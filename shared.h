@@ -1,0 +1,92 @@
+/*
+Magma - C++1x interface over Khronos Vulkan API.
+Copyright (C) 2018 Victor Coda.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+*/
+#pragma once
+
+#ifdef _DEBUG
+#define MAGMA_DEBUG
+#endif
+
+#include <malloc.h>
+#include <cassert>   
+#include <memory>
+#ifdef MAGMA_DEBUG
+#include <iostream> // std::cerr
+#endif
+
+#include "vulkan/vulkan.h"
+#include "misc/exception.h"
+
+#define MAGMA_BOOLEAN(x) x ? VK_TRUE : VK_FALSE
+#define MAGMA_COUNT(v) static_cast<uint32_t>(v.size())
+#define MAGMA_ASSERT(x) assert(x)
+
+#define MAGMA_STRINGIZE(x) #x
+#define MAGMA_STRINGIZE_FIELD(x) case x: return MAGMA_STRINGIZE(x); break
+
+#define MAGMA_COPY_VECTOR(p, v)\
+    MAGMA_ASSERT(p);\
+    MAGMA_ASSERT(!v.empty());\
+    if (p && !v.empty())\
+        memcpy((void *)p, v.data(), v.size() * sizeof(v.front()))
+
+#ifdef _MSC_VER
+#   define MAGMA_ALLOCA(size) _malloca(size)
+#   define MAGMA_FREEA(p) _freea(p)
+#else
+#   define MAGMA_ALLOCA(size) alloca(size)
+#   define MAGMA_FREEA(p) 
+#endif
+
+#define MAGMA_MAX_STACK_ALLOC 1024
+
+#define MAGMA_ALIGN(size, alignment) ((size + alignment - 1) & ~(alignment - 1)) 
+
+#define MAGMA_SUCCEEDED(result)\
+    ((VK_SUCCESS == result) ||\
+     (VK_INCOMPLETE == result))
+
+#define MAGMA_THROW_FAILURE(result, message) \
+    if (!MAGMA_SUCCEEDED(result))\
+	    throw magma::BadResultException(result, message, __FILE__, __LINE__)
+
+#ifdef MAGMA_DEBUG
+#   define MAGMA_REPORT_FAILURE(result, message)\
+        if (!MAGMA_SUCCEEDED(result))\
+            std::cerr<<__FILE__<<"("<<__LINE__<<"): "<<message<<"\n"
+#else
+#   define MAGMA_REPORT_FAILURE(result, message)
+#endif
+
+namespace magma
+{
+    template <typename Type>
+    typename Type::VkType __handle(const std::shared_ptr<const Type>& obj)
+    {
+        //return obj ? *obj : VK_NULL_HANDLE;
+        if (obj) return *obj;
+        return VK_NULL_HANDLE;
+    }
+}
+
+#define MAGMA_OPTIONAL_HANDLE(obj) magma::__handle(obj)
+
+#define MAGMA_TYPE_CAST(Type, m)\
+operator Type&() { return m; }\
+operator const Type&() const { return m; }\
+operator Type*() { return &m; }\
+operator const Type*() const { return &m; }

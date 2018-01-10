@@ -1,0 +1,11 @@
+Debug/
+Release/
+x64/
+
+*.suo
+*.user
+*.vcxproj.user
+
+*.obj
+*.pch
+*.pdb

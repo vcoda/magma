@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{8D9D4A3E-439A-4210-8879-259B20D992CA}</ProjectGuid>
+    <RootNamespace>magma</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <MinimalRebuild>true</MinimalRebuild>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <MinimalRebuild>true</MinimalRebuild>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="descriptors\attachment.h" />
+    <ClInclude Include="descriptors\descriptors.h" />
+    <ClInclude Include="descriptors\subpass.h" />
+    <ClInclude Include="helpers\mapScoped.h" />
+    <ClInclude Include="helpers\stackArray.h" />
+    <ClInclude Include="magma.h" />
+    <ClInclude Include="misc\clearValue.h" />
+    <ClInclude Include="misc\debugMarker.h" />
+    <ClInclude Include="misc\exception.h" />
+    <ClInclude Include="misc\extensions.h" />
+    <ClInclude Include="misc\format.h" />
+    <ClInclude Include="objects\buffer.h" />
+    <ClInclude Include="objects\commandBuffer.h" />
+    <ClInclude Include="objects\commandPool.h" />
+    <ClInclude Include="objects\debugObject.h" />
+    <ClInclude Include="objects\debugReportCallback.h" />
+    <ClInclude Include="objects\descriptorPool.h" />
+    <ClInclude Include="objects\descriptorSet.h" />
+    <ClInclude Include="objects\descriptorSetLayout.h" />
+    <ClInclude Include="objects\device.h" />
+    <ClInclude Include="objects\deviceMemory.h" />
+    <ClInclude Include="objects\event.h" />
+    <ClInclude Include="objects\fence.h" />
+    <ClInclude Include="objects\framebuffer.h" />
+    <ClInclude Include="objects\handle.h" />
+    <ClInclude Include="objects\image.h" />
+    <ClInclude Include="objects\imageView.h" />
+    <ClInclude Include="objects\indexBuffer.h" />
+    <ClInclude Include="objects\instance.h" />
+    <ClInclude Include="objects\physicalDevice.h" />
+    <ClInclude Include="objects\pipeline.h" />
+    <ClInclude Include="objects\pipelineCache.h" />
+    <ClInclude Include="objects\pipelineLayout.h" />
+    <ClInclude Include="objects\queue.h" />
+    <ClInclude Include="objects\renderPass.h" />
+    <ClInclude Include="objects\sampler.h" />
+    <ClInclude Include="objects\semaphore.h" />
+    <ClInclude Include="objects\shaderModule.h" />
+    <ClInclude Include="objects\stagingBuffer.h" />
+    <ClInclude Include="objects\surface.h" />
+    <ClInclude Include="objects\swapchain.h" />
+    <ClInclude Include="objects\uniformBuffer.h" />
+    <ClInclude Include="objects\vertexBuffer.h" />
+    <ClInclude Include="shared.h" />
+    <ClInclude Include="states\colorBlendState.h" />
+    <ClInclude Include="states\depthStencilState.h" />
+    <ClInclude Include="states\inputAssemblyState.h" />
+    <ClInclude Include="states\multisampleState.h" />
+    <ClInclude Include="states\rasterizationState.h" />
+    <ClInclude Include="states\samplerState.h" />
+    <ClInclude Include="states\tesselationState.h" />
+    <ClInclude Include="states\vertexInputState.h" />
+    <ClInclude Include="states\viewportState.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="objects\commandBuffer.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="descriptors\attachment.cpp" />
+    <ClCompile Include="descriptors\subpass.cpp" />
+    <ClCompile Include="misc\debugMarker.cpp" />
+    <ClCompile Include="misc\exception.cpp" />
+    <ClCompile Include="misc\extensions.cpp" />
+    <ClCompile Include="misc\format.cpp" />
+    <ClCompile Include="objects\buffer.cpp" />
+    <ClCompile Include="objects\commandBuffer.cpp" />
+    <ClCompile Include="objects\commandPool.cpp" />
+    <ClCompile Include="objects\debugObject.cpp" />
+    <ClCompile Include="objects\debugReportCallback.cpp" />
+    <ClCompile Include="objects\descriptorPool.cpp" />
+    <ClCompile Include="objects\descriptorSet.cpp" />
+    <ClCompile Include="objects\descriptorSetLayout.cpp" />
+    <ClCompile Include="objects\device.cpp" />
+    <ClCompile Include="objects\deviceMemory.cpp" />
+    <ClCompile Include="objects\event.cpp" />
+    <ClCompile Include="objects\fence.cpp" />
+    <ClCompile Include="objects\framebuffer.cpp" />
+    <ClCompile Include="objects\image.cpp" />
+    <ClCompile Include="objects\imageView.cpp" />
+    <ClCompile Include="objects\indexBuffer.cpp" />
+    <ClCompile Include="objects\instance.cpp" />
+    <ClCompile Include="objects\physicalDevice.cpp" />
+    <ClCompile Include="objects\pipeline.cpp" />
+    <ClCompile Include="objects\pipelineCache.cpp" />
+    <ClCompile Include="objects\pipelineLayout.cpp" />
+    <ClCompile Include="objects\queue.cpp" />
+    <ClCompile Include="objects\renderPass.cpp" />
+    <ClCompile Include="objects\sampler.cpp" />
+    <ClCompile Include="objects\semaphore.cpp" />
+    <ClCompile Include="objects\shaderModule.cpp" />
+    <ClCompile Include="objects\stagingBuffer.cpp" />
+    <ClCompile Include="objects\surface.cpp" />
+    <ClCompile Include="objects\swapchain.cpp" />
+    <ClCompile Include="objects\vertexBuffer.cpp" />
+    <ClCompile Include="states\colorBlendState.cpp" />
+    <ClCompile Include="states\depthStencilState.cpp" />
+    <ClCompile Include="states\inputAssemblyState.cpp" />
+    <ClCompile Include="states\multisampleState.cpp" />
+    <ClCompile Include="states\rasterizationState.cpp" />
+    <ClCompile Include="states\samplerState.cpp" />
+    <ClCompile Include="states\tesselationState.cpp" />
+    <ClCompile Include="states\vertexInputState.cpp" />
+    <ClCompile Include="states\viewportState.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
