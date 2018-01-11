@@ -130,6 +130,33 @@ bool Format::adaptiveCompressed() const
     return false;
 }
 
+bool Format::floatingPoint() const
+{
+    switch (format)
+    {
+    case VK_FORMAT_R16_SFLOAT:
+    case VK_FORMAT_R16G16_SFLOAT:
+    case VK_FORMAT_R16G16B16_SFLOAT:
+    case VK_FORMAT_R16G16B16A16_SFLOAT:
+    case VK_FORMAT_R32_SFLOAT:
+    case VK_FORMAT_R32G32_SFLOAT:
+    case VK_FORMAT_R32G32B32_SFLOAT:
+    case VK_FORMAT_R32G32B32A32_SFLOAT:
+    case VK_FORMAT_R64_SFLOAT:
+    case VK_FORMAT_R64G64_SFLOAT:
+    case VK_FORMAT_R64G64B64_SFLOAT:
+    case VK_FORMAT_R64G64B64A64_SFLOAT:
+    case VK_FORMAT_B10G11R11_UFLOAT_PACK32:
+    case VK_FORMAT_E5B9G9R9_UFLOAT_PACK32:
+    case VK_FORMAT_D32_SFLOAT:
+    case VK_FORMAT_D32_SFLOAT_S8_UINT:
+    case VK_FORMAT_BC6H_UFLOAT_BLOCK:
+    case VK_FORMAT_BC6H_SFLOAT_BLOCK:
+        return true;
+    }
+    return false;
+}
+
 std::pair<uint8_t, uint8_t> Format::blockFootprint() const
 {
     switch (format)
@@ -178,11 +205,5 @@ std::pair<uint8_t, uint8_t> Format::blockFootprint() const
         return std::make_pair(12, 12);
     };
     return std::make_pair(0, 0);
-}
-
-bool Format::floatingPoint() const
-{
-    // TODO: implement
-    return false;
 }
 } // namespace magma
