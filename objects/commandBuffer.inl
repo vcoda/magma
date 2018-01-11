@@ -103,7 +103,7 @@ inline void CommandBuffer::setStencilReference(bool frontFace, bool backFace, ui
 
 inline void CommandBuffer::draw(uint32_t vertexCount, uint32_t firstVertex) const noexcept
 {
-    vkCmdDraw(handle, vertexCount, 0, firstVertex, 0);
+    vkCmdDraw(handle, vertexCount, 1, firstVertex, 0);
 }
 
 inline void CommandBuffer::drawInstanced(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance) const noexcept
@@ -113,7 +113,7 @@ inline void CommandBuffer::drawInstanced(uint32_t vertexCount, uint32_t instance
 
 inline void CommandBuffer::drawIndexed(uint32_t indexCount, uint32_t firstIndex, int32_t vertexOffset /* 0 */) const noexcept
 {
-    vkCmdDrawIndexed(handle, indexCount, 1, firstIndex, vertexOffset, 1);
+    vkCmdDrawIndexed(handle, indexCount, 1, firstIndex, vertexOffset, 0);
 }
 
 inline void CommandBuffer::drawIndexedInstanced(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t vertexOffset, uint32_t firstInstance) const noexcept
