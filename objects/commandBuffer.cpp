@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "renderPass.h"
 #include "framebuffer.h"
+#include "queryPool.h"
 #include "vertexBuffer.h"
 #include "indexBuffer.h"
 #include "descriptorSet.h"
@@ -100,6 +101,41 @@ void CommandBuffer::beginRenderPass(std::shared_ptr<const RenderPass> renderPass
 void CommandBuffer::endRenderPass() noexcept
 {
     vkCmdEndRenderPass(handle);
+}
+
+void CommandBuffer::beginQuery(std::shared_ptr<QueryPool> queryPool, uint32_t queryIndex, bool precise) noexcept
+{
+    MAGMA_ASSERT(queryIndex < queryPool->getQueryCount());
+    VkQueryControlFlags flags = 0;
+    if (precise)
+        flags |= VK_QUERY_CONTROL_PRECISE_BIT;
+    vkCmdBeginQuery(handle, *queryPool, queryIndex, flags);
+}
+
+void CommandBuffer::endQuery(std::shared_ptr<QueryPool> queryPool, uint32_t queryIndex) noexcept
+{
+    MAGMA_ASSERT(queryIndex < queryPool->getQueryCount());
+    vkCmdEndQuery(handle, *queryPool, queryIndex);
+}
+
+void CommandBuffer::resetQueryPool(std::shared_ptr<QueryPool> queryPool) noexcept
+{
+    vkCmdResetQueryPool(handle, *queryPool, 0, queryPool->getQueryCount());
+}
+
+void CommandBuffer::copyQueryResults(std::shared_ptr<const QueryPool> queryPool, uint32_t firstQuery, uint32_t queryCount, std::shared_ptr<Buffer> buffer, 
+    bool write64Bit, bool wait, VkDeviceSize offset /* 0 */) noexcept
+{
+    VkQueryResultFlags flags = 0;
+    if (write64Bit)
+        flags |= VK_QUERY_RESULT_64_BIT;
+    if (wait)
+        flags |= VK_QUERY_RESULT_WAIT_BIT;
+    else
+        flags |= VK_QUERY_RESULT_WITH_AVAILABILITY_BIT;
+    // TODO: VK_QUERY_RESULT_PARTIAL_BIT
+    const VkDeviceSize stride = write64Bit ? sizeof(uint64_t) : sizeof(uint32_t);
+    vkCmdCopyQueryPoolResults(handle, *queryPool, firstQuery, queryCount, *buffer, offset, stride, flags);
 }
 
 void CommandBuffer::bindDescriptorSet(std::shared_ptr<const DescriptorSet> descriptorSet, std::shared_ptr<const PipelineLayout> pipelineLayout,

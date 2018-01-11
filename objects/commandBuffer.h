@@ -26,6 +26,7 @@ namespace magma
     class Device;
     class RenderPass;
     class Framebuffer;
+    class QueryPool;
     class DescriptorSet;
     class PipelineLayout;
     class GraphicsPipeline;
@@ -49,6 +50,23 @@ namespace magma
             std::shared_ptr<const Framebuffer> framebuffer,
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void endRenderPass() noexcept;
+
+        void beginQuery(
+            std::shared_ptr<QueryPool> queryPool,
+            uint32_t queryIndex,
+            bool precise) noexcept;
+        void endQuery(
+            std::shared_ptr<QueryPool> queryPool,
+            uint32_t queryIndex) noexcept;
+        void resetQueryPool(std::shared_ptr<QueryPool> queryPool) noexcept;
+        void copyQueryResults(
+            std::shared_ptr<const QueryPool> queryPool,
+            uint32_t firstQuery,
+            uint32_t queryCount,
+            std::shared_ptr<Buffer> buffer,
+            bool write64Bit,
+            bool wait,
+            VkDeviceSize offset = 0) noexcept;
 
         void setViewport(const VkViewport& viewport) noexcept;
         void setViewport(float x, float y, float width, float height,

@@ -36,6 +36,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/pipeline.h"
 #include "objects/pipelineCache.h"
 #include "objects/pipelineLayout.h"
+#include "objects/queryPool.h"  
 #include "objects/queue.h"   
 #include "objects/renderPass.h"
 #include "objects/sampler.h"
