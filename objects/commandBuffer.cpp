@@ -84,23 +84,107 @@ bool CommandBuffer::end() noexcept
     return (VK_SUCCESS == end);
 }
 
-void CommandBuffer::beginRenderPass(std::shared_ptr<const RenderPass> renderPass, std::shared_ptr<const Framebuffer> framebuffer,
-    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+bool CommandBuffer::reset(bool releaseResources) noexcept
 {
-    VkRenderPassBeginInfo beginInfo;
-    beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    beginInfo.pNext = nullptr;
-    beginInfo.renderPass = *renderPass;
-    beginInfo.framebuffer = *framebuffer;
-    beginInfo.renderArea = renderArea;
-    beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
-    beginInfo.pClearValues = clearValues.front();
-    vkCmdBeginRenderPass(handle, &beginInfo, contents);
+    VkCommandBufferResetFlags flags = 0;
+    if (releaseResources)
+        flags |= VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT;
+    const VkResult reset = vkResetCommandBuffer(handle, flags);
+    return (VK_SUCCESS == reset);
 }
 
-void CommandBuffer::endRenderPass() noexcept
+void CommandBuffer::bindPipeline(std::shared_ptr<const GraphicsPipeline> pipeline) noexcept
 {
-    vkCmdEndRenderPass(handle);
+    vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_GRAPHICS, *pipeline);
+}
+
+void CommandBuffer::bindPipeline(std::shared_ptr<const ComputePipeline> pipeline) noexcept
+{
+    vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_COMPUTE, *pipeline);
+}
+
+// inline void CommandBuffer::setViewport
+// inline void CommandBuffer::setScissor
+// inline void CommandBuffer::setLineWidth
+// inline void CommandBuffer::setDepthBias
+// inline void CommandBuffer::setBlendConstants
+// inline void CommandBuffer::setDepthBounds
+// inline void CommandBuffer::setStencilCompareMask
+// inline void CommandBuffer::setStencilWriteMask
+// inline void CommandBuffer::setStencilReference
+
+void CommandBuffer::bindDescriptorSets(std::shared_ptr<const DescriptorSet> descriptorSet, std::shared_ptr<const PipelineLayout> pipelineLayout,
+    VkPipelineBindPoint pipelineBindPoint /* VK_PIPELINE_BIND_POINT_GRAPHICS */) noexcept
+{
+    const VkDescriptorSet nativeDescriptorSets[1] = { *descriptorSet };
+    vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, 1, nativeDescriptorSets, 0, nullptr);
+}
+
+void CommandBuffer::bindIndexBuffer(std::shared_ptr<const IndexBuffer> indexBuffer, VkDeviceSize offset /* 0 */) noexcept
+{
+    vkCmdBindIndexBuffer(handle, *indexBuffer, offset, indexBuffer->getIndexType());
+}
+
+void CommandBuffer::bindVertexBuffer(uint32_t firstBinding, std::shared_ptr<const VertexBuffer> vertexBuffer, VkDeviceSize offset /* 0 */) noexcept
+{
+    const VkBuffer dereferencedBuffers[1] = { *vertexBuffer };
+    vkCmdBindVertexBuffers(handle, firstBinding, 1, dereferencedBuffers, &offset);
+}
+
+void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::vector<std::shared_ptr<const VertexBuffer>>& vertexBuffers, const std::vector<VkDeviceSize>& offsets) noexcept
+{
+    MAGMA_ASSERT(vertexBuffers.size() > 0);
+    MAGMA_ASSERT(vertexBuffers.size() == offsets.size());
+    MAGMA_STACK_ARRAY(VkBuffer, dereferencedBuffers, vertexBuffers.size());
+    for (const auto& buffer : vertexBuffers)
+        dereferencedBuffers.put(*buffer);
+    vkCmdBindVertexBuffers(handle, firstBinding, dereferencedBuffers.size(), dereferencedBuffers.data(), offsets.data());
+}
+
+// inline void CommandBuffer::draw
+// inline void CommandBuffer::drawInstanced
+// inline void CommandBuffer::drawIndexed
+// inline void CommandBuffer::drawIndexedInstanced
+
+void CommandBuffer::drawIndirect(std::shared_ptr<const Buffer> buffer, VkDeviceSize offset, uint32_t drawCount, uint32_t stride) const noexcept
+{
+    vkCmdDrawIndirect(handle, *buffer, offset, drawCount, stride);
+}
+
+void CommandBuffer::drawIndexedIndirect(std::shared_ptr<const Buffer> buffer, VkDeviceSize offset, uint32_t drawCount, uint32_t stride) const noexcept
+{
+    vkCmdDrawIndexedIndirect(handle, *buffer, offset, drawCount, stride);
+}
+
+void CommandBuffer::dispatch(uint32_t x, uint32_t y, uint32_t z) const noexcept
+{
+    vkCmdDispatch(handle, x, y, z);
+}
+
+void CommandBuffer::dispatchIndirect(std::shared_ptr<const Buffer> buffer, VkDeviceSize offset) const noexcept
+{
+    vkCmdDispatchIndirect(handle, *buffer, offset);
+}
+
+void CommandBuffer::copyBuffer(std::shared_ptr<const Buffer> srcBuffer, std::shared_ptr<Buffer> dstBuffer,
+    VkDeviceSize srcOffset /* 0 */, VkDeviceSize dstOffset /* 0 */, VkDeviceSize size /* 0 */) const noexcept
+{
+    VkBufferCopy region;
+    region.srcOffset = srcOffset;
+    region.dstOffset = dstOffset;
+    region.size = size ? size : std::min(srcBuffer->getMemory()->getSize(),
+        dstBuffer->getMemory()->getSize());
+    vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, 1, &region);
+}
+
+void CommandBuffer::copyBuffer(std::shared_ptr<const Buffer> srcBuffer, std::shared_ptr<Buffer> dstBuffer, const VkBufferCopy& region) const noexcept
+{
+    vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, 1, &region);
+}
+
+void CommandBuffer::copyBuffer(std::shared_ptr<const Buffer> srcBuffer, std::shared_ptr<Buffer> dstBuffer, const std::vector<VkBufferCopy>& regions) const noexcept
+{
+    vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, MAGMA_COUNT(regions), regions.data());
 }
 
 void CommandBuffer::beginQuery(std::shared_ptr<QueryPool> queryPool, uint32_t queryIndex, bool precise) noexcept
@@ -123,7 +207,7 @@ void CommandBuffer::resetQueryPool(std::shared_ptr<QueryPool> queryPool) noexcep
     vkCmdResetQueryPool(handle, *queryPool, 0, queryPool->getQueryCount());
 }
 
-void CommandBuffer::copyQueryResults(std::shared_ptr<const QueryPool> queryPool, std::shared_ptr<Buffer> buffer, bool wait, 
+void CommandBuffer::copyQueryResults(std::shared_ptr<const QueryPool> queryPool, std::shared_ptr<Buffer> buffer, bool wait,
     uint32_t firstQuery /* 0 */, uint32_t queryCount /* std::numeric_limits<uint32_t>::max() */,
     VkDeviceSize dstOffset /* 0 */, bool write64Bit /* true */) noexcept
 {
@@ -143,63 +227,36 @@ void CommandBuffer::copyQueryResults(std::shared_ptr<const QueryPool> queryPool,
     vkCmdCopyQueryPoolResults(handle, *queryPool, firstQuery, queryCount, *buffer, dstOffset, stride, flags);
 }
 
-void CommandBuffer::bindDescriptorSet(std::shared_ptr<const DescriptorSet> descriptorSet, std::shared_ptr<const PipelineLayout> pipelineLayout,
-    VkPipelineBindPoint pipelineBindPoint /* VK_PIPELINE_BIND_POINT_GRAPHICS */) noexcept
+void CommandBuffer::beginRenderPass(std::shared_ptr<const RenderPass> renderPass, std::shared_ptr<const Framebuffer> framebuffer,
+    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    const VkDescriptorSet nativeDescriptorSets[1] = {*descriptorSet};
-    vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, 1, nativeDescriptorSets, 0, nullptr);
+    VkRenderPassBeginInfo beginInfo;
+    beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    beginInfo.pNext = nullptr;
+    beginInfo.renderPass = *renderPass;
+    beginInfo.framebuffer = *framebuffer;
+    beginInfo.renderArea = renderArea;
+    beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
+    beginInfo.pClearValues = clearValues.front();
+    vkCmdBeginRenderPass(handle, &beginInfo, contents);
 }
 
-void CommandBuffer::bindPipeline(std::shared_ptr<const GraphicsPipeline> pipeline) noexcept
+void CommandBuffer::nextSubpass() noexcept
 {
-    vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_GRAPHICS, *pipeline);
+    // TODO: implement
 }
 
-void CommandBuffer::bindPipeline(std::shared_ptr<const ComputePipeline> pipeline) noexcept
+void CommandBuffer::endRenderPass() noexcept
 {
-    vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_COMPUTE, *pipeline);
+    vkCmdEndRenderPass(handle);
 }
 
-void CommandBuffer::bindVertexBuffer(uint32_t firstBinding, std::shared_ptr<const VertexBuffer> vertexBuffer, VkDeviceSize offset /* 0 */) noexcept
+void CommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept
 {
-    const VkBuffer dereferencedBuffers[1] = {*vertexBuffer};
-    vkCmdBindVertexBuffers(handle, firstBinding, 1, dereferencedBuffers, &offset);
-}
-
-void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::vector<std::shared_ptr<const VertexBuffer>>& vertexBuffers, const std::vector<VkDeviceSize>& offsets) noexcept
-{
-    MAGMA_ASSERT(vertexBuffers.size() > 0);
-    MAGMA_ASSERT(vertexBuffers.size() == offsets.size());
-    MAGMA_STACK_ARRAY(VkBuffer, dereferencedBuffers, vertexBuffers.size());
-    for (const auto& buffer : vertexBuffers)
-        dereferencedBuffers.put(*buffer);
-    vkCmdBindVertexBuffers(handle, firstBinding, dereferencedBuffers.size(), dereferencedBuffers.data(), offsets.data());
-}
-
-void CommandBuffer::bindIndexBuffer(std::shared_ptr<const IndexBuffer> indexBuffer, VkDeviceSize offset /* 0 */) noexcept
-{
-    vkCmdBindIndexBuffer(handle, *indexBuffer, offset, indexBuffer->getIndexType());
-}
-
-void CommandBuffer::copyBuffer(std::shared_ptr<const Buffer> srcBuffer, std::shared_ptr<Buffer> dstBuffer,
-    VkDeviceSize srcOffset /* 0 */, VkDeviceSize dstOffset /* 0 */, VkDeviceSize size /* 0 */) noexcept
-{
-    VkBufferCopy region;
-    region.srcOffset = srcOffset;
-    region.dstOffset = dstOffset;
-    region.size = size ? size : std::min(srcBuffer->getMemory()->getSize(),
-                                         dstBuffer->getMemory()->getSize());
-    vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, 1, &region);
-}
-
-void CommandBuffer::copyBuffer(std::shared_ptr<const Buffer> srcBuffer, std::shared_ptr<Buffer> dstBuffer, const VkBufferCopy& region) noexcept
-{
-    vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, 1, &region);
-}
-
-void CommandBuffer::copyBuffer(std::shared_ptr<const Buffer> srcBuffer, std::shared_ptr<Buffer> dstBuffer, const std::vector<VkBufferCopy>& regions) noexcept
-{
-    vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, MAGMA_COUNT(regions), regions.data());
+    MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCommandBuffers, commandBuffers.size());
+    for (const auto& commandBuffer : commandBuffers)
+        dereferencedCommandBuffers.put(*commandBuffer);
+    vkCmdExecuteCommands(handle, dereferencedCommandBuffers.size(), dereferencedCommandBuffers.data());
 }
 
 void CommandBuffer::beginDebugMarker(const char *name, const float color[4]) noexcept

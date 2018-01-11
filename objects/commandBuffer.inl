@@ -63,6 +63,44 @@ inline void CommandBuffer::setScissor(int32_t x, int32_t y, uint32_t width, uint
     vkCmdSetScissor(handle, 0, 1, &scissor);
 }
 
+inline void CommandBuffer::setLineWidth(float lineWidth) noexcept
+{
+    vkCmdSetLineWidth(handle, lineWidth);
+}
+
+inline void CommandBuffer::setDepthBias(float depthBiasConstantFactor, float depthBiasClamp, float depthBiasSlopeFactor) noexcept
+{
+    vkCmdSetDepthBias(handle, depthBiasConstantFactor, depthBiasClamp, depthBiasSlopeFactor);
+}
+
+inline void CommandBuffer::setBlendConstants(const float blendConstants[4]) noexcept
+{
+    vkCmdSetBlendConstants(handle, blendConstants);
+}
+
+inline void CommandBuffer::setDepthBounds(float minDepthBounds, float maxDepthBounds) noexcept
+{
+    vkCmdSetDepthBounds(handle, minDepthBounds, maxDepthBounds);
+}
+
+inline void CommandBuffer::setStencilCompareMask(bool frontFace, bool backFace, uint32_t compareMask) noexcept
+{
+    MAGMA_ASSERT(frontFace || backFace);
+    vkCmdSetStencilCompareMask(handle, MAGMA_STENCIL_FACE_MASK(frontFace, backFace), compareMask);
+}
+
+inline void CommandBuffer::setStencilWriteMask(bool frontFace, bool backFace, uint32_t writeMask) noexcept
+{
+    MAGMA_ASSERT(frontFace || backFace);
+    vkCmdSetStencilWriteMask(handle, MAGMA_STENCIL_FACE_MASK(frontFace, backFace), writeMask);
+}
+
+inline void CommandBuffer::setStencilReference(bool frontFace, bool backFace, uint32_t reference) noexcept
+{
+    MAGMA_ASSERT(frontFace || backFace);
+    vkCmdSetStencilReference(handle, MAGMA_STENCIL_FACE_MASK(frontFace, backFace), reference);
+}
+
 inline void CommandBuffer::draw(uint32_t vertexCount, uint32_t firstVertex) const noexcept
 {
     vkCmdDraw(handle, vertexCount, 0, firstVertex, 0);
@@ -83,15 +121,14 @@ inline void CommandBuffer::drawIndexedInstanced(uint32_t indexCount, uint32_t in
     vkCmdDrawIndexed(handle, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
 }
 
-inline void CommandBuffer::setClear(const ClearValue& clearValue) noexcept
+inline void CommandBuffer::setClear(const ClearValue& value)
 {
-    clearValues.clear();
-    clearValues.push_back(clearValue);
+    clearValues = std::vector<ClearValue>{value};
 }
 
-inline void CommandBuffer::setClears(const std::vector<ClearValue>& clearValues) noexcept
+inline void CommandBuffer::setClears(const std::vector<ClearValue>& values)
 {
-    this->clearValues = clearValues;
+    clearValues = values;
 }
 
 inline void CommandBuffer::setRenderArea(const VkRect2D& rc) noexcept
@@ -123,14 +160,5 @@ inline void CommandBuffer::enableOcclusionQuery(bool enable, VkQueryControlFlags
 inline void CommandBuffer::queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept
 {
     this->pipelineStatistics = pipelineStatistics;
-}
-
-inline bool CommandBuffer::reset(bool releaseResources) noexcept
-{
-    VkCommandBufferResetFlags flags = 0;
-    if (releaseResources)
-        flags |= VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT;
-    const VkResult reset = vkResetCommandBuffer(handle, flags);
-    return (VK_SUCCESS == reset);
 }
 } // namespace magma
