@@ -67,7 +67,8 @@ OcclusionQuery::OcclusionQuery(std::shared_ptr<const Device> device, uint32_t qu
 
 PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<const Device> device, 
     VkQueryPipelineStatisticFlags pipelineStatistics):
-    QueryPool(VK_QUERY_TYPE_PIPELINE_STATISTICS, device, 1, pipelineStatistics)
+    QueryPool(VK_QUERY_TYPE_PIPELINE_STATISTICS, device, 1, pipelineStatistics),
+    pipelineStatistics(pipelineStatistics)
 {}
 
 TimestampQuery::TimestampQuery(std::shared_ptr<const Device> device, uint32_t queryCount):

@@ -52,6 +52,10 @@ namespace magma
     public:
         PipelineStatisticsQuery(std::shared_ptr<const Device> device,
             VkQueryPipelineStatisticFlags pipelineStatistics);
+        VkQueryPipelineStatisticFlags getStatisticFlags() const { return pipelineStatistics; }
+
+    private:
+        VkQueryPipelineStatisticFlags pipelineStatistics;
     };
 
     class TimestampQuery : public QueryPool
