@@ -35,6 +35,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_COUNT(v) static_cast<uint32_t>(v.size())
 #define MAGMA_ASSERT(x) assert(x)
 
+#define MAGMA_STENCIL_FACE_MASK(frontFace, backFace)\
+    ((frontFace && backFace) ? VK_STENCIL_FRONT_AND_BACK :\
+     (frontFace ? VK_STENCIL_FACE_FRONT_BIT : VK_STENCIL_FACE_BACK_BIT))
+
 #define MAGMA_STRINGIZE(x) #x
 #define MAGMA_STRINGIZE_FIELD(x) case x: return MAGMA_STRINGIZE(x); break
 
