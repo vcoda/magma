@@ -31,12 +31,12 @@ namespace magma
         bool blockCompressed() const;
         bool etc() const;
         bool adaptiveCompressed() const;
-        std::pair<uint8_t, uint8_t> blockFootprint() const;
-        bool compressed() const 
+        bool compressed() const
         {
             return blockCompressed() || etc() || adaptiveCompressed();
         }
         bool floatingPoint() const;
+        std::pair<uint8_t, uint8_t> blockFootprint() const;
         operator VkFormat() const { return format; }
 
     private:
