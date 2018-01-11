@@ -123,9 +123,14 @@ void CommandBuffer::resetQueryPool(std::shared_ptr<QueryPool> queryPool) noexcep
     vkCmdResetQueryPool(handle, *queryPool, 0, queryPool->getQueryCount());
 }
 
-void CommandBuffer::copyQueryResults(std::shared_ptr<const QueryPool> queryPool, uint32_t firstQuery, uint32_t queryCount, std::shared_ptr<Buffer> buffer, 
-    bool write64Bit, bool wait, VkDeviceSize offset /* 0 */) noexcept
+void CommandBuffer::copyQueryResults(std::shared_ptr<const QueryPool> queryPool, std::shared_ptr<Buffer> buffer, bool wait, 
+    uint32_t firstQuery /* 0 */, uint32_t queryCount /* std::numeric_limits<uint32_t>::max() */,
+    VkDeviceSize dstOffset /* 0 */, bool write64Bit /* true */) noexcept
 {
+    if (std::numeric_limits<uint32_t>::max() == queryCount)
+        queryCount = queryPool->getQueryCount();
+    MAGMA_ASSERT(firstQuery + queryCount <= queryPool->getQueryCount());
+    MAGMA_ASSERT(dstOffset < buffer->getMemory()->getSize());
     VkQueryResultFlags flags = 0;
     if (write64Bit)
         flags |= VK_QUERY_RESULT_64_BIT;
@@ -135,7 +140,7 @@ void CommandBuffer::copyQueryResults(std::shared_ptr<const QueryPool> queryPool,
         flags |= VK_QUERY_RESULT_WITH_AVAILABILITY_BIT;
     // TODO: VK_QUERY_RESULT_PARTIAL_BIT
     const VkDeviceSize stride = write64Bit ? sizeof(uint64_t) : sizeof(uint32_t);
-    vkCmdCopyQueryPoolResults(handle, *queryPool, firstQuery, queryCount, *buffer, offset, stride, flags);
+    vkCmdCopyQueryPoolResults(handle, *queryPool, firstQuery, queryCount, *buffer, dstOffset, stride, flags);
 }
 
 void CommandBuffer::bindDescriptorSet(std::shared_ptr<const DescriptorSet> descriptorSet, std::shared_ptr<const PipelineLayout> pipelineLayout,

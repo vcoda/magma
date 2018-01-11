@@ -61,13 +61,12 @@ namespace magma
         void resetQueryPool(std::shared_ptr<QueryPool> queryPool) noexcept;
         void copyQueryResults(
             std::shared_ptr<const QueryPool> queryPool,
-            uint32_t firstQuery,
-            uint32_t queryCount,
             std::shared_ptr<Buffer> buffer,
-            bool write64Bit,
             bool wait,
-            VkDeviceSize offset = 0) noexcept;
-
+            uint32_t firstQuery = 0,
+            uint32_t queryCount = std::numeric_limits<uint32_t>::max(),
+            VkDeviceSize dstOffset = 0,
+            bool write64Bit = true) noexcept;
         void setViewport(const VkViewport& viewport) noexcept;
         void setViewport(float x, float y, float width, float height,
             float minDepth = 0.f, float maxDepth = 1.f) noexcept;
