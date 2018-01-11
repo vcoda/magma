@@ -22,19 +22,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    struct ClearValue;
-    class Device;
-    class RenderPass;
-    class Framebuffer;
-    class QueryPool;
-    class Event;
-    class DescriptorSet;
-    class PipelineLayout;
-    class GraphicsPipeline;
-    class ComputePipeline;
     class Buffer;
-    class VertexBuffer;
+    class ComputePipeline;
+    class DescriptorSet;
+    class Device;
+    class Event;
+    class Framebuffer;
+    class GraphicsPipeline;
     class IndexBuffer;
+    class PipelineLayout;
+    class QueryPool;
+    class RenderPass;
+    class VertexBuffer;
+
+    struct ClearValue;
 
     // Methods order follows Vulkan API order
     class CommandBuffer : public Handle<VkCommandBuffer>
