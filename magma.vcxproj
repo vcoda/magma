@@ -78,6 +78,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <AdditionalOptions>/MP16 %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>VK_USE_PLATFORM_WIN32_KHR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(VK_SDK_PATH)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
