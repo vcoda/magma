@@ -43,15 +43,15 @@ namespace magma
     public:
         bool begin() noexcept;
         bool begin(
-            std::shared_ptr<const RenderPass> renderPass, 
+            const std::shared_ptr<RenderPass>& renderPass, 
             uint32_t subpass, 
-            std::shared_ptr<const Framebuffer> framebuffer,
+            const std::shared_ptr<Framebuffer>& framebuffer,
             VkCommandBufferUsageFlags flags = 0) noexcept;
         bool end() noexcept;
         bool reset(bool releaseResources) noexcept;
 
-        void bindPipeline(std::shared_ptr<const GraphicsPipeline> pipeline) noexcept;
-        void bindPipeline(std::shared_ptr<const ComputePipeline> pipeline) noexcept;
+        void bindPipeline(const std::shared_ptr<GraphicsPipeline>& pipeline) noexcept;
+        void bindPipeline(const std::shared_ptr<ComputePipeline>& pipeline) noexcept;
 
         void setViewport(const VkViewport& viewport) noexcept;
         void setViewport(
@@ -92,19 +92,19 @@ namespace magma
             uint32_t reference) noexcept;
 
         void bindDescriptorSets(
-            std::shared_ptr<const DescriptorSet> descriptorSet,
-            std::shared_ptr<const PipelineLayout> pipelineLayout,
+            const std::shared_ptr<DescriptorSet>& descriptorSet,
+            const std::shared_ptr<PipelineLayout>& pipelineLayout,
             VkPipelineBindPoint pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS) noexcept;
         void bindIndexBuffer(
-            std::shared_ptr<const IndexBuffer> indexBuffer,
+            const std::shared_ptr<IndexBuffer>& indexBuffer,
             VkDeviceSize offset = 0) noexcept;
         void bindVertexBuffer(
             uint32_t firstBinding,
-            std::shared_ptr<const VertexBuffer> vertexBuffer,
+            const std::shared_ptr<VertexBuffer>& vertexBuffer,
             VkDeviceSize offset = 0) noexcept;
         void bindVertexBuffers(
             uint32_t firstBinding,
-            const std::vector<std::shared_ptr<const VertexBuffer>>& vertexBuffers,
+            const std::vector<std::shared_ptr<VertexBuffer>>& vertexBuffers,
             const std::vector<VkDeviceSize>& offsets) noexcept;
 
         void draw(
@@ -126,12 +126,12 @@ namespace magma
             int32_t vertexOffset,
             uint32_t firstInstance) const noexcept;
         void drawIndirect(
-            std::shared_ptr<const Buffer> buffer,
+            const std::shared_ptr<Buffer>& buffer,
             VkDeviceSize offset,
             uint32_t drawCount,
             uint32_t stride) const noexcept;
         void drawIndexedIndirect(
-            std::shared_ptr<const Buffer> buffer,
+            const std::shared_ptr<Buffer>& buffer,
             VkDeviceSize offset,
             uint32_t drawCount,
             uint32_t stride) const noexcept;
@@ -140,22 +140,22 @@ namespace magma
             uint32_t y,
             uint32_t z) const noexcept;
         void dispatchIndirect(
-            std::shared_ptr<const Buffer> buffer,
+            const std::shared_ptr<Buffer>& buffer,
             VkDeviceSize offset) const noexcept;
 
         void copyBuffer(
-            std::shared_ptr<const Buffer> srcBuffer,
-            std::shared_ptr<Buffer> dstBuffer,
+            const std::shared_ptr<Buffer>& srcBuffer,
+            const std::shared_ptr<Buffer>& dstBuffer,
             VkDeviceSize srcOffset = 0,
             VkDeviceSize dstOffset = 0,
             VkDeviceSize size = 0) const noexcept;
         void copyBuffer(
-            std::shared_ptr<const Buffer> srcBuffer,
-            std::shared_ptr<Buffer> dstBuffer,
+            const std::shared_ptr<Buffer>& srcBuffer,
+            const std::shared_ptr<Buffer>& dstBuffer,
             const VkBufferCopy& region) const noexcept;
         void copyBuffer(
-            std::shared_ptr<const Buffer> srcBuffer,
-            std::shared_ptr<Buffer> dstBuffer,
+            const std::shared_ptr<Buffer>& srcBuffer,
+            const std::shared_ptr<Buffer>& dstBuffer,
             const std::vector<VkBufferCopy>& regions) const noexcept;
         void copyImage() const noexcept; // TODO: implement
         void blitImage() const noexcept; // TODO: implement
@@ -169,24 +169,24 @@ namespace magma
         void resolveImage() const noexcept; // TODO: implement
 
         void setEvent(
-            std::shared_ptr<const Event> event,
+            const std::shared_ptr<Event>& event,
             VkPipelineStageFlags stageMask) noexcept; // TODO: implement
         void resetEvent(
-            std::shared_ptr<Event> event,
+            const std::shared_ptr<Event>& event,
             VkPipelineStageFlags stageMask) noexcept; // TODO: implement
         void waitEvents() noexcept; // TODO: implement
         void pipelineBarrier() noexcept; // TODO: implement
         void beginQuery(
-            std::shared_ptr<QueryPool> queryPool,
+            const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex,
             bool precise) noexcept;
         void endQuery(
-            std::shared_ptr<QueryPool> queryPool,
+            const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex) noexcept;
-        void resetQueryPool(std::shared_ptr<QueryPool> queryPool) noexcept;
+        void resetQueryPool(const std::shared_ptr<QueryPool>& queryPool) noexcept;
         void copyQueryResults(
-            std::shared_ptr<const QueryPool> queryPool,
-            std::shared_ptr<Buffer> buffer,
+            const std::shared_ptr<QueryPool>& queryPool,
+            const std::shared_ptr<Buffer>& buffer,
             bool wait,
             uint32_t firstQuery = 0,
             uint32_t queryCount = std::numeric_limits<uint32_t>::max(),
@@ -197,8 +197,8 @@ namespace magma
         void pushConstants() noexcept; // TODO: implement
 
         void beginRenderPass(
-            std::shared_ptr<const RenderPass> renderPass, 
-            std::shared_ptr<const Framebuffer> framebuffer,
+            const std::shared_ptr<RenderPass>& renderPass,
+            const std::shared_ptr<Framebuffer>& framebuffer,
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void nextSubpass() noexcept; // TODO: implement
         void endRenderPass() noexcept;

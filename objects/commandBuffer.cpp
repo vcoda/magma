@@ -57,7 +57,7 @@ bool CommandBuffer::begin() noexcept
     return (VK_SUCCESS == begin);
 }
 
-bool CommandBuffer::begin(std::shared_ptr<const RenderPass> renderPass, uint32_t subpass, std::shared_ptr<const Framebuffer> framebuffer,
+bool CommandBuffer::begin(const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass, const std::shared_ptr<Framebuffer>& framebuffer,
     VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
     VkCommandBufferInheritanceInfo inheritanceInfo;
@@ -93,12 +93,12 @@ bool CommandBuffer::reset(bool releaseResources) noexcept
     return (VK_SUCCESS == reset);
 }
 
-void CommandBuffer::bindPipeline(std::shared_ptr<const GraphicsPipeline> pipeline) noexcept
+void CommandBuffer::bindPipeline(const std::shared_ptr<GraphicsPipeline>& pipeline) noexcept
 {
     vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_GRAPHICS, *pipeline);
 }
 
-void CommandBuffer::bindPipeline(std::shared_ptr<const ComputePipeline> pipeline) noexcept
+void CommandBuffer::bindPipeline(const std::shared_ptr<ComputePipeline>& pipeline) noexcept
 {
     vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_COMPUTE, *pipeline);
 }
@@ -113,25 +113,25 @@ void CommandBuffer::bindPipeline(std::shared_ptr<const ComputePipeline> pipeline
 // inline void CommandBuffer::setStencilWriteMask
 // inline void CommandBuffer::setStencilReference
 
-void CommandBuffer::bindDescriptorSets(std::shared_ptr<const DescriptorSet> descriptorSet, std::shared_ptr<const PipelineLayout> pipelineLayout,
+void CommandBuffer::bindDescriptorSets(const std::shared_ptr<DescriptorSet>& descriptorSet, const std::shared_ptr<PipelineLayout>& pipelineLayout,
     VkPipelineBindPoint pipelineBindPoint /* VK_PIPELINE_BIND_POINT_GRAPHICS */) noexcept
 {
     const VkDescriptorSet nativeDescriptorSets[1] = { *descriptorSet };
     vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, 1, nativeDescriptorSets, 0, nullptr);
 }
 
-void CommandBuffer::bindIndexBuffer(std::shared_ptr<const IndexBuffer> indexBuffer, VkDeviceSize offset /* 0 */) noexcept
+void CommandBuffer::bindIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer, VkDeviceSize offset /* 0 */) noexcept
 {
     vkCmdBindIndexBuffer(handle, *indexBuffer, offset, indexBuffer->getIndexType());
 }
 
-void CommandBuffer::bindVertexBuffer(uint32_t firstBinding, std::shared_ptr<const VertexBuffer> vertexBuffer, VkDeviceSize offset /* 0 */) noexcept
+void CommandBuffer::bindVertexBuffer(uint32_t firstBinding, const std::shared_ptr<VertexBuffer>& vertexBuffer, VkDeviceSize offset /* 0 */) noexcept
 {
     const VkBuffer dereferencedBuffers[1] = { *vertexBuffer };
     vkCmdBindVertexBuffers(handle, firstBinding, 1, dereferencedBuffers, &offset);
 }
 
-void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::vector<std::shared_ptr<const VertexBuffer>>& vertexBuffers, const std::vector<VkDeviceSize>& offsets) noexcept
+void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::vector<std::shared_ptr<VertexBuffer>>& vertexBuffers, const std::vector<VkDeviceSize>& offsets) noexcept
 {
     MAGMA_ASSERT(vertexBuffers.size() > 0);
     MAGMA_ASSERT(vertexBuffers.size() == offsets.size());
@@ -146,12 +146,12 @@ void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::vector<s
 // inline void CommandBuffer::drawIndexed
 // inline void CommandBuffer::drawIndexedInstanced
 
-void CommandBuffer::drawIndirect(std::shared_ptr<const Buffer> buffer, VkDeviceSize offset, uint32_t drawCount, uint32_t stride) const noexcept
+void CommandBuffer::drawIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset, uint32_t drawCount, uint32_t stride) const noexcept
 {
     vkCmdDrawIndirect(handle, *buffer, offset, drawCount, stride);
 }
 
-void CommandBuffer::drawIndexedIndirect(std::shared_ptr<const Buffer> buffer, VkDeviceSize offset, uint32_t drawCount, uint32_t stride) const noexcept
+void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset, uint32_t drawCount, uint32_t stride) const noexcept
 {
     vkCmdDrawIndexedIndirect(handle, *buffer, offset, drawCount, stride);
 }
@@ -161,12 +161,12 @@ void CommandBuffer::dispatch(uint32_t x, uint32_t y, uint32_t z) const noexcept
     vkCmdDispatch(handle, x, y, z);
 }
 
-void CommandBuffer::dispatchIndirect(std::shared_ptr<const Buffer> buffer, VkDeviceSize offset) const noexcept
+void CommandBuffer::dispatchIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset) const noexcept
 {
     vkCmdDispatchIndirect(handle, *buffer, offset);
 }
 
-void CommandBuffer::copyBuffer(std::shared_ptr<const Buffer> srcBuffer, std::shared_ptr<Buffer> dstBuffer,
+void CommandBuffer::copyBuffer(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Buffer>& dstBuffer,
     VkDeviceSize srcOffset /* 0 */, VkDeviceSize dstOffset /* 0 */, VkDeviceSize size /* 0 */) const noexcept
 {
     VkBufferCopy region;
@@ -177,17 +177,17 @@ void CommandBuffer::copyBuffer(std::shared_ptr<const Buffer> srcBuffer, std::sha
     vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, 1, &region);
 }
 
-void CommandBuffer::copyBuffer(std::shared_ptr<const Buffer> srcBuffer, std::shared_ptr<Buffer> dstBuffer, const VkBufferCopy& region) const noexcept
+void CommandBuffer::copyBuffer(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Buffer>& dstBuffer, const VkBufferCopy& region) const noexcept
 {
     vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, 1, &region);
 }
 
-void CommandBuffer::copyBuffer(std::shared_ptr<const Buffer> srcBuffer, std::shared_ptr<Buffer> dstBuffer, const std::vector<VkBufferCopy>& regions) const noexcept
+void CommandBuffer::copyBuffer(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Buffer>& dstBuffer, const std::vector<VkBufferCopy>& regions) const noexcept
 {
     vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, MAGMA_COUNT(regions), regions.data());
 }
 
-void CommandBuffer::beginQuery(std::shared_ptr<QueryPool> queryPool, uint32_t queryIndex, bool precise) noexcept
+void CommandBuffer::beginQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex, bool precise) noexcept
 {
     MAGMA_ASSERT(queryIndex < queryPool->getQueryCount());
     VkQueryControlFlags flags = 0;
@@ -196,18 +196,18 @@ void CommandBuffer::beginQuery(std::shared_ptr<QueryPool> queryPool, uint32_t qu
     vkCmdBeginQuery(handle, *queryPool, queryIndex, flags);
 }
 
-void CommandBuffer::endQuery(std::shared_ptr<QueryPool> queryPool, uint32_t queryIndex) noexcept
+void CommandBuffer::endQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex) noexcept
 {
     MAGMA_ASSERT(queryIndex < queryPool->getQueryCount());
     vkCmdEndQuery(handle, *queryPool, queryIndex);
 }
 
-void CommandBuffer::resetQueryPool(std::shared_ptr<QueryPool> queryPool) noexcept
+void CommandBuffer::resetQueryPool(const std::shared_ptr<QueryPool>& queryPool) noexcept
 {
     vkCmdResetQueryPool(handle, *queryPool, 0, queryPool->getQueryCount());
 }
 
-void CommandBuffer::copyQueryResults(std::shared_ptr<const QueryPool> queryPool, std::shared_ptr<Buffer> buffer, bool wait,
+void CommandBuffer::copyQueryResults(const std::shared_ptr<QueryPool>& queryPool, const std::shared_ptr<Buffer>& buffer, bool wait,
     uint32_t firstQuery /* 0 */, uint32_t queryCount /* std::numeric_limits<uint32_t>::max() */,
     VkDeviceSize dstOffset /* 0 */, bool write64Bit /* true */) noexcept
 {
@@ -227,7 +227,7 @@ void CommandBuffer::copyQueryResults(std::shared_ptr<const QueryPool> queryPool,
     vkCmdCopyQueryPoolResults(handle, *queryPool, firstQuery, queryCount, *buffer, dstOffset, stride, flags);
 }
 
-void CommandBuffer::beginRenderPass(std::shared_ptr<const RenderPass> renderPass, std::shared_ptr<const Framebuffer> framebuffer,
+void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     VkRenderPassBeginInfo beginInfo;
