@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <exception>
 #include <string>
-#include "../vulkan/vulkan.h"
+#include "../vulkan.h"
 
 namespace magma
 {
