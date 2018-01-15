@@ -21,8 +21,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Surface::Surface(std::shared_ptr<Instance> instance):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT, nullptr)
+Surface::Surface(std::shared_ptr<const Instance> instance):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT, nullptr),
+    instance(instance)
 {}
 
 Surface::~Surface()
@@ -31,7 +32,7 @@ Surface::~Surface()
 }
 
 #ifdef VK_USE_PLATFORM_WIN32_KHR
-Win32Surface::Win32Surface(std::shared_ptr<Instance> instance, 
+Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance, 
     HINSTANCE hinstance, 
     HWND hwnd, 
     VkWin32SurfaceCreateFlagsKHR flags /* 0 */):

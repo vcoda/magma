@@ -25,18 +25,18 @@ namespace magma
     class Surface : public NonDispatchable<VkSurfaceKHR>
     {
     public:
-	    Surface(std::shared_ptr<Instance> instance);
+	    Surface(std::shared_ptr<const Instance> instance);
 	    virtual ~Surface();
 
     protected:
-        std::shared_ptr<Instance> instance;
+        std::shared_ptr<const Instance> instance;
     };
 
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     class Win32Surface : public Surface
     {
     public:
-	    Win32Surface(std::shared_ptr<Instance> instance, 
+	    Win32Surface(std::shared_ptr<const Instance> instance, 
             HINSTANCE hinstance, 
             HWND hwnd,
 		    VkWin32SurfaceCreateFlagsKHR flags = 0);
