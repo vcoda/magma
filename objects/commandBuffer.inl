@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "indexBuffer.h"
 #include "vertexBuffer.h"
+#include "../misc/clearValue.h"
 #include "../helpers/stackArray.h"
 
 namespace magma
@@ -166,14 +167,28 @@ inline void CommandBuffer::dispatchIndirect(const std::shared_ptr<Buffer>& buffe
     vkCmdDispatchIndirect(handle, *buffer, offset);
 }
 
-inline void CommandBuffer::setClear(const ClearValue& value)
+inline void CommandBuffer::setClear(const ClearValue& value) noexcept
 {
-    clearValues = std::vector<ClearValue>{value};
+    if (!clearValues)
+        clearValues = new(std::nothrow) VkClearValue[1];
+    clearValueCount = 0;
+    if (clearValues)
+        clearValues[clearValueCount++] = *value;
 }
 
-inline void CommandBuffer::setClears(const std::vector<ClearValue>& values)
+inline void CommandBuffer::setClears(const std::initializer_list<ClearValue> values) noexcept
 {
-    clearValues = values;
+    if (values.size() > clearValueCount)
+    {
+        delete[] clearValues;
+        clearValues = new(std::nothrow) VkClearValue[values.size()];
+    }
+    clearValueCount = 0;
+    if (clearValues)
+    {
+        for (const auto& value : values)
+            clearValues[clearValueCount++] = *value;
+    }
 }
 
 inline void CommandBuffer::setRenderArea(const VkRect2D& rc) noexcept

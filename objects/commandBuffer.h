@@ -18,7 +18,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <vector>
 #include "handle.h"
-#include "../misc/clearValue.h"
 
 namespace magma
 {
@@ -40,7 +39,11 @@ namespace magma
     // Methods order follows Vulkan API order
     class CommandBuffer : public Handle<VkCommandBuffer>
     {
+        CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Device> device);
+
     public:
+        ~CommandBuffer();
+
         bool begin() noexcept;
         bool begin(
             const std::shared_ptr<RenderPass>& renderPass, 
@@ -213,8 +216,8 @@ namespace magma
         void insertDebugMarker(const char *name) noexcept;
         
         // Non-API utility methods
-        void setClear(const ClearValue& value);
-        void setClears(const std::vector<ClearValue>& values);
+        void setClear(const ClearValue& value) noexcept;
+        void setClears(const std::initializer_list<ClearValue> values) noexcept;
 
         void setRenderArea(const VkRect2D& rc) noexcept;
         void setRenderArea(
@@ -230,15 +233,13 @@ namespace magma
         void queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept;
 
     private:
-        CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Device> device);
-        friend class CommandPool;
-
-    private:
-        std::vector<ClearValue> clearValues;
+        uint32_t clearValueCount = 0;
+        VkClearValue *clearValues = nullptr;
         VkRect2D renderArea = {0};
         bool occlusionQueryEnable = false;
         VkQueryControlFlags queryFlags = 0;
         VkQueryPipelineStatisticFlags pipelineStatistics = 0;
+        friend class CommandPool;
     };
 } // namespace magma
 

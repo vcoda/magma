@@ -49,6 +49,11 @@ CommandBuffer::CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Devic
 #endif // MAGMA_DEBUG
 }
 
+CommandBuffer::~CommandBuffer()
+{
+    delete[] clearValues;
+}
+
 bool CommandBuffer::begin() noexcept
 {
     VkCommandBufferBeginInfo beginInfo = {};
@@ -203,8 +208,8 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     beginInfo.renderPass = *renderPass;
     beginInfo.framebuffer = *framebuffer;
     beginInfo.renderArea = renderArea;
-    beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
-    beginInfo.pClearValues = clearValues.front();
+    beginInfo.clearValueCount = clearValueCount;
+    beginInfo.pClearValues = clearValues;
     vkCmdBeginRenderPass(handle, &beginInfo, contents);
 }
 
