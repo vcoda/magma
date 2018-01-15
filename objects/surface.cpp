@@ -15,9 +15,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#ifdef _WIN32
-#define VK_USE_PLATFORM_WIN32_KHR
-#endif
 #include "surface.h"
 #include "instance.h"
 #include "../shared.h"
@@ -25,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Surface::Surface(std::shared_ptr<Instance> instance):
-    instance(instance)
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT, nullptr)
 {}
 
 Surface::~Surface()

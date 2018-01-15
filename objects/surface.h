@@ -16,22 +16,19 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <memory>
-#include "../vulkan/vulkan.h"
+#include "handle.h"
 
 namespace magma
 {
     class Instance;
 
-    class Surface
+    class Surface : public NonDispatchable<VkSurfaceKHR>
     {
     public:
 	    Surface(std::shared_ptr<Instance> instance);
 	    virtual ~Surface();
-        operator const VkSurfaceKHR() const { return handle; }
 
     protected:
-        VkSurfaceKHR handle = VK_NULL_HANDLE;
         std::shared_ptr<Instance> instance;
     };
 
