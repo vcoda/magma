@@ -79,11 +79,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     template <typename Type>
-    typename Type::VkType __handle(const std::shared_ptr<const Type>& obj)
+    inline typename Type::VkType __handle(const std::shared_ptr<const Type>& obj)
     {
         //return obj ? *obj : VK_NULL_HANDLE;
         if (obj) return *obj;
         return VK_NULL_HANDLE;
+    }
+
+    template <typename Type>
+    inline Type *__memcpy(Type *const dst, const Type *const src)
+    {
+        return reinterpret_cast<Type *>(std::memcpy(dst, src, sizeof(Type)));
     }
 }
 
