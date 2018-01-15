@@ -204,6 +204,9 @@
     <ClInclude Include="objects\queryPool.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="vulkan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">

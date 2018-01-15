@@ -171,6 +171,7 @@
     <ClInclude Include="states\tesselationState.h" />
     <ClInclude Include="states\vertexInputState.h" />
     <ClInclude Include="states\viewportState.h" />
+    <ClInclude Include="vulkan.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl" />
