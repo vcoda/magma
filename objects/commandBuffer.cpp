@@ -120,51 +120,18 @@ void CommandBuffer::bindDescriptorSets(const std::shared_ptr<DescriptorSet>& des
     vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, 1, nativeDescriptorSets, 0, nullptr);
 }
 
-void CommandBuffer::bindIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer, VkDeviceSize offset /* 0 */) noexcept
-{
-    vkCmdBindIndexBuffer(handle, *indexBuffer, offset, indexBuffer->getIndexType());
-}
-
-void CommandBuffer::bindVertexBuffer(uint32_t firstBinding, const std::shared_ptr<VertexBuffer>& vertexBuffer, VkDeviceSize offset /* 0 */) noexcept
-{
-    const VkBuffer dereferencedBuffers[1] = { *vertexBuffer };
-    vkCmdBindVertexBuffers(handle, firstBinding, 1, dereferencedBuffers, &offset);
-}
-
-void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::vector<std::shared_ptr<VertexBuffer>>& vertexBuffers, const std::vector<VkDeviceSize>& offsets) noexcept
-{
-    MAGMA_ASSERT(vertexBuffers.size() > 0);
-    MAGMA_ASSERT(vertexBuffers.size() == offsets.size());
-    MAGMA_STACK_ARRAY(VkBuffer, dereferencedBuffers, vertexBuffers.size());
-    for (const auto& buffer : vertexBuffers)
-        dereferencedBuffers.put(*buffer);
-    vkCmdBindVertexBuffers(handle, firstBinding, dereferencedBuffers.size(), dereferencedBuffers.data(), offsets.data());
-}
+// inline void CommandBuffer::bindIndexBuffer
+// inline void CommandBuffer::bindVertexBuffer
+// inline void CommandBuffer::bindVertexBuffers
 
 // inline void CommandBuffer::draw
 // inline void CommandBuffer::drawInstanced
 // inline void CommandBuffer::drawIndexed
 // inline void CommandBuffer::drawIndexedInstanced
-
-void CommandBuffer::drawIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset, uint32_t drawCount, uint32_t stride) const noexcept
-{
-    vkCmdDrawIndirect(handle, *buffer, offset, drawCount, stride);
-}
-
-void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset, uint32_t drawCount, uint32_t stride) const noexcept
-{
-    vkCmdDrawIndexedIndirect(handle, *buffer, offset, drawCount, stride);
-}
-
-void CommandBuffer::dispatch(uint32_t x, uint32_t y, uint32_t z) const noexcept
-{
-    vkCmdDispatch(handle, x, y, z);
-}
-
-void CommandBuffer::dispatchIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset) const noexcept
-{
-    vkCmdDispatchIndirect(handle, *buffer, offset);
-}
+// inline void CommandBuffer::drawIndirect
+// inline void CommandBuffer::drawIndexedIndirect
+// inline void CommandBuffer::dispatch
+// inline void CommandBuffer::dispatchIndirect
 
 void CommandBuffer::copyBuffer(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Buffer>& dstBuffer,
     VkDeviceSize srcOffset /* 0 */, VkDeviceSize dstOffset /* 0 */, VkDeviceSize size /* 0 */) const noexcept

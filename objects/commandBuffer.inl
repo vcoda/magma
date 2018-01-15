@@ -15,6 +15,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
+#include "indexBuffer.h"
+#include "vertexBuffer.h"
+#include "../helpers/stackArray.h"
+
 namespace magma
 {
 inline void CommandBuffer::setViewport(const VkViewport& viewport) noexcept
@@ -101,6 +105,27 @@ inline void CommandBuffer::setStencilReference(bool frontFace, bool backFace, ui
     vkCmdSetStencilReference(handle, MAGMA_STENCIL_FACE_MASK(frontFace, backFace), reference);
 }
 
+inline void CommandBuffer::bindIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer, VkDeviceSize offset /* 0 */) noexcept
+{
+    vkCmdBindIndexBuffer(handle, *indexBuffer, offset, indexBuffer->getIndexType());
+}
+
+inline void CommandBuffer::bindVertexBuffer(uint32_t firstBinding, const std::shared_ptr<VertexBuffer>& vertexBuffer, VkDeviceSize offset /* 0 */) noexcept
+{
+    const VkBuffer dereferencedBuffers[1] = {*vertexBuffer};
+    vkCmdBindVertexBuffers(handle, firstBinding, 1, dereferencedBuffers, &offset);
+}
+
+inline void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::vector<std::shared_ptr<VertexBuffer>>& vertexBuffers, const std::vector<VkDeviceSize>& offsets) noexcept
+{
+    MAGMA_ASSERT(vertexBuffers.size() > 0);
+    MAGMA_ASSERT(vertexBuffers.size() == offsets.size());
+    MAGMA_STACK_ARRAY(VkBuffer, dereferencedBuffers, vertexBuffers.size());
+    for (const auto& buffer : vertexBuffers)
+        dereferencedBuffers.put(*buffer);
+    vkCmdBindVertexBuffers(handle, firstBinding, dereferencedBuffers.size(), dereferencedBuffers.data(), offsets.data());
+}
+
 inline void CommandBuffer::draw(uint32_t vertexCount, uint32_t firstVertex) const noexcept
 {
     vkCmdDraw(handle, vertexCount, 1, firstVertex, 0);
@@ -119,6 +144,26 @@ inline void CommandBuffer::drawIndexed(uint32_t indexCount, uint32_t firstIndex,
 inline void CommandBuffer::drawIndexedInstanced(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t vertexOffset, uint32_t firstInstance) const noexcept
 {
     vkCmdDrawIndexed(handle, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
+}
+
+inline void CommandBuffer::drawIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset, uint32_t drawCount, uint32_t stride) const noexcept
+{
+    vkCmdDrawIndirect(handle, *buffer, offset, drawCount, stride);
+}
+
+inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset, uint32_t drawCount, uint32_t stride) const noexcept
+{
+    vkCmdDrawIndexedIndirect(handle, *buffer, offset, drawCount, stride);
+}
+
+inline void CommandBuffer::dispatch(uint32_t x, uint32_t y, uint32_t z) const noexcept
+{
+    vkCmdDispatch(handle, x, y, z);
+}
+
+inline void CommandBuffer::dispatchIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset) const noexcept
+{
+    vkCmdDispatchIndirect(handle, *buffer, offset);
 }
 
 inline void CommandBuffer::setClear(const ClearValue& value)
