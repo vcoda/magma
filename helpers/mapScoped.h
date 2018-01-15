@@ -20,17 +20,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    template <typename Block>
-    inline void mapScoped(
-        const std::shared_ptr<UniformBuffer<Block>>& buffer,
-        bool clearMemory,
-        std::function<void(Block *block)> fn)
+    namespace helpers
     {
-        Block *block = buffer->map(clearMemory);
-        if (block)
+        template <typename Block>
+        inline void mapScoped(
+            const std::shared_ptr<UniformBuffer<Block>>& buffer,
+            bool clearMemory,
+            std::function<void(Block *block)> fn)
         {
-            fn(block);
-            buffer->unmap();
+            Block *block = buffer->map(clearMemory);
+            if (block)
+            {
+                fn(block);
+                buffer->unmap();
+            }
         }
-    }
+    } // namespace helpers
 } // namespace magma
