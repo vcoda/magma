@@ -19,10 +19,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/instance.h"
 #include "../objects/physicalDevice.h"
 
-namespace magma
-{
 #define MAGMA_CHECK_EXTENSION(ext) ext(hasExtension(#ext))
 
+namespace magma
+{
 bool Extensions::hasExtension(const char *name) const
 {
     static const std::string prefix("VK_");
