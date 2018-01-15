@@ -129,6 +129,7 @@
     <ClInclude Include="misc\extensions.h" />
     <ClInclude Include="misc\format.h" />
     <ClInclude Include="objects\buffer.h" />
+    <ClInclude Include="objects\bufferView.h" />
     <ClInclude Include="objects\commandBuffer.h" />
     <ClInclude Include="objects\commandPool.h" />
     <ClInclude Include="objects\debugObject.h" />
@@ -184,6 +185,7 @@
     <ClCompile Include="misc\extensions.cpp" />
     <ClCompile Include="misc\format.cpp" />
     <ClCompile Include="objects\buffer.cpp" />
+    <ClCompile Include="objects\bufferView.cpp" />
     <ClCompile Include="objects\commandBuffer.cpp" />
     <ClCompile Include="objects\commandPool.cpp" />
     <ClCompile Include="objects\debugObject.cpp" />

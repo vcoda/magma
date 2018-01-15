@@ -17,6 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
+#include "objects/buffer.h"
+#include "objects/bufferView.h"
 #include "objects/commandBuffer.h" 
 #include "objects/commandPool.h"
 #include "objects/debugReportCallback.h"
