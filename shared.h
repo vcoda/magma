@@ -28,7 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <iostream> // std::cerr
 #endif
 
-#include "vulkan/vulkan.h"
+#include "vulkan.h"
 #include "misc/exception.h"
 
 #define MAGMA_BOOLEAN(x) x ? VK_TRUE : VK_FALSE
