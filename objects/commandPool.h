@@ -31,7 +31,7 @@ namespace magma
             VkCommandPoolCreateFlags flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT);
         ~CommandPool();
         std::shared_ptr<CommandBuffer> allocateCommandBuffer(VkCommandBufferLevel level = VK_COMMAND_BUFFER_LEVEL_PRIMARY);
-        void freeCommandBuffer(std::shared_ptr<CommandBuffer> commandBuffer);
+        void freeCommandBuffer(std::shared_ptr<CommandBuffer>& commandBuffer);
         std::vector<std::shared_ptr<CommandBuffer>> allocateCommandBuffers(uint32_t count,
             VkCommandBufferLevel level = VK_COMMAND_BUFFER_LEVEL_PRIMARY);
         void freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers);

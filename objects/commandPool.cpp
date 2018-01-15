@@ -55,10 +55,11 @@ std::shared_ptr<CommandBuffer> CommandPool::allocateCommandBuffer(
     return std::shared_ptr<CommandBuffer>(new CommandBuffer(commandBuffer, device));
 }
 
-void CommandPool::freeCommandBuffer(std::shared_ptr<CommandBuffer> commandBuffer)
+void CommandPool::freeCommandBuffer(std::shared_ptr<CommandBuffer>& commandBuffer)
 {
-    const VkCommandBuffer dereferencedCommandBuffers[1] = {*commandBuffer};
+    VkCommandBuffer dereferencedCommandBuffers[1] = {*commandBuffer};
     vkFreeCommandBuffers(*device, handle, 1, dereferencedCommandBuffers);
+    commandBuffer.reset();
 }
 
 std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(uint32_t count,
