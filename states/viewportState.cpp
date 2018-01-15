@@ -110,7 +110,13 @@ ViewportState::~ViewportState()
 
 void ViewportState::initialize(const VkViewport& viewport, const VkRect2D& scissor)
 {
-    initialize(std::vector<VkViewport>{viewport}, std::vector<VkRect2D>{scissor});
+    state.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+    state.pNext = nullptr;
+    state.flags = 0;
+    state.viewportCount = 1;
+    state.pViewports = magma::__memcpy(new VkViewport[state.viewportCount], &viewport);
+    state.scissorCount = 1;
+    state.pScissors = magma::__memcpy(new VkRect2D[state.scissorCount], &scissor);
 }
 
 void ViewportState::initialize(const std::vector<VkViewport>& viewports, const std::vector<VkRect2D>& scissors)
