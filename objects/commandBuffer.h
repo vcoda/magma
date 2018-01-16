@@ -217,7 +217,7 @@ namespace magma
         
         // Non-API utility methods
         void setClear(const ClearValue& value) noexcept;
-        void setClears(const std::initializer_list<ClearValue> values) noexcept;
+        void setClears(const std::initializer_list<ClearValue>& values) noexcept;
 
         void setRenderArea(const VkRect2D& rc) noexcept;
         void setRenderArea(

@@ -176,7 +176,7 @@ inline void CommandBuffer::setClear(const ClearValue& value) noexcept
         clearValues[clearValueCount++] = value;
 }
 
-inline void CommandBuffer::setClears(const std::initializer_list<ClearValue> values) noexcept
+inline void CommandBuffer::setClears(const std::initializer_list<ClearValue>& values) noexcept
 {
     if (values.size() > clearValueCount)
     {
