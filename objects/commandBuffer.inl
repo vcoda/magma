@@ -64,7 +64,7 @@ inline void CommandBuffer::setScissor(int32_t x, int32_t y, uint32_t width, uint
     scissor.offset.x = x;
     scissor.offset.y = y;
     scissor.extent.width = width;
-    scissor.extent.width = height;
+    scissor.extent.height = height;
     vkCmdSetScissor(handle, 0, 1, &scissor);
 }
 
