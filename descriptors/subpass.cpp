@@ -16,51 +16,61 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "subpass.h"
+#include "../shared.h"
 
 namespace magma
 {
 Subpass::Subpass(VkSubpassDescriptionFlags flags, VkPipelineBindPoint pipelineBindPoint)
 {
-    desc.flags = flags;
-    desc.pipelineBindPoint = pipelineBindPoint;
-    desc.inputAttachmentCount = 0;
-    desc.pInputAttachments = nullptr;
-    desc.colorAttachmentCount = 1;
-    desc.pColorAttachments = nullptr;
-    desc.pResolveAttachments = nullptr;
-    desc.pDepthStencilAttachment = nullptr;
-    desc.preserveAttachmentCount = 0;
-    desc.pPreserveAttachments = nullptr;
+    this->flags = flags;
+    this->pipelineBindPoint = pipelineBindPoint;
+    inputAttachmentCount = 0;
+    pInputAttachments = nullptr;
+    colorAttachmentCount = 0;
+    pColorAttachments = nullptr;
+    pResolveAttachments = nullptr;
+    pDepthStencilAttachment = nullptr;
+    preserveAttachmentCount = 0;
+    pPreserveAttachments = nullptr;
+}
+
+Subpass::Subpass(const Subpass& other)
+{
+    copy(this, &other);
+    if (other.pColorAttachments)
+        pColorAttachments = copy(new VkAttachmentReference[colorAttachmentCount], other.pColorAttachments, colorAttachmentCount);
+    if (other.pDepthStencilAttachment)
+        pDepthStencilAttachment = copy(new VkAttachmentReference, other.pDepthStencilAttachment);
 }
 
 Subpass::~Subpass()
 {
-    delete[] desc.pColorAttachments;
-    delete desc.pDepthStencilAttachment;
+    delete[] pColorAttachments;
+    delete pDepthStencilAttachment;
 }
 
 GraphicsSubpass::GraphicsSubpass(const VkImageLayout& colorLayout):
     Subpass(0, VK_PIPELINE_BIND_POINT_GRAPHICS)
 {
-    VkAttachmentReference *colorReference = new VkAttachmentReference;
+    VkAttachmentReference *colorReference = new VkAttachmentReference[1];
     colorReference->attachment = 0;
     colorReference->layout = colorLayout;
-    desc.colorAttachmentCount = 1;
-    desc.pColorAttachments = colorReference;
+    colorAttachmentCount = 1;
+    pColorAttachments = colorReference;
 }
 
 GraphicsSubpass::GraphicsSubpass(const VkImageLayout& colorLayout, const VkImageLayout& depthStencilLayout):
     Subpass(0, VK_PIPELINE_BIND_POINT_GRAPHICS)
 {
-    VkAttachmentReference *colorReference = new VkAttachmentReference;
+    VkAttachmentReference *colorReference = new VkAttachmentReference[1];
     colorReference->attachment = 0;
     colorReference->layout = colorLayout;
     VkAttachmentReference *depthStencilReference = new VkAttachmentReference;
     depthStencilReference->attachment = 1;
     depthStencilReference->layout = depthStencilLayout;
-    desc.colorAttachmentCount = 1;
-    desc.pColorAttachments = colorReference;
-    desc.pDepthStencilAttachment = depthStencilReference;
+    colorAttachmentCount = 1;
+    pColorAttachments = colorReference;
+    pDepthStencilAttachment = depthStencilReference;
 }
 
 ComputeSubpass::ComputeSubpass():

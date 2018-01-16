@@ -32,7 +32,7 @@ namespace magma
         friend class Attachment;
     };
 
-    class Attachment
+    class Attachment : public VkAttachmentDescription
     {
     public:
         Attachment(VkFormat format, 
@@ -49,10 +49,6 @@ namespace magma
             VkImageLayout initialLayout,
             VkImageLayout finalLayout); 
         Attachment(VkFormat format, const Attachment& predefined);
-        MAGMA_TYPE_CAST(VkAttachmentDescription, desc)
-
-    private:
-        VkAttachmentDescription desc;
     };
 
     namespace op

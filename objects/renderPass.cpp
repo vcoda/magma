@@ -28,9 +28,9 @@ RenderPass::RenderPass(std::shared_ptr<const Device> device, const std::vector<A
     info.pNext = nullptr;
     info.flags = 0;
     info.attachmentCount = MAGMA_COUNT(attachments);
-    info.pAttachments = attachments.front();
+    info.pAttachments = attachments.data();
     info.subpassCount = 1;
-    info.pSubpasses = subpass;
+    info.pSubpasses = &subpass;
     info.dependencyCount = 0;
     info.pDependencies = nullptr;
     const VkResult create = vkCreateRenderPass(*device, &info, nullptr, &handle);

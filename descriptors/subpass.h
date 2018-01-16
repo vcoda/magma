@@ -21,15 +21,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Subpass 
+    class Subpass : public VkSubpassDescription
     {
     public:
         Subpass(VkSubpassDescriptionFlags flags, VkPipelineBindPoint pipelineBindPoint);
+        Subpass(const Subpass&);
         ~Subpass();
-        MAGMA_TYPE_CAST(VkSubpassDescription, desc)
-
-    protected:
-        VkSubpassDescription desc;
     };
 
     class GraphicsSubpass : public Subpass

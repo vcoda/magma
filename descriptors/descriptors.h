@@ -23,8 +23,8 @@ namespace magma
     {
         Descriptor(VkDescriptorType type, uint32_t descriptorCount)
         {
-            VkDescriptorPoolSize::type = type;
-            VkDescriptorPoolSize::descriptorCount = descriptorCount;
+            this->type = type;
+            this->descriptorCount = descriptorCount;
         }
     };
 

@@ -26,26 +26,26 @@ Attachment::Attachment(VkFormat format,
     VkImageLayout finalLayout,
     VkImageLayout initialLayout /* VK_IMAGE_LAYOUT_UNDEFINED */)
 {
-    desc.flags = 0;
-    desc.format = format;
+    flags = 0;
+    this->format = format;
     switch (sampleCount)
     {
-    case 1: desc.samples = VK_SAMPLE_COUNT_1_BIT; break;
-    case 2: desc.samples = VK_SAMPLE_COUNT_2_BIT; break;
-    case 4: desc.samples = VK_SAMPLE_COUNT_4_BIT; break;
-    case 8: desc.samples = VK_SAMPLE_COUNT_8_BIT; break;
-    case 16: desc.samples = VK_SAMPLE_COUNT_16_BIT; break;
-    case 32: desc.samples = VK_SAMPLE_COUNT_32_BIT; break;
-    case 64: desc.samples = VK_SAMPLE_COUNT_64_BIT; break;
+    case 1: samples = VK_SAMPLE_COUNT_1_BIT; break;
+    case 2: samples = VK_SAMPLE_COUNT_2_BIT; break;
+    case 4: samples = VK_SAMPLE_COUNT_4_BIT; break;
+    case 8: samples = VK_SAMPLE_COUNT_8_BIT; break;
+    case 16: samples = VK_SAMPLE_COUNT_16_BIT; break;
+    case 32: samples = VK_SAMPLE_COUNT_32_BIT; break;
+    case 64: samples = VK_SAMPLE_COUNT_64_BIT; break;
     default: 
         throw Exception("invalid <sampleCount> parameter");
     }
-    desc.loadOp = op.loadOp;
-    desc.storeOp = op.storeOp;
-    desc.stencilLoadOp = stencilOp.loadOp;
-    desc.stencilStoreOp = stencilOp.storeOp;
-    desc.initialLayout = initialLayout;
-    desc.finalLayout = finalLayout;
+    loadOp = op.loadOp;
+    storeOp = op.storeOp;
+    stencilLoadOp = stencilOp.loadOp;
+    stencilStoreOp = stencilOp.storeOp;
+    this->initialLayout = initialLayout;
+    this->finalLayout = finalLayout;
 }
 
 Attachment::Attachment(VkSampleCountFlagBits samples, 
@@ -56,21 +56,21 @@ Attachment::Attachment(VkSampleCountFlagBits samples,
     VkImageLayout initialLayout, 
     VkImageLayout finalLayout)
 {
-    desc.flags = 0;
-    desc.format = VK_FORMAT_UNDEFINED;
-    desc.samples = samples;
-    desc.loadOp = loadOp;
-    desc.storeOp = storeOp;
-    desc.stencilLoadOp = stencilLoadOp;
-    desc.stencilStoreOp = stencilStoreOp;
-    desc.initialLayout = initialLayout;
-    desc.finalLayout = finalLayout;
+    flags = 0;
+    format = VK_FORMAT_UNDEFINED;
+    this->samples = samples;
+    this->loadOp = loadOp;
+    this->storeOp = storeOp;
+    this->stencilLoadOp = stencilLoadOp;
+    this->stencilStoreOp = stencilStoreOp;
+    this->initialLayout = initialLayout;
+    this->finalLayout = finalLayout;
 }
 
 Attachment::Attachment(VkFormat format, const Attachment& predefined)
 {
-    desc = predefined.desc;
-    desc.format = format;
+    copy(this, &predefined);
+    this->format = format;
 }
 
 namespace op
