@@ -49,7 +49,7 @@ Subpass::~Subpass()
     delete pDepthStencilAttachment;
 }
 
-GraphicsSubpass::GraphicsSubpass(const VkImageLayout& colorLayout):
+GraphicsSubpass::GraphicsSubpass(VkImageLayout colorLayout):
     Subpass(0, VK_PIPELINE_BIND_POINT_GRAPHICS)
 {
     VkAttachmentReference *colorReference = new VkAttachmentReference[1];
@@ -59,7 +59,7 @@ GraphicsSubpass::GraphicsSubpass(const VkImageLayout& colorLayout):
     pColorAttachments = colorReference;
 }
 
-GraphicsSubpass::GraphicsSubpass(const VkImageLayout& colorLayout, const VkImageLayout& depthStencilLayout):
+GraphicsSubpass::GraphicsSubpass(VkImageLayout colorLayout, VkImageLayout depthStencilLayout):
     Subpass(0, VK_PIPELINE_BIND_POINT_GRAPHICS)
 {
     VkAttachmentReference *colorReference = new VkAttachmentReference[1];

@@ -32,8 +32,8 @@ namespace magma
     class GraphicsSubpass : public Subpass
     {
     public:
-        GraphicsSubpass(const VkImageLayout& colorLayout);
-        GraphicsSubpass(const VkImageLayout& colorLayout, const VkImageLayout& depthStencilLayout);
+        GraphicsSubpass(VkImageLayout colorLayout);
+        GraphicsSubpass(VkImageLayout colorLayout, VkImageLayout depthStencilLayout);
         GraphicsSubpass(const std::vector<VkImageLayout>& colorLayouts);
         GraphicsSubpass(const std::vector<VkImageLayout>& colorLayouts, const VkImageLayout& depthStencilLayout);
     };
