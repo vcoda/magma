@@ -216,6 +216,9 @@
     <ClInclude Include="misc\scissor.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
+    <ClInclude Include="descriptors\bindings.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">

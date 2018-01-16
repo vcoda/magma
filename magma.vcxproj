@@ -118,6 +118,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="descriptors\attachment.h" />
+    <ClInclude Include="descriptors\bindings.h" />
     <ClInclude Include="descriptors\descriptors.h" />
     <ClInclude Include="descriptors\subpass.h" />
     <ClInclude Include="helpers\mapScoped.h" />
