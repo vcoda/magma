@@ -109,9 +109,3 @@ namespace magma
 }
 
 #define MAGMA_OPTIONAL_HANDLE(obj) magma::__handle(obj)
-
-#define MAGMA_TYPE_CAST(Type, m)\
-operator Type&() { return m; }\
-operator const Type&() const { return m; }\
-operator Type*() { return &m; }\
-operator const Type*() const { return &m; }
