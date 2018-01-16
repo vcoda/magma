@@ -30,7 +30,7 @@ namespace magma
     {
     public:
         RenderPass(std::shared_ptr<const Device> device,
-            const std::vector<Attachment>& attachments,
+            const std::initializer_list<Attachment>& attachments,
             const Subpass& subpass);
         RenderPass(std::shared_ptr<const Device> device, 
             const Attachment& attachment, 

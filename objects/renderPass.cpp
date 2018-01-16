@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-RenderPass::RenderPass(std::shared_ptr<const Device> device, const std::vector<Attachment>& attachments, const Subpass& subpass):
+RenderPass::RenderPass(std::shared_ptr<const Device> device, const std::initializer_list<Attachment>& attachments, const Subpass& subpass):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT, device)
 {
     VkRenderPassCreateInfo info;
@@ -28,7 +28,7 @@ RenderPass::RenderPass(std::shared_ptr<const Device> device, const std::vector<A
     info.pNext = nullptr;
     info.flags = 0;
     info.attachmentCount = MAGMA_COUNT(attachments);
-    info.pAttachments = attachments.data();
+    info.pAttachments = attachments.begin();
     info.subpassCount = 1;
     info.pSubpasses = &subpass;
     info.dependencyCount = 0;
@@ -38,7 +38,7 @@ RenderPass::RenderPass(std::shared_ptr<const Device> device, const std::vector<A
 }
 
 RenderPass::RenderPass(std::shared_ptr<const Device> device, const Attachment& attachment, const Subpass& subpass):
-    RenderPass(device, std::vector<Attachment>{attachment}, subpass)
+    RenderPass(device, {attachment}, subpass)
 {}
 
 RenderPass::~RenderPass()
