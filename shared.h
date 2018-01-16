@@ -87,9 +87,15 @@ namespace magma
     }
 
     template <typename Type>
-    inline Type *__memcpy(Type *const dst, const Type *const src)
+    inline Type *copy(Type *const dst, const Type *const src)
     {
         return reinterpret_cast<Type *>(std::memcpy(dst, src, sizeof(Type)));
+    }
+
+    template <typename Type>
+    inline Type *copy(Type *const dst, const Type *const src, uint32_t count)
+    {
+        return reinterpret_cast<Type *>(std::memcpy(dst, src, sizeof(Type) * count));
     }
 }
 
