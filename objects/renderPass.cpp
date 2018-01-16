@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "renderPass.h"
 #include "device.h"
+#include "../shared.h"
 
 namespace magma
 {

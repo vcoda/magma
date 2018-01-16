@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "sampler.h"
 #include "device.h"
 #include "../states/samplerState.h"
+#include "../shared.h"
 
 namespace magma
 {
