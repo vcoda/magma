@@ -26,7 +26,7 @@ namespace magma
     {
     public:
         Fence(std::shared_ptr<const Device> device, 
-            VkFenceCreateFlags flags = 0);
+            bool signaled = false);
         ~Fence();
         bool reset() noexcept;
         bool wait(uint64_t timeout = UINT64_MAX) const noexcept;

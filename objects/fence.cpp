@@ -21,13 +21,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Fence::Fence(std::shared_ptr<const Device> device, VkFenceCreateFlags flags /* 0 */):
+Fence::Fence(std::shared_ptr<const Device> device, 
+    bool signaled /* false */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT, device)
 {
     VkFenceCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     info.pNext = nullptr;
-    info.flags = flags;
+    info.flags = 0;
+    if (signaled)
+        info.flags |= VK_FENCE_CREATE_SIGNALED_BIT;
     const VkResult create = vkCreateFence(*device, &info, nullptr, &handle);
     MAGMA_THROW_FAILURE(create, "failed to create fence");
 }
