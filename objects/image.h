@@ -30,6 +30,8 @@ namespace magma
         virtual VkImageType getType() const = 0;
         VkFormat getFormat() const { return format; }
         uint32_t getMipLevels() const { return mipLevels; }
+        void bindMemory(std::shared_ptr<DeviceMemory> memory,
+            VkDeviceSize offset = 0);
         std::shared_ptr<DeviceMemory> getMemory() const { return memory; }
 
     protected:

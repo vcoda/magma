@@ -48,9 +48,9 @@ Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkForm
     MAGMA_THROW_FAILURE(create, "failed to create image");
     VkMemoryRequirements memoryRequirements;
     vkGetImageMemoryRequirements(*device, handle, &memoryRequirements);
-    memory.reset(new DeviceMemory(device, memoryRequirements.size, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
-    const VkResult bind = vkBindImageMemory(*device, handle, *memory, 0);
-    MAGMA_THROW_FAILURE(bind, "failed to bind image memory");
+    bindMemory(std::shared_ptr<DeviceMemory>(new DeviceMemory(device, 
+        memoryRequirements.size, 
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)));
 }
 
 Image::Image(std::shared_ptr<const Device> device, VkFormat format):
@@ -63,6 +63,14 @@ Image::~Image()
 {
     if (handle != VK_NULL_HANDLE) // Handle swapchain case
         vkDestroyImage(*device, handle, nullptr);
+}
+
+void Image::bindMemory(std::shared_ptr<DeviceMemory> memory,
+    VkDeviceSize offset /* 0 */)
+{
+    const VkResult bind = vkBindImageMemory(*device, handle, *memory, offset);
+    MAGMA_THROW_FAILURE(bind, "failed to bind image memory");
+    this->memory = memory;
 }
 
 Image1D::Image1D(std::shared_ptr<const Device> device, VkFormat format, 
