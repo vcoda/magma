@@ -34,6 +34,41 @@ namespace magma
                 VkShaderStageFlags stageFlags);
         };
 
+        struct VertexStageBinding : Binding
+        {
+            VertexStageBinding(uint32_t binding, const Descriptor& descriptor): Binding(binding, descriptor, VK_SHADER_STAGE_VERTEX_BIT) {}
+        };
+
+        struct GeometryStageBinding : Binding
+        {
+            GeometryStageBinding(uint32_t binding, const Descriptor& descriptor): Binding(binding, descriptor, VK_SHADER_STAGE_GEOMETRY_BIT) {}
+        };
+
+        struct FragmentStageBinding : Binding
+        {
+            FragmentStageBinding(uint32_t binding, const Descriptor& descriptor): Binding(binding, descriptor, VK_SHADER_STAGE_FRAGMENT_BIT) {}
+        };
+
+        struct VertexFragmentStageBinding : Binding
+        {
+            VertexFragmentStageBinding(uint32_t binding, const Descriptor& descriptor): Binding(binding, descriptor, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT) {}
+        };
+
+        struct ComputeStageBinding : Binding
+        {
+            ComputeStageBinding(uint32_t binding, const Descriptor& descriptor): Binding(binding, descriptor, VK_SHADER_STAGE_COMPUTE_BIT) {}
+        };
+
+        struct AllGraphicsStageBinding : Binding
+        {
+            AllGraphicsStageBinding(uint32_t binding, const Descriptor& descriptor): Binding(binding, descriptor, VK_SHADER_STAGE_ALL_GRAPHICS) {}
+        };
+
+        struct AllStageBinding : Binding
+        {
+            AllStageBinding(uint32_t binding, const Descriptor& descriptor): Binding(binding, descriptor, VK_SHADER_STAGE_ALL) {}
+        };
+
     public:
         DescriptorSetLayout(std::shared_ptr<const Device> device,
             const Binding& binding);
