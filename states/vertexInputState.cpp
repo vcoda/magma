@@ -20,14 +20,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 VertexInputState::VertexInputState(const VertexInputBinding& binding, const VertexInputAttribute& attribute):
-    VertexInputState(std::vector<VertexInputBinding>{binding}, std::vector<VertexInputAttribute>{attribute})
+    VertexInputState({binding}, {attribute})
 {}
 
-VertexInputState::VertexInputState(const VertexInputBinding& binding, const std::vector<VertexInputAttribute>& attributes):
-    VertexInputState(std::vector<VertexInputBinding>{binding}, attributes)
+VertexInputState::VertexInputState(const VertexInputBinding& binding, const std::initializer_list<VertexInputAttribute>& attributes):
+    VertexInputState({binding}, attributes)
 {}
 
-VertexInputState::VertexInputState(const std::vector<VertexInputBinding>& bindings, const std::vector<VertexInputAttribute>& attributes)
+VertexInputState::VertexInputState(const std::initializer_list<VertexInputBinding>& bindings, 
+    const std::initializer_list<VertexInputAttribute>& attributes)
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;

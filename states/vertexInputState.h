@@ -48,12 +48,13 @@ namespace magma
     class VertexInputState final : public VkPipelineVertexInputStateCreateInfo
     {
     public:
-        VertexInputState(const std::vector<VertexInputBinding>& bindings,
-            const std::vector<VertexInputAttribute>& attributes);
         VertexInputState(const VertexInputBinding& binding,
             const VertexInputAttribute& attribute);
         VertexInputState(const VertexInputBinding& binding,
-            const std::vector<VertexInputAttribute>& attributes);  
+            const std::initializer_list<VertexInputAttribute>& attributes);
+        VertexInputState(
+            const std::initializer_list<VertexInputBinding>& bindings,
+            const std::initializer_list<VertexInputAttribute>& attributes);
         VertexInputState(const VertexInputState&);
         ~VertexInputState();
     };
