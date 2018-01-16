@@ -21,9 +21,9 @@ namespace magma
 {
 TesselationState::TesselationState(uint32_t patchControlPoints /* 0 */)
 {
-    state.sType = VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO;
-    state.pNext = nullptr;
-    state.flags = 0;
-    state.patchControlPoints = patchControlPoints;
+    sType = VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    this->patchControlPoints = patchControlPoints;
 }
 } // namespace magma

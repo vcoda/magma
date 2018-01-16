@@ -21,11 +21,11 @@ namespace magma
 {
 InputAssemblyState::InputAssemblyState(VkPrimitiveTopology topology, bool primitiveRestartEnable /* false */)
 {
-    state.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-    state.pNext = nullptr;
-    state.flags = 0;
-    state.topology = topology;
-    state.primitiveRestartEnable = MAGMA_BOOLEAN(primitiveRestartEnable);
+    sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    this->topology = topology;
+    this->primitiveRestartEnable = MAGMA_BOOLEAN(primitiveRestartEnable);
 }
 
 namespace states

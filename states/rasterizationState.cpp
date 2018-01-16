@@ -22,19 +22,19 @@ namespace magma
 RasterizationState::RasterizationState(VkPolygonMode polygonMode, VkCullModeFlags cullMode, VkFrontFace frontFace,
     bool depthClampEnable /* false */, bool rasterizerDiscardEnable /* false */)
 {
-    state.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-    state.pNext = nullptr;
-    state.flags = 0;
-    state.depthClampEnable = MAGMA_BOOLEAN(depthClampEnable);
-    state.rasterizerDiscardEnable = MAGMA_BOOLEAN(rasterizerDiscardEnable);
-    state.polygonMode = polygonMode;
-    state.cullMode = cullMode;
-    state.frontFace = frontFace;
-    state.depthBiasEnable = VK_FALSE;
-    state.depthBiasConstantFactor = 0.f;
-    state.depthBiasClamp = 0.f;
-    state.depthBiasSlopeFactor = 0.f;
-    state.lineWidth = 1.f;
+    sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    this->depthClampEnable = MAGMA_BOOLEAN(depthClampEnable);
+    this->rasterizerDiscardEnable = MAGMA_BOOLEAN(rasterizerDiscardEnable);
+    this->polygonMode = polygonMode;
+    this->cullMode = cullMode;
+    this->frontFace = frontFace;
+    depthBiasEnable = VK_FALSE;
+    depthBiasConstantFactor = 0.f;
+    depthBiasClamp = 0.f;
+    depthBiasSlopeFactor = 0.f;
+    lineWidth = 1.f;
 }
 
 namespace states

@@ -20,15 +20,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class InputAssemblyState
+    class InputAssemblyState : public VkPipelineInputAssemblyStateCreateInfo
     {
     public:
         InputAssemblyState(VkPrimitiveTopology topology, 
             bool primitiveRestartEnable = false);
-        MAGMA_TYPE_CAST(VkPipelineInputAssemblyStateCreateInfo, state)
-
-    private:
-        VkPipelineInputAssemblyStateCreateInfo state;
     };
 
     namespace states

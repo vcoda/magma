@@ -21,39 +21,31 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class VertexInputBinding
+    class VertexInputBinding : public VkVertexInputBindingDescription
     {
     public:
         VertexInputBinding(uint32_t binding, uint32_t stride,
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX)
         {
-            desc.binding = binding;
-            desc.stride = stride;
-            desc.inputRate = inputRate;
+            this->binding = binding;
+            this->stride = stride;
+            this->inputRate = inputRate;
         }
-
-    private:
-        VkVertexInputBindingDescription desc;
-        friend class VertexInputState;
     };
 
-    class VertexInputAttribute
+    class VertexInputAttribute : public VkVertexInputAttributeDescription
     {
     public:
         VertexInputAttribute(uint32_t binding, uint32_t location, VkFormat format, uint32_t offset)
         {
-            desc.location = location;
-            desc.binding = binding;
-            desc.format = format;
-            desc.offset = offset;
+            this->location = location;
+            this->binding = binding;
+            this->format = format;
+            this->offset = offset;
         }
-
-    private:
-        VkVertexInputAttributeDescription desc;
-        friend class VertexInputState;
     };
 
-    class VertexInputState final
+    class VertexInputState final : public VkPipelineVertexInputStateCreateInfo
     {
     public:
         VertexInputState(const std::vector<VertexInputBinding>& bindings,
@@ -62,11 +54,8 @@ namespace magma
             const VertexInputAttribute& attribute);
         VertexInputState(const VertexInputBinding& binding,
             const std::vector<VertexInputAttribute>& attributes);  
+        VertexInputState(const VertexInputState&);
         ~VertexInputState();
-        MAGMA_TYPE_CAST(VkPipelineVertexInputStateCreateInfo, state)
-
-    private:
-        VkPipelineVertexInputStateCreateInfo state;
     };
 
     namespace states

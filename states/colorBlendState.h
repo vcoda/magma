@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class ColorBlendAttachmentState
+    class ColorBlendAttachmentState : public VkPipelineColorBlendAttachmentState
     {
     public:
         ColorBlendAttachmentState(bool blendEnable, 
@@ -29,22 +29,15 @@ namespace magma
             VkBlendFactor dstBlendFactor,
             VkBlendOp blendOp, 
             VkColorComponentFlags colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
-        MAGMA_TYPE_CAST(VkPipelineColorBlendAttachmentState, state)
-
-    private:
-        VkPipelineColorBlendAttachmentState state;
     };
 
-    class ColorBlendState final
+    class ColorBlendState final : public VkPipelineColorBlendStateCreateInfo
     {
     public:
         ColorBlendState(const ColorBlendAttachmentState& attachment);
         ColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments);
+        ColorBlendState(const ColorBlendState&);
         ~ColorBlendState();
-        MAGMA_TYPE_CAST(VkPipelineColorBlendStateCreateInfo, state)
-
-    private:
-        VkPipelineColorBlendStateCreateInfo state;
     };
 
     namespace blends

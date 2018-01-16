@@ -29,23 +29,30 @@ VertexInputState::VertexInputState(const VertexInputBinding& binding, const std:
 
 VertexInputState::VertexInputState(const std::vector<VertexInputBinding>& bindings, const std::vector<VertexInputAttribute>& attributes)
 {
-    MAGMA_ASSERT(!bindings.empty());
-    MAGMA_ASSERT(!attributes.empty());
-    state.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    state.pNext = nullptr;
-    state.flags = 0;
-    state.vertexBindingDescriptionCount = MAGMA_COUNT(bindings);
-    state.pVertexBindingDescriptions = new VkVertexInputBindingDescription[state.vertexBindingDescriptionCount];
-    MAGMA_COPY_VECTOR(state.pVertexBindingDescriptions, bindings);
-    state.vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
-    state.pVertexAttributeDescriptions = new VkVertexInputAttributeDescription[state.vertexAttributeDescriptionCount];
-    MAGMA_COPY_VECTOR(state.pVertexAttributeDescriptions, attributes);
+    sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    vertexBindingDescriptionCount = MAGMA_COUNT(bindings);
+    pVertexBindingDescriptions = copy(new VkVertexInputBindingDescription[vertexBindingDescriptionCount], bindings);
+    vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
+    pVertexAttributeDescriptions = copy(new VkVertexInputAttributeDescription[vertexAttributeDescriptionCount], attributes);
+}
+
+VertexInputState::VertexInputState(const VertexInputState& other)
+{
+    copy(this, &other);
+    pVertexBindingDescriptions = copy(new VkVertexInputBindingDescription[vertexBindingDescriptionCount], 
+        other.pVertexBindingDescriptions, 
+        vertexBindingDescriptionCount);
+    pVertexAttributeDescriptions = copy(new VkVertexInputAttributeDescription[vertexAttributeDescriptionCount], 
+        other.pVertexAttributeDescriptions,
+        vertexAttributeDescriptionCount);
 }
 
 VertexInputState::~VertexInputState()
 {
-    delete[] state.pVertexBindingDescriptions;
-    delete[] state.pVertexAttributeDescriptions;
+    delete[] pVertexBindingDescriptions;
+    delete[] pVertexAttributeDescriptions;
 }
 
 namespace states

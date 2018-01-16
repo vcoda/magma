@@ -20,13 +20,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class TesselationState
+    class TesselationState : public VkPipelineTessellationStateCreateInfo
     {
     public:
         TesselationState(uint32_t patchControlPoints = 0);
-        MAGMA_TYPE_CAST(VkPipelineTessellationStateCreateInfo, state)
-
-    private:
-        VkPipelineTessellationStateCreateInfo state;
     };
 } // namespace magma

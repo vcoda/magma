@@ -20,17 +20,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class MultisampleState
+    class MultisampleState : public VkPipelineMultisampleStateCreateInfo
     {
     public:
         MultisampleState(VkSampleCountFlagBits rasterizationSamples, 
             bool sampleShading = false, 
             bool alphaToCoverage = false, 
             bool alphaToOne = false);
-        MAGMA_TYPE_CAST(VkPipelineMultisampleStateCreateInfo, state)
-
-    private:
-        VkPipelineMultisampleStateCreateInfo state;
     };
 
     namespace states

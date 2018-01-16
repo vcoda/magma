@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class ViewportState final
+    class ViewportState final : public VkPipelineViewportStateCreateInfo
     {
     public:
         ViewportState(float x, float y, float width, float height, 
@@ -37,15 +37,10 @@ namespace magma
             const std::vector<VkRect2D>& scissors);
         ViewportState(const ViewportState&);
         ~ViewportState();
-        MAGMA_TYPE_CAST(VkPipelineViewportStateCreateInfo, state)
 
     private:
-        void initialize(const VkViewport& viewport,
-            const VkRect2D& scissor);
+        void initialize(const VkViewport& viewport, const VkRect2D& scissor);
         void initialize(const std::vector<VkViewport>& viewports,
             const std::vector<VkRect2D>& scissors);
-
-    private:
-        VkPipelineViewportStateCreateInfo state;
     };
 } // namespace magma

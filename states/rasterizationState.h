@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class RasterizationState
+    class RasterizationState : public VkPipelineRasterizationStateCreateInfo
     {
     public:
         RasterizationState(VkPolygonMode polygonMode, 
@@ -28,10 +28,6 @@ namespace magma
             VkFrontFace frontFace,
             bool depthClampEnable = false, 
             bool rasterizerDiscardEnable = false);
-        MAGMA_TYPE_CAST(VkPipelineRasterizationStateCreateInfo, state)
-
-    private:
-        VkPipelineRasterizationStateCreateInfo state;
     };
 
     namespace states

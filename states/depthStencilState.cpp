@@ -22,30 +22,30 @@ namespace magma
 StencilOpState::StencilOpState(VkStencilOp failOp, VkStencilOp passOp, VkStencilOp depthFailOp, VkCompareOp compareOp,
     uint32_t compareMask /* 0 */, uint32_t writeMask /* 0 */, uint32_t reference /* 0 */)
 {
-    state.failOp = failOp;
-    state.passOp = passOp;
-    state.depthFailOp = depthFailOp;
-    state.compareOp = compareOp;
-    state.compareMask = compareMask;
-    state.writeMask = writeMask;
-    state.reference = reference;
+    this->failOp = failOp;
+    this->passOp = passOp;
+    this->depthFailOp = depthFailOp;
+    this->compareOp = compareOp;
+    this->compareMask = compareMask;
+    this->writeMask = writeMask;
+    this->reference = reference;
 }
 
 DepthStencilState::DepthStencilState(VkCompareOp depthCompareOp, bool depthWriteEnable,
     const StencilOpState& front, const StencilOpState& back)
 {
-    state.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-    state.pNext = nullptr;
-    state.flags = 0;
-    state.depthTestEnable = (depthCompareOp != VK_COMPARE_OP_ALWAYS);
-    state.depthWriteEnable = MAGMA_BOOLEAN(depthWriteEnable);
-    state.depthCompareOp = depthCompareOp;
-    state.front = front;
-    state.back = back;
-    state.stencilTestEnable = (state.front.compareOp != VK_COMPARE_OP_ALWAYS) || (state.back.compareOp != VK_COMPARE_OP_ALWAYS);
-    state.depthBoundsTestEnable = VK_FALSE;
-    state.minDepthBounds = 0.f;
-    state.maxDepthBounds = 1.f;
+    sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    depthTestEnable = (depthCompareOp != VK_COMPARE_OP_ALWAYS);
+    this->depthWriteEnable = MAGMA_BOOLEAN(depthWriteEnable);
+    this->depthCompareOp = depthCompareOp;
+    this->front = front;
+    this->back = back;
+    stencilTestEnable = (front.compareOp != VK_COMPARE_OP_ALWAYS) || (back.compareOp != VK_COMPARE_OP_ALWAYS);
+    depthBoundsTestEnable = VK_FALSE;
+    minDepthBounds = 0.f;
+    maxDepthBounds = 1.f;
 }
 
 namespace states

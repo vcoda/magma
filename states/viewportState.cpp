@@ -105,37 +105,35 @@ ViewportState::ViewportState(const std::vector<VkViewport>& viewports, const std
 ViewportState::ViewportState(const ViewportState& other)
 {
     copy(this, &other);
-    state.pViewports = copy(new VkViewport[state.viewportCount], other.state.pViewports, state.viewportCount);
-    state.pScissors = copy(new VkRect2D[state.scissorCount], other.state.pScissors, state.scissorCount);
+    pViewports = copy(new VkViewport[viewportCount], other.pViewports, viewportCount);
+    pScissors = copy(new VkRect2D[scissorCount], other.pScissors, scissorCount);
 }
 
 ViewportState::~ViewportState()
 {
-    delete[] state.pViewports;
-    delete[] state.pScissors;
+    delete[] pViewports;
+    delete[] pScissors;
 }
 
 void ViewportState::initialize(const VkViewport& viewport, const VkRect2D& scissor)
 {
-    state.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-    state.pNext = nullptr;
-    state.flags = 0;
-    state.viewportCount = 1;
-    state.pViewports = copy(new VkViewport[state.viewportCount], &viewport);
-    state.scissorCount = 1;
-    state.pScissors = copy(new VkRect2D[state.scissorCount], &scissor);
+    sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    viewportCount = 1;
+    pViewports = copy(new VkViewport[viewportCount], &viewport);
+    scissorCount = 1;
+    pScissors = copy(new VkRect2D[scissorCount], &scissor);
 }
 
 void ViewportState::initialize(const std::vector<VkViewport>& viewports, const std::vector<VkRect2D>& scissors)
 {
-    state.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-    state.pNext = nullptr;
-    state.flags = 0;
-    state.viewportCount = MAGMA_COUNT(viewports);
-    state.pViewports = new VkViewport[state.viewportCount];
-    MAGMA_COPY_VECTOR(state.pViewports, viewports);
-    state.scissorCount = MAGMA_COUNT(scissors);
-    state.pScissors = new VkRect2D[state.scissorCount];
-    MAGMA_COPY_VECTOR(state.pScissors, scissors);
+    sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    viewportCount = MAGMA_COUNT(viewports);
+    pViewports = copy(new VkViewport[viewportCount], viewports);
+    scissorCount = MAGMA_COUNT(scissors);
+    pScissors = copy(new VkRect2D[scissorCount], scissors);
 }
 } // namespace magma

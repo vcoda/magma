@@ -23,41 +23,44 @@ ColorBlendAttachmentState::ColorBlendAttachmentState(bool blendEnable,
     VkBlendFactor srcBlendFactor, VkBlendFactor dstBlendFactor, VkBlendOp blendOp,
     VkColorComponentFlags colorWriteMask /* R, G, B, A */)
 {
-    state.blendEnable = MAGMA_BOOLEAN(blendEnable);
-    state.srcColorBlendFactor = srcBlendFactor;
-    state.dstColorBlendFactor = dstBlendFactor;
-    state.colorBlendOp = blendOp;
-    state.srcAlphaBlendFactor = srcBlendFactor;
-    state.dstAlphaBlendFactor = dstBlendFactor;
-    state.alphaBlendOp = blendOp;
-    state.colorWriteMask = colorWriteMask;
+    this->blendEnable = MAGMA_BOOLEAN(blendEnable);
+    srcColorBlendFactor = srcBlendFactor;
+    dstColorBlendFactor = dstBlendFactor;
+    colorBlendOp = blendOp;
+    srcAlphaBlendFactor = srcBlendFactor;
+    dstAlphaBlendFactor = dstBlendFactor;
+    alphaBlendOp = blendOp;
+    this->colorWriteMask = colorWriteMask;
 }
 
 ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& attachment):
     ColorBlendState(std::vector<ColorBlendAttachmentState>{attachment})
-{
-}
+{}
 
 ColorBlendState::ColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments)
 {
-    MAGMA_ASSERT(!attachments.empty());
-    state.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-    state.pNext = nullptr;
-    state.flags = 0;
-    state.logicOpEnable = VK_FALSE;
-    state.logicOp = VK_LOGIC_OP_CLEAR;
-    state.attachmentCount = MAGMA_COUNT(attachments);
-    state.pAttachments = new VkPipelineColorBlendAttachmentState[state.attachmentCount];
-    MAGMA_COPY_VECTOR(state.pAttachments, attachments);
-    state.blendConstants[0] = 1.f;
-    state.blendConstants[1] = 1.f;
-    state.blendConstants[2] = 1.f;
-    state.blendConstants[3] = 1.f;
+    sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    logicOpEnable = VK_FALSE;
+    logicOp = VK_LOGIC_OP_CLEAR;
+    attachmentCount = MAGMA_COUNT(attachments);
+    pAttachments = copy(new VkPipelineColorBlendAttachmentState[attachmentCount], attachments);
+    blendConstants[0] = 1.f;
+    blendConstants[1] = 1.f;
+    blendConstants[2] = 1.f;
+    blendConstants[3] = 1.f;
+}
+
+ColorBlendState::ColorBlendState(const ColorBlendState& other)
+{
+    copy(this, &other);
+    pAttachments = copy(new VkPipelineColorBlendAttachmentState[attachmentCount], other.pAttachments, attachmentCount);
 }
 
 ColorBlendState::~ColorBlendState()
 {
-    delete[] state.pAttachments;
+    delete[] pAttachments;
 }
 
 namespace blends

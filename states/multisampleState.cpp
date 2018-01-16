@@ -22,15 +22,15 @@ namespace magma
 MultisampleState::MultisampleState(VkSampleCountFlagBits rasterizationSamples, 
     bool sampleShading /* false */, bool alphaToCoverage /* false */, bool alphaToOne /* false */)
 {
-    state.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-    state.pNext = nullptr;
-    state.flags = 0;
-    state.rasterizationSamples = rasterizationSamples;
-    state.sampleShadingEnable = MAGMA_BOOLEAN(sampleShading);
-    state.minSampleShading = 0;
-    state.pSampleMask = nullptr;
-    state.alphaToCoverageEnable = MAGMA_BOOLEAN(alphaToCoverage);
-    state.alphaToOneEnable = MAGMA_BOOLEAN(alphaToOne);
+    sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    this->rasterizationSamples = rasterizationSamples;
+    sampleShadingEnable = MAGMA_BOOLEAN(sampleShading);
+    minSampleShading = 0;
+    pSampleMask = nullptr;
+    alphaToCoverageEnable = MAGMA_BOOLEAN(alphaToCoverage);
+    alphaToOneEnable = MAGMA_BOOLEAN(alphaToOne);
 }
 
 namespace states

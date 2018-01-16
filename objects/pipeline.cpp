@@ -67,14 +67,14 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
         dereferencedStages.push_back(stage);
     info.stageCount = MAGMA_COUNT(dereferencedStages);
     info.pStages = dereferencedStages.data();
-    info.pVertexInputState = vertexInputState;
-    info.pInputAssemblyState = inputAssemblyState;
-    info.pTessellationState = tesselationState;
-    info.pViewportState = viewportState;
-    info.pRasterizationState = rasterizationState;
-    info.pMultisampleState = multisampleState;
-    info.pDepthStencilState = depthStencilState;
-    info.pColorBlendState = colorBlendState;
+    info.pVertexInputState = &vertexInputState;
+    info.pInputAssemblyState = &inputAssemblyState;
+    info.pTessellationState = &tesselationState;
+    info.pViewportState = &viewportState;
+    info.pRasterizationState = &rasterizationState;
+    info.pMultisampleState = &multisampleState;
+    info.pDepthStencilState = &depthStencilState;
+    info.pColorBlendState = &colorBlendState;
     info.pDynamicState = VK_NULL_HANDLE;
     if (layout)
         info.layout = *layout;
