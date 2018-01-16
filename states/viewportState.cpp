@@ -20,6 +20,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+ViewportState::ViewportState()
+{
+    memset(this, 0, sizeof(ViewportState));
+}
+
 ViewportState::ViewportState(float x, float y, float width, float height, 
     float minDepth /* 0 */, float maxDepth /* 1 */)
 {
