@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <malloc.h>
 #include <cassert>   
 #include <memory>
+#include <vector>
 #ifdef MAGMA_DEBUG
 #include <iostream> // std::cerr
 #endif
@@ -89,13 +90,27 @@ namespace magma
     template <typename Type>
     inline Type *copy(Type *const dst, const Type *const src)
     {
+        MAGMA_ASSERT(dst);
+        MAGMA_ASSERT(src);
         return reinterpret_cast<Type *>(std::memcpy(dst, src, sizeof(Type)));
     }
 
     template <typename Type>
     inline Type *copy(Type *const dst, const Type *const src, uint32_t count)
     {
+        MAGMA_ASSERT(dst);
+        MAGMA_ASSERT(src);
+        MAGMA_ASSERT(count);
         return reinterpret_cast<Type *>(std::memcpy(dst, src, sizeof(Type) * count));
+    }
+
+    template <typename DstType, typename SrcType>
+    inline DstType *copy(DstType *const dst, const std::vector<SrcType>& src)
+    {
+        static_assert(sizeof(DstType) == sizeof(SrcType), "equal size expected");
+        MAGMA_ASSERT(dst);
+        MAGMA_ASSERT(!src.empty());
+        return reinterpret_cast<DstType *>(std::memcpy(dst, src.data(), sizeof(SrcType) * src.size()));
     }
 }
 
