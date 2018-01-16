@@ -21,18 +21,24 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class PhysicalDevice;
+    class Queue;
     class Fence;
 
-    class Device : public Handle<VkDevice>
+    class Device : public Handle<VkDevice>,
+        public std::enable_shared_from_this<Device>
     {
+        Device(VkDevice device, std::shared_ptr<const PhysicalDevice> physicalDevice);
+        friend PhysicalDevice;
+
     public:
+        std::shared_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
         bool waitIdle() const noexcept;
         bool resetFences(std::vector<std::shared_ptr<const Fence>>& fences) const noexcept;
         bool waitForFences(std::vector<std::shared_ptr<const Fence>>& fences, 
             bool waitAll, uint64_t timeout = UINT64_MAX) const noexcept;
 
     private:
-        Device(VkDevice device);
-        friend class PhysicalDevice;
+        std::shared_ptr<const PhysicalDevice> physicalDevice;
     };
 } // namespace magma

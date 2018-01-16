@@ -29,10 +29,14 @@ namespace magma
 
     class Queue : public Handle<VkQueue>
     {
+        Queue(VkQueue queue, std::shared_ptr<const Device> device,
+            VkQueueFlagBits flags, uint32_t familyIndex, uint32_t index);
+        friend Device;
+
     public:
-        Queue(std::shared_ptr<const Device> device, 
-            uint32_t queueFamilyIndex = 0, 
-            uint32_t queueIndex = 0);
+        VkQueueFlagBits getFlags() const { return flags; }
+        uint32_t getFamilyIndex() const { return familyIndex; }
+        uint32_t getIndex() const { return index; }
         bool submit(const std::vector<std::shared_ptr<const CommandBuffer>>& commandBuffers,
             VkPipelineStageFlags waitStageMask,
             const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores,
@@ -46,5 +50,10 @@ namespace magma
         bool waitIdle() noexcept;
         bool present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr) noexcept;
+
+    private:
+        VkQueueFlagBits flags;
+        uint32_t familyIndex;
+        uint32_t index;
     };
 } // namespace magma

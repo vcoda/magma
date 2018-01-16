@@ -16,14 +16,28 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "device.h"
+#include "physicalDevice.h"
+#include "queue.h"
 #include "fence.h"
 #include "../helpers/stackArray.h"
 
 namespace magma
 {
-Device::Device(VkDevice device):
-    Handle(VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT, device)
+Device::Device(VkDevice device, std::shared_ptr<const PhysicalDevice> physicalDevice):
+    Handle(VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT, device),
+    physicalDevice(physicalDevice)
 {}
+
+std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const
+{
+    const DeviceQueueDescriptor queueDesc(flags, physicalDevice);
+    VkQueue queue = VK_NULL_HANDLE;
+    vkGetDeviceQueue(handle, queueDesc.queueFamilyIndex, queueIndex, &queue);
+    if (VK_NULL_HANDLE == queue)
+        throw Exception("failed to get device queue");
+    return std::shared_ptr<Queue>(new Queue(queue, shared_from_this(), 
+        flags, queueDesc.queueFamilyIndex, queueIndex));
+}
 
 bool Device::waitIdle() const noexcept
 {

@@ -23,19 +23,42 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class PhysicalDevice;
+
+    class DeviceQueueDescriptor : public VkDeviceQueueCreateInfo
+    {
+    public:
+        DeviceQueueDescriptor(VkQueueFlagBits queueType,
+            std::shared_ptr<const PhysicalDevice> device,
+            const std::vector<float>& queuePriorities = {1.f});
+        DeviceQueueDescriptor(const DeviceQueueDescriptor&);
+        ~DeviceQueueDescriptor();
+
+    private:
+        uint32_t getFamilyIndex(VkQueueFlagBits queueType,
+            const std::vector<VkQueueFamilyProperties>& queueFamilyProperties,
+            bool skipGraphics) const;
+    };
+
     class Device;
     class Surface;
 
-    class PhysicalDevice : public Handle<VkPhysicalDevice>
+    class PhysicalDevice : public Handle<VkPhysicalDevice>,
+        public std::enable_shared_from_this<PhysicalDevice>
     {
     public:
         PhysicalDevice(VkPhysicalDevice physicalDevice);   
-        std::shared_ptr<Device> createDevice(
-            const std::vector<const char *>& layers,
-            const std::vector<const char *>& extensions, 
-            const VkPhysicalDeviceFeatures& deviceFeatures);
-        std::shared_ptr<Device> createDefaultDevice();
+        void getFeatures(VkPhysicalDeviceFeatures& features) const;
+        void getProperties(VkPhysicalDeviceProperties& properties) const;
+        std::vector<VkQueueFamilyProperties> getQueueFamilyProperties() const;
+        void getMemoryProperties(VkPhysicalDeviceMemoryProperties& properties) const;
         std::set<std::string> enumerateExtensions(const char *layerName = nullptr) const;
+        std::shared_ptr<Device> createDevice(
+            const std::vector<DeviceQueueDescriptor>& queueDescriptors,
+            const std::vector<const char *>& layers,
+            const std::vector<const char *>& extensions,
+            const VkPhysicalDeviceFeatures& deviceFeatures) const;
+        std::shared_ptr<Device> createDefaultDevice() const;
         bool surfaceSupported(std::shared_ptr<Surface> surface) const;
         bool depthStencilSupported(VkFormat format) const;
         std::vector<VkSurfaceFormatKHR> getSurfaceFormats(std::shared_ptr<Surface> surface) const;
