@@ -43,12 +43,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_STRINGIZE(x) #x
 #define MAGMA_STRINGIZE_FIELD(x) case x: return MAGMA_STRINGIZE(x); break
 
-#define MAGMA_COPY_VECTOR(p, v)\
-    MAGMA_ASSERT(p);\
-    MAGMA_ASSERT(!v.empty());\
-    if (p && !v.empty())\
-        memcpy((void *)p, v.data(), v.size() * sizeof(v.front()))
-
 #ifdef _MSC_VER
 #   define MAGMA_ALLOCA(size) _malloca(size)
 #   define MAGMA_FREEA(p) _freea(p)
