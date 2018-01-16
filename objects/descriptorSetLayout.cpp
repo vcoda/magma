@@ -23,18 +23,18 @@ namespace magma
 {
 DescriptorSetLayout::Binding::Binding(uint32_t binding, const Descriptor& descriptor, VkShaderStageFlags stageFlags)
 {
-    VkDescriptorSetLayoutBinding::binding = binding;
-    VkDescriptorSetLayoutBinding::descriptorType = descriptor.type;
-    VkDescriptorSetLayoutBinding::descriptorCount = descriptor.descriptorCount;
-    VkDescriptorSetLayoutBinding::stageFlags = stageFlags;
-    VkDescriptorSetLayoutBinding::pImmutableSamplers = nullptr;
+    this->binding = binding;
+    descriptorType = descriptor.type;
+    descriptorCount = descriptor.descriptorCount;
+    this->stageFlags = stageFlags;
+    pImmutableSamplers = nullptr;
 }
 
 DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<const Device> device, const Binding& binding):
-    DescriptorSetLayout(device, std::vector<Binding>{binding})
+    DescriptorSetLayout(device, {binding})
 {}
 
-DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<const Device> device, const std::vector<Binding>& bindings):
+DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<const Device> device, const std::initializer_list<Binding>& bindings):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT, device)
 {
     VkDescriptorSetLayoutCreateInfo info;
@@ -42,7 +42,7 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<const Device> device, c
     info.pNext = nullptr;
     info.flags = 0;
     info.bindingCount = MAGMA_COUNT(bindings);
-    info.pBindings = bindings.data();
+    info.pBindings = bindings.begin();
     const VkResult create = vkCreateDescriptorSetLayout(*device, &info, nullptr, &handle);
     MAGMA_THROW_FAILURE(create, "failed to create descriptor set layout");
 }
