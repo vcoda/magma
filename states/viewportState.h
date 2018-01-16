@@ -35,6 +35,7 @@ namespace magma
         ViewportState(const std::vector<VkViewport>& viewports);
         ViewportState(const std::vector<VkViewport>& viewports, 
             const std::vector<VkRect2D>& scissors);
+        ViewportState(const ViewportState&);
         ~ViewportState();
         MAGMA_TYPE_CAST(VkPipelineViewportStateCreateInfo, state)
 

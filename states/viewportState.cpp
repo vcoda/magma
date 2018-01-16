@@ -102,6 +102,13 @@ ViewportState::ViewportState(const std::vector<VkViewport>& viewports, const std
     initialize(viewports, scissors);
 }
 
+ViewportState::ViewportState(const ViewportState& other)
+{
+    copy(this, &other);
+    state.pViewports = copy(new VkViewport[state.viewportCount], other.state.pViewports, state.viewportCount);
+    state.pScissors = copy(new VkRect2D[state.scissorCount], other.state.pScissors, state.scissorCount);
+}
+
 ViewportState::~ViewportState()
 {
     delete[] state.pViewports;
