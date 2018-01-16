@@ -44,7 +44,7 @@ namespace magma
     public:
         ~CommandBuffer();
 
-        bool begin() noexcept;
+        bool begin(VkCommandBufferUsageFlags flags = 0) noexcept;
         bool begin(
             const std::shared_ptr<RenderPass>& renderPass, 
             uint32_t subpass, 

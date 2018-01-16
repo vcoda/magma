@@ -54,10 +54,13 @@ CommandBuffer::~CommandBuffer()
     delete[] clearValues;
 }
 
-bool CommandBuffer::begin() noexcept
+bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
-    VkCommandBufferBeginInfo beginInfo = {};
+    VkCommandBufferBeginInfo beginInfo;
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.pNext = nullptr;
+    beginInfo.flags = flags;
+    beginInfo.pInheritanceInfo = nullptr;
     const VkResult begin = vkBeginCommandBuffer(handle, &beginInfo);
     return (VK_SUCCESS == begin);
 }
