@@ -23,14 +23,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 CommandPool::CommandPool(std::shared_ptr<const Device> device,
-    VkCommandPoolCreateFlags flags /* VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT */):
+    uint32_t queueFamilyIndex,
+    bool transient /* false */, 
+    bool reset /* true */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT, device)
 {
     VkCommandPoolCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     info.pNext = nullptr;
-    info.flags = flags;
-    info.queueFamilyIndex = 0;
+    info.flags = 0;
+    if (transient)
+        info.flags |= VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+    if (reset)
+        info.flags |= VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+    info.queueFamilyIndex = queueFamilyIndex;
     const VkResult create = vkCreateCommandPool(*device, &info, nullptr, &handle);
     MAGMA_THROW_FAILURE(create, "failed to create command pool");
 }
@@ -40,14 +46,13 @@ CommandPool::~CommandPool()
     vkDestroyCommandPool(*device, handle, nullptr);
 }
 
-std::shared_ptr<CommandBuffer> CommandPool::allocateCommandBuffer(
-    VkCommandBufferLevel level /* VK_COMMAND_BUFFER_LEVEL_PRIMARY */)
+std::shared_ptr<CommandBuffer> CommandPool::allocateCommandBuffer(bool primaryLevel)
 {
     VkCommandBufferAllocateInfo info;
     info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     info.pNext = nullptr;
     info.commandPool = handle;
-    info.level = level;
+    info.level = primaryLevel ? VK_COMMAND_BUFFER_LEVEL_PRIMARY : VK_COMMAND_BUFFER_LEVEL_SECONDARY;
     info.commandBufferCount = 1;
     VkCommandBuffer commandBuffer;
     const VkResult alloc = vkAllocateCommandBuffers(*device, &info, &commandBuffer);
@@ -62,14 +67,13 @@ void CommandPool::freeCommandBuffer(std::shared_ptr<CommandBuffer>& commandBuffe
     commandBuffer.reset();
 }
 
-std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(uint32_t count,
-    VkCommandBufferLevel level /* VK_COMMAND_BUFFER_LEVEL_PRIMARY */)
+std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(uint32_t count, bool primaryLevel)
 {
     VkCommandBufferAllocateInfo info;
     info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     info.pNext = nullptr;
     info.commandPool = handle;
-    info.level = level;
+    info.level = primaryLevel ? VK_COMMAND_BUFFER_LEVEL_PRIMARY : VK_COMMAND_BUFFER_LEVEL_SECONDARY;
     info.commandBufferCount = count;
     MAGMA_STACK_ARRAY(VkCommandBuffer, nativeCommandBuffers, count);
     const VkResult alloc = vkAllocateCommandBuffers(*device, &info, nativeCommandBuffers.data());

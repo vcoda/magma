@@ -27,13 +27,14 @@ namespace magma
     class CommandPool : public NonDispatchable<VkCommandPool>
     {
     public:
-        CommandPool(std::shared_ptr<const Device> device,
-            VkCommandPoolCreateFlags flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT);
+        CommandPool(std::shared_ptr<const Device> device, 
+            uint32_t queueFamilyIndex,
+            bool transient = false, bool reset = true);
         ~CommandPool();
-        std::shared_ptr<CommandBuffer> allocateCommandBuffer(VkCommandBufferLevel level = VK_COMMAND_BUFFER_LEVEL_PRIMARY);
+        std::shared_ptr<CommandBuffer> allocateCommandBuffer(bool primaryLevel);
         void freeCommandBuffer(std::shared_ptr<CommandBuffer>& commandBuffer);
         std::vector<std::shared_ptr<CommandBuffer>> allocateCommandBuffers(uint32_t count,
-            VkCommandBufferLevel level = VK_COMMAND_BUFFER_LEVEL_PRIMARY);
+            bool primaryLevel);
         void freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers);
         bool reset(bool releaseResources) noexcept;
     };
