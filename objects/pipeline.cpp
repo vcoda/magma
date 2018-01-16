@@ -28,6 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/multisampleState.h"
 #include "../states/depthStencilState.h"
 #include "../states/colorBlendState.h"
+#include "../shared.h"
 
 namespace magma
 {
@@ -52,6 +53,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
     std::shared_ptr<const RenderPass> renderPass,
+    const std::initializer_list<VkDynamicState>& dynamicStates /* {} */,
     std::shared_ptr<const PipelineLayout> layout /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */):
     Pipeline(device)
@@ -69,13 +71,30 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
     info.pStages = dereferencedStages.data();
     info.pVertexInputState = &vertexInputState;
     info.pInputAssemblyState = &inputAssemblyState;
-    info.pTessellationState = &tesselationState;
-    info.pViewportState = &viewportState;
+    if (0 == tesselationState.patchControlPoints)
+        info.pTessellationState = nullptr;
+    else
+        info.pTessellationState = &tesselationState;
+    if (0 == viewportState.viewportCount)
+        info.pViewportState = nullptr;
+    else
+        info.pViewportState = &viewportState;
     info.pRasterizationState = &rasterizationState;
     info.pMultisampleState = &multisampleState;
     info.pDepthStencilState = &depthStencilState;
     info.pColorBlendState = &colorBlendState;
-    info.pDynamicState = VK_NULL_HANDLE;
+    VkPipelineDynamicStateCreateInfo dynamicState;
+    if (0 == dynamicStates.size())
+        info.pDynamicState = nullptr;
+    else
+    {
+        dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+        dynamicState.pNext = 0;
+        dynamicState.flags = 0;
+        dynamicState.dynamicStateCount = MAGMA_COUNT(dynamicStates);
+        dynamicState.pDynamicStates = dynamicStates.begin();
+        info.pDynamicState = &dynamicState;
+    }
     if (layout)
         info.layout = *layout;
     else
