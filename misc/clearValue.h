@@ -23,7 +23,7 @@ namespace magma
     // C++ forbids inheritance from union.
     struct ClearValue
     {
-        MAGMA_TYPE_CAST(VkClearValue, value)
+        operator const VkClearValue&() const { return value; }
 
     protected:
         VkClearValue value;

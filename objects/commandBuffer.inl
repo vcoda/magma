@@ -173,7 +173,7 @@ inline void CommandBuffer::setClear(const ClearValue& value) noexcept
         clearValues = new(std::nothrow) VkClearValue[1];
     clearValueCount = 0;
     if (clearValues)
-        clearValues[clearValueCount++] = *value;
+        clearValues[clearValueCount++] = value;
 }
 
 inline void CommandBuffer::setClears(const std::initializer_list<ClearValue> values) noexcept
@@ -187,7 +187,7 @@ inline void CommandBuffer::setClears(const std::initializer_list<ClearValue> val
     if (clearValues)
     {
         for (const auto& value : values)
-            clearValues[clearValueCount++] = *value;
+            clearValues[clearValueCount++] = value;
     }
 }
 
