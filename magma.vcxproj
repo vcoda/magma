@@ -128,6 +128,8 @@
     <ClInclude Include="misc\exception.h" />
     <ClInclude Include="misc\extensions.h" />
     <ClInclude Include="misc\format.h" />
+    <ClInclude Include="misc\scissor.h" />
+    <ClInclude Include="misc\viewport.h" />
     <ClInclude Include="objects\buffer.h" />
     <ClInclude Include="objects\bufferView.h" />
     <ClInclude Include="objects\commandBuffer.h" />
