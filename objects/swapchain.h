@@ -36,7 +36,7 @@ namespace magma
             uint32_t minImageCount, 
             VkSurfaceFormatKHR surfaceFormat,
             const VkExtent2D& imageExtent,
-		    VkPresentModeKHR presentMode = VK_PRESENT_MODE_FIFO_KHR, 
+		    VkPresentModeKHR presentMode, 
 		    VkSwapchainCreateFlagsKHR flags = 0);
 	    ~Swapchain();
         uint32_t acquireNextImage(
