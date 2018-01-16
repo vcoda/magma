@@ -21,20 +21,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DescriptorSetLayout::Binding::Binding(uint32_t binding, const Descriptor& descriptor, VkShaderStageFlags stageFlags)
-{
-    this->binding = binding;
-    descriptorType = descriptor.type;
-    descriptorCount = descriptor.descriptorCount;
-    this->stageFlags = stageFlags;
-    pImmutableSamplers = nullptr;
-}
-
-DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<const Device> device, const Binding& binding):
+DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<const Device> device, const LayoutBinding& binding):
     DescriptorSetLayout(device, {binding})
 {}
 
-DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<const Device> device, const std::initializer_list<Binding>& bindings):
+DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<const Device> device, const std::initializer_list<LayoutBinding>& bindings):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT, device)
 {
     VkDescriptorSetLayoutCreateInfo info;

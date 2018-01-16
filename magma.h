@@ -61,6 +61,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "states/viewportState.h"
 
 #include "descriptors/attachment.h"
+#include "descriptors/bindings.h"
 #include "descriptors/descriptors.h"
 #include "descriptors/subpass.h"
 
