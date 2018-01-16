@@ -38,14 +38,21 @@ Buffer::Buffer(std::shared_ptr<const Device> device, VkDeviceSize size, VkBuffer
     MAGMA_THROW_FAILURE(create, "failed to create buffer");
     VkMemoryRequirements memoryRequirements;
     vkGetBufferMemoryRequirements(*device, handle, &memoryRequirements);
-    memory.reset(new DeviceMemory(device, memoryRequirements.size, memoryFlags));
-    const VkResult bind = vkBindBufferMemory(*device, handle, *memory, 0);
-    MAGMA_THROW_FAILURE(bind, "failed to bind buffer memory");
+    bindMemory(std::shared_ptr<DeviceMemory>(new DeviceMemory(device,
+        memoryRequirements.size, memoryFlags)));
 }
 
 Buffer::~Buffer()
 {
     vkDestroyBuffer(*device, handle, nullptr);
+}
+
+void Buffer::bindMemory(std::shared_ptr<DeviceMemory> memory,
+    VkDeviceSize offset /* 0 */)
+{
+    const VkResult bind = vkBindBufferMemory(*device, handle, *memory, offset);
+    MAGMA_THROW_FAILURE(bind, "failed to bind buffer memory");
+    this->memory = memory;
 }
 
 VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept

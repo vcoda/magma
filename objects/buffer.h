@@ -25,6 +25,8 @@ namespace magma
     {
     public:
         ~Buffer();
+        void bindMemory(std::shared_ptr<DeviceMemory> memory,
+            VkDeviceSize offset = 0);
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
         VkMemoryRequirements getMemoryRequirements() const noexcept;
 
