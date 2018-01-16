@@ -34,6 +34,8 @@ namespace magma
     class RenderPass;
     class VertexBuffer;
 
+    struct Viewport;
+    struct Scissor;
     struct ClearValue;
 
     // Methods order follows Vulkan API order
@@ -56,7 +58,6 @@ namespace magma
         void bindPipeline(const std::shared_ptr<GraphicsPipeline>& pipeline) noexcept;
         void bindPipeline(const std::shared_ptr<ComputePipeline>& pipeline) noexcept;
 
-        void setViewport(const VkViewport& viewport) noexcept;
         void setViewport(
             float x, float y, 
             float width, float height,
@@ -67,10 +68,11 @@ namespace magma
             uint32_t width, uint32_t height,
             float minDepth = 0.f, 
             float maxDepth = 1.f) noexcept;
-        void setScissor(const VkRect2D& scissor) noexcept;
+        void setViewports(const std::initializer_list<Viewport>& viewports) noexcept;
         void setScissor(
             int32_t x, int32_t y,
             uint32_t width, uint32_t height) noexcept;
+        void setScissors(const std::initializer_list<Scissor>& scissors) noexcept;
 
         void setLineWidth(float lineWidth) noexcept;
         void setDepthBias(

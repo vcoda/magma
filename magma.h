@@ -69,6 +69,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "misc/format.h"
 #include "misc/exception.h"
 #include "misc/extensions.h"
+#include "misc/scissor.h"
+#include "misc/viewport.h"
 
 #include "helpers/mapScoped.h"
 #include "helpers/stackArray.h"

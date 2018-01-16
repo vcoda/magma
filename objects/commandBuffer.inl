@@ -18,15 +18,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "indexBuffer.h"
 #include "vertexBuffer.h"
 #include "../misc/clearValue.h"
+#include "../misc/viewport.h"
+#include "../misc/scissor.h"
 #include "../helpers/stackArray.h"
 
 namespace magma
 {
-inline void CommandBuffer::setViewport(const VkViewport& viewport) noexcept
-{
-    vkCmdSetViewport(handle, 0, 1, &viewport);
-}
-
 inline void CommandBuffer::setViewport(float x, float y, float width, float height,
     float minDepth /* 0 */, float maxDepth /* 1 */) noexcept
 {
@@ -53,9 +50,9 @@ inline void CommandBuffer::setViewport(uint32_t x, uint32_t y, uint32_t width, u
     vkCmdSetViewport(handle, 0, 1, &viewport);
 }
 
-inline void CommandBuffer::setScissor(const VkRect2D& scissor) noexcept
+inline void CommandBuffer::setViewports(const std::initializer_list<Viewport>& viewports) noexcept
 {
-    vkCmdSetScissor(handle, 0, 1, &scissor);
+    vkCmdSetViewport(handle, 0, MAGMA_COUNT(viewports), viewports.begin());
 }
 
 inline void CommandBuffer::setScissor(int32_t x, int32_t y, uint32_t width, uint32_t height) noexcept
@@ -66,6 +63,11 @@ inline void CommandBuffer::setScissor(int32_t x, int32_t y, uint32_t width, uint
     scissor.extent.width = width;
     scissor.extent.height = height;
     vkCmdSetScissor(handle, 0, 1, &scissor);
+}    
+
+inline void CommandBuffer::setScissors(const std::initializer_list<Scissor>& scissors) noexcept
+{
+    vkCmdSetScissor(handle, 0, MAGMA_COUNT(scissors), scissors.begin());
 }
 
 inline void CommandBuffer::setLineWidth(float lineWidth) noexcept
