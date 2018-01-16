@@ -79,8 +79,8 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     const VkResult alloc = vkAllocateCommandBuffers(*device, &info, nativeCommandBuffers.data());
     MAGMA_THROW_FAILURE(alloc, "failed to allocate command buffers");
     std::vector<std::shared_ptr<CommandBuffer>> commandBuffers;
-    for (const auto& handle : nativeCommandBuffers)
-        commandBuffers.push_back(std::shared_ptr<CommandBuffer>(new CommandBuffer(handle, device)));
+    for (const VkCommandBuffer cmdBuffer : nativeCommandBuffers)
+        commandBuffers.push_back(std::shared_ptr<CommandBuffer>(new CommandBuffer(cmdBuffer, device)));
     return commandBuffers;
 }
 
