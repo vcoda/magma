@@ -33,7 +33,7 @@ ViewportState::ViewportState(float x, float y, float width, float height,
     scissor.offset.x = static_cast<int32_t>(x);
     scissor.offset.y = static_cast<int32_t>(y);
     scissor.extent.width = static_cast<uint32_t>(width);
-    scissor.extent.width = static_cast<uint32_t>(height);
+    scissor.extent.height = static_cast<uint32_t>(height);
     initialize(viewport, scissor);
 }
 
@@ -73,7 +73,7 @@ ViewportState::ViewportState(const VkViewport& viewport)
     scissor.offset.x = static_cast<int32_t>(viewport.x);
     scissor.offset.y = static_cast<int32_t>(viewport.y);
     scissor.extent.width = static_cast<uint32_t>(viewport.width);
-    scissor.extent.width = static_cast<uint32_t>(viewport.height);
+    scissor.extent.height = static_cast<uint32_t>(viewport.height);
     initialize(viewport, scissor);
 }
 
@@ -91,7 +91,7 @@ ViewportState::ViewportState(const std::vector<VkViewport>& viewports)
         scissor.offset.x = static_cast<int32_t>(viewport.x);
         scissor.offset.y = static_cast<int32_t>(viewport.y);
         scissor.extent.width = static_cast<uint32_t>(viewport.width);
-        scissor.extent.width = static_cast<uint32_t>(viewport.height);
+        scissor.extent.height = static_cast<uint32_t>(viewport.height);
         scissors.push_back(scissor);
     }
     initialize(viewports, scissors);
