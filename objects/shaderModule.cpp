@@ -75,8 +75,20 @@ ShaderStage::ShaderStage(const VkShaderStageFlagBits stage, std::shared_ptr<cons
     info.flags = flags;
     info.stage = stage;
     info.module = *module;
-    info.pName = entrypoint;
+    info.pName = helpers::copyString(entrypoint);
     info.pSpecializationInfo = specializedInfo;
+}
+
+ShaderStage::ShaderStage(const ShaderStage& other):
+    info(other.info),
+    module(other.module)
+{
+    info.pName = helpers::copyString(other.info.pName);
+}
+
+ShaderStage::~ShaderStage()
+{
+    delete[] info.pName;
 }
 
 VertexShaderStage::VertexShaderStage(std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
