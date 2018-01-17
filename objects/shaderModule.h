@@ -36,7 +36,7 @@ namespace magma
         ~ShaderModule();
 
     private:
-        std::vector<uint32_t> loadBytecode(const std::string& filename) const;
+        std::vector<uint32_t> loadSPIRVBytecode(const std::string& filename) const;
     };
 
     class ShaderStage

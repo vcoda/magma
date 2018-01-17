@@ -41,7 +41,7 @@ ShaderModule::ShaderModule(std::shared_ptr<const Device> device, const std::vect
 {}    
 
 ShaderModule::ShaderModule(std::shared_ptr<const Device> device, const std::string& filename):
-    ShaderModule(device, loadBytecode(filename))
+    ShaderModule(device, loadSPIRVBytecode(filename))
 {}
 
 ShaderModule::~ShaderModule()
@@ -49,7 +49,7 @@ ShaderModule::~ShaderModule()
     vkDestroyShaderModule(*device, handle, nullptr);
 }
 
-std::vector<uint32_t> ShaderModule::loadBytecode(const std::string& filename) const
+std::vector<uint32_t> ShaderModule::loadSPIRVBytecode(const std::string& filename) const
 {
     std::vector<uint32_t> bytecode;
     std::ifstream file(filename, std::ios::binary | std::ios::in | std::ios::ate);
