@@ -34,6 +34,7 @@ namespace magma
             const std::vector<Descriptor>& descriptors,
             VkDescriptorPoolCreateFlags flags = 0);
         ~DescriptorPool();
+        void reset();
         std::shared_ptr<DescriptorSet> allocateDescriptorSet(std::shared_ptr<DescriptorSetLayout> setLayout);
         void freeDescriptorSet(std::shared_ptr<DescriptorSet> descriptorSet);
         std::vector<std::shared_ptr<DescriptorSet>> allocateDescriptorSets(std::shared_ptr<DescriptorSetLayout> setLayout);

@@ -45,6 +45,12 @@ DescriptorPool::~DescriptorPool()
     vkDestroyDescriptorPool(*device, handle, nullptr);
 }
 
+void DescriptorPool::reset()
+{
+    const VkResult reset = vkResetDescriptorPool(*device, handle, 0);
+    MAGMA_THROW_FAILURE(reset, "failed to reset descriptor pool");
+}
+
 std::shared_ptr<DescriptorSet> DescriptorPool::allocateDescriptorSet(std::shared_ptr<DescriptorSetLayout> setLayout)
 {
     VkDescriptorSetAllocateInfo info;
