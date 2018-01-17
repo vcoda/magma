@@ -20,6 +20,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+VertexInputState::VertexInputState()
+{
+    sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    vertexBindingDescriptionCount = 0;
+    pVertexBindingDescriptions = nullptr;
+    vertexAttributeDescriptionCount = 0;
+    pVertexAttributeDescriptions = nullptr;
+}
+
 VertexInputState::VertexInputState(const VertexInputBinding& binding, const VertexInputAttribute& attribute):
     VertexInputState({binding}, {attribute})
 {}
@@ -59,6 +70,8 @@ VertexInputState::~VertexInputState()
 
 namespace states
 {
+const VertexInputState noVertices;
+
 const VertexInputState vertexHalf(VertexInputBinding(0, sizeof(short)), VertexInputAttribute(0, 0, VK_FORMAT_R16_SFLOAT, 0));
 const VertexInputState vertex2Half(VertexInputBinding(0, sizeof(short) * 2), VertexInputAttribute(0, 0, VK_FORMAT_R16G16_SFLOAT, 0));
 const VertexInputState vertex3Half(VertexInputBinding(0, sizeof(short) * 3), VertexInputAttribute(0, 0, VK_FORMAT_R16G16B16_SFLOAT, 0));

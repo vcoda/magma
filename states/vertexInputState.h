@@ -48,6 +48,7 @@ namespace magma
     class VertexInputState final : public VkPipelineVertexInputStateCreateInfo
     {
     public:
+        VertexInputState();
         VertexInputState(const VertexInputBinding& binding,
             const VertexInputAttribute& attribute);
         VertexInputState(const VertexInputBinding& binding,
@@ -61,6 +62,8 @@ namespace magma
 
     namespace states
     {
+        extern const VertexInputState noVertices;
+
         extern const VertexInputState vertexHalf;
         extern const VertexInputState vertex2Half;
         extern const VertexInputState vertex3Half;
