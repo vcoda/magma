@@ -32,7 +32,7 @@ namespace magma
         DescriptorPool(std::shared_ptr<const Device> device, 
             uint32_t maxDescriptorSets,
             const std::vector<Descriptor>& descriptors,
-            VkDescriptorPoolCreateFlags flags = 0);
+            bool freeDescriptorSet = false);
         ~DescriptorPool();
         void reset();
         std::shared_ptr<DescriptorSet> allocateDescriptorSet(std::shared_ptr<DescriptorSetLayout> setLayout);

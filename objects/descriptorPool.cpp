@@ -26,13 +26,15 @@ namespace magma
 DescriptorPool::DescriptorPool(std::shared_ptr<const Device> device,
     uint32_t maxDescriptorSets,
     const std::vector<Descriptor>& descriptors,
-    VkDescriptorPoolCreateFlags flags /* 0 */):
+    bool freeDescriptorSet /* false */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT, device)
 {
     VkDescriptorPoolCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
     info.pNext = nullptr;
-    info.flags = flags;
+    info.flags = 0;
+    if (freeDescriptorSet)
+        info.flags |= VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
     info.maxSets = maxDescriptorSets;
     info.poolSizeCount = MAGMA_COUNT(descriptors);
     info.pPoolSizes = descriptors.data();
