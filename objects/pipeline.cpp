@@ -75,10 +75,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
         info.pTessellationState = nullptr;
     else
         info.pTessellationState = &tesselationState;
-    if (0 == viewportState.viewportCount)
-        info.pViewportState = nullptr;
-    else
-        info.pViewportState = &viewportState;
+    info.pViewportState = &viewportState;
     info.pRasterizationState = &rasterizationState;
     info.pMultisampleState = &multisampleState;
     info.pDepthStencilState = &depthStencilState;
