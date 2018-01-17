@@ -34,7 +34,7 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
     VkQueue queue = VK_NULL_HANDLE;
     vkGetDeviceQueue(handle, queueDesc.queueFamilyIndex, queueIndex, &queue);
     if (VK_NULL_HANDLE == queue)
-        throw Exception("failed to get device queue");
+        MAGMA_THROW("failed to get device queue");
     return std::shared_ptr<Queue>(new Queue(queue, shared_from_this(), 
         flags, queueDesc.queueFamilyIndex, queueIndex));
 }

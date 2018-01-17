@@ -63,7 +63,7 @@ std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId)
 {                          
     uint32_t physicalDeviceCount = countPhysicalDevices();
     if (deviceId >= physicalDeviceCount)
-        throw Exception("invalid parameter <deviceId>");
+        MAGMA_THROW("invalid parameter <deviceId>");
     MAGMA_STACK_ARRAY(VkPhysicalDevice, physicalDevices, physicalDeviceCount);
     const VkResult enumerate = vkEnumeratePhysicalDevices(handle, &physicalDeviceCount, physicalDevices.data());
     MAGMA_THROW_FAILURE(enumerate, "failed to enumerate physical devices");

@@ -59,7 +59,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
     Pipeline(device)
 {
     if (stages.empty())
-        throw Exception("shader stages are empty");
+        MAGMA_THROW("shader stages are empty");
     VkGraphicsPipelineCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     info.pNext = nullptr;

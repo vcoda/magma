@@ -39,7 +39,7 @@ Attachment::Attachment(VkFormat format,
     case 32: samples = VK_SAMPLE_COUNT_32_BIT; break;
     case 64: samples = VK_SAMPLE_COUNT_64_BIT; break;
     default: 
-        throw Exception("invalid <sampleCount> parameter");
+        MAGMA_THROW("invalid <sampleCount> parameter");
     }
     loadOp = op.loadOp;
     storeOp = op.storeOp;

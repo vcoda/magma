@@ -54,10 +54,10 @@ std::vector<uint32_t> ShaderModule::loadBytecode(const std::string& filename) co
     std::vector<uint32_t> bytecode;
     std::ifstream file(filename, std::ios::binary | std::ios::in | std::ios::ate);
     if (!file.is_open())
-        throw Exception("failed to open file \"" + filename + "\"");
+        MAGMA_THROW("failed to open file \"" + filename + "\"");
     const std::streamsize bytecodeSize = file.tellg();
     if (!bytecodeSize)
-        throw Exception("file \"" + filename + "\" is empty");
+        MAGMA_THROW("file \"" + filename + "\" is empty");
     file.seekg(0, std::ios::beg);
     MAGMA_ASSERT(bytecodeSize % sizeof(uint32_t) == 0);
     bytecode.resize(static_cast<size_t>(bytecodeSize) / sizeof(uint32_t));

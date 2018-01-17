@@ -59,7 +59,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     ((VK_SUCCESS == result) ||\
      (VK_INCOMPLETE == result))
 
-#define MAGMA_THROW_FAILURE(result, message) \
+#define MAGMA_THROW(message) throw Exception(message, __FILE__, __LINE__)
+#define MAGMA_THROW_FAILURE(result, message)\
     if (!MAGMA_SUCCEEDED(result))\
 	    throw magma::BadResultException(result, message, __FILE__, __LINE__)
 

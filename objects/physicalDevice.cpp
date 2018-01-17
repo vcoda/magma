@@ -35,7 +35,7 @@ DeviceQueueDescriptor::DeviceQueueDescriptor(VkQueueFlagBits queueType,
     if (-1 == queueFamilyIndex)
         queueFamilyIndex = getFamilyIndex(queueType, queueFamilyProperties, false);
     if (-1 == queueFamilyIndex)
-        throw Exception("could not find suitable queue family");
+        MAGMA_THROW("could not find suitable queue family");
     for (float priority : queuePriorities)
         MAGMA_ASSERT(priority >= 0.f && priority <= 1.f);
     queueCount = MAGMA_COUNT(queuePriorities);
