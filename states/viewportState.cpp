@@ -116,9 +116,9 @@ ViewportState::ViewportState(const std::vector<VkViewport>& viewports, const std
 
 ViewportState::ViewportState(const ViewportState& other)
 {
-    copy(this, &other);
-    pViewports = copy(new VkViewport[viewportCount], other.pViewports, viewportCount);
-    pScissors = copy(new VkRect2D[scissorCount], other.pScissors, scissorCount);
+    helpers::copy(this, &other);
+    pViewports = helpers::copy(new VkViewport[viewportCount], other.pViewports, viewportCount);
+    pScissors = helpers::copy(new VkRect2D[scissorCount], other.pScissors, scissorCount);
 }
 
 ViewportState::~ViewportState()
@@ -133,9 +133,9 @@ void ViewportState::initialize(const VkViewport& viewport, const VkRect2D& sciss
     pNext = nullptr;
     flags = 0;
     viewportCount = 1;
-    pViewports = copy(new VkViewport[viewportCount], &viewport);
+    pViewports = helpers::copy(new VkViewport[viewportCount], &viewport);
     scissorCount = 1;
-    pScissors = copy(new VkRect2D[scissorCount], &scissor);
+    pScissors = helpers::copy(new VkRect2D[scissorCount], &scissor);
 }
 
 void ViewportState::initialize(const std::vector<VkViewport>& viewports, const std::vector<VkRect2D>& scissors)
@@ -144,8 +144,8 @@ void ViewportState::initialize(const std::vector<VkViewport>& viewports, const s
     pNext = nullptr;
     flags = 0;
     viewportCount = MAGMA_COUNT(viewports);
-    pViewports = copy(new VkViewport[viewportCount], viewports);
+    pViewports = helpers::copy(new VkViewport[viewportCount], viewports);
     scissorCount = MAGMA_COUNT(scissors);
-    pScissors = copy(new VkRect2D[scissorCount], scissors);
+    pScissors = helpers::copy(new VkRect2D[scissorCount], scissors);
 }
 } // namespace magma

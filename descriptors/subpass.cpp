@@ -36,11 +36,11 @@ Subpass::Subpass(VkSubpassDescriptionFlags flags, VkPipelineBindPoint pipelineBi
 
 Subpass::Subpass(const Subpass& other)
 {
-    copy(this, &other);
+    helpers::copy(this, &other);
     if (other.pColorAttachments)
-        pColorAttachments = copy(new VkAttachmentReference[colorAttachmentCount], other.pColorAttachments, colorAttachmentCount);
+        pColorAttachments = helpers::copy(new VkAttachmentReference[colorAttachmentCount], other.pColorAttachments, colorAttachmentCount);
     if (other.pDepthStencilAttachment)
-        pDepthStencilAttachment = copy(new VkAttachmentReference, other.pDepthStencilAttachment);
+        pDepthStencilAttachment = helpers::copy(new VkAttachmentReference, other.pDepthStencilAttachment);
 }
 
 Subpass::~Subpass()

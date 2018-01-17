@@ -39,13 +39,13 @@ DeviceQueueDescriptor::DeviceQueueDescriptor(VkQueueFlagBits queueType,
     for (float priority : queuePriorities)
         MAGMA_ASSERT(priority >= 0.f && priority <= 1.f);
     queueCount = MAGMA_COUNT(queuePriorities);
-    pQueuePriorities = copy(new float[queueCount], queuePriorities);
+    pQueuePriorities = helpers::copy(new float[queueCount], queuePriorities);
 }
 
 DeviceQueueDescriptor::DeviceQueueDescriptor(const DeviceQueueDescriptor& other)
 {
-    copy(this, &other);
-    pQueuePriorities = copy(new float[queueCount], other.pQueuePriorities, queueCount);
+    helpers::copy(this, &other);
+    pQueuePriorities = helpers::copy(new float[queueCount], other.pQueuePriorities, queueCount);
 }
 
 DeviceQueueDescriptor::~DeviceQueueDescriptor()

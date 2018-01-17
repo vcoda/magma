@@ -46,7 +46,7 @@ ColorBlendState::ColorBlendState(const std::vector<ColorBlendAttachmentState>& a
     logicOpEnable = VK_FALSE;
     logicOp = VK_LOGIC_OP_CLEAR;
     attachmentCount = MAGMA_COUNT(attachments);
-    pAttachments = copy(new VkPipelineColorBlendAttachmentState[attachmentCount], attachments);
+    pAttachments = helpers::copy(new VkPipelineColorBlendAttachmentState[attachmentCount], attachments);
     blendConstants[0] = 1.f;
     blendConstants[1] = 1.f;
     blendConstants[2] = 1.f;
@@ -55,8 +55,8 @@ ColorBlendState::ColorBlendState(const std::vector<ColorBlendAttachmentState>& a
 
 ColorBlendState::ColorBlendState(const ColorBlendState& other)
 {
-    copy(this, &other);
-    pAttachments = copy(new VkPipelineColorBlendAttachmentState[attachmentCount], other.pAttachments, attachmentCount);
+    helpers::copy(this, &other);
+    pAttachments = helpers::copy(new VkPipelineColorBlendAttachmentState[attachmentCount], other.pAttachments, attachmentCount);
 }
 
 ColorBlendState::~ColorBlendState()

@@ -70,7 +70,7 @@ Attachment::Attachment(VkSampleCountFlagBits samples,
 
 Attachment::Attachment(VkFormat format, const Attachment& predefined)
 {
-    copy(this, &predefined);
+    helpers::copy(this, &predefined);
     this->format = format;
 }
 

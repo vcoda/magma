@@ -81,50 +81,8 @@ namespace magma
         if (obj) return *obj;
         return VK_NULL_HANDLE;
     }
-
-    template <typename Type>
-    inline Type *copy(Type *const dst, const Type *const src)
-    {
-        MAGMA_ASSERT(dst);
-        MAGMA_ASSERT(src);
-        return reinterpret_cast<Type *>(std::memcpy(dst, src, sizeof(Type)));
-    }
-
-    template <typename Type>
-    inline Type *copy(Type *const dst, const Type *const src, uint32_t count)
-    {
-        MAGMA_ASSERT(dst);
-        MAGMA_ASSERT(src);
-        MAGMA_ASSERT(count);
-        return reinterpret_cast<Type *>(std::memcpy(dst, src, sizeof(Type) * count));
-    }
-
-    template <typename DstType, typename SrcType>
-    inline DstType *copy(DstType *const dst, const std::vector<SrcType>& src)
-    {
-        static_assert(sizeof(DstType) == sizeof(SrcType), "equal size expected");
-        MAGMA_ASSERT(dst);
-        MAGMA_ASSERT(!src.empty());
-        return reinterpret_cast<DstType *>(std::memcpy(dst, src.data(), sizeof(SrcType) * src.size()));
-    }
-
-    template <typename DstType, typename SrcType>
-    inline DstType *copy(DstType *const dst, const std::initializer_list<SrcType>& src)
-    {
-        static_assert(sizeof(DstType) == sizeof(SrcType), "equal size expected");
-        MAGMA_ASSERT(dst);
-        MAGMA_ASSERT(src.size() > 0);
-        return reinterpret_cast<DstType *>(std::memcpy(dst, src.begin(), sizeof(SrcType) * src.size()));
-    }
-
-    inline char *copyString(const char *src)
-    {
-        const size_t size = strlen(src) + 1;
-        char *dst = new char[size];
-        const errno_t err = strcpy_s(dst, size, src);
-        MAGMA_ASSERT(0 == err);
-        return dst;
-    }
 }
 
 #define MAGMA_OPTIONAL_HANDLE(obj) magma::__handle(obj)
+
+#include "helpers/copying.h"

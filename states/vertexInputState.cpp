@@ -46,18 +46,18 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
     pNext = nullptr;
     flags = 0;
     vertexBindingDescriptionCount = MAGMA_COUNT(bindings);
-    pVertexBindingDescriptions = copy(new VkVertexInputBindingDescription[vertexBindingDescriptionCount], bindings);
+    pVertexBindingDescriptions = helpers::copy(new VkVertexInputBindingDescription[vertexBindingDescriptionCount], bindings);
     vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
-    pVertexAttributeDescriptions = copy(new VkVertexInputAttributeDescription[vertexAttributeDescriptionCount], attributes);
+    pVertexAttributeDescriptions = helpers::copy(new VkVertexInputAttributeDescription[vertexAttributeDescriptionCount], attributes);
 }
 
 VertexInputState::VertexInputState(const VertexInputState& other)
 {
-    copy(this, &other);
-    pVertexBindingDescriptions = copy(new VkVertexInputBindingDescription[vertexBindingDescriptionCount], 
+    helpers::copy(this, &other);
+    pVertexBindingDescriptions = helpers::copy(new VkVertexInputBindingDescription[vertexBindingDescriptionCount],
         other.pVertexBindingDescriptions, 
         vertexBindingDescriptionCount);
-    pVertexAttributeDescriptions = copy(new VkVertexInputAttributeDescription[vertexAttributeDescriptionCount], 
+    pVertexAttributeDescriptions = helpers::copy(new VkVertexInputAttributeDescription[vertexAttributeDescriptionCount],
         other.pVertexAttributeDescriptions,
         vertexAttributeDescriptionCount);
 }
