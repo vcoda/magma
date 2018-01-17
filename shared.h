@@ -116,6 +116,15 @@ namespace magma
         MAGMA_ASSERT(src.size() > 0);
         return reinterpret_cast<DstType *>(std::memcpy(dst, src.begin(), sizeof(SrcType) * src.size()));
     }
+
+    inline char *copyString(const char *src)
+    {
+        const size_t size = strlen(src) + 1;
+        char *dst = new char[size];
+        const errno_t err = strcpy_s(dst, size, src);
+        MAGMA_ASSERT(0 == err);
+        return dst;
+    }
 }
 
 #define MAGMA_OPTIONAL_HANDLE(obj) magma::__handle(obj)
