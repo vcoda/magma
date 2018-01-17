@@ -42,6 +42,27 @@ Pipeline::~Pipeline()
     vkDestroyPipeline(*device, handle, nullptr);
 }
 
+GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
+    const std::vector<ShaderStage>& stages,
+    const VertexInputState& vertexInputState,
+    const InputAssemblyState& inputAssemblyState,
+    const RasterizationState& rasterizationState,
+    const MultisampleState& multisampleState,
+    const DepthStencilState& depthStencilState,
+    const ColorBlendState& colorBlendState,
+    const std::initializer_list<VkDynamicState>& dynamicStates,
+    std::shared_ptr<const PipelineLayout> layout,
+    std::shared_ptr<const RenderPass> renderPass,
+    uint32_t subpass /* 0 */,
+    VkPipelineCreateFlags flags /* 0 */):
+    GraphicsPipeline(device, pipelineCache, stages, 
+        vertexInputState, inputAssemblyState, 
+        TesselationState(), // No tesselation state
+        ViewportState(), // No viewport state (supposed to be dynamic)
+        rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
+        layout, renderPass, subpass, flags)
+{}
+
 GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::shared_ptr<const PipelineCache> pipelineCache,  
     const std::vector<ShaderStage>& stages,
     const VertexInputState& vertexInputState,
@@ -52,9 +73,10 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
     const MultisampleState& multisampleState,
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
+    const std::initializer_list<VkDynamicState>& dynamicStates,
+    std::shared_ptr<const PipelineLayout> layout,
     std::shared_ptr<const RenderPass> renderPass,
-    const std::initializer_list<VkDynamicState>& dynamicStates /* {} */,
-    std::shared_ptr<const PipelineLayout> layout /* nullptr */,
+    uint32_t subpass /* 0 */,
     VkPipelineCreateFlags flags /* 0 */):
     Pipeline(device)
 {
@@ -100,7 +122,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
         info.layout = *defaultLayout;
     }
     info.renderPass = *renderPass;
-    info.subpass = 0;
+    info.subpass = subpass;
     info.basePipelineIndex = 0;
     info.basePipelineHandle = VK_NULL_HANDLE;
     const VkResult create = vkCreateGraphicsPipelines(*device, *pipelineCache, 1, &info, nullptr, &handle);
