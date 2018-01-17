@@ -88,6 +88,8 @@
       <SDLCheck>true</SDLCheck>
       <MinimalRebuild>false</MinimalRebuild>
       <AdditionalOptions>/MP16 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(VK_SDK_PATH)\Include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>VK_USE_PLATFORM_WIN32_KHR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
