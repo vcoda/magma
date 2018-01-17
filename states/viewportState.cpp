@@ -22,7 +22,13 @@ namespace magma
 {
 ViewportState::ViewportState()
 {
-    memset(this, 0, sizeof(ViewportState));
+    sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    viewportCount = 1;
+    pViewports = nullptr;
+    scissorCount = 1;
+    pScissors = nullptr;
 }
 
 ViewportState::ViewportState(float x, float y, float width, float height, 
