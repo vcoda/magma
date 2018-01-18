@@ -145,13 +145,14 @@ std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
 {
     std::vector<float> defaultQueuePriorities = {1.0f};
     const std::vector<DeviceQueueDescriptor> queueDescriptors = {
-        DeviceQueueDescriptor(VK_QUEUE_GRAPHICS_BIT, shared_from_this(), defaultQueuePriorities),
-        DeviceQueueDescriptor(VK_QUEUE_COMPUTE_BIT, shared_from_this(), defaultQueuePriorities)
+        DeviceQueueDescriptor(VK_QUEUE_GRAPHICS_BIT, shared_from_this(), defaultQueuePriorities)
     };
     const std::vector<const char*> noLayers;
-    const std::vector<const char*> KHR_swapchain = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
+    const std::vector<const char*> extensions = {
+        VK_KHR_SWAPCHAIN_EXTENSION_NAME
+    };
     const VkPhysicalDeviceFeatures noFeatures = {0};
-    return createDevice(queueDescriptors, noLayers, KHR_swapchain, noFeatures);
+    return createDevice(queueDescriptors, noLayers, extensions, noFeatures);
 }
 
 bool PhysicalDevice::surfaceSupported(std::shared_ptr<Surface> surface) const
