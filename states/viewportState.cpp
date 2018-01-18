@@ -45,7 +45,7 @@ ViewportState::ViewportState(float x, float y, float width, float height,
     scissor.offset.x = static_cast<int32_t>(x);
     scissor.offset.y = static_cast<int32_t>(y);
     scissor.extent.width = static_cast<uint32_t>(width);
-    scissor.extent.height = static_cast<uint32_t>(height);
+    scissor.extent.height = static_cast<uint32_t>(height >= 0.f ? height: -height);
     initialize(viewport, scissor);
 }
 
@@ -63,6 +63,24 @@ ViewportState::ViewportState(float x, float y, const VkExtent2D& extent,
     scissor.offset.x = static_cast<int32_t>(x);
     scissor.offset.y = static_cast<int32_t>(y);
     scissor.extent = extent;
+    initialize(viewport, scissor);
+}
+
+ViewportState::ViewportState(uint32_t x, uint32_t y, uint32_t width, int32_t height,
+    float minDepth /* 0 */, float maxDepth /* 1 */)
+{
+    VkViewport viewport;
+    viewport.x = static_cast<float>(x);
+    viewport.y = static_cast<float>(y);
+    viewport.width = static_cast<float>(width);
+    viewport.height = static_cast<float>(height);
+    viewport.minDepth = minDepth;
+    viewport.maxDepth = maxDepth;
+    VkRect2D scissor;
+    scissor.offset.x = static_cast<int32_t>(x);
+    scissor.offset.y = static_cast<int32_t>(y);
+    scissor.extent.width = static_cast<uint32_t>(width);
+    scissor.extent.height = static_cast<uint32_t>(height >= 0 ? height : -height);
     initialize(viewport, scissor);
 }
 

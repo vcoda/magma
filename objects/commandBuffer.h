@@ -65,7 +65,8 @@ namespace magma
             float maxDepth = 1.f) noexcept;
         void setViewport(
             uint32_t x, uint32_t y, 
-            uint32_t width, uint32_t height,
+            uint32_t width, 
+            int32_t height, // Viewport height can be negative (if supported)
             float minDepth = 0.f, 
             float maxDepth = 1.f) noexcept;
         void setViewports(const std::initializer_list<Viewport>& viewports) noexcept;

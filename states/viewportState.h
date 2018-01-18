@@ -29,6 +29,8 @@ namespace magma
             float minDepth = 0.f, float maxDepth = 1.f);
         ViewportState(float x, float y, const VkExtent2D& extent, 
             float minDepth = 0.f, float maxDepth = 1.f);
+        ViewportState(uint32_t x, uint32_t y, uint32_t width, int32_t height,
+            float minDepth = 0.f, float maxDepth = 1.f);
         ViewportState(const VkRect2D& viewport, const VkRect2D& scissor,
             float minDepth = 0.f, float maxDepth = 1.f);
         ViewportState(const VkViewport& viewport);     
