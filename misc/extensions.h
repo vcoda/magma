@@ -109,6 +109,9 @@ namespace magma
         const bool IMG_filter_cubic;
         const bool IMG_format_pvrtc;
 
+        const bool KHR_maintenance1;
+        const bool KHR_maintenance2;
+
         const bool NV_clip_space_w_scaling;
         const bool NV_dedicated_allocation;
         const bool NV_external_memory;

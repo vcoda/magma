@@ -98,6 +98,9 @@ DeviceExtensions::DeviceExtensions(std::shared_ptr<const PhysicalDevice> device)
     MAGMA_CHECK_EXTENSION(IMG_filter_cubic),
     MAGMA_CHECK_EXTENSION(IMG_format_pvrtc),
 
+    MAGMA_CHECK_EXTENSION(KHR_maintenance1),
+    MAGMA_CHECK_EXTENSION(KHR_maintenance2),
+
     MAGMA_CHECK_EXTENSION(NV_clip_space_w_scaling),
     MAGMA_CHECK_EXTENSION(NV_dedicated_allocation),
     MAGMA_CHECK_EXTENSION(NV_external_memory),
