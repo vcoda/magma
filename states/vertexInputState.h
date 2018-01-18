@@ -57,6 +57,7 @@ namespace magma
             const std::initializer_list<VertexInputBinding>& bindings,
             const std::initializer_list<VertexInputAttribute>& attributes);
         VertexInputState(const VertexInputState&);
+        VertexInputState& operator=(const VertexInputState&);
         ~VertexInputState();
     };
 

@@ -37,6 +37,7 @@ namespace magma
         ColorBlendState(const ColorBlendAttachmentState& attachment);
         ColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments);
         ColorBlendState(const ColorBlendState&);
+        ColorBlendState& operator=(const ColorBlendState&);
         ~ColorBlendState();
     };
 

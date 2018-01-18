@@ -139,6 +139,14 @@ ViewportState::ViewportState(const ViewportState& other)
     pScissors = helpers::copy(new VkRect2D[scissorCount], other.pScissors, scissorCount);
 }
 
+ViewportState& ViewportState::operator=(const ViewportState& other)
+{
+    helpers::copy(this, &other);
+    pViewports = helpers::copy(new VkViewport[viewportCount], other.pViewports, viewportCount);
+    pScissors = helpers::copy(new VkRect2D[scissorCount], other.pScissors, scissorCount);
+    return *this;
+}
+
 ViewportState::~ViewportState()
 {
     delete[] pViewports;

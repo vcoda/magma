@@ -39,6 +39,7 @@ namespace magma
         ViewportState(const std::vector<VkViewport>& viewports, 
             const std::vector<VkRect2D>& scissors);
         ViewportState(const ViewportState&);
+        ViewportState& operator=(const ViewportState&);
         ~ViewportState();
 
     private:
