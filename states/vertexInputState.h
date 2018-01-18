@@ -65,14 +65,20 @@ namespace magma
     {
         extern const VertexInputState noVertices;
 
-        extern const VertexInputState vertexHalf;
-        extern const VertexInputState vertex2Half;
-        extern const VertexInputState vertex3Half;
-        extern const VertexInputState vertex4Half;
+        extern const VertexInputState pos2Float;
+        extern const VertexInputState pos3Float;
+        extern const VertexInputState pos4Float;
 
-        extern const VertexInputState vertexFloat;
-        extern const VertexInputState vertex2Float;
-        extern const VertexInputState vertex3Float;
-        extern const VertexInputState vertex4Float;
+        extern const VertexInputState pos2Float_Col3Float;
+        extern const VertexInputState pos2Float_Col4Float;
+        extern const VertexInputState pos2Float_Col4Unorm;
+        extern const VertexInputState pos3Float_Col3Float;
+        extern const VertexInputState pos3Float_Col4Float;
+        extern const VertexInputState pos3Float_Col4Unorm;
+
+        extern const VertexInputState pos3Float_Nrm3Float;
+        extern const VertexInputState pos3Float_Nrm3Float_Col3Float;
+        extern const VertexInputState pos3Float_Nrm3Float_Col4Float;
+        extern const VertexInputState pos3Float_Nrm3Float_Tex2Float;
     } // namespace states
 } // namespace magma
