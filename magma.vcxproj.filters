@@ -198,9 +198,6 @@
     <ClInclude Include="objects\uniformBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="helpers\mapScoped.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
     <ClInclude Include="objects\queryPool.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -220,6 +217,12 @@
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
     <ClInclude Include="helpers\copying.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\mapScoped.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\transferQueue.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
   </ItemGroup>
