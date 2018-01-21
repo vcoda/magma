@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "descriptorSet.h"
 #include "device.h"
+#include "buffer.h"
 #include "image.h"
 #include "imageView.h"
 #include "sampler.h"
@@ -27,8 +28,9 @@ DescriptorSet::DescriptorSet(VkDescriptorSet handle, std::shared_ptr<const Devic
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT, handle, device)
 {}
 
-void DescriptorSet::update(uint32_t binding, const Descriptor& descriptor, const VkDescriptorBufferInfo& info) noexcept
+void DescriptorSet::update(uint32_t binding, const Descriptor& descriptor, std::shared_ptr<const Buffer> buffer) noexcept
 {
+    const VkDescriptorBufferInfo info = buffer->getDescriptor();
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     descriptorWrite.pNext = nullptr;

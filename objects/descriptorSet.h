@@ -23,20 +23,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
+    class Buffer;
     class Sampler;
     class ImageView;
 
     class DescriptorSet : public NonDispatchable<VkDescriptorSet>
     {
-    public:
-        void update(uint32_t binding, 
-            const Descriptor& descriptor, 
-            const VkDescriptorBufferInfo& info) noexcept;
-
-    private:
-        DescriptorSet(VkDescriptorSet handle, 
+        DescriptorSet(VkDescriptorSet handle,
             std::shared_ptr<const Device> device);
         friend class DescriptorPool;
+
+    public:
+        void update(uint32_t binding,
+            const Descriptor& descriptor,
+            std::shared_ptr<const Buffer> buffer) noexcept;
         void update(uint32_t binding,
             const Descriptor& descriptor,
             std::shared_ptr<const Sampler> sampler,
