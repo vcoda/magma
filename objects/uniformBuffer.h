@@ -31,7 +31,7 @@ namespace magma
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
         {}
 
-        Block *map(bool clearMemory = false)
+        Block *map(bool clearMemory = false) noexcept
         {
             if (void *block = memory->map(0, sizeof(Block)))
             {
@@ -42,7 +42,7 @@ namespace magma
             return nullptr;
         }
 
-        void unmap() 
+        void unmap() noexcept
         { 
             memory->unmap(); 
         }
