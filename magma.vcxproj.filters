@@ -225,6 +225,9 @@
     <ClInclude Include="helpers\transferQueue.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
+    <ClInclude Include="objects\transferBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
@@ -371,6 +374,9 @@
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="objects\bufferView.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\transferBuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
