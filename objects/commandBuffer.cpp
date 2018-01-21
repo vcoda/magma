@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "queryPool.h"
 #include "vertexBuffer.h"
 #include "indexBuffer.h"
+#include "image.h"
 #include "descriptorSet.h"
 #include "pipelineLayout.h"
 #include "pipeline.h"
@@ -160,6 +161,11 @@ void CommandBuffer::copyBuffer(const std::shared_ptr<Buffer>& srcBuffer, const s
 void CommandBuffer::copyBuffer(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Buffer>& dstBuffer, const std::vector<VkBufferCopy>& regions) const noexcept
 {
     vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, MAGMA_COUNT(regions), regions.data());
+}
+
+void CommandBuffer::copyBufferToImage(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Image>& dstImage, VkImageLayout dstImageLayout, const std::vector<VkBufferImageCopy>& regions) const noexcept
+{
+    vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstImageLayout, MAGMA_COUNT(regions), regions.data());
 }
 
 void CommandBuffer::beginQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex, bool precise) noexcept

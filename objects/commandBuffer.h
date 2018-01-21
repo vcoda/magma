@@ -29,6 +29,7 @@ namespace magma
     class Framebuffer;
     class GraphicsPipeline;
     class IndexBuffer;
+    class Image;
     class PipelineLayout;
     class QueryPool;
     class RenderPass;
@@ -165,7 +166,11 @@ namespace magma
             const std::vector<VkBufferCopy>& regions) const noexcept;
         void copyImage() const noexcept; // TODO: implement
         void blitImage() const noexcept; // TODO: implement
-        void copyBufferToImage() const noexcept; // TODO: implement
+        void copyBufferToImage(
+            const std::shared_ptr<Buffer>& srcBuffer, 
+            const std::shared_ptr<Image>& dstImage,
+            VkImageLayout dstImageLayout,
+            const std::vector<VkBufferImageCopy>& regions) const noexcept;
         void copyImageToBuffer() const noexcept; // TODO: implement
         void updateBuffer() const noexcept; // TODO: implement
         void fillBuffer() const noexcept; // TODO: implement
