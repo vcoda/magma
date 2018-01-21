@@ -17,6 +17,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "descriptorSet.h"
 #include "device.h"
+#include "image.h"
+#include "imageView.h"
+#include "sampler.h"
 
 namespace magma
 {
@@ -36,6 +39,28 @@ void DescriptorSet::update(uint32_t binding, const Descriptor& descriptor, const
     descriptorWrite.descriptorType = descriptor.type;
     descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = &info;
+    descriptorWrite.pTexelBufferView = nullptr;
+    vkUpdateDescriptorSets(*device, 1, &descriptorWrite, 0, nullptr);
+}
+
+void DescriptorSet::update(uint32_t binding, const Descriptor& descriptor, 
+    std::shared_ptr<const Sampler> sampler,
+    std::shared_ptr<const ImageView> imageView) noexcept
+{
+    VkDescriptorImageInfo info;
+    info.sampler = *sampler;
+    info.imageView = *imageView;
+    info.imageLayout = imageView->getImage()->getLayout();
+    VkWriteDescriptorSet descriptorWrite;
+    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    descriptorWrite.pNext = nullptr;
+    descriptorWrite.dstSet = handle;
+    descriptorWrite.dstBinding = binding;
+    descriptorWrite.dstArrayElement = 0;
+    descriptorWrite.descriptorCount = descriptor.descriptorCount;
+    descriptorWrite.descriptorType = descriptor.type;
+    descriptorWrite.pImageInfo = &info;
+    descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = nullptr;
     vkUpdateDescriptorSets(*device, 1, &descriptorWrite, 0, nullptr);
 }

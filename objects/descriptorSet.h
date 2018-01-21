@@ -23,6 +23,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
+    class Sampler;
+    class ImageView;
 
     class DescriptorSet : public NonDispatchable<VkDescriptorSet>
     {
@@ -35,5 +37,9 @@ namespace magma
         DescriptorSet(VkDescriptorSet handle, 
             std::shared_ptr<const Device> device);
         friend class DescriptorPool;
+        void update(uint32_t binding,
+            const Descriptor& descriptor,
+            std::shared_ptr<const Sampler> sampler,
+            std::shared_ptr<const ImageView> imageView) noexcept;
     };
 } // namespace magma
