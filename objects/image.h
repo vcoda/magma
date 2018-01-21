@@ -16,12 +16,14 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <vector>
 #include "handle.h"
 
 namespace magma
 {
     class Device;
     class DeviceMemory;
+    class CommandBuffer;
 
     class Image : public NonDispatchable<VkImage>
     {
@@ -29,6 +31,8 @@ namespace magma
         ~Image();
         virtual VkImageType getType() const = 0;
         VkFormat getFormat() const { return format; }
+        VkImageLayout getLayout() const { return layout; }
+        const VkExtent3D& getExtent() const { return extent; }
         uint32_t getMipLevels() const { return mipLevels; }
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0);
@@ -45,6 +49,8 @@ namespace magma
 
     protected:
         VkFormat format;
+        VkImageLayout layout;
+        VkExtent3D extent;
         uint32_t mipLevels;
         std::shared_ptr<DeviceMemory> memory;
     };
@@ -68,6 +74,12 @@ namespace magma
             const VkExtent2D& extent,
             uint32_t mipLevels,
             VkImageUsageFlags usage);
+        Image2D(std::shared_ptr<const Device> device, 
+            VkFormat format, 
+            const std::vector<const void *>& mipLevelData,
+            const std::vector<VkExtent2D>& mipLevelExtents,
+            const std::vector<VkDeviceSize>& mipLevelSizes,
+            std::shared_ptr<CommandBuffer> cmdBuffer);
         VkImageType getType() const override { return VK_IMAGE_TYPE_2D; }
     };
 
