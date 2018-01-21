@@ -69,9 +69,12 @@ namespace magma
         extern const VertexInputState pos3Float;
         extern const VertexInputState pos4Float;
 
+        extern const VertexInputState pos2Float_Tex2Float;
         extern const VertexInputState pos2Float_Col3Float;
         extern const VertexInputState pos2Float_Col4Float;
         extern const VertexInputState pos2Float_Col4Unorm;
+
+        extern const VertexInputState pos3Float_Tex2Float;
         extern const VertexInputState pos3Float_Col3Float;
         extern const VertexInputState pos3Float_Col4Float;
         extern const VertexInputState pos3Float_Col4Unorm;

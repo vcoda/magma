@@ -87,7 +87,10 @@ const VertexInputState pos3Float(VertexInputBinding(0, sizeof(float) * 3),
 const VertexInputState pos4Float(VertexInputBinding(0, sizeof(float) * 4),
     VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32A32_SFLOAT, 0));
 
-
+const VertexInputState pos2Float_Tex2Float(VertexInputBinding(0, sizeof(float) * 4), {
+    VertexInputAttribute(0, 0, VK_FORMAT_R32G32_SFLOAT, 0),
+    VertexInputAttribute(0, 1, VK_FORMAT_R32G32_SFLOAT, 8)
+});
 const VertexInputState pos2Float_Col3Float(VertexInputBinding(0, sizeof(float) * 5), {
     VertexInputAttribute(0, 0, VK_FORMAT_R32G32_SFLOAT, 0),
     VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32_SFLOAT, 8)
@@ -99,6 +102,11 @@ const VertexInputState pos2Float_Col4Float(VertexInputBinding(0, sizeof(float) *
 const VertexInputState pos2Float_Col4Unorm(VertexInputBinding(0, sizeof(float) * 2 + sizeof(char) * 4), {
     VertexInputAttribute(0, 0, VK_FORMAT_R32G32_SFLOAT, 0),
     VertexInputAttribute(0, 1, VK_FORMAT_R8G8B8A8_UNORM, 8)
+});
+
+const VertexInputState pos3Float_Tex2Float(VertexInputBinding(0, sizeof(float) * 5), {
+    VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0),
+    VertexInputAttribute(0, 1, VK_FORMAT_R32G32_SFLOAT, 8)
 });
 const VertexInputState pos3Float_Col3Float(VertexInputBinding(0, sizeof(float) * 6), {
     VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0),
