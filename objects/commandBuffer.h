@@ -186,7 +186,7 @@ namespace magma
             const std::shared_ptr<Event>& event,
             VkPipelineStageFlags stageMask) noexcept; // TODO: implement
         void waitEvents() noexcept; // TODO: implement
-        void pipelineBarrier() noexcept; // TODO: implement
+        void pipelineImageBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkImageMemoryBarrier>& barriers) noexcept;
         void beginQuery(
             const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex,

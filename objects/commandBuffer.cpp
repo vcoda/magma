@@ -168,6 +168,16 @@ void CommandBuffer::copyBufferToImage(const std::shared_ptr<Buffer>& srcBuffer, 
     vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstImageLayout, MAGMA_COUNT(regions), regions.data());
 }
 
+void CommandBuffer::pipelineImageBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkImageMemoryBarrier>& barriers) noexcept
+{
+    vkCmdPipelineBarrier(handle, 
+        srcStageMask, dstStageMask, 0,
+        0, nullptr,
+        0, nullptr,
+        MAGMA_COUNT(barriers),
+        barriers.data());
+}
+
 void CommandBuffer::beginQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex, bool precise) noexcept
 {
     MAGMA_ASSERT(queryIndex < queryPool->getQueryCount());
