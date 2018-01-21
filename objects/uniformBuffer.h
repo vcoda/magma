@@ -46,14 +46,5 @@ namespace magma
         { 
             memory->unmap(); 
         }
-
-        VkDescriptorBufferInfo getDescriptor() const
-        {
-            VkDescriptorBufferInfo info;
-            info.buffer = handle;
-            info.offset = 0;
-            info.range = sizeof(Block);
-            return info;
-        }
     };
 } // namespace magma

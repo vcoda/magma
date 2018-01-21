@@ -61,4 +61,13 @@ VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
     vkGetBufferMemoryRequirements(*device, handle, &memoryRequirements);
     return memoryRequirements;
 }
+
+VkDescriptorBufferInfo Buffer::getDescriptor() const noexcept
+{
+    VkDescriptorBufferInfo info;
+    info.buffer = handle;
+    info.offset = 0;
+    info.range = size;
+    return info;
+}
 } // namespace magma
