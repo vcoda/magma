@@ -136,7 +136,10 @@ std::shared_ptr<Device> PhysicalDevice::createDevice(
     VkDevice logicalDevice;
     const VkResult create = vkCreateDevice(handle, &info, nullptr, &logicalDevice);
     MAGMA_THROW_FAILURE(create, "failed to create device");
-    std::shared_ptr<Device> device(new Device(logicalDevice, shared_from_this()));
+    std::vector<VkDeviceQueueCreateInfo> deviceQueues;
+    for (const auto& desc : queueDescriptors)
+        deviceQueues.push_back(desc);
+    std::shared_ptr<Device> device(new Device(logicalDevice, shared_from_this(), deviceQueues));
     device->device = device;
     return device;
 }

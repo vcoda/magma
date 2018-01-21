@@ -28,7 +28,9 @@ namespace magma
     class Device : public Handle<VkDevice>,
         public std::enable_shared_from_this<Device>
     {
-        Device(VkDevice device, std::shared_ptr<const PhysicalDevice> physicalDevice);
+        Device(VkDevice device, 
+            std::shared_ptr<const PhysicalDevice> physicalDevice,
+            const std::vector<VkDeviceQueueCreateInfo>& queues);
         friend PhysicalDevice;
 
     public:
@@ -40,5 +42,6 @@ namespace magma
 
     private:
         std::shared_ptr<const PhysicalDevice> physicalDevice;
+        std::vector<VkDeviceQueueCreateInfo> queues;
     };
 } // namespace magma

@@ -23,20 +23,30 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Device::Device(VkDevice device, std::shared_ptr<const PhysicalDevice> physicalDevice):
+Device::Device(VkDevice device, std::shared_ptr<const PhysicalDevice> physicalDevice, const std::vector<VkDeviceQueueCreateInfo>& queues):
     Handle(VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT, device),
-    physicalDevice(physicalDevice)
+    physicalDevice(physicalDevice),
+    queues(queues)
 {}
 
 std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const
 {
-    const DeviceQueueDescriptor queueDesc(flags, physicalDevice);
     VkQueue queue = VK_NULL_HANDLE;
-    vkGetDeviceQueue(handle, queueDesc.queueFamilyIndex, queueIndex, &queue);
+    const DeviceQueueDescriptor queueDesc(flags, physicalDevice);
+    for (const auto& info : queues)
+    {
+        // Check if queue family is present, otherwise
+        // vkGetDeviceQueue() throws an exception
+        if (info.queueFamilyIndex == queueDesc.queueFamilyIndex)
+        {
+            vkGetDeviceQueue(handle, queueDesc.queueFamilyIndex, queueIndex, &queue);
+            return std::shared_ptr<Queue>(new Queue(queue, shared_from_this(),
+                flags, queueDesc.queueFamilyIndex, queueIndex));
+        }
+    }
     if (VK_NULL_HANDLE == queue)
         MAGMA_THROW("failed to get device queue");
-    return std::shared_ptr<Queue>(new Queue(queue, shared_from_this(), 
-        flags, queueDesc.queueFamilyIndex, queueIndex));
+    return std::shared_ptr<Queue>();
 }
 
 bool Device::waitIdle() const noexcept
