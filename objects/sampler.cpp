@@ -42,7 +42,7 @@ Sampler::Sampler(std::shared_ptr<const Device> device, const SamplerState& state
     info.compareEnable = VK_FALSE;
     info.compareOp = VK_COMPARE_OP_NEVER;
     info.minLod = 0.f;
-    info.maxLod = 1.f;
+    info.maxLod = std::numeric_limits<float>::max();
     info.borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK;
     info.unnormalizedCoordinates = VK_FALSE;
     const VkResult create = vkCreateSampler(*device, &info, nullptr, &handle);
