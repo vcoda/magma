@@ -38,7 +38,7 @@ Sampler::Sampler(std::shared_ptr<const Device> device, const SamplerState& state
     info.addressModeW = state.addressMode;
     info.mipLodBias = mipLodBias;
     info.anisotropyEnable = MAGMA_BOOLEAN(state.anisotropyEnable);
-    info.maxAnisotropy = state.maxAnisotropy;
+    info.maxAnisotropy = state.anisotropyEnable ? state.maxAnisotropy : 1.f;
     info.compareEnable = VK_FALSE;
     info.compareOp = VK_COMPARE_OP_NEVER;
     info.minLod = 0.f;
