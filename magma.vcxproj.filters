@@ -228,6 +228,9 @@
     <ClInclude Include="objects\transferBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="misc\imageMemoryBarrier.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
@@ -378,6 +381,9 @@
     </ClCompile>
     <ClCompile Include="objects\transferBuffer.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="misc\imageMemoryBarrier.cpp">
+      <Filter>Source Files\misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
