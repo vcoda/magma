@@ -125,7 +125,7 @@ Image2D::Image2D(std::shared_ptr<const Device> device, VkFormat format,
         for (uint32_t level = 0; level < mipLevels; ++level)
         {
             void *mipData = data + copyRegions[level].bufferOffset;
-            memcpy(mipData, mipLevelData[level], mipLevelSizes[level]);
+            memcpy(mipData, mipLevelData[level], static_cast<size_t>(mipLevelSizes[level]));
         }
         srcTransferBuffer->getMemory()->unmap();
     }
