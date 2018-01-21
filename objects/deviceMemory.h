@@ -29,8 +29,8 @@ namespace magma
             VkDeviceSize size, 
             VkMemoryPropertyFlags flags);
         ~DeviceMemory();
-        void *map(VkDeviceSize offset, 
-            VkDeviceSize size, 
+        void *map(VkDeviceSize offset = 0, 
+            VkDeviceSize size = 0, 
             VkMemoryMapFlags flags = 0) noexcept;
         void unmap() noexcept;
         VkDeviceSize getSize() const noexcept { return size; }

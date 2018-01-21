@@ -47,9 +47,13 @@ DeviceMemory::~DeviceMemory()
     vkFreeMemory(*device, handle, nullptr);
 }
 
-void *DeviceMemory::map(VkDeviceSize offset, VkDeviceSize size,
+void *DeviceMemory::map(
+    VkDeviceSize offset /* 0 */, 
+    VkDeviceSize size /* 0 */,
     VkMemoryMapFlags flags /* 0 */) noexcept
 {
+    if (0 == size)
+        size = this->size;
     void *data;
     const VkResult map = vkMapMemory(*device, handle, offset, size, flags, &data);
     return (VK_SUCCESS == map) ? data : nullptr;
