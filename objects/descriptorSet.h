@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <vector>
 #include "handle.h"
-#include "../descriptors/descriptors.h"
+#include "../descriptors/bindings.h"
 
 namespace magma
 {
@@ -34,11 +34,9 @@ namespace magma
         friend class DescriptorPool;
 
     public:
-        void update(uint32_t binding,
-            const Descriptor& descriptor,
+        void update(const LayoutBinding& binding,
             std::shared_ptr<const Buffer> buffer) noexcept;
-        void update(uint32_t binding,
-            const Descriptor& descriptor,
+        void update(const LayoutBinding& binding,
             std::shared_ptr<const Sampler> sampler,
             std::shared_ptr<const ImageView> imageView) noexcept;
     };

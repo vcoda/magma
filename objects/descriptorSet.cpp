@@ -28,26 +28,24 @@ DescriptorSet::DescriptorSet(VkDescriptorSet handle, std::shared_ptr<const Devic
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT, handle, device)
 {}
 
-void DescriptorSet::update(uint32_t binding, const Descriptor& descriptor, std::shared_ptr<const Buffer> buffer) noexcept
+void DescriptorSet::update(const LayoutBinding& binding, std::shared_ptr<const Buffer> buffer) noexcept
 {
     const VkDescriptorBufferInfo info = buffer->getDescriptor();
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     descriptorWrite.pNext = nullptr;
     descriptorWrite.dstSet = handle;
-    descriptorWrite.dstBinding = binding;
+    descriptorWrite.dstBinding = binding.binding;
     descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = descriptor.descriptorCount;
-    descriptorWrite.descriptorType = descriptor.type;
+    descriptorWrite.descriptorCount = binding.descriptorCount;
+    descriptorWrite.descriptorType = binding.descriptorType;
     descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = &info;
     descriptorWrite.pTexelBufferView = nullptr;
     vkUpdateDescriptorSets(*device, 1, &descriptorWrite, 0, nullptr);
 }
 
-void DescriptorSet::update(uint32_t binding, const Descriptor& descriptor, 
-    std::shared_ptr<const Sampler> sampler,
-    std::shared_ptr<const ImageView> imageView) noexcept
+void DescriptorSet::update(const LayoutBinding& binding, std::shared_ptr<const Sampler> sampler, std::shared_ptr<const ImageView> imageView) noexcept
 {
     VkDescriptorImageInfo info;
     info.sampler = *sampler;
@@ -57,10 +55,10 @@ void DescriptorSet::update(uint32_t binding, const Descriptor& descriptor,
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     descriptorWrite.pNext = nullptr;
     descriptorWrite.dstSet = handle;
-    descriptorWrite.dstBinding = binding;
+    descriptorWrite.dstBinding = binding.binding;
     descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = descriptor.descriptorCount;
-    descriptorWrite.descriptorType = descriptor.type;
+    descriptorWrite.descriptorCount = binding.descriptorCount;
+    descriptorWrite.descriptorType = binding.descriptorType;
     descriptorWrite.pImageInfo = &info;
     descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = nullptr;
