@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "indexBuffer.h"
 #include "vertexBuffer.h"
+#include "pipelineLayout.h"
 #include "../misc/clearValue.h"
 #include "../misc/clearAttachment.h"
 #include "../misc/viewport.h"
@@ -173,6 +174,13 @@ inline void CommandBuffer::dispatchIndirect(const std::shared_ptr<Buffer>& buffe
 inline void CommandBuffer::clearAttachments(const std::initializer_list<ClearAttachment>& attachments, const VkClearRect& clearRect) const noexcept
 {
     vkCmdClearAttachments(handle, MAGMA_COUNT(attachments), attachments.begin(), 1, &clearRect);
+}
+
+template <typename Type>
+inline void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const std::vector<Type>& constants,
+    uint32_t offset /* 0 */) noexcept
+{
+    vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * constants.size()), constants.data());
 }
 
 inline void CommandBuffer::setClear(const ClearValue& value) noexcept

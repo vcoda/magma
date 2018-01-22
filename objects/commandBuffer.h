@@ -206,7 +206,12 @@ namespace magma
             bool write64Bit = true) noexcept;
         void writeTimestamp() noexcept; // TODO: implement
 
-        void pushConstants() noexcept; // TODO: implement
+        template <typename Type>
+        void pushConstants(
+            const std::shared_ptr<PipelineLayout>& pipeline,
+            VkShaderStageFlags stageFlags, 
+            const std::vector<Type>& constants,
+            uint32_t offset = 0) noexcept;
 
         void beginRenderPass(
             const std::shared_ptr<RenderPass>& renderPass,
