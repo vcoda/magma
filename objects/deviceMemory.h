@@ -34,6 +34,8 @@ namespace magma
             VkMemoryMapFlags flags = 0) noexcept;
         void unmap() noexcept;
         VkDeviceSize getSize() const noexcept { return size; }
+        bool flushMappedRange(VkDeviceSize offset = 0,
+            VkDeviceSize size = VK_WHOLE_SIZE);
 
     private:
         VkDeviceSize size;

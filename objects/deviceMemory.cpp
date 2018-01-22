@@ -61,4 +61,17 @@ void DeviceMemory::unmap() noexcept
 {
     vkUnmapMemory(*device, handle);
 }
+
+bool DeviceMemory::flushMappedRange(
+    VkDeviceSize offset /* 0 */, 
+    VkDeviceSize size /* VK_WHOLE_SIZE */)
+{
+    VkMappedMemoryRange memoryRange;
+    memoryRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
+    memoryRange.pNext = nullptr;
+    memoryRange.memory = handle;
+    memoryRange.offset = offset;
+    memoryRange.size = size;
+    return vkFlushMappedMemoryRanges(*device, 1, &memoryRange);
+}
 } // namespace magma
