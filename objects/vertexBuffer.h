@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class CommandBuffer;
+
     class VertexBuffer : public Buffer
     {
     public:
@@ -27,36 +29,26 @@ namespace magma
             const void *data, VkDeviceSize size,
             uint32_t vertexCount,
             VkBufferCreateFlags flags = 0);
-
-        template <typename VertexType, size_t ArraySize>
-        VertexBuffer(std::shared_ptr<const Device> device,
-            const VertexType(&vertices)[ArraySize],
-            VkBufferCreateFlags flags = 0):
-            Buffer(device, sizeof(VertexType) * ArraySize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, flags,
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
-            vertexCount(static_cast<uint32_t>(ArraySize))
-        {
-            if (void *buffer = memory->map(0, size))
-            {
-                memcpy(buffer, vertices, static_cast<size_t>(size));
-                memory->unmap();
-            }
-        }
+        VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+            const void *data, VkDeviceSize size,
+            uint32_t vertexCount,  
+            VkBufferCreateFlags flags = 0);
 
         template <typename VertexType>
         VertexBuffer(std::shared_ptr<const Device> device,
             const std::vector<VertexType>& vertices,
             VkBufferCreateFlags flags = 0):
-            Buffer(device, sizeof(VertexType) * vertices.size(), VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, flags,
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
-            vertexCount(static_cast<uint32_t>(vertices.size()))
-        {
-            if (void *buffer = memory->map(0, size))
-            {
-                memcpy(buffer, vertices.data(), static_cast<size_t>(size));
-                memory->unmap();
-            }
-        }
+            VertexBuffer(device, vertices.data(), static_cast<VkDeviceSize>(sizeof(VertexType) * vertices.size()), 
+                static_cast<uint32_t>(vertices.size()), flags)
+        {}
+
+        template <typename VertexType>
+        VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+            const std::vector<VertexType>& vertices,
+            VkBufferCreateFlags flags = 0):
+            VertexBuffer(copyCmdBuffer, vertices.data(), static_cast<VkDeviceSize>(sizeof(VertexType) * vertices.size()), 
+                static_cast<uint32_t>(vertices.size()), flags)
+        {}
 
         uint32_t getVertexCount() const { return vertexCount; }
 
@@ -69,11 +61,5 @@ namespace magma
 
     private:
         uint32_t vertexCount;
-    };
-
-    class LocalVertexBuffer : public VertexBuffer
-    {
-    public:
-        LocalVertexBuffer(std::shared_ptr<const Device> device, VkDeviceSize size, VkBufferCreateFlags flags = 0);
     };
 } // namespace magma
