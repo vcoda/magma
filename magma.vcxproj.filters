@@ -228,6 +228,9 @@
     <ClInclude Include="misc\imageMemoryBarrier.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
+    <ClInclude Include="misc\clearAttachment.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">

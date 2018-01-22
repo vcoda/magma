@@ -129,6 +129,7 @@
     <ClInclude Include="helpers\mapScoped.h" />
     <ClInclude Include="helpers\stackArray.h" />
     <ClInclude Include="magma.h" />
+    <ClInclude Include="misc\clearAttachment.h" />
     <ClInclude Include="misc\clearValue.h" />
     <ClInclude Include="misc\debugMarker.h" />
     <ClInclude Include="misc\exception.h" />
