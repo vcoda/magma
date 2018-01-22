@@ -37,7 +37,7 @@ namespace magma
         void update(const LayoutBinding& binding,
             std::shared_ptr<const Buffer> buffer) noexcept;
         void update(const LayoutBinding& binding,
-            std::shared_ptr<const Sampler> sampler,
-            std::shared_ptr<const ImageView> imageView) noexcept;
+            std::shared_ptr<const ImageView> imageView,
+            std::shared_ptr<const Sampler> sampler) noexcept;
     };
 } // namespace magma

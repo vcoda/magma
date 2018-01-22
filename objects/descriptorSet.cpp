@@ -45,7 +45,7 @@ void DescriptorSet::update(const LayoutBinding& binding, std::shared_ptr<const B
     vkUpdateDescriptorSets(*device, 1, &descriptorWrite, 0, nullptr);
 }
 
-void DescriptorSet::update(const LayoutBinding& binding, std::shared_ptr<const Sampler> sampler, std::shared_ptr<const ImageView> imageView) noexcept
+void DescriptorSet::update(const LayoutBinding& binding, std::shared_ptr<const ImageView> imageView, std::shared_ptr<const Sampler> sampler) noexcept
 {
     VkDescriptorImageInfo info;
     info.sampler = *sampler;
