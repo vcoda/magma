@@ -26,7 +26,8 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<const Device> device, c
 {}
 
 DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<const Device> device, const std::initializer_list<LayoutBinding>& bindings):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT, device)
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT, device),
+    bindings(bindings)
 {
     VkDescriptorSetLayoutCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;

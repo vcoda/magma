@@ -32,5 +32,10 @@ namespace magma
         DescriptorSetLayout(std::shared_ptr<const Device> device,
             const std::initializer_list<LayoutBinding>& bindings);
         ~DescriptorSetLayout();
+        const std::vector<magma::LayoutBinding>& getBindings() const { return bindings; }
+        const magma::LayoutBinding& getBinding(uint32_t index) const { return bindings[index]; }
+
+    private:
+        std::vector<magma::LayoutBinding> bindings;
     };
 } // namespace magma
