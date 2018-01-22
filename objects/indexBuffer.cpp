@@ -16,6 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "indexBuffer.h"
+#include "commandBuffer.h"
+#include "transferBuffer.h"
+#include "queue.h"
 
 namespace magma
 {
@@ -38,9 +41,24 @@ IndexBuffer::IndexBuffer(std::shared_ptr<const Device> device, const void *data,
     }
 }
 
-LocalIndexBuffer::LocalIndexBuffer(std::shared_ptr<const Device> device, VkDeviceSize size, VkIndexType indexType,
+IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size, VkIndexType indexType,
     VkBufferCreateFlags flags /* 0 */):
-    IndexBuffer(device, size, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags, indexType, 
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) 
-{}
+    Buffer(copyCmdBuffer->getDevice(), size, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
+    indexType(indexType)
+{
+    std::shared_ptr<SourceTransferBuffer> srcBuffer(new SourceTransferBuffer(device, data, size));
+    copyCmdBuffer->begin();
+    {
+        VkBufferCopy region;
+        region.srcOffset = 0;
+        region.dstOffset = 0;
+        region.size = size;
+        vkCmdCopyBuffer(*copyCmdBuffer, *srcBuffer, handle, 1, &region);
+    }
+    copyCmdBuffer->end();
+    std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_TRANSFER_BIT, 0));
+    queue->submit(copyCmdBuffer, 0, nullptr, nullptr, nullptr);
+    queue->waitIdle();
+}
 } // namespace magma

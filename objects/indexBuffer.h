@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class CommandBuffer;
+
     class IndexBuffer : public Buffer
     {
     public:
@@ -27,36 +29,26 @@ namespace magma
             const void *data, VkDeviceSize size,
             VkIndexType indexType,
             VkBufferCreateFlags flags = 0);
-
-        template <typename IndexType, size_t ArraySize>
-        IndexBuffer(std::shared_ptr<const Device> device,
-            const IndexType(&indices)[ArraySize],
-            VkBufferCreateFlags flags = 0):
-            Buffer(device, sizeof(IndexType) * ArraySize, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, flags,
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
-            indexType(sizeof(IndexType) == sizeof(uint16_t) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32)
-        {
-            if (void *buffer = memory->map(0, size))
-            {
-                memcpy(buffer, indices, static_cast<size_t>(size));
-                memory->unmap();
-            }
-        }
+        IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+            const void *data, VkDeviceSize size,
+            VkIndexType indexType,
+            VkBufferCreateFlags flags = 0);
 
         template <typename IndexType>
         IndexBuffer(std::shared_ptr<const Device> device,
             const std::vector<IndexType>& indices,
             VkBufferCreateFlags flags = 0):
-            Buffer(device, sizeof(IndexType) * indices.size(), VK_BUFFER_USAGE_INDEX_BUFFER_BIT, flags,
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
-            indexType(sizeof(IndexType) == sizeof(uint16_t) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32)
-        {
-            if (void *buffer = memory->map(0, size))
-            {
-                memcpy(buffer, indices.data(), static_cast<size_t>(size));
-                memory->unmap();
-            }
-        }
+            IndexBuffer(device, indices.data(), static_cast<VkDeviceSize>(sizeof(IndexType) * indices.size()),
+                sizeof(IndexType) == sizeof(uint16_t) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32, flags)
+        {}
+
+        template <typename IndexType>
+        IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+            const std::vector<IndexType>& indices,
+            VkBufferCreateFlags flags = 0):
+            IndexBuffer(copyCmdBuffer, indices.data(), static_cast<VkDeviceSize>(sizeof(IndexType) * indices.size()), 
+                sizeof(IndexType) == sizeof(uint16_t) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32, flags)
+        {}
 
         VkIndexType getIndexType() const { return indexType; }
         uint32_t getIndexCount() const 
@@ -76,14 +68,5 @@ namespace magma
 
     private:
         VkIndexType indexType;
-    };
-
-    class LocalIndexBuffer : public IndexBuffer
-    {
-    public:
-        LocalIndexBuffer(std::shared_ptr<const Device> device,
-            VkDeviceSize size,
-            VkIndexType indexType,
-            VkBufferCreateFlags flags = 0);
     };
 } // namespace magma
