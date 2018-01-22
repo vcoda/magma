@@ -126,7 +126,6 @@
     <ClInclude Include="descriptors\descriptors.h" />
     <ClInclude Include="descriptors\subpass.h" />
     <ClInclude Include="helpers\copying.h" />
-    <ClInclude Include="helpers\transferQueue.h" />
     <ClInclude Include="helpers\mapScoped.h" />
     <ClInclude Include="helpers\stackArray.h" />
     <ClInclude Include="magma.h" />

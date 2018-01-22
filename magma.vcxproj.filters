@@ -222,9 +222,6 @@
     <ClInclude Include="helpers\mapScoped.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
-    <ClInclude Include="helpers\transferQueue.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
     <ClInclude Include="objects\transferBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
