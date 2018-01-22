@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "indexBuffer.h"
 #include "vertexBuffer.h"
 #include "../misc/clearValue.h"
+#include "../misc/clearAttachment.h"
 #include "../misc/viewport.h"
 #include "../misc/scissor.h"
 #include "../helpers/stackArray.h"
@@ -167,6 +168,11 @@ inline void CommandBuffer::dispatch(uint32_t x, uint32_t y, uint32_t z) const no
 inline void CommandBuffer::dispatchIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset) const noexcept
 {
     vkCmdDispatchIndirect(handle, *buffer, offset);
+}
+
+inline void CommandBuffer::clearAttachments(const std::initializer_list<ClearAttachment>& attachments, const VkClearRect& clearRect) const noexcept
+{
+    vkCmdClearAttachments(handle, MAGMA_COUNT(attachments), attachments.begin(), 1, &clearRect);
 }
 
 inline void CommandBuffer::setClear(const ClearValue& value) noexcept

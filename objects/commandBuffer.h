@@ -38,6 +38,7 @@ namespace magma
     struct Viewport;
     struct Scissor;
     struct ClearValue;
+    struct ClearAttachment;
 
     // Methods order follows Vulkan API order
     class CommandBuffer : public Handle<VkCommandBuffer>
@@ -176,7 +177,7 @@ namespace magma
         void fillBuffer() const noexcept; // TODO: implement
         void clearColorImage() const noexcept; // TODO: implement
         void clearDepthStencilImage() const noexcept; // TODO: implement
-        void clearAttachments() const noexcept; // TODO: implement
+        void clearAttachments(const std::initializer_list<ClearAttachment>& attachments, const VkClearRect& clearRect) const noexcept;
         void resolveImage() const noexcept; // TODO: implement
 
         void setEvent(
