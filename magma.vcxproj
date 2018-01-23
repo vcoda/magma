@@ -154,6 +154,11 @@
     <ClInclude Include="objects\framebuffer.h" />
     <ClInclude Include="objects\handle.h" />
     <ClInclude Include="objects\image.h" />
+    <ClInclude Include="objects\image1D.h" />
+    <ClInclude Include="objects\image1DArray.h" />
+    <ClInclude Include="objects\image2D.h" />
+    <ClInclude Include="objects\image2DArray.h" />
+    <ClInclude Include="objects\image3D.h" />
     <ClInclude Include="objects\imageView.h" />
     <ClInclude Include="objects\indexBuffer.h" />
     <ClInclude Include="objects\instance.h" />
@@ -211,6 +216,11 @@
     <ClCompile Include="objects\fence.cpp" />
     <ClCompile Include="objects\framebuffer.cpp" />
     <ClCompile Include="objects\image.cpp" />
+    <ClCompile Include="objects\image1D.cpp" />
+    <ClCompile Include="objects\image1DArray.cpp" />
+    <ClCompile Include="objects\image2D.cpp" />
+    <ClCompile Include="objects\image2DArray.cpp" />
+    <ClCompile Include="objects\image3D.cpp" />
     <ClCompile Include="objects\imageView.cpp" />
     <ClCompile Include="objects\indexBuffer.cpp" />
     <ClCompile Include="objects\instance.cpp" />

@@ -228,6 +228,21 @@
     <ClInclude Include="misc\imageMemoryBarrier.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
+    <ClInclude Include="objects\image2D.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="objects\image2DArray.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="objects\image1D.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="objects\image1DArray.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="objects\image3D.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
     <ClInclude Include="misc\clearAttachment.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
@@ -384,6 +399,21 @@
     </ClCompile>
     <ClCompile Include="misc\imageMemoryBarrier.cpp">
       <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\image2D.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\image2DArray.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\image1D.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\image3D.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\image1DArray.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -55,44 +55,6 @@ namespace magma
         std::shared_ptr<DeviceMemory> memory;
     };
 
-    class Image1D : public Image
-    {
-    public:
-        Image1D(std::shared_ptr<const Device> device,
-            VkFormat format,
-            uint32_t width,
-            uint32_t mipLevels,
-            VkImageUsageFlags usage);
-        VkImageType getType() const override { return VK_IMAGE_TYPE_1D; }
-    };
-
-    class Image2D : public Image
-    {
-    public:
-        Image2D(std::shared_ptr<const Device> device,
-            VkFormat format,
-            const VkExtent2D& extent,
-            uint32_t mipLevels,
-            VkImageUsageFlags usage);
-        Image2D(std::shared_ptr<const Device> device, 
-            VkFormat format, 
-            const std::vector<const void *>& mipLevelData,
-            const std::vector<VkExtent2D>& mipLevelExtents,
-            const std::vector<VkDeviceSize>& mipLevelSizes,
-            std::shared_ptr<CommandBuffer> cmdBuffer);
-        VkImageType getType() const override { return VK_IMAGE_TYPE_2D; }
-    };
-
-    class Image3D : public Image
-    {
-    public:
-        Image3D(std::shared_ptr<const Device> device,
-            VkFormat format,
-            const VkExtent3D& extent,
-            VkImageUsageFlags usage);
-        VkImageType getType() const override { return VK_IMAGE_TYPE_3D; }
-    };
-
     class SwapchainImage : public Image
     {
         friend class Swapchain;
