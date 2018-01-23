@@ -159,6 +159,7 @@
     <ClInclude Include="objects\image2D.h" />
     <ClInclude Include="objects\image2DArray.h" />
     <ClInclude Include="objects\image3D.h" />
+    <ClInclude Include="objects\imageCube.h" />
     <ClInclude Include="objects\imageView.h" />
     <ClInclude Include="objects\indexBuffer.h" />
     <ClInclude Include="objects\instance.h" />
@@ -221,6 +222,7 @@
     <ClCompile Include="objects\image2D.cpp" />
     <ClCompile Include="objects\image2DArray.cpp" />
     <ClCompile Include="objects\image3D.cpp" />
+    <ClCompile Include="objects\imageCube.cpp" />
     <ClCompile Include="objects\imageView.cpp" />
     <ClCompile Include="objects\indexBuffer.cpp" />
     <ClCompile Include="objects\instance.cpp" />

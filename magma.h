@@ -36,6 +36,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/image2D.h"
 #include "objects/image2DArray.h"
 #include "objects/image3D.h"
+#include "objects/imageCube.h"
 #include "objects/imageView.h"
 #include "objects/indexBuffer.h"
 #include "objects/instance.h"
