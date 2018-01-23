@@ -16,58 +16,46 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "descriptors.h"
+#include "../objects/descriptorSetLayout.h"
 
 namespace magma
 {
-    struct LayoutBinding : VkDescriptorSetLayoutBinding
-    {
-        LayoutBinding(uint32_t binding, const Descriptor& descriptor, VkShaderStageFlags stageFlags)
-        {
-            this->binding = binding;
-            descriptorType = descriptor.type;
-            descriptorCount = descriptor.descriptorCount;
-            this->stageFlags = stageFlags;
-            pImmutableSamplers = nullptr;
-        }
-    };
-
     namespace bindings
     {
-        struct VertexStageBinding : LayoutBinding
+        struct VertexStageBinding : DescriptorSetLayout::Binding
         {
-            VertexStageBinding(uint32_t binding, const Descriptor& descriptor): LayoutBinding(binding, descriptor, VK_SHADER_STAGE_VERTEX_BIT) {}
+            VertexStageBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_VERTEX_BIT) {}
         };
 
-        struct GeometryStageBinding : LayoutBinding
+        struct GeometryStageBinding : DescriptorSetLayout::Binding
         {
-            GeometryStageBinding(uint32_t binding, const Descriptor& descriptor): LayoutBinding(binding, descriptor, VK_SHADER_STAGE_GEOMETRY_BIT) {}
+            GeometryStageBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_GEOMETRY_BIT) {}
         };
 
-        struct FragmentStageBinding : LayoutBinding
+        struct FragmentStageBinding : DescriptorSetLayout::Binding
         {
-            FragmentStageBinding(uint32_t binding, const Descriptor& descriptor): LayoutBinding(binding, descriptor, VK_SHADER_STAGE_FRAGMENT_BIT) {}
+            FragmentStageBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_FRAGMENT_BIT) {}
         };
 
-        struct VertexFragmentStageBinding : LayoutBinding
+        struct VertexFragmentStageBinding : DescriptorSetLayout::Binding
         {
             VertexFragmentStageBinding(uint32_t binding, const Descriptor& descriptor): 
-                LayoutBinding(binding, descriptor, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT) {}
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT) {}
         };
 
-        struct ComputeStageBinding : LayoutBinding
+        struct ComputeStageBinding : DescriptorSetLayout::Binding
         {
-            ComputeStageBinding(uint32_t binding, const Descriptor& descriptor): LayoutBinding(binding, descriptor, VK_SHADER_STAGE_COMPUTE_BIT) {}
+            ComputeStageBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_COMPUTE_BIT) {}
         };
 
-        struct AllGraphicsStageBinding : LayoutBinding
+        struct AllGraphicsStageBinding : DescriptorSetLayout::Binding
         {
-            AllGraphicsStageBinding(uint32_t binding, const Descriptor& descriptor): LayoutBinding(binding, descriptor, VK_SHADER_STAGE_ALL_GRAPHICS) {}
+            AllGraphicsStageBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_ALL_GRAPHICS) {}
         };
 
-        struct AllStageBinding : LayoutBinding
+        struct AllStageBinding : DescriptorSetLayout::Binding
         {
-            AllStageBinding(uint32_t binding, const Descriptor& descriptor): LayoutBinding(binding, descriptor, VK_SHADER_STAGE_ALL) {}
+            AllStageBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_ALL) {}
         };
     } // namespace bindings
 } // namespace magma

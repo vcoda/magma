@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "descriptorSet.h"
+#include "descriptorSetLayout.h"
 #include "device.h"
 #include "buffer.h"
 #include "image.h"
@@ -24,12 +25,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DescriptorSet::DescriptorSet(VkDescriptorSet handle, std::shared_ptr<const Device> device):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT, handle, device)
+DescriptorSet::DescriptorSet(VkDescriptorSet handle, std::shared_ptr<const Device> device, std::shared_ptr<DescriptorSetLayout> setLayout):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT, handle, device),
+    setLayout(setLayout)
 {}
 
-void DescriptorSet::update(const LayoutBinding& binding, std::shared_ptr<const Buffer> buffer) noexcept
+void DescriptorSet::update(uint32_t index, std::shared_ptr<const Buffer> buffer) noexcept
 {
+    const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
     const VkDescriptorBufferInfo info = buffer->getDescriptor();
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -45,8 +48,9 @@ void DescriptorSet::update(const LayoutBinding& binding, std::shared_ptr<const B
     vkUpdateDescriptorSets(*device, 1, &descriptorWrite, 0, nullptr);
 }
 
-void DescriptorSet::update(const LayoutBinding& binding, std::shared_ptr<const ImageView> imageView, std::shared_ptr<const Sampler> sampler) noexcept
+void DescriptorSet::update(uint32_t index, std::shared_ptr<const ImageView> imageView, std::shared_ptr<const Sampler> sampler) noexcept
 {
+    const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
     VkDescriptorImageInfo info;
     info.sampler = *sampler;
     info.imageView = *imageView;

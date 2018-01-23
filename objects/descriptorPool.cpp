@@ -65,13 +65,14 @@ std::shared_ptr<DescriptorSet> DescriptorPool::allocateDescriptorSet(std::shared
     VkDescriptorSet descriptorSet;
     const VkResult alloc = vkAllocateDescriptorSets(*device, &info, &descriptorSet);
     MAGMA_THROW_FAILURE(alloc, "failed to allocate descriptor set");
-    return std::shared_ptr<DescriptorSet>(new DescriptorSet(descriptorSet, device));
+    return std::shared_ptr<DescriptorSet>(new DescriptorSet(descriptorSet, device, setLayout));
 }
 
-void DescriptorPool::freeDescriptorSet(std::shared_ptr<DescriptorSet> setLayout)
+void DescriptorPool::freeDescriptorSet(std::shared_ptr<DescriptorSet>& descriptorSet)
 {
-    const VkDescriptorSet dereferencedLayouts[1] = {*setLayout};
+    const VkDescriptorSet dereferencedLayouts[1] = {*descriptorSet};
     vkFreeDescriptorSets(*device, handle, 1, dereferencedLayouts);
+    descriptorSet.reset();
 }
 
 std::vector<std::shared_ptr<DescriptorSet>> DescriptorPool::allocateDescriptorSets(std::shared_ptr<DescriptorSetLayout> setLayout)

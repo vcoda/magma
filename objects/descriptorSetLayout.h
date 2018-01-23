@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <vector>
 #include "handle.h"
-#include "../descriptors/bindings.h"
+#include "../descriptors/descriptors.h"
 
 namespace magma
 {
@@ -27,15 +27,22 @@ namespace magma
     class DescriptorSetLayout : public NonDispatchable<VkDescriptorSetLayout>
     {
     public:
+        struct Binding : VkDescriptorSetLayoutBinding
+        {
+            Binding(uint32_t binding, 
+                const Descriptor& descriptor,
+                VkShaderStageFlags stageFlags);
+        };
+
+    public:
         DescriptorSetLayout(std::shared_ptr<const Device> device,
-            const LayoutBinding& binding);
+            const Binding& binding);
         DescriptorSetLayout(std::shared_ptr<const Device> device,
-            const std::initializer_list<LayoutBinding>& bindings);
+            const std::initializer_list<Binding>& bindings);
         ~DescriptorSetLayout();
-        const std::vector<magma::LayoutBinding>& getBindings() const { return bindings; }
-        const magma::LayoutBinding& getBinding(uint32_t index) const { return bindings[index]; }
+        const Binding& getBinding(uint32_t index) const { return bindings[index]; }
 
     private:
-        std::vector<magma::LayoutBinding> bindings;
+        std::vector<Binding> bindings;
     };
 } // namespace magma
