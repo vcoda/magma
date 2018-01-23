@@ -35,6 +35,5 @@ namespace magma
             const std::vector<std::vector<const void *>>& layersMipData,
             const std::vector<VkDeviceSize>& mipSizes,
             std::shared_ptr<CommandBuffer> cmdBuffer);
-        virtual VkImageType getType() const override { return VK_IMAGE_TYPE_2D; }
     };
 } // namespace magma

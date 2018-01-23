@@ -28,6 +28,5 @@ namespace magma
             uint32_t width,
             uint32_t mipLevels,
             VkImageUsageFlags usage);
-        virtual VkImageType getType() const override { return VK_IMAGE_TYPE_1D; }
     };
 } // namespace magma

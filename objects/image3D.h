@@ -27,6 +27,5 @@ namespace magma
             VkFormat format,
             const VkExtent3D& extent,
             VkImageUsageFlags usage);
-        VkImageType getType() const override { return VK_IMAGE_TYPE_3D; }
     };
 } // namespace magma

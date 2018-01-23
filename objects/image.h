@@ -23,13 +23,14 @@ namespace magma
 {
     class Device;
     class DeviceMemory;
+    class Buffer;
     class CommandBuffer;
 
     class Image : public NonDispatchable<VkImage>
     {
     public:
         ~Image();
-        virtual VkImageType getType() const = 0;
+        VkImageType getType() const { return imageType; }
         VkFormat getFormat() const { return format; }
         VkImageLayout getLayout() const { return layout; }
         const VkExtent3D& getExtent() const { return extent; }
@@ -41,21 +42,33 @@ namespace magma
 
     protected:
         Image(std::shared_ptr<const Device> device, 
-            VkImageType imageType, 
+            VkImageType imageType,
             VkFormat format,
             const VkExtent3D& extent,
             uint32_t mipLevels,
             uint32_t arrayLayers,
-            VkImageUsageFlags usage);
-        Image(std::shared_ptr<const Device> device, VkFormat format);
+            VkImageUsageFlags usage,
+            VkImageCreateFlags flags = 0);
+        Image(std::shared_ptr<const Device> device, 
+            VkImageType imageType, 
+            VkFormat format);
+        VkDeviceSize getCopyRegions(const std::vector<VkExtent2D>& mipExtents,
+            const std::vector<VkDeviceSize>& mipSizes,
+            std::vector<VkBufferImageCopy>& copyRegions) const;
+        void copyFromBuffer(std::shared_ptr<Buffer> buffer,
+            const std::vector<VkBufferImageCopy>& copyRegions,
+            std::shared_ptr<CommandBuffer> cmdBuffer);
 
     protected:
+        VkImageType imageType;
         VkFormat format;
         VkImageLayout layout;
         VkExtent3D extent;
         uint32_t mipLevels;
         uint32_t arrayLayers;
+        VkImageCreateFlags flags;
         std::shared_ptr<DeviceMemory> memory;
+        friend class ImageView;
     };
 
     class SwapchainImage : public Image
@@ -66,6 +79,5 @@ namespace magma
             VkFormat format);
     public:
         ~SwapchainImage();
-        VkImageType getType() const override { return VK_IMAGE_TYPE_2D; }
     };
 } // namespace magma
