@@ -40,8 +40,8 @@ Image2DArray::Image2DArray(std::shared_ptr<const Device> device,
     std::vector<VkBufferImageCopy> copyRegions;
     VkDeviceSize size = getCopyRegions(mipExtents, mipSizes, copyRegions);
     // Copy array layers to host visible buffer
-    std::shared_ptr<SourceTransferBuffer> srcTransferBuffer(new SourceTransferBuffer(device, size));
-    if (uint8_t *data = reinterpret_cast<uint8_t *>(srcTransferBuffer->getMemory()->map()))
+    std::shared_ptr<SourceTransferBuffer> srcBuffer(new SourceTransferBuffer(device, size));
+    if (uint8_t *data = reinterpret_cast<uint8_t *>(srcBuffer->getMemory()->map()))
     {
         for (uint32_t layer = 0; layer < arrayLayers; ++layer)
         {
@@ -52,8 +52,8 @@ Image2DArray::Image2DArray(std::shared_ptr<const Device> device,
                 memcpy(mipLevel, layersMipData[layer][level], static_cast<size_t>(mipSizes[level]));
             }
         }
-        srcTransferBuffer->getMemory()->unmap();
+        srcBuffer->getMemory()->unmap();
     }
-    copyFromBuffer(srcTransferBuffer, copyRegions, cmdBuffer);
+    copyFromBuffer(srcBuffer, copyRegions, cmdBuffer);
 }
 } // namespace magma
