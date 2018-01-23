@@ -44,7 +44,8 @@ VertexBuffer::VertexBuffer(std::shared_ptr<const Device> device, const void *dat
 VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size, uint32_t vertexCount,
     VkBufferCreateFlags flags /* 0 */):
     Buffer(copyCmdBuffer->getDevice(), size, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
+    vertexCount(vertexCount)
 {        
     std::shared_ptr<SourceTransferBuffer> srcBuffer(new SourceTransferBuffer(device, data, size));
     copyCmdBuffer->begin();
