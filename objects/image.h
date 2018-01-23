@@ -34,6 +34,7 @@ namespace magma
         VkImageLayout getLayout() const { return layout; }
         const VkExtent3D& getExtent() const { return extent; }
         uint32_t getMipLevels() const { return mipLevels; }
+        uint32_t getArrayLayers() const { return arrayLayers; }
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0);
         std::shared_ptr<DeviceMemory> getMemory() const { return memory; }
@@ -44,6 +45,7 @@ namespace magma
             VkFormat format,
             const VkExtent3D& extent,
             uint32_t mipLevels,
+            uint32_t arrayLayers,
             VkImageUsageFlags usage);
         Image(std::shared_ptr<const Device> device, VkFormat format);
 
@@ -52,6 +54,7 @@ namespace magma
         VkImageLayout layout;
         VkExtent3D extent;
         uint32_t mipLevels;
+        uint32_t arrayLayers;
         std::shared_ptr<DeviceMemory> memory;
     };
 

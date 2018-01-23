@@ -27,12 +27,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkFormat format, 
-    const VkExtent3D& extent, uint32_t mipLevels, VkImageUsageFlags usage):
+    const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, VkImageUsageFlags usage):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, device),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
     extent(extent),
-    mipLevels(mipLevels)
+    mipLevels(mipLevels),
+    arrayLayers(arrayLayers)
 {
     VkImageCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -42,7 +43,7 @@ Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkForm
     info.format = format;
     info.extent = extent;
     info.mipLevels = mipLevels;
-    info.arrayLayers = 1;
+    info.arrayLayers = arrayLayers;
     info.samples = VK_SAMPLE_COUNT_1_BIT;
     info.tiling = VK_IMAGE_TILING_OPTIMAL;
     info.usage = usage;
@@ -63,7 +64,8 @@ Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkForm
 Image::Image(std::shared_ptr<const Device> device, VkFormat format):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, device),
     format(format),
-    mipLevels(1)
+    mipLevels(1),
+    arrayLayers(1)
 {}
 
 Image::~Image()
