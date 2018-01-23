@@ -75,8 +75,8 @@ Image2DArray::Image2DArray(std::shared_ptr<const Device> device,
             for (uint32_t level = 0; level < mipLevels; ++level)
             {
                 const VkDeviceSize bufferOffset = copyRegions[layer * mipLevels + level].bufferOffset;
-                void *mipData = data + bufferOffset;
-                memcpy(mipData, layersMipData[layer][level], static_cast<size_t>(mipSizes[level]));
+                void *mipLevel = data + bufferOffset;
+                memcpy(mipLevel, layersMipData[layer][level], static_cast<size_t>(mipSizes[level]));
             }
         }
         srcTransferBuffer->getMemory()->unmap();
