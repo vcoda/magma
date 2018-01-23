@@ -37,9 +37,21 @@ ImageView::ImageView(std::shared_ptr<const Device> device,
 	info.image = *image;
     switch (image->getType())
     {
-    case VK_IMAGE_TYPE_1D: info.viewType = VK_IMAGE_VIEW_TYPE_1D; break;
-    case VK_IMAGE_TYPE_2D: info.viewType = VK_IMAGE_VIEW_TYPE_2D; break;
-    case VK_IMAGE_TYPE_3D: info.viewType = VK_IMAGE_VIEW_TYPE_3D; break;
+    case VK_IMAGE_TYPE_1D: 
+        if (image->getArrayLayers() == 1)
+            info.viewType = VK_IMAGE_VIEW_TYPE_1D; 
+        else
+            info.viewType = VK_IMAGE_VIEW_TYPE_1D_ARRAY;
+        break;
+    case VK_IMAGE_TYPE_2D: 
+        if (image->getArrayLayers() == 1)
+            info.viewType = VK_IMAGE_VIEW_TYPE_2D; 
+        else
+            info.viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
+        break;
+    case VK_IMAGE_TYPE_3D: 
+        info.viewType = VK_IMAGE_VIEW_TYPE_3D; 
+        break;
     }
     info.format = image->getFormat();
     const Format format(info.format);
@@ -62,7 +74,7 @@ ImageView::ImageView(std::shared_ptr<const Device> device,
     else
         info.subresourceRange.levelCount = mipLevelCount;
 	info.subresourceRange.baseArrayLayer = 0;
-	info.subresourceRange.layerCount = 1;
+    info.subresourceRange.layerCount = image->getArrayLayers();
 	const VkResult create = vkCreateImageView(*device, &info, nullptr, &handle);
     MAGMA_THROW_FAILURE(create, "failed to create image view");
 }
