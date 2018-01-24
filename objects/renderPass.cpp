@@ -32,16 +32,16 @@ RenderPass::RenderPass(std::shared_ptr<const Device> device,
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT, device)
 {
     // Count multisample and single sample attachments
-    uint32_t multisampleAttachments = 0;
-    uint32_t resolveAttachments = 0;
+    uint32_t multisampleAttachmentCount = 0;
+    uint32_t resolveAttachmentCount = 0;
     for (const auto& desc : attachments)
     {
         if (!Format(desc.format).depth())
         {
             if (desc.samples > 1)
-                ++multisampleAttachments;
+                ++multisampleAttachmentCount;
             else
-                ++resolveAttachments;
+                ++resolveAttachmentCount;
         }
     }
     // In a typical usage scenario we could fill subpass descriptor by himself
@@ -50,14 +50,11 @@ RenderPass::RenderPass(std::shared_ptr<const Device> device,
     subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
     subpass.inputAttachmentCount = 0;
     subpass.pInputAttachments = nullptr;
-    if (0 == multisampleAttachments)
-        subpass.colorAttachmentCount = resolveAttachments;
-    else
-        subpass.colorAttachmentCount = multisampleAttachments;
-    resolveAttachments = std::max(0U, multisampleAttachments);
+    subpass.colorAttachmentCount = multisampleAttachmentCount ? multisampleAttachmentCount : resolveAttachmentCount;
+    resolveAttachmentCount = std::max(0U, multisampleAttachmentCount);
     MAGMA_ASSERT(subpass.colorAttachmentCount);
     MAGMA_STACK_ARRAY(VkAttachmentReference, colorReferences, subpass.colorAttachmentCount);
-    MAGMA_STACK_ARRAY(VkAttachmentReference, resolveReferences, resolveAttachments);
+    MAGMA_STACK_ARRAY(VkAttachmentReference, resolveReferences, resolveAttachmentCount);
     VkAttachmentReference *depthStencilReference = nullptr;
     uint32_t attachmentIndex = 0;
     uint32_t colorIndex = 0;
@@ -68,26 +65,14 @@ RenderPass::RenderPass(std::shared_ptr<const Device> device,
         if (Format(desc.format).depth())
         {
             if (!depthStencilReference)
-            {
-                depthStencilReference = new VkAttachmentReference;
-                depthStencilReference->attachment = attachmentIndex;
-                depthStencilReference->layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            }
+                depthStencilReference = new VkAttachmentReference{attachmentIndex, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL};
         }
         else
         {
-            if (resolveAttachments < 1 || desc.samples > 1)
-            {
-                colorReferences[colorIndex].attachment = attachmentIndex;
-                colorReferences[colorIndex].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-                ++colorIndex;
-            }
+            if (desc.samples > 1 || resolveAttachmentCount < 1)
+                colorReferences[colorIndex++] = {attachmentIndex, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL};
             else
-            {
-                resolveReferences[resolveIndex].attachment = attachmentIndex;
-                resolveReferences[resolveIndex].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-                ++resolveIndex;
-            }
+                resolveReferences[resolveIndex++] = {attachmentIndex, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL};
         }
         ++attachmentIndex;
     }
