@@ -64,8 +64,8 @@ Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkForm
     bindMemory(memory);
 }
 
-Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkFormat format):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, device),
+Image::Image(std::shared_ptr<const Device> device, VkImage image, VkImageType imageType, VkFormat format):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, image, device),
     imageType(imageType),
     format(format),
     mipLevels(1),
@@ -75,8 +75,7 @@ Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkForm
 
 Image::~Image()
 {
-    if (handle != VK_NULL_HANDLE) // Handle swapchain case
-        vkDestroyImage(*device, handle, nullptr);
+    vkDestroyImage(*device, handle, nullptr);
 }
 
 void Image::bindMemory(std::shared_ptr<DeviceMemory> memory,
@@ -145,17 +144,5 @@ void Image::copyFromBuffer(std::shared_ptr<Buffer> buffer,
     std::shared_ptr<Queue> queue = device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0);
     queue->submit(cmdBuffer, 0, nullptr, nullptr, nullptr);
     queue->waitIdle();
-}
-
-SwapchainImage::SwapchainImage(std::shared_ptr<const Device> device, VkImage image, VkFormat format):
-    Image(device, VK_IMAGE_TYPE_2D, format)
-{
-    handle = image;
-}
-
-SwapchainImage::~SwapchainImage()
-{
-    // Do not call vkDestroyImage() as handle was not created using vkCreateImage()
-    handle = VK_NULL_HANDLE;
 }
 } // namespace magma

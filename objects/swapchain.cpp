@@ -18,11 +18,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "swapchain.h"
 #include "device.h"
 #include "surface.h"
-#include "image.h"
+#include "image2D.h"
 #include "queue.h"
 #include "semaphore.h"
 #include "fence.h"
-#include "../shared.h"
+#include "../helpers/stackArray.h"
 
 namespace magma
 {
@@ -67,36 +67,28 @@ uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore,
         MAGMA_OPTIONAL_HANDLE(semaphore),
         MAGMA_OPTIONAL_HANDLE(fence),
         &imageIndex);
-    MAGMA_REPORT_FAILURE(acquire, "swapchain failed to acquire next image");
     return imageIndex;
 }
 
-uint32_t Swapchain::getImageCount() const noexcept
+uint32_t Swapchain::getImageCount() const
 {
     uint32_t imageCount = 0;
     const VkResult get = vkGetSwapchainImagesKHR(*device, handle, &imageCount, nullptr);
-    MAGMA_REPORT_FAILURE(get, "failed to get swapchain image count");
+    MAGMA_THROW_FAILURE(get, "failed to get swapchain image count");
     return imageCount;
 }
 
-const std::vector<std::shared_ptr<Image>>& Swapchain::getImages() const noexcept
+std::vector<std::shared_ptr<SwapchainColorAttachment2D>> Swapchain::getImages() const
 {
-    if (images.empty())
+    std::vector<std::shared_ptr<SwapchainColorAttachment2D>> images;
+    uint32_t imageCount = getImageCount();
+    MAGMA_STACK_ARRAY(VkImage, nativeImages, imageCount);
+    const VkResult get = vkGetSwapchainImagesKHR(*device, handle, &imageCount, nativeImages.data());
+    MAGMA_THROW_FAILURE(get, "failed to get swapchain images");
+    for (const VkImage handle : nativeImages)
     {
-        uint32_t imageCount = getImageCount();
-        if (imageCount > 0)
-        {
-            std::vector<VkImage> nativeImages(imageCount);
-            const VkResult get = vkGetSwapchainImagesKHR(*device, handle, &imageCount, nativeImages.data());
-            if (VK_SUCCESS == get)
-            {
-                for (const VkImage handle : nativeImages)
-                {
-                    std::shared_ptr<Image> image(new SwapchainImage(device, handle, this->surfaceFormat.format));
-                    images.push_back(image);
-                }
-            }
-        }
+        std::shared_ptr<SwapchainColorAttachment2D> image(new SwapchainColorAttachment2D(device, handle, this->surfaceFormat.format));
+        images.push_back(image);
     }
     return images;
 }

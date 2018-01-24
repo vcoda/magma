@@ -22,17 +22,53 @@ namespace magma
 {
     class Image2D : public Image
     {
-    public:
+    protected:
         Image2D(std::shared_ptr<const Device> device,
             VkFormat format,
             const VkExtent2D& extent,
             uint32_t mipLevels,
             VkImageUsageFlags usage);
         Image2D(std::shared_ptr<const Device> device,
+            VkImage image,
+            VkFormat format);
+
+    public:
+        Image2D(std::shared_ptr<const Device> device,
             VkFormat format,
             const std::vector<VkExtent2D>& mipExtents,
             const std::vector<const void *>& mipData,
             const std::vector<VkDeviceSize>& mipSizes,
             std::shared_ptr<CommandBuffer> cmdBuffer);
+    };
+
+    class ColorAttachment2D : public Image2D
+    {
+    public:
+        ColorAttachment2D(std::shared_ptr<const Device> device,
+            VkFormat colorFormat,
+            const VkExtent2D& extent,
+            uint32_t mipLevels,
+            bool sampled = true);
+    };
+
+    class DepthStencilAttachment2D : public Image2D
+    {
+    public:
+        DepthStencilAttachment2D(std::shared_ptr<const Device> device,
+            VkFormat depthStencilFormat,
+            const VkExtent2D& extent,
+            uint32_t mipLevels,
+            bool sampled = false);
+    };
+
+    class SwapchainColorAttachment2D : public Image2D
+    {
+        SwapchainColorAttachment2D(std::shared_ptr<const Device> device,
+            VkImage image,
+            VkFormat format);
+        friend class Swapchain;
+
+    public:
+        ~SwapchainColorAttachment2D();
     };
 } // namespace magma

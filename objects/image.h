@@ -50,6 +50,7 @@ namespace magma
             VkImageUsageFlags usage,
             VkImageCreateFlags flags = 0);
         Image(std::shared_ptr<const Device> device, 
+            VkImage image,
             VkImageType imageType, 
             VkFormat format);
         VkDeviceSize getCopyRegions(const std::vector<VkExtent2D>& mipExtents,
@@ -69,15 +70,5 @@ namespace magma
         VkImageCreateFlags flags;
         std::shared_ptr<DeviceMemory> memory;
         friend class ImageView;
-    };
-
-    class SwapchainImage : public Image
-    {
-        friend class Swapchain;
-        SwapchainImage(std::shared_ptr<const Device> device,
-            VkImage image,
-            VkFormat format);
-    public:
-        ~SwapchainImage();
     };
 } // namespace magma

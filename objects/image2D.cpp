@@ -25,6 +25,12 @@ Image2D::Image2D(std::shared_ptr<const Device> device, VkFormat format,
     Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1}, mipLevels, 1, usage)
 {}
 
+Image2D::Image2D(std::shared_ptr<const Device> device,
+    VkImage image,
+    VkFormat format):
+    Image(device, image, VK_IMAGE_TYPE_2D, format)
+{}
+
 Image2D::Image2D(std::shared_ptr<const Device> device, 
     VkFormat format,
     const std::vector<VkExtent2D>& mipExtents,
@@ -51,5 +57,36 @@ Image2D::Image2D(std::shared_ptr<const Device> device,
         srcBuffer->getMemory()->unmap();
     }
     copyFromBuffer(srcBuffer, copyRegions, cmdBuffer);
+}
+
+ColorAttachment2D::ColorAttachment2D(std::shared_ptr<const Device> device,
+    VkFormat colorFormat,
+    const VkExtent2D& extent,
+    uint32_t mipLevels,
+    bool sampled /* true */):
+    Image2D(device, colorFormat, extent, mipLevels,
+        VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | (sampled ? VK_IMAGE_USAGE_SAMPLED_BIT : 0))
+{}
+
+DepthStencilAttachment2D::DepthStencilAttachment2D(std::shared_ptr<const Device> device,
+    VkFormat depthStencilFormat,
+    const VkExtent2D& extent,
+    uint32_t mipLevels,
+    bool sampled /* false */):
+    Image2D(device, depthStencilFormat, extent, mipLevels,
+        VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | (sampled ? VK_IMAGE_USAGE_SAMPLED_BIT : 0))
+{}
+
+SwapchainColorAttachment2D::SwapchainColorAttachment2D(std::shared_ptr<const Device> device,
+    VkImage image,
+    VkFormat format):
+    Image2D(device, image, format)
+{}
+
+SwapchainColorAttachment2D::~SwapchainColorAttachment2D()
+{
+    // vkDestroyImage() shouldn't have effect on it 
+    // as it was not created via vkCreateImage()
+    handle = VK_NULL_HANDLE;
 }
 } // namespace magma

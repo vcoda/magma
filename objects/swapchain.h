@@ -23,7 +23,7 @@ namespace magma
 {
     class Device;
     class Surface;
-    class Image;
+    class SwapchainColorAttachment2D;
     class Queue;
     class Semaphore;
     class Fence;
@@ -42,11 +42,10 @@ namespace magma
         uint32_t acquireNextImage(
             std::shared_ptr<const Semaphore> semaphore, 
             std::shared_ptr<const Fence> fence) noexcept;
-        uint32_t getImageCount() const noexcept;
-        const std::vector<std::shared_ptr<Image>>& getImages() const noexcept;
+        uint32_t getImageCount() const;
+        std::vector<std::shared_ptr<SwapchainColorAttachment2D>> getImages() const;
 
     private:
         VkSurfaceFormatKHR surfaceFormat;
-        mutable std::vector<std::shared_ptr<Image>> images;
     };
 } // namespace magma
