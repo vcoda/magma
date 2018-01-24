@@ -24,9 +24,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Framebuffer::Framebuffer(std::shared_ptr<const Device> device, std::shared_ptr<const RenderPass> renderPass, const std::vector<std::shared_ptr<const ImageView>>& attachments,
-    const VkExtent2D& extents, VkFramebufferCreateFlags flags /* 0 */):
+    const VkExtent2D& extent, VkFramebufferCreateFlags flags /* 0 */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT, device),
-    attachments(attachments)
+    attachments(attachments),
+    extent(extent)
 {
     VkFramebufferCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -38,8 +39,8 @@ Framebuffer::Framebuffer(std::shared_ptr<const Device> device, std::shared_ptr<c
         nativeAttachments.put(*attachment);
     info.attachmentCount = MAGMA_COUNT(nativeAttachments);
     info.pAttachments = nativeAttachments.data();
-    info.width = extents.width;
-    info.height = extents.height;
+    info.width = extent.width;
+    info.height = extent.height;
     info.layers = 1;
     const VkResult create = vkCreateFramebuffer(*device, &info, nullptr, &handle);
     MAGMA_THROW_FAILURE(create, "failed to create framebuffer");
@@ -51,8 +52,8 @@ Framebuffer::Framebuffer(std::shared_ptr<const Device> device, std::shared_ptr<c
 {}
 
 Framebuffer::Framebuffer(std::shared_ptr<const Device> device, std::shared_ptr<const RenderPass> renderPass, std::shared_ptr<const ImageView> attachment, 
-    const VkExtent2D& extents, VkFramebufferCreateFlags flags /* 0 */):
-    Framebuffer(device, renderPass, std::vector<std::shared_ptr<const ImageView>>{attachment}, extents, flags)
+    const VkExtent2D& extent, VkFramebufferCreateFlags flags /* 0 */):
+    Framebuffer(device, renderPass, std::vector<std::shared_ptr<const ImageView>>{attachment}, extent, flags)
 {}
 
 Framebuffer::~Framebuffer()

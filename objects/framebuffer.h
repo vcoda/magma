@@ -31,7 +31,7 @@ namespace magma
         Framebuffer(std::shared_ptr<const Device> device,
             std::shared_ptr<const RenderPass> renderPass,
             const std::vector<std::shared_ptr<const ImageView>>& attachments,
-            const VkExtent2D& extents,
+            const VkExtent2D& extent,
             VkFramebufferCreateFlags = 0);
         Framebuffer(std::shared_ptr<const Device> device,
             std::shared_ptr<const RenderPass> renderPass,
@@ -42,12 +42,14 @@ namespace magma
         Framebuffer(std::shared_ptr<const Device> device,
             std::shared_ptr<const RenderPass> renderPass,
             std::shared_ptr<const ImageView> attachment,
-            const VkExtent2D& extents,
+            const VkExtent2D& extent,
             VkFramebufferCreateFlags = 0);
 	    ~Framebuffer();
         std::shared_ptr<const ImageView> getAttachment(uint32_t index) const { return attachments[index]; }
+        const VkExtent2D& getExtent() const { return extent; }
 
     private:
         std::vector<std::shared_ptr<const ImageView>> attachments;
+        VkExtent2D extent;
     };
 } // namespace magma
