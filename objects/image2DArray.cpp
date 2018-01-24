@@ -23,7 +23,7 @@ namespace magma
 Image2DArray::Image2DArray(std::shared_ptr<const Device> device, VkFormat format, 
     const VkExtent2D& extent, uint32_t mipLevels, uint32_t arrayLayers, 
     VkImageUsageFlags usage):
-    Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1}, mipLevels, arrayLayers, usage)
+    Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1}, mipLevels, arrayLayers, 1, usage)
 {}
 
 Image2DArray::Image2DArray(std::shared_ptr<const Device> device, 
@@ -35,6 +35,7 @@ Image2DArray::Image2DArray(std::shared_ptr<const Device> device,
     Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{mipExtents[0].width, mipExtents[0].height, 1},
         static_cast<uint32_t>(mipExtents.size()), // mipLevels
         static_cast<uint32_t>(layersMipData.size()), // arrayLayers 
+        1, // samples
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT)
 {
     std::vector<VkBufferImageCopy> copyRegions;

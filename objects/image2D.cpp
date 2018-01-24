@@ -21,8 +21,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Image2D::Image2D(std::shared_ptr<const Device> device, VkFormat format,
-    const VkExtent2D& extent, uint32_t mipLevels, VkImageUsageFlags usage):
-    Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1}, mipLevels, 1, usage)
+    const VkExtent2D& extent, uint32_t mipLevels, uint32_t samples, VkImageUsageFlags usage):
+    Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1}, mipLevels, 1, samples, usage)
 {}
 
 Image2D::Image2D(std::shared_ptr<const Device> device,
@@ -40,6 +40,7 @@ Image2D::Image2D(std::shared_ptr<const Device> device,
     Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{mipExtents[0].width, mipExtents[0].height, 1},
         static_cast<uint32_t>(mipExtents.size()), // mipLevels
         1, // arrayLayers 
+        1, // samples
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT)
 {
     std::vector<VkBufferImageCopy> copyRegions;
@@ -63,8 +64,9 @@ ColorAttachment2D::ColorAttachment2D(std::shared_ptr<const Device> device,
     VkFormat colorFormat,
     const VkExtent2D& extent,
     uint32_t mipLevels,
+    uint32_t samples,
     bool sampled /* true */):
-    Image2D(device, colorFormat, extent, mipLevels,
+    Image2D(device, colorFormat, extent, mipLevels, samples,
         VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | (sampled ? VK_IMAGE_USAGE_SAMPLED_BIT : 0))
 {}
 
@@ -72,8 +74,9 @@ DepthStencilAttachment2D::DepthStencilAttachment2D(std::shared_ptr<const Device>
     VkFormat depthStencilFormat,
     const VkExtent2D& extent,
     uint32_t mipLevels,
+    uint32_t samples,
     bool sampled /* false */):
-    Image2D(device, depthStencilFormat, extent, mipLevels,
+    Image2D(device, depthStencilFormat, extent, mipLevels, samples,
         VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | (sampled ? VK_IMAGE_USAGE_SAMPLED_BIT : 0))
 {}
 

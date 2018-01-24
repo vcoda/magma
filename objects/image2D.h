@@ -27,6 +27,7 @@ namespace magma
             VkFormat format,
             const VkExtent2D& extent,
             uint32_t mipLevels,
+            uint32_t samples,
             VkImageUsageFlags usage);
         Image2D(std::shared_ptr<const Device> device,
             VkImage image,
@@ -48,6 +49,7 @@ namespace magma
             VkFormat colorFormat,
             const VkExtent2D& extent,
             uint32_t mipLevels,
+            uint32_t samples,
             bool sampled = true);
     };
 
@@ -58,6 +60,7 @@ namespace magma
             VkFormat depthStencilFormat,
             const VkExtent2D& extent,
             uint32_t mipLevels,
+            uint32_t samples,
             bool sampled = false);
     };
 

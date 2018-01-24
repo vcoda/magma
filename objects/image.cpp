@@ -27,7 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkFormat format,
-    const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, 
+    const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
     VkImageUsageFlags usage, VkImageCreateFlags flags /* 0 */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, device),
     imageType(imageType),
@@ -36,6 +36,7 @@ Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkForm
     extent(extent),
     mipLevels(mipLevels),
     arrayLayers(arrayLayers),
+    samples(samples),
     flags(flags)
 {
     VkImageCreateInfo info;
@@ -47,7 +48,18 @@ Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkForm
     info.extent = extent;
     info.mipLevels = mipLevels;
     info.arrayLayers = arrayLayers;
-    info.samples = VK_SAMPLE_COUNT_1_BIT;
+    switch (samples)
+    {
+    case 1: info.samples = VK_SAMPLE_COUNT_1_BIT; break;
+    case 2: info.samples = VK_SAMPLE_COUNT_2_BIT; break;
+    case 4: info.samples = VK_SAMPLE_COUNT_4_BIT; break;
+    case 8: info.samples = VK_SAMPLE_COUNT_8_BIT; break;
+    case 16: info.samples = VK_SAMPLE_COUNT_16_BIT; break;
+    case 32: info.samples = VK_SAMPLE_COUNT_32_BIT; break;
+    case 64: info.samples = VK_SAMPLE_COUNT_64_BIT; break;
+    default:
+        MAGMA_THROW("invalid <samples> parameter");
+    }
     info.tiling = VK_IMAGE_TILING_OPTIMAL;
     info.usage = usage;
     info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
@@ -70,6 +82,7 @@ Image::Image(std::shared_ptr<const Device> device, VkImage image, VkImageType im
     format(format),
     mipLevels(1),
     arrayLayers(1),
+    samples(1),
     flags(0)
 {}
 

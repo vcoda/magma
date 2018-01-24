@@ -22,7 +22,7 @@ namespace magma
 {
 ImageCube::ImageCube(std::shared_ptr<const Device> device, VkFormat format,
     uint32_t dimension, uint32_t mipLevels, VkImageUsageFlags usage):
-    Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1}, mipLevels, 6, usage, 
+    Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1}, mipLevels, 6, 1, usage, 
         VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT)
 {}
 
@@ -35,6 +35,7 @@ ImageCube::ImageCube(std::shared_ptr<const Device> device,
     Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{mipDimensions[0], mipDimensions[0], 1},
         static_cast<uint32_t>(mipDimensions.size()), // mipLevels
         6, // arrayLayers 
+        1, // samples
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT)
 {
