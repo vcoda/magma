@@ -70,11 +70,13 @@ namespace magma
             uint32_t width, 
             int32_t height, // Viewport height can be negative (if supported)
             float minDepth = 0.f, 
-            float maxDepth = 1.f) noexcept;
+            float maxDepth = 1.f) noexcept;  
+        void setViewport(const Viewport& viewport) noexcept;
         void setViewports(const std::initializer_list<Viewport>& viewports) noexcept;
         void setScissor(
             int32_t x, int32_t y,
             uint32_t width, uint32_t height) noexcept;
+        void setScissor(const Scissor& scissor) noexcept;
         void setScissors(const std::initializer_list<Scissor>& scissors) noexcept;
 
         void setLineWidth(float lineWidth) noexcept;

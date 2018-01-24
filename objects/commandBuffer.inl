@@ -52,6 +52,11 @@ inline void CommandBuffer::setViewport(uint32_t x, uint32_t y, uint32_t width, i
     vkCmdSetViewport(handle, 0, 1, &viewport);
 }
 
+inline void CommandBuffer::setViewport(const Viewport& viewport) noexcept
+{
+    vkCmdSetViewport(handle, 0, 1, &viewport);
+}
+
 inline void CommandBuffer::setViewports(const std::initializer_list<Viewport>& viewports) noexcept
 {
     vkCmdSetViewport(handle, 0, MAGMA_COUNT(viewports), viewports.begin());
@@ -66,6 +71,11 @@ inline void CommandBuffer::setScissor(int32_t x, int32_t y, uint32_t width, uint
     scissor.extent.height = height;
     vkCmdSetScissor(handle, 0, 1, &scissor);
 }    
+
+inline void CommandBuffer::setScissor(const Scissor& scissor) noexcept
+{
+    vkCmdSetScissor(handle, 0, 1, &scissor);
+}
 
 inline void CommandBuffer::setScissors(const std::initializer_list<Scissor>& scissors) noexcept
 {
