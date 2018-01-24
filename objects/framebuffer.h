@@ -45,7 +45,7 @@ namespace magma
             const VkExtent2D& extent,
             VkFramebufferCreateFlags = 0);
 	    ~Framebuffer();
-        std::shared_ptr<const ImageView> getAttachment(uint32_t index) const { return attachments[index]; }
+        const std::vector<std::shared_ptr<const ImageView>>& getAttachments() const { return attachments; }
         const VkExtent2D& getExtent() const { return extent; }
 
     private:
