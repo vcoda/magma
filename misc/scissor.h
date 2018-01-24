@@ -21,8 +21,21 @@ namespace magma
 {
     struct Scissor : VkRect2D
     {
-        Scissor(int32_t x, int32_t y, uint32_t width, uint32_t height,
-            float minDepth = 0.f, float maxDepth = 1.f)
+        Scissor(int32_t x, int32_t y, const VkExtent2D& extent)
+        {
+            offset.x = x;
+            offset.y = y;
+            this->extent = extent;
+        }
+
+        Scissor(float x, float y, const VkExtent2D& extent)
+        {
+            offset.x = static_cast<int32_t>(x);
+            offset.y = static_cast<int32_t>(y);
+            this->extent = extent;
+        }
+
+        Scissor(int32_t x, int32_t y, uint32_t width, uint32_t height)
         {
             offset.x = x;
             offset.y = y;
@@ -36,14 +49,6 @@ namespace magma
             offset.y = static_cast<int32_t>(y);
             extent.width = static_cast<uint32_t>(width);
             extent.height = static_cast<uint32_t>(height);
-        }
-
-        Scissor(float x, float y, const VkExtent2D& extent,
-            float minDepth = 0.f, float maxDepth = 1.f)
-        {
-            offset.x = static_cast<int32_t>(x);
-            offset.y = static_cast<int32_t>(y);
-            this->extent = extent;
         }
     };
 } // namespace magma
