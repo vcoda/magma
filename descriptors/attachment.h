@@ -29,26 +29,24 @@ namespace magma
     private:
         VkAttachmentLoadOp loadOp;
         VkAttachmentStoreOp storeOp;
-        friend class Attachment;
+        friend struct AttachmentDescription;
     };
 
-    class Attachment : public VkAttachmentDescription
+    struct AttachmentDescription : VkAttachmentDescription
     {
-    public:
-        Attachment(VkFormat format, 
+        AttachmentDescription(VkFormat format,
             uint32_t sampleCount,
             const LoadStoreOp& op,
             const LoadStoreOp& stencilOp,   
-            VkImageLayout finalLayout,
-            VkImageLayout initialLayout = VK_IMAGE_LAYOUT_UNDEFINED);
-        Attachment(VkSampleCountFlagBits samples,
-            VkAttachmentLoadOp loadOp,
+            VkImageLayout initialLayout,
+            VkImageLayout finalLayout);
+        AttachmentDescription(VkAttachmentLoadOp loadOp,
             VkAttachmentStoreOp storeOp,
             VkAttachmentLoadOp stencilLoadOp,
             VkAttachmentStoreOp stencilStoreOp,
             VkImageLayout initialLayout,
             VkImageLayout finalLayout); 
-        Attachment(VkFormat format, const Attachment& predefined);
+        AttachmentDescription(VkFormat format, uint32_t sampleCount, const AttachmentDescription& predefined);
     };
 
     namespace op
@@ -63,32 +61,34 @@ namespace magma
 
     namespace attachments
     {
-        extern const Attachment colorLoadStoreSamples1;
-        extern const Attachment colorClearStoreSamples1;
-        extern const Attachment colorDontCareStoreSamples1;
-        extern const Attachment colorLoadDontCareSamples1;
-        extern const Attachment colorClearDontCareSamples1;
-        extern const Attachment colorDontCareDontCareSamples1;
+        extern const AttachmentDescription colorLoadStoreOptimal;
+        extern const AttachmentDescription colorClearStoreOptimal;
+        extern const AttachmentDescription colorDontCareStoreOptimal;
+        extern const AttachmentDescription colorLoadDontCareOptimal;
+        extern const AttachmentDescription colorClearDontCareOptimal;
+        extern const AttachmentDescription colorDontCareDontCareOptimal;
 
-        extern const Attachment colorLoadStoreSamples2;
-        extern const Attachment colorClearStoreSamples2;
-        extern const Attachment colorDontCareStoreSamples2;
-        extern const Attachment colorLoadDontCareSamples2;
-        extern const Attachment colorClearDontCareSamples2;
-        extern const Attachment colorDontCareDontCareSamples2;
+        extern const AttachmentDescription colorLoadStoreReadOnly;
+        extern const AttachmentDescription colorClearStoreReadOnly;
+        extern const AttachmentDescription colorDontCareStoreReadOnly;
+        extern const AttachmentDescription colorLoadDontCareReadOnly;
+        extern const AttachmentDescription colorClearDontCareReadOnly;
+        extern const AttachmentDescription colorDontCareDontCareReadOnly;
 
-        extern const Attachment colorLoadStoreSamples4;
-        extern const Attachment colorClearStoreSamples4;
-        extern const Attachment colorDontCareStoreSamples4;
-        extern const Attachment colorLoadDontCareSamples4;
-        extern const Attachment colorClearDontCareSamples4;
-        extern const Attachment colorDontCareDontCareSamples4;
+        extern const AttachmentDescription depthLoadStoreOptimal;
+        extern const AttachmentDescription depthClearStoreOptimal;
+        extern const AttachmentDescription depthDontCareStoreOptimal;
+        extern const AttachmentDescription depthLoadDontCareOptimal;
+        extern const AttachmentDescription depthClearDontCareOptimal;
+        extern const AttachmentDescription depthDontCareDontCareOptimal;
 
-        extern const Attachment colorLoadStoreSamples8;
-        extern const Attachment colorClearStoreSamples8;
-        extern const Attachment colorDontCareStoreSamples8;
-        extern const Attachment colorLoadDontCareSamples8;
-        extern const Attachment colorClearDontCareSamples8;
-        extern const Attachment colorDontCareDontCareSamples8;
+        extern const AttachmentDescription depthLoadStoreReadOnly;
+        extern const AttachmentDescription depthClearStoreReadOnly;
+        extern const AttachmentDescription depthDontCareStoreReadOnly;
+        extern const AttachmentDescription depthLoadDontCareReadOnly;
+        extern const AttachmentDescription depthClearDontCareReadOnly;
+        extern const AttachmentDescription depthDontCareDontCareReadOnly;
+
+        // TODO: add depthStencil attachment descriptions
     } // namespace attachments
 } // namespace magma

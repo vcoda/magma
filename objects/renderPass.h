@@ -30,11 +30,12 @@ namespace magma
     {
     public:
         RenderPass(std::shared_ptr<const Device> device,
-            const std::initializer_list<Attachment>& attachments,
-            const Subpass& subpass);
-        RenderPass(std::shared_ptr<const Device> device, 
-            const Attachment& attachment, 
-            const Subpass& subpass);
+            const AttachmentDescription& attachment);
+        RenderPass(std::shared_ptr<const Device> device,
+            const std::initializer_list<AttachmentDescription>& attachments);
+        RenderPass(std::shared_ptr<const Device> device,
+            const std::initializer_list<AttachmentDescription>& attachments,
+            const std::initializer_list<Subpass>& subpasses);
         ~RenderPass();
     };
 } // namespace magma
