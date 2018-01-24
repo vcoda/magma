@@ -48,7 +48,7 @@ PipelineLayout::PipelineLayout(std::shared_ptr<const Device> device, const std::
     for (const auto& layout : setLayouts)
         dereferencedSetLayouts.put(*layout);
     info.setLayoutCount = MAGMA_COUNT(dereferencedSetLayouts);
-    info.pSetLayouts = dereferencedSetLayouts.data();
+    info.pSetLayouts = dereferencedSetLayouts;
     info.pushConstantRangeCount = 0;
     info.pPushConstantRanges = nullptr;
     const VkResult create = vkCreatePipelineLayout(*device, &info, nullptr, &handle);

@@ -247,7 +247,7 @@ void CommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuf
     MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCommandBuffers, commandBuffers.size());
     for (const auto& commandBuffer : commandBuffers)
         dereferencedCommandBuffers.put(*commandBuffer);
-    vkCmdExecuteCommands(handle, dereferencedCommandBuffers.size(), dereferencedCommandBuffers.data());
+    vkCmdExecuteCommands(handle, dereferencedCommandBuffers.size(), dereferencedCommandBuffers);
 }
 
 void CommandBuffer::beginDebugMarker(const char *name, const float color[4]) noexcept

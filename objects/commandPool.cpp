@@ -76,7 +76,7 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     info.level = primaryLevel ? VK_COMMAND_BUFFER_LEVEL_PRIMARY : VK_COMMAND_BUFFER_LEVEL_SECONDARY;
     info.commandBufferCount = count;
     MAGMA_STACK_ARRAY(VkCommandBuffer, nativeCommandBuffers, count);
-    const VkResult alloc = vkAllocateCommandBuffers(*device, &info, nativeCommandBuffers.data());
+    const VkResult alloc = vkAllocateCommandBuffers(*device, &info, nativeCommandBuffers);
     MAGMA_THROW_FAILURE(alloc, "failed to allocate command buffers");
     std::vector<std::shared_ptr<CommandBuffer>> commandBuffers;
     for (const VkCommandBuffer cmdBuffer : nativeCommandBuffers)
@@ -89,7 +89,7 @@ void CommandPool::freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>
     MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCommandBuffers, commandBuffers.size());
     for (const auto& buffer : commandBuffers)
         dereferencedCommandBuffers.put(*buffer);
-    vkFreeCommandBuffers(*device, handle, dereferencedCommandBuffers.size(), dereferencedCommandBuffers.data());
+    vkFreeCommandBuffers(*device, handle, dereferencedCommandBuffers.size(), dereferencedCommandBuffers);
     commandBuffers.clear();
 }
 

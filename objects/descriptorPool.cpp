@@ -86,7 +86,7 @@ void DescriptorPool::freeDescriptorSets(std::vector<std::shared_ptr<DescriptorSe
     MAGMA_STACK_ARRAY(VkDescriptorSet, dereferencedDescriptorSets, descriptorSets.size());
     for (const auto& set : descriptorSets)
         dereferencedDescriptorSets.put(*set);
-    vkFreeDescriptorSets(*device, handle, dereferencedDescriptorSets.size(), dereferencedDescriptorSets.data());
+    vkFreeDescriptorSets(*device, handle, dereferencedDescriptorSets.size(), dereferencedDescriptorSets);
     descriptorSets.clear();
 }
 } // namespace magma

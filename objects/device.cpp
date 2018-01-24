@@ -60,7 +60,7 @@ bool Device::resetFences(std::vector<std::shared_ptr<const Fence>>& fences) cons
     MAGMA_STACK_ARRAY(VkFence, dereferencedFences, fences.size());
     for (const auto& fence : fences)
         dereferencedFences.put(*fence);
-    const VkResult reset = vkResetFences(handle, dereferencedFences.size(), dereferencedFences.data());
+    const VkResult reset = vkResetFences(handle, dereferencedFences.size(), dereferencedFences);
     return (VK_SUCCESS == reset);
 }
 
@@ -70,7 +70,7 @@ bool Device::waitForFences(std::vector<std::shared_ptr<const Fence>>& fences, bo
     MAGMA_STACK_ARRAY(VkFence, dereferencedFences, fences.size());
     for (const auto& fence : fences)
         dereferencedFences.put(*fence);
-    const VkResult wait = vkWaitForFences(handle, dereferencedFences.size(), dereferencedFences.data(), 
+    const VkResult wait = vkWaitForFences(handle, dereferencedFences.size(), dereferencedFences, 
         MAGMA_BOOLEAN(waitAll), timeout);
     return (VK_SUCCESS == wait);
 }

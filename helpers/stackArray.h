@@ -52,9 +52,7 @@ namespace magma
                 }
                 MAGMA_FREEA(stack);
             }
-            // Do not store or pass stack pointer anywhere, use inside function scope only.
-            Type *data() { return stack; }
-            const Type *data() const { return stack; }
+            // Support range-based loops
             Type *begin() { return stack; }
             const Type *begin() const { return stack; }
             Type *end() { return stack + count; }
@@ -67,6 +65,9 @@ namespace magma
                 stack[pos++] = elem;
                 return pos;
             }
+            // Do not store or pass stack pointer anywhere, use inside function scope only
+            operator Type *() { return stack; }
+            operator const Type *() const { return stack; }
             Type& operator[](int i)
             {
                 MAGMA_ASSERT(stack);
@@ -90,7 +91,7 @@ namespace magma
     } // namespace helpers
 } // namespace magma
 
-// Macro to call alloca() in the stack frame of the variable declaration.
+// Macro to call alloca() in the stack frame of the variable declaration
 #define MAGMA_STACK_ARRAY(Type, var, count)\
     MAGMA_ASSERT(sizeof(Type) * count < MAGMA_MAX_STACK_ALLOC);\
     magma::helpers::StackArray<Type> var(\

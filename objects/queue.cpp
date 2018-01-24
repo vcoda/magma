@@ -57,13 +57,13 @@ bool Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& comm
         for (const auto& semaphore : waitSemaphores)
             dereferencedWaitSemaphores.put(*semaphore);
         info.waitSemaphoreCount = MAGMA_COUNT(dereferencedWaitSemaphores);
-        info.pWaitSemaphores = dereferencedWaitSemaphores.data();
+        info.pWaitSemaphores = dereferencedWaitSemaphores;
     }
     info.pWaitDstStageMask = &waitStageMask;  
     for (const auto& cmdBuffer : commandBuffers)
         dereferencedCommandBuffers.put(*cmdBuffer);
     info.commandBufferCount = MAGMA_COUNT(dereferencedCommandBuffers);
-    info.pCommandBuffers = dereferencedCommandBuffers.data();  
+    info.pCommandBuffers = dereferencedCommandBuffers;  
     if (signalSemaphores.empty())
     {
         info.signalSemaphoreCount = 0;
@@ -74,7 +74,7 @@ bool Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& comm
         for (const auto& semaphore : signalSemaphores)
             dereferencedSignalSemaphores.put(*semaphore);
         info.signalSemaphoreCount = MAGMA_COUNT(dereferencedSignalSemaphores);
-        info.pSignalSemaphores = dereferencedSignalSemaphores.data();
+        info.pSignalSemaphores = dereferencedSignalSemaphores;
     }
     const VkResult submit = vkQueueSubmit(handle, 1, &info, MAGMA_OPTIONAL_HANDLE(fence));
     return (VK_SUCCESS == submit);

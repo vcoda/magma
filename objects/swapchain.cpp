@@ -83,7 +83,7 @@ std::vector<std::shared_ptr<SwapchainColorAttachment2D>> Swapchain::getImages() 
     std::vector<std::shared_ptr<SwapchainColorAttachment2D>> images;
     uint32_t imageCount = getImageCount();
     MAGMA_STACK_ARRAY(VkImage, nativeImages, imageCount);
-    const VkResult get = vkGetSwapchainImagesKHR(*device, handle, &imageCount, nativeImages.data());
+    const VkResult get = vkGetSwapchainImagesKHR(*device, handle, &imageCount, nativeImages);
     MAGMA_THROW_FAILURE(get, "failed to get swapchain images");
     for (const VkImage handle : nativeImages)
     {

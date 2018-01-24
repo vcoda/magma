@@ -38,7 +38,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const Device> device, std::shared_ptr<c
     for (auto& attachment : attachments)
         nativeAttachments.put(*attachment);
     info.attachmentCount = MAGMA_COUNT(nativeAttachments);
-    info.pAttachments = nativeAttachments.data();
+    info.pAttachments = nativeAttachments;
     info.width = extent.width;
     info.height = extent.height;
     info.layers = 1;
