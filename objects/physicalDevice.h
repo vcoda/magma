@@ -48,11 +48,16 @@ namespace magma
     {
     public:
         PhysicalDevice(VkPhysicalDevice physicalDevice);   
-        void getFeatures(VkPhysicalDeviceFeatures& features) const;
-        void getProperties(VkPhysicalDeviceProperties& properties) const;
+        const VkPhysicalDeviceFeatures& getFeatures() const;
+        const VkPhysicalDeviceProperties& getProperties() const;
+        VkFormatProperties getFormatProperties(VkFormat format) const;
+        VkImageFormatProperties getImageFormatProperties(VkFormat format, 
+            VkImageType, bool optimalTiling, VkImageUsageFlags usage,
+            VkImageCreateFlags flags = 0) const;
         std::vector<VkQueueFamilyProperties> getQueueFamilyProperties() const;
-        void getMemoryProperties(VkPhysicalDeviceMemoryProperties& properties) const;
+        const VkPhysicalDeviceMemoryProperties& getMemoryProperties() const;
         std::set<std::string> enumerateExtensions(const char *layerName = nullptr) const;
+        std::vector<VkLayerProperties> enumerateLayerProperties() const;
         std::shared_ptr<Device> createDevice(
             const std::vector<DeviceQueueDescriptor>& queueDescriptors,
             const std::vector<const char *>& layers,
@@ -64,5 +69,10 @@ namespace magma
         std::vector<VkSurfaceFormatKHR> getSurfaceFormats(std::shared_ptr<Surface> surface) const;
         void getSurfaceCapabilities(std::shared_ptr<Surface> surface, 
             VkSurfaceCapabilitiesKHR& caps) const;
+
+    private:
+        mutable VkPhysicalDeviceFeatures features = {};
+        mutable VkPhysicalDeviceProperties properties = {};
+        mutable VkPhysicalDeviceMemoryProperties memoryProperties = {};
     };
 } // namespace magma

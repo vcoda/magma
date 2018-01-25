@@ -74,14 +74,35 @@ PhysicalDevice::PhysicalDevice(VkPhysicalDevice physicalDevice):
     Handle(VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT, physicalDevice)
 {}
 
-void PhysicalDevice::getFeatures(VkPhysicalDeviceFeatures& features) const
+const VkPhysicalDeviceFeatures& PhysicalDevice::getFeatures() const
 {
     vkGetPhysicalDeviceFeatures(handle, &features);
+    return features;
 }
 
-void PhysicalDevice::getProperties(VkPhysicalDeviceProperties& properties) const
+const VkPhysicalDeviceProperties& PhysicalDevice::getProperties() const
 {
     vkGetPhysicalDeviceProperties(handle, &properties);
+    return properties;
+}
+
+VkFormatProperties PhysicalDevice::getFormatProperties(VkFormat format) const
+{
+    VkFormatProperties formatProperties;
+    vkGetPhysicalDeviceFormatProperties(handle, format, &formatProperties);
+    return formatProperties;
+}
+
+VkImageFormatProperties PhysicalDevice::getImageFormatProperties(VkFormat format, 
+    VkImageType imageType, bool optimalTiling, VkImageUsageFlags usage,
+    VkImageCreateFlags flags /* 0* */) const
+{
+    VkImageFormatProperties imageFormatProperties;
+    VkResult get = vkGetPhysicalDeviceImageFormatProperties(handle, format, imageType,
+        optimalTiling ? VK_IMAGE_TILING_OPTIMAL : VK_IMAGE_TILING_LINEAR,
+        usage, flags, &imageFormatProperties);
+    MAGMA_THROW_FAILURE(get, "failed to get image format properties");
+    return imageFormatProperties;
 }
 
 std::vector<VkQueueFamilyProperties> PhysicalDevice::getQueueFamilyProperties() const
@@ -97,9 +118,10 @@ std::vector<VkQueueFamilyProperties> PhysicalDevice::getQueueFamilyProperties() 
     return queueFamilyProperties;
 }
 
-void PhysicalDevice::getMemoryProperties(VkPhysicalDeviceMemoryProperties& properties) const
+const VkPhysicalDeviceMemoryProperties& PhysicalDevice::getMemoryProperties() const
 {
-    vkGetPhysicalDeviceMemoryProperties(handle, &properties);
+    vkGetPhysicalDeviceMemoryProperties(handle, &memoryProperties);
+    return memoryProperties;
 }
 
 std::set<std::string> PhysicalDevice::enumerateExtensions(const char *layerName /* nullptr */) const
@@ -114,6 +136,17 @@ std::set<std::string> PhysicalDevice::enumerateExtensions(const char *layerName 
     for (const auto& property : properties)
         extensions.insert(property.extensionName);
     return extensions;
+}
+
+std::vector<VkLayerProperties> PhysicalDevice::enumerateLayerProperties() const
+{
+    uint32_t propertyCount = 0;
+    VkResult count = vkEnumerateDeviceLayerProperties(handle, &propertyCount, nullptr);
+    MAGMA_THROW_FAILURE(count, "failed to count device layers");
+    std::vector<VkLayerProperties> properties(propertyCount);
+    const VkResult enumerate = vkEnumerateDeviceLayerProperties(handle, &propertyCount, properties.data());
+    MAGMA_THROW_FAILURE(count, "failed to enumerate device layers");
+    return properties;
 }
 
 std::shared_ptr<Device> PhysicalDevice::createDevice(
