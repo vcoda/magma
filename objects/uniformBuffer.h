@@ -26,17 +26,18 @@ namespace magma
     {
     public:
         UniformBuffer(std::shared_ptr<const Device> device,
+            uint32_t arraySize = 1,
             VkBufferCreateFlags flags = 0):
-            Buffer(device, sizeof(Block), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, flags,
+            Buffer(device, sizeof(Block) * arraySize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, flags,
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
         {}
 
         Block *map(bool clearMemory = false) noexcept
         {
-            if (void *block = memory->map(0, sizeof(Block)))
+            if (void *block = memory->map(0, size))
             {
                 if (clearMemory)
-                    memset(block, 0, sizeof(Block));
+                    memset(block, 0, static_cast<size_t>(size));
                 return static_cast<Block *>(block);
             }
             return nullptr;
