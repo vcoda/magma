@@ -99,12 +99,23 @@ namespace magma
         void setStencilReference(
             bool frontFace,
             bool backFace,
-            uint32_t reference) noexcept;
+            uint32_t reference) noexcept; 
 
-        void bindDescriptorSets(
+        void bindDescriptorSet(
+            const std::shared_ptr<PipelineLayout>& pipelineLayout, 
             const std::shared_ptr<DescriptorSet>& descriptorSet,
-            const std::shared_ptr<PipelineLayout>& pipelineLayout,
             VkPipelineBindPoint pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS) noexcept;
+        void bindDescriptorSet(
+            const std::shared_ptr<PipelineLayout>& pipelineLayout,
+            const std::shared_ptr<DescriptorSet>& descriptorSet,
+            uint32_t dynamicOffset,
+            VkPipelineBindPoint pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS) noexcept;
+        void bindDescriptorSets(
+            const std::shared_ptr<PipelineLayout>& pipelineLayout,
+            const std::vector<std::shared_ptr<DescriptorSet>>& descriptorSets,
+            const std::vector<uint32_t>& dynamicOffsets = {},
+            VkPipelineBindPoint pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS) noexcept;
+
         void bindIndexBuffer(
             const std::shared_ptr<IndexBuffer>& indexBuffer,
             VkDeviceSize offset = 0) noexcept;
