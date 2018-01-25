@@ -111,6 +111,7 @@ namespace magma
 
         const bool KHR_maintenance1;
         const bool KHR_maintenance2;
+        const bool KHR_shader_draw_parameters;
 
         const bool NV_clip_space_w_scaling;
         const bool NV_dedicated_allocation;

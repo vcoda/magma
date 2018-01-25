@@ -51,7 +51,7 @@ InstanceExtensions::InstanceExtensions(std::shared_ptr<const Instance> instance)
     MAGMA_CHECK_EXTENSION(KHR_win32_surface)
 {}   
 
-DeviceExtensions::DeviceExtensions(std::shared_ptr<const PhysicalDevice> device):
+DeviceExtensions::DeviceExtensions(std::shared_ptr<const PhysicalDevice> device) :
     Extensions(device->enumerateExtensions()),
 
     MAGMA_CHECK_EXTENSION(AMD_draw_indirect_count),
@@ -100,6 +100,7 @@ DeviceExtensions::DeviceExtensions(std::shared_ptr<const PhysicalDevice> device)
 
     MAGMA_CHECK_EXTENSION(KHR_maintenance1),
     MAGMA_CHECK_EXTENSION(KHR_maintenance2),
+    MAGMA_CHECK_EXTENSION(KHR_shader_draw_parameters),
 
     MAGMA_CHECK_EXTENSION(NV_clip_space_w_scaling),
     MAGMA_CHECK_EXTENSION(NV_dedicated_allocation),
