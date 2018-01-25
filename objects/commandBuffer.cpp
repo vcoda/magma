@@ -122,30 +122,8 @@ void CommandBuffer::bindPipeline(const std::shared_ptr<ComputePipeline>& pipelin
 // inline void CommandBuffer::setStencilWriteMask
 // inline void CommandBuffer::setStencilReference
 
-void CommandBuffer::bindDescriptorSet(const std::shared_ptr<PipelineLayout>& pipelineLayout, const std::shared_ptr<DescriptorSet>& descriptorSet,
-    VkPipelineBindPoint pipelineBindPoint /* VK_PIPELINE_BIND_POINT_GRAPHICS */) noexcept
-{
-    const VkDescriptorSet dereferencedDescriptorSets[1] = {*descriptorSet};
-    vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, 1, dereferencedDescriptorSets, 0, nullptr);
-}
-
-void CommandBuffer::bindDescriptorSet(const std::shared_ptr<PipelineLayout>& pipelineLayout, const std::shared_ptr<DescriptorSet>& descriptorSet, uint32_t dynamicOffset,
-    VkPipelineBindPoint pipelineBindPoint /* VK_PIPELINE_BIND_POINT_GRAPHICS */) noexcept
-{
-    const VkDescriptorSet dereferencedDescriptorSets[1] = {*descriptorSet};
-    vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, 1, dereferencedDescriptorSets, 1, &dynamicOffset);
-}
-
-void CommandBuffer::bindDescriptorSets(const std::shared_ptr<PipelineLayout>& pipelineLayout, const std::vector<std::shared_ptr<DescriptorSet>>& descriptorSets,
-    const std::vector<uint32_t>& dynamicOffsets /* {} */,
-    VkPipelineBindPoint pipelineBindPoint /* VK_PIPELINE_BIND_POINT_GRAPHICS */) noexcept
-{
-    MAGMA_STACK_ARRAY(VkDescriptorSet, dereferencedDescriptorSets, descriptorSets.size());
-    for (const auto& descriptorSet : descriptorSets)
-        dereferencedDescriptorSets.put(*descriptorSet);
-    vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, dereferencedDescriptorSets.size(), dereferencedDescriptorSets, 
-        MAGMA_COUNT(dynamicOffsets), dynamicOffsets.data());
-}
+// inline void CommandBuffer::bindDescriptorSet
+// inline void CommandBuffer::bindDescriptorSets
 
 // inline void CommandBuffer::bindIndexBuffer
 // inline void CommandBuffer::bindVertexBuffer

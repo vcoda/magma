@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "indexBuffer.h"
 #include "vertexBuffer.h"
 #include "pipelineLayout.h"
+#include "descriptorSet.h"
 #include "../misc/clearValue.h"
 #include "../misc/clearAttachment.h"
 #include "../misc/viewport.h"
@@ -118,6 +119,39 @@ inline void CommandBuffer::setStencilReference(bool frontFace, bool backFace, ui
 {
     MAGMA_ASSERT(frontFace || backFace);
     vkCmdSetStencilReference(handle, MAGMA_STENCIL_FACE_MASK(frontFace, backFace), reference);
+}
+
+inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<PipelineLayout>& pipelineLayout, const std::shared_ptr<DescriptorSet>& descriptorSet, 
+    uint32_t offset /* 0 */,
+    VkPipelineBindPoint pipelineBindPoint /* VK_PIPELINE_BIND_POINT_GRAPHICS */) noexcept
+{
+    const VkDescriptorSet dereferencedDescriptorSets[1] = {*descriptorSet};
+    vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, 1, dereferencedDescriptorSets, 
+        offset ? 1 : 0, 
+        offset ? &offset : nullptr);
+}
+
+template <uint32_t descriptorSetCount>
+inline void CommandBuffer::bindDescriptorSets(const std::shared_ptr<PipelineLayout>& pipelineLayout, const std::shared_ptr<magma::DescriptorSet>(&descriptorSets)[descriptorSetCount],
+    const std::initializer_list<uint32_t>& offsets /* {} */,
+    VkPipelineBindPoint pipelineBindPoint /* VK_PIPELINE_BIND_POINT_GRAPHICS */) noexcept
+{
+    MAGMA_STACK_ARRAY(VkDescriptorSet, dereferencedDescriptorSets, descriptorSetCount);
+    for (uint32_t i = 0; i < descriptorSetCount; ++i)
+        dereferencedDescriptorSets.put(*descriptorSets[i]);
+    vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, descriptorSetCount, dereferencedDescriptorSets,
+        MAGMA_COUNT(offsets), offsets.begin());
+}
+
+inline void CommandBuffer::bindDescriptorSets(const std::shared_ptr<PipelineLayout>& pipelineLayout, const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
+    const std::initializer_list<uint32_t>& offsets /* {} */,
+    VkPipelineBindPoint pipelineBindPoint /* VK_PIPELINE_BIND_POINT_GRAPHICS */) noexcept
+{
+    MAGMA_STACK_ARRAY(VkDescriptorSet, dereferencedDescriptorSets, descriptorSets.size());
+    for (const auto& descriptorSet : descriptorSets)
+        dereferencedDescriptorSets.put(*descriptorSet);
+    vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, dereferencedDescriptorSets.size(), dereferencedDescriptorSets,
+        MAGMA_COUNT(offsets), offsets.begin());
 }
 
 inline void CommandBuffer::bindIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer, VkDeviceSize offset /* 0 */) noexcept

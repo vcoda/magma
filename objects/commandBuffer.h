@@ -102,18 +102,19 @@ namespace magma
             uint32_t reference) noexcept; 
 
         void bindDescriptorSet(
-            const std::shared_ptr<PipelineLayout>& pipelineLayout, 
-            const std::shared_ptr<DescriptorSet>& descriptorSet,
-            VkPipelineBindPoint pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS) noexcept;
-        void bindDescriptorSet(
             const std::shared_ptr<PipelineLayout>& pipelineLayout,
             const std::shared_ptr<DescriptorSet>& descriptorSet,
-            uint32_t dynamicOffset,
+            uint32_t offset = 0,
+            VkPipelineBindPoint pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS) noexcept;
+        template <uint32_t descriptorSetCount> void bindDescriptorSets(
+            const std::shared_ptr<PipelineLayout>& pipelineLayout,
+            const std::shared_ptr<magma::DescriptorSet>(&descriptorSets)[descriptorSetCount],
+            const std::initializer_list<uint32_t>& offsets = {},
             VkPipelineBindPoint pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS) noexcept;
         void bindDescriptorSets(
             const std::shared_ptr<PipelineLayout>& pipelineLayout,
-            const std::vector<std::shared_ptr<DescriptorSet>>& descriptorSets,
-            const std::vector<uint32_t>& dynamicOffsets = {},
+            const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
+            const std::initializer_list<uint32_t>& offsets = {},
             VkPipelineBindPoint pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS) noexcept;
 
         void bindIndexBuffer(
