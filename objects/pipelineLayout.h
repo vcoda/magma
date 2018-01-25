@@ -29,9 +29,17 @@ namespace magma
     public:
         PipelineLayout(std::shared_ptr<const Device> device);
         PipelineLayout(std::shared_ptr<const Device> device,
-            const std::vector<std::shared_ptr<const DescriptorSetLayout>>& setLayouts);
-        PipelineLayout(std::shared_ptr<const Device> device,
             std::shared_ptr<const DescriptorSetLayout> setLayout);
+        template <int setLayoutCount> PipelineLayout(std::shared_ptr<const Device> device,
+            const std::shared_ptr<DescriptorSetLayout>(&setLayouts)[setLayoutCount]);
+        PipelineLayout(std::shared_ptr<const Device> device,
+            const std::vector<std::shared_ptr<const DescriptorSetLayout>>& setLayouts);
         ~PipelineLayout();
     };
+
+    template <int setLayoutCount>
+    inline PipelineLayout::PipelineLayout(std::shared_ptr<const Device> device,
+        const std::shared_ptr<DescriptorSetLayout>(&setLayouts)[setLayoutCount]):
+        PipelineLayout(device, std::vector<std::shared_ptr<const DescriptorSetLayout>>(setLayouts, setLayouts + setLayoutCount))
+    {}
 } // namespace magma

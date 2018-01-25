@@ -37,7 +37,11 @@ PipelineLayout::PipelineLayout(std::shared_ptr<const Device> device):
     MAGMA_THROW_FAILURE(create, "failed to create pipeline layout");
 }
 
-PipelineLayout::PipelineLayout(std::shared_ptr<const Device> device, const std::vector<std::shared_ptr<const DescriptorSetLayout>>& setLayouts) :
+PipelineLayout::PipelineLayout(std::shared_ptr<const Device> device, std::shared_ptr<const DescriptorSetLayout> setLayout):
+    PipelineLayout(device, std::vector<std::shared_ptr<const DescriptorSetLayout>>{setLayout})
+{}
+
+PipelineLayout::PipelineLayout(std::shared_ptr<const Device> device, const std::vector<std::shared_ptr<const DescriptorSetLayout>>& setLayouts):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_LAYOUT_EXT, device)
 {
     VkPipelineLayoutCreateInfo info;
@@ -54,10 +58,6 @@ PipelineLayout::PipelineLayout(std::shared_ptr<const Device> device, const std::
     const VkResult create = vkCreatePipelineLayout(*device, &info, nullptr, &handle);
     MAGMA_THROW_FAILURE(create, "failed to create pipeline layout");
 }
-
-PipelineLayout::PipelineLayout(std::shared_ptr<const Device> device, std::shared_ptr<const DescriptorSetLayout> setLayout):
-    PipelineLayout(device, std::vector<std::shared_ptr<const DescriptorSetLayout>>{setLayout})
-{}
 
 PipelineLayout::~PipelineLayout()
 {
