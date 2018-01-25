@@ -69,7 +69,7 @@ VkDescriptorBufferInfo Buffer::getDescriptor() const noexcept
     VkDescriptorBufferInfo info;
     info.buffer = handle;
     info.offset = 0;
-    info.range = size;
+    info.range = VK_WHOLE_SIZE;
     return info;
 }
 } // namespace magma
