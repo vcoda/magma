@@ -62,11 +62,14 @@ VertexInputState::VertexInputState(const VertexInputState& other)
 
 VertexInputState& VertexInputState::operator=(const VertexInputState& other)
 {
-    helpers::copy(this, &other);
-    pVertexBindingDescriptions = helpers::copy(new VkVertexInputBindingDescription[vertexBindingDescriptionCount],
-        other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
-    pVertexAttributeDescriptions = helpers::copy(new VkVertexInputAttributeDescription[vertexAttributeDescriptionCount],
-        other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+    if (this != &other)
+    {
+        helpers::copy(this, &other);
+        pVertexBindingDescriptions = helpers::copy(new VkVertexInputBindingDescription[vertexBindingDescriptionCount],
+            other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
+        pVertexAttributeDescriptions = helpers::copy(new VkVertexInputAttributeDescription[vertexAttributeDescriptionCount],
+            other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+    }
     return *this;
 }
 
