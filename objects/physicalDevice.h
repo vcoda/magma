@@ -32,6 +32,7 @@ namespace magma
             std::shared_ptr<const PhysicalDevice> device,
             const std::vector<float>& queuePriorities = {1.f});
         DeviceQueueDescriptor(const DeviceQueueDescriptor&);
+        DeviceQueueDescriptor& operator=(const DeviceQueueDescriptor&);
         ~DeviceQueueDescriptor();
 
     private:

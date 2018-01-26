@@ -48,6 +48,16 @@ DeviceQueueDescriptor::DeviceQueueDescriptor(const DeviceQueueDescriptor& other)
     pQueuePriorities = helpers::copy(new float[queueCount], other.pQueuePriorities, queueCount);
 }
 
+DeviceQueueDescriptor& DeviceQueueDescriptor::operator=(const DeviceQueueDescriptor& other)
+{
+    if (this != &other)
+    {
+        helpers::copy(this, &other);
+        pQueuePriorities = helpers::copy(new float[queueCount], other.pQueuePriorities, queueCount);
+    }
+    return *this;
+}
+
 DeviceQueueDescriptor::~DeviceQueueDescriptor()
 {
     delete[] pQueuePriorities;

@@ -48,6 +48,7 @@ namespace magma
             VkPipelineShaderStageCreateFlags flags = 0,
             const VkSpecializationInfo *specializedInfo = nullptr);
         ShaderStage(const ShaderStage&);
+        ShaderStage& operator=(const ShaderStage&);
         ~ShaderStage();
         operator const VkPipelineShaderStageCreateInfo&() const { return info; }
 

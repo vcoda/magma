@@ -41,6 +41,19 @@ Subpass::Subpass(const Subpass& other)
         pColorAttachments = helpers::copy(new VkAttachmentReference[colorAttachmentCount], other.pColorAttachments, colorAttachmentCount);
     if (other.pDepthStencilAttachment)
         pDepthStencilAttachment = helpers::copy(new VkAttachmentReference, other.pDepthStencilAttachment);
+}   
+
+Subpass& Subpass::operator=(const Subpass& other)
+{
+    if (this != &other)
+    {
+        helpers::copy(this, &other);
+        if (other.pColorAttachments)
+            pColorAttachments = helpers::copy(new VkAttachmentReference[colorAttachmentCount], other.pColorAttachments, colorAttachmentCount);
+        if (other.pDepthStencilAttachment)
+            pDepthStencilAttachment = helpers::copy(new VkAttachmentReference, other.pDepthStencilAttachment);
+    }
+    return *this;
 }
 
 Subpass::~Subpass()

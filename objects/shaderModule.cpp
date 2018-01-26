@@ -86,6 +86,13 @@ ShaderStage::ShaderStage(const ShaderStage& other):
     info.pName = helpers::copyString(other.info.pName);
 }
 
+ShaderStage& ShaderStage::operator=(const ShaderStage& other)
+{
+    if (this != &other)
+        info.pName = helpers::copyString(other.info.pName);
+    return *this;
+}
+
 ShaderStage::~ShaderStage()
 {
     delete[] info.pName;
