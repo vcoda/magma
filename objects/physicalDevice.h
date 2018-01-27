@@ -66,7 +66,6 @@ namespace magma
             const VkPhysicalDeviceFeatures& deviceFeatures) const;
         std::shared_ptr<Device> createDefaultDevice() const;
         bool surfaceSupported(std::shared_ptr<Surface> surface) const;
-        bool depthStencilSupported(VkFormat format) const;
         std::vector<VkSurfaceFormatKHR> getSurfaceFormats(std::shared_ptr<Surface> surface) const;
         void getSurfaceCapabilities(std::shared_ptr<Surface> surface, 
             VkSurfaceCapabilitiesKHR& caps) const;

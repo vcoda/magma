@@ -208,13 +208,6 @@ bool PhysicalDevice::surfaceSupported(std::shared_ptr<Surface> surface) const
     return (VK_SUCCESS == get) && (VK_TRUE == supported);
 }
 
-bool PhysicalDevice::depthStencilSupported(VkFormat format) const
-{
-    VkFormatProperties properties;
-    vkGetPhysicalDeviceFormatProperties(handle, format, &properties);
-    return (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
-}
-
 std::vector<VkSurfaceFormatKHR> PhysicalDevice::getSurfaceFormats(std::shared_ptr<Surface> surface) const
 {
     uint32_t formatCount = 0;
