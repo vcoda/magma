@@ -50,11 +50,6 @@ CommandBuffer::CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Devic
 #endif // MAGMA_DEBUG
 }
 
-CommandBuffer::~CommandBuffer()
-{
-    delete[] clearValues;
-}
-
 bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
     VkCommandBufferBeginInfo beginInfo;
@@ -164,6 +159,11 @@ void CommandBuffer::copyBufferToImage(const std::shared_ptr<Buffer>& srcBuffer, 
     vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstImageLayout, MAGMA_COUNT(regions), regions.data());
 }
 
+void CommandBuffer::copyImageToBuffer(const std::shared_ptr<Image>& srcImage, VkImageLayout srcImageLayout, const std::shared_ptr<Buffer>& dstBuffer, const std::vector<VkBufferImageCopy>& regions) const noexcept
+{
+    vkCmdCopyImageToBuffer(handle, *srcImage, srcImageLayout, *dstBuffer, MAGMA_COUNT(regions), regions.data());
+}
+
 void CommandBuffer::pipelineImageBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkImageMemoryBarrier>& barriers) noexcept
 {
     vkCmdPipelineBarrier(handle, 
@@ -214,7 +214,13 @@ void CommandBuffer::copyQueryResults(const std::shared_ptr<QueryPool>& queryPool
     vkCmdCopyQueryPoolResults(handle, *queryPool, firstQuery, queryCount, *buffer, dstOffset, stride, flags);
 }
 
-void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
+void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const ClearValue& clearValue,
+    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+{
+    beginRenderPass(renderPass, framebuffer, {clearValue}, contents);
+}
+
+void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const std::initializer_list<ClearValue>& clearValues,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     VkRenderPassBeginInfo beginInfo;
@@ -223,8 +229,11 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     beginInfo.renderPass = *renderPass;
     beginInfo.framebuffer = *framebuffer;
     beginInfo.renderArea = renderArea;
-    beginInfo.clearValueCount = clearValueCount;
-    beginInfo.pClearValues = clearValues;
+    beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
+    MAGMA_STACK_ARRAY(VkClearValue, dereferencedClearValues, beginInfo.clearValueCount);
+    for (const auto& clearValue : clearValues)
+        dereferencedClearValues.put(clearValue);
+    beginInfo.pClearValues = dereferencedClearValues;
     vkCmdBeginRenderPass(handle, &beginInfo, contents);
 }
 

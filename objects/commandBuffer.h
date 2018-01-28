@@ -46,8 +46,6 @@ namespace magma
         CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Device> device);
 
     public:
-        ~CommandBuffer();
-
         bool begin(VkCommandBufferUsageFlags flags = 0) noexcept;
         bool begin(
             const std::shared_ptr<RenderPass>& renderPass, 
@@ -186,8 +184,16 @@ namespace magma
             const std::shared_ptr<Image>& dstImage,
             VkImageLayout dstImageLayout,
             const std::vector<VkBufferImageCopy>& regions) const noexcept;
-        void copyImageToBuffer() const noexcept; // TODO: implement
-        void updateBuffer() const noexcept; // TODO: implement
+        void copyImageToBuffer(
+            const std::shared_ptr<Image>& srcImage,
+            VkImageLayout srcImageLayout, 
+            const std::shared_ptr<Buffer>& dstBuffer, 
+            const std::vector<VkBufferImageCopy>& regions) const noexcept;
+        template<typename Type>
+        void updateBuffer(
+            const std::shared_ptr<Buffer>& dstBuffer, 
+            const std::vector<Type>& data,
+            VkDeviceSize offset = 0) const noexcept;
         void fillBuffer() const noexcept; // TODO: implement
         void clearColorImage() const noexcept; // TODO: implement
         void clearDepthStencilImage() const noexcept; // TODO: implement
@@ -220,16 +226,26 @@ namespace magma
             bool write64Bit = true) noexcept;
         void writeTimestamp() noexcept; // TODO: implement
 
-        template <typename Type>
-        void pushConstants(
-            const std::shared_ptr<PipelineLayout>& pipeline,
+        template<typename Type, uint32_t pushConstantCount> void pushConstants(
+            const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags, 
-            const std::vector<Type>& constants,
+            const Type(&values)[pushConstantCount],
+            uint32_t offset = 0) noexcept;
+        template<typename Type> void pushConstants(
+            const std::shared_ptr<PipelineLayout>& layout,
+            VkShaderStageFlags stageFlags, 
+            const std::vector<Type>& values,
             uint32_t offset = 0) noexcept;
 
         void beginRenderPass(
             const std::shared_ptr<RenderPass>& renderPass,
             const std::shared_ptr<Framebuffer>& framebuffer,
+            const ClearValue& clearValue,
+            VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
+        void beginRenderPass(
+            const std::shared_ptr<RenderPass>& renderPass,
+            const std::shared_ptr<Framebuffer>& framebuffer,
+            const std::initializer_list<ClearValue>& clearValues,
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void nextSubpass() noexcept; // TODO: implement
         void endRenderPass() noexcept;
@@ -244,9 +260,6 @@ namespace magma
         void insertDebugMarker(const char *name) noexcept;
         
         // Non-API utility methods
-        void setClear(const ClearValue& value) noexcept;
-        void setClears(const std::initializer_list<ClearValue>& values) noexcept;
-
         void setRenderArea(const VkRect2D& rc) noexcept;
         void setRenderArea(
             int32_t x, int32_t y, 
@@ -261,8 +274,6 @@ namespace magma
         void queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept;
 
     private:
-        uint32_t clearValueCount = 0;
-        VkClearValue *clearValues = nullptr;
         VkRect2D renderArea = {0};
         bool occlusionQueryEnable = false;
         VkQueryControlFlags queryFlags = 0;

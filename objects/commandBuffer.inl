@@ -215,40 +215,35 @@ inline void CommandBuffer::dispatchIndirect(const std::shared_ptr<Buffer>& buffe
     vkCmdDispatchIndirect(handle, *buffer, offset);
 }
 
+template<typename Type>
+inline void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& dstBuffer, const std::vector<Type>& data,
+    VkDeviceSize offset /* 0 */) const noexcept
+{
+    /* Buffer updates performed with vkCmdUpdateBuffer first copy the data 
+       into command buffer memory when the command is recorded 
+       (which requires additional storage and may incur an additional allocation), 
+       and then copy the data from the command buffer into dstBuffer 
+       when the command is executed on a device. */
+    vkCmdUpdateBuffer(handle, *dstBuffer, offset, static_cast<uint32_t>(sizeof(Type) * data.size()), data.data());
+}
+
 inline void CommandBuffer::clearAttachments(const std::initializer_list<ClearAttachment>& attachments, const VkClearRect& clearRect) const noexcept
 {
     vkCmdClearAttachments(handle, MAGMA_COUNT(attachments), attachments.begin(), 1, &clearRect);
 }
 
-template <typename Type>
-inline void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const std::vector<Type>& constants,
+template<typename Type, uint32_t pushConstantCount>
+inline void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const Type(&values)[pushConstantCount],
     uint32_t offset /* 0 */) noexcept
 {
-    vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * constants.size()), constants.data());
+    vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * pushConstantCount), values);
 }
 
-inline void CommandBuffer::setClear(const ClearValue& value) noexcept
+template<typename Type>
+inline void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const std::vector<Type>& values,
+    uint32_t offset /* 0 */) noexcept
 {
-    if (!clearValues)
-        clearValues = new(std::nothrow) VkClearValue[1];
-    clearValueCount = 0;
-    if (clearValues)
-        clearValues[clearValueCount++] = value;
-}
-
-inline void CommandBuffer::setClears(const std::initializer_list<ClearValue>& values) noexcept
-{
-    if (values.size() > clearValueCount)
-    {
-        delete[] clearValues;
-        clearValues = new(std::nothrow) VkClearValue[values.size()];
-    }
-    clearValueCount = 0;
-    if (clearValues)
-    {
-        for (const auto& value : values)
-            clearValues[clearValueCount++] = value;
-    }
+    vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * values.size()), values.data());
 }
 
 inline void CommandBuffer::setRenderArea(const VkRect2D& rc) noexcept
