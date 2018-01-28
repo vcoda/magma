@@ -29,17 +29,31 @@ namespace magma
     public:
         PipelineLayout(std::shared_ptr<const Device> device);
         PipelineLayout(std::shared_ptr<const Device> device,
-            std::shared_ptr<const DescriptorSetLayout> setLayout);
-        template <int setLayoutCount> PipelineLayout(std::shared_ptr<const Device> device,
+            std::shared_ptr<const DescriptorSetLayout> setLayout,
+            const std::vector<VkPushConstantRange>& pushConstantRanges = {});
+        template<uint32_t setLayoutCount> PipelineLayout(std::shared_ptr<const Device> device,
             const std::shared_ptr<DescriptorSetLayout>(&setLayouts)[setLayoutCount]);
+        template<uint32_t setLayoutCount, uint32_t pushConstantRangeCount> PipelineLayout(std::shared_ptr<const Device> device,
+            const std::shared_ptr<DescriptorSetLayout>(&setLayouts)[setLayoutCount],
+            const std::shared_ptr<VkPushConstantRange>(&pushConstantRanges)[pushConstantRangeCount]);
         PipelineLayout(std::shared_ptr<const Device> device,
-            const std::vector<std::shared_ptr<const DescriptorSetLayout>>& setLayouts);
+            const std::vector<std::shared_ptr<const DescriptorSetLayout>>& setLayouts,
+            const std::vector<VkPushConstantRange>& pushConstantRanges = {});
         ~PipelineLayout();
     };
 
-    template <int setLayoutCount>
+    template<uint32_t setLayoutCount>
     inline PipelineLayout::PipelineLayout(std::shared_ptr<const Device> device,
         const std::shared_ptr<DescriptorSetLayout>(&setLayouts)[setLayoutCount]):
         PipelineLayout(device, std::vector<std::shared_ptr<const DescriptorSetLayout>>(setLayouts, setLayouts + setLayoutCount))
+    {}
+
+    template<uint32_t setLayoutCount, uint32_t pushConstantRangeCount>
+    inline PipelineLayout::PipelineLayout(std::shared_ptr<const Device> device,
+        const std::shared_ptr<DescriptorSetLayout>(&setLayouts)[setLayoutCount],
+        const std::shared_ptr<VkPushConstantRange>(&pushConstantRanges)[pushConstantRangeCount]):
+        PipelineLayout(device, 
+            std::vector<std::shared_ptr<const DescriptorSetLayout>>(setLayouts, setLayouts + setLayoutCount),
+            std::vector<std::shared_ptr<const DescriptorSetLayout>>(pushConstantRanges, pushConstantRanges + pushConstantRangeCount))
     {}
 } // namespace magma
