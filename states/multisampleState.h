@@ -27,6 +27,10 @@ namespace magma
             bool sampleShading = false, 
             bool alphaToCoverage = false, 
             bool alphaToOne = false);
+        MultisampleState(uint32_t sampleCount, 
+            bool sampleShading = false, 
+            bool alphaToCoverage = false, 
+            bool alphaToOne = false);
     };
 
     namespace states
