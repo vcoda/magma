@@ -1,4 +1,7 @@
 # Magma
-Magma - utility library written in C++1x to simplify usage of Khronos Vulkan API.
-# <img src="magma.png" alt="" height="256px" align="left">
+<p align="center">
+    <b>Magma - utility library with tips & tricks to facilitate usage of Khronos Vulkan API</b>
+    <br><br>
+    <img src="magma.jpg" width="600px" height="382px">
+</p>
 
