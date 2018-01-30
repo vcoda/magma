@@ -125,6 +125,7 @@
     <ClInclude Include="descriptors\bindings.h" />
     <ClInclude Include="descriptors\descriptors.h" />
     <ClInclude Include="descriptors\subpass.h" />
+    <ClInclude Include="helpers\alignedMemcpy.h" />
     <ClInclude Include="helpers\copying.h" />
     <ClInclude Include="helpers\mapScoped.h" />
     <ClInclude Include="helpers\stackArray.h" />

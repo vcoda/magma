@@ -53,7 +53,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_MAX_STACK_ALLOC 1024
 
-#define MAGMA_ALIGN(size, alignment) ((size + alignment - 1) & ~(alignment - 1)) 
+#define MAGMA_ALIGNED_MALLOC(size) _mm_malloc(size, 16)
+#define MAGMA_ALIGNED_FREE(p) _mm_free(p)
+#define MAGMA_ALIGN(size) ((size + 15) & ~(15)) 
+#define MAGMA_ALIGNED(p) (((uintptr_t)(const void *)(p)) % (16) == 0)
 
 #define MAGMA_SUCCEEDED(result)\
     ((VK_SUCCESS == result) ||\

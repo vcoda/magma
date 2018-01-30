@@ -249,6 +249,9 @@
     <ClInclude Include="objects\imageCube.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="helpers\alignedMemcpy.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
