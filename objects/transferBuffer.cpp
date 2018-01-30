@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "transferBuffer.h"
-#include <iostream>
+#include "../helpers/alignedMemcpy.h"
 
 namespace magma
 {
@@ -34,7 +34,7 @@ SourceTransferBuffer::SourceTransferBuffer(std::shared_ptr<const Device> device,
 {   
     if (void *buffer = memory->map(0, size))
     {
-        memcpy(buffer, data, static_cast<size_t>(size));
+        helpers::alignedMemcpy(buffer, data, static_cast<size_t>(size));
         memory->unmap();
     }
 }

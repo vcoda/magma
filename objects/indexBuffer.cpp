@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandBuffer.h"
 #include "transferBuffer.h"
 #include "queue.h"
+#include "../helpers/alignedMemcpy.h"
 
 namespace magma
 {
@@ -36,7 +37,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<const Device> device, const void *data,
 {
     if (void *buffer = memory->map(0, size))
     {
-        memcpy(buffer, data, static_cast<size_t>(size));
+        helpers::alignedMemcpy(buffer, data, static_cast<size_t>(size));
         memory->unmap();
     }
 }

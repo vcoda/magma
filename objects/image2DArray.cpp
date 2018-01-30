@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "image2DArray.h"
 #include "transferBuffer.h"
+#include "../helpers/alignedMemcpy.h"
 
 namespace magma
 {
@@ -50,7 +51,7 @@ Image2DArray::Image2DArray(std::shared_ptr<const Device> device,
             {
                 const VkDeviceSize bufferOffset = copyRegions[layer * mipLevels + level].bufferOffset;
                 void *mipLevel = data + bufferOffset;
-                memcpy(mipLevel, layersMipData[layer][level], static_cast<size_t>(mipSizes[level]));
+                helpers::alignedMemcpy(mipLevel, layersMipData[layer][level], static_cast<size_t>(mipSizes[level]));
             }
         }
         srcBuffer->getMemory()->unmap();

@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "image2D.h"
 #include "transferBuffer.h"
+#include "../helpers/alignedMemcpy.h"
 
 namespace magma
 {
@@ -53,7 +54,7 @@ Image2D::Image2D(std::shared_ptr<const Device> device,
         {
             const VkDeviceSize bufferOffset = copyRegions[level].bufferOffset;
             void *mipLevel = data + bufferOffset;
-            memcpy(mipLevel, mipData[level], static_cast<size_t>(mipSizes[level]));
+            helpers::alignedMemcpy(mipLevel, mipData[level], static_cast<size_t>(mipSizes[level]));
         }
         srcBuffer->getMemory()->unmap();
     }

@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "imageCube.h"
 #include "transferBuffer.h"
+#include "../helpers/alignedMemcpy.h"
 
 namespace magma
 {
@@ -54,7 +55,7 @@ ImageCube::ImageCube(std::shared_ptr<const Device> device,
             {
                 const VkDeviceSize bufferOffset = copyRegions[face * mipLevels + level].bufferOffset;
                 void *mipLevel = data + bufferOffset;
-                memcpy(mipLevel, cubeMipData[face][level], static_cast<size_t>(mipSizes[level]));
+                helpers::alignedMemcpy(mipLevel, cubeMipData[face][level], static_cast<size_t>(mipSizes[level]));
             }
         }
         srcBuffer->getMemory()->unmap();

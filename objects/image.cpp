@@ -122,6 +122,7 @@ VkDeviceSize Image::getCopyRegions(const std::vector<VkExtent2D>& mipExtents,
             copy.imageExtent.depth = 1;
             copyRegions.push_back(copy);
             offset += mipSizes[level];
+            offset = MAGMA_ALIGN(offset); 
         }
     }
     return offset;
