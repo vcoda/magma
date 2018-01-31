@@ -34,6 +34,7 @@ namespace magma
         VkFormat getFormat() const { return format; }
         VkImageLayout getLayout() const { return layout; }
         const VkExtent3D& getExtent() const { return extent; }
+        VkExtent2D getExtent2D() const { return VkExtent2D{extent.width, extent.height}; }
         uint32_t getMipLevels() const { return mipLevels; }
         uint32_t getArrayLayers() const { return arrayLayers; }
         uint32_t getSamples() const { return samples; }

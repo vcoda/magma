@@ -31,18 +31,10 @@ namespace magma
         Framebuffer(std::shared_ptr<const Device> device,
             std::shared_ptr<const RenderPass> renderPass,
             const std::vector<std::shared_ptr<const ImageView>>& attachments,
-            const VkExtent2D& extent,
             VkFramebufferCreateFlags = 0);
         Framebuffer(std::shared_ptr<const Device> device,
             std::shared_ptr<const RenderPass> renderPass,
             std::shared_ptr<const ImageView> attachment,
-            uint32_t width,
-            uint32_t height,
-            VkFramebufferCreateFlags = 0);
-        Framebuffer(std::shared_ptr<const Device> device,
-            std::shared_ptr<const RenderPass> renderPass,
-            std::shared_ptr<const ImageView> attachment,
-            const VkExtent2D& extent,
             VkFramebufferCreateFlags = 0);
 	    ~Framebuffer();
         const std::vector<std::shared_ptr<const ImageView>>& getAttachments() const { return attachments; }

@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "framebuffer.h"
 #include "device.h"
+#include "image.h"
 #include "imageView.h"
 #include "renderPass.h"
 #include "../helpers/stackArray.h"
@@ -24,10 +25,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Framebuffer::Framebuffer(std::shared_ptr<const Device> device, std::shared_ptr<const RenderPass> renderPass, const std::vector<std::shared_ptr<const ImageView>>& attachments,
-    const VkExtent2D& extent, VkFramebufferCreateFlags flags /* 0 */):
+    VkFramebufferCreateFlags flags /* 0 */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT, device),
     attachments(attachments),
-    extent(extent)
+    extent(attachments[0]->getImage()->getExtent2D())
 {
     VkFramebufferCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -47,13 +48,8 @@ Framebuffer::Framebuffer(std::shared_ptr<const Device> device, std::shared_ptr<c
 }
 
 Framebuffer::Framebuffer(std::shared_ptr<const Device> device, std::shared_ptr<const RenderPass> renderPass, std::shared_ptr<const ImageView> attachment, 
-    uint32_t width, uint32_t height, VkFramebufferCreateFlags flags /* 0 */):
-    Framebuffer(device, renderPass, std::vector<std::shared_ptr<const ImageView>>{attachment}, VkExtent2D{width, height}, flags)
-{}
-
-Framebuffer::Framebuffer(std::shared_ptr<const Device> device, std::shared_ptr<const RenderPass> renderPass, std::shared_ptr<const ImageView> attachment, 
-    const VkExtent2D& extent, VkFramebufferCreateFlags flags /* 0 */):
-    Framebuffer(device, renderPass, std::vector<std::shared_ptr<const ImageView>>{attachment}, extent, flags)
+    VkFramebufferCreateFlags flags /* 0 */):
+    Framebuffer(device, renderPass, std::vector<std::shared_ptr<const ImageView>>{attachment}, flags)
 {}
 
 Framebuffer::~Framebuffer()
