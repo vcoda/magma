@@ -125,7 +125,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
     info.subpass = subpass;
     info.basePipelineIndex = 0;
     info.basePipelineHandle = VK_NULL_HANDLE;
-    const VkResult create = vkCreateGraphicsPipelines(*device, *pipelineCache, 1, &info, nullptr, &handle);
+    const VkResult create = vkCreateGraphicsPipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, nullptr, &handle);
     MAGMA_THROW_FAILURE(create, "failed to create graphics pipeline");
 }
 
@@ -149,7 +149,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<const Device> device, std::shar
     }
     info.basePipelineHandle = 0;
     info.basePipelineIndex = 0;
-    const VkResult create = vkCreateComputePipelines(*device, *pipelineCache, 1, &info, nullptr, &handle);
+    const VkResult create = vkCreateComputePipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, nullptr, &handle);
     MAGMA_THROW_FAILURE(create, "failed to create compute pipeline");
 }
 } // namespace magma
