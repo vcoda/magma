@@ -26,8 +26,16 @@ namespace magma
         {
             MAGMA_ASSERT(dst);
             MAGMA_ASSERT(src);
+#ifdef _M_AMD64
+            /* On x64 platform all allocations should have 16-byte alignment.
+               On x86 it's hard to follow this restriction, as standard alignment 
+               there is 8 bytes: https://msdn.microsoft.com/en-us/library/ycsb6wwf.aspx
+               Standard std::vector also has 8-byte alignment, and using custom allocator 
+               for it means incompatibility with standard vectors. So 16-byte 
+               alignment check performed only in the case of x64 build. */
             MAGMA_ASSERT(MAGMA_ALIGNED(dst));
             MAGMA_ASSERT(MAGMA_ALIGNED(src));
+#endif // _M_AMD64
             return memcpy(dst, src, size);
         }
     } // namespace helpers
