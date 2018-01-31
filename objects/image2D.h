@@ -30,8 +30,9 @@ namespace magma
             uint32_t samples,
             VkImageUsageFlags usage);
         Image2D(std::shared_ptr<const Device> device,
-            VkImage image,
-            VkFormat format);
+            VkImage handle,
+            VkFormat format,
+            const VkExtent2D& extent);
 
     public:
         Image2D(std::shared_ptr<const Device> device,
@@ -67,8 +68,9 @@ namespace magma
     class SwapchainColorAttachment2D : public Image2D
     {
         SwapchainColorAttachment2D(std::shared_ptr<const Device> device,
-            VkImage image,
-            VkFormat format);
+            VkImage handle,
+            VkFormat format,
+            const VkExtent2D& extent);
         friend class Swapchain;
 
     public:

@@ -76,10 +76,12 @@ Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkForm
     bindMemory(memory);
 }
 
-Image::Image(std::shared_ptr<const Device> device, VkImage image, VkImageType imageType, VkFormat format):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, image, device),
+Image::Image(std::shared_ptr<const Device> device, VkImage handle, VkImageType imageType, VkFormat format, const VkExtent3D& extent):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, handle, device),
     imageType(imageType),
     format(format),
+    layout(VK_IMAGE_LAYOUT_UNDEFINED),
+    extent(extent),
     mipLevels(1),
     arrayLayers(1),
     samples(1),

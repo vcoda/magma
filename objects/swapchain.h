@@ -47,5 +47,6 @@ namespace magma
 
     private:
         VkSurfaceFormatKHR surfaceFormat;
+        VkExtent2D imageExtent;
     };
 } // namespace magma

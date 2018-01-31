@@ -30,7 +30,8 @@ Swapchain::Swapchain(std::shared_ptr<const Device> device, std::shared_ptr<const
 	VkPresentModeKHR presentMode,
 	VkSwapchainCreateFlagsKHR flags /* 0 */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT, device),
-    surfaceFormat(surfaceFormat)
+    surfaceFormat(surfaceFormat),
+    imageExtent(imageExtent)
 {
 	VkSwapchainCreateInfoKHR info;
 	info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
@@ -80,14 +81,14 @@ uint32_t Swapchain::getImageCount() const
 
 std::vector<std::shared_ptr<SwapchainColorAttachment2D>> Swapchain::getImages() const
 {
-    std::vector<std::shared_ptr<SwapchainColorAttachment2D>> images;
     uint32_t imageCount = getImageCount();
-    MAGMA_STACK_ARRAY(VkImage, nativeImages, imageCount);
-    const VkResult get = vkGetSwapchainImagesKHR(*device, handle, &imageCount, nativeImages);
+    MAGMA_STACK_ARRAY(VkImage, swapchainImages, imageCount);
+    const VkResult get = vkGetSwapchainImagesKHR(*device, handle, &imageCount, swapchainImages);
     MAGMA_THROW_FAILURE(get, "failed to get swapchain images");
-    for (const VkImage handle : nativeImages)
+    std::vector<std::shared_ptr<SwapchainColorAttachment2D>> images;
+    for (const VkImage handle : swapchainImages)
     {
-        std::shared_ptr<SwapchainColorAttachment2D> image(new SwapchainColorAttachment2D(device, handle, this->surfaceFormat.format));
+        std::shared_ptr<SwapchainColorAttachment2D> image(new SwapchainColorAttachment2D(device, handle, surfaceFormat.format, imageExtent));
         images.push_back(image);
     }
     return images;

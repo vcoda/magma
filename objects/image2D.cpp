@@ -26,10 +26,8 @@ Image2D::Image2D(std::shared_ptr<const Device> device, VkFormat format,
     Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1}, mipLevels, 1, samples, usage)
 {}
 
-Image2D::Image2D(std::shared_ptr<const Device> device,
-    VkImage image,
-    VkFormat format):
-    Image(device, image, VK_IMAGE_TYPE_2D, format)
+Image2D::Image2D(std::shared_ptr<const Device> device, VkImage handle, VkFormat format, const VkExtent2D& extent):
+    Image(device, handle, VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1})
 {}
 
 Image2D::Image2D(std::shared_ptr<const Device> device, 
@@ -82,9 +80,8 @@ DepthStencilAttachment2D::DepthStencilAttachment2D(std::shared_ptr<const Device>
 {}
 
 SwapchainColorAttachment2D::SwapchainColorAttachment2D(std::shared_ptr<const Device> device,
-    VkImage image,
-    VkFormat format):
-    Image2D(device, image, format)
+    VkImage handle, VkFormat format, const VkExtent2D& extent):
+    Image2D(device, handle, format, extent)
 {}
 
 SwapchainColorAttachment2D::~SwapchainColorAttachment2D()

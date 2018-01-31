@@ -53,9 +53,10 @@ namespace magma
             VkImageUsageFlags usage,
             VkImageCreateFlags flags = 0);
         Image(std::shared_ptr<const Device> device, 
-            VkImage image,
+            VkImage handle,
             VkImageType imageType, 
-            VkFormat format);
+            VkFormat format,
+            const VkExtent3D& extent);
         VkDeviceSize getCopyRegions(const std::vector<VkExtent2D>& mipExtents,
             const std::vector<VkDeviceSize>& mipSizes,
             std::vector<VkBufferImageCopy>& copyRegions) const;
