@@ -23,11 +23,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ImageView::ImageView(std::shared_ptr<const Device> device, 
-    std::shared_ptr<const Image> image,
+ImageView::ImageView(std::shared_ptr<const Image> image,
 	uint32_t mipLevelCount, /* 0 */
 	VkComponentMapping swizzle /* R, G, B, A */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT, device),
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT, image->getDevice()),
     image(image)
 {
 	VkImageViewCreateInfo info;

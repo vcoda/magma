@@ -26,8 +26,7 @@ namespace magma
     class ImageView : public NonDispatchable<VkImageView>
     {
     public:
-	    ImageView(std::shared_ptr<const Device> device, 
-            std::shared_ptr<const Image> image, 
+	    ImageView(std::shared_ptr<const Image> image, 
 		    uint32_t mipLevelCount = 0,
 		    VkComponentMapping swizzle = {VK_COMPONENT_SWIZZLE_R,
 		                                  VK_COMPONENT_SWIZZLE_G,
