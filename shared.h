@@ -44,19 +44,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_STRINGIZE_FIELD(x) case x: return MAGMA_STRINGIZE(x); break
 
 #ifdef _MSC_VER
+#   define MAGMA_MALLOC(size) _mm_malloc(size, 16)
+#   define MAGMA_FREE(p) _mm_free(p)
 #   define MAGMA_ALLOCA(size) _malloca(size)
 #   define MAGMA_FREEA(p) _freea(p)
 #else
+#   define MAGMA_MALLOC(size) malloc(size)
+#   define MAGMA_FREE(p) free(size)
 #   define MAGMA_ALLOCA(size) alloca(size)
 #   define MAGMA_FREEA(p) 
 #endif
 
-#define MAGMA_MAX_STACK_ALLOC 1024
-
-#define MAGMA_ALIGNED_MALLOC(size) _mm_malloc(size, 16)
-#define MAGMA_ALIGNED_FREE(p) _mm_free(p)
 #define MAGMA_ALIGN(size) ((size + 15) & ~(15)) 
 #define MAGMA_ALIGNED(p) (((uintptr_t)(const void *)(p)) % (16) == 0)
+
+#define MAGMA_MAX_STACK_ALLOC 1024
 
 #define MAGMA_SUCCEEDED(result)\
     ((VK_SUCCESS == result) ||\
