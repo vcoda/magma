@@ -31,12 +31,7 @@ namespace magma
             size_t bytecodeSize);
         ShaderModule(std::shared_ptr<const Device> device,
             const std::vector<uint32_t>& bytecode);
-        ShaderModule(std::shared_ptr<const Device>,
-            const std::string& filename);
         ~ShaderModule();
-
-    private:
-        std::vector<uint32_t> loadSPIRVBytecode(const std::string& filename) const;
     };
 
     class SpecializationEntry : public VkSpecializationMapEntry

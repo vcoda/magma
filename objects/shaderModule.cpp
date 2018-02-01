@@ -15,7 +15,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include <fstream>
 #include "shaderModule.h"
 #include "device.h"
 #include "../shared.h"
@@ -40,30 +39,9 @@ ShaderModule::ShaderModule(std::shared_ptr<const Device> device, const std::vect
     ShaderModule(device, bytecode.data(), bytecode.size() * sizeof(uint32_t))
 {}    
 
-ShaderModule::ShaderModule(std::shared_ptr<const Device> device, const std::string& filename):
-    ShaderModule(device, loadSPIRVBytecode(filename))
-{}
-
 ShaderModule::~ShaderModule()
 {
     vkDestroyShaderModule(*device, handle, nullptr);
-}
-
-std::vector<uint32_t> ShaderModule::loadSPIRVBytecode(const std::string& filename) const
-{
-    std::vector<uint32_t> bytecode;
-    std::ifstream file(filename, std::ios::binary | std::ios::in | std::ios::ate);
-    if (!file.is_open())
-        MAGMA_THROW("failed to open file \"" + filename + "\"");
-    const std::streamsize bytecodeSize = file.tellg();
-    if (!bytecodeSize)
-        MAGMA_THROW("file \"" + filename + "\" is empty");
-    file.seekg(0, std::ios::beg);
-    MAGMA_ASSERT(bytecodeSize % sizeof(uint32_t) == 0);
-    bytecode.resize(static_cast<size_t>(bytecodeSize) / sizeof(uint32_t));
-    file.read(reinterpret_cast<char *>(bytecode.data()), bytecodeSize);
-    file.close();
-    return bytecode;
 }
 
 Specialization::Specialization(const Specialization& other)
