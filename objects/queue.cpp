@@ -112,20 +112,21 @@ bool Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
     VkPresentInfoKHR info;
     info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
     info.pNext = nullptr;
+    VkSemaphore dereferencedWaitSemaphore;
     if (waitSemaphore)
     {
-        const VkSemaphore dereferencedWaitSemaphores[1] = {*waitSemaphore};
+        dereferencedWaitSemaphore = *waitSemaphore;
         info.waitSemaphoreCount = 1;
-        info.pWaitSemaphores = dereferencedWaitSemaphores;
+        info.pWaitSemaphores = &dereferencedWaitSemaphore;
     }
     else
     {
         info.waitSemaphoreCount = 0;
         info.pWaitSemaphores = nullptr;
     }
-    const VkSwapchainKHR dereferencedSwapchains[1] = {*swapchain};
+    const VkSwapchainKHR dereferencedSwapchain = *swapchain;
     info.swapchainCount = 1;
-    info.pSwapchains = dereferencedSwapchains;
+    info.pSwapchains = &dereferencedSwapchain;
     info.pImageIndices = &imageIndex;
     info.pResults = nullptr;
     const VkResult present = vkQueuePresentKHR(handle, &info);
