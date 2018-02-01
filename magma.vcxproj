@@ -176,7 +176,6 @@
     <ClInclude Include="objects\sampler.h" />
     <ClInclude Include="objects\semaphore.h" />
     <ClInclude Include="objects\shaderModule.h" />
-    <ClInclude Include="objects\stagingBuffer.h" />
     <ClInclude Include="objects\surface.h" />
     <ClInclude Include="objects\swapchain.h" />
     <ClInclude Include="objects\transferBuffer.h" />
@@ -239,7 +238,6 @@
     <ClCompile Include="objects\sampler.cpp" />
     <ClCompile Include="objects\semaphore.cpp" />
     <ClCompile Include="objects\shaderModule.cpp" />
-    <ClCompile Include="objects\stagingBuffer.cpp" />
     <ClCompile Include="objects\surface.cpp" />
     <ClCompile Include="objects\swapchain.cpp" />
     <ClCompile Include="objects\transferBuffer.cpp" />

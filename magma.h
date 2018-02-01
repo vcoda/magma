@@ -50,7 +50,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/sampler.h"
 #include "objects/semaphore.h"
 #include "objects/shaderModule.h"
-#include "objects/stagingBuffer.h"
 #include "objects/surface.h"
 #include "objects/swapchain.h"
 #include "objects/uniformBuffer.h"

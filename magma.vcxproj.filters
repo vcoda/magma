@@ -150,9 +150,6 @@
     <ClInclude Include="objects\shaderModule.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="objects\stagingBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="objects\surface.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -389,9 +386,6 @@
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="objects\indexBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="objects\stagingBuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="objects\queryPool.cpp">
