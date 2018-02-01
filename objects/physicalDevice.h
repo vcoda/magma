@@ -47,8 +47,10 @@ namespace magma
     class PhysicalDevice : public Handle<VkPhysicalDevice>,
         public std::enable_shared_from_this<PhysicalDevice>
     {
-    public:
-        PhysicalDevice(VkPhysicalDevice physicalDevice);   
+        PhysicalDevice(VkPhysicalDevice physicalDevice);
+        friend class Instance;
+
+    public: 
         const VkPhysicalDeviceFeatures& getFeatures() const;
         const VkPhysicalDeviceProperties& getProperties() const;
         VkFormatProperties getFormatProperties(VkFormat format) const;
