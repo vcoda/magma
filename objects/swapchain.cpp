@@ -26,10 +26,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Swapchain::Swapchain(std::shared_ptr<const Surface> surface, uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& imageExtent,
+Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surface> surface, uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& imageExtent,
 	VkPresentModeKHR presentMode,
 	VkSwapchainCreateFlagsKHR flags /* 0 */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT, surface->getDevice()),
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT, device),
     surfaceFormat(surfaceFormat),
     imageExtent(imageExtent)
 {

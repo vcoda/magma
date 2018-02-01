@@ -31,7 +31,8 @@ namespace magma
     class Swapchain : public NonDispatchable<VkSwapchainKHR>
     {
     public:
-	    Swapchain(std::shared_ptr<const Surface> surface, 
+	    Swapchain(std::shared_ptr<Device> device,
+            std::shared_ptr<const Surface> surface,
             uint32_t minImageCount, 
             VkSurfaceFormatKHR surfaceFormat,
             const VkExtent2D& imageExtent,
