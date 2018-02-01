@@ -22,12 +22,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-BufferView::BufferView(std::shared_ptr<const Device> device,
-    std::shared_ptr<const Buffer> buffer,
+BufferView::BufferView(std::shared_ptr<const Buffer> buffer,
     VkFormat format,
     VkDeviceSize offset /* 0 */,
     VkDeviceSize range /* VK_WHOLE_SIZE */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_VIEW_EXT, device),
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_VIEW_EXT, buffer->getDevice()),
     buffer(buffer)
 {
     VkBufferViewCreateInfo info;

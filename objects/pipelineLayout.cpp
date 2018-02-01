@@ -37,14 +37,14 @@ PipelineLayout::PipelineLayout(std::shared_ptr<const Device> device):
     MAGMA_THROW_FAILURE(create, "failed to create pipeline layout");
 }
 
-PipelineLayout::PipelineLayout(std::shared_ptr<const Device> device, std::shared_ptr<const DescriptorSetLayout> setLayout,
+PipelineLayout::PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLayout,
     const std::vector<VkPushConstantRange>& pushConstantRanges /* {} */):
-    PipelineLayout(device, std::vector<std::shared_ptr<const DescriptorSetLayout>>{setLayout}, pushConstantRanges)
+    PipelineLayout(std::vector<std::shared_ptr<const DescriptorSetLayout>>{setLayout}, pushConstantRanges)
 {}
 
-PipelineLayout::PipelineLayout(std::shared_ptr<const Device> device, const std::vector<std::shared_ptr<const DescriptorSetLayout>>& setLayouts,
+PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<const DescriptorSetLayout>>& setLayouts,
     const std::vector<VkPushConstantRange>& pushConstantRanges /* {} */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_LAYOUT_EXT, device)
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_LAYOUT_EXT, setLayouts[0]->getDevice())
 {
     VkPipelineLayoutCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
