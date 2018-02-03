@@ -246,6 +246,13 @@ inline void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLayout>& 
     vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * values.size()), values.data());
 }
 
+template<typename Type>
+inline void CommandBuffer::pushConstantBlock(const std::shared_ptr<PipelineLayout>& layout, const Type& block,
+    VkShaderStageFlags stageFlags /* VK_SHADER_STAGE_ALL_GRAPHICS */) noexcept
+{
+    vkCmdPushConstants(handle, *layout, stageFlags, 0, static_cast<uint32_t>(sizeof(Type)), &block);
+}
+
 inline void CommandBuffer::setRenderArea(const VkRect2D& rc) noexcept
 {
     renderArea = rc;

@@ -236,6 +236,10 @@ namespace magma
             VkShaderStageFlags stageFlags, 
             const std::vector<Type>& values,
             uint32_t offset = 0) noexcept;
+        template<typename Type> void pushConstantBlock(
+            const std::shared_ptr<PipelineLayout>& layout,
+            const Type& block,
+            VkShaderStageFlags stageFlags = VK_SHADER_STAGE_ALL_GRAPHICS) noexcept;
 
         void beginRenderPass(
             const std::shared_ptr<RenderPass>& renderPass,
