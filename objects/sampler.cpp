@@ -49,8 +49,8 @@ Sampler::Sampler(std::shared_ptr<const Device> device, const SamplerState& state
     MAGMA_THROW_FAILURE(create, "failed to create sampler");
 }
 
-Sampler::Sampler(std::shared_ptr<const Device> device, 
-    VkFilter magFilter, VkFilter minFilter, VkSamplerMipmapMode mipmapMode, VkSamplerAddressMode addressMode, 
+Sampler::Sampler(std::shared_ptr<const Device> device, VkFilter magFilter, VkFilter minFilter, 
+    VkSamplerMipmapMode mipmapMode, VkSamplerAddressMode addressMode, 
     float mipLodBias /* 0 */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT, device)
 {
@@ -77,8 +77,38 @@ Sampler::Sampler(std::shared_ptr<const Device> device,
     MAGMA_THROW_FAILURE(create, "failed to create sampler");
 }
 
+Sampler::Sampler(std::shared_ptr<const Device> device):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT, device)
+{}
+
 Sampler::~Sampler()
 {
     vkDestroySampler(*device, handle, nullptr);
+}
+
+UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<const Device> device, bool linearFilter):
+    Sampler(device)
+{
+    VkSamplerCreateInfo info;
+    info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+    info.pNext = nullptr;
+    info.flags = 0;
+    info.magFilter = linearFilter ? VK_FILTER_LINEAR : VK_FILTER_NEAREST;
+    info.minFilter = linearFilter ? VK_FILTER_LINEAR : VK_FILTER_NEAREST;
+    info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
+    info.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+    info.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+    info.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+    info.mipLodBias = 0.f;
+    info.anisotropyEnable = VK_FALSE;
+    info.maxAnisotropy = 0.f;
+    info.compareEnable = VK_FALSE;
+    info.compareOp = VK_COMPARE_OP_NEVER;
+    info.minLod = 0.f;
+    info.maxLod = 0.f;
+    info.borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK;
+    info.unnormalizedCoordinates = VK_TRUE;
+    const VkResult create = vkCreateSampler(*device, &info, nullptr, &handle);
+    MAGMA_THROW_FAILURE(create, "failed to create unnormalized sampler");
 }
 } // namespace magma

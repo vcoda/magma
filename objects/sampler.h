@@ -35,7 +35,15 @@ namespace magma
             VkSamplerAddressMode addressMode,
             float mipLodBias = 0.f);
         ~Sampler();
+
+    protected:
+        Sampler(std::shared_ptr<const Device> device);
     };
 
+    class UnnormalizedSampler : public Sampler
     {
+    public:
+        UnnormalizedSampler(std::shared_ptr<const Device> device,
+            bool linearFilter);
+    };
 } // namespace magma
