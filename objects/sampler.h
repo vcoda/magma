@@ -37,31 +37,5 @@ namespace magma
         ~Sampler();
     };
 
-    namespace samplers
     {
-        extern const SamplerState nearestMipmapNearestRepeat;
-        extern const SamplerState linearMipmapNearestRepeat;
-        extern const SamplerState linearMipmapLinearRepeat;
-        extern const SamplerState anisotropicRepeat;
-
-        extern const SamplerState nearestMipmapNearestMirroredRepeat;
-        extern const SamplerState linearMipmapNearestMirroredRepeat;
-        extern const SamplerState linearMipmapLinearMirroredRepeat;
-        extern const SamplerState anisotropicMirroredRepeat;
-
-        extern const SamplerState nearestMipmapNearestClampToEdge;
-        extern const SamplerState linearMipmapNearestClampToEdge;
-        extern const SamplerState linearMipmapLinearClampToEdge;
-        extern const SamplerState anisotropicClampToEdge;
-
-        extern const SamplerState nearestMipmapNearestClampToBorder;
-        extern const SamplerState linearMipmapNearestClampToBorder;
-        extern const SamplerState linearMipmapLinearClampToBorder;
-        extern const SamplerState anisotropicClampToBorder;
-
-        extern const SamplerState nearestMipmapNearestMirrorClampToEdge;
-        extern const SamplerState linearMipmapNearestMirrorClampToEdge;
-        extern const SamplerState linearMipmapLinearMirrorClampToEdge;
-        extern const SamplerState anisotropicMirrorClampToEdge;
-    } // namespace samplers
 } // namespace magma
