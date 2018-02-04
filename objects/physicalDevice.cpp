@@ -30,10 +30,7 @@ DeviceQueueDescriptor::DeviceQueueDescriptor(VkQueueFlagBits queueType,
     sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
     pNext = nullptr;
     flags = 0;
-    const std::vector<VkQueueFamilyProperties> queueFamilyProperties = device->getQueueFamilyProperties();
-    queueFamilyIndex = getFamilyIndex(queueType, queueFamilyProperties, queueType != VK_QUEUE_GRAPHICS_BIT);
-    if (-1 == queueFamilyIndex)
-        queueFamilyIndex = getFamilyIndex(queueType, queueFamilyProperties, false);
+    queueFamilyIndex = getFamilyIndex(queueType, device->getQueueFamilyProperties());
     if (-1 == queueFamilyIndex)
         MAGMA_THROW("could not find suitable queue family");
     for (float priority : queuePriorities)
@@ -64,16 +61,35 @@ DeviceQueueDescriptor::~DeviceQueueDescriptor()
 }
 
 uint32_t DeviceQueueDescriptor::getFamilyIndex(VkQueueFlagBits queueType,
-    const std::vector<VkQueueFamilyProperties>& queueFamilyProperties,
-    bool skipGraphics) const
+    const std::vector<VkQueueFamilyProperties>& queueFamilyProperties) const
 {
+    if (VK_QUEUE_COMPUTE_BIT == queueType)
+    {   // Try to find dedicated compute queue
+        uint32_t queueFamilyIndex = 0;
+        for (const auto& property : queueFamilyProperties)
+        {
+            if ((property.queueFlags & VK_QUEUE_COMPUTE_BIT) && !(property.queueFlags & VK_QUEUE_GRAPHICS_BIT))
+                return queueFamilyIndex;
+            ++queueFamilyIndex;
+        }
+    } else if (VK_QUEUE_TRANSFER_BIT == queueType)
+    {   // Try to find dedicated transfer queue
+        uint32_t queueFamilyIndex = 0;
+        for (const auto& property : queueFamilyProperties)
+        {
+            if (property.queueFlags & VK_QUEUE_TRANSFER_BIT)
+            {
+                VkFlags graphicsCompute = property.queueFlags & (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT);
+                if (!graphicsCompute)
+                    return queueFamilyIndex;
+            }
+            ++queueFamilyIndex;
+        }
+    }
     uint32_t queueFamilyIndex = 0;
-    for (const auto& prop : queueFamilyProperties)
-    {
-        bool found = prop.queueFlags & queueType;
-        if (skipGraphics)
-            found = found && !(prop.queueFlags & VK_QUEUE_GRAPHICS_BIT);
-        if (found)
+    for (const auto& property : queueFamilyProperties)
+    {   // Try to find any suitable family
+        if (property.queueFlags & queueType)
             return queueFamilyIndex;
         ++queueFamilyIndex;
     }

@@ -37,8 +37,7 @@ namespace magma
 
     private:
         uint32_t getFamilyIndex(VkQueueFlagBits queueType,
-            const std::vector<VkQueueFamilyProperties>& queueFamilyProperties,
-            bool skipGraphics) const;
+            const std::vector<VkQueueFamilyProperties>& queueFamilyProperties) const;
     };
 
     class Device;
