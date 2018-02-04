@@ -17,18 +17,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "deviceMemory.h"
 #include "device.h"
+#include "physicalDevice.h"
 #include "../shared.h"
 
 namespace magma
 {
-static uint32_t getMemoryTypeIndex(VkMemoryPropertyFlags flags)
-{
-    // TODO: implement proper memory type selection
-    if (VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT == flags)
-        return 0;
-    return 1;
-}
-
 DeviceMemory::DeviceMemory(std::shared_ptr<const Device> device, VkDeviceSize size, VkMemoryPropertyFlags flags):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT, device),
     size(size)
@@ -37,7 +30,29 @@ DeviceMemory::DeviceMemory(std::shared_ptr<const Device> device, VkDeviceSize si
     info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     info.pNext = nullptr;
     info.allocationSize = size;
-    info.memoryTypeIndex = getMemoryTypeIndex(flags);
+    info.memoryTypeIndex = VK_MAX_MEMORY_TYPES;
+    const VkPhysicalDeviceMemoryProperties& properties = device->getPhysicalDevice()->getMemoryProperties();
+    for (uint32_t i = 0; i < properties.memoryTypeCount; ++i)
+    {   // Try to find exact match
+        if (properties.memoryTypes[i].propertyFlags == flags)
+        {
+            info.memoryTypeIndex = i;
+            break;
+        }
+    }
+    if (VK_MAX_MEMORY_TYPES == info.memoryTypeIndex)
+    {   
+        for (uint32_t i = 0; i < properties.memoryTypeCount; ++i)
+        {   // Try to find any suitable memory type
+            if ((properties.memoryTypes[i].propertyFlags & flags) == flags)
+            {
+                info.memoryTypeIndex = i;
+                break;
+            }
+        }
+        if (VK_MAX_MEMORY_TYPES == info.memoryTypeIndex)
+            MAGMA_THROW("failed to find suitable memory type");
+    }
     const VkResult allocate = vkAllocateMemory(*device, &info, nullptr, &handle);
     MAGMA_THROW_FAILURE(allocate, "failed to allocate memory");
 }
