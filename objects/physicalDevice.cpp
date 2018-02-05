@@ -31,11 +31,9 @@ DeviceQueueDescriptor::DeviceQueueDescriptor(VkQueueFlagBits queueType,
     pNext = nullptr;
     flags = 0;
     queueFamilyIndex = getFamilyIndex(queueType, device->getQueueFamilyProperties());
-    if (-1 == queueFamilyIndex)
-        MAGMA_THROW("could not find suitable queue family");
+    queueCount = MAGMA_COUNT(queuePriorities);
     for (float priority : queuePriorities)
         MAGMA_ASSERT(priority >= 0.f && priority <= 1.f);
-    queueCount = MAGMA_COUNT(queuePriorities);
     pQueuePriorities = helpers::copy(new float[queueCount], queuePriorities);
 }
 
@@ -68,8 +66,12 @@ uint32_t DeviceQueueDescriptor::getFamilyIndex(VkQueueFlagBits queueType,
         uint32_t queueFamilyIndex = 0;
         for (const auto& property : queueFamilyProperties)
         {
-            if ((property.queueFlags & VK_QUEUE_COMPUTE_BIT) && !(property.queueFlags & VK_QUEUE_GRAPHICS_BIT))
-                return queueFamilyIndex;
+            if (property.queueFlags & VK_QUEUE_COMPUTE_BIT)
+            {
+                const VkFlags hasGraphics = property.queueFlags & VK_QUEUE_GRAPHICS_BIT;
+                if (!hasGraphics)
+                    return queueFamilyIndex;
+            }
             ++queueFamilyIndex;
         }
     } else if (VK_QUEUE_TRANSFER_BIT == queueType)
@@ -79,8 +81,8 @@ uint32_t DeviceQueueDescriptor::getFamilyIndex(VkQueueFlagBits queueType,
         {
             if (property.queueFlags & VK_QUEUE_TRANSFER_BIT)
             {
-                VkFlags graphicsCompute = property.queueFlags & (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT);
-                if (!graphicsCompute)
+                const VkFlags hasGraphicsOrCompute = property.queueFlags & (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT);
+                if (!hasGraphicsOrCompute)
                     return queueFamilyIndex;
             }
             ++queueFamilyIndex;
@@ -93,7 +95,8 @@ uint32_t DeviceQueueDescriptor::getFamilyIndex(VkQueueFlagBits queueType,
             return queueFamilyIndex;
         ++queueFamilyIndex;
     }
-    return -1;
+    MAGMA_THROW("could not find suitable queue family");
+    return 0;
 }
 
 PhysicalDevice::PhysicalDevice(VkPhysicalDevice physicalDevice):
