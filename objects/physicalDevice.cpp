@@ -220,14 +220,22 @@ std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
     return createDevice(queueDescriptors, noLayers, extensions, noFeatures);
 }
 
-bool PhysicalDevice::surfaceSupported(std::shared_ptr<Surface> surface) const
+bool PhysicalDevice::getSurfaceSupport(std::shared_ptr<Surface> surface) const
 {
     VkBool32 supported = VK_FALSE;
     const VkResult get = vkGetPhysicalDeviceSurfaceSupportKHR(handle, 0, *surface, &supported);
     return (VK_SUCCESS == get) && (VK_TRUE == supported);
 }
 
-std::vector<VkSurfaceFormatKHR> PhysicalDevice::getSurfaceFormats(std::shared_ptr<Surface> surface) const
+VkSurfaceCapabilitiesKHR PhysicalDevice::getSurfaceCapabilities(std::shared_ptr<const Surface> surface) const
+{
+    VkSurfaceCapabilitiesKHR caps;
+    const VkResult get = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(handle, *surface, &caps);
+    MAGMA_THROW_FAILURE(get, "failed to get surface capabilities");
+    return caps;
+}
+
+std::vector<VkSurfaceFormatKHR> PhysicalDevice::getSurfaceFormats(std::shared_ptr<const Surface> surface) const
 {
     uint32_t formatCount = 0;
     const VkResult count = vkGetPhysicalDeviceSurfaceFormatsKHR(handle, *surface, &formatCount, nullptr);
@@ -238,9 +246,14 @@ std::vector<VkSurfaceFormatKHR> PhysicalDevice::getSurfaceFormats(std::shared_pt
     return surfaceFormats;
 }
 
-void PhysicalDevice::getSurfaceCapabilities(std::shared_ptr<Surface> surface, VkSurfaceCapabilitiesKHR& caps) const
+std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared_ptr<const Surface> surface) const
 {
-    const VkResult get = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(handle, *surface, &caps);
-    MAGMA_THROW_FAILURE(get, "failed to get surface capabilities");
+    uint32_t presentModeCount = 0;
+    const VkResult count = vkGetPhysicalDeviceSurfacePresentModesKHR(handle, *surface, &presentModeCount, nullptr);
+    MAGMA_THROW_FAILURE(count, "failed to count surface present modes");
+    std::vector<VkPresentModeKHR> surfacePresentModes(presentModeCount);
+    const VkResult get = vkGetPhysicalDeviceSurfacePresentModesKHR(handle, *surface, &presentModeCount, surfacePresentModes.data());
+    MAGMA_THROW_FAILURE(get, "failed to get surface present modes");
+    return surfacePresentModes;
 }
 } // namespace magma
