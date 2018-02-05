@@ -20,26 +20,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <set>
 #include <string>
 #include "handle.h"
+#include "../misc/deviceQueueDesc.h"
 
 namespace magma
 {
-    class PhysicalDevice;
-
-    class DeviceQueueDescriptor : public VkDeviceQueueCreateInfo
-    {
-    public:
-        DeviceQueueDescriptor(VkQueueFlagBits queueType,
-            std::shared_ptr<const PhysicalDevice> device,
-            const std::vector<float>& queuePriorities = {1.f});
-        DeviceQueueDescriptor(const DeviceQueueDescriptor&);
-        DeviceQueueDescriptor& operator=(const DeviceQueueDescriptor&);
-        ~DeviceQueueDescriptor();
-
-    private:
-        uint32_t getFamilyIndex(VkQueueFlagBits queueType,
-            const std::vector<VkQueueFamilyProperties>& queueFamilyProperties) const;
-    };
-
     class Device;
     class Surface;
 

@@ -249,6 +249,9 @@
     <ClInclude Include="helpers\alignedMemcpy.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
+    <ClInclude Include="misc\deviceQueueDesc.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
@@ -417,6 +420,9 @@
     </ClCompile>
     <ClCompile Include="objects\imageCube.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="misc\deviceQueueDesc.cpp">
+      <Filter>Source Files\misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

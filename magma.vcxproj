@@ -135,6 +135,7 @@
     <ClInclude Include="misc\clearAttachment.h" />
     <ClInclude Include="misc\clearValue.h" />
     <ClInclude Include="misc\debugMarker.h" />
+    <ClInclude Include="misc\deviceQueueDesc.h" />
     <ClInclude Include="misc\exception.h" />
     <ClInclude Include="misc\extensions.h" />
     <ClInclude Include="misc\format.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="descriptors\attachment.cpp" />
     <ClCompile Include="descriptors\subpass.cpp" />
     <ClCompile Include="misc\debugMarker.cpp" />
+    <ClCompile Include="misc\deviceQueueDesc.cpp" />
     <ClCompile Include="misc\exception.cpp" />
     <ClCompile Include="misc\extensions.cpp" />
     <ClCompile Include="misc\format.cpp" />
