@@ -69,12 +69,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptors/bindings.h"
 #include "descriptors/descriptors.h"
 #include "descriptors/subpass.h"
-
+                            
+#include "misc/clearAttachment.h"
 #include "misc/clearValue.h"
 #include "misc/debugMarker.h"
-#include "misc/format.h"
+#include "misc/deviceQueueDesc.h"
 #include "misc/exception.h"
 #include "misc/extensions.h"
+#include "misc/format.h"
+#include "misc/imageMemoryBarrier.h"
+#include "misc/pushConstants.h"
 #include "misc/scissor.h"
 #include "misc/viewport.h"
 
