@@ -63,7 +63,7 @@ namespace magma
 
     namespace states
     {
-        extern const VertexInputState noVertices;
+        extern const VertexInputState nullVertexInput;
 
         extern const VertexInputState pos2Float;
         extern const VertexInputState pos3Float;

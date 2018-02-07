@@ -81,7 +81,7 @@ VertexInputState::~VertexInputState()
 
 namespace states
 {
-const VertexInputState noVertices;
+const VertexInputState nullVertexInput;
 
 const VertexInputState pos2Float(VertexInputBinding(0, sizeof(float) * 2),
     VertexInputAttribute(0, 0, VK_FORMAT_R32G32_SFLOAT, 0));
