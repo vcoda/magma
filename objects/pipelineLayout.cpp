@@ -22,7 +22,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-PipelineLayout::PipelineLayout(std::shared_ptr<const Device> device):
+PipelineLayout::PipelineLayout(std::shared_ptr<const Device> device,
+    const std::initializer_list<VkPushConstantRange>& pushConstantRanges /* {} */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_LAYOUT_EXT, device)
 {
     VkPipelineLayoutCreateInfo info;
@@ -31,19 +32,19 @@ PipelineLayout::PipelineLayout(std::shared_ptr<const Device> device):
     info.flags = 0;
     info.setLayoutCount = 0;
     info.pSetLayouts = nullptr;
-    info.pushConstantRangeCount = 0;
-    info.pPushConstantRanges = nullptr;
+    info.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
+    info.pPushConstantRanges = pushConstantRanges.begin();
     const VkResult create = vkCreatePipelineLayout(*device, &info, nullptr, &handle);
     MAGMA_THROW_FAILURE(create, "failed to create pipeline layout");
 }
 
 PipelineLayout::PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLayout,
-    const std::vector<VkPushConstantRange>& pushConstantRanges /* {} */):
+    const std::initializer_list<VkPushConstantRange>& pushConstantRanges /* {} */):
     PipelineLayout(std::vector<std::shared_ptr<const DescriptorSetLayout>>{setLayout}, pushConstantRanges)
 {}
 
 PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<const DescriptorSetLayout>>& setLayouts,
-    const std::vector<VkPushConstantRange>& pushConstantRanges /* {} */):
+    const std::initializer_list<VkPushConstantRange>& pushConstantRanges /* {} */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_LAYOUT_EXT, setLayouts[0]->getDevice())
 {
     VkPipelineLayoutCreateInfo info;
@@ -56,7 +57,7 @@ PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<const Descripto
     info.setLayoutCount = MAGMA_COUNT(dereferencedSetLayouts);
     info.pSetLayouts = dereferencedSetLayouts;
     info.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
-    info.pPushConstantRanges = pushConstantRanges.data();
+    info.pPushConstantRanges = pushConstantRanges.begin();
     const VkResult create = vkCreatePipelineLayout(*device, &info, nullptr, &handle);
     MAGMA_THROW_FAILURE(create, "failed to create pipeline layout");
 }
