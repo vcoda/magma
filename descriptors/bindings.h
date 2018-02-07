@@ -54,14 +54,14 @@ namespace magma
             ComputeStageBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_COMPUTE_BIT) {}
         };
 
-        struct AllGraphicsStageBinding : DescriptorSetLayout::Binding
+        struct GraphicsStageBinding : DescriptorSetLayout::Binding
         {
-            AllGraphicsStageBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_ALL_GRAPHICS) {}
+            GraphicsStageBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_ALL_GRAPHICS) {}
         };
 
-        struct AllStageBinding : DescriptorSetLayout::Binding
+        struct AllStagesBinding : DescriptorSetLayout::Binding
         {
-            AllStageBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_ALL) {}
+            AllStagesBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_ALL) {}
         };
     } // namespace bindings
 } // namespace magma
