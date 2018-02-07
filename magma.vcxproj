@@ -140,6 +140,7 @@
     <ClInclude Include="misc\extensions.h" />
     <ClInclude Include="misc\format.h" />
     <ClInclude Include="misc\imageMemoryBarrier.h" />
+    <ClInclude Include="misc\pushConstants.h" />
     <ClInclude Include="misc\scissor.h" />
     <ClInclude Include="misc\viewport.h" />
     <ClInclude Include="objects\buffer.h" />

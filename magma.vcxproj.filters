@@ -252,6 +252,9 @@
     <ClInclude Include="misc\deviceQueueDesc.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
+    <ClInclude Include="misc\pushConstants.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
