@@ -37,6 +37,12 @@ namespace magma
             FragmentStageBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_FRAGMENT_BIT) {}
         };
 
+        struct VertexGeometryStageBinding : DescriptorSetLayout::Binding
+        {
+            VertexGeometryStageBinding(uint32_t binding, const Descriptor& descriptor):
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT) {}
+        };
+
         struct VertexFragmentStageBinding : DescriptorSetLayout::Binding
         {
             VertexFragmentStageBinding(uint32_t binding, const Descriptor& descriptor): 
