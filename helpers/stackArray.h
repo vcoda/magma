@@ -93,6 +93,6 @@ namespace magma
 
 // Macro to call alloca() in the stack frame of the variable declaration
 #define MAGMA_STACK_ARRAY(Type, var, count)\
-    MAGMA_ASSERT(sizeof(Type) * count < MAGMA_MAX_STACK_ALLOC);\
+    MAGMA_ASSERT(sizeof(Type) * (count) < MAGMA_MAX_STACK_ALLOC);\
     magma::helpers::StackArray<Type> var(\
-        count ? MAGMA_ALLOCA(sizeof(Type) * count) : nullptr, count)
+        (count) ? MAGMA_ALLOCA(sizeof(Type) * (count)) : nullptr, (count))
