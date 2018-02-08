@@ -40,6 +40,12 @@ namespace magma
         };
 
         template<typename Type>
+        struct FragmentConstantRange : PushConstantRange<Type>
+        {
+            FragmentConstantRange(uint32_t offset = 0): PushConstantRange(VK_SHADER_STAGE_FRAGMENT_BIT, offset) {}
+        };
+
+        template<typename Type>
         struct VertexGeometryConstantRange : PushConstantRange<Type>
         {
             VertexGeometryConstantRange(uint32_t offset = 0): PushConstantRange(VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT, offset) {}
