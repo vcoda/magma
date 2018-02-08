@@ -35,10 +35,13 @@ VertexBuffer::VertexBuffer(std::shared_ptr<const Device> device, const void *dat
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
     vertexCount(vertexCount)
 {
-    if (void *buffer = memory->map(0, size))
+    if (data)
     {
-        helpers::alignedMemcpy(buffer, data, static_cast<size_t>(size));
-        memory->unmap();
+        if (void *buffer = memory->map(0, size))
+        {
+            helpers::alignedMemcpy(buffer, data, static_cast<size_t>(size));
+            memory->unmap();
+        }
     }
 }
 
