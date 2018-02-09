@@ -47,7 +47,7 @@ namespace magma
 
     public:
         bool begin(VkCommandBufferUsageFlags flags = 0) noexcept;
-        bool begin(
+        bool beginInherited(
             const std::shared_ptr<RenderPass>& renderPass, 
             uint32_t subpass, 
             const std::shared_ptr<Framebuffer>& framebuffer,

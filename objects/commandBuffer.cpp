@@ -61,7 +61,7 @@ bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
     return (VK_SUCCESS == begin);
 }
 
-bool CommandBuffer::begin(const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass, const std::shared_ptr<Framebuffer>& framebuffer,
+bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass, const std::shared_ptr<Framebuffer>& framebuffer,
     VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
     VkCommandBufferInheritanceInfo inheritanceInfo;
@@ -76,7 +76,7 @@ bool CommandBuffer::begin(const std::shared_ptr<RenderPass>& renderPass, uint32_
     VkCommandBufferBeginInfo beginInfo;
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.pNext = nullptr;
-    beginInfo.flags = flags;
+    beginInfo.flags = flags | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT;
     beginInfo.pInheritanceInfo = &inheritanceInfo;
     const VkResult begin = vkBeginCommandBuffer(handle, &beginInfo);
     return (VK_SUCCESS == begin);
