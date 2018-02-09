@@ -58,6 +58,7 @@ bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
     beginInfo.flags = flags;
     beginInfo.pInheritanceInfo = nullptr;
     const VkResult begin = vkBeginCommandBuffer(handle, &beginInfo);
+    MAGMA_ASSERT(VK_SUCCESS == begin);
     return (VK_SUCCESS == begin);
 }
 
@@ -79,12 +80,14 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     beginInfo.flags = flags | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT;
     beginInfo.pInheritanceInfo = &inheritanceInfo;
     const VkResult begin = vkBeginCommandBuffer(handle, &beginInfo);
+    MAGMA_ASSERT(VK_SUCCESS == begin);
     return (VK_SUCCESS == begin);
 }
 
 bool CommandBuffer::end() noexcept
 {
     const VkResult end = vkEndCommandBuffer(handle);
+    MAGMA_ASSERT(VK_SUCCESS == end);
     return (VK_SUCCESS == end);
 }
 
@@ -94,6 +97,7 @@ bool CommandBuffer::reset(bool releaseResources) noexcept
     if (releaseResources)
         flags |= VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT;
     const VkResult reset = vkResetCommandBuffer(handle, flags);
+    MAGMA_ASSERT(VK_SUCCESS == reset);
     return (VK_SUCCESS == reset);
 }
 
