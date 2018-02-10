@@ -69,7 +69,6 @@ void *DeviceMemory::map(
 {
     void *data;
     const VkResult map = vkMapMemory(*device, handle, offset, size, flags, &data);
-    MAGMA_ASSERT(MAGMA_ALIGNED(data));
     return (VK_SUCCESS == map) ? data : nullptr;
 }
 
