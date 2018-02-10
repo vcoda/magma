@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <vector>
 #include "../shared.h"
 
 namespace magma
@@ -37,6 +38,12 @@ namespace magma
             MAGMA_ASSERT(MAGMA_ALIGNED(src));
 #endif // _M_AMD64
             return memcpy(dst, src, size);
+        }
+
+        template<typename Type>
+        inline void *alignedMemcpy(void *dst, const std::vector<Type>& src)
+        {
+            return alignedMemcpy(dst, src.data(), sizeof(Type) * src.size());
         }
     } // namespace helpers
 } // namespace magma
