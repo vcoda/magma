@@ -122,13 +122,17 @@ inline void CommandBuffer::setStencilReference(bool frontFace, bool backFace, ui
 }
 
 inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<PipelineLayout>& pipelineLayout, const std::shared_ptr<DescriptorSet>& descriptorSet, 
-    uint32_t offset /* 0 */,
     VkPipelineBindPoint pipelineBindPoint /* VK_PIPELINE_BIND_POINT_GRAPHICS */) noexcept
 {
     const VkDescriptorSet dereferencedDescriptorSets[1] = {*descriptorSet};
-    vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, 1, dereferencedDescriptorSets, 
-        offset ? 1 : 0, 
-        offset ? &offset : nullptr);
+    vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, 1, dereferencedDescriptorSets, 0, nullptr);
+}
+
+inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<PipelineLayout>& pipelineLayout, const std::shared_ptr<DescriptorSet>& descriptorSet, uint32_t dynamic0ffset,
+    VkPipelineBindPoint pipelineBindPoint /* VK_PIPELINE_BIND_POINT_GRAPHICS */) noexcept
+{
+    const VkDescriptorSet dereferencedDescriptorSets[1] = {*descriptorSet};
+    vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, 1, dereferencedDescriptorSets, 1, &dynamic0ffset);
 }
 
 template <uint32_t descriptorSetCount>
