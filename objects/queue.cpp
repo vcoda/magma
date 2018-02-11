@@ -44,6 +44,7 @@ bool Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& comm
     MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCommandBuffers, commandBuffers.size());
     MAGMA_STACK_ARRAY(VkSemaphore, dereferencedWaitSemaphores, waitSemaphores.size());
     MAGMA_STACK_ARRAY(VkSemaphore, dereferencedSignalSemaphores, signalSemaphores.size());
+    // https://www.khronos.org/registry/vulkan/specs/1.0/man/html/VkSubmitInfo.html
     VkSubmitInfo info;
     info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     info.pNext = nullptr;
@@ -51,6 +52,7 @@ bool Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& comm
     {
         info.waitSemaphoreCount = 0;
         info.pWaitSemaphores = nullptr;
+        info.pWaitDstStageMask = nullptr;
     }
     else
     {
@@ -58,8 +60,8 @@ bool Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& comm
             dereferencedWaitSemaphores.put(*semaphore);
         info.waitSemaphoreCount = MAGMA_COUNT(dereferencedWaitSemaphores);
         info.pWaitSemaphores = dereferencedWaitSemaphores;
+        info.pWaitDstStageMask = &waitStageMask;
     }
-    info.pWaitDstStageMask = &waitStageMask;  
     for (const auto& cmdBuffer : commandBuffers)
         dereferencedCommandBuffers.put(*cmdBuffer);
     info.commandBufferCount = MAGMA_COUNT(dereferencedCommandBuffers);
