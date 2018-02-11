@@ -47,7 +47,7 @@ SourceTransferBuffer::SourceTransferBuffer(std::shared_ptr<const Device> device,
 
 DestTransferBuffer::DestTransferBuffer(std::shared_ptr<const Device> device,
     VkDeviceSize size,
-    VkBufferCreateFlags flags /* 0 */) :
+    VkBufferCreateFlags flags /* 0 */):
     Buffer(device, size, VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags,
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
 {}
