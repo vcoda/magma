@@ -33,4 +33,12 @@ namespace magma
             const std::vector<uint8_t>& data,
             VkBufferCreateFlags flags = 0);
     };
+
+    class DestTransferBuffer : public Buffer
+    {
+    public:
+        DestTransferBuffer(std::shared_ptr<const Device> device,
+            VkDeviceSize size,
+            VkBufferCreateFlags flags = 0);
+    };
 } // namespace magma

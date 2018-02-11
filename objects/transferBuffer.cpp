@@ -44,4 +44,11 @@ SourceTransferBuffer::SourceTransferBuffer(std::shared_ptr<const Device> device,
     VkBufferCreateFlags flags /* 0 */):
     SourceTransferBuffer(device, data.data(), static_cast<VkDeviceSize>(data.size()), flags)
 {}
+
+DestTransferBuffer::DestTransferBuffer(std::shared_ptr<const Device> device,
+    VkDeviceSize size,
+    VkBufferCreateFlags flags /* 0 */) :
+    Buffer(device, size, VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
+{}
 } // namespace magma
