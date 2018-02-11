@@ -27,6 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptorSet.h"
 #include "pipelineLayout.h"
 #include "pipeline.h"
+#include "../misc/bufferMemoryBarrier.h"
 #include "../helpers/stackArray.h"
 
 namespace magma
@@ -169,6 +170,7 @@ void CommandBuffer::copyImageToBuffer(const std::shared_ptr<Image>& srcImage, Vk
 }
 
 void CommandBuffer::pipelineImageBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkImageMemoryBarrier>& barriers) noexcept
+void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::shared_ptr<Buffer>& buffer, const BufferMemoryBarrier& barrier) noexcept
 {
     vkCmdPipelineBarrier(handle, 
         srcStageMask, dstStageMask, 0,
@@ -176,6 +178,18 @@ void CommandBuffer::pipelineImageBarrier(VkPipelineStageFlags srcStageMask, VkPi
         0, nullptr,
         MAGMA_COUNT(barriers),
         barriers.data());
+    const BufferMemoryBarrier bufferBarrier(buffer, barrier);
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, 0, 0, nullptr, 1, &bufferBarrier, 0, nullptr);
+}
+
+void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<std::shared_ptr<Buffer>>& buffers, const BufferMemoryBarrier& barrier) noexcept
+{
+    MAGMA_STACK_ARRAY(VkBufferMemoryBarrier, barriers, buffers.size());
+    for (const auto& buffer : buffers)
+        barriers.put(BufferMemoryBarrier(buffer, barrier));
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, 0, 0, nullptr, MAGMA_COUNT(barriers), barriers, 0, nullptr);
+}
+
 }
 
 void CommandBuffer::beginQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex, bool precise) noexcept
