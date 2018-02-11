@@ -16,14 +16,16 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <memory>
 #include "../vulkan.h"
 
 namespace magma
 {
+    class Image;
+
     struct ImageMemoryBarrier : VkImageMemoryBarrier
     {
-        ImageMemoryBarrier(
-            VkImage image, 
+        ImageMemoryBarrier(const std::shared_ptr<Image> image,
             VkImageLayout oldLayout, 
             VkImageLayout newLayout, 
             VkImageSubresourceRange subresourceRange);

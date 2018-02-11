@@ -16,14 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "imageMemoryBarrier.h"
+#include "../objects/image.h"
 
 namespace magma
 {
-ImageMemoryBarrier::ImageMemoryBarrier(
-    VkImage image,
-    VkImageLayout oldLayout,
-    VkImageLayout newLayout,
-    VkImageSubresourceRange subresourceRange)
+ImageMemoryBarrier::ImageMemoryBarrier(const std::shared_ptr<Image> image,
+    VkImageLayout oldLayout, VkImageLayout newLayout, VkImageSubresourceRange subresourceRange)
 {
     sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
     pNext = nullptr;
@@ -55,7 +53,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(
     this->newLayout = newLayout;
     srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
     dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-    this->image = image;
+    this->image = *image;
     this->subresourceRange = subresourceRange;
 }
 } // namespace magma
