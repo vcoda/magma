@@ -174,7 +174,7 @@ namespace magma
             const std::shared_ptr<Buffer>& dstBuffer,
             VkDeviceSize srcOffset = 0,
             VkDeviceSize dstOffset = 0,
-            VkDeviceSize size = 0) const noexcept;
+            VkDeviceSize size = VK_WHOLE_SIZE) const noexcept;
         void copyBuffer(
             const std::shared_ptr<Buffer>& srcBuffer,
             const std::shared_ptr<Buffer>& dstBuffer,

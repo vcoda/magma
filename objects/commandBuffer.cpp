@@ -140,13 +140,15 @@ void CommandBuffer::bindPipeline(const std::shared_ptr<ComputePipeline>& pipelin
 // inline void CommandBuffer::dispatchIndirect
 
 void CommandBuffer::copyBuffer(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Buffer>& dstBuffer,
-    VkDeviceSize srcOffset /* 0 */, VkDeviceSize dstOffset /* 0 */, VkDeviceSize size /* 0 */) const noexcept
+    VkDeviceSize srcOffset /* 0 */, VkDeviceSize dstOffset /* 0 */, VkDeviceSize size /* VK_WHOLE_SIZE */) const noexcept
 {
     VkBufferCopy region;
     region.srcOffset = srcOffset;
     region.dstOffset = dstOffset;
-    region.size = size ? size : std::min(srcBuffer->getMemory()->getSize(),
-        dstBuffer->getMemory()->getSize());
+    if (VK_WHOLE_SIZE == size)
+        region.size = dstBuffer->getMemory()->getSize();
+    else
+        region.size = size;
     vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, 1, &region);
 }
 
