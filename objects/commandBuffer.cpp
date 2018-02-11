@@ -28,6 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineLayout.h"
 #include "pipeline.h"
 #include "../misc/bufferMemoryBarrier.h"
+#include "../misc/imageMemoryBarrier.h"
 #include "../helpers/stackArray.h"
 
 namespace magma
@@ -169,15 +170,8 @@ void CommandBuffer::copyImageToBuffer(const std::shared_ptr<Image>& srcImage, Vk
     vkCmdCopyImageToBuffer(handle, *srcImage, srcImageLayout, *dstBuffer, MAGMA_COUNT(regions), regions.data());
 }
 
-void CommandBuffer::pipelineImageBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkImageMemoryBarrier>& barriers) noexcept
 void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::shared_ptr<Buffer>& buffer, const BufferMemoryBarrier& barrier) noexcept
 {
-    vkCmdPipelineBarrier(handle, 
-        srcStageMask, dstStageMask, 0,
-        0, nullptr,
-        0, nullptr,
-        MAGMA_COUNT(barriers),
-        barriers.data());
     const BufferMemoryBarrier bufferBarrier(buffer, barrier);
     vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, 0, 0, nullptr, 1, &bufferBarrier, 0, nullptr);
 }
@@ -190,6 +184,9 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
     vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, 0, 0, nullptr, MAGMA_COUNT(barriers), barriers, 0, nullptr);
 }
 
+void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier) noexcept
+{
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, 0, 0, nullptr, 0, nullptr, 1, &barrier);
 }
 
 void CommandBuffer::beginQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex, bool precise) noexcept

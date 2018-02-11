@@ -40,6 +40,7 @@ namespace magma
     struct Scissor;
     struct ClearValue;
     struct ClearAttachment;
+    struct ImageMemoryBarrier;
 
     // Methods order follows Vulkan API order
     class CommandBuffer : public Handle<VkCommandBuffer>
@@ -212,9 +213,9 @@ namespace magma
             const std::shared_ptr<Event>& event,
             VkPipelineStageFlags stageMask) noexcept; // TODO: implement
         void waitEvents() noexcept; // TODO: implement
-        void pipelineImageBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkImageMemoryBarrier>& barriers) noexcept;
         void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::shared_ptr<Buffer>& buffer, const BufferMemoryBarrier& barrier) noexcept;
         void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<std::shared_ptr<Buffer>>& buffers, const BufferMemoryBarrier& barrier) noexcept;
+        void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier) noexcept;
         void beginQuery(
             const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex,
