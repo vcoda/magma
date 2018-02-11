@@ -50,8 +50,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/sampler.h"
 #include "objects/semaphore.h"
 #include "objects/shaderModule.h"
+#include "objects/storageBuffer.h"
 #include "objects/surface.h"
 #include "objects/swapchain.h"
+#include "objects/transferBuffer.h"
 #include "objects/uniformBuffer.h"
 #include "objects/vertexBuffer.h"
 
@@ -70,6 +72,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptors/descriptors.h"
 #include "descriptors/subpass.h"
                             
+#include "misc/bufferMemoryBarrier.h"
 #include "misc/clearAttachment.h"
 #include "misc/clearValue.h"
 #include "misc/debugMarker.h"

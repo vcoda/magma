@@ -255,6 +255,12 @@
     <ClInclude Include="misc\pushConstants.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
+    <ClInclude Include="misc\bufferMemoryBarrier.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="objects\storageBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
@@ -426,6 +432,12 @@
     </ClCompile>
     <ClCompile Include="misc\deviceQueueDesc.cpp">
       <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="misc\bufferMemoryBarrier.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\storageBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
