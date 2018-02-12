@@ -34,23 +34,14 @@ namespace magma
             const void *data, VkDeviceSize size,
             uint32_t vertexCount,  
             VkBufferCreateFlags flags = 0);
-
-        template <typename VertexType>
+        template<typename VertexType>
         VertexBuffer(std::shared_ptr<const Device> device,
             const std::vector<VertexType>& vertices,
-            VkBufferCreateFlags flags = 0):
-            VertexBuffer(device, vertices.data(), static_cast<VkDeviceSize>(sizeof(VertexType) * vertices.size()), 
-                static_cast<uint32_t>(vertices.size()), flags)
-        {}
-
-        template <typename VertexType>
+            VkBufferCreateFlags flags = 0);
+        template<typename VertexType>
         VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const std::vector<VertexType>& vertices,
-            VkBufferCreateFlags flags = 0):
-            VertexBuffer(copyCmdBuffer, vertices.data(), static_cast<VkDeviceSize>(sizeof(VertexType) * vertices.size()), 
-                static_cast<uint32_t>(vertices.size()), flags)
-        {}
-
+            VkBufferCreateFlags flags = 0);
         uint32_t getVertexCount() const { return vertexCount; }
 
     protected:
@@ -63,4 +54,20 @@ namespace magma
     private:
         uint32_t vertexCount;
     };
+
+    template<typename VertexType>
+    inline VertexBuffer::VertexBuffer(std::shared_ptr<const Device> device,
+        const std::vector<VertexType>& vertices,
+        VkBufferCreateFlags flags /* 0 */):
+        VertexBuffer(device, vertices.data(), static_cast<VkDeviceSize>(sizeof(VertexType) * vertices.size()),
+            static_cast<uint32_t>(vertices.size()), flags)
+    {}
+
+    template<typename VertexType>
+    VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+        const std::vector<VertexType>& vertices,
+        VkBufferCreateFlags flags /* 0 */):
+        VertexBuffer(copyCmdBuffer, vertices.data(), static_cast<VkDeviceSize>(sizeof(VertexType) * vertices.size()),
+            static_cast<uint32_t>(vertices.size()), flags)
+    {}
 } // namespace magma
