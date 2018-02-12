@@ -27,7 +27,10 @@ namespace magma
             VkBlendFactor srcBlendFactor,
             VkBlendFactor dstBlendFactor,
             VkBlendOp blendOp, 
-            VkColorComponentFlags colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
+            VkColorComponentFlags colorWriteMask = VK_COLOR_COMPONENT_R_BIT | 
+                                                   VK_COLOR_COMPONENT_G_BIT | 
+                                                   VK_COLOR_COMPONENT_B_BIT | 
+                                                   VK_COLOR_COMPONENT_A_BIT);
     };
 
     class ColorBlendState final : public VkPipelineColorBlendStateCreateInfo
