@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "imageMemoryBarrier.h"
 #include "../objects/image.h"
+#include "../shared.h"
 
 namespace magma
 {
@@ -30,24 +31,67 @@ ImageMemoryBarrier::ImageMemoryBarrier(const std::shared_ptr<Image> image,
     case VK_IMAGE_LAYOUT_UNDEFINED:
         srcAccessMask = 0;
         break;
-    case VK_IMAGE_LAYOUT_PREINITIALIZED:
-        srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;
+    case VK_IMAGE_LAYOUT_GENERAL:
+        // Supports all types of device access, not recommended due to lower performance.
+        srcAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT |
+            VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
+            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
+            VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
+        srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
+        srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
+        srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
+        srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
         break;
     case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
         srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
         break;
+    case VK_IMAGE_LAYOUT_PREINITIALIZED:
+        srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;
+        break;
+    default:
+        MAGMA_THROW_NOT_IMPLEMENTED();
     }
     switch (newLayout)
     {
+    case VK_IMAGE_LAYOUT_GENERAL:
+        // Supports all types of device access, not recommended due to lower performance.
+        dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT |
+            VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
+            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
+            VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
+        dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
+        dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL:
+        if (VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL == oldLayout)
+            throw Exception("Image memory barrier not neccessary");
+        dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
+        if (0 == srcAccessMask)
+            srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT | VK_ACCESS_HOST_WRITE_BIT;
+        dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+        break;
     case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
         dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
         break;
     case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
         dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
         break;
-    case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
-        dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-        break;
+    default:
+        MAGMA_THROW_NOT_IMPLEMENTED();
     }
     this->oldLayout = oldLayout;
     this->newLayout = newLayout;
