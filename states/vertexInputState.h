@@ -21,9 +21,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class VertexInputBinding : public VkVertexInputBindingDescription
+    struct VertexInputBinding : VkVertexInputBindingDescription
     {
-    public:
         VertexInputBinding(uint32_t binding, uint32_t stride,
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX)
         {
@@ -33,9 +32,8 @@ namespace magma
         }
     };
 
-    class VertexInputAttribute : public VkVertexInputAttributeDescription
+    struct VertexInputAttribute : VkVertexInputAttributeDescription
     {
-    public:
         VertexInputAttribute(uint32_t binding, uint32_t location, VkFormat format, uint32_t offset)
         {
             this->location = location;

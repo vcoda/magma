@@ -20,9 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class StencilOpState : public VkStencilOpState
+    struct StencilOpState : VkStencilOpState
     {
-    public:
         StencilOpState(VkStencilOp failOp,
             VkStencilOp passOp,
             VkStencilOp depthFailOp,
@@ -37,9 +36,8 @@ namespace magma
         extern const StencilOpState stencilAlwaysDontWrite;
     }
 
-    class DepthStencilState : public VkPipelineDepthStencilStateCreateInfo
+    struct DepthStencilState : VkPipelineDepthStencilStateCreateInfo
     {
-    public:
         DepthStencilState(VkCompareOp depthCompareOp,
             bool depthWriteEnable,
             const StencilOpState& front = states::stencilAlwaysDontWrite,

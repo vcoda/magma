@@ -20,9 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class MultisampleState : public VkPipelineMultisampleStateCreateInfo
+    struct MultisampleState : VkPipelineMultisampleStateCreateInfo
     {
-    public:
         MultisampleState(VkSampleCountFlagBits rasterizationSamples, 
             bool sampleShading = false, 
             bool alphaToCoverage = false, 
