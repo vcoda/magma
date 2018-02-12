@@ -52,11 +52,13 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const voi
     std::shared_ptr<SourceTransferBuffer> srcBuffer(new SourceTransferBuffer(device, data, size));
     copyCmdBuffer->begin();
     {
+        // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
+        const auto dstBuffer = std::shared_ptr<IndexBuffer>(this, [](IndexBuffer *) {});
         VkBufferCopy region;
         region.srcOffset = 0;
         region.dstOffset = 0;
         region.size = size;
-        vkCmdCopyBuffer(*copyCmdBuffer, *srcBuffer, handle, 1, &region);
+        copyCmdBuffer->copyBuffer(srcBuffer, dstBuffer, region);
     }
     copyCmdBuffer->end();
     std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_TRANSFER_BIT, 0));
