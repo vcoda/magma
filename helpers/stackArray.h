@@ -58,6 +58,7 @@ namespace magma
             Type *end() { return stack + count; }
             const Type *end() const { return stack + count; }
             uint32_t size() const { return count; }
+            // This method allows to avoid additional indexing variable in range-based loops
             uint32_t put(const Type& elem)
             {
                 MAGMA_ASSERT(stack);
