@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "vertexBuffer.h"
 #include "commandBuffer.h"
 #include "transferBuffer.h"
+#include "deviceMemory.h"
 #include "queue.h"
 #include "../helpers/alignedMemcpy.h"
 

@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "imageCube.h"
 #include "transferBuffer.h"
+#include "deviceMemory.h"
 #include "../helpers/alignedMemcpy.h"
 
 namespace magma

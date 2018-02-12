@@ -16,6 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "buffer.h"
+#include "device.h"
+#include "deviceMemory.h"
 #include "../shared.h"
 
 namespace magma

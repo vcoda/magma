@@ -16,11 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "device.h"
-#include "deviceMemory.h"
+#include "handle.h"
 
 namespace magma
 {
+    class DeviceMemory;
+
     class Buffer : public NonDispatchable<VkBuffer>
     {
     public:
