@@ -39,6 +39,8 @@ namespace magma
     struct Viewport;
     struct Scissor;
     struct ClearValue;
+    struct ColorClear;
+    struct DepthStencilClear;
     struct ClearAttachment;
     struct ImageMemoryBarrier;
 
@@ -179,43 +181,68 @@ namespace magma
             const std::shared_ptr<Buffer>& srcBuffer,
             const std::shared_ptr<Buffer>& dstBuffer,
             const VkBufferCopy& region) const noexcept;
-        void copyBuffer(
-            const std::shared_ptr<Buffer>& srcBuffer,
-            const std::shared_ptr<Buffer>& dstBuffer,
-            const std::vector<VkBufferCopy>& regions) const noexcept;
-        void copyImage() const noexcept; // TODO: implement
-        void blitImage() const noexcept; // TODO: implement
+
+        void copyImage(
+            const std::shared_ptr<Image>& srcImage, 
+            const std::shared_ptr<Image>& dstImage, 
+            const VkImageCopy& region) const noexcept;
+        void blitImage(
+            const std::shared_ptr<Image>& srcImage, 
+            const std::shared_ptr<Image>& dstImage, 
+            const VkImageBlit& region, 
+            VkFilter filter) const noexcept;
+
         void copyBufferToImage(
-            const std::shared_ptr<Buffer>& srcBuffer, 
+            const std::shared_ptr<Buffer>& srcBuffer,
             const std::shared_ptr<Image>& dstImage,
             VkImageLayout dstImageLayout,
-            const std::vector<VkBufferImageCopy>& regions) const noexcept;
+            const VkBufferImageCopy& region) const noexcept;
         void copyImageToBuffer(
             const std::shared_ptr<Image>& srcImage,
-            VkImageLayout srcImageLayout, 
             const std::shared_ptr<Buffer>& dstBuffer, 
-            const std::vector<VkBufferImageCopy>& regions) const noexcept;
+            const VkBufferImageCopy& region) const noexcept;
+
         template<typename Type>
         void updateBuffer(
-            const std::shared_ptr<Buffer>& dstBuffer, 
+            const std::shared_ptr<Buffer>& buffer, 
             const std::vector<Type>& data,
             VkDeviceSize offset = 0) const noexcept;
-        void fillBuffer() const noexcept; // TODO: implement
-        void clearColorImage() const noexcept; // TODO: implement
-        void clearDepthStencilImage() const noexcept; // TODO: implement
-        void clearAttachments(const std::initializer_list<ClearAttachment>& attachments, const VkClearRect& clearRect) const noexcept;
-        void resolveImage() const noexcept; // TODO: implement
+        template<typename Type>
+        void fillBuffer(const std::shared_ptr<Buffer>& dstBuffer,
+            const std::vector<Type>& data,
+            VkDeviceSize offset = 0) const noexcept;  
+
+        void clearColorImage(
+            const std::shared_ptr<Image>& image, 
+            const ColorClear& color, 
+            const VkImageSubresourceRange& range) const noexcept;
+        void clearDepthStencilImage(
+            const std::shared_ptr<Image>& image, 
+            const DepthStencilClear& depthStencil, 
+            const VkImageSubresourceRange& range) const noexcept;
+        void clearAttachments(
+            const std::initializer_list<ClearAttachment>& attachments, 
+            const VkClearRect& clearRect) const noexcept;
+        void resolveImage(
+            const std::shared_ptr<Image>& srcImage, 
+            const std::shared_ptr<Image>& dstImage, 
+            const VkImageResolve& region) const noexcept;
 
         void setEvent(
             const std::shared_ptr<Event>& event,
-            VkPipelineStageFlags stageMask) noexcept; // TODO: implement
+            VkPipelineStageFlags stageMask) noexcept;
         void resetEvent(
             const std::shared_ptr<Event>& event,
-            VkPipelineStageFlags stageMask) noexcept; // TODO: implement
-        void waitEvents() noexcept; // TODO: implement
+            VkPipelineStageFlags stageMask) noexcept;
+        void waitEvent(
+            std::shared_ptr<Event>&event); 
+        void waitEvents(
+            std::vector<std::shared_ptr<Event>>& events);
+
         void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::shared_ptr<Buffer>& buffer, const BufferMemoryBarrier& barrier) noexcept;
         void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<std::shared_ptr<Buffer>>& buffers, const BufferMemoryBarrier& barrier) noexcept;
         void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier) noexcept;
+        
         void beginQuery(
             const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex,

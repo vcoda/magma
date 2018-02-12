@@ -220,7 +220,7 @@ inline void CommandBuffer::dispatchIndirect(const std::shared_ptr<Buffer>& buffe
 }
 
 template<typename Type>
-inline void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& dstBuffer, const std::vector<Type>& data,
+inline void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, const std::vector<Type>& data,
     VkDeviceSize offset /* 0 */) const noexcept
 {
     /* Buffer updates performed with vkCmdUpdateBuffer first copy the data 
@@ -228,12 +228,14 @@ inline void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& dstBuffer
        (which requires additional storage and may incur an additional allocation), 
        and then copy the data from the command buffer into dstBuffer 
        when the command is executed on a device. */
-    vkCmdUpdateBuffer(handle, *dstBuffer, offset, static_cast<uint32_t>(sizeof(Type) * data.size()), data.data());
+    vkCmdUpdateBuffer(handle, *buffer, offset, static_cast<uint32_t>(sizeof(Type) * data.size()), data.data());
 }
 
-inline void CommandBuffer::clearAttachments(const std::initializer_list<ClearAttachment>& attachments, const VkClearRect& clearRect) const noexcept
+template<typename Type>
+inline void CommandBuffer::fillBuffer(const std::shared_ptr<Buffer>& dstBuffer, const std::vector<Type>& data,
+    VkDeviceSize offset /* 0 */) const noexcept
 {
-    vkCmdClearAttachments(handle, MAGMA_COUNT(attachments), attachments.begin(), 1, &clearRect);
+    vkCmdFillBuffer(handle, *buffer, offset, static_cast<uint32_t>(sizeof(Type) * data.size()), data.data());
 }
 
 template<typename Type, uint32_t pushConstantCount>

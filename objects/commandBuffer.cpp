@@ -27,6 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptorSet.h"
 #include "pipelineLayout.h"
 #include "pipeline.h"
+#include "event.h"
 #include "../misc/bufferMemoryBarrier.h"
 #include "../misc/imageMemoryBarrier.h"
 #include "../helpers/stackArray.h"
@@ -157,19 +158,69 @@ void CommandBuffer::copyBuffer(const std::shared_ptr<Buffer>& srcBuffer, const s
     vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, 1, &region);
 }
 
-void CommandBuffer::copyBuffer(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Buffer>& dstBuffer, const std::vector<VkBufferCopy>& regions) const noexcept
+void CommandBuffer::copyImage(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Image>& dstImage, const VkImageCopy& region) const noexcept
 {
-    vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, MAGMA_COUNT(regions), regions.data());
+    vkCmdCopyImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &region);
 }
 
-void CommandBuffer::copyBufferToImage(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Image>& dstImage, VkImageLayout dstImageLayout, const std::vector<VkBufferImageCopy>& regions) const noexcept
+void CommandBuffer::blitImage(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Image>& dstImage, const VkImageBlit& region, VkFilter filter) const noexcept
 {
-    vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstImageLayout, MAGMA_COUNT(regions), regions.data());
+    vkCmdBlitImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &region, filter);
 }
 
-void CommandBuffer::copyImageToBuffer(const std::shared_ptr<Image>& srcImage, VkImageLayout srcImageLayout, const std::shared_ptr<Buffer>& dstBuffer, const std::vector<VkBufferImageCopy>& regions) const noexcept
+void CommandBuffer::copyBufferToImage(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Image>& dstImage, VkImageLayout dstImageLayout, const VkBufferImageCopy& region) const noexcept
 {
-    vkCmdCopyImageToBuffer(handle, *srcImage, srcImageLayout, *dstBuffer, MAGMA_COUNT(regions), regions.data());
+    vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstImageLayout, 1, &region);
+}
+
+void CommandBuffer::copyImageToBuffer(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Buffer>& dstBuffer, const VkBufferImageCopy& region) const noexcept
+{
+    vkCmdCopyImageToBuffer(handle, *srcImage, srcImage->getLayout(), *dstBuffer, 1, &region);
+}
+
+// inline void CommandBuffer::updateBuffer()
+// inline void CommandBuffer::fillBuffer()
+
+void CommandBuffer::clearColorImage(const std::shared_ptr<Image>& image, const ColorClear& color, const VkImageSubresourceRange& range) const noexcept
+{
+    const VkClearValue clearValue = color;
+    vkCmdClearColorImage(handle, *image, VK_IMAGE_LAYOUT_GENERAL, &clearValue.color, 1, &range);
+}
+
+void CommandBuffer::clearDepthStencilImage(const std::shared_ptr<Image>& image, const DepthStencilClear& depthStencil, const VkImageSubresourceRange& range) const noexcept
+{
+    const VkClearValue clearValue = depthStencil;
+    vkCmdClearDepthStencilImage(handle, *image, VK_IMAGE_LAYOUT_GENERAL, &clearValue.depthStencil, 1, &range);
+}
+
+void CommandBuffer::clearAttachments(const std::initializer_list<ClearAttachment>& attachments, const VkClearRect& clearRect) const noexcept
+{
+    vkCmdClearAttachments(handle, MAGMA_COUNT(attachments), attachments.begin(), 1, &clearRect);
+}
+
+void CommandBuffer::resolveImage(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Image>& dstImage, const VkImageResolve& region) const noexcept
+{
+    vkCmdResolveImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &region);
+}
+
+void CommandBuffer::setEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags stageMask) noexcept
+{
+    vkCmdSetEvent(handle, *event, stageMask);
+}
+
+void CommandBuffer::resetEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags stageMask) noexcept
+{
+    vkCmdResetEvent(handle, *event, stageMask);
+}
+
+void CommandBuffer::waitEvent(std::shared_ptr<Event>& event)
+{
+    MAGMA_THROW_NOT_IMPLEMENTED();
+}
+
+void CommandBuffer::waitEvents(std::vector<std::shared_ptr<Event>>& events)
+{
+    MAGMA_THROW_NOT_IMPLEMENTED();
 }
 
 void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::shared_ptr<Buffer>& buffer, const BufferMemoryBarrier& barrier) noexcept
