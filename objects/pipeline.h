@@ -38,13 +38,14 @@ namespace magma
         std::unique_ptr<PipelineLayout> defaultLayout;
     };
 
+    struct InputAssemblyState;
+    struct TesselationState;
+    struct RasterizationState;
+    struct MultisampleState;
+    struct DepthStencilState;
+    
     class VertexInputState;
-    class InputAssemblyState;
-    class TesselationState;
     class ViewportState;
-    class RasterizationState;
-    class MultisampleState;
-    class DepthStencilState;
     class ColorBlendState;
     class RenderPass;
 
