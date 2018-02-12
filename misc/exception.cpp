@@ -88,4 +88,10 @@ const char *BadResultException::codeString() const
 	}
 	return "<unknown>";
 }
+
+NotImplementedException::NotImplementedException(const char *const function,
+    const char *file, int line):
+    Exception(function, file, line)
+{}
+
 } // namespace magma

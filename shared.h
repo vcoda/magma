@@ -68,6 +68,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_THROW_FAILURE(result, message)\
     if (!MAGMA_SUCCEEDED(result))\
 	    throw magma::BadResultException(result, message, __FILE__, __LINE__)
+#ifdef _MSC_VER
+#   define MAGMA_THROW_NOT_IMPLEMENTED() throw NotImplementedException(__FUNCSIG__, __FILE__, __LINE__)
+#else
+#   define MAGMA_THROW_NOT_IMPLEMENTED() throw NotImplementedException(__PRETTY_FUNCTION__, __FILE__, __LINE__)
+#endif
 
 #ifdef MAGMA_DEBUG
 #   define MAGMA_REPORT_FAILURE(result, message)\

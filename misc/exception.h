@@ -50,4 +50,11 @@ namespace magma
     private:
 	    VkResult result;
     };
+
+    class NotImplementedException : public Exception
+    {
+    public:
+        NotImplementedException(const char *const function, 
+            const char *file, int line);
+    };
 } // namespace magma
