@@ -34,7 +34,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_BOOLEAN(x) x ? VK_TRUE : VK_FALSE
 #define MAGMA_COUNT(v) static_cast<uint32_t>(v.size())
-#define MAGMA_ASSERT(x) assert(x)
+
+#ifdef _DEBUG
+#   ifndef MAGMA_ASSERT
+#       define MAGMA_ASSERT(x) assert(x)
+#   endif
+#   define MAGMA_DEBUG_VARIABLE(var, value) var = value
+#else
+#   define MAGMA_ASSERT(x)
+#   define MAGMA_DEBUG_VARIABLE(var, value)
+#endif
 
 #define MAGMA_STENCIL_FACE_MASK(frontFace, backFace)\
     ((frontFace && backFace) ? VK_STENCIL_FRONT_AND_BACK :\
