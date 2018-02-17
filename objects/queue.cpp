@@ -108,8 +108,8 @@ bool Queue::waitIdle() noexcept
     return (VK_SUCCESS == wait);
 }
 
-bool Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex, 
-    std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */) noexcept
+void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex, 
+    std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */)
 {
     VkPresentInfoKHR info;
     info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -132,6 +132,6 @@ bool Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
     info.pImageIndices = &imageIndex;
     info.pResults = nullptr;
     const VkResult present = vkQueuePresentKHR(handle, &info);
-    return (VK_SUCCESS == present);
+    MAGMA_THROW_FAILURE(present, "queue present failed");
 }
 } // namespace magma
