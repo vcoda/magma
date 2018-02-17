@@ -126,6 +126,7 @@ inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<PipelineLayou
 {
     const VkDescriptorSet dereferencedDescriptorSets[1] = {*descriptorSet};
     vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, 1, dereferencedDescriptorSets, 0, nullptr);
+    MAGMA_DEBUG_VARIABLE(hasDescriptorSet, true);
 }
 
 inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<PipelineLayout>& pipelineLayout, const std::shared_ptr<DescriptorSet>& descriptorSet, uint32_t dynamic0ffset,
@@ -133,6 +134,7 @@ inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<PipelineLayou
 {
     const VkDescriptorSet dereferencedDescriptorSets[1] = {*descriptorSet};
     vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, 1, dereferencedDescriptorSets, 1, &dynamic0ffset);
+    MAGMA_DEBUG_VARIABLE(hasDescriptorSet, true);
 }
 
 template <uint32_t descriptorSetCount>
@@ -145,6 +147,7 @@ inline void CommandBuffer::bindDescriptorSets(const std::shared_ptr<PipelineLayo
         dereferencedDescriptorSets.put(*descriptorSets[i]);
     vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, descriptorSetCount, dereferencedDescriptorSets,
         MAGMA_COUNT(offsets), offsets.begin());
+    MAGMA_DEBUG_VARIABLE(hasDescriptorSet, true);
 }
 
 inline void CommandBuffer::bindDescriptorSets(const std::shared_ptr<PipelineLayout>& pipelineLayout, const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
@@ -156,6 +159,7 @@ inline void CommandBuffer::bindDescriptorSets(const std::shared_ptr<PipelineLayo
         dereferencedDescriptorSets.put(*descriptorSet);
     vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, dereferencedDescriptorSets.size(), dereferencedDescriptorSets,
         MAGMA_COUNT(offsets), offsets.begin());
+    MAGMA_DEBUG_VARIABLE(hasDescriptorSet, true);
 }
 
 inline void CommandBuffer::bindIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer, VkDeviceSize offset /* 0 */) noexcept
@@ -181,41 +185,49 @@ inline void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::v
 
 inline void CommandBuffer::draw(uint32_t vertexCount, uint32_t firstVertex) const noexcept
 {
+    MAGMA_ASSERT(hasDescriptorSet);
     vkCmdDraw(handle, vertexCount, 1, firstVertex, 0);
 }
 
 inline void CommandBuffer::drawInstanced(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance) const noexcept
 {
+    MAGMA_ASSERT(hasDescriptorSet);
     vkCmdDraw(handle, vertexCount, instanceCount, firstVertex, firstInstance);
 }
 
 inline void CommandBuffer::drawIndexed(uint32_t indexCount, uint32_t firstIndex, int32_t vertexOffset /* 0 */) const noexcept
 {
+    MAGMA_ASSERT(hasDescriptorSet);
     vkCmdDrawIndexed(handle, indexCount, 1, firstIndex, vertexOffset, 0);
 }
 
 inline void CommandBuffer::drawIndexedInstanced(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t vertexOffset, uint32_t firstInstance) const noexcept
 {
+    MAGMA_ASSERT(hasDescriptorSet);
     vkCmdDrawIndexed(handle, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
 }
 
 inline void CommandBuffer::drawIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset, uint32_t drawCount, uint32_t stride) const noexcept
 {
+    MAGMA_ASSERT(hasDescriptorSet);
     vkCmdDrawIndirect(handle, *buffer, offset, drawCount, stride);
 }
 
 inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset, uint32_t drawCount, uint32_t stride) const noexcept
 {
+    MAGMA_ASSERT(hasDescriptorSet);
     vkCmdDrawIndexedIndirect(handle, *buffer, offset, drawCount, stride);
 }
 
 inline void CommandBuffer::dispatch(uint32_t x, uint32_t y, uint32_t z) const noexcept
 {
+    MAGMA_ASSERT(hasDescriptorSet);
     vkCmdDispatch(handle, x, y, z);
 }
 
 inline void CommandBuffer::dispatchIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset) const noexcept
 {
+    MAGMA_ASSERT(hasDescriptorSet);
     vkCmdDispatchIndirect(handle, *buffer, offset);
 }
 
