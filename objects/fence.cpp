@@ -46,14 +46,14 @@ bool Fence::reset() noexcept
     return (VK_SUCCESS == reset);
 }
 
+VkResult Fence::getStatus() const noexcept
+{
+    return vkGetFenceStatus(*device, handle);
+}
+
 bool Fence::wait(uint64_t timeout /* UINT64_MAX */) const noexcept
 {
     const VkResult wait = vkWaitForFences(*device, 1, &handle, VK_TRUE, timeout);
     return (VK_SUCCESS == wait);
-}
-
-VkResult Fence::getStatus() const noexcept
-{
-    return vkGetFenceStatus(*device, handle);
 }
 } // namespace magma

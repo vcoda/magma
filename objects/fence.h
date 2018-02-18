@@ -29,7 +29,7 @@ namespace magma
             bool signaled = false);
         ~Fence();
         bool reset() noexcept;
-        bool wait(uint64_t timeout = UINT64_MAX) const noexcept;
         VkResult getStatus() const noexcept;
+        bool wait(uint64_t timeout = UINT64_MAX) const noexcept;
     };
 } // namespace magma
