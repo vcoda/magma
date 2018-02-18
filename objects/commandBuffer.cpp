@@ -87,11 +87,14 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     return (VK_SUCCESS == begin);
 }
 
-bool CommandBuffer::end() noexcept
+void CommandBuffer::end()
 {
-    const VkResult end = vkEndCommandBuffer(handle);
-    MAGMA_ASSERT(VK_SUCCESS == end);
-    return (VK_SUCCESS == end);
+    /* Performance - critical commands generally do not have return codes.
+       If a run time error occurs in such commands, the implementation will defer 
+       reporting the error until a specified point. For commands that record 
+       into command buffers (vkCmd*), run time errors are reported by vkEndCommandBuffer. */
+    const VkResult result = vkEndCommandBuffer(handle);
+    MAGMA_THROW_FAILURE(result, "failed to end command buffer");
 }
 
 bool CommandBuffer::reset(bool releaseResources) noexcept

@@ -57,7 +57,7 @@ namespace magma
             uint32_t subpass, 
             const std::shared_ptr<Framebuffer>& framebuffer,
             VkCommandBufferUsageFlags flags = 0) noexcept;
-        bool end() noexcept;
+        void end();
         bool reset(bool releaseResources) noexcept;
 
         void bindPipeline(const std::shared_ptr<GraphicsPipeline>& pipeline) noexcept;
