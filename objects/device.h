@@ -28,12 +28,13 @@ namespace magma
     class Device : public Handle<VkDevice>,
         public std::enable_shared_from_this<Device>
     {
-        Device(VkDevice device, 
-            std::shared_ptr<const PhysicalDevice> physicalDevice,
+        Device(std::shared_ptr<const PhysicalDevice> physicalDevice,
+            const VkDeviceCreateInfo& info,
             const std::vector<VkDeviceQueueCreateInfo>& queues);
         friend PhysicalDevice;
 
     public:
+        ~Device();
         std::shared_ptr<const PhysicalDevice> getPhysicalDevice() const { return physicalDevice; }
         std::shared_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
         bool waitIdle() const noexcept;

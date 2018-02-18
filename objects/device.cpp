@@ -23,11 +23,19 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Device::Device(VkDevice device, std::shared_ptr<const PhysicalDevice> physicalDevice, const std::vector<VkDeviceQueueCreateInfo>& queues):
-    Handle(VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT, device),
+Device::Device(std::shared_ptr<const PhysicalDevice> physicalDevice, const VkDeviceCreateInfo& info, const std::vector<VkDeviceQueueCreateInfo>& queues):
+    Handle(VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT),
     physicalDevice(physicalDevice),
     queues(queues)
-{}
+{
+    const VkResult create = vkCreateDevice(*physicalDevice, &info, nullptr, &handle);
+    MAGMA_THROW_FAILURE(create, "failed to create logical device");
+}
+
+Device::~Device()
+{
+    vkDestroyDevice(handle, nullptr);
+}
 
 std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const
 {
