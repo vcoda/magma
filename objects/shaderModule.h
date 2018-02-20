@@ -77,6 +77,7 @@ namespace magma
         ShaderStage(const ShaderStage&);
         ShaderStage& operator=(const ShaderStage&);
         ~ShaderStage();
+        VkShaderStageFlagBits getStage() const { return info.stage; }
         operator const VkPipelineShaderStageCreateInfo&() const { return info; }
 
     private:
