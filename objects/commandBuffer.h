@@ -318,10 +318,6 @@ namespace magma
         bool occlusionQueryEnable = false;
         VkQueryControlFlags queryFlags = 0;
         VkQueryPipelineStatisticFlags pipelineStatistics = 0;
-        /* Look like we could easily get device lost during swapchain present, 
-           if forgot to bind any descriptor set. Validation layer says nothing about this.
-           So use debug-only flag and assertion that descriptor set is present. */
-        MAGMA_DEBUG_VARIABLE(bool hasDescriptorSet, false);
         friend class CommandPool;
     };
 } // namespace magma

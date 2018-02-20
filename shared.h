@@ -37,12 +37,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #ifdef _DEBUG
 #   ifndef MAGMA_ASSERT
-#       define MAGMA_ASSERT(x) assert(x)
+#   define MAGMA_ASSERT(x) assert(x)
 #   endif
-#   define MAGMA_DEBUG_VARIABLE(var, value) var = value
 #else
 #   define MAGMA_ASSERT(x)
-#   define MAGMA_DEBUG_VARIABLE(var, value)
 #endif
 
 #define MAGMA_STENCIL_FACE_MASK(frontFace, backFace)\
