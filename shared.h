@@ -75,6 +75,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_THROW_FAILURE(result, message)\
     if (!MAGMA_SUCCEEDED(result))\
 	    throw magma::BadResultException(result, message, __FILE__, __LINE__)
+#define MAGMA_THROW_UNSUPPORTED(extension) throw UnsupportedExtensionException(extension, __FILE__, __LINE__)
 #ifdef _MSC_VER
 #   define MAGMA_THROW_NOT_IMPLEMENTED() throw NotImplementedException(__FUNCSIG__, __FILE__, __LINE__)
 #else

@@ -89,6 +89,11 @@ const char *BadResultException::codeString() const
 	return "<unknown>";
 }
 
+UnsupportedExtensionException::UnsupportedExtensionException(const char *const extension, 
+    const char *file, int line):
+    Exception(extension, file, line)
+{}
+
 NotImplementedException::NotImplementedException(const char *const function,
     const char *file, int line):
     Exception(function, file, line)
