@@ -30,7 +30,9 @@ namespace magma
             VkBufferCreateFlags flags = 0):
             Buffer(device, sizeof(Block) * arraySize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, flags,
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
-        {}
+        {
+            static_assert(sizeof(Block)%16 == 0, "uniform block should have 16-byte alignment");
+        }
 
         Block *map(bool clearMemory = false) noexcept
         {
