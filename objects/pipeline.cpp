@@ -42,6 +42,50 @@ Pipeline::~Pipeline()
     vkDestroyPipeline(*device, handle, nullptr);
 }
 
+void Pipeline::getShaderStatistics(VkShaderStageFlagBits stage, VkShaderStatisticsInfoAMD& info) const
+{
+    PFN_vkGetShaderInfoAMD pfnGetShaderInfoAMD = (PFN_vkGetShaderInfoAMD)vkGetDeviceProcAddr(*device, "vkGetShaderInfoAMD");
+    if (!pfnGetShaderInfoAMD)
+        MAGMA_THROW_UNSUPPORTED(VK_AMD_SHADER_INFO_EXTENSION_NAME);
+    size_t infoSize = sizeof(VkShaderStatisticsInfoAMD);
+    const VkResult get = pfnGetShaderInfoAMD(*device, handle, stage, VK_SHADER_INFO_TYPE_STATISTICS_AMD, &infoSize, &info);
+    MAGMA_THROW_FAILURE(get, "failed to get shader statistics");
+}
+
+std::vector<uint8_t> Pipeline::getShaderBinary(VkShaderStageFlagBits stage) const
+{
+    PFN_vkGetShaderInfoAMD pfnGetShaderInfoAMD = (PFN_vkGetShaderInfoAMD)vkGetDeviceProcAddr(*device, "vkGetShaderInfoAMD");
+    if (!pfnGetShaderInfoAMD)
+        MAGMA_THROW_UNSUPPORTED(VK_AMD_SHADER_INFO_EXTENSION_NAME);
+    size_t binarySize = 0;
+    const VkResult getSize = pfnGetShaderInfoAMD(*device, handle, stage, VK_SHADER_INFO_TYPE_BINARY_AMD, &binarySize, nullptr);
+    if (VK_SUCCESS == getSize)
+    {
+        std::vector<uint8_t> binary(binarySize);
+        const VkResult get = pfnGetShaderInfoAMD(*device, handle, stage, VK_SHADER_INFO_TYPE_BINARY_AMD, &binarySize, binary.data());
+        if (VK_SUCCESS == get)
+            return binary;
+    }
+    return std::vector<uint8_t>();
+}
+
+std::string Pipeline::getShaderDisassembly(VkShaderStageFlagBits stage) const
+{
+    PFN_vkGetShaderInfoAMD pfnGetShaderInfoAMD = (PFN_vkGetShaderInfoAMD)vkGetDeviceProcAddr(*device, "vkGetShaderInfoAMD");
+    if (!pfnGetShaderInfoAMD)
+        MAGMA_THROW_UNSUPPORTED(VK_AMD_SHADER_INFO_EXTENSION_NAME);
+    size_t disassemblySize = 0;
+    const VkResult getSize = pfnGetShaderInfoAMD(*device, handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, nullptr);
+    if (VK_SUCCESS == getSize)
+    {
+        std::vector<char> disassembly(disassemblySize);
+        const VkResult get = pfnGetShaderInfoAMD(*device, handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, disassembly.data());
+        if (VK_SUCCESS == get)
+            return std::string(&disassembly[0]);
+    }
+    return std::string();
+}
+
 GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
     const std::vector<ShaderStage>& stages,
     const VertexInputState& vertexInputState,
