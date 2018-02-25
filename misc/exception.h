@@ -25,9 +25,9 @@ namespace magma
     class Exception : public std::exception
     {
     public:
-        Exception(const char *const message, 
+        Exception(const char *const message,
             const char *file = nullptr, int line = -1);
-        Exception(const std::string& message, 
+        Exception(const std::string& message,
             const char *file = nullptr, int line = -1);
         const char *file() const { return fl; }
         int line() const { return ln; }
@@ -40,28 +40,28 @@ namespace magma
     class BadResultException : public Exception
     {
     public:
-        BadResultException(const VkResult result, const char *const message, 
+        BadResultException(const VkResult result, const char *const message,
             const char *file, int line);
-        BadResultException(const VkResult result, const std::string& message, 
+        BadResultException(const VkResult result, const std::string& message,
             const char *file, int line);
-	    VkResult code() const { return result;  }
+        VkResult code() const { return result;  }
         const char *codeString() const;
 
     private:
-	    VkResult result;
+        VkResult result;
     };
 
     class ExtensionNotPresentException : public Exception
     {
     public:
-        ExtensionNotPresentException(const char *const extension, 
+        ExtensionNotPresentException(const char *const extension,
             const char *file, int line);
     };
 
     class NotImplementedException : public Exception
     {
     public:
-        NotImplementedException(const char *const function, 
+        NotImplementedException(const char *const function,
             const char *file, int line);
     };
 } // namespace magma

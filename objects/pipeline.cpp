@@ -34,8 +34,7 @@ namespace magma
 {
 Pipeline::Pipeline(std::shared_ptr<const Device> device):
     NonDispatchable<VkPipeline>(VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT, device)
-{
-}
+{}
 
 Pipeline::~Pipeline()
 {

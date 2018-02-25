@@ -20,28 +20,28 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Exception::Exception(const char *const message, 
+Exception::Exception(const char *const message,
     const char *file /* nullptr */, int line /* -1 */):
     std::exception(message),
     fl(file), 
     ln(line)
 {}
 
-Exception::Exception(const std::string& message, 
+Exception::Exception(const std::string& message,
     const char *file /* nullptr */, int line /* -1 */):
     std::exception(message.c_str()),
     fl(file), 
     ln(line)
 {}
 
-BadResultException::BadResultException(const VkResult result, 
+BadResultException::BadResultException(const VkResult result,
     const char *const message,
     const char *file, int line):
-	Exception(message, file, line),
-	result(result)
+    Exception(message, file, line),
+    result(result)
 {}
 
-BadResultException::BadResultException(const VkResult result, 
+BadResultException::BadResultException(const VkResult result,
     const std::string& message,
     const char *file, int line):
     Exception(message, file, line),
@@ -85,8 +85,8 @@ const char *BadResultException::codeString() const
     MAGMA_STRINGIZE_FIELD(VK_ERROR_VALIDATION_FAILED_EXT);
 
     MAGMA_STRINGIZE_FIELD(VK_ERROR_INVALID_SHADER_NV);
-	}
-	return "<unknown>";
+    }
+    return "<unknown>";
 }
 
 ExtensionNotPresentException::ExtensionNotPresentException(const char *const extension,
