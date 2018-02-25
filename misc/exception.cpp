@@ -50,8 +50,8 @@ BadResultException::BadResultException(const VkResult result,
 
 const char *BadResultException::codeString() const
 {
-	switch (code())
-	{
+    switch (code())
+    {
     MAGMA_STRINGIZE_FIELD(VK_SUCCESS);
     MAGMA_STRINGIZE_FIELD(VK_NOT_READY);
     MAGMA_STRINGIZE_FIELD(VK_TIMEOUT);
@@ -89,7 +89,7 @@ const char *BadResultException::codeString() const
 	return "<unknown>";
 }
 
-UnsupportedExtensionException::UnsupportedExtensionException(const char *const extension, 
+ExtensionNotPresentException::ExtensionNotPresentException(const char *const extension,
     const char *file, int line):
     Exception(extension, file, line)
 {}

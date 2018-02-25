@@ -51,10 +51,10 @@ namespace magma
 	    VkResult result;
     };
 
-    class UnsupportedExtensionException : public Exception
+    class ExtensionNotPresentException : public Exception
     {
     public:
-        UnsupportedExtensionException(const char *const extension, 
+        ExtensionNotPresentException(const char *const extension, 
             const char *file, int line);
     };
 
