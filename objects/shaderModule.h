@@ -34,9 +34,8 @@ namespace magma
         ~ShaderModule();
     };
 
-    class SpecializationEntry : public VkSpecializationMapEntry
+    struct SpecializationEntry : VkSpecializationMapEntry
     {
-    public:
         template<typename Block, typename Type>
         SpecializationEntry(uint32_t index, Type Block::*member)
         {                    
