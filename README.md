@@ -1,7 +1,7 @@
-# Magma
 <p align="center">
-    <b>Magma - utility library with tips & tricks to facilitate usage of Khronos Vulkan API</b>
-    <br><br>
-    <img src="magma.jpg" width="600px" height="382px">
+    <b>MAGMA</b><br><br>
+    C++ abstraction layer to facilitate usage of<br>
+    Khronos Vulkan API<br><br>
+    <img src="vulkan.gif" width="94px" height="107px">
 </p>
 
