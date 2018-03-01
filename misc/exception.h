@@ -16,13 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <exception>
+#include <stdexcept>
 #include <string>
 #include "../vulkan.h"
 
 namespace magma
 {
-    class Exception : public std::exception
+	class Exception : public std::runtime_error
     {
     public:
         Exception(const char *const message,

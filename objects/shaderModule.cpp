@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "shaderModule.h"
 #include "device.h"
-#include "../shared.h"
 
 namespace magma
 {
@@ -67,7 +66,7 @@ Specialization& Specialization::operator=(const Specialization& other)
 Specialization::~Specialization()
 {
     delete[] pMapEntries;
-    delete[] pData;
+	delete[] static_cast<const char *>(pData);
 }
 
 ShaderStage::ShaderStage(const VkShaderStageFlagBits stage, std::shared_ptr<const ShaderModule> module, const char *const entrypoint,

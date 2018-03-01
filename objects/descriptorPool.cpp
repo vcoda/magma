@@ -75,9 +75,10 @@ void DescriptorPool::freeDescriptorSet(std::shared_ptr<DescriptorSet>& descripto
     descriptorSet.reset();
 }
 
-std::vector<std::shared_ptr<DescriptorSet>> DescriptorPool::allocateDescriptorSets(std::shared_ptr<DescriptorSetLayout> setLayout)
+std::vector<std::shared_ptr<DescriptorSet>> DescriptorPool::allocateDescriptorSets(std::shared_ptr<DescriptorSetLayout>)
 {
     std::vector<std::shared_ptr<DescriptorSet>> descriptorSets;
+	MAGMA_THROW_NOT_IMPLEMENTED();
     return descriptorSets;
 }
 

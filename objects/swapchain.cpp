@@ -61,13 +61,14 @@ Swapchain::~Swapchain()
 	vkDestroySwapchainKHR(*device, handle, nullptr);
 }
 
-uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore, std::shared_ptr<const Fence> fence) noexcept
+uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore, std::shared_ptr<const Fence> fence)
 {
     uint32_t imageIndex = 0;
     const VkResult acquire = vkAcquireNextImageKHR(*device, handle, UINT64_MAX, 
         MAGMA_OPTIONAL_HANDLE(semaphore),
         MAGMA_OPTIONAL_HANDLE(fence),
         &imageIndex);
+	MAGMA_THROW_FAILURE(acquire, "failed to acquire swapchain image");
     return imageIndex;
 }
 

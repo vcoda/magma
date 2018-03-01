@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <limits>
 #include <vector>
 #include "handle.h"
 #include "../shared.h"
@@ -314,7 +315,7 @@ namespace magma
         void queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept;
 
     private:
-        VkRect2D renderArea = {0};
+		VkRect2D renderArea = {{0, 0}, {0, 0}};
         bool occlusionQueryEnable = false;
         VkQueryControlFlags queryFlags = 0;
         VkQueryPipelineStatisticFlags pipelineStatistics = 0;
