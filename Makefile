@@ -1,5 +1,6 @@
 CC=g++
-BASE_CFLAGS=-std=c++11 -pedantic -Wall -Wextra -D_DEBUG -I$(VULKAN_SDK)/include
+PLATFORM=VK_USE_PLATFORM_XLIB_KHR
+BASE_CFLAGS=-std=c++11 -pedantic -Wall -Wextra -D$(PLATFORM) -I$(VULKAN_SDK)/include
 DEBUG_CFLAGS=$(BASE_CFLAGS) -D_DEBUG
 RELEASE_CFLAGS=$(BASE_CFLAGS)
 DEPS=
