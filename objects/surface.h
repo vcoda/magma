@@ -32,8 +32,9 @@ namespace magma
         std::shared_ptr<const Instance> instance;
     };
 
-#ifdef VK_USE_PLATFORM_WIN32_KHR
-    class Win32Surface : public Surface
+#if defined(VK_USE_PLATFORM_WIN32_KHR)
+
+	class Win32Surface : public Surface
     {
     public:
 	    Win32Surface(std::shared_ptr<const Instance> instance, 
@@ -41,5 +42,28 @@ namespace magma
             HWND hwnd,
 		    VkWin32SurfaceCreateFlagsKHR flags = 0);
     };
-#endif // VK_USE_PLATFORM_WIN32_KHR
+
+#elif defined(VK_USE_PLATFORM_XLIB_KHR)
+
+	class XlibSurface : public Surface
+	{
+	public:
+		XlibSurface(std::shared_ptr<const Instance> instance,
+			Display *dpy,
+			Window window,
+			VkXlibSurfaceCreateFlagsKHR flags = 0);
+	};
+
+#elif defined(VK_USE_PLATFORM_XCB_KHR)
+
+	class XcbSurface : public Surface
+	{
+	public:
+		XcbSurface(std::shared_ptr<const Instance> instance,
+			xcb_connection_t *connection,
+			xcb_window_t window,
+			VkXcbSurfaceCreateFlagsKHR flags = 0);
+	};
+
+#endif // VK_USE_PLATFORM_XCB_KHR
 } // namespace magma

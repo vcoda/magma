@@ -31,7 +31,8 @@ Surface::~Surface()
 	vkDestroySurfaceKHR(*instance, handle, nullptr);
 }
 
-#ifdef VK_USE_PLATFORM_WIN32_KHR
+#if defined(VK_USE_PLATFORM_WIN32_KHR)
+
 Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance, 
     HINSTANCE hinstance, 
     HWND hwnd, 
@@ -47,5 +48,42 @@ Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance,
 	const VkResult create = vkCreateWin32SurfaceKHR(*instance, &info, nullptr, &handle);
     MAGMA_THROW_FAILURE(create, "failed to create Win32 surface");
 }
-#endif // VK_USE_PLATFORM_WIN32_KHR
+
+#elif defined(VK_USE_PLATFORM_XLIB_KHR)
+
+XlibSurface::XlibSurface(std::shared_ptr<const Instance> instance,
+	Display *dpy,
+	Window window,
+	VkXlibSurfaceCreateFlagsKHR flags /* 0 */):
+	Surface(instance)
+{
+	VkXlibSurfaceCreateInfoKHR info;
+	info.sType = VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR;
+	info.pNext = nullptr;
+	info.flags = flags;
+	info.dpy = dpy;
+	info.window = window;
+	const VkResult create = vkCreateXlibSurfaceKHR(*instance, &info, nullptr, &handle);
+	MAGMA_THROW_FAILURE(create, "failed to create Xlib surface");
+}
+
+#elif defined(VK_USE_PLATFORM_XCB_KHR)
+
+XcbSurface::XcbSurface(std::shared_ptr<const Instance> instance,
+	xcb_connection_t *connection,
+	xcb_window_t window,
+	VkXcbSurfaceCreateFlagsKHR flags /* 0 */):
+	Surface(instance)
+{
+	VkXcbSurfaceCreateInfoKHR info;
+	info.sType = VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR;
+	info.pNext = nullptr;
+	info.flags = flags;
+	info.connection = connection;
+	info.window = window;
+	const VkResult create = vkCreateXcbSurfaceKHR(*instance, &info, nullptr, &handle);
+	MAGMA_THROW_FAILURE(create, "failed to create Xcb surface");
+}
+
+#endif // VK_USE_PLATFORM_XCB_KHR
 } // namespace magma
