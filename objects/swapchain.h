@@ -36,8 +36,10 @@ namespace magma
             uint32_t minImageCount, 
             VkSurfaceFormatKHR surfaceFormat,
             const VkExtent2D& imageExtent,
-		    VkPresentModeKHR presentMode, 
-		    VkSwapchainCreateFlagsKHR flags = 0);
+            VkSurfaceTransformFlagBitsKHR preTransform,
+            VkCompositeAlphaFlagBitsKHR compositeAlpha,
+            VkPresentModeKHR presentMode,
+            VkSwapchainCreateFlagsKHR flags = 0);
 	    ~Swapchain();
         uint32_t acquireNextImage(
             std::shared_ptr<const Semaphore> semaphore, 
