@@ -76,7 +76,7 @@ XcbSurface::XcbSurface(std::shared_ptr<const Instance> instance,
 	Surface(instance)
 {
 	VkXcbSurfaceCreateInfoKHR info;
-	info.sType = VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR;
+	info.sType = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
 	info.pNext = nullptr;
 	info.flags = flags;
 	info.connection = connection;
