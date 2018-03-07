@@ -25,8 +25,8 @@ namespace magma
     class Surface : public NonDispatchable<VkSurfaceKHR>
     {
     public:
-	    Surface(std::shared_ptr<const Instance> instance);
-	    virtual ~Surface();
+        Surface(std::shared_ptr<const Instance> instance);
+        virtual ~Surface();
 
     protected:
         std::shared_ptr<const Instance> instance;
@@ -34,36 +34,36 @@ namespace magma
 
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
 
-	class Win32Surface : public Surface
+    class Win32Surface : public Surface
     {
     public:
-	    Win32Surface(std::shared_ptr<const Instance> instance, 
+        Win32Surface(std::shared_ptr<const Instance> instance,
             HINSTANCE hinstance, 
             HWND hwnd,
-		    VkWin32SurfaceCreateFlagsKHR flags = 0);
+            VkWin32SurfaceCreateFlagsKHR flags = 0);
     };
 
 #elif defined(VK_USE_PLATFORM_XLIB_KHR)
 
-	class XlibSurface : public Surface
-	{
-	public:
-		XlibSurface(std::shared_ptr<const Instance> instance,
-			Display *dpy,
-			Window window,
-			VkXlibSurfaceCreateFlagsKHR flags = 0);
-	};
+    class XlibSurface : public Surface
+    {
+    public:
+        XlibSurface(std::shared_ptr<const Instance> instance,
+            Display *dpy,
+            Window window,
+            VkXlibSurfaceCreateFlagsKHR flags = 0);
+    };
 
 #elif defined(VK_USE_PLATFORM_XCB_KHR)
 
-	class XcbSurface : public Surface
-	{
-	public:
-		XcbSurface(std::shared_ptr<const Instance> instance,
-			xcb_connection_t *connection,
-			xcb_window_t window,
-			VkXcbSurfaceCreateFlagsKHR flags = 0);
-	};
+    class XcbSurface : public Surface
+    {
+    public:
+        XcbSurface(std::shared_ptr<const Instance> instance,
+            xcb_connection_t *connection,
+            xcb_window_t window,
+            VkXcbSurfaceCreateFlagsKHR flags = 0);
+    };
 
 #elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
 
