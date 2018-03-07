@@ -85,5 +85,85 @@ XcbSurface::XcbSurface(std::shared_ptr<const Instance> instance,
 	MAGMA_THROW_FAILURE(create, "failed to create Xcb surface");
 }
 
-#endif // VK_USE_PLATFORM_XCB_KHR
+#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
+
+WaylandSurface::WaylandSurface(std::shared_ptr<const Instance> instance,
+    wl_display *display,
+    wl_surface *surface,
+    VkWaylandSurfaceCreateFlagsKHR flags /* 0 */):
+	Surface(instance)
+{
+	VkWaylandSurfaceCreateInfoKHR info;
+    info.sType = VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR;
+    info.pNext = nullptr;
+    info.flags = flags;
+    info.display = display;
+    info.surface = surface;
+	const VkResult create = vkCreateWaylandSurfaceKHR(*instance, &info, nullptr, &handle);
+	MAGMA_THROW_FAILURE(create, "failed to create Wayland surface");
+}
+
+#elif defined(VK_USE_PLATFORM_MIR_KHR)
+
+MirSurface::MirSurface(std::shared_ptr<const Instance> instance,
+    MirConnection *connection,
+    MirSurface *surface,
+    VkMirSurfaceCreateFlagsKHR flags /* 0 */):
+{
+    VkMirSurfaceCreateInfoKHR info;
+    info.sType = VK_STRUCTURE_TYPE_MIR_SURFACE_CREATE_INFO_KHR;
+    info.pNext = nullptr;
+    info.flags = flags;
+    info.connection = connection;
+    info.mirSurface = surface;
+    const VkResult create = vkCreateMirSurfaceKHR(*instance, &info, nullptr, &handle);
+	MAGMA_THROW_FAILURE(create, "failed to create Mir surface");
+}
+
+#elif defined(VK_USE_PLATFORM_ANDROID_KHR)
+
+AndroidSurface::AndroidSurface(std::shared_ptr<const Instance> instance,
+    ANativeWindow *window,
+    VkAndroidSurfaceCreateFlagsKHR flags /* 0 */)
+{
+    VkAndroidSurfaceCreateInfoKHR info.
+    info.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR;
+    info.pNext = nullptr;
+    info.flags = flags;
+    info.window = window;
+    const VkResult create = vkCreateAndroidSurfaceKHR(*instance, &info, nullptr, &handle);
+	MAGMA_THROW_FAILURE(create, "failed to create Android surface");
+}
+
+#elif defined(VK_USE_PLATFORM_IOS_MVK)
+
+IosSurface::IosSurface(std::shared_ptr<const Instance> instance,
+    const void *view,
+    VkIOSSurfaceCreateFlagsMVK flags /* 0 */)
+{
+    VkIOSSurfaceCreateInfoMVK info.
+    info.sType = VK_STRUCTURE_TYPE_IOS_SURFACE_CREATE_INFO_MVK;
+    info.pNext = nullptr;
+    info.flags = flags;
+    info.pView = view;
+    const VkResult create = vkCreateIOSSurfaceMVK(*instance, &info, nullptr, &handle);
+	MAGMA_THROW_FAILURE(create, "failed to create iOS surface");
+}
+
+#elif defined(VK_USE_PLATFORM_MACOS_MVK)
+
+MacosSurface::MacosSurface(std::shared_ptr<const Instance> instance,
+    const void *view,
+    VkMacOSSurfaceCreateFlagsMVK flags /* 0 */)
+{
+    VkMacOSSurfaceCreateInfoMVK info.
+    info.sType = VK_STRUCTURE_TYPE_MACOS_SURFACE_CREATE_INFO_MVK;
+    info.pNext = nullptr;
+    info.flags = flags;
+    info.pView = view;
+    const VkResult create = vkCreateMacOSSurfaceMVK(*instance, &info, nullptr, &handle);
+	MAGMA_THROW_FAILURE(create, "failed to create macOS surface");
+}
+
+#endif // VK_USE_PLATFORM_MACOS_MVK
 } // namespace magma

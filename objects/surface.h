@@ -65,5 +65,57 @@ namespace magma
 			VkXcbSurfaceCreateFlagsKHR flags = 0);
 	};
 
-#endif // VK_USE_PLATFORM_XCB_KHR
+#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
+
+    class WaylandSurface : public Surface
+    {
+    public:
+        WaylandSurface(std::shared_ptr<const Instance> instance,
+            wl_display *display,
+            wl_surface *surface,
+            VkWaylandSurfaceCreateFlagsKHR flags = 0);
+    };
+
+#elif defined(VK_USE_PLATFORM_MIR_KHR)
+
+    class MirSurface : public Surface
+    {
+    public:
+        MirSurface(std::shared_ptr<const Instance> instance,
+            MirConnection *connection,
+            MirSurface *surface,
+            VkMirSurfaceCreateFlagsKHR flags = 0);
+    };
+
+#elif defined(VK_USE_PLATFORM_ANDROID_KHR)
+
+    class AndroidSurface : public Surface
+    {
+    public:
+        AndroidSurface(std::shared_ptr<const Instance> instance,
+            ANativeWindow *window,
+            VkAndroidSurfaceCreateFlagsKHR flags = 0);
+    };
+
+#elif defined(VK_USE_PLATFORM_IOS_MVK)
+
+    class IosSurface : public Surface
+    {
+    public:
+        IosSurface(std::shared_ptr<const Instance> instance,
+            const void *view,
+            VkIOSSurfaceCreateFlagsMVK flags = 0);
+    };
+
+#elif defined(VK_USE_PLATFORM_MACOS_MVK)
+
+    class MacosSurface : public Surface
+    {
+    public:
+        MacosSurface(std::shared_ptr<const Instance> instance,
+            const void *view,
+            VkMacOSSurfaceCreateFlagsMVK flags = 0);
+    };
+
+#endif // VK_USE_PLATFORM_MACOS_MVK
 } // namespace magma
