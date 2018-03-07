@@ -35,7 +35,6 @@ InstanceExtensions::InstanceExtensions(std::shared_ptr<const Instance> instance)
 
     MAGMA_CHECK_EXTENSION(EXT_debug_report),
 
-    MAGMA_CHECK_EXTENSION(KHR_android_surface),
     MAGMA_CHECK_EXTENSION(KHR_display),
     MAGMA_CHECK_EXTENSION(KHR_external_fence_capabilities),
     MAGMA_CHECK_EXTENSION(KHR_external_memory_capabilities),
@@ -44,11 +43,15 @@ InstanceExtensions::InstanceExtensions(std::shared_ptr<const Instance> instance)
     MAGMA_CHECK_EXTENSION(KHR_get_surface_capabilities2),
 
     MAGMA_CHECK_EXTENSION(KHR_surface),
+    MAGMA_CHECK_EXTENSION(KHR_android_surface),
     MAGMA_CHECK_EXTENSION(KHR_mir_surface),
     MAGMA_CHECK_EXTENSION(KHR_xcb_surface),
     MAGMA_CHECK_EXTENSION(KHR_xlib_surface),
     MAGMA_CHECK_EXTENSION(KHR_wayland_surface),
-    MAGMA_CHECK_EXTENSION(KHR_win32_surface)
+    MAGMA_CHECK_EXTENSION(KHR_win32_surface),
+
+    MAGMA_CHECK_EXTENSION(MVK_ios_surface),
+    MAGMA_CHECK_EXTENSION(MVK_macos_surface)
 {}   
 
 DeviceExtensions::DeviceExtensions(std::shared_ptr<const PhysicalDevice> device) :

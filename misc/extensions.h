@@ -38,12 +38,10 @@ namespace magma
         std::set<std::string> extensions;
     };
 
-    // Maintain extensions list in alphabetical order.
     struct InstanceExtensions : Extensions
     {
         const bool EXT_debug_report;
 
-        const bool KHR_android_surface;
         const bool KHR_display;
         const bool KHR_external_fence_capabilities;
         const bool KHR_external_memory_capabilities;
@@ -51,13 +49,17 @@ namespace magma
         const bool KHR_get_physical_device_properties2;
         const bool KHR_get_surface_capabilities2;
 
-        // Window system extensions
+        // Window system integration
         const bool KHR_surface;
+        const bool KHR_android_surface;
         const bool KHR_mir_surface;
         const bool KHR_xcb_surface;
         const bool KHR_xlib_surface;
         const bool KHR_wayland_surface;
         const bool KHR_win32_surface;
+
+        const bool MVK_ios_surface;
+        const bool MVK_macos_surface;
         
         InstanceExtensions(std::shared_ptr<const class Instance> instance);
     };
