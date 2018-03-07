@@ -64,7 +64,7 @@ namespace magma
         InstanceExtensions(std::shared_ptr<const class Instance> instance);
     };
 
-    // Maintain extensions list in alphabetical order.
+    // Keep extensions list in alphabetical order
     struct DeviceExtensions : Extensions
     {
         const bool AMD_draw_indirect_count;
