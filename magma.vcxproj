@@ -144,6 +144,7 @@
     <ClInclude Include="misc\imageMemoryBarrier.h" />
     <ClInclude Include="misc\pushConstants.h" />
     <ClInclude Include="misc\scissor.h" />
+    <ClInclude Include="misc\stringize.h" />
     <ClInclude Include="misc\viewport.h" />
     <ClInclude Include="objects\buffer.h" />
     <ClInclude Include="objects\bufferView.h" />
@@ -211,6 +212,7 @@
     <ClCompile Include="misc\extensions.cpp" />
     <ClCompile Include="misc\format.cpp" />
     <ClCompile Include="misc\imageMemoryBarrier.cpp" />
+    <ClCompile Include="misc\stringize.cpp" />
     <ClCompile Include="objects\buffer.cpp" />
     <ClCompile Include="objects\bufferView.cpp" />
     <ClCompile Include="objects\commandBuffer.cpp" />
