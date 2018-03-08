@@ -49,6 +49,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_STRINGIZE(x) #x
 #define MAGMA_STRINGIZE_FIELD(x) case x: return MAGMA_STRINGIZE(x); break
+#define MAGMA_UNKNOWN "<unknown>"
 
 #ifdef _MSC_VER
 #   define MAGMA_MALLOC(size) _mm_malloc(size, 16)
