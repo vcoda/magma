@@ -216,12 +216,12 @@ void CommandBuffer::resetEvent(const std::shared_ptr<Event>& event, VkPipelineSt
     vkCmdResetEvent(handle, *event, stageMask);
 }
 
-void CommandBuffer::waitEvent(std::shared_ptr<Event>& event)
+void CommandBuffer::waitEvent(std::shared_ptr<Event>&)
 {
     MAGMA_THROW_NOT_IMPLEMENTED();
 }
 
-void CommandBuffer::waitEvents(std::vector<std::shared_ptr<Event>>& events)
+void CommandBuffer::waitEvents(std::vector<std::shared_ptr<Event>>&)
 {
     MAGMA_THROW_NOT_IMPLEMENTED();
 }
@@ -335,7 +335,7 @@ void CommandBuffer::beginDebugMarker(const char *name, const float color[4]) noe
         info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
         info.pNext = nullptr;
         info.pMarkerName = name;
-        memcpy(info.color, color, sizeof(color));
+		memcpy(info.color, color, sizeof(float) * 4);
         vkCmdDebugMarkerBegin(handle, &info);
     }
 #endif // MAGMA_DEBUG

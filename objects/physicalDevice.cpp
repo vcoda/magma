@@ -84,7 +84,7 @@ std::set<std::string> PhysicalDevice::enumerateExtensions(const char *layerName 
     MAGMA_THROW_FAILURE(count, "failed to count device extensions");
     std::vector<VkExtensionProperties> properties(propertyCount);
     const VkResult enumerate = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, properties.data());
-    MAGMA_THROW_FAILURE(count, "failed to enumerate device extensions");
+	MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device extensions");
     std::set<std::string> extensions;
     for (const auto& property : properties)
         extensions.insert(property.extensionName);
@@ -97,8 +97,8 @@ std::vector<VkLayerProperties> PhysicalDevice::enumerateLayerProperties() const
     VkResult count = vkEnumerateDeviceLayerProperties(handle, &propertyCount, nullptr);
     MAGMA_THROW_FAILURE(count, "failed to count device layers");
     std::vector<VkLayerProperties> properties(propertyCount);
-    const VkResult enumerate = vkEnumerateDeviceLayerProperties(handle, &propertyCount, properties.data());
-    MAGMA_THROW_FAILURE(count, "failed to enumerate device layers");
+	const VkResult enumerate = vkEnumerateDeviceLayerProperties(handle, &propertyCount, properties.data());
+	MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device layers");
     return properties;
 }
 
@@ -135,7 +135,8 @@ std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
     const std::vector<const char*> extensions = {
         VK_KHR_SWAPCHAIN_EXTENSION_NAME
     };
-    const VkPhysicalDeviceFeatures noFeatures = {0};
+	VkPhysicalDeviceFeatures noFeatures;
+	memset(&noFeatures, 0, sizeof(VkPhysicalDeviceFeatures));
     return createDevice(queueDescriptors, noLayers, extensions, noFeatures);
 }
 

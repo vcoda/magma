@@ -28,8 +28,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surface> surface, uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& imageExtent,
-	VkPresentModeKHR presentMode,
+Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surface> surface,
+    uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& imageExtent,
+    VkSurfaceTransformFlagBitsKHR preTransform,
+    VkCompositeAlphaFlagBitsKHR compositeAlpha,
+    VkPresentModeKHR presentMode,
 	VkSwapchainCreateFlagsKHR flags /* 0 */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT, device),
     surfaceFormat(surfaceFormat),
@@ -49,8 +52,8 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
 	info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 	info.queueFamilyIndexCount = 0;
 	info.pQueueFamilyIndices = nullptr;
-	info.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
-	info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+	info.preTransform = preTransform;
+	info.compositeAlpha = compositeAlpha;
 	info.presentMode = presentMode;
 	info.clipped = VK_TRUE;
 	info.oldSwapchain = VK_NULL_HANDLE;
@@ -84,13 +87,14 @@ Swapchain::~Swapchain()
 	vkDestroySwapchainKHR(*device, handle, nullptr);
 }
 
-uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore, std::shared_ptr<const Fence> fence) noexcept
+uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore, std::shared_ptr<const Fence> fence)
 {
     uint32_t imageIndex = 0;
     const VkResult acquire = vkAcquireNextImageKHR(*device, handle, UINT64_MAX, 
         MAGMA_OPTIONAL_HANDLE(semaphore),
         MAGMA_OPTIONAL_HANDLE(fence),
         &imageIndex);
+	MAGMA_THROW_FAILURE(acquire, "failed to acquire swapchain image");
     return imageIndex;
 }
 

@@ -56,6 +56,8 @@ ImageView::ImageView(std::shared_ptr<const Image> image,
     case VK_IMAGE_TYPE_3D: 
         info.viewType = VK_IMAGE_VIEW_TYPE_3D; 
         break;
+	default:
+		throw std::runtime_error("invalid image type");
     }
     info.format = image->getFormat();
     const Format format(info.format);

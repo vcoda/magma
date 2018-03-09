@@ -232,7 +232,7 @@ inline void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, c
 }
 
 template<typename Type>
-inline void CommandBuffer::fillBuffer(const std::shared_ptr<Buffer>& dstBuffer, const std::vector<Type>& data,
+inline void CommandBuffer::fillBuffer(const std::shared_ptr<Buffer>& buffer, const std::vector<Type>& data,
     VkDeviceSize offset /* 0 */) const noexcept
 {
     vkCmdFillBuffer(handle, *buffer, offset, static_cast<uint32_t>(sizeof(Type) * data.size()), data.data());

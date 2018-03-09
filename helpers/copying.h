@@ -61,8 +61,12 @@ namespace magma
         {
             const size_t size = strlen(src) + 1;
             char *const dst = new char[size];
+#ifdef _MSC_VER
             const errno_t err = strcpy_s(dst, size, src);
             MAGMA_ASSERT(0 == err);
+#else
+			strcpy(dst, src);
+#endif // _MSC_VER
             return dst;
         }
     } // namespace helpers
