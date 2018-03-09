@@ -66,10 +66,10 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
             << "minImageCount: " << std::to_string(info.minImageCount) << std::endl
             << "imageFormat: " << stringize(info.imageFormat) << std::endl
             << "imageColorSpace: " << stringize(info.imageColorSpace) << std::endl
-            << "imageExtent: " << std::to_string(info.imageExtent.width) << ", " << std::to_string(info.imageExtent.height) << std::endl
+            << "imageExtent: {" << std::to_string(info.imageExtent.width) << ", " << std::to_string(info.imageExtent.height) << "}" << std::endl
             << "imageArrayLayers: " << std::to_string(info.imageArrayLayers) << std::endl
             << "imageUsage: " << stringize(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT) << std::endl
-            << "imageSharingMode" << stringize(info.imageSharingMode) << std::endl
+            << "imageSharingMode: " << stringize(info.imageSharingMode) << std::endl
             << "preTransform: " << stringize(info.preTransform) << std::endl
             << "compositeAlpha: " << stringize(info.compositeAlpha) << std::endl
             << "presentMode: " << stringize(info.presentMode) << std::endl
