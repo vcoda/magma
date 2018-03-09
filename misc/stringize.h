@@ -22,14 +22,43 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    const char *stringize(VkFormat format);
-    const char *stringize(VkImageType param);
+    const char *stringize(VkFormat param);
+    const char *stringize(VkImageType param);  
     const char *stringize(VkImageTiling param);
     const char *stringize(VkPhysicalDeviceType param);
     const char *stringize(VkQueryType param);
+    const char *stringize(VkSharingMode param);
+    const char *stringize(VkImageLayout param);
+    const char *stringize(VkImageViewType param);
+    const char *stringize(VkComponentSwizzle param);
+    const char *stringize(VkVertexInputRate param);
+    const char *stringize(VkPrimitiveTopology param);
+    const char *stringize(VkPolygonMode param);
+    const char *stringize(VkFrontFace param);
+    const char *stringize(VkCompareOp param);
+    const char *stringize(VkStencilOp param);
+    const char *stringize(VkLogicOp param);
+    const char *stringize(VkBlendFactor param);
+    const char *stringize(VkBlendOp param);
+    const char *stringize(VkDynamicState param);
+    const char *stringize(VkFilter param);
+    const char *stringize(VkSamplerMipmapMode param);
+    const char *stringize(VkSamplerAddressMode param);
+    const char *stringize(VkBorderColor param);
+    const char *stringize(VkDescriptorType param);
+    const char *stringize(VkAttachmentLoadOp param);
+    const char *stringize(VkAttachmentStoreOp param); 
+    const char *stringize(VkPipelineBindPoint param);
+    const char *stringize(VkCommandBufferLevel param);
 
-    const char *stringize(VkPipelineStageFlagBits bit);
+    const char *stringize(VkIndexType param);
+    const char *stringize(VkSubpassContents param);
+    const char *stringize(VkFormatFeatureFlagBits bit);
     const char *stringize(VkImageUsageFlagBits bit);
+    const char *stringize(VkPipelineStageFlagBits bit);
+    const char *stringize(VkSurfaceTransformFlagBitsKHR bit);
+    const char *stringize(VkColorSpaceKHR param);
+    const char *stringize(VkPresentModeKHR param);
     const char *stringize(VkSurfaceTransformFlagBitsKHR bit);
     const char *stringize(VkCompositeAlphaFlagBitsKHR bit);
 } // namespace magma
