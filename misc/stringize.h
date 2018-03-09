@@ -16,7 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../vulkan.h"
+#include "../shared.h"
+
+#ifdef MAGMA_DEBUG
 
 namespace magma
 {
@@ -31,3 +33,5 @@ namespace magma
     const char *stringize(VkSurfaceTransformFlagBitsKHR bit);
     const char *stringize(VkCompositeAlphaFlagBitsKHR bit);
 } // namespace magma
+
+#endif // MAGMA_DEBUG

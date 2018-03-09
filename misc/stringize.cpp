@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "stringize.h"
-#include "../shared.h"
+
+#ifdef MAGMA_DEBUG
 
 namespace magma
 {
@@ -354,3 +355,5 @@ const char *stringize(VkCompositeAlphaFlagBitsKHR param)
     }; return MAGMA_UNKNOWN;
 }
 } // namespace magma
+
+#endif // MAGMA_DEBUG
