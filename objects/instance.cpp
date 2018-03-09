@@ -43,7 +43,7 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
     createInfo.enabledExtensionCount = MAGMA_COUNT(extensionNames);
     createInfo.ppEnabledExtensionNames = extensionNames.data();
     const VkResult create = vkCreateInstance(&createInfo, nullptr, &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create instance");
+    MAGMA_THROW_FAILURE(create, "failed to create Vulkan instance");
 }
 
 Instance::~Instance()
