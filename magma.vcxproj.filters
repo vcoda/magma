@@ -264,6 +264,9 @@
     <ClInclude Include="misc\stringize.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
+    <ClInclude Include="objects\indirectBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
@@ -444,6 +447,9 @@
     </ClCompile>
     <ClCompile Include="misc\stringize.cpp">
       <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\indirectBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

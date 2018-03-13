@@ -39,6 +39,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/imageCube.h"
 #include "objects/imageView.h"
 #include "objects/indexBuffer.h"
+#include "objects/indirectBuffer.h"
 #include "objects/instance.h"
 #include "objects/physicalDevice.h"
 #include "objects/pipeline.h"
