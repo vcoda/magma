@@ -89,3 +89,5 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "helpers/alignedMemcpy.h"
 #include "helpers/mapScoped.h"
 #include "helpers/stackArray.h"
+
+#include "typedefs.h"
