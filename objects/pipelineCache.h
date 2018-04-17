@@ -27,6 +27,16 @@ namespace magma
     class PipelineCache : public NonDispatchable<VkPipelineCache>
     {
     public:
+        struct Header
+        {
+            uint32_t size = 0;
+            uint32_t version = 0;
+            uint32_t vendorID = 0;
+            uint32_t deviceID = 0;
+            uint8_t cacheUUID[VK_UUID_SIZE] = {};
+        };
+
+    public:
         PipelineCache(std::shared_ptr<const Device> device,
             const std::vector<uint8_t>& cacheData = {});
         PipelineCache(std::shared_ptr<const Device> device,
