@@ -30,13 +30,15 @@ PhysicalDevice::PhysicalDevice(VkPhysicalDevice physicalDevice):
 
 const VkPhysicalDeviceFeatures& PhysicalDevice::getFeatures() const
 {
-    vkGetPhysicalDeviceFeatures(handle, &features);
+    if (!features.geometryShader)
+        vkGetPhysicalDeviceFeatures(handle, &features);
     return features;
 }
 
 const VkPhysicalDeviceProperties& PhysicalDevice::getProperties() const
 {
-    vkGetPhysicalDeviceProperties(handle, &properties);
+    if (0 == properties.apiVersion)
+        vkGetPhysicalDeviceProperties(handle, &properties);
     return properties;
 }
 
@@ -74,7 +76,8 @@ std::vector<VkQueueFamilyProperties> PhysicalDevice::getQueueFamilyProperties() 
 
 const VkPhysicalDeviceMemoryProperties& PhysicalDevice::getMemoryProperties() const
 {
-    vkGetPhysicalDeviceMemoryProperties(handle, &memoryProperties);
+    if (0 == memoryProperties.memoryTypeCount)
+        vkGetPhysicalDeviceMemoryProperties(handle, &memoryProperties);
     return memoryProperties;
 }
 
