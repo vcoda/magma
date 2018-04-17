@@ -16,16 +16,24 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <vector>
 #include "handle.h"
 
 namespace magma
 {
+    class PhysicalDevice;
     class Device;
 
     class PipelineCache : public NonDispatchable<VkPipelineCache>
     {
     public:
-        PipelineCache(std::shared_ptr<const Device> device);
+        PipelineCache(std::shared_ptr<const Device> device,
+            const std::vector<uint8_t>& cacheData = {});
+        PipelineCache(std::shared_ptr<const Device> device,
+            size_t dataSize,
+            const void *cacheData);
         ~PipelineCache();
+        std::vector<uint8_t> getData() const;
+        void mergeCaches(const std::vector<std::shared_ptr<const PipelineCache>>& caches);
     };
 } // namespace magma

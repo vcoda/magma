@@ -16,20 +16,28 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pipelineCache.h"
+#include "physicalDevice.h"
 #include "device.h"
 #include "../shared.h"
+#include "../helpers/stackArray.h"
 
 namespace magma
 {
-PipelineCache::PipelineCache(std::shared_ptr<const Device> device):
+PipelineCache::PipelineCache(std::shared_ptr<const Device> device,
+    const std::vector<uint8_t>& cacheData /* {} */):
+    PipelineCache(device, cacheData.size(), cacheData.data())
+{}
+
+PipelineCache::PipelineCache(std::shared_ptr<const Device> device, 
+    size_t dataSize, const void *cacheData):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_CACHE_EXT, device)
 {
     VkPipelineCacheCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
     info.pNext = nullptr;
     info.flags = 0;
-    info.initialDataSize = 0;
-    info.pInitialData = nullptr;
+    info.initialDataSize = dataSize;
+    info.pInitialData = cacheData;
     const VkResult create = vkCreatePipelineCache(*device, &info, nullptr, &handle);
     MAGMA_THROW_FAILURE(create, "failed to create pipeline cache");
 }
@@ -37,5 +45,25 @@ PipelineCache::PipelineCache(std::shared_ptr<const Device> device):
 PipelineCache::~PipelineCache()
 {
     vkDestroyPipelineCache(*device, handle, nullptr);
+}
+
+std::vector<uint8_t> PipelineCache::getData() const
+{
+    size_t dataSize = 0;
+    const VkResult getSize = vkGetPipelineCacheData(*device, handle, &dataSize, nullptr);
+    MAGMA_THROW_FAILURE(getSize, "failed to get pipeline cache size");
+    std::vector<uint8_t> data(dataSize);
+    const VkResult getData = vkGetPipelineCacheData(*device, handle, &dataSize, data.data());
+    MAGMA_THROW_FAILURE(getData, "failed to get pipeline cache data");
+    return std::move(data);
+}
+
+void PipelineCache::mergeCaches(const std::vector<std::shared_ptr<const PipelineCache>>& caches)
+{
+    MAGMA_STACK_ARRAY(VkPipelineCache, dereferencedCaches, caches.size());
+    for (const auto& cache : caches)
+        dereferencedCaches.put(*cache);
+    const VkResult merge = vkMergePipelineCaches(*device, handle, MAGMA_COUNT(dereferencedCaches), dereferencedCaches);
+    MAGMA_THROW_FAILURE(merge, "failed to merge pipeline caches");
 }
 } // namespace magma
