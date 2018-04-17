@@ -71,7 +71,7 @@ std::vector<VkQueueFamilyProperties> PhysicalDevice::getQueueFamilyProperties() 
         queueFamilyProperties.resize(propertyCount);
         vkGetPhysicalDeviceQueueFamilyProperties(handle, &propertyCount, queueFamilyProperties.data());
     }
-    return queueFamilyProperties;
+    return std::move(queueFamilyProperties);
 }
 
 const VkPhysicalDeviceMemoryProperties& PhysicalDevice::getMemoryProperties() const
@@ -92,7 +92,7 @@ std::set<std::string> PhysicalDevice::enumerateExtensions(const char *layerName 
     std::set<std::string> extensions;
     for (const auto& property : properties)
         extensions.insert(property.extensionName);
-    return extensions;
+    return std::move(extensions);
 }
 
 std::vector<VkLayerProperties> PhysicalDevice::enumerateLayerProperties() const
@@ -103,7 +103,7 @@ std::vector<VkLayerProperties> PhysicalDevice::enumerateLayerProperties() const
     std::vector<VkLayerProperties> properties(propertyCount);
 	const VkResult enumerate = vkEnumerateDeviceLayerProperties(handle, &propertyCount, properties.data());
 	MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device layers");
-    return properties;
+    return std::move(properties);
 }
 
 std::shared_ptr<Device> PhysicalDevice::createDevice(
@@ -167,7 +167,7 @@ std::vector<VkSurfaceFormatKHR> PhysicalDevice::getSurfaceFormats(std::shared_pt
     std::vector<VkSurfaceFormatKHR> surfaceFormats(formatCount);
     const VkResult get = vkGetPhysicalDeviceSurfaceFormatsKHR(handle, *surface, &formatCount, surfaceFormats.data());
     MAGMA_THROW_FAILURE(get, "failed to get surface formats");
-    return surfaceFormats;
+    return std::move(surfaceFormats);
 }
 
 std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared_ptr<const Surface> surface) const
@@ -178,7 +178,7 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared
     std::vector<VkPresentModeKHR> surfacePresentModes(presentModeCount);
     const VkResult get = vkGetPhysicalDeviceSurfacePresentModesKHR(handle, *surface, &presentModeCount, surfacePresentModes.data());
     MAGMA_THROW_FAILURE(get, "failed to get surface present modes");
-    return surfacePresentModes;
+    return std::move(surfacePresentModes);
 }
 
 bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) const
