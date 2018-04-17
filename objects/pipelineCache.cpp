@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pipelineCache.h"
-#include "physicalDevice.h"
 #include "device.h"
 #include "../shared.h"
 #include "../helpers/stackArray.h"
