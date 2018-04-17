@@ -54,6 +54,7 @@ namespace magma
         VkSurfaceCapabilitiesKHR getSurfaceCapabilities(std::shared_ptr<const Surface> surface) const;
         std::vector<VkSurfaceFormatKHR> getSurfaceFormats(std::shared_ptr<const Surface> surface) const;
         std::vector<VkPresentModeKHR> getSurfacePresentModes(std::shared_ptr<const Surface> surface) const;
+        bool checkPipelineCacheDataCompatibility(const void *cacheData) const;
 
     private:
         mutable VkPhysicalDeviceFeatures features = {};

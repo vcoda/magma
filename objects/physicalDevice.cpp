@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "instance.h"
 #include "device.h"
 #include "surface.h"
+#include "pipelineCache.h"
 #include "../shared.h"
 
 namespace magma
@@ -175,5 +176,23 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared
     const VkResult get = vkGetPhysicalDeviceSurfacePresentModesKHR(handle, *surface, &presentModeCount, surfacePresentModes.data());
     MAGMA_THROW_FAILURE(get, "failed to get surface present modes");
     return surfacePresentModes;
+}
+
+bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) const
+{
+    MAGMA_ASSERT(cacheData);
+    if (!cacheData)
+        return false;
+    if ((0 == properties.vendorID) || (0 == properties.deviceID))
+        getProperties();
+    PipelineCache::Header header;
+    header.size = sizeof(PipelineCache::Header);
+    header.version = VK_PIPELINE_CACHE_HEADER_VERSION_ONE;
+    header.vendorID = properties.vendorID;
+    header.deviceID = properties.deviceID;
+    memcpy(header.cacheUUID, properties.pipelineCacheUUID, VK_UUID_SIZE);
+    const PipelineCache::Header *cacheHeader = reinterpret_cast<const PipelineCache::Header *>(cacheData);
+    const bool equal = (0 == memcmp(cacheHeader, &header, sizeof(PipelineCache::Header)));
+    return equal;
 }
 } // namespace magma
