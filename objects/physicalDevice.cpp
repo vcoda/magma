@@ -54,7 +54,7 @@ VkImageFormatProperties PhysicalDevice::getImageFormatProperties(VkFormat format
     VkImageCreateFlags flags /* 0* */) const
 {
     VkImageFormatProperties imageFormatProperties;
-    VkResult get = vkGetPhysicalDeviceImageFormatProperties(handle, format, imageType,
+    const VkResult get = vkGetPhysicalDeviceImageFormatProperties(handle, format, imageType,
         optimalTiling ? VK_IMAGE_TILING_OPTIMAL : VK_IMAGE_TILING_LINEAR,
         usage, flags, &imageFormatProperties);
     MAGMA_THROW_FAILURE(get, "failed to get image format properties");
@@ -98,7 +98,7 @@ std::set<std::string> PhysicalDevice::enumerateExtensions(const char *layerName 
 std::vector<VkLayerProperties> PhysicalDevice::enumerateLayerProperties() const
 {
     uint32_t propertyCount = 0;
-    VkResult count = vkEnumerateDeviceLayerProperties(handle, &propertyCount, nullptr);
+    const VkResult count = vkEnumerateDeviceLayerProperties(handle, &propertyCount, nullptr);
     MAGMA_THROW_FAILURE(count, "failed to count device layers");
     std::vector<VkLayerProperties> properties(propertyCount);
 	const VkResult enumerate = vkEnumerateDeviceLayerProperties(handle, &propertyCount, properties.data());
