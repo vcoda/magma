@@ -32,6 +32,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "vulkan.h"
 #include "misc/exception.h"
 
+#define MAGMA_INLINE inline
 #define MAGMA_BOOLEAN(x) x ? VK_TRUE : VK_FALSE
 #define MAGMA_COUNT(v) static_cast<uint32_t>(v.size())
 
@@ -94,7 +95,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     template <typename Type>
-    inline typename Type::VkType __handle(const std::shared_ptr<const Type>& obj)
+    MAGMA_INLINE typename Type::VkType __handle(const std::shared_ptr<const Type>& obj)
     {
         //return obj ? *obj : VK_NULL_HANDLE;
         if (obj) return *obj;

@@ -23,7 +23,7 @@ namespace magma
 {
     namespace helpers
     {
-        inline void *alignedMemcpy(void *dst, const void *src, size_t size)
+        MAGMA_INLINE void *alignedMemcpy(void *dst, const void *src, size_t size)
         {
             MAGMA_ASSERT(dst);
             MAGMA_ASSERT(src);
@@ -41,7 +41,7 @@ namespace magma
         }
 
         template<typename Type>
-        inline void *alignedMemcpy(void *dst, const std::vector<Type>& src)
+        MAGMA_INLINE void *alignedMemcpy(void *dst, const std::vector<Type>& src)
         {
             return alignedMemcpy(dst, src.data(), sizeof(Type) * src.size());
         }

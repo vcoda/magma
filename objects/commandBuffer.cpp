@@ -117,31 +117,31 @@ void CommandBuffer::bindPipeline(const std::shared_ptr<ComputePipeline>& pipelin
     vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_COMPUTE, *pipeline);
 }
 
-// inline void CommandBuffer::setViewport
-// inline void CommandBuffer::setScissor
-// inline void CommandBuffer::setLineWidth
-// inline void CommandBuffer::setDepthBias
-// inline void CommandBuffer::setBlendConstants
-// inline void CommandBuffer::setDepthBounds
-// inline void CommandBuffer::setStencilCompareMask
-// inline void CommandBuffer::setStencilWriteMask
-// inline void CommandBuffer::setStencilReference
+// void CommandBuffer::setViewport
+// void CommandBuffer::setScissor
+// void CommandBuffer::setLineWidth
+// void CommandBuffer::setDepthBias
+// void CommandBuffer::setBlendConstants
+// void CommandBuffer::setDepthBounds
+// void CommandBuffer::setStencilCompareMask
+// void CommandBuffer::setStencilWriteMask
+// void CommandBuffer::setStencilReference
 
-// inline void CommandBuffer::bindDescriptorSet
-// inline void CommandBuffer::bindDescriptorSets
+// void CommandBuffer::bindDescriptorSet
+// void CommandBuffer::bindDescriptorSets
 
-// inline void CommandBuffer::bindIndexBuffer
-// inline void CommandBuffer::bindVertexBuffer
-// inline void CommandBuffer::bindVertexBuffers
+// void CommandBuffer::bindIndexBuffer
+// void CommandBuffer::bindVertexBuffer
+// void CommandBuffer::bindVertexBuffers
 
-// inline void CommandBuffer::draw
-// inline void CommandBuffer::drawInstanced
-// inline void CommandBuffer::drawIndexed
-// inline void CommandBuffer::drawIndexedInstanced
-// inline void CommandBuffer::drawIndirect
-// inline void CommandBuffer::drawIndexedIndirect
-// inline void CommandBuffer::dispatch
-// inline void CommandBuffer::dispatchIndirect
+// void CommandBuffer::draw
+// void CommandBuffer::drawInstanced
+// void CommandBuffer::drawIndexed
+// void CommandBuffer::drawIndexedInstanced
+// void CommandBuffer::drawIndirect
+// void CommandBuffer::drawIndexedIndirect
+// void CommandBuffer::dispatch
+// void CommandBuffer::dispatchIndirect
 
 void CommandBuffer::copyBuffer(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Buffer>& dstBuffer,
     VkDeviceSize srcOffset /* 0 */, VkDeviceSize dstOffset /* 0 */, VkDeviceSize size /* VK_WHOLE_SIZE */) const noexcept
@@ -181,8 +181,8 @@ void CommandBuffer::copyImageToBuffer(const std::shared_ptr<Image>& srcImage, co
     vkCmdCopyImageToBuffer(handle, *srcImage, srcImage->getLayout(), *dstBuffer, 1, &region);
 }
 
-// inline void CommandBuffer::updateBuffer()
-// inline void CommandBuffer::fillBuffer()
+// void CommandBuffer::updateBuffer()
+// void CommandBuffer::fillBuffer()
 
 void CommandBuffer::clearColorImage(const std::shared_ptr<Image>& image, const ColorClear& color, const VkImageSubresourceRange& range) const noexcept
 {

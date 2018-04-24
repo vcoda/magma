@@ -23,7 +23,7 @@ namespace magma
     namespace helpers
     {
         template <typename Type>
-        inline Type *copy(Type *const dst, const Type *const src)
+        MAGMA_INLINE Type *copy(Type *const dst, const Type *const src)
         {
             MAGMA_ASSERT(dst);
             MAGMA_ASSERT(src);
@@ -31,7 +31,7 @@ namespace magma
         }
 
         template <typename Type>
-        inline Type *copy(Type *const dst, const Type *const src, uint32_t count)
+        MAGMA_INLINE Type *copy(Type *const dst, const Type *const src, uint32_t count)
         {
             MAGMA_ASSERT(dst);
             MAGMA_ASSERT(src);
@@ -40,7 +40,7 @@ namespace magma
         }
 
         template <typename DstType, typename SrcType>
-        inline DstType *copy(DstType *const dst, const std::vector<SrcType>& src)
+        MAGMA_INLINE DstType *copy(DstType *const dst, const std::vector<SrcType>& src)
         {
             static_assert(sizeof(DstType) == sizeof(SrcType), "equal size expected");
             MAGMA_ASSERT(dst);
@@ -49,7 +49,7 @@ namespace magma
         }
 
         template <typename DstType, typename SrcType>
-        inline DstType *copy(DstType *const dst, const std::initializer_list<SrcType>& src)
+        MAGMA_INLINE DstType *copy(DstType *const dst, const std::initializer_list<SrcType>& src)
         {
             static_assert(sizeof(DstType) == sizeof(SrcType), "equal size expected");
             MAGMA_ASSERT(dst);
@@ -57,7 +57,7 @@ namespace magma
             return reinterpret_cast<DstType *>(memcpy(dst, src.begin(), sizeof(SrcType) * src.size()));
         }
 
-        inline char *copyString(const char *const src)
+        MAGMA_INLINE char *copyString(const char *const src)
         {
             const size_t size = strlen(src) + 1;
             char *const dst = new char[size];
