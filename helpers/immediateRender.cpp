@@ -75,7 +75,6 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology)
     primitive.vertexCount = 0;
     primitive.firstVertex = vertexCount;
     primitives.push_back(primitive);
-    pipelines.insert(primitive.pipeline); // Hold unique pipelines, as they should exist during command buffer submission
     insidePrimitive = true;
     return true;
 }
@@ -272,10 +271,12 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
         &states::triangleStripWithAdjacency,
         &states::patchList
     };
-    return std::shared_ptr<GraphicsPipeline>(new GraphicsPipeline(device, cache,
+    std::shared_ptr<GraphicsPipeline> pipeline(new GraphicsPipeline(device, cache,
         {vertexShader, fragmentShader}, vertexInput, *inputAssemblyStates[topology],
         rasterizationState, multisampleState, depthStencilState, colorBlendState,
         {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR}, layout, renderPass));
+    pipelines.insert(pipeline); // Hold unique pipelines, as they should exist during command buffer submission
+    return pipeline;
 }
 } // namespace helpers
 } // namespace magma
