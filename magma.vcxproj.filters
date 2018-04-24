@@ -40,6 +40,9 @@
     <Filter Include="Source Files\states">
       <UniqueIdentifier>{7f21c3be-9580-415f-a719-ae5de612389d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\helpers">
+      <UniqueIdentifier>{67f6364d-f547-47a0-947d-55379aaf5fdd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="descriptors\attachment.h">
@@ -270,10 +273,16 @@
     <ClInclude Include="typedefs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="helpers\immediateRender.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
       <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="helpers\immediateRender.inl">
+      <Filter>Header Files\helpers</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -453,6 +462,9 @@
     </ClCompile>
     <ClCompile Include="objects\indirectBuffer.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="helpers\immediateRender.cpp">
+      <Filter>Source Files\helpers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
