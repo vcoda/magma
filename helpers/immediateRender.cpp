@@ -37,7 +37,7 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     layout(layout),
     cache(cache),
     renderPass(renderPass),
-    vertexBuffer(new VertexBuffer(device, nullptr, sizeof(Vertex) * maxVertexCount, maxVertexCount, 0)),
+    vertexBuffer(new VertexBuffer(device, nullptr, sizeof(Vertex) * maxVertexCount, maxVertexCount)),
     vertexShader(VertexShaderStage(createVertexShader(), "main")),
     fragmentShader(FragmentShaderStage(createFragmentShader(), "main")),
     rasterizationState(states::fillCullBackCCW),
@@ -48,7 +48,7 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     if (!layout)
     {
         const pushconstants::VertexConstantRange<Transform> pushConstantRange;
-        this->layout.reset(new magma::PipelineLayout(device, {pushConstantRange}));
+        this->layout.reset(new PipelineLayout(device, {pushConstantRange}));
     }
     // Set attributes to initial state
     curr.x = curr.y = curr.z = 0.f;
@@ -94,7 +94,7 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer
     MAGMA_ASSERT(!insidePrimitive);
     if (insidePrimitive || primitives.empty())
         return false;
-    cmdBuffer->bindVertexBuffer(0, vertexBuffer, 0);
+    cmdBuffer->bindVertexBuffer(0, vertexBuffer);
     std::shared_ptr<GraphicsPipeline> prevPipeline;
     for (const auto& primitive : primitives)
     {
