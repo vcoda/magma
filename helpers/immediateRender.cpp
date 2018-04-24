@@ -95,16 +95,16 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer
     if (insidePrimitive || primitives.empty())
         return false;
     cmdBuffer->bindVertexBuffer(0, vertexBuffer, 0);
-    std::shared_ptr<GraphicsPipeline> prevPipeline = nullptr;
+    std::shared_ptr<GraphicsPipeline> prevPipeline;
     for (const auto& primitive : primitives)
     {
         if (primitive.pipeline != prevPipeline)
         {
             cmdBuffer->bindPipeline(primitive.pipeline);
-            if (layout)
-                cmdBuffer->pushConstantBlock(layout, primitive.transform, VK_SHADER_STAGE_VERTEX_BIT);
             prevPipeline = primitive.pipeline;
         }
+        if (layout)
+            cmdBuffer->pushConstantBlock(layout, primitive.transform, VK_SHADER_STAGE_VERTEX_BIT);
         cmdBuffer->draw(primitive.vertexCount, primitive.firstVertex);
     }
     if (clear)
