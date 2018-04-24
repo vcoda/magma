@@ -19,7 +19,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/deviceMemory.h"
 #include "../objects/commandBuffer.h"
 #include "../objects/pipeline.h"
-#include "../objects/pipelineLayout.h"
+#include "../states/vertexInputState.h"
+#include "../states/inputAssemblyState.h"
 #include "../misc/pushConstants.h"
 
 namespace magma

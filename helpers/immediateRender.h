@@ -19,8 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <list>
 #include <unordered_set>
 #include "../objects/shaderModule.h"
-#include "../states/vertexInputState.h"
-#include "../states/inputAssemblyState.h"
 #include "../states/rasterizationState.h"
 #include "../states/multiSampleState.h"
 #include "../states/depthStencilState.h"
