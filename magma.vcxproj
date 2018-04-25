@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="allocator\allocator.h" />
     <ClInclude Include="descriptors\attachment.h" />
     <ClInclude Include="descriptors\bindings.h" />
     <ClInclude Include="descriptors\descriptors.h" />
@@ -207,6 +208,7 @@
     <None Include="objects\commandBuffer.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="allocator\allocator.cpp" />
     <ClCompile Include="descriptors\attachment.cpp" />
     <ClCompile Include="descriptors\subpass.cpp" />
     <ClCompile Include="helpers\immediateRender.cpp" />

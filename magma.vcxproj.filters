@@ -43,6 +43,12 @@
     <Filter Include="Source Files\helpers">
       <UniqueIdentifier>{67f6364d-f547-47a0-947d-55379aaf5fdd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\allocator">
+      <UniqueIdentifier>{5c6e002d-488d-4884-b8a0-de93c4efe8a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\allocator">
+      <UniqueIdentifier>{9b6625c6-3df9-4388-b570-e80682bb98e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="descriptors\attachment.h">
@@ -276,6 +282,9 @@
     <ClInclude Include="helpers\immediateRender.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
+    <ClInclude Include="allocator\allocator.h">
+      <Filter>Header Files\allocator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
@@ -465,6 +474,9 @@
     </ClCompile>
     <ClCompile Include="helpers\immediateRender.cpp">
       <Filter>Source Files\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="allocator\allocator.cpp">
+      <Filter>Source Files\allocator</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
