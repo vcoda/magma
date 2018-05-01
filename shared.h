@@ -104,5 +104,6 @@ namespace magma
 }
 
 #define MAGMA_OPTIONAL_HANDLE(obj) magma::__handle(obj)
+#define MAGMA_OPTIONAL_INSTANCE(obj) obj ? obj.get() : nullptr
 
 #include "helpers/copying.h"
