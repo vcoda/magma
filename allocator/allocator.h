@@ -28,6 +28,7 @@ namespace magma
     class IAllocator : public AllocationCallbacks
     {
     public:
+        virtual ~IAllocator() = default;
         virtual void *alloc(size_t size,
             size_t alignment,
             VkSystemAllocationScope allocationScope) = 0;
