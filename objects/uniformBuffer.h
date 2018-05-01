@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    template <typename Block>
+    template<typename Block>
     class UniformBuffer : public Buffer
     {
     public:

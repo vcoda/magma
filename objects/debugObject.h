@@ -35,7 +35,7 @@ namespace magma
             std::shared_ptr<const Device> device);
         virtual ~DebugObject() = default;
         void setMarkerTag(uint64_t name, size_t tagSize, const void *tag);
-        template <typename Tag>
+        template<typename Tag>
         void setMarkerTag(uint64_t name, const Tag& tag) 
         { 
             setMarkerTag(name, sizeof(Tag), &tag); 

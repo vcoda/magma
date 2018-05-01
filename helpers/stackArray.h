@@ -25,7 +25,7 @@ namespace magma
         /* As variable length arrays are not part of C++1x standard, implement our own.
            Prevent scenarios with multiple allocation in cycles/inlined functions,
            as allocated stack memory freed only when function returns. */
-        template <typename Type>
+        template<typename Type>
         class StackArray final
         {
         public:

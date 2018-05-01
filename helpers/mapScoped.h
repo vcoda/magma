@@ -22,7 +22,7 @@ namespace magma
 {
     namespace helpers
     {
-        template <typename Block>
+        template<typename Block>
         inline void mapScoped(
             const std::shared_ptr<UniformBuffer<Block>>& buffer,
             bool clearMemory,
