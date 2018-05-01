@@ -106,7 +106,7 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer
             prevPipeline = primitive.pipeline;
         }
         if (layout)
-            cmdBuffer->pushConstantBlock(layout, primitive.transform, VK_SHADER_STAGE_VERTEX_BIT);
+            cmdBuffer->pushConstantBlock(layout, VK_SHADER_STAGE_VERTEX_BIT, primitive.transform);
         cmdBuffer->draw(primitive.vertexCount, primitive.firstVertex);
     }
     if (clear)

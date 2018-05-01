@@ -275,8 +275,9 @@ namespace magma
             uint32_t offset = 0) noexcept;
         template<typename Type> void pushConstantBlock(
             const std::shared_ptr<PipelineLayout>& layout,
+            VkShaderStageFlags stageFlags,
             const Type& block,
-            VkShaderStageFlags stageFlags = VK_SHADER_STAGE_ALL_GRAPHICS) noexcept;
+            uint32_t offset = 0) noexcept;
 
         void beginRenderPass(
             const std::shared_ptr<RenderPass>& renderPass,

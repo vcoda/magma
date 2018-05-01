@@ -253,10 +253,10 @@ MAGMA_INLINE void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLay
 }
 
 template<typename Type>
-MAGMA_INLINE void CommandBuffer::pushConstantBlock(const std::shared_ptr<PipelineLayout>& layout, const Type& block,
-    VkShaderStageFlags stageFlags /* VK_SHADER_STAGE_ALL_GRAPHICS */) noexcept
+MAGMA_INLINE void CommandBuffer::pushConstantBlock(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const Type& block,
+    uint32_t offset /* 0 */) noexcept
 {
-    vkCmdPushConstants(handle, *layout, stageFlags, 0, static_cast<uint32_t>(sizeof(Type)), &block);
+    vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type)), &block);
 }
 
 MAGMA_INLINE void CommandBuffer::setRenderArea(const VkRect2D& rc) noexcept
