@@ -84,6 +84,6 @@ std::set<std::string> Instance::enumerateExtensions(const char *layerName /* nul
     std::set<std::string> extensions;
     for (const auto& property : properties)
         extensions.insert(property.extensionName);
-    return extensions;
+    return std::move(extensions);
 }
 } // namespace magma

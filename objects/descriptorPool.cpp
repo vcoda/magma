@@ -81,7 +81,7 @@ std::vector<std::shared_ptr<DescriptorSet>> DescriptorPool::allocateDescriptorSe
 {
     std::vector<std::shared_ptr<DescriptorSet>> descriptorSets;
 	MAGMA_THROW_NOT_IMPLEMENTED();
-    return descriptorSets;
+    return std::move(descriptorSets);
 }
 
 void DescriptorPool::freeDescriptorSets(std::vector<std::shared_ptr<DescriptorSet>>& descriptorSets)

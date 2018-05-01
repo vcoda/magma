@@ -83,7 +83,7 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     std::vector<std::shared_ptr<CommandBuffer>> commandBuffers;
     for (const VkCommandBuffer cmdBuffer : nativeCommandBuffers)
         commandBuffers.push_back(std::shared_ptr<CommandBuffer>(new CommandBuffer(cmdBuffer, device)));
-    return commandBuffers;
+    return std::move(commandBuffers);
 }
 
 void CommandPool::freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers)

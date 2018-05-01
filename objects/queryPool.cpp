@@ -58,7 +58,7 @@ std::vector<uint64_t> QueryPool::getResults(uint32_t firstQuery, uint32_t queryC
         sizeof(uint64_t) * results.size(), results.data(), stride, 
         flags);
     if (MAGMA_SUCCEEDED(get))
-        return results;
+        return std::move(results);
     return std::vector<uint64_t>();
 }
 

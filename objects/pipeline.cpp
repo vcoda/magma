@@ -64,7 +64,7 @@ std::vector<uint8_t> Pipeline::getShaderBinary(VkShaderStageFlagBits stage) cons
         std::vector<uint8_t> binary(binarySize);
         const VkResult get = pfnGetShaderInfoAMD(*device, handle, stage, VK_SHADER_INFO_TYPE_BINARY_AMD, &binarySize, binary.data());
         if (VK_SUCCESS == get)
-            return binary;
+            return std::move(binary);
     }
     return std::vector<uint8_t>();
 }
