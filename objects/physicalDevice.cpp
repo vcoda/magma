@@ -198,7 +198,7 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
     header.deviceID = properties.deviceID;
     memcpy(header.cacheUUID, properties.pipelineCacheUUID, VK_UUID_SIZE);
     const PipelineCache::Header *cacheHeader = reinterpret_cast<const PipelineCache::Header *>(cacheData);
-    const bool equal = (0 == memcmp(cacheHeader, &header, sizeof(PipelineCache::Header)));
-    return equal;
+    const int compareDiff = memcmp(cacheHeader, &header, sizeof(PipelineCache::Header));
+    return (0 == compareDiff);
 }
 } // namespace magma
