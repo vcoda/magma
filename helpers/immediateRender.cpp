@@ -47,11 +47,6 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     depthStencilState(states::depthAlwaysDontWrite),
     colorBlendState(states::dontBlendWriteRGBA)
 {
-    if (!layout)
-    {
-        const pushconstants::VertexConstantRange<Transform> pushConstantRange;
-        this->layout.reset(new PipelineLayout(device, {pushConstantRange}, allocator));
-    }
     // Set attributes to initial state
     curr.x = curr.y = curr.z = 0.f;
     curr.w = 1.f;
@@ -59,6 +54,12 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     curr.psize = 1.f; // Initial point size
     curr.r = curr.g = curr.b = curr.a = 1.f; // White is default
     curr.u = curr.v = 0.f;
+    // If layout not specified, create default one
+    if (!layout)
+    {
+        const pushconstants::VertexConstantRange<Transform> pushConstantRange;
+        this->layout.reset(new PipelineLayout(device, {pushConstantRange}, allocator));
+    }
 }
 
 bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology)
