@@ -23,8 +23,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Image2D::Image2D(std::shared_ptr<const Device> device, VkFormat format,
-    const VkExtent2D& extent, uint32_t mipLevels, uint32_t samples, VkImageUsageFlags usage):
-    Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1}, mipLevels, 1, samples, usage)
+    const VkExtent2D& extent, uint32_t mipLevels, uint32_t samples, VkImageUsageFlags usage,
+    std::shared_ptr<IAllocator> allocator):
+    Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1}, mipLevels, 1, samples, usage, 0, allocator)
 {}
 
 Image2D::Image2D(std::shared_ptr<const Device> device, VkImage handle, VkFormat format, const VkExtent2D& extent):
@@ -36,17 +37,20 @@ Image2D::Image2D(std::shared_ptr<const Device> device,
     const std::vector<VkExtent2D>& mipExtents,
     const std::vector<const void *>& mipData,
     const std::vector<VkDeviceSize>& mipSizes,
-    std::shared_ptr<CommandBuffer> cmdBuffer):
+    std::shared_ptr<CommandBuffer> cmdBuffer,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{mipExtents[0].width, mipExtents[0].height, 1},
         static_cast<uint32_t>(mipExtents.size()), // mipLevels
         1, // arrayLayers 
         1, // samples
-        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT)
+        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+        0,
+        allocator)
 {
     std::vector<VkBufferImageCopy> copyRegions;
     VkDeviceSize size = getCopyRegions(mipExtents, mipSizes, copyRegions);
     // Copy mip levels to host visible buffer
-    std::shared_ptr<SourceTransferBuffer> srcBuffer(new SourceTransferBuffer(device, size));
+    std::shared_ptr<SourceTransferBuffer> srcBuffer(new SourceTransferBuffer(device, size, 0, allocator));
     if (uint8_t *data = reinterpret_cast<uint8_t *>(srcBuffer->getMemory()->map()))
     {
         for (uint32_t level = 0; level < mipLevels; ++level)
@@ -65,9 +69,11 @@ ColorAttachment2D::ColorAttachment2D(std::shared_ptr<const Device> device,
     const VkExtent2D& extent,
     uint32_t mipLevels,
     uint32_t samples,
-    bool sampled /* true */):
+    bool sampled /* true */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image2D(device, colorFormat, extent, mipLevels, samples,
-        VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | (sampled ? VK_IMAGE_USAGE_SAMPLED_BIT : 0))
+        VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | (sampled ? VK_IMAGE_USAGE_SAMPLED_BIT : 0),
+        allocator)
 {}
 
 DepthStencilAttachment2D::DepthStencilAttachment2D(std::shared_ptr<const Device> device,
@@ -75,9 +81,11 @@ DepthStencilAttachment2D::DepthStencilAttachment2D(std::shared_ptr<const Device>
     const VkExtent2D& extent,
     uint32_t mipLevels,
     uint32_t samples,
-    bool sampled /* false */):
+    bool sampled /* false */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image2D(device, depthStencilFormat, extent, mipLevels, samples,
-        VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | (sampled ? VK_IMAGE_USAGE_SAMPLED_BIT : 0))
+        VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | (sampled ? VK_IMAGE_USAGE_SAMPLED_BIT : 0),
+        allocator)
 {}
 
 SwapchainColorAttachment2D::SwapchainColorAttachment2D(std::shared_ptr<const Device> device,

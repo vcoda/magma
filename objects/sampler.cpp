@@ -19,13 +19,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "sampler.h"
 #include "device.h"
 #include "../states/samplerState.h"
+#include "../allocator/allocator.h"
 #include "../shared.h"
 
 namespace magma
 {
 Sampler::Sampler(std::shared_ptr<const Device> device, const SamplerState& state, 
-    float mipLodBias /* 0 */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT, device)
+    float mipLodBias /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT, device, allocator)
 {
     VkSamplerCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
@@ -46,14 +48,15 @@ Sampler::Sampler(std::shared_ptr<const Device> device, const SamplerState& state
     info.maxLod = std::numeric_limits<float>::max();
     info.borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK;
     info.unnormalizedCoordinates = VK_FALSE;
-    const VkResult create = vkCreateSampler(*device, &info, nullptr, &handle);
+    const VkResult create = vkCreateSampler(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create sampler");
 }
 
 Sampler::Sampler(std::shared_ptr<const Device> device, VkFilter magFilter, VkFilter minFilter, 
     VkSamplerMipmapMode mipmapMode, VkSamplerAddressMode addressMode, 
-    float mipLodBias /* 0 */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT, device)
+    float mipLodBias /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT, device, allocator)
 {
     VkSamplerCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
@@ -74,21 +77,22 @@ Sampler::Sampler(std::shared_ptr<const Device> device, VkFilter magFilter, VkFil
     info.maxLod = 1.f;
     info.borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK;
     info.unnormalizedCoordinates = VK_FALSE;
-    const VkResult create = vkCreateSampler(*device, &info, nullptr, &handle);
+    const VkResult create = vkCreateSampler(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create sampler");
 }
 
-Sampler::Sampler(std::shared_ptr<const Device> device):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT, device)
+Sampler::Sampler(std::shared_ptr<const Device> device, std::shared_ptr<IAllocator> allocator):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT, device, allocator)
 {}
 
 Sampler::~Sampler()
 {
-    vkDestroySampler(*device, handle, nullptr);
+    vkDestroySampler(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
-UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<const Device> device, bool linearFilter):
-    Sampler(device)
+UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<const Device> device, bool linearFilter,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Sampler(device, allocator)
 {
     VkSamplerCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
@@ -109,7 +113,7 @@ UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<const Device> device, b
     info.maxLod = 0.f;
     info.borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK;
     info.unnormalizedCoordinates = VK_TRUE;
-    const VkResult create = vkCreateSampler(*device, &info, nullptr, &handle);
+    const VkResult create = vkCreateSampler(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create unnormalized sampler");
 }
 } // namespace magma

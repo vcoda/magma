@@ -25,14 +25,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 VertexBuffer::VertexBuffer(std::shared_ptr<const Device> device, VkDeviceSize size, VkBufferUsageFlags usage,
-    VkBufferCreateFlags flags, VkMemoryPropertyFlags memoryFlags):
-    Buffer(device, size, usage, flags, memoryFlags),
+    VkBufferCreateFlags flags, std::shared_ptr<IAllocator> allocator, VkMemoryPropertyFlags memoryFlags):
+    Buffer(device, size, usage, flags, allocator, memoryFlags),
     vertexCount(0)
 {}
 
 VertexBuffer::VertexBuffer(std::shared_ptr<const Device> device, const void *data, VkDeviceSize size, uint32_t vertexCount,
-    VkBufferCreateFlags flags /* 0 */):
-    Buffer(device, size, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, flags,
+    VkBufferCreateFlags flags /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Buffer(device, size, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, flags, allocator, 
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
     vertexCount(vertexCount)
 {
@@ -47,8 +48,9 @@ VertexBuffer::VertexBuffer(std::shared_ptr<const Device> device, const void *dat
 }
 
 VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size, uint32_t vertexCount,
-    VkBufferCreateFlags flags /* 0 */):
-    Buffer(copyCmdBuffer->getDevice(), size, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags,
+    VkBufferCreateFlags flags /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Buffer(copyCmdBuffer->getDevice(), size, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags, allocator,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
     vertexCount(vertexCount)
 {        

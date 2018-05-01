@@ -17,13 +17,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "instance.h"
 #include "physicalDevice.h"
+#include "../allocator/allocator.h"
 #include "../helpers/stackArray.h"
 
 namespace magma
 {
 Instance::Instance(const char *applicationName, const char *engineName, uint32_t apiVersion, 
-    const std::vector<const char *>& layerNames, const std::vector<const char *>& extensionNames):
-    Handle(VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT)
+    const std::vector<const char *>& layerNames, const std::vector<const char *>& extensionNames,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Dispatchable<VkInstance>(VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT, nullptr, allocator)
 {
     VkApplicationInfo appInfo;
     appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -42,13 +44,13 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
     createInfo.ppEnabledLayerNames = layerNames.data();
     createInfo.enabledExtensionCount = MAGMA_COUNT(extensionNames);
     createInfo.ppEnabledExtensionNames = extensionNames.data();
-    const VkResult create = vkCreateInstance(&createInfo, nullptr, &handle);
+    const VkResult create = vkCreateInstance(&createInfo, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create Vulkan instance");
 }
 
 Instance::~Instance()
 {
-    vkDestroyInstance(handle, nullptr);
+    vkDestroyInstance(handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 uint32_t Instance::countPhysicalDevices() const

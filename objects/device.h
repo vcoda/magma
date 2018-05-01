@@ -24,13 +24,15 @@ namespace magma
     class PhysicalDevice;
     class Queue;
     class Fence;
+    class IAllocator;
 
-    class Device : public Handle<VkDevice>,
+    class Device : public Dispatchable<VkDevice>,
         public std::enable_shared_from_this<Device>
     {
         Device(std::shared_ptr<const PhysicalDevice> physicalDevice,
             const VkDeviceCreateInfo& info,
-            const std::vector<VkDeviceQueueCreateInfo>& queues);
+            const std::vector<VkDeviceQueueCreateInfo>& queues,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         friend PhysicalDevice;
 
     public:

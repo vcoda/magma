@@ -19,22 +19,24 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "physicalDevice.h"
 #include "queue.h"
 #include "fence.h"
+#include "../allocator/allocator.h"
 #include "../helpers/stackArray.h"
 
 namespace magma
 {
-Device::Device(std::shared_ptr<const PhysicalDevice> physicalDevice, const VkDeviceCreateInfo& info, const std::vector<VkDeviceQueueCreateInfo>& queues):
-    Handle(VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT),
+Device::Device(std::shared_ptr<const PhysicalDevice> physicalDevice, const VkDeviceCreateInfo& info, const std::vector<VkDeviceQueueCreateInfo>& queues,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Dispatchable<VkDevice>(VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT, nullptr, allocator),
     physicalDevice(physicalDevice),
     queues(queues)
 {
-    const VkResult create = vkCreateDevice(*physicalDevice, &info, nullptr, &handle);
+    const VkResult create = vkCreateDevice(*physicalDevice, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create logical device");
 }
 
 Device::~Device()
 {
-    vkDestroyDevice(handle, nullptr);
+    vkDestroyDevice(handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const

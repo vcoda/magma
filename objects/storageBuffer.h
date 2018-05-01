@@ -28,20 +28,24 @@ namespace magma
     public:
         StorageBuffer(std::shared_ptr<const Device> device,
             VkDeviceSize size,
-            VkBufferCreateFlags flags = 0);
+            VkBufferCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const void *data, VkDeviceSize size,
-            VkBufferCreateFlags flags = 0);
+            VkBufferCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         template<typename Type>
         StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const std::vector<Type>& data,
-            VkBufferCreateFlags flags = 0);
+            VkBufferCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
     template<typename Type>
     inline StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, 
         const std::vector<Type>& data, 
-        VkBufferCreateFlags flags /* 0 */):
-        StorageBuffer(copyCmdBuffer, data.data(), static_cast<VkDeviceSize>(sizeof(Type) * data.size()), flags)
+        VkBufferCreateFlags flags /* 0 */,
+        std::shared_ptr<IAllocator> allocator /* nullptr */):
+        StorageBuffer(copyCmdBuffer, data.data(), static_cast<VkDeviceSize>(sizeof(Type) * data.size()), flags, allocator)
     {}
 } // namespace magma

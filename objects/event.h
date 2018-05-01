@@ -21,11 +21,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
+    class IAllocator;
 
     class Event : public NonDispatchable<VkEvent>
     {
     public:
-        Event(std::shared_ptr<const Device> device);
+        Event(std::shared_ptr<const Device> device,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         ~Event();
         VkResult getStatus() const noexcept;
         void set() noexcept;

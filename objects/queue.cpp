@@ -25,13 +25,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Queue::Queue(VkQueue queue, std::shared_ptr<const Device> device,
+Queue::Queue(VkQueue handle, std::shared_ptr<const Device> device,
     VkQueueFlagBits flags, uint32_t familyIndex, uint32_t index):
-    Handle(VK_DEBUG_REPORT_OBJECT_TYPE_QUEUE_EXT, queue, device),
+    Dispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_QUEUE_EXT, device, nullptr),
     flags(flags),
     familyIndex(familyIndex),
     index(index)
-{}
+{
+    this->handle = handle;
+}
 
 bool Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& commandBuffers,
     VkPipelineStageFlags waitStageMask,

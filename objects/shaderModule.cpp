@@ -17,11 +17,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "shaderModule.h"
 #include "device.h"
+#include "../allocator/allocator.h"
 
 namespace magma
 {
-ShaderModule::ShaderModule(std::shared_ptr<const Device> device, const uint32_t *bytecode, size_t bytecodeSize):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT, device)
+ShaderModule::ShaderModule(std::shared_ptr<const Device> device, const uint32_t *bytecode, size_t bytecodeSize,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT, device, allocator)
 {
     MAGMA_ASSERT(bytecodeSize % sizeof(uint32_t) == 0);
     VkShaderModuleCreateInfo info;
@@ -30,17 +32,18 @@ ShaderModule::ShaderModule(std::shared_ptr<const Device> device, const uint32_t 
     info.flags = 0;
     info.codeSize = bytecodeSize;
     info.pCode = bytecode;
-    const VkResult create = vkCreateShaderModule(*device, &info, nullptr, &handle);
+    const VkResult create = vkCreateShaderModule(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create shader module");
 }
 
-ShaderModule::ShaderModule(std::shared_ptr<const Device> device, const std::vector<uint32_t>& bytecode):
-    ShaderModule(device, bytecode.data(), bytecode.size() * sizeof(uint32_t))
+ShaderModule::ShaderModule(std::shared_ptr<const Device> device, const std::vector<uint32_t>& bytecode,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    ShaderModule(device, bytecode.data(), bytecode.size() * sizeof(uint32_t), allocator)
 {}    
 
 ShaderModule::~ShaderModule()
 {
-    vkDestroyShaderModule(*device, handle, nullptr);
+    vkDestroyShaderModule(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 Specialization::Specialization(const Specialization& other)

@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandPool.h"
 #include "commandBuffer.h"
 #include "device.h"
+#include "../allocator/allocator.h"
 #include "../helpers/stackArray.h"
 
 namespace magma
@@ -25,8 +26,9 @@ namespace magma
 CommandPool::CommandPool(std::shared_ptr<const Device> device,
     uint32_t queueFamilyIndex,
     bool transient /* false */, 
-    bool reset /* true */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT, device)
+    bool reset /* true */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT, device, allocator)
 {
     VkCommandPoolCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
@@ -37,13 +39,13 @@ CommandPool::CommandPool(std::shared_ptr<const Device> device,
     if (reset)
         info.flags |= VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     info.queueFamilyIndex = queueFamilyIndex;
-    const VkResult create = vkCreateCommandPool(*device, &info, nullptr, &handle);
+    const VkResult create = vkCreateCommandPool(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create command pool");
 }
 
 CommandPool::~CommandPool()
 {
-    vkDestroyCommandPool(*device, handle, nullptr);
+    vkDestroyCommandPool(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 std::shared_ptr<CommandBuffer> CommandPool::allocateCommandBuffer(bool primaryLevel)

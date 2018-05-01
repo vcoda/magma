@@ -28,12 +28,14 @@ namespace magma
             const VkExtent2D& extent,
             uint32_t mipLevels,
             uint32_t arrayLayers,
-            VkImageUsageFlags usage);
+            VkImageUsageFlags usage,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         Image2DArray(std::shared_ptr<const Device> device,
             VkFormat format,
             const std::vector<VkExtent2D>& mipExtents,
             const std::vector<std::vector<const void *>>& layersMipData,
             const std::vector<VkDeviceSize>& mipSizes,
-            std::shared_ptr<CommandBuffer> cmdBuffer);
+            std::shared_ptr<CommandBuffer> cmdBuffer,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma

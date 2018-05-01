@@ -70,7 +70,8 @@ namespace magma
                 std::shared_ptr<Device> device,
                 std::shared_ptr<PipelineCache> cache,
                 std::shared_ptr<PipelineLayout> layout,
-                std::shared_ptr<RenderPass> renderPass);
+                std::shared_ptr<RenderPass> renderPass,
+                std::shared_ptr<IAllocator> allocator = nullptr);
             void setVertexShader(const VertexShaderStage& vertexShader);
             void setFragmentShader(const FragmentShaderStage& fragmentShader);
             void setRasterizationState(const RasterizationState& state);

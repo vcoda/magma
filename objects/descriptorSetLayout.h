@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
+    class IAllocator;
 
     class DescriptorSetLayout : public NonDispatchable<VkDescriptorSetLayout>
     {
@@ -36,9 +37,13 @@ namespace magma
 
     public:
         DescriptorSetLayout(std::shared_ptr<const Device> device,
-            const Binding& binding);
+            const Binding& binding,
+            VkDescriptorSetLayoutCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         DescriptorSetLayout(std::shared_ptr<const Device> device,
-            const std::initializer_list<Binding>& bindings);
+            const std::initializer_list<Binding>& bindings,
+            VkDescriptorSetLayoutCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         ~DescriptorSetLayout();
         const Binding& getBinding(uint32_t index) const { return bindings[index]; }
 

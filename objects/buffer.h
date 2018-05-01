@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class DeviceMemory;
+    class IAllocator;
 
     class Buffer : public NonDispatchable<VkBuffer>
     {
@@ -37,6 +38,7 @@ namespace magma
             VkDeviceSize size, 
             VkBufferUsageFlags usage, 
             VkBufferCreateFlags flags,
+            std::shared_ptr<IAllocator> allocator,
             VkMemoryPropertyFlags memoryFlags);
 
     protected:

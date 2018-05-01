@@ -21,12 +21,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
+    class IAllocator;
 
     class Fence : public NonDispatchable<VkFence>
     {
     public:
         Fence(std::shared_ptr<const Device> device, 
-            bool signaled = false);
+            bool signaled = false,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         ~Fence();
         bool reset() noexcept;
         VkResult getStatus() const noexcept;

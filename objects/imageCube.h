@@ -27,12 +27,14 @@ namespace magma
             VkFormat format,
             uint32_t dimension,
             uint32_t mipLevels,
-            VkImageUsageFlags usage);
+            VkImageUsageFlags usage,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         ImageCube(std::shared_ptr<const Device> device,
             VkFormat format,
             const std::vector<uint32_t>& mipDimensions,
             const std::vector<const void *> cubeMipData[6],
             const std::vector<VkDeviceSize>& mipSizes,
-            std::shared_ptr<CommandBuffer> cmdBuffer);
+            std::shared_ptr<CommandBuffer> cmdBuffer,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma

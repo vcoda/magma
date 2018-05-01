@@ -17,19 +17,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pipelineCache.h"
 #include "device.h"
-#include "../shared.h"
+#include "../allocator/allocator.h"
 #include "../helpers/stackArray.h"
 
 namespace magma
 {
 PipelineCache::PipelineCache(std::shared_ptr<const Device> device,
-    const std::vector<uint8_t>& cacheData /* {} */):
-    PipelineCache(device, cacheData.size(), cacheData.data())
+    const std::vector<uint8_t>& cacheData /* {} */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    PipelineCache(device, cacheData.size(), cacheData.data(), allocator)
 {}
 
 PipelineCache::PipelineCache(std::shared_ptr<const Device> device, 
-    size_t dataSize, const void *cacheData):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_CACHE_EXT, device)
+    size_t dataSize, const void *cacheData,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_CACHE_EXT, device, allocator)
 {
     VkPipelineCacheCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
@@ -37,13 +39,13 @@ PipelineCache::PipelineCache(std::shared_ptr<const Device> device,
     info.flags = 0;
     info.initialDataSize = dataSize;
     info.pInitialData = cacheData;
-    const VkResult create = vkCreatePipelineCache(*device, &info, nullptr, &handle);
+    const VkResult create = vkCreatePipelineCache(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create pipeline cache");
 }
 
 PipelineCache::~PipelineCache()
 {
-    vkDestroyPipelineCache(*device, handle, nullptr);
+    vkDestroyPipelineCache(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 std::vector<uint8_t> PipelineCache::getData() const

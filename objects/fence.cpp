@@ -17,13 +17,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "fence.h"
 #include "device.h"
+#include "../allocator/allocator.h"
 #include "../shared.h"
 
 namespace magma
 {
 Fence::Fence(std::shared_ptr<const Device> device, 
-    bool signaled /* false */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT, device)
+    bool signaled /* false */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT, device, allocator)
 {
     VkFenceCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
@@ -31,13 +33,13 @@ Fence::Fence(std::shared_ptr<const Device> device,
     info.flags = 0;
     if (signaled)
         info.flags |= VK_FENCE_CREATE_SIGNALED_BIT;
-    const VkResult create = vkCreateFence(*device, &info, nullptr, &handle);
+    const VkResult create = vkCreateFence(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create fence");
 }
 
 Fence::~Fence()
 {
-    vkDestroyFence(*device, handle, nullptr);
+    vkDestroyFence(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 bool Fence::reset() noexcept

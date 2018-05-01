@@ -18,12 +18,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "deviceMemory.h"
 #include "device.h"
 #include "physicalDevice.h"
+#include "../allocator/allocator.h"
 #include "../shared.h"
 
 namespace magma
 {
-DeviceMemory::DeviceMemory(std::shared_ptr<const Device> device, VkDeviceSize size, VkMemoryPropertyFlags flags):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT, device),
+DeviceMemory::DeviceMemory(std::shared_ptr<const Device> device, VkDeviceSize size, VkMemoryPropertyFlags flags,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT, device, allocator),
     size(size)
 {
     VkMemoryAllocateInfo info;
@@ -53,13 +55,13 @@ DeviceMemory::DeviceMemory(std::shared_ptr<const Device> device, VkDeviceSize si
         if (VK_MAX_MEMORY_TYPES == info.memoryTypeIndex)
             MAGMA_THROW("failed to find suitable memory type");
     }
-    const VkResult allocate = vkAllocateMemory(*device, &info, nullptr, &handle);
+    const VkResult allocate = vkAllocateMemory(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(allocate, "failed to allocate memory");
 }
 
 DeviceMemory::~DeviceMemory()
 {
-    vkFreeMemory(*device, handle, nullptr);
+    vkFreeMemory(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 void *DeviceMemory::map(

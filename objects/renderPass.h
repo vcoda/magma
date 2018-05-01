@@ -25,17 +25,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
+    class IAllocator;
 
     class RenderPass : public NonDispatchable<VkRenderPass>
     {
     public:
         RenderPass(std::shared_ptr<const Device> device,
-            const AttachmentDescription& attachment);
-        RenderPass(std::shared_ptr<const Device> device,
-            const std::initializer_list<AttachmentDescription>& attachments);
+            const AttachmentDescription& attachment,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         RenderPass(std::shared_ptr<const Device> device,
             const std::initializer_list<AttachmentDescription>& attachments,
-            const std::initializer_list<Subpass>& subpasses);
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        RenderPass(std::shared_ptr<const Device> device,
+            const std::initializer_list<AttachmentDescription>& attachments,
+            const std::initializer_list<Subpass>& subpasses,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         ~RenderPass();
     };
 } // namespace magma

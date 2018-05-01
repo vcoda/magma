@@ -21,13 +21,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
+    class IAllocator;
 
     class DeviceMemory : public NonDispatchable<VkDeviceMemory>
     {
     public:
         DeviceMemory(std::shared_ptr<const Device> device, 
             VkDeviceSize size, 
-            VkMemoryPropertyFlags flags);
+            VkMemoryPropertyFlags flags,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         ~DeviceMemory();
         void *map(VkDeviceSize offset = 0, 
             VkDeviceSize size = VK_WHOLE_SIZE,

@@ -21,29 +21,34 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class SamplerState;
+    class IAllocator;
 
     class Sampler : public NonDispatchable<VkSampler>
     {
     public:
         Sampler(std::shared_ptr<const Device> device,
             const SamplerState& state,
-            float mipLodBias = 0.f);
+            float mipLodBias = 0.f,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         Sampler(std::shared_ptr<const Device> device,
             VkFilter magFilter, 
             VkFilter minFilter, 
             VkSamplerMipmapMode mipmapMode,
             VkSamplerAddressMode addressMode,
-            float mipLodBias = 0.f);
+            float mipLodBias = 0.f,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         ~Sampler();
 
     protected:
-        Sampler(std::shared_ptr<const Device> device);
+        Sampler(std::shared_ptr<const Device> device, 
+            std::shared_ptr<IAllocator> allocator);
     };
 
     class UnnormalizedSampler : public Sampler
     {
     public:
         UnnormalizedSampler(std::shared_ptr<const Device> device,
-            bool linearFilter);
+            bool linearFilter,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma

@@ -25,6 +25,7 @@ namespace magma
     class DeviceMemory;
     class Buffer;
     class CommandBuffer;
+    class IAllocator;
 
     class Image : public NonDispatchable<VkImage>
     {
@@ -51,7 +52,8 @@ namespace magma
             uint32_t arrayLayers,
             uint32_t samples,
             VkImageUsageFlags usage,
-            VkImageCreateFlags flags = 0);
+            VkImageCreateFlags flags,
+            std::shared_ptr<IAllocator> allocator);
         Image(std::shared_ptr<const Device> device, 
             VkImage handle,
             VkImageType imageType, 

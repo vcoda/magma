@@ -21,6 +21,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class Device;
+    class IAllocator;
+
     class QueryPool : public NonDispatchable<VkQueryPool>
     {
     public:
@@ -34,7 +37,8 @@ namespace magma
         QueryPool(VkQueryType queryType, 
             std::shared_ptr<const Device> device, 
             uint32_t queryCount,
-            VkQueryPipelineStatisticFlags pipelineStatistics);
+            VkQueryPipelineStatisticFlags pipelineStatistics,
+            std::shared_ptr<IAllocator> allocator);
 
     protected:
         uint32_t queryCount;
@@ -44,14 +48,16 @@ namespace magma
     {
     public:
         OcclusionQuery(std::shared_ptr<const Device> device,
-            uint32_t queryCount);
+            uint32_t queryCount,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
     class PipelineStatisticsQuery : public QueryPool
     {
     public:
         PipelineStatisticsQuery(std::shared_ptr<const Device> device,
-            VkQueryPipelineStatisticFlags pipelineStatistics);
+            VkQueryPipelineStatisticFlags pipelineStatistics,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         VkQueryPipelineStatisticFlags getStatisticFlags() const { return pipelineStatistics; }
 
     private:
@@ -62,6 +68,7 @@ namespace magma
     {
     public:
         TimestampQuery(std::shared_ptr<const Device> device,
-            uint32_t queryCount);
+            uint32_t queryCount,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma

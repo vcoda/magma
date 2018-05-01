@@ -47,7 +47,7 @@ namespace magma
     struct ImageMemoryBarrier;
 
     // Methods order follows Vulkan API order
-    class CommandBuffer : public Handle<VkCommandBuffer>
+    class CommandBuffer : public Dispatchable<VkCommandBuffer>
     {
         CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Device> device);
 

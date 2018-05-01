@@ -20,16 +20,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Device;
     class Buffer;
-
+    class IAllocator;
+   
     class BufferView : public NonDispatchable<VkBufferView>
     {
     public:
         BufferView(std::shared_ptr<const Buffer> buffer,
             VkFormat format,
             VkDeviceSize offset = 0,
-            VkDeviceSize range = VK_WHOLE_SIZE);
+            VkDeviceSize range = VK_WHOLE_SIZE,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         ~BufferView();
         std::shared_ptr<const Buffer> getBuffer() const { return buffer; }
 

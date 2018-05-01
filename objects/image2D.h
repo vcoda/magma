@@ -28,7 +28,8 @@ namespace magma
             const VkExtent2D& extent,
             uint32_t mipLevels,
             uint32_t samples,
-            VkImageUsageFlags usage);
+            VkImageUsageFlags usage,
+            std::shared_ptr<IAllocator> allocator);
         Image2D(std::shared_ptr<const Device> device,
             VkImage handle,
             VkFormat format,
@@ -40,7 +41,8 @@ namespace magma
             const std::vector<VkExtent2D>& mipExtents,
             const std::vector<const void *>& mipData,
             const std::vector<VkDeviceSize>& mipSizes,
-            std::shared_ptr<CommandBuffer> cmdBuffer);
+            std::shared_ptr<CommandBuffer> cmdBuffer,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
     class ColorAttachment2D : public Image2D
@@ -51,7 +53,8 @@ namespace magma
             const VkExtent2D& extent,
             uint32_t mipLevels,
             uint32_t samples,
-            bool sampled = true);
+            bool sampled = true,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
     class DepthStencilAttachment2D : public Image2D
@@ -62,7 +65,8 @@ namespace magma
             const VkExtent2D& extent,
             uint32_t mipLevels,
             uint32_t samples,
-            bool sampled = false);
+            bool sampled = false,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
     class SwapchainColorAttachment2D : public Image2D

@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "queue.h"
 #include "semaphore.h"
 #include "fence.h"
+#include "../allocator/allocator.h"
 #include "../misc/stringize.h"
 #include "../helpers/stackArray.h"
 
@@ -33,8 +34,9 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     VkSurfaceTransformFlagBitsKHR preTransform,
     VkCompositeAlphaFlagBitsKHR compositeAlpha,
     VkPresentModeKHR presentMode,
-	VkSwapchainCreateFlagsKHR flags /* 0 */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT, device),
+	VkSwapchainCreateFlagsKHR flags /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT, device, allocator),
     surfaceFormat(surfaceFormat),
     imageExtent(imageExtent)
 {
@@ -57,7 +59,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
 	info.presentMode = presentMode;
 	info.clipped = VK_TRUE;
 	info.oldSwapchain = VK_NULL_HANDLE;
-	const VkResult create = vkCreateSwapchainKHR(*device, &info, nullptr, &handle);
+	const VkResult create = vkCreateSwapchainKHR(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
 #ifdef MAGMA_DEBUG
     if (create != VK_SUCCESS)
     {
@@ -84,7 +86,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
 
 Swapchain::~Swapchain()
 {
-	vkDestroySwapchainKHR(*device, handle, nullptr);
+	vkDestroySwapchainKHR(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore, std::shared_ptr<const Fence> fence)

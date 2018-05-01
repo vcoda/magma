@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/vertexInputState.h"
 #include "../states/inputAssemblyState.h"
 #include "../misc/pushConstants.h"
+#include "../allocator/allocator.h"
 
 namespace magma
 {
@@ -31,13 +32,14 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     std::shared_ptr<Device> device,
     std::shared_ptr<PipelineCache> cache,
     std::shared_ptr<PipelineLayout> layout,
-    std::shared_ptr<RenderPass> renderPass):
+    std::shared_ptr<RenderPass> renderPass,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     maxVertexCount(maxVertexCount),
     device(device),
     layout(layout),
     cache(cache),
     renderPass(renderPass),
-    vertexBuffer(new VertexBuffer(device, nullptr, sizeof(Vertex) * maxVertexCount, maxVertexCount)),
+    vertexBuffer(new VertexBuffer(device, nullptr, sizeof(Vertex) * maxVertexCount, maxVertexCount, 0, allocator)),
     vertexShader(VertexShaderStage(createVertexShader(), "main")),
     fragmentShader(FragmentShaderStage(createFragmentShader(), "main")),
     rasterizationState(states::fillCullBackCCW),
@@ -48,7 +50,7 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     if (!layout)
     {
         const pushconstants::VertexConstantRange<Transform> pushConstantRange;
-        this->layout.reset(new PipelineLayout(device, {pushConstantRange}));
+        this->layout.reset(new PipelineLayout(device, {pushConstantRange}, allocator));
     }
     // Set attributes to initial state
     curr.x = curr.y = curr.z = 0.f;

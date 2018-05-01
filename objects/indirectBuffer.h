@@ -21,13 +21,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
+    class IAllocator;
 
     class IndirectBuffer : public Buffer
     {
     public:
         IndirectBuffer(std::shared_ptr<const Device> device,
             uint32_t drawCount = 1,
-            VkBufferCreateFlags flags = 0);
+            VkBufferCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         void updateDraw(const VkDrawIndirectCommand& parameters) noexcept;
         void updateDraw(uint32_t vertexCount, 
             uint32_t firstVertex) noexcept;

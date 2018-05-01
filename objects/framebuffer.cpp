@@ -20,13 +20,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "image.h"
 #include "imageView.h"
 #include "renderPass.h"
+#include "../allocator/allocator.h"
 #include "../helpers/stackArray.h"
 
 namespace magma
 {
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std::vector<std::shared_ptr<const ImageView>>& attachments,
-    VkFramebufferCreateFlags flags /* 0 */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT, renderPass->getDevice()),
+    VkFramebufferCreateFlags flags /* 0 */, 
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT, renderPass->getDevice(), allocator),
     attachments(attachments),
     extent(attachments[0]->getImage()->getExtent2D())
 {
@@ -35,26 +37,27 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std
     info.pNext = nullptr;
     info.flags = flags;
     info.renderPass = *renderPass;
-    MAGMA_STACK_ARRAY(VkImageView, nativeAttachments, attachments.size());
+    MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachments.size());
     for (auto& attachment : attachments)
-        nativeAttachments.put(*attachment);
-    info.attachmentCount = MAGMA_COUNT(nativeAttachments);
-    info.pAttachments = nativeAttachments;
+        dereferencedAttachments.put(*attachment);
+    info.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
+    info.pAttachments = dereferencedAttachments;
     info.width = extent.width;
     info.height = extent.height;
     info.layers = 1;
-    const VkResult create = vkCreateFramebuffer(*device, &info, nullptr, &handle);
+    const VkResult create = vkCreateFramebuffer(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create framebuffer");
 }
 
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shared_ptr<const ImageView> attachment, 
-    VkFramebufferCreateFlags flags /* 0 */):
-    Framebuffer(renderPass, std::vector<std::shared_ptr<const ImageView>>{attachment}, flags)
+    VkFramebufferCreateFlags flags /* 0 */, 
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Framebuffer(renderPass, std::vector<std::shared_ptr<const ImageView>>{attachment}, flags, allocator)
 {}
 
 Framebuffer::~Framebuffer()
 {
-    vkDestroyFramebuffer(*device, handle, nullptr);
+    vkDestroyFramebuffer(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
     attachments.clear();
 }
 } // namespace magma

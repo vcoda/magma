@@ -26,6 +26,7 @@ namespace magma
         Image3D(std::shared_ptr<const Device> device,
             VkFormat format,
             const VkExtent3D& extent,
-            VkImageUsageFlags usage);
+            VkImageUsageFlags usage,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma

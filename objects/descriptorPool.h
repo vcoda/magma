@@ -25,6 +25,7 @@ namespace magma
     class Device;
     class DescriptorSet;
     class DescriptorSetLayout;
+    class IAllocator;
 
     class DescriptorPool : public NonDispatchable<VkDescriptorPool>
     {
@@ -32,7 +33,8 @@ namespace magma
         DescriptorPool(std::shared_ptr<const Device> device, 
             uint32_t maxDescriptorSets,
             const std::vector<Descriptor>& descriptors,
-            bool freeDescriptorSet = false);
+            bool freeDescriptorSet = false,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         ~DescriptorPool();
         void reset();
         std::shared_ptr<DescriptorSet> allocateDescriptorSet(std::shared_ptr<DescriptorSetLayout> setLayout);

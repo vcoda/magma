@@ -24,14 +24,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 StorageBuffer::StorageBuffer(std::shared_ptr<const Device> device, VkDeviceSize size,
-    VkBufferCreateFlags flags /* 0 */):
-    Buffer(device, size, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT, flags,
+    VkBufferCreateFlags flags /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Buffer(device, size, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT, flags, allocator,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
 {}
 
 StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size,
-    VkBufferCreateFlags flags /* 0 */):
-    Buffer(copyCmdBuffer->getDevice(), size, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags,
+    VkBufferCreateFlags flags /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Buffer(copyCmdBuffer->getDevice(), size, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags, allocator,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
 {
     std::shared_ptr<SourceTransferBuffer> srcBuffer(new SourceTransferBuffer(device, data, size));

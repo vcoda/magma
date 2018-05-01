@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "bufferView.h"
 #include "buffer.h"
 #include "device.h"
+#include "../allocator/allocator.h"
 #include "../shared.h"
 
 namespace magma
@@ -25,8 +26,9 @@ namespace magma
 BufferView::BufferView(std::shared_ptr<const Buffer> buffer,
     VkFormat format,
     VkDeviceSize offset /* 0 */,
-    VkDeviceSize range /* VK_WHOLE_SIZE */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_VIEW_EXT, buffer->getDevice()),
+    VkDeviceSize range /* VK_WHOLE_SIZE */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_VIEW_EXT, buffer->getDevice(), allocator),
     buffer(buffer)
 {
     VkBufferViewCreateInfo info;
@@ -37,12 +39,12 @@ BufferView::BufferView(std::shared_ptr<const Buffer> buffer,
     info.format = format;
     info.offset = offset;
     info.range = range;
-    const VkResult create = vkCreateBufferView(*device, &info, nullptr, &handle);
+    const VkResult create = vkCreateBufferView(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create buffer view");
 }
 
 BufferView::~BufferView()
 {
-    vkDestroyBufferView(*device, handle, nullptr);
+    vkDestroyBufferView(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 } // namespace magma

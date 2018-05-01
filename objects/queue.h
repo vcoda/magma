@@ -27,9 +27,9 @@ namespace magma
     class Fence;
     class Swapchain;
 
-    class Queue : public Handle<VkQueue>
+    class Queue : public Dispatchable<VkQueue>
     {
-        Queue(VkQueue queue, std::shared_ptr<const Device> device,
+        Queue(VkQueue handle, std::shared_ptr<const Device> device,
             VkQueueFlagBits flags, uint32_t familyIndex, uint32_t index);
         friend Device;
 

@@ -24,16 +24,19 @@ namespace magma
     class Device;
     class RenderPass;
     class ImageView;
+    class IAllocator;
    
     class Framebuffer : public NonDispatchable<VkFramebuffer>
     {
     public:
         Framebuffer(std::shared_ptr<const RenderPass> renderPass,
             const std::vector<std::shared_ptr<const ImageView>>& attachments,
-            VkFramebufferCreateFlags = 0);
+            VkFramebufferCreateFlags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         Framebuffer(std::shared_ptr<const RenderPass> renderPass,
             std::shared_ptr<const ImageView> attachment,
-            VkFramebufferCreateFlags = 0);
+            VkFramebufferCreateFlags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
 	    ~Framebuffer();
         const std::vector<std::shared_ptr<const ImageView>>& getAttachments() const { return attachments; }
         const VkExtent2D& getExtent() const { return extent; }

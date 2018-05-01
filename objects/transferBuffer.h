@@ -26,13 +26,16 @@ namespace magma
     public:
         SourceTransferBuffer(std::shared_ptr<const Device> device,
             VkDeviceSize size,
-            VkBufferCreateFlags flags = 0);
+            VkBufferCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         SourceTransferBuffer(std::shared_ptr<const Device> device,
             const void *data, VkDeviceSize size,
-            VkBufferCreateFlags flags = 0);
+            VkBufferCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         SourceTransferBuffer(std::shared_ptr<const Device> device,
             const std::vector<uint8_t>& data,
-            VkBufferCreateFlags flags = 0);
+            VkBufferCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
     class DestTransferBuffer : public Buffer
@@ -40,6 +43,7 @@ namespace magma
     public:
         DestTransferBuffer(std::shared_ptr<const Device> device,
             VkDeviceSize size,
-            VkBufferCreateFlags flags = 0);
+            VkBufferCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma

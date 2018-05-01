@@ -26,9 +26,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 DescriptorSet::DescriptorSet(VkDescriptorSet handle, std::shared_ptr<const Device> device, std::shared_ptr<DescriptorSetLayout> setLayout):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT, handle, device),
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT, device, nullptr),
     setLayout(setLayout)
-{}
+{
+    this->handle = handle;
+}
 
 void DescriptorSet::update(uint32_t index, std::shared_ptr<const Buffer> buffer) noexcept
 {

@@ -27,6 +27,7 @@ namespace magma
     class Queue;
     class Semaphore;
     class Fence;
+    class IAllocator;
 
     class Swapchain : public NonDispatchable<VkSwapchainKHR>
     {
@@ -39,7 +40,8 @@ namespace magma
             VkSurfaceTransformFlagBitsKHR preTransform,
             VkCompositeAlphaFlagBitsKHR compositeAlpha,
             VkPresentModeKHR presentMode,
-            VkSwapchainCreateFlagsKHR flags = 0);
+            VkSwapchainCreateFlagsKHR flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
 	    ~Swapchain();
         uint32_t acquireNextImage(
             std::shared_ptr<const Semaphore> semaphore, 

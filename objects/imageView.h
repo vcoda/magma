@@ -22,6 +22,7 @@ namespace magma
 {
     class Device;
     class Image;
+    class IAllocator;
 
     class ImageView : public NonDispatchable<VkImageView>
     {
@@ -31,7 +32,8 @@ namespace magma
 		    VkComponentMapping swizzle = {VK_COMPONENT_SWIZZLE_R,
 		                                  VK_COMPONENT_SWIZZLE_G,
 		                                  VK_COMPONENT_SWIZZLE_B,
-		                                  VK_COMPONENT_SWIZZLE_A});
+		                                  VK_COMPONENT_SWIZZLE_A},
+            std::shared_ptr<IAllocator> allocator = nullptr);
 	    ~ImageView();
         std::shared_ptr<const Image> getImage() const { return image; }
 

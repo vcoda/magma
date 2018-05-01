@@ -25,6 +25,7 @@ namespace magma
     class Device;
     class PipelineLayout;
     class PipelineCache;
+    class IAllocator;
 
     class Pipeline : public NonDispatchable<VkPipeline>
     {
@@ -35,7 +36,8 @@ namespace magma
         std::string getShaderDisassembly(VkShaderStageFlagBits stage) const;
 
     protected:
-        Pipeline(std::shared_ptr<const Device> device);
+        Pipeline(std::shared_ptr<const Device> device,
+            std::shared_ptr<IAllocator> allocator);
 
     protected:
         std::unique_ptr<PipelineLayout> defaultLayout;
@@ -67,7 +69,8 @@ namespace magma
             std::shared_ptr<const PipelineLayout> layout,
             std::shared_ptr<const RenderPass> renderPass,
             uint32_t subpass = 0,
-            VkPipelineCreateFlags flags = 0);
+            VkPipelineCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         GraphicsPipeline(std::shared_ptr<const Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
             const std::vector<ShaderStage>& stages,
             const VertexInputState& vertexInputState,
@@ -82,7 +85,8 @@ namespace magma
             std::shared_ptr<const PipelineLayout> layout,
             std::shared_ptr<const RenderPass> renderPass,
             uint32_t subpass = 0,
-            VkPipelineCreateFlags flags = 0);
+            VkPipelineCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
     class ComputePipeline : public Pipeline
@@ -91,6 +95,7 @@ namespace magma
         ComputePipeline(std::shared_ptr<const Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
             const ShaderStage& stage,
             std::shared_ptr<const PipelineLayout> layout = nullptr,
-            VkPipelineCreateFlags flags = 0);
+            VkPipelineCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma

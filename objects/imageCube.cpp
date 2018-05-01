@@ -23,9 +23,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 ImageCube::ImageCube(std::shared_ptr<const Device> device, VkFormat format,
-    uint32_t dimension, uint32_t mipLevels, VkImageUsageFlags usage):
-    Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1}, mipLevels, 6, 1, usage, 
-        VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT)
+    uint32_t dimension, uint32_t mipLevels, VkImageUsageFlags usage,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1}, mipLevels, 
+        6, // arrayLayers  
+        1, // samples
+        usage, 
+        VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT, 
+        allocator)
 {}
 
 ImageCube::ImageCube(std::shared_ptr<const Device> device, 
@@ -33,13 +38,15 @@ ImageCube::ImageCube(std::shared_ptr<const Device> device,
     const std::vector<uint32_t>& mipDimensions,
     const std::vector<const void *> cubeMipData[6],
     const std::vector<VkDeviceSize>& mipSizes,
-    std::shared_ptr<CommandBuffer> cmdBuffer):
+    std::shared_ptr<CommandBuffer> cmdBuffer,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{mipDimensions[0], mipDimensions[0], 1},
         static_cast<uint32_t>(mipDimensions.size()), // mipLevels
         6, // arrayLayers 
         1, // samples
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-        VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT)
+        VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT, 
+        allocator)
 {
     std::vector<VkExtent2D> mipExtents;
     for (const uint32_t size : mipDimensions)
@@ -47,7 +54,7 @@ ImageCube::ImageCube(std::shared_ptr<const Device> device,
     std::vector<VkBufferImageCopy> copyRegions;
     const VkDeviceSize size = getCopyRegions(mipExtents, mipSizes, copyRegions);
     // Copy array layers to host visible buffer
-    std::shared_ptr<SourceTransferBuffer> srcBuffer(new SourceTransferBuffer(device, size));
+    std::shared_ptr<SourceTransferBuffer> srcBuffer(new SourceTransferBuffer(device, size, 0, allocator));
     if (uint8_t *data = reinterpret_cast<uint8_t *>(srcBuffer->getMemory()->map()))
     {
         for (uint32_t face = 0; face < 6; ++face)

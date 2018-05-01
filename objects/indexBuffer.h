@@ -29,19 +29,23 @@ namespace magma
         IndexBuffer(std::shared_ptr<const Device> device,
             const void *data, VkDeviceSize size,
             VkIndexType indexType,
-            VkBufferCreateFlags flags = 0);
+            VkBufferCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const void *data, VkDeviceSize size,
             VkIndexType indexType,
-            VkBufferCreateFlags flags = 0);
+            VkBufferCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         template<typename IndexType>
         IndexBuffer(std::shared_ptr<const Device> device,
             const std::vector<IndexType>& indices,
-            VkBufferCreateFlags flags = 0);
+            VkBufferCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         template<typename IndexType>
         IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const std::vector<IndexType>& indices,
-            VkBufferCreateFlags flags = 0);
+            VkBufferCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         VkIndexType getIndexType() const { return indexType; }
         uint32_t getIndexCount() const;
 
@@ -50,8 +54,9 @@ namespace magma
             VkDeviceSize size,
             VkBufferUsageFlags usage,
             VkBufferCreateFlags flags,
-            VkIndexType indexType,
-            VkMemoryPropertyFlags memoryFlags);
+            std::shared_ptr<IAllocator> allocator,
+            VkMemoryPropertyFlags memoryFlags,
+            VkIndexType indexType);
 
     private:
         VkIndexType indexType;
@@ -60,17 +65,21 @@ namespace magma
     template<typename IndexType>
     inline IndexBuffer::IndexBuffer(std::shared_ptr<const Device> device,
         const std::vector<IndexType>& indices,
-        VkBufferCreateFlags flags /* 0 */):
+        VkBufferCreateFlags flags /* 0 */,
+        std::shared_ptr<IAllocator> allocator /* nullptr */):
         IndexBuffer(device, indices.data(), static_cast<VkDeviceSize>(sizeof(IndexType) * indices.size()),
-            sizeof(IndexType) == sizeof(uint16_t) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32, flags)
+            sizeof(IndexType) == sizeof(uint16_t) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32,
+            flags, allocator)
     {}
 
     template<typename IndexType>
     inline IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
         const std::vector<IndexType>& indices,
-        VkBufferCreateFlags flags /* 0 */):
+        VkBufferCreateFlags flags /* 0 */,
+        std::shared_ptr<IAllocator> allocator /* nullptr */):
         IndexBuffer(copyCmdBuffer, indices.data(), static_cast<VkDeviceSize>(sizeof(IndexType) * indices.size()),
-            sizeof(IndexType) == sizeof(uint16_t) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32, flags)
+            sizeof(IndexType) == sizeof(uint16_t) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32,
+            flags, allocator)
     {}
 
     inline uint32_t IndexBuffer::getIndexCount() const

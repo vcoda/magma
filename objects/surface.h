@@ -21,12 +21,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Instance;
+    class IAllocator;
 
     class Surface : public NonDispatchable<VkSurfaceKHR>
     {
     public:
-        Surface(std::shared_ptr<const Instance> instance);
-        virtual ~Surface();
+        ~Surface();
+
+    protected:
+        Surface(std::shared_ptr<const Instance> instance,
+            std::shared_ptr<IAllocator> allocator);
 
     protected:
         std::shared_ptr<const Instance> instance;
@@ -40,7 +44,8 @@ namespace magma
         Win32Surface(std::shared_ptr<const Instance> instance,
             HINSTANCE hinstance, 
             HWND hwnd,
-            VkWin32SurfaceCreateFlagsKHR flags = 0);
+            VkWin32SurfaceCreateFlagsKHR flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
 #elif defined(VK_USE_PLATFORM_XLIB_KHR)
@@ -51,7 +56,8 @@ namespace magma
         XlibSurface(std::shared_ptr<const Instance> instance,
             Display *dpy,
             Window window,
-            VkXlibSurfaceCreateFlagsKHR flags = 0);
+            VkXlibSurfaceCreateFlagsKHR flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
 #elif defined(VK_USE_PLATFORM_XCB_KHR)
@@ -62,7 +68,8 @@ namespace magma
         XcbSurface(std::shared_ptr<const Instance> instance,
             xcb_connection_t *connection,
             xcb_window_t window,
-            VkXcbSurfaceCreateFlagsKHR flags = 0);
+            VkXcbSurfaceCreateFlagsKHR flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
 #elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
@@ -73,7 +80,8 @@ namespace magma
         WaylandSurface(std::shared_ptr<const Instance> instance,
             wl_display *display,
             wl_surface *surface,
-            VkWaylandSurfaceCreateFlagsKHR flags = 0);
+            VkWaylandSurfaceCreateFlagsKHR flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
 #elif defined(VK_USE_PLATFORM_MIR_KHR)
@@ -84,7 +92,8 @@ namespace magma
         MirSurface(std::shared_ptr<const Instance> instance,
             MirConnection *connection,
             MirSurface *surface,
-            VkMirSurfaceCreateFlagsKHR flags = 0);
+            VkMirSurfaceCreateFlagsKHR flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
 #elif defined(VK_USE_PLATFORM_ANDROID_KHR)
@@ -94,7 +103,8 @@ namespace magma
     public:
         AndroidSurface(std::shared_ptr<const Instance> instance,
             ANativeWindow *window,
-            VkAndroidSurfaceCreateFlagsKHR flags = 0);
+            VkAndroidSurfaceCreateFlagsKHR flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
 #elif defined(VK_USE_PLATFORM_IOS_MVK)
@@ -104,7 +114,8 @@ namespace magma
     public:
         IosSurface(std::shared_ptr<const Instance> instance,
             const void *view,
-            VkIOSSurfaceCreateFlagsMVK flags = 0);
+            VkIOSSurfaceCreateFlagsMVK flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
 #elif defined(VK_USE_PLATFORM_MACOS_MVK)
@@ -114,7 +125,8 @@ namespace magma
     public:
         MacosSurface(std::shared_ptr<const Instance> instance,
             const void *view,
-            VkMacOSSurfaceCreateFlagsMVK flags = 0);
+            VkMacOSSurfaceCreateFlagsMVK flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
 #endif // VK_USE_PLATFORM_MACOS_MVK

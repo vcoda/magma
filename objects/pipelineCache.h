@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
+    class IAllocator;
 
     class PipelineCache : public NonDispatchable<VkPipelineCache>
     {
@@ -37,10 +38,12 @@ namespace magma
 
     public:
         PipelineCache(std::shared_ptr<const Device> device,
-            const std::vector<uint8_t>& cacheData = {});
+            const std::vector<uint8_t>& cacheData = {},
+            std::shared_ptr<IAllocator> allocator = nullptr);
         PipelineCache(std::shared_ptr<const Device> device,
             size_t dataSize,
-            const void *cacheData);
+            const void *cacheData,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         ~PipelineCache();
         std::vector<uint8_t> getData() const;
         void mergeCaches(const std::vector<std::shared_ptr<const PipelineCache>>& caches);

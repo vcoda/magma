@@ -28,17 +28,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/multisampleState.h"
 #include "../states/depthStencilState.h"
 #include "../states/colorBlendState.h"
+#include "../allocator/allocator.h"
 #include "../shared.h"
 
 namespace magma
 {
-Pipeline::Pipeline(std::shared_ptr<const Device> device):
-    NonDispatchable<VkPipeline>(VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT, device)
+Pipeline::Pipeline(std::shared_ptr<const Device> device, std::shared_ptr<IAllocator> allocator):
+    NonDispatchable<VkPipeline>(VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT, device, allocator)
 {}
 
 Pipeline::~Pipeline()
 {
-    vkDestroyPipeline(*device, handle, nullptr);
+    vkDestroyPipeline(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 void Pipeline::getShaderStatistics(VkShaderStageFlagBits stage, VkShaderStatisticsInfoAMD& info) const
@@ -97,13 +98,14 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
     std::shared_ptr<const PipelineLayout> layout,
     std::shared_ptr<const RenderPass> renderPass,
     uint32_t subpass /* 0 */,
-    VkPipelineCreateFlags flags /* 0 */):
+    VkPipelineCreateFlags flags /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     GraphicsPipeline(device, pipelineCache, stages, 
         vertexInputState, inputAssemblyState, 
         TesselationState(), // No tesselation state
         ViewportState(), // No viewport state (supposed to be dynamic)
         rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
-        layout, renderPass, subpass, flags)
+        layout, renderPass, subpass, flags, allocator)
 {}
 
 GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::shared_ptr<const PipelineCache> pipelineCache,  
@@ -120,8 +122,9 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
     std::shared_ptr<const PipelineLayout> layout,
     std::shared_ptr<const RenderPass> renderPass,
     uint32_t subpass /* 0 */,
-    VkPipelineCreateFlags flags /* 0 */):
-    Pipeline(device)
+    VkPipelineCreateFlags flags /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Pipeline(device, allocator)
 {
     if (stages.empty())
         MAGMA_THROW("shader stages are empty");
@@ -168,15 +171,16 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
     info.subpass = subpass;
     info.basePipelineIndex = 0;
     info.basePipelineHandle = VK_NULL_HANDLE;
-    const VkResult create = vkCreateGraphicsPipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, nullptr, &handle);
+    const VkResult create = vkCreateGraphicsPipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create graphics pipeline");
 }
 
 ComputePipeline::ComputePipeline(std::shared_ptr<const Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
     const ShaderStage& stage,
     std::shared_ptr<const PipelineLayout> layout /* nullptr */,
-    VkPipelineCreateFlags flags /* 0 */):
-    Pipeline(device)
+    VkPipelineCreateFlags flags /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Pipeline(device, allocator)
 {
     VkComputePipelineCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
@@ -192,7 +196,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<const Device> device, std::shar
     }
     info.basePipelineHandle = 0;
     info.basePipelineIndex = 0;
-    const VkResult create = vkCreateComputePipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, nullptr, &handle);
+    const VkResult create = vkCreateComputePipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create compute pipeline");
 }
 } // namespace magma

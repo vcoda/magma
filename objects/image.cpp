@@ -22,14 +22,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandBuffer.h"
 #include "queue.h"
 #include "../misc/imageMemoryBarrier.h"
+#include "../allocator/allocator.h"
 #include "../shared.h"
 
 namespace magma
 {
 Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkFormat format,
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
-    VkImageUsageFlags usage, VkImageCreateFlags flags /* 0 */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, device),
+    VkImageUsageFlags usage, VkImageCreateFlags flags,
+    std::shared_ptr<IAllocator> allocator):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, device, allocator),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
@@ -66,7 +68,7 @@ Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkForm
     info.queueFamilyIndexCount = 0;
     info.pQueueFamilyIndices = nullptr;
     info.initialLayout = layout;
-    const VkResult create = vkCreateImage(*device, &info, nullptr, &handle);
+    const VkResult create = vkCreateImage(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create image");
     VkMemoryRequirements memoryRequirements;
     vkGetImageMemoryRequirements(*device, handle, &memoryRequirements);
@@ -77,7 +79,7 @@ Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkForm
 }
 
 Image::Image(std::shared_ptr<const Device> device, VkImage handle, VkImageType imageType, VkFormat format, const VkExtent3D& extent):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, handle, device),
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, device, nullptr),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
@@ -86,11 +88,13 @@ Image::Image(std::shared_ptr<const Device> device, VkImage handle, VkImageType i
     arrayLayers(1),
     samples(1),
     flags(0)
-{}
+{
+    this->handle = handle;
+}
 
 Image::~Image()
 {
-    vkDestroyImage(*device, handle, nullptr);
+    vkDestroyImage(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 void Image::bindMemory(std::shared_ptr<DeviceMemory> memory,

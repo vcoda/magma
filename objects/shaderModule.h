@@ -19,19 +19,23 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 #include "handle.h"
 #include "../shared.h"
+#include "../helpers/copying.h"
 
 namespace magma
 {
     class Device;
+    class IAllocator;
 
     class ShaderModule : public NonDispatchable<VkShaderModule>
     {
     public:
         ShaderModule(std::shared_ptr<const Device> device,
             const uint32_t *bytecode,
-            size_t bytecodeSize);
+            size_t bytecodeSize,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         ShaderModule(std::shared_ptr<const Device> device,
-            const std::vector<uint32_t>& bytecode);
+            const std::vector<uint32_t>& bytecode,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         ~ShaderModule();
     };
 

@@ -26,11 +26,13 @@ namespace magma
 {
     class Device;
     class Surface;
+    class IAllocator;
 
-    class PhysicalDevice : public Handle<VkPhysicalDevice>,
+    class PhysicalDevice : public Dispatchable<VkPhysicalDevice>,
         public std::enable_shared_from_this<PhysicalDevice>
     {
-        PhysicalDevice(VkPhysicalDevice physicalDevice);
+        PhysicalDevice(VkPhysicalDevice handle,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         friend class Instance;
 
     public: 

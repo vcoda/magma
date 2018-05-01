@@ -23,9 +23,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Image2DArray::Image2DArray(std::shared_ptr<const Device> device, VkFormat format, 
-    const VkExtent2D& extent, uint32_t mipLevels, uint32_t arrayLayers, 
-    VkImageUsageFlags usage):
-    Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1}, mipLevels, arrayLayers, 1, usage)
+    const VkExtent2D& extent, uint32_t mipLevels, uint32_t arrayLayers, VkImageUsageFlags usage,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1}, mipLevels, arrayLayers, 1, usage, 0, allocator)
 {}
 
 Image2DArray::Image2DArray(std::shared_ptr<const Device> device, 
@@ -33,17 +33,20 @@ Image2DArray::Image2DArray(std::shared_ptr<const Device> device,
     const std::vector<VkExtent2D>& mipExtents,
     const std::vector<std::vector<const void *>>& layersMipData,
     const std::vector<VkDeviceSize>& mipSizes,
-    std::shared_ptr<CommandBuffer> cmdBuffer):
+    std::shared_ptr<CommandBuffer> cmdBuffer,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{mipExtents[0].width, mipExtents[0].height, 1},
         static_cast<uint32_t>(mipExtents.size()), // mipLevels
         static_cast<uint32_t>(layersMipData.size()), // arrayLayers 
         1, // samples
-        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT)
+        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+        0, // flags
+        allocator)
 {
     std::vector<VkBufferImageCopy> copyRegions;
     VkDeviceSize size = getCopyRegions(mipExtents, mipSizes, copyRegions);
     // Copy array layers to host visible buffer
-    std::shared_ptr<SourceTransferBuffer> srcBuffer(new SourceTransferBuffer(device, size));
+    std::shared_ptr<SourceTransferBuffer> srcBuffer(new SourceTransferBuffer(device, size, 0, allocator));
     if (uint8_t *data = reinterpret_cast<uint8_t *>(srcBuffer->getMemory()->map()))
     {
         for (uint32_t layer = 0; layer < arrayLayers; ++layer)

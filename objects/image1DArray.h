@@ -28,6 +28,7 @@ namespace magma
             uint32_t width,
             uint32_t mipLevels,
             uint32_t arrayLayers,
-            VkImageUsageFlags usage);
+            VkImageUsageFlags usage,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma

@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "debugReportCallback.h"
-#include "../objects/instance.h"
+#include "instance.h"
+#include "../allocator/allocator.h"
 #include "../shared.h"
 
 namespace magma
@@ -24,8 +25,9 @@ namespace magma
 DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instance, 
     PFN_vkDebugReportCallbackEXT reportCallback, 
     VkDebugReportFlagsEXT flags, 
-    void *userData /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT, nullptr),
+    void *userData /* nullptr */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT, nullptr, allocator),
 	instance(instance)
 {
 	auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(*instance, "vkCreateDebugReportCallbackEXT");
@@ -37,7 +39,7 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
         info.flags = flags;
         info.pfnCallback = reportCallback;
         info.pUserData = userData;
-        const VkResult create = vkCreateDebugReportCallbackEXT(*instance, &info, nullptr, &handle);
+        const VkResult create = vkCreateDebugReportCallbackEXT(*instance, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
         MAGMA_THROW_FAILURE(create, "failed to create debug callback");
     }
 }
@@ -46,6 +48,6 @@ DebugReportCallback::~DebugReportCallback()
 {
 	auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(*instance, "vkDestroyDebugReportCallbackEXT");
 	if (vkDestroyDebugReportCallbackEXT)
-		vkDestroyDebugReportCallbackEXT(*instance, handle, nullptr);
+		vkDestroyDebugReportCallbackEXT(*instance, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 } // namespace magma

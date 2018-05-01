@@ -18,13 +18,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "buffer.h"
 #include "device.h"
 #include "deviceMemory.h"
+#include "../allocator/allocator.h"
 #include "../shared.h"
 
 namespace magma
 {
 Buffer::Buffer(std::shared_ptr<const Device> device, VkDeviceSize size, VkBufferUsageFlags usage,
-    VkBufferCreateFlags flags, VkMemoryPropertyFlags memoryFlags):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT, device),
+    VkBufferCreateFlags flags, std::shared_ptr<IAllocator> allocator, VkMemoryPropertyFlags memoryFlags):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT, device, allocator),
     size(size)
 {
     VkBufferCreateInfo info;
@@ -36,19 +37,17 @@ Buffer::Buffer(std::shared_ptr<const Device> device, VkDeviceSize size, VkBuffer
     info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
     info.queueFamilyIndexCount = 0;
     info.pQueueFamilyIndices = nullptr;
-    const VkResult create = vkCreateBuffer(*device, &info, nullptr, &handle);
+    const VkResult create = vkCreateBuffer(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create buffer");
     VkMemoryRequirements memoryRequirements;
     vkGetBufferMemoryRequirements(*device, handle, &memoryRequirements);
-    std::shared_ptr<DeviceMemory> memory(new DeviceMemory(device, 
-        memoryRequirements.size, 
-        memoryFlags));
+    std::shared_ptr<DeviceMemory> memory(new DeviceMemory(device, memoryRequirements.size, memoryFlags));
     bindMemory(memory);
 }
 
 Buffer::~Buffer()
 {
-    vkDestroyBuffer(*device, handle, nullptr);
+    vkDestroyBuffer(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 void Buffer::bindMemory(std::shared_ptr<DeviceMemory> memory,

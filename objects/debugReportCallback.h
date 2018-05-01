@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Instance;
+    class IAllocator;
 
     class DebugReportCallback : public NonDispatchable<VkDebugReportCallbackEXT>
     {
@@ -33,7 +34,8 @@ namespace magma
 		        VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT |
 		        VK_DEBUG_REPORT_ERROR_BIT_EXT |
 		        VK_DEBUG_REPORT_DEBUG_BIT_EXT,
-		    void *userData = nullptr);
+		    void *userData = nullptr,
+            std::shared_ptr<IAllocator> allocator = nullptr);
 	    ~DebugReportCallback();
 
     private:

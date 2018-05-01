@@ -24,8 +24,9 @@ namespace magma
 {
 IndirectBuffer::IndirectBuffer(std::shared_ptr<const Device> device,
     uint32_t drawCount /* 1 */,
-    VkBufferCreateFlags flags /* 0 */):
-    Buffer(device, sizeof(VkDrawIndirectCommand) * drawCount, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT, flags,
+    VkBufferCreateFlags flags /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Buffer(device, sizeof(VkDrawIndirectCommand) * drawCount, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT, flags, allocator,
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
 {}
 

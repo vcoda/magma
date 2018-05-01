@@ -24,9 +24,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-PhysicalDevice::PhysicalDevice(VkPhysicalDevice physicalDevice):
-    Handle(VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT, physicalDevice)
-{}
+PhysicalDevice::PhysicalDevice(VkPhysicalDevice handle,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Dispatchable<VkPhysicalDevice>(VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT, nullptr, allocator)
+{
+    this->handle = handle;
+}
 
 const VkPhysicalDeviceFeatures& PhysicalDevice::getFeatures() const
 {
@@ -126,7 +129,7 @@ std::shared_ptr<Device> PhysicalDevice::createDevice(
     std::vector<VkDeviceQueueCreateInfo> deviceQueues;
     for (const auto& desc : queueDescriptors)
         deviceQueues.push_back(desc);
-    return std::shared_ptr<Device>(new Device(shared_from_this(), info, deviceQueues));
+    return std::shared_ptr<Device>(new Device(shared_from_this(), info, deviceQueues, allocator));
 }
 
 std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const

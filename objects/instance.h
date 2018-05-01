@@ -24,15 +24,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class PhysicalDevice;
+    class IAllocator;
 
-    class Instance : public Handle<VkInstance>
+    class Instance : public Dispatchable<VkInstance>
     {
     public:
         Instance(const char *applicationName, 
             const char *engineName, 
             uint32_t apiVersion,
             const std::vector<const char *>& layerNames,
-            const std::vector<const char *>& extensionNames);
+            const std::vector<const char *>& extensionNames,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         ~Instance();
         uint32_t countPhysicalDevices() const; 
         std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId);

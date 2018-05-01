@@ -23,13 +23,16 @@ namespace magma
 {
     class Device;
     class CommandBuffer;
+    class IAllocator;
 
     class CommandPool : public NonDispatchable<VkCommandPool>
     {
     public:
         CommandPool(std::shared_ptr<const Device> device, 
             uint32_t queueFamilyIndex,
-            bool transient = false, bool reset = true);
+            bool transient = false, 
+            bool reset = true,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         ~CommandPool();
         std::shared_ptr<CommandBuffer> allocateCommandBuffer(bool primaryLevel);
         void freeCommandBuffer(std::shared_ptr<CommandBuffer>& commandBuffer);

@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptorSet.h"
 #include "descriptorSetLayout.h"
 #include "device.h"
+#include "../allocator/allocator.h"
 #include "../helpers/stackArray.h"
 
 namespace magma
@@ -26,8 +27,9 @@ namespace magma
 DescriptorPool::DescriptorPool(std::shared_ptr<const Device> device,
     uint32_t maxDescriptorSets,
     const std::vector<Descriptor>& descriptors,
-    bool freeDescriptorSet /* false */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT, device)
+    bool freeDescriptorSet /* false */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT, device, allocator)
 {
     VkDescriptorPoolCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
@@ -38,13 +40,13 @@ DescriptorPool::DescriptorPool(std::shared_ptr<const Device> device,
     info.maxSets = maxDescriptorSets;
     info.poolSizeCount = MAGMA_COUNT(descriptors);
     info.pPoolSizes = descriptors.data();
-    const VkResult create = vkCreateDescriptorPool(*device, &info, nullptr, &handle);
+    const VkResult create = vkCreateDescriptorPool(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create descriptor pool");
 }
 
 DescriptorPool::~DescriptorPool()
 {
-    vkDestroyDescriptorPool(*device, handle, nullptr);
+    vkDestroyDescriptorPool(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 void DescriptorPool::reset()
