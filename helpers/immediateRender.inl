@@ -94,7 +94,7 @@ MAGMA_INLINE void ImmediateRender::color(const float c[4])
     color(c[0], c[1], c[2], c[3]);
 }
 
-MAGMA_INLINE void ImmediateRender::color(uint8_t r, uint8_t g, uint8_t b, uint8_t a /* 255 */)
+MAGMA_INLINE void ImmediateRender::color(uint8_t r, uint8_t g, uint8_t b, uint8_t a /* UCHAR_MAX */)
 {
     color(r/255.f, g/255.f, b/255.f, a/255.f);
 }

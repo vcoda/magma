@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <list>
 #include <unordered_set>
+#include <limits>
 #include "../objects/shaderModule.h"
 #include "../states/rasterizationState.h"
 #include "../states/multiSampleState.h"
@@ -86,7 +87,7 @@ namespace magma
             void normal(const float n[3]);
             void color(float r, float g, float b, float a = 1.f);
             void color(const float c[4]);
-            void color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
+            void color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = std::numeric_limits<uint8_t>::max());
             void color(const uint8_t c[4]);
             void texCoord(float u, float v);
             void texCoord(const float tc[2]);
