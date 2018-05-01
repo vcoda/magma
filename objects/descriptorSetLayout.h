@@ -45,6 +45,7 @@ namespace magma
             VkDescriptorSetLayoutCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~DescriptorSetLayout();
+        uint32_t getBindingCount() const { return static_cast<uint32_t>(bindings.size()); }
         const Binding& getBinding(uint32_t index) const { return bindings[index]; }
 
     private:
