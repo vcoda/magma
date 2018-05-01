@@ -33,7 +33,7 @@ namespace magma
     public:
         DebugObject(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<const Device> device);
-        virtual ~DebugObject() {}
+        virtual ~DebugObject() = default;
         void setMarkerTag(uint64_t name, size_t tagSize, const void *tag);
         template <typename Tag>
         void setMarkerTag(uint64_t name, const Tag& tag) 
