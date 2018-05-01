@@ -69,7 +69,7 @@ Specialization& Specialization::operator=(const Specialization& other)
 Specialization::~Specialization()
 {
     delete[] pMapEntries;
-	delete[] static_cast<const char *>(pData);
+	delete[] reinterpret_cast<const char *>(pData);
 }
 
 ShaderStage::ShaderStage(const VkShaderStageFlagBits stage, std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
