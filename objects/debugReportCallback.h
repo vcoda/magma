@@ -26,19 +26,19 @@ namespace magma
     class DebugReportCallback : public NonDispatchable<VkDebugReportCallbackEXT>
     {
     public:
-	    DebugReportCallback(std::shared_ptr<const Instance> instance, 
-            PFN_vkDebugReportCallbackEXT reportCallback, 
-            VkDebugReportFlagsEXT flags = 
+        DebugReportCallback(std::shared_ptr<const Instance> instance,
+            PFN_vkDebugReportCallbackEXT reportCallback,
+            VkDebugReportFlagsEXT flags =
                 VK_DEBUG_REPORT_INFORMATION_BIT_EXT |
-		        VK_DEBUG_REPORT_WARNING_BIT_EXT |
-		        VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT |
-		        VK_DEBUG_REPORT_ERROR_BIT_EXT |
-		        VK_DEBUG_REPORT_DEBUG_BIT_EXT,
-		    void *userData = nullptr,
+                VK_DEBUG_REPORT_WARNING_BIT_EXT |
+                VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT |
+                VK_DEBUG_REPORT_ERROR_BIT_EXT |
+                VK_DEBUG_REPORT_DEBUG_BIT_EXT,
+            void *userData = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr);
-	    ~DebugReportCallback();
+        ~DebugReportCallback();
 
     private:
-	    std::shared_ptr<const Instance> instance;
+        std::shared_ptr<const Instance> instance;
     };
 } // namespace magma

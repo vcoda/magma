@@ -80,7 +80,7 @@ void DescriptorPool::freeDescriptorSet(std::shared_ptr<DescriptorSet>& descripto
 std::vector<std::shared_ptr<DescriptorSet>> DescriptorPool::allocateDescriptorSets(std::shared_ptr<DescriptorSetLayout>)
 {
     std::vector<std::shared_ptr<DescriptorSet>> descriptorSets;
-	MAGMA_THROW_NOT_IMPLEMENTED();
+    MAGMA_THROW_NOT_IMPLEMENTED();
     return std::move(descriptorSets);
 }
 

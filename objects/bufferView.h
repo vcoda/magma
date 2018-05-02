@@ -22,7 +22,7 @@ namespace magma
 {
     class Buffer;
     class IAllocator;
-   
+
     class BufferView : public NonDispatchable<VkBufferView>
     {
     public:

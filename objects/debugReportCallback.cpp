@@ -22,15 +22,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instance, 
+DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instance,
     PFN_vkDebugReportCallbackEXT reportCallback, 
     VkDebugReportFlagsEXT flags, 
     void *userData /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT, nullptr, allocator),
-	instance(instance)
+    instance(instance)
 {
-	auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(*instance, "vkCreateDebugReportCallbackEXT");
+    auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(*instance, "vkCreateDebugReportCallbackEXT");
     if (vkCreateDebugReportCallbackEXT)
     {
         VkDebugReportCallbackCreateInfoEXT info;
@@ -46,8 +46,8 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
 
 DebugReportCallback::~DebugReportCallback() 
 {
-	auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(*instance, "vkDestroyDebugReportCallbackEXT");
-	if (vkDestroyDebugReportCallbackEXT)
-		vkDestroyDebugReportCallbackEXT(*instance, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(*instance, "vkDestroyDebugReportCallbackEXT");
+    if (vkDestroyDebugReportCallbackEXT)
+        vkDestroyDebugReportCallbackEXT(*instance, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 } // namespace magma

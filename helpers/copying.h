@@ -66,7 +66,7 @@ namespace magma
             const errno_t err = strcpy_s(dst, size, src);
             MAGMA_ASSERT(0 == err);
 #else
-			strcpy(dst, src);
+            strcpy(dst, src);
 #endif // _MSC_VER
             return dst;
         }

@@ -25,22 +25,22 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 ImageView::ImageView(std::shared_ptr<const Image> image,
-	uint32_t mipLevelCount, /* 0 */
-	VkComponentMapping swizzle /* R, G, B, A */,
+    uint32_t mipLevelCount, /* 0 */
+    VkComponentMapping swizzle /* R, G, B, A */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT, image->getDevice(), allocator),
     image(image)
 {
-	VkImageViewCreateInfo info;
-	info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-	info.pNext = nullptr;
-	info.flags = 0;
-	info.image = *image;
+    VkImageViewCreateInfo info;
+    info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+    info.pNext = nullptr;
+    info.flags = 0;
+    info.image = *image;
     switch (image->getType())
     {
     case VK_IMAGE_TYPE_1D: 
         if (image->getArrayLayers() == 1)
-            info.viewType = VK_IMAGE_VIEW_TYPE_1D; 
+            info.viewType = VK_IMAGE_VIEW_TYPE_1D;
         else
             info.viewType = VK_IMAGE_VIEW_TYPE_1D_ARRAY;
         break;
@@ -56,10 +56,10 @@ ImageView::ImageView(std::shared_ptr<const Image> image,
         }
         break;
     case VK_IMAGE_TYPE_3D: 
-        info.viewType = VK_IMAGE_VIEW_TYPE_3D; 
+        info.viewType = VK_IMAGE_VIEW_TYPE_3D;
         break;
-	default:
-		throw std::runtime_error("invalid image type");
+    default:
+        throw std::runtime_error("invalid image type");
     }
     info.format = image->getFormat();
     const Format format(info.format);
@@ -76,14 +76,14 @@ ImageView::ImageView(std::shared_ptr<const Image> image,
         info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
     else
         info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-	info.subresourceRange.baseMipLevel = 0;
+    info.subresourceRange.baseMipLevel = 0;
     if (!mipLevelCount)
         info.subresourceRange.levelCount = image->getMipLevels();
     else
         info.subresourceRange.levelCount = mipLevelCount;
-	info.subresourceRange.baseArrayLayer = 0;
+    info.subresourceRange.baseArrayLayer = 0;
     info.subresourceRange.layerCount = image->getArrayLayers();
-	const VkResult create = vkCreateImageView(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateImageView(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create image view");
 }
 

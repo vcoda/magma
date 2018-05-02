@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-	class Exception : public std::runtime_error
+    class Exception : public std::runtime_error
     {
     public:
         Exception(const char *const message,
@@ -44,7 +44,7 @@ namespace magma
             const char *file, int line);
         BadResultException(const VkResult result, const std::string& message,
             const char *file, int line);
-        VkResult code() const { return result;  }
+        VkResult code() const { return result; }
         const char *codeString() const;
 
     private:

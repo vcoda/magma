@@ -23,7 +23,7 @@ namespace magma
 {
     class Device;
 
-    // Every Magma object inherited from debug one to enable debugging markers.
+    // Every Magma object inherited from debug one to enable debugging markers
     class DebugObject
     {
     public:
@@ -36,9 +36,9 @@ namespace magma
         virtual ~DebugObject() = default;
         void setMarkerTag(uint64_t name, size_t tagSize, const void *tag);
         template<typename Tag>
-        void setMarkerTag(uint64_t name, const Tag& tag) 
+        void setMarkerTag(uint64_t name, const Tag& tag)
         { 
-            setMarkerTag(name, sizeof(Tag), &tag); 
+            setMarkerTag(name, sizeof(Tag), &tag);
         }
         void setMarkerName(const char *name);
         virtual uint64_t getObject() const = 0;

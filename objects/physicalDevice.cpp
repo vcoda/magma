@@ -52,7 +52,7 @@ VkFormatProperties PhysicalDevice::getFormatProperties(VkFormat format) const
     return formatProperties;
 }
 
-VkImageFormatProperties PhysicalDevice::getImageFormatProperties(VkFormat format, 
+VkImageFormatProperties PhysicalDevice::getImageFormatProperties(VkFormat format,
     VkImageType imageType, bool optimalTiling, VkImageUsageFlags usage,
     VkImageCreateFlags flags /* 0* */) const
 {
@@ -91,7 +91,7 @@ std::set<std::string> PhysicalDevice::enumerateExtensions(const char *layerName 
     MAGMA_THROW_FAILURE(count, "failed to count device extensions");
     std::vector<VkExtensionProperties> properties(propertyCount);
     const VkResult enumerate = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, properties.data());
-	MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device extensions");
+    MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device extensions");
     std::set<std::string> extensions;
     for (const auto& property : properties)
         extensions.insert(property.extensionName);
@@ -104,8 +104,8 @@ std::vector<VkLayerProperties> PhysicalDevice::enumerateLayerProperties() const
     const VkResult count = vkEnumerateDeviceLayerProperties(handle, &propertyCount, nullptr);
     MAGMA_THROW_FAILURE(count, "failed to count device layers");
     std::vector<VkLayerProperties> properties(propertyCount);
-	const VkResult enumerate = vkEnumerateDeviceLayerProperties(handle, &propertyCount, properties.data());
-	MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device layers");
+    const VkResult enumerate = vkEnumerateDeviceLayerProperties(handle, &propertyCount, properties.data());
+    MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device layers");
     return std::move(properties);
 }
 
@@ -114,7 +114,7 @@ std::shared_ptr<Device> PhysicalDevice::createDevice(
     const std::vector<const char *>& layers, 
     const std::vector<const char *>& extensions, 
     const VkPhysicalDeviceFeatures& deviceFeatures) const
-{                                
+{
     VkDeviceCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     info.pNext = nullptr;
@@ -142,8 +142,8 @@ std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
     const std::vector<const char*> extensions = {
         VK_KHR_SWAPCHAIN_EXTENSION_NAME
     };
-	VkPhysicalDeviceFeatures noFeatures;
-	memset(&noFeatures, 0, sizeof(VkPhysicalDeviceFeatures));
+    VkPhysicalDeviceFeatures noFeatures;
+    memset(&noFeatures, 0, sizeof(VkPhysicalDeviceFeatures));
     return createDevice(queueDescriptors, noLayers, extensions, noFeatures);
 }
 

@@ -44,7 +44,7 @@ namespace magma
         std::shared_ptr<DeviceMemory> getMemory() const { return memory; }
 
     protected:
-        Image(std::shared_ptr<const Device> device, 
+        Image(std::shared_ptr<const Device> device,
             VkImageType imageType,
             VkFormat format,
             const VkExtent3D& extent,
@@ -54,9 +54,9 @@ namespace magma
             VkImageUsageFlags usage,
             VkImageCreateFlags flags,
             std::shared_ptr<IAllocator> allocator);
-        Image(std::shared_ptr<const Device> device, 
+        Image(std::shared_ptr<const Device> device,
             VkImage handle,
-            VkImageType imageType, 
+            VkImageType imageType,
             VkFormat format,
             const VkExtent3D& extent);
         VkDeviceSize getCopyRegions(const std::vector<VkExtent2D>& mipExtents,

@@ -34,32 +34,32 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     VkSurfaceTransformFlagBitsKHR preTransform,
     VkCompositeAlphaFlagBitsKHR compositeAlpha,
     VkPresentModeKHR presentMode,
-	VkSwapchainCreateFlagsKHR flags /* 0 */,
+    VkSwapchainCreateFlagsKHR flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT, device, allocator),
     surfaceFormat(surfaceFormat),
     imageExtent(imageExtent)
 {
-	VkSwapchainCreateInfoKHR info;
-	info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-	info.pNext = nullptr;
-	info.flags = flags;
-	info.surface = *surface;
-	info.minImageCount = minImageCount;
-	info.imageFormat = surfaceFormat.format;
-	info.imageColorSpace = surfaceFormat.colorSpace;
-	info.imageExtent = imageExtent;
-	info.imageArrayLayers = 1;
-	info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-	info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-	info.queueFamilyIndexCount = 0;
-	info.pQueueFamilyIndices = nullptr;
-	info.preTransform = preTransform;
-	info.compositeAlpha = compositeAlpha;
-	info.presentMode = presentMode;
-	info.clipped = VK_TRUE;
-	info.oldSwapchain = VK_NULL_HANDLE;
-	const VkResult create = vkCreateSwapchainKHR(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    VkSwapchainCreateInfoKHR info;
+    info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+    info.pNext = nullptr;
+    info.flags = flags;
+    info.surface = *surface;
+    info.minImageCount = minImageCount;
+    info.imageFormat = surfaceFormat.format;
+    info.imageColorSpace = surfaceFormat.colorSpace;
+    info.imageExtent = imageExtent;
+    info.imageArrayLayers = 1;
+    info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    info.queueFamilyIndexCount = 0;
+    info.pQueueFamilyIndices = nullptr;
+    info.preTransform = preTransform;
+    info.compositeAlpha = compositeAlpha;
+    info.presentMode = presentMode;
+    info.clipped = VK_TRUE;
+    info.oldSwapchain = VK_NULL_HANDLE;
+    const VkResult create = vkCreateSwapchainKHR(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
 #ifdef MAGMA_DEBUG
     if (create != VK_SUCCESS)
     {
@@ -86,17 +86,17 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
 
 Swapchain::~Swapchain()
 {
-	vkDestroySwapchainKHR(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroySwapchainKHR(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore, std::shared_ptr<const Fence> fence)
 {
     uint32_t imageIndex = 0;
-    const VkResult acquire = vkAcquireNextImageKHR(*device, handle, UINT64_MAX, 
+    const VkResult acquire = vkAcquireNextImageKHR(*device, handle, UINT64_MAX,
         MAGMA_OPTIONAL_HANDLE(semaphore),
         MAGMA_OPTIONAL_HANDLE(fence),
         &imageIndex);
-	MAGMA_THROW_FAILURE(acquire, "failed to acquire swapchain image");
+    MAGMA_THROW_FAILURE(acquire, "failed to acquire swapchain image");
     return imageIndex;
 }
 

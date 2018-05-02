@@ -54,7 +54,7 @@ namespace magma
     public:
         bool begin(VkCommandBufferUsageFlags flags = 0) noexcept;
         bool beginInherited(
-            const std::shared_ptr<RenderPass>& renderPass, 
+            const std::shared_ptr<RenderPass>& renderPass,
             uint32_t subpass, 
             const std::shared_ptr<Framebuffer>& framebuffer,
             VkCommandBufferUsageFlags flags = 0) noexcept;
@@ -65,16 +65,16 @@ namespace magma
         void bindPipeline(const std::shared_ptr<ComputePipeline>& pipeline) noexcept;
 
         void setViewport(
-            float x, float y, 
+            float x, float y,
             float width, float height,
-            float minDepth = 0.f, 
+            float minDepth = 0.f,
             float maxDepth = 1.f) noexcept;
         void setViewport(
-            uint32_t x, uint32_t y, 
+            uint32_t x, uint32_t y,
             uint32_t width, 
             int32_t height, // Viewport height can be negative (if supported)
-            float minDepth = 0.f, 
-            float maxDepth = 1.f) noexcept;  
+            float minDepth = 0.f,
+            float maxDepth = 1.f) noexcept;
         void setViewport(const Viewport& viewport) noexcept;
         void setViewports(const std::initializer_list<Viewport>& viewports) noexcept;
         void setScissor(
@@ -103,7 +103,7 @@ namespace magma
         void setStencilReference(
             bool frontFace,
             bool backFace,
-            uint32_t reference) noexcept; 
+            uint32_t reference) noexcept;
 
         void bindDescriptorSet(
             const std::shared_ptr<PipelineLayout>& pipelineLayout,
@@ -185,13 +185,13 @@ namespace magma
             const VkBufferCopy& region) const noexcept;
 
         void copyImage(
-            const std::shared_ptr<Image>& srcImage, 
-            const std::shared_ptr<Image>& dstImage, 
+            const std::shared_ptr<Image>& srcImage,
+            const std::shared_ptr<Image>& dstImage,
             const VkImageCopy& region) const noexcept;
         void blitImage(
-            const std::shared_ptr<Image>& srcImage, 
-            const std::shared_ptr<Image>& dstImage, 
-            const VkImageBlit& region, 
+            const std::shared_ptr<Image>& srcImage,
+            const std::shared_ptr<Image>& dstImage,
+            const VkImageBlit& region,
             VkFilter filter) const noexcept;
 
         void copyBufferToImage(
@@ -201,33 +201,33 @@ namespace magma
             const VkBufferImageCopy& region) const noexcept;
         void copyImageToBuffer(
             const std::shared_ptr<Image>& srcImage,
-            const std::shared_ptr<Buffer>& dstBuffer, 
+            const std::shared_ptr<Buffer>& dstBuffer,
             const VkBufferImageCopy& region) const noexcept;
 
         template<typename Type>
         void updateBuffer(
-            const std::shared_ptr<Buffer>& buffer, 
+            const std::shared_ptr<Buffer>& buffer,
             const std::vector<Type>& data,
             VkDeviceSize offset = 0) const noexcept;
         template<typename Type>
         void fillBuffer(const std::shared_ptr<Buffer>& dstBuffer,
             const std::vector<Type>& data,
-            VkDeviceSize offset = 0) const noexcept;  
+            VkDeviceSize offset = 0) const noexcept;
 
         void clearColorImage(
-            const std::shared_ptr<Image>& image, 
+            const std::shared_ptr<Image>& image,
             const ColorClear& color, 
             const VkImageSubresourceRange& range) const noexcept;
         void clearDepthStencilImage(
-            const std::shared_ptr<Image>& image, 
-            const DepthStencilClear& depthStencil, 
+            const std::shared_ptr<Image>& image,
+            const DepthStencilClear& depthStencil,
             const VkImageSubresourceRange& range) const noexcept;
         void clearAttachments(
-            const std::initializer_list<ClearAttachment>& attachments, 
+            const std::initializer_list<ClearAttachment>& attachments,
             const VkClearRect& clearRect) const noexcept;
         void resolveImage(
-            const std::shared_ptr<Image>& srcImage, 
-            const std::shared_ptr<Image>& dstImage, 
+            const std::shared_ptr<Image>& srcImage,
+            const std::shared_ptr<Image>& dstImage,
             const VkImageResolve& region) const noexcept;
 
         void setEvent(
@@ -237,7 +237,7 @@ namespace magma
             const std::shared_ptr<Event>& event,
             VkPipelineStageFlags stageMask) noexcept;
         void waitEvent(
-            std::shared_ptr<Event>&event); 
+            std::shared_ptr<Event>&event);
         void waitEvents(
             std::vector<std::shared_ptr<Event>>& events);
 
@@ -270,7 +270,7 @@ namespace magma
             uint32_t offset = 0) noexcept;
         template<typename Type> void pushConstants(
             const std::shared_ptr<PipelineLayout>& layout,
-            VkShaderStageFlags stageFlags, 
+            VkShaderStageFlags stageFlags,
             const std::vector<Type>& values,
             uint32_t offset = 0) noexcept;
         template<typename Type> void pushConstantBlock(
@@ -316,7 +316,7 @@ namespace magma
         void queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept;
 
     private:
-		VkRect2D renderArea = {{0, 0}, {0, 0}};
+        VkRect2D renderArea = {{0, 0}, {0, 0}};
         bool occlusionQueryEnable = false;
         VkQueryControlFlags queryFlags = 0;
         VkQueryPipelineStatisticFlags pipelineStatistics = 0;

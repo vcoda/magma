@@ -26,8 +26,8 @@ namespace magma
     class Handle : public DebugObject
     {
     public:
-        Handle(VkDebugReportObjectTypeEXT objectType, 
-            std::shared_ptr<const Device> device, 
+        Handle(VkDebugReportObjectTypeEXT objectType,
+            std::shared_ptr<const Device> device,
             std::shared_ptr<IAllocator> allocator):
             DebugObject(objectType, device),
             allocator(allocator) {}
@@ -43,7 +43,7 @@ namespace magma
         typedef Type VkType;
 
     public:
-        virtual uint64_t getObject() const override 
+        virtual uint64_t getObject() const override
             { return reinterpret_cast<uint64_t>(handle); }
         operator Type() const { return handle; }
 

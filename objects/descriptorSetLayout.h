@@ -30,7 +30,7 @@ namespace magma
     public:
         struct Binding : VkDescriptorSetLayoutBinding
         {
-            Binding(uint32_t binding, 
+            Binding(uint32_t binding,
                 const Descriptor& descriptor,
                 VkShaderStageFlags stageFlags);
         };

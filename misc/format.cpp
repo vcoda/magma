@@ -33,8 +33,8 @@ bool Format::depth() const
     case VK_FORMAT_D24_UNORM_S8_UINT:
     case VK_FORMAT_D32_SFLOAT_S8_UINT:
         return true;
-	default:
-		return false;
+    default:
+        return false;
     }
     return false;
 }
@@ -47,8 +47,8 @@ bool Format::depthStencil() const
     case VK_FORMAT_D24_UNORM_S8_UINT:
     case VK_FORMAT_D32_SFLOAT_S8_UINT:
         return true;
-	default:
-		return false;
+    default:
+        return false;
     }
     return false;
 }
@@ -74,8 +74,8 @@ bool Format::blockCompressed() const
     case VK_FORMAT_BC7_UNORM_BLOCK:
     case VK_FORMAT_BC7_SRGB_BLOCK:
         return true;
-	default:
-		return false;
+    default:
+        return false;
     }
     return false;
 }
@@ -95,8 +95,8 @@ bool Format::etc() const
     case VK_FORMAT_EAC_R11G11_UNORM_BLOCK:
     case VK_FORMAT_EAC_R11G11_SNORM_BLOCK:
         return true;
-	default:
-		return false;
+    default:
+        return false;
     }
     return false;
 }
@@ -134,8 +134,8 @@ bool Format::adaptiveCompressed() const
     case VK_FORMAT_ASTC_12x12_UNORM_BLOCK:
     case VK_FORMAT_ASTC_12x12_SRGB_BLOCK:
         return true;
-	default:
-		return false;
+    default:
+        return false;
     };
     return false;
 }
@@ -163,8 +163,8 @@ bool Format::floatingPoint() const
     case VK_FORMAT_BC6H_UFLOAT_BLOCK:
     case VK_FORMAT_BC6H_SFLOAT_BLOCK:
         return true;
-	default:
-		return false;
+    default:
+        return false;
     }
     return false;
 }
@@ -215,8 +215,8 @@ std::pair<uint8_t, uint8_t> Format::blockFootprint() const
     case VK_FORMAT_ASTC_12x12_UNORM_BLOCK:
     case VK_FORMAT_ASTC_12x12_SRGB_BLOCK:
         return std::make_pair(12, 12);
-	default:
-		return std::make_pair(0, 0);
+    default:
+        return std::make_pair(0, 0);
     };
     return std::make_pair(0, 0);
 }

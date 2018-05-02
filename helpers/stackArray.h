@@ -79,7 +79,7 @@ namespace magma
             {
                 MAGMA_ASSERT(stack);
                 MAGMA_ASSERT(i < static_cast<int>(count));
-				return stack[i];
+                return stack[i];
             }
 
         private:

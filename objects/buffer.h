@@ -34,15 +34,15 @@ namespace magma
         VkDescriptorBufferInfo getDescriptor() const noexcept;
 
     protected:
-	    Buffer(std::shared_ptr<const Device> device, 
-            VkDeviceSize size, 
-            VkBufferUsageFlags usage, 
+        Buffer(std::shared_ptr<const Device> device,
+            VkDeviceSize size,
+            VkBufferUsageFlags usage,
             VkBufferCreateFlags flags,
             std::shared_ptr<IAllocator> allocator,
             VkMemoryPropertyFlags memoryFlags);
 
     protected:
         VkDeviceSize size;
-	    std::shared_ptr<DeviceMemory> memory;
+        std::shared_ptr<DeviceMemory> memory;
     };
 } // namespace magma

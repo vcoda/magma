@@ -22,14 +22,14 @@ namespace magma
 {
 Exception::Exception(const char *const message,
     const char *file /* nullptr */, int line /* -1 */):
-	std::runtime_error(message),
+    std::runtime_error(message),
     fl(file), 
     ln(line)
 {}
 
 Exception::Exception(const std::string& message,
     const char *file /* nullptr */, int line /* -1 */):
-	std::runtime_error(message.c_str()),
+    std::runtime_error(message.c_str()),
     fl(file), 
     ln(line)
 {}
@@ -86,8 +86,8 @@ const char *BadResultException::codeString() const
 
     MAGMA_STRINGIZE_FIELD(VK_ERROR_INVALID_SHADER_NV);
 
-	default:
-		return "<unknown>";
+    default:
+        return "<unknown>";
     }
     return "<unknown>";
 }

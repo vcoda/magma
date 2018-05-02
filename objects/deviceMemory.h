@@ -26,12 +26,12 @@ namespace magma
     class DeviceMemory : public NonDispatchable<VkDeviceMemory>
     {
     public:
-        DeviceMemory(std::shared_ptr<const Device> device, 
-            VkDeviceSize size, 
+        DeviceMemory(std::shared_ptr<const Device> device,
+            VkDeviceSize size,
             VkMemoryPropertyFlags flags,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~DeviceMemory();
-        void *map(VkDeviceSize offset = 0, 
+        void *map(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE,
             VkMemoryMapFlags flags = 0) noexcept;
         void unmap() noexcept;

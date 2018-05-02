@@ -26,7 +26,7 @@ namespace magma
     class Fence : public NonDispatchable<VkFence>
     {
     public:
-        Fence(std::shared_ptr<const Device> device, 
+        Fence(std::shared_ptr<const Device> device,
             bool signaled = false,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~Fence();

@@ -336,7 +336,7 @@ void CommandBuffer::beginDebugMarker(const char *name, const float color[4]) noe
         info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
         info.pNext = nullptr;
         info.pMarkerName = name;
-		memcpy(info.color, color, sizeof(float) * 4);
+        memcpy(info.color, color, sizeof(float) * 4);
         vkCmdDebugMarkerBegin(handle, &info);
     }
 #endif // MAGMA_DEBUG
