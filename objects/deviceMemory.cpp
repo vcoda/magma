@@ -89,7 +89,8 @@ bool DeviceMemory::flushMappedRange(
     memoryRange.memory = handle;
     memoryRange.offset = offset;
     memoryRange.size = size;
-    return vkFlushMappedMemoryRanges(*device, 1, &memoryRange);
+    const VkResult flush = vkFlushMappedMemoryRanges(*device, 1, &memoryRange);
+    return (VK_SUCCESS == flush);
 }
 
 bool DeviceMemory::invalidateMappedRange(
@@ -102,6 +103,7 @@ bool DeviceMemory::invalidateMappedRange(
     memoryRange.memory = handle;
     memoryRange.offset = offset;
     memoryRange.size = size;
-    return vkInvalidateMappedMemoryRanges(*device, 1, &memoryRange);
+    const VkResult invalidate = vkInvalidateMappedMemoryRanges(*device, 1, &memoryRange);
+    return (VK_SUCCESS == invalidate);
 }
 } // namespace magma
