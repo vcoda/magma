@@ -54,7 +54,7 @@ VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const v
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
     vertexCount(vertexCount)
 {        
-    std::shared_ptr<SourceTransferBuffer> srcBuffer(new SourceTransferBuffer(device, data, size));
+    std::shared_ptr<SourceTransferBuffer> srcBuffer(std::make_shared<SourceTransferBuffer>(device, data, size));
     copyCmdBuffer->begin();
     {
         VkBufferCopy region;

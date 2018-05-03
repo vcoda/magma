@@ -52,7 +52,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const voi
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
     indexType(indexType)
 {
-    std::shared_ptr<SourceTransferBuffer> srcBuffer(new SourceTransferBuffer(device, data, size));
+    std::shared_ptr<SourceTransferBuffer> srcBuffer(std::make_shared<SourceTransferBuffer>(device, data, size));
     copyCmdBuffer->begin();
     {
         // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter

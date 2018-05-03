@@ -72,9 +72,7 @@ Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkForm
     MAGMA_THROW_FAILURE(create, "failed to create image");
     VkMemoryRequirements memoryRequirements;
     vkGetImageMemoryRequirements(*device, handle, &memoryRequirements);
-    std::shared_ptr<DeviceMemory> memory(new DeviceMemory(device,
-        memoryRequirements.size,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+    std::shared_ptr<DeviceMemory> memory = std::make_shared<DeviceMemory>(device, memoryRequirements.size, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
     bindMemory(memory);
 }
 

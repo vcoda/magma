@@ -36,7 +36,7 @@ StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const
     Buffer(copyCmdBuffer->getDevice(), size, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags, allocator,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
 {
-    std::shared_ptr<SourceTransferBuffer> srcBuffer(new SourceTransferBuffer(device, data, size));
+    std::shared_ptr<SourceTransferBuffer> srcBuffer(std::make_shared<SourceTransferBuffer>(device, data, size));
     copyCmdBuffer->begin();
     {
         VkBufferCopy region;
@@ -47,7 +47,7 @@ StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const
     }
     copyCmdBuffer->end();
     std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_TRANSFER_BIT, 0));
-    std::shared_ptr<Fence> fence(new Fence(device));
+    std::shared_ptr<Fence> fence(std::make_shared<Fence>(device));
     queue->submit(copyCmdBuffer, 0, nullptr, nullptr, fence);
     fence->wait();
 }

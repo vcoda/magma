@@ -50,7 +50,7 @@ Image2D::Image2D(std::shared_ptr<const Device> device,
     std::vector<VkBufferImageCopy> copyRegions;
     VkDeviceSize size = getCopyRegions(mipExtents, mipSizes, copyRegions);
     // Copy mip levels to host visible buffer
-    std::shared_ptr<SourceTransferBuffer> srcBuffer(new SourceTransferBuffer(device, size, 0, allocator));
+    std::shared_ptr<SourceTransferBuffer> srcBuffer(std::make_shared<SourceTransferBuffer>(device, size, 0, allocator));
     if (uint8_t *data = reinterpret_cast<uint8_t *>(srcBuffer->getMemory()->map()))
     {
         for (uint32_t level = 0; level < mipLevels; ++level)
