@@ -100,7 +100,7 @@ void Image::bindMemory(std::shared_ptr<DeviceMemory> memory,
 {
     const VkResult bind = vkBindImageMemory(*device, handle, *memory, offset);
     MAGMA_THROW_FAILURE(bind, "failed to bind image memory");
-    this->memory = memory;
+    this->memory = std::move(memory);
 }
 
 VkDeviceSize Image::getCopyRegions(const std::vector<VkExtent2D>& mipExtents, 

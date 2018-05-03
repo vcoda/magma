@@ -101,7 +101,7 @@ bool Queue::submit(std::shared_ptr<const CommandBuffer> commandBuffer,
         waitStageMask, 
         waitSemaphores, 
         signalSemaphores, 
-        fence);
+        std::move(fence));
 }
 
 bool Queue::waitIdle() noexcept

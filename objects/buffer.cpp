@@ -55,7 +55,7 @@ void Buffer::bindMemory(std::shared_ptr<DeviceMemory> memory,
 {
     const VkResult bind = vkBindBufferMemory(*device, handle, *memory, offset);
     MAGMA_THROW_FAILURE(bind, "failed to bind buffer memory");
-    this->memory = memory;
+    this->memory = std::move(memory);
 }
 
 VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept

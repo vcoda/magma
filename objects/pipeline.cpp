@@ -81,7 +81,7 @@ std::string Pipeline::getShaderDisassembly(VkShaderStageFlagBits stage) const
         std::vector<char> disassembly(disassemblySize);
         const VkResult get = pfnGetShaderInfoAMD(*device, handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, disassembly.data());
         if (VK_SUCCESS == get)
-            return std::string(&disassembly[0]);
+            return std::move(std::string(&disassembly[0]));
     }
     return std::string();
 }
