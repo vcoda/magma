@@ -50,6 +50,7 @@ namespace magma
     class CommandBuffer : public Dispatchable<VkCommandBuffer>
     {
         CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Device> device);
+        friend class CommandPool;
 
     public:
         bool begin(VkCommandBufferUsageFlags flags = 0) noexcept;
@@ -320,7 +321,6 @@ namespace magma
         bool occlusionQueryEnable = false;
         VkQueryControlFlags queryFlags = 0;
         VkQueryPipelineStatisticFlags pipelineStatistics = 0;
-        friend class CommandPool;
     };
 } // namespace magma
 
