@@ -115,21 +115,7 @@ std::shared_ptr<Device> PhysicalDevice::createDevice(
     const std::vector<const char *>& extensions, 
     const VkPhysicalDeviceFeatures& deviceFeatures) const
 {
-    VkDeviceCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = 0;
-    info.queueCreateInfoCount = MAGMA_COUNT(queueDescriptors);
-    info.pQueueCreateInfos = queueDescriptors.data();
-    info.enabledLayerCount = MAGMA_COUNT(layers);
-    info.ppEnabledLayerNames = layers.data();
-    info.enabledExtensionCount = MAGMA_COUNT(extensions);
-    info.ppEnabledExtensionNames = extensions.data();
-    info.pEnabledFeatures = &deviceFeatures;
-    std::vector<VkDeviceQueueCreateInfo> deviceQueues;
-    for (const auto& desc : queueDescriptors)
-        deviceQueues.push_back(desc);
-    return std::shared_ptr<Device>(new Device(shared_from_this(), info, deviceQueues, allocator));
+    return std::shared_ptr<Device>(new Device(shared_from_this(), queueDescriptors, layers, extensions, deviceFeatures, allocator));
 }
 
 std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
@@ -144,7 +130,7 @@ std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
     };
     VkPhysicalDeviceFeatures noFeatures;
     memset(&noFeatures, 0, sizeof(VkPhysicalDeviceFeatures));
-    return createDevice(queueDescriptors, noLayers, extensions, noFeatures);
+    return std::shared_ptr<Device>(new Device(shared_from_this(), queueDescriptors, noLayers, extensions, noFeatures, allocator));
 }
 
 bool PhysicalDevice::getSurfaceSupport(std::shared_ptr<Surface> surface) const

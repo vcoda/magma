@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <vector>
 #include "handle.h"
+#include "../misc/deviceQueueDesc.h"
 
 namespace magma
 {
@@ -30,8 +31,10 @@ namespace magma
         public std::enable_shared_from_this<Device>
     {
         Device(std::shared_ptr<const PhysicalDevice> physicalDevice,
-            const VkDeviceCreateInfo& info,
-            const std::vector<VkDeviceQueueCreateInfo>& queues,
+            const std::vector<DeviceQueueDescriptor>& queueDescriptors,
+            const std::vector<const char *>& layers, 
+            const std::vector<const char *>& extensions, 
+            const VkPhysicalDeviceFeatures& deviceFeatures,
             std::shared_ptr<IAllocator> allocator = nullptr);
         friend PhysicalDevice;
 
