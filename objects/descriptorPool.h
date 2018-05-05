@@ -27,7 +27,8 @@ namespace magma
     class DescriptorSetLayout;
     class IAllocator;
 
-    class DescriptorPool : public NonDispatchable<VkDescriptorPool>
+    class DescriptorPool : public NonDispatchable<VkDescriptorPool>,
+        public std::enable_shared_from_this<DescriptorPool>
     {
     public:
         DescriptorPool(std::shared_ptr<const Device> device, 
