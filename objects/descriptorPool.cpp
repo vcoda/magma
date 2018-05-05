@@ -101,8 +101,8 @@ std::vector<std::shared_ptr<DescriptorSet>> DescriptorPool::allocateDescriptorSe
 void DescriptorPool::freeDescriptorSets(std::vector<std::shared_ptr<DescriptorSet>>& descriptorSets)
 {
     MAGMA_STACK_ARRAY(VkDescriptorSet, dereferencedDescriptorSets, descriptorSets.size());
-    for (const auto& set : descriptorSets)
-        dereferencedDescriptorSets.put(*set);
+    for (const auto& descriptorSet : descriptorSets)
+        dereferencedDescriptorSets.put(*descriptorSet);
     vkFreeDescriptorSets(*device, handle, dereferencedDescriptorSets.size(), dereferencedDescriptorSets);
     descriptorSets.clear();
 }
