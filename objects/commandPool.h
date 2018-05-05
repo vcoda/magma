@@ -25,7 +25,8 @@ namespace magma
     class CommandBuffer;
     class IAllocator;
 
-    class CommandPool : public NonDispatchable<VkCommandPool>
+    class CommandPool : public NonDispatchable<VkCommandPool>,
+        public std::enable_shared_from_this<CommandPool>
     {
     public:
         CommandPool(std::shared_ptr<const Device> device, 

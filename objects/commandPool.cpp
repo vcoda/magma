@@ -68,7 +68,7 @@ std::shared_ptr<CommandBuffer> CommandPool::allocateCommandBuffer(bool primaryLe
     VkCommandBuffer commandBuffer;
     const VkResult alloc = vkAllocateCommandBuffers(*device, &info, &commandBuffer);
     MAGMA_THROW_FAILURE(alloc, "failed to allocate command buffer");
-    return std::shared_ptr<CommandBuffer>(new CommandBuffer(commandBuffer, device));
+    return std::shared_ptr<CommandBuffer>(new CommandBuffer(commandBuffer, device, shared_from_this()));
 }
 
 void CommandPool::freeCommandBuffer(std::shared_ptr<CommandBuffer>& commandBuffer)
@@ -91,7 +91,7 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     MAGMA_THROW_FAILURE(alloc, "failed to allocate command buffers");
     std::vector<std::shared_ptr<CommandBuffer>> commandBuffers;
     for (const VkCommandBuffer cmdBuffer : nativeCommandBuffers)
-        commandBuffers.push_back(std::shared_ptr<CommandBuffer>(new CommandBuffer(cmdBuffer, device)));
+        commandBuffers.push_back(std::shared_ptr<CommandBuffer>(new CommandBuffer(cmdBuffer, device, shared_from_this())));
     return std::move(commandBuffers);
 }
 

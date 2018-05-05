@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class CommandPool;
     class Buffer;
     class ComputePipeline;
     class DescriptorSet;
@@ -49,7 +50,7 @@ namespace magma
     // Methods order follows Vulkan API order
     class CommandBuffer : public Dispatchable<VkCommandBuffer>
     {
-        CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Device> device);
+        CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Device> device, std::shared_ptr<CommandPool> pool);
         friend class CommandPool;
 
     public:
@@ -303,6 +304,8 @@ namespace magma
         void insertDebugMarker(const char *name) noexcept;
         
         // Non-API utility methods
+        std::shared_ptr<CommandPool> getPool() const { return pool; }
+
         void setRenderArea(const VkRect2D& rc) noexcept;
         void setRenderArea(
             int32_t x, int32_t y, 
@@ -317,6 +320,7 @@ namespace magma
         void queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept;
 
     private:
+        std::shared_ptr<CommandPool> pool;
         VkRect2D renderArea = {{0, 0}, {0, 0}};
         bool occlusionQueryEnable = false;
         VkQueryControlFlags queryFlags = 0;

@@ -40,8 +40,9 @@ PFN_vkCmdDebugMarkerEndEXT vkCmdDebugMarkerEnd;
 PFN_vkCmdDebugMarkerInsertEXT vkCmdDebugMarkerInsert;
 #endif // MAGMA_DEBUG
 
-CommandBuffer::CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Device> device):
-    Dispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT, device, nullptr)
+CommandBuffer::CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Device> device, std::shared_ptr<CommandPool> pool):
+    Dispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT, device, nullptr),
+    pool(pool)
 {
     this->handle = handle;
 #ifdef MAGMA_DEBUG
