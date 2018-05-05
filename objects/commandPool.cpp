@@ -48,6 +48,15 @@ CommandPool::~CommandPool()
     vkDestroyCommandPool(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
+bool CommandPool::reset(bool releaseResources)
+{
+    VkCommandPoolResetFlags flags = 0;
+    if (releaseResources)
+        flags |= VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT;
+    const VkResult reset = vkResetCommandPool(*device, handle, flags);
+    return (VK_SUCCESS == reset);
+}
+
 std::shared_ptr<CommandBuffer> CommandPool::allocateCommandBuffer(bool primaryLevel)
 {
     VkCommandBufferAllocateInfo info;
@@ -93,14 +102,5 @@ void CommandPool::freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>
         dereferencedCommandBuffers.put(*buffer);
     vkFreeCommandBuffers(*device, handle, dereferencedCommandBuffers.size(), dereferencedCommandBuffers);
     commandBuffers.clear();
-}
-
-bool CommandPool::reset(bool releaseResources) noexcept
-{
-    VkCommandPoolResetFlags flags = 0;
-    if (releaseResources)
-        flags |= VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT;
-    const VkResult reset = vkResetCommandPool(*device, handle, flags);
-    return (VK_SUCCESS == reset);
 }
 } // namespace magma

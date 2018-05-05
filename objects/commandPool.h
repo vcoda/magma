@@ -34,11 +34,11 @@ namespace magma
             bool reset = true,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~CommandPool();
+        bool reset(bool releaseResources);
         std::shared_ptr<CommandBuffer> allocateCommandBuffer(bool primaryLevel);
         void freeCommandBuffer(std::shared_ptr<CommandBuffer>& commandBuffer);
         std::vector<std::shared_ptr<CommandBuffer>> allocateCommandBuffers(uint32_t count,
             bool primaryLevel);
         void freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers);
-        bool reset(bool releaseResources) noexcept;
     };
 } // namespace magma
