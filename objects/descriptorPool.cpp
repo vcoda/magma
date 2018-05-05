@@ -77,10 +77,24 @@ void DescriptorPool::freeDescriptorSet(std::shared_ptr<DescriptorSet>& descripto
     descriptorSet.reset();
 }
 
-std::vector<std::shared_ptr<DescriptorSet>> DescriptorPool::allocateDescriptorSets(std::shared_ptr<DescriptorSetLayout>)
+std::vector<std::shared_ptr<DescriptorSet>> DescriptorPool::allocateDescriptorSets(const std::vector<std::shared_ptr<DescriptorSetLayout>>& setLayouts)
 {
+    VkDescriptorSetAllocateInfo info;
+    info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+    info.pNext = nullptr;
+    info.descriptorPool = handle;
+    info.descriptorSetCount = MAGMA_COUNT(setLayouts);
+    MAGMA_STACK_ARRAY(VkDescriptorSetLayout, dereferencedLayouts, setLayouts.size());
+    for (const auto& layout : setLayouts)
+        dereferencedLayouts.put(*layout);
+    info.pSetLayouts = dereferencedLayouts;
+    MAGMA_STACK_ARRAY(VkDescriptorSet, nativeDescriptorSets, info.descriptorSetCount);
+    const VkResult alloc = vkAllocateDescriptorSets(*device, &info, nativeDescriptorSets);
+    MAGMA_THROW_FAILURE(alloc, "failed to allocate descriptor sets");
     std::vector<std::shared_ptr<DescriptorSet>> descriptorSets;
-    MAGMA_THROW_NOT_IMPLEMENTED();
+    int i = 0;
+    for (const VkDescriptorSet descriptorSet : nativeDescriptorSets)
+        descriptorSets.push_back(std::shared_ptr<DescriptorSet>(new DescriptorSet(descriptorSet, device, setLayouts[i++])));
     return std::move(descriptorSets);
 }
 
