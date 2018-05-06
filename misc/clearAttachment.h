@@ -20,13 +20,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    struct ClearAttachment : VkClearAttachment
-    {
-    };
+    struct ClearAttachment : VkClearAttachment 
+    {};
 
     struct ColorClearAttachment : ClearAttachment
     {
-        ColorClearAttachment(uint32_t attachment, float r, float g, float b, float a = 1.f)
+        ColorClearAttachment(uint32_t attachment, float r, float g, float b, 
+            float a = 1.f)
         {
             aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
             colorAttachment = attachment;

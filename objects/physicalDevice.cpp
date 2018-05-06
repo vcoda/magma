@@ -54,7 +54,7 @@ VkFormatProperties PhysicalDevice::getFormatProperties(VkFormat format) const
 
 VkImageFormatProperties PhysicalDevice::getImageFormatProperties(VkFormat format,
     VkImageType imageType, bool optimalTiling, VkImageUsageFlags usage,
-    VkImageCreateFlags flags /* 0* */) const
+    VkImageCreateFlags flags /* 0 */) const
 {
     VkImageFormatProperties imageFormatProperties;
     const VkResult get = vkGetPhysicalDeviceImageFormatProperties(handle, format, imageType,
@@ -128,8 +128,7 @@ std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
     const std::vector<const char*> extensions = {
         VK_KHR_SWAPCHAIN_EXTENSION_NAME
     };
-    VkPhysicalDeviceFeatures noFeatures;
-    memset(&noFeatures, 0, sizeof(VkPhysicalDeviceFeatures));
+    VkPhysicalDeviceFeatures noFeatures = {VK_FALSE};
     return std::shared_ptr<Device>(new Device(shared_from_this(), queueDescriptors, noLayers, extensions, noFeatures, allocator));
 }
 

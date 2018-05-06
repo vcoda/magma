@@ -19,10 +19,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    // C++ forbids inheritance from union.
+    // C++ forbids inheritance from union
     struct ClearValue
     {
-        operator const VkClearValue&() const { return value; }
+        operator const VkClearValue&() const 
+            { return value; }
 
     protected:
         VkClearValue value;
@@ -30,7 +31,8 @@ namespace magma
 
     struct ColorClear : public ClearValue 
     {
-        ColorClear(float r, float g, float b, float a = 1.f)
+        ColorClear(float r, float g, float b, 
+            float a = 1.f)
         {
             value.color.float32[0] = r;
             value.color.float32[1] = g;
