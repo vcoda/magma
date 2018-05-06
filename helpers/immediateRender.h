@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <limits>
 #include "../objects/shaderModule.h"
 #include "../states/rasterizationState.h"
-#include "../states/multiSampleState.h"
+#include "../states/multisampleState.h"
 #include "../states/depthStencilState.h"
 #include "../states/colorBlendState.h"
 
