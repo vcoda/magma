@@ -82,7 +82,7 @@ namespace magma
             void setIdentity();
             void setTransform(const float transform[16]);
             bool beginPrimitive(VkPrimitiveTopology topology);
-            bool endPrimitive();
+            bool endPrimitive(bool loop = false);
             void normal(float x, float y, float z);
             void normal(const float n[3]);
             void color(float r, float g, float b, float a = 1.f);

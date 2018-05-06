@@ -83,11 +83,18 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology)
     return true;
 }
 
-bool ImmediateRender::endPrimitive()
+bool ImmediateRender::endPrimitive(bool loop /* false */)
 {
     MAGMA_ASSERT(insidePrimitive);
     if (!insidePrimitive)
         return false;
+    if (loop && (primitives.back().vertexCount > 0))
+    {
+        const Vertex *first = vert - primitives.back().vertexCount;
+        *vert++ = *first;
+        ++primitives.back().vertexCount;
+        ++vertexCount;
+    }
     insidePrimitive = false;
     return true;
 }
