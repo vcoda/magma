@@ -57,6 +57,12 @@ MAGMA_INLINE void ImmediateRender::setColorBlendState(const ColorBlendState& sta
     colorBlendState = state;
 }
 
+MAGMA_INLINE void ImmediateRender::setLineWidth(float width)
+{
+    MAGMA_ASSERT(!insidePrimitive);
+    lineWidth = width;
+}
+
 MAGMA_INLINE void ImmediateRender::setIdentity()
 {
     MAGMA_ASSERT(!insidePrimitive);

@@ -61,6 +61,7 @@ namespace magma
             struct Primitive
             {
                 std::shared_ptr<GraphicsPipeline> pipeline;
+                float lineWidth;
                 Transform transform;
                 uint32_t vertexCount;
                 uint32_t firstVertex;
@@ -79,6 +80,7 @@ namespace magma
             void setMultisampleState(const MultisampleState& state);
             void setDepthStencilState(const DepthStencilState& state);
             void setColorBlendState(const ColorBlendState& state);
+            void setLineWidth(float width);
             void setIdentity();
             void setTransform(const float transform[16]);
             bool beginPrimitive(VkPrimitiveTopology topology);
@@ -121,6 +123,7 @@ namespace magma
             MultisampleState multisampleState;
             DepthStencilState depthStencilState;
             ColorBlendState colorBlendState;
+            float lineWidth = 1.f;
             Transform transform;
             std::list<Primitive> primitives;
             std::unordered_set<std::shared_ptr<GraphicsPipeline>> pipelines;

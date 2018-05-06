@@ -75,6 +75,7 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology)
     }
     Primitive primitive;
     primitive.pipeline = createPipelineState(topology);
+    primitive.lineWidth = lineWidth;
     primitive.transform = transform;
     primitive.vertexCount = 0;
     primitive.firstVertex = vertexCount;
@@ -113,6 +114,7 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer
             cmdBuffer->bindPipeline(primitive.pipeline);
             prevPipeline = primitive.pipeline;
         }
+        cmdBuffer->setLineWidth(primitive.lineWidth);
         if (layout)
             cmdBuffer->pushConstantBlock(layout, VK_SHADER_STAGE_VERTEX_BIT, primitive.transform);
         cmdBuffer->draw(primitive.vertexCount, primitive.firstVertex);
@@ -283,9 +285,18 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
         &states::patchList
     };
     std::shared_ptr<GraphicsPipeline> pipeline(std::make_shared<GraphicsPipeline>(device, cache,
-        std::vector<ShaderStage>{vertexShader, fragmentShader}, vertexInput, *inputAssemblyStates[topology],
-        rasterizationState, multisampleState, depthStencilState, colorBlendState,
-        std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR}, layout, renderPass));
+        std::vector<ShaderStage>{vertexShader, fragmentShader}, 
+        vertexInput, 
+        *inputAssemblyStates[topology],
+        rasterizationState, 
+        multisampleState, 
+        depthStencilState, 
+        colorBlendState,
+        std::initializer_list<VkDynamicState>{
+            VK_DYNAMIC_STATE_VIEWPORT, 
+            VK_DYNAMIC_STATE_SCISSOR, 
+            VK_DYNAMIC_STATE_LINE_WIDTH
+        }, layout, renderPass));
     pipelines.insert(pipeline); // Hold unique pipelines, as they should exist during command buffer submission
     return pipeline;
 }
