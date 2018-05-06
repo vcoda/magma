@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../vulkan.h"
+#include "../nonCopyable.h"
 
 namespace magma
 {
@@ -25,10 +26,9 @@ namespace magma
         AllocationCallbacks();
     };
 
-    class IAllocator : public AllocationCallbacks
+    class IAllocator : public AllocationCallbacks, public NonCopyable
     {
     public:
-        virtual ~IAllocator() = default;
         virtual void *alloc(size_t size,
             size_t alignment,
             VkSystemAllocationScope allocationScope) = 0;

@@ -285,6 +285,9 @@
     <ClInclude Include="allocator\allocator.h">
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
+    <ClInclude Include="nonCopyable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">

@@ -18,13 +18,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <memory>
 #include "../vulkan.h"
+#include "../nonCopyable.h"
 
 namespace magma
 {
     class Device;
 
     // Every Magma object inherited from debug one to enable debugging markers
-    class DebugObject
+    class DebugObject : public NonCopyable
     {
     public:
         static void initDebugMarker(std::shared_ptr<const Device> device);
@@ -33,7 +34,6 @@ namespace magma
     public:
         DebugObject(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<const Device> device);
-        virtual ~DebugObject() = default;
         void setMarkerTag(uint64_t name, size_t tagSize, const void *tag);
         template<typename Tag>
         void setMarkerTag(uint64_t name, const Tag& tag)
