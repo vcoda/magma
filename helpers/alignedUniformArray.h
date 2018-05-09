@@ -28,6 +28,23 @@ namespace magma
         class AlignedUniformArray : public NonCopyable
         {
         public:
+            template<typename Type>
+            class Iterator
+            {
+            public:
+                Iterator(char *ptr, VkDeviceSize alignment):
+                    ptr(ptr), alignment(alignment) {}
+                Iterator& operator++() { ptr += alignment; return *this; }
+                Iterator& operator--() { ptr -= alignment; return *this; }
+                bool operator!=(const Iterator& it) const { return ptr != it.ptr; }
+                Type& operator*() { return *reinterpret_cast<Type *>(ptr); }
+
+            private:
+                char *ptr;
+                const VkDeviceSize alignment;
+            };
+
+        public:
             AlignedUniformArray(Type *buffer, const uint32_t arraySize, const VkDeviceSize alignment):
                 buffer(buffer),
                 arraySize(arraySize),
@@ -39,6 +56,16 @@ namespace magma
             constexpr size_t getElementSize() { return sizeof(Type); }
             VkDeviceSize getElementAlignment() const { return alignment; }
             Type *getData() { return buffer; }
+            Iterator<Type> begin() const
+            {
+                char *beg = reinterpret_cast<char *>(buffer);
+                return Iterator<Type>(beg, alignment);
+            }
+            Iterator<Type> end() const
+            {
+                char *end = reinterpret_cast<char *>(buffer) + arraySize * alignment;
+                return Iterator<Type>(end, alignment);
+            }
             Type& operator[](uint32_t index)
             {
                 MAGMA_ASSERT(index < arraySize);
