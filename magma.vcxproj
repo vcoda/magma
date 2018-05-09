@@ -130,6 +130,7 @@
     <ClInclude Include="descriptors\descriptors.h" />
     <ClInclude Include="descriptors\subpass.h" />
     <ClInclude Include="helpers\alignedMemcpy.h" />
+    <ClInclude Include="helpers\alignedUniformArray.h" />
     <ClInclude Include="helpers\copying.h" />
     <ClInclude Include="helpers\immediateRender.h" />
     <ClInclude Include="helpers\mapScoped.h" />
