@@ -60,7 +60,7 @@ namespace magma
         class AlignedUniformArray<Type>::Iterator
         {
         public:
-            Iterator(char *ptr, VkDeviceSize alignment):
+            Iterator(char *ptr, const VkDeviceSize alignment):
                 ptr(ptr), alignment(alignment) {}
             Iterator& operator++()
             {
