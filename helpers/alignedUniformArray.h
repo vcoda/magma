@@ -55,7 +55,6 @@ namespace magma
             uint32_t getArraySize() const { return arraySize; }
             constexpr size_t getElementSize() { return sizeof(Type); }
             VkDeviceSize getElementAlignment() const { return alignment; }
-            Type *getData() { return buffer; }
             Iterator<Type> begin() const
             {
                 char *beg = reinterpret_cast<char *>(buffer);
