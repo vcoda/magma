@@ -28,25 +28,11 @@ namespace magma
         class AlignedUniformArray : public NonCopyable
         {
         public:
-            template<typename Type>
-            class Iterator
-            {
-            public:
-                Iterator(char *ptr, VkDeviceSize alignment):
-                    ptr(ptr), alignment(alignment) {}
-                Iterator& operator++() { ptr += alignment; return *this; }
-                Iterator& operator--() { ptr -= alignment; return *this; }
-                bool operator!=(const Iterator& it) const { return ptr != it.ptr; }
-                Type& operator*() { return *reinterpret_cast<Type *>(ptr); }
-
-            private:
-                char *ptr;
-                const VkDeviceSize alignment;
-            };
+            class Iterator;
 
         public:
-            AlignedUniformArray(Type *buffer, const uint32_t arraySize, const VkDeviceSize alignment):
-                buffer(buffer),
+            AlignedUniformArray(void *buffer, const uint32_t arraySize, const VkDeviceSize alignment):
+                buffer(reinterpret_cast<char *>(buffer)),
                 arraySize(arraySize),
                 alignment(alignment)
             {
@@ -55,26 +41,56 @@ namespace magma
             uint32_t getArraySize() const { return arraySize; }
             constexpr size_t getElementSize() { return sizeof(Type); }
             VkDeviceSize getElementAlignment() const { return alignment; }
-            Iterator<Type> begin() const
-            {
-                char *beg = reinterpret_cast<char *>(buffer);
-                return Iterator<Type>(beg, alignment);
-            }
-            Iterator<Type> end() const
-            {
-                char *end = reinterpret_cast<char *>(buffer) + arraySize * alignment;
-                return Iterator<Type>(end, alignment);
-            }
+            Iterator begin() const { return Iterator(buffer, alignment); }
+            Iterator end() const { return Iterator(buffer + arraySize * alignment, alignment); }
             Type& operator[](uint32_t index)
             {
                 MAGMA_ASSERT(index < arraySize);
-                void *const elem = reinterpret_cast<char *>(buffer) + index * alignment;
+                char *const elem = buffer + index * alignment;
                 return *reinterpret_cast<Type *>(elem);
             }
 
         private:
-            Type *const buffer;
+            char *const buffer;
             const uint32_t arraySize;
+            const VkDeviceSize alignment;
+        };
+
+        template<typename Type>
+        class AlignedUniformArray<Type>::Iterator
+        {
+        public:
+            Iterator(char *ptr, VkDeviceSize alignment):
+                ptr(ptr), alignment(alignment) {}
+            Iterator& operator++()
+            {
+                ptr += alignment;
+                return *this;
+            }
+            Iterator operator++(int)
+            {
+                Iterator temp = *this;
+                ptr += alignment;
+                return temp;
+            }
+            Iterator& operator--()
+            {
+                ptr -= alignment;
+                return *this;
+            }
+            Iterator operator--(int)
+            {
+                Iterator temp = *this;
+                ptr -= alignment;
+                return temp;
+            }
+            bool operator!=(const Iterator& it) const
+                { return ptr != it.ptr; }
+            Type& operator*()
+                { return *reinterpret_cast<Type *>(ptr); }
+
+        private:
+            char *ptr;
             const VkDeviceSize alignment;
         };
     } // namespace helpers
