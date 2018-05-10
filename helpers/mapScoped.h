@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../objects/uniformBuffer.h"
+#include "uniformArray.h"
 #include "alignedUniformArray.h"
 
 namespace magma
@@ -37,17 +38,33 @@ namespace magma
             }
         }
 
-        template<typename Block>
+        template<typename Type>
         inline void mapScoped(
-            const std::shared_ptr<DynamicUniformBuffer<Block>>& buffer,
+            const std::shared_ptr<UniformBuffer<Type>>& buffer,
             bool clearMemory,
-            std::function<void(AlignedUniformArray<Block>& array)> fn)
+            std::function<void(UniformArray<Type>& array)> fn)
         {
-            Block *data = buffer->map(clearMemory);
+            Type *data = buffer->map(clearMemory);
             if (data)
             {
-                AlignedUniformArray<Block> array(data, 
-                    buffer->getArraySize(), 
+                UniformArray<Type> array(data,
+                    buffer->getArraySize());
+                fn(array);
+                buffer->unmap();
+            }
+        }
+
+        template<typename Type>
+        inline void mapScoped(
+            const std::shared_ptr<DynamicUniformBuffer<Type>>& buffer,
+            bool clearMemory,
+            std::function<void(AlignedUniformArray<Type>& array)> fn)
+        {
+            Type *data = buffer->map(clearMemory);
+            if (data)
+            {
+                AlignedUniformArray<Type> array(data,
+                    buffer->getArraySize(),
                     buffer->getElementAlignment());
                 fn(array);
                 buffer->unmap();

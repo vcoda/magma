@@ -135,6 +135,7 @@
     <ClInclude Include="helpers\immediateRender.h" />
     <ClInclude Include="helpers\mapScoped.h" />
     <ClInclude Include="helpers\stackArray.h" />
+    <ClInclude Include="helpers\uniformArray.h" />
     <ClInclude Include="magma.h" />
     <ClInclude Include="misc\bufferMemoryBarrier.h" />
     <ClInclude Include="misc\clearAttachment.h" />

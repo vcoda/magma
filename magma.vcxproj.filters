@@ -291,6 +291,9 @@
     <ClInclude Include="helpers\alignedUniformArray.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
+    <ClInclude Include="helpers\uniformArray.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
