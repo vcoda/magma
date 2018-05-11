@@ -87,18 +87,27 @@ namespace magma
             bool endPrimitive(bool loop = false);
             void normal(float x, float y, float z);
             void normal(const float n[3]);
+            template<typename Normal>
+            void normal(const Normal& n);
             void color(float r, float g, float b, float a = 1.f);
             void color(const float c[4]);
             void color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = std::numeric_limits<uint8_t>::max());
             void color(const uint8_t c[4]);
+            template<typename Color>
+            void color(const Color& c);
             void texCoord(float u, float v);
             void texCoord(const float tc[2]);
+            template<typename TexCoord>
+            void texCoord(const TexCoord& tc);
             void pointSize(float size);
             void vertex(float x, float y, float z = 0.f, float w = 1.f);
             void vertex(const float v[4]);
-            template<typename Vertex2> void vertex2(const Vertex2& v);
-            template<typename Vertex3> void vertex3(const Vertex3& v);
-            template<typename Vertex4> void vertex4(const Vertex4& v);
+            template<typename Vertex2>
+            void vertex2(const Vertex2& v);
+            template<typename Vertex3>
+            void vertex3(const Vertex3& v);
+            template<typename Vertex4>
+            void vertex4(const Vertex4& v);
             bool commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer,
                 bool clear = true);
             bool reset();

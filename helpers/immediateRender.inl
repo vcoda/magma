@@ -87,6 +87,12 @@ MAGMA_INLINE void ImmediateRender::normal(const float n[3])
     normal(n[0], n[1], n[2]);
 }
 
+template<typename Normal>
+MAGMA_INLINE void ImmediateRender::normal(const Normal& n)
+{
+    normal(n[0], n[1], n[2]);
+}
+
 MAGMA_INLINE void ImmediateRender::color(float r, float g, float b, float a /* 1 */)
 {
     curr.r = r;
@@ -110,6 +116,12 @@ MAGMA_INLINE void ImmediateRender::color(const uint8_t c[4])
     color(c[0], c[1], c[2], c[3]);
 }
 
+template<typename Color>
+MAGMA_INLINE void ImmediateRender::color(const Color& c)
+{
+    color(c[0], c[1], c[2], c[3]);
+}
+
 MAGMA_INLINE void ImmediateRender::texCoord(float u, float v)
 {
     curr.u = u;
@@ -117,6 +129,12 @@ MAGMA_INLINE void ImmediateRender::texCoord(float u, float v)
 }
 
 MAGMA_INLINE void ImmediateRender::texCoord(const float tc[2])
+{
+    texCoord(tc[0], tc[1]);
+}
+
+template<typename TexCoord>
+MAGMA_INLINE void ImmediateRender::texCoord(const TexCoord& tc)
 {
     texCoord(tc[0], tc[1]);
 }
