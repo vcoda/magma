@@ -23,7 +23,7 @@ namespace magma
 {
     namespace helpers
     {
-        template <typename Type>
+        template<typename Type>
         MAGMA_INLINE Type *copy(Type *const dst, const Type *const src)
         {
             MAGMA_ASSERT(dst);
@@ -31,7 +31,7 @@ namespace magma
             return reinterpret_cast<Type *>(memcpy(dst, src, sizeof(Type)));
         }
 
-        template <typename Type>
+        template<typename Type>
         MAGMA_INLINE Type *copy(Type *const dst, const Type *const src, uint32_t count)
         {
             MAGMA_ASSERT(dst);
@@ -40,7 +40,7 @@ namespace magma
             return reinterpret_cast<Type *>(memcpy(dst, src, sizeof(Type) * count));
         }
 
-        template <typename DstType, typename SrcType>
+        template<typename DstType, typename SrcType>
         MAGMA_INLINE DstType *copy(DstType *const dst, const std::vector<SrcType>& src)
         {
             static_assert(sizeof(DstType) == sizeof(SrcType), "equal size expected");
@@ -49,7 +49,7 @@ namespace magma
             return reinterpret_cast<DstType *>(memcpy(dst, src.data(), sizeof(SrcType) * src.size()));
         }
 
-        template <typename DstType, typename SrcType>
+        template<typename DstType, typename SrcType>
         MAGMA_INLINE DstType *copy(DstType *const dst, const std::initializer_list<SrcType>& src)
         {
             static_assert(sizeof(DstType) == sizeof(SrcType), "equal size expected");

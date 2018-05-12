@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "surface.h"
 #include "pipelineCache.h"
+#include "../misc/exception.h"
 #include "../shared.h"
 
 namespace magma

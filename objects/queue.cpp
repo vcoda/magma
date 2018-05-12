@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "fence.h"
 #include "swapchain.h"
 #include "../helpers/stackArray.h"
+#include "../misc/exception.h"
 
 namespace magma
 {

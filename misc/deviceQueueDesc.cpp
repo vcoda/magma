@@ -17,6 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "deviceQueueDesc.h"
 #include "../objects/physicalDevice.h"
+#include "../misc/exception.h"
+#include "../helpers/copy.h"
 #include "../shared.h"
 
 namespace magma

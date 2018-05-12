@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "imageMemoryBarrier.h"
 #include "../objects/image.h"
-#include "../shared.h"
+#include "../misc/exception.h"
 
 namespace magma
 {
@@ -57,7 +57,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(const std::shared_ptr<Image> image,
         srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;
         break;
     default:
-        MAGMA_THROW_NOT_IMPLEMENTED();
+        MAGMA_THROW_NOT_IMPLEMENTED;
     }
     switch (newLayout)
     {
@@ -76,7 +76,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(const std::shared_ptr<Image> image,
         break;
     case VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL:
         if (VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL == oldLayout)
-            throw Exception("Image memory barrier not neccessary");
+            MAGMA_THROW("Image memory barrier not neccessary");
         dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
         break;
     case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
@@ -91,7 +91,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(const std::shared_ptr<Image> image,
         dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
         break;
     default:
-        MAGMA_THROW_NOT_IMPLEMENTED();
+        MAGMA_THROW_NOT_IMPLEMENTED;
     }
     this->oldLayout = oldLayout;
     this->newLayout = newLayout;

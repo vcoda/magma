@@ -24,8 +24,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "semaphore.h"
 #include "fence.h"
 #include "../allocator/allocator.h"
-#include "../misc/stringize.h"
 #include "../helpers/stackArray.h"
+#include "../misc/stringize.h"
+#include "../misc/exception.h"
 
 namespace magma
 {

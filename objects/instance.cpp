@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "physicalDevice.h"
 #include "../allocator/allocator.h"
 #include "../helpers/stackArray.h"
+#include "../misc/exception.h"
 
 namespace magma
 {

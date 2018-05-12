@@ -31,7 +31,7 @@ namespace magma
         public:
             explicit StackArray(void *const stack, const size_t count):
                 stack(static_cast<Type *>(stack)),
-                count(static_cast<uint32_t>(count)), // Vulkan accepts uint32_t
+                count(static_cast<uint32_t>(count)),
                 pos(0)
             {
                 if (!std::is_pod<Type>())
@@ -84,7 +84,8 @@ namespace magma
 
         private:
             Type *const stack;
-            uint32_t count, pos;
+            const uint32_t count;
+            uint32_t pos;
 #       ifdef MAGMA_DEBUG
             size_t bytesAllocated;
 #       endif // MAGMA_DEBUG
@@ -92,8 +93,12 @@ namespace magma
     } // namespace helpers
 } // namespace magma
 
+// Only small arrays could be safely allocated on the stack
+#define MAGMA_MAX_STACK_ALLOC 1024
+
 // Macro to call alloca() in the stack frame of the variable declaration
 #define MAGMA_STACK_ARRAY(Type, var, count)\
     MAGMA_ASSERT(sizeof(Type) * (count) < MAGMA_MAX_STACK_ALLOC);\
     magma::helpers::StackArray<Type> var(\
-        (count) ? MAGMA_ALLOCA(sizeof(Type) * (count)) : nullptr, (count))
+        (count) ? MAGMA_ALLOCA(sizeof(Type) * (count)) : nullptr, (count)\
+    )

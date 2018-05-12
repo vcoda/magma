@@ -18,8 +18,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "imageView.h"
 #include "image.h"
 #include "device.h"
-#include "../misc/format.h"
 #include "../allocator/allocator.h"
+#include "../misc/format.h"
+#include "../misc/exception.h"
 #include "../shared.h"
 
 namespace magma

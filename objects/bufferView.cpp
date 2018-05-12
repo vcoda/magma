@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "buffer.h"
 #include "device.h"
 #include "../allocator/allocator.h"
+#include "../misc/exception.h"
 #include "../shared.h"
 
 namespace magma

@@ -222,9 +222,6 @@
     <ClInclude Include="descriptors\bindings.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
-    <ClInclude Include="helpers\copying.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
     <ClInclude Include="helpers\mapScoped.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
@@ -292,6 +289,9 @@
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
     <ClInclude Include="helpers\uniformArray.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\copy.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
   </ItemGroup>

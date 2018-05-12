@@ -31,6 +31,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/bufferMemoryBarrier.h"
 #include "../misc/imageMemoryBarrier.h"
 #include "../helpers/stackArray.h"
+#include "../misc/exception.h"
 
 namespace magma
 {
@@ -220,12 +221,12 @@ void CommandBuffer::resetEvent(const std::shared_ptr<Event>& event, VkPipelineSt
 
 void CommandBuffer::waitEvent(std::shared_ptr<Event>&)
 {
-    MAGMA_THROW_NOT_IMPLEMENTED();
+    MAGMA_THROW_NOT_IMPLEMENTED;
 }
 
 void CommandBuffer::waitEvents(std::vector<std::shared_ptr<Event>>&)
 {
-    MAGMA_THROW_NOT_IMPLEMENTED();
+    MAGMA_THROW_NOT_IMPLEMENTED;
 }
 
 void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::shared_ptr<Buffer>& buffer, const BufferMemoryBarrier& barrier) noexcept

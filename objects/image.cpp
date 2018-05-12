@@ -21,8 +21,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "buffer.h"
 #include "commandBuffer.h"
 #include "queue.h"
-#include "../misc/imageMemoryBarrier.h"
 #include "../allocator/allocator.h"
+#include "../misc/imageMemoryBarrier.h"
+#include "../misc/exception.h"
 #include "../shared.h"
 
 namespace magma
