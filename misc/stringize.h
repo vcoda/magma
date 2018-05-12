@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    const char *stringize(VkSystemAllocationScope param);
     const char *stringize(VkFormat param);
     const char *stringize(VkImageType param);  
     const char *stringize(VkImageTiling param);
@@ -51,13 +52,17 @@ namespace magma
     const char *stringize(VkAttachmentStoreOp param); 
     const char *stringize(VkPipelineBindPoint param);
     const char *stringize(VkCommandBufferLevel param);
-
     const char *stringize(VkIndexType param);
     const char *stringize(VkSubpassContents param);
+    const char *stringize(VkObjectType param);
     const char *stringize(VkFormatFeatureFlagBits bit);
     const char *stringize(VkImageUsageFlagBits bit);
+    const char *stringize(VkImageCreateFlagBits bit);
+    const char *stringize(VkSampleCountFlagBits bit);
+    const char *stringize(VkQueueFlagBits bit);
+    const char *stringize(VkMemoryPropertyFlagBits bit);
+    const char *stringize(VkMemoryHeapFlagBits bit);
     const char *stringize(VkPipelineStageFlagBits bit);
-    const char *stringize(VkSurfaceTransformFlagBitsKHR bit);
     const char *stringize(VkColorSpaceKHR param);
     const char *stringize(VkPresentModeKHR param);
     const char *stringize(VkSurfaceTransformFlagBitsKHR bit);
