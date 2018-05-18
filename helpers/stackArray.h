@@ -39,9 +39,9 @@ namespace magma
                     for (Type *p = begin(); p != end(); ++p)
                         new(p) Type();
                 }
-#           ifdef MAGMA_DEBUG
+#ifdef MAGMA_DEBUG
                 bytesAllocated = sizeof(Type) * count;
-#           endif // MAGMA_DEBUG
+#endif // MAGMA_DEBUG
             }
             ~StackArray()
             {
@@ -86,9 +86,9 @@ namespace magma
             Type *const stack;
             const uint32_t count;
             uint32_t pos;
-#       ifdef MAGMA_DEBUG
+#ifdef MAGMA_DEBUG
             size_t bytesAllocated;
-#       endif // MAGMA_DEBUG
+#endif // MAGMA_DEBUG
         };
     } // namespace helpers
 } // namespace magma
