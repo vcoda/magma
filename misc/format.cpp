@@ -36,7 +36,6 @@ bool Format::depth() const
     default:
         return false;
     }
-    return false;
 }
 
 bool Format::depthStencil() const
@@ -50,7 +49,6 @@ bool Format::depthStencil() const
     default:
         return false;
     }
-    return false;
 }
 
 bool Format::blockCompressed() const
@@ -77,10 +75,9 @@ bool Format::blockCompressed() const
     default:
         return false;
     }
-    return false;
 }
 
-bool Format::etc() const
+bool Format::ETC2() const
 {
     switch (format)
     {
@@ -90,15 +87,26 @@ bool Format::etc() const
     case VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK:
     case VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK:
     case VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK:
-    case VK_FORMAT_EAC_R11_UNORM_BLOCK:
-    case VK_FORMAT_EAC_R11_SNORM_BLOCK:
-    case VK_FORMAT_EAC_R11G11_UNORM_BLOCK:
-    case VK_FORMAT_EAC_R11G11_SNORM_BLOCK:
         return true;
     default:
         return false;
     }
-    return false;
+}
+
+bool Format::EAC() const
+{
+    switch (format)
+    {
+    case VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK:
+    case VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK:
+    case VK_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK:
+    case VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK:
+    case VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK:
+    case VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK:
+        return true;
+    default:
+        return false;
+    }
 }
 
 bool Format::adaptiveCompressed() const
@@ -137,7 +145,6 @@ bool Format::adaptiveCompressed() const
     default:
         return false;
     };
-    return false;
 }
 
 bool Format::floatingPoint() const
@@ -166,7 +173,6 @@ bool Format::floatingPoint() const
     default:
         return false;
     }
-    return false;
 }
 
 std::pair<uint8_t, uint8_t> Format::blockFootprint() const
@@ -218,6 +224,5 @@ std::pair<uint8_t, uint8_t> Format::blockFootprint() const
     default:
         return std::make_pair(0, 0);
     };
-    return std::make_pair(0, 0);
 }
 } // namespace magma

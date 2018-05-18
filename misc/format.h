@@ -25,19 +25,20 @@ namespace magma
     {
     public:
         Format(VkFormat format);
-        bool valid() const { return format != VK_FORMAT_UNDEFINED; }
+        bool valid() const 
+            { return format != VK_FORMAT_UNDEFINED; }
         bool depth() const;
         bool depthStencil() const;
         bool blockCompressed() const;
-        bool etc() const;
+        bool ETC2() const;
+        bool EAC() const;
         bool adaptiveCompressed() const;
         bool compressed() const 
-        {
-            return blockCompressed() || etc() || adaptiveCompressed();
-        }
+            { return blockCompressed() || ETC2() || EAC() || adaptiveCompressed(); }
         bool floatingPoint() const;
         std::pair<uint8_t, uint8_t> blockFootprint() const;
-        operator VkFormat() const { return format; }
+        operator VkFormat() const 
+            { return format; }
 
     private:
         VkFormat format;
