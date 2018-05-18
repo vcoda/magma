@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../vulkan.h"
+#include "clearValue.h"
 
 namespace magma
 {
@@ -25,6 +26,13 @@ namespace magma
 
     struct ColorClearAttachment : ClearAttachment
     {
+        ColorClearAttachment(uint32_t attachment, const ColorClear& colorValue)
+        {
+            aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            colorAttachment = attachment;
+            clearValue = colorValue;
+        }
+
         ColorClearAttachment(uint32_t attachment, float r, float g, float b, 
             float a = 1.f)
         {
@@ -105,6 +113,13 @@ namespace magma
 
     struct DepthStencilClearAttachment : ClearAttachment
     {
+        DepthStencilClearAttachment(const DepthStencilClear& depthStencilValue)
+        {
+            aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+            colorAttachment = 0;
+            clearValue = depthStencilValue;
+        }
+
         DepthStencilClearAttachment(float depth, uint8_t stencil)
         {
             aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
