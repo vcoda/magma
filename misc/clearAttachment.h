@@ -36,6 +36,16 @@ namespace magma
             clearValue.color.float32[3] = a;
         }
 
+        ColorClearAttachment(uint32_t attachment, int32_t r, int32_t g, int32_t b, int32_t a)
+        {
+            aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            colorAttachment = attachment;
+            clearValue.color.int32[0] = r;
+            clearValue.color.int32[1] = g;
+            clearValue.color.int32[2] = b;
+            clearValue.color.int32[3] = a;
+        }
+
         ColorClearAttachment(uint32_t attachment, uint32_t r, uint32_t g, uint32_t b, uint32_t a)
         {
             aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -44,6 +54,30 @@ namespace magma
             clearValue.color.uint32[1] = g;
             clearValue.color.uint32[2] = b;
             clearValue.color.uint32[3] = a;
+        }
+
+        ColorClearAttachment(uint32_t attachment, const float color[4])
+        {
+            aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            colorAttachment = attachment;
+            for (int i = 0; i < 4; ++i)
+                clearValue.color.float32[i] = color[i];
+        }
+
+        ColorClearAttachment(uint32_t attachment, const int32_t color[4])
+        {
+            aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            colorAttachment = attachment;
+            for (int i = 0; i < 4; ++i)
+                clearValue.color.int32[i] = color[i];
+        }
+
+        ColorClearAttachment(uint32_t attachment, const uint32_t color[4])
+        {
+            aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            colorAttachment = attachment;
+            for (int i = 0; i < 4; ++i)
+                clearValue.color.uint32[i] = color[i];
         }
     };
 
