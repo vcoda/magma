@@ -48,12 +48,10 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     colorBlendState(states::dontBlendWriteRGBA)
 {
     // Set attributes to initial state
-    curr.x = curr.y = curr.z = 0.f;
-    curr.w = 1.f;
-    curr.nx = curr.ny = curr.nz = 0.f;
-    curr.psize = 1.f; // Initial point size
-    curr.r = curr.g = curr.b = curr.a = 1.f; // White is default
-    curr.u = curr.v = 0.f;
+    normal(0.f, 0.f, 0.f);
+    color(1.f, 1.f, 1.f, 1.f); // White is default
+    texCoord(0.f, 0.f);
+    pointSize(1.f); // Initial point size
     // If layout not specified, create default one
     if (!layout)
     {
