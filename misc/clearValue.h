@@ -41,10 +41,8 @@ namespace magma
 
     struct DepthStencilClear : public ClearValue
     {
-        DepthStencilClear(float depth, uint8_t stencil = 0)
-        {
-            value.depthStencil.depth = depth;
-            value.depthStencil.stencil = stencil;
-        }
+        DepthStencilClear(float depth, uint8_t stencil = 0);
     };
 } // namespace magma
+
+#include "clearValue.inl"
