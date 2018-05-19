@@ -82,10 +82,22 @@ namespace magma
                 _mm_stream_si128(vdst + 14, xmm14);
                 _mm_stream_si128(vdst + 15, xmm15);
             }
-            const size_t trailSize = size - (sizeof(__m128i) * MAGMA_XMM_REGISTERS * blockCount);
+            size_t trailSize = size - (sizeof(__m128i) * MAGMA_XMM_REGISTERS * blockCount);
             if (trailSize > 0)
-            {   // TODO: replace by SSE in future
-                memcpy(vdst, vsrc, trailSize);
+            {   
+                const size_t registerCount = trailSize / sizeof(__m128i);
+                for (size_t i = 0; i < registerCount; ++i)
+                {   // Copy remained 16-byte blocks
+                    __m128i xmm = _mm_stream_load_si128(vsrc++);
+                    _mm_stream_si128(vdst++, xmm);
+                }
+                const uint8_t *bsrc = reinterpret_cast<const uint8_t *>(vsrc);
+                uint8_t *bdst = reinterpret_cast<uint8_t *>(vdst);
+                trailSize = trailSize % sizeof(__m128i);
+                for (size_t i = 0; i < trailSize; ++i)
+                {   // Copy remained bytes
+                    *bdst++ = *bsrc++;
+                }
             }
             return dst;
 #else
