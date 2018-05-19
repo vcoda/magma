@@ -36,7 +36,9 @@ namespace magma
                 arraySize(arraySize),
                 alignment(alignment)
             {
+                MAGMA_ASSERT(buffer);
                 MAGMA_ASSERT(arraySize > 0);
+                MAGMA_ASSERT(alignment > 0);
             }
             uint32_t getArraySize() const { return arraySize; }
             constexpr size_t getElementSize() { return sizeof(Type); }

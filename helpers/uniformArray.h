@@ -35,6 +35,7 @@ namespace magma
                 buffer(buffer),
                 arraySize(arraySize)
             {
+                MAGMA_ASSERT(buffer);
                 MAGMA_ASSERT(arraySize > 0);
             }
             uint32_t getArraySize() const { return arraySize; }
