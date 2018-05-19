@@ -44,10 +44,11 @@ namespace magma
             MAGMA_ASSERT(MAGMA_ALIGNED(src));
             const __m128i *vsrc = reinterpret_cast<const __m128i *>(src);
             __m128i *vdst = reinterpret_cast<__m128i *>(dst);
-            const size_t blockCount = size / (sizeof(__m128i) * MAGMA_XMM_REGISTERS);
             _mm_prefetch(reinterpret_cast<const char *>(vsrc), _MM_HINT_NTA);
             _mm_prefetch(reinterpret_cast<const char *>(vdst), _MM_HINT_NTA);
-            for (register size_t i = blockCount; i--; vsrc += MAGMA_XMM_REGISTERS, vdst += MAGMA_XMM_REGISTERS)
+            const size_t blockCount = size / (sizeof(__m128i) * MAGMA_XMM_REGISTERS);
+            size_t i;
+            for (i = blockCount; i--; vsrc += MAGMA_XMM_REGISTERS, vdst += MAGMA_XMM_REGISTERS)
             {   // Copy 256 byte block
                 __m128i xmm0 = _mm_stream_load_si128(vsrc + 0);
                 __m128i xmm1 = _mm_stream_load_si128(vsrc + 1);
@@ -82,19 +83,21 @@ namespace magma
                 _mm_stream_si128(vdst + 14, xmm14);
                 _mm_stream_si128(vdst + 15, xmm15);
             }
-            size_t trailSize = size - (sizeof(__m128i) * MAGMA_XMM_REGISTERS * blockCount);
-            if (trailSize > 0)
+            const size_t tailSize = size - (sizeof(__m128i) * MAGMA_XMM_REGISTERS * blockCount);
+            if (tailSize > 0)
             {   
-                const size_t registerCount = trailSize / sizeof(__m128i);
-                for (size_t i = 0; i < registerCount; ++i)
+                const size_t registerCount = tailSize / sizeof(__m128i);
+                MAGMA_ASSERT(registerCount < MAGMA_XMM_REGISTERS);
+                for (i = 0; i < registerCount; ++i)
                 {   // Copy remained 16-byte blocks
                     __m128i xmm = _mm_stream_load_si128(vsrc++);
                     _mm_stream_si128(vdst++, xmm);
                 }
                 const uint8_t *bsrc = reinterpret_cast<const uint8_t *>(vsrc);
                 uint8_t *bdst = reinterpret_cast<uint8_t *>(vdst);
-                trailSize = trailSize % sizeof(__m128i);
-                for (size_t i = 0; i < trailSize; ++i)
+                const size_t byteCount = tailSize % sizeof(__m128i);
+                MAGMA_ASSERT(byteCount < sizeof(__m128i));
+                for (i = 0; i < byteCount; ++i)
                 {   // Copy remained bytes
                     *bdst++ = *bsrc++;
                 }
