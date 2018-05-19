@@ -297,6 +297,9 @@
     <ClInclude Include="sys\alignedMemcpy.h">
       <Filter>Header Files\sys</Filter>
     </ClInclude>
+    <ClInclude Include="sys\alignedMemzero.h">
+      <Filter>Header Files\sys</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">

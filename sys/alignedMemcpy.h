@@ -20,10 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 #include "../shared.h"
 
-#ifdef _M_AMD64
-#define MAGMA_XMM_REGISTERS 16
-#endif
-
 namespace magma
 {
     namespace sys

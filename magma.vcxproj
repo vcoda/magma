@@ -203,6 +203,7 @@
     <ClInclude Include="states\vertexInputState.h" />
     <ClInclude Include="states\viewportState.h" />
     <ClInclude Include="sys\alignedMemcpy.h" />
+    <ClInclude Include="sys\alignedMemzero.h" />
     <ClInclude Include="typedefs.h" />
     <ClInclude Include="vulkan.h" />
   </ItemGroup>

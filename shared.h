@@ -56,6 +56,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_ALIGN(size) ((size + 15) & ~(15)) 
 #define MAGMA_ALIGNED(p) (((uintptr_t)(const void *)(p)) % (16) == 0)
 
+#ifdef _M_AMD64
+#define MAGMA_XMM_REGISTERS 16
+#endif
+
 #define MAGMA_SUCCEEDED(result)\
     ((VK_SUCCESS == result) ||\
      (VK_INCOMPLETE == result))
