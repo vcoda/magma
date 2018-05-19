@@ -129,7 +129,6 @@
     <ClInclude Include="descriptors\bindings.h" />
     <ClInclude Include="descriptors\descriptors.h" />
     <ClInclude Include="descriptors\subpass.h" />
-    <ClInclude Include="helpers\alignedMemcpy.h" />
     <ClInclude Include="helpers\alignedUniformArray.h" />
     <ClInclude Include="helpers\copy.h" />
     <ClInclude Include="helpers\immediateRender.h" />
@@ -203,6 +202,7 @@
     <ClInclude Include="states\tesselationState.h" />
     <ClInclude Include="states\vertexInputState.h" />
     <ClInclude Include="states\viewportState.h" />
+    <ClInclude Include="sys\alignedMemcpy.h" />
     <ClInclude Include="typedefs.h" />
     <ClInclude Include="vulkan.h" />
   </ItemGroup>

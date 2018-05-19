@@ -88,10 +88,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "misc/scissor.h"
 #include "misc/viewport.h"
 
-#include "helpers/alignedMemcpy.h"
 #include "helpers/alignedUniformArray.h"
 #include "helpers/immediateRender.h"
 #include "helpers/mapScoped.h"
 #include "helpers/stackArray.h"
+#include "helpers/uniformArray.h"
 
 #include "typedefs.h"

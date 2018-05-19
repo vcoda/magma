@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "transferBuffer.h"
 #include "deviceMemory.h"
 #include "queue.h"
-#include "../helpers/alignedMemcpy.h"
+#include "../sys/alignedMemcpy.h"
 
 namespace magma
 {
@@ -41,7 +41,7 @@ VertexBuffer::VertexBuffer(std::shared_ptr<const Device> device, const void *dat
     {
         if (void *buffer = memory->map(0, size))
         {
-            helpers::alignedMemcpy(buffer, data, static_cast<size_t>(size));
+            sys::alignedMemcpy(buffer, data, static_cast<size_t>(size));
             memory->unmap();
         }
     }
