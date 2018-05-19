@@ -22,7 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "physicalDevice.h"
 #include "../sys/alignedMemzero.h"
-#include "../shared.h"
 
 namespace magma
 {
