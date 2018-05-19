@@ -70,6 +70,7 @@ namespace magma
                     *bdst++ = 0;
                 }
             }
+            return dst;
 #else
             return memset(dst, 0, size);
 #endif // _M_AMD64
