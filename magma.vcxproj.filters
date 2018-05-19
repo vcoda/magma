@@ -302,6 +302,18 @@
     <None Include="helpers\immediateRender.inl">
       <Filter>Header Files\helpers</Filter>
     </None>
+    <None Include="misc\clearAttachment.inl">
+      <Filter>Header Files\misc</Filter>
+    </None>
+    <None Include="misc\clearValue.inl">
+      <Filter>Header Files\misc</Filter>
+    </None>
+    <None Include="misc\viewport.inl">
+      <Filter>Header Files\misc</Filter>
+    </None>
+    <None Include="misc\scissor.inl">
+      <Filter>Header Files\misc</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="states\colorBlendState.cpp">

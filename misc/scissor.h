@@ -16,39 +16,17 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "../vulkan.h"
 
 namespace magma
 {
     struct Scissor : VkRect2D
     {
-        Scissor(int32_t x, int32_t y, const VkExtent2D& extent)
-        {
-            offset.x = x;
-            offset.y = y;
-            this->extent = extent;
-        }
-
-        Scissor(float x, float y, const VkExtent2D& extent)
-        {
-            offset.x = static_cast<int32_t>(x);
-            offset.y = static_cast<int32_t>(y);
-            this->extent = extent;
-        }
-
-        Scissor(int32_t x, int32_t y, uint32_t width, uint32_t height)
-        {
-            offset.x = x;
-            offset.y = y;
-            extent.width = width;
-            extent.height = height;
-        }
-
-        Scissor(float x, float y, float width, float height)
-        {
-            offset.x = static_cast<int32_t>(x);
-            offset.y = static_cast<int32_t>(y);
-            extent.width = static_cast<uint32_t>(width);
-            extent.height = static_cast<uint32_t>(height);
-        }
+        Scissor(int32_t x, int32_t y, const VkExtent2D& extent);
+        Scissor(float x, float y, const VkExtent2D& extent);
+        Scissor(int32_t x, int32_t y, uint32_t width, uint32_t height);
+        Scissor(float x, float y, float width, float height);
     };
 } // namespace magma
+
+#include "scissor.inl"

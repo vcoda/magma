@@ -31,48 +31,12 @@ namespace magma
 
     struct ColorClear : public ClearValue 
     {
-        ColorClear(float r, float g, float b, 
-            float a = 1.f)
-        {
-            value.color.float32[0] = r;
-            value.color.float32[1] = g;
-            value.color.float32[2] = b;
-            value.color.float32[3] = a;
-        }
-
-        ColorClear(int32_t r, int32_t g, int32_t b, int32_t a)
-        {
-            value.color.int32[0] = r;
-            value.color.int32[1] = g;
-            value.color.int32[2] = b;
-            value.color.int32[3] = a;
-        }
-
-        ColorClear(uint32_t r, uint32_t g, uint32_t b, uint32_t a)
-        {
-            value.color.uint32[0] = r;
-            value.color.uint32[1] = g;
-            value.color.uint32[2] = b;
-            value.color.uint32[3] = a;
-        }
-
-        ColorClear(const float color[4])
-        {
-            for (int i = 0; i < 4; ++i)
-                value.color.float32[i] = color[i];
-        }
-
-        ColorClear(const int32_t color[4])
-        {
-            for (int i = 0; i < 4; ++i)
-                value.color.int32[i] = color[i];
-        }
-
-        ColorClear(const uint32_t color[4])
-        {
-            for (int i = 0; i < 4; ++i)
-                value.color.uint32[i] = color[i];
-        }
+        ColorClear(float r, float g, float b, float a = 1.f);
+        ColorClear(int32_t r, int32_t g, int32_t b, int32_t a);
+        ColorClear(uint32_t r, uint32_t g, uint32_t b, uint32_t a);
+        ColorClear(const float color[4]);
+        ColorClear(const int32_t color[4]);
+        ColorClear(const uint32_t color[4]);
     };
 
     struct DepthStencilClear : public ClearValue
