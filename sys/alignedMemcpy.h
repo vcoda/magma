@@ -96,7 +96,7 @@ namespace magma
         template<typename Type>
         MAGMA_INLINE void *alignedMemcpy(void *dst, const std::vector<Type>& v)
         {
-            return copy(dst, v.data(), sizeof(Type) * v.size());
+            return alignedMemcpy(dst, v.data(), sizeof(Type) * v.size());
         }
     } // namespace sys
 } // namespace magma
