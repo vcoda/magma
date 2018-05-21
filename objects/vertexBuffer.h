@@ -30,22 +30,26 @@ namespace magma
             const void *data, VkDeviceSize size,
             uint32_t vertexCount,
             VkBufferCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
         VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const void *data, VkDeviceSize size,
             uint32_t vertexCount,  
             VkBufferCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
         template<typename VertexType>
         VertexBuffer(std::shared_ptr<const Device> device,
             const std::vector<VertexType>& vertices,
             VkBufferCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
         template<typename VertexType>
         VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const std::vector<VertexType>& vertices,
             VkBufferCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
         uint32_t getVertexCount() const { return vertexCount; }
 
     protected:
@@ -64,17 +68,19 @@ namespace magma
     inline VertexBuffer::VertexBuffer(std::shared_ptr<const Device> device,
         const std::vector<VertexType>& vertices,
         VkBufferCreateFlags flags /* 0 */,
-        std::shared_ptr<IAllocator> allocator /* nullptr */):
+        std::shared_ptr<IAllocator> allocator /* nullptr */,
+        CopyMemoryFunction copyFn /* nullptr */):
         VertexBuffer(device, vertices.data(), static_cast<VkDeviceSize>(sizeof(VertexType) * vertices.size()),
-            static_cast<uint32_t>(vertices.size()), flags, allocator)
+            static_cast<uint32_t>(vertices.size()), flags, allocator, copyFn)
     {}
 
     template<typename VertexType>
     VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
         const std::vector<VertexType>& vertices,
         VkBufferCreateFlags flags /* 0 */,
-        std::shared_ptr<IAllocator> allocator /* nullptr */):
+        std::shared_ptr<IAllocator> allocator /* nullptr */,
+        CopyMemoryFunction copyFn /* nullptr */):
         VertexBuffer(copyCmdBuffer, vertices.data(), static_cast<VkDeviceSize>(sizeof(VertexType) * vertices.size()),
-            static_cast<uint32_t>(vertices.size()), flags, allocator)
+            static_cast<uint32_t>(vertices.size()), flags, allocator, copyFn)
     {}
 } // namespace magma

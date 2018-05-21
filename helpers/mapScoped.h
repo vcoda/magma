@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/uniformBuffer.h"
 #include "uniformArray.h"
 #include "alignedUniformArray.h"
+#include "../mem/zeroMemory.h"
 
 namespace magma
 {
@@ -30,7 +31,8 @@ namespace magma
             bool clearMemory,
             std::function<void(Block *block)> fn)
         {
-            Block *block = buffer->map(clearMemory);
+            ZeroMemoryFunction zeroFn = clearMemory ? zeroMemory : nullptr;
+            Block *block = buffer->map(zeroFn);
             if (block)
             {
                 fn(block);
@@ -44,7 +46,8 @@ namespace magma
             bool clearMemory,
             std::function<void(UniformArray<Type>& array)> fn)
         {
-            Type *data = buffer->map(clearMemory);
+            ZeroMemoryFunction zeroFn = clearMemory ? zeroMemory : nullptr;
+            Type *data = buffer->map(zeroFn);
             if (data)
             {
                 UniformArray<Type> array(data,
@@ -60,7 +63,8 @@ namespace magma
             bool clearMemory,
             std::function<void(AlignedUniformArray<Type>& array)> fn)
         {
-            Type *data = buffer->map(clearMemory);
+            ZeroMemoryFunction zeroFn = clearMemory ? zeroMemory : nullptr;
+            Type *data = buffer->map(zeroFn);
             if (data)
             {
                 AlignedUniformArray<Type> array(data,

@@ -16,26 +16,11 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "image.h"
+#include <cstddef>
+#include <functional>
 
 namespace magma
 {
-    class ImageCube : public Image
-    {
-    public:
-        ImageCube(std::shared_ptr<const Device> device,
-            VkFormat format,
-            uint32_t dimension,
-            uint32_t mipLevels,
-            VkImageUsageFlags usage,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-        ImageCube(std::shared_ptr<const Device> device,
-            VkFormat format,
-            const std::vector<uint32_t>& mipDimensions,
-            const std::vector<const void *> cubeMipData[6],
-            const std::vector<VkDeviceSize>& mipSizes,
-            std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            CopyMemoryFunction copyFn = nullptr);
-    };
+    typedef std::function<void *(void *, const void *, std::size_t)> CopyMemoryFunction;
+    typedef std::function<void *(void *, std::size_t)> ZeroMemoryFunction;
 } // namespace magma

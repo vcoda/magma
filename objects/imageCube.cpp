@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "imageCube.h"
 #include "transferBuffer.h"
 #include "deviceMemory.h"
-#include "../sys/alignedMemcpy.h"
+#include "../mem/copyMemory.h"
 
 namespace magma
 {
@@ -39,7 +39,8 @@ ImageCube::ImageCube(std::shared_ptr<const Device> device,
     const std::vector<const void *> cubeMipData[6],
     const std::vector<VkDeviceSize>& mipSizes,
     std::shared_ptr<CommandBuffer> cmdBuffer,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    CopyMemoryFunction copyFn /* nullptr */):
     Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{mipDimensions[0], mipDimensions[0], 1},
         static_cast<uint32_t>(mipDimensions.size()), // mipLevels
         6, // arrayLayers 
@@ -57,13 +58,15 @@ ImageCube::ImageCube(std::shared_ptr<const Device> device,
     std::shared_ptr<SourceTransferBuffer> srcBuffer(std::make_shared<SourceTransferBuffer>(device, size, 0, allocator));
     if (uint8_t *data = reinterpret_cast<uint8_t *>(srcBuffer->getMemory()->map()))
     {
+        if (!copyFn)
+            copyFn = copyMemory;
         for (uint32_t face = 0; face < 6; ++face)
         {
             for (uint32_t level = 0; level < mipLevels; ++level)
             {
                 const VkDeviceSize bufferOffset = copyRegions[face * mipLevels + level].bufferOffset;
                 void *mipLevel = data + bufferOffset;
-                sys::alignedMemcpy(mipLevel, cubeMipData[face][level], static_cast<size_t>(mipSizes[level]));
+                copyFn(mipLevel, cubeMipData[face][level], static_cast<size_t>(mipSizes[level]));
             }
         }
         srcBuffer->getMemory()->unmap();

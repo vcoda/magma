@@ -31,11 +31,13 @@ namespace magma
         SourceTransferBuffer(std::shared_ptr<const Device> device,
             const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
         SourceTransferBuffer(std::shared_ptr<const Device> device,
             const std::vector<uint8_t>& data,
             VkBufferCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
     };
 
     class DestTransferBuffer : public Buffer

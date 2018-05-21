@@ -49,8 +49,8 @@
     <Filter Include="Source Files\allocator">
       <UniqueIdentifier>{9b6625c6-3df9-4388-b570-e80682bb98e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\sys">
-      <UniqueIdentifier>{172c3fa5-57f0-4c83-b6ac-3a2fef40105c}</UniqueIdentifier>
+    <Filter Include="Header Files\mem">
+      <UniqueIdentifier>{e6769573-288b-41d6-a84e-9a41c5c66238}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -294,11 +294,14 @@
     <ClInclude Include="helpers\copy.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
-    <ClInclude Include="sys\alignedMemcpy.h">
-      <Filter>Header Files\sys</Filter>
+    <ClInclude Include="mem\copyMemory.h">
+      <Filter>Header Files\mem</Filter>
     </ClInclude>
-    <ClInclude Include="sys\alignedMemzero.h">
-      <Filter>Header Files\sys</Filter>
+    <ClInclude Include="mem\typedefs.h">
+      <Filter>Header Files\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\zeroMemory.h">
+      <Filter>Header Files\mem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

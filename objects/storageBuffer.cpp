@@ -32,11 +32,12 @@ StorageBuffer::StorageBuffer(std::shared_ptr<const Device> device, VkDeviceSize 
 
 StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    CopyMemoryFunction copyFn /* nullptr */):
     Buffer(copyCmdBuffer->getDevice(), size, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags, allocator,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
 {
-    std::shared_ptr<SourceTransferBuffer> srcBuffer(std::make_shared<SourceTransferBuffer>(device, data, size));
+    std::shared_ptr<SourceTransferBuffer> srcBuffer(std::make_shared<SourceTransferBuffer>(device, data, size, 0, allocator, copyFn));
     copyCmdBuffer->begin();
     {
         VkBufferCopy region;

@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <vector>
 #include "handle.h"
+#include "../mem/typedefs.h"
 
 namespace magma
 {

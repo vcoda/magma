@@ -42,7 +42,8 @@ namespace magma
             const std::vector<const void *>& mipData,
             const std::vector<VkDeviceSize>& mipSizes,
             std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
     };
 
     class ColorAttachment2D : public Image2D

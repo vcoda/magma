@@ -33,7 +33,8 @@ namespace magma
         StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
         template<typename Type>
         StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const std::vector<Type>& data,

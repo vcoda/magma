@@ -136,6 +136,9 @@
     <ClInclude Include="helpers\stackArray.h" />
     <ClInclude Include="helpers\uniformArray.h" />
     <ClInclude Include="magma.h" />
+    <ClInclude Include="mem\copyMemory.h" />
+    <ClInclude Include="mem\typedefs.h" />
+    <ClInclude Include="mem\zeroMemory.h" />
     <ClInclude Include="misc\bufferMemoryBarrier.h" />
     <ClInclude Include="misc\clearAttachment.h" />
     <ClInclude Include="misc\clearValue.h" />
@@ -202,8 +205,6 @@
     <ClInclude Include="states\tesselationState.h" />
     <ClInclude Include="states\vertexInputState.h" />
     <ClInclude Include="states\viewportState.h" />
-    <ClInclude Include="sys\alignedMemcpy.h" />
-    <ClInclude Include="sys\alignedMemzero.h" />
     <ClInclude Include="typedefs.h" />
     <ClInclude Include="vulkan.h" />
   </ItemGroup>

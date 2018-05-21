@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "image2DArray.h"
 #include "transferBuffer.h"
 #include "deviceMemory.h"
-#include "../sys/alignedMemcpy.h"
+#include "../mem/copyMemory.h"
 
 namespace magma
 {
@@ -34,7 +34,8 @@ Image2DArray::Image2DArray(std::shared_ptr<const Device> device,
     const std::vector<std::vector<const void *>>& layersMipData,
     const std::vector<VkDeviceSize>& mipSizes,
     std::shared_ptr<CommandBuffer> cmdBuffer,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    CopyMemoryFunction copyFn /* nullptr */):
     Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{mipExtents[0].width, mipExtents[0].height, 1},
         static_cast<uint32_t>(mipExtents.size()), // mipLevels
         static_cast<uint32_t>(layersMipData.size()), // arrayLayers 
@@ -49,13 +50,15 @@ Image2DArray::Image2DArray(std::shared_ptr<const Device> device,
     std::shared_ptr<SourceTransferBuffer> srcBuffer(std::make_shared<SourceTransferBuffer>(device, size, 0, allocator));
     if (uint8_t *data = reinterpret_cast<uint8_t *>(srcBuffer->getMemory()->map()))
     {
+        if (!copyFn)
+            copyFn = copyMemory;
         for (uint32_t layer = 0; layer < arrayLayers; ++layer)
         {
             for (uint32_t level = 0; level < mipLevels; ++level)
             {
                 const VkDeviceSize bufferOffset = copyRegions[layer * mipLevels + level].bufferOffset;
                 void *mipLevel = data + bufferOffset;
-                sys::alignedMemcpy(mipLevel, layersMipData[layer][level], static_cast<size_t>(mipSizes[level]));
+                copyFn(mipLevel, layersMipData[layer][level], static_cast<size_t>(mipSizes[level]));
             }
         }
         srcBuffer->getMemory()->unmap();

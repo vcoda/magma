@@ -36,6 +36,7 @@ namespace magma
             const std::vector<std::vector<const void *>>& layersMipData,
             const std::vector<VkDeviceSize>& mipSizes,
             std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
     };
 } // namespace magma

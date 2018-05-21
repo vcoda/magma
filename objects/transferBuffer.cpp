@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "transferBuffer.h"
 #include "deviceMemory.h"
-#include "../sys/alignedMemcpy.h"
+#include "../mem/copyMemory.h"
 
 namespace magma
 {
@@ -32,12 +32,15 @@ SourceTransferBuffer::SourceTransferBuffer(std::shared_ptr<const Device> device,
 SourceTransferBuffer::SourceTransferBuffer(std::shared_ptr<const Device> device,
     const void *data, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    CopyMemoryFunction copyFn /* nullptr */):
     SourceTransferBuffer(device, size, flags, allocator)
 {   
     if (void *buffer = memory->map(0, size))
     {
-        sys::alignedMemcpy(buffer, data, static_cast<size_t>(size));
+        if (!copyFn)
+            copyFn = copyMemory;
+        copyFn(buffer, data, static_cast<size_t>(size));
         memory->unmap();
     }
 }
@@ -45,8 +48,9 @@ SourceTransferBuffer::SourceTransferBuffer(std::shared_ptr<const Device> device,
 SourceTransferBuffer::SourceTransferBuffer(std::shared_ptr<const Device> device,
     const std::vector<uint8_t>& data,
     VkBufferCreateFlags flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    SourceTransferBuffer(device, data.data(), static_cast<VkDeviceSize>(data.size()), flags, allocator)
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    CopyMemoryFunction copyFn /* nullptr */):
+    SourceTransferBuffer(device, data.data(), static_cast<VkDeviceSize>(data.size()), flags, allocator, copyFn)
 {}
 
 DestTransferBuffer::DestTransferBuffer(std::shared_ptr<const Device> device,

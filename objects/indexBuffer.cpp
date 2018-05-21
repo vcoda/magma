@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "transferBuffer.h"
 #include "deviceMemory.h"
 #include "queue.h"
-#include "../sys/alignedMemcpy.h"
+#include "../mem/copyMemory.h"
 
 namespace magma
 {
@@ -33,35 +33,37 @@ IndexBuffer::IndexBuffer(std::shared_ptr<const Device> device, VkDeviceSize size
 
 IndexBuffer::IndexBuffer(std::shared_ptr<const Device> device, const void *data, VkDeviceSize size, VkIndexType indexType,
     VkBufferCreateFlags flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    CopyMemoryFunction copyFn /* nullptr */):
     Buffer(device, size, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, flags, allocator,
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
     indexType(indexType)
 {
     if (void *buffer = memory->map(0, size))
     {
-        sys::alignedMemcpy(buffer, data, static_cast<size_t>(size));
+        if (!copyFn)
+            copyFn = copyMemory;
+        copyFn(buffer, data, static_cast<size_t>(size));
         memory->unmap();
     }
 }
 
 IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size, VkIndexType indexType,
     VkBufferCreateFlags flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    CopyMemoryFunction copyFn /* nullptr */):
     Buffer(copyCmdBuffer->getDevice(), size, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags, allocator,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
     indexType(indexType)
 {
-    std::shared_ptr<SourceTransferBuffer> srcBuffer(std::make_shared<SourceTransferBuffer>(device, data, size));
+    std::shared_ptr<SourceTransferBuffer> srcBuffer(std::make_shared<SourceTransferBuffer>(device, data, size, 0, allocator, copyFn));
     copyCmdBuffer->begin();
     {
-        // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
-        const auto dstBuffer = std::shared_ptr<IndexBuffer>(this, [](IndexBuffer *) {});
         VkBufferCopy region;
         region.srcOffset = 0;
         region.dstOffset = 0;
         region.size = size;
-        copyCmdBuffer->copyBuffer(srcBuffer, dstBuffer, region);
+        vkCmdCopyBuffer(*copyCmdBuffer, *srcBuffer, handle, 1, &region);
     }
     copyCmdBuffer->end();
     std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_TRANSFER_BIT, 0));

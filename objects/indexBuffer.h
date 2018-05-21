@@ -30,22 +30,26 @@ namespace magma
             const void *data, VkDeviceSize size,
             VkIndexType indexType,
             VkBufferCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
         IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const void *data, VkDeviceSize size,
             VkIndexType indexType,
             VkBufferCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
         template<typename IndexType>
         IndexBuffer(std::shared_ptr<const Device> device,
             const std::vector<IndexType>& indices,
             VkBufferCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
         template<typename IndexType>
         IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const std::vector<IndexType>& indices,
             VkBufferCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
         VkIndexType getIndexType() const { return indexType; }
         uint32_t getIndexCount() const;
 
@@ -66,20 +70,22 @@ namespace magma
     inline IndexBuffer::IndexBuffer(std::shared_ptr<const Device> device,
         const std::vector<IndexType>& indices,
         VkBufferCreateFlags flags /* 0 */,
-        std::shared_ptr<IAllocator> allocator /* nullptr */):
+        std::shared_ptr<IAllocator> allocator /* nullptr */,
+        CopyMemoryFunction copyFn /* nullptr */):
         IndexBuffer(device, indices.data(), static_cast<VkDeviceSize>(sizeof(IndexType) * indices.size()),
             sizeof(IndexType) == sizeof(uint16_t) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32,
-            flags, allocator)
+            flags, allocator, copyFn)
     {}
 
     template<typename IndexType>
     inline IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
         const std::vector<IndexType>& indices,
         VkBufferCreateFlags flags /* 0 */,
-        std::shared_ptr<IAllocator> allocator /* nullptr */):
+        std::shared_ptr<IAllocator> allocator /* nullptr */,
+        CopyMemoryFunction copyFn /* nullptr */):
         IndexBuffer(copyCmdBuffer, indices.data(), static_cast<VkDeviceSize>(sizeof(IndexType) * indices.size()),
             sizeof(IndexType) == sizeof(uint16_t) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32,
-            flags, allocator)
+            flags, allocator, copyFn)
     {}
 
     inline uint32_t IndexBuffer::getIndexCount() const

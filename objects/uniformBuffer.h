@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "buffer.h"
 #include "device.h"
 #include "physicalDevice.h"
-#include "../sys/alignedMemzero.h"
+#include "../mem/typedefs.h"
 
 namespace magma
 {
@@ -39,12 +39,12 @@ namespace magma
         {
             static_assert(sizeof(Block)%16 == 0, "uniform block should have 16-byte alignment");
         }
-        Block *map(bool clearMemory = false) noexcept
+        Block *map(ZeroMemoryFunction zeroFn = nullptr) noexcept
         {
             if (void *block = memory->map(0, size))
             {
-                if (clearMemory)
-                    sys::alignedMemzero(block, static_cast<size_t>(size));
+                if (zeroFn)
+                    zeroFn(block, static_cast<size_t>(size));
                 return reinterpret_cast<Block *>(block);
             }
             return nullptr;
