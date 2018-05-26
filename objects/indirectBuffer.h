@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <vector>
 #include "buffer.h"
 
 namespace magma
@@ -30,8 +31,13 @@ namespace magma
             uint32_t drawCount = 1,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        void updateDraw(const VkDrawIndirectCommand& parameters) noexcept;
-        void updateDraw(uint32_t vertexCount, 
-            uint32_t firstVertex) noexcept;
+        void writeDrawCommand(uint32_t vertexCount, 
+            uint32_t firstVertex = 0) noexcept;
+        void writeDrawCommand(uint32_t vertexCount,
+            uint32_t instanceCount,
+            uint32_t firstVertex,
+            uint32_t firstInstance) noexcept;
+        void writeDrawCommand(const VkDrawIndirectCommand& drawCmd) noexcept;
+        void writeDrawCommands(const std::vector<VkDrawIndirectCommand>& drawCmdList) noexcept;
     };
 } // namespace magma

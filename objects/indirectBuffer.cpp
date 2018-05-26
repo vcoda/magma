@@ -30,24 +30,50 @@ IndirectBuffer::IndirectBuffer(std::shared_ptr<const Device> device,
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
 {}
 
-void IndirectBuffer::updateDraw(const VkDrawIndirectCommand& parameters) noexcept
+void IndirectBuffer::writeDrawCommand(uint32_t vertexCount, uint32_t firstVertex /* 0 */) noexcept
 {
-    if (void *drawParameters = memory->map(0, sizeof(VkDrawIndirectCommand)))
+    if (void *data = memory->map(0, sizeof(VkDrawIndirectCommand)))
     {
-        memcpy(drawParameters, &parameters, sizeof(VkDrawIndirectCommand));
+        VkDrawIndirectCommand *drawCmd = reinterpret_cast<VkDrawIndirectCommand *>(data);
+        drawCmd->vertexCount = vertexCount;
+        drawCmd->instanceCount = 1;
+        drawCmd->firstVertex = firstVertex;
+        drawCmd->firstInstance = 0;
         memory->unmap();
     }
 }
 
-void IndirectBuffer::updateDraw(uint32_t vertexCount, uint32_t firstVertex) noexcept
+void IndirectBuffer::writeDrawCommand(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance) noexcept
 {
     if (void *data = memory->map(0, sizeof(VkDrawIndirectCommand)))
     {
-        VkDrawIndirectCommand *drawParameters = reinterpret_cast<VkDrawIndirectCommand *>(data);
-        drawParameters->vertexCount = vertexCount;
-        drawParameters->instanceCount = 1;
-        drawParameters->firstVertex = firstVertex;
-        drawParameters->firstInstance = 0;
+        VkDrawIndirectCommand *drawCmd = reinterpret_cast<VkDrawIndirectCommand *>(data);
+        drawCmd->vertexCount = vertexCount;
+        drawCmd->instanceCount = instanceCount;
+        drawCmd->firstVertex = firstVertex;
+        drawCmd->firstInstance = firstInstance;
+        memory->unmap();
+    }
+}
+
+void IndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawCmd) noexcept
+{
+    if (void *data = memory->map(0, sizeof(VkDrawIndirectCommand)))
+    {
+        memcpy(data, &drawCmd, sizeof(VkDrawIndirectCommand));
+        memory->unmap();
+    }
+}
+
+void IndirectBuffer::writeDrawCommands(const std::vector<VkDrawIndirectCommand>& drawCmdList) noexcept
+{
+    if (VkDrawIndirectCommand *data = reinterpret_cast<VkDrawIndirectCommand *>(memory->map(0, sizeof(VkDrawIndirectCommand))))
+    {
+        for (const VkDrawIndirectCommand& drawCmd : drawCmdList)
+        {
+            memcpy(data, &drawCmd, sizeof(VkDrawIndirectCommand));
+            ++data;
+        }
         memory->unmap();
     }
 }
