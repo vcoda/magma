@@ -57,6 +57,6 @@ VkResult Fence::getStatus() const noexcept
 bool Fence::wait(uint64_t timeout /* UINT64_MAX */) const noexcept
 {
     const VkResult wait = vkWaitForFences(*device, 1, &handle, VK_TRUE, timeout);
-    return (VK_SUCCESS == wait);
+    return (VK_SUCCESS == wait) || (VK_TIMEOUT == wait);
 }
 } // namespace magma
