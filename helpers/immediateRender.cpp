@@ -82,7 +82,7 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology)
     return true;
 }
 
-bool ImmediateRender::endPrimitive(bool loop /* false */)
+bool ImmediateRender::endPrimitive(bool loop /* false */) noexcept
 {
     MAGMA_ASSERT(insidePrimitive);
     if (!insidePrimitive)

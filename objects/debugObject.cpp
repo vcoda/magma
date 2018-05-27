@@ -31,7 +31,7 @@ DebugObject::DebugObject(VkDebugReportObjectTypeEXT objectType, std::shared_ptr<
     device(device)
 {}
 
-void DebugObject::setMarkerTag(uint64_t name, size_t tagSize, const void *tag)
+void DebugObject::setMarkerTag(uint64_t name, size_t tagSize, const void *tag) noexcept
 {
 #ifdef MAGMA_DEBUG
     if (vkDebugMarkerSetObjectTag)
@@ -50,7 +50,7 @@ void DebugObject::setMarkerTag(uint64_t name, size_t tagSize, const void *tag)
 #endif // MAGMA_DEBUG
 }
 
-void DebugObject::setMarkerName(const char *name)
+void DebugObject::setMarkerName(const char *name) noexcept
 {
 #ifdef MAGMA_DEBUG
     if (vkDebugMarkerSetObjectName)

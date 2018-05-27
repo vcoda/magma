@@ -34,13 +34,11 @@ namespace magma
     public:
         DebugObject(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<const Device> device);
-        void setMarkerTag(uint64_t name, size_t tagSize, const void *tag);
+        void setMarkerTag(uint64_t name, size_t tagSize, const void *tag) noexcept;
         template<typename Tag>
-        void setMarkerTag(uint64_t name, const Tag& tag)
-        { 
-            setMarkerTag(name, sizeof(Tag), &tag);
-        }
-        void setMarkerName(const char *name);
+        void setMarkerTag(uint64_t name, const Tag& tag) noexcept
+            { setMarkerTag(name, sizeof(Tag), &tag); }
+        void setMarkerName(const char *name) noexcept;
         virtual uint64_t getObject() const = 0;
         virtual std::shared_ptr<const Device> getDevice() const { return device; }
 

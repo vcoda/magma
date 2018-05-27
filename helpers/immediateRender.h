@@ -74,45 +74,45 @@ namespace magma
                 std::shared_ptr<PipelineLayout> layout,
                 std::shared_ptr<RenderPass> renderPass,
                 std::shared_ptr<IAllocator> allocator = nullptr);
-            void setVertexShader(const VertexShaderStage& vertexShader);
-            void setFragmentShader(const FragmentShaderStage& fragmentShader);
-            void setRasterizationState(const RasterizationState& state);
-            void setMultisampleState(const MultisampleState& state);
-            void setDepthStencilState(const DepthStencilState& state);
-            void setColorBlendState(const ColorBlendState& state);
-            void setLineWidth(float width);
-            void setIdentity();
-            void setTransform(const float transform[16]);
+            void setVertexShader(const VertexShaderStage& vertexShader) noexcept;
+            void setFragmentShader(const FragmentShaderStage& fragmentShader) noexcept;
+            void setRasterizationState(const RasterizationState& state) noexcept;
+            void setMultisampleState(const MultisampleState& state) noexcept;
+            void setDepthStencilState(const DepthStencilState& state) noexcept;
+            void setColorBlendState(const ColorBlendState& state) noexcept;
+            void setLineWidth(float width) noexcept;
+            void setIdentity() noexcept;
+            void setTransform(const float transform[16]) noexcept;
             bool beginPrimitive(VkPrimitiveTopology topology);
-            bool endPrimitive(bool loop = false);
-            void normal(float x, float y, float z);
-            void normal(const float n[3]);
+            bool endPrimitive(bool loop = false) noexcept;
+            void normal(float x, float y, float z) noexcept;
+            void normal(const float n[3]) noexcept;
             template<typename Normal>
-            void normal(const Normal& n);
-            void color(float r, float g, float b, float a = 1.f);
-            void color(const float c[4]);
-            void color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = std::numeric_limits<uint8_t>::max());
-            void color(const uint8_t c[4]);
+            void normal(const Normal& n) noexcept;
+            void color(float r, float g, float b, float a = 1.f) noexcept;
+            void color(const float c[4]) noexcept;
+            void color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = std::numeric_limits<uint8_t>::max()) noexcept;
+            void color(const uint8_t c[4]) noexcept;
             template<typename Color>
-            void color(const Color& c);
-            void texCoord(float u, float v);
-            void texCoord(const float tc[2]);
+            void color(const Color& c) noexcept;
+            void texCoord(float u, float v) noexcept;
+            void texCoord(const float tc[2]) noexcept;
             template<typename TexCoord>
-            void texCoord(const TexCoord& tc);
-            void pointSize(float size);
-            void vertex(float x, float y, float z = 0.f, float w = 1.f);
-            void vertex(const float v[4]);
+            void texCoord(const TexCoord& tc) noexcept;
+            void pointSize(float size) noexcept;
+            void vertex(float x, float y, float z = 0.f, float w = 1.f) noexcept;
+            void vertex(const float v[4]) noexcept;
             template<typename Vertex2>
-            void vertex2(const Vertex2& v);
+            void vertex2(const Vertex2& v) noexcept;
             template<typename Vertex3>
-            void vertex3(const Vertex3& v);
+            void vertex3(const Vertex3& v) noexcept;
             template<typename Vertex4>
-            void vertex4(const Vertex4& v);
+            void vertex4(const Vertex4& v) noexcept;
             bool commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer,
                 bool clear = true);
             bool reset();
-            uint32_t getVertexCount() const { return vertexCount; }
-            uint32_t getPrimitiveCount() const { return MAGMA_COUNT(primitives); }
+            uint32_t getVertexCount() const noexcept { return vertexCount; }
+            uint32_t getPrimitiveCount() const noexcept { return MAGMA_COUNT(primitives); }
 
         private:
             std::shared_ptr<ShaderModule> createVertexShader();
