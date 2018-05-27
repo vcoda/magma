@@ -90,10 +90,11 @@ Swapchain::~Swapchain()
     vkDestroySwapchainKHR(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
-uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore, std::shared_ptr<const Fence> fence)
+uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore, std::shared_ptr<const Fence> fence,
+    uint64_t timeout /* UINT64_MAX */)
 {
     uint32_t imageIndex = 0;
-    const VkResult acquire = vkAcquireNextImageKHR(*device, handle, UINT64_MAX,
+    const VkResult acquire = vkAcquireNextImageKHR(*device, handle, timeout,
         MAGMA_OPTIONAL_HANDLE(semaphore),
         MAGMA_OPTIONAL_HANDLE(fence),
         &imageIndex);
