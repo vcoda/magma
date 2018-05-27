@@ -99,6 +99,6 @@ bool Device::waitForFences(std::vector<std::shared_ptr<const Fence>>& fences, bo
         dereferencedFences.put(*fence);
     const VkResult wait = vkWaitForFences(handle, dereferencedFences.size(), dereferencedFences, 
         MAGMA_BOOLEAN(waitAll), timeout);
-    return (VK_SUCCESS == wait);
+    return (VK_SUCCESS == wait) || (VK_TIMEOUT == wait);
 }
 } // namespace magma
