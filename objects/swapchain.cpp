@@ -15,7 +15,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include <sstream>
 #include "swapchain.h"
 #include "device.h"
 #include "surface.h"
@@ -24,9 +23,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "semaphore.h"
 #include "fence.h"
 #include "../allocator/allocator.h"
-#include "../helpers/stackArray.h"
-#include "../misc/stringize.h"
 #include "../misc/exception.h"
+#include "../helpers/stackArray.h"
+#include "../shared.h"
+#ifdef MAGMA_DEBUG
+#include "../misc/stringize.h"
+#include <sstream>
+#endif
 
 namespace magma
 {
