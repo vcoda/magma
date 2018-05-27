@@ -162,8 +162,10 @@ void Image::copyFromBuffer(std::shared_ptr<Buffer> buffer,
     }
     cmdBuffer->end();
     // Flush
-    std::shared_ptr<Queue> queue = device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0);
-    queue->submit(cmdBuffer, 0, nullptr, nullptr, nullptr);
-    queue->waitIdle();
+    std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0));
+    if (!queue->submit(cmdBuffer, 0, nullptr, nullptr, nullptr))
+        MAGMA_THROW("failed to submit command buffer to graphics queue");
+    if (!queue->waitIdle())
+        MAGMA_THROW("failed to wait for the completion of queue operation");
 }
 } // namespace magma
