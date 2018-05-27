@@ -21,8 +21,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "imageView.h"
 #include "renderPass.h"
 #include "../allocator/allocator.h"
-#include "../helpers/stackArray.h"
 #include "../misc/exception.h"
+#include "../helpers/stackArray.h"
 
 namespace magma
 {
