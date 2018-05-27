@@ -66,7 +66,7 @@ namespace magma
     };
 } // namespace magma
 
-#define MAGMA_THROW(message)throw Exception(message, __FILE__, __LINE__)
+#define MAGMA_THROW(message) throw Exception(message, __FILE__, __LINE__)
 
 #define MAGMA_THROW_FAILURE(result, message)\
     if (!MAGMA_SUCCEEDED(result))\

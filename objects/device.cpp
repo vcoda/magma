@@ -61,8 +61,7 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
     VkQueue queue = VK_NULL_HANDLE;
     const DeviceQueueDescriptor queueDesc(flags, physicalDevice);
     for (const auto& info : queues)
-    {
-        // Check if queue family is present, otherwise
+    {   // Check if queue family is present, otherwise
         // vkGetDeviceQueue() throws an exception
         if (info.queueFamilyIndex == queueDesc.queueFamilyIndex)
         {
