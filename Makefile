@@ -85,4 +85,5 @@ release : $(MAGMA_OBJS)
 	@ar rcs $(RELEASE_TARGET) $(MAGMA_OBJS)
 
 clean :
-	rm $(DEBUG_TARGET) $(RELEASE_TARGET) $(MAGMA_OBJS)
+	@find . -name '*.a' -delete
+	rm $(MAGMA_OBJS)
