@@ -55,7 +55,7 @@ VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const v
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    VertexBuffer(copyCmdBuffer, std::make_shared<SrcTransferBuffer>(device, data, size, 0, allocator, copyFn), 
+    VertexBuffer(copyCmdBuffer, std::make_shared<SrcTransferBuffer>(copyCmdBuffer->getDevice(), data, size, 0, allocator, copyFn), 
         flags, allocator)
 {
 }
