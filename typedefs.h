@@ -29,6 +29,7 @@ namespace magma
     typedef std::shared_ptr<class DescriptorSetLayout> DescriptorSetLayoutPtr;
     typedef std::shared_ptr<class Device> DevicePtr;
     typedef std::shared_ptr<class DeviceMemory> DeviceMemoryPtr;
+    typedef std::shared_ptr<class DstTransferBuffer> DstTransferBufferPtr;
     typedef std::shared_ptr<class Event> EventPtr;
     typedef std::shared_ptr<class Fence> FencePtr;
     typedef std::shared_ptr<class Framebuffer> FramebufferPtr;
@@ -57,8 +58,7 @@ namespace magma
     typedef std::shared_ptr<class StorageBuffer> StorageBufferPtr;
     typedef std::shared_ptr<class Surface> SurfacePtr;
     typedef std::shared_ptr<class Swapchain> SwapchainPtr;
-    typedef std::shared_ptr<class SourceTransferBuffer> SourceTransferBufferPtr;
-    typedef std::shared_ptr<class DestTransferBuffer> DestTransferBufferPtr;
+    typedef std::shared_ptr<class SrcTransferBuffer> SrcTransferBufferPtr;
     typedef std::shared_ptr<class VertexBuffer> VertexBufferPtr;
 
     template<class Block> using DynamicUniformBufferPtr = std::shared_ptr<class DynamicUniformBuffer<Block>>;

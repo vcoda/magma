@@ -15,26 +15,28 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include "transferBuffer.h"
+#include "srcTransferBuffer.h"
 #include "deviceMemory.h"
 #include "../mem/copyMemory.h"
 
 namespace magma
 {
-SourceTransferBuffer::SourceTransferBuffer(std::shared_ptr<const Device> device,
+SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<const Device> device,
     VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Buffer(device, size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, flags, allocator,
+    Buffer(device, size, 
+        VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
+        flags, allocator,
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
 {}
 
-SourceTransferBuffer::SourceTransferBuffer(std::shared_ptr<const Device> device,
+SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<const Device> device,
     const void *data, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    SourceTransferBuffer(device, size, flags, allocator)
+    SrcTransferBuffer(device, size, flags, allocator)
 {   
     if (void *buffer = memory->map(0, size))
     {
@@ -44,20 +46,4 @@ SourceTransferBuffer::SourceTransferBuffer(std::shared_ptr<const Device> device,
         memory->unmap();
     }
 }
-
-SourceTransferBuffer::SourceTransferBuffer(std::shared_ptr<const Device> device,
-    const std::vector<uint8_t>& data,
-    VkBufferCreateFlags flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    CopyMemoryFunction copyFn /* nullptr */):
-    SourceTransferBuffer(device, data.data(), static_cast<VkDeviceSize>(data.size()), flags, allocator, copyFn)
-{}
-
-DestTransferBuffer::DestTransferBuffer(std::shared_ptr<const Device> device,
-    VkDeviceSize size,
-    VkBufferCreateFlags flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Buffer(device, size, VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags,  allocator,
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
-{}
 } // namespace magma

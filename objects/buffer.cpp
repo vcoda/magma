@@ -24,8 +24,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Buffer::Buffer(std::shared_ptr<const Device> device, VkDeviceSize size, VkBufferUsageFlags usage,
-    VkBufferCreateFlags flags, std::shared_ptr<IAllocator> allocator, VkMemoryPropertyFlags memoryFlags):
+Buffer::Buffer(std::shared_ptr<const Device> device, 
+    VkDeviceSize size, VkBufferUsageFlags usage, VkBufferCreateFlags flags, 
+    std::shared_ptr<IAllocator> allocator,
+    VkMemoryPropertyFlags memoryFlags):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT, device, allocator),
     size(size)
 {
@@ -42,7 +44,8 @@ Buffer::Buffer(std::shared_ptr<const Device> device, VkDeviceSize size, VkBuffer
     MAGMA_THROW_FAILURE(create, "failed to create buffer");
     VkMemoryRequirements memoryRequirements;
     vkGetBufferMemoryRequirements(*device, handle, &memoryRequirements);
-    std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(device, memoryRequirements.size, memoryFlags));
+    std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(
+        device, memoryRequirements.size, memoryFlags));
     bindMemory(memory);
 }
 

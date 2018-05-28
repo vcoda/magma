@@ -21,31 +21,33 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class SourceTransferBuffer : public Buffer
+    class SrcTransferBuffer : public Buffer
     {
     public:
-        SourceTransferBuffer(std::shared_ptr<const Device> device,
+        SrcTransferBuffer(std::shared_ptr<const Device> device,
             VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        SourceTransferBuffer(std::shared_ptr<const Device> device,
+        SrcTransferBuffer(std::shared_ptr<const Device> device,
             const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
-        SourceTransferBuffer(std::shared_ptr<const Device> device,
-            const std::vector<uint8_t>& data,
+        template<typename Type>
+        SrcTransferBuffer(std::shared_ptr<const Device> device,
+            const std::vector<Type>& data,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
     };
 
-    class DestTransferBuffer : public Buffer
-    {
-    public:
-        DestTransferBuffer(std::shared_ptr<const Device> device,
-            VkDeviceSize size,
-            VkBufferCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-    };
+    template<typename Type>
+    inline SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<const Device> device,
+        const std::vector<Type>& data,
+        VkBufferCreateFlags flags /* 0 */,
+        std::shared_ptr<IAllocator> allocator /* nullptr */,
+        CopyMemoryFunction copyFn /* nullptr */):
+        SrcTransferBuffer(device, data.data(), static_cast<VkDeviceSize>(data.size() * sizeof(Type)), 
+            flags, allocator, copyFn)
+    {}
 } // namespace magma

@@ -33,7 +33,9 @@ namespace magma
             uint32_t arraySize = 1,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr):
-            Buffer(device, sizeof(Block) * arraySize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, flags, allocator,
+            Buffer(device, sizeof(Block) * arraySize, 
+                VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, 
+                flags, allocator,
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
             arraySize(arraySize)
         {

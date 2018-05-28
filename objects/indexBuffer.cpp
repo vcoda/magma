@@ -16,28 +16,29 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "indexBuffer.h"
+#include "srcTransferBuffer.h"
 #include "commandBuffer.h"
-#include "transferBuffer.h"
 #include "deviceMemory.h"
 #include "queue.h"
 #include "../mem/copyMemory.h"
 
 namespace magma
 {
-IndexBuffer::IndexBuffer(std::shared_ptr<const Device> device, VkDeviceSize size, VkBufferUsageFlags usage,
-    VkBufferCreateFlags flags, std::shared_ptr<IAllocator> allocator, VkMemoryPropertyFlags memoryFlags,
-    VkIndexType indexType):
-    Buffer(device, size, usage, flags, allocator, memoryFlags),
-    indexType(indexType) 
+IndexBuffer::IndexBuffer(std::shared_ptr<const Device> device, VkDeviceSize size, VkIndexType indexType,
+    VkBufferCreateFlags flags /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Buffer(device, size, 
+        VK_BUFFER_USAGE_INDEX_BUFFER_BIT, 
+        flags, allocator,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
+    indexType(indexType)
 {}
 
 IndexBuffer::IndexBuffer(std::shared_ptr<const Device> device, const void *data, VkDeviceSize size, VkIndexType indexType,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Buffer(device, size, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, flags, allocator,
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
-    indexType(indexType)
+    IndexBuffer(device, size, indexType, flags, allocator) 
 {
     if (void *buffer = memory->map(0, size))
     {
@@ -52,17 +53,25 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const voi
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Buffer(copyCmdBuffer->getDevice(), size, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags, allocator,
+    IndexBuffer(copyCmdBuffer, std::make_shared<SrcTransferBuffer>(device, data, size, 0, allocator, copyFn), 
+        indexType, flags, allocator)
+{}
+
+IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, std::shared_ptr<SrcTransferBuffer> srcBuffer, VkIndexType indexType,
+    VkBufferCreateFlags flags /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Buffer(copyCmdBuffer->getDevice(), srcBuffer->getMemory()->getSize(), 
+        VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        flags, allocator,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
     indexType(indexType)
 {
-    std::shared_ptr<SourceTransferBuffer> srcBuffer(std::make_shared<SourceTransferBuffer>(device, data, size, 0, allocator, copyFn));
     copyCmdBuffer->begin();
     {
         VkBufferCopy region;
         region.srcOffset = 0;
         region.dstOffset = 0;
-        region.size = size;
+        region.size = srcBuffer->getMemory()->getSize();
         vkCmdCopyBuffer(*copyCmdBuffer, *srcBuffer, handle, 1, &region);
     }
     copyCmdBuffer->end();

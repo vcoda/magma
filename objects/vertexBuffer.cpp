@@ -16,27 +16,28 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "vertexBuffer.h"
+#include "srcTransferBuffer.h"
 #include "commandBuffer.h"
-#include "transferBuffer.h"
 #include "deviceMemory.h"
 #include "queue.h"
 #include "../mem/copyMemory.h"
 
 namespace magma
 {
-VertexBuffer::VertexBuffer(std::shared_ptr<const Device> device, VkDeviceSize size, VkBufferUsageFlags usage,
-    VkBufferCreateFlags flags, std::shared_ptr<IAllocator> allocator, VkMemoryPropertyFlags memoryFlags):
-    Buffer(device, size, usage, flags, allocator, memoryFlags),
-    vertexCount(0)
+VertexBuffer::VertexBuffer(std::shared_ptr<const Device> device, VkDeviceSize size,
+    VkBufferCreateFlags flags /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Buffer(device, size,
+        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, 
+        flags, allocator,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
 {}
 
-VertexBuffer::VertexBuffer(std::shared_ptr<const Device> device, const void *data, VkDeviceSize size, uint32_t vertexCount,
+VertexBuffer::VertexBuffer(std::shared_ptr<const Device> device, const void *data, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Buffer(device, size, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, flags, allocator, 
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
-    vertexCount(vertexCount)
+    VertexBuffer(device, size, flags, allocator)
 {
     if (data)
     {
@@ -50,26 +51,41 @@ VertexBuffer::VertexBuffer(std::shared_ptr<const Device> device, const void *dat
     }
 }
 
-VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size, uint32_t vertexCount,
+VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Buffer(copyCmdBuffer->getDevice(), size, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags, allocator,
+    VertexBuffer(copyCmdBuffer, std::make_shared<SrcTransferBuffer>(device, data, size, 0, allocator, copyFn), 
+        flags, allocator)
+{
+}
+
+VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, std::shared_ptr<SrcTransferBuffer> srcBuffer,
+    VkBufferCreateFlags flags /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Buffer(copyCmdBuffer->getDevice(), srcBuffer->getMemory()->getSize(), 
+        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, 
+        flags, allocator,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
-    vertexCount(vertexCount)
+    vertexCount(0)
 {        
-    std::shared_ptr<SourceTransferBuffer> srcBuffer(std::make_shared<SourceTransferBuffer>(device, data, size, 0, allocator, copyFn));
     copyCmdBuffer->begin();
     {
         VkBufferCopy region;
         region.srcOffset = 0;
         region.dstOffset = 0;
-        region.size = size;
+        region.size = srcBuffer->getMemory()->getSize();
         vkCmdCopyBuffer(*copyCmdBuffer, *srcBuffer, handle, 1, &region);
     }
     copyCmdBuffer->end();
     std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_TRANSFER_BIT, 0));
     queue->submit(copyCmdBuffer, 0, nullptr, nullptr, nullptr);
     queue->waitIdle();
+}
+
+uint32_t VertexBuffer::getVertexCount() const noexcept
+{
+    MAGMA_ASSERT(vertexCount > 0);
+    return vertexCount;
 }
 } // namespace magma

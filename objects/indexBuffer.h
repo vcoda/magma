@@ -21,11 +21,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class SrcTransferBuffer;
     class CommandBuffer;
 
     class IndexBuffer : public Buffer
     {
     public:
+        IndexBuffer(std::shared_ptr<const Device> device,
+            VkDeviceSize size,
+            VkIndexType indexType,
+            VkBufferCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         IndexBuffer(std::shared_ptr<const Device> device,
             const void *data, VkDeviceSize size,
             VkIndexType indexType,
@@ -38,6 +44,11 @@ namespace magma
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
+        IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+            std::shared_ptr<SrcTransferBuffer> srcBuffer,
+            VkIndexType indexType,
+            VkBufferCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         template<typename IndexType>
         IndexBuffer(std::shared_ptr<const Device> device,
             const std::vector<IndexType>& indices,
@@ -52,15 +63,6 @@ namespace magma
             CopyMemoryFunction copyFn = nullptr);
         VkIndexType getIndexType() const { return indexType; }
         uint32_t getIndexCount() const;
-
-    protected:
-        IndexBuffer(std::shared_ptr<const Device> device,
-            VkDeviceSize size,
-            VkBufferUsageFlags usage,
-            VkBufferCreateFlags flags,
-            std::shared_ptr<IAllocator> allocator,
-            VkMemoryPropertyFlags memoryFlags,
-            VkIndexType indexType);
 
     private:
         VkIndexType indexType;

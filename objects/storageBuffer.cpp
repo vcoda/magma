@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "storageBuffer.h"
-#include "transferBuffer.h"
+#include "srcTransferBuffer.h"
 #include "commandBuffer.h"
 #include "queue.h"
 #include "fence.h"
@@ -26,7 +26,9 @@ namespace magma
 StorageBuffer::StorageBuffer(std::shared_ptr<const Device> device, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Buffer(device, size, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT, flags, allocator,
+    Buffer(device, size, 
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+        flags, allocator,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
 {}
 
@@ -34,10 +36,12 @@ StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Buffer(copyCmdBuffer->getDevice(), size, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags, allocator,
+    Buffer(copyCmdBuffer->getDevice(), size, 
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, 
+        flags, allocator,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
 {
-    std::shared_ptr<SourceTransferBuffer> srcBuffer(std::make_shared<SourceTransferBuffer>(device, data, size, 0, allocator, copyFn));
+    std::shared_ptr<SrcTransferBuffer> srcBuffer(std::make_shared<SrcTransferBuffer>(device, data, size, 0, allocator, copyFn));
     copyCmdBuffer->begin();
     {
         VkBufferCopy region;

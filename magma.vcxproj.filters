@@ -228,9 +228,6 @@
     <ClInclude Include="helpers\mapScoped.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
-    <ClInclude Include="objects\transferBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="misc\imageMemoryBarrier.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
@@ -302,6 +299,12 @@
     </ClInclude>
     <ClInclude Include="mem\zeroMemory.h">
       <Filter>Header Files\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="objects\srcTransferBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="objects\dstTransferBuffer.h">
+      <Filter>Header Files\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -463,9 +466,6 @@
     <ClCompile Include="objects\bufferView.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="objects\transferBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="misc\imageMemoryBarrier.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>
@@ -507,6 +507,12 @@
     </ClCompile>
     <ClCompile Include="allocator\allocator.cpp">
       <Filter>Source Files\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\srcTransferBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\dstTransferBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -33,6 +33,7 @@ MAGMA_OBJS = \
 	objects/descriptorSetLayout.o \
 	objects/device.o \
 	objects/deviceMemory.o \
+	objects/dstTransferBuffer.o \
 	objects/event.o \
 	objects/fence.o \
 	objects/framebuffer.o \
@@ -56,10 +57,10 @@ MAGMA_OBJS = \
 	objects/sampler.o \
 	objects/semaphore.o \
 	objects/shaderModule.o \
+	objects/srcTransferBuffer.o \
 	objects/storageBuffer.o \
 	objects/surface.o \
 	objects/swapchain.o \
-	objects/transferBuffer.o \
 	objects/vertexBuffer.o \
 	\
 	states/colorBlendState.o \

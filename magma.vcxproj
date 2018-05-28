@@ -189,10 +189,11 @@
     <ClInclude Include="objects\sampler.h" />
     <ClInclude Include="objects\semaphore.h" />
     <ClInclude Include="objects\shaderModule.h" />
+    <ClInclude Include="objects\srcTransferBuffer.h" />
     <ClInclude Include="objects\storageBuffer.h" />
     <ClInclude Include="objects\surface.h" />
     <ClInclude Include="objects\swapchain.h" />
-    <ClInclude Include="objects\transferBuffer.h" />
+    <ClInclude Include="objects\dstTransferBuffer.h" />
     <ClInclude Include="objects\uniformBuffer.h" />
     <ClInclude Include="objects\vertexBuffer.h" />
     <ClInclude Include="shared.h" />
@@ -264,10 +265,11 @@
     <ClCompile Include="objects\sampler.cpp" />
     <ClCompile Include="objects\semaphore.cpp" />
     <ClCompile Include="objects\shaderModule.cpp" />
+    <ClCompile Include="objects\srcTransferBuffer.cpp" />
     <ClCompile Include="objects\storageBuffer.cpp" />
     <ClCompile Include="objects\surface.cpp" />
     <ClCompile Include="objects\swapchain.cpp" />
-    <ClCompile Include="objects\transferBuffer.cpp" />
+    <ClCompile Include="objects\dstTransferBuffer.cpp" />
     <ClCompile Include="objects\vertexBuffer.cpp" />
     <ClCompile Include="states\colorBlendState.cpp" />
     <ClCompile Include="states\depthStencilState.cpp" />

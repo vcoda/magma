@@ -16,9 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "image2DArray.h"
-#include "transferBuffer.h"
+#include "srcTransferBuffer.h"
 #include "deviceMemory.h"
 #include "../mem/copyMemory.h"
+#include "../helpers/mapScoped.h"
 
 namespace magma
 {
@@ -47,8 +48,8 @@ Image2DArray::Image2DArray(std::shared_ptr<const Device> device,
     std::vector<VkBufferImageCopy> copyRegions;
     VkDeviceSize size = getCopyRegions(mipExtents, mipSizes, copyRegions);
     // Copy array layers to host visible buffer
-    std::shared_ptr<SourceTransferBuffer> srcBuffer(std::make_shared<SourceTransferBuffer>(device, size, 0, allocator));
-    if (uint8_t *data = reinterpret_cast<uint8_t *>(srcBuffer->getMemory()->map()))
+    std::shared_ptr<SrcTransferBuffer> srcBuffer(std::make_shared<SrcTransferBuffer>(device, size, 0, allocator));
+    helpers::mapScoped<uint8_t>(srcBuffer, [&](uint8_t *data) 
     {
         if (!copyFn)
             copyFn = copyMemory;
@@ -61,8 +62,7 @@ Image2DArray::Image2DArray(std::shared_ptr<const Device> device,
                 copyFn(mipLevel, layersMipData[layer][level], static_cast<size_t>(mipSizes[level]));
             }
         }
-        srcBuffer->getMemory()->unmap();
-    }
+    });
     copyFromBuffer(srcBuffer, copyRegions, cmdBuffer);
 }
 } // namespace magma
