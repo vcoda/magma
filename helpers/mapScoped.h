@@ -16,15 +16,28 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../objects/uniformBuffer.h"
 #include "uniformArray.h"
 #include "alignedUniformArray.h"
+#include "../objects/uniformBuffer.h"
 #include "../mem/zeroMemory.h"
 
 namespace magma
 {
     namespace helpers
     {
+        template<typename Type>
+        inline void mapScoped(
+            const std::shared_ptr<Buffer>& buffer,
+            std::function<void(Type *data)> fn)
+        {
+            void *const data = buffer->getMemory()->map();
+            if (data)
+            {
+                fn(static_cast<Type *>(data));
+                buffer->getMemory()->unmap();
+            }
+        }
+
         template<typename Block>
         inline void mapScoped(
             const std::shared_ptr<UniformBuffer<Block>>& buffer,
