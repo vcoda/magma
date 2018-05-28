@@ -45,7 +45,7 @@ namespace magma
             std::function<void(Block *block)> fn)
         {
             ZeroMemoryFunction zeroFn = clearMemory ? zeroMemory : nullptr;
-            Block *block = buffer->map(zeroFn);
+            Block *const block = buffer->map(zeroFn);
             if (block)
             {
                 fn(block);
@@ -60,7 +60,7 @@ namespace magma
             std::function<void(UniformArray<Type>& array)> fn)
         {
             ZeroMemoryFunction zeroFn = clearMemory ? zeroMemory : nullptr;
-            Type *data = buffer->map(zeroFn);
+            Type *const data = buffer->map(zeroFn);
             if (data)
             {
                 UniformArray<Type> array(data,
@@ -77,7 +77,7 @@ namespace magma
             std::function<void(AlignedUniformArray<Type>& array)> fn)
         {
             ZeroMemoryFunction zeroFn = clearMemory ? zeroMemory : nullptr;
-            Type *data = buffer->map(zeroFn);
+            Type *const data = buffer->map(zeroFn);
             if (data)
             {
                 AlignedUniformArray<Type> array(data,
