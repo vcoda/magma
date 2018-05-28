@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandBuffer.h"
 #include "queue.h"
 #include "fence.h"
+#include "../misc/exception.h"
 
 namespace magma
 {
@@ -53,7 +54,9 @@ StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const
     copyCmdBuffer->end();
     std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_TRANSFER_BIT, 0));
     std::shared_ptr<Fence> fence(std::make_shared<Fence>(device));
-    queue->submit(copyCmdBuffer, 0, nullptr, nullptr, fence);
-    fence->wait();
+    if (!queue->submit(copyCmdBuffer, 0, nullptr, nullptr, nullptr))
+        MAGMA_THROW("failed to submit command buffer to graphics queue");
+    if (!fence->wait())
+        MAGMA_THROW("failed to wait for the fence");
 }
 } // namespace magma
