@@ -125,6 +125,7 @@ namespace magma
             std::shared_ptr<PipelineCache> cache;
             std::shared_ptr<PipelineLayout> layout;
             std::shared_ptr<RenderPass> renderPass;
+            std::shared_ptr<IAllocator> allocator;
             std::shared_ptr<VertexBuffer> vertexBuffer;
             VertexShaderStage vertexShader;
             FragmentShaderStage fragmentShader;

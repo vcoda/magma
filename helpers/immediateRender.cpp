@@ -40,6 +40,8 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     cache(cache),
     renderPass(renderPass),
     vertexBuffer(std::make_shared<VertexBuffer>(device, nullptr, sizeof(Vertex) * maxVertexCount, 0, allocator)),
+    allocator(std::move(allocator)),
+    vertexBuffer(std::make_shared<VertexBuffer>(this->device, nullptr, sizeof(Vertex) * maxVertexCount, 0, this->allocator)),
     vertexShader(VertexShaderStage(createVertexShader(), "main")),
     fragmentShader(FragmentShaderStage(createFragmentShader(), "main")),
     rasterizationState(states::fillCullBackCCW),
@@ -56,7 +58,7 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     if (!layout)
     {
         const pushconstants::VertexConstantRange<Transform> pushConstantRange;
-        this->layout = std::make_shared<PipelineLayout>(device, std::initializer_list<VkPushConstantRange>{pushConstantRange}, allocator);
+        this->layout = std::make_shared<PipelineLayout>(this->device, std::initializer_list<VkPushConstantRange>{pushConstantRange}, this->allocator);
     }
 }
 
@@ -219,7 +221,7 @@ std::shared_ptr<ShaderModule> ImmediateRender::createVertexShader()
         0x0000002e,0x0000002d,0x00050041,0x0000002f,0x00000030,0x0000001b,0x00000029,0x0003003e,
         0x00000030,0x0000002e,0x000100fd,0x00010038
     };
-    return std::make_shared<ShaderModule>(device, vertexShaderBytecode, sizeof(vertexShaderBytecode));
+    return std::make_shared<ShaderModule>(device, vertexShaderBytecode, sizeof(vertexShaderBytecode), allocator);
 }
 
 std::shared_ptr<ShaderModule> ImmediateRender::createFragmentShader()
@@ -256,7 +258,7 @@ std::shared_ptr<ShaderModule> ImmediateRender::createFragmentShader()
         0x00050036,0x00000002,0x00000004,0x00000000,0x00000003,0x000200f8,0x00000005,0x0004003d,
         0x00000007,0x0000000c,0x0000000b,0x0003003e,0x00000009,0x0000000c,0x000100fd,0x00010038
     };
-    return std::make_shared<ShaderModule>(device, fragmentShaderBytecode, sizeof(fragmentShaderBytecode));
+    return std::make_shared<ShaderModule>(device, fragmentShaderBytecode, sizeof(fragmentShaderBytecode), allocator);
 }
 
 std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimitiveTopology topology)
@@ -294,7 +296,11 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
             VK_DYNAMIC_STATE_VIEWPORT, 
             VK_DYNAMIC_STATE_SCISSOR, 
             VK_DYNAMIC_STATE_LINE_WIDTH
-        }, layout, renderPass));
+        },
+        layout,
+        renderPass,
+        0, 0,
+        allocator));
     pipelines.insert(pipeline); // Hold unique pipelines, as they should exist during command buffer submission
     return pipeline;
 }
