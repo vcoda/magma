@@ -15,6 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
+#include <cstring>
 #include "physicalDevice.h"
 #include "instance.h"
 #include "device.h"
@@ -129,7 +130,7 @@ std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
     const std::vector<const char*> extensions = {
         VK_KHR_SWAPCHAIN_EXTENSION_NAME
     };
-    VkPhysicalDeviceFeatures noFeatures = {VK_FALSE};
+    VkPhysicalDeviceFeatures noFeatures = {};
     return std::shared_ptr<Device>(new Device(shared_from_this(), queueDescriptors, noLayers, extensions, noFeatures, allocator));
 }
 
@@ -184,7 +185,8 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
     header.deviceID = properties.deviceID;
     memcpy(header.cacheUUID, properties.pipelineCacheUUID, VK_UUID_SIZE);
     const PipelineCache::Header *cacheHeader = reinterpret_cast<const PipelineCache::Header *>(cacheData);
-    const int compareDiff = memcmp(cacheHeader, &header, sizeof(PipelineCache::Header));
-    return (0 == compareDiff);
+    if (memcmp(cacheHeader, &header, sizeof(PipelineCache::Header)) != 0)
+        return false;
+    return true;
 }
 } // namespace magma

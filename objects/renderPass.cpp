@@ -27,7 +27,7 @@ namespace magma
 {
 RenderPass::RenderPass(std::shared_ptr<const Device> device, const AttachmentDescription& attachment,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    RenderPass(device, {attachment})
+    RenderPass(device, {attachment}, allocator)
 {}
 
 RenderPass::RenderPass(std::shared_ptr<const Device> device, 

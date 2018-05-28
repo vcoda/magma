@@ -78,9 +78,9 @@ namespace magma
         virtual uint32_t getArraySize() const override
         { 
             if (elementSize >= alignment)
-                return arraySize;
+                return UniformBuffer<Type>::arraySize;
             const VkDeviceSize divisor = alignment/elementSize;
-            return static_cast<uint32_t>(arraySize/divisor);
+            return static_cast<uint32_t>(UniformBuffer<Type>::arraySize/divisor);
         }
         uint32_t getDynamicOffset(uint32_t index) const
         {
