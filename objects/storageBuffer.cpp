@@ -54,7 +54,7 @@ StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const
     copyCmdBuffer->end();
     std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_TRANSFER_BIT, 0));
     std::shared_ptr<Fence> fence(std::make_shared<Fence>(device));
-    if (!queue->submit(copyCmdBuffer, 0, nullptr, nullptr, nullptr))
+    if (!queue->submit(copyCmdBuffer, 0, nullptr, nullptr, fence))
         MAGMA_THROW("failed to submit command buffer to graphics queue");
     if (!fence->wait())
         MAGMA_THROW("failed to wait for the fence");
