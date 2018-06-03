@@ -27,13 +27,13 @@ namespace magma
 {
 RenderPass::RenderPass(std::shared_ptr<const Device> device, const AttachmentDescription& attachment,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    RenderPass(device, {attachment}, allocator)
+    RenderPass(std::move(device), {attachment}, std::move(allocator))
 {}
 
 RenderPass::RenderPass(std::shared_ptr<const Device> device, 
     const std::initializer_list<AttachmentDescription>& attachments,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT, device, allocator)
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT, std::move(device), std::move(allocator))
 {   // Count multisample and single sample attachments
     uint32_t multisampleAttachmentCount = 0;
     uint32_t resolveAttachmentCount = 0;
@@ -94,7 +94,7 @@ RenderPass::RenderPass(std::shared_ptr<const Device> device,
     info.pSubpasses = &subpass;
     info.dependencyCount = 0;
     info.pDependencies = nullptr;
-    const VkResult create = vkCreateRenderPass(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateRenderPass(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create render pass");
 }
 
@@ -102,7 +102,7 @@ RenderPass::RenderPass(std::shared_ptr<const Device> device,
     const std::initializer_list<AttachmentDescription>& attachments,
     const std::initializer_list<Subpass>& subpasses,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT, device, allocator)
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT, std::move(device), std::move(allocator))
 {
     VkRenderPassCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
@@ -114,12 +114,12 @@ RenderPass::RenderPass(std::shared_ptr<const Device> device,
     info.pSubpasses = subpasses.begin();
     info.dependencyCount = 0;
     info.pDependencies = nullptr;
-    const VkResult create = vkCreateRenderPass(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateRenderPass(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create render pass");
 }
 
 RenderPass::~RenderPass()
 {
-    vkDestroyRenderPass(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyRenderPass(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 } // namespace magma

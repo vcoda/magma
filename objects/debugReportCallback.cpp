@@ -28,10 +28,10 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
     VkDebugReportFlagsEXT flags, 
     void *userData /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT, nullptr, allocator),
-    instance(instance)
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT, nullptr, std::move(allocator)),
+    instance(std::move(instance))
 {
-    auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(*instance, "vkCreateDebugReportCallbackEXT");
+    auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(MAGMA_HANDLE(instance), "vkCreateDebugReportCallbackEXT");
     if (vkCreateDebugReportCallbackEXT)
     {
         VkDebugReportCallbackCreateInfoEXT info;
@@ -40,15 +40,15 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
         info.flags = flags;
         info.pfnCallback = reportCallback;
         info.pUserData = userData;
-        const VkResult create = vkCreateDebugReportCallbackEXT(*instance, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+        const VkResult create = vkCreateDebugReportCallbackEXT(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
         MAGMA_THROW_FAILURE(create, "failed to create debug callback");
     }
 }
 
 DebugReportCallback::~DebugReportCallback() 
 {
-    auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(*instance, "vkDestroyDebugReportCallbackEXT");
+    auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(*this->instance, "vkDestroyDebugReportCallbackEXT");
     if (vkDestroyDebugReportCallbackEXT)
-        vkDestroyDebugReportCallbackEXT(*instance, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+        vkDestroyDebugReportCallbackEXT(MAGMA_HANDLE(instance), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 } // namespace magma

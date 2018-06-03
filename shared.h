@@ -79,5 +79,6 @@ namespace magma
     }
 }
 
+#define MAGMA_HANDLE(obj) *(this->obj)
 #define MAGMA_OPTIONAL_HANDLE(obj) magma::__handle(obj)
-#define MAGMA_OPTIONAL_INSTANCE(obj) obj ? obj.get() : nullptr
+#define MAGMA_OPTIONAL_INSTANCE(obj) this->obj ? this->obj.get() : nullptr

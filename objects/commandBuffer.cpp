@@ -42,16 +42,16 @@ PFN_vkCmdDebugMarkerInsertEXT vkCmdDebugMarkerInsert;
 #endif // MAGMA_DEBUG
 
 CommandBuffer::CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Device> device, std::shared_ptr<CommandPool> pool):
-    Dispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT, device, nullptr),
-    pool(pool)
+    Dispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT, std::move(device), nullptr),
+    pool(std::move(pool))
 {
     this->handle = handle;
 #ifdef MAGMA_DEBUG
     if (DebugObject::debugMarkerEnabled() && !vkCmdDebugMarkerBegin)
     {
-        vkCmdDebugMarkerBegin = (PFN_vkCmdDebugMarkerBeginEXT)vkGetDeviceProcAddr(*device, "vkCmdDebugMarkerBeginEXT");
-        vkCmdDebugMarkerEnd = (PFN_vkCmdDebugMarkerEndEXT)vkGetDeviceProcAddr(*device, "vkCmdDebugMarkerEndEXT");
-        vkCmdDebugMarkerInsert = (PFN_vkCmdDebugMarkerInsertEXT)vkGetDeviceProcAddr(*device, "vkCmdDebugMarkerInsertEXT");
+        vkCmdDebugMarkerBegin = (PFN_vkCmdDebugMarkerBeginEXT)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkCmdDebugMarkerBeginEXT");
+        vkCmdDebugMarkerEnd = (PFN_vkCmdDebugMarkerEndEXT)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkCmdDebugMarkerEndEXT");
+        vkCmdDebugMarkerInsert = (PFN_vkCmdDebugMarkerInsertEXT)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkCmdDebugMarkerInsertEXT");
     }
 #endif // MAGMA_DEBUG
 }

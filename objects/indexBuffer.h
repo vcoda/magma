@@ -76,7 +76,7 @@ namespace magma
         CopyMemoryFunction copyFn /* nullptr */):
         IndexBuffer(device, indices.data(), static_cast<VkDeviceSize>(sizeof(IndexType) * indices.size()),
             sizeof(IndexType) == sizeof(uint16_t) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32,
-            flags, allocator, copyFn)
+            flags, std::move(allocator), std::move(copyFn))
     {}
 
     template<typename IndexType>
@@ -87,7 +87,7 @@ namespace magma
         CopyMemoryFunction copyFn /* nullptr */):
         IndexBuffer(copyCmdBuffer, indices.data(), static_cast<VkDeviceSize>(sizeof(IndexType) * indices.size()),
             sizeof(IndexType) == sizeof(uint16_t) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32,
-            flags, allocator, copyFn)
+            flags, std::move(allocator), std::move(copyFn))
     {}
 
     inline uint32_t IndexBuffer::getIndexCount() const

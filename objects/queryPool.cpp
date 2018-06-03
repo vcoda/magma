@@ -25,7 +25,7 @@ namespace magma
 {
 QueryPool::QueryPool(VkQueryType queryType, std::shared_ptr<const Device> device, uint32_t queryCount,
     VkQueryPipelineStatisticFlags pipelineStatistics, std::shared_ptr<IAllocator> allocator):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_QUERY_POOL_EXT, device, allocator),
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_QUERY_POOL_EXT, std::move(device), std::move(allocator)),
     queryCount(queryCount)
 {
     VkQueryPoolCreateInfo info;
@@ -35,13 +35,13 @@ QueryPool::QueryPool(VkQueryType queryType, std::shared_ptr<const Device> device
     info.queryType = queryType;
     info.queryCount = queryCount;
     info.pipelineStatistics = pipelineStatistics;
-    const VkResult create = vkCreateQueryPool(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateQueryPool(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create query pool");
 }
 
 QueryPool::~QueryPool()
 {
-    vkDestroyQueryPool(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyQueryPool(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 std::vector<uint64_t> QueryPool::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const
@@ -54,7 +54,7 @@ std::vector<uint64_t> QueryPool::getResults(uint32_t firstQuery, uint32_t queryC
     // TODO: VK_QUERY_RESULT_PARTIAL_BIT
     const VkDeviceSize stride = sizeof(uint64_t);
     std::vector<uint64_t> results(queryCount);
-    const VkResult get = vkGetQueryPoolResults(*device, handle, 
+    const VkResult get = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, 
         firstQuery, queryCount,
         sizeof(uint64_t) * results.size(), results.data(), stride, 
         flags);
@@ -65,18 +65,18 @@ std::vector<uint64_t> QueryPool::getResults(uint32_t firstQuery, uint32_t queryC
 
 OcclusionQuery::OcclusionQuery(std::shared_ptr<const Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    QueryPool(VK_QUERY_TYPE_OCCLUSION, device, queryCount, 0, allocator)
+    QueryPool(VK_QUERY_TYPE_OCCLUSION, std::move(device), queryCount, 0, std::move(allocator))
 {}
 
 PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<const Device> device, 
     VkQueryPipelineStatisticFlags pipelineStatistics,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    QueryPool(VK_QUERY_TYPE_PIPELINE_STATISTICS, device, 1, pipelineStatistics, allocator),
+    QueryPool(VK_QUERY_TYPE_PIPELINE_STATISTICS, std::move(device), 1, pipelineStatistics, std::move(allocator)),
     pipelineStatistics(pipelineStatistics)
 {}
 
 TimestampQuery::TimestampQuery(std::shared_ptr<const Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    QueryPool(VK_QUERY_TYPE_TIMESTAMP, device, queryCount, 0, allocator)
+    QueryPool(VK_QUERY_TYPE_TIMESTAMP, std::move(device), queryCount, 0, std::move(allocator))
 {}
 } // namespace magma

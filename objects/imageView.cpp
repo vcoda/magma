@@ -25,12 +25,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ImageView::ImageView(std::shared_ptr<const Image> image,
+ImageView::ImageView(std::shared_ptr<const Image> resource,
     uint32_t mipLevelCount, /* 0 */
     VkComponentMapping swizzle /* R, G, B, A */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT, image->getDevice(), allocator),
-    image(image)
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT, std::move(resource->getDevice()), std::move(allocator)),
+    image(std::move(resource))
 {
     VkImageViewCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -84,12 +84,12 @@ ImageView::ImageView(std::shared_ptr<const Image> image,
         info.subresourceRange.levelCount = mipLevelCount;
     info.subresourceRange.baseArrayLayer = 0;
     info.subresourceRange.layerCount = image->getArrayLayers();
-    const VkResult create = vkCreateImageView(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateImageView(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create image view");
 }
 
 ImageView::~ImageView()
 {
-    vkDestroyImageView(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyImageView(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 } // namespace magma

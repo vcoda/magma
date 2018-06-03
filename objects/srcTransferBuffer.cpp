@@ -25,9 +25,9 @@ SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<const Device> device,
     VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Buffer(device, size, 
+    Buffer(std::move(device), size, 
         VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
-        flags, allocator,
+        flags, std::move(allocator),
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
 {}
 
@@ -36,7 +36,7 @@ SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<const Device> device,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    SrcTransferBuffer(device, size, flags, allocator)
+    SrcTransferBuffer(std::move(device), size, flags, std::move(allocator))
 {   
     if (void *buffer = memory->map(0, size))
     {

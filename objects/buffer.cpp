@@ -28,7 +28,7 @@ Buffer::Buffer(std::shared_ptr<const Device> device,
     VkDeviceSize size, VkBufferUsageFlags usage, VkBufferCreateFlags flags, 
     std::shared_ptr<IAllocator> allocator,
     VkMemoryPropertyFlags memoryFlags):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT, device, allocator),
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT, std::move(device), std::move(allocator)),
     size(size)
 {
     VkBufferCreateInfo info;
@@ -40,12 +40,12 @@ Buffer::Buffer(std::shared_ptr<const Device> device,
     info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
     info.queueFamilyIndexCount = 0;
     info.pQueueFamilyIndices = nullptr;
-    const VkResult create = vkCreateBuffer(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateBuffer(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create buffer");
     VkMemoryRequirements memoryRequirements;
-    vkGetBufferMemoryRequirements(*device, handle, &memoryRequirements);
+    vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
     std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(
-        device, memoryRequirements.size, memoryFlags));
+        this->device, memoryRequirements.size, memoryFlags));
     bindMemory(memory);
 }
 
@@ -57,7 +57,7 @@ Buffer::~Buffer()
 void Buffer::bindMemory(std::shared_ptr<DeviceMemory> memory,
     VkDeviceSize offset /* 0 */)
 {
-    const VkResult bind = vkBindBufferMemory(*device, handle, *memory, offset);
+    const VkResult bind = vkBindBufferMemory(MAGMA_HANDLE(device), handle, *memory, offset);
     MAGMA_THROW_FAILURE(bind, "failed to bind buffer memory");
     this->memory = std::move(memory);
 }
@@ -65,7 +65,7 @@ void Buffer::bindMemory(std::shared_ptr<DeviceMemory> memory,
 VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
 {
     VkMemoryRequirements memoryRequirements;
-    vkGetBufferMemoryRequirements(*device, handle, &memoryRequirements);
+    vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
     return memoryRequirements;
 }
 

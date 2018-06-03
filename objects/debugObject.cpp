@@ -28,7 +28,7 @@ PFN_vkDebugMarkerSetObjectNameEXT vkDebugMarkerSetObjectName;
 
 DebugObject::DebugObject(VkDebugReportObjectTypeEXT objectType, std::shared_ptr<const Device> device):
     objectType(objectType),
-    device(device)
+    device(std::move(device))
 {}
 
 void DebugObject::setMarkerTag(uint64_t name, size_t tagSize, const void *tag) noexcept
@@ -45,7 +45,7 @@ void DebugObject::setMarkerTag(uint64_t name, size_t tagSize, const void *tag) n
         info.tagSize = tagSize;
         info.pTag = tag;
         if (device)
-            vkDebugMarkerSetObjectTag(*device, &info);
+            vkDebugMarkerSetObjectTag(MAGMA_HANDLE(device), &info);
     }
 #endif // MAGMA_DEBUG
 }
@@ -62,7 +62,7 @@ void DebugObject::setMarkerName(const char *name) noexcept
         info.object = this->getObject();
         info.pObjectName = name;
         if (device)
-            vkDebugMarkerSetObjectName(*device, &info);
+            vkDebugMarkerSetObjectName(MAGMA_HANDLE(device), &info);
     }
 #endif // MAGMA_DEBUG
 }

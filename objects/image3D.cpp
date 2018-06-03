@@ -21,6 +21,6 @@ namespace magma
 {
 Image3D::Image3D(std::shared_ptr<const Device> device, VkFormat format, const VkExtent3D& extent, VkImageUsageFlags usage, 
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Image(device, VK_IMAGE_TYPE_3D, format, extent, 1, 1, 1, usage, 0, allocator)
+    Image(std::move(device), VK_IMAGE_TYPE_3D, format, extent, 1, 1, 1, usage, 0, std::move(allocator))
 {}
 } // namespace magma

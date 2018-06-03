@@ -27,9 +27,9 @@ namespace magma
 StorageBuffer::StorageBuffer(std::shared_ptr<const Device> device, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Buffer(device, size, 
+    Buffer(std::move(device), size, 
         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-        flags, allocator,
+        flags, std::move(allocator),
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
 {}
 
@@ -37,12 +37,12 @@ StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Buffer(copyCmdBuffer->getDevice(), size, 
+    Buffer(std::move(copyCmdBuffer->getDevice()), size, 
         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, 
-        flags, allocator,
+        flags, std::move(allocator),
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
 {
-    std::shared_ptr<SrcTransferBuffer> srcBuffer(std::make_shared<SrcTransferBuffer>(device, data, size, 0, allocator, copyFn));
+    std::shared_ptr<SrcTransferBuffer> srcBuffer(std::make_shared<SrcTransferBuffer>(this->device, data, size, 0, this->allocator, copyFn));
     copyCmdBuffer->begin();
     {
         VkBufferCopy region;
@@ -53,8 +53,8 @@ StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const
     }
     copyCmdBuffer->end();
     std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_TRANSFER_BIT, 0));
-    std::shared_ptr<Fence> fence(std::make_shared<Fence>(device));
-    if (!queue->submit(copyCmdBuffer, 0, nullptr, nullptr, fence))
+    std::shared_ptr<Fence> fence(std::make_shared<Fence>(this->device));
+    if (!queue->submit(std::move(copyCmdBuffer), 0, nullptr, nullptr, fence))
         MAGMA_THROW("failed to submit command buffer to graphics queue");
     if (!fence->wait())
         MAGMA_THROW("failed to wait for the fence");

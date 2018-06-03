@@ -29,8 +29,8 @@ namespace magma
         Handle(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<const Device> device,
             std::shared_ptr<IAllocator> allocator):
-            DebugObject(objectType, device),
-            allocator(allocator) {}
+            DebugObject(objectType, std::move(device)),
+            allocator(std::move(allocator)) {}
 
     protected:
         std::shared_ptr<IAllocator> allocator;
@@ -51,7 +51,7 @@ namespace magma
         Dispatchable(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<const Device> device,
             std::shared_ptr<IAllocator> allocator):
-            Handle(objectType, device, allocator),
+            Handle(objectType, std::move(device), std::move(allocator)),
             handle(nullptr) {}
         
     protected:
@@ -78,7 +78,7 @@ namespace magma
         NonDispatchable(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<const Device> device,
             std::shared_ptr<IAllocator> allocator):
-            Handle(objectType, device, allocator),
+            Handle(objectType, std::move(device), std::move(allocator)),
             handle(VK_NULL_HANDLE) {}
 
     protected:

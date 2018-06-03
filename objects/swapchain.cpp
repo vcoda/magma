@@ -40,7 +40,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     VkPresentModeKHR presentMode,
     VkSwapchainCreateFlagsKHR flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT, device, allocator),
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT, std::move(device), std::move(allocator)),
     surfaceFormat(surfaceFormat),
     imageExtent(imageExtent)
 {
@@ -63,7 +63,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     info.presentMode = presentMode;
     info.clipped = VK_TRUE;
     info.oldSwapchain = VK_NULL_HANDLE;
-    const VkResult create = vkCreateSwapchainKHR(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
 #ifdef MAGMA_DEBUG
     if (create != VK_SUCCESS)
     {
@@ -90,14 +90,14 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
 
 Swapchain::~Swapchain()
 {
-    vkDestroySwapchainKHR(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroySwapchainKHR(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore, std::shared_ptr<const Fence> fence,
     uint64_t timeout /* UINT64_MAX */)
 {
     uint32_t imageIndex = 0;
-    const VkResult acquire = vkAcquireNextImageKHR(*device, handle, timeout,
+    const VkResult acquire = vkAcquireNextImageKHR(MAGMA_HANDLE(device), handle, timeout,
         MAGMA_OPTIONAL_HANDLE(semaphore),
         MAGMA_OPTIONAL_HANDLE(fence),
         &imageIndex);
@@ -108,7 +108,7 @@ uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore,
 uint32_t Swapchain::getImageCount() const
 {
     uint32_t imageCount = 0;
-    const VkResult get = vkGetSwapchainImagesKHR(*device, handle, &imageCount, nullptr);
+    const VkResult get = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &imageCount, nullptr);
     MAGMA_THROW_FAILURE(get, "failed to get swapchain image count");
     return imageCount;
 }
@@ -117,7 +117,7 @@ std::vector<std::shared_ptr<SwapchainColorAttachment2D>> Swapchain::getImages() 
 {
     uint32_t imageCount = getImageCount();
     MAGMA_STACK_ARRAY(VkImage, swapchainImages, imageCount);
-    const VkResult get = vkGetSwapchainImagesKHR(*device, handle, &imageCount, swapchainImages);
+    const VkResult get = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &imageCount, swapchainImages);
     MAGMA_THROW_FAILURE(get, "failed to get swapchain images");
     std::vector<std::shared_ptr<SwapchainColorAttachment2D>> images;
     for (const VkImage handle : swapchainImages)

@@ -22,32 +22,31 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 DebugMarker::DebugMarker(std::shared_ptr<CommandBuffer> commandBuffer, const char *name):
-    DebugMarker(commandBuffer, name, 0.f, 0.f, 0.f, 1.f)
-{
-}
+    DebugMarker(std::move(commandBuffer), name, 0.f, 0.f, 0.f, 1.f)
+{}
         
 DebugMarker::DebugMarker(std::shared_ptr<CommandBuffer> commandBuffer, const char *name, 
     float r, float g, float b, float a /* 1 */) :
-    commandBuffer(commandBuffer)
+    commandBuffer(std::move(commandBuffer))
 {
 #ifdef MAGMA_DEBUG
     const float color[4] = {r, g, b, a};
-    commandBuffer->beginDebugMarker(name, color);
+    this->commandBuffer->beginDebugMarker(name, color);
 #endif
 }
 
 DebugMarker::DebugMarker(std::shared_ptr<CommandBuffer> commandBuffer, const char *name, const float color[4]):
-    commandBuffer(commandBuffer)
+    commandBuffer(std::move(commandBuffer))
 {
 #ifdef MAGMA_DEBUG
-    commandBuffer->beginDebugMarker(name, color);
+    this->commandBuffer->beginDebugMarker(name, color);
 #endif
 }
 
 DebugMarker::~DebugMarker()
 {
 #ifdef MAGMA_DEBUG
-    commandBuffer->endDebugMarker();
+    this->commandBuffer->endDebugMarker();
 #endif
 }
 } // namespace magma

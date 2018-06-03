@@ -26,12 +26,12 @@ namespace magma
 ImageCube::ImageCube(std::shared_ptr<const Device> device, VkFormat format,
     uint32_t dimension, uint32_t mipLevels, VkImageUsageFlags usage,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1}, mipLevels, 
+    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1}, mipLevels, 
         6, // arrayLayers  
         1, // samples
         usage, 
         VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT, 
-        allocator)
+        std::move(allocator))
 {}
 
 ImageCube::ImageCube(std::shared_ptr<const Device> device, 
@@ -42,13 +42,13 @@ ImageCube::ImageCube(std::shared_ptr<const Device> device,
     std::shared_ptr<CommandBuffer> cmdBuffer,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Image(device, VK_IMAGE_TYPE_2D, format, VkExtent3D{mipDimensions[0], mipDimensions[0], 1},
+    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{mipDimensions[0], mipDimensions[0], 1},
         static_cast<uint32_t>(mipDimensions.size()), // mipLevels
         6, // arrayLayers 
         1, // samples
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT, 
-        allocator)
+        std::move(allocator))
 {
     std::vector<VkExtent2D> mipExtents;
     for (const uint32_t size : mipDimensions)
@@ -56,7 +56,7 @@ ImageCube::ImageCube(std::shared_ptr<const Device> device,
     std::vector<VkBufferImageCopy> copyRegions;
     const VkDeviceSize size = getCopyRegions(mipExtents, mipSizes, copyRegions);
     // Copy array layers to host visible buffer
-    std::shared_ptr<SrcTransferBuffer> srcBuffer(std::make_shared<SrcTransferBuffer>(device, size, 0, allocator));
+    std::shared_ptr<SrcTransferBuffer> srcBuffer(std::make_shared<SrcTransferBuffer>(this->device, size, 0, allocator));
     helpers::mapScoped<uint8_t>(srcBuffer, [&](uint8_t *data)
     {
         if (!copyFn)

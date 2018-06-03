@@ -38,11 +38,11 @@ namespace magma
 
     public:
         PipelineCache(std::shared_ptr<const Device> device,
-            const std::vector<uint8_t>& cacheData = {},
-            std::shared_ptr<IAllocator> allocator = nullptr);
-        PipelineCache(std::shared_ptr<const Device> device,
             size_t dataSize,
             const void *cacheData,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        PipelineCache(std::shared_ptr<const Device> device,
+            const std::vector<uint8_t>& cacheData = {},
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~PipelineCache();
         std::vector<uint8_t> getData() const;

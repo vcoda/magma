@@ -28,7 +28,7 @@ namespace magma
 {
 PhysicalDevice::PhysicalDevice(VkPhysicalDevice handle,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Dispatchable<VkPhysicalDevice>(VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT, nullptr, allocator)
+    Dispatchable<VkPhysicalDevice>(VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT, nullptr, std::move(allocator))
 {
     this->handle = handle;
 }
@@ -117,7 +117,7 @@ std::shared_ptr<Device> PhysicalDevice::createDevice(
     const std::vector<const char *>& extensions, 
     const VkPhysicalDeviceFeatures& deviceFeatures) const
 {
-    return std::shared_ptr<Device>(new Device(shared_from_this(), queueDescriptors, layers, extensions, deviceFeatures, allocator));
+    return std::shared_ptr<Device>(new Device(std::move(shared_from_this()), queueDescriptors, layers, extensions, deviceFeatures, allocator));
 }
 
 std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
@@ -131,7 +131,7 @@ std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
         VK_KHR_SWAPCHAIN_EXTENSION_NAME
     };
     VkPhysicalDeviceFeatures noFeatures = {};
-    return std::shared_ptr<Device>(new Device(shared_from_this(), queueDescriptors, noLayers, extensions, noFeatures, allocator));
+    return std::shared_ptr<Device>(new Device(std::move(shared_from_this()), queueDescriptors, noLayers, extensions, noFeatures, allocator));
 }
 
 bool PhysicalDevice::getSurfaceSupport(std::shared_ptr<Surface> surface) const

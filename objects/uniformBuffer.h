@@ -33,9 +33,9 @@ namespace magma
             uint32_t arraySize = 1,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr):
-            Buffer(device, sizeof(Block) * arraySize, 
+            Buffer(std::move(device), sizeof(Block) * arraySize, 
                 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, 
-                flags, allocator,
+                flags, std::move(allocator),
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
             arraySize(arraySize)
         {
@@ -69,7 +69,7 @@ namespace magma
             uint32_t arraySize,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr):
-            UniformBuffer<Type>(device, alignedArraySize(device, arraySize), flags, allocator),
+            UniformBuffer<Type>(device, alignedArraySize(device, arraySize), flags, std::move(allocator)),
             alignment(std::max(
                 minOffsetAlignment(device),
                 static_cast<VkDeviceSize>(elementSize)
@@ -91,14 +91,14 @@ namespace magma
     private:
         VkDeviceSize minOffsetAlignment(std::shared_ptr<const Device> device) const
         {   // Check hardware requirements
-            std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+            std::shared_ptr<const PhysicalDevice> physicalDevice = std::move(device->getPhysicalDevice());
             const VkPhysicalDeviceProperties& properties = physicalDevice->getProperties();
             const VkPhysicalDeviceLimits& limits = properties.limits;
             return limits.minUniformBufferOffsetAlignment;
         }
         uint32_t alignedArraySize(std::shared_ptr<const Device> device, uint32_t arraySize) const
         {
-            const VkDeviceSize alignment = minOffsetAlignment(device);
+            const VkDeviceSize alignment = minOffsetAlignment(std::move(device));
             if (elementSize >= alignment)
                 return arraySize;
             const VkDeviceSize multiplier = alignment/elementSize;

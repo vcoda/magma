@@ -25,18 +25,18 @@ namespace magma
 {
 Semaphore::Semaphore(std::shared_ptr<const Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SEMAPHORE_EXT, device, allocator)
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SEMAPHORE_EXT, std::move(device), std::move(allocator))
 {
     VkSemaphoreCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
     info.pNext = nullptr;
     info.flags = 0;
-    const VkResult create = vkCreateSemaphore(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateSemaphore(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create semaphore");
 }
 
 Semaphore::~Semaphore()
 {
-    vkDestroySemaphore(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroySemaphore(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 } // namespace magma

@@ -26,7 +26,7 @@ namespace magma
 Fence::Fence(std::shared_ptr<const Device> device, 
     bool signaled /* false */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT, device, allocator)
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT, std::move(device), std::move(allocator))
 {
     VkFenceCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
@@ -34,29 +34,29 @@ Fence::Fence(std::shared_ptr<const Device> device,
     info.flags = 0;
     if (signaled)
         info.flags |= VK_FENCE_CREATE_SIGNALED_BIT;
-    const VkResult create = vkCreateFence(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateFence(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create fence");
 }
 
 Fence::~Fence()
 {
-    vkDestroyFence(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyFence(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 bool Fence::reset() noexcept
 {
-    const VkResult reset = vkResetFences(*device, 1, &handle);
+    const VkResult reset = vkResetFences(MAGMA_HANDLE(device), 1, &handle);
     return (VK_SUCCESS == reset);
 }
 
 VkResult Fence::getStatus() const noexcept
 {
-    return vkGetFenceStatus(*device, handle);
+    return vkGetFenceStatus(MAGMA_HANDLE(device), handle);
 }
 
 bool Fence::wait(uint64_t timeout /* UINT64_MAX */) const noexcept
 {
-    const VkResult wait = vkWaitForFences(*device, 1, &handle, VK_TRUE, timeout);
+    const VkResult wait = vkWaitForFences(MAGMA_HANDLE(device), 1, &handle, VK_TRUE, timeout);
     return (VK_SUCCESS == wait) || (VK_TIMEOUT == wait);
 }
 } // namespace magma

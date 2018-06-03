@@ -22,13 +22,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "image.h"
 #include "imageView.h"
 #include "sampler.h"
+#include "../shared.h"
 
 namespace magma
 {
 DescriptorSet::DescriptorSet(VkDescriptorSet handle, std::shared_ptr<const Device> device, std::shared_ptr<DescriptorPool> pool, std::shared_ptr<DescriptorSetLayout> setLayout):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT, device, nullptr),
-    pool(pool),
-    setLayout(setLayout)
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT, std::move(device), nullptr),
+    pool(std::move(pool)),
+    setLayout(std::move(setLayout))
 {
     this->handle = handle;
 }
@@ -48,7 +49,7 @@ void DescriptorSet::update(uint32_t index, std::shared_ptr<const Buffer> buffer)
     descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = &info;
     descriptorWrite.pTexelBufferView = nullptr;
-    vkUpdateDescriptorSets(*device, 1, &descriptorWrite, 0, nullptr);
+    vkUpdateDescriptorSets(MAGMA_HANDLE(device), 1, &descriptorWrite, 0, nullptr);
 }
 
 void DescriptorSet::update(uint32_t index, std::shared_ptr<const ImageView> imageView, std::shared_ptr<const Sampler> sampler) noexcept
@@ -69,6 +70,6 @@ void DescriptorSet::update(uint32_t index, std::shared_ptr<const ImageView> imag
     descriptorWrite.pImageInfo = &info;
     descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = nullptr;
-    vkUpdateDescriptorSets(*device, 1, &descriptorWrite, 0, nullptr);
+    vkUpdateDescriptorSets(MAGMA_HANDLE(device), 1, &descriptorWrite, 0, nullptr);
 }
 } // namespace magma

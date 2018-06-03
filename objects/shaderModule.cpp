@@ -24,7 +24,7 @@ namespace magma
 {
 ShaderModule::ShaderModule(std::shared_ptr<const Device> device, const uint32_t *bytecode, size_t bytecodeSize,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT, device, allocator)
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT, std::move(device), std::move(allocator))
 {
     MAGMA_ASSERT(bytecodeSize % sizeof(uint32_t) == 0);
     VkShaderModuleCreateInfo info;
@@ -33,7 +33,7 @@ ShaderModule::ShaderModule(std::shared_ptr<const Device> device, const uint32_t 
     info.flags = 0;
     info.codeSize = bytecodeSize;
     info.pCode = bytecode;
-    const VkResult create = vkCreateShaderModule(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateShaderModule(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create shader module");
 }
 
@@ -44,7 +44,7 @@ ShaderModule::ShaderModule(std::shared_ptr<const Device> device, const std::vect
 
 ShaderModule::~ShaderModule()
 {
-    vkDestroyShaderModule(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyShaderModule(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 Specialization::Specialization(const Specialization& other)
@@ -75,16 +75,16 @@ Specialization::~Specialization()
 
 ShaderStage::ShaderStage(const VkShaderStageFlagBits stage, std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
     std::shared_ptr<const Specialization> specialization, VkPipelineShaderStageCreateFlags flags):
-    module(module),
-    specialization(specialization)
+    module(std::move(module)),
+    specialization(std::move(specialization))
 {
     info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
     info.pNext = nullptr;
     info.flags = flags;
     info.stage = stage;
-    info.module = *module;
+    info.module = *this->module;
     info.pName = helpers::copyString(entrypoint);
-    info.pSpecializationInfo = specialization.get();
+    info.pSpecializationInfo = this->specialization.get();
 }
 
 ShaderStage::ShaderStage(const ShaderStage& other):
@@ -115,24 +115,24 @@ ShaderStage::~ShaderStage()
 VertexShaderStage::VertexShaderStage(std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
     std::shared_ptr<const Specialization> specialization /* nullptr */,
     VkPipelineShaderStageCreateFlags flags /* 0 */):
-    ShaderStage(VK_SHADER_STAGE_VERTEX_BIT, module, entrypoint, specialization, flags)
+    ShaderStage(VK_SHADER_STAGE_VERTEX_BIT, std::move(module), entrypoint, std::move(specialization), flags)
 {}
 
 GeometryShaderStage::GeometryShaderStage(std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
     std::shared_ptr<const Specialization> specialization /* nullptr */,
     VkPipelineShaderStageCreateFlags flags /* 0 */):
-    ShaderStage(VK_SHADER_STAGE_GEOMETRY_BIT, module, entrypoint, specialization, flags)
+    ShaderStage(VK_SHADER_STAGE_GEOMETRY_BIT, std::move(module), entrypoint, std::move(specialization), flags)
 {}
 
 FragmentShaderStage::FragmentShaderStage(std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
     std::shared_ptr<const Specialization> specialization /* nullptr */,
     VkPipelineShaderStageCreateFlags flags /* 0 */):
-    ShaderStage(VK_SHADER_STAGE_FRAGMENT_BIT, module, entrypoint, specialization, flags)
+    ShaderStage(VK_SHADER_STAGE_FRAGMENT_BIT, std::move(module), entrypoint, std::move(specialization), flags)
 {}
 
 ComputeShaderStage::ComputeShaderStage(std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
     std::shared_ptr<const Specialization> specialization /* nullptr */,
     VkPipelineShaderStageCreateFlags flags /* 0 */):
-    ShaderStage(VK_SHADER_STAGE_COMPUTE_BIT, module, entrypoint, specialization, flags)
+    ShaderStage(VK_SHADER_STAGE_COMPUTE_BIT, std::move(module), entrypoint, std::move(specialization), flags)
 {}
 } // namespace magma

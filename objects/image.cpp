@@ -32,7 +32,7 @@ Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkForm
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
     VkImageUsageFlags usage, VkImageCreateFlags flags,
     std::shared_ptr<IAllocator> allocator):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, device, allocator),
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, std::move(device), std::move(allocator)),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
@@ -69,16 +69,17 @@ Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkForm
     info.queueFamilyIndexCount = 0;
     info.pQueueFamilyIndices = nullptr;
     info.initialLayout = layout;
-    const VkResult create = vkCreateImage(*device, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateImage(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create image");
     VkMemoryRequirements memoryRequirements;
-    vkGetImageMemoryRequirements(*device, handle, &memoryRequirements);
-    std::shared_ptr<DeviceMemory> memory = std::make_shared<DeviceMemory>(device, memoryRequirements.size, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+    vkGetImageMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
+    std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(
+        this->device, memoryRequirements.size, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
     bindMemory(memory);
 }
 
 Image::Image(std::shared_ptr<const Device> device, VkImage handle, VkImageType imageType, VkFormat format, const VkExtent3D& extent):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, device, nullptr),
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, std::move(device), nullptr),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
@@ -93,13 +94,13 @@ Image::Image(std::shared_ptr<const Device> device, VkImage handle, VkImageType i
 
 Image::~Image()
 {
-    vkDestroyImage(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyImage(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 void Image::bindMemory(std::shared_ptr<DeviceMemory> memory,
     VkDeviceSize offset /* 0 */)
 {
-    const VkResult bind = vkBindImageMemory(*device, handle, *memory, offset);
+    const VkResult bind = vkBindImageMemory(MAGMA_HANDLE(device), handle, *memory, offset);
     MAGMA_THROW_FAILURE(bind, "failed to bind image memory");
     this->memory = std::move(memory);
 }

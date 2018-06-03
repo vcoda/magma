@@ -35,35 +35,35 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Pipeline::Pipeline(std::shared_ptr<const Device> device, std::shared_ptr<IAllocator> allocator):
-    NonDispatchable<VkPipeline>(VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT, device, allocator)
+    NonDispatchable<VkPipeline>(VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT, std::move(device), std::move(allocator))
 {}
 
 Pipeline::~Pipeline()
 {
-    vkDestroyPipeline(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyPipeline(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
 void Pipeline::getShaderStatistics(VkShaderStageFlagBits stage, VkShaderStatisticsInfoAMD& info) const
 {
-    PFN_vkGetShaderInfoAMD pfnGetShaderInfoAMD = (PFN_vkGetShaderInfoAMD)vkGetDeviceProcAddr(*device, "vkGetShaderInfoAMD");
+    PFN_vkGetShaderInfoAMD pfnGetShaderInfoAMD = (PFN_vkGetShaderInfoAMD)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkGetShaderInfoAMD");
     if (!pfnGetShaderInfoAMD)
         MAGMA_THROW_NOT_PRESENT(VK_AMD_SHADER_INFO_EXTENSION_NAME);
     size_t infoSize = sizeof(VkShaderStatisticsInfoAMD);
-    const VkResult get = pfnGetShaderInfoAMD(*device, handle, stage, VK_SHADER_INFO_TYPE_STATISTICS_AMD, &infoSize, &info);
+    const VkResult get = pfnGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_STATISTICS_AMD, &infoSize, &info);
     MAGMA_THROW_FAILURE(get, "failed to get shader statistics");
 }
 
 std::vector<uint8_t> Pipeline::getShaderBinary(VkShaderStageFlagBits stage) const
 {
-    PFN_vkGetShaderInfoAMD pfnGetShaderInfoAMD = (PFN_vkGetShaderInfoAMD)vkGetDeviceProcAddr(*device, "vkGetShaderInfoAMD");
+    PFN_vkGetShaderInfoAMD pfnGetShaderInfoAMD = (PFN_vkGetShaderInfoAMD)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkGetShaderInfoAMD");
     if (!pfnGetShaderInfoAMD)
         MAGMA_THROW_NOT_PRESENT(VK_AMD_SHADER_INFO_EXTENSION_NAME);
     size_t binarySize = 0;
-    const VkResult getSize = pfnGetShaderInfoAMD(*device, handle, stage, VK_SHADER_INFO_TYPE_BINARY_AMD, &binarySize, nullptr);
+    const VkResult getSize = pfnGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_BINARY_AMD, &binarySize, nullptr);
     if (VK_SUCCESS == getSize)
     {
         std::vector<uint8_t> binary(binarySize);
-        const VkResult get = pfnGetShaderInfoAMD(*device, handle, stage, VK_SHADER_INFO_TYPE_BINARY_AMD, &binarySize, binary.data());
+        const VkResult get = pfnGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_BINARY_AMD, &binarySize, binary.data());
         if (VK_SUCCESS == get)
             return std::move(binary);
     }
@@ -72,15 +72,15 @@ std::vector<uint8_t> Pipeline::getShaderBinary(VkShaderStageFlagBits stage) cons
 
 std::string Pipeline::getShaderDisassembly(VkShaderStageFlagBits stage) const
 {
-    PFN_vkGetShaderInfoAMD pfnGetShaderInfoAMD = (PFN_vkGetShaderInfoAMD)vkGetDeviceProcAddr(*device, "vkGetShaderInfoAMD");
+    PFN_vkGetShaderInfoAMD pfnGetShaderInfoAMD = (PFN_vkGetShaderInfoAMD)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkGetShaderInfoAMD");
     if (!pfnGetShaderInfoAMD)
         MAGMA_THROW_NOT_PRESENT(VK_AMD_SHADER_INFO_EXTENSION_NAME);
     size_t disassemblySize = 0;
-    const VkResult getSize = pfnGetShaderInfoAMD(*device, handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, nullptr);
+    const VkResult getSize = pfnGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, nullptr);
     if (VK_SUCCESS == getSize)
     {
         std::vector<char> disassembly(disassemblySize);
-        const VkResult get = pfnGetShaderInfoAMD(*device, handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, disassembly.data());
+        const VkResult get = pfnGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, disassembly.data());
         if (VK_SUCCESS == get)
             return std::move(std::string(&disassembly[0]));
     }
@@ -101,12 +101,12 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
     uint32_t subpass /* 0 */,
     VkPipelineCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    GraphicsPipeline(device, pipelineCache, stages, 
+    GraphicsPipeline(std::move(device), std::move(pipelineCache), stages, 
         vertexInputState, inputAssemblyState, 
         TesselationState(), // No tesselation state
         ViewportState(), // No viewport state (supposed to be dynamic)
         rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
-        layout, renderPass, subpass, flags, allocator)
+        std::move(layout), std::move(renderPass), subpass, flags, std::move(allocator))
 {}
 
 GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::shared_ptr<const PipelineCache> pipelineCache,  
@@ -125,7 +125,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
     uint32_t subpass /* 0 */,
     VkPipelineCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Pipeline(device, allocator)
+    Pipeline(std::move(device), std::move(allocator))
 {
     if (stages.empty())
         MAGMA_THROW("shader stages are empty");
@@ -165,14 +165,14 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
         info.layout = *layout;
     else
     {
-        defaultLayout.reset(new PipelineLayout(device));
+        defaultLayout = std::make_unique<PipelineLayout>(this->device);
         info.layout = *defaultLayout;
     }
     info.renderPass = *renderPass;
     info.subpass = subpass;
     info.basePipelineIndex = 0;
     info.basePipelineHandle = VK_NULL_HANDLE;
-    const VkResult create = vkCreateGraphicsPipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create graphics pipeline");
 }
 
@@ -181,7 +181,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<const Device> device, std::shar
     std::shared_ptr<const PipelineLayout> layout /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Pipeline(device, allocator)
+    Pipeline(std::move(device), std::move(allocator))
 {
     VkComputePipelineCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
@@ -192,12 +192,12 @@ ComputePipeline::ComputePipeline(std::shared_ptr<const Device> device, std::shar
         info.layout = *layout;
     else
     {
-        defaultLayout.reset(new PipelineLayout(device));
+        defaultLayout = std::make_unique<PipelineLayout>(this->device);
         info.layout = *defaultLayout;
     }
     info.basePipelineHandle = 0;
     info.basePipelineIndex = 0;
-    const VkResult create = vkCreateComputePipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create compute pipeline");
 }
 } // namespace magma

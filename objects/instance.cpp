@@ -26,7 +26,7 @@ namespace magma
 Instance::Instance(const char *applicationName, const char *engineName, uint32_t apiVersion, 
     const std::vector<const char *>& layerNames, const std::vector<const char *>& extensionNames,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Dispatchable<VkInstance>(VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT, nullptr, allocator)
+    Dispatchable<VkInstance>(VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT, nullptr, std::move(allocator))
 {
     VkApplicationInfo appInfo;
     appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
