@@ -39,7 +39,7 @@ namespace magma
                 MAGMA_ASSERT(arraySize > 0);
             }
             uint32_t getArraySize() const { return arraySize; }
-            constexpr size_t getElementSize() { return sizeof(Type); }
+            constexpr size_t getElementSize() const { return sizeof(Type); }
             Iterator begin() const { return Iterator(buffer); }
             Iterator end() const { return Iterator(buffer + arraySize); }
             Type& operator[](uint32_t index)

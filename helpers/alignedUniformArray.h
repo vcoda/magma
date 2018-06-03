@@ -40,7 +40,7 @@ namespace magma
                 MAGMA_ASSERT(alignment > 0);
             }
             uint32_t getArraySize() const { return arraySize; }
-            constexpr size_t getElementSize() { return sizeof(Type); }
+            constexpr size_t getElementSize() const { return sizeof(Type); }
             VkDeviceSize getElementAlignment() const { return alignment; }
             Iterator begin() const { return Iterator(buffer, alignment); }
             Iterator end() const { return Iterator(buffer + arraySize * alignment, alignment); }
