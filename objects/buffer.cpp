@@ -62,6 +62,11 @@ void Buffer::bindMemory(std::shared_ptr<DeviceMemory> memory,
     this->memory = std::move(memory);
 }
 
+void Buffer::unbindMemory()
+{
+    memory.reset();
+}
+
 VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
 {
     VkMemoryRequirements memoryRequirements;
