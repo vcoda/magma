@@ -43,17 +43,21 @@ namespace magma
         }
         Block *map(ZeroMemoryFunction zeroFn = nullptr) noexcept
         {
-            if (void *block = memory->map(0, size))
+            if (memory)
             {
-                if (zeroFn)
-                    zeroFn(block, static_cast<size_t>(size));
-                return reinterpret_cast<Block *>(block);
+                if (void *block = memory->map(0, size))
+                {
+                    if (zeroFn)
+                        zeroFn(block, static_cast<size_t>(size));
+                    return reinterpret_cast<Block *>(block);
+                }
             }
             return nullptr;
         }
         void unmap() noexcept
         { 
-            memory->unmap();
+            if (memory)
+                memory->unmap();
         }
         virtual uint32_t getArraySize() const { return arraySize; }
 

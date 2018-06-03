@@ -26,24 +26,32 @@ namespace magma
     namespace helpers
     {
         template<typename Type>
-        inline void mapScoped(
+        MAGMA_INLINE void mapScoped(
             const std::shared_ptr<Buffer>& buffer,
             std::function<void(Type *data)> fn)
         {
-            void *const data = buffer->getMemory()->map();
-            if (data)
+            MAGMA_ASSERT(buffer);
+            MAGMA_ASSERT(fn);
+            std::shared_ptr<DeviceMemory> memory = buffer->getMemory();
+            if (memory)
             {
-                fn(static_cast<Type *>(data));
-                buffer->getMemory()->unmap();
+                void *const data = memory->map();
+                if (data)
+                {
+                    fn(static_cast<Type *>(data));
+                    memory->unmap();
+                }
             }
         }
 
         template<typename Block>
-        inline void mapScoped(
+        MAGMA_INLINE void mapScoped(
             const std::shared_ptr<UniformBuffer<Block>>& buffer,
             bool clearMemory,
             std::function<void(Block *block)> fn)
         {
+            MAGMA_ASSERT(buffer);
+            MAGMA_ASSERT(fn);
             ZeroMemoryFunction zeroFn = clearMemory ? zeroMemory : nullptr;
             Block *const block = buffer->map(zeroFn);
             if (block)
@@ -54,11 +62,13 @@ namespace magma
         }
 
         template<typename Type>
-        inline void mapScoped(
+        MAGMA_INLINE void mapScoped(
             const std::shared_ptr<UniformBuffer<Type>>& buffer,
             bool clearMemory,
             std::function<void(UniformArray<Type>& array)> fn)
         {
+            MAGMA_ASSERT(buffer);
+            MAGMA_ASSERT(fn);
             ZeroMemoryFunction zeroFn = clearMemory ? zeroMemory : nullptr;
             Type *const data = buffer->map(zeroFn);
             if (data)
@@ -71,11 +81,13 @@ namespace magma
         }
 
         template<typename Type>
-        inline void mapScoped(
+        MAGMA_INLINE void mapScoped(
             const std::shared_ptr<DynamicUniformBuffer<Type>>& buffer,
             bool clearMemory,
             std::function<void(AlignedUniformArray<Type>& array)> fn)
         {
+            MAGMA_ASSERT(buffer);
+            MAGMA_ASSERT(fn);
             ZeroMemoryFunction zeroFn = clearMemory ? zeroMemory : nullptr;
             Type *const data = buffer->map(zeroFn);
             if (data)
