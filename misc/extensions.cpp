@@ -54,7 +54,7 @@ InstanceExtensions::InstanceExtensions(std::shared_ptr<const Instance> instance)
     MAGMA_CHECK_EXTENSION(MVK_macos_surface)
 {}   
 
-DeviceExtensions::DeviceExtensions(std::shared_ptr<const PhysicalDevice> device) :
+DeviceExtensions::DeviceExtensions(std::shared_ptr<const PhysicalDevice> device):
     Extensions(device->enumerateExtensions()),
 
     MAGMA_CHECK_EXTENSION(AMD_draw_indirect_count),
