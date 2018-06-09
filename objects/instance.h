@@ -24,7 +24,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class PhysicalDevice;
-    class IAllocator;
 
     class Instance : public Dispatchable<VkInstance>
     {

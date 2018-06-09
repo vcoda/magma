@@ -22,10 +22,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Device;
     class DescriptorSet;
     class DescriptorSetLayout;
-    class IAllocator;
 
     class DescriptorPool : public NonDispatchable<VkDescriptorPool>,
         public std::enable_shared_from_this<DescriptorPool>

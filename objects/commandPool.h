@@ -21,9 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Device;
     class CommandBuffer;
-    class IAllocator;
 
     class CommandPool : public NonDispatchable<VkCommandPool>,
         public std::enable_shared_from_this<CommandPool>

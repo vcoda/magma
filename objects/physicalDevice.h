@@ -24,9 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Device;
     class Surface;
-    class IAllocator;
 
     class PhysicalDevice : public Dispatchable<VkPhysicalDevice>,
         public std::enable_shared_from_this<PhysicalDevice>

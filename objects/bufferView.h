@@ -21,7 +21,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Buffer;
-    class IAllocator;
 
     class BufferView : public NonDispatchable<VkBufferView>
     {

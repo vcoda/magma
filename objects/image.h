@@ -22,11 +22,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Device;
     class DeviceMemory;
     class Buffer;
     class CommandBuffer;
-    class IAllocator;
 
     class Image : public NonDispatchable<VkImage>
     {

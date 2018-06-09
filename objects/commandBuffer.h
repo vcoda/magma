@@ -27,7 +27,6 @@ namespace magma
     class Buffer;
     class ComputePipeline;
     class DescriptorSet;
-    class Device;
     class Event;
     class Framebuffer;
     class GraphicsPipeline;

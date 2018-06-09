@@ -20,9 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Device;
-    class IAllocator;
-
     class Event : public NonDispatchable<VkEvent>
     {
     public:

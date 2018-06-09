@@ -17,8 +17,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include <algorithm>
 #include "commandBuffer.h"
-#include "descriptorSet.h"
+#include "device.h"
 #include "deviceMemory.h"
+#include "descriptorSet.h"
 #include "event.h"
 #include "framebuffer.h"
 #include "image.h"

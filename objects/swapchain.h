@@ -21,14 +21,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Device;
     class Surface;
     class SwapchainColorAttachment2D;
     class Queue;
-    class Semaphore;
     class Fence;
-    class IAllocator;
-
+    class Semaphore;
+    
     class Swapchain : public NonDispatchable<VkSwapchainKHR>
     {
     public:

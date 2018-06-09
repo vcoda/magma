@@ -25,7 +25,6 @@ namespace magma
     class PhysicalDevice;
     class Queue;
     class Fence;
-    class IAllocator;
 
     class Device : public Dispatchable<VkDevice>,
         public std::enable_shared_from_this<Device>

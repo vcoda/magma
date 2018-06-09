@@ -24,7 +24,6 @@ namespace magma
 {
     class DescriptorPool;
     class DescriptorSetLayout;
-    class Device;
     class Buffer;
     class Sampler;
     class ImageView;

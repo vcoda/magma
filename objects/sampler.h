@@ -21,7 +21,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class SamplerState;
-    class IAllocator;
 
     class Sampler : public NonDispatchable<VkSampler>
     {

@@ -16,14 +16,14 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <vector>
 #include "buffer.h"
-#include "device.h"
 
 namespace magma
 {
     class SrcTransferBuffer;
     class CommandBuffer;
-
+    
     class IndexBuffer : public Buffer
     {
     public:

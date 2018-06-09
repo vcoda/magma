@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "indexBuffer.h"
 #include "srcTransferBuffer.h"
 #include "commandBuffer.h"
+#include "device.h"
 #include "deviceMemory.h"
 #include "queue.h"
 #include "../mem/copyMemory.h"

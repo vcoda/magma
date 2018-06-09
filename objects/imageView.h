@@ -20,9 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Device;
     class Image;
-    class IAllocator;
 
     class ImageView : public NonDispatchable<VkImageView>
     {

@@ -22,11 +22,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Device;
-    class PipelineLayout;
     class PipelineCache;
-    class IAllocator;
-
+    class PipelineLayout;
+    
     class Pipeline : public NonDispatchable<VkPipeline>
     {
     public:
