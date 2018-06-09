@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "indirectBuffer.h"
 #include "device.h"
 #include "deviceMemory.h"
+#include "../helpers/mapScoped.h"
 
 namespace magma
 {
@@ -33,9 +34,9 @@ IndirectBuffer::IndirectBuffer(std::shared_ptr<const Device> device,
 
 void IndirectBuffer::writeDrawCommand(uint32_t vertexCount, uint32_t firstVertex /* 0 */) noexcept
 {
-    if (void *data = memory->map(0, sizeof(VkDrawIndirectCommand)))
+    if (void *buffer = memory->map(0, sizeof(VkDrawIndirectCommand)))
     {
-        VkDrawIndirectCommand *drawCmd = reinterpret_cast<VkDrawIndirectCommand *>(data);
+        VkDrawIndirectCommand *drawCmd = reinterpret_cast<VkDrawIndirectCommand *>(buffer);
         drawCmd->vertexCount = vertexCount;
         drawCmd->instanceCount = 1;
         drawCmd->firstVertex = firstVertex;
@@ -46,9 +47,9 @@ void IndirectBuffer::writeDrawCommand(uint32_t vertexCount, uint32_t firstVertex
 
 void IndirectBuffer::writeDrawCommand(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance) noexcept
 {
-    if (void *data = memory->map(0, sizeof(VkDrawIndirectCommand)))
+    if (void *buffer = memory->map(0, sizeof(VkDrawIndirectCommand)))
     {
-        VkDrawIndirectCommand *drawCmd = reinterpret_cast<VkDrawIndirectCommand *>(data);
+        VkDrawIndirectCommand *drawCmd = reinterpret_cast<VkDrawIndirectCommand *>(buffer);
         drawCmd->vertexCount = vertexCount;
         drawCmd->instanceCount = instanceCount;
         drawCmd->firstVertex = firstVertex;
@@ -59,23 +60,19 @@ void IndirectBuffer::writeDrawCommand(uint32_t vertexCount, uint32_t instanceCou
 
 void IndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawCmd) noexcept
 {
-    if (void *data = memory->map(0, sizeof(VkDrawIndirectCommand)))
+    if (void *buffer = memory->map(0, sizeof(VkDrawIndirectCommand)))
     {
-        memcpy(data, &drawCmd, sizeof(VkDrawIndirectCommand));
+        memcpy(buffer, &drawCmd, sizeof(VkDrawIndirectCommand));
         memory->unmap();
     }
 }
 
 void IndirectBuffer::writeDrawCommands(const std::vector<VkDrawIndirectCommand>& drawCmdList) noexcept
 {
-    if (VkDrawIndirectCommand *data = reinterpret_cast<VkDrawIndirectCommand *>(memory->map(0, sizeof(VkDrawIndirectCommand))))
+    helpers::mapScoped<VkDrawIndirectCommand>(shared_from_this(), [&drawCmdList](VkDrawIndirectCommand *buffer)
     {
         for (const VkDrawIndirectCommand& drawCmd : drawCmdList)
-        {
-            memcpy(data, &drawCmd, sizeof(VkDrawIndirectCommand));
-            ++data;
-        }
-        memory->unmap();
-    }
+            memcpy(buffer++, &drawCmd, sizeof(VkDrawIndirectCommand));
+    });
 }
 } // namespace magma

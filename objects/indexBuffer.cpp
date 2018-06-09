@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "deviceMemory.h"
 #include "queue.h"
 #include "../mem/copyMemory.h"
+#include "../helpers/mapScoped.h"
 
 namespace magma
 {
@@ -41,12 +42,14 @@ IndexBuffer::IndexBuffer(std::shared_ptr<const Device> device, const void *data,
     CopyMemoryFunction copyFn /* nullptr */):
     IndexBuffer(std::move(device), size, indexType, flags, std::move(allocator)) 
 {
-    if (void *buffer = memory->map(0, size))
+    if (data)
     {
         if (!copyFn)
             copyFn = copyMemory;
-        copyFn(buffer, data, static_cast<size_t>(size));
-        memory->unmap();
+        helpers::mapScoped<void>(shared_from_this(), [&copyFn, data, size](void *buffer) 
+        {
+            copyFn(buffer, data, static_cast<size_t>(size));
+        });
     }
 }
 

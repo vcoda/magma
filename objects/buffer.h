@@ -23,7 +23,8 @@ namespace magma
 {
     class DeviceMemory;
 
-    class Buffer : public NonDispatchable<VkBuffer>
+    class Buffer : public NonDispatchable<VkBuffer>,
+        public std::enable_shared_from_this<Buffer>
     {
     public:
         ~Buffer();
