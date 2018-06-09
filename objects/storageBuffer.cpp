@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "storageBuffer.h"
 #include "srcTransferBuffer.h"
+#include "device.h"
 #include "commandBuffer.h"
 #include "queue.h"
 #include "fence.h"
