@@ -55,10 +55,10 @@ namespace magma
     typedef std::shared_ptr<class Sampler> SamplerPtr;
     typedef std::shared_ptr<class Semaphore> SemaphorePtr;
     typedef std::shared_ptr<class ShaderModule> ShaderModulePtr;
+    typedef std::shared_ptr<class SrcTransferBuffer> SrcTransferBufferPtr;
     typedef std::shared_ptr<class StorageBuffer> StorageBufferPtr;
     typedef std::shared_ptr<class Surface> SurfacePtr;
     typedef std::shared_ptr<class Swapchain> SwapchainPtr;
-    typedef std::shared_ptr<class SrcTransferBuffer> SrcTransferBufferPtr;
     typedef std::shared_ptr<class VertexBuffer> VertexBufferPtr;
     typedef std::shared_ptr<class UniformTexelBuffer> UniformTexelBufferPtr;
 

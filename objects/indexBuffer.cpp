@@ -54,7 +54,8 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const voi
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    IndexBuffer(copyCmdBuffer, std::make_shared<SrcTransferBuffer>(std::move(copyCmdBuffer->getDevice()), data, size, 0, allocator, std::move(copyFn)), 
+    IndexBuffer(copyCmdBuffer, 
+        std::make_shared<SrcTransferBuffer>(std::move(copyCmdBuffer->getDevice()), data, size, 0, allocator, std::move(copyFn)), 
         indexType, flags, std::move(allocator))
 {}
 
