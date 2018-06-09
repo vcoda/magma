@@ -56,6 +56,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/shaderModule.h"
 #include "objects/srcTransferBuffer.h"
 #include "objects/storageBuffer.h"
+#include "objects/storageTexelBuffer.h"
 #include "objects/surface.h"
 #include "objects/swapchain.h"
 #include "objects/uniformBuffer.h"

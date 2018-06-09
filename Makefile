@@ -59,6 +59,7 @@ MAGMA_OBJS = \
 	objects/shaderModule.o \
 	objects/srcTransferBuffer.o \
 	objects/storageBuffer.o \
+    objects/storageTexelBuffer.o \
 	objects/surface.o \
 	objects/swapchain.o \
 	objects/vertexBuffer.o \

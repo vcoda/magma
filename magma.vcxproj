@@ -191,6 +191,7 @@
     <ClInclude Include="objects\shaderModule.h" />
     <ClInclude Include="objects\srcTransferBuffer.h" />
     <ClInclude Include="objects\storageBuffer.h" />
+    <ClInclude Include="objects\storageTexelBuffer.h" />
     <ClInclude Include="objects\surface.h" />
     <ClInclude Include="objects\swapchain.h" />
     <ClInclude Include="objects\dstTransferBuffer.h" />
@@ -268,6 +269,7 @@
     <ClCompile Include="objects\shaderModule.cpp" />
     <ClCompile Include="objects\srcTransferBuffer.cpp" />
     <ClCompile Include="objects\storageBuffer.cpp" />
+    <ClCompile Include="objects\storageTexelBuffer.cpp" />
     <ClCompile Include="objects\surface.cpp" />
     <ClCompile Include="objects\swapchain.cpp" />
     <ClCompile Include="objects\dstTransferBuffer.cpp" />
