@@ -25,16 +25,19 @@ namespace magma
     {
     public:
         IndirectBuffer(std::shared_ptr<const Device> device,
-            uint32_t drawCount = 1,
+            uint32_t drawCmdCount = 1,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
         void writeDrawCommand(uint32_t vertexCount, 
-            uint32_t firstVertex = 0) noexcept;
+            uint32_t firstVertex = 0,
+            uint32_t cmdIndex = 0) noexcept;
         void writeDrawCommand(uint32_t vertexCount,
             uint32_t instanceCount,
             uint32_t firstVertex,
-            uint32_t firstInstance) noexcept;
-        void writeDrawCommand(const VkDrawIndirectCommand& drawCmd) noexcept;
+            uint32_t firstInstance,
+            uint32_t cmdIndex = 0) noexcept;
+        void writeDrawCommand(const VkDrawIndirectCommand& drawCmd,
+            uint32_t cmdIndex = 0) noexcept;
         void writeDrawCommands(const std::vector<VkDrawIndirectCommand>& drawCmdList) noexcept;
     };
 } // namespace magma

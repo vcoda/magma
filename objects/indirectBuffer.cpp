@@ -24,17 +24,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 IndirectBuffer::IndirectBuffer(std::shared_ptr<const Device> device,
-    uint32_t drawCount /* 1 */,
+    uint32_t drawCmdCount /* 1 */,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Buffer(std::move(device), sizeof(VkDrawIndirectCommand) * drawCount, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT, 
+    Buffer(std::move(device), sizeof(VkDrawIndirectCommand) * drawCmdCount, 
+        VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT, 
         flags, std::move(allocator),
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
 {}
 
-void IndirectBuffer::writeDrawCommand(uint32_t vertexCount, uint32_t firstVertex /* 0 */) noexcept
+void IndirectBuffer::writeDrawCommand(uint32_t vertexCount, 
+    uint32_t firstVertex /* 0 */,
+    uint32_t cmdIndex /* 0 */) noexcept
 {
-    if (void *buffer = memory->map(0, sizeof(VkDrawIndirectCommand)))
+    const VkDeviceSize offset = cmdIndex * sizeof(VkDrawIndirectCommand);
+    if (void *buffer = memory->map(offset, sizeof(VkDrawIndirectCommand)))
     {
         VkDrawIndirectCommand *drawCmd = reinterpret_cast<VkDrawIndirectCommand *>(buffer);
         drawCmd->vertexCount = vertexCount;
@@ -45,9 +49,11 @@ void IndirectBuffer::writeDrawCommand(uint32_t vertexCount, uint32_t firstVertex
     }
 }
 
-void IndirectBuffer::writeDrawCommand(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance) noexcept
+void IndirectBuffer::writeDrawCommand(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance,
+    uint32_t cmdIndex /* 0 */) noexcept
 {
-    if (void *buffer = memory->map(0, sizeof(VkDrawIndirectCommand)))
+    const VkDeviceSize offset = cmdIndex * sizeof(VkDrawIndirectCommand);
+    if (void *buffer = memory->map(offset, sizeof(VkDrawIndirectCommand)))
     {
         VkDrawIndirectCommand *drawCmd = reinterpret_cast<VkDrawIndirectCommand *>(buffer);
         drawCmd->vertexCount = vertexCount;
@@ -58,9 +64,11 @@ void IndirectBuffer::writeDrawCommand(uint32_t vertexCount, uint32_t instanceCou
     }
 }
 
-void IndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawCmd) noexcept
+void IndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawCmd,
+    uint32_t cmdIndex /* 0 */) noexcept
 {
-    if (void *buffer = memory->map(0, sizeof(VkDrawIndirectCommand)))
+    const VkDeviceSize offset = cmdIndex * sizeof(VkDrawIndirectCommand);
+    if (void *buffer = memory->map(offset, sizeof(VkDrawIndirectCommand)))
     {
         memcpy(buffer, &drawCmd, sizeof(VkDrawIndirectCommand));
         memory->unmap();
