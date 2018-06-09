@@ -1,11 +1,10 @@
 CC=g++
-PLATFORM=VK_USE_PLATFORM_XLIB_KHR
-BASE_CFLAGS=-std=c++14 -pedantic -Wall -Wextra -D$(PLATFORM) -I$(VULKAN_SDK)/include
+PLATFORM=VK_USE_PLATFORM_XCB_KHR
+INCLUDE_DIR=-I$(VULKAN_SDK)/include
+
+BASE_CFLAGS=-std=c++14 -pedantic -Wall -Wextra -D$(PLATFORM) $(INCLUDE_DIR)
 DEBUG_CFLAGS=$(BASE_CFLAGS) -D_DEBUG
 RELEASE_CFLAGS=$(BASE_CFLAGS)
-DEPS=
-
-DO_CC=$(CC) $(CFLAGS) -o $@ -c $<
 
 DEBUG_TARGET=libmagmad.a
 RELEASE_TARGET=libmagma.a
@@ -46,6 +45,7 @@ MAGMA_OBJS = \
 	objects/imageCube.o \
 	objects/imageView.o \
 	objects/indexBuffer.o \
+	objects/indirectBuffer.o \
 	objects/instance.o \
 	objects/physicalDevice.o \
 	objects/pipeline.o \
@@ -59,11 +59,11 @@ MAGMA_OBJS = \
 	objects/shaderModule.o \
 	objects/srcTransferBuffer.o \
 	objects/storageBuffer.o \
-    objects/storageTexelBuffer.o \
+	objects/storageTexelBuffer.o \
 	objects/surface.o \
 	objects/swapchain.o \
 	objects/vertexBuffer.o \
-    objects/uniformTexelBuffer.o \
+	objects/uniformTexelBuffer.o \
 	\
 	states/colorBlendState.o \
 	states/depthStencilState.o \
@@ -75,8 +75,12 @@ MAGMA_OBJS = \
 	states/vertexInputState.o \
 	states/viewportState.o
 
-%.o: %.cpp $(DEPS)
-	$(CC) $(DEBUG_CFLAGS) -o $@ -c $<
+DEPS := $(MAGMA_OBJS:.o=.d)
+
+-include $(DEPS)
+
+%.o: %.cpp
+	$(CC) $(DEBUG_CFLAGS) -c $< -o $@
 
 debug : $(MAGMA_OBJS)
 	@echo "Make debug static library"
