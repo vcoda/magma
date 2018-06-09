@@ -60,6 +60,7 @@ namespace magma
     typedef std::shared_ptr<class Swapchain> SwapchainPtr;
     typedef std::shared_ptr<class SrcTransferBuffer> SrcTransferBufferPtr;
     typedef std::shared_ptr<class VertexBuffer> VertexBufferPtr;
+    typedef std::shared_ptr<class UniformTexelBuffer> UniformTexelBufferPtr;
 
     template<class Block> using DynamicUniformBufferPtr = std::shared_ptr<class DynamicUniformBuffer<Block>>;
     template<class Block> using UniformBufferPtr = std::shared_ptr<class UniformBuffer<Block>>;

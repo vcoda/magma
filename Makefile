@@ -62,6 +62,7 @@ MAGMA_OBJS = \
 	objects/surface.o \
 	objects/swapchain.o \
 	objects/vertexBuffer.o \
+    objects/uniformTexelBuffer.o \
 	\
 	states/colorBlendState.o \
 	states/depthStencilState.o \

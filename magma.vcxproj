@@ -195,6 +195,7 @@
     <ClInclude Include="objects\swapchain.h" />
     <ClInclude Include="objects\dstTransferBuffer.h" />
     <ClInclude Include="objects\uniformBuffer.h" />
+    <ClInclude Include="objects\uniformTexelBuffer.h" />
     <ClInclude Include="objects\vertexBuffer.h" />
     <ClInclude Include="shared.h" />
     <ClInclude Include="states\colorBlendState.h" />
@@ -270,6 +271,7 @@
     <ClCompile Include="objects\surface.cpp" />
     <ClCompile Include="objects\swapchain.cpp" />
     <ClCompile Include="objects\dstTransferBuffer.cpp" />
+    <ClCompile Include="objects\uniformTexelBuffer.cpp" />
     <ClCompile Include="objects\vertexBuffer.cpp" />
     <ClCompile Include="states\colorBlendState.cpp" />
     <ClCompile Include="states\depthStencilState.cpp" />
