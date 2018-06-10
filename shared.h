@@ -34,8 +34,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif // !MAGMA_DEBUG
 
 #define MAGMA_INLINE inline
-#define MAGMA_BOOLEAN(x) x ? VK_TRUE : VK_FALSE
-#define MAGMA_COUNT(v) static_cast<uint32_t>(v.size())
+#define MAGMA_BOOLEAN(x) (x) ? VK_TRUE : VK_FALSE
+#define MAGMA_COUNT(v) static_cast<uint32_t>((v).size())
 
 #define MAGMA_STRINGIZE(x) #x
 #define MAGMA_STRINGIZE_FIELD(x) case x: return MAGMA_STRINGIZE(x); break
@@ -53,7 +53,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_FREEA(p) 
 #endif // !_MSC_VER
 
-#define MAGMA_ALIGN(size) ((size + 15) & ~(15)) 
+#define MAGMA_ALIGN(size) (((size) + 15) & ~(15)) 
 #define MAGMA_ALIGNED(p) (((uintptr_t)(const void *)(p)) % (16) == 0)
 
 #ifdef _M_AMD64
