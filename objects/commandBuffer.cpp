@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "deviceMemory.h"
 #include "descriptorSet.h"
 #include "event.h"
+#include "fence.h"
 #include "framebuffer.h"
 #include "image.h"
 #include "indexBuffer.h"
@@ -44,7 +45,8 @@ PFN_vkCmdDebugMarkerInsertEXT vkCmdDebugMarkerInsert;
 
 CommandBuffer::CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Device> device, std::shared_ptr<CommandPool> pool):
     Dispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT, std::move(device), nullptr),
-    pool(std::move(pool))
+    pool(std::move(pool)),
+    fence(std::make_shared<Fence>(this->device))
 {
     this->handle = handle;
 #ifdef MAGMA_DEBUG

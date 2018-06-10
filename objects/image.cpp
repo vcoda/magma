@@ -136,7 +136,7 @@ VkDeviceSize Image::getCopyRegions(const std::vector<VkExtent2D>& mipExtents,
 
 void Image::copyFromBuffer(std::shared_ptr<Buffer> buffer, 
     const std::vector<VkBufferImageCopy>& copyRegions, 
-    std::shared_ptr<CommandBuffer> cmdBuffer)
+    std::shared_ptr<CommandBuffer> copyCmdBuffer)
 {
     // Define array layers to copy
     VkImageSubresourceRange subresourceRange;
@@ -145,27 +145,26 @@ void Image::copyFromBuffer(std::shared_ptr<Buffer> buffer,
     subresourceRange.levelCount = mipLevels;
     subresourceRange.baseArrayLayer = 0;
     subresourceRange.layerCount = arrayLayers;
-    cmdBuffer->begin();
-    {
-        // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
+    copyCmdBuffer->begin();
+    {   // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
         const auto weakRef = std::shared_ptr<Image>(this, [](Image *) {});
         // Change layout from undefined to transfer optimal
         const VkImageLayout optimalLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
         const ImageMemoryBarrier preCopyBarrier(weakRef, VK_IMAGE_LAYOUT_UNDEFINED, optimalLayout, subresourceRange);
-        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_TRANSFER_WRITE_BIT, preCopyBarrier);
+        copyCmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_TRANSFER_WRITE_BIT, preCopyBarrier);
         // Copy image data
-        vkCmdCopyBufferToImage(*cmdBuffer, *buffer, handle, optimalLayout,
+        vkCmdCopyBufferToImage(*copyCmdBuffer, *buffer, handle, optimalLayout,
             MAGMA_COUNT(copyRegions), copyRegions.data());
         // Change layout from transfer optimal to shader read only
         layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         const ImageMemoryBarrier postCopyBarrier(weakRef, optimalLayout, layout, subresourceRange);
-        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, postCopyBarrier);
+        copyCmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, postCopyBarrier);
     }
-    cmdBuffer->end();
+    copyCmdBuffer->end();
     // Flush
     std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0));
-    std::shared_ptr<Fence> fence(std::make_shared<Fence>(this->device));
-    if (!queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence))
+    std::shared_ptr<Fence> fence(copyCmdBuffer->getFence());
+    if (!queue->submit(std::move(copyCmdBuffer), 0, nullptr, nullptr, fence))
         MAGMA_THROW("failed to submit command buffer to graphics queue");
     if (!fence->wait())
         MAGMA_THROW("failed to wait fence");

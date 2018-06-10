@@ -28,6 +28,7 @@ namespace magma
     class ComputePipeline;
     class DescriptorSet;
     class Event;
+    class Fence;
     class Framebuffer;
     class GraphicsPipeline;
     class IndexBuffer;
@@ -304,6 +305,7 @@ namespace magma
         
         // Non-API utility methods
         std::shared_ptr<CommandPool> getPool() const { return pool; }
+        std::shared_ptr<Fence> getFence() const { return fence; }
 
         void setRenderArea(const VkRect2D& rc) noexcept;
         void setRenderArea(
@@ -320,6 +322,7 @@ namespace magma
 
     private:
         std::shared_ptr<CommandPool> pool;
+        std::shared_ptr<Fence> fence;
         VkRect2D renderArea = {{0, 0}, {0, 0}};
         bool occlusionQueryEnable = false;
         VkQueryControlFlags queryFlags = 0;

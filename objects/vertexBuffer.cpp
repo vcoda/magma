@@ -82,7 +82,7 @@ VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, std::sh
     }
     copyCmdBuffer->end();
     std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_TRANSFER_BIT, 0));
-    std::shared_ptr<Fence> fence(std::make_shared<Fence>(this->device));
+    std::shared_ptr<Fence> fence(copyCmdBuffer->getFence());
     if (!queue->submit(std::move(copyCmdBuffer), 0, nullptr, nullptr, fence))
         MAGMA_THROW("failed to submit command buffer to transfer queue");
     if (!fence->wait())

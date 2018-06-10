@@ -63,7 +63,7 @@ namespace magma
             std::vector<VkBufferImageCopy>& copyRegions) const;
         void copyFromBuffer(std::shared_ptr<Buffer> buffer,
             const std::vector<VkBufferImageCopy>& copyRegions,
-            std::shared_ptr<CommandBuffer> cmdBuffer);
+            std::shared_ptr<CommandBuffer> copyCmdBuffer);
 
     protected:
         VkImageType imageType;
