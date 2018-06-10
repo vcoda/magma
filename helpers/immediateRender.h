@@ -138,7 +138,7 @@ namespace magma
             std::list<Primitive> primitives;
             std::unordered_set<std::shared_ptr<GraphicsPipeline>> pipelines;
             uint32_t vertexCount = 0;
-            Vertex *vert = nullptr, curr = {0.f};
+            Vertex *vert = nullptr, curr = {};
             bool insidePrimitive = false;
         };
     } // namespace helpers
