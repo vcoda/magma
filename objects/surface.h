@@ -129,4 +129,18 @@ namespace magma
     };
 
 #endif // VK_USE_PLATFORM_MACOS_MVK
+
+    class DisplayMode;
+
+    class DisplaySurface : public Surface
+    {
+    public:
+        DisplaySurface(std::shared_ptr<const Instance> instance,
+            std::shared_ptr<const DisplayMode> displayMode, 
+            uint32_t planeIndex, 
+            uint32_t planeStackIndex,
+            VkSurfaceTransformFlagBitsKHR transform,
+            VkDisplayPlaneAlphaFlagBitsKHR alphaMode,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+    };
 } // namespace magma

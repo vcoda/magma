@@ -32,6 +32,8 @@ MAGMA_OBJS = \
 	objects/descriptorSetLayout.o \
 	objects/device.o \
 	objects/deviceMemory.o \
+	objects/display.o \
+	objects/displayMode.o \
 	objects/dstTransferBuffer.o \
 	objects/event.o \
 	objects/fence.o \

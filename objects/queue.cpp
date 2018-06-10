@@ -114,9 +114,30 @@ bool Queue::waitIdle() noexcept
 void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex, 
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */)
 {
+    present(swapchain, imageIndex, nullptr, waitSemaphore);
+}
+
+void Queue::presentToDisplay(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
+    const VkRect2D& srcRect, const VkRect2D& dstRect, bool persistent,
+    std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */)
+{
+    VkDisplayPresentInfoKHR displayPresentInfo;
+    displayPresentInfo.sType = VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR;
+    displayPresentInfo.pNext = nullptr;
+    displayPresentInfo.srcRect = srcRect;
+    displayPresentInfo.dstRect = dstRect;
+    displayPresentInfo.persistent = MAGMA_BOOLEAN(persistent);
+    present(swapchain, imageIndex, &displayPresentInfo, waitSemaphore);
+}
+
+void Queue::present(std::shared_ptr<const Swapchain> swapchain, 
+    uint32_t imageIndex,
+    const VkDisplayPresentInfoKHR *displayPresentInfo,
+    std::shared_ptr<const Semaphore> waitSemaphore)
+{
     VkPresentInfoKHR info;
     info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-    info.pNext = nullptr;
+    info.pNext = displayPresentInfo;
     VkSemaphore dereferencedWaitSemaphore;
     if (waitSemaphore)
     {

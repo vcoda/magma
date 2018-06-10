@@ -29,6 +29,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/descriptorSetLayout.h"
 #include "objects/device.h"
 #include "objects/deviceMemory.h"
+#include "objects/display.h"
+#include "objects/displayMode.h"
 #include "objects/dstTransferBuffer.h"
 #include "objects/event.h"
 #include "objects/fence.h"

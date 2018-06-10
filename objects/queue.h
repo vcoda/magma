@@ -47,8 +47,21 @@ namespace magma
             std::shared_ptr<const Semaphore> signalSemaphore = nullptr,
             std::shared_ptr<const Fence> fence = nullptr) noexcept;
         bool waitIdle() noexcept;
-        void present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
+        void present(std::shared_ptr<const Swapchain> swapchain, 
+            uint32_t imageIndex,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr);
+        void presentToDisplay(std::shared_ptr<const Swapchain> swapchain, 
+            uint32_t imageIndex,
+            const VkRect2D& srcRect, 
+            const VkRect2D& dstRect, 
+            bool persistent,
+            std::shared_ptr<const Semaphore> waitSemaphore = nullptr);
+
+    private:
+        void present(std::shared_ptr<const Swapchain> swapchain, 
+            uint32_t imageIndex,
+            const VkDisplayPresentInfoKHR *displayPresentInfo,
+            std::shared_ptr<const Semaphore> waitSemaphore);
 
     private:
         VkQueueFlagBits flags;

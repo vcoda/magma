@@ -164,6 +164,8 @@
     <ClInclude Include="objects\descriptorSetLayout.h" />
     <ClInclude Include="objects\device.h" />
     <ClInclude Include="objects\deviceMemory.h" />
+    <ClInclude Include="objects\display.h" />
+    <ClInclude Include="objects\displayMode.h" />
     <ClInclude Include="objects\event.h" />
     <ClInclude Include="objects\fence.h" />
     <ClInclude Include="objects\framebuffer.h" />
@@ -243,6 +245,8 @@
     <ClCompile Include="objects\descriptorSetLayout.cpp" />
     <ClCompile Include="objects\device.cpp" />
     <ClCompile Include="objects\deviceMemory.cpp" />
+    <ClCompile Include="objects\display.cpp" />
+    <ClCompile Include="objects\displayMode.cpp" />
     <ClCompile Include="objects\event.cpp" />
     <ClCompile Include="objects\fence.cpp" />
     <ClCompile Include="objects\framebuffer.cpp" />

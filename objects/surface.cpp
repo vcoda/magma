@@ -17,6 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "surface.h"
 #include "instance.h"
+#include "device.h"
+#include "displayMode.h"
 #include "../allocator/allocator.h"
 #include "../misc/exception.h"
 #include "../shared.h"
@@ -180,4 +182,31 @@ MacosSurface::MacosSurface(std::shared_ptr<const Instance> instance,
 }
 
 #endif // VK_USE_PLATFORM_MACOS_MVK
+
+DisplaySurface::DisplaySurface(std::shared_ptr<const Instance> instance,
+    std::shared_ptr<const DisplayMode> displayMode, 
+    uint32_t planeIndex, 
+    uint32_t planeStackIndex,
+    VkSurfaceTransformFlagBitsKHR transform,
+    VkDisplayPlaneAlphaFlagBitsKHR alphaMode,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Surface(std::move(instance), std::move(allocator))
+{
+    VkDisplaySurfaceCreateInfoKHR info;
+    info.sType = VK_STRUCTURE_TYPE_DISPLAY_SURFACE_CREATE_INFO_KHR;
+    info.pNext = nullptr;
+    info.flags = 0;
+    info.displayMode = *displayMode;
+    info.planeIndex = planeIndex;
+    info.planeStackIndex = planeStackIndex;
+    info.transform = transform;
+    info.globalAlpha = 1.f;
+    info.alphaMode = alphaMode;
+    info.imageExtent = displayMode->getVisibleRegion();
+    PFN_vkCreateDisplayPlaneSurfaceKHR pfnCreateDisplayPlaneSurfaceKHR = (PFN_vkCreateDisplayPlaneSurfaceKHR)vkGetDeviceProcAddr(*displayMode->getDevice(), "vkCreateDisplayPlaneSurfaceKHR");
+    if (!pfnCreateDisplayPlaneSurfaceKHR)
+        MAGMA_THROW_NOT_PRESENT(VK_KHR_DISPLAY_EXTENSION_NAME);
+    const VkResult create = pfnCreateDisplayPlaneSurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    MAGMA_THROW_FAILURE(create, "failed to create display surface");
+}
 } // namespace magma

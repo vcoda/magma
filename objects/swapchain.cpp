@@ -63,7 +63,18 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     info.presentMode = presentMode;
     info.clipped = VK_TRUE;
     info.oldSwapchain = VK_NULL_HANDLE;
-    const VkResult create = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    VkResult create;
+    if (std::dynamic_pointer_cast<const DisplaySurface>(surface))
+    {
+        PFN_vkCreateSharedSwapchainsKHR pfnCreateSharedSwapchainsKHR = (PFN_vkCreateSharedSwapchainsKHR)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkCreateSharedSwapchainsKHR");
+        if (!pfnCreateSharedSwapchainsKHR)
+            MAGMA_THROW_NOT_PRESENT(VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME);
+        create = pfnCreateSharedSwapchainsKHR(MAGMA_HANDLE(device), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    }
+    else
+    {
+        create = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    }
 #ifdef MAGMA_DEBUG
     if (create != VK_SUCCESS)
     {

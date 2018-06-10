@@ -29,6 +29,9 @@ namespace magma
     typedef std::shared_ptr<class DescriptorSetLayout> DescriptorSetLayoutPtr;
     typedef std::shared_ptr<class Device> DevicePtr;
     typedef std::shared_ptr<class DeviceMemory> DeviceMemoryPtr;
+    typedef std::shared_ptr<class Display> DisplayPtr;
+    typedef std::shared_ptr<class DisplayMode> DisplayModePtr;
+    typedef std::shared_ptr<class DisplaySurface> DisplaySurfacePtr;
     typedef std::shared_ptr<class DstTransferBuffer> DstTransferBufferPtr;
     typedef std::shared_ptr<class Event> EventPtr;
     typedef std::shared_ptr<class Fence> FencePtr;
