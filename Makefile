@@ -99,4 +99,5 @@ release : $(MAGMA_OBJS)
 
 clean :
 	@find . -name '*.a' -delete
-	rm $(MAGMA_OBJS)
+	@find . -name '*.o' -delete
+	@rm -rf $(DEPS)
