@@ -10,8 +10,12 @@ DEBUG_TARGET=libmagmad.a
 RELEASE_TARGET=libmagma.a
 
 MAGMA_OBJS = \
+	allocator/allocator.o \
+	\
 	descriptors/attachment.o \
 	descriptors/subpass.o \
+	\
+	helpers/immediateRender.o \
 	\
 	misc/bufferMemoryBarrier.o \
 	misc/debugMarker.o \
@@ -20,6 +24,7 @@ MAGMA_OBJS = \
 	misc/extensions.o \
 	misc/format.o \
 	misc/imageMemoryBarrier.o \
+	misc/stringize.o \
 	\
 	objects/buffer.o \
 	objects/bufferView.o \
@@ -64,8 +69,8 @@ MAGMA_OBJS = \
 	objects/storageTexelBuffer.o \
 	objects/surface.o \
 	objects/swapchain.o \
-	objects/vertexBuffer.o \
 	objects/uniformTexelBuffer.o \
+	objects/vertexBuffer.o \
 	\
 	states/colorBlendState.o \
 	states/depthStencilState.o \
