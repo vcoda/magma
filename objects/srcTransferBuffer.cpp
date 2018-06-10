@@ -43,7 +43,7 @@ SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<const Device> device,
     {
         if (!copyFn)
             copyFn = copyMemory;
-        helpers::mapScoped<void>(shared_from_this(), [&copyFn, data, size](void *buffer) 
+        helpers::mapScoped<void>(this, [&copyFn, data, size](void *buffer) 
         {
             copyFn(buffer, data, static_cast<size_t>(size));
         });
