@@ -21,10 +21,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "buffer.h"
 #include "commandBuffer.h"
 #include "queue.h"
+#include "fence.h"
 #include "../allocator/allocator.h"
 #include "../misc/imageMemoryBarrier.h"
 #include "../misc/exception.h"
-#include "../shared.h"
 
 namespace magma
 {
@@ -164,9 +164,10 @@ void Image::copyFromBuffer(std::shared_ptr<Buffer> buffer,
     cmdBuffer->end();
     // Flush
     std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0));
-    if (!queue->submit(cmdBuffer, 0, nullptr, nullptr, nullptr))
+    std::shared_ptr<Fence> fence(std::make_shared<Fence>(this->device));
+    if (!queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence))
         MAGMA_THROW("failed to submit command buffer to graphics queue");
-    if (!queue->waitIdle())
-        MAGMA_THROW("failed to wait for the completion of queue operation");
+    if (!fence->wait())
+        MAGMA_THROW("failed to wait fence");
 }
 } // namespace magma

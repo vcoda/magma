@@ -21,8 +21,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "deviceMemory.h"
 #include "queue.h"
+#include "fence.h"
 #include "../mem/copyMemory.h"
 #include "../helpers/mapScoped.h"
+#include "../misc/exception.h"
 
 namespace magma
 {
@@ -80,8 +82,11 @@ VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, std::sh
     }
     copyCmdBuffer->end();
     std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_TRANSFER_BIT, 0));
-    queue->submit(std::move(copyCmdBuffer), 0, nullptr, nullptr, nullptr);
-    queue->waitIdle();
+    std::shared_ptr<Fence> fence(std::make_shared<Fence>(this->device));
+    if (!queue->submit(std::move(copyCmdBuffer), 0, nullptr, nullptr, fence))
+        MAGMA_THROW("failed to submit command buffer to transfer queue");
+    if (!fence->wait())
+        MAGMA_THROW("failed to wait fence");
 }
 
 uint32_t VertexBuffer::getVertexCount() const noexcept
