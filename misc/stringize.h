@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     const char *stringize(VkSystemAllocationScope param);
+    const char *stringize(VkInternalAllocationType param);
     const char *stringize(VkFormat param);
     const char *stringize(VkImageType param);  
     const char *stringize(VkImageTiling param);
@@ -62,7 +63,30 @@ namespace magma
     const char *stringize(VkQueueFlagBits bit);
     const char *stringize(VkMemoryPropertyFlagBits bit);
     const char *stringize(VkMemoryHeapFlagBits bit);
+    const char *stringize(VkDeviceQueueCreateFlagBits bit);
     const char *stringize(VkPipelineStageFlagBits bit);
+    const char *stringize(VkImageAspectFlagBits bit);
+    const char *stringize(VkSparseImageFormatFlagBits bit);
+    const char *stringize(VkSparseMemoryBindFlagBits bit);
+    const char *stringize(VkFenceCreateFlagBits bit);
+    const char *stringize(VkQueryPipelineStatisticFlagBits bit);
+    const char *stringize(VkQueryResultFlagBits bit);
+    const char *stringize(VkBufferCreateFlagBits bit);
+    const char *stringize(VkBufferUsageFlagBits bit);
+    const char *stringize(VkPipelineCreateFlagBits bit);
+    const char *stringize(VkShaderStageFlagBits flags);
+    const char *stringize(VkCullModeFlagBits flags);
+    const char *stringize(VkColorComponentFlagBits bit);
+    const char *stringize(VkDescriptorSetLayoutCreateFlagBits bit);
+    const char *stringize(VkDescriptorPoolCreateFlagBits bit);
+    const char *stringize(VkAttachmentDescriptionFlagBits bit);
+    const char *stringize(VkAccessFlagBits bit);
+    const char *stringize(VkCommandPoolCreateFlagBits bit);
+    const char *stringize(VkCommandPoolResetFlagBits bit);
+    const char *stringize(VkCommandBufferUsageFlagBits bit);
+    const char *stringize(VkQueryControlFlagBits bit);
+    const char *stringize(VkCommandBufferResetFlagBits bit);
+    const char *stringize(VkStencilFaceFlagBits flags);
     const char *stringize(VkColorSpaceKHR param);
     const char *stringize(VkPresentModeKHR param);
     const char *stringize(VkSurfaceTransformFlagBitsKHR bit);
