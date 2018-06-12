@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-const char *stringize(VkSystemAllocationScope param)
+MAGMA_STRING stringize(VkSystemAllocationScope param)
 {
     switch (param)
     {
@@ -35,7 +35,7 @@ const char *stringize(VkSystemAllocationScope param)
     };
 }
 
-const char *stringize(VkInternalAllocationType param)
+MAGMA_STRING stringize(VkInternalAllocationType param)
 {
     switch (param)
     {
@@ -44,7 +44,7 @@ const char *stringize(VkInternalAllocationType param)
     };
 }
 
-const char *stringize(VkFormat param)
+MAGMA_STRING stringize(VkFormat param)
 {
     switch (param)
     {
@@ -279,7 +279,7 @@ const char *stringize(VkFormat param)
     };
 }
 
-const char *stringize(VkImageType param)
+MAGMA_STRING stringize(VkImageType param)
 {
     switch (param)
     {
@@ -290,7 +290,7 @@ const char *stringize(VkImageType param)
     };
 }
 
-const char *stringize(VkImageTiling param)
+MAGMA_STRING stringize(VkImageTiling param)
 {
     switch (param)
     {
@@ -300,7 +300,7 @@ const char *stringize(VkImageTiling param)
     };
 }
 
-const char *stringize(VkPhysicalDeviceType param)
+MAGMA_STRING stringize(VkPhysicalDeviceType param)
 {
     switch (param)
     {
@@ -313,7 +313,7 @@ const char *stringize(VkPhysicalDeviceType param)
     };
 }
 
-const char *stringize(VkQueryType param)
+MAGMA_STRING stringize(VkQueryType param)
 {
     switch (param)
     {
@@ -324,7 +324,7 @@ const char *stringize(VkQueryType param)
     };
 }
 
-const char *stringize(VkSharingMode param)
+MAGMA_STRING stringize(VkSharingMode param)
 {
     switch (param)
     {
@@ -334,7 +334,7 @@ const char *stringize(VkSharingMode param)
     };
 }
 
-const char *stringize(VkImageLayout param)
+MAGMA_STRING stringize(VkImageLayout param)
 {
     switch (param)
     {
@@ -355,7 +355,7 @@ const char *stringize(VkImageLayout param)
     };
 }
 
-const char *stringize(VkImageViewType param)
+MAGMA_STRING stringize(VkImageViewType param)
 {
     switch (param)
     {
@@ -370,7 +370,7 @@ const char *stringize(VkImageViewType param)
     };
 }
 
-const char *stringize(VkComponentSwizzle param)
+MAGMA_STRING stringize(VkComponentSwizzle param)
 {
     switch (param)
     {
@@ -385,7 +385,7 @@ const char *stringize(VkComponentSwizzle param)
     };
 }
 
-const char *stringize(VkVertexInputRate param)
+MAGMA_STRING stringize(VkVertexInputRate param)
 {
     switch (param)
     {
@@ -395,7 +395,7 @@ const char *stringize(VkVertexInputRate param)
     };
 }
 
-const char *stringize(VkPrimitiveTopology param)
+MAGMA_STRING stringize(VkPrimitiveTopology param)
 {
     switch (param)
     {
@@ -414,7 +414,7 @@ const char *stringize(VkPrimitiveTopology param)
     };
 }
 
-const char *stringize(VkPolygonMode param)
+MAGMA_STRING stringize(VkPolygonMode param)
 {
     switch (param)
     {
@@ -426,7 +426,7 @@ const char *stringize(VkPolygonMode param)
     };
 }
 
-const char *stringize(VkFrontFace param)
+MAGMA_STRING stringize(VkFrontFace param)
 {
     switch (param)
     {
@@ -436,7 +436,7 @@ const char *stringize(VkFrontFace param)
     };
 }
 
-const char *stringize(VkCompareOp param)
+MAGMA_STRING stringize(VkCompareOp param)
 {
     switch (param)
     {
@@ -452,7 +452,7 @@ const char *stringize(VkCompareOp param)
     };
 }
 
-const char *stringize(VkStencilOp param)
+MAGMA_STRING stringize(VkStencilOp param)
 {
     switch (param)
     {
@@ -468,7 +468,7 @@ const char *stringize(VkStencilOp param)
     };
 }
 
-const char *stringize(VkLogicOp param)
+MAGMA_STRING stringize(VkLogicOp param)
 {
     switch (param)
     {
@@ -492,7 +492,7 @@ const char *stringize(VkLogicOp param)
     };
 }
 
-const char *stringize(VkBlendFactor param)
+MAGMA_STRING stringize(VkBlendFactor param)
 {
     switch (param)
     {
@@ -519,7 +519,7 @@ const char *stringize(VkBlendFactor param)
     };
 }
 
-const char *stringize(VkBlendOp param)
+MAGMA_STRING stringize(VkBlendOp param)
 {
     switch (param)
     {
@@ -578,7 +578,7 @@ const char *stringize(VkBlendOp param)
     };
 }
 
-const char *stringize(VkDynamicState param)
+MAGMA_STRING stringize(VkDynamicState param)
 {
     switch (param)
     {
@@ -598,7 +598,7 @@ const char *stringize(VkDynamicState param)
     };
 }
 
-const char *stringize(VkFilter param)
+MAGMA_STRING stringize(VkFilter param)
 {
     switch (param)
     {
@@ -609,7 +609,7 @@ const char *stringize(VkFilter param)
     };
 }
     
-const char *stringize(VkSamplerMipmapMode param)
+MAGMA_STRING stringize(VkSamplerMipmapMode param)
 {
     switch (param)
     {
@@ -619,7 +619,7 @@ const char *stringize(VkSamplerMipmapMode param)
     };
 }
 
-const char *stringize(VkSamplerAddressMode param)
+MAGMA_STRING stringize(VkSamplerAddressMode param)
 {
     switch (param)
     {
@@ -632,7 +632,7 @@ const char *stringize(VkSamplerAddressMode param)
     };
 }
 
-const char *stringize(VkBorderColor param)
+MAGMA_STRING stringize(VkBorderColor param)
 {
     switch (param)
     {
@@ -646,7 +646,7 @@ const char *stringize(VkBorderColor param)
     };
 }
 
-const char *stringize(VkDescriptorType param)
+MAGMA_STRING stringize(VkDescriptorType param)
 {
     switch (param)
     {
@@ -665,7 +665,7 @@ const char *stringize(VkDescriptorType param)
     };
 }
 
-const char *stringize(VkAttachmentLoadOp param)
+MAGMA_STRING stringize(VkAttachmentLoadOp param)
 {
     switch (param)
     {
@@ -676,7 +676,7 @@ const char *stringize(VkAttachmentLoadOp param)
     };
 }
 
-const char *stringize(VkAttachmentStoreOp param)
+MAGMA_STRING stringize(VkAttachmentStoreOp param)
 {
     switch (param)
     {
@@ -686,7 +686,7 @@ const char *stringize(VkAttachmentStoreOp param)
     };
 }
 
-const char *stringize(VkPipelineBindPoint param)
+MAGMA_STRING stringize(VkPipelineBindPoint param)
 {
     switch (param)
     {
@@ -696,7 +696,7 @@ const char *stringize(VkPipelineBindPoint param)
     };
 }
 
-const char *stringize(VkCommandBufferLevel param)
+MAGMA_STRING stringize(VkCommandBufferLevel param)
 {
     switch (param)
     {
@@ -706,7 +706,7 @@ const char *stringize(VkCommandBufferLevel param)
     };
 }
 
-const char *stringize(VkIndexType param)
+MAGMA_STRING stringize(VkIndexType param)
 {
     switch (param)
     {
@@ -716,7 +716,7 @@ const char *stringize(VkIndexType param)
     };
 }
 
-const char *stringize(VkSubpassContents param)
+MAGMA_STRING stringize(VkSubpassContents param)
 {
     switch (param)
     {
@@ -726,7 +726,7 @@ const char *stringize(VkSubpassContents param)
     };
 }
 
-const char *stringize(VkObjectType param)
+MAGMA_STRING stringize(VkObjectType param)
 {
     switch (param)
     {
@@ -770,7 +770,7 @@ const char *stringize(VkObjectType param)
     };
 }
 
-const char *stringize(VkFormatFeatureFlagBits bit)
+MAGMA_STRING stringize(VkFormatFeatureFlagBits bit)
 {
     switch (bit)
     {
@@ -802,7 +802,7 @@ const char *stringize(VkFormatFeatureFlagBits bit)
     };
 }
 
-const char *stringize(VkImageUsageFlagBits bit)
+MAGMA_STRING stringize(VkImageUsageFlagBits bit)
 {
     switch (bit)
     {
@@ -818,7 +818,7 @@ const char *stringize(VkImageUsageFlagBits bit)
     };
 }
 
-const char *stringize(VkImageCreateFlagBits bit)
+MAGMA_STRING stringize(VkImageCreateFlagBits bit)
 {
     switch (bit)
     {
@@ -839,7 +839,7 @@ const char *stringize(VkImageCreateFlagBits bit)
     };
 }
 
-const char *stringize(VkSampleCountFlagBits bit)
+MAGMA_STRING stringize(VkSampleCountFlagBits bit)
 {
     switch (bit)
     {
@@ -854,7 +854,7 @@ const char *stringize(VkSampleCountFlagBits bit)
     };
 }
 
-const char *stringize(VkQueueFlagBits bit)
+MAGMA_STRING stringize(VkQueueFlagBits bit)
 {
     switch (bit)
     {
@@ -866,7 +866,7 @@ const char *stringize(VkQueueFlagBits bit)
     };
 }
 
-const char *stringize(VkMemoryPropertyFlagBits bit)
+MAGMA_STRING stringize(VkMemoryPropertyFlagBits bit)
 {
     switch (bit)
     {
@@ -879,7 +879,7 @@ const char *stringize(VkMemoryPropertyFlagBits bit)
     };
 }
 
-const char *stringize(VkMemoryHeapFlagBits bit)
+MAGMA_STRING stringize(VkMemoryHeapFlagBits bit)
 {
     switch (bit)
     {
@@ -889,7 +889,7 @@ const char *stringize(VkMemoryHeapFlagBits bit)
     };
 }
 
-const char *stringize(VkDeviceQueueCreateFlagBits bit)
+MAGMA_STRING stringize(VkDeviceQueueCreateFlagBits bit)
 {
     switch (bit)
     {
@@ -898,7 +898,7 @@ const char *stringize(VkDeviceQueueCreateFlagBits bit)
     };
 }
 
-const char *stringize(VkPipelineStageFlagBits bit)
+MAGMA_STRING stringize(VkPipelineStageFlagBits bit)
 {
     switch (bit)
     {
@@ -924,7 +924,7 @@ const char *stringize(VkPipelineStageFlagBits bit)
     };
 }
 
-const char *stringize(VkImageAspectFlagBits bit)
+MAGMA_STRING stringize(VkImageAspectFlagBits bit)
 {
     switch (bit)
     {
@@ -939,7 +939,7 @@ const char *stringize(VkImageAspectFlagBits bit)
     }
 }
 
-const char *stringize(VkSparseImageFormatFlagBits bit)
+MAGMA_STRING stringize(VkSparseImageFormatFlagBits bit)
 {
     switch (bit)
     {
@@ -950,7 +950,7 @@ const char *stringize(VkSparseImageFormatFlagBits bit)
     }
 }
 
-const char *stringize(VkSparseMemoryBindFlagBits bit)
+MAGMA_STRING stringize(VkSparseMemoryBindFlagBits bit)
 {
     switch (bit)
     {
@@ -959,7 +959,7 @@ const char *stringize(VkSparseMemoryBindFlagBits bit)
     }
 }
 
-const char *stringize(VkFenceCreateFlagBits bit)
+MAGMA_STRING stringize(VkFenceCreateFlagBits bit)
 {
     switch (bit)
     {
@@ -968,7 +968,7 @@ const char *stringize(VkFenceCreateFlagBits bit)
     }
 }
 
-const char *stringize(VkQueryPipelineStatisticFlagBits bit)
+MAGMA_STRING stringize(VkQueryPipelineStatisticFlagBits bit)
 {
     switch (bit)
     {
@@ -987,7 +987,7 @@ const char *stringize(VkQueryPipelineStatisticFlagBits bit)
     }
 }
 
-const char *stringize(VkQueryResultFlagBits bit)
+MAGMA_STRING stringize(VkQueryResultFlagBits bit)
 {
     switch (bit)
     {
@@ -999,7 +999,7 @@ const char *stringize(VkQueryResultFlagBits bit)
     }
 }
 
-const char *stringize(VkBufferCreateFlagBits bit)
+MAGMA_STRING stringize(VkBufferCreateFlagBits bit)
 {
     switch (bit)
     {
@@ -1011,7 +1011,7 @@ const char *stringize(VkBufferCreateFlagBits bit)
     }
 }
 
-const char *stringize(VkBufferUsageFlagBits bit)
+MAGMA_STRING stringize(VkBufferUsageFlagBits bit)
 {
     switch (bit)
     {
@@ -1028,7 +1028,7 @@ const char *stringize(VkBufferUsageFlagBits bit)
     }
 }
 
-const char *stringize(VkPipelineCreateFlagBits bit)
+MAGMA_STRING stringize(VkPipelineCreateFlagBits bit)
 {
     switch (bit)
     {
@@ -1039,7 +1039,7 @@ const char *stringize(VkPipelineCreateFlagBits bit)
     }
 }
 
-const char *stringize(VkShaderStageFlagBits flags)
+MAGMA_STRING stringize(VkShaderStageFlagBits flags)
 {
     switch (flags)
     {
@@ -1055,7 +1055,7 @@ const char *stringize(VkShaderStageFlagBits flags)
     }
 }
 
-const char *stringize(VkCullModeFlagBits flags)
+MAGMA_STRING stringize(VkCullModeFlagBits flags)
 {
     switch (flags)
     {
@@ -1067,7 +1067,7 @@ const char *stringize(VkCullModeFlagBits flags)
     }
 }
 
-const char *stringize(VkColorComponentFlagBits bit)
+MAGMA_STRING stringize(VkColorComponentFlagBits bit)
 {
     switch (bit)
     {
@@ -1079,7 +1079,7 @@ const char *stringize(VkColorComponentFlagBits bit)
     }
 }
 
-const char *stringize(VkDescriptorSetLayoutCreateFlagBits bit)
+MAGMA_STRING stringize(VkDescriptorSetLayoutCreateFlagBits bit)
 {
     switch (bit)
     {
@@ -1088,7 +1088,7 @@ const char *stringize(VkDescriptorSetLayoutCreateFlagBits bit)
     }
 }
 
-const char *stringize(VkDescriptorPoolCreateFlagBits bit)
+MAGMA_STRING stringize(VkDescriptorPoolCreateFlagBits bit)
 {
     switch (bit)
     {
@@ -1097,7 +1097,7 @@ const char *stringize(VkDescriptorPoolCreateFlagBits bit)
     }
 }
 
-const char *stringize(VkAttachmentDescriptionFlagBits bit)
+MAGMA_STRING stringize(VkAttachmentDescriptionFlagBits bit)
 {
     switch (bit)
     {
@@ -1106,7 +1106,7 @@ const char *stringize(VkAttachmentDescriptionFlagBits bit)
     }
 }
 
-const char *stringize(VkAccessFlagBits bit)
+MAGMA_STRING stringize(VkAccessFlagBits bit)
 {
     switch (bit)
     {
@@ -1134,7 +1134,7 @@ const char *stringize(VkAccessFlagBits bit)
     }
 }
 
-const char *stringize(VkCommandPoolCreateFlagBits bit)
+MAGMA_STRING stringize(VkCommandPoolCreateFlagBits bit)
 {
     switch (bit)
     {
@@ -1144,7 +1144,7 @@ const char *stringize(VkCommandPoolCreateFlagBits bit)
     }
 }
 
-const char *stringize(VkCommandPoolResetFlagBits bit)
+MAGMA_STRING stringize(VkCommandPoolResetFlagBits bit)
 {
     switch (bit)
     {
@@ -1153,7 +1153,7 @@ const char *stringize(VkCommandPoolResetFlagBits bit)
     }
 }
 
-const char *stringize(VkCommandBufferUsageFlagBits bit)
+MAGMA_STRING stringize(VkCommandBufferUsageFlagBits bit)
 {
     switch (bit)
     {
@@ -1164,7 +1164,7 @@ const char *stringize(VkCommandBufferUsageFlagBits bit)
     }
 }
 
-const char *stringize(VkQueryControlFlagBits bit)
+MAGMA_STRING stringize(VkQueryControlFlagBits bit)
 {
     switch (bit)
     {
@@ -1173,7 +1173,7 @@ const char *stringize(VkQueryControlFlagBits bit)
     }
 }
 
-const char *stringize(VkCommandBufferResetFlagBits bit)
+MAGMA_STRING stringize(VkCommandBufferResetFlagBits bit)
 {
     switch (bit)
     {
@@ -1182,7 +1182,7 @@ const char *stringize(VkCommandBufferResetFlagBits bit)
     }
 }
 
-const char *stringize(VkStencilFaceFlagBits flags)
+MAGMA_STRING stringize(VkStencilFaceFlagBits flags)
 {
     switch (flags)
     {
@@ -1193,7 +1193,7 @@ const char *stringize(VkStencilFaceFlagBits flags)
     }
 }
 
-const char *stringize(VkColorSpaceKHR param)
+MAGMA_STRING stringize(VkColorSpaceKHR param)
 {
     switch (param)
     {
@@ -1216,7 +1216,7 @@ const char *stringize(VkColorSpaceKHR param)
     };
 }
 
-const char *stringize(VkPresentModeKHR param)
+MAGMA_STRING stringize(VkPresentModeKHR param)
 {
     switch (param)
     {
@@ -1230,7 +1230,7 @@ const char *stringize(VkPresentModeKHR param)
     };
 }
 
-const char *stringize(VkSurfaceTransformFlagBitsKHR bit) 
+MAGMA_STRING stringize(VkSurfaceTransformFlagBitsKHR bit) 
 {
     switch (bit)
     {
@@ -1247,7 +1247,7 @@ const char *stringize(VkSurfaceTransformFlagBitsKHR bit)
     };
 }
 
-const char *stringize(VkCompositeAlphaFlagBitsKHR param)
+MAGMA_STRING stringize(VkCompositeAlphaFlagBitsKHR param)
 {
     switch (param)
     {
