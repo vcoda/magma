@@ -347,6 +347,9 @@ void CommandBuffer::beginDebugMarker(const char *name, const float color[4]) noe
         memcpy(info.color, color, sizeof(float) * 4);
         vkCmdDebugMarkerBegin(handle, &info);
     }
+#else
+    name;
+    color;
 #endif // MAGMA_DEBUG
 }
 
@@ -373,6 +376,8 @@ void CommandBuffer::insertDebugMarker(const char *name) noexcept
         info.color[3] = 1.f;
         vkCmdDebugMarkerInsert(handle, &info);
     }
+#else
+    name;
 #endif // MAGMA_DEBUG
 }
 } // namespace magma

@@ -32,8 +32,10 @@ DeviceQueueDescriptor::DeviceQueueDescriptor(VkQueueFlagBits queueType,
     flags = 0;
     queueFamilyIndex = getFamilyIndex(queueType, device->getQueueFamilyProperties());
     queueCount = MAGMA_COUNT(queuePriorities);
+#ifdef MAGMA_DEBUG
     for (float priority : queuePriorities)
         MAGMA_ASSERT(priority >= 0.f && priority <= 1.f);
+#endif
     pQueuePriorities = helpers::copy(new float[queueCount], queuePriorities);
 }
 
@@ -96,6 +98,5 @@ uint32_t DeviceQueueDescriptor::getFamilyIndex(VkQueueFlagBits queueType,
         ++queueFamilyIndex;
     }
     MAGMA_THROW("could not find suitable queue family");
-    return 0;
 }
 } // namespace magma

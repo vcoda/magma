@@ -175,7 +175,7 @@ bool Format::floatingPoint() const
     }
 }
 
-std::pair<uint8_t, uint8_t> Format::blockFootprint() const
+std::pair<int, int> Format::blockFootprint() const
 {
     switch (format)
     {

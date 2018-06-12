@@ -89,7 +89,6 @@ const char *BadResultException::codeString() const
     default:
         return "<unknown>";
     }
-    return "<unknown>";
 }
 
 ExtensionNotPresentException::ExtensionNotPresentException(const char *const extension,
