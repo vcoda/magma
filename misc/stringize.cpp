@@ -1247,9 +1247,9 @@ MAGMA_STRING stringize(VkSurfaceTransformFlagBitsKHR bit)
     };
 }
 
-MAGMA_STRING stringize(VkCompositeAlphaFlagBitsKHR param)
+MAGMA_STRING stringize(VkCompositeAlphaFlagBitsKHR bit)
 {
-    switch (param)
+    switch (bit)
     {
     MAGMA_STRINGIZE_FIELD(VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR);
     MAGMA_STRINGIZE_FIELD(VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR);
