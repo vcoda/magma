@@ -22,21 +22,8 @@ namespace magma
 {
     class IAllocator;
 
-    class Handle : public DebugMarker
-    {
-    public:
-        Handle(VkDebugReportObjectTypeEXT objectType,
-            std::shared_ptr<const Device> device,
-            std::shared_ptr<IAllocator> allocator):
-            DebugMarker(objectType, std::move(device)),
-            allocator(std::move(allocator)) {}
-
-    protected:
-        std::shared_ptr<IAllocator> allocator;
-    };
-
     template<typename Type>
-    class Dispatchable : public Handle
+    class Dispatchable : public DebugMarker
     {
     public: 
         typedef Type VkType;
@@ -50,15 +37,17 @@ namespace magma
         Dispatchable(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<const Device> device,
             std::shared_ptr<IAllocator> allocator):
-            Handle(objectType, std::move(device), std::move(allocator)),
-            handle(nullptr) {}
+            DebugMarker(objectType, std::move(device)),
+            handle(nullptr),
+            allocator(std::move(allocator)) {}
         
     protected:
         Type handle;
+        std::shared_ptr<IAllocator> allocator;
     };
 
     template<typename Type>
-    class NonDispatchable : public Handle
+    class NonDispatchable : public DebugMarker
     {
     public:
         typedef Type VkType;
@@ -77,10 +66,12 @@ namespace magma
         NonDispatchable(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<const Device> device,
             std::shared_ptr<IAllocator> allocator):
-            Handle(objectType, std::move(device), std::move(allocator)),
-            handle(VK_NULL_HANDLE) {}
+            DebugMarker(objectType, std::move(device)),
+            handle(VK_NULL_HANDLE),
+            allocator(std::move(allocator)) {}
 
     protected:
         Type handle;
+        std::shared_ptr<IAllocator> allocator;
     };
 } // namespace magma
