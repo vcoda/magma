@@ -18,7 +18,7 @@ MAGMA_OBJS = \
 	helpers/immediateRender.o \
 	\
 	misc/bufferMemoryBarrier.o \
-	misc/debugMarker.o \
+	misc/scopedDebugMarker.o \
 	misc/deviceQueueDesc.o \
 	misc/exception.o \
 	misc/extensions.o \
@@ -30,7 +30,7 @@ MAGMA_OBJS = \
 	objects/bufferView.o \
 	objects/commandBuffer.o \
 	objects/commandPool.o \
-	objects/debugObject.o \
+	objects/debugMarker.o \
 	objects/debugReportCallback.o \
 	objects/descriptorPool.o \
 	objects/descriptorSet.o \

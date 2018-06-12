@@ -17,25 +17,29 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <memory>
+#include "../vulkan.h"
+#include "../nonCopyable.h"
 
 namespace magma
 {
-    class CommandBuffer;
+    class Device;
 
-    class DebugMarker
+    class DebugMarker : public NonCopyable
     {
     public:
-        DebugMarker(std::shared_ptr<CommandBuffer> commandBuffer,
-            const char *name);
-        DebugMarker(std::shared_ptr<CommandBuffer> commandBuffer,
-            const char *name,
-            float r, float g, float b, float a = 1.f);
-        DebugMarker(std::shared_ptr<CommandBuffer> commandBuffer,
-            const char *name,
-            const float color[4]);
-        virtual ~DebugMarker();
+        DebugMarker(VkDebugReportObjectTypeEXT objectType,
+            std::shared_ptr<const Device> device);
+        void setObjectTag(uint64_t name, size_t tagSize, const void *tag) noexcept;
+        template<typename Tag>
+        void setObjectTag(uint64_t name, const Tag& tag) noexcept 
+            { setObjectTag(name, sizeof(Tag), &tag); }
+        void setObjectName(const char *name) noexcept;
+        virtual uint64_t getObject() const = 0;
+        virtual std::shared_ptr<const Device> getDevice() const noexcept
+            { return device; }
 
-    private:
-        std::shared_ptr<CommandBuffer> commandBuffer;
+    protected:
+        VkDebugReportObjectTypeEXT objectType;
+        std::shared_ptr<const Device> device;
     };
 } // namespace magma

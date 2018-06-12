@@ -69,9 +69,6 @@
     <ClInclude Include="misc\clearValue.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="misc\debugMarker.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
     <ClInclude Include="misc\exception.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
@@ -88,9 +85,6 @@
       <Filter>Header Files\objects</Filter>
     </ClInclude>
     <ClInclude Include="objects\commandPool.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="objects\debugObject.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
     <ClInclude Include="objects\debugReportCallback.h">
@@ -318,6 +312,12 @@
     <ClInclude Include="objects\display.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="objects\debugMarker.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="misc\scopedDebugMarker.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
@@ -374,9 +374,6 @@
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="objects\commandPool.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="objects\debugObject.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="objects\debugReportCallback.cpp">
@@ -447,9 +444,6 @@
     </ClCompile>
     <ClCompile Include="objects\swapchain.cpp">
       <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="misc\debugMarker.cpp">
-      <Filter>Source Files\misc</Filter>
     </ClCompile>
     <ClCompile Include="misc\exception.cpp">
       <Filter>Source Files\misc</Filter>
@@ -537,6 +531,12 @@
     </ClCompile>
     <ClCompile Include="objects\display.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\debugMarker.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="misc\scopedDebugMarker.cpp">
+      <Filter>Source Files\misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

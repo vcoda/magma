@@ -15,25 +15,32 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include "debugObject.h"
+#include "debugMarker.h"
 #include "../objects/device.h"
 #include "../shared.h"
 
 namespace magma
 {
 #ifdef MAGMA_DEBUG
+namespace 
+{
 PFN_vkDebugMarkerSetObjectTagEXT vkDebugMarkerSetObjectTag;
 PFN_vkDebugMarkerSetObjectNameEXT vkDebugMarkerSetObjectName;
+}
 #endif // MAGMA_DEBUG
 
-DebugObject::DebugObject(VkDebugReportObjectTypeEXT objectType, std::shared_ptr<const Device> device):
+DebugMarker::DebugMarker(VkDebugReportObjectTypeEXT objectType, std::shared_ptr<const Device> device):
     objectType(objectType),
     device(std::move(device))
 {}
 
-void DebugObject::setMarkerTag(uint64_t name, size_t tagSize, const void *tag) noexcept
+void DebugMarker::setObjectTag(uint64_t name, size_t tagSize, const void *tag) noexcept
 {
 #ifdef MAGMA_DEBUG
+    if (!device)
+        return;
+    if (!vkDebugMarkerSetObjectTag)
+        vkDebugMarkerSetObjectTag = (PFN_vkDebugMarkerSetObjectTagEXT)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkDebugMarkerSetObjectTagEXT");
     if (vkDebugMarkerSetObjectTag)
     {
         VkDebugMarkerObjectTagInfoEXT info;
@@ -44,15 +51,22 @@ void DebugObject::setMarkerTag(uint64_t name, size_t tagSize, const void *tag) n
         info.tagName = name;
         info.tagSize = tagSize;
         info.pTag = tag;
-        if (device)
-            vkDebugMarkerSetObjectTag(MAGMA_HANDLE(device), &info);
+        vkDebugMarkerSetObjectTag(MAGMA_HANDLE(device), &info);
     }
+#else
+    name; 
+    tagSize; 
+    tag;
 #endif // MAGMA_DEBUG
 }
 
-void DebugObject::setMarkerName(const char *name) noexcept
+void DebugMarker::setObjectName(const char *name) noexcept
 {
 #ifdef MAGMA_DEBUG
+    if (!device)
+        return;
+    if (!vkDebugMarkerSetObjectName)
+        vkDebugMarkerSetObjectName = (PFN_vkDebugMarkerSetObjectNameEXT)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkDebugMarkerSetObjectNameEXT");
     if (vkDebugMarkerSetObjectName)
     {
         VkDebugMarkerObjectNameInfoEXT info;
@@ -61,26 +75,10 @@ void DebugObject::setMarkerName(const char *name) noexcept
         info.objectType = objectType;
         info.object = this->getObject();
         info.pObjectName = name;
-        if (device)
-            vkDebugMarkerSetObjectName(MAGMA_HANDLE(device), &info);
+        vkDebugMarkerSetObjectName(MAGMA_HANDLE(device), &info);
     }
-#endif // MAGMA_DEBUG
-}
-
-void DebugObject::initDebugMarker(std::shared_ptr<const Device> device)
-{
-#ifdef MAGMA_DEBUG
-    vkDebugMarkerSetObjectTag = (PFN_vkDebugMarkerSetObjectTagEXT)vkGetDeviceProcAddr(*device, "vkDebugMarkerSetObjectTagEXT");
-    vkDebugMarkerSetObjectName = (PFN_vkDebugMarkerSetObjectNameEXT)vkGetDeviceProcAddr(*device, "vkDebugMarkerSetObjectNameEXT");
-#endif // MAGMA_DEBUG
-}
-
-bool DebugObject::debugMarkerEnabled()
-{
-#ifdef MAGMA_DEBUG
-    return vkDebugMarkerSetObjectTag || vkDebugMarkerSetObjectName;
 #else
-    return false;
+    name;
 #endif // MAGMA_DEBUG
 }
 } // namespace magma

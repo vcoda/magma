@@ -15,38 +15,46 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include "debugMarker.h"
+#include "scopedDebugMarker.h"
 #include "../objects/commandBuffer.h"
 #include "../shared.h"
 
 namespace magma
 {
-DebugMarker::DebugMarker(std::shared_ptr<CommandBuffer> commandBuffer, const char *name):
-    DebugMarker(std::move(commandBuffer), name, 0.f, 0.f, 0.f, 1.f)
+ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBufferr, const char *name):
+    ScopedDebugMarker(std::move(cmdBuffer), name, 0.f, 0.f, 0.f, 1.f)
 {}
         
-DebugMarker::DebugMarker(std::shared_ptr<CommandBuffer> commandBuffer, const char *name, 
-    float r, float g, float b, float a /* 1 */) :
-    commandBuffer(std::move(commandBuffer))
+ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, const char *name, 
+    float r, float g, float b, float a /* 1 */):
+    cmdBuffer(std::move(cmdBuffer))
 {
 #ifdef MAGMA_DEBUG
     const float color[4] = {r, g, b, a};
-    this->commandBuffer->beginDebugMarker(name, color);
+    this->cmdBuffer->beginDebugMarker(name, color);
+#else
+    cmdBuffer;
+    name;
+    r; g; b; a;
 #endif
 }
 
-DebugMarker::DebugMarker(std::shared_ptr<CommandBuffer> commandBuffer, const char *name, const float color[4]):
-    commandBuffer(std::move(commandBuffer))
+ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, const char *name, const float color[4]):
+    cmdBuffer(std::move(cmdBuffer))
 {
 #ifdef MAGMA_DEBUG
-    this->commandBuffer->beginDebugMarker(name, color);
+    this->cmdBuffer->beginDebugMarker(name, color);
+#else
+    cmdBuffer;
+    name;
+    color;
 #endif
 }
 
-DebugMarker::~DebugMarker()
+ScopedDebugMarker::~ScopedDebugMarker()
 {
 #ifdef MAGMA_DEBUG
-    this->commandBuffer->endDebugMarker();
+    this->cmdBuffer->endDebugMarker();
 #endif
 }
 } // namespace magma

@@ -16,19 +16,19 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "debugObject.h"
+#include "debugMarker.h"
 
 namespace magma
 {
     class IAllocator;
 
-    class Handle : public DebugObject
+    class Handle : public DebugMarker
     {
     public:
         Handle(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<const Device> device,
             std::shared_ptr<IAllocator> allocator):
-            DebugObject(objectType, std::move(device)),
+            DebugMarker(objectType, std::move(device)),
             allocator(std::move(allocator)) {}
 
     protected:
