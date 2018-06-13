@@ -17,58 +17,32 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <cstring>
+#include <vector>
 #include "../shared.h"
 
 namespace magma
 {
     namespace helpers
     {
-        template<typename Type>
-        MAGMA_INLINE Type *copy(Type *const dst, const Type *const src)
-        {
-            MAGMA_ASSERT(dst);
-            MAGMA_ASSERT(src);
-            return reinterpret_cast<Type *>(memcpy(dst, src, sizeof(Type)));
-        }
+        template<typename Type> 
+        Type *copy(Type *const dst,
+            const Type *const src);
 
-        template<typename Type>
-        MAGMA_INLINE Type *copy(Type *const dst, const Type *const src, uint32_t count)
-        {
-            MAGMA_ASSERT(dst);
-            MAGMA_ASSERT(src);
-            MAGMA_ASSERT(count);
-            return reinterpret_cast<Type *>(memcpy(dst, src, sizeof(Type) * count));
-        }
+        template<typename Type> 
+        Type *copy(Type *const dst, 
+            const Type *const src, 
+            uint32_t count);
 
-        template<typename DstType, typename SrcType>
-        MAGMA_INLINE DstType *copy(DstType *const dst, const std::vector<SrcType>& src)
-        {
-            static_assert(sizeof(DstType) == sizeof(SrcType), "equal size expected");
-            MAGMA_ASSERT(dst);
-            MAGMA_ASSERT(!src.empty());
-            return reinterpret_cast<DstType *>(memcpy(dst, src.data(), sizeof(SrcType) * src.size()));
-        }
+        template<typename DestType, typename SourceType> 
+        DestType *copy(DestType *const dst, 
+            const std::vector<SourceType>& src);
 
-        template<typename DstType, typename SrcType>
-        MAGMA_INLINE DstType *copy(DstType *const dst, const std::initializer_list<SrcType>& src)
-        {
-            static_assert(sizeof(DstType) == sizeof(SrcType), "equal size expected");
-            MAGMA_ASSERT(dst);
-            MAGMA_ASSERT(src.size() > 0);
-            return reinterpret_cast<DstType *>(memcpy(dst, src.begin(), sizeof(SrcType) * src.size()));
-        }
+        template<typename DestType, typename SourceType> 
+        DestType *copy(DestType *const dst, 
+            const std::initializer_list<SourceType>& src);
 
-        MAGMA_INLINE char *copyString(const char *const src)
-        {
-            const size_t size = strlen(src) + 1;
-            char *const dst = new char[size];
-#ifdef _MSC_VER
-            const errno_t err = strcpy_s(dst, size, src);
-            MAGMA_ASSERT(0 == err);
-#else
-            strcpy(dst, src);
-#endif // _MSC_VER
-            return dst;
-        }
+        char *copyString(const char *const src);
     } // namespace helpers
 } // namespace magma
+
+#include "copy.inl"

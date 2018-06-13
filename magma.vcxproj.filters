@@ -338,6 +338,9 @@
     <None Include="misc\scissor.inl">
       <Filter>Header Files\misc</Filter>
     </None>
+    <None Include="helpers\copy.inl">
+      <Filter>Header Files\helpers</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="states\colorBlendState.cpp">

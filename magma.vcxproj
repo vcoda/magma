@@ -222,6 +222,7 @@
     <ClInclude Include="vulkan.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="helpers\copy.inl" />
     <None Include="helpers\immediateRender.inl" />
     <None Include="misc\clearAttachment.inl" />
     <None Include="misc\clearValue.inl" />
