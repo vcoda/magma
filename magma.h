@@ -83,7 +83,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "misc/bufferMemoryBarrier.h"
 #include "misc/clearAttachment.h"
 #include "misc/clearValue.h"
-#include "misc/debugMarker.h"
+#include "misc/scopedDebugMarker.h"
 #include "misc/deviceQueueDesc.h"
 #include "misc/exception.h"
 #include "misc/extensions.h"
