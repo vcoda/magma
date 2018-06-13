@@ -50,9 +50,9 @@ ShaderModule::~ShaderModule()
 Specialization::Specialization(const Specialization& other)
 {
     mapEntryCount = other.mapEntryCount;
-    pMapEntries = magma::helpers::copy(new VkSpecializationMapEntry[mapEntryCount], other.pMapEntries, mapEntryCount);
+    pMapEntries = helpers::copy(new VkSpecializationMapEntry[mapEntryCount], other.pMapEntries, mapEntryCount);
     dataSize = other.dataSize;
-    pData = magma::helpers::copy(new char[dataSize], static_cast<const char *>(other.pData), static_cast<uint32_t>(dataSize));
+    pData = helpers::copy(new char[dataSize], static_cast<const char *>(other.pData), static_cast<uint32_t>(dataSize));
 }
 
 Specialization& Specialization::operator=(const Specialization& other)
@@ -60,9 +60,9 @@ Specialization& Specialization::operator=(const Specialization& other)
     if (this != &other)
     {
         mapEntryCount = other.mapEntryCount;
-        pMapEntries = magma::helpers::copy(new VkSpecializationMapEntry[mapEntryCount], other.pMapEntries, mapEntryCount);
+        pMapEntries = helpers::copy(new VkSpecializationMapEntry[mapEntryCount], other.pMapEntries, mapEntryCount);
         dataSize = other.dataSize;
-        pData = magma::helpers::copy(new char[dataSize], static_cast<const char *>(other.pData), static_cast<uint32_t>(dataSize));
+        pData = helpers::copy(new char[dataSize], static_cast<const char *>(other.pData), static_cast<uint32_t>(dataSize));
     }
     return *this;
 }
