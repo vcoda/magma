@@ -32,17 +32,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "vertexBuffer.h"
 #include "../misc/bufferMemoryBarrier.h"
 #include "../misc/imageMemoryBarrier.h"
+#include "../helpers/extensionFunc.h"
 #include "../helpers/stackArray.h"
-#include "../misc/exception.h"
 
 namespace magma
 {
 #ifdef MAGMA_DEBUG
 namespace 
 {
-PFN_vkCmdDebugMarkerBeginEXT vkCmdDebugMarkerBegin;
-PFN_vkCmdDebugMarkerEndEXT vkCmdDebugMarkerEnd;
-PFN_vkCmdDebugMarkerInsertEXT vkCmdDebugMarkerInsert;
+PFN_vkCmdDebugMarkerBeginEXT pfnCmdDebugMarkerBegin;
+PFN_vkCmdDebugMarkerEndEXT pfnCmdDebugMarkerEnd;
+PFN_vkCmdDebugMarkerInsertEXT pfnCmdDebugMarkerInsert;
 }
 #endif // MAGMA_DEBUG
 
@@ -53,11 +53,11 @@ CommandBuffer::CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Devic
 {
     this->handle = handle;
 #ifdef MAGMA_DEBUG
-    if (!vkCmdDebugMarkerBegin)
+    if (!pfnCmdDebugMarkerBegin)
     {
-        vkCmdDebugMarkerBegin = (PFN_vkCmdDebugMarkerBeginEXT)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkCmdDebugMarkerBeginEXT");
-        vkCmdDebugMarkerEnd = (PFN_vkCmdDebugMarkerEndEXT)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkCmdDebugMarkerEndEXT");
-        vkCmdDebugMarkerInsert = (PFN_vkCmdDebugMarkerInsertEXT)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkCmdDebugMarkerInsertEXT");
+        pfnCmdDebugMarkerBegin = MAGMA_OPTIONAL_DEVICE_EXTENSION_FUNC(vkCmdDebugMarkerBeginEXT);
+        pfnCmdDebugMarkerEnd = MAGMA_OPTIONAL_DEVICE_EXTENSION_FUNC(vkCmdDebugMarkerEndEXT);
+        pfnCmdDebugMarkerInsert = MAGMA_OPTIONAL_DEVICE_EXTENSION_FUNC(vkCmdDebugMarkerInsertEXT);
     }
 #endif // MAGMA_DEBUG
 }
@@ -338,14 +338,14 @@ void CommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuf
 void CommandBuffer::beginDebugMarker(const char *name, const float color[4]) noexcept
 {
 #ifdef MAGMA_DEBUG
-    if (vkCmdDebugMarkerBegin)
+    if (pfnCmdDebugMarkerBegin)
     {
         VkDebugMarkerMarkerInfoEXT info;
         info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
         info.pNext = nullptr;
         info.pMarkerName = name;
         memcpy(info.color, color, sizeof(float) * 4);
-        vkCmdDebugMarkerBegin(handle, &info);
+        pfnCmdDebugMarkerBegin(handle, &info);
     }
 #else
     name;
@@ -356,15 +356,15 @@ void CommandBuffer::beginDebugMarker(const char *name, const float color[4]) noe
 void CommandBuffer::endDebugMarker() noexcept
 {
 #ifdef MAGMA_DEBUG
-    if (vkCmdDebugMarkerEnd)
-        vkCmdDebugMarkerEnd(handle);
+    if (pfnCmdDebugMarkerEnd)
+        pfnCmdDebugMarkerEnd(handle);
 #endif // MAGMA_DEBUG
 }
 
 void CommandBuffer::insertDebugMarker(const char *name) noexcept
 {
 #ifdef MAGMA_DEBUG
-    if (vkCmdDebugMarkerInsert)
+    if (pfnCmdDebugMarkerInsert)
     {
         VkDebugMarkerMarkerInfoEXT info;
         info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
@@ -374,7 +374,7 @@ void CommandBuffer::insertDebugMarker(const char *name) noexcept
         info.color[1] = 0.f;
         info.color[2] = 0.f;
         info.color[3] = 1.f;
-        vkCmdDebugMarkerInsert(handle, &info);
+        pfnCmdDebugMarkerInsert(handle, &info);
     }
 #else
     name;

@@ -16,16 +16,15 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "debugMarker.h"
-#include "../objects/device.h"
-#include "../shared.h"
+#include "../helpers/extensionFunc.h"
 
 namespace magma
 {
 #ifdef MAGMA_DEBUG
 namespace 
 {
-PFN_vkDebugMarkerSetObjectTagEXT vkDebugMarkerSetObjectTag;
-PFN_vkDebugMarkerSetObjectNameEXT vkDebugMarkerSetObjectName;
+PFN_vkDebugMarkerSetObjectTagEXT pfnDebugMarkerSetObjectTag;
+PFN_vkDebugMarkerSetObjectNameEXT pfnDebugMarkerSetObjectName;
 }
 #endif // MAGMA_DEBUG
 
@@ -39,9 +38,9 @@ void DebugMarker::setObjectTag(uint64_t name, size_t tagSize, const void *tag) n
 #ifdef MAGMA_DEBUG
     if (!device)
         return;
-    if (!vkDebugMarkerSetObjectTag)
-        vkDebugMarkerSetObjectTag = (PFN_vkDebugMarkerSetObjectTagEXT)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkDebugMarkerSetObjectTagEXT");
-    if (vkDebugMarkerSetObjectTag)
+    if (!pfnDebugMarkerSetObjectTag)
+        pfnDebugMarkerSetObjectTag = MAGMA_OPTIONAL_DEVICE_EXTENSION_FUNC(vkDebugMarkerSetObjectTagEXT);
+    if (pfnDebugMarkerSetObjectTag)
     {
         VkDebugMarkerObjectTagInfoEXT info;
         info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT;
@@ -51,7 +50,7 @@ void DebugMarker::setObjectTag(uint64_t name, size_t tagSize, const void *tag) n
         info.tagName = name;
         info.tagSize = tagSize;
         info.pTag = tag;
-        vkDebugMarkerSetObjectTag(MAGMA_HANDLE(device), &info);
+        pfnDebugMarkerSetObjectTag(MAGMA_HANDLE(device), &info);
     }
 #else
     name; 
@@ -65,9 +64,9 @@ void DebugMarker::setObjectName(const char *name) noexcept
 #ifdef MAGMA_DEBUG
     if (!device)
         return;
-    if (!vkDebugMarkerSetObjectName)
-        vkDebugMarkerSetObjectName = (PFN_vkDebugMarkerSetObjectNameEXT)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkDebugMarkerSetObjectNameEXT");
-    if (vkDebugMarkerSetObjectName)
+    if (!pfnDebugMarkerSetObjectName)
+        pfnDebugMarkerSetObjectName = MAGMA_OPTIONAL_DEVICE_EXTENSION_FUNC(vkDebugMarkerSetObjectNameEXT);
+    if (pfnDebugMarkerSetObjectName)
     {
         VkDebugMarkerObjectNameInfoEXT info;
         info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT;
@@ -75,7 +74,7 @@ void DebugMarker::setObjectName(const char *name) noexcept
         info.objectType = objectType;
         info.object = this->getObject();
         info.pObjectName = name;
-        vkDebugMarkerSetObjectName(MAGMA_HANDLE(device), &info);
+        pfnDebugMarkerSetObjectName(MAGMA_HANDLE(device), &info);
     }
 #else
     name;

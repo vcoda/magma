@@ -29,8 +29,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/depthStencilState.h"
 #include "../states/colorBlendState.h"
 #include "../allocator/allocator.h"
-#include "../misc/exception.h"
-#include "../shared.h"
+#include "../helpers/extensionFunc.h"
 
 namespace magma
 {
@@ -45,9 +44,7 @@ Pipeline::~Pipeline()
 
 void Pipeline::getShaderStatistics(VkShaderStageFlagBits stage, VkShaderStatisticsInfoAMD& info) const
 {
-    PFN_vkGetShaderInfoAMD pfnGetShaderInfoAMD = (PFN_vkGetShaderInfoAMD)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkGetShaderInfoAMD");
-    if (!pfnGetShaderInfoAMD)
-        MAGMA_THROW_NOT_PRESENT(VK_AMD_SHADER_INFO_EXTENSION_NAME);
+    auto pfnGetShaderInfoAMD = MAGMA_DEVICE_EXTENSION_FUNC(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO);
     size_t infoSize = sizeof(VkShaderStatisticsInfoAMD);
     const VkResult get = pfnGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_STATISTICS_AMD, &infoSize, &info);
     MAGMA_THROW_FAILURE(get, "failed to get shader statistics");
@@ -55,9 +52,7 @@ void Pipeline::getShaderStatistics(VkShaderStageFlagBits stage, VkShaderStatisti
 
 std::vector<uint8_t> Pipeline::getShaderBinary(VkShaderStageFlagBits stage) const
 {
-    PFN_vkGetShaderInfoAMD pfnGetShaderInfoAMD = (PFN_vkGetShaderInfoAMD)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkGetShaderInfoAMD");
-    if (!pfnGetShaderInfoAMD)
-        MAGMA_THROW_NOT_PRESENT(VK_AMD_SHADER_INFO_EXTENSION_NAME);
+    auto pfnGetShaderInfoAMD = MAGMA_DEVICE_EXTENSION_FUNC(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO);
     size_t binarySize = 0;
     const VkResult getSize = pfnGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_BINARY_AMD, &binarySize, nullptr);
     if (VK_SUCCESS == getSize)
@@ -72,9 +67,7 @@ std::vector<uint8_t> Pipeline::getShaderBinary(VkShaderStageFlagBits stage) cons
 
 std::string Pipeline::getShaderDisassembly(VkShaderStageFlagBits stage) const
 {
-    PFN_vkGetShaderInfoAMD pfnGetShaderInfoAMD = (PFN_vkGetShaderInfoAMD)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkGetShaderInfoAMD");
-    if (!pfnGetShaderInfoAMD)
-        MAGMA_THROW_NOT_PRESENT(VK_AMD_SHADER_INFO_EXTENSION_NAME);
+    auto pfnGetShaderInfoAMD = MAGMA_DEVICE_EXTENSION_FUNC(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO);
     size_t disassemblySize = 0;
     const VkResult getSize = pfnGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, nullptr);
     if (VK_SUCCESS == getSize)

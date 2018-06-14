@@ -139,6 +139,7 @@
     <ClInclude Include="descriptors\subpass.h" />
     <ClInclude Include="helpers\alignedUniformArray.h" />
     <ClInclude Include="helpers\copy.h" />
+    <ClInclude Include="helpers\extensionFunc.h" />
     <ClInclude Include="helpers\immediateRender.h" />
     <ClInclude Include="helpers\mapScoped.h" />
     <ClInclude Include="helpers\stackArray.h" />

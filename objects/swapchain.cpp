@@ -23,9 +23,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "semaphore.h"
 #include "fence.h"
 #include "../allocator/allocator.h"
-#include "../misc/exception.h"
+#include "../helpers/extensionFunc.h"
 #include "../helpers/stackArray.h"
-#include "../shared.h"
 #ifdef MAGMA_DEBUG
 #include "../misc/stringize.h"
 #include <sstream>
@@ -66,9 +65,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     VkResult create;
     if (std::dynamic_pointer_cast<const DisplaySurface>(surface))
     {
-        PFN_vkCreateSharedSwapchainsKHR pfnCreateSharedSwapchainsKHR = (PFN_vkCreateSharedSwapchainsKHR)vkGetDeviceProcAddr(MAGMA_HANDLE(device), "vkCreateSharedSwapchainsKHR");
-        if (!pfnCreateSharedSwapchainsKHR)
-            MAGMA_THROW_NOT_PRESENT(VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME);
+        auto pfnCreateSharedSwapchainsKHR = MAGMA_DEVICE_EXTENSION_FUNC(vkCreateSharedSwapchainsKHR, VK_KHR_DISPLAY_SWAPCHAIN);
         create = pfnCreateSharedSwapchainsKHR(MAGMA_HANDLE(device), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     }
     else

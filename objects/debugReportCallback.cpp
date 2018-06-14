@@ -18,8 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "debugReportCallback.h"
 #include "instance.h"
 #include "../allocator/allocator.h"
-#include "../misc/exception.h"
-#include "../shared.h"
+#include "../helpers/extensionFunc.h"
 
 namespace magma
 {
@@ -31,8 +30,8 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT, nullptr, std::move(allocator)),
     instance(std::move(instance))
 {
-    auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(MAGMA_HANDLE(instance), "vkCreateDebugReportCallbackEXT");
-    if (vkCreateDebugReportCallbackEXT)
+    auto pfnCreateDebugReportCallbackEXT = MAGMA_OPTIONAL_INSTANCE_EXTENSION_FUNC(vkCreateDebugReportCallbackEXT);
+    if (pfnCreateDebugReportCallbackEXT)
     {
         VkDebugReportCallbackCreateInfoEXT info;
         info.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
@@ -40,15 +39,15 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
         info.flags = flags;
         info.pfnCallback = reportCallback;
         info.pUserData = userData;
-        const VkResult create = vkCreateDebugReportCallbackEXT(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+        const VkResult create = pfnCreateDebugReportCallbackEXT(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
         MAGMA_THROW_FAILURE(create, "failed to create debug callback");
     }
 }
 
 DebugReportCallback::~DebugReportCallback() 
 {
-    auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(*this->instance, "vkDestroyDebugReportCallbackEXT");
-    if (vkDestroyDebugReportCallbackEXT)
-        vkDestroyDebugReportCallbackEXT(MAGMA_HANDLE(instance), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    auto pfnDestroyDebugReportCallbackEXT = MAGMA_OPTIONAL_INSTANCE_EXTENSION_FUNC(vkDestroyDebugReportCallbackEXT);
+    if (pfnDestroyDebugReportCallbackEXT)
+        pfnDestroyDebugReportCallbackEXT(MAGMA_HANDLE(instance), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 } // namespace magma
