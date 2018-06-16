@@ -67,6 +67,8 @@ namespace magma
     // Keep extensions list in alphabetical order
     struct DeviceExtensions : Extensions
     {
+        const bool AMD_buffer_marker;
+        const bool AMD_calibrated_timestamps;
         const bool AMD_draw_indirect_count;
         const bool AMD_gcn_shader;
         const bool AMD_gpa_interface;
@@ -76,12 +78,14 @@ namespace magma
         const bool AMD_negative_viewport_height;
         const bool AMD_rasterization_order;
         const bool AMD_shader_ballot;
+        const bool AMD_shader_core_properties;
         const bool AMD_shader_explicit_vertex_parameter;
         const bool AMD_shader_fragment_mask;
         const bool AMD_shader_image_load_store_lod;
         const bool AMD_shader_info;
         const bool AMD_shader_trinary_minmax;
         const bool AMD_texture_gather_bias_lod;
+        const bool AMD_wave_limits;
 
         const bool EXT_acquire_xlib_display;
         const bool EXT_blend_operation_advanced;
@@ -111,8 +115,10 @@ namespace magma
         const bool IMG_filter_cubic;
         const bool IMG_format_pvrtc;
 
+        const bool KHR_dedicated_allocation;
         const bool KHR_maintenance1;
         const bool KHR_maintenance2;
+        const bool KHR_maintenance3;
         const bool KHR_shader_draw_parameters;
 
         const bool NV_clip_space_w_scaling;

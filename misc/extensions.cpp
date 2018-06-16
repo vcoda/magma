@@ -57,6 +57,8 @@ InstanceExtensions::InstanceExtensions(std::shared_ptr<const Instance> instance)
 DeviceExtensions::DeviceExtensions(std::shared_ptr<const PhysicalDevice> device):
     Extensions(device->enumerateExtensions()),
 
+    MAGMA_CHECK_EXTENSION(AMD_buffer_marker),
+    MAGMA_CHECK_EXTENSION(AMD_calibrated_timestamps),
     MAGMA_CHECK_EXTENSION(AMD_draw_indirect_count),
     MAGMA_CHECK_EXTENSION(AMD_gcn_shader),
     MAGMA_CHECK_EXTENSION(AMD_gpa_interface),
@@ -66,12 +68,14 @@ DeviceExtensions::DeviceExtensions(std::shared_ptr<const PhysicalDevice> device)
     MAGMA_CHECK_EXTENSION(AMD_negative_viewport_height),
     MAGMA_CHECK_EXTENSION(AMD_rasterization_order),
     MAGMA_CHECK_EXTENSION(AMD_shader_ballot),
+    MAGMA_CHECK_EXTENSION(AMD_shader_core_properties),
     MAGMA_CHECK_EXTENSION(AMD_shader_explicit_vertex_parameter),
     MAGMA_CHECK_EXTENSION(AMD_shader_fragment_mask),
     MAGMA_CHECK_EXTENSION(AMD_shader_image_load_store_lod),
     MAGMA_CHECK_EXTENSION(AMD_shader_info),
     MAGMA_CHECK_EXTENSION(AMD_shader_trinary_minmax),
     MAGMA_CHECK_EXTENSION(AMD_texture_gather_bias_lod),
+    MAGMA_CHECK_EXTENSION(AMD_wave_limits),
 
     MAGMA_CHECK_EXTENSION(EXT_acquire_xlib_display),
     MAGMA_CHECK_EXTENSION(EXT_blend_operation_advanced),
@@ -101,8 +105,10 @@ DeviceExtensions::DeviceExtensions(std::shared_ptr<const PhysicalDevice> device)
     MAGMA_CHECK_EXTENSION(IMG_filter_cubic),
     MAGMA_CHECK_EXTENSION(IMG_format_pvrtc),
 
+    MAGMA_CHECK_EXTENSION(KHR_dedicated_allocation),
     MAGMA_CHECK_EXTENSION(KHR_maintenance1),
     MAGMA_CHECK_EXTENSION(KHR_maintenance2),
+    MAGMA_CHECK_EXTENSION(KHR_maintenance3),
     MAGMA_CHECK_EXTENSION(KHR_shader_draw_parameters),
 
     MAGMA_CHECK_EXTENSION(NV_clip_space_w_scaling),
