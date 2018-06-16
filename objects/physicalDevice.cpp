@@ -21,14 +21,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "surface.h"
 #include "pipelineCache.h"
-#include "../misc/exception.h"
-#include "../shared.h"
+#include "../misc/instanceExtension.h"
 
 namespace magma
 {
-PhysicalDevice::PhysicalDevice(VkPhysicalDevice handle,
+PhysicalDevice::PhysicalDevice(std::shared_ptr<const Instance> instance,
+    VkPhysicalDevice handle,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Dispatchable<VkPhysicalDevice>(VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT, nullptr, std::move(allocator))
+    Dispatchable<VkPhysicalDevice>(VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT, nullptr, std::move(allocator)),
+    instance(std::move(instance))
 {
     this->handle = handle;
 }
@@ -181,6 +182,21 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared
         MAGMA_THROW_FAILURE(get, "failed to get surface present modes");
     }
     return std::move(surfacePresentModes);
+}
+
+const VkPhysicalDeviceShaderCorePropertiesAMD& PhysicalDevice::getShaderCoreProperties() const
+{
+    if (0 == shaderCoreProperties.shaderEngineCount)
+    {
+        MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2, "Vulkan 1.1");
+        shaderCoreProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_AMD;
+        shaderCoreProperties.pNext = nullptr;
+        VkPhysicalDeviceProperties2 properties;
+        properties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+        properties.pNext = &shaderCoreProperties;
+        vkGetPhysicalDeviceProperties2(handle, &properties);
+    }
+    return shaderCoreProperties;
 }
 
 bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) const

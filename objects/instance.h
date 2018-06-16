@@ -25,7 +25,8 @@ namespace magma
 {
     class PhysicalDevice;
 
-    class Instance : public Dispatchable<VkInstance>
+    class Instance : public Dispatchable<VkInstance>,
+        public std::enable_shared_from_this<Instance>
     {
     public:
         Instance(const char *applicationName, 

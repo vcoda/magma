@@ -24,12 +24,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class Instance;
     class Surface;
 
     class PhysicalDevice : public Dispatchable<VkPhysicalDevice>,
         public std::enable_shared_from_this<PhysicalDevice>
     {
-        PhysicalDevice(VkPhysicalDevice handle,
+        PhysicalDevice(std::shared_ptr<const Instance> instance, VkPhysicalDevice handle,
             std::shared_ptr<IAllocator> allocator = nullptr);
         friend class Instance;
 
@@ -54,11 +55,16 @@ namespace magma
         VkSurfaceCapabilitiesKHR getSurfaceCapabilities(std::shared_ptr<const Surface> surface) const;
         std::vector<VkSurfaceFormatKHR> getSurfaceFormats(std::shared_ptr<const Surface> surface) const;
         std::vector<VkPresentModeKHR> getSurfacePresentModes(std::shared_ptr<const Surface> surface) const;
+        // VK_AMD_shared_core_properties
+        const VkPhysicalDeviceShaderCorePropertiesAMD& getShaderCoreProperties() const;
+        // Non-API
         bool checkPipelineCacheDataCompatibility(const void *cacheData) const;
 
     private:
+        std::shared_ptr<const Instance> instance;
         mutable VkPhysicalDeviceFeatures features = {};
         mutable VkPhysicalDeviceProperties properties = {};
         mutable VkPhysicalDeviceMemoryProperties memoryProperties = {};
+        mutable VkPhysicalDeviceShaderCorePropertiesAMD shaderCoreProperties = {};
     };
 } // namespace magma
