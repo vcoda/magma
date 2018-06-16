@@ -20,8 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "physicalDevice.h"
 #include "device.h"
 #include "../allocator/allocator.h"
-#include "../misc/exception.h"
-#include "../shared.h"
+#include "../misc/deviceExtension.h"
 
 namespace magma
 {
@@ -40,10 +39,8 @@ DisplayMode::DisplayMode(std::shared_ptr<PhysicalDevice> physicalDevice,
     info.flags = 0;
     info.parameters.visibleRegion = visibleRegion;
     info.parameters.refreshRate = refreshRate;
-    PFN_vkCreateDisplayModeKHR pfnCreateDisplayModeKHR = (PFN_vkCreateDisplayModeKHR)vkGetDeviceProcAddr(*display->getDevice(), "vkCreateDisplayModeKHR");
-    if (!pfnCreateDisplayModeKHR)
-        MAGMA_THROW_NOT_PRESENT(VK_KHR_DISPLAY_EXTENSION_NAME);
-    const VkResult create = pfnCreateDisplayModeKHR(*physicalDevice, *display, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    MAGMA_DEVICE_EXTENSION(vkCreateDisplayModeKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
+    const VkResult create = vkCreateDisplayModeKHR(*physicalDevice, *display, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create display mode");
 }
 } // namespace magma

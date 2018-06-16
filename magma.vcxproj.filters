@@ -318,8 +318,11 @@
     <ClInclude Include="misc\scopedDebugMarker.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="helpers\extensionFunc.h">
-      <Filter>Header Files\helpers</Filter>
+    <ClInclude Include="misc\deviceExtension.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="misc\instanceExtension.h">
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

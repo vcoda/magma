@@ -139,7 +139,6 @@
     <ClInclude Include="descriptors\subpass.h" />
     <ClInclude Include="helpers\alignedUniformArray.h" />
     <ClInclude Include="helpers\copy.h" />
-    <ClInclude Include="helpers\extensionFunc.h" />
     <ClInclude Include="helpers\immediateRender.h" />
     <ClInclude Include="helpers\mapScoped.h" />
     <ClInclude Include="helpers\stackArray.h" />
@@ -151,6 +150,8 @@
     <ClInclude Include="misc\bufferMemoryBarrier.h" />
     <ClInclude Include="misc\clearAttachment.h" />
     <ClInclude Include="misc\clearValue.h" />
+    <ClInclude Include="misc\deviceExtension.h" />
+    <ClInclude Include="misc\instanceExtension.h" />
     <ClInclude Include="misc\scopedDebugMarker.h" />
     <ClInclude Include="misc\deviceQueueDesc.h" />
     <ClInclude Include="misc\exception.h" />

@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "displayMode.h"
 #include "../allocator/allocator.h"
-#include "../helpers/extensionFunc.h"
+#include "../misc/instanceExtension.h"
 
 namespace magma
 {
@@ -202,8 +202,8 @@ DisplaySurface::DisplaySurface(std::shared_ptr<const Instance> instance,
     info.globalAlpha = 1.f;
     info.alphaMode = alphaMode;
     info.imageExtent = displayMode->getVisibleRegion();
-    auto pfnCreateDisplayPlaneSurfaceKHR = MAGMA_INSTANCE_EXTENSION_FUNC(vkCreateDisplayPlaneSurfaceKHR, VK_KHR_DISPLAY);
-    const VkResult create = pfnCreateDisplayPlaneSurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    MAGMA_INSTANCE_EXTENSION(vkCreateDisplayPlaneSurfaceKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
+    const VkResult create = vkCreateDisplayPlaneSurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create display surface");
 }
 } // namespace magma
