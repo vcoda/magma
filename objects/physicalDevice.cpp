@@ -92,11 +92,14 @@ std::set<std::string> PhysicalDevice::enumerateExtensions(const char *layerName 
     const VkResult count = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, nullptr);
     MAGMA_THROW_FAILURE(count, "failed to count device extensions");
     std::vector<VkExtensionProperties> properties(propertyCount);
-    const VkResult enumerate = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, properties.data());
-    MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device extensions");
     std::set<std::string> extensions;
-    for (const auto& property : properties)
-        extensions.insert(property.extensionName);
+    if (propertyCount > 0)
+    {
+        const VkResult enumerate = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, properties.data());
+        MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device extensions");
+        for (const auto& property : properties)
+            extensions.insert(property.extensionName);
+    }
     return std::move(extensions);
 }
 
@@ -106,8 +109,11 @@ std::vector<VkLayerProperties> PhysicalDevice::enumerateLayerProperties() const
     const VkResult count = vkEnumerateDeviceLayerProperties(handle, &propertyCount, nullptr);
     MAGMA_THROW_FAILURE(count, "failed to count device layers");
     std::vector<VkLayerProperties> properties(propertyCount);
-    const VkResult enumerate = vkEnumerateDeviceLayerProperties(handle, &propertyCount, properties.data());
-    MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device layers");
+    if (propertyCount > 0)
+    {
+        const VkResult enumerate = vkEnumerateDeviceLayerProperties(handle, &propertyCount, properties.data());
+        MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device layers");
+    }
     return std::move(properties);
 }
 
@@ -155,8 +161,11 @@ std::vector<VkSurfaceFormatKHR> PhysicalDevice::getSurfaceFormats(std::shared_pt
     const VkResult count = vkGetPhysicalDeviceSurfaceFormatsKHR(handle, *surface, &formatCount, nullptr);
     MAGMA_THROW_FAILURE(count, "failed to count surface formats");
     std::vector<VkSurfaceFormatKHR> surfaceFormats(formatCount);
-    const VkResult get = vkGetPhysicalDeviceSurfaceFormatsKHR(handle, *surface, &formatCount, surfaceFormats.data());
-    MAGMA_THROW_FAILURE(get, "failed to get surface formats");
+    if (formatCount > 0)
+    {
+        const VkResult get = vkGetPhysicalDeviceSurfaceFormatsKHR(handle, *surface, &formatCount, surfaceFormats.data());
+        MAGMA_THROW_FAILURE(get, "failed to get surface formats");
+    }
     return std::move(surfaceFormats);
 }
 
@@ -166,8 +175,11 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared
     const VkResult count = vkGetPhysicalDeviceSurfacePresentModesKHR(handle, *surface, &presentModeCount, nullptr);
     MAGMA_THROW_FAILURE(count, "failed to count surface present modes");
     std::vector<VkPresentModeKHR> surfacePresentModes(presentModeCount);
-    const VkResult get = vkGetPhysicalDeviceSurfacePresentModesKHR(handle, *surface, &presentModeCount, surfacePresentModes.data());
-    MAGMA_THROW_FAILURE(get, "failed to get surface present modes");
+    if (presentModeCount > 0)
+    {
+        const VkResult get = vkGetPhysicalDeviceSurfacePresentModesKHR(handle, *surface, &presentModeCount, surfacePresentModes.data());
+        MAGMA_THROW_FAILURE(get, "failed to get surface present modes");
+    }
     return std::move(surfacePresentModes);
 }
 
