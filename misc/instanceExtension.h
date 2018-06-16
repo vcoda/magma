@@ -31,32 +31,24 @@ namespace magma
             const char *name, const char *extension,
             bool throwNotPresent)
         {
-            MAGMA_ASSERT(name);
-            auto it = cache.find(std::string(name));
-            if (it != cache.end())
-                pfn = reinterpret_cast<Function>(it->second);
-            else
+            if (!addr)
             {
                 MAGMA_ASSERT(instance != VK_NULL_HANDLE);
-                PFN_vkVoidFunction addr = vkGetInstanceProcAddr(instance, name);
-                if (addr)
-                {
-                    cache[std::string(name)] = addr;
-                    pfn = reinterpret_cast<Function>(addr);
-                }
-                else if (throwNotPresent)
+                MAGMA_ASSERT(name);
+                addr = vkGetInstanceProcAddr(instance, name);
+                if (!addr && throwNotPresent)
                     MAGMA_THROW_NOT_PRESENT(extension);
             }
         }
-        operator Function() { return pfn; }
+        operator Function() const 
+            { return reinterpret_cast<Function>(addr); }
 
     private:
-        static std::map<std::string, PFN_vkVoidFunction> cache;
-        Function pfn;
+        static PFN_vkVoidFunction addr;
     };
 
     template<typename Function>
-    std::map<std::string, PFN_vkVoidFunction> InstanceExtension<Function>::cache;
+    PFN_vkVoidFunction InstanceExtension<Function>::addr;
 } // namespace magma
 
 #define MAGMA_INSTANCE_EXTENSION(func, extension)\
