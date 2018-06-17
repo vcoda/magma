@@ -16,9 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <map>
+#include "exception.h"
 #include "../objects/instance.h"
-#include "../misc/exception.h"
 #include "../shared.h"
 
 namespace magma
@@ -27,31 +26,22 @@ namespace magma
     class InstanceExtension
     {
     public:
-        InstanceExtension(VkInstance instance, 
-            const char *name, const char *extension,
-            bool throwNotPresent)
-        {
-            if (!addr)
-            {
-                MAGMA_ASSERT(instance != VK_NULL_HANDLE);
-                MAGMA_ASSERT(name);
-                addr = vkGetInstanceProcAddr(instance, name);
-                if (!addr && throwNotPresent)
-                    MAGMA_THROW_NOT_PRESENT(extension);
-            }
-        }
-        operator Function() const 
+        InstanceExtension(VkInstance instance,
+            const char *name) noexcept;
+        InstanceExtension(VkInstance instance,
+            const char *name,
+            const char *extension);
+        operator Function() const
             { return reinterpret_cast<Function>(addr); }
 
     private:
         static PFN_vkVoidFunction addr;
     };
-
-    template<typename Function>
-    PFN_vkVoidFunction InstanceExtension<Function>::addr;
 } // namespace magma
 
 #define MAGMA_INSTANCE_EXTENSION(func, extension)\
-    InstanceExtension<PFN_##func> func(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(func), extension, true)
+    InstanceExtension<PFN_##func> func(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(func), extension)
 #define MAGMA_OPTIONAL_INSTANCE_EXTENSION(func)\
-    InstanceExtension<PFN_##func> func(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(func), nullptr, false)
+    InstanceExtension<PFN_##func> func(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(func))
+
+#include "instanceExtension.inl"

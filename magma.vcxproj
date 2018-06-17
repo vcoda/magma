@@ -228,6 +228,8 @@
     <None Include="helpers\immediateRender.inl" />
     <None Include="misc\clearAttachment.inl" />
     <None Include="misc\clearValue.inl" />
+    <None Include="misc\deviceExtension.inl" />
+    <None Include="misc\instanceExtension.inl" />
     <None Include="misc\scissor.inl" />
     <None Include="misc\viewport.inl" />
     <None Include="objects\commandBuffer.inl" />

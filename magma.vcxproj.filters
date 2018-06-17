@@ -347,6 +347,12 @@
     <None Include="helpers\copy.inl">
       <Filter>Header Files\helpers</Filter>
     </None>
+    <None Include="misc\deviceExtension.inl">
+      <Filter>Header Files\misc</Filter>
+    </None>
+    <None Include="misc\instanceExtension.inl">
+      <Filter>Header Files\misc</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="states\colorBlendState.cpp">

@@ -16,9 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <map>
+#include "exception.h"
 #include "../objects/device.h"
-#include "../misc/exception.h"
 #include "../shared.h"
 
 namespace magma
@@ -27,31 +26,22 @@ namespace magma
     class DeviceExtension
     {
     public:
-        DeviceExtension(VkDevice device, 
-            const char *name, const char *extension,
-            bool throwNotPresent)
-        {
-            if (!addr)
-            {
-                MAGMA_ASSERT(device != VK_NULL_HANDLE);
-                MAGMA_ASSERT(name);
-                addr = vkGetDeviceProcAddr(device, name);
-                if (!addr && throwNotPresent)
-                    MAGMA_THROW_NOT_PRESENT(extension);
-            }
-        }
+        DeviceExtension(VkDevice device,
+            const char *name) noexcept;
+        DeviceExtension(VkDevice device,
+            const char *name, 
+            const char *extension);
         operator Function() const 
             { return reinterpret_cast<Function>(addr); }
 
     private:
         static PFN_vkVoidFunction addr;
     };
-
-    template<typename Function>
-    PFN_vkVoidFunction DeviceExtension<Function>::addr;
 } // namespace magma
 
 #define MAGMA_DEVICE_EXTENSION(func, extension)\
-    DeviceExtension<PFN_##func> func(MAGMA_HANDLE(device), MAGMA_STRINGIZE(func), extension, true)
+    DeviceExtension<PFN_##func> func(MAGMA_HANDLE(device), MAGMA_STRINGIZE(func), extension)
 #define MAGMA_OPTIONAL_DEVICE_EXTENSION(func)\
-    DeviceExtension<PFN_##func> func(MAGMA_HANDLE(device), MAGMA_STRINGIZE(func), nullptr, false)
+    DeviceExtension<PFN_##func> func(MAGMA_HANDLE(device), MAGMA_STRINGIZE(func))
+
+#include "deviceExtension.inl"
