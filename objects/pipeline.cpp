@@ -30,6 +30,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/colorBlendState.h"
 #include "../allocator/allocator.h"
 #include "../misc/deviceExtension.h"
+#include "../helpers/stackArray.h"
 
 namespace magma
 {
@@ -126,11 +127,11 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
     info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     info.pNext = nullptr;
     info.flags = flags;
-    std::vector<VkPipelineShaderStageCreateInfo> dereferencedStages;
+    MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, stages.size());
     for (auto& stage : stages)
-        dereferencedStages.push_back(stage);
+        dereferencedStages.put(stage);
     info.stageCount = MAGMA_COUNT(dereferencedStages);
-    info.pStages = dereferencedStages.data();
+    info.pStages = dereferencedStages;
     info.pVertexInputState = &vertexInputState;
     info.pInputAssemblyState = &inputAssemblyState;
     if (0 == tesselationState.patchControlPoints)
