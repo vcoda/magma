@@ -101,7 +101,7 @@ std::set<std::string> PhysicalDevice::enumerateExtensions(const char *layerName 
         const VkResult enumerate = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, properties.data());
         MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device extensions");
         for (const auto& property : properties)
-            extensions.insert(property.extensionName);
+            extensions.emplace(property.extensionName);
     }
     return std::move(extensions);
 }

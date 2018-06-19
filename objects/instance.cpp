@@ -84,7 +84,7 @@ std::set<std::string> Instance::enumerateExtensions(const char *layerName /* nul
     MAGMA_THROW_FAILURE(enumerate, "failed to enumerate instance extensions");
     std::set<std::string> extensions;
     for (const auto& property : properties)
-        extensions.insert(property.extensionName);
+        extensions.emplace(property.extensionName);
     return std::move(extensions);
 }
 } // namespace magma

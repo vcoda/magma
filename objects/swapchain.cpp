@@ -129,10 +129,7 @@ std::vector<std::shared_ptr<SwapchainColorAttachment2D>> Swapchain::getImages() 
     MAGMA_THROW_FAILURE(get, "failed to get swapchain images");
     std::vector<std::shared_ptr<SwapchainColorAttachment2D>> images;
     for (const VkImage handle : swapchainImages)
-    {
-        std::shared_ptr<SwapchainColorAttachment2D> image(new SwapchainColorAttachment2D(device, handle, surfaceFormat.format, imageExtent));
-        images.push_back(image);
-    }
+        images.emplace_back(new SwapchainColorAttachment2D(device, handle, surfaceFormat.format, imageExtent));
     return std::move(images);
 }
 } // namespace magma
