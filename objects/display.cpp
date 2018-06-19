@@ -16,12 +16,32 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "display.h"
+#include "physicalDevice.h"
+#include "../misc/instanceExtension.h"
 
 namespace magma
 {
-Display::Display(std::shared_ptr<const Device> device, VkDisplayKHR handle):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_KHR_EXT, std::move(device), nullptr)
+Display::Display(std::shared_ptr<const PhysicalDevice> physicalDevice, VkDisplayKHR handle, uint32_t planeIndex):
+    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_KHR_EXT, nullptr, nullptr),
+    instance(std::move(physicalDevice->getInstance())),
+    physicalDevice(std::move(physicalDevice)),
+    planeIndex(planeIndex)
 {
     this->handle = handle;
+}
+
+std::vector<VkDisplayModePropertiesKHR> Display::getModeProperties() const
+{
+    uint32_t propertyCount = 0;
+    MAGMA_INSTANCE_EXTENSION(vkGetDisplayModePropertiesKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
+    const VkResult count = vkGetDisplayModePropertiesKHR(MAGMA_HANDLE(physicalDevice), handle, &propertyCount, nullptr);
+    MAGMA_THROW_FAILURE(count, "failed to count display mode properties");
+    std::vector<VkDisplayModePropertiesKHR> displayModeProperties(propertyCount);
+    if (propertyCount > 0)
+    {
+        const VkResult get = vkGetDisplayModePropertiesKHR(MAGMA_HANDLE(physicalDevice), handle, &propertyCount, displayModeProperties.data());
+        MAGMA_THROW_FAILURE(get, "failed to get display mode properties");
+    }
+    return std::move(displayModeProperties);
 }
 } // namespace magma

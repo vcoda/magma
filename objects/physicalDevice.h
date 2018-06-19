@@ -35,6 +35,7 @@ namespace magma
         friend class Instance;
 
     public: 
+        std::shared_ptr<const Instance> getInstance() const { return instance; }
         const VkPhysicalDeviceFeatures& getFeatures() const;
         const VkPhysicalDeviceProperties& getProperties() const;
         VkFormatProperties getFormatProperties(VkFormat format) const;

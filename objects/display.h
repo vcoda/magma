@@ -16,14 +16,27 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <vector>
 #include "handle.h"
 
 namespace magma
 {
+    class Instance;
+    class PhysicalDevice;
+
     class Display : public NonDispatchable<VkDisplayKHR>
     {
-    protected:
-        Display(std::shared_ptr<const Device> device,
-            VkDisplayKHR handle);
+        Display(std::shared_ptr<const PhysicalDevice> physicalDevice, 
+            VkDisplayKHR handle, 
+            uint32_t planeIndex);
+        friend PhysicalDevice;
+
+    public:
+        std::vector<VkDisplayModePropertiesKHR> getModeProperties() const;
+
+    private:
+        std::shared_ptr<const Instance> instance;
+        std::shared_ptr<const PhysicalDevice> physicalDevice;
+        uint32_t planeIndex;
     };
 } // namespace magma
