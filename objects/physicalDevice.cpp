@@ -238,12 +238,12 @@ const VkPhysicalDeviceShaderCorePropertiesAMD& PhysicalDevice::getShaderCoreProp
 {
     if (0 == shaderCoreProperties.shaderEngineCount)
     {
-        MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2, "Vulkan 1.1");
         shaderCoreProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_AMD;
         shaderCoreProperties.pNext = nullptr;
         VkPhysicalDeviceProperties2 properties;
         properties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
         properties.pNext = &shaderCoreProperties;
+        MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2, "Vulkan 1.1");
         vkGetPhysicalDeviceProperties2(handle, &properties);
     }
     return shaderCoreProperties;
