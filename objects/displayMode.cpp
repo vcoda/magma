@@ -20,16 +20,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "physicalDevice.h"
 #include "device.h"
 #include "../allocator/allocator.h"
-#include "../misc/deviceExtension.h"
+#include "../misc/instanceExtension.h"
 
 namespace magma
 {
-DisplayMode::DisplayMode(std::shared_ptr<PhysicalDevice> physicalDevice, 
-    std::shared_ptr<const Display> display, 
-    const VkExtent2D& visibleRegion, 
-    uint32_t refreshRate,
+DisplayMode::DisplayMode(std::shared_ptr<const PhysicalDevice> physicalDevice, std::shared_ptr<const Display> display,
+    const VkExtent2D& visibleRegion, uint32_t refreshRate,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_MODE_KHR_EXT, std::move(display->getDevice()), std::move(allocator)),
+    instance(std::move(physicalDevice->getInstance())),
     visibleRegion(visibleRegion),
     refreshRate(refreshRate)
 {
@@ -39,7 +38,7 @@ DisplayMode::DisplayMode(std::shared_ptr<PhysicalDevice> physicalDevice,
     info.flags = 0;
     info.parameters.visibleRegion = visibleRegion;
     info.parameters.refreshRate = refreshRate;
-    MAGMA_DEVICE_EXTENSION(vkCreateDisplayModeKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
+    MAGMA_INSTANCE_EXTENSION(vkCreateDisplayModeKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
     const VkResult create = vkCreateDisplayModeKHR(*physicalDevice, *display, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create display mode");
 }

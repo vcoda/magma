@@ -20,13 +20,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Display;
+    class Instance;
     class PhysicalDevice;
+    class Display;
 
     class DisplayMode : public NonDispatchable<VkDisplayModeKHR>
     {
     public:
-        DisplayMode(std::shared_ptr<PhysicalDevice> physicalDevice,
+        DisplayMode(std::shared_ptr<const PhysicalDevice> physicalDevice,
             std::shared_ptr<const Display> display,
             const VkExtent2D& visibleRegion,
             uint32_t refreshRate,
@@ -35,6 +36,7 @@ namespace magma
         uint32_t getRefreshRate() const { return refreshRate; }
 
     private:
+        std::shared_ptr<const Instance> instance;
         VkExtent2D visibleRegion;
         uint32_t refreshRate;
     };
