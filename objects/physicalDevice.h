@@ -26,6 +26,7 @@ namespace magma
 {
     class Instance;
     class Surface;
+    class Display;
 
     class PhysicalDevice : public Dispatchable<VkPhysicalDevice>,
         public std::enable_shared_from_this<PhysicalDevice>
@@ -56,6 +57,10 @@ namespace magma
         VkSurfaceCapabilitiesKHR getSurfaceCapabilities(std::shared_ptr<const Surface> surface) const;
         std::vector<VkSurfaceFormatKHR> getSurfaceFormats(std::shared_ptr<const Surface> surface) const;
         std::vector<VkPresentModeKHR> getSurfacePresentModes(std::shared_ptr<const Surface> surface) const;
+        // VK_KHR_display
+        std::vector<VkDisplayPropertiesKHR> getDisplayProperties() const;
+        std::vector<VkDisplayPlanePropertiesKHR> getDisplayPlaneProperties() const;
+        std::vector<std::shared_ptr<Display>> getSupportedDisplays(uint32_t planeIndex) const;
         // VK_AMD_shared_core_properties
         const VkPhysicalDeviceShaderCorePropertiesAMD& getShaderCoreProperties() const;
         // Non-API
