@@ -105,17 +105,18 @@ void Image::bindMemory(std::shared_ptr<DeviceMemory> memory,
     this->memory = std::move(memory);
 }
 
-VkDeviceSize Image::getCopyRegions(const std::vector<VkExtent2D>& mipExtents, 
+std::vector<VkBufferImageCopy> Image::getCopyRegions(const std::vector<VkExtent2D>& mipExtents, 
      const std::vector<VkDeviceSize>& mipSizes,
-     std::vector<VkBufferImageCopy>& copyRegions) const
+     VkDeviceSize *offset) const
 {
-    VkDeviceSize offset = 0;
+    std::vector<VkBufferImageCopy> copyRegions;
+    *offset = 0;
     for (uint32_t layer = 0; layer < arrayLayers; ++layer)
     {
         for (uint32_t level = 0; level < mipLevels; ++level)
         {
             VkBufferImageCopy copy;
-            copy.bufferOffset = offset;
+            copy.bufferOffset = *offset;
             copy.bufferRowLength = 0;
             copy.bufferImageHeight = 0;
             copy.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -127,11 +128,11 @@ VkDeviceSize Image::getCopyRegions(const std::vector<VkExtent2D>& mipExtents,
             copy.imageExtent.height = mipExtents[level].height;
             copy.imageExtent.depth = 1;
             copyRegions.push_back(copy);
-            offset += mipSizes[level];
-            offset = MAGMA_ALIGN(offset); 
+            *offset += mipSizes[level];
+            *offset = MAGMA_ALIGN(*offset); 
         }
     }
-    return offset;
+    return std::move(copyRegions);
 }   
 
 void Image::copyFromBuffer(std::shared_ptr<Buffer> buffer, 

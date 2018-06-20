@@ -58,9 +58,9 @@ namespace magma
             VkImageType imageType,
             VkFormat format,
             const VkExtent3D& extent);
-        VkDeviceSize getCopyRegions(const std::vector<VkExtent2D>& mipExtents,
+        std::vector<VkBufferImageCopy> getCopyRegions(const std::vector<VkExtent2D>& mipExtents,
             const std::vector<VkDeviceSize>& mipSizes,
-            std::vector<VkBufferImageCopy>& copyRegions) const;
+            VkDeviceSize *size) const;
         void copyFromBuffer(std::shared_ptr<Buffer> buffer,
             const std::vector<VkBufferImageCopy>& copyRegions,
             std::shared_ptr<CommandBuffer> copyCmdBuffer);

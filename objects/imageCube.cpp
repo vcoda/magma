@@ -51,10 +51,11 @@ ImageCube::ImageCube(std::shared_ptr<const Device> device,
         std::move(allocator))
 {
     std::vector<VkExtent2D> mipExtents;
+    mipExtents.reserve(mipDimensions.size());
     for (const uint32_t size : mipDimensions)
         mipExtents.push_back(VkExtent2D{size, size});
-    std::vector<VkBufferImageCopy> copyRegions;
-    const VkDeviceSize size = getCopyRegions(mipExtents, mipSizes, copyRegions);
+    VkDeviceSize size;
+    const std::vector<VkBufferImageCopy> copyRegions = getCopyRegions(mipExtents, mipSizes, &size);
     // Copy array layers to host visible buffer
     std::shared_ptr<SrcTransferBuffer> srcBuffer(std::make_shared<SrcTransferBuffer>(this->device, size, 0, allocator));
     helpers::mapScoped<uint8_t>(srcBuffer, [&](uint8_t *data)

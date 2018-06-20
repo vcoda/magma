@@ -45,8 +45,8 @@ Image2DArray::Image2DArray(std::shared_ptr<const Device> device,
         0, // flags
         std::move(allocator))
 {
-    std::vector<VkBufferImageCopy> copyRegions;
-    VkDeviceSize size = getCopyRegions(mipExtents, mipSizes, copyRegions);
+    VkDeviceSize size;
+    const std::vector<VkBufferImageCopy> copyRegions = getCopyRegions(mipExtents, mipSizes, &size);
     // Copy array layers to host visible buffer
     std::shared_ptr<SrcTransferBuffer> srcBuffer(std::make_shared<SrcTransferBuffer>(this->device, size, 0, allocator));
     helpers::mapScoped<uint8_t>(srcBuffer, [&](uint8_t *data) 
