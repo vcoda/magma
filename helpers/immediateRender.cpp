@@ -54,7 +54,7 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     texCoord(0.f, 0.f);
     pointSize(1.f); // Initial point size
     // If layout not specified, create default one
-    if (!layout)
+    if (!this->layout)
     {
         const pushconstants::VertexConstantRange<Transform> pushConstantRange;
         this->layout = std::make_shared<PipelineLayout>(this->device, std::initializer_list<VkPushConstantRange>{pushConstantRange}, this->allocator);
