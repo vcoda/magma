@@ -135,7 +135,7 @@ MAGMA_INLINE void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipelin
     vkCmdBindDescriptorSets(handle, pipelineBindPoint, *pipelineLayout, 0, 1, dereferencedDescriptorSets, 1, &dynamic0ffset);
 }
 
-template <uint32_t descriptorSetCount>
+template<uint32_t descriptorSetCount>
 MAGMA_INLINE void CommandBuffer::bindDescriptorSets(const std::shared_ptr<PipelineLayout>& pipelineLayout, const std::shared_ptr<magma::DescriptorSet>(&descriptorSets)[descriptorSetCount],
     const std::initializer_list<uint32_t>& offsets /* {} */,
     VkPipelineBindPoint pipelineBindPoint /* VK_PIPELINE_BIND_POINT_GRAPHICS */) noexcept

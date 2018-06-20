@@ -116,7 +116,7 @@ namespace magma
             const std::shared_ptr<DescriptorSet>& descriptorSet,
             uint32_t dynamic0ffset,
             VkPipelineBindPoint pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS) noexcept;
-        template <uint32_t descriptorSetCount> void bindDescriptorSets(
+        template<uint32_t descriptorSetCount> void bindDescriptorSets(
             const std::shared_ptr<PipelineLayout>& pipelineLayout,
             const std::shared_ptr<magma::DescriptorSet>(&descriptorSets)[descriptorSetCount],
             const std::initializer_list<uint32_t>& offsets = {},
