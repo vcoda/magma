@@ -49,7 +49,7 @@ CommandPool::~CommandPool()
     vkDestroyCommandPool(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
-bool CommandPool::reset(bool releaseResources)
+bool CommandPool::reset(bool releaseResources) noexcept
 {
     VkCommandPoolResetFlags flags = 0;
     if (releaseResources)
@@ -72,7 +72,7 @@ std::shared_ptr<CommandBuffer> CommandPool::allocateCommandBuffer(bool primaryLe
     return std::shared_ptr<CommandBuffer>(new CommandBuffer(commandBuffer, device, shared_from_this()));
 }
 
-void CommandPool::freeCommandBuffer(std::shared_ptr<CommandBuffer>& commandBuffer)
+void CommandPool::freeCommandBuffer(std::shared_ptr<CommandBuffer>& commandBuffer) noexcept
 {
     VkCommandBuffer dereferencedCommandBuffers[1] = {*commandBuffer};
     vkFreeCommandBuffers(MAGMA_HANDLE(device), handle, 1, dereferencedCommandBuffers);
@@ -96,7 +96,7 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     return std::move(commandBuffers);
 }
 
-void CommandPool::freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers)
+void CommandPool::freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept
 {
     MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCommandBuffers, commandBuffers.size());
     for (const auto& buffer : commandBuffers)

@@ -30,17 +30,17 @@ namespace magma
     {
     public:
         ~Image();
-        VkImageType getType() const { return imageType; }
-        VkFormat getFormat() const { return format; }
-        VkImageLayout getLayout() const { return layout; }
-        const VkExtent3D& getExtent() const { return extent; }
-        VkExtent2D getExtent2D() const { return VkExtent2D{extent.width, extent.height}; }
-        uint32_t getMipLevels() const { return mipLevels; }
-        uint32_t getArrayLayers() const { return arrayLayers; }
-        uint32_t getSamples() const { return samples; }
+        VkImageType getType() const noexcept { return imageType; }
+        VkFormat getFormat() const noexcept { return format; }
+        VkImageLayout getLayout() const noexcept { return layout; }
+        const VkExtent3D& getExtent() const noexcept { return extent; }
+        VkExtent2D getExtent2D() const noexcept { return VkExtent2D{extent.width, extent.height}; }
+        uint32_t getMipLevels() const noexcept { return mipLevels; }
+        uint32_t getArrayLayers() const noexcept { return arrayLayers; }
+        uint32_t getSamples() const noexcept { return samples; }
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0);
-        std::shared_ptr<DeviceMemory> getMemory() const { return memory; }
+        std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
 
     protected:
         Image(std::shared_ptr<const Device> device,
@@ -60,7 +60,7 @@ namespace magma
             const VkExtent3D& extent);
         std::vector<VkBufferImageCopy> getCopyRegions(const std::vector<VkExtent2D>& mipExtents,
             const std::vector<VkDeviceSize>& mipSizes,
-            VkDeviceSize *size) const;
+            VkDeviceSize *size) const noexcept;
         void copyFromBuffer(std::shared_ptr<Buffer> buffer,
             const std::vector<VkBufferImageCopy>& copyRegions,
             std::shared_ptr<CommandBuffer> copyCmdBuffer);

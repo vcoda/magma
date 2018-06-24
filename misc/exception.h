@@ -29,8 +29,8 @@ namespace magma
             const char *file = nullptr, int line = -1);
         Exception(const std::string& message,
             const char *file = nullptr, int line = -1);
-        const char *file() const { return fl; }
-        int line() const { return ln; }
+        const char *file() const noexcept { return fl; }
+        int line() const noexcept { return ln; }
 
     private:
         const char *fl;
@@ -44,8 +44,8 @@ namespace magma
             const char *file, int line);
         BadResultException(const VkResult result, const std::string& message,
             const char *file, int line);
-        VkResult code() const { return result; }
-        const char *codeString() const;
+        VkResult code() const noexcept { return result; }
+        const char *codeString() const noexcept;
 
     private:
         VkResult result;

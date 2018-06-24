@@ -107,7 +107,7 @@ void Image::bindMemory(std::shared_ptr<DeviceMemory> memory,
 
 std::vector<VkBufferImageCopy> Image::getCopyRegions(const std::vector<VkExtent2D>& mipExtents, 
      const std::vector<VkDeviceSize>& mipSizes,
-     VkDeviceSize *offset) const
+     VkDeviceSize *offset) const noexcept
 {
     std::vector<VkBufferImageCopy> copyRegions;
     *offset = 0;

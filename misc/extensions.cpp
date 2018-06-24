@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-bool Extensions::hasExtension(const char *name) const
+bool Extensions::hasExtension(const char *name) const noexcept
 {
     static const std::string prefix("VK_");
     const auto it = extensions.find(prefix + name);

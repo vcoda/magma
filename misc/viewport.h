@@ -24,11 +24,11 @@ namespace magma
     struct Viewport : VkViewport
     {
         Viewport(float x, float y, float width, float height,
-            float minDepth = 0.f, float maxDepth = 1.f);
+            float minDepth = 0.f, float maxDepth = 1.f) noexcept;
         Viewport(float x, float y, const VkExtent2D& extent,
-            float minDepth = 0.f, float maxDepth = 1.f);
+            float minDepth = 0.f, float maxDepth = 1.f) noexcept;
         Viewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height,
-            float minDepth = 0.f, float maxDepth = 1.f);
+            float minDepth = 0.f, float maxDepth = 1.f) noexcept;
     };
 } // namespace magma
 

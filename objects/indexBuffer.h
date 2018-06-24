@@ -62,7 +62,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         VkIndexType getIndexType() const { return indexType; }
-        uint32_t getIndexCount() const;
+        uint32_t getIndexCount() const noexcept;
 
     private:
         VkIndexType indexType;
@@ -90,7 +90,7 @@ namespace magma
             flags, std::move(allocator), std::move(copyFn))
     {}
 
-    inline uint32_t IndexBuffer::getIndexCount() const
+    inline uint32_t IndexBuffer::getIndexCount() const noexcept
     {
         if (VK_INDEX_TYPE_UINT16 == indexType)
             return static_cast<uint32_t>(size / sizeof(uint16_t));

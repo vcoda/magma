@@ -26,20 +26,20 @@ namespace magma
     {
         template<typename Type> 
         Type *copy(Type *const dst,
-            const Type *const src);
+            const Type *const src) noexcept;
 
         template<typename Type> 
         Type *copy(Type *const dst, 
             const Type *const src, 
-            uint32_t count);
+            uint32_t count) noexcept;
 
         template<typename DestType, typename SourceType> 
         DestType *copy(DestType *const dst, 
-            const std::vector<SourceType>& src);
+            const std::vector<SourceType>& src) noexcept;
 
         template<typename DestType, typename SourceType> 
         DestType *copy(DestType *const dst, 
-            const std::initializer_list<SourceType>& src);
+            const std::initializer_list<SourceType>& src) noexcept;
 
         char *copyString(const char *const src);
     } // namespace helpers

@@ -59,7 +59,7 @@ namespace magma
             if (memory)
                 memory->unmap();
         }
-        virtual uint32_t getArraySize() const { return arraySize; }
+        virtual uint32_t getArraySize() const noexcept { return arraySize; }
 
     protected:
         const uint32_t arraySize;
@@ -79,28 +79,28 @@ namespace magma
                 static_cast<VkDeviceSize>(elementSize)
             ))
         {}
-        virtual uint32_t getArraySize() const override
+        virtual uint32_t getArraySize() const noexcept override
         { 
             if (elementSize >= alignment)
                 return UniformBuffer<Type>::arraySize;
             const VkDeviceSize divisor = alignment/elementSize;
             return static_cast<uint32_t>(UniformBuffer<Type>::arraySize/divisor);
         }
-        uint32_t getDynamicOffset(uint32_t index) const
+        uint32_t getDynamicOffset(uint32_t index) const noexcept
         {
             return static_cast<uint32_t>(index * alignment);
         }
-        VkDeviceSize getElementAlignment() const { return alignment; }
+        VkDeviceSize getElementAlignment() const noexcept { return alignment; }
 
     private:
-        VkDeviceSize minOffsetAlignment(std::shared_ptr<const Device> device) const
+        VkDeviceSize minOffsetAlignment(std::shared_ptr<const Device> device) const noexcept
         {   // Check hardware requirements
             std::shared_ptr<const PhysicalDevice> physicalDevice = std::move(device->getPhysicalDevice());
             const VkPhysicalDeviceProperties& properties = physicalDevice->getProperties();
             const VkPhysicalDeviceLimits& limits = properties.limits;
             return limits.minUniformBufferOffsetAlignment;
         }
-        uint32_t alignedArraySize(std::shared_ptr<const Device> device, uint32_t arraySize) const
+        uint32_t alignedArraySize(std::shared_ptr<const Device> device, uint32_t arraySize) const noexcept
         {
             const VkDeviceSize alignment = minOffsetAlignment(std::move(device));
             if (elementSize >= alignment)

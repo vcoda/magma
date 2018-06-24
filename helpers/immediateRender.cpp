@@ -83,7 +83,7 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology)
     return true;
 }
 
-bool ImmediateRender::endPrimitive(bool loop /* false */) noexcept
+bool ImmediateRender::endPrimitive(bool loop /* false */)
 {
     MAGMA_ASSERT(insidePrimitive);
     if (!insidePrimitive)
@@ -99,7 +99,7 @@ bool ImmediateRender::endPrimitive(bool loop /* false */) noexcept
     return true;
 }
 
-bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer, bool clear /* true */)
+bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer, bool clear /* true */) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
     if (insidePrimitive || primitives.empty())
@@ -123,7 +123,7 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer
     return true;
 }
 
-bool ImmediateRender::reset()
+bool ImmediateRender::reset() noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
     if (insidePrimitive)

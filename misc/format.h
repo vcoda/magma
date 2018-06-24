@@ -24,20 +24,20 @@ namespace magma
     class Format
     {
     public:
-        Format(VkFormat format);
-        bool valid() const 
+        Format(VkFormat format) noexcept;
+        bool valid() const noexcept 
             { return format != VK_FORMAT_UNDEFINED; }
-        bool depth() const;
-        bool depthStencil() const;
-        bool blockCompressed() const;
-        bool ETC2() const;
-        bool EAC() const;
-        bool adaptiveCompressed() const;
-        bool compressed() const 
+        bool depth() const noexcept;
+        bool depthStencil() const noexcept;
+        bool blockCompressed() const noexcept;
+        bool ETC2() const noexcept;
+        bool EAC() const noexcept;
+        bool adaptiveCompressed() const noexcept;
+        bool compressed() const noexcept 
             { return blockCompressed() || ETC2() || EAC() || adaptiveCompressed(); }
-        bool floatingPoint() const;
-        std::pair<int, int> blockFootprint() const;
-        operator VkFormat() const 
+        bool floatingPoint() const noexcept;
+        std::pair<int, int> blockFootprint() const noexcept;
+        operator VkFormat() const noexcept 
             { return format; }
 
     private:

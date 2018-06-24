@@ -38,7 +38,7 @@ namespace magma
     struct SpecializationEntry : VkSpecializationMapEntry
     {
         template<typename Block, typename Type>
-        SpecializationEntry(uint32_t index, Type Block::*member)
+        SpecializationEntry(uint32_t index, Type Block::*member) noexcept
         {                    
             constantID = index;
             const ptrdiff_t diff = reinterpret_cast<ptrdiff_t>(&(((Block*)0)->*member));
@@ -71,14 +71,14 @@ namespace magma
             std::shared_ptr<const ShaderModule> module,
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization,
-            VkPipelineShaderStageCreateFlags flags);
+            VkPipelineShaderStageCreateFlags flags) noexcept;
 
     public:
         ShaderStage(const ShaderStage&);
         ShaderStage& operator=(const ShaderStage&);
         ~ShaderStage();
-        VkShaderStageFlagBits getStage() const { return info.stage; }
-        operator const VkPipelineShaderStageCreateInfo&() const { return info; }
+        VkShaderStageFlagBits getStage() const noexcept { return info.stage; }
+        operator const VkPipelineShaderStageCreateInfo&() const noexcept { return info; }
 
     private:
         VkPipelineShaderStageCreateInfo info;
@@ -92,7 +92,7 @@ namespace magma
         VertexShaderStage(std::shared_ptr<const ShaderModule> module,
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
-            VkPipelineShaderStageCreateFlags flags = 0);
+            VkPipelineShaderStageCreateFlags flags = 0) noexcept;
     };
 
     class GeometryShaderStage : public ShaderStage
@@ -101,7 +101,7 @@ namespace magma
         GeometryShaderStage(std::shared_ptr<const ShaderModule> module,
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
-            VkPipelineShaderStageCreateFlags flags = 0);
+            VkPipelineShaderStageCreateFlags flags = 0) noexcept;
     };
 
     class FragmentShaderStage : public ShaderStage
@@ -110,7 +110,7 @@ namespace magma
         FragmentShaderStage(std::shared_ptr<const ShaderModule> module,
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
-            VkPipelineShaderStageCreateFlags flags = 0);
+            VkPipelineShaderStageCreateFlags flags = 0) noexcept;
     };
 
     class ComputeShaderStage : public ShaderStage
@@ -119,6 +119,6 @@ namespace magma
         ComputeShaderStage(std::shared_ptr<const ShaderModule> module,
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
-            VkPipelineShaderStageCreateFlags flags = 0);
+            VkPipelineShaderStageCreateFlags flags = 0) noexcept;
     };
 } // namespace magma

@@ -53,13 +53,13 @@ namespace magma
                 MAGMA_FREEA(stack);
             }
             // Support range-based loops
-            Type *begin() { return stack; }
-            const Type *begin() const { return stack; }
-            Type *end() { return stack + count; }
-            const Type *end() const { return stack + count; }
-            uint32_t size() const { return count; }
+            Type *begin() noexcept { return stack; }
+            const Type *begin() const noexcept { return stack; }
+            Type *end() noexcept { return stack + count; }
+            const Type *end() const noexcept { return stack + count; }
+            uint32_t size() const noexcept { return count; }
             // This method allows to avoid additional indexing variable in range-based loops
-            uint32_t put(const Type& elem)
+            uint32_t put(const Type& elem) noexcept
             {
                 MAGMA_ASSERT(stack);
                 MAGMA_ASSERT(pos < count);
@@ -67,15 +67,15 @@ namespace magma
                 return pos;
             }
             // Do not store or pass stack pointer anywhere, use inside function scope only
-            operator Type *() { return stack; }
-            operator const Type *() const { return stack; }
-            Type& operator[](int i)
+            operator Type *() noexcept { return stack; }
+            operator const Type *() const noexcept{ return stack; }
+            Type& operator[](int i) noexcept
             {
                 MAGMA_ASSERT(stack);
                 MAGMA_ASSERT(i < static_cast<int>(count));
                 return stack[i];
             }
-            const Type& operator[](int i) const
+            const Type& operator[](int i) const noexcept
             {
                 MAGMA_ASSERT(stack);
                 MAGMA_ASSERT(i < static_cast<int>(count));

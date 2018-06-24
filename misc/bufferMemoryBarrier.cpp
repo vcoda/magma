@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 BufferMemoryBarrier::BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
-    VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask)
+    VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask) noexcept
 {
     sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
     pNext = nullptr;
@@ -34,7 +34,7 @@ BufferMemoryBarrier::BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
     size = VK_WHOLE_SIZE;
 }
 
-BufferMemoryBarrier::BufferMemoryBarrier(VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask)
+BufferMemoryBarrier::BufferMemoryBarrier(VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask) noexcept
 {
     sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
     pNext = nullptr;
@@ -47,7 +47,7 @@ BufferMemoryBarrier::BufferMemoryBarrier(VkAccessFlags srcAccessMask, VkAccessFl
     size = VK_WHOLE_SIZE;
 }
 
-BufferMemoryBarrier::BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer, const BufferMemoryBarrier& predefined)
+BufferMemoryBarrier::BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer, const BufferMemoryBarrier& predefined) noexcept
 {
     *this = predefined;
     this->buffer = *buffer;

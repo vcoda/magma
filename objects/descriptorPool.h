@@ -37,8 +37,8 @@ namespace magma
         ~DescriptorPool();
         void reset();
         std::shared_ptr<DescriptorSet> allocateDescriptorSet(std::shared_ptr<DescriptorSetLayout> setLayout);
-        void freeDescriptorSet(std::shared_ptr<DescriptorSet>& descriptorSet);
+        void freeDescriptorSet(std::shared_ptr<DescriptorSet>& descriptorSet) noexcept;
         std::vector<std::shared_ptr<DescriptorSet>> allocateDescriptorSets(const std::vector<std::shared_ptr<DescriptorSetLayout>>& setLayouts);
-        void freeDescriptorSets(std::vector<std::shared_ptr<DescriptorSet>>& descriptorSets);
+        void freeDescriptorSets(std::vector<std::shared_ptr<DescriptorSet>>& descriptorSets) noexcept;
     };
 } // namespace magma

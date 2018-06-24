@@ -39,7 +39,7 @@ namespace magma
 
     public:
         ~Device();
-        std::shared_ptr<const PhysicalDevice> getPhysicalDevice() const { return physicalDevice; }
+        std::shared_ptr<const PhysicalDevice> getPhysicalDevice() const noexcept { return physicalDevice; }
         std::shared_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
         bool waitIdle() const noexcept;
         bool resetFences(std::vector<std::shared_ptr<const Fence>>& fences) const noexcept;

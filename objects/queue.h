@@ -33,9 +33,9 @@ namespace magma
         friend Device;
 
     public:
-        VkQueueFlagBits getFlags() const { return flags; }
-        uint32_t getFamilyIndex() const { return familyIndex; }
-        uint32_t getIndex() const { return index; }
+        VkQueueFlagBits getFlags() const noexcept { return flags; }
+        uint32_t getFamilyIndex() const noexcept { return familyIndex; }
+        uint32_t getIndex() const noexcept { return index; }
         bool submit(const std::vector<std::shared_ptr<const CommandBuffer>>& commandBuffers,
             VkPipelineStageFlags waitStageMask,
             const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores,

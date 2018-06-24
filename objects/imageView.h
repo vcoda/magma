@@ -33,7 +33,7 @@ namespace magma
                                           VK_COMPONENT_SWIZZLE_A},
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~ImageView();
-        std::shared_ptr<const Image> getImage() const { return image; }
+        std::shared_ptr<const Image> getImage() const noexcept { return image; }
 
     private:
         std::shared_ptr<const Image> image;

@@ -36,21 +36,21 @@ PhysicalDevice::PhysicalDevice(std::shared_ptr<const Instance> instance,
     this->handle = handle;
 }
 
-const VkPhysicalDeviceFeatures& PhysicalDevice::getFeatures() const
+const VkPhysicalDeviceFeatures& PhysicalDevice::getFeatures() const noexcept
 {
     if (!features.geometryShader)
         vkGetPhysicalDeviceFeatures(handle, &features);
     return features;
 }
 
-const VkPhysicalDeviceProperties& PhysicalDevice::getProperties() const
+const VkPhysicalDeviceProperties& PhysicalDevice::getProperties() const noexcept
 {
     if (0 == properties.apiVersion)
         vkGetPhysicalDeviceProperties(handle, &properties);
     return properties;
 }
 
-VkFormatProperties PhysicalDevice::getFormatProperties(VkFormat format) const
+VkFormatProperties PhysicalDevice::getFormatProperties(VkFormat format) const noexcept
 {
     VkFormatProperties formatProperties;
     vkGetPhysicalDeviceFormatProperties(handle, format, &formatProperties);
@@ -69,7 +69,7 @@ VkImageFormatProperties PhysicalDevice::getImageFormatProperties(VkFormat format
     return imageFormatProperties;
 }
 
-std::vector<VkQueueFamilyProperties> PhysicalDevice::getQueueFamilyProperties() const
+std::vector<VkQueueFamilyProperties> PhysicalDevice::getQueueFamilyProperties() const noexcept
 {
     std::vector<VkQueueFamilyProperties> queueFamilyProperties;
     uint32_t propertyCount = 0;
@@ -82,7 +82,7 @@ std::vector<VkQueueFamilyProperties> PhysicalDevice::getQueueFamilyProperties() 
     return std::move(queueFamilyProperties);
 }
 
-const VkPhysicalDeviceMemoryProperties& PhysicalDevice::getMemoryProperties() const
+const VkPhysicalDeviceMemoryProperties& PhysicalDevice::getMemoryProperties() const noexcept
 {
     if (0 == memoryProperties.memoryTypeCount)
         vkGetPhysicalDeviceMemoryProperties(handle, &memoryProperties);
@@ -143,7 +143,7 @@ std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
     return std::shared_ptr<Device>(new Device(std::move(shared_from_this()), queueDescriptors, noLayers, extensions, noFeatures, allocator));
 }
 
-bool PhysicalDevice::getSurfaceSupport(std::shared_ptr<Surface> surface) const
+bool PhysicalDevice::getSurfaceSupport(std::shared_ptr<Surface> surface) const noexcept
 {
     VkBool32 supported = VK_FALSE;
     const VkResult get = vkGetPhysicalDeviceSurfaceSupportKHR(handle, 0, *surface, &supported);
@@ -249,7 +249,7 @@ const VkPhysicalDeviceShaderCorePropertiesAMD& PhysicalDevice::getShaderCoreProp
     return shaderCoreProperties;
 }
 
-bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) const
+bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept
 {
     MAGMA_ASSERT(cacheData);
     if (!cacheData)

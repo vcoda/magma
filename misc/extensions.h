@@ -26,12 +26,12 @@ namespace magma
     class Extensions
     {
     public:
-        bool hasExtension(const char *name) const;
-        const std::set<std::string>& getExtensions() const { return extensions; }
+        bool hasExtension(const char *name) const noexcept;
+        const std::set<std::string>& getExtensions() const noexcept { return extensions; }
 
     protected:
-        Extensions() {}
-        Extensions(const std::set<std::string>& extensions): 
+        Extensions() noexcept {}
+        Extensions(const std::set<std::string>& extensions) noexcept: 
             extensions(extensions) {}
 
     protected:

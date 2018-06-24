@@ -74,7 +74,7 @@ Specialization::~Specialization()
 }
 
 ShaderStage::ShaderStage(const VkShaderStageFlagBits stage, std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
-    std::shared_ptr<const Specialization> specialization, VkPipelineShaderStageCreateFlags flags):
+    std::shared_ptr<const Specialization> specialization, VkPipelineShaderStageCreateFlags flags) noexcept:
     module(std::move(module)),
     specialization(std::move(specialization))
 {
@@ -114,25 +114,25 @@ ShaderStage::~ShaderStage()
 
 VertexShaderStage::VertexShaderStage(std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
     std::shared_ptr<const Specialization> specialization /* nullptr */,
-    VkPipelineShaderStageCreateFlags flags /* 0 */):
+    VkPipelineShaderStageCreateFlags flags /* 0 */) noexcept:
     ShaderStage(VK_SHADER_STAGE_VERTEX_BIT, std::move(module), entrypoint, std::move(specialization), flags)
 {}
 
 GeometryShaderStage::GeometryShaderStage(std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
     std::shared_ptr<const Specialization> specialization /* nullptr */,
-    VkPipelineShaderStageCreateFlags flags /* 0 */):
+    VkPipelineShaderStageCreateFlags flags /* 0 */) noexcept:
     ShaderStage(VK_SHADER_STAGE_GEOMETRY_BIT, std::move(module), entrypoint, std::move(specialization), flags)
 {}
 
 FragmentShaderStage::FragmentShaderStage(std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
     std::shared_ptr<const Specialization> specialization /* nullptr */,
-    VkPipelineShaderStageCreateFlags flags /* 0 */):
+    VkPipelineShaderStageCreateFlags flags /* 0 */) noexcept:
     ShaderStage(VK_SHADER_STAGE_FRAGMENT_BIT, std::move(module), entrypoint, std::move(specialization), flags)
 {}
 
 ComputeShaderStage::ComputeShaderStage(std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
     std::shared_ptr<const Specialization> specialization /* nullptr */,
-    VkPipelineShaderStageCreateFlags flags /* 0 */):
+    VkPipelineShaderStageCreateFlags flags /* 0 */) noexcept:
     ShaderStage(VK_SHADER_STAGE_COMPUTE_BIT, std::move(module), entrypoint, std::move(specialization), flags)
 {}
 } // namespace magma

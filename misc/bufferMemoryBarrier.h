@@ -27,11 +27,11 @@ namespace magma
     {
         BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
             VkAccessFlags srcAccessMask,
-            VkAccessFlags dstAccessMask);
+            VkAccessFlags dstAccessMask) noexcept;
         BufferMemoryBarrier(VkAccessFlags srcAccessMask, 
-            VkAccessFlags dstAccessMask);
+            VkAccessFlags dstAccessMask) noexcept;
         BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
-            const BufferMemoryBarrier& predefined);
+            const BufferMemoryBarrier& predefined) noexcept;
     };
 
     namespace barriers

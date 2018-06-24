@@ -24,7 +24,7 @@ namespace magma
     // C++ forbids inheritance from union
     struct ClearValue
     {
-        operator const VkClearValue&() const 
+        operator const VkClearValue&() const noexcept
             { return value; }
 
     protected:
@@ -33,17 +33,17 @@ namespace magma
 
     struct ColorClear : public ClearValue 
     {
-        ColorClear(float r, float g, float b, float a = 1.f);
-        ColorClear(int32_t r, int32_t g, int32_t b, int32_t a);
-        ColorClear(uint32_t r, uint32_t g, uint32_t b, uint32_t a);
-        ColorClear(const float color[4]);
-        ColorClear(const int32_t color[4]);
-        ColorClear(const uint32_t color[4]);
+        ColorClear(float r, float g, float b, float a = 1.f) noexcept;
+        ColorClear(int32_t r, int32_t g, int32_t b, int32_t a) noexcept;
+        ColorClear(uint32_t r, uint32_t g, uint32_t b, uint32_t a) noexcept;
+        ColorClear(const float color[4]) noexcept;
+        ColorClear(const int32_t color[4]) noexcept;
+        ColorClear(const uint32_t color[4]) noexcept;
     };
 
     struct DepthStencilClear : public ClearValue
     {
-        DepthStencilClear(float depth, uint8_t stencil = 0);
+        DepthStencilClear(float depth, uint8_t stencil = 0) noexcept;
     };
 } // namespace magma
 

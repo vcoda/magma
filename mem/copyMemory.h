@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    MAGMA_INLINE void *copyMemory(void *dst, const void *src, std::size_t size)
+    MAGMA_INLINE void *copyMemory(void *dst, const void *src, std::size_t size) noexcept
     {
         MAGMA_ASSERT(dst);
         MAGMA_ASSERT(src);

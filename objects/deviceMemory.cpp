@@ -82,7 +82,7 @@ void DeviceMemory::unmap() noexcept
 
 bool DeviceMemory::flushMappedRange(
     VkDeviceSize offset /* 0 */, 
-    VkDeviceSize size /* VK_WHOLE_SIZE */)
+    VkDeviceSize size /* VK_WHOLE_SIZE */) noexcept
 {
     VkMappedMemoryRange memoryRange;
     memoryRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
@@ -96,7 +96,7 @@ bool DeviceMemory::flushMappedRange(
 
 bool DeviceMemory::invalidateMappedRange(
     VkDeviceSize offset /* 0 */,
-    VkDeviceSize size /* VK_WHOLE_SIZE */)
+    VkDeviceSize size /* VK_WHOLE_SIZE */) noexcept
 {
     VkMappedMemoryRange memoryRange;
     memoryRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;

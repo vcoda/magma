@@ -29,7 +29,7 @@ namespace magma
         {
             Binding(uint32_t binding,
                 const Descriptor& descriptor,
-                VkShaderStageFlags stageFlags);
+                VkShaderStageFlags stageFlags) noexcept;
         };
 
     public:
@@ -42,8 +42,8 @@ namespace magma
             VkDescriptorSetLayoutCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~DescriptorSetLayout();
-        uint32_t getBindingCount() const { return static_cast<uint32_t>(bindings.size()); }
-        const Binding& getBinding(uint32_t index) const { return bindings[index]; }
+        uint32_t getBindingCount() const noexcept { return static_cast<uint32_t>(bindings.size()); }
+        const Binding& getBinding(uint32_t index) const noexcept { return bindings[index]; }
 
     private:
         std::vector<Binding> bindings;

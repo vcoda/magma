@@ -31,7 +31,7 @@ namespace magma
             VkDeviceSize range = VK_WHOLE_SIZE,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~BufferView();
-        std::shared_ptr<const Buffer> getBuffer() const { return buffer; }
+        std::shared_ptr<const Buffer> getBuffer() const noexcept { return buffer; }
 
     private:
         std::shared_ptr<const Buffer> buffer;
