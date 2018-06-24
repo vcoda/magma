@@ -324,6 +324,9 @@
     <ClInclude Include="misc\instanceExtension.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
+    <ClInclude Include="objects\object.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">

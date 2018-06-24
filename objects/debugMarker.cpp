@@ -20,9 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DebugMarker::DebugMarker(VkDebugReportObjectTypeEXT objectType, std::shared_ptr<const Device> device):
-    objectType(objectType),
-    device(std::move(device))
+DebugMarker::DebugMarker(VkDebugReportObjectTypeEXT objectType, std::shared_ptr<const Device> device, std::shared_ptr<IAllocator> allocator):
+    Object(objectType, std::move(device), std::move(allocator))
 {}
 
 void DebugMarker::setObjectTag(uint64_t name, size_t tagSize, const void *tag) noexcept
@@ -37,7 +36,7 @@ void DebugMarker::setObjectTag(uint64_t name, size_t tagSize, const void *tag) n
         info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT;
         info.pNext = nullptr;
         info.objectType = objectType;
-        info.object = this->getObject();
+        info.object = this->getHandle();
         info.tagName = name;
         info.tagSize = tagSize;
         info.pTag = tag;
@@ -62,7 +61,7 @@ void DebugMarker::setObjectName(const char *name) noexcept
         info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT;
         info.pNext = nullptr;
         info.objectType = objectType;
-        info.object = this->getObject();
+        info.object = this->getHandle();
         info.pObjectName = name;
         vkDebugMarkerSetObjectNameEXT(MAGMA_HANDLE(device), &info);
     }

@@ -49,6 +49,7 @@ namespace magma
     typedef std::shared_ptr<class IndexBuffer> IndexBufferPtr;
     typedef std::shared_ptr<class IndirectBuffer> IndirectBufferPtr;
     typedef std::shared_ptr<class Instance> InstancePtr;
+    typedef std::shared_ptr<class Object> ObjectPtr;
     typedef std::shared_ptr<class PhysicalDevice> PhysicalDevicePtr;
     typedef std::shared_ptr<class Pipeline> PipelinePtr;
     typedef std::shared_ptr<class PipelineCache> PipelineCachePtr;

@@ -16,22 +16,32 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "object.h"
+#include <memory>
+#include "../allocator/allocator.h"
 
 namespace magma
 {
     class Device;
+    class IAllocator;
 
-    class DebugMarker : public Object
+    class Object : public NonCopyable
     {
     public:
-        DebugMarker(VkDebugReportObjectTypeEXT objectType,
+        Object(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<const Device> device,
-            std::shared_ptr<IAllocator> allocator);
-        void setObjectTag(uint64_t name, size_t tagSize, const void *tag) noexcept;
-        template<typename Tag>
-        void setObjectTag(uint64_t name, const Tag& tag) noexcept
-            { setObjectTag(name, sizeof(Tag), &tag); }
-        void setObjectName(const char *name) noexcept;
+            std::shared_ptr<IAllocator> allocator):
+            objectType(objectType), 
+            device(std::move(device)), 
+            allocator(std::move(allocator)) {}
+        VkDebugReportObjectTypeEXT getObjectType() const noexcept
+            { return objectType; }
+        std::shared_ptr<const Device> getDevice() const noexcept
+            { return device; }
+        virtual uint64_t getHandle() const noexcept = 0;
+
+    protected:
+        VkDebugReportObjectTypeEXT objectType;
+        std::shared_ptr<const Device> device;
+        std::shared_ptr<IAllocator> allocator;
     };
 } // namespace magma

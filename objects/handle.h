@@ -20,8 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class IAllocator;
-
     template<typename Type>
     class Dispatchable : public DebugMarker
     {
@@ -29,7 +27,7 @@ namespace magma
         typedef Type VkType;
 
     public:
-        virtual uint64_t getObject() const override
+        virtual uint64_t getHandle() const noexcept override
             { return reinterpret_cast<uint64_t>(handle); }
         operator Type() const { return handle; }
 
@@ -37,13 +35,11 @@ namespace magma
         Dispatchable(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<const Device> device,
             std::shared_ptr<IAllocator> allocator):
-            DebugMarker(objectType, std::move(device)),
-            handle(nullptr),
-            allocator(std::move(allocator)) {}
+            DebugMarker(objectType, std::move(device), std::move(allocator)),
+            handle(nullptr) {}
         
     protected:
         Type handle;
-        std::shared_ptr<IAllocator> allocator;
     };
 
     template<typename Type>
@@ -54,10 +50,10 @@ namespace magma
 
     public:
 #if defined(__LP64__) || defined(_WIN64) || defined(__x86_64__) || defined(_M_X64) || defined(__ia64) || defined (_M_IA64) || defined(__aarch64__) || defined(__powerpc64__)
-        virtual uint64_t getObject() const override
+        virtual uint64_t getHandle() const noexcept override
             { return reinterpret_cast<uint64_t>(handle); }
 #else
-        virtual uint64_t getObject() const override
+        virtual uint64_t getHandle() const noexcept override
             { return handle; }
 #endif
         operator Type() const { return handle; }
@@ -66,12 +62,10 @@ namespace magma
         NonDispatchable(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<const Device> device,
             std::shared_ptr<IAllocator> allocator):
-            DebugMarker(objectType, std::move(device)),
-            handle(VK_NULL_HANDLE),
-            allocator(std::move(allocator)) {}
+            DebugMarker(objectType, std::move(device), std::move(allocator)),
+            handle(VK_NULL_HANDLE) {}
 
     protected:
         Type handle;
-        std::shared_ptr<IAllocator> allocator;
     };
 } // namespace magma

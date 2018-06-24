@@ -191,6 +191,7 @@
     <ClInclude Include="objects\indexBuffer.h" />
     <ClInclude Include="objects\indirectBuffer.h" />
     <ClInclude Include="objects\instance.h" />
+    <ClInclude Include="objects\object.h" />
     <ClInclude Include="objects\physicalDevice.h" />
     <ClInclude Include="objects\pipeline.h" />
     <ClInclude Include="objects\pipelineCache.h" />
