@@ -31,14 +31,14 @@ namespace magma
             std::shared_ptr<const Device> device);
         VkDebugReportObjectTypeEXT getObjectType() const noexcept
             { return objectType; }
+        std::shared_ptr<const Device> getDevice() const noexcept
+            { return device; }
         void setObjectTag(uint64_t name, size_t tagSize, const void *tag) noexcept;
         template<typename Tag>
         void setObjectTag(uint64_t name, const Tag& tag) noexcept 
             { setObjectTag(name, sizeof(Tag), &tag); }
         void setObjectName(const char *name) noexcept;
         virtual uint64_t getObject() const = 0;
-        virtual std::shared_ptr<const Device> getDevice() const noexcept
-            { return device; }
 
     protected:
         VkDebugReportObjectTypeEXT objectType;
