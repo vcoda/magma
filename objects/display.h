@@ -26,12 +26,14 @@ namespace magma
 
     class Display : public NonDispatchable<VkDisplayKHR>
     {
-        Display(std::shared_ptr<const PhysicalDevice> physicalDevice, 
+        Display(std::shared_ptr<const PhysicalDevice> physicalDevice,
             VkDisplayKHR handle, 
             uint32_t planeIndex);
         friend PhysicalDevice;
 
     public:
+        std::shared_ptr<const PhysicalDevice> getPhysicalDevice() const { return physicalDevice; }
+        uint32_t getPlaneIndex() const { return planeIndex; }
         std::vector<VkDisplayModePropertiesKHR> getModeProperties() const;
 
     private:
