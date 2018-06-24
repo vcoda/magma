@@ -219,7 +219,7 @@ std::vector<VkDisplayPlanePropertiesKHR> PhysicalDevice::getDisplayPlaneProperti
 std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint32_t planeIndex) const
 {
     uint32_t displayCount = 0;
-    MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceDisplayPropertiesKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
+    MAGMA_INSTANCE_EXTENSION(vkGetDisplayPlaneSupportedDisplaysKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
     const VkResult count = vkGetDisplayPlaneSupportedDisplaysKHR(handle, planeIndex, &displayCount, nullptr);
     MAGMA_THROW_FAILURE(count, "failed to count supported displays");
     std::vector<std::shared_ptr<Display>> supportedDisplays;
