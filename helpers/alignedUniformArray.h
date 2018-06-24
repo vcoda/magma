@@ -30,7 +30,7 @@ namespace magma
             class Iterator;
 
         public:
-            AlignedUniformArray(void *buffer, const uint32_t arraySize, const VkDeviceSize alignment):
+            AlignedUniformArray(void *buffer, const uint32_t arraySize, const VkDeviceSize alignment) noexcept:
                 buffer(reinterpret_cast<char *>(buffer)),
                 arraySize(arraySize),
                 alignment(alignment)
@@ -39,12 +39,12 @@ namespace magma
                 MAGMA_ASSERT(arraySize > 0);
                 MAGMA_ASSERT(alignment > 0);
             }
-            uint32_t getArraySize() const { return arraySize; }
-            constexpr size_t getElementSize() const { return sizeof(Type); }
-            VkDeviceSize getElementAlignment() const { return alignment; }
-            Iterator begin() const { return Iterator(buffer, alignment); }
-            Iterator end() const { return Iterator(buffer + arraySize * alignment, alignment); }
-            Type& operator[](uint32_t index)
+            uint32_t getArraySize() const noexcept { return arraySize; }
+            constexpr size_t getElementSize() const noexcept { return sizeof(Type); }
+            VkDeviceSize getElementAlignment() const noexcept { return alignment; }
+            Iterator begin() const noexcept { return Iterator(buffer, alignment); }
+            Iterator end() const noexcept { return Iterator(buffer + arraySize * alignment, alignment); }
+            Type& operator[](uint32_t index) noexcept
             {
                 MAGMA_ASSERT(index < arraySize);
                 char *const elem = buffer + index * alignment;
@@ -61,33 +61,33 @@ namespace magma
         class AlignedUniformArray<Type>::Iterator
         {
         public:
-            Iterator(char *ptr, const VkDeviceSize alignment):
+            Iterator(char *ptr, const VkDeviceSize alignment) noexcept:
                 ptr(ptr), alignment(alignment) {}
-            Iterator& operator++()
+            Iterator& operator++() noexcept
             {
                 ptr += alignment;
                 return *this;
             }
-            Iterator operator++(int)
+            Iterator operator++(int) noexcept
             {
                 Iterator temp = *this;
                 ptr += alignment;
                 return temp;
             }
-            Iterator& operator--()
+            Iterator& operator--() noexcept
             {
                 ptr -= alignment;
                 return *this;
             }
-            Iterator operator--(int)
+            Iterator operator--(int) noexcept
             {
                 Iterator temp = *this;
                 ptr -= alignment;
                 return temp;
             }
-            bool operator!=(const Iterator& it) const
+            bool operator!=(const Iterator& it) const noexcept
                 { return ptr != it.ptr; }
-            Type& operator*()
+            Type& operator*() noexcept
                 { return *reinterpret_cast<Type *>(ptr); }
 
         private:

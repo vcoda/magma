@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-MAGMA_STRING stringize(VkSystemAllocationScope param)
+MAGMA_STRING stringize(VkSystemAllocationScope param) noexcept
 {
     switch (param)
     {
@@ -35,7 +35,7 @@ MAGMA_STRING stringize(VkSystemAllocationScope param)
     };
 }
 
-MAGMA_STRING stringize(VkInternalAllocationType param)
+MAGMA_STRING stringize(VkInternalAllocationType param) noexcept
 {
     switch (param)
     {
@@ -44,7 +44,7 @@ MAGMA_STRING stringize(VkInternalAllocationType param)
     };
 }
 
-MAGMA_STRING stringize(VkFormat param)
+MAGMA_STRING stringize(VkFormat param) noexcept
 {
     switch (param)
     {
@@ -279,7 +279,7 @@ MAGMA_STRING stringize(VkFormat param)
     };
 }
 
-MAGMA_STRING stringize(VkImageType param)
+MAGMA_STRING stringize(VkImageType param) noexcept
 {
     switch (param)
     {
@@ -290,7 +290,7 @@ MAGMA_STRING stringize(VkImageType param)
     };
 }
 
-MAGMA_STRING stringize(VkImageTiling param)
+MAGMA_STRING stringize(VkImageTiling param) noexcept
 {
     switch (param)
     {
@@ -300,7 +300,7 @@ MAGMA_STRING stringize(VkImageTiling param)
     };
 }
 
-MAGMA_STRING stringize(VkPhysicalDeviceType param)
+MAGMA_STRING stringize(VkPhysicalDeviceType param) noexcept
 {
     switch (param)
     {
@@ -313,7 +313,7 @@ MAGMA_STRING stringize(VkPhysicalDeviceType param)
     };
 }
 
-MAGMA_STRING stringize(VkQueryType param)
+MAGMA_STRING stringize(VkQueryType param) noexcept
 {
     switch (param)
     {
@@ -324,7 +324,7 @@ MAGMA_STRING stringize(VkQueryType param)
     };
 }
 
-MAGMA_STRING stringize(VkSharingMode param)
+MAGMA_STRING stringize(VkSharingMode param) noexcept
 {
     switch (param)
     {
@@ -334,7 +334,7 @@ MAGMA_STRING stringize(VkSharingMode param)
     };
 }
 
-MAGMA_STRING stringize(VkImageLayout param)
+MAGMA_STRING stringize(VkImageLayout param) noexcept
 {
     switch (param)
     {
@@ -355,7 +355,7 @@ MAGMA_STRING stringize(VkImageLayout param)
     };
 }
 
-MAGMA_STRING stringize(VkImageViewType param)
+MAGMA_STRING stringize(VkImageViewType param) noexcept
 {
     switch (param)
     {
@@ -370,7 +370,7 @@ MAGMA_STRING stringize(VkImageViewType param)
     };
 }
 
-MAGMA_STRING stringize(VkComponentSwizzle param)
+MAGMA_STRING stringize(VkComponentSwizzle param) noexcept
 {
     switch (param)
     {
@@ -385,7 +385,7 @@ MAGMA_STRING stringize(VkComponentSwizzle param)
     };
 }
 
-MAGMA_STRING stringize(VkVertexInputRate param)
+MAGMA_STRING stringize(VkVertexInputRate param) noexcept
 {
     switch (param)
     {
@@ -395,7 +395,7 @@ MAGMA_STRING stringize(VkVertexInputRate param)
     };
 }
 
-MAGMA_STRING stringize(VkPrimitiveTopology param)
+MAGMA_STRING stringize(VkPrimitiveTopology param) noexcept
 {
     switch (param)
     {
@@ -414,7 +414,7 @@ MAGMA_STRING stringize(VkPrimitiveTopology param)
     };
 }
 
-MAGMA_STRING stringize(VkPolygonMode param)
+MAGMA_STRING stringize(VkPolygonMode param) noexcept
 {
     switch (param)
     {
@@ -426,7 +426,7 @@ MAGMA_STRING stringize(VkPolygonMode param)
     };
 }
 
-MAGMA_STRING stringize(VkFrontFace param)
+MAGMA_STRING stringize(VkFrontFace param) noexcept
 {
     switch (param)
     {
@@ -436,7 +436,7 @@ MAGMA_STRING stringize(VkFrontFace param)
     };
 }
 
-MAGMA_STRING stringize(VkCompareOp param)
+MAGMA_STRING stringize(VkCompareOp param) noexcept
 {
     switch (param)
     {
@@ -452,7 +452,7 @@ MAGMA_STRING stringize(VkCompareOp param)
     };
 }
 
-MAGMA_STRING stringize(VkStencilOp param)
+MAGMA_STRING stringize(VkStencilOp param) noexcept
 {
     switch (param)
     {
@@ -468,7 +468,7 @@ MAGMA_STRING stringize(VkStencilOp param)
     };
 }
 
-MAGMA_STRING stringize(VkLogicOp param)
+MAGMA_STRING stringize(VkLogicOp param) noexcept
 {
     switch (param)
     {
@@ -492,7 +492,7 @@ MAGMA_STRING stringize(VkLogicOp param)
     };
 }
 
-MAGMA_STRING stringize(VkBlendFactor param)
+MAGMA_STRING stringize(VkBlendFactor param) noexcept
 {
     switch (param)
     {
@@ -519,7 +519,7 @@ MAGMA_STRING stringize(VkBlendFactor param)
     };
 }
 
-MAGMA_STRING stringize(VkBlendOp param)
+MAGMA_STRING stringize(VkBlendOp param) noexcept
 {
     switch (param)
     {
@@ -578,7 +578,7 @@ MAGMA_STRING stringize(VkBlendOp param)
     };
 }
 
-MAGMA_STRING stringize(VkDynamicState param)
+MAGMA_STRING stringize(VkDynamicState param) noexcept
 {
     switch (param)
     {
@@ -598,7 +598,7 @@ MAGMA_STRING stringize(VkDynamicState param)
     };
 }
 
-MAGMA_STRING stringize(VkFilter param)
+MAGMA_STRING stringize(VkFilter param) noexcept
 {
     switch (param)
     {
@@ -609,7 +609,7 @@ MAGMA_STRING stringize(VkFilter param)
     };
 }
     
-MAGMA_STRING stringize(VkSamplerMipmapMode param)
+MAGMA_STRING stringize(VkSamplerMipmapMode param) noexcept
 {
     switch (param)
     {
@@ -619,7 +619,7 @@ MAGMA_STRING stringize(VkSamplerMipmapMode param)
     };
 }
 
-MAGMA_STRING stringize(VkSamplerAddressMode param)
+MAGMA_STRING stringize(VkSamplerAddressMode param) noexcept
 {
     switch (param)
     {
@@ -632,7 +632,7 @@ MAGMA_STRING stringize(VkSamplerAddressMode param)
     };
 }
 
-MAGMA_STRING stringize(VkBorderColor param)
+MAGMA_STRING stringize(VkBorderColor param) noexcept
 {
     switch (param)
     {
@@ -646,7 +646,7 @@ MAGMA_STRING stringize(VkBorderColor param)
     };
 }
 
-MAGMA_STRING stringize(VkDescriptorType param)
+MAGMA_STRING stringize(VkDescriptorType param) noexcept
 {
     switch (param)
     {
@@ -665,7 +665,7 @@ MAGMA_STRING stringize(VkDescriptorType param)
     };
 }
 
-MAGMA_STRING stringize(VkAttachmentLoadOp param)
+MAGMA_STRING stringize(VkAttachmentLoadOp param) noexcept
 {
     switch (param)
     {
@@ -676,7 +676,7 @@ MAGMA_STRING stringize(VkAttachmentLoadOp param)
     };
 }
 
-MAGMA_STRING stringize(VkAttachmentStoreOp param)
+MAGMA_STRING stringize(VkAttachmentStoreOp param) noexcept
 {
     switch (param)
     {
@@ -686,7 +686,7 @@ MAGMA_STRING stringize(VkAttachmentStoreOp param)
     };
 }
 
-MAGMA_STRING stringize(VkPipelineBindPoint param)
+MAGMA_STRING stringize(VkPipelineBindPoint param) noexcept
 {
     switch (param)
     {
@@ -696,7 +696,7 @@ MAGMA_STRING stringize(VkPipelineBindPoint param)
     };
 }
 
-MAGMA_STRING stringize(VkCommandBufferLevel param)
+MAGMA_STRING stringize(VkCommandBufferLevel param) noexcept
 {
     switch (param)
     {
@@ -706,7 +706,7 @@ MAGMA_STRING stringize(VkCommandBufferLevel param)
     };
 }
 
-MAGMA_STRING stringize(VkIndexType param)
+MAGMA_STRING stringize(VkIndexType param) noexcept
 {
     switch (param)
     {
@@ -716,7 +716,7 @@ MAGMA_STRING stringize(VkIndexType param)
     };
 }
 
-MAGMA_STRING stringize(VkSubpassContents param)
+MAGMA_STRING stringize(VkSubpassContents param) noexcept
 {
     switch (param)
     {
@@ -726,7 +726,7 @@ MAGMA_STRING stringize(VkSubpassContents param)
     };
 }
 
-MAGMA_STRING stringize(VkObjectType param)
+MAGMA_STRING stringize(VkObjectType param) noexcept
 {
     switch (param)
     {
@@ -770,7 +770,7 @@ MAGMA_STRING stringize(VkObjectType param)
     };
 }
 
-MAGMA_STRING stringize(VkFormatFeatureFlagBits bit)
+MAGMA_STRING stringize(VkFormatFeatureFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -802,7 +802,7 @@ MAGMA_STRING stringize(VkFormatFeatureFlagBits bit)
     };
 }
 
-MAGMA_STRING stringize(VkImageUsageFlagBits bit)
+MAGMA_STRING stringize(VkImageUsageFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -818,7 +818,7 @@ MAGMA_STRING stringize(VkImageUsageFlagBits bit)
     };
 }
 
-MAGMA_STRING stringize(VkImageCreateFlagBits bit)
+MAGMA_STRING stringize(VkImageCreateFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -839,7 +839,7 @@ MAGMA_STRING stringize(VkImageCreateFlagBits bit)
     };
 }
 
-MAGMA_STRING stringize(VkSampleCountFlagBits bit)
+MAGMA_STRING stringize(VkSampleCountFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -854,7 +854,7 @@ MAGMA_STRING stringize(VkSampleCountFlagBits bit)
     };
 }
 
-MAGMA_STRING stringize(VkQueueFlagBits bit)
+MAGMA_STRING stringize(VkQueueFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -866,7 +866,7 @@ MAGMA_STRING stringize(VkQueueFlagBits bit)
     };
 }
 
-MAGMA_STRING stringize(VkMemoryPropertyFlagBits bit)
+MAGMA_STRING stringize(VkMemoryPropertyFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -879,7 +879,7 @@ MAGMA_STRING stringize(VkMemoryPropertyFlagBits bit)
     };
 }
 
-MAGMA_STRING stringize(VkMemoryHeapFlagBits bit)
+MAGMA_STRING stringize(VkMemoryHeapFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -889,7 +889,7 @@ MAGMA_STRING stringize(VkMemoryHeapFlagBits bit)
     };
 }
 
-MAGMA_STRING stringize(VkDeviceQueueCreateFlagBits bit)
+MAGMA_STRING stringize(VkDeviceQueueCreateFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -898,7 +898,7 @@ MAGMA_STRING stringize(VkDeviceQueueCreateFlagBits bit)
     };
 }
 
-MAGMA_STRING stringize(VkPipelineStageFlagBits bit)
+MAGMA_STRING stringize(VkPipelineStageFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -924,7 +924,7 @@ MAGMA_STRING stringize(VkPipelineStageFlagBits bit)
     };
 }
 
-MAGMA_STRING stringize(VkImageAspectFlagBits bit)
+MAGMA_STRING stringize(VkImageAspectFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -939,7 +939,7 @@ MAGMA_STRING stringize(VkImageAspectFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkSparseImageFormatFlagBits bit)
+MAGMA_STRING stringize(VkSparseImageFormatFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -950,7 +950,7 @@ MAGMA_STRING stringize(VkSparseImageFormatFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkSparseMemoryBindFlagBits bit)
+MAGMA_STRING stringize(VkSparseMemoryBindFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -959,7 +959,7 @@ MAGMA_STRING stringize(VkSparseMemoryBindFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkFenceCreateFlagBits bit)
+MAGMA_STRING stringize(VkFenceCreateFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -968,7 +968,7 @@ MAGMA_STRING stringize(VkFenceCreateFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkQueryPipelineStatisticFlagBits bit)
+MAGMA_STRING stringize(VkQueryPipelineStatisticFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -987,7 +987,7 @@ MAGMA_STRING stringize(VkQueryPipelineStatisticFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkQueryResultFlagBits bit)
+MAGMA_STRING stringize(VkQueryResultFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -999,7 +999,7 @@ MAGMA_STRING stringize(VkQueryResultFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkBufferCreateFlagBits bit)
+MAGMA_STRING stringize(VkBufferCreateFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1011,7 +1011,7 @@ MAGMA_STRING stringize(VkBufferCreateFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkBufferUsageFlagBits bit)
+MAGMA_STRING stringize(VkBufferUsageFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1028,7 +1028,7 @@ MAGMA_STRING stringize(VkBufferUsageFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkPipelineCreateFlagBits bit)
+MAGMA_STRING stringize(VkPipelineCreateFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1039,7 +1039,7 @@ MAGMA_STRING stringize(VkPipelineCreateFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkShaderStageFlagBits flags)
+MAGMA_STRING stringize(VkShaderStageFlagBits flags) noexcept
 {
     switch (flags)
     {
@@ -1055,7 +1055,7 @@ MAGMA_STRING stringize(VkShaderStageFlagBits flags)
     }
 }
 
-MAGMA_STRING stringize(VkCullModeFlagBits flags)
+MAGMA_STRING stringize(VkCullModeFlagBits flags) noexcept
 {
     switch (flags)
     {
@@ -1067,7 +1067,7 @@ MAGMA_STRING stringize(VkCullModeFlagBits flags)
     }
 }
 
-MAGMA_STRING stringize(VkColorComponentFlagBits bit)
+MAGMA_STRING stringize(VkColorComponentFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1079,7 +1079,7 @@ MAGMA_STRING stringize(VkColorComponentFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkDescriptorSetLayoutCreateFlagBits bit)
+MAGMA_STRING stringize(VkDescriptorSetLayoutCreateFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1088,7 +1088,7 @@ MAGMA_STRING stringize(VkDescriptorSetLayoutCreateFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkDescriptorPoolCreateFlagBits bit)
+MAGMA_STRING stringize(VkDescriptorPoolCreateFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1097,7 +1097,7 @@ MAGMA_STRING stringize(VkDescriptorPoolCreateFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkAttachmentDescriptionFlagBits bit)
+MAGMA_STRING stringize(VkAttachmentDescriptionFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1106,7 +1106,7 @@ MAGMA_STRING stringize(VkAttachmentDescriptionFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkAccessFlagBits bit)
+MAGMA_STRING stringize(VkAccessFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1134,7 +1134,7 @@ MAGMA_STRING stringize(VkAccessFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkCommandPoolCreateFlagBits bit)
+MAGMA_STRING stringize(VkCommandPoolCreateFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1144,7 +1144,7 @@ MAGMA_STRING stringize(VkCommandPoolCreateFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkCommandPoolResetFlagBits bit)
+MAGMA_STRING stringize(VkCommandPoolResetFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1153,7 +1153,7 @@ MAGMA_STRING stringize(VkCommandPoolResetFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkCommandBufferUsageFlagBits bit)
+MAGMA_STRING stringize(VkCommandBufferUsageFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1164,7 +1164,7 @@ MAGMA_STRING stringize(VkCommandBufferUsageFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkQueryControlFlagBits bit)
+MAGMA_STRING stringize(VkQueryControlFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1173,7 +1173,7 @@ MAGMA_STRING stringize(VkQueryControlFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkCommandBufferResetFlagBits bit)
+MAGMA_STRING stringize(VkCommandBufferResetFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1182,7 +1182,7 @@ MAGMA_STRING stringize(VkCommandBufferResetFlagBits bit)
     }
 }
 
-MAGMA_STRING stringize(VkStencilFaceFlagBits flags)
+MAGMA_STRING stringize(VkStencilFaceFlagBits flags) noexcept
 {
     switch (flags)
     {
@@ -1193,7 +1193,7 @@ MAGMA_STRING stringize(VkStencilFaceFlagBits flags)
     }
 }
 
-MAGMA_STRING stringize(VkColorSpaceKHR param)
+MAGMA_STRING stringize(VkColorSpaceKHR param) noexcept
 {
     switch (param)
     {
@@ -1216,7 +1216,7 @@ MAGMA_STRING stringize(VkColorSpaceKHR param)
     };
 }
 
-MAGMA_STRING stringize(VkPresentModeKHR param)
+MAGMA_STRING stringize(VkPresentModeKHR param) noexcept
 {
     switch (param)
     {
@@ -1230,7 +1230,7 @@ MAGMA_STRING stringize(VkPresentModeKHR param)
     };
 }
 
-MAGMA_STRING stringize(VkSurfaceTransformFlagBitsKHR bit) 
+MAGMA_STRING stringize(VkSurfaceTransformFlagBitsKHR bit) noexcept 
 {
     switch (bit)
     {
@@ -1247,7 +1247,7 @@ MAGMA_STRING stringize(VkSurfaceTransformFlagBitsKHR bit)
     };
 }
 
-MAGMA_STRING stringize(VkCompositeAlphaFlagBitsKHR bit)
+MAGMA_STRING stringize(VkCompositeAlphaFlagBitsKHR bit) noexcept
 {
     switch (bit)
     {

@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 namespace magma
 {
-MAGMA_INLINE ColorClear::ColorClear(float r, float g, float b, float a /* 1.f */)
+MAGMA_INLINE ColorClear::ColorClear(float r, float g, float b, float a /* 1.f */) noexcept
 {
     value.color.float32[0] = r;
     value.color.float32[1] = g;
@@ -25,7 +25,7 @@ MAGMA_INLINE ColorClear::ColorClear(float r, float g, float b, float a /* 1.f */
     value.color.float32[3] = a;
 }
 
-MAGMA_INLINE ColorClear::ColorClear(int32_t r, int32_t g, int32_t b, int32_t a)
+MAGMA_INLINE ColorClear::ColorClear(int32_t r, int32_t g, int32_t b, int32_t a) noexcept
 {
     value.color.int32[0] = r;
     value.color.int32[1] = g;
@@ -33,7 +33,7 @@ MAGMA_INLINE ColorClear::ColorClear(int32_t r, int32_t g, int32_t b, int32_t a)
     value.color.int32[3] = a;
 }
 
-MAGMA_INLINE ColorClear::ColorClear(uint32_t r, uint32_t g, uint32_t b, uint32_t a)
+MAGMA_INLINE ColorClear::ColorClear(uint32_t r, uint32_t g, uint32_t b, uint32_t a) noexcept
 {
     value.color.uint32[0] = r;
     value.color.uint32[1] = g;
@@ -41,25 +41,25 @@ MAGMA_INLINE ColorClear::ColorClear(uint32_t r, uint32_t g, uint32_t b, uint32_t
     value.color.uint32[3] = a;
 }
 
-MAGMA_INLINE ColorClear::ColorClear(const float color[4])
+MAGMA_INLINE ColorClear::ColorClear(const float color[4]) noexcept
 {
     for (int i = 0; i < 4; ++i)
         value.color.float32[i] = color[i];
 }
 
-MAGMA_INLINE ColorClear::ColorClear(const int32_t color[4])
+MAGMA_INLINE ColorClear::ColorClear(const int32_t color[4]) noexcept
 {
     for (int i = 0; i < 4; ++i)
         value.color.int32[i] = color[i];
 }
 
-MAGMA_INLINE ColorClear::ColorClear(const uint32_t color[4])
+MAGMA_INLINE ColorClear::ColorClear(const uint32_t color[4]) noexcept
 {
     for (int i = 0; i < 4; ++i)
         value.color.uint32[i] = color[i];
 }
 
-MAGMA_INLINE DepthStencilClear::DepthStencilClear(float depth, uint8_t stencil /* 0 */)
+MAGMA_INLINE DepthStencilClear::DepthStencilClear(float depth, uint8_t stencil /* 0 */) noexcept
 {
     value.depthStencil.depth = depth;
     value.depthStencil.stencil = stencil;

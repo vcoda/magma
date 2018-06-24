@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Display::Display(std::shared_ptr<const PhysicalDevice> physicalDevice, VkDisplayKHR handle, uint32_t planeIndex):
+Display::Display(std::shared_ptr<const PhysicalDevice> physicalDevice, VkDisplayKHR handle, uint32_t planeIndex) noexcept:
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_KHR_EXT, nullptr, nullptr),
     instance(std::move(physicalDevice->getInstance())),
     physicalDevice(std::move(physicalDevice)),

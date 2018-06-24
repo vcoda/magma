@@ -33,7 +33,7 @@ namespace magma
         DescriptorSet(VkDescriptorSet handle,
             std::shared_ptr<const Device> device,
             std::shared_ptr<DescriptorPool> pool,
-            std::shared_ptr<DescriptorSetLayout> setLayout);
+            std::shared_ptr<DescriptorSetLayout> setLayout) noexcept;
         friend class DescriptorPool;
 
     public:
@@ -42,7 +42,7 @@ namespace magma
         void update(uint32_t index,
             std::shared_ptr<const ImageView> imageView,
             std::shared_ptr<const Sampler> sampler) noexcept;
-        std::shared_ptr<DescriptorPool> getPool() const { return pool; }
+        std::shared_ptr<DescriptorPool> getPool() const noexcept { return pool; }
 
     private:
         std::shared_ptr<DescriptorPool> pool;

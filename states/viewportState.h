@@ -24,7 +24,7 @@ namespace magma
     class ViewportState final : public VkPipelineViewportStateCreateInfo
     {
     public:
-        ViewportState();
+        ViewportState() noexcept;
         ViewportState(float x, float y, float width, float height, 
             float minDepth = 0.f, float maxDepth = 1.f);
         ViewportState(float x, float y, const VkExtent2D& extent, 

@@ -29,9 +29,9 @@ namespace magma
         typedef Type VkType;
 
     public:
-        virtual uint64_t getObject() const override
+        virtual uint64_t getObject() const noexcept override
             { return reinterpret_cast<uint64_t>(handle); }
-        operator Type() const { return handle; }
+        operator Type() const noexcept { return handle; }
 
     protected:
         Dispatchable(VkDebugReportObjectTypeEXT objectType,
@@ -57,10 +57,10 @@ namespace magma
         virtual uint64_t getObject() const override
             { return reinterpret_cast<uint64_t>(handle); }
 #else
-        virtual uint64_t getObject() const override
+        virtual uint64_t getObject() const noexcept override
             { return handle; }
 #endif
-        operator Type() const { return handle; }
+        operator Type() const noexcept { return handle; }
 
     protected:
         NonDispatchable(VkDebugReportObjectTypeEXT objectType,

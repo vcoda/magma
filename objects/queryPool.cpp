@@ -44,7 +44,7 @@ QueryPool::~QueryPool()
     vkDestroyQueryPool(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
-std::vector<uint64_t> QueryPool::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const
+std::vector<uint64_t> QueryPool::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
 {
     VkQueryResultFlags flags = VK_QUERY_RESULT_64_BIT;
     if (wait)

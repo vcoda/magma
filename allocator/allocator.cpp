@@ -76,7 +76,7 @@ void VKAPI_PTR vkInternalFreeNotification(
 }
 } // namespace
 
-AllocationCallbacks::AllocationCallbacks()
+AllocationCallbacks::AllocationCallbacks() noexcept
 {
     pUserData = this;
     pfnAllocation = vkAllocationFunction;

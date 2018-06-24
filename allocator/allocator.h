@@ -23,7 +23,7 @@ namespace magma
 {
     struct AllocationCallbacks : VkAllocationCallbacks
     {
-        AllocationCallbacks();
+        AllocationCallbacks() noexcept;
     };
 
     class IAllocator : public AllocationCallbacks, public NonCopyable

@@ -71,7 +71,7 @@ std::shared_ptr<DescriptorSet> DescriptorPool::allocateDescriptorSet(std::shared
     return std::shared_ptr<DescriptorSet>(new DescriptorSet(descriptorSet,  device, shared_from_this(), setLayout));
 }
 
-void DescriptorPool::freeDescriptorSet(std::shared_ptr<DescriptorSet>& descriptorSet)
+void DescriptorPool::freeDescriptorSet(std::shared_ptr<DescriptorSet>& descriptorSet) noexcept
 {
     const VkDescriptorSet dereferencedLayouts[1] = {*descriptorSet};
     vkFreeDescriptorSets(MAGMA_HANDLE(device), handle, 1, dereferencedLayouts);
@@ -99,7 +99,7 @@ std::vector<std::shared_ptr<DescriptorSet>> DescriptorPool::allocateDescriptorSe
     return std::move(descriptorSets);
 }
 
-void DescriptorPool::freeDescriptorSets(std::vector<std::shared_ptr<DescriptorSet>>& descriptorSets)
+void DescriptorPool::freeDescriptorSets(std::vector<std::shared_ptr<DescriptorSet>>& descriptorSets) noexcept
 {
     MAGMA_STACK_ARRAY(VkDescriptorSet, dereferencedDescriptorSets, descriptorSets.size());
     for (const auto& descriptorSet : descriptorSets)

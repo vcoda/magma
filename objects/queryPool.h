@@ -27,8 +27,8 @@ namespace magma
         ~QueryPool();
         virtual std::vector<uint64_t> getResults(uint32_t firstQuery, 
             uint32_t queryCount, 
-            bool wait) const;
-        uint32_t getQueryCount() const { return queryCount; }
+            bool wait) const noexcept;
+        uint32_t getQueryCount() const noexcept { return queryCount; }
 
     protected:
         QueryPool(VkQueryType queryType, 

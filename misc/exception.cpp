@@ -48,7 +48,7 @@ BadResultException::BadResultException(const VkResult result,
     result(result)
 {}
 
-const char *BadResultException::codeString() const
+const char *BadResultException::codeString() const noexcept
 {
     switch (code())
     {

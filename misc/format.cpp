@@ -19,11 +19,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Format::Format(VkFormat format):
+Format::Format(VkFormat format) noexcept:
     format(format)
 {}
 
-bool Format::depth() const
+bool Format::depth() const noexcept
 {
     switch (format)
     {
@@ -38,7 +38,7 @@ bool Format::depth() const
     }
 }
 
-bool Format::depthStencil() const
+bool Format::depthStencil() const noexcept
 {
     switch (format)
     {
@@ -51,7 +51,7 @@ bool Format::depthStencil() const
     }
 }
 
-bool Format::blockCompressed() const
+bool Format::blockCompressed() const noexcept
 {
     switch (format)
     {
@@ -77,7 +77,7 @@ bool Format::blockCompressed() const
     }
 }
 
-bool Format::ETC2() const
+bool Format::ETC2() const noexcept
 {
     switch (format)
     {
@@ -93,7 +93,7 @@ bool Format::ETC2() const
     }
 }
 
-bool Format::EAC() const
+bool Format::EAC() const noexcept
 {
     switch (format)
     {
@@ -109,7 +109,7 @@ bool Format::EAC() const
     }
 }
 
-bool Format::adaptiveCompressed() const
+bool Format::adaptiveCompressed() const noexcept
 {
     switch (format)
     {
@@ -147,7 +147,7 @@ bool Format::adaptiveCompressed() const
     };
 }
 
-bool Format::floatingPoint() const
+bool Format::floatingPoint() const noexcept
 {
     switch (format)
     {
@@ -175,7 +175,7 @@ bool Format::floatingPoint() const
     }
 }
 
-std::pair<int, int> Format::blockFootprint() const
+std::pair<int, int> Format::blockFootprint() const noexcept
 {
     switch (format)
     {

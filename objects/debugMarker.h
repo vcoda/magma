@@ -34,7 +34,7 @@ namespace magma
         void setObjectTag(uint64_t name, const Tag& tag) noexcept 
             { setObjectTag(name, sizeof(Tag), &tag); }
         void setObjectName(const char *name) noexcept;
-        virtual uint64_t getObject() const = 0;
+        virtual uint64_t getObject() const noexcept = 0;
         virtual std::shared_ptr<const Device> getDevice() const noexcept
             { return device; }
 

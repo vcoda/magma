@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    MAGMA_INLINE void *zeroMemory(void *dst, size_t size)
+    MAGMA_INLINE void *zeroMemory(void *dst, size_t size) noexcept
     {
         MAGMA_ASSERT(dst);
         MAGMA_ASSERT(size > 0);

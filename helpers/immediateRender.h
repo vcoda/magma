@@ -84,7 +84,7 @@ namespace magma
             void setIdentity() noexcept;
             void setTransform(const float transform[16]) noexcept;
             bool beginPrimitive(VkPrimitiveTopology topology);
-            bool endPrimitive(bool loop = false) noexcept;
+            bool endPrimitive(bool loop = false);
             void normal(float x, float y, float z) noexcept;
             void normal(const float n[3]) noexcept;
             template<typename Normal>
@@ -109,8 +109,8 @@ namespace magma
             template<typename Vertex4>
             void vertex4(const Vertex4& v) noexcept;
             bool commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer,
-                bool clear = true);
-            bool reset();
+                bool clear = true) noexcept;
+            bool reset() noexcept;
             uint32_t getVertexCount() const noexcept { return vertexCount; }
             uint32_t getPrimitiveCount() const noexcept { return MAGMA_COUNT(primitives); }
 

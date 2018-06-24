@@ -36,15 +36,15 @@ namespace magma
         friend class Instance;
 
     public: 
-        std::shared_ptr<const Instance> getInstance() const { return instance; }
-        const VkPhysicalDeviceFeatures& getFeatures() const;
-        const VkPhysicalDeviceProperties& getProperties() const;
-        VkFormatProperties getFormatProperties(VkFormat format) const;
+        std::shared_ptr<const Instance> getInstance() const noexcept { return instance; }
+        const VkPhysicalDeviceFeatures& getFeatures() const noexcept;
+        const VkPhysicalDeviceProperties& getProperties() const noexcept;
+        VkFormatProperties getFormatProperties(VkFormat format) const noexcept;
         VkImageFormatProperties getImageFormatProperties(VkFormat format, 
             VkImageType, bool optimalTiling, VkImageUsageFlags usage,
             VkImageCreateFlags flags = 0) const;
-        std::vector<VkQueueFamilyProperties> getQueueFamilyProperties() const;
-        const VkPhysicalDeviceMemoryProperties& getMemoryProperties() const;
+        std::vector<VkQueueFamilyProperties> getQueueFamilyProperties() const noexcept;
+        const VkPhysicalDeviceMemoryProperties& getMemoryProperties() const noexcept;
         std::set<std::string> enumerateExtensions(const char *layerName = nullptr) const;
         std::vector<VkLayerProperties> enumerateLayerProperties() const;
         std::shared_ptr<Device> createDevice(
@@ -53,7 +53,7 @@ namespace magma
             const std::vector<const char *>& extensions,
             const VkPhysicalDeviceFeatures& deviceFeatures) const;
         std::shared_ptr<Device> createDefaultDevice() const;
-        bool getSurfaceSupport(std::shared_ptr<Surface> surface) const;
+        bool getSurfaceSupport(std::shared_ptr<Surface> surface) const noexcept;
         VkSurfaceCapabilitiesKHR getSurfaceCapabilities(std::shared_ptr<const Surface> surface) const;
         std::vector<VkSurfaceFormatKHR> getSurfaceFormats(std::shared_ptr<const Surface> surface) const;
         std::vector<VkPresentModeKHR> getSurfacePresentModes(std::shared_ptr<const Surface> surface) const;
@@ -64,7 +64,7 @@ namespace magma
         // VK_AMD_shared_core_properties
         const VkPhysicalDeviceShaderCorePropertiesAMD& getShaderCoreProperties() const;
         // Non-API
-        bool checkPipelineCacheDataCompatibility(const void *cacheData) const;
+        bool checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept;
 
     private:
         std::shared_ptr<const Instance> instance;

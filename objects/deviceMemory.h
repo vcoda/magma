@@ -34,9 +34,9 @@ namespace magma
         void unmap() noexcept;
         VkDeviceSize getSize() const noexcept { return size; }
         bool flushMappedRange(VkDeviceSize offset = 0,
-            VkDeviceSize size = VK_WHOLE_SIZE);
+            VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
         bool invalidateMappedRange(VkDeviceSize offset = 0,
-            VkDeviceSize size = VK_WHOLE_SIZE);
+            VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
 
     private:
         VkDeviceSize size;

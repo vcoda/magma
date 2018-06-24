@@ -20,7 +20,7 @@ namespace magma
 namespace helpers
 {
 template<typename Type>
-MAGMA_INLINE Type *copy(Type *const dst, const Type *const src)
+MAGMA_INLINE Type *copy(Type *const dst, const Type *const src) noexcept
 {
     MAGMA_ASSERT(dst);
     MAGMA_ASSERT(src);
@@ -28,7 +28,7 @@ MAGMA_INLINE Type *copy(Type *const dst, const Type *const src)
 }
 
 template<typename Type>
-MAGMA_INLINE Type *copy(Type *const dst, const Type *const src, uint32_t count)
+MAGMA_INLINE Type *copy(Type *const dst, const Type *const src, uint32_t count) noexcept
 {
     MAGMA_ASSERT(dst);
     MAGMA_ASSERT(src);
@@ -37,7 +37,7 @@ MAGMA_INLINE Type *copy(Type *const dst, const Type *const src, uint32_t count)
 }
 
 template<typename DestType, typename SourceType>
-MAGMA_INLINE DestType *copy(DestType *const dst, const std::vector<SourceType>& src)
+MAGMA_INLINE DestType *copy(DestType *const dst, const std::vector<SourceType>& src) noexcept
 {
     static_assert(sizeof(DestType) == sizeof(SourceType), "equal size expected");
     MAGMA_ASSERT(dst);
@@ -46,7 +46,7 @@ MAGMA_INLINE DestType *copy(DestType *const dst, const std::vector<SourceType>& 
 }
 
 template<typename DestType, typename SourceType>
-MAGMA_INLINE DestType *copy(DestType *const dst, const std::initializer_list<SourceType>& src)
+MAGMA_INLINE DestType *copy(DestType *const dst, const std::initializer_list<SourceType>& src) noexcept
 {
     static_assert(sizeof(DestType) == sizeof(SourceType), "equal size expected");
     MAGMA_ASSERT(dst);

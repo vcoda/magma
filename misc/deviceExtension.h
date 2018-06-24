@@ -31,7 +31,7 @@ namespace magma
         DeviceExtension(VkDevice device,
             const char *name, 
             const char *extension);
-        operator Function() const 
+        operator Function() const noexcept
             { return reinterpret_cast<Function>(addr); }
 
     private:

@@ -31,18 +31,18 @@ namespace magma
             class Iterator;
 
         public:
-            UniformArray(Type *buffer, const uint32_t arraySize):
+            UniformArray(Type *buffer, const uint32_t arraySize) noexcept:
                 buffer(buffer),
                 arraySize(arraySize)
             {
                 MAGMA_ASSERT(buffer);
                 MAGMA_ASSERT(arraySize > 0);
             }
-            uint32_t getArraySize() const { return arraySize; }
-            constexpr size_t getElementSize() const { return sizeof(Type); }
-            Iterator begin() const { return Iterator(buffer); }
-            Iterator end() const { return Iterator(buffer + arraySize); }
-            Type& operator[](uint32_t index)
+            uint32_t getArraySize() const noexcept { return arraySize; }
+            constexpr size_t getElementSize() const noexcept { return sizeof(Type); }
+            Iterator begin() const noexcept { return Iterator(buffer); }
+            Iterator end() const noexcept { return Iterator(buffer + arraySize); }
+            Type& operator[](uint32_t index) noexcept
             {
                 MAGMA_ASSERT(index < arraySize);
                 return *buffer[index];
@@ -57,33 +57,33 @@ namespace magma
         class UniformArray<Type>::Iterator
         {
         public:
-            Iterator(Type *ptr):
+            Iterator(Type *ptr) noexcept:
                 ptr(ptr) {}
-            Iterator& operator++()
+            Iterator& operator++() noexcept
             {
                 ++ptr;
                 return *this;
             }
-            Iterator operator++(int)
+            Iterator operator++(int) noexcept
             {
                 Iterator temp = *this;
                 ++ptr;
                 return temp;
             }
-            Iterator& operator--()
+            Iterator& operator--() noexcept
             {
                 --ptr;
                 return *this;
             }
-            Iterator operator--(int)
+            Iterator operator--(int) noexcept
             {
                 Iterator temp = *this;
                 --ptr;
                 return temp;
             }
-            bool operator!=(const Iterator& it) const
+            bool operator!=(const Iterator& it) const noexcept
                 { return ptr != it.ptr; }
-            Type& operator*()
+            Type& operator*() noexcept
                 { return *ptr; }
 
         private:

@@ -36,8 +36,8 @@ namespace magma
             VkFramebufferCreateFlags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~Framebuffer();
-        const std::vector<std::shared_ptr<const ImageView>>& getAttachments() const { return attachments; }
-        const VkExtent2D& getExtent() const { return extent; }
+        const std::vector<std::shared_ptr<const ImageView>>& getAttachments() const noexcept { return attachments; }
+        const VkExtent2D& getExtent() const noexcept { return extent; }
 
     private:
         std::vector<std::shared_ptr<const ImageView>> attachments;

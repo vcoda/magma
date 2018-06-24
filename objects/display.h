@@ -28,12 +28,12 @@ namespace magma
     {
         Display(std::shared_ptr<const PhysicalDevice> physicalDevice,
             VkDisplayKHR handle, 
-            uint32_t planeIndex);
+            uint32_t planeIndex) noexcept;
         friend PhysicalDevice;
 
     public:
-        std::shared_ptr<const PhysicalDevice> getPhysicalDevice() const { return physicalDevice; }
-        uint32_t getPlaneIndex() const { return planeIndex; }
+        std::shared_ptr<const PhysicalDevice> getPhysicalDevice() const noexcept { return physicalDevice; }
+        uint32_t getPlaneIndex() const noexcept { return planeIndex; }
         std::vector<VkDisplayModePropertiesKHR> getModeProperties() const;
 
     private:
