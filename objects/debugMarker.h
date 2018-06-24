@@ -29,6 +29,8 @@ namespace magma
     public:
         DebugMarker(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<const Device> device);
+        VkDebugReportObjectTypeEXT getObjectType() const noexcept
+            { return objectType; }
         void setObjectTag(uint64_t name, size_t tagSize, const void *tag) noexcept;
         template<typename Tag>
         void setObjectTag(uint64_t name, const Tag& tag) noexcept 
