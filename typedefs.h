@@ -65,8 +65,8 @@ namespace magma
     typedef std::shared_ptr<class StorageTexelBuffer> StorageTexelBufferPtr;
     typedef std::shared_ptr<class Surface> SurfacePtr;
     typedef std::shared_ptr<class Swapchain> SwapchainPtr;
-    typedef std::shared_ptr<class VertexBuffer> VertexBufferPtr;
     typedef std::shared_ptr<class UniformTexelBuffer> UniformTexelBufferPtr;
+    typedef std::shared_ptr<class VertexBuffer> VertexBufferPtr;
 
     template<class Block> using DynamicUniformBufferPtr = std::shared_ptr<class DynamicUniformBuffer<Block>>;
     template<class Block> using UniformBufferPtr = std::shared_ptr<class UniformBuffer<Block>>;
