@@ -49,18 +49,7 @@ namespace magma
             const std::shared_ptr<Buffer>& buffer,
             std::function<void(Type *data)> fn)
         {
-            MAGMA_ASSERT(buffer);
-            MAGMA_ASSERT(fn);
-            std::shared_ptr<DeviceMemory> memory = buffer->getMemory();
-            if (memory)
-            {
-                void *const data = memory->map();
-                if (data)
-                {
-                    fn(static_cast<Type *>(data));
-                    memory->unmap();
-                }
-            }
+            mapScoped(buffer.get(), fn);
         }
 
         template<typename Block>
