@@ -24,11 +24,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DisplayMode::DisplayMode(std::shared_ptr<const PhysicalDevice> physicalDevice, std::shared_ptr<const Display> display,
+DisplayMode::DisplayMode(std::shared_ptr<const Display> display,
     const VkExtent2D& visibleRegion, uint32_t refreshRate,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_MODE_KHR_EXT, std::move(display->getDevice()), std::move(allocator)),
-    instance(std::move(physicalDevice->getInstance())),
+    instance(std::move(display->getPhysicalDevice()->getInstance())),
+    physicalDevice(std::move(display->getPhysicalDevice())),
     visibleRegion(visibleRegion),
     refreshRate(refreshRate)
 {
@@ -39,7 +40,21 @@ DisplayMode::DisplayMode(std::shared_ptr<const PhysicalDevice> physicalDevice, s
     info.parameters.visibleRegion = visibleRegion;
     info.parameters.refreshRate = refreshRate;
     MAGMA_INSTANCE_EXTENSION(vkCreateDisplayModeKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
-    const VkResult create = vkCreateDisplayModeKHR(*physicalDevice, *display, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateDisplayModeKHR(MAGMA_HANDLE(physicalDevice), *display, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create display mode");
+}
+
+const VkDisplayPlaneCapabilitiesKHR& DisplayMode::getPlaneCapabilities(uint32_t planeIndex) const
+{
+    const auto it = capabilities.find(planeIndex);
+    if (it == capabilities.end())
+    {
+        MAGMA_INSTANCE_EXTENSION(vkGetDisplayPlaneCapabilitiesKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
+        VkDisplayPlaneCapabilitiesKHR planeCaps;
+        const VkResult get = vkGetDisplayPlaneCapabilitiesKHR(MAGMA_HANDLE(physicalDevice), handle, planeIndex, &planeCaps);
+        MAGMA_THROW_FAILURE(get, "failed to get display plane capabilities");
+        capabilities[planeIndex] = planeCaps;
+    }
+    return capabilities[planeIndex];
 }
 } // namespace magma

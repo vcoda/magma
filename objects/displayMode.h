@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <map>
 #include "handle.h"
 
 namespace magma
@@ -27,16 +28,18 @@ namespace magma
     class DisplayMode : public NonDispatchable<VkDisplayModeKHR>
     {
     public:
-        DisplayMode(std::shared_ptr<const PhysicalDevice> physicalDevice,
-            std::shared_ptr<const Display> display,
+        DisplayMode(std::shared_ptr<const Display> display,
             const VkExtent2D& visibleRegion,
             uint32_t refreshRate,
             std::shared_ptr<IAllocator> allocator = nullptr);
+        const VkDisplayPlaneCapabilitiesKHR& getPlaneCapabilities(uint32_t planeIndex) const;
         const VkExtent2D& getVisibleRegion() const { return visibleRegion; }
         uint32_t getRefreshRate() const { return refreshRate; }
 
     private:
         std::shared_ptr<const Instance> instance;
+        std::shared_ptr<const PhysicalDevice> physicalDevice;
+        mutable std::map<uint32_t, VkDisplayPlaneCapabilitiesKHR> capabilities;
         VkExtent2D visibleRegion;
         uint32_t refreshRate;
     };
