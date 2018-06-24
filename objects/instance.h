@@ -29,14 +29,14 @@ namespace magma
         public std::enable_shared_from_this<Instance>
     {
     public:
-        Instance(const char *applicationName, 
-            const char *engineName, 
+        Instance(const char *applicationName,
+            const char *engineName,
             uint32_t apiVersion,
             const std::vector<const char *>& layerNames,
             const std::vector<const char *>& extensionNames,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~Instance();
-        uint32_t countPhysicalDevices() const; 
+        uint32_t countPhysicalDevices() const;
         std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId);
         std::set<std::string> enumerateExtensions(const char *layerName = nullptr) const;
     };

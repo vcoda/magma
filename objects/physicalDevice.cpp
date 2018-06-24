@@ -122,8 +122,8 @@ std::vector<VkLayerProperties> PhysicalDevice::enumerateLayerProperties() const
 
 std::shared_ptr<Device> PhysicalDevice::createDevice(
     const std::vector<DeviceQueueDescriptor>& queueDescriptors,
-    const std::vector<const char *>& layers, 
-    const std::vector<const char *>& extensions, 
+    const std::vector<const char *>& layers,
+    const std::vector<const char *>& extensions,
     const VkPhysicalDeviceFeatures& deviceFeatures) const
 {
     return std::shared_ptr<Device>(new Device(std::move(shared_from_this()), queueDescriptors, layers, extensions, deviceFeatures, allocator));

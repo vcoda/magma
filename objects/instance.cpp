@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Instance::Instance(const char *applicationName, const char *engineName, uint32_t apiVersion, 
+Instance::Instance(const char *applicationName, const char *engineName, uint32_t apiVersion,
     const std::vector<const char *>& layerNames, const std::vector<const char *>& extensionNames,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Dispatchable<VkInstance>(VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT, nullptr, std::move(allocator))
@@ -63,7 +63,7 @@ uint32_t Instance::countPhysicalDevices() const
 }
 
 std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId)
-{                          
+{
     uint32_t physicalDeviceCount = countPhysicalDevices();
     if (deviceId >= physicalDeviceCount)
         MAGMA_THROW("invalid parameter <deviceId>");
