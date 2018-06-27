@@ -39,12 +39,38 @@ namespace magma
         ColorClear(const float color[4]) noexcept;
         ColorClear(const int32_t color[4]) noexcept;
         ColorClear(const uint32_t color[4]) noexcept;
+        ColorClear(uint32_t hexValue) noexcept;
     };
 
     struct DepthStencilClear : public ClearValue
     {
         DepthStencilClear(float depth, uint8_t stencil = 0) noexcept;
     };
+
+    namespace clears
+    {   
+        // Alpha is one
+        extern const ColorClear blackColorClear;
+        extern const ColorClear whiteColorClear;
+        extern const ColorClear redColorClear;
+        extern const ColorClear limeColorClear;
+        extern const ColorClear blueColorClear;
+        extern const ColorClear yellowColorClear;
+        extern const ColorClear cyanColorClear;
+        extern const ColorClear magentaColorClear;
+        extern const ColorClear silverColorClear;
+        extern const ColorClear grayColorClear;
+        extern const ColorClear maroonColorClear;
+        extern const ColorClear oliveColorClear;
+        extern const ColorClear greenColorClear;
+        extern const ColorClear purpleColorClear;
+        extern const ColorClear tealColorClear;
+        extern const ColorClear navyColorClear;
+
+        // Stencil is zero
+        extern const DepthStencilClear oneDepthClear;
+        extern const DepthStencilClear zeroDepthClear;
+    } // namespace clears
 } // namespace magma
 
 #include "clearValue.inl"

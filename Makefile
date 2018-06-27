@@ -18,6 +18,7 @@ MAGMA_OBJS = \
 	helpers/immediateRender.o \
 	\
 	misc/bufferMemoryBarrier.o \
+	misc/clearValue.o \
 	misc/scopedDebugMarker.o \
 	misc/deviceQueueDesc.o \
 	misc/exception.o \

@@ -241,6 +241,7 @@
     <ClCompile Include="descriptors\subpass.cpp" />
     <ClCompile Include="helpers\immediateRender.cpp" />
     <ClCompile Include="misc\bufferMemoryBarrier.cpp" />
+    <ClCompile Include="misc\clearValue.cpp" />
     <ClCompile Include="misc\scopedDebugMarker.cpp" />
     <ClCompile Include="misc\deviceQueueDesc.cpp" />
     <ClCompile Include="misc\exception.cpp" />

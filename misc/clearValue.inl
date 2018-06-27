@@ -59,6 +59,14 @@ MAGMA_INLINE ColorClear::ColorClear(const uint32_t color[4]) noexcept
         value.color.uint32[i] = color[i];
 }
 
+MAGMA_INLINE ColorClear::ColorClear(uint32_t hexValue) noexcept
+{
+    value.color.float32[0] = ((hexValue >> 16) & 0xFF) / (float)0xFF;
+    value.color.float32[1] = ((hexValue >> 8) & 0xFF) / (float)0xFF;
+    value.color.float32[2] = (hexValue & 0xFF) / (float)0xFF;
+    value.color.float32[3] = 1.0f;
+}
+
 MAGMA_INLINE DepthStencilClear::DepthStencilClear(float depth, uint8_t stencil /* 0 */) noexcept
 {
     value.depthStencil.depth = depth;

@@ -556,5 +556,8 @@
     <ClCompile Include="misc\scopedDebugMarker.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>
+    <ClCompile Include="misc\clearValue.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
