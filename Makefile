@@ -12,19 +12,21 @@ RELEASE_TARGET=libmagma.a
 MAGMA_OBJS = \
 	allocator/allocator.o \
 	\
+	barriers/bufferMemoryBarrier.o \
+	barriers/imageMemoryBarrier.o \
+	barriers/memoryBarrier.o \
+	\
 	descriptors/attachment.o \
 	descriptors/subpass.o \
 	\
 	helpers/immediateRender.o \
 	\
-	misc/bufferMemoryBarrier.o \
 	misc/clearValue.o \
 	misc/scopedDebugMarker.o \
 	misc/deviceQueueDesc.o \
 	misc/exception.o \
 	misc/extensions.o \
 	misc/format.o \
-	misc/imageMemoryBarrier.o \
 	misc/stringize.o \
 	\
 	objects/buffer.o \

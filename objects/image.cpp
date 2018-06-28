@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "queue.h"
 #include "fence.h"
 #include "../allocator/allocator.h"
-#include "../misc/imageMemoryBarrier.h"
+#include "../barriers/imageMemoryBarrier.h"
 #include "../misc/exception.h"
 
 namespace magma

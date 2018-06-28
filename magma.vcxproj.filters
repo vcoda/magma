@@ -52,6 +52,12 @@
     <Filter Include="Header Files\mem">
       <UniqueIdentifier>{e6769573-288b-41d6-a84e-9a41c5c66238}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\barriers">
+      <UniqueIdentifier>{99a7312e-d495-48a7-a049-fb8ef8956478}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\barriers">
+      <UniqueIdentifier>{28129b9e-4bba-4ac8-bb73-fb88bdd4dde7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="descriptors\attachment.h">
@@ -222,9 +228,6 @@
     <ClInclude Include="helpers\mapScoped.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
-    <ClInclude Include="misc\imageMemoryBarrier.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
     <ClInclude Include="objects\image2D.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -250,9 +253,6 @@
       <Filter>Header Files\misc</Filter>
     </ClInclude>
     <ClInclude Include="misc\pushConstants.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="misc\bufferMemoryBarrier.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
     <ClInclude Include="objects\storageBuffer.h">
@@ -326,6 +326,15 @@
     </ClInclude>
     <ClInclude Include="objects\object.h">
       <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="misc\bufferMemoryBarrier.h">
+      <Filter>Header Files\barriers</Filter>
+    </ClInclude>
+    <ClInclude Include="barriers\memoryBarrier.h">
+      <Filter>Header Files\barriers</Filter>
+    </ClInclude>
+    <ClInclude Include="barriers\imageMemoryBarrier.h">
+      <Filter>Header Files\barriers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -490,9 +499,6 @@
     <ClCompile Include="objects\bufferView.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="misc\imageMemoryBarrier.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
     <ClCompile Include="objects\image2D.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
@@ -512,9 +518,6 @@
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="misc\deviceQueueDesc.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
-    <ClCompile Include="misc\bufferMemoryBarrier.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>
     <ClCompile Include="objects\storageBuffer.cpp">
@@ -558,6 +561,15 @@
     </ClCompile>
     <ClCompile Include="misc\clearValue.cpp">
       <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="barriers\memoryBarrier.cpp">
+      <Filter>Source Files\barriers</Filter>
+    </ClCompile>
+    <ClCompile Include="barriers\bufferMemoryBarrier.cpp">
+      <Filter>Source Files\barriers</Filter>
+    </ClCompile>
+    <ClCompile Include="barriers\imageMemoryBarrier.cpp">
+      <Filter>Source Files\barriers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

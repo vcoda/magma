@@ -21,24 +21,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Buffer;
+    class Image;
 
-    struct BufferMemoryBarrier : VkBufferMemoryBarrier
+    struct ImageMemoryBarrier : VkImageMemoryBarrier
     {
-        BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
-            VkAccessFlags srcAccessMask,
-            VkAccessFlags dstAccessMask) noexcept;
-        BufferMemoryBarrier(VkAccessFlags srcAccessMask, 
-            VkAccessFlags dstAccessMask) noexcept;
-        BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
-            const BufferMemoryBarrier& predefined) noexcept;
+        ImageMemoryBarrier(std::shared_ptr<const Image> image,
+            VkImageLayout oldLayout,
+            VkImageLayout newLayout,
+            VkImageSubresourceRange subresourceRange);
     };
-
-    namespace barriers
-    {
-        extern const BufferMemoryBarrier hostWriteTransferRead;
-        extern const BufferMemoryBarrier transferWriteHostRead;
-        extern const BufferMemoryBarrier transferWriteShaderRead;
-        extern const BufferMemoryBarrier shaderWriteTransferRead;
-    } // namespace barriers
 } // namespace magma

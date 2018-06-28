@@ -15,19 +15,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
-#include <memory>
-#include "../vulkan.h"
+#include "memoryBarrier.h"
 
 namespace magma
 {
-    class Image;
-
-    struct ImageMemoryBarrier : VkImageMemoryBarrier
-    {
-        ImageMemoryBarrier(const std::shared_ptr<Image> image,
-            VkImageLayout oldLayout, 
-            VkImageLayout newLayout, 
-            VkImageSubresourceRange subresourceRange);
-    };
+MemoryBarrier::MemoryBarrier(VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask) noexcept
+{
+    sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+    pNext = nullptr;
+    this->srcAccessMask = srcAccessMask;
+    this->dstAccessMask = dstAccessMask;
+}
 } // namespace magma

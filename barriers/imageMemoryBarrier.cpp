@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ImageMemoryBarrier::ImageMemoryBarrier(const std::shared_ptr<Image> image,
+ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<const Image> image,
     VkImageLayout oldLayout, VkImageLayout newLayout, VkImageSubresourceRange subresourceRange)
 {
     sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;

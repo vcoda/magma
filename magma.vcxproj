@@ -133,6 +133,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="allocator\allocator.h" />
+    <ClInclude Include="barriers\imageMemoryBarrier.h" />
+    <ClInclude Include="barriers\memoryBarrier.h" />
     <ClInclude Include="descriptors\attachment.h" />
     <ClInclude Include="descriptors\bindings.h" />
     <ClInclude Include="descriptors\descriptors.h" />
@@ -157,7 +159,6 @@
     <ClInclude Include="misc\exception.h" />
     <ClInclude Include="misc\extensions.h" />
     <ClInclude Include="misc\format.h" />
-    <ClInclude Include="misc\imageMemoryBarrier.h" />
     <ClInclude Include="misc\pushConstants.h" />
     <ClInclude Include="misc\scissor.h" />
     <ClInclude Include="misc\stringize.h" />
@@ -237,17 +238,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="allocator\allocator.cpp" />
+    <ClCompile Include="barriers\bufferMemoryBarrier.cpp" />
+    <ClCompile Include="barriers\imageMemoryBarrier.cpp" />
+    <ClCompile Include="barriers\memoryBarrier.cpp" />
     <ClCompile Include="descriptors\attachment.cpp" />
     <ClCompile Include="descriptors\subpass.cpp" />
     <ClCompile Include="helpers\immediateRender.cpp" />
-    <ClCompile Include="misc\bufferMemoryBarrier.cpp" />
     <ClCompile Include="misc\clearValue.cpp" />
     <ClCompile Include="misc\scopedDebugMarker.cpp" />
     <ClCompile Include="misc\deviceQueueDesc.cpp" />
     <ClCompile Include="misc\exception.cpp" />
     <ClCompile Include="misc\extensions.cpp" />
     <ClCompile Include="misc\format.cpp" />
-    <ClCompile Include="misc\imageMemoryBarrier.cpp" />
     <ClCompile Include="misc\stringize.cpp" />
     <ClCompile Include="objects\buffer.cpp" />
     <ClCompile Include="objects\bufferView.cpp" />
