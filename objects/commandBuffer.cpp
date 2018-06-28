@@ -30,9 +30,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "queryPool.h"
 #include "renderPass.h"
 #include "vertexBuffer.h"
+#include "../barriers/globalMemoryBarrier.h"
 #include "../barriers/bufferMemoryBarrier.h"
 #include "../barriers/imageMemoryBarrier.h"
-#include "../barriers/memoryBarrier.h"
 #include "../misc/deviceExtension.h"
 #include "../helpers/stackArray.h"
 
@@ -212,7 +212,7 @@ void CommandBuffer::resetEvent(const std::shared_ptr<Event>& event, VkPipelineSt
 }
 
 void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
-    const std::vector<MemoryBarrier>& memoryBarriers /* {} */,
+    const std::vector<GlobalMemoryBarrier>& memoryBarriers /* {} */,
     const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers /* {} */,
     const std::vector<ImageMemoryBarrier>& imageMemoryBarriers /* {} */) noexcept
 {
@@ -229,7 +229,7 @@ void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineSta
 }
 
 void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
-    const std::vector<MemoryBarrier>& memoryBarriers /* {} */,
+    const std::vector<GlobalMemoryBarrier>& memoryBarriers /* {} */,
     const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers /* {} */,
     const std::vector<ImageMemoryBarrier>& imageMemoryBarriers /* {} */) noexcept
 {
@@ -247,7 +247,7 @@ void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events
         imageMemoryBarriers.data());
 }
 
-void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier,
+void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const GlobalMemoryBarrier& barrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,

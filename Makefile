@@ -13,8 +13,8 @@ MAGMA_OBJS = \
 	allocator/allocator.o \
 	\
 	barriers/bufferMemoryBarrier.o \
+	barriers/globalMemoryBarrier.o \
 	barriers/imageMemoryBarrier.o \
-	barriers/memoryBarrier.o \
 	\
 	descriptors/attachment.o \
 	descriptors/subpass.o \

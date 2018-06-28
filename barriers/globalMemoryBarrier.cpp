@@ -15,11 +15,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include "memoryBarrier.h"
+#include "globalMemoryBarrier.h"
 
 namespace magma
 {
-MemoryBarrier::MemoryBarrier(VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask) noexcept
+GlobalMemoryBarrier::GlobalMemoryBarrier(VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask) noexcept
 {
     sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
     pNext = nullptr;

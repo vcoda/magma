@@ -327,9 +327,6 @@
     <ClInclude Include="objects\object.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="barriers\memoryBarrier.h">
-      <Filter>Header Files\barriers</Filter>
-    </ClInclude>
     <ClInclude Include="barriers\imageMemoryBarrier.h">
       <Filter>Header Files\barriers</Filter>
     </ClInclude>
@@ -338,6 +335,9 @@
     </ClInclude>
     <ClInclude Include="misc\imageSubresourceRange.h">
       <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="barriers\globalMemoryBarrier.h">
+      <Filter>Header Files\barriers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -568,13 +568,13 @@
     <ClCompile Include="misc\clearValue.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>
-    <ClCompile Include="barriers\memoryBarrier.cpp">
-      <Filter>Source Files\barriers</Filter>
-    </ClCompile>
     <ClCompile Include="barriers\bufferMemoryBarrier.cpp">
       <Filter>Source Files\barriers</Filter>
     </ClCompile>
     <ClCompile Include="barriers\imageMemoryBarrier.cpp">
+      <Filter>Source Files\barriers</Filter>
+    </ClCompile>
+    <ClCompile Include="barriers\globalMemoryBarrier.cpp">
       <Filter>Source Files\barriers</Filter>
     </ClCompile>
   </ItemGroup>

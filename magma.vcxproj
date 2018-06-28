@@ -135,7 +135,7 @@
     <ClInclude Include="allocator\allocator.h" />
     <ClInclude Include="barriers\bufferMemoryBarrier.h" />
     <ClInclude Include="barriers\imageMemoryBarrier.h" />
-    <ClInclude Include="barriers\memoryBarrier.h" />
+    <ClInclude Include="barriers\globalMemoryBarrier.h" />
     <ClInclude Include="descriptors\attachment.h" />
     <ClInclude Include="descriptors\bindings.h" />
     <ClInclude Include="descriptors\descriptors.h" />
@@ -242,7 +242,7 @@
     <ClCompile Include="allocator\allocator.cpp" />
     <ClCompile Include="barriers\bufferMemoryBarrier.cpp" />
     <ClCompile Include="barriers\imageMemoryBarrier.cpp" />
-    <ClCompile Include="barriers\memoryBarrier.cpp" />
+    <ClCompile Include="barriers\globalMemoryBarrier.cpp" />
     <ClCompile Include="descriptors\attachment.cpp" />
     <ClCompile Include="descriptors\subpass.cpp" />
     <ClCompile Include="helpers\immediateRender.cpp" />

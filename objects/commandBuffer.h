@@ -38,10 +38,10 @@ namespace magma
     class RenderPass;
     class VertexBuffer;
 
+    struct GlobalMemoryBarrier;
     struct BufferMemoryBarrier;
     struct ImageMemoryBarrier;
-    struct MemoryBarrier;
-
+   
     struct Viewport;
     struct Scissor;
     struct ClearValue;
@@ -244,21 +244,21 @@ namespace magma
             const std::shared_ptr<Event>& event,
             VkPipelineStageFlags srcStageMask, 
             VkPipelineStageFlags dstStageMask,
-            const std::vector<MemoryBarrier>& memoryBarriers = {},
+            const std::vector<GlobalMemoryBarrier>& memoryBarriers = {},
             const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers = {},
             const std::vector<ImageMemoryBarrier>& imageMemoryBarriers = {}) noexcept;
         void waitEvents(
             const std::vector<std::shared_ptr<Event>>& events, 
             VkPipelineStageFlags srcStageMask, 
             VkPipelineStageFlags dstStageMask,
-            const std::vector<MemoryBarrier>& memoryBarriers = {},
+            const std::vector<GlobalMemoryBarrier>& memoryBarriers = {},
             const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers = {},
             const std::vector<ImageMemoryBarrier>& imageMemoryBarriers = {}) noexcept;
 
         void pipelineBarrier(
             VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
-            const MemoryBarrier& barrier,
+            const GlobalMemoryBarrier& barrier,
             VkDependencyFlags dependencyFlags = 0) noexcept;
         void pipelineBarrier(
             VkPipelineStageFlags srcStageMask,

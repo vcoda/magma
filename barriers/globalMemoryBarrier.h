@@ -21,9 +21,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    struct MemoryBarrier : VkMemoryBarrier
+    struct GlobalMemoryBarrier : VkMemoryBarrier
     {
-        MemoryBarrier(VkAccessFlags srcAccessMask,
+        GlobalMemoryBarrier(VkAccessFlags srcAccessMask,
             VkAccessFlags dstAccessMask) noexcept;
     };
 } // namespace magma

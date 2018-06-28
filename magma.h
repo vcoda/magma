@@ -20,8 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "allocator/allocator.h"
 
 #include "barriers/bufferMemoryBarrier.h"
+#include "barriers/globalMemoryBarrier.h"
 #include "barriers/imageMemoryBarrier.h"
-#include "barriers/memoryBarrier.h"
 
 #include "objects/buffer.h"
 #include "objects/bufferView.h"
