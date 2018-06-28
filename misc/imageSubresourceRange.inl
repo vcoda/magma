@@ -90,7 +90,7 @@ MAGMA_INLINE ImageSubresourceRange::ImageSubresourceRange(std::shared_ptr<const 
     layerCount = VK_REMAINING_ARRAY_LAYERS;
 }
 
-ImageSubresourceRange::ImageSubresourceRange(VkFormat format) noexcept
+MAGMA_INLINE ImageSubresourceRange::ImageSubresourceRange(VkFormat format) noexcept
 {
     const Format imageFormat(format);
     if (imageFormat.depthStencil())
