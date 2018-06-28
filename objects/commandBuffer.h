@@ -39,14 +39,16 @@ namespace magma
     class VertexBuffer;
 
     struct BufferMemoryBarrier;
+    struct ImageMemoryBarrier;
+    struct MemoryBarrier;
+
     struct Viewport;
     struct Scissor;
     struct ClearValue;
     struct ColorClear;
     struct DepthStencilClear;
     struct ClearAttachment;
-    struct ImageMemoryBarrier;
-
+    
     // Methods order follows Vulkan API order
     class CommandBuffer : public Dispatchable<VkCommandBuffer>
     {
@@ -239,9 +241,19 @@ namespace magma
             const std::shared_ptr<Event>& event,
             VkPipelineStageFlags stageMask) noexcept;
         void waitEvent(
-            std::shared_ptr<Event>&event);
+            const std::shared_ptr<Event>& event,
+            VkPipelineStageFlags srcStageMask, 
+            VkPipelineStageFlags dstStageMask,
+            const std::vector<MemoryBarrier>& memoryBarriers = {},
+            const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers = {},
+            const std::vector<ImageMemoryBarrier>& imageMemoryBarriers = {}) noexcept;
         void waitEvents(
-            std::vector<std::shared_ptr<Event>>& events);
+            const std::vector<std::shared_ptr<Event>>& events, 
+            VkPipelineStageFlags srcStageMask, 
+            VkPipelineStageFlags dstStageMask,
+            const std::vector<MemoryBarrier>& memoryBarriers = {},
+            const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers = {},
+            const std::vector<ImageMemoryBarrier>& imageMemoryBarriers = {}) noexcept;
 
         void pipelineBarrier(
             VkPipelineStageFlags srcStageMask,
