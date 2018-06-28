@@ -27,9 +27,9 @@ namespace magma
     {
         ImageMemoryBarrier(std::shared_ptr<const Image> image,
             VkImageLayout oldLayout,
-            VkImageLayout newLayout,
-            VkImageSubresourceRange subresourceRange);
-        ImageMemoryBarrier(VkImageLayout oldLayout,
+            VkImageLayout newLayout);
+        ImageMemoryBarrier(std::shared_ptr<const Image> image,
+            VkImageLayout oldLayout,
             VkImageLayout newLayout,
             VkImageSubresourceRange subresourceRange);
         ImageMemoryBarrier(std::shared_ptr<const Image> image,

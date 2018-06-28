@@ -91,6 +91,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "misc/exception.h"
 #include "misc/extensions.h"
 #include "misc/format.h"
+#include "misc/imageSubresourceRange.h"
 #include "misc/instanceExtension.h"
 #include "misc/pushConstants.h"
 #include "misc/scissor.h"

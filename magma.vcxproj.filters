@@ -336,6 +336,9 @@
     <ClInclude Include="barriers\bufferMemoryBarrier.h">
       <Filter>Header Files\barriers</Filter>
     </ClInclude>
+    <ClInclude Include="misc\imageSubresourceRange.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
@@ -363,6 +366,9 @@
       <Filter>Header Files\misc</Filter>
     </None>
     <None Include="misc\instanceExtension.inl">
+      <Filter>Header Files\misc</Filter>
+    </None>
+    <None Include="misc\imageSubresourceRange.inl">
       <Filter>Header Files\misc</Filter>
     </None>
   </ItemGroup>

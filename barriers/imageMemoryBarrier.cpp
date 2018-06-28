@@ -17,11 +17,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "imageMemoryBarrier.h"
 #include "../objects/image.h"
+#include "../misc/imageSubresourceRange.h"
 #include "../misc/exception.h"
 #include "../shared.h"
 
 namespace magma
 {
+ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<const Image> image, 
+    VkImageLayout oldLayout, VkImageLayout newLayout):
+    ImageMemoryBarrier(image, oldLayout, newLayout, ImageSubresourceRange(image))
+{}
+
 ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<const Image> image,
     VkImageLayout oldLayout, VkImageLayout newLayout, VkImageSubresourceRange subresourceRange)
 {
@@ -101,10 +107,6 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<const Image> image,
     this->image = MAGMA_OPTIONAL_HANDLE(image);
     this->subresourceRange = subresourceRange;
 }
-
-ImageMemoryBarrier::ImageMemoryBarrier(VkImageLayout oldLayout, VkImageLayout newLayout, VkImageSubresourceRange subresourceRange):
-    ImageMemoryBarrier(nullptr, oldLayout, newLayout, subresourceRange)
-{}
 
 ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<const Image> image, const ImageMemoryBarrier& predefined) noexcept
 {
