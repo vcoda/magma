@@ -79,11 +79,11 @@ ImageView::ImageView(std::shared_ptr<const Image> resource,
         info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
     info.subresourceRange.baseMipLevel = 0;
     if (!mipLevelCount)
-        info.subresourceRange.levelCount = image->getMipLevels();
+        info.subresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
     else
         info.subresourceRange.levelCount = mipLevelCount;
     info.subresourceRange.baseArrayLayer = 0;
-    info.subresourceRange.layerCount = image->getArrayLayers();
+    info.subresourceRange.layerCount = VK_REMAINING_ARRAY_LAYERS;
     const VkResult create = vkCreateImageView(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create image view");
 }
