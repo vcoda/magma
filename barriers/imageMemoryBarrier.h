@@ -29,5 +29,10 @@ namespace magma
             VkImageLayout oldLayout,
             VkImageLayout newLayout,
             VkImageSubresourceRange subresourceRange);
+        ImageMemoryBarrier(VkImageLayout oldLayout,
+            VkImageLayout newLayout,
+            VkImageSubresourceRange subresourceRange);
+        ImageMemoryBarrier(std::shared_ptr<const Image> image,
+            const ImageMemoryBarrier& predefined) noexcept;
     };
 } // namespace magma
