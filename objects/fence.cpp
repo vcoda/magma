@@ -46,6 +46,7 @@ Fence::~Fence()
 bool Fence::reset() noexcept
 {
     const VkResult reset = vkResetFences(MAGMA_HANDLE(device), 1, &handle);
+    MAGMA_ASSERT(VK_SUCCESS == reset);
     return (VK_SUCCESS == reset);
 }
 
