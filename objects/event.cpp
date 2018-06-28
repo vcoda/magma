@@ -48,12 +48,14 @@ VkResult Event::getStatus() const noexcept
 bool Event::set() noexcept
 {
     const VkResult set = vkSetEvent(MAGMA_HANDLE(device), handle);
+    MAGMA_ASSERT(VK_SUCCESS == set);
     return (VK_SUCCESS == set);
 }
 
 bool Event::reset() noexcept
 {
     const VkResult reset = vkResetEvent(MAGMA_HANDLE(device), handle);
+    MAGMA_ASSERT(VK_SUCCESS == reset);
     return (VK_SUCCESS == reset);
 }
 } // namespace magma
