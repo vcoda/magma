@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "bufferMemoryBarrier.h"
 #include "../objects/buffer.h"
+#include "../shared.h"
 
 namespace magma
 {
@@ -29,23 +30,14 @@ BufferMemoryBarrier::BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
     this->dstAccessMask = dstAccessMask;
     srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
     dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-    this->buffer = *buffer;
+    this->buffer = MAGMA_OPTIONAL_HANDLE(buffer);
     offset = 0;
     size = VK_WHOLE_SIZE;
 }
 
-BufferMemoryBarrier::BufferMemoryBarrier(VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask) noexcept
-{
-    sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
-    pNext = nullptr;
-    this->srcAccessMask = srcAccessMask;
-    this->dstAccessMask = dstAccessMask;
-    srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-    dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-    this->buffer = VK_NULL_HANDLE;
-    offset = 0;
-    size = VK_WHOLE_SIZE;
-}
+BufferMemoryBarrier::BufferMemoryBarrier(VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask) noexcept:
+    BufferMemoryBarrier(nullptr, srcAccessMask, dstAccessMask)
+{}
 
 BufferMemoryBarrier::BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer, const BufferMemoryBarrier& predefined) noexcept
 {
