@@ -45,9 +45,10 @@ VkResult Event::getStatus() const noexcept
     return vkGetEventStatus(MAGMA_HANDLE(device), handle);
 }
 
-void Event::set() noexcept
+bool Event::set() noexcept
 {
-    vkSetEvent(MAGMA_HANDLE(device), handle);
+    const VkResult set = vkSetEvent(MAGMA_HANDLE(device), handle);
+    return (VK_SUCCESS == set);
 }
 
 bool Event::reset() noexcept

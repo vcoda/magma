@@ -27,7 +27,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~Event();
         VkResult getStatus() const noexcept;
-        void set() noexcept;
+        bool set() noexcept;
         bool reset() noexcept;
     };
 } // namespace magma
