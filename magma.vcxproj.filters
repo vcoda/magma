@@ -327,13 +327,13 @@
     <ClInclude Include="objects\object.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="misc\bufferMemoryBarrier.h">
-      <Filter>Header Files\barriers</Filter>
-    </ClInclude>
     <ClInclude Include="barriers\memoryBarrier.h">
       <Filter>Header Files\barriers</Filter>
     </ClInclude>
     <ClInclude Include="barriers\imageMemoryBarrier.h">
+      <Filter>Header Files\barriers</Filter>
+    </ClInclude>
+    <ClInclude Include="barriers\bufferMemoryBarrier.h">
       <Filter>Header Files\barriers</Filter>
     </ClInclude>
   </ItemGroup>

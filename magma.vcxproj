@@ -133,6 +133,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="allocator\allocator.h" />
+    <ClInclude Include="barriers\bufferMemoryBarrier.h" />
     <ClInclude Include="barriers\imageMemoryBarrier.h" />
     <ClInclude Include="barriers\memoryBarrier.h" />
     <ClInclude Include="descriptors\attachment.h" />
@@ -149,7 +150,6 @@
     <ClInclude Include="mem\copyMemory.h" />
     <ClInclude Include="mem\typedefs.h" />
     <ClInclude Include="mem\zeroMemory.h" />
-    <ClInclude Include="misc\bufferMemoryBarrier.h" />
     <ClInclude Include="misc\clearAttachment.h" />
     <ClInclude Include="misc\clearValue.h" />
     <ClInclude Include="misc\deviceExtension.h" />

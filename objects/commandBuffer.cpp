@@ -30,8 +30,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "queryPool.h"
 #include "renderPass.h"
 #include "vertexBuffer.h"
-#include "../misc/bufferMemoryBarrier.h"
-#include "../misc/imageMemoryBarrier.h"
+#include "../barriers/bufferMemoryBarrier.h"
+#include "../barriers/imageMemoryBarrier.h"
+#include "../barriers/memoryBarrier.h"
 #include "../misc/deviceExtension.h"
 #include "../helpers/stackArray.h"
 
@@ -218,23 +219,55 @@ void CommandBuffer::waitEvents(std::vector<std::shared_ptr<Event>>&)
     MAGMA_THROW_NOT_IMPLEMENTED;
 }
 
-void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::shared_ptr<Buffer>& buffer, const BufferMemoryBarrier& barrier) noexcept
+void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    const BufferMemoryBarrier bufferBarrier(buffer, barrier);
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, 0, 0, nullptr, 1, &bufferBarrier, 0, nullptr);
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
+        1, &barrier,
+        0, nullptr,
+        0, nullptr);
 }
 
-void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<std::shared_ptr<Buffer>>& buffers, const BufferMemoryBarrier& barrier) noexcept
+void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const BufferMemoryBarrier& barrier,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
+{
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
+        0, nullptr,
+        1, &barrier,
+        0, nullptr);
+}
+
+void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
+{
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
+        0, nullptr,
+        0, nullptr,
+        1, &barrier);
+}
+
+void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<std::shared_ptr<Buffer>>& buffers, const BufferMemoryBarrier& barrier,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     MAGMA_STACK_ARRAY(VkBufferMemoryBarrier, barriers, buffers.size());
     for (const auto& buffer : buffers)
         barriers.put(BufferMemoryBarrier(buffer, barrier));
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, 0, 0, nullptr, MAGMA_COUNT(barriers), barriers, 0, nullptr);
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
+        0, nullptr,
+        MAGMA_COUNT(barriers), barriers,
+        0, nullptr);
 }
 
-void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier) noexcept
+void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<std::shared_ptr<Image>>& images, const ImageMemoryBarrier& barrier,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, barriers, images.size());
+    for (const auto& image : images)
+        barriers.put(ImageMemoryBarrier(image, barrier));
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
+        0, nullptr,
+        0, nullptr,
+        MAGMA_COUNT(barriers), barriers);
 }
 
 void CommandBuffer::beginQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex, bool precise) noexcept
