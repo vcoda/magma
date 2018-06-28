@@ -201,11 +201,13 @@ void CommandBuffer::resolveImage(const std::shared_ptr<Image>& srcImage, const s
 
 void CommandBuffer::setEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags stageMask) noexcept
 {
+    MAGMA_ASSERT(!(stageMask & VK_PIPELINE_STAGE_HOST_BIT));
     vkCmdSetEvent(handle, *event, stageMask);
 }
 
 void CommandBuffer::resetEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags stageMask) noexcept
 {
+    MAGMA_ASSERT(!(stageMask & VK_PIPELINE_STAGE_HOST_BIT));
     vkCmdResetEvent(handle, *event, stageMask);
 }
 
