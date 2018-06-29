@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-
 #include <malloc.h>
 #include <cassert>
 #include <memory>
@@ -70,14 +69,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    template <typename Type>
+    template<typename Type>
     MAGMA_INLINE typename Type::VkType __handle(const std::shared_ptr<const Type>& obj)
     {
-        //return obj ? *obj : VK_NULL_HANDLE;
         if (obj) return *obj;
         return VK_NULL_HANDLE;
     }
-}
+} // namespace magma
 
 #define MAGMA_HANDLE(obj) *(this->obj)
 #define MAGMA_OPTIONAL_HANDLE(obj) magma::__handle(obj)
