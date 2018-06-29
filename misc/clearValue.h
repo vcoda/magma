@@ -24,6 +24,8 @@ namespace magma
     // C++ forbids inheritance from union
     struct ClearValue
     {
+        operator VkClearValue&() noexcept
+            { return value; }
         operator const VkClearValue&() const noexcept
             { return value; }
 
