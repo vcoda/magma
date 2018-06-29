@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 template<typename Function>
-InstanceExtension<Function>::InstanceExtension(VkInstance instance,
+MAGMA_INLINE InstanceExtension<Function>::InstanceExtension(VkInstance instance,
     const char *name) noexcept
 {
     if (!addr)
@@ -30,7 +30,7 @@ InstanceExtension<Function>::InstanceExtension(VkInstance instance,
 }
 
 template<typename Function>
-InstanceExtension<Function>::InstanceExtension(VkInstance instance,
+MAGMA_INLINE InstanceExtension<Function>::InstanceExtension(VkInstance instance,
     const char *name, const char *extension)
 {
     if (!addr)
