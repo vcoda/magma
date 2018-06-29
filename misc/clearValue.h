@@ -69,8 +69,8 @@ namespace magma
         extern const ClearColor tealColor;
         extern const ClearColor navyColor;
 
-        extern const ClearDepthStencil oneDepthZeroStencil;
-        extern const ClearDepthStencil zeroDepthZeroStencil;
+        extern const ClearDepthStencil depthOne;
+        extern const ClearDepthStencil depthZero;
     } // namespace clears
 } // namespace magma
 

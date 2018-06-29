@@ -38,7 +38,7 @@ const ClearColor purpleColor(0x800080);
 const ClearColor tealColor(0x008080);
 const ClearColor navyColor(0x000080);
 
-const ClearDepthStencil oneDepthZeroStencil(1.f, 0x0);
-const ClearDepthStencil zeroDepthZeroStencil(0.f, 0x0);
+const ClearDepthStencil depthOne(1.f, 0x0);
+const ClearDepthStencil depthZero(0.f, 0x0);
 } // namespace clears
 } // namespace magma
