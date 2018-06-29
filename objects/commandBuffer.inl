@@ -15,16 +15,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include "descriptorSet.h"
-#include "indexBuffer.h"
-#include "pipelineLayout.h"
-#include "vertexBuffer.h"
-#include "../misc/clearValue.h"
-#include "../misc/clearAttachment.h"
-#include "../misc/viewport.h"
-#include "../misc/scissor.h"
-#include "../helpers/stackArray.h"
-
 namespace magma
 {
 MAGMA_INLINE void CommandBuffer::setViewport(float x, float y, float width, float height,

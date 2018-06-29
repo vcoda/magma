@@ -17,38 +17,32 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <limits>
-#include <vector>
-#include "handle.h"
+#include "descriptorSet.h"
+#include "vertexBuffer.h"
+#include "indexBuffer.h"
+#include "pipeline.h"
+#include "pipelineLayout.h"
+#include "../misc/clearValue.h"
+#include "../misc/clearAttachment.h"
+#include "../misc/viewport.h"
+#include "../misc/scissor.h"
+#include "../helpers/stackArray.h"
 #include "../shared.h"
 
 namespace magma
 {
     class CommandPool;
-    class Buffer;
-    class ComputePipeline;
-    class DescriptorSet;
+    class Framebuffer;
+    class RenderPass;
+    class Image;
     class Event;
     class Fence;
-    class Framebuffer;
-    class GraphicsPipeline;
-    class IndexBuffer;
-    class Image;
-    class PipelineLayout;
     class QueryPool;
-    class RenderPass;
-    class VertexBuffer;
 
     struct GlobalMemoryBarrier;
     struct BufferMemoryBarrier;
     struct ImageMemoryBarrier;
    
-    struct Viewport;
-    struct Scissor;
-    struct ClearValue;
-    struct ColorClear;
-    struct DepthStencilClear;
-    struct ClearAttachment;
-    
     // Methods order follows Vulkan API order
     class CommandBuffer : public Dispatchable<VkCommandBuffer>
     {
