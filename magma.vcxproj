@@ -148,7 +148,6 @@
     <ClInclude Include="helpers\uniformArray.h" />
     <ClInclude Include="magma.h" />
     <ClInclude Include="mem\copyMemory.h" />
-    <ClInclude Include="mem\typedefs.h" />
     <ClInclude Include="mem\zeroMemory.h" />
     <ClInclude Include="misc\clearAttachment.h" />
     <ClInclude Include="misc\clearValue.h" />

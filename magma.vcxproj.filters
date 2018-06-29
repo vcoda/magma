@@ -288,9 +288,6 @@
     <ClInclude Include="mem\copyMemory.h">
       <Filter>Header Files\mem</Filter>
     </ClInclude>
-    <ClInclude Include="mem\typedefs.h">
-      <Filter>Header Files\mem</Filter>
-    </ClInclude>
     <ClInclude Include="mem\zeroMemory.h">
       <Filter>Header Files\mem</Filter>
     </ClInclude>

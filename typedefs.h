@@ -16,6 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <memory>
+#include <functional>
 
 namespace magma
 {
@@ -68,6 +70,6 @@ namespace magma
     typedef std::shared_ptr<class UniformTexelBuffer> UniformTexelBufferPtr;
     typedef std::shared_ptr<class VertexBuffer> VertexBufferPtr;
 
-    template<class Block> using DynamicUniformBufferPtr = std::shared_ptr<class DynamicUniformBuffer<Block>>;
-    template<class Block> using UniformBufferPtr = std::shared_ptr<class UniformBuffer<Block>>;
+    typedef std::function<void *(void *, const void *, std::size_t)> CopyMemoryFunction;
+    typedef std::function<void *(void *, std::size_t)> ZeroMemoryFunction;
 } // namespace magma
