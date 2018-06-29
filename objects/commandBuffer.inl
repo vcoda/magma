@@ -218,14 +218,16 @@ MAGMA_INLINE void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buf
        (which requires additional storage and may incur an additional allocation), 
        and then copy the data from the command buffer into dstBuffer 
        when the command is executed on a device. */
-    vkCmdUpdateBuffer(handle, *buffer, offset, static_cast<uint32_t>(sizeof(Type) * data.size()), data.data());
+    const VkDeviceSize dstOffset = static_cast<VkDeviceSize>(sizeof(Type) * data.size());
+    vkCmdUpdateBuffer(handle, *buffer, offset, dstOffset, data.data());
 }
 
 template<typename Type>
 MAGMA_INLINE void CommandBuffer::fillBuffer(const std::shared_ptr<Buffer>& buffer, const std::vector<Type>& data,
     VkDeviceSize offset /* 0 */) const noexcept
 {
-    vkCmdFillBuffer(handle, *buffer, offset, static_cast<uint32_t>(sizeof(Type) * data.size()), data.data());
+    const VkDeviceSize dstOffset = static_cast<VkDeviceSize>(sizeof(Type) * data.size());
+    vkCmdFillBuffer(handle, *buffer, offset, dstOffset, data.data());
 }
 
 template<typename Type, uint32_t pushConstantCount>
