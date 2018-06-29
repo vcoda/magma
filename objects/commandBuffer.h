@@ -214,11 +214,11 @@ namespace magma
 
         void clearColorImage(
             const std::shared_ptr<Image>& image,
-            const ColorClear& color, 
+            const ClearColor& color, 
             const VkImageSubresourceRange& range) const noexcept;
         void clearDepthStencilImage(
             const std::shared_ptr<Image>& image,
-            const DepthStencilClear& depthStencil,
+            const ClearDepthStencil& depthStencil,
             const VkImageSubresourceRange& range) const noexcept;
         void clearAttachments(
             const std::initializer_list<ClearAttachment>& attachments,

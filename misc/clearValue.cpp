@@ -21,24 +21,24 @@ namespace magma
 {
 namespace clears
 {
-const ColorClear blackColorClear(0x000000U);
-const ColorClear whiteColorClear(0xFFFFFF);
-const ColorClear redColorClear(0xFF0000);
-const ColorClear limeColorClear(0x00FF00);
-const ColorClear blueColorClear(0x0000FF);
-const ColorClear yellowColorClear(0xFFFF00);
-const ColorClear cyanColorClear(0x00FFFF);
-const ColorClear magentaColorClear(0xFF00FF);
-const ColorClear silverColorClear(0xC0C0C0);
-const ColorClear grayColorClear(0x808080);
-const ColorClear maroonColorClear(0x800000);
-const ColorClear oliveColorClear(0x808000);
-const ColorClear greenColorClear(0x008000);
-const ColorClear purpleColorClear(0x800080);
-const ColorClear tealColorClear(0x008080);
-const ColorClear navyColorClear(0x000080);
+const ClearColor blackColor(0x000000U);
+const ClearColor whiteColor(0xFFFFFF);
+const ClearColor redColor(0xFF0000);
+const ClearColor limeColor(0x00FF00);
+const ClearColor blueColor(0x0000FF);
+const ClearColor yellowColor(0xFFFF00);
+const ClearColor cyanColor(0x00FFFF);
+const ClearColor magentaColor(0xFF00FF);
+const ClearColor silverColor(0xC0C0C0);
+const ClearColor grayColor(0x808080);
+const ClearColor maroonColor(0x800000);
+const ClearColor oliveColor(0x808000);
+const ClearColor greenColor(0x008000);
+const ClearColor purpleColor(0x800080);
+const ClearColor tealColor(0x008080);
+const ClearColor navyColor(0x000080);
 
-const DepthStencilClear oneDepthClear(1.f, 0x0);
-const DepthStencilClear zeroDepthClear(0.f, 0x0);
+const ClearDepthStencil oneDepthZeroStencil(1.f, 0x0);
+const ClearDepthStencil zeroDepthZeroStencil(0.f, 0x0);
 } // namespace clears
 } // namespace magma

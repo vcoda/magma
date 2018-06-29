@@ -71,10 +71,10 @@ MAGMA_INLINE ColorClearAttachment::ColorClearAttachment(uint32_t attachment, con
         clearValue.color.uint32[i] = color[i];
 }
 
-MAGMA_INLINE ColorClearAttachment::ColorClearAttachment(uint32_t attachment, const ColorClear& colorValue) noexcept:
+MAGMA_INLINE ColorClearAttachment::ColorClearAttachment(uint32_t attachment, const ClearColor& color) noexcept:
     ColorClearAttachment(attachment)
 {
-    clearValue = colorValue;
+    clearValue = color;
 }
 
 MAGMA_INLINE DepthClearAttachment::DepthClearAttachment(float depth) noexcept
@@ -101,10 +101,10 @@ MAGMA_INLINE DepthStencilClearAttachment::DepthStencilClearAttachment(float dept
     clearValue.depthStencil.stencil = stencil;
 }
 
-MAGMA_INLINE DepthStencilClearAttachment::DepthStencilClearAttachment(const DepthStencilClear& depthStencilValue) noexcept
+MAGMA_INLINE DepthStencilClearAttachment::DepthStencilClearAttachment(const ClearDepthStencil& depthStencil) noexcept
 {
     aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
     colorAttachment = 0;
-    clearValue = depthStencilValue;
+    clearValue = depthStencil;
 }
 } // namespace magma

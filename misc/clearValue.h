@@ -33,45 +33,44 @@ namespace magma
         VkClearValue value;
     };  
 
-    struct ColorClear : public ClearValue 
+    struct ClearColor : public ClearValue 
     {
-        ColorClear(float r, float g, float b, float a = 1.f) noexcept;
-        ColorClear(int32_t r, int32_t g, int32_t b, int32_t a) noexcept;
-        ColorClear(uint32_t r, uint32_t g, uint32_t b, uint32_t a) noexcept;
-        ColorClear(const float color[4]) noexcept;
-        ColorClear(const int32_t color[4]) noexcept;
-        ColorClear(const uint32_t color[4]) noexcept;
-        ColorClear(uint32_t hexValue) noexcept;
+        ClearColor(float r, float g, float b, float a = 1.f) noexcept;
+        ClearColor(int32_t r, int32_t g, int32_t b, int32_t a) noexcept;
+        ClearColor(uint32_t r, uint32_t g, uint32_t b, uint32_t a) noexcept;
+        ClearColor(const float color[4]) noexcept;
+        ClearColor(const int32_t color[4]) noexcept;
+        ClearColor(const uint32_t color[4]) noexcept;
+        ClearColor(uint32_t hexValue) noexcept;
     };
 
-    struct DepthStencilClear : public ClearValue
+    struct ClearDepthStencil : public ClearValue
     {
-        DepthStencilClear(float depth, uint8_t stencil = 0) noexcept;
+        ClearDepthStencil(float depth, uint8_t stencil = 0) noexcept;
     };
 
     namespace clears
     {   
         // Alpha is one
-        extern const ColorClear blackColorClear;
-        extern const ColorClear whiteColorClear;
-        extern const ColorClear redColorClear;
-        extern const ColorClear limeColorClear;
-        extern const ColorClear blueColorClear;
-        extern const ColorClear yellowColorClear;
-        extern const ColorClear cyanColorClear;
-        extern const ColorClear magentaColorClear;
-        extern const ColorClear silverColorClear;
-        extern const ColorClear grayColorClear;
-        extern const ColorClear maroonColorClear;
-        extern const ColorClear oliveColorClear;
-        extern const ColorClear greenColorClear;
-        extern const ColorClear purpleColorClear;
-        extern const ColorClear tealColorClear;
-        extern const ColorClear navyColorClear;
+        extern const ClearColor blackColor;
+        extern const ClearColor whiteColor;
+        extern const ClearColor redColor;
+        extern const ClearColor limeColor;
+        extern const ClearColor blueColor;
+        extern const ClearColor yellowColor;
+        extern const ClearColor cyanColor;
+        extern const ClearColor magentaColor;
+        extern const ClearColor silverColor;
+        extern const ClearColor grayColor;
+        extern const ClearColor maroonColor;
+        extern const ClearColor oliveColor;
+        extern const ClearColor greenColor;
+        extern const ClearColor purpleColor;
+        extern const ClearColor tealColor;
+        extern const ClearColor navyColor;
 
-        // Stencil is zero
-        extern const DepthStencilClear oneDepthClear;
-        extern const DepthStencilClear zeroDepthClear;
+        extern const ClearDepthStencil oneDepthZeroStencil;
+        extern const ClearDepthStencil zeroDepthZeroStencil;
     } // namespace clears
 } // namespace magma
 

@@ -30,7 +30,7 @@ namespace magma
         ColorClearAttachment(uint32_t attachment, const float color[4]) noexcept;
         ColorClearAttachment(uint32_t attachment, const int32_t color[4]) noexcept;
         ColorClearAttachment(uint32_t attachment, const uint32_t color[4]) noexcept;
-        ColorClearAttachment(uint32_t attachment, const ColorClear& colorValue) noexcept;
+        ColorClearAttachment(uint32_t attachment, const ClearColor& color) noexcept;
 
     private:
         ColorClearAttachment(uint32_t attachment) noexcept;
@@ -49,7 +49,7 @@ namespace magma
     struct DepthStencilClearAttachment : ClearAttachment
     {
         DepthStencilClearAttachment(float depth, uint8_t stencil) noexcept;
-        DepthStencilClearAttachment(const DepthStencilClear& depthStencilValue) noexcept;
+        DepthStencilClearAttachment(const ClearDepthStencil& depthStencil) noexcept;
     };
 } // namespace magma
 

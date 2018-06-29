@@ -162,13 +162,13 @@ void CommandBuffer::copyImageToBuffer(const std::shared_ptr<Image>& srcImage, co
 // void CommandBuffer::updateBuffer()
 // void CommandBuffer::fillBuffer()
 
-void CommandBuffer::clearColorImage(const std::shared_ptr<Image>& image, const ColorClear& color, const VkImageSubresourceRange& range) const noexcept
+void CommandBuffer::clearColorImage(const std::shared_ptr<Image>& image, const ClearColor& color, const VkImageSubresourceRange& range) const noexcept
 {
     const VkClearColorValue& clearColor = static_cast<const VkClearValue&>(color).color;
     vkCmdClearColorImage(handle, *image, VK_IMAGE_LAYOUT_GENERAL, &clearColor, 1, &range);
 }
 
-void CommandBuffer::clearDepthStencilImage(const std::shared_ptr<Image>& image, const DepthStencilClear& depthStencil, const VkImageSubresourceRange& range) const noexcept
+void CommandBuffer::clearDepthStencilImage(const std::shared_ptr<Image>& image, const ClearDepthStencil& depthStencil, const VkImageSubresourceRange& range) const noexcept
 {
     const VkClearDepthStencilValue& clearDepthStencil = static_cast<const VkClearValue&>(depthStencil).depthStencil;
     vkCmdClearDepthStencilImage(handle, *image, VK_IMAGE_LAYOUT_GENERAL, &clearDepthStencil, 1, &range);
