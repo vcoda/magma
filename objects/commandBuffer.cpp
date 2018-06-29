@@ -355,11 +355,6 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     vkCmdBeginRenderPass(handle, &beginInfo, contents);
 }
 
-void CommandBuffer::nextSubpass() noexcept
-{
-    // TODO: implement
-}
-
 void CommandBuffer::endRenderPass() noexcept
 {
     vkCmdEndRenderPass(handle);

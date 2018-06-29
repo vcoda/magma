@@ -249,6 +249,11 @@ MAGMA_INLINE void CommandBuffer::pushConstantBlock(const std::shared_ptr<Pipelin
     vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type)), &block);
 }
 
+MAGMA_INLINE void CommandBuffer::nextSubpass(VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+{
+    vkCmdNextSubpass(handle, contents);
+}
+
 MAGMA_INLINE void CommandBuffer::setRenderArea(const VkRect2D& rc) noexcept
 {
     renderArea = rc;

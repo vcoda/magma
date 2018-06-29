@@ -322,7 +322,7 @@ namespace magma
             const std::shared_ptr<Framebuffer>& framebuffer,
             const std::initializer_list<ClearValue>& clearValues,
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
-        void nextSubpass() noexcept; // TODO: implement
+        void nextSubpass(VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void endRenderPass() noexcept;
 
         void executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept;
