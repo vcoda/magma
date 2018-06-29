@@ -94,16 +94,7 @@ bool CommandBuffer::reset(bool releaseResources) noexcept
     return (VK_SUCCESS == reset);
 }
 
-void CommandBuffer::bindPipeline(const std::shared_ptr<GraphicsPipeline>& pipeline) noexcept
-{
-    vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_GRAPHICS, *pipeline);
-}
-
-void CommandBuffer::bindPipeline(const std::shared_ptr<ComputePipeline>& pipeline) noexcept
-{
-    vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_COMPUTE, *pipeline);
-}
-
+// void CommandBuffer::bindPipeline
 // void CommandBuffer::setViewport
 // void CommandBuffer::setScissor
 // void CommandBuffer::setLineWidth
@@ -173,14 +164,14 @@ void CommandBuffer::copyImageToBuffer(const std::shared_ptr<Image>& srcImage, co
 
 void CommandBuffer::clearColorImage(const std::shared_ptr<Image>& image, const ColorClear& color, const VkImageSubresourceRange& range) const noexcept
 {
-    const VkClearValue clearValue = color;
-    vkCmdClearColorImage(handle, *image, VK_IMAGE_LAYOUT_GENERAL, &clearValue.color, 1, &range);
+    const VkClearColorValue& clearColor = static_cast<const VkClearValue&>(color).color;
+    vkCmdClearColorImage(handle, *image, VK_IMAGE_LAYOUT_GENERAL, &clearColor, 1, &range);
 }
 
 void CommandBuffer::clearDepthStencilImage(const std::shared_ptr<Image>& image, const DepthStencilClear& depthStencil, const VkImageSubresourceRange& range) const noexcept
 {
-    const VkClearValue clearValue = depthStencil;
-    vkCmdClearDepthStencilImage(handle, *image, VK_IMAGE_LAYOUT_GENERAL, &clearValue.depthStencil, 1, &range);
+    const VkClearDepthStencilValue& clearDepthStencil = static_cast<const VkClearValue&>(depthStencil).depthStencil;
+    vkCmdClearDepthStencilImage(handle, *image, VK_IMAGE_LAYOUT_GENERAL, &clearDepthStencil, 1, &range);
 }
 
 void CommandBuffer::clearAttachments(const std::initializer_list<ClearAttachment>& attachments, const VkClearRect& clearRect) const noexcept
@@ -355,10 +346,8 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     vkCmdBeginRenderPass(handle, &beginInfo, contents);
 }
 
-void CommandBuffer::endRenderPass() noexcept
-{
-    vkCmdEndRenderPass(handle);
-}
+// CommandBuffer::nextSubpass
+// CommandBuffer::endRenderPass
 
 void CommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept
 {

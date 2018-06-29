@@ -17,6 +17,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 namespace magma
 {
+MAGMA_INLINE void CommandBuffer::bindPipeline(const std::shared_ptr<GraphicsPipeline>& pipeline) noexcept
+{
+    vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_GRAPHICS, *pipeline);
+}
+
+MAGMA_INLINE void CommandBuffer::bindPipeline(const std::shared_ptr<ComputePipeline>& pipeline) noexcept
+{
+    vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_COMPUTE, *pipeline);
+}
+
 MAGMA_INLINE void CommandBuffer::setViewport(float x, float y, float width, float height,
     float minDepth /* 0 */, float maxDepth /* 1 */) noexcept
 {
@@ -254,6 +264,11 @@ MAGMA_INLINE void CommandBuffer::pushConstantBlock(const std::shared_ptr<Pipelin
 MAGMA_INLINE void CommandBuffer::nextSubpass(VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     vkCmdNextSubpass(handle, contents);
+}
+
+MAGMA_INLINE void CommandBuffer::endRenderPass() noexcept
+{
+    vkCmdEndRenderPass(handle);
 }
 
 MAGMA_INLINE void CommandBuffer::setRenderArea(const VkRect2D& rc) noexcept
