@@ -80,6 +80,7 @@ namespace magma
         extern const VertexInputState pos3Float_Nrm3Float;
         extern const VertexInputState pos3Float_Nrm3Float_Col3Float;
         extern const VertexInputState pos3Float_Nrm3Float_Col4Float;
+        extern const VertexInputState pos3Float_Nrm3Float_Col4UNorm;
         extern const VertexInputState pos3Float_Nrm3Float_Tex2Float;
     } // namespace states
 } // namespace magma

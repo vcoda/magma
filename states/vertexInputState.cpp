@@ -137,6 +137,11 @@ const VertexInputState pos3Float_Nrm3Float_Col4Float(VertexInputBinding(0, sizeo
     VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32_SFLOAT, 12),
     VertexInputAttribute(0, 2, VK_FORMAT_R32G32B32A32_SFLOAT, 24)
 });
+const VertexInputState pos3Float_Nrm3Float_Col4UNorm(VertexInputBinding(0, sizeof(float) * 6 + sizeof(char) * 4), {
+    VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0),
+    VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32_SFLOAT, 12),
+    VertexInputAttribute(0, 2, VK_FORMAT_R8G8B8A8_UNORM, 24)
+});
 const VertexInputState pos3Float_Nrm3Float_Tex2Float(VertexInputBinding(0, sizeof(float) * 8), {
     VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0),
     VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32_SFLOAT, 12),
