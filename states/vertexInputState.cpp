@@ -120,7 +120,7 @@ const VertexInputState pos3Float_Col4Float(VertexInputBinding(0, sizeof(float) *
     VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0),
     VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32A32_SFLOAT, 12)
 });
-const VertexInputState pos3Float_Col4UMorm(VertexInputBinding(0, sizeof(float) * 3 + sizeof(char) * 4), {
+const VertexInputState pos3Float_Col4UNorm(VertexInputBinding(0, sizeof(float) * 3 + sizeof(char) * 4), {
     VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0),
     VertexInputAttribute(0, 1, VK_FORMAT_R8G8B8A8_UNORM, 12)
 });
