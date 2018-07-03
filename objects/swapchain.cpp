@@ -130,6 +130,6 @@ std::vector<std::shared_ptr<SwapchainColorAttachment2D>> Swapchain::getImages() 
     std::vector<std::shared_ptr<SwapchainColorAttachment2D>> images;
     for (const VkImage handle : swapchainImages)
         images.emplace_back(new SwapchainColorAttachment2D(device, handle, surfaceFormat.format, imageExtent));
-    return std::move(images);
+    return images;
 }
 } // namespace magma

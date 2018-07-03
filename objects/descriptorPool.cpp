@@ -96,7 +96,7 @@ std::vector<std::shared_ptr<DescriptorSet>> DescriptorPool::allocateDescriptorSe
     int i = 0;
     for (const VkDescriptorSet descriptorSet : nativeDescriptorSets)
         descriptorSets.emplace_back(new DescriptorSet(descriptorSet, device, shared_from_this(), setLayouts[i++]));
-    return std::move(descriptorSets);
+    return descriptorSets;
 }
 
 void DescriptorPool::freeDescriptorSets(std::vector<std::shared_ptr<DescriptorSet>>& descriptorSets) noexcept

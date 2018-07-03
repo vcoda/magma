@@ -132,7 +132,7 @@ std::vector<VkBufferImageCopy> Image::getCopyRegions(const std::vector<VkExtent2
             *offset = MAGMA_ALIGN(*offset); 
         }
     }
-    return std::move(copyRegions);
+    return copyRegions;
 }   
 
 void Image::copyFromBuffer(std::shared_ptr<Buffer> buffer, 

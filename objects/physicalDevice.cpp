@@ -79,7 +79,7 @@ std::vector<VkQueueFamilyProperties> PhysicalDevice::getQueueFamilyProperties() 
         queueFamilyProperties.resize(propertyCount);
         vkGetPhysicalDeviceQueueFamilyProperties(handle, &propertyCount, queueFamilyProperties.data());
     }
-    return std::move(queueFamilyProperties);
+    return queueFamilyProperties;
 }
 
 const VkPhysicalDeviceMemoryProperties& PhysicalDevice::getMemoryProperties() const noexcept
@@ -103,7 +103,7 @@ std::set<std::string> PhysicalDevice::enumerateExtensions(const char *layerName 
         for (const auto& property : properties)
             extensions.emplace(property.extensionName);
     }
-    return std::move(extensions);
+    return extensions;
 }
 
 std::vector<VkLayerProperties> PhysicalDevice::enumerateLayerProperties() const
@@ -117,7 +117,7 @@ std::vector<VkLayerProperties> PhysicalDevice::enumerateLayerProperties() const
         const VkResult enumerate = vkEnumerateDeviceLayerProperties(handle, &propertyCount, properties.data());
         MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device layers");
     }
-    return std::move(properties);
+    return properties;
 }
 
 std::shared_ptr<Device> PhysicalDevice::createDevice(
@@ -169,7 +169,7 @@ std::vector<VkSurfaceFormatKHR> PhysicalDevice::getSurfaceFormats(std::shared_pt
         const VkResult get = vkGetPhysicalDeviceSurfaceFormatsKHR(handle, *surface, &formatCount, surfaceFormats.data());
         MAGMA_THROW_FAILURE(get, "failed to get surface formats");
     }
-    return std::move(surfaceFormats);
+    return surfaceFormats;
 }
 
 std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared_ptr<const Surface> surface) const
@@ -183,7 +183,7 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared
         const VkResult get = vkGetPhysicalDeviceSurfacePresentModesKHR(handle, *surface, &presentModeCount, surfacePresentModes.data());
         MAGMA_THROW_FAILURE(get, "failed to get surface present modes");
     }
-    return std::move(surfacePresentModes);
+    return surfacePresentModes;
 }
 
 std::vector<VkDisplayPropertiesKHR> PhysicalDevice::getDisplayProperties() const
@@ -198,7 +198,7 @@ std::vector<VkDisplayPropertiesKHR> PhysicalDevice::getDisplayProperties() const
         const VkResult get = vkGetPhysicalDeviceDisplayPropertiesKHR(handle, &propertyCount, displayProperties.data());
         MAGMA_THROW_FAILURE(get, "failed to get display properties");
     }
-    return std::move(displayProperties);
+    return displayProperties;
 }
 
 std::vector<VkDisplayPlanePropertiesKHR> PhysicalDevice::getDisplayPlaneProperties() const
@@ -213,7 +213,7 @@ std::vector<VkDisplayPlanePropertiesKHR> PhysicalDevice::getDisplayPlaneProperti
         const VkResult get = vkGetPhysicalDeviceDisplayPlanePropertiesKHR(handle, &propertyCount, displayPlaneProperties.data());
         MAGMA_THROW_FAILURE(get, "failed to get display plane properties");
     }
-    return std::move(displayPlaneProperties);
+    return displayPlaneProperties;
 }
 
 std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint32_t planeIndex) const
@@ -231,7 +231,7 @@ std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint3
         for (const VkDisplayKHR handle : displays)
             supportedDisplays.emplace_back(new Display(shared_from_this(), handle, planeIndex));
     }
-    return std::move(supportedDisplays);
+    return supportedDisplays;
 }
 
 const VkPhysicalDeviceShaderCorePropertiesAMD& PhysicalDevice::getShaderCoreProperties() const

@@ -61,9 +61,9 @@ std::vector<uint8_t> Pipeline::getShaderBinary(VkShaderStageFlagBits stage) cons
         std::vector<uint8_t> binary(binarySize);
         const VkResult get = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_BINARY_AMD, &binarySize, binary.data());
         if (VK_SUCCESS == get)
-            return std::move(binary);
+            return binary;
     }
-    return std::vector<uint8_t>();
+    return {};
 }
 
 std::string Pipeline::getShaderDisassembly(VkShaderStageFlagBits stage) const
@@ -76,7 +76,7 @@ std::string Pipeline::getShaderDisassembly(VkShaderStageFlagBits stage) const
         std::vector<char> disassembly(disassemblySize);
         const VkResult get = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, disassembly.data());
         if (VK_SUCCESS == get)
-            return std::move(std::string(&disassembly[0]));
+            return std::string(&disassembly[0]);
     }
     return std::string();
 }

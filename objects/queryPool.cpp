@@ -59,8 +59,8 @@ std::vector<uint64_t> QueryPool::getResults(uint32_t firstQuery, uint32_t queryC
         sizeof(uint64_t) * results.size(), results.data(), stride, 
         flags);
     if (MAGMA_SUCCEEDED(get))
-        return std::move(results);
-    return std::vector<uint64_t>();
+        return results;
+    return {};
 }
 
 OcclusionQuery::OcclusionQuery(std::shared_ptr<const Device> device, uint32_t queryCount,

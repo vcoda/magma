@@ -57,7 +57,7 @@ std::vector<uint8_t> PipelineCache::getData() const
     std::vector<uint8_t> data(dataSize);
     const VkResult getData = vkGetPipelineCacheData(MAGMA_HANDLE(device), handle, &dataSize, data.data());
     MAGMA_THROW_FAILURE(getData, "failed to get pipeline cache data");
-    return std::move(data);
+    return data;
 }
 
 void PipelineCache::mergeCaches(const std::vector<std::shared_ptr<const PipelineCache>>& caches)
