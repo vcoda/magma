@@ -112,7 +112,8 @@ namespace magma
             const std::shared_ptr<DescriptorSet>& descriptorSet,
             uint32_t dynamic0ffset,
             VkPipelineBindPoint pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS) noexcept;
-        template<uint32_t descriptorSetCount> void bindDescriptorSets(
+        template<uint32_t descriptorSetCount> 
+        void bindDescriptorSets(
             const std::shared_ptr<PipelineLayout>& pipelineLayout,
             const std::shared_ptr<magma::DescriptorSet>(&descriptorSets)[descriptorSetCount],
             const std::initializer_list<uint32_t>& offsets = {},
@@ -300,17 +301,20 @@ namespace magma
             bool write64Bit = true) noexcept;
         void writeTimestamp() noexcept; // TODO: implement
 
-        template<typename Type, uint32_t pushConstantCount> void pushConstants(
+        template<typename Type, uint32_t pushConstantCount> 
+        void pushConstants(
             const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags, 
             const Type(&values)[pushConstantCount],
             uint32_t offset = 0) noexcept;
-        template<typename Type> void pushConstants(
+        template<typename Type> 
+        void pushConstants(
             const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags,
             const std::vector<Type>& values,
             uint32_t offset = 0) noexcept;
-        template<typename Type> void pushConstantBlock(
+        template<typename Type> 
+        void pushConstantBlock(
             const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags,
             const Type& block,

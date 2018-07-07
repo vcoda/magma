@@ -328,6 +328,9 @@ void CommandBuffer::copyQueryResults(const std::shared_ptr<QueryPool>& queryPool
     vkCmdCopyQueryPoolResults(handle, *queryPool, firstQuery, queryCount, *buffer, dstOffset, stride, flags);
 }
 
+// void CommandBuffer::pushConstants()
+// void CommandBuffer::pushConstantBlock()
+
 void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const ClearValue& clearValue,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
