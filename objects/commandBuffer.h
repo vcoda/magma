@@ -286,6 +286,10 @@ namespace magma
             const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex) noexcept;
         void resetQueryPool(const std::shared_ptr<QueryPool>& queryPool) noexcept;
+        void writeTimestamp(
+            VkPipelineStageFlagBits pipelineStage, 
+            const std::shared_ptr<QueryPool>& queryPool, 
+            uint32_t queryIndex) noexcept;
         void copyQueryResults(
             const std::shared_ptr<QueryPool>& queryPool,
             const std::shared_ptr<Buffer>& buffer,
