@@ -17,10 +17,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <malloc.h>
-#include <cassert>
 #include <memory>
-
 #ifdef _DEBUG
+#include <cassert>
 #define MAGMA_DEBUG
 #endif
 
