@@ -40,7 +40,7 @@ VertexInputState::VertexInputState(const VertexInputBinding& binding, const std:
     VertexInputState({binding}, attributes)
 {}
 
-VertexInputState::VertexInputState(const std::initializer_list<VertexInputBinding>& bindings, 
+VertexInputState::VertexInputState(const std::initializer_list<VertexInputBinding>& bindings,
     const std::initializer_list<VertexInputAttribute>& attributes)
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -52,7 +52,7 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
     try
     {
         pVertexAttributeDescriptions = helpers::copy(new VkVertexInputAttributeDescription[vertexAttributeDescriptionCount], attributes);
-    } catch (const std::bad_alloc& exc) 
+    } catch (const std::bad_alloc& exc)
     {
         delete[] pVertexBindingDescriptions;
         throw exc;
@@ -68,7 +68,7 @@ VertexInputState::VertexInputState(const VertexInputState& other)
     {
         pVertexAttributeDescriptions = helpers::copy(new VkVertexInputAttributeDescription[vertexAttributeDescriptionCount],
             other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
-    } catch (const std::bad_alloc& exc) 
+    } catch (const std::bad_alloc& exc)
     {
         delete[] pVertexBindingDescriptions;
         throw exc;
@@ -86,7 +86,7 @@ VertexInputState& VertexInputState::operator=(const VertexInputState& other)
         {
             pVertexAttributeDescriptions = helpers::copy(new VkVertexInputAttributeDescription[vertexAttributeDescriptionCount],
                 other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
-        } catch (const std::bad_alloc& exc) 
+        } catch (const std::bad_alloc& exc)
         {
             delete[] pVertexBindingDescriptions;
             throw exc;

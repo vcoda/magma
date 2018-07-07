@@ -23,7 +23,7 @@ namespace magma
 {
     class SrcTransferBuffer;
     class CommandBuffer;
-    
+
     class IndexBuffer : public Buffer
     {
     public:

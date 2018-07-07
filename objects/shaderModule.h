@@ -39,7 +39,7 @@ namespace magma
     {
         template<typename Block, typename Type>
         SpecializationEntry(uint32_t index, Type Block::*member) noexcept
-        {                    
+        {
             constantID = index;
             const ptrdiff_t diff = reinterpret_cast<ptrdiff_t>(&(((Block*)0)->*member));
             offset = static_cast<uint32_t>(diff);
@@ -51,7 +51,7 @@ namespace magma
     {
     public:
         template<typename Block>
-        Specialization(const Block& data, 
+        Specialization(const Block& data,
             const std::initializer_list<SpecializationEntry>& entryMap)
         {
             mapEntryCount = static_cast<uint32_t>(entryMap.size());

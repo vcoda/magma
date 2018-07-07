@@ -35,12 +35,12 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
         friend class Instance;
 
-    public: 
+    public:
         std::shared_ptr<const Instance> getInstance() const noexcept { return instance; }
         const VkPhysicalDeviceFeatures& getFeatures() const noexcept;
         const VkPhysicalDeviceProperties& getProperties() const noexcept;
         VkFormatProperties getFormatProperties(VkFormat format) const noexcept;
-        VkImageFormatProperties getImageFormatProperties(VkFormat format, 
+        VkImageFormatProperties getImageFormatProperties(VkFormat format,
             VkImageType, bool optimalTiling, VkImageUsageFlags usage,
             VkImageCreateFlags flags = 0) const;
         std::vector<VkQueueFamilyProperties> getQueueFamilyProperties() const noexcept;

@@ -22,10 +22,10 @@ namespace magma
 {
     struct RasterizationState : VkPipelineRasterizationStateCreateInfo
     {
-        RasterizationState(VkPolygonMode polygonMode, 
-            VkCullModeFlags cullMode, 
+        RasterizationState(VkPolygonMode polygonMode,
+            VkCullModeFlags cullMode,
             VkFrontFace frontFace,
-            bool depthClampEnable = false, 
+            bool depthClampEnable = false,
             bool rasterizerDiscardEnable = false);
     };
 

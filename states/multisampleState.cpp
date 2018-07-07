@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-MultisampleState::MultisampleState(VkSampleCountFlagBits rasterizationSamples, 
+MultisampleState::MultisampleState(VkSampleCountFlagBits rasterizationSamples,
     bool sampleShading /* false */, bool alphaToCoverage /* false */, bool alphaToOne /* false */)
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
@@ -35,7 +35,7 @@ MultisampleState::MultisampleState(VkSampleCountFlagBits rasterizationSamples,
     alphaToOneEnable = MAGMA_BOOLEAN(alphaToOne);
 }
 
-MultisampleState::MultisampleState(uint32_t sampleCount, 
+MultisampleState::MultisampleState(uint32_t sampleCount,
     bool sampleShading /* false */, bool alphaToCoverage /* false */, bool alphaToOne /* false */)
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;

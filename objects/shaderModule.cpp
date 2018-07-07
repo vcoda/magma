@@ -40,7 +40,7 @@ ShaderModule::ShaderModule(std::shared_ptr<const Device> device, const uint32_t 
 ShaderModule::ShaderModule(std::shared_ptr<const Device> device, const std::vector<uint32_t>& bytecode,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     ShaderModule(device, bytecode.data(), bytecode.size() * sizeof(uint32_t), allocator)
-{}    
+{}
 
 ShaderModule::~ShaderModule()
 {
@@ -52,10 +52,10 @@ Specialization::Specialization(const Specialization& other)
     mapEntryCount = other.mapEntryCount;
     pMapEntries = helpers::copy(new VkSpecializationMapEntry[mapEntryCount], other.pMapEntries, mapEntryCount);
     dataSize = other.dataSize;
-    try 
+    try
     {
         pData = helpers::copy(new char[dataSize], reinterpret_cast<const char *>(other.pData), static_cast<uint32_t>(dataSize));
-    } catch (const std::bad_alloc& exc) 
+    } catch (const std::bad_alloc& exc)
     {
         delete[] pMapEntries;
         throw exc;
@@ -69,10 +69,10 @@ Specialization& Specialization::operator=(const Specialization& other)
         mapEntryCount = other.mapEntryCount;
         pMapEntries = helpers::copy(new VkSpecializationMapEntry[mapEntryCount], other.pMapEntries, mapEntryCount);
         dataSize = other.dataSize;
-        try 
+        try
         {
             pData = helpers::copy(new char[dataSize], reinterpret_cast<const char *>(other.pData), static_cast<uint32_t>(dataSize));
-        } catch (const std::bad_alloc& exc) 
+        } catch (const std::bad_alloc& exc)
         {
             delete[] pMapEntries;
             throw exc;

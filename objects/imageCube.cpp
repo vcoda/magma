@@ -26,15 +26,15 @@ namespace magma
 ImageCube::ImageCube(std::shared_ptr<const Device> device, VkFormat format,
     uint32_t dimension, uint32_t mipLevels, VkImageUsageFlags usage,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1}, mipLevels, 
-        6, // arrayLayers  
+    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1}, mipLevels,
+        6, // arrayLayers
         1, // samples
-        usage, 
-        VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT, 
+        usage,
+        VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
         std::move(allocator))
 {}
 
-ImageCube::ImageCube(std::shared_ptr<const Device> device, 
+ImageCube::ImageCube(std::shared_ptr<const Device> device,
     VkFormat format,
     const std::vector<uint32_t>& mipDimensions,
     const std::vector<const void *> cubeMipData[6],
@@ -44,10 +44,10 @@ ImageCube::ImageCube(std::shared_ptr<const Device> device,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{mipDimensions[0], mipDimensions[0], 1},
         static_cast<uint32_t>(mipDimensions.size()), // mipLevels
-        6, // arrayLayers 
+        6, // arrayLayers
         1, // samples
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-        VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT, 
+        VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
         std::move(allocator))
 {
     std::vector<VkExtent2D> mipExtents;

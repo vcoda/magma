@@ -23,13 +23,13 @@ namespace magma
     template<typename Type>
     class Dispatchable : public DebugMarker
     {
-    public: 
+    public:
         typedef Type VkType;
 
     public:
         virtual uint64_t getHandle() const noexcept override
             { return reinterpret_cast<uint64_t>(handle); }
-        operator Type() const noexcept 
+        operator Type() const noexcept
             { return handle; }
 
     protected:
@@ -38,7 +38,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator):
             DebugMarker(objectType, std::move(device), std::move(allocator)),
             handle(nullptr) {}
-        
+
     protected:
         Type handle;
     };
@@ -57,7 +57,7 @@ namespace magma
         virtual uint64_t getHandle() const noexcept override
             { return handle; }
 #endif
-        operator Type() const noexcept 
+        operator Type() const noexcept
             { return handle; }
 
     protected:

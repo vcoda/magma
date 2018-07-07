@@ -27,8 +27,8 @@ namespace magma
 {
 Device::Device(std::shared_ptr<const PhysicalDevice> physicalDevice,
     const std::vector<DeviceQueueDescriptor>& queueDescriptors,
-    const std::vector<const char *>& layers, 
-    const std::vector<const char *>& extensions, 
+    const std::vector<const char *>& layers,
+    const std::vector<const char *>& extensions,
     const VkPhysicalDeviceFeatures& deviceFeatures,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Dispatchable<VkDevice>(VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT, nullptr, std::move(allocator)),
@@ -90,13 +90,13 @@ bool Device::resetFences(std::vector<std::shared_ptr<const Fence>>& fences) cons
     return (VK_SUCCESS == reset);
 }
 
-bool Device::waitForFences(std::vector<std::shared_ptr<const Fence>>& fences, bool waitAll, 
+bool Device::waitForFences(std::vector<std::shared_ptr<const Fence>>& fences, bool waitAll,
     uint64_t timeout /* UINT64_MAX */) const noexcept
 {
     MAGMA_STACK_ARRAY(VkFence, dereferencedFences, fences.size());
     for (const auto& fence : fences)
         dereferencedFences.put(*fence);
-    const VkResult wait = vkWaitForFences(handle, dereferencedFences.size(), dereferencedFences, 
+    const VkResult wait = vkWaitForFences(handle, dereferencedFences.size(), dereferencedFences,
         MAGMA_BOOLEAN(waitAll), timeout);
     return (VK_SUCCESS == wait) || (VK_TIMEOUT == wait);
 }

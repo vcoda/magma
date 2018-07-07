@@ -79,7 +79,7 @@ namespace magma
         }
         const size_t tailSize = size - (sizeof(__m128i) * MAGMA_XMM_REGISTERS * blockCount);
         if (tailSize > 0)
-        {   
+        {
             const size_t registerCount = tailSize / sizeof(__m128i);
             MAGMA_ASSERT(registerCount < MAGMA_XMM_REGISTERS);
             for (i = 0; i < registerCount; ++i)

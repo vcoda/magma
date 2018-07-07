@@ -30,7 +30,7 @@ RenderPass::RenderPass(std::shared_ptr<const Device> device, const AttachmentDes
     RenderPass(std::move(device), {attachment}, std::move(allocator))
 {}
 
-RenderPass::RenderPass(std::shared_ptr<const Device> device, 
+RenderPass::RenderPass(std::shared_ptr<const Device> device,
     const std::initializer_list<AttachmentDescription>& attachments,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT, std::move(device), std::move(allocator))

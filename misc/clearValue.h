@@ -31,9 +31,9 @@ namespace magma
 
     protected:
         VkClearValue value;
-    };  
+    };
 
-    struct ClearColor : public ClearValue 
+    struct ClearColor : public ClearValue
     {
         ClearColor(float r, float g, float b, float a = 1.f) noexcept;
         ClearColor(int32_t r, int32_t g, int32_t b, int32_t a) noexcept;
@@ -50,7 +50,7 @@ namespace magma
     };
 
     namespace clears
-    {   
+    {
         // Alpha is one
         extern const ClearColor blackColor;
         extern const ClearColor whiteColor;

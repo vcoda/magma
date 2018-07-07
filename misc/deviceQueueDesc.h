@@ -34,7 +34,7 @@ namespace magma
         ~DeviceQueueDescriptor();
 
     private:
-        uint32_t getFamilyIndex(VkQueueFlagBits queueType, 
+        uint32_t getFamilyIndex(VkQueueFlagBits queueType,
             const std::vector<VkQueueFamilyProperties>& queueFamilyProperties) const;
     };
 } // namespace magma

@@ -25,14 +25,14 @@ namespace magma
     {
     public:
         ~QueryPool();
-        virtual std::vector<uint64_t> getResults(uint32_t firstQuery, 
-            uint32_t queryCount, 
+        virtual std::vector<uint64_t> getResults(uint32_t firstQuery,
+            uint32_t queryCount,
             bool wait) const noexcept;
         uint32_t getQueryCount() const noexcept { return queryCount; }
 
     protected:
-        QueryPool(VkQueryType queryType, 
-            std::shared_ptr<const Device> device, 
+        QueryPool(VkQueryType queryType,
+            std::shared_ptr<const Device> device,
             uint32_t queryCount,
             VkQueryPipelineStatisticFlags pipelineStatistics,
             std::shared_ptr<IAllocator> allocator);

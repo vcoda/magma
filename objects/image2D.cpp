@@ -33,7 +33,7 @@ Image2D::Image2D(std::shared_ptr<const Device> device, VkImage handle, VkFormat 
     Image(std::move(device), handle, VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1})
 {}
 
-Image2D::Image2D(std::shared_ptr<const Device> device, 
+Image2D::Image2D(std::shared_ptr<const Device> device,
     VkFormat format,
     const std::vector<VkExtent2D>& mipExtents,
     const std::vector<const void *>& mipData,
@@ -43,7 +43,7 @@ Image2D::Image2D(std::shared_ptr<const Device> device,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{mipExtents[0].width, mipExtents[0].height, 1},
         static_cast<uint32_t>(mipExtents.size()), // mipLevels
-        1, // arrayLayers 
+        1, // arrayLayers
         1, // samples
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0,
@@ -98,7 +98,7 @@ SwapchainColorAttachment2D::SwapchainColorAttachment2D(std::shared_ptr<const Dev
 
 SwapchainColorAttachment2D::~SwapchainColorAttachment2D()
 {
-    // vkDestroyImage() shouldn't have effect on it 
+    // vkDestroyImage() shouldn't have effect on it
     // as it was not created via vkCreateImage()
     handle = VK_NULL_HANDLE;
 }

@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-namespace 
+namespace
 {
 void *VKAPI_PTR vkAllocationFunction(
     void *pUserData,

@@ -41,7 +41,7 @@ namespace magma
     {
     public:
         Win32Surface(std::shared_ptr<const Instance> instance,
-            HINSTANCE hinstance, 
+            HINSTANCE hinstance,
             HWND hwnd,
             VkWin32SurfaceCreateFlagsKHR flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
@@ -136,8 +136,8 @@ namespace magma
     {
     public:
         DisplaySurface(std::shared_ptr<const Instance> instance,
-            std::shared_ptr<const DisplayMode> displayMode, 
-            uint32_t planeIndex, 
+            std::shared_ptr<const DisplayMode> displayMode,
+            uint32_t planeIndex,
             uint32_t planeStackIndex,
             VkSurfaceTransformFlagBitsKHR transform,
             VkDisplayPlaneAlphaFlagBitsKHR alphaMode,

@@ -41,24 +41,24 @@ namespace magma
             const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores,
             const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores,
             std::shared_ptr<const Fence> fence = nullptr) noexcept;
-        bool submit(std::shared_ptr<const CommandBuffer> commandBuffer, 
+        bool submit(std::shared_ptr<const CommandBuffer> commandBuffer,
             VkPipelineStageFlags waitStageMask = 0,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
             std::shared_ptr<const Semaphore> signalSemaphore = nullptr,
             std::shared_ptr<const Fence> fence = nullptr) noexcept;
         bool waitIdle() noexcept;
-        void present(std::shared_ptr<const Swapchain> swapchain, 
+        void present(std::shared_ptr<const Swapchain> swapchain,
             uint32_t imageIndex,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr);
-        void presentToDisplay(std::shared_ptr<const Swapchain> swapchain, 
+        void presentToDisplay(std::shared_ptr<const Swapchain> swapchain,
             uint32_t imageIndex,
-            const VkRect2D& srcRect, 
-            const VkRect2D& dstRect, 
+            const VkRect2D& srcRect,
+            const VkRect2D& dstRect,
             bool persistent,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr);
 
     private:
-        void present(std::shared_ptr<const Swapchain> swapchain, 
+        void present(std::shared_ptr<const Swapchain> swapchain,
             uint32_t imageIndex,
             const VkDisplayPresentInfoKHR *displayPresentInfo,
             std::shared_ptr<const Semaphore> waitSemaphore);

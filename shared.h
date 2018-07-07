@@ -48,10 +48,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_MALLOC(size) malloc(size)
 #define MAGMA_FREE(p) free(p)
 #define MAGMA_ALLOCA(size) alloca(size)
-#define MAGMA_FREEA(p) 
+#define MAGMA_FREEA(p)
 #endif // !_MSC_VER
 
-#define MAGMA_ALIGN(size) (((size) + 15) & ~(15)) 
+#define MAGMA_ALIGN(size) (((size) + 15) & ~(15))
 #define MAGMA_ALIGNED(p) (((uintptr_t)(const void *)(p)) % (16) == 0)
 
 #ifdef _M_AMD64

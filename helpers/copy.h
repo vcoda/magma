@@ -24,21 +24,21 @@ namespace magma
 {
     namespace helpers
     {
-        template<typename Type> 
+        template<typename Type>
         Type *copy(Type *const dst,
             const Type *const src) noexcept;
 
-        template<typename Type> 
-        Type *copy(Type *const dst, 
-            const Type *const src, 
+        template<typename Type>
+        Type *copy(Type *const dst,
+            const Type *const src,
             uint32_t count) noexcept;
 
-        template<typename DestType, typename SourceType> 
-        DestType *copy(DestType *const dst, 
+        template<typename DestType, typename SourceType>
+        DestType *copy(DestType *const dst,
             const std::vector<SourceType>& src) noexcept;
 
-        template<typename DestType, typename SourceType> 
-        DestType *copy(DestType *const dst, 
+        template<typename DestType, typename SourceType>
+        DestType *copy(DestType *const dst,
             const std::initializer_list<SourceType>& src) noexcept;
 
         char *copyString(const char *const src);

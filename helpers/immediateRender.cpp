@@ -233,7 +233,7 @@ std::shared_ptr<ShaderModule> ImmediateRender::createFragmentShader()
 
     layout(location = 0) out vec4 oColor;
 
-    void main() 
+    void main()
     {
         oColor = color;
     } */
@@ -284,16 +284,16 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
         &states::patchList
     };
     std::shared_ptr<GraphicsPipeline> pipeline(std::make_shared<GraphicsPipeline>(device, cache,
-        std::vector<ShaderStage>{vertexShader, fragmentShader}, 
-        vertexInput, 
+        std::vector<ShaderStage>{vertexShader, fragmentShader},
+        vertexInput,
         *inputAssemblyStates[topology],
-        rasterizationState, 
-        multisampleState, 
-        depthStencilState, 
+        rasterizationState,
+        multisampleState,
+        depthStencilState,
         colorBlendState,
         std::initializer_list<VkDynamicState>{
-            VK_DYNAMIC_STATE_VIEWPORT, 
-            VK_DYNAMIC_STATE_SCISSOR, 
+            VK_DYNAMIC_STATE_VIEWPORT,
+            VK_DYNAMIC_STATE_SCISSOR,
             VK_DYNAMIC_STATE_LINE_WIDTH
         },
         layout,

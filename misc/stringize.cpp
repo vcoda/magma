@@ -608,7 +608,7 @@ MAGMA_STRING stringize(VkFilter param) noexcept
     MAGMA_DEFAULT_UNKNOWN;
     };
 }
-    
+
 MAGMA_STRING stringize(VkSamplerMipmapMode param) noexcept
 {
     switch (param)
@@ -1062,7 +1062,7 @@ MAGMA_STRING stringize(VkCullModeFlagBits flags) noexcept
     MAGMA_STRINGIZE_FIELD(VK_CULL_MODE_NONE);
     MAGMA_STRINGIZE_FIELD(VK_CULL_MODE_FRONT_BIT);
     MAGMA_STRINGIZE_FIELD(VK_CULL_MODE_BACK_BIT);
-    MAGMA_STRINGIZE_FIELD(VK_CULL_MODE_FRONT_AND_BACK); 
+    MAGMA_STRINGIZE_FIELD(VK_CULL_MODE_FRONT_AND_BACK);
     MAGMA_DEFAULT_UNKNOWN;
     }
 }
@@ -1230,7 +1230,7 @@ MAGMA_STRING stringize(VkPresentModeKHR param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkSurfaceTransformFlagBitsKHR bit) noexcept 
+MAGMA_STRING stringize(VkSurfaceTransformFlagBitsKHR bit) noexcept
 {
     switch (bit)
     {

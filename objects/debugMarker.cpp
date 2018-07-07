@@ -43,8 +43,8 @@ void DebugMarker::setObjectTag(uint64_t name, size_t tagSize, const void *tag) n
         vkDebugMarkerSetObjectTagEXT(MAGMA_HANDLE(device), &info);
     }
 #else
-    name; 
-    tagSize; 
+    name;
+    tagSize;
     tag;
 #endif // MAGMA_DEBUG
 }

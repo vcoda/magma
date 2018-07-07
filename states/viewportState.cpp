@@ -32,7 +32,7 @@ ViewportState::ViewportState() noexcept
     pScissors = nullptr;
 }
 
-ViewportState::ViewportState(float x, float y, float width, float height, 
+ViewportState::ViewportState(float x, float y, float width, float height,
     float minDepth /* 0 */, float maxDepth /* 1 */)
 {
     VkViewport viewport;
@@ -50,7 +50,7 @@ ViewportState::ViewportState(float x, float y, float width, float height,
     initialize(viewport, scissor);
 }
 
-ViewportState::ViewportState(float x, float y, const VkExtent2D& extent, 
+ViewportState::ViewportState(float x, float y, const VkExtent2D& extent,
     float minDepth /* 0 */, float maxDepth /* 1 */)
 {
     VkViewport viewport;
@@ -59,7 +59,7 @@ ViewportState::ViewportState(float x, float y, const VkExtent2D& extent,
     viewport.width = static_cast<float>(extent.width);
     viewport.height = static_cast<float>(extent.height);
     viewport.minDepth = minDepth;
-    viewport.maxDepth = maxDepth; 
+    viewport.maxDepth = maxDepth;
     VkRect2D scissor;
     scissor.offset.x = static_cast<int32_t>(x);
     scissor.offset.y = static_cast<int32_t>(y);

@@ -28,7 +28,7 @@ namespace magma
     MAGMA_STRING stringize(VkSystemAllocationScope) noexcept;
     MAGMA_STRING stringize(VkInternalAllocationType) noexcept;
     MAGMA_STRING stringize(VkFormat) noexcept;
-    MAGMA_STRING stringize(VkImageType) noexcept;  
+    MAGMA_STRING stringize(VkImageType) noexcept;
     MAGMA_STRING stringize(VkImageTiling) noexcept;
     MAGMA_STRING stringize(VkPhysicalDeviceType) noexcept;
     MAGMA_STRING stringize(VkQueryType) noexcept;
@@ -52,7 +52,7 @@ namespace magma
     MAGMA_STRING stringize(VkBorderColor) noexcept;
     MAGMA_STRING stringize(VkDescriptorType) noexcept;
     MAGMA_STRING stringize(VkAttachmentLoadOp) noexcept;
-    MAGMA_STRING stringize(VkAttachmentStoreOp) noexcept; 
+    MAGMA_STRING stringize(VkAttachmentStoreOp) noexcept;
     MAGMA_STRING stringize(VkPipelineBindPoint) noexcept;
     MAGMA_STRING stringize(VkCommandBufferLevel) noexcept;
     MAGMA_STRING stringize(VkIndexType) noexcept;

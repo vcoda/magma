@@ -42,20 +42,18 @@ namespace magma
     struct GlobalMemoryBarrier;
     struct BufferMemoryBarrier;
     struct ImageMemoryBarrier;
-   
+
     // Methods order follows Vulkan API order
     class CommandBuffer : public Dispatchable<VkCommandBuffer>
     {
-        CommandBuffer(VkCommandBuffer handle, 
-            std::shared_ptr<const Device> device, 
-            std::shared_ptr<CommandPool> pool);
+        CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Device> device, std::shared_ptr<CommandPool> pool);
         friend class CommandPool;
 
     public:
         bool begin(VkCommandBufferUsageFlags flags = 0) noexcept;
         bool beginInherited(
             const std::shared_ptr<RenderPass>& renderPass,
-            uint32_t subpass, 
+            uint32_t subpass,
             const std::shared_ptr<Framebuffer>& framebuffer,
             VkCommandBufferUsageFlags flags = 0) noexcept;
         void end();
@@ -71,7 +69,7 @@ namespace magma
             float maxDepth = 1.f) noexcept;
         void setViewport(
             uint32_t x, uint32_t y,
-            uint32_t width, 
+            uint32_t width,
             int32_t height, // Viewport height can be negative (if supported)
             float minDepth = 0.f,
             float maxDepth = 1.f) noexcept;
@@ -90,7 +88,7 @@ namespace magma
             float depthBiasSlopeFactor) noexcept;
         void setBlendConstants(const float blendConstants[4]) noexcept;
         void setDepthBounds(
-            float minDepthBounds, 
+            float minDepthBounds,
             float maxDepthBounds) noexcept;
         void setStencilCompareMask(
             bool frontFace,
@@ -114,7 +112,7 @@ namespace magma
             const std::shared_ptr<DescriptorSet>& descriptorSet,
             uint32_t dynamic0ffset,
             VkPipelineBindPoint pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS) noexcept;
-        template<uint32_t descriptorSetCount> 
+        template<uint32_t descriptorSetCount>
         void bindDescriptorSets(
             const std::shared_ptr<PipelineLayout>& pipelineLayout,
             const std::shared_ptr<magma::DescriptorSet>(&descriptorSets)[descriptorSetCount],
@@ -223,7 +221,7 @@ namespace magma
 
         void clearColorImage(
             const std::shared_ptr<Image>& image,
-            const ClearColor& color, 
+            const ClearColor& color,
             const VkImageSubresourceRange& range) const noexcept;
         void clearDepthStencilImage(
             const std::shared_ptr<Image>& image,
@@ -245,14 +243,14 @@ namespace magma
             VkPipelineStageFlags stageMask) noexcept;
         void waitEvent(
             const std::shared_ptr<Event>& event,
-            VkPipelineStageFlags srcStageMask, 
+            VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
             const std::vector<GlobalMemoryBarrier>& memoryBarriers = {},
             const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers = {},
             const std::vector<ImageMemoryBarrier>& imageMemoryBarriers = {}) noexcept;
         void waitEvents(
-            const std::vector<std::shared_ptr<Event>>& events, 
-            VkPipelineStageFlags srcStageMask, 
+            const std::vector<std::shared_ptr<Event>>& events,
+            VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
             const std::vector<GlobalMemoryBarrier>& memoryBarriers = {},
             const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers = {},
@@ -286,7 +284,7 @@ namespace magma
             const std::vector<std::shared_ptr<Image>>& images,
             const ImageMemoryBarrier& barrier,
             VkDependencyFlags dependencyFlags = 0) noexcept;
-        
+
         void beginQuery(
             const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex,
@@ -296,8 +294,8 @@ namespace magma
             uint32_t queryIndex) noexcept;
         void resetQueryPool(const std::shared_ptr<QueryPool>& queryPool) noexcept;
         void writeTimestamp(
-            VkPipelineStageFlagBits pipelineStage, 
-            const std::shared_ptr<QueryPool>& queryPool, 
+            VkPipelineStageFlagBits pipelineStage,
+            const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex) noexcept;
         void copyQueryResults(
             const std::shared_ptr<QueryPool>& queryPool,
@@ -308,19 +306,19 @@ namespace magma
             VkDeviceSize dstOffset = 0,
             bool write64Bit = true) noexcept;
 
-        template<typename Type, uint32_t pushConstantCount> 
+        template<typename Type, uint32_t pushConstantCount>
         void pushConstants(
             const std::shared_ptr<PipelineLayout>& layout,
-            VkShaderStageFlags stageFlags, 
+            VkShaderStageFlags stageFlags,
             const Type(&values)[pushConstantCount],
             uint32_t offset = 0) noexcept;
-        template<typename Type> 
+        template<typename Type>
         void pushConstants(
             const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags,
             const std::vector<Type>& values,
             uint32_t offset = 0) noexcept;
-        template<typename Type> 
+        template<typename Type>
         void pushConstantBlock(
             const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags,
@@ -344,23 +342,25 @@ namespace magma
 
         // EXT_debug_marker
         void beginDebugMarker(
-            const char *name, 
+            const char *name,
             const float color[4]) noexcept;
         void endDebugMarker() noexcept;
         void insertDebugMarker(const char *name) noexcept;
-        
-        // Non-API methods
+
+        // Non-API utility methods
         std::shared_ptr<CommandPool> getPool() const { return pool; }
         std::shared_ptr<Fence> getFence() const { return fence; }
+
         void setRenderArea(const VkRect2D& rc) noexcept;
         void setRenderArea(
-            int32_t x, int32_t y, 
+            int32_t x, int32_t y,
             const VkExtent2D& extent) noexcept;
         void setRenderArea(
-            int32_t x, int32_t y, 
+            int32_t x, int32_t y,
             uint32_t width, uint32_t height) noexcept;
+
         void enableOcclusionQuery(
-            bool enable, 
+            bool enable,
             VkQueryControlFlags queryFlags) noexcept;
         void queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept;
 
