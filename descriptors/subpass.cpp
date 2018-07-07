@@ -40,7 +40,16 @@ Subpass::Subpass(const Subpass& other)
     if (other.pColorAttachments)
         pColorAttachments = helpers::copy(new VkAttachmentReference[colorAttachmentCount], other.pColorAttachments, colorAttachmentCount);
     if (other.pDepthStencilAttachment)
-        pDepthStencilAttachment = helpers::copy(new VkAttachmentReference, other.pDepthStencilAttachment);
+    {
+        try 
+        {
+            pDepthStencilAttachment = helpers::copy(new VkAttachmentReference, other.pDepthStencilAttachment);
+        } catch (const std::bad_alloc& exc) 
+        {
+            delete[] pColorAttachments;
+            throw exc;
+        }
+    }
 }   
 
 Subpass& Subpass::operator=(const Subpass& other)
@@ -51,7 +60,16 @@ Subpass& Subpass::operator=(const Subpass& other)
         if (other.pColorAttachments)
             pColorAttachments = helpers::copy(new VkAttachmentReference[colorAttachmentCount], other.pColorAttachments, colorAttachmentCount);
         if (other.pDepthStencilAttachment)
-            pDepthStencilAttachment = helpers::copy(new VkAttachmentReference, other.pDepthStencilAttachment);
+        {
+            try 
+            {
+                pDepthStencilAttachment = helpers::copy(new VkAttachmentReference, other.pDepthStencilAttachment);
+            } catch (const std::bad_alloc& exc)
+            {
+                delete[] pColorAttachments;
+                throw exc;
+            }
+        }
     }
     return *this;
 }

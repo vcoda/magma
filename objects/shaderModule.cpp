@@ -52,7 +52,14 @@ Specialization::Specialization(const Specialization& other)
     mapEntryCount = other.mapEntryCount;
     pMapEntries = helpers::copy(new VkSpecializationMapEntry[mapEntryCount], other.pMapEntries, mapEntryCount);
     dataSize = other.dataSize;
-    pData = helpers::copy(new char[dataSize], static_cast<const char *>(other.pData), static_cast<uint32_t>(dataSize));
+    try 
+    {
+        pData = helpers::copy(new char[dataSize], reinterpret_cast<const char *>(other.pData), static_cast<uint32_t>(dataSize));
+    } catch (const std::bad_alloc& exc) 
+    {
+        delete[] pMapEntries;
+        throw exc;
+    }
 }
 
 Specialization& Specialization::operator=(const Specialization& other)
@@ -62,7 +69,14 @@ Specialization& Specialization::operator=(const Specialization& other)
         mapEntryCount = other.mapEntryCount;
         pMapEntries = helpers::copy(new VkSpecializationMapEntry[mapEntryCount], other.pMapEntries, mapEntryCount);
         dataSize = other.dataSize;
-        pData = helpers::copy(new char[dataSize], static_cast<const char *>(other.pData), static_cast<uint32_t>(dataSize));
+        try 
+        {
+            pData = helpers::copy(new char[dataSize], reinterpret_cast<const char *>(other.pData), static_cast<uint32_t>(dataSize));
+        } catch (const std::bad_alloc& exc) 
+        {
+            delete[] pMapEntries;
+            throw exc;
+        }
     }
     return *this;
 }

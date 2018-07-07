@@ -49,7 +49,14 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
     vertexBindingDescriptionCount = MAGMA_COUNT(bindings);
     pVertexBindingDescriptions = helpers::copy(new VkVertexInputBindingDescription[vertexBindingDescriptionCount], bindings);
     vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
-    pVertexAttributeDescriptions = helpers::copy(new VkVertexInputAttributeDescription[vertexAttributeDescriptionCount], attributes);
+    try
+    {
+        pVertexAttributeDescriptions = helpers::copy(new VkVertexInputAttributeDescription[vertexAttributeDescriptionCount], attributes);
+    } catch (const std::bad_alloc& exc) 
+    {
+        delete[] pVertexBindingDescriptions;
+        throw exc;
+    }
 }
 
 VertexInputState::VertexInputState(const VertexInputState& other)
@@ -57,8 +64,15 @@ VertexInputState::VertexInputState(const VertexInputState& other)
     helpers::copy(this, &other);
     pVertexBindingDescriptions = helpers::copy(new VkVertexInputBindingDescription[vertexBindingDescriptionCount],
         other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
-    pVertexAttributeDescriptions = helpers::copy(new VkVertexInputAttributeDescription[vertexAttributeDescriptionCount],
-        other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+    try
+    {
+        pVertexAttributeDescriptions = helpers::copy(new VkVertexInputAttributeDescription[vertexAttributeDescriptionCount],
+            other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+    } catch (const std::bad_alloc& exc) 
+    {
+        delete[] pVertexBindingDescriptions;
+        throw exc;
+    }
 }
 
 VertexInputState& VertexInputState::operator=(const VertexInputState& other)
@@ -68,8 +82,15 @@ VertexInputState& VertexInputState::operator=(const VertexInputState& other)
         helpers::copy(this, &other);
         pVertexBindingDescriptions = helpers::copy(new VkVertexInputBindingDescription[vertexBindingDescriptionCount],
             other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
-        pVertexAttributeDescriptions = helpers::copy(new VkVertexInputAttributeDescription[vertexAttributeDescriptionCount],
-            other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+        try
+        {
+            pVertexAttributeDescriptions = helpers::copy(new VkVertexInputAttributeDescription[vertexAttributeDescriptionCount],
+                other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+        } catch (const std::bad_alloc& exc) 
+        {
+            delete[] pVertexBindingDescriptions;
+            throw exc;
+        }
     }
     return *this;
 }

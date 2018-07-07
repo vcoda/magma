@@ -137,7 +137,14 @@ ViewportState::ViewportState(const ViewportState& other)
 {
     helpers::copy(this, &other);
     pViewports = helpers::copy(new VkViewport[viewportCount], other.pViewports, viewportCount);
-    pScissors = helpers::copy(new VkRect2D[scissorCount], other.pScissors, scissorCount);
+    try
+    {
+        pScissors = helpers::copy(new VkRect2D[scissorCount], other.pScissors, scissorCount);
+    } catch (const std::bad_alloc& exc)
+    {
+        delete[] pViewports;
+        throw exc;
+    }
 }
 
 ViewportState& ViewportState::operator=(const ViewportState& other)
@@ -146,7 +153,14 @@ ViewportState& ViewportState::operator=(const ViewportState& other)
     {
         helpers::copy(this, &other);
         pViewports = helpers::copy(new VkViewport[viewportCount], other.pViewports, viewportCount);
-        pScissors = helpers::copy(new VkRect2D[scissorCount], other.pScissors, scissorCount);
+        try
+        {
+            pScissors = helpers::copy(new VkRect2D[scissorCount], other.pScissors, scissorCount);
+        } catch (const std::bad_alloc& exc)
+        {
+            delete[] pViewports;
+            throw exc;
+        }
     }
     return *this;
 }
