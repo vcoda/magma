@@ -159,8 +159,25 @@ void CommandBuffer::copyImageToBuffer(const std::shared_ptr<Image>& srcImage, co
     vkCmdCopyImageToBuffer(handle, *srcImage, srcImage->getLayout(), *dstBuffer, 1, &region);
 }
 
-// void CommandBuffer::updateBuffer()
-// void CommandBuffer::fillBuffer()
+void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, VkDeviceSize dataSize, const void *data,
+    VkDeviceSize offset /* 0 */) const noexcept
+{
+    /* Buffer updates performed with vkCmdUpdateBuffer first copy the data 
+       into command buffer memory when the command is recorded 
+       (which requires additional storage and may incur an additional allocation), 
+       and then copy the data from the command buffer into dstBuffer 
+       when the command is executed on a device. */
+    vkCmdUpdateBuffer(handle, *buffer, offset, dataSize, data);
+}
+
+void CommandBuffer::fillBuffer(const std::shared_ptr<Buffer>& buffer, uint32_t value,
+    VkDeviceSize size /* 0 */,
+    VkDeviceSize offset /* 0 */) const noexcept
+{
+    if (0 == size)
+        size = buffer->getMemory()->getSize();
+    vkCmdFillBuffer(handle, *buffer, offset, size, value);
+}
 
 void CommandBuffer::clearColorImage(const std::shared_ptr<Image>& image, const ClearColor& color, const VkImageSubresourceRange& range) const noexcept
 {

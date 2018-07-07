@@ -223,21 +223,8 @@ template<typename Type>
 MAGMA_INLINE void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, const std::vector<Type>& data,
     VkDeviceSize offset /* 0 */) const noexcept
 {
-    /* Buffer updates performed with vkCmdUpdateBuffer first copy the data 
-       into command buffer memory when the command is recorded 
-       (which requires additional storage and may incur an additional allocation), 
-       and then copy the data from the command buffer into dstBuffer 
-       when the command is executed on a device. */
-    const VkDeviceSize dstOffset = static_cast<VkDeviceSize>(sizeof(Type) * data.size());
-    vkCmdUpdateBuffer(handle, *buffer, offset, dstOffset, data.data());
-}
-
-template<typename Type>
-MAGMA_INLINE void CommandBuffer::fillBuffer(const std::shared_ptr<Buffer>& buffer, const std::vector<Type>& data,
-    VkDeviceSize offset /* 0 */) const noexcept
-{
-    const VkDeviceSize dstOffset = static_cast<VkDeviceSize>(sizeof(Type) * data.size());
-    vkCmdFillBuffer(handle, *buffer, offset, dstOffset, data.data());
+    const VkDeviceSize dataSize = static_cast<VkDeviceSize>(sizeof(Type) * data.size());
+    udpateBuffer(buffer, dataSize, data.data(), offset);
 }
 
 template<typename Type, uint32_t pushConstantCount>

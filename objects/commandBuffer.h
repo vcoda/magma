@@ -203,14 +203,20 @@ namespace magma
             const std::shared_ptr<Buffer>& dstBuffer,
             const VkBufferImageCopy& region) const noexcept;
 
+        void updateBuffer(
+            const std::shared_ptr<Buffer>& buffer,
+            VkDeviceSize dataSize,
+            const void *data,
+            VkDeviceSize offset = 0) const noexcept;
         template<typename Type>
         void updateBuffer(
             const std::shared_ptr<Buffer>& buffer,
             const std::vector<Type>& data,
             VkDeviceSize offset = 0) const noexcept;
-        template<typename Type>
-        void fillBuffer(const std::shared_ptr<Buffer>& dstBuffer,
-            const std::vector<Type>& data,
+        void fillBuffer(
+            const std::shared_ptr<Buffer>& buffer,
+            uint32_t value,
+            VkDeviceSize size = 0,
             VkDeviceSize offset = 0) const noexcept;
 
         void clearColorImage(
