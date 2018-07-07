@@ -46,7 +46,9 @@ namespace magma
     // Methods order follows Vulkan API order
     class CommandBuffer : public Dispatchable<VkCommandBuffer>
     {
-        CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Device> device, std::shared_ptr<CommandPool> pool);
+        CommandBuffer(VkCommandBuffer handle, 
+            std::shared_ptr<const Device> device, 
+            std::shared_ptr<CommandPool> pool);
         friend class CommandPool;
 
     public:
@@ -305,7 +307,6 @@ namespace magma
             uint32_t queryCount = std::numeric_limits<uint32_t>::max(),
             VkDeviceSize dstOffset = 0,
             bool write64Bit = true) noexcept;
-        void writeTimestamp() noexcept; // TODO: implement
 
         template<typename Type, uint32_t pushConstantCount> 
         void pushConstants(
@@ -348,10 +349,9 @@ namespace magma
         void endDebugMarker() noexcept;
         void insertDebugMarker(const char *name) noexcept;
         
-        // Non-API utility methods
+        // Non-API methods
         std::shared_ptr<CommandPool> getPool() const { return pool; }
         std::shared_ptr<Fence> getFence() const { return fence; }
-
         void setRenderArea(const VkRect2D& rc) noexcept;
         void setRenderArea(
             int32_t x, int32_t y, 
@@ -359,7 +359,6 @@ namespace magma
         void setRenderArea(
             int32_t x, int32_t y, 
             uint32_t width, uint32_t height) noexcept;
-
         void enableOcclusionQuery(
             bool enable, 
             VkQueryControlFlags queryFlags) noexcept;
