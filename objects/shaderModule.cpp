@@ -118,6 +118,18 @@ VertexShaderStage::VertexShaderStage(std::shared_ptr<const ShaderModule> module,
     ShaderStage(VK_SHADER_STAGE_VERTEX_BIT, std::move(module), entrypoint, std::move(specialization), flags)
 {}
 
+TesselationControlShaderStage::TesselationControlShaderStage(std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
+    std::shared_ptr<const Specialization> specialization /* nullptr */,
+    VkPipelineShaderStageCreateFlags flags /* 0 */) noexcept:
+    ShaderStage(VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, std::move(module), entrypoint, std::move(specialization), flags)
+{}
+
+TesselationEvaluationShaderStage::TesselationEvaluationShaderStage(std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
+    std::shared_ptr<const Specialization> specialization /* nullptr */,
+    VkPipelineShaderStageCreateFlags flags /* 0 */) noexcept:
+    ShaderStage(VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, std::move(module), entrypoint, std::move(specialization), flags)
+{}
+
 GeometryShaderStage::GeometryShaderStage(std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
     std::shared_ptr<const Specialization> specialization /* nullptr */,
     VkPipelineShaderStageCreateFlags flags /* 0 */) noexcept:

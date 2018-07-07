@@ -76,7 +76,7 @@ namespace magma
     public:
         ShaderStage(const ShaderStage&);
         ShaderStage& operator=(const ShaderStage&);
-        ~ShaderStage();
+        virtual ~ShaderStage();
         VkShaderStageFlagBits getStage() const noexcept { return info.stage; }
         operator const VkPipelineShaderStageCreateInfo&() const noexcept { return info; }
 
@@ -90,6 +90,24 @@ namespace magma
     {
     public:
         VertexShaderStage(std::shared_ptr<const ShaderModule> module,
+            const char *const entrypoint,
+            std::shared_ptr<const Specialization> specialization = nullptr,
+            VkPipelineShaderStageCreateFlags flags = 0) noexcept;
+    };
+
+    class TesselationControlShaderStage : public ShaderStage
+    {
+    public:
+        TesselationControlShaderStage(std::shared_ptr<const ShaderModule> module,
+            const char *const entrypoint,
+            std::shared_ptr<const Specialization> specialization = nullptr,
+            VkPipelineShaderStageCreateFlags flags = 0) noexcept;
+    };
+
+    class TesselationEvaluationShaderStage : public ShaderStage
+    {
+    public:
+        TesselationEvaluationShaderStage(std::shared_ptr<const ShaderModule> module,
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept;

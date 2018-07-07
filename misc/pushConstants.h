@@ -36,43 +36,71 @@ namespace magma
         template<typename Type>
         struct VertexConstantRange : PushConstantRange<Type>
         {
-            VertexConstantRange(uint32_t offset = 0) noexcept: PushConstantRange<Type>(VK_SHADER_STAGE_VERTEX_BIT, offset) {}
+            VertexConstantRange(uint32_t offset = 0) noexcept: 
+                PushConstantRange<Type>(VK_SHADER_STAGE_VERTEX_BIT, offset) {}
+        };
+
+        template<typename Type>
+        struct TesselationControlConstantRange : PushConstantRange<Type>
+        {
+            TesselationControlConstantRange(uint32_t offset = 0) noexcept: 
+                PushConstantRange<Type>(VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, offset) {}
+        };
+
+        template<typename Type>
+        struct TesselationEvaluationConstantRange : PushConstantRange<Type>
+        {
+            TesselationEvaluationConstantRange(uint32_t offset = 0) noexcept: 
+                PushConstantRange<Type>(VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, offset) {}
+        };
+
+        template<typename Type>
+        struct GeometryConstantRange : PushConstantRange<Type>
+        {
+            GeometryConstantRange(uint32_t offset = 0) noexcept: 
+                PushConstantRange<Type>(VK_SHADER_STAGE_GEOMETRY_BIT, offset) {}
         };
 
         template<typename Type>
         struct FragmentConstantRange : PushConstantRange<Type>
         {
-            FragmentConstantRange(uint32_t offset = 0) noexcept: PushConstantRange<Type>(VK_SHADER_STAGE_FRAGMENT_BIT, offset) {}
-        };
-
-        template<typename Type>
-        struct VertexGeometryConstantRange : PushConstantRange<Type>
-        {
-            VertexGeometryConstantRange(uint32_t offset = 0) noexcept: PushConstantRange<Type>(VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT, offset) {}
-        };
-
-        template<typename Type>
-        struct VertexFragmentConstantRange : PushConstantRange<Type>
-        {
-            VertexFragmentConstantRange(uint32_t offset = 0) noexcept: PushConstantRange<Type>(VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, offset) {}
+            FragmentConstantRange(uint32_t offset = 0) noexcept: 
+                PushConstantRange<Type>(VK_SHADER_STAGE_FRAGMENT_BIT, offset) {}
         };
 
         template<typename Type>
         struct ComputeConstantRange : PushConstantRange<Type>
         {
-            ComputeConstantRange(uint32_t offset = 0) noexcept: PushConstantRange<Type>(VK_SHADER_STAGE_COMPUTE_BIT, offset) {}
+            ComputeConstantRange(uint32_t offset = 0) noexcept: 
+                PushConstantRange<Type>(VK_SHADER_STAGE_COMPUTE_BIT, offset) {}
         };
 
         template<typename Type>
         struct GraphicsConstantRange : PushConstantRange<Type>
         {
-            GraphicsConstantRange(uint32_t offset = 0) noexcept: PushConstantRange<Type>(VK_SHADER_STAGE_ALL_GRAPHICS, offset) {}
+            GraphicsConstantRange(uint32_t offset = 0) noexcept: 
+                PushConstantRange<Type>(VK_SHADER_STAGE_ALL_GRAPHICS, offset) {}
         };
 
         template<typename Type>
-        struct PipelineConstantRange : PushConstantRange<Type>
+        struct AllConstantRange : PushConstantRange<Type>
         {
-            PipelineConstantRange(uint32_t offset = 0) noexcept: PushConstantRange<Type>(VK_SHADER_STAGE_ALL, offset) {}
+            AllConstantRange(uint32_t offset = 0) noexcept: 
+                PushConstantRange<Type>(VK_SHADER_STAGE_ALL, offset) {}
+        };
+
+        template<typename Type>
+        struct VertexGeometryConstantRange : PushConstantRange<Type>
+        {
+            VertexGeometryConstantRange(uint32_t offset = 0) noexcept: 
+                PushConstantRange<Type>(VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT, offset) {}
+        };
+
+        template<typename Type>
+        struct VertexFragmentConstantRange : PushConstantRange<Type>
+        {
+            VertexFragmentConstantRange(uint32_t offset = 0) noexcept: 
+                PushConstantRange<Type>(VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, offset) {}
         };
     } // namespace pushconstants
 } // namespace magma
