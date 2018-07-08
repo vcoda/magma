@@ -38,6 +38,7 @@ DescriptorSet::DescriptorSet(VkDescriptorSet handle, std::shared_ptr<const Devic
 void DescriptorSet::update(uint32_t index, std::shared_ptr<const Buffer> buffer) noexcept
 {
     const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
+    MAGMA_ASSERT(1 == binding.descriptorCount);
     const VkDescriptorBufferInfo info = buffer->getDescriptor();
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -56,6 +57,7 @@ void DescriptorSet::update(uint32_t index, std::shared_ptr<const Buffer> buffer)
 void DescriptorSet::update(uint32_t index, std::shared_ptr<const ImageView> imageView, std::shared_ptr<const Sampler> sampler) noexcept
 {
     const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
+    MAGMA_ASSERT(1 == binding.descriptorCount);
     VkDescriptorImageInfo info;
     info.sampler = *sampler;
     info.imageView = *imageView;
