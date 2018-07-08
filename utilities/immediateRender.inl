@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 namespace magma
 {
-namespace helpers
+namespace utilities
 {
 MAGMA_INLINE void ImmediateRender::setVertexShader(const VertexShaderStage& shader) noexcept
 {
@@ -196,5 +196,5 @@ MAGMA_INLINE void ImmediateRender::vertex4(const Vertex4& v) noexcept
 {
     vertex(v[0], v[1], v[2], v[3]);
 }
-} // namespace helpers
+} // namespace utilities
 } // namespace magma

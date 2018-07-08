@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/multisampleState.h"
 #include "../states/depthStencilState.h"
 #include "../states/colorBlendState.h"
+#include "../shared.h"
 
 namespace magma
 {
@@ -35,7 +36,7 @@ namespace magma
     class VertexBuffer;
     class RenderPass;
 
-    namespace helpers
+    namespace utilities
     {
         /* Sometimes I miss immediate mode from OpenGL 1.x era.
            This class serves as a replacement for it when you don't want
@@ -141,7 +142,7 @@ namespace magma
             Vertex *vert = nullptr, curr = {};
             bool insidePrimitive = false;
         };
-    } // namespace helpers
+    } // namespace utilities
 } // namespace magma
 
 #include "immediateRender.inl"

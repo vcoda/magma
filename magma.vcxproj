@@ -142,7 +142,6 @@
     <ClInclude Include="descriptors\subpass.h" />
     <ClInclude Include="helpers\alignedUniformArray.h" />
     <ClInclude Include="helpers\copy.h" />
-    <ClInclude Include="helpers\immediateRender.h" />
     <ClInclude Include="helpers\mapScoped.h" />
     <ClInclude Include="helpers\stackArray.h" />
     <ClInclude Include="helpers\uniformArray.h" />
@@ -223,11 +222,11 @@
     <ClInclude Include="states\vertexInputState.h" />
     <ClInclude Include="states\viewportState.h" />
     <ClInclude Include="typedefs.h" />
+    <ClInclude Include="utilities\immediateRender.h" />
     <ClInclude Include="vulkan.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="helpers\copy.inl" />
-    <None Include="helpers\immediateRender.inl" />
     <None Include="misc\clearAttachment.inl" />
     <None Include="misc\clearValue.inl" />
     <None Include="misc\deviceExtension.inl" />
@@ -238,6 +237,7 @@
     <None Include="objects\commandBuffer.inl" />
     <None Include="objects\indexBuffer.inl" />
     <None Include="objects\vertexBuffer.inl" />
+    <None Include="utilities\immediateRender.inl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="allocator\allocator.cpp" />
@@ -246,7 +246,6 @@
     <ClCompile Include="barriers\globalMemoryBarrier.cpp" />
     <ClCompile Include="descriptors\attachment.cpp" />
     <ClCompile Include="descriptors\subpass.cpp" />
-    <ClCompile Include="helpers\immediateRender.cpp" />
     <ClCompile Include="misc\clearValue.cpp" />
     <ClCompile Include="misc\scopedDebugMarker.cpp" />
     <ClCompile Include="misc\deviceQueueDesc.cpp" />
@@ -308,6 +307,7 @@
     <ClCompile Include="states\tesselationState.cpp" />
     <ClCompile Include="states\vertexInputState.cpp" />
     <ClCompile Include="states\viewportState.cpp" />
+    <ClCompile Include="utilities\immediateRender.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

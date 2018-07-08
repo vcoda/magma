@@ -26,7 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-namespace helpers
+namespace utilities
 {
 ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     std::shared_ptr<Device> device,
@@ -303,5 +303,5 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
     pipelines.insert(pipeline); // Hold unique pipelines, as they should exist during command buffer submission
     return pipeline;
 }
-} // namespace helpers
+} // namespace utilities
 } // namespace magma

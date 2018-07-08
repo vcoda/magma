@@ -19,8 +19,6 @@ MAGMA_OBJS = \
 	descriptors/attachment.o \
 	descriptors/subpass.o \
 	\
-	helpers/immediateRender.o \
-	\
 	misc/clearValue.o \
 	misc/scopedDebugMarker.o \
 	misc/deviceQueueDesc.o \
@@ -84,6 +82,8 @@ MAGMA_OBJS = \
 	states/tesselationState.o \
 	states/vertexInputState.o \
 	states/viewportState.o
+	\
+	utilities/immediateRender.o
 
 DEPS := $(MAGMA_OBJS:.o=.d)
 
