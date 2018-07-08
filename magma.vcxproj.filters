@@ -368,6 +368,12 @@
     <None Include="misc\imageSubresourceRange.inl">
       <Filter>Header Files\misc</Filter>
     </None>
+    <None Include="objects\vertexBuffer.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="objects\indexBuffer.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="states\colorBlendState.cpp">

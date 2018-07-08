@@ -32,7 +32,7 @@ VertexBuffer::VertexBuffer(std::shared_ptr<const Device> device, VkDeviceSize si
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Buffer(std::move(device), size,
-        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, 
+        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
         flags, std::move(allocator),
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
 {}
@@ -47,7 +47,7 @@ VertexBuffer::VertexBuffer(std::shared_ptr<const Device> device, const void *dat
     {
         if (!copyFn)
             copyFn = copyMemory;
-        helpers::mapScoped<void>(this, [&copyFn, data, size](void *buffer) 
+        helpers::mapScoped<void>(this, [&copyFn, data, size](void *buffer)
         {
             copyFn(buffer, data, static_cast<size_t>(size));
         });
@@ -58,20 +58,20 @@ VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const v
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    VertexBuffer(copyCmdBuffer, 
-        std::make_shared<SrcTransferBuffer>(std::move(copyCmdBuffer->getDevice()), data, size, 0, allocator, std::move(copyFn)), 
+    VertexBuffer(copyCmdBuffer,
+        std::make_shared<SrcTransferBuffer>(std::move(copyCmdBuffer->getDevice()), data, size, 0, allocator, std::move(copyFn)),
         flags, std::move(allocator))
 {}
 
 VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, std::shared_ptr<SrcTransferBuffer> srcBuffer,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Buffer(std::move(copyCmdBuffer->getDevice()), srcBuffer->getMemory()->getSize(), 
-        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, 
+    Buffer(std::move(copyCmdBuffer->getDevice()), srcBuffer->getMemory()->getSize(),
+        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         flags, std::move(allocator),
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
     vertexCount(0)
-{        
+{
     copyCmdBuffer->begin();
     {
         VkBufferCopy region;
@@ -87,11 +87,5 @@ VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, std::sh
         MAGMA_THROW("failed to submit command buffer to transfer queue");
     if (!fence->wait())
         MAGMA_THROW("failed to wait fence");
-}
-
-uint32_t VertexBuffer::getVertexCount() const noexcept
-{
-    MAGMA_ASSERT(vertexCount > 0);
-    return vertexCount;
 }
 } // namespace magma
