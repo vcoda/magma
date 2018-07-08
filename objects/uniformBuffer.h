@@ -33,8 +33,8 @@ namespace magma
             uint32_t arraySize = 1,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr):
-            Buffer(std::move(device), sizeof(Block) * arraySize, 
-                VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, 
+            Buffer(std::move(device), sizeof(Block) * arraySize,
+                VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
                 flags, std::move(allocator),
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
             arraySize(arraySize)
@@ -55,7 +55,7 @@ namespace magma
             return nullptr;
         }
         void unmap() noexcept
-        { 
+        {
             if (memory)
                 memory->unmap();
         }
@@ -80,7 +80,7 @@ namespace magma
             ))
         {}
         virtual uint32_t getArraySize() const noexcept override
-        { 
+        {
             if (elementSize >= alignment)
                 return UniformBuffer<Type>::arraySize;
             const VkDeviceSize divisor = alignment/elementSize;

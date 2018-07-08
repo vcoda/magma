@@ -26,7 +26,7 @@ namespace magma
         ColorBlendAttachmentState(bool blendEnable,
             VkBlendFactor srcBlendFactor,
             VkBlendFactor dstBlendFactor,
-            VkBlendOp blendOp, 
+            VkBlendOp blendOp,
             VkColorComponentFlags colorWriteMask = VK_COLOR_COMPONENT_R_BIT |
                                                    VK_COLOR_COMPONENT_G_BIT |
                                                    VK_COLOR_COMPONENT_B_BIT |

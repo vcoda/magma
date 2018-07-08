@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Sampler::Sampler(std::shared_ptr<const Device> device, const SamplerState& state, 
+Sampler::Sampler(std::shared_ptr<const Device> device, const SamplerState& state,
     float mipLodBias /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT, std::move(device), std::move(allocator))
@@ -53,8 +53,8 @@ Sampler::Sampler(std::shared_ptr<const Device> device, const SamplerState& state
     MAGMA_THROW_FAILURE(create, "failed to create sampler");
 }
 
-Sampler::Sampler(std::shared_ptr<const Device> device, VkFilter magFilter, VkFilter minFilter, 
-    VkSamplerMipmapMode mipmapMode, VkSamplerAddressMode addressMode, 
+Sampler::Sampler(std::shared_ptr<const Device> device, VkFilter magFilter, VkFilter minFilter,
+    VkSamplerMipmapMode mipmapMode, VkSamplerAddressMode addressMode,
     float mipLodBias /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT, std::move(device), std::move(allocator))

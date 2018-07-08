@@ -38,7 +38,7 @@ AttachmentDescription::AttachmentDescription(VkFormat format,
     case 16: samples = VK_SAMPLE_COUNT_16_BIT; break;
     case 32: samples = VK_SAMPLE_COUNT_32_BIT; break;
     case 64: samples = VK_SAMPLE_COUNT_64_BIT; break;
-    default: 
+    default:
         MAGMA_THROW("invalid <sampleCount> parameter");
     }
     loadOp = op.loadOp;
@@ -50,10 +50,10 @@ AttachmentDescription::AttachmentDescription(VkFormat format,
 }
 
 AttachmentDescription::AttachmentDescription(VkAttachmentLoadOp loadOp,
-    VkAttachmentStoreOp storeOp, 
-    VkAttachmentLoadOp stencilLoadOp, 
+    VkAttachmentStoreOp storeOp,
+    VkAttachmentLoadOp stencilLoadOp,
     VkAttachmentStoreOp stencilStoreOp,
-    VkImageLayout initialLayout, 
+    VkImageLayout initialLayout,
     VkImageLayout finalLayout)
 {
     flags = 0;

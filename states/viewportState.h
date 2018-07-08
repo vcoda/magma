@@ -25,18 +25,18 @@ namespace magma
     {
     public:
         ViewportState() noexcept;
-        ViewportState(float x, float y, float width, float height, 
+        ViewportState(float x, float y, float width, float height,
             float minDepth = 0.f, float maxDepth = 1.f);
-        ViewportState(float x, float y, const VkExtent2D& extent, 
+        ViewportState(float x, float y, const VkExtent2D& extent,
             float minDepth = 0.f, float maxDepth = 1.f);
         ViewportState(uint32_t x, uint32_t y, uint32_t width, int32_t height,
             float minDepth = 0.f, float maxDepth = 1.f);
         ViewportState(const VkRect2D& viewport, const VkRect2D& scissor,
             float minDepth = 0.f, float maxDepth = 1.f);
-        ViewportState(const VkViewport& viewport);     
+        ViewportState(const VkViewport& viewport);
         ViewportState(const VkViewport& viewport, const VkRect2D& scissor);
         ViewportState(const std::vector<VkViewport>& viewports);
-        ViewportState(const std::vector<VkViewport>& viewports, 
+        ViewportState(const std::vector<VkViewport>& viewports,
             const std::vector<VkRect2D>& scissors);
         ViewportState(const ViewportState&);
         ViewportState& operator=(const ViewportState&);

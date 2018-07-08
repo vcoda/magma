@@ -28,7 +28,7 @@ namespace magma
             uint32_t drawCmdCount = 1,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        void writeDrawCommand(uint32_t vertexCount, 
+        void writeDrawCommand(uint32_t vertexCount,
             uint32_t firstVertex = 0,
             uint32_t cmdIndex = 0) noexcept;
         void writeDrawCommand(uint32_t vertexCount,

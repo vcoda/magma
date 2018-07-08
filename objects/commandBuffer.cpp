@@ -77,8 +77,8 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
 void CommandBuffer::end()
 {
     /* Performance - critical commands generally do not have return codes.
-       If a run time error occurs in such commands, the implementation will defer 
-       reporting the error until a specified point. For commands that record 
+       If a run time error occurs in such commands, the implementation will defer
+       reporting the error until a specified point. For commands that record
        into command buffers (vkCmd*), run time errors are reported by vkEndCommandBuffer. */
     const VkResult result = vkEndCommandBuffer(handle);
     MAGMA_THROW_FAILURE(result, "failed to end command buffer");
@@ -104,14 +104,11 @@ bool CommandBuffer::reset(bool releaseResources) noexcept
 // void CommandBuffer::setStencilCompareMask
 // void CommandBuffer::setStencilWriteMask
 // void CommandBuffer::setStencilReference
-
 // void CommandBuffer::bindDescriptorSet
 // void CommandBuffer::bindDescriptorSets
-
 // void CommandBuffer::bindIndexBuffer
 // void CommandBuffer::bindVertexBuffer
 // void CommandBuffer::bindVertexBuffers
-
 // void CommandBuffer::draw
 // void CommandBuffer::drawInstanced
 // void CommandBuffer::drawIndexed
@@ -162,10 +159,10 @@ void CommandBuffer::copyImageToBuffer(const std::shared_ptr<Image>& srcImage, co
 void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, VkDeviceSize dataSize, const void *data,
     VkDeviceSize offset /* 0 */) const noexcept
 {
-    /* Buffer updates performed with vkCmdUpdateBuffer first copy the data 
-       into command buffer memory when the command is recorded 
-       (which requires additional storage and may incur an additional allocation), 
-       and then copy the data from the command buffer into dstBuffer 
+    /* Buffer updates performed with vkCmdUpdateBuffer first copy the data
+       into command buffer memory when the command is recorded
+       (which requires additional storage and may incur an additional allocation),
+       and then copy the data from the command buffer into dstBuffer
        when the command is executed on a device. */
     vkCmdUpdateBuffer(handle, *buffer, offset, dataSize, data);
 }
@@ -222,11 +219,11 @@ void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineSta
     MAGMA_ASSERT(dstStageMask);
     const VkEvent dereferencedEvents[1] = {*event};
     vkCmdWaitEvents(handle, 1, dereferencedEvents, srcStageMask, dstStageMask,
-        MAGMA_COUNT(memoryBarriers), 
+        MAGMA_COUNT(memoryBarriers),
         memoryBarriers.data(),
-        MAGMA_COUNT(bufferMemoryBarriers), 
+        MAGMA_COUNT(bufferMemoryBarriers),
         bufferMemoryBarriers.data(),
-        MAGMA_COUNT(imageMemoryBarriers), 
+        MAGMA_COUNT(imageMemoryBarriers),
         imageMemoryBarriers.data());
 }
 
@@ -241,11 +238,11 @@ void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events
     for (const auto& event : events)
         dereferencedEvents.put(*event);
     vkCmdWaitEvents(handle, dereferencedEvents.size(), dereferencedEvents, srcStageMask, dstStageMask,
-        MAGMA_COUNT(memoryBarriers), 
+        MAGMA_COUNT(memoryBarriers),
         memoryBarriers.data(),
-        MAGMA_COUNT(bufferMemoryBarriers), 
+        MAGMA_COUNT(bufferMemoryBarriers),
         bufferMemoryBarriers.data(),
-        MAGMA_COUNT(imageMemoryBarriers), 
+        MAGMA_COUNT(imageMemoryBarriers),
         imageMemoryBarriers.data());
 }
 

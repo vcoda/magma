@@ -39,13 +39,13 @@ ImageView::ImageView(std::shared_ptr<const Image> resource,
     info.image = *image;
     switch (image->getType())
     {
-    case VK_IMAGE_TYPE_1D: 
+    case VK_IMAGE_TYPE_1D:
         if (image->getArrayLayers() == 1)
             info.viewType = VK_IMAGE_VIEW_TYPE_1D;
         else
             info.viewType = VK_IMAGE_VIEW_TYPE_1D_ARRAY;
         break;
-    case VK_IMAGE_TYPE_2D: 
+    case VK_IMAGE_TYPE_2D:
         if (image->flags & VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT)
             info.viewType = VK_IMAGE_VIEW_TYPE_CUBE;
         else
@@ -56,7 +56,7 @@ ImageView::ImageView(std::shared_ptr<const Image> resource,
                 info.viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
         }
         break;
-    case VK_IMAGE_TYPE_3D: 
+    case VK_IMAGE_TYPE_3D:
         info.viewType = VK_IMAGE_VIEW_TYPE_3D;
         break;
     default:

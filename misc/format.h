@@ -25,7 +25,7 @@ namespace magma
     {
     public:
         Format(VkFormat format) noexcept;
-        bool valid() const noexcept 
+        bool valid() const noexcept
             { return format != VK_FORMAT_UNDEFINED; }
         bool depth() const noexcept;
         bool depthStencil() const noexcept;
@@ -33,11 +33,11 @@ namespace magma
         bool ETC2() const noexcept;
         bool EAC() const noexcept;
         bool adaptiveCompressed() const noexcept;
-        bool compressed() const noexcept 
+        bool compressed() const noexcept
             { return blockCompressed() || ETC2() || EAC() || adaptiveCompressed(); }
         bool floatingPoint() const noexcept;
         std::pair<int, int> blockFootprint() const noexcept;
-        operator VkFormat() const noexcept 
+        operator VkFormat() const noexcept
             { return format; }
 
     private:

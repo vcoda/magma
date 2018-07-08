@@ -68,7 +68,7 @@ bool Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& comm
     for (const auto& cmdBuffer : commandBuffers)
         dereferencedCommandBuffers.put(*cmdBuffer);
     info.commandBufferCount = MAGMA_COUNT(dereferencedCommandBuffers);
-    info.pCommandBuffers = dereferencedCommandBuffers;  
+    info.pCommandBuffers = dereferencedCommandBuffers;
     if (signalSemaphores.empty())
     {
         info.signalSemaphoreCount = 0;
@@ -98,10 +98,10 @@ bool Queue::submit(std::shared_ptr<const CommandBuffer> commandBuffer,
         waitSemaphores.push_back(waitSemaphore);
     if (signalSemaphore)
         signalSemaphores.push_back(signalSemaphore);
-    return submit(std::vector<std::shared_ptr<const CommandBuffer>>{commandBuffer}, 
-        waitStageMask, 
-        waitSemaphores, 
-        signalSemaphores, 
+    return submit(std::vector<std::shared_ptr<const CommandBuffer>>{commandBuffer},
+        waitStageMask,
+        waitSemaphores,
+        signalSemaphores,
         std::move(fence));
 }
 
@@ -111,7 +111,7 @@ bool Queue::waitIdle() noexcept
     return (VK_SUCCESS == wait);
 }
 
-void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex, 
+void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */)
 {
     present(swapchain, imageIndex, nullptr, waitSemaphore);
@@ -130,7 +130,7 @@ void Queue::presentToDisplay(std::shared_ptr<const Swapchain> swapchain, uint32_
     present(swapchain, imageIndex, &displayPresentInfo, waitSemaphore);
 }
 
-void Queue::present(std::shared_ptr<const Swapchain> swapchain, 
+void Queue::present(std::shared_ptr<const Swapchain> swapchain,
     uint32_t imageIndex,
     const VkDisplayPresentInfoKHR *displayPresentInfo,
     std::shared_ptr<const Semaphore> waitSemaphore)

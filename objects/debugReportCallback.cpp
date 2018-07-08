@@ -23,8 +23,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instance,
-    PFN_vkDebugReportCallbackEXT reportCallback, 
-    VkDebugReportFlagsEXT flags, 
+    PFN_vkDebugReportCallbackEXT reportCallback,
+    VkDebugReportFlagsEXT flags,
     void *userData /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT, nullptr, std::move(allocator)),
@@ -44,7 +44,7 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
     }
 }
 
-DebugReportCallback::~DebugReportCallback() 
+DebugReportCallback::~DebugReportCallback()
 {
     MAGMA_OPTIONAL_INSTANCE_EXTENSION(vkDestroyDebugReportCallbackEXT);
     if (vkDestroyDebugReportCallbackEXT)

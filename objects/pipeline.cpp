@@ -95,15 +95,15 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
     uint32_t subpass /* 0 */,
     VkPipelineCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    GraphicsPipeline(std::move(device), std::move(pipelineCache), stages, 
-        vertexInputState, inputAssemblyState, 
+    GraphicsPipeline(std::move(device), std::move(pipelineCache), stages,
+        vertexInputState, inputAssemblyState,
         TesselationState(), // No tesselation state
         ViewportState(), // No viewport state (supposed to be dynamic)
         rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
         std::move(layout), std::move(renderPass), subpass, flags, std::move(allocator))
 {}
 
-GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::shared_ptr<const PipelineCache> pipelineCache,  
+GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
     const std::vector<ShaderStage>& stages,
     const VertexInputState& vertexInputState,
     const InputAssemblyState& inputAssemblyState,

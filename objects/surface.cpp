@@ -37,8 +37,8 @@ Surface::~Surface()
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
 
 Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance,
-    HINSTANCE hinstance, 
-    HWND hwnd, 
+    HINSTANCE hinstance,
+    HWND hwnd,
     VkWin32SurfaceCreateFlagsKHR flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Surface(std::move(instance), std::move(allocator))
@@ -183,8 +183,8 @@ MacosSurface::MacosSurface(std::shared_ptr<const Instance> instance,
 #endif // VK_USE_PLATFORM_MACOS_MVK
 
 DisplaySurface::DisplaySurface(std::shared_ptr<const Instance> instance,
-    std::shared_ptr<const DisplayMode> displayMode, 
-    uint32_t planeIndex, 
+    std::shared_ptr<const DisplayMode> displayMode,
+    uint32_t planeIndex,
     uint32_t planeStackIndex,
     VkSurfaceTransformFlagBitsKHR transform,
     VkDisplayPlaneAlphaFlagBitsKHR alphaMode,

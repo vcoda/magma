@@ -24,7 +24,7 @@ namespace magma
 {
     class PipelineCache;
     class PipelineLayout;
-    
+
     class Pipeline : public NonDispatchable<VkPipeline>
     {
     public:
@@ -46,7 +46,7 @@ namespace magma
     struct RasterizationState;
     struct MultisampleState;
     struct DepthStencilState;
-    
+
     class VertexInputState;
     class ViewportState;
     class ColorBlendState;

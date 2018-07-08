@@ -24,8 +24,8 @@ namespace magma
 ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, const char *name) noexcept:
     ScopedDebugMarker(std::move(cmdBuffer), name, 0.f, 0.f, 0.f, 1.f)
 {}
-        
-ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, const char *name, 
+
+ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, const char *name,
     float r, float g, float b, float a /* 1 */) noexcept:
     cmdBuffer(std::move(cmdBuffer))
 {

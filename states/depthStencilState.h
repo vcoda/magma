@@ -26,8 +26,8 @@ namespace magma
             VkStencilOp passOp,
             VkStencilOp depthFailOp,
             VkCompareOp compareOp,
-            uint32_t compareMask = 0x0, 
-            uint32_t writeMask = 0x0, 
+            uint32_t compareMask = 0x0,
+            uint32_t writeMask = 0x0,
             uint32_t reference = 0x0);
     };
 

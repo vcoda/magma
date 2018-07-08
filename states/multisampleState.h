@@ -22,13 +22,13 @@ namespace magma
 {
     struct MultisampleState : VkPipelineMultisampleStateCreateInfo
     {
-        MultisampleState(VkSampleCountFlagBits rasterizationSamples, 
-            bool sampleShading = false, 
-            bool alphaToCoverage = false, 
+        MultisampleState(VkSampleCountFlagBits rasterizationSamples,
+            bool sampleShading = false,
+            bool alphaToCoverage = false,
             bool alphaToOne = false);
-        MultisampleState(uint32_t sampleCount, 
-            bool sampleShading = false, 
-            bool alphaToCoverage = false, 
+        MultisampleState(uint32_t sampleCount,
+            bool sampleShading = false,
+            bool alphaToCoverage = false,
             bool alphaToOne = false);
     };
 

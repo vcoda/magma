@@ -44,7 +44,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<const Device> device, VkDeviceSize si
         }
     }
     if (VK_MAX_MEMORY_TYPES == info.memoryTypeIndex)
-    {   
+    {
         for (uint32_t i = 0; i < properties.memoryTypeCount; ++i)
         {   // Try to find any suitable memory type
             if ((properties.memoryTypes[i].propertyFlags & flags) == flags)
@@ -66,7 +66,7 @@ DeviceMemory::~DeviceMemory()
 }
 
 void *DeviceMemory::map(
-    VkDeviceSize offset /* 0 */, 
+    VkDeviceSize offset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */,
     VkMemoryMapFlags flags /* 0 */) noexcept
 {
@@ -81,7 +81,7 @@ void DeviceMemory::unmap() noexcept
 }
 
 bool DeviceMemory::flushMappedRange(
-    VkDeviceSize offset /* 0 */, 
+    VkDeviceSize offset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */) noexcept
 {
     VkMappedMemoryRange memoryRange;

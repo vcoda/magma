@@ -26,7 +26,7 @@ namespace magma
     class Queue;
     class Fence;
     class Semaphore;
-    
+
     class Swapchain : public NonDispatchable<VkSwapchainKHR>
     {
     public:

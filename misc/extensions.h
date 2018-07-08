@@ -31,7 +31,7 @@ namespace magma
 
     protected:
         Extensions() noexcept {}
-        Extensions(const std::set<std::string>& extensions) noexcept: 
+        Extensions(const std::set<std::string>& extensions) noexcept:
             extensions(extensions) {}
 
     protected:
@@ -60,7 +60,7 @@ namespace magma
 
         const bool MVK_ios_surface;
         const bool MVK_macos_surface;
-        
+
         InstanceExtensions(std::shared_ptr<const class Instance> instance);
     };
 

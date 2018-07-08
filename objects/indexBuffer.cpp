@@ -31,8 +31,8 @@ namespace magma
 IndexBuffer::IndexBuffer(std::shared_ptr<const Device> device, VkDeviceSize size, VkIndexType indexType,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Buffer(std::move(device), size, 
-        VK_BUFFER_USAGE_INDEX_BUFFER_BIT, 
+    Buffer(std::move(device), size,
+        VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
         flags, std::move(allocator),
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
     indexType(indexType)
@@ -42,13 +42,13 @@ IndexBuffer::IndexBuffer(std::shared_ptr<const Device> device, const void *data,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    IndexBuffer(std::move(device), size, indexType, flags, std::move(allocator)) 
+    IndexBuffer(std::move(device), size, indexType, flags, std::move(allocator))
 {
     if (data)
     {
         if (!copyFn)
             copyFn = copyMemory;
-        helpers::mapScoped<void>(this, [&copyFn, data, size](void *buffer) 
+        helpers::mapScoped<void>(this, [&copyFn, data, size](void *buffer)
         {
             copyFn(buffer, data, static_cast<size_t>(size));
         });
@@ -59,15 +59,15 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const voi
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    IndexBuffer(copyCmdBuffer, 
-        std::make_shared<SrcTransferBuffer>(std::move(copyCmdBuffer->getDevice()), data, size, 0, allocator, std::move(copyFn)), 
+    IndexBuffer(copyCmdBuffer,
+        std::make_shared<SrcTransferBuffer>(std::move(copyCmdBuffer->getDevice()), data, size, 0, allocator, std::move(copyFn)),
         indexType, flags, std::move(allocator))
 {}
 
 IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, std::shared_ptr<SrcTransferBuffer> srcBuffer, VkIndexType indexType,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Buffer(std::move(copyCmdBuffer->getDevice()), srcBuffer->getMemory()->getSize(), 
+    Buffer(std::move(copyCmdBuffer->getDevice()), srcBuffer->getMemory()->getSize(),
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         flags, std::move(allocator),
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),

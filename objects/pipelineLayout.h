@@ -35,7 +35,7 @@ namespace magma
         PipelineLayout(const std::vector<std::shared_ptr<const DescriptorSetLayout>>& setLayouts,
             const std::initializer_list<VkPushConstantRange>& pushConstantRanges = {},
             std::shared_ptr<IAllocator> allocator = nullptr);
-        template<uint32_t setLayoutCount> 
+        template<uint32_t setLayoutCount>
         PipelineLayout(const std::shared_ptr<DescriptorSetLayout>(&setLayouts)[setLayoutCount],
             const std::initializer_list<VkPushConstantRange>& pushConstantRanges = {},
             std::shared_ptr<IAllocator> allocator = nullptr):

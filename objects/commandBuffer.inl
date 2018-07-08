@@ -71,7 +71,7 @@ MAGMA_INLINE void CommandBuffer::setScissor(int32_t x, int32_t y, uint32_t width
     scissor.extent.width = width;
     scissor.extent.height = height;
     vkCmdSetScissor(handle, 0, 1, &scissor);
-}    
+}
 
 MAGMA_INLINE void CommandBuffer::setScissor(const Scissor& scissor) noexcept
 {
@@ -121,7 +121,7 @@ MAGMA_INLINE void CommandBuffer::setStencilReference(bool frontFace, bool backFa
     vkCmdSetStencilReference(handle, MAGMA_STENCIL_FACE_MASK(frontFace, backFace), reference);
 }
 
-MAGMA_INLINE void CommandBuffer::bindDescriptorSet(const std::shared_ptr<PipelineLayout>& pipelineLayout, const std::shared_ptr<DescriptorSet>& descriptorSet, 
+MAGMA_INLINE void CommandBuffer::bindDescriptorSet(const std::shared_ptr<PipelineLayout>& pipelineLayout, const std::shared_ptr<DescriptorSet>& descriptorSet,
     VkPipelineBindPoint pipelineBindPoint /* VK_PIPELINE_BIND_POINT_GRAPHICS */) noexcept
 {
     const VkDescriptorSet dereferencedDescriptorSets[1] = {*descriptorSet};

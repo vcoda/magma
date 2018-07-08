@@ -30,8 +30,8 @@ namespace magma
         Object(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<const Device> device,
             std::shared_ptr<IAllocator> allocator):
-            objectType(objectType), 
-            device(std::move(device)), 
+            objectType(objectType),
+            device(std::move(device)),
             allocator(std::move(allocator)) {}
         VkDebugReportObjectTypeEXT getObjectType() const noexcept
             { return objectType; }

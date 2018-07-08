@@ -30,8 +30,8 @@ namespace magma
             float mipLodBias = 0.f,
             std::shared_ptr<IAllocator> allocator = nullptr);
         Sampler(std::shared_ptr<const Device> device,
-            VkFilter magFilter, 
-            VkFilter minFilter, 
+            VkFilter magFilter,
+            VkFilter minFilter,
             VkSamplerMipmapMode mipmapMode,
             VkSamplerAddressMode addressMode,
             float mipLodBias = 0.f,
@@ -39,7 +39,7 @@ namespace magma
         ~Sampler();
 
     protected:
-        Sampler(std::shared_ptr<const Device> device, 
+        Sampler(std::shared_ptr<const Device> device,
             std::shared_ptr<IAllocator> allocator);
     };
 

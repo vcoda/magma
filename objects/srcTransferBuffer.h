@@ -47,7 +47,7 @@ namespace magma
         VkBufferCreateFlags flags /* 0 */,
         std::shared_ptr<IAllocator> allocator /* nullptr */,
         CopyMemoryFunction copyFn /* nullptr */):
-        SrcTransferBuffer(device, data.data(), static_cast<VkDeviceSize>(data.size() * sizeof(Type)), 
+        SrcTransferBuffer(device, data.data(), static_cast<VkDeviceSize>(data.size() * sizeof(Type)),
             flags, allocator, copyFn)
     {}
 } // namespace magma

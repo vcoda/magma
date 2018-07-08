@@ -43,8 +43,8 @@ namespace magma
     };
 
     template<typename Type>
-    inline StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, 
-        const std::vector<Type>& data, 
+    inline StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+        const std::vector<Type>& data,
         VkBufferCreateFlags flags /* 0 */,
         std::shared_ptr<IAllocator> allocator /* nullptr */):
         StorageBuffer(copyCmdBuffer, data.data(), static_cast<VkDeviceSize>(sizeof(Type) * data.size()), flags, allocator)

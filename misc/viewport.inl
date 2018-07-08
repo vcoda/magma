@@ -26,7 +26,7 @@ MAGMA_INLINE Viewport::Viewport(float x, float y, float width, float height,
     this->height = height;
     this->minDepth = minDepth;
     this->maxDepth = maxDepth;
-}    
+}
 
 MAGMA_INLINE Viewport::Viewport(float x, float y, const VkExtent2D& extent,
     float minDepth /* 0.f */, float maxDepth /* 1.f */) noexcept

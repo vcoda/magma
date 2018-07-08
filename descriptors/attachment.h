@@ -37,7 +37,7 @@ namespace magma
         AttachmentDescription(VkFormat format,
             uint32_t sampleCount,
             const LoadStoreOp& op,
-            const LoadStoreOp& stencilOp,   
+            const LoadStoreOp& stencilOp,
             VkImageLayout initialLayout,
             VkImageLayout finalLayout);
         AttachmentDescription(VkAttachmentLoadOp loadOp,
@@ -45,7 +45,7 @@ namespace magma
             VkAttachmentLoadOp stencilLoadOp,
             VkAttachmentStoreOp stencilStoreOp,
             VkImageLayout initialLayout,
-            VkImageLayout finalLayout); 
+            VkImageLayout finalLayout);
         AttachmentDescription(VkFormat format, uint32_t sampleCount, const AttachmentDescription& predefined);
     };
 

@@ -54,9 +54,9 @@ std::vector<uint64_t> QueryPool::getResults(uint32_t firstQuery, uint32_t queryC
     // TODO: VK_QUERY_RESULT_PARTIAL_BIT
     const VkDeviceSize stride = sizeof(uint64_t);
     std::vector<uint64_t> results(queryCount);
-    const VkResult get = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, 
+    const VkResult get = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle,
         firstQuery, queryCount,
-        sizeof(uint64_t) * results.size(), results.data(), stride, 
+        sizeof(uint64_t) * results.size(), results.data(), stride,
         flags);
     if (MAGMA_SUCCEEDED(get))
         return results;
@@ -68,7 +68,7 @@ OcclusionQuery::OcclusionQuery(std::shared_ptr<const Device> device, uint32_t qu
     QueryPool(VK_QUERY_TYPE_OCCLUSION, std::move(device), queryCount, 0, std::move(allocator))
 {}
 
-PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<const Device> device, 
+PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<const Device> device,
     VkQueryPipelineStatisticFlags pipelineStatistics,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     QueryPool(VK_QUERY_TYPE_PIPELINE_STATISTICS, std::move(device), 1, pipelineStatistics, std::move(allocator)),
