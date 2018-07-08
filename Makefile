@@ -81,7 +81,7 @@ MAGMA_OBJS = \
 	states/samplerState.o \
 	states/tesselationState.o \
 	states/vertexInputState.o \
-	states/viewportState.o
+	states/viewportState.o \
 	\
 	utilities/immediateRender.o
 
