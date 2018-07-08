@@ -24,12 +24,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Buffer::Buffer(std::shared_ptr<const Device> device, 
-    VkDeviceSize size, VkBufferUsageFlags usage, VkBufferCreateFlags flags, 
+Buffer::Buffer(std::shared_ptr<const Device> device,
+    VkDeviceSize size, VkBufferUsageFlags usage, VkBufferCreateFlags flags,
     std::shared_ptr<IAllocator> allocator,
     VkMemoryPropertyFlags memoryFlags):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT, std::move(device), std::move(allocator)),
-    size(size)
+    size(size),
+    usage(usage)
 {
     VkBufferCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;

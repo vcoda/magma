@@ -31,6 +31,7 @@ namespace magma
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0);
         void unbindMemory();
+        VkBufferUsageFlags getUsage() const noexcept { return usage; }
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
         VkMemoryRequirements getMemoryRequirements() const noexcept;
         VkDescriptorBufferInfo getDescriptor() const noexcept;
@@ -45,6 +46,7 @@ namespace magma
 
     protected:
         VkDeviceSize size;
+        VkBufferUsageFlags usage;
         std::shared_ptr<DeviceMemory> memory;
     };
 } // namespace magma
