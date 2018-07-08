@@ -24,17 +24,50 @@ namespace magma
     {
         struct VertexStageBinding : DescriptorSetLayout::Binding
         {
-            VertexStageBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_VERTEX_BIT) {}
+            VertexStageBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_VERTEX_BIT) {}
+        };
+
+        struct TesselationControlStageBinding : DescriptorSetLayout::Binding
+        {
+            TesselationControlStageBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT) {}
+        };
+
+        struct TesselationEvaluationStageBinding : DescriptorSetLayout::Binding
+        {
+            TesselationEvaluationStageBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT) {}
         };
 
         struct GeometryStageBinding : DescriptorSetLayout::Binding
         {
-            GeometryStageBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_GEOMETRY_BIT) {}
+            GeometryStageBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_GEOMETRY_BIT) {}
         };
 
         struct FragmentStageBinding : DescriptorSetLayout::Binding
         {
-            FragmentStageBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_FRAGMENT_BIT) {}
+            FragmentStageBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_FRAGMENT_BIT) {}
+        };
+
+        struct ComputeStageBinding : DescriptorSetLayout::Binding
+        {
+            ComputeStageBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_COMPUTE_BIT) {}
+        };
+
+        struct GraphicsStageBinding : DescriptorSetLayout::Binding
+        {
+            GraphicsStageBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_ALL_GRAPHICS) {}
+        };
+
+        struct AllStagesBinding : DescriptorSetLayout::Binding
+        {
+            AllStagesBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_ALL) {}
         };
 
         struct VertexGeometryStageBinding : DescriptorSetLayout::Binding
@@ -45,23 +78,8 @@ namespace magma
 
         struct VertexFragmentStageBinding : DescriptorSetLayout::Binding
         {
-            VertexFragmentStageBinding(uint32_t binding, const Descriptor& descriptor): 
+            VertexFragmentStageBinding(uint32_t binding, const Descriptor& descriptor):
                 DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT) {}
-        };
-
-        struct ComputeStageBinding : DescriptorSetLayout::Binding
-        {
-            ComputeStageBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_COMPUTE_BIT) {}
-        };
-
-        struct GraphicsStageBinding : DescriptorSetLayout::Binding
-        {
-            GraphicsStageBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_ALL_GRAPHICS) {}
-        };
-
-        struct AllStagesBinding : DescriptorSetLayout::Binding
-        {
-            AllStagesBinding(uint32_t binding, const Descriptor& descriptor): DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_ALL) {}
         };
     } // namespace bindings
 } // namespace magma
