@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptorSetLayout.h"
 #include "device.h"
 #include "buffer.h"
+#include "bufferView.h"
 #include "image.h"
 #include "imageView.h"
 #include "sampler.h"
@@ -70,6 +71,25 @@ void DescriptorSet::update(uint32_t index, std::shared_ptr<const ImageView> imag
     descriptorWrite.pImageInfo = &info;
     descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = nullptr;
+    vkUpdateDescriptorSets(MAGMA_HANDLE(device), 1, &descriptorWrite, 0, nullptr);
+}
+
+void DescriptorSet::update(uint32_t index, std::shared_ptr<const BufferView> texelBufferView) noexcept
+{
+    const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
+    MAGMA_ASSERT(1 == binding.descriptorCount);
+    const VkBufferView bufferViews[1] = {*texelBufferView};
+    VkWriteDescriptorSet descriptorWrite;
+    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    descriptorWrite.pNext = nullptr;
+    descriptorWrite.dstSet = handle;
+    descriptorWrite.dstBinding = binding.binding;
+    descriptorWrite.dstArrayElement = 0;
+    descriptorWrite.descriptorCount = binding.descriptorCount;
+    descriptorWrite.descriptorType = binding.descriptorType;
+    descriptorWrite.pImageInfo = nullptr;
+    descriptorWrite.pBufferInfo = nullptr;
+    descriptorWrite.pTexelBufferView = bufferViews;
     vkUpdateDescriptorSets(MAGMA_HANDLE(device), 1, &descriptorWrite, 0, nullptr);
 }
 } // namespace magma

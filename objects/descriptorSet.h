@@ -27,6 +27,7 @@ namespace magma
     class Buffer;
     class Sampler;
     class ImageView;
+    class BufferView;
 
     class DescriptorSet : public NonDispatchable<VkDescriptorSet>
     {
@@ -42,6 +43,8 @@ namespace magma
         void update(uint32_t index,
             std::shared_ptr<const ImageView> imageView,
             std::shared_ptr<const Sampler> sampler) noexcept;
+        void update(uint32_t index,
+            std::shared_ptr<const BufferView> texelBufferView) noexcept;
         std::shared_ptr<DescriptorPool> getPool() const noexcept { return pool; }
 
     private:
