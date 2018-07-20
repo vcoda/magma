@@ -51,6 +51,59 @@ Device::Device(std::shared_ptr<const PhysicalDevice> physicalDevice,
         queues.push_back(desc);
 }
 
+Device::Device(std::shared_ptr<const PhysicalDevice> physicalDevice,
+    const std::vector<DeviceQueueDescriptor>& queueDescriptors,
+    const std::vector<const char *>& layers,
+    const std::vector<const char *>& extensions,
+    const VkPhysicalDeviceFeatures& deviceFeatures,
+    const std::vector<void *>& deviceFeaturesEx,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Dispatchable<VkDevice>(VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT, nullptr, std::move(allocator)),
+    physicalDevice(std::move(physicalDevice))
+{
+    VkPhysicalDeviceFeatures2 features;
+    features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+    features.features = deviceFeatures;
+    if (deviceFeaturesEx.empty())
+        features.pNext = nullptr;
+    else
+    {
+        struct VkFeaturesNode
+        {
+            VkStructureType sType;
+            void *pNext;
+            // ...
+        };
+        auto curr = deviceFeaturesEx.begin();
+        auto next = curr; ++next;
+        while (next != deviceFeaturesEx.end())
+        {   // Make linked list
+            VkFeaturesNode *currNode = reinterpret_cast<VkFeaturesNode *>(*curr);
+            VkFeaturesNode *nextNode = reinterpret_cast<VkFeaturesNode *>(*next);
+            currNode->pNext = nextNode;
+            ++curr; ++next;
+        }
+        VkFeaturesNode *lastNode = reinterpret_cast<VkFeaturesNode *>(*curr);
+        lastNode->pNext = nullptr;
+        features.pNext = deviceFeaturesEx.front();
+    }
+    VkDeviceCreateInfo info;
+    info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+    info.pNext = &features;
+    info.flags = 0;
+    info.queueCreateInfoCount = MAGMA_COUNT(queueDescriptors);
+    info.pQueueCreateInfos = queueDescriptors.data();
+    info.enabledLayerCount = MAGMA_COUNT(layers);
+    info.ppEnabledLayerNames = layers.data();
+    info.enabledExtensionCount = MAGMA_COUNT(extensions);
+    info.ppEnabledExtensionNames = extensions.data();
+    info.pEnabledFeatures = nullptr;
+    const VkResult create = vkCreateDevice(MAGMA_HANDLE(physicalDevice), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    MAGMA_THROW_FAILURE(create, "failed to create logical device");
+    for (const auto& desc : queueDescriptors)
+        queues.push_back(desc);
+}
+
 Device::~Device()
 {
     vkDestroyDevice(handle, MAGMA_OPTIONAL_INSTANCE(allocator));
