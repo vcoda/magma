@@ -85,7 +85,7 @@ Device::Device(std::shared_ptr<const PhysicalDevice> physicalDevice,
             ++curr; ++next;
         }
         VkFeaturesNode *lastNode = reinterpret_cast<VkFeaturesNode *>(*curr);
-        lastNode->pNext = nullptr;
+        lastNode->pNext = nullptr; // End of list
     }
     VkDeviceCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
