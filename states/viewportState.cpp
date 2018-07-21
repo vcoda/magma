@@ -135,7 +135,7 @@ ViewportState::ViewportState(const std::vector<VkViewport>& viewports, const std
 
 ViewportState::ViewportState(const ViewportState& other)
 {
-    helpers::copy(this, &other);
+    *this = other;
     pViewports = helpers::copy(new VkViewport[viewportCount], other.pViewports, viewportCount);
     try
     {
@@ -151,7 +151,7 @@ ViewportState& ViewportState::operator=(const ViewportState& other)
 {
     if (this != &other)
     {
-        helpers::copy(this, &other);
+        *this = other;
         pViewports = helpers::copy(new VkViewport[viewportCount], other.pViewports, viewportCount);
         try
         {
