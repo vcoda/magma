@@ -51,7 +51,8 @@ namespace magma
             const std::vector<DeviceQueueDescriptor>& queueDescriptors,
             const std::vector<const char *>& layers,
             const std::vector<const char *>& extensions,
-            const VkPhysicalDeviceFeatures& deviceFeatures) const;
+            const VkPhysicalDeviceFeatures& deviceFeatures,
+            const std::vector<void *>& deviceFeaturesEx = {}) const;
         std::shared_ptr<Device> createDefaultDevice() const;
         bool getSurfaceSupport(std::shared_ptr<Surface> surface) const noexcept;
         VkSurfaceCapabilitiesKHR getSurfaceCapabilities(std::shared_ptr<const Surface> surface) const;

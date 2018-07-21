@@ -124,9 +124,11 @@ std::shared_ptr<Device> PhysicalDevice::createDevice(
     const std::vector<DeviceQueueDescriptor>& queueDescriptors,
     const std::vector<const char *>& layers,
     const std::vector<const char *>& extensions,
-    const VkPhysicalDeviceFeatures& deviceFeatures) const
+    const VkPhysicalDeviceFeatures& deviceFeatures,
+    const std::vector<void *>& deviceFeaturesEx /* {} */) const
 {
-    return std::shared_ptr<Device>(new Device(std::move(shared_from_this()), queueDescriptors, layers, extensions, deviceFeatures, allocator));
+    return std::shared_ptr<Device>(new Device(shared_from_this(), queueDescriptors, layers, extensions,
+        deviceFeatures, deviceFeaturesEx, allocator));
 }
 
 std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
@@ -136,11 +138,12 @@ std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
         DeviceQueueDescriptor(VK_QUEUE_GRAPHICS_BIT, shared_from_this(), defaultQueuePriorities)
     };
     const std::vector<const char*> noLayers;
-    const std::vector<const char*> extensions = {
+    const std::vector<const char*> swapchainExtension = {
         VK_KHR_SWAPCHAIN_EXTENSION_NAME
     };
-    VkPhysicalDeviceFeatures noFeatures = {};
-    return std::shared_ptr<Device>(new Device(std::move(shared_from_this()), queueDescriptors, noLayers, extensions, noFeatures, allocator));
+    const VkPhysicalDeviceFeatures noDeviceFeatures = {};
+    const std::vector<void *> noDeviceFeaturesEx;
+    return createDevice(queueDescriptors, noLayers, swapchainExtension, noDeviceFeatures, noDeviceFeaturesEx);
 }
 
 bool PhysicalDevice::getSurfaceSupport(std::shared_ptr<Surface> surface) const noexcept
