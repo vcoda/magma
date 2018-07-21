@@ -29,7 +29,7 @@ namespace magma
         class StackArray final
         {
         public:
-            explicit StackArray(void *const stack, const size_t count):
+            explicit StackArray(void *const stack, const size_t count) noexcept:
                 stack(static_cast<Type *>(stack)),
                 count(static_cast<uint32_t>(count)),
                 pos(0)

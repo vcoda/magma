@@ -23,7 +23,7 @@ namespace magma
     class LoadStoreOp
     {
     public:
-        LoadStoreOp(VkAttachmentLoadOp loadOp, VkAttachmentStoreOp storeOp):
+        LoadStoreOp(VkAttachmentLoadOp loadOp, VkAttachmentStoreOp storeOp) noexcept:
             loadOp(loadOp), storeOp(storeOp) {}
 
     private:
@@ -45,7 +45,7 @@ namespace magma
             VkAttachmentLoadOp stencilLoadOp,
             VkAttachmentStoreOp stencilStoreOp,
             VkImageLayout initialLayout,
-            VkImageLayout finalLayout);
+            VkImageLayout finalLayout) noexcept;
         AttachmentDescription(VkFormat format, uint32_t sampleCount, const AttachmentDescription& predefined);
     };
 

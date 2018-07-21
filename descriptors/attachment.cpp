@@ -54,7 +54,7 @@ AttachmentDescription::AttachmentDescription(VkAttachmentLoadOp loadOp,
     VkAttachmentLoadOp stencilLoadOp,
     VkAttachmentStoreOp stencilStoreOp,
     VkImageLayout initialLayout,
-    VkImageLayout finalLayout)
+    VkImageLayout finalLayout) noexcept
 {
     flags = 0;
     format = VK_FORMAT_UNDEFINED;
