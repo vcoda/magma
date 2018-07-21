@@ -31,7 +31,7 @@ namespace magma
 
     protected:
         Extensions() noexcept {}
-        Extensions(const std::set<std::string>& extensions) noexcept:
+        Extensions(const std::set<std::string>& extensions):
             extensions(extensions) {}
 
     protected:
