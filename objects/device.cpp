@@ -30,44 +30,16 @@ Device::Device(std::shared_ptr<const PhysicalDevice> physicalDevice,
     const std::vector<const char *>& layers,
     const std::vector<const char *>& extensions,
     const VkPhysicalDeviceFeatures& deviceFeatures,
+    const std::vector<void *>& deviceFeaturesEx /* {} */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Dispatchable<VkDevice>(VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT, nullptr, std::move(allocator)),
     physicalDevice(std::move(physicalDevice))
 {
-    VkDeviceCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = 0;
-    info.queueCreateInfoCount = MAGMA_COUNT(queueDescriptors);
-    info.pQueueCreateInfos = queueDescriptors.data();
-    info.enabledLayerCount = MAGMA_COUNT(layers);
-    info.ppEnabledLayerNames = layers.data();
-    info.enabledExtensionCount = MAGMA_COUNT(extensions);
-    info.ppEnabledExtensionNames = extensions.data();
-    info.pEnabledFeatures = &deviceFeatures;
-    const VkResult create = vkCreateDevice(MAGMA_HANDLE(physicalDevice), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create logical device");
-    for (const auto& desc : queueDescriptors)
-        queues.push_back(desc);
-}
-
-Device::Device(std::shared_ptr<const PhysicalDevice> physicalDevice,
-    const std::vector<DeviceQueueDescriptor>& queueDescriptors,
-    const std::vector<const char *>& layers,
-    const std::vector<const char *>& extensions,
-    const VkPhysicalDeviceFeatures& deviceFeatures,
-    const std::vector<void *>& deviceFeaturesEx,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Dispatchable<VkDevice>(VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT, nullptr, std::move(allocator)),
-    physicalDevice(std::move(physicalDevice))
-{
-    VkPhysicalDeviceFeatures2 features;
-    features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
-    features.features = deviceFeatures;
-    if (deviceFeaturesEx.empty())
-        features.pNext = nullptr;
-    else
+    VkPhysicalDeviceFeatures2KHR features;
+    if (!deviceFeaturesEx.empty())
     {
+        features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR;
+        features.features = deviceFeatures;
         features.pNext = deviceFeaturesEx.front();
         struct VkFeaturesNode
         {
@@ -89,7 +61,7 @@ Device::Device(std::shared_ptr<const PhysicalDevice> physicalDevice,
     }
     VkDeviceCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-    info.pNext = &features;
+    info.pNext = deviceFeaturesEx.empty() ? nullptr : &features;
     info.flags = 0;
     info.queueCreateInfoCount = MAGMA_COUNT(queueDescriptors);
     info.pQueueCreateInfos = queueDescriptors.data();
@@ -97,7 +69,7 @@ Device::Device(std::shared_ptr<const PhysicalDevice> physicalDevice,
     info.ppEnabledLayerNames = layers.data();
     info.enabledExtensionCount = MAGMA_COUNT(extensions);
     info.ppEnabledExtensionNames = extensions.data();
-    info.pEnabledFeatures = nullptr;
+    info.pEnabledFeatures = deviceFeaturesEx.empty() ? &deviceFeatures : nullptr;
     const VkResult create = vkCreateDevice(MAGMA_HANDLE(physicalDevice), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create logical device");
     for (const auto& desc : queueDescriptors)
