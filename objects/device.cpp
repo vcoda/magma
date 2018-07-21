@@ -68,6 +68,7 @@ Device::Device(std::shared_ptr<const PhysicalDevice> physicalDevice,
         features.pNext = nullptr;
     else
     {
+        features.pNext = deviceFeaturesEx.front();
         struct VkFeaturesNode
         {
             VkStructureType sType;
@@ -85,7 +86,6 @@ Device::Device(std::shared_ptr<const PhysicalDevice> physicalDevice,
         }
         VkFeaturesNode *lastNode = reinterpret_cast<VkFeaturesNode *>(*curr);
         lastNode->pNext = nullptr;
-        features.pNext = deviceFeaturesEx.front();
     }
     VkDeviceCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
