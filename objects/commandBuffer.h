@@ -46,7 +46,10 @@ namespace magma
     // Methods order follows Vulkan API order
     class CommandBuffer : public Dispatchable<VkCommandBuffer>
     {
-        CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Device> device, std::shared_ptr<CommandPool> pool);
+        CommandBuffer(
+            VkCommandBuffer handle,
+            std::shared_ptr<const Device> device,
+            std::shared_ptr<CommandPool> pool);
         friend class CommandPool;
 
     public:

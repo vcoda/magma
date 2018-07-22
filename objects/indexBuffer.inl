@@ -24,8 +24,8 @@ MAGMA_INLINE IndexBuffer::IndexBuffer(std::shared_ptr<const Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     IndexBuffer(device, indices.data(), static_cast<VkDeviceSize>(sizeof(IndexType) * indices.size()),
-        sizeof(IndexType) == sizeof(uint16_t) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32,
-        flags, std::move(allocator), std::move(copyFn))
+        sizeof(IndexType) == sizeof(uint16_t) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32, flags,
+        std::move(allocator), std::move(copyFn))
 {}
 
 template<typename IndexType>
@@ -35,8 +35,8 @@ MAGMA_INLINE IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuff
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     IndexBuffer(copyCmdBuffer, indices.data(), static_cast<VkDeviceSize>(sizeof(IndexType) * indices.size()),
-        sizeof(IndexType) == sizeof(uint16_t) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32,
-        flags, std::move(allocator), std::move(copyFn))
+        sizeof(IndexType) == sizeof(uint16_t) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32, flags,
+        std::move(allocator), std::move(copyFn))
 {}
 
 MAGMA_INLINE uint32_t IndexBuffer::getIndexCount() const noexcept
