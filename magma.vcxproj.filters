@@ -377,6 +377,12 @@
     <None Include="utilities\immediateRender.inl">
       <Filter>Header Files\utilities</Filter>
     </None>
+    <None Include="objects\srcTransferBuffer.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="objects\storageBuffer.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="states\colorBlendState.cpp">

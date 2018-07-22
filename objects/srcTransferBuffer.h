@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <vector>
 #include "buffer.h"
+#include "../shared.h"
 
 namespace magma
 {
@@ -40,14 +41,6 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
     };
-
-    template<typename Type>
-    inline SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<const Device> device,
-        const std::vector<Type>& data,
-        VkBufferCreateFlags flags /* 0 */,
-        std::shared_ptr<IAllocator> allocator /* nullptr */,
-        CopyMemoryFunction copyFn /* nullptr */):
-        SrcTransferBuffer(device, data.data(), static_cast<VkDeviceSize>(data.size() * sizeof(Type)),
-            flags, allocator, copyFn)
-    {}
 } // namespace magma
+
+#include "srcTransferBuffer.inl"

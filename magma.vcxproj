@@ -236,6 +236,8 @@
     <None Include="misc\viewport.inl" />
     <None Include="objects\commandBuffer.inl" />
     <None Include="objects\indexBuffer.inl" />
+    <None Include="objects\srcTransferBuffer.inl" />
+    <None Include="objects\storageBuffer.inl" />
     <None Include="objects\vertexBuffer.inl" />
     <None Include="utilities\immediateRender.inl" />
   </ItemGroup>

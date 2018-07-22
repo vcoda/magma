@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <vector>
 #include "buffer.h"
+#include "../shared.h"
 
 namespace magma
 {
@@ -39,14 +40,9 @@ namespace magma
         StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const std::vector<Type>& data,
             VkBufferCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
     };
-
-    template<typename Type>
-    inline StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
-        const std::vector<Type>& data,
-        VkBufferCreateFlags flags /* 0 */,
-        std::shared_ptr<IAllocator> allocator /* nullptr */):
-        StorageBuffer(copyCmdBuffer, data.data(), static_cast<VkDeviceSize>(sizeof(Type) * data.size()), flags, allocator)
-    {}
 } // namespace magma
+
+#include "storageBuffer.inl"
