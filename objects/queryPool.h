@@ -55,7 +55,7 @@ namespace magma
         PipelineStatisticsQuery(std::shared_ptr<const Device> device,
             VkQueryPipelineStatisticFlags pipelineStatistics,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        VkQueryPipelineStatisticFlags getStatisticFlags() const { return pipelineStatistics; }
+        VkQueryPipelineStatisticFlags getStatisticFlags() const noexcept { return pipelineStatistics; }
 
     private:
         VkQueryPipelineStatisticFlags pipelineStatistics;

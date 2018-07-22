@@ -23,7 +23,7 @@ namespace magma
     struct InputAssemblyState : VkPipelineInputAssemblyStateCreateInfo
     {
         InputAssemblyState(VkPrimitiveTopology topology,
-            bool primitiveRestartEnable = false);
+            bool primitiveRestartEnable = false) noexcept;
     };
 
     namespace states

@@ -24,7 +24,7 @@ namespace magma
     struct VertexInputBinding : VkVertexInputBindingDescription
     {
         VertexInputBinding(uint32_t binding, uint32_t stride,
-            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX)
+            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept
         {
             this->binding = binding;
             this->stride = stride;
@@ -34,7 +34,7 @@ namespace magma
 
     struct VertexInputAttribute : VkVertexInputAttributeDescription
     {
-        VertexInputAttribute(uint32_t binding, uint32_t location, VkFormat format, uint32_t offset)
+        VertexInputAttribute(uint32_t binding, uint32_t location, VkFormat format, uint32_t offset) noexcept
         {
             this->location = location;
             this->binding = binding;
@@ -46,7 +46,7 @@ namespace magma
     class VertexInputState final : public VkPipelineVertexInputStateCreateInfo
     {
     public:
-        VertexInputState();
+        VertexInputState() noexcept;
         VertexInputState(const VertexInputBinding& binding,
             const VertexInputAttribute& attribute);
         VertexInputState(const VertexInputBinding& binding,

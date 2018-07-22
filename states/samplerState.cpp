@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-SamplerState::SamplerState(VkFilter magFilter, VkFilter minFilter, VkSamplerMipmapMode mipmapMode, VkSamplerAddressMode addressMode):
+SamplerState::SamplerState(VkFilter magFilter, VkFilter minFilter, VkSamplerMipmapMode mipmapMode, VkSamplerAddressMode addressMode) noexcept:
     magFilter(magFilter),
     minFilter(minFilter),
     mipmapMode(mipmapMode),
@@ -28,7 +28,7 @@ SamplerState::SamplerState(VkFilter magFilter, VkFilter minFilter, VkSamplerMipm
     maxAnisotropy(0.f)
 {}
 
-SamplerState::SamplerState(float maxAnisotropy, VkSamplerAddressMode addressMode):
+SamplerState::SamplerState(float maxAnisotropy, VkSamplerAddressMode addressMode) noexcept:
     magFilter(VK_FILTER_LINEAR),
     minFilter(VK_FILTER_LINEAR),
     mipmapMode(VK_SAMPLER_MIPMAP_MODE_LINEAR),

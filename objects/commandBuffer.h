@@ -348,8 +348,8 @@ namespace magma
         void insertDebugMarker(const char *name) noexcept;
 
         // Non-API utility methods
-        std::shared_ptr<CommandPool> getPool() const { return pool; }
-        std::shared_ptr<Fence> getFence() const { return fence; }
+        std::shared_ptr<CommandPool> getPool() const noexcept { return pool; }
+        std::shared_ptr<Fence> getFence() const noexcept { return fence; }
 
         void setRenderArea(const VkRect2D& rc) noexcept;
         void setRenderArea(

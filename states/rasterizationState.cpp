@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 RasterizationState::RasterizationState(VkPolygonMode polygonMode, VkCullModeFlags cullMode, VkFrontFace frontFace,
-    bool depthClampEnable /* false */, bool rasterizerDiscardEnable /* false */)
+    bool depthClampEnable /* false */, bool rasterizerDiscardEnable /* false */) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
     pNext = nullptr;

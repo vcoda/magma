@@ -28,7 +28,7 @@ namespace magma
             VkCompareOp compareOp,
             uint32_t compareMask = 0x0,
             uint32_t writeMask = 0x0,
-            uint32_t reference = 0x0);
+            uint32_t reference = 0x0) noexcept;
     };
 
     namespace states
@@ -41,7 +41,7 @@ namespace magma
         DepthStencilState(VkCompareOp depthCompareOp,
             bool depthWriteEnable,
             const StencilOpState& front = states::stencilAlwaysDontWrite,
-            const StencilOpState& back = states::stencilAlwaysDontWrite);
+            const StencilOpState& back = states::stencilAlwaysDontWrite) noexcept;
     };
 
     namespace states

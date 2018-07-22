@@ -26,9 +26,9 @@ namespace magma
         SamplerState(VkFilter magFilter,
             VkFilter minFilter,
             VkSamplerMipmapMode mipmapMode,
-            VkSamplerAddressMode addressMode);
+            VkSamplerAddressMode addressMode) noexcept;
         SamplerState(float maxAnisotropy,
-            VkSamplerAddressMode addressMode);
+            VkSamplerAddressMode addressMode) noexcept;
 
     private:
         VkFilter magFilter;

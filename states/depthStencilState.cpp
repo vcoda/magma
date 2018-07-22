@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 StencilOpState::StencilOpState(VkStencilOp failOp, VkStencilOp passOp, VkStencilOp depthFailOp, VkCompareOp compareOp,
-    uint32_t compareMask /* 0 */, uint32_t writeMask /* 0 */, uint32_t reference /* 0 */)
+    uint32_t compareMask /* 0 */, uint32_t writeMask /* 0 */, uint32_t reference /* 0 */) noexcept
 {
     this->failOp = failOp;
     this->passOp = passOp;
@@ -33,7 +33,7 @@ StencilOpState::StencilOpState(VkStencilOp failOp, VkStencilOp passOp, VkStencil
 }
 
 DepthStencilState::DepthStencilState(VkCompareOp depthCompareOp, bool depthWriteEnable,
-    const StencilOpState& front, const StencilOpState& back)
+    const StencilOpState& front, const StencilOpState& back) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
     pNext = nullptr;

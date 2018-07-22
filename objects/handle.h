@@ -35,7 +35,7 @@ namespace magma
     protected:
         Dispatchable(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<const Device> device,
-            std::shared_ptr<IAllocator> allocator):
+            std::shared_ptr<IAllocator> allocator) noexcept:
             DebugMarker(objectType, std::move(device), std::move(allocator)),
             handle(nullptr) {}
 
@@ -63,7 +63,7 @@ namespace magma
     protected:
         NonDispatchable(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<const Device> device,
-            std::shared_ptr<IAllocator> allocator):
+            std::shared_ptr<IAllocator> allocator) noexcept:
             DebugMarker(objectType, std::move(device), std::move(allocator)),
             handle(VK_NULL_HANDLE) {}
 

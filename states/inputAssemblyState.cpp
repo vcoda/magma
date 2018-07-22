@@ -20,7 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-InputAssemblyState::InputAssemblyState(VkPrimitiveTopology topology, bool primitiveRestartEnable /* false */)
+InputAssemblyState::InputAssemblyState(VkPrimitiveTopology topology,
+    bool primitiveRestartEnable /* false */) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
     pNext = nullptr;

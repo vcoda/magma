@@ -22,6 +22,6 @@ namespace magma
 {
     struct TesselationState : VkPipelineTessellationStateCreateInfo
     {
-        TesselationState(uint32_t patchControlPoints = 0);
+        TesselationState(uint32_t patchControlPoints = 0) noexcept;
     };
 } // namespace magma

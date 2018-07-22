@@ -23,7 +23,7 @@ namespace magma
 {
 ColorBlendAttachmentState::ColorBlendAttachmentState(bool blendEnable,
     VkBlendFactor srcBlendFactor, VkBlendFactor dstBlendFactor, VkBlendOp blendOp,
-    VkColorComponentFlags colorWriteMask /* R, G, B, A */)
+    VkColorComponentFlags colorWriteMask /* R, G, B, A */) noexcept
 {
     this->blendEnable = MAGMA_BOOLEAN(blendEnable);
     srcColorBlendFactor = srcBlendFactor;

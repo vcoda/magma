@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 MultisampleState::MultisampleState(VkSampleCountFlagBits rasterizationSamples,
-    bool sampleShading /* false */, bool alphaToCoverage /* false */, bool alphaToOne /* false */)
+    bool sampleShading /* false */, bool alphaToCoverage /* false */, bool alphaToOne /* false */) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -36,7 +36,7 @@ MultisampleState::MultisampleState(VkSampleCountFlagBits rasterizationSamples,
 }
 
 MultisampleState::MultisampleState(uint32_t sampleCount,
-    bool sampleShading /* false */, bool alphaToCoverage /* false */, bool alphaToOne /* false */)
+    bool sampleShading /* false */, bool alphaToCoverage /* false */, bool alphaToOne /* false */) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -51,7 +51,7 @@ MultisampleState::MultisampleState(uint32_t sampleCount,
     case 32: rasterizationSamples = VK_SAMPLE_COUNT_32_BIT; break;
     case 64: rasterizationSamples = VK_SAMPLE_COUNT_64_BIT; break;
     default:
-        MAGMA_THROW("invalid <sampleCount> parameter");
+        rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
     }
     sampleShadingEnable = MAGMA_BOOLEAN(sampleShading);
     minSampleShading = 0;

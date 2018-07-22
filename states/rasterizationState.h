@@ -26,7 +26,7 @@ namespace magma
             VkCullModeFlags cullMode,
             VkFrontFace frontFace,
             bool depthClampEnable = false,
-            bool rasterizerDiscardEnable = false);
+            bool rasterizerDiscardEnable = false) noexcept;
     };
 
     namespace states

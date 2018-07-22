@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-TesselationState::TesselationState(uint32_t patchControlPoints /* 0 */)
+TesselationState::TesselationState(uint32_t patchControlPoints /* 0 */) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO;
     pNext = nullptr;

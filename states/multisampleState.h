@@ -25,11 +25,11 @@ namespace magma
         MultisampleState(VkSampleCountFlagBits rasterizationSamples,
             bool sampleShading = false,
             bool alphaToCoverage = false,
-            bool alphaToOne = false);
+            bool alphaToOne = false) noexcept;
         MultisampleState(uint32_t sampleCount,
             bool sampleShading = false,
             bool alphaToCoverage = false,
-            bool alphaToOne = false);
+            bool alphaToOne = false) noexcept;
     };
 
     namespace states
