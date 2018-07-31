@@ -68,7 +68,7 @@ namespace magma
             }
             // Do not store or pass stack pointer anywhere, use inside function scope only
             operator Type *() noexcept { return stack; }
-            operator const Type *() const noexcept{ return stack; }
+            operator const Type *() const noexcept { return stack; }
             Type& operator[](int i) noexcept
             {
                 MAGMA_ASSERT(stack);

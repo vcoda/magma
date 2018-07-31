@@ -46,7 +46,9 @@ namespace magma
             VkAttachmentStoreOp stencilStoreOp,
             VkImageLayout initialLayout,
             VkImageLayout finalLayout) noexcept;
-        AttachmentDescription(VkFormat format, uint32_t sampleCount, const AttachmentDescription& predefined);
+        AttachmentDescription(VkFormat format,
+            uint32_t sampleCount,
+            const AttachmentDescription& predefined);
     };
 
     namespace op
