@@ -37,9 +37,11 @@ namespace magma
     {
     public:
         ColorBlendState(const ColorBlendAttachmentState& attachment,
-            bool logicOpEnable = false, VkLogicOp logicOp = VK_LOGIC_OP_CLEAR);
+            bool logicOpEnable = false,
+            VkLogicOp logicOp = VK_LOGIC_OP_CLEAR);
         ColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
-            bool logicOpEnable = false, VkLogicOp logicOp = VK_LOGIC_OP_CLEAR);
+            bool logicOpEnable = false,
+            VkLogicOp logicOp = VK_LOGIC_OP_CLEAR);
         ColorBlendState(const ColorBlendState&);
         ColorBlendState& operator=(const ColorBlendState&);
         ~ColorBlendState();

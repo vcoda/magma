@@ -30,7 +30,7 @@ namespace magma
             class Iterator;
 
         public:
-            UniformArray(Type *buffer, const uint32_t arraySize) noexcept:
+            UniformArray(Type *const buffer, const uint32_t arraySize) noexcept:
                 buffer(buffer),
                 arraySize(arraySize)
             {
