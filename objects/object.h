@@ -24,6 +24,8 @@ namespace magma
     class Device;
     class IAllocator;
 
+    /* Base non-copyable object for dispatchable and non-dispatchable handles. */
+
     class Object : public NonCopyable
     {
     public:

@@ -22,6 +22,10 @@ namespace magma
 {
     class SamplerState;
 
+    /* Sampler objects represent the state of an image sampler
+       which is used by the implementation to read image data
+       and apply filtering and other transformations for the shader. */
+
     class Sampler : public NonDispatchable<VkSampler>
     {
     public:
@@ -42,6 +46,10 @@ namespace magma
         Sampler(std::shared_ptr<const Device> device,
             std::shared_ptr<IAllocator> allocator);
     };
+
+    /* Unnormalized sampler specifies the usage of unnormalized texel coordinates
+       to address texels of the image. The range of the image coordinates used to
+       lookup the texel is in the range of zero to the image dimensions for x, y and z. */
 
     class UnnormalizedSampler : public Sampler
     {

@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Array of two-dimensional images. */
+
     class Image2DArray : public Image
     {
     public:

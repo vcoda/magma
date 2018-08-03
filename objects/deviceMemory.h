@@ -20,6 +20,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Device memory is memory that is visible to the device -
+       for example the contents of the image or buffer objects,
+       which can be natively used by the device. */
+
     class DeviceMemory : public NonDispatchable<VkDeviceMemory>
     {
     public:

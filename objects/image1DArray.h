@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Array of one-dimensional images. */
+
     class Image1DArray : public Image
     {
     public:

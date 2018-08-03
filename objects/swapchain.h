@@ -27,6 +27,12 @@ namespace magma
     class Fence;
     class Semaphore;
 
+    /* Swapchain provides the ability to present rendering results to a surface.
+       It is an abstraction for an array of presentable images that are associated with a surface.
+       One image (which can be an array image for multiview/stereoscopic-3D surfaces)
+       is displayed at a time, but multiple images can be queued for presentation.
+       An application renders to the image, and then queues the image for presentation to the surface. */
+
     class Swapchain : public NonDispatchable<VkSwapchainKHR>
     {
     public:

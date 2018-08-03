@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* A buffer that can be used as the destination of a transfer command. */
+
     class DstTransferBuffer : public Buffer
     {
     public:

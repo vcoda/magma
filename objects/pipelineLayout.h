@@ -23,6 +23,13 @@ namespace magma
 {
     class DescriptorSetLayout;
 
+    /* Access to descriptor sets from a pipeline is accomplished through a pipeline layout.
+       Zero or more descriptor set layouts and zero or more push constant ranges are combined
+       to form a pipeline layout object which describes the complete set of resources that can be accessed by a pipeline.
+       The pipeline layout represents a sequence of descriptor sets with each having a specific layout.
+       This sequence of layouts is used to determine the interface between shader stages and shader resources.
+       Each pipeline is created using a pipeline layout. */
+
     class PipelineLayout : public NonDispatchable<VkPipelineLayout>
     {
     public:

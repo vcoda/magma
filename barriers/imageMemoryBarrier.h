@@ -23,6 +23,11 @@ namespace magma
 {
     class Image;
 
+    /* Image memory barriers only apply to memory accesses involving a specific image subresource range.
+       That is, a memory dependency formed from an image memory barrier is scoped to access
+       via the specified image subresource range. Image memory barriers can also be used to define
+       image layout transitions or a queue family ownership transfer for the specified image subresource range. */
+
     struct ImageMemoryBarrier : VkImageMemoryBarrier
     {
         ImageMemoryBarrier(std::shared_ptr<const Image> image,

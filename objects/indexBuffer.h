@@ -25,6 +25,8 @@ namespace magma
     class SrcTransferBuffer;
     class CommandBuffer;
 
+    /* An array of vertex indices. */
+
     class IndexBuffer : public Buffer
     {
     public:

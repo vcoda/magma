@@ -22,6 +22,9 @@ namespace magma
 {
     class Device;
 
+    /* Debug markers provide a flexible way for debugging and validation layers
+       to receive annotation and debug information. */
+
     class DebugMarker : public Object
     {
     public:

@@ -22,6 +22,10 @@ namespace magma
 {
     class Instance;
 
+    /* A surface object abstracts a native platform surface or window object for use with Vulkan.
+       Separate platform-specific extensions each provide a function for creating a surface object
+       for the respective platform. */
+
     class Surface : public NonDispatchable<VkSurfaceKHR>
     {
     public:

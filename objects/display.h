@@ -24,6 +24,11 @@ namespace magma
     class Instance;
     class PhysicalDevice;
 
+    /* In some environments applications can also present Vulkan rendering
+       directly to display devices without using an intermediate windowing system.
+       This can be useful for embedded applications, or implementing
+       the rendering/presentation backend of a windowing system using Vulkan. */
+
     class Display : public NonDispatchable<VkDisplayKHR>
     {
         Display(std::shared_ptr<const PhysicalDevice> physicalDevice,

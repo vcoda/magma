@@ -25,6 +25,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* An array of uniform values that are used in various shader stages.
+       It is host visible so can be mapped by user to write uniform values. */
+
     template<typename Block>
     class UniformBuffer : public Buffer
     {
@@ -64,6 +67,10 @@ namespace magma
     protected:
         const uint32_t arraySize;
     };
+
+    /* An array of aligned uniform values that can be fetched from buffer with dynamic offset.
+       Alignment is determined by hardware requirements. To access elements of a buffer,
+       iterator of AlignedUniformArray should be used. */
 
     template<typename Type>
     class DynamicUniformBuffer : public UniformBuffer<Type>

@@ -23,6 +23,9 @@ namespace magma
     class Instance;
     class IAllocator;
 
+    /* Debug report callbacks give more detailed feedback on the
+       application's use of Vulkan when events of interest occur. */
+
     class DebugReportCallback : public NonDispatchable<VkDebugReportCallbackEXT>
     {
     public:

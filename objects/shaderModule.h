@@ -22,6 +22,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Shader modules contain shader code and one or more entry points.
+       Shaders are selected from a shader module by specifying an entry point.
+       The stages of a pipeline can use shaders that come from different modules.
+       The shader code defining a shader module must be in the SPIR-V format. */
+
     class ShaderModule : public NonDispatchable<VkShaderModule>
     {
     public:
@@ -46,6 +51,11 @@ namespace magma
             size = sizeof(Type);
         }
     };
+
+    /* Specialization constants are a mechanism whereby constants in a SPIR-V module
+       can have their constant value specified at the time the pipeline is created.
+       This allows a SPIR-V module to have constants that can be modified while
+       executing an application that uses the Vulkan API. */
 
     class Specialization final : public VkSpecializationInfo
     {

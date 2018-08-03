@@ -26,6 +26,13 @@ namespace magma
         AllocationCallbacks() noexcept;
     };
 
+    /* Vulkan provides applications the opportunity to perform host memory allocations
+       on behalf of the Vulkan implementation. If this feature is not used,
+       the implementation will perform its own memory allocations. Since most memory
+       allocations are off the critical path, this is not meant as a performance feature.
+       Rather, this can be useful for certain embedded systems, for debugging purposes
+       (e.g. putting a guard page after all host allocations), or for memory allocation logging. */
+
     class IAllocator : public AllocationCallbacks, public NonCopyable
     {
     public:

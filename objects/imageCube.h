@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Cube map image. */
+
     class ImageCube : public Image
     {
     public:

@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* One-dimensional image. */
+
     class Image1D : public Image
     {
     public:

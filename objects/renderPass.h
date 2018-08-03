@@ -24,6 +24,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* A render pass represents a collection of attachments, subpasses,
+       and dependencies between the subpasses, and describes how the attachments
+       are used over the course of the subpasses. The use of a render pass
+       in a command buffer is a render pass instance. */
+
     class RenderPass : public NonDispatchable<VkRenderPass>
     {
     public:
