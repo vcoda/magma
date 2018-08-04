@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* The stencil test is controlled with the front and back stencil state. */
+
     struct StencilOpState : VkStencilOpState
     {
         StencilOpState(VkStencilOp failOp,
@@ -35,6 +37,12 @@ namespace magma
     {
         extern const StencilOpState stencilAlwaysDontWrite;
     }
+
+    /* The stencil test conditionally disables coverage of a sample
+       based on the outcome of a comparison between the stencil value
+       in the depth/stencil attachment at fragment location and a reference value.
+       The stencil test also updates the value in the stencil attachment,
+       depending on the test state, the stencil value and the stencil write masks. */
 
     struct DepthStencilState : VkPipelineDepthStencilStateCreateInfo
     {

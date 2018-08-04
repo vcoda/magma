@@ -21,6 +21,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Per-target blending state for each individual color attachment. */
+
     struct ColorBlendAttachmentState : VkPipelineColorBlendAttachmentState
     {
         ColorBlendAttachmentState(bool blendEnable,
@@ -32,6 +34,11 @@ namespace magma
                                                    VK_COLOR_COMPONENT_B_BIT |
                                                    VK_COLOR_COMPONENT_A_BIT) noexcept;
     };
+
+    /* Blending combines the incoming source fragment's R, G, B, and A values
+       with the destination R, G, B, and A values of each sample stored in the framebuffer
+       at the fragment's location. Blending is performed for each pixel sample,
+       rather than just once for each fragment. */
 
     class ColorBlendState final : public VkPipelineColorBlendStateCreateInfo
     {
