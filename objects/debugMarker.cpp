@@ -36,7 +36,7 @@ void DebugMarker::setObjectTag(uint64_t name, size_t tagSize, const void *tag) n
         info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT;
         info.pNext = nullptr;
         info.objectType = objectType;
-        info.object = this->getHandle();
+        info.object = getHandle();
         info.tagName = name;
         info.tagSize = tagSize;
         info.pTag = tag;
@@ -61,7 +61,7 @@ void DebugMarker::setObjectName(const char *name) noexcept
         info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT;
         info.pNext = nullptr;
         info.objectType = objectType;
-        info.object = this->getHandle();
+        info.object = getHandle();
         info.pObjectName = name;
         vkDebugMarkerSetObjectNameEXT(MAGMA_HANDLE(device), &info);
     }
