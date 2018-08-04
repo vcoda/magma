@@ -17,7 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <memory>
-#include "../allocator/allocator.h"
+#include "../vulkan.h"
+#include "../nonCopyable.h"
 
 namespace magma
 {
