@@ -50,13 +50,21 @@ namespace magma
         typedef Type VkType;
 
     public:
-#if defined(__LP64__) || defined(_WIN64) || defined(__x86_64__) || defined(_M_X64) || defined(__ia64) || defined (_M_IA64) || defined(__aarch64__) || defined(__powerpc64__)
         virtual uint64_t getHandle() const noexcept override
-            { return reinterpret_cast<uint64_t>(handle); }
+        {
+#if defined(__LP64__) ||\
+    defined(_WIN64) ||\
+    (defined(__x86_64__) && !defined(__ILP32__)) ||\
+    defined(_M_X64) ||\
+    defined(__ia64) ||\
+    defined(_M_IA64) ||\
+    defined(__aarch64__) ||\
+    defined(__powerpc64__)
+            return reinterpret_cast<uint64_t>(handle);
 #else
-        virtual uint64_t getHandle() const noexcept override
-            { return handle; }
+            return handle;
 #endif
+        }
         operator Type() const noexcept
             { return handle; }
 
