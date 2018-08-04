@@ -47,7 +47,7 @@ namespace magma
         ~ColorBlendState();
     };
 
-    namespace colorblends
+    namespace blendstates
     {
         extern const ColorBlendAttachmentState passR;
         extern const ColorBlendAttachmentState passRG;
@@ -83,7 +83,7 @@ namespace magma
         extern const ColorBlendAttachmentState normalRG;
         extern const ColorBlendAttachmentState normalRGB;
         extern const ColorBlendAttachmentState normalRGBA;
-    } // namespace colorblends
+    } // namespace blendstates
 
     namespace states
     {
