@@ -19,6 +19,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Descriptor contains a descriptor type and number of descriptors
+       of that type to be allocated in the pool. */
+
     struct Descriptor : public VkDescriptorPoolSize
     {
         Descriptor(VkDescriptorType type, uint32_t descriptorCount) noexcept

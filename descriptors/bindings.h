@@ -22,6 +22,10 @@ namespace magma
 {
     namespace bindings
     {
+        /* Each individual descriptor binding is specified by a descriptor type, a count (array size)
+           of the number of descriptors in the binding, a set of shader stages that can access the binding,
+           and (if using immutable samplers) an array of sampler descriptors. */
+
         struct VertexStageBinding : DescriptorSetLayout::Binding
         {
             VertexStageBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
