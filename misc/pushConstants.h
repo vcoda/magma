@@ -22,6 +22,8 @@ namespace magma
 {
     namespace pushconstants
     {
+        /* Defines a set of push constant ranges for use in a single pipeline layout. */
+
         template<typename Type>
         struct PushConstantRange : VkPushConstantRange
         {
