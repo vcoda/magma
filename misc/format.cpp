@@ -97,12 +97,10 @@ bool Format::EAC() const noexcept
 {
     switch (format)
     {
-    case VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK:
-    case VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK:
-    case VK_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK:
-    case VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK:
-    case VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK:
-    case VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK:
+    case VK_FORMAT_EAC_R11_UNORM_BLOCK:
+    case VK_FORMAT_EAC_R11_SNORM_BLOCK:
+    case VK_FORMAT_EAC_R11G11_UNORM_BLOCK:
+    case VK_FORMAT_EAC_R11G11_SNORM_BLOCK:
         return true;
     default:
         return false;
