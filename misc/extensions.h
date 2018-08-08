@@ -22,7 +22,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    // https://www.khronos.org/registry/vulkan/
+    /* https://www.khronos.org/registry/vulkan/ */
+
     class Extensions
     {
     public:
@@ -64,9 +65,8 @@ namespace magma
         InstanceExtensions(std::shared_ptr<const class Instance> instance);
     };
 
-    // Keep extensions list in alphabetical order
     struct DeviceExtensions : Extensions
-    {
+    {   // Keep extensions list in alphabetical order
         const bool AMD_buffer_marker;
         const bool AMD_calibrated_timestamps;
         const bool AMD_draw_indirect_count;

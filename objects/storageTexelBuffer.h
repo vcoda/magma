@@ -23,6 +23,8 @@ namespace magma
     class SrcTransferBuffer;
     class CommandBuffer;
 
+    /* Texel buffer that is accessed from the shader stage through buffer view. */
+
     class StorageTexelBuffer : public Buffer
     {
     public:

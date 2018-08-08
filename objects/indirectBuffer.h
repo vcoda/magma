@@ -21,6 +21,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* A buffer that is suitable for passing to indirect draw commands. */
+
     class IndirectBuffer : public Buffer
     {
     public:

@@ -21,6 +21,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Pipeline cache objects allow the result of pipeline construction
+       to be reused between pipelines and between runs of an application.
+       Reuse between pipelines is achieved by passing the same pipeline cache object
+       when creating multiple related pipelines. Reuse across runs of an application
+       is achieved by retrieving pipeline cache contents in one run of an application,
+       saving the contents, and using them to preinitialize a pipeline cache on a subsequent run.
+       The contents of the pipeline cache objects are managed by the implementation. */
+
     class PipelineCache : public NonDispatchable<VkPipelineCache>
     {
     public:

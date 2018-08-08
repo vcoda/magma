@@ -20,6 +20,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Fences are a synchronization primitive that can be used
+       to insert a dependency from a queue to the host.
+       Fences have two states - signaled and unsignaled.
+       A fence can be signaled as part of the execution of a queue submission command. */
+
     class Fence : public NonDispatchable<VkFence>
     {
     public:

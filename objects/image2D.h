@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Two-dimensional image. */
+
     class Image2D : public Image
     {
     protected:
@@ -46,6 +48,8 @@ namespace magma
             CopyMemoryFunction copyFn = nullptr);
     };
 
+    /* Two-dimensional image that can be used as color attachment to framebuffer. */
+
     class ColorAttachment2D : public Image2D
     {
     public:
@@ -58,6 +62,8 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
+    /* Two-dimensional image that can be used as depth/stencil attachment to framebuffer. */
+
     class DepthStencilAttachment2D : public Image2D
     {
     public:
@@ -69,6 +75,9 @@ namespace magma
             bool sampled = false,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
+
+    /* Two-dimensional image that represents swapchain's color attachment to framebuffer.
+       It is managed internally by swapchain and never created or destroyed by user. */
 
     class SwapchainColorAttachment2D : public Image2D
     {

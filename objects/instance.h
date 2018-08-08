@@ -25,6 +25,11 @@ namespace magma
 {
     class PhysicalDevice;
 
+    /* There is no global state in Vulkan and all per-application state
+       is stored in a instance object. Creating an instance object initializes
+       the Vulkan library and allows the application to pass information
+       about itself to the implementation. */
+
     class Instance : public Dispatchable<VkInstance>,
         public std::enable_shared_from_this<Instance>
     {

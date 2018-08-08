@@ -26,6 +26,11 @@ namespace magma
     class Buffer;
     class CommandBuffer;
 
+    /* Images represent multidimensional - up to 3 - arrays of data
+       which can be used for various purposes (e.g. attachments, textures),
+       by binding them to a graphics or compute pipeline via descriptor sets,
+       or by directly specifying them as parameters to certain commands. */
+
     class Image : public NonDispatchable<VkImage>
     {
     public:

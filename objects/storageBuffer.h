@@ -24,6 +24,9 @@ namespace magma
 {
     class CommandBuffer;
 
+    /* A storage buffer described in a shader as a structure with various members
+       that load, store, and atomic operations can be performed on. */
+
     class StorageBuffer : public Buffer
     {
     public:

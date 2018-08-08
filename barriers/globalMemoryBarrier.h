@@ -21,6 +21,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Global memory barriers apply to memory accesses involving
+       all memory objects that exist at the time of its execution. */
+
     struct GlobalMemoryBarrier : VkMemoryBarrier
     {
         GlobalMemoryBarrier(VkAccessFlags srcAccessMask,

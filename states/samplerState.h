@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Predefined sampler state of sampler object. */
+
     class SamplerState
     {
     public:

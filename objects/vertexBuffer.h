@@ -25,6 +25,8 @@ namespace magma
     class SrcTransferBuffer;
     class CommandBuffer;
 
+    /* An array of vertex buffer attributes like position, normal, texture coordinates etc. */
+
     class VertexBuffer : public Buffer
     {
     public:

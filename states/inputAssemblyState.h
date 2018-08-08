@@ -20,6 +20,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Each draw is made up of zero or more vertices and zero or more instances,
+       which are processed by the device and result in the assembly of primitives.
+       Primitives are assembled according to the input assembly state. */
+
     struct InputAssemblyState : VkPipelineInputAssemblyStateCreateInfo
     {
         InputAssemblyState(VkPrimitiveTopology topology,

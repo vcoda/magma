@@ -26,6 +26,12 @@ namespace magma
     class Fence;
     class Swapchain;
 
+    /* Queues provide an interface to the execution engines of a device.
+       Commands for these execution engines are recorded into command buffers
+       ahead of execution time. These command buffers are then submitted to queues
+       with a queue submission command for execution in a number of batches.
+       The device executes queue operations asynchronously with respect to the host. */
+
     class Queue : public Dispatchable<VkQueue>
     {
         Queue(VkQueue handle, std::shared_ptr<const Device> device,

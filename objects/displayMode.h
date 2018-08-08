@@ -25,6 +25,8 @@ namespace magma
     class PhysicalDevice;
     class Display;
 
+    /* Each display has one or more supported modes associated with it by default. */
+
     class DisplayMode : public NonDispatchable<VkDisplayModeKHR>
     {
     public:
@@ -39,8 +41,8 @@ namespace magma
     private:
         std::shared_ptr<const Instance> instance;
         std::shared_ptr<const PhysicalDevice> physicalDevice;
-        mutable std::map<uint32_t, VkDisplayPlaneCapabilitiesKHR> capabilities;
         VkExtent2D visibleRegion;
         uint32_t refreshRate;
+        mutable std::map<uint32_t, VkDisplayPlaneCapabilitiesKHR> capabilities;
     };
 } // namespace magma

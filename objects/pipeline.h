@@ -25,6 +25,11 @@ namespace magma
     class PipelineCache;
     class PipelineLayout;
 
+    /* Some Vulkan commands specify geometric objects to be drawn or computational work to be performed,
+       while others specify state controlling how objects are handled by the various pipeline stages,
+       or control data transfer between memory organized as images and buffers. Commands are effectively sent
+       through a processing pipeline, either a graphics pipeline or a compute pipeline. */
+
     class Pipeline : public NonDispatchable<VkPipeline>
     {
     public:
@@ -51,6 +56,9 @@ namespace magma
     class ViewportState;
     class ColorBlendState;
     class RenderPass;
+
+    /* Graphics pipelines consist of multiple shader stages,
+       multiple fixed-function pipeline stages, and a pipeline layout. */
 
     class GraphicsPipeline : public Pipeline
     {
@@ -86,6 +94,10 @@ namespace magma
             VkPipelineCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
+
+    /* The compute pipeline is a separate pipeline from the graphics pipeline,
+       which operates on one-, two-, or three-dimensional workgroups
+       which can read from and write to buffer and image memory. */
 
     class ComputePipeline : public Pipeline
     {

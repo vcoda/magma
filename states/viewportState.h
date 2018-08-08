@@ -21,6 +21,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* The viewport transformation is determined by the selected viewport's
+       width and height in pixels and its center, as well as its depth range
+       min and max determining a depth range scale value. */
+
     class ViewportState final : public VkPipelineViewportStateCreateInfo
     {
     public:

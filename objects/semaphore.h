@@ -20,6 +20,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Semaphores are a synchronization primitive that can be used
+       to insert a dependency between batches submitted to queues.
+       Semaphores have two states - signaled and unsignaled.
+       The state of a semaphore can be signaled after execution of
+       a batch of commands is completed. A batch can wait for a semaphore
+       to become signaled before it begins execution, and the semaphore is
+       also unsignaled before the batch begins execution. */
+
     class Semaphore : public NonDispatchable<VkSemaphore>
     {
     public:

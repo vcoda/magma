@@ -21,6 +21,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* A subpass description describes the subset of attachments that is involved
+       in the execution of a subpass. Each subpass can read from some attachments
+       as input attachments, write to some as color attachments or depth/stencil
+       attachments, and perform multisample resolve operations to resolve attachments.
+       A subpass description can also include a set of preserve attachments, which are
+       attachments that are not read or written by the subpass but whose contents
+       must be preserved throughout the subpass. */
+
     class Subpass : public VkSubpassDescription
     {
     public:

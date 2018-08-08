@@ -43,6 +43,9 @@ namespace magma
         }
     };
 
+    /* Applications specify vertex input attribute and vertex input binding descriptions
+       as part of graphics pipeline creation. */
+
     class VertexInputState final : public VkPipelineVertexInputStateCreateInfo
     {
     public:
