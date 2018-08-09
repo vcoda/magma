@@ -17,19 +17,38 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "descriptorSetLayout.h"
 #include "device.h"
+#include "sampler.h"
 #include "../allocator/allocator.h"
 #include "../misc/exception.h"
+#include "../helpers/stackArray.h"
+#include "../helpers/copy.h"
 #include "../shared.h"
 
 namespace magma
 {
-DescriptorSetLayout::Binding::Binding(uint32_t binding, const Descriptor& descriptor, VkShaderStageFlags stageFlags) noexcept
+DescriptorSetLayout::Binding::Binding(uint32_t binding, const Descriptor& descriptor, VkShaderStageFlags stageFlags,
+    const ImmutableSamplerList& immutableSamplers /* {} */) noexcept
 {
     this->binding = binding;
     descriptorType = descriptor.type;
     descriptorCount = descriptor.descriptorCount;
     this->stageFlags = stageFlags;
-    pImmutableSamplers = nullptr;
+    if (0 == immutableSamplers.size())
+        pImmutableSamplers = nullptr;
+    else
+    {
+        MAGMA_STACK_ARRAY(VkSampler, dereferencedImmutableSamplers, immutableSamplers.size());
+        for (const auto& sampler : immutableSamplers)
+            dereferencedImmutableSamplers.put(*sampler);
+        pImmutableSamplers = helpers::copy(new VkSampler[dereferencedImmutableSamplers.size()],
+            static_cast<const VkSampler *>(dereferencedImmutableSamplers),
+            dereferencedImmutableSamplers.size());
+    }
+}
+
+DescriptorSetLayout::Binding::~Binding()
+{
+    delete[] pImmutableSamplers;
 }
 
 DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<const Device> device, const Binding& binding,

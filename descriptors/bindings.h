@@ -28,62 +28,70 @@ namespace magma
 
         struct VertexStageBinding : DescriptorSetLayout::Binding
         {
-            VertexStageBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
-                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_VERTEX_BIT) {}
+            VertexStageBinding(uint32_t binding, const Descriptor& descriptor,
+                const ImmutableSamplerList& immutableSamplers = {}) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_VERTEX_BIT, immutableSamplers) {}
         };
 
         struct TesselationControlStageBinding : DescriptorSetLayout::Binding
         {
-            TesselationControlStageBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
-                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT) {}
+            TesselationControlStageBinding(uint32_t binding, const Descriptor& descriptor,
+                const ImmutableSamplerList& immutableSamplers = {}) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, immutableSamplers) {}
         };
 
         struct TesselationEvaluationStageBinding : DescriptorSetLayout::Binding
         {
-            TesselationEvaluationStageBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
-                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT) {}
+            TesselationEvaluationStageBinding(uint32_t binding, const Descriptor& descriptor,
+                const ImmutableSamplerList& immutableSamplers = {}) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, immutableSamplers) {}
         };
 
         struct GeometryStageBinding : DescriptorSetLayout::Binding
         {
-            GeometryStageBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
-                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_GEOMETRY_BIT) {}
+            GeometryStageBinding(uint32_t binding, const Descriptor& descriptor,
+                const ImmutableSamplerList& immutableSamplers = {}) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_GEOMETRY_BIT, immutableSamplers) {}
         };
 
         struct FragmentStageBinding : DescriptorSetLayout::Binding
         {
-            FragmentStageBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
-                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_FRAGMENT_BIT) {}
+            FragmentStageBinding(uint32_t binding, const Descriptor& descriptor,
+                const ImmutableSamplerList& immutableSamplers = {}) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_FRAGMENT_BIT, immutableSamplers) {}
         };
 
         struct ComputeStageBinding : DescriptorSetLayout::Binding
         {
-            ComputeStageBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
-                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_COMPUTE_BIT) {}
+            ComputeStageBinding(uint32_t binding, const Descriptor& descriptor,
+                const ImmutableSamplerList& immutableSamplers = {}) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_COMPUTE_BIT, immutableSamplers) {}
         };
 
         struct GraphicsStageBinding : DescriptorSetLayout::Binding
         {
-            GraphicsStageBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
-                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_ALL_GRAPHICS) {}
+            GraphicsStageBinding(uint32_t binding, const Descriptor& descriptor,
+                const ImmutableSamplerList& immutableSamplers = {}) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_ALL_GRAPHICS, immutableSamplers) {}
         };
 
         struct AllStagesBinding : DescriptorSetLayout::Binding
         {
-            AllStagesBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
-                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_ALL) {}
+            AllStagesBinding(uint32_t binding, const Descriptor& descriptor,
+                const ImmutableSamplerList& immutableSamplers = {}) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_ALL, immutableSamplers) {}
         };
 
         struct VertexGeometryStageBinding : DescriptorSetLayout::Binding
         {
-            VertexGeometryStageBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
-                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT) {}
+            VertexGeometryStageBinding(uint32_t binding, const Descriptor& descriptor, const ImmutableSamplerList& immutableSamplers = {}) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT, immutableSamplers) {}
         };
 
         struct VertexFragmentStageBinding : DescriptorSetLayout::Binding
         {
-            VertexFragmentStageBinding(uint32_t binding, const Descriptor& descriptor) noexcept:
-                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT) {}
+            VertexFragmentStageBinding(uint32_t binding, const Descriptor& descriptor, const ImmutableSamplerList& immutableSamplers = {}) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, immutableSamplers) {}
         };
     } // namespace bindings
 } // namespace magma
