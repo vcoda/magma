@@ -18,8 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 template<typename Function>
-MAGMA_INLINE DeviceExtension<Function>::DeviceExtension(VkDevice device,
-    const char *name) noexcept
+MAGMA_INLINE DeviceExtension<Function>::DeviceExtension(VkDevice device, const char *name) noexcept
 {
     if (!addr)
     {
@@ -30,8 +29,7 @@ MAGMA_INLINE DeviceExtension<Function>::DeviceExtension(VkDevice device,
 }
 
 template<typename Function>
-MAGMA_INLINE DeviceExtension<Function>::DeviceExtension(VkDevice device,
-    const char *name, const char *extension)
+MAGMA_INLINE DeviceExtension<Function>::DeviceExtension(VkDevice device, const char *name, const char *extension)
 {
     if (!addr)
     {
