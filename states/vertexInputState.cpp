@@ -61,7 +61,7 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
 
 VertexInputState::VertexInputState(const VertexInputState& other)
 {
-    *this = other;
+    helpers::copy(this, &other);
     pVertexBindingDescriptions = helpers::copy(new VkVertexInputBindingDescription[vertexBindingDescriptionCount],
         other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
     try
@@ -79,7 +79,7 @@ VertexInputState& VertexInputState::operator=(const VertexInputState& other)
 {
     if (this != &other)
     {
-        *this = other;
+        helpers::copy(this, &other);
         pVertexBindingDescriptions = helpers::copy(new VkVertexInputBindingDescription[vertexBindingDescriptionCount],
             other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
         try

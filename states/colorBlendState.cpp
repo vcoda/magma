@@ -71,7 +71,7 @@ ColorBlendState::ColorBlendState(const std::vector<ColorBlendAttachmentState>& a
 
 ColorBlendState::ColorBlendState(const ColorBlendState& other)
 {
-    *this = other;
+    helpers::copy(this, &other);
     pAttachments = helpers::copy(new VkPipelineColorBlendAttachmentState[attachmentCount], other.pAttachments, attachmentCount);
 }
 
@@ -79,7 +79,7 @@ ColorBlendState& ColorBlendState::operator=(const ColorBlendState& other)
 {
     if (this != &other)
     {
-        *this = other;
+        helpers::copy(this, &other);
         pAttachments = helpers::copy(new VkPipelineColorBlendAttachmentState[attachmentCount], other.pAttachments, attachmentCount);
     }
     return *this;

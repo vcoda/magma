@@ -41,7 +41,7 @@ DeviceQueueDescriptor::DeviceQueueDescriptor(VkQueueFlagBits queueType,
 
 DeviceQueueDescriptor::DeviceQueueDescriptor(const DeviceQueueDescriptor& other)
 {
-    *this = other;
+    helpers::copy(this, &other);
     pQueuePriorities = helpers::copy(new float[queueCount], other.pQueuePriorities, queueCount);
 }
 
@@ -49,7 +49,7 @@ DeviceQueueDescriptor& DeviceQueueDescriptor::operator=(const DeviceQueueDescrip
 {
     if (this != &other)
     {
-        *this = other;
+        helpers::copy(this, &other);
         pQueuePriorities = helpers::copy(new float[queueCount], other.pQueuePriorities, queueCount);
     }
     return *this;
