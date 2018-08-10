@@ -24,11 +24,19 @@ namespace magma
 {
     class Device;
     class IAllocator;
+    class IObjectAllocator;
 
     /* Base non-copyable object for dispatchable and non-dispatchable handles. */
 
     class Object : public NonCopyable
     {
+    public:
+        void *operator new(std::size_t size);
+        void operator delete(void *p);
+
+        static void setAllocator(std::shared_ptr<IObjectAllocator> allocator);
+        static std::shared_ptr<IObjectAllocator> getAllocator();
+
     public:
         Object(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<const Device> device,
@@ -44,5 +52,8 @@ namespace magma
         VkDebugReportObjectTypeEXT objectType;
         std::shared_ptr<const Device> device;
         std::shared_ptr<IAllocator> allocator;
+
+    private:
+        static std::shared_ptr<IObjectAllocator> _allocator;
     };
 } // namespace magma

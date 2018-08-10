@@ -339,6 +339,9 @@
     <ClInclude Include="utilities\immediateRender.h">
       <Filter>Header Files\utilities</Filter>
     </ClInclude>
+    <ClInclude Include="allocator\objectAllocator.h">
+      <Filter>Header Files\allocator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
@@ -588,6 +591,9 @@
     </ClCompile>
     <ClCompile Include="utilities\immediateRender.cpp">
       <Filter>Source Files\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\object.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

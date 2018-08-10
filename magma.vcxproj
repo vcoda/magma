@@ -133,6 +133,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="allocator\allocator.h" />
+    <ClInclude Include="allocator\objectAllocator.h" />
     <ClInclude Include="barriers\bufferMemoryBarrier.h" />
     <ClInclude Include="barriers\imageMemoryBarrier.h" />
     <ClInclude Include="barriers\globalMemoryBarrier.h" />
@@ -282,6 +283,7 @@
     <ClCompile Include="objects\indexBuffer.cpp" />
     <ClCompile Include="objects\indirectBuffer.cpp" />
     <ClCompile Include="objects\instance.cpp" />
+    <ClCompile Include="objects\object.cpp" />
     <ClCompile Include="objects\physicalDevice.cpp" />
     <ClCompile Include="objects\pipeline.cpp" />
     <ClCompile Include="objects\pipelineCache.cpp" />
