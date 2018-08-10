@@ -40,6 +40,7 @@ namespace magma
     typedef std::shared_ptr<class Fence> FencePtr;
     typedef std::shared_ptr<class Framebuffer> FramebufferPtr;
     typedef std::shared_ptr<class IAllocator> IAllocatorPtr;
+    typedef std::shared_ptr<class IObjectAllocator> IObjectAllocatorPtr;
     typedef std::shared_ptr<class Image> ImagePtr;
     typedef std::shared_ptr<class Image1D> Image1DPtr;
     typedef std::shared_ptr<class Image1DArray> Image1DArrayPtr;
