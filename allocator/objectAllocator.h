@@ -27,6 +27,6 @@ namespace magma
     public:
         virtual void *alloc(size_t size) = 0;
         virtual void free(void *p) = 0;
-        virtual void getBytesAllocated() const = 0;
+        virtual size_t getBytesAllocated() const = 0;
     };
 } // namespace magma
