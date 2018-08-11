@@ -16,23 +16,25 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#ifndef _M_AMD64
 #include <cstring>
+#endif
 #include <smmintrin.h>
 #include "../shared.h"
 
 namespace magma
 {
-    MAGMA_INLINE void *copyMemory(void *dst, const void *src, std::size_t size) noexcept
+    MAGMA_INLINE void *copyMemory(void *dst, const void *src, size_t size) noexcept
     {
         MAGMA_ASSERT(dst);
         MAGMA_ASSERT(src);
         MAGMA_ASSERT(size > 0);
         /* On x64 platform all allocations should have 16-byte alignment.
-            On x86 it's hard to follow this restriction, as standard alignment
-            there is 8 bytes: https://msdn.microsoft.com/en-us/library/ycsb6wwf.aspx
-            Default std::vector also has 8-byte alignment, and using custom allocator
-            for it means incompatibility with defaults. So SSE copy performed
-            only in the case of x64 build. */
+           On x86 it's hard to follow this restriction, as standard alignment
+           there is 8 bytes: https://msdn.microsoft.com/en-us/library/ycsb6wwf.aspx
+           Default std::vector also has 8-byte alignment, using custom allocator
+           for it means incompatibility with other codebase. So SSE copy performed
+           only for x64 target. */
 #ifdef _M_AMD64
         MAGMA_ASSERT(MAGMA_ALIGNED(dst));
         MAGMA_ASSERT(MAGMA_ALIGNED(src));
@@ -81,18 +83,18 @@ namespace magma
         if (tailSize > 0)
         {
             const size_t registerCount = tailSize / sizeof(__m128i);
+            const size_t byteCount = tailSize % sizeof(__m128i);
             MAGMA_ASSERT(registerCount < MAGMA_XMM_REGISTERS);
             for (i = 0; i < registerCount; ++i)
-            {   // Copy remained 16-byte blocks
+            {   // Copy residual 16-byte blocks
                 __m128i xmm = _mm_stream_load_si128(vsrc++);
                 _mm_stream_si128(vdst++, xmm);
             }
             const uint8_t *bsrc = reinterpret_cast<const uint8_t *>(vsrc);
             uint8_t *bdst = reinterpret_cast<uint8_t *>(vdst);
-            const size_t byteCount = tailSize % sizeof(__m128i);
             MAGMA_ASSERT(byteCount < sizeof(__m128i));
             for (i = 0; i < byteCount; ++i)
-            {   // Copy remained bytes
+            {   // Copy residual bytes
                 *bdst++ = *bsrc++;
             }
         }

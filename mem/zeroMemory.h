@@ -16,7 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#ifndef _M_AMD64
 #include <cstring>
+#endif
 #include <smmintrin.h>
 #include "../shared.h"
 
@@ -56,16 +58,16 @@ namespace magma
         if (tailSize > 0)
         {
             const size_t registerCount = tailSize / sizeof(__m128i);
+            const size_t byteCount = tailSize % sizeof(__m128i);
             MAGMA_ASSERT(registerCount < MAGMA_XMM_REGISTERS);
             for (i = 0; i < registerCount; ++i)
-            {   // Zero remained 16-byte blocks
+            {   // Zero residual 16-byte blocks
                 _mm_stream_si128(vdst++, _0);
             }
             uint8_t *bdst = reinterpret_cast<uint8_t *>(vdst);
-            const size_t byteCount = tailSize % sizeof(__m128i);
             MAGMA_ASSERT(byteCount < sizeof(__m128i));
             for (i = 0; i < byteCount; ++i)
-            {   // Zero remained bytes
+            {   // Zero residual bytes
                 *bdst++ = 0;
             }
         }
