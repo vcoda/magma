@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Device::Device(std::shared_ptr<const PhysicalDevice> physicalDevice,
+Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     const std::vector<DeviceQueueDescriptor>& queueDescriptors,
     const std::vector<const char *>& layers,
     const std::vector<const char *>& extensions,

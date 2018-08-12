@@ -127,7 +127,7 @@ std::shared_ptr<Device> PhysicalDevice::createDevice(
     const VkPhysicalDeviceFeatures& deviceFeatures,
     const std::vector<void *>& deviceFeaturesEx /* {} */) const
 {
-    return std::shared_ptr<Device>(new Device(shared_from_this(), queueDescriptors, layers, extensions,
+    return std::shared_ptr<Device>(new Device(std::const_pointer_cast<PhysicalDevice>(shared_from_this()), queueDescriptors, layers, extensions,
         deviceFeatures, deviceFeaturesEx, allocator));
 }
 

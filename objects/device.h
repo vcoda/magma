@@ -34,7 +34,7 @@ namespace magma
     class Device : public Dispatchable<VkDevice>,
         public std::enable_shared_from_this<Device>
     {
-        Device(std::shared_ptr<const PhysicalDevice> physicalDevice,
+        Device(std::shared_ptr<PhysicalDevice> physicalDevice,
             const std::vector<DeviceQueueDescriptor>& queueDescriptors,
             const std::vector<const char *>& layers,
             const std::vector<const char *>& extensions,
@@ -45,7 +45,7 @@ namespace magma
 
     public:
         ~Device();
-        std::shared_ptr<const PhysicalDevice> getPhysicalDevice() const noexcept { return physicalDevice; }
+        std::shared_ptr<PhysicalDevice> getPhysicalDevice() const noexcept { return physicalDevice; }
         std::shared_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
         bool waitIdle() const noexcept;
         bool resetFences(std::vector<std::shared_ptr<const Fence>>& fences) const noexcept;
@@ -53,7 +53,7 @@ namespace magma
             bool waitAll, uint64_t timeout = UINT64_MAX) const noexcept;
 
     private:
-        std::shared_ptr<const PhysicalDevice> physicalDevice;
+        std::shared_ptr<PhysicalDevice> physicalDevice;
         std::vector<VkDeviceQueueCreateInfo> queues;
     };
 } // namespace magma
