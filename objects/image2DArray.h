@@ -25,14 +25,14 @@ namespace magma
     class Image2DArray : public Image
     {
     public:
-        Image2DArray(std::shared_ptr<const Device> device,
+        Image2DArray(std::shared_ptr<Device> device,
             VkFormat format,
             const VkExtent2D& extent,
             uint32_t mipLevels,
             uint32_t arrayLayers,
             VkImageUsageFlags usage,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        Image2DArray(std::shared_ptr<const Device> device,
+        Image2DArray(std::shared_ptr<Device> device,
             VkFormat format,
             const std::vector<VkExtent2D>& mipExtents,
             const std::vector<std::vector<const void *>>& layersMipData,

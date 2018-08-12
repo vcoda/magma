@@ -53,7 +53,7 @@ namespace magma
     {
         CommandBuffer(
             VkCommandBuffer handle,
-            std::shared_ptr<const Device> device,
+            std::shared_ptr<Device> device,
             std::shared_ptr<CommandPool> pool);
         friend class CommandPool;
 

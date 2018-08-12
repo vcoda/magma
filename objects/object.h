@@ -39,18 +39,18 @@ namespace magma
 
     public:
         Object(VkDebugReportObjectTypeEXT objectType,
-            std::shared_ptr<const Device> device,
+            std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator):
             objectType(objectType),
             device(std::move(device)),
             allocator(std::move(allocator)) {}
         VkDebugReportObjectTypeEXT getObjectType() const noexcept { return objectType; }
-        std::shared_ptr<const Device> getDevice() const noexcept { return device; }
+        std::shared_ptr<Device> getDevice() const noexcept { return device; }
         virtual uint64_t getHandle() const noexcept = 0;
 
     protected:
         VkDebugReportObjectTypeEXT objectType;
-        std::shared_ptr<const Device> device;
+        std::shared_ptr<Device> device;
         std::shared_ptr<IAllocator> allocator;
 
     private:

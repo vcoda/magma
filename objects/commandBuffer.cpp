@@ -32,7 +32,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-CommandBuffer::CommandBuffer(VkCommandBuffer handle, std::shared_ptr<const Device> device, std::shared_ptr<CommandPool> pool):
+CommandBuffer::CommandBuffer(VkCommandBuffer handle, std::shared_ptr<Device> device, std::shared_ptr<CommandPool> pool):
     Dispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT, std::move(device), nullptr),
     pool(std::move(pool)),
     fence(std::make_shared<Fence>(this->device))

@@ -34,7 +34,7 @@ namespace magma
         public std::enable_shared_from_this<CommandPool>
     {
     public:
-        CommandPool(std::shared_ptr<const Device> device,
+        CommandPool(std::shared_ptr<Device> device,
             uint32_t queueFamilyIndex,
             bool transient = false,
             bool reset = true,

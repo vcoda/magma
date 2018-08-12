@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-StorageBuffer::StorageBuffer(std::shared_ptr<const Device> device, VkDeviceSize size,
+StorageBuffer::StorageBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Buffer(std::move(device), size,

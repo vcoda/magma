@@ -28,7 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-IndexBuffer::IndexBuffer(std::shared_ptr<const Device> device, VkDeviceSize size, VkIndexType indexType,
+IndexBuffer::IndexBuffer(std::shared_ptr<Device> device, VkDeviceSize size, VkIndexType indexType,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Buffer(std::move(device), size,
@@ -38,7 +38,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<const Device> device, VkDeviceSize size
     indexType(indexType)
 {}
 
-IndexBuffer::IndexBuffer(std::shared_ptr<const Device> device, const void *data, VkDeviceSize size, VkIndexType indexType,
+IndexBuffer::IndexBuffer(std::shared_ptr<Device> device, const void *data, VkDeviceSize size, VkIndexType indexType,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):

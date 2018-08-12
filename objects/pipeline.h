@@ -39,7 +39,7 @@ namespace magma
         std::string getShaderDisassembly(VkShaderStageFlagBits stage) const;
 
     protected:
-        Pipeline(std::shared_ptr<const Device> device,
+        Pipeline(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator);
 
     protected:
@@ -63,7 +63,7 @@ namespace magma
     class GraphicsPipeline : public Pipeline
     {
     public:
-        GraphicsPipeline(std::shared_ptr<const Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
+        GraphicsPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
             const std::vector<ShaderStage>& stages,
             const VertexInputState& vertexInputState,
             const InputAssemblyState& inputAssemblyState,
@@ -77,7 +77,7 @@ namespace magma
             uint32_t subpass = 0,
             VkPipelineCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        GraphicsPipeline(std::shared_ptr<const Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
+        GraphicsPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
             const std::vector<ShaderStage>& stages,
             const VertexInputState& vertexInputState,
             const InputAssemblyState& inputAssemblyState,
@@ -102,7 +102,7 @@ namespace magma
     class ComputePipeline : public Pipeline
     {
     public:
-        ComputePipeline(std::shared_ptr<const Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
+        ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
             const ShaderStage& stage,
             std::shared_ptr<const PipelineLayout> layout = nullptr,
             VkPipelineCreateFlags flags = 0,

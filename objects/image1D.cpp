@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Image1D::Image1D(std::shared_ptr<const Device> device, VkFormat format,
+Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format,
     uint32_t width, uint32_t mipLevels, VkImageUsageFlags usage,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1}, mipLevels, 1, 1, usage, 0, std::move(allocator))

@@ -33,7 +33,7 @@ namespace magma
         public std::enable_shared_from_this<DescriptorPool>
     {
     public:
-        DescriptorPool(std::shared_ptr<const Device> device,
+        DescriptorPool(std::shared_ptr<Device> device,
             uint32_t maxDescriptorSets,
             const std::vector<Descriptor>& descriptors,
             bool freeDescriptorSet = false,

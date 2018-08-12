@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DescriptorPool::DescriptorPool(std::shared_ptr<const Device> device,
+DescriptorPool::DescriptorPool(std::shared_ptr<Device> device,
     uint32_t maxDescriptorSets,
     const std::vector<Descriptor>& descriptors,
     bool freeDescriptorSet /* false */,

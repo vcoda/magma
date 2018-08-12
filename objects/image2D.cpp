@@ -23,17 +23,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Image2D::Image2D(std::shared_ptr<const Device> device, VkFormat format,
+Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format,
     const VkExtent2D& extent, uint32_t mipLevels, uint32_t samples, VkImageUsageFlags usage,
     std::shared_ptr<IAllocator> allocator):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1}, mipLevels, 1, samples, usage, 0, std::move(allocator))
 {}
 
-Image2D::Image2D(std::shared_ptr<const Device> device, VkImage handle, VkFormat format, const VkExtent2D& extent):
+Image2D::Image2D(std::shared_ptr<Device> device, VkImage handle, VkFormat format, const VkExtent2D& extent):
     Image(std::move(device), handle, VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1})
 {}
 
-Image2D::Image2D(std::shared_ptr<const Device> device,
+Image2D::Image2D(std::shared_ptr<Device> device,
     VkFormat format,
     const std::vector<VkExtent2D>& mipExtents,
     const std::vector<const void *>& mipData,
@@ -67,7 +67,7 @@ Image2D::Image2D(std::shared_ptr<const Device> device,
     copyFromBuffer(srcBuffer, copyRegions, cmdBuffer);
 }
 
-ColorAttachment2D::ColorAttachment2D(std::shared_ptr<const Device> device,
+ColorAttachment2D::ColorAttachment2D(std::shared_ptr<Device> device,
     VkFormat colorFormat,
     const VkExtent2D& extent,
     uint32_t mipLevels,
@@ -79,7 +79,7 @@ ColorAttachment2D::ColorAttachment2D(std::shared_ptr<const Device> device,
         std::move(allocator))
 {}
 
-DepthStencilAttachment2D::DepthStencilAttachment2D(std::shared_ptr<const Device> device,
+DepthStencilAttachment2D::DepthStencilAttachment2D(std::shared_ptr<Device> device,
     VkFormat depthStencilFormat,
     const VkExtent2D& extent,
     uint32_t mipLevels,
@@ -91,7 +91,7 @@ DepthStencilAttachment2D::DepthStencilAttachment2D(std::shared_ptr<const Device>
         std::move(allocator))
 {}
 
-SwapchainColorAttachment2D::SwapchainColorAttachment2D(std::shared_ptr<const Device> device,
+SwapchainColorAttachment2D::SwapchainColorAttachment2D(std::shared_ptr<Device> device,
     VkImage handle, VkFormat format, const VkExtent2D& extent):
     Image2D(std::move(device), handle, format, extent)
 {}

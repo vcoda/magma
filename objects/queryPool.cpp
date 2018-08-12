@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-QueryPool::QueryPool(VkQueryType queryType, std::shared_ptr<const Device> device, uint32_t queryCount,
+QueryPool::QueryPool(VkQueryType queryType, std::shared_ptr<Device> device, uint32_t queryCount,
     VkQueryPipelineStatisticFlags pipelineStatistics, std::shared_ptr<IAllocator> allocator):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_QUERY_POOL_EXT, std::move(device), std::move(allocator)),
     queryCount(queryCount)
@@ -63,19 +63,19 @@ std::vector<uint64_t> QueryPool::getResults(uint32_t firstQuery, uint32_t queryC
     return {};
 }
 
-OcclusionQuery::OcclusionQuery(std::shared_ptr<const Device> device, uint32_t queryCount,
+OcclusionQuery::OcclusionQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     QueryPool(VK_QUERY_TYPE_OCCLUSION, std::move(device), queryCount, 0, std::move(allocator))
 {}
 
-PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<const Device> device,
+PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<Device> device,
     VkQueryPipelineStatisticFlags pipelineStatistics,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     QueryPool(VK_QUERY_TYPE_PIPELINE_STATISTICS, std::move(device), 1, pipelineStatistics, std::move(allocator)),
     pipelineStatistics(pipelineStatistics)
 {}
 
-TimestampQuery::TimestampQuery(std::shared_ptr<const Device> device, uint32_t queryCount,
+TimestampQuery::TimestampQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     QueryPool(VK_QUERY_TYPE_TIMESTAMP, std::move(device), queryCount, 0, std::move(allocator))
 {}

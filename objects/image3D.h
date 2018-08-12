@@ -25,7 +25,7 @@ namespace magma
     class Image3D : public Image
     {
     public:
-        Image3D(std::shared_ptr<const Device> device,
+        Image3D(std::shared_ptr<Device> device,
             VkFormat format,
             const VkExtent3D& extent,
             VkImageUsageFlags usage,

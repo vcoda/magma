@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-PipelineLayout::PipelineLayout(std::shared_ptr<const Device> device,
+PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
     const std::initializer_list<VkPushConstantRange>& pushConstantRanges /* {} */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_LAYOUT_EXT, std::move(device), std::move(allocator))

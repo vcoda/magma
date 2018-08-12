@@ -30,12 +30,12 @@ namespace magma
     class IndexBuffer : public Buffer
     {
     public:
-        IndexBuffer(std::shared_ptr<const Device> device,
+        IndexBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkIndexType indexType,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        IndexBuffer(std::shared_ptr<const Device> device,
+        IndexBuffer(std::shared_ptr<Device> device,
             const void *data, VkDeviceSize size,
             VkIndexType indexType,
             VkBufferCreateFlags flags = 0,
@@ -53,7 +53,7 @@ namespace magma
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
         template<typename IndexType>
-        IndexBuffer(std::shared_ptr<const Device> device,
+        IndexBuffer(std::shared_ptr<Device> device,
             const std::vector<IndexType>& indices,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,

@@ -39,7 +39,7 @@ namespace magma
     class DescriptorSet : public NonDispatchable<VkDescriptorSet>
     {
         DescriptorSet(VkDescriptorSet handle,
-            std::shared_ptr<const Device> device,
+            std::shared_ptr<Device> device,
             std::shared_ptr<DescriptorPool> pool,
             std::shared_ptr<DescriptorSetLayout> setLayout) noexcept;
         friend class DescriptorPool;

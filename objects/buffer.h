@@ -42,7 +42,7 @@ namespace magma
         VkDescriptorBufferInfo getDescriptor() const noexcept;
 
     protected:
-        Buffer(std::shared_ptr<const Device> device,
+        Buffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkBufferUsageFlags usage,
             VkBufferCreateFlags flags,

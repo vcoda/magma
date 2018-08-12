@@ -28,7 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<const Device> device, VkDeviceSize size,
+StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Buffer(std::move(device), size,
@@ -37,7 +37,7 @@ StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<const Device> device, VkD
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
 {}
 
-StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<const Device> device, const void *data, VkDeviceSize size,
+StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<Device> device, const void *data, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):

@@ -91,7 +91,7 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
         if (info.queueFamilyIndex == queueDesc.queueFamilyIndex)
         {
             vkGetDeviceQueue(handle, queueDesc.queueFamilyIndex, queueIndex, &queue);
-            return std::shared_ptr<Queue>(new Queue(queue, shared_from_this(),
+            return std::shared_ptr<Queue>(new Queue(queue, std::const_pointer_cast<Device>(shared_from_this()),
                 flags, queueDesc.queueFamilyIndex, queueIndex));
         }
     }

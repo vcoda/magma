@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DebugMarker::DebugMarker(VkDebugReportObjectTypeEXT objectType, std::shared_ptr<const Device> device, std::shared_ptr<IAllocator> allocator):
+DebugMarker::DebugMarker(VkDebugReportObjectTypeEXT objectType, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator):
     Object(objectType, std::move(device), std::move(allocator))
 {}
 

@@ -30,11 +30,11 @@ namespace magma
     class ShaderModule : public NonDispatchable<VkShaderModule>
     {
     public:
-        ShaderModule(std::shared_ptr<const Device> device,
+        ShaderModule(std::shared_ptr<Device> device,
             const uint32_t *bytecode,
             size_t bytecodeSize,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        ShaderModule(std::shared_ptr<const Device> device,
+        ShaderModule(std::shared_ptr<Device> device,
             const std::vector<uint32_t>& bytecode,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~ShaderModule();

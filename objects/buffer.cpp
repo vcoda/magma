@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Buffer::Buffer(std::shared_ptr<const Device> device,
+Buffer::Buffer(std::shared_ptr<Device> device,
     VkDeviceSize size, VkBufferUsageFlags usage, VkBufferCreateFlags flags,
     std::shared_ptr<IAllocator> allocator,
     VkMemoryPropertyFlags memoryFlags):

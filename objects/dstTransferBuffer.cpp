@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DstTransferBuffer::DstTransferBuffer(std::shared_ptr<const Device> device,
+DstTransferBuffer::DstTransferBuffer(std::shared_ptr<Device> device,
     VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):

@@ -31,13 +31,13 @@ namespace magma
     class RenderPass : public NonDispatchable<VkRenderPass>
     {
     public:
-        RenderPass(std::shared_ptr<const Device> device,
+        RenderPass(std::shared_ptr<Device> device,
             const AttachmentDescription& attachment,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        RenderPass(std::shared_ptr<const Device> device,
+        RenderPass(std::shared_ptr<Device> device,
             const std::initializer_list<AttachmentDescription>& attachments,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        RenderPass(std::shared_ptr<const Device> device,
+        RenderPass(std::shared_ptr<Device> device,
             const std::initializer_list<AttachmentDescription>& attachments,
             const std::initializer_list<Subpass>& subpasses,
             std::shared_ptr<IAllocator> allocator = nullptr);

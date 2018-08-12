@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-IndirectBuffer::IndirectBuffer(std::shared_ptr<const Device> device,
+IndirectBuffer::IndirectBuffer(std::shared_ptr<Device> device,
     uint32_t drawCmdCount /* 1 */,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):

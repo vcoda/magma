@@ -28,7 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkFormat format,
+Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat format,
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
     VkImageUsageFlags usage, VkImageCreateFlags flags,
     std::shared_ptr<IAllocator> allocator):
@@ -78,7 +78,7 @@ Image::Image(std::shared_ptr<const Device> device, VkImageType imageType, VkForm
     bindMemory(memory);
 }
 
-Image::Image(std::shared_ptr<const Device> device, VkImage handle, VkImageType imageType, VkFormat format, const VkExtent3D& extent):
+Image::Image(std::shared_ptr<Device> device, VkImage handle, VkImageType imageType, VkFormat format, const VkExtent3D& extent):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, std::move(device), nullptr),
     imageType(imageType),
     format(format),

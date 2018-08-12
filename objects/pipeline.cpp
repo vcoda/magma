@@ -34,7 +34,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Pipeline::Pipeline(std::shared_ptr<const Device> device, std::shared_ptr<IAllocator> allocator):
+Pipeline::Pipeline(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator):
     NonDispatchable<VkPipeline>(VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT, std::move(device), std::move(allocator))
 {}
 
@@ -81,7 +81,7 @@ std::string Pipeline::getShaderDisassembly(VkShaderStageFlagBits stage) const
     return std::string();
 }
 
-GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
+GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
     const std::vector<ShaderStage>& stages,
     const VertexInputState& vertexInputState,
     const InputAssemblyState& inputAssemblyState,
@@ -103,7 +103,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
         std::move(layout), std::move(renderPass), subpass, flags, std::move(allocator))
 {}
 
-GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
+GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
     const std::vector<ShaderStage>& stages,
     const VertexInputState& vertexInputState,
     const InputAssemblyState& inputAssemblyState,
@@ -170,7 +170,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<const Device> device, std::sh
     MAGMA_THROW_FAILURE(create, "failed to create graphics pipeline");
 }
 
-ComputePipeline::ComputePipeline(std::shared_ptr<const Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
+ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
     const ShaderStage& stage,
     std::shared_ptr<const PipelineLayout> layout /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,

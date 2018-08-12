@@ -30,7 +30,7 @@ namespace magma
     class StorageBuffer : public Buffer
     {
     public:
-        StorageBuffer(std::shared_ptr<const Device> device,
+        StorageBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);

@@ -30,11 +30,11 @@ namespace magma
     class VertexBuffer : public Buffer
     {
     public:
-        VertexBuffer(std::shared_ptr<const Device> device,
+        VertexBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        VertexBuffer(std::shared_ptr<const Device> device,
+        VertexBuffer(std::shared_ptr<Device> device,
             const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
@@ -49,7 +49,7 @@ namespace magma
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
         template<typename VertexType>
-        VertexBuffer(std::shared_ptr<const Device> device,
+        VertexBuffer(std::shared_ptr<Device> device,
             const std::vector<VertexType>& vertices,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,

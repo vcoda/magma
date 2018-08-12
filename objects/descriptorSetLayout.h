@@ -42,11 +42,11 @@ namespace magma
         };
 
     public:
-        DescriptorSetLayout(std::shared_ptr<const Device> device,
+        DescriptorSetLayout(std::shared_ptr<Device> device,
             const Binding& binding,
             VkDescriptorSetLayoutCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        DescriptorSetLayout(std::shared_ptr<const Device> device,
+        DescriptorSetLayout(std::shared_ptr<Device> device,
             const std::initializer_list<Binding>& bindings,
             VkDescriptorSetLayoutCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);

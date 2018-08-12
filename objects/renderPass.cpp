@@ -25,12 +25,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-RenderPass::RenderPass(std::shared_ptr<const Device> device, const AttachmentDescription& attachment,
+RenderPass::RenderPass(std::shared_ptr<Device> device, const AttachmentDescription& attachment,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     RenderPass(std::move(device), {attachment}, std::move(allocator))
 {}
 
-RenderPass::RenderPass(std::shared_ptr<const Device> device,
+RenderPass::RenderPass(std::shared_ptr<Device> device,
     const std::initializer_list<AttachmentDescription>& attachments,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT, std::move(device), std::move(allocator))
@@ -98,7 +98,7 @@ RenderPass::RenderPass(std::shared_ptr<const Device> device,
     MAGMA_THROW_FAILURE(create, "failed to create render pass");
 }
 
-RenderPass::RenderPass(std::shared_ptr<const Device> device,
+RenderPass::RenderPass(std::shared_ptr<Device> device,
     const std::initializer_list<AttachmentDescription>& attachments,
     const std::initializer_list<Subpass>& subpasses,
     std::shared_ptr<IAllocator> allocator /* nullptr */):

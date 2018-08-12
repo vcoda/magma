@@ -31,7 +31,7 @@ namespace magma
     class Semaphore : public NonDispatchable<VkSemaphore>
     {
     public:
-        Semaphore(std::shared_ptr<const Device> device,
+        Semaphore(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~Semaphore();
     };

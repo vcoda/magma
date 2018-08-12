@@ -32,7 +32,7 @@ namespace magma
     class UniformBuffer : public Buffer
     {
     public:
-        UniformBuffer(std::shared_ptr<const Device> device,
+        UniformBuffer(std::shared_ptr<Device> device,
             uint32_t arraySize = 1,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr):
@@ -76,7 +76,7 @@ namespace magma
     class DynamicUniformBuffer : public UniformBuffer<Type>
     {
     public:
-        DynamicUniformBuffer(std::shared_ptr<const Device> device,
+        DynamicUniformBuffer(std::shared_ptr<Device> device,
             uint32_t arraySize,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr):
@@ -100,14 +100,14 @@ namespace magma
         VkDeviceSize getElementAlignment() const noexcept { return alignment; }
 
     private:
-        VkDeviceSize minOffsetAlignment(std::shared_ptr<const Device> device) const noexcept
+        VkDeviceSize minOffsetAlignment(std::shared_ptr<Device> device) const noexcept
         {   // Check hardware requirements
             std::shared_ptr<const PhysicalDevice> physicalDevice = std::move(device->getPhysicalDevice());
             const VkPhysicalDeviceProperties& properties = physicalDevice->getProperties();
             const VkPhysicalDeviceLimits& limits = properties.limits;
             return limits.minUniformBufferOffsetAlignment;
         }
-        uint32_t alignedArraySize(std::shared_ptr<const Device> device, uint32_t arraySize) const noexcept
+        uint32_t alignedArraySize(std::shared_ptr<Device> device, uint32_t arraySize) const noexcept
         {
             const VkDeviceSize alignment = minOffsetAlignment(std::move(device));
             if (elementSize >= alignment)

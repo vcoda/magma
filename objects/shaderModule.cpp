@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ShaderModule::ShaderModule(std::shared_ptr<const Device> device, const uint32_t *bytecode, size_t bytecodeSize,
+ShaderModule::ShaderModule(std::shared_ptr<Device> device, const uint32_t *bytecode, size_t bytecodeSize,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT, std::move(device), std::move(allocator))
 {
@@ -37,7 +37,7 @@ ShaderModule::ShaderModule(std::shared_ptr<const Device> device, const uint32_t 
     MAGMA_THROW_FAILURE(create, "failed to create shader module");
 }
 
-ShaderModule::ShaderModule(std::shared_ptr<const Device> device, const std::vector<uint32_t>& bytecode,
+ShaderModule::ShaderModule(std::shared_ptr<Device> device, const std::vector<uint32_t>& bytecode,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     ShaderModule(device, bytecode.data(), bytecode.size() * sizeof(uint32_t), allocator)
 {}

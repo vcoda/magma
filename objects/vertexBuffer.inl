@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 template<typename VertexType>
-MAGMA_INLINE VertexBuffer::VertexBuffer(std::shared_ptr<const Device> device,
+MAGMA_INLINE VertexBuffer::VertexBuffer(std::shared_ptr<Device> device,
     const std::vector<VertexType>& vertices,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,

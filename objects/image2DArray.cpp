@@ -23,13 +23,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Image2DArray::Image2DArray(std::shared_ptr<const Device> device, VkFormat format,
+Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format,
     const VkExtent2D& extent, uint32_t mipLevels, uint32_t arrayLayers, VkImageUsageFlags usage,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1}, mipLevels, arrayLayers, 1, usage, 0, std::move(allocator))
 {}
 
-Image2DArray::Image2DArray(std::shared_ptr<const Device> device,
+Image2DArray::Image2DArray(std::shared_ptr<Device> device,
     VkFormat format,
     const std::vector<VkExtent2D>& mipExtents,
     const std::vector<std::vector<const void *>>& layersMipData,

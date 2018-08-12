@@ -27,17 +27,17 @@ namespace magma
     class SrcTransferBuffer : public Buffer
     {
     public:
-        SrcTransferBuffer(std::shared_ptr<const Device> device,
+        SrcTransferBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        SrcTransferBuffer(std::shared_ptr<const Device> device,
+        SrcTransferBuffer(std::shared_ptr<Device> device,
             const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         template<typename Type>
-        SrcTransferBuffer(std::shared_ptr<const Device> device,
+        SrcTransferBuffer(std::shared_ptr<Device> device,
             const std::vector<Type>& data,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,

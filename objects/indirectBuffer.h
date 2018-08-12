@@ -26,7 +26,7 @@ namespace magma
     class IndirectBuffer : public Buffer
     {
     public:
-        IndirectBuffer(std::shared_ptr<const Device> device,
+        IndirectBuffer(std::shared_ptr<Device> device,
             uint32_t drawCmdCount = 1,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);

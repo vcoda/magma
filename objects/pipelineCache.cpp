@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-PipelineCache::PipelineCache(std::shared_ptr<const Device> device,
+PipelineCache::PipelineCache(std::shared_ptr<Device> device,
     size_t dataSize, const void *cacheData,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_CACHE_EXT, std::move(device), std::move(allocator))
@@ -38,7 +38,7 @@ PipelineCache::PipelineCache(std::shared_ptr<const Device> device,
     MAGMA_THROW_FAILURE(create, "failed to create pipeline cache");
 }
 
-PipelineCache::PipelineCache(std::shared_ptr<const Device> device,
+PipelineCache::PipelineCache(std::shared_ptr<Device> device,
     const std::vector<uint8_t>& cacheData /* {} */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     PipelineCache(std::move(device), cacheData.size(), cacheData.data(), std::move(allocator))

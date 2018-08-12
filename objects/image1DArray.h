@@ -25,7 +25,7 @@ namespace magma
     class Image1DArray : public Image
     {
     public:
-        Image1DArray(std::shared_ptr<const Device> device,
+        Image1DArray(std::shared_ptr<Device> device,
             VkFormat format,
             uint32_t width,
             uint32_t mipLevels,

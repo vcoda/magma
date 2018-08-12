@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-CommandPool::CommandPool(std::shared_ptr<const Device> device,
+CommandPool::CommandPool(std::shared_ptr<Device> device,
     uint32_t queueFamilyIndex,
     bool transient /* false */,
     bool reset /* true */,

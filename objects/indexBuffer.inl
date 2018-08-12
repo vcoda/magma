@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 template<typename IndexType>
-MAGMA_INLINE IndexBuffer::IndexBuffer(std::shared_ptr<const Device> device,
+MAGMA_INLINE IndexBuffer::IndexBuffer(std::shared_ptr<Device> device,
     const std::vector<IndexType>& indices,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
