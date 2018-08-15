@@ -32,10 +32,10 @@ namespace magma
             const char *name,
             const char *extension);
         operator Function() const noexcept
-            { return reinterpret_cast<Function>(addr); }
+            { return reinterpret_cast<Function>(_addr); }
 
     private:
-        static PFN_vkVoidFunction addr;
+        static PFN_vkVoidFunction _addr;
     };
 } // namespace magma
 

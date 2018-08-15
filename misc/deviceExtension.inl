@@ -20,27 +20,27 @@ namespace magma
 template<typename Function>
 MAGMA_INLINE DeviceExtension<Function>::DeviceExtension(VkDevice device, const char *name) noexcept
 {
-    if (!addr)
+    if (!_addr)
     {
         MAGMA_ASSERT(device != VK_NULL_HANDLE);
         MAGMA_ASSERT(name);
-        addr = vkGetDeviceProcAddr(device, name);
+        _addr = vkGetDeviceProcAddr(device, name);
     }
 }
 
 template<typename Function>
 MAGMA_INLINE DeviceExtension<Function>::DeviceExtension(VkDevice device, const char *name, const char *extension)
 {
-    if (!addr)
+    if (!_addr)
     {
         MAGMA_ASSERT(device != VK_NULL_HANDLE);
         MAGMA_ASSERT(name);
-        addr = vkGetDeviceProcAddr(device, name);
-        if (!addr)
+        _addr = vkGetDeviceProcAddr(device, name);
+        if (!_addr)
             MAGMA_THROW_NOT_PRESENT(extension);
     }
 }
 
 template<typename Function>
-PFN_vkVoidFunction DeviceExtension<Function>::addr;
+PFN_vkVoidFunction DeviceExtension<Function>::_addr;
 } // namespace magma
