@@ -24,17 +24,32 @@ std::shared_ptr<IObjectAllocator> Object::_allocator;
 
 void *Object::operator new(std::size_t size)
 {
+    void *ptr;
     if (_allocator)
-        return _allocator->alloc(size);
-    return malloc(size);
+        ptr = _allocator->alloc(size);
+    else
+        ptr = malloc(size);
+    if (!ptr)
+        throw std::bad_alloc();
+    return ptr;
 }
 
-void Object::operator delete(void *p)
+void *Object::operator new(std::size_t size, const std::nothrow_t&) noexcept
+{
+    void *ptr;
+    if (_allocator)
+        ptr = _allocator->alloc(size);
+    else
+        ptr = malloc(size);
+    return ptr;
+}
+
+void Object::operator delete(void *ptr)
 {
     if (_allocator)
-        _allocator->free(p);
+        _allocator->free(ptr);
     else
-        free(p);
+        free(ptr);
 }
 
 void Object::setAllocator(std::shared_ptr<IObjectAllocator> allocator)

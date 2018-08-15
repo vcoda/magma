@@ -32,7 +32,8 @@ namespace magma
     {
     public:
         void *operator new(std::size_t size);
-        void operator delete(void *p);
+        void *operator new(std::size_t size, const std::nothrow_t&) noexcept;
+        void operator delete(void *ptr);
 
         static void setAllocator(std::shared_ptr<IObjectAllocator> allocator);
         static std::shared_ptr<IObjectAllocator> getAllocator();
