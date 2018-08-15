@@ -36,7 +36,7 @@ namespace magma
         void operator delete(void *ptr);
 
         static void setAllocator(std::shared_ptr<IObjectAllocator> allocator);
-        static std::shared_ptr<IObjectAllocator> getAllocator();
+        static std::shared_ptr<IObjectAllocator> getAllocator() noexcept;
 
     public:
         Object(VkDebugReportObjectTypeEXT objectType,
@@ -56,5 +56,6 @@ namespace magma
 
     private:
         static std::shared_ptr<IObjectAllocator> _allocator;
+        static uint32_t _allocCount;
     };
 } // namespace magma
