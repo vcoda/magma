@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 std::shared_ptr<IObjectAllocator> Object::_allocator;
-uint32_t Object::_allocCount = 0;
+int32_t Object::_allocCount = 0;
 
 void *Object::operator new(std::size_t size)
 {
@@ -61,7 +61,7 @@ void Object::operator delete(void *ptr)
 
 void Object::setAllocator(std::shared_ptr<IObjectAllocator> allocator)
 {
-    if (_allocCount > 0)
+    if (_allocCount)
         throw Exception("allocator should be defined only when allocation count is zero");
     _allocator = std::move(allocator);
 }

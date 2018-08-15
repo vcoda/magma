@@ -56,6 +56,6 @@ namespace magma
 
     private:
         static std::shared_ptr<IObjectAllocator> _allocator;
-        static uint32_t _allocCount;
+        static int32_t _allocCount;
     };
 } // namespace magma
