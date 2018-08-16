@@ -357,7 +357,7 @@ namespace magma
 
         // Non-API utility methods
         std::shared_ptr<CommandPool> getPool() const noexcept { return pool; }
-        std::shared_ptr<Fence> getFence() const noexcept { return fence; }
+        std::shared_ptr<Fence> getFence() const noexcept;
 
         void setRenderArea(const VkRect2D& rc) noexcept;
         void setRenderArea(

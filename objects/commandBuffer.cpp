@@ -427,4 +427,10 @@ void CommandBuffer::insertDebugMarker(const char *name) noexcept
     name;
 #endif // MAGMA_DEBUG
 }
+
+std::shared_ptr<Fence> CommandBuffer::getFence() const noexcept
+{
+    fence->reset();
+    return fence;
+}
 } // namespace magma
