@@ -72,8 +72,9 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     info.pEnabledFeatures = deviceFeaturesEx.empty() ? &deviceFeatures : nullptr;
     const VkResult create = vkCreateDevice(MAGMA_HANDLE(physicalDevice), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create logical device");
+    queues.reserve(queueDescriptors.size());
     for (const auto& desc : queueDescriptors)
-        queues.push_back(desc);
+        queues.emplace_back(desc, nullptr);
 }
 
 Device::~Device()
@@ -85,14 +86,19 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
 {
     VkQueue queue = VK_NULL_HANDLE;
     const DeviceQueueDescriptor queueDesc(flags, physicalDevice);
-    for (const auto& info : queues)
-    {   // Check if queue family is present, otherwise
-        // vkGetDeviceQueue() throws an exception
-        if (info.queueFamilyIndex == queueDesc.queueFamilyIndex)
+    for (auto& info : queues)
+    {   // Check if queue family is present, otherwise vkGetDeviceQueue() throws an exception
+        if (info.first.queueFamilyIndex == queueDesc.queueFamilyIndex)
         {
-            vkGetDeviceQueue(handle, queueDesc.queueFamilyIndex, queueIndex, &queue);
-            return std::shared_ptr<Queue>(new Queue(queue, std::const_pointer_cast<Device>(shared_from_this()),
-                flags, queueDesc.queueFamilyIndex, queueIndex));
+            if (!info.second)
+            {   // Cache queue object
+                vkGetDeviceQueue(handle, queueDesc.queueFamilyIndex, queueIndex, &queue);
+                info.second = std::shared_ptr<Queue>(new Queue(queue,
+                    std::const_pointer_cast<Device>(shared_from_this()),
+                    flags, queueDesc.queueFamilyIndex, queueIndex));
+                return info.second;
+            }
+            return info.second;
         }
     }
     if (VK_NULL_HANDLE == queue)
