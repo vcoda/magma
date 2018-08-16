@@ -133,7 +133,7 @@ std::shared_ptr<Device> PhysicalDevice::createDevice(
 
 std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
 {
-    std::vector<float> defaultQueuePriorities = {1.0f};
+    const std::vector<float> defaultQueuePriorities = {1.0f};
     const std::vector<DeviceQueueDescriptor> queueDescriptors = {
         DeviceQueueDescriptor(VK_QUEUE_GRAPHICS_BIT, shared_from_this(), defaultQueuePriorities)
     };
