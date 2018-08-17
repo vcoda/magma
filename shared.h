@@ -35,12 +35,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_BOOLEAN(x) (x) ? VK_TRUE : VK_FALSE
 #define MAGMA_COUNT(v) static_cast<uint32_t>((v).size())
 
-#define MAGMA_STRINGIZE(x) #x
-#define MAGMA_STRINGIZE_FIELD(x) case x: return MAGMA_STRINGIZE(x); break
-#define MAGMA_UNKNOWN "<unknown>"
+#define MAGMA_ALIGNMENT 16
+#define MAGMA_ALIGN(size) (((size) + 0xF) & ~(0xF))
+#define MAGMA_ALIGNED(p) (((uintptr_t)(const void *)(p)) % (MAGMA_ALIGNMENT) == 0)
 
 #ifdef _MSC_VER
-#define MAGMA_MALLOC(size) _mm_malloc(size, 16)
+#define MAGMA_MALLOC(size) _mm_malloc(size, MAGMA_ALIGNMENT)
 #define MAGMA_FREE(p) _mm_free(p)
 #define MAGMA_ALLOCA(size) _malloca(size)
 #define MAGMA_FREEA(p) _freea(p)
@@ -51,12 +51,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_FREEA(p)
 #endif // !_MSC_VER
 
-#define MAGMA_ALIGN(size) (((size) + 15) & ~(15))
-#define MAGMA_ALIGNED(p) (((uintptr_t)(const void *)(p)) % (16) == 0)
-
 #ifdef _M_AMD64
 #define MAGMA_XMM_REGISTERS 16
 #endif
+
+#define MAGMA_STRINGIZE(x) #x
+#define MAGMA_STRINGIZE_FIELD(x) case x: return MAGMA_STRINGIZE(x); break
+#define MAGMA_UNKNOWN "<unknown>"
 
 #define MAGMA_SUCCEEDED(result)\
     ((VK_SUCCESS == result) ||\
