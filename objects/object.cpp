@@ -52,11 +52,13 @@ void *Object::operator new(std::size_t size, const std::nothrow_t&) noexcept
 void Object::operator delete(void *ptr)
 {
     if (ptr)
+    {
         --_allocCount;
-    if (_allocator)
-        _allocator->free(ptr);
-    else
-        free(ptr);
+        if (_allocator)
+            _allocator->free(ptr);
+        else
+            free(ptr);
+    }
 }
 
 void Object::setAllocator(std::shared_ptr<IObjectAllocator> allocator)

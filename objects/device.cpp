@@ -86,19 +86,18 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
 {
     VkQueue queue = VK_NULL_HANDLE;
     const DeviceQueueDescriptor queueDesc(flags, physicalDevice);
-    for (auto& info : queues)
+    for (auto& pair : queues)
     {   // Check if queue family is present, otherwise vkGetDeviceQueue() throws an exception
-        if (info.first.queueFamilyIndex == queueDesc.queueFamilyIndex)
+        if (pair.first.queueFamilyIndex == queueDesc.queueFamilyIndex)
         {
-            if (!info.second)
+            if (!pair.second)
             {   // Cache queue object
                 vkGetDeviceQueue(handle, queueDesc.queueFamilyIndex, queueIndex, &queue);
-                info.second = std::shared_ptr<Queue>(new Queue(queue,
+                pair.second = std::shared_ptr<Queue>(new Queue(queue,
                     std::const_pointer_cast<Device>(shared_from_this()),
                     flags, queueDesc.queueFamilyIndex, queueIndex));
-                return info.second;
             }
-            return info.second;
+            return pair.second;
         }
     }
     if (VK_NULL_HANDLE == queue)
