@@ -16,9 +16,11 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <thread>
 #include <cstring>
+#ifdef _M_AMD64
+#include <thread>
 #include <smmintrin.h>
+#endif
 #include "../shared.h"
 
 namespace magma
