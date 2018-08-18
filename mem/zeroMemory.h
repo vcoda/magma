@@ -17,9 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <thread>
-#ifndef _M_AMD64
 #include <cstring>
-#endif
 #include <smmintrin.h>
 #include "../shared.h"
 
