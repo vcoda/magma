@@ -28,7 +28,7 @@ namespace magma
 #ifdef _M_AMD64
     MAGMA_INLINE void __copyThread(void *dst, const void *src, size_t blockCount) noexcept
     {
-         const __m128i *vsrc = reinterpret_cast<const __m128i *>(src);
+        const __m128i *vsrc = reinterpret_cast<const __m128i *>(src);
         __m128i *vdst = reinterpret_cast<__m128i *>(dst);
         for (size_t i = blockCount; i--; vsrc += MAGMA_XMM_REGISTERS, vdst += MAGMA_XMM_REGISTERS)
         {   // Copy 256 byte block
