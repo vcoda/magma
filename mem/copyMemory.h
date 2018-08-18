@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef _M_AMD64
     MAGMA_INLINE void __copyThread(void *dst, const void *src, size_t blockCount) noexcept
     {
          const __m128i *vsrc = reinterpret_cast<const __m128i *>(src);
@@ -63,6 +64,7 @@ namespace magma
             _mm_stream_si128(vdst + 15, xmm15);
         }
     }
+#endif // _M_AMD64
 
     MAGMA_INLINE void *copyMemory(void *dst, const void *src, size_t size)
     {

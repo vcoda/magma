@@ -20,10 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "allocator/allocator.h"
 #include "allocator/objectAllocator.h"
 
-#include "barriers/bufferMemoryBarrier.h"
-#include "barriers/globalMemoryBarrier.h"
-#include "barriers/imageMemoryBarrier.h"
-
 #include "objects/buffer.h"
 #include "objects/bufferView.h"
 #include "objects/commandBuffer.h"
@@ -85,6 +81,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptors/descriptors.h"
 #include "descriptors/subpass.h"
 
+#include "barriers/bufferMemoryBarrier.h"
+#include "barriers/globalMemoryBarrier.h"
+#include "barriers/imageMemoryBarrier.h"
+
 #include "misc/clearAttachment.h"
 #include "misc/clearValue.h"
 #include "misc/deviceExtension.h"
@@ -104,6 +104,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "helpers/mapScoped.h"
 #include "helpers/stackArray.h"
 #include "helpers/uniformArray.h"
+
+#include "mem/copyMemory.h"
+#include "mem/zeroMemory.h"
 
 #include "utilities/immediateRender.h"
 

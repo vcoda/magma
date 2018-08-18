@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef _M_AMD64
     MAGMA_INLINE void __zeroThread(void *dst, size_t blockCount) noexcept
     {
         const __m128i _0 = _mm_setzero_si128();
@@ -47,6 +48,7 @@ namespace magma
             _mm_stream_si128(vdst + 15, _0);
         }
     }
+#endif // _M_AMD64
 
     MAGMA_INLINE void *zeroMemory(void *dst, size_t size)
     {
