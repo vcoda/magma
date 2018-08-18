@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <thread>
 #ifndef _M_AMD64
 #include <cstring>
 #endif
@@ -24,20 +25,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    MAGMA_INLINE void *zeroMemory(void *dst, size_t size) noexcept
+    MAGMA_INLINE void __zeroThread(void *dst, size_t blockCount) noexcept
     {
-        MAGMA_ASSERT(dst);
-        MAGMA_ASSERT(size > 0);
-#ifdef _M_AMD64
-        MAGMA_ASSERT(MAGMA_ALIGNED(dst));
         const __m128i _0 = _mm_setzero_si128();
         __m128i *vdst = reinterpret_cast<__m128i *>(dst);
-        _mm_prefetch(reinterpret_cast<const char *>(vdst), _MM_HINT_NTA);
-        const size_t blockCount = size / (sizeof(__m128i) * MAGMA_XMM_REGISTERS);
-        size_t i;
-        for (i = blockCount; i--; vdst += MAGMA_XMM_REGISTERS)
+        for (size_t i = blockCount; i--; vdst += MAGMA_XMM_REGISTERS)
         {   // Zero 256 byte block
-            _mm_stream_si128(vdst + 0, _0);
+            _mm_stream_si128(vdst,     _0);
             _mm_stream_si128(vdst + 1, _0);
             _mm_stream_si128(vdst + 2, _0);
             _mm_stream_si128(vdst + 3, _0);
@@ -54,22 +48,34 @@ namespace magma
             _mm_stream_si128(vdst + 14, _0);
             _mm_stream_si128(vdst + 15, _0);
         }
-        const size_t tailSize = size - (sizeof(__m128i) * MAGMA_XMM_REGISTERS * blockCount);
-        if (tailSize > 0)
+    }
+
+    MAGMA_INLINE void *zeroMemory(void *dst, size_t size)
+    {
+        MAGMA_ASSERT(dst);
+        MAGMA_ASSERT(size > 0);
+#ifdef _M_AMD64
+        MAGMA_ASSERT(MAGMA_ALIGNED(dst));
+        constexpr size_t BLOCK_SIZE = sizeof(__m128i) * MAGMA_XMM_REGISTERS;
+        constexpr int NUM_THREADS = 4;
+        size_t blockCount = size / BLOCK_SIZE;
+        size_t threadBlockCount = blockCount / NUM_THREADS;
+        size_t threadZeroSize = threadBlockCount * BLOCK_SIZE;
+        std::thread threads[NUM_THREADS];
+        for (int i = 0; i < NUM_THREADS; ++i)
         {
-            const size_t registerCount = tailSize / sizeof(__m128i);
-            const size_t byteCount = tailSize % sizeof(__m128i);
-            MAGMA_ASSERT(registerCount < MAGMA_XMM_REGISTERS);
-            for (i = 0; i < registerCount; ++i)
-            {   // Zero residual 16-byte blocks
-                _mm_stream_si128(vdst++, _0);
-            }
-            uint8_t *bdst = reinterpret_cast<uint8_t *>(vdst);
-            MAGMA_ASSERT(byteCount < sizeof(__m128i));
-            for (i = 0; i < byteCount; ++i)
-            {   // Zero residual bytes
-                *bdst++ = 0;
-            }
+            threads[i] = std::thread(__zeroThread,
+                ((char *)dst) + i * threadZeroSize,
+                threadBlockCount);
+        }
+        for (int i = 0; i < NUM_THREADS; ++i)
+            threads[i].join();
+        size_t residualSize = size - (BLOCK_SIZE * threadBlockCount * NUM_THREADS);
+        if (residualSize > 0)
+        {
+            memset(((char *)dst) + NUM_THREADS * threadZeroSize,
+                0,
+                residualSize);
         }
         return dst;
 #else
