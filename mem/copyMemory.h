@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <thread>
 #ifndef _M_AMD64
 #include <cstring>
 #endif
@@ -24,29 +25,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    MAGMA_INLINE void *copyMemory(void *dst, const void *src, size_t size) noexcept
+    MAGMA_INLINE void __copyThread(void *dst, const void *src, size_t blockCount) noexcept
     {
-        MAGMA_ASSERT(dst);
-        MAGMA_ASSERT(src);
-        MAGMA_ASSERT(size > 0);
-        /* On x64 platform all allocations should have 16-byte alignment.
-           On x86 it's hard to follow this restriction, as standard alignment
-           there is 8 bytes: https://msdn.microsoft.com/en-us/library/ycsb6wwf.aspx
-           Default std::vector also has 8-byte alignment, using custom allocator
-           for it means incompatibility with other codebase. So SSE copy performed
-           only for x64 target. */
-#ifdef _M_AMD64
-        MAGMA_ASSERT(MAGMA_ALIGNED(dst));
-        MAGMA_ASSERT(MAGMA_ALIGNED(src));
-        const __m128i *vsrc = reinterpret_cast<const __m128i *>(src);
+         const __m128i *vsrc = reinterpret_cast<const __m128i *>(src);
         __m128i *vdst = reinterpret_cast<__m128i *>(dst);
-        _mm_prefetch(reinterpret_cast<const char *>(vsrc), _MM_HINT_NTA);
-        _mm_prefetch(reinterpret_cast<const char *>(vdst), _MM_HINT_NTA);
-        const size_t blockCount = size / (sizeof(__m128i) * MAGMA_XMM_REGISTERS);
-        size_t i;
-        for (i = blockCount; i--; vsrc += MAGMA_XMM_REGISTERS, vdst += MAGMA_XMM_REGISTERS)
+        for (size_t i = blockCount; i--; vsrc += MAGMA_XMM_REGISTERS, vdst += MAGMA_XMM_REGISTERS)
         {   // Copy 256 byte block
-            __m128i xmm0 = _mm_stream_load_si128(vsrc + 0);
+            __m128i xmm0 = _mm_stream_load_si128(vsrc);
             __m128i xmm1 = _mm_stream_load_si128(vsrc + 1);
             __m128i xmm2 = _mm_stream_load_si128(vsrc + 2);
             __m128i xmm3 = _mm_stream_load_si128(vsrc + 3);
@@ -62,7 +47,7 @@ namespace magma
             __m128i xmm13 = _mm_stream_load_si128(vsrc + 13);
             __m128i xmm14 = _mm_stream_load_si128(vsrc + 14);
             __m128i xmm15 = _mm_stream_load_si128(vsrc + 15);
-            _mm_stream_si128(vdst + 0, xmm0);
+            _mm_stream_si128(vdst,     xmm0);
             _mm_stream_si128(vdst + 1, xmm1);
             _mm_stream_si128(vdst + 2, xmm2);
             _mm_stream_si128(vdst + 3, xmm3);
@@ -79,24 +64,43 @@ namespace magma
             _mm_stream_si128(vdst + 14, xmm14);
             _mm_stream_si128(vdst + 15, xmm15);
         }
-        const size_t tailSize = size - (sizeof(__m128i) * MAGMA_XMM_REGISTERS * blockCount);
-        if (tailSize > 0)
+    }
+
+    MAGMA_INLINE void *copyMemory(void *dst, const void *src, size_t size)
+    {
+        MAGMA_ASSERT(dst);
+        MAGMA_ASSERT(src);
+        MAGMA_ASSERT(size > 0);
+        /* On x64 platform all allocations should have 16-byte alignment.
+           On x86 it's hard to follow this restriction, as standard alignment
+           there is 8 bytes: https://msdn.microsoft.com/en-us/library/ycsb6wwf.aspx
+           Default std::vector also has 8-byte alignment, using custom allocator
+           for it means incompatibility with other codebase. So SSE copy performed
+           only for x64 target. */
+#ifdef _M_AMD64
+        MAGMA_ASSERT(MAGMA_ALIGNED(dst));
+        MAGMA_ASSERT(MAGMA_ALIGNED(src));
+        constexpr size_t BLOCK_SIZE = sizeof(__m128i) * MAGMA_XMM_REGISTERS;
+        constexpr int NUM_THREADS = 4;
+        size_t blockCount = size / BLOCK_SIZE;
+        size_t threadBlockCount = blockCount / NUM_THREADS;
+        size_t threadCopySize = threadBlockCount * BLOCK_SIZE;
+        std::thread threads[NUM_THREADS];
+        for (int i = 0; i < NUM_THREADS; ++i)
         {
-            const size_t registerCount = tailSize / sizeof(__m128i);
-            const size_t byteCount = tailSize % sizeof(__m128i);
-            MAGMA_ASSERT(registerCount < MAGMA_XMM_REGISTERS);
-            for (i = 0; i < registerCount; ++i)
-            {   // Copy residual 16-byte blocks
-                __m128i xmm = _mm_stream_load_si128(vsrc++);
-                _mm_stream_si128(vdst++, xmm);
-            }
-            const uint8_t *bsrc = reinterpret_cast<const uint8_t *>(vsrc);
-            uint8_t *bdst = reinterpret_cast<uint8_t *>(vdst);
-            MAGMA_ASSERT(byteCount < sizeof(__m128i));
-            for (i = 0; i < byteCount; ++i)
-            {   // Copy residual bytes
-                *bdst++ = *bsrc++;
-            }
+            threads[i] = std::thread(__copyThread,
+                ((char *)dst) + i * threadCopySize,
+                ((const char *)src) + i * threadCopySize,
+                threadBlockCount);
+        }
+        for (int i = 0; i < NUM_THREADS; ++i)
+            threads[i].join();
+        size_t residualSize = size - (BLOCK_SIZE * threadBlockCount * NUM_THREADS);
+        if (residualSize > 0)
+        {
+            memcpy(((char *)dst) + NUM_THREADS * threadCopySize,
+                ((const char *)src) + NUM_THREADS * threadCopySize,
+                residualSize);
         }
         return dst;
 #else
