@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <cstring>
-#ifdef _M_AMD64
+#if defined(_M_AMD64) || defined(__x86_64__)
 #include <thread>
 #include <smmintrin.h>
 #endif
@@ -25,11 +25,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-#ifdef _M_AMD64
+#if defined(_M_AMD64) || defined(__x86_64__)
     MAGMA_INLINE void __copyThread(void *dst, const void *src, size_t blockCount) noexcept
     {
-        const __m128i *vsrc = reinterpret_cast<const __m128i *>(src);
-        __m128i *vdst = reinterpret_cast<__m128i *>(dst);
+        __m128i *vsrc = (__m128i *)src;
+        __m128i *vdst = (__m128i *)dst;
         for (size_t i = blockCount; i--; vsrc += MAGMA_XMM_REGISTERS, vdst += MAGMA_XMM_REGISTERS)
         {   // Copy 256 byte block
             __m128i xmm0 = _mm_stream_load_si128(vsrc);
@@ -79,7 +79,7 @@ namespace magma
            Default std::vector also has 8-byte alignment, using custom allocator
            for it means incompatibility with other codebase. So SSE copy performed
            only for x64 target. */
-#ifdef _M_AMD64
+#if defined(_M_AMD64) || defined(__x86_64__)
         MAGMA_ASSERT(MAGMA_ALIGNED(dst));
         MAGMA_ASSERT(MAGMA_ALIGNED(src));
         constexpr size_t BLOCK_SIZE = sizeof(__m128i) * MAGMA_XMM_REGISTERS;

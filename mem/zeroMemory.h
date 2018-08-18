@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <cstring>
-#ifdef _M_AMD64
+#if defined(_M_AMD64) || defined(__x86_64__)
 #include <thread>
 #include <smmintrin.h>
 #endif
@@ -25,11 +25,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-#ifdef _M_AMD64
+#if defined(_M_AMD64) || defined(__x86_64__)
     MAGMA_INLINE void __zeroThread(void *dst, size_t blockCount) noexcept
     {
         const __m128i _0 = _mm_setzero_si128();
-        __m128i *vdst = reinterpret_cast<__m128i *>(dst);
+        __m128i *vdst = (__m128i *)dst;
         for (size_t i = blockCount; i--; vdst += MAGMA_XMM_REGISTERS)
         {   // Zero 256 byte block
             _mm_stream_si128(vdst,     _0);
@@ -56,7 +56,7 @@ namespace magma
     {
         MAGMA_ASSERT(dst);
         MAGMA_ASSERT(size > 0);
-#ifdef _M_AMD64
+#if defined(_M_AMD64) || defined(__x86_64__)
         MAGMA_ASSERT(MAGMA_ALIGNED(dst));
         constexpr size_t BLOCK_SIZE = sizeof(__m128i) * MAGMA_XMM_REGISTERS;
         constexpr int NUM_THREADS = 4;

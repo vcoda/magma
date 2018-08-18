@@ -51,7 +51,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_FREEA(p)
 #endif // !_MSC_VER
 
-#ifdef _M_AMD64
+#if defined(_M_AMD64) || defined(__x86_64__)
 #define MAGMA_XMM_REGISTERS 16
 #endif
 
@@ -73,7 +73,11 @@ namespace magma
     MAGMA_INLINE typename Type::VkType __handle(const std::shared_ptr<const Type>& obj)
     {
         if (obj) return *obj;
+#ifdef VK_NULL_HANDLE
         return VK_NULL_HANDLE;
+#else
+        return 0;
+#endif
     }
 } // namespace magma
 

@@ -1,3 +1,8 @@
+#ifdef _MSC_VER
+#include <malloc.h>
+#else
+#include <mm_malloc.h>
+#endif
 #include <chrono>
 #include <iostream>
 #include "../copyMemory.h"
@@ -41,7 +46,7 @@ bool checkBuffer(void *buffer, char value)
 
 int main()
 {
-#ifndef _M_AMD64
+#if !defined(_M_AMD64) && !defined(__x86_64__)
     std::cout << "Not a x64 build, quit." << std::endl;
     return 0;
 #endif
