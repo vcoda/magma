@@ -53,6 +53,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #if defined(_M_AMD64) || defined(__x86_64__)
 #define MAGMA_XMM_REGISTERS 16
+#else
+#define MAGMA_XMM_REGISTERS 8
 #endif
 
 #define MAGMA_STRINGIZE(x) #x
