@@ -60,24 +60,29 @@ namespace magma
         MAGMA_ASSERT(MAGMA_ALIGNED(dst));
         constexpr size_t BLOCK_SIZE = sizeof(__m128i) * MAGMA_XMM_REGISTERS;
         constexpr int NUM_THREADS = 4;
-        size_t blockCount = size / BLOCK_SIZE;
-        size_t threadBlockCount = blockCount / NUM_THREADS;
-        size_t threadZeroSize = threadBlockCount * BLOCK_SIZE;
-        std::thread threads[NUM_THREADS];
-        for (int i = 0; i < NUM_THREADS; ++i)
+        if (size < BLOCK_SIZE * NUM_THREADS)
+            memset(dst, 0, size);
+        else
         {
-            threads[i] = std::thread(__zeroThread,
-                ((char *)dst) + i * threadZeroSize,
-                threadBlockCount);
-        }
-        for (int i = 0; i < NUM_THREADS; ++i)
-            threads[i].join();
-        size_t residualSize = size - (BLOCK_SIZE * threadBlockCount * NUM_THREADS);
-        if (residualSize > 0)
-        {
-            memset(((char *)dst) + NUM_THREADS * threadZeroSize,
-                0,
-                residualSize);
+            size_t blockCount = size / BLOCK_SIZE;
+            size_t threadBlockCount = blockCount / NUM_THREADS;
+            size_t threadZeroSize = threadBlockCount * BLOCK_SIZE;
+            std::thread threads[NUM_THREADS];
+            for (int i = 0; i < NUM_THREADS; ++i)
+            {
+                threads[i] = std::thread(__zeroThread,
+                    ((char *)dst) + i * threadZeroSize,
+                    threadBlockCount);
+            }
+            for (int i = 0; i < NUM_THREADS; ++i)
+                threads[i].join();
+            size_t residualSize = size - (BLOCK_SIZE * threadBlockCount * NUM_THREADS);
+            if (residualSize > 0)
+            {
+                memset(((char *)dst) + NUM_THREADS * threadZeroSize,
+                    0,
+                    residualSize);
+            }
         }
         return dst;
 #else
