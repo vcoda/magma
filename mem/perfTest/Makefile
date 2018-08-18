@@ -1,7 +1,5 @@
 CC=g++
-INCLUDE_DIR=-I$(VULKAN_SDK)/include
-CFLAGS=-std=c++14 -m64 -msse4 -O3 -pedantic -Wall $(INCLUDE_DIR)
-LDFLAGS=-pthread
+CFLAGS=-std=c++14 -m64 -msse4 -pthread -O3 -pedantic -Wall
 
 perfTest: perfTest.cpp
 	$(CC) $(CFLAGS) $(LDFLAGS) -o perfTest perfTest.cpp
