@@ -8,7 +8,7 @@
 #include "../copyMemory.h"
 #include "../zeroMemory.h"
 
-constexpr size_t BUFFER_SIZE = 1024 * 1024 * 16; // 16M
+constexpr size_t BUFFER_SIZE = 1024 * 1024 * 32; // 32M
 constexpr int NUM_ITERATIONS = 100;
 
 class ScopedProfiler
@@ -19,7 +19,7 @@ public:
     ScopedProfiler(const char *message):
         begin(HiResClock::now())
     {
-        std::cout << std::endl << message << std::endl;
+        std::cout << message << std::endl;
     }
     ~ScopedProfiler()
     {
@@ -33,12 +33,12 @@ private:
     HiResClock::time_point begin;
 };
 
-bool checkBuffer(void *buffer, char value)
+bool checkBuffer(const void *buffer, char value)
 {
-    char *c = (char *)buffer;
+    const char *c = (const char *)buffer;
     for (size_t i = 0; i < BUFFER_SIZE; ++i)
     {
-        if (*c++ != value)
+        if (c[i] != value)
             return false;
     }
     return true;
@@ -58,14 +58,13 @@ int main()
     // Values to be copied
     memset(srcBuffer0, 0x7F, BUFFER_SIZE);
     memset(srcBuffer1, 0x7F, BUFFER_SIZE);
-    // Warmup
-    std::this_thread::sleep_for(std::chrono::seconds(1));
     {
         // 1) Test std::memcpy()
         ScopedProfiler prof("Run std::memcpy() performance test.");
         for (int i = 0; i < NUM_ITERATIONS; ++i)
             std::memcpy(dstBuffer0, srcBuffer0, BUFFER_SIZE);
     }
+    std::cout << std::endl;
     {
         // 2) Test our copy function
         ScopedProfiler prof("Run magma::copyMemory() performance test.");
@@ -77,12 +76,14 @@ int main()
         std::cout << "Memory copy Ok" << std::endl;
     else
         std::cout << "Memory copy invalid!" << std::endl;
+    std::cout << std::endl;
     {
         // 3) Test std::memset()
         ScopedProfiler prof("Run std::memset() performance test.");
         for (int i = 0; i < NUM_ITERATIONS; ++i)
             std::memset(dstBuffer0, 0, BUFFER_SIZE);
     }
+    std::cout << std::endl;
     {
         // 4) Test our zero function
         ScopedProfiler prof("Run magma::zeroMemory() performance test.");
