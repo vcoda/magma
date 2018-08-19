@@ -1,15 +1,18 @@
 CC=g++
 PLATFORM=VK_USE_PLATFORM_XCB_KHR
 INCLUDE_DIR=-I$(VULKAN_SDK)/include
+BASE_CFLAGS=-std=c++14 -m64 -msse4 -pthread -pedantic -Wall -Werror -D$(PLATFORM) $(INCLUDE_DIR)
 
-BASE_CFLAGS=-std=c++14 -m64 -msse4 -pthread -pedantic -Wall -Wextra -D$(PLATFORM) $(INCLUDE_DIR)
-DEBUG_CFLAGS=$(BASE_CFLAGS) -D_DEBUG
-RELEASE_CFLAGS=$(BASE_CFLAGS) -O3
+DEBUG ?= 1
+ifeq ($(DEBUG), 1)
+	CFLAGS=$(BASE_CFLAGS) -O0 -g -D_DEBUG
+	TARGET=libmagmad.a
+else
+	CFLAGS=$(BASE_CFLAGS) -O3 -DNDEBUG
+	TARGET=libmagma.a
+endif
 
-DEBUG_TARGET=libmagmad.a
-RELEASE_TARGET=libmagma.a
-
-MAGMA_OBJS = \
+MAGMA_OBJS= \
 	allocator/allocator.o \
 	\
 	barriers/bufferMemoryBarrier.o \
@@ -91,17 +94,13 @@ DEPS := $(MAGMA_OBJS:.o=.d)
 -include $(DEPS)
 
 %.o: %.cpp
-	$(CC) $(DEBUG_CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
-debug : $(MAGMA_OBJS)
-	@echo "Make debug static library"
-	@ar rcs $(DEBUG_TARGET) $(MAGMA_OBJS)
+magma: $(MAGMA_OBJS)
+	@echo "Make" $(TARGET)
+	@ar rcs $(TARGET) $(MAGMA_OBJS)
 
-release : $(MAGMA_OBJS)
-	@echo "Make release static library"
-	@ar rcs $(RELEASE_TARGET) $(MAGMA_OBJS)
-
-clean :
-	@find . -name '*.a' -delete
+clean:
 	@find . -name '*.o' -delete
+	@find . -name '*.a' -delete
 	@rm -rf $(DEPS)
