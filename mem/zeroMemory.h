@@ -50,7 +50,7 @@ namespace magma
             _mm_stream_si128(vdst + 15, _0);
         }
     }
-#endif // _M_AMD64
+#endif // _M_AMD64 || __x86_64__
 
     MAGMA_INLINE void *zeroMemory(void *dst, size_t size)
     {
@@ -87,6 +87,6 @@ namespace magma
         return dst;
 #else
         return memset(dst, 0, size);
-#endif // _M_AMD64
+#endif // _M_AMD64 || __x86_64__
     }
 } // namespace magma

@@ -66,7 +66,7 @@ namespace magma
             _mm_stream_si128(vdst + 15, xmm15);
         }
     }
-#endif // _M_AMD64
+#endif // _M_AMD64 || __x86_64__
 
     MAGMA_INLINE void *copyMemory(void *dst, const void *src, size_t size)
     {
@@ -112,6 +112,6 @@ namespace magma
         return dst;
 #else
         return memcpy(dst, src, size);
-#endif // _M_AMD64
+#endif // _M_AMD64 || __x86_64__
     }
 } // namespace magma
