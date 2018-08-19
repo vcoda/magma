@@ -392,7 +392,7 @@ void CommandBuffer::beginDebugMarker(const char *name, const float color[4]) noe
         memcpy(info.color, color, sizeof(float) * 4);
         vkCmdDebugMarkerBeginEXT(handle, &info);
     }
-#else
+#elif defined(_MSC_VER)
     name;
     color;
 #endif // MAGMA_DEBUG
@@ -423,7 +423,7 @@ void CommandBuffer::insertDebugMarker(const char *name) noexcept
         info.color[3] = 1.f;
         vkCmdDebugMarkerInsertEXT(handle, &info);
     }
-#else
+#elif defined(_MSC_VER)
     name;
 #endif // MAGMA_DEBUG
 }

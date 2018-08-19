@@ -42,7 +42,7 @@ void DebugMarker::setObjectTag(uint64_t name, size_t tagSize, const void *tag) n
         info.pTag = tag;
         vkDebugMarkerSetObjectTagEXT(MAGMA_HANDLE(device), &info);
     }
-#else
+#elif defined(_MSC_VER)
     name;
     tagSize;
     tag;
@@ -65,7 +65,7 @@ void DebugMarker::setObjectName(const char *name) noexcept
         info.pObjectName = name;
         vkDebugMarkerSetObjectNameEXT(MAGMA_HANDLE(device), &info);
     }
-#else
+#elif defined(_MSC_VER)
     name;
 #endif // MAGMA_DEBUG
 }

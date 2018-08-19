@@ -32,11 +32,11 @@ ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, c
 #ifdef MAGMA_DEBUG
     const float color[4] = {r, g, b, a};
     this->cmdBuffer->beginDebugMarker(name, color);
-#else
+#elif defined(_MSC_VER)
     cmdBuffer;
     name;
     r; g; b; a;
-#endif
+#endif // MAGMA_DEBUG
 }
 
 ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, const char *name, const float color[4]) noexcept:
@@ -44,11 +44,11 @@ ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, c
 {
 #ifdef MAGMA_DEBUG
     this->cmdBuffer->beginDebugMarker(name, color);
-#else
+#elif defined(_MSC_VER)
     cmdBuffer;
     name;
     color;
-#endif
+#endif // MAGMA_DEBUG
 }
 
 ScopedDebugMarker::~ScopedDebugMarker()
