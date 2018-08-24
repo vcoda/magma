@@ -65,9 +65,9 @@ namespace magma
             const std::initializer_list<SpecializationEntry>& entryMap)
         {
             mapEntryCount = static_cast<uint32_t>(entryMap.size());
-            pMapEntries = helpers::copy(new VkSpecializationMapEntry[mapEntryCount], entryMap);
+            pMapEntries = helpers::copyArray(static_cast<const VkSpecializationMapEntry *>(entryMap.begin()), entryMap.size());
             dataSize = sizeof(Block);
-            pData = helpers::copy(new Block[1], &data);
+            pData = helpers::copyArray(reinterpret_cast<const char *>(&data), dataSize);
         }
         Specialization(const Specialization&);
         Specialization& operator=(const Specialization&);

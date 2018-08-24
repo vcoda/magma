@@ -36,13 +36,13 @@ DeviceQueueDescriptor::DeviceQueueDescriptor(VkQueueFlagBits queueType,
     for (float priority : queuePriorities)
         MAGMA_ASSERT(priority >= 0.f && priority <= 1.f);
 #endif
-    pQueuePriorities = helpers::copy(new float[queueCount], queuePriorities);
+    pQueuePriorities = helpers::copyVector(queuePriorities);
 }
 
 DeviceQueueDescriptor::DeviceQueueDescriptor(const DeviceQueueDescriptor& other)
 {
     helpers::copy(this, &other);
-    pQueuePriorities = helpers::copy(new float[queueCount], other.pQueuePriorities, queueCount);
+    pQueuePriorities = helpers::copyArray(other.pQueuePriorities, queueCount);
 }
 
 DeviceQueueDescriptor& DeviceQueueDescriptor::operator=(const DeviceQueueDescriptor& other)
@@ -50,7 +50,7 @@ DeviceQueueDescriptor& DeviceQueueDescriptor::operator=(const DeviceQueueDescrip
     if (this != &other)
     {
         helpers::copy(this, &other);
-        pQueuePriorities = helpers::copy(new float[queueCount], other.pQueuePriorities, queueCount);
+        pQueuePriorities = helpers::copyArray(other.pQueuePriorities, queueCount);
     }
     return *this;
 }

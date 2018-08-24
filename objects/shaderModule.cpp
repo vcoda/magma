@@ -50,11 +50,11 @@ ShaderModule::~ShaderModule()
 Specialization::Specialization(const Specialization& other)
 {
     mapEntryCount = other.mapEntryCount;
-    pMapEntries = helpers::copy(new VkSpecializationMapEntry[mapEntryCount], other.pMapEntries, mapEntryCount);
+    pMapEntries = helpers::copyArray(other.pMapEntries, mapEntryCount);
     dataSize = other.dataSize;
     try
     {
-        pData = helpers::copy(new char[dataSize], reinterpret_cast<const char *>(other.pData), static_cast<uint32_t>(dataSize));
+        pData = helpers::copyArray(reinterpret_cast<const char *>(other.pData), dataSize);
     } catch (const std::bad_alloc& exc)
     {
         delete[] pMapEntries;
@@ -67,11 +67,11 @@ Specialization& Specialization::operator=(const Specialization& other)
     if (this != &other)
     {
         mapEntryCount = other.mapEntryCount;
-        pMapEntries = helpers::copy(new VkSpecializationMapEntry[mapEntryCount], other.pMapEntries, mapEntryCount);
+        pMapEntries = helpers::copyArray(other.pMapEntries, mapEntryCount);
         dataSize = other.dataSize;
         try
         {
-            pData = helpers::copy(new char[dataSize], reinterpret_cast<const char *>(other.pData), static_cast<uint32_t>(dataSize));
+            pData = helpers::copyArray(reinterpret_cast<const char *>(other.pData), dataSize);
         } catch (const std::bad_alloc& exc)
         {
             delete[] pMapEntries;

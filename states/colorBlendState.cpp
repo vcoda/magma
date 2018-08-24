@@ -45,7 +45,7 @@ ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& attachment,
     this->logicOpEnable = MAGMA_BOOLEAN(logicOpEnable);
     this->logicOp = logicOp;
     attachmentCount = 1;
-    pAttachments = helpers::copy(new VkPipelineColorBlendAttachmentState[1], static_cast<const VkPipelineColorBlendAttachmentState *>(&attachment));
+    pAttachments = helpers::copyArray(static_cast<const VkPipelineColorBlendAttachmentState *>(&attachment), 1);
     blendConstants[0] = 1.f;
     blendConstants[1] = 1.f;
     blendConstants[2] = 1.f;
@@ -62,7 +62,7 @@ ColorBlendState::ColorBlendState(const std::vector<ColorBlendAttachmentState>& a
     this->logicOpEnable = MAGMA_BOOLEAN(logicOpEnable);
     this->logicOp = logicOp;
     attachmentCount = MAGMA_COUNT(attachments);
-    pAttachments = helpers::copy(new VkPipelineColorBlendAttachmentState[attachmentCount], attachments);
+    pAttachments = helpers::copyArray(static_cast<const VkPipelineColorBlendAttachmentState *>(attachments.data()), attachments.size());
     blendConstants[0] = 1.f;
     blendConstants[1] = 1.f;
     blendConstants[2] = 1.f;
@@ -72,7 +72,7 @@ ColorBlendState::ColorBlendState(const std::vector<ColorBlendAttachmentState>& a
 ColorBlendState::ColorBlendState(const ColorBlendState& other)
 {
     helpers::copy(this, &other);
-    pAttachments = helpers::copy(new VkPipelineColorBlendAttachmentState[attachmentCount], other.pAttachments, attachmentCount);
+    pAttachments = helpers::copyArray(other.pAttachments, attachmentCount);
 }
 
 ColorBlendState& ColorBlendState::operator=(const ColorBlendState& other)
@@ -80,7 +80,7 @@ ColorBlendState& ColorBlendState::operator=(const ColorBlendState& other)
     if (this != &other)
     {
         helpers::copy(this, &other);
-        pAttachments = helpers::copy(new VkPipelineColorBlendAttachmentState[attachmentCount], other.pAttachments, attachmentCount);
+        pAttachments = helpers::copyArray(other.pAttachments, attachmentCount);
     }
     return *this;
 }

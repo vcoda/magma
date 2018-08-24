@@ -20,38 +20,49 @@ namespace magma
 namespace helpers
 {
 template<typename Type>
-MAGMA_INLINE Type *copy(Type *const dst, const Type *const src) noexcept
+MAGMA_INLINE Type *copy(const Type *const src)
 {
-    MAGMA_ASSERT(dst);
     MAGMA_ASSERT(src);
-    return reinterpret_cast<Type *>(memcpy(dst, src, sizeof(Type)));
+    Type *dst = new Type();
+    memcpy(dst, src, sizeof(Type));
+    return dst;
 }
 
 template<typename Type>
-MAGMA_INLINE Type *copy(Type *const dst, const Type *const src, uint32_t count) noexcept
+MAGMA_INLINE Type *copy(Type *const dst, const Type *const src)
 {
     MAGMA_ASSERT(dst);
     MAGMA_ASSERT(src);
-    MAGMA_ASSERT(count);
-    return reinterpret_cast<Type *>(memcpy(dst, src, sizeof(Type) * count));
+    memcpy(dst, src, sizeof(Type));
+    return dst;
 }
 
-template<typename DestType, typename SourceType>
-MAGMA_INLINE DestType *copy(DestType *const dst, const std::vector<SourceType>& src) noexcept
+template<typename Type>
+MAGMA_INLINE Type *copyArray(const Type *const src, size_t count)
 {
-    static_assert(sizeof(DestType) == sizeof(SourceType), "equal size expected");
-    MAGMA_ASSERT(dst);
-    MAGMA_ASSERT(!src.empty());
-    return reinterpret_cast<DestType *>(memcpy(dst, src.data(), sizeof(SourceType) * src.size()));
+    MAGMA_ASSERT(src);
+    MAGMA_ASSERT(count > 0);
+    Type *dst = new Type[count];
+    memcpy(dst, src, sizeof(Type) * count);
+    return dst;
 }
 
-template<typename DestType, typename SourceType>
-MAGMA_INLINE DestType *copy(DestType *const dst, const std::initializer_list<SourceType>& src) noexcept
+template<typename Type>
+MAGMA_INLINE Type *copyVector(const std::vector<Type>& src)
 {
-    static_assert(sizeof(DestType) == sizeof(SourceType), "equal size expected");
-    MAGMA_ASSERT(dst);
     MAGMA_ASSERT(src.size() > 0);
-    return reinterpret_cast<DestType *>(memcpy(dst, src.begin(), sizeof(SourceType) * src.size()));
+    Type *dst = new Type[src.size()];
+    memcpy(dst, src.data(), sizeof(Type) * src.size());
+    return dst;
+}
+
+template<typename Type>
+MAGMA_INLINE Type *copyInitializer(const std::initializer_list<Type>& src)
+{
+    MAGMA_ASSERT(src.size() > 0);
+    Type *dst = new Type[src.size()];
+    memcpy(dst, src.begin(), sizeof(Type) * src.size());
+    return dst;
 }
 
 MAGMA_INLINE char *copyString(const char *const src)
