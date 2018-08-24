@@ -32,11 +32,11 @@ namespace magma
     class Framebuffer : public NonDispatchable<VkFramebuffer>
     {
     public:
-        Framebuffer(std::shared_ptr<const RenderPass> renderPass,
+        explicit Framebuffer(std::shared_ptr<const RenderPass> renderPass,
             const std::vector<std::shared_ptr<const ImageView>>& attachments,
             VkFramebufferCreateFlags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        Framebuffer(std::shared_ptr<const RenderPass> renderPass,
+        explicit Framebuffer(std::shared_ptr<const RenderPass> renderPass,
             std::shared_ptr<const ImageView> attachment,
             VkFramebufferCreateFlags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);

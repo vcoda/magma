@@ -34,7 +34,7 @@ namespace magma
         public std::enable_shared_from_this<Instance>
     {
     public:
-        Instance(const char *applicationName,
+        explicit Instance(const char *applicationName,
             const char *engineName,
             uint32_t apiVersion,
             const std::vector<const char *>& layerNames,

@@ -25,13 +25,13 @@ namespace magma
     class ImageCube : public Image
     {
     public:
-        ImageCube(std::shared_ptr<Device> device,
+        explicit ImageCube(std::shared_ptr<Device> device,
             VkFormat format,
             uint32_t dimension,
             uint32_t mipLevels,
             VkImageUsageFlags usage,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        ImageCube(std::shared_ptr<Device> device,
+        explicit ImageCube(std::shared_ptr<Device> device,
             VkFormat format,
             const std::vector<uint32_t>& mipDimensions,
             const std::vector<const void *> cubeMipData[6],

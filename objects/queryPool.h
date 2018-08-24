@@ -35,7 +35,7 @@ namespace magma
         uint32_t getQueryCount() const noexcept { return queryCount; }
 
     protected:
-        QueryPool(VkQueryType queryType,
+        explicit QueryPool(VkQueryType queryType,
             std::shared_ptr<Device> device,
             uint32_t queryCount,
             VkQueryPipelineStatisticFlags pipelineStatistics,
@@ -53,7 +53,7 @@ namespace magma
     class OcclusionQuery : public QueryPool
     {
     public:
-        OcclusionQuery(std::shared_ptr<Device> device,
+        explicit OcclusionQuery(std::shared_ptr<Device> device,
             uint32_t queryCount,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
@@ -66,7 +66,7 @@ namespace magma
     class PipelineStatisticsQuery : public QueryPool
     {
     public:
-        PipelineStatisticsQuery(std::shared_ptr<Device> device,
+        explicit PipelineStatisticsQuery(std::shared_ptr<Device> device,
             VkQueryPipelineStatisticFlags pipelineStatistics,
             std::shared_ptr<IAllocator> allocator = nullptr);
         VkQueryPipelineStatisticFlags getStatisticFlags() const noexcept { return pipelineStatistics; }
@@ -82,7 +82,7 @@ namespace magma
     class TimestampQuery : public QueryPool
     {
     public:
-        TimestampQuery(std::shared_ptr<Device> device,
+        explicit TimestampQuery(std::shared_ptr<Device> device,
             uint32_t queryCount,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };

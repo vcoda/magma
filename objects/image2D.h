@@ -25,14 +25,14 @@ namespace magma
     class Image2D : public Image
     {
     protected:
-        Image2D(std::shared_ptr<Device> device,
+        explicit Image2D(std::shared_ptr<Device> device,
             VkFormat format,
             const VkExtent2D& extent,
             uint32_t mipLevels,
             uint32_t samples,
             VkImageUsageFlags usage,
             std::shared_ptr<IAllocator> allocator);
-        Image2D(std::shared_ptr<Device> device,
+        explicit Image2D(std::shared_ptr<Device> device,
             VkImage handle,
             VkFormat format,
             const VkExtent2D& extent);
@@ -53,7 +53,7 @@ namespace magma
     class ColorAttachment2D : public Image2D
     {
     public:
-        ColorAttachment2D(std::shared_ptr<Device> device,
+        explicit ColorAttachment2D(std::shared_ptr<Device> device,
             VkFormat colorFormat,
             const VkExtent2D& extent,
             uint32_t mipLevels,
@@ -67,7 +67,7 @@ namespace magma
     class DepthStencilAttachment2D : public Image2D
     {
     public:
-        DepthStencilAttachment2D(std::shared_ptr<Device> device,
+        explicit DepthStencilAttachment2D(std::shared_ptr<Device> device,
             VkFormat depthStencilFormat,
             const VkExtent2D& extent,
             uint32_t mipLevels,
@@ -81,7 +81,7 @@ namespace magma
 
     class SwapchainColorAttachment2D : public Image2D
     {
-        SwapchainColorAttachment2D(std::shared_ptr<Device> device,
+        explicit SwapchainColorAttachment2D(std::shared_ptr<Device> device,
             VkImage handle,
             VkFormat format,
             const VkExtent2D& extent);

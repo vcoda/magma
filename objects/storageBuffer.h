@@ -30,17 +30,17 @@ namespace magma
     class StorageBuffer : public Buffer
     {
     public:
-        StorageBuffer(std::shared_ptr<Device> device,
+        explicit StorageBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+        explicit StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         template<typename Type>
-        StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+        explicit StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const std::vector<Type>& data,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,

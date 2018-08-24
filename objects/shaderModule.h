@@ -30,11 +30,11 @@ namespace magma
     class ShaderModule : public NonDispatchable<VkShaderModule>
     {
     public:
-        ShaderModule(std::shared_ptr<Device> device,
+        explicit ShaderModule(std::shared_ptr<Device> device,
             const uint32_t *bytecode,
             size_t bytecodeSize,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        ShaderModule(std::shared_ptr<Device> device,
+        explicit ShaderModule(std::shared_ptr<Device> device,
             const std::vector<uint32_t>& bytecode,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~ShaderModule();
@@ -43,7 +43,7 @@ namespace magma
     struct SpecializationEntry : VkSpecializationMapEntry
     {
         template<typename Block, typename Type>
-        SpecializationEntry(uint32_t index, Type Block::*member) noexcept
+        explicit SpecializationEntry(uint32_t index, Type Block::*member) noexcept
         {
             constantID = index;
             const ptrdiff_t diff = reinterpret_cast<ptrdiff_t>(&(((Block*)0)->*member));
@@ -61,7 +61,7 @@ namespace magma
     {
     public:
         template<typename Block>
-        Specialization(const Block& data,
+        explicit Specialization(const Block& data,
             const std::initializer_list<SpecializationEntry>& entryMap)
         {
             mapEntryCount = static_cast<uint32_t>(entryMap.size());
@@ -77,7 +77,7 @@ namespace magma
     class ShaderStage
     {
     protected:
-        ShaderStage(const VkShaderStageFlagBits stage,
+        explicit ShaderStage(const VkShaderStageFlagBits stage,
             std::shared_ptr<const ShaderModule> module,
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization,

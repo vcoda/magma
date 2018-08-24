@@ -34,7 +34,7 @@ namespace magma
 
     class Queue : public Dispatchable<VkQueue>
     {
-        Queue(VkQueue handle, std::shared_ptr<Device> device,
+        explicit Queue(VkQueue handle, std::shared_ptr<Device> device,
             VkQueueFlagBits flags, uint32_t familyIndex, uint32_t index);
         friend Device;
 

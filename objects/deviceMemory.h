@@ -27,7 +27,7 @@ namespace magma
     class DeviceMemory : public NonDispatchable<VkDeviceMemory>
     {
     public:
-        DeviceMemory(std::shared_ptr<Device> device,
+        explicit DeviceMemory(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkMemoryPropertyFlags flags,
             std::shared_ptr<IAllocator> allocator = nullptr);

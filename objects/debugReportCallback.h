@@ -29,7 +29,7 @@ namespace magma
     class DebugReportCallback : public NonDispatchable<VkDebugReportCallbackEXT>
     {
     public:
-        DebugReportCallback(std::shared_ptr<const Instance> instance,
+        explicit DebugReportCallback(std::shared_ptr<const Instance> instance,
             PFN_vkDebugReportCallbackEXT reportCallback,
             VkDebugReportFlagsEXT flags =
                 VK_DEBUG_REPORT_INFORMATION_BIT_EXT |

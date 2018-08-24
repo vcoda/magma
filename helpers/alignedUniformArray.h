@@ -30,7 +30,9 @@ namespace magma
             class Iterator;
 
         public:
-            AlignedUniformArray(void *buffer, const uint32_t arraySize, const VkDeviceSize alignment) noexcept:
+            explicit AlignedUniformArray(void *buffer,
+                const uint32_t arraySize,
+                const VkDeviceSize alignment) noexcept:
                 buffer(reinterpret_cast<char *>(buffer)),
                 arraySize(arraySize),
                 alignment(alignment)

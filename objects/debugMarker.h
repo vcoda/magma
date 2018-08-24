@@ -28,7 +28,7 @@ namespace magma
     class DebugMarker : public Object
     {
     public:
-        DebugMarker(VkDebugReportObjectTypeEXT objectType,
+        explicit DebugMarker(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator);
         void setObjectTag(uint64_t name, size_t tagSize, const void *tag) noexcept;

@@ -71,7 +71,7 @@ namespace magma
             };
 
         public:
-            ImmediateRender(uint32_t maxVertexCount,
+            explicit ImmediateRender(uint32_t maxVertexCount,
                 std::shared_ptr<Device> device,
                 std::shared_ptr<PipelineCache> cache,
                 std::shared_ptr<PipelineLayout> layout,

@@ -31,7 +31,7 @@ namespace magma
     class Event : public NonDispatchable<VkEvent>
     {
     public:
-        Event(std::shared_ptr<Device> device,
+        explicit Event(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~Event();
         VkResult getStatus() const noexcept;

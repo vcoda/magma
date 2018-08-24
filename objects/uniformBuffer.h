@@ -32,7 +32,7 @@ namespace magma
     class UniformBuffer : public Buffer
     {
     public:
-        UniformBuffer(std::shared_ptr<Device> device,
+        explicit UniformBuffer(std::shared_ptr<Device> device,
             uint32_t arraySize = 1,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr):
@@ -76,7 +76,7 @@ namespace magma
     class DynamicUniformBuffer : public UniformBuffer<Type>
     {
     public:
-        DynamicUniformBuffer(std::shared_ptr<Device> device,
+        explicit DynamicUniformBuffer(std::shared_ptr<Device> device,
             uint32_t arraySize,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr):

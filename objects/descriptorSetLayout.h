@@ -34,7 +34,7 @@ namespace magma
     public:
         struct Binding : VkDescriptorSetLayoutBinding
         {
-            Binding(uint32_t binding,
+            explicit Binding(uint32_t binding,
                 const Descriptor& descriptor,
                 VkShaderStageFlags stageFlags,
                 const ImmutableSamplerList& immutableSamplers = {}) noexcept;
@@ -42,11 +42,11 @@ namespace magma
         };
 
     public:
-        DescriptorSetLayout(std::shared_ptr<Device> device,
+        explicit DescriptorSetLayout(std::shared_ptr<Device> device,
             const Binding& binding,
             VkDescriptorSetLayoutCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        DescriptorSetLayout(std::shared_ptr<Device> device,
+        explicit DescriptorSetLayout(std::shared_ptr<Device> device,
             const std::initializer_list<Binding>& bindings,
             VkDescriptorSetLayoutCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);

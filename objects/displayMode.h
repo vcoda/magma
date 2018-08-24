@@ -30,7 +30,7 @@ namespace magma
     class DisplayMode : public NonDispatchable<VkDisplayModeKHR>
     {
     public:
-        DisplayMode(std::shared_ptr<const Display> display,
+        explicit DisplayMode(std::shared_ptr<const Display> display,
             const VkExtent2D& visibleRegion,
             uint32_t refreshRate,
             std::shared_ptr<IAllocator> allocator = nullptr);

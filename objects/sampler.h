@@ -29,11 +29,11 @@ namespace magma
     class Sampler : public NonDispatchable<VkSampler>
     {
     public:
-        Sampler(std::shared_ptr<Device> device,
+        explicit Sampler(std::shared_ptr<Device> device,
             const SamplerState& state,
             float mipLodBias = 0.f,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        Sampler(std::shared_ptr<Device> device,
+        explicit Sampler(std::shared_ptr<Device> device,
             VkFilter magFilter,
             VkFilter minFilter,
             VkSamplerMipmapMode mipmapMode,
@@ -54,7 +54,7 @@ namespace magma
     class UnnormalizedSampler : public Sampler
     {
     public:
-        UnnormalizedSampler(std::shared_ptr<Device> device,
+        explicit UnnormalizedSampler(std::shared_ptr<Device> device,
             bool linearFilter,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };

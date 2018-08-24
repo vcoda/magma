@@ -39,7 +39,7 @@ namespace magma
         static std::shared_ptr<IObjectAllocator> getAllocator() noexcept;
 
     public:
-        Object(VkDebugReportObjectTypeEXT objectType,
+        explicit Object(VkDebugReportObjectTypeEXT objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator):
             objectType(objectType),

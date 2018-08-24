@@ -32,7 +32,7 @@ namespace magma
         ~Surface();
 
     protected:
-        Surface(std::shared_ptr<const Instance> instance,
+        explicit Surface(std::shared_ptr<const Instance> instance,
             std::shared_ptr<IAllocator> allocator);
 
     protected:
@@ -44,7 +44,7 @@ namespace magma
     class Win32Surface : public Surface
     {
     public:
-        Win32Surface(std::shared_ptr<const Instance> instance,
+        explicit Win32Surface(std::shared_ptr<const Instance> instance,
             HINSTANCE hinstance,
             HWND hwnd,
             VkWin32SurfaceCreateFlagsKHR flags = 0,
@@ -56,7 +56,7 @@ namespace magma
     class XlibSurface : public Surface
     {
     public:
-        XlibSurface(std::shared_ptr<const Instance> instance,
+        explicit XlibSurface(std::shared_ptr<const Instance> instance,
             Display *dpy,
             Window window,
             VkXlibSurfaceCreateFlagsKHR flags = 0,
@@ -68,7 +68,7 @@ namespace magma
     class XcbSurface : public Surface
     {
     public:
-        XcbSurface(std::shared_ptr<const Instance> instance,
+        explicit XcbSurface(std::shared_ptr<const Instance> instance,
             xcb_connection_t *connection,
             xcb_window_t window,
             VkXcbSurfaceCreateFlagsKHR flags = 0,
@@ -80,7 +80,7 @@ namespace magma
     class WaylandSurface : public Surface
     {
     public:
-        WaylandSurface(std::shared_ptr<const Instance> instance,
+        explicit WaylandSurface(std::shared_ptr<const Instance> instance,
             wl_display *display,
             wl_surface *surface,
             VkWaylandSurfaceCreateFlagsKHR flags = 0,
@@ -92,7 +92,7 @@ namespace magma
     class MirSurface : public Surface
     {
     public:
-        MirSurface(std::shared_ptr<const Instance> instance,
+        explicit MirSurface(std::shared_ptr<const Instance> instance,
             MirConnection *connection,
             MirSurface *surface,
             VkMirSurfaceCreateFlagsKHR flags = 0,
@@ -104,7 +104,7 @@ namespace magma
     class AndroidSurface : public Surface
     {
     public:
-        AndroidSurface(std::shared_ptr<const Instance> instance,
+        explicit AndroidSurface(std::shared_ptr<const Instance> instance,
             ANativeWindow *window,
             VkAndroidSurfaceCreateFlagsKHR flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
@@ -115,7 +115,7 @@ namespace magma
     class IosSurface : public Surface
     {
     public:
-        IosSurface(std::shared_ptr<const Instance> instance,
+        explicit IosSurface(std::shared_ptr<const Instance> instance,
             const void *view,
             VkIOSSurfaceCreateFlagsMVK flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
@@ -126,7 +126,7 @@ namespace magma
     class MacosSurface : public Surface
     {
     public:
-        MacosSurface(std::shared_ptr<const Instance> instance,
+        explicit MacosSurface(std::shared_ptr<const Instance> instance,
             const void *view,
             VkMacOSSurfaceCreateFlagsMVK flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
@@ -139,7 +139,7 @@ namespace magma
     class DisplaySurface : public Surface
     {
     public:
-        DisplaySurface(std::shared_ptr<const Instance> instance,
+        explicit DisplaySurface(std::shared_ptr<const Instance> instance,
             std::shared_ptr<const DisplayMode> displayMode,
             uint32_t planeIndex,
             uint32_t planeStackIndex,
