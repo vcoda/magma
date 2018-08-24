@@ -43,7 +43,7 @@ namespace magma
            to mess around with vertex buffer mapping, data copy,
            state changes etc. */
 
-        class ImmediateRender
+        class ImmediateRender : public NonCopyable
         {
             struct Vertex
             {
