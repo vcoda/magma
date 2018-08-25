@@ -42,6 +42,7 @@ namespace magma
 
     struct SpecializationEntry : VkSpecializationMapEntry
     {
+        SpecializationEntry() noexcept {}
         template<typename Block, typename Type>
         explicit SpecializationEntry(uint32_t index, Type Block::*member) noexcept
         {
@@ -65,7 +66,7 @@ namespace magma
             const std::initializer_list<SpecializationEntry>& entryMap)
         {
             mapEntryCount = static_cast<uint32_t>(entryMap.size());
-            pMapEntries = helpers::copyArray(static_cast<const VkSpecializationMapEntry *>(entryMap.begin()), entryMap.size());
+            pMapEntries = helpers::copyInitializer(entryMap);
             dataSize = sizeof(Block);
             pData = helpers::copyArray(reinterpret_cast<const char *>(&data), dataSize);
         }
