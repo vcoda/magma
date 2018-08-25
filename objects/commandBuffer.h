@@ -51,7 +51,7 @@ namespace magma
 
     class CommandBuffer : public Dispatchable<VkCommandBuffer>
     {
-        CommandBuffer(
+        explicit CommandBuffer(
             VkCommandBuffer handle,
             std::shared_ptr<Device> device,
             std::shared_ptr<CommandPool> pool);

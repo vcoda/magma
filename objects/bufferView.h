@@ -29,7 +29,7 @@ namespace magma
     class BufferView : public NonDispatchable<VkBufferView>
     {
     public:
-        BufferView(std::shared_ptr<const Buffer> resource,
+        explicit BufferView(std::shared_ptr<const Buffer> resource,
             VkFormat format,
             VkDeviceSize offset = 0,
             VkDeviceSize range = VK_WHOLE_SIZE,

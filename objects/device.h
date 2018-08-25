@@ -34,7 +34,7 @@ namespace magma
     class Device : public Dispatchable<VkDevice>,
         public std::enable_shared_from_this<Device>
     {
-        Device(std::shared_ptr<PhysicalDevice> physicalDevice,
+        explicit Device(std::shared_ptr<PhysicalDevice> physicalDevice,
             const std::vector<DeviceQueueDescriptor>& queueDescriptors,
             const std::vector<const char *>& layers,
             const std::vector<const char *>& extensions,

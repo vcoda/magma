@@ -31,7 +31,7 @@ namespace magma
 
     class Display : public NonDispatchable<VkDisplayKHR>
     {
-        Display(std::shared_ptr<const PhysicalDevice> physicalDevice,
+        explicit Display(std::shared_ptr<const PhysicalDevice> physicalDevice,
             VkDisplayKHR handle,
             uint32_t planeIndex) noexcept;
         friend PhysicalDevice;
