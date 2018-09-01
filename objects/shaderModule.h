@@ -100,7 +100,7 @@ namespace magma
     class VertexShaderStage : public ShaderStage
     {
     public:
-        VertexShaderStage(std::shared_ptr<const ShaderModule> module,
+        explicit VertexShaderStage(std::shared_ptr<const ShaderModule> module,
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept;
@@ -109,7 +109,7 @@ namespace magma
     class TesselationControlShaderStage : public ShaderStage
     {
     public:
-        TesselationControlShaderStage(std::shared_ptr<const ShaderModule> module,
+        explicit TesselationControlShaderStage(std::shared_ptr<const ShaderModule> module,
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept;
@@ -118,7 +118,7 @@ namespace magma
     class TesselationEvaluationShaderStage : public ShaderStage
     {
     public:
-        TesselationEvaluationShaderStage(std::shared_ptr<const ShaderModule> module,
+        explicit TesselationEvaluationShaderStage(std::shared_ptr<const ShaderModule> module,
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept;
@@ -127,7 +127,7 @@ namespace magma
     class GeometryShaderStage : public ShaderStage
     {
     public:
-        GeometryShaderStage(std::shared_ptr<const ShaderModule> module,
+        explicit GeometryShaderStage(std::shared_ptr<const ShaderModule> module,
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept;
@@ -136,7 +136,7 @@ namespace magma
     class FragmentShaderStage : public ShaderStage
     {
     public:
-        FragmentShaderStage(std::shared_ptr<const ShaderModule> module,
+        explicit FragmentShaderStage(std::shared_ptr<const ShaderModule> module,
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept;
@@ -145,7 +145,7 @@ namespace magma
     class ComputeShaderStage : public ShaderStage
     {
     public:
-        ComputeShaderStage(std::shared_ptr<const ShaderModule> module,
+        explicit ComputeShaderStage(std::shared_ptr<const ShaderModule> module,
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept;
