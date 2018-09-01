@@ -20,12 +20,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-AttachmentDescription::AttachmentDescription(VkFormat format,
-    uint32_t sampleCount,
-    const LoadStoreOp& op,
-    const LoadStoreOp& stencilOp,
-    VkImageLayout initialLayout,
-    VkImageLayout finalLayout)
+AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t sampleCount,
+    const LoadStoreOp& op, const LoadStoreOp& stencilOp,
+    VkImageLayout initialLayout, VkImageLayout finalLayout)
 {
     flags = 0;
     this->format = format;
@@ -49,12 +46,9 @@ AttachmentDescription::AttachmentDescription(VkFormat format,
     this->finalLayout = finalLayout;
 }
 
-AttachmentDescription::AttachmentDescription(VkAttachmentLoadOp loadOp,
-    VkAttachmentStoreOp storeOp,
-    VkAttachmentLoadOp stencilLoadOp,
-    VkAttachmentStoreOp stencilStoreOp,
-    VkImageLayout initialLayout,
-    VkImageLayout finalLayout) noexcept
+AttachmentDescription::AttachmentDescription(VkAttachmentLoadOp loadOp, VkAttachmentStoreOp storeOp,
+    VkAttachmentLoadOp stencilLoadOp, VkAttachmentStoreOp stencilStoreOp,
+    VkImageLayout initialLayout, VkImageLayout finalLayout) noexcept
 {
     flags = 0;
     format = VK_FORMAT_UNDEFINED;
@@ -67,7 +61,8 @@ AttachmentDescription::AttachmentDescription(VkAttachmentLoadOp loadOp,
     this->finalLayout = finalLayout;
 }
 
-AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t sampleCount, const AttachmentDescription& predefined)
+AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t sampleCount,
+    const AttachmentDescription& predefined)
 {
     *this = predefined;
     this->format = format;

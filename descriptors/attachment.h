@@ -23,7 +23,8 @@ namespace magma
     class LoadStoreOp
     {
     public:
-        LoadStoreOp(VkAttachmentLoadOp loadOp, VkAttachmentStoreOp storeOp) noexcept:
+        LoadStoreOp(VkAttachmentLoadOp loadOp,
+            VkAttachmentStoreOp storeOp) noexcept:
             loadOp(loadOp), storeOp(storeOp) {}
 
     private:
