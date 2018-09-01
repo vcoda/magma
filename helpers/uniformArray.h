@@ -57,7 +57,7 @@ namespace magma
         class UniformArray<Type>::Iterator
         {
         public:
-            Iterator(Type *ptr) noexcept:
+            explicit Iterator(Type *ptr) noexcept:
                 ptr(ptr) {}
             Iterator& operator++() noexcept
             {

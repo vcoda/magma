@@ -63,7 +63,7 @@ namespace magma
         class AlignedUniformArray<Type>::Iterator
         {
         public:
-            Iterator(char *ptr, const VkDeviceSize alignment) noexcept:
+            explicit Iterator(char *ptr, const VkDeviceSize alignment) noexcept:
                 ptr(ptr), alignment(alignment) {}
             Iterator& operator++() noexcept
             {
