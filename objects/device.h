@@ -39,8 +39,8 @@ namespace magma
             const std::vector<const char *>& layers,
             const std::vector<const char *>& extensions,
             const VkPhysicalDeviceFeatures& deviceFeatures,
-            const std::vector<void *>& deviceFeaturesEx = {},
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            const std::vector<void *>& extendedDeviceFeatures,
+            std::shared_ptr<IAllocator> allocator);
         friend PhysicalDevice;
 
     public:
