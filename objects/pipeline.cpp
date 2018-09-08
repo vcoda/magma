@@ -93,6 +93,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
     std::shared_ptr<const PipelineLayout> layout,
     std::shared_ptr<const RenderPass> renderPass,
     uint32_t subpass /* 0 */,
+    std::shared_ptr<const GraphicsPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     GraphicsPipeline(std::move(device), std::move(pipelineCache), stages,
@@ -100,7 +101,8 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
         TesselationState(), // No tesselation state
         ViewportState(), // No viewport state (supposed to be dynamic)
         rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
-        std::move(layout), std::move(renderPass), subpass, flags, std::move(allocator))
+        std::move(layout), std::move(renderPass), subpass, std::move(basePipeline), flags,
+        std::move(allocator))
 {}
 
 GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
@@ -117,6 +119,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
     std::shared_ptr<const PipelineLayout> layout,
     std::shared_ptr<const RenderPass> renderPass,
     uint32_t subpass /* 0 */,
+    std::shared_ptr<const GraphicsPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Pipeline(std::move(device), std::move(allocator))
@@ -127,6 +130,8 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
     info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     info.pNext = nullptr;
     info.flags = flags;
+    if (basePipeline)
+        info.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, stages.size());
     for (auto& stage : stages)
         dereferencedStages.put(stage);
@@ -164,8 +169,8 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
     }
     info.renderPass = *renderPass;
     info.subpass = subpass;
-    info.basePipelineIndex = 0;
-    info.basePipelineHandle = VK_NULL_HANDLE;
+    info.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipeline);
+    info.basePipelineIndex = -1;
     const VkResult create = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create graphics pipeline");
 }
@@ -173,6 +178,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
 ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
     const ShaderStage& stage,
     std::shared_ptr<const PipelineLayout> layout /* nullptr */,
+    std::shared_ptr<const ComputePipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Pipeline(std::move(device), std::move(allocator))
@@ -181,6 +187,8 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr
     info.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
     info.pNext = nullptr;
     info.flags = flags;
+    if (basePipeline)
+        info.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     info.stage = stage;
     if (layout)
         info.layout = *layout;
@@ -189,8 +197,8 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr
         defaultLayout = std::make_unique<PipelineLayout>(this->device);
         info.layout = *defaultLayout;
     }
-    info.basePipelineHandle = 0;
-    info.basePipelineIndex = 0;
+    info.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipeline);
+    info.basePipelineIndex = -1;
     const VkResult create = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create compute pipeline");
 }

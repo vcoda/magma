@@ -43,10 +43,12 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     vertexBuffer(std::make_shared<VertexBuffer>(this->device, nullptr, sizeof(Vertex) * maxVertexCount, 0, this->allocator)),
     vertexShader(VertexShaderStage(createVertexShader(), "main")),
     fragmentShader(FragmentShaderStage(createFragmentShader(), "main")),
-    rasterizationState(states::fillCullBackCCW),
-    multisampleState(states::dontMultisample),
-    depthStencilState(states::depthAlwaysDontWrite),
-    colorBlendState(states::dontBlendWriteRGBA)
+    renderStates{
+        states::fillCullBackCCW,
+        states::dontMultisample,
+        states::depthAlwaysDontWrite,
+        states::dontBlendWriteRGBA
+    }
 {
     // Set attributes to initial state
     normal(0.f, 0.f, 0.f);
@@ -279,25 +281,41 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
         &states::triangleStripWithAdjacency,
         &states::patchList
     };
-    std::shared_ptr<GraphicsPipeline> pipeline(std::make_shared<GraphicsPipeline>(device, cache,
+    std::shared_ptr<const GraphicsPipeline> basePipeline = findBasePipeline();
+    std::shared_ptr<GraphicsPipeline> childPipeline(std::make_shared<GraphicsPipeline>(device, cache,
         std::vector<ShaderStage>{vertexShader, fragmentShader},
         vertexInput,
         *inputAssemblyStates[topology],
-        rasterizationState,
-        multisampleState,
-        depthStencilState,
-        colorBlendState,
+        renderStates.rasterization,
+        renderStates.multisample,
+        renderStates.depthStencil,
+        renderStates.colorBlend,
         std::initializer_list<VkDynamicState>{
             VK_DYNAMIC_STATE_VIEWPORT,
             VK_DYNAMIC_STATE_SCISSOR,
             VK_DYNAMIC_STATE_LINE_WIDTH
         },
         layout,
-        renderPass,
-        0, 0,
+        renderPass, 0,
+        basePipeline,
+        VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT,
         allocator));
-    pipelines.insert(pipeline); // Hold unique pipelines, as they should exist during command buffer submission
-    return pipeline;
+    // Hold unique pipelines, as they should exist during command buffer submission
+    pipelines[childPipeline] = std::make_shared<RenderStates>(renderStates);
+    return childPipeline;
 }
+
+std::shared_ptr<const GraphicsPipeline> ImmediateRender::findBasePipeline() const
+{
+    for (const auto& pair : pipelines)
+    {
+        // If render states are the same, child and parent are expected to have much commonality
+        const int result = memcmp(pair.second.get(), &renderStates, sizeof(RenderStates));
+        if (0 == result)
+            return pair.first;
+    }
+    return nullptr;
+}
+
 } // namespace utilities
 } // namespace magma

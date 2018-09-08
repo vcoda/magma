@@ -75,6 +75,7 @@ namespace magma
             std::shared_ptr<const PipelineLayout> layout,
             std::shared_ptr<const RenderPass> renderPass,
             uint32_t subpass = 0,
+            std::shared_ptr<const GraphicsPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit GraphicsPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
@@ -91,6 +92,7 @@ namespace magma
             std::shared_ptr<const PipelineLayout> layout,
             std::shared_ptr<const RenderPass> renderPass,
             uint32_t subpass = 0,
+            std::shared_ptr<const GraphicsPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
@@ -105,6 +107,7 @@ namespace magma
         explicit ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
             const ShaderStage& stage,
             std::shared_ptr<const PipelineLayout> layout = nullptr,
+            std::shared_ptr<const ComputePipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };

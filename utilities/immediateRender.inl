@@ -34,25 +34,25 @@ MAGMA_INLINE void ImmediateRender::setFragmentShader(const FragmentShaderStage& 
 MAGMA_INLINE void ImmediateRender::setRasterizationState(const RasterizationState& state) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
-    rasterizationState = state;
+    renderStates.rasterization = state;
 }
 
 MAGMA_INLINE void ImmediateRender::setMultisampleState(const MultisampleState& state) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
-    multisampleState = state;
+    renderStates.multisample = state;
 }
 
 MAGMA_INLINE void ImmediateRender::setDepthStencilState(const DepthStencilState& state) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
-    depthStencilState = state;
+    renderStates.depthStencil = state;
 }
 
 MAGMA_INLINE void ImmediateRender::setColorBlendState(const ColorBlendState& state) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
-    colorBlendState = state;
+    renderStates.colorBlend = state;
 }
 
 MAGMA_INLINE void ImmediateRender::setLineWidth(float width) noexcept

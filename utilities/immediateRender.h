@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <list>
-#include <unordered_set>
+#include <unordered_map>
 #include <limits>
 #include "../objects/shaderModule.h"
 #include "../states/rasterizationState.h"
@@ -68,6 +68,14 @@ namespace magma
                 Transform transform;
                 uint32_t vertexCount;
                 uint32_t firstVertex;
+            };
+
+            struct RenderStates
+            {
+                RasterizationState rasterization;
+                MultisampleState multisample;
+                DepthStencilState depthStencil;
+                ColorBlendState colorBlend;
             };
 
         public:
@@ -121,6 +129,7 @@ namespace magma
             std::shared_ptr<ShaderModule> createVertexShader();
             std::shared_ptr<ShaderModule> createFragmentShader();
             std::shared_ptr<GraphicsPipeline> createPipelineState(VkPrimitiveTopology topology);
+            std::shared_ptr<const GraphicsPipeline> findBasePipeline() const;
 
         private:
             const uint32_t maxVertexCount;
@@ -132,14 +141,11 @@ namespace magma
             std::shared_ptr<VertexBuffer> vertexBuffer;
             VertexShaderStage vertexShader;
             FragmentShaderStage fragmentShader;
-            RasterizationState rasterizationState;
-            MultisampleState multisampleState;
-            DepthStencilState depthStencilState;
-            ColorBlendState colorBlendState;
+            RenderStates renderStates;
             float lineWidth = 1.f;
             Transform transform;
             std::list<Primitive> primitives;
-            std::unordered_set<std::shared_ptr<GraphicsPipeline>> pipelines;
+            std::unordered_map<std::shared_ptr<const GraphicsPipeline>, std::shared_ptr<const RenderStates>> pipelines;
             uint32_t vertexCount = 0;
             Vertex *vert = nullptr, curr = {};
             bool insidePrimitive = false;
