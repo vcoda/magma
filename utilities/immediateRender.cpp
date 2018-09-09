@@ -311,11 +311,23 @@ std::shared_ptr<const GraphicsPipeline> ImmediateRender::findBasePipeline() cons
 {
     for (const auto& pair : basePipelines)
     {
-        const auto childRenderStates = pair.second;
-        const int result = memcmp(childRenderStates.get(), &renderStates, sizeof(RenderStates));
-        if (0 == result)
-        {   // If render states are the same, child and parent are expected to have much commonality
-            return pair.first;
+        const auto baseStates = pair.second;
+        if (0 == memcmp(&baseStates->rasterization, &renderStates.rasterization, sizeof(RasterizationState)) &&
+            0 == memcmp(&baseStates->multisample, &renderStates.multisample, sizeof(MultisampleState)) &&
+            0 == memcmp(&baseStates->depthStencil, &renderStates.depthStencil, sizeof(DepthStencilState)))
+        {
+            if (0 == memcmp(&baseStates->colorBlend, &renderStates.colorBlend,
+                sizeof(ColorBlendState) - sizeof(ColorBlendState::pAttachments) - sizeof(ColorBlendState::blendConstants)))
+            {   // Compare blend attachments and blend constants separately
+                const size_t attachmentsSize = sizeof(VkPipelineColorBlendAttachmentState) * renderStates.colorBlend.attachmentCount;
+                if (0 == memcmp(baseStates->colorBlend.pAttachments, renderStates.colorBlend.pAttachments, attachmentsSize))
+                {
+                    if (0 == memcmp(baseStates->colorBlend.blendConstants, renderStates.colorBlend.blendConstants, sizeof(ColorBlendState::blendConstants)))
+                    {   // If render states are the same, child and parent are expected to have much commonality
+                        return pair.first;
+                    }
+                }
+            }
         }
     }
     return nullptr;
