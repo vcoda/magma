@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/deviceMemory.h"
 #include "../objects/commandBuffer.h"
 #include "../objects/pipeline.h"
-#include "../states/vertexInputState.h"
 #include "../states/inputAssemblyState.h"
 #include "../misc/pushConstants.h"
 #include "../allocator/allocator.h"
@@ -41,6 +40,12 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     renderPass(std::move(renderPass)),
     allocator(std::move(allocator)),
     vertexBuffer(std::make_shared<VertexBuffer>(this->device, nullptr, sizeof(Vertex) * maxVertexCount, 0, this->allocator)),
+    vertexInput(VertexInputBinding(0, sizeof(Vertex)), {
+        VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, x)),
+        VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, nx)),
+        VertexInputAttribute(0, 2, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, r)),
+        VertexInputAttribute(0, 3, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, u))
+    }),
     vertexShader(VertexShaderStage(createVertexShader(), "main")),
     fragmentShader(FragmentShaderStage(createFragmentShader(), "main")),
     renderStates{
@@ -260,14 +265,7 @@ std::shared_ptr<ShaderModule> ImmediateRender::createFragmentShader()
 
 std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimitiveTopology topology)
 {
-    const VertexInputState vertexInput(VertexInputBinding(0, sizeof(Vertex)),
-    {
-        VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, x)),
-        VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, nx)),
-        VertexInputAttribute(0, 2, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, r)),
-        VertexInputAttribute(0, 3, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, u))
-    });
-    const InputAssemblyState *inputAssemblyStates[] =
+    static const InputAssemblyState *inputAssemblyStates[] =
     {
         &states::pointList,
         &states::lineList,

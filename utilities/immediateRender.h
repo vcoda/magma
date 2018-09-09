@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <unordered_map>
 #include <limits>
 #include "../objects/shaderModule.h"
+#include "../states/vertexInputState.h"
 #include "../states/rasterizationState.h"
 #include "../states/multisampleState.h"
 #include "../states/depthStencilState.h"
@@ -139,6 +140,7 @@ namespace magma
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<IAllocator> allocator;
             std::shared_ptr<VertexBuffer> vertexBuffer;
+            VertexInputState vertexInput;
             VertexShaderStage vertexShader;
             FragmentShaderStage fragmentShader;
             RenderStates renderStates;
