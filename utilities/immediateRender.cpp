@@ -300,19 +300,25 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
         basePipeline,
         VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT,
         allocator));
-    // Hold unique pipelines, as they should exist during command buffer submission
-    pipelines[childPipeline] = std::make_shared<RenderStates>(renderStates);
+    auto it = cachedPipelines.find(*childPipeline);
+    if (it != cachedPipelines.end())
+        return it->second;
+    else // Hold unique pipelines, as they should exist during command buffer submission
+        cachedPipelines[*childPipeline] = childPipeline;
+    basePipelines[childPipeline] = std::make_shared<RenderStates>(renderStates);
     return childPipeline;
 }
 
 std::shared_ptr<const GraphicsPipeline> ImmediateRender::findBasePipeline() const
 {
-    for (const auto& pair : pipelines)
+    for (const auto& pair : basePipelines)
     {
-        // If render states are the same, child and parent are expected to have much commonality
-        const int result = memcmp(pair.second.get(), &renderStates, sizeof(RenderStates));
+        const auto childRenderStates = pair.second;
+        const int result = memcmp(childRenderStates.get(), &renderStates, sizeof(RenderStates));
         if (0 == result)
+        {   // If render states are the same, child and parent are expected to have much commonality
             return pair.first;
+        }
     }
     return nullptr;
 }

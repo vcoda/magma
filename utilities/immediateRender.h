@@ -145,7 +145,8 @@ namespace magma
             float lineWidth = 1.f;
             Transform transform;
             std::list<Primitive> primitives;
-            std::unordered_map<std::shared_ptr<const GraphicsPipeline>, std::shared_ptr<const RenderStates>> pipelines;
+            std::unordered_map<VkPipeline, std::shared_ptr<GraphicsPipeline>> cachedPipelines;
+            std::unordered_map<std::shared_ptr<const GraphicsPipeline>, std::shared_ptr<const RenderStates>> basePipelines;
             uint32_t vertexCount = 0;
             Vertex *vert = nullptr, curr = {};
             bool insidePrimitive = false;
