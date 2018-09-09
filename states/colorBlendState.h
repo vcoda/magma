@@ -56,6 +56,11 @@ namespace magma
 
     namespace blendstates
     {
+        extern const VkColorComponentFlags colorWriteMaskR;
+        extern const VkColorComponentFlags colorWriteMaskRG;
+        extern const VkColorComponentFlags colorWriteMaskRGB;
+        extern const VkColorComponentFlags colorWriteMaskRGBA;
+
         extern const ColorBlendAttachmentState passR;
         extern const ColorBlendAttachmentState passRG;
         extern const ColorBlendAttachmentState passRGB;
