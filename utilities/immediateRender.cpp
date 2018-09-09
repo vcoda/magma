@@ -45,7 +45,7 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     fragmentShader(FragmentShaderStage(createFragmentShader(), "main")),
     renderStates{
         states::fillCullBackCCW,
-        states::dontMultisample,
+        states::noMultisample,
         states::depthAlwaysDontWrite,
         states::dontBlendWriteRGBA
     }

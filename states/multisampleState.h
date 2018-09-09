@@ -36,7 +36,9 @@ namespace magma
 
     namespace states
     {
-        extern const MultisampleState dontMultisample;
+        extern const MultisampleState noMultisample;
+
+        extern const MultisampleState multisample1;
         extern const MultisampleState multisample2;
         extern const MultisampleState multisample4;
         extern const MultisampleState multisample8;

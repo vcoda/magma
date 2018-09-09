@@ -62,7 +62,9 @@ MultisampleState::MultisampleState(uint32_t sampleCount,
 
 namespace states
 {
-const MultisampleState dontMultisample(VK_SAMPLE_COUNT_1_BIT);
+const MultisampleState noMultisample(VK_SAMPLE_COUNT_1_BIT); // Just another name for convenience
+
+const MultisampleState multisample1(VK_SAMPLE_COUNT_1_BIT);
 const MultisampleState multisample2(VK_SAMPLE_COUNT_2_BIT);
 const MultisampleState multisample4(VK_SAMPLE_COUNT_4_BIT);
 const MultisampleState multisample8(VK_SAMPLE_COUNT_8_BIT);
