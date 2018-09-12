@@ -78,5 +78,15 @@ MAGMA_INLINE char *copyString(const char *const src)
 #endif // _MSC_VER
     return dst;
 }
+
+template<typename Type>
+MAGMA_INLINE bool compareArrays(const Type *const src, const Type *const dst, size_t count)
+{
+    if (!src && !dst)
+        return true;
+    if (!src || !dst)
+        return false;
+    return (memcmp(src, dst, sizeof(Type) * count) == 0);
+}
 } // namespace helpers
 } // namespace magma
