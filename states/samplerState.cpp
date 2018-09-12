@@ -37,6 +37,16 @@ SamplerState::SamplerState(float maxAnisotropy, VkSamplerAddressMode addressMode
     maxAnisotropy(maxAnisotropy)
 {}
 
+bool SamplerState::operator==(const SamplerState& other) const noexcept
+{
+    return (magFilter == other.magFilter) &&
+        (minFilter == other.minFilter) &&
+        (mipmapMode == other.mipmapMode) &&
+        (addressMode == other.addressMode) &&
+        (anisotropyEnable == other.anisotropyEnable) &&
+        (maxAnisotropy == other.maxAnisotropy);
+}
+
 namespace samplers
 {
 const SamplerState nearestMipmapNearestRepeat(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_ADDRESS_MODE_REPEAT);

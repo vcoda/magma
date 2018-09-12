@@ -31,6 +31,7 @@ namespace magma
             VkSamplerAddressMode addressMode) noexcept;
         SamplerState(float maxAnisotropy,
             VkSamplerAddressMode addressMode) noexcept;
+        bool operator==(const SamplerState&) const noexcept;
 
     private:
         VkFilter magFilter;

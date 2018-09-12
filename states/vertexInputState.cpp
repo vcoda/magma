@@ -73,6 +73,12 @@ VertexInputState::VertexInputState(const VertexInputState& other)
     }
 }
 
+VertexInputState::~VertexInputState()
+{
+    delete[] pVertexBindingDescriptions;
+    delete[] pVertexAttributeDescriptions;
+}
+
 VertexInputState& VertexInputState::operator=(const VertexInputState& other)
 {
     if (this != &other)
@@ -91,10 +97,13 @@ VertexInputState& VertexInputState::operator=(const VertexInputState& other)
     return *this;
 }
 
-VertexInputState::~VertexInputState()
+bool VertexInputState::operator==(const VertexInputState& other) const noexcept
 {
-    delete[] pVertexBindingDescriptions;
-    delete[] pVertexAttributeDescriptions;
+    return (flags == other.flags) &&
+        (vertexBindingDescriptionCount == other.vertexBindingDescriptionCount) &&
+        (vertexAttributeDescriptionCount == other.vertexAttributeDescriptionCount) &&
+        helpers::compareArrays(pVertexBindingDescriptions, other.pVertexBindingDescriptions, vertexBindingDescriptionCount) &&
+        helpers::compareArrays(pVertexAttributeDescriptions, other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
 }
 
 namespace states

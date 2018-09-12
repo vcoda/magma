@@ -26,4 +26,9 @@ TesselationState::TesselationState(uint32_t patchControlPoints /* 0 */) noexcept
     flags = 0;
     this->patchControlPoints = patchControlPoints;
 }
+
+bool TesselationState::operator==(const TesselationState& other) const noexcept
+{
+    return (flags == other.flags) && (patchControlPoints == other.patchControlPoints);
+}
 } // namespace magma

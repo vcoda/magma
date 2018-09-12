@@ -30,6 +30,13 @@ InputAssemblyState::InputAssemblyState(VkPrimitiveTopology topology,
     this->primitiveRestartEnable = MAGMA_BOOLEAN(primitiveRestartEnable);
 }
 
+bool InputAssemblyState::operator==(const InputAssemblyState& other) const noexcept
+{
+    return (flags == other.flags) &&
+        (topology == other.topology) &&
+        (primitiveRestartEnable == other.primitiveRestartEnable);
+}
+
 namespace states
 {
 const InputAssemblyState pointList(VK_PRIMITIVE_TOPOLOGY_POINT_LIST);

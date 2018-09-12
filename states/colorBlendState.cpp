@@ -35,6 +35,18 @@ ColorBlendAttachmentState::ColorBlendAttachmentState(bool blendEnable,
     this->colorWriteMask = colorWriteMask;
 }
 
+bool ColorBlendAttachmentState::operator==(const ColorBlendAttachmentState& other) const noexcept
+{
+    return (blendEnable == other.blendEnable) &&
+        (srcColorBlendFactor == other.srcColorBlendFactor) &&
+        (dstColorBlendFactor == other.dstColorBlendFactor) &&
+        (colorBlendOp == other.colorBlendOp) &&
+        (srcAlphaBlendFactor == other.srcAlphaBlendFactor) &&
+        (dstAlphaBlendFactor == other.dstAlphaBlendFactor) &&
+        (alphaBlendOp == other.alphaBlendOp) &&
+        (colorWriteMask == other.colorWriteMask);
+}
+
 ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& attachment,
     bool logicOpEnable /* false */,
     VkLogicOp logicOp /* VK_LOGIC_OP_CLEAR */)
@@ -75,6 +87,11 @@ ColorBlendState::ColorBlendState(const ColorBlendState& other)
     pAttachments = helpers::copyArray(other.pAttachments, attachmentCount);
 }
 
+ColorBlendState::~ColorBlendState()
+{
+    delete[] pAttachments;
+}
+
 ColorBlendState& ColorBlendState::operator=(const ColorBlendState& other)
 {
     if (this != &other)
@@ -85,9 +102,14 @@ ColorBlendState& ColorBlendState::operator=(const ColorBlendState& other)
     return *this;
 }
 
-ColorBlendState::~ColorBlendState()
+bool ColorBlendState::operator==(const ColorBlendState& other) const noexcept
 {
-    delete[] pAttachments;
+    return (flags == other.flags) &&
+        (logicOpEnable == other.logicOpEnable) &&
+        (logicOp == other.logicOp) &&
+        (attachmentCount == other.attachmentCount) &&
+        helpers::compareArrays(pAttachments, other.pAttachments, attachmentCount) &&
+        helpers::compareArrays(blendConstants, other.blendConstants, 4);
 }
 
 namespace blendstates

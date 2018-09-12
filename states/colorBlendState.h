@@ -33,6 +33,7 @@ namespace magma
                                                    VK_COLOR_COMPONENT_G_BIT |
                                                    VK_COLOR_COMPONENT_B_BIT |
                                                    VK_COLOR_COMPONENT_A_BIT) noexcept;
+        bool operator==(const ColorBlendAttachmentState&) const noexcept;
     };
 
     /* Blending combines the incoming source fragment's R, G, B, and A values
@@ -50,8 +51,9 @@ namespace magma
             bool logicOpEnable = false,
             VkLogicOp logicOp = VK_LOGIC_OP_CLEAR);
         ColorBlendState(const ColorBlendState&);
-        ColorBlendState& operator=(const ColorBlendState&);
         ~ColorBlendState();
+        ColorBlendState& operator=(const ColorBlendState&);
+        bool operator==(const ColorBlendState&) const noexcept;
     };
 
     namespace blendstates

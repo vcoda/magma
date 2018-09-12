@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "multisampleState.h"
 #include "../misc/exception.h"
+#include "../helpers/copy.h"
 #include "../shared.h"
 
 namespace magma
@@ -58,6 +59,17 @@ MultisampleState::MultisampleState(uint32_t sampleCount,
     pSampleMask = nullptr;
     alphaToCoverageEnable = MAGMA_BOOLEAN(alphaToCoverage);
     alphaToOneEnable = MAGMA_BOOLEAN(alphaToOne);
+}
+
+bool MultisampleState::operator==(const MultisampleState& other) const noexcept
+{
+    return (flags == other.flags) &&
+        (rasterizationSamples == other.rasterizationSamples) &&
+        (sampleShadingEnable == other.sampleShadingEnable) &&
+        (minSampleShading == other.minSampleShading) &&
+        (helpers::compareArrays(pSampleMask, other.pSampleMask, rasterizationSamples / 32)) &&
+        (alphaToCoverageEnable == other.alphaToCoverageEnable) &&
+        (alphaToOneEnable == other.alphaToOneEnable);
 }
 
 namespace states

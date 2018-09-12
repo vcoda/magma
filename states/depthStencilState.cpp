@@ -32,6 +32,17 @@ StencilOpState::StencilOpState(VkStencilOp failOp, VkStencilOp passOp, VkStencil
     this->reference = reference;
 }
 
+bool StencilOpState::operator==(const StencilOpState& other) const noexcept
+{
+    return (failOp == other.failOp) &&
+        (passOp == other.passOp) &&
+        (depthFailOp == other.depthFailOp) &&
+        (compareOp == other.compareOp) &&
+        (compareMask == other.compareMask) &&
+        (writeMask == other.writeMask) &&
+        (reference == other.reference);
+}
+
 DepthStencilState::DepthStencilState(VkCompareOp depthCompareOp, bool depthWriteEnable,
     const StencilOpState& front, const StencilOpState& back) noexcept
 {
@@ -47,6 +58,20 @@ DepthStencilState::DepthStencilState(VkCompareOp depthCompareOp, bool depthWrite
     depthBoundsTestEnable = VK_FALSE;
     minDepthBounds = 0.f;
     maxDepthBounds = 1.f;
+}
+
+bool DepthStencilState::operator==(const DepthStencilState& other) const noexcept
+{
+    return (flags == other.flags) &&
+        (depthTestEnable == other.depthTestEnable) &&
+        (depthWriteEnable == other.depthWriteEnable) &&
+        (depthCompareOp == other.depthCompareOp) &&
+        (memcmp(&front, &other.front, sizeof(VkStencilOpState)) == 0) &&
+        (memcmp(&back, &other.back, sizeof(VkStencilOpState)) == 0) &&
+        (stencilTestEnable == other.stencilTestEnable) &&
+        (depthBoundsTestEnable == other.depthBoundsTestEnable) &&
+        (minDepthBounds == other.minDepthBounds) &&
+        (maxDepthBounds == other.maxDepthBounds);
 }
 
 namespace states

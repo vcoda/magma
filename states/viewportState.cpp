@@ -147,6 +147,12 @@ ViewportState::ViewportState(const ViewportState& other)
     }
 }
 
+ViewportState::~ViewportState()
+{
+    delete[] pViewports;
+    delete[] pScissors;
+}
+
 ViewportState& ViewportState::operator=(const ViewportState& other)
 {
     if (this != &other)
@@ -165,10 +171,13 @@ ViewportState& ViewportState::operator=(const ViewportState& other)
     return *this;
 }
 
-ViewportState::~ViewportState()
+bool ViewportState::operator==(const ViewportState& other) const noexcept
 {
-    delete[] pViewports;
-    delete[] pScissors;
+    return (flags == other.flags) &&
+        (viewportCount == other.viewportCount) &&
+        (scissorCount == other.scissorCount) &&
+        helpers::compareArrays(pViewports, other.pViewports, viewportCount) &&
+        helpers::compareArrays(pScissors, other.pScissors, scissorCount);
 }
 
 void ViewportState::initialize(const VkViewport& viewport, const VkRect2D& scissor)

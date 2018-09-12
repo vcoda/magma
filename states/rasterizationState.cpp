@@ -38,6 +38,21 @@ RasterizationState::RasterizationState(VkPolygonMode polygonMode, VkCullModeFlag
     lineWidth = 1.f;
 }
 
+bool RasterizationState::operator==(const RasterizationState& other) const noexcept
+{
+    return (flags == other.flags) &&
+        (depthClampEnable == other.depthClampEnable) &&
+        (rasterizerDiscardEnable == other.rasterizerDiscardEnable) &&
+        (polygonMode == other.polygonMode) &&
+        (cullMode == other.cullMode) &&
+        (frontFace == other.frontFace) &&
+        (depthBiasEnable == other.depthBiasEnable) &&
+        (depthBiasConstantFactor == other.depthBiasConstantFactor) &&
+        (depthBiasClamp == other.depthBiasClamp) &&
+        (depthBiasSlopeFactor == other.depthBiasSlopeFactor) &&
+        (lineWidth == other.lineWidth);
+}
+
 namespace states
 {
 const RasterizationState fillCullNoneCCW(VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);
