@@ -342,6 +342,9 @@
     <ClInclude Include="allocator\objectAllocator.h">
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
+    <ClInclude Include="helpers\hashCombine.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
