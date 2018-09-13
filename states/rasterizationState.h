@@ -29,6 +29,7 @@ namespace magma
             VkFrontFace frontFace,
             bool depthClampEnable = false,
             bool rasterizerDiscardEnable = false) noexcept;
+        size_t hash() const noexcept;
         bool operator==(const RasterizationState&) const noexcept;
     };
 

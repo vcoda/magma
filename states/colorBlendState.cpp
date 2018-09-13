@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "colorBlendState.h"
 #include "../helpers/copy.h"
+#include "../helpers/hash.h"
 #include "../shared.h"
 
 namespace magma
@@ -33,6 +34,19 @@ ColorBlendAttachmentState::ColorBlendAttachmentState(bool blendEnable,
     dstAlphaBlendFactor = dstBlendFactor;
     alphaBlendOp = blendOp;
     this->colorWriteMask = colorWriteMask;
+}
+
+size_t ColorBlendAttachmentState::hash() const noexcept
+{
+    return helpers::hashVariadic(
+        blendEnable,
+        srcColorBlendFactor,
+        dstColorBlendFactor,
+        colorBlendOp,
+        srcAlphaBlendFactor,
+        dstAlphaBlendFactor,
+        alphaBlendOp,
+        colorWriteMask);
 }
 
 bool ColorBlendAttachmentState::operator==(const ColorBlendAttachmentState& other) const noexcept
@@ -90,6 +104,29 @@ ColorBlendState::ColorBlendState(const ColorBlendState& other)
 ColorBlendState::~ColorBlendState()
 {
     delete[] pAttachments;
+}
+
+size_t ColorBlendState::hash() const noexcept
+{
+    size_t value = helpers::hashVariadic(
+        flags,
+        logicOpEnable,
+        logicOp,
+        attachmentCount);
+    for (uint32_t i = 0; i < attachmentCount; ++i)
+    {
+        helpers::hashCombine(value, helpers::hashVariadic(
+            pAttachments[i].blendEnable,
+            pAttachments[i].srcColorBlendFactor,
+            pAttachments[i].dstColorBlendFactor,
+            pAttachments[i].colorBlendOp,
+            pAttachments[i].srcAlphaBlendFactor,
+            pAttachments[i].dstAlphaBlendFactor,
+            pAttachments[i].alphaBlendOp,
+            pAttachments[i].colorWriteMask));
+    }
+    helpers::hashCombine(value, helpers::hashArray(blendConstants, 4));
+    return value;
 }
 
 ColorBlendState& ColorBlendState::operator=(const ColorBlendState& other)

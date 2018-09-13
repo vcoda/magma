@@ -16,19 +16,20 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <functional>
+#include <cstddef>
 
 namespace magma
 {
     namespace helpers
     {
-        // https://www.boost.org/doc/libs/1_46_1/doc/html/hash/reference.html#boost.hash_combine
+        void hashCombine(size_t& seed, size_t hash) noexcept;
         template<typename Type>
-        inline void hashCombine(size_t& seed, const Type& value)
-        {
-            std::hash<Type> hasher;
-            const size_t hash = hasher(value);
-            seed ^= (hash + 0x9e3779b9 + (seed << 6) + (seed >> 2));
-        }
+        void hashCombineArg(size_t& seed, const Type& arg) noexcept;
+        template<typename Type, typename... Args>
+        size_t hashVariadic(const Type& arg, Args... args) noexcept;
+        template<typename Type>
+        size_t hashArray(const Type *const array, size_t count) noexcept;
     } // namespace helpers
 } // namespace magma
+
+#include "hash.inl"

@@ -44,6 +44,7 @@ namespace magma
             const std::vector<VkRect2D>& scissors);
         ViewportState(const ViewportState&);
         ~ViewportState();
+        size_t hash() const noexcept;
         ViewportState& operator=(const ViewportState&);
         bool operator==(const ViewportState&) const noexcept;
 

@@ -144,10 +144,10 @@
     <ClInclude Include="descriptors\subpass.h" />
     <ClInclude Include="helpers\alignedUniformArray.h" />
     <ClInclude Include="helpers\copy.h" />
-    <ClInclude Include="helpers\hashCombine.h" />
     <ClInclude Include="helpers\mapScoped.h" />
     <ClInclude Include="helpers\stackArray.h" />
     <ClInclude Include="helpers\uniformArray.h" />
+    <ClInclude Include="helpers\hash.h" />
     <ClInclude Include="magma.h" />
     <ClInclude Include="mem\copyMemory.h" />
     <ClInclude Include="mem\zeroMemory.h" />
@@ -230,6 +230,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="helpers\copy.inl" />
+    <None Include="helpers\hash.inl" />
     <None Include="misc\clearAttachment.inl" />
     <None Include="misc\clearValue.inl" />
     <None Include="misc\deviceExtension.inl" />

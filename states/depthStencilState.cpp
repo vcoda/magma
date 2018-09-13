@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "depthStencilState.h"
+#include "../helpers/hash.h"
 #include "../shared.h"
 
 namespace magma
@@ -30,6 +31,18 @@ StencilOpState::StencilOpState(VkStencilOp failOp, VkStencilOp passOp, VkStencil
     this->compareMask = compareMask;
     this->writeMask = writeMask;
     this->reference = reference;
+}
+
+size_t StencilOpState::hash() const noexcept
+{
+    return helpers::hashVariadic(
+        failOp,
+        passOp,
+        depthFailOp,
+        compareOp,
+        compareMask,
+        writeMask,
+        reference);
 }
 
 bool StencilOpState::operator==(const StencilOpState& other) const noexcept
@@ -58,6 +71,32 @@ DepthStencilState::DepthStencilState(VkCompareOp depthCompareOp, bool depthWrite
     depthBoundsTestEnable = VK_FALSE;
     minDepthBounds = 0.f;
     maxDepthBounds = 1.f;
+}
+
+size_t DepthStencilState::hash() const noexcept
+{
+    return helpers::hashVariadic(
+        flags,
+        depthWriteEnable,
+        depthCompareOp,
+        front.failOp,
+        front.passOp,
+        front.depthFailOp,
+        front.compareOp,
+        front.compareMask,
+        front.writeMask,
+        front.reference,
+        back.failOp,
+        back.passOp,
+        back.depthFailOp,
+        back.compareOp,
+        back.compareMask,
+        back.writeMask,
+        back.reference,
+        stencilTestEnable,
+        depthBoundsTestEnable,
+        minDepthBounds,
+        maxDepthBounds);
 }
 
 bool DepthStencilState::operator==(const DepthStencilState& other) const noexcept

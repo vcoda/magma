@@ -29,10 +29,9 @@ namespace magma
             VkBlendFactor srcBlendFactor,
             VkBlendFactor dstBlendFactor,
             VkBlendOp blendOp,
-            VkColorComponentFlags colorWriteMask = VK_COLOR_COMPONENT_R_BIT |
-                                                   VK_COLOR_COMPONENT_G_BIT |
-                                                   VK_COLOR_COMPONENT_B_BIT |
-                                                   VK_COLOR_COMPONENT_A_BIT) noexcept;
+            VkColorComponentFlags colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+                VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT) noexcept;
+        size_t hash() const noexcept;
         bool operator==(const ColorBlendAttachmentState&) const noexcept;
     };
 
@@ -52,6 +51,7 @@ namespace magma
             VkLogicOp logicOp = VK_LOGIC_OP_CLEAR);
         ColorBlendState(const ColorBlendState&);
         ~ColorBlendState();
+        size_t hash() const noexcept;
         ColorBlendState& operator=(const ColorBlendState&);
         bool operator==(const ColorBlendState&) const noexcept;
     };

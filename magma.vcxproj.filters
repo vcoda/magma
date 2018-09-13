@@ -342,7 +342,7 @@
     <ClInclude Include="allocator\objectAllocator.h">
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
-    <ClInclude Include="helpers\hashCombine.h">
+    <ClInclude Include="helpers\hash.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -388,6 +388,9 @@
     </None>
     <None Include="objects\storageBuffer.inl">
       <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="helpers\hash.inl">
+      <Filter>Header Files\helpers</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

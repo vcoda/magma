@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "vertexInputState.h"
 #include "../helpers/copy.h"
+#include "../helpers/hash.h"
 #include "../shared.h"
 
 namespace magma
@@ -77,6 +78,30 @@ VertexInputState::~VertexInputState()
 {
     delete[] pVertexBindingDescriptions;
     delete[] pVertexAttributeDescriptions;
+}
+
+size_t VertexInputState::hash() const noexcept
+{
+    size_t value = helpers::hashVariadic(
+        flags,
+        vertexBindingDescriptionCount,
+        vertexAttributeDescriptionCount);
+    for (uint32_t i = 0; i < vertexBindingDescriptionCount; ++i)
+    {
+        helpers::hashCombine(value, helpers::hashVariadic(
+            pVertexBindingDescriptions[i].binding,
+            pVertexBindingDescriptions[i].stride,
+            pVertexBindingDescriptions[i].inputRate));
+    }
+    for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
+    {
+        helpers::hashCombine(value, helpers::hashVariadic(
+            pVertexAttributeDescriptions[i].location,
+            pVertexAttributeDescriptions[i].binding,
+            pVertexAttributeDescriptions[i].format,
+            pVertexAttributeDescriptions[i].offset));
+    }
+    return value;
 }
 
 VertexInputState& VertexInputState::operator=(const VertexInputState& other)

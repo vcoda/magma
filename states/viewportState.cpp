@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "viewportState.h"
 #include "../helpers/copy.h"
+#include "../helpers/hash.h"
 #include "../shared.h"
 
 namespace magma
@@ -151,6 +152,33 @@ ViewportState::~ViewportState()
 {
     delete[] pViewports;
     delete[] pScissors;
+}
+
+size_t ViewportState::hash() const noexcept
+{
+    size_t value = helpers::hashVariadic(
+        flags,
+        viewportCount,
+        scissorCount);
+    for (uint32_t i = 0; i < viewportCount; ++i)
+    {
+        helpers::hashCombine(value, helpers::hashVariadic(
+            pViewports[i].x,
+            pViewports[i].y,
+            pViewports[i].width,
+            pViewports[i].height,
+            pViewports[i].minDepth,
+            pViewports[i].maxDepth));
+    }
+    for (uint32_t i = 0; i < scissorCount; ++i)
+    {
+        helpers::hashCombine(value, helpers::hashVariadic(
+            pScissors[i].offset.x,
+            pScissors[i].offset.y,
+            pScissors[i].extent.width,
+            pScissors[i].extent.height));
+    }
+    return value;
 }
 
 ViewportState& ViewportState::operator=(const ViewportState& other)

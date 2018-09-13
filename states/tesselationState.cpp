@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "tesselationState.h"
+#include "../helpers/hash.h"
 
 namespace magma
 {
@@ -25,6 +26,13 @@ TesselationState::TesselationState(uint32_t patchControlPoints /* 0 */) noexcept
     pNext = nullptr;
     flags = 0;
     this->patchControlPoints = patchControlPoints;
+}
+
+size_t TesselationState::hash() const noexcept
+{
+    return helpers::hashVariadic(
+        flags,
+        patchControlPoints);
 }
 
 bool TesselationState::operator==(const TesselationState& other) const noexcept

@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "multisampleState.h"
-#include "../misc/exception.h"
 #include "../helpers/copy.h"
+#include "../helpers/hash.h"
 #include "../shared.h"
 
 namespace magma
@@ -59,6 +59,24 @@ MultisampleState::MultisampleState(uint32_t sampleCount,
     pSampleMask = nullptr;
     alphaToCoverageEnable = MAGMA_BOOLEAN(alphaToCoverage);
     alphaToOneEnable = MAGMA_BOOLEAN(alphaToOne);
+}
+
+size_t MultisampleState::hash() const noexcept
+{
+    size_t value = helpers::hashVariadic(
+        flags,
+        rasterizationSamples,
+        sampleShadingEnable,
+        minSampleShading,
+        alphaToCoverageEnable,
+        alphaToOneEnable);
+    if (pSampleMask)
+    {
+        helpers::hashCombineArg(value, pSampleMask[0]);
+        if (rasterizationSamples > VK_SAMPLE_COUNT_32_BIT)
+            helpers::hashCombineArg(value, pSampleMask[1]);
+    }
+    return value;
 }
 
 bool MultisampleState::operator==(const MultisampleState& other) const noexcept

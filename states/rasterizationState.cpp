@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "rasterizationState.h"
+#include "../helpers/hash.h"
 #include "../shared.h"
 
 namespace magma
@@ -36,6 +37,22 @@ RasterizationState::RasterizationState(VkPolygonMode polygonMode, VkCullModeFlag
     depthBiasClamp = 0.f;
     depthBiasSlopeFactor = 0.f;
     lineWidth = 1.f;
+}
+
+size_t RasterizationState::hash() const noexcept
+{
+    return helpers::hashVariadic(
+        flags,
+        depthClampEnable,
+        rasterizerDiscardEnable,
+        polygonMode,
+        cullMode,
+        frontFace,
+        depthBiasEnable,
+        depthBiasConstantFactor,
+        depthBiasClamp,
+        depthBiasSlopeFactor,
+        lineWidth);
 }
 
 bool RasterizationState::operator==(const RasterizationState& other) const noexcept

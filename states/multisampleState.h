@@ -32,6 +32,7 @@ namespace magma
             bool sampleShading = false,
             bool alphaToCoverage = false,
             bool alphaToOne = false) noexcept;
+        size_t hash() const noexcept;
         bool operator==(const MultisampleState&) const noexcept;
     };
 

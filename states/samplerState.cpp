@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "samplerState.h"
+#include "../helpers/hash.h"
 
 namespace magma
 {
@@ -36,6 +37,17 @@ SamplerState::SamplerState(float maxAnisotropy, VkSamplerAddressMode addressMode
     anisotropyEnable(true),
     maxAnisotropy(maxAnisotropy)
 {}
+
+size_t SamplerState::hash() const noexcept
+{
+    return helpers::hashVariadic(
+        magFilter,
+        minFilter,
+        mipmapMode,
+        addressMode,
+        anisotropyEnable,
+        maxAnisotropy);
+}
 
 bool SamplerState::operator==(const SamplerState& other) const noexcept
 {

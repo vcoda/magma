@@ -31,6 +31,7 @@ namespace magma
             uint32_t compareMask = 0x0,
             uint32_t writeMask = 0x0,
             uint32_t reference = 0x0) noexcept;
+        size_t hash() const noexcept;
         bool operator==(const StencilOpState&) const noexcept;
     };
 
@@ -51,6 +52,7 @@ namespace magma
             bool depthWriteEnable,
             const StencilOpState& front = states::stencilAlwaysDontWrite,
             const StencilOpState& back = states::stencilAlwaysDontWrite) noexcept;
+        size_t hash() const noexcept;
         bool operator==(const DepthStencilState&) const noexcept;
     };
 
