@@ -101,6 +101,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "misc/viewport.h"
 
 #include "helpers/alignedUniformArray.h"
+#include "helpers/copy.h"
 #include "helpers/hash.h"
 #include "helpers/mapScoped.h"
 #include "helpers/stackArray.h"
