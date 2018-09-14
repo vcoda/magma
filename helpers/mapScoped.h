@@ -26,7 +26,7 @@ namespace magma
     namespace helpers
     {
         template<typename Type>
-        MAGMA_INLINE void mapScoped(
+        inline void mapScoped(
             const Buffer *buffer,
             std::function<void(Type *data)> fn)
         {
@@ -45,7 +45,7 @@ namespace magma
         }
 
         template<typename Type>
-        MAGMA_INLINE void mapScoped(
+        inline void mapScoped(
             const std::shared_ptr<Buffer>& buffer,
             std::function<void(Type *data)> fn)
         {
@@ -53,7 +53,7 @@ namespace magma
         }
 
         template<typename Block>
-        MAGMA_INLINE void mapScoped(
+        inline void mapScoped(
             const std::shared_ptr<UniformBuffer<Block>>& buffer,
             bool clearMemory,
             std::function<void(Block *block)> fn)
@@ -70,7 +70,7 @@ namespace magma
         }
 
         template<typename Type>
-        MAGMA_INLINE void mapScoped(
+        inline void mapScoped(
             const std::shared_ptr<UniformBuffer<Type>>& buffer,
             bool clearMemory,
             std::function<void(UniformArray<Type>& array)> fn)
@@ -89,7 +89,7 @@ namespace magma
         }
 
         template<typename Type>
-        MAGMA_INLINE void mapScoped(
+        inline void mapScoped(
             const std::shared_ptr<DynamicUniformBuffer<Type>>& buffer,
             bool clearMemory,
             std::function<void(AlignedUniformArray<Type>& array)> fn)
