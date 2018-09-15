@@ -83,7 +83,7 @@ inline char *copyString(const char *const src)
 }
 
 template<typename Type>
-inline bool compareArrays(const Type *const src, const Type *const dst, size_t count)
+inline bool compareArrays(const Type *const src, const Type *const dst, size_t count) noexcept
 {
     if (!src && !dst)
         return true;

@@ -34,7 +34,7 @@ namespace magma
         Type *copyInitializer(const std::initializer_list<Type>& src);
         char *copyString(const char *const src);
         template<typename Type>
-        bool compareArrays(const Type *const src, const Type *const dst, size_t count);
+        bool compareArrays(const Type *const src, const Type *const dst, size_t count) noexcept;
     } // namespace helpers
 } // namespace magma
 
