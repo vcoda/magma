@@ -47,45 +47,6 @@ namespace magma
 
         class ImmediateRender : public NonCopyable
         {
-            struct Vertex
-            {
-                float x, y, z, w;
-                float nx, ny, nz, psize;
-                float r, g, b, a;
-                float u, v;
-            };
-
-            struct Transform
-            {
-                float m[16] = {1.f, 0.f, 0.f, 0.f,
-                               0.f, 1.f, 0.f, 0.f,
-                               0.f, 0.f, 1.f, 0.f,
-                               0.f, 0.f, 0.f, 1.f};
-            };
-
-            struct Primitive
-            {
-                std::shared_ptr<GraphicsPipeline> pipeline;
-                float lineWidth;
-                Transform transform;
-                uint32_t vertexCount;
-                uint32_t firstVertex;
-            };
-
-            struct RenderStates
-            {
-                RasterizationState rasterization;
-                MultisampleState multisample;
-                DepthStencilState depthStencil;
-                ColorBlendState colorBlend;
-            };
-
-            struct Pipeline
-            {
-                std::shared_ptr<GraphicsPipeline> pipeline;
-                std::shared_ptr<RenderStates> renderStates;
-            };
-
         public:
             explicit ImmediateRender(uint32_t maxVertexCount,
                 std::shared_ptr<Device> device,
@@ -141,6 +102,45 @@ namespace magma
             size_t hash(const InputAssemblyState *inputAssembly) const noexcept;
 
         private:
+            struct Vertex
+            {
+                float x, y, z, w;
+                float nx, ny, nz, psize;
+                float r, g, b, a;
+                float u, v;
+            };
+
+            struct Transform
+            {
+                float m[16] = {1.f, 0.f, 0.f, 0.f,
+                               0.f, 1.f, 0.f, 0.f,
+                               0.f, 0.f, 1.f, 0.f,
+                               0.f, 0.f, 0.f, 1.f};
+            };
+
+            struct Primitive
+            {
+                std::shared_ptr<GraphicsPipeline> pipeline;
+                float lineWidth;
+                Transform transform;
+                uint32_t vertexCount;
+                uint32_t firstVertex;
+            };
+
+            struct RenderStates
+            {
+                RasterizationState rasterization;
+                MultisampleState multisample;
+                DepthStencilState depthStencil;
+                ColorBlendState colorBlend;
+            };
+
+            struct Pipeline
+            {
+                std::shared_ptr<GraphicsPipeline> pipeline;
+                std::shared_ptr<RenderStates> renderStates;
+            };
+
             const uint32_t maxVertexCount;
             std::shared_ptr<Device> device;
             std::shared_ptr<PipelineCache> cache;
