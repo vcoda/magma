@@ -101,6 +101,16 @@ ColorBlendState::ColorBlendState(const ColorBlendState& other)
     pAttachments = helpers::copyArray(other.pAttachments, attachmentCount);
 }
 
+ColorBlendState& ColorBlendState::operator=(const ColorBlendState& other)
+{
+    if (this != &other)
+    {
+        helpers::copy(this, &other);
+        pAttachments = helpers::copyArray(other.pAttachments, attachmentCount);
+    }
+    return *this;
+}
+
 ColorBlendState::~ColorBlendState()
 {
     delete[] pAttachments;
@@ -127,16 +137,6 @@ size_t ColorBlendState::hash() const noexcept
     }
     helpers::hashCombine(hash, helpers::hashArray(blendConstants, 4));
     return hash;
-}
-
-ColorBlendState& ColorBlendState::operator=(const ColorBlendState& other)
-{
-    if (this != &other)
-    {
-        helpers::copy(this, &other);
-        pAttachments = helpers::copyArray(other.pAttachments, attachmentCount);
-    }
-    return *this;
 }
 
 bool ColorBlendState::operator==(const ColorBlendState& other) const noexcept

@@ -50,9 +50,9 @@ namespace magma
             bool logicOpEnable = false,
             VkLogicOp logicOp = VK_LOGIC_OP_CLEAR);
         ColorBlendState(const ColorBlendState&);
+        ColorBlendState& operator=(const ColorBlendState&);
         ~ColorBlendState();
         size_t hash() const noexcept;
-        ColorBlendState& operator=(const ColorBlendState&);
         bool operator==(const ColorBlendState&) const noexcept;
     };
 

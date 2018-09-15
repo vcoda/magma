@@ -74,6 +74,23 @@ VertexInputState::VertexInputState(const VertexInputState& other)
     }
 }
 
+VertexInputState& VertexInputState::operator=(const VertexInputState& other)
+{
+    if (this != &other)
+    {
+        helpers::copy(this, &other);
+        pVertexBindingDescriptions = helpers::copyArray(other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
+        try {
+            pVertexAttributeDescriptions = helpers::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+        } catch (const std::bad_alloc& exc)
+        {
+            delete[] pVertexBindingDescriptions;
+            throw exc;
+        }
+    }
+    return *this;
+}
+
 VertexInputState::~VertexInputState()
 {
     delete[] pVertexBindingDescriptions;
@@ -102,24 +119,6 @@ size_t VertexInputState::hash() const noexcept
             pVertexAttributeDescriptions[i].offset));
     }
     return hash;
-}
-
-VertexInputState& VertexInputState::operator=(const VertexInputState& other)
-{
-    if (this != &other)
-    {
-        helpers::copy(this, &other);
-        pVertexBindingDescriptions = helpers::copyArray(other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
-        try
-        {
-            pVertexAttributeDescriptions = helpers::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
-        } catch (const std::bad_alloc& exc)
-        {
-            delete[] pVertexBindingDescriptions;
-            throw exc;
-        }
-    }
-    return *this;
 }
 
 bool VertexInputState::operator==(const VertexInputState& other) const noexcept

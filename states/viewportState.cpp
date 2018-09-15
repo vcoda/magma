@@ -148,6 +148,23 @@ ViewportState::ViewportState(const ViewportState& other)
     }
 }
 
+ViewportState& ViewportState::operator=(const ViewportState& other)
+{
+    if (this != &other)
+    {
+        helpers::copy(this, &other);
+        pViewports = helpers::copyArray(other.pViewports, viewportCount);
+        try {
+            pScissors = helpers::copyArray(other.pScissors, scissorCount);
+        } catch (const std::bad_alloc& exc)
+        {
+            delete[] pViewports;
+            throw exc;
+        }
+    }
+    return *this;
+}
+
 ViewportState::~ViewportState()
 {
     delete[] pViewports;
@@ -179,24 +196,6 @@ size_t ViewportState::hash() const noexcept
             pScissors[i].extent.height));
     }
     return hash;
-}
-
-ViewportState& ViewportState::operator=(const ViewportState& other)
-{
-    if (this != &other)
-    {
-        helpers::copy(this, &other);
-        pViewports = helpers::copyArray(other.pViewports, viewportCount);
-        try
-        {
-            pScissors = helpers::copyArray(other.pScissors, scissorCount);
-        } catch (const std::bad_alloc& exc)
-        {
-            delete[] pViewports;
-            throw exc;
-        }
-    }
-    return *this;
 }
 
 bool ViewportState::operator==(const ViewportState& other) const noexcept
