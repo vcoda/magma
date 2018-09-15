@@ -138,8 +138,7 @@ ViewportState::ViewportState(const ViewportState& other)
 {
     helpers::copy(this, &other);
     pViewports = helpers::copyArray(other.pViewports, viewportCount);
-    try
-    {
+    try {
         pScissors = helpers::copyArray(other.pScissors, scissorCount);
     } catch (const std::bad_alloc& exc)
     {

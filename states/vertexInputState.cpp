@@ -50,8 +50,7 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
     vertexBindingDescriptionCount = MAGMA_COUNT(bindings);
     pVertexBindingDescriptions = helpers::copyArray(static_cast<const VkVertexInputBindingDescription *>(bindings.begin()), bindings.size());
     vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
-    try
-    {
+    try {
         pVertexAttributeDescriptions = helpers::copyArray(static_cast<const VkVertexInputAttributeDescription *>(attributes.begin()), attributes.size());
     } catch (const std::bad_alloc& exc)
     {
@@ -64,8 +63,7 @@ VertexInputState::VertexInputState(const VertexInputState& other)
 {
     helpers::copy(this, &other);
     pVertexBindingDescriptions = helpers::copyArray(other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
-    try
-    {
+    try {
         pVertexAttributeDescriptions = helpers::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
     } catch (const std::bad_alloc& exc)
     {
