@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <limits>
 #include "../objects/shaderModule.h"
 #include "../states/vertexInputState.h"
+#include "../states/inputAssemblyState.h"
 #include "../states/rasterizationState.h"
 #include "../states/multisampleState.h"
 #include "../states/depthStencilState.h"
@@ -79,6 +80,12 @@ namespace magma
                 ColorBlendState colorBlend;
             };
 
+            struct Pipeline
+            {
+                std::shared_ptr<GraphicsPipeline> pipeline;
+                std::shared_ptr<RenderStates> renderStates;
+            };
+
         public:
             explicit ImmediateRender(uint32_t maxVertexCount,
                 std::shared_ptr<Device> device,
@@ -131,6 +138,7 @@ namespace magma
             std::shared_ptr<ShaderModule> createFragmentShader();
             std::shared_ptr<GraphicsPipeline> createPipelineState(VkPrimitiveTopology topology);
             std::shared_ptr<const GraphicsPipeline> findBasePipeline() const;
+            size_t hash(const InputAssemblyState *inputAssembly) const noexcept;
 
         private:
             const uint32_t maxVertexCount;
@@ -140,15 +148,14 @@ namespace magma
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<IAllocator> allocator;
             std::shared_ptr<VertexBuffer> vertexBuffer;
+            std::unordered_map<size_t, Pipeline> pipelines;
+            std::list<Primitive> primitives;
             VertexInputState vertexInput;
             VertexShaderStage vertexShader;
             FragmentShaderStage fragmentShader;
             RenderStates renderStates;
             float lineWidth = 1.f;
             Transform transform;
-            std::list<Primitive> primitives;
-            std::unordered_map<VkPipeline, std::shared_ptr<GraphicsPipeline>> cachedPipelines;
-            std::unordered_map<std::shared_ptr<const GraphicsPipeline>, std::shared_ptr<const RenderStates>> basePipelines;
             uint32_t vertexCount = 0;
             Vertex *vert = nullptr, curr = {};
             bool insidePrimitive = false;

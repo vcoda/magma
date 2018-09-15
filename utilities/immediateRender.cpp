@@ -19,9 +19,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/deviceMemory.h"
 #include "../objects/commandBuffer.h"
 #include "../objects/pipeline.h"
-#include "../states/inputAssemblyState.h"
 #include "../misc/pushConstants.h"
 #include "../allocator/allocator.h"
+#include "../helpers/hash.h"
 
 namespace magma
 {
@@ -279,8 +279,14 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
         &states::triangleStripWithAdjacency,
         &states::patchList
     };
+    const size_t renderStatesHash = hash(inputAssemblyStates[topology]);
+    // Try to find existing pipeline
+    auto it = pipelines.find(renderStatesHash);
+    if (it != pipelines.end())
+        return it->second.pipeline;
+    // Create new pipeline for unique render states
     std::shared_ptr<const GraphicsPipeline> basePipeline = findBasePipeline();
-    std::shared_ptr<GraphicsPipeline> childPipeline(std::make_shared<GraphicsPipeline>(device, cache,
+    std::shared_ptr<GraphicsPipeline> pipeline(std::make_shared<GraphicsPipeline>(device, cache,
         std::vector<ShaderStage>{vertexShader, fragmentShader},
         vertexInput,
         *inputAssemblyStates[topology],
@@ -298,40 +304,36 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
         basePipeline,
         VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT,
         allocator));
-    auto it = cachedPipelines.find(*childPipeline);
-    if (it != cachedPipelines.end())
-        return it->second;
-    else // Hold unique pipelines, as they should exist during command buffer submission
-        cachedPipelines[*childPipeline] = childPipeline;
-    basePipelines[childPipeline] = std::make_shared<RenderStates>(renderStates);
-    return childPipeline;
+    pipelines[renderStatesHash] = {pipeline, std::make_shared<RenderStates>(renderStates)};
+    return pipeline;
 }
 
 std::shared_ptr<const GraphicsPipeline> ImmediateRender::findBasePipeline() const
 {
-    for (const auto& pair : basePipelines)
+    for (const auto& it : pipelines)
     {
-        const auto baseStates = pair.second;
-        if (0 == memcmp(&baseStates->rasterization, &renderStates.rasterization, sizeof(RasterizationState)) &&
-            0 == memcmp(&baseStates->multisample, &renderStates.multisample, sizeof(MultisampleState)) &&
-            0 == memcmp(&baseStates->depthStencil, &renderStates.depthStencil, sizeof(DepthStencilState)))
-        {
-            if (0 == memcmp(&baseStates->colorBlend, &renderStates.colorBlend,
-                sizeof(ColorBlendState) - sizeof(ColorBlendState::pAttachments) - sizeof(ColorBlendState::blendConstants)))
-            {   // Compare blend attachments and blend constants separately
-                const size_t attachmentsSize = sizeof(VkPipelineColorBlendAttachmentState) * renderStates.colorBlend.attachmentCount;
-                if (0 == memcmp(baseStates->colorBlend.pAttachments, renderStates.colorBlend.pAttachments, attachmentsSize))
-                {
-                    if (0 == memcmp(baseStates->colorBlend.blendConstants, renderStates.colorBlend.blendConstants, sizeof(ColorBlendState::blendConstants)))
-                    {   // If render states are the same, child and parent are expected to have much commonality
-                        return pair.first;
-                    }
-                }
-            }
+        if ((it.second.renderStates->rasterization == this->renderStates.rasterization) &&
+            (it.second.renderStates->multisample == this->renderStates.multisample) &&
+            (it.second.renderStates->depthStencil == this->renderStates.depthStencil) &&
+            (it.second.renderStates->colorBlend == this->renderStates.colorBlend))
+        {   // If render states are the same, child and parent are expected to have much commonality
+            return it.second.pipeline;
         }
     }
     return nullptr;
 }
 
+size_t ImmediateRender::hash(const InputAssemblyState *inputAssembly) const noexcept
+{
+    size_t hash = 0;
+    helpers::hashCombine(hash, inputAssembly->hash());
+    helpers::hashCombine(hash, vertexShader.hash());
+    helpers::hashCombine(hash, fragmentShader.hash());
+    helpers::hashCombine(hash, renderStates.rasterization.hash());
+    helpers::hashCombine(hash, renderStates.multisample.hash());
+    helpers::hashCombine(hash, renderStates.depthStencil.hash());
+    helpers::hashCombine(hash, renderStates.colorBlend.hash());
+    return hash;
+}
 } // namespace utilities
 } // namespace magma
