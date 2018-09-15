@@ -73,6 +73,7 @@ namespace magma
         Specialization(const Specialization&);
         Specialization& operator=(const Specialization&);
         ~Specialization();
+        size_t hash() const noexcept;
     };
 
     class ShaderStage
@@ -89,6 +90,7 @@ namespace magma
         ShaderStage& operator=(const ShaderStage&);
         virtual ~ShaderStage();
         VkShaderStageFlagBits getStage() const noexcept { return info.stage; }
+        size_t hash() const noexcept;
         operator const VkPipelineShaderStageCreateInfo&() const noexcept { return info; }
 
     private:

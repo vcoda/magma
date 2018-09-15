@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "shaderModule.h"
 #include "device.h"
 #include "../allocator/allocator.h"
+#include "../helpers/hash.h"
 #include "../misc/exception.h"
 
 namespace magma
@@ -87,6 +88,21 @@ Specialization::~Specialization()
     delete[] reinterpret_cast<const char *>(pData);
 }
 
+size_t Specialization::hash() const noexcept
+{
+    size_t value = 0;
+    for (uint32_t i = 0; i < mapEntryCount; ++i)
+    {
+        helpers::hashCombine(value, helpers::hashVariadic(
+            pMapEntries[i].constantID,
+            pMapEntries[i].offset,
+            pMapEntries[i].size));
+    }
+    helpers::hashCombine(value, helpers::hashArray(
+        reinterpret_cast<const uint8_t *>(pData), dataSize));
+    return value;
+}
+
 ShaderStage::ShaderStage(const VkShaderStageFlagBits stage, std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
     std::shared_ptr<const Specialization> specialization, VkPipelineShaderStageCreateFlags flags) noexcept:
     module(std::move(module)),
@@ -124,6 +140,20 @@ ShaderStage& ShaderStage::operator=(const ShaderStage& other)
 ShaderStage::~ShaderStage()
 {
     delete[] info.pName;
+}
+
+size_t ShaderStage::hash() const noexcept
+{
+    size_t value = helpers::hashVariadic(
+        info.flags,
+        info.stage,
+        info.module);
+    const std::string entrypoint(info.pName);
+    std::hash<std::string> hasher;
+    helpers::hashCombine(value, hasher(entrypoint));
+    if (specialization)
+        helpers::hashCombine(value, specialization->hash());
+    return value;
 }
 
 VertexShaderStage::VertexShaderStage(std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
