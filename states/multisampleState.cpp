@@ -63,7 +63,7 @@ MultisampleState::MultisampleState(uint32_t sampleCount,
 
 size_t MultisampleState::hash() const noexcept
 {
-    size_t value = helpers::hashVariadic(
+    size_t hash = helpers::hashVariadic(
         flags,
         rasterizationSamples,
         sampleShadingEnable,
@@ -72,11 +72,11 @@ size_t MultisampleState::hash() const noexcept
         alphaToOneEnable);
     if (pSampleMask)
     {
-        helpers::hashCombineArg(value, pSampleMask[0]);
+        helpers::hashCombineArg(hash, pSampleMask[0]);
         if (rasterizationSamples > VK_SAMPLE_COUNT_32_BIT)
-            helpers::hashCombineArg(value, pSampleMask[1]);
+            helpers::hashCombineArg(hash, pSampleMask[1]);
     }
-    return value;
+    return hash;
 }
 
 bool MultisampleState::operator==(const MultisampleState& other) const noexcept

@@ -53,8 +53,7 @@ Specialization::Specialization(const Specialization& other)
     mapEntryCount = other.mapEntryCount;
     pMapEntries = helpers::copyArray(other.pMapEntries, mapEntryCount);
     dataSize = other.dataSize;
-    try
-    {
+    try {
         pData = helpers::copyArray(reinterpret_cast<const char *>(other.pData), dataSize);
     } catch (const std::bad_alloc& exc)
     {
@@ -70,8 +69,7 @@ Specialization& Specialization::operator=(const Specialization& other)
         mapEntryCount = other.mapEntryCount;
         pMapEntries = helpers::copyArray(other.pMapEntries, mapEntryCount);
         dataSize = other.dataSize;
-        try
-        {
+        try {
             pData = helpers::copyArray(reinterpret_cast<const char *>(other.pData), dataSize);
         } catch (const std::bad_alloc& exc)
         {
@@ -90,17 +88,17 @@ Specialization::~Specialization()
 
 size_t Specialization::hash() const noexcept
 {
-    size_t value = 0;
+    size_t hash = 0;
     for (uint32_t i = 0; i < mapEntryCount; ++i)
     {
-        helpers::hashCombine(value, helpers::hashVariadic(
+        helpers::hashCombine(hash, helpers::hashVariadic(
             pMapEntries[i].constantID,
             pMapEntries[i].offset,
             pMapEntries[i].size));
     }
-    helpers::hashCombine(value, helpers::hashArray(
+    helpers::hashCombine(hash, helpers::hashArray(
         reinterpret_cast<const uint8_t *>(pData), dataSize));
-    return value;
+    return hash;
 }
 
 ShaderStage::ShaderStage(const VkShaderStageFlagBits stage, std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
@@ -144,16 +142,16 @@ ShaderStage::~ShaderStage()
 
 size_t ShaderStage::hash() const noexcept
 {
-    size_t value = helpers::hashVariadic(
+    size_t hash = helpers::hashVariadic(
         info.flags,
         info.stage,
         info.module);
     const std::string entrypoint(info.pName);
     std::hash<std::string> hasher;
-    helpers::hashCombine(value, hasher(entrypoint));
+    helpers::hashCombine(hash, hasher(entrypoint));
     if (specialization)
-        helpers::hashCombine(value, specialization->hash());
-    return value;
+        helpers::hashCombine(hash, specialization->hash());
+    return hash;
 }
 
 VertexShaderStage::VertexShaderStage(std::shared_ptr<const ShaderModule> module, const char *const entrypoint,

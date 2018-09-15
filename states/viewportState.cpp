@@ -156,13 +156,13 @@ ViewportState::~ViewportState()
 
 size_t ViewportState::hash() const noexcept
 {
-    size_t value = helpers::hashVariadic(
+    size_t hash = helpers::hashVariadic(
         flags,
         viewportCount,
         scissorCount);
     for (uint32_t i = 0; i < viewportCount; ++i)
     {
-        helpers::hashCombine(value, helpers::hashVariadic(
+        helpers::hashCombine(hash, helpers::hashVariadic(
             pViewports[i].x,
             pViewports[i].y,
             pViewports[i].width,
@@ -172,13 +172,13 @@ size_t ViewportState::hash() const noexcept
     }
     for (uint32_t i = 0; i < scissorCount; ++i)
     {
-        helpers::hashCombine(value, helpers::hashVariadic(
+        helpers::hashCombine(hash, helpers::hashVariadic(
             pScissors[i].offset.x,
             pScissors[i].offset.y,
             pScissors[i].extent.width,
             pScissors[i].extent.height));
     }
-    return value;
+    return hash;
 }
 
 ViewportState& ViewportState::operator=(const ViewportState& other)

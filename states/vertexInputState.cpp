@@ -82,26 +82,26 @@ VertexInputState::~VertexInputState()
 
 size_t VertexInputState::hash() const noexcept
 {
-    size_t value = helpers::hashVariadic(
+    size_t hash = helpers::hashVariadic(
         flags,
         vertexBindingDescriptionCount,
         vertexAttributeDescriptionCount);
     for (uint32_t i = 0; i < vertexBindingDescriptionCount; ++i)
     {
-        helpers::hashCombine(value, helpers::hashVariadic(
+        helpers::hashCombine(hash, helpers::hashVariadic(
             pVertexBindingDescriptions[i].binding,
             pVertexBindingDescriptions[i].stride,
             pVertexBindingDescriptions[i].inputRate));
     }
     for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
     {
-        helpers::hashCombine(value, helpers::hashVariadic(
+        helpers::hashCombine(hash, helpers::hashVariadic(
             pVertexAttributeDescriptions[i].location,
             pVertexAttributeDescriptions[i].binding,
             pVertexAttributeDescriptions[i].format,
             pVertexAttributeDescriptions[i].offset));
     }
-    return value;
+    return hash;
 }
 
 VertexInputState& VertexInputState::operator=(const VertexInputState& other)

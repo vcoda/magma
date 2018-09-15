@@ -108,14 +108,14 @@ ColorBlendState::~ColorBlendState()
 
 size_t ColorBlendState::hash() const noexcept
 {
-    size_t value = helpers::hashVariadic(
+    size_t hash = helpers::hashVariadic(
         flags,
         logicOpEnable,
         logicOp,
         attachmentCount);
     for (uint32_t i = 0; i < attachmentCount; ++i)
     {
-        helpers::hashCombine(value, helpers::hashVariadic(
+        helpers::hashCombine(hash, helpers::hashVariadic(
             pAttachments[i].blendEnable,
             pAttachments[i].srcColorBlendFactor,
             pAttachments[i].dstColorBlendFactor,
@@ -125,8 +125,8 @@ size_t ColorBlendState::hash() const noexcept
             pAttachments[i].alphaBlendOp,
             pAttachments[i].colorWriteMask));
     }
-    helpers::hashCombine(value, helpers::hashArray(blendConstants, 4));
-    return value;
+    helpers::hashCombine(hash, helpers::hashArray(blendConstants, 4));
+    return hash;
 }
 
 ColorBlendState& ColorBlendState::operator=(const ColorBlendState& other)
