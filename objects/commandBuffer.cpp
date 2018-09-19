@@ -408,10 +408,11 @@ void CommandBuffer::endDebugMarker() noexcept
 #endif // MAGMA_DEBUG
 }
 
-void CommandBuffer::insertDebugMarker(const char *name) noexcept
+void CommandBuffer::insertDebugMarker(const char *name, const float color[4]) noexcept
 {
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
+    MAGMA_ASSERT(color);
 #ifdef MAGMA_DEBUG
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDebugMarkerInsertEXT);
     if (vkCmdDebugMarkerInsertEXT)
@@ -420,14 +421,15 @@ void CommandBuffer::insertDebugMarker(const char *name) noexcept
         info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
         info.pNext = nullptr;
         info.pMarkerName = name;
-        info.color[0] = 0.f;
-        info.color[1] = 0.f;
-        info.color[2] = 0.f;
-        info.color[3] = 1.f;
+        info.color[0] = color[0];
+        info.color[1] = color[1];
+        info.color[2] = color[2];
+        info.color[3] = color[3];
         vkCmdDebugMarkerInsertEXT(handle, &info);
     }
 #elif defined(_MSC_VER)
     name;
+    color;
 #endif // MAGMA_DEBUG
 }
 
