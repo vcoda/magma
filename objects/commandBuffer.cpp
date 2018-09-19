@@ -81,7 +81,8 @@ void CommandBuffer::end()
        reporting the error until a specified point. For commands that record
        into command buffers (vkCmd*), run time errors are reported by vkEndCommandBuffer. */
     const VkResult result = vkEndCommandBuffer(handle);
-    MAGMA_THROW_FAILURE(result, "failed to end command buffer");
+    /* This is the only place where command buffer may throw and exception. */
+    MAGMA_THROW_FAILURE(result, "failed to record command buffer");
 }
 
 bool CommandBuffer::reset(bool releaseResources) noexcept
