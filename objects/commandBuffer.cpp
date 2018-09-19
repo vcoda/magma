@@ -381,6 +381,7 @@ void CommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuf
 
 void CommandBuffer::beginDebugMarker(const char *name, const float color[4]) noexcept
 {
+    MAGMA_ASSERT(color);
 #ifdef MAGMA_DEBUG
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDebugMarkerBeginEXT);
     if (vkCmdDebugMarkerBeginEXT)
@@ -409,6 +410,8 @@ void CommandBuffer::endDebugMarker() noexcept
 
 void CommandBuffer::insertDebugMarker(const char *name) noexcept
 {
+    MAGMA_ASSERT(name);
+    MAGMA_ASSERT(strlen(name) > 0);
 #ifdef MAGMA_DEBUG
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDebugMarkerInsertEXT);
     if (vkCmdDebugMarkerInsertEXT)

@@ -60,6 +60,7 @@ MAGMA_INLINE void CommandBuffer::setViewport(const Viewport& viewport) noexcept
 
 MAGMA_INLINE void CommandBuffer::setViewports(const std::initializer_list<Viewport>& viewports) noexcept
 {
+    MAGMA_ASSERT(viewports.size());
     vkCmdSetViewport(handle, 0, MAGMA_COUNT(viewports), viewports.begin());
 }
 
@@ -80,6 +81,7 @@ MAGMA_INLINE void CommandBuffer::setScissor(const Scissor& scissor) noexcept
 
 MAGMA_INLINE void CommandBuffer::setScissors(const std::initializer_list<Scissor>& scissors) noexcept
 {
+    MAGMA_ASSERT(scissors.size());
     vkCmdSetScissor(handle, 0, MAGMA_COUNT(scissors), scissors.begin());
 }
 
@@ -95,11 +97,13 @@ MAGMA_INLINE void CommandBuffer::setDepthBias(float depthBiasConstantFactor, flo
 
 MAGMA_INLINE void CommandBuffer::setBlendConstants(const float blendConstants[4]) noexcept
 {
+    MAGMA_ASSERT(blendConstants);
     vkCmdSetBlendConstants(handle, blendConstants);
 }
 
 MAGMA_INLINE void CommandBuffer::setDepthBounds(float minDepthBounds, float maxDepthBounds) noexcept
 {
+    MAGMA_ASSERT(minDepthBounds <= maxDepthBounds);
     vkCmdSetDepthBounds(handle, minDepthBounds, maxDepthBounds);
 }
 
