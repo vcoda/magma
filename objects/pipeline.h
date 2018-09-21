@@ -111,4 +111,21 @@ namespace magma
             VkPipelineCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
+
+    /* Raytracing pipelines consist of multiple shader stages,
+       fixed-function traversal stages, and a pipeline layout. */
+
+    class RaytracingPipeline : public Pipeline
+    {
+    public:
+        explicit RaytracingPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
+            const std::vector<ShaderStage>& stages,
+            const std::vector<uint32_t> groupNumbers,
+            uint32_t maxRecursionDepth,
+            std::shared_ptr<const PipelineLayout> layout,
+            std::shared_ptr<const RaytracingPipeline> basePipeline = nullptr,
+            VkPipelineCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        void compileDeferred(uint32_t shaderIndex);
+    };
 } // namespace magma
