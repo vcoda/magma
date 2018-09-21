@@ -166,6 +166,7 @@
     <ClInclude Include="misc\stringize.h" />
     <ClInclude Include="misc\viewport.h" />
     <ClInclude Include="nonCopyable.h" />
+    <ClInclude Include="objects\accelerationStructure.h" />
     <ClInclude Include="objects\buffer.h" />
     <ClInclude Include="objects\bufferView.h" />
     <ClInclude Include="objects\commandBuffer.h" />
@@ -259,6 +260,7 @@
     <ClCompile Include="misc\extensions.cpp" />
     <ClCompile Include="misc\format.cpp" />
     <ClCompile Include="misc\stringize.cpp" />
+    <ClCompile Include="objects\accelerationStructure.cpp" />
     <ClCompile Include="objects\buffer.cpp" />
     <ClCompile Include="objects\bufferView.cpp" />
     <ClCompile Include="objects\commandBuffer.cpp" />
