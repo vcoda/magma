@@ -23,7 +23,7 @@ namespace magma
 {
 Geometry::Geometry(VkGeometryTypeNVX geometryType, VkGeometryFlagsNVX flags) noexcept
 {
-    sType = (VkStructureType)0;
+    sType = (VkStructureType)VK_STRUCTURE_TYPE_GEOMETRY_NVX;
     pNext = nullptr;
     this->geometryType = geometryType;
     this->flags = flags;
@@ -36,6 +36,8 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<Buffer> vertexData, VkDevic
     Geometry(VK_GEOMETRY_TYPE_TRIANGLES_NVX, flags)
 {
     VkGeometryTrianglesNVX& triangles = geometry.triangles;
+    triangles.sType = (VkStructureType)VK_STRUCTURE_TYPE_GEOMETRY_TRIANGLES_NVX;
+    triangles.pNext = nullptr;
     triangles.vertexData = *vertexData;
     triangles.vertexOffset = vertexOffset;
     triangles.vertexCount = vertexCount;
@@ -59,6 +61,8 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData, V
     Geometry(VK_GEOMETRY_TYPE_TRIANGLES_NVX, flags)
 {
     VkGeometryTrianglesNVX& triangles = geometry.triangles;
+    triangles.sType = (VkStructureType)VK_STRUCTURE_TYPE_GEOMETRY_TRIANGLES_NVX;
+    triangles.pNext = nullptr;
     triangles.vertexData = *vertexData;
     triangles.vertexOffset = vertexOffset;
     triangles.vertexCount = vertexData->getVertexCount();
@@ -78,6 +82,8 @@ GeometryBVH::GeometryBVH(std::shared_ptr<Buffer> aabbData, uint32_t numAABBs, ui
     Geometry(VK_GEOMETRY_TYPE_AABBS_NVX, flags)
 {
     VkGeometryAABBNVX& aabbs = geometry.aabbs;
+    aabbs.sType = (VkStructureType)VK_STRUCTURE_TYPE_GEOMETRY_AABB_NVX;
+    aabbs.pNext = nullptr;
     aabbs.aabbData = *aabbData;
     aabbs.numAABBs = numAABBs;
     aabbs.stride = stride;
