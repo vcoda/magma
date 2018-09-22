@@ -53,8 +53,8 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<Buffer> vertexData, VkDevic
 GeometryTriangles::GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData, VkDeviceSize vertexStride, VkFormat vertexFormat,
     std::shared_ptr<IndexBuffer> indexData, std::shared_ptr<Buffer> transformData,
     VkDeviceSize vertexOffset /* 0 */,
-    VkDeviceSize transformOffset /* 0 */,
     VkDeviceSize indexOffset /* 0 */,
+    VkDeviceSize transformOffset /* 0 */,
     VkGeometryFlagsNVX flags /* 0 */) noexcept:
     Geometry(VK_GEOMETRY_TYPE_TRIANGLES_NVX, flags)
 {

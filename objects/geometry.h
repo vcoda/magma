@@ -58,8 +58,8 @@ namespace magma
             std::shared_ptr<IndexBuffer> indexData,
             std::shared_ptr<Buffer> transformData,
             VkDeviceSize vertexOffset = 0,
-            VkDeviceSize transformOffset = 0,
             VkDeviceSize indexOffset = 0,
+            VkDeviceSize transformOffset = 0,
             VkGeometryFlagsNVX flags = 0) noexcept;
     };
 
