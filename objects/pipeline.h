@@ -64,7 +64,7 @@ namespace magma
     {
     public:
         explicit GraphicsPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
-            const std::vector<ShaderStage>& stages,
+            const std::vector<PipelineShaderStage>& stages,
             const VertexInputState& vertexInputState,
             const InputAssemblyState& inputAssemblyState,
             const RasterizationState& rasterizationState,
@@ -79,7 +79,7 @@ namespace magma
             VkPipelineCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit GraphicsPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
-            const std::vector<ShaderStage>& stages,
+            const std::vector<PipelineShaderStage>& stages,
             const VertexInputState& vertexInputState,
             const InputAssemblyState& inputAssemblyState,
             const TesselationState& tesselationState,
@@ -105,7 +105,7 @@ namespace magma
     {
     public:
         explicit ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
-            const ShaderStage& stage,
+            const PipelineShaderStage& stage,
             std::shared_ptr<const PipelineLayout> layout = nullptr,
             std::shared_ptr<const ComputePipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
@@ -119,7 +119,7 @@ namespace magma
     {
     public:
         explicit RaytracingPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
-            const std::vector<ShaderStage>& stages,
+            const std::vector<PipelineShaderStage>& stages,
             const std::vector<uint32_t> groupNumbers,
             uint32_t maxRecursionDepth,
             std::shared_ptr<const PipelineLayout> layout,

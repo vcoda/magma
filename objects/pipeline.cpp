@@ -82,7 +82,7 @@ std::string Pipeline::getShaderDisassembly(VkShaderStageFlagBits stage) const
 }
 
 GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
-    const std::vector<ShaderStage>& stages,
+    const std::vector<PipelineShaderStage>& stages,
     const VertexInputState& vertexInputState,
     const InputAssemblyState& inputAssemblyState,
     const RasterizationState& rasterizationState,
@@ -106,7 +106,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
 {}
 
 GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
-    const std::vector<ShaderStage>& stages,
+    const std::vector<PipelineShaderStage>& stages,
     const VertexInputState& vertexInputState,
     const InputAssemblyState& inputAssemblyState,
     const TesselationState& tesselationState,
@@ -176,7 +176,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
 }
 
 ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
-    const ShaderStage& stage,
+    const PipelineShaderStage& stage,
     std::shared_ptr<const PipelineLayout> layout /* nullptr */,
     std::shared_ptr<const ComputePipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
@@ -204,7 +204,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr
 }
 
 RaytracingPipeline::RaytracingPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
-    const std::vector<ShaderStage>& stages,
+    const std::vector<PipelineShaderStage>& stages,
     const std::vector<uint32_t> groupNumbers,
     uint32_t maxRecursionDepth,
     std::shared_ptr<const PipelineLayout> layout,

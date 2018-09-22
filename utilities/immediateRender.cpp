@@ -287,7 +287,7 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
     // Create new pipeline for unique render states
     std::shared_ptr<const GraphicsPipeline> basePipeline = findBasePipeline();
     std::shared_ptr<GraphicsPipeline> pipeline(std::make_shared<GraphicsPipeline>(device, cache,
-        std::vector<ShaderStage>{vertexShader, fragmentShader},
+        std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
         vertexInput,
         *inputAssemblyStates[topology],
         renderStates.rasterization,
