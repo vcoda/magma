@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "accelerationStructure.h"
+#include "geometry.h"
 #include "device.h"
 #include "../allocator/allocator.h"
 #include "../misc/deviceExtension.h"
@@ -26,7 +27,7 @@ namespace magma
 AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device,
     VkDeviceSize compactedSize,
     uint32_t instanceCount,
-    const std::vector<std::shared_ptr<Geometry>>& geometries,
+    const std::list<Geometry>& geometries,
     VkBuildAccelerationStructureFlagsNVX flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable((VkDebugReportObjectTypeEXT)VK_DEBUG_REPORT_OBJECT_TYPE_ACCELERATION_STRUCTURE_NVX_EXT, std::move(device), std::move(allocator))
@@ -39,7 +40,10 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device,
     info.compactedSize = compactedSize;
     info.instanceCount = instanceCount;
     info.geometryCount = MAGMA_COUNT(geometries);
-    info.pGeometries = nullptr; // TODO
+    MAGMA_STACK_ARRAY(VkGeometryNVX, dereferencedGeometries, geometries.size());
+    for (const auto& geometry : geometries)
+        dereferencedGeometries.put(geometry);
+    info.pGeometries = dereferencedGeometries;
     MAGMA_DEVICE_EXTENSION(vkCreateAccelerationStructureNVX, VK_NVX_RAYTRACING_INFO_EXTENSION_NAME);
     const VkResult create = vkCreateAccelerationStructureNVX(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create acceleration structure");

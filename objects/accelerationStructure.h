@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <vector>
+#include <list>
 #include "handle.h"
 
 namespace magma
@@ -35,7 +35,7 @@ namespace magma
         AccelerationStructure(std::shared_ptr<Device> device,
             VkDeviceSize compactedSize,
             uint32_t instanceCount,
-            const std::vector<std::shared_ptr<Geometry>>& geometries,
+            const std::list<Geometry>& geometries,
             VkBuildAccelerationStructureFlagsNVX flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~AccelerationStructure();

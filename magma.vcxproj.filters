@@ -348,6 +348,9 @@
     <ClInclude Include="objects\accelerationStructure.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="objects\geometry.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
@@ -605,6 +608,9 @@
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="objects\accelerationStructure.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\geometry.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>

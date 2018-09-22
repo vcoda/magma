@@ -183,6 +183,7 @@
     <ClInclude Include="objects\event.h" />
     <ClInclude Include="objects\fence.h" />
     <ClInclude Include="objects\framebuffer.h" />
+    <ClInclude Include="objects\geometry.h" />
     <ClInclude Include="objects\handle.h" />
     <ClInclude Include="objects\image.h" />
     <ClInclude Include="objects\image1D.h" />
@@ -277,6 +278,7 @@
     <ClCompile Include="objects\event.cpp" />
     <ClCompile Include="objects\fence.cpp" />
     <ClCompile Include="objects\framebuffer.cpp" />
+    <ClCompile Include="objects\geometry.cpp" />
     <ClCompile Include="objects\image.cpp" />
     <ClCompile Include="objects\image1D.cpp" />
     <ClCompile Include="objects\image1DArray.cpp" />
