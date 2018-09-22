@@ -88,4 +88,16 @@ namespace magma
             uint32_t queryCount,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
+
+    /* The acceleration structure object may be compacted
+       in order to improve performance. Before copying, an application
+       must query the size of the resulting acceleration structure. */
+
+    class CompactedSizeQuery : public QueryPool
+    {
+    public:
+        explicit CompactedSizeQuery(std::shared_ptr<Device> device,
+            uint32_t queryCount,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+    };
 } // namespace magma
