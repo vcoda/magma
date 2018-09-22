@@ -166,7 +166,46 @@ VkResult vkGetAccelerationStructureHandleNVX(
     size_t                                      dataSize,
     void*                                       pData);
 
+void vkCmdBuildAccelerationStructureNVX(
+    VkCommandBuffer                             cmdBuf,
+    VkAccelerationStructureTypeNVX              type,
+    uint32_t                                    instanceCount,
+    VkBuffer                                    instanceData,
+    VkDeviceSize                                instanceOffset,
+    uint32_t                                    geometryCount,
+    const VkGeometryNVX*                        pGeometries,
+    VkBuildAccelerationStructureFlagsNVX        flags,
+    VkBool32                                    update,
+    VkAccelerationStructureNVX                  dst,
+    VkAccelerationStructureNVX                  src,
+    VkBuffer                                    scratch,
+    VkDeviceSize                                scratchOffset);
 
+void vkCmdWriteAccelerationStructurePropertiesNVX(
+    VkCommandBuffer                             cmdBuf,
+    VkAccelerationStructureNVX                  accelerationStructure,
+    VkQueryType                                 queryType,
+    VkQueryPool                                 queryPool,
+    uint32_t                                    query);
+
+void vkCmdCopyAccelerationStructureNVX(
+    VkCommandBuffer                             cmdBuf,
+    VkAccelerationStructureNVX                  dst,
+    VkAccelerationStructureNVX                  src,
+    VkCopyAccelerationStructureModeNVX          mode);
+
+void vkCmdTraceRaysNVX(
+    VkCommandBuffer                             cmdBuf,
+    VkBuffer                                    raygenShaderBindingTableBuffer,
+    VkDeviceSize                                raygenShaderBindingOffset,
+    VkBuffer                                    missShaderBindingTableBuffer,
+    VkDeviceSize                                missShaderBindingOffset,
+    VkDeviceSize                                missShaderBindingStride,
+    VkBuffer                                    hitShaderBindingTableBuffer,
+    VkDeviceSize                                hitShaderBindingOffset,
+    VkDeviceSize                                hitShaderBindingStride,
+    uint32_t                                    width,
+    uint32_t                                    height);
 
 /////////////////////////
 
@@ -223,6 +262,47 @@ typedef VkResult (VKAPI_PTR *PFN_vkGetAccelerationStructureHandleNVX)(
     size_t                                      dataSize,
     void*                                       pData);
 
+typedef void (VKAPI_PTR *PFN_vkCmdBuildAccelerationStructureNVX)(
+    VkCommandBuffer                             cmdBuf,
+    VkAccelerationStructureTypeNVX              type,
+    uint32_t                                    instanceCount,
+    VkBuffer                                    instanceData,
+    VkDeviceSize                                instanceOffset,
+    uint32_t                                    geometryCount,
+    const VkGeometryNVX*                        pGeometries,
+    VkBuildAccelerationStructureFlagsNVX        flags,
+    VkBool32                                    update,
+    VkAccelerationStructureNVX                  dst,
+    VkAccelerationStructureNVX                  src,
+    VkBuffer                                    scratch,
+    VkDeviceSize                                scratchOffset);
+
+typedef void (VKAPI_PTR *PFN_vkCmdWriteAccelerationStructurePropertiesNVX)(
+    VkCommandBuffer                             cmdBuf,
+    VkAccelerationStructureNVX                  accelerationStructure,
+    VkQueryType                                 queryType,
+    VkQueryPool                                 queryPool,
+    uint32_t                                    query);
+
+typedef void (VKAPI_PTR *PFN_vkCmdCopyAccelerationStructureNVX)(
+    VkCommandBuffer                             cmdBuf,
+    VkAccelerationStructureNVX                  dst,
+    VkAccelerationStructureNVX                  src,
+    VkCopyAccelerationStructureModeNVX          mode);
+
+typedef void (VKAPI_PTR *PFN_vkCmdTraceRaysNVX)(
+    VkCommandBuffer                             cmdBuf,
+    VkBuffer                                    raygenShaderBindingTableBuffer,
+    VkDeviceSize                                raygenShaderBindingOffset,
+    VkBuffer                                    missShaderBindingTableBuffer,
+    VkDeviceSize                                missShaderBindingOffset,
+    VkDeviceSize                                missShaderBindingStride,
+    VkBuffer                                    hitShaderBindingTableBuffer,
+    VkDeviceSize                                hitShaderBindingOffset,
+    VkDeviceSize                                hitShaderBindingStride,
+    uint32_t                                    width,
+    uint32_t                                    height);
+
 /////////////////////////
 
 #define VK_STRUCTURE_TYPE_RAYTRACING_PIPELINE_CREATE_INFO_NVX 1000165000
@@ -237,3 +317,7 @@ typedef VkResult (VKAPI_PTR *PFN_vkGetAccelerationStructureHandleNVX)(
 #define VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_INFO_NVX 1000165008
 
 #define VK_DEBUG_REPORT_OBJECT_TYPE_ACCELERATION_STRUCTURE_NVX_EXT 1000165000
+
+#define VK_PIPELINE_BIND_POINT_RAYTRACING_NVX 1000165000
+
+#define VK_QUERY_TYPE_COMPACTED_SIZE_NVX 1000165000
