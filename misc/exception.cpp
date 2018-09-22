@@ -34,21 +34,21 @@ Exception::Exception(const std::string& message,
     ln(line)
 {}
 
-BadResultException::BadResultException(const VkResult result,
+BadResult::BadResult(const VkResult result,
     const char *const message,
     const char *file, int line):
     Exception(message, file, line),
     result(result)
 {}
 
-BadResultException::BadResultException(const VkResult result,
+BadResult::BadResult(const VkResult result,
     const std::string& message,
     const char *file, int line):
     Exception(message, file, line),
     result(result)
 {}
 
-const char *BadResultException::codeString() const noexcept
+const char *BadResult::codeString() const noexcept
 {
     switch (code())
     {
@@ -89,14 +89,13 @@ const char *BadResultException::codeString() const noexcept
     }
 }
 
-ExtensionNotPresentException::ExtensionNotPresentException(const char *const extension,
+ExtensionNotPresent::ExtensionNotPresent(const char *const extension,
     const char *file, int line):
     Exception(extension, file, line)
 {}
 
-NotImplementedException::NotImplementedException(const char *const function,
+NotImplemented::NotImplemented(const char *const function,
     const char *file, int line):
     Exception(function, file, line)
 {}
-
 } // namespace magma
