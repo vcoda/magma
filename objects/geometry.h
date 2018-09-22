@@ -26,6 +26,12 @@ namespace magma
 
     class Geometry : public VkGeometryNVX
     {
+    public:
+        bool isTriangles() const noexcept
+            { return VK_GEOMETRY_TYPE_TRIANGLES_NVX == geometryType; }
+        bool isBVH() const noexcept
+            { return VK_GEOMETRY_TYPE_AABBS_NVX == geometryType; }
+
     protected:
         explicit Geometry(VkGeometryTypeNVX geometryType,
             VkGeometryFlagsNVX flags) noexcept;
