@@ -16,12 +16,14 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <vector>
 #include <list>
 #include "handle.h"
 
 namespace magma
 {
     class Geometry;
+    class DeviceMemory;
 
     /* Acceleration structures are an opaque structure that can be built by the implementation
        to more efficiently perform spatial queries on the provided geometric data.
@@ -39,5 +41,14 @@ namespace magma
             VkBuildAccelerationStructureFlagsNVX flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~AccelerationStructure();
+        void bindMemory(std::shared_ptr<DeviceMemory> memory,
+            const std::vector<uint32_t>& deviceIndices,
+            VkDeviceSize offset /* 0 */);
+        std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
+        VkMemoryRequirements2 getMemoryRequirements() const;
+        VkMemoryRequirements2 getScratchMemoryRequirements() const;
+
+    private:
+        std::shared_ptr<DeviceMemory> memory;
     };
 } // namespace magma
