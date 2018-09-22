@@ -45,14 +45,14 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device,
     for (const auto& geometry : geometries)
         dereferencedGeometries.put(geometry);
     info.pGeometries = dereferencedGeometries;
-    MAGMA_DEVICE_EXTENSION(vkCreateAccelerationStructureNVX, VK_NVX_RAYTRACING_INFO_EXTENSION_NAME);
+    MAGMA_DEVICE_EXTENSION(vkCreateAccelerationStructureNVX, VK_NVX_RAYTRACING_EXTENSION_NAME);
     const VkResult create = vkCreateAccelerationStructureNVX(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create acceleration structure");
 }
 
 AccelerationStructure::~AccelerationStructure()
 {
-    MAGMA_DEVICE_EXTENSION(vkDestroyAccelerationStructureNVX, VK_NVX_RAYTRACING_INFO_EXTENSION_NAME);
+    MAGMA_DEVICE_EXTENSION(vkDestroyAccelerationStructureNVX, VK_NVX_RAYTRACING_EXTENSION_NAME);
     vkDestroyAccelerationStructureNVX(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
@@ -67,7 +67,7 @@ void AccelerationStructure::bindMemory(std::shared_ptr<DeviceMemory> memory, con
     info.memoryOffset = offset;
     info.deviceIndexCount = MAGMA_COUNT(deviceIndices);
     info.pDeviceIndices = nullptr;
-    MAGMA_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNVX, VK_NVX_RAYTRACING_INFO_EXTENSION_NAME);
+    MAGMA_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNVX, VK_NVX_RAYTRACING_EXTENSION_NAME);
     const VkResult bind = vkBindAccelerationStructureMemoryNVX(MAGMA_HANDLE(device), 1, &info);
     MAGMA_THROW_FAILURE(bind, "failed to bind acceleration structure memory");
     this->memory = std::move(memory);
@@ -80,7 +80,7 @@ VkMemoryRequirements2 AccelerationStructure::getMemoryRequirements() const
     info.pNext = nullptr;
     info.accelerationStructure = handle;
     VkMemoryRequirements2 memoryRequirements;
-    MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureMemoryRequirementsNVX, VK_NVX_RAYTRACING_INFO_EXTENSION_NAME);
+    MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureMemoryRequirementsNVX, VK_NVX_RAYTRACING_EXTENSION_NAME);
     vkGetAccelerationStructureMemoryRequirementsNVX(MAGMA_HANDLE(device), &info, &memoryRequirements);
     return memoryRequirements;
 }
@@ -92,7 +92,7 @@ VkMemoryRequirements2 AccelerationStructure::getScratchMemoryRequirements() cons
     info.pNext = nullptr;
     info.accelerationStructure = handle;
     VkMemoryRequirements2 memoryRequirements;
-    MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureScratchMemoryRequirementsNVX, VK_NVX_RAYTRACING_INFO_EXTENSION_NAME);
+    MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureScratchMemoryRequirementsNVX, VK_NVX_RAYTRACING_EXTENSION_NAME);
     vkGetAccelerationStructureScratchMemoryRequirementsNVX(MAGMA_HANDLE(device), &info, &memoryRequirements);
     return memoryRequirements;
 }

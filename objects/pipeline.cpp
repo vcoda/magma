@@ -240,7 +240,7 @@ RaytracingPipeline::RaytracingPipeline(std::shared_ptr<Device> device, std::shar
     }
     info.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipeline);
     info.basePipelineIndex = -1;
-    MAGMA_DEVICE_EXTENSION(vkCreateRaytracingPipelinesNVX, VK_NVX_RAYTRACING_INFO_EXTENSION_NAME);
+    MAGMA_DEVICE_EXTENSION(vkCreateRaytracingPipelinesNVX, VK_NVX_RAYTRACING_EXTENSION_NAME);
     const VkResult create = vkCreateRaytracingPipelinesNVX(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create raytracing pipeline");
 }
@@ -249,7 +249,7 @@ std::vector<VkShaderModule> RaytracingPipeline::getShaderHandles(uint32_t firstS
 {
     std::vector<VkShaderModule> shaders(shaderCount);
     const size_t dataSize = sizeof(VkShaderModule) * shaders.size();
-    MAGMA_DEVICE_EXTENSION(vkGetRaytracingShaderHandlesNVX, VK_NVX_RAYTRACING_INFO_EXTENSION_NAME);
+    MAGMA_DEVICE_EXTENSION(vkGetRaytracingShaderHandlesNVX, VK_NVX_RAYTRACING_EXTENSION_NAME);
     const VkResult get = vkGetRaytracingShaderHandlesNVX(MAGMA_HANDLE(device), handle, firstShader, shaderCount, dataSize, shaders.data());
     MAGMA_THROW_FAILURE(get, "failed to get raytracing shader handles");
     return shaders;
@@ -257,7 +257,7 @@ std::vector<VkShaderModule> RaytracingPipeline::getShaderHandles(uint32_t firstS
 
 void RaytracingPipeline::compileDeferred(uint32_t shaderIndex)
 {
-    MAGMA_DEVICE_EXTENSION(vkCompileDeferredNVX, VK_NVX_RAYTRACING_INFO_EXTENSION_NAME);
+    MAGMA_DEVICE_EXTENSION(vkCompileDeferredNVX, VK_NVX_RAYTRACING_EXTENSION_NAME);
     const VkResult compile = vkCompileDeferredNVX(MAGMA_HANDLE(device), handle, shaderIndex);
     MAGMA_THROW_FAILURE(compile, "failed to compile shader deferred");
 }
