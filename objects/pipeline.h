@@ -126,6 +126,7 @@ namespace magma
             std::shared_ptr<const RaytracingPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
+        std::vector<VkShaderModule> getShaderHandles(uint32_t firstShader, uint32_t shaderCount) const;
         void compileDeferred(uint32_t shaderIndex);
     };
 } // namespace magma
