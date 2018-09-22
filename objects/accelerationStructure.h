@@ -34,21 +34,48 @@ namespace magma
     class AccelerationStructure : public NonDispatchable<VkAccelerationStructureNVX>
     {
     public:
-        AccelerationStructure(std::shared_ptr<Device> device,
-            VkDeviceSize compactedSize,
-            uint32_t instanceCount,
-            const std::list<Geometry>& geometries,
-            VkBuildAccelerationStructureFlagsNVX flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
         ~AccelerationStructure();
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
             VkDeviceSize offset /* 0 */);
+        VkAccelerationStructureTypeNVX getType() const noexcept { return type; }
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
         VkMemoryRequirements2 getMemoryRequirements() const;
         VkMemoryRequirements2 getScratchMemoryRequirements() const;
 
+    protected:
+        AccelerationStructure(std::shared_ptr<Device> device,
+            VkAccelerationStructureTypeNVX type,
+            uint32_t instanceCount,
+            const std::list<Geometry>& geometries,
+            VkBuildAccelerationStructureFlagsNVX flags,
+            VkDeviceSize compactedSize,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+
     private:
+        VkAccelerationStructureTypeNVX type;
         std::shared_ptr<DeviceMemory> memory;
+    };
+
+    class TopLevelAccelerationStructure : public AccelerationStructure
+    {
+    public:
+        TopLevelAccelerationStructure(std::shared_ptr<Device> device,
+            uint32_t instanceCount,
+            const std::list<Geometry>& geometries,
+            VkBuildAccelerationStructureFlagsNVX flags = 0,
+            VkDeviceSize compactedSize = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+    };
+
+    class BottomLevelAccelerationStructure : public AccelerationStructure
+    {
+    public:
+        BottomLevelAccelerationStructure(std::shared_ptr<Device> device,
+            uint32_t instanceCount,
+            const std::list<Geometry>& geometries,
+            VkBuildAccelerationStructureFlagsNVX flags = 0,
+            VkDeviceSize compactedSize = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma

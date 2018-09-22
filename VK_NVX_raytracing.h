@@ -16,7 +16,8 @@ typedef struct VkRaytracingPipelineCreateInfoNVX {
 } VkRaytracingPipelineCreateInfoNVX;
 
 typedef enum VkAccelerationStructureTypeNVX {
-    VK_ACCELERATION_STRUCTURE_TYPE_UNKNOWN = 0x0
+    VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL = 0x0,
+    VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL = 0x1
 } VkAccelerationStructureTypeNVX;
 
 typedef enum VkBuildAccelerationStructureFlagBitsNVX {
