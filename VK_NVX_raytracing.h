@@ -33,6 +33,11 @@ typedef enum VkGeometryTypeNVX {
     VK_GEOMETRY_TYPE_AABBS_NVX = 1,
 } VkGeometryTypeNVX;
 
+typedef enum VkCopyAccelerationStructureModeNVX {
+    VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_NVX = 0,
+    VK_COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_NVX = 1,
+} VkCopyAccelerationStructureModeNVX;
+
 typedef struct VkGeometryTrianglesNVX {
     VkStructureType    sType;
     const void*        pNext;
@@ -88,6 +93,25 @@ typedef struct VkAccelerationStructureCreateInfoNVX {
     const VkGeometryNVX*                    pGeometries;
 } VkAccelerationStructureCreateInfoNVX;
 
+typedef struct VkAccelerationStructureMemoryRequirementsInfoNVX {
+    VkStructureType               sType;
+    const void*                   pNext;
+    VkAccelerationStructureNVX    accelerationStructure;
+} VkAccelerationStructureMemoryRequirementsInfoNVX;
+
+typedef struct VkBindAccelerationStructureMemoryInfoNVX {
+    VkStructureType               sType;
+    const void*                   pNext;
+    VkAccelerationStructureNVX    accelerationStructure;
+    VkDeviceMemory                memory;
+    VkDeviceSize                  memoryOffset;
+    uint32_t                      deviceIndexCount;
+    const uint32_t*               pDeviceIndices;
+} VkBindAccelerationStructureMemoryInfoNVX;
+
+
+//////////////////////////
+
 VkResult vkCreateRaytracingPipelinesNVX(
     VkDevice                                    device,
     VkPipelineCache                             pipelineCache,
@@ -101,6 +125,14 @@ VkResult vkCompileDeferredNVX(
     VkPipeline                                  pipeline,
     uint32_t                                    shader);
 
+VkResult vkGetRaytracingShaderHandlesNVX(
+    VkDevice                                    device,
+    VkPipeline                                  pipeline,
+    uint32_t                                    firstGroup,
+    uint32_t                                    groupCount,
+    size_t                                      dataSize,
+    void*                                       pData);
+
 VkResult vkCreateAccelerationStructureNVX(
     VkDevice                                    device,
     const VkAccelerationStructureCreateInfoNVX* pCreateInfo,
@@ -112,10 +144,28 @@ void vkDestroyAccelerationStructureNVX(
     VkAccelerationStructureNVX                  accelerationStructure,
     const VkAllocationCallbacks*                pAllocator);
 
-typedef enum VkCopyAccelerationStructureModeNVX {
-    VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_NVX = 0,
-    VK_COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_NVX = 1,
-} VkCopyAccelerationStructureModeNVX;
+void vkGetAccelerationStructureMemoryRequirementsNVX(
+    VkDevice                                    device,
+    const VkAccelerationStructureMemoryRequirementsInfoNVX* pInfo,
+    VkMemoryRequirements2KHR*                   pMemoryRequirements);
+
+void vkGetAccelerationStructureScratchMemoryRequirementsNVX(
+    VkDevice                                    device,
+    const VkAccelerationStructureMemoryRequirementsInfoNVX* pInfo,
+    VkMemoryRequirements2KHR*                   pMemoryRequirements);
+
+VkResult vkBindAccelerationStructureMemoryNVX(
+    VkDevice                                    device,
+    uint32_t                                    bindInfoCount,
+    const VkBindAccelerationStructureMemoryInfoNVX* pBindInfos);
+
+VkResult vkGetAccelerationStructureHandleNVX(
+    VkDevice                                    device,
+    VkAccelerationStructureNVX                  accelerationStructure,
+    size_t                                      dataSize,
+    void*                                       pData);
+
+
 
 /////////////////////////
 
@@ -132,6 +182,14 @@ typedef VkResult (VKAPI_PTR *PFN_vkCompileDeferredNVX)(
     VkPipeline                                  pipeline,
     uint32_t                                    shader);
 
+typedef VkResult (VKAPI_PTR *PFN_vkGetRaytracingShaderHandlesNVX)(
+    VkDevice                                    device,
+    VkPipeline                                  pipeline,
+    uint32_t                                    firstGroup,
+    uint32_t                                    groupCount,
+    size_t                                      dataSize,
+    void*                                       pData);
+
 typedef VkResult (VKAPI_PTR *PFN_vkCreateAccelerationStructureNVX)(
     VkDevice                                    device,
     const VkAccelerationStructureCreateInfoNVX* pCreateInfo,
@@ -143,9 +201,38 @@ typedef void (VKAPI_PTR *PFN_vkDestroyAccelerationStructureNVX)(
     VkAccelerationStructureNVX                  accelerationStructure,
     const VkAllocationCallbacks*                pAllocator);
 
+typedef void (VKAPI_PTR *PFN_vkGetAccelerationStructureMemoryRequirementsNVX)(
+    VkDevice                                    device,
+    const VkAccelerationStructureMemoryRequirementsInfoNVX* pInfo,
+    VkMemoryRequirements2KHR*                   pMemoryRequirements);
+
+typedef void (VKAPI_PTR *PFN_vkGetAccelerationStructureScratchMemoryRequirementsNVX)(
+    VkDevice                                    device,
+    const VkAccelerationStructureMemoryRequirementsInfoNVX* pInfo,
+    VkMemoryRequirements2KHR*                   pMemoryRequirements);
+
+typedef VkResult (VKAPI_PTR *PFN_vkBindAccelerationStructureMemoryNVX)(
+    VkDevice                                    device,
+    uint32_t                                    bindInfoCount,
+    const VkBindAccelerationStructureMemoryInfoNVX* pBindInfos);
+
+typedef VkResult (VKAPI_PTR *PFN_vkGetAccelerationStructureHandleNVX)(
+    VkDevice                                    device,
+    VkAccelerationStructureNVX                  accelerationStructure,
+    size_t                                      dataSize,
+    void*                                       pData);
+
 /////////////////////////
 
 #define VK_STRUCTURE_TYPE_RAYTRACING_PIPELINE_CREATE_INFO_NVX 1000165000
 #define VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_NVX 1000165001
+
+#define VK_STRUCTURE_TYPE_GEOMETRY_INSTANCE_NVX 1000165002
+#define VK_STRUCTURE_TYPE_GEOMETRY_NVX 1000165003
+#define VK_STRUCTURE_TYPE_GEOMETRY_TRIANGLES_NVX 1000165004
+#define VK_STRUCTURE_TYPE_GEOMETRY_AABB_NVX 1000165005
+#define VK_STRUCTURE_TYPE_BIND_ACCELERATION_STRUCTURE_MEMORY_INFO_NVX 1000165006
+#define VK_STRUCTURE_TYPE_DESCRIPTOR_ACCELERATION_STRUCTURE_INFO_NVX 1000165007
+#define VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_INFO_NVX 1000165008
 
 #define VK_DEBUG_REPORT_OBJECT_TYPE_ACCELERATION_STRUCTURE_NVX_EXT 1000165000
