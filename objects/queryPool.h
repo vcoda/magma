@@ -32,6 +32,7 @@ namespace magma
         virtual std::vector<uint64_t> getResults(uint32_t firstQuery,
             uint32_t queryCount,
             bool wait) const noexcept;
+        VkQueryType getType() const noexcept { return queryType; }
         uint32_t getQueryCount() const noexcept { return queryCount; }
 
     protected:
@@ -42,6 +43,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator);
 
     protected:
+        VkQueryType queryType;
         uint32_t queryCount;
     };
 

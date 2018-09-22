@@ -26,6 +26,7 @@ namespace magma
 QueryPool::QueryPool(VkQueryType queryType, std::shared_ptr<Device> device, uint32_t queryCount,
     VkQueryPipelineStatisticFlags pipelineStatistics, std::shared_ptr<IAllocator> allocator):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_QUERY_POOL_EXT, std::move(device), std::move(allocator)),
+    queryType(queryType),
     queryCount(queryCount)
 {
     VkQueryPoolCreateInfo info;
