@@ -27,14 +27,14 @@ namespace magma
     class Geometry : public VkGeometryNVX
     {
     protected:
-        Geometry(VkGeometryTypeNVX geometryType,
-            VkGeometryFlagsNVX flags);
+        explicit Geometry(VkGeometryTypeNVX geometryType,
+            VkGeometryFlagsNVX flags) noexcept;
     };
 
     class GeometryTriangles : public Geometry
     {
     public:
-        GeometryTriangles(std::shared_ptr<Buffer> vertexData,
+        explicit GeometryTriangles(std::shared_ptr<Buffer> vertexData,
             VkDeviceSize vertexOffset,
             uint32_t vertexCount,
             VkDeviceSize vertexStride,
@@ -45,8 +45,8 @@ namespace magma
             VkIndexType indexType,
             std::shared_ptr<Buffer> transformData,
             VkDeviceSize transformOffset,
-            VkGeometryFlagsNVX flags = 0);
-        GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData,
+            VkGeometryFlagsNVX flags = 0) noexcept;
+        explicit GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData,
             VkDeviceSize vertexStride,
             VkFormat vertexFormat,
             std::shared_ptr<IndexBuffer> indexData,
@@ -54,16 +54,16 @@ namespace magma
             VkDeviceSize vertexOffset = 0,
             VkDeviceSize transformOffset = 0,
             VkDeviceSize indexOffset = 0,
-            VkGeometryFlagsNVX flags = 0);
+            VkGeometryFlagsNVX flags = 0) noexcept;
     };
 
     class GeometryBVH : public Geometry
     {
     public:
-        GeometryBVH(std::shared_ptr<Buffer> aabbData,
+        explicit GeometryBVH(std::shared_ptr<Buffer> aabbData,
             uint32_t numAABBs,
             uint32_t stride,
             VkDeviceSize offset,
-            VkGeometryFlagsNVX flags = 0);
+            VkGeometryFlagsNVX flags = 0) noexcept;
     };
 } // namespace magma

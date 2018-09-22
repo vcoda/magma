@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Geometry::Geometry(VkGeometryTypeNVX geometryType, VkGeometryFlagsNVX flags)
+Geometry::Geometry(VkGeometryTypeNVX geometryType, VkGeometryFlagsNVX flags) noexcept
 {
     sType = (VkStructureType)0;
     pNext = nullptr;
@@ -32,7 +32,7 @@ Geometry::Geometry(VkGeometryTypeNVX geometryType, VkGeometryFlagsNVX flags)
 GeometryTriangles::GeometryTriangles(std::shared_ptr<Buffer> vertexData, VkDeviceSize vertexOffset, uint32_t vertexCount, VkDeviceSize vertexStride, VkFormat vertexFormat,
     std::shared_ptr<Buffer> indexData, VkDeviceSize indexOffset, uint32_t indexCount, VkIndexType indexType,
     std::shared_ptr<Buffer> transformData, VkDeviceSize transformOffset,
-    VkGeometryFlagsNVX flags /* 0 */):
+    VkGeometryFlagsNVX flags /* 0 */) noexcept:
     Geometry(VK_GEOMETRY_TYPE_TRIANGLES_NVX, flags)
 {
     VkGeometryTrianglesNVX& triangles = geometry.triangles;
@@ -55,7 +55,7 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData, V
     VkDeviceSize vertexOffset /* 0 */,
     VkDeviceSize transformOffset /* 0 */,
     VkDeviceSize indexOffset /* 0 */,
-    VkGeometryFlagsNVX flags /* 0 */):
+    VkGeometryFlagsNVX flags /* 0 */) noexcept:
     Geometry(VK_GEOMETRY_TYPE_TRIANGLES_NVX, flags)
 {
     VkGeometryTrianglesNVX& triangles = geometry.triangles;
@@ -74,7 +74,7 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData, V
 }
 
 GeometryBVH::GeometryBVH(std::shared_ptr<Buffer> aabbData, uint32_t numAABBs, uint32_t stride, VkDeviceSize offset,
-    VkGeometryFlagsNVX flags /* 0 */):
+    VkGeometryFlagsNVX flags /* 0 */) noexcept:
     Geometry(VK_GEOMETRY_TYPE_AABBS_NVX, flags)
 {
     VkGeometryAABBNVX& aabbs = geometry.aabbs;
