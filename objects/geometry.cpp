@@ -35,17 +35,18 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<Buffer> vertexData, VkDevic
     VkGeometryFlagsNVX flags /* 0 */):
     Geometry(VK_GEOMETRY_TYPE_TRIANGLES_NVX, flags)
 {
-    geometry.triangles.vertexData = *vertexData;
-    geometry.triangles.vertexOffset = vertexOffset;
-    geometry.triangles.vertexCount = vertexCount;
-    geometry.triangles.vertexStride = vertexStride;
-    geometry.triangles.vertexFormat = vertexFormat;
-    geometry.triangles.indexData = *indexData;
-    geometry.triangles.indexOffset = indexOffset;
-    geometry.triangles.indexCount = indexCount;
-    geometry.triangles.indexType = indexType;
-    geometry.triangles.transformData = *transformData;
-    geometry.triangles.transformOffset = transformOffset;
+    VkGeometryTrianglesNVX& triangles = geometry.triangles;
+    triangles.vertexData = *vertexData;
+    triangles.vertexOffset = vertexOffset;
+    triangles.vertexCount = vertexCount;
+    triangles.vertexStride = vertexStride;
+    triangles.vertexFormat = vertexFormat;
+    triangles.indexData = *indexData;
+    triangles.indexOffset = indexOffset;
+    triangles.indexCount = indexCount;
+    triangles.indexType = indexType;
+    triangles.transformData = *transformData;
+    triangles.transformOffset = transformOffset;
     memset(&geometry.aabbs, 0, sizeof(VkGeometryAABBNVX));
 }
 
@@ -57,17 +58,18 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData, V
     VkGeometryFlagsNVX flags /* 0 */):
     Geometry(VK_GEOMETRY_TYPE_TRIANGLES_NVX, flags)
 {
-    geometry.triangles.vertexData = *vertexData;
-    geometry.triangles.vertexOffset = vertexOffset;
-    geometry.triangles.vertexCount = vertexData->getVertexCount();
-    geometry.triangles.vertexStride = vertexStride;
-    geometry.triangles.vertexFormat = vertexFormat;
-    geometry.triangles.indexData = *indexData;
-    geometry.triangles.indexOffset = indexOffset;
-    geometry.triangles.indexCount = indexData->getIndexCount();
-    geometry.triangles.indexType = indexData->getIndexType();
-    geometry.triangles.transformData = *transformData;
-    geometry.triangles.transformOffset = transformOffset;
+    VkGeometryTrianglesNVX& triangles = geometry.triangles;
+    triangles.vertexData = *vertexData;
+    triangles.vertexOffset = vertexOffset;
+    triangles.vertexCount = vertexData->getVertexCount();
+    triangles.vertexStride = vertexStride;
+    triangles.vertexFormat = vertexFormat;
+    triangles.indexData = *indexData;
+    triangles.indexOffset = indexOffset;
+    triangles.indexCount = indexData->getIndexCount();
+    triangles.indexType = indexData->getIndexType();
+    triangles.transformData = *transformData;
+    triangles.transformOffset = transformOffset;
     memset(&geometry.aabbs, 0, sizeof(VkGeometryAABBNVX));
 }
 
@@ -75,10 +77,11 @@ GeometryBVH::GeometryBVH(std::shared_ptr<Buffer> aabbData, uint32_t numAABBs, ui
     VkGeometryFlagsNVX flags /* 0 */):
     Geometry(VK_GEOMETRY_TYPE_AABBS_NVX, flags)
 {
-    geometry.aabbs.aabbData = *aabbData;
-    geometry.aabbs.numAABBs = numAABBs;
-    geometry.aabbs.stride = stride;
-    geometry.aabbs.offset = offset;
+    VkGeometryAABBNVX& aabbs = geometry.aabbs;
+    aabbs.aabbData = *aabbData;
+    aabbs.numAABBs = numAABBs;
+    aabbs.stride = stride;
+    aabbs.offset = offset;
     memset(&geometry.triangles, 0, sizeof(VkGeometryTrianglesNVX));
 }
 } // namespace magma
