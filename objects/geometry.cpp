@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "geometry.h"
-#include "buffer.h"
+#include "vertexBuffer.h"
+#include "indexBuffer.h"
 
 namespace magma
 {
@@ -43,6 +44,28 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<Buffer> vertexData, VkDevic
     geometry.triangles.indexOffset = indexOffset;
     geometry.triangles.indexCount = indexCount;
     geometry.triangles.indexType = indexType;
+    geometry.triangles.transformData = *transformData;
+    geometry.triangles.transformOffset = transformOffset;
+    memset(&geometry.aabbs, 0, sizeof(VkGeometryAABBNVX));
+}
+
+GeometryTriangles::GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData, VkDeviceSize vertexStride, VkFormat vertexFormat,
+    std::shared_ptr<IndexBuffer> indexData, std::shared_ptr<Buffer> transformData,
+    VkDeviceSize vertexOffset /* 0 */,
+    VkDeviceSize transformOffset /* 0 */,
+    VkDeviceSize indexOffset /* 0 */,
+    VkGeometryFlagsNVX flags /* 0 */):
+    Geometry(VK_GEOMETRY_TYPE_TRIANGLES_NVX, flags)
+{
+    geometry.triangles.vertexData = *vertexData;
+    geometry.triangles.vertexOffset = vertexOffset;
+    geometry.triangles.vertexCount = vertexData->getVertexCount();
+    geometry.triangles.vertexStride = vertexStride;
+    geometry.triangles.vertexFormat = vertexFormat;
+    geometry.triangles.indexData = *indexData;
+    geometry.triangles.indexOffset = indexOffset;
+    geometry.triangles.indexCount = indexData->getIndexCount();
+    geometry.triangles.indexType = indexData->getIndexType();
     geometry.triangles.transformData = *transformData;
     geometry.triangles.transformOffset = transformOffset;
     memset(&geometry.aabbs, 0, sizeof(VkGeometryAABBNVX));

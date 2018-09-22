@@ -21,6 +21,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Buffer;
+    class VertexBuffer;
+    class IndexBuffer;
 
     class Geometry : public VkGeometryNVX
     {
@@ -43,6 +45,15 @@ namespace magma
             VkIndexType indexType,
             std::shared_ptr<Buffer> transformData,
             VkDeviceSize transformOffset,
+            VkGeometryFlagsNVX flags = 0);
+        GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData,
+            VkDeviceSize vertexStride,
+            VkFormat vertexFormat,
+            std::shared_ptr<IndexBuffer> indexData,
+            std::shared_ptr<Buffer> transformData,
+            VkDeviceSize vertexOffset = 0,
+            VkDeviceSize transformOffset = 0,
+            VkDeviceSize indexOffset = 0,
             VkGeometryFlagsNVX flags = 0);
     };
 
