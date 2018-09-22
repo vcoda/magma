@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <list>
 #include <limits>
 #include "descriptorSet.h"
 #include "vertexBuffer.h"
@@ -38,6 +39,9 @@ namespace magma
     class Event;
     class Fence;
     class QueryPool;
+    class CompactedSizeQuery;
+    class Geometry;
+    class AccelerationStructure;
 
     struct GlobalMemoryBarrier;
     struct BufferMemoryBarrier;
@@ -69,6 +73,7 @@ namespace magma
 
         void bindPipeline(const std::shared_ptr<GraphicsPipeline>& pipeline) noexcept;
         void bindPipeline(const std::shared_ptr<ComputePipeline>& pipeline) noexcept;
+        void bindPipeline(const std::shared_ptr<RaytracingPipeline>& pipeline) noexcept; // VK_NVX_raytracing
 
         void setViewport(
             float x, float y,
@@ -348,7 +353,39 @@ namespace magma
 
         void executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept;
 
-        // EXT_debug_marker
+        // VK_NVX_raytracing
+        void buildAccelerationStructure(
+            uint32_t instanceCount,
+            const std::shared_ptr<Buffer>& instanceData,
+            VkDeviceSize instanceOffset,
+            const std::list<Geometry>& geometries,
+            VkBuildAccelerationStructureFlagsNVX flags,
+            bool update,
+            const std::shared_ptr<AccelerationStructure>& dst,
+            const std::shared_ptr<AccelerationStructure>& src,
+            const std::shared_ptr<Buffer>& scratch,
+            VkDeviceSize scratchOffset = 0) noexcept;
+        void writeAccelerationStructureProperties(
+            const std::shared_ptr<AccelerationStructure>& accelerationStructure,
+            const std::shared_ptr<CompactedSizeQuery>& queryPool,
+            uint32_t queryIndex) noexcept;
+        void copyAccelerationStructure(
+            const std::shared_ptr<AccelerationStructure>& dst,
+            const std::shared_ptr<AccelerationStructure>& src,
+            VkCopyAccelerationStructureModeNVX mode) const noexcept;
+        void traceRays(
+            const std::shared_ptr<Buffer>& raygenShaderBindingTableBuffer,
+            VkDeviceSize raygenShaderBindingOffset,
+            const std::shared_ptr<Buffer>& missShaderBindingTableBuffer,
+            VkDeviceSize missShaderBindingOffset,
+            VkDeviceSize missShaderBindingStride,
+            const std::shared_ptr<Buffer>& hitShaderBindingTableBuffer,
+            VkDeviceSize hitShaderBindingOffset,
+            VkDeviceSize hitShaderBindingStride,
+            uint32_t width,
+            uint32_t height) noexcept;
+
+        // VK_EXT_debug_marker
         void beginDebugMarker(
             const char *name,
             const float color[4]) noexcept;
