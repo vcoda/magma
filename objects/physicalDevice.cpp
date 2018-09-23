@@ -192,6 +192,16 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared
     return surfacePresentModes;
 }
 
+void PhysicalDevice::getExtendedProperties(void *properties) const
+{
+    MAGMA_ASSERT(properties);
+    VkPhysicalDeviceProperties2 properties2;
+    properties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+    properties2.pNext = properties;
+    MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
+    vkGetPhysicalDeviceProperties2KHR(handle, &properties2);
+}
+
 std::vector<VkDisplayPropertiesKHR> PhysicalDevice::getDisplayProperties() const
 {
     uint32_t propertyCount = 0;
