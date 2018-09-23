@@ -146,6 +146,7 @@
     <ClInclude Include="helpers\copy.h" />
     <ClInclude Include="helpers\mapScoped.h" />
     <ClInclude Include="helpers\stackArray.h" />
+    <ClInclude Include="helpers\stringize.h" />
     <ClInclude Include="helpers\uniformArray.h" />
     <ClInclude Include="helpers\hash.h" />
     <ClInclude Include="magma.h" />
@@ -163,7 +164,6 @@
     <ClInclude Include="misc\format.h" />
     <ClInclude Include="misc\pushConstants.h" />
     <ClInclude Include="misc\scissor.h" />
-    <ClInclude Include="misc\stringize.h" />
     <ClInclude Include="misc\viewport.h" />
     <ClInclude Include="nonCopyable.h" />
     <ClInclude Include="objects\buffer.h" />
@@ -252,13 +252,13 @@
     <ClCompile Include="barriers\globalMemoryBarrier.cpp" />
     <ClCompile Include="descriptors\attachment.cpp" />
     <ClCompile Include="descriptors\subpass.cpp" />
+    <ClCompile Include="helpers\stringize.cpp" />
     <ClCompile Include="misc\clearValue.cpp" />
     <ClCompile Include="misc\scopedDebugMarker.cpp" />
     <ClCompile Include="misc\deviceQueueDesc.cpp" />
     <ClCompile Include="misc\exception.cpp" />
     <ClCompile Include="misc\extensions.cpp" />
     <ClCompile Include="misc\format.cpp" />
-    <ClCompile Include="misc\stringize.cpp" />
     <ClCompile Include="objects\buffer.cpp" />
     <ClCompile Include="objects\bufferView.cpp" />
     <ClCompile Include="objects\commandBuffer.cpp" />

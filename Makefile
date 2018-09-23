@@ -23,12 +23,14 @@ MAGMA_OBJS= \
 	descriptors/subpass.o \
 	\
 	misc/clearValue.o \
-	misc/scopedDebugMarker.o \
 	misc/deviceQueueDesc.o \
 	misc/exception.o \
 	misc/extensions.o \
 	misc/format.o \
+	misc/scopedDebugMarker.o \
 	misc/stringize.o \
+	\
+	helpers/stringize.o \
 	\
 	objects/buffer.o \
 	objects/bufferView.o \

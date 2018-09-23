@@ -61,6 +61,9 @@
     <Filter Include="Source Files\utilities">
       <UniqueIdentifier>{7429dc55-1b4d-4285-b3cf-a9c6cd0bae11}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\helpers">
+      <UniqueIdentifier>{c8d4cdf5-8010-4561-828e-88c13c552914}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="descriptors\attachment.h">
@@ -261,9 +264,6 @@
     <ClInclude Include="objects\storageBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="misc\stringize.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
     <ClInclude Include="objects\indirectBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -343,6 +343,9 @@
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
     <ClInclude Include="helpers\hash.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\stringize.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -550,9 +553,6 @@
     <ClCompile Include="objects\storageBuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="misc\stringize.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
     <ClCompile Include="objects\indirectBuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
@@ -600,6 +600,9 @@
     </ClCompile>
     <ClCompile Include="objects\object.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="helpers\stringize.cpp">
+      <Filter>Source Files\helpers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
