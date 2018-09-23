@@ -44,13 +44,13 @@ namespace magma
         VkMemoryRequirements2 getScratchMemoryRequirements() const;
 
     protected:
-        AccelerationStructure(std::shared_ptr<Device> device,
+        explicit AccelerationStructure(std::shared_ptr<Device> device,
             VkAccelerationStructureTypeNVX type,
             uint32_t instanceCount,
             const std::list<Geometry>& geometries,
             VkBuildAccelerationStructureFlagsNVX flags,
             VkDeviceSize compactedSize,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator);
 
     private:
         VkAccelerationStructureTypeNVX type;
@@ -60,7 +60,7 @@ namespace magma
     class TopLevelAccelerationStructure : public AccelerationStructure
     {
     public:
-        TopLevelAccelerationStructure(std::shared_ptr<Device> device,
+        explicit TopLevelAccelerationStructure(std::shared_ptr<Device> device,
             uint32_t instanceCount,
             const std::list<Geometry>& geometries,
             VkBuildAccelerationStructureFlagsNVX flags = 0,
@@ -71,7 +71,7 @@ namespace magma
     class BottomLevelAccelerationStructure : public AccelerationStructure
     {
     public:
-        BottomLevelAccelerationStructure(std::shared_ptr<Device> device,
+        explicit BottomLevelAccelerationStructure(std::shared_ptr<Device> device,
             uint32_t instanceCount,
             const std::list<Geometry>& geometries,
             VkBuildAccelerationStructureFlagsNVX flags = 0,
