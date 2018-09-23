@@ -203,6 +203,7 @@
     <ClInclude Include="objects\pipelineLayout.h" />
     <ClInclude Include="objects\queryPool.h" />
     <ClInclude Include="objects\queue.h" />
+    <ClInclude Include="objects\shaderStagesRaytrace.h" />
     <ClInclude Include="objects\renderPass.h" />
     <ClInclude Include="objects\sampler.h" />
     <ClInclude Include="objects\semaphore.h" />
