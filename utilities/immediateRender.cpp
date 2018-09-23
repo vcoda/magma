@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/deviceMemory.h"
 #include "../objects/commandBuffer.h"
 #include "../objects/pipeline.h"
+#include "../objects/shaderModule.h"
 #include "../misc/pushConstants.h"
 #include "../allocator/allocator.h"
 #include "../helpers/hash.h"

@@ -207,6 +207,7 @@
     <ClInclude Include="objects\sampler.h" />
     <ClInclude Include="objects\semaphore.h" />
     <ClInclude Include="objects\shaderModule.h" />
+    <ClInclude Include="objects\shaderStages.h" />
     <ClInclude Include="objects\srcTransferBuffer.h" />
     <ClInclude Include="objects\storageBuffer.h" />
     <ClInclude Include="objects\storageTexelBuffer.h" />
@@ -301,6 +302,7 @@
     <ClCompile Include="objects\sampler.cpp" />
     <ClCompile Include="objects\semaphore.cpp" />
     <ClCompile Include="objects\shaderModule.cpp" />
+    <ClCompile Include="objects\shaderStages.cpp" />
     <ClCompile Include="objects\srcTransferBuffer.cpp" />
     <ClCompile Include="objects\storageBuffer.cpp" />
     <ClCompile Include="objects\storageTexelBuffer.cpp" />

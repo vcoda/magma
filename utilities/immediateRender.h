@@ -19,13 +19,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <list>
 #include <unordered_map>
 #include <limits>
-#include "../objects/shaderModule.h"
+#include "../objects/shaderStages.h"
 #include "../states/vertexInputState.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/rasterizationState.h"
 #include "../states/multisampleState.h"
 #include "../states/depthStencilState.h"
 #include "../states/colorBlendState.h"
+#include "../nonCopyable.h"
 #include "../shared.h"
 
 namespace magma
@@ -37,6 +38,7 @@ namespace magma
     class PipelineCache;
     class VertexBuffer;
     class RenderPass;
+    class IAllocator;
 
     namespace utilities
     {

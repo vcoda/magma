@@ -69,6 +69,7 @@ MAGMA_OBJS= \
 	objects/sampler.o \
 	objects/semaphore.o \
 	objects/shaderModule.o \
+	objects/shaderStages.o \
 	objects/srcTransferBuffer.o \
 	objects/storageBuffer.o \
 	objects/storageTexelBuffer.o \
