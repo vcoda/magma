@@ -31,6 +31,7 @@ MAGMA_OBJS= \
 	misc/geometry.o \
 	misc/stringize.o \
 	\
+	objects/accelerationStructure.o \
 	objects/buffer.o \
 	objects/bufferView.o \
 	objects/commandBuffer.o \
