@@ -154,6 +154,7 @@
     <ClInclude Include="misc\clearAttachment.h" />
     <ClInclude Include="misc\clearValue.h" />
     <ClInclude Include="misc\deviceExtension.h" />
+    <ClInclude Include="misc\geometry.h" />
     <ClInclude Include="misc\imageSubresourceRange.h" />
     <ClInclude Include="misc\instanceExtension.h" />
     <ClInclude Include="misc\scopedDebugMarker.h" />
@@ -183,7 +184,6 @@
     <ClInclude Include="objects\event.h" />
     <ClInclude Include="objects\fence.h" />
     <ClInclude Include="objects\framebuffer.h" />
-    <ClInclude Include="objects\geometry.h" />
     <ClInclude Include="objects\handle.h" />
     <ClInclude Include="objects\image.h" />
     <ClInclude Include="objects\image1D.h" />
@@ -257,6 +257,7 @@
     <ClCompile Include="descriptors\attachment.cpp" />
     <ClCompile Include="descriptors\subpass.cpp" />
     <ClCompile Include="misc\clearValue.cpp" />
+    <ClCompile Include="misc\geometry.cpp" />
     <ClCompile Include="misc\scopedDebugMarker.cpp" />
     <ClCompile Include="misc\deviceQueueDesc.cpp" />
     <ClCompile Include="misc\exception.cpp" />
@@ -280,7 +281,6 @@
     <ClCompile Include="objects\event.cpp" />
     <ClCompile Include="objects\fence.cpp" />
     <ClCompile Include="objects\framebuffer.cpp" />
-    <ClCompile Include="objects\geometry.cpp" />
     <ClCompile Include="objects\image.cpp" />
     <ClCompile Include="objects\image1D.cpp" />
     <ClCompile Include="objects\image1DArray.cpp" />

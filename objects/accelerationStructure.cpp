@@ -16,10 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "accelerationStructure.h"
-#include "geometry.h"
 #include "device.h"
 #include "deviceMemory.h"
 #include "../allocator/allocator.h"
+#include "../misc/geometry.h"
 #include "../misc/deviceExtension.h"
 #include "../helpers/stackArray.h"
 

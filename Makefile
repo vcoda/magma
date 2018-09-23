@@ -28,6 +28,7 @@ MAGMA_OBJS= \
 	misc/exception.o \
 	misc/extensions.o \
 	misc/format.o \
+	misc/geometry.o \
 	misc/stringize.o \
 	\
 	objects/buffer.o \

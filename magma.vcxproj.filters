@@ -348,14 +348,14 @@
     <ClInclude Include="objects\accelerationStructure.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="objects\geometry.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="objects\shaderStages.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
     <ClInclude Include="objects\shaderStagesRaytrace.h">
       <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="misc\geometry.h">
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -616,11 +616,11 @@
     <ClCompile Include="objects\accelerationStructure.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="objects\geometry.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="objects\shaderStages.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="misc\geometry.cpp">
+      <Filter>Source Files\misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

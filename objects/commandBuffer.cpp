@@ -25,11 +25,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "event.h"
 #include "fence.h"
 #include "queryPool.h"
-#include "geometry.h"
 #include "accelerationStructure.h"
 #include "../barriers/globalMemoryBarrier.h"
 #include "../barriers/bufferMemoryBarrier.h"
 #include "../barriers/imageMemoryBarrier.h"
+#include "../misc/geometry.h"
 #include "../misc/deviceExtension.h"
 
 namespace magma

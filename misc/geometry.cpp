@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "geometry.h"
-#include "vertexBuffer.h"
-#include "indexBuffer.h"
+#include "../objects/vertexBuffer.h"
+#include "../objects/indexBuffer.h"
 
 namespace magma
 {
