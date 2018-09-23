@@ -1,6 +1,6 @@
 #define VK_NVX_RAYTRACING_EXTENSION_NAME "VK_NVX_raytracing"
 
-VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkAccelerationStructureNVX);
+VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkAccelerationStructureNVX)
 
 typedef struct VkRaytracingPipelineCreateInfoNVX {
     VkStructureType                           sType;
