@@ -93,4 +93,14 @@ VkMemoryRequirements2 AccelerationStructure::getScratchMemoryRequirements() cons
     vkGetAccelerationStructureScratchMemoryRequirementsNVX(MAGMA_HANDLE(device), &info, &memoryRequirements);
     return memoryRequirements;
 }
+
+uint64_t AccelerationStructure::getStructureHandle() const
+{
+    uint64_t structureHandle;
+    MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureHandleNVX, VK_NVX_RAYTRACING_EXTENSION_NAME);
+    const VkResult get = vkGetAccelerationStructureHandleNVX(MAGMA_HANDLE(device), handle, sizeof(structureHandle), &structureHandle);
+    MAGMA_THROW_FAILURE(get, "failed to get acceleration structure handle");
+    return structureHandle;
+}
+
 } // namespace magma

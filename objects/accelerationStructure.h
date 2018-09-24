@@ -42,6 +42,7 @@ namespace magma
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
         VkMemoryRequirements2 getMemoryRequirements() const;
         VkMemoryRequirements2 getScratchMemoryRequirements() const;
+        uint64_t getStructureHandle() const;
 
     protected:
         explicit AccelerationStructure(std::shared_ptr<Device> device,
