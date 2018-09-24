@@ -52,6 +52,8 @@ void DebugMarker::setObjectTag(uint64_t name, size_t tagSize, const void *tag) n
 
 void DebugMarker::setObjectName(const char *name) noexcept
 {
+    MAGMA_ASSERT(name);
+    MAGMA_ASSERT(strlen(name) > 0);
 #ifdef MAGMA_DEBUG
     if (!device)
         return;
