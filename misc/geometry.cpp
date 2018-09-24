@@ -36,20 +36,19 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<Buffer> vertexData, VkDevic
     VkGeometryFlagsNVX flags /* 0 */) noexcept:
     Geometry(VK_GEOMETRY_TYPE_TRIANGLES_NVX, flags)
 {
-    VkGeometryTrianglesNVX& triangles = geometry.triangles;
-    triangles.sType = (VkStructureType)VK_STRUCTURE_TYPE_GEOMETRY_TRIANGLES_NVX;
-    triangles.pNext = nullptr;
-    triangles.vertexData = MAGMA_OPTIONAL_HANDLE(vertexData);
-    triangles.vertexOffset = vertexOffset;
-    triangles.vertexCount = vertexCount;
-    triangles.vertexStride = vertexStride;
-    triangles.vertexFormat = vertexFormat;
-    triangles.indexData = MAGMA_OPTIONAL_HANDLE(indexData);
-    triangles.indexOffset = indexOffset;
-    triangles.indexCount = indexCount;
-    triangles.indexType = indexType;
-    triangles.transformData = MAGMA_OPTIONAL_HANDLE(transformData);
-    triangles.transformOffset = transformOffset;
+    geometry.triangles.sType = (VkStructureType)VK_STRUCTURE_TYPE_GEOMETRY_TRIANGLES_NVX;
+    geometry.triangles.pNext = nullptr;
+    geometry.triangles.vertexData = MAGMA_OPTIONAL_HANDLE(vertexData);
+    geometry.triangles.vertexOffset = vertexOffset;
+    geometry.triangles.vertexCount = vertexCount;
+    geometry.triangles.vertexStride = vertexStride;
+    geometry.triangles.vertexFormat = vertexFormat;
+    geometry.triangles.indexData = MAGMA_OPTIONAL_HANDLE(indexData);
+    geometry.triangles.indexOffset = indexOffset;
+    geometry.triangles.indexCount = indexCount;
+    geometry.triangles.indexType = indexType;
+    geometry.triangles.transformData = MAGMA_OPTIONAL_HANDLE(transformData);
+    geometry.triangles.transformOffset = transformOffset;
     memset(&geometry.aabbs, 0, sizeof(VkGeometryAABBNVX));
 }
 
@@ -61,20 +60,19 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData, V
     VkGeometryFlagsNVX flags /* 0 */) noexcept:
     Geometry(VK_GEOMETRY_TYPE_TRIANGLES_NVX, flags)
 {
-    VkGeometryTrianglesNVX& triangles = geometry.triangles;
-    triangles.sType = (VkStructureType)VK_STRUCTURE_TYPE_GEOMETRY_TRIANGLES_NVX;
-    triangles.pNext = nullptr;
-    triangles.vertexData = MAGMA_OPTIONAL_HANDLE(vertexData);
-    triangles.vertexOffset = vertexOffset;
-    triangles.vertexCount = vertexData->getVertexCount();
-    triangles.vertexStride = vertexStride;
-    triangles.vertexFormat = vertexFormat;
-    triangles.indexData = MAGMA_OPTIONAL_HANDLE(indexData);
-    triangles.indexOffset = indexOffset;
-    triangles.indexCount = indexData->getIndexCount();
-    triangles.indexType = indexData->getIndexType();
-    triangles.transformData = MAGMA_OPTIONAL_HANDLE(transformData);
-    triangles.transformOffset = transformOffset;
+    geometry.triangles.sType = (VkStructureType)VK_STRUCTURE_TYPE_GEOMETRY_TRIANGLES_NVX;
+    geometry.triangles.pNext = nullptr;
+    geometry.triangles.vertexData = MAGMA_OPTIONAL_HANDLE(vertexData);
+    geometry.triangles.vertexOffset = vertexOffset;
+    geometry.triangles.vertexCount = vertexData->getVertexCount();
+    geometry.triangles.vertexStride = vertexStride;
+    geometry.triangles.vertexFormat = vertexFormat;
+    geometry.triangles.indexData = MAGMA_OPTIONAL_HANDLE(indexData);
+    geometry.triangles.indexOffset = indexOffset;
+    geometry.triangles.indexCount = indexData->getIndexCount();
+    geometry.triangles.indexType = indexData->getIndexType();
+    geometry.triangles.transformData = MAGMA_OPTIONAL_HANDLE(transformData);
+    geometry.triangles.transformOffset = transformOffset;
     memset(&geometry.aabbs, 0, sizeof(VkGeometryAABBNVX));
 }
 
@@ -82,13 +80,12 @@ GeometryBVH::GeometryBVH(std::shared_ptr<Buffer> aabbData, uint32_t numAABBs, ui
     VkGeometryFlagsNVX flags /* 0 */) noexcept:
     Geometry(VK_GEOMETRY_TYPE_AABBS_NVX, flags)
 {
-    VkGeometryAABBNVX& aabbs = geometry.aabbs;
-    aabbs.sType = (VkStructureType)VK_STRUCTURE_TYPE_GEOMETRY_AABB_NVX;
-    aabbs.pNext = nullptr;
-    aabbs.aabbData = MAGMA_OPTIONAL_HANDLE(aabbData);
-    aabbs.numAABBs = numAABBs;
-    aabbs.stride = stride;
-    aabbs.offset = offset;
+    geometry.aabbs.sType = (VkStructureType)VK_STRUCTURE_TYPE_GEOMETRY_AABB_NVX;
+    geometry.aabbs.pNext = nullptr;
+    geometry.aabbs.aabbData = MAGMA_OPTIONAL_HANDLE(aabbData);
+    geometry.aabbs.numAABBs = numAABBs;
+    geometry.aabbs.stride = stride;
+    geometry.aabbs.offset = offset;
     memset(&geometry.triangles, 0, sizeof(VkGeometryTrianglesNVX));
 }
 } // namespace magma
