@@ -393,9 +393,13 @@ void CommandBuffer::buildAccelerationStructure(uint32_t instanceCount, const std
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBuildAccelerationStructureNVX);
     if (vkCmdBuildAccelerationStructureNVX)
     {
-        vkCmdBuildAccelerationStructureNVX(handle, dst->getType(), instanceCount, *instanceData, instanceOffset,
-            MAGMA_COUNT(geometries), dereferencedGeometries, flags, MAGMA_BOOLEAN(update),
-            *dst, *src, *scratch, scratchOffset);
+        vkCmdBuildAccelerationStructureNVX(handle,
+            dst->getType(),
+            instanceCount, MAGMA_OPTIONAL_HANDLE(instanceData), instanceOffset,
+            MAGMA_COUNT(geometries), dereferencedGeometries,
+            flags, MAGMA_BOOLEAN(update),
+            *dst, MAGMA_OPTIONAL_HANDLE(src),
+            *scratch, scratchOffset);
     }
 }
 
