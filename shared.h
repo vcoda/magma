@@ -76,7 +76,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     template<typename Type>
-    MAGMA_INLINE typename Type::VkType __handle(const std::shared_ptr<const Type>& obj)
+    MAGMA_INLINE typename Type::VkType __handle(const std::shared_ptr<Type>& obj)
     {
         if (obj) return *obj;
 #ifdef VK_NULL_HANDLE
