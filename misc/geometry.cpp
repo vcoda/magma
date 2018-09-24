@@ -39,16 +39,16 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<Buffer> vertexData, VkDevic
     VkGeometryTrianglesNVX& triangles = geometry.triangles;
     triangles.sType = (VkStructureType)VK_STRUCTURE_TYPE_GEOMETRY_TRIANGLES_NVX;
     triangles.pNext = nullptr;
-    triangles.vertexData = *vertexData;
+    triangles.vertexData = MAGMA_OPTIONAL_HANDLE(vertexData);
     triangles.vertexOffset = vertexOffset;
     triangles.vertexCount = vertexCount;
     triangles.vertexStride = vertexStride;
     triangles.vertexFormat = vertexFormat;
-    triangles.indexData = *indexData;
+    triangles.indexData = MAGMA_OPTIONAL_HANDLE(indexData);
     triangles.indexOffset = indexOffset;
     triangles.indexCount = indexCount;
     triangles.indexType = indexType;
-    triangles.transformData = *transformData;
+    triangles.transformData = MAGMA_OPTIONAL_HANDLE(transformData);
     triangles.transformOffset = transformOffset;
     memset(&geometry.aabbs, 0, sizeof(VkGeometryAABBNVX));
 }
@@ -64,16 +64,16 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData, V
     VkGeometryTrianglesNVX& triangles = geometry.triangles;
     triangles.sType = (VkStructureType)VK_STRUCTURE_TYPE_GEOMETRY_TRIANGLES_NVX;
     triangles.pNext = nullptr;
-    triangles.vertexData = *vertexData;
+    triangles.vertexData = MAGMA_OPTIONAL_HANDLE(vertexData);
     triangles.vertexOffset = vertexOffset;
     triangles.vertexCount = vertexData->getVertexCount();
     triangles.vertexStride = vertexStride;
     triangles.vertexFormat = vertexFormat;
-    triangles.indexData = *indexData;
+    triangles.indexData = MAGMA_OPTIONAL_HANDLE(indexData);
     triangles.indexOffset = indexOffset;
     triangles.indexCount = indexData->getIndexCount();
     triangles.indexType = indexData->getIndexType();
-    triangles.transformData = *transformData;
+    triangles.transformData = MAGMA_OPTIONAL_HANDLE(transformData);
     triangles.transformOffset = transformOffset;
     memset(&geometry.aabbs, 0, sizeof(VkGeometryAABBNVX));
 }
@@ -85,7 +85,7 @@ GeometryBVH::GeometryBVH(std::shared_ptr<Buffer> aabbData, uint32_t numAABBs, ui
     VkGeometryAABBNVX& aabbs = geometry.aabbs;
     aabbs.sType = (VkStructureType)VK_STRUCTURE_TYPE_GEOMETRY_AABB_NVX;
     aabbs.pNext = nullptr;
-    aabbs.aabbData = *aabbData;
+    aabbs.aabbData = MAGMA_OPTIONAL_HANDLE(aabbData);
     aabbs.numAABBs = numAABBs;
     aabbs.stride = stride;
     aabbs.offset = offset;
