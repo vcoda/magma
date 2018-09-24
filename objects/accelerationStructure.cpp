@@ -93,22 +93,4 @@ VkMemoryRequirements2 AccelerationStructure::getScratchMemoryRequirements() cons
     vkGetAccelerationStructureScratchMemoryRequirementsNVX(MAGMA_HANDLE(device), &info, &memoryRequirements);
     return memoryRequirements;
 }
-
-TopLevelAccelerationStructure::TopLevelAccelerationStructure(std::shared_ptr<Device> device,
-    uint32_t instanceCount, const std::list<Geometry>& geometries,
-    VkBuildAccelerationStructureFlagsNVX flags /* 0 */,
-    VkDeviceSize compactedSize /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL, instanceCount, geometries,
-        flags, compactedSize, std::move(allocator))
-{}
-
-BottomLevelAccelerationStructure::BottomLevelAccelerationStructure(std::shared_ptr<Device> device,
-    uint32_t instanceCount, const std::list<Geometry>& geometries,
-    VkBuildAccelerationStructureFlagsNVX flags /* 0 */,
-    VkDeviceSize compactedSize /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL, instanceCount, geometries,
-        flags, compactedSize, std::move(allocator))
-{}
 } // namespace magma

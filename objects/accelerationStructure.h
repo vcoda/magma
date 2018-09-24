@@ -65,7 +65,10 @@ namespace magma
             const std::list<Geometry>& geometries,
             VkBuildAccelerationStructureFlagsNVX flags = 0,
             VkDeviceSize compactedSize = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr):
+            AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NVX,
+                instanceCount, geometries, flags, compactedSize, std::move(allocator))
+        {}
     };
 
     class BottomLevelAccelerationStructure : public AccelerationStructure
@@ -76,6 +79,9 @@ namespace magma
             const std::list<Geometry>& geometries,
             VkBuildAccelerationStructureFlagsNVX flags = 0,
             VkDeviceSize compactedSize = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr):
+            AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NVX,
+                instanceCount, geometries, flags, compactedSize, std::move(allocator))
+        {}
     };
 } // namespace magma
