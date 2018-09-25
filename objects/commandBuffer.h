@@ -63,7 +63,8 @@ namespace magma
             const std::shared_ptr<RenderPass>& renderPass,
             uint32_t subpass,
             const std::shared_ptr<Framebuffer>& framebuffer,
-            VkCommandBufferUsageFlags flags = 0) noexcept;
+            VkCommandBufferUsageFlags flags = 0,
+            bool conditionalRenderingEnable = false) noexcept;
         void end();
         bool reset(bool releaseResources) noexcept;
 
@@ -347,6 +348,13 @@ namespace magma
         void endRenderPass() noexcept;
 
         void executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept;
+
+        // VK_EXT_conditional_rendering
+        void beginConditionalRendering(
+            const std::shared_ptr<Buffer>& buffer,
+            VkDeviceSize offset = 0,
+            bool inverted = false) noexcept;
+        void endConditionalRendering() noexcept;
 
         // EXT_debug_marker
         void beginDebugMarker(

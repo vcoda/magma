@@ -53,7 +53,8 @@ bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
 }
 
 bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass, const std::shared_ptr<Framebuffer>& framebuffer,
-    VkCommandBufferUsageFlags flags /* 0 */) noexcept
+    VkCommandBufferUsageFlags flags /* 0 */,
+    bool conditionalRenderingEnable /* false */) noexcept
 {
     VkCommandBufferInheritanceInfo inheritanceInfo;
     inheritanceInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
@@ -64,6 +65,14 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     inheritanceInfo.occlusionQueryEnable = MAGMA_BOOLEAN(occlusionQueryEnable);
     inheritanceInfo.queryFlags = queryFlags;
     inheritanceInfo.pipelineStatistics = pipelineStatistics;
+    VkCommandBufferInheritanceConditionalRenderingInfoEXT conditionalRenderingInfo;
+    conditionalRenderingInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_CONDITIONAL_RENDERING_INFO_EXT;
+    conditionalRenderingInfo.pNext = nullptr;
+    conditionalRenderingInfo.conditionalRenderingEnable = MAGMA_BOOLEAN(conditionalRenderingEnable);
+    if (conditionalRenderingEnable)
+    {   // VK_EXT_conditional_rendering
+        inheritanceInfo.pNext = &conditionalRenderingInfo;
+    }
     VkCommandBufferBeginInfo beginInfo;
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.pNext = nullptr;
@@ -378,6 +387,34 @@ void CommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuf
     for (const auto& commandBuffer : commandBuffers)
         dereferencedCommandBuffers.put(*commandBuffer);
     vkCmdExecuteCommands(handle, dereferencedCommandBuffers.size(), dereferencedCommandBuffers);
+}
+
+void CommandBuffer::beginConditionalRendering(const std::shared_ptr<Buffer>& buffer,
+    VkDeviceSize offset /* 0 */,
+    bool inverted /* false */) noexcept
+{
+    MAGMA_ASSERT(offset <= buffer->getMemory()->getSize() - sizeof(uint32_t));
+    MAGMA_ASSERT(offset % sizeof(uint32_t) == 0);
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBeginConditionalRenderingEXT);
+    if (vkCmdBeginConditionalRenderingEXT)
+    {
+        VkConditionalRenderingBeginInfoEXT beginInfo;
+        beginInfo.sType = VK_STRUCTURE_TYPE_CONDITIONAL_RENDERING_BEGIN_INFO_EXT;
+        beginInfo.pNext = nullptr;
+        beginInfo.buffer = *buffer;
+        beginInfo.offset = offset;
+        beginInfo.flags = 0;
+        if (inverted)
+            beginInfo.flags |= VK_CONDITIONAL_RENDERING_INVERTED_BIT_EXT;
+        vkCmdBeginConditionalRenderingEXT(handle, &beginInfo);
+    }
+}
+
+void CommandBuffer::endConditionalRendering() noexcept
+{
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdEndConditionalRenderingEXT);
+    if (vkCmdEndConditionalRenderingEXT)
+        vkCmdEndConditionalRenderingEXT(handle);
 }
 
 void CommandBuffer::beginDebugMarker(const char *name, const float color[4]) noexcept
