@@ -170,6 +170,7 @@
     <ClInclude Include="objects\bufferView.h" />
     <ClInclude Include="objects\commandBuffer.h" />
     <ClInclude Include="objects\commandPool.h" />
+    <ClInclude Include="objects\conditionalRenderingBuffer.h" />
     <ClInclude Include="objects\debugMarker.h" />
     <ClInclude Include="objects\debugReportCallback.h" />
     <ClInclude Include="objects\descriptorPool.h" />
