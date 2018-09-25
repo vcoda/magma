@@ -66,11 +66,11 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     inheritanceInfo.queryFlags = queryFlags;
     inheritanceInfo.pipelineStatistics = pipelineStatistics;
     VkCommandBufferInheritanceConditionalRenderingInfoEXT conditionalRenderingInfo;
-    conditionalRenderingInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_CONDITIONAL_RENDERING_INFO_EXT;
-    conditionalRenderingInfo.pNext = nullptr;
-    conditionalRenderingInfo.conditionalRenderingEnable = MAGMA_BOOLEAN(conditionalRenderingEnable);
     if (conditionalRenderingEnable)
     {   // VK_EXT_conditional_rendering
+        conditionalRenderingInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_CONDITIONAL_RENDERING_INFO_EXT;
+        conditionalRenderingInfo.pNext = nullptr;
+        conditionalRenderingInfo.conditionalRenderingEnable = MAGMA_BOOLEAN(conditionalRenderingEnable);
         inheritanceInfo.pNext = &conditionalRenderingInfo;
     }
     VkCommandBufferBeginInfo beginInfo;
