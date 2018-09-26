@@ -22,8 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "queue.h"
 #include "fence.h"
 #include "commandBuffer.h"
-#include "../mem/copyMemory.h"
-#include "../helpers/mapScoped.h"
 #include "../misc/exception.h"
 
 namespace magma
@@ -37,15 +35,7 @@ ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<Device> d
         flags, std::move(allocator),
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
 {
-    if (data)
-    {
-        if (!copyFn)
-            copyFn = copyMemory;
-        helpers::mapScoped<void>(this, [&copyFn, data, size](void *buffer)
-        {
-            copyFn(buffer, data, static_cast<size_t>(size));
-        });
-    }
+    copyToMapped(data, std::move(copyFn));
 }
 
 ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size,

@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "deviceMemory.h"
 #include "../allocator/allocator.h"
+#include "../mem/copyMemory.h"
 #include "../misc/exception.h"
 #include "../shared.h"
 
@@ -82,5 +83,20 @@ VkDescriptorBufferInfo Buffer::getDescriptor() const noexcept
     info.offset = 0;
     info.range = VK_WHOLE_SIZE;
     return info;
+}
+
+void Buffer::copyToMapped(const void *data, CopyMemoryFunction copyFn) noexcept
+{
+    if (data)
+    {
+        void *buffer = memory->map();
+        if (buffer)
+        {
+            if (!copyFn)
+                copyFn = copyMemory;
+            copyFn(buffer, data, static_cast<size_t>(size));
+            memory->unmap();
+        }
+    }
 }
 } // namespace magma
