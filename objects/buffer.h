@@ -48,6 +48,8 @@ namespace magma
             VkBufferCreateFlags flags,
             std::shared_ptr<IAllocator> allocator,
             VkMemoryPropertyFlags memoryFlags);
+        void copyToMapped(const void *data,
+            CopyMemoryFunction copyFn) noexcept;
 
     protected:
         VkDeviceSize size;
