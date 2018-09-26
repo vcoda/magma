@@ -28,7 +28,6 @@ MAGMA_OBJS= \
 	misc/extensions.o \
 	misc/format.o \
 	misc/scopedDebugMarker.o \
-	misc/stringize.o \
 	\
 	helpers/stringize.o \
 	\
