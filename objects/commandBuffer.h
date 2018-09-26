@@ -63,8 +63,7 @@ namespace magma
             const std::shared_ptr<RenderPass>& renderPass,
             uint32_t subpass,
             const std::shared_ptr<Framebuffer>& framebuffer,
-            VkCommandBufferUsageFlags flags = 0,
-            bool conditionalRenderingEnable = false) noexcept;
+            VkCommandBufferUsageFlags flags = 0) noexcept;
         void end();
         bool reset(bool releaseResources) noexcept;
 
@@ -380,13 +379,15 @@ namespace magma
         void enableOcclusionQuery(
             bool enable,
             VkQueryControlFlags queryFlags) noexcept;
+        void enableConditionalRendering(bool enable) noexcept;
         void queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept;
 
     private:
         std::shared_ptr<CommandPool> pool;
         std::shared_ptr<Fence> fence;
         VkRect2D renderArea = {{0, 0}, {0, 0}};
-        bool occlusionQueryEnable = false;
+        VkBool32 occlusionQueryEnable = VK_FALSE;
+        VkBool32 conditionalRenderingEnable = VK_FALSE;
         VkQueryControlFlags queryFlags = 0;
         VkQueryPipelineStatisticFlags pipelineStatistics = 0;
     };

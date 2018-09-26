@@ -53,8 +53,7 @@ bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
 }
 
 bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass, const std::shared_ptr<Framebuffer>& framebuffer,
-    VkCommandBufferUsageFlags flags /* 0 */,
-    bool conditionalRenderingEnable /* false */) noexcept
+    VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
     VkCommandBufferInheritanceInfo inheritanceInfo;
     inheritanceInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
@@ -62,7 +61,7 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     inheritanceInfo.renderPass = *renderPass;
     inheritanceInfo.subpass = subpass;
     inheritanceInfo.framebuffer = *framebuffer;
-    inheritanceInfo.occlusionQueryEnable = MAGMA_BOOLEAN(occlusionQueryEnable);
+    inheritanceInfo.occlusionQueryEnable = occlusionQueryEnable;
     inheritanceInfo.queryFlags = queryFlags;
     inheritanceInfo.pipelineStatistics = pipelineStatistics;
     VkCommandBufferInheritanceConditionalRenderingInfoEXT conditionalRenderingInfo;
@@ -70,7 +69,7 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     {   // VK_EXT_conditional_rendering
         conditionalRenderingInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_CONDITIONAL_RENDERING_INFO_EXT;
         conditionalRenderingInfo.pNext = nullptr;
-        conditionalRenderingInfo.conditionalRenderingEnable = MAGMA_BOOLEAN(conditionalRenderingEnable);
+        conditionalRenderingInfo.conditionalRenderingEnable = conditionalRenderingEnable;
         inheritanceInfo.pNext = &conditionalRenderingInfo;
     }
     VkCommandBufferBeginInfo beginInfo;
