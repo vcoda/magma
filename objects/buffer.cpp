@@ -16,8 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "buffer.h"
+#include "srcTransferBuffer.h"
 #include "device.h"
 #include "deviceMemory.h"
+#include "queue.h"
+#include "fence.h"
+#include "commandBuffer.h"
 #include "../allocator/allocator.h"
 #include "../mem/copyMemory.h"
 #include "../misc/exception.h"
@@ -98,5 +102,26 @@ void Buffer::copyToMapped(const void *data, CopyMemoryFunction copyFn) noexcept
             memory->unmap();
         }
     }
+}
+
+void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+    std::shared_ptr<SrcTransferBuffer> srcBuffer,
+    VkDeviceSize srcOffset /* 0 */)
+{
+    copyCmdBuffer->begin();
+    {
+        VkBufferCopy region;
+        region.srcOffset = srcOffset;
+        region.dstOffset = 0;
+        region.size = srcBuffer->getMemory()->getSize();
+        vkCmdCopyBuffer(*copyCmdBuffer, *srcBuffer, handle, 1, &region);
+    }
+    copyCmdBuffer->end();
+    std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_TRANSFER_BIT, 0));
+    std::shared_ptr<Fence> fence(copyCmdBuffer->getFence());
+    if (!queue->submit(std::move(copyCmdBuffer), 0, nullptr, nullptr, fence))
+        MAGMA_THROW("failed to submit command buffer to transfer queue");
+    if (!fence->wait())
+        MAGMA_THROW("failed to wait fence");
 }
 } // namespace magma
