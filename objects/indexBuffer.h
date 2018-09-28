@@ -31,11 +31,6 @@ namespace magma
     {
     public:
         explicit IndexBuffer(std::shared_ptr<Device> device,
-            VkDeviceSize size,
-            VkIndexType indexType,
-            VkBufferCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-        explicit IndexBuffer(std::shared_ptr<Device> device,
             const void *data, VkDeviceSize size,
             VkIndexType indexType,
             VkBufferCreateFlags flags = 0,

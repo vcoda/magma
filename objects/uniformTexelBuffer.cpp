@@ -28,30 +28,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
-    VkBufferCreateFlags flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Buffer(std::move(device), size,
-        VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT,
-        flags, std::move(allocator),
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
-{}
-
 UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<Device> device, const void *data, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    UniformTexelBuffer(std::move(device), size, flags, std::move(allocator))
+    Buffer(std::move(device), size,
+        VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT,
+        flags, std::move(allocator),
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
 {
     if (data)
-    {
-        if (!copyFn)
-            copyFn = copyMemory;
-        helpers::mapScoped<void>(this, [&copyFn, data, size](void *buffer)
-        {
-            copyFn(buffer, data, static_cast<size_t>(size));
-        });
-    }
+        copyToMapped(data, std::move(copyFn));
 }
 
 UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size,
