@@ -29,15 +29,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #ifdef MAGMA_DEBUG
 #ifndef MAGMA_ASSERT
-#define MAGMA_ASSERT(x) assert(x)
+#define MAGMA_ASSERT(condition) assert(condition)
 #endif
 #else
-#define MAGMA_ASSERT(x)
+#define MAGMA_ASSERT(condition)
 #endif // !MAGMA_DEBUG
 
 #define MAGMA_INLINE inline
-#define MAGMA_BOOLEAN(x) (x) ? VK_TRUE : VK_FALSE
-#define MAGMA_COUNT(v) static_cast<uint32_t>((v).size())
+#define MAGMA_BOOLEAN(condition) (condition) ? VK_TRUE : VK_FALSE
+#define MAGMA_COUNT(container) static_cast<uint32_t>(container.size())
 
 #define MAGMA_ALIGNMENT 16
 #define MAGMA_ALIGN(size) (((size) + 0xF) & ~(0xF))
@@ -61,8 +61,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_XMM_REGISTERS 8
 #endif
 
-#define MAGMA_STRINGIZE(x) #x
-#define MAGMA_STRINGIZE_FIELD(x) case x: return MAGMA_STRINGIZE(x); break
+#define MAGMA_STRINGIZE(name) #name
+#define MAGMA_STRINGIZE_FIELD(field) case field: return MAGMA_STRINGIZE(field); break
 #define MAGMA_UNKNOWN "<unknown>"
 
 #define MAGMA_SUCCEEDED(result)\
