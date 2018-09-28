@@ -91,16 +91,13 @@ VkDescriptorBufferInfo Buffer::getDescriptor() const noexcept
 
 void Buffer::copyToMapped(const void *data, CopyMemoryFunction copyFn) noexcept
 {
-    if (data)
+    void *buffer = memory->map();
+    if (buffer)
     {
-        void *buffer = memory->map();
-        if (buffer)
-        {
-            if (!copyFn)
-                copyFn = copyMemory;
-            copyFn(buffer, data, static_cast<size_t>(size));
-            memory->unmap();
-        }
+        if (!copyFn)
+            copyFn = copyMemory;
+        copyFn(buffer, data, static_cast<size_t>(size));
+        memory->unmap();
     }
 }
 
