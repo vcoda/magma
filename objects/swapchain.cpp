@@ -78,15 +78,15 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
         std::ostringstream msg;
         msg << "failed to create swapchain with the following parameters:" << std::endl
             << "minImageCount: " << std::to_string(info.minImageCount) << std::endl
-            << "imageFormat: " << stringize(info.imageFormat) << std::endl
-            << "imageColorSpace: " << stringize(info.imageColorSpace) << std::endl
+            << "imageFormat: " << helpers::stringize(info.imageFormat) << std::endl
+            << "imageColorSpace: " << helpers::stringize(info.imageColorSpace) << std::endl
             << "imageExtent: {" << std::to_string(info.imageExtent.width) << ", " << std::to_string(info.imageExtent.height) << "}" << std::endl
             << "imageArrayLayers: " << std::to_string(info.imageArrayLayers) << std::endl
-            << "imageUsage: " << stringize(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT) << std::endl
-            << "imageSharingMode: " << stringize(info.imageSharingMode) << std::endl
-            << "preTransform: " << stringize(info.preTransform) << std::endl
-            << "compositeAlpha: " << stringize(info.compositeAlpha) << std::endl
-            << "presentMode: " << stringize(info.presentMode) << std::endl
+            << "imageUsage: " << helpers::stringize(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT) << std::endl
+            << "imageSharingMode: " << helpers::stringize(info.imageSharingMode) << std::endl
+            << "preTransform: " << helpers::stringize(info.preTransform) << std::endl
+            << "compositeAlpha: " << helpers::stringize(info.compositeAlpha) << std::endl
+            << "presentMode: " << helpers::stringize(info.presentMode) << std::endl
             << "clipped: " << (info.clipped ? "VK_TRUE" : "VK_FALSE") << std::endl
             << "oldSwapchain: " << info.oldSwapchain << std::endl;
         MAGMA_THROW_FAILURE(create, msg.str());

@@ -22,6 +22,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+namespace helpers
+{
 const char *stringize(VkSystemAllocationScope param) noexcept
 {
     switch (param)
@@ -1259,6 +1261,7 @@ const char *stringize(VkCompositeAlphaFlagBitsKHR bit) noexcept
     MAGMA_DEFAULT_UNKNOWN;
     };
 }
+} // namespace helpers
 } // namespace magma
 
 #endif // MAGMA_DEBUG
