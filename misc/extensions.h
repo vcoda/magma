@@ -29,9 +29,8 @@ namespace magma
 
     /* https://www.khronos.org/registry/vulkan/ */
 
-    class Extensions
+    struct Extensions
     {
-    public:
         const std::map<std::string, uint32_t>& getExtensions() const noexcept
             { return extensions; }
         bool hasExtension(const char *name) const noexcept;

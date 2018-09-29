@@ -52,10 +52,8 @@ namespace magma
     typedef std::shared_ptr<class IndexBuffer> IndexBufferPtr;
     typedef std::shared_ptr<class IndirectBuffer> IndirectBufferPtr;
     typedef std::shared_ptr<class Instance> InstancePtr;
-    typedef std::shared_ptr<class InstanceExtensions> InstanceExtensionsPtr;
     typedef std::shared_ptr<class Object> ObjectPtr;
     typedef std::shared_ptr<class PhysicalDevice> PhysicalDevicePtr;
-    typedef std::shared_ptr<class PhysicalDeviceExtensions> PhysicalDeviceExtensionsPtr;
     typedef std::shared_ptr<class Pipeline> PipelinePtr;
     typedef std::shared_ptr<class PipelineCache> PipelineCachePtr;
     typedef std::shared_ptr<class PipelineLayout> PipelineLayoutPtr;
@@ -72,6 +70,9 @@ namespace magma
     typedef std::shared_ptr<class Swapchain> SwapchainPtr;
     typedef std::shared_ptr<class UniformTexelBuffer> UniformTexelBufferPtr;
     typedef std::shared_ptr<class VertexBuffer> VertexBufferPtr;
+
+    typedef std::shared_ptr<struct InstanceExtensions> InstanceExtensionsPtr;
+    typedef std::shared_ptr<struct PhysicalDeviceExtensions> PhysicalDeviceExtensionsPtr;
 
     typedef std::function<void *(void *, const void *, std::size_t)> CopyMemoryFunction;
     typedef std::function<void *(void *, std::size_t)> ZeroMemoryFunction;
