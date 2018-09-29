@@ -97,7 +97,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "misc/pushConstants.h"
 #include "misc/scissor.h"
 #include "misc/scopedDebugMarker.h"
-#include "misc/stringize.h"
 #include "misc/viewport.h"
 
 #include "helpers/alignedUniformArray.h"
@@ -105,6 +104,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "helpers/hash.h"
 #include "helpers/mapScoped.h"
 #include "helpers/stackArray.h"
+#include "helpers/stringize.h"
 #include "helpers/uniformArray.h"
 
 #include "mem/copyMemory.h"
