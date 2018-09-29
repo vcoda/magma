@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <vector>
-#include <set>
 #include <string>
 #include "handle.h"
 
@@ -43,6 +42,6 @@ namespace magma
         ~Instance();
         uint32_t countPhysicalDevices() const;
         std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId);
-        std::set<std::string> enumerateExtensions(const char *layerName = nullptr) const;
+        std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr) const;
     };
 } // namespace magma

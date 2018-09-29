@@ -89,19 +89,16 @@ const VkPhysicalDeviceMemoryProperties& PhysicalDevice::getMemoryProperties() co
     return memoryProperties;
 }
 
-std::set<std::string> PhysicalDevice::enumerateExtensions(const char *layerName /* nullptr */) const
+std::vector<VkExtensionProperties> PhysicalDevice::enumerateExtensions(const char *layerName /* nullptr */) const
 {
     uint32_t propertyCount = 0;
     const VkResult count = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, nullptr);
     MAGMA_THROW_FAILURE(count, "failed to count device extensions");
-    std::vector<VkExtensionProperties> properties(propertyCount);
-    std::set<std::string> extensions;
+    std::vector<VkExtensionProperties> extensions(propertyCount);
     if (propertyCount > 0)
     {
-        const VkResult enumerate = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, properties.data());
+        const VkResult enumerate = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, extensions.data());
         MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device extensions");
-        for (const auto& property : properties)
-            extensions.emplace(property.extensionName);
     }
     return extensions;
 }

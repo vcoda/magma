@@ -16,27 +16,31 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <set>
+#include <vector>
+#include <map>
 #include <string>
 #include <memory>
+#include "../vulkan.h"
 
 namespace magma
 {
+    class Instance;
+    class PhysicalDevice;
+
     /* https://www.khronos.org/registry/vulkan/ */
 
     class Extensions
     {
     public:
+        const std::map<std::string, uint32_t>& getExtensions() const noexcept
+            { return extensions; }
         bool hasExtension(const char *name) const noexcept;
-        const std::set<std::string>& getExtensions() const noexcept { return extensions; }
 
     protected:
-        Extensions() noexcept {}
-        Extensions(const std::set<std::string>& extensions):
-            extensions(extensions) {}
+        Extensions(const std::vector<VkExtensionProperties>& extensions);
 
     protected:
-        std::set<std::string> extensions;
+        std::map<std::string, uint32_t> extensions;
     };
 
     struct InstanceExtensions : Extensions
@@ -62,10 +66,10 @@ namespace magma
         const bool MVK_ios_surface;
         const bool MVK_macos_surface;
 
-        InstanceExtensions(std::shared_ptr<const class Instance> instance);
+        InstanceExtensions(std::shared_ptr<const Instance> instance);
     };
 
-    struct DeviceExtensions : Extensions
+    struct PhysicalDeviceExtensions : Extensions
     {   // Keep extensions list in alphabetical order
         const bool AMD_buffer_marker;
         const bool AMD_calibrated_timestamps;
@@ -136,6 +140,6 @@ namespace magma
         const bool NV_viewport_swizzle;
         const bool NV_win32_keyed_mutex;
 
-        DeviceExtensions(std::shared_ptr<const class PhysicalDevice> device);
+        PhysicalDeviceExtensions(std::shared_ptr<const PhysicalDevice> device);
     };
 } // namespace magma

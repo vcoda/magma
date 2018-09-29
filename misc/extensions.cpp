@@ -23,6 +23,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+Extensions::Extensions(const std::vector<VkExtensionProperties>& extensions)
+{
+    for (const auto& property : extensions)
+        this->extensions[property.extensionName] = property.specVersion;
+}
+
 bool Extensions::hasExtension(const char *name) const noexcept
 {
     static const std::string prefix("VK_");
@@ -54,7 +60,7 @@ InstanceExtensions::InstanceExtensions(std::shared_ptr<const Instance> instance)
     MAGMA_CHECK_EXTENSION(MVK_macos_surface)
 {}
 
-DeviceExtensions::DeviceExtensions(std::shared_ptr<const PhysicalDevice> device):
+PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const PhysicalDevice> device):
     Extensions(device->enumerateExtensions()),
 
     MAGMA_CHECK_EXTENSION(AMD_buffer_marker),
