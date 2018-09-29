@@ -27,7 +27,7 @@ namespace magma
     {
         template<typename Type>
         inline void mapScoped(
-            const Buffer *buffer,
+            const std::shared_ptr<Buffer>& buffer,
             std::function<void(Type *data)> fn)
         {
             MAGMA_ASSERT(buffer);
@@ -42,14 +42,6 @@ namespace magma
                     memory->unmap();
                 }
             }
-        }
-
-        template<typename Type>
-        inline void mapScoped(
-            const std::shared_ptr<Buffer>& buffer,
-            std::function<void(Type *data)> fn)
-        {
-            mapScoped(buffer.get(), fn);
         }
 
         template<typename Block>
