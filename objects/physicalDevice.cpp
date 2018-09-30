@@ -189,6 +189,39 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared
     return surfacePresentModes;
 }
 
+bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex, void *display,
+    const void *visualID /* nullptr */) const noexcept
+{
+#if defined(VK_USE_PLATFORM_WIN32_KHR)
+#if defined(_MSC_VER)
+    display;
+    visualID;
+#endif
+    const VkBool32 get = vkGetPhysicalDeviceWin32PresentationSupportKHR(handle, queueFamilyIndex);
+#elif defined(VK_USE_PLATFORM_XLIB_KHR)
+    MAGMA_ASSERT(display);
+    MAGMA_ASSERT(visualID);
+    const VkBool32 get = vkGetPhysicalDeviceXlibPresentationSupportKHR(handle, queueFamilyIndex,
+        reinterpret_cast<::Display *>(display),
+        *reinterpret_cast<const VisualID *>(visualID));
+#elif defined(VK_USE_PLATFORM_XCB_KHR)
+    MAGMA_ASSERT(display);
+    MAGMA_ASSERT(visualID);
+    const VkBool32 get = vkGetPhysicalDeviceXcbPresentationSupportKHR(handle, queueFamilyIndex,
+        reinterpret_cast<xcb_connection_t *>(display),
+        *reinterpret_cast<const xcb_visualid_t *>(visualID));
+#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
+    MAGMA_ASSERT(display);
+    const VkBool32 get = vkGetPhysicalDeviceWaylandPresentationSupportKHR(handle, queueFamilyIndex,
+        reinterpret_cast<wl_display *>(display));
+#elif defined(VK_USE_PLATFORM_MIR_KHR)
+    MAGMA_ASSERT(display);
+    const VkBool32 get = vkGetPhysicalDeviceMirPresentationSupportKHR(handle, queueFamilyIndex,
+        reinterpret_cast<MirConnection *>(display));
+#endif
+    return (get ? true : false);
+}
+
 std::vector<VkDisplayPropertiesKHR> PhysicalDevice::getDisplayProperties() const
 {
     uint32_t propertyCount = 0;
