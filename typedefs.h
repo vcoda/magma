@@ -21,6 +21,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class Display; // Declare explicitly because of Xlib's Diplay
+
     typedef std::shared_ptr<class IAllocator> AllocatorPtr;
 
     typedef std::shared_ptr<class Buffer> BufferPtr;
@@ -35,7 +37,7 @@ namespace magma
     typedef std::shared_ptr<class DescriptorSetLayout> DescriptorSetLayoutPtr;
     typedef std::shared_ptr<class Device> DevicePtr;
     typedef std::shared_ptr<class DeviceMemory> DeviceMemoryPtr;
-    typedef std::shared_ptr<class Display> DisplayPtr;
+    typedef std::shared_ptr<Display> DisplayPtr;
     typedef std::shared_ptr<class DisplayMode> DisplayModePtr;
     typedef std::shared_ptr<class DisplaySurface> DisplaySurfacePtr;
     typedef std::shared_ptr<class DstTransferBuffer> DstTransferBufferPtr;

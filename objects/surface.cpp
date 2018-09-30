@@ -56,7 +56,7 @@ Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance,
 #elif defined(VK_USE_PLATFORM_XLIB_KHR)
 
 XlibSurface::XlibSurface(std::shared_ptr<const Instance> instance,
-    Display *dpy,
+    ::Display *dpy,
     Window window,
     VkXlibSurfaceCreateFlagsKHR flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):

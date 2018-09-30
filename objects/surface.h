@@ -57,7 +57,7 @@ namespace magma
     {
     public:
         explicit XlibSurface(std::shared_ptr<const Instance> instance,
-            Display *dpy,
+            ::Display *dpy,
             Window window,
             VkXlibSurfaceCreateFlagsKHR flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
