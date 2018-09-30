@@ -22,9 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class SrcTransferBuffer;
-    class CommandBuffer;
-
     /* An array of vertex indices. */
 
     class IndexBuffer : public Buffer

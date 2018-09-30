@@ -20,9 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class SrcTransferBuffer;
-    class CommandBuffer;
-
     /* Uniform texel buffer that is accessed from the shader stage through buffer view. */
 
     class UniformTexelBuffer : public Buffer

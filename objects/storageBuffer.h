@@ -22,8 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class CommandBuffer;
-
     /* A storage buffer described in a shader as a structure with various members
        that load, store, and atomic operations can be performed on. */
 
