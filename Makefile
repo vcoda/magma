@@ -23,19 +23,21 @@ MAGMA_OBJS= \
 	descriptors/subpass.o \
 	\
 	misc/clearValue.o \
-	misc/scopedDebugMarker.o \
 	misc/deviceQueueDesc.o \
 	misc/exception.o \
 	misc/extensions.o \
 	misc/format.o \
 	misc/geometry.o \
-	misc/stringize.o \
+	misc/scopedDebugMarker.o \
+	\
+	helpers/stringize.o \
 	\
 	objects/accelerationStructure.o \
 	objects/buffer.o \
 	objects/bufferView.o \
 	objects/commandBuffer.o \
 	objects/commandPool.o \
+	objects/conditionalRenderingBuffer.o \
 	objects/debugMarker.o \
 	objects/debugReportCallback.o \
 	objects/descriptorPool.o \

@@ -16,9 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "srcTransferBuffer.h"
-#include "deviceMemory.h"
-#include "../mem/copyMemory.h"
-#include "../helpers/mapScoped.h"
 
 namespace magma
 {
@@ -40,13 +37,6 @@ SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<Device> device,
     SrcTransferBuffer(std::move(device), size, flags, std::move(allocator))
 {
     if (data)
-    {
-        if (!copyFn)
-            copyFn = copyMemory;
-        helpers::mapScoped<void>(this, [&copyFn, data, size](void *buffer)
-        {
-            copyFn(buffer, data, static_cast<size_t>(size));
-        });
-    }
+        copyToMapped(data, std::move(copyFn));
 }
 } // namespace magma

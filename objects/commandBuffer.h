@@ -353,6 +353,13 @@ namespace magma
 
         void executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept;
 
+        // VK_EXT_conditional_rendering
+        void beginConditionalRendering(
+            const std::shared_ptr<Buffer>& buffer,
+            VkDeviceSize offset = 0,
+            bool inverted = false) noexcept;
+        void endConditionalRendering() noexcept;
+
         // VK_NVX_raytracing
         void buildAccelerationStructure(
             uint32_t instanceCount,
@@ -409,13 +416,15 @@ namespace magma
         void enableOcclusionQuery(
             bool enable,
             VkQueryControlFlags queryFlags) noexcept;
+        void enableConditionalRendering(bool enable) noexcept;
         void queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept;
 
     private:
         std::shared_ptr<CommandPool> pool;
         std::shared_ptr<Fence> fence;
         VkRect2D renderArea = {{0, 0}, {0, 0}};
-        bool occlusionQueryEnable = false;
+        VkBool32 occlusionQueryEnable = VK_FALSE;
+        VkBool32 conditionalRenderingEnable = VK_FALSE;
         VkQueryControlFlags queryFlags = 0;
         VkQueryPipelineStatisticFlags pipelineStatistics = 0;
     };

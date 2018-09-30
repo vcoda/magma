@@ -146,6 +146,7 @@
     <ClInclude Include="helpers\copy.h" />
     <ClInclude Include="helpers\mapScoped.h" />
     <ClInclude Include="helpers\stackArray.h" />
+    <ClInclude Include="helpers\stringize.h" />
     <ClInclude Include="helpers\uniformArray.h" />
     <ClInclude Include="helpers\hash.h" />
     <ClInclude Include="magma.h" />
@@ -164,7 +165,6 @@
     <ClInclude Include="misc\format.h" />
     <ClInclude Include="misc\pushConstants.h" />
     <ClInclude Include="misc\scissor.h" />
-    <ClInclude Include="misc\stringize.h" />
     <ClInclude Include="misc\viewport.h" />
     <ClInclude Include="nonCopyable.h" />
     <ClInclude Include="objects\accelerationStructure.h" />
@@ -172,6 +172,7 @@
     <ClInclude Include="objects\bufferView.h" />
     <ClInclude Include="objects\commandBuffer.h" />
     <ClInclude Include="objects\commandPool.h" />
+    <ClInclude Include="objects\conditionalRenderingBuffer.h" />
     <ClInclude Include="objects\debugMarker.h" />
     <ClInclude Include="objects\debugReportCallback.h" />
     <ClInclude Include="objects\descriptorPool.h" />
@@ -257,6 +258,7 @@
     <ClCompile Include="barriers\globalMemoryBarrier.cpp" />
     <ClCompile Include="descriptors\attachment.cpp" />
     <ClCompile Include="descriptors\subpass.cpp" />
+    <ClCompile Include="helpers\stringize.cpp" />
     <ClCompile Include="misc\clearValue.cpp" />
     <ClCompile Include="misc\geometry.cpp" />
     <ClCompile Include="misc\scopedDebugMarker.cpp" />
@@ -264,12 +266,12 @@
     <ClCompile Include="misc\exception.cpp" />
     <ClCompile Include="misc\extensions.cpp" />
     <ClCompile Include="misc\format.cpp" />
-    <ClCompile Include="misc\stringize.cpp" />
     <ClCompile Include="objects\accelerationStructure.cpp" />
     <ClCompile Include="objects\buffer.cpp" />
     <ClCompile Include="objects\bufferView.cpp" />
     <ClCompile Include="objects\commandBuffer.cpp" />
     <ClCompile Include="objects\commandPool.cpp" />
+    <ClCompile Include="objects\conditionalRenderingBuffer.cpp" />
     <ClCompile Include="objects\debugMarker.cpp" />
     <ClCompile Include="objects\debugReportCallback.cpp" />
     <ClCompile Include="objects\descriptorPool.cpp" />

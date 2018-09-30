@@ -16,13 +16,15 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "stringize.h"
-
 #ifdef MAGMA_DEBUG
+
 #define MAGMA_DEFAULT_UNKNOWN default: return MAGMA_UNKNOWN
 
 namespace magma
 {
-MAGMA_STRING stringize(VkSystemAllocationScope param) noexcept
+namespace helpers
+{
+const char *stringize(VkSystemAllocationScope param) noexcept
 {
     switch (param)
     {
@@ -35,7 +37,7 @@ MAGMA_STRING stringize(VkSystemAllocationScope param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkInternalAllocationType param) noexcept
+const char *stringize(VkInternalAllocationType param) noexcept
 {
     switch (param)
     {
@@ -44,7 +46,7 @@ MAGMA_STRING stringize(VkInternalAllocationType param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkFormat param) noexcept
+const char *stringize(VkFormat param) noexcept
 {
     switch (param)
     {
@@ -279,7 +281,7 @@ MAGMA_STRING stringize(VkFormat param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkImageType param) noexcept
+const char *stringize(VkImageType param) noexcept
 {
     switch (param)
     {
@@ -290,7 +292,7 @@ MAGMA_STRING stringize(VkImageType param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkImageTiling param) noexcept
+const char *stringize(VkImageTiling param) noexcept
 {
     switch (param)
     {
@@ -300,7 +302,7 @@ MAGMA_STRING stringize(VkImageTiling param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkPhysicalDeviceType param) noexcept
+const char *stringize(VkPhysicalDeviceType param) noexcept
 {
     switch (param)
     {
@@ -313,7 +315,7 @@ MAGMA_STRING stringize(VkPhysicalDeviceType param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkQueryType param) noexcept
+const char *stringize(VkQueryType param) noexcept
 {
     switch (param)
     {
@@ -324,7 +326,7 @@ MAGMA_STRING stringize(VkQueryType param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkSharingMode param) noexcept
+const char *stringize(VkSharingMode param) noexcept
 {
     switch (param)
     {
@@ -334,7 +336,7 @@ MAGMA_STRING stringize(VkSharingMode param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkImageLayout param) noexcept
+const char *stringize(VkImageLayout param) noexcept
 {
     switch (param)
     {
@@ -355,7 +357,7 @@ MAGMA_STRING stringize(VkImageLayout param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkImageViewType param) noexcept
+const char *stringize(VkImageViewType param) noexcept
 {
     switch (param)
     {
@@ -370,7 +372,7 @@ MAGMA_STRING stringize(VkImageViewType param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkComponentSwizzle param) noexcept
+const char *stringize(VkComponentSwizzle param) noexcept
 {
     switch (param)
     {
@@ -385,7 +387,7 @@ MAGMA_STRING stringize(VkComponentSwizzle param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkVertexInputRate param) noexcept
+const char *stringize(VkVertexInputRate param) noexcept
 {
     switch (param)
     {
@@ -395,7 +397,7 @@ MAGMA_STRING stringize(VkVertexInputRate param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkPrimitiveTopology param) noexcept
+const char *stringize(VkPrimitiveTopology param) noexcept
 {
     switch (param)
     {
@@ -414,7 +416,7 @@ MAGMA_STRING stringize(VkPrimitiveTopology param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkPolygonMode param) noexcept
+const char *stringize(VkPolygonMode param) noexcept
 {
     switch (param)
     {
@@ -426,7 +428,7 @@ MAGMA_STRING stringize(VkPolygonMode param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkFrontFace param) noexcept
+const char *stringize(VkFrontFace param) noexcept
 {
     switch (param)
     {
@@ -436,7 +438,7 @@ MAGMA_STRING stringize(VkFrontFace param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkCompareOp param) noexcept
+const char *stringize(VkCompareOp param) noexcept
 {
     switch (param)
     {
@@ -452,7 +454,7 @@ MAGMA_STRING stringize(VkCompareOp param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkStencilOp param) noexcept
+const char *stringize(VkStencilOp param) noexcept
 {
     switch (param)
     {
@@ -468,7 +470,7 @@ MAGMA_STRING stringize(VkStencilOp param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkLogicOp param) noexcept
+const char *stringize(VkLogicOp param) noexcept
 {
     switch (param)
     {
@@ -492,7 +494,7 @@ MAGMA_STRING stringize(VkLogicOp param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkBlendFactor param) noexcept
+const char *stringize(VkBlendFactor param) noexcept
 {
     switch (param)
     {
@@ -519,7 +521,7 @@ MAGMA_STRING stringize(VkBlendFactor param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkBlendOp param) noexcept
+const char *stringize(VkBlendOp param) noexcept
 {
     switch (param)
     {
@@ -578,7 +580,7 @@ MAGMA_STRING stringize(VkBlendOp param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkDynamicState param) noexcept
+const char *stringize(VkDynamicState param) noexcept
 {
     switch (param)
     {
@@ -598,7 +600,7 @@ MAGMA_STRING stringize(VkDynamicState param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkFilter param) noexcept
+const char *stringize(VkFilter param) noexcept
 {
     switch (param)
     {
@@ -609,7 +611,7 @@ MAGMA_STRING stringize(VkFilter param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkSamplerMipmapMode param) noexcept
+const char *stringize(VkSamplerMipmapMode param) noexcept
 {
     switch (param)
     {
@@ -619,7 +621,7 @@ MAGMA_STRING stringize(VkSamplerMipmapMode param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkSamplerAddressMode param) noexcept
+const char *stringize(VkSamplerAddressMode param) noexcept
 {
     switch (param)
     {
@@ -632,7 +634,7 @@ MAGMA_STRING stringize(VkSamplerAddressMode param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkBorderColor param) noexcept
+const char *stringize(VkBorderColor param) noexcept
 {
     switch (param)
     {
@@ -646,7 +648,7 @@ MAGMA_STRING stringize(VkBorderColor param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkDescriptorType param) noexcept
+const char *stringize(VkDescriptorType param) noexcept
 {
     switch (param)
     {
@@ -665,7 +667,7 @@ MAGMA_STRING stringize(VkDescriptorType param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkAttachmentLoadOp param) noexcept
+const char *stringize(VkAttachmentLoadOp param) noexcept
 {
     switch (param)
     {
@@ -676,7 +678,7 @@ MAGMA_STRING stringize(VkAttachmentLoadOp param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkAttachmentStoreOp param) noexcept
+const char *stringize(VkAttachmentStoreOp param) noexcept
 {
     switch (param)
     {
@@ -686,7 +688,7 @@ MAGMA_STRING stringize(VkAttachmentStoreOp param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkPipelineBindPoint param) noexcept
+const char *stringize(VkPipelineBindPoint param) noexcept
 {
     switch (param)
     {
@@ -696,7 +698,7 @@ MAGMA_STRING stringize(VkPipelineBindPoint param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkCommandBufferLevel param) noexcept
+const char *stringize(VkCommandBufferLevel param) noexcept
 {
     switch (param)
     {
@@ -706,7 +708,7 @@ MAGMA_STRING stringize(VkCommandBufferLevel param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkIndexType param) noexcept
+const char *stringize(VkIndexType param) noexcept
 {
     switch (param)
     {
@@ -716,7 +718,7 @@ MAGMA_STRING stringize(VkIndexType param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkSubpassContents param) noexcept
+const char *stringize(VkSubpassContents param) noexcept
 {
     switch (param)
     {
@@ -726,7 +728,7 @@ MAGMA_STRING stringize(VkSubpassContents param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkObjectType param) noexcept
+const char *stringize(VkObjectType param) noexcept
 {
     switch (param)
     {
@@ -770,7 +772,7 @@ MAGMA_STRING stringize(VkObjectType param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkFormatFeatureFlagBits bit) noexcept
+const char *stringize(VkFormatFeatureFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -802,7 +804,7 @@ MAGMA_STRING stringize(VkFormatFeatureFlagBits bit) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkImageUsageFlagBits bit) noexcept
+const char *stringize(VkImageUsageFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -818,7 +820,7 @@ MAGMA_STRING stringize(VkImageUsageFlagBits bit) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkImageCreateFlagBits bit) noexcept
+const char *stringize(VkImageCreateFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -839,7 +841,7 @@ MAGMA_STRING stringize(VkImageCreateFlagBits bit) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkSampleCountFlagBits bit) noexcept
+const char *stringize(VkSampleCountFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -854,7 +856,7 @@ MAGMA_STRING stringize(VkSampleCountFlagBits bit) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkQueueFlagBits bit) noexcept
+const char *stringize(VkQueueFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -866,7 +868,7 @@ MAGMA_STRING stringize(VkQueueFlagBits bit) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkMemoryPropertyFlagBits bit) noexcept
+const char *stringize(VkMemoryPropertyFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -879,7 +881,7 @@ MAGMA_STRING stringize(VkMemoryPropertyFlagBits bit) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkMemoryHeapFlagBits bit) noexcept
+const char *stringize(VkMemoryHeapFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -889,7 +891,7 @@ MAGMA_STRING stringize(VkMemoryHeapFlagBits bit) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkDeviceQueueCreateFlagBits bit) noexcept
+const char *stringize(VkDeviceQueueCreateFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -898,7 +900,7 @@ MAGMA_STRING stringize(VkDeviceQueueCreateFlagBits bit) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkPipelineStageFlagBits bit) noexcept
+const char *stringize(VkPipelineStageFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -924,7 +926,7 @@ MAGMA_STRING stringize(VkPipelineStageFlagBits bit) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkImageAspectFlagBits bit) noexcept
+const char *stringize(VkImageAspectFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -939,7 +941,7 @@ MAGMA_STRING stringize(VkImageAspectFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkSparseImageFormatFlagBits bit) noexcept
+const char *stringize(VkSparseImageFormatFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -950,7 +952,7 @@ MAGMA_STRING stringize(VkSparseImageFormatFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkSparseMemoryBindFlagBits bit) noexcept
+const char *stringize(VkSparseMemoryBindFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -959,7 +961,7 @@ MAGMA_STRING stringize(VkSparseMemoryBindFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkFenceCreateFlagBits bit) noexcept
+const char *stringize(VkFenceCreateFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -968,7 +970,7 @@ MAGMA_STRING stringize(VkFenceCreateFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkQueryPipelineStatisticFlagBits bit) noexcept
+const char *stringize(VkQueryPipelineStatisticFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -987,7 +989,7 @@ MAGMA_STRING stringize(VkQueryPipelineStatisticFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkQueryResultFlagBits bit) noexcept
+const char *stringize(VkQueryResultFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -999,7 +1001,7 @@ MAGMA_STRING stringize(VkQueryResultFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkBufferCreateFlagBits bit) noexcept
+const char *stringize(VkBufferCreateFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1011,7 +1013,7 @@ MAGMA_STRING stringize(VkBufferCreateFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkBufferUsageFlagBits bit) noexcept
+const char *stringize(VkBufferUsageFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1028,7 +1030,7 @@ MAGMA_STRING stringize(VkBufferUsageFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkPipelineCreateFlagBits bit) noexcept
+const char *stringize(VkPipelineCreateFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1039,7 +1041,7 @@ MAGMA_STRING stringize(VkPipelineCreateFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkShaderStageFlagBits flags) noexcept
+const char *stringize(VkShaderStageFlagBits flags) noexcept
 {
     switch (flags)
     {
@@ -1055,7 +1057,7 @@ MAGMA_STRING stringize(VkShaderStageFlagBits flags) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkCullModeFlagBits flags) noexcept
+const char *stringize(VkCullModeFlagBits flags) noexcept
 {
     switch (flags)
     {
@@ -1067,7 +1069,7 @@ MAGMA_STRING stringize(VkCullModeFlagBits flags) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkColorComponentFlagBits bit) noexcept
+const char *stringize(VkColorComponentFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1079,7 +1081,7 @@ MAGMA_STRING stringize(VkColorComponentFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkDescriptorSetLayoutCreateFlagBits bit) noexcept
+const char *stringize(VkDescriptorSetLayoutCreateFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1088,7 +1090,7 @@ MAGMA_STRING stringize(VkDescriptorSetLayoutCreateFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkDescriptorPoolCreateFlagBits bit) noexcept
+const char *stringize(VkDescriptorPoolCreateFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1097,7 +1099,7 @@ MAGMA_STRING stringize(VkDescriptorPoolCreateFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkAttachmentDescriptionFlagBits bit) noexcept
+const char *stringize(VkAttachmentDescriptionFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1106,7 +1108,7 @@ MAGMA_STRING stringize(VkAttachmentDescriptionFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkAccessFlagBits bit) noexcept
+const char *stringize(VkAccessFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1134,7 +1136,7 @@ MAGMA_STRING stringize(VkAccessFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkCommandPoolCreateFlagBits bit) noexcept
+const char *stringize(VkCommandPoolCreateFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1144,7 +1146,7 @@ MAGMA_STRING stringize(VkCommandPoolCreateFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkCommandPoolResetFlagBits bit) noexcept
+const char *stringize(VkCommandPoolResetFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1153,7 +1155,7 @@ MAGMA_STRING stringize(VkCommandPoolResetFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkCommandBufferUsageFlagBits bit) noexcept
+const char *stringize(VkCommandBufferUsageFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1164,7 +1166,7 @@ MAGMA_STRING stringize(VkCommandBufferUsageFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkQueryControlFlagBits bit) noexcept
+const char *stringize(VkQueryControlFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1173,7 +1175,7 @@ MAGMA_STRING stringize(VkQueryControlFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkCommandBufferResetFlagBits bit) noexcept
+const char *stringize(VkCommandBufferResetFlagBits bit) noexcept
 {
     switch (bit)
     {
@@ -1182,7 +1184,7 @@ MAGMA_STRING stringize(VkCommandBufferResetFlagBits bit) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkStencilFaceFlagBits flags) noexcept
+const char *stringize(VkStencilFaceFlagBits flags) noexcept
 {
     switch (flags)
     {
@@ -1193,7 +1195,7 @@ MAGMA_STRING stringize(VkStencilFaceFlagBits flags) noexcept
     }
 }
 
-MAGMA_STRING stringize(VkColorSpaceKHR param) noexcept
+const char *stringize(VkColorSpaceKHR param) noexcept
 {
     switch (param)
     {
@@ -1216,7 +1218,7 @@ MAGMA_STRING stringize(VkColorSpaceKHR param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkPresentModeKHR param) noexcept
+const char *stringize(VkPresentModeKHR param) noexcept
 {
     switch (param)
     {
@@ -1230,7 +1232,7 @@ MAGMA_STRING stringize(VkPresentModeKHR param) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkSurfaceTransformFlagBitsKHR bit) noexcept
+const char *stringize(VkSurfaceTransformFlagBitsKHR bit) noexcept
 {
     switch (bit)
     {
@@ -1247,7 +1249,7 @@ MAGMA_STRING stringize(VkSurfaceTransformFlagBitsKHR bit) noexcept
     };
 }
 
-MAGMA_STRING stringize(VkCompositeAlphaFlagBitsKHR bit) noexcept
+const char *stringize(VkCompositeAlphaFlagBitsKHR bit) noexcept
 {
     switch (bit)
     {
@@ -1259,6 +1261,7 @@ MAGMA_STRING stringize(VkCompositeAlphaFlagBitsKHR bit) noexcept
     MAGMA_DEFAULT_UNKNOWN;
     };
 }
+} // namespace helpers
 } // namespace magma
 
 #endif // MAGMA_DEBUG

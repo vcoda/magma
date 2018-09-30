@@ -31,6 +31,8 @@ namespace magma
     class Object : public NonCopyable
     {
     public:
+        // Notice that std::make_shared() constructs an objects via placement new,
+        // so custom allocation functions do not used in that case.
         void *operator new(std::size_t size);
         void *operator new(std::size_t size, const std::nothrow_t&) noexcept;
         void operator delete(void *ptr);

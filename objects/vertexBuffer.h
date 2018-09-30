@@ -31,10 +31,6 @@ namespace magma
     {
     public:
         explicit VertexBuffer(std::shared_ptr<Device> device,
-            VkDeviceSize size,
-            VkBufferCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-        explicit VertexBuffer(std::shared_ptr<Device> device,
             const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,

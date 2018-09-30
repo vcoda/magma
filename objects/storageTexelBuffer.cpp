@@ -18,40 +18,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "storageTexelBuffer.h"
 #include "srcTransferBuffer.h"
 #include "commandBuffer.h"
-#include "device.h"
 #include "deviceMemory.h"
-#include "queue.h"
-#include "fence.h"
-#include "../mem/copyMemory.h"
-#include "../helpers/mapScoped.h"
-#include "../misc/exception.h"
 
 namespace magma
 {
-StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
-    VkBufferCreateFlags flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Buffer(std::move(device), size,
-        VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT,
-        flags, std::move(allocator),
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
-{}
-
 StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<Device> device, const void *data, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    StorageTexelBuffer(std::move(device), size, flags, std::move(allocator))
+    Buffer(std::move(device), size,
+        VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT,
+        flags, std::move(allocator),
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
 {
     if (data)
-    {
-        if (!copyFn)
-            copyFn = copyMemory;
-        helpers::mapScoped<void>(this, [&copyFn, data, size](void *buffer)
-        {
-            copyFn(buffer, data, static_cast<size_t>(size));
-        });
-    }
+        copyToMapped(data, std::move(copyFn));
 }
 
 StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size,
@@ -71,20 +52,6 @@ StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<CommandBuffer> copyCmdBuf
         flags, std::move(allocator),
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
 {
-    copyCmdBuffer->begin();
-    {
-        VkBufferCopy region;
-        region.srcOffset = 0;
-        region.dstOffset = 0;
-        region.size = srcBuffer->getMemory()->getSize();
-        vkCmdCopyBuffer(*copyCmdBuffer, *srcBuffer, handle, 1, &region);
-    }
-    copyCmdBuffer->end();
-    std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_TRANSFER_BIT, 0));
-    std::shared_ptr<Fence> fence(copyCmdBuffer->getFence());
-    if (!queue->submit(std::move(copyCmdBuffer), 0, nullptr, nullptr, fence))
-        MAGMA_THROW("failed to submit command buffer to transfer queue");
-    if (!fence->wait())
-        MAGMA_THROW("failed to wait fence");
+    copyTransfer(std::move(copyCmdBuffer), std::move(srcBuffer));
 }
 } // namespace magma

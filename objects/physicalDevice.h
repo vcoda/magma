@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <vector>
-#include <set>
 #include <string>
 #include "handle.h"
 #include "../misc/deviceQueueDesc.h"
@@ -49,7 +48,7 @@ namespace magma
             VkImageCreateFlags flags = 0) const;
         std::vector<VkQueueFamilyProperties> getQueueFamilyProperties() const noexcept;
         const VkPhysicalDeviceMemoryProperties& getMemoryProperties() const noexcept;
-        std::set<std::string> enumerateExtensions(const char *layerName = nullptr) const;
+        std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr) const;
         std::vector<VkLayerProperties> enumerateLayerProperties() const;
         std::shared_ptr<Device> createDevice(
             const std::vector<DeviceQueueDescriptor>& queueDescriptors,

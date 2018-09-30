@@ -37,12 +37,12 @@ namespace magma
         int ln;
     };
 
-    class BadResultException : public Exception
+    class BadResult : public Exception
     {
     public:
-        BadResultException(const VkResult result, const char *const message,
+        BadResult(const VkResult result, const char *const message,
             const char *file, int line);
-        BadResultException(const VkResult result, const std::string& message,
+        BadResult(const VkResult result, const std::string& message,
             const char *file, int line);
         VkResult code() const noexcept { return result; }
         const char *codeString() const noexcept;
@@ -51,31 +51,28 @@ namespace magma
         VkResult result;
     };
 
-    class ExtensionNotPresentException : public Exception
+    class ExtensionNotPresent: public Exception
     {
     public:
-        ExtensionNotPresentException(const char *const extension,
+        ExtensionNotPresent(const char *const extension,
             const char *file, int line);
     };
 
-    class NotImplementedException : public Exception
+    class NotImplemented : public Exception
     {
     public:
-        NotImplementedException(const char *const function,
+        NotImplemented(const char *const function,
             const char *file, int line);
     };
 } // namespace magma
 
 #define MAGMA_THROW(message) throw Exception(message, __FILE__, __LINE__)
-
 #define MAGMA_THROW_FAILURE(result, message)\
     if (!MAGMA_SUCCEEDED(result))\
-        throw BadResultException(result, message, __FILE__, __LINE__)
-
-#define MAGMA_THROW_NOT_PRESENT(extension) throw ExtensionNotPresentException(extension, __FILE__, __LINE__)
-
+        throw BadResult(result, message, __FILE__, __LINE__)
+#define MAGMA_THROW_NOT_PRESENT(extension) throw ExtensionNotPresent(extension, __FILE__, __LINE__)
 #ifdef _MSC_VER
-#   define MAGMA_THROW_NOT_IMPLEMENTED throw NotImplementedException(__FUNCSIG__, __FILE__, __LINE__)
+#   define MAGMA_THROW_NOT_IMPLEMENTED throw NotImplemented(__FUNCSIG__, __FILE__, __LINE__)
 #else
-#   define MAGMA_THROW_NOT_IMPLEMENTED throw NotImplementedException(__PRETTY_FUNCTION__, __FILE__, __LINE__)
+#   define MAGMA_THROW_NOT_IMPLEMENTED throw NotImplemented(__PRETTY_FUNCTION__, __FILE__, __LINE__)
 #endif

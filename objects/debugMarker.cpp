@@ -15,7 +15,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
+#include <cstring>
 #include "debugMarker.h"
+#include "device.h"
 #include "../misc/deviceExtension.h"
 
 namespace magma
@@ -51,6 +53,8 @@ void DebugMarker::setObjectTag(uint64_t name, size_t tagSize, const void *tag) n
 
 void DebugMarker::setObjectName(const char *name) noexcept
 {
+    MAGMA_ASSERT(name);
+    MAGMA_ASSERT(strlen(name) > 0);
 #ifdef MAGMA_DEBUG
     if (!device)
         return;

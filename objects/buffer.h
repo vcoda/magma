@@ -22,6 +22,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class DeviceMemory;
+    class CommandBuffer;
+    class SrcTransferBuffer;
 
     /* Buffers represent linear arrays of data which are used
        for various purposes by binding them to a graphics or compute
@@ -48,6 +50,11 @@ namespace magma
             VkBufferCreateFlags flags,
             std::shared_ptr<IAllocator> allocator,
             VkMemoryPropertyFlags memoryFlags);
+        void copyToMapped(const void *data,
+            CopyMemoryFunction copyFn) noexcept;
+        void copyTransfer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+            std::shared_ptr<SrcTransferBuffer> srcBuffer,
+            VkDeviceSize srcOffset = 0);
 
     protected:
         VkDeviceSize size;

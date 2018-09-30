@@ -74,17 +74,17 @@ std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId)
     return std::shared_ptr<PhysicalDevice>(new PhysicalDevice(shared_from_this(), physicalDevice));
 }
 
-std::set<std::string> Instance::enumerateExtensions(const char *layerName /* nullptr */) const
+std::vector<VkExtensionProperties> Instance::enumerateExtensions(const char *layerName /* nullptr */) const
 {
     uint32_t propertyCount = 0;
     const VkResult count = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, nullptr);
     MAGMA_THROW_FAILURE(count, "failed to count instance extensions");
-    std::vector<VkExtensionProperties> properties(propertyCount);
-    const VkResult enumerate = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, properties.data());
-    MAGMA_THROW_FAILURE(enumerate, "failed to enumerate instance extensions");
-    std::set<std::string> extensions;
-    for (const auto& property : properties)
-        extensions.emplace(property.extensionName);
+    std::vector<VkExtensionProperties> extensions(propertyCount);
+    if (propertyCount > 0)
+    {
+        const VkResult enumerate = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, extensions.data());
+        MAGMA_THROW_FAILURE(enumerate, "failed to enumerate instance extensions");
+    }
     return extensions;
 }
 } // namespace magma

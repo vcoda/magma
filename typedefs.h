@@ -21,10 +21,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    typedef std::shared_ptr<class IAllocator> AllocatorPtr;
+
     typedef std::shared_ptr<class Buffer> BufferPtr;
     typedef std::shared_ptr<class BufferView> BufferViewPtr;
     typedef std::shared_ptr<class CommandBuffer> CommandBufferPtr;
     typedef std::shared_ptr<class CommandPool> CommandPoolPtr;
+    typedef std::shared_ptr<class ComputePipeline> ComputePipelinePtr;
     typedef std::shared_ptr<class DebugMarker> DebugMarkerPtr;
     typedef std::shared_ptr<class DebugReportCallback> DebugReportCallbackPtr;
     typedef std::shared_ptr<class DescriptorPool> DescriptorPoolPtr;
@@ -39,8 +42,7 @@ namespace magma
     typedef std::shared_ptr<class Event> EventPtr;
     typedef std::shared_ptr<class Fence> FencePtr;
     typedef std::shared_ptr<class Framebuffer> FramebufferPtr;
-    typedef std::shared_ptr<class IAllocator> IAllocatorPtr;
-    typedef std::shared_ptr<class IObjectAllocator> IObjectAllocatorPtr;
+    typedef std::shared_ptr<class GraphicsPipeline> GraphicsPipelinePtr;
     typedef std::shared_ptr<class Image> ImagePtr;
     typedef std::shared_ptr<class Image1D> Image1DPtr;
     typedef std::shared_ptr<class Image1DArray> Image1DArrayPtr;
@@ -70,6 +72,14 @@ namespace magma
     typedef std::shared_ptr<class Swapchain> SwapchainPtr;
     typedef std::shared_ptr<class UniformTexelBuffer> UniformTexelBufferPtr;
     typedef std::shared_ptr<class VertexBuffer> VertexBufferPtr;
+
+    typedef std::unique_ptr<struct InstanceExtensions> InstanceExtensionsPtr;
+    typedef std::unique_ptr<struct PhysicalDeviceExtensions> PhysicalDeviceExtensionsPtr;
+
+    namespace utilities
+    {
+        typedef std::shared_ptr<class ImmediateRender> ImmediateRenderPtr;
+    }
 
     typedef std::function<void *(void *, const void *, std::size_t)> CopyMemoryFunction;
     typedef std::function<void *(void *, std::size_t)> ZeroMemoryFunction;

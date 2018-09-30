@@ -289,8 +289,13 @@ MAGMA_INLINE void CommandBuffer::setRenderArea(int32_t x, int32_t y, uint32_t wi
 
 MAGMA_INLINE void CommandBuffer::enableOcclusionQuery(bool enable, VkQueryControlFlags queryFlags) noexcept
 {
-    occlusionQueryEnable = enable;
+    occlusionQueryEnable = MAGMA_BOOLEAN(enable);
     this->queryFlags = queryFlags;
+}
+
+MAGMA_INLINE void CommandBuffer::enableConditionalRendering(bool enable) noexcept
+{
+    conditionalRenderingEnable = MAGMA_BOOLEAN(enable);
 }
 
 MAGMA_INLINE void CommandBuffer::queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept

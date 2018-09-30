@@ -16,31 +16,34 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <vector>
 #include "buffer.h"
+#include "../shared.h"
 
 namespace magma
 {
     class SrcTransferBuffer;
     class CommandBuffer;
 
-    /* Uniform texel buffer that is accessed from the shader stage through buffer view. */
+    /* Buffer that is suitable to use as predicate with conditional rendering extension. */
 
-    class UniformTexelBuffer : public Buffer
+    class ConditionalRenderingBuffer : public Buffer
     {
     public:
-        explicit UniformTexelBuffer(std::shared_ptr<Device> device,
+        explicit ConditionalRenderingBuffer(std::shared_ptr<Device> device,
             const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
-        explicit UniformTexelBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+        explicit ConditionalRenderingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
-        explicit UniformTexelBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+        explicit ConditionalRenderingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             std::shared_ptr<SrcTransferBuffer> srcBuffer,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma
+
