@@ -58,20 +58,6 @@ UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> copyCmdBuf
         flags, std::move(allocator),
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
 {
-    copyCmdBuffer->begin();
-    {
-        VkBufferCopy region;
-        region.srcOffset = 0;
-        region.dstOffset = 0;
-        region.size = srcBuffer->getMemory()->getSize();
-        vkCmdCopyBuffer(*copyCmdBuffer, *srcBuffer, handle, 1, &region);
-    }
-    copyCmdBuffer->end();
-    std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_TRANSFER_BIT, 0));
-    std::shared_ptr<Fence> fence(copyCmdBuffer->getFence());
-    if (!queue->submit(std::move(copyCmdBuffer), 0, nullptr, nullptr, fence))
-        MAGMA_THROW("failed to submit command buffer to transfer queue");
-    if (!fence->wait())
-        MAGMA_THROW("failed to wait fence");
+    copyTransfer(std::move(copyCmdBuffer), std::move(srcBuffer));
 }
 } // namespace magma
