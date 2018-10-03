@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "stringize.h"
-#ifdef MAGMA_DEBUG
 
 #define MAGMA_DEFAULT_UNKNOWN default: return MAGMA_UNKNOWN
 
@@ -1263,5 +1262,3 @@ const char *stringize(VkCompositeAlphaFlagBitsKHR bit) noexcept
 }
 } // namespace helpers
 } // namespace magma
-
-#endif // MAGMA_DEBUG
