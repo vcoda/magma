@@ -24,9 +24,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Instance;
-    class PhysicalDevice;
-
     /* https://www.khronos.org/registry/vulkan/ */
 
     struct Extensions
