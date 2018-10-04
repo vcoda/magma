@@ -46,5 +46,6 @@ namespace magma
         std::vector<std::shared_ptr<CommandBuffer>> allocateCommandBuffers(uint32_t count,
             bool primaryLevel);
         void freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept;
+        void trim(VkCommandPoolTrimFlags flags = 0);
     };
 } // namespace magma

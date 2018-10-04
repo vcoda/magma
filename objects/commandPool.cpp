@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "../allocator/allocator.h"
 #include "../helpers/stackArray.h"
+#include "../misc/deviceExtension.h"
 #include "../misc/exception.h"
 
 namespace magma
@@ -103,5 +104,11 @@ void CommandPool::freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>
         dereferencedCommandBuffers.put(*buffer);
     vkFreeCommandBuffers(MAGMA_HANDLE(device), handle, dereferencedCommandBuffers.size(), dereferencedCommandBuffers);
     commandBuffers.clear();
+}
+
+void CommandPool::trim(VkCommandPoolTrimFlags flags /*0 */)
+{
+    MAGMA_DEVICE_EXTENSION(vkTrimCommandPoolKHR, VK_KHR_MAINTENANCE1_EXTENSION_NAME);
+    vkTrimCommandPoolKHR(MAGMA_HANDLE(device), handle, flags);
 }
 } // namespace magma
