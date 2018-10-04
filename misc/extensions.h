@@ -43,9 +43,11 @@ namespace magma
     };
 
     struct InstanceExtensions : Extensions
-    {
+    {   // Keep extensions list in alphabetical order
         const bool EXT_debug_report;
+        const bool EXT_debug_utils;
 
+        const bool KHR_device_group_creation;
         const bool KHR_display;
         const bool KHR_external_fence_capabilities;
         const bool KHR_external_memory_capabilities;
@@ -53,7 +55,7 @@ namespace magma
         const bool KHR_get_physical_device_properties2;
         const bool KHR_get_surface_capabilities2;
 
-        // Window system integration
+        // WSI
         const bool KHR_surface;
         const bool KHR_android_surface;
         const bool KHR_mir_surface;
@@ -65,7 +67,7 @@ namespace magma
         const bool MVK_ios_surface;
         const bool MVK_macos_surface;
 
-        InstanceExtensions(std::shared_ptr<const Instance> instance);
+        InstanceExtensions(const char *layerName = nullptr);
     };
 
     struct PhysicalDeviceExtensions : Extensions
@@ -139,6 +141,6 @@ namespace magma
         const bool NV_viewport_swizzle;
         const bool NV_win32_keyed_mutex;
 
-        PhysicalDeviceExtensions(std::shared_ptr<const PhysicalDevice> device);
+        PhysicalDeviceExtensions(std::shared_ptr<const class PhysicalDevice> device);
     };
 } // namespace magma

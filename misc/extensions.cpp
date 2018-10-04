@@ -36,11 +36,13 @@ bool Extensions::hasExtension(const char *name) const noexcept
     return it != extensions.end();
 }
 
-InstanceExtensions::InstanceExtensions(std::shared_ptr<const Instance> instance):
-    Extensions(instance->enumerateExtensions()),
+InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
+    Extensions(Instance::enumerateExtensions(layerName)),
 
     MAGMA_CHECK_EXTENSION(EXT_debug_report),
+    MAGMA_CHECK_EXTENSION(EXT_debug_utils),
 
+    MAGMA_CHECK_EXTENSION(KHR_device_group_creation),
     MAGMA_CHECK_EXTENSION(KHR_display),
     MAGMA_CHECK_EXTENSION(KHR_external_fence_capabilities),
     MAGMA_CHECK_EXTENSION(KHR_external_memory_capabilities),
