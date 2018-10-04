@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "physicalDevice.h"
 #include "../allocator/allocator.h"
 #include "../helpers/stackArray.h"
+#include "../misc/instanceExtension.h"
 #include "../misc/exception.h"
 
 namespace magma
@@ -72,6 +73,22 @@ std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId)
     MAGMA_THROW_FAILURE(enumerate, "failed to enumerate physical devices");
     VkPhysicalDevice physicalDevice = physicalDevices[deviceId];
     return std::shared_ptr<PhysicalDevice>(new PhysicalDevice(shared_from_this(), physicalDevice));
+}
+
+std::vector<VkPhysicalDeviceGroupProperties> Instance::enumeratePhysicalDeviceGroups() const
+{
+    uint32_t physicalDeviceGroupCount = 0;
+    InstanceExtension<PFN_vkEnumeratePhysicalDeviceGroupsKHR> vkEnumeratePhysicalDeviceGroupsKHR(
+        handle, "vkEnumeratePhysicalDeviceGroupsKHR", VK_KHR_DEVICE_GROUP_CREATION_EXTENSION_NAME);
+    const VkResult count = vkEnumeratePhysicalDeviceGroupsKHR(handle, &physicalDeviceGroupCount, nullptr);
+    MAGMA_THROW_FAILURE(count, "failed to count groups of physical devices");
+    std::vector<VkPhysicalDeviceGroupProperties> physicalDeviceGroups(physicalDeviceGroupCount);
+    if (physicalDeviceGroupCount > 0)
+    {
+        const VkResult enumerate = vkEnumeratePhysicalDeviceGroupsKHR(handle, &physicalDeviceGroupCount, physicalDeviceGroups.data());
+        MAGMA_THROW_FAILURE(enumerate, "failed to enumerate groups of physical devices");
+    }
+    return physicalDeviceGroups;
 }
 
 std::vector<VkExtensionProperties> Instance::enumerateExtensions(const char *layerName /* nullptr */)
