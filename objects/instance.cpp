@@ -74,7 +74,7 @@ std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId)
     return std::shared_ptr<PhysicalDevice>(new PhysicalDevice(shared_from_this(), physicalDevice));
 }
 
-std::vector<VkExtensionProperties> Instance::enumerateExtensions(const char *layerName /* nullptr */) const
+std::vector<VkExtensionProperties> Instance::enumerateExtensions(const char *layerName /* nullptr */)
 {
     uint32_t propertyCount = 0;
     const VkResult count = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, nullptr);

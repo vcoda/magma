@@ -42,6 +42,6 @@ namespace magma
         ~Instance();
         uint32_t countPhysicalDevices() const;
         std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId);
-        std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr) const;
+        static std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr);
     };
 } // namespace magma
