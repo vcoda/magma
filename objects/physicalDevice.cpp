@@ -43,13 +43,6 @@ const VkPhysicalDeviceFeatures& PhysicalDevice::getFeatures() const noexcept
     return features;
 }
 
-const VkPhysicalDeviceProperties& PhysicalDevice::getProperties() const noexcept
-{
-    if (0 == properties.apiVersion)
-        vkGetPhysicalDeviceProperties(handle, &properties);
-    return properties;
-}
-
 VkFormatProperties PhysicalDevice::getFormatProperties(VkFormat format) const noexcept
 {
     VkFormatProperties formatProperties;
@@ -67,6 +60,13 @@ VkImageFormatProperties PhysicalDevice::getImageFormatProperties(VkFormat format
         usage, flags, &imageFormatProperties);
     MAGMA_THROW_FAILURE(get, "failed to get image format properties");
     return imageFormatProperties;
+}
+
+const VkPhysicalDeviceProperties& PhysicalDevice::getProperties() const noexcept
+{
+    if (0 == properties.apiVersion)
+        vkGetPhysicalDeviceProperties(handle, &properties);
+    return properties;
 }
 
 std::vector<VkQueueFamilyProperties> PhysicalDevice::getQueueFamilyProperties() const noexcept
@@ -87,6 +87,20 @@ const VkPhysicalDeviceMemoryProperties& PhysicalDevice::getMemoryProperties() co
     if (0 == memoryProperties.memoryTypeCount)
         vkGetPhysicalDeviceMemoryProperties(handle, &memoryProperties);
     return memoryProperties;
+}
+
+std::shared_ptr<Device> PhysicalDevice::createDevice(
+    const std::vector<DeviceQueueDescriptor>& queueDescriptors,
+    const std::vector<const char *>& layers,
+    const std::vector<const char *>& extensions,
+    const VkPhysicalDeviceFeatures& deviceFeatures,
+    const std::vector<void *>& extendedDeviceFeatures /* {} */) const
+{
+    return std::shared_ptr<Device>(new Device(
+        std::const_pointer_cast<PhysicalDevice>(shared_from_this()),
+        queueDescriptors, layers, extensions,
+        deviceFeatures, extendedDeviceFeatures,
+        this->allocator));
 }
 
 std::vector<VkExtensionProperties> PhysicalDevice::enumerateExtensions(const char *layerName /* nullptr */) const
@@ -115,35 +129,6 @@ std::vector<VkLayerProperties> PhysicalDevice::enumerateLayerProperties() const
         MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device layers");
     }
     return properties;
-}
-
-std::shared_ptr<Device> PhysicalDevice::createDevice(
-    const std::vector<DeviceQueueDescriptor>& queueDescriptors,
-    const std::vector<const char *>& layers,
-    const std::vector<const char *>& extensions,
-    const VkPhysicalDeviceFeatures& deviceFeatures,
-    const std::vector<void *>& extendedDeviceFeatures /* {} */) const
-{
-    return std::shared_ptr<Device>(new Device(
-        std::const_pointer_cast<PhysicalDevice>(shared_from_this()),
-        queueDescriptors, layers, extensions,
-        deviceFeatures, extendedDeviceFeatures,
-        this->allocator));
-}
-
-std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
-{
-    const std::vector<float> defaultQueuePriorities = {1.0f};
-    const std::vector<DeviceQueueDescriptor> queueDescriptors = {
-        DeviceQueueDescriptor(VK_QUEUE_GRAPHICS_BIT, shared_from_this(), defaultQueuePriorities)
-    };
-    const std::vector<const char*> noLayers;
-    const std::vector<const char*> swapchainExtension = {
-        VK_KHR_SWAPCHAIN_EXTENSION_NAME
-    };
-    const VkPhysicalDeviceFeatures noDeviceFeatures = {};
-    const std::vector<void *> noExtendedDeviceFeatures;
-    return createDevice(queueDescriptors, noLayers, swapchainExtension, noDeviceFeatures, noExtendedDeviceFeatures);
 }
 
 bool PhysicalDevice::getSurfaceSupport(std::shared_ptr<Surface> surface) const noexcept
@@ -283,6 +268,21 @@ const VkPhysicalDeviceShaderCorePropertiesAMD& PhysicalDevice::getShaderCoreProp
         vkGetPhysicalDeviceProperties2KHR(handle, &properties);
     }
     return shaderCoreProperties;
+}
+
+std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
+{
+    const std::vector<float> defaultQueuePriorities = {1.0f};
+    const std::vector<DeviceQueueDescriptor> queueDescriptors = {
+        DeviceQueueDescriptor(VK_QUEUE_GRAPHICS_BIT, shared_from_this(), defaultQueuePriorities)
+    };
+    const std::vector<const char*> noLayers;
+    const std::vector<const char*> swapchainExtension = {
+        VK_KHR_SWAPCHAIN_EXTENSION_NAME
+    };
+    const VkPhysicalDeviceFeatures noDeviceFeatures = {};
+    const std::vector<void *> noExtendedDeviceFeatures;
+    return createDevice(queueDescriptors, noLayers, swapchainExtension, noDeviceFeatures, noExtendedDeviceFeatures);
 }
 
 bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept

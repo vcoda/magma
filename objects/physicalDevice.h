@@ -39,24 +39,21 @@ namespace magma
         friend class Instance;
 
     public:
-        std::shared_ptr<Instance> getInstance() const noexcept { return instance; }
         const VkPhysicalDeviceFeatures& getFeatures() const noexcept;
-        const VkPhysicalDeviceProperties& getProperties() const noexcept;
         VkFormatProperties getFormatProperties(VkFormat format) const noexcept;
         VkImageFormatProperties getImageFormatProperties(VkFormat format,
             VkImageType, bool optimalTiling, VkImageUsageFlags usage,
             VkImageCreateFlags flags = 0) const;
+        const VkPhysicalDeviceProperties& getProperties() const noexcept;
         std::vector<VkQueueFamilyProperties> getQueueFamilyProperties() const noexcept;
         const VkPhysicalDeviceMemoryProperties& getMemoryProperties() const noexcept;
-        std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr) const;
-        std::vector<VkLayerProperties> enumerateLayerProperties() const;
-        std::shared_ptr<Device> createDevice(
-            const std::vector<DeviceQueueDescriptor>& queueDescriptors,
+        std::shared_ptr<Device> createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
             const std::vector<const char *>& layers,
             const std::vector<const char *>& extensions,
             const VkPhysicalDeviceFeatures& deviceFeatures,
             const std::vector<void *>& extendedDeviceFeatures = {}) const;
-        std::shared_ptr<Device> createDefaultDevice() const;
+        std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr) const;
+        std::vector<VkLayerProperties> enumerateLayerProperties() const;
         bool getSurfaceSupport(std::shared_ptr<Surface> surface) const noexcept;
         VkSurfaceCapabilitiesKHR getSurfaceCapabilities(std::shared_ptr<const Surface> surface) const;
         std::vector<VkSurfaceFormatKHR> getSurfaceFormats(std::shared_ptr<const Surface> surface) const;
@@ -71,6 +68,8 @@ namespace magma
         // VK_AMD_shared_core_properties
         const VkPhysicalDeviceShaderCorePropertiesAMD& getShaderCoreProperties() const;
         // Non-API
+        std::shared_ptr<Instance> getInstance() const noexcept { return instance; }
+        std::shared_ptr<Device> createDefaultDevice() const;
         bool checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept;
 
     private:
