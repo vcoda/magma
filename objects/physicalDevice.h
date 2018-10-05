@@ -79,4 +79,28 @@ namespace magma
         mutable VkPhysicalDeviceMemoryProperties memoryProperties = {};
         mutable VkPhysicalDeviceShaderCorePropertiesAMD shaderCoreProperties = {};
     };
+
+    /* A logical device can be created that connects to one or more physical devices. */
+
+    class PhysicalDeviceGroup
+    {
+        explicit PhysicalDeviceGroup(std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices,
+            uint32_t groupId);
+        friend class Instance;
+
+    public:
+        std::shared_ptr<Device> createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
+            const std::vector<const char *>& layers,
+            const std::vector<const char *>& extensions,
+            const VkPhysicalDeviceFeatures& deviceFeatures,
+            std::vector<void *> extendedDeviceFeatures = {}) const;
+        uint32_t getGroupId() const { return groupId; }
+        uint32_t physicalDeviceCount() const
+            { return static_cast<uint32_t>(physicalDevices.size()); }
+        std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId) const
+            { return physicalDevices[deviceId]; }
+    private:
+        std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices;
+        uint32_t groupId;
+    };
 } // namespace magma

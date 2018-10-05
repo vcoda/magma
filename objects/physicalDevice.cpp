@@ -303,4 +303,30 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
         return false;
     return true;
 }
+
+PhysicalDeviceGroup::PhysicalDeviceGroup(std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices,
+    uint32_t groupId):
+    physicalDevices(std::move(physicalDevices)),
+    groupId(groupId)
+{}
+
+std::shared_ptr<Device> PhysicalDeviceGroup::createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
+    const std::vector<const char *>& layers,
+    const std::vector<const char *>& extensions,
+    const VkPhysicalDeviceFeatures& deviceFeatures,
+    std::vector<void *> extendedDeviceFeatures /* {} */) const
+{
+    VkDeviceGroupDeviceCreateInfoKHR info;
+    info.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO_KHR;
+    info.pNext = nullptr;
+    info.physicalDeviceCount = physicalDeviceCount();
+    MAGMA_STACK_ARRAY(VkPhysicalDevice, dereferencedPhysicalDevices, info.physicalDeviceCount);
+    for (const auto& physicalDevice : physicalDevices)
+        dereferencedPhysicalDevices.put(*physicalDevice);
+    info.pPhysicalDevices = dereferencedPhysicalDevices;
+    extendedDeviceFeatures.push_back(&info); // Add to linked list
+    return physicalDevices.front()->createDevice(queueDescriptors,
+        layers, extensions,
+        deviceFeatures, extendedDeviceFeatures);
+}
 } // namespace magma

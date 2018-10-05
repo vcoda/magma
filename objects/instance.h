@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class PhysicalDevice;
+    class PhysicalDeviceGroup;
 
     /* There is no global state in Vulkan and all per-application state
        is stored in a instance object. Creating an instance object initializes
@@ -43,6 +44,7 @@ namespace magma
         uint32_t countPhysicalDevices() const;
         std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId);
         std::vector<VkPhysicalDeviceGroupProperties> enumeratePhysicalDeviceGroups() const;
+        std::shared_ptr<PhysicalDeviceGroup> getPhysicalDeviceGroup(uint32_t groupId);
         static std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr);
     };
 } // namespace magma
