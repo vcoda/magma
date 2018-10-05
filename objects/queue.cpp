@@ -93,15 +93,14 @@ bool Queue::submit(std::shared_ptr<const CommandBuffer> commandBuffer,
 {
     if (!commandBuffer)
         return false;
-    std::vector<std::shared_ptr<const Semaphore>> waitSemaphores, signalSemaphores;
+    std::vector<std::shared_ptr<const CommandBuffer>> commandBuffers = {commandBuffer};
+    std::vector<std::shared_ptr<const Semaphore>> waitSemaphores;
     if (waitSemaphore)
         waitSemaphores.push_back(waitSemaphore);
+    std::vector<std::shared_ptr<const Semaphore>> signalSemaphores;
     if (signalSemaphore)
         signalSemaphores.push_back(signalSemaphore);
-    return submit(std::vector<std::shared_ptr<const CommandBuffer>>{commandBuffer},
-        waitStageMask,
-        waitSemaphores,
-        signalSemaphores,
+    return submit(commandBuffers, waitStageMask, waitSemaphores, signalSemaphores,
         std::move(fence));
 }
 
