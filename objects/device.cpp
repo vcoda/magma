@@ -74,7 +74,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     MAGMA_THROW_FAILURE(create, "failed to create logical device");
     queues.reserve(queueDescriptors.size());
     for (const auto& desc : queueDescriptors)
-        queues.emplace_back(desc, nullptr);
+        queues.emplace_back(desc, std::weak_ptr<Queue>());
 }
 
 Device::~Device()
@@ -84,25 +84,28 @@ Device::~Device()
 
 std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const
 {
-    VkQueue queue = VK_NULL_HANDLE;
     const DeviceQueueDescriptor queueDesc(flags, physicalDevice);
     for (auto& pair : queues)
     {   // Check if queue family is present, otherwise vkGetDeviceQueue() throws an exception
         if (pair.first.queueFamilyIndex == queueDesc.queueFamilyIndex)
         {
-            if (!pair.second)
-            {   // Cache queue object
+            if (pair.second.expired())
+            {   // Get queue that supports specified flags
+                VkQueue queue = VK_NULL_HANDLE;
                 vkGetDeviceQueue(handle, queueDesc.queueFamilyIndex, queueIndex, &queue);
-                pair.second = std::shared_ptr<Queue>(new Queue(queue,
+                if (VK_NULL_HANDLE == queue)
+                    MAGMA_THROW("failed to get device queue");
+                auto queueObj = std::shared_ptr<Queue>(new Queue(queue,
                     std::const_pointer_cast<Device>(shared_from_this()),
                     flags, queueDesc.queueFamilyIndex, queueIndex));
+                // Cache using weak_ptr to break circular references
+                pair.second = queueObj;
+                return queueObj;
             }
-            return pair.second;
+            return pair.second.lock();
         }
     }
-    if (VK_NULL_HANDLE == queue)
-        MAGMA_THROW("failed to get device queue");
-    return std::shared_ptr<Queue>();
+    MAGMA_THROW("failed to get device queue");
 }
 
 bool Device::waitIdle() const noexcept

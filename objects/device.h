@@ -54,6 +54,6 @@ namespace magma
 
     private:
         std::shared_ptr<PhysicalDevice> physicalDevice;
-        mutable std::vector<std::pair<DeviceQueueDescriptor, std::shared_ptr<Queue>>> queues;
+        mutable std::vector<std::pair<DeviceQueueDescriptor, std::weak_ptr<Queue>>> queues;
     };
 } // namespace magma
