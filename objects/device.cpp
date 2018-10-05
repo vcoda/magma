@@ -89,20 +89,19 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
     {   // Check if queue family is present, otherwise vkGetDeviceQueue() throws an exception
         if (pair.first.queueFamilyIndex == queueDesc.queueFamilyIndex)
         {
-            if (pair.second.expired())
-            {   // Get queue that supports specified flags
-                VkQueue queue = VK_NULL_HANDLE;
-                vkGetDeviceQueue(handle, queueDesc.queueFamilyIndex, queueIndex, &queue);
-                if (VK_NULL_HANDLE == queue)
-                    MAGMA_THROW("failed to get device queue");
-                auto queueObj = std::shared_ptr<Queue>(new Queue(queue,
-                    std::const_pointer_cast<Device>(shared_from_this()),
-                    flags, queueDesc.queueFamilyIndex, queueIndex));
-                // Cache using weak_ptr to break circular references
-                pair.second = queueObj;
-                return queueObj;
-            }
-            return pair.second.lock();
+            if (!pair.second.expired())
+                return pair.second.lock();
+            // Get queue that supports specified flags
+            VkQueue queue = VK_NULL_HANDLE;
+            vkGetDeviceQueue(handle, queueDesc.queueFamilyIndex, queueIndex, &queue);
+            if (VK_NULL_HANDLE == queue)
+                MAGMA_THROW("failed to get device queue");
+            auto queueObj = std::shared_ptr<Queue>(new Queue(queue,
+                std::const_pointer_cast<Device>(shared_from_this()),
+                flags, queueDesc.queueFamilyIndex, queueIndex));
+            // Cache using weak_ptr to break circular references
+            pair.second = queueObj;
+            return queueObj;
         }
     }
     MAGMA_THROW("failed to get device queue");
