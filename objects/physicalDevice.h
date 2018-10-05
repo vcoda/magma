@@ -35,7 +35,7 @@ namespace magma
         public std::enable_shared_from_this<PhysicalDevice>
     {
         explicit PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDevice handle,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator);
         friend class Instance;
 
     public:

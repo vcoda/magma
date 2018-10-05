@@ -29,7 +29,7 @@ namespace magma
 {
 PhysicalDevice::PhysicalDevice(std::shared_ptr<Instance> instance,
     VkPhysicalDevice handle,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator):
     Dispatchable<VkPhysicalDevice>(VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT, nullptr, std::move(allocator)),
     instance(std::move(instance))
 {

@@ -72,7 +72,7 @@ std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId)
     const VkResult enumerate = vkEnumeratePhysicalDevices(handle, &physicalDeviceCount, physicalDevices);
     MAGMA_THROW_FAILURE(enumerate, "failed to enumerate physical devices");
     VkPhysicalDevice physicalDevice = physicalDevices[deviceId];
-    return std::shared_ptr<PhysicalDevice>(new PhysicalDevice(shared_from_this(), physicalDevice));
+    return std::shared_ptr<PhysicalDevice>(new PhysicalDevice(shared_from_this(), physicalDevice, allocator));
 }
 
 std::vector<VkPhysicalDeviceGroupProperties> Instance::enumeratePhysicalDeviceGroups() const
