@@ -28,7 +28,7 @@ namespace magma
 {
 Queue::Queue(VkQueue handle, std::shared_ptr<Device> device,
     VkQueueFlagBits flags, uint32_t familyIndex, uint32_t index):
-    Dispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_QUEUE_EXT, device, nullptr),
+    Dispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_QUEUE_EXT, std::move(device), nullptr),
     flags(flags),
     familyIndex(familyIndex),
     index(index)
@@ -114,7 +114,7 @@ bool Queue::waitIdle() noexcept
 void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */)
 {
-    present(swapchain, imageIndex, nullptr, waitSemaphore);
+    present(std::move(swapchain), imageIndex, nullptr, std::move(waitSemaphore));
 }
 
 void Queue::presentToDisplay(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
@@ -127,7 +127,7 @@ void Queue::presentToDisplay(std::shared_ptr<const Swapchain> swapchain, uint32_
     displayPresentInfo.srcRect = srcRect;
     displayPresentInfo.dstRect = dstRect;
     displayPresentInfo.persistent = MAGMA_BOOLEAN(persistent);
-    present(swapchain, imageIndex, &displayPresentInfo, waitSemaphore);
+    present(std::move(swapchain), imageIndex, &displayPresentInfo, std::move(waitSemaphore));
 }
 
 void Queue::present(std::shared_ptr<const Swapchain> swapchain,
