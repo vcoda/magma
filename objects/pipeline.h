@@ -34,7 +34,7 @@ namespace magma
     {
     public:
         ~Pipeline();
-        void getShaderStatistics(VkShaderStageFlagBits stage, VkShaderStatisticsInfoAMD& info) const;
+        VkShaderStatisticsInfoAMD getShaderStatistics(VkShaderStageFlagBits stage) const;
         std::vector<uint8_t> getShaderBinary(VkShaderStageFlagBits stage) const;
         std::string getShaderDisassembly(VkShaderStageFlagBits stage) const;
 
