@@ -213,9 +213,9 @@ MAGMA_INLINE void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<Buffe
     vkCmdDrawIndexedIndirect(handle, *buffer, offset, drawCount, stride);
 }
 
-MAGMA_INLINE void CommandBuffer::dispatch(uint32_t x, uint32_t y, uint32_t z) const noexcept
+MAGMA_INLINE void CommandBuffer::dispatch(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) const noexcept
 {
-    vkCmdDispatch(handle, x, y, z);
+    vkCmdDispatch(handle, groupCountX, groupCountY, groupCountZ);
 }
 
 MAGMA_INLINE void CommandBuffer::dispatchIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset) const noexcept

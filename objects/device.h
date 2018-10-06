@@ -45,7 +45,6 @@ namespace magma
 
     public:
         ~Device();
-        std::shared_ptr<PhysicalDevice> getPhysicalDevice() const noexcept { return physicalDevice; }
         std::shared_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
         bool waitIdle() const noexcept;
         bool resetFences(std::vector<std::shared_ptr<const Fence>>& fences) const noexcept;
@@ -55,6 +54,8 @@ namespace magma
         VkPeerMemoryFeatureFlags getGroupPeerMemoryFeatures(uint32_t heapIndex,
             uint32_t localDeviceIndex,
             uint32_t remoteDeviceIndex) const noexcept;
+        // Non-API
+        std::shared_ptr<PhysicalDevice> getPhysicalDevice() const noexcept { return physicalDevice; }
 
     private:
         std::shared_ptr<PhysicalDevice> physicalDevice;

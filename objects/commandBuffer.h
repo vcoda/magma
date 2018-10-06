@@ -173,9 +173,9 @@ namespace magma
             uint32_t drawCount,
             uint32_t stride) const noexcept;
         void dispatch(
-            uint32_t x,
-            uint32_t y,
-            uint32_t z) const noexcept;
+            uint32_t groupCountX,
+            uint32_t groupCountY,
+            uint32_t groupCountZ) const noexcept;
         void dispatchIndirect(
             const std::shared_ptr<Buffer>& buffer,
             VkDeviceSize offset) const noexcept;
@@ -366,7 +366,7 @@ namespace magma
             bool inverted = false) noexcept;
         void endConditionalRendering() noexcept;
 
-        // EXT_debug_marker
+        // VK_EXT_debug_marker
         void beginDebugMarker(
             const char *name,
             const float color[4]) noexcept;
