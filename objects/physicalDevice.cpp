@@ -27,9 +27,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-PhysicalDevice::PhysicalDevice(std::shared_ptr<Instance> instance,
-    VkPhysicalDevice handle,
-    std::shared_ptr<IAllocator> allocator):
+PhysicalDevice::PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDevice handle,
+    std::shared_ptr<IAllocator> allocator) noexcept:
     Dispatchable<VkPhysicalDevice>(VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT, nullptr, std::move(allocator)),
     instance(std::move(instance))
 {
@@ -303,7 +302,7 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
     return true;
 }
 
-PhysicalDeviceGroup::PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices, uint32_t groupId):
+PhysicalDeviceGroup::PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices, uint32_t groupId) noexcept:
     physicalDevices(physicalDevices),
     groupId(groupId)
 {}

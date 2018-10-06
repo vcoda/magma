@@ -35,7 +35,7 @@ namespace magma
         public std::enable_shared_from_this<PhysicalDevice>
     {
         explicit PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDevice handle,
-            std::shared_ptr<IAllocator> allocator);
+            std::shared_ptr<IAllocator> allocator) noexcept;
         friend class Instance;
 
     public:
@@ -81,7 +81,7 @@ namespace magma
     class PhysicalDeviceGroup
     {
         explicit PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices,
-            uint32_t groupId);
+            uint32_t groupId) noexcept;
         friend class Instance;
 
     public:
