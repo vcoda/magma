@@ -388,6 +388,21 @@ void CommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuf
     vkCmdExecuteCommands(handle, dereferencedCommandBuffers.size(), dereferencedCommandBuffers);
 }
 
+MAGMA_INLINE void CommandBuffer::setDeviceMask(uint32_t deviceMask) noexcept
+{
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdSetDeviceMaskKHR);
+    if (vkCmdSetDeviceMaskKHR)
+        vkCmdSetDeviceMaskKHR(handle, deviceMask);
+}
+
+MAGMA_INLINE void CommandBuffer::dispatchBase(uint32_t baseGroupX, uint32_t baseGroupY, uint32_t baseGroupZ,
+    uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) const noexcept
+{
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDispatchBaseKHR);
+    if (vkCmdDispatchBaseKHR)
+        vkCmdDispatchBaseKHR(handle, baseGroupX, baseGroupY, baseGroupZ, groupCountX, groupCountY, groupCountZ);
+}
+
 void CommandBuffer::beginConditionalRendering(const std::shared_ptr<Buffer>& buffer,
     VkDeviceSize offset /* 0 */,
     bool inverted /* false */) noexcept

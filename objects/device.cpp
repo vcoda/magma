@@ -20,8 +20,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "queue.h"
 #include "fence.h"
 #include "../allocator/allocator.h"
-#include "../helpers/stackArray.h"
+#include "../misc/deviceExtension.h"
 #include "../misc/exception.h"
+#include "../helpers/stackArray.h"
 
 namespace magma
 {
@@ -131,5 +132,14 @@ bool Device::waitForFences(std::vector<std::shared_ptr<const Fence>>& fences, bo
     const VkResult wait = vkWaitForFences(handle, dereferencedFences.size(), dereferencedFences,
         MAGMA_BOOLEAN(waitAll), timeout);
     return (VK_SUCCESS == wait) || (VK_TIMEOUT == wait);
+}
+
+VkPeerMemoryFeatureFlags Device::getGroupPeerMemoryFeatures(uint32_t heapIndex, uint32_t localDeviceIndex, uint32_t remoteDeviceIndex) const noexcept
+{
+    VkPeerMemoryFeatureFlags peerMemoryFeatures = 0;
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkGetDeviceGroupPeerMemoryFeaturesKHR);
+    if (vkGetDeviceGroupPeerMemoryFeaturesKHR)
+        vkGetDeviceGroupPeerMemoryFeaturesKHR(handle, heapIndex, localDeviceIndex, remoteDeviceIndex, &peerMemoryFeatures);
+    return peerMemoryFeatures;
 }
 } // namespace magma

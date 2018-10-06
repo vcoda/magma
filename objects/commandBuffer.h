@@ -348,6 +348,17 @@ namespace magma
 
         void executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept;
 
+        // VK_KHR_device_group
+        void setDeviceMask(
+            uint32_t deviceMask) noexcept;
+        void dispatchBase(
+            uint32_t baseGroupX,
+            uint32_t baseGroupY,
+            uint32_t baseGroupZ,
+            uint32_t groupCountX,
+            uint32_t groupCountY,
+            uint32_t groupCountZ) const noexcept;
+
         // VK_EXT_conditional_rendering
         void beginConditionalRendering(
             const std::shared_ptr<Buffer>& buffer,

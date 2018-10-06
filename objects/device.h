@@ -51,6 +51,10 @@ namespace magma
         bool resetFences(std::vector<std::shared_ptr<const Fence>>& fences) const noexcept;
         bool waitForFences(std::vector<std::shared_ptr<const Fence>>& fences,
             bool waitAll, uint64_t timeout = UINT64_MAX) const noexcept;
+        // VK_KHR_device_group
+        VkPeerMemoryFeatureFlags getGroupPeerMemoryFeatures(uint32_t heapIndex,
+            uint32_t localDeviceIndex,
+            uint32_t remoteDeviceIndex) const noexcept;
 
     private:
         std::shared_ptr<PhysicalDevice> physicalDevice;
