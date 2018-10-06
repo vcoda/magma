@@ -18,9 +18,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "instance.h"
 #include "physicalDevice.h"
 #include "../allocator/allocator.h"
-#include "../helpers/stackArray.h"
 #include "../misc/instanceExtension.h"
 #include "../misc/exception.h"
+#include "../helpers/stackArray.h"
+#include "../helpers/refCountChecker.h"
+
+#ifdef MAGMA_DEBUG
+static magma::helpers::RefCountChecker _refCountChecker;
+#endif
 
 namespace magma
 {
@@ -48,11 +53,17 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
     createInfo.ppEnabledExtensionNames = extensionNames.data();
     const VkResult create = vkCreateInstance(&createInfo, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create Vulkan instance");
+#ifdef MAGMA_DEBUG
+    _refCountChecker.addRef();
+#endif
 }
 
 Instance::~Instance()
 {
     vkDestroyInstance(handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+#ifdef MAGMA_DEBUG
+    _refCountChecker.release();
+#endif
 }
 
 uint32_t Instance::countPhysicalDevices() const
