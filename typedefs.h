@@ -30,6 +30,7 @@ namespace magma
     typedef std::shared_ptr<class CommandBuffer> CommandBufferPtr;
     typedef std::shared_ptr<class CommandPool> CommandPoolPtr;
     typedef std::shared_ptr<class ComputePipeline> ComputePipelinePtr;
+    typedef std::shared_ptr<class ConditionalRenderingBuffer> ConditionalRenderingBufferPtr;
     typedef std::shared_ptr<class DebugMarker> DebugMarkerPtr;
     typedef std::shared_ptr<class DebugReportCallback> DebugReportCallbackPtr;
     typedef std::shared_ptr<class DescriptorPool> DescriptorPoolPtr;
@@ -56,11 +57,14 @@ namespace magma
     typedef std::shared_ptr<class IndexBuffer> IndexBufferPtr;
     typedef std::shared_ptr<class IndirectBuffer> IndirectBufferPtr;
     typedef std::shared_ptr<class Instance> InstancePtr;
+    typedef std::shared_ptr<class OcclusionQuery> OcclusionQueryPtr;
     typedef std::shared_ptr<class Object> ObjectPtr;
     typedef std::shared_ptr<class PhysicalDevice> PhysicalDevicePtr;
+    typedef std::shared_ptr<class PhysicalDeviceGroup> PhysicalDeviceGroupPtr;
     typedef std::shared_ptr<class Pipeline> PipelinePtr;
     typedef std::shared_ptr<class PipelineCache> PipelineCachePtr;
     typedef std::shared_ptr<class PipelineLayout> PipelineLayoutPtr;
+    typedef std::shared_ptr<class PipelineStatisticsQuery> PipelineStatisticsQueryPtr;
     typedef std::shared_ptr<class QueryPool> QueryPoolPtr;
     typedef std::shared_ptr<class Queue> QueuePtr;
     typedef std::shared_ptr<class RenderPass> RenderPassPtr;
@@ -72,6 +76,7 @@ namespace magma
     typedef std::shared_ptr<class StorageTexelBuffer> StorageTexelBufferPtr;
     typedef std::shared_ptr<class Surface> SurfacePtr;
     typedef std::shared_ptr<class Swapchain> SwapchainPtr;
+    typedef std::shared_ptr<class TimestampQuery> TimestampQueryPtr;
     typedef std::shared_ptr<class UniformTexelBuffer> UniformTexelBufferPtr;
     typedef std::shared_ptr<class VertexBuffer> VertexBufferPtr;
 
