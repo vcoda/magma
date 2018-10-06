@@ -103,7 +103,7 @@ std::shared_ptr<PhysicalDeviceGroup> Instance::getPhysicalDeviceGroup(uint32_t g
         VkPhysicalDevice physicalDevice = deviceGroupProperties.physicalDevices[deviceId];
         physicalDevices.emplace_back(new PhysicalDevice(shared_from_this(), physicalDevice, allocator));
     }
-    return std::shared_ptr<PhysicalDeviceGroup>(new PhysicalDeviceGroup(std::move(physicalDevices), groupId));
+    return std::shared_ptr<PhysicalDeviceGroup>(new PhysicalDeviceGroup(physicalDevices, groupId));
 }
 
 std::vector<VkExtensionProperties> Instance::enumerateExtensions(const char *layerName /* nullptr */)

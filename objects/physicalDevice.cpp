@@ -304,9 +304,8 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
     return true;
 }
 
-PhysicalDeviceGroup::PhysicalDeviceGroup(std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices,
-    uint32_t groupId):
-    physicalDevices(std::move(physicalDevices)),
+PhysicalDeviceGroup::PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices, uint32_t groupId):
+    physicalDevices(physicalDevices),
     groupId(groupId)
 {}
 
@@ -314,19 +313,20 @@ std::shared_ptr<Device> PhysicalDeviceGroup::createDevice(const std::vector<Devi
     const std::vector<const char *>& layers,
     const std::vector<const char *>& extensions,
     const VkPhysicalDeviceFeatures& deviceFeatures,
-    std::vector<void *> extendedDeviceFeatures /* {} */) const
+    const std::vector<void *>& extendedDeviceFeatures /* {} */) const
 {
-    VkDeviceGroupDeviceCreateInfoKHR info;
-    info.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO_KHR;
+    VkDeviceGroupDeviceCreateInfo info;
+    info.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO;
     info.pNext = nullptr;
     info.physicalDeviceCount = physicalDeviceCount();
     MAGMA_STACK_ARRAY(VkPhysicalDevice, dereferencedPhysicalDevices, info.physicalDeviceCount);
     for (const auto& physicalDevice : physicalDevices)
         dereferencedPhysicalDevices.put(*physicalDevice);
     info.pPhysicalDevices = dereferencedPhysicalDevices;
-    extendedDeviceFeatures.push_back(&info); // Add to linked list
+    std::vector<void *> extendedDeviceGroupFeatures = extendedDeviceFeatures;
+    extendedDeviceGroupFeatures.push_back(&info);
     return physicalDevices.front()->createDevice(queueDescriptors,
         layers, extensions,
-        deviceFeatures, extendedDeviceFeatures);
+        deviceFeatures, extendedDeviceGroupFeatures);
 }
 } // namespace magma
