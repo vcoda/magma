@@ -36,10 +36,10 @@ PhysicalDevice::PhysicalDevice(std::shared_ptr<Instance> instance,
     this->handle = handle;
 }
 
-const VkPhysicalDeviceFeatures& PhysicalDevice::getFeatures() const noexcept
+VkPhysicalDeviceFeatures PhysicalDevice::getFeatures() const noexcept
 {
-    if (!features.geometryShader)
-        vkGetPhysicalDeviceFeatures(handle, &features);
+    VkPhysicalDeviceFeatures features;
+    vkGetPhysicalDeviceFeatures(handle, &features);
     return features;
 }
 
@@ -62,10 +62,10 @@ VkImageFormatProperties PhysicalDevice::getImageFormatProperties(VkFormat format
     return imageFormatProperties;
 }
 
-const VkPhysicalDeviceProperties& PhysicalDevice::getProperties() const noexcept
+VkPhysicalDeviceProperties PhysicalDevice::getProperties() const noexcept
 {
-    if (0 == properties.apiVersion)
-        vkGetPhysicalDeviceProperties(handle, &properties);
+    VkPhysicalDeviceProperties properties;
+    vkGetPhysicalDeviceProperties(handle, &properties);
     return properties;
 }
 
@@ -82,10 +82,10 @@ std::vector<VkQueueFamilyProperties> PhysicalDevice::getQueueFamilyProperties() 
     return queueFamilyProperties;
 }
 
-const VkPhysicalDeviceMemoryProperties& PhysicalDevice::getMemoryProperties() const noexcept
+VkPhysicalDeviceMemoryProperties PhysicalDevice::getMemoryProperties() const noexcept
 {
-    if (0 == memoryProperties.memoryTypeCount)
-        vkGetPhysicalDeviceMemoryProperties(handle, &memoryProperties);
+    VkPhysicalDeviceMemoryProperties memoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(handle, &memoryProperties);
     return memoryProperties;
 }
 
@@ -256,18 +256,16 @@ std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint3
     return supportedDisplays;
 }
 
-const VkPhysicalDeviceShaderCorePropertiesAMD& PhysicalDevice::getShaderCoreProperties() const
+VkPhysicalDeviceShaderCorePropertiesAMD PhysicalDevice::getShaderCoreProperties() const
 {
-    if (0 == shaderCoreProperties.shaderEngineCount)
-    {
-        shaderCoreProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_AMD;
-        shaderCoreProperties.pNext = nullptr;
-        VkPhysicalDeviceProperties2 properties;
-        properties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
-        properties.pNext = &shaderCoreProperties;
-        MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
-        vkGetPhysicalDeviceProperties2KHR(handle, &properties);
-    }
+    VkPhysicalDeviceShaderCorePropertiesAMD shaderCoreProperties;
+    shaderCoreProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_AMD;
+    shaderCoreProperties.pNext = nullptr;
+    VkPhysicalDeviceProperties2 properties;
+    properties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
+    properties.pNext = &shaderCoreProperties;
+    MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
+    vkGetPhysicalDeviceProperties2KHR(handle, &properties);
     return shaderCoreProperties;
 }
 
@@ -291,8 +289,8 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
     MAGMA_ASSERT(cacheData);
     if (!cacheData)
         return false;
-    if ((0 == properties.vendorID) || (0 == properties.deviceID))
-        getProperties();
+    VkPhysicalDeviceProperties properties;
+    vkGetPhysicalDeviceProperties(handle, &properties);
     PipelineCache::Header header;
     header.size = sizeof(PipelineCache::Header);
     header.version = VK_PIPELINE_CACHE_HEADER_VERSION_ONE;

@@ -39,14 +39,14 @@ namespace magma
         friend class Instance;
 
     public:
-        const VkPhysicalDeviceFeatures& getFeatures() const noexcept;
+        VkPhysicalDeviceFeatures getFeatures() const noexcept;
         VkFormatProperties getFormatProperties(VkFormat format) const noexcept;
         VkImageFormatProperties getImageFormatProperties(VkFormat format,
             VkImageType, bool optimalTiling, VkImageUsageFlags usage,
             VkImageCreateFlags flags = 0) const;
-        const VkPhysicalDeviceProperties& getProperties() const noexcept;
+        VkPhysicalDeviceProperties getProperties() const noexcept;
         std::vector<VkQueueFamilyProperties> getQueueFamilyProperties() const noexcept;
-        const VkPhysicalDeviceMemoryProperties& getMemoryProperties() const noexcept;
+        VkPhysicalDeviceMemoryProperties getMemoryProperties() const noexcept;
         std::shared_ptr<Device> createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
             const std::vector<const char *>& layers,
             const std::vector<const char *>& extensions,
@@ -66,7 +66,7 @@ namespace magma
         std::vector<VkDisplayPlanePropertiesKHR> getDisplayPlaneProperties() const;
         std::vector<std::shared_ptr<Display>> getSupportedDisplays(uint32_t planeIndex) const;
         // VK_AMD_shared_core_properties
-        const VkPhysicalDeviceShaderCorePropertiesAMD& getShaderCoreProperties() const;
+        VkPhysicalDeviceShaderCorePropertiesAMD getShaderCoreProperties() const;
         // Non-API
         std::shared_ptr<Instance> getInstance() const noexcept { return instance; }
         std::shared_ptr<Device> createDefaultDevice() const;
@@ -74,10 +74,6 @@ namespace magma
 
     private:
         std::shared_ptr<Instance> instance;
-        mutable VkPhysicalDeviceFeatures features = {};
-        mutable VkPhysicalDeviceProperties properties = {};
-        mutable VkPhysicalDeviceMemoryProperties memoryProperties = {};
-        mutable VkPhysicalDeviceShaderCorePropertiesAMD shaderCoreProperties = {};
     };
 
     /* A logical device can be created that connects to one or more physical devices. */
