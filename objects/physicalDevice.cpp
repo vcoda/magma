@@ -174,7 +174,8 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared
     return surfacePresentModes;
 }
 
-bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex, void *display,
+bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex,
+    void *display /* nullptr */,
     const void *visualID /* nullptr */) const noexcept
 {
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
