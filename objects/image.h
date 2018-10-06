@@ -45,6 +45,10 @@ namespace magma
         uint32_t getSamples() const noexcept { return samples; }
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0);
+        void bindMemoryDeviceGroup(const std::vector<uint32_t>& deviceIndices,
+            const std::vector<VkRect2D>& splitInstanceBindRegions,
+            std::shared_ptr<DeviceMemory> memory,
+            VkDeviceSize offset = 0);
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
 
     protected:

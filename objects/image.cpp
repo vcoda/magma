@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "fence.h"
 #include "../allocator/allocator.h"
 #include "../barriers/imageMemoryBarrier.h"
+#include "../misc/deviceExtension.h"
 #include "../misc/exception.h"
 
 namespace magma
@@ -102,6 +103,30 @@ void Image::bindMemory(std::shared_ptr<DeviceMemory> memory,
 {
     const VkResult bind = vkBindImageMemory(MAGMA_HANDLE(device), handle, *memory, offset);
     MAGMA_THROW_FAILURE(bind, "failed to bind image memory");
+    this->memory = std::move(memory);
+}
+
+void Image::bindMemoryDeviceGroup(const std::vector<uint32_t>& deviceIndices,
+    const std::vector<VkRect2D>& splitInstanceBindRegions,
+    std::shared_ptr<DeviceMemory> memory,
+    VkDeviceSize offset /* 0 */)
+{
+    VkBindImageMemoryDeviceGroupInfo deviceGroupBindInfo;
+    deviceGroupBindInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO;
+    deviceGroupBindInfo.pNext = nullptr;
+    deviceGroupBindInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
+    deviceGroupBindInfo.pDeviceIndices = deviceIndices.data();
+    deviceGroupBindInfo.splitInstanceBindRegionCount = MAGMA_COUNT(splitInstanceBindRegions);
+    deviceGroupBindInfo.pSplitInstanceBindRegions = splitInstanceBindRegions.data();
+    VkBindImageMemoryInfo bindInfo;
+    bindInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO;
+    bindInfo.pNext = &deviceGroupBindInfo;
+    bindInfo.image = handle;
+    bindInfo.memory = *memory;
+    bindInfo.memoryOffset = offset;
+    MAGMA_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
+    const VkResult bind = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindInfo);
+    MAGMA_THROW_FAILURE(bind, "failed to bind image memory within device group");
     this->memory = std::move(memory);
 }
 
