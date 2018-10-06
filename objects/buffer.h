@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <vector>
 #include "handle.h"
 #include "../typedefs.h"
 
@@ -37,7 +38,9 @@ namespace magma
         ~Buffer();
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0);
-        void unbindMemory();
+        void bindMemoryDeviceGroup(const std::vector<uint32_t>& deviceIndices,
+            std::shared_ptr<DeviceMemory> memory,
+            VkDeviceSize offset = 0);
         VkBufferUsageFlags getUsage() const noexcept { return usage; }
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
         VkMemoryRequirements getMemoryRequirements() const noexcept;

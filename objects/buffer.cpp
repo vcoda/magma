@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandBuffer.h"
 #include "../allocator/allocator.h"
 #include "../mem/copyMemory.h"
+#include "../misc/deviceExtension.h"
 #include "../misc/exception.h"
 #include "../shared.h"
 
@@ -68,9 +69,24 @@ void Buffer::bindMemory(std::shared_ptr<DeviceMemory> memory,
     this->memory = std::move(memory);
 }
 
-void Buffer::unbindMemory()
+void Buffer::bindMemoryDeviceGroup(const std::vector<uint32_t>& deviceIndices, std::shared_ptr<DeviceMemory> memory,
+    VkDeviceSize offset /* 0 */)
 {
-    memory.reset();
+    VkBindBufferMemoryDeviceGroupInfo deviceGroupBindInfo;
+    deviceGroupBindInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_DEVICE_GROUP_INFO;
+    deviceGroupBindInfo.pNext = nullptr;
+    deviceGroupBindInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
+    deviceGroupBindInfo.pDeviceIndices = deviceIndices.data();
+    VkBindBufferMemoryInfo bindInfo;
+    bindInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO;
+    bindInfo.pNext = &deviceGroupBindInfo;
+    bindInfo.buffer = handle;
+    bindInfo.memory = *memory;
+    bindInfo.memoryOffset = offset;
+    MAGMA_DEVICE_EXTENSION(vkBindBufferMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
+    const VkResult bind = vkBindBufferMemory2KHR(MAGMA_HANDLE(device), 1, &bindInfo);
+    MAGMA_THROW_FAILURE(bind, "failed to bind buffer memory within device group");
+    this->memory = std::move(memory);
 }
 
 VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
