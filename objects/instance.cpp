@@ -23,6 +23,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../helpers/stackArray.h"
 #include "../helpers/refCountChecker.h"
 
+// Redefine macro for Instance object as here we use handle directly
+#undef MAGMA_INSTANCE_EXTENSION
+#define MAGMA_INSTANCE_EXTENSION(func, extension)\
+    magma::InstanceExtension<PFN_##func> func(handle, MAGMA_STRINGIZE(func), extension)
+
 #ifdef MAGMA_DEBUG
 static magma::helpers::RefCountChecker _refCountChecker;
 #endif
@@ -89,8 +94,7 @@ std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId)
 std::vector<VkPhysicalDeviceGroupProperties> Instance::enumeratePhysicalDeviceGroups() const
 {
     uint32_t physicalDeviceGroupCount = 0;
-    InstanceExtension<PFN_vkEnumeratePhysicalDeviceGroupsKHR> vkEnumeratePhysicalDeviceGroupsKHR(
-        handle, "vkEnumeratePhysicalDeviceGroupsKHR", VK_KHR_DEVICE_GROUP_CREATION_EXTENSION_NAME);
+    MAGMA_INSTANCE_EXTENSION(vkEnumeratePhysicalDeviceGroupsKHR, VK_KHR_DEVICE_GROUP_CREATION_EXTENSION_NAME);
     const VkResult count = vkEnumeratePhysicalDeviceGroupsKHR(handle, &physicalDeviceGroupCount, nullptr);
     MAGMA_THROW_FAILURE(count, "failed to count groups of physical devices");
     std::vector<VkPhysicalDeviceGroupProperties> physicalDeviceGroups(physicalDeviceGroupCount);
