@@ -388,6 +388,29 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     vkCmdBeginRenderPass(handle, &beginInfo, contents);
 }
 
+void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const std::initializer_list<ClearValue>& clearValues, uint32_t deviceMask,
+    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+{
+    VkDeviceGroupRenderPassBeginInfo deviceGroupBeginInfo;
+    deviceGroupBeginInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO;
+    deviceGroupBeginInfo.pNext = nullptr;
+    deviceGroupBeginInfo.deviceMask = deviceMask;
+    deviceGroupBeginInfo.deviceRenderAreaCount = MAGMA_COUNT(renderAreas);
+    deviceGroupBeginInfo.pDeviceRenderAreas = renderAreas.data();
+    VkRenderPassBeginInfo beginInfo;
+    beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    beginInfo.pNext = &deviceGroupBeginInfo;
+    beginInfo.renderPass = *renderPass;
+    beginInfo.framebuffer = *framebuffer;
+    beginInfo.renderArea = VkRect2D{0, 0, 0, 0}; // Elements of VkDeviceGroupRenderPassBeginInfo::pDeviceRenderAreas override the value of VkRenderPassBeginInfo::renderArea
+    beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
+    MAGMA_STACK_ARRAY(VkClearValue, dereferencedClearValues, beginInfo.clearValueCount);
+    for (const auto& clearValue : clearValues)
+        dereferencedClearValues.put(clearValue);
+    beginInfo.pClearValues = dereferencedClearValues;
+    vkCmdBeginRenderPass(handle, &beginInfo, contents);
+}
+
 // CommandBuffer::nextSubpass
 // CommandBuffer::endRenderPass
 
@@ -412,29 +435,6 @@ void CommandBuffer::dispatchBase(uint32_t baseGroupX, uint32_t baseGroupY, uint3
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDispatchBaseKHR);
     if (vkCmdDispatchBaseKHR)
         vkCmdDispatchBaseKHR(handle, baseGroupX, baseGroupY, baseGroupZ, groupCountX, groupCountY, groupCountZ);
-}
-
-void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const std::initializer_list<ClearValue>& clearValues, uint32_t deviceMask,
-    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
-{
-    VkDeviceGroupRenderPassBeginInfo deviceGroupBeginInfo;
-    deviceGroupBeginInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO;
-    deviceGroupBeginInfo.pNext = nullptr;
-    deviceGroupBeginInfo.deviceMask = deviceMask;
-    deviceGroupBeginInfo.deviceRenderAreaCount = MAGMA_COUNT(renderAreas);
-    deviceGroupBeginInfo.pDeviceRenderAreas = renderAreas.data();
-    VkRenderPassBeginInfo beginInfo;
-    beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    beginInfo.pNext = &deviceGroupBeginInfo;
-    beginInfo.renderPass = *renderPass;
-    beginInfo.framebuffer = *framebuffer;
-    beginInfo.renderArea = VkRect2D{0, 0, 0, 0}; // Elements of VkDeviceGroupRenderPassBeginInfo::pDeviceRenderAreas override the value of VkRenderPassBeginInfo::renderArea
-    beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
-    MAGMA_STACK_ARRAY(VkClearValue, dereferencedClearValues, beginInfo.clearValueCount);
-    for (const auto& clearValue : clearValues)
-        dereferencedClearValues.put(clearValue);
-    beginInfo.pClearValues = dereferencedClearValues;
-    vkCmdBeginRenderPass(handle, &beginInfo, contents);
 }
 
 void CommandBuffer::beginConditionalRendering(const std::shared_ptr<Buffer>& buffer,
