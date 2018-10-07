@@ -245,24 +245,38 @@ MAGMA_INLINE void CommandBuffer::endRenderPass() noexcept
     vkCmdEndRenderPass(handle);
 }
 
-MAGMA_INLINE void CommandBuffer::setRenderArea(const VkRect2D& rc) noexcept
+MAGMA_INLINE void CommandBuffer::setRenderArea(const VkRect2D& renderArea) noexcept
 {
-    renderArea = rc;
+    renderAreas = {renderArea};
+}
+
+MAGMA_INLINE VkRect2D CommandBuffer::getRenderArea() const noexcept
+{
+     if (!renderAreas.empty())
+         return renderAreas.front();
+     return VkRect2D();
 }
 
 MAGMA_INLINE void CommandBuffer::setRenderArea(int32_t x, int32_t y, const VkExtent2D& extent) noexcept
 {
-    renderArea.offset.x = x;
-    renderArea.offset.y = y;
-    renderArea.extent = extent;
+    const VkRect2D renderArea = {x, y, extent};
+    renderAreas = {renderArea};
 }
 
 MAGMA_INLINE void CommandBuffer::setRenderArea(int32_t x, int32_t y, uint32_t width, uint32_t height) noexcept
 {
-    renderArea.offset.x = x;
-    renderArea.offset.y = y;
-    renderArea.extent.width = width;
-    renderArea.extent.height = height;
+    const VkRect2D renderArea = {x, y, width, height};
+    renderAreas = {renderArea};
+}
+
+MAGMA_INLINE const std::vector<VkRect2D>& CommandBuffer::getRenderAreas() const noexcept
+{
+    return renderAreas;
+}
+
+MAGMA_INLINE void CommandBuffer::setRenderAreas(const std::vector<VkRect2D>& renderAreas) noexcept
+{
+    this->renderAreas = renderAreas;
 }
 
 MAGMA_INLINE void CommandBuffer::enableOcclusionQuery(bool enable, VkQueryControlFlags queryFlags) noexcept

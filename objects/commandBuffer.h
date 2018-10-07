@@ -59,6 +59,9 @@ namespace magma
 
     public:
         bool begin(VkCommandBufferUsageFlags flags = 0) noexcept;
+        bool beginDeviceGroup(
+            uint32_t deviceMask,
+            VkCommandBufferUsageFlags flags = 0) noexcept;
         bool beginInherited(
             const std::shared_ptr<RenderPass>& renderPass,
             uint32_t subpass,
@@ -358,6 +361,18 @@ namespace magma
             uint32_t groupCountX,
             uint32_t groupCountY,
             uint32_t groupCountZ) const noexcept;
+        void beginRenderPassDeviceGroup(
+            const std::shared_ptr<RenderPass>& renderPass,
+            const std::shared_ptr<Framebuffer>& framebuffer,
+            const ClearValue& clearValue,
+            uint32_t deviceMask,
+            VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
+        void beginRenderPassDeviceGroup(
+            const std::shared_ptr<RenderPass>& renderPass,
+            const std::shared_ptr<Framebuffer>& framebuffer,
+            const std::initializer_list<ClearValue>& clearValues,
+            uint32_t deviceMask,
+            VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
 
         // VK_EXT_conditional_rendering
         void beginConditionalRendering(
@@ -379,6 +394,7 @@ namespace magma
         std::shared_ptr<CommandPool> getPool() const noexcept { return pool; }
         std::shared_ptr<Fence> getFence() const noexcept;
 
+        VkRect2D getRenderArea() const noexcept;
         void setRenderArea(const VkRect2D& rc) noexcept;
         void setRenderArea(
             int32_t x, int32_t y,
@@ -386,6 +402,8 @@ namespace magma
         void setRenderArea(
             int32_t x, int32_t y,
             uint32_t width, uint32_t height) noexcept;
+        const std::vector<VkRect2D>& getRenderAreas() const noexcept;
+        void setRenderAreas(const std::vector<VkRect2D>& renderAreas) noexcept;
 
         void enableOcclusionQuery(
             bool enable,
@@ -396,7 +414,7 @@ namespace magma
     private:
         std::shared_ptr<CommandPool> pool;
         std::shared_ptr<Fence> fence;
-        VkRect2D renderArea = {{0, 0}, {0, 0}};
+        std::vector<VkRect2D> renderAreas;
         VkBool32 occlusionQueryEnable = VK_FALSE;
         VkBool32 conditionalRenderingEnable = VK_FALSE;
         VkQueryControlFlags queryFlags = 0;

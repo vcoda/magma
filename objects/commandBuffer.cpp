@@ -52,6 +52,23 @@ bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
     return (VK_SUCCESS == begin);
 }
 
+bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask,
+    VkCommandBufferUsageFlags flags /* 0 */) noexcept
+{
+    VkDeviceGroupCommandBufferBeginInfo deviceGroupBeginInfo;
+    deviceGroupBeginInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_COMMAND_BUFFER_BEGIN_INFO;
+    deviceGroupBeginInfo.pNext = nullptr;
+    deviceGroupBeginInfo.deviceMask = deviceMask;
+    VkCommandBufferBeginInfo beginInfo;
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.pNext = &deviceGroupBeginInfo;
+    beginInfo.flags = flags;
+    beginInfo.pInheritanceInfo = nullptr;
+    const VkResult begin = vkBeginCommandBuffer(handle, &beginInfo);
+    MAGMA_ASSERT(VK_SUCCESS == begin);
+    return (VK_SUCCESS == begin);
+}
+
 bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass, const std::shared_ptr<Framebuffer>& framebuffer,
     VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
@@ -368,7 +385,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     beginInfo.pNext = nullptr;
     beginInfo.renderPass = *renderPass;
     beginInfo.framebuffer = *framebuffer;
-    beginInfo.renderArea = renderArea;
+    beginInfo.renderArea = renderAreas.empty() ? VkRect2D{0, 0, 0, 0} : renderAreas.front();
     beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
     MAGMA_STACK_ARRAY(VkClearValue, dereferencedClearValues, beginInfo.clearValueCount);
     for (const auto& clearValue : clearValues)
@@ -388,19 +405,48 @@ void CommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuf
     vkCmdExecuteCommands(handle, dereferencedCommandBuffers.size(), dereferencedCommandBuffers);
 }
 
-MAGMA_INLINE void CommandBuffer::setDeviceMask(uint32_t deviceMask) noexcept
+void CommandBuffer::setDeviceMask(uint32_t deviceMask) noexcept
 {
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdSetDeviceMaskKHR);
     if (vkCmdSetDeviceMaskKHR)
         vkCmdSetDeviceMaskKHR(handle, deviceMask);
 }
 
-MAGMA_INLINE void CommandBuffer::dispatchBase(uint32_t baseGroupX, uint32_t baseGroupY, uint32_t baseGroupZ,
+void CommandBuffer::dispatchBase(uint32_t baseGroupX, uint32_t baseGroupY, uint32_t baseGroupZ,
     uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) const noexcept
 {
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDispatchBaseKHR);
     if (vkCmdDispatchBaseKHR)
         vkCmdDispatchBaseKHR(handle, baseGroupX, baseGroupY, baseGroupZ, groupCountX, groupCountY, groupCountZ);
+}
+
+void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const ClearValue& clearValue, uint32_t deviceMask,
+    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+{
+    beginRenderPassDeviceGroup(renderPass, framebuffer, {clearValue}, deviceMask, contents);
+}
+
+void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const std::initializer_list<ClearValue>& clearValues, uint32_t deviceMask,
+    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+{
+    VkDeviceGroupRenderPassBeginInfo deviceGroupBeginInfo;
+    deviceGroupBeginInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO;
+    deviceGroupBeginInfo.pNext = nullptr;
+    deviceGroupBeginInfo.deviceMask = deviceMask;
+    deviceGroupBeginInfo.deviceRenderAreaCount = MAGMA_COUNT(renderAreas);
+    deviceGroupBeginInfo.pDeviceRenderAreas = renderAreas.data();
+    VkRenderPassBeginInfo beginInfo;
+    beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    beginInfo.pNext = &deviceGroupBeginInfo;
+    beginInfo.renderPass = *renderPass;
+    beginInfo.framebuffer = *framebuffer;
+    beginInfo.renderArea = VkRect2D{0, 0, 0, 0}; // Elements of VkDeviceGroupRenderPassBeginInfo::pDeviceRenderAreas override the value of VkRenderPassBeginInfo::renderArea
+    beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
+    MAGMA_STACK_ARRAY(VkClearValue, dereferencedClearValues, beginInfo.clearValueCount);
+    for (const auto& clearValue : clearValues)
+        dereferencedClearValues.put(clearValue);
+    beginInfo.pClearValues = dereferencedClearValues;
+    vkCmdBeginRenderPass(handle, &beginInfo, contents);
 }
 
 void CommandBuffer::beginConditionalRendering(const std::shared_ptr<Buffer>& buffer,
