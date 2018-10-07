@@ -31,6 +31,11 @@ namespace magma
             VkDeviceSize size,
             VkMemoryPropertyFlags flags,
             std::shared_ptr<IAllocator> allocator = nullptr);
+        explicit DeviceMemory(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            VkMemoryPropertyFlags flags,
+            uint32_t deviceMask,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         ~DeviceMemory();
         void *map(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE,
