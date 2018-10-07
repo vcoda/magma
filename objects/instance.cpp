@@ -109,7 +109,7 @@ std::vector<VkPhysicalDeviceGroupProperties> Instance::enumeratePhysicalDeviceGr
 std::shared_ptr<PhysicalDeviceGroup> Instance::getPhysicalDeviceGroup(uint32_t groupId)
 {
     const std::vector<VkPhysicalDeviceGroupProperties>& deviceGroups = enumeratePhysicalDeviceGroups();
-    if (groupId > MAGMA_COUNT(deviceGroups))
+    if (groupId >= MAGMA_COUNT(deviceGroups))
         MAGMA_THROW("invalid <groupId> parameter");
     std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices;
     const VkPhysicalDeviceGroupProperties& deviceGroupProperties = deviceGroups[groupId];
