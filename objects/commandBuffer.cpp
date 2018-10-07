@@ -371,12 +371,6 @@ void CommandBuffer::copyQueryResults(const std::shared_ptr<QueryPool>& queryPool
 // void CommandBuffer::pushConstants()
 // void CommandBuffer::pushConstantBlock()
 
-void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const ClearValue& clearValue,
-    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
-{
-    beginRenderPass(renderPass, framebuffer, {clearValue}, contents);
-}
-
 void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const std::initializer_list<ClearValue>& clearValues,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
@@ -418,12 +412,6 @@ void CommandBuffer::dispatchBase(uint32_t baseGroupX, uint32_t baseGroupY, uint3
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDispatchBaseKHR);
     if (vkCmdDispatchBaseKHR)
         vkCmdDispatchBaseKHR(handle, baseGroupX, baseGroupY, baseGroupZ, groupCountX, groupCountY, groupCountZ);
-}
-
-void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const ClearValue& clearValue, uint32_t deviceMask,
-    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
-{
-    beginRenderPassDeviceGroup(renderPass, framebuffer, {clearValue}, deviceMask, contents);
 }
 
 void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const std::initializer_list<ClearValue>& clearValues, uint32_t deviceMask,
