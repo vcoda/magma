@@ -33,29 +33,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, VkDeviceSize size, Vk
     info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     info.pNext = nullptr;
     info.allocationSize = size;
-    info.memoryTypeIndex = VK_MAX_MEMORY_TYPES;
-    const VkPhysicalDeviceMemoryProperties& properties = this->device->getPhysicalDevice()->getMemoryProperties();
-    for (uint32_t i = 0; i < properties.memoryTypeCount; ++i)
-    {   // Try to find exact match
-        if (properties.memoryTypes[i].propertyFlags == flags)
-        {
-            info.memoryTypeIndex = i;
-            break;
-        }
-    }
-    if (VK_MAX_MEMORY_TYPES == info.memoryTypeIndex)
-    {
-        for (uint32_t i = 0; i < properties.memoryTypeCount; ++i)
-        {   // Try to find any suitable memory type
-            if ((properties.memoryTypes[i].propertyFlags & flags) == flags)
-            {
-                info.memoryTypeIndex = i;
-                break;
-            }
-        }
-        if (VK_MAX_MEMORY_TYPES == info.memoryTypeIndex)
-            MAGMA_THROW("failed to find suitable memory type");
-    }
+    info.memoryTypeIndex = getTypeIndex(flags);
     const VkResult allocate = vkAllocateMemory(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(allocate, "failed to allocate memory");
 }
@@ -106,5 +84,23 @@ bool DeviceMemory::invalidateMappedRange(
     memoryRange.size = size;
     const VkResult invalidate = vkInvalidateMappedMemoryRanges(MAGMA_HANDLE(device), 1, &memoryRange);
     return (VK_SUCCESS == invalidate);
+}
+
+uint32_t DeviceMemory::getTypeIndex(VkMemoryPropertyFlags flags) const
+{
+    const VkPhysicalDeviceMemoryProperties& properties = this->device->getPhysicalDevice()->getMemoryProperties();
+    for (uint32_t memoryTypeIndex = 0; memoryTypeIndex < properties.memoryTypeCount; ++memoryTypeIndex)
+    {   // Try exact match
+        const VkMemoryType& memoryType = properties.memoryTypes[memoryTypeIndex];
+        if (memoryType.propertyFlags == flags)
+            return memoryTypeIndex;
+    }
+    for (uint32_t memoryTypeIndex = 0; memoryTypeIndex < properties.memoryTypeCount; ++memoryTypeIndex)
+    {   // Try any suitable memory type
+        const VkMemoryType& memoryType = properties.memoryTypes[memoryTypeIndex];
+        if ((memoryType.propertyFlags & flags) == flags)
+            return memoryTypeIndex;
+    }
+    MAGMA_THROW("failed to find suitable memory type");
 }
 } // namespace magma

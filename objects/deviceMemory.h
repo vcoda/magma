@@ -43,6 +43,9 @@ namespace magma
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
 
     private:
+        uint32_t getTypeIndex(VkMemoryPropertyFlags flags) const;
+
+    private:
         VkDeviceSize size;
     };
 } // namespace magma
