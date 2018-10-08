@@ -103,6 +103,26 @@ bool Queue::submit(std::shared_ptr<const CommandBuffer> commandBuffer,
         signalSemaphores.push_back(signalSemaphore);
     return submit(commandBuffers, {waitStageMask}, waitSemaphores, signalSemaphores, std::move(fence));
 }
+
+bool Queue::submitDeviceGroup(const std::vector<std::shared_ptr<const CommandBuffer>>& commandBuffers,
+    const std::vector<uint32_t>& commandBufferDeviceMasks /* {} */,
+    const std::vector<VkPipelineStageFlags>& waitStageMasks /* {} */,
+    const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores /* {} */,
+    const std::vector<uint32_t>& waitSemaphoreDeviceIndices /* {} */,
+    const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores /* {} */,
+    const std::vector<uint32_t>& signalSemaphoreDeviceIndices /* {} */,
+    std::shared_ptr<const Fence> fence /* nullptr */) noexcept
+{
+    VkDeviceGroupSubmitInfo deviceGroupSubmitInfo;
+    deviceGroupSubmitInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_SUBMIT_INFO;
+    deviceGroupSubmitInfo.pNext = nullptr;
+    deviceGroupSubmitInfo.waitSemaphoreCount = MAGMA_COUNT(waitSemaphoreDeviceIndices);
+    deviceGroupSubmitInfo.pWaitSemaphoreDeviceIndices = waitSemaphoreDeviceIndices.data();
+    deviceGroupSubmitInfo.commandBufferCount = MAGMA_COUNT(commandBufferDeviceMasks);
+    deviceGroupSubmitInfo.pCommandBufferDeviceMasks = commandBufferDeviceMasks.data();
+    deviceGroupSubmitInfo.signalSemaphoreCount = MAGMA_COUNT(signalSemaphoreDeviceIndices);
+    deviceGroupSubmitInfo.pSignalSemaphoreDeviceIndices = signalSemaphoreDeviceIndices.data();
+    return submit(commandBuffers, waitStageMasks, waitSemaphores, signalSemaphores, fence, &deviceGroupSubmitInfo);
 }
 
 bool Queue::waitIdle() noexcept
