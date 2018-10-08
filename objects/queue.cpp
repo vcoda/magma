@@ -37,10 +37,11 @@ Queue::Queue(VkQueue handle, std::shared_ptr<Device> device,
 }
 
 bool Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& commandBuffers,
-    VkPipelineStageFlags waitStageMask,
-    const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores,
-    const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores,
-    std::shared_ptr<const Fence> fence /* nullptr */) noexcept
+    const std::vector<VkPipelineStageFlags>& waitStageMasks /* {} */,
+    const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores /* {} */,
+    const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores /* {} */,
+    std::shared_ptr<const Fence> fence /* nullptr */,
+    const void *extension /* nullptr */) noexcept
 {
     if (commandBuffers.empty())
         return false;
@@ -48,40 +49,40 @@ bool Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& comm
     MAGMA_STACK_ARRAY(VkSemaphore, dereferencedWaitSemaphores, waitSemaphores.size());
     MAGMA_STACK_ARRAY(VkSemaphore, dereferencedSignalSemaphores, signalSemaphores.size());
     // https://www.khronos.org/registry/vulkan/specs/1.0/man/html/VkSubmitInfo.html
-    VkSubmitInfo info;
-    info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    info.pNext = nullptr;
+    VkSubmitInfo submitInfo;
+    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.pNext = extension;
     if (waitSemaphores.empty())
     {
-        info.waitSemaphoreCount = 0;
-        info.pWaitSemaphores = nullptr;
-        info.pWaitDstStageMask = nullptr;
+        submitInfo.waitSemaphoreCount = 0;
+        submitInfo.pWaitSemaphores = nullptr;
+        submitInfo.pWaitDstStageMask = nullptr;
     }
     else
-    {
+    {   // Dereference wait semaphores
         for (const auto& semaphore : waitSemaphores)
             dereferencedWaitSemaphores.put(*semaphore);
-        info.waitSemaphoreCount = MAGMA_COUNT(dereferencedWaitSemaphores);
-        info.pWaitSemaphores = dereferencedWaitSemaphores;
-        info.pWaitDstStageMask = &waitStageMask;
+        submitInfo.waitSemaphoreCount = MAGMA_COUNT(dereferencedWaitSemaphores);
+        submitInfo.pWaitSemaphores = dereferencedWaitSemaphores;
+        submitInfo.pWaitDstStageMask = waitStageMasks.data();
     }
     for (const auto& cmdBuffer : commandBuffers)
         dereferencedCommandBuffers.put(*cmdBuffer);
-    info.commandBufferCount = MAGMA_COUNT(dereferencedCommandBuffers);
-    info.pCommandBuffers = dereferencedCommandBuffers;
+    submitInfo.commandBufferCount = MAGMA_COUNT(dereferencedCommandBuffers);
+    submitInfo.pCommandBuffers = dereferencedCommandBuffers;
     if (signalSemaphores.empty())
     {
-        info.signalSemaphoreCount = 0;
-        info.pSignalSemaphores = nullptr;
+        submitInfo.signalSemaphoreCount = 0;
+        submitInfo.pSignalSemaphores = nullptr;
     }
     else
-    {
+    {   // Dereference signal semaphores
         for (const auto& semaphore : signalSemaphores)
             dereferencedSignalSemaphores.put(*semaphore);
-        info.signalSemaphoreCount = MAGMA_COUNT(dereferencedSignalSemaphores);
-        info.pSignalSemaphores = dereferencedSignalSemaphores;
+        submitInfo.signalSemaphoreCount = MAGMA_COUNT(dereferencedSignalSemaphores);
+        submitInfo.pSignalSemaphores = dereferencedSignalSemaphores;
     }
-    const VkResult submit = vkQueueSubmit(handle, 1, &info, MAGMA_OPTIONAL_HANDLE(fence));
+    const VkResult submit = vkQueueSubmit(handle, 1, &submitInfo, MAGMA_OPTIONAL_HANDLE(fence));
     return (VK_SUCCESS == submit);
 }
 
@@ -100,8 +101,8 @@ bool Queue::submit(std::shared_ptr<const CommandBuffer> commandBuffer,
     std::vector<std::shared_ptr<const Semaphore>> signalSemaphores;
     if (signalSemaphore)
         signalSemaphores.push_back(signalSemaphore);
-    return submit(commandBuffers, waitStageMask, waitSemaphores, signalSemaphores,
-        std::move(fence));
+    return submit(commandBuffers, {waitStageMask}, waitSemaphores, signalSemaphores, std::move(fence));
+}
 }
 
 bool Queue::waitIdle() noexcept
@@ -134,27 +135,27 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain,
     const VkDisplayPresentInfoKHR *displayPresentInfo,
     std::shared_ptr<const Semaphore> waitSemaphore)
 {
-    VkPresentInfoKHR info;
-    info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-    info.pNext = displayPresentInfo;
+    VkPresentInfoKHR presentInfo;
+    presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+    presentInfo.pNext = displayPresentInfo;
     VkSemaphore dereferencedWaitSemaphore;
     if (waitSemaphore)
     {
         dereferencedWaitSemaphore = *waitSemaphore;
-        info.waitSemaphoreCount = 1;
-        info.pWaitSemaphores = &dereferencedWaitSemaphore;
+        presentInfo.waitSemaphoreCount = 1;
+        presentInfo.pWaitSemaphores = &dereferencedWaitSemaphore;
     }
     else
     {
-        info.waitSemaphoreCount = 0;
-        info.pWaitSemaphores = nullptr;
+        presentInfo.waitSemaphoreCount = 0;
+        presentInfo.pWaitSemaphores = nullptr;
     }
     const VkSwapchainKHR dereferencedSwapchain = *swapchain;
-    info.swapchainCount = 1;
-    info.pSwapchains = &dereferencedSwapchain;
-    info.pImageIndices = &imageIndex;
-    info.pResults = nullptr;
-    const VkResult present = vkQueuePresentKHR(handle, &info);
+    presentInfo.swapchainCount = 1;
+    presentInfo.pSwapchains = &dereferencedSwapchain;
+    presentInfo.pImageIndices = &imageIndex;
+    presentInfo.pResults = nullptr;
+    const VkResult present = vkQueuePresentKHR(handle, &presentInfo);
     MAGMA_THROW_FAILURE(present, "queue present failed");
 }
 } // namespace magma

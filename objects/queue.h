@@ -43,10 +43,11 @@ namespace magma
         uint32_t getFamilyIndex() const noexcept { return familyIndex; }
         uint32_t getIndex() const noexcept { return index; }
         bool submit(const std::vector<std::shared_ptr<const CommandBuffer>>& commandBuffers,
-            VkPipelineStageFlags waitStageMask,
-            const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores,
-            const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores,
-            std::shared_ptr<const Fence> fence = nullptr) noexcept;
+            const std::vector<VkPipelineStageFlags>& waitStageMasks = {},
+            const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores = {},
+            const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores = {},
+            std::shared_ptr<const Fence> fence = nullptr,
+            const void *extension = nullptr) noexcept;
         bool submit(std::shared_ptr<const CommandBuffer> commandBuffer,
             VkPipelineStageFlags waitStageMask = 0,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
