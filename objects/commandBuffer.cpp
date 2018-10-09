@@ -426,7 +426,11 @@ void CommandBuffer::setDeviceMask(uint32_t deviceMask) noexcept
 {
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdSetDeviceMaskKHR);
     if (vkCmdSetDeviceMaskKHR)
+    {
+        MAGMA_ASSERT(deviceMask);
         vkCmdSetDeviceMaskKHR(handle, deviceMask);
+        this->deviceMask = deviceMask;
+    }
 }
 
 void CommandBuffer::dispatchBase(uint32_t baseGroupX, uint32_t baseGroupY, uint32_t baseGroupZ,

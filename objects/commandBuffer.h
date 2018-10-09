@@ -382,6 +382,7 @@ namespace magma
         // Non-API utility methods
         std::shared_ptr<CommandPool> getPool() const noexcept { return pool; }
         std::shared_ptr<Fence> getFence() const noexcept;
+        uint32_t getDeviceMask() const noexcept { return deviceMask; }
 
         VkRect2D getRenderArea() const noexcept;
         void setRenderArea(const VkRect2D& rc) noexcept;
@@ -403,6 +404,7 @@ namespace magma
     private:
         std::shared_ptr<CommandPool> pool;
         std::shared_ptr<Fence> fence;
+        uint32_t deviceMask = 0xFFFFFFFF;
         std::vector<VkRect2D> renderAreas;
         VkBool32 occlusionQueryEnable = VK_FALSE;
         VkBool32 conditionalRenderingEnable = VK_FALSE;
