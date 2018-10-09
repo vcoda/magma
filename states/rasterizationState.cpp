@@ -57,8 +57,7 @@ size_t RasterizationState::hash() const noexcept
 
 bool RasterizationState::operator==(const RasterizationState& other) const noexcept
 {
-    return (flags == other.flags) &&
-        (depthClampEnable == other.depthClampEnable) &&
+    return (depthClampEnable == other.depthClampEnable) &&
         (rasterizerDiscardEnable == other.rasterizerDiscardEnable) &&
         (polygonMode == other.polygonMode) &&
         (cullMode == other.cullMode) &&
