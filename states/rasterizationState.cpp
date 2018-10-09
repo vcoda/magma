@@ -70,6 +70,16 @@ bool RasterizationState::operator==(const RasterizationState& other) const noexc
         (lineWidth == other.lineWidth);
 }
 
+DepthBiasRasterizationState::DepthBiasRasterizationState(const RasterizationState& state,
+    bool depthBiasEnable, float depthBiasConstantFactor, float depthBiasClamp, float depthBiasSlopeFactor) noexcept:
+    RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable)
+{
+    this->depthBiasEnable = MAGMA_BOOLEAN(depthBiasEnable);
+    this->depthBiasConstantFactor = depthBiasConstantFactor;
+    this->depthBiasClamp = depthBiasClamp;
+    this->depthBiasSlopeFactor = depthBiasSlopeFactor;
+}
+
 namespace states
 {
 const RasterizationState fillCullNoneCCW(VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);

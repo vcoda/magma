@@ -33,6 +33,15 @@ namespace magma
         bool operator==(const RasterizationState&) const noexcept;
     };
 
+    struct DepthBiasRasterizationState : RasterizationState
+    {
+        DepthBiasRasterizationState(const RasterizationState& state,
+            bool depthBiasEnable,
+            float depthBiasConstantFactor,
+            float depthBiasClamp,
+            float depthBiasSlopeFactor) noexcept;
+    };
+
     namespace states
     {
         extern const RasterizationState fillCullNoneCCW;
