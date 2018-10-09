@@ -80,6 +80,36 @@ DepthBiasRasterizationState::DepthBiasRasterizationState(const RasterizationStat
     this->depthBiasSlopeFactor = depthBiasSlopeFactor;
 }
 
+ConservativeRasterizationState::ConservativeRasterizationState(const RasterizationState& state,
+    VkConservativeRasterizationModeEXT conservativeRasterizationMode,
+    float extraPrimitiveOverestimationSize) noexcept:
+    RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable)
+{
+    VkPipelineRasterizationStateCreateInfo::pNext = &(VkPipelineRasterizationConservativeStateCreateInfoEXT::sType);
+    VkPipelineRasterizationConservativeStateCreateInfoEXT::sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_CONSERVATIVE_STATE_CREATE_INFO_EXT;
+    VkPipelineRasterizationConservativeStateCreateInfoEXT::pNext = nullptr;
+    VkPipelineRasterizationConservativeStateCreateInfoEXT::flags = 0;
+	VkPipelineRasterizationConservativeStateCreateInfoEXT::conservativeRasterizationMode = conservativeRasterizationMode;
+    VkPipelineRasterizationConservativeStateCreateInfoEXT::extraPrimitiveOverestimationSize = extraPrimitiveOverestimationSize;
+}
+
+size_t ConservativeRasterizationState::hash() const noexcept
+{
+    size_t hash = helpers::hashVariadic(
+        VkPipelineRasterizationConservativeStateCreateInfoEXT::flags,
+        conservativeRasterizationMode,
+        extraPrimitiveOverestimationSize);
+    helpers::hashCombineArg(hash, RasterizationState::hash());
+    return hash;
+}
+
+bool ConservativeRasterizationState::operator==(const ConservativeRasterizationState& other) const noexcept
+{
+    return RasterizationState::operator==(other) &&
+        (conservativeRasterizationMode == other.conservativeRasterizationMode) &&
+        (extraPrimitiveOverestimationSize == other.extraPrimitiveOverestimationSize);
+}
+
 namespace states
 {
 const RasterizationState fillCullNoneCCW(VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);

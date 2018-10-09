@@ -42,6 +42,19 @@ namespace magma
             float depthBiasSlopeFactor) noexcept;
     };
 
+    /* If overestimation is enabled, fragments will be generated if the primitive area
+       covers any portion of the pixel, including its edges or corners. */
+
+    struct ConservativeRasterizationState : RasterizationState,
+        VkPipelineRasterizationConservativeStateCreateInfoEXT
+    {
+        ConservativeRasterizationState(const RasterizationState& state,
+            VkConservativeRasterizationModeEXT conservativeRasterizationMode,
+            float extraPrimitiveOverestimationSize) noexcept;
+        size_t hash() const noexcept;
+        bool operator==(const ConservativeRasterizationState&) const noexcept;
+    };
+
     namespace states
     {
         extern const RasterizationState fillCullNoneCCW;
