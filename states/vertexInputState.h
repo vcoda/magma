@@ -72,20 +72,20 @@ namespace magma
         extern const VertexInputState pos3Float;
         extern const VertexInputState pos4Float;
 
-        extern const VertexInputState pos2Float_Tex2Float;
-        extern const VertexInputState pos2Float_Col3Float;
-        extern const VertexInputState pos2Float_Col4Float;
-        extern const VertexInputState pos2Float_Col4UNorm;
+        extern const VertexInputState pos2FloatTex2Float;
+        extern const VertexInputState pos2FloatCol3Float;
+        extern const VertexInputState pos2FloatCol4Float;
+        extern const VertexInputState pos2FloatCol4UNorm;
 
-        extern const VertexInputState pos3Float_Tex2Float;
-        extern const VertexInputState pos3Float_Col3Float;
-        extern const VertexInputState pos3Float_Col4Float;
-        extern const VertexInputState pos3Float_Col4UNorm;
+        extern const VertexInputState pos3FloatTex2Float;
+        extern const VertexInputState pos3FloatCol3Float;
+        extern const VertexInputState pos3FloatCol4Float;
+        extern const VertexInputState pos3FloatCol4UNorm;
 
-        extern const VertexInputState pos3Float_Nrm3Float;
-        extern const VertexInputState pos3Float_Nrm3Float_Col3Float;
-        extern const VertexInputState pos3Float_Nrm3Float_Col4Float;
-        extern const VertexInputState pos3Float_Nrm3Float_Col4UNorm;
-        extern const VertexInputState pos3Float_Nrm3Float_Tex2Float;
+        extern const VertexInputState pos3FloatNrm3Float;
+        extern const VertexInputState pos3FloatNrm3FloatTex2Float;
+        extern const VertexInputState pos3FloatNrm3FloatCol3Float;
+        extern const VertexInputState pos3FloatNrm3FloatCol4Float;
+        extern const VertexInputState pos3FloatNrm3FloatCol4UNorm;
     } // namespace states
 } // namespace magma
