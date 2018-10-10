@@ -55,6 +55,20 @@ namespace magma
         VkPipelineRasterizationConservativeStateCreateInfoEXT conservative;
     };
 
+    /* This extension enables applications to opt into a relaxed, implementation
+       defined primitive rasterization order that may allow better parallel processing
+       of primitives and thus enabling higher primitive throughput. */
+
+    struct RasterizationOrderState : RasterizationState
+    {
+        RasterizationOrderState(const RasterizationState& state,
+            VkRasterizationOrderAMD rasterizationOrder) noexcept;
+        size_t hash() const noexcept;
+        bool operator==(const RasterizationOrderState&) const noexcept;
+
+        VkPipelineRasterizationStateRasterizationOrderAMD order;
+    };
+
     namespace states
     {
         extern const RasterizationState fillCullNoneCCW;

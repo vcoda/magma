@@ -111,6 +111,30 @@ bool ConservativeRasterizationState::operator==(const ConservativeRasterizationS
         (conservative.extraPrimitiveOverestimationSize == other.conservative.extraPrimitiveOverestimationSize);
 }
 
+RasterizationOrderState::RasterizationOrderState(const RasterizationState& state,
+    VkRasterizationOrderAMD rasterizationOrder) noexcept:
+    RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable)
+{
+    order.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD;
+    order.pNext = nullptr;
+    order.rasterizationOrder = rasterizationOrder;
+    pNext = &order;
+}
+
+size_t RasterizationOrderState::hash() const noexcept
+{
+    size_t hash = 0;
+    helpers::hashCombineArg(hash, order.rasterizationOrder);
+    helpers::hashCombineArg(hash, RasterizationState::hash());
+    return hash;
+}
+
+bool RasterizationOrderState::operator==(const RasterizationOrderState& other) const noexcept
+{
+    return RasterizationState::operator==(other) &&
+        (order.rasterizationOrder == other.order.rasterizationOrder);
+}
+
 namespace states
 {
 const RasterizationState fillCullNoneCCW(VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);
