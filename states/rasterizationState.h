@@ -36,7 +36,6 @@ namespace magma
     struct DepthBiasRasterizationState : RasterizationState
     {
         DepthBiasRasterizationState(const RasterizationState& state,
-            bool depthBiasEnable,
             float depthBiasConstantFactor,
             float depthBiasClamp,
             float depthBiasSlopeFactor) noexcept;
