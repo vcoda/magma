@@ -84,20 +84,20 @@ ConservativeRasterizationState::ConservativeRasterizationState(const Rasterizati
     float extraPrimitiveOverestimationSize) noexcept:
     RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable)
 {
-    VkPipelineRasterizationStateCreateInfo::pNext = &(VkPipelineRasterizationConservativeStateCreateInfoEXT::sType);
-    VkPipelineRasterizationConservativeStateCreateInfoEXT::sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_CONSERVATIVE_STATE_CREATE_INFO_EXT;
-    VkPipelineRasterizationConservativeStateCreateInfoEXT::pNext = nullptr;
-    VkPipelineRasterizationConservativeStateCreateInfoEXT::flags = 0;
-	VkPipelineRasterizationConservativeStateCreateInfoEXT::conservativeRasterizationMode = conservativeRasterizationMode;
-    VkPipelineRasterizationConservativeStateCreateInfoEXT::extraPrimitiveOverestimationSize = extraPrimitiveOverestimationSize;
+    conservative.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_CONSERVATIVE_STATE_CREATE_INFO_EXT;
+    conservative.pNext = nullptr;
+    conservative.flags = 0;
+	conservative.conservativeRasterizationMode = conservativeRasterizationMode;
+    conservative.extraPrimitiveOverestimationSize = extraPrimitiveOverestimationSize;
+    pNext = &conservative;
 }
 
 size_t ConservativeRasterizationState::hash() const noexcept
 {
     size_t hash = helpers::hashVariadic(
-        VkPipelineRasterizationConservativeStateCreateInfoEXT::flags,
-        conservativeRasterizationMode,
-        extraPrimitiveOverestimationSize);
+        conservative.flags,
+        conservative.conservativeRasterizationMode,
+        conservative.extraPrimitiveOverestimationSize);
     helpers::hashCombineArg(hash, RasterizationState::hash());
     return hash;
 }
@@ -105,8 +105,9 @@ size_t ConservativeRasterizationState::hash() const noexcept
 bool ConservativeRasterizationState::operator==(const ConservativeRasterizationState& other) const noexcept
 {
     return RasterizationState::operator==(other) &&
-        (conservativeRasterizationMode == other.conservativeRasterizationMode) &&
-        (extraPrimitiveOverestimationSize == other.extraPrimitiveOverestimationSize);
+        (conservative.flags == other.conservative.flags) &&
+        (conservative.conservativeRasterizationMode == other.conservative.conservativeRasterizationMode) &&
+        (conservative.extraPrimitiveOverestimationSize == other.conservative.extraPrimitiveOverestimationSize);
 }
 
 namespace states
