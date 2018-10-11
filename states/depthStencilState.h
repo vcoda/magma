@@ -50,12 +50,11 @@ namespace magma
     {
         DepthStencilState(VkCompareOp depthCompareOp,
             bool depthWriteEnable,
-            const VkStencilOpState& front,
-            const VkStencilOpState& back) noexcept;
-        DepthStencilState(VkCompareOp depthCompareOp,
-            bool depthWriteEnable,
             const StencilOpState& front = states::stencilAlwaysDontWrite,
             const StencilOpState& back = states::stencilAlwaysDontWrite) noexcept;
+        DepthStencilState(const DepthStencilState& state,
+            const StencilOpState& front,
+            const StencilOpState& back) noexcept;
         size_t hash() const noexcept;
         bool operator==(const DepthStencilState&) const noexcept;
     };
