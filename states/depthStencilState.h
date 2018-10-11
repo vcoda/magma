@@ -50,10 +50,25 @@ namespace magma
     {
         DepthStencilState(VkCompareOp depthCompareOp,
             bool depthWriteEnable,
+            const VkStencilOpState& front,
+            const VkStencilOpState& back) noexcept;
+        DepthStencilState(VkCompareOp depthCompareOp,
+            bool depthWriteEnable,
             const StencilOpState& front = states::stencilAlwaysDontWrite,
             const StencilOpState& back = states::stencilAlwaysDontWrite) noexcept;
         size_t hash() const noexcept;
         bool operator==(const DepthStencilState&) const noexcept;
+    };
+
+    /* The depth bounds test conditionally disables coverage of a sample
+       based on the outcome of a comparison between the value Z in the depth attachment
+       at location (xf,yf) (for the appropriate sample) and a range of values. */
+
+    struct DepthBoundsState : DepthStencilState
+    {
+        DepthBoundsState(const DepthStencilState& state,
+            float minDepthBounds,
+            float maxDepthBounds) noexcept;
     };
 
     namespace states

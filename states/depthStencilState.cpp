@@ -58,7 +58,7 @@ bool StencilOpState::operator==(const StencilOpState& other) const noexcept
 }
 
 DepthStencilState::DepthStencilState(VkCompareOp depthCompareOp, bool depthWriteEnable,
-    const StencilOpState& front, const StencilOpState& back) noexcept
+    const VkStencilOpState& front, const VkStencilOpState& back) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -73,6 +73,11 @@ DepthStencilState::DepthStencilState(VkCompareOp depthCompareOp, bool depthWrite
     minDepthBounds = 0.f;
     maxDepthBounds = 1.f;
 }
+
+DepthStencilState::DepthStencilState(VkCompareOp depthCompareOp, bool depthWriteEnable,
+    const StencilOpState& front, const StencilOpState& back) noexcept:
+    DepthStencilState(depthCompareOp, depthWriteEnable, (VkStencilOpState)front, (VkStencilOpState)back)
+{}
 
 size_t DepthStencilState::hash() const noexcept
 {
@@ -112,6 +117,15 @@ bool DepthStencilState::operator==(const DepthStencilState& other) const noexcep
         (depthBoundsTestEnable == other.depthBoundsTestEnable) &&
         (minDepthBounds == other.minDepthBounds) &&
         (maxDepthBounds == other.maxDepthBounds);
+}
+
+DepthBoundsState::DepthBoundsState(const DepthStencilState& state,
+    float minDepthBounds, float maxDepthBounds) noexcept:
+    DepthStencilState(state.depthCompareOp, state.depthWriteEnable, state.front, state.back)
+{
+    depthBoundsTestEnable = VK_TRUE;
+    this->minDepthBounds = minDepthBounds;
+    this->maxDepthBounds = maxDepthBounds;
 }
 
 namespace states
