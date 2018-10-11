@@ -38,6 +38,16 @@ namespace magma
     namespace states
     {
         extern const StencilOpState stencilAlwaysDontWrite;
+
+        extern const StencilOpState stencilIncrClampDepthPass;
+        extern const StencilOpState stencilIncrWrapDepthPass;
+        extern const StencilOpState stencilDecrClampDepthPass;
+        extern const StencilOpState stencilDecrWrapDepthPass;
+
+        extern const StencilOpState stencilIncrClampDepthFail;
+        extern const StencilOpState stencilIncrWrapDepthFail;
+        extern const StencilOpState stencilDecrClampDepthFail;
+        extern const StencilOpState stencilDecrWrapDepthFail;
     }
 
     /* The stencil test conditionally disables coverage of a sample
