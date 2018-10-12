@@ -62,37 +62,32 @@ bool ColorBlendAttachmentState::operator==(const ColorBlendAttachmentState& othe
 }
 
 ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& attachment,
-    bool logicOpEnable /* false */,
-    VkLogicOp logicOp /* VK_LOGIC_OP_CLEAR */)
-{
-    sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-    pNext = nullptr;
-    flags = 0;
-    this->logicOpEnable = MAGMA_BOOLEAN(logicOpEnable);
-    this->logicOp = logicOp;
-    attachmentCount = 1;
-    pAttachments = helpers::copyArray(static_cast<const VkPipelineColorBlendAttachmentState *>(&attachment), 1);
-    blendConstants[0] = 1.f;
-    blendConstants[1] = 1.f;
-    blendConstants[2] = 1.f;
-    blendConstants[3] = 1.f;
-}
+    const std::initializer_list<float>& blendConstants /* {} */):
+    ColorBlendState(std::vector<ColorBlendAttachmentState>{attachment}, blendConstants)
+{}
 
 ColorBlendState::ColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
-    bool logicOpEnable /* false */,
-    VkLogicOp logicOp /* VK_LOGIC_OP_CLEAR */)
+    const std::initializer_list<float>& blendConstants /* {} */)
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     pNext = nullptr;
     flags = 0;
-    this->logicOpEnable = MAGMA_BOOLEAN(logicOpEnable);
-    this->logicOp = logicOp;
+    this->logicOpEnable = VK_FALSE;
+    this->logicOp = VK_LOGIC_OP_CLEAR;
     attachmentCount = MAGMA_COUNT(attachments);
     pAttachments = helpers::copyArray(static_cast<const VkPipelineColorBlendAttachmentState *>(attachments.data()), attachments.size());
-    blendConstants[0] = 1.f;
-    blendConstants[1] = 1.f;
-    blendConstants[2] = 1.f;
-    blendConstants[3] = 1.f;
+    if (0 == blendConstants.size())
+    {
+        this->blendConstants[0] = 1.f;
+        this->blendConstants[1] = 1.f;
+        this->blendConstants[2] = 1.f;
+        this->blendConstants[3] = 1.f;
+    }
+    else
+    {
+        MAGMA_ASSERT(blendConstants.size() >= 4);
+        memcpy(this->blendConstants, blendConstants.begin(), sizeof(this->blendConstants));
+    }
 }
 
 ColorBlendState::ColorBlendState(const ColorBlendState& other)
@@ -147,6 +142,20 @@ bool ColorBlendState::operator==(const ColorBlendState& other) const noexcept
         (attachmentCount == other.attachmentCount) &&
         helpers::compareArrays(pAttachments, other.pAttachments, attachmentCount) &&
         helpers::compareArrays(blendConstants, other.blendConstants, 4);
+}
+
+ColorLogicOpState::ColorLogicOpState(const ColorBlendAttachmentState& attachment, VkLogicOp logicOp):
+    ColorBlendState(attachment)
+{
+    logicOpEnable = VK_TRUE;
+    this->logicOp = logicOp;
+}
+
+ColorLogicOpState::ColorLogicOpState(const std::vector<ColorBlendAttachmentState>& attachments, VkLogicOp logicOp):
+    ColorBlendState(attachments)
+{
+    logicOpEnable = VK_TRUE;
+    this->logicOp = logicOp;
 }
 
 namespace blendstates
@@ -229,72 +238,72 @@ const ColorBlendState blendNormalWriteRG(blendstates::normalRG);
 const ColorBlendState blendNormalWriteRGB(blendstates::normalRGB);
 const ColorBlendState blendNormalWriteRGBA(blendstates::normalRGBA);
 
-const ColorBlendState logicClearWriteR(blendstates::passR, true, VK_LOGIC_OP_CLEAR);
-const ColorBlendState logicAndWriteR(blendstates::passR, true, VK_LOGIC_OP_AND);
-const ColorBlendState logicReverseAndWriteR(blendstates::passR, true, VK_LOGIC_OP_AND_REVERSE);
-const ColorBlendState logicCopyWriteR(blendstates::passR, true, VK_LOGIC_OP_COPY);
-const ColorBlendState logicInvertedAndWriteR(blendstates::passR, true, VK_LOGIC_OP_AND_INVERTED);
-const ColorBlendState logicNoOpWriteR(blendstates::passR, true, VK_LOGIC_OP_NO_OP);
-const ColorBlendState logicXorWriteR(blendstates::passR, true, VK_LOGIC_OP_XOR);
-const ColorBlendState logicOrWriteR(blendstates::passR, true, VK_LOGIC_OP_OR);
-const ColorBlendState logicNorWriteR(blendstates::passR, true, VK_LOGIC_OP_NOR);
-const ColorBlendState logicEquivalentWriteR(blendstates::passR, true, VK_LOGIC_OP_EQUIVALENT);
-const ColorBlendState logicInvertR(blendstates::passR, true, VK_LOGIC_OP_INVERT);
-const ColorBlendState logicReverseOrWriteR(blendstates::passR, true, VK_LOGIC_OP_OR_REVERSE);
-const ColorBlendState logicInvertedCopyWriteR(blendstates::passR, true, VK_LOGIC_OP_COPY_INVERTED);
-const ColorBlendState logicInvertedOrWriteR(blendstates::passR, true, VK_LOGIC_OP_OR_INVERTED);
-const ColorBlendState logicNandWriteR(blendstates::passR, true, VK_LOGIC_OP_NAND);
-const ColorBlendState logicSetWriteR(blendstates::passR, true, VK_LOGIC_OP_SET);
+const ColorLogicOpState logicClearWriteR(blendstates::passR, VK_LOGIC_OP_CLEAR);
+const ColorLogicOpState logicAndWriteR(blendstates::passR, VK_LOGIC_OP_AND);
+const ColorLogicOpState logicReverseAndWriteR(blendstates::passR, VK_LOGIC_OP_AND_REVERSE);
+const ColorLogicOpState logicCopyWriteR(blendstates::passR, VK_LOGIC_OP_COPY);
+const ColorLogicOpState logicInvertedAndWriteR(blendstates::passR, VK_LOGIC_OP_AND_INVERTED);
+const ColorLogicOpState logicNoOpWriteR(blendstates::passR, VK_LOGIC_OP_NO_OP);
+const ColorLogicOpState logicXorWriteR(blendstates::passR, VK_LOGIC_OP_XOR);
+const ColorLogicOpState logicOrWriteR(blendstates::passR, VK_LOGIC_OP_OR);
+const ColorLogicOpState logicNorWriteR(blendstates::passR, VK_LOGIC_OP_NOR);
+const ColorLogicOpState logicEquivalentWriteR(blendstates::passR, VK_LOGIC_OP_EQUIVALENT);
+const ColorLogicOpState logicInvertR(blendstates::passR, VK_LOGIC_OP_INVERT);
+const ColorLogicOpState logicReverseOrWriteR(blendstates::passR, VK_LOGIC_OP_OR_REVERSE);
+const ColorLogicOpState logicInvertedCopyWriteR(blendstates::passR, VK_LOGIC_OP_COPY_INVERTED);
+const ColorLogicOpState logicInvertedOrWriteR(blendstates::passR, VK_LOGIC_OP_OR_INVERTED);
+const ColorLogicOpState logicNandWriteR(blendstates::passR, VK_LOGIC_OP_NAND);
+const ColorLogicOpState logicSetWriteR(blendstates::passR, VK_LOGIC_OP_SET);
 
-const ColorBlendState logicClearWriteRG(blendstates::passRG, true, VK_LOGIC_OP_CLEAR);
-const ColorBlendState logicAndWriteRG(blendstates::passRG, true, VK_LOGIC_OP_AND);
-const ColorBlendState logicReverseAndWriteRG(blendstates::passRG, true, VK_LOGIC_OP_AND_REVERSE);
-const ColorBlendState logicCopyWriteRG(blendstates::passRG, true, VK_LOGIC_OP_COPY);
-const ColorBlendState logicInvertedAndWriteRG(blendstates::passRG, true, VK_LOGIC_OP_AND_INVERTED);
-const ColorBlendState logicNoOpWriteRG(blendstates::passRG, true, VK_LOGIC_OP_NO_OP);
-const ColorBlendState logicXorWriteRG(blendstates::passRG, true, VK_LOGIC_OP_XOR);
-const ColorBlendState logicOrWriteRG(blendstates::passRG, true, VK_LOGIC_OP_OR);
-const ColorBlendState logicNorWriteRG(blendstates::passRG, true, VK_LOGIC_OP_NOR);
-const ColorBlendState logicEquivalentWriteRG(blendstates::passRG, true, VK_LOGIC_OP_EQUIVALENT);
-const ColorBlendState logicInvertRG(blendstates::passRG, true, VK_LOGIC_OP_INVERT);
-const ColorBlendState logicReverseOrWriteRG(blendstates::passRG, true, VK_LOGIC_OP_OR_REVERSE);
-const ColorBlendState logicInvertedCopyWriteRG(blendstates::passRG, true, VK_LOGIC_OP_COPY_INVERTED);
-const ColorBlendState logicInvertedOrWriteRG(blendstates::passRG, true, VK_LOGIC_OP_OR_INVERTED);
-const ColorBlendState logicNandWriteRG(blendstates::passRG, true, VK_LOGIC_OP_NAND);
-const ColorBlendState logicSetWriteRG(blendstates::passRG, true, VK_LOGIC_OP_SET);
+const ColorLogicOpState logicClearWriteRG(blendstates::passRG, VK_LOGIC_OP_CLEAR);
+const ColorLogicOpState logicAndWriteRG(blendstates::passRG, VK_LOGIC_OP_AND);
+const ColorLogicOpState logicReverseAndWriteRG(blendstates::passRG, VK_LOGIC_OP_AND_REVERSE);
+const ColorLogicOpState logicCopyWriteRG(blendstates::passRG, VK_LOGIC_OP_COPY);
+const ColorLogicOpState logicInvertedAndWriteRG(blendstates::passRG, VK_LOGIC_OP_AND_INVERTED);
+const ColorLogicOpState logicNoOpWriteRG(blendstates::passRG, VK_LOGIC_OP_NO_OP);
+const ColorLogicOpState logicXorWriteRG(blendstates::passRG, VK_LOGIC_OP_XOR);
+const ColorLogicOpState logicOrWriteRG(blendstates::passRG, VK_LOGIC_OP_OR);
+const ColorLogicOpState logicNorWriteRG(blendstates::passRG, VK_LOGIC_OP_NOR);
+const ColorLogicOpState logicEquivalentWriteRG(blendstates::passRG, VK_LOGIC_OP_EQUIVALENT);
+const ColorLogicOpState logicInvertRG(blendstates::passRG, VK_LOGIC_OP_INVERT);
+const ColorLogicOpState logicReverseOrWriteRG(blendstates::passRG, VK_LOGIC_OP_OR_REVERSE);
+const ColorLogicOpState logicInvertedCopyWriteRG(blendstates::passRG, VK_LOGIC_OP_COPY_INVERTED);
+const ColorLogicOpState logicInvertedOrWriteRG(blendstates::passRG, VK_LOGIC_OP_OR_INVERTED);
+const ColorLogicOpState logicNandWriteRG(blendstates::passRG, VK_LOGIC_OP_NAND);
+const ColorLogicOpState logicSetWriteRG(blendstates::passRG, VK_LOGIC_OP_SET);
 
-const ColorBlendState logicClearWriteRGB(blendstates::passRGB, true, VK_LOGIC_OP_CLEAR);
-const ColorBlendState logicAndWriteRGB(blendstates::passRGB, true, VK_LOGIC_OP_AND);
-const ColorBlendState logicReverseAndWriteRGB(blendstates::passRGB, true, VK_LOGIC_OP_AND_REVERSE);
-const ColorBlendState logicCopyWriteRGB(blendstates::passRGB, true, VK_LOGIC_OP_COPY);
-const ColorBlendState logicInvertedAndWriteRGB(blendstates::passRGB, true, VK_LOGIC_OP_AND_INVERTED);
-const ColorBlendState logicNoOpWriteRGB(blendstates::passRGB, true, VK_LOGIC_OP_NO_OP);
-const ColorBlendState logicXorWriteRGB(blendstates::passRGB, true, VK_LOGIC_OP_XOR);
-const ColorBlendState logicOrWriteRGB(blendstates::passRGB, true, VK_LOGIC_OP_OR);
-const ColorBlendState logicNorWriteRGB(blendstates::passRGB, true, VK_LOGIC_OP_NOR);
-const ColorBlendState logicEquivalentWriteRGB(blendstates::passRGB, true, VK_LOGIC_OP_EQUIVALENT);
-const ColorBlendState logicInvertRGB(blendstates::passRGB, true, VK_LOGIC_OP_INVERT);
-const ColorBlendState logicReverseOrWriteRGB(blendstates::passRGB, true, VK_LOGIC_OP_OR_REVERSE);
-const ColorBlendState logicInvertedCopyWriteRGB(blendstates::passRGB, true, VK_LOGIC_OP_COPY_INVERTED);
-const ColorBlendState logicInvertedOrWriteRGB(blendstates::passRGB, true, VK_LOGIC_OP_OR_INVERTED);
-const ColorBlendState logicNandWriteRGB(blendstates::passRGB, true, VK_LOGIC_OP_NAND);
-const ColorBlendState logicSetWriteRGB(blendstates::passRGB, true, VK_LOGIC_OP_SET);
+const ColorLogicOpState logicClearWriteRGB(blendstates::passRGB, VK_LOGIC_OP_CLEAR);
+const ColorLogicOpState logicAndWriteRGB(blendstates::passRGB, VK_LOGIC_OP_AND);
+const ColorLogicOpState logicReverseAndWriteRGB(blendstates::passRGB, VK_LOGIC_OP_AND_REVERSE);
+const ColorLogicOpState logicCopyWriteRGB(blendstates::passRGB, VK_LOGIC_OP_COPY);
+const ColorLogicOpState logicInvertedAndWriteRGB(blendstates::passRGB, VK_LOGIC_OP_AND_INVERTED);
+const ColorLogicOpState logicNoOpWriteRGB(blendstates::passRGB, VK_LOGIC_OP_NO_OP);
+const ColorLogicOpState logicXorWriteRGB(blendstates::passRGB, VK_LOGIC_OP_XOR);
+const ColorLogicOpState logicOrWriteRGB(blendstates::passRGB, VK_LOGIC_OP_OR);
+const ColorLogicOpState logicNorWriteRGB(blendstates::passRGB, VK_LOGIC_OP_NOR);
+const ColorLogicOpState logicEquivalentWriteRGB(blendstates::passRGB, VK_LOGIC_OP_EQUIVALENT);
+const ColorLogicOpState logicInvertRGB(blendstates::passRGB, VK_LOGIC_OP_INVERT);
+const ColorLogicOpState logicReverseOrWriteRGB(blendstates::passRGB, VK_LOGIC_OP_OR_REVERSE);
+const ColorLogicOpState logicInvertedCopyWriteRGB(blendstates::passRGB, VK_LOGIC_OP_COPY_INVERTED);
+const ColorLogicOpState logicInvertedOrWriteRGB(blendstates::passRGB, VK_LOGIC_OP_OR_INVERTED);
+const ColorLogicOpState logicNandWriteRGB(blendstates::passRGB, VK_LOGIC_OP_NAND);
+const ColorLogicOpState logicSetWriteRGB(blendstates::passRGB, VK_LOGIC_OP_SET);
 
-const ColorBlendState logicClearWriteRGBA(blendstates::passRGBA, true, VK_LOGIC_OP_CLEAR);
-const ColorBlendState logicAndWriteRGBA(blendstates::passRGBA, true, VK_LOGIC_OP_AND);
-const ColorBlendState logicReverseAndWriteRGBA(blendstates::passRGBA, true, VK_LOGIC_OP_AND_REVERSE);
-const ColorBlendState logicCopyWriteRGBA(blendstates::passRGBA, true, VK_LOGIC_OP_COPY);
-const ColorBlendState logicInvertedAndWriteRGBA(blendstates::passRGBA, true, VK_LOGIC_OP_AND_INVERTED);
-const ColorBlendState logicNoOpWriteRGBA(blendstates::passRGBA, true, VK_LOGIC_OP_NO_OP);
-const ColorBlendState logicXorWriteRGBA(blendstates::passRGBA, true, VK_LOGIC_OP_XOR);
-const ColorBlendState logicOrWriteRGBA(blendstates::passRGBA, true, VK_LOGIC_OP_OR);
-const ColorBlendState logicNorWriteRGBA(blendstates::passRGBA, true, VK_LOGIC_OP_NOR);
-const ColorBlendState logicEquivalentWriteRGBA(blendstates::passRGBA, true, VK_LOGIC_OP_EQUIVALENT);
-const ColorBlendState logicInvertRGBA(blendstates::passRGBA, true, VK_LOGIC_OP_INVERT);
-const ColorBlendState logicReverseOrWriteRGBA(blendstates::passRGBA, true, VK_LOGIC_OP_OR_REVERSE);
-const ColorBlendState logicInvertedCopyWriteRGBA(blendstates::passRGBA, true, VK_LOGIC_OP_COPY_INVERTED);
-const ColorBlendState logicInvertedOrWriteRGBA(blendstates::passRGBA, true, VK_LOGIC_OP_OR_INVERTED);
-const ColorBlendState logicNandWriteRGBA(blendstates::passRGBA, true, VK_LOGIC_OP_NAND);
-const ColorBlendState logicSetWriteRGBA(blendstates::passRGBA, true, VK_LOGIC_OP_SET);
+const ColorLogicOpState logicClearWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_CLEAR);
+const ColorLogicOpState logicAndWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_AND);
+const ColorLogicOpState logicReverseAndWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_AND_REVERSE);
+const ColorLogicOpState logicCopyWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_COPY);
+const ColorLogicOpState logicInvertedAndWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_AND_INVERTED);
+const ColorLogicOpState logicNoOpWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_NO_OP);
+const ColorLogicOpState logicXorWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_XOR);
+const ColorLogicOpState logicOrWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_OR);
+const ColorLogicOpState logicNorWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_NOR);
+const ColorLogicOpState logicEquivalentWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_EQUIVALENT);
+const ColorLogicOpState logicInvertRGBA(blendstates::passRGBA, VK_LOGIC_OP_INVERT);
+const ColorLogicOpState logicReverseOrWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_OR_REVERSE);
+const ColorLogicOpState logicInvertedCopyWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_COPY_INVERTED);
+const ColorLogicOpState logicInvertedOrWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_OR_INVERTED);
+const ColorLogicOpState logicNandWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_NAND);
+const ColorLogicOpState logicSetWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_SET);
 } // namespace states
 } // namespace magma

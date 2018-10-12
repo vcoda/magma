@@ -40,20 +40,29 @@ namespace magma
        at the fragment's location. Blending is performed for each pixel sample,
        rather than just once for each fragment. */
 
-    class ColorBlendState final : public VkPipelineColorBlendStateCreateInfo
+    struct ColorBlendState : VkPipelineColorBlendStateCreateInfo
     {
-    public:
         ColorBlendState(const ColorBlendAttachmentState& attachment,
-            bool logicOpEnable = false,
-            VkLogicOp logicOp = VK_LOGIC_OP_CLEAR);
+            const std::initializer_list<float>& blendConstants = {});
         ColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
-            bool logicOpEnable = false,
-            VkLogicOp logicOp = VK_LOGIC_OP_CLEAR);
+            const std::initializer_list<float>& blendConstants = {});
         ColorBlendState(const ColorBlendState&);
         ColorBlendState& operator=(const ColorBlendState&);
         ~ColorBlendState();
         size_t hash() const noexcept;
         bool operator==(const ColorBlendState&) const noexcept;
+    };
+
+    /* If logicOpEnable is VK_TRUE, then a logical operation selected by logicOp is applied
+       between each color attachment and the fragment’s corresponding output value,
+       and blending of all attachments is treated as if it were disabled. */
+
+    struct ColorLogicOpState : ColorBlendState
+    {
+        ColorLogicOpState(const ColorBlendAttachmentState& attachment,
+            VkLogicOp logicOp);
+        ColorLogicOpState(const std::vector<ColorBlendAttachmentState>& attachments,
+            VkLogicOp logicOp);
     };
 
     namespace blendstates
@@ -136,72 +145,72 @@ namespace magma
         extern const ColorBlendState blendNormalWriteRGB;
         extern const ColorBlendState blendNormalWriteRGBA;
 
-        extern const ColorBlendState logicClearWriteR;
-        extern const ColorBlendState logicAndWriteR;
-        extern const ColorBlendState logicReverseAndWriteR;
-        extern const ColorBlendState logicCopyWriteR;
-        extern const ColorBlendState logicInvertedAndWriteR;
-        extern const ColorBlendState logicNoOpWriteR;
-        extern const ColorBlendState logicXorWriteR;
-        extern const ColorBlendState logicOrWriteR;
-        extern const ColorBlendState logicNorWriteR;
-        extern const ColorBlendState logicEquivalentWriteR;
-        extern const ColorBlendState logicInvertR;
-        extern const ColorBlendState logicReverseOrWriteR;
-        extern const ColorBlendState logicInvertedCopyWriteR;
-        extern const ColorBlendState logicInvertedOrWriteR;
-        extern const ColorBlendState logicNandWriteR;
-        extern const ColorBlendState logicSetWriteR;
+        extern const ColorLogicOpState logicClearWriteR;
+        extern const ColorLogicOpState logicAndWriteR;
+        extern const ColorLogicOpState logicReverseAndWriteR;
+        extern const ColorLogicOpState logicCopyWriteR;
+        extern const ColorLogicOpState logicInvertedAndWriteR;
+        extern const ColorLogicOpState logicNoOpWriteR;
+        extern const ColorLogicOpState logicXorWriteR;
+        extern const ColorLogicOpState logicOrWriteR;
+        extern const ColorLogicOpState logicNorWriteR;
+        extern const ColorLogicOpState logicEquivalentWriteR;
+        extern const ColorLogicOpState logicInvertR;
+        extern const ColorLogicOpState logicReverseOrWriteR;
+        extern const ColorLogicOpState logicInvertedCopyWriteR;
+        extern const ColorLogicOpState logicInvertedOrWriteR;
+        extern const ColorLogicOpState logicNandWriteR;
+        extern const ColorLogicOpState logicSetWriteR;
 
-        extern const ColorBlendState logicClearWriteRG;
-        extern const ColorBlendState logicAndWriteRG;
-        extern const ColorBlendState logicReverseAndWriteRG;
-        extern const ColorBlendState logicCopyWriteRG;
-        extern const ColorBlendState logicInvertedAndWriteRG;
-        extern const ColorBlendState logicNoOpWriteRG;
-        extern const ColorBlendState logicXorWriteRG;
-        extern const ColorBlendState logicOrWriteRG;
-        extern const ColorBlendState logicNorWriteRG;
-        extern const ColorBlendState logicEquivalentWriteRG;
-        extern const ColorBlendState logicInvertR;
-        extern const ColorBlendState logicReverseOrWriteRG;
-        extern const ColorBlendState logicInvertedCopyWriteRG;
-        extern const ColorBlendState logicInvertedOrWriteRG;
-        extern const ColorBlendState logicNandWriteRG;
-        extern const ColorBlendState logicSetWriteRG;
+        extern const ColorLogicOpState logicClearWriteRG;
+        extern const ColorLogicOpState logicAndWriteRG;
+        extern const ColorLogicOpState logicReverseAndWriteRG;
+        extern const ColorLogicOpState logicCopyWriteRG;
+        extern const ColorLogicOpState logicInvertedAndWriteRG;
+        extern const ColorLogicOpState logicNoOpWriteRG;
+        extern const ColorLogicOpState logicXorWriteRG;
+        extern const ColorLogicOpState logicOrWriteRG;
+        extern const ColorLogicOpState logicNorWriteRG;
+        extern const ColorLogicOpState logicEquivalentWriteRG;
+        extern const ColorLogicOpState logicInvertR;
+        extern const ColorLogicOpState logicReverseOrWriteRG;
+        extern const ColorLogicOpState logicInvertedCopyWriteRG;
+        extern const ColorLogicOpState logicInvertedOrWriteRG;
+        extern const ColorLogicOpState logicNandWriteRG;
+        extern const ColorLogicOpState logicSetWriteRG;
 
-        extern const ColorBlendState logicClearWriteRGB;
-        extern const ColorBlendState logicAndWriteRGB;
-        extern const ColorBlendState logicReverseAndWriteRGB;
-        extern const ColorBlendState logicCopyWriteRGB;
-        extern const ColorBlendState logicInvertedAndWriteRGB;
-        extern const ColorBlendState logicNoOpWriteRGB;
-        extern const ColorBlendState logicXorWriteRGB;
-        extern const ColorBlendState logicOrWriteRGB;
-        extern const ColorBlendState logicNorWriteRGB;
-        extern const ColorBlendState logicEquivalentWriteRGB;
-        extern const ColorBlendState logicInvertR;
-        extern const ColorBlendState logicReverseOrWriteRGB;
-        extern const ColorBlendState logicInvertedCopyWriteRGB;
-        extern const ColorBlendState logicInvertedOrWriteRGB;
-        extern const ColorBlendState logicNandWriteRGB;
-        extern const ColorBlendState logicSetWriteRGB;
+        extern const ColorLogicOpState logicClearWriteRGB;
+        extern const ColorLogicOpState logicAndWriteRGB;
+        extern const ColorLogicOpState logicReverseAndWriteRGB;
+        extern const ColorLogicOpState logicCopyWriteRGB;
+        extern const ColorLogicOpState logicInvertedAndWriteRGB;
+        extern const ColorLogicOpState logicNoOpWriteRGB;
+        extern const ColorLogicOpState logicXorWriteRGB;
+        extern const ColorLogicOpState logicOrWriteRGB;
+        extern const ColorLogicOpState logicNorWriteRGB;
+        extern const ColorLogicOpState logicEquivalentWriteRGB;
+        extern const ColorLogicOpState logicInvertR;
+        extern const ColorLogicOpState logicReverseOrWriteRGB;
+        extern const ColorLogicOpState logicInvertedCopyWriteRGB;
+        extern const ColorLogicOpState logicInvertedOrWriteRGB;
+        extern const ColorLogicOpState logicNandWriteRGB;
+        extern const ColorLogicOpState logicSetWriteRGB;
 
-        extern const ColorBlendState logicClearWriteRGBA;
-        extern const ColorBlendState logicAndWriteRGBA;
-        extern const ColorBlendState logicReverseAndWriteRGBA;
-        extern const ColorBlendState logicCopyWriteRGBA;
-        extern const ColorBlendState logicInvertedAndWriteRGBA;
-        extern const ColorBlendState logicNoOpWriteRGBA;
-        extern const ColorBlendState logicXorWriteRGBA;
-        extern const ColorBlendState logicOrWriteRGBA;
-        extern const ColorBlendState logicNorWriteRGBA;
-        extern const ColorBlendState logicEquivalentWriteRGBA;
-        extern const ColorBlendState logicInvertR;
-        extern const ColorBlendState logicReverseOrWriteRGBA;
-        extern const ColorBlendState logicInvertedCopyWriteRGBA;
-        extern const ColorBlendState logicInvertedOrWriteRGBA;
-        extern const ColorBlendState logicNandWriteRGBA;
-        extern const ColorBlendState logicSetWriteRGBA;
+        extern const ColorLogicOpState logicClearWriteRGBA;
+        extern const ColorLogicOpState logicAndWriteRGBA;
+        extern const ColorLogicOpState logicReverseAndWriteRGBA;
+        extern const ColorLogicOpState logicCopyWriteRGBA;
+        extern const ColorLogicOpState logicInvertedAndWriteRGBA;
+        extern const ColorLogicOpState logicNoOpWriteRGBA;
+        extern const ColorLogicOpState logicXorWriteRGBA;
+        extern const ColorLogicOpState logicOrWriteRGBA;
+        extern const ColorLogicOpState logicNorWriteRGBA;
+        extern const ColorLogicOpState logicEquivalentWriteRGBA;
+        extern const ColorLogicOpState logicInvertR;
+        extern const ColorLogicOpState logicReverseOrWriteRGBA;
+        extern const ColorLogicOpState logicInvertedCopyWriteRGBA;
+        extern const ColorLogicOpState logicInvertedOrWriteRGBA;
+        extern const ColorLogicOpState logicNandWriteRGBA;
+        extern const ColorLogicOpState logicSetWriteRGBA;
     } // namespace states
 } // namespace magma

@@ -51,10 +51,10 @@ namespace magma
     struct RasterizationState;
     struct MultisampleState;
     struct DepthStencilState;
+    struct ColorBlendState;
 
     class VertexInputState;
     class ViewportState;
-    class ColorBlendState;
     class RenderPass;
 
     /* Graphics pipelines consist of multiple shader stages,
