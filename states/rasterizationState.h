@@ -100,5 +100,35 @@ namespace magma
         extern const RasterizationState pointCullBackCW;
         extern const RasterizationState pointCullFrontCW;
         extern const RasterizationState pointCullFrontAndBackCW;
+
+        extern const RasterizationOrderState fillCullNoneCCWRelaxed;
+        extern const RasterizationOrderState fillCullBackCCWRelaxed;
+        extern const RasterizationOrderState fillCullFrontCCWRelaxed;
+        extern const RasterizationOrderState fillCullFrontAndBackCCWRelaxed;
+
+        extern const RasterizationOrderState lineCullNoneCCWRelaxed;
+        extern const RasterizationOrderState lineCullBackCCWRelaxed;
+        extern const RasterizationOrderState lineCullFrontCCWRelaxed;
+        extern const RasterizationOrderState lineCullFrontAndBackCCWRelaxed;
+
+        extern const RasterizationOrderState pointCullNoneCCWRelaxed;
+        extern const RasterizationOrderState pointCullBackCCWRelaxed;
+        extern const RasterizationOrderState pointCullFrontCCWRelaxed;
+        extern const RasterizationOrderState pointCullFrontAndBackCCWRelaxed;
+
+        extern const RasterizationOrderState fillCullNoneCWRelaxed;
+        extern const RasterizationOrderState fillCullBackCWRelaxed;
+        extern const RasterizationOrderState fillCullFrontCWRelaxed;
+        extern const RasterizationOrderState fillCullFrontAndBackCWRelaxed;
+
+        extern const RasterizationOrderState lineCullNoneCWRelaxed;
+        extern const RasterizationOrderState lineCullBackCWRelaxed;
+        extern const RasterizationOrderState lineCullFrontCWRelaxed;
+        extern const RasterizationOrderState lineCullFrontAndBackCWRelaxed;
+
+        extern const RasterizationOrderState pointCullNoneCWRelaxed;
+        extern const RasterizationOrderState pointCullBackCWRelaxed;
+        extern const RasterizationOrderState pointCullFrontCWRelaxed;
+        extern const RasterizationOrderState pointCullFrontAndBackCWRelaxed;
     } // namespace states
  } // namespace magma
