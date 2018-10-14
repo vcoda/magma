@@ -33,8 +33,10 @@ namespace magma
         bool operator==(const MultisampleState&) const noexcept;
     };
 
-    /* Sample shading can be used to specify a minimum number
-       of unique samples to process for each fragment. */
+    /* Sample shading can be used to specify a minimum number of unique samples
+       to process for each fragment. When the sample shading fraction is 1.0,
+       a separate set of associated data are evaluated for each sample,
+       and each set of values is evaluated at the sample location. */
 
     struct MultisampleShadingState : MultisampleState
     {
@@ -42,8 +44,8 @@ namespace magma
             float minSampleShading = 1.f) noexcept;
     };
 
-    /* Sample mask contains a bitmask of static coverage information
-       that is ANDed with the coverage information generated during rasterization. */
+    /* Sample mask contains a bitmask of static coverage information that is ANDed
+       with the coverage information generated during rasterization. */
 
     struct MultisampleCoverageState : MultisampleState
     {
