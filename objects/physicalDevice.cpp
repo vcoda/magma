@@ -102,6 +102,20 @@ std::shared_ptr<Device> PhysicalDevice::createDevice(
         this->allocator));
 }
 
+std::vector<VkLayerProperties> PhysicalDevice::enumerateLayers() const
+{
+    uint32_t propertyCount = 0;
+    const VkResult count = vkEnumerateDeviceLayerProperties(handle, &propertyCount, nullptr);
+    MAGMA_THROW_FAILURE(count, "failed to count device layers");
+    std::vector<VkLayerProperties> layers(propertyCount);
+    if (propertyCount > 0)
+    {
+        const VkResult enumerate = vkEnumerateDeviceLayerProperties(handle, &propertyCount, layers.data());
+        MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device layers");
+    }
+    return layers;
+}
+
 std::vector<VkExtensionProperties> PhysicalDevice::enumerateExtensions(const char *layerName /* nullptr */) const
 {
     uint32_t propertyCount = 0;
@@ -114,20 +128,6 @@ std::vector<VkExtensionProperties> PhysicalDevice::enumerateExtensions(const cha
         MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device extensions");
     }
     return extensions;
-}
-
-std::vector<VkLayerProperties> PhysicalDevice::enumerateLayerProperties() const
-{
-    uint32_t propertyCount = 0;
-    const VkResult count = vkEnumerateDeviceLayerProperties(handle, &propertyCount, nullptr);
-    MAGMA_THROW_FAILURE(count, "failed to count device layers");
-    std::vector<VkLayerProperties> properties(propertyCount);
-    if (propertyCount > 0)
-    {
-        const VkResult enumerate = vkEnumerateDeviceLayerProperties(handle, &propertyCount, properties.data());
-        MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device layers");
-    }
-    return properties;
 }
 
 bool PhysicalDevice::getSurfaceSupport(std::shared_ptr<Surface> surface) const noexcept
