@@ -23,6 +23,9 @@ namespace magma
 {
     class CommandBuffer;
 
+    /* Uses VK_EXT_debug_utils extension in favor of deprecated VK_EXT_debug_marker.
+       https://www.lunarg.com/wp-content/uploads/2018/05/Vulkan-Debug-Utils_05_18_v1.pdf */
+
     class ScopedDebugMarker final : public NonCopyable
     {
     public:

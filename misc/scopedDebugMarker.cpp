@@ -31,7 +31,7 @@ ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, c
 {
 #ifdef MAGMA_DEBUG
     const float color[4] = {r, g, b, a};
-    this->cmdBuffer->beginDebugMarker(name, color);
+    this->cmdBuffer->beginDebugLabel(name, color);
 #elif defined(_MSC_VER)
     cmdBuffer;
     name;
@@ -43,7 +43,7 @@ ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, c
     cmdBuffer(std::move(cmdBuffer))
 {
 #ifdef MAGMA_DEBUG
-    this->cmdBuffer->beginDebugMarker(name, color);
+    this->cmdBuffer->beginDebugLabel(name, color);
 #elif defined(_MSC_VER)
     cmdBuffer;
     name;
@@ -54,7 +54,7 @@ ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, c
 ScopedDebugMarker::~ScopedDebugMarker()
 {
 #ifdef MAGMA_DEBUG
-    this->cmdBuffer->endDebugMarker();
+    this->cmdBuffer->endDebugLabel();
 #endif
 }
 } // namespace magma
