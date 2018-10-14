@@ -25,15 +25,32 @@ namespace magma
     struct MultisampleState : VkPipelineMultisampleStateCreateInfo
     {
         MultisampleState(VkSampleCountFlagBits rasterizationSamples,
-            bool sampleShading = false,
             bool alphaToCoverage = false,
             bool alphaToOne = false) noexcept;
         MultisampleState(uint32_t sampleCount,
-            bool sampleShading = false,
             bool alphaToCoverage = false,
             bool alphaToOne = false) noexcept;
+        ~MultisampleState();
         size_t hash() const noexcept;
         bool operator==(const MultisampleState&) const noexcept;
+    };
+
+    /* Sample shading can be used to specify a minimum number
+       of unique samples to process for each fragment. */
+
+    struct MultisampleShadingState : MultisampleState
+    {
+        MultisampleShadingState(const MultisampleState& state,
+            float minSampleShading = 1.f) noexcept;
+    };
+
+    /* Sample mask contains a bitmask of static coverage information
+       that is ANDed with the coverage information generated during rasterization. */
+
+    struct MultisampleCoverageState : MultisampleState
+    {
+        MultisampleCoverageState(const MultisampleState& state,
+            uint64_t coverageMask);
     };
 
     namespace states
@@ -47,13 +64,6 @@ namespace magma
         extern const MultisampleState multisample16;
         extern const MultisampleState multisample32;
         extern const MultisampleState multisample64;
-
-        extern const MultisampleState multisample2SampleShading;
-        extern const MultisampleState multisample4SampleShading;
-        extern const MultisampleState multisample8SampleShading;
-        extern const MultisampleState multisample16SampleShading;
-        extern const MultisampleState multisample32SampleShading;
-        extern const MultisampleState multisample64SampleShading;
 
         extern const MultisampleState multisample2AlphaToCoverage;
         extern const MultisampleState multisample4AlphaToCoverage;
