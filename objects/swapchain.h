@@ -26,6 +26,7 @@ namespace magma
     class Queue;
     class Fence;
     class Semaphore;
+    class DebugReportCallback;
 
     /* Swapchain provides the ability to present rendering results to a surface.
        It is an abstraction for an array of presentable images that are associated with a surface.
@@ -45,7 +46,8 @@ namespace magma
             VkCompositeAlphaFlagBitsKHR compositeAlpha,
             VkPresentModeKHR presentMode,
             VkSwapchainCreateFlagsKHR flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            std::shared_ptr<DebugReportCallback> debugReportCallback = nullptr);
         ~Swapchain();
         uint32_t acquireNextImage(
             std::shared_ptr<const Semaphore> semaphore,
@@ -53,6 +55,10 @@ namespace magma
             uint64_t timeout = UINT64_MAX);
         uint32_t getImageCount() const;
         std::vector<std::shared_ptr<SwapchainColorAttachment2D>> getImages() const;
+
+    private:
+        void dump(const VkSwapchainCreateInfoKHR& info,
+            std::shared_ptr<DebugReportCallback> debugReportCallback) const noexcept;
 
     private:
         VkSurfaceFormatKHR surfaceFormat;

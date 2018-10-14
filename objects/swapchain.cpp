@@ -22,13 +22,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "queue.h"
 #include "semaphore.h"
 #include "fence.h"
+#include "debugReportCallback.h"
 #include "../allocator/allocator.h"
 #include "../misc/deviceExtension.h"
 #include "../helpers/stackArray.h"
-#ifdef MAGMA_DEBUG
 #include "../helpers/stringize.h"
-#include <sstream>
-#endif
 
 namespace magma
 {
@@ -38,7 +36,8 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     VkCompositeAlphaFlagBitsKHR compositeAlpha,
     VkPresentModeKHR presentMode,
     VkSwapchainCreateFlagsKHR flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    std::shared_ptr<DebugReportCallback> debugReportCallback /* nullptr */):
     NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT, std::move(device), std::move(allocator)),
     surfaceFormat(surfaceFormat),
     imageExtent(imageExtent)
@@ -63,37 +62,19 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     info.clipped = VK_TRUE;
     info.oldSwapchain = VK_NULL_HANDLE;
     VkResult create;
-    if (std::dynamic_pointer_cast<const DisplaySurface>(surface))
+    const bool isDisplaySurface = std::dynamic_pointer_cast<const DisplaySurface>(surface) ? true : false;
+    if (!isDisplaySurface)
+        create = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    else
     {
         MAGMA_DEVICE_EXTENSION(vkCreateSharedSwapchainsKHR, VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME);
         create = vkCreateSharedSwapchainsKHR(MAGMA_HANDLE(device), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     }
-    else
-    {
-        create = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
-    }
 #ifdef MAGMA_DEBUG
-    if (create != VK_SUCCESS)
-    {
-        std::ostringstream msg;
-        msg << "failed to create swapchain with the following parameters:" << std::endl
-            << "minImageCount: " << std::to_string(info.minImageCount) << std::endl
-            << "imageFormat: " << helpers::stringize(info.imageFormat) << std::endl
-            << "imageColorSpace: " << helpers::stringize(info.imageColorSpace) << std::endl
-            << "imageExtent: {" << std::to_string(info.imageExtent.width) << ", " << std::to_string(info.imageExtent.height) << "}" << std::endl
-            << "imageArrayLayers: " << std::to_string(info.imageArrayLayers) << std::endl
-            << "imageUsage: " << helpers::stringize(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT) << std::endl
-            << "imageSharingMode: " << helpers::stringize(info.imageSharingMode) << std::endl
-            << "preTransform: " << helpers::stringize(info.preTransform) << std::endl
-            << "compositeAlpha: " << helpers::stringize(info.compositeAlpha) << std::endl
-            << "presentMode: " << helpers::stringize(info.presentMode) << std::endl
-            << "clipped: " << (info.clipped ? "VK_TRUE" : "VK_FALSE") << std::endl
-            << "oldSwapchain: " << info.oldSwapchain << std::endl;
-        MAGMA_THROW_FAILURE(create, msg.str());
-    }
-#else
+    if (create != VK_SUCCESS && debugReportCallback)
+        dump(info, debugReportCallback);
+#endif
     MAGMA_THROW_FAILURE(create, "failed to create swapchain");
-#endif // MAGMA_DEBUG
 }
 
 Swapchain::~Swapchain()
@@ -131,5 +112,34 @@ std::vector<std::shared_ptr<SwapchainColorAttachment2D>> Swapchain::getImages() 
     for (const VkImage handle : swapchainImages)
         images.emplace_back(new SwapchainColorAttachment2D(device, handle, surfaceFormat.format, imageExtent));
     return images;
+}
+
+void Swapchain::dump(const VkSwapchainCreateInfoKHR& info,
+    std::shared_ptr<DebugReportCallback> debugReportCallback) const noexcept
+{
+#ifdef MAGMA_DEBUG
+    debugReportCallback->message(VK_DEBUG_REPORT_ERROR_BIT_EXT, objectType, VK_NULL_HANDLE, 0, 0, "Magma",
+        "swapchain initialization failed with the following parameters:\n"
+        "minImageCount: %d\nimageFormat: %s\nimageColorSpace: %s\nimageExtent: {%d, %d}\n"
+        "imageArrayLayers: %d\nimageUsage: %s\nimageSharingMode: %s\n"
+        "preTransform: %s\ncompositeAlpha: %s\npresentMode: %s\nclipped: %s\n"
+        "oldSwapchain: %d\n",
+        info.minImageCount,
+        helpers::stringize(info.imageFormat),
+        helpers::stringize(info.imageColorSpace),
+        info.imageExtent.width,
+        info.imageExtent.height,
+        info.imageArrayLayers,
+        helpers::stringize(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT),
+        helpers::stringize(info.imageSharingMode),
+        helpers::stringize(info.preTransform),
+        helpers::stringize(info.compositeAlpha),
+        helpers::stringize(info.presentMode),
+        info.clipped ? "VK_TRUE" : "VK_FALSE",
+        info.oldSwapchain);
+#elif defined(_MSC_VER)
+    info;
+    debugReportCallback;
+#endif // MAGMA_DEBUG
 }
 } // namespace magma
