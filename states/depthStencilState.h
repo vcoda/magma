@@ -39,6 +39,13 @@ namespace magma
     {
         extern const StencilOpState stencilAlwaysDontWrite;
 
+        extern const StencilOpState stencilZeroDepthPass;
+        extern const StencilOpState stencilZeroDepthFail;
+        extern const StencilOpState stencilOneDepthPass;
+        extern const StencilOpState stencilOneDepthFail;
+        extern const StencilOpState stencilInvertDepthPass;
+        extern const StencilOpState stencilInvertDepthFail;
+
         extern const StencilOpState stencilIncrClampDepthPass;
         extern const StencilOpState stencilIncrWrapDepthPass;
         extern const StencilOpState stencilDecrClampDepthPass;
