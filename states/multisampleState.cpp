@@ -15,7 +15,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include <limits>
 #include "multisampleState.h"
 #include "../helpers/copy.h"
 #include "../helpers/hash.h"
@@ -23,9 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-MultisampleState::MultisampleState(VkSampleCountFlagBits rasterizationSamples,
-    bool alphaToCoverage /* false */,
-    bool alphaToOne /* false */) noexcept
+MultisampleState::MultisampleState(VkSampleCountFlagBits rasterizationSamples) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -34,13 +31,11 @@ MultisampleState::MultisampleState(VkSampleCountFlagBits rasterizationSamples,
     sampleShadingEnable = VK_FALSE;
     minSampleShading = 0.f;
     pSampleMask = nullptr;
-    alphaToCoverageEnable = MAGMA_BOOLEAN(alphaToCoverage);
-    alphaToOneEnable = MAGMA_BOOLEAN(alphaToOne);
+    alphaToCoverageEnable = VK_FALSE;
+    alphaToOneEnable = VK_FALSE;
 }
 
-MultisampleState::MultisampleState(uint32_t sampleCount,
-    bool alphaToCoverage /* false */,
-    bool alphaToOne /* false */) noexcept
+MultisampleState::MultisampleState(uint32_t sampleCount) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -60,8 +55,8 @@ MultisampleState::MultisampleState(uint32_t sampleCount,
     sampleShadingEnable = VK_FALSE;
     minSampleShading = 0.f;
     pSampleMask = nullptr;
-    alphaToCoverageEnable = MAGMA_BOOLEAN(alphaToCoverage);
-    alphaToOneEnable = MAGMA_BOOLEAN(alphaToOne);
+    alphaToCoverageEnable = VK_FALSE;
+    alphaToOneEnable = VK_FALSE;
 }
 
 MultisampleState::MultisampleState(const MultisampleState& other)
@@ -118,21 +113,25 @@ bool MultisampleState::operator==(const MultisampleState& other) const noexcept
 
 MultisampleShadingState::MultisampleShadingState(const MultisampleState& state,
     float minSampleShading /* 1 */) noexcept:
-    MultisampleState(state.rasterizationSamples, state.alphaToCoverageEnable ? true : false, state.alphaToOneEnable ? true : false)
+    MultisampleState(state.rasterizationSamples)
 {
     sampleShadingEnable = VK_TRUE;
     this->minSampleShading = minSampleShading;
 }
 
-MultisampleCoverageState::MultisampleCoverageState(const MultisampleState& state, uint64_t coverageMask):
-    MultisampleState(state.rasterizationSamples, state.alphaToCoverageEnable ? true : false, state.alphaToOneEnable ? true : false)
-{
-    // The array is sized to a length of [rasterizationSamples/32] words
+MultisampleCoverageState::MultisampleCoverageState(const MultisampleState& state,
+    uint64_t coverageMask,
+    bool alphaToCoverage /* false */,
+    bool alphaToOne /* false */):
+    MultisampleState(state.rasterizationSamples)
+{   // The array is sized to a length of [rasterizationSamples/32] words
     VkSampleMask *sampleMask = new VkSampleMask[rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1];
-    sampleMask[0] = coverageMask & std::numeric_limits<uint32_t>::max();
+    sampleMask[0] = coverageMask & 0xFFFFFFFFULL;
     if (rasterizationSamples > VK_SAMPLE_COUNT_32_BIT)
-        sampleMask[1] = (coverageMask >> VK_SAMPLE_COUNT_32_BIT) & std::numeric_limits<uint32_t>::max();
+        sampleMask[1] = (coverageMask >> VK_SAMPLE_COUNT_32_BIT) & 0xFFFFFFFFULL;
     pSampleMask = sampleMask;
+    alphaToCoverageEnable = MAGMA_BOOLEAN(alphaToCoverage);
+    alphaToOneEnable = MAGMA_BOOLEAN(alphaToOne);
 }
 
 namespace states
@@ -144,21 +143,22 @@ const MultisampleState multisample8(VK_SAMPLE_COUNT_8_BIT);
 const MultisampleState multisample16(VK_SAMPLE_COUNT_16_BIT);
 const MultisampleState multisample32(VK_SAMPLE_COUNT_32_BIT);
 const MultisampleState multisample64(VK_SAMPLE_COUNT_64_BIT);
-
-const MultisampleState multisample2AlphaToCoverage(VK_SAMPLE_COUNT_2_BIT, true, false);
-const MultisampleState multisample4AlphaToCoverage(VK_SAMPLE_COUNT_4_BIT, true, false);
-const MultisampleState multisample8AlphaToCoverage(VK_SAMPLE_COUNT_8_BIT, true, false);
-const MultisampleState multisample16AlphaToCoverage(VK_SAMPLE_COUNT_16_BIT, true, false);
-const MultisampleState multisample32AlphaToCoverage(VK_SAMPLE_COUNT_32_BIT, true, false);
-const MultisampleState multisample64AlphaToCoverage(VK_SAMPLE_COUNT_64_BIT, true, false);
-
-const MultisampleState multisample2AlphaToOne(VK_SAMPLE_COUNT_2_BIT, false, true);
-const MultisampleState multisample4AlphaToOne(VK_SAMPLE_COUNT_4_BIT, false, true);
-const MultisampleState multisample8AlphaToOne(VK_SAMPLE_COUNT_8_BIT, false, true);
-const MultisampleState multisample16AlphaToOne(VK_SAMPLE_COUNT_16_BIT, false, true);
-const MultisampleState multisample32AlphaToOne(VK_SAMPLE_COUNT_32_BIT, false, true);
-const MultisampleState multisample64AlphaToOne(VK_SAMPLE_COUNT_64_BIT, false, true);
-
 const MultisampleState noMultisample(multisample1); // Alias name for convenience
+
+static constexpr uint64_t coverageMask = 0xFFFFFFFFFFFFFFFFULL;
+
+const MultisampleCoverageState multisample2AlphaToCoverage(VK_SAMPLE_COUNT_2_BIT, coverageMask, true, false);
+const MultisampleCoverageState multisample4AlphaToCoverage(VK_SAMPLE_COUNT_4_BIT, coverageMask, true, false);
+const MultisampleCoverageState multisample8AlphaToCoverage(VK_SAMPLE_COUNT_8_BIT, coverageMask, true, false);
+const MultisampleCoverageState multisample16AlphaToCoverage(VK_SAMPLE_COUNT_16_BIT, coverageMask, true, false);
+const MultisampleCoverageState multisample32AlphaToCoverage(VK_SAMPLE_COUNT_32_BIT, coverageMask, true, false);
+const MultisampleCoverageState multisample64AlphaToCoverage(VK_SAMPLE_COUNT_64_BIT, coverageMask, false);
+
+const MultisampleCoverageState multisample2AlphaToOne(VK_SAMPLE_COUNT_2_BIT, coverageMask, false, true);
+const MultisampleCoverageState multisample4AlphaToOne(VK_SAMPLE_COUNT_4_BIT, coverageMask, false, true);
+const MultisampleCoverageState multisample8AlphaToOne(VK_SAMPLE_COUNT_8_BIT, coverageMask, false, true);
+const MultisampleCoverageState multisample16AlphaToOne(VK_SAMPLE_COUNT_16_BIT, coverageMask, false, true);
+const MultisampleCoverageState multisample32AlphaToOne(VK_SAMPLE_COUNT_32_BIT, coverageMask, false, true);
+const MultisampleCoverageState multisample64AlphaToOne(VK_SAMPLE_COUNT_64_BIT, coverageMask, false, true);
 } // namespace states
 } // namespace magma

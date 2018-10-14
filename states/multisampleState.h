@@ -24,12 +24,8 @@ namespace magma
 
     struct MultisampleState : VkPipelineMultisampleStateCreateInfo
     {
-        MultisampleState(VkSampleCountFlagBits rasterizationSamples,
-            bool alphaToCoverage = false,
-            bool alphaToOne = false) noexcept;
-        MultisampleState(uint32_t sampleCount,
-            bool alphaToCoverage = false,
-            bool alphaToOne = false) noexcept;
+        MultisampleState(VkSampleCountFlagBits rasterizationSamples) noexcept;
+        MultisampleState(uint32_t sampleCount) noexcept;
         MultisampleState(const MultisampleState&);
         MultisampleState& operator=(const MultisampleState&);
         ~MultisampleState();
@@ -52,7 +48,9 @@ namespace magma
     struct MultisampleCoverageState : MultisampleState
     {
         MultisampleCoverageState(const MultisampleState& state,
-            uint64_t coverageMask);
+            uint64_t coverageMask,
+            bool alphaToCoverage = false,
+            bool alphaToOne = false);
     };
 
     namespace states
@@ -64,21 +62,20 @@ namespace magma
         extern const MultisampleState multisample16;
         extern const MultisampleState multisample32;
         extern const MultisampleState multisample64;
-
-        extern const MultisampleState multisample2AlphaToCoverage;
-        extern const MultisampleState multisample4AlphaToCoverage;
-        extern const MultisampleState multisample8AlphaToCoverage;
-        extern const MultisampleState multisample16AlphaToCoverage;
-        extern const MultisampleState multisample32AlphaToCoverage;
-        extern const MultisampleState multisample64AlphaToCoverage;
-
-        extern const MultisampleState multisample2AlphaToOne;
-        extern const MultisampleState multisample4AlphaToOne;
-        extern const MultisampleState multisample8AlphaToOne;
-        extern const MultisampleState multisample16AlphaToOne;
-        extern const MultisampleState multisample32AlphaToOne;
-        extern const MultisampleState multisample64AlphaToOne;
-
         extern const MultisampleState noMultisample;
+
+        extern const MultisampleCoverageState multisample2AlphaToCoverage;
+        extern const MultisampleCoverageState multisample4AlphaToCoverage;
+        extern const MultisampleCoverageState multisample8AlphaToCoverage;
+        extern const MultisampleCoverageState multisample16AlphaToCoverage;
+        extern const MultisampleCoverageState multisample32AlphaToCoverage;
+        extern const MultisampleCoverageState multisample64AlphaToCoverage;
+
+        extern const MultisampleCoverageState multisample2AlphaToOne;
+        extern const MultisampleCoverageState multisample4AlphaToOne;
+        extern const MultisampleCoverageState multisample8AlphaToOne;
+        extern const MultisampleCoverageState multisample16AlphaToOne;
+        extern const MultisampleCoverageState multisample32AlphaToOne;
+        extern const MultisampleCoverageState multisample64AlphaToOne;
     } // namespace states
 } // namespace magma
