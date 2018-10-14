@@ -137,8 +137,6 @@ MultisampleCoverageState::MultisampleCoverageState(const MultisampleState& state
 
 namespace states
 {
-const MultisampleState noMultisample(VK_SAMPLE_COUNT_1_BIT); // Just another name for convenience
-
 const MultisampleState multisample1(VK_SAMPLE_COUNT_1_BIT);
 const MultisampleState multisample2(VK_SAMPLE_COUNT_2_BIT);
 const MultisampleState multisample4(VK_SAMPLE_COUNT_4_BIT);
@@ -160,5 +158,7 @@ const MultisampleState multisample8AlphaToOne(VK_SAMPLE_COUNT_8_BIT, false, true
 const MultisampleState multisample16AlphaToOne(VK_SAMPLE_COUNT_16_BIT, false, true);
 const MultisampleState multisample32AlphaToOne(VK_SAMPLE_COUNT_32_BIT, false, true);
 const MultisampleState multisample64AlphaToOne(VK_SAMPLE_COUNT_64_BIT, false, true);
+
+const MultisampleState noMultisample(multisample1); // Alias name for convenience
 } // namespace states
 } // namespace magma
