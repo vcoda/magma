@@ -40,6 +40,13 @@ namespace magma
             void *userData = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~DebugReportCallback();
+        void message(VkDebugReportFlagsEXT flags,
+            VkDebugReportObjectTypeEXT objectType,
+            uint64_t object,
+            size_t location,
+            int32_t messageCode,
+            const char *layerPrefix,
+            const char *format, ...) const;
 
     private:
         std::shared_ptr<const Instance> instance;

@@ -50,4 +50,27 @@ DebugReportCallback::~DebugReportCallback()
     if (vkDestroyDebugReportCallbackEXT)
         vkDestroyDebugReportCallbackEXT(MAGMA_HANDLE(instance), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
+
+void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType,
+    uint64_t object, size_t location, int32_t messageCode, const char *layerPrefix, const char *format, ...) const
+{
+    MAGMA_ASSERT(layerPrefix);
+    MAGMA_ASSERT(strlen(layerPrefix) > 0);
+    MAGMA_ASSERT(format);
+    MAGMA_ASSERT(strlen(format) > 0);
+    MAGMA_OPTIONAL_INSTANCE_EXTENSION(vkDebugReportMessageEXT);
+    if (vkDebugReportMessageEXT)
+    {
+        char message[4096];
+        va_list args;
+        va_start(args, format);
+#ifdef _MSC_VER
+        vsprintf_s(message, format, args);
+#else
+        vsprintf(message, format, args);
+#endif
+        va_end(args);
+        vkDebugReportMessageEXT(MAGMA_HANDLE(instance), flags, objectType, object, location, messageCode, layerPrefix, message);
+    }
+}
 } // namespace magma
