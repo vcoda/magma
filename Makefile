@@ -34,6 +34,7 @@ MAGMA_OBJS= \
 	objects/buffer.o \
 	objects/bufferView.o \
 	objects/commandBuffer.o \
+	objects/commandBufferDebug.o \
 	objects/commandPool.o \
 	objects/conditionalRenderingBuffer.o \
 	objects/debugMarker.o \

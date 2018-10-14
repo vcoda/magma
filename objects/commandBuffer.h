@@ -379,6 +379,15 @@ namespace magma
             const char *name,
             const float color[4]) noexcept;
 
+        // VK_EXT_debug_utils
+        void beginDebugLabel(
+            const char *name,
+            const float color[4]) noexcept;
+        void endDebugLabel() noexcept;
+        void insertDebugLabel(
+            const char *name,
+            const float color[4]) noexcept;
+
         // Non-API utility methods
         std::shared_ptr<CommandPool> getPool() const noexcept { return pool; }
         std::shared_ptr<Fence> getFence() const noexcept;

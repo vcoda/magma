@@ -469,62 +469,6 @@ void CommandBuffer::endConditionalRendering() noexcept
         vkCmdEndConditionalRenderingEXT(handle);
 }
 
-void CommandBuffer::beginDebugMarker(const char *name, const float color[4]) noexcept
-{
-    MAGMA_ASSERT(name);
-    MAGMA_ASSERT(strlen(name) > 0);
-    MAGMA_ASSERT(color);
-#ifdef MAGMA_DEBUG
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDebugMarkerBeginEXT);
-    if (vkCmdDebugMarkerBeginEXT)
-    {
-        VkDebugMarkerMarkerInfoEXT info;
-        info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
-        info.pNext = nullptr;
-        info.pMarkerName = name;
-        memcpy(info.color, color, sizeof(float) * 4);
-        vkCmdDebugMarkerBeginEXT(handle, &info);
-    }
-#elif defined(_MSC_VER)
-    name;
-    color;
-#endif // MAGMA_DEBUG
-}
-
-void CommandBuffer::endDebugMarker() noexcept
-{
-#ifdef MAGMA_DEBUG
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDebugMarkerEndEXT);
-    if (vkCmdDebugMarkerEndEXT)
-        vkCmdDebugMarkerEndEXT(handle);
-#endif // MAGMA_DEBUG
-}
-
-void CommandBuffer::insertDebugMarker(const char *name, const float color[4]) noexcept
-{
-    MAGMA_ASSERT(name);
-    MAGMA_ASSERT(strlen(name) > 0);
-    MAGMA_ASSERT(color);
-#ifdef MAGMA_DEBUG
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDebugMarkerInsertEXT);
-    if (vkCmdDebugMarkerInsertEXT)
-    {
-        VkDebugMarkerMarkerInfoEXT info;
-        info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
-        info.pNext = nullptr;
-        info.pMarkerName = name;
-        info.color[0] = color[0];
-        info.color[1] = color[1];
-        info.color[2] = color[2];
-        info.color[3] = color[3];
-        vkCmdDebugMarkerInsertEXT(handle, &info);
-    }
-#elif defined(_MSC_VER)
-    name;
-    color;
-#endif // MAGMA_DEBUG
-}
-
 std::shared_ptr<Fence> CommandBuffer::getFence() const noexcept
 {
     fence->reset();

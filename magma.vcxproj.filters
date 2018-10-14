@@ -613,5 +613,8 @@
     <ClCompile Include="objects\conditionalRenderingBuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
+    <ClCompile Include="objects\commandBufferDebug.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

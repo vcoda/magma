@@ -264,6 +264,7 @@
     <ClCompile Include="objects\buffer.cpp" />
     <ClCompile Include="objects\bufferView.cpp" />
     <ClCompile Include="objects\commandBuffer.cpp" />
+    <ClCompile Include="objects\commandBufferDebug.cpp" />
     <ClCompile Include="objects\commandPool.cpp" />
     <ClCompile Include="objects\conditionalRenderingBuffer.cpp" />
     <ClCompile Include="objects\debugMarker.cpp" />
