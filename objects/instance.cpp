@@ -121,6 +121,20 @@ std::shared_ptr<PhysicalDeviceGroup> Instance::getPhysicalDeviceGroup(uint32_t g
     return std::shared_ptr<PhysicalDeviceGroup>(new PhysicalDeviceGroup(physicalDevices, groupId));
 }
 
+std::vector<VkLayerProperties> Instance::enumerateLayers()
+{
+    uint32_t propertyCount = 0;
+    const VkResult count = vkEnumerateInstanceLayerProperties(&propertyCount, nullptr);
+    MAGMA_THROW_FAILURE(count, "failed to count instance layers");
+    std::vector<VkLayerProperties> layers(propertyCount);
+    if (propertyCount > 0)
+    {
+        const VkResult enumerate = vkEnumerateInstanceLayerProperties(&propertyCount, layers.data());
+        MAGMA_THROW_FAILURE(enumerate, "failed to enumerate instance layers");
+    }
+    return layers;
+}
+
 std::vector<VkExtensionProperties> Instance::enumerateExtensions(const char *layerName /* nullptr */)
 {
     uint32_t propertyCount = 0;
