@@ -33,6 +33,11 @@ namespace magma
         bool operator==(const RasterizationState&) const noexcept;
     };
 
+    /* Controls whether to bias fragment depth values:
+       depthBiasConstantFactor is a scalar factor controlling the constant depth value added to each fragment.
+       depthBiasClamp is the maximum (or minimum) depth bias of a fragment.
+       depthBiasSlopeFactor is a scalar factor applied to a fragment's slope in depth bias calculations. */
+
     struct DepthBiasRasterizationState : RasterizationState
     {
         DepthBiasRasterizationState(const RasterizationState& state,
