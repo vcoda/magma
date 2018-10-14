@@ -15,6 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
+#include <cstdarg>
 #include "debugReportCallback.h"
 #include "instance.h"
 #include "../allocator/allocator.h"
@@ -55,9 +56,7 @@ void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkDebugReportObje
     uint64_t object, size_t location, int32_t messageCode, const char *layerPrefix, const char *format, ...) const
 {
     MAGMA_ASSERT(layerPrefix);
-    MAGMA_ASSERT(strlen(layerPrefix) > 0);
     MAGMA_ASSERT(format);
-    MAGMA_ASSERT(strlen(format) > 0);
     MAGMA_OPTIONAL_INSTANCE_EXTENSION(vkDebugReportMessageEXT);
     if (vkDebugReportMessageEXT)
     {
