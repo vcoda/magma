@@ -30,7 +30,7 @@ namespace magma
             VkCompareOp compareOp,
             uint32_t compareMask = 0x0,
             uint32_t writeMask = 0x0,
-            uint32_t reference = 0x0) noexcept;
+            uint32_t reference = 0) noexcept;
         size_t hash() const noexcept;
         bool operator==(const StencilOpState&) const noexcept;
     };
