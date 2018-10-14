@@ -64,6 +64,24 @@ MultisampleState::MultisampleState(uint32_t sampleCount,
     alphaToOneEnable = MAGMA_BOOLEAN(alphaToOne);
 }
 
+MultisampleState::MultisampleState(const MultisampleState& other)
+{
+    helpers::copy(this, &other);
+    if (other.pSampleMask)
+        pSampleMask = helpers::copyArray(other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1);
+}
+
+MultisampleState& MultisampleState::operator=(const MultisampleState& other)
+{
+    if (this != &other)
+    {
+        helpers::copy(this, &other);
+        if (other.pSampleMask)
+            pSampleMask = helpers::copyArray(other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1);
+    }
+    return *this;
+}
+
 MultisampleState::~MultisampleState()
 {
     delete[] pSampleMask;

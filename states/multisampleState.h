@@ -30,6 +30,8 @@ namespace magma
         MultisampleState(uint32_t sampleCount,
             bool alphaToCoverage = false,
             bool alphaToOne = false) noexcept;
+        MultisampleState(const MultisampleState&);
+        MultisampleState& operator=(const MultisampleState&);
         ~MultisampleState();
         size_t hash() const noexcept;
         bool operator==(const MultisampleState&) const noexcept;
