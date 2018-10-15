@@ -49,6 +49,9 @@ bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
     beginInfo.pInheritanceInfo = nullptr;
     const VkResult begin = vkBeginCommandBuffer(handle, &beginInfo);
     MAGMA_ASSERT(VK_SUCCESS == begin);
+#ifdef MAGMA_DEBUG
+    beginMarked = VK_FALSE;
+#endif
     return (VK_SUCCESS == begin);
 }
 
@@ -66,6 +69,9 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask,
     beginInfo.pInheritanceInfo = nullptr;
     const VkResult begin = vkBeginCommandBuffer(handle, &beginInfo);
     MAGMA_ASSERT(VK_SUCCESS == begin);
+#ifdef MAGMA_DEBUG
+    beginMarked = VK_FALSE;
+#endif
     return (VK_SUCCESS == begin);
 }
 
@@ -96,11 +102,21 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     beginInfo.pInheritanceInfo = &inheritanceInfo;
     const VkResult begin = vkBeginCommandBuffer(handle, &beginInfo);
     MAGMA_ASSERT(VK_SUCCESS == begin);
+#ifdef MAGMA_DEBUG
+    beginMarked = VK_FALSE;
+#endif
     return (VK_SUCCESS == begin);
 }
 
 void CommandBuffer::end()
 {
+#ifdef MAGMA_DEBUG
+    if (beginMarked)
+    {
+        endDebugLabel();
+        beginMarked = VK_FALSE;
+    }
+#endif
     /* Performance - critical commands generally do not have return codes.
        If a run time error occurs in such commands, the implementation will defer
        reporting the error until a specified point. For commands that record
@@ -386,6 +402,9 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
         dereferencedClearValues.put(clearValue);
     beginInfo.pClearValues = dereferencedClearValues;
     vkCmdBeginRenderPass(handle, &beginInfo, contents);
+#ifdef MAGMA_DEBUG
+    beginRenderPassMarked = VK_FALSE;
+#endif
 }
 
 void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const std::initializer_list<ClearValue>& clearValues, uint32_t deviceMask,
@@ -409,6 +428,9 @@ void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>
         dereferencedClearValues.put(clearValue);
     beginInfo.pClearValues = dereferencedClearValues;
     vkCmdBeginRenderPass(handle, &beginInfo, contents);
+#ifdef MAGMA_DEBUG
+    beginRenderPassMarked = VK_FALSE;
+#endif
 }
 
 // CommandBuffer::nextSubpass

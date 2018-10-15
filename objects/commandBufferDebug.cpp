@@ -129,4 +129,94 @@ void CommandBuffer::insertDebugLabel(const char *name, const float color[4]) noe
     color;
 #endif // MAGMA_DEBUG
 }
+
+#ifdef MAGMA_DEBUG
+static void unpackDWordToFloat4(uint32_t value, float result[4]) noexcept
+{
+    result[0] = (value & 0xFF) / 255.0f;
+    result[1] = ((value >> 8) & 0xFF) / 255.0f;
+    result[2] = ((value >> 16) & 0xFF) / 255.0f;
+    result[3] = ((value >> 24) & 0xFF) / 255.0f;
+}
+#endif // MAGMA_DEBUG
+
+bool CommandBuffer::begin(const char *blockName, uint32_t blockColor,
+    VkCommandBufferUsageFlags flags /* 0 */) noexcept
+{
+    const bool beginResult = begin(flags);
+#ifdef MAGMA_DEBUG
+    float color[4];
+    unpackDWordToFloat4(blockColor, color);
+    beginDebugLabel(blockName, color);
+    beginMarked = VK_TRUE;
+#elif defined(_MSC_VER)
+    blockName;
+    blockColor;
+#endif // MAGMA_DEBUG
+    return beginResult;
+}
+
+bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask, const char *blockName, uint32_t blockColor,
+    VkCommandBufferUsageFlags flags /* 0 */) noexcept
+{
+    const bool beginResult = beginDeviceGroup(deviceMask, flags);
+#ifdef MAGMA_DEBUG
+    float color[4];
+    unpackDWordToFloat4(blockColor, color);
+    beginDebugLabel(blockName, color);
+    beginMarked = VK_TRUE;
+#elif defined(_MSC_VER)
+    blockName;
+    blockColor;
+#endif // MAGMA_DEBUG
+    return beginResult;
+}
+
+bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass, const std::shared_ptr<Framebuffer>& framebuffer,
+    const char *blockName, uint32_t blockColor,
+    VkCommandBufferUsageFlags flags /* 0 */) noexcept
+{
+    const bool beginResult = beginInherited(renderPass, subpass, framebuffer, flags);
+#ifdef MAGMA_DEBUG
+    float color[4];
+    unpackDWordToFloat4(blockColor, color);
+    beginDebugLabel(blockName, color);
+    beginMarked = VK_TRUE;
+#elif defined(_MSC_VER)
+    blockName;
+    blockColor;
+#endif // MAGMA_DEBUG
+    return beginResult;
+}
+
+void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const std::initializer_list<ClearValue>& clearValues,
+    const char *renderPassName, uint32_t renderPassColor,
+    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+{
+    beginRenderPass(renderPass, framebuffer, clearValues, contents);
+#ifdef MAGMA_DEBUG
+    float color[4];
+    unpackDWordToFloat4(renderPassColor, color);
+    beginDebugLabel(renderPassName, color);
+    beginRenderPassMarked = VK_TRUE;
+#elif defined(_MSC_VER)
+    renderPassName;
+    renderPassColor;
+#endif // MAGMA_DEBUG
+}
+
+void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const std::initializer_list<ClearValue>& clearValues, uint32_t deviceMask,
+    const char *renderPassName, uint32_t renderPassColor, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+{
+    beginRenderPassDeviceGroup(renderPass, framebuffer, clearValues, deviceMask, contents);
+#ifdef MAGMA_DEBUG
+    float color[4];
+    unpackDWordToFloat4(renderPassColor, color);
+    beginDebugLabel(renderPassName, color);
+    beginRenderPassMarked = VK_TRUE;
+#elif defined(_MSC_VER)
+    renderPassName;
+    renderPassColor;
+#endif // MAGMA_DEBUG
+}
 } // namespace magma

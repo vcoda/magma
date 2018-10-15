@@ -410,6 +410,38 @@ namespace magma
         void enableConditionalRendering(bool enable) noexcept;
         void queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept;
 
+        // Debug stuff
+        bool begin(const char *blockName,
+            uint32_t blockColor,
+            VkCommandBufferUsageFlags flags = 0) noexcept;
+        bool beginDeviceGroup(
+            uint32_t deviceMask,
+            const char *blockName,
+            uint32_t blockColor,
+            VkCommandBufferUsageFlags flags = 0) noexcept;
+        bool beginInherited(
+            const std::shared_ptr<RenderPass>& renderPass,
+            uint32_t subpass,
+            const std::shared_ptr<Framebuffer>& framebuffer,
+            const char *blockName,
+            uint32_t blockColor,
+            VkCommandBufferUsageFlags flags = 0) noexcept;
+        void beginRenderPass(
+            const std::shared_ptr<RenderPass>& renderPass,
+            const std::shared_ptr<Framebuffer>& framebuffer,
+            const std::initializer_list<ClearValue>& clearValues,
+            const char *renderPassName,
+            uint32_t renderPassColor,
+            VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
+        void beginRenderPassDeviceGroup(
+            const std::shared_ptr<RenderPass>& renderPass,
+            const std::shared_ptr<Framebuffer>& framebuffer,
+            const std::initializer_list<ClearValue>& clearValues,
+            uint32_t deviceMask,
+            const char *renderPassName,
+            uint32_t renderPassColor,
+            VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
+
     private:
         std::shared_ptr<CommandPool> pool;
         std::shared_ptr<Fence> fence;
@@ -419,6 +451,10 @@ namespace magma
         VkBool32 conditionalRenderingEnable = VK_FALSE;
         VkQueryControlFlags queryFlags = 0;
         VkQueryPipelineStatisticFlags pipelineStatistics = 0;
+#ifdef MAGMA_DEBUG
+        VkBool32 beginMarked = VK_FALSE;
+        VkBool32 beginRenderPassMarked = VK_FALSE;
+#endif
     };
 } // namespace magma
 
