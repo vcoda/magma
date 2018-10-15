@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/pushConstants.h"
 #include "../allocator/allocator.h"
 #include "../helpers/hash.h"
+#include "../helpers/hexColor.h"
 
 namespace magma
 {
@@ -68,7 +69,9 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     }
 }
 
-bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology)
+bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,
+    const char *labelName /* nullptr */,
+    uint32_t labelColor /* 0xFFFFFFFF */)
 {
     MAGMA_ASSERT(!insidePrimitive);
     if (insidePrimitive)
@@ -85,6 +88,8 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology)
     primitive.transform = transform;
     primitive.vertexCount = 0;
     primitive.firstVertex = vertexCount;
+    primitive.labelName = labelName;
+    primitive.labelColor = labelColor;
     primitives.push_back(primitive);
     insidePrimitive = true;
     return true;
@@ -115,6 +120,14 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer
     std::shared_ptr<GraphicsPipeline> prevPipeline;
     for (const auto& primitive : primitives)
     {
+#ifdef MAGMA_DEBUG
+        if (primitive.labelName)
+        {
+            float color[4];
+            helpers::hexColorToFloat4(primitive.labelColor, color);
+            cmdBuffer->beginDebugLabel(primitive.labelName, color);
+        }
+#endif // MAGMA_DEBUG
         if (primitive.pipeline != prevPipeline)
         {
             cmdBuffer->bindPipeline(primitive.pipeline);
@@ -124,6 +137,10 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer
         if (layout)
             cmdBuffer->pushConstantBlock(layout, VK_SHADER_STAGE_VERTEX_BIT, primitive.transform);
         cmdBuffer->draw(primitive.vertexCount, primitive.firstVertex);
+#ifdef MAGMA_DEBUG
+        if (primitive.labelName)
+            cmdBuffer->endDebugLabel();
+#endif // MAGMA_DEBUG
     }
     if (clear)
         reset();

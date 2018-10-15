@@ -63,7 +63,9 @@ namespace magma
             void setLineWidth(float width) noexcept;
             void setIdentity() noexcept;
             void setTransform(const float transform[16]) noexcept;
-            bool beginPrimitive(VkPrimitiveTopology topology);
+            bool beginPrimitive(VkPrimitiveTopology topology,
+                const char *labelName = nullptr,
+                uint32_t labelColor = 0xFFFFFFFF);
             bool endPrimitive(bool loop = false);
             void normal(float x, float y, float z) noexcept;
             void normal(const float n[3]) noexcept;
@@ -125,6 +127,8 @@ namespace magma
                 Transform transform;
                 uint32_t vertexCount;
                 uint32_t firstVertex;
+                const char *labelName;
+                uint32_t labelColor;
             };
 
             struct RenderStates
