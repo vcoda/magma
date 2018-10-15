@@ -35,9 +35,31 @@ namespace magma
             const char *name, float r, float g, float b, float a = 1.f) noexcept;
         ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer,
             const char *name, const float color[4]) noexcept;
+        ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer,
+            const char *name, uint32_t hexColor) noexcept;
         ~ScopedDebugMarker();
 
     private:
         std::shared_ptr<CommandBuffer> cmdBuffer;
     };
+
+    namespace marker
+    {   // Alpha is 0xFF
+        extern const uint32_t blackColor;
+        extern const uint32_t whiteColor;
+        extern const uint32_t redColor;
+        extern const uint32_t limeColor;
+        extern const uint32_t blueColor;
+        extern const uint32_t yellowColor;
+        extern const uint32_t cyanColor;
+        extern const uint32_t magentaColor;
+        extern const uint32_t silverColor;
+        extern const uint32_t grayColor;
+        extern const uint32_t maroonColor;
+        extern const uint32_t oliveColor;
+        extern const uint32_t greenColor;
+        extern const uint32_t purpleColor;
+        extern const uint32_t tealColor;
+        extern const uint32_t navyColor;
+    } // namespace marker
 } // namespace magma

@@ -354,6 +354,9 @@
     <ClInclude Include="helpers\refCountChecker.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
+    <ClInclude Include="helpers\hexColor.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">

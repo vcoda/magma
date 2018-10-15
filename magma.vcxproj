@@ -144,6 +144,7 @@
     <ClInclude Include="descriptors\subpass.h" />
     <ClInclude Include="helpers\alignedUniformArray.h" />
     <ClInclude Include="helpers\copy.h" />
+    <ClInclude Include="helpers\hexColor.h" />
     <ClInclude Include="helpers\mapScoped.h" />
     <ClInclude Include="helpers\refCountChecker.h" />
     <ClInclude Include="helpers\stackArray.h" />
