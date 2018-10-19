@@ -34,7 +34,7 @@ Buffer::Buffer(std::shared_ptr<Device> device,
     VkDeviceSize size, VkBufferUsageFlags usage, VkBufferCreateFlags flags,
     std::shared_ptr<IAllocator> allocator,
     VkMemoryPropertyFlags memoryFlags):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT, std::move(device), std::move(allocator)),
+    NonDispatchable(VK_OBJECT_TYPE_BUFFER, std::move(device), std::move(allocator)),
     size(size),
     usage(usage)
 {

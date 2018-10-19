@@ -33,7 +33,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     const VkPhysicalDeviceFeatures& deviceFeatures,
     const std::vector<void *>& extendedDeviceFeatures,
     std::shared_ptr<IAllocator> allocator):
-    Dispatchable<VkDevice>(VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT, nullptr, std::move(allocator)),
+    Dispatchable<VkDevice>(VK_OBJECT_TYPE_DEVICE, nullptr, std::move(allocator)),
     physicalDevice(std::move(physicalDevice))
 {
     VkPhysicalDeviceFeatures2KHR features;

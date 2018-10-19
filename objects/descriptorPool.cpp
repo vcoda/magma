@@ -30,7 +30,7 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device,
     const std::vector<Descriptor>& descriptors,
     bool freeDescriptorSet /* false */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT, std::move(device), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_POOL, std::move(device), std::move(allocator))
 {
     VkDescriptorPoolCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;

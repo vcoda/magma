@@ -28,7 +28,7 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
     VkDebugReportFlagsEXT flags,
     void *userData /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT, nullptr, std::move(allocator)),
+    NonDispatchable(VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT, nullptr, std::move(allocator)),
     instance(std::move(instance))
 {
     MAGMA_OPTIONAL_INSTANCE_EXTENSION(vkCreateDebugReportCallbackEXT);
@@ -52,8 +52,8 @@ DebugReportCallback::~DebugReportCallback()
         vkDestroyDebugReportCallbackEXT(MAGMA_HANDLE(instance), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
-void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType,
-    uint64_t object, size_t location, int32_t messageCode, const char *layerPrefix, const char *format, ...) const
+void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkObjectType objectType,
+    uint64_t object, size_t location, int32_t messageCode, const char *layerPrefix, const char *format, ...) const noexcept
 {
     MAGMA_ASSERT(layerPrefix);
     MAGMA_ASSERT(format);
@@ -69,7 +69,79 @@ void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkDebugReportObje
         vsprintf(message, format, args);
 #endif
         va_end(args);
-        vkDebugReportMessageEXT(MAGMA_HANDLE(instance), flags, objectType, object, location, messageCode, layerPrefix, message);
+        const VkDebugReportObjectTypeEXT debugObjectType = getDebugType(objectType);
+        vkDebugReportMessageEXT(MAGMA_HANDLE(instance), flags, debugObjectType, object, location, messageCode, layerPrefix, message);
+    }
+}
+
+VkDebugReportObjectTypeEXT DebugReportCallback::getDebugType(VkObjectType objectType) const noexcept
+{
+    switch (objectType)
+    {
+    case VK_OBJECT_TYPE_UNKNOWN:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT;
+    case VK_OBJECT_TYPE_INSTANCE:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT;
+    case VK_OBJECT_TYPE_PHYSICAL_DEVICE:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT;
+    case VK_OBJECT_TYPE_DEVICE:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT;
+    case VK_OBJECT_TYPE_QUEUE:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_QUEUE_EXT;
+    case VK_OBJECT_TYPE_SEMAPHORE:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_SEMAPHORE_EXT;
+    case VK_OBJECT_TYPE_COMMAND_BUFFER:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT;
+    case VK_OBJECT_TYPE_FENCE:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT;
+    case VK_OBJECT_TYPE_DEVICE_MEMORY:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT;
+    case VK_OBJECT_TYPE_BUFFER:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT;
+    case VK_OBJECT_TYPE_IMAGE:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT;
+    case VK_OBJECT_TYPE_EVENT:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_EVENT_EXT;
+    case VK_OBJECT_TYPE_QUERY_POOL:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_QUERY_POOL_EXT;
+    case VK_OBJECT_TYPE_BUFFER_VIEW:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_VIEW_EXT;
+    case VK_OBJECT_TYPE_IMAGE_VIEW:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT;
+    case VK_OBJECT_TYPE_SHADER_MODULE:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT;
+    case VK_OBJECT_TYPE_PIPELINE_CACHE:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_CACHE_EXT;
+    case VK_OBJECT_TYPE_PIPELINE_LAYOUT:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_LAYOUT_EXT;
+    case VK_OBJECT_TYPE_RENDER_PASS:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT;
+    case VK_OBJECT_TYPE_PIPELINE:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT;
+    case VK_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT;
+    case VK_OBJECT_TYPE_SAMPLER:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT;
+    case VK_OBJECT_TYPE_DESCRIPTOR_POOL:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT;
+    case VK_OBJECT_TYPE_DESCRIPTOR_SET:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT;
+    case VK_OBJECT_TYPE_FRAMEBUFFER:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT;
+    case VK_OBJECT_TYPE_COMMAND_POOL:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT;
+    case VK_OBJECT_TYPE_SURFACE_KHR:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT;
+    case VK_OBJECT_TYPE_SWAPCHAIN_KHR:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT;
+    case VK_OBJECT_TYPE_DISPLAY_KHR:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_KHR_EXT;
+    case VK_OBJECT_TYPE_DISPLAY_MODE_KHR:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_MODE_KHR_EXT;
+    case VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT_EXT;
+    default:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT;
     }
 }
 } // namespace magma

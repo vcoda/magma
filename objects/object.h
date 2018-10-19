@@ -18,46 +18,33 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <memory>
 #include "../vulkan.h"
-#include "../nonCopyable.h"
+#include "../allocator/allocable.h"
 
 namespace magma
 {
     class Device;
     class IAllocator;
-    class IObjectAllocator;
 
     /* Base non-copyable object for dispatchable and non-dispatchable handles. */
 
-    class Object : public NonCopyable
+    class Object : public Allocable
     {
     public:
-        // Notice that std::make_shared() constructs an objects via placement new,
-        // so custom allocation functions do not used in that case.
-        void *operator new(std::size_t size);
-        void *operator new(std::size_t size, const std::nothrow_t&) noexcept;
-        void operator delete(void *ptr);
-
-        static void setAllocator(std::shared_ptr<IObjectAllocator> allocator);
-        static std::shared_ptr<IObjectAllocator> getAllocator() noexcept;
-
-    public:
-        explicit Object(VkDebugReportObjectTypeEXT objectType,
+        explicit Object(VkObjectType objectType,
             std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> allocator):
-            objectType(objectType),
-            device(std::move(device)),
-            allocator(std::move(allocator)) {}
-        VkDebugReportObjectTypeEXT getObjectType() const noexcept { return objectType; }
+            std::shared_ptr<IAllocator> allocator);
+        VkObjectType getObjectType() const noexcept { return objectType; }
         std::shared_ptr<Device> getDevice() const noexcept { return device; }
+        void setMarkerName(const char *name) noexcept;
+        void setMarkerTag(uint64_t tagName, size_t tagSize, const void *tag) noexcept;
+        template<typename Tag>
+        void setMarkerTag(uint64_t tagName, const Tag& tag) noexcept
+            { setMarkerTag(name, sizeof(Tag), &tag); }
         virtual uint64_t getHandle() const noexcept = 0;
 
     protected:
-        VkDebugReportObjectTypeEXT objectType;
+        VkObjectType objectType;
         std::shared_ptr<Device> device;
         std::shared_ptr<IAllocator> allocator;
-
-    private:
-        static std::shared_ptr<IObjectAllocator> _allocator;
-        static int32_t _allocCount;
     };
 } // namespace magma

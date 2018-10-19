@@ -25,7 +25,7 @@ namespace magma
 {
 Semaphore::Semaphore(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SEMAPHORE_EXT, std::move(device), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_SEMAPHORE, std::move(device), std::move(allocator))
 {
     VkSemaphoreCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;

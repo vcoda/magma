@@ -29,7 +29,7 @@ ImageView::ImageView(std::shared_ptr<const Image> resource,
     uint32_t mipLevelCount, /* 0 */
     VkComponentMapping swizzle /* R, G, B, A */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT, std::move(resource->getDevice()), std::move(allocator)),
+    NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, std::move(resource->getDevice()), std::move(allocator)),
     image(std::move(resource))
 {
     VkImageViewCreateInfo info;

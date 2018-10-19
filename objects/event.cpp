@@ -25,7 +25,7 @@ namespace magma
 {
 Event::Event(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_EVENT_EXT, std::move(device), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_EVENT, std::move(device), std::move(allocator))
 {
     VkEventCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_EVENT_CREATE_INFO;

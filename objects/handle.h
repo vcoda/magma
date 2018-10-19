@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "debugMarker.h"
+#include "object.h"
 
 namespace magma
 {
@@ -26,7 +26,7 @@ namespace magma
        Each object of a dispatchable type must have a unique handle value during its lifetime. */
 
     template<typename Type>
-    class Dispatchable : public DebugMarker
+    class Dispatchable : public Object
     {
     public:
         typedef Type VkType;
@@ -38,10 +38,10 @@ namespace magma
             { return handle; }
 
     protected:
-        explicit Dispatchable(VkDebugReportObjectTypeEXT objectType,
+        explicit Dispatchable(VkObjectType objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator) noexcept:
-            DebugMarker(objectType, std::move(device), std::move(allocator)),
+            Object(objectType, std::move(device), std::move(allocator)),
             handle(nullptr) {}
 
     protected:
@@ -53,7 +53,7 @@ namespace magma
        in the handle rather than acting as a reference to an underlying object. */
 
     template<typename Type>
-    class NonDispatchable : public DebugMarker
+    class NonDispatchable : public Object
     {
     public:
         typedef Type VkType;
@@ -78,10 +78,10 @@ namespace magma
             { return handle; }
 
     protected:
-        explicit NonDispatchable(VkDebugReportObjectTypeEXT objectType,
+        explicit NonDispatchable(VkObjectType objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator) noexcept:
-            DebugMarker(objectType, std::move(device), std::move(allocator)),
+            Object(objectType, std::move(device), std::move(allocator)),
             handle(VK_NULL_HANDLE) {}
 
     protected:

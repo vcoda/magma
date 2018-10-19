@@ -53,7 +53,7 @@ DescriptorSetLayout::Binding::~Binding()
 DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const Binding& binding,
     VkDescriptorSetLayoutCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT, std::move(device), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT, std::move(device), std::move(allocator))
 {
     VkDescriptorSetLayoutCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
@@ -69,7 +69,7 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const B
 DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const std::initializer_list<Binding>& bindings,
     VkDescriptorSetLayoutCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT, std::move(device), std::move(allocator)),
+    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT, std::move(device), std::move(allocator)),
     bindings(bindings)
 {
     VkDescriptorSetLayoutCreateInfo info;

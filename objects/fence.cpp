@@ -26,7 +26,7 @@ namespace magma
 Fence::Fence(std::shared_ptr<Device> device,
     bool signaled /* false */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT, std::move(device), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_FENCE, std::move(device), std::move(allocator))
 {
     VkFenceCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;

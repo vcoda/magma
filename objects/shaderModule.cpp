@@ -25,7 +25,7 @@ namespace magma
 {
 ShaderModule::ShaderModule(std::shared_ptr<Device> device, const uint32_t *bytecode, size_t bytecodeSize,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT, std::move(device), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_SHADER_MODULE, std::move(device), std::move(allocator))
 {
     MAGMA_ASSERT(bytecodeSize % sizeof(uint32_t) == 0);
     VkShaderModuleCreateInfo info;

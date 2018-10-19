@@ -26,7 +26,7 @@ namespace magma
 PipelineCache::PipelineCache(std::shared_ptr<Device> device,
     size_t dataSize, const void *cacheData,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_CACHE_EXT, std::move(device), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_PIPELINE_CACHE, std::move(device), std::move(allocator))
 {
     VkPipelineCacheCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;

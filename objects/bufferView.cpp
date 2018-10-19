@@ -29,7 +29,7 @@ BufferView::BufferView(std::shared_ptr<const Buffer> resource,
     VkDeviceSize offset /* 0 */,
     VkDeviceSize range /* VK_WHOLE_SIZE */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_VIEW_EXT, std::move(resource->getDevice()), std::move(allocator)),
+    NonDispatchable(VK_OBJECT_TYPE_BUFFER_VIEW, std::move(resource->getDevice()), std::move(allocator)),
     buffer(std::move(resource))
 {
     MAGMA_ASSERT(resource->getUsage() &

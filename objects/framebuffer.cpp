@@ -29,7 +29,7 @@ namespace magma
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std::vector<std::shared_ptr<const ImageView>>& attachments,
     VkFramebufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT, std::move(renderPass->getDevice()), std::move(allocator)),
+    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, std::move(renderPass->getDevice()), std::move(allocator)),
     attachments(std::move(attachments)),
     extent(attachments[0]->getImage()->getExtent2D())
 {

@@ -33,7 +33,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
     VkImageUsageFlags usage, VkImageCreateFlags flags,
     std::shared_ptr<IAllocator> allocator):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, std::move(device), std::move(allocator)),
+    NonDispatchable(VK_OBJECT_TYPE_IMAGE, std::move(device), std::move(allocator)),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
@@ -80,7 +80,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
 }
 
 Image::Image(std::shared_ptr<Device> device, VkImage handle, VkImageType imageType, VkFormat format, const VkExtent3D& extent):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, std::move(device), nullptr),
+    NonDispatchable(VK_OBJECT_TYPE_IMAGE, std::move(device), nullptr),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),

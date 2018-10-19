@@ -16,60 +16,64 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "object.h"
+#include "device.h"
 #include "../allocator/objectAllocator.h"
+#include "../misc/deviceExtension.h"
 #include "../misc/exception.h"
 
 namespace magma
 {
-std::shared_ptr<IObjectAllocator> Object::_allocator;
-int32_t Object::_allocCount = 0;
+Object::Object(VkObjectType objectType, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator):
+    objectType(objectType),
+    device(std::move(device)),
+    allocator(std::move(allocator))
+{}
 
-void *Object::operator new(std::size_t size)
+void Object::setMarkerName(const char *name) noexcept
 {
-    void *ptr;
-    if (_allocator)
-        ptr = _allocator->alloc(size);
-    else
-        ptr = malloc(size);
-    if (!ptr)
-        throw std::bad_alloc();
-    ++_allocCount;
-    return ptr;
-}
-
-void *Object::operator new(std::size_t size, const std::nothrow_t&) noexcept
-{
-    void *ptr;
-    if (_allocator)
-        ptr = _allocator->alloc(size);
-    else
-        ptr = malloc(size);
-    if (ptr)
-        ++_allocCount;
-    return ptr;
-}
-
-void Object::operator delete(void *ptr)
-{
-    if (ptr)
+    MAGMA_ASSERT(name);
+    MAGMA_ASSERT(strlen(name) > 0);
+#ifdef MAGMA_DEBUG
+    if (!device)
+        return;
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkSetDebugUtilsObjectNameEXT);
+    if (vkSetDebugUtilsObjectNameEXT)
     {
-        --_allocCount;
-        if (_allocator)
-            _allocator->free(ptr);
-        else
-            free(ptr);
+        VkDebugUtilsObjectNameInfoEXT info;
+        info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
+        info.pNext = nullptr;
+        info.objectType = objectType;
+        info.objectHandle = getHandle();
+        info.pObjectName = name;
+        vkSetDebugUtilsObjectNameEXT(MAGMA_HANDLE(device), &info);
     }
+#elif defined(_MSC_VER)
+    name;
+#endif // MAGMA_DEBUG
 }
 
-void Object::setAllocator(std::shared_ptr<IObjectAllocator> allocator)
+void Object::setMarkerTag(uint64_t tagName, size_t tagSize, const void *tag) noexcept
 {
-    if (_allocCount)
-        throw Exception("allocator should be defined only when allocation count is zero");
-    _allocator = std::move(allocator);
-}
-
-std::shared_ptr<IObjectAllocator> Object::getAllocator() noexcept
-{
-    return _allocator;
+#ifdef MAGMA_DEBUG
+    if (!device)
+        return;
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkSetDebugUtilsObjectTagEXT);
+    if(vkSetDebugUtilsObjectTagEXT)
+    {
+        VkDebugUtilsObjectTagInfoEXT info;
+        info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_TAG_INFO_EXT;
+        info.pNext = nullptr;
+        info.objectType = objectType;
+        info.objectHandle = getHandle();
+        info.tagName = tagName;
+        info.tagSize = tagSize;
+        info.pTag = tag;
+        vkSetDebugUtilsObjectTagEXT(MAGMA_HANDLE(device), &info);
+    }
+#elif defined(_MSC_VER)
+    tagName;
+    tagSize;
+    tag;
+#endif // MAGMA_DEBUG
 }
 } // namespace magma

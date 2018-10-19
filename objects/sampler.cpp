@@ -28,7 +28,7 @@ namespace magma
 Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
     float mipLodBias /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT, std::move(device), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_SAMPLER, std::move(device), std::move(allocator))
 {
     VkSamplerCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
@@ -57,7 +57,7 @@ Sampler::Sampler(std::shared_ptr<Device> device, VkFilter magFilter, VkFilter mi
     VkSamplerMipmapMode mipmapMode, VkSamplerAddressMode addressMode,
     float mipLodBias /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT, std::move(device), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_SAMPLER, std::move(device), std::move(allocator))
 {
     VkSamplerCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
@@ -83,7 +83,7 @@ Sampler::Sampler(std::shared_ptr<Device> device, VkFilter magFilter, VkFilter mi
 }
 
 Sampler::Sampler(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT, std::move(device), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_SAMPLER, std::move(device), std::move(allocator))
 {}
 
 Sampler::~Sampler()

@@ -27,7 +27,7 @@ namespace magma
 DisplayMode::DisplayMode(std::shared_ptr<const Display> display,
     const VkExtent2D& visibleRegion, uint32_t refreshRate,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_MODE_KHR_EXT, std::move(display->getDevice()), std::move(allocator)),
+    NonDispatchable(VK_OBJECT_TYPE_DISPLAY_MODE_KHR, std::move(display->getDevice()), std::move(allocator)),
     instance(std::move(display->getPhysicalDevice()->getInstance())),
     physicalDevice(std::move(display->getPhysicalDevice())),
     visibleRegion(visibleRegion),

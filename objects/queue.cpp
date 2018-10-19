@@ -28,7 +28,7 @@ namespace magma
 {
 Queue::Queue(VkQueue handle, std::shared_ptr<Device> device,
     VkQueueFlagBits flags, uint32_t familyIndex, uint32_t index):
-    Dispatchable(VK_DEBUG_REPORT_OBJECT_TYPE_QUEUE_EXT, std::move(device), nullptr),
+    Dispatchable(VK_OBJECT_TYPE_QUEUE, std::move(device), nullptr),
     flags(flags),
     familyIndex(familyIndex),
     index(index)

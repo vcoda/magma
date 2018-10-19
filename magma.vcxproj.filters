@@ -309,9 +309,6 @@
     <ClInclude Include="objects\display.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="objects\debugMarker.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="misc\scopedDebugMarker.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
@@ -356,6 +353,9 @@
     </ClInclude>
     <ClInclude Include="helpers\hexColor.h">
       <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="allocator\allocable.h">
+      <Filter>Header Files\allocator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -586,9 +586,6 @@
     <ClCompile Include="objects\display.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="objects\debugMarker.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="misc\scopedDebugMarker.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>
@@ -618,6 +615,9 @@
     </ClCompile>
     <ClCompile Include="objects\commandBufferDebug.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="allocator\allocable.cpp">
+      <Filter>Source Files\allocator</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

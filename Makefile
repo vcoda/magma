@@ -13,6 +13,7 @@ else
 endif
 
 MAGMA_OBJS= \
+	allocator/allocable.o \
 	allocator/allocator.o \
 	\
 	barriers/bufferMemoryBarrier.o \
@@ -37,7 +38,6 @@ MAGMA_OBJS= \
 	objects/commandBufferDebug.o \
 	objects/commandPool.o \
 	objects/conditionalRenderingBuffer.o \
-	objects/debugMarker.o \
 	objects/debugReportCallback.o \
 	objects/descriptorPool.o \
 	objects/descriptorSet.o \
