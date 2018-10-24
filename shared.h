@@ -55,6 +55,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_FREEA(p)
 #endif // !_MSC_VER
 
+#define MAGMA_MAX_MESSAGE_STRING 4096
+
 #if defined(_M_AMD64) || defined(__x86_64__)
 #define MAGMA_XMM_REGISTERS 16
 #else
