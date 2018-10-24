@@ -357,6 +357,9 @@
     <ClInclude Include="allocator\allocable.h">
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
+    <ClInclude Include="objects\debugUtilsMessenger.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
@@ -618,6 +621,9 @@
     </ClCompile>
     <ClCompile Include="allocator\allocable.cpp">
       <Filter>Source Files\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\debugUtilsMessenger.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

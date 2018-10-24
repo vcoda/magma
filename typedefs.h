@@ -33,6 +33,7 @@ namespace magma
     typedef std::shared_ptr<class ConditionalRenderingBuffer> ConditionalRenderingBufferPtr;
     typedef std::shared_ptr<class DebugMarker> DebugMarkerPtr;
     typedef std::shared_ptr<class DebugReportCallback> DebugReportCallbackPtr;
+    typedef std::shared_ptr<class DebugUtilsMessenger> DebugUtilsMessengerPtr;
     typedef std::shared_ptr<class DescriptorPool> DescriptorPoolPtr;
     typedef std::shared_ptr<class DescriptorSet> DescriptorSetPtr;
     typedef std::shared_ptr<class DescriptorSetLayout> DescriptorSetLayoutPtr;

@@ -39,6 +39,7 @@ MAGMA_OBJS= \
 	objects/commandPool.o \
 	objects/conditionalRenderingBuffer.o \
 	objects/debugReportCallback.o \
+	objects/debugUtilsMessenger.o \
 	objects/descriptorPool.o \
 	objects/descriptorSet.o \
 	objects/descriptorSetLayout.o \

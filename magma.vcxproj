@@ -175,6 +175,7 @@
     <ClInclude Include="objects\commandPool.h" />
     <ClInclude Include="objects\conditionalRenderingBuffer.h" />
     <ClInclude Include="objects\debugReportCallback.h" />
+    <ClInclude Include="objects\debugUtilsMessenger.h" />
     <ClInclude Include="objects\descriptorPool.h" />
     <ClInclude Include="objects\descriptorSet.h" />
     <ClInclude Include="objects\descriptorSetLayout.h" />
@@ -270,6 +271,7 @@
     <ClCompile Include="objects\commandPool.cpp" />
     <ClCompile Include="objects\conditionalRenderingBuffer.cpp" />
     <ClCompile Include="objects\debugReportCallback.cpp" />
+    <ClCompile Include="objects\debugUtilsMessenger.cpp" />
     <ClCompile Include="objects\descriptorPool.cpp" />
     <ClCompile Include="objects\descriptorSet.cpp" />
     <ClCompile Include="objects\descriptorSetLayout.cpp" />
