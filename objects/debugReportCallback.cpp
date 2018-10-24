@@ -24,13 +24,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instance,
-    PFN_vkDebugReportCallbackEXT reportCallback,
+    PFN_vkDebugReportCallbackEXT userCallback,
     VkDebugReportFlagsEXT flags,
     void *userData /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT, nullptr, std::move(allocator)),
     instance(std::move(instance))
 {
+    MAGMA_ASSERT(userCallback);
     MAGMA_OPTIONAL_INSTANCE_EXTENSION(vkCreateDebugReportCallbackEXT);
     if (vkCreateDebugReportCallbackEXT)
     {
@@ -38,7 +39,7 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
         info.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
         info.pNext = nullptr;
         info.flags = flags;
-        info.pfnCallback = reportCallback;
+        info.pfnCallback = userCallback;
         info.pUserData = userData;
         const VkResult create = vkCreateDebugReportCallbackEXT(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
         MAGMA_THROW_FAILURE(create, "failed to create debug report callback");
@@ -69,12 +70,12 @@ void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkObjectType obje
         vsprintf(message, format, args);
 #endif
         va_end(args);
-        const VkDebugReportObjectTypeEXT debugObjectType = getDebugType(objectType);
+        const VkDebugReportObjectTypeEXT debugObjectType = coreTypeToExt(objectType);
         vkDebugReportMessageEXT(MAGMA_HANDLE(instance), flags, debugObjectType, object, location, messageCode, layerPrefix, message);
     }
 }
 
-VkDebugReportObjectTypeEXT DebugReportCallback::getDebugType(VkObjectType objectType) const noexcept
+VkDebugReportObjectTypeEXT DebugReportCallback::coreTypeToExt(VkObjectType objectType) const noexcept
 {
     switch (objectType)
     {

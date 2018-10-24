@@ -30,7 +30,7 @@ namespace magma
     {
     public:
         explicit DebugReportCallback(std::shared_ptr<const Instance> instance,
-            PFN_vkDebugReportCallbackEXT reportCallback,
+            PFN_vkDebugReportCallbackEXT userCallback,
             VkDebugReportFlagsEXT flags =
                 VK_DEBUG_REPORT_INFORMATION_BIT_EXT |
                 VK_DEBUG_REPORT_WARNING_BIT_EXT |
@@ -49,7 +49,7 @@ namespace magma
             const char *format, ...) const noexcept;
 
     private:
-        VkDebugReportObjectTypeEXT getDebugType(VkObjectType) const noexcept;
+        VkDebugReportObjectTypeEXT coreTypeToExt(VkObjectType) const noexcept;
 
     private:
         std::shared_ptr<const Instance> instance;
