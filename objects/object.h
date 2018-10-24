@@ -39,7 +39,7 @@ namespace magma
         void setMarkerTag(uint64_t tagName, size_t tagSize, const void *tag) noexcept;
         template<typename Tag>
         void setMarkerTag(uint64_t tagName, const Tag& tag) noexcept
-            { setMarkerTag(name, sizeof(Tag), &tag); }
+            { setMarkerTag(tagName, sizeof(Tag), &tag); }
         virtual uint64_t getHandle() const noexcept = 0;
 
     protected:
