@@ -262,6 +262,15 @@ const VkPhysicalDeviceShaderCorePropertiesAMD& PhysicalDevice::getShaderCoreProp
     return shaderCoreProperties;
 }
 
+VkPhysicalDeviceRaytracingPropertiesNVX PhysicalDevice::getRaytracingProperties() const
+{
+    VkPhysicalDeviceRaytracingPropertiesNVX properties;
+    properties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAYTRACING_PROPERTIES_NVX;
+    properties.pNext = nullptr;
+    getExtendedProperties(&properties);
+    return properties;
+}
+
 bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept
 {
     MAGMA_ASSERT(cacheData);
