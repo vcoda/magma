@@ -267,14 +267,10 @@ std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint3
 
 VkPhysicalDeviceShaderCorePropertiesAMD PhysicalDevice::getShaderCoreProperties() const
 {
-    VkPhysicalDeviceShaderCorePropertiesAMD shaderCoreProperties;
+    VkPhysicalDeviceShaderCorePropertiesAMD shaderCoreProperties = {};
     shaderCoreProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_AMD;
     shaderCoreProperties.pNext = nullptr;
-    VkPhysicalDeviceProperties2 properties;
-    properties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
-    properties.pNext = &shaderCoreProperties;
-    MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
-    vkGetPhysicalDeviceProperties2KHR(handle, &properties);
+    getExtendedProperties(&shaderCoreProperties);
     return shaderCoreProperties;
 }
 
