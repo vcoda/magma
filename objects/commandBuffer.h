@@ -372,14 +372,14 @@ namespace magma
             const std::shared_ptr<AccelerationStructure>& src,
             const std::shared_ptr<Buffer>& scratch,
             VkDeviceSize scratchOffset = 0) noexcept;
+        void copyAccelerationStructure(
+            const std::shared_ptr<AccelerationStructure>& dst,
+            const std::shared_ptr<AccelerationStructure>& src,
+            bool clone) const noexcept;
         void writeAccelerationStructureProperties(
             const std::shared_ptr<AccelerationStructure>& accelerationStructure,
             const std::shared_ptr<CompactedSizeQuery>& queryPool,
             uint32_t queryIndex) noexcept;
-        void copyAccelerationStructure(
-            const std::shared_ptr<AccelerationStructure>& dst,
-            const std::shared_ptr<AccelerationStructure>& src,
-            VkCopyAccelerationStructureModeNVX mode) const noexcept;
         void traceRays(
             const std::shared_ptr<Buffer>& raygenShaderBindingTableBuffer,
             VkDeviceSize raygenShaderBindingOffset,

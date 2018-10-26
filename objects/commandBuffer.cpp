@@ -439,6 +439,16 @@ void CommandBuffer::buildAccelerationStructure(uint32_t instanceCount, const std
     }
 }
 
+void CommandBuffer::copyAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dst, const std::shared_ptr<AccelerationStructure>& src, bool clone) const noexcept
+{
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureNVX);
+    if (vkCmdCopyAccelerationStructureNVX)
+    {
+        const VkCopyAccelerationStructureModeNVX mode = clone ? VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_NVX : VK_COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_NVX;
+        vkCmdCopyAccelerationStructureNVX(handle, *dst, *src, mode);
+    }
+}
+
 void CommandBuffer::writeAccelerationStructureProperties(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
     const std::shared_ptr<CompactedSizeQuery>& queryPool, uint32_t queryIndex) noexcept
 {
@@ -446,14 +456,6 @@ void CommandBuffer::writeAccelerationStructureProperties(const std::shared_ptr<A
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdWriteAccelerationStructurePropertiesNVX);
     if (vkCmdWriteAccelerationStructurePropertiesNVX)
         vkCmdWriteAccelerationStructurePropertiesNVX(handle, *accelerationStructure, queryPool->getType(), *queryPool, queryIndex);
-}
-
-void CommandBuffer::copyAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dst, const std::shared_ptr<AccelerationStructure>& src,
-    VkCopyAccelerationStructureModeNVX mode) const noexcept
-{
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureNVX);
-    if (vkCmdCopyAccelerationStructureNVX)
-        vkCmdCopyAccelerationStructureNVX(handle, *dst, *src, mode);
 }
 
 void CommandBuffer::traceRays(const std::shared_ptr<Buffer>& raygenShaderBindingTableBuffer, VkDeviceSize raygenShaderBindingOffset,
