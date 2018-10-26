@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/deviceMemory.h"
 #include "../objects/commandBuffer.h"
 #include "../objects/pipeline.h"
+#include "../objects/shaderModule.h"
 #include "../misc/pushConstants.h"
 #include "../allocator/allocator.h"
 #include "../helpers/hash.h"
@@ -304,7 +305,7 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
     // Create new pipeline for unique render states
     std::shared_ptr<const GraphicsPipeline> basePipeline = findBasePipeline();
     std::shared_ptr<GraphicsPipeline> pipeline(std::make_shared<GraphicsPipeline>(device, cache,
-        std::vector<ShaderStage>{vertexShader, fragmentShader},
+        std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
         vertexInput,
         *inputAssemblyStates[topology],
         renderStates.rasterization,

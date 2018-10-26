@@ -61,12 +61,16 @@ namespace magma
         // VK_KHR_xxx_surface
         bool getPresentationSupport(uint32_t queueFamilyIndex,
             void *display = nullptr, const void *visualID = nullptr) const noexcept;
+        // VK_KHR_get_physical_device_properties2
+        void getExtendedProperties(void *properties) const;
         // VK_KHR_display
         std::vector<VkDisplayPropertiesKHR> getDisplayProperties() const;
         std::vector<VkDisplayPlanePropertiesKHR> getDisplayPlaneProperties() const;
         std::vector<std::shared_ptr<Display>> getSupportedDisplays(uint32_t planeIndex) const;
         // VK_AMD_shared_core_properties
         VkPhysicalDeviceShaderCorePropertiesAMD getShaderCoreProperties() const;
+        // VK_NVX_raytracing
+        VkPhysicalDeviceRaytracingPropertiesNVX getRaytracingProperties() const;
         // Non-API
         std::shared_ptr<Instance> getInstance() const noexcept { return instance; }
         std::shared_ptr<Device> createDefaultDevice() const;

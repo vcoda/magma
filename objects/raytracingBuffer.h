@@ -16,26 +16,27 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <vector>
-#include "handle.h"
+#include "buffer.h"
 
 namespace magma
 {
-    /* Shader modules contain shader code and one or more entry points.
-       Shaders are selected from a shader module by specifying an entry point.
-       The stages of a pipeline can use shaders that come from different modules.
-       The shader code defining a shader module must be in the SPIR-V format. */
+    class SrcTransferBuffer;
+    class CommandBuffer;
 
-    class ShaderModule : public NonDispatchable<VkShaderModule>
+    /* Buffer data for raytracing pipeline. */
+
+    class RaytracingBuffer : public Buffer
     {
     public:
-        explicit ShaderModule(std::shared_ptr<Device> device,
-            const uint32_t *bytecode,
-            size_t bytecodeSize,
+        explicit RaytracingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+            const void *data, VkDeviceSize size,
+            VkBufferCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
+        explicit RaytracingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+            std::shared_ptr<SrcTransferBuffer> srcBuffer,
+            VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        explicit ShaderModule(std::shared_ptr<Device> device,
-            const std::vector<uint32_t>& bytecode,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-        ~ShaderModule();
     };
 } // namespace magma
+

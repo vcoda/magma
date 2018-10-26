@@ -62,7 +62,7 @@
       <UniqueIdentifier>{7429dc55-1b4d-4285-b3cf-a9c6cd0bae11}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\helpers">
-      <UniqueIdentifier>{c8d4cdf5-8010-4561-828e-88c13c552914}</UniqueIdentifier>
+      <UniqueIdentifier>{7a0e31f0-28af-45c3-bc57-ae2bb5449010}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -342,6 +342,21 @@
     <ClInclude Include="helpers\hash.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
+    <ClInclude Include="objects\accelerationStructure.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="objects\shaderStages.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="objects\shaderStagesRaytrace.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="misc\geometry.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="objects\raytracingBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
     <ClInclude Include="helpers\stringize.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
@@ -608,6 +623,18 @@
       <Filter>Source Files\utilities</Filter>
     </ClCompile>
     <ClCompile Include="objects\object.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\accelerationStructure.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\shaderStages.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="misc\geometry.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="objects\raytracingBuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="helpers\stringize.cpp">

@@ -84,7 +84,7 @@ std::string Pipeline::getShaderDisassembly(VkShaderStageFlagBits stage) const
 }
 
 GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
-    const std::vector<ShaderStage>& stages,
+    const std::vector<PipelineShaderStage>& stages,
     const VertexInputState& vertexInputState,
     const InputAssemblyState& inputAssemblyState,
     const RasterizationState& rasterizationState,
@@ -108,7 +108,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
 {}
 
 GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
-    const std::vector<ShaderStage>& stages,
+    const std::vector<PipelineShaderStage>& stages,
     const VertexInputState& vertexInputState,
     const InputAssemblyState& inputAssemblyState,
     const TesselationState& tesselationState,
@@ -178,7 +178,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
 }
 
 ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
-    const ShaderStage& stage,
+    const PipelineShaderStage& stage,
     std::shared_ptr<const PipelineLayout> layout /* nullptr */,
     std::shared_ptr<const ComputePipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
@@ -203,5 +203,64 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr
     info.basePipelineIndex = -1;
     const VkResult create = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create compute pipeline");
+}
+
+RaytracingPipeline::RaytracingPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
+    const std::vector<PipelineShaderStage>& stages,
+    const std::vector<uint32_t> groupNumbers,
+    uint32_t maxRecursionDepth,
+    std::shared_ptr<const PipelineLayout> layout,
+    std::shared_ptr<const RaytracingPipeline> basePipeline /* nullptr */,
+    VkPipelineCreateFlags flags /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Pipeline(std::move(device), std::move(allocator))
+{
+    MAGMA_ASSERT(stages.size() == groupNumbers.size());
+    if (stages.empty())
+        MAGMA_THROW("shader stages are empty");
+    if (groupNumbers.empty())
+        MAGMA_THROW("hit group numbers are empty");
+    VkRaytracingPipelineCreateInfoNVX info;
+    info.sType = VK_STRUCTURE_TYPE_RAYTRACING_PIPELINE_CREATE_INFO_NVX;
+    info.pNext = nullptr;
+    info.flags = flags;
+    if (basePipeline)
+        info.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
+    MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, stages.size());
+    for (auto& stage : stages)
+        dereferencedStages.put(stage);
+    info.stageCount = MAGMA_COUNT(dereferencedStages);
+    info.pStages = dereferencedStages;
+    info.pGroupNumbers = groupNumbers.data();
+    info.maxRecursionDepth = maxRecursionDepth;
+    if (layout)
+        info.layout = *layout;
+    else
+    {
+        defaultLayout = std::make_unique<PipelineLayout>(this->device);
+        info.layout = *defaultLayout;
+    }
+    info.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipeline);
+    info.basePipelineIndex = -1;
+    MAGMA_DEVICE_EXTENSION(vkCreateRaytracingPipelinesNVX, VK_NVX_RAYTRACING_EXTENSION_NAME);
+    const VkResult create = vkCreateRaytracingPipelinesNVX(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    MAGMA_THROW_FAILURE(create, "failed to create raytracing pipeline");
+}
+
+std::vector<VkShaderModule> RaytracingPipeline::getShaderHandles(uint32_t firstShader, uint32_t shaderCount) const
+{
+    std::vector<VkShaderModule> shaders(shaderCount);
+    const size_t dataSize = sizeof(VkShaderModule) * shaders.size();
+    MAGMA_DEVICE_EXTENSION(vkGetRaytracingShaderHandlesNVX, VK_NVX_RAYTRACING_EXTENSION_NAME);
+    const VkResult get = vkGetRaytracingShaderHandlesNVX(MAGMA_HANDLE(device), handle, firstShader, shaderCount, dataSize, shaders.data());
+    MAGMA_THROW_FAILURE(get, "failed to get raytracing shader handles");
+    return shaders;
+}
+
+void RaytracingPipeline::compileDeferred(uint32_t shaderIndex)
+{
+    MAGMA_DEVICE_EXTENSION(vkCompileDeferredNVX, VK_NVX_RAYTRACING_EXTENSION_NAME);
+    const VkResult compile = vkCompileDeferredNVX(MAGMA_HANDLE(device), handle, shaderIndex);
+    MAGMA_THROW_FAILURE(compile, "failed to compile shader deferred");
 }
 } // namespace magma

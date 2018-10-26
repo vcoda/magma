@@ -26,6 +26,7 @@ namespace magma
 QueryPool::QueryPool(VkQueryType queryType, std::shared_ptr<Device> device, uint32_t queryCount,
     VkQueryPipelineStatisticFlags pipelineStatistics, std::shared_ptr<IAllocator> allocator):
     NonDispatchable(VK_OBJECT_TYPE_QUERY_POOL, std::move(device), std::move(allocator)),
+    queryType(queryType),
     queryCount(queryCount)
 {
     VkQueryPoolCreateInfo info;
@@ -78,5 +79,10 @@ PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<Device> device,
 TimestampQuery::TimestampQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     QueryPool(VK_QUERY_TYPE_TIMESTAMP, std::move(device), queryCount, 0, std::move(allocator))
+{}
+
+CompactedSizeQuery::CompactedSizeQuery(std::shared_ptr<Device> device, uint32_t queryCount,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    QueryPool(VK_QUERY_TYPE_COMPACTED_SIZE_NVX, std::move(device), queryCount, 0, std::move(allocator))
 {}
 } // namespace magma

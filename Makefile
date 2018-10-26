@@ -28,10 +28,12 @@ MAGMA_OBJS= \
 	misc/exception.o \
 	misc/extensions.o \
 	misc/format.o \
+	misc/geometry.o \
 	misc/scopedDebugMarker.o \
 	\
 	helpers/stringize.o \
 	\
+	objects/accelerationStructure.o \
 	objects/buffer.o \
 	objects/bufferView.o \
 	objects/commandBuffer.o \
@@ -69,10 +71,12 @@ MAGMA_OBJS= \
 	objects/pipelineLayout.o \
 	objects/queryPool.o \
 	objects/queue.o \
+	objects/raytracingBuffer.o \
 	objects/renderPass.o \
 	objects/sampler.o \
 	objects/semaphore.o \
 	objects/shaderModule.o \
+	objects/shaderStages.o \
 	objects/srcTransferBuffer.o \
 	objects/storageBuffer.o \
 	objects/storageTexelBuffer.o \
