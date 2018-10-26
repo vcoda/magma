@@ -210,11 +210,14 @@ bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex,
 void PhysicalDevice::getExtendedProperties(void *properties) const
 {
     MAGMA_ASSERT(properties);
-    VkPhysicalDeviceProperties2 properties2;
-    properties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
-    properties2.pNext = properties;
-    MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
-    vkGetPhysicalDeviceProperties2KHR(handle, &properties2);
+    if (properties)
+    {
+        VkPhysicalDeviceProperties2 properties2;
+        properties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+        properties2.pNext = properties;
+        MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
+        vkGetPhysicalDeviceProperties2KHR(handle, &properties2);
+    }
 }
 
 std::vector<VkDisplayPropertiesKHR> PhysicalDevice::getDisplayProperties() const
@@ -269,18 +272,16 @@ VkPhysicalDeviceShaderCorePropertiesAMD PhysicalDevice::getShaderCoreProperties(
 {
     VkPhysicalDeviceShaderCorePropertiesAMD shaderCoreProperties = {};
     shaderCoreProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_AMD;
-    shaderCoreProperties.pNext = nullptr;
     getExtendedProperties(&shaderCoreProperties);
     return shaderCoreProperties;
 }
 
 VkPhysicalDeviceRaytracingPropertiesNVX PhysicalDevice::getRaytracingProperties() const
 {
-    VkPhysicalDeviceRaytracingPropertiesNVX properties;
-    properties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAYTRACING_PROPERTIES_NVX;
-    properties.pNext = nullptr;
-    getExtendedProperties(&properties);
-    return properties;
+    VkPhysicalDeviceRaytracingPropertiesNVX raytracingProperties = {};
+    raytracingProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAYTRACING_PROPERTIES_NVX;
+    getExtendedProperties(&raytracingProperties);
+    return raytracingProperties;
 }
 
 std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
