@@ -31,7 +31,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     NonDispatchable((VkDebugReportObjectTypeEXT)VK_DEBUG_REPORT_OBJECT_TYPE_ACCELERATION_STRUCTURE_NVX_EXT, std::move(device), std::move(allocator))
 {
     VkAccelerationStructureCreateInfoNVX info;
-    info.sType = (VkStructureType)VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_NVX;
+    info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_NVX;
     info.pNext = nullptr;
     info.type = type;
     info.flags = flags;
@@ -57,7 +57,7 @@ void AccelerationStructure::bindMemory(std::shared_ptr<DeviceMemory> memory, con
     VkDeviceSize offset /* 0 */)
 {
     VkBindAccelerationStructureMemoryInfoNVX info;
-    info.sType = (VkStructureType)VK_STRUCTURE_TYPE_BIND_ACCELERATION_STRUCTURE_MEMORY_INFO_NVX;
+    info.sType = VK_STRUCTURE_TYPE_BIND_ACCELERATION_STRUCTURE_MEMORY_INFO_NVX;
     info.pNext = nullptr;
     info.accelerationStructure = handle;
     info.memory = *memory;
@@ -73,7 +73,7 @@ void AccelerationStructure::bindMemory(std::shared_ptr<DeviceMemory> memory, con
 VkMemoryRequirements2 AccelerationStructure::getMemoryRequirements() const
 {
     VkAccelerationStructureMemoryRequirementsInfoNVX info;
-    info.sType = (VkStructureType)VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_INFO_NVX;
+    info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_INFO_NVX;
     info.pNext = nullptr;
     info.accelerationStructure = handle;
     VkMemoryRequirements2 memoryRequirements;
@@ -85,7 +85,7 @@ VkMemoryRequirements2 AccelerationStructure::getMemoryRequirements() const
 VkMemoryRequirements2 AccelerationStructure::getScratchMemoryRequirements() const
 {
     VkAccelerationStructureMemoryRequirementsInfoNVX info;
-    info.sType = (VkStructureType)VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_INFO_NVX;
+    info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_INFO_NVX;
     info.pNext = nullptr;
     info.accelerationStructure = handle;
     VkMemoryRequirements2 memoryRequirements;

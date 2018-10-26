@@ -219,7 +219,7 @@ RaytracingPipeline::RaytracingPipeline(std::shared_ptr<Device> device, std::shar
     if (groupNumbers.empty())
         MAGMA_THROW("hit group numbers are empty");
     VkRaytracingPipelineCreateInfoNVX info;
-    info.sType = (VkStructureType)VK_STRUCTURE_TYPE_RAYTRACING_PIPELINE_CREATE_INFO_NVX;
+    info.sType = VK_STRUCTURE_TYPE_RAYTRACING_PIPELINE_CREATE_INFO_NVX;
     info.pNext = nullptr;
     info.flags = flags;
     if (basePipeline)

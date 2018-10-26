@@ -83,6 +83,6 @@ TimestampQuery::TimestampQuery(std::shared_ptr<Device> device, uint32_t queryCou
 
 CompactedSizeQuery::CompactedSizeQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    QueryPool((VkQueryType)VK_QUERY_TYPE_COMPACTED_SIZE_NVX, std::move(device), queryCount, 0, std::move(allocator))
+    QueryPool(VK_QUERY_TYPE_COMPACTED_SIZE_NVX, std::move(device), queryCount, 0, std::move(allocator))
 {}
 } // namespace magma
