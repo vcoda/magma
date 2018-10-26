@@ -13,5 +13,4 @@
 #endif // _WIN32
 #ifndef VULKAN_H_
 #include <vulkan/vulkan.h>
-#include "VK_NVX_raytracing.h"
 #endif
