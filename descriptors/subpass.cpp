@@ -100,15 +100,17 @@ GraphicsSubpass::GraphicsSubpass(VkImageLayout colorLayout, VkImageLayout depthS
 GraphicsSubpass::GraphicsSubpass(const std::vector<VkImageLayout>& colorLayouts):
     Subpass(0, VK_PIPELINE_BIND_POINT_GRAPHICS)
 {
-    VkAttachmentReference *colorReferences = new VkAttachmentReference[colorLayouts.size()];
-    colorAttachmentCount = 0;
-    for (const auto layout : colorLayouts)
+    if (!colorLayouts.empty())
     {
-        colorReferences[colorAttachmentCount].attachment = colorAttachmentCount;
-        colorReferences[colorAttachmentCount].layout = layout;
-        ++colorAttachmentCount;
+        VkAttachmentReference *colorReferences = new VkAttachmentReference[colorLayouts.size()];
+        for (auto layout : colorLayouts)
+        {
+            colorReferences[colorAttachmentCount].attachment = colorAttachmentCount;
+            colorReferences[colorAttachmentCount].layout = layout;
+            ++colorAttachmentCount;
+        }
+        pColorAttachments = colorReferences;
     }
-    pColorAttachments = colorReferences;
 }
 
 GraphicsSubpass::GraphicsSubpass(const std::vector<VkImageLayout>& colorLayouts, const VkImageLayout& depthStencilLayout):
