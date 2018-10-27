@@ -62,6 +62,11 @@ namespace magma
     {
         extern const GraphicsSubpass colorOptimal;
         extern const GraphicsSubpass colorOptimalDepthStencilOptimal;
-        extern const GraphicsSubpass colorOptimalDepthStencilReadOnlyOptimal;
+        extern const GraphicsSubpass colorOptimalDepthReadOnlyStencilOptimal;
+        extern const GraphicsSubpass colorOptimalDepthOptimalStencilReadOnlyOptimal;
+
+        extern const GraphicsSubpass depthStencilOptimal;
+        extern const GraphicsSubpass depthReadOnlyStencilOptimal;
+        extern const GraphicsSubpass depthOptimalStencilReadOnlyOptimal;
     } // namespace subpasses
 } // namespace magma
