@@ -32,7 +32,8 @@ namespace magma
     class Subpass : public VkSubpassDescription
     {
     public:
-        Subpass(VkSubpassDescriptionFlags flags, VkPipelineBindPoint pipelineBindPoint) noexcept;
+        Subpass(VkSubpassDescriptionFlags flags,
+            VkPipelineBindPoint pipelineBindPoint) noexcept;
         Subpass(const Subpass&);
         Subpass& operator=(const Subpass&);
         ~Subpass();
@@ -42,9 +43,11 @@ namespace magma
     {
     public:
         GraphicsSubpass(VkImageLayout colorLayout);
-        GraphicsSubpass(VkImageLayout colorLayout, VkImageLayout depthStencilLayout);
+        GraphicsSubpass(VkImageLayout colorLayout,
+            VkImageLayout depthStencilLayout);
         GraphicsSubpass(const std::vector<VkImageLayout>& colorLayouts);
-        GraphicsSubpass(const std::vector<VkImageLayout>& colorLayouts, const VkImageLayout& depthStencilLayout);
+        GraphicsSubpass(const std::vector<VkImageLayout>& colorLayouts,
+            const VkImageLayout& depthStencilLayout);
     };
 
     class ComputeSubpass : public Subpass

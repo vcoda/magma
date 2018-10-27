@@ -89,16 +89,34 @@ GraphicsSubpass::GraphicsSubpass(VkImageLayout colorLayout):
 }
 
 GraphicsSubpass::GraphicsSubpass(VkImageLayout colorLayout, VkImageLayout depthStencilLayout):
-    Subpass(0, VK_PIPELINE_BIND_POINT_GRAPHICS)
+    GraphicsSubpass(colorLayout)
 {
-    VkAttachmentReference *colorReference = new VkAttachmentReference[1];
-    colorReference->attachment = 0;
-    colorReference->layout = colorLayout;
     VkAttachmentReference *depthStencilReference = new VkAttachmentReference;
     depthStencilReference->attachment = 1;
     depthStencilReference->layout = depthStencilLayout;
-    colorAttachmentCount = 1;
-    pColorAttachments = colorReference;
+    pDepthStencilAttachment = depthStencilReference;
+}
+
+GraphicsSubpass::GraphicsSubpass(const std::vector<VkImageLayout>& colorLayouts):
+    Subpass(0, VK_PIPELINE_BIND_POINT_GRAPHICS)
+{
+    VkAttachmentReference *colorReferences = new VkAttachmentReference[colorLayouts.size()];
+    colorAttachmentCount = 0;
+    for (const auto layout : colorLayouts)
+    {
+        colorReferences[colorAttachmentCount].attachment = colorAttachmentCount;
+        colorReferences[colorAttachmentCount].layout = layout;
+        ++colorAttachmentCount;
+    }
+    pColorAttachments = colorReferences;
+}
+
+GraphicsSubpass::GraphicsSubpass(const std::vector<VkImageLayout>& colorLayouts, const VkImageLayout& depthStencilLayout):
+    GraphicsSubpass(colorLayouts)
+{
+    VkAttachmentReference *depthStencilReference = new VkAttachmentReference;
+    depthStencilReference->attachment = colorAttachmentCount;
+    depthStencilReference->layout = depthStencilLayout;
     pDepthStencilAttachment = depthStencilReference;
 }
 
