@@ -31,9 +31,11 @@ namespace magma
 
     class Subpass : public VkSubpassDescription
     {
-    public:
+    protected:
         Subpass(VkSubpassDescriptionFlags flags,
             VkPipelineBindPoint pipelineBindPoint) noexcept;
+
+    public:
         Subpass(const Subpass&);
         Subpass& operator=(const Subpass&);
         ~Subpass();
