@@ -102,5 +102,4 @@ uint64_t AccelerationStructure::getStructureHandle() const
     MAGMA_THROW_FAILURE(get, "failed to get acceleration structure handle");
     return structureHandle;
 }
-
 } // namespace magma
