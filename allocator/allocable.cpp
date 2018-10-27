@@ -16,13 +16,24 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "allocable.h"
-#include "../allocator/objectAllocator.h"
 #include "../misc/exception.h"
 
 namespace magma
 {
 std::shared_ptr<IObjectAllocator> Allocable::allocator;
 int32_t Allocable::allocCount = 0;
+
+void Allocable::setAllocator(std::shared_ptr<IObjectAllocator> allocator)
+{
+    if (allocCount)
+        MAGMA_THROW("allocator should be defined only when allocation count is zero");
+    allocator = std::move(allocator);
+}
+
+std::shared_ptr<IObjectAllocator> Allocable::getAllocator() noexcept
+{
+    return allocator;
+}
 
 void *Allocable::operator new(std::size_t size)
 {
@@ -59,17 +70,5 @@ void Allocable::operator delete(void *ptr)
         else
             free(ptr);
     }
-}
-
-void Allocable::setAllocator(std::shared_ptr<IObjectAllocator> allocator)
-{
-    if (allocCount)
-        throw Exception("allocator should be defined only when allocation count is zero");
-    allocator = std::move(allocator);
-}
-
-std::shared_ptr<IObjectAllocator> Allocable::getAllocator() noexcept
-{
-    return allocator;
 }
 } // namespace magma
