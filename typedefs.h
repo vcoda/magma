@@ -29,6 +29,7 @@ namespace magma
     typedef std::shared_ptr<class BufferView> BufferViewPtr;
     typedef std::shared_ptr<class CommandBuffer> CommandBufferPtr;
     typedef std::shared_ptr<class CommandPool> CommandPoolPtr;
+    typedef std::shared_ptr<class CompactedSizeQuery> CompactedSizeQueryPtr;
     typedef std::shared_ptr<class ComputePipeline> ComputePipelinePtr;
     typedef std::shared_ptr<class ConditionalRenderingBuffer> ConditionalRenderingBufferPtr;
     typedef std::shared_ptr<class DebugReportCallback> DebugReportCallbackPtr;
