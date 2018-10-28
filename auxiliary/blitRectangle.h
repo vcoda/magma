@@ -45,6 +45,9 @@ namespace magma
     {
         class Framebuffer;
 
+        /* Auxiliary object that helps quickly blit source texture
+           into destination framebuffer. */
+
         class BlitRectangle : public NonCopyable
         {
         public:
