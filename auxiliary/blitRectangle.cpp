@@ -112,7 +112,7 @@ void BlitRectangle::setImageView(std::shared_ptr<ImageView> attachment,
     cmdBuffer->end();
 }
 
-void BlitRectangle::blit(std::shared_ptr<Semaphore> renderFinished, std::shared_ptr<Semaphore> blitFinished, std::shared_ptr<Fence> fence)
+void BlitRectangle::blit(std::shared_ptr<Semaphore> renderFinished, std::shared_ptr<Semaphore> blitFinished, std::shared_ptr<Fence> fence) const noexcept
 {
     queue->submit(cmdBuffer, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
         renderFinished, blitFinished, fence);

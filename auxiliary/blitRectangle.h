@@ -60,7 +60,7 @@ namespace magma
                 std::shared_ptr<Sampler> sampler = nullptr);
             void blit(std::shared_ptr<Semaphore> renderFinished,
                 std::shared_ptr<Semaphore> blitFinished,
-                std::shared_ptr<Fence> fence);
+                std::shared_ptr<Fence> fence) const noexcept;
 
         private:
             std::shared_ptr<Device> device;
