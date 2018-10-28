@@ -55,10 +55,10 @@ BlitRectangle::BlitRectangle(std::shared_ptr<aux::Framebuffer> framebuffer, std:
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, std::shared_ptr<magma::Framebuffer> framebuffer, std::shared_ptr<CommandPool> cmdPool,
     const VertexShaderStage& vertexShader, const FragmentShaderStage& fragmentShader):
     device(renderPass->getDevice()),
-    queue(std::move(device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0))),
-    renderPass(renderPass),
-    framebuffer(framebuffer),
-    cmdPool(cmdPool)
+    queue(device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0)),
+    renderPass(std::move(renderPass)),
+    framebuffer(std::move(framebuffer)),
+    cmdPool(std::move(cmdPool))
 {   // Descriptor set for single image view in fragment shader
     const Descriptor imageSamplerDesc = descriptors::CombinedImageSampler(1);
     setLayout = std::make_shared<DescriptorSetLayout>(device, bindings::FragmentStageBinding(0, imageSamplerDesc));
