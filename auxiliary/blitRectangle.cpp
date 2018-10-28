@@ -87,8 +87,9 @@ void BlitRectangle::setImageView(std::shared_ptr<ImageView> attachment,
     if (sampler)
         descriptorSet->update(0, attachment, sampler);
     else
-    {   // Default is nearest sampler
-        nearestSampler = std::make_shared<Sampler>(device, samplers::nearestMipmapNearestClampToEdge);
+    {   // Default to nearest sampler
+        if (!nearestSampler)
+            nearestSampler = std::make_shared<Sampler>(device, samplers::nearestMipmapNearestClampToEdge);
         descriptorSet->update(0, attachment, nearestSampler);
     }
     if (!cmdBuffer)
