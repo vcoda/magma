@@ -25,6 +25,7 @@ namespace magma
     class Framebuffer;
     class ImageView;
     class RenderPass;
+    class ShaderModule;
     class VertexShaderStage;
     class FragmentShaderStage;
     class Sampler;
@@ -49,11 +50,18 @@ namespace magma
         public:
             explicit BlitRectangle(std::shared_ptr<aux::Framebuffer> framebuffer,
                 std::shared_ptr<CommandPool> cmdPool,
+                std::shared_ptr<IAllocator> allocator = nullptr);
+            explicit BlitRectangle(std::shared_ptr<magma::Framebuffer> framebuffer,
+                std::shared_ptr<RenderPass> renderPass,
+                std::shared_ptr<CommandPool> cmdPool,
+                std::shared_ptr<IAllocator> allocator = nullptr);
+            explicit BlitRectangle(std::shared_ptr<aux::Framebuffer> framebuffer,
+                std::shared_ptr<CommandPool> cmdPool,
                 const VertexShaderStage& vertexShader,
                 const FragmentShaderStage& fragmentShader,
                 std::shared_ptr<IAllocator> allocator = nullptr);
-            explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
-                std::shared_ptr<magma::Framebuffer> framebuffer,
+            explicit BlitRectangle(std::shared_ptr<magma::Framebuffer> framebuffer,
+                std::shared_ptr<RenderPass> renderPass,
                 std::shared_ptr<CommandPool> cmdPool,
                 const VertexShaderStage& vertexShader,
                 const FragmentShaderStage& fragmentShader,
@@ -63,6 +71,10 @@ namespace magma
             void blit(std::shared_ptr<Semaphore> renderFinished,
                 std::shared_ptr<Semaphore> blitFinished,
                 std::shared_ptr<Fence> fence) const noexcept;
+
+        private:
+            std::shared_ptr<ShaderModule> createVertexShader(std::shared_ptr<IAllocator>);
+            std::shared_ptr<ShaderModule> createFragmentShader(std::shared_ptr<IAllocator>);
 
         private:
             std::shared_ptr<Device> device;

@@ -48,12 +48,29 @@ namespace magma
 namespace aux
 {
 BlitRectangle::BlitRectangle(std::shared_ptr<aux::Framebuffer> framebuffer, std::shared_ptr<CommandPool> cmdPool,
-    const VertexShaderStage& vertexShader, const FragmentShaderStage& fragmentShader,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    BlitRectangle(framebuffer->getRenderPass(), framebuffer->getFramebuffer(), std::move(cmdPool), vertexShader, fragmentShader, std::move(allocator))
+    BlitRectangle(framebuffer->getFramebuffer(), framebuffer->getRenderPass(), std::move(cmdPool),
+        VertexShaderStage(createVertexShader(allocator), "main"),
+        FragmentShaderStage(createFragmentShader(allocator), "main"),
+        std::move(allocator))
 {}
 
-BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, std::shared_ptr<magma::Framebuffer> framebuffer, std::shared_ptr<CommandPool> cmdPool,
+BlitRectangle::BlitRectangle(std::shared_ptr<magma::Framebuffer> framebuffer, std::shared_ptr<RenderPass> renderPass, std::shared_ptr<CommandPool> cmdPool,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    BlitRectangle(std::move(framebuffer), std::move(renderPass), std::move(cmdPool),
+        VertexShaderStage(createVertexShader(allocator), "main"),
+        FragmentShaderStage(createFragmentShader(allocator), "main"),
+        std::move(allocator))
+{}
+
+BlitRectangle::BlitRectangle(std::shared_ptr<aux::Framebuffer> framebuffer, std::shared_ptr<CommandPool> cmdPool,
+    const VertexShaderStage& vertexShader, const FragmentShaderStage& fragmentShader,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    BlitRectangle(framebuffer->getFramebuffer(), framebuffer->getRenderPass(), std::move(cmdPool),
+        vertexShader, fragmentShader, std::move(allocator))
+{}
+
+BlitRectangle::BlitRectangle(std::shared_ptr<magma::Framebuffer> framebuffer, std::shared_ptr<RenderPass> renderPass, std::shared_ptr<CommandPool> cmdPool,
     const VertexShaderStage& vertexShader, const FragmentShaderStage& fragmentShader,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     device(renderPass->getDevice()),
@@ -113,6 +130,18 @@ void BlitRectangle::blit(std::shared_ptr<Semaphore> renderFinished, std::shared_
 {
     queue->submit(cmdBuffer, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
         renderFinished, blitFinished, fence);
+}
+
+std::shared_ptr<ShaderModule> BlitRectangle::createVertexShader(std::shared_ptr<IAllocator>)
+{
+    // TODO:
+    return nullptr;
+}
+
+std::shared_ptr<ShaderModule> BlitRectangle::createFragmentShader(std::shared_ptr<IAllocator>)
+{
+    // TODO:
+    return nullptr;
 }
 } // namespace aux
 } // namespace magma
