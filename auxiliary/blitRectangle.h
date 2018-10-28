@@ -50,12 +50,14 @@ namespace magma
             explicit BlitRectangle(std::shared_ptr<aux::Framebuffer> framebuffer,
                 std::shared_ptr<CommandPool> cmdPool,
                 const VertexShaderStage& vertexShader,
-                const FragmentShaderStage& fragmentShader);
+                const FragmentShaderStage& fragmentShader,
+                std::shared_ptr<IAllocator> allocator = nullptr);
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
                 std::shared_ptr<magma::Framebuffer> framebuffer,
                 std::shared_ptr<CommandPool> cmdPool,
                 const VertexShaderStage& vertexShader,
-                const FragmentShaderStage& fragmentShader);
+                const FragmentShaderStage& fragmentShader,
+                std::shared_ptr<IAllocator> allocator = nullptr);
             void setImageView(std::shared_ptr<ImageView> attachment,
                 std::shared_ptr<Sampler> sampler = nullptr);
             void blit(std::shared_ptr<Semaphore> renderFinished,

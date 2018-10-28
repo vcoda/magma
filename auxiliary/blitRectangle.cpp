@@ -48,12 +48,14 @@ namespace magma
 namespace aux
 {
 BlitRectangle::BlitRectangle(std::shared_ptr<aux::Framebuffer> framebuffer, std::shared_ptr<CommandPool> cmdPool,
-    const VertexShaderStage& vertexShader, const FragmentShaderStage& fragmentShader):
-    BlitRectangle(framebuffer->getRenderPass(), framebuffer->getFramebuffer(), std::move(cmdPool), vertexShader, fragmentShader)
+    const VertexShaderStage& vertexShader, const FragmentShaderStage& fragmentShader,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    BlitRectangle(framebuffer->getRenderPass(), framebuffer->getFramebuffer(), std::move(cmdPool), vertexShader, fragmentShader, std::move(allocator))
 {}
 
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, std::shared_ptr<magma::Framebuffer> framebuffer, std::shared_ptr<CommandPool> cmdPool,
-    const VertexShaderStage& vertexShader, const FragmentShaderStage& fragmentShader):
+    const VertexShaderStage& vertexShader, const FragmentShaderStage& fragmentShader,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     device(renderPass->getDevice()),
     queue(device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0)),
     renderPass(std::move(renderPass)),
@@ -61,11 +63,11 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, std::shared
     cmdPool(std::move(cmdPool))
 {   // Descriptor set for single image view in fragment shader
     const Descriptor imageSamplerDesc = descriptors::CombinedImageSampler(1);
-    setLayout = std::make_shared<DescriptorSetLayout>(device, bindings::FragmentStageBinding(0, imageSamplerDesc));
-    descriptorPool = std::make_shared<DescriptorPool>(device, 1, std::vector<Descriptor>{imageSamplerDesc});
+    setLayout = std::make_shared<DescriptorSetLayout>(device, bindings::FragmentStageBinding(0, imageSamplerDesc), 0, allocator);
+    descriptorPool = std::make_shared<DescriptorPool>(device, 1, std::vector<Descriptor>{imageSamplerDesc}, false, allocator);
     descriptorSet = descriptorPool->allocateDescriptorSet(setLayout);
     // Create blit pipeline
-    pipelineLayout = std::make_shared<PipelineLayout>(setLayout);
+    pipelineLayout = std::make_shared<PipelineLayout>(setLayout, std::initializer_list<VkPushConstantRange>{}, allocator);
     pipeline = std::make_shared<GraphicsPipeline>(device, nullptr,
         std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
         states::nullVertexInput,
@@ -78,7 +80,10 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, std::shared
         states::dontBlendWriteRGBA,
         std::initializer_list<VkDynamicState>{},
         pipelineLayout,
-        renderPass);
+        renderPass,
+        0, nullptr, 0,
+        allocator);
+    nearestSampler = std::make_shared<Sampler>(device, samplers::nearestMipmapNearestClampToEdge, 0.f, allocator);
 }
 
 void BlitRectangle::setImageView(std::shared_ptr<ImageView> attachment,
@@ -86,12 +91,8 @@ void BlitRectangle::setImageView(std::shared_ptr<ImageView> attachment,
 {   // Bind attachment to descriptor set
     if (sampler)
         descriptorSet->update(0, attachment, sampler);
-    else
-    {   // Default to nearest sampler
-        if (!nearestSampler)
-            nearestSampler = std::make_shared<Sampler>(device, samplers::nearestMipmapNearestClampToEdge);
+    else // Default to nearest sampler
         descriptorSet->update(0, attachment, nearestSampler);
-    }
     if (!cmdBuffer)
     {
         cmdBuffer = cmdPool->allocateCommandBuffer(true);
