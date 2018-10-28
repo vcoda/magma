@@ -47,11 +47,11 @@ namespace magma
         class BlitRectangle : public NonCopyable
         {
         public:
-            BlitRectangle(std::shared_ptr<aux::Framebuffer> framebuffer,
+            explicit BlitRectangle(std::shared_ptr<aux::Framebuffer> framebuffer,
                 std::shared_ptr<CommandPool> cmdPool,
                 const VertexShaderStage& vertexShader,
                 const FragmentShaderStage& fragmentShader);
-            BlitRectangle(std::shared_ptr<RenderPass> renderPass,
+            explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
                 std::shared_ptr<magma::Framebuffer> framebuffer,
                 std::shared_ptr<CommandPool> cmdPool,
                 const VertexShaderStage& vertexShader,
