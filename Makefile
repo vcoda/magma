@@ -95,8 +95,10 @@ MAGMA_OBJS= \
 	states/vertexInputState.o \
 	states/viewportState.o \
 	\
+	auxiliary/blitRectangle.o \
+	auxiliary/framebuffers.o \
 	auxiliary/immediateRender.o
-	auxiliary/framebuffers.o
+
 
 DEPS := $(MAGMA_OBJS:.o=.d)
 

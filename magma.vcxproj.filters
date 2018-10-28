@@ -381,6 +381,9 @@
     <ClInclude Include="auxiliary\framebuffers.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
+    <ClInclude Include="auxiliary\blitRectangle.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
@@ -653,6 +656,9 @@
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
     <ClCompile Include="auxiliary\framebuffers.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="auxiliary\blitRectangle.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>

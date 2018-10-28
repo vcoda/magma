@@ -136,6 +136,7 @@
     <ClInclude Include="allocator\allocable.h" />
     <ClInclude Include="allocator\allocator.h" />
     <ClInclude Include="allocator\objectAllocator.h" />
+    <ClInclude Include="auxiliary\blitRectangle.h" />
     <ClInclude Include="auxiliary\framebuffers.h" />
     <ClInclude Include="auxiliary\immediateRender.h" />
     <ClInclude Include="barriers\bufferMemoryBarrier.h" />
@@ -256,6 +257,7 @@
   <ItemGroup>
     <ClCompile Include="allocator\allocable.cpp" />
     <ClCompile Include="allocator\allocator.cpp" />
+    <ClCompile Include="auxiliary\blitRectangle.cpp" />
     <ClCompile Include="auxiliary\framebuffers.cpp" />
     <ClCompile Include="auxiliary\immediateRender.cpp" />
     <ClCompile Include="barriers\bufferMemoryBarrier.cpp" />
