@@ -110,6 +110,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "mem/copyMemory.h"
 #include "mem/zeroMemory.h"
 
-#include "utilities/immediateRender.h"
+#include "auxiliary/immediateRender.h"
 
 #include "typedefs.h"
