@@ -86,8 +86,12 @@ namespace magma
 
     namespace aux
     {
+        typedef std::shared_ptr<class Framebuffer> FramebufferPtr;
         typedef std::shared_ptr<class ImmediateRender> ImmediateRenderPtr;
-    }
+        typedef std::shared_ptr<class MultisampleFramebuffer> MultisampleFramebufferPtr;
+        typedef std::shared_ptr<class NonMultisampleFramebuffer> NonMultisampleFramebufferPtr;
+        typedef std::shared_ptr<class SwapchainFramebuffer> SwapchainFramebufferPtr;
+    } // namespace aux
 
     typedef std::function<void *(void *, const void *, std::size_t)> CopyMemoryFunction;
     typedef std::function<void *(void *, std::size_t)> ZeroMemoryFunction;

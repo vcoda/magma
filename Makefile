@@ -96,6 +96,7 @@ MAGMA_OBJS= \
 	states/viewportState.o \
 	\
 	auxiliary/immediateRender.o
+	auxiliary/framebuffers.o
 
 DEPS := $(MAGMA_OBJS:.o=.d)
 

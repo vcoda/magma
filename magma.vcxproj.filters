@@ -378,6 +378,9 @@
     <ClInclude Include="utilities\refCountChecker.h">
       <Filter>Header Files\utilities</Filter>
     </ClInclude>
+    <ClInclude Include="auxiliary\framebuffers.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
@@ -647,6 +650,9 @@
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="auxiliary\immediateRender.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="auxiliary\framebuffers.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>

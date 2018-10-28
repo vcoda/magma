@@ -1,0 +1,105 @@
+/*
+Magma - C++1x interface over Khronos Vulkan API.
+Copyright (C) 2018 Victor Coda.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+*/
+#pragma once
+#include <memory>
+#include "../vulkan.h"
+#include "../nonCopyable.h"
+
+namespace magma
+{
+    class Device;
+    class Framebuffer;
+    class ColorAttachment2D;
+    class DepthStencilAttachment2D;
+    class SwapchainColorAttachment2D;
+    class ImageView;
+    class RenderPass;
+    class IAllocator;
+
+    namespace aux
+    {
+        /* Auxiliary framebuffer class that is responsible for management of
+           color, depth/stencil and resolve attachments, image view reinterpretation,
+           render pass and framebuffer construction. */
+
+        class Framebuffer : public NonCopyable
+        {
+        public:
+            virtual uint32_t getSampleCount() const noexcept { return 1; }
+            virtual std::shared_ptr<ImageView> getColorView() const noexcept { return colorView; }
+            std::shared_ptr<RenderPass> getRenderPass() const noexcept { return renderPass; }
+            std::shared_ptr<magma::Framebuffer> getFramebuffer() const noexcept { return framebuffer; }
+            const VkExtent2D& getExtent() const noexcept { return extent; }
+
+        protected:
+            Framebuffer(const VkExtent2D& extent):
+                extent(extent) {}
+
+        protected:
+            std::shared_ptr<ImageView> colorView;
+            std::shared_ptr<ImageView> depthStencilView;
+            std::shared_ptr<RenderPass> renderPass;
+            std::shared_ptr<magma::Framebuffer> framebuffer;
+            VkExtent2D extent;
+        };
+
+        class NonMultisampleFramebuffer : public Framebuffer
+        {
+        public:
+            NonMultisampleFramebuffer(std::shared_ptr<Device> device,
+                const VkFormat colorFormat,
+                const VkFormat depthStencilFormat,
+                const VkExtent2D& extent,
+                std::shared_ptr<IAllocator> allocator = nullptr);
+
+        private:
+            std::shared_ptr<ColorAttachment2D> color;
+            std::shared_ptr<DepthStencilAttachment2D> depthStencil;
+        };
+
+        class MultisampleFramebuffer : public Framebuffer
+        {
+        public:
+            MultisampleFramebuffer(std::shared_ptr<Device> device,
+                const VkFormat colorFormat,
+                const VkFormat depthStencilFormat,
+                const VkExtent2D& extent,
+                uint32_t sampleCount,
+                std::shared_ptr<IAllocator> allocator = nullptr);
+            virtual uint32_t getSampleCount() const noexcept override;
+            virtual std::shared_ptr<ImageView> getColorView() const noexcept override { return resolveView; }
+
+        private:
+            std::shared_ptr<ColorAttachment2D> color;
+            std::shared_ptr<DepthStencilAttachment2D> depthStencil;
+            std::shared_ptr<ColorAttachment2D> resolve;
+            std::shared_ptr<ImageView> resolveView;
+        };
+
+        class SwapchainFramebuffer : public Framebuffer
+        {
+        public:
+            SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachment2D> color,
+                VkFormat depthFormat = VK_FORMAT_UNDEFINED,
+                std::shared_ptr<IAllocator> allocator = nullptr);
+
+        private:
+            std::shared_ptr<DepthStencilAttachment2D> depthStencil;
+        };
+    } // namespace aux
+} // namespace magma
