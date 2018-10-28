@@ -47,17 +47,18 @@ namespace magma
 {
 namespace aux
 {
-BlitRectangle::BlitRectangle(std::shared_ptr<aux::Framebuffer> framebuffer,
+BlitRectangle::BlitRectangle(std::shared_ptr<aux::Framebuffer> framebuffer, std::shared_ptr<CommandPool> cmdPool,
     const VertexShaderStage& vertexShader, const FragmentShaderStage& fragmentShader):
-    BlitRectangle(framebuffer->getRenderPass(), framebuffer->getFramebuffer(), vertexShader, fragmentShader)
+    BlitRectangle(framebuffer->getRenderPass(), framebuffer->getFramebuffer(), std::move(cmdPool), vertexShader, fragmentShader)
 {}
 
-BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, std::shared_ptr<magma::Framebuffer> framebuffer,
+BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, std::shared_ptr<magma::Framebuffer> framebuffer, std::shared_ptr<CommandPool> cmdPool,
     const VertexShaderStage& vertexShader, const FragmentShaderStage& fragmentShader):
     device(renderPass->getDevice()),
     queue(std::move(device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0))),
     renderPass(renderPass),
-    framebuffer(framebuffer)
+    framebuffer(framebuffer),
+    cmdPool(cmdPool)
 {   // Descriptor set for single image view in fragment shader
     const Descriptor imageSamplerDesc = descriptors::CombinedImageSampler(1);
     setLayout = std::make_shared<DescriptorSetLayout>(device, bindings::FragmentStageBinding(0, imageSamplerDesc));
@@ -80,8 +81,8 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, std::shared
         renderPass);
 }
 
-void BlitRectangle::setSource(std::shared_ptr<ImageView> attachment, std::shared_ptr<Sampler> sampler,
-    std::shared_ptr<CommandPool> cmdPool)
+void BlitRectangle::setImageView(std::shared_ptr<ImageView> attachment,
+    std::shared_ptr<Sampler> sampler /* nullptr */)
 {   // Bind attachment to descriptor set
     if (sampler)
         descriptorSet->update(0, attachment, sampler);

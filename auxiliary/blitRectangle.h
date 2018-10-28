@@ -48,15 +48,16 @@ namespace magma
         {
         public:
             BlitRectangle(std::shared_ptr<aux::Framebuffer> framebuffer,
+                std::shared_ptr<CommandPool> cmdPool,
                 const VertexShaderStage& vertexShader,
                 const FragmentShaderStage& fragmentShader);
             BlitRectangle(std::shared_ptr<RenderPass> renderPass,
                 std::shared_ptr<magma::Framebuffer> framebuffer,
+                std::shared_ptr<CommandPool> cmdPool,
                 const VertexShaderStage& vertexShader,
                 const FragmentShaderStage& fragmentShader);
-            void setSource(std::shared_ptr<ImageView> attachment,
-                std::shared_ptr<Sampler> sampler,
-                std::shared_ptr<CommandPool> cmdPool);
+            void setImageView(std::shared_ptr<ImageView> attachment,
+                std::shared_ptr<Sampler> sampler = nullptr);
             void blit(std::shared_ptr<Semaphore> renderFinished,
                 std::shared_ptr<Semaphore> blitFinished,
                 std::shared_ptr<Fence> fence);
@@ -72,6 +73,7 @@ namespace magma
             std::shared_ptr<Sampler> nearestSampler;
             std::shared_ptr<GraphicsPipeline> pipeline;
             std::shared_ptr<PipelineLayout> pipelineLayout;
+            std::shared_ptr<CommandPool> cmdPool;
             std::shared_ptr<CommandBuffer> cmdBuffer;
         };
     } // namespace aux
