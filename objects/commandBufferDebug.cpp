@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandBuffer.h"
 #include "device.h"
 #include "../misc/deviceExtension.h"
-#include "../helpers/hexColor.h"
+#include "../utilities/hexColor.h"
 
 namespace magma
 {
@@ -137,7 +137,7 @@ bool CommandBuffer::begin(const char *blockName, uint32_t blockColor,
     const bool beginResult = begin(flags);
 #ifdef MAGMA_DEBUG
     float color[4];
-    helpers::hexColorToFloat4(blockColor, color);
+    utilities::hexColorToFloat4(blockColor, color);
     beginDebugLabel(blockName, color);
     beginMarked = VK_TRUE;
 #elif defined(_MSC_VER)
@@ -153,7 +153,7 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask, const char *blockName,
     const bool beginResult = beginDeviceGroup(deviceMask, flags);
 #ifdef MAGMA_DEBUG
     float color[4];
-    helpers::hexColorToFloat4(blockColor, color);
+    utilities::hexColorToFloat4(blockColor, color);
     beginDebugLabel(blockName, color);
     beginMarked = VK_TRUE;
 #elif defined(_MSC_VER)
@@ -170,7 +170,7 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     const bool beginResult = beginInherited(renderPass, subpass, framebuffer, flags);
 #ifdef MAGMA_DEBUG
     float color[4];
-    helpers::hexColorToFloat4(blockColor, color);
+    utilities::hexColorToFloat4(blockColor, color);
     beginDebugLabel(blockName, color);
     beginMarked = VK_TRUE;
 #elif defined(_MSC_VER)
@@ -187,7 +187,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     beginRenderPass(renderPass, framebuffer, clearValues, contents);
 #ifdef MAGMA_DEBUG
     float color[4];
-    helpers::hexColorToFloat4(renderPassColor, color);
+    utilities::hexColorToFloat4(renderPassColor, color);
     beginDebugLabel(renderPassName, color);
     beginRenderPassMarked = VK_TRUE;
 #elif defined(_MSC_VER)
@@ -203,7 +203,7 @@ void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>
     beginRenderPassDeviceGroup(renderPass, framebuffer, clearValues, deviceMask, contents);
 #ifdef MAGMA_DEBUG
     float color[4];
-    helpers::hexColorToFloat4(renderPassColor, color);
+    utilities::hexColorToFloat4(renderPassColor, color);
     beginDebugLabel(renderPassName, color);
     beginRenderPassMarked = VK_TRUE;
 #elif defined(_MSC_VER)

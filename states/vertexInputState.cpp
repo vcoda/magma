@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "vertexInputState.h"
-#include "../helpers/copy.h"
-#include "../helpers/hash.h"
+#include "../utilities/copy.h"
+#include "../utilities/hash.h"
 #include "../shared.h"
 
 namespace magma
@@ -48,10 +48,10 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
     pNext = nullptr;
     flags = 0;
     vertexBindingDescriptionCount = MAGMA_COUNT(bindings);
-    pVertexBindingDescriptions = helpers::copyArray(static_cast<const VkVertexInputBindingDescription *>(bindings.begin()), bindings.size());
+    pVertexBindingDescriptions = utilities::copyArray(static_cast<const VkVertexInputBindingDescription *>(bindings.begin()), bindings.size());
     vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
     try {
-        pVertexAttributeDescriptions = helpers::copyArray(static_cast<const VkVertexInputAttributeDescription *>(attributes.begin()), attributes.size());
+        pVertexAttributeDescriptions = utilities::copyArray(static_cast<const VkVertexInputAttributeDescription *>(attributes.begin()), attributes.size());
     } catch (const std::bad_alloc& exc)
     {
         delete[] pVertexBindingDescriptions;
@@ -61,10 +61,10 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
 
 VertexInputState::VertexInputState(const VertexInputState& other)
 {
-    helpers::copy(this, &other);
-    pVertexBindingDescriptions = helpers::copyArray(other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
+    utilities::copy(this, &other);
+    pVertexBindingDescriptions = utilities::copyArray(other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
     try {
-        pVertexAttributeDescriptions = helpers::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+        pVertexAttributeDescriptions = utilities::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
     } catch (const std::bad_alloc& exc)
     {
         delete[] pVertexBindingDescriptions;
@@ -76,10 +76,10 @@ VertexInputState& VertexInputState::operator=(const VertexInputState& other)
 {
     if (this != &other)
     {
-        helpers::copy(this, &other);
-        pVertexBindingDescriptions = helpers::copyArray(other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
+        utilities::copy(this, &other);
+        pVertexBindingDescriptions = utilities::copyArray(other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
         try {
-            pVertexAttributeDescriptions = helpers::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+            pVertexAttributeDescriptions = utilities::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
         } catch (const std::bad_alloc& exc)
         {
             delete[] pVertexBindingDescriptions;
@@ -97,20 +97,20 @@ VertexInputState::~VertexInputState()
 
 size_t VertexInputState::hash() const noexcept
 {
-    size_t hash = helpers::hashVariadic(
+    size_t hash = utilities::hashVariadic(
         flags,
         vertexBindingDescriptionCount,
         vertexAttributeDescriptionCount);
     for (uint32_t i = 0; i < vertexBindingDescriptionCount; ++i)
     {
-        helpers::hashCombine(hash, helpers::hashVariadic(
+        utilities::hashCombine(hash, utilities::hashVariadic(
             pVertexBindingDescriptions[i].binding,
             pVertexBindingDescriptions[i].stride,
             pVertexBindingDescriptions[i].inputRate));
     }
     for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
     {
-        helpers::hashCombine(hash, helpers::hashVariadic(
+        utilities::hashCombine(hash, utilities::hashVariadic(
             pVertexAttributeDescriptions[i].location,
             pVertexAttributeDescriptions[i].binding,
             pVertexAttributeDescriptions[i].format,
@@ -124,8 +124,8 @@ bool VertexInputState::operator==(const VertexInputState& other) const noexcept
     return (flags == other.flags) &&
         (vertexBindingDescriptionCount == other.vertexBindingDescriptionCount) &&
         (vertexAttributeDescriptionCount == other.vertexAttributeDescriptionCount) &&
-        helpers::compareArrays(pVertexBindingDescriptions, other.pVertexBindingDescriptions, vertexBindingDescriptionCount) &&
-        helpers::compareArrays(pVertexAttributeDescriptions, other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+        utilities::compareArrays(pVertexBindingDescriptions, other.pVertexBindingDescriptions, vertexBindingDescriptionCount) &&
+        utilities::compareArrays(pVertexAttributeDescriptions, other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
 }
 
 namespace states

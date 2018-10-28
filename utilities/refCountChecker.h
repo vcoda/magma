@@ -23,10 +23,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    namespace helpers
+    namespace utilities
     {
         /* Reference counter to check that there are no circular references
-           that prevents destruction of Vulkan objects on exit. */
+           that prevents destruction of Vulkan objects. */
 
         class RefCountChecker
         {
@@ -46,7 +46,7 @@ namespace magma
         private:
             std::atomic<long> refCount;
         };
-    } // namespace helpers
+    } // namespace utilities
 } // namespace magma
 
 #endif // _DEBUG

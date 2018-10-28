@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "scopedDebugMarker.h"
 #include "../objects/commandBuffer.h"
-#include "../helpers/hexColor.h"
+#include "../utilities/hexColor.h"
 #include "../shared.h"
 
 namespace magma
@@ -57,7 +57,7 @@ ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, c
 {
 #ifdef MAGMA_DEBUG
     float color[4];
-    helpers::hexColorToFloat4(hexColor, color);
+    utilities::hexColorToFloat4(hexColor, color);
     this->cmdBuffer->beginDebugLabel(name, color);
 #elif defined(_MSC_VER)
     cmdBuffer;

@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../misc/exception.h"
 #include "../helpers/stackArray.h"
-#include "../helpers/copy.h"
+#include "../utilities/copy.h"
 #include "../shared.h"
 
 namespace magma
@@ -40,7 +40,7 @@ DescriptorSetLayout::Binding::Binding(uint32_t binding, const Descriptor& descri
         MAGMA_STACK_ARRAY(VkSampler, dereferencedImmutableSamplers, immutableSamplers.size());
         for (const auto& sampler : immutableSamplers)
             dereferencedImmutableSamplers.put(*sampler);
-        pImmutableSamplers = helpers::copyArray(static_cast<const VkSampler *>(dereferencedImmutableSamplers),
+        pImmutableSamplers = utilities::copyArray(static_cast<const VkSampler *>(dereferencedImmutableSamplers),
             dereferencedImmutableSamplers.size());
     }
 }

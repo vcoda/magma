@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/instanceExtension.h"
 #include "../misc/exception.h"
 #include "../helpers/stackArray.h"
-#include "../helpers/refCountChecker.h"
+#include "../utilities/refCountChecker.h"
 
 // Redefine macro for Instance object as here we use handle directly
 #undef MAGMA_INSTANCE_EXTENSION
@@ -29,7 +29,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     magma::InstanceExtension<PFN_##func> func(handle, MAGMA_STRINGIZE(func), extension)
 
 #ifdef MAGMA_DEBUG
-static magma::helpers::RefCountChecker _refCountChecker;
+static magma::utilities::RefCountChecker _refCountChecker;
 #endif
 
 namespace magma

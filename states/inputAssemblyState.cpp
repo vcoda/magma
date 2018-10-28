@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "inputAssemblyState.h"
-#include "../helpers/hash.h"
+#include "../utilities/hash.h"
 #include "../shared.h"
 
 namespace magma
@@ -33,7 +33,7 @@ InputAssemblyState::InputAssemblyState(VkPrimitiveTopology topology,
 
 size_t InputAssemblyState::hash() const noexcept
 {
-    return helpers::hashVariadic(
+    return utilities::hashVariadic(
         flags,
         topology,
         primitiveRestartEnable);

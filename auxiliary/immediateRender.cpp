@@ -22,12 +22,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/shaderModule.h"
 #include "../misc/pushConstants.h"
 #include "../allocator/allocator.h"
-#include "../helpers/hash.h"
-#include "../helpers/hexColor.h"
+#include "../utilities/hash.h"
+#include "../utilities/hexColor.h"
 
 namespace magma
 {
-namespace utilities
+namespace aux
 {
 ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     std::shared_ptr<Device> device,
@@ -125,7 +125,7 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer
         if (primitive.labelName)
         {
             float color[4];
-            helpers::hexColorToFloat4(primitive.labelColor, color);
+            utilities::hexColorToFloat4(primitive.labelColor, color);
             cmdBuffer->beginDebugLabel(primitive.labelName, color);
         }
 #endif // MAGMA_DEBUG
@@ -344,14 +344,14 @@ std::shared_ptr<const GraphicsPipeline> ImmediateRender::findBasePipeline() cons
 size_t ImmediateRender::hash(const InputAssemblyState *inputAssembly) const noexcept
 {
     size_t hash = 0;
-    helpers::hashCombine(hash, inputAssembly->hash());
-    helpers::hashCombine(hash, vertexShader.hash());
-    helpers::hashCombine(hash, fragmentShader.hash());
-    helpers::hashCombine(hash, renderStates.rasterization.hash());
-    helpers::hashCombine(hash, renderStates.multisample.hash());
-    helpers::hashCombine(hash, renderStates.depthStencil.hash());
-    helpers::hashCombine(hash, renderStates.colorBlend.hash());
+    utilities::hashCombine(hash, inputAssembly->hash());
+    utilities::hashCombine(hash, vertexShader.hash());
+    utilities::hashCombine(hash, fragmentShader.hash());
+    utilities::hashCombine(hash, renderStates.rasterization.hash());
+    utilities::hashCombine(hash, renderStates.multisample.hash());
+    utilities::hashCombine(hash, renderStates.depthStencil.hash());
+    utilities::hashCombine(hash, renderStates.colorBlend.hash());
     return hash;
 }
-} // namespace utilities
+} // namespace aux
 } // namespace magma

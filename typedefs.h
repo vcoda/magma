@@ -83,7 +83,7 @@ namespace magma
     typedef std::unique_ptr<struct InstanceExtensions> InstanceExtensionsPtr;
     typedef std::unique_ptr<struct PhysicalDeviceExtensions> PhysicalDeviceExtensionsPtr;
 
-    namespace utilities
+    namespace aux
     {
         typedef std::shared_ptr<class ImmediateRender> ImmediateRenderPtr;
     }

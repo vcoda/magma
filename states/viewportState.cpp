@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "viewportState.h"
-#include "../helpers/copy.h"
-#include "../helpers/hash.h"
+#include "../utilities/copy.h"
+#include "../utilities/hash.h"
 #include "../shared.h"
 
 namespace magma
@@ -136,10 +136,10 @@ ViewportState::ViewportState(const std::vector<VkViewport>& viewports, const std
 
 ViewportState::ViewportState(const ViewportState& other)
 {
-    helpers::copy(this, &other);
-    pViewports = helpers::copyArray(other.pViewports, viewportCount);
+    utilities::copy(this, &other);
+    pViewports = utilities::copyArray(other.pViewports, viewportCount);
     try {
-        pScissors = helpers::copyArray(other.pScissors, scissorCount);
+        pScissors = utilities::copyArray(other.pScissors, scissorCount);
     } catch (const std::bad_alloc& exc)
     {
         delete[] pViewports;
@@ -151,10 +151,10 @@ ViewportState& ViewportState::operator=(const ViewportState& other)
 {
     if (this != &other)
     {
-        helpers::copy(this, &other);
-        pViewports = helpers::copyArray(other.pViewports, viewportCount);
+        utilities::copy(this, &other);
+        pViewports = utilities::copyArray(other.pViewports, viewportCount);
         try {
-            pScissors = helpers::copyArray(other.pScissors, scissorCount);
+            pScissors = utilities::copyArray(other.pScissors, scissorCount);
         } catch (const std::bad_alloc& exc)
         {
             delete[] pViewports;
@@ -172,13 +172,13 @@ ViewportState::~ViewportState()
 
 size_t ViewportState::hash() const noexcept
 {
-    size_t hash = helpers::hashVariadic(
+    size_t hash = utilities::hashVariadic(
         flags,
         viewportCount,
         scissorCount);
     for (uint32_t i = 0; i < viewportCount; ++i)
     {
-        helpers::hashCombine(hash, helpers::hashVariadic(
+        utilities::hashCombine(hash, utilities::hashVariadic(
             pViewports[i].x,
             pViewports[i].y,
             pViewports[i].width,
@@ -188,7 +188,7 @@ size_t ViewportState::hash() const noexcept
     }
     for (uint32_t i = 0; i < scissorCount; ++i)
     {
-        helpers::hashCombine(hash, helpers::hashVariadic(
+        utilities::hashCombine(hash, utilities::hashVariadic(
             pScissors[i].offset.x,
             pScissors[i].offset.y,
             pScissors[i].extent.width,
@@ -202,8 +202,8 @@ bool ViewportState::operator==(const ViewportState& other) const noexcept
     return (flags == other.flags) &&
         (viewportCount == other.viewportCount) &&
         (scissorCount == other.scissorCount) &&
-        helpers::compareArrays(pViewports, other.pViewports, viewportCount) &&
-        helpers::compareArrays(pScissors, other.pScissors, scissorCount);
+        utilities::compareArrays(pViewports, other.pViewports, viewportCount) &&
+        utilities::compareArrays(pScissors, other.pScissors, scissorCount);
 }
 
 void ViewportState::initialize(const VkViewport& viewport, const VkRect2D& scissor)
@@ -212,9 +212,9 @@ void ViewportState::initialize(const VkViewport& viewport, const VkRect2D& sciss
     pNext = nullptr;
     flags = 0;
     viewportCount = 1;
-    pViewports = helpers::copyArray(&viewport, 1);
+    pViewports = utilities::copyArray(&viewport, 1);
     scissorCount = 1;
-    pScissors = helpers::copyArray(&scissor, 1);
+    pScissors = utilities::copyArray(&scissor, 1);
 }
 
 void ViewportState::initialize(const std::vector<VkViewport>& viewports, const std::vector<VkRect2D>& scissors)
@@ -223,8 +223,8 @@ void ViewportState::initialize(const std::vector<VkViewport>& viewports, const s
     pNext = nullptr;
     flags = 0;
     viewportCount = MAGMA_COUNT(viewports);
-    pViewports = helpers::copyVector(viewports);
+    pViewports = utilities::copyVector(viewports);
     scissorCount = MAGMA_COUNT(scissors);
-    pScissors = helpers::copyVector(scissors);
+    pScissors = utilities::copyVector(scissors);
 }
 } // namespace magma

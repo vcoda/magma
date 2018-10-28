@@ -136,6 +136,7 @@
     <ClInclude Include="allocator\allocable.h" />
     <ClInclude Include="allocator\allocator.h" />
     <ClInclude Include="allocator\objectAllocator.h" />
+    <ClInclude Include="auxiliary\immediateRender.h" />
     <ClInclude Include="barriers\bufferMemoryBarrier.h" />
     <ClInclude Include="barriers\imageMemoryBarrier.h" />
     <ClInclude Include="barriers\globalMemoryBarrier.h" />
@@ -144,14 +145,10 @@
     <ClInclude Include="descriptors\descriptors.h" />
     <ClInclude Include="descriptors\subpass.h" />
     <ClInclude Include="helpers\alignedUniformArray.h" />
-    <ClInclude Include="helpers\copy.h" />
-    <ClInclude Include="helpers\hexColor.h" />
     <ClInclude Include="helpers\mapScoped.h" />
-    <ClInclude Include="helpers\refCountChecker.h" />
     <ClInclude Include="helpers\stackArray.h" />
     <ClInclude Include="helpers\stringize.h" />
     <ClInclude Include="helpers\uniformArray.h" />
-    <ClInclude Include="helpers\hash.h" />
     <ClInclude Include="magma.h" />
     <ClInclude Include="mem\copyMemory.h" />
     <ClInclude Include="mem\zeroMemory.h" />
@@ -234,12 +231,14 @@
     <ClInclude Include="states\vertexInputState.h" />
     <ClInclude Include="states\viewportState.h" />
     <ClInclude Include="typedefs.h" />
-    <ClInclude Include="utilities\immediateRender.h" />
+    <ClInclude Include="utilities\copy.h" />
+    <ClInclude Include="utilities\hash.h" />
+    <ClInclude Include="utilities\hexColor.h" />
+    <ClInclude Include="utilities\refCountChecker.h" />
     <ClInclude Include="vulkan.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="helpers\copy.inl" />
-    <None Include="helpers\hash.inl" />
+    <None Include="auxiliary\immediateRender.inl" />
     <None Include="misc\clearAttachment.inl" />
     <None Include="misc\clearValue.inl" />
     <None Include="misc\deviceExtension.inl" />
@@ -252,11 +251,11 @@
     <None Include="objects\srcTransferBuffer.inl" />
     <None Include="objects\storageBuffer.inl" />
     <None Include="objects\vertexBuffer.inl" />
-    <None Include="utilities\immediateRender.inl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="allocator\allocable.cpp" />
     <ClCompile Include="allocator\allocator.cpp" />
+    <ClCompile Include="auxiliary\immediateRender.cpp" />
     <ClCompile Include="barriers\bufferMemoryBarrier.cpp" />
     <ClCompile Include="barriers\imageMemoryBarrier.cpp" />
     <ClCompile Include="barriers\globalMemoryBarrier.cpp" />
@@ -330,7 +329,6 @@
     <ClCompile Include="states\tesselationState.cpp" />
     <ClCompile Include="states\vertexInputState.cpp" />
     <ClCompile Include="states\viewportState.cpp" />
-    <ClCompile Include="utilities\immediateRender.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

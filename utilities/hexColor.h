@@ -19,14 +19,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    namespace helpers
+    namespace utilities
     {
-        inline void hexColorToFloat4(uint32_t value, float result[4]) noexcept
+        inline void hexColorToFloat4(unsigned value, float result[4]) noexcept
         {
             result[0] = ((value >> 24) & 0xFF) / 255.f; // R
             result[1] = ((value >> 16) & 0xFF) / 255.f; // G
             result[2] = ((value >> 8) & 0xFF) / 255.f; // B
             result[3] = (value & 0xFF) / 255.f; // A
         }
-    } // namespace helpers
+    } // namespace utilities
 } // namespace magma

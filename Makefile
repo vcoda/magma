@@ -95,7 +95,7 @@ MAGMA_OBJS= \
 	states/vertexInputState.o \
 	states/viewportState.o \
 	\
-	utilities/immediateRender.o
+	aux/immediateRender.o
 
 DEPS := $(MAGMA_OBJS:.o=.d)
 

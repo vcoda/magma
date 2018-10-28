@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "colorBlendState.h"
-#include "../helpers/copy.h"
-#include "../helpers/hash.h"
+#include "../utilities/copy.h"
+#include "../utilities/hash.h"
 #include "../shared.h"
 
 namespace magma
@@ -38,7 +38,7 @@ ColorBlendAttachmentState::ColorBlendAttachmentState(bool blendEnable,
 
 size_t ColorBlendAttachmentState::hash() const noexcept
 {
-    return helpers::hashVariadic(
+    return utilities::hashVariadic(
         blendEnable,
         srcColorBlendFactor,
         dstColorBlendFactor,
@@ -75,7 +75,7 @@ ColorBlendState::ColorBlendState(const std::vector<ColorBlendAttachmentState>& a
     this->logicOpEnable = VK_FALSE;
     this->logicOp = VK_LOGIC_OP_CLEAR;
     attachmentCount = MAGMA_COUNT(attachments);
-    pAttachments = helpers::copyArray(static_cast<const VkPipelineColorBlendAttachmentState *>(attachments.data()), attachments.size());
+    pAttachments = utilities::copyArray(static_cast<const VkPipelineColorBlendAttachmentState *>(attachments.data()), attachments.size());
     if (0 == blendConstants.size())
     {
         this->blendConstants[0] = 1.f;
@@ -92,16 +92,16 @@ ColorBlendState::ColorBlendState(const std::vector<ColorBlendAttachmentState>& a
 
 ColorBlendState::ColorBlendState(const ColorBlendState& other)
 {
-    helpers::copy(this, &other);
-    pAttachments = helpers::copyArray(other.pAttachments, attachmentCount);
+    utilities::copy(this, &other);
+    pAttachments = utilities::copyArray(other.pAttachments, attachmentCount);
 }
 
 ColorBlendState& ColorBlendState::operator=(const ColorBlendState& other)
 {
     if (this != &other)
     {
-        helpers::copy(this, &other);
-        pAttachments = helpers::copyArray(other.pAttachments, attachmentCount);
+        utilities::copy(this, &other);
+        pAttachments = utilities::copyArray(other.pAttachments, attachmentCount);
     }
     return *this;
 }
@@ -113,14 +113,14 @@ ColorBlendState::~ColorBlendState()
 
 size_t ColorBlendState::hash() const noexcept
 {
-    size_t hash = helpers::hashVariadic(
+    size_t hash = utilities::hashVariadic(
         flags,
         logicOpEnable,
         logicOp,
         attachmentCount);
     for (uint32_t i = 0; i < attachmentCount; ++i)
     {
-        helpers::hashCombine(hash, helpers::hashVariadic(
+        utilities::hashCombine(hash, utilities::hashVariadic(
             pAttachments[i].blendEnable,
             pAttachments[i].srcColorBlendFactor,
             pAttachments[i].dstColorBlendFactor,
@@ -130,7 +130,7 @@ size_t ColorBlendState::hash() const noexcept
             pAttachments[i].alphaBlendOp,
             pAttachments[i].colorWriteMask));
     }
-    helpers::hashCombine(hash, helpers::hashArray(blendConstants, 4));
+    utilities::hashCombine(hash, utilities::hashArray(blendConstants, 4));
     return hash;
 }
 
@@ -140,8 +140,8 @@ bool ColorBlendState::operator==(const ColorBlendState& other) const noexcept
         (logicOpEnable == other.logicOpEnable) &&
         (logicOp == other.logicOp) &&
         (attachmentCount == other.attachmentCount) &&
-        helpers::compareArrays(pAttachments, other.pAttachments, attachmentCount) &&
-        helpers::compareArrays(blendConstants, other.blendConstants, 4);
+        utilities::compareArrays(pAttachments, other.pAttachments, attachmentCount) &&
+        utilities::compareArrays(blendConstants, other.blendConstants, 4);
 }
 
 ColorLogicOpState::ColorLogicOpState(const ColorBlendAttachmentState& attachment, VkLogicOp logicOp):

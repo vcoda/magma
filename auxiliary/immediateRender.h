@@ -40,7 +40,7 @@ namespace magma
     class RenderPass;
     class IAllocator;
 
-    namespace utilities
+    namespace aux
     {
         /* Sometimes I miss immediate mode from OpenGL 1.x era.
            This class serves as a replacement for it when you don't want
@@ -166,7 +166,7 @@ namespace magma
             Vertex *vert = nullptr, curr = {};
             bool insidePrimitive = false;
         };
-    } // namespace utilities
+    } // namespace aux
 } // namespace magma
 
 #include "immediateRender.inl"

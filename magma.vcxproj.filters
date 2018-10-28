@@ -58,11 +58,14 @@
     <Filter Include="Header Files\utilities">
       <UniqueIdentifier>{b7f1fa23-f762-4c0e-9cd6-3382501a7056}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\utilities">
-      <UniqueIdentifier>{7429dc55-1b4d-4285-b3cf-a9c6cd0bae11}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\helpers">
       <UniqueIdentifier>{7a0e31f0-28af-45c3-bc57-ae2bb5449010}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\auxiliary">
+      <UniqueIdentifier>{e443ec01-9915-4632-855f-2e3b70d9961d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\auxiliary">
+      <UniqueIdentifier>{7b01e8e4-37b6-4a4b-9d34-d136e8862483}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -282,9 +285,6 @@
     <ClInclude Include="helpers\uniformArray.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
-    <ClInclude Include="helpers\copy.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
     <ClInclude Include="mem\copyMemory.h">
       <Filter>Header Files\mem</Filter>
     </ClInclude>
@@ -333,14 +333,8 @@
     <ClInclude Include="barriers\globalMemoryBarrier.h">
       <Filter>Header Files\barriers</Filter>
     </ClInclude>
-    <ClInclude Include="utilities\immediateRender.h">
-      <Filter>Header Files\utilities</Filter>
-    </ClInclude>
     <ClInclude Include="allocator\objectAllocator.h">
       <Filter>Header Files\allocator</Filter>
-    </ClInclude>
-    <ClInclude Include="helpers\hash.h">
-      <Filter>Header Files\helpers</Filter>
     </ClInclude>
     <ClInclude Include="objects\accelerationStructure.h">
       <Filter>Header Files\objects</Filter>
@@ -363,17 +357,26 @@
     <ClInclude Include="objects\conditionalRenderingBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="helpers\refCountChecker.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="helpers\hexColor.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
     <ClInclude Include="allocator\allocable.h">
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
     <ClInclude Include="objects\debugUtilsMessenger.h">
       <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="auxiliary\immediateRender.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\copy.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\hash.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\hexColor.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\refCountChecker.h">
+      <Filter>Header Files\utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -392,9 +395,6 @@
     <None Include="misc\scissor.inl">
       <Filter>Header Files\misc</Filter>
     </None>
-    <None Include="helpers\copy.inl">
-      <Filter>Header Files\helpers</Filter>
-    </None>
     <None Include="misc\deviceExtension.inl">
       <Filter>Header Files\misc</Filter>
     </None>
@@ -410,17 +410,14 @@
     <None Include="objects\indexBuffer.inl">
       <Filter>Header Files\objects</Filter>
     </None>
-    <None Include="utilities\immediateRender.inl">
-      <Filter>Header Files\utilities</Filter>
-    </None>
     <None Include="objects\srcTransferBuffer.inl">
       <Filter>Header Files\objects</Filter>
     </None>
     <None Include="objects\storageBuffer.inl">
       <Filter>Header Files\objects</Filter>
     </None>
-    <None Include="helpers\hash.inl">
-      <Filter>Header Files\helpers</Filter>
+    <None Include="auxiliary\immediateRender.inl">
+      <Filter>Header Files\auxiliary</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -619,9 +616,6 @@
     <ClCompile Include="barriers\globalMemoryBarrier.cpp">
       <Filter>Source Files\barriers</Filter>
     </ClCompile>
-    <ClCompile Include="utilities\immediateRender.cpp">
-      <Filter>Source Files\utilities</Filter>
-    </ClCompile>
     <ClCompile Include="objects\object.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
@@ -651,6 +645,9 @@
     </ClCompile>
     <ClCompile Include="objects\debugUtilsMessenger.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="auxiliary\immediateRender.cpp">
+      <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
