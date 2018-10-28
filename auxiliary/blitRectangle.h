@@ -75,7 +75,6 @@ namespace magma
             std::shared_ptr<Sampler> nearestSampler;
             std::shared_ptr<GraphicsPipeline> pipeline;
             std::shared_ptr<PipelineLayout> pipelineLayout;
-            std::shared_ptr<CommandPool> cmdPool;
             std::shared_ptr<CommandBuffer> cmdBuffer;
         };
     } // namespace aux

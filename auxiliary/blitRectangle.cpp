@@ -59,8 +59,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, std::shared
     device(renderPass->getDevice()),
     queue(device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0)),
     renderPass(std::move(renderPass)),
-    framebuffer(std::move(framebuffer)),
-    cmdPool(std::move(cmdPool))
+    framebuffer(std::move(framebuffer))
 {   // Descriptor set for single image view in fragment shader
     const Descriptor imageSamplerDesc = descriptors::CombinedImageSampler(1);
     setLayout = std::make_shared<DescriptorSetLayout>(device, bindings::FragmentStageBinding(0, imageSamplerDesc), 0, allocator);
@@ -84,6 +83,8 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, std::shared
         0, nullptr, 0,
         allocator);
     nearestSampler = std::make_shared<Sampler>(device, samplers::nearestMipmapNearestClampToEdge, 0.f, allocator);
+    cmdBuffer = cmdPool->allocateCommandBuffer(true);
+    cmdBuffer->setRenderArea(0, 0, framebuffer->getExtent());
 }
 
 void BlitRectangle::setImageView(std::shared_ptr<ImageView> attachment,
@@ -93,11 +94,6 @@ void BlitRectangle::setImageView(std::shared_ptr<ImageView> attachment,
         descriptorSet->update(0, attachment, sampler);
     else // Default to nearest sampler
         descriptorSet->update(0, attachment, nearestSampler);
-    if (!cmdBuffer)
-    {
-        cmdBuffer = cmdPool->allocateCommandBuffer(true);
-        cmdBuffer->setRenderArea(0, 0, framebuffer->getExtent());
-    }
     // Record command buffer
     cmdBuffer->reset(false);
     cmdBuffer->begin();
