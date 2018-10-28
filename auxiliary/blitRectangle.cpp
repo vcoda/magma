@@ -35,11 +35,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/queue.h"
 #include "../states/vertexInputState.h"
 #include "../states/inputAssemblyState.h"
+#include "../states/tesselationState.h"
 #include "../states/rasterizationState.h"
 #include "../states/multisampleState.h"
 #include "../states/depthStencilState.h"
 #include "../states/colorBlendState.h"
 #include "../states/samplerState.h"
+#include "../states/viewportState.h"
 
 namespace magma
 {
@@ -67,11 +69,13 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, std::shared
         std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
         states::nullVertexInput,
         states::triangleStrip,
+        TesselationState(),
+        ViewportState(0, 0, framebuffer->getExtent()),
         states::fillCullBackCCW,
         states::noMultisample,
         states::depthAlwaysDontWrite,
         states::dontBlendWriteRGBA,
-        std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
+        std::initializer_list<VkDynamicState>{},
         pipelineLayout,
         renderPass);
 }
@@ -87,17 +91,16 @@ void BlitRectangle::setSource(std::shared_ptr<ImageView> attachment, std::shared
         descriptorSet->update(0, attachment, nearestSampler);
     }
     if (!cmdBuffer)
+    {
         cmdBuffer = cmdPool->allocateCommandBuffer(true);
+        cmdBuffer->setRenderArea(0, 0, framebuffer->getExtent());
+    }
     // Record command buffer
     cmdBuffer->reset(false);
     cmdBuffer->begin();
     {
-        const VkExtent2D& extent = framebuffer->getExtent();
-        cmdBuffer->setRenderArea(0, 0, extent);
         cmdBuffer->beginRenderPass(renderPass, framebuffer, {clears::blackColor});
         {
-            cmdBuffer->setViewport(0, 0, extent.width, extent.height);
-            cmdBuffer->setScissor(0, 0, extent.width, extent.height);
             cmdBuffer->bindDescriptorSet(pipelineLayout, descriptorSet);
             cmdBuffer->bindPipeline(pipeline);
             cmdBuffer->draw(4, 0);
