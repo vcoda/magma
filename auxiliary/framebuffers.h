@@ -40,11 +40,11 @@ namespace magma
         class Framebuffer : public NonCopyable
         {
         public:
-            virtual uint32_t getSampleCount() const noexcept { return 1; }
             virtual std::shared_ptr<ImageView> getColorView() const noexcept { return colorView; }
             std::shared_ptr<RenderPass> getRenderPass() const noexcept { return renderPass; }
             std::shared_ptr<magma::Framebuffer> getFramebuffer() const noexcept { return framebuffer; }
             const VkExtent2D& getExtent() const noexcept { return extent; }
+            virtual uint32_t getSampleCount() const noexcept = 0;
 
         protected:
             Framebuffer(const VkExtent2D& extent):
@@ -66,6 +66,7 @@ namespace magma
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
                 std::shared_ptr<IAllocator> allocator = nullptr);
+            virtual uint32_t getSampleCount() const noexcept override { return 1; }
 
         private:
             std::shared_ptr<ColorAttachment2D> color;
@@ -81,8 +82,8 @@ namespace magma
                 const VkExtent2D& extent,
                 uint32_t sampleCount,
                 std::shared_ptr<IAllocator> allocator = nullptr);
-            virtual uint32_t getSampleCount() const noexcept override;
             virtual std::shared_ptr<ImageView> getColorView() const noexcept override { return resolveView; }
+            virtual uint32_t getSampleCount() const noexcept override;
 
         private:
             std::shared_ptr<ColorAttachment2D> color;
@@ -97,6 +98,7 @@ namespace magma
             SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachment2D> color,
                 VkFormat depthFormat = VK_FORMAT_UNDEFINED,
                 std::shared_ptr<IAllocator> allocator = nullptr);
+            virtual uint32_t getSampleCount() const noexcept override { return 1; }
 
         private:
             std::shared_ptr<DepthStencilAttachment2D> depthStencil;
