@@ -27,7 +27,7 @@ namespace magma
 {
 ImageView::ImageView(std::shared_ptr<const Image> resource,
     uint32_t mipLevelCount, /* 0 */
-    VkComponentMapping swizzle /* R, G, B, A */,
+    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, std::move(resource->getDevice()), std::move(allocator)),
     image(std::move(resource))

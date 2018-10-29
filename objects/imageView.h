@@ -33,10 +33,12 @@ namespace magma
     public:
         explicit ImageView(std::shared_ptr<const Image> resource,
             uint32_t mipLevelCount = 0,
-            VkComponentMapping swizzle = {VK_COMPONENT_SWIZZLE_R,
-                                          VK_COMPONENT_SWIZZLE_G,
-                                          VK_COMPONENT_SWIZZLE_B,
-                                          VK_COMPONENT_SWIZZLE_A},
+            // https://github.com/SaschaWillems/Vulkan/issues/160
+            const VkComponentMapping& swizzle = {
+                VK_COMPONENT_SWIZZLE_IDENTITY,
+                VK_COMPONENT_SWIZZLE_IDENTITY,
+                VK_COMPONENT_SWIZZLE_IDENTITY,
+                VK_COMPONENT_SWIZZLE_IDENTITY},
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~ImageView();
         std::shared_ptr<const Image> getImage() const noexcept { return image; }
