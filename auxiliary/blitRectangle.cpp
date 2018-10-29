@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/image2D.h"
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
+#include "../objects/shaderModule.h"
 #include "../objects/shaderStages.h"
 #include "../objects/sampler.h"
 #include "../objects/descriptorPool.h"
@@ -132,16 +133,20 @@ void BlitRectangle::blit(std::shared_ptr<Semaphore> renderFinished, std::shared_
         renderFinished, blitFinished, fence);
 }
 
-std::shared_ptr<ShaderModule> BlitRectangle::createVertexShader(std::shared_ptr<IAllocator>)
+std::shared_ptr<ShaderModule> BlitRectangle::createVertexShader(std::shared_ptr<IAllocator> allocator)
 {
-    // TODO:
-    return nullptr;
+    const uint32_t vertexShaderBytecode[] = {
+#include "spirv/blitv.h"
+    };
+    return std::make_shared<ShaderModule>(device, vertexShaderBytecode, sizeof(vertexShaderBytecode), allocator);
 }
 
-std::shared_ptr<ShaderModule> BlitRectangle::createFragmentShader(std::shared_ptr<IAllocator>)
+std::shared_ptr<ShaderModule> BlitRectangle::createFragmentShader(std::shared_ptr<IAllocator> allocator)
 {
-    // TODO:
-    return nullptr;
+    const uint32_t fragmentShaderBytecode[] = {
+#include "spirv/blitf.h"
+    };
+    return std::make_shared<ShaderModule>(device, fragmentShaderBytecode, sizeof(fragmentShaderBytecode), allocator);
 }
 } // namespace aux
 } // namespace magma

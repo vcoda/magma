@@ -67,6 +67,9 @@
     <Filter Include="Source Files\auxiliary">
       <UniqueIdentifier>{7b01e8e4-37b6-4a4b-9d34-d136e8862483}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\auxiliary\spirv">
+      <UniqueIdentifier>{c3b02838-c559-4057-8d22-d9cdadfb5920}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="descriptors\attachment.h">
@@ -661,5 +664,19 @@
     <ClCompile Include="auxiliary\blitRectangle.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="auxiliary\spirv\blitv.vert">
+      <Filter>Source Files\auxiliary\spirv</Filter>
+    </CustomBuild>
+    <CustomBuild Include="auxiliary\spirv\blitf.frag">
+      <Filter>Source Files\auxiliary\spirv</Filter>
+    </CustomBuild>
+    <CustomBuild Include="auxiliary\spirv\immrv.vert">
+      <Filter>Source Files\auxiliary\spirv</Filter>
+    </CustomBuild>
+    <CustomBuild Include="auxiliary\spirv\immrf.frag">
+      <Filter>Source Files\auxiliary\spirv</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>
