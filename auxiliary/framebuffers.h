@@ -65,6 +65,11 @@ namespace magma
                 const VkFormat colorFormat,
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
+                const VkComponentMapping& swizzle = {
+                    VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY},
                 std::shared_ptr<IAllocator> allocator = nullptr);
             virtual uint32_t getSampleCount() const noexcept override { return 1; }
 
@@ -81,6 +86,11 @@ namespace magma
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
                 uint32_t sampleCount,
+                const VkComponentMapping& swizzle = {
+                    VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY},
                 std::shared_ptr<IAllocator> allocator = nullptr);
             virtual std::shared_ptr<ImageView> getColorView() const noexcept override { return resolveView; }
             virtual uint32_t getSampleCount() const noexcept override;
@@ -97,6 +107,11 @@ namespace magma
         public:
             SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachment2D> color,
                 VkFormat depthFormat = VK_FORMAT_UNDEFINED,
+                const VkComponentMapping& swizzle = {
+                    VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY},
                 std::shared_ptr<IAllocator> allocator = nullptr);
             virtual uint32_t getSampleCount() const noexcept override { return 1; }
 

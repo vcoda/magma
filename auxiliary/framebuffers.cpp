@@ -28,6 +28,7 @@ namespace aux
 {
 NonMultisampleFramebuffer::NonMultisampleFramebuffer(std::shared_ptr<Device> device,
     const VkFormat colorFormat, const VkFormat depthStencilFormat, const VkExtent2D& extent,
+    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Framebuffer(extent)
 {   // Create multisample attachments
@@ -35,10 +36,9 @@ NonMultisampleFramebuffer::NonMultisampleFramebuffer(std::shared_ptr<Device> dev
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
         depthStencil = std::make_shared<DepthStencilAttachment2D>(device, depthStencilFormat, extent, 1, 1, false, allocator);
     // Create attachment views
-    const VkComponentMapping rgbaSwizzle = {VK_COMPONENT_SWIZZLE_R, VK_COMPONENT_SWIZZLE_G, VK_COMPONENT_SWIZZLE_B, VK_COMPONENT_SWIZZLE_A};
-    colorView = std::make_shared<ImageView>(color, 0, rgbaSwizzle, allocator);
+    colorView = std::make_shared<ImageView>(color, 0, swizzle, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
-        depthStencilView = std::make_shared<ImageView>(depthStencil, 0, rgbaSwizzle, allocator);
+        depthStencilView = std::make_shared<ImageView>(depthStencil, 0, swizzle, allocator);
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, 1,
         op::clearStore, // Clear color, store
@@ -66,6 +66,7 @@ NonMultisampleFramebuffer::NonMultisampleFramebuffer(std::shared_ptr<Device> dev
 MultisampleFramebuffer::MultisampleFramebuffer(std::shared_ptr<Device> device,
     const VkFormat colorFormat, const VkFormat depthStencilFormat,
     const VkExtent2D& extent, const uint32_t sampleCount,
+    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Framebuffer(extent)
 {   // Create multisample attachments
@@ -75,11 +76,10 @@ MultisampleFramebuffer::MultisampleFramebuffer(std::shared_ptr<Device> device,
     // Create color resolve attachment
     resolve = std::make_shared<ColorAttachment2D>(device, colorFormat, extent, 1, 1, true, allocator);
     // Create attachment views
-    const VkComponentMapping rgbaSwizzle = {VK_COMPONENT_SWIZZLE_R, VK_COMPONENT_SWIZZLE_G, VK_COMPONENT_SWIZZLE_B, VK_COMPONENT_SWIZZLE_A};
-    colorView = std::make_shared<ImageView>(color, 0, rgbaSwizzle, allocator);
+    colorView = std::make_shared<ImageView>(color, 0, swizzle, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
-        depthStencilView = std::make_shared<ImageView>(depthStencil, 0, rgbaSwizzle, allocator);
-    resolveView = std::make_shared<ImageView>(resolve, 0, rgbaSwizzle, allocator);
+        depthStencilView = std::make_shared<ImageView>(depthStencil, 0, swizzle, allocator);
+    resolveView = std::make_shared<ImageView>(resolve, 0, swizzle, allocator);
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, sampleCount,
         op::clearStore, // Clear color, store
@@ -116,18 +116,18 @@ uint32_t MultisampleFramebuffer::getSampleCount() const noexcept
 
 SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachment2D> color,
     VkFormat depthFormat /* VK_FORMAT_UNDEFINED */,
+    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Framebuffer({color->getExtent().width, color->getExtent().height})
 {
     std::shared_ptr<Device> device = color->getDevice();
     std::vector<std::shared_ptr<const ImageView>> attachments;
-    const VkComponentMapping rgbaSwizzle = {VK_COMPONENT_SWIZZLE_R, VK_COMPONENT_SWIZZLE_G, VK_COMPONENT_SWIZZLE_B, VK_COMPONENT_SWIZZLE_A};
-    colorView = std::make_shared<ImageView>(color, 0, rgbaSwizzle, allocator);
+    colorView = std::make_shared<ImageView>(color, 0, swizzle, allocator);
     attachments.push_back(colorView);
     if (depthFormat != VK_FORMAT_UNDEFINED)
     {
         depthStencil = std::make_shared<DepthStencilAttachment2D>(device, depthFormat, extent, 1, color->getSamples(), false, allocator);
-        depthStencilView = std::make_shared<ImageView>(depthStencil, 0, rgbaSwizzle, allocator);
+        depthStencilView = std::make_shared<ImageView>(depthStencil, 0, swizzle, allocator);
         attachments.push_back(depthStencilView);
     }
     const AttachmentDescription colorAttachment(color->getFormat(), 1,
