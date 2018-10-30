@@ -27,8 +27,8 @@ namespace magma
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept:
-        PipelineShaderStage((VkShaderStageFlagBits)VK_SHADER_STAGE_RAYGEN_BIT_NVX,
-            std::move(module), entrypoint, std::move(specialization), flags) {}
+            PipelineShaderStage(VK_SHADER_STAGE_RAYGEN_BIT_NVX, std::move(module), entrypoint, std::move(specialization), flags)
+        {}
     };
 
     class AnyHitShaderStage : public PipelineShaderStage
@@ -38,8 +38,8 @@ namespace magma
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept:
-        AnyHitShaderStage((VkShaderStageFlagBits)VK_SHADER_STAGE_ANY_HIT_BIT_NVX,
-            std::move(module), entrypoint, std::move(specialization), flags) {}
+            PipelineShaderStage(VK_SHADER_STAGE_ANY_HIT_BIT_NVX, std::move(module), entrypoint, std::move(specialization), flags)
+        {}
     };
 
     class ClosestHitShaderStage : public PipelineShaderStage
@@ -49,8 +49,8 @@ namespace magma
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept:
-        PipelineShaderStage((VkShaderStageFlagBits)VK_SHADER_STAGE_CLOSEST_HIT_BIT_NVX,
-            std::move(module), entrypoint, std::move(specialization), flags) {}
+            PipelineShaderStage(VK_SHADER_STAGE_CLOSEST_HIT_BIT_NVX, std::move(module), entrypoint, std::move(specialization), flags)
+        {}
     };
 
     class MissShaderStage : public PipelineShaderStage
@@ -60,19 +60,19 @@ namespace magma
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept:
-        PipelineShaderStage((VkShaderStageFlagBits)VK_SHADER_STAGE_MISS_BIT_NVX, std::move(module),
-            entrypoint, std::move(specialization), flags) {}
+            PipelineShaderStage(VK_SHADER_STAGE_MISS_BIT_NVX, std::move(module), entrypoint, std::move(specialization), flags)
+        {}
     };
 
     class IntersectionShaderStage : public PipelineShaderStage
     {
     public:
-        explicit FragmentShaderStage(std::shared_ptr<const ShaderModule> module,
+        explicit IntersectionShaderStage(std::shared_ptr<const ShaderModule> module,
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept:
-        PipelineShaderStage((VkShaderStageFlagBits)VK_SHADER_STAGE_INTERSECTION_BIT_NVX, std::move(module),
-            entrypoint, std::move(specialization), flags) {}
+            PipelineShaderStage(VK_SHADER_STAGE_INTERSECTION_BIT_NVX, std::move(module), entrypoint, std::move(specialization), flags)
+        {}
     };
 
     class CallableShaderStage : public PipelineShaderStage
@@ -82,7 +82,7 @@ namespace magma
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept:
-        PipelineShaderStage((VkShaderStageFlagBits)VK_SHADER_STAGE_CALLABLE_BIT_NVX, std::move(module),
-            entrypoint, std::move(specialization), flags) {}
+            PipelineShaderStage(VK_SHADER_STAGE_CALLABLE_BIT_NVX, std::move(module), entrypoint, std::move(specialization), flags)
+        {}
     };
 } // namespace magma
