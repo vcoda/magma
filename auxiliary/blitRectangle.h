@@ -34,63 +34,42 @@ namespace magma
     class DescriptorSetLayout;
     class PipelineLayout;
     class GraphicsPipeline;
-    class CommandPool;
     class CommandBuffer;
-    class Semaphore;
-    class Fence;
-    class Queue;
     class IAllocator;
 
     namespace aux
     {
-        class Framebuffer;
-
         /* Auxiliary object that helps quickly blit source texture
            into destination framebuffer. */
 
         class BlitRectangle : public NonCopyable
         {
         public:
-            explicit BlitRectangle(std::shared_ptr<aux::Framebuffer> framebuffer,
-                std::shared_ptr<CommandPool> cmdPool,
+            explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
                 std::shared_ptr<IAllocator> allocator = nullptr);
-            explicit BlitRectangle(std::shared_ptr<magma::Framebuffer> framebuffer,
-                std::shared_ptr<RenderPass> renderPass,
-                std::shared_ptr<CommandPool> cmdPool,
-                std::shared_ptr<IAllocator> allocator = nullptr);
-            explicit BlitRectangle(std::shared_ptr<aux::Framebuffer> framebuffer,
-                std::shared_ptr<CommandPool> cmdPool,
+            explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
                 const VertexShaderStage& vertexShader,
                 const FragmentShaderStage& fragmentShader,
                 std::shared_ptr<IAllocator> allocator = nullptr);
-            explicit BlitRectangle(std::shared_ptr<magma::Framebuffer> framebuffer,
-                std::shared_ptr<RenderPass> renderPass,
-                std::shared_ptr<CommandPool> cmdPool,
-                const VertexShaderStage& vertexShader,
-                const FragmentShaderStage& fragmentShader,
-                std::shared_ptr<IAllocator> allocator = nullptr);
-            void setImageView(std::shared_ptr<ImageView> attachment,
-                std::shared_ptr<Sampler> sampler = nullptr);
-            void blit(std::shared_ptr<Semaphore> renderFinished,
-                std::shared_ptr<Semaphore> blitFinished,
-                std::shared_ptr<Fence> fence) const noexcept;
+            void blit(std::shared_ptr<Framebuffer>& bltDst,
+                std::shared_ptr<ImageView>& bltSrc,
+                std::shared_ptr<CommandBuffer>& cmdBuffer,
+                const char *markerName = nullptr,
+                uint32_t markerColor = 0x0) const;
 
         private:
-            std::shared_ptr<ShaderModule> createVertexShader(std::shared_ptr<IAllocator>);
-            std::shared_ptr<ShaderModule> createFragmentShader(std::shared_ptr<IAllocator>);
+            std::shared_ptr<ShaderModule> createShader(std::shared_ptr<Device>,
+                std::shared_ptr<IAllocator>, bool) const;
 
         private:
-            std::shared_ptr<Device> device;
-            std::shared_ptr<Queue> queue;
             std::shared_ptr<RenderPass> renderPass;
-            std::shared_ptr<magma::Framebuffer> framebuffer;
             std::shared_ptr<DescriptorPool> descriptorPool;
-            std::shared_ptr<DescriptorSetLayout> setLayout;
             std::shared_ptr<DescriptorSet> descriptorSet;
+            std::shared_ptr<DescriptorSetLayout> descriptorSetLayout;
             std::shared_ptr<Sampler> nearestSampler;
-            std::shared_ptr<GraphicsPipeline> pipeline;
             std::shared_ptr<PipelineLayout> pipelineLayout;
-            std::shared_ptr<CommandBuffer> cmdBuffer;
+            std::shared_ptr<GraphicsPipeline> pipeline;
+            mutable std::shared_ptr<ImageView> prevBltSrc;
         };
     } // namespace aux
 } // namespace magma
