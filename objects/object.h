@@ -35,6 +35,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator);
         VkObjectType getObjectType() const noexcept { return objectType; }
         std::shared_ptr<Device> getDevice() const noexcept { return device; }
+        std::shared_ptr<IAllocator> getAllocator() const noexcept { return allocator; }
         void setMarkerName(const char *name) noexcept;
         void setMarkerTag(uint64_t tagName, size_t tagSize, const void *tag) noexcept;
         template<typename Tag>
