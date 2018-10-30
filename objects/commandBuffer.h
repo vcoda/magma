@@ -344,13 +344,13 @@ namespace magma
         void beginRenderPass(
             const std::shared_ptr<RenderPass>& renderPass,
             const std::shared_ptr<Framebuffer>& framebuffer,
-            const std::initializer_list<ClearValue>& clearValues,
+            const std::initializer_list<ClearValue>& clearValues = {},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void beginRenderPassDeviceGroup(
             const std::shared_ptr<RenderPass>& renderPass,
             const std::shared_ptr<Framebuffer>& framebuffer,
-            const std::initializer_list<ClearValue>& clearValues,
             uint32_t deviceMask,
+            const std::initializer_list<ClearValue>& clearValues = {},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void nextSubpass(VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void endRenderPass() noexcept;
@@ -473,8 +473,8 @@ namespace magma
         void beginRenderPassDeviceGroup(
             const std::shared_ptr<RenderPass>& renderPass,
             const std::shared_ptr<Framebuffer>& framebuffer,
-            const std::initializer_list<ClearValue>& clearValues,
             uint32_t deviceMask,
+            const std::initializer_list<ClearValue>& clearValues,
             const char *renderPassName,
             uint32_t renderPassColor,
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;

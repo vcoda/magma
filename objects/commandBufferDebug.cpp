@@ -196,11 +196,11 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
 #endif // MAGMA_DEBUG
 }
 
-void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const std::initializer_list<ClearValue>& clearValues, uint32_t deviceMask,
+void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, uint32_t deviceMask, const std::initializer_list<ClearValue>& clearValues,
     const char *renderPassName, uint32_t renderPassColor,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    beginRenderPassDeviceGroup(renderPass, framebuffer, clearValues, deviceMask, contents);
+    beginRenderPassDeviceGroup(renderPass, framebuffer, deviceMask, clearValues, contents);
 #ifdef MAGMA_DEBUG
     float color[4];
     utilities::hexColorToFloat4(renderPassColor, color);

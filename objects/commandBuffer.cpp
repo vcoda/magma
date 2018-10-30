@@ -389,7 +389,8 @@ void CommandBuffer::copyQueryResults(const std::shared_ptr<QueryPool>& queryPool
 // void CommandBuffer::pushConstants()
 // void CommandBuffer::pushConstantBlock()
 
-void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const std::initializer_list<ClearValue>& clearValues,
+void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
+    const std::initializer_list<ClearValue>& clearValues /* {} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     VkRenderPassBeginInfo beginInfo;
@@ -409,7 +410,8 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
 #endif
 }
 
-void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const std::initializer_list<ClearValue>& clearValues, uint32_t deviceMask,
+void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, uint32_t deviceMask,
+    const std::initializer_list<ClearValue>& clearValues /* {} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     VkDeviceGroupRenderPassBeginInfo deviceGroupBeginInfo;
