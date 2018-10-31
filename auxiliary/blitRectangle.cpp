@@ -75,7 +75,8 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, const Verte
 }
 
 void BlitRectangle::blit(std::shared_ptr<Framebuffer>& bltDst, std::shared_ptr<ImageView>& bltSrc, std::shared_ptr<CommandBuffer>& cmdBuffer,
-    const char *markerName /* nullptr */, uint32_t markerColor /* 0x0 */) const
+    const char *labelName /* nullptr */,
+    uint32_t labelColor /* 0xFFFFFFFF */) const noexcept
 {
     MAGMA_ASSERT(bltDst);
     MAGMA_ASSERT(bltSrc);
@@ -86,8 +87,8 @@ void BlitRectangle::blit(std::shared_ptr<Framebuffer>& bltDst, std::shared_ptr<I
         prevBltSrc = bltSrc;
     }
     cmdBuffer->setRenderArea(0, 0, bltDst->getExtent());
-    if (markerName)
-        cmdBuffer->beginRenderPass(renderPass, bltDst, {}, markerName, markerColor);
+    if (labelName)
+        cmdBuffer->beginRenderPass(renderPass, bltDst, {}, labelName, labelColor);
     else
         cmdBuffer->beginRenderPass(renderPass, bltDst);
     {

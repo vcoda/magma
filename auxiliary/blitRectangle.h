@@ -54,8 +54,8 @@ namespace magma
             void blit(std::shared_ptr<Framebuffer>& bltDst,
                 std::shared_ptr<ImageView>& bltSrc,
                 std::shared_ptr<CommandBuffer>& cmdBuffer,
-                const char *markerName = nullptr,
-                uint32_t markerColor = 0x0) const;
+                const char *labelName  = nullptr,
+                uint32_t labelColor = 0xFFFFFFFF) const noexcept;
 
         private:
             std::shared_ptr<ShaderModule> createShader(std::shared_ptr<Device>,
