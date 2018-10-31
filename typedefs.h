@@ -86,6 +86,7 @@ namespace magma
 
     namespace aux
     {
+        typedef std::shared_ptr<class BlitRectangle> BlitRectanglePtr;
         typedef std::shared_ptr<class Framebuffer> FramebufferPtr;
         typedef std::shared_ptr<class ImmediateRender> ImmediateRenderPtr;
         typedef std::shared_ptr<class MultisampleFramebuffer> MultisampleFramebufferPtr;
