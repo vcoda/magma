@@ -96,7 +96,7 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,
     return true;
 }
 
-bool ImmediateRender::endPrimitive(bool loop /* false */)
+bool ImmediateRender::endPrimitive(bool loop /* false */) noexcept
 {
     MAGMA_ASSERT(insidePrimitive);
     if (!insidePrimitive)
@@ -226,7 +226,7 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
     return pipeline;
 }
 
-std::shared_ptr<const GraphicsPipeline> ImmediateRender::findBasePipeline() const
+std::shared_ptr<const GraphicsPipeline> ImmediateRender::findBasePipeline() const noexcept
 {
     for (const auto& it : pipelines)
     {

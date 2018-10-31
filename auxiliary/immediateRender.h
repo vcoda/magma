@@ -68,7 +68,7 @@ namespace magma
             bool beginPrimitive(VkPrimitiveTopology topology,
                 const char *labelName = nullptr,
                 uint32_t labelColor = 0xFFFFFFFF);
-            bool endPrimitive(bool loop = false);
+            bool endPrimitive(bool loop = false) noexcept;
             void normal(float x, float y, float z) noexcept;
             void normal(const float n[3]) noexcept;
             template<typename Normal>
@@ -101,7 +101,7 @@ namespace magma
         private:
             std::shared_ptr<ShaderModule> createShader(bool vertexShader) const;
             std::shared_ptr<GraphicsPipeline> createPipelineState(VkPrimitiveTopology topology);
-            std::shared_ptr<const GraphicsPipeline> findBasePipeline() const;
+            std::shared_ptr<const GraphicsPipeline> findBasePipeline() const noexcept;
             size_t hash(const InputAssemblyState *inputAssembly) const noexcept;
 
         private:
