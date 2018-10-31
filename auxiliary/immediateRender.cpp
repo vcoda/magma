@@ -48,8 +48,8 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
         VertexInputAttribute(0, 2, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, r)),
         VertexInputAttribute(0, 3, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, u))
     }),
-    vertexShader(VertexShaderStage(createVertexShader(), "main")),
-    fragmentShader(FragmentShaderStage(createFragmentShader(), "main")),
+    vertexShader(VertexShaderStage(createShader(true), "main")),
+    fragmentShader(FragmentShaderStage(createShader(false), "main")),
     renderStates{
         states::fillCullBackCCW,
         states::noMultisample,
@@ -163,20 +163,22 @@ bool ImmediateRender::reset() noexcept
     return true;
 }
 
-std::shared_ptr<ShaderModule> ImmediateRender::createVertexShader()
+std::shared_ptr<ShaderModule> ImmediateRender::createShader(bool vertexShader) const
 {
-    const uint32_t vertexShaderBytecode[] = {
-#include "spirv/immrv.h"
-    };
-    return std::make_shared<ShaderModule>(device, vertexShaderBytecode, sizeof(vertexShaderBytecode), allocator);
-}
-
-std::shared_ptr<ShaderModule> ImmediateRender::createFragmentShader()
-{
-    const uint32_t fragmentShaderBytecode[] = {
-#include "spirv/immrf.h"
-    };
-    return std::make_shared<ShaderModule>(device, fragmentShaderBytecode, sizeof(fragmentShaderBytecode), allocator);
+    if (vertexShader)
+    {
+        const uint32_t vertexShaderBytecode[] = {
+#include "spirv/immrv"
+        };
+        return std::make_shared<ShaderModule>(device, vertexShaderBytecode, sizeof(vertexShaderBytecode), allocator);
+    }
+    else
+    {
+        const uint32_t fragmentShaderBytecode[] = {
+#include "spirv/immrf"
+        };
+        return std::make_shared<ShaderModule>(device, fragmentShaderBytecode, sizeof(fragmentShaderBytecode), allocator);
+    }
 }
 
 std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimitiveTopology topology)

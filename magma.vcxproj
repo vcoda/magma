@@ -243,63 +243,63 @@
     <None Include="auxiliary\immediateRender.inl" />
     <CustomBuild Include="auxiliary\spirv\blitv.vert">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename).h</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling vertex shader</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename).h</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling vertex shader</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename).h</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compiling vertex shader</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename).h</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling vertex shader</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).h</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).h</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).h</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).h</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename)</Outputs>
     </CustomBuild>
     <CustomBuild Include="auxiliary\spirv\blitf.frag">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename).h</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compile fragment shader</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).h</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename).h</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compile fragment shader</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).h</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename).h</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compile fragment shader</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).h</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename).h</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compile fragment shader</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).h</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename)</Outputs>
     </CustomBuild>
     <CustomBuild Include="auxiliary\spirv\immrf.frag">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename).h</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename).h</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename).h</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename).h</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compile fragment shader</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compile fragment shader</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compile fragment shader</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compile fragment shader</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).h</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).h</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).h</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).h</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename)</Outputs>
     </CustomBuild>
     <CustomBuild Include="auxiliary\spirv\immrv.vert">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename).h</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename).h</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename).h</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename).h</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -x %(FullPath) -o %(RelativeDir)%(Filename)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling vertex shader</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling vertex shader</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compiling vertex shader</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling vertex shader</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(FullPath) -o %(RelativeDir)%(Filename).h</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(FullPath) -o %(RelativeDir)%(Filename).h</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(FullPath) -o %(RelativeDir)%(Filename).h</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(FullPath) -o %(RelativeDir)%(Filename).h</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename)</Outputs>
     </CustomBuild>
     <None Include="misc\clearAttachment.inl" />
     <None Include="misc\clearValue.inl" />

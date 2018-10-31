@@ -99,8 +99,7 @@ namespace magma
             uint32_t getPrimitiveCount() const noexcept { return MAGMA_COUNT(primitives); }
 
         private:
-            std::shared_ptr<ShaderModule> createVertexShader();
-            std::shared_ptr<ShaderModule> createFragmentShader();
+            std::shared_ptr<ShaderModule> createShader(bool vertexShader) const;
             std::shared_ptr<GraphicsPipeline> createPipelineState(VkPrimitiveTopology topology);
             std::shared_ptr<const GraphicsPipeline> findBasePipeline() const;
             size_t hash(const InputAssemblyState *inputAssembly) const noexcept;
