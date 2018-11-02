@@ -72,24 +72,4 @@ ScopedDebugMarker::~ScopedDebugMarker()
     this->cmdBuffer->endDebugLabel();
 #endif
 }
-
-namespace marker
-{
-const uint32_t blackColor(0x000000FF);
-const uint32_t whiteColor(0xFFFFFFFF);
-const uint32_t redColor(0xFF0000FF);
-const uint32_t limeColor(0x00FF00FF);
-const uint32_t blueColor(0x0000FFFF);
-const uint32_t yellowColor(0xFFFF00FF);
-const uint32_t cyanColor(0x00FFFFFF);
-const uint32_t magentaColor(0xFF00FFFF);
-const uint32_t silverColor(0xC0C0C0FF);
-const uint32_t grayColor(0x808080FF);
-const uint32_t maroonColor(0x800000FF);
-const uint32_t oliveColor(0x808000FF);
-const uint32_t greenColor(0x008000FF);
-const uint32_t purpleColor(0x800080FF);
-const uint32_t tealColor(0x008080FF);
-const uint32_t navyColor(0x000080FF);
-} // namespace marker
 } // namespace magma

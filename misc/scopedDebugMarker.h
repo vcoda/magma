@@ -43,23 +43,23 @@ namespace magma
         std::shared_ptr<CommandBuffer> cmdBuffer;
     };
 
-    namespace marker
-    {   // Alpha is 0xFF
-        extern const uint32_t blackColor;
-        extern const uint32_t whiteColor;
-        extern const uint32_t redColor;
-        extern const uint32_t limeColor;
-        extern const uint32_t blueColor;
-        extern const uint32_t yellowColor;
-        extern const uint32_t cyanColor;
-        extern const uint32_t magentaColor;
-        extern const uint32_t silverColor;
-        extern const uint32_t grayColor;
-        extern const uint32_t maroonColor;
-        extern const uint32_t oliveColor;
-        extern const uint32_t greenColor;
-        extern const uint32_t purpleColor;
-        extern const uint32_t tealColor;
-        extern const uint32_t navyColor;
-    } // namespace marker
+    enum class marker : uint32_t
+    {   // Alpha is 1
+        blackColor = 0x000000FF,
+        whiteColor = 0xFFFFFFFF,
+        redColor = 0xFF0000FF,
+        limeColor = 0x00FF00FF,
+        blueColor = 0x0000FFFF,
+        yellowColor = 0xFFFF00FF,
+        cyanColor = 0x00FFFFFF,
+        magentaColor = 0xFF00FFFF,
+        silverColor = 0xC0C0C0FF,
+        grayColor = 0x808080FF,
+        maroonColor = 0x800000FF,
+        oliveColor = 0x808000FF,
+        greenColor = 0x008000FF,
+        purpleColor = 0x800080FF,
+        tealColor = 0x008080FF,
+        navyColor = 0x000080FF
+    };
 } // namespace magma
