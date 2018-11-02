@@ -23,55 +23,13 @@ namespace magma
 namespace sys
 {
 std::shared_ptr<IObjectAllocator> Allocable::allocator;
-int32_t Allocable::allocCount = 0;
+std::atomic<int32_t> Allocable::allocCount;
 
 void Allocable::setAllocator(std::shared_ptr<IObjectAllocator> allocator)
 {
     if (allocCount)
         MAGMA_THROW("allocator should be defined only when allocation count is zero");
     allocator = std::move(allocator);
-}
-
-std::shared_ptr<IObjectAllocator> Allocable::getAllocator() noexcept
-{
-    return allocator;
-}
-
-void *Allocable::operator new(std::size_t size)
-{
-    void *ptr;
-    if (allocator)
-        ptr = allocator->alloc(size);
-    else
-        ptr = malloc(size);
-    if (!ptr)
-        throw std::bad_alloc();
-    ++allocCount;
-    return ptr;
-}
-
-void *Allocable::operator new(std::size_t size, const std::nothrow_t&) noexcept
-{
-    void *ptr;
-    if (allocator)
-        ptr = allocator->alloc(size);
-    else
-        ptr = malloc(size);
-    if (ptr)
-        ++allocCount;
-    return ptr;
-}
-
-void Allocable::operator delete(void *ptr)
-{
-    if (ptr)
-    {
-        --allocCount;
-        if (allocator)
-            allocator->free(ptr);
-        else
-            free(ptr);
-    }
 }
 } // namespace sys
 } // namespace magma

@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <atomic>
 #include <memory>
 #include "objectAllocator.h"
 
@@ -28,19 +29,50 @@ namespace magma
         class Allocable : public NonCopyable
         {
         public:
-            static void setAllocator(std::shared_ptr<IObjectAllocator> allocator);
-            static std::shared_ptr<IObjectAllocator> getAllocator() noexcept;
+            void *operator new(std::size_t size)
+            {
+                void *ptr;
+                if (allocator)
+                    ptr = allocator->alloc(size);
+                else
+                    ptr = malloc(size);
+                if (!ptr)
+                    throw std::bad_alloc();
+                ++allocCount;
+                return ptr;
+            }
+
+            void *operator new(std::size_t size, const std::nothrow_t&) noexcept
+            {
+                void *ptr;
+                if (allocator)
+                    ptr = allocator->alloc(size);
+                else
+                    ptr = malloc(size);
+                if (ptr)
+                    ++allocCount;
+                return ptr;
+            }
+
+            void operator delete(void *ptr)
+            {
+                if (ptr)
+                {
+                    --allocCount;
+                    if (allocator)
+                        allocator->free(ptr);
+                    else
+                        free(ptr);
+                }
+            }
 
         public:
-            // Notice that std::make_shared() constructs an objects via placement new,
-            // so custom allocation functions do not used in that case.
-            void *operator new(std::size_t size);
-            void *operator new(std::size_t size, const std::nothrow_t&) noexcept;
-            void operator delete(void *ptr);
+            static void setAllocator(std::shared_ptr<IObjectAllocator> allocator);
+            static std::shared_ptr<IObjectAllocator> getAllocator() noexcept { return allocator; }
 
         private:
             static std::shared_ptr<IObjectAllocator> allocator;
-            static int32_t allocCount;
+            static std::atomic<int32_t> allocCount;
         };
     } // namespace sys
 } // namespace magma
