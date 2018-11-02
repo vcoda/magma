@@ -34,7 +34,7 @@ namespace magma
        Rather, this can be useful for certain embedded systems, for debugging purposes
        (e.g. putting a guard page after all host allocations), or for memory allocation logging. */
 
-    class IAllocator : public AllocationCallbacks, public NonCopyable
+    class IAllocator : public AllocationCallbacks, public sys::NonCopyable
     {
     public:
         virtual void *alloc(size_t size,

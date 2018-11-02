@@ -37,7 +37,7 @@ namespace magma
            color, depth/stencil and resolve attachments, image view reinterpretation,
            render pass and framebuffer construction. */
 
-        class Framebuffer : public NonCopyable
+        class Framebuffer : public sys::NonCopyable
         {
         public:
             virtual std::shared_ptr<ImageView> getColorView() const noexcept { return colorView; }

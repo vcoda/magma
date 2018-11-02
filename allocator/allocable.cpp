@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+namespace sys
+{
 std::shared_ptr<IObjectAllocator> Allocable::allocator;
 int32_t Allocable::allocCount = 0;
 
@@ -71,4 +73,5 @@ void Allocable::operator delete(void *ptr)
             free(ptr);
     }
 }
+} // namespace sys
 } // namespace magma

@@ -23,7 +23,7 @@ namespace magma
 {
     /* User-defined allocator of Magma objects. */
 
-    class IObjectAllocator : public NonCopyable
+    class IObjectAllocator : public sys::NonCopyable
     {
     public:
         virtual void *alloc(size_t size) = 0;

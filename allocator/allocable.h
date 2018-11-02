@@ -21,23 +21,26 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Provides user-defined new and delete operators for custom allocations. */
-
-    class Allocable : public NonCopyable
+    namespace sys
     {
-    public:
-        static void setAllocator(std::shared_ptr<IObjectAllocator> allocator);
-        static std::shared_ptr<IObjectAllocator> getAllocator() noexcept;
+        /* Provides user-defined new and delete operators for custom allocations. */
 
-    public:
-        // Notice that std::make_shared() constructs an objects via placement new,
-        // so custom allocation functions do not used in that case.
-        void *operator new(std::size_t size);
-        void *operator new(std::size_t size, const std::nothrow_t&) noexcept;
-        void operator delete(void *ptr);
+        class Allocable : public NonCopyable
+        {
+        public:
+            static void setAllocator(std::shared_ptr<IObjectAllocator> allocator);
+            static std::shared_ptr<IObjectAllocator> getAllocator() noexcept;
 
-    private:
-        static std::shared_ptr<IObjectAllocator> allocator;
-        static int32_t allocCount;
-    };
+        public:
+            // Notice that std::make_shared() constructs an objects via placement new,
+            // so custom allocation functions do not used in that case.
+            void *operator new(std::size_t size);
+            void *operator new(std::size_t size, const std::nothrow_t&) noexcept;
+            void operator delete(void *ptr);
+
+        private:
+            static std::shared_ptr<IObjectAllocator> allocator;
+            static int32_t allocCount;
+        };
+    } // namespace sys
 } // namespace magma

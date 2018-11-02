@@ -19,14 +19,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class NonCopyable
+    namespace sys
     {
-    public:
-        NonCopyable() = default;
-        virtual ~NonCopyable() = default;
+        class NonCopyable
+        {
+        public:
+            NonCopyable() = default;
+            virtual ~NonCopyable() = default;
 
-    private:
-        NonCopyable(const NonCopyable&) = delete;
-        NonCopyable& operator=(const NonCopyable&) = delete;
-    };
+        private:
+            NonCopyable(const NonCopyable&) = delete;
+            NonCopyable& operator=(const NonCopyable&) = delete;
+        };
+    } // namespace sys
 } // namespace magma

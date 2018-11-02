@@ -27,7 +27,7 @@ namespace magma
 
     /* Base non-copyable object for dispatchable and non-dispatchable handles. */
 
-    class Object : public Allocable
+    class Object : public sys::Allocable
     {
     public:
         explicit Object(VkObjectType objectType,

@@ -42,7 +42,7 @@ namespace magma
         /* Auxiliary object that helps quickly blit source texture
            into destination framebuffer. */
 
-        class BlitRectangle : public NonCopyable
+        class BlitRectangle : public sys::NonCopyable
         {
         public:
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,

@@ -47,7 +47,7 @@ namespace magma
            to mess around with vertex buffer mapping, data copy,
            state changes etc. */
 
-        class ImmediateRender : public NonCopyable
+        class ImmediateRender : public sys::NonCopyable
         {
         public:
             explicit ImmediateRender(uint32_t maxVertexCount,
