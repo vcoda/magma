@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "shaderCompiler.h"
 #include "../objects/shaderModule.h"
 #include "../misc/exception.h"
+#include "../shared.h"
 
 namespace magma
 {
@@ -38,6 +39,8 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     const std::unordered_map<std::string, std::string>& macroDefinitions /* {} */,
     const std::string& fileName  /* "" */)
 {
+    MAGMA_ASSERT(source.length() > 0);
+    MAGMA_ASSERT(strlen(entrypoint) > 0);
     shaderc_compile_options_t options = shaderc_compile_options_initialize();
     for (const auto& macro : macroDefinitions)
     {   // Add preprocessor definitions
@@ -59,6 +62,7 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
             },
             includeHandler.get());
     }
+    // Define compiler behavior
     shaderc_compile_options_set_optimization_level(options, optimizationLevel);
     if (generateDebugInfo)
         shaderc_compile_options_set_generate_debug_info(options);
