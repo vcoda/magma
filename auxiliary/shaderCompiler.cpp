@@ -61,6 +61,8 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     shaderc_compile_options_set_optimization_level(options, optimizationLevel);
     if (generateDebugInfo)
         shaderc_compile_options_set_generate_debug_info(options);
+    if (warningsAsErrors)
+        shaderc_compile_options_set_warnings_as_errors(options);
     // Compile GLSL to SPIR-V
     const shaderc_compilation_result_t result = shaderc_compile_into_spv(compiler,
         source.c_str(), source.size(), shaderKind,

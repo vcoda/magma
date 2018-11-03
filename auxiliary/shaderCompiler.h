@@ -61,6 +61,8 @@ namespace magma
                 { optimizationLevel = level; }
             void setGenerateDebugInfo(bool generate) noexcept
                 { generateDebugInfo = generate; }
+            void setWarningsAsErrors(bool asErrors) noexcept
+                { warningsAsErrors = asErrors; }
             std::shared_ptr<ShaderModule> compileShader(const std::string& source,
                 const char *entrypoint,
                 shaderc_shader_kind shaderKind = shaderc_glsl_infer_from_source,
@@ -72,6 +74,7 @@ namespace magma
             shaderc_compiler_t compiler;
             shaderc_optimization_level optimizationLevel = shaderc_optimization_level_performance;
             bool generateDebugInfo = false;
+            bool warningsAsErrors = false;
         };
     } // namespace aux
 } // namespace magma
