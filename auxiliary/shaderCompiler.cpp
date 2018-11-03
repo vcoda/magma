@@ -35,7 +35,8 @@ ShaderCompiler::~ShaderCompiler()
 
 std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& source, const char *entrypoint,
     shaderc_shader_kind shaderKind /* shaderc_glsl_infer_from_source */,
-    const std::unordered_map<std::string, std::string>& macroDefinitions /* {} */)
+    const std::unordered_map<std::string, std::string>& macroDefinitions /* {} */,
+    const std::string& fileName  /* "" */)
 {
     shaderc_compile_options_t options = shaderc_compile_options_initialize();
     for (const auto& macro : macroDefinitions)
@@ -66,7 +67,7 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     // Compile GLSL to SPIR-V
     const shaderc_compilation_result_t result = shaderc_compile_into_spv(compiler,
         source.c_str(), source.size(), shaderKind,
-        "", entrypoint, options);
+        fileName.c_str(), entrypoint, options);
     shaderc_compile_options_release(options);
     const shaderc_compilation_status status = shaderc_result_get_compilation_status(result);
     if (status != shaderc_compilation_status_success)
