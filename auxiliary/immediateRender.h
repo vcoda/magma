@@ -65,35 +65,32 @@ namespace magma
             void setLineWidth(float width) noexcept;
             void setIdentity() noexcept;
             void setTransform(const float transform[16]) noexcept;
-            bool beginPrimitive(VkPrimitiveTopology topology,
-                const char *labelName = nullptr,
-                uint32_t labelColor = 0xFFFFFFFF);
+            bool beginPrimitive(VkPrimitiveTopology topology, const char *labelName = nullptr, uint32_t labelColor = 0xFFFFFFFF);
             bool endPrimitive(bool loop = false) noexcept;
             void normal(float x, float y, float z) noexcept;
             void normal(const float n[3]) noexcept;
-            template<typename Normal>
-            void normal(const Normal& n) noexcept;
             void color(float r, float g, float b, float a = 1.f) noexcept;
             void color(const float c[4]) noexcept;
             void color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = std::numeric_limits<uint8_t>::max()) noexcept;
             void color(const uint8_t c[4]) noexcept;
-            template<typename Color>
-            void color(const Color& c) noexcept;
             void texCoord(float u, float v) noexcept;
-            void texCoord(const float tc[2]) noexcept;
-            template<typename TexCoord>
-            void texCoord(const TexCoord& tc) noexcept;
+            void texCoord(const float uv[2]) noexcept;
             void pointSize(float size) noexcept;
             void vertex(float x, float y, float z = 0.f, float w = 1.f) noexcept;
             void vertex(const float v[4]) noexcept;
+            template<typename Normal>
+            void normal(const Normal& n) noexcept;
+            template<typename Color>
+            void color4(const Color& c) noexcept;
+            template<typename TexCoord>
+            void texCoord2(const TexCoord& uv) noexcept;
             template<typename Vertex2>
             void vertex2(const Vertex2& v) noexcept;
             template<typename Vertex3>
             void vertex3(const Vertex3& v) noexcept;
             template<typename Vertex4>
             void vertex4(const Vertex4& v) noexcept;
-            bool commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer,
-                bool clear = true) noexcept;
+            bool commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer, bool clear = true) noexcept;
             bool reset() noexcept;
             uint32_t getVertexCount() const noexcept { return vertexCount; }
             uint32_t getPrimitiveCount() const noexcept { return MAGMA_COUNT(primitives); }
