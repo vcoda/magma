@@ -112,5 +112,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "auxiliary/framebuffers.h"
 #include "auxiliary/immediateRender.h"
+#include "auxiliary/shaderCompiler.h"
 
 #include "typedefs.h"

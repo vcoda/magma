@@ -97,7 +97,8 @@ MAGMA_OBJS= \
 	\
 	auxiliary/blitRectangle.o \
 	auxiliary/framebuffers.o \
-	auxiliary/immediateRender.o
+	auxiliary/immediateRender.o \
+	auxiliary/shaderCompiler.o
 
 
 DEPS := $(MAGMA_OBJS:.o=.d)
