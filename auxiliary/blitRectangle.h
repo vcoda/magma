@@ -51,9 +51,9 @@ namespace magma
                 const VertexShaderStage& vertexShader,
                 const FragmentShaderStage& fragmentShader,
                 std::shared_ptr<IAllocator> allocator = nullptr);
-            void blit(std::shared_ptr<Framebuffer>& bltDst,
-                std::shared_ptr<ImageView>& bltSrc,
-                std::shared_ptr<CommandBuffer>& cmdBuffer,
+            void blit(const std::shared_ptr<Framebuffer>& bltDst,
+                const std::shared_ptr<ImageView>& bltSrc,
+                const std::shared_ptr<CommandBuffer>& cmdBuffer,
                 const char *labelName  = nullptr,
                 uint32_t labelColor = 0xFFFFFFFF) const noexcept;
 
