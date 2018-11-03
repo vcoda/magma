@@ -31,12 +31,12 @@ namespace magma
     {
         /* An abstract interface for mapping an #include request to an include result. */
 
-        class IShaderIncludeHandler : public sys::NonCopyable
+        class IShaderInclude : public sys::NonCopyable
         {
         public:
             virtual shaderc_include_result *resolve(const char *requestedSource,
                 shaderc_include_type includeType,
-                const char* requestingSource,
+                const char *requestingSource,
                 size_t includeDepth) = 0;
             virtual void release(shaderc_include_result *result) = 0;
         };
@@ -48,16 +48,12 @@ namespace magma
         class ShaderCompiler : public sys::NonCopyable
         {
         public:
-            ShaderCompiler(std::shared_ptr<Device> device);
+            ShaderCompiler(std::shared_ptr<Device> device,
+                std::shared_ptr<IShaderInclude> handler);
             ~ShaderCompiler();
-            void setIncludeHandler(std::shared_ptr<IShaderIncludeHandler> handler) noexcept
-                { includeHandler = handler; }
-            void setOptimizationLevel(shaderc_optimization_level level) noexcept
-                { optimizationLevel = level; }
-            void setGenerateDebugInfo(bool generate) noexcept
-                { generateDebugInfo = generate; }
-            void setWarningsAsErrors(bool asErrors) noexcept
-                { warningsAsErrors = asErrors; }
+            void setOptimizationLevel(shaderc_optimization_level level) noexcept { optimizationLevel = level; }
+            void setGenerateDebugInfo(bool generate) noexcept { generateDebugInfo = generate; }
+            void setWarningsAsErrors(bool asErrors) noexcept { warningsAsErrors = asErrors; }
             std::shared_ptr<ShaderModule> compileShader(const std::string& source,
                 const char *entrypoint,
                 shaderc_shader_kind shaderKind = shaderc_glsl_infer_from_source,
@@ -66,7 +62,7 @@ namespace magma
 
         private:
             std::shared_ptr<Device> device;
-            std::shared_ptr<IShaderIncludeHandler> includeHandler;
+            std::shared_ptr<IShaderInclude> includeHandler;
             shaderc_compiler_t compiler;
             shaderc_optimization_level optimizationLevel = shaderc_optimization_level_performance;
             bool generateDebugInfo = false;

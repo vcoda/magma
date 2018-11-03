@@ -24,10 +24,12 @@ namespace magma
 {
 namespace aux
 {
-ShaderCompiler::ShaderCompiler(std::shared_ptr<Device> device):
+ShaderCompiler::ShaderCompiler(std::shared_ptr<Device> device, std::shared_ptr<IShaderInclude> handler):
     device(device),
-    compiler(shaderc_compiler_initialize())
-{}
+    includeHandler(handler)
+{
+    compiler = shaderc_compiler_initialize();
+}
 
 ShaderCompiler::~ShaderCompiler()
 {
@@ -48,26 +50,27 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
             macro.first.c_str(), macro.first.length(),
             macro.second.c_str(), macro.second.length());
     }
-    if (includeHandler)
-    {   // Provide shader include callbacks
-        shaderc_compile_options_set_include_callbacks(options,
-            [](void *userData, const char *requestedSource, int type, const char *requestingSource, size_t includeDepth)
-            {
-                IShaderIncludeHandler *includeHandler = reinterpret_cast<IShaderIncludeHandler *>(userData);
-                return includeHandler->resolve(requestedSource, static_cast<shaderc_include_type>(type), requestingSource, includeDepth);
-            },
-            [](void* userData, shaderc_include_result *result) {
-                IShaderIncludeHandler *includeHandler = reinterpret_cast<IShaderIncludeHandler *>(userData);
-                includeHandler->release(result);
-            },
-            includeHandler.get());
-    }
     // Define compiler behavior
     shaderc_compile_options_set_optimization_level(options, optimizationLevel);
     if (generateDebugInfo)
         shaderc_compile_options_set_generate_debug_info(options);
     if (warningsAsErrors)
         shaderc_compile_options_set_warnings_as_errors(options);
+    if (includeHandler)
+    {   // Provide shader include callbacks
+        shaderc_compile_options_set_include_callbacks(options,
+            [](void *userData, const char *requestedSource, int type, const char *requestingSource, size_t includeDepth)
+            {
+                IShaderInclude *includeHandler = reinterpret_cast<IShaderInclude *>(userData);
+                return includeHandler->resolve(requestedSource, static_cast<shaderc_include_type>(type), requestingSource, includeDepth);
+            },
+            [](void* userData, shaderc_include_result *result)
+            {
+                IShaderInclude *includeHandler = reinterpret_cast<IShaderInclude *>(userData);
+                includeHandler->release(result);
+            },
+            includeHandler.get());
+    }
     // Compile GLSL to SPIR-V
     const shaderc_compilation_result_t result = shaderc_compile_into_spv(compiler,
         source.c_str(), source.size(), shaderKind,
