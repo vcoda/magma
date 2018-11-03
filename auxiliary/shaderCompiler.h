@@ -22,11 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <shaderc/shaderc.h>
 #include "../nonCopyable.h"
 
-namespace shaderc
-{
-    class Compiler;
-}
-
 namespace magma
 {
     class Device;
