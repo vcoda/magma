@@ -34,11 +34,12 @@ namespace magma
         class IShaderInclude : public sys::NonCopyable
         {
         public:
-            virtual shaderc_include_result *resolve(const char *requestedSource,
-                shaderc_include_type includeType,
+            virtual void *resolve(shaderc_include_type includeType,
+                const char *requestedSource,
                 const char *requestingSource,
-                size_t includeDepth) = 0;
-            virtual void release(shaderc_include_result *result) = 0;
+                size_t includeDepth,
+                size_t& dataSize) noexcept = 0;
+            virtual void release(void *data) noexcept = 0;
         };
 
         /* Auxiliary wrapper around https://github.com/google/shaderc

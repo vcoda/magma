@@ -61,13 +61,25 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
         shaderc_compile_options_set_include_callbacks(options,
             [](void *userData, const char *requestedSource, int type, const char *requestingSource, size_t includeDepth)
             {
-                IShaderInclude *includeHandler = reinterpret_cast<IShaderInclude *>(userData);
-                return includeHandler->resolve(requestedSource, static_cast<shaderc_include_type>(type), requestingSource, includeDepth);
+                shaderc_include_result *result = new(std::nothrow)shaderc_include_result;
+                if (result)
+                {
+                    IShaderInclude *includeHandler = (IShaderInclude *)userData;
+                    result->source_name = requestedSource;
+                    result->source_name_length = strlen(requestedSource);
+                    result->content_length = 0;
+                    result->content = (const char *)includeHandler->resolve(
+                        static_cast<shaderc_include_type>(type), requestedSource, requestingSource,
+                        includeDepth, result->content_length);
+                    result->user_data = nullptr;
+                }
+                return result;
             },
             [](void* userData, shaderc_include_result *result)
             {
-                IShaderInclude *includeHandler = reinterpret_cast<IShaderInclude *>(userData);
-                includeHandler->release(result);
+                IShaderInclude *includeHandler = (IShaderInclude *)userData;
+                includeHandler->release((void *)result->content);
+                delete result;
             },
             includeHandler.get());
     }
