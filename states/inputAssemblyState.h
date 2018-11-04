@@ -32,7 +32,7 @@ namespace magma
         bool operator==(const InputAssemblyState&) const noexcept;
     };
 
-    namespace states
+    namespace renderstates
     {
         extern const InputAssemblyState pointList;
         extern const InputAssemblyState lineList;
@@ -57,5 +57,5 @@ namespace magma
         extern const InputAssemblyState triangleListWithAdjacencyRestart;
         extern const InputAssemblyState triangleStripWithAdjacencyRestart;
         extern const InputAssemblyState patchListRestart;
-    } // namespace states
+    } // namespace renderstates
 } // namespace magma

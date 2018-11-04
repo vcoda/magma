@@ -128,7 +128,7 @@ bool VertexInputState::operator==(const VertexInputState& other) const noexcept
         utilities::compareArrays(pVertexAttributeDescriptions, other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
 }
 
-namespace states
+namespace renderstates
 {
 const VertexInputState nullVertexInput;
 
@@ -197,5 +197,5 @@ const VertexInputState pos3FloatNrm3FloatCol4UNorm(VertexInputBinding(0, sizeof(
     VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32_SFLOAT, 12),
     VertexInputAttribute(0, 2, VK_FORMAT_R8G8B8A8_UNORM, 24)
 });
-} // namespace states
+} // namespace renderstates
 } // namespace magma

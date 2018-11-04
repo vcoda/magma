@@ -35,7 +35,7 @@ namespace magma
         bool operator==(const StencilOpState&) const noexcept;
     };
 
-    namespace states
+    namespace renderstates
     {
         extern const StencilOpState stencilAlwaysDontWrite;
 
@@ -67,8 +67,8 @@ namespace magma
     {
         DepthStencilState(VkCompareOp depthCompareOp,
             bool depthWriteEnable,
-            const StencilOpState& front = states::stencilAlwaysDontWrite,
-            const StencilOpState& back = states::stencilAlwaysDontWrite) noexcept;
+            const StencilOpState& front = renderstates::stencilAlwaysDontWrite,
+            const StencilOpState& back = renderstates::stencilAlwaysDontWrite) noexcept;
         DepthStencilState(const DepthStencilState& state,
             const StencilOpState& front,
             const StencilOpState& back) noexcept;
@@ -87,7 +87,7 @@ namespace magma
             float maxDepthBounds) noexcept;
     };
 
-    namespace states
+    namespace renderstates
     {
         extern const DepthStencilState depthLess;
         extern const DepthStencilState depthEqual;
@@ -105,5 +105,5 @@ namespace magma
         extern const DepthStencilState depthNoEqualDontWrite;
         extern const DepthStencilState depthGreaterOrEqualDontWrite;
         extern const DepthStencilState depthAlwaysDontWrite;
-    } // namespace states
+    } // namespace renderstates
 } // namespace magma

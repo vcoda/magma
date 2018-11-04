@@ -135,7 +135,7 @@ bool RasterizationOrderState::operator==(const RasterizationOrderState& other) c
         (order.rasterizationOrder == other.order.rasterizationOrder);
 }
 
-namespace states
+namespace renderstates
 {
 const RasterizationState fillCullNoneCCW(VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);
 const RasterizationState fillCullBackCCW(VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);
@@ -256,5 +256,5 @@ const RasterizationOrderState pointCullNoneCWRelaxed(pointCullNoneCW, VK_RASTERI
 const RasterizationOrderState pointCullBackCWRelaxed(pointCullBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
 const RasterizationOrderState pointCullFrontCWRelaxed(pointCullFrontCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
 const RasterizationOrderState pointCullFrontAndBackCWRelaxed(pointCullFrontAndBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-} // namespace states
+} // namespace renderstates
 } // namespace magma

@@ -134,7 +134,7 @@ MultisampleCoverageState::MultisampleCoverageState(const MultisampleState& state
     alphaToOneEnable = MAGMA_BOOLEAN(alphaToOne);
 }
 
-namespace states
+namespace renderstates
 {
 const MultisampleState multisample1(VK_SAMPLE_COUNT_1_BIT);
 const MultisampleState multisample2(VK_SAMPLE_COUNT_2_BIT);
@@ -160,5 +160,5 @@ const MultisampleCoverageState multisample8AlphaToOne(VK_SAMPLE_COUNT_8_BIT, cov
 const MultisampleCoverageState multisample16AlphaToOne(VK_SAMPLE_COUNT_16_BIT, coverageMask, false, true);
 const MultisampleCoverageState multisample32AlphaToOne(VK_SAMPLE_COUNT_32_BIT, coverageMask, false, true);
 const MultisampleCoverageState multisample64AlphaToOne(VK_SAMPLE_COUNT_64_BIT, coverageMask, false, true);
-} // namespace states
+} // namespace renderstates
 } // namespace magma

@@ -201,7 +201,7 @@ const ColorBlendAttachmentState normalRGB(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BL
 const ColorBlendAttachmentState normalRGBA(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, colorWriteMaskRGBA);
 } // namespace blendstates
 
-namespace states
+namespace renderstates
 {
 const ColorBlendState dontBlendWriteR(blendstates::passR);
 const ColorBlendState dontBlendWriteRG(blendstates::passRG);
@@ -305,5 +305,5 @@ const ColorLogicOpState logicInvertedCopyWriteRGBA(blendstates::passRGBA, VK_LOG
 const ColorLogicOpState logicInvertedOrWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_OR_INVERTED);
 const ColorLogicOpState logicNandWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_NAND);
 const ColorLogicOpState logicSetWriteRGBA(blendstates::passRGBA, VK_LOGIC_OP_SET);
-} // namespace states
+} // namespace renderstates
 } // namespace magma

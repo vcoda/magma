@@ -46,7 +46,7 @@ bool InputAssemblyState::operator==(const InputAssemblyState& other) const noexc
         (primitiveRestartEnable == other.primitiveRestartEnable);
 }
 
-namespace states
+namespace renderstates
 {
 const InputAssemblyState pointList(VK_PRIMITIVE_TOPOLOGY_POINT_LIST);
 const InputAssemblyState lineList(VK_PRIMITIVE_TOPOLOGY_LINE_LIST);
@@ -71,5 +71,5 @@ const InputAssemblyState lineStripWithAdjacencyRestart(VK_PRIMITIVE_TOPOLOGY_LIN
 const InputAssemblyState triangleListWithAdjacencyRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY, true);
 const InputAssemblyState triangleStripWithAdjacencyRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY, true);
 const InputAssemblyState patchListRestart(VK_PRIMITIVE_TOPOLOGY_PATCH_LIST, true);
-} // namespace states
+} // namespace renderstates
 } // namespace magma

@@ -51,10 +51,10 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     vertexShader(VertexShaderStage(createShader(true), "main")),
     fragmentShader(FragmentShaderStage(createShader(false), "main")),
     renderStates{
-        states::fillCullBackCCW,
-        states::noMultisample,
-        states::depthAlwaysDontWrite,
-        states::dontBlendWriteRGBA
+        renderstates::fillCullBackCCW,
+        renderstates::noMultisample,
+        renderstates::depthAlwaysDontWrite,
+        renderstates::dontBlendWriteRGBA
     }
 {
     // Set attributes to initial state
@@ -185,17 +185,17 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
 {
     static const InputAssemblyState *inputAssemblyStates[] =
     {
-        &states::pointList,
-        &states::lineList,
-        &states::lineStrip,
-        &states::triangleList,
-        &states::triangleStrip,
-        &states::triangleFan,
-        &states::lineListWithAdjacency,
-        &states::lineStripWithAdjacency,
-        &states::triangleListWithAdjacency,
-        &states::triangleStripWithAdjacency,
-        &states::patchList
+        &renderstates::pointList,
+        &renderstates::lineList,
+        &renderstates::lineStrip,
+        &renderstates::triangleList,
+        &renderstates::triangleStrip,
+        &renderstates::triangleFan,
+        &renderstates::lineListWithAdjacency,
+        &renderstates::lineStripWithAdjacency,
+        &renderstates::triangleListWithAdjacency,
+        &renderstates::triangleStripWithAdjacency,
+        &renderstates::patchList
     };
     const size_t renderStatesHash = hash(inputAssemblyStates[topology]);
     // Try to find existing pipeline

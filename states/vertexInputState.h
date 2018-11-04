@@ -64,7 +64,7 @@ namespace magma
         bool operator==(const VertexInputState&) const noexcept;
     };
 
-    namespace states
+    namespace renderstates
     {
         extern const VertexInputState nullVertexInput;
 
@@ -87,5 +87,5 @@ namespace magma
         extern const VertexInputState pos3FloatNrm3FloatCol3Float;
         extern const VertexInputState pos3FloatNrm3FloatCol4Float;
         extern const VertexInputState pos3FloatNrm3FloatCol4UNorm;
-    } // namespace states
+    } // namespace renderstates
 } // namespace magma

@@ -76,7 +76,7 @@ namespace magma
         VkPipelineRasterizationStateRasterizationOrderAMD order;
     };
 
-    namespace states
+    namespace renderstates
     {
         extern const RasterizationState fillCullNoneCCW;
         extern const RasterizationState fillCullBackCCW;
@@ -197,5 +197,5 @@ namespace magma
         extern const RasterizationOrderState pointCullBackCWRelaxed;
         extern const RasterizationOrderState pointCullFrontCWRelaxed;
         extern const RasterizationOrderState pointCullFrontAndBackCWRelaxed;
-    } // namespace states
+    } // namespace renderstates
  } // namespace magma

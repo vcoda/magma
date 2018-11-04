@@ -55,7 +55,7 @@ namespace magma
             bool alphaToOne = false);
     };
 
-    namespace states
+    namespace renderstates
     {
         extern const MultisampleState multisample1;
         extern const MultisampleState multisample2;
@@ -79,5 +79,5 @@ namespace magma
         extern const MultisampleCoverageState multisample16AlphaToOne;
         extern const MultisampleCoverageState multisample32AlphaToOne;
         extern const MultisampleCoverageState multisample64AlphaToOne;
-    } // namespace states
+    } // namespace renderstates
 } // namespace magma

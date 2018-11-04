@@ -108,7 +108,7 @@ namespace magma
         extern const ColorBlendAttachmentState normalRGBA;
     } // namespace blendstates
 
-    namespace states
+    namespace renderstates
     {
         extern const ColorBlendState dontBlendWriteR;
         extern const ColorBlendState dontBlendWriteRG;
@@ -212,5 +212,5 @@ namespace magma
         extern const ColorLogicOpState logicInvertedOrWriteRGBA;
         extern const ColorLogicOpState logicNandWriteRGBA;
         extern const ColorLogicOpState logicSetWriteRGBA;
-    } // namespace states
+    } // namespace renderstates
 } // namespace magma

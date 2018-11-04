@@ -57,7 +57,7 @@ bool StencilOpState::operator==(const StencilOpState& other) const noexcept
         (reference == other.reference);
 }
 
-namespace states
+namespace renderstates
 {
     const StencilOpState stencilAlwaysDontWrite(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0x0, 0x0, 0);
 
@@ -77,7 +77,7 @@ namespace states
     const StencilOpState stencilIncrWrapDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_WRAP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
     const StencilOpState stencilDecrClampDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_CLAMP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
     const StencilOpState stencilDecrWrapDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_WRAP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
-} // namespace states
+} // namespace renderstates
 
 DepthStencilState::DepthStencilState(VkCompareOp depthCompareOp, bool depthWriteEnable,
     const StencilOpState& front, const StencilOpState& back) noexcept
@@ -152,7 +152,7 @@ DepthBoundsState::DepthBoundsState(const DepthStencilState& state,
     this->maxDepthBounds = maxDepthBounds;
 }
 
-namespace states
+namespace renderstates
 {
     const DepthStencilState depthLess(VK_COMPARE_OP_LESS, true);
     const DepthStencilState depthEqual(VK_COMPARE_OP_EQUAL, true);
@@ -170,5 +170,5 @@ namespace states
     const DepthStencilState depthNoEqualDontWrite(VK_COMPARE_OP_NOT_EQUAL, false);
     const DepthStencilState depthGreaterOrEqualDontWrite(VK_COMPARE_OP_GREATER_OR_EQUAL, false);
     const DepthStencilState depthAlwaysDontWrite(VK_COMPARE_OP_ALWAYS, false);
-} // namespace states
+} // namespace renderstates
 } // namespace magma
