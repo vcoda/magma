@@ -59,7 +59,7 @@ namespace magma
                 const char *entrypoint,
                 shaderc_shader_kind shaderKind = shaderc_glsl_infer_from_source,
                 const std::unordered_map<std::string, std::string>& macroDefinitions = {},
-                const std::string& fileName = "");
+                const std::string& srcFileName = "");
 
         private:
             std::shared_ptr<Device> device;

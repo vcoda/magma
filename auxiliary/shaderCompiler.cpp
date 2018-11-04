@@ -39,7 +39,7 @@ ShaderCompiler::~ShaderCompiler()
 std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& source, const char *entrypoint,
     shaderc_shader_kind shaderKind /* shaderc_glsl_infer_from_source */,
     const std::unordered_map<std::string, std::string>& macroDefinitions /* {} */,
-    const std::string& fileName  /* "" */)
+    const std::string& srcFileName  /* "" */)
 {
     MAGMA_ASSERT(source.length() > 0);
     MAGMA_ASSERT(strlen(entrypoint) > 0);
@@ -85,8 +85,7 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     }
     // Compile GLSL to SPIR-V
     const shaderc_compilation_result_t result = shaderc_compile_into_spv(compiler,
-        source.c_str(), source.size(), shaderKind,
-        fileName.c_str(), entrypoint, options);
+        source.c_str(), source.size(), shaderKind, srcFileName.c_str(), entrypoint, options);
     shaderc_compile_options_release(options);
     const shaderc_compilation_status status = shaderc_result_get_compilation_status(result);
     if (status != shaderc_compilation_status_success)
