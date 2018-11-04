@@ -46,14 +46,16 @@ namespace magma
             float depthBiasSlopeFactor) noexcept;
     };
 
-    /* If overestimation is enabled, fragments will be generated if the primitive area
-       covers any portion of the pixel, including its edges or corners. */
+    /* When overestimation is enabled, if any part of the primitive, including its edges,
+       covers any part of the rectangular pixel area, then a fragment is generated with all
+       coverage samples turned on. When underestimation is enabled, fragments are only generated
+       if the rectangular pixel area is fully covered by the generating primitive. */
 
     struct ConservativeRasterizationState : RasterizationState
     {
         ConservativeRasterizationState(const RasterizationState& state,
             VkConservativeRasterizationModeEXT conservativeRasterizationMode,
-            float extraPrimitiveOverestimationSize) noexcept;
+            float extraPrimitiveOverestimationSize = 0.f) noexcept;
         size_t hash() const noexcept;
         bool operator==(const ConservativeRasterizationState&) const noexcept;
 
@@ -105,6 +107,66 @@ namespace magma
         extern const RasterizationState pointCullBackCW;
         extern const RasterizationState pointCullFrontCW;
         extern const RasterizationState pointCullFrontAndBackCW;
+
+        extern const ConservativeRasterizationState fillCullNoneCCWOverestimate;
+        extern const ConservativeRasterizationState fillCullBackCCWOverestimate;
+        extern const ConservativeRasterizationState fillCullFrontCCWOverestimate;
+        extern const ConservativeRasterizationState fillCullFrontAndBackCCWOverestimate;
+
+        extern const ConservativeRasterizationState lineCullNoneCCWOverestimate;
+        extern const ConservativeRasterizationState lineCullBackCCWOverestimate;
+        extern const ConservativeRasterizationState lineCullFrontCCWOverestimate;
+        extern const ConservativeRasterizationState lineCullFrontAndBackCCWOverestimate;
+
+        extern const ConservativeRasterizationState pointCullNoneCCWOverestimate;
+        extern const ConservativeRasterizationState pointCullBackCCWOverestimate;
+        extern const ConservativeRasterizationState pointCullFrontCCWOverestimate;
+        extern const ConservativeRasterizationState pointCullFrontAndBackCCWOverestimate;
+
+        extern const ConservativeRasterizationState fillCullNoneCWOverestimate;
+        extern const ConservativeRasterizationState fillCullBackCWOverestimate;
+        extern const ConservativeRasterizationState fillCullFrontCWOverestimate;
+        extern const ConservativeRasterizationState fillCullFrontAndBackCWOverestimate;
+
+        extern const ConservativeRasterizationState lineCullNoneCWOverestimate;
+        extern const ConservativeRasterizationState lineCullBackCWOverestimate;
+        extern const ConservativeRasterizationState lineCullFrontCWOverestimate;
+        extern const ConservativeRasterizationState lineCullFrontAndBackCWOverestimate;
+
+        extern const ConservativeRasterizationState pointCullNoneCWOverestimate;
+        extern const ConservativeRasterizationState pointCullBackCWOverestimate;
+        extern const ConservativeRasterizationState pointCullFrontCWOverestimate;
+        extern const ConservativeRasterizationState pointCullFrontAndBackCWOverestimate;
+
+        extern const ConservativeRasterizationState fillCullNoneCCWUnderestimate;
+        extern const ConservativeRasterizationState fillCullBackCCWUnderestimate;
+        extern const ConservativeRasterizationState fillCullFrontCCWUnderestimate;
+        extern const ConservativeRasterizationState fillCullFrontAndBackCCWUnderestimate;
+
+        extern const ConservativeRasterizationState lineCullNoneCCWUnderestimate;
+        extern const ConservativeRasterizationState lineCullBackCCWUnderestimate;
+        extern const ConservativeRasterizationState lineCullFrontCCWUnderestimate;
+        extern const ConservativeRasterizationState lineCullFrontAndBackCCWUnderestimate;
+
+        extern const ConservativeRasterizationState pointCullNoneCCWUnderestimate;
+        extern const ConservativeRasterizationState pointCullBackCCWUnderestimate;
+        extern const ConservativeRasterizationState pointCullFrontCCWUnderestimate;
+        extern const ConservativeRasterizationState pointCullFrontAndBackCCWUnderestimate;
+
+        extern const ConservativeRasterizationState fillCullNoneCWUnderestimate;
+        extern const ConservativeRasterizationState fillCullBackCWUnderestimate;
+        extern const ConservativeRasterizationState fillCullFrontCWUnderestimate;
+        extern const ConservativeRasterizationState fillCullFrontAndBackCWUnderestimate;
+
+        extern const ConservativeRasterizationState lineCullNoneCWUnderestimate;
+        extern const ConservativeRasterizationState lineCullBackCWUnderestimate;
+        extern const ConservativeRasterizationState lineCullFrontCWUnderestimate;
+        extern const ConservativeRasterizationState lineCullFrontAndBackCWUnderestimate;
+
+        extern const ConservativeRasterizationState pointCullNoneCWUnderestimate;
+        extern const ConservativeRasterizationState pointCullBackCWUnderestimate;
+        extern const ConservativeRasterizationState pointCullFrontCWUnderestimate;
+        extern const ConservativeRasterizationState pointCullFrontAndBackCWUnderestimate;
 
         extern const RasterizationOrderState fillCullNoneCCWRelaxed;
         extern const RasterizationOrderState fillCullBackCCWRelaxed;
