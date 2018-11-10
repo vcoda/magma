@@ -181,21 +181,21 @@ template<typename Vertex2>
 MAGMA_INLINE void ImmediateRender::vertex2(
     const Vertex2& v) noexcept
 {
-    vertex(v[0], v[1]);
+    vertex(v.x, v.y);
 }
 
 template<typename Vertex3>
 MAGMA_INLINE void ImmediateRender::vertex3(
     const Vertex3& v) noexcept
 {
-    vertex(v[0], v[1], v[2]);
+    vertex(v.x, v.y, v.z);
 }
 
 template<typename Vertex4>
 MAGMA_INLINE void ImmediateRender::vertex4(
     const Vertex4& v) noexcept
 {
-    vertex(v[0], v[1], v[2], v[3]);
+    vertex(v.x, v.y, v.z, v.w);
 }
 } // namespace aux
 } // namespace magma
