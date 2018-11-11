@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "../shared.h"
 
 namespace magma
 {
@@ -26,6 +27,7 @@ namespace magma
     {
         Descriptor(VkDescriptorType type, uint32_t descriptorCount) noexcept
         {
+            MAGMA_ASSERT(descriptorCount > 0);
             this->type = type;
             this->descriptorCount = descriptorCount;
         }
