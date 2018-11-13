@@ -36,6 +36,26 @@ ShaderCompiler::~ShaderCompiler()
     shaderc_compiler_release(compiler);
 }
 
+void ShaderCompiler::setOptimizationLevel(shaderc_optimization_level level) noexcept
+{
+    optimizationLevel = level;
+}
+
+void ShaderCompiler::setGenerateDebugInfo(bool generate) noexcept
+{
+    generateDebugInfo = generate;
+}
+
+void ShaderCompiler::setSuppressWarnings(bool suppress) noexcept
+{
+    suppressWarnings = suppress;
+}
+
+void ShaderCompiler::setWarningsAsErrors(bool errors) noexcept
+{
+    warningsAsErrors = errors;
+}
+
 std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& source, const char *entrypoint,
     shaderc_shader_kind shaderKind /* shaderc_glsl_infer_from_source */,
     const std::unordered_map<std::string, std::string>& macroDefinitions /* {} */,
@@ -54,6 +74,8 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     shaderc_compile_options_set_optimization_level(options, optimizationLevel);
     if (generateDebugInfo)
         shaderc_compile_options_set_generate_debug_info(options);
+    if (suppressWarnings)
+        shaderc_compile_options_set_suppress_warnings(options);
     if (warningsAsErrors)
         shaderc_compile_options_set_warnings_as_errors(options);
     if (includeHandler)
