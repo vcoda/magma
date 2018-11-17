@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <stdexcept>
 #include <string>
 #include "../vulkan.h"
-#include <shaderc/shaderc.h>
 
 namespace magma
 {
@@ -50,23 +49,6 @@ namespace magma
 
     private:
         VkResult result;
-    };
-
-    class CompileException : public Exception
-    {
-    public:
-        CompileException(shaderc_compilation_result_t result,
-            const char *file, int line);
-        shaderc_compilation_status getStatus() const noexcept { return status; }
-        size_t numWarnings() const noexcept { return warnings; }
-        size_t numErrors() const noexcept { return errors; }
-
-    private:
-        std::string errorMessage(const shaderc_compilation_result_t) const;
-
-        shaderc_compilation_status status;
-        size_t warnings;
-        size_t errors;
     };
 
     class ExtensionNotPresent: public Exception

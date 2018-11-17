@@ -89,24 +89,6 @@ const char *BadResult::codeString() const noexcept
     }
 }
 
-CompileException::CompileException(shaderc_compilation_result_t result,
-    const char *file, int line):
-    Exception(errorMessage(result), file, line),
-    status(shaderc_result_get_compilation_status(result)),
-    warnings(shaderc_result_get_num_warnings(result)),
-    errors(shaderc_result_get_num_errors(result))
-{
-    shaderc_result_release(result);
-}
-
-std::string CompileException::errorMessage(const shaderc_compilation_result_t result) const
-{
-    const char *message = shaderc_result_get_error_message(result);
-    if (message && strlen(message))
-        return message;
-    return "failed to compile shader";
-}
-
 ExtensionNotPresent::ExtensionNotPresent(const char *const extension,
     const char *file, int line):
     Exception(extension, file, line)

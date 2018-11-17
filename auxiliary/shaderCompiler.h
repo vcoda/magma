@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <unordered_map>
 #include <memory>
 #include <shaderc/shaderc.h>
+#include "../misc/exception.h"
 #include "../nonCopyable.h"
 
 namespace magma
@@ -70,6 +71,21 @@ namespace magma
             bool generateDebugInfo = false;
             bool suppressWarnings = false;
             bool warningsAsErrors = false;
+        };
+
+        class CompileException : public Exception
+        {
+        public:
+            CompileException(shaderc_compilation_result_t result,
+                const char *file, int line);
+            shaderc_compilation_status getStatus() const noexcept { return status; }
+            size_t numWarnings() const noexcept { return warnings; }
+            size_t numErrors() const noexcept { return errors; }
+
+        private:
+            shaderc_compilation_status status;
+            size_t warnings;
+            size_t errors;
         };
     } // namespace aux
 } // namespace magma

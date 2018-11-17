@@ -126,5 +126,15 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     shaderc_result_release(result);
     return shaderModule;
 }
+
+CompileException::CompileException(shaderc_compilation_result_t result,
+    const char *file, int line):
+    Exception(shaderc_result_get_error_message(result), file, line),
+    status(shaderc_result_get_compilation_status(result)),
+    warnings(shaderc_result_get_num_warnings(result)),
+    errors(shaderc_result_get_num_errors(result))
+{
+    shaderc_result_release(result);
+}
 } // namespace aux
 } // namespace magma
