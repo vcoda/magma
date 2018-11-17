@@ -115,8 +115,16 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     // Create shader module
     const char *bytecode = shaderc_result_get_bytes(result);
     const size_t bytecodeSize = shaderc_result_get_length(result);
+    std::shared_ptr<ShaderModule> shaderModule;
+    try {
+        shaderModule = std::make_shared<ShaderModule>(device, reinterpret_cast<const uint32_t *>(bytecode), bytecodeSize);
+    } catch (const BadResult& badResult)
+    {
+        shaderc_result_release(result);
+        throw badResult;
+    }
     shaderc_result_release(result);
-    return std::make_shared<ShaderModule>(device, reinterpret_cast<const uint32_t *>(bytecode), bytecodeSize);
+    return shaderModule;
 }
 } // namespace aux
 } // namespace magma
