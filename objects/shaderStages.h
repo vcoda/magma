@@ -50,7 +50,7 @@ namespace magma
             const std::initializer_list<SpecializationEntry>& entryMap)
         {
             mapEntryCount = static_cast<uint32_t>(entryMap.size());
-            pMapEntries = helpers::copyInitializer(entryMap);
+            pMapEntries = utilities::copyInitializer(entryMap);
             dataSize = sizeof(Block);
             pData = utilities::copyArray(reinterpret_cast<const char *>(&data), dataSize);
         }
