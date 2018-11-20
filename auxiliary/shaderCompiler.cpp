@@ -25,8 +25,8 @@ namespace magma
 namespace aux
 {
 ShaderCompiler::ShaderCompiler(std::shared_ptr<Device> device, std::shared_ptr<IShaderInclude> handler):
-    device(device),
-    includeHandler(handler)
+    device(std::move(device)),
+    includeHandler(std::move(handler))
 {
     compiler = shaderc_compiler_initialize();
 }
