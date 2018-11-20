@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "shaderCompiler.h"
 #include "../objects/shaderModule.h"
-#include "../misc/exception.h"
 #include "../shared.h"
 
 namespace magma
@@ -29,6 +28,8 @@ ShaderCompiler::ShaderCompiler(std::shared_ptr<Device> device, std::shared_ptr<I
     includeHandler(std::move(handler))
 {
     compiler = shaderc_compiler_initialize();
+    if (!compiler)
+        MAGMA_THROW("failed to initialize shader compiler");
 }
 
 ShaderCompiler::~ShaderCompiler()
@@ -118,12 +119,12 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     std::shared_ptr<ShaderModule> shaderModule;
     try {
         shaderModule = std::make_shared<ShaderModule>(device, reinterpret_cast<const uint32_t *>(bytecode), bytecodeSize);
+        shaderc_result_release(result);
     } catch (const BadResult& badResult)
     {
         shaderc_result_release(result);
         throw badResult;
     }
-    shaderc_result_release(result);
     return shaderModule;
 }
 
