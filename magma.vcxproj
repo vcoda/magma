@@ -236,6 +236,7 @@
     <ClInclude Include="states\vertexInputState.h" />
     <ClInclude Include="states\viewportState.h" />
     <ClInclude Include="typedefs.h" />
+    <ClInclude Include="utilities\castExtent.h" />
     <ClInclude Include="utilities\copy.h" />
     <ClInclude Include="utilities\hash.h" />
     <ClInclude Include="utilities\hexColor.h" />
