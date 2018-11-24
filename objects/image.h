@@ -31,7 +31,8 @@ namespace magma
        by binding them to a graphics or compute pipeline via descriptor sets,
        or by directly specifying them as parameters to certain commands. */
 
-    class Image : public NonDispatchable<VkImage>
+    class Image : public NonDispatchable<VkImage>,
+        public std::enable_shared_from_this<Image>
     {
     public:
         ~Image();
@@ -42,13 +43,20 @@ namespace magma
         uint32_t getMipLevels() const noexcept { return mipLevels; }
         uint32_t getArrayLayers() const noexcept { return arrayLayers; }
         uint32_t getSamples() const noexcept { return samples; }
+        std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0);
         void bindMemoryDeviceGroup(const std::vector<uint32_t>& deviceIndices,
             const std::vector<VkRect2D>& splitInstanceBindRegions,
             std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0);
-        std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
+        void copyMipLevel(uint32_t mipLevel,
+            std::shared_ptr<Buffer> buffer,
+            uint32_t bufferOffset,
+            const VkOffset3D& imageOffset,
+            std::shared_ptr<CommandBuffer> copyCmdBuffer,
+            VkPipelineStageFlags barrierDstStageMask = VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
+            bool flush = true);
 
     protected:
         explicit Image(std::shared_ptr<Device> device,
