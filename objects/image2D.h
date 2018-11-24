@@ -24,19 +24,6 @@ namespace magma
 
     class Image2D : public Image
     {
-    protected:
-        explicit Image2D(std::shared_ptr<Device> device,
-            VkFormat format,
-            const VkExtent2D& extent,
-            uint32_t mipLevels,
-            uint32_t samples,
-            VkImageUsageFlags usage,
-            std::shared_ptr<IAllocator> allocator);
-        explicit Image2D(std::shared_ptr<Device> device,
-            VkImage handle,
-            VkFormat format,
-            const VkExtent2D& extent);
-
     public:
         explicit Image2D(std::shared_ptr<Device> device,
             VkFormat format,
@@ -51,6 +38,19 @@ namespace magma
             std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
+
+    protected:
+        Image2D(std::shared_ptr<Device> device,
+            VkFormat format,
+            const VkExtent2D& extent,
+            uint32_t mipLevels,
+            uint32_t samples,
+            VkImageUsageFlags usage,
+            std::shared_ptr<IAllocator> allocator);
+        Image2D(std::shared_ptr<Device> device,
+            VkImage handle,
+            VkFormat format,
+            const VkExtent2D& extent);
     };
 
     /* Two-dimensional image that can be used as color attachment to framebuffer. */
