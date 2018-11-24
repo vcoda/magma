@@ -29,7 +29,6 @@ namespace magma
             VkFormat format,
             uint32_t width,
             uint32_t mipLevels,
-            VkImageUsageFlags usage,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma
