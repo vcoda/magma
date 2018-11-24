@@ -390,9 +390,6 @@
     <ClInclude Include="auxiliary\shaderCompiler.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="utilities\castExtent.h">
-      <Filter>Header Files\utilities</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="objects\commandBuffer.inl">
