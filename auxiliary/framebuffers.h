@@ -49,6 +49,11 @@ namespace magma
         protected:
             Framebuffer(const VkExtent2D& extent):
                 extent(extent) {}
+            Framebuffer(const VkExtent3D& extent)
+            {
+                this->extent.width = extent.width;
+                this->extent.height = extent.height;
+            }
 
         protected:
             std::shared_ptr<ImageView> colorView;
