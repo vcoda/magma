@@ -43,7 +43,7 @@ namespace magma
             const VkExtent2D& extent,
             uint32_t mipLevels,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        Image2D(std::shared_ptr<Device> device,
+        explicit Image2D(std::shared_ptr<Device> device,
             VkFormat format,
             const std::vector<VkExtent2D>& mipExtents,
             const std::vector<const void *>& mipData,
