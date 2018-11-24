@@ -198,7 +198,7 @@ void Image::copyMipLevel(uint32_t mipLevel, std::shared_ptr<Buffer> buffer, uint
     }
 }
 
-std::vector<VkBufferImageCopy> Image::getCopyRegions(const std::vector<VkDeviceSize>& mipSizes,
+std::vector<VkBufferImageCopy> Image::buildCopyRegions(const std::vector<VkDeviceSize>& mipSizes,
      VkDeviceSize *offset) const noexcept
 {
     std::vector<VkBufferImageCopy> copyRegions;
