@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/image2D.h"
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
+#include "../utilities/castExtent.h"
 
 namespace magma
 {
@@ -118,7 +119,7 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
     VkFormat depthFormat /* VK_FORMAT_UNDEFINED */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Framebuffer({color->getExtent().width, color->getExtent().height})
+    Framebuffer(utilities::castExtent2D(color->getMipExtent(0)))
 {
     std::shared_ptr<Device> device = color->getDevice();
     std::vector<std::shared_ptr<const ImageView>> attachments;

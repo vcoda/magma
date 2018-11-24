@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../misc/exception.h"
 #include "../helpers/stackArray.h"
+#include "../utilities/castExtent.h"
 
 namespace magma
 {
@@ -31,7 +32,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, std::move(renderPass->getDevice()), std::move(allocator)),
     attachments(std::move(attachments)),
-    extent(attachments[0]->getImage()->getExtent2D())
+    extent(utilities::castExtent2D(attachments.front()->getImage()->getMipExtent(0)))
 {
     VkFramebufferCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;

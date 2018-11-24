@@ -98,6 +98,25 @@ Image::~Image()
     vkDestroyImage(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
+VkExtent3D Image::getMipExtent(uint32_t level) const
+{
+    if (0 == level)
+        return extent;
+    if (level >= mipLevels)
+        MAGMA_THROW("invalid <level> argument");
+    VkExtent3D mipExtent = extent;
+    for (uint32_t i = 0; i < level; ++i)
+    {
+        if (mipExtent.width > 1)
+			mipExtent.width >>= 1;
+        if (mipExtent.height > 1)
+			mipExtent.height >>= 1;
+        if (mipExtent.depth > 1)
+			mipExtent.depth >>= 1;
+    }
+    return mipExtent;
+}
+
 void Image::bindMemory(std::shared_ptr<DeviceMemory> memory,
     VkDeviceSize offset /* 0 */)
 {
