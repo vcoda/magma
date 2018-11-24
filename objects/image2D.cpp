@@ -33,6 +33,12 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkImage handle, VkFormat format
     Image(std::move(device), handle, VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1})
 {}
 
+Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent, uint32_t mipLevels,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1}, mipLevels, 1, 1,
+        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 0, std::move(allocator))
+{}
+
 Image2D::Image2D(std::shared_ptr<Device> device,
     VkFormat format,
     const std::vector<VkExtent2D>& mipExtents,
