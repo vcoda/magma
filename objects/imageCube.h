@@ -29,7 +29,6 @@ namespace magma
             VkFormat format,
             uint32_t dimension,
             uint32_t mipLevels,
-            VkImageUsageFlags usage,
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit ImageCube(std::shared_ptr<Device> device,
             VkFormat format,

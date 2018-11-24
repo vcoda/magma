@@ -23,13 +23,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format,
-    uint32_t dimension, uint32_t mipLevels, VkImageUsageFlags usage,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t dimension,
+    uint32_t mipLevels, std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1}, mipLevels,
         6, // arrayLayers
         1, // samples
-        usage,
+        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
         std::move(allocator))
 {}

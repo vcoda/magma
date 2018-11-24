@@ -30,7 +30,6 @@ namespace magma
             const VkExtent2D& extent,
             uint32_t mipLevels,
             uint32_t arrayLayers,
-            VkImageUsageFlags usage,
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit Image2DArray(std::shared_ptr<Device> device,
             VkFormat format,
