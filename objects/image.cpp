@@ -198,8 +198,7 @@ void Image::copyMipLevel(uint32_t mipLevel, std::shared_ptr<Buffer> buffer, uint
     }
 }
 
-std::vector<VkBufferImageCopy> Image::getCopyRegions(const std::vector<VkExtent2D>& mipExtents,
-     const std::vector<VkDeviceSize>& mipSizes,
+std::vector<VkBufferImageCopy> Image::getCopyRegions(const std::vector<VkDeviceSize>& mipSizes,
      VkDeviceSize *offset) const noexcept
 {
     std::vector<VkBufferImageCopy> copyRegions;
@@ -208,19 +207,17 @@ std::vector<VkBufferImageCopy> Image::getCopyRegions(const std::vector<VkExtent2
     {
         for (uint32_t level = 0; level < mipLevels; ++level)
         {
-            VkBufferImageCopy copy;
-            copy.bufferOffset = *offset;
-            copy.bufferRowLength = 0;
-            copy.bufferImageHeight = 0;
-            copy.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            copy.imageSubresource.mipLevel = level;
-            copy.imageSubresource.baseArrayLayer = layer;
-            copy.imageSubresource.layerCount = 1;
-            copy.imageOffset = {0, 0, 0};
-            copy.imageExtent.width = mipExtents[level].width;
-            copy.imageExtent.height = mipExtents[level].height;
-            copy.imageExtent.depth = 1;
-            copyRegions.push_back(copy);
+            VkBufferImageCopy region;
+            region.bufferOffset = *offset;
+            region.bufferRowLength = 0;
+            region.bufferImageHeight = 0;
+            region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            region.imageSubresource.mipLevel = level;
+            region.imageSubresource.baseArrayLayer = layer;
+            region.imageSubresource.layerCount = 1;
+            region.imageOffset = {0, 0, 0};
+            region.imageExtent = getMipExtent(level);
+            copyRegions.push_back(region);
             *offset += mipSizes[level];
             *offset = MAGMA_ALIGN(*offset);
         }

@@ -29,24 +29,20 @@ Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format,
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1}, mipLevels, arrayLayers, 1, usage, 0, std::move(allocator))
 {}
 
-Image2DArray::Image2DArray(std::shared_ptr<Device> device,
-    VkFormat format,
-    const std::vector<VkExtent2D>& mipExtents,
-    const std::vector<std::vector<const void *>>& layersMipData,
-    const std::vector<VkDeviceSize>& mipSizes,
-    std::shared_ptr<CommandBuffer> cmdBuffer,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
+Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
+    const std::vector<std::vector<const void *>>& layersMipData, const std::vector<VkDeviceSize>& mipSizes,
+    std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{mipExtents[0].width, mipExtents[0].height, 1},
-        static_cast<uint32_t>(mipExtents.size()), // mipLevels
-        static_cast<uint32_t>(layersMipData.size()), // arrayLayers
+    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
+        MAGMA_COUNT(mipSizes), // mipLevels
+        MAGMA_COUNT(layersMipData), // arrayLayers
         1, // samples
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
         std::move(allocator))
 {
     VkDeviceSize size;
-    const std::vector<VkBufferImageCopy> copyRegions = getCopyRegions(mipExtents, mipSizes, &size);
+    const auto copyRegions = getCopyRegions(mipSizes, &size);
     // Copy array layers to host visible buffer
     std::shared_ptr<SrcTransferBuffer> srcBuffer(std::make_shared<SrcTransferBuffer>(this->device, size, 0, allocator));
     helpers::mapScoped<uint8_t>(srcBuffer, [&](uint8_t *data)

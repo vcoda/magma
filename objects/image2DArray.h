@@ -34,7 +34,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit Image2DArray(std::shared_ptr<Device> device,
             VkFormat format,
-            const std::vector<VkExtent2D>& mipExtents,
+            const VkExtent2D& extent,
             const std::vector<std::vector<const void *>>& layersMipData,
             const std::vector<VkDeviceSize>& mipSizes,
             std::shared_ptr<CommandBuffer> cmdBuffer,

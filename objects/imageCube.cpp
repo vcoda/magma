@@ -34,28 +34,20 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format,
         std::move(allocator))
 {}
 
-ImageCube::ImageCube(std::shared_ptr<Device> device,
-    VkFormat format,
-    const std::vector<uint32_t>& mipDimensions,
-    const std::vector<const void *> cubeMipData[6],
-    const std::vector<VkDeviceSize>& mipSizes,
-    std::shared_ptr<CommandBuffer> cmdBuffer,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
+ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t dimension,
+    const std::vector<const void *> cubeMipData[6], const std::vector<VkDeviceSize>& mipSizes,
+    std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{mipDimensions[0], mipDimensions[0], 1},
-        static_cast<uint32_t>(mipDimensions.size()), // mipLevels
+    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1},
+        MAGMA_COUNT(mipSizes), // mipLevels
         6, // arrayLayers
         1, // samples
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
         std::move(allocator))
 {
-    std::vector<VkExtent2D> mipExtents;
-    mipExtents.reserve(mipDimensions.size());
-    for (const uint32_t size : mipDimensions)
-        mipExtents.push_back(VkExtent2D{size, size});
     VkDeviceSize size;
-    const std::vector<VkBufferImageCopy> copyRegions = getCopyRegions(mipExtents, mipSizes, &size);
+    const auto copyRegions = getCopyRegions(mipSizes, &size);
     // Copy array layers to host visible buffer
     std::shared_ptr<SrcTransferBuffer> srcBuffer(std::make_shared<SrcTransferBuffer>(this->device, size, 0, allocator));
     helpers::mapScoped<uint8_t>(srcBuffer, [&](uint8_t *data)
