@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <memory>
+#include "../vulkan.h"
 #include "../nonCopyable.h"
 
 namespace magma
@@ -25,24 +26,30 @@ namespace magma
     class Image1D;
     class Image2D;
     class CommandBuffer;
-    class IAllocator;
+    class Queue;
 
     namespace aux
     {
         /* Generates MIP levels from base texture level using blit operations. */
 
-        class MipmapBuilder: public sys::NonCopyable
+        class MipmapBuilder : public sys::NonCopyable
         {
         public:
-            explicit MipmapBuilder(std::shared_ptr<Device> device,
-                std::shared_ptr<IAllocator> allocator = nullptr);
-            void buildMipmap1D(std::shared_ptr<Image1D> baseLevel,
-                std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept;
-            void buildMipmap2D(std::shared_ptr<Image2D> baseLevel,
-                std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept;
+            explicit MipmapBuilder(std::shared_ptr<Device> device);
+            bool buildMipmap1D(std::shared_ptr<Image1D> image,
+                uint32_t firstLevel,
+                VkFilter filter,
+                std::shared_ptr<CommandBuffer> commandBuffer,
+                bool commit) const noexcept;
+            bool buildMipmap2D(std::shared_ptr<Image2D> image,
+                uint32_t firstLevel,
+                VkFilter filter,
+                std::shared_ptr<CommandBuffer> commandBuffer,
+                bool commit) const noexcept;
 
         private:
             std::shared_ptr<Device> device;
+            std::shared_ptr<Queue> queue;
         };
     } // namespace aux
 } // namespace magma
