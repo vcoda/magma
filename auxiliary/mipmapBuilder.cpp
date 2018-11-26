@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "mipmapBuilder.h"
 #include "../objects/device.h"
+#include "../objects/physicalDevice.h"
 #include "../objects/image1D.h"
 #include "../objects/image2D.h"
 #include "../objects/commandBuffer.h"
@@ -34,6 +35,15 @@ MipmapBuilder::MipmapBuilder(std::shared_ptr<Device> device):
     device(std::move(device)),
     queue(this->device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0))
 {}
+
+bool MipmapBuilder::checkFormatSupport(VkFormat format) const noexcept
+{
+    std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+    const VkFormatProperties& properties = physicalDevice->getFormatProperties(format);
+    bool srcBlit = (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT);
+    bool dstBlit = (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT);
+    return srcBlit && dstBlit;
+}
 
 bool MipmapBuilder::buildMipmap1D(std::shared_ptr<Image1D> image, uint32_t firstLevel, VkFilter /*filter*/,
     std::shared_ptr<CommandBuffer> commandBuffer, bool /* commit */) const noexcept
