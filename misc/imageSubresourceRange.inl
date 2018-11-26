@@ -5,10 +5,10 @@ inline ImageSubresourceRange::ImageSubresourceRange(std::shared_ptr<const Image>
     uint32_t levelCount /* VK_REMAINING_MIP_LEVELS */) noexcept:
     ImageSubresourceRange(image->getFormat())
 {
-    baseMipLevel = baseMipLevel;
-    levelCount = levelCount;
-    baseArrayLayer = 0;
-    layerCount = VK_REMAINING_ARRAY_LAYERS;
+    this->baseMipLevel = baseMipLevel;
+    this->levelCount = levelCount;
+    this->baseArrayLayer = 0;
+    this->layerCount = VK_REMAINING_ARRAY_LAYERS;
 }
 
 inline ImageSubresourceRange::ImageSubresourceRange(std::shared_ptr<const Image1DArray> image,
