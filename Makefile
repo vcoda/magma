@@ -98,6 +98,7 @@ MAGMA_OBJS= \
 	auxiliary/blitRectangle.o \
 	auxiliary/framebuffers.o \
 	auxiliary/immediateRender.o \
+	auxiliary/mipmapBuilder.o \
 	auxiliary/shaderCompiler.o
 
 
