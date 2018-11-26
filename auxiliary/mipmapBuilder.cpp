@@ -44,13 +44,12 @@ bool MipmapBuilder::checkFormatSupport(VkFormat format) const noexcept
     return srcBlit && dstBlit;
 }
 
-bool MipmapBuilder::buildMipmap(std::shared_ptr<Image> image, uint32_t firstLevel, VkFilter filter,
+bool MipmapBuilder::buildMipmap(std::shared_ptr<Image> image, uint32_t baseLevel, VkFilter filter,
     std::shared_ptr<CommandBuffer> commandBuffer, bool flush) const noexcept
 {
-    MAGMA_ASSERT(firstLevel > 0);
     if (flush)
         commandBuffer->begin();
-    for (uint32_t level = firstLevel; level < image->getMipLevels(); ++level)
+    for (uint32_t level = baseLevel + 1; level < image->getMipLevels(); ++level)
     {
         const VkExtent3D& prevMipExtent = image->getMipExtent(level - 1);
         const VkExtent3D& currMipExtent = image->getMipExtent(level);
@@ -86,7 +85,7 @@ bool MipmapBuilder::buildMipmap(std::shared_ptr<Image> image, uint32_t firstLeve
         commandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, dstToSrcBarrier);
     }
     // Blitted mip levels are transitioned to shader read layout
-    const ImageSubresourceRange blitMipsRange(image, firstLevel, image->getMipLevels() - firstLevel);
+    const ImageSubresourceRange blitMipsRange(image, baseLevel + 1, image->getMipLevels() - baseLevel - 1);
     const ImageMemoryBarrier shaderReadBarrier(
         image,
         VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
