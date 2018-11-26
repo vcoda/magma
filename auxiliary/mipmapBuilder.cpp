@@ -18,8 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "mipmapBuilder.h"
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
-#include "../objects/image1D.h"
-#include "../objects/image2D.h"
+#include "../objects/image.h"
 #include "../objects/commandBuffer.h"
 #include "../objects/queue.h"
 #include "../objects/fence.h"
@@ -45,19 +44,11 @@ bool MipmapBuilder::checkFormatSupport(VkFormat format) const noexcept
     return srcBlit && dstBlit;
 }
 
-bool MipmapBuilder::buildMipmap1D(std::shared_ptr<Image1D> image, uint32_t firstLevel, VkFilter /*filter*/,
-    std::shared_ptr<CommandBuffer> commandBuffer, bool /* commit */) const noexcept
+bool MipmapBuilder::buildMipmap(std::shared_ptr<Image> image, uint32_t firstLevel, VkFilter filter,
+    std::shared_ptr<CommandBuffer> commandBuffer, bool flush) const noexcept
 {
     MAGMA_ASSERT(firstLevel > 0);
-    // TODO:
-    return true;
-}
-
-bool MipmapBuilder::buildMipmap2D(std::shared_ptr<Image2D> image, uint32_t firstLevel, VkFilter filter,
-    std::shared_ptr<CommandBuffer> commandBuffer, bool commit) const noexcept
-{
-    MAGMA_ASSERT(firstLevel > 0);
-    if (commit)
+    if (flush)
         commandBuffer->begin();
     for (uint32_t level = firstLevel; level < image->getMipLevels(); ++level)
     {
@@ -102,14 +93,21 @@ bool MipmapBuilder::buildMipmap2D(std::shared_ptr<Image2D> image, uint32_t first
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
         blitMipsRange);
     commandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, shaderReadBarrier);
-    if (commit)
+    if (flush)
     {
         commandBuffer->end();
-        std::shared_ptr<magma::Fence> fence(commandBuffer->getFence());
-        if (!queue->submit(commandBuffer, 0, nullptr, nullptr, fence))
-            return false;
-        return fence->wait();
+        return commit(commandBuffer);
     }
+    return true;
+}
+
+bool MipmapBuilder::commit(std::shared_ptr<CommandBuffer> commandBuffer) const noexcept
+{
+    std::shared_ptr<magma::Fence> fence(commandBuffer->getFence());
+    if (!queue->submit(commandBuffer, 0, nullptr, nullptr, fence))
+        return false;
+    if (!fence->wait())
+        return false;
     return true;
 }
 } // namespace aux

@@ -23,8 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
-    class Image1D;
-    class Image2D;
+    class Image;
     class CommandBuffer;
     class Queue;
 
@@ -37,16 +36,12 @@ namespace magma
         public:
             explicit MipmapBuilder(std::shared_ptr<Device> device);
             bool checkFormatSupport(VkFormat format) const noexcept;
-            bool buildMipmap1D(std::shared_ptr<Image1D> image,
+            bool buildMipmap(std::shared_ptr<Image> image,
                 uint32_t firstLevel,
                 VkFilter filter,
                 std::shared_ptr<CommandBuffer> commandBuffer,
-                bool commit) const noexcept;
-            bool buildMipmap2D(std::shared_ptr<Image2D> image,
-                uint32_t firstLevel,
-                VkFilter filter,
-                std::shared_ptr<CommandBuffer> commandBuffer,
-                bool commit) const noexcept;
+                bool flush) const noexcept;
+            bool commit(std::shared_ptr<CommandBuffer> commandBuffer) const noexcept;
 
         private:
             std::shared_ptr<Device> device;
