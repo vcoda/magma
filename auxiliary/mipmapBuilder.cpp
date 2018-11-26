@@ -49,10 +49,10 @@ bool MipmapBuilder::buildMipmap(std::shared_ptr<Image> image, uint32_t baseLevel
 {
     if (flush)
         commandBuffer->begin();
+    VkExtent3D prevMipExtent = image->getMipExtent(baseLevel);
     for (uint32_t level = baseLevel + 1; level < image->getMipLevels(); ++level)
     {
-        const VkExtent3D& prevMipExtent = image->getMipExtent(level - 1);
-        const VkExtent3D& currMipExtent = image->getMipExtent(level);
+        const VkExtent3D& nextMipExtent = image->getMipExtent(level);
         VkImageBlit blitRegion;
         blitRegion.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
         blitRegion.srcSubresource.mipLevel = level - 1;
@@ -65,24 +65,25 @@ bool MipmapBuilder::buildMipmap(std::shared_ptr<Image> image, uint32_t baseLevel
         blitRegion.dstSubresource.baseArrayLayer = 0;
         blitRegion.dstSubresource.layerCount = 1;
         blitRegion.dstOffsets[0] = VkOffset3D{0, 0, 0};
-        blitRegion.dstOffsets[1] = VkOffset3D{int32_t(currMipExtent.width), int32_t(currMipExtent.height), 1};
-        const ImageSubresourceRange currMipRange(image, level, 1);
-        // Transition current mip level to transfer dest
+        blitRegion.dstOffsets[1] = VkOffset3D{int32_t(nextMipExtent.width), int32_t(nextMipExtent.height), 1};
+        const ImageSubresourceRange nextMipRange(image, level, 1);
+        // Transition next mip level to transfer dest
         const ImageMemoryBarrier undefinedToDstBarrier(
             image,
             VK_IMAGE_LAYOUT_UNDEFINED,
             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-            currMipRange);
+            nextMipRange);
         commandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, undefinedToDstBarrier);
         // Downsample larger mip to smaller one
         commandBuffer->blitImage(image, image, blitRegion, filter);
-        // Transition current mip level back to transfer source
+        // Transition next mip level back to transfer source
         const ImageMemoryBarrier dstToSrcBarrier(
             image,
             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
             VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-            currMipRange);
+            nextMipRange);
         commandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, dstToSrcBarrier);
+        prevMipExtent = nextMipExtent;
     }
     // Blitted mip levels are transitioned to shader read layout
     const ImageSubresourceRange blitMipsRange(image, baseLevel + 1, image->getMipLevels() - baseLevel - 1);
