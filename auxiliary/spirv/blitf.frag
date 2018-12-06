@@ -6,5 +6,5 @@ layout(binding = 0) uniform sampler2D s0;
 
 void main()
 {
-    oColor = texture(s0, texCoord);
+  oColor = texture(s0, texCoord);
 }
