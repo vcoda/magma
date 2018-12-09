@@ -30,5 +30,22 @@ namespace magma
             uint32_t width,
             uint32_t mipLevels,
             std::shared_ptr<IAllocator> allocator = nullptr);
+        explicit Image1D(std::shared_ptr<Device> device,
+            VkFormat format,
+            uint32_t width,
+            std::shared_ptr<Buffer> buffer,
+            VkDeviceSize bufferOffset,
+            const std::vector<VkDeviceSize>& mipSizes,
+            bool mipAligned,
+            std::shared_ptr<CommandBuffer> cmdBuffer,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        explicit Image1D(std::shared_ptr<Device> device,
+            VkFormat format,
+            uint32_t width,
+            const std::vector<const void *>& mipData,
+            const std::vector<VkDeviceSize>& mipSizes,
+            std::shared_ptr<CommandBuffer> cmdBuffer,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
     };
 } // namespace magma

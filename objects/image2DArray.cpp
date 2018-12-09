@@ -26,26 +26,48 @@ namespace magma
 Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
     uint32_t mipLevels, uint32_t arrayLayers, std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
-        mipLevels, arrayLayers, 1, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 0, std::move(allocator))
+        mipLevels, 
+        arrayLayers, 
+        1, // samples
+        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
+        0, // flags
+        std::move(allocator))
 {}
 
+Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent, uint32_t arrayLayers,
+    std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset,
+    const std::vector<VkDeviceSize>& mipSizes, bool mipAligned,
+    std::shared_ptr<CommandBuffer> cmdBuffer,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
+        MAGMA_COUNT(mipSizes), // mipLevels
+        arrayLayers, 
+        1, // samples
+        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
+        0, // flags
+        std::move(allocator))
+{
+    const auto copyRegions = buildCopyRegions(mipSizes, bufferOffset, mipAligned);
+    copyFromBuffer(buffer, copyRegions, cmdBuffer);
+}
+
 Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
-    const std::vector<std::vector<const void *>>& layersMipData, const std::vector<VkDeviceSize>& mipSizes,
+    const std::vector<std::vector<const void *>>& mipData, const std::vector<VkDeviceSize>& mipSizes,
     std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         MAGMA_COUNT(mipSizes), // mipLevels
-        MAGMA_COUNT(layersMipData), // arrayLayers
+        MAGMA_COUNT(mipData), // arrayLayers
         1, // samples
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
         std::move(allocator))
 {
     VkDeviceSize size;
-    const auto copyRegions = buildCopyRegions(mipSizes, &size);
+    const auto copyRegions = buildCopyRegions(mipSizes, 0, true, &size);
     // Copy array layers to host visible buffer
-    std::shared_ptr<SrcTransferBuffer> srcBuffer(std::make_shared<SrcTransferBuffer>(this->device, size, 0, allocator));
-    helpers::mapScoped<uint8_t>(srcBuffer, [&](uint8_t *data)
+    std::shared_ptr<SrcTransferBuffer> buffer(std::make_shared<SrcTransferBuffer>(this->device, size, 0, allocator));
+    helpers::mapScoped<uint8_t>(buffer, [&](uint8_t *data)
     {
         if (!copyFn)
             copyFn = copyMemory;
@@ -55,10 +77,10 @@ Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, cons
             {
                 const VkDeviceSize bufferOffset = copyRegions[layer * mipLevels + level].bufferOffset;
                 void *mipLevel = data + bufferOffset;
-                copyFn(mipLevel, layersMipData[layer][level], static_cast<size_t>(mipSizes[level]));
+                copyFn(mipLevel, mipData[layer][level], static_cast<size_t>(mipSizes[level]));
             }
         }
     });
-    copyFromBuffer(srcBuffer, copyRegions, cmdBuffer);
+    copyFromBuffer(buffer, copyRegions, cmdBuffer);
 }
 } // namespace magma

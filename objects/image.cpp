@@ -149,7 +149,7 @@ void Image::bindMemoryDeviceGroup(const std::vector<uint32_t>& deviceIndices,
     this->memory = std::move(memory);
 }
 
-void Image::copyMipLevel(uint32_t mipLevel, std::shared_ptr<Buffer> buffer, uint32_t bufferOffset,
+void Image::copyMipLevel(uint32_t mipLevel, std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset,
     const VkOffset3D& imageOffset, std::shared_ptr<CommandBuffer> copyCmdBuffer,
     VkPipelineStageFlags barrierDstStageMask /* VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT */,
     bool flush /* true */)
@@ -199,16 +199,18 @@ void Image::copyMipLevel(uint32_t mipLevel, std::shared_ptr<Buffer> buffer, uint
 }
 
 std::vector<VkBufferImageCopy> Image::buildCopyRegions(const std::vector<VkDeviceSize>& mipSizes,
-     VkDeviceSize *offset) const noexcept
+    VkDeviceSize bufferOffset, bool align, VkDeviceSize *size /* nullptr */) const noexcept
 {
+    MAGMA_ASSERT(mipSizes.size() <= mipLevels);
     std::vector<VkBufferImageCopy> copyRegions;
-    *offset = 0;
+    VkDeviceSize mipLevelOffset = 0;
     for (uint32_t layer = 0; layer < arrayLayers; ++layer)
     {
-        for (uint32_t level = 0; level < mipLevels; ++level)
+        uint32_t level = 0;
+        for (VkDeviceSize mipSize : mipSizes)
         {
             VkBufferImageCopy region;
-            region.bufferOffset = *offset;
+            region.bufferOffset = bufferOffset + mipLevelOffset;
             region.bufferRowLength = 0;
             region.bufferImageHeight = 0;
             region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -218,10 +220,14 @@ std::vector<VkBufferImageCopy> Image::buildCopyRegions(const std::vector<VkDevic
             region.imageOffset = {0, 0, 0};
             region.imageExtent = getMipExtent(level);
             copyRegions.push_back(region);
-            *offset += mipSizes[level];
-            *offset = MAGMA_ALIGN(*offset);
+            mipLevelOffset += mipSize;
+            if (align)
+                mipLevelOffset = MAGMA_ALIGN(mipLevelOffset);
+            ++level;
         }
     }
+    if (size)
+        *size = mipLevelOffset;
     return copyRegions;
 }
 

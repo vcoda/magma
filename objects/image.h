@@ -52,7 +52,7 @@ namespace magma
             VkDeviceSize offset = 0);
         void copyMipLevel(uint32_t mipLevel,
             std::shared_ptr<Buffer> buffer,
-            uint32_t bufferOffset,
+            VkDeviceSize bufferOffset,
             const VkOffset3D& imageOffset,
             std::shared_ptr<CommandBuffer> copyCmdBuffer,
             VkPipelineStageFlags barrierDstStageMask = VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
@@ -75,7 +75,9 @@ namespace magma
             VkFormat format,
             const VkExtent3D& extent);
         std::vector<VkBufferImageCopy> buildCopyRegions(const std::vector<VkDeviceSize>& mipSizes,
-            VkDeviceSize *size) const noexcept;
+            VkDeviceSize bufferOffset,
+            bool align,
+            VkDeviceSize *size = nullptr) const noexcept;
         void copyFromBuffer(std::shared_ptr<Buffer> buffer,
             const std::vector<VkBufferImageCopy>& copyRegions,
             std::shared_ptr<CommandBuffer> copyCmdBuffer);
