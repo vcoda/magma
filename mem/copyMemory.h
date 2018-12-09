@@ -84,7 +84,7 @@ namespace magma
         MAGMA_ASSERT(MAGMA_ALIGNED(src));
         constexpr size_t BLOCK_SIZE = sizeof(__m128i) * MAGMA_XMM_REGISTERS;
         constexpr int NUM_THREADS = 4;
-        if (size < BLOCK_SIZE * NUM_THREADS)
+        if (size <= BLOCK_SIZE * NUM_THREADS)
             memcpy(dst, src, size);
         else
         {
