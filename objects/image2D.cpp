@@ -35,8 +35,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
 {}
 
 Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
-    std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, 
-    const std::vector<VkDeviceSize>& mipSizes, bool mipAligned, 
+    std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, const ImageMipmapSizes& mipSizes, bool mipAligned, 
     std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1}, 
         MAGMA_COUNT(mipSizes), // mipLevels
@@ -51,7 +50,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
 }
 
 Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
-     const std::vector<const void *>& mipData, const std::vector<VkDeviceSize>& mipSizes,
+    const ImageMipmapData& mipData, const ImageMipmapSizes& mipSizes,
     std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},

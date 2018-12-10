@@ -35,10 +35,8 @@ Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, cons
 {}
 
 Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent, uint32_t arrayLayers,
-    std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset,
-    const std::vector<VkDeviceSize>& mipSizes, bool mipAligned,
-    std::shared_ptr<CommandBuffer> cmdBuffer,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, const ImageMipmapSizes& mipSizes, bool mipAligned,
+    std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         MAGMA_COUNT(mipSizes), // mipLevels
         arrayLayers, 
@@ -52,7 +50,7 @@ Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, cons
 }
 
 Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
-    const std::vector<std::vector<const void *>>& mipData, const std::vector<VkDeviceSize>& mipSizes,
+    const ImageArrayMipmapData& mipData, const ImageMipmapSizes& mipSizes,
     std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},

@@ -198,7 +198,7 @@ void Image::copyMipLevel(uint32_t mipLevel, std::shared_ptr<Buffer> buffer, VkDe
     }
 }
 
-std::vector<VkBufferImageCopy> Image::buildCopyRegions(const std::vector<VkDeviceSize>& mipSizes,
+std::vector<VkBufferImageCopy> Image::buildCopyRegions(const ImageMipmapSizes& mipSizes,
     VkDeviceSize bufferOffset, bool align, VkDeviceSize *size /* nullptr */) const noexcept
 {
     MAGMA_ASSERT(mipSizes.size() <= mipLevels);

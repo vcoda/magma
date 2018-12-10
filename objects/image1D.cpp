@@ -35,8 +35,7 @@ Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width
 {}
 
 Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width, 
-    std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, 
-    const std::vector<VkDeviceSize>& mipSizes, bool mipAligned, 
+    std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, const ImageMipmapSizes& mipSizes, bool mipAligned, 
     std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1}, 
         MAGMA_COUNT(mipSizes), // mipLevels
@@ -51,7 +50,7 @@ Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width
 }
 
 Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width,
-    const std::vector<const void *>& mipData, const std::vector<VkDeviceSize>& mipSizes,
+    const ImageMipmapData& mipData, const ImageMipmapSizes& mipSizes,
     std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},

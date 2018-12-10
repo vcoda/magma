@@ -34,7 +34,7 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
 {}
 
 ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t dimension,
-    const std::vector<const void *> mipData[6], const std::vector<VkDeviceSize>& mipSizes,
+    const ImageMipmapData mipData[6], const ImageMipmapSizes& mipSizes,
     std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1},
