@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include "mipmapBuilder.h"
+#include "mipmapGenerator.h"
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
 #include "../objects/image.h"
@@ -30,12 +30,12 @@ namespace magma
 {
 namespace aux
 {
-MipmapBuilder::MipmapBuilder(std::shared_ptr<Device> device):
+MipmapGenerator::MipmapGenerator(std::shared_ptr<Device> device):
     device(std::move(device)),
     queue(this->device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0))
 {}
 
-bool MipmapBuilder::checkFormatSupport(VkFormat format) const noexcept
+bool MipmapGenerator::checkFormatSupport(VkFormat format) const noexcept
 {
     std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
     const VkFormatProperties& properties = physicalDevice->getFormatProperties(format);
@@ -44,7 +44,7 @@ bool MipmapBuilder::checkFormatSupport(VkFormat format) const noexcept
     return srcBlit && dstBlit;
 }
 
-bool MipmapBuilder::buildMipmap(std::shared_ptr<Image> image, uint32_t baseLevel, VkFilter filter,
+bool MipmapGenerator::generateMipmap(std::shared_ptr<Image> image, uint32_t baseLevel, VkFilter filter,
     std::shared_ptr<CommandBuffer> commandBuffer, bool flush) const noexcept
 {
     if (flush)
@@ -101,7 +101,7 @@ bool MipmapBuilder::buildMipmap(std::shared_ptr<Image> image, uint32_t baseLevel
     return true;
 }
 
-bool MipmapBuilder::commit(std::shared_ptr<CommandBuffer> commandBuffer) const noexcept
+bool MipmapGenerator::commit(std::shared_ptr<CommandBuffer> commandBuffer) const noexcept
 {
     std::shared_ptr<magma::Fence> fence(commandBuffer->getFence());
     if (!queue->submit(commandBuffer, 0, nullptr, nullptr, fence))

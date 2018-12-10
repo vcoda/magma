@@ -390,7 +390,7 @@
     <ClInclude Include="auxiliary\shaderCompiler.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="auxiliary\mipmapBuilder.h">
+    <ClInclude Include="auxiliary\mipmapGenerator.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
   </ItemGroup>
@@ -673,7 +673,7 @@
     <ClCompile Include="auxiliary\shaderCompiler.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
-    <ClCompile Include="auxiliary\mipmapBuilder.cpp">
+    <ClCompile Include="auxiliary\mipmapGenerator.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>

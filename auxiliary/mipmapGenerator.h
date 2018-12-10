@@ -31,12 +31,12 @@ namespace magma
     {
         /* Generates MIP levels from base texture level using blit operations. */
 
-        class MipmapBuilder : public sys::NonCopyable
+        class MipmapGenerator : public sys::NonCopyable
         {
         public:
-            explicit MipmapBuilder(std::shared_ptr<Device> device);
+            explicit MipmapGenerator(std::shared_ptr<Device> device);
             bool checkFormatSupport(VkFormat format) const noexcept;
-            bool buildMipmap(std::shared_ptr<Image> image,
+            bool generateMipmap(std::shared_ptr<Image> image,
                 uint32_t baseLevel,
                 VkFilter filter,
                 std::shared_ptr<CommandBuffer> commandBuffer,
