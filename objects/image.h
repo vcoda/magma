@@ -79,6 +79,8 @@ namespace magma
             VkImageType imageType,
             VkFormat format,
             const VkExtent3D& extent);
+        ImageMipmapOffsets buildMipOffsets(const ImageMipmapSizes& mipSizes,
+            VkDeviceSize& bufferSize) const noexcept;
         std::vector<VkBufferImageCopy> buildCopyRegions(const ImageMipmapOffsets& mipOffsets,
             VkDeviceSize bufferOffset) const noexcept;
         void copyFromBuffer(std::shared_ptr<Buffer> buffer,
