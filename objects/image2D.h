@@ -35,15 +35,14 @@ namespace magma
             const VkExtent2D& extent,
             std::shared_ptr<Buffer> buffer,
             VkDeviceSize bufferOffset,
-            const ImageMipmapSizes& mipSizes,
-            bool mipAligned,
+            const ImageMipmapLayout& mipOffsets,
             std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit Image2D(std::shared_ptr<Device> device,
             VkFormat format,
             const VkExtent2D& extent,
             const ImageMipmapData& mipData, 
-            const ImageMipmapSizes& mipSizes,
+            const ImageMipmapLayout& mipSizes,
             std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);

@@ -198,51 +198,54 @@ void Image::copyMipLevel(uint32_t mipLevel, std::shared_ptr<Buffer> buffer, VkDe
     }
 }
 
-ImageMipmapOffsets Image::buildMipOffsets(const ImageMipmapSizes& mipSizes,
-    VkDeviceSize& bufferSize) const noexcept
+ImageMipmapLayout Image::buildMipOffsets(const ImageMipmapLayout& mipSizes, VkDeviceSize& bufferSize) const noexcept
 {
-    MAGMA_ASSERT(mipSizes.size() <= mipLevels);
-    bufferSize = 0;
-    ImageMipmapOffsets mipOffsets(1, 0);
-    for (uint32_t level = 1; level < mipSizes.size(); ++level)
-    {
-        const VkDeviceSize mipAlignedSize = MAGMA_ALIGN(mipSizes[level - 1]);
-        bufferSize += mipAlignedSize;
-        mipOffsets.push_back(mipAlignedSize);
+    const uint32_t mipCount = MAGMA_COUNT(mipSizes);
+    MAGMA_ASSERT(mipCount <= mipLevels * arrayLayers);
+    ImageMipmapLayout mipOffsets;
+    mipOffsets.reserve(mipLevels * arrayLayers);
+    mipOffsets.push_back(0);
+    for (uint32_t layer = 0; layer < arrayLayers; ++layer)
+    {   // Do not compute last mip offset for last array layer
+        const uint32_t count = (layer < arrayLayers - 1) ? mipCount : mipCount - 1;
+        for (uint32_t level = 1; level <= count; ++level)
+        {   // By default memory copies are aligned
+            const VkDeviceSize alignedMipSize = MAGMA_ALIGN(mipSizes[level - 1]);
+            mipOffsets.push_back(alignedMipSize);
+        }
     }
+    // Compute buffer size
+    bufferSize = 0;
+    for (uint32_t level = 0; level < mipCount; ++level)
+        bufferSize += MAGMA_ALIGN(mipSizes[level]);
+    bufferSize *= arrayLayers;
     return mipOffsets;
 }
 
-std::vector<VkBufferImageCopy> Image::buildCopyRegions(const ImageMipmapOffsets& mipOffsets,
-    VkDeviceSize bufferOffset) const noexcept
+std::vector<VkBufferImageCopy> Image::buildCopyRegions(const ImageMipmapLayout& mipOffsets, VkDeviceSize bufferOffset) const noexcept
 {
-    MAGMA_ASSERT(mipOffsets.size() <= mipLevels);
+    MAGMA_ASSERT(mipOffsets.size() <= mipLevels * arrayLayers);
     std::vector<VkBufferImageCopy> copyRegions;
-    for (uint32_t layer = 0; layer < arrayLayers; ++layer)
+    const uint32_t mipCount = MAGMA_COUNT(mipOffsets);
+    for (uint32_t i = 0; i < mipCount; ++i)
     {
-        uint32_t level = 0;
-        for (VkDeviceSize mipOffset : mipOffsets)
-        {
-            bufferOffset += mipOffset;
-            VkBufferImageCopy region;
-            region.bufferOffset = bufferOffset;
-            region.bufferRowLength = 0;
-            region.bufferImageHeight = 0;
-            region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            region.imageSubresource.mipLevel = level;
-            region.imageSubresource.baseArrayLayer = layer;
-            region.imageSubresource.layerCount = 1;
-            region.imageOffset = {0, 0, 0};
-            region.imageExtent = getMipExtent(level);
-            copyRegions.push_back(region);
-            ++level;
-        }
+        bufferOffset += mipOffsets[i];
+        VkBufferImageCopy region;
+        region.bufferOffset = bufferOffset;
+        region.bufferRowLength = 0;
+        region.bufferImageHeight = 0;
+        region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        region.imageSubresource.mipLevel = i % mipLevels;
+        region.imageSubresource.baseArrayLayer = i / mipLevels;
+        region.imageSubresource.layerCount = 1;
+        region.imageOffset = {0, 0, 0};
+        region.imageExtent = getMipExtent(region.imageSubresource.mipLevel);
+        copyRegions.push_back(region);
     }
     return copyRegions;
 }
 
-void Image::copyFromBuffer(std::shared_ptr<Buffer> buffer,
-    const std::vector<VkBufferImageCopy>& copyRegions,
+void Image::copyFromBuffer(std::shared_ptr<Buffer> buffer, const std::vector<VkBufferImageCopy>& copyRegions,
     std::shared_ptr<CommandBuffer> copyCmdBuffer)
 {
     // Define array layers to copy

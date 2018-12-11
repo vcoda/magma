@@ -33,8 +33,23 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
         std::move(allocator))
 {}
 
+ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t dimension, uint32_t mipLevels,
+    std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, const ImageMipmapLayout& mipOffsets,
+    std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1},
+        mipLevels,
+        6, // arrayLayers
+        1, // samples
+        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+        VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
+        std::move(allocator))
+{
+    const auto copyRegions = buildCopyRegions(mipOffsets, bufferOffset);
+    copyFromBuffer(buffer, copyRegions, cmdBuffer);
+}
+
 ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t dimension,
-    const ImageMipmapData mipData[6], const ImageMipmapSizes& mipSizes,
+    const ImageMipmapData mipData[6], const ImageMipmapLayout& mipSizes,
     std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1},
@@ -44,16 +59,17 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
         std::move(allocator))
-{
-    VkDeviceSize size;
-    const auto copyRegions = buildCopyRegions(mipSizes, 0, true, &size);
+{   // Calculate aligned size and mip offsets
+    VkDeviceSize bufferSize = 0;
+    const auto mipOffsets = buildMipOffsets(mipSizes, bufferSize);
+    const auto copyRegions = buildCopyRegions(mipOffsets, 0);
     // Copy array layers to host visible buffer
-    std::shared_ptr<SrcTransferBuffer> buffer(std::make_shared<SrcTransferBuffer>(this->device, size, 0, allocator));
+    std::shared_ptr<SrcTransferBuffer> buffer(std::make_shared<SrcTransferBuffer>(this->device, bufferSize, 0, allocator));
     helpers::mapScoped<uint8_t>(buffer, [&](uint8_t *data)
     {
         if (!copyFn)
             copyFn = copyMemory;
-        for (uint32_t face = 0; face < 6; ++face)
+        for (uint32_t face = 0; face < arrayLayers; ++face)
         {
             for (uint32_t level = 0; level < mipLevels; ++level)
             {

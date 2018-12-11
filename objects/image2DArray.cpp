@@ -35,22 +35,22 @@ Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, cons
 {}
 
 Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent, uint32_t arrayLayers,
-    std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, const ImageMipmapSizes& mipSizes, bool mipAligned,
+    std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, const ImageMipmapLayout& mipOffsets,
     std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
-        MAGMA_COUNT(mipSizes), // mipLevels
+        MAGMA_COUNT(mipOffsets) / arrayLayers, // mipLevels
         arrayLayers, 
         1, // samples
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
         0, // flags
         std::move(allocator))
 {
-    const auto copyRegions = buildCopyRegions(mipSizes, bufferOffset, mipAligned);
+    const auto copyRegions = buildCopyRegions(mipOffsets, bufferOffset);
     copyFromBuffer(buffer, copyRegions, cmdBuffer);
 }
 
 Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
-    const ImageArrayMipmapData& mipData, const ImageMipmapSizes& mipSizes,
+    const ImageArrayMipmapData& mipData, const ImageMipmapLayout& mipSizes,
     std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
@@ -60,11 +60,12 @@ Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, cons
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
         std::move(allocator))
-{
-    VkDeviceSize size;
-    const auto copyRegions = buildCopyRegions(mipSizes, 0, true, &size);
+{   // Calculate aligned size and mip offsets
+    VkDeviceSize bufferSize = 0;
+    const auto mipOffsets = buildMipOffsets(mipSizes, bufferSize);
+    const auto copyRegions = buildCopyRegions(mipOffsets, 0);
     // Copy array layers to host visible buffer
-    std::shared_ptr<SrcTransferBuffer> buffer(std::make_shared<SrcTransferBuffer>(this->device, size, 0, allocator));
+    std::shared_ptr<SrcTransferBuffer> buffer(std::make_shared<SrcTransferBuffer>(this->device, bufferSize, 0, allocator));
     helpers::mapScoped<uint8_t>(buffer, [&](uint8_t *data)
     {
         if (!copyFn)

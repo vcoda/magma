@@ -35,22 +35,22 @@ Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width
 {}
 
 Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width, 
-    std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, const ImageMipmapSizes& mipSizes, bool mipAligned, 
+    std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, const ImageMipmapLayout& mipOffsets,
     std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1}, 
-        MAGMA_COUNT(mipSizes), // mipLevels
+        MAGMA_COUNT(mipOffsets), // mipLevels
         1, // arrayLayers
         1, // samples
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
         0, 
         std::move(allocator))
 {
-    const auto copyRegions = buildCopyRegions(mipSizes, bufferOffset, mipAligned);
+    const auto copyRegions = buildCopyRegions(mipOffsets, bufferOffset);
     copyFromBuffer(buffer, copyRegions, cmdBuffer);
 }
 
 Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width,
-    const ImageMipmapData& mipData, const ImageMipmapSizes& mipSizes,
+    const ImageMipmapData& mipData, const ImageMipmapLayout& mipSizes,
     std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
@@ -60,11 +60,12 @@ Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0,
         std::move(allocator))
-{
-    VkDeviceSize size;
-    const auto copyRegions = buildCopyRegions(mipSizes, 0, true, &size);
+{   // Calculate aligned size and mip offsets
+    VkDeviceSize bufferSize = 0;
+    const auto mipOffsets = buildMipOffsets(mipSizes, bufferSize);
+    const auto copyRegions = buildCopyRegions(mipOffsets, 0);
     // Copy mip levels to host visible buffer
-    std::shared_ptr<SrcTransferBuffer> buffer(std::make_shared<SrcTransferBuffer>(this->device, size, 0, allocator));
+    std::shared_ptr<SrcTransferBuffer> buffer(std::make_shared<SrcTransferBuffer>(this->device, bufferSize, 0, allocator));
     helpers::mapScoped<uint8_t>(buffer, [&](uint8_t *data)
     {
         if (!copyFn)

@@ -33,8 +33,17 @@ namespace magma
         explicit ImageCube(std::shared_ptr<Device> device,
             VkFormat format,
             uint32_t dimension,
+            uint32_t mipLevels,
+            std::shared_ptr<Buffer> buffer, 
+            VkDeviceSize bufferOffset, 
+            const ImageMipmapLayout& mipOffsets,
+            std::shared_ptr<CommandBuffer> cmdBuffer,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        explicit ImageCube(std::shared_ptr<Device> device,
+            VkFormat format,
+            uint32_t dimension,
             const ImageMipmapData mipData[6],
-            const ImageMipmapSizes& mipSizes,
+            const ImageMipmapLayout& mipSizes,
             std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
