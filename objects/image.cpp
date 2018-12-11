@@ -108,11 +108,11 @@ VkExtent3D Image::getMipExtent(uint32_t level) const
     for (uint32_t i = 0; i < level; ++i)
     {
         if (mipExtent.width > 1)
-			mipExtent.width >>= 1;
+            mipExtent.width >>= 1;
         if (mipExtent.height > 1)
-			mipExtent.height >>= 1;
+            mipExtent.height >>= 1;
         if (mipExtent.depth > 1)
-			mipExtent.depth >>= 1;
+            mipExtent.depth >>= 1;
     }
     return mipExtent;
 }
