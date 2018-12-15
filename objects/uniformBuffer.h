@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <algorithm>
 #include <functional>
+#include <type_traits>
 #include "buffer.h"
 #include "device.h"
 #include "physicalDevice.h"
@@ -42,7 +43,7 @@ namespace magma
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
             arraySize(arraySize)
         {
-            static_assert(sizeof(Block)%16 == 0, "uniform block should have 16-byte alignment");
+            static_assert(std::alignment_of<Block>() == 16, "uniform block should have 16-byte alignment");
         }
         Block *map(ZeroMemoryFunction zeroFn = nullptr) noexcept
         {
