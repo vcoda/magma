@@ -214,10 +214,19 @@ namespace magma
             const std::shared_ptr<Image>& dstImage,
             VkImageLayout dstImageLayout,
             const VkBufferImageCopy& region) const noexcept;
+        void copyBufferToImage(
+            const std::shared_ptr<Buffer>& srcBuffer,
+            const std::shared_ptr<Image>& dstImage,
+            VkImageLayout dstImageLayout,
+            const std::vector<VkBufferImageCopy>& regions) const noexcept;
         void copyImageToBuffer(
             const std::shared_ptr<Image>& srcImage,
             const std::shared_ptr<Buffer>& dstBuffer,
             const VkBufferImageCopy& region) const noexcept;
+        void copyImageToBuffer(
+            const std::shared_ptr<Image>& srcImage,
+            const std::shared_ptr<Buffer>& dstBuffer,
+            const std::vector<VkBufferImageCopy>& regions) const noexcept;
 
         void updateBuffer(
             const std::shared_ptr<Buffer>& buffer,

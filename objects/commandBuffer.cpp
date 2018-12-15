@@ -195,9 +195,19 @@ void CommandBuffer::copyBufferToImage(const std::shared_ptr<Buffer>& srcBuffer, 
     vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstImageLayout, 1, &region);
 }
 
+void CommandBuffer::copyBufferToImage(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Image>& dstImage, VkImageLayout dstImageLayout, const std::vector<VkBufferImageCopy>& regions) const noexcept
+{
+    vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstImageLayout, MAGMA_COUNT(regions), regions.data());
+}
+
 void CommandBuffer::copyImageToBuffer(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Buffer>& dstBuffer, const VkBufferImageCopy& region) const noexcept
 {
     vkCmdCopyImageToBuffer(handle, *srcImage, srcImage->getLayout(), *dstBuffer, 1, &region);
+}
+
+void CommandBuffer::copyImageToBuffer(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Buffer>& dstBuffer, const std::vector<VkBufferImageCopy>& regions) const noexcept
+{
+    vkCmdCopyImageToBuffer(handle, *srcImage, srcImage->getLayout(), *dstBuffer, MAGMA_COUNT(regions), regions.data());
 }
 
 void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, VkDeviceSize dataSize, const void *data,
