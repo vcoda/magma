@@ -31,5 +31,23 @@ namespace magma
             uint32_t mipLevels,
             uint32_t arrayLayers,
             std::shared_ptr<IAllocator> allocator = nullptr);
+        explicit Image1DArray(std::shared_ptr<Device> device,
+            VkFormat format,
+            uint32_t width,
+            uint32_t arrayLayers,
+            std::shared_ptr<Buffer> buffer, 
+            VkDeviceSize bufferOffset, 
+            const ImageMipmapLayout& mipOffsets,
+            std::shared_ptr<CommandBuffer> cmdBuffer,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            bool flush = true);
+        explicit Image1DArray(std::shared_ptr<Device> device,
+            VkFormat format,
+            uint32_t width,
+            const ImageArrayMipmapData& mipData,
+            const ImageMipmapLayout& mipSizes,
+            std::shared_ptr<CommandBuffer> cmdBuffer,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
     };
 } // namespace magma
