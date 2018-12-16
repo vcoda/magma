@@ -200,6 +200,7 @@ void Image::copyMipLevel(uint32_t level, std::shared_ptr<Buffer> buffer, VkDevic
 ImageMipmapLayout Image::buildMipOffsets(const ImageMipmapLayout& mipSizes, VkDeviceSize& bufferSize) const noexcept
 {
     const uint32_t mipCount = MAGMA_COUNT(mipSizes);
+    MAGMA_ASSERT(mipCount > 0);
     MAGMA_ASSERT(mipCount <= mipLevels * arrayLayers);
     ImageMipmapLayout mipOffsets;
     mipOffsets.reserve(mipLevels * arrayLayers);
@@ -223,9 +224,10 @@ ImageMipmapLayout Image::buildMipOffsets(const ImageMipmapLayout& mipSizes, VkDe
 
 std::vector<VkBufferImageCopy> Image::buildCopyRegions(const ImageMipmapLayout& mipOffsets, VkDeviceSize bufferOffset) const noexcept
 {
-    MAGMA_ASSERT(mipOffsets.size() <= mipLevels * arrayLayers);
-    std::vector<VkBufferImageCopy> copyRegions;
     const uint32_t mipCount = MAGMA_COUNT(mipOffsets);
+    MAGMA_ASSERT(mipCount > 0);
+    MAGMA_ASSERT(mipCount <= mipLevels * arrayLayers);
+    std::vector<VkBufferImageCopy> copyRegions;
     for (uint32_t i = 0; i < mipCount; ++i)
     {
         bufferOffset += mipOffsets[i];

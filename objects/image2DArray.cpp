@@ -47,6 +47,7 @@ Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, cons
         0, // flags
         std::move(allocator))
 {
+    MAGMA_ASSERT(MAGMA_COUNT(mipOffsets) % arrayLayers == 0);
     const auto copyRegions = buildCopyRegions(mipOffsets, bufferOffset);
     copyFromBuffer(buffer, copyRegions, cmdBuffer, flush);
 }
