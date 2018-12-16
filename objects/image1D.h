@@ -37,7 +37,8 @@ namespace magma
             VkDeviceSize bufferOffset,
             const ImageMipmapLayout& mipOffsets,
             std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            bool flush = true);
         explicit Image1D(std::shared_ptr<Device> device,
             VkFormat format,
             uint32_t width,

@@ -81,7 +81,8 @@ namespace magma
             VkDeviceSize bufferOffset) const noexcept;
         void copyFromBuffer(std::shared_ptr<Buffer> buffer,
             const std::vector<VkBufferImageCopy>& copyRegions,
-            std::shared_ptr<CommandBuffer> copyCmdBuffer);
+            std::shared_ptr<CommandBuffer> cmdBuffer,
+            bool flush = true);
 
     protected:
         VkImageType imageType;

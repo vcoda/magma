@@ -34,8 +34,10 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
 {}
 
 ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t dimension, uint32_t mipLevels,
-    std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, const ImageMipmapLayout& mipOffsets,
-    std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, const ImageMipmapLayout& mipOffsets, 
+    std::shared_ptr<CommandBuffer> cmdBuffer, 
+    std::shared_ptr<IAllocator> allocator /* nullptr */, 
+    bool flush /* true */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1},
         mipLevels,
         6, // arrayLayers
@@ -45,12 +47,13 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
         std::move(allocator))
 {
     const auto copyRegions = buildCopyRegions(mipOffsets, bufferOffset);
-    copyFromBuffer(buffer, copyRegions, cmdBuffer);
+    copyFromBuffer(buffer, copyRegions, cmdBuffer, flush);
 }
 
 ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t dimension,
-    const ImageMipmapData mipData[6], const ImageMipmapLayout& mipSizes,
-    std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const ImageMipmapData mipData[6], const ImageMipmapLayout& mipSizes, 
+    std::shared_ptr<CommandBuffer> cmdBuffer, 
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1},
         MAGMA_COUNT(mipSizes), // mipLevels
@@ -79,6 +82,6 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
             }
         }
     });
-    copyFromBuffer(buffer, copyRegions, cmdBuffer);
+    copyFromBuffer(buffer, copyRegions, cmdBuffer, true);
 }
 } // namespace magma
