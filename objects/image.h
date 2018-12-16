@@ -47,9 +47,9 @@ namespace magma
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0);
-        void bindMemoryDeviceGroup(const std::vector<uint32_t>& deviceIndices,
+        void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+            const std::vector<uint32_t>& deviceIndices,
             const std::vector<VkRect2D>& splitInstanceBindRegions,
-            std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0);
         void copyMipLevel(uint32_t mipLevel,
             std::shared_ptr<Buffer> buffer,

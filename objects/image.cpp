@@ -125,9 +125,8 @@ void Image::bindMemory(std::shared_ptr<DeviceMemory> memory,
     this->memory = std::move(memory);
 }
 
-void Image::bindMemoryDeviceGroup(const std::vector<uint32_t>& deviceIndices,
-    const std::vector<VkRect2D>& splitInstanceBindRegions,
-    std::shared_ptr<DeviceMemory> memory,
+void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+    const std::vector<uint32_t>& deviceIndices, const std::vector<VkRect2D>& splitInstanceBindRegions,
     VkDeviceSize offset /* 0 */)
 {
     VkBindImageMemoryDeviceGroupInfo deviceGroupBindInfo;
