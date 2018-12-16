@@ -191,7 +191,7 @@ void Image::copyMipLevel(uint32_t level, std::shared_ptr<Buffer> buffer, VkDevic
         std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0));
         std::shared_ptr<Fence> fence(cmdBuffer->getFence());
         if (!queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence))
-            MAGMA_THROW("failed to submit command buffer to transfer queue");
+            MAGMA_THROW("failed to submit command buffer to graphics queue");
         if (!fence->wait())
             MAGMA_THROW("failed to wait fence");
     }
