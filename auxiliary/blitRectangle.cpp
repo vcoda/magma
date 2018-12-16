@@ -104,17 +104,13 @@ std::shared_ptr<ShaderModule> BlitRectangle::createShader(std::shared_ptr<Device
 {
     if (vertexShader)
     {
-        const uint32_t vertexShaderBytecode[] = {
 #include "spirv/blitv"
-        };
-        return std::make_shared<ShaderModule>(device, vertexShaderBytecode, sizeof(vertexShaderBytecode), allocator);
+        return std::make_shared<ShaderModule>(device, vsBlit, sizeof(vsBlit), allocator);
     }
     else
     {
-        const uint32_t fragmentShaderBytecode[] = {
 #include "spirv/blitf"
-        };
-        return std::make_shared<ShaderModule>(device, fragmentShaderBytecode, sizeof(fragmentShaderBytecode), allocator);
+        return std::make_shared<ShaderModule>(device, fsBlit, sizeof(fsBlit), allocator);
     }
 }
 } // namespace aux

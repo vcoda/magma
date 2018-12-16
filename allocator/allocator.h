@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <cstddef>
-#include "../vulkan.h"
+#include "../api/vulkan.h"
 #include "../nonCopyable.h"
 
 namespace magma

@@ -166,17 +166,13 @@ std::shared_ptr<ShaderModule> ImmediateRender::createShader(bool vertexShader) c
 {
     if (vertexShader)
     {
-        const uint32_t vertexShaderBytecode[] = {
-#include "spirv/immrv"
-        };
-        return std::make_shared<ShaderModule>(device, vertexShaderBytecode, sizeof(vertexShaderBytecode), allocator);
+#include "spirv/immv"
+        return std::make_shared<ShaderModule>(device, vsImm, sizeof(vsImm), allocator);
     }
     else
     {
-        const uint32_t fragmentShaderBytecode[] = {
-#include "spirv/immrf"
-        };
-        return std::make_shared<ShaderModule>(device, fragmentShaderBytecode, sizeof(fragmentShaderBytecode), allocator);
+#include "spirv/immf"
+        return std::make_shared<ShaderModule>(device, fsImm, sizeof(fsImm), allocator);
     }
 }
 
