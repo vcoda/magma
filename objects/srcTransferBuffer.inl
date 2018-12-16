@@ -1,7 +1,7 @@
 namespace magma
 {
 template<typename Type>
-MAGMA_INLINE SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<Device> device,
+inline SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<Device> device,
     const std::vector<Type>& data,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
