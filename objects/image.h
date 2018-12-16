@@ -51,11 +51,11 @@ namespace magma
             const std::vector<uint32_t>& deviceIndices,
             const std::vector<VkRect2D>& splitInstanceBindRegions,
             VkDeviceSize offset = 0);
-        void copyMipLevel(uint32_t mipLevel,
+        void copyMipLevel(uint32_t level,
             std::shared_ptr<Buffer> buffer,
             VkDeviceSize bufferOffset,
             const VkOffset3D& imageOffset,
-            std::shared_ptr<CommandBuffer> copyCmdBuffer,
+            std::shared_ptr<CommandBuffer> cmdBuffer,
             VkPipelineStageFlags barrierDstStageMask = VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
             bool flush = true);
 

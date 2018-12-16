@@ -148,49 +148,49 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     this->memory = std::move(memory);
 }
 
-void Image::copyMipLevel(uint32_t mipLevel, std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset,
-    const VkOffset3D& imageOffset, std::shared_ptr<CommandBuffer> copyCmdBuffer,
+void Image::copyMipLevel(uint32_t level, std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset,
+    const VkOffset3D& imageOffset, std::shared_ptr<CommandBuffer> cmdBuffer,
     VkPipelineStageFlags barrierDstStageMask /* VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT */,
     bool flush /* true */)
 {
     VkImageSubresourceRange subresourceRange;
     subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-    subresourceRange.baseMipLevel = mipLevel;
+    subresourceRange.baseMipLevel = level;
     subresourceRange.levelCount = 1;
     subresourceRange.baseArrayLayer = 0;
     subresourceRange.layerCount = 1;
-    copyCmdBuffer->begin();
+    cmdBuffer->begin();
     {   // Change layout from undefined to transfer optimal
         const ImageMemoryBarrier preCopyBarrier(shared_from_this(),
             VK_IMAGE_LAYOUT_UNDEFINED,
             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
             subresourceRange);
-        copyCmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_TRANSFER_WRITE_BIT, preCopyBarrier);
+        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_TRANSFER_WRITE_BIT, preCopyBarrier);
         VkBufferImageCopy region;
         region.bufferOffset = bufferOffset;
         region.bufferRowLength = 0;
         region.bufferImageHeight = 0;
         region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        region.imageSubresource.mipLevel = mipLevel;
+        region.imageSubresource.mipLevel = level;
         region.imageSubresource.baseArrayLayer = subresourceRange.baseArrayLayer;
         region.imageSubresource.layerCount = subresourceRange.layerCount;
         region.imageOffset = imageOffset;
-        region.imageExtent = getMipExtent(mipLevel);
+        region.imageExtent = getMipExtent(level);
         // Copy image data
-        copyCmdBuffer->copyBufferToImage(buffer, shared_from_this(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, region);
+        cmdBuffer->copyBufferToImage(buffer, shared_from_this(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, region);
         // Change layout from transfer optimal to shader read only
         const ImageMemoryBarrier postCopyBarrier(shared_from_this(),
             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
             VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
             subresourceRange);
-        copyCmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, barrierDstStageMask, postCopyBarrier);
+        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, barrierDstStageMask, postCopyBarrier);
     }
-    copyCmdBuffer->end();
+    cmdBuffer->end();
     if (flush)
     {
         std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0));
-        std::shared_ptr<Fence> fence(copyCmdBuffer->getFence());
-        if (!queue->submit(std::move(copyCmdBuffer), 0, nullptr, nullptr, fence))
+        std::shared_ptr<Fence> fence(cmdBuffer->getFence());
+        if (!queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence))
             MAGMA_THROW("failed to submit command buffer to transfer queue");
         if (!fence->wait())
             MAGMA_THROW("failed to wait fence");
