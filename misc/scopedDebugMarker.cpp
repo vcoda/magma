@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "scopedDebugMarker.h"
 #include "../objects/commandBuffer.h"
 #include "../utilities/hexColor.h"
-#include "../shared.h"
+#include "../internal/shared.h"
 
 namespace magma
 {

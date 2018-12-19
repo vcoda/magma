@@ -26,8 +26,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/multisampleState.h"
 #include "../states/depthStencilState.h"
 #include "../states/colorBlendState.h"
-#include "../nonCopyable.h"
-#include "../shared.h"
+#include "../internal/nonCopyable.h"
+#include "../internal/shared.h"
 
 namespace magma
 {
@@ -47,7 +47,7 @@ namespace magma
            to mess around with vertex buffer mapping, data copy,
            state changes etc. */
 
-        class ImmediateRender : public sys::NonCopyable
+        class ImmediateRender : public internal::NonCopyable
         {
         public:
             explicit ImmediateRender(uint32_t maxVertexCount,

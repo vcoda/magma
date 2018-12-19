@@ -77,18 +77,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    template<typename Type>
-    MAGMA_INLINE typename Type::VkType __handle(const std::shared_ptr<Type>& obj)
+    namespace internal
     {
-        if (obj) return *obj;
+        template<typename Type>
+        MAGMA_INLINE typename Type::VkType dereference(const std::shared_ptr<Type>& obj)
+        {
+            if (obj) return *obj;
 #ifdef VK_NULL_HANDLE
-        return VK_NULL_HANDLE;
+            return VK_NULL_HANDLE;
 #else
-        return 0;
+            return 0;
 #endif
+        }
     }
 } // namespace magma
 
 #define MAGMA_HANDLE(obj) *(this->obj)
-#define MAGMA_OPTIONAL_HANDLE(obj) magma::__handle(obj)
+#define MAGMA_OPTIONAL_HANDLE(obj) magma::internal::dereference(obj)
 #define MAGMA_OPTIONAL_INSTANCE(obj) this->obj ? this->obj.get() : nullptr

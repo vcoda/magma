@@ -135,7 +135,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\allocator\allocable.h" />
     <ClInclude Include="..\..\allocator\allocator.h" />
     <ClInclude Include="..\..\allocator\objectAllocator.h" />
     <ClInclude Include="..\..\api\vulkan.h" />
@@ -156,8 +155,16 @@
     <ClInclude Include="..\..\helpers\stackArray.h" />
     <ClInclude Include="..\..\helpers\stringize.h" />
     <ClInclude Include="..\..\helpers\uniformArray.h" />
-    <ClInclude Include="..\..\mem\copyMemory.h" />
-    <ClInclude Include="..\..\mem\zeroMemory.h" />
+    <ClInclude Include="..\..\internal\allocable.h" />
+    <ClInclude Include="..\..\internal\compareArrays.h" />
+    <ClInclude Include="..\..\internal\copy.h" />
+    <ClInclude Include="..\..\internal\copyMemory.h" />
+    <ClInclude Include="..\..\internal\hash.h" />
+    <ClInclude Include="..\..\internal\nonCopyable.h" />
+    <ClInclude Include="..\..\internal\refCountChecker.h" />
+    <ClInclude Include="..\..\internal\shared.h" />
+    <ClInclude Include="..\..\internal\zeroMemory.h" />
+    <ClInclude Include="..\..\magma.h" />
     <ClInclude Include="..\..\misc\clearAttachment.h" />
     <ClInclude Include="..\..\misc\clearValue.h" />
     <ClInclude Include="..\..\misc\deviceExtension.h" />
@@ -234,17 +241,8 @@
     <ClInclude Include="..\..\states\tesselationState.h" />
     <ClInclude Include="..\..\states\vertexInputState.h" />
     <ClInclude Include="..\..\states\viewportState.h" />
-    <ClInclude Include="..\..\utilities\copy.h" />
-    <ClInclude Include="..\..\utilities\hash.h" />
-    <ClInclude Include="..\..\utilities\hexColor.h" />
-    <ClInclude Include="..\..\utilities\refCountChecker.h" />
-    <ClInclude Include="magma.h" />
-    <ClInclude Include="nonCopyable.h" />
-    <ClInclude Include="shared.h" />
-    <ClInclude Include="typedefs.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\allocator\allocable.cpp" />
     <ClCompile Include="..\..\allocator\allocator.cpp" />
     <ClCompile Include="..\..\auxiliary\blitRectangle.cpp" />
     <ClCompile Include="..\..\auxiliary\framebuffers.cpp" />
@@ -257,6 +255,7 @@
     <ClCompile Include="..\..\descriptors\attachment.cpp" />
     <ClCompile Include="..\..\descriptors\subpass.cpp" />
     <ClCompile Include="..\..\helpers\stringize.cpp" />
+    <ClCompile Include="..\..\internal\allocable.cpp" />
     <ClCompile Include="..\..\misc\clearValue.cpp" />
     <ClCompile Include="..\..\misc\deviceQueueDesc.cpp" />
     <ClCompile Include="..\..\misc\exception.cpp" />

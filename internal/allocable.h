@@ -18,15 +18,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <atomic>
 #include <memory>
-#include "objectAllocator.h"
+#include "../allocator/objectAllocator.h"
+#include "nonCopyable.h"
 
 namespace magma
 {
-    namespace sys
+    namespace internal
     {
         /* Provides user-defined new and delete operators for custom allocations. */
 
-        class Allocable : public NonCopyable
+        class Allocable : public internal::NonCopyable
         {
         public:
             void *operator new(std::size_t size)
@@ -74,5 +75,5 @@ namespace magma
             static std::shared_ptr<IObjectAllocator> allocator;
             static std::atomic<int32_t> allocCount;
         };
-    } // namespace sys
+    } // namespace internal
 } // namespace magma

@@ -16,9 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "viewportState.h"
-#include "../utilities/copy.h"
-#include "../utilities/hash.h"
-#include "../shared.h"
+#include "../internal/copy.h"
+#include "../internal/hash.h"
+#include "../internal/compareArrays.h"
 
 namespace magma
 {
@@ -136,10 +136,10 @@ ViewportState::ViewportState(const std::vector<VkViewport>& viewports, const std
 
 ViewportState::ViewportState(const ViewportState& other)
 {
-    utilities::copy(this, &other);
-    pViewports = utilities::copyArray(other.pViewports, viewportCount);
+    internal::copy(this, &other);
+    pViewports = internal::copyArray(other.pViewports, viewportCount);
     try {
-        pScissors = utilities::copyArray(other.pScissors, scissorCount);
+        pScissors = internal::copyArray(other.pScissors, scissorCount);
     } catch (const std::bad_alloc& exc)
     {
         delete[] pViewports;
@@ -151,10 +151,10 @@ ViewportState& ViewportState::operator=(const ViewportState& other)
 {
     if (this != &other)
     {
-        utilities::copy(this, &other);
-        pViewports = utilities::copyArray(other.pViewports, viewportCount);
+        internal::copy(this, &other);
+        pViewports = internal::copyArray(other.pViewports, viewportCount);
         try {
-            pScissors = utilities::copyArray(other.pScissors, scissorCount);
+            pScissors = internal::copyArray(other.pScissors, scissorCount);
         } catch (const std::bad_alloc& exc)
         {
             delete[] pViewports;
@@ -172,13 +172,13 @@ ViewportState::~ViewportState()
 
 size_t ViewportState::hash() const noexcept
 {
-    size_t hash = utilities::hashVariadic(
+    size_t hash = internal::hashArgs(
         flags,
         viewportCount,
         scissorCount);
     for (uint32_t i = 0; i < viewportCount; ++i)
     {
-        utilities::hashCombine(hash, utilities::hashVariadic(
+        internal::hashCombine(hash, internal::hashArgs(
             pViewports[i].x,
             pViewports[i].y,
             pViewports[i].width,
@@ -188,7 +188,7 @@ size_t ViewportState::hash() const noexcept
     }
     for (uint32_t i = 0; i < scissorCount; ++i)
     {
-        utilities::hashCombine(hash, utilities::hashVariadic(
+        internal::hashCombine(hash, internal::hashArgs(
             pScissors[i].offset.x,
             pScissors[i].offset.y,
             pScissors[i].extent.width,
@@ -202,8 +202,8 @@ bool ViewportState::operator==(const ViewportState& other) const noexcept
     return (flags == other.flags) &&
         (viewportCount == other.viewportCount) &&
         (scissorCount == other.scissorCount) &&
-        utilities::compareArrays(pViewports, other.pViewports, viewportCount) &&
-        utilities::compareArrays(pScissors, other.pScissors, scissorCount);
+        internal::compareArrays(pViewports, other.pViewports, viewportCount) &&
+        internal::compareArrays(pScissors, other.pScissors, scissorCount);
 }
 
 void ViewportState::initialize(const VkViewport& viewport, const VkRect2D& scissor)
@@ -212,9 +212,9 @@ void ViewportState::initialize(const VkViewport& viewport, const VkRect2D& sciss
     pNext = nullptr;
     flags = 0;
     viewportCount = 1;
-    pViewports = utilities::copyArray(&viewport, 1);
+    pViewports = internal::copyArray(&viewport, 1);
     scissorCount = 1;
-    pScissors = utilities::copyArray(&scissor, 1);
+    pScissors = internal::copyArray(&scissor, 1);
 }
 
 void ViewportState::initialize(const std::vector<VkViewport>& viewports, const std::vector<VkRect2D>& scissors)
@@ -223,8 +223,8 @@ void ViewportState::initialize(const std::vector<VkViewport>& viewports, const s
     pNext = nullptr;
     flags = 0;
     viewportCount = MAGMA_COUNT(viewports);
-    pViewports = utilities::copyVector(viewports);
+    pViewports = internal::copyVector(viewports);
     scissorCount = MAGMA_COUNT(scissors);
-    pScissors = utilities::copyVector(scissors);
+    pScissors = internal::copyVector(scissors);
 }
 } // namespace magma

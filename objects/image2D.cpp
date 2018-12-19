@@ -18,8 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "image2D.h"
 #include "srcTransferBuffer.h"
 #include "deviceMemory.h"
-#include "../mem/copyMemory.h"
 #include "../helpers/mapScoped.h"
+#include "../internal/copyMemory.h"
 
 namespace magma
 {
@@ -72,7 +72,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
     helpers::mapScoped<uint8_t>(buffer, [&](uint8_t *data)
     {
         if (!copyFn)
-            copyFn = copyMemory;
+            copyFn = internal::copyMemory;
         for (uint32_t level = 0; level < mipLevels; ++level)
         {
             const VkDeviceSize bufferOffset = copyRegions[level].bufferOffset;

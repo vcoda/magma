@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <memory>
-#include "../nonCopyable.h"
+#include "../internal/nonCopyable.h"
 
 namespace magma
 {
@@ -26,7 +26,7 @@ namespace magma
     /* Uses VK_EXT_debug_utils extension in favor of deprecated VK_EXT_debug_marker.
        https://www.lunarg.com/wp-content/uploads/2018/05/Vulkan-Debug-Utils_05_18_v1.pdf */
 
-    class ScopedDebugMarker final : public sys::NonCopyable
+    class ScopedDebugMarker final : public internal::NonCopyable
     {
     public:
         ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer,

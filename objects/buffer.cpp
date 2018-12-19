@@ -23,10 +23,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "fence.h"
 #include "commandBuffer.h"
 #include "../allocator/allocator.h"
-#include "../mem/copyMemory.h"
 #include "../misc/deviceExtension.h"
 #include "../misc/exception.h"
-#include "../shared.h"
+#include "../internal/copyMemory.h"
+#include "../internal/shared.h"
 
 namespace magma
 {
@@ -111,7 +111,7 @@ void Buffer::copyToMapped(const void *data, CopyMemoryFunction copyFn) noexcept
     if (buffer)
     {
         if (!copyFn)
-            copyFn = copyMemory;
+            copyFn = internal::copyMemory;
         copyFn(buffer, data, static_cast<size_t>(size));
         memory->unmap();
     }

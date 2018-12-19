@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <memory>
 #include "../api/vulkan.h"
-#include "../allocator/allocable.h"
+#include "../internal/allocable.h"
 
 namespace magma
 {
@@ -27,7 +27,7 @@ namespace magma
 
     /* Base non-copyable object for dispatchable and non-dispatchable handles. */
 
-    class Object : public sys::Allocable
+    class Object : public internal::Allocable
     {
     public:
         explicit Object(VkObjectType objectType,

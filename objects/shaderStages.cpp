@@ -17,17 +17,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "shaderStages.h"
 #include "shaderModule.h"
-#include "../utilities/hash.h"
+#include "../internal/hash.h"
 
 namespace magma
 {
 Specialization::Specialization(const Specialization& other)
 {
     mapEntryCount = other.mapEntryCount;
-    pMapEntries = utilities::copyArray(other.pMapEntries, mapEntryCount);
+    pMapEntries = internal::copyArray(other.pMapEntries, mapEntryCount);
     dataSize = other.dataSize;
     try {
-        pData = utilities::copyArray(reinterpret_cast<const char *>(other.pData), dataSize);
+        pData = internal::copyArray(reinterpret_cast<const char *>(other.pData), dataSize);
     } catch (const std::bad_alloc& exc)
     {
         delete[] pMapEntries;
@@ -40,10 +40,10 @@ Specialization& Specialization::operator=(const Specialization& other)
     if (this != &other)
     {
         mapEntryCount = other.mapEntryCount;
-        pMapEntries = utilities::copyArray(other.pMapEntries, mapEntryCount);
+        pMapEntries = internal::copyArray(other.pMapEntries, mapEntryCount);
         dataSize = other.dataSize;
         try {
-            pData = utilities::copyArray(reinterpret_cast<const char *>(other.pData), dataSize);
+            pData = internal::copyArray(reinterpret_cast<const char *>(other.pData), dataSize);
         } catch (const std::bad_alloc& exc)
         {
             delete[] pMapEntries;
@@ -64,12 +64,12 @@ size_t Specialization::hash() const noexcept
     size_t hash = 0;
     for (uint32_t i = 0; i < mapEntryCount; ++i)
     {
-        utilities::hashCombine(hash, utilities::hashVariadic(
+        internal::hashCombine(hash, internal::hashArgs(
             pMapEntries[i].constantID,
             pMapEntries[i].offset,
             pMapEntries[i].size));
     }
-    utilities::hashCombine(hash, utilities::hashArray(
+    internal::hashCombine(hash, internal::hashArray(
         reinterpret_cast<const uint8_t *>(pData), dataSize));
     return hash;
 }
@@ -84,7 +84,7 @@ PipelineShaderStage::PipelineShaderStage(const VkShaderStageFlagBits stage, std:
     info.flags = flags;
     info.stage = stage;
     info.module = *this->module;
-    info.pName = utilities::copyString(entrypoint);
+    info.pName = internal::copyString(entrypoint);
     info.pSpecializationInfo = this->specialization.get();
 }
 
@@ -93,7 +93,7 @@ PipelineShaderStage::PipelineShaderStage(const PipelineShaderStage& other):
     module(other.module),
     specialization(other.specialization)
 {
-    info.pName = utilities::copyString(other.info.pName);
+    info.pName = internal::copyString(other.info.pName);
 }
 
 PipelineShaderStage& PipelineShaderStage::operator=(const PipelineShaderStage& other)
@@ -101,7 +101,7 @@ PipelineShaderStage& PipelineShaderStage::operator=(const PipelineShaderStage& o
     if (this != &other)
     {
         info = other.info;
-        info.pName = utilities::copyString(other.info.pName);
+        info.pName = internal::copyString(other.info.pName);
         module = other.module;
         specialization = other.specialization;
     }
@@ -115,15 +115,15 @@ PipelineShaderStage::~PipelineShaderStage()
 
 size_t PipelineShaderStage::hash() const noexcept
 {
-    size_t hash = utilities::hashVariadic(
+    size_t hash = internal::hashArgs(
         info.flags,
         info.stage,
         info.module);
     const std::string entrypoint(info.pName);
     std::hash<std::string> hasher;
-    utilities::hashCombine(hash, hasher(entrypoint));
+    internal::hashCombine(hash, hasher(entrypoint));
     if (specialization)
-        utilities::hashCombine(hash, specialization->hash());
+        internal::hashCombine(hash, specialization->hash());
     return hash;
 }
 } // namespace magma

@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "shaderCompiler.h"
 #include "../objects/shaderModule.h"
-#include "../shared.h"
+#include "../internal/shared.h"
 
 namespace magma
 {

@@ -16,15 +16,15 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../nonCopyable.h"
-#include "../shared.h"
+#include "../internal/nonCopyable.h"
+#include "../internal/shared.h"
 
 namespace magma
 {
     namespace helpers
     {
         template<typename Type>
-        class AlignedUniformArray : public NonCopyable
+        class AlignedUniformArray : public internal::NonCopyable
         {
         public:
             class Iterator;

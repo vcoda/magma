@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <memory>
-#include "../nonCopyable.h"
+#include "../internal/nonCopyable.h"
 
 namespace magma
 {
@@ -42,7 +42,7 @@ namespace magma
         /* Auxiliary object that helps quickly blit source texture
            into destination framebuffer. */
 
-        class BlitRectangle : public sys::NonCopyable
+        class BlitRectangle : public internal::NonCopyable
         {
         public:
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,

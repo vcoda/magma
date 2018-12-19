@@ -18,8 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "deviceQueueDesc.h"
 #include "../objects/physicalDevice.h"
 #include "../misc/exception.h"
-#include "../utilities/copy.h"
-#include "../shared.h"
+#include "../internal/copy.h"
 
 namespace magma
 {
@@ -36,21 +35,21 @@ DeviceQueueDescriptor::DeviceQueueDescriptor(VkQueueFlagBits queueType,
     for (float priority : queuePriorities)
         MAGMA_ASSERT(priority >= 0.f && priority <= 1.f);
 #endif
-    pQueuePriorities = utilities::copyVector(queuePriorities);
+    pQueuePriorities = internal::copyVector(queuePriorities);
 }
 
 DeviceQueueDescriptor::DeviceQueueDescriptor(const DeviceQueueDescriptor& other)
 {
-    utilities::copy(this, &other);
-    pQueuePriorities = utilities::copyArray(other.pQueuePriorities, queueCount);
+    internal::copy(this, &other);
+    pQueuePriorities = internal::copyArray(other.pQueuePriorities, queueCount);
 }
 
 DeviceQueueDescriptor& DeviceQueueDescriptor::operator=(const DeviceQueueDescriptor& other)
 {
     if (this != &other)
     {
-        utilities::copy(this, &other);
-        pQueuePriorities = utilities::copyArray(other.pQueuePriorities, queueCount);
+        internal::copy(this, &other);
+        pQueuePriorities = internal::copyArray(other.pQueuePriorities, queueCount);
     }
     return *this;
 }

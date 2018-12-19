@@ -15,21 +15,23 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include "allocable.h"
-#include "../misc/exception.h"
+#pragma once
+#include <cstring>
+#include "shared.h"
 
 namespace magma
 {
-namespace sys
-{
-std::shared_ptr<IObjectAllocator> Allocable::allocator;
-std::atomic<int32_t> Allocable::allocCount;
-
-void Allocable::setAllocator(std::shared_ptr<IObjectAllocator> allocator)
-{
-    if (allocCount)
-        MAGMA_THROW("allocator should be defined only when allocation count is zero");
-    allocator = std::move(allocator);
-}
-} // namespace sys
+    namespace internal
+    {
+        template<typename Type>
+        MAGMA_INLINE bool compareArrays(const Type *const src, const Type *const dst, size_t count) noexcept
+        {
+            if (!src && !dst)
+                return true;
+            if (!src || !dst)
+                return false;
+            MAGMA_ASSERT(src != dst);
+            return (memcmp(src, dst, sizeof(Type) * count) == 0);
+        }
+    } // namespace internal
 } // namespace magma

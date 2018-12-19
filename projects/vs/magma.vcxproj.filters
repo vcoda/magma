@@ -46,17 +46,11 @@
     <Filter Include="Source Files\allocator">
       <UniqueIdentifier>{9b6625c6-3df9-4388-b570-e80682bb98e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\mem">
-      <UniqueIdentifier>{e6769573-288b-41d6-a84e-9a41c5c66238}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\barriers">
       <UniqueIdentifier>{99a7312e-d495-48a7-a049-fb8ef8956478}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\barriers">
       <UniqueIdentifier>{28129b9e-4bba-4ac8-bb73-fb88bdd4dde7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\utilities">
-      <UniqueIdentifier>{b7f1fa23-f762-4c0e-9cd6-3382501a7056}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\helpers">
       <UniqueIdentifier>{7a0e31f0-28af-45c3-bc57-ae2bb5449010}</UniqueIdentifier>
@@ -73,23 +67,14 @@
     <Filter Include="Header Files\api">
       <UniqueIdentifier>{998d6151-609b-4dd4-ba47-8b056f2cc48c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\internal">
+      <UniqueIdentifier>{f51a856c-0dcd-4f37-84ac-03b251d1ddc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\internal">
+      <UniqueIdentifier>{c5068743-cbd8-4456-a41b-fc0d8e3e041b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="magma.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="shared.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="typedefs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nonCopyable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\allocator\allocable.h">
-      <Filter>Header Files\allocator</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\allocator\allocator.h">
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
@@ -146,12 +131,6 @@
     </ClInclude>
     <ClInclude Include="..\..\helpers\uniformArray.h">
       <Filter>Header Files\helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\mem\copyMemory.h">
-      <Filter>Header Files\mem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\mem\zeroMemory.h">
-      <Filter>Header Files\mem</Filter>
     </ClInclude>
     <ClInclude Include="..\..\misc\clearAttachment.h">
       <Filter>Header Files\misc</Filter>
@@ -381,26 +360,41 @@
     <ClInclude Include="..\..\states\viewportState.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\utilities\copy.h">
-      <Filter>Header Files\utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\utilities\hash.h">
-      <Filter>Header Files\utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\utilities\hexColor.h">
-      <Filter>Header Files\utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\utilities\refCountChecker.h">
-      <Filter>Header Files\utilities</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\api\vulkan.h">
       <Filter>Header Files\api</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\internal\nonCopyable.h">
+      <Filter>Header Files\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\internal\refCountChecker.h">
+      <Filter>Header Files\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\internal\shared.h">
+      <Filter>Header Files\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\magma.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\internal\allocable.h">
+      <Filter>Header Files\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\internal\copyMemory.h">
+      <Filter>Header Files\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\internal\zeroMemory.h">
+      <Filter>Header Files\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\internal\copy.h">
+      <Filter>Header Files\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\internal\hash.h">
+      <Filter>Header Files\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\internal\compareArrays.h">
+      <Filter>Header Files\internal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\allocator\allocable.cpp">
-      <Filter>Source Files\allocator</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\allocator\allocator.cpp">
       <Filter>Source Files\allocator</Filter>
     </ClCompile>
@@ -637,6 +631,9 @@
     </ClCompile>
     <ClCompile Include="..\..\objects\vertexBuffer.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\internal\allocable.cpp">
+      <Filter>Source Files\internal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

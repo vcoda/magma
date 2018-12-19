@@ -101,19 +101,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "misc/scopedDebugMarker.h"
 #include "misc/viewport.h"
 
-#include "helpers/alignedUniformArray.h"
-#include "helpers/mapScoped.h"
-#include "helpers/stackArray.h"
-#include "helpers/stringize.h"
-#include "helpers/uniformArray.h"
-
-#include "mem/copyMemory.h"
-#include "mem/zeroMemory.h"
-
 #include "auxiliary/blitRectangle.h"
 #include "auxiliary/framebuffers.h"
 #include "auxiliary/immediateRender.h"
 #include "auxiliary/mipmapGenerator.h"
 #include "auxiliary/shaderCompiler.h"
 
-#include "typedefs.h"
+#include "helpers/alignedUniformArray.h"
+#include "helpers/mapScoped.h"
+#include "helpers/stackArray.h"
+#include "helpers/stringize.h"
+#include "helpers/typedefs.h"
+#include "helpers/uniformArray.h"

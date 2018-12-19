@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <cstddef>
 #include "../api/vulkan.h"
-#include "../nonCopyable.h"
+#include "../internal/nonCopyable.h"
 
 namespace magma
 {
@@ -34,7 +34,7 @@ namespace magma
        Rather, this can be useful for certain embedded systems, for debugging purposes
        (e.g. putting a guard page after all host allocations), or for memory allocation logging. */
 
-    class IAllocator : public AllocationCallbacks, public sys::NonCopyable
+    class IAllocator : public AllocationCallbacks, public internal::NonCopyable
     {
     public:
         virtual void *alloc(size_t size,

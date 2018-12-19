@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <memory>
 #include "../api/vulkan.h"
-#include "../nonCopyable.h"
+#include "../internal/nonCopyable.h"
 
 namespace magma
 {
@@ -37,7 +37,7 @@ namespace magma
            color, depth/stencil and resolve attachments, image view reinterpretation,
            render pass and framebuffer construction. */
 
-        class Framebuffer : public sys::NonCopyable
+        class Framebuffer : public internal::NonCopyable
         {
         public:
             virtual std::shared_ptr<ImageView> getColorView() const noexcept { return colorView; }

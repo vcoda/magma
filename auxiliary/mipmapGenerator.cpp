@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/fence.h"
 #include "../barriers/imageMemoryBarrier.h"
 #include "../misc/imageSubresourceRange.h"
-#include "../shared.h"
+#include "../internal/shared.h"
 
 namespace magma
 {

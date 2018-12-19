@@ -18,8 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "imageCube.h"
 #include "srcTransferBuffer.h"
 #include "deviceMemory.h"
-#include "../mem/copyMemory.h"
 #include "../helpers/mapScoped.h"
+#include "../internal/copyMemory.h"
 
 namespace magma
 {
@@ -71,7 +71,7 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
     helpers::mapScoped<uint8_t>(buffer, [&](uint8_t *data)
     {
         if (!copyFn)
-            copyFn = copyMemory;
+            copyFn = internal::copyMemory;
         for (uint32_t face = 0; face < arrayLayers; ++face)
         {
             for (uint32_t level = 0; level < mipLevels; ++level)

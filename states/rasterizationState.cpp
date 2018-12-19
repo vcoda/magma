@@ -16,8 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "rasterizationState.h"
-#include "../utilities/hash.h"
-#include "../shared.h"
+#include "../internal/hash.h"
 
 namespace magma
 {
@@ -41,7 +40,7 @@ RasterizationState::RasterizationState(VkPolygonMode polygonMode, VkCullModeFlag
 
 size_t RasterizationState::hash() const noexcept
 {
-    return utilities::hashVariadic(
+    return internal::hashArgs(
         flags,
         depthClampEnable,
         rasterizerDiscardEnable,
@@ -95,11 +94,11 @@ ConservativeRasterizationState::ConservativeRasterizationState(const Rasterizati
 
 size_t ConservativeRasterizationState::hash() const noexcept
 {
-    size_t hash = utilities::hashVariadic(
+    size_t hash = internal::hashArgs(
         conservative.flags,
         conservative.conservativeRasterizationMode,
         conservative.extraPrimitiveOverestimationSize);
-    utilities::hashCombineArg(hash, RasterizationState::hash());
+    internal::hashCombine(hash, RasterizationState::hash());
     return hash;
 }
 
@@ -123,9 +122,9 @@ RasterizationOrderState::RasterizationOrderState(const RasterizationState& state
 
 size_t RasterizationOrderState::hash() const noexcept
 {
-    size_t hash = 0;
-    utilities::hashCombineArg(hash, order.rasterizationOrder);
-    utilities::hashCombineArg(hash, RasterizationState::hash());
+    std::hash<VkRasterizationOrderAMD> hasher;
+    size_t hash = hasher(order.rasterizationOrder);
+    internal::hashCombine(hash, RasterizationState::hash());
     return hash;
 }
 

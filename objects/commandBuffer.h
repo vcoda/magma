@@ -28,7 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/viewport.h"
 #include "../misc/scissor.h"
 #include "../helpers/stackArray.h"
-#include "../shared.h"
+#include "../internal/shared.h"
 
 namespace magma
 {

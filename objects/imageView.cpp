@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../misc/format.h"
 #include "../misc/exception.h"
-#include "../shared.h"
+#include "../internal/shared.h"
 
 namespace magma
 {

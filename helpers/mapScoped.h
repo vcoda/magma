@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "uniformArray.h"
 #include "alignedUniformArray.h"
 #include "../objects/uniformBuffer.h"
-#include "../mem/zeroMemory.h"
+#include "../internal/zeroMemory.h"
 
 namespace magma
 {

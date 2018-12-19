@@ -3,35 +3,15 @@
 #else
 #include <mm_malloc.h>
 #endif
-#include <chrono>
-#include <iostream>
+#include "scopedProfiler.h"
 #include "../copyMemory.h"
 #include "../zeroMemory.h"
 
-constexpr size_t BUFFER_SIZE = 1024 * 1024 * 32; // 32M
-constexpr int NUM_ITERATIONS = 100;
-
-class ScopedProfiler
+namespace
 {
-    typedef std::chrono::high_resolution_clock HiResClock;
-
-public:
-    ScopedProfiler(const char *message):
-        begin(HiResClock::now())
-    {
-        std::cout << message << std::endl;
-    }
-    ~ScopedProfiler()
-    {
-        const HiResClock::time_point end = HiResClock::now();
-        const std::chrono::microseconds mcs = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
-        const float ms = static_cast<float>(mcs.count()) / 1000.0f;
-        std::cout << "Elapsed time: " << ms << "ms." << std::endl;
-    }
-
-private:
-    HiResClock::time_point begin;
-};
+    constexpr size_t BUFFER_SIZE = 1024 * 1024 * 32; // 32M
+    constexpr int NUM_ITERATIONS = 100;
+}
 
 bool checkBuffer(const void *buffer, char value)
 {
@@ -58,18 +38,16 @@ int main()
     // Values to be copied
     memset(srcBuffer0, 0x7F, BUFFER_SIZE);
     memset(srcBuffer1, 0x7F, BUFFER_SIZE);
-    {
-        // 1) Test std::memcpy()
+    {   // 1) Test std::memcpy()
         ScopedProfiler prof("Run std::memcpy() performance test.");
         for (int i = 0; i < NUM_ITERATIONS; ++i)
             std::memcpy(dstBuffer0, srcBuffer0, BUFFER_SIZE);
     }
     std::cout << std::endl;
-    {
-        // 2) Test our copy function
+    {   // 2) Test our copy function
         ScopedProfiler prof("Run magma::copyMemory() performance test.");
         for (int i = 0; i < NUM_ITERATIONS; ++i)
-            magma::copyMemory(dstBuffer1, srcBuffer1, BUFFER_SIZE);
+            magma::internal::copyMemory(dstBuffer1, srcBuffer1, BUFFER_SIZE);
     }
     // Test copy correctness
     if (checkBuffer(dstBuffer1, 0x7F))
@@ -77,18 +55,16 @@ int main()
     else
         std::cout << "Memory copy invalid!" << std::endl;
     std::cout << std::endl;
-    {
-        // 3) Test std::memset()
+    {   // 3) Test std::memset()
         ScopedProfiler prof("Run std::memset() performance test.");
         for (int i = 0; i < NUM_ITERATIONS; ++i)
             std::memset(dstBuffer0, 0, BUFFER_SIZE);
     }
     std::cout << std::endl;
-    {
-        // 4) Test our zero function
+    {   // 4) Test our zero function
         ScopedProfiler prof("Run magma::zeroMemory() performance test.");
         for (int i = 0; i < NUM_ITERATIONS; ++i)
-            magma::zeroMemory(dstBuffer1, BUFFER_SIZE);
+            magma::internal::zeroMemory(dstBuffer1, BUFFER_SIZE);
     }
     // Test zero correctness
     if (checkBuffer(dstBuffer1, 0))

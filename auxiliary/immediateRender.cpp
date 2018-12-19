@@ -21,8 +21,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/pipeline.h"
 #include "../objects/shaderModule.h"
 #include "../misc/pushConstants.h"
-#include "../utilities/hash.h"
 #include "../utilities/hexColor.h"
+#include "../internal/hash.h"
 
 namespace magma
 {
@@ -239,13 +239,13 @@ std::shared_ptr<const GraphicsPipeline> ImmediateRender::findBasePipeline() cons
 size_t ImmediateRender::hash(const InputAssemblyState *inputAssembly) const noexcept
 {
     size_t hash = 0;
-    utilities::hashCombine(hash, inputAssembly->hash());
-    utilities::hashCombine(hash, vertexShader.hash());
-    utilities::hashCombine(hash, fragmentShader.hash());
-    utilities::hashCombine(hash, renderStates.rasterization.hash());
-    utilities::hashCombine(hash, renderStates.multisample.hash());
-    utilities::hashCombine(hash, renderStates.depthStencil.hash());
-    utilities::hashCombine(hash, renderStates.colorBlend.hash());
+    internal::hashCombine(hash, inputAssembly->hash());
+    internal::hashCombine(hash, vertexShader.hash());
+    internal::hashCombine(hash, fragmentShader.hash());
+    internal::hashCombine(hash, renderStates.rasterization.hash());
+    internal::hashCombine(hash, renderStates.multisample.hash());
+    internal::hashCombine(hash, renderStates.depthStencil.hash());
+    internal::hashCombine(hash, renderStates.colorBlend.hash());
     return hash;
 }
 } // namespace aux

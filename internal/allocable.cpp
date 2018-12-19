@@ -15,21 +15,21 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
+#include "allocable.h"
+#include "../misc/exception.h"
 
 namespace magma
 {
-    namespace sys
-    {
-        class NonCopyable
-        {
-        public:
-            NonCopyable() = default;
-            virtual ~NonCopyable() = default;
+namespace internal
+{
+std::shared_ptr<IObjectAllocator> Allocable::allocator;
+std::atomic<int32_t> Allocable::allocCount;
 
-        private:
-            NonCopyable(const NonCopyable&) = delete;
-            NonCopyable& operator=(const NonCopyable&) = delete;
-        };
-    } // namespace sys
+void Allocable::setAllocator(std::shared_ptr<IObjectAllocator> allocator)
+{
+    if (allocCount)
+        MAGMA_THROW("allocator should be defined only when allocation count is zero");
+    allocator = std::move(allocator);
+}
+} // namespace internal
 } // namespace magma

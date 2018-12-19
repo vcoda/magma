@@ -13,8 +13,13 @@ else
 endif
 
 MAGMA_OBJS= \
-	allocator/allocable.o \
 	allocator/allocator.o \
+	\
+	auxiliary/blitRectangle.o \
+	auxiliary/framebuffers.o \
+	auxiliary/immediateRender.o \
+	auxiliary/mipmapGenerator.o \
+	auxiliary/shaderCompiler.o \
 	\
 	barriers/bufferMemoryBarrier.o \
 	barriers/globalMemoryBarrier.o \
@@ -22,6 +27,8 @@ MAGMA_OBJS= \
 	\
 	descriptors/attachment.o \
 	descriptors/subpass.o \
+	\
+	helpers/stringize.o \
 	\
 	misc/clearValue.o \
 	misc/deviceQueueDesc.o \
@@ -31,7 +38,7 @@ MAGMA_OBJS= \
 	misc/geometry.o \
 	misc/scopedDebugMarker.o \
 	\
-	helpers/stringize.o \
+	internal/allocable.o \
 	\
 	objects/accelerationStructure.o \
 	objects/buffer.o \
@@ -93,14 +100,7 @@ MAGMA_OBJS= \
 	states/samplerState.o \
 	states/tesselationState.o \
 	states/vertexInputState.o \
-	states/viewportState.o \
-	\
-	auxiliary/blitRectangle.o \
-	auxiliary/framebuffers.o \
-	auxiliary/immediateRender.o \
-	auxiliary/mipmapGenerator.o \
-	auxiliary/shaderCompiler.o
-
+	states/viewportState.o
 
 DEPS := $(MAGMA_OBJS:.o=.d)
 

@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "image.h"
 #include "imageView.h"
 #include "sampler.h"
-#include "../shared.h"
+#include "../internal/shared.h"
 
 namespace magma
 {

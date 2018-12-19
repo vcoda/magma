@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <memory>
 #include "../api/vulkan.h"
-#include "../nonCopyable.h"
+#include "../internal/nonCopyable.h"
 
 namespace magma
 {
@@ -31,7 +31,7 @@ namespace magma
     {
         /* Generates MIP levels from base texture level using blit operations. */
 
-        class MipmapGenerator : public sys::NonCopyable
+        class MipmapGenerator : public internal::NonCopyable
         {
         public:
             explicit MipmapGenerator(std::shared_ptr<Device> device);

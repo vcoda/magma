@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "bufferMemoryBarrier.h"
 #include "../objects/buffer.h"
-#include "../shared.h"
+#include "../internal/shared.h"
 
 namespace magma
 {

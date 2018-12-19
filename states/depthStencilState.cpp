@@ -17,8 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include <cstring>
 #include "depthStencilState.h"
-#include "../utilities/hash.h"
-#include "../shared.h"
+#include "../internal/hash.h"
 
 namespace magma
 {
@@ -36,7 +35,7 @@ StencilOpState::StencilOpState(VkStencilOp failOp, VkStencilOp passOp, VkStencil
 
 size_t StencilOpState::hash() const noexcept
 {
-    return utilities::hashVariadic(
+    return internal::hashArgs(
         failOp,
         passOp,
         depthFailOp,
@@ -103,7 +102,7 @@ DepthStencilState::DepthStencilState(const DepthStencilState& state,
 
 size_t DepthStencilState::hash() const noexcept
 {
-    return utilities::hashVariadic(
+    return internal::hashArgs(
         flags,
         depthWriteEnable,
         depthCompareOp,

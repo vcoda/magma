@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "subpass.h"
-#include "../utilities/copy.h"
+#include "../internal/copy.h"
 
 namespace magma
 {
@@ -36,13 +36,13 @@ Subpass::Subpass(VkSubpassDescriptionFlags flags, VkPipelineBindPoint pipelineBi
 
 Subpass::Subpass(const Subpass& other)
 {
-    utilities::copy(this, &other);
+    internal::copy(this, &other);
     if (other.pColorAttachments)
-        pColorAttachments = utilities::copyArray(other.pColorAttachments, colorAttachmentCount);
+        pColorAttachments = internal::copyArray(other.pColorAttachments, colorAttachmentCount);
     if (other.pDepthStencilAttachment)
     {
         try {
-            pDepthStencilAttachment = utilities::copy(other.pDepthStencilAttachment);
+            pDepthStencilAttachment = internal::copy(other.pDepthStencilAttachment);
         } catch (const std::bad_alloc& exc)
         {
             delete[] pColorAttachments;
@@ -55,13 +55,13 @@ Subpass& Subpass::operator=(const Subpass& other)
 {
     if (this != &other)
     {
-        utilities::copy(this, &other);
+        internal::copy(this, &other);
         if (other.pColorAttachments)
-            pColorAttachments = utilities::copyArray(other.pColorAttachments, colorAttachmentCount);
+            pColorAttachments = internal::copyArray(other.pColorAttachments, colorAttachmentCount);
         if (other.pDepthStencilAttachment)
         {
             try {
-                pDepthStencilAttachment = utilities::copy(other.pDepthStencilAttachment);
+                pDepthStencilAttachment = internal::copy(other.pDepthStencilAttachment);
             } catch (const std::bad_alloc& exc)
             {
                 delete[] pColorAttachments;

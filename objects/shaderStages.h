@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <memory>
 #include "../api/vulkan.h"
-#include "../utilities/copy.h"
+#include "../internal/copy.h"
 
 namespace magma
 {
@@ -50,9 +50,9 @@ namespace magma
             const std::initializer_list<SpecializationEntry>& entryMap)
         {
             mapEntryCount = static_cast<uint32_t>(entryMap.size());
-            pMapEntries = utilities::copyInitializer(entryMap);
+            pMapEntries = internal::copyInitializerList(entryMap);
             dataSize = sizeof(Block);
-            pData = utilities::copyArray(reinterpret_cast<const char *>(&data), dataSize);
+            pData = internal::copyArray(reinterpret_cast<const char *>(&data), dataSize);
         }
         Specialization(const Specialization&);
         Specialization& operator=(const Specialization&);

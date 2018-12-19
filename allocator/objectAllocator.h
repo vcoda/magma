@@ -17,13 +17,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <cstddef>
-#include "../nonCopyable.h"
+#include "../internal/nonCopyable.h"
 
 namespace magma
 {
     /* User-defined allocator of Magma objects. */
 
-    class IObjectAllocator : public sys::NonCopyable
+    class IObjectAllocator : public internal::NonCopyable
     {
     public:
         virtual void *alloc(size_t size) = 0;

@@ -16,9 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "multisampleState.h"
-#include "../utilities/copy.h"
-#include "../utilities/hash.h"
-#include "../shared.h"
+#include "../internal/copy.h"
+#include "../internal/hash.h"
+#include "../internal/compareArrays.h"
 
 namespace magma
 {
@@ -61,18 +61,18 @@ MultisampleState::MultisampleState(uint32_t sampleCount) noexcept
 
 MultisampleState::MultisampleState(const MultisampleState& other)
 {
-    utilities::copy(this, &other);
+    internal::copy(this, &other);
     if (other.pSampleMask)
-        pSampleMask = utilities::copyArray(other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1);
+        pSampleMask = internal::copyArray(other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1);
 }
 
 MultisampleState& MultisampleState::operator=(const MultisampleState& other)
 {
     if (this != &other)
     {
-        utilities::copy(this, &other);
+        internal::copy(this, &other);
         if (other.pSampleMask)
-            pSampleMask = utilities::copyArray(other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1);
+            pSampleMask = internal::copyArray(other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1);
     }
     return *this;
 }
@@ -84,7 +84,7 @@ MultisampleState::~MultisampleState()
 
 size_t MultisampleState::hash() const noexcept
 {
-    size_t hash = utilities::hashVariadic(
+    size_t hash = internal::hashArgs(
         flags,
         rasterizationSamples,
         sampleShadingEnable,
@@ -93,9 +93,10 @@ size_t MultisampleState::hash() const noexcept
         alphaToOneEnable);
     if (pSampleMask)
     {
-        utilities::hashCombineArg(hash, pSampleMask[0]);
+        std::hash<VkSampleMask> hasher;
+        internal::hashCombine(hash, hasher(pSampleMask[0]));
         if (rasterizationSamples > VK_SAMPLE_COUNT_32_BIT)
-            utilities::hashCombineArg(hash, pSampleMask[1]);
+            internal::hashCombine(hash, hasher(pSampleMask[1]));
     }
     return hash;
 }
@@ -106,7 +107,7 @@ bool MultisampleState::operator==(const MultisampleState& other) const noexcept
         (rasterizationSamples == other.rasterizationSamples) &&
         (sampleShadingEnable == other.sampleShadingEnable) &&
         (minSampleShading == other.minSampleShading) &&
-        (utilities::compareArrays(pSampleMask, other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1)) &&
+        (internal::compareArrays(pSampleMask, other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1)) &&
         (alphaToCoverageEnable == other.alphaToCoverageEnable) &&
         (alphaToOneEnable == other.alphaToOneEnable);
 }
