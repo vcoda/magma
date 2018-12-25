@@ -19,11 +19,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandBuffer.h"
 #include "device.h"
 #include "../misc/deviceExtension.h"
-#include "../utilities/hexColor.h"
 
 namespace magma
 {
-void CommandBuffer::beginDebugMarker(const char *name, const float color[4]) noexcept
+void CommandBuffer::beginDebugMarker(const char *name, uint32_t color) noexcept
 {
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
@@ -36,8 +35,10 @@ void CommandBuffer::beginDebugMarker(const char *name, const float color[4]) noe
         info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
         info.pNext = nullptr;
         info.pMarkerName = name;
-        for (int i = 0; i < 4; ++i)
-            info.color[i] = color[i];
+        info.color[0] = ((color >> 24) & 0xFF) / 255.f; // R
+        info.color[1] = ((color >> 16) & 0xFF) / 255.f; // G
+        info.color[2] = ((color >> 8) & 0xFF) / 255.f; // B
+        info.color[3] = (color & 0xFF) / 255.f; // A
         vkCmdDebugMarkerBeginEXT(handle, &info);
     }
 #elif defined(_MSC_VER)
@@ -55,7 +56,7 @@ void CommandBuffer::endDebugMarker() noexcept
 #endif // MAGMA_DEBUG
 }
 
-void CommandBuffer::insertDebugMarker(const char *name, const float color[4]) noexcept
+void CommandBuffer::insertDebugMarker(const char *name, uint32_t color) noexcept
 {
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
@@ -68,8 +69,10 @@ void CommandBuffer::insertDebugMarker(const char *name, const float color[4]) no
         info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
         info.pNext = nullptr;
         info.pMarkerName = name;
-        for (int i = 0; i < 4; ++i)
-            info.color[i] = color[i];
+        info.color[0] = ((color >> 24) & 0xFF) / 255.f; // R
+        info.color[1] = ((color >> 16) & 0xFF) / 255.f; // G
+        info.color[2] = ((color >> 8) & 0xFF) / 255.f; // B
+        info.color[3] = (color & 0xFF) / 255.f; // A
         vkCmdDebugMarkerInsertEXT(handle, &info);
     }
 #elif defined(_MSC_VER)
@@ -78,7 +81,7 @@ void CommandBuffer::insertDebugMarker(const char *name, const float color[4]) no
 #endif // MAGMA_DEBUG
 }
 
-void CommandBuffer::beginDebugLabel(const char *name, const float color[4]) noexcept
+void CommandBuffer::beginDebugLabel(const char *name, uint32_t color) noexcept
 {
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
@@ -91,8 +94,10 @@ void CommandBuffer::beginDebugLabel(const char *name, const float color[4]) noex
         info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT;
         info.pNext = nullptr;
         info.pLabelName = name;
-        for (int i = 0; i < 4; ++i)
-            info.color[i] = color[i];
+        info.color[0] = ((color >> 24) & 0xFF) / 255.f; // R
+        info.color[1] = ((color >> 16) & 0xFF) / 255.f; // G
+        info.color[2] = ((color >> 8) & 0xFF) / 255.f; // B
+        info.color[3] = (color & 0xFF) / 255.f; // A
         vkCmdBeginDebugUtilsLabelEXT(handle, &info);
     }
 #elif defined(_MSC_VER)
@@ -108,7 +113,7 @@ void CommandBuffer::endDebugLabel() noexcept
         vkCmdEndDebugUtilsLabelEXT(handle);
 }
 
-void CommandBuffer::insertDebugLabel(const char *name, const float color[4]) noexcept
+void CommandBuffer::insertDebugLabel(const char *name, uint32_t color) noexcept
 {
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
@@ -121,8 +126,10 @@ void CommandBuffer::insertDebugLabel(const char *name, const float color[4]) noe
         info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT;
         info.pNext = nullptr;
         info.pLabelName = name;
-        for (int i = 0; i < 4; ++i)
-            info.color[i] = color[i];
+        info.color[0] = ((color >> 24) & 0xFF) / 255.f; // R
+        info.color[1] = ((color >> 16) & 0xFF) / 255.f; // G
+        info.color[2] = ((color >> 8) & 0xFF) / 255.f; // B
+        info.color[3] = (color & 0xFF) / 255.f; // A
         vkCmdInsertDebugUtilsLabelEXT(handle, &info);
     }
 #elif defined(_MSC_VER)
@@ -136,9 +143,7 @@ bool CommandBuffer::begin(const char *blockName, uint32_t blockColor,
 {
     const bool beginResult = begin(flags);
 #ifdef MAGMA_DEBUG
-    float color[4];
-    utilities::hexColorToFloat4(blockColor, color);
-    beginDebugLabel(blockName, color);
+    beginDebugLabel(blockName, blockColor);
     beginMarked = VK_TRUE;
 #elif defined(_MSC_VER)
     blockName;
@@ -152,9 +157,7 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask, const char *blockName,
 {
     const bool beginResult = beginDeviceGroup(deviceMask, flags);
 #ifdef MAGMA_DEBUG
-    float color[4];
-    utilities::hexColorToFloat4(blockColor, color);
-    beginDebugLabel(blockName, color);
+    beginDebugLabel(blockName, blockColor);
     beginMarked = VK_TRUE;
 #elif defined(_MSC_VER)
     blockName;
@@ -169,9 +172,7 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
 {
     const bool beginResult = beginInherited(renderPass, subpass, framebuffer, flags);
 #ifdef MAGMA_DEBUG
-    float color[4];
-    utilities::hexColorToFloat4(blockColor, color);
-    beginDebugLabel(blockName, color);
+    beginDebugLabel(blockName, blockColor);
     beginMarked = VK_TRUE;
 #elif defined(_MSC_VER)
     blockName;
@@ -180,15 +181,13 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     return beginResult;
 }
 
-void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, const std::initializer_list<ClearValue>& clearValues,
-    const char *renderPassName, uint32_t renderPassColor,
+void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, 
+    const std::initializer_list<ClearValue>& clearValues, const char *renderPassName, uint32_t renderPassColor,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     beginRenderPass(renderPass, framebuffer, clearValues, contents);
 #ifdef MAGMA_DEBUG
-    float color[4];
-    utilities::hexColorToFloat4(renderPassColor, color);
-    beginDebugLabel(renderPassName, color);
+    beginDebugLabel(renderPassName, renderPassColor);
     beginRenderPassMarked = VK_TRUE;
 #elif defined(_MSC_VER)
     renderPassName;
@@ -196,15 +195,13 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
 #endif // MAGMA_DEBUG
 }
 
-void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, uint32_t deviceMask, const std::initializer_list<ClearValue>& clearValues,
-    const char *renderPassName, uint32_t renderPassColor,
+void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, 
+    uint32_t deviceMask, const std::initializer_list<ClearValue>& clearValues, const char *renderPassName, uint32_t renderPassColor,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     beginRenderPassDeviceGroup(renderPass, framebuffer, deviceMask, clearValues, contents);
 #ifdef MAGMA_DEBUG
-    float color[4];
-    utilities::hexColorToFloat4(renderPassColor, color);
-    beginDebugLabel(renderPassName, color);
+    beginDebugLabel(renderPassName, renderPassColor);
     beginRenderPassMarked = VK_TRUE;
 #elif defined(_MSC_VER)
     renderPassName;

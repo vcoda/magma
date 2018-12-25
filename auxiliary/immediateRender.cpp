@@ -21,7 +21,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/pipeline.h"
 #include "../objects/shaderModule.h"
 #include "../misc/pushConstants.h"
-#include "../utilities/hexColor.h"
 #include "../internal/hash.h"
 
 namespace magma
@@ -122,11 +121,7 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer
     {
 #ifdef MAGMA_DEBUG
         if (primitive.labelName)
-        {
-            float color[4];
-            utilities::hexColorToFloat4(primitive.labelColor, color);
-            cmdBuffer->beginDebugLabel(primitive.labelName, color);
-        }
+            cmdBuffer->beginDebugLabel(primitive.labelName, primitive.labelColor);
 #endif // MAGMA_DEBUG
         if (primitive.pipeline != prevPipeline)
         {

@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "scopedDebugMarker.h"
 #include "../objects/commandBuffer.h"
-#include "../utilities/hexColor.h"
 #include "../internal/shared.h"
 
 namespace magma
@@ -31,7 +30,10 @@ ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, c
     cmdBuffer(std::move(cmdBuffer))
 {
 #ifdef MAGMA_DEBUG
-    const float color[4] = {r, g, b, a};
+    uint32_t color = uint32_t(a * 255.0f) | 
+                    (uint32_t(b * 255.0f) << 8) | 
+                    (uint32_t(g * 255.0f) << 16) | 
+                    (uint32_t(r * 255.0f) << 24);
     this->cmdBuffer->beginDebugLabel(name, color);
 #elif defined(_MSC_VER)
     cmdBuffer;
@@ -40,7 +42,7 @@ ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, c
 #endif // MAGMA_DEBUG
 }
 
-ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, const char *name, const float color[4]) noexcept:
+ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, const char *name, uint32_t color) noexcept:
     cmdBuffer(std::move(cmdBuffer))
 {
 #ifdef MAGMA_DEBUG
@@ -49,20 +51,6 @@ ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, c
     cmdBuffer;
     name;
     color;
-#endif // MAGMA_DEBUG
-}
-
-ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, const char *name, uint32_t hexColor) noexcept:
-    cmdBuffer(std::move(cmdBuffer))
-{
-#ifdef MAGMA_DEBUG
-    float color[4];
-    utilities::hexColorToFloat4(hexColor, color);
-    this->cmdBuffer->beginDebugLabel(name, color);
-#elif defined(_MSC_VER)
-    cmdBuffer;
-    name;
-    hexColor;
 #endif // MAGMA_DEBUG
 }
 

@@ -419,20 +419,20 @@ namespace magma
         // VK_EXT_debug_marker
         void beginDebugMarker(
             const char *name,
-            const float color[4]) noexcept;
+            uint32_t color) noexcept;
         void endDebugMarker() noexcept;
         void insertDebugMarker(
             const char *name,
-            const float color[4]) noexcept;
+            uint32_t color) noexcept;
 
         // VK_EXT_debug_utils
         void beginDebugLabel(
             const char *name,
-            const float color[4]) noexcept;
+            uint32_t color) noexcept;
         void endDebugLabel() noexcept;
         void insertDebugLabel(
             const char *name,
-            const float color[4]) noexcept;
+            uint32_t color) noexcept;
 
         // Non-API utility methods
         std::shared_ptr<CommandPool> getPool() const noexcept { return pool; }
