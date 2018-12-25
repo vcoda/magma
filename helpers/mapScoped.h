@@ -26,7 +26,7 @@ namespace magma
     namespace helpers
     {
         template<typename Type>
-        inline void mapScoped(
+        MAGMA_INLINE void mapScoped(
             const std::shared_ptr<Buffer>& buffer,
             std::function<void(Type *data)> fn)
         {
@@ -45,14 +45,14 @@ namespace magma
         }
 
         template<typename Block>
-        inline void mapScoped(
+        MAGMA_INLINE void mapScoped(
             const std::shared_ptr<UniformBuffer<Block>>& buffer,
             bool clearMemory,
             std::function<void(Block *block)> fn)
         {
             MAGMA_ASSERT(buffer);
             MAGMA_ASSERT(fn);
-            ZeroMemoryFunction zeroFn = clearMemory ? zeroMemory : nullptr;
+            ZeroMemoryFunction zeroFn = clearMemory ? internal::zeroMemory : nullptr;
             Block *const block = buffer->map(zeroFn);
             if (block)
             {
@@ -62,14 +62,14 @@ namespace magma
         }
 
         template<typename Type>
-        inline void mapScoped(
+        MAGMA_INLINE void mapScoped(
             const std::shared_ptr<UniformBuffer<Type>>& buffer,
             bool clearMemory,
             std::function<void(UniformArray<Type>& array)> fn)
         {
             MAGMA_ASSERT(buffer);
             MAGMA_ASSERT(fn);
-            ZeroMemoryFunction zeroFn = clearMemory ? zeroMemory : nullptr;
+            ZeroMemoryFunction zeroFn = clearMemory ? internal::zeroMemory : nullptr;
             Type *const data = buffer->map(zeroFn);
             if (data)
             {
@@ -81,14 +81,14 @@ namespace magma
         }
 
         template<typename Type>
-        inline void mapScoped(
+        MAGMA_INLINE void mapScoped(
             const std::shared_ptr<DynamicUniformBuffer<Type>>& buffer,
             bool clearMemory,
             std::function<void(AlignedUniformArray<Type>& array)> fn)
         {
             MAGMA_ASSERT(buffer);
             MAGMA_ASSERT(fn);
-            ZeroMemoryFunction zeroFn = clearMemory ? zeroMemory : nullptr;
+            ZeroMemoryFunction zeroFn = clearMemory ? internal::zeroMemory : nullptr;
             Type *const data = buffer->map(zeroFn);
             if (data)
             {
