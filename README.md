@@ -1,7 +1,7 @@
 # Magma - abstraction layer to facilitate usage of Khronos Vulkan API
 
 <p align="center">
-    <img src="vulkan.gif" width="94px" height="107px">
+    <img src="resources/vulkan.gif" width="94px" height="107px">
 </p>
 
 ## Problem
