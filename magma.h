@@ -108,6 +108,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "auxiliary/shaderCompiler.h"
 
 #include "helpers/alignedUniformArray.h"
+#include "helpers/executeCommandBuffer.h"
 #include "helpers/mapScoped.h"
 #include "helpers/stackArray.h"
 #include "helpers/stringize.h"

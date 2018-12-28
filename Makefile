@@ -28,6 +28,7 @@ MAGMA_OBJS= \
 	descriptors/attachment.o \
 	descriptors/subpass.o \
 	\
+	helpers/executeCommandBuffer.o \
 	helpers/stringize.o \
 	\
 	misc/clearValue.o \

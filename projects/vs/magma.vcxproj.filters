@@ -393,6 +393,9 @@
     <ClInclude Include="..\..\internal\compareArrays.h">
       <Filter>Header Files\internal</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\helpers\executeCommandBuffer.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -634,6 +637,9 @@
     </ClCompile>
     <ClCompile Include="..\..\internal\allocable.cpp">
       <Filter>Source Files\internal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\helpers\executeCommandBuffer.cpp">
+      <Filter>Source Files\helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

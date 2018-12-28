@@ -151,6 +151,7 @@
     <ClInclude Include="..\..\descriptors\descriptors.h" />
     <ClInclude Include="..\..\descriptors\subpass.h" />
     <ClInclude Include="..\..\helpers\alignedUniformArray.h" />
+    <ClInclude Include="..\..\helpers\executeCommandBuffer.h" />
     <ClInclude Include="..\..\helpers\mapScoped.h" />
     <ClInclude Include="..\..\helpers\stackArray.h" />
     <ClInclude Include="..\..\helpers\stringize.h" />
@@ -254,6 +255,7 @@
     <ClCompile Include="..\..\barriers\imageMemoryBarrier.cpp" />
     <ClCompile Include="..\..\descriptors\attachment.cpp" />
     <ClCompile Include="..\..\descriptors\subpass.cpp" />
+    <ClCompile Include="..\..\helpers\executeCommandBuffer.cpp" />
     <ClCompile Include="..\..\helpers\stringize.cpp" />
     <ClCompile Include="..\..\internal\allocable.cpp" />
     <ClCompile Include="..\..\misc\clearValue.cpp" />
