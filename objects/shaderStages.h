@@ -148,41 +148,4 @@ namespace magma
         PipelineShaderStage(VK_SHADER_STAGE_COMPUTE_BIT, std::move(module),
             entrypoint, std::move(specialization), flags) {}
     };
-
-    class RaytracingShaderGroup : public VkRayTracingShaderGroupCreateInfoNV
-    {
-    protected:
-        explicit RaytracingShaderGroup(VkRayTracingShaderGroupTypeNV type,
-            uint32_t generalShader,
-            uint32_t closestHitShader,
-            uint32_t anyHitShader,
-            uint32_t intersectionShader);
-    };
-
-    // TODO: reconsider
-
-    class RaytracingGeneralShaderGroup : public RaytracingShaderGroup
-    {
-    public:
-        explicit RaytracingGeneralShaderGroup(uint32_t generalShader):
-        RaytracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_NV, 
-            generalShader, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV) {}   
-    };
-
-    class RaytracingTrianglesHitShaderGroup : public RaytracingShaderGroup
-    {
-    public:
-        explicit RaytracingTrianglesHitShaderGroup(uint32_t closestHitShader, uint32_t anyHitShader):
-        RaytracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_NV,
-            VK_SHADER_UNUSED_NV, closestHitShader, anyHitShader, VK_SHADER_UNUSED_NV) {}
-    };
-
-    class RaytracingProceduralHitShaderGroup : public RaytracingShaderGroup
-    {
-    public:
-        explicit RaytracingProceduralHitShaderGroup(uint32_t intersectionShader):
-        RaytracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_PROCEDURAL_HIT_GROUP_NV,
-            VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV, intersectionShader) {}
-    };
-
 } // namespace magma

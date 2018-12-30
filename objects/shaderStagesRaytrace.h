@@ -27,7 +27,7 @@ namespace magma
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept:
-            PipelineShaderStage(VK_SHADER_STAGE_RAYGEN_BIT_NVX, std::move(module), entrypoint, std::move(specialization), flags)
+            PipelineShaderStage(VK_SHADER_STAGE_RAYGEN_BIT_NV, std::move(module), entrypoint, std::move(specialization), flags)
         {}
     };
 
@@ -38,7 +38,7 @@ namespace magma
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept:
-            PipelineShaderStage(VK_SHADER_STAGE_ANY_HIT_BIT_NVX, std::move(module), entrypoint, std::move(specialization), flags)
+            PipelineShaderStage(VK_SHADER_STAGE_ANY_HIT_BIT_NV, std::move(module), entrypoint, std::move(specialization), flags)
         {}
     };
 
@@ -49,7 +49,7 @@ namespace magma
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept:
-            PipelineShaderStage(VK_SHADER_STAGE_CLOSEST_HIT_BIT_NVX, std::move(module), entrypoint, std::move(specialization), flags)
+            PipelineShaderStage(VK_SHADER_STAGE_CLOSEST_HIT_BIT_NV, std::move(module), entrypoint, std::move(specialization), flags)
         {}
     };
 
@@ -60,7 +60,7 @@ namespace magma
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept:
-            PipelineShaderStage(VK_SHADER_STAGE_MISS_BIT_NVX, std::move(module), entrypoint, std::move(specialization), flags)
+            PipelineShaderStage(VK_SHADER_STAGE_MISS_BIT_NV, std::move(module), entrypoint, std::move(specialization), flags)
         {}
     };
 
@@ -71,7 +71,7 @@ namespace magma
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept:
-            PipelineShaderStage(VK_SHADER_STAGE_INTERSECTION_BIT_NVX, std::move(module), entrypoint, std::move(specialization), flags)
+            PipelineShaderStage(VK_SHADER_STAGE_INTERSECTION_BIT_NV, std::move(module), entrypoint, std::move(specialization), flags)
         {}
     };
 
@@ -82,7 +82,43 @@ namespace magma
             const char *const entrypoint,
             std::shared_ptr<const Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept:
-            PipelineShaderStage(VK_SHADER_STAGE_CALLABLE_BIT_NVX, std::move(module), entrypoint, std::move(specialization), flags)
+            PipelineShaderStage(VK_SHADER_STAGE_CALLABLE_BIT_NV, std::move(module), entrypoint, std::move(specialization), flags)
         {}
+    };
+
+    class RaytracingShaderGroup : public VkRayTracingShaderGroupCreateInfoNV
+    {
+    protected:
+        explicit RaytracingShaderGroup(VkRayTracingShaderGroupTypeNV type,
+            uint32_t generalShader,
+            uint32_t closestHitShader,
+            uint32_t anyHitShader,
+            uint32_t intersectionShader);
+    };
+
+    // TODO: reconsider
+
+    class RaytracingGeneralShaderGroup : public RaytracingShaderGroup
+    {
+    public:
+        explicit RaytracingGeneralShaderGroup(uint32_t generalShader):
+        RaytracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_NV, 
+            generalShader, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV) {}   
+    };
+
+    class RaytracingTrianglesHitShaderGroup : public RaytracingShaderGroup
+    {
+    public:
+        explicit RaytracingTrianglesHitShaderGroup(uint32_t closestHitShader, uint32_t anyHitShader):
+        RaytracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_NV,
+            VK_SHADER_UNUSED_NV, closestHitShader, anyHitShader, VK_SHADER_UNUSED_NV) {}
+    };
+
+    class RaytracingProceduralHitShaderGroup : public RaytracingShaderGroup
+    {
+    public:
+        explicit RaytracingProceduralHitShaderGroup(uint32_t intersectionShader):
+        RaytracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_PROCEDURAL_HIT_GROUP_NV,
+            VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV, intersectionShader) {}
     };
 } // namespace magma
