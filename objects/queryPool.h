@@ -93,10 +93,10 @@ namespace magma
        in order to improve performance. Before copying, an application
        must query the size of the resulting acceleration structure. */
 
-    class CompactedSizeQuery : public QueryPool
+    class AccelerationStructureCompactedSizeQuery : public QueryPool
     {
     public:
-        explicit CompactedSizeQuery(std::shared_ptr<Device> device,
+        explicit AccelerationStructureCompactedSizeQuery(std::shared_ptr<Device> device,
             uint32_t queryCount,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };

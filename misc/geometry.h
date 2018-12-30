@@ -25,17 +25,17 @@ namespace magma
     class VertexBuffer;
     class IndexBuffer;
 
-    class Geometry : public VkGeometryNVX
+    class Geometry : public VkGeometryNV
     {
     public:
         bool isTriangles() const noexcept
-            { return VK_GEOMETRY_TYPE_TRIANGLES_NVX == geometryType; }
+            { return VK_GEOMETRY_TYPE_TRIANGLES_NV == geometryType; }
         bool isBVH() const noexcept
-            { return VK_GEOMETRY_TYPE_AABBS_NVX == geometryType; }
+            { return VK_GEOMETRY_TYPE_AABBS_NV == geometryType; }
 
     protected:
-        explicit Geometry(VkGeometryTypeNVX geometryType,
-            VkGeometryFlagsNVX flags) noexcept;
+        explicit Geometry(VkGeometryTypeNV geometryType,
+            VkGeometryFlagsNV flags) noexcept;
     };
 
     class GeometryTriangles : public Geometry
@@ -52,7 +52,7 @@ namespace magma
             VkIndexType indexType,
             std::shared_ptr<Buffer> transformData,
             VkDeviceSize transformOffset,
-            VkGeometryFlagsNVX flags = 0) noexcept;
+            VkGeometryFlagsNV flags = 0) noexcept;
         explicit GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData,
             VkDeviceSize vertexStride,
             VkFormat vertexFormat,
@@ -61,7 +61,7 @@ namespace magma
             VkDeviceSize vertexOffset = 0,
             VkDeviceSize indexOffset = 0,
             VkDeviceSize transformOffset = 0,
-            VkGeometryFlagsNVX flags = 0) noexcept;
+            VkGeometryFlagsNV flags = 0) noexcept;
     };
 
     class GeometryBVH : public Geometry
@@ -71,6 +71,6 @@ namespace magma
             uint32_t numAABBs,
             uint32_t stride,
             VkDeviceSize offset,
-            VkGeometryFlagsNVX flags = 0) noexcept;
+            VkGeometryFlagsNV flags = 0) noexcept;
     };
 } // namespace magma

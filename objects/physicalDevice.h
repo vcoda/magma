@@ -70,7 +70,7 @@ namespace magma
         // VK_AMD_shared_core_properties
         VkPhysicalDeviceShaderCorePropertiesAMD getShaderCoreProperties() const;
         // VK_NVX_raytracing
-        VkPhysicalDeviceRaytracingPropertiesNVX getRaytracingProperties() const;
+        VkPhysicalDeviceRayTracingPropertiesNV getRaytracingProperties() const;
         // Non-API
         std::shared_ptr<Instance> getInstance() const noexcept { return instance; }
         std::shared_ptr<Device> createDefaultDevice() const;

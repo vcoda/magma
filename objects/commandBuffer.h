@@ -39,9 +39,9 @@ namespace magma
     class Event;
     class Fence;
     class QueryPool;
-    class CompactedSizeQuery;
     class Geometry;
     class AccelerationStructure;
+    class AccelerationStructureCompactedSizeQuery;
 
     struct GlobalMemoryBarrier;
     struct BufferMemoryBarrier;
@@ -390,7 +390,7 @@ namespace magma
             const std::shared_ptr<Buffer>& instanceData,
             VkDeviceSize instanceOffset,
             const std::list<Geometry>& geometries,
-            VkBuildAccelerationStructureFlagsNVX flags,
+            VkBuildAccelerationStructureFlagsNV flags,
             bool update,
             const std::shared_ptr<AccelerationStructure>& dst,
             const std::shared_ptr<AccelerationStructure>& src,
@@ -402,8 +402,8 @@ namespace magma
             bool clone) const noexcept;
         void writeAccelerationStructureProperties(
             const std::shared_ptr<AccelerationStructure>& accelerationStructure,
-            const std::shared_ptr<CompactedSizeQuery>& queryPool,
-            uint32_t queryIndex) noexcept;
+            const std::shared_ptr<AccelerationStructureCompactedSizeQuery>& queryPool,
+            uint32_t firstQuery) noexcept;
         void traceRays(
             const std::shared_ptr<Buffer>& raygenShaderBindingTableBuffer,
             VkDeviceSize raygenShaderBindingOffset,
@@ -413,8 +413,12 @@ namespace magma
             const std::shared_ptr<Buffer>& hitShaderBindingTableBuffer,
             VkDeviceSize hitShaderBindingOffset,
             VkDeviceSize hitShaderBindingStride,
+            const std::shared_ptr<Buffer>& callableShaderBindingTableBuffer,
+            VkDeviceSize callableShaderBindingOffset,
+            VkDeviceSize callableShaderBindingStride,
             uint32_t width,
-            uint32_t height) noexcept;
+            uint32_t height,
+            uint32_t depth) noexcept;
 
         // VK_EXT_debug_marker
         void beginDebugMarker(

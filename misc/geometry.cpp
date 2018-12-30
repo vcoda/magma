@@ -22,9 +22,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Geometry::Geometry(VkGeometryTypeNVX geometryType, VkGeometryFlagsNVX flags) noexcept
+Geometry::Geometry(VkGeometryTypeNV geometryType, VkGeometryFlagsNV flags) noexcept
 {
-    sType = (VkStructureType)VK_STRUCTURE_TYPE_GEOMETRY_NVX;
+    sType = VK_STRUCTURE_TYPE_GEOMETRY_NV;
     pNext = nullptr;
     this->geometryType = geometryType;
     this->flags = flags;
@@ -33,10 +33,10 @@ Geometry::Geometry(VkGeometryTypeNVX geometryType, VkGeometryFlagsNVX flags) noe
 GeometryTriangles::GeometryTriangles(std::shared_ptr<Buffer> vertexData, VkDeviceSize vertexOffset, uint32_t vertexCount, VkDeviceSize vertexStride, VkFormat vertexFormat,
     std::shared_ptr<Buffer> indexData, VkDeviceSize indexOffset, uint32_t indexCount, VkIndexType indexType,
     std::shared_ptr<Buffer> transformData, VkDeviceSize transformOffset,
-    VkGeometryFlagsNVX flags /* 0 */) noexcept:
-    Geometry(VK_GEOMETRY_TYPE_TRIANGLES_NVX, flags)
+    VkGeometryFlagsNV flags /* 0 */) noexcept:
+    Geometry(VK_GEOMETRY_TYPE_TRIANGLES_NV, flags)
 {
-    geometry.triangles.sType = (VkStructureType)VK_STRUCTURE_TYPE_GEOMETRY_TRIANGLES_NVX;
+    geometry.triangles.sType = VK_STRUCTURE_TYPE_GEOMETRY_TRIANGLES_NV;
     geometry.triangles.pNext = nullptr;
     geometry.triangles.vertexData = MAGMA_OPTIONAL_HANDLE(vertexData);
     geometry.triangles.vertexOffset = vertexOffset;
@@ -49,7 +49,7 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<Buffer> vertexData, VkDevic
     geometry.triangles.indexType = indexType;
     geometry.triangles.transformData = MAGMA_OPTIONAL_HANDLE(transformData);
     geometry.triangles.transformOffset = transformOffset;
-    memset(&geometry.aabbs, 0, sizeof(VkGeometryAABBNVX));
+    memset(&geometry.aabbs, 0, sizeof(VkGeometryAABBNV));
 }
 
 GeometryTriangles::GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData, VkDeviceSize vertexStride, VkFormat vertexFormat,
@@ -57,10 +57,10 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData, V
     VkDeviceSize vertexOffset /* 0 */,
     VkDeviceSize indexOffset /* 0 */,
     VkDeviceSize transformOffset /* 0 */,
-    VkGeometryFlagsNVX flags /* 0 */) noexcept:
-    Geometry(VK_GEOMETRY_TYPE_TRIANGLES_NVX, flags)
+    VkGeometryFlagsNV flags /* 0 */) noexcept:
+    Geometry(VK_GEOMETRY_TYPE_TRIANGLES_NV, flags)
 {
-    geometry.triangles.sType = (VkStructureType)VK_STRUCTURE_TYPE_GEOMETRY_TRIANGLES_NVX;
+    geometry.triangles.sType = VK_STRUCTURE_TYPE_GEOMETRY_TRIANGLES_NV;
     geometry.triangles.pNext = nullptr;
     geometry.triangles.vertexData = MAGMA_OPTIONAL_HANDLE(vertexData);
     geometry.triangles.vertexOffset = vertexOffset;
@@ -73,19 +73,19 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData, V
     geometry.triangles.indexType = indexData->getIndexType();
     geometry.triangles.transformData = MAGMA_OPTIONAL_HANDLE(transformData);
     geometry.triangles.transformOffset = transformOffset;
-    memset(&geometry.aabbs, 0, sizeof(VkGeometryAABBNVX));
+    memset(&geometry.aabbs, 0, sizeof(VkGeometryAABBNV));
 }
 
 GeometryBVH::GeometryBVH(std::shared_ptr<Buffer> aabbData, uint32_t numAABBs, uint32_t stride, VkDeviceSize offset,
-    VkGeometryFlagsNVX flags /* 0 */) noexcept:
-    Geometry(VK_GEOMETRY_TYPE_AABBS_NVX, flags)
+    VkGeometryFlagsNV flags /* 0 */) noexcept:
+    Geometry(VK_GEOMETRY_TYPE_AABBS_NV, flags)
 {
-    geometry.aabbs.sType = (VkStructureType)VK_STRUCTURE_TYPE_GEOMETRY_AABB_NVX;
+    geometry.aabbs.sType = VK_STRUCTURE_TYPE_GEOMETRY_AABB_NV;
     geometry.aabbs.pNext = nullptr;
     geometry.aabbs.aabbData = MAGMA_OPTIONAL_HANDLE(aabbData);
     geometry.aabbs.numAABBs = numAABBs;
     geometry.aabbs.stride = stride;
     geometry.aabbs.offset = offset;
-    memset(&geometry.triangles, 0, sizeof(VkGeometryTrianglesNVX));
+    memset(&geometry.triangles, 0, sizeof(VkGeometryTrianglesNV));
 }
 } // namespace magma

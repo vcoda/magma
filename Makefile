@@ -19,7 +19,6 @@ MAGMA_OBJS= \
 	auxiliary/framebuffers.o \
 	auxiliary/immediateRender.o \
 	auxiliary/mipmapGenerator.o \
-	auxiliary/shaderCompiler.o \
 	\
 	barriers/bufferMemoryBarrier.o \
 	barriers/globalMemoryBarrier.o \

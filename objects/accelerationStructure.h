@@ -31,30 +31,29 @@ namespace magma
        a set of bottom-level acceleration structures or a bottom-level acceleration structure
        containing either a set of axis-aligned bounding boxes for custom geometry or a set of triangles. */
 
-    class AccelerationStructure : public NonDispatchable<VkAccelerationStructureNVX>
+    class AccelerationStructure : public NonDispatchable<VkAccelerationStructureNV>
     {
     public:
         ~AccelerationStructure();
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
             VkDeviceSize offset /* 0 */);
-        VkAccelerationStructureTypeNVX getType() const noexcept { return type; }
+        VkAccelerationStructureTypeNV getType() const noexcept { return type; }
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
         VkMemoryRequirements2 getMemoryRequirements() const;
-        VkMemoryRequirements2 getScratchMemoryRequirements() const;
         uint64_t getStructureHandle() const;
 
     protected:
         explicit AccelerationStructure(std::shared_ptr<Device> device,
-            VkAccelerationStructureTypeNVX type,
+            VkAccelerationStructureTypeNV type,
             uint32_t instanceCount,
             const std::list<Geometry>& geometries,
-            VkBuildAccelerationStructureFlagsNVX flags,
+            VkBuildAccelerationStructureFlagsNV flags,
             VkDeviceSize compactedSize,
             std::shared_ptr<IAllocator> allocator);
 
     private:
-        VkAccelerationStructureTypeNVX type;
+        VkAccelerationStructureTypeNV type;
         std::shared_ptr<DeviceMemory> memory;
     };
 
@@ -64,10 +63,10 @@ namespace magma
         explicit TopLevelAccelerationStructure(std::shared_ptr<Device> device,
             uint32_t instanceCount,
             const std::list<Geometry>& geometries,
-            VkBuildAccelerationStructureFlagsNVX flags = 0,
+            VkBuildAccelerationStructureFlagsNV flags = 0,
             VkDeviceSize compactedSize = 0,
             std::shared_ptr<IAllocator> allocator = nullptr):
-            AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NVX,
+            AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NV,
                 instanceCount, geometries, flags, compactedSize, std::move(allocator))
         {}
     };
@@ -78,10 +77,10 @@ namespace magma
         explicit BottomLevelAccelerationStructure(std::shared_ptr<Device> device,
             uint32_t instanceCount,
             const std::list<Geometry>& geometries,
-            VkBuildAccelerationStructureFlagsNVX flags = 0,
+            VkBuildAccelerationStructureFlagsNV flags = 0,
             VkDeviceSize compactedSize = 0,
             std::shared_ptr<IAllocator> allocator = nullptr):
-            AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NVX,
+            AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NV,
                 instanceCount, geometries, flags, compactedSize, std::move(allocator))
         {}
     };

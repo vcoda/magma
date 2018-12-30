@@ -506,60 +506,65 @@ void CommandBuffer::endConditionalRendering() noexcept
 }
 
 void CommandBuffer::buildAccelerationStructure(uint32_t instanceCount, const std::shared_ptr<Buffer>& instanceData, VkDeviceSize instanceOffset,
-    const std::list<Geometry>& geometries, VkBuildAccelerationStructureFlagsNVX flags, bool update,
+    const std::list<Geometry>& geometries, VkBuildAccelerationStructureFlagsNV flags, bool update,
     const std::shared_ptr<AccelerationStructure>& dst, const std::shared_ptr<AccelerationStructure>& src,
     const std::shared_ptr<Buffer>& scratch, VkDeviceSize scratchOffset /* 0 */) noexcept
 {
-    MAGMA_STACK_ARRAY(VkGeometryNVX, dereferencedGeometries, geometries.size());
+    MAGMA_STACK_ARRAY(VkGeometryNV, dereferencedGeometries, geometries.size());
     for (const auto& geometry : geometries)
         dereferencedGeometries.put(geometry);
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBuildAccelerationStructureNVX);
-    if (vkCmdBuildAccelerationStructureNVX)
-    {
-        vkCmdBuildAccelerationStructureNVX(handle,
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBuildAccelerationStructureNV);
+    if (vkCmdBuildAccelerationStructureNV)
+    {/*
+        vkCmdBuildAccelerationStructureNV(handle,
             dst->getType(),
             instanceCount, MAGMA_OPTIONAL_HANDLE(instanceData), instanceOffset,
             MAGMA_COUNT(geometries), dereferencedGeometries,
             flags, MAGMA_BOOLEAN(update),
             *dst, MAGMA_OPTIONAL_HANDLE(src),
-            *scratch, scratchOffset);
+            *scratch, scratchOffset);*/
     }
 }
 
 void CommandBuffer::copyAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dst, const std::shared_ptr<AccelerationStructure>& src, bool clone) const noexcept
 {
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureNVX);
-    if (vkCmdCopyAccelerationStructureNVX)
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureNV);
+    if (vkCmdCopyAccelerationStructureNV)
     {
-        const VkCopyAccelerationStructureModeNVX mode = clone ? VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_NVX : VK_COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_NVX;
-        vkCmdCopyAccelerationStructureNVX(handle, *dst, *src, mode);
+        const VkCopyAccelerationStructureModeNV mode = clone ? VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_NV : VK_COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_NV;
+        vkCmdCopyAccelerationStructureNV(handle, *dst, *src, mode);
     }
 }
 
 void CommandBuffer::writeAccelerationStructureProperties(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
-    const std::shared_ptr<CompactedSizeQuery>& queryPool, uint32_t queryIndex) noexcept
+    const std::shared_ptr<AccelerationStructureCompactedSizeQuery>& queryPool, uint32_t firstQuery) noexcept
 {
-    MAGMA_ASSERT(queryIndex < queryPool->getQueryCount());
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdWriteAccelerationStructurePropertiesNVX);
-    if (vkCmdWriteAccelerationStructurePropertiesNVX)
-        vkCmdWriteAccelerationStructurePropertiesNVX(handle, *accelerationStructure, queryPool->getType(), *queryPool, queryIndex);
+    MAGMA_ASSERT(firstQuery < queryPool->getQueryCount());
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdWriteAccelerationStructuresPropertiesNV);
+    if (vkCmdWriteAccelerationStructuresPropertiesNV)
+    {
+        const VkAccelerationStructureNV dereferencedAccelerationStructure = *accelerationStructure;
+        vkCmdWriteAccelerationStructuresPropertiesNV(handle, 1, &dereferencedAccelerationStructure, queryPool->getType(), *queryPool, firstQuery);
+    }
 }
 
 void CommandBuffer::traceRays(const std::shared_ptr<Buffer>& raygenShaderBindingTableBuffer, VkDeviceSize raygenShaderBindingOffset,
     const std::shared_ptr<Buffer>& missShaderBindingTableBuffer, VkDeviceSize missShaderBindingOffset, VkDeviceSize missShaderBindingStride,
     const std::shared_ptr<Buffer>& hitShaderBindingTableBuffer, VkDeviceSize hitShaderBindingOffset, VkDeviceSize hitShaderBindingStride,
-    uint32_t width, uint32_t height) noexcept
+    const std::shared_ptr<Buffer>& callableShaderBindingTableBuffer, VkDeviceSize callableShaderBindingOffset, VkDeviceSize callableShaderBindingStride,
+    uint32_t width, uint32_t height, uint32_t depth) noexcept
 {
     MAGMA_ASSERT(width);
     MAGMA_ASSERT(height);
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdTraceRaysNVX);
-    if (vkCmdTraceRaysNVX)
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdTraceRaysNV);
+    if (vkCmdTraceRaysNV)
     {
-        vkCmdTraceRaysNVX(handle,
+        vkCmdTraceRaysNV(handle,
             *raygenShaderBindingTableBuffer, raygenShaderBindingOffset,
             *missShaderBindingTableBuffer, missShaderBindingOffset, missShaderBindingStride,
             *hitShaderBindingTableBuffer, hitShaderBindingOffset, hitShaderBindingStride,
-            width, height);
+            *callableShaderBindingTableBuffer, callableShaderBindingOffset, callableShaderBindingStride,
+            width, height, depth);
     }
 }
 

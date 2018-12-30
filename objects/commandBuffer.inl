@@ -12,7 +12,7 @@ MAGMA_INLINE void CommandBuffer::bindPipeline(const std::shared_ptr<ComputePipel
 
 MAGMA_INLINE void CommandBuffer::bindPipeline(const std::shared_ptr<RaytracingPipeline>& pipeline) noexcept
 {
-    vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_RAYTRACING_NVX, *pipeline);
+    vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, *pipeline);
 }
 
 MAGMA_INLINE void CommandBuffer::setViewport(float x, float y, float width, float height,

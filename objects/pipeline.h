@@ -120,13 +120,13 @@ namespace magma
     public:
         explicit RaytracingPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
             const std::vector<PipelineShaderStage>& stages,
-            const std::vector<uint32_t> groupNumbers,
+            const std::vector<RaytracingShaderGroup>& groups,
             uint32_t maxRecursionDepth,
             std::shared_ptr<const PipelineLayout> layout,
             std::shared_ptr<const RaytracingPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        std::vector<VkShaderModule> getShaderHandles(uint32_t firstShader, uint32_t shaderCount) const;
+        std::vector<VkShaderModule> getShaderGroupHandles(uint32_t firstGroup, uint32_t groupCount) const;
         void compileDeferred(uint32_t shaderIndex);
     };
 } // namespace magma

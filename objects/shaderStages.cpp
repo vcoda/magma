@@ -126,4 +126,16 @@ size_t PipelineShaderStage::hash() const noexcept
         internal::hashCombine(hash, specialization->hash());
     return hash;
 }
+
+RaytracingShaderGroup::RaytracingShaderGroup(VkRayTracingShaderGroupTypeNV type,
+    uint32_t generalShader, uint32_t closestHitShader, uint32_t anyHitShader, uint32_t intersectionShader)
+{
+    sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_NV;
+    pNext = nullptr;
+    type = type;
+    generalShader = generalShader;
+    closestHitShader = closestHitShader;
+    anyHitShader = anyHitShader;
+    intersectionShader = intersectionShader;
+}
 } // namespace magma

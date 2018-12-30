@@ -276,10 +276,10 @@ VkPhysicalDeviceShaderCorePropertiesAMD PhysicalDevice::getShaderCoreProperties(
     return shaderCoreProperties;
 }
 
-VkPhysicalDeviceRaytracingPropertiesNVX PhysicalDevice::getRaytracingProperties() const
+VkPhysicalDeviceRayTracingPropertiesNV PhysicalDevice::getRaytracingProperties() const
 {
-    VkPhysicalDeviceRaytracingPropertiesNVX raytracingProperties = {};
-    raytracingProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAYTRACING_PROPERTIES_NVX;
+    VkPhysicalDeviceRayTracingPropertiesNV raytracingProperties = {};
+    raytracingProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PROPERTIES_NV;
     getExtendedProperties(&raytracingProperties);
     return raytracingProperties;
 }

@@ -35,7 +35,7 @@ RaytracingBuffer::RaytracingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Buffer(copyCmdBuffer->getDevice(), srcBuffer->getMemory()->getSize(),
-        VK_BUFFER_USAGE_RAYTRACING_BIT_NVX | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_BUFFER_USAGE_RAY_TRACING_BIT_NV | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         flags, std::move(allocator),
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
 {
