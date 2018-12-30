@@ -39,6 +39,7 @@ namespace magma
             const std::vector<uint32_t>& deviceIndices,
             VkDeviceSize offset /* 0 */);
         VkAccelerationStructureTypeNV getType() const noexcept { return type; }
+        const VkAccelerationStructureInfoNV& getInfo() const noexcept { return info; }
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
         VkMemoryRequirements2 getMemoryRequirements() const;
         uint64_t getStructureHandle() const;
@@ -54,6 +55,7 @@ namespace magma
 
     private:
         VkAccelerationStructureTypeNV type;
+        VkAccelerationStructureInfoNV info;
         std::shared_ptr<DeviceMemory> memory;
     };
 

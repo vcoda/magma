@@ -505,24 +505,21 @@ void CommandBuffer::endConditionalRendering() noexcept
         vkCmdEndConditionalRenderingEXT(handle);
 }
 
-void CommandBuffer::buildAccelerationStructure(uint32_t instanceCount, const std::shared_ptr<Buffer>& instanceData, VkDeviceSize instanceOffset,
-    const std::list<Geometry>& geometries, VkBuildAccelerationStructureFlagsNV flags, bool update,
+void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<Buffer>& instanceData, VkDeviceSize instanceOffset, bool update,
     const std::shared_ptr<AccelerationStructure>& dst, const std::shared_ptr<AccelerationStructure>& src,
     const std::shared_ptr<Buffer>& scratch, VkDeviceSize scratchOffset /* 0 */) noexcept
 {
-    MAGMA_STACK_ARRAY(VkGeometryNV, dereferencedGeometries, geometries.size());
-    for (const auto& geometry : geometries)
-        dereferencedGeometries.put(geometry);
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBuildAccelerationStructureNV);
     if (vkCmdBuildAccelerationStructureNV)
-    {/*
+    {
         vkCmdBuildAccelerationStructureNV(handle,
-            dst->getType(),
-            instanceCount, MAGMA_OPTIONAL_HANDLE(instanceData), instanceOffset,
-            MAGMA_COUNT(geometries), dereferencedGeometries,
-            flags, MAGMA_BOOLEAN(update),
-            *dst, MAGMA_OPTIONAL_HANDLE(src),
-            *scratch, scratchOffset);*/
+            &dst->getInfo(),
+            MAGMA_OPTIONAL_HANDLE(instanceData), 
+            instanceOffset,
+            MAGMA_BOOLEAN(update),
+            *dst, 
+            MAGMA_OPTIONAL_HANDLE(src),
+            *scratch, scratchOffset);
     }
 }
 
