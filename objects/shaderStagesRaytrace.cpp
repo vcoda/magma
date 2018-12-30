@@ -24,10 +24,10 @@ RaytracingShaderGroup::RaytracingShaderGroup(VkRayTracingShaderGroupTypeNV type,
 {
     sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_NV;
     pNext = nullptr;
-    type = type;
-    generalShader = generalShader;
-    closestHitShader = closestHitShader;
-    anyHitShader = anyHitShader;
-    intersectionShader = intersectionShader;
+    this->type = type;
+    this->generalShader = generalShader;
+    this->closestHitShader = closestHitShader;
+    this->anyHitShader = anyHitShader;
+    this->intersectionShader = intersectionShader;
 }
 } // namespace magma
