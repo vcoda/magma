@@ -309,6 +309,7 @@
     <ClCompile Include="..\..\objects\semaphore.cpp" />
     <ClCompile Include="..\..\objects\shaderModule.cpp" />
     <ClCompile Include="..\..\objects\shaderStages.cpp" />
+    <ClCompile Include="..\..\objects\shaderStagesRaytrace.cpp" />
     <ClCompile Include="..\..\objects\srcTransferBuffer.cpp" />
     <ClCompile Include="..\..\objects\storageBuffer.cpp" />
     <ClCompile Include="..\..\objects\storageTexelBuffer.cpp" />
