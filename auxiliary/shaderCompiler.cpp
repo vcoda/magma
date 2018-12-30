@@ -15,6 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
+#ifdef _WIN32
 #include "shaderCompiler.h"
 #include "../objects/shaderModule.h"
 #include "../internal/shared.h"
@@ -139,3 +140,4 @@ CompileException::CompileException(shaderc_compilation_result_t result,
 }
 } // namespace aux
 } // namespace magma
+#endif // _WIN32
