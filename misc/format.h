@@ -32,9 +32,10 @@ namespace magma
         bool blockCompressed() const noexcept;
         bool ETC2() const noexcept;
         bool EAC() const noexcept;
-        bool adaptiveCompressed() const noexcept;
+        bool ASTC() const noexcept;
+        bool PVRTC() const noexcept;
         bool compressed() const noexcept
-            { return blockCompressed() || ETC2() || EAC() || adaptiveCompressed(); }
+            { return blockCompressed() || ETC2() || EAC() || ASTC() || PVRTC(); }
         bool floatingPoint() const noexcept;
         std::pair<int, int> blockFootprint() const noexcept;
         operator VkFormat() const noexcept

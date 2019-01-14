@@ -107,7 +107,7 @@ bool Format::EAC() const noexcept
     }
 }
 
-bool Format::adaptiveCompressed() const noexcept
+bool Format::ASTC() const noexcept
 {
     switch (format)
     {
@@ -143,6 +143,24 @@ bool Format::adaptiveCompressed() const noexcept
     default:
         return false;
     };
+}
+
+bool Format::PVRTC() const noexcept
+{
+    switch (format)
+    {
+    case VK_FORMAT_PVRTC1_2BPP_UNORM_BLOCK_IMG:
+    case VK_FORMAT_PVRTC1_4BPP_UNORM_BLOCK_IMG:
+    case VK_FORMAT_PVRTC2_2BPP_UNORM_BLOCK_IMG:
+    case VK_FORMAT_PVRTC2_4BPP_UNORM_BLOCK_IMG:
+    case VK_FORMAT_PVRTC1_2BPP_SRGB_BLOCK_IMG:
+    case VK_FORMAT_PVRTC1_4BPP_SRGB_BLOCK_IMG:
+    case VK_FORMAT_PVRTC2_2BPP_SRGB_BLOCK_IMG:
+    case VK_FORMAT_PVRTC2_4BPP_SRGB_BLOCK_IMG:
+        return true;
+    default:
+        return false;
+    }
 }
 
 bool Format::floatingPoint() const noexcept
