@@ -19,10 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Format::Format(VkFormat format) noexcept:
-    format(format)
-{}
-
 bool Format::depth() const noexcept
 {
     switch (format)
