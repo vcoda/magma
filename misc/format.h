@@ -28,6 +28,7 @@ namespace magma
         bool valid() const noexcept
             { return format != VK_FORMAT_UNDEFINED; }
         bool depth() const noexcept;
+        bool stencil() const noexcept;
         bool depthStencil() const noexcept;
         bool blockCompressed() const noexcept;
         bool ETC2() const noexcept;
