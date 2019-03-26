@@ -17,8 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "stringize.h"
 
-#define MAGMA_DEFAULT_UNKNOWN default: return MAGMA_UNKNOWN
-
 namespace magma
 {
 namespace helpers

@@ -65,7 +65,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_STRINGIZE(name) #name
 #define MAGMA_STRINGIZE_FIELD(field) case field: return MAGMA_STRINGIZE(field); break
-#define MAGMA_UNKNOWN "<unknown>"
+#define MAGMA_DEFAULT_UNKNOWN default: return "<unknown>"
 
 #define MAGMA_SUCCEEDED(result)\
     ((VK_SUCCESS == result) ||\
