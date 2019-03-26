@@ -23,6 +23,16 @@ namespace magma
 {
 namespace helpers
 {
+const char *stringize(VkBool32 param) noexcept
+{
+    switch (param)
+    {
+    MAGMA_STRINGIZE_FIELD(VK_TRUE);
+    MAGMA_STRINGIZE_FIELD(VK_FALSE);
+    MAGMA_DEFAULT_UNKNOWN;
+    }
+}
+
 const char *stringize(VkSystemAllocationScope param) noexcept
 {
     switch (param)
