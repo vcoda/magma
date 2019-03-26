@@ -44,8 +44,7 @@ namespace magma
             const char *file, int line);
         BadResult(const VkResult result, const std::string& message,
             const char *file, int line);
-        VkResult code() const noexcept { return result; }
-        const char *codeString() const noexcept;
+        VkResult getResult() const noexcept { return result; }
 
     private:
         VkResult result;

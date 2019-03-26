@@ -24,6 +24,7 @@ namespace magma
     namespace helpers
     {
         const char *stringize(VkBool32) noexcept;
+        const char *stringize(VkResult) noexcept;
         const char *stringize(VkSystemAllocationScope) noexcept;
         const char *stringize(VkInternalAllocationType) noexcept;
         const char *stringize(VkFormat) noexcept;
