@@ -40,7 +40,8 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     std::shared_ptr<DebugReportCallback> debugReportCallback /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_SWAPCHAIN_KHR, std::move(device), std::move(allocator)),
     surfaceFormat(surfaceFormat),
-    imageExtent(imageExtent)
+    imageExtent(imageExtent),
+    imageIndex(0)
 {
     VkSwapchainCreateInfoKHR info;
     info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;

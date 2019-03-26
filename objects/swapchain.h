@@ -49,12 +49,14 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<DebugReportCallback> debugReportCallback = nullptr);
         ~Swapchain();
+        const VkExtent2D& getExtent() const noexcept { return imageExtent; }
+        uint32_t getImageIndex() const noexcept { return imageIndex; }
+        uint32_t getImageCount() const;
+        std::vector<std::shared_ptr<SwapchainColorAttachment2D>> getImages() const;
         uint32_t acquireNextImage(
             std::shared_ptr<const Semaphore> semaphore,
             std::shared_ptr<const Fence> fence,
             uint64_t timeout = UINT64_MAX);
-        uint32_t getImageCount() const;
-        std::vector<std::shared_ptr<SwapchainColorAttachment2D>> getImages() const;
 
     private:
         void dump(const VkSwapchainCreateInfoKHR& info,
@@ -63,5 +65,6 @@ namespace magma
     private:
         VkSurfaceFormatKHR surfaceFormat;
         VkExtent2D imageExtent;
+        uint32_t imageIndex;
     };
 } // namespace magma
