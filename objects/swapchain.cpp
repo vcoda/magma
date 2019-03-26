@@ -63,17 +63,40 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     info.clipped = VK_TRUE;
     info.oldSwapchain = VK_NULL_HANDLE;
     VkResult create;
-    const bool isDisplaySurface = std::dynamic_pointer_cast<const DisplaySurface>(surface) ? true : false;
-    if (!isDisplaySurface)
-        create = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
-    else
+    if (std::dynamic_pointer_cast<const DisplaySurface>(surface))
     {
         MAGMA_DEVICE_EXTENSION(vkCreateSharedSwapchainsKHR, VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME);
         create = vkCreateSharedSwapchainsKHR(MAGMA_HANDLE(device), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     }
+    else
+    {
+        create = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    }
 #ifdef MAGMA_DEBUG
     if (create != VK_SUCCESS && debugReportCallback)
-        dump(info, debugReportCallback);
+    {
+        debugReportCallback->message(VK_DEBUG_REPORT_ERROR_BIT_EXT, objectType, VK_NULL_HANDLE, 0, 0, "Magma",
+            "swapchain initialization failed with the following parameters:\n"
+            "minImageCount: %d\nimageFormat: %s\nimageColorSpace: %s\nimageExtent: {%d, %d}\n"
+            "imageArrayLayers: %d\nimageUsage: %s\nimageSharingMode: %s\n"
+            "preTransform: %s\ncompositeAlpha: %s\npresentMode: %s\nclipped: %s\n"
+            "oldSwapchain: %d\n",
+            info.minImageCount,
+            helpers::stringize(info.imageFormat),
+            helpers::stringize(info.imageColorSpace),
+            info.imageExtent.width,
+            info.imageExtent.height,
+            info.imageArrayLayers,
+            helpers::stringize(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT),
+            helpers::stringize(info.imageSharingMode),
+            helpers::stringize(info.preTransform),
+            helpers::stringize(info.compositeAlpha),
+            helpers::stringize(info.presentMode),
+            helpers::stringize(info.clipped),
+            info.oldSwapchain);
+    }
+#else
+    debugReportCallback;
 #endif
     MAGMA_THROW_FAILURE(create, "failed to create swapchain");
 }
@@ -113,34 +136,5 @@ std::vector<std::shared_ptr<SwapchainColorAttachment2D>> Swapchain::getImages() 
     for (const VkImage image : swapchainImages)
         colorAttachments.emplace_back(new SwapchainColorAttachment2D(device, image, surfaceFormat.format, imageExtent));
     return colorAttachments;
-}
-
-void Swapchain::dump(const VkSwapchainCreateInfoKHR& info,
-    std::shared_ptr<DebugReportCallback> debugReportCallback) const noexcept
-{
-#ifdef MAGMA_DEBUG
-    debugReportCallback->message(VK_DEBUG_REPORT_ERROR_BIT_EXT, objectType, VK_NULL_HANDLE, 0, 0, "Magma",
-        "swapchain initialization failed with the following parameters:\n"
-        "minImageCount: %d\nimageFormat: %s\nimageColorSpace: %s\nimageExtent: {%d, %d}\n"
-        "imageArrayLayers: %d\nimageUsage: %s\nimageSharingMode: %s\n"
-        "preTransform: %s\ncompositeAlpha: %s\npresentMode: %s\nclipped: %s\n"
-        "oldSwapchain: %d\n",
-        info.minImageCount,
-        helpers::stringize(info.imageFormat),
-        helpers::stringize(info.imageColorSpace),
-        info.imageExtent.width,
-        info.imageExtent.height,
-        info.imageArrayLayers,
-        helpers::stringize(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT),
-        helpers::stringize(info.imageSharingMode),
-        helpers::stringize(info.preTransform),
-        helpers::stringize(info.compositeAlpha),
-        helpers::stringize(info.presentMode),
-        info.clipped ? "VK_TRUE" : "VK_FALSE",
-        info.oldSwapchain);
-#elif defined(_MSC_VER)
-    info;
-    debugReportCallback;
-#endif // MAGMA_DEBUG
 }
 } // namespace magma

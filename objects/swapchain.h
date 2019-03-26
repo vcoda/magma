@@ -59,10 +59,6 @@ namespace magma
             uint64_t timeout = UINT64_MAX);
 
     private:
-        void dump(const VkSwapchainCreateInfoKHR& info,
-            std::shared_ptr<DebugReportCallback> debugReportCallback) const noexcept;
-
-    private:
         VkSurfaceFormatKHR surfaceFormat;
         VkExtent2D imageExtent;
         uint32_t imageIndex;
