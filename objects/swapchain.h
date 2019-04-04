@@ -53,8 +53,7 @@ namespace magma
         uint32_t getImageIndex() const noexcept { return imageIndex; }
         uint32_t getImageCount() const;
         std::vector<std::shared_ptr<SwapchainColorAttachment2D>> getImages() const;
-        uint32_t acquireNextImage(
-            std::shared_ptr<const Semaphore> semaphore,
+        uint32_t acquireNextImage(std::shared_ptr<const Semaphore> semaphore,
             std::shared_ptr<const Fence> fence,
             uint64_t timeout = UINT64_MAX);
 
