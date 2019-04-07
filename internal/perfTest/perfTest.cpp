@@ -3,9 +3,9 @@
 #else
 #include <mm_malloc.h>
 #endif
-#include "scopedProfiler.h"
 #include "../copyMemory.h"
 #include "../zeroMemory.h"
+#include "../scopedProfiler.h"
 
 namespace
 {
@@ -30,6 +30,10 @@ int main()
     std::cout << "Not a x64 build, quit." << std::endl;
     return 0;
 #endif
+    auto onFinish = [](float ms) -> void
+    {
+        std::cout << "Elapsed time: " << ms << "ms." << std::endl;
+    };
     // Allocate buffers
     void *srcBuffer0 = _mm_malloc(BUFFER_SIZE, 16);
     void *dstBuffer0 = _mm_malloc(BUFFER_SIZE, 16);
@@ -39,13 +43,13 @@ int main()
     memset(srcBuffer0, 0x7F, BUFFER_SIZE);
     memset(srcBuffer1, 0x7F, BUFFER_SIZE);
     {   // 1) Test std::memcpy()
-        ScopedProfiler prof("Run std::memcpy() performance test.");
+        magma::internal::ScopedProfiler prof("Run std::memcpy() performance test.", onFinish);
         for (int i = 0; i < NUM_ITERATIONS; ++i)
             std::memcpy(dstBuffer0, srcBuffer0, BUFFER_SIZE);
     }
     std::cout << std::endl;
     {   // 2) Test our copy function
-        ScopedProfiler prof("Run magma::copyMemory() performance test.");
+        magma::internal::ScopedProfiler prof("Run magma::copyMemory() performance test.", onFinish);
         for (int i = 0; i < NUM_ITERATIONS; ++i)
             magma::internal::copyMemory(dstBuffer1, srcBuffer1, BUFFER_SIZE);
     }
@@ -56,13 +60,13 @@ int main()
         std::cout << "Memory copy invalid!" << std::endl;
     std::cout << std::endl;
     {   // 3) Test std::memset()
-        ScopedProfiler prof("Run std::memset() performance test.");
+        magma::internal::ScopedProfiler prof("Run std::memset() performance test.", onFinish);
         for (int i = 0; i < NUM_ITERATIONS; ++i)
             std::memset(dstBuffer0, 0, BUFFER_SIZE);
     }
     std::cout << std::endl;
     {   // 4) Test our zero function
-        ScopedProfiler prof("Run magma::zeroMemory() performance test.");
+        magma::internal::ScopedProfiler prof("Run magma::zeroMemory() performance test.", onFinish);
         for (int i = 0; i < NUM_ITERATIONS; ++i)
             magma::internal::zeroMemory(dstBuffer1, BUFFER_SIZE);
     }
