@@ -29,6 +29,7 @@ namespace magma
     {
         bool executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool, 
             std::function<void(std::shared_ptr<CommandBuffer>)> callback,
+            bool primaryLevel = true,
             VkQueueFlagBits queueType = VK_QUEUE_GRAPHICS_BIT,
             const char *blockName = "magma::helpers::executeCommandBuffer",
             uint32_t blockColor = 0x0);

@@ -28,11 +28,12 @@ namespace helpers
 {
 bool executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool, 
     std::function<void(std::shared_ptr<CommandBuffer>)> callback,
+    bool primaryLevel /* true */,
     VkQueueFlagBits queueType /* VK_QUEUE_GRAPHICS_BIT */,
     const char *blockName /* magma::helpers::executeGraphicsCommands */,
     uint32_t blockColor /* 0x0 */)
 {
-    std::shared_ptr<CommandBuffer> cmdBuffer = cmdPool->allocateCommandBuffer(true);
+    std::shared_ptr<CommandBuffer> cmdBuffer = cmdPool->allocateCommandBuffer(primaryLevel);
     if (cmdBuffer->begin(blockName, blockColor))
     {
         callback(cmdBuffer);
