@@ -39,7 +39,8 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     uint32_t resolveAttachmentCount = 0;
     for (const auto& desc : attachments)
     {
-        if (!Format(desc.format).depth())
+        const Format format(desc.format);
+        if (!format.depth() && !format.stencil() && !format.depthStencil())
         {
             if (desc.samples > 1)
                 ++multisampleAttachmentCount;
@@ -65,7 +66,8 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     // Color/depth/multisample attachments go to their slots
     for (const auto& desc : attachments)
     {
-        if (Format(desc.format).depth())
+        const Format format(desc.format);
+        if (format.depth() || format.stencil() || format.depthStencil())
         {
             if (!depthStencilReference)
                 depthStencilReference = new VkAttachmentReference{attachmentIndex, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL};
