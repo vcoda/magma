@@ -26,8 +26,7 @@ namespace magma
     class ImageView;
     class RenderPass;
     class ShaderModule;
-    class VertexShaderStage;
-    class FragmentShaderStage;
+    class PipelineShaderStage;
     class Sampler;
     class DescriptorPool;
     class DescriptorSet;
@@ -48,8 +47,8 @@ namespace magma
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
-                const VertexShaderStage& vertexShader,
-                const FragmentShaderStage& fragmentShader,
+                const PipelineShaderStage& vertexShader,
+                const PipelineShaderStage& fragmentShader,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             void blit(const std::shared_ptr<Framebuffer>& bltDst,
                 const std::shared_ptr<ImageView>& bltSrc,

@@ -48,7 +48,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         std::move(allocator))
 {}
 
-BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, const VertexShaderStage& vertexShader, const FragmentShaderStage& fragmentShader,
+BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, const PipelineShaderStage& vertexShader, const PipelineShaderStage& fragmentShader,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     renderPass(std::move(renderPass))
 {   // Descriptor set for single image view in fragment shader
