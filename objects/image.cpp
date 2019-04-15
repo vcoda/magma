@@ -41,6 +41,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     mipLevels(mipLevels),
     arrayLayers(arrayLayers),
     samples(samples),
+    usage(usage),
     flags(flags)
 {
     VkImageCreateInfo info;

@@ -44,6 +44,7 @@ namespace magma
         uint32_t getMipLevels() const noexcept { return mipLevels; }
         uint32_t getArrayLayers() const noexcept { return arrayLayers; }
         uint32_t getSamples() const noexcept { return samples; }
+        VkImageUsageFlags getUsage() const noexcept { return usage; }
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0);
@@ -92,6 +93,7 @@ namespace magma
         uint32_t mipLevels;
         uint32_t arrayLayers;
         uint32_t samples;
+        VkImageUsageFlags usage;
         VkImageCreateFlags flags;
         std::shared_ptr<DeviceMemory> memory;
         friend class ImageView;
