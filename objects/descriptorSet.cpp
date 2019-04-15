@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "image.h"
 #include "imageView.h"
 #include "sampler.h"
+#include "../misc/format.h"
 #include "../internal/shared.h"
 
 namespace magma
@@ -57,11 +58,19 @@ void DescriptorSet::update(uint32_t index, std::shared_ptr<const Buffer> buffer)
 void DescriptorSet::update(uint32_t index, std::shared_ptr<const ImageView> imageView, std::shared_ptr<const Sampler> sampler) noexcept
 {
     const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
+    const Format format(imageView->getImage()->getFormat());
     MAGMA_ASSERT(1 == binding.descriptorCount);
     VkDescriptorImageInfo info;
     info.sampler = *sampler;
     info.imageView = *imageView;
-    info.imageLayout = imageView->getImage()->getLayout();
+    if (format.depth()) // Read-only image in a shader where only the depth aspect is accessed
+        info.imageLayout = VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL;
+    else if (format.stencil()) // Read-only image in a shader where only the stencil aspect is accessed
+        info.imageLayout = VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL;
+    else if (format.depthStencil()) // Read-only depth/stencil image in a shader
+        info.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+    else // Read-only image in a shader
+        info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     descriptorWrite.pNext = nullptr;
