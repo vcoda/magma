@@ -87,7 +87,7 @@ ConservativeRasterizationState::ConservativeRasterizationState(const Rasterizati
     conservative.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_CONSERVATIVE_STATE_CREATE_INFO_EXT;
     conservative.pNext = nullptr;
     conservative.flags = 0;
-	conservative.conservativeRasterizationMode = conservativeRasterizationMode;
+    conservative.conservativeRasterizationMode = conservativeRasterizationMode;
     conservative.extraPrimitiveOverestimationSize = extraPrimitiveOverestimationSize;
     pNext = &conservative;
 }
