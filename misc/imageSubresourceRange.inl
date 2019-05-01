@@ -40,10 +40,12 @@ inline ImageSubresourceRange::ImageSubresourceRange(std::shared_ptr<const Image2
 inline ImageSubresourceRange::ImageSubresourceRange(VkFormat format) noexcept
 {
     const Format imageFormat(format);
-    if (imageFormat.depthStencil())
-        aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
-    else if (imageFormat.depth())
+    if (imageFormat.depth())
         aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+    else if (imageFormat.stencil())
+        aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
+    else if (imageFormat.depthStencil())
+        aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
     else
         aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 }
