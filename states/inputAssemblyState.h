@@ -26,36 +26,41 @@ namespace magma
 
     struct InputAssemblyState : VkPipelineInputAssemblyStateCreateInfo
     {
-        InputAssemblyState(VkPrimitiveTopology topology,
+        constexpr InputAssemblyState(VkPrimitiveTopology topology,
             bool primitiveRestartEnable = false) noexcept;
         size_t hash() const noexcept;
         bool operator==(const InputAssemblyState&) const noexcept;
     };
+} // namespace magma
 
+#include "inputAssemblyState.inl"
+
+namespace magma
+{
     namespace renderstates
     {
-        extern const InputAssemblyState pointList;
-        extern const InputAssemblyState lineList;
-        extern const InputAssemblyState lineStrip;
-        extern const InputAssemblyState triangleList;
-        extern const InputAssemblyState triangleStrip;
-        extern const InputAssemblyState triangleFan;
-        extern const InputAssemblyState lineListWithAdjacency;
-        extern const InputAssemblyState lineStripWithAdjacency;
-        extern const InputAssemblyState triangleListWithAdjacency;
-        extern const InputAssemblyState triangleStripWithAdjacency;
-        extern const InputAssemblyState patchList;
+        constexpr InputAssemblyState pointList(VK_PRIMITIVE_TOPOLOGY_POINT_LIST);
+        constexpr InputAssemblyState lineList(VK_PRIMITIVE_TOPOLOGY_LINE_LIST);
+        constexpr InputAssemblyState lineStrip(VK_PRIMITIVE_TOPOLOGY_LINE_STRIP);
+        constexpr InputAssemblyState triangleList(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+        constexpr InputAssemblyState triangleStrip(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP);
+        constexpr InputAssemblyState triangleFan(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN);
+        constexpr InputAssemblyState lineListWithAdjacency(VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY);
+        constexpr InputAssemblyState lineStripWithAdjacency(VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY);
+        constexpr InputAssemblyState triangleListWithAdjacency(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY);
+        constexpr InputAssemblyState triangleStripWithAdjacency(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY);
+        constexpr InputAssemblyState patchList(VK_PRIMITIVE_TOPOLOGY_PATCH_LIST);
 
-        extern const InputAssemblyState pointListRestart;
-        extern const InputAssemblyState lineListRestart;
-        extern const InputAssemblyState lineStripRestart;
-        extern const InputAssemblyState triangleListRestart;
-        extern const InputAssemblyState triangleStripRestart;
-        extern const InputAssemblyState triangleFanRestart;
-        extern const InputAssemblyState lineListWithAdjacencyRestart;
-        extern const InputAssemblyState lineStripWithAdjacencyRestart;
-        extern const InputAssemblyState triangleListWithAdjacencyRestart;
-        extern const InputAssemblyState triangleStripWithAdjacencyRestart;
-        extern const InputAssemblyState patchListRestart;
+        constexpr InputAssemblyState pointListRestart(VK_PRIMITIVE_TOPOLOGY_POINT_LIST, true);
+        constexpr InputAssemblyState lineListRestart(VK_PRIMITIVE_TOPOLOGY_LINE_LIST, true);
+        constexpr InputAssemblyState lineStripRestart(VK_PRIMITIVE_TOPOLOGY_LINE_STRIP, true);
+        constexpr InputAssemblyState triangleListRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, true);
+        constexpr InputAssemblyState triangleStripRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP, true);
+        constexpr InputAssemblyState triangleFanRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN, true);
+        constexpr InputAssemblyState lineListWithAdjacencyRestart(VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY, true);
+        constexpr InputAssemblyState lineStripWithAdjacencyRestart(VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY, true);
+        constexpr InputAssemblyState triangleListWithAdjacencyRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY, true);
+        constexpr InputAssemblyState triangleStripWithAdjacencyRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY, true);
+        constexpr InputAssemblyState patchListRestart(VK_PRIMITIVE_TOPOLOGY_PATCH_LIST, true);
     } // namespace renderstates
 } // namespace magma

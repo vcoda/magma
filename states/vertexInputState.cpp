@@ -132,12 +132,9 @@ namespace renderstates
 {
 const VertexInputState nullVertexInput;
 
-const VertexInputState pos2Float(VertexInputBinding(0, sizeof(float) * 2),
-    VertexInputAttribute(0, 0, VK_FORMAT_R32G32_SFLOAT, 0));
-const VertexInputState pos3Float(VertexInputBinding(0, sizeof(float) * 3),
-    VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0));
-const VertexInputState pos4Float(VertexInputBinding(0, sizeof(float) * 4),
-    VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32A32_SFLOAT, 0));
+const VertexInputState pos2Float(VertexInputBinding(0, sizeof(float) * 2), attributes::rg32Float);
+const VertexInputState pos3Float(VertexInputBinding(0, sizeof(float) * 3), attributes::rgb32Float);
+const VertexInputState pos4Float(VertexInputBinding(0, sizeof(float) * 4), attributes::rgba32Float);
 
 const VertexInputState pos2FloatTex2Float(VertexInputBinding(0, sizeof(float) * 4), {
     VertexInputAttribute(0, 0, VK_FORMAT_R32G32_SFLOAT, 0),

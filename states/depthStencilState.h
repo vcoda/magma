@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <cstdlib>
 #include "../api/vulkan.h"
 
 namespace magma
@@ -24,37 +25,29 @@ namespace magma
 
     struct StencilOpState : VkStencilOpState
     {
-        StencilOpState(VkStencilOp failOp,
+        constexpr StencilOpState(VkStencilOp failOp,
             VkStencilOp passOp,
             VkStencilOp depthFailOp,
             VkCompareOp compareOp,
             uint32_t compareMask = 0x0,
             uint32_t writeMask = 0x0,
-            uint32_t reference = 0) noexcept;
-        size_t hash() const noexcept;
+            uint32_t reference = 0) noexcept
+        {
+            this->failOp = failOp;
+            this->passOp = passOp;
+            this->depthFailOp = depthFailOp;
+            this->compareOp = compareOp;
+            this->compareMask = compareMask;
+            this->writeMask = writeMask;
+            this->reference = reference;
+        }
+        std::size_t hash() const noexcept;
         bool operator==(const StencilOpState&) const noexcept;
     };
 
     namespace renderstates
     {
-        extern const StencilOpState stencilAlwaysDontWrite;
-
-        extern const StencilOpState stencilZeroDepthPass;
-        extern const StencilOpState stencilZeroDepthFail;
-        extern const StencilOpState stencilOneDepthPass;
-        extern const StencilOpState stencilOneDepthFail;
-        extern const StencilOpState stencilInvertDepthPass;
-        extern const StencilOpState stencilInvertDepthFail;
-
-        extern const StencilOpState stencilIncrClampDepthPass;
-        extern const StencilOpState stencilIncrWrapDepthPass;
-        extern const StencilOpState stencilDecrClampDepthPass;
-        extern const StencilOpState stencilDecrWrapDepthPass;
-
-        extern const StencilOpState stencilIncrClampDepthFail;
-        extern const StencilOpState stencilIncrWrapDepthFail;
-        extern const StencilOpState stencilDecrClampDepthFail;
-        extern const StencilOpState stencilDecrWrapDepthFail;
+        constexpr StencilOpState stencilAlwaysDontWrite(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0x0, 0x0, 0);    
     }
 
     /* The stencil test conditionally disables coverage of a sample
@@ -65,11 +58,11 @@ namespace magma
 
     struct DepthStencilState : VkPipelineDepthStencilStateCreateInfo
     {
-        DepthStencilState(VkCompareOp depthCompareOp,
+        constexpr DepthStencilState(VkCompareOp depthCompareOp,
             bool depthWriteEnable,
             const StencilOpState& front = renderstates::stencilAlwaysDontWrite,
             const StencilOpState& back = renderstates::stencilAlwaysDontWrite) noexcept;
-        DepthStencilState(const DepthStencilState& state,
+        constexpr DepthStencilState(const DepthStencilState& state,
             const StencilOpState& front,
             const StencilOpState& back) noexcept;
         size_t hash() const noexcept;
@@ -82,28 +75,50 @@ namespace magma
 
     struct DepthBoundsState : DepthStencilState
     {
-        DepthBoundsState(const DepthStencilState& state,
+        constexpr DepthBoundsState(const DepthStencilState& state,
             float minDepthBounds,
             float maxDepthBounds) noexcept;
     };
+}
 
+#include "depthStencilState.inl"
+
+namespace magma
+{
     namespace renderstates
     {
-        extern const DepthStencilState depthLess;
-        extern const DepthStencilState depthEqual;
-        extern const DepthStencilState depthLessOrEqual;
-        extern const DepthStencilState depthGreater;
-        extern const DepthStencilState depthNoEqual;
-        extern const DepthStencilState depthGreaterOrEqual;
-        extern const DepthStencilState depthAlways;
-        extern const DepthStencilState depthNever;
+        constexpr StencilOpState stencilZeroDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_ZERO, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+        constexpr StencilOpState stencilZeroDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_ZERO, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+        constexpr StencilOpState stencilOneDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_REPLACE, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 1);
+        constexpr StencilOpState stencilOneDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_REPLACE, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 1);
+        constexpr StencilOpState stencilInvertDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INVERT, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+        constexpr StencilOpState stencilInvertDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INVERT, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
 
-        extern const DepthStencilState depthLessDontWrite;
-        extern const DepthStencilState depthEqualDontWrite;
-        extern const DepthStencilState depthLessOrEqualDontWrite;
-        extern const DepthStencilState depthGreaterDontWrite;
-        extern const DepthStencilState depthNoEqualDontWrite;
-        extern const DepthStencilState depthGreaterOrEqualDontWrite;
-        extern const DepthStencilState depthAlwaysDontWrite;
+        constexpr StencilOpState stencilIncrClampDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_CLAMP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+        constexpr StencilOpState stencilIncrWrapDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_WRAP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+        constexpr StencilOpState stencilDecrClampDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_CLAMP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+        constexpr StencilOpState stencilDecrWrapDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_WRAP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+
+        constexpr StencilOpState stencilIncrClampDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_CLAMP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+        constexpr StencilOpState stencilIncrWrapDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_WRAP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+        constexpr StencilOpState stencilDecrClampDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_CLAMP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+        constexpr StencilOpState stencilDecrWrapDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_WRAP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+
+        constexpr DepthStencilState depthLess(VK_COMPARE_OP_LESS, true);
+        constexpr DepthStencilState depthEqual(VK_COMPARE_OP_EQUAL, true);
+        constexpr DepthStencilState depthLessOrEqual(VK_COMPARE_OP_LESS_OR_EQUAL, true);
+        constexpr DepthStencilState depthGreater(VK_COMPARE_OP_GREATER, true);
+        constexpr DepthStencilState depthNoEqual(VK_COMPARE_OP_NOT_EQUAL, true);
+        constexpr DepthStencilState depthGreaterOrEqual(VK_COMPARE_OP_GREATER_OR_EQUAL, true);
+        constexpr DepthStencilState depthAlways(VK_COMPARE_OP_ALWAYS, true);
+
+        constexpr DepthStencilState depthNeverDontWrite(VK_COMPARE_OP_NEVER, false);
+        constexpr DepthStencilState depthLessDontWrite(VK_COMPARE_OP_LESS, false);
+        constexpr DepthStencilState depthEqualDontWrite(VK_COMPARE_OP_EQUAL, false);
+        constexpr DepthStencilState depthLessOrEqualDontWrite(VK_COMPARE_OP_LESS_OR_EQUAL, false);
+        constexpr DepthStencilState depthGreaterDontWrite(VK_COMPARE_OP_GREATER, false);
+        constexpr DepthStencilState depthNoEqualDontWrite(VK_COMPARE_OP_NOT_EQUAL, false);
+        constexpr DepthStencilState depthGreaterOrEqualDontWrite(VK_COMPARE_OP_GREATER_OR_EQUAL, false);
+        constexpr DepthStencilState depthAlwaysDontWrite(VK_COMPARE_OP_ALWAYS, false);
     } // namespace renderstates
 } // namespace magma

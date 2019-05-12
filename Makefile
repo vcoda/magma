@@ -94,12 +94,7 @@ MAGMA_OBJS= \
 	objects/vertexBuffer.o \
 	\
 	states/colorBlendState.o \
-	states/depthStencilState.o \
-	states/inputAssemblyState.o \
 	states/multisampleState.o \
-	states/rasterizationState.o \
-	states/samplerState.o \
-	states/tesselationState.o \
 	states/vertexInputState.o \
 	states/viewportState.o
 

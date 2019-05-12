@@ -458,22 +458,7 @@
     <ClCompile Include="..\..\states\colorBlendState.cpp">
       <Filter>Source Files\states</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\states\depthStencilState.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\states\inputAssemblyState.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\states\multisampleState.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\states\rasterizationState.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\states\samplerState.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\states\tesselationState.cpp">
       <Filter>Source Files\states</Filter>
     </ClCompile>
     <ClCompile Include="..\..\states\vertexInputState.cpp">
@@ -684,6 +669,27 @@
     </None>
     <None Include="..\..\objects\vertexBuffer.inl">
       <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\states\rasterizationState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\states\samplerState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\states\depthStencilState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\states\inputAssemblyState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\states\multisampleState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\states\tesselationState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\states\colorBlendState.inl">
+      <Filter>Header Files\states</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

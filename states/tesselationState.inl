@@ -15,12 +15,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include "tesselationState.h"
 #include "../internal/hash.h"
 
 namespace magma
 {
-TesselationState::TesselationState(uint32_t patchControlPoints /* 0 */) noexcept
+constexpr TesselationState::TesselationState(uint32_t patchControlPoints /* 0 */) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -28,14 +27,14 @@ TesselationState::TesselationState(uint32_t patchControlPoints /* 0 */) noexcept
     this->patchControlPoints = patchControlPoints;
 }
 
-size_t TesselationState::hash() const noexcept
+inline size_t TesselationState::hash() const noexcept
 {
     return internal::hashArgs(
         flags,
         patchControlPoints);
 }
 
-bool TesselationState::operator==(const TesselationState& other) const noexcept
+inline bool TesselationState::operator==(const TesselationState& other) const noexcept
 {
     return (flags == other.flags) && (patchControlPoints == other.patchControlPoints);
 }

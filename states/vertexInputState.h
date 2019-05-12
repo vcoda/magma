@@ -23,7 +23,9 @@ namespace magma
 {
     struct VertexInputBinding : VkVertexInputBindingDescription
     {
-        VertexInputBinding(uint32_t binding, uint32_t stride,
+        constexpr VertexInputBinding() {}
+        constexpr VertexInputBinding(uint32_t binding, 
+            uint32_t stride,
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept
         {
             this->binding = binding;
@@ -34,11 +36,24 @@ namespace magma
 
     struct VertexInputAttribute : VkVertexInputAttributeDescription
     {
-        VertexInputAttribute(uint32_t binding, uint32_t location, VkFormat format, uint32_t offset) noexcept
+        constexpr VertexInputAttribute() {}
+        constexpr VertexInputAttribute(uint32_t binding, 
+            uint32_t location, 
+            VkFormat format, 
+            uint32_t offset) noexcept
         {
             this->location = location;
             this->binding = binding;
             this->format = format;
+            this->offset = offset;
+        }
+
+        constexpr VertexInputAttribute(const VertexInputAttribute& attrib,
+            uint32_t offset) noexcept
+        {
+            location = attrib.location;
+            binding = attrib.binding;
+            format = attrib.format;
             this->offset = offset;
         }
     };
@@ -62,6 +77,13 @@ namespace magma
         ~VertexInputState();
         size_t hash() const noexcept;
         bool operator==(const VertexInputState&) const noexcept;
+    };
+
+    namespace attributes
+    {
+        constexpr VertexInputAttribute rg32Float(0, 0, VK_FORMAT_R32G32_SFLOAT, 0);
+        constexpr VertexInputAttribute rgb32Float(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0);
+        constexpr VertexInputAttribute rgba32Float(0, 0, VK_FORMAT_R32G32B32A32_SFLOAT, 0);
     };
 
     namespace renderstates

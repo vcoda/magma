@@ -24,11 +24,8 @@ namespace magma
 
     struct MultisampleState : VkPipelineMultisampleStateCreateInfo
     {
-        MultisampleState(VkSampleCountFlagBits rasterizationSamples) noexcept;
-        MultisampleState(uint32_t sampleCount) noexcept;
-        MultisampleState(const MultisampleState&);
-        MultisampleState& operator=(const MultisampleState&);
-        ~MultisampleState();
+        constexpr MultisampleState(VkSampleCountFlagBits rasterizationSamples) noexcept;
+        constexpr MultisampleState(uint32_t sampleCount) noexcept;
         size_t hash() const noexcept;
         bool operator==(const MultisampleState&) const noexcept;
     };
@@ -40,7 +37,7 @@ namespace magma
 
     struct MultisampleShadingState : MultisampleState
     {
-        MultisampleShadingState(const MultisampleState& state,
+        constexpr MultisampleShadingState(const MultisampleState& state,
             float minSampleShading = 1.f) noexcept;
     };
 
@@ -53,18 +50,26 @@ namespace magma
             uint64_t coverageMask,
             bool alphaToCoverage = false,
             bool alphaToOne = false);
+        MultisampleCoverageState(const MultisampleCoverageState&);
+        MultisampleCoverageState& operator=(const MultisampleCoverageState&);
+        ~MultisampleCoverageState();
     };
+} // namespace magma
 
+#include "multisampleState.inl"
+
+namespace magma
+{
     namespace renderstates
     {
-        extern const MultisampleState multisample1;
-        extern const MultisampleState multisample2;
-        extern const MultisampleState multisample4;
-        extern const MultisampleState multisample8;
-        extern const MultisampleState multisample16;
-        extern const MultisampleState multisample32;
-        extern const MultisampleState multisample64;
-        extern const MultisampleState noMultisample;
+        constexpr MultisampleState multisample1(VK_SAMPLE_COUNT_1_BIT);
+        constexpr MultisampleState multisample2(VK_SAMPLE_COUNT_2_BIT);
+        constexpr MultisampleState multisample4(VK_SAMPLE_COUNT_4_BIT);
+        constexpr MultisampleState multisample8(VK_SAMPLE_COUNT_8_BIT);
+        constexpr MultisampleState multisample16(VK_SAMPLE_COUNT_16_BIT);
+        constexpr MultisampleState multisample32(VK_SAMPLE_COUNT_32_BIT);
+        constexpr MultisampleState multisample64(VK_SAMPLE_COUNT_64_BIT);
+        constexpr MultisampleState noMultisample(multisample1); // Alias name for convenience
 
         extern const MultisampleCoverageState multisample2AlphaToCoverage;
         extern const MultisampleCoverageState multisample4AlphaToCoverage;

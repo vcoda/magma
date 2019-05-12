@@ -318,12 +318,7 @@
     <ClCompile Include="..\..\objects\uniformTexelBuffer.cpp" />
     <ClCompile Include="..\..\objects\vertexBuffer.cpp" />
     <ClCompile Include="..\..\states\colorBlendState.cpp" />
-    <ClCompile Include="..\..\states\depthStencilState.cpp" />
-    <ClCompile Include="..\..\states\inputAssemblyState.cpp" />
     <ClCompile Include="..\..\states\multisampleState.cpp" />
-    <ClCompile Include="..\..\states\rasterizationState.cpp" />
-    <ClCompile Include="..\..\states\samplerState.cpp" />
-    <ClCompile Include="..\..\states\tesselationState.cpp" />
     <ClCompile Include="..\..\states\vertexInputState.cpp" />
     <ClCompile Include="..\..\states\viewportState.cpp" />
   </ItemGroup>
@@ -401,6 +396,13 @@
     <None Include="..\..\objects\srcTransferBuffer.inl" />
     <None Include="..\..\objects\storageBuffer.inl" />
     <None Include="..\..\objects\vertexBuffer.inl" />
+    <None Include="..\..\states\colorBlendState.inl" />
+    <None Include="..\..\states\depthStencilState.inl" />
+    <None Include="..\..\states\inputAssemblyState.inl" />
+    <None Include="..\..\states\multisampleState.inl" />
+    <None Include="..\..\states\rasterizationState.inl" />
+    <None Include="..\..\states\samplerState.inl" />
+    <None Include="..\..\states\tesselationState.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

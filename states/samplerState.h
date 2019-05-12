@@ -25,11 +25,11 @@ namespace magma
     class SamplerState
     {
     public:
-        SamplerState(VkFilter magFilter,
+        constexpr SamplerState(VkFilter magFilter,
             VkFilter minFilter,
             VkSamplerMipmapMode mipmapMode,
             VkSamplerAddressMode addressMode) noexcept;
-        SamplerState(float maxAnisotropy,
+        constexpr SamplerState(float maxAnisotropy,
             VkSamplerAddressMode addressMode) noexcept;
         size_t hash() const noexcept;
         bool operator==(const SamplerState&) const noexcept;
@@ -43,32 +43,37 @@ namespace magma
         float maxAnisotropy;
         friend class Sampler;
     };
+}
 
+#include "samplerState.inl"
+
+namespace magma
+{
     namespace samplers
     {
-        extern const SamplerState nearestMipmapNearestRepeat;
-        extern const SamplerState linearMipmapNearestRepeat;
-        extern const SamplerState linearMipmapLinearRepeat;
-        extern const SamplerState anisotropicRepeat;
+        constexpr SamplerState nearestMipmapNearestRepeat(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_ADDRESS_MODE_REPEAT);
+        constexpr SamplerState linearMipmapNearestRepeat(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_ADDRESS_MODE_REPEAT);
+        constexpr SamplerState linearMipmapLinearRepeat(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR, VK_SAMPLER_ADDRESS_MODE_REPEAT);
+        constexpr SamplerState anisotropicRepeat(16.f, VK_SAMPLER_ADDRESS_MODE_REPEAT);
 
-        extern const SamplerState nearestMipmapNearestMirroredRepeat;
-        extern const SamplerState linearMipmapNearestMirroredRepeat;
-        extern const SamplerState linearMipmapLinearMirroredRepeat;
-        extern const SamplerState anisotropicMirroredRepeat;
+        constexpr SamplerState nearestMipmapNearestMirroredRepeat(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT);
+        constexpr SamplerState linearMipmapNearestMirroredRepeat(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT);
+        constexpr SamplerState linearMipmapLinearMirroredRepeat(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR, VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT);
+        constexpr SamplerState anisotropicMirroredRepeat(16.f, VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT);
 
-        extern const SamplerState nearestMipmapNearestClampToEdge;
-        extern const SamplerState linearMipmapNearestClampToEdge;
-        extern const SamplerState linearMipmapLinearClampToEdge;
-        extern const SamplerState anisotropicClampToEdge;
+        constexpr SamplerState nearestMipmapNearestClampToEdge(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE);
+        constexpr SamplerState linearMipmapNearestClampToEdge(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE);
+        constexpr SamplerState linearMipmapLinearClampToEdge(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE);
+        constexpr SamplerState anisotropicClampToEdge(16.f, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE);
 
-        extern const SamplerState nearestMipmapNearestClampToBorder;
-        extern const SamplerState linearMipmapNearestClampToBorder;
-        extern const SamplerState linearMipmapLinearClampToBorder;
-        extern const SamplerState anisotropicClampToBorder;
+        constexpr SamplerState nearestMipmapNearestClampToBorder(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER);
+        constexpr SamplerState linearMipmapNearestClampToBorder(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER);
+        constexpr SamplerState linearMipmapLinearClampToBorder(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER);
+        constexpr SamplerState anisotropicClampToBorder(16.f, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER);
 
-        extern const SamplerState nearestMipmapNearestMirrorClampToEdge;
-        extern const SamplerState linearMipmapNearestMirrorClampToEdge;
-        extern const SamplerState linearMipmapLinearMirrorClampToEdge;
-        extern const SamplerState anisotropicMirrorClampToEdge;
+        constexpr SamplerState nearestMipmapNearestMirrorClampToEdge(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE);
+        constexpr SamplerState linearMipmapNearestMirrorClampToEdge(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE);
+        constexpr SamplerState linearMipmapLinearMirrorClampToEdge(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE);
+        constexpr SamplerState anisotropicMirrorClampToEdge(16.f, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE);
     } // namespace samplers
 } // namespace magma
