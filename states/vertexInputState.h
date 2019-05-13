@@ -23,7 +23,6 @@ namespace magma
 {
     struct VertexInputBinding : VkVertexInputBindingDescription
     {
-        constexpr VertexInputBinding() {}
         constexpr VertexInputBinding(uint32_t binding, 
             uint32_t stride,
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept
@@ -36,7 +35,6 @@ namespace magma
 
     struct VertexInputAttribute : VkVertexInputAttributeDescription
     {
-        constexpr VertexInputAttribute() {}
         constexpr VertexInputAttribute(uint32_t binding, 
             uint32_t location, 
             VkFormat format, 
