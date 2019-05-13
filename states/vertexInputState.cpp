@@ -132,67 +132,67 @@ namespace renderstates
 {
 const VertexInputState nullVertexInput;
 
-const VertexInputState pos2Float(VertexInputBinding(0, sizeof(float) * 2), attributes::rg32Float);
-const VertexInputState pos3Float(VertexInputBinding(0, sizeof(float) * 3), attributes::rgb32Float);
-const VertexInputState pos4Float(VertexInputBinding(0, sizeof(float) * 4), attributes::rgba32Float);
+const VertexInputState pos2Float(VertexInputBinding(0, sizeof(float) * 2), attributes::xyFloat32);
+const VertexInputState pos3Float(VertexInputBinding(0, sizeof(float) * 3), attributes::xyzFloat32);
+const VertexInputState pos4Float(VertexInputBinding(0, sizeof(float) * 4), attributes::xyzwFloat32);
 
 const VertexInputState pos2FloatTex2Float(VertexInputBinding(0, sizeof(float) * 4), {
-    VertexInputAttribute(0, 0, VK_FORMAT_R32G32_SFLOAT, 0),
-    VertexInputAttribute(0, 1, VK_FORMAT_R32G32_SFLOAT, 8)
+    VertexInputAttribute(0, attributes::xyFloat32, 0),
+    VertexInputAttribute(1, attributes::xyFloat32, 8)
 });
-const VertexInputState pos2FloatCol3Float(VertexInputBinding(0, sizeof(float) * 5), {
-    VertexInputAttribute(0, 0, VK_FORMAT_R32G32_SFLOAT, 0),
-    VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32_SFLOAT, 8)
+const VertexInputState pos2FloatColor3Float(VertexInputBinding(0, sizeof(float) * 5), {
+    VertexInputAttribute(0, attributes::xyFloat32, 0),
+    VertexInputAttribute(1, attributes::xyzFloat32, 8)
 });
-const VertexInputState pos2FloatCol4Float(VertexInputBinding(0, sizeof(float) * 6), {
-    VertexInputAttribute(0, 0, VK_FORMAT_R32G32_SFLOAT, 0),
-    VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32A32_SFLOAT, 8)
+const VertexInputState pos2FloatColor4Float(VertexInputBinding(0, sizeof(float) * 6), {
+    VertexInputAttribute(0, attributes::xyFloat32, 0),
+    VertexInputAttribute(1, attributes::xyzwFloat32, 8)
 });
-const VertexInputState pos2FloatCol4UNorm(VertexInputBinding(0, sizeof(float) * 2 + sizeof(char) * 4), {
-    VertexInputAttribute(0, 0, VK_FORMAT_R32G32_SFLOAT, 0),
-    VertexInputAttribute(0, 1, VK_FORMAT_R8G8B8A8_UNORM, 8)
+const VertexInputState pos2FloatColor4UNorm(VertexInputBinding(0, sizeof(float) * 2 + sizeof(char) * 4), {
+    VertexInputAttribute(0, attributes::xyFloat32, 0),
+    VertexInputAttribute(1, attributes::rgbaUNorm8, 8)
 });
 
 const VertexInputState pos3FloatTex2Float(VertexInputBinding(0, sizeof(float) * 5), {
-    VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0),
-    VertexInputAttribute(0, 1, VK_FORMAT_R32G32_SFLOAT, 12)
+    VertexInputAttribute(0, attributes::xyzFloat32, 0),
+    VertexInputAttribute(1, attributes::xyFloat32, 12)
 });
-const VertexInputState pos3FloatCol3Float(VertexInputBinding(0, sizeof(float) * 6), {
-    VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0),
-    VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32_SFLOAT, 12)
+const VertexInputState pos3FloatColor3Float(VertexInputBinding(0, sizeof(float) * 6), {
+    VertexInputAttribute(0, attributes::xyzFloat32, 0),
+    VertexInputAttribute(1, attributes::xyzFloat32, 12)
 });
-const VertexInputState pos3FloatCol4Float(VertexInputBinding(0, sizeof(float) * 7), {
-    VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0),
-    VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32A32_SFLOAT, 12)
+const VertexInputState pos3FloatColor4Float(VertexInputBinding(0, sizeof(float) * 7), {
+    VertexInputAttribute(0, attributes::xyzFloat32, 0),
+    VertexInputAttribute(1, attributes::xyzwFloat32, 12)
 });
-const VertexInputState pos3FloatCol4UNorm(VertexInputBinding(0, sizeof(float) * 3 + sizeof(char) * 4), {
-    VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0),
-    VertexInputAttribute(0, 1, VK_FORMAT_R8G8B8A8_UNORM, 12)
+const VertexInputState pos3FloatColor4UNorm(VertexInputBinding(0, sizeof(float) * 3 + sizeof(char) * 4), {
+    VertexInputAttribute(0, attributes::xyzFloat32, 0),
+    VertexInputAttribute(1, attributes::rgbaUNorm8, 12)
 });
 
-const VertexInputState pos3FloatNrm3Float(VertexInputBinding(0, sizeof(float) * 6), {
-    VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0),
-    VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32_SFLOAT, 12)
+const VertexInputState pos3FloatNormal3Float(VertexInputBinding(0, sizeof(float) * 6), {
+    VertexInputAttribute(0, attributes::xyzFloat32, 0),
+    VertexInputAttribute(1, attributes::xyzFloat32, 12)
 });
-const VertexInputState pos3FloatNrm3FloatTex2Float(VertexInputBinding(0, sizeof(float) * 8), {
-    VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0),
-    VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32_SFLOAT, 12),
-    VertexInputAttribute(0, 2, VK_FORMAT_R32G32_SFLOAT, 24)
+const VertexInputState pos3FloatNormal3FloatTex2Float(VertexInputBinding(0, sizeof(float) * 8), {
+    VertexInputAttribute(0, attributes::xyzFloat32, 0),
+    VertexInputAttribute(1, attributes::xyzFloat32, 12),
+    VertexInputAttribute(2, attributes::xyFloat32, 24)
 });
-const VertexInputState pos3FloatNrm3FloatCol3Float(VertexInputBinding(0, sizeof(float) * 9), {
-    VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0),
-    VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32_SFLOAT, 12),
-    VertexInputAttribute(0, 2, VK_FORMAT_R32G32B32_SFLOAT, 24)
+const VertexInputState pos3FloatNormal3FloatColor3Float(VertexInputBinding(0, sizeof(float) * 9), {
+    VertexInputAttribute(0, attributes::xyzFloat32, 0),
+    VertexInputAttribute(1, attributes::xyzFloat32, 12),
+    VertexInputAttribute(2, attributes::xyzFloat32, 24)
 });
-const VertexInputState pos3FloatNrm3FloatCol4Float(VertexInputBinding(0, sizeof(float) * 10), {
-    VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0),
-    VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32_SFLOAT, 12),
-    VertexInputAttribute(0, 2, VK_FORMAT_R32G32B32A32_SFLOAT, 24)
+const VertexInputState pos3FloatNormal3FloatColor4Float(VertexInputBinding(0, sizeof(float) * 10), {
+    VertexInputAttribute(0, attributes::xyzFloat32, 0),
+    VertexInputAttribute(1, attributes::xyzFloat32, 12),
+    VertexInputAttribute(2, attributes::xyzwFloat32, 24)
 });
-const VertexInputState pos3FloatNrm3FloatCol4UNorm(VertexInputBinding(0, sizeof(float) * 6 + sizeof(char) * 4), {
-    VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0),
-    VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32_SFLOAT, 12),
-    VertexInputAttribute(0, 2, VK_FORMAT_R8G8B8A8_UNORM, 24)
+const VertexInputState pos3FloatNormal3FloatColor4UNorm(VertexInputBinding(0, sizeof(float) * 6 + sizeof(char) * 4), {
+    VertexInputAttribute(0, attributes::xyzFloat32, 0),
+    VertexInputAttribute(1, attributes::xyzFloat32, 12),
+    VertexInputAttribute(2, attributes::rgbaUNorm8, 24)
 });
 } // namespace renderstates
 } // namespace magma

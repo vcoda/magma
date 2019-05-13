@@ -35,8 +35,8 @@ namespace magma
 
     struct VertexInputAttribute : VkVertexInputAttributeDescription
     {
-        constexpr VertexInputAttribute(uint32_t binding, 
-            uint32_t location, 
+        constexpr VertexInputAttribute(uint32_t location, 
+            uint32_t binding, 
             VkFormat format, 
             uint32_t offset) noexcept
         {
@@ -46,10 +46,11 @@ namespace magma
             this->offset = offset;
         }
 
-        constexpr VertexInputAttribute(const VertexInputAttribute& attrib,
+        constexpr VertexInputAttribute(uint32_t location,
+            const VertexInputAttribute& attrib,
             uint32_t offset) noexcept
         {
-            location = attrib.location;
+            location = location;
             binding = attrib.binding;
             format = attrib.format;
             this->offset = offset;
@@ -79,9 +80,18 @@ namespace magma
 
     namespace attributes
     {
-        constexpr VertexInputAttribute rg32Float(0, 0, VK_FORMAT_R32G32_SFLOAT, 0);
-        constexpr VertexInputAttribute rgb32Float(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0);
-        constexpr VertexInputAttribute rgba32Float(0, 0, VK_FORMAT_R32G32B32A32_SFLOAT, 0);
+        constexpr VertexInputAttribute xFloat16(0, 0, VK_FORMAT_R16_SFLOAT, 0);
+        constexpr VertexInputAttribute xyFloat16(0, 0, VK_FORMAT_R16G16_SFLOAT, 0);
+        constexpr VertexInputAttribute xyzFloat16(0, 0, VK_FORMAT_R16G16B16_SFLOAT, 0);
+        constexpr VertexInputAttribute xyzwFloat16(0, 0, VK_FORMAT_R16G16B16A16_SFLOAT, 0);
+
+        constexpr VertexInputAttribute xFloat32(0, 0, VK_FORMAT_R32_SFLOAT, 0);
+        constexpr VertexInputAttribute xyFloat32(0, 0, VK_FORMAT_R32G32_SFLOAT, 0);
+        constexpr VertexInputAttribute xyzFloat32(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0);
+        constexpr VertexInputAttribute xyzwFloat32(0, 0, VK_FORMAT_R32G32B32A32_SFLOAT, 0);
+
+        constexpr VertexInputAttribute rgbaUNorm8(0, 0, VK_FORMAT_R8G8B8A8_UNORM, 0);
+        constexpr VertexInputAttribute bgraUNorm8(0, 0, VK_FORMAT_B8G8R8A8_UNORM, 0);
     };
 
     namespace renderstates
@@ -93,19 +103,19 @@ namespace magma
         extern const VertexInputState pos4Float;
 
         extern const VertexInputState pos2FloatTex2Float;
-        extern const VertexInputState pos2FloatCol3Float;
-        extern const VertexInputState pos2FloatCol4Float;
-        extern const VertexInputState pos2FloatCol4UNorm;
+        extern const VertexInputState pos2FloatColor3Float;
+        extern const VertexInputState pos2FloatColor4Float;
+        extern const VertexInputState pos2FloatColor4UNorm;
 
         extern const VertexInputState pos3FloatTex2Float;
-        extern const VertexInputState pos3FloatCol3Float;
-        extern const VertexInputState pos3FloatCol4Float;
-        extern const VertexInputState pos3FloatCol4UNorm;
+        extern const VertexInputState pos3FloatColor3Float;
+        extern const VertexInputState pos3FloatColor4Float;
+        extern const VertexInputState pos3FloatColor4UNorm;
 
-        extern const VertexInputState pos3FloatNrm3Float;
-        extern const VertexInputState pos3FloatNrm3FloatTex2Float;
-        extern const VertexInputState pos3FloatNrm3FloatCol3Float;
-        extern const VertexInputState pos3FloatNrm3FloatCol4Float;
-        extern const VertexInputState pos3FloatNrm3FloatCol4UNorm;
+        extern const VertexInputState pos3FloatNormal3Float;
+        extern const VertexInputState pos3FloatNormal3FloatTex2Float;
+        extern const VertexInputState pos3FloatNormal3FloatColor3Float;
+        extern const VertexInputState pos3FloatNormal3FloatColor4Float;
+        extern const VertexInputState pos3FloatNormal3FloatColor4UNorm;
     } // namespace renderstates
 } // namespace magma
