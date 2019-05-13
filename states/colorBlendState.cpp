@@ -21,8 +21,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-MultiColorBlendState::MultiColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
-    const std::initializer_list<float>& blendConstants /* {} */)
+ManagedColorBlendState::ManagedColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
+    const std::initializer_list<float>& blendConstants /* {1, 1, 1, 1} */)
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -31,27 +31,36 @@ MultiColorBlendState::MultiColorBlendState(const std::vector<ColorBlendAttachmen
     this->logicOp = VK_LOGIC_OP_CLEAR;
     attachmentCount = MAGMA_COUNT(attachments);
     pAttachments = internal::copyArray(static_cast<const VkPipelineColorBlendAttachmentState *>(attachments.data()), attachments.size());
-    if (0 == blendConstants.size())
-    {
-        this->blendConstants[0] = 1.f;
-        this->blendConstants[1] = 1.f;
-        this->blendConstants[2] = 1.f;
-        this->blendConstants[3] = 1.f;
-    }
-    else
-    {
-        MAGMA_ASSERT(blendConstants.size() >= 4);
-        memcpy(this->blendConstants, blendConstants.begin(), sizeof(this->blendConstants));
-    }
+    MAGMA_ASSERT(blendConstants.size() >= 4);
+    const auto c = blendConstants.begin();
+    this->blendConstants[0] = c[0];
+    this->blendConstants[1] = c[1];
+    this->blendConstants[2] = c[2];
+    this->blendConstants[3] = c[3];
 }
 
-MultiColorBlendState::MultiColorBlendState(const MultiColorBlendState& other)
+ManagedColorBlendState::ManagedColorBlendState(const ColorBlendState& blendState)
+{
+    sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = blendState.flags;
+    logicOpEnable = blendState.logicOpEnable;
+    logicOp = blendState.logicOp;
+    attachmentCount = blendState.attachmentCount;
+    pAttachments = internal::copyArray(blendState.pAttachments, blendState.attachmentCount);
+    blendConstants[0] = blendState.blendConstants[0];
+    blendConstants[1] = blendState.blendConstants[1];
+    blendConstants[2] = blendState.blendConstants[2];
+    blendConstants[3] = blendState.blendConstants[3];
+}
+
+ManagedColorBlendState::ManagedColorBlendState(const ManagedColorBlendState& other)
 {
     internal::copy(this, &other);
     pAttachments = internal::copyArray(other.pAttachments, attachmentCount);
 }
 
-MultiColorBlendState& MultiColorBlendState::operator=(const MultiColorBlendState& other)
+ManagedColorBlendState& ManagedColorBlendState::operator=(const ManagedColorBlendState& other)
 {
     if (this != &other)
     {
@@ -61,12 +70,12 @@ MultiColorBlendState& MultiColorBlendState::operator=(const MultiColorBlendState
     return *this;
 }
 
-MultiColorBlendState::~MultiColorBlendState()
+ManagedColorBlendState::~ManagedColorBlendState()
 {
     delete[] pAttachments;
 }
 
-size_t MultiColorBlendState::hash() const noexcept
+size_t ManagedColorBlendState::hash() const noexcept
 {
     size_t hash = internal::hashArgs(
         flags,
@@ -89,7 +98,7 @@ size_t MultiColorBlendState::hash() const noexcept
     return hash;
 }
 
-bool MultiColorBlendState::operator==(const MultiColorBlendState& other) const noexcept
+bool ManagedColorBlendState::operator==(const ManagedColorBlendState& other) const noexcept
 {
     return (flags == other.flags) &&
         (logicOpEnable == other.logicOpEnable) &&
@@ -97,12 +106,5 @@ bool MultiColorBlendState::operator==(const MultiColorBlendState& other) const n
         (attachmentCount == other.attachmentCount) &&
         internal::compareArrays(pAttachments, other.pAttachments, attachmentCount) &&
         internal::compareArrays(blendConstants, other.blendConstants, 4);
-}
-
-MultiColorLogicOpState::MultiColorLogicOpState(const std::vector<ColorBlendAttachmentState>& attachments, VkLogicOp logicOp):
-    MultiColorBlendState(attachments)
-{
-    logicOpEnable = VK_TRUE;
-    this->logicOp = logicOp;
 }
 } // namespace magma

@@ -134,7 +134,7 @@ namespace magma
                 RasterizationState rasterization;
                 MultisampleState multisample;
                 DepthStencilState depthStencil;
-                ColorBlendState colorBlend;
+                ManagedColorBlendState colorBlend;
             };
 
             struct Pipeline

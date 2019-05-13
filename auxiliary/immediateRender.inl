@@ -35,7 +35,7 @@ MAGMA_INLINE void ImmediateRender::setDepthStencilState(const DepthStencilState&
 MAGMA_INLINE void ImmediateRender::setColorBlendState(const ColorBlendState& state) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
-    renderStates.colorBlend = state;
+    renderStates.colorBlend = ManagedColorBlendState(state);
 }
 
 MAGMA_INLINE void ImmediateRender::setLineWidth(float width) noexcept

@@ -48,17 +48,29 @@ namespace magma
             const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f});
         size_t hash() const noexcept;
         bool operator==(const ColorBlendState&) const noexcept;
+
+    protected:
+        ColorBlendState() {}
+
+    private:
+        // Non-copyable because object holds raw pointer to attachment state
+        ColorBlendState(const ColorBlendState&) = delete;
+        ColorBlendState& operator=(const ColorBlendState&) = delete;
     };
 
-    struct MultiColorBlendState : VkPipelineColorBlendStateCreateInfo
+    /* Managed color blend state takes care about array of blend attachment states and 
+       thereof is copyable, but not constexpr-constructible. */
+
+    struct ManagedColorBlendState : ColorBlendState
     {
-        MultiColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
-            const std::initializer_list<float>& blendConstants = {});
-        MultiColorBlendState(const MultiColorBlendState&);
-        MultiColorBlendState& operator=(const MultiColorBlendState&);
-        ~MultiColorBlendState();
+        ManagedColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
+            const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f});
+        ManagedColorBlendState(const ColorBlendState&);
+        ManagedColorBlendState(const ManagedColorBlendState&);
+        ManagedColorBlendState& operator=(const ManagedColorBlendState&);
+        ~ManagedColorBlendState();
         size_t hash() const noexcept;
-        bool operator==(const MultiColorBlendState&) const noexcept;
+        bool operator==(const ManagedColorBlendState&) const noexcept;
     };
 
     /* If logicOpEnable is VK_TRUE, then a logical operation selected by logicOp is applied
@@ -68,12 +80,6 @@ namespace magma
     struct ColorLogicOpState : ColorBlendState
     {
         constexpr ColorLogicOpState(const ColorBlendAttachmentState& attachment,
-            VkLogicOp logicOp);
-    };
-
-    struct MultiColorLogicOpState : MultiColorBlendState
-    {
-        MultiColorLogicOpState(const std::vector<ColorBlendAttachmentState>& attachments,
             VkLogicOp logicOp);
     };
 } // namespace magma
