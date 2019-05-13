@@ -70,8 +70,11 @@ constexpr ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& atta
     this->logicOp = logicOp;
     attachmentCount = 1;
     pAttachments = &attachment;
-    for (int i = 0; i < 4; ++i)
-        this->blendConstants[i] = blendConstants.begin()[i];
+    const auto c = blendConstants.begin();
+    this->blendConstants[0] = c[0];
+    this->blendConstants[1] = c[1];
+    this->blendConstants[2] = c[2];
+    this->blendConstants[3] = c[3];
 }
 
 inline size_t ColorBlendState::hash() const noexcept
