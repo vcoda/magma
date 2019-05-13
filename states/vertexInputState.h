@@ -50,7 +50,7 @@ namespace magma
             const VertexInputAttribute& attrib,
             uint32_t offset) noexcept
         {
-            location = location;
+            this->location = location;
             binding = attrib.binding;
             format = attrib.format;
             this->offset = offset;
