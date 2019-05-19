@@ -18,27 +18,26 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <cstddef>
 #include <functional>
-#include "shared.h"
 
 namespace magma
 {
     namespace internal
     {
         // https://www.boost.org/doc/libs/1_46_1/doc/html/hash/reference.html#boost.hash_combine
-        MAGMA_INLINE void hashCombine(size_t& seed, size_t hash) noexcept
+        constexpr void hashCombine(size_t& seed, size_t hash) noexcept
         {
             seed ^= (hash + 0x9e3779b9 + (seed << 6) + (seed >> 2));
         }
 
         template<typename Type>
-        MAGMA_INLINE void hashNext(size_t& seed, const Type& arg) noexcept
+        constexpr void hashNext(size_t& seed, const Type& arg) noexcept
         {
             std::hash<Type> hasher;
             hashCombine(seed, hasher(arg));
         }
 
         template<typename Type, typename... Args>
-        MAGMA_INLINE void hashNext(size_t& seed, const Type& arg, Args... args) noexcept
+        constexpr void hashNext(size_t& seed, const Type& arg, Args... args) noexcept
         {
             std::hash<Type> hasher;
             hashCombine(seed, hasher(arg));
@@ -46,7 +45,7 @@ namespace magma
         }
 
         template<typename Type, typename... Args>
-        MAGMA_INLINE size_t hashArgs(const Type& arg, Args... args) noexcept
+        constexpr size_t hashArgs(const Type& arg, Args... args) noexcept
         {
             std::hash<Type> hasher;
             size_t value = 0;
@@ -56,7 +55,7 @@ namespace magma
         }
 
         template<typename Type>
-        MAGMA_INLINE size_t hashArray(const Type *const array, size_t count) noexcept
+        constexpr size_t hashArray(const Type *const array, size_t count) noexcept
         {
             std::hash<Type> hasher;
             size_t value = 0;
