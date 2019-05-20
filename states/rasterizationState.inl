@@ -83,12 +83,11 @@ constexpr ConservativeRasterizationState::ConservativeRasterizationState(const R
 
 constexpr size_t ConservativeRasterizationState::hash() const noexcept
 {
-    size_t hash = internal::hashArgs(
+    return internal::hashArgs(
+        RasterizationState::hash(),
         conservative.flags,
         conservative.conservativeRasterizationMode,
         conservative.extraPrimitiveOverestimationSize);
-    internal::hashCombine(hash, RasterizationState::hash());
-    return hash;
 }
 
 constexpr bool ConservativeRasterizationState::operator==(const ConservativeRasterizationState& other) const noexcept
@@ -119,12 +118,11 @@ constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationSt
     pNext = &order;
 }
 
-inline size_t RasterizationOrderState::hash() const noexcept
+constexpr size_t RasterizationOrderState::hash() const noexcept
 {
-    std::hash<VkRasterizationOrderAMD> hasher;
-    size_t hash = hasher(order.rasterizationOrder);
-    internal::hashCombine(hash, RasterizationState::hash());
-    return hash;
+    return internal::hashArgs(
+        RasterizationState::hash(),
+        order.rasterizationOrder);
 }
 
 constexpr bool RasterizationOrderState::operator==(const RasterizationOrderState& other) const noexcept

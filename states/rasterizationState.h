@@ -70,7 +70,7 @@ namespace magma
     {
         constexpr RasterizationOrderState(const RasterizationState& state,
             VkRasterizationOrderAMD rasterizationOrder) noexcept;
-        size_t hash() const noexcept;
+        constexpr size_t hash() const noexcept;
         constexpr bool operator==(const RasterizationOrderState&) const noexcept;
 
         VkPipelineRasterizationStateRasterizationOrderAMD order;
