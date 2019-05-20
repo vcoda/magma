@@ -30,10 +30,21 @@ namespace magma
 
     struct BufferMemoryBarrier : VkBufferMemoryBarrier
     {
+        constexpr BufferMemoryBarrier(VkAccessFlags srcAccessMask,
+            VkAccessFlags dstAccessMask) noexcept
+        {
+            sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+            pNext = nullptr;
+            this->srcAccessMask = srcAccessMask;
+            this->dstAccessMask = dstAccessMask;
+            srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            buffer = VK_NULL_HANDLE;
+            offset = 0;
+            size = VK_WHOLE_SIZE;
+        }
         BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
             VkAccessFlags srcAccessMask,
-            VkAccessFlags dstAccessMask) noexcept;
-        BufferMemoryBarrier(VkAccessFlags srcAccessMask,
             VkAccessFlags dstAccessMask) noexcept;
         BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
             const BufferMemoryBarrier& predefined) noexcept;
@@ -41,9 +52,9 @@ namespace magma
 
     namespace barriers
     {
-        extern const BufferMemoryBarrier hostWriteTransferRead;
-        extern const BufferMemoryBarrier transferWriteHostRead;
-        extern const BufferMemoryBarrier transferWriteShaderRead;
-        extern const BufferMemoryBarrier shaderWriteTransferRead;
+        constexpr BufferMemoryBarrier hostWriteTransferRead(VK_ACCESS_HOST_WRITE_BIT, VK_ACCESS_TRANSFER_READ_BIT);
+        constexpr BufferMemoryBarrier transferWriteHostRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_HOST_READ_BIT);
+        constexpr BufferMemoryBarrier transferWriteShaderRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT);
+        constexpr BufferMemoryBarrier shaderWriteTransferRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_TRANSFER_READ_BIT);
     } // namespace barriers
 } // namespace magma
