@@ -42,9 +42,9 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     vertexBuffer(std::make_shared<VertexBuffer>(this->device, nullptr, sizeof(Vertex) * maxVertexCount, 0, this->allocator)),
     vertexInput(VertexInputBinding(0, sizeof(Vertex)), {
         VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, x)),
-        VertexInputAttribute(0, 1, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, nx)),
-        VertexInputAttribute(0, 2, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, r)),
-        VertexInputAttribute(0, 3, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, u))
+        VertexInputAttribute(1, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, nx)),
+        VertexInputAttribute(2, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, r)),
+        VertexInputAttribute(3, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, u))
     }),
     vertexShader(VertexShaderStage(createShader(true), "main")),
     fragmentShader(FragmentShaderStage(createShader(false), "main")),
