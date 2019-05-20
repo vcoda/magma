@@ -61,7 +61,7 @@ namespace magma
     /* Managed color blend state takes care about array of blend attachment states and 
        thereof is copyable, but not constexpr-constructible. */
 
-    struct ManagedColorBlendState : ColorBlendState
+    struct ManagedColorBlendState final : ColorBlendState
     {
         ManagedColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
             const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f});

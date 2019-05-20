@@ -44,7 +44,7 @@ namespace magma
     /* Sample mask contains a bitmask of static coverage information that is ANDed
        with the coverage information generated during rasterization. */
 
-    struct MultisampleCoverageState : MultisampleState
+    struct MultisampleCoverageState final : MultisampleState
     {
         MultisampleCoverageState(const MultisampleState& state,
             uint64_t coverageMask,
