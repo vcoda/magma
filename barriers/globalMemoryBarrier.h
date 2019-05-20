@@ -26,7 +26,13 @@ namespace magma
 
     struct GlobalMemoryBarrier : VkMemoryBarrier
     {
-        GlobalMemoryBarrier(VkAccessFlags srcAccessMask,
-            VkAccessFlags dstAccessMask) noexcept;
+        constexpr GlobalMemoryBarrier(VkAccessFlags srcAccessMask,
+            VkAccessFlags dstAccessMask) noexcept
+        {
+            sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+            pNext = nullptr;
+            this->srcAccessMask = srcAccessMask;
+            this->dstAccessMask = dstAccessMask;
+        }
     };
 } // namespace magma

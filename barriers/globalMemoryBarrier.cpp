@@ -19,11 +19,4 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-GlobalMemoryBarrier::GlobalMemoryBarrier(VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask) noexcept
-{
-    sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-    pNext = nullptr;
-    this->srcAccessMask = srcAccessMask;
-    this->dstAccessMask = dstAccessMask;
-}
 } // namespace magma
