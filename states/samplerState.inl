@@ -37,7 +37,7 @@ constexpr SamplerState::SamplerState(float maxAnisotropy, VkSamplerAddressMode a
     maxAnisotropy(maxAnisotropy)
 {}
 
-inline size_t SamplerState::hash() const noexcept
+constexpr size_t SamplerState::hash() const noexcept
 {
     return internal::hashArgs(
         magFilter,
@@ -48,7 +48,7 @@ inline size_t SamplerState::hash() const noexcept
         maxAnisotropy);
 }
 
-inline bool SamplerState::operator==(const SamplerState& other) const noexcept
+constexpr bool SamplerState::operator==(const SamplerState& other) const noexcept
 {
     return (magFilter == other.magFilter) &&
         (minFilter == other.minFilter) &&

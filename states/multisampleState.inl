@@ -58,7 +58,7 @@ constexpr MultisampleState::MultisampleState(uint32_t sampleCount) noexcept
     alphaToOneEnable = VK_FALSE;
 }
 
-inline size_t MultisampleState::hash() const noexcept
+constexpr size_t MultisampleState::hash() const noexcept
 {
     size_t hash = internal::hashArgs(
         flags,
@@ -77,7 +77,7 @@ inline size_t MultisampleState::hash() const noexcept
     return hash;
 }
 
-inline bool MultisampleState::operator==(const MultisampleState& other) const noexcept
+constexpr bool MultisampleState::operator==(const MultisampleState& other) const noexcept
 {
     return (flags == other.flags) &&
         (rasterizationSamples == other.rasterizationSamples) &&

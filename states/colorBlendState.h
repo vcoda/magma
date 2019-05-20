@@ -31,8 +31,8 @@ namespace magma
             VkBlendOp blendOp,
             VkColorComponentFlags colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
                 VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT) noexcept;
-        size_t hash() const noexcept;
-        bool operator==(const ColorBlendAttachmentState&) const noexcept;
+        constexpr size_t hash() const noexcept;
+        constexpr bool operator==(const ColorBlendAttachmentState&) const noexcept;
     };
 
     /* Blending combines the incoming source fragment's R, G, B, and A values
@@ -46,8 +46,8 @@ namespace magma
             bool logicOpEnable = false,
             VkLogicOp logicOp = VK_LOGIC_OP_CLEAR,
             const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f});
-        size_t hash() const noexcept;
-        bool operator==(const ColorBlendState&) const noexcept;
+        constexpr size_t hash() const noexcept;
+        constexpr bool operator==(const ColorBlendState&) const noexcept;
 
     protected:
         ColorBlendState() {}

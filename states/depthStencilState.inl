@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-inline size_t StencilOpState::hash() const noexcept
+constexpr size_t StencilOpState::hash() const noexcept
 {
     return internal::hashArgs(
         failOp,
@@ -31,7 +31,7 @@ inline size_t StencilOpState::hash() const noexcept
         reference);
 }
 
-inline bool StencilOpState::operator==(const StencilOpState& other) const noexcept
+constexpr bool StencilOpState::operator==(const StencilOpState& other) const noexcept
 {
     return (failOp == other.failOp) &&
         (passOp == other.passOp) &&
@@ -64,7 +64,7 @@ constexpr DepthStencilState::DepthStencilState(const DepthStencilState& state,
     DepthStencilState(state.depthCompareOp, state.depthCompareOp, front, back)
 {}
 
-inline size_t DepthStencilState::hash() const noexcept
+constexpr size_t DepthStencilState::hash() const noexcept
 {
     return internal::hashArgs(
         flags,
@@ -90,7 +90,7 @@ inline size_t DepthStencilState::hash() const noexcept
         maxDepthBounds);
 }
 
-inline bool DepthStencilState::operator==(const DepthStencilState& other) const noexcept
+constexpr bool DepthStencilState::operator==(const DepthStencilState& other) const noexcept
 {
     return (flags == other.flags) &&
         (depthTestEnable == other.depthTestEnable) &&

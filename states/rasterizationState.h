@@ -30,8 +30,8 @@ namespace magma
             VkFrontFace frontFace,
             bool depthClampEnable = false,
             bool rasterizerDiscardEnable = false) noexcept;
-        size_t hash() const noexcept;
-        bool operator==(const RasterizationState&) const noexcept;
+        constexpr size_t hash() const noexcept;
+        constexpr bool operator==(const RasterizationState&) const noexcept;
     };
 
     /* Controls whether to bias fragment depth values:
@@ -57,8 +57,8 @@ namespace magma
         constexpr ConservativeRasterizationState(const RasterizationState& state,
             VkConservativeRasterizationModeEXT conservativeRasterizationMode,
             float extraPrimitiveOverestimationSize = 0.f) noexcept;
-        size_t hash() const noexcept;
-        bool operator==(const ConservativeRasterizationState&) const noexcept;
+        constexpr size_t hash() const noexcept;
+        constexpr bool operator==(const ConservativeRasterizationState&) const noexcept;
 
         VkPipelineRasterizationConservativeStateCreateInfoEXT conservative;
     };
@@ -72,7 +72,7 @@ namespace magma
         constexpr RasterizationOrderState(const RasterizationState& state,
             VkRasterizationOrderAMD rasterizationOrder) noexcept;
         size_t hash() const noexcept;
-        bool operator==(const RasterizationOrderState&) const noexcept;
+        constexpr bool operator==(const RasterizationOrderState&) const noexcept;
 
         VkPipelineRasterizationStateRasterizationOrderAMD order;
     };

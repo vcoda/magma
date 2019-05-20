@@ -29,7 +29,7 @@ constexpr InputAssemblyState::InputAssemblyState(VkPrimitiveTopology topology,
     this->primitiveRestartEnable = MAGMA_BOOLEAN(primitiveRestartEnable);
 }
 
-inline size_t InputAssemblyState::hash() const noexcept
+constexpr size_t InputAssemblyState::hash() const noexcept
 {
     return internal::hashArgs(
         flags,
@@ -37,7 +37,7 @@ inline size_t InputAssemblyState::hash() const noexcept
         primitiveRestartEnable);
 }
 
-inline bool InputAssemblyState::operator==(const InputAssemblyState& other) const noexcept
+constexpr bool InputAssemblyState::operator==(const InputAssemblyState& other) const noexcept
 {
     return (flags == other.flags) &&
         (topology == other.topology) &&

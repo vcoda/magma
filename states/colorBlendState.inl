@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "../internal/hash.h"
+#include "../internal/shared.h"
 
 namespace magma
 {
@@ -33,7 +34,7 @@ constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(bool blendEnable,
     this->colorWriteMask = colorWriteMask;
 }
 
-inline size_t ColorBlendAttachmentState::hash() const noexcept
+constexpr size_t ColorBlendAttachmentState::hash() const noexcept
 {
     return internal::hashArgs(
         blendEnable,
@@ -46,7 +47,7 @@ inline size_t ColorBlendAttachmentState::hash() const noexcept
         colorWriteMask);
 }
 
-inline bool ColorBlendAttachmentState::operator==(const ColorBlendAttachmentState& other) const noexcept
+constexpr bool ColorBlendAttachmentState::operator==(const ColorBlendAttachmentState& other) const noexcept
 {
     return (blendEnable == other.blendEnable) &&
         (srcColorBlendFactor == other.srcColorBlendFactor) &&
@@ -77,7 +78,7 @@ constexpr ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& atta
     this->blendConstants[3] = c[3];
 }
 
-inline size_t ColorBlendState::hash() const noexcept
+constexpr size_t ColorBlendState::hash() const noexcept
 {
     size_t hash = internal::hashArgs(
         flags,
@@ -97,7 +98,7 @@ inline size_t ColorBlendState::hash() const noexcept
     return hash;
 }
 
-inline bool ColorBlendState::operator==(const ColorBlendState& other) const noexcept
+constexpr bool ColorBlendState::operator==(const ColorBlendState& other) const noexcept
 {
     return (flags == other.flags) &&
         (logicOpEnable == other.logicOpEnable) &&

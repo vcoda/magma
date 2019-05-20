@@ -41,8 +41,8 @@ namespace magma
             this->writeMask = writeMask;
             this->reference = reference;
         }
-        std::size_t hash() const noexcept;
-        bool operator==(const StencilOpState&) const noexcept;
+        constexpr std::size_t hash() const noexcept;
+        constexpr bool operator==(const StencilOpState&) const noexcept;
     };
 
     namespace renderstates
@@ -65,8 +65,8 @@ namespace magma
         constexpr DepthStencilState(const DepthStencilState& state,
             const StencilOpState& front,
             const StencilOpState& back) noexcept;
-        size_t hash() const noexcept;
-        bool operator==(const DepthStencilState&) const noexcept;
+        constexpr size_t hash() const noexcept;
+        constexpr bool operator==(const DepthStencilState&) const noexcept;
     };
 
     /* The depth bounds test conditionally disables coverage of a sample

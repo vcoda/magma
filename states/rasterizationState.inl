@@ -37,7 +37,7 @@ constexpr RasterizationState::RasterizationState(VkPolygonMode polygonMode, VkCu
     lineWidth = 1.f;
 }
 
-inline size_t RasterizationState::hash() const noexcept
+constexpr size_t RasterizationState::hash() const noexcept
 {
     return internal::hashArgs(
         flags,
@@ -53,7 +53,7 @@ inline size_t RasterizationState::hash() const noexcept
         lineWidth);
 }
 
-inline bool RasterizationState::operator==(const RasterizationState& other) const noexcept
+constexpr bool RasterizationState::operator==(const RasterizationState& other) const noexcept
 {
     return (flags == other.flags) &&
         (depthClampEnable == other.depthClampEnable) &&
@@ -81,7 +81,7 @@ constexpr ConservativeRasterizationState::ConservativeRasterizationState(const R
     pNext = &conservative;
 }
 
-inline size_t ConservativeRasterizationState::hash() const noexcept
+constexpr size_t ConservativeRasterizationState::hash() const noexcept
 {
     size_t hash = internal::hashArgs(
         conservative.flags,
@@ -91,7 +91,7 @@ inline size_t ConservativeRasterizationState::hash() const noexcept
     return hash;
 }
 
-inline bool ConservativeRasterizationState::operator==(const ConservativeRasterizationState& other) const noexcept
+constexpr bool ConservativeRasterizationState::operator==(const ConservativeRasterizationState& other) const noexcept
 {
     return RasterizationState::operator==(other) &&
         (conservative.flags == other.conservative.flags) &&
@@ -127,7 +127,7 @@ inline size_t RasterizationOrderState::hash() const noexcept
     return hash;
 }
 
-inline bool RasterizationOrderState::operator==(const RasterizationOrderState& other) const noexcept
+constexpr bool RasterizationOrderState::operator==(const RasterizationOrderState& other) const noexcept
 {
     return RasterizationState::operator==(other) &&
         (order.rasterizationOrder == other.order.rasterizationOrder);

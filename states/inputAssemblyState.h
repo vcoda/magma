@@ -28,8 +28,8 @@ namespace magma
     {
         constexpr InputAssemblyState(VkPrimitiveTopology topology,
             bool primitiveRestartEnable = false) noexcept;
-        size_t hash() const noexcept;
-        bool operator==(const InputAssemblyState&) const noexcept;
+        constexpr size_t hash() const noexcept;
+        constexpr bool operator==(const InputAssemblyState&) const noexcept;
     };
 } // namespace magma
 

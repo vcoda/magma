@@ -26,8 +26,8 @@ namespace magma
     struct TesselationState : VkPipelineTessellationStateCreateInfo
     {
         constexpr TesselationState(uint32_t patchControlPoints = 0) noexcept;
-        size_t hash() const noexcept;
-        bool operator==(const TesselationState&) const noexcept;
+        constexpr size_t hash() const noexcept;
+        constexpr bool operator==(const TesselationState&) const noexcept;
     };
 } // namespace magma
 
