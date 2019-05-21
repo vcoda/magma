@@ -23,7 +23,7 @@ namespace magma
     class LoadStoreOp
     {
     public:
-        LoadStoreOp(VkAttachmentLoadOp loadOp,
+        constexpr LoadStoreOp(VkAttachmentLoadOp loadOp,
             VkAttachmentStoreOp storeOp) noexcept:
             loadOp(loadOp), storeOp(storeOp) {}
 
@@ -39,62 +39,67 @@ namespace magma
 
     struct AttachmentDescription : VkAttachmentDescription
     {
-        AttachmentDescription(VkFormat format,
+        constexpr AttachmentDescription(VkFormat format,
             uint32_t sampleCount,
             const LoadStoreOp& op,
             const LoadStoreOp& stencilOp,
             VkImageLayout initialLayout,
-            VkImageLayout finalLayout);
-        AttachmentDescription(VkAttachmentLoadOp loadOp,
+            VkImageLayout finalLayout) noexcept;
+        constexpr AttachmentDescription(VkAttachmentLoadOp loadOp,
             VkAttachmentStoreOp storeOp,
             VkAttachmentLoadOp stencilLoadOp,
             VkAttachmentStoreOp stencilStoreOp,
             VkImageLayout initialLayout,
             VkImageLayout finalLayout) noexcept;
-        AttachmentDescription(VkFormat format,
+        constexpr AttachmentDescription(VkFormat format,
             uint32_t sampleCount,
-            const AttachmentDescription& predefined);
+            const AttachmentDescription& predefined) noexcept;
     };
+} // namespace magma
 
+#include "attachment.inl"
+
+namespace magma
+{
     namespace op
     {
-        extern const LoadStoreOp loadStore;
-        extern const LoadStoreOp clearStore;
-        extern const LoadStoreOp dontCareStore;
-        extern const LoadStoreOp loadDontCare;
-        extern const LoadStoreOp clearDontCare;
-        extern const LoadStoreOp dontCareDontCare;
+        constexpr LoadStoreOp loadStore(VK_ATTACHMENT_LOAD_OP_LOAD, VK_ATTACHMENT_STORE_OP_STORE);
+        constexpr LoadStoreOp clearStore(VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE);
+        constexpr LoadStoreOp dontCareStore(VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_STORE);
+        constexpr LoadStoreOp loadDontCare(VK_ATTACHMENT_LOAD_OP_LOAD, VK_ATTACHMENT_STORE_OP_DONT_CARE);
+        constexpr LoadStoreOp clearDontCare(VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_DONT_CARE);
+        constexpr LoadStoreOp dontCareDontCare(VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE);
     } // namespace op
 
     namespace attachments
     {
-        extern const AttachmentDescription colorLoadStoreOptimal;
-        extern const AttachmentDescription colorClearStoreOptimal;
-        extern const AttachmentDescription colorDontCareStoreOptimal;
-        extern const AttachmentDescription colorLoadDontCareOptimal;
-        extern const AttachmentDescription colorClearDontCareOptimal;
-        extern const AttachmentDescription colorDontCareDontCareOptimal;
+        constexpr AttachmentDescription colorLoadStoreOptimal(VK_ATTACHMENT_LOAD_OP_LOAD, VK_ATTACHMENT_STORE_OP_STORE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+        constexpr AttachmentDescription colorClearStoreOptimal(VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+        constexpr AttachmentDescription colorDontCareStoreOptimal(VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_STORE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+        constexpr AttachmentDescription colorLoadDontCareOptimal(VK_ATTACHMENT_LOAD_OP_LOAD, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+        constexpr AttachmentDescription colorClearDontCareOptimal(VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+        constexpr AttachmentDescription colorDontCareDontCareOptimal(VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
 
-        extern const AttachmentDescription colorLoadStoreReadOnly;
-        extern const AttachmentDescription colorClearStoreReadOnly;
-        extern const AttachmentDescription colorDontCareStoreReadOnly;
-        extern const AttachmentDescription colorLoadDontCareReadOnly;
-        extern const AttachmentDescription colorClearDontCareReadOnly;
-        extern const AttachmentDescription colorDontCareDontCareReadOnly;
+        constexpr AttachmentDescription colorLoadStoreReadOnly(VK_ATTACHMENT_LOAD_OP_LOAD, VK_ATTACHMENT_STORE_OP_STORE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        constexpr AttachmentDescription colorClearStoreReadOnly(VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        constexpr AttachmentDescription colorDontCareStoreReadOnly(VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_STORE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        constexpr AttachmentDescription colorLoadDontCareReadOnly(VK_ATTACHMENT_LOAD_OP_LOAD, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        constexpr AttachmentDescription colorClearDontCareReadOnly(VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        constexpr AttachmentDescription colorDontCareDontCareReadOnly(VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-        extern const AttachmentDescription depthLoadStoreOptimal;
-        extern const AttachmentDescription depthClearStoreOptimal;
-        extern const AttachmentDescription depthDontCareStoreOptimal;
-        extern const AttachmentDescription depthLoadDontCareOptimal;
-        extern const AttachmentDescription depthClearDontCareOptimal;
-        extern const AttachmentDescription depthDontCareDontCareOptimal;
+        constexpr AttachmentDescription depthLoadStoreOptimal(VK_ATTACHMENT_LOAD_OP_LOAD, VK_ATTACHMENT_STORE_OP_STORE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+        constexpr AttachmentDescription depthClearStoreOptimal(VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+        constexpr AttachmentDescription depthDontCareStoreOptimal(VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_STORE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+        constexpr AttachmentDescription depthLoadDontCareOptimal(VK_ATTACHMENT_LOAD_OP_LOAD, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+        constexpr AttachmentDescription depthClearDontCareOptimal(VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+        constexpr AttachmentDescription depthDontCareDontCareOptimal(VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
 
-        extern const AttachmentDescription depthLoadStoreReadOnly;
-        extern const AttachmentDescription depthClearStoreReadOnly;
-        extern const AttachmentDescription depthDontCareStoreReadOnly;
-        extern const AttachmentDescription depthLoadDontCareReadOnly;
-        extern const AttachmentDescription depthClearDontCareReadOnly;
-        extern const AttachmentDescription depthDontCareDontCareReadOnly;
+        constexpr AttachmentDescription depthLoadStoreReadOnly(VK_ATTACHMENT_LOAD_OP_LOAD, VK_ATTACHMENT_STORE_OP_STORE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);
+        constexpr AttachmentDescription depthClearStoreReadOnly(VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);
+        constexpr AttachmentDescription depthDontCareStoreReadOnly(VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_STORE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);
+        constexpr AttachmentDescription depthLoadDontCareReadOnly(VK_ATTACHMENT_LOAD_OP_LOAD, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);
+        constexpr AttachmentDescription depthClearDontCareReadOnly(VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);
+        constexpr AttachmentDescription depthDontCareDontCareReadOnly(VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);
 
         // TODO: add depthStencil attachment descriptions
     } // namespace attachments

@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../api/vulkan.h"
-#include "../internal/shared.h"
 
 namespace magma
 {
@@ -26,9 +25,8 @@ namespace magma
 
     struct Descriptor : public VkDescriptorPoolSize
     {
-        Descriptor(VkDescriptorType type, uint32_t descriptorCount) noexcept
+        constexpr Descriptor(VkDescriptorType type, uint32_t descriptorCount) noexcept
         {
-            MAGMA_ASSERT(descriptorCount > 0);
             this->type = type;
             this->descriptorCount = descriptorCount;
         }
@@ -38,57 +36,57 @@ namespace magma
     {
         struct Sampler : Descriptor
         {
-            Sampler(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_SAMPLER, count) {}
+            constexpr Sampler(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_SAMPLER, count) {}
         };
 
         struct CombinedImageSampler : Descriptor
         {
-            CombinedImageSampler(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, count) {}
+            constexpr CombinedImageSampler(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, count) {}
         };
 
         struct SampledImage : Descriptor
         {
-            SampledImage(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, count) {}
+            constexpr SampledImage(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, count) {}
         };
 
         struct StorageImage : Descriptor
         {
-            StorageImage(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, count) {}
+            constexpr StorageImage(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, count) {}
         };
 
         struct UniformTexelBuffer : Descriptor
         {
-            UniformTexelBuffer(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, count) {}
+            constexpr UniformTexelBuffer(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, count) {}
         };
 
         struct StorageTexelBuffer : Descriptor
         {
-            StorageTexelBuffer(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, count) {}
+            constexpr StorageTexelBuffer(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, count) {}
         };
 
         struct UniformBuffer : Descriptor
         {
-            UniformBuffer(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, count) {}
+            constexpr UniformBuffer(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, count) {}
         };
 
         struct StorageBuffer : Descriptor
         {
-            StorageBuffer(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, count) {}
+            constexpr StorageBuffer(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, count) {}
         };
 
         struct DynamicUniformBuffer : Descriptor
         {
-            DynamicUniformBuffer(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, count) {}
+            constexpr DynamicUniformBuffer(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, count) {}
         };
 
         struct DynamicStorageBuffer : Descriptor
         {
-            DynamicStorageBuffer(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, count) {}
+            constexpr DynamicStorageBuffer(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, count) {}
         };
 
         struct InputAttachment : Descriptor
         {
-            InputAttachment(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, count) {}
+            constexpr InputAttachment(uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, count) {}
         };
     } // namespace descriptors
 } // namespace magma

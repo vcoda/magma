@@ -425,9 +425,6 @@
     <ClCompile Include="..\..\barriers\imageMemoryBarrier.cpp">
       <Filter>Source Files\barriers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\descriptors\attachment.cpp">
-      <Filter>Source Files\descriptors</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\descriptors\subpass.cpp">
       <Filter>Source Files\descriptors</Filter>
     </ClCompile>
@@ -690,6 +687,12 @@
     </None>
     <None Include="..\..\states\colorBlendState.inl">
       <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\descriptors\attachment.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\descriptors\subpass.inl">
+      <Filter>Header Files\descriptors</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -24,7 +24,6 @@ MAGMA_OBJS= \
 	barriers/globalMemoryBarrier.o \
 	barriers/imageMemoryBarrier.o \
 	\
-	descriptors/attachment.o \
 	descriptors/subpass.o \
 	\
 	helpers/executeCommandBuffer.o \
