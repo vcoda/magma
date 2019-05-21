@@ -120,8 +120,7 @@ size_t PipelineShaderStage::hash() const noexcept
         info.stage,
         info.module);
     const std::string entrypoint(info.pName);
-    std::hash<std::string> hasher;
-    internal::hashCombine(hash, hasher(entrypoint));
+    internal::hashCombine(hash, internal::hashString(entrypoint));
     if (specialization)
         internal::hashCombine(hash, specialization->hash());
     return hash;
