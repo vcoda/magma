@@ -20,6 +20,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+Subpass::Subpass(VkSubpassDescriptionFlags flags, VkPipelineBindPoint pipelineBindPoint) noexcept
+{
+    this->flags = flags;
+    this->pipelineBindPoint = pipelineBindPoint;
+    inputAttachmentCount = 0;
+    pInputAttachments = nullptr;
+    colorAttachmentCount = 0;
+    pColorAttachments = nullptr;
+    pResolveAttachments = nullptr;
+    pDepthStencilAttachment = nullptr;
+    preserveAttachmentCount = 0;
+    pPreserveAttachments = nullptr;
+}
+
 Subpass::Subpass(const Subpass& other)
 {
     internal::copy(this, &other);
@@ -107,6 +121,10 @@ GraphicsSubpass::GraphicsSubpass(const std::vector<VkImageLayout>& colorLayouts,
     depthStencilReference->layout = depthStencilLayout;
     pDepthStencilAttachment = depthStencilReference;
 }
+
+ComputeSubpass::ComputeSubpass() noexcept:
+    Subpass(0, VK_PIPELINE_BIND_POINT_COMPUTE)
+{}
 
 namespace subpasses
 {

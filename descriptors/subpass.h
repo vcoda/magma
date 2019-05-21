@@ -32,7 +32,7 @@ namespace magma
     class Subpass : public VkSubpassDescription
     {
     protected:
-        constexpr Subpass(VkSubpassDescriptionFlags flags,
+        Subpass(VkSubpassDescriptionFlags flags,
             VkPipelineBindPoint pipelineBindPoint) noexcept;
 
     public:
@@ -55,11 +55,9 @@ namespace magma
     class ComputeSubpass : public Subpass
     {
     public:
-        constexpr ComputeSubpass() noexcept;
+        ComputeSubpass() noexcept;
     };
 } // namespace magma
-
-#include "subpass.inl"
 
 namespace magma
 {

@@ -691,9 +691,6 @@
     <None Include="..\..\descriptors\attachment.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
-    <None Include="..\..\descriptors\subpass.inl">
-      <Filter>Header Files\descriptors</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blitv.vert">
