@@ -63,6 +63,13 @@ namespace magma
                 hashCombine(value, hasher(array[i]));
             return value;
         }
+
+        template<typename Elem>
+        inline std::size_t hashString(const std::basic_string<Elem>& str) noexcept
+        {
+            std::hash<std::basic_string<Elem>> hasher;
+            return hasher(str);
+        }
     } // namespace internal
 } // namespace magma
 
