@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "indirectBuffer.h"
 #include "device.h"
 #include "deviceMemory.h"
-#include "../helpers/mapScoped.h"
 
 namespace magma
 {
@@ -77,10 +76,12 @@ void IndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawCmd,
 
 void IndirectBuffer::writeDrawCommands(const std::vector<VkDrawIndirectCommand>& drawCmdList) noexcept
 {
-    helpers::mapScoped<VkDrawIndirectCommand>(shared_from_this(), [&drawCmdList](VkDrawIndirectCommand *buffer)
+    if (void *buffer = memory->map(0, sizeof(VkDrawIndirectCommand)))
     {
+        VkDrawIndirectCommand *drawCmdArray = reinterpret_cast<VkDrawIndirectCommand *>(buffer);
         for (const VkDrawIndirectCommand& drawCmd : drawCmdList)
-            memcpy(buffer++, &drawCmd, sizeof(VkDrawIndirectCommand));
-    });
+            memcpy(drawCmdArray++, &drawCmd, sizeof(VkDrawIndirectCommand));
+        memory->unmap();
+    }
 }
 } // namespace magma
