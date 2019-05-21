@@ -20,10 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandBuffer.h"
 #include "device.h"
 #include "deviceMemory.h"
-#include "queue.h"
-#include "fence.h"
-#include "../helpers/mapScoped.h"
-#include "../misc/exception.h"
 #include "../internal/copyMemory.h"
 
 namespace magma
