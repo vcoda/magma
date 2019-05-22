@@ -27,7 +27,7 @@ namespace magma
         template<typename Type>
         struct PushConstantRange : VkPushConstantRange
         {
-            PushConstantRange(VkShaderStageFlags flags, uint32_t rangeOffset = 0) noexcept
+            constexpr PushConstantRange(VkShaderStageFlags flags, uint32_t rangeOffset = 0) noexcept
             {
                 stageFlags = flags;
                 offset = rangeOffset;
@@ -38,70 +38,70 @@ namespace magma
         template<typename Type>
         struct VertexConstantRange : PushConstantRange<Type>
         {
-            VertexConstantRange(uint32_t offset = 0) noexcept:
+            constexpr VertexConstantRange(uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_VERTEX_BIT, offset) {}
         };
 
         template<typename Type>
         struct TesselationControlConstantRange : PushConstantRange<Type>
         {
-            TesselationControlConstantRange(uint32_t offset = 0) noexcept:
+            constexpr TesselationControlConstantRange(uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, offset) {}
         };
 
         template<typename Type>
         struct TesselationEvaluationConstantRange : PushConstantRange<Type>
         {
-            TesselationEvaluationConstantRange(uint32_t offset = 0) noexcept:
+            constexpr TesselationEvaluationConstantRange(uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, offset) {}
         };
 
         template<typename Type>
         struct GeometryConstantRange : PushConstantRange<Type>
         {
-            GeometryConstantRange(uint32_t offset = 0) noexcept:
+            constexpr GeometryConstantRange(uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_GEOMETRY_BIT, offset) {}
         };
 
         template<typename Type>
         struct FragmentConstantRange : PushConstantRange<Type>
         {
-            FragmentConstantRange(uint32_t offset = 0) noexcept:
+            constexpr FragmentConstantRange(uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_FRAGMENT_BIT, offset) {}
         };
 
         template<typename Type>
         struct ComputeConstantRange : PushConstantRange<Type>
         {
-            ComputeConstantRange(uint32_t offset = 0) noexcept:
+            constexpr ComputeConstantRange(uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_COMPUTE_BIT, offset) {}
         };
 
         template<typename Type>
         struct GraphicsConstantRange : PushConstantRange<Type>
         {
-            GraphicsConstantRange(uint32_t offset = 0) noexcept:
+            constexpr GraphicsConstantRange(uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_ALL_GRAPHICS, offset) {}
         };
 
         template<typename Type>
         struct AllConstantRange : PushConstantRange<Type>
         {
-            AllConstantRange(uint32_t offset = 0) noexcept:
+            constexpr AllConstantRange(uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_ALL, offset) {}
         };
 
         template<typename Type>
         struct VertexGeometryConstantRange : PushConstantRange<Type>
         {
-            VertexGeometryConstantRange(uint32_t offset = 0) noexcept:
+            constexpr VertexGeometryConstantRange(uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT, offset) {}
         };
 
         template<typename Type>
         struct VertexFragmentConstantRange : PushConstantRange<Type>
         {
-            VertexFragmentConstantRange(uint32_t offset = 0) noexcept:
+            constexpr VertexFragmentConstantRange(uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, offset) {}
         };
     } // namespace pushconstants
