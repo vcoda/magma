@@ -29,7 +29,6 @@ MAGMA_OBJS= \
 	helpers/executeCommandBuffer.o \
 	helpers/stringize.o \
 	\
-	misc/clearValue.o \
 	misc/deviceQueueDesc.o \
 	misc/exception.o \
 	misc/extensions.o \

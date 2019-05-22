@@ -431,9 +431,6 @@
     <ClCompile Include="..\..\helpers\stringize.cpp">
       <Filter>Source Files\helpers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\misc\clearValue.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\misc\deviceQueueDesc.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>

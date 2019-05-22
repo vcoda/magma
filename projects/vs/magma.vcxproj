@@ -257,7 +257,6 @@
     <ClCompile Include="..\..\helpers\executeCommandBuffer.cpp" />
     <ClCompile Include="..\..\helpers\stringize.cpp" />
     <ClCompile Include="..\..\internal\allocable.cpp" />
-    <ClCompile Include="..\..\misc\clearValue.cpp" />
     <ClCompile Include="..\..\misc\deviceQueueDesc.cpp" />
     <ClCompile Include="..\..\misc\exception.cpp" />
     <ClCompile Include="..\..\misc\extensions.cpp" />

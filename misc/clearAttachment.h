@@ -24,32 +24,32 @@ namespace magma
 
     struct ColorClearAttachment : ClearAttachment
     {
-        ColorClearAttachment(uint32_t attachment, float r, float g, float b, float a = 1.f) noexcept;
-        ColorClearAttachment(uint32_t attachment, int32_t r, int32_t g, int32_t b, int32_t a) noexcept;
-        ColorClearAttachment(uint32_t attachment, uint32_t r, uint32_t g, uint32_t b, uint32_t a) noexcept;
-        ColorClearAttachment(uint32_t attachment, const float color[4]) noexcept;
-        ColorClearAttachment(uint32_t attachment, const int32_t color[4]) noexcept;
-        ColorClearAttachment(uint32_t attachment, const uint32_t color[4]) noexcept;
-        ColorClearAttachment(uint32_t attachment, const ClearColor& color) noexcept;
+        constexpr ColorClearAttachment(uint32_t attachment, float r, float g, float b, float a = 1.f) noexcept;
+        constexpr ColorClearAttachment(uint32_t attachment, int32_t r, int32_t g, int32_t b, int32_t a) noexcept;
+        constexpr ColorClearAttachment(uint32_t attachment, uint32_t r, uint32_t g, uint32_t b, uint32_t a) noexcept;
+        constexpr ColorClearAttachment(uint32_t attachment, const float color[4]) noexcept;
+        constexpr ColorClearAttachment(uint32_t attachment, const int32_t color[4]) noexcept;
+        constexpr ColorClearAttachment(uint32_t attachment, const uint32_t color[4]) noexcept;
+        constexpr ColorClearAttachment(uint32_t attachment, const ClearColor& color) noexcept;
 
     private:
-        ColorClearAttachment(uint32_t attachment) noexcept;
+        constexpr ColorClearAttachment(uint32_t attachment) noexcept;
     };
 
     struct DepthClearAttachment : ClearAttachment
     {
-        DepthClearAttachment(float depth) noexcept;
+        constexpr DepthClearAttachment(float depth) noexcept;
     };
 
     struct StencilClearAttachment : ClearAttachment
     {
-        StencilClearAttachment(uint8_t stencil) noexcept;
+        constexpr StencilClearAttachment(uint8_t stencil) noexcept;
     };
 
     struct DepthStencilClearAttachment : ClearAttachment
     {
-        DepthStencilClearAttachment(float depth, uint8_t stencil) noexcept;
-        DepthStencilClearAttachment(const ClearDepthStencil& depthStencil) noexcept;
+        constexpr DepthStencilClearAttachment(float depth, uint8_t stencil) noexcept;
+        constexpr DepthStencilClearAttachment(const ClearDepthStencil& depthStencil) noexcept;
     };
 } // namespace magma
 
