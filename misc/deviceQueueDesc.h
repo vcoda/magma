@@ -26,14 +26,14 @@ namespace magma
 
     /* Describes the queue that is requested to be created along with the logical device. */
 
-    struct DeviceQueueDescriptor : VkDeviceQueueCreateInfo
+    struct DeviceQueueDescriptor final : VkDeviceQueueCreateInfo
     {
         DeviceQueueDescriptor(VkQueueFlagBits queueType,
             std::shared_ptr<const PhysicalDevice> device,
             const std::vector<float>& queuePriorities = {1.f});
         DeviceQueueDescriptor(const DeviceQueueDescriptor&);
         DeviceQueueDescriptor& operator=(const DeviceQueueDescriptor&);
-        virtual ~DeviceQueueDescriptor();
+        ~DeviceQueueDescriptor();
 
     private:
         uint32_t getFamilyIndex(VkQueueFlagBits queueType,
