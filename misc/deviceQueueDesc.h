@@ -33,7 +33,7 @@ namespace magma
             const std::vector<float>& queuePriorities = {1.f});
         DeviceQueueDescriptor(const DeviceQueueDescriptor&);
         DeviceQueueDescriptor& operator=(const DeviceQueueDescriptor&);
-        ~DeviceQueueDescriptor();
+        virtual ~DeviceQueueDescriptor();
 
     private:
         uint32_t getFamilyIndex(VkQueueFlagBits queueType,
