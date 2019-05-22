@@ -17,16 +17,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../api/vulkan.h"
-#include "../internal/shared.h"
 
 namespace magma
 {
     struct Scissor : VkRect2D
     {
-        Scissor(int32_t x, int32_t y, const VkExtent2D& extent) noexcept;
-        Scissor(float x, float y, const VkExtent2D& extent) noexcept;
-        Scissor(int32_t x, int32_t y, uint32_t width, uint32_t height) noexcept;
-        Scissor(float x, float y, float width, float height) noexcept;
+        constexpr Scissor(int32_t x, int32_t y, const VkExtent2D& extent) noexcept;
+        constexpr Scissor(float x, float y, const VkExtent2D& extent) noexcept;
+        constexpr Scissor(int32_t x, int32_t y, uint32_t width, uint32_t height) noexcept;
+        constexpr Scissor(float x, float y, float width, float height) noexcept;
     };
 } // namespace magma
 
