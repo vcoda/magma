@@ -31,5 +31,16 @@ namespace magma
             NonCopyable(const NonCopyable&) = delete;
             NonCopyable& operator=(const NonCopyable&) = delete;
         };
+
+        class ConstexprNonCopyable
+        {
+        public:
+            ConstexprNonCopyable() = default;
+            ~ConstexprNonCopyable() = default;
+
+        private:
+            ConstexprNonCopyable(const ConstexprNonCopyable&) = delete;
+            ConstexprNonCopyable& operator=(const ConstexprNonCopyable&) = delete;
+        };
     } // namespace internal
 } // namespace magma
