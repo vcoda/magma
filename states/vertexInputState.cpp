@@ -17,31 +17,19 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "vertexInputState.h"
 #include "../internal/copy.h"
-#include "../internal/hash.h"
 #include "../internal/compareArrays.h"
 
 namespace magma
 {
-VertexInputState::VertexInputState() noexcept
-{
-    sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    pNext = nullptr;
-    flags = 0;
-    vertexBindingDescriptionCount = 0;
-    pVertexBindingDescriptions = nullptr;
-    vertexAttributeDescriptionCount = 0;
-    pVertexAttributeDescriptions = nullptr;
-}
-
-VertexInputState::VertexInputState(const VertexInputBinding& binding, const VertexInputAttribute& attribute):
-    VertexInputState({binding}, {attribute})
+ManagedVertexInputState::ManagedVertexInputState(const VertexInputBinding& binding, const VertexInputAttribute& attribute):
+    ManagedVertexInputState({binding}, {attribute})
 {}
 
-VertexInputState::VertexInputState(const VertexInputBinding& binding, const std::initializer_list<VertexInputAttribute>& attributes):
-    VertexInputState({binding}, attributes)
+ManagedVertexInputState::ManagedVertexInputState(const VertexInputBinding& binding, const std::initializer_list<VertexInputAttribute>& attributes):
+    ManagedVertexInputState({binding}, attributes)
 {}
 
-VertexInputState::VertexInputState(const std::initializer_list<VertexInputBinding>& bindings,
+ManagedVertexInputState::ManagedVertexInputState(const std::initializer_list<VertexInputBinding>& bindings,
     const std::initializer_list<VertexInputAttribute>& attributes)
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -59,7 +47,7 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
     }
 }
 
-VertexInputState::VertexInputState(const VertexInputState& other)
+ManagedVertexInputState::ManagedVertexInputState(const ManagedVertexInputState& other)
 {
     internal::copy(this, &other);
     pVertexBindingDescriptions = internal::copyArray(other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
@@ -72,7 +60,7 @@ VertexInputState::VertexInputState(const VertexInputState& other)
     }
 }
 
-VertexInputState& VertexInputState::operator=(const VertexInputState& other)
+ManagedVertexInputState& ManagedVertexInputState::operator=(const ManagedVertexInputState& other)
 {
     if (this != &other)
     {
@@ -89,13 +77,13 @@ VertexInputState& VertexInputState::operator=(const VertexInputState& other)
     return *this;
 }
 
-VertexInputState::~VertexInputState()
+ManagedVertexInputState::~ManagedVertexInputState()
 {
     delete[] pVertexBindingDescriptions;
     delete[] pVertexAttributeDescriptions;
 }
 
-size_t VertexInputState::hash() const noexcept
+size_t ManagedVertexInputState::hash() const noexcept
 {
     size_t hash = internal::hashArgs(
         flags,
@@ -119,7 +107,7 @@ size_t VertexInputState::hash() const noexcept
     return hash;
 }
 
-bool VertexInputState::operator==(const VertexInputState& other) const noexcept
+bool ManagedVertexInputState::operator==(const ManagedVertexInputState& other) const noexcept
 {
     return (flags == other.flags) &&
         (vertexBindingDescriptionCount == other.vertexBindingDescriptionCount) &&
@@ -127,72 +115,4 @@ bool VertexInputState::operator==(const VertexInputState& other) const noexcept
         internal::compareArrays(pVertexBindingDescriptions, other.pVertexBindingDescriptions, vertexBindingDescriptionCount) &&
         internal::compareArrays(pVertexAttributeDescriptions, other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
 }
-
-namespace renderstates
-{
-const VertexInputState nullVertexInput;
-
-const VertexInputState pos2Float(VertexInputBinding(0, sizeof(float) * 2), attributes::xyFloat32);
-const VertexInputState pos3Float(VertexInputBinding(0, sizeof(float) * 3), attributes::xyzFloat32);
-const VertexInputState pos4Float(VertexInputBinding(0, sizeof(float) * 4), attributes::xyzwFloat32);
-
-const VertexInputState pos2FloatTex2Float(VertexInputBinding(0, sizeof(float) * 4), {
-    VertexInputAttribute(0, attributes::xyFloat32, 0),
-    VertexInputAttribute(1, attributes::xyFloat32, 8)
-});
-const VertexInputState pos2FloatColor3Float(VertexInputBinding(0, sizeof(float) * 5), {
-    VertexInputAttribute(0, attributes::xyFloat32, 0),
-    VertexInputAttribute(1, attributes::xyzFloat32, 8)
-});
-const VertexInputState pos2FloatColor4Float(VertexInputBinding(0, sizeof(float) * 6), {
-    VertexInputAttribute(0, attributes::xyFloat32, 0),
-    VertexInputAttribute(1, attributes::xyzwFloat32, 8)
-});
-const VertexInputState pos2FloatColor4UNorm(VertexInputBinding(0, sizeof(float) * 2 + sizeof(char) * 4), {
-    VertexInputAttribute(0, attributes::xyFloat32, 0),
-    VertexInputAttribute(1, attributes::rgbaUNorm8, 8)
-});
-
-const VertexInputState pos3FloatTex2Float(VertexInputBinding(0, sizeof(float) * 5), {
-    VertexInputAttribute(0, attributes::xyzFloat32, 0),
-    VertexInputAttribute(1, attributes::xyFloat32, 12)
-});
-const VertexInputState pos3FloatColor3Float(VertexInputBinding(0, sizeof(float) * 6), {
-    VertexInputAttribute(0, attributes::xyzFloat32, 0),
-    VertexInputAttribute(1, attributes::xyzFloat32, 12)
-});
-const VertexInputState pos3FloatColor4Float(VertexInputBinding(0, sizeof(float) * 7), {
-    VertexInputAttribute(0, attributes::xyzFloat32, 0),
-    VertexInputAttribute(1, attributes::xyzwFloat32, 12)
-});
-const VertexInputState pos3FloatColor4UNorm(VertexInputBinding(0, sizeof(float) * 3 + sizeof(char) * 4), {
-    VertexInputAttribute(0, attributes::xyzFloat32, 0),
-    VertexInputAttribute(1, attributes::rgbaUNorm8, 12)
-});
-
-const VertexInputState pos3FloatNormal3Float(VertexInputBinding(0, sizeof(float) * 6), {
-    VertexInputAttribute(0, attributes::xyzFloat32, 0),
-    VertexInputAttribute(1, attributes::xyzFloat32, 12)
-});
-const VertexInputState pos3FloatNormal3FloatTex2Float(VertexInputBinding(0, sizeof(float) * 8), {
-    VertexInputAttribute(0, attributes::xyzFloat32, 0),
-    VertexInputAttribute(1, attributes::xyzFloat32, 12),
-    VertexInputAttribute(2, attributes::xyFloat32, 24)
-});
-const VertexInputState pos3FloatNormal3FloatColor3Float(VertexInputBinding(0, sizeof(float) * 9), {
-    VertexInputAttribute(0, attributes::xyzFloat32, 0),
-    VertexInputAttribute(1, attributes::xyzFloat32, 12),
-    VertexInputAttribute(2, attributes::xyzFloat32, 24)
-});
-const VertexInputState pos3FloatNormal3FloatColor4Float(VertexInputBinding(0, sizeof(float) * 10), {
-    VertexInputAttribute(0, attributes::xyzFloat32, 0),
-    VertexInputAttribute(1, attributes::xyzFloat32, 12),
-    VertexInputAttribute(2, attributes::xyzwFloat32, 24)
-});
-const VertexInputState pos3FloatNormal3FloatColor4UNorm(VertexInputBinding(0, sizeof(float) * 6 + sizeof(char) * 4), {
-    VertexInputAttribute(0, attributes::xyzFloat32, 0),
-    VertexInputAttribute(1, attributes::xyzFloat32, 12),
-    VertexInputAttribute(2, attributes::rgbaUNorm8, 24)
-});
-} // namespace renderstates
 } // namespace magma

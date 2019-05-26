@@ -688,6 +688,9 @@
     <None Include="..\..\descriptors\attachment.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
+    <None Include="..\..\states\vertexInputState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blitv.vert">

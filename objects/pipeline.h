@@ -53,8 +53,8 @@ namespace magma
     struct MultisampleState;
     struct DepthStencilState;
     struct ColorBlendState;
+    struct VertexInputState;
 
-    class VertexInputState;
     class ViewportState;
     class RenderPass;
 
