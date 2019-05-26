@@ -16,8 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <cstddef>
-#include <functional>
 #include <string>
 
 namespace magma
@@ -73,4 +71,3 @@ namespace magma
         }
     } // namespace internal
 } // namespace magma
-
