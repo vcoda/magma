@@ -77,6 +77,18 @@ constexpr VertexInputState::VertexInputState(const VertexInputBinding& binding, 
     pVertexAttributeDescriptions = attributes.begin();
 }
 
+constexpr VertexInputState::VertexInputState(const std::initializer_list<VertexInputBinding>& bindings,
+    const std::initializer_list<VertexInputAttribute>& attributes)
+{
+    sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    vertexBindingDescriptionCount = static_cast<uint32_t>(bindings.size());
+    pVertexBindingDescriptions = bindings.begin();
+    vertexAttributeDescriptionCount = static_cast<uint32_t>(attributes.size());
+    pVertexAttributeDescriptions = attributes.begin();
+}
+
 constexpr size_t VertexInputState::hash() const noexcept
 {
     size_t hash = internal::hashArgs(
