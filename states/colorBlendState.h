@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <vector>
 #include "../api/vulkan.h"
+#include "../internal/nonCopyable.h"
 
 namespace magma
 {
@@ -40,7 +41,7 @@ namespace magma
        at the fragment's location. Blending is performed for each pixel sample,
        rather than just once for each fragment. */
 
-    struct ColorBlendState : VkPipelineColorBlendStateCreateInfo
+    struct ColorBlendState : VkPipelineColorBlendStateCreateInfo, internal::ConstexprNonCopyable
     {
         constexpr ColorBlendState(const ColorBlendAttachmentState& attachment,
             bool logicOpEnable = false,
@@ -51,11 +52,6 @@ namespace magma
 
     protected:
         ColorBlendState() {}
-
-    private:
-        // Non-copyable because object holds raw pointer to attachment state
-        ColorBlendState(const ColorBlendState&) = delete;
-        ColorBlendState& operator=(const ColorBlendState&) = delete;
     };
 
     /* Managed color blend state takes care about array of blend attachment states and 
