@@ -42,7 +42,7 @@ NonMultisampleFramebuffer::NonMultisampleFramebuffer(std::shared_ptr<Device> dev
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, 1,
         op::clearStore, // Clear color, store
-        op::dontCareDontCare, // Stencil not applicable
+        op::dontCare, // Stencil not applicable
         VK_IMAGE_LAYOUT_UNDEFINED,
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL); // !
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
@@ -83,12 +83,12 @@ MultisampleFramebuffer::MultisampleFramebuffer(std::shared_ptr<Device> device,
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, sampleCount,
         op::clearStore, // Clear color, store
-        op::dontCareDontCare, // Stencil not applicable
+        op::dontCare, // Stencil not applicable
         VK_IMAGE_LAYOUT_UNDEFINED,
         VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
     const AttachmentDescription resolveAttachment(colorFormat, 1,
         op::dontCareStore, // Don't care about clear as attachment used for MSAA resolve
-        op::dontCareDontCare, // Stencil not applicable
+        op::dontCare, // Stencil not applicable
         VK_IMAGE_LAYOUT_UNDEFINED,
         VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
@@ -132,7 +132,7 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
     }
     const AttachmentDescription colorAttachment(color->getFormat(), 1,
         op::clearStore, // Clear color, store
-        op::dontCareDontCare, // Stencil don't care
+        op::dontCare, // Stencil don't care
         VK_IMAGE_LAYOUT_UNDEFINED,
         VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
     if (depthFormat != VK_FORMAT_UNDEFINED)
