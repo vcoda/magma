@@ -1,7 +1,8 @@
 namespace magma
 {
-template<typename Function>
-MAGMA_INLINE InstanceExtension<Function>::InstanceExtension(VkInstance instance, const char *name) noexcept
+template<typename Func>
+inline InstanceExtension<Func>::InstanceExtension(VkInstance instance,
+    const char *name) noexcept
 {
     if (!_addr)
     {
@@ -11,8 +12,9 @@ MAGMA_INLINE InstanceExtension<Function>::InstanceExtension(VkInstance instance,
     }
 }
 
-template<typename Function>
-MAGMA_INLINE InstanceExtension<Function>::InstanceExtension(VkInstance instance, const char *name, const char *extension)
+template<typename Func>
+inline InstanceExtension<Func>::InstanceExtension(VkInstance instance,
+    const char *name, const char *extension)
 {
     if (!_addr)
     {
@@ -24,6 +26,6 @@ MAGMA_INLINE InstanceExtension<Function>::InstanceExtension(VkInstance instance,
     }
 }
 
-template<typename Function>
-PFN_vkVoidFunction InstanceExtension<Function>::_addr;
+template<typename Func>
+PFN_vkVoidFunction InstanceExtension<Func>::_addr;
 } // namespace magma

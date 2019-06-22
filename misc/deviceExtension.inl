@@ -1,7 +1,8 @@
 namespace magma
 {
-template<typename Function>
-MAGMA_INLINE DeviceExtension<Function>::DeviceExtension(VkDevice device, const char *name) noexcept
+template<typename Func>
+inline DeviceExtension<Func>::DeviceExtension(VkDevice device,
+    const char *name) noexcept
 {
     if (!_addr)
     {
@@ -11,8 +12,9 @@ MAGMA_INLINE DeviceExtension<Function>::DeviceExtension(VkDevice device, const c
     }
 }
 
-template<typename Function>
-MAGMA_INLINE DeviceExtension<Function>::DeviceExtension(VkDevice device, const char *name, const char *extension)
+template<typename Func>
+inline DeviceExtension<Func>::DeviceExtension(VkDevice device,
+    const char *name, const char *extension)
 {
     if (!_addr)
     {
@@ -24,6 +26,6 @@ MAGMA_INLINE DeviceExtension<Function>::DeviceExtension(VkDevice device, const c
     }
 }
 
-template<typename Function>
-PFN_vkVoidFunction DeviceExtension<Function>::_addr;
+template<typename Func>
+PFN_vkVoidFunction DeviceExtension<Func>::_addr;
 } // namespace magma

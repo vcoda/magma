@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    template<typename Function>
+    template<typename Func>
     class InstanceExtension
     {
     public:
@@ -31,8 +31,8 @@ namespace magma
         InstanceExtension(VkInstance instance,
             const char *name,
             const char *extension);
-        operator Function() const noexcept
-            { return reinterpret_cast<Function>(_addr); }
+        operator Func() const noexcept
+            { return reinterpret_cast<Func>(_addr); }
 
     private:
         static PFN_vkVoidFunction _addr;
