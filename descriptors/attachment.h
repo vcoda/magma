@@ -24,8 +24,7 @@ namespace magma
     {
     public:
         constexpr LoadStoreOp(VkAttachmentLoadOp loadOp,
-            VkAttachmentStoreOp storeOp) noexcept:
-            loadOp(loadOp), storeOp(storeOp) {}
+            VkAttachmentStoreOp storeOp) noexcept;
 
     private:
         VkAttachmentLoadOp loadOp;
