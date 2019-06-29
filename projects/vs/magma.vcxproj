@@ -383,8 +383,6 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/output/immv</Outputs>
     </CustomBuild>
     <None Include="..\..\descriptors\attachment.inl" />
-    <None Include="..\..\helpers\alignedUniformArray.inl" />
-    <None Include="..\..\helpers\uniformArray.inl" />
     <None Include="..\..\misc\clearAttachment.inl" />
     <None Include="..\..\misc\clearValue.inl" />
     <None Include="..\..\misc\deviceExtension.inl" />

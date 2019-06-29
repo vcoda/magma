@@ -688,12 +688,6 @@
     <None Include="..\..\descriptors\attachment.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
-    <None Include="..\..\helpers\alignedUniformArray.inl">
-      <Filter>Header Files\helpers</Filter>
-    </None>
-    <None Include="..\..\helpers\uniformArray.inl">
-      <Filter>Header Files\helpers</Filter>
-    </None>
     <None Include="..\..\states\vertexInputState.inl">
       <Filter>Header Files\states</Filter>
     </None>
