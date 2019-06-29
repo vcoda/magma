@@ -24,27 +24,30 @@ namespace magma
     class Format
     {
     public:
-        explicit Format(VkFormat format) noexcept:
+        constexpr Format(VkFormat format) noexcept:
             format(format) {}
-        bool valid() const noexcept
-            { return format != VK_FORMAT_UNDEFINED; }
-        bool depth() const noexcept;
-        bool stencil() const noexcept;
-        bool depthStencil() const noexcept;
-        bool blockCompressed() const noexcept;
-        bool ETC2() const noexcept;
-        bool EAC() const noexcept;
-        bool ASTC() const noexcept;
-        bool PVRTC() const noexcept;
-        bool compressed() const noexcept
-            { return blockCompressed() || ETC2() || EAC() || ASTC() || PVRTC(); }
-        bool floatingPoint() const noexcept;
-        bool sRGB() const noexcept;
-        std::pair<int, int> blockFootprint() const noexcept;
-        operator VkFormat() const noexcept
+        constexpr operator VkFormat() const noexcept
             { return format; }
+        constexpr bool valid() const noexcept
+            { return format != VK_FORMAT_UNDEFINED; }
+        constexpr bool depth() const noexcept;
+        constexpr bool stencil() const noexcept;
+        constexpr bool depthStencil() const noexcept;
+        constexpr bool blockCompressed() const noexcept;
+        constexpr bool ETC2() const noexcept;
+        constexpr bool EAC() const noexcept;
+        constexpr bool ASTC() const noexcept;
+        constexpr bool PVRTC() const noexcept;
+        constexpr bool compressed() const noexcept
+            { return blockCompressed() || ETC2() || EAC() || ASTC() || PVRTC(); }
+        constexpr bool floatingPoint() const noexcept;
+        constexpr bool sRGB() const noexcept;
+        constexpr size_t size() const noexcept;
+        std::pair<int, int> blockFootprint() const noexcept;
 
     private:
         VkFormat format;
     };
 } // namespace magma
+
+#include "format.inl"
