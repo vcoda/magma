@@ -688,21 +688,30 @@
     <None Include="..\..\descriptors\attachment.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
+    <None Include="..\..\helpers\alignedUniformArray.inl">
+      <Filter>Header Files\helpers</Filter>
+    </None>
+    <None Include="..\..\helpers\uniformArray.inl">
+      <Filter>Header Files\helpers</Filter>
+    </None>
     <None Include="..\..\states\vertexInputState.inl">
       <Filter>Header Files\states</Filter>
     </None>
+    <None Include="..\..\misc\format.inl">
+      <Filter>Header Files\misc</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\auxiliary\spirv\blitv.vert">
+    <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">
       <Filter>Source Files\auxiliary\spirv</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\auxiliary\spirv\blitf.frag">
+    <CustomBuild Include="..\..\auxiliary\spirv\blit.vert">
       <Filter>Source Files\auxiliary\spirv</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\auxiliary\spirv\immv.vert">
+    <CustomBuild Include="..\..\auxiliary\spirv\imm.frag">
       <Filter>Source Files\auxiliary\spirv</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\auxiliary\spirv\immf.frag">
+    <CustomBuild Include="..\..\auxiliary\spirv\imm.vert">
       <Filter>Source Files\auxiliary\spirv</Filter>
     </CustomBuild>
   </ItemGroup>

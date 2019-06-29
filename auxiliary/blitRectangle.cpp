@@ -102,16 +102,11 @@ void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::
 
 std::shared_ptr<ShaderModule> BlitRectangle::createShader(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator, bool vertexShader) const
 {
+#include "spirv/output/blitv"
     if (vertexShader)
-    {
-#include "spirv/blitv"
         return std::make_shared<ShaderModule>(device, vsBlit, sizeof(vsBlit), allocator);
-    }
-    else
-    {
-#include "spirv/blitf"
-        return std::make_shared<ShaderModule>(device, fsBlit, sizeof(fsBlit), allocator);
-    }
+#include "spirv/output/blitf"
+    return std::make_shared<ShaderModule>(device, fsBlit, sizeof(fsBlit), allocator);
 }
 } // namespace aux
 } // namespace magma

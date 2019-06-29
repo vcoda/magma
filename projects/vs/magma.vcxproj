@@ -322,70 +322,73 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\auxiliary\immediateRender.inl" />
-    <CustomBuild Include="..\..\auxiliary\spirv\blitf.frag">
+    <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn fsBlit %(FullPath) -o ../../auxiliary/spirv/%(Filename)</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn fsBlit %(FullPath) -o ../../auxiliary/spirv/%(Filename)</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn fsBlit %(FullPath) -o ../../auxiliary/spirv/%(Filename)</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn fsBlit %(FullPath) -o ../../auxiliary/spirv/%(Filename)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn fsBlit %(FullPath) -o ../../auxiliary/spirv/output/blitf</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn fsBlit %(FullPath) -o ../../auxiliary/spirv/output/blitf</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn fsBlit %(FullPath) -o ../../auxiliary/spirv/output/blitf</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn fsBlit %(FullPath) -o ../../auxiliary/spirv/output/blitf</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling fragment shader</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling fragment shader</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compiling fragment shader</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling fragment shader</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../auxiliary/spirv/%(Filename)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../auxiliary/spirv/%(Filename)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../auxiliary/spirv/%(Filename)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/%(Filename)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../auxiliary/spirv/output/blitf</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../auxiliary/spirv/output/blitf</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../auxiliary/spirv/output/blitf</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/output/blitf</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\..\auxiliary\spirv\blitv.vert">
+    <CustomBuild Include="..\..\auxiliary\spirv\blit.vert">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsBlit %(FullPath) -o ../../auxiliary/spirv/%(Filename)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsBlit %(FullPath) -o ../../auxiliary/spirv/output/blitv</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling vertex shader</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../auxiliary/spirv/%(Filename)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsBlit %(FullPath) -o ../../auxiliary/spirv/%(Filename)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../auxiliary/spirv/output/blitv</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsBlit %(FullPath) -o ../../auxiliary/spirv/output/blitv</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling vertex shader</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../auxiliary/spirv/%(Filename)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsBlit %(FullPath) -o ../../auxiliary/spirv/%(Filename)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../auxiliary/spirv/output/blitv</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsBlit %(FullPath) -o ../../auxiliary/spirv/output/blitv</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compiling vertex shader</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../auxiliary/spirv/%(Filename)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsBlit %(FullPath) -o ../../auxiliary/spirv/%(Filename)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../auxiliary/spirv/output/blitv</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsBlit %(FullPath) -o ../../auxiliary/spirv/output/blitv</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling vertex shader</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/%(Filename)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/output/blitv</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\..\auxiliary\spirv\immf.frag">
+    <CustomBuild Include="..\..\auxiliary\spirv\imm.frag">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn fsImm %(FullPath) -o ../../auxiliary/spirv/%(Filename)</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn fsImm %(FullPath) -o ../../auxiliary/spirv/%(Filename)</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn fsImm %(FullPath) -o ../../auxiliary/spirv/%(Filename)</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn fsImm %(FullPath) -o ../../auxiliary/spirv/%(Filename)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn fsImm %(FullPath) -o ../../auxiliary/spirv/output/immf</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn fsImm %(FullPath) -o ../../auxiliary/spirv/output/immf</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn fsImm %(FullPath) -o ../../auxiliary/spirv/output/immf</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn fsImm %(FullPath) -o ../../auxiliary/spirv/output/immf</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling fragment shader</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling fragment shader</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compiling fragment shader</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling fragment shader</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../auxiliary/spirv/%(Filename)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../auxiliary/spirv/%(Filename)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../auxiliary/spirv/%(Filename)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/%(Filename)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../auxiliary/spirv/output/immf</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../auxiliary/spirv/output/immf</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../auxiliary/spirv/output/immf</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/output/immf</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\..\auxiliary\spirv\immv.vert">
+    <CustomBuild Include="..\..\auxiliary\spirv\imm.vert">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsImm %(FullPath) -o ../../auxiliary/spirv/%(Filename)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsImm %(FullPath) -o ../../auxiliary/spirv/output/immv</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling vertex shader</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsImm %(FullPath) -o ../../auxiliary/spirv/%(Filename)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsImm %(FullPath) -o ../../auxiliary/spirv/output/immv</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling vertex shader</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsImm %(FullPath) -o ../../auxiliary/spirv/%(Filename)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsImm %(FullPath) -o ../../auxiliary/spirv/output/immv</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compiling vertex shader</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsImm %(FullPath) -o ../../auxiliary/spirv/%(Filename)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsImm %(FullPath) -o ../../auxiliary/spirv/output/immv</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling vertex shader</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../auxiliary/spirv/%(Filename)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../auxiliary/spirv/%(Filename)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../auxiliary/spirv/%(Filename)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/%(Filename)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../auxiliary/spirv/output/immv</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../auxiliary/spirv/output/immv</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../auxiliary/spirv/output/immv</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/output/immv</Outputs>
     </CustomBuild>
     <None Include="..\..\descriptors\attachment.inl" />
+    <None Include="..\..\helpers\alignedUniformArray.inl" />
+    <None Include="..\..\helpers\uniformArray.inl" />
     <None Include="..\..\misc\clearAttachment.inl" />
     <None Include="..\..\misc\clearValue.inl" />
     <None Include="..\..\misc\deviceExtension.inl" />
+    <None Include="..\..\misc\format.inl" />
     <None Include="..\..\misc\imageSubresourceRange.inl" />
     <None Include="..\..\misc\instanceExtension.inl" />
     <None Include="..\..\misc\scissor.inl" />
