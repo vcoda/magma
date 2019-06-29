@@ -128,6 +128,8 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
 {
     if (stages.empty())
         MAGMA_THROW("shader stages are empty");
+    VkPipelineVertexInputStateCreateInfo pipelineVertexInput = {0};
+    VkVertexInputBindingDescription vertexBindingDesc = {0};
     VkGraphicsPipelineCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     info.pNext = nullptr;
@@ -139,7 +141,16 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
         dereferencedStages.put(stage);
     info.stageCount = MAGMA_COUNT(dereferencedStages);
     info.pStages = dereferencedStages;
-    info.pVertexInputState = &vertexInputState;
+    if (vertexInputState.vertexBindingDescriptionCount > 0)
+        info.pVertexInputState = &vertexInputState;
+    else
+    {
+        vertexBindingDesc = VertexInputBinding(0, vertexInputState.stride(0));
+        pipelineVertexInput = vertexInputState;
+        pipelineVertexInput.vertexBindingDescriptionCount = 1;
+        pipelineVertexInput.pVertexBindingDescriptions = &vertexBindingDesc;
+        info.pVertexInputState = &pipelineVertexInput;
+    }
     info.pInputAssemblyState = &inputAssemblyState;
     if (0 == tesselationState.patchControlPoints)
         info.pTessellationState = nullptr;
