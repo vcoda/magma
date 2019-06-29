@@ -97,7 +97,7 @@ namespace magma
         private:
             std::shared_ptr<ShaderModule> createShader(bool vertexShader) const;
             std::shared_ptr<GraphicsPipeline> createPipelineState(VkPrimitiveTopology topology);
-            std::shared_ptr<const GraphicsPipeline> findBasePipeline() const noexcept;
+            std::shared_ptr<const GraphicsPipeline> lookupBasePipeline() const noexcept;
             size_t hash(const InputAssemblyState *inputAssembly) const noexcept;
 
         private:
