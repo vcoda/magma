@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/commandBuffer.h"
 #include "../objects/pipeline.h"
 #include "../objects/shaderModule.h"
+#include "../states/vertexInputState.h"
 #include "../misc/pushConstants.h"
 #include "../internal/hash.h"
 
@@ -40,12 +41,6 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     renderPass(std::move(renderPass)),
     allocator(std::move(allocator)),
     vertexBuffer(std::make_shared<VertexBuffer>(this->device, nullptr, sizeof(Vertex) * maxVertexCount, 0, this->allocator)),
-    vertexInput(VertexInputBinding(0, sizeof(Vertex)), {
-        VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, x)),
-        VertexInputAttribute(1, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, nx)),
-        VertexInputAttribute(2, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, r)),
-        VertexInputAttribute(3, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, u))
-    }),
     vertexShader(VertexShaderStage(createShader(true), "main")),
     fragmentShader(FragmentShaderStage(createShader(false), "main")),
     renderStates{
@@ -168,7 +163,15 @@ std::shared_ptr<ShaderModule> ImmediateRender::createShader(bool vertexShader) c
 
 std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimitiveTopology topology)
 {
-    static const InputAssemblyState *inputAssemblyStates[] =
+    constexpr VertexInputAttribute vertexAttributes[] = {
+        VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, x)),
+        VertexInputAttribute(1, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, nx)),
+        VertexInputAttribute(2, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, r)),
+        VertexInputAttribute(3, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, u))
+    };
+    constexpr VertexInputBinding vertexBinding(0, sizeof(Vertex));
+    constexpr VertexInputState vertexInput(vertexBinding, vertexAttributes);
+    constexpr const InputAssemblyState *inputAssemblyStates[] =
     {
         &renderstates::pointList,
         &renderstates::lineList,
@@ -183,6 +186,7 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
         &renderstates::patchList
     };
     const size_t renderStatesHash = hash(inputAssemblyStates[topology]);
+   
     // Try to find existing pipeline
     auto it = pipelines.find(renderStatesHash);
     if (it != pipelines.end())

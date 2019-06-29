@@ -20,7 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <unordered_map>
 #include <limits>
 #include "../objects/shaderStages.h"
-#include "../states/vertexInputState.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/rasterizationState.h"
 #include "../states/multisampleState.h"
@@ -152,7 +151,6 @@ namespace magma
             std::shared_ptr<VertexBuffer> vertexBuffer;
             std::unordered_map<size_t, Pipeline> pipelines;
             std::list<Primitive> primitives;
-            VertexInputState vertexInput;
             VertexShaderStage vertexShader;
             FragmentShaderStage fragmentShader;
             RenderStates renderStates;

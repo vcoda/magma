@@ -15,7 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
+#pragma 
+#include "../misc/format.h"
 #include "../internal/hash.h"
 
 namespace magma
@@ -28,7 +29,8 @@ constexpr VertexInputBinding::VertexInputBinding(uint32_t binding, uint32_t stri
     this->inputRate = inputRate;
 }
 
-constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location, uint32_t binding, VkFormat format, uint32_t offset) noexcept
+constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location, 
+    uint32_t binding, VkFormat format, uint32_t offset) noexcept
 {
     this->location = location;
     this->binding = binding;
@@ -36,7 +38,8 @@ constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location, uint32_t
     this->offset = offset;
 }
 
-constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location, const VertexInputAttribute& attrib, uint32_t offset) noexcept
+constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location, 
+    const VertexInputAttribute& attrib, uint32_t offset) noexcept
 {
     this->location = location;
     binding = attrib.binding;
@@ -55,6 +58,29 @@ constexpr VertexInputState::VertexInputState() noexcept
     pVertexAttributeDescriptions = nullptr;
 }
 
+constexpr VertexInputState::VertexInputState(const VertexInputAttribute& attribute)
+{
+    sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    vertexBindingDescriptionCount = 0;
+    pVertexBindingDescriptions = nullptr;
+    vertexAttributeDescriptionCount = 1;
+    pVertexAttributeDescriptions = &attribute;
+}
+
+template<size_t VertexAttributeDescriptionCount>
+constexpr VertexInputState::VertexInputState(const VertexInputAttribute (&attributes)[VertexAttributeDescriptionCount])
+{
+    sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    vertexBindingDescriptionCount = 0;
+    pVertexBindingDescriptions = nullptr;
+    vertexAttributeDescriptionCount = VertexAttributeDescriptionCount;
+    pVertexAttributeDescriptions = attributes;
+}
+
 constexpr VertexInputState::VertexInputState(const VertexInputBinding& binding, const VertexInputAttribute& attribute)
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -66,27 +92,45 @@ constexpr VertexInputState::VertexInputState(const VertexInputBinding& binding, 
     pVertexAttributeDescriptions = &attribute;
 }
 
-constexpr VertexInputState::VertexInputState(const VertexInputBinding& binding, const std::initializer_list<VertexInputAttribute>& attributes)
+template<size_t VertexAttributeDescriptionCount>
+constexpr VertexInputState::VertexInputState(const VertexInputBinding& binding, 
+    const VertexInputAttribute (&attributes)[VertexAttributeDescriptionCount])
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;
     flags = 0;
     vertexBindingDescriptionCount = 1;
     pVertexBindingDescriptions = &binding;
-    vertexAttributeDescriptionCount = static_cast<uint32_t>(attributes.size());
-    pVertexAttributeDescriptions = attributes.begin();
+    vertexAttributeDescriptionCount = VertexAttributeDescriptionCount;
+    pVertexAttributeDescriptions = attributes;
 }
 
-constexpr VertexInputState::VertexInputState(const std::initializer_list<VertexInputBinding>& bindings,
-    const std::initializer_list<VertexInputAttribute>& attributes)
+template<size_t VertexBindingDescriptionCount, size_t VertexAttributeDescriptionCount>
+constexpr VertexInputState::VertexInputState(const VertexInputBinding (&bindings)[VertexBindingDescriptionCount], 
+    const VertexInputAttribute (&attributes)[VertexAttributeDescriptionCount])
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;
     flags = 0;
-    vertexBindingDescriptionCount = static_cast<uint32_t>(bindings.size());
-    pVertexBindingDescriptions = bindings.begin();
-    vertexAttributeDescriptionCount = static_cast<uint32_t>(attributes.size());
-    pVertexAttributeDescriptions = attributes.begin();
+    vertexBindingDescriptionCount = VertexBindingDescriptionCount;
+    pVertexBindingDescriptions = bindings;
+    vertexAttributeDescriptionCount = VertexAttributeDescriptionCount;
+    pVertexAttributeDescriptions = attributes;
+}
+
+constexpr uint32_t VertexInputState::stride(uint32_t binding) const noexcept
+{
+    size_t stride = 0;
+    for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
+    {
+        const VkVertexInputAttributeDescription& attrib = pVertexAttributeDescriptions[i];
+        if (attrib.binding == binding)
+        {
+            const size_t attribSize = Format(attrib.format).size();
+            stride += attribSize;
+        }
+    }
+    return static_cast<uint32_t>(stride);
 }
 
 constexpr size_t VertexInputState::hash() const noexcept
