@@ -25,7 +25,7 @@ namespace magma
     namespace internal
     {
         template<typename Type>
-        MAGMA_INLINE Type *copy(const Type *const src)
+        inline Type *copy(const Type *const src)
         {
             MAGMA_ASSERT(src);
             Type *dst = new Type();
@@ -34,7 +34,7 @@ namespace magma
         }
 
         template<typename Type>
-        MAGMA_INLINE Type *copy(Type *const dst, const Type *const src)
+        inline Type *copy(Type *const dst, const Type *const src)
         {
             MAGMA_ASSERT(dst);
             MAGMA_ASSERT(src);
@@ -44,7 +44,7 @@ namespace magma
         }
 
         template<typename Type>
-        MAGMA_INLINE Type *copyArray(const Type *const src, size_t count)
+        inline Type *copyArray(const Type *const src, size_t count)
         {
             MAGMA_ASSERT(src);
             MAGMA_ASSERT(count > 0);
@@ -54,7 +54,7 @@ namespace magma
         }
 
         template<typename Type>
-        MAGMA_INLINE Type *copyVector(const std::vector<Type>& src)
+        inline Type *copyVector(const std::vector<Type>& src)
         {
             MAGMA_ASSERT(src.size() > 0);
             Type *dst = new Type[src.size()];
@@ -63,7 +63,7 @@ namespace magma
         }
 
         template<typename Type>
-        MAGMA_INLINE Type *copyInitializerList(const std::initializer_list<Type>& src)
+        inline Type *copyInitializerList(const std::initializer_list<Type>& src)
         {
             MAGMA_ASSERT(src.size() > 0);
             Type *dst = new Type[src.size()];
@@ -71,7 +71,7 @@ namespace magma
             return dst;
         }
 
-        MAGMA_INLINE char *copyString(const char *const src)
+        inline char *copyString(const char *const src)
         {
             MAGMA_ASSERT(src);
             const size_t size = strlen(src) + 1;

@@ -28,7 +28,7 @@ namespace magma
     namespace internal
     {
 #if defined(_M_AMD64) || defined(__x86_64__)
-        MAGMA_INLINE void __copyThread(void *dst, const void *src, size_t blockCount) noexcept
+        inline void __copyThread(void *dst, const void *src, size_t blockCount) noexcept
         {
             __m128i *vsrc = (__m128i *)src;
             __m128i *vdst = (__m128i *)dst;
@@ -70,7 +70,7 @@ namespace magma
         }
 #endif // _M_AMD64 || __x86_64__
 
-        MAGMA_INLINE void *copyMemory(void *dst, const void *src, size_t size)
+        inline void *copyMemory(void *dst, const void *src, size_t size)
         {
             MAGMA_ASSERT(dst);
             MAGMA_ASSERT(src);

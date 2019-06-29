@@ -28,7 +28,7 @@ namespace magma
     namespace internal
     {
 #if defined(_M_AMD64) || defined(__x86_64__)
-        MAGMA_INLINE void __zeroThread(void *dst, size_t blockCount) noexcept
+        inline void __zeroThread(void *dst, size_t blockCount) noexcept
         {
             const __m128i _0 = _mm_setzero_si128();
             __m128i *vdst = (__m128i *)dst;
@@ -54,7 +54,7 @@ namespace magma
         }
 #endif // _M_AMD64 || __x86_64__
 
-        MAGMA_INLINE void *zeroMemory(void *dst, size_t size)
+        inline void *zeroMemory(void *dst, size_t size)
         {
             MAGMA_ASSERT(dst);
             MAGMA_ASSERT(size > 0);

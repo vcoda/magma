@@ -24,7 +24,7 @@ namespace magma
     namespace internal
     {
         template<typename Type>
-        MAGMA_INLINE bool compareArrays(const Type *const src, const Type *const dst, size_t count) noexcept
+        inline bool compareArrays(const Type *const src, const Type *const dst, size_t count) noexcept
         {
             if (!src && !dst)
                 return true;

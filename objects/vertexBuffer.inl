@@ -1,7 +1,7 @@
 namespace magma
 {
 template<typename VertexType>
-MAGMA_INLINE VertexBuffer::VertexBuffer(std::shared_ptr<Device> device,
+inline VertexBuffer::VertexBuffer(std::shared_ptr<Device> device,
     const std::vector<VertexType>& vertices,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
@@ -13,7 +13,7 @@ MAGMA_INLINE VertexBuffer::VertexBuffer(std::shared_ptr<Device> device,
 }
 
 template<typename VertexType>
-MAGMA_INLINE VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+inline VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
     const std::vector<VertexType>& vertices,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
@@ -24,12 +24,12 @@ MAGMA_INLINE VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBu
     vertexCount = static_cast<uint32_t>(vertices.size());
 }
 
-MAGMA_INLINE void VertexBuffer::setVertexCount(uint32_t count) noexcept
+inline void VertexBuffer::setVertexCount(uint32_t count) noexcept
 {
     vertexCount = count;
 }
 
-MAGMA_INLINE uint32_t VertexBuffer::getVertexCount() const noexcept
+inline uint32_t VertexBuffer::getVertexCount() const noexcept
 {
     MAGMA_ASSERT(vertexCount > 0);
     return vertexCount;

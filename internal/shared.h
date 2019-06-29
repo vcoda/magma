@@ -35,7 +35,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_ASSERT(condition)
 #endif // !MAGMA_DEBUG
 
-#define MAGMA_INLINE inline
 #define MAGMA_BOOLEAN(condition) (condition) ? VK_TRUE : VK_FALSE
 #define MAGMA_COUNT(container) static_cast<uint32_t>(container.size())
 
@@ -80,7 +79,7 @@ namespace magma
     namespace internal
     {
         template<typename Type>
-        MAGMA_INLINE typename Type::VkType dereference(const std::shared_ptr<Type>& obj)
+        inline typename Type::VkType dereference(const std::shared_ptr<Type>& obj)
         {
             if (obj) return *obj;
 #ifdef VK_NULL_HANDLE
