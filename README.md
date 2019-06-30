@@ -57,7 +57,7 @@ in abuse cases, but speed up allocations and reduce memory fragmentation in run-
 Magma was written mainly around [Vulkan 1.0](https://renderdoc.org/vkspec_chunked/index.html) specification, but has built-in support for some extensions:
 
 * VK_AMD_rasterization_order
-* VK_AMD_shared_core_properties
+* VK_AMD_shader_core_properties
 * VK_EXT_conditional_rendering
 * VK_EXT_conservative_rasterization
 * VK_EXT_debug_utils
