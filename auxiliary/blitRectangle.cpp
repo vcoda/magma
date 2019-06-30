@@ -64,7 +64,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, const Pipel
         std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
         renderstates::nullVertexInput,
         renderstates::triangleStrip,
-        renderstates::fillCullBackCCW,
+        renderstates::fillCullNoneCCW,
         renderstates::noMultisample,
         renderstates::depthAlwaysDontWrite,
         renderstates::dontBlendWriteRGBA,
@@ -75,7 +75,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, const Pipel
 }
 
 void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::shared_ptr<ImageView>& bltSrc, const std::shared_ptr<CommandBuffer>& cmdBuffer,
-    const char *labelName /* nullptr */, uint32_t labelColor /* 0xFFFFFFFF */) const noexcept
+    bool negativeViewportHeight /* false */, const char *labelName /* nullptr */, uint32_t labelColor /* 0xFFFFFFFF */) const noexcept
 {
     MAGMA_ASSERT(bltDst);
     MAGMA_ASSERT(bltSrc);
@@ -92,6 +92,9 @@ void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::
         cmdBuffer->beginRenderPass(renderPass, bltDst);
     {
         cmdBuffer->setViewport(Viewport(0, 0, bltDst->getExtent()));
+        const uint32_t width = bltDst->getExtent().width;
+        const int32_t height = static_cast<int32_t>(bltDst->getExtent().height);
+        cmdBuffer->setViewport(0, 0, width, negativeViewportHeight ? -height : height);
         cmdBuffer->setScissor(Scissor(0, 0, bltDst->getExtent()));
         cmdBuffer->bindDescriptorSet(pipelineLayout, descriptorSet);
         cmdBuffer->bindPipeline(pipeline);

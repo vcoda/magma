@@ -53,6 +53,7 @@ namespace magma
             void blit(const std::shared_ptr<Framebuffer>& bltDst,
                 const std::shared_ptr<ImageView>& bltSrc,
                 const std::shared_ptr<CommandBuffer>& cmdBuffer,
+                bool negativeViewportHeight = false,
                 const char *labelName  = nullptr,
                 uint32_t labelColor = 0xFFFFFFFF) const noexcept;
 
