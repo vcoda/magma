@@ -382,6 +382,21 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../auxiliary/spirv/output/immv</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/output/immv</Outputs>
     </CustomBuild>
+    <CustomBuild Include="..\..\auxiliary\spirv\blit_nv.vert">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsBlitNV %(FullPath) -o ../../auxiliary/spirv/output/blitv_nv</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsBlitNV %(FullPath) -o ../../auxiliary/spirv/output/blitv_nv</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsBlitNV %(FullPath) -o ../../auxiliary/spirv/output/blitv_nv</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin32\glslangValidator.exe -V --vn vsBlitNV %(FullPath) -o ../../auxiliary/spirv/output/blitv_nv</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling vertex shader</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling vertex shader</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compiling vertex shader</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling vertex shader</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../auxiliary/spirv/output/blitv_nv</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../auxiliary/spirv/output/blitv_nv</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../auxiliary/spirv/output/blitv_nv</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/output/blitv_nv</Outputs>
+    </CustomBuild>
     <None Include="..\..\descriptors\attachment.inl" />
     <None Include="..\..\misc\clearAttachment.inl" />
     <None Include="..\..\misc\clearValue.inl" />

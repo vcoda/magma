@@ -72,7 +72,6 @@ namespace magma
             std::shared_ptr<PipelineLayout> pipelineLayout;
             std::shared_ptr<GraphicsPipeline> pipeline;
             std::vector<ClearValue> clearValues;
-            bool hasFillRectangle = false;
             mutable std::shared_ptr<ImageView> prevBltSrc;
         };
     } // namespace aux

@@ -54,9 +54,6 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, const Pipel
     renderPass(std::move(renderPass))
 {
     std::shared_ptr<Device> device = this->renderPass->getDevice();
-    std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-    // Check for NV_fill_rectangle support
-    hasFillRectangle = physicalDevice->checkExtensionSupport("VK_NV_fill_rectangle");
     // Descriptor set for single image view in fragment shader
     const Descriptor imageSampler(descriptors::CombinedImageSampler(1));  
     descriptorPool = std::make_shared<DescriptorPool>(device, 1, std::vector<Descriptor>{imageSampler}, false, allocator);
@@ -68,7 +65,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, const Pipel
     pipeline = std::make_shared<GraphicsPipeline>(device, nullptr,
         std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
         renderstates::nullVertexInput,
-        hasFillRectangle ? renderstates::triangleList : renderstates::triangleStrip,
+        renderstates::triangleList,
         renderstates::fillCullNoneCCW,
         renderstates::noMultisample,
         renderstates::depthAlwaysDontWrite,
@@ -111,7 +108,7 @@ void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::
         cmdBuffer->setScissor(Scissor(0, 0, bltDst->getExtent()));
         cmdBuffer->bindDescriptorSet(pipelineLayout, descriptorSet);
         cmdBuffer->bindPipeline(pipeline);
-        cmdBuffer->draw(hasFillRectangle ? 3 : 4, 0);
+        cmdBuffer->draw(3, 0);
     }
     cmdBuffer->endRenderPass();
 }
@@ -119,8 +116,14 @@ void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::
 std::shared_ptr<ShaderModule> BlitRectangle::createShader(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator, bool vertexShader) const
 {
 #include "spirv/output/blitv"
+#include "spirv/output/blitv_nv"
     if (vertexShader)
+    {   // https://www.khronos.org/registry/OpenGL/extensions/NV/NV_fill_rectangle.txt
+        const bool NV_fill_rectangle = device->getPhysicalDevice()->checkExtensionSupport("VK_NV_fill_rectangle");
+        if (NV_fill_rectangle)
+            return std::make_shared<ShaderModule>(device, vsBlitNV, sizeof(vsBlitNV), allocator);
         return std::make_shared<ShaderModule>(device, vsBlit, sizeof(vsBlit), allocator);
+    }
 #include "spirv/output/blitf"
     return std::make_shared<ShaderModule>(device, fsBlit, sizeof(fsBlit), allocator);
 }
