@@ -33,7 +33,8 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const AttachmentDescripti
 RenderPass::RenderPass(std::shared_ptr<Device> device,
     const std::initializer_list<AttachmentDescription>& attachments,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator)),
+    attachments(attachments)
 {   // Count multisample and single sample attachments
     uint32_t multisampleAttachmentCount = 0;
     uint32_t resolveAttachmentCount = 0;

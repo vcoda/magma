@@ -42,5 +42,9 @@ namespace magma
             const std::initializer_list<Subpass>& subpasses,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~RenderPass();
+        const std::vector<AttachmentDescription>& getAttachments() const noexcept { return attachments; }
+
+    private:
+        std::vector<AttachmentDescription> attachments;
     };
 } // namespace magma
