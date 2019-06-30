@@ -12,8 +12,14 @@ void main()
   // into two triangles with an internal edge.
   vec2 tri[3] = vec2[3](
     vec2(-1.,-1.),
+#ifdef NV
+    // https://www.khronos.org/registry/OpenGL/extensions/NV/NV_fill_rectangle.txt
+    vec2(-1., 1.),
+    vec2( 1.,-1.));
+#else
     vec2(-1., 3.),
     vec2( 3.,-1.));
+#endif
   vec2 pos = tri[gl_VertexIndex];
   oUV = pos * 0.5 + 0.5;
   gl_Position = vec4(pos, 0., 1.);

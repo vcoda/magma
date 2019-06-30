@@ -708,8 +708,5 @@
     <CustomBuild Include="..\..\auxiliary\spirv\imm.vert">
       <Filter>Source Files\auxiliary\spirv</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\auxiliary\spirv\blit_nv.vert">
-      <Filter>Source Files\auxiliary\spirv</Filter>
-    </CustomBuild>
   </ItemGroup>
 </Project>
