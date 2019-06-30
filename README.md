@@ -29,12 +29,12 @@ different from my vision how such wrapper should be implemented and used. So eve
 Magma is all about initialization. It was designed with simplicity of object construction in mind.
 Initialization exploit C++ RAII idiom with constructor overloading and default parameters that can be omitted.
 Also library has a lot of pre-defined state objects, so developer can use them without initialization of custom states. 
-With this approach construction of most complex Vulkan object - VkPipeline - takes a few lines of code.
+With this approach construction of most complex Vulkan object - VkPipeline - takes only a dozen lines of code.
 
 All objects are inherited from two types: Dispatchable and NonDispatchable, according to API specification. These types in turn
 are inherited from base Object class. Render state objects are simply structures that inherited from Vulkan structures
 and has plenty of constructors to conveniently initialize state description. They don't have any additional members,
-so user can safely cast an array of state objects to array of Vulkan structures. All state objects have ::hash() method,
+so user can safely cast an array of state objects to an array of Vulkan structures. All state objects have ::hash() method,
 which can be used to quickly lookup similar pipeline states in the cache instead of creating new one.
 
 The library was designed with zero or almost zero overhead in mind. While C++ exceptions are heavily used during object
@@ -46,12 +46,15 @@ construction time, there are numerous methods marked with "noexcept" specifier. 
 
 Command buffer's calls in release build should be as much efficient as native C API calls.
 
+Predefined render states are usually "constexpr" objects, which means that they are initialized at compile-time
+(not run-time), mapping efficiently to low-level API.
+
 The library often allocates temporary arrays on the stack instead of creating them in the heap. This may cause stack overflow
 in abuse cases, but speed up allocations and reduce memory fragmentation in run-time.
 
 ## Features
 
-Magma was written mainly around [Vulkan 1.0](https://renderdoc.org/vkspec_chunked/index.html) specification and has built-in support for some extensions:
+Magma was written mainly around [Vulkan 1.0](https://renderdoc.org/vkspec_chunked/index.html) specification, but has built-in support for some extensions:
 
 * VK_AMD_rasterization_order
 * VK_AMD_shared_core_properties
@@ -60,6 +63,7 @@ Magma was written mainly around [Vulkan 1.0](https://renderdoc.org/vkspec_chunke
 * VK_EXT_debug_utils
 * VK_KHR_device_group
 * VK_KHR_display
+* VK_NV_fill_rectangle
 * VK_NV_raytracing
 
 and some other minor extensions. Support for new API features (1.1 and beyond) not implemented.
