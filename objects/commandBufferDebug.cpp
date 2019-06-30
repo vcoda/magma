@@ -182,7 +182,7 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
 }
 
 void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, 
-    const std::initializer_list<ClearValue>& clearValues, const char *renderPassName, uint32_t renderPassColor,
+    const std::vector<ClearValue>& clearValues, const char *renderPassName, uint32_t renderPassColor,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     beginRenderPass(renderPass, framebuffer, clearValues, contents);
@@ -196,7 +196,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
 }
 
 void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, 
-    uint32_t deviceMask, const std::initializer_list<ClearValue>& clearValues, const char *renderPassName, uint32_t renderPassColor,
+    uint32_t deviceMask, const std::vector<ClearValue>& clearValues, const char *renderPassName, uint32_t renderPassColor,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     beginRenderPassDeviceGroup(renderPass, framebuffer, deviceMask, clearValues, contents);
