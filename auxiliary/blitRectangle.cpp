@@ -72,6 +72,15 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, const Pipel
         pipelineLayout,
         this->renderPass,
         0, nullptr, 0, allocator);
+    for (const auto& attachment : this->renderPass->getAttachments())
+    {   
+        if (VK_ATTACHMENT_LOAD_OP_CLEAR == attachment.loadOp)
+        {   // The Vulkan spec states: clearValueCount must be greater than the largest attachment index in renderPass that specifies a loadOp
+            // (or stencilLoadOp,if the attachment has a depth/stencil format) of VK_ATTACHMENT_LOAD_OP_CLEAR.
+            clearValues = std::vector<ClearValue>(this->renderPass->getAttachments().size(), magma::clears::blackColor);
+            break;
+        }
+    }
 }
 
 void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::shared_ptr<ImageView>& bltSrc, const std::shared_ptr<CommandBuffer>& cmdBuffer,
@@ -87,11 +96,10 @@ void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::
     }
     cmdBuffer->setRenderArea(0, 0, bltDst->getExtent());
     if (labelName)
-        cmdBuffer->beginRenderPass(renderPass, bltDst, {}, labelName, labelColor);
+        cmdBuffer->beginRenderPass(renderPass, bltDst, clearValues, labelName, labelColor);
     else
-        cmdBuffer->beginRenderPass(renderPass, bltDst);
+        cmdBuffer->beginRenderPass(renderPass, bltDst, clearValues);
     {
-        cmdBuffer->setViewport(Viewport(0, 0, bltDst->getExtent()));
         const uint32_t width = bltDst->getExtent().width;
         const int32_t height = static_cast<int32_t>(bltDst->getExtent().height);
         cmdBuffer->setViewport(0, 0, width, negativeViewportHeight ? -height : height);

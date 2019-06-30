@@ -16,8 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <vector>
 #include <memory>
 #include "../internal/nonCopyable.h"
+#include "../misc/clearValue.h"
 
 namespace magma
 {
@@ -69,6 +71,7 @@ namespace magma
             std::shared_ptr<Sampler> nearestSampler;
             std::shared_ptr<PipelineLayout> pipelineLayout;
             std::shared_ptr<GraphicsPipeline> pipeline;
+            std::vector<ClearValue> clearValues;
             mutable std::shared_ptr<ImageView> prevBltSrc;
         };
     } // namespace aux
