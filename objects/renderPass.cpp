@@ -38,12 +38,12 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
 {   // Count multisample and single sample attachments
     uint32_t multisampleAttachmentCount = 0;
     uint32_t resolveAttachmentCount = 0;
-    for (const auto& desc : attachments)
+    for (const auto& attachmentDesc : attachments)
     {
-        const Format format(desc.format);
+        const Format format(attachmentDesc.format);
         if (!format.depth() && !format.stencil() && !format.depthStencil())
         {
-            if (desc.samples > 1)
+            if (attachmentDesc.samples > 1)
                 ++multisampleAttachmentCount;
             else
                 ++resolveAttachmentCount;
@@ -65,9 +65,9 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     uint32_t colorIndex = 0;
     uint32_t resolveIndex = 0;
     // Color/depth/multisample attachments go to their slots
-    for (const auto& desc : attachments)
+    for (const auto& attachmentDesc : attachments)
     {
-        const Format format(desc.format);
+        const Format format(attachmentDesc.format);
         if (format.depth() || format.stencil() || format.depthStencil())
         {
             if (!depthStencilReference)
@@ -75,7 +75,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
         }
         else
         {
-            if (desc.samples > 1 || resolveAttachmentCount < 1)
+            if (attachmentDesc.samples > 1 || resolveAttachmentCount < 1)
                 colorReferences[colorIndex++] = {attachmentIndex, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL};
             else
                 resolveReferences[resolveIndex++] = {attachmentIndex, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL};
