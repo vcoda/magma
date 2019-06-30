@@ -130,6 +130,20 @@ std::vector<VkExtensionProperties> PhysicalDevice::enumerateExtensions(const cha
     return extensions;
 }
 
+bool PhysicalDevice::checkExtensionSupport(const char *extensionName) const
+{
+    MAGMA_ASSERT(extensionName);
+    if (!extensionName || !strlen(extensionName))
+        return false;
+    std::vector<VkExtensionProperties> extensions = enumerateExtensions();
+    for (const auto& property : extensions)
+    {
+        if (0 == strcmp(extensionName, property.extensionName))
+            return true;
+    }
+    return false;
+}
+
 bool PhysicalDevice::getSurfaceSupport(std::shared_ptr<Surface> surface) const noexcept
 {
     VkBool32 supported = VK_FALSE;
