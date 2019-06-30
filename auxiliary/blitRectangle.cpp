@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "blitRectangle.h"
 #include "../objects/device.h"
+#include "../objects/physicalDevice.h"
 #include "../objects/framebuffer.h"
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
@@ -51,9 +52,13 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, const PipelineShaderStage& vertexShader, const PipelineShaderStage& fragmentShader,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     renderPass(std::move(renderPass))
-{   // Descriptor set for single image view in fragment shader
-    const Descriptor imageSampler(descriptors::CombinedImageSampler(1));
-    auto device = this->renderPass->getDevice();
+{
+    std::shared_ptr<Device> device = this->renderPass->getDevice();
+    std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+    // Check for NV_fill_rectangle support
+    hasFillRectangle = physicalDevice->checkExtensionSupport("VK_NV_fill_rectangle");
+    // Descriptor set for single image view in fragment shader
+    const Descriptor imageSampler(descriptors::CombinedImageSampler(1));  
     descriptorPool = std::make_shared<DescriptorPool>(device, 1, std::vector<Descriptor>{imageSampler}, false, allocator);
     descriptorSetLayout = std::make_shared<DescriptorSetLayout>(device, bindings::FragmentStageBinding(0, imageSampler), 0, allocator);
     descriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
@@ -63,7 +68,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, const Pipel
     pipeline = std::make_shared<GraphicsPipeline>(device, nullptr,
         std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
         renderstates::nullVertexInput,
-        renderstates::triangleStrip,
+        hasFillRectangle ? renderstates::triangleList : renderstates::triangleStrip,
         renderstates::fillCullNoneCCW,
         renderstates::noMultisample,
         renderstates::depthAlwaysDontWrite,
@@ -106,7 +111,7 @@ void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::
         cmdBuffer->setScissor(Scissor(0, 0, bltDst->getExtent()));
         cmdBuffer->bindDescriptorSet(pipelineLayout, descriptorSet);
         cmdBuffer->bindPipeline(pipeline);
-        cmdBuffer->draw(4, 0);
+        cmdBuffer->draw(hasFillRectangle ? 3 : 4, 0);
     }
     cmdBuffer->endRenderPass();
 }
