@@ -15,9 +15,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include <limits>
+#include <algorithm>
 #include "sampler.h"
 #include "device.h"
+#include "physicalDevice.h"
 #include "../states/samplerState.h"
 #include "../allocator/allocator.h"
 #include "../misc/exception.h"
@@ -30,6 +31,7 @@ Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_SAMPLER, std::move(device), std::move(allocator))
 {
+    const VkPhysicalDeviceProperties properties = this->device->getPhysicalDevice()->getProperties();
     VkSamplerCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
     info.pNext = nullptr;
@@ -42,7 +44,10 @@ Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
     info.addressModeW = state.addressMode;
     info.mipLodBias = mipLodBias;
     info.anisotropyEnable = MAGMA_BOOLEAN(state.anisotropyEnable);
-    info.maxAnisotropy = state.anisotropyEnable ? state.maxAnisotropy : 1.f;
+    if (info.anisotropyEnable)
+        info.maxAnisotropy = std::min(state.maxAnisotropy, properties.limits.maxSamplerAnisotropy);
+    else
+        info.maxAnisotropy = 0.f;
     info.compareEnable = VK_FALSE;
     info.compareOp = VK_COMPARE_OP_NEVER;
     info.minLod = 0.f;

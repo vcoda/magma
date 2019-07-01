@@ -19,22 +19,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-constexpr SamplerState::SamplerState(VkFilter magFilter, VkFilter minFilter, VkSamplerMipmapMode mipmapMode, VkSamplerAddressMode addressMode) noexcept:
+constexpr SamplerState::SamplerState(VkFilter magFilter, VkFilter minFilter, 
+    VkSamplerMipmapMode mipmapMode, VkSamplerAddressMode addressMode) noexcept:
     magFilter(magFilter),
     minFilter(minFilter),
     mipmapMode(mipmapMode),
     addressMode(addressMode),
     anisotropyEnable(false),
     maxAnisotropy(0.f)
-{}
-
-constexpr SamplerState::SamplerState(float maxAnisotropy, VkSamplerAddressMode addressMode) noexcept:
-    magFilter(VK_FILTER_LINEAR),
-    minFilter(VK_FILTER_LINEAR),
-    mipmapMode(VK_SAMPLER_MIPMAP_MODE_LINEAR),
-    addressMode(addressMode),
-    anisotropyEnable(true),
-    maxAnisotropy(maxAnisotropy)
 {}
 
 constexpr size_t SamplerState::hash() const noexcept
@@ -56,5 +48,13 @@ constexpr bool SamplerState::operator==(const SamplerState& other) const noexcep
         (addressMode == other.addressMode) &&
         (anisotropyEnable == other.anisotropyEnable) &&
         (maxAnisotropy == other.maxAnisotropy);
+}
+
+constexpr AnisotropicSamplerState::AnisotropicSamplerState(VkFilter magFilter, VkFilter minFilter, VkSamplerAddressMode addressMode,
+    float maxAnisotropy /* std::numeric_limits<float>::max() */ ):
+    SamplerState(magFilter, minFilter, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode)
+{
+    anisotropyEnable = true;
+    this->maxAnisotropy = maxAnisotropy; // Value will be clamped against hardware limit
 }
 } // namespace magma
