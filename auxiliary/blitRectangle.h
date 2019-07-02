@@ -55,6 +55,7 @@ namespace magma
             void blit(const std::shared_ptr<Framebuffer>& bltDst,
                 const std::shared_ptr<ImageView>& bltSrc,
                 const std::shared_ptr<CommandBuffer>& cmdBuffer,
+                VkFilter filter,
                 bool negativeViewportHeight = false,
                 const char *labelName  = nullptr,
                 uint32_t labelColor = 0xFFFFFFFF) const noexcept;
@@ -69,10 +70,13 @@ namespace magma
             std::shared_ptr<DescriptorSet> descriptorSet;
             std::shared_ptr<DescriptorSetLayout> descriptorSetLayout;
             std::shared_ptr<Sampler> nearestSampler;
+            std::shared_ptr<Sampler> bilinearSampler;
+            std::shared_ptr<Sampler> cubicSampler;
             std::shared_ptr<PipelineLayout> pipelineLayout;
             std::shared_ptr<GraphicsPipeline> pipeline;
             std::vector<ClearValue> clearValues;
             mutable std::shared_ptr<ImageView> prevBltSrc;
+            mutable VkFilter prevFilter = VK_FILTER_NEAREST;
         };
     } // namespace aux
 } // namespace magma

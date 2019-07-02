@@ -53,13 +53,21 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, const Pipel
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     renderPass(std::move(renderPass))
 {
+{   // Check for hardware support
     std::shared_ptr<Device> device = this->renderPass->getDevice();
+    std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+    const bool NV_fill_rectangle = physicalDevice->checkExtensionSupport("VK_NV_fill_rectangle");
+    const bool IMG_filter_cubic = physicalDevice->checkExtensionSupport("VK_IMG_filter_cubic");
     // Descriptor set for single image view in fragment shader
     const Descriptor imageSampler(descriptors::CombinedImageSampler(1));  
     descriptorPool = std::make_shared<DescriptorPool>(device, 1, std::vector<Descriptor>{imageSampler}, false, allocator);
     descriptorSetLayout = std::make_shared<DescriptorSetLayout>(device, bindings::FragmentStageBinding(0, imageSampler), 0, allocator);
     descriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
+    // Create texture samplers
     nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, 0.f, allocator);
+    bilinearSampler = std::make_shared<Sampler>(device, samplers::magMinLinearMipNearestClampToEdge, 0.f, allocator);
+    if (IMG_filter_cubic)
+        cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, 0.f, allocator);
     // Create blit pipeline
     pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, std::initializer_list<VkPushConstantRange>{}, allocator);
     pipeline = std::make_shared<GraphicsPipeline>(device, nullptr,
@@ -85,16 +93,21 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, const Pipel
     }
 }
 
-void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::shared_ptr<ImageView>& bltSrc, const std::shared_ptr<CommandBuffer>& cmdBuffer,
-    bool negativeViewportHeight /* false */, const char *labelName /* nullptr */, uint32_t labelColor /* 0xFFFFFFFF */) const noexcept
+void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::shared_ptr<ImageView>& bltSrc, 
+    const std::shared_ptr<CommandBuffer>& cmdBuffer, VkFilter filter,
+    bool negativeViewportHeight /* false */, const char *labelName /* nullptr */, 
+    uint32_t labelColor /* 0xFFFFFFFF */) const noexcept
 {
     MAGMA_ASSERT(bltDst);
     MAGMA_ASSERT(bltSrc);
     MAGMA_ASSERT(cmdBuffer);
-    if (prevBltSrc != bltSrc)
+    if (bltSrc != prevBltSrc || filter != prevFilter)
     {
-        descriptorSet->update(0, bltSrc, nearestSampler);
+        descriptorSet->update(0, bltSrc, 
+            (VK_FILTER_NEAREST == filter) ? nearestSampler : 
+            ((VK_FILTER_LINEAR == filter) ? bilinearSampler : cubicSampler));
         prevBltSrc = bltSrc;
+        prevFilter = filter;
     }
     cmdBuffer->setRenderArea(0, 0, bltDst->getExtent());
     if (labelName)
