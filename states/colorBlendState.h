@@ -86,83 +86,83 @@ namespace magma
 {
     namespace blendstates
     {
-        constexpr VkColorComponentFlags colorWriteMaskR(VK_COLOR_COMPONENT_R_BIT);
-        constexpr VkColorComponentFlags colorWriteMaskRG(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT);
-        constexpr VkColorComponentFlags colorWriteMaskRGB(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT);
-        constexpr VkColorComponentFlags colorWriteMaskRGBA(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
+        constexpr VkColorComponentFlags rWriteMask(VK_COLOR_COMPONENT_R_BIT);
+        constexpr VkColorComponentFlags rgWriteMask(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT);
+        constexpr VkColorComponentFlags rgbWriteMask(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT);
+        constexpr VkColorComponentFlags rgbaWriteMask(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
 
-        constexpr ColorBlendAttachmentState writeR(false, VK_BLEND_FACTOR_ZERO, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, colorWriteMaskR);
-        constexpr ColorBlendAttachmentState writeRG(false, VK_BLEND_FACTOR_ZERO, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, colorWriteMaskRG);
-        constexpr ColorBlendAttachmentState writeRGB(false, VK_BLEND_FACTOR_ZERO, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, colorWriteMaskRGB);
-        constexpr ColorBlendAttachmentState writeRGBA(false, VK_BLEND_FACTOR_ZERO, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, colorWriteMaskRGBA);
+        constexpr ColorBlendAttachmentState writeR(false, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rWriteMask);
+        constexpr ColorBlendAttachmentState writeRg(false, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgWriteMask);
+        constexpr ColorBlendAttachmentState writeRgb(false, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgbWriteMask);
+        constexpr ColorBlendAttachmentState writeRgba(false, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgbaWriteMask);
 
-        constexpr ColorBlendAttachmentState addR(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, colorWriteMaskR);
-        constexpr ColorBlendAttachmentState addRG(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, colorWriteMaskRG);
-        constexpr ColorBlendAttachmentState addRGB(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, colorWriteMaskRGB);
-        constexpr ColorBlendAttachmentState addRGBA(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, colorWriteMaskRGBA);
+        constexpr ColorBlendAttachmentState addR(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rWriteMask);
+        constexpr ColorBlendAttachmentState addRg(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rgWriteMask);
+        constexpr ColorBlendAttachmentState addRgb(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rgbWriteMask);
+        constexpr ColorBlendAttachmentState addRgba(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rgbaWriteMask);
 
-        constexpr ColorBlendAttachmentState subtractR(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_SUBTRACT, colorWriteMaskR);
-        constexpr ColorBlendAttachmentState subtractRG(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_SUBTRACT, colorWriteMaskRG);
-        constexpr ColorBlendAttachmentState subtractRGB(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_SUBTRACT, colorWriteMaskRGB);
-        constexpr ColorBlendAttachmentState subtractRGBA(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_SUBTRACT, colorWriteMaskRGBA);
+        constexpr ColorBlendAttachmentState subtractR(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_SUBTRACT, rWriteMask);
+        constexpr ColorBlendAttachmentState subtractRg(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_SUBTRACT, rgWriteMask);
+        constexpr ColorBlendAttachmentState subtractRgb(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_SUBTRACT, rgbWriteMask);
+        constexpr ColorBlendAttachmentState subtractRgba(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_SUBTRACT, rgbaWriteMask);
 
-        constexpr ColorBlendAttachmentState reverseSubtractR(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_REVERSE_SUBTRACT, colorWriteMaskR);
-        constexpr ColorBlendAttachmentState reverseSubtractRG(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_REVERSE_SUBTRACT, colorWriteMaskRG);
-        constexpr ColorBlendAttachmentState reverseSubtractRGB(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_REVERSE_SUBTRACT, colorWriteMaskRGB);
-        constexpr ColorBlendAttachmentState reverseSubtractRGBA(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_REVERSE_SUBTRACT, colorWriteMaskRGBA);
+        constexpr ColorBlendAttachmentState reverseSubtractR(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_REVERSE_SUBTRACT, rWriteMask);
+        constexpr ColorBlendAttachmentState reverseSubtractRg(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_REVERSE_SUBTRACT, rgWriteMask);
+        constexpr ColorBlendAttachmentState reverseSubtractRgb(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_REVERSE_SUBTRACT, rgbWriteMask);
+        constexpr ColorBlendAttachmentState reverseSubtractRgba(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_REVERSE_SUBTRACT, rgbaWriteMask);
 
-        constexpr ColorBlendAttachmentState minR(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MIN, colorWriteMaskR);
-        constexpr ColorBlendAttachmentState minRG(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MIN, colorWriteMaskRG);
-        constexpr ColorBlendAttachmentState minRGB(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MIN, colorWriteMaskRGB);
-        constexpr ColorBlendAttachmentState minRGBA(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MIN, colorWriteMaskRGBA);
+        constexpr ColorBlendAttachmentState minR(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MIN, rWriteMask);
+        constexpr ColorBlendAttachmentState minRg(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MIN, rgWriteMask);
+        constexpr ColorBlendAttachmentState minRgb(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MIN, rgbWriteMask);
+        constexpr ColorBlendAttachmentState minRgba(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MIN, rgbaWriteMask);
 
-        constexpr ColorBlendAttachmentState maxR(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, colorWriteMaskR);
-        constexpr ColorBlendAttachmentState maxRG(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, colorWriteMaskRG);
-        constexpr ColorBlendAttachmentState maxRGB(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, colorWriteMaskRGB);
-        constexpr ColorBlendAttachmentState maxRGBA(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, colorWriteMaskRGBA);
+        constexpr ColorBlendAttachmentState maxR(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, rWriteMask);
+        constexpr ColorBlendAttachmentState maxRg(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, rgWriteMask);
+        constexpr ColorBlendAttachmentState maxRgb(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, rgbWriteMask);
+        constexpr ColorBlendAttachmentState maxRgba(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, rgbaWriteMask);
 
-        constexpr ColorBlendAttachmentState normalR(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, colorWriteMaskR);
-        constexpr ColorBlendAttachmentState normalRG(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, colorWriteMaskRG);
-        constexpr ColorBlendAttachmentState normalRGB(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, colorWriteMaskRGB);
-        constexpr ColorBlendAttachmentState normalRGBA(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, colorWriteMaskRGBA);
+        constexpr ColorBlendAttachmentState normalR(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rWriteMask);
+        constexpr ColorBlendAttachmentState normalRg(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgWriteMask);
+        constexpr ColorBlendAttachmentState normalRgb(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgbWriteMask);
+        constexpr ColorBlendAttachmentState normalRgba(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgbaWriteMask);
     } // namespace blendstates
 
     namespace renderstates
     {
         constexpr ColorBlendState dontBlendWriteR(blendstates::writeR);
-        constexpr ColorBlendState dontBlendWriteRG(blendstates::writeRG);
-        constexpr ColorBlendState dontBlendWriteRGB(blendstates::writeRGB);
-        constexpr ColorBlendState dontBlendWriteRGBA(blendstates::writeRGBA);
+        constexpr ColorBlendState dontBlendWriteRg(blendstates::writeRg);
+        constexpr ColorBlendState dontBlendWriteRgb(blendstates::writeRgb);
+        constexpr ColorBlendState dontBlendWriteRgba(blendstates::writeRgba);
 
         constexpr ColorBlendState blendAddWriteR(blendstates::addR);
-        constexpr ColorBlendState blendAddWriteRG(blendstates::addRG);
-        constexpr ColorBlendState blendAddWriteRGB(blendstates::addRGB);
-        constexpr ColorBlendState blendAddWriteRGBA(blendstates::addRGBA);
+        constexpr ColorBlendState blendAddWriteRg(blendstates::addRg);
+        constexpr ColorBlendState blendAddWriteRgb(blendstates::addRgb);
+        constexpr ColorBlendState blendAddWriteRgba(blendstates::addRgba);
 
         constexpr ColorBlendState blendSubtractWriteR(blendstates::subtractR);
-        constexpr ColorBlendState blendSubtractWriteRG(blendstates::subtractRG);
-        constexpr ColorBlendState blendSubtractWriteRGB(blendstates::subtractRGB);
-        constexpr ColorBlendState blendSubtractWriteRGBA(blendstates::subtractRGBA);
+        constexpr ColorBlendState blendSubtractWriteRg(blendstates::subtractRg);
+        constexpr ColorBlendState blendSubtractWriteRgb(blendstates::subtractRgb);
+        constexpr ColorBlendState blendSubtractWriteRgba(blendstates::subtractRgba);
 
         constexpr ColorBlendState blendReverseSubtractWriteR(blendstates::reverseSubtractR);
-        constexpr ColorBlendState blendReverseSubtractWriteRG(blendstates::reverseSubtractRG);
-        constexpr ColorBlendState blendReverseSubtractWriteRGB(blendstates::reverseSubtractRGB);
-        constexpr ColorBlendState blendReverseSubtractWriteRGBA(blendstates::reverseSubtractRGBA);
+        constexpr ColorBlendState blendReverseSubtractWriteRg(blendstates::reverseSubtractRg);
+        constexpr ColorBlendState blendReverseSubtractWriteRgb(blendstates::reverseSubtractRgb);
+        constexpr ColorBlendState blendReverseSubtractWriteRgba(blendstates::reverseSubtractRgba);
 
         constexpr ColorBlendState blendMinWriteR(blendstates::minR);
-        constexpr ColorBlendState blendMinWriteRG(blendstates::minRG);
-        constexpr ColorBlendState blendMinWriteRGB(blendstates::minRGB);
-        constexpr ColorBlendState blendMinWriteRGBA(blendstates::minRGBA);
+        constexpr ColorBlendState blendMinWriteRg(blendstates::minRg);
+        constexpr ColorBlendState blendMinWriteRgb(blendstates::minRgb);
+        constexpr ColorBlendState blendMinWriteRgba(blendstates::minRgba);
 
-        constexpr ColorBlendState blendMaxWriteR(blendstates::maxRG);
-        constexpr ColorBlendState blendMaxWriteRG(blendstates::maxRG);
-        constexpr ColorBlendState blendMaxWriteRGB(blendstates::maxRGB);
-        constexpr ColorBlendState blendMaxWriteRGBA(blendstates::maxRGBA);
+        constexpr ColorBlendState blendMaxWriteR(blendstates::maxRg);
+        constexpr ColorBlendState blendMaxWriteRg(blendstates::maxRg);
+        constexpr ColorBlendState blendMaxWriteRgb(blendstates::maxRgb);
+        constexpr ColorBlendState blendMaxWriteRgba(blendstates::maxRgba);
 
         constexpr ColorBlendState blendNormalWriteR(blendstates::normalR);
-        constexpr ColorBlendState blendNormalWriteRG(blendstates::normalRG);
-        constexpr ColorBlendState blendNormalWriteRGB(blendstates::normalRGB);
-        constexpr ColorBlendState blendNormalWriteRGBA(blendstates::normalRGBA);
+        constexpr ColorBlendState blendNormalWriteRg(blendstates::normalRg);
+        constexpr ColorBlendState blendNormalWriteRgb(blendstates::normalRgb);
+        constexpr ColorBlendState blendNormalWriteRgba(blendstates::normalRgba);
 
         constexpr ColorLogicOpState logicClearWriteR(blendstates::writeR, VK_LOGIC_OP_CLEAR);
         constexpr ColorLogicOpState logicAndWriteR(blendstates::writeR, VK_LOGIC_OP_AND);
@@ -181,55 +181,55 @@ namespace magma
         constexpr ColorLogicOpState logicNandWriteR(blendstates::writeR, VK_LOGIC_OP_NAND);
         constexpr ColorLogicOpState logicSetWriteR(blendstates::writeR, VK_LOGIC_OP_SET);
 
-        constexpr ColorLogicOpState logicClearWriteRG(blendstates::writeRG, VK_LOGIC_OP_CLEAR);
-        constexpr ColorLogicOpState logicAndWriteRG(blendstates::writeRG, VK_LOGIC_OP_AND);
-        constexpr ColorLogicOpState logicReverseAndWriteRG(blendstates::writeRG, VK_LOGIC_OP_AND_REVERSE);
-        constexpr ColorLogicOpState logicCopyWriteRG(blendstates::writeRG, VK_LOGIC_OP_COPY);
-        constexpr ColorLogicOpState logicInvertedAndWriteRG(blendstates::writeRG, VK_LOGIC_OP_AND_INVERTED);
-        constexpr ColorLogicOpState logicNoOpWriteRG(blendstates::writeRG, VK_LOGIC_OP_NO_OP);
-        constexpr ColorLogicOpState logicXorWriteRG(blendstates::writeRG, VK_LOGIC_OP_XOR);
-        constexpr ColorLogicOpState logicOrWriteRG(blendstates::writeRG, VK_LOGIC_OP_OR);
-        constexpr ColorLogicOpState logicNorWriteRG(blendstates::writeRG, VK_LOGIC_OP_NOR);
-        constexpr ColorLogicOpState logicEquivalentWriteRG(blendstates::writeRG, VK_LOGIC_OP_EQUIVALENT);
-        constexpr ColorLogicOpState logicInvertRG(blendstates::writeRG, VK_LOGIC_OP_INVERT);
-        constexpr ColorLogicOpState logicReverseOrWriteRG(blendstates::writeRG, VK_LOGIC_OP_OR_REVERSE);
-        constexpr ColorLogicOpState logicInvertedCopyWriteRG(blendstates::writeRG, VK_LOGIC_OP_COPY_INVERTED);
-        constexpr ColorLogicOpState logicInvertedOrWriteRG(blendstates::writeRG, VK_LOGIC_OP_OR_INVERTED);
-        constexpr ColorLogicOpState logicNandWriteRG(blendstates::writeRG, VK_LOGIC_OP_NAND);
-        constexpr ColorLogicOpState logicSetWriteRG(blendstates::writeRG, VK_LOGIC_OP_SET);
+        constexpr ColorLogicOpState logicClearWriteRg(blendstates::writeRg, VK_LOGIC_OP_CLEAR);
+        constexpr ColorLogicOpState logicAndWriteRg(blendstates::writeRg, VK_LOGIC_OP_AND);
+        constexpr ColorLogicOpState logicReverseAndWriteRg(blendstates::writeRg, VK_LOGIC_OP_AND_REVERSE);
+        constexpr ColorLogicOpState logicCopyWriteRg(blendstates::writeRg, VK_LOGIC_OP_COPY);
+        constexpr ColorLogicOpState logicInvertedAndWriteRg(blendstates::writeRg, VK_LOGIC_OP_AND_INVERTED);
+        constexpr ColorLogicOpState logicNoOpWriteRg(blendstates::writeRg, VK_LOGIC_OP_NO_OP);
+        constexpr ColorLogicOpState logicXorWriteRg(blendstates::writeRg, VK_LOGIC_OP_XOR);
+        constexpr ColorLogicOpState logicOrWriteRg(blendstates::writeRg, VK_LOGIC_OP_OR);
+        constexpr ColorLogicOpState logicNorWriteRg(blendstates::writeRg, VK_LOGIC_OP_NOR);
+        constexpr ColorLogicOpState logicEquivalentWriteRg(blendstates::writeRg, VK_LOGIC_OP_EQUIVALENT);
+        constexpr ColorLogicOpState logicInvertRg(blendstates::writeRg, VK_LOGIC_OP_INVERT);
+        constexpr ColorLogicOpState logicReverseOrWriteRg(blendstates::writeRg, VK_LOGIC_OP_OR_REVERSE);
+        constexpr ColorLogicOpState logicInvertedCopyWriteRg(blendstates::writeRg, VK_LOGIC_OP_COPY_INVERTED);
+        constexpr ColorLogicOpState logicInvertedOrWriteRg(blendstates::writeRg, VK_LOGIC_OP_OR_INVERTED);
+        constexpr ColorLogicOpState logicNandWriteRg(blendstates::writeRg, VK_LOGIC_OP_NAND);
+        constexpr ColorLogicOpState logicSetWriteRg(blendstates::writeRg, VK_LOGIC_OP_SET);
 
-        constexpr ColorLogicOpState logicClearWriteRGB(blendstates::writeRGB, VK_LOGIC_OP_CLEAR);
-        constexpr ColorLogicOpState logicAndWriteRGB(blendstates::writeRGB, VK_LOGIC_OP_AND);
-        constexpr ColorLogicOpState logicReverseAndWriteRGB(blendstates::writeRGB, VK_LOGIC_OP_AND_REVERSE);
-        constexpr ColorLogicOpState logicCopyWriteRGB(blendstates::writeRGB, VK_LOGIC_OP_COPY);
-        constexpr ColorLogicOpState logicInvertedAndWriteRGB(blendstates::writeRGB, VK_LOGIC_OP_AND_INVERTED);
-        constexpr ColorLogicOpState logicNoOpWriteRGB(blendstates::writeRGB, VK_LOGIC_OP_NO_OP);
-        constexpr ColorLogicOpState logicXorWriteRGB(blendstates::writeRGB, VK_LOGIC_OP_XOR);
-        constexpr ColorLogicOpState logicOrWriteRGB(blendstates::writeRGB, VK_LOGIC_OP_OR);
-        constexpr ColorLogicOpState logicNorWriteRGB(blendstates::writeRGB, VK_LOGIC_OP_NOR);
-        constexpr ColorLogicOpState logicEquivalentWriteRGB(blendstates::writeRGB, VK_LOGIC_OP_EQUIVALENT);
-        constexpr ColorLogicOpState logicInvertRGB(blendstates::writeRGB, VK_LOGIC_OP_INVERT);
-        constexpr ColorLogicOpState logicReverseOrWriteRGB(blendstates::writeRGB, VK_LOGIC_OP_OR_REVERSE);
-        constexpr ColorLogicOpState logicInvertedCopyWriteRGB(blendstates::writeRGB, VK_LOGIC_OP_COPY_INVERTED);
-        constexpr ColorLogicOpState logicInvertedOrWriteRGB(blendstates::writeRGB, VK_LOGIC_OP_OR_INVERTED);
-        constexpr ColorLogicOpState logicNandWriteRGB(blendstates::writeRGB, VK_LOGIC_OP_NAND);
-        constexpr ColorLogicOpState logicSetWriteRGB(blendstates::writeRGB, VK_LOGIC_OP_SET);
+        constexpr ColorLogicOpState logicClearWriteRgb(blendstates::writeRgb, VK_LOGIC_OP_CLEAR);
+        constexpr ColorLogicOpState logicAndWriteRgb(blendstates::writeRgb, VK_LOGIC_OP_AND);
+        constexpr ColorLogicOpState logicReverseAndWriteRgb(blendstates::writeRgb, VK_LOGIC_OP_AND_REVERSE);
+        constexpr ColorLogicOpState logicCopyWriteRgb(blendstates::writeRgb, VK_LOGIC_OP_COPY);
+        constexpr ColorLogicOpState logicInvertedAndWriteRgb(blendstates::writeRgb, VK_LOGIC_OP_AND_INVERTED);
+        constexpr ColorLogicOpState logicNoOpWriteRgb(blendstates::writeRgb, VK_LOGIC_OP_NO_OP);
+        constexpr ColorLogicOpState logicXorWriteRgb(blendstates::writeRgb, VK_LOGIC_OP_XOR);
+        constexpr ColorLogicOpState logicOrWriteRgb(blendstates::writeRgb, VK_LOGIC_OP_OR);
+        constexpr ColorLogicOpState logicNorWriteRgb(blendstates::writeRgb, VK_LOGIC_OP_NOR);
+        constexpr ColorLogicOpState logicEquivalentWriteRgb(blendstates::writeRgb, VK_LOGIC_OP_EQUIVALENT);
+        constexpr ColorLogicOpState logicInvertRgb(blendstates::writeRgb, VK_LOGIC_OP_INVERT);
+        constexpr ColorLogicOpState logicReverseOrWriteRgb(blendstates::writeRgb, VK_LOGIC_OP_OR_REVERSE);
+        constexpr ColorLogicOpState logicInvertedCopyWriteRgb(blendstates::writeRgb, VK_LOGIC_OP_COPY_INVERTED);
+        constexpr ColorLogicOpState logicInvertedOrWriteRgb(blendstates::writeRgb, VK_LOGIC_OP_OR_INVERTED);
+        constexpr ColorLogicOpState logicNandWriteRgb(blendstates::writeRgb, VK_LOGIC_OP_NAND);
+        constexpr ColorLogicOpState logicSetWriteRgb(blendstates::writeRgb, VK_LOGIC_OP_SET);
 
-        constexpr ColorLogicOpState logicClearWriteRGBA(blendstates::writeRGBA, VK_LOGIC_OP_CLEAR);
-        constexpr ColorLogicOpState logicAndWriteRGBA(blendstates::writeRGBA, VK_LOGIC_OP_AND);
-        constexpr ColorLogicOpState logicReverseAndWriteRGBA(blendstates::writeRGBA, VK_LOGIC_OP_AND_REVERSE);
-        constexpr ColorLogicOpState logicCopyWriteRGBA(blendstates::writeRGBA, VK_LOGIC_OP_COPY);
-        constexpr ColorLogicOpState logicInvertedAndWriteRGBA(blendstates::writeRGBA, VK_LOGIC_OP_AND_INVERTED);
-        constexpr ColorLogicOpState logicNoOpWriteRGBA(blendstates::writeRGBA, VK_LOGIC_OP_NO_OP);
-        constexpr ColorLogicOpState logicXorWriteRGBA(blendstates::writeRGBA, VK_LOGIC_OP_XOR);
-        constexpr ColorLogicOpState logicOrWriteRGBA(blendstates::writeRGBA, VK_LOGIC_OP_OR);
-        constexpr ColorLogicOpState logicNorWriteRGBA(blendstates::writeRGBA, VK_LOGIC_OP_NOR);
-        constexpr ColorLogicOpState logicEquivalentWriteRGBA(blendstates::writeRGBA, VK_LOGIC_OP_EQUIVALENT);
-        constexpr ColorLogicOpState logicInvertRGBA(blendstates::writeRGBA, VK_LOGIC_OP_INVERT);
-        constexpr ColorLogicOpState logicReverseOrWriteRGBA(blendstates::writeRGBA, VK_LOGIC_OP_OR_REVERSE);
-        constexpr ColorLogicOpState logicInvertedCopyWriteRGBA(blendstates::writeRGBA, VK_LOGIC_OP_COPY_INVERTED);
-        constexpr ColorLogicOpState logicInvertedOrWriteRGBA(blendstates::writeRGBA, VK_LOGIC_OP_OR_INVERTED);
-        constexpr ColorLogicOpState logicNandWriteRGBA(blendstates::writeRGBA, VK_LOGIC_OP_NAND);
-        constexpr ColorLogicOpState logicSetWriteRGBA(blendstates::writeRGBA, VK_LOGIC_OP_SET);
+        constexpr ColorLogicOpState logicClearWriteRgba(blendstates::writeRgba, VK_LOGIC_OP_CLEAR);
+        constexpr ColorLogicOpState logicAndWriteRgba(blendstates::writeRgba, VK_LOGIC_OP_AND);
+        constexpr ColorLogicOpState logicReverseAndWriteRgba(blendstates::writeRgba, VK_LOGIC_OP_AND_REVERSE);
+        constexpr ColorLogicOpState logicCopyWriteRgba(blendstates::writeRgba, VK_LOGIC_OP_COPY);
+        constexpr ColorLogicOpState logicInvertedAndWriteRgba(blendstates::writeRgba, VK_LOGIC_OP_AND_INVERTED);
+        constexpr ColorLogicOpState logicNoOpWriteRgba(blendstates::writeRgba, VK_LOGIC_OP_NO_OP);
+        constexpr ColorLogicOpState logicXorWriteRgba(blendstates::writeRgba, VK_LOGIC_OP_XOR);
+        constexpr ColorLogicOpState logicOrWriteRgba(blendstates::writeRgba, VK_LOGIC_OP_OR);
+        constexpr ColorLogicOpState logicNorWriteRgba(blendstates::writeRgba, VK_LOGIC_OP_NOR);
+        constexpr ColorLogicOpState logicEquivalentWriteRgba(blendstates::writeRgba, VK_LOGIC_OP_EQUIVALENT);
+        constexpr ColorLogicOpState logicInvertRgba(blendstates::writeRgba, VK_LOGIC_OP_INVERT);
+        constexpr ColorLogicOpState logicReverseOrWriteRgba(blendstates::writeRgba, VK_LOGIC_OP_OR_REVERSE);
+        constexpr ColorLogicOpState logicInvertedCopyWriteRgba(blendstates::writeRgba, VK_LOGIC_OP_COPY_INVERTED);
+        constexpr ColorLogicOpState logicInvertedOrWriteRgba(blendstates::writeRgba, VK_LOGIC_OP_OR_INVERTED);
+        constexpr ColorLogicOpState logicNandWriteRgba(blendstates::writeRgba, VK_LOGIC_OP_NAND);
+        constexpr ColorLogicOpState logicSetWriteRgba(blendstates::writeRgba, VK_LOGIC_OP_SET);
     } // namespace renderstates
 } // namespace magma

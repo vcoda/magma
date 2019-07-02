@@ -47,7 +47,7 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
         renderstates::fillCullBackCCW,
         renderstates::noMultisample,
         renderstates::depthAlwaysDontWrite,
-        ManagedColorBlendState(renderstates::dontBlendWriteRGBA) // Make copyable
+        ManagedColorBlendState(renderstates::dontBlendWriteRgba) // Make copyable
     }
 {
     // Set attributes to initial state

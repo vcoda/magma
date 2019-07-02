@@ -69,7 +69,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, const Pipel
         renderstates::fillCullNoneCCW,
         renderstates::noMultisample,
         renderstates::depthAlwaysDontWrite,
-        renderstates::dontBlendWriteRGBA,
+        renderstates::dontBlendWriteRgba,
         std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
         pipelineLayout,
         this->renderPass,
