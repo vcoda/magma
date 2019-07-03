@@ -49,7 +49,7 @@ namespace magma
         constexpr AnisotropicSamplerState(VkFilter magFilter,
             VkFilter minFilter,
             VkSamplerAddressMode addressMode,
-            float maxAnisotropy = std::numeric_limits<float>::max());
+            float maxAnisotropy = std::numeric_limits<float>::max()) noexcept;
     };
 }
 
