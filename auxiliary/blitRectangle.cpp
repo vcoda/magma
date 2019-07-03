@@ -74,7 +74,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, const Pipel
         std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
         renderstates::nullVertexInput,
         renderstates::triangleList,
-        renderstates::fillCullNoneCCW,
+        NV_fill_rectangle ? renderstates::fillRectangleCullNoneCCW : renderstates::fillCullNoneCCW,
         renderstates::noMultisample,
         renderstates::depthAlwaysDontWrite,
         renderstates::dontBlendWriteRgba,
