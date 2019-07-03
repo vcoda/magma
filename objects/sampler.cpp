@@ -62,33 +62,7 @@ Sampler::Sampler(std::shared_ptr<Device> device, VkFilter magFilter, VkFilter mi
     VkSamplerMipmapMode mipmapMode, VkSamplerAddressMode addressMode,
     float mipLodBias /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_SAMPLER, std::move(device), std::move(allocator))
-{
-    VkSamplerCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = 0;
-    info.magFilter = magFilter;
-    info.minFilter = minFilter;
-    info.mipmapMode = mipmapMode;
-    info.addressModeU = addressMode;
-    info.addressModeV = addressMode;
-    info.addressModeW = addressMode;
-    info.mipLodBias = mipLodBias;
-    info.anisotropyEnable = VK_FALSE;
-    info.maxAnisotropy = 0.f;
-    info.compareEnable = VK_FALSE;
-    info.compareOp = VK_COMPARE_OP_NEVER;
-    info.minLod = 0.f;
-    info.maxLod = 1.f;
-    info.borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK;
-    info.unnormalizedCoordinates = VK_FALSE;
-    const VkResult create = vkCreateSampler(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create sampler");
-}
-
-Sampler::Sampler(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator):
-    NonDispatchable(VK_OBJECT_TYPE_SAMPLER, std::move(device), std::move(allocator))
+    Sampler(device, SamplerState(magFilter, minFilter, mipmapMode, addressMode), mipLodBias, allocator)
 {}
 
 Sampler::~Sampler()
