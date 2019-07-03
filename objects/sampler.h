@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class SamplerState;
+    class DepthSamplerState;
 
     /* Sampler objects represent the state of an image sampler
        which is used by the implementation to read image data
@@ -45,6 +46,19 @@ namespace magma
     protected:
         Sampler(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator);
+    };
+
+    /* Depth sampler for shadow mapping etc. */
+
+    class DepthSampler : public Sampler
+    {
+    public:
+        explicit DepthSampler(std::shared_ptr<Device> device,
+            const DepthSamplerState& state,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        explicit DepthSampler(std::shared_ptr<Device> device,
+            VkCompareOp compareOp,
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
     /* Unnormalized sampler specifies the usage of unnormalized texel coordinates

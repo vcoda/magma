@@ -51,6 +51,18 @@ namespace magma
             VkSamplerAddressMode addressMode,
             float maxAnisotropy = std::numeric_limits<float>::max()) noexcept;
     };
+
+    class DepthSamplerState
+    {
+    public:
+        constexpr DepthSamplerState(VkCompareOp compareOp) noexcept;
+        constexpr size_t hash() const noexcept;
+        constexpr bool operator==(const DepthSamplerState&) const noexcept;
+
+    private:
+        VkCompareOp compareOp;
+        friend class DepthSampler;
+    };
 }
 
 #include "samplerState.inl"
@@ -140,5 +152,14 @@ namespace magma
         constexpr SamplerState magCubicMinMipLinearMirrorClampToEdge(VK_FILTER_CUBIC_EXT, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE);
         constexpr SamplerState magMinCubicMipLinearMirrorClampToEdge(VK_FILTER_CUBIC_EXT, VK_FILTER_CUBIC_EXT, VK_SAMPLER_MIPMAP_MODE_LINEAR, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE);
         constexpr AnisotropicSamplerState magMinCubicMipAnisotropicMirrorClampToEdge(VK_FILTER_CUBIC_EXT, VK_FILTER_CUBIC_EXT, VK_SAMPLER_ADDRESS_MODE_REPEAT);
+
+        constexpr DepthSamplerState compareNever(VK_COMPARE_OP_NEVER);
+        constexpr DepthSamplerState compareLess(VK_COMPARE_OP_LESS);
+        constexpr DepthSamplerState compareEqual(VK_COMPARE_OP_EQUAL);
+        constexpr DepthSamplerState compareLessOrEqual(VK_COMPARE_OP_LESS_OR_EQUAL);
+        constexpr DepthSamplerState compareGreater(VK_COMPARE_OP_GREATER);
+        constexpr DepthSamplerState compareNotEqual(VK_COMPARE_OP_NOT_EQUAL);
+        constexpr DepthSamplerState compareGreaterOrEqual(VK_COMPARE_OP_GREATER_OR_EQUAL);
+        constexpr DepthSamplerState compareAlways(VK_COMPARE_OP_ALWAYS);
     } // namespace samplers
 } // namespace magma

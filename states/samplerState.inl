@@ -57,4 +57,22 @@ constexpr AnisotropicSamplerState::AnisotropicSamplerState(VkFilter magFilter, V
     anisotropyEnable = true;
     this->maxAnisotropy = maxAnisotropy; // Value will be clamped against hardware limit
 }
+
+constexpr DepthSamplerState::DepthSamplerState(VkCompareOp compareOp) noexcept:
+    compareOp(compareOp)
+{}
+
+constexpr size_t DepthSamplerState::hash() const noexcept
+{
+    size_t hash = 0;
+    std::hash<VkCompareOp> hasher;
+    internal::hashCombine(hash, hasher(compareOp));
+    return hash;
+}
+
+constexpr bool DepthSamplerState::operator==(const DepthSamplerState& other) const noexcept
+{
+    return (compareOp == other.compareOp);
+}
+
 } // namespace magma
