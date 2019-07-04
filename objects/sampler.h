@@ -32,7 +32,6 @@ namespace magma
     public:
         explicit Sampler(std::shared_ptr<Device> device,
             const SamplerState& state,
-            float mipLodBias = 0.f,
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit Sampler(std::shared_ptr<Device> device,
             VkFilter magFilter,

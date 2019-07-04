@@ -64,10 +64,10 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, const Pipel
     descriptorSetLayout = std::make_shared<DescriptorSetLayout>(device, bindings::FragmentStageBinding(0, imageSampler), 0, allocator);
     descriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
     // Create texture samplers
-    nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, 0.f, allocator);
-    bilinearSampler = std::make_shared<Sampler>(device, samplers::magMinLinearMipNearestClampToEdge, 0.f, allocator);
+    nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, allocator);
+    bilinearSampler = std::make_shared<Sampler>(device, samplers::magMinLinearMipNearestClampToEdge, allocator);
     if (IMG_filter_cubic)
-        cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, 0.f, allocator);
+        cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, allocator);
     // Create blit pipeline
     pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, std::initializer_list<VkPushConstantRange>{}, allocator);
     pipeline = std::make_shared<GraphicsPipeline>(device, nullptr,

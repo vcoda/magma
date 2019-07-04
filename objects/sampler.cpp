@@ -27,7 +27,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
-    float mipLodBias /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_SAMPLER, std::move(device), std::move(allocator))
 {
@@ -42,7 +41,7 @@ Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
     info.addressModeU = state.addressMode;
     info.addressModeV = state.addressMode;
     info.addressModeW = state.addressMode;
-    info.mipLodBias = mipLodBias;
+    info.mipLodBias = 0.f;
     info.anisotropyEnable = MAGMA_BOOLEAN(state.anisotropyEnable);
     if (info.anisotropyEnable)
         info.maxAnisotropy = std::min(state.maxAnisotropy, properties.limits.maxSamplerAnisotropy);
