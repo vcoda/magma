@@ -51,14 +51,14 @@ namespace magma
 
     /* Depth sampler for shadow mapping etc. */
 
+    /* Depth map comparison sampler. Used to enable comparison against 
+       a reference value during lookups. */
+
     class DepthSampler : public Sampler
     {
     public:
         explicit DepthSampler(std::shared_ptr<Device> device,
             const DepthSamplerState& state,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-        explicit DepthSampler(std::shared_ptr<Device> device,
-            VkCompareOp compareOp,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 

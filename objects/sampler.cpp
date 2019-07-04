@@ -78,8 +78,8 @@ DepthSampler::DepthSampler(std::shared_ptr<Device> device, const DepthSamplerSta
     info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
     info.pNext = nullptr;
     info.flags = 0;
-    info.magFilter = VK_FILTER_NEAREST;
-    info.minFilter = VK_FILTER_NEAREST;
+    info.magFilter = state.magFilter;
+    info.minFilter = state.minFilter;
     info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
     info.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
     info.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
@@ -90,17 +90,12 @@ DepthSampler::DepthSampler(std::shared_ptr<Device> device, const DepthSamplerSta
     info.compareEnable = VK_TRUE;
     info.compareOp = state.compareOp;
     info.minLod = 0.f;
-    info.maxLod = 1.f;
+    info.maxLod = std::numeric_limits<float>::max();
     info.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
     info.unnormalizedCoordinates = VK_FALSE;
     const VkResult create = vkCreateSampler(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create depth sampler");
 }
-
-DepthSampler::DepthSampler(std::shared_ptr<Device> device, VkCompareOp compareOp,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    DepthSampler(device, DepthSamplerState(compareOp), allocator)
-{}
 
 UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool linearFilter,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
