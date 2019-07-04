@@ -57,13 +57,6 @@ Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
     MAGMA_THROW_FAILURE(create, "failed to create sampler");
 }
 
-Sampler::Sampler(std::shared_ptr<Device> device, VkFilter magFilter, VkFilter minFilter,
-    VkSamplerMipmapMode mipmapMode, VkSamplerAddressMode addressMode,
-    float mipLodBias /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Sampler(device, SamplerState(magFilter, minFilter, mipmapMode, addressMode), mipLodBias, allocator)
-{}
-
 Sampler::~Sampler()
 {
     vkDestroySampler(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
