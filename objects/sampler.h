@@ -49,7 +49,18 @@ namespace magma
             NonDispatchable(VK_OBJECT_TYPE_SAMPLER, std::move(device), std::move(allocator)) {}
     };
 
-    /* Depth sampler for shadow mapping etc. */
+    /* Sampler with level of detail control. */
+
+    class LodSampler : public Sampler
+    {
+    public:
+        explicit LodSampler(std::shared_ptr<Device> device,
+            const SamplerState& state,
+            float mipLodBias,
+            float minLod,
+            float maxLod,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+    };
 
     /* Depth map comparison sampler. Used to enable comparison against 
        a reference value during lookups. */

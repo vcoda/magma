@@ -70,6 +70,38 @@ Sampler::~Sampler()
     vkDestroySampler(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
+LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state, 
+    float mipLodBias, float minLod, float maxLod, 
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Sampler(std::move(device), std::move(allocator))
+{
+    const VkPhysicalDeviceProperties properties = this->device->getPhysicalDevice()->getProperties();
+    VkSamplerCreateInfo info;
+    info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+    info.pNext = nullptr;
+    info.flags = 0;
+    info.magFilter = state.magFilter;
+    info.minFilter = state.minFilter;
+    info.mipmapMode = state.mipmapMode;
+    info.addressModeU = state.addressMode;
+    info.addressModeV = state.addressMode;
+    info.addressModeW = state.addressMode;
+    info.mipLodBias = mipLodBias;
+    info.anisotropyEnable = MAGMA_BOOLEAN(state.anisotropyEnable);
+    if (info.anisotropyEnable)
+        info.maxAnisotropy = std::min(state.maxAnisotropy, properties.limits.maxSamplerAnisotropy);
+    else
+        info.maxAnisotropy = 0.f;
+    info.compareEnable = VK_FALSE;
+    info.compareOp = VK_COMPARE_OP_NEVER;
+    info.minLod = minLod;
+    info.maxLod = maxLod;
+    info.borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK;
+    info.unnormalizedCoordinates = VK_FALSE;
+    const VkResult create = vkCreateSampler(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    MAGMA_THROW_FAILURE(create, "failed to create LOD sampler");
+}
+
 DepthSampler::DepthSampler(std::shared_ptr<Device> device, const DepthSamplerState& state,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Sampler(std::move(device), std::move(allocator))

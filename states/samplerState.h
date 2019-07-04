@@ -41,6 +41,7 @@ namespace magma
         bool anisotropyEnable;
         float maxAnisotropy;
         friend class Sampler;
+        friend class LodSampler;
     };
 
     class AnisotropicSamplerState : public SamplerState
