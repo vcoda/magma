@@ -52,7 +52,8 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std
     VkFramebufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, std::move(renderPass->getDevice()), std::move(allocator)),
-    attachments(std::move(attachments))
+    attachments(std::move(attachments)),
+    extent{this->attachments.front()->getImage()->getMipExtent(0).width, this->attachments.front()->getImage()->getMipExtent(0).height}
 {
     VkFramebufferCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -64,13 +65,11 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std
         dereferencedAttachments.put(*attachment);
     info.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
     info.pAttachments = dereferencedAttachments;
-    const VkExtent3D extent = attachments.front()->getImage()->getMipExtent(0);
     info.width = extent.width;
     info.height = extent.height;
     info.layers = 1;
     const VkResult create = vkCreateFramebuffer(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create framebuffer");
-    this->extent = VkExtent2D{extent.width, extent.height};
 }
 
 Framebuffer::~Framebuffer()
