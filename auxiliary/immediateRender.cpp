@@ -156,9 +156,9 @@ std::shared_ptr<ShaderModule> ImmediateRender::createShader(bool vertexShader) c
 {
 #include "spirv/output/immv"
     if (vertexShader)
-        return std::make_shared<ShaderModule>(device, vsImm, sizeof(vsImm), allocator);
+        return std::make_shared<ShaderModule>(device, vsImm, allocator);
 #include "spirv/output/immf"
-    return std::make_shared<ShaderModule>(device, fsImm, sizeof(fsImm), allocator);
+    return std::make_shared<ShaderModule>(device, fsImm, allocator);
 }
 
 std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimitiveTopology topology)
