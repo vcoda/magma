@@ -26,6 +26,28 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shared_ptr<const ImageView> attachment,
+    VkFramebufferCreateFlags flags /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, std::move(renderPass->getDevice()), std::move(allocator)),
+    attachments(attachments),
+    extent{attachment->getImage()->getMipExtent(0).width, attachment->getImage()->getMipExtent(0).height}
+{
+    VkFramebufferCreateInfo info;
+    info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+    info.pNext = nullptr;
+    info.flags = flags;
+    info.renderPass = *renderPass;
+    info.attachmentCount = 1;
+    const VkImageView imageView = *attachment;
+    info.pAttachments = &imageView;
+    info.width = extent.width;
+    info.height = extent.height;
+    info.layers = 1;
+    const VkResult create = vkCreateFramebuffer(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    MAGMA_THROW_FAILURE(create, "failed to create framebuffer");
+}
+
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std::vector<std::shared_ptr<const ImageView>>& attachments,
     VkFramebufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
@@ -50,12 +72,6 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std
     MAGMA_THROW_FAILURE(create, "failed to create framebuffer");
     this->extent = VkExtent2D{extent.width, extent.height};
 }
-
-Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shared_ptr<const ImageView> attachment,
-    VkFramebufferCreateFlags flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Framebuffer(std::move(renderPass), std::vector<std::shared_ptr<const ImageView>>{attachment}, flags, std::move(allocator))
-{}
 
 Framebuffer::~Framebuffer()
 {
