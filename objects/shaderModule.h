@@ -36,6 +36,11 @@ namespace magma
         explicit ShaderModule(std::shared_ptr<Device> device,
             const std::vector<uint32_t>& bytecode,
             std::shared_ptr<IAllocator> allocator = nullptr);
+        template<size_t BytecodeSize>
+        explicit ShaderModule(std::shared_ptr<Device> device,
+            const uint32_t (&bytecode)[BytecodeSize],
+            std::shared_ptr<IAllocator> allocator = nullptr):
+            ShaderModule(std::move(device), bytecode, BytecodeSize, std::move(allocator)) {}
         ~ShaderModule();
     };
 } // namespace magma
