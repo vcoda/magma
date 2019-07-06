@@ -125,6 +125,11 @@ namespace magma
         constexpr ColorBlendAttachmentState normalRg(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgWriteMask);
         constexpr ColorBlendAttachmentState normalRgb(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgbWriteMask);
         constexpr ColorBlendAttachmentState normalRgba(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgbaWriteMask);
+
+        constexpr ColorBlendAttachmentState multiplyR(true, VK_BLEND_FACTOR_DST_COLOR, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rWriteMask);
+        constexpr ColorBlendAttachmentState multiplyRg(true, VK_BLEND_FACTOR_DST_COLOR, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgWriteMask);
+        constexpr ColorBlendAttachmentState multiplyRgb(true, VK_BLEND_FACTOR_DST_COLOR, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgbWriteMask);
+        constexpr ColorBlendAttachmentState multiplyRgba(true, VK_BLEND_FACTOR_DST_COLOR, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgbaWriteMask);
     } // namespace blendstates
 
     namespace renderstates
@@ -163,6 +168,11 @@ namespace magma
         constexpr ColorBlendState blendNormalWriteRg(blendstates::normalRg);
         constexpr ColorBlendState blendNormalWriteRgb(blendstates::normalRgb);
         constexpr ColorBlendState blendNormalWriteRgba(blendstates::normalRgba);
+
+        constexpr ColorBlendState blendMultiplyWriteR(blendstates::multiplyR);
+        constexpr ColorBlendState blendMultiplyWriteRg(blendstates::multiplyRg);
+        constexpr ColorBlendState blendMultiplyWriteRgb(blendstates::multiplyRgb);
+        constexpr ColorBlendState blendMultiplyWriteRgba(blendstates::multiplyRgba);
 
         constexpr ColorLogicOpState logicClearWriteR(blendstates::writeR, VK_LOGIC_OP_CLEAR);
         constexpr ColorLogicOpState logicAndWriteR(blendstates::writeR, VK_LOGIC_OP_AND);
