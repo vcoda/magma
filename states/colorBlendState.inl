@@ -20,17 +20,45 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(bool blendEnable,
+constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
+    VkColorComponentFlags colorWriteMask /* R, G, B, A */) noexcept
+{
+    blendEnable = VK_FALSE;
+    srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+    dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+    colorBlendOp = VK_BLEND_OP_ADD;
+    srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+    dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+    alphaBlendOp = VK_BLEND_OP_ADD;
+    this->colorWriteMask = colorWriteMask;
+}
+
+constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
     VkBlendFactor srcBlendFactor, VkBlendFactor dstBlendFactor, VkBlendOp blendOp,
     VkColorComponentFlags colorWriteMask /* R, G, B, A */) noexcept
 {
-    this->blendEnable = MAGMA_BOOLEAN(blendEnable);
+    blendEnable = VK_TRUE;
     srcColorBlendFactor = srcBlendFactor;
     dstColorBlendFactor = dstBlendFactor;
     colorBlendOp = blendOp;
     srcAlphaBlendFactor = srcBlendFactor;
     dstAlphaBlendFactor = dstBlendFactor;
     alphaBlendOp = blendOp;
+    this->colorWriteMask = colorWriteMask;
+}
+
+constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
+    VkBlendFactor srcColorBlendFactor, VkBlendFactor dstColorBlendFactor, VkBlendOp colorBlendOp,
+    VkBlendFactor srcAlphaBlendFactor, VkBlendFactor dstAlphaBlendFactor, VkBlendOp alphaBlendOp,
+    VkColorComponentFlags colorWriteMask /* R, G, B, A */) noexcept
+{
+    blendEnable = VK_TRUE;
+    this->srcColorBlendFactor = srcColorBlendFactor;
+    this->dstColorBlendFactor = dstColorBlendFactor;
+    this->colorBlendOp = colorBlendOp;
+    this->srcAlphaBlendFactor = srcAlphaBlendFactor;
+    this->dstAlphaBlendFactor = dstAlphaBlendFactor;
+    this->alphaBlendOp = alphaBlendOp;
     this->colorWriteMask = colorWriteMask;
 }
 

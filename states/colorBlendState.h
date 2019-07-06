@@ -26,12 +26,30 @@ namespace magma
 
     struct ColorBlendAttachmentState : VkPipelineColorBlendAttachmentState
     {
-        constexpr ColorBlendAttachmentState(bool blendEnable,
-            VkBlendFactor srcBlendFactor,
-            VkBlendFactor dstBlendFactor,
+        constexpr ColorBlendAttachmentState(VkColorComponentFlags colorWriteMask = 
+                VK_COLOR_COMPONENT_R_BIT | 
+                VK_COLOR_COMPONENT_G_BIT |
+                VK_COLOR_COMPONENT_B_BIT | 
+                VK_COLOR_COMPONENT_A_BIT) noexcept;
+        constexpr ColorBlendAttachmentState(VkBlendFactor srcBlendFactor, 
+            VkBlendFactor dstBlendFactor, 
             VkBlendOp blendOp,
-            VkColorComponentFlags colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
-                VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT) noexcept;
+            VkColorComponentFlags colorWriteMask = 
+                VK_COLOR_COMPONENT_R_BIT | 
+                VK_COLOR_COMPONENT_G_BIT |
+                VK_COLOR_COMPONENT_B_BIT | 
+                VK_COLOR_COMPONENT_A_BIT) noexcept;
+        constexpr ColorBlendAttachmentState(VkBlendFactor srcColorBlendFactor,
+            VkBlendFactor dstColorBlendFactor,
+            VkBlendOp colorBlendOp,
+            VkBlendFactor srcAlphaBlendFactor,
+            VkBlendFactor dstAlphaBlendFactor,
+            VkBlendOp alphaBlendOp,
+            VkColorComponentFlags colorWriteMask = 
+                VK_COLOR_COMPONENT_R_BIT | 
+                VK_COLOR_COMPONENT_G_BIT |
+                VK_COLOR_COMPONENT_B_BIT | 
+                VK_COLOR_COMPONENT_A_BIT) noexcept;
         constexpr size_t hash() const noexcept;
         constexpr bool operator==(const ColorBlendAttachmentState&) const noexcept;
     };
@@ -91,51 +109,51 @@ namespace magma
         constexpr VkColorComponentFlags rgbWriteMask(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT);
         constexpr VkColorComponentFlags rgbaWriteMask(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
 
-        constexpr ColorBlendAttachmentState writeR(false, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rWriteMask);
-        constexpr ColorBlendAttachmentState writeRg(false, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgWriteMask);
-        constexpr ColorBlendAttachmentState writeRgb(false, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgbWriteMask);
-        constexpr ColorBlendAttachmentState writeRgba(false, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgbaWriteMask);
+        constexpr ColorBlendAttachmentState writeR(rWriteMask);
+        constexpr ColorBlendAttachmentState writeRg(rgWriteMask);
+        constexpr ColorBlendAttachmentState writeRgb(rgbWriteMask);
+        constexpr ColorBlendAttachmentState writeRgba(rgbaWriteMask);
 
-        constexpr ColorBlendAttachmentState addR(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rWriteMask);
-        constexpr ColorBlendAttachmentState addRg(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rgWriteMask);
-        constexpr ColorBlendAttachmentState addRgb(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rgbWriteMask);
-        constexpr ColorBlendAttachmentState addRgba(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rgbaWriteMask);
+        constexpr ColorBlendAttachmentState addR(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rWriteMask);
+        constexpr ColorBlendAttachmentState addRg(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rgWriteMask);
+        constexpr ColorBlendAttachmentState addRgb(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rgbWriteMask);
+        constexpr ColorBlendAttachmentState addRgba(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rgbaWriteMask);
 
-        constexpr ColorBlendAttachmentState subtractR(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_SUBTRACT, rWriteMask);
-        constexpr ColorBlendAttachmentState subtractRg(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_SUBTRACT, rgWriteMask);
-        constexpr ColorBlendAttachmentState subtractRgb(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_SUBTRACT, rgbWriteMask);
-        constexpr ColorBlendAttachmentState subtractRgba(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_SUBTRACT, rgbaWriteMask);
+        constexpr ColorBlendAttachmentState subtractR(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_SUBTRACT, rWriteMask);
+        constexpr ColorBlendAttachmentState subtractRg(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_SUBTRACT, rgWriteMask);
+        constexpr ColorBlendAttachmentState subtractRgb(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_SUBTRACT, rgbWriteMask);
+        constexpr ColorBlendAttachmentState subtractRgba(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_SUBTRACT, rgbaWriteMask);
 
-        constexpr ColorBlendAttachmentState reverseSubtractR(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_REVERSE_SUBTRACT, rWriteMask);
-        constexpr ColorBlendAttachmentState reverseSubtractRg(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_REVERSE_SUBTRACT, rgWriteMask);
-        constexpr ColorBlendAttachmentState reverseSubtractRgb(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_REVERSE_SUBTRACT, rgbWriteMask);
-        constexpr ColorBlendAttachmentState reverseSubtractRgba(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_REVERSE_SUBTRACT, rgbaWriteMask);
+        constexpr ColorBlendAttachmentState reverseSubtractR(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_REVERSE_SUBTRACT, rWriteMask);
+        constexpr ColorBlendAttachmentState reverseSubtractRg(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_REVERSE_SUBTRACT, rgWriteMask);
+        constexpr ColorBlendAttachmentState reverseSubtractRgb(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_REVERSE_SUBTRACT, rgbWriteMask);
+        constexpr ColorBlendAttachmentState reverseSubtractRgba(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_REVERSE_SUBTRACT, rgbaWriteMask);
 
-        constexpr ColorBlendAttachmentState minR(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MIN, rWriteMask);
-        constexpr ColorBlendAttachmentState minRg(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MIN, rgWriteMask);
-        constexpr ColorBlendAttachmentState minRgb(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MIN, rgbWriteMask);
-        constexpr ColorBlendAttachmentState minRgba(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MIN, rgbaWriteMask);
+        constexpr ColorBlendAttachmentState minR(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MIN, rWriteMask);
+        constexpr ColorBlendAttachmentState minRg(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MIN, rgWriteMask);
+        constexpr ColorBlendAttachmentState minRgb(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MIN, rgbWriteMask);
+        constexpr ColorBlendAttachmentState minRgba(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MIN, rgbaWriteMask);
 
-        constexpr ColorBlendAttachmentState maxR(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, rWriteMask);
-        constexpr ColorBlendAttachmentState maxRg(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, rgWriteMask);
-        constexpr ColorBlendAttachmentState maxRgb(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, rgbWriteMask);
-        constexpr ColorBlendAttachmentState maxRgba(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, rgbaWriteMask);
+        constexpr ColorBlendAttachmentState maxR(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, rWriteMask);
+        constexpr ColorBlendAttachmentState maxRg(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, rgWriteMask);
+        constexpr ColorBlendAttachmentState maxRgb(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, rgbWriteMask);
+        constexpr ColorBlendAttachmentState maxRgba(VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, rgbaWriteMask);
 
-        constexpr ColorBlendAttachmentState multiplyR(true, VK_BLEND_FACTOR_DST_COLOR, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rWriteMask);
-        constexpr ColorBlendAttachmentState multiplyRg(true, VK_BLEND_FACTOR_DST_COLOR, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgWriteMask);
-        constexpr ColorBlendAttachmentState multiplyRgb(true, VK_BLEND_FACTOR_DST_COLOR, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgbWriteMask);
-        constexpr ColorBlendAttachmentState multiplyRgba(true, VK_BLEND_FACTOR_DST_COLOR, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgbaWriteMask);
+        constexpr ColorBlendAttachmentState multiplyR(VK_BLEND_FACTOR_DST_COLOR, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rWriteMask);
+        constexpr ColorBlendAttachmentState multiplyRg(VK_BLEND_FACTOR_DST_COLOR, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgWriteMask);
+        constexpr ColorBlendAttachmentState multiplyRgb(VK_BLEND_FACTOR_DST_COLOR, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgbWriteMask);
+        constexpr ColorBlendAttachmentState multiplyRgba(VK_BLEND_FACTOR_DST_COLOR, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgbaWriteMask);
 
-        constexpr ColorBlendAttachmentState normalR(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rWriteMask);
-        constexpr ColorBlendAttachmentState normalRg(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgWriteMask);
-        constexpr ColorBlendAttachmentState normalRgb(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgbWriteMask);
-        constexpr ColorBlendAttachmentState normalRgba(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgbaWriteMask);
+        constexpr ColorBlendAttachmentState normalR(VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rWriteMask);
+        constexpr ColorBlendAttachmentState normalRg(VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgWriteMask);
+        constexpr ColorBlendAttachmentState normalRgb(VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgbWriteMask);
+        constexpr ColorBlendAttachmentState normalRgba(VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgbaWriteMask);
 
         // 1 - (1 - a) (1 - b) = a * (1 - b) + b = a + (1 - a) * b
-        constexpr ColorBlendAttachmentState screenR(true, VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rWriteMask);
-        constexpr ColorBlendAttachmentState screenRg(true, VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rgWriteMask);
-        constexpr ColorBlendAttachmentState screenRgb(true, VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rgbWriteMask);
-        constexpr ColorBlendAttachmentState screenRgba(true, VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rgbaWriteMask);
+        constexpr ColorBlendAttachmentState screenR(VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rWriteMask);
+        constexpr ColorBlendAttachmentState screenRg(VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rgWriteMask);
+        constexpr ColorBlendAttachmentState screenRgb(VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rgbWriteMask);
+        constexpr ColorBlendAttachmentState screenRgba(VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rgbaWriteMask);
     } // namespace blendstates
 
     namespace renderstates
