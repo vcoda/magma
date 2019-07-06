@@ -87,6 +87,19 @@ constexpr bool ColorBlendAttachmentState::operator==(const ColorBlendAttachmentS
         (colorWriteMask == other.colorWriteMask);
 }
 
+constexpr AdvancedColorBlendAttachmentState::AdvancedColorBlendAttachmentState(VkBlendOp advancedBlendOp,
+    VkColorComponentFlags colorWriteMask /* R, G, B, A */) noexcept
+{
+    this->blendEnable = VK_TRUE;
+    srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+    dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+    colorBlendOp = advancedBlendOp;
+    srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+    dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+    alphaBlendOp = advancedBlendOp;
+    this->colorWriteMask = colorWriteMask;
+}
+
 constexpr ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& attachment,
     bool logicOpEnable /* false */,
     VkLogicOp logicOp /* VK_LOGIC_OP_CLEAR */,
