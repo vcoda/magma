@@ -121,16 +121,17 @@ namespace magma
         constexpr ColorBlendAttachmentState maxRgb(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, rgbWriteMask);
         constexpr ColorBlendAttachmentState maxRgba(true, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_MAX, rgbaWriteMask);
 
-        constexpr ColorBlendAttachmentState normalR(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rWriteMask);
-        constexpr ColorBlendAttachmentState normalRg(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgWriteMask);
-        constexpr ColorBlendAttachmentState normalRgb(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgbWriteMask);
-        constexpr ColorBlendAttachmentState normalRgba(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgbaWriteMask);
-
         constexpr ColorBlendAttachmentState multiplyR(true, VK_BLEND_FACTOR_DST_COLOR, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rWriteMask);
         constexpr ColorBlendAttachmentState multiplyRg(true, VK_BLEND_FACTOR_DST_COLOR, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgWriteMask);
         constexpr ColorBlendAttachmentState multiplyRgb(true, VK_BLEND_FACTOR_DST_COLOR, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgbWriteMask);
         constexpr ColorBlendAttachmentState multiplyRgba(true, VK_BLEND_FACTOR_DST_COLOR, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, rgbaWriteMask);
 
+        constexpr ColorBlendAttachmentState normalR(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rWriteMask);
+        constexpr ColorBlendAttachmentState normalRg(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgWriteMask);
+        constexpr ColorBlendAttachmentState normalRgb(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgbWriteMask);
+        constexpr ColorBlendAttachmentState normalRgba(true, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_OP_ADD, rgbaWriteMask);
+
+        // 1 - (1 - a) (1 - b) = a * (1 - b) + b = a + (1 - a) * b
         constexpr ColorBlendAttachmentState screenR(true, VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rWriteMask);
         constexpr ColorBlendAttachmentState screenRg(true, VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rgWriteMask);
         constexpr ColorBlendAttachmentState screenRgb(true, VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR, VK_BLEND_FACTOR_ONE, VK_BLEND_OP_ADD, rgbWriteMask);
@@ -169,15 +170,15 @@ namespace magma
         constexpr ColorBlendState blendMaxWriteRgb(blendstates::maxRgb);
         constexpr ColorBlendState blendMaxWriteRgba(blendstates::maxRgba);
 
-        constexpr ColorBlendState blendNormalWriteR(blendstates::normalR);
-        constexpr ColorBlendState blendNormalWriteRg(blendstates::normalRg);
-        constexpr ColorBlendState blendNormalWriteRgb(blendstates::normalRgb);
-        constexpr ColorBlendState blendNormalWriteRgba(blendstates::normalRgba);
-
         constexpr ColorBlendState blendMultiplyWriteR(blendstates::multiplyR);
         constexpr ColorBlendState blendMultiplyWriteRg(blendstates::multiplyRg);
         constexpr ColorBlendState blendMultiplyWriteRgb(blendstates::multiplyRgb);
         constexpr ColorBlendState blendMultiplyWriteRgba(blendstates::multiplyRgba);
+
+        constexpr ColorBlendState blendNormalWriteR(blendstates::normalR);
+        constexpr ColorBlendState blendNormalWriteRg(blendstates::normalRg);
+        constexpr ColorBlendState blendNormalWriteRgb(blendstates::normalRgb);
+        constexpr ColorBlendState blendNormalWriteRgba(blendstates::normalRgba);
 
         constexpr ColorBlendState blendScreenWriteR(blendstates::screenR);
         constexpr ColorBlendState blendScreenWriteRg(blendstates::screenRg);
