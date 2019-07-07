@@ -94,15 +94,15 @@ namespace magma
         constexpr StencilOpState stencilInvertDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INVERT, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
         constexpr StencilOpState stencilInvertDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INVERT, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
 
-        constexpr StencilOpState stencilIncrClampDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_CLAMP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
-        constexpr StencilOpState stencilIncrWrapDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_WRAP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
-        constexpr StencilOpState stencilDecrClampDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_CLAMP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
-        constexpr StencilOpState stencilDecrWrapDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_WRAP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+        constexpr StencilOpState stencilIncrementClampDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_CLAMP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+        constexpr StencilOpState stencilIncrementWrapDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_WRAP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+        constexpr StencilOpState stencilDecrementClampDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_CLAMP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+        constexpr StencilOpState stencilDecrementWrapDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_WRAP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
 
-        constexpr StencilOpState stencilIncrClampDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_CLAMP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
-        constexpr StencilOpState stencilIncrWrapDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_WRAP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
-        constexpr StencilOpState stencilDecrClampDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_CLAMP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
-        constexpr StencilOpState stencilDecrWrapDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_WRAP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+        constexpr StencilOpState stencilIncrementClampDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_CLAMP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+        constexpr StencilOpState stencilIncrementWrapDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_WRAP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+        constexpr StencilOpState stencilDecrementClampDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_CLAMP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
+        constexpr StencilOpState stencilDecrementWrapDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_WRAP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
 
         constexpr DepthStencilState depthLess(VK_COMPARE_OP_LESS, true);
         constexpr DepthStencilState depthEqual(VK_COMPARE_OP_EQUAL, true);
