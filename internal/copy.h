@@ -34,6 +34,15 @@ namespace magma
         }
 
         template<typename Type>
+        inline Type *copy(const void *const src)
+        {
+            MAGMA_ASSERT(src);
+            Type *dst = new Type();
+            memcpy(dst, src, sizeof(Type));
+            return dst;
+        }
+
+        template<typename Type>
         inline Type *copy(Type *const dst, const Type *const src)
         {
             MAGMA_ASSERT(dst);
