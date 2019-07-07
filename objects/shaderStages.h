@@ -52,7 +52,7 @@ namespace magma
             mapEntryCount = static_cast<uint32_t>(entryMap.size());
             pMapEntries = internal::copyInitializerList(entryMap);
             dataSize = sizeof(Block);
-            pData = internal::copyArray(reinterpret_cast<const char *>(&data), dataSize);
+            pData = internal::copyArray<char>(&data, dataSize);
         }
         Specialization(const Specialization&);
         Specialization& operator=(const Specialization&);

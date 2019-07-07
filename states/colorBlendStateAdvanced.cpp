@@ -36,7 +36,7 @@ AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendAttachm
     logicOpEnable = VK_FALSE;
     logicOp = VK_LOGIC_OP_CLEAR;
     attachmentCount = 1;
-    pAttachments = internal::copyArray(static_cast<const VkPipelineColorBlendAttachmentState *>(&attachment), 1);
+    pAttachments = internal::copyArray<VkPipelineColorBlendAttachmentState>(&attachment, 1);
     blendConstants[0] = 0.f;
     blendConstants[1] = 0.f;
     blendConstants[2] = 0.f;

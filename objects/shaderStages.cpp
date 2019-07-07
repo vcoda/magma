@@ -27,7 +27,7 @@ Specialization::Specialization(const Specialization& other)
     pMapEntries = internal::copyArray(other.pMapEntries, mapEntryCount);
     dataSize = other.dataSize;
     try {
-        pData = internal::copyArray(reinterpret_cast<const char *>(other.pData), dataSize);
+        pData = internal::copyArray<char>(other.pData, dataSize);
     } catch (const std::bad_alloc& exc)
     {
         delete[] pMapEntries;
@@ -43,7 +43,7 @@ Specialization& Specialization::operator=(const Specialization& other)
         pMapEntries = internal::copyArray(other.pMapEntries, mapEntryCount);
         dataSize = other.dataSize;
         try {
-            pData = internal::copyArray(reinterpret_cast<const char *>(other.pData), dataSize);
+            pData = internal::copyArray<char>(other.pData, dataSize);
         } catch (const std::bad_alloc& exc)
         {
             delete[] pMapEntries;

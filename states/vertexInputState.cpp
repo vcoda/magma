@@ -36,10 +36,10 @@ ManagedVertexInputState::ManagedVertexInputState(const std::initializer_list<Ver
     pNext = nullptr;
     flags = 0;
     vertexBindingDescriptionCount = MAGMA_COUNT(bindings);
-    pVertexBindingDescriptions = internal::copyArray(static_cast<const VkVertexInputBindingDescription *>(bindings.begin()), bindings.size());
+    pVertexBindingDescriptions = internal::copyArray<VkVertexInputBindingDescription>(bindings.begin(), bindings.size());
     vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
     try {
-        pVertexAttributeDescriptions = internal::copyArray(static_cast<const VkVertexInputAttributeDescription *>(attributes.begin()), attributes.size());
+        pVertexAttributeDescriptions = internal::copyArray<VkVertexInputAttributeDescription>(attributes.begin(), attributes.size());
     } catch (const std::bad_alloc& exc)
     {
         delete[] pVertexBindingDescriptions;

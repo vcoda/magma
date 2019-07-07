@@ -30,7 +30,7 @@ ManagedColorBlendState::ManagedColorBlendState(const std::vector<ColorBlendAttac
     this->logicOpEnable = VK_FALSE;
     this->logicOp = VK_LOGIC_OP_CLEAR;
     attachmentCount = MAGMA_COUNT(attachments);
-    pAttachments = internal::copyArray(static_cast<const VkPipelineColorBlendAttachmentState *>(attachments.data()), attachments.size());
+    pAttachments = internal::copyArray<VkPipelineColorBlendAttachmentState>(attachments.data(), attachments.size());
     MAGMA_ASSERT(blendConstants.size() >= 4);
     const auto c = blendConstants.begin();
     this->blendConstants[0] = c[0];
