@@ -234,6 +234,7 @@
     <ClInclude Include="..\..\objects\uniformTexelBuffer.h" />
     <ClInclude Include="..\..\objects\vertexBuffer.h" />
     <ClInclude Include="..\..\states\colorBlendState.h" />
+    <ClInclude Include="..\..\states\colorBlendStateAdvanced.h" />
     <ClInclude Include="..\..\states\depthStencilState.h" />
     <ClInclude Include="..\..\states\inputAssemblyState.h" />
     <ClInclude Include="..\..\states\multisampleState.h" />
@@ -316,6 +317,7 @@
     <ClCompile Include="..\..\objects\uniformTexelBuffer.cpp" />
     <ClCompile Include="..\..\objects\vertexBuffer.cpp" />
     <ClCompile Include="..\..\states\colorBlendState.cpp" />
+    <ClCompile Include="..\..\states\colorBlendStateAdvanced.cpp" />
     <ClCompile Include="..\..\states\multisampleState.cpp" />
     <ClCompile Include="..\..\states\vertexInputState.cpp" />
     <ClCompile Include="..\..\states\viewportState.cpp" />
@@ -401,6 +403,7 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
     <None Include="..\..\objects\storageBuffer.inl" />
     <None Include="..\..\objects\vertexBuffer.inl" />
     <None Include="..\..\states\colorBlendState.inl" />
+    <None Include="..\..\states\colorBlendStateAdvanced.inl" />
     <None Include="..\..\states\depthStencilState.inl" />
     <None Include="..\..\states\inputAssemblyState.inl" />
     <None Include="..\..\states\multisampleState.inl" />

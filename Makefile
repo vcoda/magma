@@ -92,6 +92,7 @@ MAGMA_OBJS= \
 	objects/vertexBuffer.o \
 	\
 	states/colorBlendState.o \
+	states/colorBlendStateAdvanced.o \
 	states/multisampleState.o \
 	states/vertexInputState.o \
 	states/viewportState.o

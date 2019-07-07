@@ -58,6 +58,7 @@ Magma was written mainly around [Vulkan 1.0](https://renderdoc.org/vkspec_chunke
 
 * VK_AMD_rasterization_order
 * VK_AMD_shader_core_properties
+* VK_EXT_blend_operation_advanced
 * VK_EXT_conditional_rendering
 * VK_EXT_conservative_rasterization
 * VK_EXT_debug_utils

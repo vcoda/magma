@@ -69,6 +69,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/vertexBuffer.h"
 
 #include "states/colorBlendState.h"
+#include "states/colorBlendStateAdvanced.h"
 #include "states/depthStencilState.h"
 #include "states/inputAssemblyState.h"
 #include "states/multisampleState.h"

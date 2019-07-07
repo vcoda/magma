@@ -54,17 +54,6 @@ namespace magma
         constexpr bool operator==(const ColorBlendAttachmentState&) const noexcept;
     };
 
-    struct AdvancedColorBlendAttachmentState : VkPipelineColorBlendAttachmentState
-    {
-    public:
-        constexpr AdvancedColorBlendAttachmentState(VkBlendOp advancedBlendOp,
-            VkColorComponentFlags colorWriteMask = 
-                VK_COLOR_COMPONENT_R_BIT | 
-                VK_COLOR_COMPONENT_G_BIT |
-                VK_COLOR_COMPONENT_B_BIT | 
-                VK_COLOR_COMPONENT_A_BIT) noexcept;
-    };
-
     /* Blending combines the incoming source fragment's R, G, B, and A values
        with the destination R, G, B, and A values of each sample stored in the framebuffer
        at the fragment's location. Blending is performed for each pixel sample,
