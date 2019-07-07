@@ -25,7 +25,7 @@ namespace magma
     namespace internal
     {
         template<typename Type>
-        inline Type *copy(const Type *const src)
+        inline Type *copy(const void *const src)
         {
             MAGMA_ASSERT(src);
             Type *dst = new Type();
@@ -34,7 +34,7 @@ namespace magma
         }
 
         template<typename Type>
-        inline Type *copy(const void *const src)
+        inline Type *copy(const Type *const src)
         {
             MAGMA_ASSERT(src);
             Type *dst = new Type();
@@ -49,6 +49,16 @@ namespace magma
             MAGMA_ASSERT(src);
             MAGMA_ASSERT(dst != src);
             memcpy(dst, src, sizeof(Type));
+            return dst;
+        }
+
+        template<typename Type>
+        inline Type *copyArray(const void *const src, size_t count)
+        {
+            MAGMA_ASSERT(src);
+            MAGMA_ASSERT(count > 0);
+            Type *dst = new Type[count];
+            memcpy(dst, src, sizeof(Type) * count);
             return dst;
         }
 
