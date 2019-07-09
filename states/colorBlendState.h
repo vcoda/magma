@@ -69,7 +69,7 @@ namespace magma
         constexpr bool operator==(const ColorBlendState&) const noexcept;
 
     protected:
-        ColorBlendState() {}
+        constexpr ColorBlendState() noexcept;
     };
 
     /* Managed color blend state takes care about array of blend attachment states and 

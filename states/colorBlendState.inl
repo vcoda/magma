@@ -87,6 +87,21 @@ constexpr bool ColorBlendAttachmentState::operator==(const ColorBlendAttachmentS
         (colorWriteMask == other.colorWriteMask);
 }
 
+constexpr ColorBlendState::ColorBlendState() noexcept
+{
+    sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    logicOpEnable = VK_FALSE;
+    logicOp = VK_LOGIC_OP_CLEAR;
+    attachmentCount = 0;
+    pAttachments = nullptr;
+    blendConstants[0] = 0.f;
+    blendConstants[1] = 0.f;
+    blendConstants[2] = 0.f;
+    blendConstants[3] = 0.f;
+}
+
 constexpr ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& attachment,
     bool logicOpEnable /* false */,
     VkLogicOp logicOp /* VK_LOGIC_OP_CLEAR */,
