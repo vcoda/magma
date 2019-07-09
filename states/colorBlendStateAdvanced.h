@@ -44,6 +44,10 @@ namespace magma
             bool srcPremultiplied,
             bool dstPremultiplied,
             VkBlendOverlapEXT blendOverlap);
+        AdvancedColorBlendState(const std::vector<AdvancedColorBlendAttachmentState>& attachments,
+            bool srcPremultiplied,
+            bool dstPremultiplied,
+            VkBlendOverlapEXT blendOverlap);
         AdvancedColorBlendState(const AdvancedColorBlendState&);
         AdvancedColorBlendState& operator=(const AdvancedColorBlendState&);
         ~AdvancedColorBlendState();
