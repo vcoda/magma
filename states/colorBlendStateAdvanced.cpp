@@ -30,17 +30,9 @@ AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendAttachm
     colorBlendAdvanced->srcPremultiplied = MAGMA_BOOLEAN(srcPremultiplied);
     colorBlendAdvanced->dstPremultiplied = MAGMA_BOOLEAN(dstPremultiplied);
     colorBlendAdvanced->blendOverlap = blendOverlap;
-    sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     pNext = colorBlendAdvanced;
-    flags = 0;
-    logicOpEnable = VK_FALSE;
-    logicOp = VK_LOGIC_OP_CLEAR;
     attachmentCount = 1;
     pAttachments = internal::copyArray<VkPipelineColorBlendAttachmentState>(&attachment, 1);
-    blendConstants[0] = 0.f;
-    blendConstants[1] = 0.f;
-    blendConstants[2] = 0.f;
-    blendConstants[3] = 0.f;
 }
 
 AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendState& other)

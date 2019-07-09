@@ -37,7 +37,7 @@ namespace magma
         constexpr bool operator==(const AdvancedColorBlendAttachmentState&) const noexcept;
     };
 
-    struct AdvancedColorBlendState final : VkPipelineColorBlendStateCreateInfo
+    struct AdvancedColorBlendState final : ColorBlendState
     {
     public:
         AdvancedColorBlendState(const AdvancedColorBlendAttachmentState& attachment,
