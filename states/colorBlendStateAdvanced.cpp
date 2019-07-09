@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "colorBlendStateAdvanced.h"
 #include "../internal/copy.h"
-#include "../internal/compareArrays.h"
+#include "../internal/compare.h"
 
 namespace magma
 {
@@ -100,7 +100,7 @@ size_t AdvancedColorBlendState::hash() const noexcept
 bool AdvancedColorBlendState::operator==(const AdvancedColorBlendState& other) const noexcept
 {
     return (sType == other.sType) &&
-        (0 == memcmp(pNext, other.pNext, sizeof(VkPipelineColorBlendAdvancedStateCreateInfoEXT))) &&
+        (internal::compare<VkPipelineColorBlendAdvancedStateCreateInfoEXT>(pNext, other.pNext)) &&
         (flags == other.flags) &&
         (logicOpEnable == other.logicOpEnable) &&
         (logicOp == other.logicOp) &&

@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "vertexInputState.h"
 #include "../internal/copy.h"
-#include "../internal/compareArrays.h"
+#include "../internal/compare.h"
 
 namespace magma
 {

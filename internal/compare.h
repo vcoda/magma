@@ -17,21 +17,39 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <cstring>
-#include "shared.h"
 
 namespace magma
 {
     namespace internal
     {
         template<typename Type>
+        inline bool compare(const void *const src, const void *const dst)
+        {
+            if (!src && !dst)
+                return true;
+            if (!src || !dst || src == dst)
+                return false;
+            return !memcmp(src, dst, sizeof(Type));
+        }
+
+        template<typename Type>
+        inline bool compare(const Type *const src, const Type *const dst)
+        {
+            if (!src && !dst)
+                return true;
+            if (!src || !dst || src == dst)
+                return false;
+            return !memcmp(src, dst, sizeof(Type));
+        }
+
+        template<typename Type>
         inline bool compareArrays(const Type *const src, const Type *const dst, size_t count) noexcept
         {
             if (!src && !dst)
                 return true;
-            if (!src || !dst)
+            if (!src || !dst || src == dst)
                 return false;
-            MAGMA_ASSERT(src != dst);
-            return (memcmp(src, dst, sizeof(Type) * count) == 0);
+            return !memcmp(src, dst, sizeof(Type) * count);
         }
     } // namespace internal
 } // namespace magma

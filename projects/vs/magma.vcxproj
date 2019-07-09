@@ -157,7 +157,7 @@
     <ClInclude Include="..\..\helpers\stringize.h" />
     <ClInclude Include="..\..\helpers\uniformArray.h" />
     <ClInclude Include="..\..\internal\allocable.h" />
-    <ClInclude Include="..\..\internal\compareArrays.h" />
+    <ClInclude Include="..\..\internal\compare.h" />
     <ClInclude Include="..\..\internal\copy.h" />
     <ClInclude Include="..\..\internal\copyMemory.h" />
     <ClInclude Include="..\..\internal\hash.h" />

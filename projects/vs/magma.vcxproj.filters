@@ -390,14 +390,14 @@
     <ClInclude Include="..\..\internal\hash.h">
       <Filter>Header Files\internal</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\internal\compareArrays.h">
-      <Filter>Header Files\internal</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\helpers\executeCommandBuffer.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\states\colorBlendStateAdvanced.h">
       <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\internal\compare.h">
+      <Filter>Header Files\internal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

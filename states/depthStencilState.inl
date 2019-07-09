@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "../internal/hash.h"
+#include "../internal/compare.h"
 
 namespace magma
 {
@@ -96,8 +97,8 @@ constexpr bool DepthStencilState::operator==(const DepthStencilState& other) con
         (depthTestEnable == other.depthTestEnable) &&
         (depthWriteEnable == other.depthWriteEnable) &&
         (depthCompareOp == other.depthCompareOp) &&
-        (memcmp(&front, &other.front, sizeof(VkStencilOpState)) == 0) &&
-        (memcmp(&back, &other.back, sizeof(VkStencilOpState)) == 0) &&
+        (internal::compare(&front, &other.front)) &&
+        (internal::compare(&back, &other.back)) &&
         (stencilTestEnable == other.stencilTestEnable) &&
         (depthBoundsTestEnable == other.depthBoundsTestEnable) &&
         (minDepthBounds == other.minDepthBounds) &&
