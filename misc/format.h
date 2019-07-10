@@ -43,6 +43,7 @@ namespace magma
         constexpr bool floatingPoint() const noexcept;
         constexpr bool sRGB() const noexcept;
         constexpr size_t size() const noexcept;
+        size_t blockCompressedSize() const noexcept;
         std::pair<int, int> blockFootprint() const noexcept;
 
     private:
