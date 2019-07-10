@@ -120,7 +120,7 @@ uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore,
 
 uint32_t Swapchain::getImageCount() const
 {
-    uint32_t imageCount = 0;
+    uint32_t imageCount;
     const VkResult get = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &imageCount, nullptr);
     MAGMA_THROW_FAILURE(get, "failed to get swapchain image count");
     return imageCount;

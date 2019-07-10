@@ -48,21 +48,21 @@ VkShaderStatisticsInfoAMD Pipeline::getShaderStatistics(VkShaderStageFlagBits st
     MAGMA_DEVICE_EXTENSION(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO_EXTENSION_NAME);
     size_t infoSize = sizeof(VkShaderStatisticsInfoAMD);
     VkShaderStatisticsInfoAMD info;
-    const VkResult get = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_STATISTICS_AMD, &infoSize, &info);
-    MAGMA_THROW_FAILURE(get, "failed to get shader statistics");
+    const VkResult getStatistics = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_STATISTICS_AMD, &infoSize, &info);
+    MAGMA_THROW_FAILURE(getStatistics, "failed to get shader statistics");
     return info;
 }
 
 std::vector<uint8_t> Pipeline::getShaderBinary(VkShaderStageFlagBits stage) const
 {
     MAGMA_DEVICE_EXTENSION(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO_EXTENSION_NAME);
-    size_t binarySize = 0;
+    size_t binarySize;
     const VkResult getSize = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_BINARY_AMD, &binarySize, nullptr);
     if (VK_SUCCESS == getSize)
     {
         std::vector<uint8_t> binary(binarySize);
-        const VkResult get = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_BINARY_AMD, &binarySize, binary.data());
-        if (VK_SUCCESS == get)
+        const VkResult getBinary = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_BINARY_AMD, &binarySize, binary.data());
+        if (VK_SUCCESS == getBinary)
             return binary;
     }
     return {};
@@ -71,13 +71,13 @@ std::vector<uint8_t> Pipeline::getShaderBinary(VkShaderStageFlagBits stage) cons
 std::string Pipeline::getShaderDisassembly(VkShaderStageFlagBits stage) const
 {
     MAGMA_DEVICE_EXTENSION(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO_EXTENSION_NAME);
-    size_t disassemblySize = 0;
+    size_t disassemblySize;
     const VkResult getSize = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, nullptr);
     if (VK_SUCCESS == getSize)
     {
-        std::vector<char> disassembly(disassemblySize);
-        const VkResult get = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, disassembly.data());
-        if (VK_SUCCESS == get)
+        std::vector<char> disassembly(disassemblySize, '\0'); // May be large enough, so avoid stack allocation
+        const VkResult getDisassembly = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, disassembly.data());
+        if (VK_SUCCESS == getDisassembly)
             return std::string(&disassembly[0]);
     }
     return std::string();

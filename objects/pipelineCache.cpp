@@ -51,7 +51,7 @@ PipelineCache::~PipelineCache()
 
 std::vector<uint8_t> PipelineCache::getData() const
 {
-    size_t dataSize = 0;
+    size_t dataSize;
     const VkResult getSize = vkGetPipelineCacheData(MAGMA_HANDLE(device), handle, &dataSize, nullptr);
     MAGMA_THROW_FAILURE(getSize, "failed to get pipeline cache size");
     std::vector<uint8_t> data(dataSize);

@@ -144,7 +144,7 @@ bool PhysicalDevice::checkExtensionSupport(const char *extensionName) const
 
 bool PhysicalDevice::getSurfaceSupport(std::shared_ptr<Surface> surface) const noexcept
 {
-    VkBool32 supported = VK_FALSE;
+    VkBool32 supported;
     const VkResult get = vkGetPhysicalDeviceSurfaceSupportKHR(handle, 0, *surface, &supported);
     return (VK_SUCCESS == get) && (VK_TRUE == supported);
 }
@@ -159,7 +159,7 @@ VkSurfaceCapabilitiesKHR PhysicalDevice::getSurfaceCapabilities(std::shared_ptr<
 
 std::vector<VkSurfaceFormatKHR> PhysicalDevice::getSurfaceFormats(std::shared_ptr<const Surface> surface) const
 {
-    uint32_t formatCount = 0;
+    uint32_t formatCount;
     const VkResult count = vkGetPhysicalDeviceSurfaceFormatsKHR(handle, *surface, &formatCount, nullptr);
     MAGMA_THROW_FAILURE(count, "failed to count surface formats");
     std::vector<VkSurfaceFormatKHR> surfaceFormats(formatCount);
@@ -173,7 +173,7 @@ std::vector<VkSurfaceFormatKHR> PhysicalDevice::getSurfaceFormats(std::shared_pt
 
 std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared_ptr<const Surface> surface) const
 {
-    uint32_t presentModeCount = 0;
+    uint32_t presentModeCount;
     const VkResult count = vkGetPhysicalDeviceSurfacePresentModesKHR(handle, *surface, &presentModeCount, nullptr);
     MAGMA_THROW_FAILURE(count, "failed to count surface present modes");
     std::vector<VkPresentModeKHR> surfacePresentModes(presentModeCount);
@@ -234,7 +234,7 @@ void PhysicalDevice::getExtendedProperties(void *properties) const
 
 std::vector<VkDisplayPropertiesKHR> PhysicalDevice::getDisplayProperties() const
 {
-    uint32_t propertyCount = 0;
+    uint32_t propertyCount;
     MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceDisplayPropertiesKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
     const VkResult count = vkGetPhysicalDeviceDisplayPropertiesKHR(handle, &propertyCount, nullptr);
     MAGMA_THROW_FAILURE(count, "failed to count display properties");
@@ -249,7 +249,7 @@ std::vector<VkDisplayPropertiesKHR> PhysicalDevice::getDisplayProperties() const
 
 std::vector<VkDisplayPlanePropertiesKHR> PhysicalDevice::getDisplayPlaneProperties() const
 {
-    uint32_t propertyCount = 0;
+    uint32_t propertyCount;
     MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceDisplayPropertiesKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
     const VkResult count = vkGetPhysicalDeviceDisplayPlanePropertiesKHR(handle, &propertyCount, nullptr);
     MAGMA_THROW_FAILURE(count, "failed to count display plane properties");
@@ -264,7 +264,7 @@ std::vector<VkDisplayPlanePropertiesKHR> PhysicalDevice::getDisplayPlaneProperti
 
 std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint32_t planeIndex) const
 {
-    uint32_t displayCount = 0;
+    uint32_t displayCount;
     MAGMA_INSTANCE_EXTENSION(vkGetDisplayPlaneSupportedDisplaysKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
     const VkResult count = vkGetDisplayPlaneSupportedDisplaysKHR(handle, planeIndex, &displayCount, nullptr);
     MAGMA_THROW_FAILURE(count, "failed to count supported displays");
