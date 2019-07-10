@@ -41,6 +41,7 @@ namespace magma
         void bindMemoryDeviceGroup(const std::vector<uint32_t>& deviceIndices,
             std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0);
+        VkDeviceSize getSize() const noexcept { return size; }
         VkBufferUsageFlags getUsage() const noexcept { return usage; }
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
         VkMemoryRequirements getMemoryRequirements() const noexcept;
