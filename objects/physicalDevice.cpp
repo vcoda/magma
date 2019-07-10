@@ -71,14 +71,11 @@ VkPhysicalDeviceProperties PhysicalDevice::getProperties() const noexcept
 
 std::vector<VkQueueFamilyProperties> PhysicalDevice::getQueueFamilyProperties() const noexcept
 {
-    std::vector<VkQueueFamilyProperties> queueFamilyProperties;
-    uint32_t propertyCount = 0;
+    uint32_t propertyCount;
     vkGetPhysicalDeviceQueueFamilyProperties(handle, &propertyCount, nullptr);
+    std::vector<VkQueueFamilyProperties> queueFamilyProperties(propertyCount);
     if (propertyCount > 0)
-    {
-        queueFamilyProperties.resize(propertyCount);
         vkGetPhysicalDeviceQueueFamilyProperties(handle, &propertyCount, queueFamilyProperties.data());
-    }
     return queueFamilyProperties;
 }
 
