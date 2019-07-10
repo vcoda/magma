@@ -46,6 +46,8 @@ namespace magma
         uint32_t getSamples() const noexcept { return samples; }
         VkImageUsageFlags getUsage() const noexcept { return usage; }
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
+        VkMemoryRequirements getMemoryRequirements() const noexcept;
+        std::vector<VkSparseImageMemoryRequirements> getSparseMemoryRequirements() const;
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0);
         void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,

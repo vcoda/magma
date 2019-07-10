@@ -118,6 +118,23 @@ VkExtent3D Image::getMipExtent(uint32_t level) const
     return mipExtent;
 }
 
+VkMemoryRequirements Image::getMemoryRequirements() const noexcept
+{
+    VkMemoryRequirements memoryRequirements;
+    vkGetImageMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
+    return memoryRequirements;
+}
+
+std::vector<VkSparseImageMemoryRequirements> Image::getSparseMemoryRequirements() const
+{
+    uint32_t sparseMemoryRequirementCount;
+    vkGetImageSparseMemoryRequirements(MAGMA_HANDLE(device), handle, &sparseMemoryRequirementCount, nullptr);
+    std::vector<VkSparseImageMemoryRequirements> sparseMemoryRequirements(sparseMemoryRequirementCount);
+    if (sparseMemoryRequirementCount > 0)
+        vkGetImageSparseMemoryRequirements(MAGMA_HANDLE(device), handle, &sparseMemoryRequirementCount, sparseMemoryRequirements.data());
+    return sparseMemoryRequirements;
+}
+
 void Image::bindMemory(std::shared_ptr<DeviceMemory> memory,
     VkDeviceSize offset /* 0 */)
 {
