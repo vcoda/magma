@@ -100,6 +100,16 @@ namespace magma
             return dst;
         }
 
+        template<typename DstType, typename SrcType>
+        inline DstType *copyInitializerList(const std::initializer_list<SrcType>& src)
+        {
+            MAGMA_ASSERT(sizeof(DstType) == sizeof(SrcType));
+            MAGMA_ASSERT(src.size() > 0);
+            DstType *dst = new DstType[src.size()];
+            memcpy(dst, src.begin(), sizeof(SrcType) * src.size());
+            return dst;
+        }
+
         inline char *copyString(const char *const src)
         {
             MAGMA_ASSERT(src);
