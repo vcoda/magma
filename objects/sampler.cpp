@@ -46,7 +46,7 @@ Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
     if (info.anisotropyEnable)
         info.maxAnisotropy = std::min(state.maxAnisotropy, properties.limits.maxSamplerAnisotropy);
     else
-        info.maxAnisotropy = 0.f;
+        info.maxAnisotropy = 1.f;
     info.compareEnable = VK_FALSE;
     info.compareOp = VK_COMPARE_OP_NEVER;
     info.minLod = 0.f;
@@ -83,7 +83,7 @@ LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state
     if (info.anisotropyEnable)
         info.maxAnisotropy = std::min(state.maxAnisotropy, properties.limits.maxSamplerAnisotropy);
     else
-        info.maxAnisotropy = 0.f;
+        info.maxAnisotropy = 1.f;
     info.compareEnable = VK_FALSE;
     info.compareOp = VK_COMPARE_OP_NEVER;
     info.minLod = minLod;
@@ -110,7 +110,7 @@ DepthSampler::DepthSampler(std::shared_ptr<Device> device, const DepthSamplerSta
     info.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
     info.mipLodBias = 0.f;
     info.anisotropyEnable = VK_FALSE;
-    info.maxAnisotropy = 0.f;
+    info.maxAnisotropy = 1.f;
     info.compareEnable = VK_TRUE;
     info.compareOp = state.compareOp;
     info.minLod = 0.f;
@@ -137,7 +137,7 @@ UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool li
     info.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
     info.mipLodBias = 0.f;
     info.anisotropyEnable = VK_FALSE;
-    info.maxAnisotropy = 0.f;
+    info.maxAnisotropy = 1.f;
     info.compareEnable = VK_FALSE;
     info.compareOp = VK_COMPARE_OP_NEVER;
     info.minLod = 0.f;

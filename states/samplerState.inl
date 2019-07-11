@@ -26,7 +26,7 @@ constexpr SamplerState::SamplerState(VkFilter magFilter, VkFilter minFilter,
     mipmapMode(mipmapMode),
     addressMode(addressMode),
     anisotropyEnable(false),
-    maxAnisotropy(0.f)
+    maxAnisotropy(1.f)
 {}
 
 constexpr size_t SamplerState::hash() const noexcept
@@ -55,7 +55,9 @@ constexpr AnisotropicSamplerState::AnisotropicSamplerState(VkFilter magFilter, V
     SamplerState(magFilter, minFilter, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode)
 {
     anisotropyEnable = true;
-    this->maxAnisotropy = maxAnisotropy; // Value will be clamped against hardware limit
+    // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 
+    // 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive.
+    this->maxAnisotropy = std::max(1.f, maxAnisotropy);
 }
 
 constexpr DepthSamplerState::DepthSamplerState(VkFilter magFilter, VkFilter minFilter, VkCompareOp compareOp) noexcept:
