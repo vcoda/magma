@@ -35,6 +35,20 @@ AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendAttachm
     pAttachments = internal::copyArray<VkPipelineColorBlendAttachmentState>(&attachment, 1);
 }
 
+AdvancedColorBlendState::AdvancedColorBlendState(const std::initializer_list<AdvancedColorBlendAttachmentState>& attachments,
+    bool srcPremultiplied, bool dstPremultiplied, VkBlendOverlapEXT blendOverlap)
+{
+    VkPipelineColorBlendAdvancedStateCreateInfoEXT *colorBlendAdvanced = new VkPipelineColorBlendAdvancedStateCreateInfoEXT;
+    colorBlendAdvanced->sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT;
+    colorBlendAdvanced->pNext = nullptr;
+    colorBlendAdvanced->srcPremultiplied = MAGMA_BOOLEAN(srcPremultiplied);
+    colorBlendAdvanced->dstPremultiplied = MAGMA_BOOLEAN(dstPremultiplied);
+    colorBlendAdvanced->blendOverlap = blendOverlap;
+    pNext = colorBlendAdvanced;
+    attachmentCount = MAGMA_COUNT(attachments);
+    pAttachments = internal::copyInitializerList<VkPipelineColorBlendAttachmentState>(attachments);
+}
+
 AdvancedColorBlendState::AdvancedColorBlendState(const std::vector<AdvancedColorBlendAttachmentState>& attachments,
     bool srcPremultiplied, bool dstPremultiplied, VkBlendOverlapEXT blendOverlap)
 {
