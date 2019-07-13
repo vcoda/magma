@@ -76,6 +76,8 @@ constexpr size_t DepthSamplerState::hash() const noexcept
 
 constexpr bool DepthSamplerState::operator==(const DepthSamplerState& other) const noexcept
 {
-    return (compareOp == other.compareOp);
+    return (magFilter == other.magFilter) &&
+        (minFilter == other.minFilter) &&
+        (compareOp == other.compareOp);
 }
 } // namespace magma
