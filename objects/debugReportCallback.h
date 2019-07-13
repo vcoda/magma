@@ -49,9 +49,6 @@ namespace magma
             const char *format, ...) const noexcept;
 
     private:
-        VkDebugReportObjectTypeEXT coreTypeToExt(VkObjectType) const noexcept;
-
-    private:
         std::shared_ptr<const Instance> instance;
     };
 } // namespace magma

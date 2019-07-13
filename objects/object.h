@@ -37,14 +37,16 @@ namespace magma
         VkObjectType getObjectType() const noexcept { return objectType; }
         std::shared_ptr<Device> getDevice() const noexcept { return device; }
         std::shared_ptr<IAllocator> getAllocator() const noexcept { return allocator; }
-        void setMarkerName(const char *name) noexcept;
-        void setMarkerTag(uint64_t tagName, size_t tagSize, const void *tag) noexcept;
+        void setObjectName(const char *name) noexcept;
+        void setObjectTag(uint64_t tagName, size_t tagSize, const void *tag) noexcept;
         template<typename Tag>
-        void setMarkerTag(uint64_t tagName, const Tag& tag) noexcept
-            { setMarkerTag(tagName, sizeof(Tag), &tag); }
+        void setObjectTag(uint64_t tagName, const Tag& tag) noexcept
+            { setObjectTag(tagName, sizeof(Tag), &tag); }
         virtual uint64_t getHandle() const noexcept = 0;
 
     protected:
+        VkDebugReportObjectTypeEXT castToDebugReportType(VkObjectType) const noexcept;
+
         VkObjectType objectType;
         std::shared_ptr<Device> device;
         std::shared_ptr<IAllocator> allocator;
