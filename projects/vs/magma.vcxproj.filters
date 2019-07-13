@@ -399,6 +399,9 @@
     <ClInclude Include="..\..\internal\compare.h">
       <Filter>Header Files\internal</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\states\colorWriteMask.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">

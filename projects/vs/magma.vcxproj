@@ -243,6 +243,7 @@
     <ClInclude Include="..\..\states\tesselationState.h" />
     <ClInclude Include="..\..\states\vertexInputState.h" />
     <ClInclude Include="..\..\states\viewportState.h" />
+    <ClInclude Include="..\..\states\colorWriteMask.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp" />
