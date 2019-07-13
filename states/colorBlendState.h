@@ -168,7 +168,7 @@ namespace magma
         constexpr ColorBlendState blendSubtractWriteR(blendstates::subtractR);
         constexpr ColorBlendState blendReverseSubtractWriteR(blendstates::reverseSubtractR);
         constexpr ColorBlendState blendMinWriteR(blendstates::minR);
-        constexpr ColorBlendState blendMaxWriteR(blendstates::maxRg);
+        constexpr ColorBlendState blendMaxWriteR(blendstates::maxR);
         constexpr ColorBlendState blendMultiplyWriteR(blendstates::multiplyR);
         constexpr ColorBlendState blendNormalWriteR(blendstates::normalR);
         constexpr ColorBlendState blendNormalPremultipliedWriteR(blendstates::normalPremultipliedR);
