@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Object::Object(VkObjectType objectType, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator):
+Object::Object(VkObjectType objectType, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) noexcept:
     objectType(objectType),
     device(std::move(device)),
     allocator(std::move(allocator))

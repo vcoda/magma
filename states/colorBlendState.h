@@ -94,7 +94,7 @@ namespace magma
     struct ColorLogicOpState : ColorBlendState
     {
         constexpr ColorLogicOpState(const ColorBlendAttachmentState& attachment,
-            VkLogicOp logicOp);
+            VkLogicOp logicOp) noexcept;
     };
 } // namespace magma
 

@@ -161,7 +161,7 @@ constexpr bool ColorBlendState::operator==(const ColorBlendState& other) const n
         (blendConstants[3] == other.blendConstants[3]);
 }
 
-constexpr ColorLogicOpState::ColorLogicOpState(const ColorBlendAttachmentState& attachment, VkLogicOp logicOp):
+constexpr ColorLogicOpState::ColorLogicOpState(const ColorBlendAttachmentState& attachment, VkLogicOp logicOp) noexcept:
     ColorBlendState(attachment, true, logicOp)
 {}
 } // namespace magma
