@@ -24,11 +24,6 @@ inline VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
     vertexCount = static_cast<uint32_t>(vertices.size());
 }
 
-inline void VertexBuffer::setVertexCount(uint32_t count) noexcept
-{
-    vertexCount = count;
-}
-
 inline uint32_t VertexBuffer::getVertexCount() const noexcept
 {
     MAGMA_ASSERT(vertexCount > 0);

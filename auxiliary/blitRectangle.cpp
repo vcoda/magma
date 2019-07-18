@@ -49,10 +49,10 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         std::move(allocator))
 {}
 
-BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, const PipelineShaderStage& vertexShader, const PipelineShaderStage& fragmentShader,
+BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, 
+    const PipelineShaderStage& vertexShader, const PipelineShaderStage& fragmentShader,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     renderPass(std::move(renderPass))
-{
 {   // Check for hardware support
     std::shared_ptr<Device> device = this->renderPass->getDevice();
     std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
@@ -86,8 +86,8 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, const Pipel
     {   
         if (VK_ATTACHMENT_LOAD_OP_CLEAR == attachment.loadOp)
         {   // The Vulkan spec states: clearValueCount must be greater than the largest attachment index in renderPass that specifies a loadOp
-            // (or stencilLoadOp,if the attachment has a depth/stencil format) of VK_ATTACHMENT_LOAD_OP_CLEAR.
-            clearValues = std::vector<ClearValue>(this->renderPass->getAttachments().size(), magma::clears::blackColor);
+            // (or stencilLoadOp, if the attachment has a depth/stencil format) of VK_ATTACHMENT_LOAD_OP_CLEAR.
+            clearValues = std::vector<ClearValue>(this->renderPass->getAttachments().size(), clears::blackColor);
             break;
         }
     }
@@ -126,7 +126,8 @@ void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::
     cmdBuffer->endRenderPass();
 }
 
-std::shared_ptr<ShaderModule> BlitRectangle::createShader(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator, bool vertexShader) const
+std::shared_ptr<ShaderModule> BlitRectangle::createShader(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator, 
+    bool vertexShader) const
 {
 #include "spirv/output/blitv"
 #include "spirv/output/blitv_nv"

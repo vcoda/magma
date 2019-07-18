@@ -28,7 +28,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DescriptorSet::DescriptorSet(VkDescriptorSet handle, std::shared_ptr<Device> device, std::shared_ptr<DescriptorPool> pool, std::shared_ptr<DescriptorSetLayout> setLayout) noexcept:
+DescriptorSet::DescriptorSet(VkDescriptorSet handle, std::shared_ptr<Device> device, std::shared_ptr<DescriptorPool> pool,
+    std::shared_ptr<DescriptorSetLayout> setLayout) noexcept:
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, std::move(device), nullptr),
     pool(std::move(pool)),
     setLayout(std::move(setLayout))

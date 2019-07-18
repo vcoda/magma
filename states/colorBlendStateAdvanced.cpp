@@ -76,7 +76,7 @@ AdvancedColorBlendState& AdvancedColorBlendState::operator=(const AdvancedColorB
     {
         internal::copy(this, &other);
         pNext = internal::copy<VkPipelineColorBlendAdvancedStateCreateInfoEXT>(other.pNext);
-        pAttachments = internal::copyArray(other.pAttachments, other.attachmentCount);
+        pAttachments = internal::copyArray(other.pAttachments, attachmentCount);
     }
     return *this;
 }

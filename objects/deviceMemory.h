@@ -37,11 +37,11 @@ namespace magma
             uint32_t deviceMask,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~DeviceMemory();
+        VkDeviceSize getSize() const noexcept { return size; }
         void *map(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE,
             VkMemoryMapFlags flags = 0) noexcept;
         void unmap() noexcept;
-        VkDeviceSize getSize() const noexcept { return size; }
         bool flushMappedRange(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
         bool invalidateMappedRange(VkDeviceSize offset = 0,

@@ -53,7 +53,7 @@ namespace magma
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
-        void setVertexCount(uint32_t count) noexcept;
+        void setVertexCount(uint32_t count) noexcept { vertexCount = count; }
         uint32_t getVertexCount() const noexcept;
 
     private:
