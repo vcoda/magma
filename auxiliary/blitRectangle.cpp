@@ -134,11 +134,11 @@ std::shared_ptr<ShaderModule> BlitRectangle::createShader(std::shared_ptr<Device
     {   // https://www.khronos.org/registry/OpenGL/extensions/NV/NV_fill_rectangle.txt
         const bool NV_fill_rectangle = device->getPhysicalDevice()->checkExtensionSupport("VK_NV_fill_rectangle");
         if (NV_fill_rectangle)
-            return std::make_shared<ShaderModule>(device, vsBlitNV, allocator);
-        return std::make_shared<ShaderModule>(device, vsBlit, allocator);
+            return std::make_shared<ShaderModule>(std::move(device), vsBlitNV, std::move(allocator));
+        return std::make_shared<ShaderModule>(std::move(device), vsBlit, std::move(allocator));
     }
 #include "spirv/output/blitf"
-    return std::make_shared<ShaderModule>(device, fsBlit, allocator);
+    return std::make_shared<ShaderModule>(std::move(device), fsBlit, std::move(allocator));
 }
 } // namespace aux
 } // namespace magma

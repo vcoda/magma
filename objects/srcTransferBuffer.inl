@@ -6,7 +6,7 @@ inline SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<Device> device,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    SrcTransferBuffer(device, data.data(), static_cast<VkDeviceSize>(data.size() * sizeof(Type)), flags,
+    SrcTransferBuffer(std::move(device), data.data(), static_cast<VkDeviceSize>(data.size() * sizeof(Type)), flags,
         std::move(allocator), std::move(copyFn))
 {}
 } // namespace magma

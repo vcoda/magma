@@ -40,7 +40,7 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const uint32_t *bytec
 
 ShaderModule::ShaderModule(std::shared_ptr<Device> device, const std::vector<uint32_t>& bytecode,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    ShaderModule(device, bytecode.data(), bytecode.size() * sizeof(uint32_t), allocator)
+    ShaderModule(std::move(device), bytecode.data(), bytecode.size() * sizeof(uint32_t), std::move(allocator))
 {}
 
 ShaderModule::~ShaderModule()

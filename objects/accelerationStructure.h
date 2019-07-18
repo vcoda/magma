@@ -69,7 +69,7 @@ namespace magma
             VkDeviceSize compactedSize = 0,
             std::shared_ptr<IAllocator> allocator = nullptr):
             AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NV,
-                instanceCount, geometries, flags, compactedSize, std::move(allocator))
+                instanceCount, std::move(geometries), flags, compactedSize, std::move(allocator))
         {}
     };
 
@@ -83,7 +83,7 @@ namespace magma
             VkDeviceSize compactedSize = 0,
             std::shared_ptr<IAllocator> allocator = nullptr):
             AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NV,
-                instanceCount, geometries, flags, compactedSize, std::move(allocator))
+                instanceCount, std::move(geometries), flags, compactedSize, std::move(allocator))
         {}
     };
 } // namespace magma

@@ -18,7 +18,7 @@ inline VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    VertexBuffer(copyCmdBuffer, vertices.data(), static_cast<VkDeviceSize>(sizeof(VertexType) * vertices.size()), flags,
+    VertexBuffer(std::move(copyCmdBuffer), vertices.data(), static_cast<VkDeviceSize>(sizeof(VertexType) * vertices.size()), flags,
         std::move(allocator), std::move(copyFn))
 {
     vertexCount = static_cast<uint32_t>(vertices.size());

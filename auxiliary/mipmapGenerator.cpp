@@ -103,8 +103,8 @@ bool MipmapGenerator::generateMipmap(std::shared_ptr<Image> image, uint32_t base
 
 bool MipmapGenerator::commit(std::shared_ptr<CommandBuffer> commandBuffer) const noexcept
 {
-    std::shared_ptr<magma::Fence> fence(commandBuffer->getFence());
-    if (!queue->submit(commandBuffer, 0, nullptr, nullptr, fence))
+    std::shared_ptr<Fence> fence(commandBuffer->getFence());
+    if (!queue->submit(std::move(commandBuffer), 0, nullptr, nullptr, fence))
         return false;
     if (!fence->wait())
         return false;
