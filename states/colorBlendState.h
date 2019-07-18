@@ -64,7 +64,7 @@ namespace magma
         constexpr ColorBlendState(const ColorBlendAttachmentState& attachment,
             bool logicOpEnable = false,
             VkLogicOp logicOp = VK_LOGIC_OP_CLEAR,
-            const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f});
+            const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f}) noexcept;
         constexpr size_t hash() const noexcept;
         constexpr bool operator==(const ColorBlendState&) const noexcept;
 
