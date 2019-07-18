@@ -219,8 +219,8 @@ inline void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, c
     udpateBuffer(buffer, dataSize, data.data(), offset);
 }
 
-template<typename Type, uint32_t pushConstantCount>
-inline void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const Type(&values)[pushConstantCount],
+template<typename Type, uint32_t PushConstantCount>
+inline void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const Type(&values)[PushConstantCount],
     uint32_t offset /* 0 */) noexcept
 {
     vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * pushConstantCount), values);
@@ -233,11 +233,11 @@ inline void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLayout>& 
     vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * values.size()), values.data());
 }
 
-template<typename Type>
-inline void CommandBuffer::pushConstantBlock(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const Type& block,
+template<typename BlockType>
+inline void CommandBuffer::pushConstantBlock(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const BlockType& block,
     uint32_t offset /* 0 */) noexcept
 {
-    vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type)), &block);
+    vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(BlockType)), &block);
 }
 
 inline void CommandBuffer::nextSubpass(VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept

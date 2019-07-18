@@ -331,11 +331,11 @@ namespace magma
             VkDeviceSize dstOffset = 0,
             bool write64Bit = true) noexcept;
 
-        template<typename Type, uint32_t pushConstantCount>
+        template<typename Type, uint32_t PushConstantCount>
         void pushConstants(
             const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags,
-            const Type(&values)[pushConstantCount],
+            const Type(&values)[PushConstantCount],
             uint32_t offset = 0) noexcept;
         template<typename Type>
         void pushConstants(
@@ -343,11 +343,11 @@ namespace magma
             VkShaderStageFlags stageFlags,
             const std::vector<Type>& values,
             uint32_t offset = 0) noexcept;
-        template<typename Type>
+        template<typename BlockStructure>
         void pushConstantBlock(
             const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags,
-            const Type& block,
+            const BlockStructure& block,
             uint32_t offset = 0) noexcept;
 
         void beginRenderPass(
