@@ -54,7 +54,7 @@ NonMultisampleFramebuffer::NonMultisampleFramebuffer(std::shared_ptr<Device> dev
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
         // Create color/depth framebuffer
         renderPass = std::make_shared<RenderPass>(device, std::initializer_list<AttachmentDescription>{colorAttachment, depthStencilAttachment});
-        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, std::vector<std::shared_ptr<const ImageView>>{colorView, depthStencilView});
+        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, std::vector<std::shared_ptr<ImageView>>{colorView, depthStencilView});
     }
     else
     {   // Create color only framebuffer
@@ -100,12 +100,12 @@ MultisampleFramebuffer::MultisampleFramebuffer(std::shared_ptr<Device> device,
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
         // Create color/depth framebuffer
         renderPass = std::make_shared<RenderPass>(device, std::initializer_list<AttachmentDescription>{colorAttachment, depthStencilAttachment, resolveAttachment}, allocator);
-        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, std::vector<std::shared_ptr<const ImageView>>{colorView, depthStencilView, resolveView}, 0, allocator);
+        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, std::vector<std::shared_ptr<ImageView>>{colorView, depthStencilView, resolveView}, 0, allocator);
     }
     else
     {   // Create color only framebuffer
         renderPass = std::make_shared<RenderPass>(device, std::initializer_list<AttachmentDescription>{colorAttachment, resolveAttachment}, allocator);
-        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, std::vector<std::shared_ptr<const ImageView>>{colorView, resolveView}, 0, allocator);
+        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, std::vector<std::shared_ptr<ImageView>>{colorView, resolveView}, 0, allocator);
     }
 }
 
@@ -121,7 +121,7 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
     Framebuffer(color->getMipExtent(0))
 {
     std::shared_ptr<Device> device = color->getDevice();
-    std::vector<std::shared_ptr<const ImageView>> attachments;
+    std::vector<std::shared_ptr<ImageView>> attachments;
     colorView = std::make_shared<ImageView>(color, 0, swizzle, allocator);
     attachments.push_back(colorView);
     if (depthFormat != VK_FORMAT_UNDEFINED)

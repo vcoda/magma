@@ -31,7 +31,7 @@ namespace magma
     class ImageView : public NonDispatchable<VkImageView>
     {
     public:
-        explicit ImageView(std::shared_ptr<const Image> resource,
+        explicit ImageView(std::shared_ptr<Image> resource,
             uint32_t mipLevelCount = 0,
             // https://github.com/SaschaWillems/Vulkan/issues/160
             const VkComponentMapping& swizzle = {
@@ -41,9 +41,10 @@ namespace magma
                 VK_COMPONENT_SWIZZLE_IDENTITY},
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~ImageView();
+        std::shared_ptr<Image> getImage() noexcept { return image; }
         std::shared_ptr<const Image> getImage() const noexcept { return image; }
 
     private:
-        std::shared_ptr<const Image> image;
+        std::shared_ptr<Image> image;
     };
 } // namespace magma
