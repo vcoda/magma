@@ -104,12 +104,12 @@ std::vector<VkLayerProperties> PhysicalDevice::enumerateLayers() const
 {
     uint32_t propertyCount = 0;
     const VkResult count = vkEnumerateDeviceLayerProperties(handle, &propertyCount, nullptr);
-    MAGMA_THROW_FAILURE(count, "failed to count device layers");
+    MAGMA_THROW_FAILURE(count, "failed to count physical device layers");
     std::vector<VkLayerProperties> layers(propertyCount);
     if (propertyCount > 0)
     {
         const VkResult enumerate = vkEnumerateDeviceLayerProperties(handle, &propertyCount, layers.data());
-        MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device layers");
+        MAGMA_THROW_FAILURE(enumerate, "failed to enumerate physical device layers");
     }
     return layers;
 }
@@ -118,12 +118,12 @@ std::vector<VkExtensionProperties> PhysicalDevice::enumerateExtensions(const cha
 {
     uint32_t propertyCount = 0;
     const VkResult count = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, nullptr);
-    MAGMA_THROW_FAILURE(count, "failed to count device extensions");
+    MAGMA_THROW_FAILURE(count, "failed to count physical device extensions");
     std::vector<VkExtensionProperties> extensions(propertyCount);
     if (propertyCount > 0)
     {
         const VkResult enumerate = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, extensions.data());
-        MAGMA_THROW_FAILURE(enumerate, "failed to enumerate device extensions");
+        MAGMA_THROW_FAILURE(enumerate, "failed to enumerate physical device extensions");
     }
     return extensions;
 }
