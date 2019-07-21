@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-BufferView::BufferView(std::shared_ptr<const Buffer> resource,
+BufferView::BufferView(std::shared_ptr<Buffer> resource,
     VkFormat format,
     VkDeviceSize offset /* 0 */,
     VkDeviceSize range /* VK_WHOLE_SIZE */,

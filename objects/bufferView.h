@@ -29,15 +29,16 @@ namespace magma
     class BufferView : public NonDispatchable<VkBufferView>
     {
     public:
-        explicit BufferView(std::shared_ptr<const Buffer> resource,
+        explicit BufferView(std::shared_ptr<Buffer> resource,
             VkFormat format,
             VkDeviceSize offset = 0,
             VkDeviceSize range = VK_WHOLE_SIZE,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~BufferView();
+        std::shared_ptr<Buffer> getBuffer() noexcept { return buffer; }
         std::shared_ptr<const Buffer> getBuffer() const noexcept { return buffer; }
 
     private:
-        std::shared_ptr<const Buffer> buffer;
+        std::shared_ptr<Buffer> buffer;
     };
 } // namespace magma
