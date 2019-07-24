@@ -1,6 +1,6 @@
 namespace magma
 {
-constexpr SamplerState::SamplerState(VkFilter magFilter, VkFilter minFilter, 
+constexpr SamplerState::SamplerState(VkFilter magFilter, VkFilter minFilter,
     VkSamplerMipmapMode mipmapMode, VkSamplerAddressMode addressMode) noexcept:
     magFilter(magFilter),
     minFilter(minFilter),

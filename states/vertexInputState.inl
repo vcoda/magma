@@ -8,7 +8,7 @@ constexpr VertexInputBinding::VertexInputBinding(uint32_t binding, uint32_t stri
     this->inputRate = inputRate;
 }
 
-constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location, 
+constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location,
     uint32_t binding, VkFormat format, uint32_t offset) noexcept
 {
     this->location = location;
@@ -17,7 +17,7 @@ constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location,
     this->offset = offset;
 }
 
-constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location, 
+constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location,
     const VertexInputAttribute& attrib, uint32_t offset) noexcept
 {
     this->location = location;
@@ -72,7 +72,7 @@ constexpr VertexInputState::VertexInputState(const VertexInputBinding& binding, 
 }
 
 template<size_t VertexAttributeDescriptionCount>
-constexpr VertexInputState::VertexInputState(const VertexInputBinding& binding, 
+constexpr VertexInputState::VertexInputState(const VertexInputBinding& binding,
     const VertexInputAttribute (&attributes)[VertexAttributeDescriptionCount])
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -85,7 +85,7 @@ constexpr VertexInputState::VertexInputState(const VertexInputBinding& binding,
 }
 
 template<size_t VertexBindingDescriptionCount, size_t VertexAttributeDescriptionCount>
-constexpr VertexInputState::VertexInputState(const VertexInputBinding (&bindings)[VertexBindingDescriptionCount], 
+constexpr VertexInputState::VertexInputState(const VertexInputBinding (&bindings)[VertexBindingDescriptionCount],
     const VertexInputAttribute (&attributes)[VertexAttributeDescriptionCount])
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;

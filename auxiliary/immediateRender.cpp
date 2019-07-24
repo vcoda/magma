@@ -186,7 +186,6 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
         &renderstates::patchList
     };
     const size_t renderStatesHash = hash(inputAssemblyStates[topology]);
-   
     // Try to find existing pipeline
     auto it = pipelines.find(renderStatesHash);
     if (it != pipelines.end())

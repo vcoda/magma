@@ -74,7 +74,7 @@ namespace magma
         constexpr ColorBlendState() noexcept;
     };
 
-    /* Managed color blend state takes care about array of blend attachment states and 
+    /* Managed color blend state takes care about array of blend attachment states and
        thereof is copyable, but not constexpr-constructible. */
 
     struct ManagedColorBlendState final : ColorBlendState
