@@ -38,6 +38,9 @@ namespace magma
         constexpr bool operator==(const AdvancedColorBlendAttachmentState&) const noexcept;
     };
 
+    /* For explanation, see 
+       https://www.khronos.org/registry/OpenGL/extensions/NV/NV_blend_equation_advanced.txt */
+
     struct AdvancedColorBlendState final : ColorBlendState
     {
     public:
