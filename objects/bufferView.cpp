@@ -32,7 +32,7 @@ BufferView::BufferView(std::shared_ptr<Buffer> resource,
     NonDispatchable(VK_OBJECT_TYPE_BUFFER_VIEW, resource->getDevice(), std::move(allocator)),
     buffer(std::move(resource))
 {
-    MAGMA_ASSERT(resource->getUsage() &
+    MAGMA_ASSERT(buffer->getUsage() &
         (VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT |
          VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT));
     VkBufferViewCreateInfo info;
