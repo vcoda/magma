@@ -26,11 +26,15 @@ namespace magma
 {
 namespace aux
 {
-NonMultisampleFramebuffer::NonMultisampleFramebuffer(std::shared_ptr<Device> device,
+BaseFramebuffer::BaseFramebuffer(const VkExtent2D& extent) noexcept: 
+    extent(extent) 
+{}
+
+Framebuffer::Framebuffer(std::shared_ptr<Device> device,
     const VkFormat colorFormat, const VkFormat depthStencilFormat, const VkExtent2D& extent,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Framebuffer(extent)
+    BaseFramebuffer(extent)
 {   // Create multisample attachments
     color = std::make_shared<ColorAttachment2D>(device, colorFormat, extent, 1, 1, true, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
@@ -68,7 +72,7 @@ MultisampleFramebuffer::MultisampleFramebuffer(std::shared_ptr<Device> device,
     const VkExtent2D& extent, const uint32_t sampleCount,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Framebuffer(extent)
+    BaseFramebuffer(extent)
 {   // Create multisample attachments
     color = std::make_shared<ColorAttachment2D>(device, colorFormat, extent, 1, sampleCount, true, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
@@ -118,7 +122,7 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
     VkFormat depthFormat /* VK_FORMAT_UNDEFINED */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Framebuffer(color->getMipExtent(0))
+    BaseFramebuffer(VkExtent2D{color->getMipExtent(0).width, color->getMipExtent(0).height})
 {
     std::shared_ptr<Device> device = color->getDevice();
     std::vector<std::shared_ptr<ImageView>> attachments;

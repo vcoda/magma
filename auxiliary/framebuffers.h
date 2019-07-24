@@ -33,40 +33,50 @@ namespace magma
 
     namespace aux
     {
-        /* Auxiliary framebuffer class that is responsible for management of
-           color, depth/stencil and resolve attachments, image view reinterpretation,
-           render pass and framebuffer construction. */
+        /* Abstract interface of Framebuffer object.
+           Concrete implementations include MSAA and non-MSAA frame buffers
+           as well as main window frame buffer. */
 
-        class Framebuffer : public internal::NonCopyable
+        class IFramebuffer : public internal::NonCopyable
         {
         public:
-            virtual std::shared_ptr<ImageView> getColorView() const noexcept { return colorView; }
-            std::shared_ptr<RenderPass> getRenderPass() const noexcept { return renderPass; }
-            std::shared_ptr<magma::Framebuffer> getFramebuffer() const noexcept { return framebuffer; }
-            const VkExtent2D& getExtent() const noexcept { return extent; }
+            virtual std::shared_ptr<Framebuffer> getFramebuffer() const noexcept = 0;
+            virtual std::shared_ptr<ImageView> getColorView() const noexcept = 0;
+            virtual std::shared_ptr<RenderPass> getRenderPass() const noexcept = 0;
+            virtual const VkExtent2D& getExtent() const noexcept = 0;
             virtual uint32_t getSampleCount() const noexcept = 0;
+        };
+
+        /* Framebuffer's base class with shared functionality. */
+
+        class BaseFramebuffer : public IFramebuffer
+        {
+        public:
+            virtual std::shared_ptr<magma::Framebuffer> getFramebuffer() const noexcept override { return framebuffer; }
+            virtual std::shared_ptr<RenderPass> getRenderPass() const noexcept override { return renderPass; }
+            virtual std::shared_ptr<ImageView> getColorView() const noexcept override { return colorView; }
+            virtual const VkExtent2D& getExtent() const noexcept override { return extent; }
+            virtual uint32_t getSampleCount() const noexcept override { return 1; }
 
         protected:
-            Framebuffer(const VkExtent2D& extent):
-                extent(extent) {}
-            Framebuffer(const VkExtent3D& extent)
-            {
-                this->extent.width = extent.width;
-                this->extent.height = extent.height;
-            }
+            BaseFramebuffer(const VkExtent2D& extent) noexcept;
 
         protected:
             std::shared_ptr<ImageView> colorView;
             std::shared_ptr<ImageView> depthStencilView;
             std::shared_ptr<RenderPass> renderPass;
-            std::shared_ptr<magma::Framebuffer> framebuffer;
+            std::shared_ptr<Framebuffer> framebuffer;
             VkExtent2D extent;
         };
 
-        class NonMultisampleFramebuffer : public Framebuffer
+        /* Auxiliary frame buffer class that is responsible for management of
+           color, depth/stencil and resolve attachments, image view reinterpretation,
+           render pass and framebuffer construction. */
+
+        class Framebuffer : public BaseFramebuffer
         {
         public:
-            NonMultisampleFramebuffer(std::shared_ptr<Device> device,
+            Framebuffer(std::shared_ptr<Device> device,
                 const VkFormat colorFormat,
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
@@ -76,14 +86,15 @@ namespace magma
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY},
                 std::shared_ptr<IAllocator> allocator = nullptr);
-            virtual uint32_t getSampleCount() const noexcept override { return 1; }
 
         private:
             std::shared_ptr<ColorAttachment2D> color;
             std::shared_ptr<DepthStencilAttachment2D> depthStencil;
         };
 
-        class MultisampleFramebuffer : public Framebuffer
+        /* Multi-sample frame buffer with resolve attachment. */
+
+        class MultisampleFramebuffer : public BaseFramebuffer
         {
         public:
             MultisampleFramebuffer(std::shared_ptr<Device> device,
@@ -107,7 +118,9 @@ namespace magma
             std::shared_ptr<ImageView> resolveView;
         };
 
-        class SwapchainFramebuffer : public Framebuffer
+        /* Main window frame buffer. */
+
+        class SwapchainFramebuffer : public BaseFramebuffer
         {
         public:
             SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachment2D> color,
@@ -118,7 +131,6 @@ namespace magma
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY},
                 std::shared_ptr<IAllocator> allocator = nullptr);
-            virtual uint32_t getSampleCount() const noexcept override { return 1; }
 
         private:
             std::shared_ptr<DepthStencilAttachment2D> depthStencil;
