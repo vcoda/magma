@@ -26,7 +26,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 ImageView::ImageView(std::shared_ptr<Image> resource,
-    uint32_t mipLevelCount, /* 0 */
+    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    ImageView(std::move(resource), 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS, swizzle,
+        std::move(allocator))
+{}
+
+ImageView::ImageView(std::shared_ptr<Image> resource,
+    uint32_t baseMipLevel, 
+    uint32_t levelCount /* VK_REMAINING_MIP_LEVELS */,
+    uint32_t baseArrayLayer /* 0 */,
+    uint32_t layerCount /* VK_REMAINING_ARRAY_LAYERS */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, std::move(resource->getDevice()), std::move(allocator)),
@@ -77,13 +87,10 @@ ImageView::ImageView(std::shared_ptr<Image> resource,
         info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
     else
         info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-    info.subresourceRange.baseMipLevel = 0;
-    if (!mipLevelCount)
-        info.subresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
-    else
-        info.subresourceRange.levelCount = mipLevelCount;
-    info.subresourceRange.baseArrayLayer = 0;
-    info.subresourceRange.layerCount = VK_REMAINING_ARRAY_LAYERS;
+    info.subresourceRange.baseMipLevel = baseMipLevel;
+    info.subresourceRange.levelCount = levelCount;
+    info.subresourceRange.baseArrayLayer = baseArrayLayer;
+    info.subresourceRange.layerCount = layerCount;
     const VkResult create = vkCreateImageView(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create image view");
 }

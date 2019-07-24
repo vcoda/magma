@@ -36,9 +36,9 @@ NonMultisampleFramebuffer::NonMultisampleFramebuffer(std::shared_ptr<Device> dev
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
         depthStencil = std::make_shared<DepthStencilAttachment2D>(device, depthStencilFormat, extent, 1, 1, false, allocator);
     // Create attachment views
-    colorView = std::make_shared<ImageView>(color, 0, swizzle, allocator);
+    colorView = std::make_shared<ImageView>(color, swizzle, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
-        depthStencilView = std::make_shared<ImageView>(depthStencil, 0, swizzle, allocator);
+        depthStencilView = std::make_shared<ImageView>(depthStencil, swizzle, allocator);
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, 1,
         op::clearStore, // Clear color, store
@@ -76,10 +76,10 @@ MultisampleFramebuffer::MultisampleFramebuffer(std::shared_ptr<Device> device,
     // Create color resolve attachment
     resolve = std::make_shared<ColorAttachment2D>(device, colorFormat, extent, 1, 1, true, allocator);
     // Create attachment views
-    colorView = std::make_shared<ImageView>(color, 0, swizzle, allocator);
+    colorView = std::make_shared<ImageView>(color, swizzle, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
-        depthStencilView = std::make_shared<ImageView>(depthStencil, 0, swizzle, allocator);
-    resolveView = std::make_shared<ImageView>(resolve, 0, swizzle, allocator);
+        depthStencilView = std::make_shared<ImageView>(depthStencil, swizzle, allocator);
+    resolveView = std::make_shared<ImageView>(resolve, swizzle, allocator);
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, sampleCount,
         op::clearStore, // Clear color, store
@@ -122,12 +122,12 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
 {
     std::shared_ptr<Device> device = color->getDevice();
     std::vector<std::shared_ptr<ImageView>> attachments;
-    colorView = std::make_shared<ImageView>(color, 0, swizzle, allocator);
+    colorView = std::make_shared<ImageView>(color, swizzle, allocator);
     attachments.push_back(colorView);
     if (depthFormat != VK_FORMAT_UNDEFINED)
     {
         depthStencil = std::make_shared<DepthStencilAttachment2D>(device, depthFormat, extent, 1, color->getSamples(), false, allocator);
-        depthStencilView = std::make_shared<ImageView>(depthStencil, 0, swizzle, allocator);
+        depthStencilView = std::make_shared<ImageView>(depthStencil, swizzle, allocator);
         attachments.push_back(depthStencilView);
     }
     const AttachmentDescription colorAttachment(color->getFormat(), 1,
