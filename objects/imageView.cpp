@@ -74,7 +74,7 @@ ImageView::ImageView(std::shared_ptr<Image> resource,
     }
     info.format = image->getFormat();
     const Format format(info.format);
-    if (!format.depth())
+    if (!(format.depth() || format.stencil() || format.depthStencil()))
         info.components = swizzle;
     else
         info.components = {VK_COMPONENT_SWIZZLE_IDENTITY,
