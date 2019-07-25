@@ -21,6 +21,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class Device;
+    class IAllocator;
+
     /* See https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.pdf
        2.3 Physical Layout of a SPIR-V Module and Instruction */
     typedef uint32_t SpirvWord;
