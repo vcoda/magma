@@ -21,6 +21,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* See https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.pdf
+       2.3 Physical Layout of a SPIR-V Module and Instruction */
+    typedef uint32_t SpirvWord;
+
     /* Shader modules contain shader code and one or more entry points.
        Shaders are selected from a shader module by specifying an entry point.
        The stages of a pipeline can use shaders that come from different modules.
@@ -30,17 +34,18 @@ namespace magma
     {
     public:
         explicit ShaderModule(std::shared_ptr<Device> device,
-            const uint32_t *bytecode,
+            const SpirvWord *bytecode,
             size_t bytecodeSize,
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit ShaderModule(std::shared_ptr<Device> device,
-            const std::vector<uint32_t>& bytecode,
+            const std::vector<SpirvWord>& bytecode,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        template<size_t BytecodeSize>
+        template<size_t WordCount>
         explicit ShaderModule(std::shared_ptr<Device> device,
-            const uint32_t (&bytecode)[BytecodeSize],
+            const SpirvWord (&bytecode)[WordCount],
             std::shared_ptr<IAllocator> allocator = nullptr):
-            ShaderModule(std::move(device), bytecode, BytecodeSize, std::move(allocator)) {}
+            ShaderModule(std::move(device), bytecode, WordCount * sizeof(SpirvWord), 
+                std::move(allocator)) {}
         ~ShaderModule();
     };
 } // namespace magma

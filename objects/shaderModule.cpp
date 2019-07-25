@@ -23,11 +23,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ShaderModule::ShaderModule(std::shared_ptr<Device> device, const uint32_t *bytecode, size_t bytecodeSize,
+ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *bytecode, size_t bytecodeSize,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_SHADER_MODULE, std::move(device), std::move(allocator))
 {
-    MAGMA_ASSERT(bytecodeSize % sizeof(uint32_t) == 0);
+    // A module is defined as a stream of words, not a stream of bytes
+    MAGMA_ASSERT(bytecodeSize % sizeof(SpirvWord) == 0);
     VkShaderModuleCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
     info.pNext = nullptr;
@@ -38,9 +39,9 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const uint32_t *bytec
     MAGMA_THROW_FAILURE(create, "failed to create shader module");
 }
 
-ShaderModule::ShaderModule(std::shared_ptr<Device> device, const std::vector<uint32_t>& bytecode,
+ShaderModule::ShaderModule(std::shared_ptr<Device> device, const std::vector<SpirvWord>& bytecode,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    ShaderModule(std::move(device), bytecode.data(), bytecode.size() * sizeof(uint32_t), std::move(allocator))
+    ShaderModule(std::move(device), bytecode.data(), bytecode.size() * sizeof(SpirvWord), std::move(allocator))
 {}
 
 ShaderModule::~ShaderModule()
