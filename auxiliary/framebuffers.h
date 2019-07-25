@@ -40,11 +40,14 @@ namespace magma
         class IFramebuffer : public internal::NonCopyable
         {
         public:
-            virtual std::shared_ptr<Framebuffer> getFramebuffer() const noexcept = 0;
-            virtual std::shared_ptr<ImageView> getColorView() const noexcept = 0;
-            virtual std::shared_ptr<RenderPass> getRenderPass() const noexcept = 0;
             virtual const VkExtent2D& getExtent() const noexcept = 0;
             virtual uint32_t getSampleCount() const noexcept = 0;
+            virtual std::shared_ptr<ImageView> getColorView() noexcept = 0;
+            virtual std::shared_ptr<const ImageView> getColorView() const noexcept = 0;
+            virtual std::shared_ptr<RenderPass> getRenderPass() noexcept = 0;
+            virtual std::shared_ptr<const RenderPass> getRenderPass() const noexcept = 0;
+            virtual std::shared_ptr<Framebuffer> getFramebuffer() noexcept = 0;
+            virtual std::shared_ptr<const Framebuffer> getFramebuffer() const noexcept = 0;
         };
 
         /* Framebuffer's base class with shared functionality. */
@@ -52,21 +55,24 @@ namespace magma
         class BaseFramebuffer : public IFramebuffer
         {
         public:
-            virtual std::shared_ptr<magma::Framebuffer> getFramebuffer() const noexcept override { return framebuffer; }
-            virtual std::shared_ptr<RenderPass> getRenderPass() const noexcept override { return renderPass; }
-            virtual std::shared_ptr<ImageView> getColorView() const noexcept override { return colorView; }
             virtual const VkExtent2D& getExtent() const noexcept override { return extent; }
             virtual uint32_t getSampleCount() const noexcept override { return 1; }
-
+            virtual std::shared_ptr<RenderPass> getRenderPass() noexcept override { return renderPass; }
+            virtual std::shared_ptr<const RenderPass> getRenderPass() const noexcept override { return renderPass; }
+            virtual std::shared_ptr<ImageView> getColorView() noexcept override { return colorView; }
+            virtual std::shared_ptr<const ImageView> getColorView() const noexcept override { return colorView; }
+            virtual std::shared_ptr<Framebuffer> getFramebuffer() noexcept override { return framebuffer; }
+            virtual std::shared_ptr<const Framebuffer> getFramebuffer() const noexcept override { return framebuffer; }
+            
         protected:
             BaseFramebuffer(const VkExtent2D& extent) noexcept;
 
         protected:
+            VkExtent2D extent;
             std::shared_ptr<ImageView> colorView;
             std::shared_ptr<ImageView> depthStencilView;
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<Framebuffer> framebuffer;
-            VkExtent2D extent;
         };
 
         /* Auxiliary frame buffer class that is responsible for management of
@@ -108,9 +114,10 @@ namespace magma
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY},
                 std::shared_ptr<IAllocator> allocator = nullptr);
-            virtual std::shared_ptr<ImageView> getColorView() const noexcept override { return resolveView; }
             virtual uint32_t getSampleCount() const noexcept override;
-
+            virtual std::shared_ptr<ImageView> getColorView() noexcept override { return resolveView; }
+            virtual std::shared_ptr<const ImageView> getColorView() const noexcept override { return resolveView; }
+            
         private:
             std::shared_ptr<ColorAttachment2D> color;
             std::shared_ptr<DepthStencilAttachment2D> depthStencil;
