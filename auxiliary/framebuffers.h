@@ -65,7 +65,7 @@ namespace magma
             virtual std::shared_ptr<const Framebuffer> getFramebuffer() const noexcept override { return framebuffer; }
             
         protected:
-            BaseFramebuffer(const VkExtent2D& extent) noexcept;
+            explicit BaseFramebuffer(const VkExtent2D& extent) noexcept;
 
         protected:
             VkExtent2D extent;
@@ -82,7 +82,7 @@ namespace magma
         class Framebuffer : public BaseFramebuffer
         {
         public:
-            Framebuffer(std::shared_ptr<Device> device,
+            explicit Framebuffer(std::shared_ptr<Device> device,
                 const VkFormat colorFormat,
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
@@ -103,7 +103,7 @@ namespace magma
         class MultisampleFramebuffer : public BaseFramebuffer
         {
         public:
-            MultisampleFramebuffer(std::shared_ptr<Device> device,
+            explicit MultisampleFramebuffer(std::shared_ptr<Device> device,
                 const VkFormat colorFormat,
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
@@ -130,7 +130,7 @@ namespace magma
         class SwapchainFramebuffer : public BaseFramebuffer
         {
         public:
-            SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachment2D> color,
+            explicit SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachment2D> color,
                 VkFormat depthFormat = VK_FORMAT_UNDEFINED,
                 const VkComponentMapping& swizzle = {
                     VK_COMPONENT_SWIZZLE_IDENTITY,
