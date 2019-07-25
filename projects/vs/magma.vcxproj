@@ -155,6 +155,7 @@
     <ClInclude Include="..\..\helpers\mapScoped.h" />
     <ClInclude Include="..\..\helpers\stackArray.h" />
     <ClInclude Include="..\..\helpers\stringize.h" />
+    <ClInclude Include="..\..\helpers\typedefs.h" />
     <ClInclude Include="..\..\helpers\uniformArray.h" />
     <ClInclude Include="..\..\internal\allocable.h" />
     <ClInclude Include="..\..\internal\compare.h" />
