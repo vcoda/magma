@@ -225,8 +225,6 @@
     <ClInclude Include="..\..\objects\sampler.h" />
     <ClInclude Include="..\..\objects\semaphore.h" />
     <ClInclude Include="..\..\objects\shaderModule.h" />
-    <ClInclude Include="..\..\objects\shaderStages.h" />
-    <ClInclude Include="..\..\objects\shaderStagesRaytrace.h" />
     <ClInclude Include="..\..\objects\srcTransferBuffer.h" />
     <ClInclude Include="..\..\objects\storageBuffer.h" />
     <ClInclude Include="..\..\objects\storageTexelBuffer.h" />
@@ -235,6 +233,10 @@
     <ClInclude Include="..\..\objects\uniformBuffer.h" />
     <ClInclude Include="..\..\objects\uniformTexelBuffer.h" />
     <ClInclude Include="..\..\objects\vertexBuffer.h" />
+    <ClInclude Include="..\..\shaders\pipelineShaderStage.h" />
+    <ClInclude Include="..\..\shaders\rayTracingShaderGroup.h" />
+    <ClInclude Include="..\..\shaders\specialization.h" />
+    <ClInclude Include="..\..\shaders\shaderStages.h" />
     <ClInclude Include="..\..\states\colorBlendState.h" />
     <ClInclude Include="..\..\states\colorBlendStateAdvanced.h" />
     <ClInclude Include="..\..\states\depthStencilState.h" />
@@ -310,8 +312,6 @@
     <ClCompile Include="..\..\objects\sampler.cpp" />
     <ClCompile Include="..\..\objects\semaphore.cpp" />
     <ClCompile Include="..\..\objects\shaderModule.cpp" />
-    <ClCompile Include="..\..\objects\shaderStages.cpp" />
-    <ClCompile Include="..\..\objects\shaderStagesRaytrace.cpp" />
     <ClCompile Include="..\..\objects\srcTransferBuffer.cpp" />
     <ClCompile Include="..\..\objects\storageBuffer.cpp" />
     <ClCompile Include="..\..\objects\storageTexelBuffer.cpp" />
@@ -319,6 +319,9 @@
     <ClCompile Include="..\..\objects\swapchain.cpp" />
     <ClCompile Include="..\..\objects\uniformTexelBuffer.cpp" />
     <ClCompile Include="..\..\objects\vertexBuffer.cpp" />
+    <ClCompile Include="..\..\shaders\pipelineShaderStage.cpp" />
+    <ClCompile Include="..\..\shaders\rayTracingShaderGroup.cpp" />
+    <ClCompile Include="..\..\shaders\specialization.cpp" />
     <ClCompile Include="..\..\states\colorBlendState.cpp" />
     <ClCompile Include="..\..\states\colorBlendStateAdvanced.cpp" />
     <ClCompile Include="..\..\states\multisampleState.cpp" />

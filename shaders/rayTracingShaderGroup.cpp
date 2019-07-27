@@ -15,11 +15,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include "shaderStagesRaytrace.h"
+#include "rayTracingShaderGroup.h"
+#include "../internal/hash.h"
 
 namespace magma
 {
-RaytracingShaderGroup::RaytracingShaderGroup(VkRayTracingShaderGroupTypeNV type,
+RayTracingShaderGroup::RayTracingShaderGroup(VkRayTracingShaderGroupTypeNV type,
     uint32_t generalShader, uint32_t closestHitShader, uint32_t anyHitShader, uint32_t intersectionShader)
 {
     sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_NV;
@@ -29,5 +30,18 @@ RaytracingShaderGroup::RaytracingShaderGroup(VkRayTracingShaderGroupTypeNV type,
     this->closestHitShader = closestHitShader;
     this->anyHitShader = anyHitShader;
     this->intersectionShader = intersectionShader;
+}
+
+size_t RayTracingShaderGroup::hash() const noexcept
+{
+    size_t hash = internal::hashArgs(
+        sType,
+        pNext,
+        type,
+        generalShader,
+        closestHitShader,
+        anyHitShader,
+        intersectionShader);
+    return hash;
 }
 } // namespace magma

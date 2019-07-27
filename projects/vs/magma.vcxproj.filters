@@ -73,6 +73,12 @@
     <Filter Include="Source Files\internal">
       <UniqueIdentifier>{c5068743-cbd8-4456-a41b-fc0d8e3e041b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\shaders">
+      <UniqueIdentifier>{e8c7631a-96b2-4ef1-9bcd-805d82a1a993}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shaders">
+      <UniqueIdentifier>{56134ab4-cfaa-40ec-b076-ec8c0feea20d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\allocator\allocator.h">
@@ -300,12 +306,6 @@
     <ClInclude Include="..\..\objects\shaderModule.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\shaderStages.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\shaderStagesRaytrace.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\objects\srcTransferBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -407,6 +407,18 @@
     </ClInclude>
     <ClInclude Include="..\..\objects\nondispatchable.h">
       <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shaders\specialization.h">
+      <Filter>Header Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shaders\pipelineShaderStage.h">
+      <Filter>Header Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shaders\shaderStages.h">
+      <Filter>Header Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shaders\rayTracingShaderGroup.h">
+      <Filter>Header Files\shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -602,9 +614,6 @@
     <ClCompile Include="..\..\objects\shaderModule.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\objects\shaderStages.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\objects\srcTransferBuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
@@ -632,11 +641,17 @@
     <ClCompile Include="..\..\helpers\executeCommandBuffer.cpp">
       <Filter>Source Files\helpers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\objects\shaderStagesRaytrace.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\states\colorBlendStateAdvanced.cpp">
       <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shaders\pipelineShaderStage.cpp">
+      <Filter>Source Files\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shaders\rayTracingShaderGroup.cpp">
+      <Filter>Source Files\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shaders\specialization.cpp">
+      <Filter>Source Files\shaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

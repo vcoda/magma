@@ -217,7 +217,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr
 }
 
 RaytracingPipeline::RaytracingPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
-    const std::vector<PipelineShaderStage>& stages, const std::vector<RaytracingShaderGroup>& groups,
+    const std::vector<PipelineShaderStage>& stages, const std::vector<RayTracingShaderGroup>& groups,
     uint32_t maxRecursionDepth, std::shared_ptr<const PipelineLayout> layout,
     std::shared_ptr<const RaytracingPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,

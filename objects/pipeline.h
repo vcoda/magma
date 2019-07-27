@@ -18,8 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <vector>
 #include "nondispatchable.h"
-#include "shaderStages.h"
-#include "shaderStagesRaytrace.h"
+#include "../shaders/shaderStages.h"
+#include "../shaders/rayTracingShaderGroup.h"
 
 namespace magma
 {
@@ -121,7 +121,7 @@ namespace magma
     public:
         explicit RaytracingPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
             const std::vector<PipelineShaderStage>& stages,
-            const std::vector<RaytracingShaderGroup>& groups,
+            const std::vector<RayTracingShaderGroup>& groups,
             uint32_t maxRecursionDepth,
             std::shared_ptr<const PipelineLayout> layout,
             std::shared_ptr<const RaytracingPipeline> basePipeline = nullptr,

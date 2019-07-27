@@ -15,8 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include "shaderStages.h"
-#include "shaderModule.h"
+#include "specialization.h"
 #include "../internal/hash.h"
 
 namespace magma
@@ -71,58 +70,6 @@ size_t Specialization::hash() const noexcept
     }
     internal::hashCombine(hash, internal::hashArray(
         reinterpret_cast<const uint8_t *>(pData), dataSize));
-    return hash;
-}
-
-PipelineShaderStage::PipelineShaderStage(const VkShaderStageFlagBits stage, std::shared_ptr<const ShaderModule> module, const char *const entrypoint,
-    std::shared_ptr<const Specialization> specialization, VkPipelineShaderStageCreateFlags flags) noexcept:
-    module(std::move(module)),
-    specialization(std::move(specialization))
-{
-    info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = flags;
-    info.stage = stage;
-    info.module = *this->module;
-    info.pName = internal::copyString(entrypoint);
-    info.pSpecializationInfo = this->specialization.get();
-}
-
-PipelineShaderStage::PipelineShaderStage(const PipelineShaderStage& other):
-    info(other.info),
-    module(other.module),
-    specialization(other.specialization)
-{
-    info.pName = internal::copyString(other.info.pName);
-}
-
-PipelineShaderStage& PipelineShaderStage::operator=(const PipelineShaderStage& other)
-{
-    if (this != &other)
-    {
-        info = other.info;
-        info.pName = internal::copyString(other.info.pName);
-        module = other.module;
-        specialization = other.specialization;
-    }
-    return *this;
-}
-
-PipelineShaderStage::~PipelineShaderStage()
-{
-    delete[] info.pName;
-}
-
-size_t PipelineShaderStage::hash() const noexcept
-{
-    size_t hash = internal::hashArgs(
-        info.flags,
-        info.stage,
-        info.module);
-    const std::string entrypoint(info.pName);
-    internal::hashCombine(hash, internal::hashString(entrypoint));
-    if (specialization)
-        internal::hashCombine(hash, specialization->hash());
     return hash;
 }
 } // namespace magma

@@ -81,8 +81,6 @@ MAGMA_OBJS= \
 	objects/sampler.o \
 	objects/semaphore.o \
 	objects/shaderModule.o \
-	objects/shaderStages.o \
-	objects/shaderStagesRaytrace.o \
 	objects/srcTransferBuffer.o \
 	objects/storageBuffer.o \
 	objects/storageTexelBuffer.o \
@@ -90,6 +88,10 @@ MAGMA_OBJS= \
 	objects/swapchain.o \
 	objects/uniformTexelBuffer.o \
 	objects/vertexBuffer.o \
+	\
+	shaders/pipelineShaderStage.o \
+	shaders/rayTracingShaderGroup.o \
+	shaders/specialization.o \
 	\
 	states/colorBlendState.o \
 	states/colorBlendStateAdvanced.o \

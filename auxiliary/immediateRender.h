@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <list>
 #include <unordered_map>
 #include <limits>
-#include "../objects/shaderStages.h"
+#include "../shaders/shaderStages.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/rasterizationState.h"
 #include "../states/multisampleState.h"
