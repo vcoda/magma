@@ -20,34 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Dispatchable handle types are a pointer to an opaque type.
-       This pointer may be used by layers as part of intercepting API commands,
-       and thus each API command takes a dispatchable type as its first parameter.
-       Each object of a dispatchable type must have a unique handle value during its lifetime. */
-
-    template<typename Type>
-    class Dispatchable : public Object
-    {
-    public:
-        typedef Type VkType;
-
-    public:
-        virtual uint64_t getHandle() const noexcept override
-            { return reinterpret_cast<uint64_t>(handle); }
-        operator Type() const noexcept
-            { return handle; }
-
-    protected:
-        explicit Dispatchable(VkObjectType objectType,
-            std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> allocator) noexcept:
-            Object(objectType, std::move(device), std::move(allocator)),
-            handle(nullptr) {}
-
-    protected:
-        Type handle;
-    };
-
     /* Non-dispatchable handle types are a 64-bit integer type whose meaning is
        implementation-dependent, and may encode object information directly
        in the handle rather than acting as a reference to an underlying object. */
@@ -56,7 +28,7 @@ namespace magma
     class NonDispatchable : public Object
     {
     public:
-        typedef Type VkType;
+        typedef Type VkHandleType;
 
     public:
         virtual uint64_t getHandle() const noexcept override

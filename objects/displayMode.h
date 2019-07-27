@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <map>
-#include "handle.h"
+#include "nondispatchable.h"
 
 namespace magma
 {

@@ -231,9 +231,6 @@
     <ClInclude Include="..\..\objects\framebuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\handle.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\objects\image.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -404,6 +401,12 @@
     </ClInclude>
     <ClInclude Include="..\..\helpers\typedefs.h">
       <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\objects\dispatchable.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\objects\nondispatchable.h">
+      <Filter>Header Files\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

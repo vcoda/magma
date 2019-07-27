@@ -194,13 +194,13 @@
     <ClInclude Include="..\..\objects\descriptorSetLayout.h" />
     <ClInclude Include="..\..\objects\device.h" />
     <ClInclude Include="..\..\objects\deviceMemory.h" />
+    <ClInclude Include="..\..\objects\dispatchable.h" />
     <ClInclude Include="..\..\objects\display.h" />
     <ClInclude Include="..\..\objects\displayMode.h" />
     <ClInclude Include="..\..\objects\dstTransferBuffer.h" />
     <ClInclude Include="..\..\objects\event.h" />
     <ClInclude Include="..\..\objects\fence.h" />
     <ClInclude Include="..\..\objects\framebuffer.h" />
-    <ClInclude Include="..\..\objects\handle.h" />
     <ClInclude Include="..\..\objects\image.h" />
     <ClInclude Include="..\..\objects\image1D.h" />
     <ClInclude Include="..\..\objects\image1DArray.h" />
@@ -212,6 +212,7 @@
     <ClInclude Include="..\..\objects\indexBuffer.h" />
     <ClInclude Include="..\..\objects\indirectBuffer.h" />
     <ClInclude Include="..\..\objects\instance.h" />
+    <ClInclude Include="..\..\objects\nondispatchable.h" />
     <ClInclude Include="..\..\objects\object.h" />
     <ClInclude Include="..\..\objects\physicalDevice.h" />
     <ClInclude Include="..\..\objects\pipeline.h" />

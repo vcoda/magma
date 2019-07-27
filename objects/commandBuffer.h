@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <list>
 #include <limits>
+#include "dispatchable.h"
 #include "descriptorSet.h"
 #include "vertexBuffer.h"
 #include "indexBuffer.h"

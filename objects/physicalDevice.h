@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <vector>
 #include <string>
-#include "handle.h"
+#include "dispatchable.h"
 #include "../misc/deviceQueueDesc.h"
 
 namespace magma

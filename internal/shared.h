@@ -79,7 +79,7 @@ namespace magma
     namespace internal
     {
         template<typename Type>
-        inline typename Type::VkType dereference(const std::shared_ptr<Type>& obj)
+        inline typename Type::VkHandleType dereference(const std::shared_ptr<Type>& obj)
         {
             if (obj) return *obj;
 #ifdef VK_NULL_HANDLE
