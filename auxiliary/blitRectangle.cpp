@@ -28,6 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/pipelineLayout.h"
 #include "../objects/pipeline.h"
 #include "../objects/commandBuffer.h"
+#include "../shaders/shaderStages.h"
 #include "../states/vertexInputState.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/rasterizationState.h"

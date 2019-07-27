@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "pipeline.h"
-#include "../shaders/shaderStages.h"
+#include "../shaders/pipelineShaderStage.h"
 
 namespace magma
 {
