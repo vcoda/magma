@@ -186,6 +186,7 @@
     <ClInclude Include="..\..\objects\bufferView.h" />
     <ClInclude Include="..\..\objects\commandBuffer.h" />
     <ClInclude Include="..\..\objects\commandPool.h" />
+    <ClInclude Include="..\..\objects\computePipeline.h" />
     <ClInclude Include="..\..\objects\conditionalRenderingBuffer.h" />
     <ClInclude Include="..\..\objects\debugReportCallback.h" />
     <ClInclude Include="..\..\objects\debugUtilsMessenger.h" />
@@ -201,6 +202,7 @@
     <ClInclude Include="..\..\objects\event.h" />
     <ClInclude Include="..\..\objects\fence.h" />
     <ClInclude Include="..\..\objects\framebuffer.h" />
+    <ClInclude Include="..\..\objects\graphicsPipeline.h" />
     <ClInclude Include="..\..\objects\image.h" />
     <ClInclude Include="..\..\objects\image1D.h" />
     <ClInclude Include="..\..\objects\image1DArray.h" />
@@ -221,6 +223,7 @@
     <ClInclude Include="..\..\objects\queryPool.h" />
     <ClInclude Include="..\..\objects\queue.h" />
     <ClInclude Include="..\..\objects\raytracingBuffer.h" />
+    <ClInclude Include="..\..\objects\rayTracingPipeline.h" />
     <ClInclude Include="..\..\objects\renderPass.h" />
     <ClInclude Include="..\..\objects\sampler.h" />
     <ClInclude Include="..\..\objects\semaphore.h" />
@@ -275,6 +278,7 @@
     <ClCompile Include="..\..\objects\commandBuffer.cpp" />
     <ClCompile Include="..\..\objects\commandBufferDebug.cpp" />
     <ClCompile Include="..\..\objects\commandPool.cpp" />
+    <ClCompile Include="..\..\objects\computePipeline.cpp" />
     <ClCompile Include="..\..\objects\conditionalRenderingBuffer.cpp" />
     <ClCompile Include="..\..\objects\debugReportCallback.cpp" />
     <ClCompile Include="..\..\objects\debugUtilsMessenger.cpp" />
@@ -289,6 +293,7 @@
     <ClCompile Include="..\..\objects\event.cpp" />
     <ClCompile Include="..\..\objects\fence.cpp" />
     <ClCompile Include="..\..\objects\framebuffer.cpp" />
+    <ClCompile Include="..\..\objects\graphicsPipeline.cpp" />
     <ClCompile Include="..\..\objects\image.cpp" />
     <ClCompile Include="..\..\objects\image1D.cpp" />
     <ClCompile Include="..\..\objects\image1DArray.cpp" />
@@ -308,6 +313,7 @@
     <ClCompile Include="..\..\objects\queryPool.cpp" />
     <ClCompile Include="..\..\objects\queue.cpp" />
     <ClCompile Include="..\..\objects\raytracingBuffer.cpp" />
+    <ClCompile Include="..\..\objects\rayTracingPipeline.cpp" />
     <ClCompile Include="..\..\objects\renderPass.cpp" />
     <ClCompile Include="..\..\objects\sampler.cpp" />
     <ClCompile Include="..\..\objects\semaphore.cpp" />

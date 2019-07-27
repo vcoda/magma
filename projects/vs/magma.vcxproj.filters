@@ -420,6 +420,15 @@
     <ClInclude Include="..\..\shaders\rayTracingShaderGroup.h">
       <Filter>Header Files\shaders</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\graphicsPipeline.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\objects\computePipeline.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\objects\rayTracingPipeline.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -652,6 +661,15 @@
     </ClCompile>
     <ClCompile Include="..\..\shaders\specialization.cpp">
       <Filter>Source Files\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\graphicsPipeline.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\computePipeline.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\rayTracingPipeline.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

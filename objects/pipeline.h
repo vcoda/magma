@@ -18,13 +18,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <vector>
 #include "nondispatchable.h"
-#include "../shaders/shaderStages.h"
-#include "../shaders/rayTracingShaderGroup.h"
+#include "pipelineLayout.h"
 
 namespace magma
 {
-    class PipelineCache;
-    class PipelineLayout;
+    class Device;
+    class IAllocator;
 
     /* Some Vulkan commands specify geometric objects to be drawn or computational work to be performed,
        while others specify state controlling how objects are handled by the various pipeline stages,
@@ -45,89 +44,5 @@ namespace magma
 
     protected:
         std::unique_ptr<PipelineLayout> defaultLayout;
-    };
-
-    struct InputAssemblyState;
-    struct TesselationState;
-    struct RasterizationState;
-    struct MultisampleState;
-    struct DepthStencilState;
-    struct ColorBlendState;
-    struct VertexInputState;
-
-    class ViewportState;
-    class RenderPass;
-
-    /* Graphics pipelines consist of multiple shader stages,
-       multiple fixed-function pipeline stages, and a pipeline layout. */
-
-    class GraphicsPipeline : public Pipeline
-    {
-    public:
-        explicit GraphicsPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
-            const std::vector<PipelineShaderStage>& stages,
-            const VertexInputState& vertexInputState,
-            const InputAssemblyState& inputAssemblyState,
-            const RasterizationState& rasterizationState,
-            const MultisampleState& multisampleState,
-            const DepthStencilState& depthStencilState,
-            const ColorBlendState& colorBlendState,
-            const std::initializer_list<VkDynamicState>& dynamicStates,
-            std::shared_ptr<const PipelineLayout> layout,
-            std::shared_ptr<const RenderPass> renderPass,
-            uint32_t subpass = 0,
-            std::shared_ptr<const GraphicsPipeline> basePipeline = nullptr,
-            VkPipelineCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-        explicit GraphicsPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
-            const std::vector<PipelineShaderStage>& stages,
-            const VertexInputState& vertexInputState,
-            const InputAssemblyState& inputAssemblyState,
-            const TesselationState& tesselationState,
-            const ViewportState& viewportState,
-            const RasterizationState& rasterizationState,
-            const MultisampleState& multisampleState,
-            const DepthStencilState& depthStencilState,
-            const ColorBlendState& colorBlendState,
-            const std::initializer_list<VkDynamicState>& dynamicStates,
-            std::shared_ptr<const PipelineLayout> layout,
-            std::shared_ptr<const RenderPass> renderPass,
-            uint32_t subpass = 0,
-            std::shared_ptr<const GraphicsPipeline> basePipeline = nullptr,
-            VkPipelineCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-    };
-
-    /* The compute pipeline is a separate pipeline from the graphics pipeline,
-       which operates on one-, two-, or three-dimensional workgroups
-       which can read from and write to buffer and image memory. */
-
-    class ComputePipeline : public Pipeline
-    {
-    public:
-        explicit ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
-            const PipelineShaderStage& stage,
-            std::shared_ptr<const PipelineLayout> layout = nullptr,
-            std::shared_ptr<const ComputePipeline> basePipeline = nullptr,
-            VkPipelineCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-    };
-
-    /* Raytracing pipelines consist of multiple shader stages,
-       fixed-function traversal stages, and a pipeline layout. */
-
-    class RaytracingPipeline : public Pipeline
-    {
-    public:
-        explicit RaytracingPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
-            const std::vector<PipelineShaderStage>& stages,
-            const std::vector<RayTracingShaderGroup>& groups,
-            uint32_t maxRecursionDepth,
-            std::shared_ptr<const PipelineLayout> layout,
-            std::shared_ptr<const RaytracingPipeline> basePipeline = nullptr,
-            VkPipelineCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-        std::vector<VkShaderModule> getShaderGroupHandles(uint32_t firstGroup, uint32_t groupCount) const;
-        void compileDeferred(uint32_t shaderIndex);
     };
 } // namespace magma

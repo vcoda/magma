@@ -10,7 +10,7 @@ inline void CommandBuffer::bindPipeline(const std::shared_ptr<ComputePipeline>& 
     vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_COMPUTE, *pipeline);
 }
 
-inline void CommandBuffer::bindPipeline(const std::shared_ptr<RaytracingPipeline>& pipeline) noexcept
+inline void CommandBuffer::bindPipeline(const std::shared_ptr<RayTracingPipeline>& pipeline) noexcept
 {
     vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, *pipeline);
 }

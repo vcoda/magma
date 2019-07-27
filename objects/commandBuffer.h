@@ -22,7 +22,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptorSet.h"
 #include "vertexBuffer.h"
 #include "indexBuffer.h"
-#include "pipeline.h"
+#include "graphicsPipeline.h"
+#include "computePipeline.h"
+#include "rayTracingPipeline.h"
 #include "pipelineLayout.h"
 #include "../misc/clearValue.h"
 #include "../misc/clearAttachment.h"
@@ -77,7 +79,7 @@ namespace magma
 
         void bindPipeline(const std::shared_ptr<GraphicsPipeline>& pipeline) noexcept;
         void bindPipeline(const std::shared_ptr<ComputePipeline>& pipeline) noexcept;
-        void bindPipeline(const std::shared_ptr<RaytracingPipeline>& pipeline) noexcept;
+        void bindPipeline(const std::shared_ptr<RayTracingPipeline>& pipeline) noexcept;
 
         void setViewport(
             float x, float y,
