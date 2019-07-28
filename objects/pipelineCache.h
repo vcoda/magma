@@ -20,6 +20,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class Device;
+    class IAllocator;
+
     /* Pipeline cache objects allow the result of pipeline construction
        to be reused between pipelines and between runs of an application.
        Reuse between pipelines is achieved by passing the same pipeline cache object
