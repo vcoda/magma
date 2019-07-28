@@ -665,9 +665,6 @@
     <ClCompile Include="..\..\objects\rayTracingPipeline.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\magma.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\internal\pch.cpp">
       <Filter>Source Files\internal</Filter>
     </ClCompile>
