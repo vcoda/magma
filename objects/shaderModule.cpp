@@ -19,21 +19,30 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "shaderModule.h"
 #include "device.h"
+#include "validationCache.h"
 #include "../allocator/allocator.h"
 #include "../misc/exception.h"
 
 namespace magma
 {
 ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *bytecode, size_t bytecodeSize,
+    std::shared_ptr<ValidationCache> validationCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_SHADER_MODULE, std::move(device), std::move(allocator))
 {
-    // A module is defined as a stream of words, not a stream of bytes
-    MAGMA_ASSERT(bytecodeSize % sizeof(SpirvWord) == 0);
     VkShaderModuleCreateInfo info;
+    VkShaderModuleValidationCacheCreateInfoEXT cacheCreateInfo;
     info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = 0;
+    if (!validationCache)
+        info.pNext = nullptr;
+    else
+    {
+        cacheCreateInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_VALIDATION_CACHE_CREATE_INFO_EXT;
+        cacheCreateInfo.pNext = nullptr;
+        cacheCreateInfo.validationCache = MAGMA_OPTIONAL_HANDLE(validationCache);
+        info.pNext = &cacheCreateInfo;
+    }
+    MAGMA_ASSERT(bytecodeSize % sizeof(SpirvWord) == 0); // A module is defined as a stream of words, not a stream of bytes
     info.codeSize = bytecodeSize;
     info.pCode = bytecode;
     const VkResult create = vkCreateShaderModule(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
@@ -41,8 +50,10 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
 }
 
 ShaderModule::ShaderModule(std::shared_ptr<Device> device, const std::vector<SpirvWord>& bytecode,
+    std::shared_ptr<ValidationCache> validationCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    ShaderModule(std::move(device), bytecode.data(), bytecode.size() * sizeof(SpirvWord), std::move(allocator))
+    ShaderModule(std::move(device), bytecode.data(), bytecode.size() * sizeof(SpirvWord), 
+        std::move(validationCache), std::move(allocator))
 {}
 
 ShaderModule::~ShaderModule()

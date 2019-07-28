@@ -77,6 +77,7 @@ namespace magma
     typedef std::shared_ptr<class Swapchain> SwapchainPtr;
     typedef std::shared_ptr<class TimestampQuery> TimestampQueryPtr;
     typedef std::shared_ptr<class UniformTexelBuffer> UniformTexelBufferPtr;
+    typedef std::shared_ptr<class ValidationCache> ValidationCachePtr;
     typedef std::shared_ptr<class VertexBuffer> VertexBufferPtr;
 
     typedef std::unique_ptr<struct InstanceExtensions> InstanceExtensionsPtr;

@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
+    class ValidationCache;
     class IAllocator;
 
     /* See https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.pdf
@@ -38,16 +39,19 @@ namespace magma
         explicit ShaderModule(std::shared_ptr<Device> device,
             const SpirvWord *bytecode,
             size_t bytecodeSize,
+            std::shared_ptr<ValidationCache> validationCache = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit ShaderModule(std::shared_ptr<Device> device,
             const std::vector<SpirvWord>& bytecode,
+            std::shared_ptr<ValidationCache> validationCache = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr);
         template<size_t WordCount>
         explicit ShaderModule(std::shared_ptr<Device> device,
             const SpirvWord (&bytecode)[WordCount],
+            std::shared_ptr<ValidationCache> validationCache = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr):
             ShaderModule(std::move(device), bytecode, WordCount * sizeof(SpirvWord), 
-                std::move(allocator)) {}
+                std::move(validationCache), std::move(allocator)) {}
         ~ShaderModule();
     };
 } // namespace magma
