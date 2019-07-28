@@ -53,8 +53,16 @@ namespace magma
         ~ImageView();
         std::shared_ptr<Image> getImage() noexcept { return image; }
         std::shared_ptr<const Image> getImage() const noexcept { return image; }
+        uint32_t getBaseMipLevel() const noexcept { return baseMipLevel; }
+        uint32_t getMipLevelCount() const noexcept { return levelCount; }
+        uint32_t getBaseArrayLayer() const noexcept { return baseArrayLayer; }
+        uint32_t getArrayLayerCount() const noexcept { return layerCount; } 
 
     private:
         std::shared_ptr<Image> image;
+        uint32_t baseMipLevel;
+        uint32_t levelCount;
+        uint32_t baseArrayLayer;
+        uint32_t layerCount;
     };
 } // namespace magma

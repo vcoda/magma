@@ -41,7 +41,11 @@ ImageView::ImageView(std::shared_ptr<Image> resource,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, std::move(resource->getDevice()), std::move(allocator)),
-    image(std::move(resource))
+    image(std::move(resource)),
+    baseMipLevel(baseMipLevel),
+    levelCount(levelCount),
+    baseArrayLayer(baseArrayLayer),
+    layerCount(layerCount)
 {
     VkImageViewCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
