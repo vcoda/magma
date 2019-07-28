@@ -76,6 +76,9 @@
     <Filter Include="Source Files\shaders">
       <UniqueIdentifier>{56134ab4-cfaa-40ec-b076-ec8c0feea20d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\internal">
+      <UniqueIdentifier>{e54257bc-c13d-4527-9935-9e53a2a2d997}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\allocator\allocator.h">
@@ -354,9 +357,6 @@
     <ClInclude Include="..\..\states\viewportState.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\api\vulkan.h">
-      <Filter>Header Files\api</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\internal\nonCopyable.h">
       <Filter>Header Files\internal</Filter>
     </ClInclude>
@@ -425,6 +425,9 @@
     </ClInclude>
     <ClInclude Include="..\..\helpers\castToDebugReport.h">
       <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\internal\pch.h">
+      <Filter>Header Files\internal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -664,6 +667,12 @@
     </ClCompile>
     <ClCompile Include="..\..\objects\rayTracingPipeline.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\magma.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\internal\pch.cpp">
+      <Filter>Source Files\internal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -17,12 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #ifdef _WIN32
 #pragma once
-#include <string>
-#include <unordered_map>
-#include <memory>
 #include <shaderc/shaderc.h>
 #include "../misc/exception.h"
-#include "../internal/nonCopyable.h"
 
 namespace magma
 {

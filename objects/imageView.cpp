@@ -15,13 +15,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
+#include "pch.h"
+#pragma hdrstop
 #include "imageView.h"
 #include "image.h"
 #include "device.h"
 #include "../allocator/allocator.h"
 #include "../misc/format.h"
 #include "../misc/exception.h"
-#include "../internal/shared.h"
 
 namespace magma
 {

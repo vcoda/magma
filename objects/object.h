@@ -16,11 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <memory>
-#include <atomic>
-#include "../api/vulkan.h"
 #include "../allocator/objectAllocator.h"
-#include "../internal/shared.h"
 
 namespace magma
 {

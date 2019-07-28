@@ -15,6 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
+#include "pch.h"
+#pragma hdrstop
 #include "buffer.h"
 #include "srcTransferBuffer.h"
 #include "device.h"
@@ -26,7 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/deviceExtension.h"
 #include "../misc/exception.h"
 #include "../internal/copyMemory.h"
-#include "../internal/shared.h"
+
 
 namespace magma
 {

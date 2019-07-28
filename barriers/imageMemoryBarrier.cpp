@@ -15,11 +15,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
+#include "pch.h"
+#pragma hdrstop
 #include "imageMemoryBarrier.h"
 #include "../objects/image.h"
 #include "../misc/imageSubresourceRange.h"
 #include "../misc/exception.h"
-#include "../internal/shared.h"
 
 namespace magma
 {

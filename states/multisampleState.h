@@ -16,9 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../api/vulkan.h"
 #include "../internal/copy.h"
-#include "../internal/hash.h"
 #include "../internal/compare.h"
 
 namespace magma

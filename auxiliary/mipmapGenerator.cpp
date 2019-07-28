@@ -15,6 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
+#include "pch.h"
+#pragma hdrstop
 #include "mipmapGenerator.h"
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
@@ -24,7 +26,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/fence.h"
 #include "../barriers/imageMemoryBarrier.h"
 #include "../misc/imageSubresourceRange.h"
-#include "../internal/shared.h"
 
 namespace magma
 {

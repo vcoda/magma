@@ -15,14 +15,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include <algorithm>
+#include "pch.h"
+#pragma hdrstop
 #include "sampler.h"
 #include "device.h"
 #include "physicalDevice.h"
 #include "../states/samplerState.h"
 #include "../allocator/allocator.h"
 #include "../misc/exception.h"
-#include "../internal/shared.h"
 
 namespace magma
 {

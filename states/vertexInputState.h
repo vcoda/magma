@@ -16,11 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <initializer_list>
-#include "../api/vulkan.h"
 #include "../misc/format.h"
-#include "../internal/nonCopyable.h"
-#include "../internal/hash.h"
 
 namespace magma
 {

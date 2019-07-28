@@ -15,7 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include <cstdarg>
+#include "pch.h"
+#pragma hdrstop
 #include "debugUtilsMessenger.h"
 #include "instance.h"
 #include "../allocator/allocator.h"

@@ -15,6 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
+#include "pch.h"
+#pragma hdrstop
 #include "descriptorSet.h"
 #include "descriptorSetLayout.h"
 #include "device.h"
@@ -24,7 +26,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "imageView.h"
 #include "sampler.h"
 #include "../misc/format.h"
-#include "../internal/shared.h"
 
 namespace magma
 {

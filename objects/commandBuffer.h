@@ -16,8 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <list>
-#include <limits>
 #include "dispatchable.h"
 #include "descriptorSet.h"
 #include "vertexBuffer.h"
@@ -31,7 +29,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/viewport.h"
 #include "../misc/scissor.h"
 #include "../helpers/stackArray.h"
-#include "../internal/shared.h"
+
 
 namespace magma
 {

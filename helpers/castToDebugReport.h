@@ -1,5 +1,4 @@
 #pragma once
-#include "../api/vulkan.h"
 
 namespace magma
 {

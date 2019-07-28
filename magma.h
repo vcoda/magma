@@ -17,6 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
+#include "internal/pch.h"
+
 #include "allocator/allocator.h"
 #include "allocator/objectAllocator.h"
 
