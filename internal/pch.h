@@ -26,7 +26,9 @@
 #endif
 
 #ifdef _WIN32
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif
 #endif
 #ifndef VULKAN_H_
 #include <vulkan/vulkan.h>
