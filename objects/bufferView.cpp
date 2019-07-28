@@ -31,7 +31,10 @@ BufferView::BufferView(std::shared_ptr<Buffer> resource,
     VkDeviceSize range /* VK_WHOLE_SIZE */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_BUFFER_VIEW, resource->getDevice(), std::move(allocator)),
-    buffer(std::move(resource))
+    buffer(std::move(resource)),
+    format(format),
+    offset(offset),
+    range(range)
 {
     MAGMA_ASSERT(buffer->getUsage() &
         (VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT |

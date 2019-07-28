@@ -37,8 +37,14 @@ namespace magma
         ~BufferView();
         std::shared_ptr<Buffer> getBuffer() noexcept { return buffer; }
         std::shared_ptr<const Buffer> getBuffer() const noexcept { return buffer; }
+        VkFormat getFormat() const noexcept { return format; }
+        VkDeviceSize getOffset() const noexcept { return offset; }
+        VkDeviceSize getRange() const noexcept { return range; }
 
     private:
         std::shared_ptr<Buffer> buffer;
+        VkFormat format;
+        VkDeviceSize offset;
+        VkDeviceSize range;
     };
 } // namespace magma
