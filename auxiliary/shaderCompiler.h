@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #ifdef _WIN32
 #pragma once
 #include <shaderc/shaderc.h>
+#include "../internal/noncopyable.h"
 #include "../misc/exception.h"
 
 namespace magma

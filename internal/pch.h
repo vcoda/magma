@@ -35,5 +35,4 @@
 #endif
 
 #include "shared.h"
-#include "noncopyable.h"
 #include "hash.h"
