@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "instance.h"
 #include "../allocator/allocator.h"
 #include "../misc/instanceExtension.h"
+#include "../helpers/castToDebugReport.h"
 
 namespace magma
 {
@@ -70,7 +71,7 @@ void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkObjectType obje
         vsprintf(message, format, args);
 #endif
         va_end(args);
-        const VkDebugReportObjectTypeEXT debugObjectType = castToDebugReportType(objectType);
+        const VkDebugReportObjectTypeEXT debugObjectType = helpers::castToDebugReportType(objectType);
         vkDebugReportMessageEXT(MAGMA_HANDLE(instance), flags, debugObjectType, object, location, messageCode, layerPrefix, message);
     }
 }

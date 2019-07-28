@@ -53,8 +53,6 @@ namespace magma
         static std::shared_ptr<IObjectAllocator> getOverridenAllocator() noexcept;
 
     protected:
-        VkDebugReportObjectTypeEXT castToDebugReportType(VkObjectType) const noexcept;
-
         VkObjectType objectType;
         std::shared_ptr<Device> device;
         std::shared_ptr<IAllocator> allocator;
