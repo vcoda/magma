@@ -40,12 +40,6 @@ PipelineCache::PipelineCache(std::shared_ptr<Device> device,
     MAGMA_THROW_FAILURE(create, "failed to create pipeline cache");
 }
 
-PipelineCache::PipelineCache(std::shared_ptr<Device> device,
-    const std::vector<uint8_t>& cacheData /* {} */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    PipelineCache(std::move(device), cacheData.size(), cacheData.data(), std::move(allocator))
-{}
-
 PipelineCache::~PipelineCache()
 {
     vkDestroyPipelineCache(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));

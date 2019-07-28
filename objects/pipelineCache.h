@@ -48,9 +48,12 @@ namespace magma
             size_t dataSize,
             const void *cacheData,
             std::shared_ptr<IAllocator> allocator = nullptr);
+        template<typename Type>
         explicit PipelineCache(std::shared_ptr<Device> device,
-            const std::vector<uint8_t>& cacheData = {},
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            const std::vector<Type>& cacheData = {},
+            std::shared_ptr<IAllocator> allocator = nullptr):
+            PipelineCache(std::move(device), cacheData.size() * sizeof(Type), cacheData.data(),
+                std::move(allocator)) {}
         ~PipelineCache();
         std::vector<uint8_t> getData() const;
         void mergeCaches(const std::vector<std::shared_ptr<const PipelineCache>>& caches);
