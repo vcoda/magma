@@ -2,9 +2,6 @@
 #include <cstddef>
 #include <cstring>
 #include <cstdarg>
-#ifdef _DEBUG
-#include <cassert>
-#endif
 
 #include <algorithm>
 #include <functional>
