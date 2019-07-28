@@ -64,9 +64,6 @@
     <Filter Include="Source Files\auxiliary\spirv">
       <UniqueIdentifier>{c3b02838-c559-4057-8d22-d9cdadfb5920}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\api">
-      <UniqueIdentifier>{998d6151-609b-4dd4-ba47-8b056f2cc48c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\internal">
       <UniqueIdentifier>{f51a856c-0dcd-4f37-84ac-03b251d1ddc9}</UniqueIdentifier>
     </Filter>
