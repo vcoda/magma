@@ -191,4 +191,23 @@ VkDebugReportObjectTypeEXT Object::castToDebugReportType(VkObjectType objectType
         return VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT;
     }
 }
+
+std::shared_ptr<IObjectAllocator> Object::objectAllocator;
+#ifdef MAGMA_DEBUG
+std::atomic<int64_t> Object::allocCount = 0;
+#endif
+
+void Object::overrideDefaultAllocator(std::shared_ptr<IObjectAllocator> allocator)
+{
+#ifdef MAGMA_DEBUG
+    if (allocCount)
+        MAGMA_THROW("object allocator should be defined prior any allocations");
+#endif
+    objectAllocator = std::move(allocator);
+}
+
+std::shared_ptr<IObjectAllocator> Object::getOverridenAllocator() noexcept
+{
+    return objectAllocator;
+}
 } // namespace magma

@@ -157,7 +157,6 @@
     <ClInclude Include="..\..\helpers\stringize.h" />
     <ClInclude Include="..\..\helpers\typedefs.h" />
     <ClInclude Include="..\..\helpers\uniformArray.h" />
-    <ClInclude Include="..\..\internal\allocable.h" />
     <ClInclude Include="..\..\internal\compare.h" />
     <ClInclude Include="..\..\internal\copy.h" />
     <ClInclude Include="..\..\internal\copyMemory.h" />
@@ -265,7 +264,6 @@
     <ClCompile Include="..\..\descriptors\subpass.cpp" />
     <ClCompile Include="..\..\helpers\executeCommandBuffer.cpp" />
     <ClCompile Include="..\..\helpers\stringize.cpp" />
-    <ClCompile Include="..\..\internal\allocable.cpp" />
     <ClCompile Include="..\..\misc\deviceQueueDesc.cpp" />
     <ClCompile Include="..\..\misc\exception.cpp" />
     <ClCompile Include="..\..\misc\extensions.cpp" />
@@ -411,6 +409,7 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
     <None Include="..\..\misc\viewport.inl" />
     <None Include="..\..\objects\commandBuffer.inl" />
     <None Include="..\..\objects\indexBuffer.inl" />
+    <None Include="..\..\objects\object.inl" />
     <None Include="..\..\objects\srcTransferBuffer.inl" />
     <None Include="..\..\objects\storageBuffer.inl" />
     <None Include="..\..\objects\vertexBuffer.inl" />

@@ -70,9 +70,6 @@
     <Filter Include="Header Files\internal">
       <UniqueIdentifier>{f51a856c-0dcd-4f37-84ac-03b251d1ddc9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\internal">
-      <UniqueIdentifier>{c5068743-cbd8-4456-a41b-fc0d8e3e041b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\shaders">
       <UniqueIdentifier>{e8c7631a-96b2-4ef1-9bcd-805d82a1a993}</UniqueIdentifier>
     </Filter>
@@ -372,9 +369,6 @@
     <ClInclude Include="..\..\magma.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\internal\allocable.h">
-      <Filter>Header Files\internal</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\internal\copyMemory.h">
       <Filter>Header Files\internal</Filter>
     </ClInclude>
@@ -644,9 +638,6 @@
     <ClCompile Include="..\..\objects\vertexBuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\internal\allocable.cpp">
-      <Filter>Source Files\internal</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\helpers\executeCommandBuffer.cpp">
       <Filter>Source Files\helpers</Filter>
     </ClCompile>
@@ -744,6 +735,9 @@
     </None>
     <None Include="..\..\states\colorBlendStateAdvanced.inl">
       <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\objects\object.inl">
+      <Filter>Header Files\objects</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -17,19 +17,25 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <memory>
+#include <atomic>
 #include "../api/vulkan.h"
-#include "../internal/allocable.h"
+#include "../allocator/objectAllocator.h"
+#include "../internal/shared.h"
 
 namespace magma
 {
     class Device;
     class IAllocator;
 
-    /* Base non-copyable object for dispatchable and non-dispatchable handles. */
+    /* Base non-copyable object for dispatchable and non-dispatchable handles.
+       Provides user-defined new and delete operators for custom allocations. */
 
-    class Object : public internal::Allocable
+    class Object : public internal::NonCopyable
     {
     public:
+        void *operator new(std::size_t size);
+        void *operator new(std::size_t size, const std::nothrow_t&) noexcept;
+        void operator delete(void *ptr);
         explicit Object(VkObjectType objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator) noexcept;
@@ -43,6 +49,8 @@ namespace magma
         void setObjectTag(uint64_t tagName, const Tag& tag) noexcept
             { setObjectTag(tagName, sizeof(Tag), &tag); }
         virtual uint64_t getHandle() const noexcept = 0;
+        static void overrideDefaultAllocator(std::shared_ptr<IObjectAllocator> allocator);
+        static std::shared_ptr<IObjectAllocator> getOverridenAllocator() noexcept;
 
     protected:
         VkDebugReportObjectTypeEXT castToDebugReportType(VkObjectType) const noexcept;
@@ -50,5 +58,11 @@ namespace magma
         VkObjectType objectType;
         std::shared_ptr<Device> device;
         std::shared_ptr<IAllocator> allocator;
+        
+    private:
+        static std::shared_ptr<IObjectAllocator> objectAllocator;
+        static std::atomic<int64_t> allocCount;
     };
 } // namespace magma
+
+#include "object.inl"
