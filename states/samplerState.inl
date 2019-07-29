@@ -38,7 +38,9 @@ constexpr AnisotropicSamplerState::AnisotropicSamplerState(VkFilter magFilter, V
     anisotropyEnable = true;
     // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 
     // 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive.
-    this->maxAnisotropy = std::max(1.f, maxAnisotropy);
+    if (maxAnisotropy < 1.f)
+        maxAnisotropy = 1.f;
+    this->maxAnisotropy = maxAnisotropy;
 }
 
 constexpr DepthSamplerState::DepthSamplerState(VkFilter magFilter, VkFilter minFilter, VkCompareOp compareOp) noexcept:
