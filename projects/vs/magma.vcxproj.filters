@@ -288,9 +288,6 @@
     <ClInclude Include="..\..\objects\queue.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\raytracingBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\objects\renderPass.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -427,6 +424,9 @@
       <Filter>Header Files\internal</Filter>
     </ClInclude>
     <ClInclude Include="..\..\objects\validationCache.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\objects\rayTracingBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
   </ItemGroup>
@@ -608,9 +608,6 @@
     <ClCompile Include="..\..\objects\queue.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\objects\raytracingBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\objects\renderPass.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
@@ -672,6 +669,9 @@
       <Filter>Source Files\internal</Filter>
     </ClCompile>
     <ClCompile Include="..\..\objects\validationCache.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\rayTracingBuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>

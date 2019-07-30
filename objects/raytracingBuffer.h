@@ -25,15 +25,15 @@ namespace magma
 
     /* Buffer data for raytracing pipeline. */
 
-    class RaytracingBuffer : public Buffer
+    class RayTracingBuffer : public Buffer
     {
     public:
-        explicit RaytracingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+        explicit RayTracingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
-        explicit RaytracingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+        explicit RayTracingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             std::shared_ptr<SrcTransferBuffer> srcBuffer,
             VkBufferCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);

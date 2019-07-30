@@ -64,6 +64,7 @@ namespace magma
     typedef std::shared_ptr<class PipelineCache> PipelineCachePtr;
     typedef std::shared_ptr<class PipelineLayout> PipelineLayoutPtr;
     typedef std::shared_ptr<class PipelineStatisticsQuery> PipelineStatisticsQueryPtr;
+    typedef std::shared_ptr<class RayTracingBuffer> RayTracingBufferPtr;
     typedef std::shared_ptr<class RayTracingPipeline> RayTracingPipelinePtr;
     typedef std::shared_ptr<class QueryPool> QueryPoolPtr;
     typedef std::shared_ptr<class Queue> QueuePtr;

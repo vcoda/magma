@@ -78,7 +78,7 @@ MAGMA_OBJS= \
 	objects/pipelineLayout.o \
 	objects/queryPool.o \
 	objects/queue.o \
-	objects/raytracingBuffer.o \
+	objects/rayTracingBuffer.o \
 	objects/rayTracingPipeline.o \
 	objects/renderPass.o \
 	objects/sampler.o \

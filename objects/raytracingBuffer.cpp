@@ -17,23 +17,23 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "raytracingBuffer.h"
+#include "rayTracingBuffer.h"
 #include "srcTransferBuffer.h"
 #include "commandBuffer.h"
 #include "deviceMemory.h"
 
 namespace magma
 {
-RaytracingBuffer::RaytracingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size,
+RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    RaytracingBuffer(copyCmdBuffer,
+    RayTracingBuffer(copyCmdBuffer,
         std::make_shared<SrcTransferBuffer>(copyCmdBuffer->getDevice(), data, size, 0, allocator, std::move(copyFn)),
         flags, std::move(allocator))
 {}
 
-RaytracingBuffer::RaytracingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, std::shared_ptr<SrcTransferBuffer> srcBuffer,
+RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, std::shared_ptr<SrcTransferBuffer> srcBuffer,
     VkBufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Buffer(copyCmdBuffer->getDevice(), srcBuffer->getMemory()->getSize(),

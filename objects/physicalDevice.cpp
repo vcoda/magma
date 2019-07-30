@@ -289,7 +289,7 @@ VkPhysicalDeviceShaderCorePropertiesAMD PhysicalDevice::getShaderCoreProperties(
     return shaderCoreProperties;
 }
 
-VkPhysicalDeviceRayTracingPropertiesNV PhysicalDevice::getRaytracingProperties() const
+VkPhysicalDeviceRayTracingPropertiesNV PhysicalDevice::getRayTracingProperties() const
 {
     VkPhysicalDeviceRayTracingPropertiesNV raytracingProperties = {};
     raytracingProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PROPERTIES_NV;
