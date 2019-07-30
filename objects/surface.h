@@ -132,7 +132,18 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
-#endif // VK_USE_PLATFORM_MACOS_MVK
+#elif defined(VK_USE_PLATFORM_METAL_EXT)
+
+    class MetalSurface : public Surface
+    {
+    public:
+        explicit MetalSurface(std::shared_ptr<const Instance> instance,
+            const CAMetalLayer *layer,
+            VkMacOSSurfaceCreateFlagsMVK flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+    };
+
+#endif // VK_USE_PLATFORM_METAL_EXT
 
     class DisplayMode;
 
