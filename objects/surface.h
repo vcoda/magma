@@ -112,10 +112,10 @@ namespace magma
 
 #elif defined(VK_USE_PLATFORM_IOS_MVK)
 
-    class IosSurface : public Surface
+    class iOSSurface : public Surface
     {
     public:
-        explicit IosSurface(std::shared_ptr<const Instance> instance,
+        explicit iOSSurface(std::shared_ptr<const Instance> instance,
             const void *view,
             VkIOSSurfaceCreateFlagsMVK flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
@@ -123,10 +123,10 @@ namespace magma
 
 #elif defined(VK_USE_PLATFORM_MACOS_MVK)
 
-    class MacosSurface : public Surface
+    class MacOSSurface : public Surface
     {
     public:
-        explicit MacosSurface(std::shared_ptr<const Instance> instance,
+        explicit MacOSSurface(std::shared_ptr<const Instance> instance,
             const void *view,
             VkMacOSSurfaceCreateFlagsMVK flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);

@@ -150,7 +150,7 @@ AndroidSurface::AndroidSurface(std::shared_ptr<const Instance> instance,
 
 #elif defined(VK_USE_PLATFORM_IOS_MVK)
 
-IosSurface::IosSurface(std::shared_ptr<const Instance> instance,
+iOSSurface::iOSSurface(std::shared_ptr<const Instance> instance,
     const void *view,
     VkIOSSurfaceCreateFlagsMVK flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
@@ -167,7 +167,7 @@ IosSurface::IosSurface(std::shared_ptr<const Instance> instance,
 
 #elif defined(VK_USE_PLATFORM_MACOS_MVK)
 
-MacosSurface::MacosSurface(std::shared_ptr<const Instance> instance,
+MacOSSurface::MacOSSurface(std::shared_ptr<const Instance> instance,
     const void *view,
     VkMacOSSurfaceCreateFlagsMVK flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
