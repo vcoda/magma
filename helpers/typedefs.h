@@ -82,6 +82,16 @@ namespace magma
     typedef std::shared_ptr<class ValidationCache> ValidationCachePtr;
     typedef std::shared_ptr<class VertexBuffer> VertexBufferPtr;
 
+    typedef std::shared_ptr<class Win32Surface> Win32SurfacePtr;
+    typedef std::shared_ptr<class XlibSurface> XlibSurfacePtr;
+    typedef std::shared_ptr<class XcbSurface> XcbSurfacePtr;
+    typedef std::shared_ptr<class WaylandSurface> WaylandSurfacePtr;
+    typedef std::shared_ptr<class MirSurface> MirSurfacePtr;
+    typedef std::shared_ptr<class AndroidSurface> AndroidSurfacePtr;
+    typedef std::shared_ptr<class iOSSurface> iOSSurfacePtr;
+    typedef std::shared_ptr<class MacOSSurface> MacOSSurfacePtr;
+    typedef std::shared_ptr<class MetalSurface> MetalSurfacePtr;
+
     typedef std::unique_ptr<struct InstanceExtensions> InstanceExtensionsPtr;
     typedef std::unique_ptr<struct PhysicalDeviceExtensions> PhysicalDeviceExtensionsPtr;
 
