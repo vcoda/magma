@@ -139,7 +139,7 @@ AndroidSurface::AndroidSurface(std::shared_ptr<const Instance> instance,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Surface(std::move(instance), std::move(allocator))
 {
-    VkAndroidSurfaceCreateInfoKHR info.
+    VkAndroidSurfaceCreateInfoKHR info;
     info.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR;
     info.pNext = nullptr;
     info.flags = flags;
@@ -156,7 +156,7 @@ IosSurface::IosSurface(std::shared_ptr<const Instance> instance,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Surface(std::move(instance), std::move(allocator))
 {
-    VkIOSSurfaceCreateInfoMVK info.
+    VkIOSSurfaceCreateInfoMVK info;
     info.sType = VK_STRUCTURE_TYPE_IOS_SURFACE_CREATE_INFO_MVK;
     info.pNext = nullptr;
     info.flags = flags;
@@ -173,7 +173,7 @@ MacosSurface::MacosSurface(std::shared_ptr<const Instance> instance,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Surface(std::move(instance), std::move(allocator))
 {
-    VkMacOSSurfaceCreateInfoMVK info.
+    VkMacOSSurfaceCreateInfoMVK info;
     info.sType = VK_STRUCTURE_TYPE_MACOS_SURFACE_CREATE_INFO_MVK;
     info.pNext = nullptr;
     info.flags = flags;
