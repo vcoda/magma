@@ -102,7 +102,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "misc/deviceExtension.h"
 #include "misc/deviceQueueDesc.h"
 #include "misc/exception.h"
-#include "misc/extensions.h"
 #include "misc/format.h"
 #include "misc/imageSubresourceRange.h"
 #include "misc/instanceExtension.h"
@@ -110,6 +109,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "misc/scissor.h"
 #include "misc/scopedDebugMarker.h"
 #include "misc/viewport.h"
+
+#include "extensions/instanceExtensions.h"
+#include "extensions/physicalDeviceExtensions.h"
 
 #include "auxiliary/blitRectangle.h"
 #include "auxiliary/framebuffers.h"

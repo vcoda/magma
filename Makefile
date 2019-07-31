@@ -26,12 +26,14 @@ MAGMA_OBJS= \
 	\
 	descriptors/subpass.o \
 	\
+	extensions/instanceExtensions.o \
+	extensions/physicalDeviceExtensions.o \
+	\
 	helpers/executeCommandBuffer.o \
 	helpers/stringize.o \
 	\
 	misc/deviceQueueDesc.o \
 	misc/exception.o \
-	misc/extensions.o \
 	misc/format.o \
 	misc/geometry.o \
 	misc/scopedDebugMarker.o \

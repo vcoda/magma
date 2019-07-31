@@ -76,6 +76,12 @@
     <Filter Include="Source Files\internal">
       <UniqueIdentifier>{e54257bc-c13d-4527-9935-9e53a2a2d997}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\extensions">
+      <UniqueIdentifier>{43b6ce09-f3c8-4dd6-94d3-0b11ab3b8c71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\extensions">
+      <UniqueIdentifier>{13307459-d655-4c21-a588-dfa1dd86ee21}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\allocator\allocator.h">
@@ -148,9 +154,6 @@
       <Filter>Header Files\misc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\misc\exception.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\extensions.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\misc\format.h">
@@ -429,6 +432,15 @@
     <ClInclude Include="..\..\objects\rayTracingBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\extensions\instanceExtensions.h">
+      <Filter>Header Files\extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\extensions\physicalDeviceExtensions.h">
+      <Filter>Header Files\extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\extensions\extensions.h">
+      <Filter>Header Files\extensions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -468,9 +480,6 @@
       <Filter>Source Files\misc</Filter>
     </ClCompile>
     <ClCompile Include="..\..\misc\exception.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\misc\extensions.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>
     <ClCompile Include="..\..\misc\format.cpp">
@@ -673,6 +682,15 @@
     </ClCompile>
     <ClCompile Include="..\..\objects\rayTracingBuffer.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extensions\physicalDeviceExtensions.cpp">
+      <Filter>Source Files\extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extensions\instanceExtensions.cpp">
+      <Filter>Source Files\extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extensions\extensions.cpp">
+      <Filter>Source Files\extensions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

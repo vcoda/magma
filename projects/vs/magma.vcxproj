@@ -157,6 +157,9 @@
     <ClInclude Include="..\..\descriptors\bindings.h" />
     <ClInclude Include="..\..\descriptors\descriptors.h" />
     <ClInclude Include="..\..\descriptors\subpass.h" />
+    <ClInclude Include="..\..\extensions\physicalDeviceExtensions.h" />
+    <ClInclude Include="..\..\extensions\extensions.h" />
+    <ClInclude Include="..\..\extensions\instanceExtensions.h" />
     <ClInclude Include="..\..\helpers\alignedUniformArray.h" />
     <ClInclude Include="..\..\helpers\castToDebugReport.h" />
     <ClInclude Include="..\..\helpers\executeCommandBuffer.h" />
@@ -180,7 +183,6 @@
     <ClInclude Include="..\..\misc\deviceExtension.h" />
     <ClInclude Include="..\..\misc\deviceQueueDesc.h" />
     <ClInclude Include="..\..\misc\exception.h" />
-    <ClInclude Include="..\..\misc\extensions.h" />
     <ClInclude Include="..\..\misc\format.h" />
     <ClInclude Include="..\..\misc\geometry.h" />
     <ClInclude Include="..\..\misc\imageSubresourceRange.h" />
@@ -272,6 +274,9 @@
     <ClCompile Include="..\..\barriers\globalMemoryBarrier.cpp" />
     <ClCompile Include="..\..\barriers\imageMemoryBarrier.cpp" />
     <ClCompile Include="..\..\descriptors\subpass.cpp" />
+    <ClCompile Include="..\..\extensions\instanceExtensions.cpp" />
+    <ClCompile Include="..\..\extensions\physicalDeviceExtensions.cpp" />
+    <ClCompile Include="..\..\extensions\extensions.cpp" />
     <ClCompile Include="..\..\helpers\executeCommandBuffer.cpp" />
     <ClCompile Include="..\..\helpers\stringize.cpp" />
     <ClCompile Include="..\..\internal\pch.cpp">
@@ -286,7 +291,6 @@
     </ClCompile>
     <ClCompile Include="..\..\misc\deviceQueueDesc.cpp" />
     <ClCompile Include="..\..\misc\exception.cpp" />
-    <ClCompile Include="..\..\misc\extensions.cpp" />
     <ClCompile Include="..\..\misc\format.cpp" />
     <ClCompile Include="..\..\misc\geometry.cpp" />
     <ClCompile Include="..\..\misc\scopedDebugMarker.cpp" />

@@ -16,78 +16,39 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "extensions.h"
 
 namespace magma
 {
-    /* https://www.khronos.org/registry/vulkan/ */
+    class PhysicalDevice;
 
-    struct Extensions
+    /* Functionality that is restricted to the device-level 
+       must be implemented as a device extension.
+       Keep extensions list in alphabetical order. */
+
+    class PhysicalDeviceExtensions : public Extensions
     {
-        const std::map<std::string, uint32_t>& getExtensions() const noexcept
-            { return extensions; }
-        bool hasExtension(const char *name) const noexcept;
-
-    protected:
-        Extensions(const std::vector<VkExtensionProperties>& extensions);
-
-    protected:
-        std::map<std::string, uint32_t> extensions;
-    };
-
-    struct InstanceExtensions : Extensions
-    {   // Keep extensions list in alphabetical order
-        const bool EXT_debug_report;
-        const bool EXT_debug_utils;
-
-        const bool KHR_device_group_creation;
-        const bool KHR_display;
-        const bool KHR_external_fence_capabilities;
-        const bool KHR_external_memory_capabilities;
-        const bool KHR_external_semaphore_capabilities;
-        const bool KHR_get_physical_device_properties2;
-        const bool KHR_get_surface_capabilities2;
-
-        // WSI
-        const bool KHR_surface;
-        const bool KHR_android_surface;
-        const bool KHR_mir_surface;
-        const bool KHR_xcb_surface;
-        const bool KHR_xlib_surface;
-        const bool KHR_wayland_surface;
-        const bool KHR_win32_surface;
-
-        const bool MVK_ios_surface;
-        const bool MVK_macos_surface;
-
-        InstanceExtensions(const char *layerName = nullptr);
-    };
-
-    struct PhysicalDeviceExtensions : Extensions
-    {   // Keep extensions list in alphabetical order
+    public:
         const bool AMD_buffer_marker;
-        const bool AMD_calibrated_timestamps;
         const bool AMD_draw_indirect_count;
         const bool AMD_gcn_shader;
-        const bool AMD_gpa_interface;
         const bool AMD_gpu_shader_half_float;
         const bool AMD_gpu_shader_int16;
         const bool AMD_mixed_attachment_samples;
         const bool AMD_negative_viewport_height;
         const bool AMD_rasterization_order;
         const bool AMD_shader_ballot;
-        const bool AMD_shader_core_properties;
         const bool AMD_shader_explicit_vertex_parameter;
         const bool AMD_shader_fragment_mask;
         const bool AMD_shader_image_load_store_lod;
         const bool AMD_shader_info;
         const bool AMD_shader_trinary_minmax;
         const bool AMD_texture_gather_bias_lod;
-        const bool AMD_wave_limits;
-
         const bool EXT_acquire_xlib_display;
         const bool EXT_blend_operation_advanced;
         const bool EXT_conservative_rasterization;
         const bool EXT_debug_marker;
+        const bool EXT_debug_report;
         const bool EXT_depth_range_unrestricted;
         const bool EXT_direct_mode_display;
         const bool EXT_discard_rectangles;
@@ -108,16 +69,58 @@ namespace magma
         const bool EXT_swapchain_colorspace;
         const bool EXT_validation_cache;
         const bool EXT_validation_flags;
-
+        const bool GOOGLE_display_timing;
         const bool IMG_filter_cubic;
-        const bool IMG_format_pvrtc;
-
+        const bool KHR_16bit_storage;
+        const bool KHR_android_surface;
+        const bool KHR_bind_memory2;
         const bool KHR_dedicated_allocation;
+        const bool KHR_descriptor_update_template;
+        const bool KHR_display;
+        const bool KHR_display_swapchain;
+        const bool KHR_external_fence;
+        const bool KHR_external_fence_capabilities;
+        const bool KHR_external_fence_fd;
+        const bool KHR_external_fence_win32;
+        const bool KHR_external_memory;
+        const bool KHR_external_memory_capabilities;
+        const bool KHR_external_memory_fd;
+        const bool KHR_external_memory_win32;
+        const bool KHR_external_semaphore;
+        const bool KHR_external_semaphore_capabilities;
+        const bool KHR_external_semaphore_fd;
+        const bool KHR_external_semaphore_win32;
+        const bool KHR_get_memory_requirements2;
+        const bool KHR_get_physical_device_properties2;
+        const bool KHR_get_surface_capabilities2;
+        const bool KHR_image_format_list;
+        const bool KHR_incremental_present;
         const bool KHR_maintenance1;
         const bool KHR_maintenance2;
-        const bool KHR_maintenance3;
+        const bool KHR_mir_surface;
+        const bool KHR_push_descriptor;
+        const bool KHR_relaxed_block_layout;
+        const bool KHR_sampler_mirror_clamp_to_edge;
+        const bool KHR_sampler_ycbcr_conversion;
         const bool KHR_shader_draw_parameters;
-
+        const bool KHR_shared_presentable_image;
+        const bool KHR_storage_buffer_storage_class;
+        const bool KHR_surface;
+        const bool KHR_swapchain;
+        const bool KHR_variable_pointers;
+        const bool KHR_wayland_surface;
+        const bool KHR_win32_keyed_mutex;
+        const bool KHR_win32_surface;
+        const bool KHR_xcb_surface;
+        const bool KHR_xlib_surface;
+        const bool KHX_device_group;
+        const bool KHX_device_group_creation;
+        const bool KHX_multiview;
+        const bool MVK_ios_surface;
+        const bool MVK_macos_surface;
+        const bool NN_vi_surface;
+        const bool NVX_device_generated_commands;
+        const bool NVX_multiview_per_view_attributes;
         const bool NV_clip_space_w_scaling;
         const bool NV_dedicated_allocation;
         const bool NV_external_memory;
@@ -133,6 +136,6 @@ namespace magma
         const bool NV_viewport_swizzle;
         const bool NV_win32_keyed_mutex;
 
-        PhysicalDeviceExtensions(std::shared_ptr<const class PhysicalDevice> device);
+        PhysicalDeviceExtensions(std::shared_ptr<const PhysicalDevice> device);
     };
 } // namespace magma
