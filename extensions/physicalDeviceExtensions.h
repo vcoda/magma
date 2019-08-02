@@ -48,7 +48,6 @@ namespace magma
         const bool EXT_blend_operation_advanced;
         const bool EXT_conservative_rasterization;
         const bool EXT_debug_marker;
-        const bool EXT_debug_report;
         const bool EXT_depth_range_unrestricted;
         const bool EXT_direct_mode_display;
         const bool EXT_discard_rectangles;
@@ -108,17 +107,10 @@ namespace magma
         const bool KHR_surface;
         const bool KHR_swapchain;
         const bool KHR_variable_pointers;
-        const bool KHR_wayland_surface;
         const bool KHR_win32_keyed_mutex;
-        const bool KHR_win32_surface;
-        const bool KHR_xcb_surface;
-        const bool KHR_xlib_surface;
         const bool KHX_device_group;
         const bool KHX_device_group_creation;
         const bool KHX_multiview;
-        const bool MVK_ios_surface;
-        const bool MVK_macos_surface;
-        const bool NN_vi_surface;
         const bool NVX_device_generated_commands;
         const bool NVX_multiview_per_view_attributes;
         const bool NV_clip_space_w_scaling;
