@@ -67,9 +67,11 @@ namespace magma
         const bool EXT_shader_viewport_index_layer;
         const bool EXT_swapchain_colorspace;
         const bool EXT_validation_cache;
+        const bool EXT_validation_features;
         const bool EXT_validation_flags;
         const bool GOOGLE_display_timing;
         const bool IMG_filter_cubic;
+        const bool IMG_format_pvrtc;
         const bool KHR_16bit_storage;
         const bool KHR_android_surface;
         const bool KHR_bind_memory2;
