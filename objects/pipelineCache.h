@@ -37,7 +37,8 @@ namespace magma
         struct Header
         {
             uint32_t size = 0;
-            uint32_t version = 0;
+            VkPipelineCacheHeaderVersion version = 
+                VK_PIPELINE_CACHE_HEADER_VERSION_ONE;
             uint32_t vendorID = 0;
             uint32_t deviceID = 0;
             uint8_t cacheUUID[VK_UUID_SIZE] = {};
