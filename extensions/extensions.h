@@ -25,8 +25,6 @@ namespace magma
     {
     public:
         bool hasExtension(const char *name) const noexcept;
-        const std::map<std::string, uint32_t>& getExtensions() const noexcept
-            { return extensions; }
 
     protected:
         Extensions(const std::vector<VkExtensionProperties>&);
