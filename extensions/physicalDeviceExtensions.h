@@ -22,8 +22,9 @@ namespace magma
 {
     class PhysicalDevice;
 
-    /* Functionality that is restricted to the device-level 
-       must be implemented as a device extension.
+    /* Functionality that is restricted to the device-level must be implemented 
+       as a device extension. For the list of extensions see: 
+       https://github.com/KhronosGroup/Vulkan-Docs/tree/master/appendices
        Keep extensions list in alphabetical order. */
 
     class PhysicalDeviceExtensions : public Extensions
