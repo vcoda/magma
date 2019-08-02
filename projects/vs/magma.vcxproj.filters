@@ -441,6 +441,9 @@
     <ClInclude Include="..\..\extensions\extensions.h">
       <Filter>Header Files\extensions</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\extensions\instanceLayers.h">
+      <Filter>Header Files\extensions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -690,6 +693,9 @@
       <Filter>Source Files\extensions</Filter>
     </ClCompile>
     <ClCompile Include="..\..\extensions\extensions.cpp">
+      <Filter>Source Files\extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extensions\instanceLayers.cpp">
       <Filter>Source Files\extensions</Filter>
     </ClCompile>
   </ItemGroup>

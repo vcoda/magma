@@ -27,6 +27,7 @@ MAGMA_OBJS= \
 	descriptors/subpass.o \
 	\
 	extensions/instanceExtensions.o \
+	extensions/instanceLayers.o \
 	extensions/physicalDeviceExtensions.o \
 	\
 	helpers/executeCommandBuffer.o \
