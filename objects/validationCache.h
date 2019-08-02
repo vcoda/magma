@@ -36,6 +36,15 @@ namespace magma
     class ValidationCache : public NonDispatchable<VkValidationCacheEXT>
     {
     public:
+        struct Header
+        {
+            uint32_t size = 0;
+            VkValidationCacheHeaderVersionEXT version =
+                VK_VALIDATION_CACHE_HEADER_VERSION_ONE_EXT;
+            uint8_t cacheUUID[VK_UUID_SIZE] = {};
+        };
+
+    public:
         explicit ValidationCache(std::shared_ptr<Device> device,
             size_t dataSize,
             const void *cacheData,
