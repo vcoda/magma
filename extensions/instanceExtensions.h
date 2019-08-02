@@ -25,7 +25,7 @@ namespace magma
        should be an instance extension.
        Keep extensions list in alphabetical order. */
 
-    class InstanceExtensions : Extensions
+    class InstanceExtensions : public Extensions
     {
     public:
         const bool ANDROID_native_buffer;
