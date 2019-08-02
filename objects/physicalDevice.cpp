@@ -326,9 +326,7 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
     header.deviceID = properties.deviceID;
     memcpy(header.cacheUUID, properties.pipelineCacheUUID, VK_UUID_SIZE);
     const PipelineCache::Header *cacheHeader = reinterpret_cast<const PipelineCache::Header *>(cacheData);
-    if (!internal::compare(cacheHeader, &header))
-        return false;
-    return true;
+    return internal::compare(cacheHeader, &header);
 }
 
 PhysicalDeviceGroup::PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices, uint32_t groupId) noexcept:
