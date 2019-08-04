@@ -26,7 +26,8 @@ namespace magma
             uint32_t generalShader,
             uint32_t closestHitShader,
             uint32_t anyHitShader,
-            uint32_t intersectionShader);
+            uint32_t intersectionShader) noexcept;
+
     public:
         size_t hash() const noexcept;
     };
@@ -36,21 +37,21 @@ namespace magma
     class GeneralRayTracingShaderGroup : public RayTracingShaderGroup
     {
     public:
-        explicit GeneralRayTracingShaderGroup(uint32_t generalShader):
+        explicit GeneralRayTracingShaderGroup(uint32_t generalShader) noexcept:
             RayTracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_NV, generalShader, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV) {}
     };
 
     class TrianglesHitRayTracingShaderGroup : public RayTracingShaderGroup
     {
     public:
-        explicit TrianglesHitRayTracingShaderGroup(uint32_t closestHitShader, uint32_t anyHitShader):
+        explicit TrianglesHitRayTracingShaderGroup(uint32_t closestHitShader, uint32_t anyHitShader) noexcept:
             RayTracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_NV, VK_SHADER_UNUSED_NV, closestHitShader, anyHitShader, VK_SHADER_UNUSED_NV) {}
     };
 
     class ProceduralHitRayTracingShaderGroup : public RayTracingShaderGroup
     {
     public:
-        explicit ProceduralHitRayTracingShaderGroup(uint32_t intersectionShader):
+        explicit ProceduralHitRayTracingShaderGroup(uint32_t intersectionShader) noexcept:
             RayTracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_PROCEDURAL_HIT_GROUP_NV, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV, intersectionShader) {}
     };
 } // namespace magma
