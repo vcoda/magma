@@ -23,7 +23,7 @@ namespace magma
     class SrcTransferBuffer;
     class CommandBuffer;
 
-    /* Buffer data for raytracing pipeline. */
+    /* Buffer data for ray tracing pipeline. */
 
     class RayTracingBuffer : public Buffer
     {

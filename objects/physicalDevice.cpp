@@ -291,10 +291,10 @@ VkPhysicalDeviceShaderCorePropertiesAMD PhysicalDevice::getShaderCoreProperties(
 
 VkPhysicalDeviceRayTracingPropertiesNV PhysicalDevice::getRayTracingProperties() const
 {
-    VkPhysicalDeviceRayTracingPropertiesNV raytracingProperties = {};
-    raytracingProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PROPERTIES_NV;
-    getExtendedProperties(&raytracingProperties);
-    return raytracingProperties;
+    VkPhysicalDeviceRayTracingPropertiesNV rayTracingProperties = {};
+    rayTracingProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PROPERTIES_NV;
+    getExtendedProperties(&rayTracingProperties);
+    return rayTracingProperties;
 }
 
 std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const

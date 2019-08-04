@@ -65,7 +65,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device, std::shar
     info.basePipelineIndex = -1;
     MAGMA_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult create = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create raytracing pipeline");
+    MAGMA_THROW_FAILURE(create, "failed to create ray tracing pipeline");
 }
 
 std::vector<VkShaderModule> RayTracingPipeline::getShaderGroupHandles(uint32_t firstGroup, uint32_t groupCount) const
@@ -74,7 +74,7 @@ std::vector<VkShaderModule> RayTracingPipeline::getShaderGroupHandles(uint32_t f
     const size_t dataSize = sizeof(VkShaderModule) * groupCount;
     MAGMA_DEVICE_EXTENSION(vkGetRayTracingShaderGroupHandlesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult get = vkGetRayTracingShaderGroupHandlesNV(MAGMA_HANDLE(device), handle, firstGroup, groupCount, dataSize, shaders.data());
-    MAGMA_THROW_FAILURE(get, "failed to get raytracing shader handles");
+    MAGMA_THROW_FAILURE(get, "failed to get ray tracing shader handles");
     return shaders;
 }
 

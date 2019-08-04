@@ -68,7 +68,7 @@ namespace magma
         std::vector<std::shared_ptr<Display>> getSupportedDisplays(uint32_t planeIndex) const;
         // VK_AMD_shared_core_properties
         VkPhysicalDeviceShaderCorePropertiesAMD getShaderCoreProperties() const;
-        // VK_NVX_raytracing
+        // VK_NV_ray_tracing
         VkPhysicalDeviceRayTracingPropertiesNV getRayTracingProperties() const;
         // Non-API
         std::shared_ptr<Instance> getInstance() const noexcept { return instance; }

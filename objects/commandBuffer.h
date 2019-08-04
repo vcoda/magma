@@ -385,7 +385,7 @@ namespace magma
             bool inverted = false) noexcept;
         void endConditionalRendering() noexcept;
 
-        // VK_NVX_raytracing
+        // VK_NV_ray_tracing
         void buildAccelerationStructure(const std::shared_ptr<Buffer>& instanceData, 
             VkDeviceSize instanceOffset,
             bool update,
