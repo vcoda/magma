@@ -56,7 +56,7 @@ namespace magma
     class DepthSamplerState
     {
     public:
-        constexpr DepthSamplerState(VkFilter magFilter, 
+        constexpr DepthSamplerState(VkFilter magFilter,
             VkFilter minFilter,
             VkCompareOp compareOp) noexcept;
         constexpr size_t hash() const noexcept;

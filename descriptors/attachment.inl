@@ -1,7 +1,7 @@
 namespace magma
 {
 constexpr LoadStoreOp::LoadStoreOp(VkAttachmentLoadOp loadOp, VkAttachmentStoreOp storeOp) noexcept:
-    loadOp(loadOp), storeOp(storeOp) 
+    loadOp(loadOp), storeOp(storeOp)
 {}
 
 constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t sampleCount,
@@ -30,7 +30,7 @@ constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t
     this->finalLayout = finalLayout;
 }
 
-constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t sampleCount, 
+constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t sampleCount,
     const LoadStoreOp& colorDepthOp, const LoadStoreOp& stencilOp,
     VkImageLayout initialLayout, VkImageLayout finalLayout) noexcept:
     AttachmentDescription(format, sampleCount, colorDepthOp.loadOp, colorDepthOp.storeOp,
@@ -43,7 +43,7 @@ constexpr AttachmentDescription::AttachmentDescription(const LoadStoreOp& colorD
         stencilOp.loadOp, stencilOp.storeOp, initialLayout, finalLayout)
 {}
 
-constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t sampleCount, 
+constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t sampleCount,
     const AttachmentDescription& prefab) noexcept:
     AttachmentDescription(format, sampleCount, prefab.loadOp, prefab.storeOp,
         prefab.stencilLoadOp, prefab.stencilStoreOp, initialLayout, finalLayout)

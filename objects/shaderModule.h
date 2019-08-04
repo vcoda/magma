@@ -50,7 +50,7 @@ namespace magma
             const SpirvWord (&bytecode)[WordCount],
             std::shared_ptr<ValidationCache> validationCache = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr):
-            ShaderModule(std::move(device), bytecode, WordCount * sizeof(SpirvWord), 
+            ShaderModule(std::move(device), bytecode, WordCount * sizeof(SpirvWord),
                 std::move(validationCache), std::move(allocator)) {}
         ~ShaderModule();
     };

@@ -25,18 +25,18 @@ namespace magma
 
     struct ColorBlendAttachmentState : VkPipelineColorBlendAttachmentState
     {
-        constexpr ColorBlendAttachmentState(VkColorComponentFlags colorWriteMask = 
-                VK_COLOR_COMPONENT_R_BIT | 
+        constexpr ColorBlendAttachmentState(VkColorComponentFlags colorWriteMask =
+                VK_COLOR_COMPONENT_R_BIT |
                 VK_COLOR_COMPONENT_G_BIT |
-                VK_COLOR_COMPONENT_B_BIT | 
+                VK_COLOR_COMPONENT_B_BIT |
                 VK_COLOR_COMPONENT_A_BIT) noexcept;
-        constexpr ColorBlendAttachmentState(VkBlendFactor srcBlendFactor, 
-            VkBlendFactor dstBlendFactor, 
+        constexpr ColorBlendAttachmentState(VkBlendFactor srcBlendFactor,
+            VkBlendFactor dstBlendFactor,
             VkBlendOp blendOp,
-            VkColorComponentFlags colorWriteMask = 
-                VK_COLOR_COMPONENT_R_BIT | 
+            VkColorComponentFlags colorWriteMask =
+                VK_COLOR_COMPONENT_R_BIT |
                 VK_COLOR_COMPONENT_G_BIT |
-                VK_COLOR_COMPONENT_B_BIT | 
+                VK_COLOR_COMPONENT_B_BIT |
                 VK_COLOR_COMPONENT_A_BIT) noexcept;
         constexpr ColorBlendAttachmentState(VkBlendFactor srcColorBlendFactor,
             VkBlendFactor dstColorBlendFactor,
@@ -44,10 +44,10 @@ namespace magma
             VkBlendFactor srcAlphaBlendFactor,
             VkBlendFactor dstAlphaBlendFactor,
             VkBlendOp alphaBlendOp,
-            VkColorComponentFlags colorWriteMask = 
-                VK_COLOR_COMPONENT_R_BIT | 
+            VkColorComponentFlags colorWriteMask =
+                VK_COLOR_COMPONENT_R_BIT |
                 VK_COLOR_COMPONENT_G_BIT |
-                VK_COLOR_COMPONENT_B_BIT | 
+                VK_COLOR_COMPONENT_B_BIT |
                 VK_COLOR_COMPONENT_A_BIT) noexcept;
         constexpr size_t hash() const noexcept;
         constexpr bool operator==(const ColorBlendAttachmentState&) const noexcept;

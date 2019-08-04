@@ -53,7 +53,7 @@ namespace magma
         explicit ValidationCache(std::shared_ptr<Device> device,
             const std::vector<Type>& cacheData = {},
             std::shared_ptr<IAllocator> allocator = nullptr):
-            ValidationCache(std::move(device), cacheData.size() * sizeof(Type), cacheData.data(), 
+            ValidationCache(std::move(device), cacheData.size() * sizeof(Type), cacheData.data(),
                 std::move(allocator)) {}
         ~ValidationCache();
         std::vector<uint8_t> getData() const;

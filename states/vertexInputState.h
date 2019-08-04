@@ -23,16 +23,16 @@ namespace magma
 {
     struct VertexInputBinding : VkVertexInputBindingDescription
     {
-        constexpr VertexInputBinding(uint32_t binding, 
+        constexpr VertexInputBinding(uint32_t binding,
             uint32_t stride,
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
     };
 
     struct VertexInputAttribute : VkVertexInputAttributeDescription
     {
-        constexpr VertexInputAttribute(uint32_t location, 
-            uint32_t binding, 
-            VkFormat format, 
+        constexpr VertexInputAttribute(uint32_t location,
+            uint32_t binding,
+            VkFormat format,
             uint32_t offset) noexcept;
         constexpr VertexInputAttribute(uint32_t location,
             const VertexInputAttribute& attrib,
@@ -62,7 +62,7 @@ namespace magma
         bool operator==(const VertexInputState&) const noexcept;
     };
 
-    /* Managed vertex input state takes care about array of vertex attributes and 
+    /* Managed vertex input state takes care about array of vertex attributes and
        thereof is copyable, but not constexpr-constructible. */
 
     class ManagedVertexInputState final : public VertexInputState

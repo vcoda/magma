@@ -386,7 +386,7 @@ namespace magma
         void endConditionalRendering() noexcept;
 
         // VK_NV_ray_tracing
-        void buildAccelerationStructure(const std::shared_ptr<Buffer>& instanceData, 
+        void buildAccelerationStructure(const std::shared_ptr<Buffer>& instanceData,
             VkDeviceSize instanceOffset,
             bool update,
             const std::shared_ptr<AccelerationStructure>& dst,

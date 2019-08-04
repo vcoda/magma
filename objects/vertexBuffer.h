@@ -60,4 +60,3 @@ namespace magma
 } // namespace magma
 
 #include "vertexBuffer.inl"
-

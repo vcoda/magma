@@ -63,4 +63,3 @@ namespace magma
 } // namespace magma
 
 #include "indexBuffer.inl"
-

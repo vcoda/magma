@@ -36,8 +36,8 @@ namespace magma
     class GeneralRayTracingShaderGroup : public RayTracingShaderGroup
     {
     public:
-        explicit GeneralRayTracingShaderGroup(uint32_t generalShader): 
-            RayTracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_NV, generalShader, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV) {}   
+        explicit GeneralRayTracingShaderGroup(uint32_t generalShader):
+            RayTracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_NV, generalShader, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV) {}
     };
 
     class TrianglesHitRayTracingShaderGroup : public RayTracingShaderGroup

@@ -39,4 +39,3 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma
-

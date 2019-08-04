@@ -213,5 +213,3 @@ namespace magma
         constexpr RasterizationOrderState pointCullFrontAndBackCWRelaxed(pointCullFrontAndBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
     } // namespace renderstates
  } // namespace magma
-
-
