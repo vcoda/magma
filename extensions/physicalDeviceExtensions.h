@@ -99,7 +99,6 @@ namespace magma
         const bool KHR_incremental_present;
         const bool KHR_maintenance1;
         const bool KHR_maintenance2;
-        const bool KHR_mir_surface;
         const bool KHR_push_descriptor;
         const bool KHR_relaxed_block_layout;
         const bool KHR_sampler_mirror_clamp_to_edge;
@@ -107,7 +106,6 @@ namespace magma
         const bool KHR_shader_draw_parameters;
         const bool KHR_shared_presentable_image;
         const bool KHR_storage_buffer_storage_class;
-        const bool KHR_surface;
         const bool KHR_swapchain;
         const bool KHR_variable_pointers;
         const bool KHR_win32_keyed_mutex;
