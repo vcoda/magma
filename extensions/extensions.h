@@ -32,4 +32,16 @@ namespace magma
     private:
         std::map<std::string, uint32_t> extensions;
     };
+
+    class Layers
+    {
+    public:
+        bool hasLayer(const char *name) const noexcept;
+
+    protected:
+        Layers(const std::vector<VkLayerProperties>&);
+
+    private:
+        std::map<std::string, uint32_t> layers;
+    };
 } // namespace magma

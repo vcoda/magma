@@ -24,23 +24,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Layers::Layers(const std::vector<VkLayerProperties>& properties)
-{
-    for (const auto& property : properties)
-        layers[property.layerName] = property.specVersion;
-}
-
-bool Layers::hasLayer(const char *name) const noexcept
-{
-    static const std::string prefix("VK_LAYER_");
-    std::map<std::string, uint32_t>::const_iterator it;
-    if (strstr(name, prefix.c_str()))
-        it = layers.find(name);
-    else
-        it = layers.find(prefix + name);
-    return it != layers.end();
-}
-
 InstanceLayers::InstanceLayers():
     Layers(Instance::enumerateLayers()),
     MAGMA_CHECK_LAYER(AMD_switchable_graphics),

@@ -16,21 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "extensions.h"
 
 namespace magma
 {
-    class Layers
-    {
-    public:
-        bool hasLayer(const char *name) const noexcept;
-
-    protected:
-        Layers(const std::vector<VkLayerProperties>&);
-
-    private:
-        std::map<std::string, uint32_t> layers;
-    };
-
     /* https://vulkan.gpuinfo.org/listinstancelayers.php */
 
     class InstanceLayers : public Layers
