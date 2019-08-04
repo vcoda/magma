@@ -26,6 +26,7 @@ MAGMA_OBJS= \
 	\
 	descriptors/subpass.o \
 	\
+	extensions/extensions.o \
 	extensions/instanceExtensions.o \
 	extensions/instanceLayers.o \
 	extensions/physicalDeviceExtensions.o \
@@ -39,7 +40,7 @@ MAGMA_OBJS= \
 	misc/geometry.o \
 	misc/scopedDebugMarker.o \
 	\
-	internal/allocable.o \
+	internal/pch.o \
 	\
 	objects/accelerationStructure.o \
 	objects/buffer.o \
