@@ -30,7 +30,7 @@ namespace magma
             VkCompareOp compareOp,
             uint32_t compareMask = 0x0,
             uint32_t writeMask = 0x0,
-            uint32_t reference = 0) noexcept
+            uint32_t reference = 0)
         {
             this->failOp = failOp;
             this->passOp = passOp;
@@ -40,8 +40,8 @@ namespace magma
             this->writeMask = writeMask;
             this->reference = reference;
         }
-        constexpr std::size_t hash() const noexcept;
-        constexpr bool operator==(const StencilOpState&) const noexcept;
+        constexpr std::size_t hash() const;
+        constexpr bool operator==(const StencilOpState&) const;
     };
 
     namespace renderstates
@@ -60,12 +60,12 @@ namespace magma
         constexpr DepthStencilState(VkCompareOp depthCompareOp,
             bool depthWriteEnable,
             const StencilOpState& front = renderstates::stencilAlwaysDontWrite,
-            const StencilOpState& back = renderstates::stencilAlwaysDontWrite) noexcept;
+            const StencilOpState& back = renderstates::stencilAlwaysDontWrite);
         constexpr DepthStencilState(const DepthStencilState& state,
             const StencilOpState& front,
-            const StencilOpState& back) noexcept;
-        constexpr size_t hash() const noexcept;
-        constexpr bool operator==(const DepthStencilState&) const noexcept;
+            const StencilOpState& back);
+        constexpr size_t hash() const;
+        constexpr bool operator==(const DepthStencilState&) const;
     };
 
     /* The depth bounds test conditionally disables coverage of a sample
@@ -76,7 +76,7 @@ namespace magma
     {
         constexpr DepthBoundsState(const DepthStencilState& state,
             float minDepthBounds,
-            float maxDepthBounds) noexcept;
+            float maxDepthBounds);
     };
 }
 

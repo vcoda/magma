@@ -1,7 +1,7 @@
 namespace magma
 {
 constexpr VertexInputBinding::VertexInputBinding(uint32_t binding, uint32_t stride,
-    VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */) noexcept
+    VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */)
 {
     this->binding = binding;
     this->stride = stride;
@@ -9,7 +9,7 @@ constexpr VertexInputBinding::VertexInputBinding(uint32_t binding, uint32_t stri
 }
 
 constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location,
-    uint32_t binding, VkFormat format, uint32_t offset) noexcept
+    uint32_t binding, VkFormat format, uint32_t offset)
 {
     this->location = location;
     this->binding = binding;
@@ -18,7 +18,7 @@ constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location,
 }
 
 constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location,
-    const VertexInputAttribute& attrib, uint32_t offset) noexcept
+    const VertexInputAttribute& attrib, uint32_t offset)
 {
     this->location = location;
     binding = attrib.binding;
@@ -26,7 +26,7 @@ constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location,
     this->offset = offset;
 }
 
-constexpr VertexInputState::VertexInputState() noexcept
+constexpr VertexInputState::VertexInputState()
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -97,7 +97,7 @@ constexpr VertexInputState::VertexInputState(const VertexInputBinding (&bindings
     pVertexAttributeDescriptions = attributes;
 }
 
-constexpr uint32_t VertexInputState::stride(uint32_t binding) const noexcept
+constexpr uint32_t VertexInputState::stride(uint32_t binding) const
 {
     size_t stride = 0;
     for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
@@ -112,7 +112,7 @@ constexpr uint32_t VertexInputState::stride(uint32_t binding) const noexcept
     return static_cast<uint32_t>(stride);
 }
 
-constexpr size_t VertexInputState::hash() const noexcept
+constexpr size_t VertexInputState::hash() const
 {
     size_t hash = internal::hashArgs(
         flags,

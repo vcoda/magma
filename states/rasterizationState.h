@@ -27,9 +27,9 @@ namespace magma
             VkCullModeFlags cullMode,
             VkFrontFace frontFace,
             bool depthClampEnable = false,
-            bool rasterizerDiscardEnable = false) noexcept;
-        constexpr size_t hash() const noexcept;
-        constexpr bool operator==(const RasterizationState&) const noexcept;
+            bool rasterizerDiscardEnable = false);
+        constexpr size_t hash() const;
+        constexpr bool operator==(const RasterizationState&) const;
     };
 
     /* Controls whether to bias fragment depth values:
@@ -42,7 +42,7 @@ namespace magma
         constexpr DepthBiasRasterizationState(const RasterizationState& state,
             float depthBiasConstantFactor,
             float depthBiasClamp,
-            float depthBiasSlopeFactor) noexcept;
+            float depthBiasSlopeFactor);
     };
 
     /* When overestimation is enabled, if any part of the primitive, including its edges,
@@ -54,9 +54,9 @@ namespace magma
     {
         constexpr ConservativeRasterizationState(const RasterizationState& state,
             VkConservativeRasterizationModeEXT conservativeRasterizationMode,
-            float extraPrimitiveOverestimationSize = 0.f) noexcept;
-        constexpr size_t hash() const noexcept;
-        constexpr bool operator==(const ConservativeRasterizationState&) const noexcept;
+            float extraPrimitiveOverestimationSize = 0.f);
+        constexpr size_t hash() const;
+        constexpr bool operator==(const ConservativeRasterizationState&) const;
 
         VkPipelineRasterizationConservativeStateCreateInfoEXT conservative;
     };
@@ -68,9 +68,9 @@ namespace magma
     struct RasterizationOrderState : RasterizationState
     {
         constexpr RasterizationOrderState(const RasterizationState& state,
-            VkRasterizationOrderAMD rasterizationOrder) noexcept;
-        constexpr size_t hash() const noexcept;
-        constexpr bool operator==(const RasterizationOrderState&) const noexcept;
+            VkRasterizationOrderAMD rasterizationOrder);
+        constexpr size_t hash() const;
+        constexpr bool operator==(const RasterizationOrderState&) const;
 
         VkPipelineRasterizationStateRasterizationOrderAMD order;
     };

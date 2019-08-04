@@ -21,9 +21,9 @@ namespace magma
 {
     struct ClearValue
     {
-        constexpr operator VkClearValue&() noexcept
+        constexpr operator VkClearValue&()
             { return value; }
-        constexpr operator const VkClearValue&() const noexcept
+        constexpr operator const VkClearValue&() const
             { return value; }
 
     protected:
@@ -33,18 +33,18 @@ namespace magma
 
     struct ClearColor : public ClearValue
     {
-        constexpr ClearColor(float r, float g, float b, float a = 1.f) noexcept;
-        constexpr ClearColor(int32_t r, int32_t g, int32_t b, int32_t a) noexcept;
-        constexpr ClearColor(uint32_t r, uint32_t g, uint32_t b, uint32_t a) noexcept;
-        constexpr ClearColor(const float color[4]) noexcept;
-        constexpr ClearColor(const int32_t color[4]) noexcept;
-        constexpr ClearColor(const uint32_t color[4]) noexcept;
-        constexpr ClearColor(uint32_t hexValue) noexcept;
+        constexpr ClearColor(float r, float g, float b, float a = 1.f);
+        constexpr ClearColor(int32_t r, int32_t g, int32_t b, int32_t a);
+        constexpr ClearColor(uint32_t r, uint32_t g, uint32_t b, uint32_t a);
+        constexpr ClearColor(const float color[4]);
+        constexpr ClearColor(const int32_t color[4]);
+        constexpr ClearColor(const uint32_t color[4]);
+        constexpr ClearColor(uint32_t hexValue);
     };
 
     struct ClearDepthStencil : public ClearValue
     {
-        constexpr ClearDepthStencil(float depth, uint8_t stencil = 0) noexcept;
+        constexpr ClearDepthStencil(float depth, uint8_t stencil = 0);
     };
 } // namespace magma
 

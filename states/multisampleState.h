@@ -25,10 +25,10 @@ namespace magma
 
     struct MultisampleState : VkPipelineMultisampleStateCreateInfo
     {
-        constexpr MultisampleState(VkSampleCountFlagBits rasterizationSamples) noexcept;
-        constexpr MultisampleState(uint32_t sampleCount) noexcept;
-        constexpr size_t hash() const noexcept;
-        constexpr bool operator==(const MultisampleState&) const noexcept;
+        constexpr MultisampleState(VkSampleCountFlagBits rasterizationSamples);
+        constexpr MultisampleState(uint32_t sampleCount);
+        constexpr size_t hash() const;
+        constexpr bool operator==(const MultisampleState&) const;
     };
 
     /* Sample shading can be used to specify a minimum number of unique samples
@@ -39,7 +39,7 @@ namespace magma
     struct MultisampleShadingState : MultisampleState
     {
         constexpr MultisampleShadingState(const MultisampleState& state,
-            float minSampleShading = 1.f) noexcept;
+            float minSampleShading = 1.f);
     };
 
     /* Sample mask contains a bitmask of static coverage information that is ANDed

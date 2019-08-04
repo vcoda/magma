@@ -1,7 +1,7 @@
 namespace magma
 {
 constexpr SamplerState::SamplerState(VkFilter magFilter, VkFilter minFilter,
-    VkSamplerMipmapMode mipmapMode, VkSamplerAddressMode addressMode) noexcept:
+    VkSamplerMipmapMode mipmapMode, VkSamplerAddressMode addressMode):
     magFilter(magFilter),
     minFilter(minFilter),
     mipmapMode(mipmapMode),
@@ -10,7 +10,7 @@ constexpr SamplerState::SamplerState(VkFilter magFilter, VkFilter minFilter,
     maxAnisotropy(1.f)
 {}
 
-constexpr size_t SamplerState::hash() const noexcept
+constexpr size_t SamplerState::hash() const
 {
     return internal::hashArgs(
         magFilter,
@@ -21,7 +21,7 @@ constexpr size_t SamplerState::hash() const noexcept
         maxAnisotropy);
 }
 
-constexpr bool SamplerState::operator==(const SamplerState& other) const noexcept
+constexpr bool SamplerState::operator==(const SamplerState& other) const
 {
     return (magFilter == other.magFilter) &&
         (minFilter == other.minFilter) &&
@@ -32,7 +32,7 @@ constexpr bool SamplerState::operator==(const SamplerState& other) const noexcep
 }
 
 constexpr AnisotropicSamplerState::AnisotropicSamplerState(VkFilter magFilter, VkFilter minFilter, VkSamplerAddressMode addressMode,
-    float maxAnisotropy /* std::numeric_limits<float>::max() */ ) noexcept:
+    float maxAnisotropy /* std::numeric_limits<float>::max() */ ):
     SamplerState(magFilter, minFilter, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode)
 {
     anisotropyEnable = true;
@@ -43,13 +43,13 @@ constexpr AnisotropicSamplerState::AnisotropicSamplerState(VkFilter magFilter, V
     this->maxAnisotropy = maxAnisotropy;
 }
 
-constexpr DepthSamplerState::DepthSamplerState(VkFilter magFilter, VkFilter minFilter, VkCompareOp compareOp) noexcept:
+constexpr DepthSamplerState::DepthSamplerState(VkFilter magFilter, VkFilter minFilter, VkCompareOp compareOp):
     magFilter(magFilter),
     minFilter(minFilter),
     compareOp(compareOp)
 {}
 
-constexpr size_t DepthSamplerState::hash() const noexcept
+constexpr size_t DepthSamplerState::hash() const
 {
     return internal::hashArgs(
         magFilter,
@@ -57,7 +57,7 @@ constexpr size_t DepthSamplerState::hash() const noexcept
         compareOp);
 }
 
-constexpr bool DepthSamplerState::operator==(const DepthSamplerState& other) const noexcept
+constexpr bool DepthSamplerState::operator==(const DepthSamplerState& other) const
 {
     return (magFilter == other.magFilter) &&
         (minFilter == other.minFilter) &&

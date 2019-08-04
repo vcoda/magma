@@ -29,7 +29,7 @@ namespace magma
                 VK_COLOR_COMPONENT_R_BIT |
                 VK_COLOR_COMPONENT_G_BIT |
                 VK_COLOR_COMPONENT_B_BIT |
-                VK_COLOR_COMPONENT_A_BIT) noexcept;
+                VK_COLOR_COMPONENT_A_BIT);
         constexpr ColorBlendAttachmentState(VkBlendFactor srcBlendFactor,
             VkBlendFactor dstBlendFactor,
             VkBlendOp blendOp,
@@ -37,7 +37,7 @@ namespace magma
                 VK_COLOR_COMPONENT_R_BIT |
                 VK_COLOR_COMPONENT_G_BIT |
                 VK_COLOR_COMPONENT_B_BIT |
-                VK_COLOR_COMPONENT_A_BIT) noexcept;
+                VK_COLOR_COMPONENT_A_BIT);
         constexpr ColorBlendAttachmentState(VkBlendFactor srcColorBlendFactor,
             VkBlendFactor dstColorBlendFactor,
             VkBlendOp colorBlendOp,
@@ -48,9 +48,9 @@ namespace magma
                 VK_COLOR_COMPONENT_R_BIT |
                 VK_COLOR_COMPONENT_G_BIT |
                 VK_COLOR_COMPONENT_B_BIT |
-                VK_COLOR_COMPONENT_A_BIT) noexcept;
-        constexpr size_t hash() const noexcept;
-        constexpr bool operator==(const ColorBlendAttachmentState&) const noexcept;
+                VK_COLOR_COMPONENT_A_BIT);
+        constexpr size_t hash() const;
+        constexpr bool operator==(const ColorBlendAttachmentState&) const;
     };
 
     /* Blending combines the incoming source fragment's R, G, B, and A values
@@ -63,12 +63,12 @@ namespace magma
         constexpr ColorBlendState(const ColorBlendAttachmentState& attachment,
             bool logicOpEnable = false,
             VkLogicOp logicOp = VK_LOGIC_OP_CLEAR,
-            const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f}) noexcept;
-        constexpr size_t hash() const noexcept;
-        constexpr bool operator==(const ColorBlendState&) const noexcept;
+            const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f});
+        constexpr size_t hash() const;
+        constexpr bool operator==(const ColorBlendState&) const;
 
     protected:
-        constexpr ColorBlendState() noexcept;
+        constexpr ColorBlendState();
     };
 
     /* Managed color blend state takes care about array of blend attachment states and
@@ -93,7 +93,7 @@ namespace magma
     struct ColorLogicOpState : ColorBlendState
     {
         constexpr ColorLogicOpState(const ColorBlendAttachmentState& attachment,
-            VkLogicOp logicOp) noexcept;
+            VkLogicOp logicOp);
     };
 } // namespace magma
 

@@ -25,7 +25,7 @@ namespace magma
     {
         constexpr VertexInputBinding(uint32_t binding,
             uint32_t stride,
-            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
+            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX);
     };
 
     struct VertexInputAttribute : VkVertexInputAttributeDescription
@@ -33,10 +33,10 @@ namespace magma
         constexpr VertexInputAttribute(uint32_t location,
             uint32_t binding,
             VkFormat format,
-            uint32_t offset) noexcept;
+            uint32_t offset);
         constexpr VertexInputAttribute(uint32_t location,
             const VertexInputAttribute& attrib,
-            uint32_t offset) noexcept;
+            uint32_t offset);
     };
 
     /* Applications specify vertex input attribute and vertex input binding descriptions
@@ -45,7 +45,7 @@ namespace magma
     struct VertexInputState : public VkPipelineVertexInputStateCreateInfo, internal::ConstexprNonCopyable
     {
     public:
-        constexpr VertexInputState() noexcept;
+        constexpr VertexInputState();
         constexpr VertexInputState(const VertexInputAttribute& attribute);
         template<size_t VertexAttributeDescriptionCount>
         constexpr VertexInputState(const VertexInputAttribute (&attributes)[VertexAttributeDescriptionCount]);
@@ -57,8 +57,8 @@ namespace magma
         template<size_t VertexBindingDescriptionCount, size_t VertexAttributeDescriptionCount>
         constexpr VertexInputState(const VertexInputBinding (&bindings)[VertexBindingDescriptionCount],
             const VertexInputAttribute (&attributes)[VertexAttributeDescriptionCount]);
-        constexpr uint32_t stride(uint32_t binding) const noexcept;
-        constexpr size_t hash() const noexcept;
+        constexpr uint32_t stride(uint32_t binding) const;
+        constexpr size_t hash() const;
         bool operator==(const VertexInputState&) const noexcept;
     };
 

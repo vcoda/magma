@@ -27,9 +27,9 @@ namespace magma
         constexpr SamplerState(VkFilter magFilter,
             VkFilter minFilter,
             VkSamplerMipmapMode mipmapMode,
-            VkSamplerAddressMode addressMode) noexcept;
-        constexpr size_t hash() const noexcept;
-        constexpr bool operator==(const SamplerState&) const noexcept;
+            VkSamplerAddressMode addressMode);
+        constexpr size_t hash() const;
+        constexpr bool operator==(const SamplerState&) const;
 
     protected:
         VkFilter magFilter;
@@ -48,7 +48,7 @@ namespace magma
         constexpr AnisotropicSamplerState(VkFilter magFilter,
             VkFilter minFilter,
             VkSamplerAddressMode addressMode,
-            float maxAnisotropy = std::numeric_limits<float>::max()) noexcept;
+            float maxAnisotropy = std::numeric_limits<float>::max());
     };
 
     /* Depth map sampler state. */
@@ -58,9 +58,9 @@ namespace magma
     public:
         constexpr DepthSamplerState(VkFilter magFilter,
             VkFilter minFilter,
-            VkCompareOp compareOp) noexcept;
-        constexpr size_t hash() const noexcept;
-        constexpr bool operator==(const DepthSamplerState&) const noexcept;
+            VkCompareOp compareOp);
+        constexpr size_t hash() const;
+        constexpr bool operator==(const DepthSamplerState&) const;
 
     private:
         VkFilter magFilter;

@@ -1,7 +1,7 @@
 namespace magma
 {
 constexpr RasterizationState::RasterizationState(VkPolygonMode polygonMode, VkCullModeFlags cullMode, VkFrontFace frontFace,
-    bool depthClampEnable /* false */, bool rasterizerDiscardEnable /* false */) noexcept
+    bool depthClampEnable /* false */, bool rasterizerDiscardEnable /* false */)
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -18,7 +18,7 @@ constexpr RasterizationState::RasterizationState(VkPolygonMode polygonMode, VkCu
     lineWidth = 1.f;
 }
 
-constexpr size_t RasterizationState::hash() const noexcept
+constexpr size_t RasterizationState::hash() const
 {
     return internal::hashArgs(
         flags,
@@ -34,7 +34,7 @@ constexpr size_t RasterizationState::hash() const noexcept
         lineWidth);
 }
 
-constexpr bool RasterizationState::operator==(const RasterizationState& other) const noexcept
+constexpr bool RasterizationState::operator==(const RasterizationState& other) const
 {
     return (flags == other.flags) &&
         (depthClampEnable == other.depthClampEnable) &&
@@ -51,7 +51,7 @@ constexpr bool RasterizationState::operator==(const RasterizationState& other) c
 
 constexpr ConservativeRasterizationState::ConservativeRasterizationState(const RasterizationState& state,
     VkConservativeRasterizationModeEXT conservativeRasterizationMode,
-    float extraPrimitiveOverestimationSize /* 0 */) noexcept:
+    float extraPrimitiveOverestimationSize /* 0 */):
     RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable)
 {
     conservative.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_CONSERVATIVE_STATE_CREATE_INFO_EXT;
@@ -62,7 +62,7 @@ constexpr ConservativeRasterizationState::ConservativeRasterizationState(const R
     pNext = &conservative;
 }
 
-constexpr size_t ConservativeRasterizationState::hash() const noexcept
+constexpr size_t ConservativeRasterizationState::hash() const
 {
     return internal::hashArgs(
         RasterizationState::hash(),
@@ -71,7 +71,7 @@ constexpr size_t ConservativeRasterizationState::hash() const noexcept
         conservative.extraPrimitiveOverestimationSize);
 }
 
-constexpr bool ConservativeRasterizationState::operator==(const ConservativeRasterizationState& other) const noexcept
+constexpr bool ConservativeRasterizationState::operator==(const ConservativeRasterizationState& other) const
 {
     return RasterizationState::operator==(other) &&
         (conservative.flags == other.conservative.flags) &&
@@ -80,7 +80,7 @@ constexpr bool ConservativeRasterizationState::operator==(const ConservativeRast
 }
 
 constexpr DepthBiasRasterizationState::DepthBiasRasterizationState(const RasterizationState& state,
-    float depthBiasConstantFactor, float depthBiasClamp, float depthBiasSlopeFactor) noexcept:
+    float depthBiasConstantFactor, float depthBiasClamp, float depthBiasSlopeFactor):
     RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable)
 {
     this->depthBiasEnable = VK_TRUE;
@@ -90,7 +90,7 @@ constexpr DepthBiasRasterizationState::DepthBiasRasterizationState(const Rasteri
 }
 
 constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationState& state,
-    VkRasterizationOrderAMD rasterizationOrder) noexcept:
+    VkRasterizationOrderAMD rasterizationOrder):
     RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable)
 {
     order.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD;
@@ -99,14 +99,14 @@ constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationSt
     pNext = &order;
 }
 
-constexpr size_t RasterizationOrderState::hash() const noexcept
+constexpr size_t RasterizationOrderState::hash() const
 {
     return internal::hashArgs(
         RasterizationState::hash(),
         order.rasterizationOrder);
 }
 
-constexpr bool RasterizationOrderState::operator==(const RasterizationOrderState& other) const noexcept
+constexpr bool RasterizationOrderState::operator==(const RasterizationOrderState& other) const
 {
     return RasterizationState::operator==(other) &&
         (order.rasterizationOrder == other.order.rasterizationOrder);

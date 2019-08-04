@@ -1,6 +1,6 @@
 namespace magma
 {
-constexpr size_t StencilOpState::hash() const noexcept
+constexpr size_t StencilOpState::hash() const
 {
     return internal::hashArgs(
         failOp,
@@ -12,7 +12,7 @@ constexpr size_t StencilOpState::hash() const noexcept
         reference);
 }
 
-constexpr bool StencilOpState::operator==(const StencilOpState& other) const noexcept
+constexpr bool StencilOpState::operator==(const StencilOpState& other) const
 {
     return (failOp == other.failOp) &&
         (passOp == other.passOp) &&
@@ -24,7 +24,7 @@ constexpr bool StencilOpState::operator==(const StencilOpState& other) const noe
 }
 
 constexpr DepthStencilState::DepthStencilState(VkCompareOp depthCompareOp, bool depthWriteEnable,
-    const StencilOpState& front, const StencilOpState& back) noexcept
+    const StencilOpState& front, const StencilOpState& back)
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -41,11 +41,11 @@ constexpr DepthStencilState::DepthStencilState(VkCompareOp depthCompareOp, bool 
 }
 
 constexpr DepthStencilState::DepthStencilState(const DepthStencilState& state,
-    const StencilOpState& front, const StencilOpState& back) noexcept:
+    const StencilOpState& front, const StencilOpState& back):
     DepthStencilState(state.depthCompareOp, state.depthCompareOp, front, back)
 {}
 
-constexpr size_t DepthStencilState::hash() const noexcept
+constexpr size_t DepthStencilState::hash() const
 {
     return internal::hashArgs(
         flags,
@@ -71,7 +71,7 @@ constexpr size_t DepthStencilState::hash() const noexcept
         maxDepthBounds);
 }
 
-constexpr bool DepthStencilState::operator==(const DepthStencilState& other) const noexcept
+constexpr bool DepthStencilState::operator==(const DepthStencilState& other) const
 {
     return (flags == other.flags) &&
         (depthTestEnable == other.depthTestEnable) &&
@@ -86,7 +86,7 @@ constexpr bool DepthStencilState::operator==(const DepthStencilState& other) con
 }
 
 constexpr DepthBoundsState::DepthBoundsState(const DepthStencilState& state,
-    float minDepthBounds, float maxDepthBounds) noexcept:
+    float minDepthBounds, float maxDepthBounds):
     DepthStencilState(state.depthCompareOp, state.depthWriteEnable)
 {
     front = state.front;

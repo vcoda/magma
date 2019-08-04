@@ -1,13 +1,13 @@
 namespace magma
 {
-constexpr LoadStoreOp::LoadStoreOp(VkAttachmentLoadOp loadOp, VkAttachmentStoreOp storeOp) noexcept:
+constexpr LoadStoreOp::LoadStoreOp(VkAttachmentLoadOp loadOp, VkAttachmentStoreOp storeOp):
     loadOp(loadOp), storeOp(storeOp)
 {}
 
 constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t sampleCount,
     VkAttachmentLoadOp loadOp, VkAttachmentStoreOp storeOp,
     VkAttachmentLoadOp stencilLoadOp, VkAttachmentStoreOp stencilStoreOp,
-    VkImageLayout initialLayout, VkImageLayout finalLayout) noexcept
+    VkImageLayout initialLayout, VkImageLayout finalLayout)
 {
     flags = 0;
     this->format = format;
@@ -32,19 +32,19 @@ constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t
 
 constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t sampleCount,
     const LoadStoreOp& colorDepthOp, const LoadStoreOp& stencilOp,
-    VkImageLayout initialLayout, VkImageLayout finalLayout) noexcept:
+    VkImageLayout initialLayout, VkImageLayout finalLayout):
     AttachmentDescription(format, sampleCount, colorDepthOp.loadOp, colorDepthOp.storeOp,
         stencilOp.loadOp, stencilOp.storeOp, initialLayout, finalLayout)
 {}
 
 constexpr AttachmentDescription::AttachmentDescription(const LoadStoreOp& colorDepthOp, const LoadStoreOp& stencilOp,
-    VkImageLayout initialLayout, VkImageLayout finalLayout) noexcept:
+    VkImageLayout initialLayout, VkImageLayout finalLayout):
     AttachmentDescription(VK_FORMAT_UNDEFINED, VK_SAMPLE_COUNT_1_BIT, colorDepthOp.loadOp, colorDepthOp.storeOp,
         stencilOp.loadOp, stencilOp.storeOp, initialLayout, finalLayout)
 {}
 
 constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t sampleCount,
-    const AttachmentDescription& prefab) noexcept:
+    const AttachmentDescription& prefab):
     AttachmentDescription(format, sampleCount, prefab.loadOp, prefab.storeOp,
         prefab.stencilLoadOp, prefab.stencilStoreOp, initialLayout, finalLayout)
 {}

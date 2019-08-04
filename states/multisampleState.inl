@@ -1,6 +1,6 @@
 namespace magma
 {
-constexpr MultisampleState::MultisampleState(VkSampleCountFlagBits rasterizationSamples) noexcept
+constexpr MultisampleState::MultisampleState(VkSampleCountFlagBits rasterizationSamples)
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -13,7 +13,7 @@ constexpr MultisampleState::MultisampleState(VkSampleCountFlagBits rasterization
     alphaToOneEnable = VK_FALSE;
 }
 
-constexpr MultisampleState::MultisampleState(uint32_t sampleCount) noexcept
+constexpr MultisampleState::MultisampleState(uint32_t sampleCount)
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -37,7 +37,7 @@ constexpr MultisampleState::MultisampleState(uint32_t sampleCount) noexcept
     alphaToOneEnable = VK_FALSE;
 }
 
-constexpr size_t MultisampleState::hash() const noexcept
+constexpr size_t MultisampleState::hash() const
 {
     size_t hash = internal::hashArgs(
         flags,
@@ -56,7 +56,7 @@ constexpr size_t MultisampleState::hash() const noexcept
     return hash;
 }
 
-constexpr bool MultisampleState::operator==(const MultisampleState& other) const noexcept
+constexpr bool MultisampleState::operator==(const MultisampleState& other) const
 {
     return (flags == other.flags) &&
         (rasterizationSamples == other.rasterizationSamples) &&
@@ -68,7 +68,7 @@ constexpr bool MultisampleState::operator==(const MultisampleState& other) const
 }
 
 constexpr MultisampleShadingState::MultisampleShadingState(const MultisampleState& state,
-    float minSampleShading /* 1 */) noexcept:
+    float minSampleShading /* 1 */):
     MultisampleState(state.rasterizationSamples)
 {
     sampleShadingEnable = VK_TRUE;

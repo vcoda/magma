@@ -23,7 +23,7 @@ namespace magma
     {
     public:
         constexpr LoadStoreOp(VkAttachmentLoadOp loadOp,
-            VkAttachmentStoreOp storeOp) noexcept;
+            VkAttachmentStoreOp storeOp);
 
     private:
         VkAttachmentLoadOp loadOp;
@@ -44,20 +44,20 @@ namespace magma
             VkAttachmentLoadOp stencilLoadOp,
             VkAttachmentStoreOp stencilStoreOp,
             VkImageLayout initialLayout,
-            VkImageLayout finalLayout) noexcept;
+            VkImageLayout finalLayout);
         constexpr AttachmentDescription(VkFormat format,
             uint32_t sampleCount,
             const LoadStoreOp& colorDepthOp,
             const LoadStoreOp& stencilOp,
             VkImageLayout initialLayout,
-            VkImageLayout finalLayout) noexcept;
+            VkImageLayout finalLayout);
         constexpr AttachmentDescription(const LoadStoreOp& colorDepthOp,
             const LoadStoreOp& stencilOp,
             VkImageLayout initialLayout,
-            VkImageLayout finalLayout) noexcept;
+            VkImageLayout finalLayout);
         constexpr AttachmentDescription(VkFormat format,
             uint32_t sampleCount,
-            const AttachmentDescription& prefab) noexcept;
+            const AttachmentDescription& prefab);
     };
 } // namespace magma
 

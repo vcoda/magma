@@ -1,7 +1,7 @@
 namespace magma
 {
 constexpr AdvancedColorBlendAttachmentState::AdvancedColorBlendAttachmentState(VkBlendOp advancedBlendOp,
-    VkColorComponentFlags colorWriteMask /* R, G, B, A */) noexcept
+    VkColorComponentFlags colorWriteMask /* R, G, B, A */)
 {
     blendEnable = VK_TRUE;
     srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
@@ -13,7 +13,7 @@ constexpr AdvancedColorBlendAttachmentState::AdvancedColorBlendAttachmentState(V
     this->colorWriteMask = colorWriteMask;
 }
 
-constexpr size_t AdvancedColorBlendAttachmentState::hash() const noexcept
+constexpr size_t AdvancedColorBlendAttachmentState::hash() const
 {
     return internal::hashArgs(
         blendEnable,
@@ -26,7 +26,7 @@ constexpr size_t AdvancedColorBlendAttachmentState::hash() const noexcept
         colorWriteMask);
 }
 
-constexpr bool AdvancedColorBlendAttachmentState::operator==(const AdvancedColorBlendAttachmentState& other) const noexcept
+constexpr bool AdvancedColorBlendAttachmentState::operator==(const AdvancedColorBlendAttachmentState& other) const
 {
     return (blendEnable == other.blendEnable) &&
         (srcColorBlendFactor == other.srcColorBlendFactor) &&

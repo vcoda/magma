@@ -22,25 +22,25 @@ namespace magma
     class Format
     {
     public:
-        constexpr Format(VkFormat format) noexcept:
+        constexpr Format(VkFormat format):
             format(format) {}
-        constexpr operator VkFormat() const noexcept
+        constexpr operator VkFormat() const
             { return format; }
-        constexpr bool valid() const noexcept
+        constexpr bool valid() const
             { return format != VK_FORMAT_UNDEFINED; }
-        constexpr bool depth() const noexcept;
-        constexpr bool stencil() const noexcept;
-        constexpr bool depthStencil() const noexcept;
-        constexpr bool blockCompressed() const noexcept;
-        constexpr bool ETC2() const noexcept;
-        constexpr bool EAC() const noexcept;
-        constexpr bool ASTC() const noexcept;
-        constexpr bool PVRTC() const noexcept;
-        constexpr bool compressed() const noexcept
+        constexpr bool depth() const;
+        constexpr bool stencil() const;
+        constexpr bool depthStencil() const;
+        constexpr bool blockCompressed() const;
+        constexpr bool ETC2() const;
+        constexpr bool EAC() const;
+        constexpr bool ASTC() const;
+        constexpr bool PVRTC() const;
+        constexpr bool compressed() const
             { return blockCompressed() || ETC2() || EAC() || ASTC() || PVRTC(); }
-        constexpr bool floatingPoint() const noexcept;
-        constexpr bool sRGB() const noexcept;
-        constexpr size_t size() const noexcept;
+        constexpr bool floatingPoint() const;
+        constexpr bool sRGB() const;
+        constexpr size_t size() const;
         size_t blockCompressedSize() const noexcept;
         std::pair<int, int> blockFootprint() const noexcept;
 

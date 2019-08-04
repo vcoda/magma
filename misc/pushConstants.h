@@ -26,7 +26,7 @@ namespace magma
         template<typename Type>
         struct PushConstantRange : VkPushConstantRange
         {
-            constexpr PushConstantRange(VkShaderStageFlags flags, uint32_t rangeOffset = 0) noexcept
+            constexpr PushConstantRange(VkShaderStageFlags flags, uint32_t rangeOffset = 0)
             {
                 stageFlags = flags;
                 offset = rangeOffset;
@@ -37,70 +37,70 @@ namespace magma
         template<typename Type>
         struct VertexConstantRange : PushConstantRange<Type>
         {
-            constexpr VertexConstantRange(uint32_t offset = 0) noexcept:
+            constexpr VertexConstantRange(uint32_t offset = 0):
                 PushConstantRange<Type>(VK_SHADER_STAGE_VERTEX_BIT, offset) {}
         };
 
         template<typename Type>
         struct TesselationControlConstantRange : PushConstantRange<Type>
         {
-            constexpr TesselationControlConstantRange(uint32_t offset = 0) noexcept:
+            constexpr TesselationControlConstantRange(uint32_t offset = 0):
                 PushConstantRange<Type>(VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, offset) {}
         };
 
         template<typename Type>
         struct TesselationEvaluationConstantRange : PushConstantRange<Type>
         {
-            constexpr TesselationEvaluationConstantRange(uint32_t offset = 0) noexcept:
+            constexpr TesselationEvaluationConstantRange(uint32_t offset = 0):
                 PushConstantRange<Type>(VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, offset) {}
         };
 
         template<typename Type>
         struct GeometryConstantRange : PushConstantRange<Type>
         {
-            constexpr GeometryConstantRange(uint32_t offset = 0) noexcept:
+            constexpr GeometryConstantRange(uint32_t offset = 0):
                 PushConstantRange<Type>(VK_SHADER_STAGE_GEOMETRY_BIT, offset) {}
         };
 
         template<typename Type>
         struct FragmentConstantRange : PushConstantRange<Type>
         {
-            constexpr FragmentConstantRange(uint32_t offset = 0) noexcept:
+            constexpr FragmentConstantRange(uint32_t offset = 0):
                 PushConstantRange<Type>(VK_SHADER_STAGE_FRAGMENT_BIT, offset) {}
         };
 
         template<typename Type>
         struct ComputeConstantRange : PushConstantRange<Type>
         {
-            constexpr ComputeConstantRange(uint32_t offset = 0) noexcept:
+            constexpr ComputeConstantRange(uint32_t offset = 0):
                 PushConstantRange<Type>(VK_SHADER_STAGE_COMPUTE_BIT, offset) {}
         };
 
         template<typename Type>
         struct GraphicsConstantRange : PushConstantRange<Type>
         {
-            constexpr GraphicsConstantRange(uint32_t offset = 0) noexcept:
+            constexpr GraphicsConstantRange(uint32_t offset = 0):
                 PushConstantRange<Type>(VK_SHADER_STAGE_ALL_GRAPHICS, offset) {}
         };
 
         template<typename Type>
         struct AllConstantRange : PushConstantRange<Type>
         {
-            constexpr AllConstantRange(uint32_t offset = 0) noexcept:
+            constexpr AllConstantRange(uint32_t offset = 0):
                 PushConstantRange<Type>(VK_SHADER_STAGE_ALL, offset) {}
         };
 
         template<typename Type>
         struct VertexGeometryConstantRange : PushConstantRange<Type>
         {
-            constexpr VertexGeometryConstantRange(uint32_t offset = 0) noexcept:
+            constexpr VertexGeometryConstantRange(uint32_t offset = 0):
                 PushConstantRange<Type>(VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT, offset) {}
         };
 
         template<typename Type>
         struct VertexFragmentConstantRange : PushConstantRange<Type>
         {
-            constexpr VertexFragmentConstantRange(uint32_t offset = 0) noexcept:
+            constexpr VertexFragmentConstantRange(uint32_t offset = 0):
                 PushConstantRange<Type>(VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, offset) {}
         };
     } // namespace pushconstants

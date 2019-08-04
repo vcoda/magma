@@ -1,6 +1,6 @@
 namespace magma
 {
-constexpr bool Format::depth() const noexcept
+constexpr bool Format::depth() const
 {
     switch (format)
     {
@@ -13,7 +13,7 @@ constexpr bool Format::depth() const noexcept
     }
 }
 
-constexpr bool Format::stencil() const noexcept
+constexpr bool Format::stencil() const
 {
     switch (format)
     {
@@ -24,7 +24,7 @@ constexpr bool Format::stencil() const noexcept
     }
 }
 
-constexpr bool Format::depthStencil() const noexcept
+constexpr bool Format::depthStencil() const
 {
     switch (format)
     {
@@ -37,7 +37,7 @@ constexpr bool Format::depthStencil() const noexcept
     }
 }
 
-constexpr bool Format::blockCompressed() const noexcept
+constexpr bool Format::blockCompressed() const
 {
     switch (format)
     {
@@ -63,7 +63,7 @@ constexpr bool Format::blockCompressed() const noexcept
     }
 }
 
-constexpr bool Format::ETC2() const noexcept
+constexpr bool Format::ETC2() const
 {
     switch (format)
     {
@@ -79,7 +79,7 @@ constexpr bool Format::ETC2() const noexcept
     }
 }
 
-constexpr bool Format::EAC() const noexcept
+constexpr bool Format::EAC() const
 {
     switch (format)
     {
@@ -93,7 +93,7 @@ constexpr bool Format::EAC() const noexcept
     }
 }
 
-constexpr bool Format::ASTC() const noexcept
+constexpr bool Format::ASTC() const
 {
     switch (format)
     {
@@ -131,7 +131,7 @@ constexpr bool Format::ASTC() const noexcept
     };
 }
 
-constexpr bool Format::PVRTC() const noexcept
+constexpr bool Format::PVRTC() const
 {
     switch (format)
     {
@@ -149,7 +149,7 @@ constexpr bool Format::PVRTC() const noexcept
     }
 }
 
-constexpr bool Format::floatingPoint() const noexcept
+constexpr bool Format::floatingPoint() const
 {
     switch (format)
     {
@@ -177,7 +177,7 @@ constexpr bool Format::floatingPoint() const noexcept
     }
 }
 
-constexpr bool Format::sRGB() const noexcept
+constexpr bool Format::sRGB() const
 {   
     switch (format)
     {
@@ -220,7 +220,7 @@ constexpr bool Format::sRGB() const noexcept
     }
 }
     
-constexpr size_t Format::size() const noexcept
+constexpr size_t Format::size() const
 {
     switch (format) // TODO: add all other formats in the future.
     {

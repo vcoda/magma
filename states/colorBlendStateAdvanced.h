@@ -32,9 +32,9 @@ namespace magma
                 VK_COLOR_COMPONENT_R_BIT |
                 VK_COLOR_COMPONENT_G_BIT |
                 VK_COLOR_COMPONENT_B_BIT |
-                VK_COLOR_COMPONENT_A_BIT) noexcept;
-        constexpr size_t hash() const noexcept;
-        constexpr bool operator==(const AdvancedColorBlendAttachmentState&) const noexcept;
+                VK_COLOR_COMPONENT_A_BIT);
+        constexpr size_t hash() const;
+        constexpr bool operator==(const AdvancedColorBlendAttachmentState&) const;
     };
 
     /* For explanation, see 

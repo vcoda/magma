@@ -1,7 +1,7 @@
 namespace magma
 {
 constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
-    VkColorComponentFlags colorWriteMask /* R, G, B, A */) noexcept
+    VkColorComponentFlags colorWriteMask /* R, G, B, A */)
 {
     blendEnable = VK_FALSE;
     srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
@@ -15,7 +15,7 @@ constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
 
 constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
     VkBlendFactor srcBlendFactor, VkBlendFactor dstBlendFactor, VkBlendOp blendOp,
-    VkColorComponentFlags colorWriteMask /* R, G, B, A */) noexcept
+    VkColorComponentFlags colorWriteMask /* R, G, B, A */)
 {
     blendEnable = VK_TRUE;
     srcColorBlendFactor = srcBlendFactor;
@@ -30,7 +30,7 @@ constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
 constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
     VkBlendFactor srcColorBlendFactor, VkBlendFactor dstColorBlendFactor, VkBlendOp colorBlendOp,
     VkBlendFactor srcAlphaBlendFactor, VkBlendFactor dstAlphaBlendFactor, VkBlendOp alphaBlendOp,
-    VkColorComponentFlags colorWriteMask /* R, G, B, A */) noexcept
+    VkColorComponentFlags colorWriteMask /* R, G, B, A */)
 {
     blendEnable = VK_TRUE;
     this->srcColorBlendFactor = srcColorBlendFactor;
@@ -42,7 +42,7 @@ constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
     this->colorWriteMask = colorWriteMask;
 }
 
-constexpr size_t ColorBlendAttachmentState::hash() const noexcept
+constexpr size_t ColorBlendAttachmentState::hash() const
 {
     return internal::hashArgs(
         blendEnable,
@@ -55,7 +55,7 @@ constexpr size_t ColorBlendAttachmentState::hash() const noexcept
         colorWriteMask);
 }
 
-constexpr bool ColorBlendAttachmentState::operator==(const ColorBlendAttachmentState& other) const noexcept
+constexpr bool ColorBlendAttachmentState::operator==(const ColorBlendAttachmentState& other) const
 {
     return (blendEnable == other.blendEnable) &&
         (srcColorBlendFactor == other.srcColorBlendFactor) &&
@@ -67,7 +67,7 @@ constexpr bool ColorBlendAttachmentState::operator==(const ColorBlendAttachmentS
         (colorWriteMask == other.colorWriteMask);
 }
 
-constexpr ColorBlendState::ColorBlendState() noexcept
+constexpr ColorBlendState::ColorBlendState()
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -85,7 +85,7 @@ constexpr ColorBlendState::ColorBlendState() noexcept
 constexpr ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& attachment,
     bool logicOpEnable /* false */,
     VkLogicOp logicOp /* VK_LOGIC_OP_CLEAR */,
-    const std::initializer_list<float>& blendConstants /* {1, 1, 1, 1} */) noexcept
+    const std::initializer_list<float>& blendConstants /* {1, 1, 1, 1} */)
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -101,7 +101,7 @@ constexpr ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& atta
     this->blendConstants[3] = c[3];
 }
 
-constexpr size_t ColorBlendState::hash() const noexcept
+constexpr size_t ColorBlendState::hash() const
 {
     size_t hash = internal::hashArgs(
         flags,
@@ -121,7 +121,7 @@ constexpr size_t ColorBlendState::hash() const noexcept
     return hash;
 }
 
-constexpr bool ColorBlendState::operator==(const ColorBlendState& other) const noexcept
+constexpr bool ColorBlendState::operator==(const ColorBlendState& other) const
 {
     return (flags == other.flags) &&
         (logicOpEnable == other.logicOpEnable) &&
@@ -141,7 +141,7 @@ constexpr bool ColorBlendState::operator==(const ColorBlendState& other) const n
         (blendConstants[3] == other.blendConstants[3]);
 }
 
-constexpr ColorLogicOpState::ColorLogicOpState(const ColorBlendAttachmentState& attachment, VkLogicOp logicOp) noexcept:
+constexpr ColorLogicOpState::ColorLogicOpState(const ColorBlendAttachmentState& attachment, VkLogicOp logicOp):
     ColorBlendState(attachment, true, logicOp)
 {}
 } // namespace magma

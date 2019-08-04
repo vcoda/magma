@@ -26,9 +26,9 @@ namespace magma
     struct InputAssemblyState : VkPipelineInputAssemblyStateCreateInfo
     {
         constexpr InputAssemblyState(VkPrimitiveTopology topology,
-            bool primitiveRestartEnable = false) noexcept;
-        constexpr size_t hash() const noexcept;
-        constexpr bool operator==(const InputAssemblyState&) const noexcept;
+            bool primitiveRestartEnable = false);
+        constexpr size_t hash() const;
+        constexpr bool operator==(const InputAssemblyState&) const;
     };
 } // namespace magma
 
