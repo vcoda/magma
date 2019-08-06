@@ -27,6 +27,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 ValidationCache::ValidationCache(std::shared_ptr<Device> device,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    ValidationCache(std::move(device), 0, nullptr, std::move(allocator))
+{}
+
+ValidationCache::ValidationCache(std::shared_ptr<Device> device,
     size_t dataSize, const void *cacheData,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_VALIDATION_CACHE_EXT, std::move(device), std::move(allocator))
