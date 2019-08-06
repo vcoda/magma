@@ -219,8 +219,8 @@ inline void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, c
     udpateBuffer(buffer, dataSize, data.data(), offset);
 }
 
-template<typename Type, uint32_t PushConstantCount>
-inline void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const Type(&values)[PushConstantCount],
+template<typename Type, uint32_t pushConstantCount>
+inline void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const Type(&values)[pushConstantCount],
     uint32_t offset /* 0 */) noexcept
 {
     vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * pushConstantCount), values);

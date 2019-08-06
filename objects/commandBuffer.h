@@ -332,11 +332,11 @@ namespace magma
             VkDeviceSize dstOffset = 0,
             bool write64Bit = true) noexcept;
 
-        template<typename Type, uint32_t PushConstantCount>
+        template<typename Type, uint32_t pushConstantCount>
         void pushConstants(
             const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags,
-            const Type(&values)[PushConstantCount],
+            const Type(&values)[pushConstantCount],
             uint32_t offset = 0) noexcept;
         template<typename Type>
         void pushConstants(
