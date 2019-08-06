@@ -23,6 +23,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <mm_malloc.h>
 #endif
 
+#ifdef _MSC_VER
+#define MAGMA_CONSTEXPR constexpr
+#else
+#define MAGMA_CONSTEXPR
+#endif
+
 #ifdef _DEBUG
 #define MAGMA_DEBUG
 #endif

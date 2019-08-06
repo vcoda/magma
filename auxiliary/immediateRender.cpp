@@ -172,7 +172,7 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
         VertexInputAttribute(3, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, u))
     };
     constexpr VertexInputBinding vertexBinding(0, sizeof(Vertex));
-    constexpr VertexInputState vertexInput(vertexBinding, vertexAttributes);
+	MAGMA_CONSTEXPR VertexInputState vertexInput(vertexBinding, vertexAttributes);
     constexpr const InputAssemblyState *inputAssemblyStates[] =
     {
         &renderstates::pointList,
