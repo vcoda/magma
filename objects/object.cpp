@@ -112,7 +112,7 @@ void Object::setObjectTag(uint64_t tagName, size_t tagSize, const void *tag) noe
 
 std::shared_ptr<IObjectAllocator> Object::objectAllocator;
 #ifdef MAGMA_DEBUG
-std::atomic<int64_t> Object::allocCount = 0;
+std::atomic<int64_t> Object::allocCount;
 #endif
 
 void Object::overrideDefaultAllocator(std::shared_ptr<IObjectAllocator> allocator)

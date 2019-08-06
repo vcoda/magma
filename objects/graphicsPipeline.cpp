@@ -81,8 +81,8 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
 {
     if (stages.empty())
         MAGMA_THROW("shader stages are empty");
-    VkPipelineVertexInputStateCreateInfo pipelineVertexInput = {0};
-    VkVertexInputBindingDescription vertexBindingDesc = {0};
+	VkPipelineVertexInputStateCreateInfo pipelineVertexInput = {};
+	VkVertexInputBindingDescription vertexBindingDesc = {};
     VkGraphicsPipelineCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     info.pNext = nullptr;
