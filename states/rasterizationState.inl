@@ -53,7 +53,8 @@ constexpr bool RasterizationState::operator==(const RasterizationState& other) c
 constexpr ConservativeRasterizationState::ConservativeRasterizationState(const RasterizationState& state,
     VkConservativeRasterizationModeEXT conservativeRasterizationMode,
     float extraPrimitiveOverestimationSize /* 0 */):
-    RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable)
+    RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable),
+    conservative{}
 {
     conservative.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_CONSERVATIVE_STATE_CREATE_INFO_EXT;
     conservative.pNext = nullptr;
@@ -92,7 +93,8 @@ constexpr DepthBiasRasterizationState::DepthBiasRasterizationState(const Rasteri
 
 constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationState& state,
     VkRasterizationOrderAMD rasterizationOrder):
-    RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable)
+    RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable),
+    order{}
 {
     order.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD;
     order.pNext = nullptr;
