@@ -92,8 +92,8 @@ namespace magma
     typedef std::shared_ptr<class MacOSSurface> MacOSSurfacePtr;
     typedef std::shared_ptr<class MetalSurface> MetalSurfacePtr;
 
-    typedef std::unique_ptr<struct InstanceExtensions> InstanceExtensionsPtr;
-    typedef std::unique_ptr<struct PhysicalDeviceExtensions> PhysicalDeviceExtensionsPtr;
+    typedef std::unique_ptr<class InstanceExtensions> InstanceExtensionsPtr;
+    typedef std::unique_ptr<class PhysicalDeviceExtensions> PhysicalDeviceExtensionsPtr;
 
     namespace aux
     {
