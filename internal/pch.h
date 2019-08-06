@@ -17,11 +17,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
+#include <cstring>
+
 #include <memory>
 #include <vector>
-#include <string>
+#include <list>
 #include <map>
 #include <unordered_map>
+#include <string>
 #include <initializer_list>
 #include <stdexcept>
 #include <limits>

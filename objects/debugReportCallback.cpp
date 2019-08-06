@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
+#include <cstdarg>
 #include "debugReportCallback.h"
 #include "instance.h"
 #include "../allocator/allocator.h"
