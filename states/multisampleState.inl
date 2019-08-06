@@ -1,6 +1,7 @@
 namespace magma
 {
-constexpr MultisampleState::MultisampleState(VkSampleCountFlagBits rasterizationSamples)
+constexpr MultisampleState::MultisampleState(VkSampleCountFlagBits rasterizationSamples):
+    VkPipelineMultisampleStateCreateInfo{}
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -13,7 +14,8 @@ constexpr MultisampleState::MultisampleState(VkSampleCountFlagBits rasterization
     alphaToOneEnable = VK_FALSE;
 }
 
-constexpr MultisampleState::MultisampleState(uint32_t sampleCount)
+constexpr MultisampleState::MultisampleState(uint32_t sampleCount):
+    VkPipelineMultisampleStateCreateInfo{}
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     pNext = nullptr;

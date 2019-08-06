@@ -1,7 +1,8 @@
 namespace magma
 {
 constexpr VertexInputBinding::VertexInputBinding(uint32_t binding, uint32_t stride,
-    VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */)
+    VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */):
+    VkVertexInputBindingDescription{}
 {
     this->binding = binding;
     this->stride = stride;
@@ -9,7 +10,8 @@ constexpr VertexInputBinding::VertexInputBinding(uint32_t binding, uint32_t stri
 }
 
 constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location,
-    uint32_t binding, VkFormat format, uint32_t offset)
+    uint32_t binding, VkFormat format, uint32_t offset):
+    VkVertexInputAttributeDescription{}
 {
     this->location = location;
     this->binding = binding;
@@ -18,7 +20,8 @@ constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location,
 }
 
 constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location,
-    const VertexInputAttribute& attrib, uint32_t offset)
+    const VertexInputAttribute& attrib, uint32_t offset):
+    VkVertexInputAttributeDescription{}
 {
     this->location = location;
     binding = attrib.binding;
@@ -26,7 +29,8 @@ constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location,
     this->offset = offset;
 }
 
-constexpr VertexInputState::VertexInputState()
+constexpr VertexInputState::VertexInputState():
+    VkPipelineVertexInputStateCreateInfo{}
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -37,7 +41,8 @@ constexpr VertexInputState::VertexInputState()
     pVertexAttributeDescriptions = nullptr;
 }
 
-constexpr VertexInputState::VertexInputState(const VertexInputAttribute& attribute)
+constexpr VertexInputState::VertexInputState(const VertexInputAttribute& attribute):
+    VkPipelineVertexInputStateCreateInfo{}
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -49,7 +54,8 @@ constexpr VertexInputState::VertexInputState(const VertexInputAttribute& attribu
 }
 
 template<size_t VertexAttributeDescriptionCount>
-constexpr VertexInputState::VertexInputState(const VertexInputAttribute (&attributes)[VertexAttributeDescriptionCount])
+constexpr VertexInputState::VertexInputState(const VertexInputAttribute (&attributes)[VertexAttributeDescriptionCount]):
+    VkPipelineVertexInputStateCreateInfo{}
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -60,7 +66,8 @@ constexpr VertexInputState::VertexInputState(const VertexInputAttribute (&attrib
     pVertexAttributeDescriptions = attributes;
 }
 
-constexpr VertexInputState::VertexInputState(const VertexInputBinding& binding, const VertexInputAttribute& attribute)
+constexpr VertexInputState::VertexInputState(const VertexInputBinding& binding, const VertexInputAttribute& attribute):
+    VkPipelineVertexInputStateCreateInfo{}
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -73,7 +80,8 @@ constexpr VertexInputState::VertexInputState(const VertexInputBinding& binding, 
 
 template<size_t VertexAttributeDescriptionCount>
 constexpr VertexInputState::VertexInputState(const VertexInputBinding& binding,
-    const VertexInputAttribute (&attributes)[VertexAttributeDescriptionCount])
+    const VertexInputAttribute (&attributes)[VertexAttributeDescriptionCount]):
+    VkPipelineVertexInputStateCreateInfo{}
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -86,7 +94,8 @@ constexpr VertexInputState::VertexInputState(const VertexInputBinding& binding,
 
 template<size_t VertexBindingDescriptionCount, size_t VertexAttributeDescriptionCount>
 constexpr VertexInputState::VertexInputState(const VertexInputBinding (&bindings)[VertexBindingDescriptionCount],
-    const VertexInputAttribute (&attributes)[VertexAttributeDescriptionCount])
+    const VertexInputAttribute (&attributes)[VertexAttributeDescriptionCount]):
+    VkPipelineVertexInputStateCreateInfo{}
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;

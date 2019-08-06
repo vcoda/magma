@@ -1,7 +1,8 @@
 namespace magma
 {
 constexpr RasterizationState::RasterizationState(VkPolygonMode polygonMode, VkCullModeFlags cullMode, VkFrontFace frontFace,
-    bool depthClampEnable /* false */, bool rasterizerDiscardEnable /* false */)
+    bool depthClampEnable /* false */, bool rasterizerDiscardEnable /* false */):
+    VkPipelineRasterizationStateCreateInfo{}
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
     pNext = nullptr;

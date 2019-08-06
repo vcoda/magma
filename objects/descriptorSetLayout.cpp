@@ -28,7 +28,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 DescriptorSetLayout::Binding::Binding(uint32_t binding, const Descriptor& descriptor, VkShaderStageFlags stageFlags,
-    const ImmutableSamplerList& immutableSamplers /* {} */) noexcept
+    const ImmutableSamplerList& immutableSamplers /* {} */) noexcept:
+    VkDescriptorSetLayoutBinding{}
 {
     this->binding = binding;
     descriptorType = descriptor.type;

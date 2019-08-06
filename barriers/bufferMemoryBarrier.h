@@ -29,7 +29,8 @@ namespace magma
     struct BufferMemoryBarrier : VkBufferMemoryBarrier
     {
         constexpr BufferMemoryBarrier(VkAccessFlags srcAccessMask,
-            VkAccessFlags dstAccessMask) noexcept
+            VkAccessFlags dstAccessMask):
+            VkBufferMemoryBarrier{}
         {
             sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
             pNext = nullptr;

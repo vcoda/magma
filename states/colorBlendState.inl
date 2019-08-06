@@ -1,7 +1,8 @@
 namespace magma
 {
 constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
-    VkColorComponentFlags colorWriteMask /* R, G, B, A */)
+    VkColorComponentFlags colorWriteMask /* R, G, B, A */):
+    VkPipelineColorBlendAttachmentState{}
 {
     blendEnable = VK_FALSE;
     srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
@@ -15,7 +16,8 @@ constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
 
 constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
     VkBlendFactor srcBlendFactor, VkBlendFactor dstBlendFactor, VkBlendOp blendOp,
-    VkColorComponentFlags colorWriteMask /* R, G, B, A */)
+    VkColorComponentFlags colorWriteMask /* R, G, B, A */):
+    VkPipelineColorBlendAttachmentState{}
 {
     blendEnable = VK_TRUE;
     srcColorBlendFactor = srcBlendFactor;
@@ -30,7 +32,8 @@ constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
 constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
     VkBlendFactor srcColorBlendFactor, VkBlendFactor dstColorBlendFactor, VkBlendOp colorBlendOp,
     VkBlendFactor srcAlphaBlendFactor, VkBlendFactor dstAlphaBlendFactor, VkBlendOp alphaBlendOp,
-    VkColorComponentFlags colorWriteMask /* R, G, B, A */)
+    VkColorComponentFlags colorWriteMask /* R, G, B, A */):
+    VkPipelineColorBlendAttachmentState{}
 {
     blendEnable = VK_TRUE;
     this->srcColorBlendFactor = srcColorBlendFactor;
@@ -67,7 +70,8 @@ constexpr bool ColorBlendAttachmentState::operator==(const ColorBlendAttachmentS
         (colorWriteMask == other.colorWriteMask);
 }
 
-constexpr ColorBlendState::ColorBlendState()
+constexpr ColorBlendState::ColorBlendState():
+    VkPipelineColorBlendStateCreateInfo{}
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     pNext = nullptr;

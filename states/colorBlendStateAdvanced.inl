@@ -1,7 +1,8 @@
 namespace magma
 {
 constexpr AdvancedColorBlendAttachmentState::AdvancedColorBlendAttachmentState(VkBlendOp advancedBlendOp,
-    VkColorComponentFlags colorWriteMask /* R, G, B, A */)
+    VkColorComponentFlags colorWriteMask /* R, G, B, A */):
+    VkPipelineColorBlendAttachmentState{}
 {
     blendEnable = VK_TRUE;
     srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;

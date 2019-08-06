@@ -24,22 +24,15 @@ namespace magma
 
     struct StencilOpState : VkStencilOpState
     {
-        constexpr StencilOpState(VkStencilOp failOp,
+        constexpr StencilOpState(VkStencilOp failOp, 
             VkStencilOp passOp,
-            VkStencilOp depthFailOp,
+            VkStencilOp depthFailOp, 
             VkCompareOp compareOp,
-            uint32_t compareMask = 0x0,
-            uint32_t writeMask = 0x0,
-            uint32_t reference = 0)
-        {
-            this->failOp = failOp;
-            this->passOp = passOp;
-            this->depthFailOp = depthFailOp;
-            this->compareOp = compareOp;
-            this->compareMask = compareMask;
-            this->writeMask = writeMask;
-            this->reference = reference;
-        }
+            uint32_t compareMask = 0x0, 
+            uint32_t writeMask = 0x0, 
+            uint32_t reference = 0):
+            VkStencilOpState{failOp, passOp, depthFailOp, compareOp, compareMask, writeMask, reference}
+        {}
         constexpr std::size_t hash() const;
         constexpr bool operator==(const StencilOpState&) const;
     };

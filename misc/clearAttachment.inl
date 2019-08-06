@@ -1,5 +1,9 @@
 namespace magma
 {
+constexpr ClearAttachment::ClearAttachment():
+    VkClearAttachment{}
+{}
+
 constexpr ColorClearAttachment::ColorClearAttachment(uint32_t attachment)
 {
     aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;

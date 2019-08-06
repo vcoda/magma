@@ -7,7 +7,8 @@ constexpr LoadStoreOp::LoadStoreOp(VkAttachmentLoadOp loadOp, VkAttachmentStoreO
 constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t sampleCount,
     VkAttachmentLoadOp loadOp, VkAttachmentStoreOp storeOp,
     VkAttachmentLoadOp stencilLoadOp, VkAttachmentStoreOp stencilStoreOp,
-    VkImageLayout initialLayout, VkImageLayout finalLayout)
+    VkImageLayout initialLayout, VkImageLayout finalLayout):
+    VkAttachmentDescription{}
 {
     flags = 0;
     this->format = format;

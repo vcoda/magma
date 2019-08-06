@@ -20,7 +20,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    struct ClearAttachment : VkClearAttachment {};
+    struct ClearAttachment : VkClearAttachment 
+    {
+        constexpr ClearAttachment();
+    };
 
     struct ColorClearAttachment : ClearAttachment
     {

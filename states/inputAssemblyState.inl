@@ -1,7 +1,8 @@
 namespace magma
 {
 constexpr InputAssemblyState::InputAssemblyState(VkPrimitiveTopology topology,
-    bool primitiveRestartEnable /* false */)
+    bool primitiveRestartEnable /* false */):
+    VkPipelineInputAssemblyStateCreateInfo{}
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
     pNext = nullptr;

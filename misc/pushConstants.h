@@ -26,7 +26,8 @@ namespace magma
         template<typename Type>
         struct PushConstantRange : VkPushConstantRange
         {
-            constexpr PushConstantRange(VkShaderStageFlags flags, uint32_t rangeOffset = 0)
+            constexpr PushConstantRange(VkShaderStageFlags flags, uint32_t rangeOffset = 0):
+                VkPushConstantRange{}
             {
                 stageFlags = flags;
                 offset = rangeOffset;

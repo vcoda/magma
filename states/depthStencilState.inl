@@ -24,7 +24,8 @@ constexpr bool StencilOpState::operator==(const StencilOpState& other) const
 }
 
 constexpr DepthStencilState::DepthStencilState(VkCompareOp depthCompareOp, bool depthWriteEnable,
-    const StencilOpState& front, const StencilOpState& back)
+    const StencilOpState& front, const StencilOpState& back):
+    VkPipelineDepthStencilStateCreateInfo{}
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
     pNext = nullptr;

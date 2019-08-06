@@ -24,7 +24,8 @@ namespace magma
 
     struct Descriptor : public VkDescriptorPoolSize
     {
-        constexpr Descriptor(VkDescriptorType type, uint32_t descriptorCount)
+        constexpr Descriptor(VkDescriptorType type, uint32_t descriptorCount):
+            VkDescriptorPoolSize{}
         {
             this->type = type;
             this->descriptorCount = descriptorCount;
