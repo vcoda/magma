@@ -30,26 +30,30 @@ namespace magma
         }
 
         template<typename Type>
-        constexpr void hashNext(std::size_t& seed, const Type& arg) noexcept
+        constexpr std::size_t hash(const Type& arg) noexcept
         {
             std::hash<Type> hasher;
-            hashCombine(seed, hasher(arg));
+            return hasher(arg);
+        }
+
+        template<typename Type>
+        constexpr void hashNext(std::size_t& seed, const Type& arg) noexcept
+        {
+            hashCombine(seed, hash(arg));
         }
 
         template<typename Type, typename... Args>
         constexpr void hashNext(std::size_t& seed, const Type& arg, Args... args) noexcept
         {
-            std::hash<Type> hasher;
-            hashCombine(seed, hasher(arg));
+            hashCombine(seed, hash(arg));
             hashNext(seed, args...);
         }
 
         template<typename Type, typename... Args>
         constexpr std::size_t hashArgs(const Type& arg, Args... args) noexcept
         {
-            std::hash<Type> hasher;
             std::size_t value = 0;
-            hashCombine(value, hasher(arg));
+            hashCombine(value, hash(arg));
             hashNext(value, args...);
             return value;
         }
