@@ -24,33 +24,33 @@ namespace magma
     namespace internal
     {
         // https://www.boost.org/doc/libs/1_46_1/doc/html/hash/reference.html#boost.hash_combine
-        constexpr void hashCombine(std::size_t& seed, std::size_t hash) noexcept
+        constexpr void hashCombine(std::size_t& seed, std::size_t hash)
         {
             seed ^= (hash + 0x9e3779b9 + (seed << 6) + (seed >> 2));
         }
 
         template<typename Type>
-        constexpr std::size_t hash(const Type& arg) noexcept
+        constexpr std::size_t hash(const Type& arg)
         {
             std::hash<Type> hasher;
             return hasher(arg);
         }
 
         template<typename Type>
-        constexpr void hashNext(std::size_t& seed, const Type& arg) noexcept
+        constexpr void hashNext(std::size_t& seed, const Type& arg)
         {
             hashCombine(seed, hash(arg));
         }
 
         template<typename Type, typename... Args>
-        constexpr void hashNext(std::size_t& seed, const Type& arg, Args... args) noexcept
+        constexpr void hashNext(std::size_t& seed, const Type& arg, Args... args)
         {
             hashCombine(seed, hash(arg));
             hashNext(seed, args...);
         }
 
         template<typename Type, typename... Args>
-        constexpr std::size_t hashArgs(const Type& arg, Args... args) noexcept
+        constexpr std::size_t hashArgs(const Type& arg, Args... args)
         {
             std::size_t value = 0;
             hashCombine(value, hash(arg));
@@ -59,7 +59,7 @@ namespace magma
         }
 
         template<typename Type>
-        constexpr std::size_t hashArray(const Type *const array, std::size_t count) noexcept
+        constexpr std::size_t hashArray(const Type *const array, std::size_t count)
         {
             std::hash<Type> hasher;
             std::size_t value = 0;
