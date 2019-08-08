@@ -193,7 +193,7 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
     if (it != pipelines.end())
         return it->second.pipeline;
     // Create new pipeline for unique render states
-    std::shared_ptr<const GraphicsPipeline> basePipeline = lookupBasePipeline();
+    std::shared_ptr<GraphicsPipeline> basePipeline = lookupBasePipeline();
     std::shared_ptr<GraphicsPipeline> pipeline(std::make_shared<GraphicsPipeline>(device, cache,
         std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
         vertexInput,
@@ -216,7 +216,7 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
     return pipeline;
 }
 
-std::shared_ptr<const GraphicsPipeline> ImmediateRender::lookupBasePipeline() const noexcept
+std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupBasePipeline() const noexcept
 {
     for (const auto& it : pipelines)
     {   // If render states are the same, child and parent are expected to have much commonality

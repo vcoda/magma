@@ -28,13 +28,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
+RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> cache,
     const std::vector<PipelineShaderStage>& stages, const std::vector<RayTracingShaderGroup>& groups,
     uint32_t maxRecursionDepth, std::shared_ptr<const PipelineLayout> layout,
-    std::shared_ptr<const RayTracingPipeline> basePipeline /* nullptr */,
+    std::shared_ptr<RayTracingPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Pipeline(std::move(device), std::move(allocator))
+    Pipeline(std::move(device), std::move(basePipeline), std::move(cache), std::move(allocator))
 {
     if (stages.empty())
         MAGMA_THROW("shader stages are empty");
@@ -44,7 +44,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device, std::shar
     info.sType = VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_NV;
     info.pNext = nullptr;
     info.flags = flags;
-    if (basePipeline)
+    if (this->basePipeline)
         info.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, stages.size());
     for (auto& stage : stages)
@@ -61,10 +61,10 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device, std::shar
         defaultLayout = std::make_unique<PipelineLayout>(this->device);
         info.layout = *defaultLayout;
     }
-    info.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipeline);
+    info.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
     info.basePipelineIndex = -1;
     MAGMA_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    const VkResult create = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->cache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create ray tracing pipeline");
 }
 

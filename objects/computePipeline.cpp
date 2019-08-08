@@ -26,19 +26,19 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr<const PipelineCache> pipelineCache,
+ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> cache,
     const PipelineShaderStage& stage,
     std::shared_ptr<const PipelineLayout> layout /* nullptr */,
-    std::shared_ptr<const ComputePipeline> basePipeline /* nullptr */,
+    std::shared_ptr<ComputePipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Pipeline(std::move(device), std::move(allocator))
+    Pipeline(std::move(device), std::move(basePipeline), std::move(cache), std::move(allocator))
 {
     VkComputePipelineCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
     info.pNext = nullptr;
     info.flags = flags;
-    if (basePipeline)
+    if (this->basePipeline)
         info.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     info.stage = stage;
     if (layout)
@@ -48,9 +48,9 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr
         defaultLayout = std::make_unique<PipelineLayout>(this->device);
         info.layout = *defaultLayout;
     }
-    info.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipeline);
+    info.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
     info.basePipelineIndex = -1;
-    const VkResult create = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->cache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create compute pipeline");
 }
 } // namespace magma

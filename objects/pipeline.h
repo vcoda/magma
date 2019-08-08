@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
+    class PipelineCache;
     class IAllocator;
 
     /* Some Vulkan commands specify geometric objects to be drawn or computational work to be performed,
@@ -33,15 +34,22 @@ namespace magma
     {
     public:
         ~Pipeline();
+        std::shared_ptr<Pipeline> getBasePipeline() noexcept { return basePipeline; }
+        std::shared_ptr<PipelineCache> getCache() noexcept { return cache; }
+        // VK_AMD_shader_info
         VkShaderStatisticsInfoAMD getShaderStatistics(VkShaderStageFlagBits stage) const;
         std::vector<uint8_t> getShaderBinary(VkShaderStageFlagBits stage) const;
         std::string getShaderDisassembly(VkShaderStageFlagBits stage) const;
 
     protected:
         explicit Pipeline(std::shared_ptr<Device> device,
+            std::shared_ptr<Pipeline> basePipeline,
+            std::shared_ptr<PipelineCache> cache,
             std::shared_ptr<IAllocator> allocator);
 
     protected:
+        std::shared_ptr<Pipeline> basePipeline;
+        std::shared_ptr<PipelineCache> cache;
         std::unique_ptr<PipelineLayout> defaultLayout;
     };
 } // namespace magma
