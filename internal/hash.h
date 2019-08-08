@@ -74,5 +74,13 @@ namespace magma
             std::hash<std::basic_string<Elem>> hasher;
             return hasher(str);
         }
+
+        inline std::size_t combineHashList(const std::initializer_list<std::size_t>& hashes) noexcept
+        {
+            std::size_t value = 0;
+            for (const std::size_t hash : hashes)
+                hashCombine(value, hash);
+            return value;
+        }
     } // namespace internal
 } // namespace magma

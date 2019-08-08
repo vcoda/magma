@@ -52,6 +52,20 @@ DescriptorSetLayout::Binding::~Binding()
     delete[] pImmutableSamplers;
 }
 
+std::size_t DescriptorSetLayout::Binding::hash() const noexcept
+{
+    std::size_t hash = internal::hashArgs(
+        binding,
+        descriptorType,
+        descriptorCount,
+        stageFlags);
+    if (pImmutableSamplers)
+    {   // pImmutableSamplers must be a valid pointer to an array of descriptorCount valid VkSampler handles.
+        internal::hashCombine(hash, internal::hashArray(pImmutableSamplers, descriptorCount));
+    }
+    return hash;
+}
+
 DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const Binding& binding,
     VkDescriptorSetLayoutCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
@@ -66,6 +80,10 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const B
     const VkResult create = vkCreateDescriptorSetLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create descriptor set layout");
     bindings.push_back(binding);
+    hash = internal::hashArgs(
+        info.sType,
+        info.flags,
+        info.bindingCount);
 }
 
 DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const std::initializer_list<Binding>& bindings,
@@ -82,10 +100,21 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const s
     info.pBindings = bindings.begin();
     const VkResult create = vkCreateDescriptorSetLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create descriptor set layout");
+    hash = internal::hashArgs(
+        info.sType,
+        info.flags,
+        info.bindingCount);
 }
 
 DescriptorSetLayout::~DescriptorSetLayout()
 {
     vkDestroyDescriptorSetLayout(MAGMA_HANDLE(device), handle, nullptr);
+}
+
+std::size_t DescriptorSetLayout::getHash() const noexcept
+{
+    std::size_t hash = this->hash;
+    for (const Binding& binding : bindings) internal::hashCombine(hash, binding.hash());
+    return hash;
 }
 } // namespace magma

@@ -38,6 +38,7 @@ namespace magma
                 VkShaderStageFlags stageFlags,
                 const ImmutableSamplerList& immutableSamplers = {}) noexcept;
             ~Binding();
+            std::size_t hash() const noexcept;
         };
 
     public:
@@ -52,8 +53,10 @@ namespace magma
         ~DescriptorSetLayout();
         uint32_t getBindingCount() const noexcept { return static_cast<uint32_t>(bindings.size()); }
         const Binding& getBinding(uint32_t index) const noexcept { return bindings[index]; }
+        std::size_t getHash() const noexcept;
 
     private:
         std::vector<Binding> bindings;
+        std::size_t hash;
     };
 } // namespace magma

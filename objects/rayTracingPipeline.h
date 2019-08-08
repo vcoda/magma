@@ -35,7 +35,7 @@ namespace magma
             const std::vector<PipelineShaderStage>& stages,
             const std::vector<RayTracingShaderGroup>& groups,
             uint32_t maxRecursionDepth,
-            std::shared_ptr<const PipelineLayout> layout,
+            std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<RayTracingPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);

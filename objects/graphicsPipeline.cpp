@@ -32,6 +32,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/colorBlendState.h"
 #include "../allocator/allocator.h"
 #include "../misc/exception.h"
+#include "../internal/hash.h"
 #include "../helpers/stackArray.h"
 
 namespace magma
@@ -45,8 +46,8 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
     const std::initializer_list<VkDynamicState>& dynamicStates,
-    std::shared_ptr<const PipelineLayout> layout,
-    std::shared_ptr<const RenderPass> renderPass,
+    std::shared_ptr<PipelineLayout> layout,
+    std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass /* 0 */,
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
@@ -71,8 +72,8 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
     const std::initializer_list<VkDynamicState>& dynamicStates,
-    std::shared_ptr<const PipelineLayout> layout,
-    std::shared_ptr<const RenderPass> renderPass,
+    std::shared_ptr<PipelineLayout> layout,
+    std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass /* 0 */,
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
@@ -127,17 +128,38 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
         info.pDynamicState = &dynamicState;
     }
     if (layout)
-        info.layout = *layout;
+        this->layout = std::move(layout);
     else
-    {
-        defaultLayout = std::make_unique<PipelineLayout>(this->device);
-        info.layout = *defaultLayout;
-    }
+        this->layout =  std::make_shared<PipelineLayout>(this->device);
+    info.layout = *this->layout;
     info.renderPass = *renderPass;
     info.subpass = subpass;
     info.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
     info.basePipelineIndex = -1;
     const VkResult create = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->cache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create graphics pipeline");
+    internal::hashCombine(hash, internal::hashArgs(
+        info.sType,
+        info.flags,
+        info.subpass));
+    for (const auto& stage : stages)
+        internal::hashCombine(hash, stage.hash());
+    internal::hashCombine(hash, internal::combineHashList(
+        {
+            vertexInputState.hash(),
+            inputAssemblyState.hash(),
+            tesselationState.hash(),
+            viewportState.hash(),
+            rasterizationState.hash(),
+            multisampleState.hash(),
+            depthStencilState.hash(),
+            colorBlendState.hash()
+        }));
+    if (info.pDynamicState)
+        internal::hashCombine(hash, internal::hashArray(info.pDynamicState->pDynamicStates, info.pDynamicState->dynamicStateCount));
+    if (this->layout)
+        internal::hashCombine(hash, this->layout->getHash());
+    if (this->basePipeline)
+        internal::hashCombine(hash, this->basePipeline->getHash());
 }
 } // namespace magma

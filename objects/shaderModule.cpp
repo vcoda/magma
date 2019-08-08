@@ -26,9 +26,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *bytecode, size_t bytecodeSize,
+    VkShaderModuleCreateFlags flags /* 0 */,
     std::shared_ptr<ValidationCache> validationCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_SHADER_MODULE, std::move(device), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_SHADER_MODULE, std::move(device), std::move(allocator)),
+    hash(internal::hashArray(bytecode, bytecodeSize / sizeof(SpirvWord)))
 {
     VkShaderModuleCreateInfo info;
     VkShaderModuleValidationCacheCreateInfoEXT cacheCreateInfo;
@@ -42,7 +44,10 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
         cacheCreateInfo.validationCache = MAGMA_OPTIONAL_HANDLE(validationCache);
         info.pNext = &cacheCreateInfo;
     }
-    MAGMA_ASSERT(bytecodeSize % sizeof(SpirvWord) == 0); // A module is defined as a stream of words, not a stream of bytes
+    if (flags != 0)
+        internal::hashCombine(hash, internal::hash(flags));
+    info.flags = flags;
+    MAGMA_ASSERT(0 == bytecodeSize % sizeof(SpirvWord)); // A module is defined as a stream of words, not a stream of bytes
     info.codeSize = bytecodeSize;
     info.pCode = bytecode;
     const VkResult create = vkCreateShaderModule(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
@@ -50,9 +55,10 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
 }
 
 ShaderModule::ShaderModule(std::shared_ptr<Device> device, const std::vector<SpirvWord>& bytecode,
+    VkShaderModuleCreateFlags flags /* 0 */,
     std::shared_ptr<ValidationCache> validationCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    ShaderModule(std::move(device), bytecode.data(), bytecode.size() * sizeof(SpirvWord), 
+    ShaderModule(std::move(device), bytecode.data(), bytecode.size() * sizeof(SpirvWord), flags,
         std::move(validationCache), std::move(allocator))
 {}
 

@@ -41,18 +41,31 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
     info.pPushConstantRanges = pushConstantRanges.begin();
     const VkResult create = vkCreatePipelineLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create pipeline layout");
+    hash = internal::hashArgs(
+        info.sType,
+        info.flags,
+        info.setLayoutCount,
+        info.pushConstantRangeCount);
+    for (const auto& constantRange : pushConstantRanges)
+    {
+        internal::hashCombine(hash, internal::hashArgs(
+            constantRange.stageFlags,
+            constantRange.offset,
+            constantRange.size));
+    }
 }
 
-PipelineLayout::PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLayout,
+PipelineLayout::PipelineLayout(std::shared_ptr<DescriptorSetLayout> setLayout,
     const std::initializer_list<VkPushConstantRange>& pushConstantRanges /* {} */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    PipelineLayout(std::vector<std::shared_ptr<const DescriptorSetLayout>>{setLayout}, pushConstantRanges, std::move(allocator))
+    PipelineLayout(std::vector<std::shared_ptr<DescriptorSetLayout>>{setLayout}, pushConstantRanges, std::move(allocator))
 {}
 
-PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<const DescriptorSetLayout>>& setLayouts,
+PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<DescriptorSetLayout>>& setLayouts,
     const std::initializer_list<VkPushConstantRange>& pushConstantRanges /* {} */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, std::move(setLayouts[0]->getDevice()), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, std::move(setLayouts[0]->getDevice()), std::move(allocator)),
+    setLayouts(setLayouts)
 {
     VkPipelineLayoutCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -67,10 +80,30 @@ PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<const Descripto
     info.pPushConstantRanges = pushConstantRanges.begin();
     const VkResult create = vkCreatePipelineLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create pipeline layout");
+    hash = internal::hashArgs(
+        info.sType,
+        info.flags,
+        info.setLayoutCount,
+        info.pushConstantRangeCount);
+    for (const auto& constantRange : pushConstantRanges)
+    {
+        internal::hashCombine(hash, internal::hashArgs(
+            constantRange.stageFlags,
+            constantRange.offset,
+            constantRange.size));
+    }
 }
 
 PipelineLayout::~PipelineLayout()
 {
     vkDestroyPipelineLayout(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+}
+
+std::size_t PipelineLayout::getHash() const noexcept
+{
+    size_t hash = this->hash;
+    for (const std::shared_ptr<DescriptorSetLayout>& layout : setLayouts) 
+        internal::hashCombine(hash, layout->getHash());
+    return hash;
 }
 } // namespace magma

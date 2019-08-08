@@ -76,10 +76,10 @@ size_t PipelineShaderStage::hash() const noexcept
 {
     size_t hash = internal::hashArgs(
         sType,
-        pNext,
         flags,
         stage,
         module);
+    internal::hashCombine(hash, shaderModule->getHash());
     internal::hashCombine(hash, internal::hashString(std::string(pName)));
     if (specialization)
         internal::hashCombine(hash, specialization->hash());

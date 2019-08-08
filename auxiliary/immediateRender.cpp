@@ -156,11 +156,12 @@ bool ImmediateRender::reset() noexcept
 
 std::shared_ptr<ShaderModule> ImmediateRender::createShader(bool vertexShader) const
 {
+    constexpr VkShaderModuleCreateFlags flags = 0;
 #include "spirv/output/immv"
     if (vertexShader)
-        return std::make_shared<ShaderModule>(device, vsImm, nullptr, allocator);
+        return std::make_shared<ShaderModule>(device, vsImm, flags, nullptr, allocator);
 #include "spirv/output/immf"
-    return std::make_shared<ShaderModule>(device, fsImm, nullptr, allocator);
+    return std::make_shared<ShaderModule>(device, fsImm, flags, nullptr, allocator);
 }
 
 std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimitiveTopology topology)
