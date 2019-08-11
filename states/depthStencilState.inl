@@ -51,6 +51,7 @@ constexpr size_t DepthStencilState::hash() const
     return internal::hashArgs(
         sType,
         flags,
+        depthTestEnable,
         depthWriteEnable,
         depthCompareOp,
         front.failOp,
