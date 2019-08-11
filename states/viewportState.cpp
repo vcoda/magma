@@ -174,10 +174,11 @@ ViewportState::~ViewportState()
 size_t ViewportState::hash() const noexcept
 {
     size_t hash = internal::hashArgs(
+        sType,
         flags,
         viewportCount,
         scissorCount);
-    for (uint32_t i = 0; i < viewportCount; ++i)
+    if (pViewports) for (uint32_t i = 0; i < viewportCount; ++i)
     {
         internal::hashCombine(hash, internal::hashArgs(
             pViewports[i].x,
@@ -187,7 +188,7 @@ size_t ViewportState::hash() const noexcept
             pViewports[i].minDepth,
             pViewports[i].maxDepth));
     }
-    for (uint32_t i = 0; i < scissorCount; ++i)
+    if (pScissors) for (uint32_t i = 0; i < scissorCount; ++i)
     {
         internal::hashCombine(hash, internal::hashArgs(
             pScissors[i].offset.x,
