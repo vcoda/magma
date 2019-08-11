@@ -109,6 +109,7 @@ constexpr ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& atta
 constexpr size_t ColorBlendState::hash() const
 {
     size_t hash = internal::hashArgs(
+        sType,
         flags,
         logicOpEnable,
         logicOp,

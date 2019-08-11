@@ -42,6 +42,7 @@ constexpr MultisampleState::MultisampleState(uint32_t sampleCount):
 constexpr size_t MultisampleState::hash() const
 {
     size_t hash = internal::hashArgs(
+        sType,
         flags,
         rasterizationSamples,
         sampleShadingEnable,

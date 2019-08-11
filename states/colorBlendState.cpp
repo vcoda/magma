@@ -80,6 +80,7 @@ ManagedColorBlendState::~ManagedColorBlendState()
 size_t ManagedColorBlendState::hash() const noexcept
 {
     size_t hash = internal::hashArgs(
+        sType,
         flags,
         logicOpEnable,
         logicOp,

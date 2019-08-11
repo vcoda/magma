@@ -14,6 +14,7 @@ constexpr InputAssemblyState::InputAssemblyState(VkPrimitiveTopology topology,
 constexpr size_t InputAssemblyState::hash() const
 {
     return internal::hashArgs(
+        sType,
         flags,
         topology,
         primitiveRestartEnable);

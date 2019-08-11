@@ -49,6 +49,7 @@ constexpr DepthStencilState::DepthStencilState(const DepthStencilState& state,
 constexpr size_t DepthStencilState::hash() const
 {
     return internal::hashArgs(
+        sType,
         flags,
         depthWriteEnable,
         depthCompareOp,

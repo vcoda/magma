@@ -124,6 +124,7 @@ constexpr uint32_t VertexInputState::stride(uint32_t binding) const
 constexpr size_t VertexInputState::hash() const
 {
     size_t hash = internal::hashArgs(
+        sType,
         flags,
         vertexBindingDescriptionCount,
         vertexAttributeDescriptionCount);
