@@ -82,7 +82,7 @@ namespace magma
         ManagedColorBlendState(const ManagedColorBlendState&);
         ManagedColorBlendState& operator=(const ManagedColorBlendState&);
         ~ManagedColorBlendState();
-        size_t std::hash() const noexcept;
+        std::size_t hash() const noexcept;
         bool operator==(const ManagedColorBlendState&) const noexcept;
     };
 
