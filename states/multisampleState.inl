@@ -51,10 +51,9 @@ constexpr size_t MultisampleState::hash() const
         alphaToOneEnable);
     if (pSampleMask)
     {
-        std::hash<VkSampleMask> hasher;
-        internal::hashCombine(hash, hasher(pSampleMask[0]));
+        internal::hashCombine(hash, internal::hash(pSampleMask[0]));
         if (rasterizationSamples > VK_SAMPLE_COUNT_32_BIT)
-            internal::hashCombine(hash, hasher(pSampleMask[1]));
+            internal::hashCombine(hash, internal::hash(pSampleMask[1]));
     }
     return hash;
 }

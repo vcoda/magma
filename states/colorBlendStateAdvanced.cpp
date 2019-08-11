@@ -91,18 +91,12 @@ AdvancedColorBlendState::~AdvancedColorBlendState()
 
 size_t AdvancedColorBlendState::hash() const noexcept
 {
-    auto colorBlendAdvanced = reinterpret_cast<const VkPipelineColorBlendAdvancedStateCreateInfoEXT *>(pNext);
     size_t hash = internal::hashArgs(
-        colorBlendAdvanced->sType,
-        colorBlendAdvanced->srcPremultiplied,
-        colorBlendAdvanced->dstPremultiplied,
-        colorBlendAdvanced->blendOverlap);
-    internal::hashCombine(hash, internal::hashArgs(
         sType,
         flags,
         logicOpEnable,
         logicOp,
-        attachmentCount));
+        attachmentCount);
     for (uint32_t i = 0; i < attachmentCount; ++i)
     {
         internal::hashCombine(hash, internal::hashArgs(
@@ -116,6 +110,12 @@ size_t AdvancedColorBlendState::hash() const noexcept
             pAttachments[i].colorWriteMask));
     }
     internal::hashCombine(hash, internal::hashArray(blendConstants, 4));
+    auto colorBlendAdvanced = reinterpret_cast<const VkPipelineColorBlendAdvancedStateCreateInfoEXT *>(pNext);
+    internal::hashCombine(hash, internal::hashArgs(
+        colorBlendAdvanced->sType,
+        colorBlendAdvanced->srcPremultiplied,
+        colorBlendAdvanced->dstPremultiplied,
+        colorBlendAdvanced->blendOverlap));
     return hash;
 }
 
