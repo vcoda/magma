@@ -47,6 +47,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr):
             PipelineLayout(std::vector<std::shared_ptr<DescriptorSetLayout>>(setLayouts, setLayouts + setLayoutCount), pushConstantRanges, allocator) {}
         ~PipelineLayout();
+        const std::vector<std::shared_ptr<DescriptorSetLayout>>& getSetLayouts() const noexcept { return setLayouts; }
         std::size_t getHash() const noexcept;
 
     private:

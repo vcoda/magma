@@ -52,6 +52,7 @@ namespace magma
         void update(uint32_t index,
             std::shared_ptr<const BufferView> texelBufferView) noexcept;
         std::shared_ptr<DescriptorPool> getPool() const noexcept { return pool; }
+        std::shared_ptr<DescriptorSetLayout> getSetLayout() const noexcept { return setLayout; }
 
     private:
         std::shared_ptr<DescriptorPool> pool;
