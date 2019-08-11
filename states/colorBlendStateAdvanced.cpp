@@ -89,9 +89,9 @@ AdvancedColorBlendState::~AdvancedColorBlendState()
     delete[] pAttachments;
 }
 
-size_t AdvancedColorBlendState::hash() const noexcept
+std::size_t AdvancedColorBlendState::hash() const noexcept
 {
-    size_t hash = internal::hashArgs(
+    std::size_t hash = internal::hashArgs(
         sType,
         flags,
         logicOpEnable,

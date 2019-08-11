@@ -232,9 +232,9 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupBasePipeline() const no
     return nullptr;
 }
 
-size_t ImmediateRender::hash(const InputAssemblyState *inputAssembly) const noexcept
+std::size_t ImmediateRender::hash(const InputAssemblyState *inputAssembly) const noexcept
 {
-    size_t hash = 0;
+    std::size_t hash = 0;
     internal::hashCombine(hash, inputAssembly->hash());
     internal::hashCombine(hash, vertexShader.hash());
     internal::hashCombine(hash, fragmentShader.hash());

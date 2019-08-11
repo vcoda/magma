@@ -53,6 +53,6 @@ namespace magma
         Specialization(const Specialization&);
         Specialization& operator=(const Specialization&);
         ~Specialization();
-        size_t hash() const noexcept;
+        std::size_t hash() const noexcept;
     };
 } // namespace magma

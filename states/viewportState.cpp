@@ -173,7 +173,7 @@ ViewportState::~ViewportState()
 
 size_t ViewportState::hash() const noexcept
 {
-    size_t hash = internal::hashArgs(
+    std::size_t hash = internal::hashArgs(
         sType,
         flags,
         viewportCount,

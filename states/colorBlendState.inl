@@ -45,7 +45,7 @@ constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
     this->colorWriteMask = colorWriteMask;
 }
 
-constexpr size_t ColorBlendAttachmentState::hash() const
+constexpr std::size_t ColorBlendAttachmentState::hash() const
 {
     return internal::hashArgs(
         blendEnable,
@@ -106,9 +106,9 @@ constexpr ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& atta
     this->blendConstants[3] = c[3];
 }
 
-constexpr size_t ColorBlendState::hash() const
+constexpr std::size_t ColorBlendState::hash() const
 {
-    size_t hash = internal::hashArgs(
+    std::size_t hash = internal::hashArgs(
         sType,
         flags,
         logicOpEnable,

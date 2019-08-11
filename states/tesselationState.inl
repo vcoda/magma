@@ -9,7 +9,7 @@ constexpr TesselationState::TesselationState(uint32_t patchControlPoints /* 0 */
     this->patchControlPoints = patchControlPoints;
 }
 
-constexpr size_t TesselationState::hash() const
+constexpr std::size_t TesselationState::hash() const
 {
     return internal::hashArgs(
         sType,

@@ -87,7 +87,7 @@ ManagedVertexInputState::~ManagedVertexInputState()
 
 size_t ManagedVertexInputState::hash() const noexcept
 {
-    size_t hash = internal::hashArgs(
+    std::size_t hash = internal::hashArgs(
         flags,
         vertexBindingDescriptionCount,
         vertexAttributeDescriptionCount);

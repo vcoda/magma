@@ -49,7 +49,7 @@ namespace magma
                 VK_COLOR_COMPONENT_G_BIT |
                 VK_COLOR_COMPONENT_B_BIT |
                 VK_COLOR_COMPONENT_A_BIT);
-        constexpr size_t hash() const;
+        constexpr std::size_t hash() const;
         constexpr bool operator==(const ColorBlendAttachmentState&) const;
     };
 
@@ -64,7 +64,7 @@ namespace magma
             bool logicOpEnable = false,
             VkLogicOp logicOp = VK_LOGIC_OP_CLEAR,
             const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f});
-        constexpr size_t hash() const;
+        constexpr std::size_t hash() const;
         constexpr bool operator==(const ColorBlendState&) const;
 
     protected:
@@ -82,7 +82,7 @@ namespace magma
         ManagedColorBlendState(const ManagedColorBlendState&);
         ManagedColorBlendState& operator=(const ManagedColorBlendState&);
         ~ManagedColorBlendState();
-        size_t hash() const noexcept;
+        size_t std::hash() const noexcept;
         bool operator==(const ManagedColorBlendState&) const noexcept;
     };
 

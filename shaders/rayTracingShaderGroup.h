@@ -29,7 +29,7 @@ namespace magma
             uint32_t intersectionShader) noexcept;
 
     public:
-        size_t hash() const noexcept;
+        std::size_t hash() const noexcept;
     };
 
     // TODO: reconsider

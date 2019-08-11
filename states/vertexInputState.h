@@ -58,7 +58,7 @@ namespace magma
         constexpr VertexInputState(const VertexInputBinding (&bindings)[VertexBindingDescriptionCount],
             const VertexInputAttribute (&attributes)[VertexAttributeDescriptionCount]);
         constexpr uint32_t stride(uint32_t binding) const;
-        constexpr size_t hash() const;
+        constexpr std::size_t hash() const;
         bool operator==(const VertexInputState&) const noexcept;
     };
 
@@ -78,7 +78,7 @@ namespace magma
         ManagedVertexInputState(const ManagedVertexInputState&);
         ManagedVertexInputState& operator=(const ManagedVertexInputState&);
         ~ManagedVertexInputState();
-        size_t hash() const noexcept;
+        std::size_t hash() const noexcept;
         bool operator==(const ManagedVertexInputState&) const noexcept;
     };
 } // namespace magma

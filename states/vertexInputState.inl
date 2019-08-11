@@ -121,7 +121,7 @@ constexpr uint32_t VertexInputState::stride(uint32_t binding) const
     return static_cast<uint32_t>(stride);
 }
 
-constexpr size_t VertexInputState::hash() const
+constexpr std::size_t VertexInputState::hash() const
 {
     size_t hash = internal::hashArgs(
         sType,

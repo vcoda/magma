@@ -43,7 +43,7 @@ namespace magma
         ViewportState(const ViewportState&);
         ViewportState& operator=(const ViewportState&);
         ~ViewportState();
-        size_t hash() const noexcept;
+        std::size_t hash() const noexcept;
         bool operator==(const ViewportState&) const noexcept;
 
     private:

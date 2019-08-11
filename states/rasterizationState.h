@@ -28,7 +28,7 @@ namespace magma
             VkFrontFace frontFace,
             bool depthClampEnable = false,
             bool rasterizerDiscardEnable = false);
-        constexpr size_t hash() const;
+        constexpr std::size_t hash() const;
         constexpr bool operator==(const RasterizationState&) const;
     };
 
@@ -55,7 +55,7 @@ namespace magma
         constexpr ConservativeRasterizationState(const RasterizationState& state,
             VkConservativeRasterizationModeEXT conservativeRasterizationMode,
             float extraPrimitiveOverestimationSize = 0.f);
-        constexpr size_t hash() const;
+        constexpr std::size_t hash() const;
         constexpr bool operator==(const ConservativeRasterizationState&) const;
 
         VkPipelineRasterizationConservativeStateCreateInfoEXT conservative;
@@ -69,7 +69,7 @@ namespace magma
     {
         constexpr RasterizationOrderState(const RasterizationState& state,
             VkRasterizationOrderAMD rasterizationOrder);
-        constexpr size_t hash() const;
+        constexpr std::size_t hash() const;
         constexpr bool operator==(const RasterizationOrderState&) const;
 
         VkPipelineRasterizationStateRasterizationOrderAMD order;

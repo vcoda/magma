@@ -1,6 +1,6 @@
 namespace magma
 {
-constexpr size_t StencilOpState::hash() const
+constexpr std::size_t StencilOpState::hash() const
 {
     return internal::hashArgs(
         failOp,
@@ -46,7 +46,7 @@ constexpr DepthStencilState::DepthStencilState(const DepthStencilState& state,
     DepthStencilState(state.depthCompareOp, state.depthCompareOp, front, back)
 {}
 
-constexpr size_t DepthStencilState::hash() const
+constexpr std::size_t DepthStencilState::hash() const
 {
     return internal::hashArgs(
         sType,

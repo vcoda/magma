@@ -72,9 +72,9 @@ PipelineShaderStage::~PipelineShaderStage()
     delete[] pName;
 }
 
-size_t PipelineShaderStage::hash() const noexcept
+std::size_t PipelineShaderStage::hash() const noexcept
 {
-    size_t hash = internal::hashArgs(
+    std::size_t hash = internal::hashArgs(
         sType,
         flags,
         stage,

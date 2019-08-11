@@ -27,7 +27,7 @@ namespace magma
     {
         constexpr InputAssemblyState(VkPrimitiveTopology topology,
             bool primitiveRestartEnable = false);
-        constexpr size_t hash() const;
+        constexpr std::size_t hash() const;
         constexpr bool operator==(const InputAssemblyState&) const;
     };
 } // namespace magma

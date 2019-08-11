@@ -33,7 +33,7 @@ namespace magma
                 VK_COLOR_COMPONENT_G_BIT |
                 VK_COLOR_COMPONENT_B_BIT |
                 VK_COLOR_COMPONENT_A_BIT);
-        constexpr size_t hash() const;
+        constexpr std::size_t hash() const;
         constexpr bool operator==(const AdvancedColorBlendAttachmentState&) const;
     };
 
@@ -58,7 +58,7 @@ namespace magma
         AdvancedColorBlendState(const AdvancedColorBlendState&);
         AdvancedColorBlendState& operator=(const AdvancedColorBlendState&);
         ~AdvancedColorBlendState();
-        size_t hash() const noexcept;
+        std::size_t hash() const noexcept;
         bool operator==(const AdvancedColorBlendState&) const noexcept;
     };
 } // namespace magma

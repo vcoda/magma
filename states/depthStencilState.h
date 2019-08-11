@@ -57,7 +57,7 @@ namespace magma
         constexpr DepthStencilState(const DepthStencilState& state,
             const StencilOpState& front,
             const StencilOpState& back);
-        constexpr size_t hash() const;
+        constexpr std::size_t hash() const;
         constexpr bool operator==(const DepthStencilState&) const;
     };
 

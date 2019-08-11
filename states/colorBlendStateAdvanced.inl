@@ -14,7 +14,7 @@ constexpr AdvancedColorBlendAttachmentState::AdvancedColorBlendAttachmentState(V
     this->colorWriteMask = colorWriteMask;
 }
 
-constexpr size_t AdvancedColorBlendAttachmentState::hash() const
+constexpr std::size_t AdvancedColorBlendAttachmentState::hash() const
 {
     return internal::hashArgs(
         blendEnable,

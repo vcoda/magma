@@ -38,7 +38,7 @@ namespace magma
         virtual ~PipelineShaderStage();
         std::shared_ptr<ShaderModule> getShaderModule() noexcept { return shaderModule; }
         std::shared_ptr<const ShaderModule> getShaderModule() const noexcept { return shaderModule; }
-        size_t hash() const noexcept;
+        std::size_t hash() const noexcept;
 
     private:
         std::shared_ptr<ShaderModule> shaderModule;
