@@ -35,6 +35,9 @@ namespace magma
     class RenderPass;
     class IAllocator;
 
+    struct VertexInputState;
+    struct InputAssemblyState;
+
     namespace aux
     {
         /* Sometimes I miss immediate mode from OpenGL 1.x era.
@@ -94,7 +97,7 @@ namespace magma
             std::shared_ptr<ShaderModule> createShader(bool vertexShader) const;
             std::shared_ptr<GraphicsPipeline> createPipelineState(VkPrimitiveTopology topology);
             std::shared_ptr<GraphicsPipeline> lookupBasePipeline() const noexcept;
-            size_t hash(const InputAssemblyState *inputAssembly) const noexcept;
+            std::size_t computePipelineHash(const VertexInputState&, const InputAssemblyState&, std::shared_ptr<GraphicsPipeline>) const noexcept;
 
         private:
             struct Vertex
@@ -145,7 +148,7 @@ namespace magma
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<IAllocator> allocator;
             std::shared_ptr<VertexBuffer> vertexBuffer;
-            std::unordered_map<size_t, Pipeline> pipelines;
+            std::unordered_map<std::size_t, Pipeline> pipelines;
             std::list<Primitive> primitives;
             VertexShaderStage vertexShader;
             FragmentShaderStage fragmentShader;

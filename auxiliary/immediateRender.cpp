@@ -23,8 +23,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/pipeline.h"
 #include "../objects/shaderModule.h"
 #include "../states/vertexInputState.h"
+#include "../states/viewportState.h"
+#include "../states/tesselationState.h"
 #include "../misc/pushConstants.h"
-
 
 namespace magma
 {
@@ -173,7 +174,7 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
         VertexInputAttribute(3, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, u))
     };
     constexpr VertexInputBinding vertexBinding(0, sizeof(Vertex));
-	MAGMA_CONSTEXPR VertexInputState vertexInput(vertexBinding, vertexAttributes);
+	MAGMA_CONSTEXPR VertexInputState vertexInputState(vertexBinding, vertexAttributes);
     constexpr const InputAssemblyState *inputAssemblyStates[] =
     {
         &renderstates::pointList,
@@ -188,32 +189,36 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimiti
         &renderstates::triangleStripWithAdjacency,
         &renderstates::patchList
     };
-    const size_t renderStatesHash = hash(inputAssemblyStates[topology]);
-    // Try to find existing pipeline
-    auto it = pipelines.find(renderStatesHash);
-    if (it != pipelines.end())
-        return it->second.pipeline;
-    // Create new pipeline for unique render states
+    std::shared_ptr<GraphicsPipeline> pipeline;
     std::shared_ptr<GraphicsPipeline> basePipeline = lookupBasePipeline();
-    std::shared_ptr<GraphicsPipeline> pipeline(std::make_shared<GraphicsPipeline>(device, cache,
-        std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
-        vertexInput,
-        *inputAssemblyStates[topology],
-        renderStates.rasterization,
-        renderStates.multisample,
-        renderStates.depthStencil,
-        renderStates.colorBlend,
-        std::initializer_list<VkDynamicState>{
-            VK_DYNAMIC_STATE_VIEWPORT,
-            VK_DYNAMIC_STATE_SCISSOR,
-            VK_DYNAMIC_STATE_LINE_WIDTH
-        },
-        layout,
-        renderPass, 0,
-        basePipeline,
-        VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT,
-        allocator));
-    pipelines[renderStatesHash] = {pipeline, std::make_shared<RenderStates>(renderStates)};
+    const std::size_t hash = computePipelineHash(vertexInputState, *inputAssemblyStates[topology], basePipeline);
+    // Fast lookup for existing pipeline
+    auto it = pipelines.find(hash); 
+    if (it != pipelines.end())
+        pipeline = it->second.pipeline;
+    else
+    {   // Create new pipeline for unique render states
+        pipeline = std::make_shared<GraphicsPipeline>(device, cache,
+            std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
+            vertexInputState,
+            *inputAssemblyStates[topology],
+            renderStates.rasterization,
+            renderStates.multisample,
+            renderStates.depthStencil,
+            renderStates.colorBlend,
+            std::initializer_list<VkDynamicState>{
+                VK_DYNAMIC_STATE_VIEWPORT,
+                VK_DYNAMIC_STATE_SCISSOR,
+                VK_DYNAMIC_STATE_LINE_WIDTH
+            },
+            layout,
+            renderPass, 0,
+            basePipeline,
+            VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT,
+            allocator);
+        MAGMA_ASSERT(pipeline->getHash() == hash);
+        pipelines[pipeline->getHash()] = {pipeline, std::make_shared<RenderStates>(renderStates)};
+    }
     return pipeline;
 }
 
@@ -232,16 +237,42 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupBasePipeline() const no
     return nullptr;
 }
 
-std::size_t ImmediateRender::hash(const InputAssemblyState *inputAssembly) const noexcept
-{
+std::size_t ImmediateRender::computePipelineHash(const VertexInputState& vertexInputState,
+    const InputAssemblyState& inputAssemblyState,
+    std::shared_ptr<GraphicsPipeline> basePipeline) const noexcept
+{   // Keep in sync with GraphicsPipeline!
     std::size_t hash = 0;
-    internal::hashCombine(hash, inputAssembly->hash());
+    VkGraphicsPipelineCreateInfo info;
+    info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    info.flags = VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
+    if (basePipeline)
+        info.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
+    info.subpass = 0;
+    internal::hashCombine(hash, internal::hashArgs(
+        info.sType,
+        info.flags,
+        info.subpass));
     internal::hashCombine(hash, vertexShader.hash());
     internal::hashCombine(hash, fragmentShader.hash());
-    internal::hashCombine(hash, renderStates.rasterization.hash());
-    internal::hashCombine(hash, renderStates.multisample.hash());
-    internal::hashCombine(hash, renderStates.depthStencil.hash());
-    internal::hashCombine(hash, renderStates.colorBlend.hash());
+    internal::hashCombine(hash, internal::combineHashList(
+        {
+            vertexInputState.hash(),
+            inputAssemblyState.hash(),
+            TesselationState().hash(),
+            ViewportState().hash(),
+            renderStates.rasterization.hash(),
+            renderStates.multisample.hash(),
+            renderStates.depthStencil.hash(),
+            renderStates.colorBlend.hash(),
+        }));
+    internal::hashCombine(hash, internal::hashArgs(
+        VK_DYNAMIC_STATE_VIEWPORT,
+        VK_DYNAMIC_STATE_SCISSOR,
+        VK_DYNAMIC_STATE_LINE_WIDTH));
+    if (layout)
+        internal::hashCombine(hash, layout->getHash());
+    if (basePipeline)
+        internal::hashCombine(hash, basePipeline->getHash());
     return hash;
 }
 } // namespace aux
