@@ -56,22 +56,29 @@ inline void ImmediateRender::setTransform(const float transform[16]) noexcept
     memcpy(this->transform.m, transform, sizeof(float) * 16);
 }
 
-inline void ImmediateRender::normal(
-    float x, float y, float z) noexcept
+inline uint32_t ImmediateRender::getVertexCount() const noexcept 
+{ 
+    return vertexCount; 
+}
+
+inline uint32_t ImmediateRender::getPrimitiveCount() const noexcept 
+{ 
+    return MAGMA_COUNT(primitives); 
+}
+
+inline void ImmediateRender::normal(float x, float y, float z) noexcept
 {
     curr.nx = x;
     curr.ny = y;
     curr.nz = z;
 }
 
-inline void ImmediateRender::normal(
-    const float n[3]) noexcept
+inline void ImmediateRender::normal(const float n[3]) noexcept
 {
     normal(n[0], n[1], n[2]);
 }
 
-inline void ImmediateRender::color(
-    float r, float g, float b, float a /* 1 */) noexcept
+inline void ImmediateRender::color(float r, float g, float b, float a /* 1 */) noexcept
 {
     curr.r = r;
     curr.g = g;
@@ -79,47 +86,39 @@ inline void ImmediateRender::color(
     curr.a = a;
 }
 
-inline void ImmediateRender::color(
-    const float c[4]) noexcept
+inline void ImmediateRender::color(const float c[4]) noexcept
 {
     color(c[0], c[1], c[2], c[3]);
 }
 
-inline void ImmediateRender::color(
-    uint8_t r, uint8_t g, uint8_t b,
-    uint8_t a /* UCHAR_MAX */) noexcept
+inline void ImmediateRender::color(uint8_t r, uint8_t g, uint8_t b, uint8_t a /* std::numeric_limits<uint8_t>::max() */) noexcept
 {
     color(r/255.f, g/255.f, b/255.f, a/255.f);
 }
 
-inline void ImmediateRender::color(
-    const uint8_t c[4]) noexcept
+inline void ImmediateRender::color(const uint8_t c[4]) noexcept
 {
     color(c[0], c[1], c[2], c[3]);
 }
 
-inline void ImmediateRender::texCoord(
-    float u, float v) noexcept
+inline void ImmediateRender::texcoord(float u, float v) noexcept
 {
     curr.u = u;
     curr.v = v;
 }
 
-inline void ImmediateRender::texCoord(
-    const float uv[2]) noexcept
+inline void ImmediateRender::texcoord(const float uv[2]) noexcept
 {
-    texCoord(uv[0], uv[1]);
+    texcoord(uv[0], uv[1]);
 }
 
-inline void ImmediateRender::pointSize(
-    float size) noexcept
+inline void ImmediateRender::pointSize(float size) noexcept
 {
     MAGMA_ASSERT(size >= 1.f);
     curr.psize = size;
 }
 
-inline void ImmediateRender::vertex(
-    float x, float y, float z /* 0 */, float w /* 1 */) noexcept
+inline void ImmediateRender::vertex(float x, float y, float z /* 0 */, float w /* 1 */) noexcept
 {
     MAGMA_ASSERT(insidePrimitive);
     MAGMA_ASSERT(vertexCount < maxVertexCount);
@@ -150,52 +149,9 @@ inline void ImmediateRender::vertex(
     }
 }
 
-inline void ImmediateRender::vertex(
-    const float v[4]) noexcept
+inline void ImmediateRender::vertex(const float v[4]) noexcept
 {
     vertex(v[0], v[1], v[2], v[3]);
-}
-
-template<typename Normal>
-inline void ImmediateRender::normal(
-    const Normal& n) noexcept
-{
-    normal(n.x, n.y, n.z);
-}
-
-template<typename Color>
-inline void ImmediateRender::color4(
-    const Color& c) noexcept
-{
-    color(c.r, c.g, c.b, c.a);
-}
-
-template<typename TexCoord>
-inline void ImmediateRender::texCoord2(
-    const TexCoord& uv) noexcept
-{
-    texCoord(uv.x, uv.y);
-}
-
-template<typename Vertex2>
-inline void ImmediateRender::vertex2(
-    const Vertex2& v) noexcept
-{
-    vertex(v.x, v.y);
-}
-
-template<typename Vertex3>
-inline void ImmediateRender::vertex3(
-    const Vertex3& v) noexcept
-{
-    vertex(v.x, v.y, v.z);
-}
-
-template<typename Vertex4>
-inline void ImmediateRender::vertex4(
-    const Vertex4& v) noexcept
-{
-    vertex(v.x, v.y, v.z, v.w);
 }
 } // namespace aux
 } // namespace magma

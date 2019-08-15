@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/pipeline.h"
 #include "../objects/shaderModule.h"
 #include "../states/vertexInputState.h"
+#include "../states/inputAssemblyState.h"
 #include "../states/viewportState.h"
 #include "../states/tesselationState.h"
 #include "../misc/pushConstants.h"
@@ -56,7 +57,7 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     // Set attributes to initial state
     normal(0.f, 0.f, 0.f);
     color(1.f, 1.f, 1.f, 1.f); // White is default
-    texCoord(0.f, 0.f);
+    texcoord(0.f, 0.f);
     pointSize(1.f); // Initial point size
     // If layout not specified, create default one
     if (!this->layout)
@@ -80,7 +81,7 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,
             return false;
     }
     Primitive primitive;
-    primitive.pipeline = createPipelineState(topology);
+    primitive.pipeline = lookupPipeline(topology);
     primitive.lineWidth = lineWidth;
     primitive.transform = transform;
     primitive.vertexCount = 0;
@@ -165,7 +166,7 @@ std::shared_ptr<ShaderModule> ImmediateRender::createShader(bool vertexShader) c
     return std::make_shared<ShaderModule>(device, fsImm, flags, nullptr, allocator);
 }
 
-std::shared_ptr<GraphicsPipeline> ImmediateRender::createPipelineState(VkPrimitiveTopology topology)
+std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTopology topology)
 {
     constexpr VertexInputAttribute vertexAttributes[] = {
         VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, x)),
