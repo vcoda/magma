@@ -50,9 +50,9 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr
     info.basePipelineIndex = -1;
     const VkResult create = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->cache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create compute pipeline");
-    internal::hashCombine(hash, internal::hashArgs(
+    hash = internal::hashArgs(
         info.sType,
-        info.flags));
+        info.flags);
     internal::hashCombine(hash, stage.hash());
     if (this->layout)
         internal::hashCombine(hash, this->layout->getHash());
