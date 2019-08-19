@@ -80,6 +80,42 @@ Subpass::~Subpass()
     delete pDepthStencilAttachment;
 }
 
+std::size_t Subpass::hash() const noexcept
+{
+    std::size_t hash = internal::hashArgs(
+        flags,
+        pipelineBindPoint,
+        inputAttachmentCount,
+        colorAttachmentCount,
+        preserveAttachmentCount
+    );
+    uint32_t i;
+    for (i = 0; i < inputAttachmentCount; ++i)
+    {
+        internal::hashCombine(hash, internal::hashArgs(
+            pInputAttachments[i].attachment,
+            pInputAttachments[i].layout
+        ));
+    }
+    for (i = 0; i < colorAttachmentCount; ++i)
+    {
+        internal::hashCombine(hash, internal::hashArgs(
+            pColorAttachments[i].attachment,
+            pColorAttachments[i].layout
+        ));
+    }
+    if (pDepthStencilAttachment)
+    {
+        internal::hashCombine(hash, internal::hashArgs(
+            pDepthStencilAttachment->attachment,
+            pDepthStencilAttachment->layout
+        ));
+    }
+    for (i = 0; i < preserveAttachmentCount; ++i)
+        internal::hashCombine(hash, internal::hash(pPreserveAttachments[i]));
+    return hash;
+}
+
 GraphicsSubpass::GraphicsSubpass(VkImageLayout colorLayout):
     Subpass(0, VK_PIPELINE_BIND_POINT_GRAPHICS)
 {

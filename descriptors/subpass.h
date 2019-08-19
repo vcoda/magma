@@ -37,6 +37,7 @@ namespace magma
         Subpass(const Subpass&);
         Subpass& operator=(const Subpass&);
         ~Subpass();
+        std::size_t hash() const noexcept;
     };
 
     class GraphicsSubpass : public Subpass
