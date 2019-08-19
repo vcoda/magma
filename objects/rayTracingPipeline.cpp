@@ -74,8 +74,6 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device, std::shar
         internal::hashCombine(hash, stage.hash());
     if (this->layout)
         internal::hashCombine(hash, this->layout->getHash());
-    if (this->basePipeline)
-        internal::hashCombine(hash, this->basePipeline->getHash());
 }
 
 std::vector<VkShaderModule> RayTracingPipeline::getShaderGroupHandles(uint32_t firstGroup, uint32_t groupCount) const

@@ -56,7 +56,5 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr
     internal::hashCombine(hash, stage.hash());
     if (this->layout)
         internal::hashCombine(hash, this->layout->getHash());
-    if (this->basePipeline)
-        internal::hashCombine(hash, this->basePipeline->getHash());
 }
 } // namespace magma

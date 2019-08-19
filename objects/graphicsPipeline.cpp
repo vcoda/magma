@@ -159,7 +159,5 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
         internal::hashCombine(hash, internal::hashArray(info.pDynamicState->pDynamicStates, info.pDynamicState->dynamicStateCount));
     if (this->layout)
         internal::hashCombine(hash, this->layout->getHash());
-    if (this->basePipeline)
-        internal::hashCombine(hash, this->basePipeline->getHash());
 }
 } // namespace magma

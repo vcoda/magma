@@ -272,8 +272,6 @@ std::size_t ImmediateRender::computePipelineHash(const VertexInputState& vertexI
         VK_DYNAMIC_STATE_LINE_WIDTH));
     if (layout)
         internal::hashCombine(hash, layout->getHash());
-    if (basePipeline)
-        internal::hashCombine(hash, basePipeline->getHash());
     return hash;
 }
 } // namespace aux
