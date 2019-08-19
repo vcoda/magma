@@ -49,4 +49,19 @@ constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t
     AttachmentDescription(format, sampleCount, prefab.loadOp, prefab.storeOp,
         prefab.stencilLoadOp, prefab.stencilStoreOp, initialLayout, finalLayout)
 {}
+
+constexpr std::size_t AttachmentDescription::hash() const
+{
+    return internal::hashArgs(
+        flags,
+        format,
+        samples,
+        loadOp,
+        storeOp,
+        stencilLoadOp,
+        stencilStoreOp,
+        initialLayout,
+        finalLayout
+    );
+}
 } // namespace magma
