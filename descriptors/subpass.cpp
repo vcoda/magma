@@ -87,15 +87,13 @@ std::size_t Subpass::hash() const noexcept
         pipelineBindPoint,
         inputAttachmentCount,
         colorAttachmentCount,
-        preserveAttachmentCount
-    );
+        preserveAttachmentCount);
     uint32_t i;
     for (i = 0; i < inputAttachmentCount; ++i)
     {
         internal::hashCombine(hash, internal::hashArgs(
             pInputAttachments[i].attachment,
-            pInputAttachments[i].layout
-        ));
+            pInputAttachments[i].layout));
     }
     for (i = 0; i < colorAttachmentCount; ++i)
     {
@@ -103,26 +101,26 @@ std::size_t Subpass::hash() const noexcept
         {
             internal::hashCombine(hash, internal::hashArgs(
                 pColorAttachments[i].attachment,
-                pColorAttachments[i].layout
-            ));
+                pColorAttachments[i].layout));
         }
         else if (pResolveAttachments)
         {
             internal::hashCombine(hash, internal::hashArgs(
                 pResolveAttachments[i].attachment,
-                pResolveAttachments[i].layout
-            ));
+                pResolveAttachments[i].layout));
         }
     }
     if (pDepthStencilAttachment)
     {
         internal::hashCombine(hash, internal::hashArgs(
             pDepthStencilAttachment->attachment,
-            pDepthStencilAttachment->layout
-        ));
+            pDepthStencilAttachment->layout));
     }
     for (i = 0; i < preserveAttachmentCount; ++i)
-        internal::hashCombine(hash, internal::hash(pPreserveAttachments[i]));
+    {
+        internal::hashCombine(hash, internal::hash(
+            pPreserveAttachments[i]));
+    }
     return hash;
 }
 
