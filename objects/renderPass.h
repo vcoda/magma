@@ -42,8 +42,10 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~RenderPass();
         const std::vector<AttachmentDescription>& getAttachments() const noexcept { return attachments; }
+        std::size_t getHash() const noexcept { return hash; }
 
     private:
         std::vector<AttachmentDescription> attachments;
+        std::size_t hash = 0;
     };
 } // namespace magma
