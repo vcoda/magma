@@ -99,10 +99,20 @@ std::size_t Subpass::hash() const noexcept
     }
     for (i = 0; i < colorAttachmentCount; ++i)
     {
-        internal::hashCombine(hash, internal::hashArgs(
-            pColorAttachments[i].attachment,
-            pColorAttachments[i].layout
-        ));
+        if (pColorAttachments)
+        {
+            internal::hashCombine(hash, internal::hashArgs(
+                pColorAttachments[i].attachment,
+                pColorAttachments[i].layout
+            ));
+        }
+        else if (pResolveAttachments)
+        {
+            internal::hashCombine(hash, internal::hashArgs(
+                pResolveAttachments[i].attachment,
+                pResolveAttachments[i].layout
+            ));
+        }
     }
     if (pDepthStencilAttachment)
     {
