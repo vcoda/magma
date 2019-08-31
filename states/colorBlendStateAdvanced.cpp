@@ -67,15 +67,25 @@ AdvancedColorBlendState::AdvancedColorBlendState(const std::vector<AdvancedColor
 
 AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendState& other)
 {
-    internal::copy(this, &other);
+    sType = other.sType;
     pNext = internal::copy<VkPipelineColorBlendAdvancedStateCreateInfoEXT>(other.pNext);
+    flags = other.flags;
+    logicOpEnable = other.logicOpEnable;
+    logicOp = other.logicOp;
+    attachmentCount = other.attachmentCount;
     pAttachments = internal::copyArray(other.pAttachments, other.attachmentCount);
+    blendConstants[0] = other.blendConstants[0];
+    blendConstants[1] = other.blendConstants[1];
+    blendConstants[2] = other.blendConstants[2];
+    blendConstants[3] = other.blendConstants[3];
 }
         
 AdvancedColorBlendState& AdvancedColorBlendState::operator=(const AdvancedColorBlendState& other)
 {
     if (this != &other)
     {
+        delete reinterpret_cast<const VkPipelineColorBlendAdvancedStateCreateInfoEXT *>(pNext);
+        delete[] pAttachments;
         internal::copy(this, &other);
         pNext = internal::copy<VkPipelineColorBlendAdvancedStateCreateInfoEXT>(other.pNext);
         pAttachments = internal::copyArray(other.pAttachments, attachmentCount);
