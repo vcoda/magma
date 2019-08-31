@@ -40,8 +40,10 @@ Specialization& Specialization::operator=(const Specialization& other)
     if (this != &other)
     {
         mapEntryCount = other.mapEntryCount;
+        delete[] pMapEntries;
         pMapEntries = internal::copyArray(other.pMapEntries, mapEntryCount);
         dataSize = other.dataSize;
+        delete[] reinterpret_cast<const char *>(pData);
         try {
             pData = internal::copyArray<char>(other.pData, dataSize);
         } catch (const std::bad_alloc& exc)
