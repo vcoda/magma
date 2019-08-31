@@ -48,6 +48,7 @@ MultisampleCoverageState& MultisampleCoverageState::operator=(const MultisampleC
 {
     if (this != &other)
     {
+        delete[] pSampleMask;
         internal::copy(this, &other);
         if (other.pSampleMask)
             pSampleMask = internal::copyArray(other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1);
