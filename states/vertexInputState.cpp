@@ -51,8 +51,12 @@ ManagedVertexInputState::ManagedVertexInputState(const std::initializer_list<Ver
 
 ManagedVertexInputState::ManagedVertexInputState(const ManagedVertexInputState& other)
 {
-    internal::copy(this, &other);
+    sType = other.sType;
+    pNext = other.pNext;
+    flags = other.flags;
+    vertexBindingDescriptionCount = other.vertexBindingDescriptionCount;
     pVertexBindingDescriptions = internal::copyArray(other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
+    vertexAttributeDescriptionCount = other.vertexAttributeDescriptionCount;
     try {
         pVertexAttributeDescriptions = internal::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
     } catch (const std::bad_alloc& exc)
@@ -66,6 +70,8 @@ ManagedVertexInputState& ManagedVertexInputState::operator=(const ManagedVertexI
 {
     if (this != &other)
     {
+        delete[] pVertexBindingDescriptions;
+        delete[] pVertexAttributeDescriptions;
         internal::copy(this, &other);
         pVertexBindingDescriptions = internal::copyArray(other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
         try {
