@@ -34,7 +34,7 @@ PipelineShaderStage::PipelineShaderStage(const VkShaderStageFlagBits stage, std:
     this->stage = stage;
     module = MAGMA_HANDLE(shaderModule);
     pName = internal::copyString(entrypoint);
-    pSpecializationInfo = this->specialization.get();
+    pSpecializationInfo = specialization.get();
 }
 
 PipelineShaderStage::PipelineShaderStage(const PipelineShaderStage& other):
@@ -47,22 +47,19 @@ PipelineShaderStage::PipelineShaderStage(const PipelineShaderStage& other):
     stage = other.stage;
     module = other.module;
     pName = internal::copyString(other.pName);
-    pSpecializationInfo = other.pSpecializationInfo;
+    pSpecializationInfo = specialization.get();
 }
 
 PipelineShaderStage& PipelineShaderStage::operator=(const PipelineShaderStage& other)
 {
     if (this != &other)
     {
-        sType = other.sType;
-        pNext = other.pNext;
-        flags = other.flags;
-        stage = other.stage;
-        module = other.module;
-        pName = internal::copyString(other.pName);
-        pSpecializationInfo = other.pSpecializationInfo;
         shaderModule = other.shaderModule;
         specialization = other.specialization;
+        delete[] pName;
+        internal::copy(this, &other);
+        pName = internal::copyString(other.pName);
+        pSpecializationInfo = specialization.get();
     }
     return *this;
 }
