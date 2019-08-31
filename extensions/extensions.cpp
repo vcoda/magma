@@ -24,7 +24,7 @@ namespace magma
 Extensions::Extensions(const std::vector<VkExtensionProperties>& properties)
 {
     for (const auto& property : properties)
-        extensions[property.extensionName] = property.specVersion;
+        extensions.emplace(property.extensionName, property.specVersion);
 }
 
 bool Extensions::hasExtension(const char *name) const noexcept
@@ -41,7 +41,7 @@ bool Extensions::hasExtension(const char *name) const noexcept
 Layers::Layers(const std::vector<VkLayerProperties>& properties)
 {
     for (const auto& property : properties)
-        layers[property.layerName] = property.specVersion;
+        layers.emplace(property.layerName, property.specVersion);
 }
 
 bool Layers::hasLayer(const char *name) const noexcept
