@@ -86,6 +86,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "states/samplerState.h"
 #include "states/tesselationState.h"
 #include "states/vertexInputState.h"
+#include "states/vertexInputStructure.h"
 #include "states/viewportState.h"
 
 #include "descriptors/attachment.h"
