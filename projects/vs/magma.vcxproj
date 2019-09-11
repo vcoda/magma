@@ -261,6 +261,8 @@
     <ClInclude Include="..\..\states\samplerState.h" />
     <ClInclude Include="..\..\states\tesselationState.h" />
     <ClInclude Include="..\..\states\vertexInputState.h" />
+    <ClInclude Include="..\..\states\vertexInputStructure.h" />
+    <ClInclude Include="..\..\states\vertexDecl.h" />
     <ClInclude Include="..\..\states\viewportState.h" />
     <ClInclude Include="..\..\states\colorWriteMask.h" />
   </ItemGroup>
@@ -357,6 +359,7 @@
     <ClCompile Include="..\..\states\colorBlendStateAdvanced.cpp" />
     <ClCompile Include="..\..\states\multisampleState.cpp" />
     <ClCompile Include="..\..\states\vertexInputState.cpp" />
+    <ClCompile Include="..\..\states\vertexInputStructure.cpp" />
     <ClCompile Include="..\..\states\viewportState.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -449,6 +452,7 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
     <None Include="..\..\states\samplerState.inl" />
     <None Include="..\..\states\tesselationState.inl" />
     <None Include="..\..\states\vertexInputState.inl" />
+    <None Include="..\..\states\vertexInputStructure.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -81,6 +81,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     ((frontFace && backFace) ? VK_STENCIL_FRONT_AND_BACK :\
      (frontFace ? VK_STENCIL_FACE_FRONT_BIT : VK_STENCIL_FACE_BACK_BIT))
 
+#define MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Type, normalized, format)\
+    template<>\
+    struct VertexAttribute<Type, normalized> :\
+        AttributeFormat<format> {};
+
 namespace magma
 {
     namespace internal

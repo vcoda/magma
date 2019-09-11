@@ -444,6 +444,12 @@
     <ClInclude Include="..\..\extensions\instanceLayers.h">
       <Filter>Header Files\extensions</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\states\vertexInputStructure.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\states\vertexDecl.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -698,6 +704,9 @@
     <ClCompile Include="..\..\extensions\instanceLayers.cpp">
       <Filter>Source Files\extensions</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\states\vertexInputStructure.cpp">
+      <Filter>Source Files\states</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\auxiliary\immediateRender.inl">
@@ -763,9 +772,6 @@
     <None Include="..\..\descriptors\attachment.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
-    <None Include="..\..\states\vertexInputState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
     <None Include="..\..\misc\format.inl">
       <Filter>Header Files\misc</Filter>
     </None>
@@ -774,6 +780,12 @@
     </None>
     <None Include="..\..\objects\object.inl">
       <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\states\vertexInputStructure.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\states\vertexInputState.inl">
+      <Filter>Header Files\states</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

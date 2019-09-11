@@ -23,77 +23,28 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ManagedVertexInputState::ManagedVertexInputState(const VertexInputBinding& binding, const VertexInputAttribute& attribute):
-    ManagedVertexInputState({binding}, {attribute})
-{}
-
-ManagedVertexInputState::ManagedVertexInputState(const VertexInputBinding& binding, const std::initializer_list<VertexInputAttribute>& attributes):
-    ManagedVertexInputState({binding}, attributes)
-{}
-
-ManagedVertexInputState::ManagedVertexInputState(const std::initializer_list<VertexInputBinding>& bindings,
-    const std::initializer_list<VertexInputAttribute>& attributes)
+VertexInputState::VertexInputState():
+    VkPipelineVertexInputStateCreateInfo{}
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;
     flags = 0;
-    vertexBindingDescriptionCount = MAGMA_COUNT(bindings);
-    pVertexBindingDescriptions = internal::copyArray<VkVertexInputBindingDescription>(bindings.begin(), bindings.size());
-    vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
-    try {
-        pVertexAttributeDescriptions = internal::copyArray<VkVertexInputAttributeDescription>(attributes.begin(), attributes.size());
-    } catch (const std::bad_alloc& exc)
-    {
-        delete[] pVertexBindingDescriptions;
-        throw exc;
-    }
+    vertexBindingDescriptionCount = 0;
+    pVertexBindingDescriptions = nullptr;
+    vertexAttributeDescriptionCount = 0;
+    pVertexAttributeDescriptions = nullptr;
 }
 
-ManagedVertexInputState::ManagedVertexInputState(const ManagedVertexInputState& other)
-{
-    sType = other.sType;
-    pNext = other.pNext;
-    flags = other.flags;
-    vertexBindingDescriptionCount = other.vertexBindingDescriptionCount;
-    pVertexBindingDescriptions = internal::copyArray(other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
-    vertexAttributeDescriptionCount = other.vertexAttributeDescriptionCount;
-    try {
-        pVertexAttributeDescriptions = internal::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
-    } catch (const std::bad_alloc& exc)
-    {
-        delete[] pVertexBindingDescriptions;
-        throw exc;
-    }
-}
-
-ManagedVertexInputState& ManagedVertexInputState::operator=(const ManagedVertexInputState& other)
-{
-    if (this != &other)
-    {
-        delete[] pVertexBindingDescriptions;
-        delete[] pVertexAttributeDescriptions;
-        internal::copy(this, &other);
-        pVertexBindingDescriptions = internal::copyArray(other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
-        try {
-            pVertexAttributeDescriptions = internal::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
-        } catch (const std::bad_alloc& exc)
-        {
-            delete[] pVertexBindingDescriptions;
-            throw exc;
-        }
-    }
-    return *this;
-}
-
-ManagedVertexInputState::~ManagedVertexInputState()
+VertexInputState::~VertexInputState()
 {
     delete[] pVertexBindingDescriptions;
     delete[] pVertexAttributeDescriptions;
 }
 
-size_t ManagedVertexInputState::hash() const noexcept
+std::size_t VertexInputState::hash() const
 {
-    std::size_t hash = internal::hashArgs(
+    size_t hash = internal::hashArgs(
+        sType,
         flags,
         vertexBindingDescriptionCount,
         vertexAttributeDescriptionCount);
@@ -115,9 +66,9 @@ size_t ManagedVertexInputState::hash() const noexcept
     return hash;
 }
 
-bool ManagedVertexInputState::operator==(const ManagedVertexInputState& other) const noexcept
+bool VertexInputState::operator==(const VertexInputState& other) const noexcept
 {
-    return (flags == other.flags) &&
+   return (flags == other.flags) &&
         (vertexBindingDescriptionCount == other.vertexBindingDescriptionCount) &&
         (vertexAttributeDescriptionCount == other.vertexAttributeDescriptionCount) &&
         internal::compareArrays(pVertexBindingDescriptions, other.pVertexBindingDescriptions, vertexBindingDescriptionCount) &&

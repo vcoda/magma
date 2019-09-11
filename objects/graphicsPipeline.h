@@ -21,18 +21,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class RenderPass;
     class PipelineCache;
 
+    class VertexInputState;
     struct InputAssemblyState;
     struct TesselationState;
     struct RasterizationState;
     struct MultisampleState;
     struct DepthStencilState;
     struct ColorBlendState;
-    struct VertexInputState;
-
     class ViewportState;
-    class RenderPass;
 
     /* Graphics pipelines consist of multiple shader stages,
        multiple fixed-function pipeline stages, and a pipeline layout. */

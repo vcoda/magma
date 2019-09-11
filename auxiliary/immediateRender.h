@@ -34,7 +34,7 @@ namespace magma
     class RenderPass;
     class IAllocator;
 
-    struct VertexInputState;
+    class VertexInputState;
     struct InputAssemblyState;
 
     namespace aux
