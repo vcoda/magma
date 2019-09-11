@@ -9,8 +9,8 @@ constexpr VertexInputBinding::VertexInputBinding(uint32_t binding, uint32_t stri
     this->inputRate = inputRate;
 }
 
-constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location, uint32_t binding,
-    VkFormat format, uint32_t offset)
+constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location, uint32_t binding, VkFormat format, uint32_t offset):
+    VkVertexInputAttributeDescription{}
 {
     this->location = location;
     this->binding = binding;
