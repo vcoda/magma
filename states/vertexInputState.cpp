@@ -23,8 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-VertexInputState::VertexInputState():
-    VkPipelineVertexInputStateCreateInfo{}
+VertexInputState::VertexInputState()
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -33,6 +32,40 @@ VertexInputState::VertexInputState():
     pVertexBindingDescriptions = nullptr;
     vertexAttributeDescriptionCount = 0;
     pVertexAttributeDescriptions = nullptr;
+}
+
+VertexInputState::VertexInputState(const VertexInputBinding& binding,
+    const std::initializer_list<VertexInputAttribute>& attributes)
+{
+    sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    vertexBindingDescriptionCount = 1;
+    pVertexBindingDescriptions = internal::copyArray<VkVertexInputBindingDescription>(&binding, 1);
+    vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
+    try {
+        pVertexAttributeDescriptions = internal::copyInitializerList<VkVertexInputAttributeDescription>(attributes);
+    } catch (const std::bad_alloc& err) {
+        delete[] pVertexBindingDescriptions;
+        throw err;
+    }
+}
+
+VertexInputState::VertexInputState(const std::initializer_list<VertexInputBinding>& bindings,
+    const std::initializer_list<VertexInputAttribute>& attributes)
+{
+    sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    vertexBindingDescriptionCount = MAGMA_COUNT(bindings);
+    pVertexBindingDescriptions = internal::copyInitializerList<VkVertexInputBindingDescription>(bindings);
+    vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
+    try {
+        pVertexAttributeDescriptions = internal::copyInitializerList<VkVertexInputAttributeDescription>(attributes);
+    } catch (const std::bad_alloc& err) {
+        delete[] pVertexBindingDescriptions;
+        throw err;
+    }
 }
 
 VertexInputState::~VertexInputState()

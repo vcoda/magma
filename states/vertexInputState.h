@@ -50,6 +50,10 @@ namespace magma
     {
     public:
         VertexInputState();
+        VertexInputState(const VertexInputBinding& binding,
+            const std::initializer_list<VertexInputAttribute>& attributes);
+        VertexInputState(const std::initializer_list<VertexInputBinding>& bindings,
+            const std::initializer_list<VertexInputAttribute>& attributes);
         virtual ~VertexInputState();
         virtual uint32_t stride(uint32_t binding) const = 0;
         std::size_t hash() const;
