@@ -37,7 +37,7 @@ namespace magma
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX);
         VertexInputStructure(const VertexInputStructure& other);
         VertexInputStructure& VertexInputStructure::operator=(const VertexInputStructure& other);
-        virtual uint32_t stride(uint32_t binding) const override;
+        virtual uint32_t stride(uint32_t binding) const noexcept override;
     };
 
     namespace specialization

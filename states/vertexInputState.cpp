@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "vertexInputState.h"
+#include "../misc/format.h"
 #include "../internal/copy.h"
 #include "../internal/compare.h"
 
@@ -72,6 +73,21 @@ VertexInputState::~VertexInputState()
 {
     delete[] pVertexBindingDescriptions;
     delete[] pVertexAttributeDescriptions;
+}
+
+uint32_t VertexInputState::stride(uint32_t binding) const noexcept
+{
+    size_t stride = 0;
+    for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
+    {
+        const VkVertexInputAttributeDescription& attrib = pVertexAttributeDescriptions[i];
+        if (attrib.binding == binding)
+        {   // TODO: alignment?
+            const size_t attribSize = Format(attrib.format).size();
+            stride += attribSize;
+        }
+    }
+    return static_cast<uint32_t>(stride);
 }
 
 std::size_t VertexInputState::hash() const

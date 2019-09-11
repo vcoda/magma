@@ -106,7 +106,7 @@ inline VertexInputStructure<Vertex>& VertexInputStructure<Vertex>::operator=(con
 }
 
 template<typename Vertex>
-inline uint32_t VertexInputStructure<Vertex>::stride(uint32_t binding) const
+inline uint32_t VertexInputStructure<Vertex>::stride(uint32_t binding) const noexcept
 {
     MAGMA_ASSERT(0 == binding);
     if ((0 == vertexAttributeDescriptionCount) || (binding > 0))
