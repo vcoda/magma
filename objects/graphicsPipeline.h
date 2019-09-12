@@ -39,7 +39,7 @@ namespace magma
     class GraphicsPipeline : public Pipeline
     {
     public:
-        explicit GraphicsPipeline(std::shared_ptr<Device> device, 
+        explicit GraphicsPipeline(std::shared_ptr<Device> device,
             std::shared_ptr<PipelineCache> cache,
             const std::vector<PipelineShaderStage>& stages,
             const VertexInputState& vertexInputState,
@@ -55,7 +55,7 @@ namespace magma
             std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        explicit GraphicsPipeline(std::shared_ptr<Device> device, 
+        explicit GraphicsPipeline(std::shared_ptr<Device> device,
             std::shared_ptr<PipelineCache> cache,
             const std::vector<PipelineShaderStage>& stages,
             const VertexInputState& vertexInputState,
