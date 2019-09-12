@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include <cstring>
+#include <cassert>
 
 #include <memory>
 #include <vector>
@@ -33,8 +34,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include <atomic>
 #include <thread>
-
-#include <cassert>
 
 #ifdef _WIN32
 #ifndef NOMINMAX
