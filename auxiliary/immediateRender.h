@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "../internal/noncopyable.h"
 #include "../shaders/shaderStages.h"
+#include "../states/vertexLayouts.h"
 #include "../states/rasterizationState.h"
 #include "../states/multisampleState.h"
 #include "../states/depthStencilState.h"
@@ -90,10 +91,10 @@ namespace magma
         private:
             struct Vertex
             {
-                float x, y, z, w;
-                float nx, ny, nz, psize;
-                float r, g, b, a;
-                float u, v;
+                vertexlayout::Float4 position;
+                vertexlayout::Float4 normalPSize;
+                vertexlayout::Float4 color;
+                vertexlayout::Float2 texcoord;
             };
 
             struct Transform
@@ -145,7 +146,8 @@ namespace magma
             float lineWidth = 1.f;
             Transform transform;
             uint32_t vertexCount = 0;
-            Vertex *vert = nullptr, curr = {};
+            Vertex *pvertex = nullptr;
+            Vertex current = {};
             bool insidePrimitive = false;
         };
     } // namespace aux

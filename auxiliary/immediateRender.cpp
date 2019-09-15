@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/commandBuffer.h"
 #include "../objects/pipeline.h"
 #include "../objects/shaderModule.h"
-#include "../states/vertexInputState.h"
+#include "../states/vertexInputStructure.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/viewportState.h"
 #include "../states/tesselationState.h"
@@ -74,10 +74,10 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,
     MAGMA_ASSERT(!insidePrimitive);
     if (insidePrimitive)
         return false;
-    if (!vert)
+    if (!pvertex)
     {
-        vert = reinterpret_cast<Vertex *>(vertexBuffer->getMemory()->map(0, VK_WHOLE_SIZE));
-        if (!vert)
+        pvertex = reinterpret_cast<Vertex *>(vertexBuffer->getMemory()->map(0, VK_WHOLE_SIZE));
+        if (!pvertex)
             return false;
     }
     Primitive primitive;
@@ -100,8 +100,8 @@ bool ImmediateRender::endPrimitive(bool loop /* false */) noexcept
         return false;
     if (loop && (primitives.back().vertexCount > 0))
     {
-        const Vertex *first = vert - primitives.back().vertexCount;
-        *vert++ = *first;
+        const Vertex *first = pvertex - primitives.back().vertexCount;
+        *pvertex++ = *first;
         ++primitives.back().vertexCount;
         ++vertexCount;
     }
@@ -146,10 +146,10 @@ bool ImmediateRender::reset() noexcept
     MAGMA_ASSERT(!insidePrimitive);
     if (insidePrimitive)
         return false;
-    if (vert)
+    if (pvertex)
     {
         vertexBuffer->getMemory()->unmap();
-        vert = nullptr;
+        pvertex = nullptr;
     }
     primitives.clear();
     vertexCount = 0;
@@ -168,14 +168,11 @@ std::shared_ptr<ShaderModule> ImmediateRender::createShader(bool vertexShader) c
 
 std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTopology topology)
 {
-    constexpr VertexInputAttribute vertexAttributes[] = {
-        VertexInputAttribute(0, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, x)),
-        VertexInputAttribute(1, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, nx)),
-        VertexInputAttribute(2, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, r)),
-        VertexInputAttribute(3, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, u))
-    };
-    constexpr VertexInputBinding vertexBinding(0, sizeof(Vertex));
-	MAGMA_CONSTEXPR VertexInputState vertexInputState(vertexBinding, vertexAttributes);
+    static VertexInputStructure<Vertex> vertexInputState(0, {
+        {0, &Vertex::position},
+        {1, &Vertex::normalPSize},
+        {2, &Vertex::color},
+        {3, &Vertex::texcoord}});
     constexpr const InputAssemblyState *inputAssemblyStates[] =
     {
         &renderstates::pointList,

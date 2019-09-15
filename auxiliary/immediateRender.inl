@@ -68,9 +68,9 @@ inline uint32_t ImmediateRender::getPrimitiveCount() const noexcept
 
 inline void ImmediateRender::normal(float x, float y, float z) noexcept
 {
-    curr.nx = x;
-    curr.ny = y;
-    curr.nz = z;
+    current.normalPSize.v[0] = x;
+    current.normalPSize.v[1] = y;
+    current.normalPSize.v[2] = z;
 }
 
 inline void ImmediateRender::normal(const float n[3]) noexcept
@@ -80,10 +80,10 @@ inline void ImmediateRender::normal(const float n[3]) noexcept
 
 inline void ImmediateRender::color(float r, float g, float b, float a /* 1 */) noexcept
 {
-    curr.r = r;
-    curr.g = g;
-    curr.b = b;
-    curr.a = a;
+    current.color.v[0] = r;
+    current.color.v[1] = g;
+    current.color.v[2] = b;
+    current.color.v[3] = a;
 }
 
 inline void ImmediateRender::color(const float c[4]) noexcept
@@ -103,8 +103,8 @@ inline void ImmediateRender::color(const uint8_t c[4]) noexcept
 
 inline void ImmediateRender::texcoord(float u, float v) noexcept
 {
-    curr.u = u;
-    curr.v = v;
+    current.texcoord.v[0] = u;
+    current.texcoord.v[1] = v;
 }
 
 inline void ImmediateRender::texcoord(const float uv[2]) noexcept
@@ -115,7 +115,7 @@ inline void ImmediateRender::texcoord(const float uv[2]) noexcept
 inline void ImmediateRender::pointSize(float size) noexcept
 {
     MAGMA_ASSERT(size >= 1.f);
-    curr.psize = size;
+    current.normalPSize.v[3] = size;
 }
 
 inline void ImmediateRender::vertex(float x, float y, float z /* 0 */, float w /* 1 */) noexcept
@@ -123,27 +123,14 @@ inline void ImmediateRender::vertex(float x, float y, float z /* 0 */, float w /
     MAGMA_ASSERT(insidePrimitive);
     MAGMA_ASSERT(vertexCount < maxVertexCount);
     if (insidePrimitive && vertexCount < maxVertexCount)
-    {   // Position
-        vert->x = x;
-        vert->y = y;
-        vert->z = z;
-        vert->w = w;
-        // Normal
-        vert->nx = curr.nx;
-        vert->ny = curr.ny;
-        vert->nz = curr.nz;
-        // Color
-        vert->r = curr.r;
-        vert->g = curr.g;
-        vert->b = curr.b;
-        vert->a = curr.a;
-        // Texture coords
-        vert->u = curr.u;
-        vert->v = curr.v;
-        // Point size
-        vert->psize = curr.psize;
+    {   // Copy curent state
+        current.position.v[0] = x;
+        current.position.v[1] = y;
+        current.position.v[2] = z;
+        current.position.v[3] = w;
+        internal::copy(pvertex, &current);
         // Go to the next vertex
-        ++vert;
+        ++pvertex;
         ++primitives.back().vertexCount;
         ++vertexCount;
     }
