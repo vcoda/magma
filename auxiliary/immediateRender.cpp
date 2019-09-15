@@ -239,17 +239,17 @@ std::size_t ImmediateRender::computePipelineHash(const VertexInputState& vertexI
     const InputAssemblyState& inputAssemblyState,
     std::shared_ptr<GraphicsPipeline> basePipeline) const noexcept
 {   // Keep in sync with GraphicsPipeline!
-    std::size_t hash = 0;
     VkGraphicsPipelineCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    info.pNext = nullptr;
     info.flags = VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
     if (basePipeline)
         info.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     info.subpass = 0;
-    internal::hashCombine(hash, internal::hashArgs(
+    std::size_t hash = internal::hashArgs(
         info.sType,
         info.flags,
-        info.subpass));
+        info.subpass);
     internal::hashCombine(hash, vertexShader.hash());
     internal::hashCombine(hash, fragmentShader.hash());
     internal::hashCombine(hash, internal::combineHashList(
