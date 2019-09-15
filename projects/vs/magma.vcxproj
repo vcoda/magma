@@ -262,7 +262,7 @@
     <ClInclude Include="..\..\states\tesselationState.h" />
     <ClInclude Include="..\..\states\vertexInputState.h" />
     <ClInclude Include="..\..\states\vertexInputStructure.h" />
-    <ClInclude Include="..\..\states\vertexDecl.h" />
+    <ClInclude Include="..\..\states\vertexLayouts.h" />
     <ClInclude Include="..\..\states\viewportState.h" />
     <ClInclude Include="..\..\states\colorWriteMask.h" />
   </ItemGroup>

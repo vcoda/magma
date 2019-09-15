@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "vertexInputState.h"
+#include "vertexLayouts.h"
 #include "../internal/copy.h"
 
 namespace magma
@@ -83,10 +84,15 @@ namespace magma
         MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(uint64_t, false, VK_FORMAT_R64_UINT)
         MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(int64_t, false, VK_FORMAT_R64_SINT)
         MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(double, false, VK_FORMAT_R64_SFLOAT)
+
+        /* Built-in specializations for our vector types. */
+
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::Float2, false, VK_FORMAT_R32G32_SFLOAT)
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::Float3, false, VK_FORMAT_R32G32B32_SFLOAT)
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::Float4, false, VK_FORMAT_R32G32B32A32_SFLOAT)
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::Color, true, VK_FORMAT_R8G8B8A8_UNORM)
     } // namespace specialization
 } // namespace magma
-
-#include "vertexDecl.h"
 
 namespace magma
 {
@@ -94,21 +100,25 @@ namespace magma
     {
         extern const VertexInputStructure<int> nullVertexInput;
 
-        extern const VertexInputStructure<vertexdecl::Pos2fTex2f> pos2fTex2f;
-        extern const VertexInputStructure<vertexdecl::Pos2fColor3f> pos2fColor3f;
-        extern const VertexInputStructure<vertexdecl::Pos2fColor4f> pos2fColor4f;
-        extern const VertexInputStructure<vertexdecl::Pos2fColor4b> pos2fColor4b;
+        extern const VertexInputStructure<vertexlayout::Float2> pos2f;
+        extern const VertexInputStructure<vertexlayout::Float3> pos3f;
+        extern const VertexInputStructure<vertexlayout::Float4> pos4f;
 
-        extern const VertexInputStructure<vertexdecl::Pos3fTex2f> pos3fTex2f;
-        extern const VertexInputStructure<vertexdecl::Pos3fColor3f> pos3fColor3f;
-        extern const VertexInputStructure<vertexdecl::Pos3fColor4f> pos3fColor4f;
-        extern const VertexInputStructure<vertexdecl::Pos3fColor4b> pos3fColor4b;
-        extern const VertexInputStructure<vertexdecl::Pos3fNormal3f> pos3fNormal3f;
+        extern const VertexInputStructure<vertexlayout::Pos2fTex2f> pos2fTex2f;
+        extern const VertexInputStructure<vertexlayout::Pos2fColor3f> pos2fColor3f;
+        extern const VertexInputStructure<vertexlayout::Pos2fColor4f> pos2fColor4f;
+        extern const VertexInputStructure<vertexlayout::Pos2fColor4b> pos2fColor4b;
 
-        extern const VertexInputStructure<vertexdecl::Pos3fNormal3fTex2f> pos3fNormal3fTex2f;
-        extern const VertexInputStructure<vertexdecl::Pos3fNormal3fColor3f> pos3fNormal3fColor3f;
-        extern const VertexInputStructure<vertexdecl::Pos3fNormal3fColor4f> pos3fNormal3fColor4f;
-        extern const VertexInputStructure<vertexdecl::Pos3fNormal3fColor4b> pos3fNormal3fColor4b;
+        extern const VertexInputStructure<vertexlayout::Pos3fTex2f> pos3fTex2f;
+        extern const VertexInputStructure<vertexlayout::Pos3fColor3f> pos3fColor3f;
+        extern const VertexInputStructure<vertexlayout::Pos3fColor4f> pos3fColor4f;
+        extern const VertexInputStructure<vertexlayout::Pos3fColor4b> pos3fColor4b;
+        extern const VertexInputStructure<vertexlayout::Pos3fNormal3f> pos3fNormal3f;
+
+        extern const VertexInputStructure<vertexlayout::Pos3fNormal3fTex2f> pos3fNormal3fTex2f;
+        extern const VertexInputStructure<vertexlayout::Pos3fNormal3fColor3f> pos3fNormal3fColor3f;
+        extern const VertexInputStructure<vertexlayout::Pos3fNormal3fColor4f> pos3fNormal3fColor4f;
+        extern const VertexInputStructure<vertexlayout::Pos3fNormal3fColor4b> pos3fNormal3fColor4b;
     } // namespace renderstates
 } // namespace magma
 

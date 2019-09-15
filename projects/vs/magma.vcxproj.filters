@@ -447,7 +447,7 @@
     <ClInclude Include="..\..\states\vertexInputStructure.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\states\vertexDecl.h">
+    <ClInclude Include="..\..\states\vertexLayouts.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
   </ItemGroup>

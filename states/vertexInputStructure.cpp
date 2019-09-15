@@ -21,13 +21,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-using namespace vertexdecl;
+using namespace vertexlayout;
 
 namespace renderstates
 {
 static const magma::VertexInputAttribute::normalized<true> normalized;
 
 const VertexInputStructure<int> nullVertexInput;
+
+const VertexInputStructure<Float2> pos2f(0,
+    {0, 0, VK_FORMAT_R32G32_SFLOAT, 0});
+const VertexInputStructure<Float3> pos3f(0,
+    {0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0});
+const VertexInputStructure<Float4> pos4f(0,
+    {0, 0, VK_FORMAT_R32G32B32A32_SFLOAT, 0});
 
 const VertexInputStructure<Pos2fTex2f> pos2fTex2f(0, {
     {0, &Pos2fTex2f::position},
