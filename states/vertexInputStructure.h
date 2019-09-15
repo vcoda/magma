@@ -29,6 +29,9 @@ namespace magma
     public:
         VertexInputStructure() = default;
         explicit VertexInputStructure(uint32_t binding,
+            const VertexInputAttribute& attribute,
+            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX);
+        explicit VertexInputStructure(uint32_t binding,
             const std::initializer_list<VertexInputAttribute>& attributes,
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX);
         template<uint32_t vertexAttributeCount>

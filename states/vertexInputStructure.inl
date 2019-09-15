@@ -12,6 +12,12 @@ inline VertexInputAttribute::VertexInputAttribute(uint32_t location, Type Vertex
 }
 
 template<typename Vertex>
+inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, const VertexInputAttribute& attribute,
+    VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */):
+    VertexInputStructure<Vertex>(binding, {attribute}, inputRate)
+{}
+
+template<typename Vertex>
 inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, const std::initializer_list<VertexInputAttribute>& attributes,
     VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */)
 {
