@@ -22,34 +22,31 @@ namespace magma
 {
     namespace internal
     {
-        template<typename Type>
-        inline bool compare(const void *const src, const void *const dst)
+        template<typename T> inline bool compare(const void *const p1, const void *const p2) noexcept
         {
-            if (!src && !dst)
+            if (!p1 && !p2)
                 return true;
-            if (!src || !dst || src == dst)
+            if (!p1 || !p2 || p1 == p2)
                 return false;
-            return !memcmp(src, dst, sizeof(Type));
+            return !memcmp(p1, p2, sizeof(T));
         }
 
-        template<typename Type>
-        inline bool compare(const Type *const src, const Type *const dst)
+        template<typename T> inline bool compare(const T *const p1, const T *const p2) noexcept
         {
-            if (!src && !dst)
+            if (!p1 && !p2)
                 return true;
-            if (!src || !dst || src == dst)
+            if (!p1 || !p2 || p1 == p2)
                 return false;
-            return !memcmp(src, dst, sizeof(Type));
+            return !memcmp(p1, p2, sizeof(T));
         }
 
-        template<typename Type>
-        inline bool compareArrays(const Type *const src, const Type *const dst, size_t count) noexcept
+        template<typename T> inline bool compareArrays(const T *const p1, const T *const p2, size_t count) noexcept
         {
-            if (!src && !dst)
+            if (!p1 && !p2)
                 return true;
-            if (!src || !dst || src == dst)
+            if (!p1 || !p2 || p1 == p2)
                 return false;
-            return !memcmp(src, dst, sizeof(Type) * count);
+            return !memcmp(p1, p2, sizeof(T) * count);
         }
     } // namespace internal
 } // namespace magma
