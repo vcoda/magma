@@ -22,104 +22,122 @@ namespace magma
 {
     namespace internal
     {
-        template<typename Type>
-        inline Type *copy(const void *const src)
+        template<typename T> inline T *copy(const void *const source) noexcept
         {
-            MAGMA_ASSERT(src);
-            Type *dst = new Type();
-            memcpy(dst, src, sizeof(Type));
-            return dst;
+            MAGMA_ASSERT(source);
+            if (!source)
+                return nullptr;
+            T *dest = new(std::nothrow) T();
+            if (dest)
+                memcpy(dest, source, sizeof(T));
+            return dest;
         }
 
-        template<typename Type>
-        inline Type *copy(const Type *const src)
+        template<typename T> inline T *copy(const T *const source) noexcept
         {
-            MAGMA_ASSERT(src);
-            Type *dst = new Type();
-            memcpy(dst, src, sizeof(Type));
-            return dst;
+            MAGMA_ASSERT(source);
+            if (source)
+                return nullptr;
+            T *dest = new(std::nothrow) T();
+            if (dest)
+                memcpy(dest, source, sizeof(T));
+            return dest;
         }
 
-        template<typename Type>
-        inline Type *copy(Type *const dst, const Type *const src)
+        template<typename T> inline T *copy(T *const dest, const T *const source) noexcept
         {
-            MAGMA_ASSERT(dst);
-            MAGMA_ASSERT(src);
-            MAGMA_ASSERT(dst != src);
-            memcpy(dst, src, sizeof(Type));
-            return dst;
+            MAGMA_ASSERT(dest);
+            MAGMA_ASSERT(source);
+            MAGMA_ASSERT(dest != source);
+            if (dest && source && dest != source)
+                memcpy(dest, source, sizeof(T));
+            return dest;
         }
 
-        template<typename Type>
-        inline Type *copyArray(const void *const src, size_t count)
+        template<typename T> inline T *copyArray(const void *const source, std::size_t count) noexcept
         {
-            MAGMA_ASSERT(src);
+            MAGMA_ASSERT(source);
+            MAGMA_ASSERT(count);
+            if (!source || !count)
+                return nullptr;
+            T *dest = new(std::nothrow) T[count];
+            if (dest)
+                memcpy(dest, source, sizeof(T) * count);
+            return dest;
+        }
+
+        template<typename T> inline T *copyArray(const T *const source, std::size_t count) noexcept
+        {
+            MAGMA_ASSERT(source);
             MAGMA_ASSERT(count > 0);
-            Type *dst = new Type[count];
-            memcpy(dst, src, sizeof(Type) * count);
-            return dst;
+            if (!source || !count)
+                return nullptr;
+            T *dest = new(std::nothrow) T[count];
+            if (dest)
+                memcpy(dest, source, sizeof(T) * count);
+            return dest;
         }
 
-        template<typename Type>
-        inline Type *copyArray(const Type *const src, size_t count)
+        template<typename T> inline T *copyVector(const std::vector<T>& source) noexcept
         {
-            MAGMA_ASSERT(src);
-            MAGMA_ASSERT(count > 0);
-            Type *dst = new Type[count];
-            memcpy(dst, src, sizeof(Type) * count);
-            return dst;
+            MAGMA_ASSERT(!source.empty());
+            if (source.empty())
+                return nullptr;
+            T *dest = new(std::nothrow) T[source.size()];
+            if (dest)
+                memcpy(dest, source.data(), sizeof(T) * source.size());
+            return dest;
         }
 
-        template<typename Type>
-        inline Type *copyVector(const std::vector<Type>& src)
+        template<typename X, typename T> inline X *copyVector(const std::vector<T>& source) noexcept
         {
-            MAGMA_ASSERT(src.size() > 0);
-            Type *dst = new Type[src.size()];
-            memcpy(dst, src.data(), sizeof(Type) * src.size());
-            return dst;
+            static_assert(sizeof(X) == sizeof(T), "type size mismatch");
+            MAGMA_ASSERT(!source.empty());
+            if (source.empty())
+                return nullptr;
+            X *dest = new(std::nothrow) X[source.size()];
+            if (dest)
+                memcpy(dest, source.data(), sizeof(T) * source.size());
+            return dest;
         }
 
-        template<typename DstType, typename SrcType>
-        inline DstType *copyVector(const std::vector<SrcType>& src)
+        template<typename T> inline T *copyInitializerList(const std::initializer_list<T>& source) noexcept
         {
-            MAGMA_ASSERT(sizeof(DstType) == sizeof(SrcType));
-            MAGMA_ASSERT(src.size() > 0);
-            DstType *dst = new DstType[src.size()];
-            memcpy(dst, src.data(), sizeof(SrcType) * src.size());
-            return dst;
+            MAGMA_ASSERT(source.size() > 0);
+            if (!source.size())
+                return nullptr;
+            T *dest = new(std::nothrow) T[source.size()];
+            if (dest)
+                memcpy(dest, source.begin(), sizeof(T) * source.size());
+            return dest;
         }
 
-        template<typename Type>
-        inline Type *copyInitializerList(const std::initializer_list<Type>& src)
+        template<typename X, typename T> inline X *copyInitializerList(const std::initializer_list<T>& source) noexcept
         {
-            MAGMA_ASSERT(src.size() > 0);
-            Type *dst = new Type[src.size()];
-            memcpy(dst, src.begin(), sizeof(Type) * src.size());
-            return dst;
+            static_assert(sizeof(X) == sizeof(T), "type size mismatch");
+            MAGMA_ASSERT(source.size() > 0);
+            if (!source.size())
+                return nullptr;
+            X *dest = new(std::nothrow) X[source.size()];
+            if (dest)
+                memcpy(dest, source.begin(), sizeof(T) * source.size());
+            return dest;
         }
 
-        template<typename DstType, typename SrcType>
-        inline DstType *copyInitializerList(const std::initializer_list<SrcType>& src)
+        inline char *copyString(const char *const source) noexcept
         {
-            MAGMA_ASSERT(sizeof(DstType) == sizeof(SrcType));
-            MAGMA_ASSERT(src.size() > 0);
-            DstType *dst = new DstType[src.size()];
-            memcpy(dst, src.begin(), sizeof(SrcType) * src.size());
-            return dst;
-        }
-
-        inline char *copyString(const char *const src)
-        {
-            MAGMA_ASSERT(src);
-            const size_t size = strlen(src) + 1;
-            char *const dst = new char[size];
+            MAGMA_ASSERT(source);
+            if (!source)
+                return nullptr;
+            const std::size_t size = strlen(source) + 1;
+            char *const dest = new(std::nothrow) char[size];
 #ifdef _MSC_VER
-            const errno_t err = strcpy_s(dst, size, src);
+            const errno_t err = strcpy_s(dest, size, source);
             MAGMA_ASSERT(0 == err);
 #else
-            strcpy(dst, src);
+            strcpy(dest, source);
 #endif // _MSC_VER
-            return dst;
+            return dest;
         }
     } // namespace internal
 } // namespace magma
