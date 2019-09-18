@@ -66,6 +66,7 @@ ManagedColorBlendState& ManagedColorBlendState::operator=(const ManagedColorBlen
 {
     if (this != &other)
     {
+        delete[] pAttachments;
         internal::copy(this, &other);
         pAttachments = internal::copyArray(other.pAttachments, attachmentCount);
     }

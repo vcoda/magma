@@ -57,6 +57,8 @@ Subpass& Subpass::operator=(const Subpass& other)
 {
     if (this != &other)
     {
+        delete[] pColorAttachments;
+        delete pDepthStencilAttachment;
         internal::copy(this, &other);
         if (other.pColorAttachments)
             pColorAttachments = internal::copyArray(other.pColorAttachments, colorAttachmentCount);

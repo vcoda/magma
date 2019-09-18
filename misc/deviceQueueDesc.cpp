@@ -50,6 +50,7 @@ DeviceQueueDescriptor& DeviceQueueDescriptor::operator=(const DeviceQueueDescrip
 {
     if (this != &other)
     {
+        delete[] pQueuePriorities;
         internal::copy(this, &other);
         pQueuePriorities = internal::copyArray(other.pQueuePriorities, queueCount);
     }

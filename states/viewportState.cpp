@@ -152,6 +152,8 @@ ViewportState& ViewportState::operator=(const ViewportState& other)
 {
     if (this != &other)
     {
+        delete[] pViewports;
+        delete[] pScissors;
         internal::copy(this, &other);
         pViewports = internal::copyArray(other.pViewports, viewportCount);
         try {
