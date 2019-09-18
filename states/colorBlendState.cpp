@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 ManagedColorBlendState::ManagedColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
-    const std::initializer_list<float>& blendConstants /* {1, 1, 1, 1} */)
+    const std::initializer_list<float>& blendConstants /* {1, 1, 1, 1} */) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -41,7 +41,7 @@ ManagedColorBlendState::ManagedColorBlendState(const std::vector<ColorBlendAttac
     this->blendConstants[3] = c[3];
 }
 
-ManagedColorBlendState::ManagedColorBlendState(const ColorBlendState& blendState)
+ManagedColorBlendState::ManagedColorBlendState(const ColorBlendState& blendState) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -56,13 +56,13 @@ ManagedColorBlendState::ManagedColorBlendState(const ColorBlendState& blendState
     blendConstants[3] = blendState.blendConstants[3];
 }
 
-ManagedColorBlendState::ManagedColorBlendState(const ManagedColorBlendState& other)
+ManagedColorBlendState::ManagedColorBlendState(const ManagedColorBlendState& other) noexcept
 {
     internal::copy(this, &other);
     pAttachments = internal::copyArray(other.pAttachments, attachmentCount);
 }
 
-ManagedColorBlendState& ManagedColorBlendState::operator=(const ManagedColorBlendState& other)
+ManagedColorBlendState& ManagedColorBlendState::operator=(const ManagedColorBlendState& other) noexcept
 {
     if (this != &other)
     {

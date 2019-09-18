@@ -21,21 +21,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Specialization::Specialization(const Specialization& other)
+Specialization::Specialization(const Specialization& other) noexcept
 {
     mapEntryCount = other.mapEntryCount;
     pMapEntries = internal::copyArray(other.pMapEntries, mapEntryCount);
     dataSize = other.dataSize;
-    try {
-        pData = internal::copyArray<char>(other.pData, dataSize);
-    } catch (const std::bad_alloc& exc)
-    {
-        delete[] pMapEntries;
-        throw exc;
-    }
+    pData = internal::copyArray<char>(other.pData, dataSize);
 }
 
-Specialization& Specialization::operator=(const Specialization& other)
+Specialization& Specialization::operator=(const Specialization& other) noexcept
 {
     if (this != &other)
     {
@@ -44,13 +38,7 @@ Specialization& Specialization::operator=(const Specialization& other)
         pMapEntries = internal::copyArray(other.pMapEntries, mapEntryCount);
         dataSize = other.dataSize;
         delete[] reinterpret_cast<const char *>(pData);
-        try {
-            pData = internal::copyArray<char>(other.pData, dataSize);
-        } catch (const std::bad_alloc& exc)
-        {
-            delete[] pMapEntries;
-            throw exc;
-        }
+        pData = internal::copyArray<char>(other.pData, dataSize);
     }
     return *this;
 }

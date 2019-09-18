@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-PipelineShaderStage::PipelineShaderStage(const VkShaderStageFlagBits stage, std::shared_ptr<ShaderModule> shaderModule, const char *const entrypoint, 
+PipelineShaderStage::PipelineShaderStage(const VkShaderStageFlagBits stage, std::shared_ptr<ShaderModule> shaderModule, const char *const entrypoint,
     std::shared_ptr<Specialization> specialization /* nullptr */,
     VkPipelineShaderStageCreateFlags flags /* 0 */) noexcept:
     shaderModule(std::move(shaderModule)),
@@ -37,7 +37,7 @@ PipelineShaderStage::PipelineShaderStage(const VkShaderStageFlagBits stage, std:
     pSpecializationInfo = specialization.get();
 }
 
-PipelineShaderStage::PipelineShaderStage(const PipelineShaderStage& other):
+PipelineShaderStage::PipelineShaderStage(const PipelineShaderStage& other) noexcept:
     shaderModule(other.shaderModule),
     specialization(other.specialization)
 {
@@ -50,7 +50,7 @@ PipelineShaderStage::PipelineShaderStage(const PipelineShaderStage& other):
     pSpecializationInfo = specialization.get();
 }
 
-PipelineShaderStage& PipelineShaderStage::operator=(const PipelineShaderStage& other)
+PipelineShaderStage& PipelineShaderStage::operator=(const PipelineShaderStage& other) noexcept
 {
     if (this != &other)
     {

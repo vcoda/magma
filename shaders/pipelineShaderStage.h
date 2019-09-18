@@ -33,8 +33,8 @@ namespace magma
             VkPipelineShaderStageCreateFlags flags = 0) noexcept;
 
     public:
-        PipelineShaderStage(const PipelineShaderStage&);
-        PipelineShaderStage& operator=(const PipelineShaderStage&);
+        PipelineShaderStage(const PipelineShaderStage&) noexcept;
+        PipelineShaderStage& operator=(const PipelineShaderStage&) noexcept;
         virtual ~PipelineShaderStage();
         std::shared_ptr<ShaderModule> getShaderModule() noexcept { return shaderModule; }
         std::shared_ptr<const ShaderModule> getShaderModule() const noexcept { return shaderModule; }

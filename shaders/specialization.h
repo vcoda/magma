@@ -43,15 +43,15 @@ namespace magma
     public:
         template<typename Block>
         explicit Specialization(const Block& data,
-            const std::initializer_list<SpecializationEntry>& entryMap)
+            const std::initializer_list<SpecializationEntry>& entryMap) noexcept
         {
             mapEntryCount = static_cast<uint32_t>(entryMap.size());
             pMapEntries = internal::copyInitializerList(entryMap);
             dataSize = sizeof(Block);
             pData = internal::copyArray<char>(&data, dataSize);
         }
-        Specialization(const Specialization&);
-        Specialization& operator=(const Specialization&);
+        Specialization(const Specialization&) noexcept;
+        Specialization& operator=(const Specialization&) noexcept;
         ~Specialization();
         std::size_t hash() const noexcept;
     };

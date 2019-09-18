@@ -36,24 +36,16 @@ Subpass::Subpass(VkSubpassDescriptionFlags flags, VkPipelineBindPoint pipelineBi
     pPreserveAttachments = nullptr;
 }
 
-Subpass::Subpass(const Subpass& other)
+Subpass::Subpass(const Subpass& other) noexcept
 {
     internal::copy(this, &other);
     if (other.pColorAttachments)
         pColorAttachments = internal::copyArray(other.pColorAttachments, colorAttachmentCount);
     if (other.pDepthStencilAttachment)
-    {
-        try {
-            pDepthStencilAttachment = internal::copy(other.pDepthStencilAttachment);
-        } catch (const std::bad_alloc& exc)
-        {
-            delete[] pColorAttachments;
-            throw exc;
-        }
-    }
+        pDepthStencilAttachment = internal::copy(other.pDepthStencilAttachment);
 }
 
-Subpass& Subpass::operator=(const Subpass& other)
+Subpass& Subpass::operator=(const Subpass& other) noexcept
 {
     if (this != &other)
     {
@@ -63,15 +55,7 @@ Subpass& Subpass::operator=(const Subpass& other)
         if (other.pColorAttachments)
             pColorAttachments = internal::copyArray(other.pColorAttachments, colorAttachmentCount);
         if (other.pDepthStencilAttachment)
-        {
-            try {
-                pDepthStencilAttachment = internal::copy(other.pDepthStencilAttachment);
-            } catch (const std::bad_alloc& exc)
-            {
-                delete[] pColorAttachments;
-                throw exc;
-            }
-        }
+            pDepthStencilAttachment = internal::copy(other.pDepthStencilAttachment);
     }
     return *this;
 }

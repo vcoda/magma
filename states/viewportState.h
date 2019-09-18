@@ -28,27 +28,27 @@ namespace magma
     public:
         ViewportState() noexcept;
         ViewportState(float x, float y, float width, float height,
-            float minDepth = 0.f, float maxDepth = 1.f);
+            float minDepth = 0.f, float maxDepth = 1.f) noexcept;
         ViewportState(float x, float y, const VkExtent2D& extent,
-            float minDepth = 0.f, float maxDepth = 1.f);
+            float minDepth = 0.f, float maxDepth = 1.f) noexcept;
         ViewportState(uint32_t x, uint32_t y, uint32_t width, int32_t height,
-            float minDepth = 0.f, float maxDepth = 1.f);
+            float minDepth = 0.f, float maxDepth = 1.f) noexcept;
         ViewportState(const VkRect2D& viewport, const VkRect2D& scissor,
-            float minDepth = 0.f, float maxDepth = 1.f);
-        ViewportState(const VkViewport& viewport);
-        ViewportState(const VkViewport& viewport, const VkRect2D& scissor);
+            float minDepth = 0.f, float maxDepth = 1.f) noexcept;
+        ViewportState(const VkViewport& viewport) noexcept;
+        ViewportState(const VkViewport& viewport, const VkRect2D& scissor) noexcept;
         ViewportState(const std::vector<VkViewport>& viewports);
         ViewportState(const std::vector<VkViewport>& viewports,
-            const std::vector<VkRect2D>& scissors);
-        ViewportState(const ViewportState&);
-        ViewportState& operator=(const ViewportState&);
+            const std::vector<VkRect2D>& scissors) noexcept;
+        ViewportState(const ViewportState&) noexcept;
+        ViewportState& operator=(const ViewportState&) noexcept;
         ~ViewportState();
         std::size_t hash() const noexcept;
         bool operator==(const ViewportState&) const noexcept;
 
     private:
-        void initialize(const VkViewport& viewport, const VkRect2D& scissor);
+        void initialize(const VkViewport& viewport, const VkRect2D& scissor) noexcept;
         void initialize(const std::vector<VkViewport>& viewports,
-            const std::vector<VkRect2D>& scissors);
+            const std::vector<VkRect2D>& scissors) noexcept;
     };
 } // namespace magma

@@ -34,8 +34,8 @@ namespace magma
             VkPipelineBindPoint pipelineBindPoint) noexcept;
 
     public:
-        Subpass(const Subpass&);
-        Subpass& operator=(const Subpass&);
+        Subpass(const Subpass&) noexcept;
+        Subpass& operator=(const Subpass&) noexcept;
         ~Subpass();
         std::size_t hash() const noexcept;
     };

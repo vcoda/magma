@@ -36,7 +36,7 @@ MultisampleCoverageState::MultisampleCoverageState(const MultisampleState& state
     alphaToOneEnable = MAGMA_BOOLEAN(alphaToOne);
 }
 
-MultisampleCoverageState::MultisampleCoverageState(const MultisampleCoverageState& other):
+MultisampleCoverageState::MultisampleCoverageState(const MultisampleCoverageState& other) noexcept:
     MultisampleState(other.rasterizationSamples)
 {
     pSampleMask = internal::copyArray(other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1);
@@ -44,7 +44,7 @@ MultisampleCoverageState::MultisampleCoverageState(const MultisampleCoverageStat
     alphaToOneEnable = other.alphaToOneEnable;
 }
 
-MultisampleCoverageState& MultisampleCoverageState::operator=(const MultisampleCoverageState& other)
+MultisampleCoverageState& MultisampleCoverageState::operator=(const MultisampleCoverageState& other) noexcept
 {
     if (this != &other)
     {

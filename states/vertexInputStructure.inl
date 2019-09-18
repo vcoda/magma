@@ -25,22 +25,20 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, cons
     vertexBindingDescription->binding = binding;
     vertexBindingDescription->stride = sizeof(Vertex);
     vertexBindingDescription->inputRate = inputRate;
-    VkVertexInputAttributeDescription *vertexAttributeDescriptions;
-    try {
-        vertexAttributeDescriptions = internal::copyInitializerList(attributes);
-    } catch (const std::bad_alloc& err) {
-        delete[] vertexBindingDescription;
-        throw err;
+    VkVertexInputAttributeDescription *vertexAttributeDescriptions = internal::copyInitializerList(attributes);
+    if (!vertexAttributeDescriptions)
+        vertexAttributeDescriptionCount = 0;
+    else
+    {
+        vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
+        for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
+            vertexAttributeDescriptions[i].binding = binding;
     }
-    const uint32_t vertexAttributeCount = MAGMA_COUNT(attributes);
-    for (uint32_t i = 0; i < vertexAttributeCount; ++i)
-        vertexAttributeDescriptions[i].binding = binding;
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;
     flags = 0;
     vertexBindingDescriptionCount = 1;
     pVertexBindingDescriptions = vertexBindingDescription;
-    vertexAttributeDescriptionCount = vertexAttributeCount;
     pVertexAttributeDescriptions = vertexAttributeDescriptions;
 }
 
@@ -53,21 +51,20 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, cons
     vertexBindingDescription->binding = binding;
     vertexBindingDescription->stride = sizeof(Vertex);
     vertexBindingDescription->inputRate = inputRate;
-    VkVertexInputAttributeDescription *vertexAttributeDescriptions;
-    try {
-        vertexAttributeDescriptions = internal::copyArray(attributes, vertexAttributeCount);
-    } catch (const std::bad_alloc& err) {
-        delete[] vertexBindingDescription;
-        throw err;
+    VkVertexInputAttributeDescription *vertexAttributeDescriptions = internal::copyArray(attributes, vertexAttributeCount);
+    if (!vertexAttributeDescriptions)
+        vertexAttributeDescriptionCount = 0;
+    else
+    {
+        vertexAttributeDescriptionCount = vertexAttributeCount;
+        for (uint32_t i = 0; i <  vertexAttributeDescriptionCount; ++i)
+            vertexAttributeDescriptions[i].binding = binding;
     }
-    for (uint32_t i = 0; i < vertexAttributeCount; ++i)
-        vertexAttributeDescriptions[i].binding = binding;
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;
     flags = 0;
     vertexBindingDescriptionCount = 1;
     pVertexBindingDescriptions = vertexBindingDescription;
-    vertexAttributeDescriptionCount = vertexAttributeCount;
     pVertexAttributeDescriptions = vertexAttributeDescriptions;
 }
 
@@ -80,12 +77,7 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(const VertexInputStruc
     vertexBindingDescriptionCount = other.vertexBindingDescriptionCount;
     pVertexBindingDescriptions = internal::copyArray(other.pVertexBindingDescriptions, 1);
     vertexAttributeDescriptionCount = other.vertexAttributeDescriptionCount;
-    try {
-        pVertexAttributeDescriptions = internal::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
-    } catch (const std::bad_alloc& err) {
-        delete[] pVertexBindingDescriptions;
-        throw err;
-    }
+    pVertexAttributeDescriptions = internal::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
 }
 
 template<typename Vertex>
@@ -101,12 +93,7 @@ inline VertexInputStructure<Vertex>& VertexInputStructure<Vertex>::operator=(con
         pVertexBindingDescriptions = internal::copyArray(other.pVertexBindingDescriptions, 1);
         vertexAttributeDescriptionCount = other.vertexAttributeDescriptionCount;
         delete[] pVertexAttributeDescriptions;
-        try {
-            pVertexAttributeDescriptions = internal::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
-        } catch (const std::bad_alloc& err) {
-            delete[] pVertexBindingDescriptions;
-            throw err;
-        }
+        pVertexAttributeDescriptions = internal::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
     }
     return *this;
 }

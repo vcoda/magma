@@ -35,7 +35,7 @@ ViewportState::ViewportState() noexcept
 }
 
 ViewportState::ViewportState(float x, float y, float width, float height,
-    float minDepth /* 0 */, float maxDepth /* 1 */)
+    float minDepth /* 0 */, float maxDepth /* 1 */) noexcept
 {
     VkViewport viewport;
     viewport.x = x;
@@ -53,7 +53,7 @@ ViewportState::ViewportState(float x, float y, float width, float height,
 }
 
 ViewportState::ViewportState(float x, float y, const VkExtent2D& extent,
-    float minDepth /* 0 */, float maxDepth /* 1 */)
+    float minDepth /* 0 */, float maxDepth /* 1 */) noexcept
 {
     VkViewport viewport;
     viewport.x = x;
@@ -70,7 +70,7 @@ ViewportState::ViewportState(float x, float y, const VkExtent2D& extent,
 }
 
 ViewportState::ViewportState(uint32_t x, uint32_t y, uint32_t width, int32_t height,
-    float minDepth /* 0 */, float maxDepth /* 1 */)
+    float minDepth /* 0 */, float maxDepth /* 1 */) noexcept
 {
     VkViewport viewport;
     viewport.x = static_cast<float>(x);
@@ -88,7 +88,7 @@ ViewportState::ViewportState(uint32_t x, uint32_t y, uint32_t width, int32_t hei
 }
 
 ViewportState::ViewportState(const VkRect2D& vp, const VkRect2D& scissor,
-    float minDepth /* 0 */, float maxDepth /* 1 */)
+    float minDepth /* 0 */, float maxDepth /* 1 */) noexcept
 {
     VkViewport viewport;
     viewport.x = static_cast<float>(vp.offset.x);
@@ -100,7 +100,7 @@ ViewportState::ViewportState(const VkRect2D& vp, const VkRect2D& scissor,
     initialize(viewport, scissor);
 }
 
-ViewportState::ViewportState(const VkViewport& viewport)
+ViewportState::ViewportState(const VkViewport& viewport) noexcept
 {
     VkRect2D scissor;
     scissor.offset.x = static_cast<int32_t>(viewport.x);
@@ -110,7 +110,7 @@ ViewportState::ViewportState(const VkViewport& viewport)
     initialize(viewport, scissor);
 }
 
-ViewportState::ViewportState(const VkViewport& viewport, const VkRect2D& scissor)
+ViewportState::ViewportState(const VkViewport& viewport, const VkRect2D& scissor) noexcept
 {
     initialize(viewport, scissor);
 }
@@ -130,25 +130,19 @@ ViewportState::ViewportState(const std::vector<VkViewport>& viewports)
     initialize(viewports, scissors);
 }
 
-ViewportState::ViewportState(const std::vector<VkViewport>& viewports, const std::vector<VkRect2D>& scissors)
+ViewportState::ViewportState(const std::vector<VkViewport>& viewports, const std::vector<VkRect2D>& scissors) noexcept
 {
     initialize(viewports, scissors);
 }
 
-ViewportState::ViewportState(const ViewportState& other)
+ViewportState::ViewportState(const ViewportState& other) noexcept
 {
     internal::copy(this, &other);
     pViewports = internal::copyArray(other.pViewports, viewportCount);
-    try {
-        pScissors = internal::copyArray(other.pScissors, scissorCount);
-    } catch (const std::bad_alloc& exc)
-    {
-        delete[] pViewports;
-        throw exc;
-    }
+    pScissors = internal::copyArray(other.pScissors, scissorCount);
 }
 
-ViewportState& ViewportState::operator=(const ViewportState& other)
+ViewportState& ViewportState::operator=(const ViewportState& other) noexcept
 {
     if (this != &other)
     {
@@ -156,13 +150,7 @@ ViewportState& ViewportState::operator=(const ViewportState& other)
         delete[] pScissors;
         internal::copy(this, &other);
         pViewports = internal::copyArray(other.pViewports, viewportCount);
-        try {
-            pScissors = internal::copyArray(other.pScissors, scissorCount);
-        } catch (const std::bad_alloc& exc)
-        {
-            delete[] pViewports;
-            throw exc;
-        }
+        pScissors = internal::copyArray(other.pScissors, scissorCount);
     }
     return *this;
 }
@@ -210,7 +198,7 @@ bool ViewportState::operator==(const ViewportState& other) const noexcept
         internal::compareArrays(pScissors, other.pScissors, scissorCount);
 }
 
-void ViewportState::initialize(const VkViewport& viewport, const VkRect2D& scissor)
+void ViewportState::initialize(const VkViewport& viewport, const VkRect2D& scissor) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -221,7 +209,7 @@ void ViewportState::initialize(const VkViewport& viewport, const VkRect2D& sciss
     pScissors = internal::copyArray(&scissor, 1);
 }
 
-void ViewportState::initialize(const std::vector<VkViewport>& viewports, const std::vector<VkRect2D>& scissors)
+void ViewportState::initialize(const std::vector<VkViewport>& viewports, const std::vector<VkRect2D>& scissors) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
     pNext = nullptr;

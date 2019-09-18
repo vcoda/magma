@@ -49,11 +49,11 @@ namespace magma
     class VertexInputState : public VkPipelineVertexInputStateCreateInfo
     {
     public:
-        VertexInputState();
+        VertexInputState() noexcept;
         VertexInputState(const VertexInputBinding& binding,
-            const std::initializer_list<VertexInputAttribute>& attributes);
+            const std::initializer_list<VertexInputAttribute>& attributes) noexcept;
         VertexInputState(const std::initializer_list<VertexInputBinding>& bindings,
-            const std::initializer_list<VertexInputAttribute>& attributes);
+            const std::initializer_list<VertexInputAttribute>& attributes) noexcept;
         virtual ~VertexInputState();
         virtual uint32_t stride(uint32_t binding) const noexcept;
         std::size_t hash() const noexcept;

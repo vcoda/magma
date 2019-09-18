@@ -77,10 +77,10 @@ namespace magma
     struct ManagedColorBlendState final : ColorBlendState
     {
         ManagedColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
-            const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f});
-        ManagedColorBlendState(const ColorBlendState&);
-        ManagedColorBlendState(const ManagedColorBlendState&);
-        ManagedColorBlendState& operator=(const ManagedColorBlendState&);
+            const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f}) noexcept;
+        ManagedColorBlendState(const ColorBlendState&) noexcept;
+        ManagedColorBlendState(const ManagedColorBlendState&) noexcept;
+        ManagedColorBlendState& operator=(const ManagedColorBlendState&) noexcept;
         ~ManagedColorBlendState();
         std::size_t hash() const noexcept;
         bool operator==(const ManagedColorBlendState&) const noexcept;
