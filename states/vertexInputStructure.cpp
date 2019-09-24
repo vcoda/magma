@@ -60,7 +60,7 @@ const VertexInputStructure<Pos3fColor4f> pos3fColor4f(0, {
     {1, &Pos3fColor4f::attrib}});
 const VertexInputStructure<Pos3fColor4b> pos3fColor4b(0, {
     {0, &Pos3fColor4b::position},
-    {1, &Pos2fColor4b::attrib, normalized}});
+    {1, &Pos3fColor4b::attrib, normalized}});
 const VertexInputStructure<Pos3fNormal3f> pos3fNormal3f(0, {
     {0, &Pos3fNormal3f::position},
     {1, &Pos3fNormal3f::attrib}});
