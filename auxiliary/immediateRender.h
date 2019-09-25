@@ -91,10 +91,10 @@ namespace magma
         private:
             struct Vertex
             {
-                vertexlayout::Float4 position;
-                vertexlayout::Float4 normalPSize;
-                vertexlayout::Float4 color;
-                vertexlayout::Float2 texcoord;
+                vectors::float4 position;
+                vectors::float4 normalPSize;
+                vectors::float4 color;
+                vectors::float2 texcoord;
             };
 
             struct Transform

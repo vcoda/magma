@@ -16,24 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "../misc/vectorTypes.h"
 
 namespace magma
 {
     namespace vertexlayout
     {
-        /* Vector types. */
-
-        template<typename Type, int N>
-        struct Vector
-        {
-            Type v[N];
-        };
-
-        typedef Vector<float, 2> Float2;
-        typedef Vector<float, 3> Float3;
-        typedef Vector<float, 4> Float4;
-        typedef Vector<uint8_t, 4> Color;
-
         /* Templates for common vertex layouts. */
 
         template<typename Position,
@@ -54,23 +42,40 @@ namespace magma
             Attribute attrib;
         };
 
-        /* Typical vertex structures that are often used with basic primitive rasterization. */
+        /* Typical vertex structures with half float type. */
 
-        typedef Vertex<Float2, Float2> Pos2fTex2f;
-        typedef Vertex<Float2, Float3> Pos2fColor3f;
-        typedef Vertex<Float2, Float4> Pos2fColor4f;
-        typedef Vertex<Float2, Color> Pos2fColor4b;
+        typedef Vertex<vectors::half2, vectors::half2> Pos2hTex2h;
+        typedef Vertex<vectors::half2, vectors::half3> Pos2hColor3h;
+        typedef Vertex<vectors::half2, vectors::half4> Pos2hColor4h;
+        typedef Vertex<vectors::half2, vectors::ubyte4> Pos2hColor4b;
 
-        typedef Vertex<Float3, Float2> Pos3fTex2f;
-        typedef Vertex<Float3, Float3> Pos3fColor3f;
-        typedef Vertex<Float3, Float4> Pos3fColor4f;
-        typedef Vertex<Float3, Color> Pos3fColor4b;
+        typedef Vertex<vectors::half3, vectors::half2> Pos3hTex2h;
+        typedef Vertex<vectors::half3, vectors::half3> Pos3hColor3h;
+        typedef Vertex<vectors::half3, vectors::half4> Pos3hColor4h;
+        typedef Vertex<vectors::half3, vectors::ubyte4> Pos3hColor4b;
+        typedef Vertex<vectors::half3, vectors::half3> Pos3hNormal3h;
 
-        typedef Vertex<Float3, Float3> Pos3fNormal3f;
+        typedef LitVertex<vectors::half3, vectors::half3, vectors::half2> Pos3hNormal3hTex2h;
+        typedef LitVertex<vectors::half3, vectors::half3, vectors::half3> Pos3hNormal3hColor3h;
+        typedef LitVertex<vectors::half3, vectors::half3, vectors::half4> Pos3hNormal3hColor4h;
+        typedef LitVertex<vectors::half3, vectors::half3, vectors::ubyte4> Pos3hNormal3hColor4b;
 
-        typedef LitVertex<Float3, Float3, Float2> Pos3fNormal3fTex2f;
-        typedef LitVertex<Float3, Float3, Float3> Pos3fNormal3fColor3f;
-        typedef LitVertex<Float3, Float3, Float4> Pos3fNormal3fColor4f;
-        typedef LitVertex<Float3, Float3, Color> Pos3fNormal3fColor4b;
+        /* Typical vertex structures with float type. */
+
+        typedef Vertex<vectors::float2, vectors::float2> Pos2fTex2f;
+        typedef Vertex<vectors::float2, vectors::float3> Pos2fColor3f;
+        typedef Vertex<vectors::float2, vectors::float4> Pos2fColor4f;
+        typedef Vertex<vectors::float2, vectors::ubyte4> Pos2fColor4b;
+
+        typedef Vertex<vectors::float3, vectors::float2> Pos3fTex2f;
+        typedef Vertex<vectors::float3, vectors::float3> Pos3fColor3f;
+        typedef Vertex<vectors::float3, vectors::float4> Pos3fColor4f;
+        typedef Vertex<vectors::float3, vectors::ubyte4> Pos3fColor4b;
+        typedef Vertex<vectors::float3, vectors::float3> Pos3fNormal3f;
+
+        typedef LitVertex<vectors::float3, vectors::float3, vectors::float2> Pos3fNormal3fTex2f;
+        typedef LitVertex<vectors::float3, vectors::float3, vectors::float3> Pos3fNormal3fColor3f;
+        typedef LitVertex<vectors::float3, vectors::float3, vectors::float4> Pos3fNormal3fColor4f;
+        typedef LitVertex<vectors::float3, vectors::float3, vectors::ubyte4> Pos3fNormal3fColor4b;
     } // namespace vertexlayout
 } // namespace magma

@@ -88,10 +88,16 @@ namespace magma
 
         /* Built-in specializations for our vector types. */
 
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::Float2, false, VK_FORMAT_R32G32_SFLOAT)
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::Float3, false, VK_FORMAT_R32G32B32_SFLOAT)
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::Float4, false, VK_FORMAT_R32G32B32A32_SFLOAT)
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::Color, true, VK_FORMAT_R8G8B8A8_UNORM)
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vectors::ubyte4, true, VK_FORMAT_R8G8B8A8_UNORM)
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vectors::half2, false, VK_FORMAT_R16G16_SFLOAT)
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vectors::half3, false, VK_FORMAT_R16G16B16_SFLOAT)
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vectors::half4, false, VK_FORMAT_R16G16B16A16_SFLOAT)
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vectors::float2, false, VK_FORMAT_R32G32_SFLOAT)
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vectors::float3, false, VK_FORMAT_R32G32B32_SFLOAT)
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vectors::float4, false, VK_FORMAT_R32G32B32A32_SFLOAT)
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vectors::double2, false, VK_FORMAT_R64G64_SFLOAT)
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vectors::double3, false, VK_FORMAT_R64G64B64_SFLOAT)
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vectors::double4, false, VK_FORMAT_R64G64B64A64_SFLOAT)
     } // namespace specialization
 } // namespace magma
 
@@ -101,9 +107,33 @@ namespace magma
     {
         extern const VertexInputStructure<int> nullVertexInput;
 
-        extern const VertexInputStructure<vertexlayout::Float2> pos2f;
-        extern const VertexInputStructure<vertexlayout::Float3> pos3f;
-        extern const VertexInputStructure<vertexlayout::Float4> pos4f;
+        /* Vertex input states with half float type. */
+
+        extern const VertexInputStructure<vectors::half2> pos2h;
+        extern const VertexInputStructure<vectors::half3> pos3h;
+        extern const VertexInputStructure<vectors::half4> pos4h;
+
+        extern const VertexInputStructure<vertexlayout::Pos2hTex2h> pos2hTex2h;
+        extern const VertexInputStructure<vertexlayout::Pos2hColor3h> pos2hColor3h;
+        extern const VertexInputStructure<vertexlayout::Pos2hColor4h> pos2hColor4h;
+        extern const VertexInputStructure<vertexlayout::Pos2hColor4b> pos2hColor4b;
+
+        extern const VertexInputStructure<vertexlayout::Pos3hTex2h> pos3hTex2h;
+        extern const VertexInputStructure<vertexlayout::Pos3hColor3h> pos3hColor3h;
+        extern const VertexInputStructure<vertexlayout::Pos3hColor4h> pos3hColor4h;
+        extern const VertexInputStructure<vertexlayout::Pos3hColor4b> pos3hColor4b;
+        extern const VertexInputStructure<vertexlayout::Pos3hNormal3h> pos3hNormal3h;
+
+        extern const VertexInputStructure<vertexlayout::Pos3hNormal3hTex2h> pos3hNormal3hTex2h;
+        extern const VertexInputStructure<vertexlayout::Pos3hNormal3hColor3h> pos3hNormal3hColor3h;
+        extern const VertexInputStructure<vertexlayout::Pos3hNormal3hColor4h> pos3hNormal3hColor4h;
+        extern const VertexInputStructure<vertexlayout::Pos3hNormal3hColor4b> pos3hNormal3hColor4b;
+
+        /* Vertex input states with float type. */
+
+        extern const VertexInputStructure<vectors::float2> pos2f;
+        extern const VertexInputStructure<vectors::float3> pos3f;
+        extern const VertexInputStructure<vectors::float4> pos4f;
 
         extern const VertexInputStructure<vertexlayout::Pos2fTex2f> pos2fTex2f;
         extern const VertexInputStructure<vertexlayout::Pos2fColor3f> pos2fColor3f;
