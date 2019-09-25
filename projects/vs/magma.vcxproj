@@ -191,6 +191,7 @@
     <ClInclude Include="..\..\misc\pushConstants.h" />
     <ClInclude Include="..\..\misc\scissor.h" />
     <ClInclude Include="..\..\misc\scopedDebugMarker.h" />
+    <ClInclude Include="..\..\misc\vectorTypes.h" />
     <ClInclude Include="..\..\misc\viewport.h" />
     <ClInclude Include="..\..\objects\accelerationStructure.h" />
     <ClInclude Include="..\..\objects\buffer.h" />

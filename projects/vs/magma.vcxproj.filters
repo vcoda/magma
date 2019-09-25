@@ -450,6 +450,9 @@
     <ClInclude Include="..\..\states\vertexLayouts.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\misc\vectorTypes.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
