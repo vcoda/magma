@@ -41,6 +41,10 @@ namespace magma
         void *map(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE,
             VkMemoryMapFlags flags = 0) noexcept;
+        template<typename Type>
+        Type *map(VkDeviceSize offset = 0,
+            VkDeviceSize size = VK_WHOLE_SIZE,
+            VkMemoryMapFlags flags = 0) noexcept;
         void unmap() noexcept;
         bool flushMappedRange(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
@@ -54,3 +58,5 @@ namespace magma
         VkDeviceSize size;
     };
 } // namespace magma
+
+#include "deviceMemory.inl"
