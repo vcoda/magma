@@ -19,17 +19,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* https://www.khronos.org/registry/vulkan/ */
-
-    class Extensions
+    class Layers
     {
     public:
-        bool hasExtension(const char *name) const noexcept;
+        bool hasLayer(const char *name) const noexcept;
 
     protected:
-        Extensions(const std::vector<VkExtensionProperties>&);
+        Layers(const std::vector<VkLayerProperties>&);
 
     private:
-        std::map<std::string, uint32_t> extensions;
+        std::map<std::string, uint32_t> layers;
     };
 } // namespace magma

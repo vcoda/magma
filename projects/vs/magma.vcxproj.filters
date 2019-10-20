@@ -453,6 +453,9 @@
     <ClInclude Include="..\..\misc\vectorTypes.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\extensions\layers.h">
+      <Filter>Header Files\extensions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -709,6 +712,9 @@
     </ClCompile>
     <ClCompile Include="..\..\states\vertexInputStructure.cpp">
       <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extensions\layers.cpp">
+      <Filter>Source Files\extensions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

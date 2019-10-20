@@ -113,6 +113,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "misc/viewport.h"
 
 #include "extensions/instanceExtensions.h"
+#include "extensions/instanceLayers.h"
 #include "extensions/physicalDeviceExtensions.h"
 
 #include "auxiliary/blitRectangle.h"

@@ -29,6 +29,7 @@ MAGMA_OBJS= \
 	extensions/extensions.o \
 	extensions/instanceExtensions.o \
 	extensions/instanceLayers.o \
+	extensions/layers.o \
 	extensions/physicalDeviceExtensions.o \
 	\
 	helpers/executeCommandBuffer.o \

@@ -158,6 +158,7 @@
     <ClInclude Include="..\..\descriptors\descriptors.h" />
     <ClInclude Include="..\..\descriptors\subpass.h" />
     <ClInclude Include="..\..\extensions\instanceLayers.h" />
+    <ClInclude Include="..\..\extensions\layers.h" />
     <ClInclude Include="..\..\extensions\physicalDeviceExtensions.h" />
     <ClInclude Include="..\..\extensions\extensions.h" />
     <ClInclude Include="..\..\extensions\instanceExtensions.h" />
@@ -280,6 +281,7 @@
     <ClCompile Include="..\..\descriptors\subpass.cpp" />
     <ClCompile Include="..\..\extensions\instanceExtensions.cpp" />
     <ClCompile Include="..\..\extensions\instanceLayers.cpp" />
+    <ClCompile Include="..\..\extensions\layers.cpp" />
     <ClCompile Include="..\..\extensions\physicalDeviceExtensions.cpp" />
     <ClCompile Include="..\..\extensions\extensions.cpp" />
     <ClCompile Include="..\..\helpers\executeCommandBuffer.cpp" />
