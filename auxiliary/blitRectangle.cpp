@@ -52,7 +52,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         std::move(allocator))
 {}
 
-BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass, 
+BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     const PipelineShaderStage& vertexShader, const PipelineShaderStage& fragmentShader,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     renderPass(std::move(renderPass))
@@ -62,7 +62,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     const bool NV_fill_rectangle = physicalDevice->checkExtensionSupport("VK_NV_fill_rectangle");
     const bool IMG_filter_cubic = physicalDevice->checkExtensionSupport("VK_IMG_filter_cubic");
     // Descriptor set for single image view in fragment shader
-    const Descriptor imageSampler(descriptors::CombinedImageSampler(1));  
+    const Descriptor imageSampler(descriptors::CombinedImageSampler(1));
     descriptorPool = std::make_shared<DescriptorPool>(device, 1, std::vector<Descriptor>{imageSampler}, false, allocator);
     descriptorSetLayout = std::make_shared<DescriptorSetLayout>(device, bindings::FragmentStageBinding(0, imageSampler), 0, allocator);
     descriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
@@ -86,7 +86,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         this->renderPass,
         0, nullptr, 0, allocator);
     for (const auto& attachment : this->renderPass->getAttachments())
-    {   
+    {
         if (VK_ATTACHMENT_LOAD_OP_CLEAR == attachment.loadOp)
         {   // The Vulkan spec states: clearValueCount must be greater than the largest attachment index in renderPass that specifies a loadOp
             // (or stencilLoadOp, if the attachment has a depth/stencil format) of VK_ATTACHMENT_LOAD_OP_CLEAR.
@@ -96,9 +96,9 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     }
 }
 
-void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::shared_ptr<ImageView>& bltSrc, 
+void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::shared_ptr<ImageView>& bltSrc,
     const std::shared_ptr<CommandBuffer>& cmdBuffer, VkFilter filter,
-    bool negativeViewportHeight /* false */, const char *labelName /* nullptr */, 
+    bool negativeViewportHeight /* false */, const char *labelName /* nullptr */,
     uint32_t labelColor /* 0xFFFFFFFF */) const noexcept
 {
     MAGMA_ASSERT(bltDst);
@@ -106,8 +106,8 @@ void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::
     MAGMA_ASSERT(cmdBuffer);
     if (bltSrc != prevBltSrc || filter != prevFilter)
     {
-        descriptorSet->update(0, bltSrc, 
-            (VK_FILTER_NEAREST == filter) ? nearestSampler : 
+        descriptorSet->update(0, bltSrc,
+            (VK_FILTER_NEAREST == filter) ? nearestSampler :
             ((VK_FILTER_LINEAR == filter) ? bilinearSampler : cubicSampler));
         prevBltSrc = bltSrc;
         prevFilter = filter;
@@ -129,7 +129,7 @@ void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::
     cmdBuffer->endRenderPass();
 }
 
-std::shared_ptr<ShaderModule> BlitRectangle::createShader(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator, 
+std::shared_ptr<ShaderModule> BlitRectangle::createShader(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator,
     bool vertexShader) const
 {
     constexpr VkShaderModuleCreateFlags flags = 0;

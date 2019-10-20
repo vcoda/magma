@@ -515,10 +515,10 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<Buffer>& in
     {
         vkCmdBuildAccelerationStructureNV(handle,
             &dst->getInfo(),
-            MAGMA_OPTIONAL_HANDLE(instanceData), 
+            MAGMA_OPTIONAL_HANDLE(instanceData),
             instanceOffset,
             MAGMA_BOOLEAN(update),
-            *dst, 
+            *dst,
             MAGMA_OPTIONAL_HANDLE(src),
             *scratch, scratchOffset);
     }

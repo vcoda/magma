@@ -54,7 +54,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
-    /* Depth map comparison sampler. Used to enable comparison against 
+    /* Depth map comparison sampler. Used to enable comparison against
        a reference value during lookups. */
 
     class DepthSampler : public Sampler

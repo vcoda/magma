@@ -178,7 +178,7 @@ constexpr bool Format::floatingPoint() const
 }
 
 constexpr bool Format::sRGB() const
-{   
+{
     switch (format)
     {
     case VK_FORMAT_R8_SRGB:
@@ -219,7 +219,7 @@ constexpr bool Format::sRGB() const
         return false;
     }
 }
-    
+
 constexpr size_t Format::size() const
 {
     switch (format) // TODO: add all other formats in the future.

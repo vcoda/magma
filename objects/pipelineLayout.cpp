@@ -102,7 +102,7 @@ PipelineLayout::~PipelineLayout()
 std::size_t PipelineLayout::getHash() const noexcept
 {
     size_t hash = this->hash;
-    for (const std::shared_ptr<DescriptorSetLayout>& layout : setLayouts) 
+    for (const std::shared_ptr<DescriptorSetLayout>& layout : setLayouts)
         internal::hashCombine(hash, layout->getHash());
     return hash;
 }

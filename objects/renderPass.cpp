@@ -103,8 +103,8 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     MAGMA_THROW_FAILURE(create, "failed to create render pass");
 }
 
-RenderPass::RenderPass(std::shared_ptr<Device> device, 
-    const std::initializer_list<AttachmentDescription>& attachments, 
+RenderPass::RenderPass(std::shared_ptr<Device> device,
+    const std::initializer_list<AttachmentDescription>& attachments,
     const std::initializer_list<Subpass>& subpasses,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator))

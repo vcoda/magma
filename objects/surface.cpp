@@ -190,13 +190,13 @@ MetalSurface::MetalSurface(std::shared_ptr<const Instance> instance,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Surface(std::move(instance), std::move(allocator))
 {
-    VkMetalSurfaceCreateInfoEXT info;    
+    VkMetalSurfaceCreateInfoEXT info;
     info.sType = VK_STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT;
     info.pNext = nullptr;
     info.flags = flags;
-    info.pLayer = layer;            
+    info.pLayer = layer;
     const VkResult create = vkCreateMetalSurfaceEXT(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create Metal surface");    
+    MAGMA_THROW_FAILURE(create, "failed to create Metal surface");
 }
 
 #endif // VK_USE_PLATFORM_METAL_EXT

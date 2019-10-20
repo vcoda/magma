@@ -36,7 +36,7 @@ constexpr AnisotropicSamplerState::AnisotropicSamplerState(VkFilter magFilter, V
     SamplerState(magFilter, minFilter, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode)
 {
     anisotropyEnable = true;
-    // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 
+    // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between
     // 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive.
     if (maxAnisotropy < 1.f)
         maxAnisotropy = 1.f;

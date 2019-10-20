@@ -30,7 +30,7 @@ namespace magma
         class RefCountChecker
         {
         public:
-            RefCountChecker(): 
+            RefCountChecker():
                 refCount(0L) {}
             ~RefCountChecker()
             {

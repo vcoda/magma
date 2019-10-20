@@ -56,14 +56,14 @@ inline void ImmediateRender::setTransform(const float transform[16]) noexcept
     memcpy(this->transform.m, transform, sizeof(float) * 16);
 }
 
-inline uint32_t ImmediateRender::getVertexCount() const noexcept 
-{ 
-    return vertexCount; 
+inline uint32_t ImmediateRender::getVertexCount() const noexcept
+{
+    return vertexCount;
 }
 
-inline uint32_t ImmediateRender::getPrimitiveCount() const noexcept 
-{ 
-    return MAGMA_COUNT(primitives); 
+inline uint32_t ImmediateRender::getPrimitiveCount() const noexcept
+{
+    return MAGMA_COUNT(primitives);
 }
 
 inline void ImmediateRender::normal(float x, float y, float z) noexcept

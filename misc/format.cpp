@@ -55,17 +55,17 @@ size_t Format::blockCompressedSize() const noexcept
     // ATI1
     case VK_FORMAT_BC4_UNORM_BLOCK:
     case VK_FORMAT_BC4_SNORM_BLOCK:
-        // Assuming a 4x4 texture using the largest data format possible, 
+        // Assuming a 4x4 texture using the largest data format possible,
         // this compression technique reduces the memory required from
         // 16 bytes to 8 bytes.
         return 64/8;
     // ATI2
     case VK_FORMAT_BC5_UNORM_BLOCK:
     case VK_FORMAT_BC5_SNORM_BLOCK:
-        // Total storage is 128 bits per 4x4 block once both 
+        // Total storage is 128 bits per 4x4 block once both
         // source components are factored in. In an uncompressed
-        // scheme with similar 8-bit precision, the source data 
-        // is 32 8-bit values for the same area, occupying 256 bits. 
+        // scheme with similar 8-bit precision, the source data
+        // is 32 8-bit values for the same area, occupying 256 bits.
         // The algorithm therefore produces a 2:1 compression ratio.
         return 128/8;
     // https://docs.microsoft.com/en-us/windows/win32/direct3d11/bc6h-format

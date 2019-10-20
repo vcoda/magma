@@ -28,7 +28,7 @@ namespace magma
 {
 namespace helpers
 {
-bool executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool, 
+bool executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
     std::function<void(std::shared_ptr<CommandBuffer>)> callback,
     bool primaryLevel /* true */,
     VkQueueFlagBits queueType /* VK_QUEUE_GRAPHICS_BIT */,

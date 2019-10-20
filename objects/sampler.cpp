@@ -63,8 +63,8 @@ Sampler::~Sampler()
     vkDestroySampler(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
-LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state, 
-    float mipLodBias, float minLod, float maxLod, 
+LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state,
+    float mipLodBias, float minLod, float maxLod,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Sampler(std::move(device), std::move(allocator))
 {

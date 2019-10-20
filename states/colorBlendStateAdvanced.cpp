@@ -79,7 +79,7 @@ AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendState& 
     blendConstants[2] = other.blendConstants[2];
     blendConstants[3] = other.blendConstants[3];
 }
-        
+
 AdvancedColorBlendState& AdvancedColorBlendState::operator=(const AdvancedColorBlendState& other)
 {
     if (this != &other)

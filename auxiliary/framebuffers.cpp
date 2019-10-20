@@ -28,8 +28,8 @@ namespace magma
 {
 namespace aux
 {
-BaseFramebuffer::BaseFramebuffer(const VkExtent2D& extent) noexcept: 
-    extent(extent) 
+BaseFramebuffer::BaseFramebuffer(const VkExtent2D& extent) noexcept:
+    extent(extent)
 {}
 
 Framebuffer::Framebuffer(std::shared_ptr<Device> device,

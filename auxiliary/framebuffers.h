@@ -61,7 +61,7 @@ namespace magma
             virtual std::shared_ptr<const ImageView> getColorView() const noexcept override { return colorView; }
             virtual std::shared_ptr<Framebuffer> getFramebuffer() noexcept override { return framebuffer; }
             virtual std::shared_ptr<const Framebuffer> getFramebuffer() const noexcept override { return framebuffer; }
-            
+
         protected:
             explicit BaseFramebuffer(const VkExtent2D& extent) noexcept;
 
@@ -115,7 +115,7 @@ namespace magma
             virtual uint32_t getSampleCount() const noexcept override;
             virtual std::shared_ptr<ImageView> getColorView() noexcept override { return resolveView; }
             virtual std::shared_ptr<const ImageView> getColorView() const noexcept override { return resolveView; }
-            
+
         private:
             std::shared_ptr<ColorAttachment2D> color;
             std::shared_ptr<DepthStencilAttachment2D> depthStencil;

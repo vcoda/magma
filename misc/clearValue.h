@@ -24,10 +24,8 @@ namespace magma
 #ifndef _MSC_VER
         constexpr ClearValue(): value{} {}
 #endif
-        constexpr operator VkClearValue&()
-            { return value; }
-        constexpr operator const VkClearValue&() const
-            { return value; }
+        constexpr operator VkClearValue&() { return value; }
+        constexpr operator const VkClearValue&() const { return value; }
 
     protected:
         // C++ forbids inheritance from union.

@@ -97,7 +97,7 @@ namespace magma
         constexpr AttachmentDescription depthDontCareStoreAttachment(op::dontCareStore, op::dontCare, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
         constexpr AttachmentDescription depthLoadDontCareAttachment(op::loadDontCare, op::dontCare, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
         constexpr AttachmentDescription depthClearDontCareAttachment(op::clearDontCare, op::dontCare, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
-        
+
         constexpr AttachmentDescription depthLoadStoreShaderReadOnly(op::loadStore, op::dontCare, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);
         constexpr AttachmentDescription depthClearStoreShaderReadOnly(op::clearStore, op::dontCare, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);
         constexpr AttachmentDescription depthDontCareStoreShaderReadOnly(op::dontCareStore, op::dontCare, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);
@@ -109,7 +109,7 @@ namespace magma
         constexpr AttachmentDescription stencilDontCareStoreAttachment(op::dontCare, op::dontCareStore, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
         constexpr AttachmentDescription stencilLoadDontCareAttachment(op::dontCare, op::loadDontCare, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
         constexpr AttachmentDescription stencilClearDontCareAttachment(op::dontCare, op::clearDontCare, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
-        
+
         constexpr AttachmentDescription stencilLoadStoreShaderReadOnly(op::dontCare, op::loadStore, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);
         constexpr AttachmentDescription stencilClearStoreShaderReadOnly(op::dontCare, op::clearStore, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);
         constexpr AttachmentDescription stencilDontCareStoreShaderReadOnly(op::dontCare, op::dontCareStore, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);

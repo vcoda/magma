@@ -56,7 +56,7 @@ namespace magma
         uint32_t getBaseMipLevel() const noexcept { return baseMipLevel; }
         uint32_t getMipLevelCount() const noexcept { return levelCount; }
         uint32_t getBaseArrayLayer() const noexcept { return baseArrayLayer; }
-        uint32_t getArrayLayerCount() const noexcept { return layerCount; } 
+        uint32_t getArrayLayerCount() const noexcept { return layerCount; }
 
     private:
         std::shared_ptr<Image> image;

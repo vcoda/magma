@@ -37,7 +37,7 @@ inline void Object::operator delete(void *ptr)
 #endif
     if (objectAllocator)
         objectAllocator->free(ptr);
-    else 
+    else
         free(ptr);
 }
 } // namespace magma

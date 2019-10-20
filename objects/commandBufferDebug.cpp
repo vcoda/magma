@@ -182,7 +182,7 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     return beginResult;
 }
 
-void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, 
+void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
     const std::vector<ClearValue>& clearValues, const char *renderPassName, uint32_t renderPassColor,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
@@ -196,7 +196,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
 #endif // MAGMA_DEBUG
 }
 
-void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, 
+void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
     uint32_t deviceMask, const std::vector<ClearValue>& clearValues, const char *renderPassName, uint32_t renderPassColor,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {

@@ -34,7 +34,7 @@ ImageView::ImageView(std::shared_ptr<Image> resource,
 {}
 
 ImageView::ImageView(std::shared_ptr<Image> resource,
-    uint32_t baseMipLevel, 
+    uint32_t baseMipLevel,
     uint32_t levelCount /* VK_REMAINING_MIP_LEVELS */,
     uint32_t baseArrayLayer /* 0 */,
     uint32_t layerCount /* VK_REMAINING_ARRAY_LAYERS */,

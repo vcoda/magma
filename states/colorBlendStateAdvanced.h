@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* This extension adds a number of "advanced" blending operations that can be 
+    /* This extension adds a number of "advanced" blending operations that can be
        used to perform new color blending operations, many of which are more
        complex than the standard blend modes provided by unextended Vulkan. */
 
@@ -37,7 +37,7 @@ namespace magma
         constexpr bool operator==(const AdvancedColorBlendAttachmentState&) const;
     };
 
-    /* For explanation, see 
+    /* For explanation, see
        https://www.khronos.org/registry/OpenGL/extensions/NV/NV_blend_equation_advanced.txt */
 
     struct AdvancedColorBlendState final : ColorBlendState

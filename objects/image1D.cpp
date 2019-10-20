@@ -27,26 +27,26 @@ namespace magma
 {
 Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width, uint32_t mipLevels,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1}, 
-        mipLevels, 
+    Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
+        mipLevels,
         1, // arrayLayers
         1, // samples
-        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
+        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
         std::move(allocator))
 {}
 
-Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width, 
-    std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, const ImageMipmapLayout& mipOffsets, 
-    std::shared_ptr<CommandBuffer> cmdBuffer, 
+Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width,
+    std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, const ImageMipmapLayout& mipOffsets,
+    std::shared_ptr<CommandBuffer> cmdBuffer,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool flush /* true */):
-    Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1}, 
+    Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
         MAGMA_COUNT(mipOffsets), // mipLevels
         1, // arrayLayers
         1, // samples
-        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
-        0, 
+        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+        0,
         std::move(allocator))
 {
     const auto copyRegions = buildCopyRegions(mipOffsets, bufferOffset);
@@ -54,8 +54,8 @@ Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width
 }
 
 Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width,
-    const ImageMipmapData& mipData, const ImageMipmapLayout& mipSizes, 
-    std::shared_ptr<CommandBuffer> cmdBuffer, 
+    const ImageMipmapData& mipData, const ImageMipmapLayout& mipSizes,
+    std::shared_ptr<CommandBuffer> cmdBuffer,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},

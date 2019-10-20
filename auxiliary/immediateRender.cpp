@@ -191,7 +191,7 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTop
     std::shared_ptr<GraphicsPipeline> basePipeline = lookupBasePipeline();
     const std::size_t hash = computePipelineHash(vertexInputState, *inputAssemblyStates[topology], basePipeline);
     // Fast lookup for existing pipeline
-    auto it = pipelines.find(hash); 
+    auto it = pipelines.find(hash);
     if (it != pipelines.end())
         pipeline = it->second.pipeline;
     else
@@ -228,7 +228,7 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupBasePipeline() const no
             (it.second.renderStates->multisample == this->renderStates.multisample) &&
             (it.second.renderStates->depthStencil == this->renderStates.depthStencil) &&
             (it.second.renderStates->colorBlend == this->renderStates.colorBlend))
-        {   
+        {
             return it.second.pipeline;
         }
     }

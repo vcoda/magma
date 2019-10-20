@@ -24,12 +24,12 @@ namespace magma
 
     struct StencilOpState : VkStencilOpState
     {
-        constexpr StencilOpState(VkStencilOp failOp, 
+        constexpr StencilOpState(VkStencilOp failOp,
             VkStencilOp passOp,
-            VkStencilOp depthFailOp, 
+            VkStencilOp depthFailOp,
             VkCompareOp compareOp,
-            uint32_t compareMask = 0x0, 
-            uint32_t writeMask = 0x0, 
+            uint32_t compareMask = 0x0,
+            uint32_t writeMask = 0x0,
             uint32_t reference = 0):
             VkStencilOpState{failOp, passOp, depthFailOp, compareOp, compareMask, writeMask, reference}
         {}

@@ -52,7 +52,7 @@ namespace magma
         VkObjectType objectType;
         std::shared_ptr<Device> device;
         std::shared_ptr<IAllocator> allocator;
-        
+
     private:
         static std::shared_ptr<IObjectAllocator> objectAllocator;
         static std::atomic<int64_t> allocCount;
