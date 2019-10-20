@@ -1,13 +1,13 @@
 namespace magma
 {
-template<typename Vertex, typename Type, bool unsignedNorm /* false */>
+template<typename Vertex, typename Type, bool normalized /* false */>
 inline VertexInputAttribute::VertexInputAttribute(uint32_t location, Type Vertex::*attrib,
-    normalized<unsignedNorm> /* Deduce <unsignedNorm> template parameter */) noexcept
+    Normalized<normalized> /* deduce template <normalized> parameter */) noexcept
 {
     this->location = location;
     binding = 0;
-    format = specialization::VertexAttribute<Type, unsignedNorm>().getFormat();
-    ptrdiff_t diff = reinterpret_cast<ptrdiff_t>(&(((Vertex *)0)->*attrib));
+    format = specialization::VertexAttribute<Type, normalized>().getFormat(); // constexpr value
+    const ptrdiff_t diff = reinterpret_cast<ptrdiff_t>(&(((Vertex *)0)->*attrib));
     offset = static_cast<uint32_t>(diff);
 }
 

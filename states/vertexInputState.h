@@ -30,17 +30,18 @@ namespace magma
 
     struct VertexInputAttribute : VkVertexInputAttributeDescription
     {
-        // Workaround to deduce constructor's <bool unsignedNorm> template parameter
-        template<bool normalized> struct normalized {};
+        template<bool normalized>
+        struct Normalized {}; // Deduce constructor's template <bool normalized> parameter.
+
         VertexInputAttribute() = default;
         constexpr VertexInputAttribute(uint32_t location,
             uint32_t binding,
             VkFormat format,
             uint32_t offset);
-        template<typename Vertex, typename Type, bool unsignedNorm = false>
+        template<typename Vertex, typename Type, bool normalized = false>
         VertexInputAttribute(uint32_t location,
             Type Vertex::*attrib,
-            normalized<unsignedNorm> norm = normalized<unsignedNorm>()) noexcept;
+            Normalized<normalized> normalize = Normalized<false>()) noexcept;
     };
 
     /* Applications specify vertex input attribute and vertex input binding descriptions

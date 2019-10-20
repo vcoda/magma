@@ -26,7 +26,7 @@ using namespace vertexlayout;
 
 namespace renderstates
 {
-static const magma::VertexInputAttribute::normalized<true> normalized;
+static constexpr VertexInputAttribute::Normalized<true> normalized;
 
 const VertexInputStructure<int> nullVertexInput;
 
