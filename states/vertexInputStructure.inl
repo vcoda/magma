@@ -1,32 +1,5 @@
 namespace magma
 {
-namespace specialization
-{
-template<VkFormat format>
-constexpr VkFormat AttributeFormat<format>::getFormat() const
-{
-    return format;
-}
-
-template<typename Type, bool normalized /* false */>
-constexpr VertexAttribute<Type, normalized>::VertexAttribute()
-{
-    static_assert(false, "vertex attribute type not specialized");
-}
-
-template<typename Type, bool normalized /* false */>
-constexpr std::size_t VertexAttribute<Type, normalized>::getSize() const
-{
-    return sizeof(Type);
-}
-
-template<typename Type, bool normalized /* false */>
-constexpr bool VertexAttribute<Type, normalized>::isNormalized() const
-{
-    return normalized;
-}
-} // namespace specialization
-
 template<typename Vertex, typename Type, bool unsignedNorm /* false */>
 inline VertexInputAttribute::VertexInputAttribute(uint32_t location, Type Vertex::*attrib,
     normalized<unsignedNorm> /* Deduce <unsignedNorm> template parameter */) noexcept

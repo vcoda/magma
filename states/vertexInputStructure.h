@@ -51,7 +51,7 @@ namespace magma
         template<VkFormat format>
         struct AttributeFormat
         {
-            constexpr VkFormat getFormat() const;
+            constexpr VkFormat getFormat() const { return format; }
         };
 
         /* User have to specialize this template for concrete type.
@@ -61,9 +61,9 @@ namespace magma
         template<typename Type, bool normalized = false>
         struct VertexAttribute : AttributeFormat<VK_FORMAT_UNDEFINED>
         {
-            constexpr VertexAttribute();
-            constexpr std::size_t getSize() const;
-            constexpr bool isNormalized() const;
+            constexpr VertexAttribute() { static_assert(false, "vertex attribute type not specialized"); }
+            constexpr std::size_t getSize() const { return sizeof(Type); }
+            constexpr bool hasNormalization() const { return normalized; }
         };
 
         /* Built-in specializations for basic machine types. */
