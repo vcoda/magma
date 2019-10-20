@@ -13,9 +13,22 @@ inline VertexInputAttribute::VertexInputAttribute(uint32_t location, Type Vertex
 
 template<typename Vertex>
 inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, const VertexInputAttribute& attribute,
-    VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */):
-    VertexInputStructure<Vertex>(binding, {attribute}, inputRate)
-{}
+    VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */)
+{
+    VkVertexInputBindingDescription *vertexBindingDescription = new VkVertexInputBindingDescription[1];
+    vertexBindingDescription->binding = binding;
+    vertexBindingDescription->stride = sizeof(Vertex);
+    vertexBindingDescription->inputRate = inputRate;
+    VkVertexInputAttributeDescription *vertexAttributeDescription = internal::copyArray(&attribute, 1);
+    vertexAttributeDescription->binding = binding;
+    sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+    pNext = nullptr;
+    flags = 0;
+    vertexBindingDescriptionCount = 1;
+    pVertexBindingDescriptions = vertexBindingDescription;
+    vertexAttributeDescriptionCount = 1;
+    pVertexAttributeDescriptions = vertexAttributeDescription;
+}
 
 template<typename Vertex>
 inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, const std::initializer_list<VertexInputAttribute>& attributes,
