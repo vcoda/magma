@@ -267,6 +267,7 @@
     <ClInclude Include="..\..\states\vertexLayouts.h" />
     <ClInclude Include="..\..\states\viewportState.h" />
     <ClInclude Include="..\..\states\colorWriteMask.h" />
+    <ClInclude Include="packedType.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp" />
