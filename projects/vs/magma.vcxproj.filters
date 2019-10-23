@@ -456,7 +456,7 @@
     <ClInclude Include="..\..\extensions\layers.h">
       <Filter>Header Files\extensions</Filter>
     </ClInclude>
-    <ClInclude Include="packedType.h">
+    <ClInclude Include="..\..\auxiliary\packedTypes.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
   </ItemGroup>

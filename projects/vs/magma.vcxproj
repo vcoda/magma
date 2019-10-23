@@ -149,6 +149,7 @@
     <ClInclude Include="..\..\auxiliary\framebuffers.h" />
     <ClInclude Include="..\..\auxiliary\immediateRender.h" />
     <ClInclude Include="..\..\auxiliary\mipmapGenerator.h" />
+    <ClInclude Include="..\..\auxiliary\packedTypes.h" />
     <ClInclude Include="..\..\auxiliary\shaderCompiler.h" />
     <ClInclude Include="..\..\barriers\bufferMemoryBarrier.h" />
     <ClInclude Include="..\..\barriers\globalMemoryBarrier.h" />
@@ -267,7 +268,6 @@
     <ClInclude Include="..\..\states\vertexLayouts.h" />
     <ClInclude Include="..\..\states\viewportState.h" />
     <ClInclude Include="..\..\states\colorWriteMask.h" />
-    <ClInclude Include="packedType.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp" />
