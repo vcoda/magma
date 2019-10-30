@@ -36,6 +36,8 @@ namespace magma
     {
     public:
         ~Image();
+        VkDeviceSize getSize() const noexcept { return size; }
+        VkDeviceSize getOffset() const noexcept { return offset; }
         VkImageType getType() const noexcept { return imageType; }
         VkFormat getFormat() const noexcept { return format; }
         VkImageLayout getLayout() const noexcept { return layout; }
@@ -72,6 +74,17 @@ namespace magma
             VkImageUsageFlags usage,
             VkImageCreateFlags flags,
             std::shared_ptr<IAllocator> allocator);
+        explicit Image(std::shared_ptr<DeviceMemory> memory,
+            VkDeviceSize offset,
+            VkImageType imageType,
+            VkFormat format,
+            const VkExtent3D& extent,
+            uint32_t mipLevels,
+            uint32_t arrayLayers,
+            uint32_t samples,
+            VkImageUsageFlags usage,
+            VkImageCreateFlags flags,
+            std::shared_ptr<IAllocator> allocator);
         explicit Image(std::shared_ptr<Device> device,
             VkImage handle,
             VkImageType imageType,
@@ -87,6 +100,8 @@ namespace magma
             bool flush = true);
 
     protected:
+        VkDeviceSize size;
+        VkDeviceSize offset;
         VkImageType imageType;
         VkFormat format;
         VkImageLayout layout;

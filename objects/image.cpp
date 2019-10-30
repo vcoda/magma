@@ -36,6 +36,8 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     VkImageUsageFlags usage, VkImageCreateFlags flags,
     std::shared_ptr<IAllocator> allocator):
     NonDispatchable(VK_OBJECT_TYPE_IMAGE, std::move(device), std::move(allocator)),
+    size(0),
+    offset(0),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
@@ -77,9 +79,65 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     MAGMA_THROW_FAILURE(create, "failed to create image");
     VkMemoryRequirements memoryRequirements;
     vkGetImageMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
+    size = memoryRequirements.size;
     std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(
         this->device, memoryRequirements.size, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
     bindMemory(memory);
+}
+
+Image::Image(std::shared_ptr<DeviceMemory> memory, VkDeviceSize offset,
+    VkImageType imageType, VkFormat format,
+    const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
+    VkImageUsageFlags usage, VkImageCreateFlags flags,
+    std::shared_ptr<IAllocator> allocator):
+    NonDispatchable(VK_OBJECT_TYPE_IMAGE, std::move(device), std::move(allocator)),
+    size(0),
+    offset(offset),
+    imageType(imageType),
+    format(format),
+    layout(VK_IMAGE_LAYOUT_UNDEFINED),
+    extent(extent),
+    mipLevels(mipLevels),
+    arrayLayers(arrayLayers),
+    samples(samples),
+    usage(usage),
+    flags(flags)
+{
+    VkImageCreateInfo info;
+    info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+    info.pNext = nullptr;
+    info.flags = flags;
+    info.imageType = imageType;
+    info.format = format;
+    info.extent = extent;
+    info.mipLevels = mipLevels;
+    info.arrayLayers = arrayLayers;
+    switch (samples)
+    {
+    case 1: info.samples = VK_SAMPLE_COUNT_1_BIT; break;
+    case 2: info.samples = VK_SAMPLE_COUNT_2_BIT; break;
+    case 4: info.samples = VK_SAMPLE_COUNT_4_BIT; break;
+    case 8: info.samples = VK_SAMPLE_COUNT_8_BIT; break;
+    case 16: info.samples = VK_SAMPLE_COUNT_16_BIT; break;
+    case 32: info.samples = VK_SAMPLE_COUNT_32_BIT; break;
+    case 64: info.samples = VK_SAMPLE_COUNT_64_BIT; break;
+    default:
+        MAGMA_THROW("invalid <samples> parameter");
+    }
+    info.tiling = VK_IMAGE_TILING_OPTIMAL;
+    info.usage = usage;
+    info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    info.queueFamilyIndexCount = 0;
+    info.pQueueFamilyIndices = nullptr;
+    info.initialLayout = layout;
+    const VkResult create = vkCreateImage(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    MAGMA_THROW_FAILURE(create, "failed to create image");
+    VkMemoryRequirements memoryRequirements;
+    vkGetImageMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
+    if (memoryRequirements.size + offset > memory->getSize())
+        MAGMA_THROW("image cannot be placed in the memory chunk");
+    size = memoryRequirements.size;
+    bindMemory(memory, offset);
 }
 
 Image::Image(std::shared_ptr<Device> device, VkImage handle, VkImageType imageType, VkFormat format, const VkExtent3D& extent):
@@ -142,6 +200,7 @@ void Image::bindMemory(std::shared_ptr<DeviceMemory> memory,
 {
     const VkResult bind = vkBindImageMemory(MAGMA_HANDLE(device), handle, *memory, offset);
     MAGMA_THROW_FAILURE(bind, "failed to bind image memory");
+    this->offset = offset;
     this->memory = std::move(memory);
 }
 
@@ -165,6 +224,7 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     MAGMA_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
     const VkResult bind = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindInfo);
     MAGMA_THROW_FAILURE(bind, "failed to bind image memory within device group");
+    this->offset = offset;
     this->memory = std::move(memory);
 }
 
