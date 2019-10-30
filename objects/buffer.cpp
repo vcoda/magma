@@ -29,15 +29,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/exception.h"
 #include "../internal/copyMemory.h"
 
-
 namespace magma
 {
-Buffer::Buffer(std::shared_ptr<Device> device,
-    VkDeviceSize size, VkBufferUsageFlags usage, VkBufferCreateFlags flags,
+Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
+    VkBufferUsageFlags usage, VkBufferCreateFlags flags,
     std::shared_ptr<IAllocator> allocator,
     VkMemoryPropertyFlags memoryFlags):
     NonDispatchable(VK_OBJECT_TYPE_BUFFER, std::move(device), std::move(allocator)),
     size(size),
+    offset(0),
     usage(usage)
 {
     VkBufferCreateInfo info;
@@ -58,6 +58,30 @@ Buffer::Buffer(std::shared_ptr<Device> device,
     bindMemory(memory);
 }
 
+Buffer::Buffer(std::shared_ptr<DeviceMemory> memory, VkDeviceSize size, VkDeviceSize offset,
+    VkBufferUsageFlags usage, VkBufferCreateFlags flags,
+    std::shared_ptr<IAllocator> allocator):
+    NonDispatchable(VK_OBJECT_TYPE_BUFFER, std::move(device), std::move(allocator)),
+    size(size),
+    offset(offset),
+    usage(usage)
+{
+    if (size + offset > memory->getSize())
+        MAGMA_THROW("buffer cannot be placed in the memory chunk");
+    VkBufferCreateInfo info;
+    info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    info.pNext = nullptr;
+    info.flags = flags;
+    info.size = size;
+    info.usage = usage;
+    info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    info.queueFamilyIndexCount = 0;
+    info.pQueueFamilyIndices = nullptr;
+    const VkResult create = vkCreateBuffer(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    MAGMA_THROW_FAILURE(create, "failed to create buffer");
+    bindMemory(memory, offset);
+}
+
 Buffer::~Buffer()
 {
     vkDestroyBuffer(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
@@ -68,6 +92,7 @@ void Buffer::bindMemory(std::shared_ptr<DeviceMemory> memory,
 {
     const VkResult bind = vkBindBufferMemory(MAGMA_HANDLE(device), handle, *memory, offset);
     MAGMA_THROW_FAILURE(bind, "failed to bind buffer memory");
+    this->offset = offset;
     this->memory = std::move(memory);
 }
 

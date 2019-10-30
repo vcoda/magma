@@ -41,6 +41,7 @@ namespace magma
             std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0);
         VkDeviceSize getSize() const noexcept { return size; }
+        VkDeviceSize getOffset() const noexcept { return offset; }
         VkBufferUsageFlags getUsage() const noexcept { return usage; }
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
         VkMemoryRequirements getMemoryRequirements() const noexcept;
@@ -53,6 +54,12 @@ namespace magma
             VkBufferCreateFlags flags,
             std::shared_ptr<IAllocator> allocator,
             VkMemoryPropertyFlags memoryFlags);
+        explicit Buffer(std::shared_ptr<DeviceMemory> memory,
+            VkDeviceSize size,
+            VkDeviceSize offset,
+            VkBufferUsageFlags usage,
+            VkBufferCreateFlags flags,
+            std::shared_ptr<IAllocator> allocator);
         void copyToMapped(const void *data,
             CopyMemoryFunction copyFn) noexcept;
         void copyTransfer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
@@ -61,6 +68,7 @@ namespace magma
 
     protected:
         VkDeviceSize size;
+        VkDeviceSize offset;
         VkBufferUsageFlags usage;
         std::shared_ptr<DeviceMemory> memory;
     };
