@@ -61,7 +61,7 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
 Buffer::Buffer(std::shared_ptr<DeviceMemory> memory, VkDeviceSize size, VkDeviceSize offset,
     VkBufferUsageFlags usage, VkBufferCreateFlags flags,
     std::shared_ptr<IAllocator> allocator):
-    NonDispatchable(VK_OBJECT_TYPE_BUFFER, std::move(device), std::move(allocator)),
+    NonDispatchable(VK_OBJECT_TYPE_BUFFER, memory->getDevice(), std::move(allocator)),
     size(size),
     offset(offset),
     usage(usage)

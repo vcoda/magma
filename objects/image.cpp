@@ -90,7 +90,7 @@ Image::Image(std::shared_ptr<DeviceMemory> memory, VkDeviceSize offset,
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
     VkImageUsageFlags usage, VkImageCreateFlags flags,
     std::shared_ptr<IAllocator> allocator):
-    NonDispatchable(VK_OBJECT_TYPE_IMAGE, std::move(device), std::move(allocator)),
+    NonDispatchable(VK_OBJECT_TYPE_IMAGE, memory->getDevice(), std::move(allocator)),
     size(0),
     offset(offset),
     imageType(imageType),
