@@ -82,7 +82,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     size = memoryRequirements.size;
     std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(
         this->device, memoryRequirements.size, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
-    bindMemory(memory);
+    bindMemory(std::move(memory));
 }
 
 Image::Image(std::shared_ptr<DeviceMemory> memory, VkDeviceSize offset,
@@ -137,7 +137,7 @@ Image::Image(std::shared_ptr<DeviceMemory> memory, VkDeviceSize offset,
     if (memoryRequirements.size + offset > memory->getSize())
         MAGMA_THROW("image cannot be placed in the memory chunk");
     size = memoryRequirements.size;
-    bindMemory(memory, offset);
+    bindMemory(std::move(memory), offset);
 }
 
 Image::Image(std::shared_ptr<Device> device, VkImage handle, VkImageType imageType, VkFormat format, const VkExtent3D& extent):
