@@ -28,7 +28,7 @@ namespace magma
     {
     public:
         SharedQueueFamilies() = default;
-        SharedQueueFamilies(std::shared_ptr<PhysicalDevice> device,
+        SharedQueueFamilies(std::shared_ptr<const PhysicalDevice> device,
             const std::initializer_list<VkQueueFlagBits>& queueTypes);
         VkSharingMode getSharingMode() const noexcept;
         uint32_t getFamiliesCount() const noexcept;

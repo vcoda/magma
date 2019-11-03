@@ -22,11 +22,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-SharedQueueFamilies::SharedQueueFamilies(std::shared_ptr<PhysicalDevice> device,
+SharedQueueFamilies::SharedQueueFamilies(std::shared_ptr<const PhysicalDevice> device,
     const std::initializer_list<VkQueueFlagBits>& queueTypes)
 {
     const auto queueFamilyProperties = device->getQueueFamilyProperties();
-    for (VkQueueFlagBits queueType : queueTypes)
+    for (const VkQueueFlagBits queueType : queueTypes)
     {
         const uint32_t queueFamilyIndex = chooseFamilyIndex(queueType, queueFamilyProperties);
         queueFamilyIndices.push_back(queueFamilyIndex);
