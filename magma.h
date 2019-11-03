@@ -109,6 +109,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "misc/pushConstants.h"
 #include "misc/scissor.h"
 #include "misc/scopedDebugMarker.h"
+#include "misc/sharedQueueFamilies.h"
 #include "misc/vectorTypes.h"
 #include "misc/viewport.h"
 

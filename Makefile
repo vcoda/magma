@@ -40,6 +40,7 @@ MAGMA_OBJS= \
 	misc/format.o \
 	misc/geometry.o \
 	misc/scopedDebugMarker.o \
+	misc/sharedQueueFamilies.o \
 	\
 	internal/pch.o \
 	\

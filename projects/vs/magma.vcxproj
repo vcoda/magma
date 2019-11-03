@@ -193,6 +193,7 @@
     <ClInclude Include="..\..\misc\pushConstants.h" />
     <ClInclude Include="..\..\misc\scissor.h" />
     <ClInclude Include="..\..\misc\scopedDebugMarker.h" />
+    <ClInclude Include="..\..\misc\sharedQueueFamilies.h" />
     <ClInclude Include="..\..\misc\vectorTypes.h" />
     <ClInclude Include="..\..\misc\viewport.h" />
     <ClInclude Include="..\..\objects\accelerationStructure.h" />
@@ -302,6 +303,7 @@
     <ClCompile Include="..\..\misc\format.cpp" />
     <ClCompile Include="..\..\misc\geometry.cpp" />
     <ClCompile Include="..\..\misc\scopedDebugMarker.cpp" />
+    <ClCompile Include="..\..\misc\sharedQueueFamilies.cpp" />
     <ClCompile Include="..\..\objects\accelerationStructure.cpp" />
     <ClCompile Include="..\..\objects\buffer.cpp" />
     <ClCompile Include="..\..\objects\bufferView.cpp" />
