@@ -59,7 +59,7 @@ uint32_t SharedQueueFamilies::chooseFamilyIndex(VkQueueFlagBits queueType,
         for (const auto& property : queueFamilyProperties)
         {
             if (property.queueFlags & queueType)
-            {
+            {   // Compute queue would be better separated from graphics
                 const VkFlags hasGraphics = property.queueFlags & VK_QUEUE_GRAPHICS_BIT;
                 if (!hasGraphics)
                     return queueFamilyIndex;
@@ -71,7 +71,7 @@ uint32_t SharedQueueFamilies::chooseFamilyIndex(VkQueueFlagBits queueType,
         for (const auto& property : queueFamilyProperties)
         {
             if (property.queueFlags & queueType)
-            {
+            {   // Transfer queue would be better separated from graphics or compute
                 const VkFlags hasGraphicsOrCompute = property.queueFlags & (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT);
                 if (!hasGraphicsOrCompute)
                     return queueFamilyIndex;
@@ -79,6 +79,7 @@ uint32_t SharedQueueFamilies::chooseFamilyIndex(VkQueueFlagBits queueType,
             ++queueFamilyIndex;
         }
     }
+    // Some hardware is limited to have only single queue family with one queue in it
     queueFamilyIndex = 0;
     for (const auto& property : queueFamilyProperties)
     {   // Try to find any suitable family
