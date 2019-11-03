@@ -17,27 +17,24 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "deviceQueueDesc.h"
+#include "deviceQueueDescriptor.h"
 #include "../objects/physicalDevice.h"
 #include "../misc/exception.h"
 #include "../internal/copy.h"
 
 namespace magma
 {
-DeviceQueueDescriptor::DeviceQueueDescriptor(VkQueueFlagBits queueType,
-    std::shared_ptr<const PhysicalDevice> device,
-    const std::vector<float>& queuePriorities /* 1 */)
+DeviceQueueDescriptor::DeviceQueueDescriptor(std::shared_ptr<const PhysicalDevice> device,
+    VkQueueFlagBits queueType, const std::vector<float>& queuePriorities /* 1 */)
 {
     sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
     pNext = nullptr;
     flags = 0;
-    queueFamilyIndex = getFamilyIndex(queueType, device->getQueueFamilyProperties());
+    queueFamilyIndex = chooseFamilyIndex(queueType, device->getQueueFamilyProperties());
     queueCount = MAGMA_COUNT(queuePriorities);
-#ifdef MAGMA_DEBUG
-    for (float priority : queuePriorities)
-        MAGMA_ASSERT(priority >= 0.f && priority <= 1.f);
-#endif
     pQueuePriorities = internal::copyVector(queuePriorities);
+    for (float priority : queuePriorities)
+        MAGMA_ASSERT((priority >= 0.f) && (priority <= 1.f));
 }
 
 DeviceQueueDescriptor::DeviceQueueDescriptor(const DeviceQueueDescriptor& other)
@@ -62,29 +59,28 @@ DeviceQueueDescriptor::~DeviceQueueDescriptor()
     delete[] pQueuePriorities;
 }
 
-uint32_t DeviceQueueDescriptor::getFamilyIndex(VkQueueFlagBits queueType,
+uint32_t DeviceQueueDescriptor::chooseFamilyIndex(VkQueueFlagBits queueType,
     const std::vector<VkQueueFamilyProperties>& queueFamilyProperties) const
 {
+    uint32_t queueFamilyIndex = 0;
     if (VK_QUEUE_COMPUTE_BIT == queueType)
     {   // Try to find dedicated compute queue
-        uint32_t queueFamilyIndex = 0;
         for (const auto& property : queueFamilyProperties)
         {
-            if (property.queueFlags & VK_QUEUE_COMPUTE_BIT)
-            {
+            if (property.queueFlags & queueType)
+            {   // Compute queue would be better separated from graphics
                 const VkFlags hasGraphics = property.queueFlags & VK_QUEUE_GRAPHICS_BIT;
                 if (!hasGraphics)
                     return queueFamilyIndex;
             }
             ++queueFamilyIndex;
         }
-    } else if (VK_QUEUE_TRANSFER_BIT == queueType)
-    {   // Try to find dedicated transfer queue
-        uint32_t queueFamilyIndex = 0;
+    } else if ((VK_QUEUE_TRANSFER_BIT == queueType) || (VK_QUEUE_SPARSE_BINDING_BIT == queueType))
+    {   // Try to find dedicated transfer/sparse queue
         for (const auto& property : queueFamilyProperties)
         {
-            if (property.queueFlags & VK_QUEUE_TRANSFER_BIT)
-            {
+            if (property.queueFlags & queueType)
+            {   // Transfer queue would be better separated from graphics or compute
                 const VkFlags hasGraphicsOrCompute = property.queueFlags & (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT);
                 if (!hasGraphicsOrCompute)
                     return queueFamilyIndex;
@@ -92,7 +88,8 @@ uint32_t DeviceQueueDescriptor::getFamilyIndex(VkQueueFlagBits queueType,
             ++queueFamilyIndex;
         }
     }
-    uint32_t queueFamilyIndex = 0;
+    // Some hardware is limited to have only single queue family with one queue in it
+    queueFamilyIndex = 0;
     for (const auto& property : queueFamilyProperties)
     {   // Try to find any suitable family
         if (property.queueFlags & queueType)

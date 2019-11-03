@@ -101,7 +101,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "misc/clearAttachment.h"
 #include "misc/clearValue.h"
 #include "misc/deviceExtension.h"
-#include "misc/deviceQueueDesc.h"
+#include "misc/deviceQueueDescriptor.h"
 #include "misc/exception.h"
 #include "misc/format.h"
 #include "misc/imageSubresourceRange.h"

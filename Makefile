@@ -35,7 +35,7 @@ MAGMA_OBJS= \
 	helpers/executeCommandBuffer.o \
 	helpers/stringize.o \
 	\
-	misc/deviceQueueDesc.o \
+	misc/deviceQueueDescriptor.o \
 	misc/exception.o \
 	misc/format.o \
 	misc/geometry.o \

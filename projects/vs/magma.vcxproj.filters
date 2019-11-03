@@ -150,9 +150,6 @@
     <ClInclude Include="..\..\misc\deviceExtension.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\misc\deviceQueueDesc.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\misc\exception.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
@@ -462,6 +459,9 @@
     <ClInclude Include="..\..\misc\sharedQueueFamilies.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\misc\deviceQueueDescriptor.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -496,9 +496,6 @@
     </ClCompile>
     <ClCompile Include="..\..\helpers\stringize.cpp">
       <Filter>Source Files\helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\misc\deviceQueueDesc.cpp">
-      <Filter>Source Files\misc</Filter>
     </ClCompile>
     <ClCompile Include="..\..\misc\exception.cpp">
       <Filter>Source Files\misc</Filter>
@@ -723,6 +720,9 @@
       <Filter>Source Files\extensions</Filter>
     </ClCompile>
     <ClCompile Include="..\..\misc\sharedQueueFamilies.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\deviceQueueDescriptor.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>
   </ItemGroup>

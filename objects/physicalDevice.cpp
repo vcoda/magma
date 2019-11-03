@@ -301,7 +301,7 @@ std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
 {
     const std::vector<float> defaultQueuePriorities = {1.0f};
     const std::vector<DeviceQueueDescriptor> queueDescriptors = {
-        DeviceQueueDescriptor(VK_QUEUE_GRAPHICS_BIT, shared_from_this(), defaultQueuePriorities)
+        DeviceQueueDescriptor(shared_from_this(), VK_QUEUE_GRAPHICS_BIT, defaultQueuePriorities)
     };
     const std::vector<const char*> noLayers;
     const std::vector<const char*> swapchainExtension = {

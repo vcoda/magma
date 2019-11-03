@@ -184,7 +184,7 @@
     <ClInclude Include="..\..\misc\clearAttachment.h" />
     <ClInclude Include="..\..\misc\clearValue.h" />
     <ClInclude Include="..\..\misc\deviceExtension.h" />
-    <ClInclude Include="..\..\misc\deviceQueueDesc.h" />
+    <ClInclude Include="..\..\misc\deviceQueueDescriptor.h" />
     <ClInclude Include="..\..\misc\exception.h" />
     <ClInclude Include="..\..\misc\format.h" />
     <ClInclude Include="..\..\misc\geometry.h" />
@@ -298,7 +298,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="..\..\misc\deviceQueueDesc.cpp" />
+    <ClCompile Include="..\..\misc\deviceQueueDescriptor.cpp" />
     <ClCompile Include="..\..\misc\exception.cpp" />
     <ClCompile Include="..\..\misc\format.cpp" />
     <ClCompile Include="..\..\misc\geometry.cpp" />
