@@ -24,15 +24,16 @@ namespace magma
     /* Buffer and image objects may be created with a concurrent sharing mode.
        Concurrent access is supported for multiple queue families. */
 
-    class SharedQueueFamilies
+    class ResourceSharing
     {
     public:
-        SharedQueueFamilies() = default;
-        SharedQueueFamilies(std::shared_ptr<const PhysicalDevice> device,
+        ResourceSharing() = default;
+        ResourceSharing(const std::vector<uint32_t>& queueFamilyIndices);
+        ResourceSharing(std::shared_ptr<const PhysicalDevice> device,
             const std::initializer_list<VkQueueFlagBits>& queueTypes);
-        VkSharingMode getSharingMode() const noexcept;
-        uint32_t getFamiliesCount() const noexcept;
-        const std::vector<uint32_t>& getFamilyIndices() const noexcept;
+        VkSharingMode getMode() const noexcept;
+        uint32_t getQueueFamiliesCount() const noexcept;
+        const std::vector<uint32_t>& getQueueFamilyIndices() const noexcept;
 
     private:
         uint32_t chooseFamilyIndex(VkQueueFlagBits queueType,

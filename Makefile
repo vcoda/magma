@@ -39,8 +39,8 @@ MAGMA_OBJS= \
 	misc/exception.o \
 	misc/format.o \
 	misc/geometry.o \
+	misc/resourceSharing.o \
 	misc/scopedDebugMarker.o \
-	misc/sharedQueueFamilies.o \
 	\
 	internal/pch.o \
 	\

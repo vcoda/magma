@@ -456,10 +456,10 @@
     <ClInclude Include="..\..\auxiliary\packedTypes.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\misc\sharedQueueFamilies.h">
+    <ClInclude Include="..\..\misc\deviceQueueDescriptor.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\misc\deviceQueueDescriptor.h">
+    <ClInclude Include="..\..\misc\resourceSharing.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
   </ItemGroup>
@@ -719,10 +719,10 @@
     <ClCompile Include="..\..\extensions\layers.cpp">
       <Filter>Source Files\extensions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\misc\sharedQueueFamilies.cpp">
+    <ClCompile Include="..\..\misc\deviceQueueDescriptor.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\misc\deviceQueueDescriptor.cpp">
+    <ClCompile Include="..\..\misc\resourceSharing.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>
   </ItemGroup>

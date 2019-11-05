@@ -17,12 +17,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "sharedQueueFamilies.h"
+#include "resourceSharing.h"
 #include "../objects/physicalDevice.h"
 
 namespace magma
 {
-SharedQueueFamilies::SharedQueueFamilies(std::shared_ptr<const PhysicalDevice> device,
+ResourceSharing::ResourceSharing(const std::vector<uint32_t>& queueFamilyIndices):
+    queueFamilyIndices(std::move(queueFamilyIndices))
+{}
+
+ResourceSharing::ResourceSharing(std::shared_ptr<const PhysicalDevice> device,
     const std::initializer_list<VkQueueFlagBits>& queueTypes)
 {
     const auto queueFamilyProperties = device->getQueueFamilyProperties();
@@ -33,24 +37,24 @@ SharedQueueFamilies::SharedQueueFamilies(std::shared_ptr<const PhysicalDevice> d
     }
 }
 
-VkSharingMode SharedQueueFamilies::getSharingMode() const noexcept
+VkSharingMode ResourceSharing::getMode() const noexcept
 {
     return queueFamilyIndices.empty() ?
         VK_SHARING_MODE_EXCLUSIVE :
         VK_SHARING_MODE_CONCURRENT;
 }
 
-uint32_t SharedQueueFamilies::getFamiliesCount() const noexcept
+uint32_t ResourceSharing::getQueueFamiliesCount() const noexcept
 {
     return MAGMA_COUNT(queueFamilyIndices);
 }
 
-const std::vector<uint32_t>& SharedQueueFamilies::getFamilyIndices() const noexcept
+const std::vector<uint32_t>& ResourceSharing::getQueueFamilyIndices() const noexcept
 {
     return queueFamilyIndices;
 }
 
-uint32_t SharedQueueFamilies::chooseFamilyIndex(VkQueueFlagBits queueType,
+uint32_t ResourceSharing::chooseFamilyIndex(VkQueueFlagBits queueType,
     const std::vector<VkQueueFamilyProperties>& queueFamilyProperties) const noexcept
 {
     uint32_t queueFamilyIndex = 0;
