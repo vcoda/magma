@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "buffer.h"
+#include "../misc/resourceSharing.h"
 
 namespace magma
 {
@@ -28,16 +29,19 @@ namespace magma
         explicit StorageTexelBuffer(std::shared_ptr<Device> device,
             const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
+            const ResourceSharing& sharing = ResourceSharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         explicit StorageTexelBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
+            const ResourceSharing& sharing = ResourceSharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         explicit StorageTexelBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             std::shared_ptr<SrcTransferBuffer> srcBuffer,
             VkBufferCreateFlags flags = 0,
+            const ResourceSharing& sharing = ResourceSharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma

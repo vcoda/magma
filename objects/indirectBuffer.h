@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "buffer.h"
+#include "../misc/resourceSharing.h"
 
 namespace magma
 {
@@ -28,6 +29,7 @@ namespace magma
         explicit IndirectBuffer(std::shared_ptr<Device> device,
             uint32_t drawCmdCount = 1,
             VkBufferCreateFlags flags = 0,
+            const ResourceSharing& sharing = ResourceSharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
         void writeDrawCommand(uint32_t vertexCount,
             uint32_t firstVertex = 0,

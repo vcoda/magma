@@ -24,6 +24,7 @@ namespace magma
     class DeviceMemory;
     class CommandBuffer;
     class SrcTransferBuffer;
+    class ResourceSharing;
 
     /* Buffers represent linear arrays of data which are used
        for various purposes by binding them to a graphics or compute
@@ -52,6 +53,7 @@ namespace magma
             VkDeviceSize size,
             VkBufferUsageFlags usage,
             VkBufferCreateFlags flags,
+            const ResourceSharing& sharing,
             std::shared_ptr<IAllocator> allocator,
             VkMemoryPropertyFlags memoryFlags);
         explicit Buffer(std::shared_ptr<DeviceMemory> memory,
@@ -59,6 +61,7 @@ namespace magma
             VkDeviceSize offset,
             VkBufferUsageFlags usage,
             VkBufferCreateFlags flags,
+            const ResourceSharing& sharing,
             std::shared_ptr<IAllocator> allocator);
         void copyToMapped(const void *data,
             CopyMemoryFunction copyFn) noexcept;

@@ -26,24 +26,26 @@ namespace magma
 {
 StorageBuffer::StorageBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
+    const ResourceSharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Buffer(std::move(device), size,
         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-        flags, std::move(allocator),
+        flags, sharing, std::move(allocator),
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
 {}
 
 StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
+    const ResourceSharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(copyCmdBuffer->getDevice(), size,
         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        flags, std::move(allocator),
+        flags, sharing, std::move(allocator),
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
 {
     std::shared_ptr<SrcTransferBuffer> srcBuffer(std::make_shared<SrcTransferBuffer>(this->device,
-        data, size, 0, this->allocator, std::move(copyFn)));
+        data, size, 0, sharing, this->allocator, std::move(copyFn)));
     copyTransfer(std::move(copyCmdBuffer), std::move(srcBuffer));
 }
 } // namespace magma

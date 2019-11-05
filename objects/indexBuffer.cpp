@@ -26,11 +26,12 @@ namespace magma
 {
 IndexBuffer::IndexBuffer(std::shared_ptr<Device> device, const void *data, VkDeviceSize size, VkIndexType indexType,
     VkBufferCreateFlags flags /* 0 */,
+    const ResourceSharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(std::move(device), size,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
-        flags, std::move(allocator),
+        flags, sharing, std::move(allocator),
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
     indexType(indexType)
 {
@@ -40,19 +41,21 @@ IndexBuffer::IndexBuffer(std::shared_ptr<Device> device, const void *data, VkDev
 
 IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size, VkIndexType indexType,
     VkBufferCreateFlags flags /* 0 */,
+    const ResourceSharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     IndexBuffer(copyCmdBuffer,
-        std::make_shared<SrcTransferBuffer>(std::move(copyCmdBuffer->getDevice()), data, size, 0, allocator, std::move(copyFn)),
-        indexType, flags, std::move(allocator))
+        std::make_shared<SrcTransferBuffer>(std::move(copyCmdBuffer->getDevice()), data, size, 0, sharing, allocator, std::move(copyFn)),
+        indexType, flags, sharing, std::move(allocator))
 {}
 
 IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, std::shared_ptr<SrcTransferBuffer> srcBuffer, VkIndexType indexType,
     VkBufferCreateFlags flags /* 0 */,
+    const ResourceSharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Buffer(std::move(copyCmdBuffer->getDevice()), srcBuffer->getMemory()->getSize(),
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        flags, std::move(allocator),
+        flags, sharing, std::move(allocator),
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
     indexType(indexType)
 {

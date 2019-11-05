@@ -28,11 +28,12 @@ namespace magma
 {
 UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<Device> device, const void *data, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
+    const ResourceSharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(std::move(device), size,
         VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT,
-        flags, std::move(allocator),
+        flags, sharing, std::move(allocator),
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
 {
     if (data)
@@ -41,19 +42,21 @@ UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<Device> device, const voi
 
 UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
+    const ResourceSharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     UniformTexelBuffer(copyCmdBuffer,
-        std::make_shared<SrcTransferBuffer>(copyCmdBuffer->getDevice(), data, size, 0, allocator, std::move(copyFn)),
-        flags, std::move(allocator))
+        std::make_shared<SrcTransferBuffer>(copyCmdBuffer->getDevice(), data, size, 0, sharing, allocator, std::move(copyFn)),
+        flags, sharing, std::move(allocator))
 {}
 
 UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, std::shared_ptr<SrcTransferBuffer> srcBuffer,
     VkBufferCreateFlags flags /* 0 */,
+    const ResourceSharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Buffer(copyCmdBuffer->getDevice(), srcBuffer->getMemory()->getSize(),
         VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        flags, std::move(allocator),
+        flags, sharing, std::move(allocator),
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
 {
     copyTransfer(std::move(copyCmdBuffer), std::move(srcBuffer));

@@ -25,6 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "fence.h"
 #include "commandBuffer.h"
 #include "../allocator/allocator.h"
+#include "../misc/resourceSharing.h"
 #include "../misc/deviceExtension.h"
 #include "../misc/exception.h"
 #include "../internal/copyMemory.h"
@@ -32,9 +33,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
-    VkBufferUsageFlags usage, VkBufferCreateFlags flags,
-    std::shared_ptr<IAllocator> allocator,
-    VkMemoryPropertyFlags memoryFlags):
+    VkBufferUsageFlags usage, VkBufferCreateFlags flags, const ResourceSharing& sharing,
+    std::shared_ptr<IAllocator> allocator, VkMemoryPropertyFlags memoryFlags):
     NonDispatchable(VK_OBJECT_TYPE_BUFFER, std::move(device), std::move(allocator)),
     size(size),
     offset(0),
@@ -46,9 +46,9 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     info.flags = flags;
     info.size = size;
     info.usage = usage;
-    info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-    info.queueFamilyIndexCount = 0;
-    info.pQueueFamilyIndices = nullptr;
+    info.sharingMode = sharing.getMode();
+    info.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
+    info.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     const VkResult create = vkCreateBuffer(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create buffer");
     VkMemoryRequirements memoryRequirements;
@@ -59,7 +59,7 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
 }
 
 Buffer::Buffer(std::shared_ptr<DeviceMemory> memory, VkDeviceSize size, VkDeviceSize offset,
-    VkBufferUsageFlags usage, VkBufferCreateFlags flags,
+    VkBufferUsageFlags usage, VkBufferCreateFlags flags, const ResourceSharing& sharing,
     std::shared_ptr<IAllocator> allocator):
     NonDispatchable(VK_OBJECT_TYPE_BUFFER, memory->getDevice(), std::move(allocator)),
     size(size),
@@ -74,9 +74,9 @@ Buffer::Buffer(std::shared_ptr<DeviceMemory> memory, VkDeviceSize size, VkDevice
     info.flags = flags;
     info.size = size;
     info.usage = usage;
-    info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-    info.queueFamilyIndexCount = 0;
-    info.pQueueFamilyIndices = nullptr;
+    info.sharingMode = sharing.getMode();
+    info.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
+    info.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     const VkResult create = vkCreateBuffer(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create buffer");
     bindMemory(std::move(memory), offset);

@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "buffer.h"
+#include "../misc/resourceSharing.h"
 
 namespace magma
 {
@@ -28,6 +29,7 @@ namespace magma
         explicit DstTransferBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
+            const ResourceSharing& sharing = ResourceSharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma

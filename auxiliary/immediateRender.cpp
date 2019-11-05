@@ -44,7 +44,7 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     layout(std::move(layout)),
     renderPass(std::move(renderPass)),
     allocator(std::move(allocator)),
-    vertexBuffer(std::make_shared<VertexBuffer>(this->device, nullptr, sizeof(Vertex) * maxVertexCount, 0, this->allocator)),
+    vertexBuffer(std::make_shared<VertexBuffer>(this->device, nullptr, sizeof(Vertex) * maxVertexCount, 0, ResourceSharing(), this->allocator)),
     vertexShader(VertexShaderStage(createShader(true), "main")),
     fragmentShader(FragmentShaderStage(createShader(false), "main")),
     renderStates{
