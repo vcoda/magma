@@ -37,8 +37,8 @@ namespace magma
         ~Buffer();
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0);
-        void bindMemoryDeviceGroup(const std::vector<uint32_t>& deviceIndices,
-            std::shared_ptr<DeviceMemory> memory,
+        void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+            const std::vector<uint32_t>& deviceIndices,
             VkDeviceSize offset = 0);
         VkDeviceSize getSize() const noexcept { return size; }
         VkDeviceSize getOffset() const noexcept { return offset; }

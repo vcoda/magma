@@ -96,7 +96,8 @@ void Buffer::bindMemory(std::shared_ptr<DeviceMemory> memory,
     this->memory = std::move(memory);
 }
 
-void Buffer::bindMemoryDeviceGroup(const std::vector<uint32_t>& deviceIndices, std::shared_ptr<DeviceMemory> memory,
+void Buffer::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+    const std::vector<uint32_t>& deviceIndices,
     VkDeviceSize offset /* 0 */)
 {
     VkBindBufferMemoryDeviceGroupInfo deviceGroupBindInfo;
