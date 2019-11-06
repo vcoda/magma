@@ -70,7 +70,7 @@ VkPhysicalDeviceProperties PhysicalDevice::getProperties() const noexcept
     return properties;
 }
 
-std::vector<VkQueueFamilyProperties> PhysicalDevice::getQueueFamilyProperties() const noexcept
+std::vector<VkQueueFamilyProperties> PhysicalDevice::getQueueFamilyProperties() const
 {
     uint32_t propertyCount;
     vkGetPhysicalDeviceQueueFamilyProperties(handle, &propertyCount, nullptr);

@@ -43,7 +43,7 @@ namespace magma
             VkImageType, bool optimalTiling, VkImageUsageFlags usage,
             VkImageCreateFlags flags = 0) const;
         VkPhysicalDeviceProperties getProperties() const noexcept;
-        std::vector<VkQueueFamilyProperties> getQueueFamilyProperties() const noexcept;
+        std::vector<VkQueueFamilyProperties> getQueueFamilyProperties() const;
         VkPhysicalDeviceMemoryProperties getMemoryProperties() const noexcept;
         std::shared_ptr<Device> createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
             const std::vector<const char *>& layers,
