@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
+#include "../misc/resourceSharing.h"
 #include "../helpers/typedefs.h"
 
 namespace magma
@@ -24,7 +25,6 @@ namespace magma
     class DeviceMemory;
     class CommandBuffer;
     class SrcTransferBuffer;
-    class ResourceSharing;
 
     /* Buffers represent linear arrays of data which are used
        for various purposes by binding them to a graphics or compute
