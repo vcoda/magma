@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
+#include "../misc/resourceSharing.h"
 #include "../helpers/typedefs.h"
 
 namespace magma
@@ -73,6 +74,7 @@ namespace magma
             uint32_t samples,
             VkImageUsageFlags usage,
             VkImageCreateFlags flags,
+            const ResourceSharing& sharing,
             std::shared_ptr<IAllocator> allocator);
         explicit Image(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset,
@@ -84,6 +86,7 @@ namespace magma
             uint32_t samples,
             VkImageUsageFlags usage,
             VkImageCreateFlags flags,
+            const ResourceSharing& sharing,
             std::shared_ptr<IAllocator> allocator);
         explicit Image(std::shared_ptr<Device> device,
             VkImage handle,

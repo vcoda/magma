@@ -29,6 +29,7 @@ namespace magma
             VkFormat format,
             const VkExtent3D& extent,
             VkImageUsageFlags usage,
+            const ResourceSharing& sharing = ResourceSharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma

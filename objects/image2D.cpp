@@ -25,20 +25,23 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
-    uint32_t mipLevels, std::shared_ptr<IAllocator> allocator /* nullptr */):
+Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent, uint32_t mipLevels,
+    const ResourceSharing& sharing /* default */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         mipLevels,
         1, // arrayLayers
         1, // samples
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
+        sharing,
         std::move(allocator))
 {}
 
 Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
     std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, const ImageMipmapLayout& mipOffsets,
     std::shared_ptr<CommandBuffer> cmdBuffer,
+    const ResourceSharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool flush /* true */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
@@ -47,6 +50,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
         1, // samples
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
+        sharing,
         std::move(allocator))
 {
     const auto copyRegions = buildCopyRegions(mipOffsets, bufferOffset);
@@ -56,6 +60,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
 Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
     const ImageMipmapData& mipData, const ImageMipmapLayout& mipSizes,
     std::shared_ptr<CommandBuffer> cmdBuffer,
+    const ResourceSharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
@@ -64,13 +69,14 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
         1, // samples
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
+        sharing,
         std::move(allocator))
 {   // Calculate aligned size and mip offsets
     VkDeviceSize bufferSize = 0;
     const auto mipOffsets = buildMipOffsets(mipSizes, bufferSize);
     const auto copyRegions = buildCopyRegions(mipOffsets, 0);
     // Copy mip levels to host visible buffer
-    std::shared_ptr<SrcTransferBuffer> buffer(std::make_shared<SrcTransferBuffer>(this->device, bufferSize, 0, allocator));
+    std::shared_ptr<SrcTransferBuffer> buffer(std::make_shared<SrcTransferBuffer>(this->device, bufferSize, 0, sharing, allocator));
     helpers::mapScoped<uint8_t>(buffer, [&](uint8_t *data)
     {
         if (!copyFn)
@@ -85,10 +91,18 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
     copyFromBuffer(buffer, copyRegions, cmdBuffer, true);
 }
 
-Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format,
-    const VkExtent2D& extent, uint32_t mipLevels, uint32_t samples, VkImageUsageFlags usage,
+Image2D::Image2D(std::shared_ptr<Device> device,
+    VkFormat format, const VkExtent2D& extent, uint32_t mipLevels, uint32_t samples,
+    VkImageUsageFlags usage, const ResourceSharing& sharing,
     std::shared_ptr<IAllocator> allocator):
-    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1}, mipLevels, 1, samples, usage, 0, std::move(allocator))
+    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
+        mipLevels,
+        1, // arrayLayers
+        samples,
+        usage,
+        0, // flags
+        sharing,
+        std::move(allocator))
 {}
 
 Image2D::Image2D(std::shared_ptr<Device> device, VkImage handle, VkFormat format, const VkExtent2D& extent):
@@ -104,7 +118,7 @@ ColorAttachment2D::ColorAttachment2D(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image2D(std::move(device), colorFormat, extent, mipLevels, samples,
         VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | (sampled ? VK_IMAGE_USAGE_SAMPLED_BIT : 0),
-        std::move(allocator))
+        ResourceSharing(), std::move(allocator))
 {}
 
 DepthStencilAttachment2D::DepthStencilAttachment2D(std::shared_ptr<Device> device,
@@ -116,7 +130,7 @@ DepthStencilAttachment2D::DepthStencilAttachment2D(std::shared_ptr<Device> devic
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image2D(std::move(device), depthStencilFormat, extent, mipLevels, samples,
         VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | (sampled ? VK_IMAGE_USAGE_SAMPLED_BIT : 0),
-        std::move(allocator))
+        ResourceSharing(), std::move(allocator))
 {}
 
 SwapchainColorAttachment2D::SwapchainColorAttachment2D(std::shared_ptr<Device> device,

@@ -33,7 +33,7 @@ namespace magma
 {
 Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat format,
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
-    VkImageUsageFlags usage, VkImageCreateFlags flags,
+    VkImageUsageFlags usage, VkImageCreateFlags flags, const ResourceSharing& sharing,
     std::shared_ptr<IAllocator> allocator):
     NonDispatchable(VK_OBJECT_TYPE_IMAGE, std::move(device), std::move(allocator)),
     size(0),
@@ -71,9 +71,9 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     }
     info.tiling = VK_IMAGE_TILING_OPTIMAL;
     info.usage = usage;
-    info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-    info.queueFamilyIndexCount = 0;
-    info.pQueueFamilyIndices = nullptr;
+    info.sharingMode = sharing.getMode();
+    info.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
+    info.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     info.initialLayout = layout;
     const VkResult create = vkCreateImage(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create image");
@@ -88,7 +88,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
 Image::Image(std::shared_ptr<DeviceMemory> memory, VkDeviceSize offset,
     VkImageType imageType, VkFormat format,
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
-    VkImageUsageFlags usage, VkImageCreateFlags flags,
+    VkImageUsageFlags usage, VkImageCreateFlags flags, const ResourceSharing& sharing,
     std::shared_ptr<IAllocator> allocator):
     NonDispatchable(VK_OBJECT_TYPE_IMAGE, memory->getDevice(), std::move(allocator)),
     size(0),
@@ -126,9 +126,9 @@ Image::Image(std::shared_ptr<DeviceMemory> memory, VkDeviceSize offset,
     }
     info.tiling = VK_IMAGE_TILING_OPTIMAL;
     info.usage = usage;
-    info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-    info.queueFamilyIndexCount = 0;
-    info.pQueueFamilyIndices = nullptr;
+    info.sharingMode = sharing.getMode();
+    info.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
+    info.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     info.initialLayout = layout;
     const VkResult create = vkCreateImage(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create image");
