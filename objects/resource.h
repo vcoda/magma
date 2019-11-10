@@ -52,8 +52,7 @@ namespace magma
         std::shared_ptr<const DeviceMemory> getMemory() const noexcept { return memory; }
 
     protected:
-        Resource(VkDeviceSize size):
-            size(size), offset(0) {}
+        explicit Resource(VkDeviceSize size) noexcept;
 
         VkDeviceSize size;
         VkDeviceSize offset;
