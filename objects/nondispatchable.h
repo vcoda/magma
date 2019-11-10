@@ -28,7 +28,7 @@ namespace magma
     class NonDispatchable : public Object
     {
     public:
-        typedef Type VkHandleType;
+        typedef Type NativeHandle;
 
     public:
         virtual uint64_t getHandle() const noexcept override
