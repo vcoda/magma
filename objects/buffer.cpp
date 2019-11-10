@@ -32,11 +32,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
-    VkBufferUsageFlags usage, VkBufferCreateFlags flags, const ResourceSharing& sharing,
+    VkBufferUsageFlags usage, VkBufferCreateFlags flags, const Sharing& sharing,
     std::shared_ptr<IAllocator> allocator, VkMemoryPropertyFlags memoryFlags):
-    NonDispatchable(VK_OBJECT_TYPE_BUFFER, std::move(device), std::move(allocator)),
-    size(size),
-    offset(0),
+    NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, size, std::move(device), std::move(allocator)),
     usage(usage)
 {
     VkBufferCreateInfo info;
@@ -58,11 +56,9 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
 }
 
 Buffer::Buffer(std::shared_ptr<DeviceMemory> memory, VkDeviceSize size, VkDeviceSize offset,
-    VkBufferUsageFlags usage, VkBufferCreateFlags flags, const ResourceSharing& sharing,
+    VkBufferUsageFlags usage, VkBufferCreateFlags flags, const Sharing& sharing,
     std::shared_ptr<IAllocator> allocator):
-    NonDispatchable(VK_OBJECT_TYPE_BUFFER, memory->getDevice(), std::move(allocator)),
-    size(size),
-    offset(offset),
+    NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, size, memory->getDevice(), std::move(allocator)),
     usage(usage)
 {
     if (size + offset > memory->getSize())

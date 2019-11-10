@@ -26,7 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent, uint32_t mipLevels,
-    const ResourceSharing& sharing /* default */,
+    const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         mipLevels,
@@ -41,7 +41,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
 Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
     std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, const ImageMipmapLayout& mipOffsets,
     std::shared_ptr<CommandBuffer> cmdBuffer,
-    const ResourceSharing& sharing /* default */,
+    const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool flush /* true */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
@@ -60,7 +60,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
 Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
     const ImageMipmapData& mipData, const ImageMipmapLayout& mipSizes,
     std::shared_ptr<CommandBuffer> cmdBuffer,
-    const ResourceSharing& sharing /* default */,
+    const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
@@ -93,7 +93,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
 
 Image2D::Image2D(std::shared_ptr<Device> device,
     VkFormat format, const VkExtent2D& extent, uint32_t mipLevels, uint32_t samples,
-    VkImageUsageFlags usage, const ResourceSharing& sharing,
+    VkImageUsageFlags usage, const Sharing& sharing,
     std::shared_ptr<IAllocator> allocator):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         mipLevels,
@@ -118,7 +118,7 @@ ColorAttachment2D::ColorAttachment2D(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image2D(std::move(device), colorFormat, extent, mipLevels, samples,
         VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | (sampled ? VK_IMAGE_USAGE_SAMPLED_BIT : 0),
-        ResourceSharing(), std::move(allocator))
+        Sharing(), std::move(allocator))
 {}
 
 DepthStencilAttachment2D::DepthStencilAttachment2D(std::shared_ptr<Device> device,
@@ -130,7 +130,7 @@ DepthStencilAttachment2D::DepthStencilAttachment2D(std::shared_ptr<Device> devic
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image2D(std::move(device), depthStencilFormat, extent, mipLevels, samples,
         VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | (sampled ? VK_IMAGE_USAGE_SAMPLED_BIT : 0),
-        ResourceSharing(), std::move(allocator))
+        Sharing(), std::move(allocator))
 {}
 
 SwapchainColorAttachment2D::SwapchainColorAttachment2D(std::shared_ptr<Device> device,

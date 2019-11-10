@@ -16,12 +16,11 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "nondispatchable.h"
+#include "resource.h"
 
 namespace magma
 {
     class Geometry;
-    class DeviceMemory;
 
     /* Acceleration structures are an opaque structure that can be built by the implementation
        to more efficiently perform spatial queries on the provided geometric data.
@@ -29,7 +28,7 @@ namespace magma
        a set of bottom-level acceleration structures or a bottom-level acceleration structure
        containing either a set of axis-aligned bounding boxes for custom geometry or a set of triangles. */
 
-    class AccelerationStructure : public NonDispatchable<VkAccelerationStructureNV>
+    class AccelerationStructure : public NonDispatchableResource<AccelerationStructure, VkAccelerationStructureNV>
     {
     public:
         ~AccelerationStructure();
@@ -54,7 +53,6 @@ namespace magma
     private:
         VkAccelerationStructureTypeNV type;
         VkAccelerationStructureInfoNV info;
-        std::shared_ptr<DeviceMemory> memory;
     };
 
     class TopLevelAccelerationStructure : public AccelerationStructure

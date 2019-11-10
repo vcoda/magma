@@ -18,12 +18,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "image.h"
+#include "buffer.h"
 #include "device.h"
 #include "deviceMemory.h"
-#include "buffer.h"
-#include "commandBuffer.h"
 #include "queue.h"
 #include "fence.h"
+#include "commandBuffer.h"
 #include "../allocator/allocator.h"
 #include "../barriers/imageMemoryBarrier.h"
 #include "../misc/deviceExtension.h"
@@ -33,11 +33,9 @@ namespace magma
 {
 Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat format,
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
-    VkImageUsageFlags usage, VkImageCreateFlags flags, const ResourceSharing& sharing,
+    VkImageUsageFlags usage, VkImageCreateFlags flags, const Sharing& sharing,
     std::shared_ptr<IAllocator> allocator):
-    NonDispatchable(VK_OBJECT_TYPE_IMAGE, std::move(device), std::move(allocator)),
-    size(0),
-    offset(0),
+    NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, 0, std::move(device), std::move(allocator)),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
@@ -88,11 +86,9 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
 Image::Image(std::shared_ptr<DeviceMemory> memory, VkDeviceSize offset,
     VkImageType imageType, VkFormat format,
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
-    VkImageUsageFlags usage, VkImageCreateFlags flags, const ResourceSharing& sharing,
+    VkImageUsageFlags usage, VkImageCreateFlags flags, const Sharing& sharing,
     std::shared_ptr<IAllocator> allocator):
-    NonDispatchable(VK_OBJECT_TYPE_IMAGE, memory->getDevice(), std::move(allocator)),
-    size(0),
-    offset(offset),
+    NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, 0, std::move(device), std::move(allocator)),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
@@ -141,7 +137,7 @@ Image::Image(std::shared_ptr<DeviceMemory> memory, VkDeviceSize offset,
 }
 
 Image::Image(std::shared_ptr<Device> device, VkImage handle, VkImageType imageType, VkFormat format, const VkExtent3D& extent):
-    NonDispatchable(VK_OBJECT_TYPE_IMAGE, std::move(device), nullptr),
+    NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, 0, std::move(device), nullptr),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),

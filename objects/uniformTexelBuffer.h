@@ -28,19 +28,19 @@ namespace magma
         explicit UniformTexelBuffer(std::shared_ptr<Device> device,
             const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
-            const ResourceSharing& sharing = ResourceSharing(),
+            const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         explicit UniformTexelBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
-            const ResourceSharing& sharing = ResourceSharing(),
+            const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         explicit UniformTexelBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             std::shared_ptr<SrcTransferBuffer> srcBuffer,
             VkBufferCreateFlags flags = 0,
-            const ResourceSharing& sharing = ResourceSharing(),
+            const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma

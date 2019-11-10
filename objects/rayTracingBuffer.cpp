@@ -26,7 +26,7 @@ namespace magma
 {
 RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
-    const ResourceSharing& sharing /* default */,
+    const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     RayTracingBuffer(copyCmdBuffer,
@@ -36,7 +36,7 @@ RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
 
 RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, std::shared_ptr<SrcTransferBuffer> srcBuffer,
     VkBufferCreateFlags flags /* 0 */,
-    const ResourceSharing& sharing /* default */,
+    const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Buffer(copyCmdBuffer->getDevice(), srcBuffer->getMemory()->getSize(),
         VK_BUFFER_USAGE_RAY_TRACING_BIT_NV | VK_BUFFER_USAGE_TRANSFER_DST_BIT,

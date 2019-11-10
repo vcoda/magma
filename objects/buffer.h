@@ -16,13 +16,11 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "nondispatchable.h"
-#include "../misc/resourceSharing.h"
+#include "resource.h"
 #include "../helpers/typedefs.h"
 
 namespace magma
 {
-    class DeviceMemory;
     class CommandBuffer;
     class SrcTransferBuffer;
 
@@ -31,8 +29,7 @@ namespace magma
        pipeline via descriptor sets or via certain commands,
        or by directly specifying them as parameters to certain commands. */
 
-    class Buffer : public NonDispatchable<VkBuffer>,
-        public std::enable_shared_from_this<Buffer>
+    class Buffer : public NonDispatchableResource<Buffer, VkBuffer>
     {
     public:
         ~Buffer();
@@ -41,8 +38,6 @@ namespace magma
         void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
             VkDeviceSize offset = 0);
-        VkDeviceSize getSize() const noexcept { return size; }
-        VkDeviceSize getOffset() const noexcept { return offset; }
         VkBufferUsageFlags getUsage() const noexcept { return usage; }
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
         VkMemoryRequirements getMemoryRequirements() const noexcept;
@@ -53,7 +48,7 @@ namespace magma
             VkDeviceSize size,
             VkBufferUsageFlags usage,
             VkBufferCreateFlags flags,
-            const ResourceSharing& sharing,
+            const Sharing& sharing,
             std::shared_ptr<IAllocator> allocator,
             VkMemoryPropertyFlags memoryFlags);
         explicit Buffer(std::shared_ptr<DeviceMemory> memory,
@@ -61,7 +56,7 @@ namespace magma
             VkDeviceSize offset,
             VkBufferUsageFlags usage,
             VkBufferCreateFlags flags,
-            const ResourceSharing& sharing,
+            const Sharing& sharing,
             std::shared_ptr<IAllocator> allocator);
         void copyToMapped(const void *data,
             CopyMemoryFunction copyFn) noexcept;
@@ -70,9 +65,6 @@ namespace magma
             VkDeviceSize srcOffset = 0);
 
     protected:
-        VkDeviceSize size;
-        VkDeviceSize offset;
         VkBufferUsageFlags usage;
-        std::shared_ptr<DeviceMemory> memory;
     };
 } // namespace magma

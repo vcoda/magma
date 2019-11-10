@@ -16,13 +16,11 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "nondispatchable.h"
-#include "../misc/resourceSharing.h"
+#include "resource.h"
 #include "../helpers/typedefs.h"
 
 namespace magma
 {
-    class DeviceMemory;
     class Buffer;
     class CommandBuffer;
     typedef std::vector<VkDeviceSize> ImageMipmapLayout;
@@ -32,13 +30,10 @@ namespace magma
        by binding them to a graphics or compute pipeline via descriptor sets,
        or by directly specifying them as parameters to certain commands. */
 
-    class Image : public NonDispatchable<VkImage>,
-        public std::enable_shared_from_this<Image>
+    class Image : public NonDispatchableResource<Image, VkImage>
     {
     public:
         ~Image();
-        VkDeviceSize getSize() const noexcept { return size; }
-        VkDeviceSize getOffset() const noexcept { return offset; }
         VkImageType getType() const noexcept { return imageType; }
         VkFormat getFormat() const noexcept { return format; }
         VkImageLayout getLayout() const noexcept { return layout; }
@@ -74,7 +69,7 @@ namespace magma
             uint32_t samples,
             VkImageUsageFlags usage,
             VkImageCreateFlags flags,
-            const ResourceSharing& sharing,
+            const Sharing& sharing,
             std::shared_ptr<IAllocator> allocator);
         explicit Image(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset,
@@ -86,7 +81,7 @@ namespace magma
             uint32_t samples,
             VkImageUsageFlags usage,
             VkImageCreateFlags flags,
-            const ResourceSharing& sharing,
+            const Sharing& sharing,
             std::shared_ptr<IAllocator> allocator);
         explicit Image(std::shared_ptr<Device> device,
             VkImage handle,
@@ -103,8 +98,6 @@ namespace magma
             bool flush = true);
 
     protected:
-        VkDeviceSize size;
-        VkDeviceSize offset;
         VkImageType imageType;
         VkFormat format;
         VkImageLayout layout;
@@ -114,7 +107,6 @@ namespace magma
         uint32_t samples;
         VkImageUsageFlags usage;
         VkImageCreateFlags flags;
-        std::shared_ptr<DeviceMemory> memory;
         friend class ImageView;
     };
 

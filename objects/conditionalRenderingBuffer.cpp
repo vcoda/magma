@@ -26,7 +26,7 @@ namespace magma
 {
 ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<Device> device, const void *data, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
-    const ResourceSharing& sharing /* default */,
+    const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(std::move(device), size,
@@ -40,7 +40,7 @@ ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<Device> d
 
 ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,
-    const ResourceSharing& sharing /* default */,
+    const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     ConditionalRenderingBuffer(copyCmdBuffer,
@@ -50,7 +50,7 @@ ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBu
 
 ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, std::shared_ptr<SrcTransferBuffer> srcBuffer,
     VkBufferCreateFlags flags /* 0 */,
-    const ResourceSharing& sharing /* default */,
+    const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Buffer(copyCmdBuffer->getDevice(), srcBuffer->getMemory()->getSize(),
         VK_BUFFER_USAGE_CONDITIONAL_RENDERING_BIT_EXT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,

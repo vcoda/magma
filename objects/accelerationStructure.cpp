@@ -30,7 +30,7 @@ namespace magma
 AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkAccelerationStructureTypeNV type,
     uint32_t instanceCount, const std::list<Geometry>& geometries, VkBuildAccelerationStructureFlagsNV flags,
     VkDeviceSize compactedSize, std::shared_ptr<IAllocator> allocator):
-    NonDispatchable(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, std::move(device), std::move(allocator)),
+    NonDispatchableResource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, compactedSize, std::move(device), std::move(allocator)),
     type(type)
 {
     MAGMA_ASSERT(geometries.size() > 0);
@@ -75,6 +75,7 @@ void AccelerationStructure::bindMemory(std::shared_ptr<DeviceMemory> memory, con
     MAGMA_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult bind = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &info);
     MAGMA_THROW_FAILURE(bind, "failed to bind acceleration structure memory");
+    this->offset = offset;
     this->memory = std::move(memory);
 }
 

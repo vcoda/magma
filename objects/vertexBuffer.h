@@ -28,32 +28,32 @@ namespace magma
         explicit VertexBuffer(std::shared_ptr<Device> device,
             const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
-            const ResourceSharing& sharing = ResourceSharing(),
+            const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
-            const ResourceSharing& sharing = ResourceSharing(),
+            const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             std::shared_ptr<SrcTransferBuffer> srcBuffer,
             VkBufferCreateFlags flags = 0,
-            const ResourceSharing& sharing = ResourceSharing(),
+            const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
         template<typename VertexType>
         explicit VertexBuffer(std::shared_ptr<Device> device,
             const std::vector<VertexType>& vertices,
             VkBufferCreateFlags flags = 0,
-            const ResourceSharing& sharing = ResourceSharing(),
+            const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         template<typename VertexType>
         explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const std::vector<VertexType>& vertices,
             VkBufferCreateFlags flags = 0,
-            const ResourceSharing& sharing = ResourceSharing(),
+            const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         void setVertexCount(uint32_t count) noexcept { vertexCount = count; }

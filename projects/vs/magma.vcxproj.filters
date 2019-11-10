@@ -459,8 +459,8 @@
     <ClInclude Include="..\..\misc\deviceQueueDescriptor.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\misc\resourceSharing.h">
-      <Filter>Header Files\misc</Filter>
+    <ClInclude Include="..\..\objects\resource.h">
+      <Filter>Header Files\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -722,8 +722,8 @@
     <ClCompile Include="..\..\misc\deviceQueueDescriptor.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\misc\resourceSharing.cpp">
-      <Filter>Source Files\misc</Filter>
+    <ClCompile Include="..\..\objects\resource.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

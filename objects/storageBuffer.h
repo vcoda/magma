@@ -29,19 +29,19 @@ namespace magma
         explicit StorageBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
-            const ResourceSharing& sharing = ResourceSharing(),
+            const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
-            const ResourceSharing& sharing = ResourceSharing(),
+            const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         template<typename Type>
         explicit StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
             const std::vector<Type>& data,
             VkBufferCreateFlags flags = 0,
-            const ResourceSharing& sharing = ResourceSharing(),
+            const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
     };

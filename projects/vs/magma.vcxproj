@@ -191,7 +191,6 @@
     <ClInclude Include="..\..\misc\imageSubresourceRange.h" />
     <ClInclude Include="..\..\misc\instanceExtension.h" />
     <ClInclude Include="..\..\misc\pushConstants.h" />
-    <ClInclude Include="..\..\misc\resourceSharing.h" />
     <ClInclude Include="..\..\misc\scissor.h" />
     <ClInclude Include="..\..\misc\scopedDebugMarker.h" />
     <ClInclude Include="..\..\misc\vectorTypes.h" />
@@ -240,6 +239,7 @@
     <ClInclude Include="..\..\objects\rayTracingBuffer.h" />
     <ClInclude Include="..\..\objects\rayTracingPipeline.h" />
     <ClInclude Include="..\..\objects\renderPass.h" />
+    <ClInclude Include="..\..\objects\resource.h" />
     <ClInclude Include="..\..\objects\sampler.h" />
     <ClInclude Include="..\..\objects\semaphore.h" />
     <ClInclude Include="..\..\objects\shaderModule.h" />
@@ -302,7 +302,6 @@
     <ClCompile Include="..\..\misc\exception.cpp" />
     <ClCompile Include="..\..\misc\format.cpp" />
     <ClCompile Include="..\..\misc\geometry.cpp" />
-    <ClCompile Include="..\..\misc\resourceSharing.cpp" />
     <ClCompile Include="..\..\misc\scopedDebugMarker.cpp" />
     <ClCompile Include="..\..\objects\accelerationStructure.cpp" />
     <ClCompile Include="..\..\objects\buffer.cpp" />
@@ -347,6 +346,7 @@
     <ClCompile Include="..\..\objects\rayTracingBuffer.cpp" />
     <ClCompile Include="..\..\objects\rayTracingPipeline.cpp" />
     <ClCompile Include="..\..\objects\renderPass.cpp" />
+    <ClCompile Include="..\..\objects\resource.cpp" />
     <ClCompile Include="..\..\objects\sampler.cpp" />
     <ClCompile Include="..\..\objects\semaphore.cpp" />
     <ClCompile Include="..\..\objects\shaderModule.cpp" />

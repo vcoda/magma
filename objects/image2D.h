@@ -29,7 +29,7 @@ namespace magma
             VkFormat format,
             const VkExtent2D& extent,
             uint32_t mipLevels,
-            const ResourceSharing& sharing = ResourceSharing(),
+            const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit Image2D(std::shared_ptr<Device> device,
             VkFormat format,
@@ -38,7 +38,7 @@ namespace magma
             VkDeviceSize bufferOffset,
             const ImageMipmapLayout& mipOffsets,
             std::shared_ptr<CommandBuffer> cmdBuffer,
-            const ResourceSharing& sharing = ResourceSharing(),
+            const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             bool flush = true);
         explicit Image2D(std::shared_ptr<Device> device,
@@ -47,7 +47,7 @@ namespace magma
             const ImageMipmapData& mipData,
             const ImageMipmapLayout& mipSizes,
             std::shared_ptr<CommandBuffer> cmdBuffer,
-            const ResourceSharing& sharing = ResourceSharing(),
+            const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
 
@@ -58,7 +58,7 @@ namespace magma
             uint32_t mipLevels,
             uint32_t samples,
             VkImageUsageFlags usage,
-            const ResourceSharing& sharing,
+            const Sharing& sharing,
             std::shared_ptr<IAllocator> allocator);
         Image2D(std::shared_ptr<Device> device,
             VkImage handle,

@@ -39,7 +39,6 @@ MAGMA_OBJS= \
 	misc/exception.o \
 	misc/format.o \
 	misc/geometry.o \
-	misc/resourceSharing.o \
 	misc/scopedDebugMarker.o \
 	\
 	internal/pch.o \
@@ -87,6 +86,7 @@ MAGMA_OBJS= \
 	objects/rayTracingBuffer.o \
 	objects/rayTracingPipeline.o \
 	objects/renderPass.o \
+	objects/resource.o \
 	objects/sampler.o \
 	objects/semaphore.o \
 	objects/shaderModule.o \

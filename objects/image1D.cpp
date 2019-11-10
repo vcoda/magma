@@ -26,7 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width, uint32_t mipLevels,
-    const ResourceSharing& sharing /* default */,
+    const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
         mipLevels,
@@ -41,7 +41,7 @@ Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width
 Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width,
     std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, const ImageMipmapLayout& mipOffsets,
     std::shared_ptr<CommandBuffer> cmdBuffer,
-    const ResourceSharing& sharing /* default */,
+    const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool flush /* true */):
     Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
@@ -60,7 +60,7 @@ Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width
 Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width,
     const ImageMipmapData& mipData, const ImageMipmapLayout& mipSizes,
     std::shared_ptr<CommandBuffer> cmdBuffer,
-    const ResourceSharing& sharing /* default */,
+    const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
