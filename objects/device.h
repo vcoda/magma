@@ -54,7 +54,8 @@ namespace magma
             uint32_t localDeviceIndex,
             uint32_t remoteDeviceIndex) const noexcept;
         // Non-API
-        std::shared_ptr<PhysicalDevice> getPhysicalDevice() const noexcept { return physicalDevice; }
+        std::shared_ptr<PhysicalDevice> getPhysicalDevice() noexcept { return physicalDevice; }
+        std::shared_ptr<const PhysicalDevice> getPhysicalDevice() const noexcept { return physicalDevice; }
 
     private:
         std::shared_ptr<PhysicalDevice> physicalDevice;
