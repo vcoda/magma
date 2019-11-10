@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Resource::Sharing::Sharing(const std::vector<uint32_t>& queueFamilyIndices):
+Resource::Sharing::Sharing(const std::vector<uint32_t>& queueFamilyIndices) noexcept:
     queueFamilyIndices(std::move(queueFamilyIndices))
 {}
 

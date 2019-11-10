@@ -32,7 +32,7 @@ namespace magma
         {
         public:
             Sharing() = default;
-            Sharing(const std::vector<uint32_t>& queueFamilyIndices);
+            Sharing(const std::vector<uint32_t>& queueFamilyIndices) noexcept;
             Sharing(std::shared_ptr<const PhysicalDevice> device,
                 const std::initializer_list<VkQueueFlagBits>& queueTypes);
             VkSharingMode getMode() const noexcept;
@@ -71,7 +71,7 @@ namespace magma
         explicit NonDispatchableResource(VkObjectType objectType,
             VkDeviceSize size,
             std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> allocator):
+            std::shared_ptr<IAllocator> allocator) noexcept:
             NonDispatchable(objectType, std::move(device), std::move(allocator)),
             Resource(size)
         {}
