@@ -43,6 +43,13 @@ namespace magma
         VkResult result;
     };
 
+    class PresentException : public BadResult
+    {
+    public:
+        PresentException(const VkResult result, const char *const message, const char *file, int line):
+            BadResult(result, message, file, line) {}
+    };
+
     class ExtensionNotPresent: public Exception
     {
     public:

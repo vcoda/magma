@@ -178,6 +178,6 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain,
     presentInfo.pImageIndices = &imageIndex;
     presentInfo.pResults = nullptr;
     const VkResult present = vkQueuePresentKHR(handle, &presentInfo);
-    MAGMA_THROW_FAILURE(present, "queue present failed");
+    throw PresentException(present, "queue present failed", __FILE__, __LINE__);
 }
 } // namespace magma
