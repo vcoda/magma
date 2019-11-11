@@ -22,10 +22,8 @@ namespace magma
     class Exception : public std::runtime_error
     {
     public:
-        Exception(const char *const message,
-            const char *file = nullptr, int line = -1);
-        Exception(const std::string& message,
-            const char *file = nullptr, int line = -1);
+        Exception(const char *const message, const char *file = nullptr, int line = -1);
+        Exception(const std::string& message, const char *file = nullptr, int line = -1);
         const char *file() const noexcept { return fl; }
         int line() const noexcept { return ln; }
 
@@ -37,10 +35,8 @@ namespace magma
     class BadResult : public Exception
     {
     public:
-        BadResult(const VkResult result, const char *const message,
-            const char *file, int line);
-        BadResult(const VkResult result, const std::string& message,
-            const char *file, int line);
+        BadResult(const VkResult result, const char *const message, const char *file, int line);
+        BadResult(const VkResult result, const std::string& message, const char *file, int line);
         VkResult getResult() const noexcept { return result; }
 
     private:
@@ -50,15 +46,15 @@ namespace magma
     class ExtensionNotPresent: public Exception
     {
     public:
-        ExtensionNotPresent(const char *const extension,
-            const char *file, int line);
+        ExtensionNotPresent(const char *const extension, const char *file, int line):
+            Exception(extension, file, line) {}
     };
 
     class NotImplemented : public Exception
     {
     public:
-        NotImplemented(const char *const function,
-            const char *file, int line);
+        NotImplemented(const char *const function, const char *file, int line):
+            Exception(function, file, line) {}
     };
 } // namespace magma
 

@@ -48,14 +48,4 @@ BadResult::BadResult(const VkResult result,
     Exception(message, file, line),
     result(result)
 {}
-
-ExtensionNotPresent::ExtensionNotPresent(const char *const extension,
-    const char *file, int line):
-    Exception(extension, file, line)
-{}
-
-NotImplemented::NotImplemented(const char *const function,
-    const char *file, int line):
-    Exception(function, file, line)
-{}
 } // namespace magma

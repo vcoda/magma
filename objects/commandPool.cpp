@@ -30,7 +30,7 @@ namespace magma
 CommandPool::CommandPool(std::shared_ptr<Device> device,
     uint32_t queueFamilyIndex,
     bool transient /* false */,
-    bool reset /* true */,
+    bool resetCommandBuffer /* true */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_COMMAND_POOL, std::move(device), std::move(allocator))
 {
@@ -40,7 +40,7 @@ CommandPool::CommandPool(std::shared_ptr<Device> device,
     info.flags = 0;
     if (transient)
         info.flags |= VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
-    if (reset)
+    if (resetCommandBuffer)
         info.flags |= VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     info.queueFamilyIndex = queueFamilyIndex;
     const VkResult create = vkCreateCommandPool(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
