@@ -116,7 +116,7 @@ bool Device::waitIdle() const noexcept
     return (VK_SUCCESS == wait);
 }
 
-bool Device::resetFences(std::vector<std::shared_ptr<const Fence>>& fences) const noexcept
+bool Device::resetFences(std::vector<std::shared_ptr<Fence>>& fences) const noexcept
 {
     MAGMA_STACK_ARRAY(VkFence, dereferencedFences, fences.size());
     for (const auto& fence : fences)
@@ -125,7 +125,7 @@ bool Device::resetFences(std::vector<std::shared_ptr<const Fence>>& fences) cons
     return (VK_SUCCESS == reset);
 }
 
-bool Device::waitForFences(std::vector<std::shared_ptr<const Fence>>& fences, bool waitAll,
+bool Device::waitForFences(std::vector<std::shared_ptr<Fence>>& fences, bool waitAll,
     uint64_t timeout /* UINT64_MAX */) const noexcept
 {
     MAGMA_STACK_ARRAY(VkFence, dereferencedFences, fences.size());
