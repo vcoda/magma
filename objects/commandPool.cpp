@@ -21,9 +21,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandBuffer.h"
 #include "device.h"
 #include "../allocator/allocator.h"
-#include "../helpers/stackArray.h"
 #include "../misc/deviceExtension.h"
 #include "../misc/exception.h"
+#include "../helpers/stackArray.h"
 
 namespace magma
 {
@@ -61,27 +61,6 @@ bool CommandPool::reset(bool releaseResources) noexcept
     return (VK_SUCCESS == reset);
 }
 
-std::shared_ptr<CommandBuffer> CommandPool::allocateCommandBuffer(bool primaryLevel)
-{
-    VkCommandBufferAllocateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    info.pNext = nullptr;
-    info.commandPool = handle;
-    info.level = primaryLevel ? VK_COMMAND_BUFFER_LEVEL_PRIMARY : VK_COMMAND_BUFFER_LEVEL_SECONDARY;
-    info.commandBufferCount = 1;
-    VkCommandBuffer commandBuffer;
-    const VkResult alloc = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &info, &commandBuffer);
-    MAGMA_THROW_FAILURE(alloc, "failed to allocate command buffer");
-    return std::shared_ptr<CommandBuffer>(new CommandBuffer(commandBuffer, device, shared_from_this()));
-}
-
-void CommandPool::freeCommandBuffer(std::shared_ptr<CommandBuffer>& commandBuffer) noexcept
-{
-    VkCommandBuffer dereferencedCommandBuffers[1] = {*commandBuffer};
-    vkFreeCommandBuffers(MAGMA_HANDLE(device), handle, 1, dereferencedCommandBuffers);
-    commandBuffer.reset();
-}
-
 std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(uint32_t count, bool primaryLevel)
 {
     VkCommandBufferAllocateInfo info;
@@ -95,7 +74,12 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     MAGMA_THROW_FAILURE(alloc, "failed to allocate command buffers");
     std::vector<std::shared_ptr<CommandBuffer>> commandBuffers;
     for (const VkCommandBuffer cmdBuffer : nativeCommandBuffers)
-        commandBuffers.emplace_back(new CommandBuffer(cmdBuffer, device, shared_from_this()));
+    {
+        if (primaryLevel)
+            commandBuffers.emplace_back(new PrimaryCommandBuffer(cmdBuffer, shared_from_this()));
+        else
+            commandBuffers.emplace_back(new SecondaryCommandBuffer(cmdBuffer, shared_from_this()));
+    }
     return commandBuffers;
 }
 
@@ -105,6 +89,8 @@ void CommandPool::freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>
     for (const auto& buffer : commandBuffers)
         dereferencedCommandBuffers.put(*buffer);
     vkFreeCommandBuffers(MAGMA_HANDLE(device), handle, dereferencedCommandBuffers.size(), dereferencedCommandBuffers);
+    for (auto& buffer : commandBuffers)
+        buffer->handle = VK_NULL_HANDLE;
     commandBuffers.clear();
 }
 

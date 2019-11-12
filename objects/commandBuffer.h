@@ -30,7 +30,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/scissor.h"
 #include "../helpers/stackArray.h"
 
-
 namespace magma
 {
     class CommandPool;
@@ -49,20 +48,20 @@ namespace magma
     struct ImageMemoryBarrier;
 
     /* Command buffers are objects used to record commands which can be subsequently
-       submitted to a device queue for execution. There are two levels of command buffers -
-       primary command buffers, which can execute secondary command buffers,
-       and which are submitted to queues, and secondary command buffers, which can be executed
-       by primary command buffers, and which are not directly submitted to queues. */
+       submitted to a device queue for execution. */
 
     class CommandBuffer : public Dispatchable<VkCommandBuffer>
     {
-        explicit CommandBuffer(
-            VkCommandBuffer handle,
-            std::shared_ptr<Device> device,
-            std::shared_ptr<CommandPool> pool);
+    protected:
         friend class CommandPool;
+        explicit CommandBuffer(VkCommandBufferLevel level,
+            VkCommandBuffer handle,
+            std::shared_ptr<CommandPool> pool);
+        explicit CommandBuffer(VkCommandBufferLevel level,
+            std::shared_ptr<CommandPool> pool);
 
     public:
+        ~CommandBuffer();
         bool begin(VkCommandBufferUsageFlags flags = 0) noexcept;
         bool beginDeviceGroup(
             uint32_t deviceMask,
@@ -489,9 +488,10 @@ namespace magma
             uint32_t renderPassColor,
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
 
-    private:
+    protected:
         std::shared_ptr<CommandPool> pool;
         std::shared_ptr<Fence> fence;
+        VkCommandBufferLevel level;
         uint32_t deviceMask = 0xFFFFFFFF;
         std::vector<VkRect2D> renderAreas;
         VkBool32 occlusionQueryEnable = VK_FALSE;
@@ -502,6 +502,36 @@ namespace magma
         VkBool32 beginMarked = VK_FALSE;
         VkBool32 beginRenderPassMarked = VK_FALSE;
 #endif
+    };
+
+    /* Primary command buffer, which can execute secondary command buffers,
+       and which is submitted to the queue. */
+
+    class PrimaryCommandBuffer : public CommandBuffer
+    {
+        friend class CommandPool;
+        explicit PrimaryCommandBuffer(VkCommandBuffer handle,
+            std::shared_ptr<CommandPool> pool):
+            CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, handle, std::move(pool)) {}
+
+    public:
+        explicit PrimaryCommandBuffer(std::shared_ptr<CommandPool> pool):
+            CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, std::move(pool)) {}
+    };
+
+    /* Secondary command buffer, which can be executed by primary command buffers,
+       and which is not directly submitted to the queue. */
+
+    class SecondaryCommandBuffer : public CommandBuffer
+    {
+        friend class CommandPool;
+        explicit SecondaryCommandBuffer(VkCommandBuffer handle,
+            std::shared_ptr<CommandPool> pool):
+            CommandBuffer(VK_COMMAND_BUFFER_LEVEL_SECONDARY, handle, std::move(pool)) {}
+
+    public:
+        explicit SecondaryCommandBuffer(std::shared_ptr<CommandPool> pool):
+            CommandBuffer(VK_COMMAND_BUFFER_LEVEL_SECONDARY, std::move(pool)) {}
     };
 } // namespace magma
 

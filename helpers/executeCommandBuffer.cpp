@@ -35,7 +35,11 @@ bool executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
     const char *blockName /* magma::helpers::executeCommandBuffer */,
     uint32_t blockColor /* 0x0 */)
 {
-    std::shared_ptr<CommandBuffer> cmdBuffer = cmdPool->allocateCommandBuffer(primaryLevel);
+    std::shared_ptr<CommandBuffer> cmdBuffer;
+    if (primaryLevel)
+        cmdBuffer = std::make_shared<PrimaryCommandBuffer>(cmdPool);
+    else
+        cmdBuffer = std::make_shared<SecondaryCommandBuffer>(cmdPool);
     if (cmdBuffer->begin(blockName, blockColor))
     {
         callback(cmdBuffer);
@@ -45,7 +49,6 @@ bool executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
     std::shared_ptr<Queue> queue = cmdPool->getDevice()->getQueue(queueType, 0);
     const bool submitted = queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
     const bool waited = fence->wait();
-    cmdPool->freeCommandBuffer(cmdBuffer);
     return submitted && waited;
 }
 } // namespace helpers

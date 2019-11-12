@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "commandBuffer.h"
+#include "commandPool.h"
 #include "device.h"
 #include "deviceMemory.h"
 #include "framebuffer.h"
@@ -35,12 +36,37 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-CommandBuffer::CommandBuffer(VkCommandBuffer handle, std::shared_ptr<Device> device, std::shared_ptr<CommandPool> pool):
+CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle, std::shared_ptr<CommandPool> pool):
     Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, std::move(device), nullptr),
     pool(std::move(pool)),
-    fence(std::make_shared<Fence>(this->device))
+    fence(std::make_shared<Fence>(this->device)),
+    level(level)
 {
     this->handle = handle;
+}
+
+CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<CommandPool> pool):
+    Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, pool->getDevice(), nullptr),
+    pool(std::move(pool)),
+    fence(std::make_shared<Fence>(device)),
+    level(level)
+{
+    VkCommandBufferAllocateInfo info;
+    info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    info.pNext = nullptr;
+    info.commandPool = *this->pool;
+    info.level = level;
+    info.commandBufferCount = 1;
+    const VkResult alloc = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &info, &handle);
+    MAGMA_THROW_FAILURE(alloc, "failed to allocate primary command buffer");
+}
+
+CommandBuffer::~CommandBuffer()
+{
+    if (handle)
+    {   // Release if not freed through command pool
+        vkFreeCommandBuffers(MAGMA_HANDLE(device), *pool, 1, &handle);
+    }
 }
 
 bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept

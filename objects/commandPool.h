@@ -40,8 +40,6 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~CommandPool();
         bool reset(bool releaseResources) noexcept;
-        std::shared_ptr<CommandBuffer> allocateCommandBuffer(bool primaryLevel);
-        void freeCommandBuffer(std::shared_ptr<CommandBuffer>& commandBuffer) noexcept;
         std::vector<std::shared_ptr<CommandBuffer>> allocateCommandBuffers(uint32_t count,
             bool primaryLevel);
         void freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept;
