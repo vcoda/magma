@@ -78,7 +78,7 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     for (const VkCommandBuffer handle : cmdBufferHandles)
     {
         CommandBuffer *commandBuffer;
-        if (void *placement = pool.allocate())
+        if (void *placement = pool.alloc(sizeof(CommandBuffer)))
         {   // Optimize object allocation using placement new
             if (primaryLevel)
                 commandBuffer = new (placement) PrimaryCommandBuffer(handle, shared_from_this());

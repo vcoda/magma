@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "../allocator/objectAllocator.h"
 
 namespace magma
 {
@@ -24,31 +25,42 @@ namespace magma
         /* Placement pool. */
 
         template<typename Type>
-        class PlacementPool
+        class PlacementPool : public IObjectAllocator
         {
         public:
-            PlacementPool(uint32_t maxObjects):
-                pool(sizeof(Type) * maxObjects, 0),
-                maxObjects(maxObjects),
+            PlacementPool(uint32_t maxObjectCount):
+                pool(sizeof(Type) * maxObjectCount, 0),
+                maxObjectCount(maxObjectCount),
                 allocCount(0)
-            {
-            }
+            {}
 
-            void *allocate() noexcept
-            {   // Linear allocation
-                if (allocCount < maxObjects)
+            void *alloc(size_t size) override
+            {
+                if (size != sizeof(Type))
+                    return nullptr;
+                // Linear allocation
+                if (allocCount < maxObjectCount)
                     return pool.data() + sizeof(Type) * allocCount++;
                 return nullptr;
             }
 
-            uint32_t getAllocationCount() const noexcept
+            void free(void *p) noexcept override
             {
-                return allocCount;
+                if ((p >= pool.data()) &&
+                    (p <= pool.data() + sizeof(Type) * (maxObjectCount - 1)))
+                {
+                    // Not yet implemented
+                }
+            }
+
+            size_t getBytesAllocated() const noexcept override
+            {
+                return sizeof(Type) * allocCount;
             }
 
         private:
             std::vector<char> pool;
-            const uint32_t maxObjects;
+            const uint32_t maxObjectCount;
             uint32_t allocCount;
         };
     } // namespace internal
