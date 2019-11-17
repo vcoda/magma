@@ -31,7 +31,9 @@ namespace magma
     public:
         void *operator new(std::size_t size);
         void *operator new(std::size_t size, const std::nothrow_t&) noexcept;
+        void* operator new(std::size_t, void* where) noexcept { return where; }
         void operator delete(void *ptr);
+        void operator delete(void *, void *) {}
         explicit Object(VkObjectType objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator) noexcept;
