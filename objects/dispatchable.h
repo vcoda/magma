@@ -43,6 +43,12 @@ namespace magma
             std::shared_ptr<IAllocator> allocator) noexcept:
             Object(objectType, std::move(device), std::move(allocator)),
             handle(nullptr) {}
+        explicit Dispatchable(VkObjectType objectType,
+            NativeHandle handle,
+            std::shared_ptr<Device> device,
+            std::shared_ptr<IAllocator> allocator) noexcept:
+            Object(objectType, std::move(device), std::move(allocator)),
+            handle(handle) {}
 
     protected:
         NativeHandle handle;
