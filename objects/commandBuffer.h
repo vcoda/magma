@@ -489,9 +489,9 @@ namespace magma
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
 
     protected:
+        VkCommandBufferLevel level;
         std::shared_ptr<CommandPool> pool;
         std::shared_ptr<Fence> fence;
-        VkCommandBufferLevel level;
         uint32_t deviceMask = 0xFFFFFFFF;
         std::vector<VkRect2D> renderAreas;
         VkBool32 occlusionQueryEnable = VK_FALSE;
