@@ -31,8 +31,10 @@ CommandPool::CommandPool(std::shared_ptr<Device> device,
     uint32_t queueFamilyIndex,
     bool transient /* false */,
     bool resetCommandBuffer /* true */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_COMMAND_POOL, std::move(device), std::move(allocator))
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    uint32_t poolCommandBufferCount /* 256 */):
+    NonDispatchable(VK_OBJECT_TYPE_COMMAND_POOL, std::move(device), std::move(allocator)),
+    pool(poolCommandBufferCount)
 {
     VkCommandPoolCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
@@ -61,24 +63,40 @@ bool CommandPool::reset(bool releaseResources) noexcept
     return (VK_SUCCESS == reset);
 }
 
-std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(uint32_t count, bool primaryLevel)
+std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(uint32_t commandBufferCount, bool primaryLevel)
 {
     VkCommandBufferAllocateInfo info;
     info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     info.pNext = nullptr;
     info.commandPool = handle;
     info.level = primaryLevel ? VK_COMMAND_BUFFER_LEVEL_PRIMARY : VK_COMMAND_BUFFER_LEVEL_SECONDARY;
-    info.commandBufferCount = count;
-    MAGMA_STACK_ARRAY(VkCommandBuffer, nativeCommandBuffers, count);
-    const VkResult alloc = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &info, nativeCommandBuffers);
+    info.commandBufferCount = commandBufferCount;
+    MAGMA_STACK_ARRAY(VkCommandBuffer, cmdBufferHandles, commandBufferCount);
+    const VkResult alloc = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &info, cmdBufferHandles);
     MAGMA_THROW_FAILURE(alloc, "failed to allocate command buffers");
     std::vector<std::shared_ptr<CommandBuffer>> commandBuffers;
-    for (const VkCommandBuffer cmdBuffer : nativeCommandBuffers)
+    for (const VkCommandBuffer handle : cmdBufferHandles)
     {
-        if (primaryLevel)
-            commandBuffers.emplace_back(new PrimaryCommandBuffer(cmdBuffer, shared_from_this()));
+        CommandBuffer *commandBuffer;
+        if (void *placement = pool.allocate())
+        {   // Optimize object allocation using placement new
+            if (primaryLevel)
+                commandBuffer = new (placement) PrimaryCommandBuffer(handle, shared_from_this());
+            else
+                commandBuffer = new (placement) SecondaryCommandBuffer(handle, shared_from_this());
+            commandBuffers.emplace_back(commandBuffer, [](CommandBuffer *commandBuffer)
+            {   // Release resource ownership, but don't delete in memory because of placement new
+                commandBuffer->~CommandBuffer();
+            });
+        }
         else
-            commandBuffers.emplace_back(new SecondaryCommandBuffer(cmdBuffer, shared_from_this()));
+        {   // Pool is out of memory
+            if (primaryLevel)
+                commandBuffer = new PrimaryCommandBuffer(handle, shared_from_this());
+            else
+                commandBuffer = new SecondaryCommandBuffer(handle, shared_from_this());
+            commandBuffers.emplace_back(commandBuffer);
+        }
     }
     return commandBuffers;
 }
@@ -90,7 +108,7 @@ void CommandPool::freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>
         dereferencedCommandBuffers.put(*buffer);
     vkFreeCommandBuffers(MAGMA_HANDLE(device), handle, dereferencedCommandBuffers.size(), dereferencedCommandBuffers);
     for (auto& buffer : commandBuffers)
-        buffer->handle = VK_NULL_HANDLE;
+        buffer->handle = VK_NULL_HANDLE; // Do not call vkFreeCommandBuffers() in destructor
     commandBuffers.clear();
 }
 

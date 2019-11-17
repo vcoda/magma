@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
+#include "../internal/placementPool.h"
 
 namespace magma
 {
@@ -37,12 +38,16 @@ namespace magma
             uint32_t queueFamilyIndex,
             bool transient = false,
             bool resetCommandBuffer = true,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            uint32_t poolCommandBufferCount = 256);
         ~CommandPool();
         bool reset(bool releaseResources) noexcept;
-        std::vector<std::shared_ptr<CommandBuffer>> allocateCommandBuffers(uint32_t count,
+        std::vector<std::shared_ptr<CommandBuffer>> allocateCommandBuffers(uint32_t commandBufferCount,
             bool primaryLevel);
         void freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept;
         void trim(VkCommandPoolTrimFlags flags = 0);
+
+    private:
+        internal::PlacementPool<CommandBuffer> pool;
     };
 } // namespace magma
