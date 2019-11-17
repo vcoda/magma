@@ -437,6 +437,7 @@ namespace magma
             uint32_t color) noexcept;
 
         // Non-API utility methods
+        bool primary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_PRIMARY == level; }
         std::shared_ptr<CommandPool> getPool() const noexcept { return pool; }
         std::shared_ptr<Fence> getFence() const noexcept;
         uint32_t getDeviceMask() const noexcept { return deviceMask; }
