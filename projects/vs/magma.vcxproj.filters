@@ -462,6 +462,9 @@
     <ClInclude Include="..\..\objects\resource.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\internal\placementPool.h">
+      <Filter>Header Files\internal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">

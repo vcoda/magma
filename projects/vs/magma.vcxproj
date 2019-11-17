@@ -177,6 +177,7 @@
     <ClInclude Include="..\..\internal\hash.h" />
     <ClInclude Include="..\..\internal\nonCopyable.h" />
     <ClInclude Include="..\..\internal\pch.h" />
+    <ClInclude Include="..\..\internal\placementPool.h" />
     <ClInclude Include="..\..\internal\refCountChecker.h" />
     <ClInclude Include="..\..\internal\shared.h" />
     <ClInclude Include="..\..\internal\zeroMemory.h" />
