@@ -63,7 +63,9 @@ namespace magma
        Resources are views of memory with associated formatting and dimensionality. */
 
     template<typename Child, typename Object>
-    class NonDispatchableResource : public NonDispatchable<Object>, public Resource,
+    class NonDispatchableResource :
+        public NonDispatchable<Object>,
+        public Resource,
         public std::enable_shared_from_this<Child>
     {
     protected:
