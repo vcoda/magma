@@ -74,11 +74,13 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     MAGMA_STACK_ARRAY(VkCommandBuffer, cmdBufferHandles, commandBufferCount);
     const VkResult alloc = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &info, cmdBufferHandles);
     MAGMA_THROW_FAILURE(alloc, "failed to allocate command buffers");
+    std::shared_ptr<IObjectAllocator> userAllocator = getOverridenAllocator();
     std::vector<std::shared_ptr<CommandBuffer>> commandBuffers;
     for (const VkCommandBuffer handle : cmdBufferHandles)
     {
         CommandBuffer *commandBuffer;
-        if (void *placement = pool.alloc(sizeof(CommandBuffer)))
+        void *placement = userAllocator ? nullptr : pool.alloc(sizeof(CommandBuffer));
+        if (placement)
         {   // Optimize object allocation using placement new
             if (primaryLevel)
                 commandBuffer = new (placement) PrimaryCommandBuffer(handle, shared_from_this());
@@ -90,7 +92,7 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
             });
         }
         else
-        {   // Pool is out of memory
+        {
             if (primaryLevel)
                 commandBuffer = new PrimaryCommandBuffer(handle, shared_from_this());
             else
