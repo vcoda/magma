@@ -29,7 +29,7 @@ namespace magma
     class Dispatchable : public Object
     {
     public:
-        typedef Type VkHandleType;
+        typedef Type NativeHandle;
 
     public:
         virtual uint64_t getHandle() const noexcept override
@@ -45,6 +45,6 @@ namespace magma
             handle(nullptr) {}
 
     protected:
-        Type handle;
+        NativeHandle handle;
     };
 } // namespace magma
