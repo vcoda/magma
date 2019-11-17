@@ -54,10 +54,12 @@ namespace magma
     {
     protected:
         friend class CommandPool;
-        explicit CommandBuffer(VkCommandBufferLevel level,
-            VkCommandBuffer handle,
+        explicit CommandBuffer(
+            VkCommandBufferLevel level,
             std::shared_ptr<CommandPool> pool);
-        explicit CommandBuffer(VkCommandBufferLevel level,
+        explicit CommandBuffer(
+            VkCommandBufferLevel level,
+            VkCommandBuffer handle,
             std::shared_ptr<CommandPool> pool);
 
     public:

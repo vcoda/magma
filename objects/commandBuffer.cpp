@@ -36,15 +36,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle, std::shared_ptr<CommandPool> pool):
-    Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, pool->getDevice(), nullptr),
-    level(level),
-    pool(std::move(pool)),
-    fence(std::make_shared<Fence>(this->device))
-{   // Allocated through command pool
-    this->handle = handle;
-}
-
 CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<CommandPool> pool):
     Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, pool->getDevice(), nullptr),
     level(level),
@@ -60,6 +51,13 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     const VkResult alloc = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &info, &handle);
     MAGMA_THROW_FAILURE(alloc, "failed to allocate primary command buffer");
 }
+
+CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle, std::shared_ptr<CommandPool> pool):
+    Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, handle, pool->getDevice(), nullptr),
+    level(level),
+    pool(std::move(pool)),
+    fence(std::make_shared<Fence>(this->device))
+{}
 
 CommandBuffer::~CommandBuffer()
 {   // Release if not freed through command pool
