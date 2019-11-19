@@ -28,23 +28,7 @@ namespace magma
     class Resource
     {
     public:
-        class Sharing
-        {
-        public:
-            Sharing() = default;
-            Sharing(const std::vector<uint32_t>& queueFamilyIndices) noexcept;
-            Sharing(std::shared_ptr<const PhysicalDevice> device,
-                const std::initializer_list<VkQueueFlagBits>& queueTypes);
-            VkSharingMode getMode() const noexcept;
-            uint32_t getQueueFamiliesCount() const noexcept;
-            const std::vector<uint32_t>& getQueueFamilyIndices() const noexcept { return queueFamilyIndices; }
-
-        private:
-            uint32_t chooseFamilyIndex(VkQueueFlagBits queueType,
-                const std::vector<VkQueueFamilyProperties>& queueFamilyProperties) const noexcept;
-
-            std::vector<uint32_t> queueFamilyIndices;
-        };
+        class Sharing;
 
         VkDeviceSize getSize() const noexcept { return size; }
         VkDeviceSize getOffset() const noexcept { return offset; }
@@ -57,6 +41,27 @@ namespace magma
         VkDeviceSize size;
         VkDeviceSize offset;
         std::shared_ptr<DeviceMemory> memory;
+    };
+
+    /* Buffer and image objects are created with a sharing mode
+       controlling how they can be accessed from queues. */
+
+    class Resource::Sharing
+    {
+    public:
+        Sharing() = default;
+        Sharing(const std::vector<uint32_t>& queueFamilyIndices) noexcept;
+        Sharing(std::shared_ptr<const PhysicalDevice> device,
+            const std::initializer_list<VkQueueFlagBits>& queueTypes);
+        VkSharingMode getMode() const noexcept;
+        uint32_t getQueueFamiliesCount() const noexcept;
+        const std::vector<uint32_t>& getQueueFamilyIndices() const noexcept { return queueFamilyIndices; }
+
+    private:
+        uint32_t chooseFamilyIndex(VkQueueFlagBits queueType,
+            const std::vector<VkQueueFamilyProperties>& queueFamilyProperties) const noexcept;
+
+        std::vector<uint32_t> queueFamilyIndices;
     };
 
     /* Vulkan supports two primary resource types: buffers and images.
