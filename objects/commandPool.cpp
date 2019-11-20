@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../misc/deviceExtension.h"
 #include "../misc/exception.h"
+#include "../internal/placementPool.h"
 #include "../helpers/stackArray.h"
 
 namespace magma
@@ -47,7 +48,7 @@ CommandPool::CommandPool(std::shared_ptr<Device> device,
     const VkResult create = vkCreateCommandPool(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create command pool");
     if (!getOverridenAllocator())
-        pool = std::make_unique<internal::PlacementPool<CommandBuffer>>(poolCommandBufferCount);
+        pool = std::make_unique<internal::PlacementPool>(sizeof(CommandBuffer), poolCommandBufferCount);
 }
 
 CommandPool::~CommandPool()
@@ -78,20 +79,20 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     std::vector<std::shared_ptr<CommandBuffer>> commandBuffers;
     for (const VkCommandBuffer handle : cmdBufferHandles)
     {
-        CommandBuffer *commandBuffer;
-        void *placement = pool ? pool->alloc(sizeof(CommandBuffer)) : nullptr;
-        if (placement)
-        {   // Optimize object allocation using placement new
+        CommandBuffer *commandBuffer = nullptr;
+        if (pool)
+        {   // Optimize command buffer object allocation using placement new
             if (primaryLevel)
-                commandBuffer = new (placement) PrimaryCommandBuffer(handle, shared_from_this());
+                commandBuffer = pool->placementNew<PrimaryCommandBuffer>(handle, shared_from_this());
             else
-                commandBuffer = new (placement) SecondaryCommandBuffer(handle, shared_from_this());
-            commandBuffers.emplace_back(commandBuffer, [](CommandBuffer *commandBuffer)
-            {   // Release resource ownership, but don't delete in memory because of placement new
-                commandBuffer->~CommandBuffer();
-            });
+                commandBuffer = pool->placementNew<SecondaryCommandBuffer>(handle, shared_from_this());
+            if (commandBuffer)
+                commandBuffers.emplace_back(commandBuffer, [](CommandBuffer *commandBuffer) {
+                    // Release resource ownership, but don't delete in memory because of placement new
+                    commandBuffer->~CommandBuffer();
+                });
         }
-        else
+        if (!commandBuffer)
         {
             if (primaryLevel)
                 commandBuffer = new PrimaryCommandBuffer(handle, shared_from_this());

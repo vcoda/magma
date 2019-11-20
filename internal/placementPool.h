@@ -24,30 +24,37 @@ namespace magma
     {
         /* Placement pool. */
 
-        template<typename Type>
         class PlacementPool : public IObjectAllocator
         {
         public:
-            PlacementPool(uint32_t maxObjectCount):
-                pool(sizeof(Type) * maxObjectCount, 0),
+            PlacementPool(size_t typeSize, uint32_t maxObjectCount):
+                pool(typeSize * maxObjectCount, 0),
+                typeSize(typeSize),
                 maxObjectCount(maxObjectCount),
                 allocCount(0)
             {}
 
-            void *alloc(size_t size) override
+            template<typename Type, typename... Types>
+            Type *placementNew(Types&&... args)
             {
-                if (size != sizeof(Type))
-                    return nullptr;
-                // Linear allocation
+                assert(sizeof(Type) == typeSize);
+                void *const placement = alloc(sizeof(Type));
+                if (placement)
+                    return new (placement) Type(std::forward<Types &&>(args)...);
+                return nullptr;
+            }
+
+            void *alloc(size_t size) override
+            {   // Linear incremental allocation
                 if (allocCount < maxObjectCount)
-                    return pool.data() + sizeof(Type) * allocCount++;
+                    return pool.data() + size * allocCount++;
                 return nullptr;
             }
 
             void free(void *p) noexcept override
             {
                 if ((p >= pool.data()) &&
-                    (p <= pool.data() + sizeof(Type) * (maxObjectCount - 1)))
+                    (p <= pool.data() + typeSize * (maxObjectCount - 1)))
                 {
                     // Not yet implemented
                 }
@@ -55,11 +62,12 @@ namespace magma
 
             size_t getBytesAllocated() const noexcept override
             {
-                return sizeof(Type) * allocCount;
+                return typeSize * allocCount;
             }
 
         private:
             std::vector<char> pool;
+            const size_t typeSize;
             const uint32_t maxObjectCount;
             uint32_t allocCount;
         };
