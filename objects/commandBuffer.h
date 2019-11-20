@@ -58,7 +58,7 @@ namespace magma
     class CommandBuffer : public Dispatchable<VkCommandBuffer>
     {
     protected:
-        friend class CommandPool;
+        friend CommandPool;
         explicit CommandBuffer(
             VkCommandBufferLevel level,
             std::shared_ptr<CommandPool> pool);
@@ -517,7 +517,7 @@ namespace magma
 
     class PrimaryCommandBuffer : public CommandBuffer
     {
-        friend class CommandPool;
+        friend CommandPool;
         friend internal::PlacementPool;
         explicit PrimaryCommandBuffer(VkCommandBuffer handle,
             std::shared_ptr<CommandPool> pool):
@@ -533,7 +533,7 @@ namespace magma
 
     class SecondaryCommandBuffer : public CommandBuffer
     {
-        friend class CommandPool;
+        friend CommandPool;
         friend internal::PlacementPool;
         explicit SecondaryCommandBuffer(VkCommandBuffer handle,
             std::shared_ptr<CommandPool> pool):

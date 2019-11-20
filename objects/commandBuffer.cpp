@@ -60,8 +60,8 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle,
 {}
 
 CommandBuffer::~CommandBuffer()
-{   // Release if not freed through command pool
-    if (handle)
+{
+    if (handle) // Release if not freed through command pool
         vkFreeCommandBuffers(MAGMA_HANDLE(device), MAGMA_HANDLE(pool), 1, &handle);
 }
 
