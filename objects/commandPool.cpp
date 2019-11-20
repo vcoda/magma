@@ -33,8 +33,7 @@ CommandPool::CommandPool(std::shared_ptr<Device> device,
     bool resetCommandBuffer /* true */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     uint32_t poolCommandBufferCount /* 256 */):
-    NonDispatchable(VK_OBJECT_TYPE_COMMAND_POOL, std::move(device), std::move(allocator)),
-    pool(poolCommandBufferCount)
+    NonDispatchable(VK_OBJECT_TYPE_COMMAND_POOL, std::move(device), std::move(allocator))
 {
     VkCommandPoolCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
@@ -47,6 +46,8 @@ CommandPool::CommandPool(std::shared_ptr<Device> device,
     info.queueFamilyIndex = queueFamilyIndex;
     const VkResult create = vkCreateCommandPool(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create command pool");
+    if (!getOverridenAllocator())
+        pool = std::make_unique<internal::PlacementPool<CommandBuffer>>(poolCommandBufferCount);
 }
 
 CommandPool::~CommandPool()
@@ -74,12 +75,11 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     MAGMA_STACK_ARRAY(VkCommandBuffer, cmdBufferHandles, commandBufferCount);
     const VkResult alloc = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &info, cmdBufferHandles);
     MAGMA_THROW_FAILURE(alloc, "failed to allocate command buffers");
-    std::shared_ptr<IObjectAllocator> userAllocator = getOverridenAllocator();
     std::vector<std::shared_ptr<CommandBuffer>> commandBuffers;
     for (const VkCommandBuffer handle : cmdBufferHandles)
     {
         CommandBuffer *commandBuffer;
-        void *placement = userAllocator ? nullptr : pool.alloc(sizeof(CommandBuffer));
+        void *placement = pool ? pool->alloc(sizeof(CommandBuffer)) : nullptr;
         if (placement)
         {   // Optimize object allocation using placement new
             if (primaryLevel)

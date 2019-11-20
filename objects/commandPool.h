@@ -48,6 +48,6 @@ namespace magma
         void trim(VkCommandPoolTrimFlags flags = 0);
 
     private:
-        internal::PlacementPool<CommandBuffer> pool;
+        std::unique_ptr<internal::PlacementPool<CommandBuffer>> pool;
     };
 } // namespace magma
