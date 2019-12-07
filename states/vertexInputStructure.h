@@ -40,7 +40,7 @@ namespace magma
             const VertexInputAttribute(&attributes)[vertexAttributeCount],
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX);
         VertexInputStructure(const VertexInputStructure& other);
-        VertexInputStructure& VertexInputStructure::operator=(const VertexInputStructure& other);
+		VertexInputStructure& operator=(const VertexInputStructure& other);
         virtual uint32_t stride(uint32_t binding) const noexcept override;
     };
 
@@ -61,7 +61,7 @@ namespace magma
         template<typename Type, bool normalized = false>
         struct VertexAttribute : AttributeFormat<VK_FORMAT_UNDEFINED>
         {
-            constexpr VertexAttribute() { static_assert(false, "vertex attribute type not specialized"); }
+			constexpr VertexAttribute() { /*static_assert(false, "vertex attribute type not specialized");*/ }
             constexpr std::size_t getSize() const { return sizeof(Type); }
             constexpr bool hasNormalization() const { return normalized; }
         };
