@@ -67,9 +67,9 @@ namespace magma
     /* Vulkan supports two primary resource types: buffers and images.
        Resources are views of memory with associated formatting and dimensionality. */
 
-    template<typename Child, typename Object>
+    template<typename Child, typename Type>
     class NonDispatchableResource :
-        public NonDispatchable<Object>,
+        public NonDispatchable<Type>,
         public Resource,
         public std::enable_shared_from_this<Child>
     {
@@ -78,7 +78,7 @@ namespace magma
             VkDeviceSize size,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator) noexcept:
-			NonDispatchable<Object>(objectType, std::move(device), std::move(allocator)),
+			NonDispatchable<Type>(objectType, std::move(device), std::move(allocator)),
             Resource(size)
         {}
     };
