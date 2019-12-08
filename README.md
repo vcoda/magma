@@ -35,7 +35,7 @@ All objects are inherited from two types: Dispatchable and NonDispatchable, acco
 are inherited from base Object class. Render state objects are simply structures that inherited from Vulkan structures
 and has plenty of constructors to conveniently initialize state description. They don't have any additional members,
 so user can safely cast an array of state objects to an array of Vulkan structures. All state objects have ::hash() method,
-which can be used to quickly lookup similar pipeline states in the cache instead of creating new one.
+which can be used to quickly lookup similar pipeline states in the cache instead of creating a new one.
 
 The library was designed with zero or almost zero overhead in mind. While C++ exceptions are heavily used during object
 construction time, there are numerous methods marked with "noexcept" specifier. Consider, for example, VkCommandBuffer object:
@@ -50,7 +50,7 @@ Predefined render states are usually "constexpr" objects, which means that they 
 (not run-time), mapping efficiently to low-level API.
 
 The library often allocates temporary arrays on the stack instead of creating them in the heap. This may cause stack overflow
-in abuse cases, but speed up allocations and reduce memory fragmentation in run-time.
+in abuse cases, but speeds up allocations and reduces memory fragmentation in run-time.
 
 ## Features
 
@@ -74,7 +74,7 @@ and some other minor extensions. Support for new API features (1.1 and beyond) n
 Magma provides some auxiliary objects that were written on top of core functionality. Their goals are to facilitate development by providing
 typical operations used in 3D graphics. For example, sometimes I miss immediate mode from OpenGL 1.x era, where you can quickly draw 
 a few primitives with glBegin/glEnd. Or often there is need to quickly present rendered image to the screen, or create shader from GLSL source
-instead of pre-compiled SPIR-V binary and so on. Auxiliary objects are placed in nested namespace and are not part of the Vulkan core.
+instead of pre-compiled SPIR-V binary and so on. Auxiliary objects are placed in nested namespace and are not part of the Magma core.
 
 ## Dependencies
 
@@ -83,4 +83,4 @@ from any third-party libraries, except [shaderc](https://github.com/google/shade
 
 ## Language
 
-Code is written in modern C++11/14 and takes advantage of new language features, STL containers and smart pointers.
+Code is written in modern C++11/14 and takes advantage of new language features, STL and smart pointers.
