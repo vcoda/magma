@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "immediateRender.h"
+#include "graphicsPipelineCache.h"
 #include "../objects/deviceMemory.h"
 #include "../objects/commandBuffer.h"
 #include "../objects/pipeline.h"
@@ -40,21 +41,18 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     maxVertexCount(maxVertexCount),
     device(std::move(device)),
-    cache(std::move(cache)),
     layout(std::move(layout)),
     renderPass(std::move(renderPass)),
     allocator(std::move(allocator)),
     vertexBuffer(std::make_shared<VertexBuffer>(this->device, nullptr, sizeof(Vertex) * maxVertexCount, 0, Resource::Sharing(), this->allocator)),
+    pipelineCache(std::make_shared<GraphicsPipelineCache>(this->device, std::move(cache), this->allocator)),
     vertexShader(VertexShaderStage(createShader(true), "main")),
     fragmentShader(FragmentShaderStage(createShader(false), "main")),
-    renderStates{
-        renderstates::fillCullBackCCW,
-        renderstates::noMultisample,
-        renderstates::depthAlwaysDontWrite,
-        ManagedColorBlendState(renderstates::dontBlendWriteRgba) // Make copyable
-    }
-{
-    // Set attributes to initial state
+    rasterizationState(renderstates::fillCullBackCCW),
+    multisampleState(renderstates::noMultisample),
+    depthStencilState(renderstates::depthAlwaysDontWrite),
+    colorBlendState(renderstates::dontBlendWriteRgba) // Make copyable
+{   // Set attributes to initial state
     normal(0.f, 0.f, 0.f);
     color(1.f, 1.f, 1.f, 1.f); // White is default
     texcoord(0.f, 0.f);
@@ -173,8 +171,7 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTop
         {1, &Vertex::normalPSize},
         {2, &Vertex::color},
         {3, &Vertex::texcoord}});
-    constexpr const InputAssemblyState *inputAssemblyStates[] =
-    {
+    constexpr const InputAssemblyState *inputAssemblyStates[] = {
         &renderstates::pointList,
         &renderstates::lineList,
         &renderstates::lineStrip,
@@ -185,91 +182,19 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTop
         &renderstates::lineStripWithAdjacency,
         &renderstates::triangleListWithAdjacency,
         &renderstates::triangleStripWithAdjacency,
-        &renderstates::patchList
-    };
-    std::shared_ptr<GraphicsPipeline> pipeline;
-    std::shared_ptr<GraphicsPipeline> basePipeline = lookupBasePipeline();
-    const std::size_t hash = computePipelineHash(vertexInputState, *inputAssemblyStates[topology], basePipeline);
-    // Fast lookup for existing pipeline
-    auto it = pipelines.find(hash);
-    if (it != pipelines.end())
-        pipeline = it->second.pipeline;
-    else
-    {   // Create new pipeline for unique render states
-        pipeline = std::make_shared<GraphicsPipeline>(device, cache,
-            std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
-            vertexInputState,
-            *inputAssemblyStates[topology],
-            renderStates.rasterization,
-            renderStates.multisample,
-            renderStates.depthStencil,
-            renderStates.colorBlend,
-            std::initializer_list<VkDynamicState>{
-                VK_DYNAMIC_STATE_VIEWPORT,
-                VK_DYNAMIC_STATE_SCISSOR,
-                VK_DYNAMIC_STATE_LINE_WIDTH
-            },
-            layout,
-            renderPass, 0,
-            basePipeline,
-            VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT,
-            allocator);
-        MAGMA_ASSERT(pipeline->getHash() == hash);
-        pipelines[pipeline->getHash()] = {pipeline, std::make_shared<RenderStates>(renderStates)};
-    }
-    return pipeline;
-}
-
-std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupBasePipeline() const noexcept
-{
-    for (const auto& it : pipelines)
-    {   // If render states are the same, child and parent are expected to have much commonality
-        if ((it.second.renderStates->rasterization == this->renderStates.rasterization) &&
-            (it.second.renderStates->multisample == this->renderStates.multisample) &&
-            (it.second.renderStates->depthStencil == this->renderStates.depthStencil) &&
-            (it.second.renderStates->colorBlend == this->renderStates.colorBlend))
-        {
-            return it.second.pipeline;
-        }
-    }
-    return nullptr;
-}
-
-std::size_t ImmediateRender::computePipelineHash(const VertexInputState& vertexInputState,
-    const InputAssemblyState& inputAssemblyState,
-    std::shared_ptr<GraphicsPipeline> basePipeline) const noexcept
-{   // Keep in sync with GraphicsPipeline!
-    VkGraphicsPipelineCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
-    if (basePipeline)
-        info.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
-    info.subpass = 0;
-    std::size_t hash = internal::hashArgs(
-        info.sType,
-        info.flags,
-        info.subpass);
-    internal::hashCombine(hash, vertexShader.hash());
-    internal::hashCombine(hash, fragmentShader.hash());
-    internal::hashCombine(hash, internal::combineHashList(
-        {
-            vertexInputState.hash(),
-            inputAssemblyState.hash(),
-            TesselationState().hash(),
-            ViewportState().hash(),
-            renderStates.rasterization.hash(),
-            renderStates.multisample.hash(),
-            renderStates.depthStencil.hash(),
-            renderStates.colorBlend.hash(),
-        }));
-    internal::hashCombine(hash, internal::hashArgs(
-        VK_DYNAMIC_STATE_VIEWPORT,
-        VK_DYNAMIC_STATE_SCISSOR,
-        VK_DYNAMIC_STATE_LINE_WIDTH));
-    if (layout)
-        internal::hashCombine(hash, layout->getHash());
-    return hash;
+        &renderstates::patchList};
+    return pipelineCache->lookupPipeline({vertexShader, fragmentShader},
+        vertexInputState,
+        *inputAssemblyStates[topology],
+        TesselationState(),
+        ViewportState(),
+        rasterizationState,
+        multisampleState,
+        depthStencilState,
+        colorBlendState,
+        {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR, VK_DYNAMIC_STATE_LINE_WIDTH},
+        layout,
+        renderPass);
 }
 } // namespace aux
 } // namespace magma

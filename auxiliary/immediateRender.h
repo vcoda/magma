@@ -40,6 +40,8 @@ namespace magma
 
     namespace aux
     {
+        class GraphicsPipelineCache;
+
         /* Sometimes I miss immediate mode from OpenGL 1.x era.
            This class serves as a replacement for it when you don't want
            to mess around with vertex buffer mapping, data copy,
@@ -85,8 +87,6 @@ namespace magma
         private:
             std::shared_ptr<ShaderModule> createShader(bool vertexShader) const;
             std::shared_ptr<GraphicsPipeline> lookupPipeline(VkPrimitiveTopology);
-            std::shared_ptr<GraphicsPipeline> lookupBasePipeline() const noexcept;
-            std::size_t computePipelineHash(const VertexInputState&, const InputAssemblyState&, std::shared_ptr<GraphicsPipeline>) const noexcept;
 
         private:
             struct Vertex
@@ -117,32 +117,20 @@ namespace magma
                 uint32_t labelColor;
             };
 
-            struct RenderStates
-            {
-                RasterizationState rasterization;
-                MultisampleState multisample;
-                DepthStencilState depthStencil;
-                ManagedColorBlendState colorBlend;
-            };
-
-            struct Pipeline
-            {
-                std::shared_ptr<GraphicsPipeline> pipeline;
-                std::shared_ptr<RenderStates> renderStates;
-            };
-
             const uint32_t maxVertexCount;
             std::shared_ptr<Device> device;
-            std::shared_ptr<PipelineCache> cache;
             std::shared_ptr<PipelineLayout> layout;
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<IAllocator> allocator;
             std::shared_ptr<VertexBuffer> vertexBuffer;
-            std::unordered_map<std::size_t, Pipeline> pipelines;
+            std::shared_ptr<GraphicsPipelineCache> pipelineCache;
             std::list<Primitive> primitives;
             VertexShaderStage vertexShader;
             FragmentShaderStage fragmentShader;
-            RenderStates renderStates;
+            RasterizationState rasterizationState;
+            MultisampleState multisampleState;
+            DepthStencilState depthStencilState;
+            ManagedColorBlendState colorBlendState;
             float lineWidth = 1.f;
             Transform transform;
             uint32_t vertexCount = 0;
