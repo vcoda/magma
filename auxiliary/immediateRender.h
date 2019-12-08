@@ -73,6 +73,7 @@ namespace magma
             void setLineWidth(float width) noexcept;
             void setIdentity() noexcept;
             void setTransform(const float transform[16]) noexcept;
+            uint32_t getMaxVertexCount() const noexcept;
             uint32_t getVertexCount() const noexcept;
             uint32_t getPrimitiveCount() const noexcept;
             bool beginPrimitive(VkPrimitiveTopology topology, const char *labelName = nullptr, uint32_t labelColor = 0xFFFFFFFF);

@@ -75,6 +75,11 @@ inline void ImmediateRender::setTransform(const float transform[16]) noexcept
     memcpy(this->transform.m, transform, sizeof(this->transform.m));
 }
 
+inline uint32_t ImmediateRender::getMaxVertexCount() const noexcept
+{
+    return maxVertexCount;
+}
+
 inline uint32_t ImmediateRender::getVertexCount() const noexcept
 {
     return vertexCount;
