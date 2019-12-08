@@ -465,6 +465,9 @@
     <ClInclude Include="..\..\internal\placementPool.h">
       <Filter>Header Files\internal</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\auxiliary\graphicsPipelineCache.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -727,6 +730,9 @@
     </ClCompile>
     <ClCompile Include="..\..\objects\resource.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\auxiliary\graphicsPipelineCache.cpp">
+      <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
