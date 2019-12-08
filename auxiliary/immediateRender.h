@@ -57,11 +57,11 @@ namespace magma
             };
 
         public:
-            explicit ImmediateRender(uint32_t maxVertexCount,
-                std::shared_ptr<Device> device,
+            explicit ImmediateRender(std::shared_ptr<Device> device,
                 std::shared_ptr<PipelineCache> cache,
                 std::shared_ptr<PipelineLayout> layout,
                 std::shared_ptr<RenderPass> renderPass,
+                const uint32_t maxVertexCount,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             std::shared_ptr<Device> getDevice() const noexcept { return device; }
             void setVertexShader(const VertexShaderStage& vertexShader) noexcept;
@@ -96,7 +96,6 @@ namespace magma
             std::shared_ptr<ShaderModule> createShader(bool vertexShader) const;
             std::shared_ptr<GraphicsPipeline> lookupPipeline(VkPrimitiveTopology);
 
-            const uint32_t maxVertexCount;
             std::shared_ptr<Device> device;
             std::shared_ptr<PipelineLayout> layout;
             std::shared_ptr<RenderPass> renderPass;
@@ -112,7 +111,8 @@ namespace magma
             ManagedColorBlendState colorBlendState;
             float lineWidth = 1.f;
             Transform transform;
-            uint32_t vertexCount = 0;
+            const uint32_t maxVertexCount;
+            uint32_t vertexCount;
             Vertex *current = nullptr;
             bool insidePrimitive = false;
         };

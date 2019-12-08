@@ -33,13 +33,10 @@ namespace magma
 {
 namespace aux
 {
-ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
-    std::shared_ptr<Device> device,
-    std::shared_ptr<PipelineCache> cache,
-    std::shared_ptr<PipelineLayout> layout,
-    std::shared_ptr<RenderPass> renderPass,
+ImmediateRender::ImmediateRender(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> cache,
+    std::shared_ptr<PipelineLayout> layout, std::shared_ptr<RenderPass> renderPass,
+    const uint32_t maxVertexCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    maxVertexCount(maxVertexCount),
     device(std::move(device)),
     layout(std::move(layout)),
     renderPass(std::move(renderPass)),
@@ -51,10 +48,12 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     rasterizationState(renderstates::fillCullBackCCW),
     multisampleState(renderstates::noMultisample),
     depthStencilState(renderstates::depthAlwaysDontWrite),
-    colorBlendState(renderstates::dontBlendWriteRgba) // Make copyable
-{   // If layout not specified, create default one
+    colorBlendState(renderstates::dontBlendWriteRgba), // Make copyable
+    maxVertexCount(maxVertexCount),
+    vertexCount(0)
+{
     if (!this->layout)
-    {
+    {   // If layout not specified, create default one
         const pushconstants::VertexConstantRange<Transform> pushConstantRange;
         this->layout = std::make_shared<PipelineLayout>(this->device, std::initializer_list<VkPushConstantRange>{pushConstantRange}, this->allocator);
     }
