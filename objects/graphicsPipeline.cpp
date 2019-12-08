@@ -138,26 +138,31 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
     info.basePipelineIndex = -1;
     const VkResult create = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->cache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create graphics pipeline");
-    hash = internal::hashArgs(
+    using namespace internal;
+    hash = hashArgs(
         info.sType,
         info.flags,
-        info.subpass);
+        info.stageCount);
     for (const auto& stage : stages)
-        internal::hashCombine(hash, stage.hash());
-    internal::hashCombine(hash, internal::combineHashList(
-        {
-            vertexInputState.hash(),
-            inputAssemblyState.hash(),
-            tesselationState.hash(),
-            viewportState.hash(),
-            rasterizationState.hash(),
-            multisampleState.hash(),
-            depthStencilState.hash(),
-            colorBlendState.hash()
-        }));
-    if (info.pDynamicState)
-        internal::hashCombine(hash, internal::hashArray(info.pDynamicState->pDynamicStates, info.pDynamicState->dynamicStateCount));
+        hashCombine(hash, stage.hash());
+    std::size_t stateHash = combineHashList({
+        vertexInputState.hash(),
+        inputAssemblyState.hash(),
+        tesselationState.hash(),
+        viewportState.hash(),
+        rasterizationState.hash(),
+        multisampleState.hash(),
+        depthStencilState.hash(),
+        colorBlendState.hash()});
+    for (auto state : dynamicStates)
+        hashCombine(stateHash, internal::hash(state));
+    hashCombine(hash, stateHash);
     if (this->layout)
-        internal::hashCombine(hash, this->layout->getHash());
+        hashCombine(hash, this->layout->getHash());
+    if (renderPass)
+    {
+        hashCombine(hash, renderPass->getHash());
+        hashCombine(hash, internal::hash(subpass));
+    }
 }
 } // namespace magma
