@@ -56,6 +56,7 @@ namespace magma
                 std::shared_ptr<PipelineLayout> layout,
                 std::shared_ptr<RenderPass> renderPass,
                 std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<Device> getDevice() const noexcept { return device; }
             void setVertexShader(const VertexShaderStage& vertexShader) noexcept;
             void setFragmentShader(const FragmentShaderStage& fragmentShader) noexcept;
             void setRasterizationState(const RasterizationState& state) noexcept;
