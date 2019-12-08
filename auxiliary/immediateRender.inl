@@ -2,6 +2,25 @@ namespace magma
 {
 namespace aux
 {
+struct ImmediateRender::Vertex
+{
+    vectors::float4 position;
+    vectors::float4 normalPSize;
+    vectors::float4 color;
+    vectors::float2 texcoord;
+};
+
+struct ImmediateRender::Primitive
+{
+    std::shared_ptr<GraphicsPipeline> pipeline;
+    float lineWidth;
+    Transform transform;
+    uint32_t vertexCount;
+    uint32_t firstVertex;
+    const char *labelName;
+    uint32_t labelColor;
+};
+
 inline void ImmediateRender::setVertexShader(const VertexShaderStage& shader) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
@@ -53,7 +72,7 @@ inline void ImmediateRender::setIdentity() noexcept
 inline void ImmediateRender::setTransform(const float transform[16]) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
-    memcpy(this->transform.m, transform, sizeof(float) * 16);
+    memcpy(this->transform.m, transform, sizeof(this->transform.m));
 }
 
 inline uint32_t ImmediateRender::getVertexCount() const noexcept
@@ -68,9 +87,9 @@ inline uint32_t ImmediateRender::getPrimitiveCount() const noexcept
 
 inline void ImmediateRender::normal(float x, float y, float z) noexcept
 {
-    current.normalPSize.v[0] = x;
-    current.normalPSize.v[1] = y;
-    current.normalPSize.v[2] = z;
+    current->normalPSize.v[0] = x;
+    current->normalPSize.v[1] = y;
+    current->normalPSize.v[2] = z;
 }
 
 inline void ImmediateRender::normal(const float n[3]) noexcept
@@ -80,10 +99,10 @@ inline void ImmediateRender::normal(const float n[3]) noexcept
 
 inline void ImmediateRender::color(float r, float g, float b, float a /* 1 */) noexcept
 {
-    current.color.v[0] = r;
-    current.color.v[1] = g;
-    current.color.v[2] = b;
-    current.color.v[3] = a;
+    current->color.v[0] = r;
+    current->color.v[1] = g;
+    current->color.v[2] = b;
+    current->color.v[3] = a;
 }
 
 inline void ImmediateRender::color(const float c[4]) noexcept
@@ -103,8 +122,8 @@ inline void ImmediateRender::color(const uint8_t c[4]) noexcept
 
 inline void ImmediateRender::texcoord(float u, float v) noexcept
 {
-    current.texcoord.v[0] = u;
-    current.texcoord.v[1] = v;
+    current->texcoord.v[0] = u;
+    current->texcoord.v[1] = v;
 }
 
 inline void ImmediateRender::texcoord(const float uv[2]) noexcept
@@ -115,7 +134,7 @@ inline void ImmediateRender::texcoord(const float uv[2]) noexcept
 inline void ImmediateRender::pointSize(float size) noexcept
 {
     MAGMA_ASSERT(size >= 1.f);
-    current.normalPSize.v[3] = size;
+    current->normalPSize.v[3] = size;
 }
 
 inline void ImmediateRender::vertex(float x, float y, float z /* 0 */, float w /* 1 */) noexcept
@@ -123,14 +142,14 @@ inline void ImmediateRender::vertex(float x, float y, float z /* 0 */, float w /
     MAGMA_ASSERT(insidePrimitive);
     MAGMA_ASSERT(vertexCount < maxVertexCount);
     if (insidePrimitive && vertexCount < maxVertexCount)
-    {   // Copy curent state
-        current.position.v[0] = x;
-        current.position.v[1] = y;
-        current.position.v[2] = z;
-        current.position.v[3] = w;
-        internal::copy(pvertex, &current);
-        // Go to the next vertex
-        ++pvertex;
+    {
+        current->position.v[0] = x;
+        current->position.v[1] = y;
+        current->position.v[2] = z;
+        current->position.v[3] = w;
+        // Propagate current state to the next vertex
+        const Vertex *last = current;
+        *++current = *last;
         ++primitives.back().vertexCount;
         ++vertexCount;
     }

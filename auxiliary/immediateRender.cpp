@@ -52,17 +52,18 @@ ImmediateRender::ImmediateRender(uint32_t maxVertexCount,
     multisampleState(renderstates::noMultisample),
     depthStencilState(renderstates::depthAlwaysDontWrite),
     colorBlendState(renderstates::dontBlendWriteRgba) // Make copyable
-{   // Set attributes to initial state
-    normal(0.f, 0.f, 0.f);
-    color(1.f, 1.f, 1.f, 1.f); // White is default
-    texcoord(0.f, 0.f);
-    pointSize(1.f); // Initial point size
-    // If layout not specified, create default one
+{   // If layout not specified, create default one
     if (!this->layout)
     {
         const pushconstants::VertexConstantRange<Transform> pushConstantRange;
         this->layout = std::make_shared<PipelineLayout>(this->device, std::initializer_list<VkPushConstantRange>{pushConstantRange}, this->allocator);
     }
+    constexpr float identity[16] = {
+        1.f, 0.f, 0.f, 0.f,
+        0.f, 1.f, 0.f, 0.f,
+        0.f, 0.f, 1.f, 0.f,
+        0.f, 0.f, 0.f, 1.f};
+    setTransform(identity);
 }
 
 bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,
@@ -72,11 +73,16 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,
     MAGMA_ASSERT(!insidePrimitive);
     if (insidePrimitive)
         return false;
-    if (!pvertex)
+    if (!current)
     {
-        pvertex = reinterpret_cast<Vertex *>(vertexBuffer->getMemory()->map(0, VK_WHOLE_SIZE));
-        if (!pvertex)
+        current = reinterpret_cast<Vertex *>(vertexBuffer->getMemory()->map(0, VK_WHOLE_SIZE));
+        if (!current)
             return false;
+        // Set attributes to initial state
+        normal(0.f, 0.f, 0.f);
+        color(1.f, 1.f, 1.f, 1.f);
+        texcoord(0.f, 0.f);
+        pointSize(1.f);
     }
     Primitive primitive;
     primitive.pipeline = lookupPipeline(topology);
@@ -97,9 +103,9 @@ bool ImmediateRender::endPrimitive(bool loop /* false */) noexcept
     if (!insidePrimitive)
         return false;
     if (loop && (primitives.back().vertexCount > 0))
-    {
-        const Vertex *first = pvertex - primitives.back().vertexCount;
-        *pvertex++ = *first;
+    {   // Copy first to last
+        const Vertex *first = current - primitives.back().vertexCount;
+        *current++ = *first;
         ++primitives.back().vertexCount;
         ++vertexCount;
     }
@@ -144,10 +150,10 @@ bool ImmediateRender::reset() noexcept
     MAGMA_ASSERT(!insidePrimitive);
     if (insidePrimitive)
         return false;
-    if (pvertex)
+    if (current)
     {
         vertexBuffer->getMemory()->unmap();
-        pvertex = nullptr;
+        current = nullptr;
     }
     primitives.clear();
     vertexCount = 0;

@@ -49,6 +49,13 @@ namespace magma
 
         class ImmediateRender : public internal::NonCopyable
         {
+            struct Vertex;
+            struct Primitive;
+            struct Transform
+            {
+                float m[16];
+            };
+
         public:
             explicit ImmediateRender(uint32_t maxVertexCount,
                 std::shared_ptr<Device> device,
@@ -89,35 +96,6 @@ namespace magma
             std::shared_ptr<ShaderModule> createShader(bool vertexShader) const;
             std::shared_ptr<GraphicsPipeline> lookupPipeline(VkPrimitiveTopology);
 
-        private:
-            struct Vertex
-            {
-                vectors::float4 position;
-                vectors::float4 normalPSize;
-                vectors::float4 color;
-                vectors::float2 texcoord;
-            };
-
-            struct Transform
-            {
-                float m[16] = {
-                    1.f, 0.f, 0.f, 0.f,
-                    0.f, 1.f, 0.f, 0.f,
-                    0.f, 0.f, 1.f, 0.f,
-                    0.f, 0.f, 0.f, 1.f};
-            };
-
-            struct Primitive
-            {
-                std::shared_ptr<GraphicsPipeline> pipeline;
-                float lineWidth;
-                Transform transform;
-                uint32_t vertexCount;
-                uint32_t firstVertex;
-                const char *labelName;
-                uint32_t labelColor;
-            };
-
             const uint32_t maxVertexCount;
             std::shared_ptr<Device> device;
             std::shared_ptr<PipelineLayout> layout;
@@ -135,8 +113,7 @@ namespace magma
             float lineWidth = 1.f;
             Transform transform;
             uint32_t vertexCount = 0;
-            Vertex *pvertex = nullptr;
-            Vertex current = {};
+            Vertex *current = nullptr;
             bool insidePrimitive = false;
         };
     } // namespace aux
