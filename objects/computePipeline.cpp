@@ -32,7 +32,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr
     std::shared_ptr<ComputePipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Pipeline(std::move(device), std::move(basePipeline), std::move(cache), std::move(allocator))
+    Pipeline(std::move(device), std::move(layout), std::move(basePipeline), std::move(cache), std::move(allocator))
 {
     VkComputePipelineCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
@@ -41,20 +41,16 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr
     if (this->basePipeline)
         info.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     info.stage = stage;
-    if (layout)
-        this->layout = std::move(layout);
-    else
-        this->layout =  std::make_shared<PipelineLayout>(this->device);
-    info.layout = *this->layout;
+    info.layout = MAGMA_HANDLE(layout);
     info.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
     info.basePipelineIndex = -1;
     const VkResult create = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->cache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create compute pipeline");
-    hash = internal::hashArgs(
+    using namespace internal;
+    hash = hashArgs(
         info.sType,
         info.flags);
-    internal::hashCombine(hash, stage.hash());
-    if (this->layout)
-        internal::hashCombine(hash, this->layout->getHash());
+    hashCombine(hash, stage.hash());
+    hashCombine(hash, this->layout->getHash());
 }
 } // namespace magma

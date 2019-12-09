@@ -78,7 +78,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Pipeline(std::move(device), std::move(basePipeline), std::move(cache), std::move(allocator))
+    Pipeline(std::move(device), std::move(layout), std::move(basePipeline), std::move(cache), std::move(allocator))
 {
     if (stages.empty())
         MAGMA_THROW("shader stages are empty");
@@ -127,11 +127,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
         dynamicState.pDynamicStates = dynamicStates.begin();
         info.pDynamicState = &dynamicState;
     }
-    if (layout)
-        this->layout = std::move(layout);
-    else
-        this->layout =  std::make_shared<PipelineLayout>(this->device);
-    info.layout = *this->layout;
+    info.layout = MAGMA_HANDLE(layout);
     info.renderPass = *renderPass;
     info.subpass = subpass;
     info.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
@@ -157,8 +153,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
     for (auto state : dynamicStates)
         hashCombine(stateHash, internal::hash(state));
     hashCombine(hash, stateHash);
-    if (this->layout)
-        hashCombine(hash, this->layout->getHash());
+    hashCombine(hash, this->layout->getHash());
     if (renderPass)
     {
         hashCombine(hash, renderPass->getHash());

@@ -34,7 +34,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device, std::shar
     std::shared_ptr<RayTracingPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Pipeline(std::move(device), std::move(basePipeline), std::move(cache), std::move(allocator))
+    Pipeline(std::move(device), std::move(layout), std::move(basePipeline), std::move(cache), std::move(allocator))
 {
     if (stages.empty())
         MAGMA_THROW("shader stages are empty");
@@ -54,11 +54,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device, std::shar
     info.groupCount = MAGMA_COUNT(groups);
     info.pGroups = groups.data();
     info.maxRecursionDepth = maxRecursionDepth;
-    if (layout)
-        this->layout = std::move(layout);
-    else
-        this->layout =  std::make_shared<PipelineLayout>(this->device);
-    info.layout = *this->layout;
+    info.layout = MAGMA_HANDLE(layout);
     info.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
     info.basePipelineIndex = -1;
     MAGMA_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
@@ -75,8 +71,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device, std::shar
         hashCombine(hash, stage.hash());
     for (const auto& group : groups)
         hashCombine(hash, group.hash());
-    if (this->layout)
-        hashCombine(hash, this->layout->getHash());
+    hashCombine(hash, this->layout->getHash());
 }
 
 std::vector<VkShaderModule> RayTracingPipeline::getShaderGroupHandles(uint32_t firstGroup, uint32_t groupCount) const

@@ -34,9 +34,9 @@ namespace magma
     {
     public:
         ~Pipeline();
+        std::shared_ptr<PipelineLayout> getLayout() noexcept { return layout; }
         std::shared_ptr<Pipeline> getBasePipeline() noexcept { return basePipeline; }
         std::shared_ptr<PipelineCache> getCache() noexcept { return cache; }
-        std::shared_ptr<PipelineLayout> getLayout() noexcept { return layout; }
         std::size_t getHash() const noexcept { return hash; }
         // VK_AMD_shader_info
         VkShaderStatisticsInfoAMD getShaderStatistics(VkShaderStageFlagBits stage) const;
@@ -45,14 +45,15 @@ namespace magma
 
     protected:
         explicit Pipeline(std::shared_ptr<Device> device,
+            std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<PipelineCache> cache,
             std::shared_ptr<IAllocator> allocator);
 
     protected:
+        std::shared_ptr<PipelineLayout> layout;
         std::shared_ptr<Pipeline> basePipeline;
         std::shared_ptr<PipelineCache> cache;
-        std::shared_ptr<PipelineLayout> layout;
         std::size_t hash = 0;
     };
 } // namespace magma

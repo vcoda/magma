@@ -88,8 +88,9 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
     for (auto state : dynamicStates)
         hashCombine(baseHash, internal::hash(state));
     hashCombine(hash, baseHash);
-    if (layout)
-        hashCombine(hash, layout->getHash());
+    if (!layout)
+        layout = std::make_shared<PipelineLayout>(device);
+    hashCombine(hash, layout->getHash());
     if (renderPass)
     {
         hashCombine(hash, renderPass->getHash());
