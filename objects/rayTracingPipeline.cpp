@@ -64,16 +64,19 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device, std::shar
     MAGMA_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult create = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->cache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create ray tracing pipeline");
-    hash = internal::hashArgs(
+    using namespace internal;
+    hash = hashArgs(
         info.sType,
         info.flags,
         info.stageCount,
         info.groupCount,
         info.maxRecursionDepth);
     for (const auto& stage : stages)
-        internal::hashCombine(hash, stage.hash());
+        hashCombine(hash, stage.hash());
+    for (const auto& group : groups)
+        hashCombine(hash, group.hash());
     if (this->layout)
-        internal::hashCombine(hash, this->layout->getHash());
+        hashCombine(hash, this->layout->getHash());
 }
 
 std::vector<VkShaderModule> RayTracingPipeline::getShaderGroupHandles(uint32_t firstGroup, uint32_t groupCount) const

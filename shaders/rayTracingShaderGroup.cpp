@@ -35,14 +35,12 @@ RayTracingShaderGroup::RayTracingShaderGroup(VkRayTracingShaderGroupTypeNV type,
 
 std::size_t RayTracingShaderGroup::hash() const noexcept
 {
-    std::size_t hash = internal::hashArgs(
+    return internal::hashArgs(
         sType,
-        pNext,
         type,
         generalShader,
         closestHitShader,
         anyHitShader,
         intersectionShader);
-    return hash;
 }
 } // namespace magma
