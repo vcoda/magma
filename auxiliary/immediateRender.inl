@@ -127,16 +127,16 @@ inline void ImmediateRender::color(const uint8_t c[4]) noexcept
     color(c[0], c[1], c[2], c[3]);
 }
 
-inline void ImmediateRender::texcoord(float u, float v) noexcept
+inline void ImmediateRender::texCoord(float u, float v) noexcept
 {
     MAGMA_ASSERT(insidePrimitive);
     current->texcoord.v[0] = u;
     current->texcoord.v[1] = v;
 }
 
-inline void ImmediateRender::texcoord(const float uv[2]) noexcept
+inline void ImmediateRender::texCoord(const float uv[2]) noexcept
 {
-    texcoord(uv[0], uv[1]);
+    texCoord(uv[0], uv[1]);
 }
 
 inline void ImmediateRender::pointSize(float size) noexcept

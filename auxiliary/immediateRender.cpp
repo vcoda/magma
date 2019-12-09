@@ -80,7 +80,7 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,
         // Set attributes to initial state
         normal(0.f, 0.f, 0.f);
         color(1.f, 1.f, 1.f, 1.f);
-        texcoord(0.f, 0.f);
+        texCoord(0.f, 0.f);
         pointSize(1.f);
     }
     Primitive primitive;
