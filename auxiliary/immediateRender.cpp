@@ -188,18 +188,13 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTop
         &renderstates::triangleListWithAdjacency,
         &renderstates::triangleStripWithAdjacency,
         &renderstates::patchList};
+    // Create new or take existing graphics pipeline
     return pipelineCache->lookupPipeline({vertexShader, fragmentShader},
-        vertexInputState,
-        *inputAssemblyStates[topology],
-        TesselationState(),
-        ViewportState(),
-        rasterizationState,
-        multisampleState,
-        depthStencilState,
-        colorBlendState,
+        vertexInputState, *inputAssemblyStates[topology],
+        TesselationState(), ViewportState(),
+        rasterizationState, multisampleState, depthStencilState, colorBlendState,
         {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR, VK_DYNAMIC_STATE_LINE_WIDTH},
-        layout,
-        renderPass);
+        layout, renderPass, 0);
 }
 } // namespace aux
 } // namespace magma
