@@ -61,5 +61,6 @@ namespace magma
 
     public:
         virtual ~SwapchainColorAttachment2D();
+        VkExtent2D getExtent() const noexcept { return {extent.width, extent.height}; }
     };
 } // namespace magma
