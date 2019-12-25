@@ -57,6 +57,7 @@ namespace magma
             const VkExtent2D& extent,
             uint32_t mipLevels,
             uint32_t samples,
+            VkImageTiling tiling,
             VkImageUsageFlags usage,
             const Sharing& sharing,
             std::shared_ptr<IAllocator> allocator);
