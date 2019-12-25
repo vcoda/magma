@@ -24,6 +24,14 @@ namespace magma
 Image3D::Image3D(std::shared_ptr<Device> device, VkFormat format, const VkExtent3D& extent, VkImageUsageFlags usage,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Image(std::move(device), VK_IMAGE_TYPE_3D, format, extent, 1, 1, 1, usage, 0, sharing, std::move(allocator))
+    Image(std::move(device), VK_IMAGE_TYPE_3D, format, extent,
+        1, // mipLevels,
+        1, // arrayLayers
+        1, // samples
+        VK_IMAGE_TILING_OPTIMAL,
+        usage,
+        0, // flags
+        sharing,
+        std::move(allocator))
 {}
 } // namespace magma

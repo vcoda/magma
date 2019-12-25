@@ -33,6 +33,7 @@ Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, cons
         mipLevels,
         arrayLayers,
         1, // samples
+        VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
         sharing,
@@ -49,6 +50,7 @@ Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, cons
         MAGMA_COUNT(mipOffsets) / arrayLayers, // mipLevels
         arrayLayers,
         1, // samples
+        VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
         sharing,
@@ -69,6 +71,7 @@ Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, cons
         MAGMA_COUNT(mipSizes), // mipLevels
         MAGMA_COUNT(mipData), // arrayLayers
         1, // samples
+        VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
         sharing,

@@ -32,6 +32,7 @@ Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width
         mipLevels,
         1, // arrayLayers
         1, // samples
+        VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
         sharing,
@@ -48,6 +49,7 @@ Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width
         MAGMA_COUNT(mipOffsets), // mipLevels
         1, // arrayLayers
         1, // samples
+        VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
         sharing,
@@ -67,6 +69,7 @@ Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width
         MAGMA_COUNT(mipSizes), // mipLevels
         1, // arrayLayers
         1, // samples
+        VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
         sharing,

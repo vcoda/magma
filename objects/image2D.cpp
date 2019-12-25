@@ -32,6 +32,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
         mipLevels,
         1, // arrayLayers
         1, // samples
+        VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
         sharing,
@@ -48,6 +49,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
         MAGMA_COUNT(mipOffsets), // mipLevels
         1, // arrayLayers
         1, // samples
+        VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
         sharing,
@@ -67,6 +69,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
         MAGMA_COUNT(mipSizes), // mipLevels
         1, // arrayLayers
         1, // samples
+        VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
         sharing,
@@ -99,6 +102,7 @@ Image2D::Image2D(std::shared_ptr<Device> device,
         mipLevels,
         1, // arrayLayers
         samples,
+        VK_IMAGE_TILING_OPTIMAL,
         usage,
         0, // flags
         sharing,

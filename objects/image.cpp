@@ -33,8 +33,8 @@ namespace magma
 {
 Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat format,
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
-    VkImageUsageFlags usage, VkImageCreateFlags flags, const Sharing& sharing,
-    std::shared_ptr<IAllocator> allocator):
+    VkImageTiling tiling, VkImageUsageFlags usage, VkImageCreateFlags flags,
+    const Sharing& sharing, std::shared_ptr<IAllocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, 0, std::move(device), std::move(allocator)),
     imageType(imageType),
     format(format),
@@ -67,7 +67,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     default:
         MAGMA_THROW("invalid <samples> parameter");
     }
-    info.tiling = VK_IMAGE_TILING_OPTIMAL;
+    info.tiling = tiling;
     info.usage = usage;
     info.sharingMode = sharing.getMode();
     info.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
@@ -86,8 +86,8 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
 Image::Image(std::shared_ptr<DeviceMemory> memory, VkDeviceSize offset,
     VkImageType imageType, VkFormat format,
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
-    VkImageUsageFlags usage, VkImageCreateFlags flags, const Sharing& sharing,
-    std::shared_ptr<IAllocator> allocator):
+    VkImageTiling tiling, VkImageUsageFlags usage, VkImageCreateFlags flags,
+    const Sharing& sharing, std::shared_ptr<IAllocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, 0, std::move(device), std::move(allocator)),
     imageType(imageType),
     format(format),
@@ -120,7 +120,7 @@ Image::Image(std::shared_ptr<DeviceMemory> memory, VkDeviceSize offset,
     default:
         MAGMA_THROW("invalid <samples> parameter");
     }
-    info.tiling = VK_IMAGE_TILING_OPTIMAL;
+    info.tiling = tiling;
     info.usage = usage;
     info.sharingMode = sharing.getMode();
     info.queueFamilyIndexCount = sharing.getQueueFamiliesCount();

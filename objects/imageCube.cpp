@@ -31,6 +31,7 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1}, mipLevels,
         6, // arrayLayers
         1, // samples
+        VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
         sharing,
@@ -47,6 +48,7 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
         mipLevels,
         6, // arrayLayers
         1, // samples
+        VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
         sharing,
@@ -66,6 +68,7 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
         MAGMA_COUNT(mipSizes), // mipLevels
         6, // arrayLayers
         1, // samples
+        VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
         sharing,

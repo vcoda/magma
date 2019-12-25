@@ -29,8 +29,15 @@ Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format,
     uint32_t width, uint32_t mipLevels, uint32_t arrayLayers,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1}, mipLevels, arrayLayers, 1,
-        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 0, sharing, std::move(allocator))
+    Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
+        mipLevels,
+        arrayLayers,
+        1, // samples
+        VK_IMAGE_TILING_OPTIMAL,
+        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+        0, // flags
+        sharing,
+        std::move(allocator))
 {}
 
 Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format, uint32_t width, uint32_t arrayLayers,
@@ -43,6 +50,7 @@ Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format, uint
         MAGMA_COUNT(mipOffsets) / arrayLayers, // mipLevels
         arrayLayers,
         1, // samples
+        VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
         sharing,
@@ -63,6 +71,7 @@ Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format, uint
         MAGMA_COUNT(mipSizes), // mipLevels
         MAGMA_COUNT(mipData), // arrayLayers
         1, // samples
+        VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
         sharing,
