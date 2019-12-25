@@ -40,7 +40,7 @@ namespace magma
             std::shared_ptr<const Surface> surface,
             uint32_t minImageCount,
             VkSurfaceFormatKHR surfaceFormat,
-            const VkExtent2D& imageExtent,
+            const VkExtent2D& extent,
             VkImageUsageFlags usage,
             VkSurfaceTransformFlagBitsKHR preTransform,
             VkCompositeAlphaFlagBitsKHR compositeAlpha,
@@ -49,7 +49,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<DebugReportCallback> debugReportCallback = nullptr);
         ~Swapchain();
-        const VkExtent2D& getExtent() const noexcept { return imageExtent; }
+        const VkExtent2D& getExtent() const noexcept { return extent; }
         uint32_t getImageIndex() const noexcept { return imageIndex; }
         uint32_t getImageCount() const;
         std::vector<std::shared_ptr<SwapchainColorAttachment2D>> getImages() const;
@@ -59,7 +59,7 @@ namespace magma
 
     private:
         VkSurfaceFormatKHR surfaceFormat;
-        VkExtent2D imageExtent;
+        VkExtent2D extent;
         uint32_t imageIndex;
     };
 } // namespace magma

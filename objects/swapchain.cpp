@@ -35,7 +35,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surface> surface,
-    uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& imageExtent,
+    uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent,
     VkImageUsageFlags usage,
     VkSurfaceTransformFlagBitsKHR preTransform,
     VkCompositeAlphaFlagBitsKHR compositeAlpha,
@@ -45,7 +45,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     std::shared_ptr<DebugReportCallback> debugReportCallback /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_SWAPCHAIN_KHR, std::move(device), std::move(allocator)),
     surfaceFormat(surfaceFormat),
-    imageExtent(imageExtent),
+    extent(extent),
     imageIndex(0)
 {
     VkSwapchainCreateInfoKHR info;
@@ -56,7 +56,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     info.minImageCount = minImageCount;
     info.imageFormat = surfaceFormat.format;
     info.imageColorSpace = surfaceFormat.colorSpace;
-    info.imageExtent = imageExtent;
+    info.imageExtent = extent;
     info.imageArrayLayers = 1;
     info.imageUsage = usage;
     info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
@@ -140,7 +140,7 @@ std::vector<std::shared_ptr<SwapchainColorAttachment2D>> Swapchain::getImages() 
     MAGMA_THROW_FAILURE(get, "failed to get swapchain images");
     std::vector<std::shared_ptr<SwapchainColorAttachment2D>> colorAttachments;
     for (const VkImage image : swapchainImages)
-        colorAttachments.emplace_back(new SwapchainColorAttachment2D(device, image, surfaceFormat.format, imageExtent));
+        colorAttachments.emplace_back(new SwapchainColorAttachment2D(device, image, surfaceFormat.format, extent));
     return colorAttachments;
 }
 } // namespace magma
