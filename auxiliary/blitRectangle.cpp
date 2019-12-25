@@ -47,8 +47,8 @@ namespace aux
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     BlitRectangle(renderPass,
-        VertexShaderStage(createShader(renderPass->getDevice(), allocator, true), "main"),
-        FragmentShaderStage(createShader(renderPass->getDevice(), allocator, false), "main"),
+        VertexShaderStage(createVertexShader(renderPass->getDevice(), allocator), "main"),
+        FragmentShaderStage(createFragmentShader(renderPass->getDevice(), allocator), "main"),
         std::move(allocator))
 {}
 
@@ -129,21 +129,23 @@ void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::
     cmdBuffer->endRenderPass();
 }
 
-std::shared_ptr<ShaderModule> BlitRectangle::createShader(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator,
-    bool vertexShader) const
-{
-    constexpr VkShaderModuleCreateFlags flags = 0;
-#include "spirv/output/blitv"
+std::shared_ptr<ShaderModule> BlitRectangle::createVertexShader(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) const
+{   // https://www.khronos.org/registry/OpenGL/extensions/NV/NV_fill_rectangle.txt
+    const bool NV_fill_rectangle = device->getPhysicalDevice()->checkExtensionSupport("VK_NV_fill_rectangle");
+    if (NV_fill_rectangle)
+    {
 #include "spirv/output/blitv_nv"
-    if (vertexShader)
-    {   // https://www.khronos.org/registry/OpenGL/extensions/NV/NV_fill_rectangle.txt
-        const bool NV_fill_rectangle = device->getPhysicalDevice()->checkExtensionSupport("VK_NV_fill_rectangle");
-        if (NV_fill_rectangle)
-            return std::make_shared<ShaderModule>(std::move(device), vsBlitNV, flags, nullptr, std::move(allocator));
-        return std::make_shared<ShaderModule>(std::move(device), vsBlit, flags, nullptr, std::move(allocator));
+        return std::make_shared<ShaderModule>(std::move(device), vsBlitNV, 0, nullptr, std::move(allocator));
     }
-#include "spirv/output/blitf"
-    return std::make_shared<ShaderModule>(std::move(device), fsBlit, flags, nullptr, std::move(allocator));
+#include "spirv/output/blitv"
+    return std::make_shared<ShaderModule>(std::move(device), vsBlit, 0, nullptr, std::move(allocator));
 }
+
+std::shared_ptr<ShaderModule> BlitRectangle::createFragmentShader(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) const
+{
+#include "spirv/output/blitf"
+    return std::make_shared<ShaderModule>(std::move(device), fsBlit, 0, nullptr, std::move(allocator));
+}
+
 } // namespace aux
 } // namespace magma

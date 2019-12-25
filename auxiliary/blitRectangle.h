@@ -59,8 +59,10 @@ namespace magma
                 uint32_t labelColor = 0xFFFFFFFF) const noexcept;
 
         private:
-            std::shared_ptr<ShaderModule> createShader(std::shared_ptr<Device>,
-                std::shared_ptr<IAllocator>, bool) const;
+            std::shared_ptr<ShaderModule> createVertexShader(std::shared_ptr<Device> device,
+                std::shared_ptr<IAllocator> allocator) const;
+            std::shared_ptr<ShaderModule> createFragmentShader(std::shared_ptr<Device> device,
+                std::shared_ptr<IAllocator> allocator) const;
 
         private:
             std::shared_ptr<RenderPass> renderPass;
