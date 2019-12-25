@@ -25,6 +25,7 @@ namespace magma
 
     typedef std::shared_ptr<class Buffer> BufferPtr;
     typedef std::shared_ptr<class BufferView> BufferViewPtr;
+    typedef std::shared_ptr<class ColorAttachment2D> ColorAttachment2DPtr;
     typedef std::shared_ptr<class CommandBuffer> CommandBufferPtr;
     typedef std::shared_ptr<class CommandPool> CommandPoolPtr;
     typedef std::shared_ptr<class CompactedSizeQuery> CompactedSizeQueryPtr;
@@ -32,6 +33,7 @@ namespace magma
     typedef std::shared_ptr<class ConditionalRenderingBuffer> ConditionalRenderingBufferPtr;
     typedef std::shared_ptr<class DebugReportCallback> DebugReportCallbackPtr;
     typedef std::shared_ptr<class DebugUtilsMessenger> DebugUtilsMessengerPtr;
+    typedef std::shared_ptr<class DepthStencilAttachment2D> DepthStencilAttachment2DPtr;
     typedef std::shared_ptr<class DescriptorPool> DescriptorPoolPtr;
     typedef std::shared_ptr<class DescriptorSet> DescriptorSetPtr;
     typedef std::shared_ptr<class DescriptorSetLayout> DescriptorSetLayoutPtr;
@@ -77,6 +79,7 @@ namespace magma
     typedef std::shared_ptr<class StorageTexelBuffer> StorageTexelBufferPtr;
     typedef std::shared_ptr<class Surface> SurfacePtr;
     typedef std::shared_ptr<class Swapchain> SwapchainPtr;
+    typedef std::shared_ptr<class SwapchainColorAttachment2D> SwapchainColorAttachment2DPtr;
     typedef std::shared_ptr<class TimestampQuery> TimestampQueryPtr;
     typedef std::shared_ptr<class UniformTexelBuffer> UniformTexelBufferPtr;
     typedef std::shared_ptr<class ValidationCache> ValidationCachePtr;
