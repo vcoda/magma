@@ -45,11 +45,11 @@ bool MipmapGenerator::checkFormatSupport(VkFormat format) const noexcept
     return srcBlit && dstBlit;
 }
 
-bool MipmapGenerator::generateMipmap(std::shared_ptr<Image> image, uint32_t baseLevel, VkFilter filter,
-    std::shared_ptr<CommandBuffer> commandBuffer, bool flush) const noexcept
+bool MipmapGenerator::generateMipmap(const std::shared_ptr<Image>& image, uint32_t baseLevel, VkFilter filter,
+    const std::shared_ptr<CommandBuffer>& cmdBuffer, bool flush) const noexcept
 {
     if (flush)
-        commandBuffer->begin();
+        cmdBuffer->begin();
     VkExtent3D prevMipExtent = image->getMipExtent(baseLevel);
     for (uint32_t level = baseLevel + 1; level < image->getMipLevels(); ++level)
     {
@@ -69,43 +69,43 @@ bool MipmapGenerator::generateMipmap(std::shared_ptr<Image> image, uint32_t base
         blitRegion.dstOffsets[1] = VkOffset3D{int32_t(nextMipExtent.width), int32_t(nextMipExtent.height), 1};
         const ImageSubresourceRange nextMipRange(image, level, 1);
         // Transition next mip level to transfer dest
-        const ImageMemoryBarrier undefinedToDstBarrier(
+        const ImageMemoryBarrier undefinedToTransferDst(
             image,
             VK_IMAGE_LAYOUT_UNDEFINED,
             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
             nextMipRange);
-        commandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, undefinedToDstBarrier);
+        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, undefinedToTransferDst);
         // Downsample larger mip to smaller one
-        commandBuffer->blitImage(image, image, blitRegion, filter);
+        cmdBuffer->blitImage(image, image, blitRegion, filter);
         // Transition next mip level back to transfer source
-        const ImageMemoryBarrier dstToSrcBarrier(
+        const ImageMemoryBarrier transferDstToSrc(
             image,
             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
             VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
             nextMipRange);
-        commandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, dstToSrcBarrier);
+        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDstToSrc);
         prevMipExtent = nextMipExtent;
     }
     // Blitted mip levels are transitioned to shader read layout
     const ImageSubresourceRange blitMipsRange(image, baseLevel + 1, image->getMipLevels() - baseLevel - 1);
-    const ImageMemoryBarrier shaderReadBarrier(
+    const ImageMemoryBarrier transferSrcToShaderRead(
         image,
         VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
         blitMipsRange);
-    commandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, shaderReadBarrier);
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, transferSrcToShaderRead);
     if (flush)
     {
-        commandBuffer->end();
-        return commit(commandBuffer);
+        cmdBuffer->end();
+        return commit(cmdBuffer);
     }
     return true;
 }
 
-bool MipmapGenerator::commit(std::shared_ptr<CommandBuffer> commandBuffer) const noexcept
+bool MipmapGenerator::commit(const std::shared_ptr<CommandBuffer>& cmdBuffer) const noexcept
 {
-    std::shared_ptr<Fence> fence(commandBuffer->getFence());
-    if (!queue->submit(std::move(commandBuffer), 0, nullptr, nullptr, fence))
+    std::shared_ptr<Fence> fence(cmdBuffer->getFence());
+    if (!queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence))
         return false;
     if (!fence->wait())
         return false;
