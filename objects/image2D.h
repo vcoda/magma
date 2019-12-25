@@ -65,47 +65,4 @@ namespace magma
             VkFormat format,
             const VkExtent2D& extent);
     };
-
-    /* Two-dimensional image that can be used as color attachment to framebuffer. */
-
-    class ColorAttachment2D : public Image2D
-    {
-    public:
-        explicit ColorAttachment2D(std::shared_ptr<Device> device,
-            VkFormat colorFormat,
-            const VkExtent2D& extent,
-            uint32_t mipLevels,
-            uint32_t samples,
-            bool sampled = true,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-    };
-
-    /* Two-dimensional image that can be used as depth/stencil attachment to framebuffer. */
-
-    class DepthStencilAttachment2D : public Image2D
-    {
-    public:
-        explicit DepthStencilAttachment2D(std::shared_ptr<Device> device,
-            VkFormat depthStencilFormat,
-            const VkExtent2D& extent,
-            uint32_t mipLevels,
-            uint32_t samples,
-            bool sampled = false,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-    };
-
-    /* Two-dimensional image that represents swapchain's color attachment to framebuffer.
-       It is managed internally by swapchain and never created or destroyed by user. */
-
-    class SwapchainColorAttachment2D : public Image2D
-    {
-        explicit SwapchainColorAttachment2D(std::shared_ptr<Device> device,
-            VkImage handle,
-            VkFormat format,
-            const VkExtent2D& extent);
-        friend class Swapchain;
-
-    public:
-        ~SwapchainColorAttachment2D();
-    };
 } // namespace magma

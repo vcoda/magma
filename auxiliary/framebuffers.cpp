@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "framebuffers.h"
 #include "../objects/device.h"
 #include "../objects/framebuffer.h"
-#include "../objects/image2D.h"
+#include "../objects/image2DAttachment.h"
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
 

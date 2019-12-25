@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "swapchain.h"
 #include "device.h"
 #include "surface.h"
-#include "image2D.h"
+#include "image2DAttachment.h"
 #include "queue.h"
 #include "semaphore.h"
 #include "fence.h"
