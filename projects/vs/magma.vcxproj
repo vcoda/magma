@@ -166,6 +166,7 @@
     <ClInclude Include="..\..\extensions\instanceExtensions.h" />
     <ClInclude Include="..\..\helpers\alignedUniformArray.h" />
     <ClInclude Include="..\..\helpers\castToDebugReport.h" />
+    <ClInclude Include="..\..\helpers\checkFeatureSupport.h" />
     <ClInclude Include="..\..\helpers\executeCommandBuffer.h" />
     <ClInclude Include="..\..\helpers\mapScoped.h" />
     <ClInclude Include="..\..\helpers\stackArray.h" />
@@ -290,6 +291,7 @@
     <ClCompile Include="..\..\extensions\layers.cpp" />
     <ClCompile Include="..\..\extensions\physicalDeviceExtensions.cpp" />
     <ClCompile Include="..\..\extensions\extensions.cpp" />
+    <ClCompile Include="..\..\helpers\checkFeatureSupport.cpp" />
     <ClCompile Include="..\..\helpers\executeCommandBuffer.cpp" />
     <ClCompile Include="..\..\helpers\stringize.cpp" />
     <ClCompile Include="..\..\internal\pch.cpp">

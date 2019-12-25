@@ -33,6 +33,7 @@ MAGMA_OBJS= \
 	extensions/layers.o \
 	extensions/physicalDeviceExtensions.o \
 	\
+	helpers/checkFeatureSupport.o \
 	helpers/executeCommandBuffer.o \
 	helpers/stringize.o \
 	\

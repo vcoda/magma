@@ -41,6 +41,7 @@ namespace magma
             uint32_t minImageCount,
             VkSurfaceFormatKHR surfaceFormat,
             const VkExtent2D& imageExtent,
+            VkImageUsageFlags usage,
             VkSurfaceTransformFlagBitsKHR preTransform,
             VkCompositeAlphaFlagBitsKHR compositeAlpha,
             VkPresentModeKHR presentMode,

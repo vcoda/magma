@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "swapchain.h"
 #include "device.h"
+#include "physicalDevice.h"
 #include "surface.h"
 #include "image2DAttachment.h"
 #include "queue.h"
@@ -29,11 +30,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/deviceExtension.h"
 #include "../helpers/stackArray.h"
 #include "../helpers/stringize.h"
+#include "../helpers/checkFeatureSupport.h"
 
 namespace magma
 {
 Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surface> surface,
     uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& imageExtent,
+    VkImageUsageFlags usage,
     VkSurfaceTransformFlagBitsKHR preTransform,
     VkCompositeAlphaFlagBitsKHR compositeAlpha,
     VkPresentModeKHR presentMode,
@@ -55,7 +58,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     info.imageColorSpace = surfaceFormat.colorSpace;
     info.imageExtent = imageExtent;
     info.imageArrayLayers = 1;
-    info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    info.imageUsage = usage;
     info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
     info.queueFamilyIndexCount = 0;
     info.pQueueFamilyIndices = nullptr;
@@ -64,6 +67,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     info.presentMode = presentMode;
     info.clipped = VK_TRUE;
     info.oldSwapchain = VK_NULL_HANDLE;
+    helpers::checkImageUsageSupport(surface, info.imageUsage, this->device->getPhysicalDevice());
     VkResult create;
     if (std::dynamic_pointer_cast<const DisplaySurface>(surface))
     {

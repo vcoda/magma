@@ -471,6 +471,9 @@
     <ClInclude Include="..\..\objects\image2DAttachment.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\helpers\checkFeatureSupport.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -739,6 +742,9 @@
     </ClCompile>
     <ClCompile Include="..\..\objects\image2DAttachment.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\helpers\checkFeatureSupport.cpp">
+      <Filter>Source Files\helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
