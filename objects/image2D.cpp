@@ -114,7 +114,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkImage handle, VkFormat format
 {}
 
 LinearTiledImage2D::LinearTiledImage2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
-    const Sharing& sharing,
+    const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image2D(std::move(device), format, extent,
         1, // mipLevels,

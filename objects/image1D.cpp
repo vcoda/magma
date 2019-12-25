@@ -109,7 +109,7 @@ Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width
 {}
 
 LinearTiledImage1D::LinearTiledImage1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width,
-    const Sharing& sharing,
+    const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Image1D(std::move(device), format, width,
         1, // mipLevels
