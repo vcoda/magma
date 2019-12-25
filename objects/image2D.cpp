@@ -112,4 +112,16 @@ Image2D::Image2D(std::shared_ptr<Device> device,
 Image2D::Image2D(std::shared_ptr<Device> device, VkImage handle, VkFormat format, const VkExtent2D& extent):
     Image(std::move(device), handle, VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1})
 {}
+
+LinearTiledImage2D::LinearTiledImage2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
+    const Sharing& sharing,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Image2D(std::move(device), format, extent,
+        1, // mipLevels,
+        1, // samples
+        VK_IMAGE_TILING_LINEAR,
+        VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+        sharing,
+        std::move(allocator))
+{}
 } // namespace magma

@@ -66,4 +66,16 @@ namespace magma
             VkFormat format,
             const VkExtent2D& extent);
     };
+
+    /* Two-dimensional image with linear tiling. */
+
+    class LinearTiledImage2D : public Image2D
+    {
+    public:
+        explicit LinearTiledImage2D(std::shared_ptr<Device> device,
+            VkFormat format,
+            const VkExtent2D& extent,
+            const Sharing& sharing = Sharing(),
+            std::shared_ptr<IAllocator> allocator = nullptr);
+    };
 } // namespace magma
