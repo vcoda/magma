@@ -38,6 +38,8 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~DeviceMemory();
         VkDeviceSize getSize() const noexcept { return size; }
+        bool deviceLocal() const noexcept;
+        bool hostVisible() const noexcept;
         void *map(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE,
             VkMemoryMapFlags flags = 0) noexcept;
@@ -51,11 +53,13 @@ namespace magma
         bool invalidateMappedRange(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
 
+
     private:
         uint32_t getTypeIndex(VkMemoryPropertyFlags flags) const;
 
     private:
         VkDeviceSize size;
+        VkMemoryPropertyFlags flags;
     };
 } // namespace magma
 
