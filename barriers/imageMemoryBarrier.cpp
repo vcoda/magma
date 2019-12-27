@@ -122,11 +122,4 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
     this->image = MAGMA_HANDLE(resource);
     this->subresourceRange = subresourceRange;
 }
-
-ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, const ImageMemoryBarrier& predefined) noexcept:
-    resource(std::move(image))
-{
-    *this = predefined;
-    this->image = MAGMA_HANDLE(resource);
-}
 } // namespace magma

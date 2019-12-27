@@ -303,19 +303,6 @@ namespace magma
             VkPipelineStageFlags dstStageMask,
             const ImageMemoryBarrier& imageMemoryBarrier,
             VkDependencyFlags dependencyFlags = 0) noexcept;
-        // Multi-object barriers
-        void pipelineBarrier(
-            VkPipelineStageFlags srcStageMask,
-            VkPipelineStageFlags dstStageMask,
-            const std::vector<std::shared_ptr<Buffer>>& buffers,
-            const BufferMemoryBarrier& barrier,
-            VkDependencyFlags dependencyFlags = 0) noexcept;
-        void pipelineBarrier(
-            VkPipelineStageFlags srcStageMask,
-            VkPipelineStageFlags dstStageMask,
-            const std::vector<std::shared_ptr<Image>>& images,
-            const ImageMemoryBarrier& barrier,
-            VkDependencyFlags dependencyFlags = 0) noexcept;
 
         void beginQuery(
             const std::shared_ptr<QueryPool>& queryPool,
