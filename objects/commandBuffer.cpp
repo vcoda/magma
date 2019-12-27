@@ -357,6 +357,21 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
     imageMemoryBarrier.resource->setLayout(imageMemoryBarrier.newLayout);
 }
 
+void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<MemoryBarrier>& memoryBarriers,
+    const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers, const std::vector<ImageMemoryBarrier>& imageMemoryBarriers,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
+{
+    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedImageMemoryBarriers, imageMemoryBarriers.size());
+    for (const auto& barrier : imageMemoryBarriers)
+        dereferencedImageMemoryBarriers.put(barrier);
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
+        MAGMA_COUNT(memoryBarriers), memoryBarriers.data(),
+        MAGMA_COUNT(bufferMemoryBarriers), bufferMemoryBarriers.data(),
+        MAGMA_COUNT(imageMemoryBarriers), dereferencedImageMemoryBarriers);
+    for (const auto& barrier : imageMemoryBarriers)
+        barrier.resource->setLayout(barrier.newLayout);
+}
+
 void CommandBuffer::beginQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex, bool precise) noexcept
 {
     MAGMA_ASSERT(queryIndex < queryPool->getQueryCount());

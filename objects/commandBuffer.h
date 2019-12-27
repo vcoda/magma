@@ -303,6 +303,13 @@ namespace magma
             VkPipelineStageFlags dstStageMask,
             const ImageMemoryBarrier& imageMemoryBarrier,
             VkDependencyFlags dependencyFlags = 0) noexcept;
+        void pipelineBarrier(
+            VkPipelineStageFlags srcStageMask,
+            VkPipelineStageFlags dstStageMask,
+            const std::vector<MemoryBarrier>& memoryBarriers,
+            const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers,
+            const std::vector<ImageMemoryBarrier>& imageMemoryBarriers,
+            VkDependencyFlags dependencyFlags = 0) noexcept;
 
         void beginQuery(
             const std::shared_ptr<QueryPool>& queryPool,
