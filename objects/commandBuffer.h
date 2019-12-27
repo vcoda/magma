@@ -306,9 +306,9 @@ namespace magma
         void pipelineBarrier(
             VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
-            const std::vector<MemoryBarrier>& memoryBarriers,
-            const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers,
-            const std::vector<ImageMemoryBarrier>& imageMemoryBarriers,
+            const std::vector<MemoryBarrier>& memoryBarriers = {},
+            const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers = {},
+            const std::vector<ImageMemoryBarrier>& imageMemoryBarriers = {},
             VkDependencyFlags dependencyFlags = 0) noexcept;
 
         void beginQuery(

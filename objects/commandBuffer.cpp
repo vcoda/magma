@@ -357,8 +357,10 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
     imageMemoryBarrier.resource->setLayout(imageMemoryBarrier.newLayout);
 }
 
-void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<MemoryBarrier>& memoryBarriers,
-    const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers, const std::vector<ImageMemoryBarrier>& imageMemoryBarriers,
+void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
+    const std::vector<MemoryBarrier>& memoryBarriers /* {} */,
+    const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers /* {} */,
+    const std::vector<ImageMemoryBarrier>& imageMemoryBarriers /* {} */,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedImageMemoryBarriers, imageMemoryBarriers.size());
