@@ -241,11 +241,8 @@ void Image::copyMipLevel(uint32_t level, std::shared_ptr<Buffer> buffer, VkDevic
     subresourceRange.baseArrayLayer = 0;
     subresourceRange.layerCount = 1;
     cmdBuffer->begin();
-    {   // Change layout from undefined to transfer optimal
-        const ImageMemoryBarrier preCopyBarrier(shared_from_this(),
-            VK_IMAGE_LAYOUT_UNDEFINED,
-            VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-            subresourceRange);
+    {   // Change image layout to transfer dest optimal
+        const ImageMemoryBarrier preCopyBarrier(shared_from_this(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_TRANSFER_WRITE_BIT, preCopyBarrier);
         VkBufferImageCopy region;
         region.bufferOffset = bufferOffset;
@@ -260,10 +257,7 @@ void Image::copyMipLevel(uint32_t level, std::shared_ptr<Buffer> buffer, VkDevic
         // Copy image data
         cmdBuffer->copyBufferToImage(buffer, shared_from_this(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, region);
         // Change layout from transfer optimal to shader read only
-        const ImageMemoryBarrier postCopyBarrier(shared_from_this(),
-            VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-            subresourceRange);
+        const ImageMemoryBarrier postCopyBarrier(shared_from_this(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, subresourceRange);
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, barrierDstStageMask, postCopyBarrier);
     }
     cmdBuffer->end();
@@ -340,15 +334,14 @@ void Image::copyFromBuffer(std::shared_ptr<Buffer> buffer, const std::vector<VkB
     cmdBuffer->begin();
     {   // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
         const auto weakRef = std::shared_ptr<Image>(this, [](Image *) {});
-        // Change layout from undefined to transfer optimal
-        const VkImageLayout optimalLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
-        const ImageMemoryBarrier preCopyBarrier(weakRef, VK_IMAGE_LAYOUT_UNDEFINED, optimalLayout, subresourceRange);
+        // Change image layout to transfer dest optimal
+        const ImageMemoryBarrier preCopyBarrier(weakRef, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_TRANSFER_WRITE_BIT, preCopyBarrier);
         // Copy image data
         cmdBuffer->copyBufferToImage(buffer, weakRef, optimalLayout, copyRegions);
         // Change layout from transfer optimal to shader read only
         layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-        const ImageMemoryBarrier postCopyBarrier(weakRef, optimalLayout, layout, subresourceRange);
+        const ImageMemoryBarrier postCopyBarrier(weakRef, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, subresourceRange);
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, postCopyBarrier);
     }
     cmdBuffer->end();

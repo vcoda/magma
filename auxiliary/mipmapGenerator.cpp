@@ -68,32 +68,20 @@ bool MipmapGenerator::generateMipmap(const std::shared_ptr<Image>& image, uint32
         blitRegion.dstOffsets[0] = VkOffset3D{0, 0, 0};
         blitRegion.dstOffsets[1] = VkOffset3D{int32_t(nextMipExtent.width), int32_t(nextMipExtent.height), 1};
         const ImageSubresourceRange nextMipRange(image, level, 1);
-        // Transition next mip level to transfer dest
-        const ImageMemoryBarrier undefinedToTransferDst(
-            image,
-            VK_IMAGE_LAYOUT_UNDEFINED,
-            VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-            nextMipRange);
-        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, undefinedToTransferDst);
+        // Transition of next mip level to transfer dest
+        const ImageMemoryBarrier transferDstOptimal(image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, nextMipRange);
+        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDstOptimal);
         // Downsample larger mip to smaller one
         cmdBuffer->blitImage(image, image, blitRegion, filter);
-        // Transition next mip level back to transfer source
-        const ImageMemoryBarrier transferDstToSrc(
-            image,
-            VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-            VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-            nextMipRange);
-        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDstToSrc);
+        // Transition of next mip level back to transfer source
+        const ImageMemoryBarrier transferSrcOptimal(image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, nextMipRange);
+        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferSrcOptimal);
         prevMipExtent = nextMipExtent;
     }
     // Blitted mip levels are transitioned to shader read layout
     const ImageSubresourceRange blitMipsRange(image, baseLevel + 1, image->getMipLevels() - baseLevel - 1);
-    const ImageMemoryBarrier transferSrcToShaderRead(
-        image,
-        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-        blitMipsRange);
-    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, transferSrcToShaderRead);
+    const ImageMemoryBarrier shaderReadOnlyOptimal(image, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, blitMipsRange);
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, shaderReadOnlyOptimal);
     if (flush)
     {
         cmdBuffer->end();
