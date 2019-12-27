@@ -29,11 +29,9 @@ namespace magma
     class ImageMemoryBarrier : public VkImageMemoryBarrier
     {
     public:
-        explicit ImageMemoryBarrier(std::shared_ptr<Image> image,
-            VkImageLayout oldLayout,
+        ImageMemoryBarrier(std::shared_ptr<Image> image,
             VkImageLayout newLayout);
-        explicit ImageMemoryBarrier(std::shared_ptr<Image> image,
-            VkImageLayout oldLayout,
+        ImageMemoryBarrier(std::shared_ptr<Image> image,
             VkImageLayout newLayout,
             VkImageSubresourceRange subresourceRange);
         explicit ImageMemoryBarrier(std::shared_ptr<Image> image,

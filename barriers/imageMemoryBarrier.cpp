@@ -24,18 +24,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image,
-    VkImageLayout oldLayout, VkImageLayout newLayout):
-    ImageMemoryBarrier(image, oldLayout, newLayout, ImageSubresourceRange(image))
+ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayout newLayout):
+    ImageMemoryBarrier(std::move(image), newLayout, ImageSubresourceRange(image))
 {}
 
-ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image,
-    VkImageLayout oldLayout, VkImageLayout newLayout, VkImageSubresourceRange subresourceRange):
+ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayout newLayout,
+    VkImageSubresourceRange subresourceRange):
     resource(std::move(image))
 {
     sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
     pNext = nullptr;
-    switch (oldLayout)
+    switch (resource->getLayout())
     {
     case VK_IMAGE_LAYOUT_UNDEFINED:
         srcAccessMask = 0;
@@ -116,7 +115,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image,
     default:
         MAGMA_THROW_NOT_IMPLEMENTED;
     }
-    this->oldLayout = oldLayout;
+    this->oldLayout = resource->getLayout();
     this->newLayout = newLayout;
     srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
     dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
