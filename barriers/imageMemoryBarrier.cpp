@@ -24,13 +24,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<const Image> image,
+ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image,
     VkImageLayout oldLayout, VkImageLayout newLayout):
     ImageMemoryBarrier(image, oldLayout, newLayout, ImageSubresourceRange(image))
 {}
 
-ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<const Image> image,
-    VkImageLayout oldLayout, VkImageLayout newLayout, VkImageSubresourceRange subresourceRange)
+ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image,
+    VkImageLayout oldLayout, VkImageLayout newLayout, VkImageSubresourceRange subresourceRange):
+    resource(std::move(image))
 {
     sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
     pNext = nullptr;
@@ -63,6 +64,13 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<const Image> image,
         break;
     case VK_IMAGE_LAYOUT_PREINITIALIZED:
         srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR:
+    case VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR:
+        srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_SHADING_RATE_OPTIMAL_NV:
+        srcAccessMask = VK_ACCESS_SHADING_RATE_IMAGE_READ_BIT_NV;
         break;
     default:
         MAGMA_THROW_NOT_IMPLEMENTED;
@@ -98,6 +106,13 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<const Image> image,
     case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
         dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
         break;
+    case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR:
+    case VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR:
+        dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_SHADING_RATE_OPTIMAL_NV:
+        dstAccessMask = VK_ACCESS_SHADING_RATE_IMAGE_READ_BIT_NV;
+        break;
     default:
         MAGMA_THROW_NOT_IMPLEMENTED;
     }
@@ -105,13 +120,14 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<const Image> image,
     this->newLayout = newLayout;
     srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
     dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-    this->image = MAGMA_OPTIONAL_HANDLE(image);
+    this->image = MAGMA_HANDLE(resource);
     this->subresourceRange = subresourceRange;
 }
 
-ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<const Image> image, const ImageMemoryBarrier& predefined) noexcept
+ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, const ImageMemoryBarrier& predefined) noexcept:
+    resource(std::move(image))
 {
     *this = predefined;
-    this->image = *image;
+    this->image = MAGMA_HANDLE(resource);
 }
 } // namespace magma

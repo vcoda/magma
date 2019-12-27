@@ -45,7 +45,7 @@ namespace magma
 
     struct GlobalMemoryBarrier;
     struct BufferMemoryBarrier;
-    struct ImageMemoryBarrier;
+    class ImageMemoryBarrier;
 
     namespace internal
     {
@@ -301,7 +301,7 @@ namespace magma
         void pipelineBarrier(
             VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
-            const ImageMemoryBarrier& barrier,
+            const ImageMemoryBarrier& imageMemoryBarrier,
             VkDependencyFlags dependencyFlags = 0) noexcept;
         // Multi-object barriers
         void pipelineBarrier(

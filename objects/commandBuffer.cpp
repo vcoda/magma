@@ -341,13 +341,14 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
         0, nullptr);
 }
 
-void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier,
+void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& imageMemoryBarrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
         0, nullptr,
         0, nullptr,
-        1, &barrier);
+        1, &imageMemoryBarrier);
+    imageMemoryBarrier.resource->setLayout(imageMemoryBarrier.newLayout);
 }
 
 void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<std::shared_ptr<Buffer>>& buffers, const BufferMemoryBarrier& barrier,

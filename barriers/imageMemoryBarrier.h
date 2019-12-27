@@ -26,16 +26,21 @@ namespace magma
        via the specified image subresource range. Image memory barriers can also be used to define
        image layout transitions or a queue family ownership transfer for the specified image subresource range. */
 
-    struct ImageMemoryBarrier : VkImageMemoryBarrier
+    class ImageMemoryBarrier : public VkImageMemoryBarrier
     {
-        ImageMemoryBarrier(std::shared_ptr<const Image> image,
+    public:
+        explicit ImageMemoryBarrier(std::shared_ptr<Image> image,
             VkImageLayout oldLayout,
             VkImageLayout newLayout);
-        ImageMemoryBarrier(std::shared_ptr<const Image> image,
+        explicit ImageMemoryBarrier(std::shared_ptr<Image> image,
             VkImageLayout oldLayout,
             VkImageLayout newLayout,
             VkImageSubresourceRange subresourceRange);
-        ImageMemoryBarrier(std::shared_ptr<const Image> image,
+        explicit ImageMemoryBarrier(std::shared_ptr<Image> image,
             const ImageMemoryBarrier& predefined) noexcept;
+
+    private:
+        std::shared_ptr<Image> resource;
+        friend class CommandBuffer;
     };
 } // namespace magma
