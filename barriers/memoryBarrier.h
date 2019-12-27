@@ -15,10 +15,22 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include "pch.h"
-#pragma hdrstop
-#include "globalMemoryBarrier.h"
+#pragma once
 
 namespace magma
 {
+    /* Global memory barriers apply to memory accesses involving
+       all memory objects that exist at the time of its execution. */
+
+    struct MemoryBarrier : VkMemoryBarrier
+    {
+        constexpr MemoryBarrier(VkAccessFlags srcAccessMask,
+            VkAccessFlags dstAccessMask): VkMemoryBarrier{}
+        {
+            sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+            pNext = nullptr;
+            this->srcAccessMask = srcAccessMask;
+            this->dstAccessMask = dstAccessMask;
+        }
+    };
 } // namespace magma

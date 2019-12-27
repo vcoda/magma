@@ -153,7 +153,7 @@
     <ClInclude Include="..\..\auxiliary\packedTypes.h" />
     <ClInclude Include="..\..\auxiliary\shaderCompiler.h" />
     <ClInclude Include="..\..\barriers\bufferMemoryBarrier.h" />
-    <ClInclude Include="..\..\barriers\globalMemoryBarrier.h" />
+    <ClInclude Include="..\..\barriers\memoryBarrier.h" />
     <ClInclude Include="..\..\barriers\imageMemoryBarrier.h" />
     <ClInclude Include="..\..\descriptors\attachment.h" />
     <ClInclude Include="..\..\descriptors\bindings.h" />
@@ -283,7 +283,6 @@
     <ClCompile Include="..\..\auxiliary\mipmapGenerator.cpp" />
     <ClCompile Include="..\..\auxiliary\shaderCompiler.cpp" />
     <ClCompile Include="..\..\barriers\bufferMemoryBarrier.cpp" />
-    <ClCompile Include="..\..\barriers\globalMemoryBarrier.cpp" />
     <ClCompile Include="..\..\barriers\imageMemoryBarrier.cpp" />
     <ClCompile Include="..\..\descriptors\subpass.cpp" />
     <ClCompile Include="..\..\extensions\instanceExtensions.cpp" />

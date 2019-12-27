@@ -97,8 +97,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptors/subpass.h"
 
 #include "barriers/bufferMemoryBarrier.h"
-#include "barriers/globalMemoryBarrier.h"
 #include "barriers/imageMemoryBarrier.h"
+#include "barriers/memoryBarrier.h"
 
 #include "misc/clearAttachment.h"
 #include "misc/clearValue.h"

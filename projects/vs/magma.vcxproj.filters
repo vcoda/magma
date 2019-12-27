@@ -108,9 +108,6 @@
     <ClInclude Include="..\..\barriers\bufferMemoryBarrier.h">
       <Filter>Header Files\barriers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\barriers\globalMemoryBarrier.h">
-      <Filter>Header Files\barriers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\barriers\imageMemoryBarrier.h">
       <Filter>Header Files\barriers</Filter>
     </ClInclude>
@@ -495,9 +492,6 @@
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
     <ClCompile Include="..\..\barriers\bufferMemoryBarrier.cpp">
-      <Filter>Source Files\barriers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\barriers\globalMemoryBarrier.cpp">
       <Filter>Source Files\barriers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\barriers\imageMemoryBarrier.cpp">

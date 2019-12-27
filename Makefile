@@ -22,7 +22,6 @@ MAGMA_OBJS= \
 	auxiliary/mipmapGenerator.o \
 	\
 	barriers/bufferMemoryBarrier.o \
-	barriers/globalMemoryBarrier.o \
 	barriers/imageMemoryBarrier.o \
 	\
 	descriptors/subpass.o \
