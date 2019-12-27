@@ -213,14 +213,14 @@ void CommandBuffer::blitImage(const std::shared_ptr<Image>& srcImage, const std:
     vkCmdBlitImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &region, filter);
 }
 
-void CommandBuffer::copyBufferToImage(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Image>& dstImage, VkImageLayout dstImageLayout, const VkBufferImageCopy& region) const noexcept
+void CommandBuffer::copyBufferToImage(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Image>& dstImage, const VkBufferImageCopy& region) const noexcept
 {
-    vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstImageLayout, 1, &region);
+    vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstImage->getLayout(), 1, &region);
 }
 
-void CommandBuffer::copyBufferToImage(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Image>& dstImage, VkImageLayout dstImageLayout, const std::vector<VkBufferImageCopy>& regions) const noexcept
+void CommandBuffer::copyBufferToImage(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Image>& dstImage, const std::vector<VkBufferImageCopy>& regions) const noexcept
 {
-    vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstImageLayout, MAGMA_COUNT(regions), regions.data());
+    vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstImage->getLayout(), MAGMA_COUNT(regions), regions.data());
 }
 
 void CommandBuffer::copyImageToBuffer(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Buffer>& dstBuffer, const VkBufferImageCopy& region) const noexcept
