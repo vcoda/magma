@@ -45,5 +45,10 @@ namespace magma
         std::shared_ptr<PhysicalDeviceGroup> getPhysicalDeviceGroup(uint32_t groupId);
         static std::vector<VkLayerProperties> enumerateLayers();
         static std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr);
+        // Non-API
+        uint32_t getApiVersion() const noexcept { return apiVersion; }
+
+    private:
+        uint32_t apiVersion;
     };
 } // namespace magma
