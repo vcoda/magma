@@ -27,6 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../barriers/imageMemoryBarrier.h"
 #include "../misc/deviceExtension.h"
+#include "../misc/format.h"
 #include "../misc/exception.h"
 
 namespace magma
@@ -177,6 +178,25 @@ VkExtent3D Image::getMipExtent(uint32_t level) const
             mipExtent.depth >>= 1;
     }
     return mipExtent;
+}
+
+VkSubresourceLayout Image::getSubresourceLayout(uint32_t mipLevel, uint32_t arrayLayer /* 0 */) const noexcept
+{
+    const Format imageFormat(format);
+    VkImageSubresource subResource;
+    if (imageFormat.depth())
+        subResource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+    else if (imageFormat.stencil())
+        subResource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
+    else if (imageFormat.depthStencil())
+        subResource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+    else
+        subResource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    subResource.mipLevel = mipLevel;
+    subResource.arrayLayer = this->arrayLayers > 1 ? arrayLayer : 0; // Ignore for non-arrays
+    VkSubresourceLayout subResourceLayout;
+    vkGetImageSubresourceLayout(MAGMA_HANDLE(device), handle, &subResource, &subResourceLayout);
+    return subResourceLayout;
 }
 
 VkMemoryRequirements Image::getMemoryRequirements() const noexcept
