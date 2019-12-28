@@ -50,7 +50,9 @@ DepthStencilAttachment2D::DepthStencilAttachment2D(std::shared_ptr<Device> devic
 SwapchainColorAttachment2D::SwapchainColorAttachment2D(std::shared_ptr<Device> device,
     VkImage handle, VkFormat format, const VkExtent2D& extent):
     Image2D(std::move(device), handle, format, extent)
-{}
+{
+    layout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+}
 
 SwapchainColorAttachment2D::~SwapchainColorAttachment2D()
 {   // vkDestroyImage() shouldn't have effect on it as it was not created via vkCreateImage().
