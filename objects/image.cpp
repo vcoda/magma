@@ -183,20 +183,20 @@ VkExtent3D Image::getMipExtent(uint32_t level) const
 VkSubresourceLayout Image::getSubresourceLayout(uint32_t mipLevel, uint32_t arrayLayer /* 0 */) const noexcept
 {
     const Format imageFormat(format);
-    VkImageSubresource subResource;
+    VkImageSubresource subresource;
     if (imageFormat.depth())
-        subResource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+        subresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
     else if (imageFormat.stencil())
-        subResource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
+        subresource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
     else if (imageFormat.depthStencil())
-        subResource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+        subresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
     else
-        subResource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-    subResource.mipLevel = mipLevel;
-    subResource.arrayLayer = this->arrayLayers > 1 ? arrayLayer : 0; // Ignore for non-arrays
-    VkSubresourceLayout subResourceLayout;
-    vkGetImageSubresourceLayout(MAGMA_HANDLE(device), handle, &subResource, &subResourceLayout);
-    return subResourceLayout;
+        subresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    subresource.mipLevel = mipLevel;
+    subresource.arrayLayer = this->arrayLayers > 1 ? arrayLayer : 0; // Ignore for non-arrays
+    VkSubresourceLayout subresourceLayout;
+    vkGetImageSubresourceLayout(MAGMA_HANDLE(device), handle, &subresource, &subresourceLayout);
+    return subresourceLayout;
 }
 
 VkMemoryRequirements Image::getMemoryRequirements() const noexcept
