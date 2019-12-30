@@ -18,8 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "colorBlendState.h"
-#include "../internal/copy.h"
-#include "../internal/compare.h"
+#include "../detail/copy.h"
+#include "../detail/compare.h"
 
 namespace magma
 {
@@ -32,7 +32,7 @@ ManagedColorBlendState::ManagedColorBlendState(const std::vector<ColorBlendAttac
     this->logicOpEnable = VK_FALSE;
     this->logicOp = VK_LOGIC_OP_CLEAR;
     attachmentCount = MAGMA_COUNT(attachments);
-    pAttachments = internal::copyArray<VkPipelineColorBlendAttachmentState>(attachments.data(), attachments.size());
+    pAttachments = detail::copyArray<VkPipelineColorBlendAttachmentState>(attachments.data(), attachments.size());
     MAGMA_ASSERT(blendConstants.size() >= 4);
     const auto c = blendConstants.begin();
     this->blendConstants[0] = c[0];
@@ -49,7 +49,7 @@ ManagedColorBlendState::ManagedColorBlendState(const ColorBlendState& blendState
     logicOpEnable = blendState.logicOpEnable;
     logicOp = blendState.logicOp;
     attachmentCount = blendState.attachmentCount;
-    pAttachments = internal::copyArray(blendState.pAttachments, blendState.attachmentCount);
+    pAttachments = detail::copyArray(blendState.pAttachments, blendState.attachmentCount);
     blendConstants[0] = blendState.blendConstants[0];
     blendConstants[1] = blendState.blendConstants[1];
     blendConstants[2] = blendState.blendConstants[2];
@@ -58,8 +58,8 @@ ManagedColorBlendState::ManagedColorBlendState(const ColorBlendState& blendState
 
 ManagedColorBlendState::ManagedColorBlendState(const ManagedColorBlendState& other) noexcept
 {
-    internal::copy(this, &other);
-    pAttachments = internal::copyArray(other.pAttachments, attachmentCount);
+    detail::copy(this, &other);
+    pAttachments = detail::copyArray(other.pAttachments, attachmentCount);
 }
 
 ManagedColorBlendState& ManagedColorBlendState::operator=(const ManagedColorBlendState& other) noexcept
@@ -67,8 +67,8 @@ ManagedColorBlendState& ManagedColorBlendState::operator=(const ManagedColorBlen
     if (this != &other)
     {
         delete[] pAttachments;
-        internal::copy(this, &other);
-        pAttachments = internal::copyArray(other.pAttachments, attachmentCount);
+        detail::copy(this, &other);
+        pAttachments = detail::copyArray(other.pAttachments, attachmentCount);
     }
     return *this;
 }
@@ -80,7 +80,7 @@ ManagedColorBlendState::~ManagedColorBlendState()
 
 std::size_t ManagedColorBlendState::hash() const noexcept
 {
-    std::size_t hash = internal::hashArgs(
+    std::size_t hash = detail::hashArgs(
         sType,
         flags,
         logicOpEnable,
@@ -88,7 +88,7 @@ std::size_t ManagedColorBlendState::hash() const noexcept
         attachmentCount);
     for (uint32_t i = 0; i < attachmentCount; ++i)
     {
-        internal::hashCombine(hash, internal::hashArgs(
+        detail::hashCombine(hash, detail::hashArgs(
             pAttachments[i].blendEnable,
             pAttachments[i].srcColorBlendFactor,
             pAttachments[i].dstColorBlendFactor,
@@ -98,7 +98,7 @@ std::size_t ManagedColorBlendState::hash() const noexcept
             pAttachments[i].alphaBlendOp,
             pAttachments[i].colorWriteMask));
     }
-    internal::hashCombine(hash, internal::hashArray(blendConstants, 4));
+    detail::hashCombine(hash, detail::hashArray(blendConstants, 4));
     return hash;
 }
 
@@ -108,7 +108,7 @@ bool ManagedColorBlendState::operator==(const ManagedColorBlendState& other) con
         (logicOpEnable == other.logicOpEnable) &&
         (logicOp == other.logicOp) &&
         (attachmentCount == other.attachmentCount) &&
-        internal::compareArrays(pAttachments, other.pAttachments, attachmentCount) &&
-        internal::compareArrays(blendConstants, other.blendConstants, 4);
+        detail::compareArrays(pAttachments, other.pAttachments, attachmentCount) &&
+        detail::compareArrays(blendConstants, other.blendConstants, 4);
 }
 } // namespace magma

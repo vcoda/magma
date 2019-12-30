@@ -47,7 +47,7 @@ constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
 
 constexpr std::size_t ColorBlendAttachmentState::hash() const
 {
-    return internal::hashArgs(
+    return detail::hashArgs(
         blendEnable,
         srcColorBlendFactor,
         dstColorBlendFactor,
@@ -108,13 +108,13 @@ constexpr ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& atta
 
 constexpr std::size_t ColorBlendState::hash() const
 {
-    std::size_t hash = internal::hashArgs(
+    std::size_t hash = detail::hashArgs(
         sType,
         flags,
         logicOpEnable,
         logicOp,
         attachmentCount);
-    internal::hashCombine(hash, internal::hashArgs(
+    detail::hashCombine(hash, detail::hashArgs(
         pAttachments->blendEnable,
         pAttachments->srcColorBlendFactor,
         pAttachments->dstColorBlendFactor,
@@ -123,7 +123,7 @@ constexpr std::size_t ColorBlendState::hash() const
         pAttachments->dstAlphaBlendFactor,
         pAttachments->alphaBlendOp,
         pAttachments->colorWriteMask));
-    internal::hashCombine(hash, internal::hashArray(blendConstants, 4));
+    detail::hashCombine(hash, detail::hashArray(blendConstants, 4));
     return hash;
 }
 

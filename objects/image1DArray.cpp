@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "srcTransferBuffer.h"
 #include "deviceMemory.h"
 #include "../helpers/mapScoped.h"
-#include "../internal/copyMemory.h"
+#include "../detail/copyMemory.h"
 
 namespace magma
 {
@@ -85,7 +85,7 @@ Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format, uint
     helpers::mapScoped<uint8_t>(buffer, [&](uint8_t *data)
     {
         if (!copyFn)
-            copyFn = internal::copyMemory;
+            copyFn = detail::copyMemory;
         for (uint32_t layer = 0; layer < arrayLayers; ++layer)
         {
             for (uint32_t level = 0; level < mipLevels; ++level)

@@ -41,7 +41,7 @@ constexpr MultisampleState::MultisampleState(uint32_t sampleCount):
 
 constexpr std::size_t MultisampleState::hash() const
 {
-    size_t hash = internal::hashArgs(
+    size_t hash = detail::hashArgs(
         sType,
         flags,
         rasterizationSamples,
@@ -51,9 +51,9 @@ constexpr std::size_t MultisampleState::hash() const
         alphaToOneEnable);
     if (pSampleMask)
     {
-        internal::hashCombine(hash, internal::hash(pSampleMask[0]));
+        detail::hashCombine(hash, detail::hash(pSampleMask[0]));
         if (rasterizationSamples > VK_SAMPLE_COUNT_32_BIT)
-            internal::hashCombine(hash, internal::hash(pSampleMask[1]));
+            detail::hashCombine(hash, detail::hash(pSampleMask[1]));
     }
     return hash;
 }
@@ -64,7 +64,7 @@ constexpr bool MultisampleState::operator==(const MultisampleState& other) const
         (rasterizationSamples == other.rasterizationSamples) &&
         (sampleShadingEnable == other.sampleShadingEnable) &&
         (minSampleShading == other.minSampleShading) &&
-        (internal::compareArrays(pSampleMask, other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1)) &&
+        (detail::compareArrays(pSampleMask, other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1)) &&
         (alphaToCoverageEnable == other.alphaToCoverageEnable) &&
         (alphaToOneEnable == other.alphaToOneEnable);
 }

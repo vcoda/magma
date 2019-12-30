@@ -160,6 +160,17 @@
     <ClInclude Include="..\..\descriptors\bindings.h" />
     <ClInclude Include="..\..\descriptors\descriptors.h" />
     <ClInclude Include="..\..\descriptors\subpass.h" />
+    <ClInclude Include="..\..\detail\compare.h" />
+    <ClInclude Include="..\..\detail\copy.h" />
+    <ClInclude Include="..\..\detail\copyMemory.h" />
+    <ClInclude Include="..\..\detail\hash.h" />
+    <ClInclude Include="..\..\detail\noncopyable.h" />
+    <ClInclude Include="..\..\detail\pch.h" />
+    <ClInclude Include="..\..\detail\placementPool.h" />
+    <ClInclude Include="..\..\detail\refCountChecker.h" />
+    <ClInclude Include="..\..\detail\scopedProfiler.h" />
+    <ClInclude Include="..\..\detail\shared.h" />
+    <ClInclude Include="..\..\detail\zeroMemory.h" />
     <ClInclude Include="..\..\extensions\instanceLayers.h" />
     <ClInclude Include="..\..\extensions\layers.h" />
     <ClInclude Include="..\..\extensions\physicalDeviceExtensions.h" />
@@ -174,16 +185,6 @@
     <ClInclude Include="..\..\helpers\stringize.h" />
     <ClInclude Include="..\..\helpers\typedefs.h" />
     <ClInclude Include="..\..\helpers\uniformArray.h" />
-    <ClInclude Include="..\..\internal\compare.h" />
-    <ClInclude Include="..\..\internal\copy.h" />
-    <ClInclude Include="..\..\internal\copyMemory.h" />
-    <ClInclude Include="..\..\internal\hash.h" />
-    <ClInclude Include="..\..\internal\nonCopyable.h" />
-    <ClInclude Include="..\..\internal\pch.h" />
-    <ClInclude Include="..\..\internal\placementPool.h" />
-    <ClInclude Include="..\..\internal\refCountChecker.h" />
-    <ClInclude Include="..\..\internal\shared.h" />
-    <ClInclude Include="..\..\internal\zeroMemory.h" />
     <ClInclude Include="..\..\magma.h" />
     <ClInclude Include="..\..\misc\clearAttachment.h" />
     <ClInclude Include="..\..\misc\clearValue.h" />
@@ -287,6 +288,12 @@
     <ClCompile Include="..\..\barriers\bufferMemoryBarrier.cpp" />
     <ClCompile Include="..\..\barriers\imageMemoryBarrier.cpp" />
     <ClCompile Include="..\..\descriptors\subpass.cpp" />
+    <ClCompile Include="..\..\detail\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\..\extensions\instanceExtensions.cpp" />
     <ClCompile Include="..\..\extensions\instanceLayers.cpp" />
     <ClCompile Include="..\..\extensions\layers.cpp" />
@@ -295,16 +302,6 @@
     <ClCompile Include="..\..\helpers\checkFeatureSupport.cpp" />
     <ClCompile Include="..\..\helpers\executeCommandBuffer.cpp" />
     <ClCompile Include="..\..\helpers\stringize.cpp" />
-    <ClCompile Include="..\..\internal\pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
-    </ClCompile>
     <ClCompile Include="..\..\misc\deviceQueueDescriptor.cpp" />
     <ClCompile Include="..\..\misc\exception.cpp" />
     <ClCompile Include="..\..\misc\format.cpp" />

@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    namespace internal
+    namespace detail
     {
         template<typename T> inline T *copy(const void *const source) noexcept
         {
@@ -139,5 +139,5 @@ namespace magma
 #endif // _MSC_VER
             return dest;
         }
-    } // namespace internal
+    } // namespace detail
 } // namespace magma

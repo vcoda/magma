@@ -22,7 +22,7 @@ namespace magma
     namespace helpers
     {
         template<typename Type>
-        class AlignedUniformArray : public internal::NonCopyable
+        class AlignedUniformArray : public detail::NonCopyable
         {
         public:
             class Iterator;

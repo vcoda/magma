@@ -19,8 +19,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "vertexInputState.h"
 #include "../misc/format.h"
-#include "../internal/copy.h"
-#include "../internal/compare.h"
+#include "../detail/copy.h"
+#include "../detail/compare.h"
 
 namespace magma
 {
@@ -42,9 +42,9 @@ VertexInputState::VertexInputState(const VertexInputBinding& binding,
     pNext = nullptr;
     flags = 0;
     vertexBindingDescriptionCount = 1;
-    pVertexBindingDescriptions = internal::copyArray<VkVertexInputBindingDescription>(&binding, 1);
+    pVertexBindingDescriptions = detail::copyArray<VkVertexInputBindingDescription>(&binding, 1);
     vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
-    pVertexAttributeDescriptions = internal::copyInitializerList<VkVertexInputAttributeDescription>(attributes);
+    pVertexAttributeDescriptions = detail::copyInitializerList<VkVertexInputAttributeDescription>(attributes);
 }
 
 VertexInputState::VertexInputState(const std::initializer_list<VertexInputBinding>& bindings,
@@ -54,9 +54,9 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
     pNext = nullptr;
     flags = 0;
     vertexBindingDescriptionCount = MAGMA_COUNT(bindings);
-    pVertexBindingDescriptions = internal::copyInitializerList<VkVertexInputBindingDescription>(bindings);
+    pVertexBindingDescriptions = detail::copyInitializerList<VkVertexInputBindingDescription>(bindings);
     vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
-    pVertexAttributeDescriptions = internal::copyInitializerList<VkVertexInputAttributeDescription>(attributes);
+    pVertexAttributeDescriptions = detail::copyInitializerList<VkVertexInputAttributeDescription>(attributes);
 }
 
 VertexInputState::~VertexInputState()
@@ -82,21 +82,21 @@ uint32_t VertexInputState::stride(uint32_t binding) const noexcept
 
 std::size_t VertexInputState::hash() const noexcept
 {
-    size_t hash = internal::hashArgs(
+    size_t hash = detail::hashArgs(
         sType,
         flags,
         vertexBindingDescriptionCount,
         vertexAttributeDescriptionCount);
     for (uint32_t i = 0; i < vertexBindingDescriptionCount; ++i)
     {
-        internal::hashCombine(hash, internal::hashArgs(
+        detail::hashCombine(hash, detail::hashArgs(
             pVertexBindingDescriptions[i].binding,
             pVertexBindingDescriptions[i].stride,
             pVertexBindingDescriptions[i].inputRate));
     }
     for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
     {
-        internal::hashCombine(hash, internal::hashArgs(
+        detail::hashCombine(hash, detail::hashArgs(
             pVertexAttributeDescriptions[i].location,
             pVertexAttributeDescriptions[i].binding,
             pVertexAttributeDescriptions[i].format,
@@ -110,7 +110,7 @@ bool VertexInputState::operator==(const VertexInputState& other) const noexcept
    return (flags == other.flags) &&
         (vertexBindingDescriptionCount == other.vertexBindingDescriptionCount) &&
         (vertexAttributeDescriptionCount == other.vertexAttributeDescriptionCount) &&
-        internal::compareArrays(pVertexBindingDescriptions, other.pVertexBindingDescriptions, vertexBindingDescriptionCount) &&
-        internal::compareArrays(pVertexAttributeDescriptions, other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+        detail::compareArrays(pVertexBindingDescriptions, other.pVertexBindingDescriptions, vertexBindingDescriptionCount) &&
+        detail::compareArrays(pVertexAttributeDescriptions, other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
 }
 } // namespace magma

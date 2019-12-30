@@ -35,7 +35,7 @@ RayTracingShaderGroup::RayTracingShaderGroup(VkRayTracingShaderGroupTypeNV type,
 
 std::size_t RayTracingShaderGroup::hash() const noexcept
 {
-    return internal::hashArgs(
+    return detail::hashArgs(
         sType,
         type,
         generalShader,

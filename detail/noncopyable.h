@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    namespace internal
+    namespace detail
     {
         class NonCopyable
         {
@@ -42,5 +42,5 @@ namespace magma
             ConstexprNonCopyable(const ConstexprNonCopyable&) = delete;
             ConstexprNonCopyable& operator=(const ConstexprNonCopyable&) = delete;
         };
-    } // namespace internal
+    } // namespace detail
 } // namespace magma

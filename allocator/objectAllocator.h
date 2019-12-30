@@ -16,13 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../internal/noncopyable.h"
+#include "../detail/noncopyable.h"
 
 namespace magma
 {
     /* User-defined allocator of Magma objects. */
 
-    class IObjectAllocator : public internal::NonCopyable
+    class IObjectAllocator : public detail::NonCopyable
     {
     public:
         virtual void *alloc(size_t size) = 0;

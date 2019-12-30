@@ -24,9 +24,9 @@ namespace magma
 Specialization::Specialization(const Specialization& other) noexcept
 {
     mapEntryCount = other.mapEntryCount;
-    pMapEntries = internal::copyArray(other.pMapEntries, mapEntryCount);
+    pMapEntries = detail::copyArray(other.pMapEntries, mapEntryCount);
     dataSize = other.dataSize;
-    pData = internal::copyArray<char>(other.pData, dataSize);
+    pData = detail::copyArray<char>(other.pData, dataSize);
 }
 
 Specialization& Specialization::operator=(const Specialization& other) noexcept
@@ -35,10 +35,10 @@ Specialization& Specialization::operator=(const Specialization& other) noexcept
     {
         mapEntryCount = other.mapEntryCount;
         delete[] pMapEntries;
-        pMapEntries = internal::copyArray(other.pMapEntries, mapEntryCount);
+        pMapEntries = detail::copyArray(other.pMapEntries, mapEntryCount);
         dataSize = other.dataSize;
         delete[] reinterpret_cast<const char *>(pData);
-        pData = internal::copyArray<char>(other.pData, dataSize);
+        pData = detail::copyArray<char>(other.pData, dataSize);
     }
     return *this;
 }
@@ -54,12 +54,12 @@ std::size_t Specialization::hash() const noexcept
     std::size_t hash = 0;
     for (uint32_t i = 0; i < mapEntryCount; ++i)
     {
-        internal::hashCombine(hash, internal::hashArgs(
+        detail::hashCombine(hash, detail::hashArgs(
             pMapEntries[i].constantID,
             pMapEntries[i].offset,
             pMapEntries[i].size));
     }
-    internal::hashCombine(hash, internal::hashArray(
+    detail::hashCombine(hash, detail::hashArray(
         reinterpret_cast<const uint8_t *>(pData), dataSize));
     return hash;
 }

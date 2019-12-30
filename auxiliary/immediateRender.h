@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../internal/noncopyable.h"
+#include "../detail/noncopyable.h"
 #include "../shaders/shaderStages.h"
 #include "../states/vertexLayouts.h"
 #include "../states/rasterizationState.h"
@@ -47,7 +47,7 @@ namespace magma
            to mess around with vertex buffer mapping, data copy,
            state changes etc. */
 
-        class ImmediateRender : public internal::NonCopyable
+        class ImmediateRender : public detail::NonCopyable
         {
             struct Vertex;
             struct Primitive;

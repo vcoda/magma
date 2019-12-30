@@ -12,7 +12,7 @@ constexpr SamplerState::SamplerState(VkFilter magFilter, VkFilter minFilter,
 
 constexpr std::size_t SamplerState::hash() const
 {
-    return internal::hashArgs(
+    return detail::hashArgs(
         magFilter,
         minFilter,
         mipmapMode,
@@ -51,7 +51,7 @@ constexpr DepthSamplerState::DepthSamplerState(VkFilter magFilter, VkFilter minF
 
 constexpr std::size_t DepthSamplerState::hash() const
 {
-    return internal::hashArgs(
+    return detail::hashArgs(
         magFilter,
         minFilter,
         compareOp);

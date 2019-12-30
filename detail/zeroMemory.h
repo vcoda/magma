@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    namespace internal
+    namespace detail
     {
 #if defined(_M_AMD64) || defined(__x86_64__)
         inline void __zeroThread(void *dst, size_t blockCount) noexcept
@@ -88,5 +88,5 @@ namespace magma
             return memset(dst, 0, size);
 #endif // _M_AMD64 || __x86_64__
         }
-    } // namespace internal
+    } // namespace detail
 } // namespace magma

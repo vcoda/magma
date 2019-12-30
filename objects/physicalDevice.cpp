@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineCache.h"
 #include "../misc/instanceExtension.h"
 #include "../helpers/stackArray.h"
-#include "../internal/compare.h"
+#include "../detail/compare.h"
 
 namespace magma
 {
@@ -326,7 +326,7 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
     header.deviceID = properties.deviceID;
     memcpy(header.cacheUUID, properties.pipelineCacheUUID, VK_UUID_SIZE);
     const PipelineCache::Header *cacheHeader = reinterpret_cast<const PipelineCache::Header *>(cacheData);
-    return internal::compare(cacheHeader, &header);
+    return detail::compare(cacheHeader, &header);
 }
 
 PhysicalDeviceGroup::PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices, uint32_t groupId) noexcept:

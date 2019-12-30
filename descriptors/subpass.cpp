@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "subpass.h"
-#include "../internal/copy.h"
+#include "../detail/copy.h"
 
 namespace magma
 {
@@ -38,11 +38,11 @@ Subpass::Subpass(VkSubpassDescriptionFlags flags, VkPipelineBindPoint pipelineBi
 
 Subpass::Subpass(const Subpass& other) noexcept
 {
-    internal::copy(this, &other);
+    detail::copy(this, &other);
     if (other.pColorAttachments)
-        pColorAttachments = internal::copyArray(other.pColorAttachments, colorAttachmentCount);
+        pColorAttachments = detail::copyArray(other.pColorAttachments, colorAttachmentCount);
     if (other.pDepthStencilAttachment)
-        pDepthStencilAttachment = internal::copy(other.pDepthStencilAttachment);
+        pDepthStencilAttachment = detail::copy(other.pDepthStencilAttachment);
 }
 
 Subpass& Subpass::operator=(const Subpass& other) noexcept
@@ -51,11 +51,11 @@ Subpass& Subpass::operator=(const Subpass& other) noexcept
     {
         delete[] pColorAttachments;
         delete pDepthStencilAttachment;
-        internal::copy(this, &other);
+        detail::copy(this, &other);
         if (other.pColorAttachments)
-            pColorAttachments = internal::copyArray(other.pColorAttachments, colorAttachmentCount);
+            pColorAttachments = detail::copyArray(other.pColorAttachments, colorAttachmentCount);
         if (other.pDepthStencilAttachment)
-            pDepthStencilAttachment = internal::copy(other.pDepthStencilAttachment);
+            pDepthStencilAttachment = detail::copy(other.pDepthStencilAttachment);
     }
     return *this;
 }
@@ -68,7 +68,7 @@ Subpass::~Subpass()
 
 std::size_t Subpass::hash() const noexcept
 {
-    std::size_t hash = internal::hashArgs(
+    std::size_t hash = detail::hashArgs(
         flags,
         pipelineBindPoint,
         inputAttachmentCount,
@@ -77,7 +77,7 @@ std::size_t Subpass::hash() const noexcept
     uint32_t i;
     for (i = 0; i < inputAttachmentCount; ++i)
     {
-        internal::hashCombine(hash, internal::hashArgs(
+        detail::hashCombine(hash, detail::hashArgs(
             pInputAttachments[i].attachment,
             pInputAttachments[i].layout));
     }
@@ -85,26 +85,26 @@ std::size_t Subpass::hash() const noexcept
     {
         if (pColorAttachments)
         {
-            internal::hashCombine(hash, internal::hashArgs(
+            detail::hashCombine(hash, detail::hashArgs(
                 pColorAttachments[i].attachment,
                 pColorAttachments[i].layout));
         }
         else if (pResolveAttachments)
         {
-            internal::hashCombine(hash, internal::hashArgs(
+            detail::hashCombine(hash, detail::hashArgs(
                 pResolveAttachments[i].attachment,
                 pResolveAttachments[i].layout));
         }
     }
     if (pDepthStencilAttachment)
     {
-        internal::hashCombine(hash, internal::hashArgs(
+        detail::hashCombine(hash, detail::hashArgs(
             pDepthStencilAttachment->attachment,
             pDepthStencilAttachment->layout));
     }
     for (i = 0; i < preserveAttachmentCount; ++i)
     {
-        internal::hashCombine(hash, internal::hash(
+        detail::hashCombine(hash, detail::hash(
             pPreserveAttachments[i]));
     }
     return hash;

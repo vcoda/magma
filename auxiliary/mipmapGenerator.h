@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../internal/noncopyable.h"
+#include "../detail/noncopyable.h"
 
 namespace magma
 {
@@ -29,7 +29,7 @@ namespace magma
     {
         /* Generates MIP levels from base texture level using blit operations. */
 
-        class MipmapGenerator : public internal::NonCopyable
+        class MipmapGenerator : public detail::NonCopyable
         {
         public:
             explicit MipmapGenerator(std::shared_ptr<Device> device);

@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandBuffer.h"
 #include "device.h"
 #include "deviceMemory.h"
-#include "../internal/copyMemory.h"
+#include "../detail/copyMemory.h"
 
 namespace magma
 {

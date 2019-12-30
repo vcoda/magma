@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    namespace internal
+    namespace detail
     {
 #if defined(_M_AMD64) || defined(__x86_64__)
         inline void __copyThread(void *dst, const void *src, size_t blockCount) noexcept
@@ -113,5 +113,5 @@ namespace magma
             return memcpy(dst, src, size);
 #endif // _M_AMD64 || __x86_64__
         }
-    } // namespace internal
+    } // namespace detail
 } // namespace magma

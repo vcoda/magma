@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../misc/exception.h"
 #include "../helpers/stackArray.h"
-#include "../internal/copy.h"
+#include "../detail/copy.h"
 
 namespace magma
 {
@@ -42,7 +42,7 @@ DescriptorSetLayout::Binding::Binding(uint32_t binding, const Descriptor& descri
         MAGMA_STACK_ARRAY(VkSampler, dereferencedImmutableSamplers, immutableSamplers.size());
         for (const auto& sampler : immutableSamplers)
             dereferencedImmutableSamplers.put(*sampler);
-        pImmutableSamplers = internal::copyArray(static_cast<const VkSampler *>(dereferencedImmutableSamplers),
+        pImmutableSamplers = detail::copyArray(static_cast<const VkSampler *>(dereferencedImmutableSamplers),
             dereferencedImmutableSamplers.size());
     }
 }
@@ -54,14 +54,14 @@ DescriptorSetLayout::Binding::~Binding()
 
 std::size_t DescriptorSetLayout::Binding::hash() const noexcept
 {
-    std::size_t hash = internal::hashArgs(
+    std::size_t hash = detail::hashArgs(
         binding,
         descriptorType,
         descriptorCount,
         stageFlags);
     if (pImmutableSamplers)
     {   // pImmutableSamplers must be a valid pointer to an array of descriptorCount valid VkSampler handles.
-        internal::hashCombine(hash, internal::hashArray(pImmutableSamplers, descriptorCount));
+        detail::hashCombine(hash, detail::hashArray(pImmutableSamplers, descriptorCount));
     }
     return hash;
 }
@@ -80,7 +80,7 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const B
     const VkResult create = vkCreateDescriptorSetLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create descriptor set layout");
     bindings.push_back(binding);
-    hash = internal::hashArgs(
+    hash = detail::hashArgs(
         info.sType,
         info.flags,
         info.bindingCount);
@@ -100,7 +100,7 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const s
     info.pBindings = bindings.begin();
     const VkResult create = vkCreateDescriptorSetLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create descriptor set layout");
-    hash = internal::hashArgs(
+    hash = detail::hashArgs(
         info.sType,
         info.flags,
         info.bindingCount);
@@ -114,7 +114,7 @@ DescriptorSetLayout::~DescriptorSetLayout()
 std::size_t DescriptorSetLayout::getHash() const noexcept
 {
     std::size_t hash = this->hash;
-    for (const Binding& binding : bindings) internal::hashCombine(hash, binding.hash());
+    for (const Binding& binding : bindings) detail::hashCombine(hash, binding.hash());
     return hash;
 }
 } // namespace magma

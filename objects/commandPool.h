@@ -22,7 +22,7 @@ namespace magma
 {
     class CommandBuffer;
 
-    namespace internal
+    namespace detail
     {
         class PlacementPool;
     }
@@ -52,6 +52,6 @@ namespace magma
         void trim(VkCommandPoolTrimFlags flags = 0);
 
     private:
-        std::unique_ptr<internal::PlacementPool> pool;
+        std::unique_ptr<detail::PlacementPool> pool;
     };
 } // namespace magma

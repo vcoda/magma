@@ -13,7 +13,7 @@ constexpr InputAssemblyState::InputAssemblyState(VkPrimitiveTopology topology,
 
 constexpr std::size_t InputAssemblyState::hash() const
 {
-    return internal::hashArgs(
+    return detail::hashArgs(
         sType,
         flags,
         topology,

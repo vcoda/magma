@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../misc/deviceExtension.h"
 #include "../misc/exception.h"
-#include "../internal/placementPool.h"
+#include "../detail/placementPool.h"
 #include "../helpers/stackArray.h"
 
 namespace magma
@@ -48,7 +48,7 @@ CommandPool::CommandPool(std::shared_ptr<Device> device,
     const VkResult create = vkCreateCommandPool(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create command pool");
     if (!getOverridenAllocator())
-        pool = std::make_unique<internal::PlacementPool>(sizeof(CommandBuffer), poolCommandBufferCount);
+        pool = std::make_unique<detail::PlacementPool>(sizeof(CommandBuffer), poolCommandBufferCount);
 }
 
 CommandPool::~CommandPool()

@@ -3,9 +3,9 @@
 #else
 #include <mm_malloc.h>
 #endif
-#include "../copyMemory.h"
-#include "../zeroMemory.h"
-#include "../scopedProfiler.h"
+#include "scopedProfiler.h"
+#include "../detail/copyMemory.h"
+#include "../detail/zeroMemory.h"
 
 namespace
 {
@@ -43,15 +43,15 @@ int main()
     memset(srcBuffer0, 0x7F, BUFFER_SIZE);
     memset(srcBuffer1, 0x7F, BUFFER_SIZE);
     {   // 1) Test std::memcpy()
-        magma::internal::ScopedProfiler prof("Run std::memcpy() performance test.", onFinish);
+        ScopedProfiler prof("Run std::memcpy() performance test.", onFinish);
         for (int i = 0; i < NUM_ITERATIONS; ++i)
             std::memcpy(dstBuffer0, srcBuffer0, BUFFER_SIZE);
     }
     std::cout << std::endl;
     {   // 2) Test our copy function
-        magma::internal::ScopedProfiler prof("Run magma::copyMemory() performance test.", onFinish);
+        ScopedProfiler prof("Run magma::detail::copyMemory() performance test.", onFinish);
         for (int i = 0; i < NUM_ITERATIONS; ++i)
-            magma::internal::copyMemory(dstBuffer1, srcBuffer1, BUFFER_SIZE);
+            magma::detail::copyMemory(dstBuffer1, srcBuffer1, BUFFER_SIZE);
     }
     // Test copy correctness
     if (checkBuffer(dstBuffer1, 0x7F))
@@ -60,15 +60,15 @@ int main()
         std::cout << "Memory copy invalid!" << std::endl;
     std::cout << std::endl;
     {   // 3) Test std::memset()
-        magma::internal::ScopedProfiler prof("Run std::memset() performance test.", onFinish);
+        ScopedProfiler prof("Run std::memset() performance test.", onFinish);
         for (int i = 0; i < NUM_ITERATIONS; ++i)
             std::memset(dstBuffer0, 0, BUFFER_SIZE);
     }
     std::cout << std::endl;
     {   // 4) Test our zero function
-        magma::internal::ScopedProfiler prof("Run magma::zeroMemory() performance test.", onFinish);
+        ScopedProfiler prof("Run magma::detail::zeroMemory() performance test.", onFinish);
         for (int i = 0; i < NUM_ITERATIONS; ++i)
-            magma::internal::zeroMemory(dstBuffer1, BUFFER_SIZE);
+            magma::detail::zeroMemory(dstBuffer1, BUFFER_SIZE);
     }
     // Test zero correctness
     if (checkBuffer(dstBuffer1, 0))

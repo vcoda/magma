@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    namespace internal
+    namespace detail
     {
         template<typename T> inline bool compare(const void *const p1, const void *const p2) noexcept
         {
@@ -48,5 +48,5 @@ namespace magma
                 return false;
             return !memcmp(p1, p2, sizeof(T) * count);
         }
-    } // namespace internal
+    } // namespace detail
 } // namespace magma

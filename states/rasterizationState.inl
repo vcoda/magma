@@ -21,7 +21,7 @@ constexpr RasterizationState::RasterizationState(VkPolygonMode polygonMode, VkCu
 
 constexpr std::size_t RasterizationState::hash() const
 {
-    return internal::hashArgs(
+    return detail::hashArgs(
         sType,
         flags,
         depthClampEnable,
@@ -67,7 +67,7 @@ constexpr ConservativeRasterizationState::ConservativeRasterizationState(const R
 
 constexpr std::size_t ConservativeRasterizationState::hash() const
 {
-    return internal::hashArgs(
+    return detail::hashArgs(
         RasterizationState::hash(),
         conservative.sType,
         conservative.flags,
@@ -106,7 +106,7 @@ constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationSt
 
 constexpr std::size_t RasterizationOrderState::hash() const
 {
-    return internal::hashArgs(
+    return detail::hashArgs(
         RasterizationState::hash(),
         order.sType,
         order.rasterizationOrder);

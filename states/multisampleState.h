@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../internal/copy.h"
-#include "../internal/compare.h"
+#include "../detail/copy.h"
+#include "../detail/compare.h"
 
 namespace magma
 {

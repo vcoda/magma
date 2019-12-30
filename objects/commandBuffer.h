@@ -47,7 +47,7 @@ namespace magma
     struct BufferMemoryBarrier;
     class ImageMemoryBarrier;
 
-    namespace internal
+    namespace detail
     {
         class PlacementPool;
     }
@@ -510,7 +510,7 @@ namespace magma
     class PrimaryCommandBuffer : public CommandBuffer
     {
         friend CommandPool;
-        friend internal::PlacementPool;
+        friend detail::PlacementPool;
         explicit PrimaryCommandBuffer(VkCommandBuffer handle,
             std::shared_ptr<CommandPool> pool):
             CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, handle, std::move(pool)) {}
@@ -526,7 +526,7 @@ namespace magma
     class SecondaryCommandBuffer : public CommandBuffer
     {
         friend CommandPool;
-        friend internal::PlacementPool;
+        friend detail::PlacementPool;
         explicit SecondaryCommandBuffer(VkCommandBuffer handle,
             std::shared_ptr<CommandPool> pool):
             CommandBuffer(VK_COMMAND_BUFFER_LEVEL_SECONDARY, handle, std::move(pool)) {}

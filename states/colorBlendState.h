@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../internal/noncopyable.h"
+#include "../detail/noncopyable.h"
 #include "colorWriteMask.h"
 
 namespace magma
@@ -58,7 +58,7 @@ namespace magma
        at the fragment's location. Blending is performed for each pixel sample,
        rather than just once for each fragment. */
 
-    struct ColorBlendState : VkPipelineColorBlendStateCreateInfo, internal::ConstexprNonCopyable
+    struct ColorBlendState : VkPipelineColorBlendStateCreateInfo, detail::ConstexprNonCopyable
     {
         constexpr ColorBlendState(const ColorBlendAttachmentState& attachment,
             bool logicOpEnable = false,

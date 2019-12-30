@@ -16,7 +16,7 @@ constexpr AdvancedColorBlendAttachmentState::AdvancedColorBlendAttachmentState(V
 
 constexpr std::size_t AdvancedColorBlendAttachmentState::hash() const
 {
-    return internal::hashArgs(
+    return detail::hashArgs(
         blendEnable,
         srcColorBlendFactor,
         dstColorBlendFactor,

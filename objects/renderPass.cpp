@@ -121,16 +121,16 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     info.pDependencies = nullptr;
     const VkResult create = vkCreateRenderPass(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create render pass");
-    hash = internal::hashArgs(
+    hash = detail::hashArgs(
         info.sType,
         info.flags,
         info.attachmentCount,
         info.subpassCount,
         info.dependencyCount);
     for (const auto& attachment : attachments)
-        internal::hashCombine(hash, attachment.hash());
+        detail::hashCombine(hash, attachment.hash());
     for (const auto& subpass : subpasses)
-        internal::hashCombine(hash, subpass.hash());
+        detail::hashCombine(hash, subpass.hash());
 }
 
 RenderPass::~RenderPass()

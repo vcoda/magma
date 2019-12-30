@@ -19,7 +19,7 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, cons
     vertexBindingDescription->binding = binding;
     vertexBindingDescription->stride = sizeof(Vertex);
     vertexBindingDescription->inputRate = inputRate;
-    VkVertexInputAttributeDescription *vertexAttributeDescription = internal::copyArray(&attribute, 1);
+    VkVertexInputAttributeDescription *vertexAttributeDescription = detail::copyArray(&attribute, 1);
     vertexAttributeDescription->binding = binding;
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -38,7 +38,7 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, cons
     vertexBindingDescription->binding = binding;
     vertexBindingDescription->stride = sizeof(Vertex);
     vertexBindingDescription->inputRate = inputRate;
-    VkVertexInputAttributeDescription *vertexAttributeDescriptions = internal::copyInitializerList(attributes);
+    VkVertexInputAttributeDescription *vertexAttributeDescriptions = detail::copyInitializerList(attributes);
     if (!vertexAttributeDescriptions)
         vertexAttributeDescriptionCount = 0;
     else
@@ -64,7 +64,7 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, cons
     vertexBindingDescription->binding = binding;
     vertexBindingDescription->stride = sizeof(Vertex);
     vertexBindingDescription->inputRate = inputRate;
-    VkVertexInputAttributeDescription *vertexAttributeDescriptions = internal::copyArray(attributes, vertexAttributeCount);
+    VkVertexInputAttributeDescription *vertexAttributeDescriptions = detail::copyArray(attributes, vertexAttributeCount);
     if (!vertexAttributeDescriptions)
         vertexAttributeDescriptionCount = 0;
     else
@@ -88,9 +88,9 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(const VertexInputStruc
     pNext = other.pNext;
     flags = other.flags;
     vertexBindingDescriptionCount = other.vertexBindingDescriptionCount;
-    pVertexBindingDescriptions = internal::copyArray(other.pVertexBindingDescriptions, 1);
+    pVertexBindingDescriptions = detail::copyArray(other.pVertexBindingDescriptions, 1);
     vertexAttributeDescriptionCount = other.vertexAttributeDescriptionCount;
-    pVertexAttributeDescriptions = internal::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+    pVertexAttributeDescriptions = detail::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
 }
 
 template<typename Vertex>
@@ -103,10 +103,10 @@ inline VertexInputStructure<Vertex>& VertexInputStructure<Vertex>::operator=(con
         flags = other.flags;
         vertexBindingDescriptionCount = other.vertexBindingDescriptionCount;
         delete[] pVertexBindingDescriptions;
-        pVertexBindingDescriptions = internal::copyArray(other.pVertexBindingDescriptions, 1);
+        pVertexBindingDescriptions = detail::copyArray(other.pVertexBindingDescriptions, 1);
         vertexAttributeDescriptionCount = other.vertexAttributeDescriptionCount;
         delete[] pVertexAttributeDescriptions;
-        pVertexAttributeDescriptions = internal::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+        pVertexAttributeDescriptions = detail::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
     }
     return *this;
 }

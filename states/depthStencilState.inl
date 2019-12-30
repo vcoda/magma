@@ -2,7 +2,7 @@ namespace magma
 {
 constexpr std::size_t StencilOpState::hash() const
 {
-    return internal::hashArgs(
+    return detail::hashArgs(
         failOp,
         passOp,
         depthFailOp,
@@ -48,7 +48,7 @@ constexpr DepthStencilState::DepthStencilState(const DepthStencilState& state,
 
 constexpr std::size_t DepthStencilState::hash() const
 {
-    return internal::hashArgs(
+    return detail::hashArgs(
         sType,
         flags,
         depthTestEnable,
@@ -80,8 +80,8 @@ constexpr bool DepthStencilState::operator==(const DepthStencilState& other) con
         (depthTestEnable == other.depthTestEnable) &&
         (depthWriteEnable == other.depthWriteEnable) &&
         (depthCompareOp == other.depthCompareOp) &&
-        (internal::compare(&front, &other.front)) &&
-        (internal::compare(&back, &other.back)) &&
+        (detail::compare(&front, &other.front)) &&
+        (detail::compare(&back, &other.back)) &&
         (stencilTestEnable == other.stencilTestEnable) &&
         (depthBoundsTestEnable == other.depthBoundsTestEnable) &&
         (minDepthBounds == other.minDepthBounds) &&

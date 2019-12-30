@@ -16,36 +16,36 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <chrono>
+#ifdef _DEBUG
 #include <iostream>
-#include <functional>
+#include <cassert>
 
 namespace magma
 {
-    namespace internal
+    namespace detail
     {
-        class ScopedProfiler
+        /* Reference counter to check that there are no circular references
+           that prevents destruction of Vulkan objects. */
+
+        class RefCountChecker
         {
         public:
-            ScopedProfiler(const char *message,
-                std::function<void(float ms)> callback):
-                callback(callback),
-                begin(std::chrono::high_resolution_clock::now())
+            RefCountChecker():
+                refCount(0L) {}
+            ~RefCountChecker()
             {
-                std::cout << message << std::endl;
+                if (refCount != 0L)
+                    std::cout << "invalid reference count (" << refCount << ")" << std::endl;
+                assert(0L == refCount);
             }
-            ~ScopedProfiler()
-            {
-                using namespace std::chrono;
-                high_resolution_clock::time_point end = high_resolution_clock::now();
-                microseconds mcs = duration_cast<microseconds>(end - begin);
-                float ms = static_cast<float>(mcs.count()) / 1000.f;
-                callback(ms);
-            }
+            void addRef() { ++refCount; }
+            void release() { --refCount; }
+            long getRefCount() const noexcept { return refCount; }
 
         private:
-            std::function<void(float ms)> callback;
-            std::chrono::high_resolution_clock::time_point begin;
+            std::atomic<long> refCount;
         };
-    } // namespace internal
+    } // namespace detail
 } // namespace magma
+
+#endif // _DEBUG

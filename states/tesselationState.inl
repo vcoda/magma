@@ -11,7 +11,7 @@ constexpr TesselationState::TesselationState(uint32_t patchControlPoints /* 0 */
 
 constexpr std::size_t TesselationState::hash() const
 {
-    return internal::hashArgs(
+    return detail::hashArgs(
         sType,
         flags,
         patchControlPoints);

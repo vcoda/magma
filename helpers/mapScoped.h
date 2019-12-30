@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/buffer.h"
 #include "../objects/uniformBuffer.h"
 #include "../objects/image.h"
-#include "../internal/zeroMemory.h"
+#include "../detail/zeroMemory.h"
 
 namespace magma
 {
@@ -55,7 +55,7 @@ namespace magma
         {
             MAGMA_ASSERT(buffer);
             MAGMA_ASSERT(fn);
-            ZeroMemoryFunction zeroFn = clearMemory ? internal::zeroMemory : nullptr;
+            ZeroMemoryFunction zeroFn = clearMemory ? detail::zeroMemory : nullptr;
             Block *const block = buffer->map(zeroFn);
             if (block)
             {
@@ -72,7 +72,7 @@ namespace magma
         {
             MAGMA_ASSERT(buffer);
             MAGMA_ASSERT(fn);
-            ZeroMemoryFunction zeroFn = clearMemory ? internal::zeroMemory : nullptr;
+            ZeroMemoryFunction zeroFn = clearMemory ? detail::zeroMemory : nullptr;
             Type *const data = buffer->map(zeroFn);
             if (data)
             {
@@ -91,7 +91,7 @@ namespace magma
         {
             MAGMA_ASSERT(buffer);
             MAGMA_ASSERT(fn);
-            ZeroMemoryFunction zeroFn = clearMemory ? internal::zeroMemory : nullptr;
+            ZeroMemoryFunction zeroFn = clearMemory ? detail::zeroMemory : nullptr;
             Type *const data = buffer->map(zeroFn);
             if (data)
             {

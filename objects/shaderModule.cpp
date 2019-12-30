@@ -30,7 +30,7 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
     std::shared_ptr<ValidationCache> validationCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_SHADER_MODULE, std::move(device), std::move(allocator)),
-    hash(internal::hashArray(bytecode, bytecodeSize / sizeof(SpirvWord)))
+    hash(detail::hashArray(bytecode, bytecodeSize / sizeof(SpirvWord)))
 {
     VkShaderModuleCreateInfo info;
     VkShaderModuleValidationCacheCreateInfoEXT cacheCreateInfo;
@@ -45,7 +45,7 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
         info.pNext = &cacheCreateInfo;
     }
     if (flags != 0)
-        internal::hashCombine(hash, internal::hash(flags));
+        detail::hashCombine(hash, detail::hash(flags));
     info.flags = flags;
     MAGMA_ASSERT(0 == bytecodeSize % sizeof(SpirvWord)); // A module is defined as a stream of words, not a stream of bytes
     info.codeSize = bytecodeSize;

@@ -88,7 +88,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    namespace internal
+    namespace detail
     {
         template<typename Type>
         inline typename Type::NativeHandle dereference(const std::shared_ptr<Type>& obj)
@@ -104,5 +104,5 @@ namespace magma
 } // namespace magma
 
 #define MAGMA_HANDLE(obj) *(this->obj)
-#define MAGMA_OPTIONAL_HANDLE(obj) magma::internal::dereference(obj)
+#define MAGMA_OPTIONAL_HANDLE(obj) magma::detail::dereference(obj)
 #define MAGMA_OPTIONAL_INSTANCE(obj) this->obj ? this->obj.get() : nullptr

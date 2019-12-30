@@ -16,12 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <functional>
-#include <string>
 
 namespace magma
 {
-    namespace internal
+    namespace detail
     {
         // https://www.boost.org/doc/libs/1_46_1/doc/html/hash/reference.html#boost.hash_combine
         constexpr void hashCombine(std::size_t& seed, std::size_t hash) noexcept
@@ -76,5 +74,5 @@ namespace magma
                 hashCombine(value, hash);
             return value;
         }
-    } // namespace internal
+    } // namespace detail
 } // namespace magma
