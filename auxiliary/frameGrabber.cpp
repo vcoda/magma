@@ -144,6 +144,35 @@ void FrameGrabber::readPixels(std::function<void(uint32_t col, uint32_t row, uin
     );
 }
 
+void FrameGrabber::readPixels(std::function<void(uint32_t row, const std::vector<uint32_t>& rowPixels)> forEachRow) const
+{   // Get image row pitch
+    const VkSubresourceLayout subresourceLayout = dstImage->getSubresourceLayout(0);
+    const VkDeviceSize rowPitch = subresourceLayout.rowPitch;
+    const VkExtent3D extent = dstImage->getMipExtent(0);
+    helpers::mapScoped<uint8_t>(dstImage, subresourceLayout.offset,
+        [this, extent, rowPitch, forEachRow](const uint8_t *data)
+        {
+            std::vector<uint32_t> rowPixels(extent.width);
+            for (uint32_t y = 0; y < extent.height; ++y)
+            {
+                const uint32_t *row = (const uint32_t *)data;
+                if (!swizzleBgra)
+                    memcpy(rowPixels.data(), row, sizeof(uint32_t) * extent.width);
+                else for (uint32_t x = 0; x < extent.width; ++x)
+                {   // Swizzle BGRA to RGBA
+                    const uint32_t argb = row[x];
+                    const uint32_t r = (argb >> 16) & 0xFF;
+                    const uint32_t g = (argb >> 8) & 0xFF;
+                    const uint32_t b = argb & 0xFF;
+                    rowPixels[x] = (argb & 0xFF000000) | (b << 16) | (g << 8) | r;
+                }
+                forEachRow(y, rowPixels);
+                data += rowPitch;
+            }
+        }
+    );
+}
+
 VkExtent2D FrameGrabber::getImageExtent() const
 {
     if (dstImage)
