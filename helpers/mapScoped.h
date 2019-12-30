@@ -18,7 +18,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "uniformArray.h"
 #include "alignedUniformArray.h"
+#include "../objects/deviceMemory.h"
+#include "../objects/buffer.h"
 #include "../objects/uniformBuffer.h"
+#include "../objects/image.h"
 #include "../internal/zeroMemory.h"
 
 namespace magma
@@ -97,6 +100,26 @@ namespace magma
                     buffer->getElementAlignment());
                 fn(array);
                 buffer->unmap();
+            }
+        }
+
+        template<typename Type>
+        inline void mapScoped(
+            const std::shared_ptr<Image>& image,
+            VkDeviceSize offset,
+            std::function<void(Type *data)> fn)
+        {
+            MAGMA_ASSERT(image);
+            MAGMA_ASSERT(fn);
+            std::shared_ptr<DeviceMemory> memory = image->getMemory();
+            if (memory)
+            {
+                void *const data = memory->map(offset);
+                if (data)
+                {
+                    fn(static_cast<Type *>(data));
+                    memory->unmap();
+                }
             }
         }
     } // namespace helpers
