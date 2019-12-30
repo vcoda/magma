@@ -471,11 +471,11 @@
     <ClInclude Include="..\..\helpers\checkFeatureSupport.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\barriers\memoryBarrier.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\auxiliary\frameGrabber.h">
       <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\barriers\memoryBarrier.h">
+      <Filter>Header Files\barriers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
