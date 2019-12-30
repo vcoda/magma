@@ -120,6 +120,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "auxiliary/blitRectangle.h"
 #include "auxiliary/framebuffers.h"
+#include "auxiliary/frameGrabber.h"
 #include "auxiliary/graphicsPipelineCache.h"
 #include "auxiliary/immediateRender.h"
 #include "auxiliary/mipmapGenerator.h"

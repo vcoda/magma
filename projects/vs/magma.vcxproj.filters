@@ -474,6 +474,9 @@
     <ClInclude Include="..\..\barriers\memoryBarrier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\auxiliary\frameGrabber.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -742,6 +745,9 @@
     </ClCompile>
     <ClCompile Include="..\..\helpers\checkFeatureSupport.cpp">
       <Filter>Source Files\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\auxiliary\frameGrabber.cpp">
+      <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

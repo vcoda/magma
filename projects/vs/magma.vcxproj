@@ -151,6 +151,7 @@
     <ClInclude Include="..\..\auxiliary\immediateRender.h" />
     <ClInclude Include="..\..\auxiliary\mipmapGenerator.h" />
     <ClInclude Include="..\..\auxiliary\packedTypes.h" />
+    <ClInclude Include="..\..\auxiliary\frameGrabber.h" />
     <ClInclude Include="..\..\auxiliary\shaderCompiler.h" />
     <ClInclude Include="..\..\barriers\bufferMemoryBarrier.h" />
     <ClInclude Include="..\..\barriers\memoryBarrier.h" />
@@ -281,6 +282,7 @@
     <ClCompile Include="..\..\auxiliary\graphicsPipelineCache.cpp" />
     <ClCompile Include="..\..\auxiliary\immediateRender.cpp" />
     <ClCompile Include="..\..\auxiliary\mipmapGenerator.cpp" />
+    <ClCompile Include="..\..\auxiliary\frameGrabber.cpp" />
     <ClCompile Include="..\..\auxiliary\shaderCompiler.cpp" />
     <ClCompile Include="..\..\barriers\bufferMemoryBarrier.cpp" />
     <ClCompile Include="..\..\barriers\imageMemoryBarrier.cpp" />
