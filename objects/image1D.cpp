@@ -93,29 +93,4 @@ Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width
     });
     copyFromBuffer(buffer, copyRegions, cmdBuffer, true);
 }
-
-Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width, uint32_t mipLevels,
-    VkImageTiling tiling, VkImageUsageFlags usage, const Sharing& sharing,
-    std::shared_ptr<IAllocator> allocator):
-    Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
-        mipLevels,
-        1, // arrayLayers
-        1, // samples
-        tiling,
-        usage,
-        0, // flags
-        sharing,
-        std::move(allocator))
-{}
-
-LinearTiledImage1D::LinearTiledImage1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width,
-    const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Image1D(std::move(device), format, width,
-        1, // mipLevels
-        VK_IMAGE_TILING_LINEAR,
-        VK_IMAGE_USAGE_TRANSFER_DST_BIT,
-        sharing,
-        std::move(allocator))
-{}
 } // namespace magma

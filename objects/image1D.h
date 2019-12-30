@@ -50,27 +50,5 @@ namespace magma
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
-
-    protected:
-        Image1D(std::shared_ptr<Device> device,
-            VkFormat format,
-            uint32_t width,
-            uint32_t mipLevels,
-            VkImageTiling tiling,
-            VkImageUsageFlags usage,
-            const Sharing& sharing,
-            std::shared_ptr<IAllocator> allocator);
-    };
-
-    /* One-dimensional image with linear tiling. */
-
-    class LinearTiledImage1D : public Image1D
-    {
-    public:
-        explicit LinearTiledImage1D(std::shared_ptr<Device> device,
-            VkFormat format,
-            uint32_t width,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma
