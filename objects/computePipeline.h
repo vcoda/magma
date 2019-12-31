@@ -1,6 +1,6 @@
 /*
-Magma - C++1x interface over Khronos Vulkan API.
-Copyright (C) 2018 Victor Coda.
+Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
+Copyright (C) 2018-2019 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
