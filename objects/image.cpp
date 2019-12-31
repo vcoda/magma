@@ -89,59 +89,6 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     bindMemory(std::move(memory));
 }
 
-Image::Image(std::shared_ptr<DeviceMemory> memory, VkDeviceSize offset,
-    VkImageType imageType, VkFormat format,
-    const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
-    VkImageTiling tiling, VkImageUsageFlags usage, VkImageCreateFlags flags,
-    const Sharing& sharing, std::shared_ptr<IAllocator> allocator):
-    NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, 0, std::move(device), std::move(allocator)),
-    imageType(imageType),
-    format(format),
-    layout(VK_IMAGE_LAYOUT_UNDEFINED),
-    extent(extent),
-    mipLevels(mipLevels),
-    arrayLayers(arrayLayers),
-    samples(samples),
-    usage(usage),
-    flags(flags)
-{
-    VkImageCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = flags;
-    info.imageType = imageType;
-    info.format = format;
-    info.extent = extent;
-    info.mipLevels = mipLevels;
-    info.arrayLayers = arrayLayers;
-    switch (samples)
-    {
-    case 1: info.samples = VK_SAMPLE_COUNT_1_BIT; break;
-    case 2: info.samples = VK_SAMPLE_COUNT_2_BIT; break;
-    case 4: info.samples = VK_SAMPLE_COUNT_4_BIT; break;
-    case 8: info.samples = VK_SAMPLE_COUNT_8_BIT; break;
-    case 16: info.samples = VK_SAMPLE_COUNT_16_BIT; break;
-    case 32: info.samples = VK_SAMPLE_COUNT_32_BIT; break;
-    case 64: info.samples = VK_SAMPLE_COUNT_64_BIT; break;
-    default:
-        MAGMA_THROW("invalid <samples> parameter");
-    }
-    info.tiling = tiling;
-    info.usage = usage;
-    info.sharingMode = sharing.getMode();
-    info.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
-    info.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
-    info.initialLayout = layout;
-    const VkResult create = vkCreateImage(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create image");
-    VkMemoryRequirements memoryRequirements;
-    vkGetImageMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
-    if (memoryRequirements.size + offset > memory->getSize())
-        MAGMA_THROW("image cannot be placed in the memory chunk");
-    size = memoryRequirements.size;
-    bindMemory(std::move(memory), offset);
-}
-
 Image::Image(std::shared_ptr<Device> device, VkImage handle, VkImageType imageType, VkFormat format, const VkExtent3D& extent):
     NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, 0, std::move(device), nullptr),
     imageType(imageType),

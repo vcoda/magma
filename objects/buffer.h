@@ -50,13 +50,6 @@ namespace magma
             const Sharing& sharing,
             std::shared_ptr<IAllocator> allocator,
             VkMemoryPropertyFlags memoryFlags);
-        explicit Buffer(std::shared_ptr<DeviceMemory> memory,
-            VkDeviceSize size,
-            VkDeviceSize offset,
-            VkBufferUsageFlags usage,
-            VkBufferCreateFlags flags,
-            const Sharing& sharing,
-            std::shared_ptr<IAllocator> allocator);
         void copyToMapped(const void *data,
             CopyMemoryFunction copyFn) noexcept;
         void copyTransfer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
