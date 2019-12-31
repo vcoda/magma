@@ -40,15 +40,15 @@ bool MipmapGenerator::checkFormatSupport(VkFormat format) const noexcept
 {
     std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
     const VkFormatProperties& properties = physicalDevice->getFormatProperties(format);
-    bool srcBlit = (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT);
-    bool dstBlit = (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT);
-    return srcBlit && dstBlit;
+    const bool optimalSrcBlit = (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT);
+    const bool optimalDstBlit = (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT);
+    return optimalSrcBlit && optimalDstBlit;
 }
 
-bool MipmapGenerator::generateMipmap(const std::shared_ptr<Image>& image, uint32_t baseLevel, VkFilter filter,
-    const std::shared_ptr<CommandBuffer>& cmdBuffer, bool flush) const noexcept
+bool MipmapGenerator::generateMipmap(std::shared_ptr<Image> image, uint32_t baseLevel, VkFilter filter,
+    std::shared_ptr<CommandBuffer> cmdBuffer, bool flushCmdBuffer) const noexcept
 {
-    if (flush)
+    if (flushCmdBuffer)
         cmdBuffer->begin();
     VkExtent3D prevMipExtent = image->getMipExtent(baseLevel);
     for (uint32_t level = baseLevel + 1; level < image->getMipLevels(); ++level)
@@ -68,21 +68,21 @@ bool MipmapGenerator::generateMipmap(const std::shared_ptr<Image>& image, uint32
         blitRegion.dstOffsets[0] = VkOffset3D{0, 0, 0};
         blitRegion.dstOffsets[1] = VkOffset3D{int32_t(nextMipExtent.width), int32_t(nextMipExtent.height), 1};
         const ImageSubresourceRange nextMipRange(image, level, 1);
-        // Transition of next mip level to transfer dest
-        const ImageMemoryBarrier transferDstOptimal(image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, nextMipRange);
-        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDstOptimal);
+        // Transition of next mip level to transfer dest optimal layout
+        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+            ImageMemoryBarrier(image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, nextMipRange));
         // Downsample larger mip to smaller one
         cmdBuffer->blitImage(image, image, blitRegion, filter);
-        // Transition of next mip level back to transfer source
-        const ImageMemoryBarrier transferSrcOptimal(image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, nextMipRange);
-        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferSrcOptimal);
+        // Transition of next mip level back to transfer source optimal layout
+        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+            ImageMemoryBarrier(image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, nextMipRange));
         prevMipExtent = nextMipExtent;
     }
-    // Blitted mip levels are transitioned to shader read layout
+    // Blitted mip levels are transitioned to shader read only optimal layout
     const ImageSubresourceRange blitMipsRange(image, baseLevel + 1, image->getMipLevels() - baseLevel - 1);
-    const ImageMemoryBarrier shaderReadOnlyOptimal(image, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, blitMipsRange);
-    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, shaderReadOnlyOptimal);
-    if (flush)
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
+        ImageMemoryBarrier(image, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, blitMipsRange));
+    if (flushCmdBuffer)
     {
         cmdBuffer->end();
         return commit(cmdBuffer);
@@ -90,7 +90,7 @@ bool MipmapGenerator::generateMipmap(const std::shared_ptr<Image>& image, uint32
     return true;
 }
 
-bool MipmapGenerator::commit(const std::shared_ptr<CommandBuffer>& cmdBuffer) const noexcept
+bool MipmapGenerator::commit(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept
 {
     std::shared_ptr<Fence> fence(cmdBuffer->getFence());
     if (!queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence))

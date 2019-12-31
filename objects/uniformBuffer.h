@@ -43,6 +43,7 @@ namespace magma
         {
             static_assert(std::alignment_of<Block>() == 16, "uniform block should have 16-byte alignment");
         }
+
         Block *map(ZeroMemoryFunction zeroFn = nullptr) noexcept
         {
             if (memory)
@@ -50,17 +51,19 @@ namespace magma
                 if (void *block = memory->map(0, size))
                 {
                     if (zeroFn)
-                        zeroFn(block, static_cast<size_t>(size));
+                        zeroFn(block, static_cast<std::size_t>(size));
                     return reinterpret_cast<Block *>(block);
                 }
             }
             return nullptr;
         }
+
         void unmap() noexcept
         {
             if (memory)
                 memory->unmap();
         }
+
         virtual uint32_t getArraySize() const noexcept { return arraySize; }
 
     protected:
@@ -85,6 +88,7 @@ namespace magma
                 static_cast<VkDeviceSize>(elementSize)
             ))
         {}
+
         virtual uint32_t getArraySize() const noexcept override
         {
             if (elementSize >= alignment)
@@ -92,10 +96,12 @@ namespace magma
             const VkDeviceSize divisor = alignment/elementSize;
             return static_cast<uint32_t>(UniformBuffer<Type>::arraySize/divisor);
         }
+
         uint32_t getDynamicOffset(uint32_t index) const noexcept
         {
             return static_cast<uint32_t>(index * alignment);
         }
+
         VkDeviceSize getElementAlignment() const noexcept { return alignment; }
 
     private:
@@ -106,6 +112,7 @@ namespace magma
             const VkPhysicalDeviceLimits& limits = properties.limits;
             return limits.minUniformBufferOffsetAlignment;
         }
+
         uint32_t alignedArraySize(std::shared_ptr<Device> device, uint32_t arraySize) const noexcept
         {
             const VkDeviceSize alignment = minOffsetAlignment(std::move(device));
@@ -116,7 +123,7 @@ namespace magma
         }
 
     private:
-        static constexpr size_t elementSize = sizeof(Type);
+        static constexpr std::size_t elementSize = sizeof(Type);
         const VkDeviceSize alignment;
     };
 

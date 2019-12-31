@@ -67,13 +67,13 @@ VertexInputState::~VertexInputState()
 
 uint32_t VertexInputState::stride(uint32_t binding) const noexcept
 {
-    size_t stride = 0;
+    std::size_t stride = 0;
     for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
     {
         const VkVertexInputAttributeDescription& attrib = pVertexAttributeDescriptions[i];
         if (attrib.binding == binding)
         {   // TODO: alignment?
-            const size_t attribSize = Format(attrib.format).size();
+            const std::size_t attribSize = Format(attrib.format).size();
             stride += attribSize;
         }
     }
@@ -82,7 +82,7 @@ uint32_t VertexInputState::stride(uint32_t binding) const noexcept
 
 std::size_t VertexInputState::hash() const noexcept
 {
-    size_t hash = detail::hashArgs(
+    std::size_t hash = detail::hashArgs(
         sType,
         flags,
         vertexBindingDescriptionCount,

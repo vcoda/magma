@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *bytecode, size_t bytecodeSize,
+ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *bytecode, std::size_t bytecodeSize,
     VkShaderModuleCreateFlags flags /* 0 */,
     std::shared_ptr<ValidationCache> validationCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):

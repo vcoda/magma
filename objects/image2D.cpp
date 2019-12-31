@@ -88,7 +88,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
         {
             const VkDeviceSize bufferOffset = copyRegions[level].bufferOffset;
             void *mipLevel = data + bufferOffset;
-            copyFn(mipLevel, mipData[level], static_cast<size_t>(mipSizes[level]));
+            copyFn(mipLevel, mipData[level], static_cast<std::size_t>(mipSizes[level]));
         }
     });
     copyFromBuffer(buffer, copyRegions, cmdBuffer, true);

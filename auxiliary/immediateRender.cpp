@@ -33,10 +33,11 @@ namespace magma
 {
 namespace aux
 {
-ImmediateRender::ImmediateRender(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> cache,
+ImmediateRender::ImmediateRender(const uint32_t maxVertexCount,
+    std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> cache,
     std::shared_ptr<PipelineLayout> layout, std::shared_ptr<RenderPass> renderPass,
-    const uint32_t maxVertexCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
+    maxVertexCount(maxVertexCount),
     device(std::move(device)),
     layout(std::move(layout)),
     renderPass(std::move(renderPass)),
@@ -48,9 +49,7 @@ ImmediateRender::ImmediateRender(std::shared_ptr<Device> device, std::shared_ptr
     rasterizationState(renderstates::fillCullBackCCW),
     multisampleState(renderstates::noMultisample),
     depthStencilState(renderstates::depthAlwaysDontWrite),
-    colorBlendState(renderstates::dontBlendWriteRgba), // Make copyable
-    maxVertexCount(maxVertexCount),
-    vertexCount(0)
+    colorBlendState(renderstates::dontBlendWriteRgba) // Make copyable
 {
     if (!this->layout)
     {   // If layout not specified, create default one
@@ -112,7 +111,8 @@ bool ImmediateRender::endPrimitive(bool loop /* false */) noexcept
     return true;
 }
 
-bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer, bool clear /* true */) noexcept
+bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer> cmdBuffer,
+    bool freePrimitiveList /* true */) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
     if (insidePrimitive || primitives.empty())
@@ -139,7 +139,7 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer
             cmdBuffer->endDebugLabel();
 #endif // MAGMA_DEBUG
     }
-    if (clear)
+    if (freePrimitiveList)
         reset();
     return true;
 }
@@ -161,12 +161,11 @@ bool ImmediateRender::reset() noexcept
 
 std::shared_ptr<ShaderModule> ImmediateRender::createShader(bool vertexShader) const
 {
-    constexpr VkShaderModuleCreateFlags flags = 0;
 #include "spirv/output/immv"
     if (vertexShader)
-        return std::make_shared<ShaderModule>(device, vsImm, flags, nullptr, allocator);
+        return std::make_shared<ShaderModule>(device, vsImm, 0, nullptr, allocator);
 #include "spirv/output/immf"
-    return std::make_shared<ShaderModule>(device, fsImm, flags, nullptr, allocator);
+    return std::make_shared<ShaderModule>(device, fsImm, 0, nullptr, allocator);
 }
 
 std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTopology topology)
@@ -188,7 +187,7 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTop
         &renderstates::triangleListWithAdjacency,
         &renderstates::triangleStripWithAdjacency,
         &renderstates::patchList};
-    // Create new or take existing graphics pipeline
+    // Create new or grab existing graphics pipeline
     return pipelineCache->lookupPipeline({vertexShader, fragmentShader},
         vertexInputState, *inputAssemblyStates[topology],
         TesselationState(), ViewportState(),

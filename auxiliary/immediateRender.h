@@ -57,11 +57,11 @@ namespace magma
             };
 
         public:
-            explicit ImmediateRender(std::shared_ptr<Device> device,
+            explicit ImmediateRender(const uint32_t maxVertexCount,
+                std::shared_ptr<Device> device,
                 std::shared_ptr<PipelineCache> cache,
                 std::shared_ptr<PipelineLayout> layout,
                 std::shared_ptr<RenderPass> renderPass,
-                const uint32_t maxVertexCount,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             std::shared_ptr<Device> getDevice() const noexcept { return device; }
             void setVertexShader(const VertexShaderStage& vertexShader) noexcept;
@@ -78,7 +78,8 @@ namespace magma
             uint32_t getPrimitiveCount() const noexcept;
             bool beginPrimitive(VkPrimitiveTopology topology, const char *labelName = nullptr, uint32_t labelColor = 0xFFFFFFFF);
             bool endPrimitive(bool loop = false) noexcept;
-            bool commitPrimitives(std::shared_ptr<CommandBuffer>& cmdBuffer, bool clear = true) noexcept;
+            bool commitPrimitives(std::shared_ptr<CommandBuffer> cmdBuffer,
+                bool freePrimitiveList = true) noexcept;
             bool reset() noexcept;
             // Per-vertex attributes
             void normal(float x, float y, float z) noexcept;
@@ -97,6 +98,7 @@ namespace magma
             std::shared_ptr<ShaderModule> createShader(bool vertexShader) const;
             std::shared_ptr<GraphicsPipeline> lookupPipeline(VkPrimitiveTopology);
 
+            const uint32_t maxVertexCount;
             std::shared_ptr<Device> device;
             std::shared_ptr<PipelineLayout> layout;
             std::shared_ptr<RenderPass> renderPass;
@@ -109,13 +111,12 @@ namespace magma
             RasterizationState rasterizationState;
             MultisampleState multisampleState;
             DepthStencilState depthStencilState;
-            ManagedColorBlendState colorBlendState;
+            MultiColorBlendState colorBlendState;
             float lineWidth = 1.f;
             Transform transform;
-            const uint32_t maxVertexCount;
-            uint32_t vertexCount;
             Vertex *current = nullptr;
             bool insidePrimitive = false;
+            uint32_t vertexCount = 0;
         };
     } // namespace aux
 } // namespace magma

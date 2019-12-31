@@ -92,7 +92,7 @@ Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, cons
             {
                 const VkDeviceSize bufferOffset = copyRegions[layer * mipLevels + level].bufferOffset;
                 void *mipLevel = data + bufferOffset;
-                copyFn(mipLevel, mipData[layer][level], static_cast<size_t>(mipSizes[level]));
+                copyFn(mipLevel, mipData[layer][level], static_cast<std::size_t>(mipSizes[level]));
             }
         }
     });

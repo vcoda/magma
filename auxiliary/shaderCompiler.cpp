@@ -39,24 +39,24 @@ ShaderCompiler::~ShaderCompiler()
     shaderc_compiler_release(compiler);
 }
 
-void ShaderCompiler::setOptimizationLevel(shaderc_optimization_level level) noexcept
+void ShaderCompiler::setOptimizationLevel(shaderc_optimization_level optimizationLevel) noexcept
 {
-    optimizationLevel = level;
+    this->optimizationLevel = optimizationLevel;
 }
 
-void ShaderCompiler::setGenerateDebugInfo(bool generate) noexcept
+void ShaderCompiler::setGenerateDebugInfo(bool generateDebugInfo) noexcept
 {
-    generateDebugInfo = generate;
+    this->generateDebugInfo = generateDebugInfo;
 }
 
-void ShaderCompiler::setSuppressWarnings(bool suppress) noexcept
+void ShaderCompiler::setSuppressWarnings(bool suppressWarnings) noexcept
 {
-    suppressWarnings = suppress;
+    this->suppressWarnings = suppressWarnings;
 }
 
-void ShaderCompiler::setWarningsAsErrors(bool errors) noexcept
+void ShaderCompiler::setWarningsAsErrors(bool warningsAsErrors) noexcept
 {
-    warningsAsErrors = errors;
+    this->warningsAsErrors = warningsAsErrors;
 }
 
 std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& source, const char *entrypoint,
@@ -117,7 +117,7 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
         throw CompileException(result, __FILE__, __LINE__);
     // Create shader module
     const char *bytecode = shaderc_result_get_bytes(result);
-    const size_t bytecodeSize = shaderc_result_get_length(result);
+    const std::size_t bytecodeSize = shaderc_result_get_length(result);
     std::shared_ptr<ShaderModule> shaderModule;
     try {
         shaderModule = std::make_shared<ShaderModule>(device, reinterpret_cast<const uint32_t *>(bytecode), bytecodeSize);

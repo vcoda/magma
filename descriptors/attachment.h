@@ -57,7 +57,7 @@ namespace magma
             VkImageLayout finalLayout);
         constexpr AttachmentDescription(VkFormat format,
             uint32_t sampleCount,
-            const AttachmentDescription& prefab);
+            const AttachmentDescription& predefined);
         constexpr std::size_t hash() const;
     };
 } // namespace magma

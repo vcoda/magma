@@ -32,8 +32,6 @@ namespace magma
         std::size_t hash() const noexcept;
     };
 
-    // TODO: reconsider
-
     class GeneralRayTracingShaderGroup : public RayTracingShaderGroup
     {
     public:

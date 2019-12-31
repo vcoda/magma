@@ -69,7 +69,7 @@ void Object::setObjectName(const char *name) noexcept
 #endif // MAGMA_DEBUG
 }
 
-void Object::setObjectTag(uint64_t tagName, size_t tagSize, const void *tag) noexcept
+void Object::setObjectTag(uint64_t tagName, std::size_t tagSize, const void *tag) noexcept
 {
 #ifdef MAGMA_DEBUG
     if (!device)

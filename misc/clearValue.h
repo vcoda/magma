@@ -28,7 +28,7 @@ namespace magma
         constexpr operator const VkClearValue&() const { return value; }
 
     protected:
-        // C++ forbids inheritance from union.
+        // C++ forbids inheritance from union
         VkClearValue value;
     };
 

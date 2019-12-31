@@ -161,7 +161,7 @@ ViewportState::~ViewportState()
     delete[] pScissors;
 }
 
-size_t ViewportState::hash() const noexcept
+std::size_t ViewportState::hash() const noexcept
 {
     std::size_t hash = detail::hashArgs(
         sType,

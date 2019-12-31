@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-size_t Format::blockCompressedSize() const noexcept
+std::size_t Format::blockCompressedSize() const noexcept
 {
     switch (format)
     {

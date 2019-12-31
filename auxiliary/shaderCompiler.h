@@ -36,8 +36,8 @@ namespace magma
             virtual void *resolve(shaderc_include_type includeType,
                 const char *requestedSource,
                 const char *requestingSource,
-                size_t includeDepth,
-                size_t& dataSize) noexcept = 0;
+                std::size_t includeDepth,
+                std::size_t& dataSize) noexcept = 0;
             virtual void release(void *data) noexcept = 0;
         };
 
@@ -51,10 +51,10 @@ namespace magma
             ShaderCompiler(std::shared_ptr<Device> device,
                 std::shared_ptr<IShaderInclude> handler);
             ~ShaderCompiler();
-            void setOptimizationLevel(shaderc_optimization_level level) noexcept;
-            void setGenerateDebugInfo(bool generate) noexcept;
-            void setSuppressWarnings(bool suppress) noexcept;
-            void setWarningsAsErrors(bool errors) noexcept;
+            void setOptimizationLevel(shaderc_optimization_level optimizationLevel) noexcept;
+            void setGenerateDebugInfo(bool generateDebugInfo) noexcept;
+            void setSuppressWarnings(bool suppressWarnings) noexcept;
+            void setWarningsAsErrors(bool warningsAsErrors) noexcept;
             std::shared_ptr<ShaderModule> compileShader(const std::string& source,
                 const char *entrypoint,
                 shaderc_shader_kind shaderKind = shaderc_glsl_infer_from_source,
@@ -77,13 +77,13 @@ namespace magma
             CompileException(shaderc_compilation_result_t result,
                 const char *file, int line);
             shaderc_compilation_status getStatus() const noexcept { return status; }
-            size_t numWarnings() const noexcept { return warnings; }
-            size_t numErrors() const noexcept { return errors; }
+            std::size_t numWarnings() const noexcept { return warnings; }
+            std::size_t numErrors() const noexcept { return errors; }
 
         private:
             shaderc_compilation_status status;
-            size_t warnings;
-            size_t errors;
+            std::size_t warnings;
+            std::size_t errors;
         };
     } // namespace aux
 } // namespace magma

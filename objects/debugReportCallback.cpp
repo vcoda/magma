@@ -57,7 +57,7 @@ DebugReportCallback::~DebugReportCallback()
 }
 
 void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkObjectType objectType,
-    uint64_t object, size_t location, int32_t messageCode, const char *layerPrefix, const char *format, ...) const noexcept
+    uint64_t object, std::size_t location, int32_t messageCode, const char *layerPrefix, const char *format, ...) const noexcept
 {
     MAGMA_ASSERT(layerPrefix);
     MAGMA_ASSERT(format);

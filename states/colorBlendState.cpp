@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ManagedColorBlendState::ManagedColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
+MultiColorBlendState::MultiColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
     const std::initializer_list<float>& blendConstants /* {1, 1, 1, 1} */) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
@@ -41,7 +41,7 @@ ManagedColorBlendState::ManagedColorBlendState(const std::vector<ColorBlendAttac
     this->blendConstants[3] = c[3];
 }
 
-ManagedColorBlendState::ManagedColorBlendState(const ColorBlendState& blendState) noexcept
+MultiColorBlendState::MultiColorBlendState(const ColorBlendState& blendState) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -56,13 +56,13 @@ ManagedColorBlendState::ManagedColorBlendState(const ColorBlendState& blendState
     blendConstants[3] = blendState.blendConstants[3];
 }
 
-ManagedColorBlendState::ManagedColorBlendState(const ManagedColorBlendState& other) noexcept
+MultiColorBlendState::MultiColorBlendState(const MultiColorBlendState& other) noexcept
 {
     detail::copy(this, &other);
     pAttachments = detail::copyArray(other.pAttachments, attachmentCount);
 }
 
-ManagedColorBlendState& ManagedColorBlendState::operator=(const ManagedColorBlendState& other) noexcept
+MultiColorBlendState& MultiColorBlendState::operator=(const MultiColorBlendState& other) noexcept
 {
     if (this != &other)
     {
@@ -73,12 +73,12 @@ ManagedColorBlendState& ManagedColorBlendState::operator=(const ManagedColorBlen
     return *this;
 }
 
-ManagedColorBlendState::~ManagedColorBlendState()
+MultiColorBlendState::~MultiColorBlendState()
 {
     delete[] pAttachments;
 }
 
-std::size_t ManagedColorBlendState::hash() const noexcept
+std::size_t MultiColorBlendState::hash() const noexcept
 {
     std::size_t hash = detail::hashArgs(
         sType,
@@ -102,7 +102,7 @@ std::size_t ManagedColorBlendState::hash() const noexcept
     return hash;
 }
 
-bool ManagedColorBlendState::operator==(const ManagedColorBlendState& other) const noexcept
+bool MultiColorBlendState::operator==(const MultiColorBlendState& other) const noexcept
 {
     return (flags == other.flags) &&
         (logicOpEnable == other.logicOpEnable) &&

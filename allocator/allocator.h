@@ -35,18 +35,18 @@ namespace magma
     class IAllocator : public AllocationCallbacks, public detail::NonCopyable
     {
     public:
-        virtual void *alloc(size_t size,
-            size_t alignment,
+        virtual void *alloc(std::size_t size,
+            std::size_t alignment,
             VkSystemAllocationScope allocationScope) = 0;
         virtual void *realloc(void *original,
-            size_t size,
-            size_t alignment,
+            std::size_t size,
+            std::size_t alignment,
             VkSystemAllocationScope allocationScope) = 0;
         virtual void free(void *memory) = 0;
-        virtual void internalAllocationNotification(size_t size,
+        virtual void internalAllocationNotification(std::size_t size,
             VkInternalAllocationType allocationType,
             VkSystemAllocationScope allocationScope) = 0;
-        virtual void internalFreeNotification(size_t size,
+        virtual void internalFreeNotification(std::size_t size,
             VkInternalAllocationType allocationType,
             VkSystemAllocationScope allocationScope) = 0;
     };

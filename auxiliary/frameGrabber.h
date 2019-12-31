@@ -37,7 +37,9 @@ namespace magma
                 std::shared_ptr<IAllocator> allocator = nullptr);
             void captureFrame(std::shared_ptr<SwapchainColorAttachment2D> srcImage,
                 std::shared_ptr<CommandBuffer> cmdBuffer);
-            void readPixels(std::function<void(uint32_t col, uint32_t row, uint32_t rgba)> pix) const;
+            void readPixels(std::function<void(uint32_t col,
+                uint32_t row,
+                uint32_t rgba)> forEachPixel) const;
             void readPixels(std::function<void(uint32_t row,
                 const std::vector<uint32_t>& rowPixels)> forEachRow) const;
             VkExtent2D getImageExtent() const;

@@ -1,31 +1,29 @@
 namespace magma
 {
 template<typename Func>
-inline DeviceExtension<Func>::DeviceExtension(VkDevice device,
-    const char *name) noexcept
+inline DeviceExtension<Func>::DeviceExtension(VkDevice device, const char *name) noexcept
 {
-    if (!_addr)
+    if (!pfn)
     {
         MAGMA_ASSERT(device != VK_NULL_HANDLE);
         MAGMA_ASSERT(name);
-        _addr = vkGetDeviceProcAddr(device, name);
+        pfn = vkGetDeviceProcAddr(device, name);
     }
 }
 
 template<typename Func>
-inline DeviceExtension<Func>::DeviceExtension(VkDevice device,
-    const char *name, const char *extension)
+inline DeviceExtension<Func>::DeviceExtension(VkDevice device, const char *name, const char *extension)
 {
-    if (!_addr)
+    if (!pfn)
     {
         MAGMA_ASSERT(device != VK_NULL_HANDLE);
         MAGMA_ASSERT(name);
-        _addr = vkGetDeviceProcAddr(device, name);
-        if (!_addr)
+        pfn = vkGetDeviceProcAddr(device, name);
+        if (!pfn)
             MAGMA_THROW_NOT_PRESENT(extension);
     }
 }
 
 template<typename Func>
-PFN_vkVoidFunction DeviceExtension<Func>::_addr;
+PFN_vkVoidFunction DeviceExtension<Func>::pfn;
 } // namespace magma

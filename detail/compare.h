@@ -40,7 +40,7 @@ namespace magma
             return !memcmp(p1, p2, sizeof(T));
         }
 
-        template<typename T> inline bool compareArrays(const T *const p1, const T *const p2, size_t count) noexcept
+        template<typename T> inline bool compareArrays(const T *const p1, const T *const p2, std::size_t count) noexcept
         {
             if (!p1 && !p2)
                 return true;

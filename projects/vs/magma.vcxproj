@@ -168,7 +168,6 @@
     <ClInclude Include="..\..\detail\pch.h" />
     <ClInclude Include="..\..\detail\placementPool.h" />
     <ClInclude Include="..\..\detail\refCountChecker.h" />
-    <ClInclude Include="..\..\detail\scopedProfiler.h" />
     <ClInclude Include="..\..\detail\shared.h" />
     <ClInclude Include="..\..\detail\zeroMemory.h" />
     <ClInclude Include="..\..\extensions\instanceLayers.h" />
@@ -199,7 +198,6 @@
     <ClInclude Include="..\..\misc\pushConstants.h" />
     <ClInclude Include="..\..\misc\scissor.h" />
     <ClInclude Include="..\..\misc\scopedDebugMarker.h" />
-    <ClInclude Include="..\..\misc\vectorTypes.h" />
     <ClInclude Include="..\..\misc\viewport.h" />
     <ClInclude Include="..\..\objects\accelerationStructure.h" />
     <ClInclude Include="..\..\objects\buffer.h" />

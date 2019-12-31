@@ -30,11 +30,10 @@ namespace magma
         InstanceExtension(VkInstance instance,
             const char *name,
             const char *extension);
-        operator Func() const noexcept
-            { return reinterpret_cast<Func>(_addr); }
+        operator Func() const noexcept { return reinterpret_cast<Func>(pfn); }
 
     private:
-        static PFN_vkVoidFunction _addr;
+        static PFN_vkVoidFunction pfn;
     };
 } // namespace magma
 

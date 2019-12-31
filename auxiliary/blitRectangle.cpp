@@ -59,8 +59,9 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
 {   // Check for hardware support
     std::shared_ptr<Device> device = this->renderPass->getDevice();
     std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-    const bool NV_fill_rectangle = physicalDevice->checkExtensionSupport("VK_NV_fill_rectangle");
-    const bool IMG_filter_cubic = physicalDevice->checkExtensionSupport("VK_IMG_filter_cubic");
+    const bool canDrawRect = physicalDevice->checkExtensionSupport("VK_NV_fill_rectangle");
+    const bool hasCubicFilter = physicalDevice->checkExtensionSupport("VK_IMG_filter_cubic") ||
+        physicalDevice->checkExtensionSupport("VK_EXT_filter_cubic");
     // Descriptor set for single image view in fragment shader
     const Descriptor imageSampler(descriptors::CombinedImageSampler(1));
     descriptorPool = std::make_shared<DescriptorPool>(device, 1, std::vector<Descriptor>{imageSampler}, false, allocator);
@@ -69,7 +70,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     // Create texture samplers
     nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, allocator);
     bilinearSampler = std::make_shared<Sampler>(device, samplers::magMinLinearMipNearestClampToEdge, allocator);
-    if (IMG_filter_cubic)
+    if (hasCubicFilter)
         cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, allocator);
     // Create blit pipeline
     pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, std::initializer_list<VkPushConstantRange>{}, allocator);
@@ -77,7 +78,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
         renderstates::nullVertexInput,
         renderstates::triangleList,
-        NV_fill_rectangle ? renderstates::fillRectangleCullNoneCCW : renderstates::fillCullNoneCCW,
+        canDrawRect ? renderstates::fillRectangleCullNoneCCW : renderstates::fillCullNoneCCW,
         renderstates::noMultisample,
         renderstates::depthAlwaysDontWrite,
         renderstates::dontBlendWriteRgba,
@@ -96,8 +97,8 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     }
 }
 
-void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::shared_ptr<ImageView>& bltSrc,
-    const std::shared_ptr<CommandBuffer>& cmdBuffer, VkFilter filter,
+void BlitRectangle::blit(std::shared_ptr<Framebuffer> bltDst, std::shared_ptr<const ImageView> bltSrc,
+    std::shared_ptr<CommandBuffer> cmdBuffer, VkFilter filter,
     bool negativeViewportHeight /* false */, const char *labelName /* nullptr */,
     uint32_t labelColor /* 0xFFFFFFFF */) const noexcept
 {
@@ -130,9 +131,8 @@ void BlitRectangle::blit(const std::shared_ptr<Framebuffer>& bltDst, const std::
 }
 
 std::shared_ptr<ShaderModule> BlitRectangle::createVertexShader(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) const
-{   // https://www.khronos.org/registry/OpenGL/extensions/NV/NV_fill_rectangle.txt
-    const bool NV_fill_rectangle = device->getPhysicalDevice()->checkExtensionSupport("VK_NV_fill_rectangle");
-    if (NV_fill_rectangle)
+{   // https://www.khronos.org/registry/OpenGL/extensions/NV/NV_fill_rectangle.txt;
+    if (device->getPhysicalDevice()->checkExtensionSupport("VK_NV_fill_rectangle"))
     {
 #include "spirv/output/blitv_nv"
         return std::make_shared<ShaderModule>(std::move(device), vsBlitNV, 0, nullptr, std::move(allocator));
@@ -146,6 +146,5 @@ std::shared_ptr<ShaderModule> BlitRectangle::createFragmentShader(std::shared_pt
 #include "spirv/output/blitf"
     return std::make_shared<ShaderModule>(std::move(device), fsBlit, 0, nullptr, std::move(allocator));
 }
-
 } // namespace aux
 } // namespace magma

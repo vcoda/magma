@@ -41,7 +41,7 @@ constexpr MultisampleState::MultisampleState(uint32_t sampleCount):
 
 constexpr std::size_t MultisampleState::hash() const
 {
-    size_t hash = detail::hashArgs(
+    std::size_t hash = detail::hashArgs(
         sType,
         flags,
         rasterizationSamples,

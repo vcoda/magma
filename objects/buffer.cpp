@@ -113,7 +113,7 @@ void Buffer::copyToMapped(const void *data, CopyMemoryFunction copyFn) noexcept
     {
         if (!copyFn)
             copyFn = detail::copyMemory;
-        copyFn(buffer, data, static_cast<size_t>(size));
+        copyFn(buffer, data, static_cast<std::size_t>(size));
         memory->unmap();
     }
 }

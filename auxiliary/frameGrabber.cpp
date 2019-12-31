@@ -111,32 +111,31 @@ void FrameGrabber::captureFrame(std::shared_ptr<SwapchainColorAttachment2D> srcI
     }
 }
 
-void FrameGrabber::readPixels(std::function<void(uint32_t col, uint32_t row, uint32_t rgba)> pix) const
+void FrameGrabber::readPixels(std::function<void(uint32_t col, uint32_t row, uint32_t rgba)> forEachPixel) const
 {   // Get image row pitch
-    const VkExtent3D extent = dstImage->getMipExtent(0);
     const VkSubresourceLayout subresourceLayout = dstImage->getSubresourceLayout(0);
     const VkDeviceSize rowPitch = subresourceLayout.rowPitch;
-    helpers::mapScoped<char>(dstImage, subresourceLayout.offset,
-        [this, extent, rowPitch, pix](char *data)
+    const VkExtent3D extent = dstImage->getMipExtent(0);
+    helpers::mapScoped<uint8_t>(dstImage, subresourceLayout.offset,
+        [this, extent, rowPitch, forEachPixel](const uint8_t *data)
         {
             for (uint32_t y = 0; y < extent.height; ++y)
             {
-                uint32_t *row = (uint32_t *)data;
+                const uint32_t *row = (const uint32_t *)data;
                 for (uint32_t x = 0; x < extent.width; ++x)
                 {
                     uint32_t abgr;
                     if (!swizzleBgra)
-                        abgr = *row;
+                        abgr = row[x];
                     else
                     {   // Swizzle BGRA to RGBA
-                        const uint32_t argb = *row;
+                        const uint32_t argb = row[x];
                         const uint32_t r = (argb >> 16) & 0xFF;
                         const uint32_t g = (argb >> 8) & 0xFF;
                         const uint32_t b = argb & 0xFF;
                         abgr = (argb & 0xFF000000) | (b << 16) | (g << 8) | r;
                     }
-                    pix(x, y, abgr); // Let user process each pixel
-                    row++;
+                    forEachPixel(x, y, abgr);
                 }
                 data += rowPitch;
             }

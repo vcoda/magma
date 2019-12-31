@@ -28,7 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Framebuffer::Framebuffer(std::shared_ptr<RenderPass> renderPass, std::shared_ptr<ImageView> attachment,
+Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shared_ptr<ImageView> attachment,
     VkFramebufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, std::move(renderPass->getDevice()), std::move(allocator)),
@@ -51,7 +51,7 @@ Framebuffer::Framebuffer(std::shared_ptr<RenderPass> renderPass, std::shared_ptr
     MAGMA_THROW_FAILURE(create, "failed to create framebuffer");
 }
 
-Framebuffer::Framebuffer(std::shared_ptr<RenderPass> renderPass, const std::vector<std::shared_ptr<ImageView>>& attachments,
+Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std::vector<std::shared_ptr<ImageView>>& attachments,
     VkFramebufferCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, std::move(renderPass->getDevice()), std::move(allocator)),

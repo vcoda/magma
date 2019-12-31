@@ -25,11 +25,11 @@ namespace magma
     namespace detail
     {
 #if defined(_M_AMD64) || defined(__x86_64__)
-        inline void __copyThread(void *dst, const void *src, size_t blockCount) noexcept
+        inline void __copyThread(void *dst, const void *src, std::size_t blockCount) noexcept
         {
             __m128i *vsrc = (__m128i *)src;
             __m128i *vdst = (__m128i *)dst;
-            for (size_t i = blockCount; i--; vsrc += MAGMA_XMM_REGISTERS, vdst += MAGMA_XMM_REGISTERS)
+            for (std::size_t i = blockCount; i--; vsrc += MAGMA_XMM_REGISTERS, vdst += MAGMA_XMM_REGISTERS)
             {   // Copy 256 byte block
                 __m128i xmm0 = _mm_stream_load_si128(vsrc);
                 __m128i xmm1 = _mm_stream_load_si128(vsrc + 1);
@@ -67,7 +67,7 @@ namespace magma
         }
 #endif // _M_AMD64 || __x86_64__
 
-        inline void *copyMemory(void *dst, const void *src, size_t size)
+        inline void *copyMemory(void *dst, const void *src, std::size_t size)
         {
             MAGMA_ASSERT(dst);
             MAGMA_ASSERT(src);
@@ -81,15 +81,15 @@ namespace magma
 #if defined(_M_AMD64) || defined(__x86_64__)
             MAGMA_ASSERT(MAGMA_ALIGNED(dst));
             MAGMA_ASSERT(MAGMA_ALIGNED(src));
-            constexpr size_t BLOCK_SIZE = sizeof(__m128i) * MAGMA_XMM_REGISTERS;
+            constexpr std::size_t BLOCK_SIZE = sizeof(__m128i) * MAGMA_XMM_REGISTERS;
             constexpr int NUM_THREADS = 4;
             if (size <= BLOCK_SIZE * NUM_THREADS)
                 memcpy(dst, src, size);
             else
             {
-                size_t blockCount = size / BLOCK_SIZE;
-                size_t threadBlockCount = blockCount / NUM_THREADS;
-                size_t threadCopySize = threadBlockCount * BLOCK_SIZE;
+                std::size_t blockCount = size / BLOCK_SIZE;
+                std::size_t threadBlockCount = blockCount / NUM_THREADS;
+                std::size_t threadCopySize = threadBlockCount * BLOCK_SIZE;
                 std::thread threads[NUM_THREADS];
                 for (int i = 0; i < NUM_THREADS; ++i)
                 {
@@ -100,7 +100,7 @@ namespace magma
                 }
                 for (int i = 0; i < NUM_THREADS; ++i)
                     threads[i].join();
-                size_t residualSize = size - (BLOCK_SIZE * threadBlockCount * NUM_THREADS);
+                std::size_t residualSize = size - (BLOCK_SIZE * threadBlockCount * NUM_THREADS);
                 if (residualSize > 0)
                 {
                     memcpy(((char *)dst) + NUM_THREADS * threadCopySize,

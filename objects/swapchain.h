@@ -47,7 +47,7 @@ namespace magma
             VkPresentModeKHR presentMode,
             VkSwapchainCreateFlagsKHR flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            std::shared_ptr<DebugReportCallback> debugReportCallback = nullptr);
+            std::shared_ptr<const DebugReportCallback> debugReportCallback = nullptr);
         ~Swapchain();
         const VkExtent2D& getExtent() const noexcept { return extent; }
         uint32_t getImageIndex() const noexcept { return imageIndex; }

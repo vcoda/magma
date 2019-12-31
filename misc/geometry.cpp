@@ -31,9 +31,9 @@ Geometry::Geometry(VkGeometryTypeNV geometryType, VkGeometryFlagsNV flags) noexc
     this->flags = flags;
 }
 
-GeometryTriangles::GeometryTriangles(std::shared_ptr<Buffer> vertexData, VkDeviceSize vertexOffset, uint32_t vertexCount, VkDeviceSize vertexStride, VkFormat vertexFormat,
-    std::shared_ptr<Buffer> indexData, VkDeviceSize indexOffset, uint32_t indexCount, VkIndexType indexType,
-    std::shared_ptr<Buffer> transformData, VkDeviceSize transformOffset,
+GeometryTriangles::GeometryTriangles(std::shared_ptr<const Buffer> vertexData, VkDeviceSize vertexOffset, uint32_t vertexCount, VkDeviceSize vertexStride, VkFormat vertexFormat,
+    std::shared_ptr<const Buffer> indexData, VkDeviceSize indexOffset, uint32_t indexCount, VkIndexType indexType,
+    std::shared_ptr<const Buffer> transformData, VkDeviceSize transformOffset,
     VkGeometryFlagsNV flags /* 0 */) noexcept:
     Geometry(VK_GEOMETRY_TYPE_TRIANGLES_NV, flags)
 {
@@ -53,8 +53,8 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<Buffer> vertexData, VkDevic
     memset(&geometry.aabbs, 0, sizeof(VkGeometryAABBNV));
 }
 
-GeometryTriangles::GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData, VkDeviceSize vertexStride, VkFormat vertexFormat,
-    std::shared_ptr<IndexBuffer> indexData, std::shared_ptr<Buffer> transformData,
+GeometryTriangles::GeometryTriangles(std::shared_ptr<const VertexBuffer> vertexData, VkDeviceSize vertexStride, VkFormat vertexFormat,
+    std::shared_ptr<const IndexBuffer> indexData, std::shared_ptr<const Buffer> transformData,
     VkDeviceSize vertexOffset /* 0 */,
     VkDeviceSize indexOffset /* 0 */,
     VkDeviceSize transformOffset /* 0 */,
@@ -77,7 +77,7 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData, V
     memset(&geometry.aabbs, 0, sizeof(VkGeometryAABBNV));
 }
 
-GeometryBVH::GeometryBVH(std::shared_ptr<Buffer> aabbData, uint32_t numAABBs, uint32_t stride, VkDeviceSize offset,
+GeometryBVH::GeometryBVH(std::shared_ptr<const Buffer> aabbData, uint32_t numAABBs, uint32_t stride, VkDeviceSize offset,
     VkGeometryFlagsNV flags /* 0 */) noexcept:
     Geometry(VK_GEOMETRY_TYPE_AABBS_NV, flags)
 {

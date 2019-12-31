@@ -25,8 +25,8 @@ namespace
 {
 void *VKAPI_PTR vkAllocationFunction(
     void *pUserData,
-    size_t size,
-    size_t alignment,
+    std::size_t size,
+    std::size_t alignment,
     VkSystemAllocationScope allocationScope)
 {
     AllocationCallbacks *base = reinterpret_cast<AllocationCallbacks *>(pUserData);
@@ -37,8 +37,8 @@ void *VKAPI_PTR vkAllocationFunction(
 void *VKAPI_PTR vkReallocationFunction(
     void *pUserData,
     void *pOriginal,
-    size_t size,
-    size_t alignment,
+    std::size_t size,
+    std::size_t alignment,
     VkSystemAllocationScope allocationScope)
 {
     AllocationCallbacks *base = reinterpret_cast<AllocationCallbacks *>(pUserData);
@@ -57,7 +57,7 @@ void VKAPI_PTR vkFreeFunction(
 
 void VKAPI_PTR vkInternalAllocationNotification(
     void *pUserData,
-    size_t size,
+    std::size_t size,
     VkInternalAllocationType allocationType,
     VkSystemAllocationScope allocationScope)
 {
@@ -68,7 +68,7 @@ void VKAPI_PTR vkInternalAllocationNotification(
 
 void VKAPI_PTR vkInternalFreeNotification(
     void *pUserData,
-    size_t size,
+    std::size_t size,
     VkInternalAllocationType allocationType,
     VkSystemAllocationScope allocationScope)
 {

@@ -35,7 +35,7 @@ namespace magma
                 MAGMA_ASSERT(arraySize > 0);
             }
             uint32_t getArraySize() const noexcept { return arraySize; }
-            constexpr size_t getElementSize() const noexcept { return sizeof(Type); }
+            constexpr std::size_t getElementSize() const noexcept { return sizeof(Type); }
             Iterator begin() const noexcept { return Iterator(buffer); }
             Iterator end() const noexcept { return Iterator(buffer + arraySize); }
             Type& operator[](uint32_t index) noexcept

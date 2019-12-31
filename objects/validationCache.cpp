@@ -32,7 +32,7 @@ ValidationCache::ValidationCache(std::shared_ptr<Device> device,
 {}
 
 ValidationCache::ValidationCache(std::shared_ptr<Device> device,
-    size_t dataSize, const void *cacheData,
+    std::size_t dataSize, const void *cacheData,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_VALIDATION_CACHE_EXT, std::move(device), std::move(allocator))
 {
@@ -56,7 +56,7 @@ ValidationCache::~ValidationCache()
 std::vector<uint8_t> ValidationCache::getData() const
 {
     MAGMA_DEVICE_EXTENSION(vkGetValidationCacheDataEXT, VK_EXT_VALIDATION_CACHE_EXTENSION_NAME);
-    size_t dataSize;
+    std::size_t dataSize;
     const VkResult getSize = vkGetValidationCacheDataEXT(MAGMA_HANDLE(device), handle, &dataSize, nullptr);
     MAGMA_THROW_FAILURE(getSize, "failed to get validation cache size");
     std::vector<uint8_t> data(dataSize);

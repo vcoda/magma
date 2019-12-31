@@ -31,10 +31,10 @@ ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, c
     cmdBuffer(std::move(cmdBuffer))
 {
 #ifdef MAGMA_DEBUG
-    uint32_t color = uint32_t(a * 255.0f) |
-                    (uint32_t(b * 255.0f) << 8) |
-                    (uint32_t(g * 255.0f) << 16) |
-                    (uint32_t(r * 255.0f) << 24);
+    uint32_t color = uint32_t(a * 255.f) |
+                    (uint32_t(b * 255.f) << 8) |
+                    (uint32_t(g * 255.f) << 16) |
+                    (uint32_t(r * 255.f) << 24);
     this->cmdBuffer->beginDebugLabel(name, color);
 #elif defined(_MSC_VER)
     cmdBuffer;

@@ -65,7 +65,7 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
     VkGraphicsPipelineCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     info.pNext = nullptr;
-    // Specify that the pipeline to be created is allowed to be the parent of a pipeline that will be created.
+    // Specify that the pipeline to be created is allowed to be the parent of a pipeline that will be created
     info.flags = flags | VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
     info.stageCount = MAGMA_COUNT(stages);
     std::size_t hash = detail::hashArgs(
@@ -104,8 +104,7 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
         rasterizationState, multisampleState, depthStencilState, colorBlendState,
         dynamicStates);
     if (basePipeline)
-    {
-        // A pipeline derivative is a child pipeline created from a parent pipeline,
+    {   // A pipeline derivative is a child pipeline created from a parent pipeline,
         // where the child and parent are expected to have much commonality.
         info.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     }

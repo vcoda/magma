@@ -43,7 +43,7 @@ namespace magma
         void message(VkDebugReportFlagsEXT flags,
             VkObjectType objectType,
             uint64_t object,
-            size_t location,
+            std::size_t location,
             int32_t messageCode,
             const char *layerPrefix,
             const char *format, ...) const noexcept;

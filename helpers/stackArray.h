@@ -29,7 +29,7 @@ namespace magma
         class StackArray final
         {
         public:
-            explicit StackArray(void *const stack, const size_t count) noexcept:
+            explicit StackArray(void *const stack, const std::size_t count) noexcept:
                 stack(static_cast<Type *>(stack)),
                 count(static_cast<uint32_t>(count)),
                 pos(0)
@@ -87,7 +87,7 @@ namespace magma
             const uint32_t count;
             uint32_t pos;
 #ifdef MAGMA_DEBUG
-            size_t bytesAllocated;
+            std::size_t bytesAllocated;
 #endif // MAGMA_DEBUG
         };
     } // namespace helpers

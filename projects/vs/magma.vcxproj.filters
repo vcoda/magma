@@ -417,9 +417,6 @@
     <ClInclude Include="..\..\states\vertexLayouts.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\misc\vectorTypes.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\extensions\layers.h">
       <Filter>Header Files\extensions</Filter>
     </ClInclude>
@@ -469,9 +466,6 @@
       <Filter>Header Files\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\detail\refCountChecker.h">
-      <Filter>Header Files\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\detail\scopedProfiler.h">
       <Filter>Header Files\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\detail\shared.h">

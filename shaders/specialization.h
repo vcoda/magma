@@ -43,10 +43,10 @@ namespace magma
     public:
         template<typename Block>
         explicit Specialization(const Block& data,
-            const std::initializer_list<SpecializationEntry>& entryMap) noexcept
+            const std::initializer_list<SpecializationEntry>& mapEntries) noexcept
         {
-            mapEntryCount = static_cast<uint32_t>(entryMap.size());
-            pMapEntries = detail::copyInitializerList(entryMap);
+            mapEntryCount = MAGMA_COUNT(mapEntries);
+            pMapEntries = detail::copyInitializerList(mapEntries);
             dataSize = sizeof(Block);
             pData = detail::copyArray<char>(&data, dataSize);
         }

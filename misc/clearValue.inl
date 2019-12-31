@@ -50,9 +50,9 @@ constexpr ClearColor::ClearColor(const uint32_t color[4])
 
 constexpr ClearColor::ClearColor(uint32_t hexValue)
 {
-    value.color.float32[0] = ((hexValue >> 16) & 0xFF) / static_cast<float>(0xFF);
-    value.color.float32[1] = ((hexValue >> 8) & 0xFF) / static_cast<float>(0xFF);
-    value.color.float32[2] = (hexValue & 0xFF) / static_cast<float>(0xFF);
+    value.color.float32[0] = ((hexValue >> 16) & 0xFF) / 255.f;
+    value.color.float32[1] = ((hexValue >> 8) & 0xFF) / 255.f;
+    value.color.float32[2] = (hexValue & 0xFF) / 255.f;
     value.color.float32[3] = 1.f;
 }
 

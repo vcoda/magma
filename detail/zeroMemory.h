@@ -25,11 +25,11 @@ namespace magma
     namespace detail
     {
 #if defined(_M_AMD64) || defined(__x86_64__)
-        inline void __zeroThread(void *dst, size_t blockCount) noexcept
+        inline void __zeroThread(void *dst, std::size_t blockCount) noexcept
         {
             const __m128i _0 = _mm_setzero_si128();
             __m128i *vdst = (__m128i *)dst;
-            for (size_t i = blockCount; i--; vdst += MAGMA_XMM_REGISTERS)
+            for (std::size_t i = blockCount; i--; vdst += MAGMA_XMM_REGISTERS)
             {   // Zero 256 byte block
                 _mm_stream_si128(vdst,     _0);
                 _mm_stream_si128(vdst + 1, _0);
@@ -51,21 +51,21 @@ namespace magma
         }
 #endif // _M_AMD64 || __x86_64__
 
-        inline void *zeroMemory(void *dst, size_t size)
+        inline void *zeroMemory(void *dst, std::size_t size)
         {
             MAGMA_ASSERT(dst);
             MAGMA_ASSERT(size > 0);
 #if defined(_M_AMD64) || defined(__x86_64__)
             MAGMA_ASSERT(MAGMA_ALIGNED(dst));
-            constexpr size_t BLOCK_SIZE = sizeof(__m128i) * MAGMA_XMM_REGISTERS;
+            constexpr std::size_t BLOCK_SIZE = sizeof(__m128i) * MAGMA_XMM_REGISTERS;
             constexpr int NUM_THREADS = 4;
             if (size <= BLOCK_SIZE * NUM_THREADS)
                 memset(dst, 0, size);
             else
             {
-                size_t blockCount = size / BLOCK_SIZE;
-                size_t threadBlockCount = blockCount / NUM_THREADS;
-                size_t threadZeroSize = threadBlockCount * BLOCK_SIZE;
+                std::size_t blockCount = size / BLOCK_SIZE;
+                std::size_t threadBlockCount = blockCount / NUM_THREADS;
+                std::size_t threadZeroSize = threadBlockCount * BLOCK_SIZE;
                 std::thread threads[NUM_THREADS];
                 for (int i = 0; i < NUM_THREADS; ++i)
                 {
@@ -75,7 +75,7 @@ namespace magma
                 }
                 for (int i = 0; i < NUM_THREADS; ++i)
                     threads[i].join();
-                size_t residualSize = size - (BLOCK_SIZE * threadBlockCount * NUM_THREADS);
+                std::size_t residualSize = size - (BLOCK_SIZE * threadBlockCount * NUM_THREADS);
                 if (residualSize > 0)
                 {
                     memset(((char *)dst) + NUM_THREADS * threadZeroSize,

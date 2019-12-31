@@ -29,6 +29,11 @@ inline void *Object::operator new(std::size_t size, const std::nothrow_t&) noexc
     return ptr;
 }
 
+inline void* Object::operator new(std::size_t, void* where) noexcept
+{
+    return where;
+}
+
 inline void Object::operator delete(void *ptr)
 {
 #ifdef MAGMA_DEBUG

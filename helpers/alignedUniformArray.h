@@ -38,7 +38,7 @@ namespace magma
                 MAGMA_ASSERT(alignment > 0);
             }
             uint32_t getArraySize() const noexcept { return arraySize; }
-            constexpr size_t getElementSize() const noexcept { return sizeof(Type); }
+            constexpr std::size_t getElementSize() const noexcept { return sizeof(Type); }
             VkDeviceSize getElementAlignment() const noexcept { return alignment; }
             Iterator begin() const noexcept { return Iterator(buffer, alignment); }
             Iterator end() const noexcept { return Iterator(buffer + arraySize * alignment, alignment); }

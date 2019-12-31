@@ -4,10 +4,10 @@ namespace aux
 {
 struct ImmediateRender::Vertex
 {
-    vectors::float4 position;
-    vectors::float4 normalPSize;
-    vectors::float4 color;
-    vectors::float2 texcoord;
+    vertexlayout::float4 position;
+    vertexlayout::float4 normalPSize;
+    vertexlayout::float4 color;
+    vertexlayout::float2 texcoord;
 };
 
 struct ImmediateRender::Primitive
@@ -54,7 +54,7 @@ inline void ImmediateRender::setDepthStencilState(const DepthStencilState& state
 inline void ImmediateRender::setColorBlendState(const ColorBlendState& state) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
-    colorBlendState = ManagedColorBlendState(state);
+    colorBlendState = MultiColorBlendState(state); // Make copyable
 }
 
 inline void ImmediateRender::setLineWidth(float width) noexcept

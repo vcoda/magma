@@ -40,8 +40,8 @@ namespace magma
             { return blockCompressed() || ETC2() || EAC() || ASTC() || PVRTC(); }
         constexpr bool floatingPoint() const;
         constexpr bool sRGB() const;
-        constexpr size_t size() const;
-        size_t blockCompressedSize() const noexcept;
+        constexpr std::size_t size() const;
+        std::size_t blockCompressedSize() const noexcept;
         std::pair<int, int> blockFootprint() const noexcept;
 
     private:

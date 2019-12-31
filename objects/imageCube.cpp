@@ -89,7 +89,7 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
             {
                 const VkDeviceSize bufferOffset = copyRegions[face * mipLevels + level].bufferOffset;
                 void *mipLevel = data + bufferOffset;
-                copyFn(mipLevel, mipData[face][level], static_cast<size_t>(mipSizes[level]));
+                copyFn(mipLevel, mipData[face][level], static_cast<std::size_t>(mipSizes[level]));
             }
         }
     });

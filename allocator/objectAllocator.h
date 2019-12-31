@@ -25,8 +25,8 @@ namespace magma
     class IObjectAllocator : public detail::NonCopyable
     {
     public:
-        virtual void *alloc(size_t size) = 0;
+        virtual void *alloc(std::size_t size) = 0;
         virtual void free(void *p) noexcept = 0;
-        virtual size_t getBytesAllocated() const noexcept = 0;
+        virtual std::size_t getBytesAllocated() const noexcept = 0;
     };
 } // namespace magma

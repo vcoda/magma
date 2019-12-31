@@ -1,31 +1,29 @@
 namespace magma
 {
 template<typename Func>
-inline InstanceExtension<Func>::InstanceExtension(VkInstance instance,
-    const char *name) noexcept
+inline InstanceExtension<Func>::InstanceExtension(VkInstance instance, const char *name) noexcept
 {
-    if (!_addr)
+    if (!pfn)
     {
         MAGMA_ASSERT(instance != VK_NULL_HANDLE);
         MAGMA_ASSERT(name);
-        _addr = vkGetInstanceProcAddr(instance, name);
+        pfn = vkGetInstanceProcAddr(instance, name);
     }
 }
 
 template<typename Func>
-inline InstanceExtension<Func>::InstanceExtension(VkInstance instance,
-    const char *name, const char *extension)
+inline InstanceExtension<Func>::InstanceExtension(VkInstance instance, const char *name, const char *extension)
 {
-    if (!_addr)
+    if (!pfn)
     {
         MAGMA_ASSERT(instance != VK_NULL_HANDLE);
         MAGMA_ASSERT(name);
-        _addr = vkGetInstanceProcAddr(instance, name);
-        if (!_addr)
+        pfn = vkGetInstanceProcAddr(instance, name);
+        if (!pfn)
             MAGMA_THROW_NOT_PRESENT(extension);
     }
 }
 
 template<typename Func>
-PFN_vkVoidFunction InstanceExtension<Func>::_addr;
+PFN_vkVoidFunction InstanceExtension<Func>::pfn;
 } // namespace magma

@@ -106,10 +106,11 @@ constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationSt
 
 constexpr std::size_t RasterizationOrderState::hash() const
 {
-    return detail::hashArgs(
-        RasterizationState::hash(),
+    std::size_t hash = detail::hashArgs(
         order.sType,
         order.rasterizationOrder);
+    detail::hashCombine(hash, RasterizationState::hash());
+    return hash;
 }
 
 constexpr bool RasterizationOrderState::operator==(const RasterizationOrderState& other) const

@@ -31,7 +31,7 @@ PipelineCache::PipelineCache(std::shared_ptr<Device> device,
 {}
 
 PipelineCache::PipelineCache(std::shared_ptr<Device> device,
-    size_t dataSize, const void *cacheData,
+    std::size_t dataSize, const void *cacheData,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_CACHE, std::move(device), std::move(allocator))
 {
@@ -52,7 +52,7 @@ PipelineCache::~PipelineCache()
 
 std::vector<uint8_t> PipelineCache::getData() const
 {
-    size_t dataSize;
+    std::size_t dataSize;
     const VkResult getSize = vkGetPipelineCacheData(MAGMA_HANDLE(device), handle, &dataSize, nullptr);
     MAGMA_THROW_FAILURE(getSize, "failed to get pipeline cache size");
     std::vector<uint8_t> data(dataSize);

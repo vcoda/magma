@@ -39,23 +39,23 @@ namespace magma
     class GeometryTriangles : public Geometry
     {
     public:
-        explicit GeometryTriangles(std::shared_ptr<Buffer> vertexData,
+        explicit GeometryTriangles(std::shared_ptr<const Buffer> vertexData,
             VkDeviceSize vertexOffset,
             uint32_t vertexCount,
             VkDeviceSize vertexStride,
             VkFormat vertexFormat,
-            std::shared_ptr<Buffer> indexData,
+            std::shared_ptr<const Buffer> indexData,
             VkDeviceSize indexOffset,
             uint32_t indexCount,
             VkIndexType indexType,
-            std::shared_ptr<Buffer> transformData,
+            std::shared_ptr<const Buffer> transformData,
             VkDeviceSize transformOffset,
             VkGeometryFlagsNV flags = 0) noexcept;
-        explicit GeometryTriangles(std::shared_ptr<VertexBuffer> vertexData,
+        explicit GeometryTriangles(std::shared_ptr<const VertexBuffer> vertexData,
             VkDeviceSize vertexStride,
             VkFormat vertexFormat,
-            std::shared_ptr<IndexBuffer> indexData,
-            std::shared_ptr<Buffer> transformData,
+            std::shared_ptr<const IndexBuffer> indexData,
+            std::shared_ptr<const Buffer> transformData,
             VkDeviceSize vertexOffset = 0,
             VkDeviceSize indexOffset = 0,
             VkDeviceSize transformOffset = 0,
@@ -65,7 +65,7 @@ namespace magma
     class GeometryBVH : public Geometry
     {
     public:
-        explicit GeometryBVH(std::shared_ptr<Buffer> aabbData,
+        explicit GeometryBVH(std::shared_ptr<const Buffer> aabbData,
             uint32_t numAABBs,
             uint32_t stride,
             VkDeviceSize offset,

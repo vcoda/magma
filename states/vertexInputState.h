@@ -31,7 +31,7 @@ namespace magma
     struct VertexInputAttribute : VkVertexInputAttributeDescription
     {
         template<bool normalized>
-        struct Normalized {}; // Deduce constructor's template <bool normalized> parameter.
+        struct Normalized {}; // Deduce constructor's template <bool normalized> parameter
 
         VertexInputAttribute() = default;
         constexpr VertexInputAttribute(uint32_t location,

@@ -27,7 +27,7 @@ namespace magma
         class PlacementPool : public IObjectAllocator
         {
         public:
-            PlacementPool(size_t typeSize, uint32_t maxObjectCount):
+            PlacementPool(std::size_t typeSize, uint32_t maxObjectCount):
                 pool(typeSize * maxObjectCount, 0),
                 typeSize(typeSize),
                 maxObjectCount(maxObjectCount),
@@ -44,7 +44,7 @@ namespace magma
                 return nullptr;
             }
 
-            void *alloc(size_t size) override
+            void *alloc(std::size_t size) override
             {   // Linear incremental allocation
                 if (allocCount < maxObjectCount)
                     return pool.data() + size * allocCount++;
@@ -60,14 +60,14 @@ namespace magma
                 }
             }
 
-            size_t getBytesAllocated() const noexcept override
+            std::size_t getBytesAllocated() const noexcept override
             {
                 return typeSize * allocCount;
             }
 
         private:
             std::vector<char> pool;
-            const size_t typeSize;
+            const std::size_t typeSize;
             const uint32_t maxObjectCount;
             uint32_t allocCount;
         };

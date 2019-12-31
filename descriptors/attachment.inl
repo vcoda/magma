@@ -44,10 +44,9 @@ constexpr AttachmentDescription::AttachmentDescription(const LoadStoreOp& colorD
         stencilOp.loadOp, stencilOp.storeOp, initialLayout, finalLayout)
 {}
 
-constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t sampleCount,
-    const AttachmentDescription& prefab):
-    AttachmentDescription(format, sampleCount, prefab.loadOp, prefab.storeOp,
-        prefab.stencilLoadOp, prefab.stencilStoreOp, initialLayout, finalLayout)
+constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t sampleCount, const AttachmentDescription& predefined):
+    AttachmentDescription(format, sampleCount, predefined.loadOp, predefined.storeOp,
+        predefined.stencilLoadOp, predefined.stencilStoreOp, initialLayout, finalLayout)
 {}
 
 constexpr std::size_t AttachmentDescription::hash() const

@@ -50,9 +50,9 @@ namespace magma
                 const PipelineShaderStage& vertexShader,
                 const PipelineShaderStage& fragmentShader,
                 std::shared_ptr<IAllocator> allocator = nullptr);
-            void blit(const std::shared_ptr<Framebuffer>& bltDst,
-                const std::shared_ptr<ImageView>& bltSrc,
-                const std::shared_ptr<CommandBuffer>& cmdBuffer,
+            void blit(std::shared_ptr<Framebuffer> bltDst,
+                std::shared_ptr<const ImageView> bltSrc,
+                std::shared_ptr<CommandBuffer> cmdBuffer,
                 VkFilter filter,
                 bool negativeViewportHeight = false,
                 const char *labelName  = nullptr,
@@ -75,7 +75,7 @@ namespace magma
             std::shared_ptr<PipelineLayout> pipelineLayout;
             std::shared_ptr<GraphicsPipeline> pipeline;
             std::vector<ClearValue> clearValues;
-            mutable std::shared_ptr<ImageView> prevBltSrc;
+            mutable std::shared_ptr<const ImageView> prevBltSrc;
             mutable VkFilter prevFilter = VK_FILTER_NEAREST;
         };
     } // namespace aux

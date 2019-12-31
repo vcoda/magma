@@ -220,7 +220,7 @@ constexpr bool Format::sRGB() const
     }
 }
 
-constexpr size_t Format::size() const
+constexpr std::size_t Format::size() const
 {
     switch (format) // TODO: add all other formats in the future.
     {
