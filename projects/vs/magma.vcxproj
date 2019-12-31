@@ -185,6 +185,7 @@
     <ClInclude Include="..\..\helpers\stringize.h" />
     <ClInclude Include="..\..\helpers\typedefs.h" />
     <ClInclude Include="..\..\helpers\uniformArray.h" />
+    <ClInclude Include="..\..\helpers\uniformArrayIterator.h" />
     <ClInclude Include="..\..\magma.h" />
     <ClInclude Include="..\..\misc\clearAttachment.h" />
     <ClInclude Include="..\..\misc\clearValue.h" />
@@ -440,6 +441,7 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/output/immv</Outputs>
     </CustomBuild>
     <None Include="..\..\descriptors\attachment.inl" />
+    <None Include="..\..\helpers\alignedUniformArrayIterator.inl" />
     <None Include="..\..\misc\clearAttachment.inl" />
     <None Include="..\..\misc\clearValue.inl" />
     <None Include="..\..\misc\deviceExtension.inl" />

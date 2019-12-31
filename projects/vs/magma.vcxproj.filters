@@ -480,6 +480,9 @@
     <ClInclude Include="..\..\detail\zeroMemory.h">
       <Filter>Header Files\detail</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\helpers\uniformArrayIterator.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -834,6 +837,9 @@
     </None>
     <None Include="..\..\objects\deviceMemory.inl">
       <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\helpers\alignedUniformArrayIterator.inl">
+      <Filter>Header Files\helpers</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
