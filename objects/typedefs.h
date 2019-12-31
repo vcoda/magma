@@ -98,21 +98,6 @@ namespace magma
     typedef std::unique_ptr<class InstanceExtensions> InstanceExtensionsPtr;
     typedef std::unique_ptr<class PhysicalDeviceExtensions> PhysicalDeviceExtensionsPtr;
 
-    namespace aux
-    {
-        typedef std::shared_ptr<class BaseFramebuffer> BaseFramebufferPtr;
-        typedef std::shared_ptr<class BlitRectangle> BlitRectanglePtr;
-        typedef std::shared_ptr<class Framebuffer> FramebufferPtr;
-        typedef std::shared_ptr<class FrameGrabber> FrameGrabberPtr;
-        typedef std::shared_ptr<class GraphicsPipelineCache> GraphicsPipelineCachePtr;
-        typedef std::shared_ptr<class ImmediateRender> ImmediateRenderPtr;
-        typedef std::shared_ptr<class IShaderIncludeHandler> ShaderIncludeHandlerPtr;
-        typedef std::shared_ptr<class MipmapGenerator> MipmapGeneratorPtr;
-        typedef std::shared_ptr<class MultisampleFramebuffer> MultisampleFramebufferPtr;
-        typedef std::shared_ptr<class ShaderCompiler> ShaderCompilerPtr;
-        typedef std::shared_ptr<class SwapchainFramebuffer> SwapchainFramebufferPtr;
-    } // namespace aux
-
     typedef std::function<void *(void *, const void *, std::size_t)> CopyMemoryFunction;
     typedef std::function<void *(void *, std::size_t)> ZeroMemoryFunction;
 } // namespace magma

@@ -70,6 +70,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/storageTexelBuffer.h"
 #include "objects/surface.h"
 #include "objects/swapchain.h"
+#include "objects/typedefs.h"
 #include "objects/uniformBuffer.h"
 #include "objects/uniformTexelBuffer.h"
 #include "objects/vertexBuffer.h"
@@ -111,7 +112,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "misc/pushConstants.h"
 #include "misc/scissor.h"
 #include "misc/scopedDebugMarker.h"
-#include "misc/vectorTypes.h"
 #include "misc/viewport.h"
 
 #include "extensions/instanceExtensions.h"
@@ -126,11 +126,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "auxiliary/mipmapGenerator.h"
 #include "auxiliary/packedTypes.h"
 #include "auxiliary/shaderCompiler.h"
+#include "auxiliary/typedefs.h"
 
 #include "helpers/alignedUniformArray.h"
 #include "helpers/executeCommandBuffer.h"
 #include "helpers/mapScoped.h"
 #include "helpers/stackArray.h"
 #include "helpers/stringize.h"
-#include "helpers/typedefs.h"
 #include "helpers/uniformArray.h"

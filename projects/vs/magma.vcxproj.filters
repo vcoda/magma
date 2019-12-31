@@ -360,9 +360,6 @@
     <ClInclude Include="..\..\states\colorWriteMask.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\helpers\typedefs.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\objects\dispatchable.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -476,6 +473,12 @@
     </ClInclude>
     <ClInclude Include="..\..\helpers\uniformArrayIterator.h">
       <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\auxiliary\typedefs.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\objects\typedefs.h">
+      <Filter>Header Files\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

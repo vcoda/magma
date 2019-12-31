@@ -153,6 +153,7 @@
     <ClInclude Include="..\..\auxiliary\packedTypes.h" />
     <ClInclude Include="..\..\auxiliary\frameGrabber.h" />
     <ClInclude Include="..\..\auxiliary\shaderCompiler.h" />
+    <ClInclude Include="..\..\auxiliary\typedefs.h" />
     <ClInclude Include="..\..\barriers\bufferMemoryBarrier.h" />
     <ClInclude Include="..\..\barriers\memoryBarrier.h" />
     <ClInclude Include="..\..\barriers\imageMemoryBarrier.h" />
@@ -182,7 +183,6 @@
     <ClInclude Include="..\..\helpers\mapScoped.h" />
     <ClInclude Include="..\..\helpers\stackArray.h" />
     <ClInclude Include="..\..\helpers\stringize.h" />
-    <ClInclude Include="..\..\helpers\typedefs.h" />
     <ClInclude Include="..\..\helpers\uniformArray.h" />
     <ClInclude Include="..\..\helpers\uniformArrayIterator.h" />
     <ClInclude Include="..\..\magma.h" />
@@ -253,6 +253,7 @@
     <ClInclude Include="..\..\objects\storageTexelBuffer.h" />
     <ClInclude Include="..\..\objects\surface.h" />
     <ClInclude Include="..\..\objects\swapchain.h" />
+    <ClInclude Include="..\..\objects\typedefs.h" />
     <ClInclude Include="..\..\objects\uniformBuffer.h" />
     <ClInclude Include="..\..\objects\uniformTexelBuffer.h" />
     <ClInclude Include="..\..\objects\validationCache.h" />
