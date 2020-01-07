@@ -82,8 +82,9 @@ namespace magma
         explicit DynamicUniformBuffer(std::shared_ptr<Device> device,
             uint32_t arraySize,
             VkBufferCreateFlags flags = 0,
+            const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr):
-            UniformBuffer<Type>(device, alignedArraySize(device, arraySize), flags, std::move(allocator)),
+            UniformBuffer<Type>(device, alignedArraySize(device, arraySize), flags, sharing, std::move(allocator)),
             alignment(std::max(
                 minOffsetAlignment(device),
                 static_cast<VkDeviceSize>(elementSize)
