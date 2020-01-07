@@ -1,6 +1,6 @@
 /*
 Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2019 Victor Coda.
+Copyright (C) 2018-2020 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -76,6 +76,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_SUCCEEDED(result)\
     ((VK_SUCCESS == result) ||\
      (VK_INCOMPLETE == result))
+
+#define MAGMA_PRESENT_SUCCEEDED(result)\
+    ((VK_SUCCESS == result) ||\
+     (VK_SUBOPTIMAL_KHR == result))
 
 #define MAGMA_STENCIL_FACE_MASK(frontFace, backFace)\
     ((frontFace && backFace) ? VK_STENCIL_FRONT_AND_BACK :\

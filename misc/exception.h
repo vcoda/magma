@@ -69,6 +69,9 @@ namespace magma
 #define MAGMA_THROW_FAILURE(result, message)\
     if (!MAGMA_SUCCEEDED(result))\
         throw BadResult(result, message, __FILE__, __LINE__)
+#define MAGMA_THROW_PRESENT_FAILURE(result, message)\
+    if (!MAGMA_PRESENT_SUCCEEDED(result))\
+        throw PresentException(result, message, __FILE__, __LINE__)
 #define MAGMA_THROW_UNSUPPORTED_EXTENSION(pfn, extension)\
     if (!pfn)\
         throw ExtensionNotPresent(extension, __FILE__, __LINE__)

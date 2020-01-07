@@ -1,6 +1,6 @@
 /*
 Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2019 Victor Coda.
+Copyright (C) 2018-2020 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -178,6 +178,6 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain,
     presentInfo.pImageIndices = &imageIndex;
     presentInfo.pResults = nullptr;
     const VkResult present = vkQueuePresentKHR(handle, &presentInfo);
-    throw PresentException(present, "queue present failed", __FILE__, __LINE__);
+    MAGMA_THROW_PRESENT_FAILURE(present, "queue present failed");
 }
 } // namespace magma
