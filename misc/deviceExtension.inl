@@ -19,8 +19,7 @@ inline DeviceExtension<Func>::DeviceExtension(VkDevice device, const char *name,
         MAGMA_ASSERT(device != VK_NULL_HANDLE);
         MAGMA_ASSERT(name);
         pfn = vkGetDeviceProcAddr(device, name);
-        if (!pfn)
-            MAGMA_THROW_NOT_PRESENT(extension);
+        MAGMA_THROW_UNSUPPORTED_EXTENSION(pfn, extension);
     }
 }
 

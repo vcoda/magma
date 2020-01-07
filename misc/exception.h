@@ -1,6 +1,6 @@
 /*
 Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2019 Victor Coda.
+Copyright (C) 2018-2020 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -69,7 +69,9 @@ namespace magma
 #define MAGMA_THROW_FAILURE(result, message)\
     if (!MAGMA_SUCCEEDED(result))\
         throw BadResult(result, message, __FILE__, __LINE__)
-#define MAGMA_THROW_NOT_PRESENT(extension) throw ExtensionNotPresent(extension, __FILE__, __LINE__)
+#define MAGMA_THROW_UNSUPPORTED_EXTENSION(pfn, extension)\
+    if (!pfn)\
+        throw ExtensionNotPresent(extension, __FILE__, __LINE__)
 #ifdef _MSC_VER
 #   define MAGMA_THROW_NOT_IMPLEMENTED throw NotImplemented(__FUNCSIG__, __FILE__, __LINE__)
 #else

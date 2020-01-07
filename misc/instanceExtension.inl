@@ -19,8 +19,7 @@ inline InstanceExtension<Func>::InstanceExtension(VkInstance instance, const cha
         MAGMA_ASSERT(instance != VK_NULL_HANDLE);
         MAGMA_ASSERT(name);
         pfn = vkGetInstanceProcAddr(instance, name);
-        if (!pfn)
-            MAGMA_THROW_NOT_PRESENT(extension);
+        MAGMA_THROW_UNSUPPORTED_EXTENSION(pfn, extension);
     }
 }
 
