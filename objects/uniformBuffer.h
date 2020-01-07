@@ -1,6 +1,6 @@
 /*
 Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2019 Victor Coda.
+Copyright (C) 2018-2020 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,10 +34,11 @@ namespace magma
         explicit UniformBuffer(std::shared_ptr<Device> device,
             uint32_t arraySize = 1,
             VkBufferCreateFlags flags = 0,
+            const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr):
             Buffer(std::move(device), sizeof(Block) * arraySize,
                 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-                flags, std::move(allocator),
+                flags, sharing, std::move(allocator),
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
             arraySize(arraySize)
         {
