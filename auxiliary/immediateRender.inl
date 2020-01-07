@@ -92,7 +92,6 @@ inline uint32_t ImmediateRender::getPrimitiveCount() const noexcept
 
 inline void ImmediateRender::normal(float x, float y, float z) noexcept
 {
-    MAGMA_ASSERT(insidePrimitive);
     current->normalPSize.v[0] = x;
     current->normalPSize.v[1] = y;
     current->normalPSize.v[2] = z;
@@ -105,7 +104,6 @@ inline void ImmediateRender::normal(const float n[3]) noexcept
 
 inline void ImmediateRender::color(float r, float g, float b, float a /* 1 */) noexcept
 {
-    MAGMA_ASSERT(insidePrimitive);
     current->color.v[0] = r;
     current->color.v[1] = g;
     current->color.v[2] = b;
@@ -129,7 +127,6 @@ inline void ImmediateRender::color(const uint8_t c[4]) noexcept
 
 inline void ImmediateRender::texCoord(float u, float v) noexcept
 {
-    MAGMA_ASSERT(insidePrimitive);
     current->texcoord.v[0] = u;
     current->texcoord.v[1] = v;
 }
@@ -141,7 +138,6 @@ inline void ImmediateRender::texCoord(const float uv[2]) noexcept
 
 inline void ImmediateRender::pointSize(float size) noexcept
 {
-    MAGMA_ASSERT(insidePrimitive);
     MAGMA_ASSERT(size >= 1.f);
     current->normalPSize.v[3] = size;
 }
