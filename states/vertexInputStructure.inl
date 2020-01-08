@@ -119,4 +119,17 @@ inline uint32_t VertexInputStructure<Vertex>::stride(uint32_t binding) const noe
         return 0;
     return static_cast<uint32_t>(sizeof(Vertex));
 }
+
+namespace specialization
+{
+template<typename Type, bool normalized>
+constexpr VertexAttribute<Type, normalized>::VertexAttribute()
+{
+#ifdef _MSC_VER
+    // TODO: By design this should be called in compile-time when there is no user-provided
+    // specialization for concrete type, but this way it doesn't work on GCC.
+    static_assert(false, "vertex attribute type not specialized");
+#endif
+}
+} // namespace specialization
 } // namespace magma

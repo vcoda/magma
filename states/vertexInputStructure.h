@@ -61,7 +61,7 @@ namespace magma
         template<typename Type, bool normalized = false>
         struct VertexAttribute : AttributeFormat<VK_FORMAT_UNDEFINED>
         {
-			constexpr VertexAttribute() { /*static_assert(false, "vertex attribute type not specialized");*/ }
+			constexpr VertexAttribute();
             constexpr std::size_t getSize() const { return sizeof(Type); }
             constexpr bool hasNormalization() const { return normalized; }
         };
