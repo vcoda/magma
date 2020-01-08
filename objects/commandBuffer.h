@@ -1,6 +1,6 @@
 /*
 Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2019 Victor Coda.
+Copyright (C) 2018-2020 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -157,7 +157,7 @@ namespace magma
         void bindVertexBuffers(
             uint32_t firstBinding,
             const std::vector<std::shared_ptr<VertexBuffer>>& vertexBuffers,
-            const std::vector<VkDeviceSize>& offsets) noexcept;
+            std::vector<VkDeviceSize> offsets = {}) noexcept;
 
         void draw(
             uint32_t vertexCount,

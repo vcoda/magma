@@ -161,13 +161,16 @@ inline void CommandBuffer::bindVertexBuffer(uint32_t firstBinding, const std::sh
     vkCmdBindVertexBuffers(handle, firstBinding, 1, dereferencedBuffers, &offset);
 }
 
-inline void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::vector<std::shared_ptr<VertexBuffer>>& vertexBuffers, const std::vector<VkDeviceSize>& offsets) noexcept
+inline void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::vector<std::shared_ptr<VertexBuffer>>& vertexBuffers,
+    std::vector<VkDeviceSize> offsets /* {} */) noexcept
 {
     MAGMA_ASSERT(vertexBuffers.size() > 0);
     MAGMA_ASSERT(vertexBuffers.size() == offsets.size());
     MAGMA_STACK_ARRAY(VkBuffer, dereferencedBuffers, vertexBuffers.size());
     for (const auto& buffer : vertexBuffers)
         dereferencedBuffers.put(*buffer);
+    if (offsets.empty())
+        offsets.resize(vertexBuffers.size(), 0);
     vkCmdBindVertexBuffers(handle, firstBinding, dereferencedBuffers.size(), dereferencedBuffers, offsets.data());
 }
 
