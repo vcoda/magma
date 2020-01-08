@@ -1,6 +1,6 @@
 /*
 Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2019 Victor Coda.
+Copyright (C) 2018-2020 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,6 +27,24 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const Descriptor& descriptor,
+    bool freeDescriptorSet /* false */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_POOL, std::move(device), std::move(allocator))
+{
+    VkDescriptorPoolCreateInfo info;
+    info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+    info.pNext = nullptr;
+    info.flags = 0;
+    if (freeDescriptorSet)
+        info.flags |= VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+    info.maxSets = maxSets;
+    info.poolSizeCount = 1;
+    info.pPoolSizes = &descriptor;
+    const VkResult create = vkCreateDescriptorPool(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    MAGMA_THROW_FAILURE(create, "failed to create descriptor pool");
+}
+
 DescriptorPool::DescriptorPool(std::shared_ptr<Device> device,
     uint32_t maxDescriptorSets,
     const std::vector<Descriptor>& descriptors,

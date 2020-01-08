@@ -1,6 +1,6 @@
 /*
 Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2019 Victor Coda.
+Copyright (C) 2018-2020 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -32,6 +32,11 @@ namespace magma
         public std::enable_shared_from_this<DescriptorPool>
     {
     public:
+        explicit DescriptorPool(std::shared_ptr<Device> device,
+            uint32_t maxSets,
+            const Descriptor& descriptor,
+            bool freeDescriptorSet = false,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         explicit DescriptorPool(std::shared_ptr<Device> device,
             uint32_t maxDescriptorSets,
             const std::vector<Descriptor>& descriptors,
