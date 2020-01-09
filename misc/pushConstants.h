@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "../detail/hash.h"
 
 namespace magma
 {
@@ -32,6 +33,14 @@ namespace magma
                 stageFlags = flags;
                 offset = rangeOffset;
                 size = sizeof(Type);
+            }
+
+            constexpr std::size_t hash() const
+            {
+                return detail::hashArgs(
+                    stageFlags,
+                    offset,
+                    size);
             }
         };
 
