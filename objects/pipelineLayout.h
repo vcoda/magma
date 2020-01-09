@@ -1,6 +1,6 @@
 /*
 Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2019 Victor Coda.
+Copyright (C) 2018-2020 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
+#include "../misc/pushConstants.h"
 
 namespace magma
 {
@@ -32,6 +33,10 @@ namespace magma
     class PipelineLayout : public NonDispatchable<VkPipelineLayout>
     {
     public:
+        template<typename Type>
+        explicit PipelineLayout(std::shared_ptr<Device> device,
+            const pushconstants::PushConstantRange<Type>& pushConstantRange,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         explicit PipelineLayout(std::shared_ptr<Device> device,
             const std::initializer_list<VkPushConstantRange>& pushConstantRanges = {},
             std::shared_ptr<IAllocator> allocator = nullptr);
@@ -55,3 +60,5 @@ namespace magma
         std::size_t hash;
     };
 } // namespace magma
+
+#include "pipelineLayout.inl"
