@@ -61,6 +61,15 @@ namespace magma
             return value;
         }
 
+        template<typename T> constexpr std::size_t hashVector(const std::vector<T>& array) noexcept
+        {
+            std::hash<T> hasher;
+            std::size_t value = 0;
+            for (const auto& elem : array)
+                hashCombine(value, hasher(elem));
+            return value;
+        }
+
         template<typename T> inline std::size_t hashString(const std::basic_string<T>& str) noexcept
         {
             std::hash<std::basic_string<T>> hasher;
