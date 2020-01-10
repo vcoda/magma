@@ -73,7 +73,7 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
         info.flags,
         info.stageCount);
     for (const auto& stage : stages)
-        detail::hashCombine(hash, stage.hash());
+        detail::hashCombine(hash, stage.getHash());
     std::size_t baseHash = detail::combineHashList({
         vertexInputState.hash(),
         inputAssemblyState.hash(),

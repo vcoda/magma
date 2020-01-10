@@ -67,7 +67,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device, std::shar
         info.groupCount,
         info.maxRecursionDepth);
     for (const auto& stage : stages)
-        detail::hashCombine(hash, stage.hash());
+        detail::hashCombine(hash, stage.getHash());
     for (const auto& group : groups)
         detail::hashCombine(hash, group.hash());
     detail::hashCombine(hash, this->layout->getHash());

@@ -139,7 +139,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
         info.flags,
         info.stageCount);
     for (const auto& stage : stages)
-        detail::hashCombine(hash, stage.hash());
+        detail::hashCombine(hash, stage.getHash());
     std::size_t stateHash = detail::combineHashList({
         vertexInputState.hash(),
         inputAssemblyState.hash(),

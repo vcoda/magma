@@ -56,9 +56,10 @@ namespace magma
             ShaderModule(std::move(device), bytecode, WordCount * sizeof(SpirvWord), flags,
                 std::move(validationCache), std::move(allocator)) {}
         ~ShaderModule();
-        std::size_t getHash() const noexcept { return hash; }
+        std::size_t getHash() noexcept;
 
     private:
+        std::vector<char> bytecode;
         std::size_t hash;
     };
 } // namespace magma

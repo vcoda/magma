@@ -112,8 +112,8 @@ PipelineLayout::~PipelineLayout()
 }
 
 std::size_t PipelineLayout::getHash() const noexcept
-{
-    size_t hash = this->hash;
+{   // Compute complex hash on demand
+    std::size_t hash = this->hash;
     for (const std::shared_ptr<DescriptorSetLayout>& layout : setLayouts)
         detail::hashCombine(hash, layout->getHash());
     return hash;

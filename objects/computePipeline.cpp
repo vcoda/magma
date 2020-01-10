@@ -49,7 +49,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr
     hash = detail::hashArgs(
         info.sType,
         info.flags);
-    detail::hashCombine(hash, stage.hash());
+    detail::hashCombine(hash, stage.getHash());
     detail::hashCombine(hash, this->layout->getHash());
 }
 } // namespace magma
