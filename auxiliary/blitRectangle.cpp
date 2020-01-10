@@ -73,7 +73,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     if (hasCubicFilter)
         cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, allocator);
     // Create blit pipeline
-    pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, std::initializer_list<VkPushConstantRange>{}, allocator);
+    pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, std::initializer_list<PushConstantRange>{}, allocator);
     pipeline = std::make_shared<GraphicsPipeline>(device, nullptr,
         std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
         renderstates::nullVertexInput,

@@ -1,6 +1,6 @@
 /*
 Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2019 Victor Coda.
+Copyright (C) 2018-2020 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,8 +26,30 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+PipelineLayout::PipelineLayout(std::shared_ptr<Device> device, const PushConstantRange& pushConstantRange,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, std::move(device), std::move(allocator))
+{
+    VkPipelineLayoutCreateInfo info;
+    info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    info.pNext = nullptr;
+    info.flags = 0;
+    info.setLayoutCount = 0;
+    info.pSetLayouts = nullptr;
+    info.pushConstantRangeCount = 1;
+    info.pPushConstantRanges = &pushConstantRange;
+    const VkResult create = vkCreatePipelineLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    MAGMA_THROW_FAILURE(create, "failed to create pipeline layout");
+    hash = detail::hashArgs(
+        info.sType,
+        info.flags,
+        info.setLayoutCount,
+        info.pushConstantRangeCount);
+    detail::hashCombine(hash, pushConstantRange.hash());
+}
+
 PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
-    const std::initializer_list<VkPushConstantRange>& pushConstantRanges /* {} */,
+    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, std::move(device), std::move(allocator))
 {
@@ -46,23 +68,18 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
         info.flags,
         info.setLayoutCount,
         info.pushConstantRangeCount);
-    for (const auto& constantRange : pushConstantRanges)
-    {
-        detail::hashCombine(hash, detail::hashArgs(
-            constantRange.stageFlags,
-            constantRange.offset,
-            constantRange.size));
-    }
+    for (const auto& pushConstantRange : pushConstantRanges)
+        detail::hashCombine(hash, pushConstantRange.hash());
 }
 
 PipelineLayout::PipelineLayout(std::shared_ptr<DescriptorSetLayout> setLayout,
-    const std::initializer_list<VkPushConstantRange>& pushConstantRanges /* {} */,
+    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     PipelineLayout(std::vector<std::shared_ptr<DescriptorSetLayout>>{setLayout}, pushConstantRanges, std::move(allocator))
 {}
 
 PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<DescriptorSetLayout>>& setLayouts,
-    const std::initializer_list<VkPushConstantRange>& pushConstantRanges /* {} */,
+    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, std::move(setLayouts[0]->getDevice()), std::move(allocator)),
     setLayouts(setLayouts)
@@ -85,13 +102,8 @@ PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<DescriptorSetLa
         info.flags,
         info.setLayoutCount,
         info.pushConstantRangeCount);
-    for (const auto& constantRange : pushConstantRanges)
-    {
-        detail::hashCombine(hash, detail::hashArgs(
-            constantRange.stageFlags,
-            constantRange.offset,
-            constantRange.size));
-    }
+    for (const auto& pushConstantRange : pushConstantRanges)
+        detail::hashCombine(hash, pushConstantRange.hash());
 }
 
 PipelineLayout::~PipelineLayout()

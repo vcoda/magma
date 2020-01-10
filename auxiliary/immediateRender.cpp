@@ -54,7 +54,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount,
     if (!this->layout)
     {   // If layout not specified, create default one
         const pushconstants::VertexConstantRange<Transform> pushConstantRange;
-        this->layout = std::make_shared<PipelineLayout>(this->device, std::initializer_list<VkPushConstantRange>{pushConstantRange}, this->allocator);
+        this->layout = std::make_shared<PipelineLayout>(this->device, pushConstantRange, this->allocator);
     }
     constexpr float identity[16] = {
         1.f, 0.f, 0.f, 0.f,

@@ -838,9 +838,6 @@
     <None Include="..\..\helpers\alignedUniformArrayIterator.inl">
       <Filter>Header Files\helpers</Filter>
     </None>
-    <None Include="..\..\objects\pipelineLayout.inl">
-      <Filter>Header Files\objects</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">

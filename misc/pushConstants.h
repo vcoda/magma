@@ -20,28 +20,37 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Base of push constant ranges, computes hash of the structure. */
+
+    struct PushConstantRange : VkPushConstantRange
+    {
+        PushConstantRange() = default;
+        constexpr PushConstantRange(VkShaderStageFlags stageFlags, uint32_t offset, std::size_t size):
+            VkPushConstantRange{}
+        {
+            this->stageFlags = stageFlags;
+            this->offset = offset;
+            this->size = static_cast<uint32_t>(size);
+        }
+
+        constexpr std::size_t hash() const
+        {
+            return detail::hashArgs(
+                stageFlags,
+                offset,
+                size);
+        }
+    };
+
     namespace pushconstants
     {
         /* Defines a set of push constant ranges for use in a single pipeline layout. */
 
         template<typename Type>
-        struct PushConstantRange : VkPushConstantRange
+        struct PushConstantRange : magma::PushConstantRange
         {
-            constexpr PushConstantRange(VkShaderStageFlags flags, uint32_t rangeOffset = 0):
-                VkPushConstantRange{}
-            {
-                stageFlags = flags;
-                offset = rangeOffset;
-                size = sizeof(Type);
-            }
-
-            constexpr std::size_t hash() const
-            {
-                return detail::hashArgs(
-                    stageFlags,
-                    offset,
-                    size);
-            }
+            constexpr PushConstantRange(VkShaderStageFlags flags, uint32_t offset = 0):
+                magma::PushConstantRange(flags, offset, sizeof(Type)) {}
         };
 
         template<typename Type>
