@@ -75,7 +75,7 @@ std::size_t ShaderModule::getHash() noexcept
     if (!bytecode.empty())
     {   // Compute complex hash on demand, may take time for large shaders
         detail::hashCombine(hash, detail::hashVector(bytecode));
-        bytecode.clear(); // Free wasted
+        std::vector<char>().swap(bytecode);
     }
     return hash;
 }
