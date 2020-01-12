@@ -40,6 +40,9 @@ namespace magma
             const std::initializer_list<PushConstantRange>& pushConstantRanges = {},
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit PipelineLayout(std::shared_ptr<DescriptorSetLayout> setLayout,
+            const PushConstantRange& pushConstantRange,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        explicit PipelineLayout(std::shared_ptr<DescriptorSetLayout> setLayout,
             const std::initializer_list<PushConstantRange>& pushConstantRanges = {},
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit PipelineLayout(const std::vector<std::shared_ptr<DescriptorSetLayout>>& setLayouts,

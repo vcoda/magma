@@ -72,10 +72,15 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
         detail::hashCombine(hash, pushConstantRange.hash());
 }
 
+PipelineLayout::PipelineLayout(std::shared_ptr<DescriptorSetLayout> setLayout, const PushConstantRange& pushConstantRange,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    PipelineLayout(std::move(setLayout), {pushConstantRange}, std::move(allocator))
+{}
+
 PipelineLayout::PipelineLayout(std::shared_ptr<DescriptorSetLayout> setLayout,
     const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    PipelineLayout(std::vector<std::shared_ptr<DescriptorSetLayout>>{setLayout}, pushConstantRanges, std::move(allocator))
+    PipelineLayout(std::vector<std::shared_ptr<DescriptorSetLayout>>{setLayout}, std::move(pushConstantRanges), std::move(allocator))
 {}
 
 PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<DescriptorSetLayout>>& setLayouts,
