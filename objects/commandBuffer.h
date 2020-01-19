@@ -80,11 +80,7 @@ namespace magma
             VkCommandBufferUsageFlags flags = 0) noexcept;
         void end();
         bool reset(bool releaseResources) noexcept;
-
-        void bindPipeline(const std::shared_ptr<GraphicsPipeline>& pipeline) noexcept;
-        void bindPipeline(const std::shared_ptr<ComputePipeline>& pipeline) noexcept;
-        void bindPipeline(const std::shared_ptr<RayTracingPipeline>& pipeline) noexcept;
-
+        void bindPipeline(const std::shared_ptr<Pipeline>& pipeline) noexcept;
         void setViewport(
             float x, float y,
             float width, float height,

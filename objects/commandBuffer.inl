@@ -1,18 +1,8 @@
 namespace magma
 {
-inline void CommandBuffer::bindPipeline(const std::shared_ptr<GraphicsPipeline>& pipeline) noexcept
+inline void CommandBuffer::bindPipeline(const std::shared_ptr<Pipeline>& pipeline) noexcept
 {
-    vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_GRAPHICS, *pipeline);
-}
-
-inline void CommandBuffer::bindPipeline(const std::shared_ptr<ComputePipeline>& pipeline) noexcept
-{
-    vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_COMPUTE, *pipeline);
-}
-
-inline void CommandBuffer::bindPipeline(const std::shared_ptr<RayTracingPipeline>& pipeline) noexcept
-{
-    vkCmdBindPipeline(handle, VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, *pipeline);
+    vkCmdBindPipeline(handle, pipeline->getBindPoint(), *pipeline);
 }
 
 inline void CommandBuffer::setViewport(float x, float y, float width, float height,
