@@ -34,7 +34,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device, std::shar
     std::shared_ptr<RayTracingPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Pipeline(std::move(device), std::move(layout), std::move(basePipeline), std::move(cache), std::move(allocator))
+    Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, std::move(device), std::move(layout), std::move(basePipeline), std::move(cache), std::move(allocator))
 {
     if (stages.empty())
         MAGMA_THROW("shader stages are empty");

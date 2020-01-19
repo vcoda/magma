@@ -78,7 +78,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Pipeline(std::move(device), std::move(layout), std::move(basePipeline), std::move(cache), std::move(allocator))
+    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout), std::move(basePipeline), std::move(cache), std::move(allocator))
 {
     if (stages.empty())
         MAGMA_THROW("shader stages are empty");

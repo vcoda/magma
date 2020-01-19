@@ -32,7 +32,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr
     std::shared_ptr<ComputePipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Pipeline(std::move(device), std::move(layout), std::move(basePipeline), std::move(cache), std::move(allocator))
+    Pipeline(VK_PIPELINE_BIND_POINT_COMPUTE, std::move(device), std::move(layout), std::move(basePipeline), std::move(cache), std::move(allocator))
 {
     VkComputePipelineCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;

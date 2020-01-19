@@ -34,6 +34,7 @@ namespace magma
     {
     public:
         ~Pipeline();
+        VkPipelineBindPoint getBindPoint() const noexcept { return bindPoint; }
         std::shared_ptr<PipelineLayout> getLayout() noexcept { return layout; }
         std::shared_ptr<Pipeline> getBasePipeline() noexcept { return basePipeline; }
         std::shared_ptr<PipelineCache> getCache() noexcept { return cache; }
@@ -44,13 +45,14 @@ namespace magma
         std::string getShaderDisassembly(VkShaderStageFlagBits stage) const;
 
     protected:
-        explicit Pipeline(std::shared_ptr<Device> device,
+        explicit Pipeline(VkPipelineBindPoint bindPoint,
+            std::shared_ptr<Device> device,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<PipelineCache> cache,
             std::shared_ptr<IAllocator> allocator);
 
-    protected:
+        VkPipelineBindPoint bindPoint;
         std::shared_ptr<PipelineLayout> layout;
         std::shared_ptr<Pipeline> basePipeline;
         std::shared_ptr<PipelineCache> cache;
