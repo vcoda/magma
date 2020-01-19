@@ -123,7 +123,7 @@ void BlitRectangle::blit(std::shared_ptr<Framebuffer> bltDst, std::shared_ptr<co
         const int32_t height = static_cast<int32_t>(bltDst->getExtent().height);
         cmdBuffer->setViewport(0, 0, width, negativeViewportHeight ? -height : height);
         cmdBuffer->setScissor(Scissor(0, 0, bltDst->getExtent()));
-        cmdBuffer->bindDescriptorSet(pipelineLayout, descriptorSet);
+        cmdBuffer->bindDescriptorSet(pipeline, descriptorSet);
         cmdBuffer->bindPipeline(pipeline);
         cmdBuffer->draw(3, 0);
     }

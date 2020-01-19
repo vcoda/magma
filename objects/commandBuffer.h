@@ -127,25 +127,21 @@ namespace magma
             uint32_t reference) noexcept;
 
         void bindDescriptorSet(
-            const std::shared_ptr<PipelineLayout>& pipelineLayout,
-            const std::shared_ptr<DescriptorSet>& descriptorSet,
-            VkPipelineBindPoint pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS) noexcept;
+            const std::shared_ptr<Pipeline>& pipeline,
+            const std::shared_ptr<DescriptorSet>& descriptorSet) noexcept;
         void bindDescriptorSet(
-            const std::shared_ptr<PipelineLayout>& pipelineLayout,
+            const std::shared_ptr<Pipeline>& pipeline,
             const std::shared_ptr<DescriptorSet>& descriptorSet,
-            uint32_t dynamic0ffset,
-            VkPipelineBindPoint pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS) noexcept;
+            uint32_t dynamicOffset) noexcept;
+        void bindDescriptorSets(
+            const std::shared_ptr<Pipeline>& pipeline,
+            const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
+            const std::initializer_list<uint32_t>& dynamicOffsets = {}) noexcept;
         template<uint32_t descriptorSetCount>
         void bindDescriptorSets(
-            const std::shared_ptr<PipelineLayout>& pipelineLayout,
+            const std::shared_ptr<Pipeline>& pipeline,
             const std::shared_ptr<magma::DescriptorSet>(&descriptorSets)[descriptorSetCount],
-            const std::initializer_list<uint32_t>& offsets = {},
-            VkPipelineBindPoint pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS) noexcept;
-        void bindDescriptorSets(
-            const std::shared_ptr<PipelineLayout>& pipelineLayout,
-            const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
-            const std::initializer_list<uint32_t>& offsets = {},
-            VkPipelineBindPoint pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS) noexcept;
+            const std::initializer_list<uint32_t>& dynamicOffsets = {}) noexcept;
 
         void bindIndexBuffer(
             const std::shared_ptr<IndexBuffer>& indexBuffer,
