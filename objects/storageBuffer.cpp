@@ -25,14 +25,19 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 StorageBuffer::StorageBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
+    const void *data /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    CopyMemoryFunction copyFn /* nullptr */):
     Buffer(std::move(device), size,
-        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
         flags, sharing, std::move(allocator),
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
-{}
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
+{
+    if (data)
+        copyToMapped(data, std::move(copyFn));
+}
 
 StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size,
     VkBufferCreateFlags flags /* 0 */,

@@ -480,6 +480,9 @@
     <ClInclude Include="..\..\objects\typedefs.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\auxiliary\textShader.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -752,6 +755,9 @@
     <ClCompile Include="..\..\detail\pch.cpp">
       <Filter>Source Files\detail</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\auxiliary\textShader.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\auxiliary\immediateRender.inl">
@@ -850,6 +856,9 @@
       <Filter>Source Files\auxiliary\spirv</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\auxiliary\spirv\imm.vert">
+      <Filter>Source Files\auxiliary\spirv</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\auxiliary\spirv\font.frag">
       <Filter>Source Files\auxiliary\spirv</Filter>
     </CustomBuild>
   </ItemGroup>

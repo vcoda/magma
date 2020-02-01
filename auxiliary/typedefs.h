@@ -32,5 +32,6 @@ namespace magma
         typedef std::shared_ptr<class MultisampleFramebuffer> MultisampleFramebufferPtr;
         typedef std::shared_ptr<class ShaderCompiler> ShaderCompilerPtr;
         typedef std::shared_ptr<class SwapchainFramebuffer> SwapchainFramebufferPtr;
+        typedef std::shared_ptr<class TextShader> TextShaderPtr;
     } // namespace aux
 } // namespace magma

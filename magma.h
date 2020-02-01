@@ -126,6 +126,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "auxiliary/mipmapGenerator.h"
 #include "auxiliary/packedTypes.h"
 #include "auxiliary/shaderCompiler.h"
+#include "auxiliary/textShader.h"
 #include "auxiliary/typedefs.h"
 
 #include "helpers/alignedUniformArray.h"

@@ -21,6 +21,7 @@ MAGMA_OBJS= \
 	auxiliary/graphicsPipelineCache.o \
 	auxiliary/immediateRender.o \
 	auxiliary/mipmapGenerator.o \
+	auxiliary/textShader.o \
 	\
 	barriers/bufferMemoryBarrier.o \
 	barriers/imageMemoryBarrier.o \
