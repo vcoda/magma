@@ -20,7 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "buffer.h"
 #include "device.h"
 #include "physicalDevice.h"
-#include "../auxiliary/typedefs.h"
 
 namespace magma
 {
