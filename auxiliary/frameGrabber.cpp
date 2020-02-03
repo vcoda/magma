@@ -34,6 +34,7 @@ namespace aux
 FrameGrabber::FrameGrabber(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     device(std::move(device)),
+    queue(this->device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0)),
     allocator(std::move(allocator))
 {}
 
@@ -98,7 +99,6 @@ void FrameGrabber::captureFrame(std::shared_ptr<SwapchainColorAttachment2D> srcI
     cmdBuffer->end();
     // Flush command buffer
     std::shared_ptr<Fence> fence = cmdBuffer->getFence();
-    std::shared_ptr<Queue> queue = cmdBuffer->getDevice()->getQueue(VK_QUEUE_GRAPHICS_BIT, 0);
     queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence);
     fence->wait();
     // Do we need to handle swizzling?

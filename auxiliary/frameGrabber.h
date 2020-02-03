@@ -22,6 +22,7 @@ namespace magma
 {
     class Device;
     class CommandBuffer;
+    class Queue;
     class SwapchainColorAttachment2D;
     class LinearTiledImage2D;
     class IAllocator;
@@ -49,6 +50,7 @@ namespace magma
                 VkFormat dstFormat) const noexcept;
 
             std::shared_ptr<Device> device;
+            std::shared_ptr<Queue> queue;
             std::shared_ptr<IAllocator> allocator;
             std::shared_ptr<LinearTiledImage2D> dstImage;
             bool swizzleBgra = false;
