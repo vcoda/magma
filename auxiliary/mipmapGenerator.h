@@ -21,9 +21,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
-    class Image;
     class CommandBuffer;
     class Queue;
+    class Image;
 
     namespace aux
     {

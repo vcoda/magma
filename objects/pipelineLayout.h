@@ -62,4 +62,3 @@ namespace magma
         std::size_t hash;
     };
 } // namespace magma
-

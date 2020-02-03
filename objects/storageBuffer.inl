@@ -1,8 +1,7 @@
 namespace magma
 {
 template<typename Type>
-inline StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
-    const std::vector<Type>& data,
+inline StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const std::vector<Type>& data,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,

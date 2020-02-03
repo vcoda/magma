@@ -20,10 +20,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "mipmapGenerator.h"
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
-#include "../objects/image.h"
 #include "../objects/commandBuffer.h"
 #include "../objects/queue.h"
 #include "../objects/fence.h"
+#include "../objects/image.h"
 #include "../barriers/imageMemoryBarrier.h"
 #include "../misc/imageSubresourceRange.h"
 
@@ -92,7 +92,7 @@ bool MipmapGenerator::generateMipmap(std::shared_ptr<Image> image, uint32_t base
 
 bool MipmapGenerator::commit(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept
 {
-    std::shared_ptr<Fence> fence(cmdBuffer->getFence());
+    std::shared_ptr<Fence> fence = cmdBuffer->getFence();
     if (!queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence))
         return false;
     if (!fence->wait())

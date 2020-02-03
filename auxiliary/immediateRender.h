@@ -76,7 +76,9 @@ namespace magma
             uint32_t getMaxVertexCount() const noexcept;
             uint32_t getVertexCount() const noexcept;
             uint32_t getPrimitiveCount() const noexcept;
-            bool beginPrimitive(VkPrimitiveTopology topology, const char *labelName = nullptr, uint32_t labelColor = 0xFFFFFFFF);
+            bool beginPrimitive(VkPrimitiveTopology topology,
+                const char *labelName = nullptr,
+                uint32_t labelColor = 0xFFFFFFFF);
             bool endPrimitive(bool loop = false) noexcept;
             bool commitPrimitives(std::shared_ptr<CommandBuffer> cmdBuffer,
                 bool freePrimitiveList = true) noexcept;

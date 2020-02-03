@@ -38,7 +38,7 @@ namespace magma
             bool freeDescriptorSet = false,
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit DescriptorPool(std::shared_ptr<Device> device,
-            uint32_t maxDescriptorSets,
+            uint32_t maxSets,
             const std::vector<Descriptor>& descriptors,
             bool freeDescriptorSet = false,
             std::shared_ptr<IAllocator> allocator = nullptr);

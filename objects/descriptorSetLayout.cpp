@@ -112,9 +112,10 @@ DescriptorSetLayout::~DescriptorSetLayout()
 }
 
 std::size_t DescriptorSetLayout::getHash() const noexcept
-{
+{   // Compute complex hash on demand
     std::size_t hash = this->hash;
-    for (const Binding& binding : bindings) detail::hashCombine(hash, binding.hash());
+    for (const Binding& binding : bindings)
+        detail::hashCombine(hash, binding.hash());
     return hash;
 }
 } // namespace magma

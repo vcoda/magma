@@ -45,9 +45,7 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets,
     MAGMA_THROW_FAILURE(create, "failed to create descriptor pool");
 }
 
-DescriptorPool::DescriptorPool(std::shared_ptr<Device> device,
-    uint32_t maxDescriptorSets,
-    const std::vector<Descriptor>& descriptors,
+DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const std::vector<Descriptor>& descriptors,
     bool freeDescriptorSet /* false */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_POOL, std::move(device), std::move(allocator))
@@ -58,7 +56,7 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device,
     info.flags = 0;
     if (freeDescriptorSet)
         info.flags |= VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-    info.maxSets = maxDescriptorSets;
+    info.maxSets = maxSets;
     info.poolSizeCount = MAGMA_COUNT(descriptors);
     info.pPoolSizes = descriptors.data();
     const VkResult create = vkCreateDescriptorPool(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
