@@ -169,6 +169,10 @@ namespace magma
     namespace renderstates
     {
         constexpr ColorBlendState dontBlendWriteR(blendstates::writeR);
+        constexpr ColorBlendState dontBlendWriteRg(blendstates::writeRg);
+        constexpr ColorBlendState dontBlendWriteRgb(blendstates::writeRgb);
+        constexpr ColorBlendState dontBlendWriteRgba(blendstates::writeRgba);
+
         constexpr ColorBlendState blendAddWriteR(blendstates::addR);
         constexpr ColorBlendState blendSubtractWriteR(blendstates::subtractR);
         constexpr ColorBlendState blendReverseSubtractWriteR(blendstates::reverseSubtractR);
@@ -179,7 +183,6 @@ namespace magma
         constexpr ColorBlendState blendNormalPremultipliedWriteR(blendstates::normalPremultipliedR);
         constexpr ColorBlendState blendScreenWriteR(blendstates::screenR);
 
-        constexpr ColorBlendState dontBlendWriteRg(blendstates::writeRg);
         constexpr ColorBlendState blendAddWriteRg(blendstates::addRg);
         constexpr ColorBlendState blendSubtractWriteRg(blendstates::subtractRg);
         constexpr ColorBlendState blendReverseSubtractWriteRg(blendstates::reverseSubtractRg);
@@ -190,7 +193,6 @@ namespace magma
         constexpr ColorBlendState blendNormalPremultipliedWriteRg(blendstates::normalPremultipliedRg);
         constexpr ColorBlendState blendScreenWriteRg(blendstates::screenRg);
 
-        constexpr ColorBlendState dontBlendWriteRgb(blendstates::writeRgb);
         constexpr ColorBlendState blendAddWriteRgb(blendstates::addRgb);
         constexpr ColorBlendState blendSubtractWriteRgb(blendstates::subtractRgb);
         constexpr ColorBlendState blendReverseSubtractWriteRgb(blendstates::reverseSubtractRgb);
@@ -201,7 +203,6 @@ namespace magma
         constexpr ColorBlendState blendNormalPremultipliedWriteRgb(blendstates::normalPremultipliedRgb);
         constexpr ColorBlendState blendScreenWriteRgb(blendstates::screenRgb);
 
-        constexpr ColorBlendState dontBlendWriteRgba(blendstates::writeRgba);
         constexpr ColorBlendState blendAddWriteRgba(blendstates::addRgba);
         constexpr ColorBlendState blendSubtractWriteRgba(blendstates::subtractRgba);
         constexpr ColorBlendState blendReverseSubtractWriteRgba(blendstates::reverseSubtractRgba);
