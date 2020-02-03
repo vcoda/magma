@@ -25,30 +25,18 @@ namespace magma
 
     struct ColorBlendAttachmentState : VkPipelineColorBlendAttachmentState
     {
-        constexpr ColorBlendAttachmentState(VkColorComponentFlags colorWriteMask =
-                VK_COLOR_COMPONENT_R_BIT |
-                VK_COLOR_COMPONENT_G_BIT |
-                VK_COLOR_COMPONENT_B_BIT |
-                VK_COLOR_COMPONENT_A_BIT);
+        constexpr ColorBlendAttachmentState(VkColorComponentFlags colorWriteMask = colorwritemask::rgba);
         constexpr ColorBlendAttachmentState(VkBlendFactor srcBlendFactor,
             VkBlendFactor dstBlendFactor,
             VkBlendOp blendOp,
-            VkColorComponentFlags colorWriteMask =
-                VK_COLOR_COMPONENT_R_BIT |
-                VK_COLOR_COMPONENT_G_BIT |
-                VK_COLOR_COMPONENT_B_BIT |
-                VK_COLOR_COMPONENT_A_BIT);
+            VkColorComponentFlags colorWriteMask = colorwritemask::rgba);
         constexpr ColorBlendAttachmentState(VkBlendFactor srcColorBlendFactor,
             VkBlendFactor dstColorBlendFactor,
             VkBlendOp colorBlendOp,
             VkBlendFactor srcAlphaBlendFactor,
             VkBlendFactor dstAlphaBlendFactor,
             VkBlendOp alphaBlendOp,
-            VkColorComponentFlags colorWriteMask =
-                VK_COLOR_COMPONENT_R_BIT |
-                VK_COLOR_COMPONENT_G_BIT |
-                VK_COLOR_COMPONENT_B_BIT |
-                VK_COLOR_COMPONENT_A_BIT);
+            VkColorComponentFlags colorWriteMask = colorwritemask::rgba);
         constexpr std::size_t hash() const;
         constexpr bool operator==(const ColorBlendAttachmentState&) const;
     };
