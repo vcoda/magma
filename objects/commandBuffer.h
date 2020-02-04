@@ -140,15 +140,15 @@ namespace magma
             const std::initializer_list<uint32_t>& dynamicOffsets = {}) noexcept;
 
         void bindIndexBuffer(
-            const std::shared_ptr<IndexBuffer>& indexBuffer,
+            const std::shared_ptr<BaseIndexBuffer>& indexBuffer,
             VkDeviceSize offset = 0) noexcept;
         void bindVertexBuffer(
             uint32_t firstBinding,
-            const std::shared_ptr<VertexBuffer>& vertexBuffer,
+            const std::shared_ptr<BaseVertexBuffer>& vertexBuffer,
             VkDeviceSize offset = 0) noexcept;
         void bindVertexBuffers(
             uint32_t firstBinding,
-            const std::vector<std::shared_ptr<VertexBuffer>>& vertexBuffers,
+            const std::vector<std::shared_ptr<BaseVertexBuffer>>& vertexBuffers,
             std::vector<VkDeviceSize> offsets = {}) noexcept;
 
         void draw(

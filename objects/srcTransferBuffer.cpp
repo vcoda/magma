@@ -22,23 +22,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
-    VkBufferCreateFlags flags /* 0 */,
-    const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Buffer(std::move(device), size,
-        VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-        flags, sharing, std::move(allocator),
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
-{}
-
-SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<Device> device, const void *data, VkDeviceSize size,
+    const void *data /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    SrcTransferBuffer(std::move(device), size, flags, sharing, std::move(allocator))
+    Buffer(std::move(device), size,
+        VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+        flags, sharing, std::move(allocator))
 {
     if (data)
-        copyToMapped(data, std::move(copyFn));
+        copyHost(data, std::move(copyFn));
 }
 } // namespace magma

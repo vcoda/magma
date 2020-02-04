@@ -20,45 +20,34 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "uniformTexelBuffer.h"
 #include "srcTransferBuffer.h"
 #include "commandBuffer.h"
-#include "device.h"
 #include "deviceMemory.h"
-#include "../detail/copyMemory.h"
 
 namespace magma
 {
-UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<Device> device, const void *data, VkDeviceSize size,
+UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> copyCmd, VkDeviceSize size, const void *data,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Buffer(std::move(device), size,
-        VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT,
-        flags, sharing, std::move(allocator),
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
+    Buffer(copyCmd->getDevice(), size,
+        VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        flags, sharing, allocator)
 {
-    if (data)
-        copyToMapped(data, std::move(copyFn));
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(
+        device, size, data, 0, sharing, std::move(allocator), std::move(copyFn));
+    copyTransfer(std::move(copyCmd), std::move(srcBuffer));
 }
 
-UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size,
-    VkBufferCreateFlags flags /* 0 */,
-    const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    CopyMemoryFunction copyFn /* nullptr */):
-    UniformTexelBuffer(copyCmdBuffer,
-        std::make_shared<SrcTransferBuffer>(copyCmdBuffer->getDevice(), data, size, 0, sharing, allocator, std::move(copyFn)),
-        flags, sharing, std::move(allocator))
-{}
-
-UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, std::shared_ptr<SrcTransferBuffer> srcBuffer,
+UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> copyCmd, std::shared_ptr<SrcTransferBuffer> srcBuffer,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Buffer(copyCmdBuffer->getDevice(), srcBuffer->getMemory()->getSize(),
+    Buffer(copyCmd->getDevice(), srcBuffer->getMemory()->getSize(),
         VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        flags, sharing, std::move(allocator),
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        flags, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(copyCmdBuffer), std::move(srcBuffer));
+    copyTransfer(std::move(copyCmd), std::move(srcBuffer));
 }
 } // namespace magma

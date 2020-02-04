@@ -37,8 +37,8 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr):
             Buffer(std::move(device), sizeof(Block) * arraySize,
                 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-                flags, sharing, std::move(allocator),
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
+                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                flags, sharing, std::move(allocator)),
             arraySize(arraySize)
         {
             static_assert(std::alignment_of<Block>() == 16, "uniform block should have 16-byte alignment");

@@ -26,22 +26,35 @@ namespace magma
     class StorageBuffer : public Buffer
     {
     public:
-        explicit StorageBuffer(std::shared_ptr<Device> device,
+        explicit StorageBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+            const void *data,
             VkDeviceSize size,
-            const void *data = nullptr,
-            VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            CopyMemoryFunction copyFn = nullptr);
-        explicit StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
-            const void *data, VkDeviceSize size,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         template<typename Type>
-        explicit StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
-            const std::vector<Type>& data,
+        explicit StorageBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+            const std::vector<Type>& vertices,
+            VkBufferCreateFlags flags = 0,
+            const Sharing& sharing = Sharing(),
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
+        explicit StorageBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+            std::shared_ptr<SrcTransferBuffer> srcBuffer,
+            VkBufferCreateFlags flags = 0,
+            const Sharing& sharing = Sharing(),
+            std::shared_ptr<IAllocator> allocator = nullptr);
+    };
+
+    /* Dynamic storage buffer that can be mapped for host access. */
+
+    class DynamicStorageBuffer : public Buffer
+    {
+    public:
+        explicit DynamicStorageBuffer(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            const void *initial = nullptr,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,

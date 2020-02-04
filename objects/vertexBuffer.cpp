@@ -24,40 +24,53 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-VertexBuffer::VertexBuffer(std::shared_ptr<Device> device, const void *data, VkDeviceSize size,
-    VkBufferCreateFlags flags /* 0 */,
-    const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    CopyMemoryFunction copyFn /* nullptr */):
-    Buffer(std::move(device), size,
-        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-        flags, sharing, std::move(allocator),
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
-{
-    if (data)
-        copyToMapped(data, std::move(copyFn));
-}
-
-VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size,
-    VkBufferCreateFlags flags /* 0 */,
-    const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    CopyMemoryFunction copyFn /* nullptr */):
-    VertexBuffer(copyCmdBuffer,
-        std::make_shared<SrcTransferBuffer>(std::move(copyCmdBuffer->getDevice()), data, size, 0, sharing, allocator, std::move(copyFn)),
-        flags, sharing, std::move(allocator))
+BaseVertexBuffer::BaseVertexBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
+    VkBufferUsageFlags usage, VkMemoryPropertyFlags memFlags, VkBufferCreateFlags flags,
+    const Sharing& sharing, std::shared_ptr<IAllocator> allocator):
+    Buffer(std::move(device), size, usage, memFlags, flags, sharing, std::move(allocator)),
+    vertexCount(0)
 {}
 
-VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, std::shared_ptr<SrcTransferBuffer> srcBuffer,
+VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmd, VkDeviceSize size, const void *data,
+    VkBufferCreateFlags flags /* 0 */,
+    const Sharing& sharing /* default */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    CopyMemoryFunction copyFn /* nullptr */):
+    BaseVertexBuffer(copyCmd->getDevice(), size,
+        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        flags, sharing, allocator)
+{
+    MAGMA_ASSERT(data);
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(
+        device, size, data, 0, sharing, std::move(allocator), std::move(copyFn));
+    copyTransfer(std::move(copyCmd), std::move(srcBuffer));
+}
+
+VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmd, std::shared_ptr<SrcTransferBuffer> srcBuffer,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Buffer(std::move(copyCmdBuffer->getDevice()), srcBuffer->getMemory()->getSize(),
+    BaseVertexBuffer(copyCmd->getDevice(), srcBuffer->getMemory()->getSize(),
         VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        flags, sharing, std::move(allocator),
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
-    vertexCount(0)
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        flags, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(copyCmdBuffer), std::move(srcBuffer));
+    copyTransfer(std::move(copyCmd), std::move(srcBuffer));
+}
+
+DynamicVertexBuffer::DynamicVertexBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
+    const void *initial /* nullptr */,
+    VkBufferCreateFlags flags /* 0 */,
+    const Sharing& sharing /* default */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    CopyMemoryFunction copyFn /* nullptr */):
+    BaseVertexBuffer(std::move(device), size,
+        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+        flags, sharing, std::move(allocator))
+{
+    if (initial)
+        copyHost(initial, std::move(copyFn));
 }
 } // namespace magma

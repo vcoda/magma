@@ -20,47 +20,64 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* An array of vertex buffer attributes like position, normal, texture coordinates etc. */
+    /* Base vertex buffer class. Holds vertex count as helper for draw calls. */
 
-    class VertexBuffer : public Buffer
+    class BaseVertexBuffer : public Buffer
     {
     public:
-        explicit VertexBuffer(std::shared_ptr<Device> device,
-            const void *data, VkDeviceSize size,
+        void setVertexCount(uint32_t count) noexcept;
+        uint32_t getVertexCount() const noexcept;
+
+    protected:
+        explicit BaseVertexBuffer(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            VkBufferUsageFlags usage,
+            VkMemoryPropertyFlags memFlags,
+            VkBufferCreateFlags flags,
+            const Sharing& sharing,
+            std::shared_ptr<IAllocator> allocator);
+
+        uint32_t vertexCount;
+    };
+
+    /* An array of vertex buffer attributes like position, normal, texture coordinates etc. */
+
+    class VertexBuffer : public BaseVertexBuffer
+    {
+    public:
+        explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+            VkDeviceSize size,
+            const void *data,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
-        explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
-            const void *data, VkDeviceSize size,
+        template<typename VertexType>
+        explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+            const std::vector<VertexType>& vertices,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
-        explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+        explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
             std::shared_ptr<SrcTransferBuffer> srcBuffer,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
-        template<typename VertexType>
-        explicit VertexBuffer(std::shared_ptr<Device> device,
-            const std::vector<VertexType>& vertices,
-            VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            CopyMemoryFunction copyFn = nullptr);
-        template<typename VertexType>
-        explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
-            const std::vector<VertexType>& vertices,
-            VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            CopyMemoryFunction copyFn = nullptr);
-        void setVertexCount(uint32_t count) noexcept { vertexCount = count; }
-        uint32_t getVertexCount() const noexcept;
+    };
 
-    private:
-        uint32_t vertexCount = 0;
+    /* Dynamic vertex buffer that can be mapped for host access. */
+
+    class DynamicVertexBuffer : public BaseVertexBuffer
+    {
+    public:
+        explicit DynamicVertexBuffer(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            const void *initial = nullptr,
+            VkBufferCreateFlags flags = 0,
+            const Sharing& sharing = Sharing(),
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
     };
 } // namespace magma
 

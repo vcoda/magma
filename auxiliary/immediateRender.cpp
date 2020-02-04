@@ -1,6 +1,6 @@
 /*
 Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2019 Victor Coda.
+Copyright (C) 2018-2020 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount,
     layout(std::move(layout)),
     renderPass(std::move(renderPass)),
     allocator(std::move(allocator)),
-    vertexBuffer(std::make_shared<VertexBuffer>(this->device, nullptr, sizeof(Vertex) * maxVertexCount, 0, Resource::Sharing(), this->allocator)),
+    vertexBuffer(std::make_shared<DynamicVertexBuffer>(this->device, sizeof(Vertex) * maxVertexCount, nullptr, 0, Resource::Sharing(), this->allocator)),
     pipelineCache(std::make_shared<GraphicsPipelineCache>(this->device, std::move(cache), this->allocator)),
     vertexShader(VertexShaderStage(createShader(true), "main")),
     fragmentShader(FragmentShaderStage(createShader(false), "main")),

@@ -134,19 +134,19 @@ inline void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& p
     vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), 0, descriptorSetCount, dereferencedDescriptorSets, MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
 }
 
-inline void CommandBuffer::bindIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer, VkDeviceSize offset /* 0 */) noexcept
+inline void CommandBuffer::bindIndexBuffer(const std::shared_ptr<BaseIndexBuffer>& indexBuffer, VkDeviceSize offset /* 0 */) noexcept
 {
     vkCmdBindIndexBuffer(handle, *indexBuffer, offset, indexBuffer->getIndexType());
 }
 
-inline void CommandBuffer::bindVertexBuffer(uint32_t firstBinding, const std::shared_ptr<VertexBuffer>& vertexBuffer,
+inline void CommandBuffer::bindVertexBuffer(uint32_t firstBinding, const std::shared_ptr<BaseVertexBuffer>& vertexBuffer,
     VkDeviceSize offset /* 0 */) noexcept
 {
     const VkBuffer dereferencedBuffers[1] = {*vertexBuffer};
     vkCmdBindVertexBuffers(handle, firstBinding, 1, dereferencedBuffers, &offset);
 }
 
-inline void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::vector<std::shared_ptr<VertexBuffer>>& vertexBuffers,
+inline void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::vector<std::shared_ptr<BaseVertexBuffer>>& vertexBuffers,
     std::vector<VkDeviceSize> offsets /* {} */) noexcept
 {
     MAGMA_ASSERT(vertexBuffers.size() > 0);

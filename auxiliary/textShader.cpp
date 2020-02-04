@@ -65,8 +65,8 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
     std::shared_ptr<Device> device = renderPass->getDevice();
     // Create uniform and storage buffers
     uniforms = std::make_shared<UniformBuffer<Uniforms>>(device);
-    stringBuffer = std::make_shared<StorageBuffer>(device, sizeof(String) * maxStrings);
-    glyphBuffer = std::make_shared<StorageBuffer>(device, sizeof(Glyph) * maxChars);
+    stringBuffer = std::make_shared<DynamicStorageBuffer>(device, sizeof(String) * maxStrings);
+    glyphBuffer = std::make_shared<DynamicStorageBuffer>(device, sizeof(Glyph) * maxChars);
     // Define layout of descriptor set
     constexpr Descriptor oneUniformBuffer = descriptors::UniformBuffer(1);
     constexpr Descriptor oneStorageBuffer = descriptors::StorageBuffer(1);

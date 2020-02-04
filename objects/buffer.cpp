@@ -32,8 +32,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
-    VkBufferUsageFlags usage, VkBufferCreateFlags flags, const Sharing& sharing,
-    std::shared_ptr<IAllocator> allocator, VkMemoryPropertyFlags memFlags):
+    VkBufferUsageFlags usage, VkMemoryPropertyFlags memFlags, VkBufferCreateFlags flags,
+    const Sharing& sharing, std::shared_ptr<IAllocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, size, std::move(device), std::move(allocator)),
     usage(usage)
 {
@@ -106,7 +106,7 @@ VkDescriptorBufferInfo Buffer::getDescriptor() const noexcept
     return info;
 }
 
-void Buffer::copyToMapped(const void *data, CopyMemoryFunction copyFn) noexcept
+void Buffer::copyHost(const void *data, CopyMemoryFunction copyFn) noexcept
 {
     void *buffer = memory->map();
     if (buffer)

@@ -19,38 +19,49 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "storageBuffer.h"
 #include "srcTransferBuffer.h"
-#include "device.h"
 #include "commandBuffer.h"
+#include "deviceMemory.h"
 
 namespace magma
 {
-StorageBuffer::StorageBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
-    const void *data /* nullptr */,
+StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmd, const void *data, VkDeviceSize size,
+    VkBufferCreateFlags flags /* 0 */,
+    const Sharing& sharing /* default */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    CopyMemoryFunction copyFn /* nullptr */):
+    Buffer(copyCmd->getDevice(), size,
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        flags, sharing, allocator)
+{
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(
+        device, size, data, 0, sharing, std::move(allocator), std::move(copyFn));
+    copyTransfer(std::move(copyCmd), std::move(srcBuffer));
+}
+
+StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmd, std::shared_ptr<SrcTransferBuffer> srcBuffer,
+    VkBufferCreateFlags flags /* 0 */,
+    const Sharing& sharing /* default */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Buffer(copyCmd->getDevice(), srcBuffer->getMemory()->getSize(),
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        flags, sharing, std::move(allocator))
+{
+    copyTransfer(std::move(copyCmd), std::move(srcBuffer));
+}
+
+DynamicStorageBuffer::DynamicStorageBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
+    const void *initial /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(std::move(device), size,
         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
-        flags, sharing, std::move(allocator),
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+        flags, sharing, std::move(allocator))
 {
-    if (data)
-        copyToMapped(data, std::move(copyFn));
-}
-
-StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer, const void *data, VkDeviceSize size,
-    VkBufferCreateFlags flags /* 0 */,
-    const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    CopyMemoryFunction copyFn /* nullptr */):
-    Buffer(copyCmdBuffer->getDevice(), size,
-        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        flags, sharing, std::move(allocator),
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
-{
-    std::shared_ptr<SrcTransferBuffer> srcBuffer(std::make_shared<SrcTransferBuffer>(this->device,
-        data, size, 0, sharing, this->allocator, std::move(copyFn)));
-    copyTransfer(std::move(copyCmdBuffer), std::move(srcBuffer));
+    copyHost(initial, std::move(copyFn));
 }
 } // namespace magma

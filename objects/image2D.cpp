@@ -79,7 +79,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
     const auto mipOffsets = buildMipOffsets(mipSizes, bufferSize);
     const auto copyRegions = buildCopyRegions(mipOffsets, 0);
     // Copy mip levels to host visible buffer
-    std::shared_ptr<SrcTransferBuffer> buffer(std::make_shared<SrcTransferBuffer>(this->device, bufferSize, 0, sharing, allocator));
+    auto buffer = std::make_shared<SrcTransferBuffer>(this->device, bufferSize, nullptr, 0, sharing, allocator);
     helpers::mapScoped<uint8_t>(buffer, [&](uint8_t *data)
     {
         if (!copyFn)

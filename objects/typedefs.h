@@ -43,6 +43,10 @@ namespace magma
     typedef std::shared_ptr<class DisplayMode> DisplayModePtr;
     typedef std::shared_ptr<class DisplaySurface> DisplaySurfacePtr;
     typedef std::shared_ptr<class DstTransferBuffer> DstTransferBufferPtr;
+    typedef std::shared_ptr<class DynamicIndexBuffer> DynamicIndexBufferPtr;
+    typedef std::shared_ptr<class DynamicStorageBuffer> DynamicStorageBufferPtr;
+    typedef std::shared_ptr<class DynamicStorageTexelBuffer> DynamicStorageTexelBufferPtr;
+    typedef std::shared_ptr<class DynamicVertexBuffer> DynamicVertexBufferPtr;
     typedef std::shared_ptr<class Event> EventPtr;
     typedef std::shared_ptr<class Fence> FencePtr;
     typedef std::shared_ptr<class Framebuffer> FramebufferPtr;

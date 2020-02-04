@@ -25,22 +25,31 @@ namespace magma
     class StorageTexelBuffer : public Buffer
     {
     public:
-        explicit StorageTexelBuffer(std::shared_ptr<Device> device,
-            const void *data, VkDeviceSize size,
+        explicit StorageTexelBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+            VkDeviceSize size,
+            const void *data,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
-        explicit StorageTexelBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
-            const void *data, VkDeviceSize size,
-            VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            CopyMemoryFunction copyFn = nullptr);
-        explicit StorageTexelBuffer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+        explicit StorageTexelBuffer(std::shared_ptr<CommandBuffer> copyCmd,
             std::shared_ptr<SrcTransferBuffer> srcBuffer,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
+    };
+
+    /* Dynamic storage texel buffer */
+
+    class DynamicStorageTexelBuffer : public Buffer
+    {
+    public:
+        explicit DynamicStorageTexelBuffer(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            const void *data = nullptr,
+            VkBufferCreateFlags flags = 0,
+            const Sharing& sharing = Sharing(),
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
     };
 } // namespace magma

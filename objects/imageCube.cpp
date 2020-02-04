@@ -78,7 +78,7 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
     const auto mipOffsets = buildMipOffsets(mipSizes, bufferSize);
     const auto copyRegions = buildCopyRegions(mipOffsets, 0);
     // Copy array layers to host visible buffer
-    std::shared_ptr<SrcTransferBuffer> buffer(std::make_shared<SrcTransferBuffer>(this->device, bufferSize, 0, sharing, allocator));
+    auto buffer = std::make_shared<SrcTransferBuffer>(this->device, bufferSize, nullptr, 0, sharing, allocator);
     helpers::mapScoped<uint8_t>(buffer, [&](uint8_t *data)
     {
         if (!copyFn)
