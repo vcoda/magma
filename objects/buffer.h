@@ -49,7 +49,7 @@ namespace magma
             VkBufferCreateFlags flags,
             const Sharing& sharing,
             std::shared_ptr<IAllocator> allocator,
-            VkMemoryPropertyFlags memoryFlags);
+            VkMemoryPropertyFlags memFlags);
         void copyToMapped(const void *data,
             CopyMemoryFunction copyFn) noexcept;
         void copyTransfer(std::shared_ptr<CommandBuffer> copyCmdBuffer,

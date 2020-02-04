@@ -33,7 +33,7 @@ namespace magma
 {
 Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     VkBufferUsageFlags usage, VkBufferCreateFlags flags, const Sharing& sharing,
-    std::shared_ptr<IAllocator> allocator, VkMemoryPropertyFlags memoryFlags):
+    std::shared_ptr<IAllocator> allocator, VkMemoryPropertyFlags memFlags):
     NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, size, std::move(device), std::move(allocator)),
     usage(usage)
 {
@@ -48,10 +48,10 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     info.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     const VkResult create = vkCreateBuffer(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create buffer");
-    VkMemoryRequirements memoryRequirements;
-    vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
+    VkMemoryRequirements memRequirements;
+    vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memRequirements);
     std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(
-        this->device, memoryRequirements.size, memoryFlags));
+        this->device, memRequirements.size, memFlags));
     bindMemory(std::move(memory));
 }
 
@@ -92,9 +92,9 @@ void Buffer::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
 
 VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
 {
-    VkMemoryRequirements memoryRequirements;
-    vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
-    return memoryRequirements;
+    VkMemoryRequirements memRequirements;
+    vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memRequirements);
+    return memRequirements;
 }
 
 VkDescriptorBufferInfo Buffer::getDescriptor() const noexcept
