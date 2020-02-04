@@ -39,9 +39,8 @@ void IndirectBuffer::writeDrawCommand(uint32_t vertexCount,
     uint32_t cmdIndex /* 0 */) noexcept
 {
     const VkDeviceSize offset = cmdIndex * sizeof(VkDrawIndirectCommand);
-    if (void *buffer = memory->map(offset, sizeof(VkDrawIndirectCommand)))
+    if (auto *drawCmd = memory->map<VkDrawIndirectCommand>(offset, sizeof(VkDrawIndirectCommand)))
     {
-        VkDrawIndirectCommand *drawCmd = reinterpret_cast<VkDrawIndirectCommand *>(buffer);
         drawCmd->vertexCount = vertexCount;
         drawCmd->instanceCount = 1;
         drawCmd->firstVertex = firstVertex;
@@ -54,9 +53,8 @@ void IndirectBuffer::writeDrawCommand(uint32_t vertexCount, uint32_t instanceCou
     uint32_t cmdIndex /* 0 */) noexcept
 {
     const VkDeviceSize offset = cmdIndex * sizeof(VkDrawIndirectCommand);
-    if (void *buffer = memory->map(offset, sizeof(VkDrawIndirectCommand)))
+    if (auto *drawCmd = memory->map<VkDrawIndirectCommand>(offset, sizeof(VkDrawIndirectCommand)))
     {
-        VkDrawIndirectCommand *drawCmd = reinterpret_cast<VkDrawIndirectCommand *>(buffer);
         drawCmd->vertexCount = vertexCount;
         drawCmd->instanceCount = instanceCount;
         drawCmd->firstVertex = firstVertex;
@@ -78,9 +76,8 @@ void IndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawCmd,
 
 void IndirectBuffer::writeDrawCommands(const std::vector<VkDrawIndirectCommand>& drawCmdList) noexcept
 {
-    if (void *buffer = memory->map(0, sizeof(VkDrawIndirectCommand)))
+    if (auto *drawCmdArray = memory->map<VkDrawIndirectCommand>(0, sizeof(VkDrawIndirectCommand)))
     {
-        VkDrawIndirectCommand *drawCmdArray = reinterpret_cast<VkDrawIndirectCommand *>(buffer);
         for (const VkDrawIndirectCommand& drawCmd : drawCmdList)
             memcpy(drawCmdArray++, &drawCmd, sizeof(VkDrawIndirectCommand));
         memory->unmap();
