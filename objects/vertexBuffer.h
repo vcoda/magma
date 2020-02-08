@@ -52,6 +52,13 @@ namespace magma
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
+        template<typename VertexType, uint32_t vertexArraySize>
+        explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+            const VertexType (&vertices)[vertexArraySize],
+            VkBufferCreateFlags flags = 0,
+            const Sharing& sharing = Sharing(),
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
         template<typename VertexType>
         explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
             const std::vector<VertexType>& vertices,
