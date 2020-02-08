@@ -24,11 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 #include <cassert>
 
-#ifdef _MSC_VER
-#define MAGMA_CONSTEXPR constexpr
-#else
-#define MAGMA_CONSTEXPR
-#endif
+#include "dereference.h"
 
 #ifdef _DEBUG
 #define MAGMA_DEBUG
@@ -42,12 +38,28 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_ASSERT(condition)
 #endif // !MAGMA_DEBUG
 
+#ifdef _MSC_VER
+#define MAGMA_CONSTEXPR constexpr
+#else
+#define MAGMA_CONSTEXPR
+#endif
+
 #define MAGMA_BOOLEAN(condition) (condition) ? VK_TRUE : VK_FALSE
 #define MAGMA_COUNT(container) static_cast<uint32_t>(container.size())
 
 #define MAGMA_ALIGNMENT 16
 #define MAGMA_ALIGN(size) (((size) + 0xF) & ~(0xF))
 #define MAGMA_ALIGNED(p) (((uintptr_t)(const void *)(p)) % (MAGMA_ALIGNMENT) == 0)
+
+#if defined(_M_AMD64) || defined(__x86_64__)
+#define MAGMA_XMM_REGISTERS 16
+#else
+#define MAGMA_XMM_REGISTERS 8
+#endif*/
+#define MAGMA_XMM_BLOCK_SIZE (sizeof(__m128i) * MAGMA_XMM_REGISTERS)
+
+#define MAGMA_CONCURRENT_COPY_THREADS 4
+#define MAGMA_COPY_PAGE_SIZE (MAGMA_XMM_BLOCK_SIZE * MAGMA_CONCURRENT_COPY_THREADS)
 
 #ifdef _MSC_VER
 #define MAGMA_MALLOC(size) _mm_malloc(size, MAGMA_ALIGNMENT)
@@ -61,17 +73,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_FREEA(p)
 #endif // !_MSC_VER
 
-#define MAGMA_MAX_MESSAGE_STRING 4096
-
-#if defined(_M_AMD64) || defined(__x86_64__)
-#define MAGMA_XMM_REGISTERS 16
-#else
-#define MAGMA_XMM_REGISTERS 8
-#endif
+#define MAGMA_MAX_STRING 4096
 
 #define MAGMA_STRINGIZE(name) #name
 #define MAGMA_STRINGIZE_FIELD(field) case field: return MAGMA_STRINGIZE(field); break
 #define MAGMA_DEFAULT_UNKNOWN default: return "<unknown>"
+
+#define MAGMA_HANDLE(obj) *(this->obj)
+#define MAGMA_OPTIONAL_HANDLE(obj) core::dereference(obj)
+#define MAGMA_OPTIONAL_INSTANCE(obj) this->obj ? this->obj.get() : nullptr
 
 #define MAGMA_SUCCEEDED(result)\
     ((VK_SUCCESS == result) ||\
@@ -85,28 +95,5 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     ((frontFace && backFace) ? VK_STENCIL_FRONT_AND_BACK :\
      (frontFace ? VK_STENCIL_FACE_FRONT_BIT : VK_STENCIL_FACE_BACK_BIT))
 
-#define MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Type, normalized, format)\
-    template<>\
-    struct VertexAttribute<Type, normalized> :\
-        AttributeFormat<format> {};
-
-namespace magma
-{
-    namespace detail
-    {
-        template<typename Type>
-        inline typename Type::NativeHandle dereference(const std::shared_ptr<Type>& obj)
-        {
-            if (obj) return *obj;
-#ifdef VK_NULL_HANDLE
-            return VK_NULL_HANDLE;
-#else
-            return 0;
-#endif
-        }
-    }
-} // namespace magma
-
-#define MAGMA_HANDLE(obj) *(this->obj)
-#define MAGMA_OPTIONAL_HANDLE(obj) magma::detail::dereference(obj)
-#define MAGMA_OPTIONAL_INSTANCE(obj) this->obj ? this->obj.get() : nullptr
+#define MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(type, normalized, format)\
+    template<> struct VertexAttribute<type, normalized> : AttributeFormat<format> {}

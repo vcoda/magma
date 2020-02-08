@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../detail/noncopyable.h"
+#include "../core/noncopyable.h"
 
 namespace magma
 {
@@ -36,7 +36,7 @@ namespace magma
            Simple, but sub-optimal solution to draw text on the screen.
            Supports only ASCII printable characters (32 - 127). */
 
-        class TextShader : public detail::NonCopyable
+        class TextShader : public core::NonCopyable
         {
             struct Uniforms;
             struct String;

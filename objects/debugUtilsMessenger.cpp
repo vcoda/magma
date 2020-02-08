@@ -65,7 +65,7 @@ void DebugUtilsMessenger::message(VkDebugUtilsMessageSeverityFlagBitsEXT message
     MAGMA_OPTIONAL_INSTANCE_EXTENSION(vkSubmitDebugUtilsMessageEXT);
     if (vkSubmitDebugUtilsMessageEXT)
     {
-        char message[MAGMA_MAX_MESSAGE_STRING];
+        char message[MAGMA_MAX_STRING];
         va_list args;
         va_start(args, format);
 #ifdef _MSC_VER

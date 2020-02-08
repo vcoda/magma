@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../detail/noncopyable.h"
+#include "../core/noncopyable.h"
 
 namespace magma
 {
@@ -35,7 +35,7 @@ namespace magma
            Concrete implementations include MSAA and non-MSAA frame buffers
            as well as main window frame buffer. */
 
-        class IFramebuffer : public detail::NonCopyable
+        class IFramebuffer : public core::NonCopyable
         {
         public:
             virtual const VkExtent2D& getExtent() const noexcept = 0;

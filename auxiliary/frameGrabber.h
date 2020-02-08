@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../detail/noncopyable.h"
+#include "../core/noncopyable.h"
 
 namespace magma
 {
@@ -31,7 +31,7 @@ namespace magma
     {
         /* Auxiliary frame grabber to take screenshots. */
 
-        class FrameGrabber : public detail::NonCopyable
+        class FrameGrabber : public core::NonCopyable
         {
         public:
             explicit FrameGrabber(std::shared_ptr<Device> device,

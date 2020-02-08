@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../detail/noncopyable.h"
+#include "../core/noncopyable.h"
 
 namespace magma
 {
@@ -32,7 +32,7 @@ namespace magma
        Rather, this can be useful for certain embedded systems, for debugging purposes
        (e.g. putting a guard page after all host allocations), or for memory allocation logging. */
 
-    class IAllocator : public AllocationCallbacks, public detail::NonCopyable
+    class IAllocator : public AllocationCallbacks, public core::NonCopyable
     {
     public:
         virtual void *alloc(std::size_t size,

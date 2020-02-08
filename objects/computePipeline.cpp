@@ -46,10 +46,10 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device, std::shared_ptr
     info.basePipelineIndex = -1;
     const VkResult create = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->cache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create compute pipeline");
-    hash = detail::hashArgs(
+    hash = core::hashArgs(
         info.sType,
         info.flags);
-    detail::hashCombine(hash, stage.getHash());
-    detail::hashCombine(hash, this->layout->getHash());
+    core::hashCombine(hash, stage.getHash());
+    core::hashCombine(hash, this->layout->getHash());
 }
 } // namespace magma

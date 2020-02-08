@@ -39,7 +39,7 @@ MultisampleCoverageState::MultisampleCoverageState(const MultisampleState& state
 MultisampleCoverageState::MultisampleCoverageState(const MultisampleCoverageState& other) noexcept:
     MultisampleState(other.rasterizationSamples)
 {
-    pSampleMask = detail::copyArray(other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1);
+    pSampleMask = core::copyArray(other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1);
     alphaToCoverageEnable = other.alphaToCoverageEnable;
     alphaToOneEnable = other.alphaToOneEnable;
 }
@@ -49,9 +49,9 @@ MultisampleCoverageState& MultisampleCoverageState::operator=(const MultisampleC
     if (this != &other)
     {
         delete[] pSampleMask;
-        detail::copy(this, &other);
+        core::copy(this, &other);
         if (other.pSampleMask)
-            pSampleMask = detail::copyArray(other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1);
+            pSampleMask = core::copyArray(other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1);
     }
     return *this;
 }

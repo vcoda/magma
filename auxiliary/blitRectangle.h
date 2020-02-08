@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../detail/noncopyable.h"
+#include "../core/noncopyable.h"
 #include "../misc/clearValue.h"
 
 namespace magma
@@ -41,7 +41,7 @@ namespace magma
         /* Auxiliary object that helps quickly blit source texture
            into destination framebuffer. */
 
-        class BlitRectangle : public detail::NonCopyable
+        class BlitRectangle : public core::NonCopyable
         {
         public:
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,

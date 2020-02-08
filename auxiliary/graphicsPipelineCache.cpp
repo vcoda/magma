@@ -68,13 +68,13 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
     // Specify that the pipeline to be created is allowed to be the parent of a pipeline that will be created
     info.flags = flags | VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
     info.stageCount = MAGMA_COUNT(stages);
-    std::size_t hash = detail::hashArgs(
+    std::size_t hash = core::hashArgs(
         info.sType,
         info.flags,
         info.stageCount);
     for (const auto& stage : stages)
-        detail::hashCombine(hash, stage.getHash());
-    std::size_t baseHash = detail::combineHashList({
+        core::hashCombine(hash, stage.getHash());
+    std::size_t baseHash = core::hashCombineList({
         vertexInputState.hash(),
         inputAssemblyState.hash(),
         tesselationState.hash(),
@@ -84,15 +84,15 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
         depthStencilState.hash(),
         colorBlendState.hash()});
     for (auto state : dynamicStates)
-        detail::hashCombine(baseHash, detail::hash(state));
-    detail::hashCombine(hash, baseHash);
+        core::hashCombine(baseHash, core::hash(state));
+    core::hashCombine(hash, baseHash);
     if (!layout)
         layout = std::make_shared<PipelineLayout>(device);
-    detail::hashCombine(hash, layout->getHash());
+    core::hashCombine(hash, layout->getHash());
     if (renderPass)
     {
-        detail::hashCombine(hash, renderPass->getHash());
-        detail::hashCombine(hash, detail::hash(subpass));
+        core::hashCombine(hash, renderPass->getHash());
+        core::hashCombine(hash, core::hash(subpass));
     }
     // Lookup for existing pipeline
     auto it = pipelines.find(hash);
@@ -132,7 +132,7 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupBasePipeline(
 {
     if (!basePipelines.empty())
     {   // Compute hash of render and dynamic states
-        std::size_t hash = detail::combineHashList({
+        std::size_t hash = core::hashCombineList({
             vertexInputState.hash(),
             inputAssemblyState.hash(),
             tesselationState.hash(),
@@ -142,7 +142,7 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupBasePipeline(
             depthStencilState.hash(),
             colorBlendState.hash()});
         for (auto state : dynamicStates)
-            detail::hashCombine(hash, detail::hash(state));
+            core::hashCombine(hash, core::hash(state));
         auto it = basePipelines.find(hash);
         if (it != basePipelines.end())
             return it->second;

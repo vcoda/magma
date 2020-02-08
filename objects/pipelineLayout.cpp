@@ -46,13 +46,13 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
     info.pPushConstantRanges = pushConstantRanges.begin();
     const VkResult create = vkCreatePipelineLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create pipeline layout");
-    hash = detail::hashArgs(
+    hash = core::hashArgs(
         info.sType,
         info.flags,
         info.setLayoutCount,
         info.pushConstantRangeCount);
     for (const auto& pushConstantRange : pushConstantRanges)
-        detail::hashCombine(hash, pushConstantRange.hash());
+        core::hashCombine(hash, pushConstantRange.hash());
 }
 
 PipelineLayout::PipelineLayout(std::shared_ptr<DescriptorSetLayout> setLayout, const PushConstantRange& pushConstantRange,
@@ -85,13 +85,13 @@ PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<DescriptorSetLa
     info.pPushConstantRanges = pushConstantRanges.begin();
     const VkResult create = vkCreatePipelineLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create pipeline layout");
-    hash = detail::hashArgs(
+    hash = core::hashArgs(
         info.sType,
         info.flags,
         info.setLayoutCount,
         info.pushConstantRangeCount);
     for (const auto& pushConstantRange : pushConstantRanges)
-        detail::hashCombine(hash, pushConstantRange.hash());
+        core::hashCombine(hash, pushConstantRange.hash());
 }
 
 PipelineLayout::~PipelineLayout()
@@ -103,7 +103,7 @@ std::size_t PipelineLayout::getHash() const noexcept
 {   // Compute complex hash on demand
     std::size_t hash = this->hash;
     for (const std::shared_ptr<DescriptorSetLayout>& layout : setLayouts)
-        detail::hashCombine(hash, layout->getHash());
+        core::hashCombine(hash, layout->getHash());
     return hash;
 }
 } // namespace magma

@@ -35,7 +35,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/depthStencilState.h"
 #include "../states/colorBlendState.h"
 #include "../helpers/mapScoped.h"
-#include "../detail/copyMemory.h"
+#include "../core/copyMemory.h"
 
 namespace magma
 {
@@ -235,13 +235,13 @@ void TextShader::end()
     });
     helpers::mapScoped<Glyph>(glyphBuffer, [this](auto *data)
     {   // Copy glyph data
-        detail::copyMemory(data, chars.data(), sizeof(Glyph) * chars.size());
+        core::copyMemory(data, chars.data(), sizeof(Glyph) * chars.size());
     });
 }
 
 void TextShader::print(uint32_t x, uint32_t y, uint32_t color, const char *format, ...)
 {
-    char sz[MAGMA_MAX_MESSAGE_STRING];
+    char sz[MAGMA_MAX_STRING];
     va_list args;
     va_start(args, format);
     int written;

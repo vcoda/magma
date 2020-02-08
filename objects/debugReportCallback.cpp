@@ -64,7 +64,7 @@ void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkObjectType obje
     MAGMA_OPTIONAL_INSTANCE_EXTENSION(vkDebugReportMessageEXT);
     if (vkDebugReportMessageEXT)
     {
-        char message[MAGMA_MAX_MESSAGE_STRING];
+        char message[MAGMA_MAX_STRING];
         va_list args;
         va_start(args, format);
 #ifdef _MSC_VER

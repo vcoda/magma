@@ -32,7 +32,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/colorBlendState.h"
 #include "../allocator/allocator.h"
 #include "../misc/exception.h"
-#include "../detail/hash.h"
+#include "../core/hash.h"
 #include "../helpers/stackArray.h"
 
 namespace magma
@@ -132,13 +132,13 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
     info.basePipelineIndex = -1;
     const VkResult create = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->cache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create graphics pipeline");
-    hash = detail::hashArgs(
+    hash = core::hashArgs(
         info.sType,
         info.flags,
         info.stageCount);
     for (const auto& stage : stages)
-        detail::hashCombine(hash, stage.getHash());
-    std::size_t stateHash = detail::combineHashList({
+        core::hashCombine(hash, stage.getHash());
+    std::size_t stateHash = core::hashCombineList({
         vertexInputState.hash(),
         inputAssemblyState.hash(),
         tesselationState.hash(),
@@ -148,13 +148,13 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
         depthStencilState.hash(),
         colorBlendState.hash()});
     for (auto state : dynamicStates)
-        detail::hashCombine(stateHash, detail::hash(state));
-    detail::hashCombine(hash, stateHash);
-    detail::hashCombine(hash, this->layout->getHash());
+        core::hashCombine(stateHash, core::hash(state));
+    core::hashCombine(hash, stateHash);
+    core::hashCombine(hash, this->layout->getHash());
     if (renderPass)
     {
-        detail::hashCombine(hash, renderPass->getHash());
-        detail::hashCombine(hash, detail::hash(subpass));
+        core::hashCombine(hash, renderPass->getHash());
+        core::hashCombine(hash, core::hash(subpass));
     }
 }
 } // namespace magma

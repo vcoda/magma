@@ -76,11 +76,11 @@
     <Filter Include="Source Files\extensions">
       <UniqueIdentifier>{13307459-d655-4c21-a588-dfa1dd86ee21}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\detail">
-      <UniqueIdentifier>{0164a388-ad46-40d5-a5fe-b4d1c2f5e5e6}</UniqueIdentifier>
+    <Filter Include="Header Files\core">
+      <UniqueIdentifier>{7ebdbcac-4834-4c4c-afcf-c5eb5ceebe23}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\detail">
-      <UniqueIdentifier>{61884800-3ddb-4a50-b66c-2ecd704f4f40}</UniqueIdentifier>
+    <Filter Include="Source Files\core">
+      <UniqueIdentifier>{788fe0f5-46b7-45db-86d9-6ca8cc0ff5a3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -441,36 +441,6 @@
     <ClInclude Include="..\..\barriers\memoryBarrier.h">
       <Filter>Header Files\barriers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\detail\compare.h">
-      <Filter>Header Files\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\detail\copy.h">
-      <Filter>Header Files\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\detail\copyMemory.h">
-      <Filter>Header Files\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\detail\hash.h">
-      <Filter>Header Files\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\detail\noncopyable.h">
-      <Filter>Header Files\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\detail\pch.h">
-      <Filter>Header Files\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\detail\placementPool.h">
-      <Filter>Header Files\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\detail\refCountChecker.h">
-      <Filter>Header Files\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\detail\shared.h">
-      <Filter>Header Files\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\detail\zeroMemory.h">
-      <Filter>Header Files\detail</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\helpers\uniformArrayIterator.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
@@ -482,6 +452,45 @@
     </ClInclude>
     <ClInclude Include="..\..\auxiliary\textShader.h">
       <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\copyMemory.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\zeroMemory.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\dereference.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\noncopyable.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\refCountChecker.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\pch.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\core.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\hashCombine.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\hash.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\copy.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\noncopyableConstexpr.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\placementPool.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\allocator\linearPlacementPool.h">
+      <Filter>Header Files\allocator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -752,11 +761,11 @@
     <ClCompile Include="..\..\auxiliary\frameGrabber.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\detail\pch.cpp">
-      <Filter>Source Files\detail</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\auxiliary\textShader.cpp">
       <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\core\pch.cpp">
+      <Filter>Source Files\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

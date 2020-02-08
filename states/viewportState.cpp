@@ -18,8 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "viewportState.h"
-#include "../detail/copy.h"
-#include "../detail/compare.h"
+#include "../core/copy.h"
+#include "../core/compare.h"
 
 namespace magma
 {
@@ -137,9 +137,9 @@ ViewportState::ViewportState(const std::vector<VkViewport>& viewports, const std
 
 ViewportState::ViewportState(const ViewportState& other) noexcept
 {
-    detail::copy(this, &other);
-    pViewports = detail::copyArray(other.pViewports, viewportCount);
-    pScissors = detail::copyArray(other.pScissors, scissorCount);
+    core::copy(this, &other);
+    pViewports = core::copyArray(other.pViewports, viewportCount);
+    pScissors = core::copyArray(other.pScissors, scissorCount);
 }
 
 ViewportState& ViewportState::operator=(const ViewportState& other) noexcept
@@ -148,9 +148,9 @@ ViewportState& ViewportState::operator=(const ViewportState& other) noexcept
     {
         delete[] pViewports;
         delete[] pScissors;
-        detail::copy(this, &other);
-        pViewports = detail::copyArray(other.pViewports, viewportCount);
-        pScissors = detail::copyArray(other.pScissors, scissorCount);
+        core::copy(this, &other);
+        pViewports = core::copyArray(other.pViewports, viewportCount);
+        pScissors = core::copyArray(other.pScissors, scissorCount);
     }
     return *this;
 }
@@ -163,14 +163,14 @@ ViewportState::~ViewportState()
 
 std::size_t ViewportState::hash() const noexcept
 {
-    std::size_t hash = detail::hashArgs(
+    std::size_t hash = core::hashArgs(
         sType,
         flags,
         viewportCount,
         scissorCount);
     if (pViewports) for (uint32_t i = 0; i < viewportCount; ++i)
     {
-        detail::hashCombine(hash, detail::hashArgs(
+        core::hashCombine(hash, core::hashArgs(
             pViewports[i].x,
             pViewports[i].y,
             pViewports[i].width,
@@ -180,7 +180,7 @@ std::size_t ViewportState::hash() const noexcept
     }
     if (pScissors) for (uint32_t i = 0; i < scissorCount; ++i)
     {
-        detail::hashCombine(hash, detail::hashArgs(
+        core::hashCombine(hash, core::hashArgs(
             pScissors[i].offset.x,
             pScissors[i].offset.y,
             pScissors[i].extent.width,
@@ -194,8 +194,8 @@ bool ViewportState::operator==(const ViewportState& other) const noexcept
     return (flags == other.flags) &&
         (viewportCount == other.viewportCount) &&
         (scissorCount == other.scissorCount) &&
-        detail::compareArrays(pViewports, other.pViewports, viewportCount) &&
-        detail::compareArrays(pScissors, other.pScissors, scissorCount);
+        core::compareArrays(pViewports, other.pViewports, viewportCount) &&
+        core::compareArrays(pScissors, other.pScissors, scissorCount);
 }
 
 void ViewportState::initialize(const VkViewport& viewport, const VkRect2D& scissor) noexcept
@@ -204,9 +204,9 @@ void ViewportState::initialize(const VkViewport& viewport, const VkRect2D& sciss
     pNext = nullptr;
     flags = 0;
     viewportCount = 1;
-    pViewports = detail::copyArray(&viewport, 1);
+    pViewports = core::copyArray(&viewport, 1);
     scissorCount = 1;
-    pScissors = detail::copyArray(&scissor, 1);
+    pScissors = core::copyArray(&scissor, 1);
 }
 
 void ViewportState::initialize(const std::vector<VkViewport>& viewports, const std::vector<VkRect2D>& scissors) noexcept
@@ -215,8 +215,8 @@ void ViewportState::initialize(const std::vector<VkViewport>& viewports, const s
     pNext = nullptr;
     flags = 0;
     viewportCount = MAGMA_COUNT(viewports);
-    pViewports = detail::copyVector(viewports);
+    pViewports = core::copyVector(viewports);
     scissorCount = MAGMA_COUNT(scissors);
-    pScissors = detail::copyVector(scissors);
+    pScissors = core::copyVector(scissors);
 }
 } // namespace magma

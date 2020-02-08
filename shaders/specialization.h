@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../detail/copy.h"
+#include "../core/copy.h"
 
 namespace magma
 {
@@ -46,9 +46,9 @@ namespace magma
             const std::initializer_list<SpecializationEntry>& mapEntries) noexcept
         {
             mapEntryCount = MAGMA_COUNT(mapEntries);
-            pMapEntries = detail::copyInitializerList(mapEntries);
+            pMapEntries = core::copyInitializerList(mapEntries);
             dataSize = sizeof(Block);
-            pData = detail::copyArray<char>(&data, dataSize);
+            pData = core::copyArray<char>(&data, dataSize);
         }
         Specialization(const Specialization&) noexcept;
         Specialization& operator=(const Specialization&) noexcept;

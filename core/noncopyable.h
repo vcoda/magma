@@ -1,6 +1,6 @@
 /*
 Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2019 Victor Coda.
+Copyright (C) 2018-2020 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,33 +17,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
-#include <cstring>
-#include <cassert>
+namespace magma
+{
+    namespace core
+    {
+        /* Non-copyable on stack object. */
 
-#include <memory>
-#include <vector>
-#include <list>
-#include <map>
-#include <unordered_map>
-#include <string>
-#include <initializer_list>
-#include <functional>
-#include <stdexcept>
+        class NonCopyable
+        {
+        public:
+            NonCopyable() = default;
+            virtual ~NonCopyable() = default;
 
-#include <algorithm>
-#include <limits>
-
-#include <atomic>
-#include <thread>
-
-#ifdef _WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-#endif
-#ifndef VULKAN_H_
-#include <vulkan/vulkan.h>
-#endif
-
-#include "shared.h"
-#include "hash.h"
+        private:
+            NonCopyable(const NonCopyable&) = delete;
+            NonCopyable& operator=(const NonCopyable&) = delete;
+        };
+    } // namespace core
+} // namespace magma

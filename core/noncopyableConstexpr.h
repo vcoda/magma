@@ -1,6 +1,6 @@
 /*
 Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2019 Victor Coda.
+Copyright (C) 2018-2020 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,36 +16,23 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifdef _DEBUG
-#include <iostream>
-#include <cassert>
 
 namespace magma
 {
-    namespace detail
+    namespace core
     {
-        /* Reference counter to check that there are no circular references
-           that prevents destruction of Vulkan objects. */
+        /* Non-copyable constexpr object w/o virtual destructor. */
 
-        class RefCountChecker
+        class NonCopyableConstexpr
         {
         public:
-            RefCountChecker():
-                refCount(0L) {}
-            ~RefCountChecker()
-            {
-                if (refCount != 0L)
-                    std::cout << "invalid reference count (" << refCount << ")" << std::endl;
-                assert(0L == refCount);
-            }
-            void addRef() { ++refCount; }
-            void release() { --refCount; }
-            long getRefCount() const noexcept { return refCount; }
+            NonCopyableConstexpr() = default;
+            ~NonCopyableConstexpr() = default;
 
         private:
-            std::atomic<long> refCount;
+            NonCopyableConstexpr(const NonCopyableConstexpr&) = delete;
+            NonCopyableConstexpr& operator=(const NonCopyableConstexpr&) = delete;
         };
-    } // namespace detail
+    } // core
 } // namespace magma
 
-#endif // _DEBUG

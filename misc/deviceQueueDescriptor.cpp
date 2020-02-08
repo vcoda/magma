@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "deviceQueueDescriptor.h"
 #include "../objects/physicalDevice.h"
 #include "../misc/exception.h"
-#include "../detail/copy.h"
+#include "../core/copy.h"
 
 namespace magma
 {
@@ -36,13 +36,13 @@ DeviceQueueDescriptor::DeviceQueueDescriptor(std::shared_ptr<const PhysicalDevic
     flags = 0;
     queueFamilyIndex = chooseFamilyIndex(queueType, device->getQueueFamilyProperties());
     queueCount = MAGMA_COUNT(queuePriorities);
-    pQueuePriorities = detail::copyVector(queuePriorities);
+    pQueuePriorities = core::copyVector(queuePriorities);
 }
 
 DeviceQueueDescriptor::DeviceQueueDescriptor(const DeviceQueueDescriptor& other)
 {
-    detail::copy(this, &other);
-    pQueuePriorities = detail::copyArray(other.pQueuePriorities, queueCount);
+    core::copy(this, &other);
+    pQueuePriorities = core::copyArray(other.pQueuePriorities, queueCount);
 }
 
 DeviceQueueDescriptor& DeviceQueueDescriptor::operator=(const DeviceQueueDescriptor& other)
@@ -50,8 +50,8 @@ DeviceQueueDescriptor& DeviceQueueDescriptor::operator=(const DeviceQueueDescrip
     if (this != &other)
     {
         delete[] pQueuePriorities;
-        detail::copy(this, &other);
-        pQueuePriorities = detail::copyArray(other.pQueuePriorities, queueCount);
+        core::copy(this, &other);
+        pQueuePriorities = core::copyArray(other.pQueuePriorities, queueCount);
     }
     return *this;
 }

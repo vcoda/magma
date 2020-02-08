@@ -51,7 +51,7 @@ constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t
 
 constexpr std::size_t AttachmentDescription::hash() const
 {
-    return detail::hashArgs(
+    return core::hashArgs(
         flags,
         format,
         samples,

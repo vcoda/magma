@@ -51,7 +51,7 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
     MAGMA_THROW_FAILURE(create, "failed to create shader module");
     this->bytecode.resize(info.codeSize); // codeSize is the size, in bytes, of the code pointed to by pCode
     memcpy(this->bytecode.data(), info.pCode, info.codeSize);
-    hash = detail::hashArgs(
+    hash = core::hashArgs(
         info.sType,
         info.flags,
         info.codeSize);
@@ -74,7 +74,7 @@ std::size_t ShaderModule::getHash() noexcept
 {
     if (!bytecode.empty())
     {   // Compute complex hash on demand, may take time for large shaders
-        detail::hashCombine(hash, detail::hashVector(bytecode));
+        core::hashCombine(hash, core::hashVector(bytecode));
         std::vector<char>().swap(bytecode);
     }
     return hash;

@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\allocator\allocator.h" />
+    <ClInclude Include="..\..\allocator\linearPlacementPool.h" />
     <ClInclude Include="..\..\allocator\objectAllocator.h" />
     <ClInclude Include="..\..\auxiliary\blitRectangle.h" />
     <ClInclude Include="..\..\auxiliary\framebuffers.h" />
@@ -158,20 +159,22 @@
     <ClInclude Include="..\..\barriers\bufferMemoryBarrier.h" />
     <ClInclude Include="..\..\barriers\memoryBarrier.h" />
     <ClInclude Include="..\..\barriers\imageMemoryBarrier.h" />
+    <ClInclude Include="..\..\core\noncopyableConstexpr.h" />
+    <ClInclude Include="..\..\core\copy.h" />
+    <ClInclude Include="..\..\core\copyMemory.h" />
+    <ClInclude Include="..\..\core\core.h" />
+    <ClInclude Include="..\..\core\dereference.h" />
+    <ClInclude Include="..\..\core\hashCombine.h" />
+    <ClInclude Include="..\..\core\hash.h" />
+    <ClInclude Include="..\..\core\noncopyable.h" />
+    <ClInclude Include="..\..\core\pch.h" />
+    <ClInclude Include="..\..\core\placementPool.h" />
+    <ClInclude Include="..\..\core\refCountChecker.h" />
+    <ClInclude Include="..\..\core\zeroMemory.h" />
     <ClInclude Include="..\..\descriptors\attachment.h" />
     <ClInclude Include="..\..\descriptors\bindings.h" />
     <ClInclude Include="..\..\descriptors\descriptors.h" />
     <ClInclude Include="..\..\descriptors\subpass.h" />
-    <ClInclude Include="..\..\detail\compare.h" />
-    <ClInclude Include="..\..\detail\copy.h" />
-    <ClInclude Include="..\..\detail\copyMemory.h" />
-    <ClInclude Include="..\..\detail\hash.h" />
-    <ClInclude Include="..\..\detail\noncopyable.h" />
-    <ClInclude Include="..\..\detail\pch.h" />
-    <ClInclude Include="..\..\detail\placementPool.h" />
-    <ClInclude Include="..\..\detail\refCountChecker.h" />
-    <ClInclude Include="..\..\detail\shared.h" />
-    <ClInclude Include="..\..\detail\zeroMemory.h" />
     <ClInclude Include="..\..\extensions\instanceLayers.h" />
     <ClInclude Include="..\..\extensions\layers.h" />
     <ClInclude Include="..\..\extensions\physicalDeviceExtensions.h" />
@@ -289,13 +292,13 @@
     <ClCompile Include="..\..\auxiliary\textShader.cpp" />
     <ClCompile Include="..\..\barriers\bufferMemoryBarrier.cpp" />
     <ClCompile Include="..\..\barriers\imageMemoryBarrier.cpp" />
-    <ClCompile Include="..\..\descriptors\subpass.cpp" />
-    <ClCompile Include="..\..\detail\pch.cpp">
+    <ClCompile Include="..\..\core\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\..\descriptors\subpass.cpp" />
     <ClCompile Include="..\..\extensions\instanceExtensions.cpp" />
     <ClCompile Include="..\..\extensions\instanceLayers.cpp" />
     <ClCompile Include="..\..\extensions\layers.cpp" />

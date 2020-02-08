@@ -33,7 +33,7 @@ PipelineShaderStage::PipelineShaderStage(const VkShaderStageFlagBits stage, std:
     this->flags = flags;
     this->stage = stage;
     module = MAGMA_HANDLE(shaderModule);
-    pName = detail::copyString(entrypoint);
+    pName = core::copyString(entrypoint);
     pSpecializationInfo = specialization.get();
 }
 
@@ -46,7 +46,7 @@ PipelineShaderStage::PipelineShaderStage(const PipelineShaderStage& other) noexc
     flags = other.flags;
     stage = other.stage;
     module = other.module;
-    pName = detail::copyString(other.pName);
+    pName = core::copyString(other.pName);
     pSpecializationInfo = specialization.get();
 }
 
@@ -62,7 +62,7 @@ PipelineShaderStage& PipelineShaderStage::operator=(const PipelineShaderStage& o
         stage = other.stage;
         module = other.module;
         delete[] pName;
-        pName = detail::copyString(other.pName);
+        pName = core::copyString(other.pName);
         pSpecializationInfo = specialization.get();
     }
     return *this;
@@ -75,15 +75,15 @@ PipelineShaderStage::~PipelineShaderStage()
 
 std::size_t PipelineShaderStage::getHash() const noexcept
 {   // Compute complex hash on demand
-    std::size_t hash = detail::hashArgs(
+    std::size_t hash = core::hashArgs(
         sType,
         flags,
         stage,
         module);
-    detail::hashCombine(hash, shaderModule->getHash());
-    detail::hashCombine(hash, detail::hashString(std::string(pName)));
+    core::hashCombine(hash, shaderModule->getHash());
+    core::hashCombine(hash, core::hashString(std::string(pName)));
     if (specialization)
-        detail::hashCombine(hash, specialization->hash());
+        core::hashCombine(hash, specialization->hash());
     return hash;
 }
 } // namespace magma

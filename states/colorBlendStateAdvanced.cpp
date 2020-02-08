@@ -18,8 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "colorBlendStateAdvanced.h"
-#include "../detail/copy.h"
-#include "../detail/compare.h"
+#include "../core/copy.h"
+#include "../core/compare.h"
 
 namespace magma
 {
@@ -34,7 +34,7 @@ AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendAttachm
     colorBlendAdvanced->blendOverlap = blendOverlap;
     pNext = colorBlendAdvanced;
     attachmentCount = 1;
-    pAttachments = detail::copyArray<VkPipelineColorBlendAttachmentState>(&attachment, 1);
+    pAttachments = core::copyArray<VkPipelineColorBlendAttachmentState>(&attachment, 1);
 }
 
 AdvancedColorBlendState::AdvancedColorBlendState(const std::initializer_list<AdvancedColorBlendAttachmentState>& attachments,
@@ -48,7 +48,7 @@ AdvancedColorBlendState::AdvancedColorBlendState(const std::initializer_list<Adv
     colorBlendAdvanced->blendOverlap = blendOverlap;
     pNext = colorBlendAdvanced;
     attachmentCount = MAGMA_COUNT(attachments);
-    pAttachments = detail::copyInitializerList<VkPipelineColorBlendAttachmentState>(attachments);
+    pAttachments = core::copyInitializerList<VkPipelineColorBlendAttachmentState>(attachments);
 }
 
 AdvancedColorBlendState::AdvancedColorBlendState(const std::vector<AdvancedColorBlendAttachmentState>& attachments,
@@ -62,18 +62,18 @@ AdvancedColorBlendState::AdvancedColorBlendState(const std::vector<AdvancedColor
     colorBlendAdvanced->blendOverlap = blendOverlap;
     pNext = colorBlendAdvanced;
     attachmentCount = MAGMA_COUNT(attachments);
-    pAttachments = detail::copyVector<VkPipelineColorBlendAttachmentState>(attachments);
+    pAttachments = core::castCopyVector<VkPipelineColorBlendAttachmentState>(attachments);
 }
 
 AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendState& other)
 {
     sType = other.sType;
-    pNext = detail::copy<VkPipelineColorBlendAdvancedStateCreateInfoEXT>(other.pNext);
+    pNext = core::copy<VkPipelineColorBlendAdvancedStateCreateInfoEXT>(other.pNext);
     flags = other.flags;
     logicOpEnable = other.logicOpEnable;
     logicOp = other.logicOp;
     attachmentCount = other.attachmentCount;
-    pAttachments = detail::copyArray(other.pAttachments, other.attachmentCount);
+    pAttachments = core::copyArray(other.pAttachments, other.attachmentCount);
     blendConstants[0] = other.blendConstants[0];
     blendConstants[1] = other.blendConstants[1];
     blendConstants[2] = other.blendConstants[2];
@@ -86,9 +86,9 @@ AdvancedColorBlendState& AdvancedColorBlendState::operator=(const AdvancedColorB
     {
         delete reinterpret_cast<const VkPipelineColorBlendAdvancedStateCreateInfoEXT *>(pNext);
         delete[] pAttachments;
-        detail::copy(this, &other);
-        pNext = detail::copy<VkPipelineColorBlendAdvancedStateCreateInfoEXT>(other.pNext);
-        pAttachments = detail::copyArray(other.pAttachments, attachmentCount);
+        core::copy(this, &other);
+        pNext = core::copy<VkPipelineColorBlendAdvancedStateCreateInfoEXT>(other.pNext);
+        pAttachments = core::copyArray(other.pAttachments, attachmentCount);
     }
     return *this;
 }
@@ -101,7 +101,7 @@ AdvancedColorBlendState::~AdvancedColorBlendState()
 
 std::size_t AdvancedColorBlendState::hash() const noexcept
 {
-    std::size_t hash = detail::hashArgs(
+    std::size_t hash = core::hashArgs(
         sType,
         flags,
         logicOpEnable,
@@ -109,7 +109,7 @@ std::size_t AdvancedColorBlendState::hash() const noexcept
         attachmentCount);
     for (uint32_t i = 0; i < attachmentCount; ++i)
     {
-        detail::hashCombine(hash, detail::hashArgs(
+        core::hashCombine(hash, core::hashArgs(
             pAttachments[i].blendEnable,
             pAttachments[i].srcColorBlendFactor,
             pAttachments[i].dstColorBlendFactor,
@@ -119,9 +119,9 @@ std::size_t AdvancedColorBlendState::hash() const noexcept
             pAttachments[i].alphaBlendOp,
             pAttachments[i].colorWriteMask));
     }
-    detail::hashCombine(hash, detail::hashArray(blendConstants, 4));
+    core::hashCombine(hash, core::hashArray(blendConstants, 4));
     auto colorBlendAdvanced = reinterpret_cast<const VkPipelineColorBlendAdvancedStateCreateInfoEXT *>(pNext);
-    detail::hashCombine(hash, detail::hashArgs(
+    core::hashCombine(hash, core::hashArgs(
         colorBlendAdvanced->sType,
         colorBlendAdvanced->srcPremultiplied,
         colorBlendAdvanced->dstPremultiplied,
@@ -132,12 +132,12 @@ std::size_t AdvancedColorBlendState::hash() const noexcept
 bool AdvancedColorBlendState::operator==(const AdvancedColorBlendState& other) const noexcept
 {
     return (sType == other.sType) &&
-        (detail::compare<VkPipelineColorBlendAdvancedStateCreateInfoEXT>(pNext, other.pNext)) &&
+        (core::compare<VkPipelineColorBlendAdvancedStateCreateInfoEXT>(pNext, other.pNext)) &&
         (flags == other.flags) &&
         (logicOpEnable == other.logicOpEnable) &&
         (logicOp == other.logicOp) &&
         (attachmentCount == other.attachmentCount) &&
-        detail::compareArrays(pAttachments, other.pAttachments, attachmentCount) &&
+        core::compareArrays(pAttachments, other.pAttachments, attachmentCount) &&
         (blendConstants[0] == other.blendConstants[0]) &&
         (blendConstants[1] == other.blendConstants[1]) &&
         (blendConstants[2] == other.blendConstants[2]) &&

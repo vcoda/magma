@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "subpass.h"
-#include "../detail/copy.h"
+#include "../core/copy.h"
 
 namespace magma
 {
@@ -38,11 +38,11 @@ Subpass::Subpass(VkSubpassDescriptionFlags flags, VkPipelineBindPoint pipelineBi
 
 Subpass::Subpass(const Subpass& other) noexcept
 {
-    detail::copy(this, &other);
+    core::copy(this, &other);
     if (other.pColorAttachments)
-        pColorAttachments = detail::copyArray(other.pColorAttachments, colorAttachmentCount);
+        pColorAttachments = core::copyArray(other.pColorAttachments, colorAttachmentCount);
     if (other.pDepthStencilAttachment)
-        pDepthStencilAttachment = detail::copy(other.pDepthStencilAttachment);
+        pDepthStencilAttachment = core::copy(other.pDepthStencilAttachment);
 }
 
 Subpass& Subpass::operator=(const Subpass& other) noexcept
@@ -51,11 +51,11 @@ Subpass& Subpass::operator=(const Subpass& other) noexcept
     {
         delete[] pColorAttachments;
         delete pDepthStencilAttachment;
-        detail::copy(this, &other);
+        core::copy(this, &other);
         if (other.pColorAttachments)
-            pColorAttachments = detail::copyArray(other.pColorAttachments, colorAttachmentCount);
+            pColorAttachments = core::copyArray(other.pColorAttachments, colorAttachmentCount);
         if (other.pDepthStencilAttachment)
-            pDepthStencilAttachment = detail::copy(other.pDepthStencilAttachment);
+            pDepthStencilAttachment = core::copy(other.pDepthStencilAttachment);
     }
     return *this;
 }
@@ -68,7 +68,7 @@ Subpass::~Subpass()
 
 std::size_t Subpass::hash() const noexcept
 {
-    std::size_t hash = detail::hashArgs(
+    std::size_t hash = core::hashArgs(
         flags,
         pipelineBindPoint,
         inputAttachmentCount,
@@ -77,7 +77,7 @@ std::size_t Subpass::hash() const noexcept
     uint32_t i;
     for (i = 0; i < inputAttachmentCount; ++i)
     {
-        detail::hashCombine(hash, detail::hashArgs(
+        core::hashCombine(hash, core::hashArgs(
             pInputAttachments[i].attachment,
             pInputAttachments[i].layout));
     }
@@ -85,26 +85,26 @@ std::size_t Subpass::hash() const noexcept
     {
         if (pColorAttachments)
         {
-            detail::hashCombine(hash, detail::hashArgs(
+            core::hashCombine(hash, core::hashArgs(
                 pColorAttachments[i].attachment,
                 pColorAttachments[i].layout));
         }
         else if (pResolveAttachments)
         {
-            detail::hashCombine(hash, detail::hashArgs(
+            core::hashCombine(hash, core::hashArgs(
                 pResolveAttachments[i].attachment,
                 pResolveAttachments[i].layout));
         }
     }
     if (pDepthStencilAttachment)
     {
-        detail::hashCombine(hash, detail::hashArgs(
+        core::hashCombine(hash, core::hashArgs(
             pDepthStencilAttachment->attachment,
             pDepthStencilAttachment->layout));
     }
     for (i = 0; i < preserveAttachmentCount; ++i)
     {
-        detail::hashCombine(hash, detail::hash(
+        core::hashCombine(hash, core::hash(
             pPreserveAttachments[i]));
     }
     return hash;

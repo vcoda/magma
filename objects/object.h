@@ -26,7 +26,7 @@ namespace magma
     /* Base non-copyable object for dispatchable and non-dispatchable handles.
        Provides user-defined new and delete operators for custom allocations. */
 
-    class Object : public detail::NonCopyable
+    class Object : public core::NonCopyable
     {
     public:
         void *operator new(std::size_t size);

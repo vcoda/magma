@@ -27,7 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../misc/deviceExtension.h"
 #include "../misc/exception.h"
-#include "../detail/copyMemory.h"
+#include "../core/copyMemory.h"
 
 namespace magma
 {
@@ -112,7 +112,7 @@ void Buffer::copyHost(const void *data, CopyMemoryFunction copyFn) noexcept
     if (buffer)
     {
         if (!copyFn)
-            copyFn = detail::copyMemory;
+            copyFn = core::copyMemory;
         copyFn(buffer, data, static_cast<std::size_t>(size));
         memory->unmap();
     }

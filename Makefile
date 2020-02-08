@@ -1,6 +1,6 @@
 CC=g++
 PLATFORM=VK_USE_PLATFORM_XCB_KHR
-INCLUDE_DIR=-I$(VULKAN_SDK)/include -Idetail
+INCLUDE_DIR=-I$(VULKAN_SDK)/include -Icore
 BASE_CFLAGS=-std=c++14 -m64 -msse4 -pthread -pedantic -Werror -D$(PLATFORM) $(INCLUDE_DIR)
 
 DEBUG ?= 1
@@ -44,7 +44,7 @@ MAGMA_OBJS= \
 	misc/geometry.o \
 	misc/scopedDebugMarker.o \
 	\
-	detail/pch.o \
+	core/pch.o \
 	\
 	objects/accelerationStructure.o \
 	objects/buffer.o \
