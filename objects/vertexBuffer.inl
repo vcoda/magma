@@ -18,7 +18,7 @@ inline VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> copyCmd, const 
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    BaseVertexBuffer(std::move(copyCmd), vertices.data(), static_cast<VkDeviceSize>(sizeof(VertexType) * vertices.size()),
+    VertexBuffer(std::move(copyCmd), static_cast<VkDeviceSize>(sizeof(VertexType) * vertices.size()), vertices.data(),
         flags, sharing, std::move(allocator), std::move(copyFn))
 {
     vertexCount = MAGMA_COUNT(vertices);
