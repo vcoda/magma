@@ -54,6 +54,13 @@ namespace magma
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
+        template<typename IndexType, uint32_t indexArraySize>
+        explicit IndexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+            const IndexType (&indices)[indexArraySize],
+            VkBufferCreateFlags flags = 0,
+            const Sharing& sharing = Sharing(),
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            CopyMemoryFunction copyFn = nullptr);
         template<typename IndexType>
         explicit IndexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
             const std::vector<IndexType>& indices,
