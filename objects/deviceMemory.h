@@ -53,7 +53,6 @@ namespace magma
         bool invalidateMappedRange(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
 
-
     private:
         uint32_t getTypeIndex(VkMemoryPropertyFlags flags) const;
 

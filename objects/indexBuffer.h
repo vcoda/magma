@@ -54,6 +54,13 @@ namespace magma
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
+        explicit IndexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+            std::shared_ptr<SrcTransferBuffer> srcBuffer,
+            VkIndexType indexType,
+            VkBufferCreateFlags flags = 0,
+            const Sharing& sharing = Sharing(),
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        // Templates
         template<typename IndexType, uint32_t indexArraySize>
         explicit IndexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
             const IndexType (&indices)[indexArraySize],
@@ -68,12 +75,6 @@ namespace magma
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
-        explicit IndexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
-            std::shared_ptr<SrcTransferBuffer> srcBuffer,
-            VkIndexType indexType,
-            VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
     /* Dynamic index buffer that can be mapped for host access. */

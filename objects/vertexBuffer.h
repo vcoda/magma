@@ -52,6 +52,12 @@ namespace magma
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
+        explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+            std::shared_ptr<SrcTransferBuffer> srcBuffer,
+            VkBufferCreateFlags flags = 0,
+            const Sharing& sharing = Sharing(),
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        // Templates
         template<typename VertexType, uint32_t vertexArraySize>
         explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
             const VertexType (&vertices)[vertexArraySize],
@@ -66,11 +72,6 @@ namespace magma
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
-        explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
-            std::shared_ptr<SrcTransferBuffer> srcBuffer,
-            VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
     /* Dynamic vertex buffer that can be mapped for host access. */
