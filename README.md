@@ -78,7 +78,7 @@ instead of pre-compiled SPIR-V binary and so on. Auxiliary objects are placed in
 
 ## Dependencies
 
-Library fully depends on STL and isn't designed to be used with custom containers. It doesn't use file input/output. There are no dependencies 
+Library fully depends on STL and has not been designed to be used with custom containers. It doesn't use file input/output. There are no dependencies 
 from any third-party libraries, except [shaderc](https://github.com/google/shaderc) - it's used (optionally) by ShaderCompiler.
 
 ## Language
