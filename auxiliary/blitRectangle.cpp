@@ -45,15 +45,17 @@ namespace magma
 namespace aux
 {
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
+    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     BlitRectangle(renderPass,
         VertexShaderStage(createVertexShader(renderPass->getDevice(), allocator), "main"),
         FragmentShaderStage(createFragmentShader(renderPass->getDevice(), allocator), "main"),
-        std::move(allocator))
+        std::move(pipelineCache), std::move(allocator))
 {}
 
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     const PipelineShaderStage& vertexShader, const PipelineShaderStage& fragmentShader,
+    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     renderPass(std::move(renderPass))
 {   // Check for hardware support
@@ -85,7 +87,9 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
         pipelineLayout,
         this->renderPass, 0,
-        nullptr, nullptr, 0, allocator);
+        nullptr, // basePipeline
+        std::move(pipelineCache),
+        0, std::move(allocator));
     for (const auto& attachment : this->renderPass->getAttachments())
     {
         if (VK_ATTACHMENT_LOAD_OP_CLEAR == attachment.loadOp)

@@ -32,6 +32,7 @@ namespace magma
     class DescriptorSet;
     class DescriptorSetLayout;
     class PipelineLayout;
+    class PipelineCache;
     class GraphicsPipeline;
     class CommandBuffer;
     class IAllocator;
@@ -45,10 +46,12 @@ namespace magma
         {
         public:
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
+                std::shared_ptr<PipelineCache> pipelineCache = nullptr,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
                 const PipelineShaderStage& vertexShader,
                 const PipelineShaderStage& fragmentShader,
+                std::shared_ptr<PipelineCache> pipelineCache = nullptr,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             void blit(std::shared_ptr<Framebuffer> bltDst,
                 std::shared_ptr<const ImageView> bltSrc,
