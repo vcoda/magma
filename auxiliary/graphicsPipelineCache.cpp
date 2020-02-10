@@ -36,10 +36,10 @@ namespace magma
 namespace aux
 {
 GraphicsPipelineCache::GraphicsPipelineCache(std::shared_ptr<Device> device,
-    std::shared_ptr<PipelineCache> cache /* nullptr */,
+    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     device(std::move(device)),
-    pipelineCache(std::move(cache)),
+    pipelineCache(std::move(pipelineCache)),
     allocator(std::move(allocator))
 {
     if (!pipelineCache)
@@ -109,10 +109,10 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
         info.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     }
     // Create new pipeline using cache and base pipeline to speed up construction time
-    std::shared_ptr<GraphicsPipeline> pipeline = std::make_shared<GraphicsPipeline>(device, pipelineCache,
+    std::shared_ptr<GraphicsPipeline> pipeline = std::make_shared<GraphicsPipeline>(device,
         stages, vertexInputState, inputAssemblyState, tesselationState, viewportState,
         rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
-        layout, renderPass, subpass, basePipeline, info.flags, allocator);
+        layout, renderPass, subpass, basePipeline, pipelineCache, info.flags, allocator);
     MAGMA_ASSERT(pipeline->getHash() == hash); // Check hash computation
     pipelines.emplace(hash, pipeline);
     basePipelines.emplace(baseHash, pipeline);

@@ -57,7 +57,7 @@ struct alignas(16) TextShader::String
 
 TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
     const std::shared_ptr<RenderPass> renderPass,
-    std::shared_ptr<PipelineCache> cache /* nullptr */,
+    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     maxChars(maxChars),
     maxStrings(maxStrings)
@@ -94,7 +94,7 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
     const VertexShaderStage vertexShader(std::make_shared<ShaderModule>(device, vsBlit, 0, nullptr, allocator), "main");
     const FragmentShaderStage fragmentShader(std::make_shared<ShaderModule>(device, fsFont, 0, nullptr, allocator), "main");
     // Create font pipeline
-    pipeline = std::make_shared<GraphicsPipeline>(std::move(device), std::move(cache),
+    pipeline = std::make_shared<GraphicsPipeline>(std::move(device),
         std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
         renderstates::nullVertexInput,
         renderstates::triangleList,
@@ -104,8 +104,10 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
         renderstates::blendNormalWriteRgb,
         std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
         std::move(pipelineLayout),
-        std::move(renderPass),
-        0, nullptr, 0, std::move(allocator));
+        std::move(renderPass), 0,
+        nullptr, // basePipeline
+        std::move(pipelineCache),
+        0, std::move(allocator));
 
     // Initialize glyphs
     memset(ascii, 0, sizeof(Glyph) * 32); // Zero control codes

@@ -27,10 +27,10 @@ namespace magma
     {
     public:
         explicit ComputePipeline(std::shared_ptr<Device> device,
-            std::shared_ptr<PipelineCache> cache,
             const PipelineShaderStage& stage,
             std::shared_ptr<PipelineLayout> layout = nullptr,
             std::shared_ptr<ComputePipeline> basePipeline = nullptr,
+            std::shared_ptr<PipelineCache> pipelineCache = nullptr,
             VkPipelineCreateFlags flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };

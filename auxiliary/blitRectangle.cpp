@@ -74,7 +74,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, allocator);
     // Create blit pipeline
     pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, std::initializer_list<PushConstantRange>{}, allocator);
-    pipeline = std::make_shared<GraphicsPipeline>(device, nullptr,
+    pipeline = std::make_shared<GraphicsPipeline>(device,
         std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
         renderstates::nullVertexInput,
         renderstates::triangleList,
@@ -84,8 +84,8 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         renderstates::dontBlendWriteRgba,
         std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
         pipelineLayout,
-        this->renderPass,
-        0, nullptr, 0, allocator);
+        this->renderPass, 0,
+        nullptr, nullptr, 0, allocator);
     for (const auto& attachment : this->renderPass->getAttachments())
     {
         if (VK_ATTACHMENT_LOAD_OP_CLEAR == attachment.loadOp)

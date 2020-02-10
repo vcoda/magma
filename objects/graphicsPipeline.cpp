@@ -37,7 +37,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> cache,
+GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     const std::vector<PipelineShaderStage>& stages,
     const VertexInputState& vertexInputState,
     const InputAssemblyState& inputAssemblyState,
@@ -50,18 +50,18 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass /* 0 */,
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
+    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    GraphicsPipeline(std::move(device), std::move(cache), stages,
-        vertexInputState, inputAssemblyState,
+    GraphicsPipeline(std::move(device), stages, vertexInputState, inputAssemblyState,
         TesselationState(), // No tesselation state
         ViewportState(), // No viewport state (supposed to be dynamic)
         rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
-        std::move(layout), std::move(renderPass), subpass, std::move(basePipeline), flags,
-        std::move(allocator))
+        std::move(layout), std::move(renderPass), subpass, std::move(basePipeline), std::move(pipelineCache),
+        flags, std::move(allocator))
 {}
 
-GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> cache,
+GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     const std::vector<PipelineShaderStage>& stages,
     const VertexInputState& vertexInputState,
     const InputAssemblyState& inputAssemblyState,
@@ -76,9 +76,10 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass /* 0 */,
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
+    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout), std::move(basePipeline), std::move(cache), std::move(allocator))
+    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout), std::move(basePipeline), std::move(pipelineCache), std::move(allocator))
 {
     VkPipelineVertexInputStateCreateInfo pipelineVertexInput = {};
     VkVertexInputBindingDescription vertexBindingDesc = {};
@@ -130,7 +131,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device, std::shared_p
     info.subpass = subpass;
     info.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
     info.basePipelineIndex = -1;
-    const VkResult create = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->cache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create graphics pipeline");
     hash = core::hashArgs(
         info.sType,

@@ -37,7 +37,7 @@ namespace magma
         VkPipelineBindPoint getBindPoint() const noexcept { return bindPoint; }
         std::shared_ptr<PipelineLayout> getLayout() noexcept { return layout; }
         std::shared_ptr<Pipeline> getBasePipeline() noexcept { return basePipeline; }
-        std::shared_ptr<PipelineCache> getCache() noexcept { return cache; }
+        std::shared_ptr<PipelineCache> getPipelineCache() noexcept { return pipelineCache; }
         std::size_t getHash() const noexcept { return hash; }
         // VK_AMD_shader_info
         VkShaderStatisticsInfoAMD getShaderStatistics(VkShaderStageFlagBits stage) const;
@@ -49,13 +49,13 @@ namespace magma
             std::shared_ptr<Device> device,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
-            std::shared_ptr<PipelineCache> cache,
+            std::shared_ptr<PipelineCache> pipelineCache,
             std::shared_ptr<IAllocator> allocator);
 
         VkPipelineBindPoint bindPoint;
         std::shared_ptr<PipelineLayout> layout;
         std::shared_ptr<Pipeline> basePipeline;
-        std::shared_ptr<PipelineCache> cache;
+        std::shared_ptr<PipelineCache> pipelineCache;
         std::size_t hash = 0;
     };
 } // namespace magma

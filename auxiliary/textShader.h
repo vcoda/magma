@@ -48,7 +48,7 @@ namespace magma
         public:
             explicit TextShader(const uint32_t maxChars, const uint32_t maxStrings,
                 std::shared_ptr<RenderPass> renderPass,
-                std::shared_ptr<PipelineCache> cache = nullptr,
+                std::shared_ptr<PipelineCache> pipelineCache = nullptr,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             void draw(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept;
             void begin();

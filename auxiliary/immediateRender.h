@@ -59,7 +59,7 @@ namespace magma
         public:
             explicit ImmediateRender(const uint32_t maxVertexCount,
                 std::shared_ptr<Device> device,
-                std::shared_ptr<PipelineCache> cache,
+                std::shared_ptr<PipelineCache> pipelineCache,
                 std::shared_ptr<PipelineLayout> layout,
                 std::shared_ptr<RenderPass> renderPass,
                 std::shared_ptr<IAllocator> allocator = nullptr);

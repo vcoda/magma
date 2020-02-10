@@ -34,7 +34,7 @@ namespace magma
 namespace aux
 {
 ImmediateRender::ImmediateRender(const uint32_t maxVertexCount,
-    std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> cache,
+    std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
     std::shared_ptr<PipelineLayout> layout, std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     maxVertexCount(maxVertexCount),
@@ -43,7 +43,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount,
     renderPass(std::move(renderPass)),
     allocator(std::move(allocator)),
     vertexBuffer(std::make_shared<DynamicVertexBuffer>(this->device, sizeof(Vertex) * maxVertexCount, nullptr, 0, Resource::Sharing(), this->allocator)),
-    pipelineCache(std::make_shared<GraphicsPipelineCache>(this->device, std::move(cache), this->allocator)),
+    pipelineCache(std::make_shared<GraphicsPipelineCache>(this->device, std::move(pipelineCache), this->allocator)),
     vertexShader(VertexShaderStage(createShader(true), "main")),
     fragmentShader(FragmentShaderStage(createShader(false), "main")),
     rasterizationState(renderstates::fillCullBackCCW),
