@@ -41,7 +41,7 @@ The library was designed with zero or almost zero overhead in mind. While C++ ex
 construction time, there are numerous methods marked with "noexcept" specifier. Consider, for example, VkCommandBuffer object:
 
 * Most of wrapper's methods don't throw any exceptions.
-* Parameters like smart pointers are passed by reference, so there is no reference counter increment/decrement.
+* Parameters like shared pointers are passed by reference, so there is no reference counter increment/decrement.
 * Thin methods around API calls are made inline. 
 
 Command buffer's calls in release build should be as much efficient as native C API calls.
@@ -83,4 +83,4 @@ from any third-party libraries, except [shaderc](https://github.com/google/shade
 
 ## Language
 
-Code is written in modern C++11/14 and takes advantage of new language features, STL and smart pointers.
+Code is written in modern C++11/14 and takes advantage of new language features, STL and shared pointers.
