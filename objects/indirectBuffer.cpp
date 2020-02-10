@@ -76,7 +76,8 @@ void IndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawCmd,
 
 void IndirectBuffer::writeDrawCommands(const std::vector<VkDrawIndirectCommand>& drawCmdList) noexcept
 {
-    if (auto *drawCmdArray = memory->map<VkDrawIndirectCommand>(0, sizeof(VkDrawIndirectCommand)))
+    const VkDeviceSize size = sizeof(VkDrawIndirectCommand) * drawCmdList.size();
+    if (auto *drawCmdArray = memory->map<VkDrawIndirectCommand>(0, size))
     {
         for (const VkDrawIndirectCommand& drawCmd : drawCmdList)
             memcpy(drawCmdArray++, &drawCmd, sizeof(VkDrawIndirectCommand));
