@@ -55,7 +55,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_XMM_REGISTERS 16
 #else
 #define MAGMA_XMM_REGISTERS 8
-#endif*/
+#endif
 #define MAGMA_XMM_BLOCK_SIZE (sizeof(__m128i) * MAGMA_XMM_REGISTERS)
 
 #define MAGMA_CONCURRENT_COPY_THREADS 4
