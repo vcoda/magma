@@ -84,4 +84,15 @@ void IndirectBuffer::writeDrawCommands(const std::vector<VkDrawIndirectCommand>&
         memory->unmap();
     }
 }
+
+void IndirectBuffer::writeDrawCommands(const std::list<VkDrawIndirectCommand>& drawCmdList) noexcept
+{
+    const VkDeviceSize size = sizeof(VkDrawIndirectCommand) * drawCmdList.size();
+    if (auto *drawCmdArray = memory->map<VkDrawIndirectCommand>(0, size))
+    {
+        for (const VkDrawIndirectCommand& drawCmd : drawCmdList)
+            memcpy(drawCmdArray++, &drawCmd, sizeof(VkDrawIndirectCommand));
+        memory->unmap();
+    }
+}
 } // namespace magma

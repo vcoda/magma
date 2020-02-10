@@ -41,5 +41,6 @@ namespace magma
         void writeDrawCommand(const VkDrawIndirectCommand& drawCmd,
             uint32_t cmdIndex = 0) noexcept;
         void writeDrawCommands(const std::vector<VkDrawIndirectCommand>& drawCmdList) noexcept;
+        void writeDrawCommands(const std::list<VkDrawIndirectCommand>& drawCmdList) noexcept;
     };
 } // namespace magma
