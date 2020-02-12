@@ -73,7 +73,7 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,
         return false;
     if (!current)
     {
-        current = reinterpret_cast<Vertex *>(vertexBuffer->getMemory()->map(0, VK_WHOLE_SIZE));
+        current = vertexBuffer->getMemory()->map<Vertex>(0, VK_WHOLE_SIZE);
         if (!current)
             return false;
         // Set attributes to initial state
