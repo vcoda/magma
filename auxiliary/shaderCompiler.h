@@ -87,4 +87,6 @@ namespace magma
         };
     } // namespace aux
 } // namespace magma
+
+#include "shaderCompiler.inl"
 #endif // _WIN32

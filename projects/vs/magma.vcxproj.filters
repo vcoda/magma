@@ -853,6 +853,9 @@
     <None Include="..\..\helpers\alignedUniformArrayIterator.inl">
       <Filter>Header Files\helpers</Filter>
     </None>
+    <None Include="..\..\auxiliary\shaderCompiler.inl">
+      <Filter>Header Files\auxiliary</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">

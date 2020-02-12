@@ -39,26 +39,6 @@ ShaderCompiler::~ShaderCompiler()
     shaderc_compiler_release(compiler);
 }
 
-void ShaderCompiler::setOptimizationLevel(shaderc_optimization_level optimizationLevel) noexcept
-{
-    this->optimizationLevel = optimizationLevel;
-}
-
-void ShaderCompiler::setGenerateDebugInfo(bool generateDebugInfo) noexcept
-{
-    this->generateDebugInfo = generateDebugInfo;
-}
-
-void ShaderCompiler::setSuppressWarnings(bool suppressWarnings) noexcept
-{
-    this->suppressWarnings = suppressWarnings;
-}
-
-void ShaderCompiler::setWarningsAsErrors(bool warningsAsErrors) noexcept
-{
-    this->warningsAsErrors = warningsAsErrors;
-}
-
 std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& source, const char *entrypoint,
     shaderc_shader_kind shaderKind /* shaderc_glsl_infer_from_source */,
     const std::unordered_map<std::string, std::string>& macroDefinitions /* {} */,
