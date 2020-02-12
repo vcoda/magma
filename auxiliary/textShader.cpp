@@ -213,7 +213,7 @@ void TextShader::draw(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept
 {
     cmdBuffer->bindDescriptorSet(pipeline, descriptorSet);
     cmdBuffer->bindPipeline(pipeline);
-    cmdBuffer->draw(3, 0);
+    cmdBuffer->draw(3);
 }
 
 void TextShader::begin()

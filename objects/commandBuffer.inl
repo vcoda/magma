@@ -160,17 +160,20 @@ inline void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::v
     vkCmdBindVertexBuffers(handle, firstBinding, dereferencedBuffers.size(), dereferencedBuffers, offsets.data());
 }
 
-inline void CommandBuffer::draw(uint32_t vertexCount, uint32_t firstVertex) const noexcept
+inline void CommandBuffer::draw(uint32_t vertexCount,
+    uint32_t firstVertex /* 0 */) const noexcept
 {
     vkCmdDraw(handle, vertexCount, 1, firstVertex, 0);
 }
 
-inline void CommandBuffer::drawInstanced(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance) const noexcept
+inline void CommandBuffer::drawInstanced(uint32_t vertexCount, uint32_t instanceCount,
+    uint32_t firstVertex /* 0 */, uint32_t firstInstance /* 0 */) const noexcept
 {
     vkCmdDraw(handle, vertexCount, instanceCount, firstVertex, firstInstance);
 }
 
-inline void CommandBuffer::drawIndexed(uint32_t indexCount, uint32_t firstIndex, int32_t vertexOffset /* 0 */) const noexcept
+inline void CommandBuffer::drawIndexed(uint32_t indexCount,
+    uint32_t firstIndex /* 0 */, int32_t vertexOffset /* 0 */) const noexcept
 {
     vkCmdDrawIndexed(handle, indexCount, 1, firstIndex, vertexOffset, 0);
 }

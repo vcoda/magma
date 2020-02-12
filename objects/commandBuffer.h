@@ -149,16 +149,16 @@ namespace magma
 
         void draw(
             uint32_t vertexCount,
-            uint32_t firstVertex) const noexcept;
+            uint32_t firstVertex = 0) const noexcept;
         void drawInstanced(
             uint32_t vertexCount,
             uint32_t instanceCount,
-            uint32_t firstVertex,
-            uint32_t firstInstance) const noexcept;
+            uint32_t firstVertex = 0,
+            uint32_t firstInstance = 0) const noexcept;
         void drawIndexed(
             uint32_t indexCount,
-            uint32_t firstIndex,
-            int32_t vertexOffset) const noexcept;
+            uint32_t firstIndex = 0,
+            int32_t vertexOffset = 0) const noexcept;
         void drawIndexedInstanced(
             uint32_t indexCount,
             uint32_t instanceCount,
