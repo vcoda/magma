@@ -72,7 +72,7 @@ namespace magma
             void setColorBlendState(const ColorBlendState& state) noexcept;
             void setLineWidth(float width) noexcept;
             void setIdentity() noexcept;
-            void setTransform(const float transform[16]) noexcept;
+            void setTransform(const float matrix[16]) noexcept;
             uint32_t getMaxVertexCount() const noexcept;
             uint32_t getVertexCount() const noexcept;
             uint32_t getPrimitiveCount() const noexcept;

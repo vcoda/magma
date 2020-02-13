@@ -66,13 +66,18 @@ inline void ImmediateRender::setLineWidth(float width) noexcept
 inline void ImmediateRender::setIdentity() noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
-    transform = Transform();
+    constexpr float identity[16] = {
+        1.f, 0.f, 0.f, 0.f,
+        0.f, 1.f, 0.f, 0.f,
+        0.f, 0.f, 1.f, 0.f,
+        0.f, 0.f, 0.f, 1.f};
+    setTransform(identity);
 }
 
-inline void ImmediateRender::setTransform(const float transform[16]) noexcept
+inline void ImmediateRender::setTransform(const float matrix[16]) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
-    memcpy(this->transform.m, transform, sizeof(this->transform.m));
+    memcpy(transform.m, matrix, sizeof(transform.m));
 }
 
 inline uint32_t ImmediateRender::getMaxVertexCount() const noexcept

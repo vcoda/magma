@@ -51,17 +51,12 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount,
     depthStencilState(renderstates::depthAlwaysDontWrite),
     colorBlendState(renderstates::dontBlendWriteRgba) // Make copyable
 {
+    setIdentity();
     if (!this->layout)
     {   // If layout not specified, create default one
         constexpr pushconstants::VertexConstantRange<Transform> pushConstantRange;
         this->layout = std::make_shared<PipelineLayout>(this->device, pushConstantRange, this->allocator);
     }
-    constexpr float identity[16] = {
-        1.f, 0.f, 0.f, 0.f,
-        0.f, 1.f, 0.f, 0.f,
-        0.f, 0.f, 1.f, 0.f,
-        0.f, 0.f, 0.f, 1.f};
-    setTransform(identity);
 }
 
 bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,
