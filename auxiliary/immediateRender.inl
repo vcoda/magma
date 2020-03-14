@@ -80,21 +80,6 @@ inline void ImmediateRender::setTransform(const float matrix[16]) noexcept
     memcpy(transform.m, matrix, sizeof(transform.m));
 }
 
-inline uint32_t ImmediateRender::getMaxVertexCount() const noexcept
-{
-    return maxVertexCount;
-}
-
-inline uint32_t ImmediateRender::getVertexCount() const noexcept
-{
-    return vertexCount;
-}
-
-inline uint32_t ImmediateRender::getPrimitiveCount() const noexcept
-{
-    return MAGMA_COUNT(primitives);
-}
-
 inline void ImmediateRender::normal(float x, float y, float z) noexcept
 {
     current->normalPSize.v[0] = x;

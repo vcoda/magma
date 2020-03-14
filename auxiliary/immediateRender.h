@@ -64,6 +64,10 @@ namespace magma
                 std::shared_ptr<RenderPass> renderPass,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             std::shared_ptr<Device> getDevice() const noexcept { return device; }
+            uint32_t getMaxVertexCount() const noexcept { return maxVertexCount; }
+            uint32_t getVertexCount() const noexcept { return vertexCount; }
+            uint32_t getPrimitiveCount() const noexcept { return MAGMA_COUNT(primitives); }
+            // Render states setup
             void setVertexShader(const VertexShaderStage& vertexShader) noexcept;
             void setFragmentShader(const FragmentShaderStage& fragmentShader) noexcept;
             void setRasterizationState(const RasterizationState& state) noexcept;
@@ -73,9 +77,7 @@ namespace magma
             void setLineWidth(float width) noexcept;
             void setIdentity() noexcept;
             void setTransform(const float matrix[16]) noexcept;
-            uint32_t getMaxVertexCount() const noexcept;
-            uint32_t getVertexCount() const noexcept;
-            uint32_t getPrimitiveCount() const noexcept;
+            // Primitive generation
             bool beginPrimitive(VkPrimitiveTopology topology,
                 const char *labelName = nullptr,
                 uint32_t labelColor = 0xFFFFFFFF);
