@@ -42,8 +42,8 @@ GraphicsPipelineCache::GraphicsPipelineCache(std::shared_ptr<Device> device,
     pipelineCache(std::move(pipelineCache)),
     allocator(std::move(allocator))
 {
-    if (!pipelineCache)
-        pipelineCache = std::make_shared<PipelineCache>(this->device, this->allocator);
+    if (!this->pipelineCache)
+        this->pipelineCache = std::make_shared<PipelineCache>(this->device, this->allocator);
 }
 
 std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
