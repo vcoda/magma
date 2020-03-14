@@ -31,12 +31,14 @@ namespace magma
 RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
     const std::vector<PipelineShaderStage>& stages,
     const std::vector<RayTracingShaderGroup>& groups,
-    uint32_t maxRecursionDepth, std::shared_ptr<PipelineLayout> layout,
-    std::shared_ptr<RayTracingPipeline> basePipeline /* nullptr */,
+    uint32_t maxRecursionDepth,
+    std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
-    VkPipelineCreateFlags flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, std::move(device), std::move(layout), std::move(basePipeline), std::move(pipelineCache), std::move(allocator))
+    std::shared_ptr<RayTracingPipeline> basePipeline /* nullptr */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkPipelineCreateFlags flags /* 0 */):
+    Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, std::move(device), std::move(layout),
+        std::move(pipelineCache), std::move(basePipeline), std::move(allocator))
 {
     if (stages.empty())
         MAGMA_THROW("shader stages are empty");

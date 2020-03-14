@@ -105,9 +105,9 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
         std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
         std::move(pipelineLayout),
         std::move(renderPass), 0,
-        nullptr, // basePipeline
         std::move(pipelineCache),
-        0, std::move(allocator));
+        nullptr, // basePipeline
+        std::move(allocator));
 
     // Initialize glyphs
     memset(ascii, 0, sizeof(Glyph) * 32); // Zero control codes

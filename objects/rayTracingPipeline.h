@@ -35,10 +35,10 @@ namespace magma
             const std::vector<RayTracingShaderGroup>& groups,
             uint32_t maxRecursionDepth,
             std::shared_ptr<PipelineLayout> layout,
-            std::shared_ptr<RayTracingPipeline> basePipeline = nullptr,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
-            VkPipelineCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<RayTracingPipeline> basePipeline = nullptr,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            VkPipelineCreateFlags flags = 0);
         std::vector<VkShaderModule> getShaderGroupHandles(uint32_t firstGroup, uint32_t groupCount) const;
         void compileDeferred(uint32_t shaderIndex);
     };

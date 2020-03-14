@@ -51,10 +51,10 @@ namespace magma
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<RenderPass> renderPass,
             uint32_t subpass = 0,
-            std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
-            VkPipelineCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            VkPipelineCreateFlags flags = 0);
         explicit GraphicsPipeline(std::shared_ptr<Device> device,
             const std::vector<PipelineShaderStage>& stages,
             const VertexInputState& vertexInputState,
@@ -69,9 +69,9 @@ namespace magma
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<RenderPass> renderPass,
             uint32_t subpass = 0,
-            std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
-            VkPipelineCreateFlags flags = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            VkPipelineCreateFlags flags = 0);
     };
 } // namespace magma

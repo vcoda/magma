@@ -87,9 +87,9 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
         pipelineLayout,
         this->renderPass, 0,
-        nullptr, // basePipeline
         std::move(pipelineCache),
-        0, std::move(allocator));
+        nullptr, // basePipeline
+        std::move(allocator));
     for (const auto& attachment : this->renderPass->getAttachments())
     {
         if (VK_ATTACHMENT_LOAD_OP_CLEAR == attachment.loadOp)
