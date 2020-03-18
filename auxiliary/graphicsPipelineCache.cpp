@@ -57,7 +57,7 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
     const std::initializer_list<VkDynamicState>& dynamicStates,
-    std::shared_ptr<PipelineLayout> layout,
+    std::shared_ptr<PipelineLayout> pipelineLayout,
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass /* 0 */,
     VkPipelineCreateFlags flags /* 0 */)
@@ -86,9 +86,9 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
     for (auto state : dynamicStates)
         core::hashCombine(baseHash, core::hash(state));
     core::hashCombine(hash, baseHash);
-    if (!layout)
-        layout = std::make_shared<PipelineLayout>(device);
-    core::hashCombine(hash, layout->getHash());
+    if (!pipelineLayout)
+        pipelineLayout = std::make_shared<PipelineLayout>(device);
+    core::hashCombine(hash, pipelineLayout->getHash());
     if (renderPass)
     {
         core::hashCombine(hash, renderPass->getHash());
@@ -112,7 +112,7 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
     std::shared_ptr<GraphicsPipeline> pipeline = std::make_shared<GraphicsPipeline>(device,
         stages, vertexInputState, inputAssemblyState, tesselationState, viewportState,
         rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
-        std::move(layout), std::move(renderPass), subpass,
+        std::move(pipelineLayout), std::move(renderPass), subpass,
         pipelineCache, basePipeline, allocator, info.flags);
     MAGMA_ASSERT(pipeline->getHash() == hash); // Check hash computation
     pipelines.emplace(hash, pipeline);

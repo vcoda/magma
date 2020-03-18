@@ -63,7 +63,7 @@ namespace magma
                 const DepthStencilState& depthStencilState,
                 const ColorBlendState& colorBlendState,
                 const std::initializer_list<VkDynamicState>& dynamicStates,
-                std::shared_ptr<PipelineLayout> layout,
+                std::shared_ptr<PipelineLayout> pipelineLayout,
                 std::shared_ptr<RenderPass> renderPass,
                 uint32_t subpass = 0,
                 VkPipelineCreateFlags flags = 0);
