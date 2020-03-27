@@ -182,34 +182,34 @@ namespace magma
         constexpr ConservativeRasterizationState pointCullFrontCWUnderestimate(pointCullFrontCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
         constexpr ConservativeRasterizationState pointCullFrontAndBackCWUnderestimate(pointCullFrontAndBackCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
 
-        constexpr RasterizationOrderState fillCullNoneCCWRelaxed(fillCullNoneCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState fillCullBackCCWRelaxed(fillCullBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState fillCullFrontCCWRelaxed(fillCullFrontCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState fillCullFrontAndBackCCWRelaxed(fillCullFrontAndBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState fillCullNoneRelaxedCCW(fillCullNoneCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState fillCullBackRelaxedCCW(fillCullBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState fillCullFrontRelaxedCCW(fillCullFrontCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState fillCullFrontAndBackRelaxedCCW(fillCullFrontAndBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
 
-        constexpr RasterizationOrderState lineCullNoneCCWRelaxed(lineCullNoneCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState lineCullBackCCWRelaxed(lineCullBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState lineCullFrontCCWRelaxed(lineCullFrontCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState lineCullFrontAndBackCCWRelaxed(lineCullFrontAndBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState lineCullNoneRelaxedCCW(lineCullNoneCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState lineCullBackRelaxedCCW(lineCullBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState lineCullFrontRelaxedCCW(lineCullFrontCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState lineCullFrontAndBackRelaxedCCW(lineCullFrontAndBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
 
-        constexpr RasterizationOrderState pointCullNoneCCWRelaxed(pointCullNoneCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState pointCullBackCCWRelaxed(pointCullBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState pointCullFrontCCWRelaxed(pointCullFrontCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState pointCullFrontAndBackCCWRelaxed(pointCullFrontAndBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState pointCullNoneRelaxedCCW(pointCullNoneCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState pointCullBackRelaxedCCW(pointCullBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState pointCullFrontRelaxedCCW(pointCullFrontCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState pointCullFrontAndBackRelaxedCCW(pointCullFrontAndBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
 
-        constexpr RasterizationOrderState fillCullNoneCWRelaxed(fillCullNoneCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState fillCullBackCWRelaxed(fillCullBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState fillCullFrontCWRelaxed(fillCullFrontCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState fillCullFrontAndBackCWRelaxed(fillCullFrontAndBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState fillCullNoneRelaxedCW(fillCullNoneCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState fillCullBackRelaxedCW(fillCullBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState fillCullFrontRelaxedCW(fillCullFrontCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState fillCullFrontAndBackRelaxedCW(fillCullFrontAndBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
 
-        constexpr RasterizationOrderState lineCullNoneCWRelaxed(lineCullNoneCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState lineCullBackCWRelaxed(lineCullBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState lineCullFrontCWRelaxed(lineCullFrontCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState lineCullFrontAndBackCWRelaxed(lineCullFrontAndBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState lineCullNoneRelaxedCW(lineCullNoneCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState lineCullBackRelaxedCW(lineCullBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState lineCullFrontRelaxedCW(lineCullFrontCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState lineCullFrontAndBackRelaxedCW(lineCullFrontAndBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
 
-        constexpr RasterizationOrderState pointCullNoneCWRelaxed(pointCullNoneCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState pointCullBackCWRelaxed(pointCullBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState pointCullFrontCWRelaxed(pointCullFrontCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState pointCullFrontAndBackCWRelaxed(pointCullFrontAndBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState pointCullNoneRelaxedCW(pointCullNoneCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState pointCullBackRelaxedCW(pointCullBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState pointCullFrontRelaxedCW(pointCullFrontCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+        constexpr RasterizationOrderState pointCullFrontAndBackRelaxedCW(pointCullFrontAndBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
     } // namespace renderstates
  } // namespace magma
