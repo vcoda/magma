@@ -67,12 +67,13 @@ constexpr ConservativeRasterizationState::ConservativeRasterizationState(const R
 
 constexpr std::size_t ConservativeRasterizationState::hash() const
 {
-    return core::hashArgs(
-        RasterizationState::hash(),
+    std::size_t hash = core::hashArgs(
         conservative.sType,
         conservative.flags,
         conservative.conservativeRasterizationMode,
         conservative.extraPrimitiveOverestimationSize);
+    core::hashCombine(hash, RasterizationState::hash());
+    return hash;
 }
 
 constexpr bool ConservativeRasterizationState::operator==(const ConservativeRasterizationState& other) const
