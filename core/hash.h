@@ -45,8 +45,7 @@ constexpr void hashNext(std::size_t& seed, const Type& arg, Args... args) noexce
 template<typename Type, typename... Args>
 constexpr std::size_t hashArgs(const Type& arg, Args... args) noexcept
 {
-    std::size_t value = 0;
-    hashCombine(value, hash(arg));
+    std::size_t value = hash(arg);
     hashNext(value, args...);
     return value;
 }
