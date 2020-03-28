@@ -4,10 +4,10 @@ namespace aux
 {
 struct ImmediateRender::Vertex
 {
-    vertexlayout::float4 position;
-    vertexlayout::float4 normalPSize;
-    vertexlayout::float4 color;
-    vertexlayout::float2 texcoord;
+    core::float4 position;
+    core::float4 normalPSize;
+    core::float4 color;
+    core::float2 texcoord;
 };
 
 struct ImmediateRender::Primitive

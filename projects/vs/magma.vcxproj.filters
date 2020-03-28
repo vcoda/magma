@@ -492,6 +492,9 @@
     <ClInclude Include="..\..\allocator\linearPlacementPool.h">
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\core\vectors.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">

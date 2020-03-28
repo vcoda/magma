@@ -29,11 +29,11 @@ static constexpr VertexInputAttribute::Normalized<true> normalized;
 
 const VertexInputStructure<int> nullVertexInput;
 
-const VertexInputStructure<half2> pos2h(0,
+const VertexInputStructure<core::half2> pos2h(0,
     {0, 0, VK_FORMAT_R16G16_SFLOAT, 0});
-const VertexInputStructure<half3> pos3h(0,
+const VertexInputStructure<core::half3> pos3h(0,
     {0, 0, VK_FORMAT_R16G16B16_SFLOAT, 0});
-const VertexInputStructure<half4> pos4h(0,
+const VertexInputStructure<core::half4> pos4h(0,
     {0, 0, VK_FORMAT_R16G16B16A16_SFLOAT, 0});
 
 const VertexInputStructure<Pos2hTex2h> pos2hTex2h(0, {
@@ -82,11 +82,11 @@ const VertexInputStructure<Pos3hNormal3hColor4b> pos3hNormal3hColor4b(0, {
     {1, &Pos3hNormal3hColor4b::normal},
     {2, &Pos3hNormal3hColor4b::attrib, normalized}});
 
-const VertexInputStructure<float2> pos2f(0,
+const VertexInputStructure<core::float2> pos2f(0,
     {0, 0, VK_FORMAT_R32G32_SFLOAT, 0});
-const VertexInputStructure<float3> pos3f(0,
+const VertexInputStructure<core::float3> pos3f(0,
     {0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0});
-const VertexInputStructure<float4> pos4f(0,
+const VertexInputStructure<core::float4> pos4f(0,
     {0, 0, VK_FORMAT_R32G32B32A32_SFLOAT, 0});
 
 const VertexInputStructure<Pos2fTex2f> pos2fTex2f(0, {

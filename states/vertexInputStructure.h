@@ -86,16 +86,16 @@ namespace magma
 
         /* Built-in specializations for our vector types. */
 
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::ubyte4, true, VK_FORMAT_R8G8B8A8_UNORM);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::half2, false, VK_FORMAT_R16G16_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::half3, false, VK_FORMAT_R16G16B16_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::half4, false, VK_FORMAT_R16G16B16A16_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::float2, false, VK_FORMAT_R32G32_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::float3, false, VK_FORMAT_R32G32B32_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::float4, false, VK_FORMAT_R32G32B32A32_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::double2, false, VK_FORMAT_R64G64_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::double3, false, VK_FORMAT_R64G64B64_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(vertexlayout::double4, false, VK_FORMAT_R64G64B64A64_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::ubyte4, true, VK_FORMAT_R8G8B8A8_UNORM);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::half2, false, VK_FORMAT_R16G16_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::half3, false, VK_FORMAT_R16G16B16_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::half4, false, VK_FORMAT_R16G16B16A16_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::float2, false, VK_FORMAT_R32G32_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::float3, false, VK_FORMAT_R32G32B32_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::float4, false, VK_FORMAT_R32G32B32A32_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::double2, false, VK_FORMAT_R64G64_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::double3, false, VK_FORMAT_R64G64B64_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::double4, false, VK_FORMAT_R64G64B64A64_SFLOAT);
     } // namespace specialization
 } // namespace magma
 
@@ -107,9 +107,9 @@ namespace magma
 
         /* Vertex input states with half float type. */
 
-        extern const VertexInputStructure<vertexlayout::half2> pos2h;
-        extern const VertexInputStructure<vertexlayout::half3> pos3h;
-        extern const VertexInputStructure<vertexlayout::half4> pos4h;
+        extern const VertexInputStructure<core::half2> pos2h;
+        extern const VertexInputStructure<core::half3> pos3h;
+        extern const VertexInputStructure<core::half4> pos4h;
 
         extern const VertexInputStructure<vertexlayout::Pos2hTex2h> pos2hTex2h;
         extern const VertexInputStructure<vertexlayout::Pos2hColor3h> pos2hColor3h;
@@ -129,9 +129,9 @@ namespace magma
 
         /* Vertex input states with float type. */
 
-        extern const VertexInputStructure<vertexlayout::float2> pos2f;
-        extern const VertexInputStructure<vertexlayout::float3> pos3f;
-        extern const VertexInputStructure<vertexlayout::float4> pos4f;
+        extern const VertexInputStructure<core::float2> pos2f;
+        extern const VertexInputStructure<core::float3> pos3f;
+        extern const VertexInputStructure<core::float4> pos4f;
 
         extern const VertexInputStructure<vertexlayout::Pos2fTex2f> pos2fTex2f;
         extern const VertexInputStructure<vertexlayout::Pos2fColor3f> pos2fColor3f;
