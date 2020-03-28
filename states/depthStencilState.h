@@ -100,7 +100,7 @@ namespace magma
         constexpr DepthStencilState depthEqual(VK_COMPARE_OP_EQUAL, true);
         constexpr DepthStencilState depthLessOrEqual(VK_COMPARE_OP_LESS_OR_EQUAL, true);
         constexpr DepthStencilState depthGreater(VK_COMPARE_OP_GREATER, true);
-        constexpr DepthStencilState depthNoEqual(VK_COMPARE_OP_NOT_EQUAL, true);
+        constexpr DepthStencilState depthNotEqual(VK_COMPARE_OP_NOT_EQUAL, true);
         constexpr DepthStencilState depthGreaterOrEqual(VK_COMPARE_OP_GREATER_OR_EQUAL, true);
         constexpr DepthStencilState depthAlways(VK_COMPARE_OP_ALWAYS, true);
 
@@ -109,7 +109,7 @@ namespace magma
         constexpr DepthStencilState depthEqualDontWrite(VK_COMPARE_OP_EQUAL, false);
         constexpr DepthStencilState depthLessOrEqualDontWrite(VK_COMPARE_OP_LESS_OR_EQUAL, false);
         constexpr DepthStencilState depthGreaterDontWrite(VK_COMPARE_OP_GREATER, false);
-        constexpr DepthStencilState depthNoEqualDontWrite(VK_COMPARE_OP_NOT_EQUAL, false);
+        constexpr DepthStencilState depthNotEqualDontWrite(VK_COMPARE_OP_NOT_EQUAL, false);
         constexpr DepthStencilState depthGreaterOrEqualDontWrite(VK_COMPARE_OP_GREATER_OR_EQUAL, false);
         constexpr DepthStencilState depthAlwaysDontWrite(VK_COMPARE_OP_ALWAYS, false);
     } // namespace renderstates
