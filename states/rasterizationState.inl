@@ -51,6 +51,16 @@ constexpr bool RasterizationState::operator==(const RasterizationState& other) c
         (lineWidth == other.lineWidth);
 }
 
+constexpr DepthBiasRasterizationState::DepthBiasRasterizationState(const RasterizationState& state,
+    float depthBiasConstantFactor, float depthBiasClamp, float depthBiasSlopeFactor):
+    RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable)
+{
+    depthBiasEnable = VK_TRUE;
+    this->depthBiasConstantFactor = depthBiasConstantFactor;
+    this->depthBiasClamp = depthBiasClamp;
+    this->depthBiasSlopeFactor = depthBiasSlopeFactor;
+}
+
 constexpr ConservativeRasterizationState::ConservativeRasterizationState(const RasterizationState& state,
     VkConservativeRasterizationModeEXT conservativeRasterizationMode,
     float extraPrimitiveOverestimationSize /* 0 */):
@@ -82,16 +92,6 @@ constexpr bool ConservativeRasterizationState::operator==(const ConservativeRast
         (conservative.flags == other.conservative.flags) &&
         (conservative.conservativeRasterizationMode == other.conservative.conservativeRasterizationMode) &&
         (conservative.extraPrimitiveOverestimationSize == other.conservative.extraPrimitiveOverestimationSize);
-}
-
-constexpr DepthBiasRasterizationState::DepthBiasRasterizationState(const RasterizationState& state,
-    float depthBiasConstantFactor, float depthBiasClamp, float depthBiasSlopeFactor):
-    RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable)
-{
-    this->depthBiasEnable = VK_TRUE;
-    this->depthBiasConstantFactor = depthBiasConstantFactor;
-    this->depthBiasClamp = depthBiasClamp;
-    this->depthBiasSlopeFactor = depthBiasSlopeFactor;
 }
 
 constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationState& state,
