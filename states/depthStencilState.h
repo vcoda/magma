@@ -96,6 +96,7 @@ namespace magma
         constexpr StencilOpState stencilDecrementClampDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_CLAMP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
         constexpr StencilOpState stencilDecrementWrapDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_WRAP, VK_COMPARE_OP_LESS, 0xFF, 0xFF, 0);
 
+        constexpr DepthStencilState depthNever(VK_COMPARE_OP_NEVER, true);
         constexpr DepthStencilState depthLess(VK_COMPARE_OP_LESS, true);
         constexpr DepthStencilState depthEqual(VK_COMPARE_OP_EQUAL, true);
         constexpr DepthStencilState depthLessOrEqual(VK_COMPARE_OP_LESS_OR_EQUAL, true);
