@@ -67,7 +67,9 @@ namespace magma
         typedef LitVertex<core::half3, core::half3, core::half4> Pos3hNormal3hColor4h;
         typedef LitVertex<core::half3, core::half3, core::ubyte4> Pos3hNormal3hColor4b;
 
-        /* Typical vertex structures with float type. */
+        typedef BumpVertex<core::half3, core::half3, core::half2> Pos3hTBN3hTex2h;
+
+        /* Common vertex structures with float type. */
 
         typedef Vertex<core::float2, core::float2> Pos2fTex2f;
         typedef Vertex<core::float2, core::float3> Pos2fColor3f;
@@ -84,5 +86,7 @@ namespace magma
         typedef LitVertex<core::float3, core::float3, core::float3> Pos3fNormal3fColor3f;
         typedef LitVertex<core::float3, core::float3, core::float4> Pos3fNormal3fColor4f;
         typedef LitVertex<core::float3, core::float3, core::ubyte4> Pos3fNormal3fColor4b;
+
+        typedef BumpVertex<core::float3, core::float3, core::float2> Pos3fTBN3fTex2f;
     } // namespace vertexlayout
 } // namespace magma
