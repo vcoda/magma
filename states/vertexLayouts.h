@@ -43,9 +43,9 @@ namespace magma
         struct BumpVertex
         {
             Position position;
-            Normal normal;
             Normal tangent;
             Normal bitangent;
+            Normal normal;
             Attribute attrib;
         };
 
