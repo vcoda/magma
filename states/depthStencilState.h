@@ -115,10 +115,10 @@ namespace magma
         constexpr DepthStencilState depthAlwaysDontWrite(VK_COMPARE_OP_ALWAYS, false);
 
         // Stencil shadow volume
-        constexpr DepthStencilState shadowVolumeDepthPassClampStencil(depthLess, stencilIncrementClampDepthPass, stencilDecrementClampDepthPass);
-        constexpr DepthStencilState shadowVolumeDepthPassWrapStencil(depthLess, stencilIncrementWrapDepthPass, stencilDecrementWrapDepthPass);
+        constexpr DepthStencilState shadowVolumeDepthPassClampStencil(depthLessDontWrite, stencilIncrementClampDepthPass, stencilDecrementClampDepthPass);
+        constexpr DepthStencilState shadowVolumeDepthPassWrapStencil(depthLessDontWrite, stencilIncrementWrapDepthPass, stencilDecrementWrapDepthPass);
         // Carmack's reverse
-        constexpr DepthStencilState shadowVolumeDepthFailClampStencil(depthLess, stencilDecrementClampDepthFail, stencilIncrementClampDepthFail);
-        constexpr DepthStencilState shadowVolumeDepthFailWrapStencil(depthLess, stencilDecrementWrapDepthFail, stencilIncrementWrapDepthFail);
+        constexpr DepthStencilState shadowVolumeDepthFailClampStencil(depthLessDontWrite, stencilDecrementClampDepthFail, stencilIncrementClampDepthFail);
+        constexpr DepthStencilState shadowVolumeDepthFailWrapStencil(depthLessDontWrite, stencilDecrementWrapDepthFail, stencilIncrementWrapDepthFail);
     } // namespace renderstates
 } // namespace magma
