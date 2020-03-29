@@ -102,7 +102,11 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(EXT_vertex_attribute_divisor),
     MAGMA_CHECK_EXTENSION(EXT_ycbcr_image_arrays),
 
+    MAGMA_CHECK_EXTENSION(GOOGLE_decorate_string),
     MAGMA_CHECK_EXTENSION(GOOGLE_display_timing),
+    MAGMA_CHECK_EXTENSION(GOOGLE_hlsl_functionality1),
+    MAGMA_CHECK_EXTENSION(GOOGLE_user_type),
+
     MAGMA_CHECK_EXTENSION(IMG_filter_cubic),
     MAGMA_CHECK_EXTENSION(IMG_format_pvrtc),
     MAGMA_CHECK_EXTENSION(KHR_16bit_storage),

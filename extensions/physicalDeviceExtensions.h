@@ -106,7 +106,11 @@ namespace magma
         const bool EXT_vertex_attribute_divisor;
         const bool EXT_ycbcr_image_arrays;
 
+        const bool GOOGLE_decorate_string;
         const bool GOOGLE_display_timing;
+        const bool GOOGLE_hlsl_functionality1;
+        const bool GOOGLE_user_type;
+
         const bool IMG_filter_cubic;
         const bool IMG_format_pvrtc;
         const bool KHR_16bit_storage;
