@@ -51,9 +51,6 @@ namespace magma
         const bool KHR_win32_surface;
         const bool KHR_xcb_surface;
         const bool KHR_xlib_surface;
-        const bool KHX_device_group_creation;
-        const bool KHX_external_memory_capabilities;
-        const bool KHX_external_semaphore_capabilities;
         const bool MVK_ios_surface;
         const bool MVK_macos_surface;
         const bool NV_external_memory_capabilities;

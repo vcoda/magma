@@ -49,9 +49,6 @@ InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
     MAGMA_CHECK_EXTENSION(KHR_win32_surface),
     MAGMA_CHECK_EXTENSION(KHR_xcb_surface),
     MAGMA_CHECK_EXTENSION(KHR_xlib_surface),
-    MAGMA_CHECK_EXTENSION(KHX_device_group_creation),
-    MAGMA_CHECK_EXTENSION(KHX_external_memory_capabilities),
-    MAGMA_CHECK_EXTENSION(KHX_external_semaphore_capabilities),
     MAGMA_CHECK_EXTENSION(MVK_ios_surface),
     MAGMA_CHECK_EXTENSION(MVK_macos_surface),
     MAGMA_CHECK_EXTENSION(NV_external_memory_capabilities)
