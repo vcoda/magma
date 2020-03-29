@@ -205,6 +205,8 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(NV_shading_rate_image),
     MAGMA_CHECK_EXTENSION(NV_viewport_array2),
     MAGMA_CHECK_EXTENSION(NV_viewport_swizzle),
-    MAGMA_CHECK_EXTENSION(NV_win32_keyed_mutex)
+    MAGMA_CHECK_EXTENSION(NV_win32_keyed_mutex),
+
+    MAGMA_CHECK_EXTENSION(QCOM_render_pass_transform)
 {}
 } // namespace magma

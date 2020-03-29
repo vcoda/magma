@@ -211,6 +211,8 @@ namespace magma
         const bool NV_viewport_swizzle;
         const bool NV_win32_keyed_mutex;
 
+        const bool QCOM_render_pass_transform;
+
         PhysicalDeviceExtensions(std::shared_ptr<const PhysicalDevice> device);
     };
 } // namespace magma
