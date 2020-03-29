@@ -32,6 +32,7 @@ InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
     MAGMA_CHECK_EXTENSION(EXT_debug_utils),
     MAGMA_CHECK_EXTENSION(EXT_direct_mode_display),
     MAGMA_CHECK_EXTENSION(EXT_display_surface_counter),
+    MAGMA_CHECK_EXTENSION(EXT_metal_surface),
     MAGMA_CHECK_EXTENSION(EXT_swapchain_colorspace),
     MAGMA_CHECK_EXTENSION(KHR_android_surface),
     MAGMA_CHECK_EXTENSION(KHR_device_group_creation),

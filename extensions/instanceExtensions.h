@@ -34,6 +34,7 @@ namespace magma
         const bool EXT_debug_utils;
         const bool EXT_direct_mode_display;
         const bool EXT_display_surface_counter;
+        const bool EXT_metal_surface;
         const bool EXT_swapchain_colorspace;
         const bool KHR_android_surface;
         const bool KHR_device_group_creation;
