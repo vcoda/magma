@@ -109,6 +109,10 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
 
     MAGMA_CHECK_EXTENSION(IMG_filter_cubic),
     MAGMA_CHECK_EXTENSION(IMG_format_pvrtc),
+
+    MAGMA_CHECK_EXTENSION(INTEL_performance_query),
+    MAGMA_CHECK_EXTENSION(INTEL_shader_integer_functions2),
+
     MAGMA_CHECK_EXTENSION(KHR_16bit_storage),
     MAGMA_CHECK_EXTENSION(KHR_android_surface),
     MAGMA_CHECK_EXTENSION(KHR_bind_memory2),

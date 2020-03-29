@@ -113,6 +113,10 @@ namespace magma
 
         const bool IMG_filter_cubic;
         const bool IMG_format_pvrtc;
+
+        const bool INTEL_performance_query;
+        const bool INTEL_shader_integer_functions2;
+
         const bool KHR_16bit_storage;
         const bool KHR_android_surface;
         const bool KHR_bind_memory2;
