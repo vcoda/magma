@@ -52,6 +52,8 @@ namespace magma
         const bool AMD_shader_trinary_minmax;
         const bool AMD_texture_gather_bias_lod;
 
+        const bool ANDROID_external_memory_android_hardware_buffer;
+
         const bool EXT_astc_decode_mode;
         const bool EXT_blend_operation_advanced;
         const bool EXT_buffer_device_address;

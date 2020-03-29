@@ -48,6 +48,8 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(AMD_shader_trinary_minmax),
     MAGMA_CHECK_EXTENSION(AMD_texture_gather_bias_lod),
 
+    MAGMA_CHECK_EXTENSION(ANDROID_external_memory_android_hardware_buffer),
+
     MAGMA_CHECK_EXTENSION(EXT_astc_decode_mode),
     MAGMA_CHECK_EXTENSION(EXT_blend_operation_advanced),
     MAGMA_CHECK_EXTENSION(EXT_buffer_device_address),
