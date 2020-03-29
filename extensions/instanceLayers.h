@@ -32,6 +32,7 @@ namespace magma
         const bool fpsmon;
         const bool GOOGLE_threading;
         const bool GOOGLE_unique_objects;
+        const bool KHRONOS_timeline_semaphore;
         const bool KHRONOS_validation;
         const bool LUNARG_api_dump;
         const bool LUNARG_assistant_layer;
@@ -56,8 +57,10 @@ namespace magma
         const bool NV_nsight;
         const bool NV_nsight_sys;
         const bool NV_optimus;
+        const bool NV_vgd;
         const bool PRIMUS_PrimusVK;
         const bool RENDERDOC_Capture;
+        const bool reshade;
         const bool RGA_pipeline_extraction;
         const bool RTSS;
         const bool VALVE_steam_fossilize;
