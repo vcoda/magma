@@ -31,14 +31,20 @@ namespace magma
     {
     public:
         const bool AMD_buffer_marker;
+        const bool AMD_device_coherent_memory;
+        const bool AMD_display_native_hdr;
         const bool AMD_draw_indirect_count;
         const bool AMD_gcn_shader;
         const bool AMD_gpu_shader_half_float;
         const bool AMD_gpu_shader_int16;
+        const bool AMD_memory_overallocation_behavior;
         const bool AMD_mixed_attachment_samples;
         const bool AMD_negative_viewport_height;
+        const bool AMD_pipeline_compiler_control;
         const bool AMD_rasterization_order;
         const bool AMD_shader_ballot;
+        const bool AMD_shader_core_properties;
+        const bool AMD_shader_core_properties2;
         const bool AMD_shader_explicit_vertex_parameter;
         const bool AMD_shader_fragment_mask;
         const bool AMD_shader_image_load_store_lod;
