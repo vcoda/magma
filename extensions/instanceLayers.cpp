@@ -68,6 +68,9 @@ InstanceLayers::InstanceLayers():
     MAGMA_CHECK_LAYER(VALVE_steam_fossilize_64),
     MAGMA_CHECK_LAYER(VALVE_steam_overlay),
     MAGMA_CHECK_LAYER(VALVE_steam_overlay_32),
-    MAGMA_CHECK_LAYER(VALVE_steam_overlay_64)
+    MAGMA_CHECK_LAYER(VALVE_steam_overlay_64),
+    MAGMA_CHECK_LAYER(VKBASALT_PostProcess32),
+    MAGMA_CHECK_LAYER(VKBASALT_PostProcess64),
+    MAGMA_CHECK_LAYER(vkpipeline_db)
 {}
 } // namespace magma

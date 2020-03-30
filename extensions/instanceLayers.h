@@ -69,6 +69,9 @@ namespace magma
         const bool VALVE_steam_overlay;
         const bool VALVE_steam_overlay_32;
         const bool VALVE_steam_overlay_64;
+        const bool VKBASALT_PostProcess32;
+        const bool VKBASALT_PostProcess64;
+        const bool vkpipeline_db;
 
         InstanceLayers();
     };
