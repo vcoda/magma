@@ -29,6 +29,7 @@ namespace magma
     {
     public:
         const bool ANDROID_native_buffer;
+
         const bool EXT_acquire_xlib_display;
         const bool EXT_debug_report;
         const bool EXT_debug_utils;
@@ -36,6 +37,7 @@ namespace magma
         const bool EXT_display_surface_counter;
         const bool EXT_metal_surface;
         const bool EXT_swapchain_colorspace;
+
         const bool KHR_android_surface;
         const bool KHR_device_group_creation;
         const bool KHR_display;
@@ -51,8 +53,10 @@ namespace magma
         const bool KHR_win32_surface;
         const bool KHR_xcb_surface;
         const bool KHR_xlib_surface;
+
         const bool MVK_ios_surface;
         const bool MVK_macos_surface;
+
         const bool NV_external_memory_capabilities;
 
         InstanceExtensions(const char *layerName = nullptr);

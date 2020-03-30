@@ -26,7 +26,9 @@ namespace magma
 {
 InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
     Extensions(Instance::enumerateExtensions(layerName)),
+
     MAGMA_CHECK_EXTENSION(ANDROID_native_buffer),
+
     MAGMA_CHECK_EXTENSION(EXT_acquire_xlib_display),
     MAGMA_CHECK_EXTENSION(EXT_debug_report),
     MAGMA_CHECK_EXTENSION(EXT_debug_utils),
@@ -34,6 +36,7 @@ InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
     MAGMA_CHECK_EXTENSION(EXT_display_surface_counter),
     MAGMA_CHECK_EXTENSION(EXT_metal_surface),
     MAGMA_CHECK_EXTENSION(EXT_swapchain_colorspace),
+
     MAGMA_CHECK_EXTENSION(KHR_android_surface),
     MAGMA_CHECK_EXTENSION(KHR_device_group_creation),
     MAGMA_CHECK_EXTENSION(KHR_display),
@@ -49,8 +52,10 @@ InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
     MAGMA_CHECK_EXTENSION(KHR_win32_surface),
     MAGMA_CHECK_EXTENSION(KHR_xcb_surface),
     MAGMA_CHECK_EXTENSION(KHR_xlib_surface),
+
     MAGMA_CHECK_EXTENSION(MVK_ios_surface),
     MAGMA_CHECK_EXTENSION(MVK_macos_surface),
+
     MAGMA_CHECK_EXTENSION(NV_external_memory_capabilities)
 {}
 } // namespace magma

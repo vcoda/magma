@@ -26,6 +26,7 @@ namespace magma
 {
 PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const PhysicalDevice> device):
     Extensions(device->enumerateExtensions()),
+
     MAGMA_CHECK_EXTENSION(AMD_buffer_marker),
     MAGMA_CHECK_EXTENSION(AMD_device_coherent_memory),
     MAGMA_CHECK_EXTENSION(AMD_display_native_hdr),

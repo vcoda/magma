@@ -27,13 +27,17 @@ namespace magma
     {
     public:
         const bool AMD_switchable_graphics;
+
         const bool bandicam_helper;
         const bool DxtoryHookHelper;
         const bool fpsmon;
+
         const bool GOOGLE_threading;
         const bool GOOGLE_unique_objects;
+
         const bool KHRONOS_timeline_semaphore;
         const bool KHRONOS_validation;
+
         const bool LUNARG_api_dump;
         const bool LUNARG_assistant_layer;
         const bool LUNARG_core_validation;
@@ -49,28 +53,31 @@ namespace magma
         const bool LUNARG_starter_layer;
         const bool LUNARG_swapchain;
         const bool LUNARG_vktrace;
+
         const bool MESA_overlay;
+
         const bool NV_nomad;
-        const bool NV_nomad_release_public_2019_3_0;
-        const bool NV_nomad_release_public_2019_3_1;
-        const bool NV_nomad_release_public_2019_4_0;
         const bool NV_nsight;
         const bool NV_nsight_sys;
         const bool NV_optimus;
         const bool NV_vgd;
+
         const bool PRIMUS_PrimusVK;
         const bool RENDERDOC_Capture;
         const bool reshade;
         const bool RGA_pipeline_extraction;
         const bool RTSS;
+
         const bool VALVE_steam_fossilize;
         const bool VALVE_steam_fossilize_32;
         const bool VALVE_steam_fossilize_64;
         const bool VALVE_steam_overlay;
         const bool VALVE_steam_overlay_32;
         const bool VALVE_steam_overlay_64;
+
         const bool VKBASALT_PostProcess32;
         const bool VKBASALT_PostProcess64;
+
         const bool vkpipeline_db;
 
         InstanceLayers();
