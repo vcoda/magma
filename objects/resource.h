@@ -78,7 +78,7 @@ namespace magma
             VkDeviceSize size,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator) noexcept:
-			NonDispatchable<Type>(objectType, std::move(device), std::move(allocator)),
+            NonDispatchable<Type>(objectType, std::move(device), std::move(allocator)),
             Resource(size)
         {}
     };
