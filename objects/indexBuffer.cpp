@@ -51,7 +51,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmd, std::shared_ptr
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    BaseIndexBuffer(copyCmd->getDevice(), size, indexType,
+    BaseIndexBuffer(copyCmd->getDevice(), srcBuffer->getMemory()->getSize(), indexType,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         flags, sharing, std::move(allocator))
