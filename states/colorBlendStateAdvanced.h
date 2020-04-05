@@ -28,11 +28,7 @@ namespace magma
     {
     public:
         constexpr AdvancedColorBlendAttachmentState(VkBlendOp advancedBlendOp,
-            VkColorComponentFlags colorWriteMask =
-                VK_COLOR_COMPONENT_R_BIT |
-                VK_COLOR_COMPONENT_G_BIT |
-                VK_COLOR_COMPONENT_B_BIT |
-                VK_COLOR_COMPONENT_A_BIT);
+            VkColorComponentFlags colorWriteMask = colorwritemask::rgba);
         constexpr std::size_t hash() const;
         constexpr bool operator==(const AdvancedColorBlendAttachmentState&) const;
     };

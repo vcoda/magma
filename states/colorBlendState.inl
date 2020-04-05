@@ -1,7 +1,7 @@
 namespace magma
 {
 constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
-    VkColorComponentFlags colorWriteMask /* R, G, B, A */):
+    VkColorComponentFlags colorWriteMask /* colorwritemask::rgba */):
     VkPipelineColorBlendAttachmentState{}
 {
     blendEnable = VK_FALSE;
@@ -16,7 +16,7 @@ constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
 
 constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
     VkBlendFactor srcBlendFactor, VkBlendFactor dstBlendFactor, VkBlendOp blendOp,
-    VkColorComponentFlags colorWriteMask /* R, G, B, A */):
+    VkColorComponentFlags colorWriteMask /* colorwritemask::rgba */):
     VkPipelineColorBlendAttachmentState{}
 {
     blendEnable = VK_TRUE;
@@ -32,7 +32,7 @@ constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
 constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
     VkBlendFactor srcColorBlendFactor, VkBlendFactor dstColorBlendFactor, VkBlendOp colorBlendOp,
     VkBlendFactor srcAlphaBlendFactor, VkBlendFactor dstAlphaBlendFactor, VkBlendOp alphaBlendOp,
-    VkColorComponentFlags colorWriteMask /* R, G, B, A */):
+    VkColorComponentFlags colorWriteMask /* colorwritemask::rgba */):
     VkPipelineColorBlendAttachmentState{}
 {
     blendEnable = VK_TRUE;
