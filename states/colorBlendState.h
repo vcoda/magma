@@ -156,50 +156,50 @@ namespace magma
 
     namespace renderstates
     {
-        constexpr ColorBlendState dontBlendWriteR(blendstates::writeR);
-        constexpr ColorBlendState dontBlendWriteRg(blendstates::writeRg);
-        constexpr ColorBlendState dontBlendWriteRgb(blendstates::writeRgb);
-        constexpr ColorBlendState dontBlendWriteRgba(blendstates::writeRgba);
+        constexpr ColorBlendState dontBlendR(blendstates::writeR);
+        constexpr ColorBlendState dontBlendRg(blendstates::writeRg);
+        constexpr ColorBlendState dontBlendRgb(blendstates::writeRgb);
+        constexpr ColorBlendState dontBlendRgba(blendstates::writeRgba);
 
-        constexpr ColorBlendState blendAddWriteR(blendstates::addR);
-        constexpr ColorBlendState blendSubtractWriteR(blendstates::subtractR);
-        constexpr ColorBlendState blendReverseSubtractWriteR(blendstates::reverseSubtractR);
-        constexpr ColorBlendState blendMinWriteR(blendstates::minR);
-        constexpr ColorBlendState blendMaxWriteR(blendstates::maxR);
-        constexpr ColorBlendState blendMultiplyWriteR(blendstates::multiplyR);
-        constexpr ColorBlendState blendNormalWriteR(blendstates::normalR);
-        constexpr ColorBlendState blendNormalPremultipliedWriteR(blendstates::normalPremultipliedR);
-        constexpr ColorBlendState blendScreenWriteR(blendstates::screenR);
+        constexpr ColorBlendState blendAddR(blendstates::addR);
+        constexpr ColorBlendState blendSubtractR(blendstates::subtractR);
+        constexpr ColorBlendState blendReverseSubtractR(blendstates::reverseSubtractR);
+        constexpr ColorBlendState blendMinR(blendstates::minR);
+        constexpr ColorBlendState blendMaxR(blendstates::maxR);
+        constexpr ColorBlendState blendMultiplyR(blendstates::multiplyR);
+        constexpr ColorBlendState blendNormalR(blendstates::normalR);
+        constexpr ColorBlendState blendNormalPremultipliedR(blendstates::normalPremultipliedR);
+        constexpr ColorBlendState blendScreenR(blendstates::screenR);
 
-        constexpr ColorBlendState blendAddWriteRg(blendstates::addRg);
-        constexpr ColorBlendState blendSubtractWriteRg(blendstates::subtractRg);
-        constexpr ColorBlendState blendReverseSubtractWriteRg(blendstates::reverseSubtractRg);
-        constexpr ColorBlendState blendMinWriteRg(blendstates::minRg);
-        constexpr ColorBlendState blendMaxWriteRg(blendstates::maxRg);
-        constexpr ColorBlendState blendMultiplyWriteRg(blendstates::multiplyRg);
-        constexpr ColorBlendState blendNormalWriteRg(blendstates::normalRg);
-        constexpr ColorBlendState blendNormalPremultipliedWriteRg(blendstates::normalPremultipliedRg);
-        constexpr ColorBlendState blendScreenWriteRg(blendstates::screenRg);
+        constexpr ColorBlendState blendAddRg(blendstates::addRg);
+        constexpr ColorBlendState blendSubtractRg(blendstates::subtractRg);
+        constexpr ColorBlendState blendReverseSubtractRg(blendstates::reverseSubtractRg);
+        constexpr ColorBlendState blendMinRg(blendstates::minRg);
+        constexpr ColorBlendState blendMaxRg(blendstates::maxRg);
+        constexpr ColorBlendState blendMultiplyRg(blendstates::multiplyRg);
+        constexpr ColorBlendState blendNormalRg(blendstates::normalRg);
+        constexpr ColorBlendState blendNormalPremultipliedRg(blendstates::normalPremultipliedRg);
+        constexpr ColorBlendState blendScreenRg(blendstates::screenRg);
 
-        constexpr ColorBlendState blendAddWriteRgb(blendstates::addRgb);
-        constexpr ColorBlendState blendSubtractWriteRgb(blendstates::subtractRgb);
-        constexpr ColorBlendState blendReverseSubtractWriteRgb(blendstates::reverseSubtractRgb);
-        constexpr ColorBlendState blendMinWriteRgb(blendstates::minRgb);
-        constexpr ColorBlendState blendMaxWriteRgb(blendstates::maxRgb);
-        constexpr ColorBlendState blendMultiplyWriteRgb(blendstates::multiplyRgb);
-        constexpr ColorBlendState blendNormalWriteRgb(blendstates::normalRgb);
-        constexpr ColorBlendState blendNormalPremultipliedWriteRgb(blendstates::normalPremultipliedRgb);
-        constexpr ColorBlendState blendScreenWriteRgb(blendstates::screenRgb);
+        constexpr ColorBlendState blendAddRgb(blendstates::addRgb);
+        constexpr ColorBlendState blendSubtractRgb(blendstates::subtractRgb);
+        constexpr ColorBlendState blendReverseSubtractRgb(blendstates::reverseSubtractRgb);
+        constexpr ColorBlendState blendMinRgb(blendstates::minRgb);
+        constexpr ColorBlendState blendMaxRgb(blendstates::maxRgb);
+        constexpr ColorBlendState blendMultiplyRgb(blendstates::multiplyRgb);
+        constexpr ColorBlendState blendNormalRgb(blendstates::normalRgb);
+        constexpr ColorBlendState blendNormalPremultipliedRgb(blendstates::normalPremultipliedRgb);
+        constexpr ColorBlendState blendScreenRgb(blendstates::screenRgb);
 
-        constexpr ColorBlendState blendAddWriteRgba(blendstates::addRgba);
-        constexpr ColorBlendState blendSubtractWriteRgba(blendstates::subtractRgba);
-        constexpr ColorBlendState blendReverseSubtractWriteRgba(blendstates::reverseSubtractRgba);
-        constexpr ColorBlendState blendMinWriteRgba(blendstates::minRgba);
-        constexpr ColorBlendState blendMaxWriteRgba(blendstates::maxRgba);
-        constexpr ColorBlendState blendMultiplyWriteRgba(blendstates::multiplyRgba);
-        constexpr ColorBlendState blendNormalWriteRgba(blendstates::normalRgba);
-        constexpr ColorBlendState blendNormalPremultipliedWriteRgba(blendstates::normalPremultipliedRgba);
-        constexpr ColorBlendState blendScreenWriteRgba(blendstates::screenRgba);
+        constexpr ColorBlendState blendAddRgba(blendstates::addRgba);
+        constexpr ColorBlendState blendSubtractRgba(blendstates::subtractRgba);
+        constexpr ColorBlendState blendReverseSubtractRgba(blendstates::reverseSubtractRgba);
+        constexpr ColorBlendState blendMinRgba(blendstates::minRgba);
+        constexpr ColorBlendState blendMaxRgba(blendstates::maxRgba);
+        constexpr ColorBlendState blendMultiplyRgba(blendstates::multiplyRgba);
+        constexpr ColorBlendState blendNormalRgba(blendstates::normalRgba);
+        constexpr ColorBlendState blendNormalPremultipliedRgba(blendstates::normalPremultipliedRgba);
+        constexpr ColorBlendState blendScreenRgba(blendstates::screenRgba);
 
         constexpr ColorLogicOpState logicClearWriteR(blendstates::writeR, VK_LOGIC_OP_CLEAR);
         constexpr ColorLogicOpState logicAndWriteR(blendstates::writeR, VK_LOGIC_OP_AND);

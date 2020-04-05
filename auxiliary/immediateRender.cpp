@@ -49,7 +49,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount,
     rasterizationState(renderstates::fillCullBackCCW),
     multisampleState(renderstates::noMultisample),
     depthStencilState(renderstates::depthAlwaysDontWrite),
-    colorBlendState(renderstates::dontBlendWriteRgba) // Make copyable
+    colorBlendState(renderstates::dontBlendRgba) // Make copyable
 {
     setIdentity();
     if (!this->layout)
