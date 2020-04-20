@@ -191,10 +191,8 @@ bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex,
     const void *visualID /* nullptr */) const noexcept
 {
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
-#if defined(_MSC_VER)
-    display;
-    visualID;
-#endif
+    MAGMA_UNUSED(display);
+    MAGMA_UNUSED(visualID);
     const VkBool32 get = vkGetPhysicalDeviceWin32PresentationSupportKHR(handle, queueFamilyIndex);
 #elif defined(VK_USE_PLATFORM_XLIB_KHR)
     MAGMA_ASSERT(display);

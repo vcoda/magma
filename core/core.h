@@ -44,6 +44,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_CONSTEXPR
 #endif
 
+#define MAGMA_UNUSED(variable) variable
 #define MAGMA_BOOLEAN(condition) (condition) ? VK_TRUE : VK_FALSE
 #define MAGMA_COUNT(container) static_cast<uint32_t>(container.size())
 
