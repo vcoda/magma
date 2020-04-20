@@ -218,6 +218,7 @@ bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex,
     return (get ? true : false);
 }
 
+#ifdef VK_KHR_display
 std::vector<VkDisplayPropertiesKHR> PhysicalDevice::getDisplayProperties() const
 {
     uint32_t propertyCount;
@@ -265,7 +266,9 @@ std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint3
     }
     return supportedDisplays;
 }
+#endif // VK_KHR_display
 
+#ifdef VK_AMD_shader_core_properties
 VkPhysicalDeviceShaderCorePropertiesAMD PhysicalDevice::getShaderCoreProperties() const
 {
     VkPhysicalDeviceShaderCorePropertiesAMD shaderCoreProperties = {};
@@ -273,7 +276,19 @@ VkPhysicalDeviceShaderCorePropertiesAMD PhysicalDevice::getShaderCoreProperties(
     getExtendedProperties(&shaderCoreProperties);
     return shaderCoreProperties;
 }
+#endif // VK_AMD_shader_core_properties
 
+#ifdef VK_AMD_shader_core_properties2
+VkPhysicalDeviceShaderCoreProperties2AMD PhysicalDevice::getShaderCoreProperties2() const
+{
+    VkPhysicalDeviceShaderCoreProperties2AMD shaderCoreProperties2 = {};
+    shaderCoreProperties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_2_AMD;
+    getExtendedProperties(&shaderCoreProperties2);
+    return shaderCoreProperties2;
+}
+#endif // VK_AMD_shader_core_properties2
+
+#ifdef VK_NV_ray_tracing
 VkPhysicalDeviceRayTracingPropertiesNV PhysicalDevice::getRayTracingProperties() const
 {
     VkPhysicalDeviceRayTracingPropertiesNV rayTracingProperties = {};
@@ -281,6 +296,7 @@ VkPhysicalDeviceRayTracingPropertiesNV PhysicalDevice::getRayTracingProperties()
     getExtendedProperties(&rayTracingProperties);
     return rayTracingProperties;
 }
+#endif // VK_NV_ray_tracing
 
 std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
 {
@@ -316,6 +332,7 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
 
 void PhysicalDevice::getExtendedProperties(void *properties) const
 {
+#ifdef VK_KHR_get_physical_device_properties2
     if (properties)
     {
         VkPhysicalDeviceProperties2 properties2;
@@ -324,6 +341,9 @@ void PhysicalDevice::getExtendedProperties(void *properties) const
         MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
         vkGetPhysicalDeviceProperties2KHR(handle, &properties2);
     }
+#else
+    MAGMA_UNUSED(properties);
+#endif // VK_KHR_get_physical_device_properties2
 }
 
 PhysicalDeviceGroup::PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices, uint32_t groupId) noexcept:

@@ -136,6 +136,7 @@ bool Device::waitForFences(std::vector<std::shared_ptr<Fence>>& fences, bool wai
     return (VK_SUCCESS == wait) || (VK_TIMEOUT == wait);
 }
 
+#ifdef VK_KHR_device_group
 VkPeerMemoryFeatureFlags Device::getGroupPeerMemoryFeatures(uint32_t heapIndex, uint32_t localDeviceIndex, uint32_t remoteDeviceIndex) const noexcept
 {
     VkPeerMemoryFeatureFlags peerMemoryFeatures = 0;
@@ -144,4 +145,5 @@ VkPeerMemoryFeatureFlags Device::getGroupPeerMemoryFeatures(uint32_t heapIndex, 
         vkGetDeviceGroupPeerMemoryFeaturesKHR(handle, heapIndex, localDeviceIndex, remoteDeviceIndex, &peerMemoryFeatures);
     return peerMemoryFeatures;
 }
+#endif // VK_KHR_device_group
 } // namespace magma

@@ -59,15 +59,22 @@ namespace magma
         std::vector<VkPresentModeKHR> getSurfacePresentModes(std::shared_ptr<const Surface> surface) const;
         // VK_KHR_xxx_surface
         bool getPresentationSupport(uint32_t queueFamilyIndex,
-            void *display = nullptr, const void *visualID = nullptr) const noexcept;
-        // VK_KHR_display
+            void *display = nullptr,
+            const void *visualID = nullptr) const noexcept;
+#ifdef VK_KHR_display
         std::vector<VkDisplayPropertiesKHR> getDisplayProperties() const;
         std::vector<VkDisplayPlanePropertiesKHR> getDisplayPlaneProperties() const;
         std::vector<std::shared_ptr<Display>> getSupportedDisplays(uint32_t planeIndex) const;
-        // VK_AMD_shared_core_properties
+#endif
+#ifdef VK_AMD_shader_core_properties
         VkPhysicalDeviceShaderCorePropertiesAMD getShaderCoreProperties() const;
-        // VK_NV_ray_tracing
+#endif
+#ifdef VK_AMD_shader_core_properties2
+        VkPhysicalDeviceShaderCoreProperties2AMD getShaderCoreProperties2() const;
+#endif
+#ifdef VK_NV_ray_tracing
         VkPhysicalDeviceRayTracingPropertiesNV getRayTracingProperties() const;
+#endif
         // Non-API
         std::shared_ptr<Instance> getInstance() const noexcept { return instance; }
         std::shared_ptr<Device> createDefaultDevice() const;
