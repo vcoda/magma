@@ -528,6 +528,7 @@ void CommandBuffer::endConditionalRendering() noexcept
         vkCmdEndConditionalRenderingEXT(handle);
 }
 
+#ifdef VK_NV_ray_tracing
 void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<Buffer>& instanceData, VkDeviceSize instanceOffset, bool update,
     const std::shared_ptr<AccelerationStructure>& dst, const std::shared_ptr<AccelerationStructure>& src,
     const std::shared_ptr<Buffer>& scratch, VkDeviceSize scratchOffset /* 0 */) noexcept
@@ -587,6 +588,7 @@ void CommandBuffer::traceRays(const std::shared_ptr<Buffer>& raygenShaderBinding
             width, height, depth);
     }
 }
+#endif // VK_NV_ray_tracing
 
 std::shared_ptr<Fence> CommandBuffer::getFence() const noexcept
 {

@@ -28,6 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef VK_NV_ray_tracing
 RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
     const std::vector<PipelineShaderStage>& stages,
     const std::vector<RayTracingShaderGroup>& groups,
@@ -93,4 +94,5 @@ void RayTracingPipeline::compileDeferred(uint32_t shaderIndex)
     const VkResult compile = vkCompileDeferredNV(MAGMA_HANDLE(device), handle, shaderIndex);
     MAGMA_THROW_FAILURE(compile, "failed to compile shader deferred");
 }
+#endif // VK_NV_ray_tracing
 } // namespace magma

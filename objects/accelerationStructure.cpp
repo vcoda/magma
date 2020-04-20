@@ -27,6 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef VK_NV_ray_tracing
 AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkAccelerationStructureTypeNV type,
     uint32_t instanceCount, const std::list<Geometry>& geometries, VkBuildAccelerationStructureFlagsNV flags,
     VkDeviceSize compactedSize, std::shared_ptr<IAllocator> allocator):
@@ -99,4 +100,5 @@ uint64_t AccelerationStructure::getStructureHandle() const
     MAGMA_THROW_FAILURE(get, "failed to get acceleration structure handle");
     return structureHandle;
 }
+#endif // VK_NV_ray_tracing
 } // namespace magma

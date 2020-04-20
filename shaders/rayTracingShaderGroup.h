@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef VK_NV_ray_tracing
     class RayTracingShaderGroup : public VkRayTracingShaderGroupCreateInfoNV
     {
     protected:
@@ -52,4 +53,5 @@ namespace magma
         explicit ProceduralHitRayTracingShaderGroup(uint32_t intersectionShader) noexcept:
             RayTracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_PROCEDURAL_HIT_GROUP_NV, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV, intersectionShader) {}
     };
+#endif // VK_NV_ray_tracing
 } // namespace magma

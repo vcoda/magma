@@ -25,6 +25,7 @@ namespace magma
 
     /* Buffer data for ray tracing pipeline. */
 
+#ifdef VK_NV_ray_tracing
     class RayTracingBuffer : public Buffer
     {
     public:
@@ -41,4 +42,5 @@ namespace magma
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
+#endif // VK_NV_ray_tracing
 } // namespace magma

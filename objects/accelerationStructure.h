@@ -28,6 +28,7 @@ namespace magma
        a set of bottom-level acceleration structures or a bottom-level acceleration structure
        containing either a set of axis-aligned bounding boxes for custom geometry or a set of triangles. */
 
+#ifdef VK_NV_ray_tracing
     class AccelerationStructure : public NonDispatchableResource<AccelerationStructure, VkAccelerationStructureNV>
     {
     public:
@@ -82,4 +83,5 @@ namespace magma
                 instanceCount, std::move(geometries), flags, compactedSize, std::move(allocator))
         {}
     };
+#endif // VK_NV_ray_tracing
 } // namespace magma

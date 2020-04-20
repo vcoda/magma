@@ -27,6 +27,7 @@ namespace magma
     /* Raytracing pipelines consist of multiple shader stages,
        fixed-function traversal stages, and a pipeline layout. */
 
+#ifdef VK_NV_ray_tracing
     class RayTracingPipeline : public Pipeline
     {
     public:
@@ -42,4 +43,5 @@ namespace magma
         std::vector<VkShaderModule> getShaderGroupHandles(uint32_t firstGroup, uint32_t groupCount) const;
         void compileDeferred(uint32_t shaderIndex);
     };
+#endif // VK_NV_ray_tracing
 } // namespace magma

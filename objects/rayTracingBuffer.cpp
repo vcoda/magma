@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef VK_NV_ray_tracing
 RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> copyCmd, VkDeviceSize size, const void *data,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
@@ -51,4 +52,5 @@ RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> copyCmd, std::
 {
     copyTransfer(std::move(copyCmd), std::move(srcBuffer));
 }
+#endif // VK_NV_ray_tracing
 } // namespace magma

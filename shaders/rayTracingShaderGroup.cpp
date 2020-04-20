@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef VK_NV_ray_tracing
 RayTracingShaderGroup::RayTracingShaderGroup(VkRayTracingShaderGroupTypeNV type,
     uint32_t generalShader, uint32_t closestHitShader, uint32_t anyHitShader, uint32_t intersectionShader) noexcept
 {
@@ -43,4 +44,5 @@ std::size_t RayTracingShaderGroup::hash() const noexcept
         anyHitShader,
         intersectionShader);
 }
+#endif // VK_NV_ray_tracing
 } // namespace magma
