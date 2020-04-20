@@ -126,8 +126,7 @@ namespace magma
         constexpr SamplerState magMinMipLinearMirrorClampToEdge(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE);
         constexpr AnisotropicSamplerState magMinLinearMipAnisotropicMirrorClampToEdge(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE);
 
-        /* VK_EXT_filter_cubic */
-
+#ifdef VK_EXT_filter_cubic
         constexpr SamplerState magCubicMinMipNearestRepeat(VK_FILTER_CUBIC_EXT, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_ADDRESS_MODE_REPEAT);
         constexpr SamplerState magCubicMinLinearMipNearestRepeat(VK_FILTER_CUBIC_EXT, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_ADDRESS_MODE_REPEAT);
         constexpr SamplerState magCubicMinMipLinearRepeat(VK_FILTER_CUBIC_EXT, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR, VK_SAMPLER_ADDRESS_MODE_REPEAT);
@@ -157,6 +156,7 @@ namespace magma
         constexpr SamplerState magCubicMinMipLinearMirrorClampToEdge(VK_FILTER_CUBIC_EXT, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE);
         constexpr SamplerState magMinCubicMipLinearMirrorClampToEdge(VK_FILTER_CUBIC_EXT, VK_FILTER_CUBIC_EXT, VK_SAMPLER_MIPMAP_MODE_LINEAR, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE);
         constexpr AnisotropicSamplerState magMinCubicMipAnisotropicMirrorClampToEdge(VK_FILTER_CUBIC_EXT, VK_FILTER_CUBIC_EXT, VK_SAMPLER_ADDRESS_MODE_REPEAT);
+#endif // VK_EXT_filter_cubic
 
         constexpr DepthSamplerState magMinNearestCompareNever(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_COMPARE_OP_NEVER);
         constexpr DepthSamplerState magMinNearestCompareLess(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_COMPARE_OP_LESS);

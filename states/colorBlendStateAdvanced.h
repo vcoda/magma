@@ -36,6 +36,7 @@ namespace magma
     /* For explanation, see
        https://www.khronos.org/registry/OpenGL/extensions/NV/NV_blend_equation_advanced.txt */
 
+#ifdef VK_EXT_blend_operation_advanced
     struct AdvancedColorBlendState final : ColorBlendState
     {
     public:
@@ -57,6 +58,7 @@ namespace magma
         std::size_t hash() const noexcept;
         bool operator==(const AdvancedColorBlendState&) const noexcept;
     };
+#endif // VK_EXT_blend_operation_advanced
 } // namespace magma
 
 #include "colorBlendStateAdvanced.inl"
@@ -65,6 +67,7 @@ namespace magma
 {
     namespace blendstates
     {
+#ifdef VK_EXT_blend_operation_advanced
         namespace advanced
         {
             constexpr AdvancedColorBlendAttachmentState blendZeroR(VK_BLEND_OP_ZERO_EXT, colorwritemask::r);
@@ -247,5 +250,6 @@ namespace magma
             constexpr AdvancedColorBlendAttachmentState blendGreen(VK_BLEND_OP_GREEN_EXT); // (R,G,B,A) = (Rd, Gs', Bd, Ad)
             constexpr AdvancedColorBlendAttachmentState blendBlue(VK_BLEND_OP_BLUE_EXT); // (R,G,B,A) = (Rd, Gd, Bs', Ad)
         } // namespace advanced
+#endif // VK_EXT_blend_operation_advanced
     } // namespace blendstates
 } // namespace magma

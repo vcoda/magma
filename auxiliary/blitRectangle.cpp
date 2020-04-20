@@ -61,9 +61,6 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
 {   // Check for hardware support
     std::shared_ptr<Device> device = this->renderPass->getDevice();
     std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-    const bool canDrawRect = physicalDevice->checkExtensionSupport("VK_NV_fill_rectangle");
-    const bool hasCubicFilter = physicalDevice->checkExtensionSupport("VK_IMG_filter_cubic") ||
-        physicalDevice->checkExtensionSupport("VK_EXT_filter_cubic");
     // Descriptor set for single image view in fragment shader
     const Descriptor imageSampler(descriptors::CombinedImageSampler(1));
     descriptorPool = std::make_shared<DescriptorPool>(device, 1, std::vector<Descriptor>{imageSampler}, false, allocator);
@@ -72,15 +69,20 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     // Create texture samplers
     nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, allocator);
     bilinearSampler = std::make_shared<Sampler>(device, samplers::magMinLinearMipNearestClampToEdge, allocator);
-    if (hasCubicFilter)
+#ifdef VK_EXT_filter_cubic
+    if (physicalDevice->checkExtensionSupport("VK_IMG_filter_cubic") || physicalDevice->checkExtensionSupport("VK_EXT_filter_cubic"))
         cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, allocator);
+#endif
     // Create blit pipeline
     pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, std::initializer_list<PushConstantRange>{}, allocator);
     pipeline = std::make_shared<GraphicsPipeline>(device,
         std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
         renderstates::nullVertexInput,
         renderstates::triangleList,
-        canDrawRect ? renderstates::fillRectangleCullNoneCCW : renderstates::fillCullNoneCCW,
+#ifdef VK_NV_fill_rectangle
+        physicalDevice->checkExtensionSupport("VK_NV_fill_rectangle") ? renderstates::fillRectangleCullNoneCCW :
+#endif
+        renderstates::fillCullNoneCCW,
         renderstates::noMultisample,
         renderstates::depthAlwaysDontWrite,
         renderstates::dontBlendRgba,

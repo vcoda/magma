@@ -97,11 +97,6 @@ namespace magma
         constexpr RasterizationState pointCullFrontCCW(VK_POLYGON_MODE_POINT, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);
         constexpr RasterizationState pointCullFrontAndBackCCW(VK_POLYGON_MODE_POINT, VK_CULL_MODE_FRONT_AND_BACK, VK_FRONT_FACE_COUNTER_CLOCKWISE);
 
-        constexpr RasterizationState fillRectangleCullNoneCCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);
-        constexpr RasterizationState fillRectangleCullBackCCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);
-        constexpr RasterizationState fillRectangleCullFrontCCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);
-        constexpr RasterizationState fillRectangleCullFrontAndBackCCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_FRONT_AND_BACK, VK_FRONT_FACE_COUNTER_CLOCKWISE);
-
         constexpr RasterizationState fillCullNoneCW(VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);
         constexpr RasterizationState fillCullBackCW(VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_CLOCKWISE);
         constexpr RasterizationState fillCullFrontCW(VK_POLYGON_MODE_FILL, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_CLOCKWISE);
@@ -117,11 +112,19 @@ namespace magma
         constexpr RasterizationState pointCullFrontCW(VK_POLYGON_MODE_POINT, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_CLOCKWISE);
         constexpr RasterizationState pointCullFrontAndBackCW(VK_POLYGON_MODE_POINT, VK_CULL_MODE_FRONT_AND_BACK, VK_FRONT_FACE_CLOCKWISE);
 
+#ifdef VK_NV_fill_rectangle
+        constexpr RasterizationState fillRectangleCullNoneCCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);
+        constexpr RasterizationState fillRectangleCullBackCCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);
+        constexpr RasterizationState fillRectangleCullFrontCCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);
+        constexpr RasterizationState fillRectangleCullFrontAndBackCCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_FRONT_AND_BACK, VK_FRONT_FACE_COUNTER_CLOCKWISE);
+
         constexpr RasterizationState fillRectangleCullNoneCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);
         constexpr RasterizationState fillRectangleCullBackCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_CLOCKWISE);
         constexpr RasterizationState fillRectangleCullFrontCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_CLOCKWISE);
         constexpr RasterizationState fillRectangleCullFrontAndBackCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_FRONT_AND_BACK, VK_FRONT_FACE_CLOCKWISE);
+#endif // VK_NV_fill_rectangle
 
+#ifdef VK_EXT_conservative_rasterization
         constexpr ConservativeRasterizationState fillCullNoneOverestimateCCW(fillCullNoneCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
         constexpr ConservativeRasterizationState fillCullBackOverestimateCCW(fillCullBackCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
         constexpr ConservativeRasterizationState fillCullFrontOverestimateCCW(fillCullFrontCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
@@ -181,7 +184,9 @@ namespace magma
         constexpr ConservativeRasterizationState pointCullBackUnderestimateCW(pointCullBackCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
         constexpr ConservativeRasterizationState pointCullFrontUnderestimateCW(pointCullFrontCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
         constexpr ConservativeRasterizationState pointCullFrontAndBackUnderestimateCW(pointCullFrontAndBackCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
+#endif // VK_EXT_conservative_rasterization
 
+#ifdef VK_AMD_rasterization_order
         constexpr RasterizationOrderState fillCullNoneRelaxedCCW(fillCullNoneCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
         constexpr RasterizationOrderState fillCullBackRelaxedCCW(fillCullBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
         constexpr RasterizationOrderState fillCullFrontRelaxedCCW(fillCullFrontCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
@@ -211,5 +216,6 @@ namespace magma
         constexpr RasterizationOrderState pointCullBackRelaxedCW(pointCullBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
         constexpr RasterizationOrderState pointCullFrontRelaxedCW(pointCullFrontCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
         constexpr RasterizationOrderState pointCullFrontAndBackRelaxedCW(pointCullFrontAndBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
+#endif // VK_AMD_rasterization_order
     } // namespace renderstates
  } // namespace magma

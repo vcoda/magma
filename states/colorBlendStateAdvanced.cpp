@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef VK_EXT_blend_operation_advanced
 AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendAttachmentState& attachment,
     bool srcPremultiplied, bool dstPremultiplied, VkBlendOverlapEXT blendOverlap)
 {
@@ -143,4 +144,5 @@ bool AdvancedColorBlendState::operator==(const AdvancedColorBlendState& other) c
         (blendConstants[2] == other.blendConstants[2]) &&
         (blendConstants[3] == other.blendConstants[3]);
 }
+#endif // VK_EXT_blend_operation_advanced
 } // namespace magma
