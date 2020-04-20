@@ -80,10 +80,10 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     {
         create = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     }
-#ifdef MAGMA_DEBUG
+#ifdef VK_EXT_debug_report
     if (create != VK_SUCCESS && debugReportCallback)
     {
-        debugReportCallback->message(VK_DEBUG_REPORT_ERROR_BIT_EXT, objectType, VK_NULL_HANDLE, 0, 0, "Magma",
+        debugReportCallback->message(VK_DEBUG_REPORT_ERROR_BIT_EXT, objectType, VK_NULL_HANDLE, 0, 0, "magma",
             "swapchain initialization failed with the following parameters:\n"
             "minImageCount: %d\nimageFormat: %s\nimageColorSpace: %s\nimageExtent: {%d, %d}\n"
             "imageArrayLayers: %d\nimageUsage: %s\nimageSharingMode: %s\n"
@@ -104,8 +104,8 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
             info.oldSwapchain);
     }
 #else
-    debugReportCallback;
-#endif
+    MAGMA_UNUSED(debugReportCallback);
+#endif // VK_EXT_debug_report
     MAGMA_THROW_FAILURE(create, "failed to create swapchain");
 }
 
