@@ -69,12 +69,14 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     info.oldSwapchain = VK_NULL_HANDLE;
     helpers::checkImageUsageSupport(surface, info.imageUsage, this->device->getPhysicalDevice());
     VkResult create;
+#ifdef VK_KHR_display_swapchain
     if (std::dynamic_pointer_cast<const DisplaySurface>(surface))
     {
         MAGMA_DEVICE_EXTENSION(vkCreateSharedSwapchainsKHR, VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME);
         create = vkCreateSharedSwapchainsKHR(MAGMA_HANDLE(device), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     }
     else
+#endif // VK_KHR_display_swapchain
     {
         create = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     }

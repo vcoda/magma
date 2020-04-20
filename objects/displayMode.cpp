@@ -26,8 +26,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DisplayMode::DisplayMode(std::shared_ptr<const Display> display,
-    const VkExtent2D& visibleRegion, uint32_t refreshRate,
+#ifdef VK_KHR_display
+DisplayMode::DisplayMode(std::shared_ptr<const Display> display, const VkExtent2D& visibleRegion, uint32_t refreshRate,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_DISPLAY_MODE_KHR, std::move(display->getDevice()), std::move(allocator)),
     instance(std::move(display->getPhysicalDevice()->getInstance())),
@@ -59,4 +59,5 @@ const VkDisplayPlaneCapabilitiesKHR& DisplayMode::getPlaneCapabilities(uint32_t 
     }
     return capabilities[planeIndex];
 }
+#endif // VK_KHR_display
 } // namespace magma

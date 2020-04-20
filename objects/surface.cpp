@@ -201,6 +201,7 @@ MetalSurface::MetalSurface(std::shared_ptr<const Instance> instance,
 
 #endif // VK_USE_PLATFORM_METAL_EXT
 
+#ifdef VK_KHR_display
 DisplaySurface::DisplaySurface(std::shared_ptr<const Instance> instance,
     std::shared_ptr<const DisplayMode> displayMode,
     uint32_t planeIndex,
@@ -225,4 +226,5 @@ DisplaySurface::DisplaySurface(std::shared_ptr<const Instance> instance,
     const VkResult create = vkCreateDisplayPlaneSurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create display surface");
 }
+#endif // VK_KHR_display
 } // namespace magma

@@ -26,6 +26,7 @@ namespace magma
 
     /* Each display has one or more supported modes associated with it by default. */
 
+#ifdef VK_KHR_display
     class DisplayMode : public NonDispatchable<VkDisplayModeKHR>
     {
     public:
@@ -44,4 +45,5 @@ namespace magma
         uint32_t refreshRate;
         mutable std::map<uint32_t, VkDisplayPlaneCapabilitiesKHR> capabilities;
     };
+#endif // VK_KHR_display
 } // namespace magma

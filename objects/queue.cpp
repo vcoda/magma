@@ -139,7 +139,8 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
     present(std::move(swapchain), imageIndex, nullptr, std::move(waitSemaphore));
 }
 
-void Queue::presentToDisplay(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
+#ifdef VK_KHR_display_swapchain
+void Queue::presentDisplay(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
     const VkRect2D& srcRect, const VkRect2D& dstRect, bool persistent,
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */)
 {
@@ -151,9 +152,9 @@ void Queue::presentToDisplay(std::shared_ptr<const Swapchain> swapchain, uint32_
     displayPresentInfo.persistent = MAGMA_BOOLEAN(persistent);
     present(std::move(swapchain), imageIndex, &displayPresentInfo, std::move(waitSemaphore));
 }
+#endif // VK_KHR_display_swapchain
 
-void Queue::present(std::shared_ptr<const Swapchain> swapchain,
-    uint32_t imageIndex,
+void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
     const VkDisplayPresentInfoKHR *displayPresentInfo,
     std::shared_ptr<const Semaphore> waitSemaphore)
 {

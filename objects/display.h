@@ -28,6 +28,7 @@ namespace magma
        This can be useful for embedded applications, or implementing
        the rendering/presentation backend of a windowing system using Vulkan. */
 
+#ifdef VK_KHR_display
     class Display : public NonDispatchable<VkDisplayKHR>
     {
         explicit Display(std::shared_ptr<const PhysicalDevice> physicalDevice,
@@ -45,4 +46,5 @@ namespace magma
         std::shared_ptr<const PhysicalDevice> physicalDevice;
         uint32_t planeIndex;
     };
+#endif // VK_KHR_display
 } // namespace magma

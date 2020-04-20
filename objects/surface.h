@@ -146,8 +146,8 @@ namespace magma
 
 #endif // VK_USE_PLATFORM_METAL_EXT
 
+#ifdef VK_KHR_display
     class DisplayMode;
-
     class DisplaySurface : public Surface
     {
     public:
@@ -159,4 +159,5 @@ namespace magma
             VkDisplayPlaneAlphaFlagBitsKHR alphaMode,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
+#endif // VK_KHR_display
 } // namespace magma

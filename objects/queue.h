@@ -64,12 +64,14 @@ namespace magma
         void present(std::shared_ptr<const Swapchain> swapchain,
             uint32_t imageIndex,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr);
-        void presentToDisplay(std::shared_ptr<const Swapchain> swapchain,
+#ifdef VK_KHR_display_swapchain
+        void presentDisplay(std::shared_ptr<const Swapchain> swapchain,
             uint32_t imageIndex,
             const VkRect2D& srcRect,
             const VkRect2D& dstRect,
             bool persistent,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr);
+#endif // VK_KHR_display_swapchain
 
     private:
         void present(std::shared_ptr<const Swapchain> swapchain,
