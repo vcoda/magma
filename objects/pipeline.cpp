@@ -44,6 +44,7 @@ Pipeline::~Pipeline()
     vkDestroyPipeline(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
+#ifdef VK_AMD_shader_info
 VkShaderStatisticsInfoAMD Pipeline::getShaderStatistics(VkShaderStageFlagBits stage) const
 {
     MAGMA_DEVICE_EXTENSION(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO_EXTENSION_NAME);
@@ -83,4 +84,5 @@ std::string Pipeline::getShaderDisassembly(VkShaderStageFlagBits stage) const
     }
     return std::string();
 }
+#endif // VK_AMD_shader_info
 } // namespace magma
