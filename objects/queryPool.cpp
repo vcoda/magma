@@ -82,8 +82,10 @@ TimestampQuery::TimestampQuery(std::shared_ptr<Device> device, uint32_t queryCou
     QueryPool(VK_QUERY_TYPE_TIMESTAMP, std::move(device), queryCount, 0, std::move(allocator))
 {}
 
+#ifdef VK_NV_ray_tracing
 AccelerationStructureCompactedSizeQuery::AccelerationStructureCompactedSizeQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     QueryPool(VK_QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_NV, std::move(device), queryCount, 0, std::move(allocator))
 {}
+#endif // VK_NV_ray_tracing
 } // namespace magma

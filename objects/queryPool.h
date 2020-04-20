@@ -92,6 +92,7 @@ namespace magma
        in order to improve performance. Before copying, an application
        must query the size of the resulting acceleration structure. */
 
+#ifdef VK_NV_ray_tracing
     class AccelerationStructureCompactedSizeQuery : public QueryPool
     {
     public:
@@ -99,4 +100,5 @@ namespace magma
             uint32_t queryCount,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
+#endif // VK_NV_ray_tracing
 } // namespace magma
