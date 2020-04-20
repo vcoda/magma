@@ -25,6 +25,7 @@ namespace magma
 
     /* Buffer that is suitable to use as predicate with conditional rendering extension. */
 
+#ifdef VK_EXT_conditional_rendering
     class ConditionalRenderingBuffer : public Buffer
     {
     public:
@@ -41,4 +42,5 @@ namespace magma
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
+#endif // VK_EXT_conditional_rendering
 } // namespace magma

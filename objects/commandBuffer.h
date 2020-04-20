@@ -364,12 +364,13 @@ namespace magma
             uint32_t groupCountY,
             uint32_t groupCountZ) const noexcept;
 
-        // VK_EXT_conditional_rendering
+#ifdef VK_EXT_conditional_rendering
         void beginConditionalRendering(
             const std::shared_ptr<Buffer>& buffer,
             VkDeviceSize offset = 0,
             bool inverted = false) noexcept;
         void endConditionalRendering() noexcept;
+#endif // VK_EXT_conditional_rendering
 
 #ifdef VK_NV_ray_tracing
         void buildAccelerationStructure(const std::shared_ptr<Buffer>& instanceData,

@@ -500,6 +500,7 @@ void CommandBuffer::dispatchBase(uint32_t baseGroupX, uint32_t baseGroupY, uint3
         vkCmdDispatchBaseKHR(handle, baseGroupX, baseGroupY, baseGroupZ, groupCountX, groupCountY, groupCountZ);
 }
 
+#ifdef VK_EXT_conditional_rendering
 void CommandBuffer::beginConditionalRendering(const std::shared_ptr<Buffer>& buffer,
     VkDeviceSize offset /* 0 */,
     bool inverted /* false */) noexcept
@@ -527,6 +528,7 @@ void CommandBuffer::endConditionalRendering() noexcept
     if (vkCmdEndConditionalRenderingEXT)
         vkCmdEndConditionalRenderingEXT(handle);
 }
+#endif // VK_EXT_conditional_rendering
 
 #ifdef VK_NV_ray_tracing
 void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<Buffer>& instanceData, VkDeviceSize instanceOffset, bool update,

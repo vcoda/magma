@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef VK_EXT_conditional_rendering
 ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBuffer> copyCmd, VkDeviceSize size, const void *data,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
@@ -51,4 +52,5 @@ ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBu
 {
     copyTransfer(std::move(copyCmd), std::move(srcBuffer));
 }
+#endif // VK_EXT_conditional_rendering
 } // namespace magma
