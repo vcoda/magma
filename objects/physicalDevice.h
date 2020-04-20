@@ -60,8 +60,6 @@ namespace magma
         // VK_KHR_xxx_surface
         bool getPresentationSupport(uint32_t queueFamilyIndex,
             void *display = nullptr, const void *visualID = nullptr) const noexcept;
-        // VK_KHR_get_physical_device_properties2
-        void getExtendedProperties(void *properties) const;
         // VK_KHR_display
         std::vector<VkDisplayPropertiesKHR> getDisplayProperties() const;
         std::vector<VkDisplayPlanePropertiesKHR> getDisplayPlaneProperties() const;
@@ -76,6 +74,9 @@ namespace magma
         bool checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept;
 
     private:
+        // VK_KHR_get_physical_device_properties2
+        void getExtendedProperties(void *properties) const;
+
         std::shared_ptr<Instance> instance;
     };
 

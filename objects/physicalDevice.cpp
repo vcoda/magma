@@ -218,19 +218,6 @@ bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex,
     return (get ? true : false);
 }
 
-void PhysicalDevice::getExtendedProperties(void *properties) const
-{
-    MAGMA_ASSERT(properties);
-    if (properties)
-    {
-        VkPhysicalDeviceProperties2 properties2;
-        properties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
-        properties2.pNext = properties;
-        MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
-        vkGetPhysicalDeviceProperties2KHR(handle, &properties2);
-    }
-}
-
 std::vector<VkDisplayPropertiesKHR> PhysicalDevice::getDisplayProperties() const
 {
     uint32_t propertyCount;
@@ -325,6 +312,18 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
     memcpy(header.cacheUUID, properties.pipelineCacheUUID, VK_UUID_SIZE);
     const PipelineCache::Header *cacheHeader = reinterpret_cast<const PipelineCache::Header *>(cacheData);
     return core::compare(cacheHeader, &header);
+}
+
+void PhysicalDevice::getExtendedProperties(void *properties) const
+{
+    if (properties)
+    {
+        VkPhysicalDeviceProperties2 properties2;
+        properties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+        properties2.pNext = properties;
+        MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
+        vkGetPhysicalDeviceProperties2KHR(handle, &properties2);
+    }
 }
 
 PhysicalDeviceGroup::PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices, uint32_t groupId) noexcept:
