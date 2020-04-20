@@ -25,6 +25,7 @@ namespace magma
 
     /* Vulkan Debug Utilities */
 
+#ifdef VK_EXT_debug_utils
     class DebugUtilsMessenger : public NonDispatchable<VkDebugUtilsMessengerEXT>
     {
     public:
@@ -51,4 +52,5 @@ namespace magma
     private:
         std::shared_ptr<const Instance> instance;
     };
+#endif // VK_EXT_debug_utils
 } // namespace magma
