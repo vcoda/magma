@@ -92,14 +92,16 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     inheritanceInfo.occlusionQueryEnable = occlusionQueryEnable;
     inheritanceInfo.queryFlags = queryFlags;
     inheritanceInfo.pipelineStatistics = pipelineStatistics;
+#ifdef VK_EXT_conditional_rendering
     VkCommandBufferInheritanceConditionalRenderingInfoEXT conditionalRenderingInfo;
     if (conditionalRenderingEnable)
-    {   // VK_EXT_conditional_rendering
+    {
         conditionalRenderingInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_CONDITIONAL_RENDERING_INFO_EXT;
         conditionalRenderingInfo.pNext = nullptr;
         conditionalRenderingInfo.conditionalRenderingEnable = conditionalRenderingEnable;
         inheritanceInfo.pNext = &conditionalRenderingInfo;
     }
+#endif // VK_EXT_conditional_rendering
     VkCommandBufferBeginInfo beginInfo;
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.pNext = nullptr;
