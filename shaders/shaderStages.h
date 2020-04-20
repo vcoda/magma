@@ -118,6 +118,7 @@ namespace magma
     };
 #endif // VK_NV_ray_tracing
 
+#ifdef VK_NV_mesh_shader
     class TaskShaderStage : public PipelineShaderStage
     {
     public:
@@ -133,4 +134,5 @@ namespace magma
             std::shared_ptr<Specialization> specialization = nullptr, VkPipelineShaderStageCreateFlags flags = 0) noexcept:
             PipelineShaderStage(VK_SHADER_STAGE_MESH_BIT_NV, std::move(module), entrypoint, std::move(specialization), flags) {}
     };
+#endif // VK_NV_mesh_shader
 } // namespace magma
