@@ -95,13 +95,13 @@ std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId)
 }
 
 #ifdef VK_KHR_device_group
-std::vector<VkPhysicalDeviceGroupProperties> Instance::enumeratePhysicalDeviceGroups() const
+std::vector<VkPhysicalDeviceGroupPropertiesKHR> Instance::enumeratePhysicalDeviceGroups() const
 {
     uint32_t physicalDeviceGroupCount = 0;
     MAGMA_INSTANCE_EXTENSION(vkEnumeratePhysicalDeviceGroupsKHR, VK_KHR_DEVICE_GROUP_CREATION_EXTENSION_NAME);
     const VkResult count = vkEnumeratePhysicalDeviceGroupsKHR(handle, &physicalDeviceGroupCount, nullptr);
     MAGMA_THROW_FAILURE(count, "failed to count groups of physical devices");
-    std::vector<VkPhysicalDeviceGroupProperties> physicalDeviceGroups(physicalDeviceGroupCount);
+    std::vector<VkPhysicalDeviceGroupPropertiesKHR> physicalDeviceGroups(physicalDeviceGroupCount);
     if (physicalDeviceGroupCount > 0)
     {
         const VkResult enumerate = vkEnumeratePhysicalDeviceGroupsKHR(handle, &physicalDeviceGroupCount, physicalDeviceGroups.data());
@@ -112,7 +112,7 @@ std::vector<VkPhysicalDeviceGroupProperties> Instance::enumeratePhysicalDeviceGr
 
 std::shared_ptr<PhysicalDeviceGroup> Instance::getPhysicalDeviceGroup(uint32_t groupId)
 {
-    const std::vector<VkPhysicalDeviceGroupProperties>& deviceGroups = enumeratePhysicalDeviceGroups();
+    const std::vector<VkPhysicalDeviceGroupPropertiesKHR>& deviceGroups = enumeratePhysicalDeviceGroups();
     if (groupId >= MAGMA_COUNT(deviceGroups))
         MAGMA_THROW("invalid <groupId> parameter");
     std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices;
