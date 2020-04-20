@@ -38,6 +38,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     Dispatchable<VkDevice>(VK_OBJECT_TYPE_DEVICE, nullptr, std::move(allocator)),
     physicalDevice(std::move(physicalDevice))
 {
+#ifdef VK_KHR_get_physical_device_properties2
     VkPhysicalDeviceFeatures2KHR features;
     if (!extendedDeviceFeatures.empty())
     {
@@ -62,9 +63,14 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
         VkFeaturesNode *lastNode = reinterpret_cast<VkFeaturesNode *>(*curr);
         lastNode->pNext = nullptr; // End of list
     }
+#endif // VK_KHR_get_physical_device_properties2
     VkDeviceCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+#ifdef VK_KHR_get_physical_device_properties2
     info.pNext = extendedDeviceFeatures.empty() ? nullptr : &features;
+#else
+    info.pNext = nullptr;
+#endif
     info.flags = 0;
     info.queueCreateInfoCount = MAGMA_COUNT(queueDescriptors);
     info.pQueueCreateInfos = queueDescriptors.data();
