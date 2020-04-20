@@ -26,6 +26,7 @@ namespace magma
     /* Debug report callbacks give more detailed feedback on the
        application's use of Vulkan when events of interest occur. */
 
+#ifdef VK_EXT_debug_report
     class DebugReportCallback : public NonDispatchable<VkDebugReportCallbackEXT>
     {
     public:
@@ -51,4 +52,5 @@ namespace magma
     private:
         std::shared_ptr<const Instance> instance;
     };
+#endif // VK_EXT_debug_report
 } // namespace magma
