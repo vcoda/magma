@@ -115,28 +115,6 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     return (VK_SUCCESS == begin);
 }
 
-#ifdef VK_KHR_device_group
-bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask,
-    VkCommandBufferUsageFlags flags /* 0 */) noexcept
-{
-    VkDeviceGroupCommandBufferBeginInfo deviceGroupBeginInfo;
-    deviceGroupBeginInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_COMMAND_BUFFER_BEGIN_INFO;
-    deviceGroupBeginInfo.pNext = nullptr;
-    deviceGroupBeginInfo.deviceMask = deviceMask;
-    VkCommandBufferBeginInfo beginInfo;
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.pNext = &deviceGroupBeginInfo;
-    beginInfo.flags = flags;
-    beginInfo.pInheritanceInfo = nullptr;
-    const VkResult begin = vkBeginCommandBuffer(handle, &beginInfo);
-    MAGMA_ASSERT(VK_SUCCESS == begin);
-#ifdef MAGMA_DEBUG
-    beginMarked = VK_FALSE;
-#endif
-    return (VK_SUCCESS == begin);
-}
-#endif // VK_KHR_device_group
-
 void CommandBuffer::end()
 {
 #ifdef MAGMA_DEBUG
@@ -447,7 +425,49 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
 #endif
 }
 
+// CommandBuffer::nextSubpass
+// CommandBuffer::endRenderPass
+
+void CommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept
+{
+    MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCommandBuffers, commandBuffers.size());
+    for (const auto& commandBuffer : commandBuffers)
+        dereferencedCommandBuffers.put(*commandBuffer);
+    vkCmdExecuteCommands(handle, dereferencedCommandBuffers.size(), dereferencedCommandBuffers);
+}
+
 #ifdef VK_KHR_device_group
+void CommandBuffer::setDeviceMask(uint32_t deviceMask) noexcept
+{
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdSetDeviceMaskKHR);
+    if (vkCmdSetDeviceMaskKHR)
+    {
+        MAGMA_ASSERT(deviceMask);
+        vkCmdSetDeviceMaskKHR(handle, deviceMask);
+        this->deviceMask = deviceMask;
+    }
+}
+
+bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask,
+    VkCommandBufferUsageFlags flags /* 0 */) noexcept
+{
+    VkDeviceGroupCommandBufferBeginInfo deviceGroupBeginInfo;
+    deviceGroupBeginInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_COMMAND_BUFFER_BEGIN_INFO;
+    deviceGroupBeginInfo.pNext = nullptr;
+    deviceGroupBeginInfo.deviceMask = deviceMask;
+    VkCommandBufferBeginInfo beginInfo;
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.pNext = &deviceGroupBeginInfo;
+    beginInfo.flags = flags;
+    beginInfo.pInheritanceInfo = nullptr;
+    const VkResult begin = vkBeginCommandBuffer(handle, &beginInfo);
+    MAGMA_ASSERT(VK_SUCCESS == begin);
+#ifdef MAGMA_DEBUG
+    beginMarked = VK_FALSE;
+#endif
+    return (VK_SUCCESS == begin);
+}
+
 void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, uint32_t deviceMask,
     const std::vector<ClearValue>& clearValues /* {} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
@@ -474,29 +494,6 @@ void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>
     beginRenderPassMarked = VK_FALSE;
 #endif
 }
-#endif // VK_KHR_device_group
-
-// CommandBuffer::nextSubpass
-// CommandBuffer::endRenderPass
-
-void CommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept
-{
-    MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCommandBuffers, commandBuffers.size());
-    for (const auto& commandBuffer : commandBuffers)
-        dereferencedCommandBuffers.put(*commandBuffer);
-    vkCmdExecuteCommands(handle, dereferencedCommandBuffers.size(), dereferencedCommandBuffers);
-}
-
-void CommandBuffer::setDeviceMask(uint32_t deviceMask) noexcept
-{
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdSetDeviceMaskKHR);
-    if (vkCmdSetDeviceMaskKHR)
-    {
-        MAGMA_ASSERT(deviceMask);
-        vkCmdSetDeviceMaskKHR(handle, deviceMask);
-        this->deviceMask = deviceMask;
-    }
-}
 
 void CommandBuffer::dispatchBase(uint32_t baseGroupX, uint32_t baseGroupY, uint32_t baseGroupZ,
     uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) const noexcept
@@ -505,6 +502,7 @@ void CommandBuffer::dispatchBase(uint32_t baseGroupX, uint32_t baseGroupY, uint3
     if (vkCmdDispatchBaseKHR)
         vkCmdDispatchBaseKHR(handle, baseGroupX, baseGroupY, baseGroupZ, groupCountX, groupCountY, groupCountZ);
 }
+#endif // VK_KHR_device_group
 
 #ifdef VK_EXT_conditional_rendering
 void CommandBuffer::beginConditionalRendering(const std::shared_ptr<Buffer>& buffer,

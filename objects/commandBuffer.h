@@ -71,11 +71,6 @@ namespace magma
             uint32_t subpass,
             const std::shared_ptr<Framebuffer>& framebuffer,
             VkCommandBufferUsageFlags flags = 0) noexcept;
-#ifdef VK_KHR_device_group
-        bool beginDeviceGroup(
-            uint32_t deviceMask,
-            VkCommandBufferUsageFlags flags = 0) noexcept;
-#endif
         void end();
         bool reset(bool releaseResources) noexcept;
         void bindPipeline(const std::shared_ptr<Pipeline>& pipeline) noexcept;
@@ -344,18 +339,21 @@ namespace magma
             const std::shared_ptr<Framebuffer>& framebuffer,
             const std::vector<ClearValue>& clearValues = {},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
+        void nextSubpass(VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
+        void endRenderPass() noexcept;
+
+        void executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept;
+
+#ifdef VK_KHR_device_group
+        bool beginDeviceGroup(
+            uint32_t deviceMask,
+            VkCommandBufferUsageFlags flags = 0) noexcept;
         void beginRenderPassDeviceGroup(
             const std::shared_ptr<RenderPass>& renderPass,
             const std::shared_ptr<Framebuffer>& framebuffer,
             uint32_t deviceMask,
             const std::vector<ClearValue>& clearValues = {},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
-        void nextSubpass(VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
-        void endRenderPass() noexcept;
-
-        void executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept;
-
-        // VK_KHR_device_group
         void setDeviceMask(
             uint32_t deviceMask) noexcept;
         void dispatchBase(
@@ -365,6 +363,7 @@ namespace magma
             uint32_t groupCountX,
             uint32_t groupCountY,
             uint32_t groupCountZ) const noexcept;
+#endif // VK_KHR_device_group
 
 #ifdef VK_EXT_conditional_rendering
         void beginConditionalRendering(
