@@ -172,6 +172,7 @@ void Image::bindMemory(std::shared_ptr<DeviceMemory> memory,
     this->memory = std::move(memory);
 }
 
+#ifdef VK_KHR_device_group
 void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     const std::vector<uint32_t>& deviceIndices, const std::vector<VkRect2D>& splitInstanceBindRegions,
     VkDeviceSize offset /* 0 */)
@@ -195,6 +196,7 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     this->offset = offset;
     this->memory = std::move(memory);
 }
+#endif // VK_KHR_device_group
 
 void Image::copyMipLevel(uint32_t level, std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset,
     const VkOffset3D& imageOffset, std::shared_ptr<CommandBuffer> cmdBuffer,

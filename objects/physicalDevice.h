@@ -89,6 +89,7 @@ namespace magma
 
     /* A logical device can be created that connects to one or more physical devices. */
 
+#ifdef VK_KHR_device_group
     class PhysicalDeviceGroup
     {
         explicit PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices,
@@ -111,4 +112,5 @@ namespace magma
         std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices;
         uint32_t groupId;
     };
+#endif // VK_KHR_device_group
 } // namespace magma

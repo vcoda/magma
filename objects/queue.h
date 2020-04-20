@@ -52,6 +52,7 @@ namespace magma
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
             std::shared_ptr<const Semaphore> signalSemaphore = nullptr,
             std::shared_ptr<const Fence> fence = nullptr) noexcept;
+#ifdef VK_KHR_device_group
         bool submitDeviceGroup(const std::vector<std::shared_ptr<const CommandBuffer>>& commandBuffers,
             const std::vector<uint32_t>& commandBufferDeviceMasks = {},
             const std::vector<VkPipelineStageFlags>& waitStageMasks = {},
@@ -60,6 +61,7 @@ namespace magma
             const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores = {},
             const std::vector<uint32_t>& signalSemaphoreDeviceIndices = {},
             std::shared_ptr<const Fence> fence = nullptr) noexcept;
+#endif // VK_KHR_device_group
         bool waitIdle() noexcept;
         void present(std::shared_ptr<const Swapchain> swapchain,
             uint32_t imageIndex,

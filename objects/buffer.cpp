@@ -69,6 +69,7 @@ void Buffer::bindMemory(std::shared_ptr<DeviceMemory> memory,
     this->memory = std::move(memory);
 }
 
+#ifdef VK_KHR_device_group
 void Buffer::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     const std::vector<uint32_t>& deviceIndices,
     VkDeviceSize offset /* 0 */)
@@ -89,6 +90,7 @@ void Buffer::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     MAGMA_THROW_FAILURE(bind, "failed to bind buffer memory within device group");
     this->memory = std::move(memory);
 }
+#endif // VK_KHR_device_group
 
 VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
 {

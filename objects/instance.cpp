@@ -94,6 +94,7 @@ std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId)
     return std::shared_ptr<PhysicalDevice>(new PhysicalDevice(shared_from_this(), physicalDevice, allocator));
 }
 
+#ifdef VK_KHR_device_group
 std::vector<VkPhysicalDeviceGroupProperties> Instance::enumeratePhysicalDeviceGroups() const
 {
     uint32_t physicalDeviceGroupCount = 0;
@@ -123,6 +124,7 @@ std::shared_ptr<PhysicalDeviceGroup> Instance::getPhysicalDeviceGroup(uint32_t g
     }
     return std::shared_ptr<PhysicalDeviceGroup>(new PhysicalDeviceGroup(physicalDevices, groupId));
 }
+#endif // VK_KHR_device_group
 
 std::vector<VkLayerProperties> Instance::enumerateLayers()
 {

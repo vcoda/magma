@@ -106,6 +106,7 @@ bool Queue::submit(std::shared_ptr<const CommandBuffer> commandBuffer,
     return submit(commandBuffers, {waitStageMask}, waitSemaphores, signalSemaphores, std::move(fence));
 }
 
+#ifdef VK_KHR_device_group
 bool Queue::submitDeviceGroup(const std::vector<std::shared_ptr<const CommandBuffer>>& commandBuffers,
     const std::vector<uint32_t>& commandBufferDeviceMasks /* {} */,
     const std::vector<VkPipelineStageFlags>& waitStageMasks /* {} */,
@@ -126,6 +127,7 @@ bool Queue::submitDeviceGroup(const std::vector<std::shared_ptr<const CommandBuf
     deviceGroupSubmitInfo.pSignalSemaphoreDeviceIndices = signalSemaphoreDeviceIndices.data();
     return submit(commandBuffers, waitStageMasks, waitSemaphores, signalSemaphores, fence, &deviceGroupSubmitInfo);
 }
+#endif // VK_KHR_device_group
 
 bool Queue::waitIdle() noexcept
 {

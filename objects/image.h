@@ -49,10 +49,12 @@ namespace magma
         std::vector<VkSparseImageMemoryRequirements> getSparseMemoryRequirements() const;
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0);
+#ifdef VK_KHR_device_group
         void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
             const std::vector<VkRect2D>& splitInstanceBindRegions,
             VkDeviceSize offset = 0);
+#endif
         void copyMipLevel(uint32_t level,
             std::shared_ptr<Buffer> buffer,
             VkDeviceSize bufferOffset,

@@ -66,14 +66,16 @@ namespace magma
     public:
         ~CommandBuffer();
         bool begin(VkCommandBufferUsageFlags flags = 0) noexcept;
-        bool beginDeviceGroup(
-            uint32_t deviceMask,
-            VkCommandBufferUsageFlags flags = 0) noexcept;
         bool beginInherited(
             const std::shared_ptr<RenderPass>& renderPass,
             uint32_t subpass,
             const std::shared_ptr<Framebuffer>& framebuffer,
             VkCommandBufferUsageFlags flags = 0) noexcept;
+#ifdef VK_KHR_device_group
+        bool beginDeviceGroup(
+            uint32_t deviceMask,
+            VkCommandBufferUsageFlags flags = 0) noexcept;
+#endif
         void end();
         bool reset(bool releaseResources) noexcept;
         void bindPipeline(const std::shared_ptr<Pipeline>& pipeline) noexcept;
@@ -450,11 +452,6 @@ namespace magma
         bool begin(const char *blockName,
             uint32_t blockColor,
             VkCommandBufferUsageFlags flags = 0) noexcept;
-        bool beginDeviceGroup(
-            uint32_t deviceMask,
-            const char *blockName,
-            uint32_t blockColor,
-            VkCommandBufferUsageFlags flags = 0) noexcept;
         bool beginInherited(
             const std::shared_ptr<RenderPass>& renderPass,
             uint32_t subpass,
@@ -469,6 +466,13 @@ namespace magma
             const char *renderPassName,
             uint32_t renderPassColor,
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
+
+#ifdef VK_KHR_device_group
+        bool beginDeviceGroup(
+            uint32_t deviceMask,
+            const char *blockName,
+            uint32_t blockColor,
+            VkCommandBufferUsageFlags flags = 0) noexcept;
         void beginRenderPassDeviceGroup(
             const std::shared_ptr<RenderPass>& renderPass,
             const std::shared_ptr<Framebuffer>& framebuffer,
@@ -477,6 +481,7 @@ namespace magma
             const char *renderPassName,
             uint32_t renderPassColor,
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
+#endif // VK_KHR_device_group
 
     protected:
         VkCommandBufferLevel level;

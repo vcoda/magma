@@ -346,6 +346,7 @@ void PhysicalDevice::getExtendedProperties(void *properties) const
 #endif // VK_KHR_get_physical_device_properties2
 }
 
+#ifdef VK_KHR_device_group
 PhysicalDeviceGroup::PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices, uint32_t groupId) noexcept:
     physicalDevices(physicalDevices),
     groupId(groupId)
@@ -371,4 +372,5 @@ std::shared_ptr<Device> PhysicalDeviceGroup::createDevice(const std::vector<Devi
         layers, extensions,
         deviceFeatures, extendedDeviceGroupFeatures);
 }
+#endif // VK_KHR_device_group
 } // namespace magma

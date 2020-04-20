@@ -153,20 +153,6 @@ bool CommandBuffer::begin(const char *blockName, uint32_t blockColor,
     return beginResult;
 }
 
-bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask, const char *blockName, uint32_t blockColor,
-    VkCommandBufferUsageFlags flags /* 0 */) noexcept
-{
-    const bool beginResult = beginDeviceGroup(deviceMask, flags);
-#ifdef MAGMA_DEBUG
-    beginDebugLabel(blockName, blockColor);
-    beginMarked = VK_TRUE;
-#elif defined(_MSC_VER)
-    blockName;
-    blockColor;
-#endif // MAGMA_DEBUG
-    return beginResult;
-}
-
 bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass, const std::shared_ptr<Framebuffer>& framebuffer,
     const char *blockName, uint32_t blockColor,
     VkCommandBufferUsageFlags flags /* 0 */) noexcept
@@ -196,6 +182,21 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
 #endif // MAGMA_DEBUG
 }
 
+#ifdef VK_KHR_device_group
+bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask, const char *blockName, uint32_t blockColor,
+    VkCommandBufferUsageFlags flags /* 0 */) noexcept
+{
+    const bool beginResult = beginDeviceGroup(deviceMask, flags);
+#ifdef MAGMA_DEBUG
+    beginDebugLabel(blockName, blockColor);
+    beginMarked = VK_TRUE;
+#elif defined(_MSC_VER)
+    blockName;
+    blockColor;
+#endif // MAGMA_DEBUG
+    return beginResult;
+}
+
 void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
     uint32_t deviceMask, const std::vector<ClearValue>& clearValues, const char *renderPassName, uint32_t renderPassColor,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
@@ -209,4 +210,5 @@ void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>
     renderPassColor;
 #endif // MAGMA_DEBUG
 }
+#endif // VK_KHR_device_group
 } // namespace magma
