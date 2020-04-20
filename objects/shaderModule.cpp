@@ -31,17 +31,23 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_SHADER_MODULE, std::move(device), std::move(allocator))
 {
-    VkShaderModuleCreateInfo info;
+#ifdef VK_EXT_validation_cache
     VkShaderModuleValidationCacheCreateInfoEXT cacheCreateInfo;
+#endif
+    VkShaderModuleCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
     if (!validationCache)
         info.pNext = nullptr;
     else
     {
+#ifdef VK_EXT_validation_cache
         cacheCreateInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_VALIDATION_CACHE_CREATE_INFO_EXT;
         cacheCreateInfo.pNext = nullptr;
         cacheCreateInfo.validationCache = MAGMA_OPTIONAL_HANDLE(validationCache);
         info.pNext = &cacheCreateInfo;
+#else
+        info.pNext = nullptr;
+#endif // VK_EXT_validation_cache
     }
     info.flags = flags;
     MAGMA_ASSERT(0 == bytecodeSize % sizeof(SpirvWord)); // A module is defined as a stream of words, not a stream of bytes

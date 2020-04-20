@@ -26,6 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef VK_EXT_validation_cache
 ValidationCache::ValidationCache(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     ValidationCache(std::move(device), 0, nullptr, std::move(allocator))
@@ -74,4 +75,5 @@ void ValidationCache::mergeCaches(const std::vector<std::shared_ptr<const Valida
     const VkResult merge = vkMergeValidationCachesEXT(MAGMA_HANDLE(device), handle, MAGMA_COUNT(dereferencedCaches), dereferencedCaches);
     MAGMA_THROW_FAILURE(merge, "failed to merge validation caches");
 }
+#endif // VK_EXT_validation_cache
 } // namespace magma

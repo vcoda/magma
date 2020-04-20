@@ -33,6 +33,7 @@ namespace magma
        Applications can manage the host memory consumed by a validation cache object and
        control the amount of data retrieved from a validation cache object. */
 
+#ifdef VK_EXT_validation_cache
     class ValidationCache : public NonDispatchable<VkValidationCacheEXT>
     {
     public:
@@ -61,4 +62,5 @@ namespace magma
         std::vector<uint8_t> getData() const;
         void mergeCaches(const std::vector<std::shared_ptr<const ValidationCache>>& caches);
     };
+#endif // VK_EXT_validation_cache
 } // namespace magma
