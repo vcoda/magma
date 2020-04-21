@@ -60,31 +60,46 @@ constexpr VkDebugReportObjectTypeEXT castToDebugReportType(VkObjectType objectTy
         return VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT;
     case VK_OBJECT_TYPE_COMMAND_POOL:
         return VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT;
+#ifdef VK_KHR_sampler_ycbcr_conversion
     case VK_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION:
         return VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_KHR_EXT;
+#endif // VK_KHR_sampler_ycbcr_conversion
+#ifdef VK_KHR_descriptor_update_template
     case VK_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE:
         return VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_EXT;
-    // Non-core types
+#endif // VK_KHR_descriptor_update_template
+#ifdef VK_KHR_surface
     case VK_OBJECT_TYPE_SURFACE_KHR:
         return VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT;
+#endif // VK_KHR_surface
+#ifdef VK_KHR_swapchain
     case VK_OBJECT_TYPE_SWAPCHAIN_KHR:
         return VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT;
+#endif // VK_KHR_swapchain
 #ifdef VK_KHR_display
     case VK_OBJECT_TYPE_DISPLAY_KHR:
         return VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_KHR_EXT;
     case VK_OBJECT_TYPE_DISPLAY_MODE_KHR:
         return VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_MODE_KHR_EXT;
-#endif
+#endif // VK_KHR_display
+#ifdef VK_EXT_debug_report
     case VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT:
         return VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT_EXT;
+#endif // VK_EXT_debug_report
+#ifdef VK_NVX_device_generated_commands
     case VK_OBJECT_TYPE_OBJECT_TABLE_NVX:
         return VK_DEBUG_REPORT_OBJECT_TYPE_OBJECT_TABLE_NVX_EXT;
     case VK_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX:
         return VK_DEBUG_REPORT_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX_EXT;
+#endif // VK_NVX_device_generated_commands
+#ifdef VK_EXT_validation_cache
     case VK_OBJECT_TYPE_VALIDATION_CACHE_EXT:
         return VK_DEBUG_REPORT_OBJECT_TYPE_VALIDATION_CACHE_EXT_EXT;
+#endif // VK_EXT_validation_cache
+#ifdef VK_NV_ray_tracing
     case VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV:
         return VK_DEBUG_REPORT_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV_EXT;
+#endif // VK_NV_ray_tracing
     default:
         return VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT;
     }
