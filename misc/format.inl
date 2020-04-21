@@ -151,6 +151,15 @@ constexpr bool Format::PVRTC() const
 }
 #endif // VK_IMG_format_pvrtc
 
+constexpr bool Format::compressed() const
+{
+    return
+#ifdef VK_IMG_format_pvrtc
+        PVRTC() ||
+#endif
+        blockCompressed() || ETC2() || EAC() || ASTC();
+}
+
 constexpr bool Format::floatingPoint() const
 {
     switch (format)

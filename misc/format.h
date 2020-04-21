@@ -38,8 +38,7 @@ namespace magma
 #ifdef VK_IMG_format_pvrtc
         constexpr bool PVRTC() const;
 #endif
-        constexpr bool compressed() const
-            { return blockCompressed() || ETC2() || EAC() || ASTC() || PVRTC(); }
+        constexpr bool compressed() const;
         constexpr bool floatingPoint() const;
         constexpr bool sRGB() const;
         constexpr std::size_t size() const;
