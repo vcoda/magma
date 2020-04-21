@@ -45,7 +45,9 @@ namespace magma
         std::vector<std::shared_ptr<CommandBuffer>> allocateCommandBuffers(uint32_t commandBufferCount,
             bool primaryLevel);
         void freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept;
-        void trim(VkCommandPoolTrimFlags flags = 0);
+#ifdef VK_KHR_maintenance1
+        void trim(VkCommandPoolTrimFlagsKHR flags = 0);
+#endif
 
     private:
         std::unique_ptr<LinearPlacementPool> pool;

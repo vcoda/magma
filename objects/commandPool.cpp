@@ -115,9 +115,11 @@ void CommandPool::freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>
     commandBuffers.clear();
 }
 
-void CommandPool::trim(VkCommandPoolTrimFlags flags /* 0 */)
+#ifdef VK_KHR_maintenance1
+void CommandPool::trim(VkCommandPoolTrimFlagsKHR flags /* 0 */)
 {
     MAGMA_DEVICE_EXTENSION(vkTrimCommandPoolKHR, VK_KHR_MAINTENANCE1_EXTENSION_NAME);
     vkTrimCommandPoolKHR(MAGMA_HANDLE(device), handle, flags);
 }
+#endif // VK_KHR_maintenance1
 } // namespace magma
