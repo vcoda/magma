@@ -67,6 +67,7 @@ namespace magma
        defined primitive rasterization order that may allow better parallel processing
        of primitives and thus enabling higher primitive throughput. */
 
+#ifdef VK_AMD_rasterization_order
     struct RasterizationOrderState : RasterizationState
     {
         constexpr RasterizationOrderState(const RasterizationState& state,
@@ -76,6 +77,7 @@ namespace magma
 
         VkPipelineRasterizationStateRasterizationOrderAMD order;
     };
+#endif // VK_AMD_rasterization_order
 }
 
 #include "rasterizationState.inl"

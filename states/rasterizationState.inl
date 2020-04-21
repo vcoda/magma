@@ -96,6 +96,7 @@ constexpr bool ConservativeRasterizationState::operator==(const ConservativeRast
 }
 #endif // VK_EXT_conservative_rasterization
 
+#ifdef VK_AMD_rasterization_order
 constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationState& state,
     VkRasterizationOrderAMD rasterizationOrder):
     RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable),
@@ -121,4 +122,5 @@ constexpr bool RasterizationOrderState::operator==(const RasterizationOrderState
     return RasterizationState::operator==(other) &&
         (order.rasterizationOrder == other.order.rasterizationOrder);
 }
+#endif // VK_AMD_rasterization_order
 } // namespace magma
