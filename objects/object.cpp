@@ -24,6 +24,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/exception.h"
 #include "../helpers/castToDebugReport.h"
 
+#if !defined(MAGMA_DEBUG)
+#ifdef VK_EXT_debug_utils
+#undef VK_EXT_debug_utils
+#endif
+#ifdef VK_EXT_debug_marker
+#undef VK_EXT_debug_marker
+#endif
+#endif // !MAGMA_DEBUG
+
 namespace magma
 {
 Object::Object(VkObjectType objectType, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) noexcept:
@@ -36,22 +45,24 @@ void Object::setObjectName(const char *name) noexcept
 {
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
-#ifdef MAGMA_DEBUG
-    if (!device)
-        return;
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkSetDebugUtilsObjectNameEXT);
-    if (vkSetDebugUtilsObjectNameEXT)
+#ifdef VK_EXT_debug_utils
+    if (device)
     {
-        VkDebugUtilsObjectNameInfoEXT info;
-        info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
-        info.pNext = nullptr;
-        info.objectType = objectType;
-        info.objectHandle = getHandle();
-        info.pObjectName = name;
-        vkSetDebugUtilsObjectNameEXT(MAGMA_HANDLE(device), &info);
+        MAGMA_OPTIONAL_DEVICE_EXTENSION(vkSetDebugUtilsObjectNameEXT);
+        if (vkSetDebugUtilsObjectNameEXT)
+        {
+            VkDebugUtilsObjectNameInfoEXT info;
+            info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
+            info.pNext = nullptr;
+            info.objectType = objectType;
+            info.objectHandle = getHandle();
+            info.pObjectName = name;
+            vkSetDebugUtilsObjectNameEXT(MAGMA_HANDLE(device), &info);
+        }
     }
-    else
-    {   // Old driver? Use EXT_debug_marker extension.
+#elif defined(VK_EXT_debug_marker)
+    if (device)
+    {
         MAGMA_OPTIONAL_DEVICE_EXTENSION(vkDebugMarkerSetObjectNameEXT);
         if (vkDebugMarkerSetObjectNameEXT)
         {
@@ -64,31 +75,36 @@ void Object::setObjectName(const char *name) noexcept
             vkDebugMarkerSetObjectNameEXT(MAGMA_HANDLE(device), &info);
         }
     }
-#elif defined(_MSC_VER)
-    name;
-#endif // MAGMA_DEBUG
+#else
+    MAGMA_UNUSED(name);
+#endif // VK_EXT_debug_marker
 }
 
 void Object::setObjectTag(uint64_t tagName, std::size_t tagSize, const void *tag) noexcept
 {
-#ifdef MAGMA_DEBUG
-    if (!device)
-        return;
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkSetDebugUtilsObjectTagEXT);
-    if(vkSetDebugUtilsObjectTagEXT)
+    MAGMA_ASSERT(tagName);
+    MAGMA_ASSERT(tagSize);
+    MAGMA_ASSERT(tag);
+#ifdef VK_EXT_debug_utils
+    if (device)
     {
-        VkDebugUtilsObjectTagInfoEXT info;
-        info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_TAG_INFO_EXT;
-        info.pNext = nullptr;
-        info.objectType = objectType;
-        info.objectHandle = getHandle();
-        info.tagName = tagName;
-        info.tagSize = tagSize;
-        info.pTag = tag;
-        vkSetDebugUtilsObjectTagEXT(MAGMA_HANDLE(device), &info);
+        MAGMA_OPTIONAL_DEVICE_EXTENSION(vkSetDebugUtilsObjectTagEXT);
+        if(vkSetDebugUtilsObjectTagEXT)
+        {
+            VkDebugUtilsObjectTagInfoEXT info;
+            info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_TAG_INFO_EXT;
+            info.pNext = nullptr;
+            info.objectType = objectType;
+            info.objectHandle = getHandle();
+            info.tagName = tagName;
+            info.tagSize = tagSize;
+            info.pTag = tag;
+            vkSetDebugUtilsObjectTagEXT(MAGMA_HANDLE(device), &info);
+        }
     }
-    else
-    {   // Old driver? Use EXT_debug_marker extension.
+#elif defined(VK_EXT_debug_marker)
+    if (device)
+    {
         MAGMA_OPTIONAL_DEVICE_EXTENSION(vkDebugMarkerSetObjectTagEXT);
         if (vkDebugMarkerSetObjectTagEXT)
         {
@@ -103,11 +119,11 @@ void Object::setObjectTag(uint64_t tagName, std::size_t tagSize, const void *tag
             vkDebugMarkerSetObjectTagEXT(MAGMA_HANDLE(device), &info);
         }
     }
-#elif defined(_MSC_VER)
-    tagName;
-    tagSize;
-    tag;
-#endif // MAGMA_DEBUG
+#else
+    MAGMA_UNUSED(tagName);
+    MAGMA_UNUSED(tagSize);
+    MAGMA_UNUSED(tag);
+#endif // VK_EXT_debug_marker
 }
 
 std::shared_ptr<IObjectAllocator> Object::objectAllocator;
