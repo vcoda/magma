@@ -40,15 +40,16 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, VkDeviceSize size, Vk
     MAGMA_THROW_FAILURE(allocate, "failed to allocate memory");
 }
 
-DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, VkDeviceSize size, VkMemoryPropertyFlags flags, uint32_t deviceMask,
+#ifdef VK_KHR_device_group
+DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask, VkDeviceSize size, VkMemoryPropertyFlags flags,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), std::move(allocator)),
     size(size)
 {
-    VkMemoryAllocateFlagsInfo flagsInfo;
-    flagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO;
+    VkMemoryAllocateFlagsInfoKHR flagsInfo;
+    flagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
     flagsInfo.pNext = nullptr;
-    flagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT;
+    flagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHR;
     flagsInfo.deviceMask = deviceMask;
     VkMemoryAllocateInfo info;
     info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -58,6 +59,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, VkDeviceSize size, Vk
     const VkResult allocate = vkAllocateMemory(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(allocate, "failed to allocate memory");
 }
+#endif // VK_KHR_device_group
 
 DeviceMemory::~DeviceMemory()
 {

@@ -31,11 +31,13 @@ namespace magma
             VkDeviceSize size,
             VkMemoryPropertyFlags flags,
             std::shared_ptr<IAllocator> allocator = nullptr);
+#ifdef VK_KHR_device_group
         explicit DeviceMemory(std::shared_ptr<Device> device,
+            uint32_t deviceMask,
             VkDeviceSize size,
             VkMemoryPropertyFlags flags,
-            uint32_t deviceMask,
             std::shared_ptr<IAllocator> allocator = nullptr);
+#endif
         ~DeviceMemory();
         VkDeviceSize getSize() const noexcept { return size; }
         bool deviceLocal() const noexcept;
