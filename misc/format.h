@@ -35,7 +35,9 @@ namespace magma
         constexpr bool ETC2() const;
         constexpr bool EAC() const;
         constexpr bool ASTC() const;
+#ifdef VK_IMG_format_pvrtc
         constexpr bool PVRTC() const;
+#endif
         constexpr bool compressed() const
             { return blockCompressed() || ETC2() || EAC() || ASTC() || PVRTC(); }
         constexpr bool floatingPoint() const;

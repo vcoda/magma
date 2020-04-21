@@ -131,6 +131,7 @@ constexpr bool Format::ASTC() const
     };
 }
 
+#ifdef VK_IMG_format_pvrtc
 constexpr bool Format::PVRTC() const
 {
     switch (format)
@@ -148,6 +149,7 @@ constexpr bool Format::PVRTC() const
         return false;
     }
 }
+#endif // VK_IMG_format_pvrtc
 
 constexpr bool Format::floatingPoint() const
 {
@@ -210,10 +212,12 @@ constexpr bool Format::sRGB() const
     case VK_FORMAT_ASTC_10x10_SRGB_BLOCK:
     case VK_FORMAT_ASTC_12x10_SRGB_BLOCK:
     case VK_FORMAT_ASTC_12x12_SRGB_BLOCK:
+#ifdef VK_IMG_format_pvrtc
     case VK_FORMAT_PVRTC1_2BPP_SRGB_BLOCK_IMG:
     case VK_FORMAT_PVRTC1_4BPP_SRGB_BLOCK_IMG:
     case VK_FORMAT_PVRTC2_2BPP_SRGB_BLOCK_IMG:
     case VK_FORMAT_PVRTC2_4BPP_SRGB_BLOCK_IMG:
+#endif // VK_IMG_format_pvrtc
         return true;
     default:
         return false;
