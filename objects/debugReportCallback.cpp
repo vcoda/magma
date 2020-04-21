@@ -39,7 +39,11 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
     if (vkCreateDebugReportCallbackEXT)
     {
         VkDebugReportCallbackCreateInfoEXT info;
+#ifdef VK_HEADER_VERSION
         info.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
+#else   // Compatibility with old SDK
+        info.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
+#endif
         info.pNext = nullptr;
         info.flags = flags;
         info.pfnCallback = userCallback;

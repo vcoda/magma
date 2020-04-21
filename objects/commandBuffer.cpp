@@ -223,7 +223,8 @@ void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, VkDevice
        (which requires additional storage and may incur an additional allocation),
        and then copy the data from the command buffer into dstBuffer
        when the command is executed on a device. */
-    vkCmdUpdateBuffer(handle, *buffer, offset, dataSize, data);
+    vkCmdUpdateBuffer(handle, *buffer, offset, dataSize,
+        (const uint32_t *)data); // Compatibility with old SDK
 }
 
 void CommandBuffer::fillBuffer(const std::shared_ptr<Buffer>& buffer, uint32_t value,
