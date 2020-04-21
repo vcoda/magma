@@ -116,10 +116,10 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer> cmdBuffer,
     std::shared_ptr<GraphicsPipeline> prevPipeline;
     for (const auto& primitive : primitives)
     {
-#ifdef MAGMA_DEBUG
+#ifdef MAGMA_DEBUG_LABEL
         if (primitive.labelName)
             cmdBuffer->beginDebugLabel(primitive.labelName, primitive.labelColor);
-#endif // MAGMA_DEBUG
+#endif
         if (primitive.pipeline != prevPipeline)
         {
             cmdBuffer->bindPipeline(primitive.pipeline);
@@ -129,10 +129,10 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer> cmdBuffer,
         if (layout)
             cmdBuffer->pushConstantBlock(layout, VK_SHADER_STAGE_VERTEX_BIT, primitive.transform);
         cmdBuffer->draw(primitive.vertexCount, primitive.firstVertex);
-#ifdef MAGMA_DEBUG
+#ifdef MAGMA_DEBUG_LABEL
         if (primitive.labelName)
             cmdBuffer->endDebugLabel();
-#endif // MAGMA_DEBUG
+#endif
     }
     if (freePrimitiveList)
         reset();

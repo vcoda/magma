@@ -239,13 +239,13 @@ inline void CommandBuffer::nextSubpass(VkSubpassContents contents /* VK_SUBPASS_
 
 inline void CommandBuffer::endRenderPass() noexcept
 {
-#ifdef MAGMA_DEBUG
+#ifdef MAGMA_DEBUG_LABEL
     if (beginRenderPassMarked)
     {
         endDebugLabel();
         beginRenderPassMarked = VK_FALSE;
     }
-#endif
+#endif // MAGMA_DEBUG_LABEL
     vkCmdEndRenderPass(handle);
 }
 

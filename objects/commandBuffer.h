@@ -406,7 +406,7 @@ namespace magma
             uint32_t depth) noexcept;
 #endif // VK_NV_ray_tracing
 
-        // VK_EXT_debug_marker
+#ifdef VK_EXT_debug_marker
         void beginDebugMarker(
             const char *name,
             uint32_t color) noexcept;
@@ -414,8 +414,9 @@ namespace magma
         void insertDebugMarker(
             const char *name,
             uint32_t color) noexcept;
+#endif // VK_EXT_debug_marker
 
-        // VK_EXT_debug_utils
+#ifdef VK_EXT_debug_utils
         void beginDebugLabel(
             const char *name,
             uint32_t color) noexcept;
@@ -423,6 +424,7 @@ namespace magma
         void insertDebugLabel(
             const char *name,
             uint32_t color) noexcept;
+#endif // VK_EXT_debug_utils
 
         // Non-API utility methods
         bool primary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_PRIMARY == level; }

@@ -74,7 +74,7 @@ bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
     beginInfo.pInheritanceInfo = nullptr;
     const VkResult begin = vkBeginCommandBuffer(handle, &beginInfo);
     MAGMA_ASSERT(VK_SUCCESS == begin);
-#ifdef MAGMA_DEBUG
+#ifdef MAGMA_DEBUG_LABEL
     beginMarked = VK_FALSE;
 #endif
     return (VK_SUCCESS == begin);
@@ -109,7 +109,7 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     beginInfo.pInheritanceInfo = &inheritanceInfo;
     const VkResult begin = vkBeginCommandBuffer(handle, &beginInfo);
     MAGMA_ASSERT(VK_SUCCESS == begin);
-#ifdef MAGMA_DEBUG
+#ifdef MAGMA_DEBUG_LABEL
     beginMarked = VK_FALSE;
 #endif
     return (VK_SUCCESS == begin);
@@ -117,13 +117,13 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
 
 void CommandBuffer::end()
 {
-#ifdef MAGMA_DEBUG
+#ifdef MAGMA_DEBUG_LABEL
     if (beginMarked)
     {
         endDebugLabel();
         beginMarked = VK_FALSE;
     }
-#endif
+#endif // MAGMA_DEBUG_LABEL
     /* Performance - critical commands generally do not have return codes.
        If a run time error occurs in such commands, the implementation will defer
        reporting the error until a specified point. For commands that record

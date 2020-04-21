@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef VK_EXT_debug_marker
 void CommandBuffer::beginDebugMarker(const char *name, uint32_t color) noexcept
 {
     MAGMA_ASSERT(name);
@@ -42,9 +43,9 @@ void CommandBuffer::beginDebugMarker(const char *name, uint32_t color) noexcept
         info.color[3] = (color & 0xFF) / 255.f; // A
         vkCmdDebugMarkerBeginEXT(handle, &info);
     }
-#elif defined(_MSC_VER)
-    name;
-    color;
+#else
+    MAGMA_UNUSED(name);
+    MAGMA_UNUSED(color);
 #endif // MAGMA_DEBUG
 }
 
@@ -76,12 +77,14 @@ void CommandBuffer::insertDebugMarker(const char *name, uint32_t color) noexcept
         info.color[3] = (color & 0xFF) / 255.f; // A
         vkCmdDebugMarkerInsertEXT(handle, &info);
     }
-#elif defined(_MSC_VER)
-    name;
-    color;
+#else
+    MAGMA_UNUSED(name);
+    MAGMA_UNUSED(color);
 #endif // MAGMA_DEBUG
 }
+#endif // VK_EXT_debug_marker
 
+#ifdef VK_EXT_debug_utils
 void CommandBuffer::beginDebugLabel(const char *name, uint32_t color) noexcept
 {
     MAGMA_ASSERT(name);
@@ -101,9 +104,9 @@ void CommandBuffer::beginDebugLabel(const char *name, uint32_t color) noexcept
         info.color[3] = (color & 0xFF) / 255.f; // A
         vkCmdBeginDebugUtilsLabelEXT(handle, &info);
     }
-#elif defined(_MSC_VER)
-    name;
-    color;
+#else
+    MAGMA_UNUSED(name);
+    MAGMA_UNUSED(color);
 #endif // MAGMA_DEBUG
 }
 
@@ -133,23 +136,24 @@ void CommandBuffer::insertDebugLabel(const char *name, uint32_t color) noexcept
         info.color[3] = (color & 0xFF) / 255.f; // A
         vkCmdInsertDebugUtilsLabelEXT(handle, &info);
     }
-#elif defined(_MSC_VER)
-    name;
-    color;
+#else
+    MAGMA_UNUSED(name);
+    MAGMA_UNUSED(color);
 #endif // MAGMA_DEBUG
 }
+#endif // VK_EXT_debug_utils
 
 bool CommandBuffer::begin(const char *blockName, uint32_t blockColor,
     VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
     const bool beginResult = begin(flags);
-#ifdef MAGMA_DEBUG
+#ifdef MAGMA_DEBUG_LABEL
     beginDebugLabel(blockName, blockColor);
     beginMarked = VK_TRUE;
-#elif defined(_MSC_VER)
-    blockName;
-    blockColor;
-#endif // MAGMA_DEBUG
+#else
+    MAGMA_UNUSED(blockName);
+    MAGMA_UNUSED(blockColor);
+#endif // MAGMA_DEBUG_LABEL
     return beginResult;
 }
 
@@ -158,13 +162,13 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
     const bool beginResult = beginInherited(renderPass, subpass, framebuffer, flags);
-#ifdef MAGMA_DEBUG
+#ifdef MAGMA_DEBUG_LABEL
     beginDebugLabel(blockName, blockColor);
     beginMarked = VK_TRUE;
-#elif defined(_MSC_VER)
-    blockName;
-    blockColor;
-#endif // MAGMA_DEBUG
+#else
+    MAGMA_UNUSED(blockName);
+    MAGMA_UNUSED(blockColor);
+#endif // MAGMA_DEBUG_LABEL
     return beginResult;
 }
 
@@ -173,13 +177,13 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     beginRenderPass(renderPass, framebuffer, clearValues, contents);
-#ifdef MAGMA_DEBUG
+#ifdef MAGMA_DEBUG_LABEL
     beginDebugLabel(renderPassName, renderPassColor);
     beginRenderPassMarked = VK_TRUE;
-#elif defined(_MSC_VER)
-    renderPassName;
-    renderPassColor;
-#endif // MAGMA_DEBUG
+#else
+    MAGMA_UNUSED(renderPassName);
+    MAGMA_UNUSED(renderPassColor);
+#endif // MAGMA_DEBUG_LABEL
 }
 
 #ifdef VK_KHR_device_group
@@ -187,13 +191,13 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask, const char *blockName,
     VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
     const bool beginResult = beginDeviceGroup(deviceMask, flags);
-#ifdef MAGMA_DEBUG
+#ifdef MAGMA_DEBUG_LABEL
     beginDebugLabel(blockName, blockColor);
     beginMarked = VK_TRUE;
-#elif defined(_MSC_VER)
-    blockName;
-    blockColor;
-#endif // MAGMA_DEBUG
+#else
+    MAGMA_UNUSED(blockName);
+    MAGMA_UNUSED(blockColor);
+#endif // MAGMA_DEBUG_LABEL
     return beginResult;
 }
 
@@ -202,13 +206,13 @@ void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     beginRenderPassDeviceGroup(renderPass, framebuffer, deviceMask, clearValues, contents);
-#ifdef MAGMA_DEBUG
+#ifdef MAGMA_DEBUG_LABEL
     beginDebugLabel(renderPassName, renderPassColor);
     beginRenderPassMarked = VK_TRUE;
-#elif defined(_MSC_VER)
-    renderPassName;
-    renderPassColor;
-#endif // MAGMA_DEBUG
+#else
+    MAGMA_UNUSED(renderPassName);
+    MAGMA_UNUSED(renderPassColor);
+#endif // MAGMA_DEBUG_LABEL
 }
 #endif // VK_KHR_device_group
 } // namespace magma

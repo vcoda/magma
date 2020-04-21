@@ -28,6 +28,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #ifdef _DEBUG
 #define MAGMA_DEBUG
+#ifdef VK_EXT_debug_utils
+#define MAGMA_DEBUG_LABEL
+#endif
 #endif
 
 #ifdef MAGMA_DEBUG
