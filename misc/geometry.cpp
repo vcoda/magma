@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef VK_NV_ray_tracing
 Geometry::Geometry(VkGeometryTypeNV geometryType, VkGeometryFlagsNV flags) noexcept
 {
     sType = VK_STRUCTURE_TYPE_GEOMETRY_NV;
@@ -89,4 +90,5 @@ GeometryBVH::GeometryBVH(std::shared_ptr<const Buffer> aabbData, uint32_t numAAB
     geometry.aabbs.offset = offset;
     memset(&geometry.triangles, 0, sizeof(VkGeometryTrianglesNV));
 }
+#endif // VK_NV_ray_tracing
 } // namespace magma

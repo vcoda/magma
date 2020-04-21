@@ -23,6 +23,7 @@ namespace magma
     class VertexBuffer;
     class IndexBuffer;
 
+#ifdef VK_NV_ray_tracing
     class Geometry : public VkGeometryNV
     {
     public:
@@ -71,4 +72,5 @@ namespace magma
             VkDeviceSize offset,
             VkGeometryFlagsNV flags = 0) noexcept;
     };
+#endif // VK_NV_ray_tracing
 } // namespace magma
