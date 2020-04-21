@@ -50,6 +50,7 @@ namespace magma
        coverage samples turned on. When underestimation is enabled, fragments are only generated
        if the rectangular pixel area is fully covered by the generating primitive. */
 
+#ifdef VK_EXT_conservative_rasterization
     struct ConservativeRasterizationState : RasterizationState
     {
         constexpr ConservativeRasterizationState(const RasterizationState& state,
@@ -60,6 +61,7 @@ namespace magma
 
         VkPipelineRasterizationConservativeStateCreateInfoEXT conservative;
     };
+#endif // VK_EXT_conservative_rasterization
 
     /* This extension enables applications to opt into a relaxed, implementation
        defined primitive rasterization order that may allow better parallel processing

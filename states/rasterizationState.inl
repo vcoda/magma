@@ -61,6 +61,7 @@ constexpr DepthBiasRasterizationState::DepthBiasRasterizationState(const Rasteri
     this->depthBiasSlopeFactor = depthBiasSlopeFactor;
 }
 
+#ifdef VK_EXT_conservative_rasterization
 constexpr ConservativeRasterizationState::ConservativeRasterizationState(const RasterizationState& state,
     VkConservativeRasterizationModeEXT conservativeRasterizationMode,
     float extraPrimitiveOverestimationSize /* 0 */):
@@ -93,6 +94,7 @@ constexpr bool ConservativeRasterizationState::operator==(const ConservativeRast
         (conservative.conservativeRasterizationMode == other.conservative.conservativeRasterizationMode) &&
         (conservative.extraPrimitiveOverestimationSize == other.conservative.extraPrimitiveOverestimationSize);
 }
+#endif // VK_EXT_conservative_rasterization
 
 constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationState& state,
     VkRasterizationOrderAMD rasterizationOrder):
