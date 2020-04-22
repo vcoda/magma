@@ -39,7 +39,9 @@ void checkImageUsageSupport(std::shared_ptr<const Surface> surface,
         VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
         VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT,
         VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT,
+#ifdef VK_NV_shading_rate_image
         VK_IMAGE_USAGE_SHADING_RATE_IMAGE_BIT_NV,
+#endif
         VK_IMAGE_USAGE_FRAGMENT_DENSITY_MAP_BIT_EXT
     };
     const VkSurfaceCapabilitiesKHR surfaceCaps = physicalDevice->getSurfaceCapabilities(surface);

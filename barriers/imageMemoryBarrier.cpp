@@ -68,9 +68,11 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
     case VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR:
         srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
         break;
+#ifdef VK_NV_shading_rate_image
     case VK_IMAGE_LAYOUT_SHADING_RATE_OPTIMAL_NV:
         srcAccessMask = VK_ACCESS_SHADING_RATE_IMAGE_READ_BIT_NV;
         break;
+#endif // VK_NV_shading_rate_image
     default:
         MAGMA_THROW_NOT_IMPLEMENTED;
     }
@@ -109,9 +111,11 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
     case VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR:
         dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
         break;
+#ifdef VK_NV_shading_rate_image
     case VK_IMAGE_LAYOUT_SHADING_RATE_OPTIMAL_NV:
         dstAccessMask = VK_ACCESS_SHADING_RATE_IMAGE_READ_BIT_NV;
         break;
+#endif
     default:
         MAGMA_THROW_NOT_IMPLEMENTED;
     }
