@@ -886,6 +886,9 @@ const char *stringize(VkImageUsageFlagBits bit) noexcept
 #ifdef VK_NV_shading_rate_image
     MAGMA_STRINGIZE_FIELD(VK_IMAGE_USAGE_SHADING_RATE_IMAGE_BIT_NV);
 #endif
+#ifdef VK_EXT_fragment_density_map
+    MAGMA_STRINGIZE_FIELD(VK_IMAGE_USAGE_FRAGMENT_DENSITY_MAP_BIT_EXT);
+#endif
     MAGMA_DEFAULT_UNKNOWN;
     };
 }
