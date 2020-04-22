@@ -65,7 +65,9 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
         srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;
         break;
     case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR:
+#ifdef VK_KHR_shared_presentable_image
     case VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR:
+#endif
         srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
         break;
 #ifdef VK_NV_shading_rate_image
@@ -108,7 +110,9 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
         dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
         break;
     case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR:
+#ifdef VK_KHR_shared_presentable_image
     case VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR:
+#endif
         dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
         break;
 #ifdef VK_NV_shading_rate_image
