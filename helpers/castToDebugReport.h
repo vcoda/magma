@@ -84,7 +84,11 @@ constexpr VkDebugReportObjectTypeEXT castToDebugReportType(VkObjectType objectTy
 #endif // VK_KHR_display
 #ifdef VK_EXT_debug_report
     case VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT:
+#   if VK_HEADER_VERSION <= 37 // TODO: exact version
+        return VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT;
+#   else
         return VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT_EXT;
+#   endif
 #endif // VK_EXT_debug_report
 #ifdef VK_NVX_device_generated_commands
     case VK_OBJECT_TYPE_OBJECT_TABLE_NVX:
