@@ -494,7 +494,7 @@ namespace magma
         VkBool32 conditionalRenderingEnable = VK_FALSE;
         VkQueryControlFlags queryFlags = 0;
         VkQueryPipelineStatisticFlags pipelineStatistics = 0;
-#ifdef MAGMA_DEBUG
+#ifdef MAGMA_DEBUG_LABEL
         VkBool32 beginMarked = VK_FALSE;
         VkBool32 beginRenderPassMarked = VK_FALSE;
 #endif
