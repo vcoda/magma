@@ -121,8 +121,16 @@ GraphicsSubpass::GraphicsSubpass(VkImageLayout colorLayout):
 }
 
 GraphicsSubpass::GraphicsSubpass(VkImageLayout colorLayout, VkImageLayout depthStencilLayout):
-    GraphicsSubpass(colorLayout)
+    Subpass(0, VK_PIPELINE_BIND_POINT_GRAPHICS)
 {
+    if (colorLayout != VK_IMAGE_LAYOUT_UNDEFINED)
+    {
+        VkAttachmentReference *colorReference = new VkAttachmentReference[1];
+        colorReference->attachment = 0;
+        colorReference->layout = colorLayout;
+        colorAttachmentCount = 1;
+        pColorAttachments = colorReference;
+    }
     VkAttachmentReference *depthStencilReference = new VkAttachmentReference;
     depthStencilReference->attachment = 1;
     depthStencilReference->layout = depthStencilLayout;
@@ -160,13 +168,24 @@ ComputeSubpass::ComputeSubpass() noexcept:
 
 namespace subpasses
 {
-const GraphicsSubpass colorOptimal(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
-const GraphicsSubpass colorOptimalDepthStencilOptimal(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
-const GraphicsSubpass colorOptimalDepthReadOnlyStencilOptimal(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL);
-const GraphicsSubpass colorOptimalDepthOptimalStencilReadOnlyOptimal(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL);
+const GraphicsSubpass colorAttachment(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+const GraphicsSubpass colorDepthStencilAttachment(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+const GraphicsSubpass colorAttachmentDepthStencilReadOnly(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);
+const GraphicsSubpass depthStencilAttachment(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+const GraphicsSubpass depthStencilReadOnly(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);
 
-const GraphicsSubpass depthStencilOptimal({}, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
-const GraphicsSubpass depthReadOnlyStencilOptimal({}, VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL);
-const GraphicsSubpass depthOptimalStencilReadOnlyOptimal({}, VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL);
+#ifdef VK_KHR_maintenance2
+const GraphicsSubpass colorStencilAttachmentDepthReadOnly(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL_KHR),
+const GraphicsSubpass colorDepthAttachmentStencilReadOnly(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL_KHR);
+const GraphicsSubpass depthReadOnlyStencilAttachment(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL_KHR);
+const GraphicsSubpass depthAttachmentStencilReadOnly(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL_KHR);
+#endif // VK_KHR_maintenance2
+
+#ifdef VK_KHR_separate_depth_stencil_layouts
+const GraphicsSubpass depthAttachment(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL_KHR);
+const GraphicsSubpass depthReadOnly(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL_KHR);
+const GraphicsSubpass stencilAttachment(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL_KHR);
+const GraphicsSubpass stencilReadOnly(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL_KHR);
+#endif // VK_KHR_separate_depth_stencil_layouts
 } // namespace subpasses
 } // namespace magma

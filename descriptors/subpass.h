@@ -62,13 +62,24 @@ namespace magma
 {
     namespace subpasses
     {
-        extern const GraphicsSubpass colorOptimal;
-        extern const GraphicsSubpass colorOptimalDepthStencilOptimal;
-        extern const GraphicsSubpass colorOptimalDepthReadOnlyStencilOptimal;
-        extern const GraphicsSubpass colorOptimalDepthOptimalStencilReadOnlyOptimal;
+        extern const GraphicsSubpass colorAttachment;
+        extern const GraphicsSubpass colorDepthStencilAttachment;
+        extern const GraphicsSubpass colorAttachmentDepthStencilReadOnly;
+        extern const GraphicsSubpass depthStencilAttachment;
+        extern const GraphicsSubpass depthStencilReadOnly;
 
-        extern const GraphicsSubpass depthStencilOptimal;
-        extern const GraphicsSubpass depthReadOnlyStencilOptimal;
-        extern const GraphicsSubpass depthOptimalStencilReadOnlyOptimal;
+#ifdef VK_KHR_maintenance2
+        extern const GraphicsSubpass colorStencilAttachmentDepthReadOnly;
+        extern const GraphicsSubpass colorDepthAttachmentStencilReadOnly;
+        extern const GraphicsSubpass depthReadOnlyStencilAttachment;
+        extern const GraphicsSubpass depthAttachmentStencilReadOnly;
+#endif // VK_KHR_maintenance2
+
+#ifdef VK_KHR_separate_depth_stencil_layouts
+        extern const GraphicsSubpass depthAttachment;
+        extern const GraphicsSubpass depthReadOnly;
+        extern const GraphicsSubpass stencilAttachment;
+        extern const GraphicsSubpass stencilReadOnly;
+#endif // VK_KHR_separate_depth_stencil_layouts
     } // namespace subpasses
 } // namespace magma
