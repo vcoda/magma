@@ -76,9 +76,13 @@ namespace magma
 #endif // VK_KHR_maintenance2
 
 #ifdef VK_KHR_separate_depth_stencil_layouts
+        extern const GraphicsSubpass colorDepthAttachment;
+        extern const GraphicsSubpass colorStencilAttachment;
+        extern const GraphicsSubpass colorAttachmentDepthReadOnly;
+        extern const GraphicsSubpass colorAttachmentStencilReadOnly;
         extern const GraphicsSubpass depthAttachment;
-        extern const GraphicsSubpass depthReadOnly;
         extern const GraphicsSubpass stencilAttachment;
+        extern const GraphicsSubpass depthReadOnly;
         extern const GraphicsSubpass stencilReadOnly;
 #endif // VK_KHR_separate_depth_stencil_layouts
     } // namespace subpasses
