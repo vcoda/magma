@@ -63,7 +63,9 @@ namespace magma
         const char *stringize(VkQueueFlagBits) noexcept;
         const char *stringize(VkMemoryPropertyFlagBits) noexcept;
         const char *stringize(VkMemoryHeapFlagBits) noexcept;
+#ifdef VK_VERSION_1_1
         const char *stringize(VkDeviceQueueCreateFlagBits) noexcept;
+#endif
         const char *stringize(VkPipelineStageFlagBits) noexcept;
         const char *stringize(VkImageAspectFlagBits) noexcept;
         const char *stringize(VkSparseImageFormatFlagBits) noexcept;
@@ -77,7 +79,9 @@ namespace magma
         const char *stringize(VkShaderStageFlagBits) noexcept;
         const char *stringize(VkCullModeFlagBits) noexcept;
         const char *stringize(VkColorComponentFlagBits) noexcept;
+#ifdef VK_KHR_push_descriptor
         const char *stringize(VkDescriptorSetLayoutCreateFlagBits) noexcept;
+#endif
         const char *stringize(VkDescriptorPoolCreateFlagBits) noexcept;
         const char *stringize(VkAttachmentDescriptionFlagBits) noexcept;
         const char *stringize(VkAccessFlagBits) noexcept;
