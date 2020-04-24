@@ -421,7 +421,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
         dereferencedClearValues.put(clearValue);
     beginInfo.pClearValues = dereferencedClearValues;
     vkCmdBeginRenderPass(handle, &beginInfo, contents);
-#ifdef MAGMA_DEBUG
+#ifdef MAGMA_DEBUG_LABEL
     beginRenderPassMarked = VK_FALSE;
 #endif
 }
