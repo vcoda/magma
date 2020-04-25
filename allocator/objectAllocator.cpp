@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-namespace mem
+namespace memory
 {
 std::shared_ptr<IObjectAllocator> Allocator::allocator;
 #ifdef MAGMA_DEBUG
@@ -42,5 +42,5 @@ std::shared_ptr<IObjectAllocator> Allocator::getOverridenAllocator() noexcept
 {
     return allocator;
 }
-} // namespace mem
+} // namespace memory
 } // namespace magma

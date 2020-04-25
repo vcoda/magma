@@ -34,7 +34,7 @@ namespace magma
         // Use custom template specialization for ::getObjectType() method
         public ObjectType<Type>,
 #endif
-        public mem::Allocator
+        public memory::Allocator
     {
     public:
         explicit Object(VkObjectType objectType,

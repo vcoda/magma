@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    namespace mem
+    namespace memory
     {
         /* Linear placement allocator. */
 
@@ -71,6 +71,6 @@ namespace magma
             const uint32_t maxObjectCount;
             uint32_t allocCount;
         };
-    } // namespace mem
+    } // namespace memory
 } // namespace magma
 

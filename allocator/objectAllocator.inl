@@ -1,6 +1,6 @@
 namespace magma
 {
-namespace mem
+namespace memory
 {
 inline void *Allocator::operator new(std::size_t size)
 {
@@ -41,5 +41,5 @@ inline void Allocator::operator delete(void *ptr)
     else
         free(ptr);
 }
-} // namespace mem
+} // namespace memory
 } // namespace magma

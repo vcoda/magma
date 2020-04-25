@@ -22,7 +22,7 @@ namespace magma
 {
     class CommandBuffer;
 
-    namespace mem
+    namespace memory
     {
         class LinearPlacementPool;
     }
@@ -54,6 +54,6 @@ namespace magma
 #endif
 
     private:
-        std::unique_ptr<mem::LinearPlacementPool> pool;
+        std::unique_ptr<memory::LinearPlacementPool> pool;
     };
 } // namespace magma

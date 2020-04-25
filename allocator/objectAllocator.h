@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    namespace mem
+    namespace memory
     {
         /* User-defined allocator of Magma objects. */
 
@@ -52,7 +52,7 @@ namespace magma
             static std::atomic<int64_t> allocCount;
 #endif
         };
-    } // namespace mem
+    } // namespace memory
 } // namespace magma
 
 #include "objectAllocator.inl"
