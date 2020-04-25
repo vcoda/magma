@@ -1,6 +1,6 @@
 namespace magma
 {
-inline bool DeviceMemory::deviceLocal() const noexcept
+inline bool DeviceMemory::local() const noexcept
 {
     return flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 }

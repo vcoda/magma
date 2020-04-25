@@ -37,7 +37,6 @@ Surface::~Surface()
 }
 
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
-
 Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance,
     HINSTANCE hinstance,
     HWND hwnd,
@@ -56,7 +55,6 @@ Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance,
 }
 
 #elif defined(VK_USE_PLATFORM_XLIB_KHR)
-
 XlibSurface::XlibSurface(std::shared_ptr<const Instance> instance,
     ::Display *dpy,
     Window window,
@@ -75,7 +73,6 @@ XlibSurface::XlibSurface(std::shared_ptr<const Instance> instance,
 }
 
 #elif defined(VK_USE_PLATFORM_XCB_KHR)
-
 XcbSurface::XcbSurface(std::shared_ptr<const Instance> instance,
     xcb_connection_t *connection,
     xcb_window_t window,
@@ -94,7 +91,6 @@ XcbSurface::XcbSurface(std::shared_ptr<const Instance> instance,
 }
 
 #elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
-
 WaylandSurface::WaylandSurface(std::shared_ptr<const Instance> instance,
     wl_display *display,
     wl_surface *surface,
@@ -113,7 +109,6 @@ WaylandSurface::WaylandSurface(std::shared_ptr<const Instance> instance,
 }
 
 #elif defined(VK_USE_PLATFORM_MIR_KHR)
-
 MirSurface::MirSurface(std::shared_ptr<const Instance> instance,
     MirConnection *connection,
     MirSurface *surface,
@@ -132,7 +127,6 @@ MirSurface::MirSurface(std::shared_ptr<const Instance> instance,
 }
 
 #elif defined(VK_USE_PLATFORM_ANDROID_KHR)
-
 AndroidSurface::AndroidSurface(std::shared_ptr<const Instance> instance,
     ANativeWindow *window,
     VkAndroidSurfaceCreateFlagsKHR flags /* 0 */,
@@ -149,7 +143,6 @@ AndroidSurface::AndroidSurface(std::shared_ptr<const Instance> instance,
 }
 
 #elif defined(VK_USE_PLATFORM_IOS_MVK)
-
 iOSSurface::iOSSurface(std::shared_ptr<const Instance> instance,
     const void *view,
     VkIOSSurfaceCreateFlagsMVK flags /* 0 */,
@@ -166,7 +159,6 @@ iOSSurface::iOSSurface(std::shared_ptr<const Instance> instance,
 }
 
 #elif defined(VK_USE_PLATFORM_MACOS_MVK)
-
 MacOSSurface::MacOSSurface(std::shared_ptr<const Instance> instance,
     const void *view,
     VkMacOSSurfaceCreateFlagsMVK flags /* 0 */,
@@ -183,7 +175,6 @@ MacOSSurface::MacOSSurface(std::shared_ptr<const Instance> instance,
 }
 
 #elif defined(VK_USE_PLATFORM_METAL_EXT)
-
 MetalSurface::MetalSurface(std::shared_ptr<const Instance> instance,
     const CAMetalLayer *layer,
     VkMacOSSurfaceCreateFlagsMVK flags /* 0 */,
@@ -198,7 +189,6 @@ MetalSurface::MetalSurface(std::shared_ptr<const Instance> instance,
     const VkResult create = vkCreateMetalSurfaceEXT(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create Metal surface");
 }
-
 #endif // VK_USE_PLATFORM_METAL_EXT
 
 #ifdef VK_KHR_display

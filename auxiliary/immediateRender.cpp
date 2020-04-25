@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "graphicsPipelineCache.h"
 #include "../objects/deviceMemory.h"
 #include "../objects/commandBuffer.h"
-#include "../objects/pipeline.h"
+#include "../objects/graphicsPipeline.h"
 #include "../objects/shaderModule.h"
 #include "../states/vertexInputStructure.h"
 #include "../states/inputAssemblyState.h"

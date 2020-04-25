@@ -41,7 +41,6 @@ namespace magma
     };
 
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
-
     class Win32Surface : public Surface
     {
     public:
@@ -53,7 +52,6 @@ namespace magma
     };
 
 #elif defined(VK_USE_PLATFORM_XLIB_KHR)
-
     class XlibSurface : public Surface
     {
     public:
@@ -65,7 +63,6 @@ namespace magma
     };
 
 #elif defined(VK_USE_PLATFORM_XCB_KHR)
-
     class XcbSurface : public Surface
     {
     public:
@@ -77,7 +74,6 @@ namespace magma
     };
 
 #elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
-
     class WaylandSurface : public Surface
     {
     public:
@@ -89,7 +85,6 @@ namespace magma
     };
 
 #elif defined(VK_USE_PLATFORM_MIR_KHR)
-
     class MirSurface : public Surface
     {
     public:
@@ -101,7 +96,6 @@ namespace magma
     };
 
 #elif defined(VK_USE_PLATFORM_ANDROID_KHR)
-
     class AndroidSurface : public Surface
     {
     public:
@@ -112,7 +106,6 @@ namespace magma
     };
 
 #elif defined(VK_USE_PLATFORM_IOS_MVK)
-
     class iOSSurface : public Surface
     {
     public:
@@ -123,7 +116,6 @@ namespace magma
     };
 
 #elif defined(VK_USE_PLATFORM_MACOS_MVK)
-
     class MacOSSurface : public Surface
     {
     public:
@@ -134,7 +126,6 @@ namespace magma
     };
 
 #elif defined(VK_USE_PLATFORM_METAL_EXT)
-
     class MetalSurface : public Surface
     {
     public:
@@ -143,7 +134,6 @@ namespace magma
             VkMacOSSurfaceCreateFlagsMVK flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
-
 #endif // VK_USE_PLATFORM_METAL_EXT
 
 #ifdef VK_KHR_display

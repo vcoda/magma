@@ -38,13 +38,6 @@ namespace magma
 
         class TextShader : public core::NonCopyable
         {
-            struct Uniforms;
-            struct String;
-            struct alignas(16) Glyph
-            {
-                float c[4];
-            };
-
         public:
             explicit TextShader(const uint32_t maxChars, const uint32_t maxStrings,
                 std::shared_ptr<RenderPass> renderPass,
@@ -60,6 +53,13 @@ namespace magma
                 ...);
 
         private:
+            struct Uniforms;
+            struct String;
+            struct alignas(16) Glyph
+            {
+                float c[4];
+            };
+
             const uint32_t maxChars, maxStrings;
             std::shared_ptr<Buffer> uniforms;
             std::shared_ptr<Buffer> stringBuffer;

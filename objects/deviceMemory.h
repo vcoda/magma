@@ -40,7 +40,7 @@ namespace magma
 #endif
         ~DeviceMemory();
         VkDeviceSize getSize() const noexcept { return size; }
-        bool deviceLocal() const noexcept;
+        bool local() const noexcept;
         bool hostVisible() const noexcept;
         void *map(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE,

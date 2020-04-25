@@ -79,10 +79,10 @@ namespace magma
         static constexpr VkObjectType getObjectType() { return VK_OBJECT_TYPE_UNKNOWN; }
     };
 
-#define MAGMA_SPECIALIZE_OBJECT_TYPE(Type, type)\
+#define MAGMA_SPECIALIZE_OBJECT_TYPE(Type, objectType)\
     template<> struct ObjectType<Type>\
     {\
-        static constexpr VkObjectType getObjectType() { return type; }\
+        static constexpr VkObjectType getObjectType() { return objectType; }\
     };
 
     /* Template specializations for Vulkan object types. */
