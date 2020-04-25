@@ -208,10 +208,12 @@ bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex,
         *reinterpret_cast<const xcb_visualid_t *>(visualID));
 #elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
     MAGMA_ASSERT(display);
+    MAGMA_UNUSED(visualID);
     const VkBool32 get = vkGetPhysicalDeviceWaylandPresentationSupportKHR(handle, queueFamilyIndex,
         reinterpret_cast<wl_display *>(display));
 #elif defined(VK_USE_PLATFORM_MIR_KHR)
     MAGMA_ASSERT(display);
+    MAGMA_UNUSED(visualID);
     const VkBool32 get = vkGetPhysicalDeviceMirPresentationSupportKHR(handle, queueFamilyIndex,
         reinterpret_cast<MirConnection *>(display));
 #endif
