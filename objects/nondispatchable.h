@@ -45,7 +45,7 @@ namespace magma
         explicit NonDispatchable(VkObjectType objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator) noexcept:
-            Object(objectType, std::move(device), std::move(allocator)),
+            Object<Type>(objectType, std::move(device), std::move(allocator)),
             handle(VK_NULL_HANDLE) {}
 
     protected:
