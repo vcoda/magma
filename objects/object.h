@@ -87,30 +87,97 @@ namespace magma
         void* operator new(std::size_t, void* where) noexcept;
         void operator delete(void *ptr);
         void operator delete(void *, void *) {}
-        explicit Object(VkObjectType objectType,
-            std::shared_ptr<Device> device,
+        explicit Object(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator) noexcept;
         virtual ~Object() = default;
-        VkObjectType getObjectType() const noexcept { return objectType; }
         std::shared_ptr<Device> getDevice() const noexcept { return device; }
         std::shared_ptr<IAllocator> getAllocator() const noexcept { return allocator; }
-        void setObjectName(const char *name) noexcept;
-        void setObjectTag(uint64_t tagName, std::size_t tagSize, const void *tag) noexcept;
-        template<typename Tag>
-        void setObjectTag(uint64_t tagName, const Tag& tag) noexcept
-            { setObjectTag(tagName, sizeof(Tag), &tag); }
         virtual uint64_t getHandle() const noexcept = 0;
         static void overrideDefaultAllocator(std::shared_ptr<IObjectAllocator> allocator);
         static std::shared_ptr<IObjectAllocator> getOverridenAllocator() noexcept;
 
     protected:
-        VkObjectType objectType;
+        void setObjectName(VkObjectType objectType,
+            const char *name) noexcept;
+        void setObjectTag(VkObjectType objectType,
+            uint64_t tagName,
+            std::size_t tagSize,
+            const void *tag) noexcept;
+
         std::shared_ptr<Device> device;
         std::shared_ptr<IAllocator> allocator;
 
     private:
         static std::shared_ptr<IObjectAllocator> objectAllocator;
         static std::atomic<int64_t> allocCount;
+    };
+
+#ifdef MAGMA_X64
+    template<typename Type>
+    struct ObjectType
+    {
+        static constexpr VkObjectType getType() { return VK_OBJECT_TYPE_UNKNOWN; }
+    };
+
+#define MAGMA_SPECIALIZE_OBJECT_TYPE(Type, type)\
+    template<> struct ObjectType<Type>\
+    {\
+        static constexpr VkObjectType getType() { return type; }\
+    };
+
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkInstance, VK_OBJECT_TYPE_INSTANCE)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkPhysicalDevice, VK_OBJECT_TYPE_PHYSICAL_DEVICE)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkDevice, VK_OBJECT_TYPE_DEVICE)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkQueue, VK_OBJECT_TYPE_QUEUE)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkSemaphore, VK_OBJECT_TYPE_SEMAPHORE)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkCommandBuffer, VK_OBJECT_TYPE_COMMAND_BUFFER)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkFence, VK_OBJECT_TYPE_FENCE)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkDeviceMemory, VK_OBJECT_TYPE_DEVICE_MEMORY)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkBuffer, VK_OBJECT_TYPE_BUFFER)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkImage, VK_OBJECT_TYPE_IMAGE)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkEvent, VK_OBJECT_TYPE_EVENT)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkQueryPool, VK_OBJECT_TYPE_QUERY_POOL)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkBufferView, VK_OBJECT_TYPE_BUFFER_VIEW)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkImageView, VK_OBJECT_TYPE_IMAGE_VIEW)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkShaderModule, VK_OBJECT_TYPE_SHADER_MODULE)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkPipelineCache, VK_OBJECT_TYPE_PIPELINE_CACHE)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkPipelineLayout, VK_OBJECT_TYPE_PIPELINE_LAYOUT)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkRenderPass, VK_OBJECT_TYPE_RENDER_PASS)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkPipeline, VK_OBJECT_TYPE_PIPELINE)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkDescriptorSetLayout, VK_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkSampler, VK_OBJECT_TYPE_SAMPLER)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkDescriptorPool, VK_OBJECT_TYPE_DESCRIPTOR_POOL)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkDescriptorSet, VK_OBJECT_TYPE_DESCRIPTOR_SET)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkFramebuffer, VK_OBJECT_TYPE_FRAMEBUFFER)
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkCommandPool, VK_OBJECT_TYPE_COMMAND_POOL)
+#endif // MAGMA_X64
+
+    /* */
+
+    template<typename Type>
+    class ObjectTemplate : public Object
+    {
+    public:
+        ObjectTemplate(VkObjectType objectType,
+            std::shared_ptr<Device> device,
+            std::shared_ptr<IAllocator> allocator) noexcept;
+#ifdef MAGMA_X64
+        constexpr VkObjectType getObjectType() const noexcept { return ObjectType<Type>::getType(); }
+#else
+        VkObjectType getObjectType() const noexcept { return objectType; }
+#endif
+        void setObjectName(const char *name) noexcept;
+        void setObjectTag(uint64_t tagName,
+            std::size_t tagSize,
+            const void *tag) noexcept;
+        template<typename TagType>
+        void setObjectTag(uint64_t tagName,
+            const TagType& tag) noexcept;
+
+    private:
+#if !defined(MAGMA_X64)
+        VkObjectType objectType;
+#endif
     };
 } // namespace magma
 

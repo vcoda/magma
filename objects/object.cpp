@@ -35,13 +35,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Object::Object(VkObjectType objectType, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) noexcept:
-    objectType(objectType),
+Object::Object(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) noexcept:
     device(std::move(device)),
     allocator(std::move(allocator))
 {}
 
-void Object::setObjectName(const char *name) noexcept
+void Object::setObjectName(VkObjectType objectType, const char *name) noexcept
 {
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
@@ -80,7 +79,7 @@ void Object::setObjectName(const char *name) noexcept
 #endif // VK_EXT_debug_marker
 }
 
-void Object::setObjectTag(uint64_t tagName, std::size_t tagSize, const void *tag) noexcept
+void Object::setObjectTag(VkObjectType objectType, uint64_t tagName, std::size_t tagSize, const void *tag) noexcept
 {
     MAGMA_ASSERT(tagName);
     MAGMA_ASSERT(tagSize);

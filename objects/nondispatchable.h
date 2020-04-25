@@ -25,7 +25,7 @@ namespace magma
        in the handle rather than acting as a reference to an underlying object. */
 
     template<typename Type>
-    class NonDispatchable : public Object
+    class NonDispatchable : public ObjectTemplate<Type>
     {
     public:
         typedef Type NativeHandle;
@@ -39,14 +39,13 @@ namespace magma
             return handle;
 #endif
         }
-        operator Type() const noexcept
-            { return handle; }
+        operator Type() const noexcept { return handle; }
 
     protected:
         explicit NonDispatchable(VkObjectType objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator) noexcept:
-            Object(objectType, std::move(device), std::move(allocator)),
+            ObjectTemplate(objectType, std::move(device), std::move(allocator)),
             handle(VK_NULL_HANDLE) {}
 
     protected:

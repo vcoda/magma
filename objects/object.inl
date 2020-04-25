@@ -45,4 +45,34 @@ inline void Object::operator delete(void *ptr)
     else
         free(ptr);
 }
+
+template<typename Type>
+inline ObjectTemplate<Type>::ObjectTemplate(VkObjectType objectType,
+    std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) noexcept:
+    Object(std::move(device), std::move(allocator))
+#if !defined(MAGMA_X64)
+    ,objectType(objectType)
+#endif
+{
+    MAGMA_UNUSED(objectType);
+}
+
+template<typename Type>
+inline void ObjectTemplate<Type>::setObjectName(const char *name) noexcept
+{
+    Object::setObjectName(getObjectType(), name);
+}
+
+template<typename Type>
+inline void ObjectTemplate<Type>::setObjectTag(uint64_t tagName, std::size_t tagSize, const void *tag) noexcept
+{
+    Object::setObjectTag(getObjectType(), tagName, tagSize, tag);
+}
+
+template<typename Type>
+template<typename TagType>
+inline void ObjectTemplate<Type>::setObjectTag(uint64_t tagName, const TagType& tag) noexcept
+{
+    Object::setObjectTag(getObjectType(), tagName, sizeof(TagType), &tag);
+}
 } // namespace magma
