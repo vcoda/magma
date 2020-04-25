@@ -80,7 +80,7 @@ MAGMA_OBJS= \
 	objects/indexBuffer.o \
 	objects/indirectBuffer.o \
 	objects/instance.o \
-	objects/object.o \
+	objects/objectAllocator.o \
 	objects/physicalDevice.o \
 	objects/pipeline.o \
 	objects/pipelineCache.o \

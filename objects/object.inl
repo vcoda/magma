@@ -1,78 +1,116 @@
+#if !defined(MAGMA_DEBUG)
+#ifdef VK_EXT_debug_utils
+#undef VK_EXT_debug_utils
+#endif
+#ifdef VK_EXT_debug_marker
+#undef VK_EXT_debug_marker
+#endif
+#endif // !MAGMA_DEBUG
+
 namespace magma
 {
-inline void *Object::operator new(std::size_t size)
-{
-    void *ptr;
-    if (objectAllocator)
-        ptr = objectAllocator->alloc(size);
-    else
-        ptr = malloc(size);
-    if (!ptr)
-        throw std::bad_alloc();
-#ifdef MAGMA_DEBUG
-    ++allocCount;
-#endif
-    return ptr;
-}
-
-inline void *Object::operator new(std::size_t size, const std::nothrow_t&) noexcept
-{
-    void *ptr;
-    if (objectAllocator)
-        ptr = objectAllocator->alloc(size);
-    else
-        ptr = malloc(size);
-#ifdef MAGMA_DEBUG
-    if (ptr)
-        ++allocCount;
-#endif
-    return ptr;
-}
-
-inline void* Object::operator new(std::size_t, void* where) noexcept
-{
-    return where;
-}
-
-inline void Object::operator delete(void *ptr)
-{
-#ifdef MAGMA_DEBUG
-    if (ptr)
-        --allocCount;
-#endif
-    if (objectAllocator)
-        objectAllocator->free(ptr);
-    else
-        free(ptr);
-}
-
 template<typename Type>
-inline ObjectTemplate<Type>::ObjectTemplate(VkObjectType objectType,
-    std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) noexcept:
-    Object(std::move(device), std::move(allocator))
+inline Object<Type>::Object(VkObjectType objectType, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) noexcept:
 #if !defined(MAGMA_X64)
-    ,objectType(objectType)
+    objectType(objectType),
 #endif
+    device(std::move(device)),
+    allocator(std::move(allocator))
 {
     MAGMA_UNUSED(objectType);
 }
 
 template<typename Type>
-inline void ObjectTemplate<Type>::setObjectName(const char *name) noexcept
+inline void Object<Type>::setObjectName(const char *name) noexcept
 {
-    Object::setObjectName(getObjectType(), name);
+    MAGMA_ASSERT(name);
+    MAGMA_ASSERT(strlen(name) > 0);
+#ifdef VK_EXT_debug_utils
+    if (device)
+    {
+        MAGMA_OPTIONAL_DEVICE_EXTENSION(vkSetDebugUtilsObjectNameEXT);
+        if (vkSetDebugUtilsObjectNameEXT)
+        {
+            VkDebugUtilsObjectNameInfoEXT info;
+            info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
+            info.pNext = nullptr;
+            info.objectType = getObjectType();
+            info.objectHandle = getHandle();
+            info.pObjectName = name;
+            vkSetDebugUtilsObjectNameEXT(MAGMA_HANDLE(device), &info);
+        }
+    }
+#elif defined(VK_EXT_debug_marker)
+    if (device)
+    {
+        MAGMA_OPTIONAL_DEVICE_EXTENSION(vkDebugMarkerSetObjectNameEXT);
+        if (vkDebugMarkerSetObjectNameEXT)
+        {
+            VkDebugMarkerObjectNameInfoEXT info;
+            info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT;
+            info.pNext = nullptr;
+            info.objectType = helpers::castToDebugReportType(getObjectType());
+            info.object = getHandle();
+            info.pObjectName = name;
+            vkDebugMarkerSetObjectNameEXT(MAGMA_HANDLE(device), &info);
+        }
+    }
+#else
+    MAGMA_UNUSED(name);
+#endif // VK_EXT_debug_marker
 }
 
 template<typename Type>
-inline void ObjectTemplate<Type>::setObjectTag(uint64_t tagName, std::size_t tagSize, const void *tag) noexcept
+inline void Object<Type>::setObjectTag(uint64_t tagName, std::size_t tagSize, const void *tag) noexcept
 {
-    Object::setObjectTag(getObjectType(), tagName, tagSize, tag);
+    MAGMA_ASSERT(tagName);
+    MAGMA_ASSERT(tagSize);
+    MAGMA_ASSERT(tag);
+#ifdef VK_EXT_debug_utils
+    if (device)
+    {
+        MAGMA_OPTIONAL_DEVICE_EXTENSION(vkSetDebugUtilsObjectTagEXT);
+        if(vkSetDebugUtilsObjectTagEXT)
+        {
+            VkDebugUtilsObjectTagInfoEXT info;
+            info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_TAG_INFO_EXT;
+            info.pNext = nullptr;
+            info.objectType = getObjectType();
+            info.objectHandle = getHandle();
+            info.tagName = tagName;
+            info.tagSize = tagSize;
+            info.pTag = tag;
+            vkSetDebugUtilsObjectTagEXT(MAGMA_HANDLE(device), &info);
+        }
+    }
+#elif defined(VK_EXT_debug_marker)
+    if (device)
+    {
+        MAGMA_OPTIONAL_DEVICE_EXTENSION(vkDebugMarkerSetObjectTagEXT);
+        if (vkDebugMarkerSetObjectTagEXT)
+        {
+            VkDebugMarkerObjectTagInfoEXT info;
+            info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT;
+            info.pNext = nullptr;
+            info.objectType = helpers::castToDebugReportType(getObjectType());
+            info.object = getHandle();
+            info.tagName = tagName;
+            info.tagSize = tagSize;
+            info.pTag = tag;
+            vkDebugMarkerSetObjectTagEXT(MAGMA_HANDLE(device), &info);
+        }
+    }
+#else
+    MAGMA_UNUSED(tagName);
+    MAGMA_UNUSED(tagSize);
+    MAGMA_UNUSED(tag);
+#endif // VK_EXT_debug_marker
 }
 
 template<typename Type>
 template<typename TagType>
-inline void ObjectTemplate<Type>::setObjectTag(uint64_t tagName, const TagType& tag) noexcept
+inline void Object<Type>::setObjectTag(uint64_t tagName, const TagType& tag) noexcept
 {
-    Object::setObjectTag(getObjectType(), tagName, sizeof(TagType), &tag);
+    setObjectTag(tagName, sizeof(TagType), &tag);
 }
 } // namespace magma

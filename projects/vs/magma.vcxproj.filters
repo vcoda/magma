@@ -495,6 +495,12 @@
     <ClInclude Include="..\..\core\vectors.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\objectType.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\objects\objectAllocator.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -644,9 +650,6 @@
     <ClCompile Include="..\..\objects\instance.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\objects\object.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\objects\physicalDevice.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
@@ -770,6 +773,9 @@
     <ClCompile Include="..\..\core\pch.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\objects\objectAllocator.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\auxiliary\immediateRender.inl">
@@ -858,6 +864,9 @@
     </None>
     <None Include="..\..\auxiliary\shaderCompiler.inl">
       <Filter>Header Files\auxiliary</Filter>
+    </None>
+    <None Include="..\..\objects\objectAllocator.inl">
+      <Filter>Header Files\objects</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
