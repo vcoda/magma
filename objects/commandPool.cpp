@@ -48,7 +48,7 @@ CommandPool::CommandPool(std::shared_ptr<Device> device,
     const VkResult create = vkCreateCommandPool(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create command pool");
     if (!getOverridenAllocator())
-        pool = std::make_unique<LinearPlacementPool>(sizeof(CommandBuffer), poolCommandBufferCount);
+        pool = std::make_unique<mem::LinearPlacementPool>(sizeof(CommandBuffer), poolCommandBufferCount);
 }
 
 CommandPool::~CommandPool()

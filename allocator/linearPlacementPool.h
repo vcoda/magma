@@ -20,54 +20,57 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Linear placement allocator. */
-
-    class LinearPlacementPool : public IObjectAllocator
+    namespace mem
     {
-    public:
-        LinearPlacementPool(const std::size_t sizeofType, uint32_t maxObjectCount):
-            pool(sizeofType * maxObjectCount, 0),
-            sizeofType(sizeofType),
-            maxObjectCount(maxObjectCount),
-            allocCount(0)
-        {}
+        /* Linear placement allocator. */
 
-        template<typename Type, typename... Types>
-        Type *placementNew(Types&&... args)
+        class LinearPlacementPool : public IObjectAllocator
         {
-            MAGMA_ASSERT(sizeof(Type) == sizeofType);
-            void *const placement = alloc(sizeof(Type));
-            if (placement)
-                return new (placement) Type(std::forward<Types &&>(args)...);
-            return nullptr;
-        }
+        public:
+            LinearPlacementPool(const std::size_t sizeofType, uint32_t maxObjectCount):
+                pool(sizeofType * maxObjectCount, 0),
+                sizeofType(sizeofType),
+                maxObjectCount(maxObjectCount),
+                allocCount(0)
+            {}
 
-        void *alloc(std::size_t size) override
-        {   // Linear incremental allocation
-            if (allocCount < maxObjectCount)
-                return pool.data() + size * allocCount++;
-            return nullptr;
-        }
-
-        void free(void *p) noexcept override
-        {
-            if ((p >= pool.data()) &&
-                (p <= pool.data() + sizeofType * (maxObjectCount - 1)))
+            template<typename Type, typename... Types>
+            Type *placementNew(Types&&... args)
             {
-                // Not yet implemented
+                MAGMA_ASSERT(sizeof(Type) == sizeofType);
+                void *const placement = alloc(sizeof(Type));
+                if (placement)
+                    return new (placement) Type(std::forward<Types &&>(args)...);
+                return nullptr;
             }
-        }
 
-        std::size_t getBytesAllocated() const noexcept override
-        {
-            return sizeofType * allocCount;
-        }
+            void *alloc(std::size_t size) override
+            {   // Linear incremental allocation
+                if (allocCount < maxObjectCount)
+                    return pool.data() + size * allocCount++;
+                return nullptr;
+            }
 
-    private:
-        std::vector<char> pool;
-        const std::size_t sizeofType;
-        const uint32_t maxObjectCount;
-        uint32_t allocCount;
-    };
+            void free(void *p) noexcept override
+            {
+                if ((p >= pool.data()) &&
+                    (p <= pool.data() + sizeofType * (maxObjectCount - 1)))
+                {
+                    // Not yet implemented
+                }
+            }
+
+            std::size_t getBytesAllocated() const noexcept override
+            {
+                return sizeofType * allocCount;
+            }
+
+        private:
+            std::vector<char> pool;
+            const std::size_t sizeofType;
+            const uint32_t maxObjectCount;
+            uint32_t allocCount;
+        };
+    } // namespace mem
 } // namespace magma
 

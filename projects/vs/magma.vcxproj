@@ -240,7 +240,6 @@
     <ClInclude Include="..\..\objects\instance.h" />
     <ClInclude Include="..\..\objects\nondispatchable.h" />
     <ClInclude Include="..\..\objects\object.h" />
-    <ClInclude Include="..\..\objects\objectAllocator.h" />
     <ClInclude Include="..\..\objects\objectType.h" />
     <ClInclude Include="..\..\objects\physicalDevice.h" />
     <ClInclude Include="..\..\objects\pipeline.h" />
@@ -285,6 +284,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp" />
+    <ClCompile Include="..\..\allocator\objectAllocator.cpp" />
     <ClCompile Include="..\..\auxiliary\blitRectangle.cpp" />
     <ClCompile Include="..\..\auxiliary\framebuffers.cpp" />
     <ClCompile Include="..\..\auxiliary\graphicsPipelineCache.cpp" />
@@ -349,7 +349,6 @@
     <ClCompile Include="..\..\objects\indexBuffer.cpp" />
     <ClCompile Include="..\..\objects\indirectBuffer.cpp" />
     <ClCompile Include="..\..\objects\instance.cpp" />
-    <ClCompile Include="..\..\objects\objectAllocator.cpp" />
     <ClCompile Include="..\..\objects\physicalDevice.cpp" />
     <ClCompile Include="..\..\objects\pipeline.cpp" />
     <ClCompile Include="..\..\objects\pipelineCache.cpp" />
@@ -382,6 +381,7 @@
     <ClCompile Include="..\..\states\viewportState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\allocator\objectAllocator.inl" />
     <None Include="..\..\auxiliary\immediateRender.inl" />
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">
       <FileType>Document</FileType>
@@ -477,7 +477,6 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
     <None Include="..\..\objects\deviceMemory.inl" />
     <None Include="..\..\objects\indexBuffer.inl" />
     <None Include="..\..\objects\object.inl" />
-    <None Include="..\..\objects\objectAllocator.inl" />
     <None Include="..\..\objects\srcTransferBuffer.inl" />
     <None Include="..\..\objects\storageBuffer.inl" />
     <None Include="..\..\objects\vertexBuffer.inl" />

@@ -14,6 +14,7 @@ endif
 
 MAGMA_OBJS= \
 	allocator/allocator.o \
+	allocator/objectAllocator.o \
 	\
 	auxiliary/blitRectangle.o \
 	auxiliary/framebuffers.o \
@@ -80,7 +81,6 @@ MAGMA_OBJS= \
 	objects/indexBuffer.o \
 	objects/indirectBuffer.o \
 	objects/instance.o \
-	objects/objectAllocator.o \
 	objects/physicalDevice.o \
 	objects/pipeline.o \
 	objects/pipelineCache.o \

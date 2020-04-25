@@ -21,7 +21,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class CommandBuffer;
-    class LinearPlacementPool;
+
+    namespace mem
+    {
+        class LinearPlacementPool;
+    }
 
     /* Command pools are opaque objects that command buffer memory is allocated from,
        and which allow the implementation to amortize the cost of resource creation
@@ -50,6 +54,6 @@ namespace magma
 #endif
 
     private:
-        std::unique_ptr<LinearPlacementPool> pool;
+        std::unique_ptr<mem::LinearPlacementPool> pool;
     };
 } // namespace magma

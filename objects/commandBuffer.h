@@ -40,11 +40,15 @@ namespace magma
     class Geometry;
     class AccelerationStructure;
     class AccelerationStructureCompactedSizeQuery;
-    class LinearPlacementPool;
 
     struct MemoryBarrier;
     struct BufferMemoryBarrier;
     class ImageMemoryBarrier;
+
+    namespace mem
+    {
+        class LinearPlacementPool;
+    }
 
     /* Command buffers are objects used to record commands which can be subsequently
        submitted to a device queue for execution. */
@@ -504,7 +508,7 @@ namespace magma
     class PrimaryCommandBuffer : public CommandBuffer
     {
         friend CommandPool;
-        friend LinearPlacementPool;
+        friend mem::LinearPlacementPool;
         explicit PrimaryCommandBuffer(VkCommandBuffer handle,
             std::shared_ptr<CommandPool> pool):
             CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, handle, std::move(pool)) {}
@@ -520,7 +524,7 @@ namespace magma
     class SecondaryCommandBuffer : public CommandBuffer
     {
         friend CommandPool;
-        friend LinearPlacementPool;
+        friend mem::LinearPlacementPool;
         explicit SecondaryCommandBuffer(VkCommandBuffer handle,
             std::shared_ptr<CommandPool> pool):
             CommandBuffer(VK_COMMAND_BUFFER_LEVEL_SECONDARY, handle, std::move(pool)) {}

@@ -18,27 +18,29 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "objectAllocator.h"
-#include "../allocator/objectAllocator.h"
 #include "../misc/exception.h"
 
 namespace magma
 {
-std::shared_ptr<IObjectAllocator> ObjectAllocator::allocator;
+namespace mem
+{
+std::shared_ptr<IObjectAllocator> Allocator::allocator;
 #ifdef MAGMA_DEBUG
-std::atomic<int64_t> ObjectAllocator::allocCount;
+std::atomic<int64_t> Allocator::allocCount;
 #endif
 
-void ObjectAllocator::overrideDefaultAllocator(std::shared_ptr<IObjectAllocator> allocator)
+void Allocator::overrideDefaultAllocator(std::shared_ptr<IObjectAllocator> allocator)
 {
 #ifdef MAGMA_DEBUG
     if (allocCount)
         MAGMA_THROW("object allocator should be defined prior any allocations");
 #endif
-    ObjectAllocator::allocator = std::move(allocator);
+    Allocator::allocator = std::move(allocator);
 }
 
-std::shared_ptr<IObjectAllocator> ObjectAllocator::getOverridenAllocator() noexcept
+std::shared_ptr<IObjectAllocator> Allocator::getOverridenAllocator() noexcept
 {
     return allocator;
 }
+} // namespace mem
 } // namespace magma

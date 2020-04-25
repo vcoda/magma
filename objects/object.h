@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "objectType.h"
-#include "objectAllocator.h"
+#include "../allocator/objectAllocator.h"
 #include "../misc/deviceExtension.h"
 #include "../helpers/castToDebugReport.h"
 
@@ -34,7 +34,7 @@ namespace magma
         // Use custom template specialization for ::getObjectType() method
         public ObjectType<Type>,
 #endif
-        public ObjectAllocator
+        public mem::Allocator
     {
     public:
         explicit Object(VkObjectType objectType,
