@@ -31,6 +31,7 @@ namespace magma
     template<typename Type>
     class Object : public core::NonCopyable,
 #ifdef MAGMA_X64
+        // Use custom template specialization for ::getObjectType() method
         public ObjectType<Type>,
 #endif
         public ObjectAllocator
@@ -53,6 +54,9 @@ namespace magma
 
     protected:
 #if !defined(MAGMA_X64)
+        // Additional storage is required under x86 target
+        // as Vulkan non-dispatchable handles are defined as uint64_t
+        // and thus cannot be used in custom template specialization.
         VkObjectType objectType;
 #endif
         std::shared_ptr<Device> device;
