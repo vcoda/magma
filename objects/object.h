@@ -26,14 +26,14 @@ namespace magma
     class Device;
     class IAllocator;
 
-    /* Base non-copyable object for dispatchable and non-dispatchable handles.
-       Provides user-defined new and delete operators for custom allocations. */
+    /* Base non-copyable object for dispatchable and non-dispatchable handles. */
 
     template<typename Type>
-    class Object : public ObjectAllocator
+    class Object : public core::NonCopyable,
 #ifdef MAGMA_X64
-        , public ObjectType<Type>
+        public ObjectType<Type>,
 #endif
+        public ObjectAllocator
     {
     public:
         explicit Object(VkObjectType objectType,

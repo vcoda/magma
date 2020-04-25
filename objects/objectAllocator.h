@@ -20,9 +20,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Custom object allocator. */
+    /* Custom object allocator.
+       Provides user-defined new and delete operators. */
 
-    class ObjectAllocator : public core::NonCopyable
+    class ObjectAllocator
     {
     public:
         void *operator new(std::size_t size);
