@@ -62,7 +62,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     MAGMA_ASSERT(subpass.colorAttachmentCount);
     MAGMA_STACK_ARRAY(VkAttachmentReference, colorReferences, subpass.colorAttachmentCount);
     MAGMA_STACK_ARRAY(VkAttachmentReference, resolveReferences, resolveAttachmentCount);
-    VkAttachmentReference *depthStencilReference = nullptr;
+    std::unique_ptr<VkAttachmentReference> depthStencilReference;
     uint32_t attachmentIndex = 0;
     uint32_t colorIndex = 0;
     uint32_t resolveIndex = 0;
@@ -73,7 +73,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
         if (format.depth() || format.stencil() || format.depthStencil())
         {
             if (!depthStencilReference)
-                depthStencilReference = new VkAttachmentReference{attachmentIndex, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL};
+                depthStencilReference = std::make_unique<VkAttachmentReference>(VkAttachmentReference{attachmentIndex, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL});
         }
         else
         {
@@ -86,7 +86,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     }
     subpass.pColorAttachments = colorReferences;
     subpass.pResolveAttachments = resolveReferences;
-    subpass.pDepthStencilAttachment = depthStencilReference;
+    subpass.pDepthStencilAttachment = depthStencilReference.get();
     subpass.preserveAttachmentCount = 0;
     subpass.pPreserveAttachments = nullptr;
     VkRenderPassCreateInfo info;
