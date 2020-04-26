@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <algorithm>
 #include "renderPass.h"
 #include "device.h"
+#include "physicalDevice.h"
 #include "../allocator/allocator.h"
 #include "../helpers/stackArray.h"
 #include "../misc/format.h"
@@ -73,7 +74,11 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
         if (format.depth() || format.stencil() || format.depthStencil())
         {
             if (!depthStencilReference)
-                depthStencilReference = std::make_unique<VkAttachmentReference>(VkAttachmentReference{attachmentIndex, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL});
+            {
+                const VkImageLayout depthStencilLayout = optimalDepthStencilLayout(format);
+                const VkAttachmentReference depthStencilAttachment{attachmentIndex, depthStencilLayout};
+                depthStencilReference = std::make_unique<VkAttachmentReference>(depthStencilAttachment);
+            }
         }
         else
         {
@@ -136,5 +141,20 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
 RenderPass::~RenderPass()
 {
     vkDestroyRenderPass(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+}
+
+VkImageLayout RenderPass::optimalDepthStencilLayout(const Format& format) const
+{
+#ifdef VK_KHR_separate_depth_stencil_layouts
+    std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+    if (physicalDevice->checkExtensionSupport("VK_KHR_separate_depth_stencil_layouts"))
+    {
+        if (format.depth())
+            return VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL_KHR;
+        if (format.stencil())
+            return VK_IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL_KHR;
+    }
+#endif // VK_KHR_separate_depth_stencil_layouts
+    return VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 }
 } // namespace magma

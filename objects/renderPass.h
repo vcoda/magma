@@ -22,6 +22,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class Format;
+
     /* A render pass represents a collection of attachments, subpasses,
        and dependencies between the subpasses, and describes how the attachments
        are used over the course of the subpasses. The use of a render pass
@@ -45,6 +47,8 @@ namespace magma
         std::size_t getHash() const noexcept { return hash; }
 
     private:
+        VkImageLayout optimalDepthStencilLayout(const Format& format) const;
+
         std::vector<AttachmentDescription> attachments;
         std::size_t hash = 0;
     };
