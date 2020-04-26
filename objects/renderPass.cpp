@@ -38,7 +38,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator)),
     attachments(attachments)
-{   // Count multisample and single sample attachments
+{
     uint32_t multisampleAttachmentCount = 0;
     uint32_t resolveAttachmentCount = 0;
     for (const auto& attachmentDesc : attachments)
@@ -52,46 +52,42 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
                 ++resolveAttachmentCount;
         }
     }
-    // In a typical usage scenario we could fill subpass descriptor by himself
-    VkSubpassDescription subpass;
-    subpass.flags = 0;
-    subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-    subpass.inputAttachmentCount = 0;
-    subpass.pInputAttachments = nullptr;
-    subpass.colorAttachmentCount = multisampleAttachmentCount ? multisampleAttachmentCount : resolveAttachmentCount;
+    const uint32_t colorAttachmentCount = multisampleAttachmentCount ? multisampleAttachmentCount : resolveAttachmentCount;
+    MAGMA_ASSERT(colorAttachmentCount);
     resolveAttachmentCount = std::max(0U, multisampleAttachmentCount);
-    MAGMA_ASSERT(subpass.colorAttachmentCount);
-    MAGMA_STACK_ARRAY(VkAttachmentReference, colorReferences, subpass.colorAttachmentCount);
-    MAGMA_STACK_ARRAY(VkAttachmentReference, resolveReferences, resolveAttachmentCount);
-    std::unique_ptr<VkAttachmentReference> depthStencilReference;
-    uint32_t attachmentIndex = 0;
-    uint32_t colorIndex = 0;
-    uint32_t resolveIndex = 0;
-    // Color/depth/multisample attachments go to their slots
+    MAGMA_STACK_ARRAY(VkAttachmentReference, colorAttachments, colorAttachmentCount);
+    MAGMA_STACK_ARRAY(VkAttachmentReference, resolveAttachments, resolveAttachmentCount);
+    VkAttachmentReference depthStencilAttachment = {0, VK_IMAGE_LAYOUT_UNDEFINED};
+    uint32_t attachmentIndex = 0, colorIndex = 0, resolveIndex = 0;
     for (const auto& attachmentDesc : attachments)
     {
         const Format format(attachmentDesc.format);
         if (format.depth() || format.stencil() || format.depthStencil())
         {
-            if (!depthStencilReference)
+            if (VK_IMAGE_LAYOUT_UNDEFINED == depthStencilAttachment.layout)
             {
                 const VkImageLayout depthStencilLayout = optimalDepthStencilLayout(format);
-                const VkAttachmentReference depthStencilAttachment{attachmentIndex, depthStencilLayout};
-                depthStencilReference = std::make_unique<VkAttachmentReference>(depthStencilAttachment);
+                depthStencilAttachment = {attachmentIndex, depthStencilLayout};
             }
         }
         else
         {
             if (attachmentDesc.samples > 1 || resolveAttachmentCount < 1)
-                colorReferences[colorIndex++] = {attachmentIndex, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL};
+                colorAttachments[colorIndex++] = {attachmentIndex, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL};
             else
-                resolveReferences[resolveIndex++] = {attachmentIndex, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL};
+                resolveAttachments[resolveIndex++] = {attachmentIndex, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL};
         }
         ++attachmentIndex;
     }
-    subpass.pColorAttachments = colorReferences;
-    subpass.pResolveAttachments = resolveReferences;
-    subpass.pDepthStencilAttachment = depthStencilReference.get();
+    VkSubpassDescription subpass;
+    subpass.flags = 0;
+    subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+    subpass.inputAttachmentCount = 0;
+    subpass.pInputAttachments = nullptr;
+    subpass.colorAttachmentCount = colorAttachmentCount;
+    subpass.pColorAttachments = colorAttachments;
+    subpass.pResolveAttachments = resolveAttachments;
+    subpass.pDepthStencilAttachment = &depthStencilAttachment;
     subpass.preserveAttachmentCount = 0;
     subpass.pPreserveAttachments = nullptr;
     VkRenderPassCreateInfo info;
