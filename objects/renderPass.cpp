@@ -122,6 +122,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
 RenderPass::RenderPass(std::shared_ptr<Device> device,
     const std::initializer_list<AttachmentDescription>& attachments,
     const std::initializer_list<SubpassDescription>& subpasses,
+    const std::initializer_list<SubpassDependency>& dependencies /* {} */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator))
 {
@@ -133,8 +134,8 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     info.pAttachments = attachments.begin();
     info.subpassCount = MAGMA_COUNT(subpasses);
     info.pSubpasses = subpasses.begin();
-    info.dependencyCount = 0;
-    info.pDependencies = nullptr;
+    info.dependencyCount = MAGMA_COUNT(dependencies);
+    info.pDependencies = dependencies.begin();
     const VkResult create = vkCreateRenderPass(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create render pass");
     hash = core::hashArgs(
@@ -147,6 +148,8 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
         core::hashCombine(hash, attachment.hash());
     for (const auto& subpass : subpasses)
         core::hashCombine(hash, subpass.hash());
+    for (const auto& dependency : dependencies)
+        core::hashCombine(hash, dependency.hash());
 }
 
 RenderPass::~RenderPass()
