@@ -21,7 +21,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Multisample state of graphics pipeline. */
+    /* Multisampling is a mechanism to antialias all Vulkan primitives:
+       points, lines, and polygons. The technique is to sample all primitives
+       multiple times at each pixel. */
 
     struct MultisampleState : VkPipelineMultisampleStateCreateInfo
     {
