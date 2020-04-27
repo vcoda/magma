@@ -44,6 +44,20 @@ namespace magma
     private:
         SubpassDescription(VkPipelineBindPoint pipelineBindPoint) noexcept;
     };
+
+    /* For attachments subpass dependencies work like a VkImageMemoryBarrier.
+       By default dependency is framebuffer-local. */
+
+    struct SubpassDependency : VkSubpassDependency
+    {
+        constexpr SubpassDependency();
+        constexpr SubpassDependency(uint32_t srcSubpass,
+            uint32_t dstSubpass,
+            VkPipelineStageFlags srcStageMask,
+            VkPipelineStageFlags dstStageMask,
+            VkDependencyFlags dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT);
+        constexpr std::size_t hash() const;
+    };
 } // namespace magma
 
 namespace magma
@@ -75,3 +89,5 @@ namespace magma
 #endif // VK_KHR_separate_depth_stencil_layouts
     } // namespace subpasses
 } // namespace magma
+
+#include "subpassDependency.inl"
