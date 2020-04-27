@@ -79,7 +79,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
         }
         ++attachmentIndex;
     }
-    VkSubpassDescription subpass;
+    SubpassDescription subpass;
     subpass.flags = 0;
     subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
     subpass.inputAttachmentCount = 0;
@@ -90,7 +90,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     subpass.pDepthStencilAttachment = &depthStencilAttachment;
     subpass.preserveAttachmentCount = 0;
     subpass.pPreserveAttachments = nullptr;
-    VkSubpassDependency dependencies[2];
+    SubpassDependency dependencies[2];
 	dependencies[0].srcSubpass = VK_SUBPASS_EXTERNAL;
 	dependencies[0].dstSubpass = 0;
 	dependencies[0].srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
@@ -117,6 +117,17 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     info.pDependencies = dependencies;
     const VkResult create = vkCreateRenderPass(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create render pass");
+     hash = core::hashArgs(
+        info.sType,
+        info.flags,
+        info.attachmentCount,
+        info.subpassCount,
+        info.dependencyCount);
+    for (const auto& attachment : attachments)
+        core::hashCombine(hash, attachment.hash());
+    core::hashCombine(hash, subpass.hash());
+    for (const auto& dependency : dependencies)
+        core::hashCombine(hash, dependency.hash());
 }
 
 RenderPass::RenderPass(std::shared_ptr<Device> device,
