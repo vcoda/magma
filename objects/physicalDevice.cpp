@@ -129,20 +129,6 @@ std::vector<VkExtensionProperties> PhysicalDevice::enumerateExtensions(const cha
     return extensions;
 }
 
-bool PhysicalDevice::checkExtensionSupport(const char *extensionName) const
-{
-    MAGMA_ASSERT(extensionName);
-    if (!extensionName || !strlen(extensionName))
-        return false;
-    std::vector<VkExtensionProperties> extensions = enumerateExtensions();
-    for (const auto& property : extensions)
-    {
-        if (0 == strcmp(extensionName, property.extensionName))
-            return true;
-    }
-    return false;
-}
-
 bool PhysicalDevice::getSurfaceSupport(std::shared_ptr<const Surface> surface) const noexcept
 {
     VkBool32 supported;
@@ -313,6 +299,20 @@ std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
     const VkPhysicalDeviceFeatures noDeviceFeatures = {};
     const std::vector<void *> noExtendedDeviceFeatures;
     return createDevice(queueDescriptors, noLayers, swapchainExtension, noDeviceFeatures, noExtendedDeviceFeatures);
+}
+
+bool PhysicalDevice::checkExtensionSupport(const char *extensionName) const
+{
+    MAGMA_ASSERT(extensionName);
+    if (!extensionName || !strlen(extensionName))
+        return false;
+    if (extensions.empty())
+    {   // Query once and cache
+        const std::vector<VkExtensionProperties> extensionProperties = enumerateExtensions();
+        for (const auto property : extensionProperties)
+            extensions.emplace(property.extensionName);
+    }
+    return extensions.find(extensionName) != extensions.end();
 }
 
 bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept

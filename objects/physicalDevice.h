@@ -52,7 +52,6 @@ namespace magma
             const std::vector<void *>& extendedDeviceFeatures = {}) const;
         std::vector<VkLayerProperties> enumerateLayers() const;
         std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr) const;
-        bool checkExtensionSupport(const char *extensionName) const;
         bool getSurfaceSupport(std::shared_ptr<const Surface> surface) const noexcept;
         VkSurfaceCapabilitiesKHR getSurfaceCapabilities(std::shared_ptr<const Surface> surface) const;
         std::vector<VkSurfaceFormatKHR> getSurfaceFormats(std::shared_ptr<const Surface> surface) const;
@@ -78,6 +77,7 @@ namespace magma
         // Non-API
         std::shared_ptr<Instance> getInstance() const noexcept { return instance; }
         std::shared_ptr<Device> createDefaultDevice() const;
+        bool checkExtensionSupport(const char *extensionName) const;
         bool checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept;
 
     private:
@@ -85,6 +85,7 @@ namespace magma
         void getExtendedProperties(void *properties) const;
 
         std::shared_ptr<Instance> instance;
+        mutable std::set<std::string> extensions; // Cached implicit extensions
     };
 
     /* A logical device can be created that connects to one or more physical devices. */
