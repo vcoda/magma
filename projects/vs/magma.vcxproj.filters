@@ -865,6 +865,9 @@
     <None Include="..\..\allocator\objectAllocator.inl">
       <Filter>Header Files\allocator</Filter>
     </None>
+    <None Include="..\..\descriptors\subpassDependency.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">
