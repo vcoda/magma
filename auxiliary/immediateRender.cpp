@@ -47,7 +47,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount,
     vertexShader(VertexShaderStage(createShader(true), "main")),
     fragmentShader(FragmentShaderStage(createShader(false), "main")),
     rasterizationState(renderstates::fillCullBackCCW),
-    multisampleState(renderstates::noMultisample),
+    multisampleState(renderstates::dontMultisample),
     depthStencilState(renderstates::depthAlwaysDontWrite),
     colorBlendState(renderstates::dontBlendRgba) // Make copyable
 {

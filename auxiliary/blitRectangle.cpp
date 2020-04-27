@@ -83,7 +83,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         physicalDevice->checkExtensionSupport("VK_NV_fill_rectangle") ? renderstates::fillRectangleCullNoneCCW :
 #endif
         renderstates::fillCullNoneCCW,
-        renderstates::noMultisample,
+        renderstates::dontMultisample,
         renderstates::depthAlwaysDontWrite,
         renderstates::dontBlendRgba,
         std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
