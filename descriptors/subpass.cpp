@@ -22,6 +22,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+SubpassDescription::SubpassDescription() noexcept
+{
+    flags = 0;
+    this->pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+    inputAttachmentCount = 0;
+    pInputAttachments = nullptr;
+    colorAttachmentCount = 0;
+    pColorAttachments = nullptr;
+    pResolveAttachments = nullptr;
+    pDepthStencilAttachment = nullptr;
+    preserveAttachmentCount = 0;
+    pPreserveAttachments = nullptr;
+}
+
 inline SubpassDescription::SubpassDescription(VkPipelineBindPoint pipelineBindPoint) noexcept
 {
     MAGMA_ASSERT(VK_PIPELINE_BIND_POINT_GRAPHICS == pipelineBindPoint);

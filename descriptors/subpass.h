@@ -27,9 +27,9 @@ namespace magma
        attachments that are not read or written by the subpass but whose contents
        must be preserved throughout the subpass. */
 
-    class SubpassDescription : public VkSubpassDescription
+    struct SubpassDescription : VkSubpassDescription
     {
-    public:
+        SubpassDescription() noexcept;
         SubpassDescription(VkImageLayout colorLayout);
         SubpassDescription(VkImageLayout colorLayout,
             VkImageLayout depthStencilLayout);
