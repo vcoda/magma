@@ -27,34 +27,22 @@ namespace magma
        attachments that are not read or written by the subpass but whose contents
        must be preserved throughout the subpass. */
 
-    class Subpass : public VkSubpassDescription
-    {
-    protected:
-        Subpass(VkSubpassDescriptionFlags flags,
-            VkPipelineBindPoint pipelineBindPoint) noexcept;
-
-    public:
-        Subpass(const Subpass&) noexcept;
-        Subpass& operator=(const Subpass&) noexcept;
-        ~Subpass();
-        std::size_t hash() const noexcept;
-    };
-
-    class GraphicsSubpass : public Subpass
+    class SubpassDescription : public VkSubpassDescription
     {
     public:
-        GraphicsSubpass(VkImageLayout colorLayout);
-        GraphicsSubpass(VkImageLayout colorLayout,
+        SubpassDescription(VkImageLayout colorLayout);
+        SubpassDescription(VkImageLayout colorLayout,
             VkImageLayout depthStencilLayout);
-        GraphicsSubpass(const std::vector<VkImageLayout>& colorLayouts);
-        GraphicsSubpass(const std::vector<VkImageLayout>& colorLayouts,
+        SubpassDescription(const std::vector<VkImageLayout>& colorLayouts);
+        SubpassDescription(const std::vector<VkImageLayout>& colorLayouts,
             const VkImageLayout& depthStencilLayout);
-    };
+        SubpassDescription(const SubpassDescription&) noexcept;
+        SubpassDescription& operator=(const SubpassDescription&) noexcept;
+        ~SubpassDescription();
+        std::size_t hash() const noexcept;
 
-    class ComputeSubpass : public Subpass
-    {
-    public:
-        ComputeSubpass() noexcept;
+    private:
+        SubpassDescription(VkPipelineBindPoint pipelineBindPoint) noexcept;
     };
 } // namespace magma
 
@@ -62,28 +50,28 @@ namespace magma
 {
     namespace subpasses
     {
-        extern const GraphicsSubpass colorAttachment;
-        extern const GraphicsSubpass colorDepthStencilAttachment;
-        extern const GraphicsSubpass colorAttachmentDepthStencilReadOnly;
-        extern const GraphicsSubpass depthStencilAttachment;
-        extern const GraphicsSubpass depthStencilReadOnly;
+        extern const SubpassDescription colorAttachment;
+        extern const SubpassDescription colorDepthStencilAttachment;
+        extern const SubpassDescription colorAttachmentDepthStencilReadOnly;
+        extern const SubpassDescription depthStencilAttachment;
+        extern const SubpassDescription depthStencilReadOnly;
 
 #ifdef VK_KHR_maintenance2
-        extern const GraphicsSubpass colorStencilAttachmentDepthReadOnly;
-        extern const GraphicsSubpass colorDepthAttachmentStencilReadOnly;
-        extern const GraphicsSubpass depthReadOnlyStencilAttachment;
-        extern const GraphicsSubpass depthAttachmentStencilReadOnly;
+        extern const SubpassDescription colorStencilAttachmentDepthReadOnly;
+        extern const SubpassDescription colorDepthAttachmentStencilReadOnly;
+        extern const SubpassDescription depthReadOnlyStencilAttachment;
+        extern const SubpassDescription depthAttachmentStencilReadOnly;
 #endif // VK_KHR_maintenance2
 
 #ifdef VK_KHR_separate_depth_stencil_layouts
-        extern const GraphicsSubpass colorDepthAttachment;
-        extern const GraphicsSubpass colorStencilAttachment;
-        extern const GraphicsSubpass colorAttachmentDepthReadOnly;
-        extern const GraphicsSubpass colorAttachmentStencilReadOnly;
-        extern const GraphicsSubpass depthAttachment;
-        extern const GraphicsSubpass stencilAttachment;
-        extern const GraphicsSubpass depthReadOnly;
-        extern const GraphicsSubpass stencilReadOnly;
+        extern const SubpassDescription colorDepthAttachment;
+        extern const SubpassDescription colorStencilAttachment;
+        extern const SubpassDescription colorAttachmentDepthReadOnly;
+        extern const SubpassDescription colorAttachmentStencilReadOnly;
+        extern const SubpassDescription depthAttachment;
+        extern const SubpassDescription stencilAttachment;
+        extern const SubpassDescription depthReadOnly;
+        extern const SubpassDescription stencilReadOnly;
 #endif // VK_KHR_separate_depth_stencil_layouts
     } // namespace subpasses
 } // namespace magma
