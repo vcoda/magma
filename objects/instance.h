@@ -49,8 +49,10 @@ namespace magma
         static std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr);
         // Non-API
         uint32_t getApiVersion() const noexcept { return apiVersion; }
+        bool checkExtensionSupport(const char *extensionName) const;
 
     private:
         uint32_t apiVersion;
+        mutable std::set<std::string> extensions; // Cached implicit extensions
     };
 } // namespace magma

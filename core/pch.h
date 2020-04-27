@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 #include <list>
 #include <map>
+#include <set>
 #include <unordered_map>
 #include <string>
 #include <initializer_list>

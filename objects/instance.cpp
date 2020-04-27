@@ -153,4 +153,18 @@ std::vector<VkExtensionProperties> Instance::enumerateExtensions(const char *lay
     }
     return extensions;
 }
+
+bool Instance::checkExtensionSupport(const char *extensionName) const
+{
+    MAGMA_ASSERT(extensionName);
+    if (!extensionName || !strlen(extensionName))
+        return false;
+    if (extensions.empty())
+    {   // Query once and cache
+        const std::vector<VkExtensionProperties> extensionProperties = enumerateExtensions();
+        for (const auto property : extensionProperties)
+            extensions.emplace(property.extensionName);
+    }
+    return extensions.find(extensionName) != extensions.end();
+}
 } // namespace magma
