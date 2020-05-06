@@ -174,9 +174,10 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
 
 void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
     const std::vector<ClearValue>& clearValues, const char *renderPassName, uint32_t renderPassColor,
+    const VkRect2D& renderArea /* {0, 0, 0, 0} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    beginRenderPass(renderPass, framebuffer, clearValues, contents);
+    beginRenderPass(renderPass, framebuffer, clearValues, renderArea, contents);
 #ifdef MAGMA_DEBUG_LABEL
     beginDebugLabel(renderPassName, renderPassColor);
     beginRenderPassMarked = VK_TRUE;
@@ -201,11 +202,13 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask, const char *blockName,
     return beginResult;
 }
 
-void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
-    uint32_t deviceMask, const std::vector<ClearValue>& clearValues, const char *renderPassName, uint32_t renderPassColor,
+void CommandBuffer::beginRenderPassDeviceGroup(uint32_t deviceMask,
+    const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
+    const std::vector<VkRect2D>& deviceRenderAreas, const std::vector<ClearValue>& clearValues,
+    const char *renderPassName, uint32_t renderPassColor,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    beginRenderPassDeviceGroup(renderPass, framebuffer, deviceMask, clearValues, contents);
+    beginRenderPassDeviceGroup(deviceMask, renderPass, framebuffer, deviceRenderAreas, clearValues, contents);
 #ifdef MAGMA_DEBUG_LABEL
     beginDebugLabel(renderPassName, renderPassColor);
     beginRenderPassMarked = VK_TRUE;

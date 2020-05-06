@@ -119,7 +119,6 @@ void BlitRectangle::blit(std::shared_ptr<Framebuffer> bltDst, std::shared_ptr<co
         prevBltSrc = bltSrc;
         prevFilter = filter;
     }
-    cmdBuffer->setRenderArea(0, 0, bltDst->getExtent());
     if (labelName)
         cmdBuffer->beginRenderPass(renderPass, bltDst, clearValues, labelName, labelColor);
     else

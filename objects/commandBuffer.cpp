@@ -407,6 +407,7 @@ void CommandBuffer::copyQueryResults(const std::shared_ptr<QueryPool>& queryPool
 
 void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
     const std::vector<ClearValue>& clearValues /* {} */,
+    const VkRect2D& renderArea /* {0, 0, 0, 0} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     VkRenderPassBeginInfo beginInfo;
@@ -414,7 +415,11 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     beginInfo.pNext = nullptr;
     beginInfo.renderPass = *renderPass;
     beginInfo.framebuffer = *framebuffer;
-    beginInfo.renderArea = renderAreas.empty() ? VkRect2D{0, 0, 0, 0} : renderAreas.front();
+    beginInfo.renderArea.offset = renderArea.offset;
+    if ((renderArea.extent.width != 0) || (renderArea.extent.height != 0))
+        beginInfo.renderArea.extent = renderArea.extent;
+    else
+        beginInfo.renderArea.extent = framebuffer->getExtent();
     beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
     MAGMA_STACK_ARRAY(VkClearValue, dereferencedClearValues, beginInfo.clearValueCount);
     for (const auto& clearValue : clearValues)
@@ -469,7 +474,9 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask,
     return (VK_SUCCESS == begin);
 }
 
-void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer, uint32_t deviceMask,
+void CommandBuffer::beginRenderPassDeviceGroup(uint32_t deviceMask,
+    const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
+    const std::vector<VkRect2D>& deviceRenderAreas /* {} */,
     const std::vector<ClearValue>& clearValues /* {} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
@@ -477,14 +484,16 @@ void CommandBuffer::beginRenderPassDeviceGroup(const std::shared_ptr<RenderPass>
     deviceGroupBeginInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO;
     deviceGroupBeginInfo.pNext = nullptr;
     deviceGroupBeginInfo.deviceMask = deviceMask;
-    deviceGroupBeginInfo.deviceRenderAreaCount = MAGMA_COUNT(renderAreas);
-    deviceGroupBeginInfo.pDeviceRenderAreas = renderAreas.data();
+    // Elements of VkDeviceGroupRenderPassBeginInfo::pDeviceRenderAreas override the value of VkRenderPassBeginInfo::renderArea
+    deviceGroupBeginInfo.deviceRenderAreaCount = MAGMA_COUNT(deviceRenderAreas);
+    deviceGroupBeginInfo.pDeviceRenderAreas = deviceRenderAreas.data();
     VkRenderPassBeginInfo beginInfo;
     beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     beginInfo.pNext = &deviceGroupBeginInfo;
     beginInfo.renderPass = *renderPass;
     beginInfo.framebuffer = *framebuffer;
-    beginInfo.renderArea = VkRect2D{0, 0, 0, 0}; // Elements of VkDeviceGroupRenderPassBeginInfo::pDeviceRenderAreas override the value of VkRenderPassBeginInfo::renderArea
+    beginInfo.renderArea.offset = VkOffset2D{0, 0};
+    beginInfo.renderArea.extent = deviceRenderAreas.empty() ? framebuffer->getExtent() : VkExtent2D{0, 0};
     beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
     MAGMA_STACK_ARRAY(VkClearValue, dereferencedClearValues, beginInfo.clearValueCount);
     for (const auto& clearValue : clearValues)

@@ -340,6 +340,7 @@ namespace magma
             const std::shared_ptr<RenderPass>& renderPass,
             const std::shared_ptr<Framebuffer>& framebuffer,
             const std::vector<ClearValue>& clearValues = {},
+            const VkRect2D& renderArea = {0, 0, 0, 0},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void nextSubpass(VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void endRenderPass() noexcept;
@@ -351,9 +352,10 @@ namespace magma
             uint32_t deviceMask,
             VkCommandBufferUsageFlags flags = 0) noexcept;
         void beginRenderPassDeviceGroup(
+            uint32_t deviceMask,
             const std::shared_ptr<RenderPass>& renderPass,
             const std::shared_ptr<Framebuffer>& framebuffer,
-            uint32_t deviceMask,
+            const std::vector<VkRect2D>& deviceRenderAreas = {},
             const std::vector<ClearValue>& clearValues = {},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void setDeviceMask(
@@ -434,17 +436,6 @@ namespace magma
         std::shared_ptr<Fence> getFence() const noexcept;
         uint32_t getDeviceMask() const noexcept { return deviceMask; }
 
-        VkRect2D getRenderArea() const noexcept;
-        void setRenderArea(const VkRect2D& rc) noexcept;
-        void setRenderArea(
-            int32_t x, int32_t y,
-            const VkExtent2D& extent) noexcept;
-        void setRenderArea(
-            int32_t x, int32_t y,
-            uint32_t width, uint32_t height) noexcept;
-        const std::vector<VkRect2D>& getRenderAreas() const noexcept;
-        void setRenderAreas(const std::vector<VkRect2D>& renderAreas) noexcept;
-
         void enableOcclusionQuery(
             bool enable,
             VkQueryControlFlags queryFlags) noexcept;
@@ -468,6 +459,7 @@ namespace magma
             const std::vector<ClearValue>& clearValues,
             const char *renderPassName,
             uint32_t renderPassColor,
+            const VkRect2D& renderArea = {0, 0, 0, 0},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
 
 #ifdef VK_KHR_device_group
@@ -477,9 +469,10 @@ namespace magma
             uint32_t blockColor,
             VkCommandBufferUsageFlags flags = 0) noexcept;
         void beginRenderPassDeviceGroup(
+            uint32_t deviceMask,
             const std::shared_ptr<RenderPass>& renderPass,
             const std::shared_ptr<Framebuffer>& framebuffer,
-            uint32_t deviceMask,
+            const std::vector<VkRect2D>& deviceRenderAreas,
             const std::vector<ClearValue>& clearValues,
             const char *renderPassName,
             uint32_t renderPassColor,
@@ -491,7 +484,6 @@ namespace magma
         std::shared_ptr<CommandPool> pool;
         std::shared_ptr<Fence> fence;
         uint32_t deviceMask = 0xFFFFFFFF;
-        std::vector<VkRect2D> renderAreas;
         VkBool32 occlusionQueryEnable = VK_FALSE;
         VkBool32 conditionalRenderingEnable = VK_FALSE;
         VkQueryControlFlags queryFlags = 0;

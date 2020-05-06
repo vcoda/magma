@@ -249,40 +249,6 @@ inline void CommandBuffer::endRenderPass() noexcept
     vkCmdEndRenderPass(handle);
 }
 
-inline void CommandBuffer::setRenderArea(const VkRect2D& renderArea) noexcept
-{
-    renderAreas = {renderArea};
-}
-
-inline VkRect2D CommandBuffer::getRenderArea() const noexcept
-{
-     if (!renderAreas.empty())
-         return renderAreas.front();
-     return VkRect2D();
-}
-
-inline void CommandBuffer::setRenderArea(int32_t x, int32_t y, const VkExtent2D& extent) noexcept
-{
-    const VkRect2D renderArea = {x, y, extent};
-    renderAreas = {renderArea};
-}
-
-inline void CommandBuffer::setRenderArea(int32_t x, int32_t y, uint32_t width, uint32_t height) noexcept
-{
-    const VkRect2D renderArea = {x, y, width, height};
-    renderAreas = {renderArea};
-}
-
-inline const std::vector<VkRect2D>& CommandBuffer::getRenderAreas() const noexcept
-{
-    return renderAreas;
-}
-
-inline void CommandBuffer::setRenderAreas(const std::vector<VkRect2D>& renderAreas) noexcept
-{
-    this->renderAreas = renderAreas;
-}
-
 inline void CommandBuffer::enableOcclusionQuery(bool enable, VkQueryControlFlags queryFlags) noexcept
 {
     occlusionQueryEnable = MAGMA_BOOLEAN(enable);
