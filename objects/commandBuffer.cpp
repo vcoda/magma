@@ -474,10 +474,9 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask,
     return (VK_SUCCESS == begin);
 }
 
-void CommandBuffer::beginRenderPassDeviceGroup(uint32_t deviceMask,
+void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
-    const std::vector<VkRect2D>& deviceRenderAreas /* {} */,
-    const std::vector<ClearValue>& clearValues /* {} */,
+    const std::vector<VkRect2D>& deviceRenderAreas /* {} */, const std::vector<ClearValue>& clearValues /* {} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     VkDeviceGroupRenderPassBeginInfo deviceGroupBeginInfo;

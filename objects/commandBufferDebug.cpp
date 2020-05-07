@@ -202,13 +202,13 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask, const char *blockName,
     return beginResult;
 }
 
-void CommandBuffer::beginRenderPassDeviceGroup(uint32_t deviceMask,
+void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
     const std::vector<VkRect2D>& deviceRenderAreas, const std::vector<ClearValue>& clearValues,
     const char *renderPassName, uint32_t renderPassColor,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    beginRenderPassDeviceGroup(deviceMask, renderPass, framebuffer, deviceRenderAreas, clearValues, contents);
+    beginDeviceGroupRenderPass(deviceMask, renderPass, framebuffer, deviceRenderAreas, clearValues, contents);
 #ifdef MAGMA_DEBUG_LABEL
     beginDebugLabel(renderPassName, renderPassColor);
     beginRenderPassMarked = VK_TRUE;

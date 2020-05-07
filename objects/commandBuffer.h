@@ -351,7 +351,7 @@ namespace magma
         bool beginDeviceGroup(
             uint32_t deviceMask,
             VkCommandBufferUsageFlags flags = 0) noexcept;
-        void beginRenderPassDeviceGroup(
+        void beginDeviceGroupRenderPass(
             uint32_t deviceMask,
             const std::shared_ptr<RenderPass>& renderPass,
             const std::shared_ptr<Framebuffer>& framebuffer,
@@ -468,7 +468,7 @@ namespace magma
             const char *blockName,
             uint32_t blockColor,
             VkCommandBufferUsageFlags flags = 0) noexcept;
-        void beginRenderPassDeviceGroup(
+        void beginDeviceGroupRenderPass(
             uint32_t deviceMask,
             const std::shared_ptr<RenderPass>& renderPass,
             const std::shared_ptr<Framebuffer>& framebuffer,
