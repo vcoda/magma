@@ -421,10 +421,8 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     else
         beginInfo.renderArea.extent = framebuffer->getExtent();
     beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
-    MAGMA_STACK_ARRAY(VkClearValue, dereferencedClearValues, beginInfo.clearValueCount);
-    for (const auto& clearValue : clearValues)
-        dereferencedClearValues.put(clearValue);
-    beginInfo.pClearValues = dereferencedClearValues;
+    beginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
+    static_assert(sizeof(VkClearValue) == sizeof(ClearValue), "size of ClearValue must be equal to size of VkClearValue");
     vkCmdBeginRenderPass(handle, &beginInfo, contents);
 #ifdef MAGMA_DEBUG_LABEL
     beginRenderPassMarked = VK_FALSE;
@@ -494,10 +492,8 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     beginInfo.renderArea.offset = VkOffset2D{0, 0};
     beginInfo.renderArea.extent = deviceRenderAreas.empty() ? framebuffer->getExtent() : VkExtent2D{0, 0};
     beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
-    MAGMA_STACK_ARRAY(VkClearValue, dereferencedClearValues, beginInfo.clearValueCount);
-    for (const auto& clearValue : clearValues)
-        dereferencedClearValues.put(clearValue);
-    beginInfo.pClearValues = dereferencedClearValues;
+    beginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
+    static_assert(sizeof(VkClearValue) == sizeof(ClearValue), "size of ClearValue must be equal to size of VkClearValue");
     vkCmdBeginRenderPass(handle, &beginInfo, contents);
 #ifdef MAGMA_DEBUG
     beginRenderPassMarked = VK_FALSE;
