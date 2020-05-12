@@ -24,6 +24,7 @@ namespace magma
     class PhysicalDevice;
     class Queue;
     class Fence;
+    class ResourcePool;
 
     /* Device objects represent logical connections to physical devices.
        Each device exposes a number of queue families each having one or more queues.
@@ -57,9 +58,12 @@ namespace magma
         // Non-API
         std::shared_ptr<PhysicalDevice> getPhysicalDevice() noexcept { return physicalDevice; }
         std::shared_ptr<const PhysicalDevice> getPhysicalDevice() const noexcept { return physicalDevice; }
+        std::shared_ptr<ResourcePool> getResourcePool() noexcept { return resourcePool; }
+        std::shared_ptr<const ResourcePool> getResourcePool() const noexcept { return resourcePool; }
 
     private:
         std::shared_ptr<PhysicalDevice> physicalDevice;
         mutable std::vector<std::pair<DeviceQueueDescriptor, std::weak_ptr<Queue>>> queues;
+        std::shared_ptr<ResourcePool> resourcePool;
     };
 } // namespace magma

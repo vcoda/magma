@@ -253,6 +253,7 @@
     <ClInclude Include="..\..\objects\rayTracingPipeline.h" />
     <ClInclude Include="..\..\objects\renderPass.h" />
     <ClInclude Include="..\..\objects\resource.h" />
+    <ClInclude Include="..\..\objects\resourcePool.h" />
     <ClInclude Include="..\..\objects\sampler.h" />
     <ClInclude Include="..\..\objects\semaphore.h" />
     <ClInclude Include="..\..\objects\shaderModule.h" />
@@ -361,6 +362,7 @@
     <ClCompile Include="..\..\objects\rayTracingPipeline.cpp" />
     <ClCompile Include="..\..\objects\renderPass.cpp" />
     <ClCompile Include="..\..\objects\resource.cpp" />
+    <ClCompile Include="..\..\objects\resourcePool.cpp" />
     <ClCompile Include="..\..\objects\sampler.cpp" />
     <ClCompile Include="..\..\objects\semaphore.cpp" />
     <ClCompile Include="..\..\objects\shaderModule.cpp" />
@@ -480,6 +482,7 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
     <None Include="..\..\objects\deviceMemory.inl" />
     <None Include="..\..\objects\indexBuffer.inl" />
     <None Include="..\..\objects\object.inl" />
+    <None Include="..\..\objects\resourcePool.inl" />
     <None Include="..\..\objects\srcTransferBuffer.inl" />
     <None Include="..\..\objects\storageBuffer.inl" />
     <None Include="..\..\objects\vertexBuffer.inl" />

@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "physicalDevice.h"
 #include "queue.h"
 #include "fence.h"
+#include "resourcePool.h"
 #include "../allocator/allocator.h"
 #include "../misc/deviceExtension.h"
 #include "../misc/exception.h"
@@ -36,7 +37,8 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     const std::vector<void *>& extendedDeviceFeatures,
     std::shared_ptr<IAllocator> allocator):
     Dispatchable<VkDevice>(VK_OBJECT_TYPE_DEVICE, nullptr, std::move(allocator)),
-    physicalDevice(std::move(physicalDevice))
+    physicalDevice(std::move(physicalDevice)),
+    resourcePool(std::make_shared<ResourcePool>())
 {
 #ifdef VK_KHR_get_physical_device_properties2
     VkPhysicalDeviceFeatures2KHR features;

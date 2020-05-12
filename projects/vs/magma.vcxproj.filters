@@ -498,6 +498,9 @@
     <ClInclude Include="..\..\objects\objectType.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\resourcePool.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -773,6 +776,9 @@
     <ClCompile Include="..\..\allocator\objectAllocator.cpp">
       <Filter>Source Files\allocator</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\objects\resourcePool.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\auxiliary\immediateRender.inl">
@@ -867,6 +873,9 @@
     </None>
     <None Include="..\..\descriptors\subpassDependency.inl">
       <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\objects\resourcePool.inl">
+      <Filter>Header Files\objects</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

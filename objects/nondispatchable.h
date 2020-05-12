@@ -17,6 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "object.h"
+#include "device.h"
+#include "resourcePool.h"
 
 namespace magma
 {
@@ -45,8 +47,32 @@ namespace magma
         explicit NonDispatchable(VkObjectType objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator) noexcept:
+#ifdef MAGMA_X64
+            Object<Type>(objectType, device, std::move(allocator)),
+#else
             Object<Type>(objectType, std::move(device), std::move(allocator)),
-            handle(VK_NULL_HANDLE) {}
+#endif
+            handle(VK_NULL_HANDLE)
+        {
+#ifdef MAGMA_X64
+            if (device)
+            {   // Put resource in pool
+                std::shared_ptr<ResourcePool> pool = device->getResourcePool();
+                pool->getPool<NonDispatchable<Type>>().registerResource(this);
+            }
+#endif // MAGMA_X64
+        }
+
+        ~NonDispatchable()
+        {
+#ifdef MAGMA_X64
+            if (std::shared_ptr<Device> device = Object<Type>::getDevice())
+            {   // Remove resource from pool
+                std::shared_ptr<ResourcePool> pool = device->getResourcePool();
+                pool->getPool<NonDispatchable<Type>>().unregisterResource(this);
+            }
+#endif // MAGMA_X64
+        }
 
     protected:
         Type handle;
