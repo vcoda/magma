@@ -90,6 +90,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
 
 Device::~Device()
 {
+    MAGMA_ASSERT(resourcePool->hasAnyResource() == false);
     vkDestroyDevice(handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
