@@ -20,9 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    template<typename Type>
-    class NonDispatchable;
-
     /* Resource pool stores pointers to different Vulkan objects that were created by device.
        Pool allows to keep statistics about resource usage, memory allocations etc.
        This may be used for application profiling, memory usage optimization and so on.
