@@ -51,7 +51,7 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<const Buffer> vertexData, V
     geometry.triangles.indexType = indexType;
     geometry.triangles.transformData = MAGMA_OPTIONAL_HANDLE(transformData);
     geometry.triangles.transformOffset = transformOffset;
-    memset(&geometry.aabbs, 0, sizeof(VkGeometryAABBNV));
+    core::memzero(geometry.aabbs);
 }
 
 GeometryTriangles::GeometryTriangles(std::shared_ptr<const VertexBuffer> vertexData, VkDeviceSize vertexStride, VkFormat vertexFormat,
@@ -75,7 +75,7 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<const VertexBuffer> vertexD
     geometry.triangles.indexType = indexData->getIndexType();
     geometry.triangles.transformData = MAGMA_OPTIONAL_HANDLE(transformData);
     geometry.triangles.transformOffset = transformOffset;
-    memset(&geometry.aabbs, 0, sizeof(VkGeometryAABBNV));
+    core::memzero(geometry.aabbs);
 }
 
 GeometryBVH::GeometryBVH(std::shared_ptr<const Buffer> aabbData, uint32_t numAABBs, uint32_t stride, VkDeviceSize offset,
@@ -88,7 +88,7 @@ GeometryBVH::GeometryBVH(std::shared_ptr<const Buffer> aabbData, uint32_t numAAB
     geometry.aabbs.numAABBs = numAABBs;
     geometry.aabbs.stride = stride;
     geometry.aabbs.offset = offset;
-    memset(&geometry.triangles, 0, sizeof(VkGeometryTrianglesNV));
+    core::memzero(geometry.triangles);
 }
 #endif // VK_NV_ray_tracing
 } // namespace magma

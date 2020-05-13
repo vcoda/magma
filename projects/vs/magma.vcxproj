@@ -161,6 +161,7 @@
     <ClInclude Include="..\..\barriers\bufferMemoryBarrier.h" />
     <ClInclude Include="..\..\barriers\memoryBarrier.h" />
     <ClInclude Include="..\..\barriers\imageMemoryBarrier.h" />
+    <ClInclude Include="..\..\core\memzero.h" />
     <ClInclude Include="..\..\core\noncopyableConstexpr.h" />
     <ClInclude Include="..\..\core\copy.h" />
     <ClInclude Include="..\..\core\copyMemory.h" />

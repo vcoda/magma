@@ -25,6 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <cassert>
 
 #include "dereference.h"
+#include "memzero.h"
 
 #if defined(__LP64__) ||\
     defined(_WIN64) ||\

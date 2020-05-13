@@ -125,7 +125,8 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
         info.dependencyCount);
     for (const auto& attachment : attachments)
         core::hashCombine(hash, attachment.hash());
-    core::hashCombine(hash, subpass.hash()); subpass = {};
+    core::hashCombine(hash, subpass.hash());
+    core::memzero(subpass); // Aware destructor
     for (const auto& dependency : dependencies)
         core::hashCombine(hash, dependency.hash());
 }
