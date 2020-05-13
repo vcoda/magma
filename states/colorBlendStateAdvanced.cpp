@@ -63,7 +63,7 @@ AdvancedColorBlendState::AdvancedColorBlendState(const std::vector<AdvancedColor
     colorBlendAdvanced->blendOverlap = blendOverlap;
     pNext = colorBlendAdvanced;
     attachmentCount = MAGMA_COUNT(attachments);
-    pAttachments = core::castCopyVector<VkPipelineColorBlendAttachmentState>(attachments);
+    pAttachments = core::copyVector<VkPipelineColorBlendAttachmentState>(attachments);
 }
 
 AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendState& other)

@@ -22,68 +22,62 @@ namespace magma
 {
 namespace core
 {
-template<typename Type>
-constexpr std::size_t hash(const Type& arg) noexcept
+template<typename T> constexpr std::size_t hash(const T& arg) noexcept
 {
-    std::hash<Type> hasher;
+    std::hash<T> hasher;
     return hasher(arg);
 }
 
-template<typename Type>
-constexpr void hashNext(std::size_t& seed, const Type& arg) noexcept
+template<typename T> constexpr void hashNext(std::size_t& seed, const T& arg) noexcept
 {
     hashCombine(seed, hash(arg));
 }
 
-template<typename Type, typename... Args>
-constexpr void hashNext(std::size_t& seed, const Type& arg, Args... args) noexcept
+template<typename T, typename... Args>
+constexpr void hashNext(std::size_t& seed, const T& arg, Args... args) noexcept
 {
     hashCombine(seed, hash(arg));
     hashNext(seed, args...);
 }
 
-template<typename Type, typename... Args>
-constexpr std::size_t hashArgs(const Type& arg, Args... args) noexcept
+template<typename T, typename... Args>
+constexpr std::size_t hashArgs(const T& arg, Args... args) noexcept
 {
     std::size_t value = hash(arg);
     hashNext(value, args...);
     return value;
 }
 
-template<typename Type>
-inline std::size_t hashArray(const Type *const arr, std::size_t count) noexcept
+template<typename T> inline std::size_t hashArray(const T *const arr, std::size_t count) noexcept
 {
-    std::hash<Type> hasher;
+    std::hash<T> hasher;
     std::size_t value = 0;
     for (std::size_t i = 0; i < count; ++i)
         hashCombine(value, hasher(arr[i]));
     return value;
 }
 
-template<typename Type>
-inline std::size_t hashVector(const std::vector<Type>& v) noexcept
+template<typename T> inline std::size_t hashVector(const std::vector<T>& v) noexcept
 {
-    std::hash<Type> hasher;
+    std::hash<T> hasher;
     std::size_t value = 0;
     for (const auto& it : v)
         hashCombine(value, hasher(it));
     return value;
 }
 
-template<typename Type>
-inline std::size_t hashList(const std::list<Type>& ls) noexcept
+template<typename T> inline std::size_t hashList(const std::list<T>& ls) noexcept
 {
-    std::hash<Type> hasher;
+    std::hash<T> hasher;
     std::size_t value = 0;
     for (const auto& it : ls)
         hashCombine(value, hasher(it));
     return value;
 }
 
-template<typename Type>
-inline std::size_t hashString(const std::basic_string<Type>& str) noexcept
+template<typename T> inline std::size_t hashString(const std::basic_string<T>& str) noexcept
 {
-    std::hash<std::basic_string<Type>> hasher;
+    std::hash<std::basic_string<T>> hasher;
     return hasher(str);
 }
 } // namespace core
