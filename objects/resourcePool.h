@@ -116,10 +116,19 @@ namespace magma
         Pool<NonDispatchable<VkFramebuffer>> framebuffers;
         Pool<NonDispatchable<VkCommandPool>> commandPools;
         // Non-core types
+#ifdef VK_KHR_surface
         Pool<NonDispatchable<VkSurfaceKHR>> surfaces;
+#endif
+#ifdef VK_KHR_swapchain
         Pool<NonDispatchable<VkSwapchainKHR>> swapchains;
+#endif
+#ifdef VK_KHR_display
         Pool<NonDispatchable<VkDisplayKHR>> displays;
+        Pool<NonDispatchable<VkDisplayModeKHR>> displayModes;
+#endif
+#ifdef VK_EXT_debug_report
         Pool<NonDispatchable<VkDebugReportCallbackEXT>> debugReportCallbacks;
+#endif
 #ifdef VK_NV_ray_tracing
         Pool<NonDispatchable<VkAccelerationStructureNV>> accelerationStructures;
 #endif
