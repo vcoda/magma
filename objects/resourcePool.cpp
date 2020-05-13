@@ -82,18 +82,8 @@ ResourcePool::ResourceStatistics ResourcePool::countResources() const noexcept
     statistics.framebufferCount = framebuffers.count();
     statistics.commandPoolCount = commandPools.count();
     // Non-core types
-#ifdef VK_KHR_surface
-    statistics.surfaceCount = surfaces.count();
-#endif
 #ifdef VK_KHR_swapchain
     statistics.swapchainCount = swapchains.count();
-#endif
-#ifdef VK_KHR_display
-    statistics.displayCount = displays.count();
-    statistics.displayModeCount = displayModes.count();
-#endif
-#ifdef VK_EXT_debug_report
-    statistics.debugReportCallbackCount = debugReportCallbacks.count();
 #endif
 #ifdef VK_NV_ray_tracing
     statistics.accelerationStructureCount = accelerationStructures.count();
@@ -143,18 +133,8 @@ bool ResourcePool::hasAnyResource() const noexcept
         descriptorSets.count() > 0 ||
         framebuffers.count() > 0 ||
         commandPools.count() > 0 ||
-#ifdef VK_KHR_surface
-        surfaces.count() > 0 ||
-#endif
 #ifdef VK_KHR_swapchain
         swapchains.count() > 0 ||
-#endif
-#ifdef VK_KHR_display
-        displays.count() > 0 ||
-        displayModes.count() > 0 ||
-#endif
-#ifdef VK_EXT_debug_report
-        debugReportCallbacks.count() > 0 ||
 #endif
 #ifdef VK_NV_ray_tracing
         accelerationStructures.count() > 0 ||

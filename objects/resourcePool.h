@@ -63,11 +63,7 @@ namespace magma
             uint32_t framebufferCount = 0;
             uint32_t commandPoolCount = 0;
             // Non-core types
-            uint32_t surfaceCount = 0;
             uint32_t swapchainCount = 0;
-            uint32_t displayCount = 0;
-            uint32_t displayModeCount = 0;
-            uint32_t debugReportCallbackCount = 0;
             uint32_t accelerationStructureCount = 0;
         };
 
