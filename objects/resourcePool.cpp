@@ -24,9 +24,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ResourcePool::ResourceStatistics ResourcePool::countResources() const noexcept
+ResourcePool::DeviceResources ResourcePool::countDeviceResources() const noexcept
 {
-    ResourceStatistics statistics;
+    DeviceResources statistics;
     statistics.semaphoreCount = semaphores.count();
     statistics.fenceCount = fences.count();
     statistics.deviceMemoryCount = deviceMemories.count();
@@ -87,6 +87,16 @@ ResourcePool::ResourceStatistics ResourcePool::countResources() const noexcept
 #endif
 #ifdef VK_NV_ray_tracing
     statistics.accelerationStructureCount = accelerationStructures.count();
+#endif
+    return statistics;
+}
+
+ResourcePool::PhysicalDeviceResources ResourcePool::countPhysicalDeviceResources() const noexcept
+{
+    PhysicalDeviceResources statistics;
+#ifdef VK_KHR_display
+    statistics.displayCount = displays.count();
+    statistics.displayModeCount = displayModes.count();
 #endif
     return statistics;
 }

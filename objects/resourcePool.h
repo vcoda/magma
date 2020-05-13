@@ -34,7 +34,7 @@ namespace magma
         friend class NonDispatchable;
 
     public:
-        struct ResourceStatistics
+        struct DeviceResources
         {
             uint32_t semaphoreCount = 0;
             uint32_t fenceCount = 0;
@@ -67,8 +67,15 @@ namespace magma
             uint32_t accelerationStructureCount = 0;
         };
 
+        struct PhysicalDeviceResources
+        {
+            uint32_t displayCount = 0;
+            uint32_t displayModeCount = 0;
+        };
+
     public:
-        ResourceStatistics countResources() const noexcept;
+        DeviceResources countDeviceResources() const noexcept;
+        PhysicalDeviceResources countPhysicalDeviceResources() const noexcept;
         VkDeviceSize countAllocatedDeviceLocalMemory() const noexcept;
         VkDeviceSize countAllocatedHostVisibleMemory() const noexcept;
         bool hasAnyResource() const noexcept;
