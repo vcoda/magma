@@ -36,40 +36,39 @@ namespace magma
     public:
         struct ResourceStatistics
         {
-            uint32_t semaphoreCount;
-            uint32_t fenceCount;
-            uint32_t deviceMemoryCount;
-            uint32_t bufferCount;
-            uint32_t image1DCount;
-            uint32_t image1DArrayCount;
-            uint32_t image2DCount;
-            uint32_t image2DArrayCount;
-            uint32_t image3DCount;
-            uint32_t eventCount;
-            uint32_t queryPoolCount;
-            uint32_t bufferViewCount;
-            uint32_t imageViewCount;
-            uint32_t shaderModuleCount;
-            uint32_t pipelineCacheCount;
-            uint32_t pipelineLayoutCount;
-            uint32_t renderPassCount;
-            uint32_t graphicsPipelineCount;
-            uint32_t computePipelineCount;
-            uint32_t rayTracingPipelineCount;
-            uint32_t descriptorSetLayoutCount;
-            uint32_t samplerCount;
-            uint32_t descriptorPoolCount;
-            uint32_t descriptorSetCount;
-            uint32_t framebufferCount;
-            uint32_t commandPoolCount;
+            uint32_t semaphoreCount = 0;
+            uint32_t fenceCount = 0;
+            uint32_t deviceMemoryCount = 0;
+            uint32_t bufferCount = 0;
+            uint32_t image1DCount = 0;
+            uint32_t image1DArrayCount = 0;
+            uint32_t image2DCount = 0;
+            uint32_t image2DArrayCount = 0;
+            uint32_t image3DCount = 0;
+            uint32_t eventCount = 0;
+            uint32_t queryPoolCount = 0;
+            uint32_t bufferViewCount = 0;
+            uint32_t imageViewCount = 0;
+            uint32_t shaderModuleCount = 0;
+            uint32_t pipelineCacheCount = 0;
+            uint32_t pipelineLayoutCount = 0;
+            uint32_t renderPassCount = 0;
+            uint32_t graphicsPipelineCount = 0;
+            uint32_t computePipelineCount = 0;
+            uint32_t rayTracingPipelineCount = 0;
+            uint32_t descriptorSetLayoutCount = 0;
+            uint32_t samplerCount = 0;
+            uint32_t descriptorPoolCount = 0;
+            uint32_t descriptorSetCount = 0;
+            uint32_t framebufferCount = 0;
+            uint32_t commandPoolCount = 0;
             // Non-core types
-            uint32_t surfaceCount;
-            uint32_t swapchainCount;
-            uint32_t displayCount;
-            uint32_t debugReportCallbackCount;
-#ifdef VK_NV_ray_tracing
-            uint32_t accelerationStructureCount;
-#endif
+            uint32_t surfaceCount = 0;
+            uint32_t swapchainCount = 0;
+            uint32_t displayCount = 0;
+            uint32_t displayModeCount = 0;
+            uint32_t debugReportCallbackCount = 0;
+            uint32_t accelerationStructureCount = 0;
         };
 
     public:

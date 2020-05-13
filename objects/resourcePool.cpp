@@ -31,11 +31,6 @@ ResourcePool::ResourceStatistics ResourcePool::countResources() const noexcept
     statistics.fenceCount = fences.count();
     statistics.deviceMemoryCount = deviceMemories.count();
     statistics.bufferCount = buffers.count();
-    statistics.image1DCount = 0;
-    statistics.image1DArrayCount = 0;
-    statistics.image2DCount = 0;
-    statistics.image2DArrayCount = 0;
-    statistics.image3DCount = 0;
     images.forEach<Image>([&statistics](const Image *image) {
         switch (image->getType())
         {
@@ -64,9 +59,6 @@ ResourcePool::ResourceStatistics ResourcePool::countResources() const noexcept
     statistics.pipelineCacheCount = pipelineCaches.count();
     statistics.pipelineLayoutCount = pipelineLayouts.count();
     statistics.renderPassCount = renderPasses.count();
-    statistics.graphicsPipelineCount = 0;
-    statistics.computePipelineCount = 0;
-    statistics.rayTracingPipelineCount = 0;
     pipelines.forEach<Pipeline>([&statistics](const Pipeline *pipeline) {
         switch (pipeline->getBindPoint())
         {
