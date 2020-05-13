@@ -125,6 +125,9 @@ namespace magma
 #ifdef VK_EXT_debug_report
         Pool<NonDispatchable<VkDebugReportCallbackEXT>> debugReportCallbacks;
 #endif
+#ifdef VK_EXT_debug_utils
+        Pool<NonDispatchable<VkDebugUtilsMessengerEXT>> debugUtilsMessengers;
+#endif
 #ifdef VK_NV_ray_tracing
         Pool<NonDispatchable<VkAccelerationStructureNV>> accelerationStructures;
 #endif

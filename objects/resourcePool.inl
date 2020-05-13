@@ -78,6 +78,9 @@ MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(NonDispatchable<VkDisplayModeKHR>, displa
 #ifdef VK_EXT_debug_report
 MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(NonDispatchable<VkDebugReportCallbackEXT>, debugReportCallbacks);
 #endif
+#ifdef VK_EXT_debug_utils
+MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(NonDispatchable<VkDebugUtilsMessengerEXT>, debugUtilsMessengers);
+#endif
 #ifdef VK_NV_ray_tracing
 MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(NonDispatchable<VkAccelerationStructureNV>, accelerationStructures);
 #endif
