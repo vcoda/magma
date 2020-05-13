@@ -112,6 +112,7 @@ MAGMA_OBJS= \
 	states/colorBlendStateAdvanced.o \
 	states/multisampleState.o \
 	states/vertexInputState.o \
+	states/vertexInputStructure.o \
 	states/viewportState.o
 
 DEPS := $(MAGMA_OBJS:.o=.d)
