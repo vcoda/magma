@@ -91,6 +91,7 @@ MAGMA_OBJS= \
 	objects/rayTracingPipeline.o \
 	objects/renderPass.o \
 	objects/resource.o \
+	objects/resourcePool.o \
 	objects/sampler.o \
 	objects/semaphore.o \
 	objects/shaderModule.o \
