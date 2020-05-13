@@ -110,7 +110,7 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
         std::move(allocator));
 
     // Initialize glyphs
-    memset(ascii, 0, sizeof(Glyph) * 32); // Zero control codes
+    core::memzero(ascii); // Zero control codes
     ascii[' '] = {0x000000,0x000000,0x000000,0x000000};
     ascii['!'] = {0x003078,0x787830,0x300030,0x300000};
     ascii['"'] = {0x006666,0x662400,0x000000,0x000000};
