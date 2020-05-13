@@ -40,7 +40,11 @@ namespace magma
             uint32_t fenceCount;
             uint32_t deviceMemoryCount;
             uint32_t bufferCount;
-            uint32_t imageCount;
+            uint32_t image1DCount;
+            uint32_t image1DArrayCount;
+            uint32_t image2DCount;
+            uint32_t image2DArrayCount;
+            uint32_t image3DCount;
             uint32_t eventCount;
             uint32_t queryPoolCount;
             uint32_t bufferViewCount;

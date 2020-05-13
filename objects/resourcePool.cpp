@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "resourcePool.h"
 #include "../objects/deviceMemory.h"
+#include "../objects/image.h"
 #include "../objects/pipeline.h"
 
 namespace magma
@@ -30,7 +31,31 @@ ResourcePool::ResourceStatistics ResourcePool::countResources() const noexcept
     statistics.fenceCount = fences.count();
     statistics.deviceMemoryCount = deviceMemories.count();
     statistics.bufferCount = buffers.count();
-    statistics.imageCount = images.count();
+    statistics.image1DCount = 0;
+    statistics.image1DArrayCount = 0;
+    statistics.image2DCount = 0;
+    statistics.image2DArrayCount = 0;
+    statistics.image3DCount = 0;
+    images.forEach<Image>([&statistics](const Image *image) {
+        switch (image->getType())
+        {
+        case VK_IMAGE_TYPE_1D:
+            if (image->getArrayLayers() == 1)
+                ++statistics.image1DCount;
+            else
+                ++statistics.image1DArrayCount;
+            break;
+        case VK_IMAGE_TYPE_2D:
+            if (image->getArrayLayers() == 1)
+                ++statistics.image2DCount;
+            else
+                ++statistics.image2DArrayCount;
+            break;
+        case VK_IMAGE_TYPE_3D:
+            ++statistics.image3DCount;
+            break;
+        }
+    });
     statistics.eventCount = events.count();
     statistics.queryPoolCount = queryPools.count();
     statistics.bufferViewCount = bufferViews.count();
