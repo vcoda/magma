@@ -27,6 +27,8 @@ MAGMA_OBJS= \
 	barriers/bufferMemoryBarrier.o \
 	barriers/imageMemoryBarrier.o \
 	\
+	core/pch.o \
+	\
 	descriptors/subpass.o \
 	\
 	extensions/extensions.o \
@@ -44,8 +46,6 @@ MAGMA_OBJS= \
 	misc/format.o \
 	misc/geometry.o \
 	misc/scopedDebugMarker.o \
-	\
-	core/pch.o \
 	\
 	objects/accelerationStructure.o \
 	objects/buffer.o \
