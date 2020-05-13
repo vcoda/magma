@@ -67,6 +67,9 @@ namespace magma
             uint32_t swapchainCount;
             uint32_t displayCount;
             uint32_t debugReportCallbackCount;
+#ifdef VK_NV_ray_tracing
+            uint32_t accelerationStructureCount;
+#endif
         };
 
     public:

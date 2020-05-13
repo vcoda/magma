@@ -94,6 +94,9 @@ ResourcePool::ResourceStatistics ResourcePool::countResources() const noexcept
     statistics.swapchainCount = swapchains.count();
     statistics.displayCount = displays.count();
     statistics.debugReportCallbackCount = debugReportCallbacks.count();
+#ifdef VK_NV_ray_tracing
+    statistics.accelerationStructureCount = accelerationStructures.count();
+#endif
     return statistics;
 }
 
@@ -142,6 +145,10 @@ bool ResourcePool::hasAnyResource() const noexcept
         surfaces.count() > 0 ||
         swapchains.count() > 0 ||
         displays.count() > 0 ||
-        debugReportCallbacks.count() > 0;
+        debugReportCallbacks.count() > 0 ||
+#ifdef VK_NV_ray_tracing
+        accelerationStructures.count() > 0 ||
+#endif
+        false;
 }
 } // namespace magma
