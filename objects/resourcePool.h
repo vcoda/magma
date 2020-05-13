@@ -78,7 +78,7 @@ namespace magma
         PhysicalDeviceResources countPhysicalDeviceResources() const noexcept;
         VkDeviceSize countAllocatedDeviceLocalMemory() const noexcept;
         VkDeviceSize countAllocatedHostVisibleMemory() const noexcept;
-        bool hasAnyResource() const noexcept;
+        bool hasAnyDeviceResource() const noexcept;
 
     private:
         template<typename Type>

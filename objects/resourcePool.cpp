@@ -121,7 +121,7 @@ VkDeviceSize ResourcePool::countAllocatedHostVisibleMemory() const noexcept
     return allocatedSize;
 }
 
-bool ResourcePool::hasAnyResource() const noexcept
+bool ResourcePool::hasAnyDeviceResource() const noexcept
 {
     return semaphores.count() > 0 ||
         fences.count() > 0 ||
