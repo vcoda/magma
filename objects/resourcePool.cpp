@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/deviceMemory.h"
 #include "../objects/buffer.h"
 #include "../objects/image.h"
+#include "../objects/accelerationStructure.h"
 #include "../objects/pipeline.h"
 
 namespace magma
@@ -150,6 +151,21 @@ VkDeviceSize ResourcePool::countAllocatedImageMemory() const noexcept
                 imageAllocatedSize += memory->getSize();
         });
     return imageAllocatedSize;
+}
+
+VkDeviceSize ResourcePool::countAllocatedAccelerationStructureMemory() const noexcept
+{
+    VkDeviceSize accelerationStructureAllocatedSize = 0;
+#ifdef VK_NV_ray_tracing
+    images.forEach<AccelerationStructure>(
+        [&accelerationStructureAllocatedSize](const AccelerationStructure *accelerationStructure)
+        {
+            std::shared_ptr<const DeviceMemory> memory = accelerationStructure->getMemory();
+            if (memory)
+                accelerationStructureAllocatedSize += memory->getSize();
+        });
+#endif // VK_NV_ray_tracing
+    return accelerationStructureAllocatedSize;
 }
 
 bool ResourcePool::hasAnyDeviceResource() const noexcept
