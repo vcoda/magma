@@ -104,43 +104,51 @@ ResourcePool::PhysicalDeviceResources ResourcePool::countPhysicalDeviceResources
 
 VkDeviceSize ResourcePool::countAllocatedDeviceLocalMemory() const noexcept
 {
-    VkDeviceSize allocatedSize = 0;
-    deviceMemories.forEach<DeviceMemory>([&allocatedSize](const DeviceMemory *memory) {
-        if (memory->local())
-            allocatedSize += memory->getSize();
-    });
-    return allocatedSize;
+    VkDeviceSize deviceLocalAllocatedSize = 0;
+    deviceMemories.forEach<DeviceMemory>(
+        [&deviceLocalAllocatedSize](const DeviceMemory *memory)
+        {
+            if (memory->local())
+                deviceLocalAllocatedSize += memory->getSize();
+        });
+    return deviceLocalAllocatedSize;
 }
 
 VkDeviceSize ResourcePool::countAllocatedHostVisibleMemory() const noexcept
 {
-    VkDeviceSize allocatedSize = 0;
-    deviceMemories.forEach<DeviceMemory>([&allocatedSize](const DeviceMemory *memory) {
-        if (memory->hostVisible())
-            allocatedSize += memory->getSize();
-    });
-    return allocatedSize;
+    VkDeviceSize hostVisibleAllocatedSize = 0;
+    deviceMemories.forEach<DeviceMemory>(
+        [&hostVisibleAllocatedSize](const DeviceMemory *memory)
+        {
+            if (memory->hostVisible())
+                hostVisibleAllocatedSize += memory->getSize();
+        });
+    return hostVisibleAllocatedSize;
 }
 
 VkDeviceSize ResourcePool::countAllocatedBufferMemory() const noexcept
 {
     VkDeviceSize bufferAllocatedSize = 0;
-    buffers.forEach<Buffer>([&bufferAllocatedSize](const Buffer *buffer) {
-        std::shared_ptr<const DeviceMemory> memory = buffer->getMemory();
-        if (memory)
-            bufferAllocatedSize += memory->getSize();
-    });
+    buffers.forEach<Buffer>(
+        [&bufferAllocatedSize](const Buffer *buffer)
+        {
+            std::shared_ptr<const DeviceMemory> memory = buffer->getMemory();
+            if (memory)
+                bufferAllocatedSize += memory->getSize();
+        });
     return bufferAllocatedSize;
 }
 
 VkDeviceSize ResourcePool::countAllocatedImageMemory() const noexcept
 {
     VkDeviceSize imageAllocatedSize = 0;
-    images.forEach<Image>([&imageAllocatedSize](const Image *image) {
-        std::shared_ptr<const DeviceMemory> memory = image->getMemory();
-        if (memory)
-            imageAllocatedSize += memory->getSize();
-    });
+    images.forEach<Image>(
+        [&imageAllocatedSize](const Image *image)
+        {
+            std::shared_ptr<const DeviceMemory> memory = image->getMemory();
+            if (memory)
+                imageAllocatedSize += memory->getSize();
+        });
     return imageAllocatedSize;
 }
 
