@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "resourcePool.h"
 #include "../objects/deviceMemory.h"
+#include "../objects/buffer.h"
 #include "../objects/image.h"
 #include "../objects/pipeline.h"
 
@@ -119,6 +120,28 @@ VkDeviceSize ResourcePool::countAllocatedHostVisibleMemory() const noexcept
             allocatedSize += memory->getSize();
     });
     return allocatedSize;
+}
+
+VkDeviceSize ResourcePool::countAllocatedBufferMemory() const noexcept
+{
+    VkDeviceSize bufferAllocatedSize = 0;
+    buffers.forEach<Buffer>([&bufferAllocatedSize](const Buffer *buffer) {
+        std::shared_ptr<const DeviceMemory> memory = buffer->getMemory();
+        if (memory)
+            bufferAllocatedSize += memory->getSize();
+    });
+    return bufferAllocatedSize;
+}
+
+VkDeviceSize ResourcePool::countAllocatedImageMemory() const noexcept
+{
+    VkDeviceSize imageAllocatedSize = 0;
+    images.forEach<Image>([&imageAllocatedSize](const Image *image) {
+        std::shared_ptr<const DeviceMemory> memory = image->getMemory();
+        if (memory)
+            imageAllocatedSize += memory->getSize();
+    });
+    return imageAllocatedSize;
 }
 
 bool ResourcePool::hasAnyDeviceResource() const noexcept
