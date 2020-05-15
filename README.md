@@ -76,6 +76,8 @@ typical operations used in 3D graphics. For example, sometimes I miss immediate 
 a few primitives with glBegin/glEnd. Or often there is need to quickly present rendered image to the screen, or create shader from GLSL source
 instead of pre-compiled SPIR-V binary and so on. Auxiliary objects are placed in nested namespace and are not part of the Magma core.
 
+Some auxiliary objects use built-in precompiled shaders. Hash of a bytecode of these shaders calculated in compile-time to reduce loading overhead.
+
 ## Dependencies
 
 Library fully depends on STL and has not been designed to be used with custom containers. It doesn't use file input/output. There are no dependencies 
