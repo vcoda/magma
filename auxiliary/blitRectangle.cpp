@@ -139,17 +139,23 @@ std::shared_ptr<ShaderModule> BlitRectangle::createVertexShader(std::shared_ptr<
 {   // https://www.khronos.org/registry/OpenGL/extensions/NV/NV_fill_rectangle.txt;
     if (device->getPhysicalDevice()->checkExtensionSupport("VK_NV_fill_rectangle"))
     {
+constexpr
 #include "spirv/output/blitv_nv"
-        return std::make_shared<ShaderModule>(std::move(device), vsBlitNV, 0, nullptr, std::move(allocator));
+        constexpr std::size_t vsBlitNVHash = core::hashArray(vsBlitNV);
+        return std::make_shared<ShaderModule>(std::move(device), vsBlitNV, vsBlitNVHash, 0, nullptr, std::move(allocator));
     }
+constexpr
 #include "spirv/output/blitv"
-    return std::make_shared<ShaderModule>(std::move(device), vsBlit, 0, nullptr, std::move(allocator));
+    constexpr std::size_t vsBlitHash = core::hashArray(vsBlit);
+    return std::make_shared<ShaderModule>(std::move(device), vsBlit, vsBlitHash, 0, nullptr, std::move(allocator));
 }
 
 std::shared_ptr<ShaderModule> BlitRectangle::createFragmentShader(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) const
 {
+constexpr
 #include "spirv/output/blitf"
-    return std::make_shared<ShaderModule>(std::move(device), fsBlit, 0, nullptr, std::move(allocator));
+    constexpr std::size_t fsBlitHash = core::hashArray(fsBlit);
+    return std::make_shared<ShaderModule>(std::move(device), fsBlit, fsBlitHash, 0, nullptr, std::move(allocator));
 }
 } // namespace aux
 } // namespace magma

@@ -26,7 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *bytecode, std::size_t bytecodeSize,
-    VkShaderModuleCreateFlags flags /* 0 */,
+    std::size_t bytecodeHash /* 0 */, VkShaderModuleCreateFlags flags /* 0 */,
     std::shared_ptr<ValidationCache> validationCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_SHADER_MODULE, std::move(device), std::move(allocator))
@@ -55,19 +55,24 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
     info.pCode = bytecode;
     const VkResult create = vkCreateShaderModule(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create shader module");
-    this->bytecode.resize(info.codeSize); // codeSize is the size, in bytes, of the code pointed to by pCode
-    memcpy(this->bytecode.data(), info.pCode, info.codeSize);
     hash = core::hashArgs(
         info.sType,
         info.flags,
         info.codeSize);
+    if (bytecodeHash)
+        core::hashCombine(hash, bytecodeHash);
+    else
+    {   // Store bytecode for future hash computation
+        this->bytecode.resize(info.codeSize); // codeSize is the size, in bytes, of the code pointed to by pCode
+        memcpy(this->bytecode.data(), info.pCode, info.codeSize);
+    }
 }
 
 ShaderModule::ShaderModule(std::shared_ptr<Device> device, const std::vector<SpirvWord>& bytecode,
-    VkShaderModuleCreateFlags flags /* 0 */,
+    std::size_t bytecodeHash /* 0 */, VkShaderModuleCreateFlags flags /* 0 */,
     std::shared_ptr<ValidationCache> validationCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    ShaderModule(std::move(device), bytecode.data(), bytecode.size() * sizeof(SpirvWord), flags,
+    ShaderModule(std::move(device), bytecode.data(), bytecode.size() * sizeof(SpirvWord), bytecodeHash, flags,
         std::move(validationCache), std::move(allocator))
 {}
 
@@ -79,8 +84,9 @@ ShaderModule::~ShaderModule()
 std::size_t ShaderModule::getHash() noexcept
 {
     if (!bytecode.empty())
-    {   // Compute complex hash on demand, may take time for large shaders
-        core::hashCombine(hash, core::hashVector(bytecode));
+    {   // Compute hash on demand, may take time for large shaders
+        const std::size_t bytecodeHash = core::hashVector(bytecode);
+        core::hashCombine(hash, bytecodeHash);
         std::vector<char>().swap(bytecode);
     }
     return hash;

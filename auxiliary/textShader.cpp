@@ -89,10 +89,14 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
     descriptorSet->update(2, glyphBuffer);
     std::shared_ptr<PipelineLayout> pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout);
     // Load shaders
+constexpr
 #include "spirv/output/blitv"
+constexpr
 #include "spirv/output/fontf"
-    const VertexShaderStage vertexShader(std::make_shared<ShaderModule>(device, vsBlit, 0, nullptr, allocator), "main");
-    const FragmentShaderStage fragmentShader(std::make_shared<ShaderModule>(device, fsFont, 0, nullptr, allocator), "main");
+    constexpr std::size_t vsBlitHash = core::hashArray(vsBlit);
+    const VertexShaderStage vertexShader(std::make_shared<ShaderModule>(device, vsBlit, vsBlitHash, 0, nullptr, allocator), "main");
+    constexpr std::size_t fsFontHash = core::hashArray(fsFont);
+    const FragmentShaderStage fragmentShader(std::make_shared<ShaderModule>(device, fsFont, fsFontHash, 0, nullptr, allocator), "main");
     // Create font pipeline
     pipeline = std::make_shared<GraphicsPipeline>(std::move(device),
         std::vector<PipelineShaderStage>{vertexShader, fragmentShader},

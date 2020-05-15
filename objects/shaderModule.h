@@ -39,27 +39,30 @@ namespace magma
         explicit ShaderModule(std::shared_ptr<Device> device,
             const SpirvWord *bytecode,
             std::size_t bytecodeSize,
+            std::size_t bytecodeHash = 0,
             VkShaderModuleCreateFlags flags = 0,
             std::shared_ptr<ValidationCache> validationCache = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit ShaderModule(std::shared_ptr<Device> device,
             const std::vector<SpirvWord>& bytecode,
+            std::size_t bytecodeHash = 0,
             VkShaderModuleCreateFlags flags = 0,
             std::shared_ptr<ValidationCache> validationCache = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr);
         template<std::size_t WordCount>
         explicit ShaderModule(std::shared_ptr<Device> device,
             const SpirvWord (&bytecode)[WordCount],
+            std::size_t bytecodeHash = 0,
             VkShaderModuleCreateFlags flags = 0,
             std::shared_ptr<ValidationCache> validationCache = nullptr,
-            std::shared_ptr<IAllocator> allocator = nullptr):
-            ShaderModule(std::move(device), bytecode, WordCount * sizeof(SpirvWord), flags,
-                std::move(validationCache), std::move(allocator)) {}
+            std::shared_ptr<IAllocator> allocator = nullptr);
         ~ShaderModule();
         std::size_t getHash() noexcept;
 
     private:
-        std::vector<char> bytecode;
         std::size_t hash;
+        std::vector<char> bytecode;
     };
 } // namespace magma
+
+#include "shaderModule.inl"
