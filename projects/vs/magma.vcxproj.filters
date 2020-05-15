@@ -82,6 +82,9 @@
     <Filter Include="Source Files\core">
       <UniqueIdentifier>{788fe0f5-46b7-45db-86d9-6ca8cc0ff5a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\core\hashing">
+      <UniqueIdentifier>{04d644f9-6aee-43bf-877d-32661cf831db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\allocator\allocator.h">
@@ -503,6 +506,9 @@
     </ClInclude>
     <ClInclude Include="..\..\core\memzero.h">
       <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\hashing\fnv1.h">
+      <Filter>Header Files\core\hashing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
