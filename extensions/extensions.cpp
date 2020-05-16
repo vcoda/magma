@@ -30,11 +30,6 @@ Extensions::Extensions(const std::vector<VkExtensionProperties>& properties)
 bool Extensions::hasExtension(const char *name) const noexcept
 {
     static const std::string prefix("VK_");
-    std::map<std::string, uint32_t>::const_iterator it;
-    if (strstr(name, prefix.c_str()))
-        it = extensions.find(name);
-    else
-        it = extensions.find(prefix + name);
-    return it != extensions.end();
+    return extensions.find(prefix + name) != extensions.end();
 }
 } // namespace magma

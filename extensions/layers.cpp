@@ -30,11 +30,6 @@ Layers::Layers(const std::vector<VkLayerProperties>& properties)
 bool Layers::hasLayer(const char *name) const noexcept
 {
     static const std::string prefix("VK_LAYER_");
-    std::map<std::string, uint32_t>::const_iterator it;
-    if (strstr(name, prefix.c_str()))
-        it = layers.find(name);
-    else
-        it = layers.find(prefix + name);
-    return it != layers.end();
+    return layers.find(prefix + name) != layers.end();
 }
 } // namespace magma

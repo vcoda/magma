@@ -26,6 +26,10 @@ namespace magma
 
     protected:
         Layers(const std::vector<VkLayerProperties>&);
+        inline bool hasVkLayer(const char *name) const noexcept
+        {
+            return layers.find(name) != layers.end();
+        }
 
     private:
         std::map<std::string, uint32_t> layers;

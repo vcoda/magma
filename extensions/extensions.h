@@ -28,6 +28,10 @@ namespace magma
 
     protected:
         Extensions(const std::vector<VkExtensionProperties>&);
+        inline bool hasVkExtension(const char *name) const noexcept
+        {
+            return extensions.find(name) != extensions.end();
+        }
 
     private:
         std::map<std::string, uint32_t> extensions;
