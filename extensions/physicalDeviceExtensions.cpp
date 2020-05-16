@@ -20,8 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "physicalDeviceExtensions.h"
 #include "../objects/physicalDevice.h"
 
-#define MAGMA_CHECK_EXTENSION(ext) ext(hasVkExtension(MAGMA_CONCAT("VK_", #ext)))
-
 namespace magma
 {
 PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const PhysicalDevice> device):

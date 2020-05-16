@@ -20,8 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "instanceLayers.h"
 #include "../objects/instance.h"
 
-#define MAGMA_CHECK_LAYER(ext) ext(hasVkLayer(MAGMA_CONCAT("VK_LAYER_", #ext)))
-
 namespace magma
 {
 InstanceLayers::InstanceLayers():

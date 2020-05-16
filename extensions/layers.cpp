@@ -24,12 +24,13 @@ namespace magma
 Layers::Layers(const std::vector<VkLayerProperties>& properties)
 {
     for (const auto& property : properties)
-        layers.emplace(property.layerName, property.specVersion);
+        layers.emplace(core::hashString(property.layerName));
 }
 
 bool Layers::hasLayer(const char *name) const noexcept
 {
     static const std::string prefix("VK_LAYER_");
-    return layers.find(prefix + name) != layers.end();
+    const std::size_t hash = core::hashString((prefix + name).c_str());
+    return hasLayer(hash);
 }
 } // namespace magma

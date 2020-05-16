@@ -28,12 +28,18 @@ namespace magma
 
     protected:
         Extensions(const std::vector<VkExtensionProperties>&);
-        inline bool hasVkExtension(const char *name) const noexcept
+        inline bool hasExtension(std::size_t hash) const noexcept
         {
-            return extensions.find(name) != extensions.end();
+            return extensions.find(hash) != extensions.end();
         }
 
     private:
-        std::map<std::string, uint32_t> extensions;
+        std::unordered_set<std::size_t> extensions;
     };
 } // namespace magma
+
+#define MAGMA_EXTENSION(extension)\
+    const bool extension;\
+    static constexpr std::size_t __hash_of_ ## extension = magma::core::hashString(MAGMA_CONCAT("VK_", #extension));
+
+#define MAGMA_CHECK_EXTENSION(extension) extension(hasExtension(__hash_of_ ## extension))

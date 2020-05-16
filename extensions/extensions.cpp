@@ -24,12 +24,13 @@ namespace magma
 Extensions::Extensions(const std::vector<VkExtensionProperties>& properties)
 {
     for (const auto& property : properties)
-        extensions.emplace(property.extensionName, property.specVersion);
+        extensions.emplace(core::hashString(property.extensionName));
 }
 
 bool Extensions::hasExtension(const char *name) const noexcept
 {
     static const std::string prefix("VK_");
-    return extensions.find(prefix + name) != extensions.end();
+    const std::size_t hash = core::hashString((prefix + name).c_str());
+    return hasExtension(hash);
 }
 } // namespace magma

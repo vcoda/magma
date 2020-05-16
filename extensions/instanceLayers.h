@@ -26,59 +26,59 @@ namespace magma
     class InstanceLayers : public Layers
     {
     public:
-        const bool AMD_switchable_graphics;
+        MAGMA_LAYER(AMD_switchable_graphics)
 
-        const bool bandicam_helper;
-        const bool DxtoryHookHelper;
-        const bool fpsmon;
+        MAGMA_LAYER(bandicam_helper)
+        MAGMA_LAYER(DxtoryHookHelper)
+        MAGMA_LAYER(fpsmon)
 
-        const bool GOOGLE_threading;
-        const bool GOOGLE_unique_objects;
+        MAGMA_LAYER(GOOGLE_threading)
+        MAGMA_LAYER(GOOGLE_unique_objects)
 
-        const bool KHRONOS_timeline_semaphore;
-        const bool KHRONOS_validation;
+        MAGMA_LAYER(KHRONOS_timeline_semaphore)
+        MAGMA_LAYER(KHRONOS_validation)
 
-        const bool LUNARG_api_dump;
-        const bool LUNARG_assistant_layer;
-        const bool LUNARG_core_validation;
-        const bool LUNARG_demo_layer;
-        const bool LUNARG_device_simulation;
-        const bool LUNARG_image;
-        const bool LUNARG_monitor;
-        const bool LUNARG_object_tracker;
-        const bool LUNARG_override;
-        const bool LUNARG_parameter_validation;
-        const bool LUNARG_screenshot;
-        const bool LUNARG_standard_validation;
-        const bool LUNARG_starter_layer;
-        const bool LUNARG_swapchain;
-        const bool LUNARG_vktrace;
+        MAGMA_LAYER(LUNARG_api_dump)
+        MAGMA_LAYER(LUNARG_assistant_layer)
+        MAGMA_LAYER(LUNARG_core_validation)
+        MAGMA_LAYER(LUNARG_demo_layer)
+        MAGMA_LAYER(LUNARG_device_simulation)
+        MAGMA_LAYER(LUNARG_image)
+        MAGMA_LAYER(LUNARG_monitor)
+        MAGMA_LAYER(LUNARG_object_tracker)
+        MAGMA_LAYER(LUNARG_override)
+        MAGMA_LAYER(LUNARG_parameter_validation)
+        MAGMA_LAYER(LUNARG_screenshot)
+        MAGMA_LAYER(LUNARG_standard_validation)
+        MAGMA_LAYER(LUNARG_starter_layer)
+        MAGMA_LAYER(LUNARG_swapchain)
+        MAGMA_LAYER(LUNARG_vktrace)
 
-        const bool MESA_overlay;
+        MAGMA_LAYER(MESA_overlay)
 
-        const bool NV_nomad;
-        const bool NV_nsight;
-        const bool NV_nsight_sys;
-        const bool NV_optimus;
-        const bool NV_vgd;
+        MAGMA_LAYER(NV_nomad)
+        MAGMA_LAYER(NV_nsight)
+        MAGMA_LAYER(NV_nsight_sys)
+        MAGMA_LAYER(NV_optimus)
+        MAGMA_LAYER(NV_vgd)
 
-        const bool PRIMUS_PrimusVK;
-        const bool RENDERDOC_Capture;
-        const bool reshade;
-        const bool RGA_pipeline_extraction;
-        const bool RTSS;
+        MAGMA_LAYER(PRIMUS_PrimusVK)
+        MAGMA_LAYER(RENDERDOC_Capture)
+        MAGMA_LAYER(reshade)
+        MAGMA_LAYER(RGA_pipeline_extraction)
+        MAGMA_LAYER(RTSS)
 
-        const bool VALVE_steam_fossilize;
-        const bool VALVE_steam_fossilize_32;
-        const bool VALVE_steam_fossilize_64;
-        const bool VALVE_steam_overlay;
-        const bool VALVE_steam_overlay_32;
-        const bool VALVE_steam_overlay_64;
+        MAGMA_LAYER(VALVE_steam_fossilize)
+        MAGMA_LAYER(VALVE_steam_fossilize_32)
+        MAGMA_LAYER(VALVE_steam_fossilize_64)
+        MAGMA_LAYER(VALVE_steam_overlay)
+        MAGMA_LAYER(VALVE_steam_overlay_32)
+        MAGMA_LAYER(VALVE_steam_overlay_64)
 
-        const bool VKBASALT_PostProcess32;
-        const bool VKBASALT_PostProcess64;
+        MAGMA_LAYER(VKBASALT_PostProcess32)
+        MAGMA_LAYER(VKBASALT_PostProcess64)
 
-        const bool vkpipeline_db;
+        MAGMA_LAYER(vkpipeline_db)
 
         InstanceLayers();
     };

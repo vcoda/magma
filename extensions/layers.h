@@ -26,12 +26,18 @@ namespace magma
 
     protected:
         Layers(const std::vector<VkLayerProperties>&);
-        inline bool hasVkLayer(const char *name) const noexcept
+        inline bool hasLayer(std::size_t hash) const noexcept
         {
-            return layers.find(name) != layers.end();
+            return layers.find(hash) != layers.end();
         }
 
     private:
-        std::map<std::string, uint32_t> layers;
+        std::unordered_set<std::size_t> layers;
     };
 } // namespace magma
+
+#define MAGMA_LAYER(layer)\
+    const bool layer;\
+    static constexpr std::size_t __hash_of_ ## layer = core::hashString(MAGMA_CONCAT("VK_LAYER_", #layer));
+
+#define MAGMA_CHECK_LAYER(layer) layer(hasLayer(__hash_of_ ## layer))

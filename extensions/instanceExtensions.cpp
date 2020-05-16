@@ -20,8 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "instanceExtensions.h"
 #include "../objects/instance.h"
 
-#define MAGMA_CHECK_EXTENSION(ext) ext(hasVkExtension(MAGMA_CONCAT("VK_", #ext)))
-
 namespace magma
 {
 InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
