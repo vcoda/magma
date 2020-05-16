@@ -510,6 +510,9 @@
     <ClInclude Include="..\..\core\hashing\fnv1.h">
       <Filter>Header Files\core\hashing</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\core\hashing\fnv1string.h">
+      <Filter>Header Files\core\hashing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
