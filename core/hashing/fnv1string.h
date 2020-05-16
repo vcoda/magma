@@ -31,7 +31,7 @@ namespace magma
                 template<typename T, std::size_t I>
                 struct Fnv1
                 {
-                    constexpr std::size_t hash(const T *str, std::size_t hash) noexcept
+                    constexpr std::size_t hash(const T *const str, const std::size_t hash) noexcept
                     {
                         return str[I] ? string::Fnv1<T, I+1>().hash(str, (hash * str[I]) ^ fnv::prime) : hash;
                     }
@@ -40,7 +40,7 @@ namespace magma
                 template<typename T>
                 struct Fnv1<T, 0>
                 {
-                    constexpr std::size_t hash(const T *str, std::size_t basis = fnv::basis) noexcept
+                    constexpr std::size_t hash(const T *const str, const std::size_t basis = fnv::basis) noexcept
                     {
                         return string::Fnv1<T, 1>().hash(str, (basis * str[0]) ^ fnv::prime);
                     }
@@ -49,7 +49,7 @@ namespace magma
                 template<typename T>
                 struct Fnv1<T, 1024ULL>
                 {
-                    constexpr std::size_t hash(const T *, std::size_t term) noexcept
+                    constexpr std::size_t hash(const T *const, const std::size_t term) noexcept
                     {
                         return term;
                     }
@@ -60,7 +60,7 @@ namespace magma
                 template<typename T, std::size_t I>
                 struct Fnv1a
                 {
-                    constexpr std::size_t hash(const T *str, std::size_t hash) noexcept
+                    constexpr std::size_t hash(const T *const str, const std::size_t hash) noexcept
                     {
                         return str[I] ? string::Fnv1a<T, I+1>().hash(str, (hash ^ str[I]) * fnv::prime) : hash;
                     }
@@ -69,7 +69,7 @@ namespace magma
                 template<typename T>
                 struct Fnv1a<T, 0>
                 {
-                    constexpr std::size_t hash(const T *str, std::size_t basis = fnv::basis) noexcept
+                    constexpr std::size_t hash(const T *const str, const std::size_t basis = fnv::basis) noexcept
                     {
                         return string::Fnv1a<T, 1>().hash(str, (basis ^ str[0]) * fnv::prime);
                     }
@@ -78,7 +78,7 @@ namespace magma
                 template<typename T>
                 struct Fnv1a<T, 1024ULL>
                 {
-                    constexpr std::size_t hash(const T *, std::size_t term) noexcept
+                    constexpr std::size_t hash(const T *const, const std::size_t term) noexcept
                     {
                         return term;
                     }

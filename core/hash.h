@@ -83,7 +83,7 @@ template<typename T> inline std::size_t hashList(const std::list<T>& ls) noexcep
     return value;
 }
 
-template<typename T> constexpr std::size_t hashString(const T *str) noexcept
+template<typename T> constexpr std::size_t hashString(const T *const str) noexcept
 {
     return hashing::string::Fnv1a<T, 0>().hash(str);
 }
