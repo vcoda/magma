@@ -28,7 +28,7 @@ namespace magma
             VkFilter minFilter,
             VkSamplerMipmapMode mipmapMode,
             VkSamplerAddressMode addressMode);
-        constexpr std::size_t hash() const;
+        std::size_t hash() const;
         constexpr bool operator==(const SamplerState&) const;
 
     protected:
@@ -59,7 +59,7 @@ namespace magma
         constexpr DepthSamplerState(VkFilter magFilter,
             VkFilter minFilter,
             VkCompareOp compareOp);
-        constexpr std::size_t hash() const;
+        std::size_t hash() const;
         constexpr bool operator==(const DepthSamplerState&) const;
 
     private:

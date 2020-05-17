@@ -19,7 +19,7 @@ constexpr RasterizationState::RasterizationState(VkPolygonMode polygonMode, VkCu
     lineWidth = 1.f;
 }
 
-constexpr std::size_t RasterizationState::hash() const
+inline std::size_t RasterizationState::hash() const
 {
     return core::hashArgs(
         sType,
@@ -76,7 +76,7 @@ constexpr ConservativeRasterizationState::ConservativeRasterizationState(const R
     pNext = &conservative;
 }
 
-constexpr std::size_t ConservativeRasterizationState::hash() const
+inline std::size_t ConservativeRasterizationState::hash() const
 {
     std::size_t hash = core::hashArgs(
         conservative.sType,
@@ -108,7 +108,7 @@ constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationSt
     pNext = &order;
 }
 
-constexpr std::size_t RasterizationOrderState::hash() const
+inline std::size_t RasterizationOrderState::hash() const
 {
     std::size_t hash = core::hashArgs(
         order.sType,

@@ -29,7 +29,7 @@ namespace magma
     {
         constexpr MultisampleState(VkSampleCountFlagBits rasterizationSamples);
         constexpr MultisampleState(uint32_t sampleCount);
-        constexpr std::size_t hash() const;
+        std::size_t hash() const;
         constexpr bool operator==(const MultisampleState&) const;
     };
 

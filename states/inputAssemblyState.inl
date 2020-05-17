@@ -11,7 +11,7 @@ constexpr InputAssemblyState::InputAssemblyState(VkPrimitiveTopology topology,
     this->primitiveRestartEnable = MAGMA_BOOLEAN(primitiveRestartEnable);
 }
 
-constexpr std::size_t InputAssemblyState::hash() const
+inline std::size_t InputAssemblyState::hash() const
 {
     return core::hashArgs(
         sType,

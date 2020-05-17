@@ -40,7 +40,7 @@ constexpr SubpassDependency::SubpassDependency(uint32_t srcSubpass, uint32_t dst
     this->dependencyFlags = dependencyFlags;
 }
 
-constexpr std::size_t SubpassDependency::hash() const
+inline std::size_t SubpassDependency::hash() const
 {
     return core::hashArgs(
         srcSubpass,

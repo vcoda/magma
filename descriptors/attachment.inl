@@ -49,7 +49,7 @@ constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t
         predefined.stencilLoadOp, predefined.stencilStoreOp, initialLayout, finalLayout)
 {}
 
-constexpr std::size_t AttachmentDescription::hash() const
+inline std::size_t AttachmentDescription::hash() const
 {
     return core::hashArgs(
         flags,
@@ -60,7 +60,6 @@ constexpr std::size_t AttachmentDescription::hash() const
         stencilLoadOp,
         stencilStoreOp,
         initialLayout,
-        finalLayout
-    );
+        finalLayout);
 }
 } // namespace magma

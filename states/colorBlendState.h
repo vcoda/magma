@@ -37,7 +37,7 @@ namespace magma
             VkBlendFactor dstAlphaBlendFactor,
             VkBlendOp alphaBlendOp,
             VkColorComponentFlags colorWriteMask = colorwritemask::rgba);
-        constexpr std::size_t hash() const;
+        std::size_t hash() const;
         constexpr bool operator==(const ColorBlendAttachmentState&) const;
     };
 
@@ -52,7 +52,7 @@ namespace magma
             bool logicOpEnable = false,
             VkLogicOp logicOp = VK_LOGIC_OP_CLEAR,
             const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f});
-        constexpr std::size_t hash() const;
+        std::size_t hash() const;
         constexpr bool operator==(const ColorBlendState&) const;
 
     protected:

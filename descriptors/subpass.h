@@ -56,7 +56,7 @@ namespace magma
             VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
             VkDependencyFlags dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT);
-        constexpr std::size_t hash() const;
+        std::size_t hash() const;
     };
 } // namespace magma
 

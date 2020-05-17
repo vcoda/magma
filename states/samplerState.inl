@@ -10,7 +10,7 @@ constexpr SamplerState::SamplerState(VkFilter magFilter, VkFilter minFilter,
     maxAnisotropy(1.f)
 {}
 
-constexpr std::size_t SamplerState::hash() const
+inline std::size_t SamplerState::hash() const
 {
     return core::hashArgs(
         magFilter,
@@ -49,7 +49,7 @@ constexpr DepthSamplerState::DepthSamplerState(VkFilter magFilter, VkFilter minF
     compareOp(compareOp)
 {}
 
-constexpr std::size_t DepthSamplerState::hash() const
+inline std::size_t DepthSamplerState::hash() const
 {
     return core::hashArgs(
         magFilter,

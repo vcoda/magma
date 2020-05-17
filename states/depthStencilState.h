@@ -33,7 +33,7 @@ namespace magma
             uint32_t reference = 0):
             VkStencilOpState{failOp, passOp, depthFailOp, compareOp, compareMask, writeMask, reference}
         {}
-        constexpr std::size_t hash() const;
+        std::size_t hash() const;
         constexpr bool operator==(const StencilOpState&) const;
     };
 
@@ -57,7 +57,7 @@ namespace magma
         constexpr DepthStencilState(const DepthStencilState& state,
             const StencilOpState& front,
             const StencilOpState& back);
-        constexpr std::size_t hash() const;
+        std::size_t hash() const;
         constexpr bool operator==(const DepthStencilState&) const;
     };
 

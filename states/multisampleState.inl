@@ -39,7 +39,7 @@ constexpr MultisampleState::MultisampleState(uint32_t sampleCount):
     alphaToOneEnable = VK_FALSE;
 }
 
-constexpr std::size_t MultisampleState::hash() const
+inline std::size_t MultisampleState::hash() const
 {
     std::size_t hash = core::hashArgs(
         sType,

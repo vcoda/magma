@@ -33,7 +33,7 @@ namespace magma
             this->size = static_cast<uint32_t>(size);
         }
 
-        constexpr std::size_t hash() const
+        std::size_t hash() const
         {
             return core::hashArgs(
                 stageFlags,
