@@ -58,9 +58,9 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     renderPass(std::move(renderPass))
-{   // Check for hardware support
+{
     std::shared_ptr<Device> device = this->renderPass->getDevice();
-    std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+    std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
     // Descriptor set for single image view in fragment shader
     const Descriptor imageSampler(descriptors::CombinedImageSampler(1));
     descriptorPool = std::make_shared<DescriptorPool>(device, 1, std::vector<Descriptor>{imageSampler}, false, allocator);
@@ -70,6 +70,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, allocator);
     bilinearSampler = std::make_shared<Sampler>(device, samplers::magMinLinearMipNearestClampToEdge, allocator);
 #ifdef VK_EXT_filter_cubic
+    // Check for hardware support
     if (physicalDevice->checkExtensionSupport("VK_IMG_filter_cubic") || physicalDevice->checkExtensionSupport("VK_EXT_filter_cubic"))
         cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, allocator);
 #endif

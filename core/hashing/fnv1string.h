@@ -47,11 +47,11 @@ namespace magma
                 };
 
                 template<typename T>
-                struct Fnv1<T, 1024ULL>
+                struct Fnv1<T, 1024>
                 {
-                    constexpr std::size_t hash(const T *const, const std::size_t term) noexcept
+                    constexpr std::size_t hash(const T *const, const std::size_t hash) noexcept
                     {
-                        return term;
+                        return hash; // End recursion
                     }
                 };
 
@@ -76,11 +76,11 @@ namespace magma
                 };
 
                 template<typename T>
-                struct Fnv1a<T, 1024ULL>
+                struct Fnv1a<T, 1024>
                 {
-                    constexpr std::size_t hash(const T *const, const std::size_t term) noexcept
+                    constexpr std::size_t hash(const T *const, const std::size_t hash) noexcept
                     {
-                        return term;
+                        return hash; // End recursion
                     }
                 };
             } // namespace string
