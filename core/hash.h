@@ -24,26 +24,26 @@ namespace magma
 {
 namespace core
 {
-template<typename T> constexpr std::size_t hash(const T& arg) noexcept
+template<typename T> inline std::size_t hash(const T& arg) noexcept
 {
     std::hash<T> hasher;
     return hasher(arg);
 }
 
-template<typename T> constexpr void hashNext(std::size_t& seed, const T& arg) noexcept
+template<typename T> inline void hashNext(std::size_t& seed, const T& arg) noexcept
 {
     hashCombine(seed, hash(arg));
 }
 
 template<typename T, typename... Args>
-constexpr void hashNext(std::size_t& seed, const T& arg, Args... args) noexcept
+inline void hashNext(std::size_t& seed, const T& arg, Args... args) noexcept
 {
     hashCombine(seed, hash(arg));
     hashNext(seed, args...);
 }
 
 template<typename T, typename... Args>
-constexpr std::size_t hashArgs(const T& arg, Args... args) noexcept
+inline std::size_t hashArgs(const T& arg, Args... args) noexcept
 {
     std::size_t value = hash(arg);
     hashNext(value, args...);
