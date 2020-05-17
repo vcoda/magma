@@ -19,7 +19,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* https://www.khronos.org/registry/vulkan/ */
+    /* For each extensions name we calculate its hash in compile-time.
+       When instance or device extensions are enumerated, their hashes added to hash map,
+       which allows fast lookup of extensions in ctor-initializer. */
 
     class Extensions
     {
