@@ -29,7 +29,7 @@ Layers::Layers(const std::vector<VkLayerProperties>& properties)
 
 bool Layers::hasLayer(const char *name) const noexcept
 {
-    static const std::string prefix("VK_LAYER_");
+    static const std::string prefix(MAGMA_LAYER_PREFIX);
     const std::size_t hash = core::hashString((prefix + name).c_str());
     return hasLayer(hash);
 }

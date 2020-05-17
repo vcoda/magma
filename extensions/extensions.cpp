@@ -29,7 +29,7 @@ Extensions::Extensions(const std::vector<VkExtensionProperties>& properties)
 
 bool Extensions::hasExtension(const char *name) const noexcept
 {
-    static const std::string prefix("VK_");
+    static const std::string prefix(MAGMA_EXTENSION_PREFIX);
     const std::size_t hash = core::hashString((prefix + name).c_str());
     return hasExtension(hash);
 }
