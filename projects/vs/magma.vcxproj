@@ -180,6 +180,7 @@
     <ClInclude Include="..\..\descriptors\attachment.h" />
     <ClInclude Include="..\..\descriptors\bindings.h" />
     <ClInclude Include="..\..\descriptors\descriptors.h" />
+    <ClInclude Include="..\..\descriptors\samplerBindings.h" />
     <ClInclude Include="..\..\descriptors\subpass.h" />
     <ClInclude Include="..\..\extensions\instanceLayers.h" />
     <ClInclude Include="..\..\extensions\layers.h" />
@@ -470,6 +471,7 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/output/fontf</Outputs>
     </CustomBuild>
     <None Include="..\..\auxiliary\shaderCompiler.inl" />
+    <None Include="..\..\barriers\bufferMemoryBarrier.inl" />
     <None Include="..\..\descriptors\attachment.inl" />
     <None Include="..\..\descriptors\subpassDependency.inl" />
     <None Include="..\..\helpers\alignedUniformArrayIterator.inl" />
@@ -479,9 +481,11 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
     <None Include="..\..\misc\format.inl" />
     <None Include="..\..\misc\imageSubresourceRange.inl" />
     <None Include="..\..\misc\instanceExtension.inl" />
+    <None Include="..\..\misc\pushConstants.inl" />
     <None Include="..\..\misc\scissor.inl" />
     <None Include="..\..\misc\viewport.inl" />
     <None Include="..\..\objects\commandBuffer.inl" />
+    <None Include="..\..\objects\descriptorSetLayout.inl" />
     <None Include="..\..\objects\deviceMemory.inl" />
     <None Include="..\..\objects\indexBuffer.inl" />
     <None Include="..\..\objects\object.inl" />

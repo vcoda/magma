@@ -23,26 +23,26 @@ constexpr bool StencilOpState::operator==(const StencilOpState& other) const
         (reference == other.reference);
 }
 
-constexpr DepthStencilState::DepthStencilState(VkCompareOp depthCompareOp, bool depthWriteEnable,
-    const StencilOpState& front, const StencilOpState& back):
-    VkPipelineDepthStencilStateCreateInfo{}
-{
-    sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-    pNext = nullptr;
-    flags = 0;
-    depthTestEnable = (depthCompareOp != VK_COMPARE_OP_ALWAYS);
-    this->depthWriteEnable = MAGMA_BOOLEAN(depthWriteEnable);
-    this->depthCompareOp = depthCompareOp;
-    this->front = front;
-    this->back = back;
-    stencilTestEnable = (front.compareOp != VK_COMPARE_OP_ALWAYS) || (back.compareOp != VK_COMPARE_OP_ALWAYS);
-    depthBoundsTestEnable = VK_FALSE;
-    minDepthBounds = 0.f;
-    maxDepthBounds = 1.f;
-}
+constexpr DepthStencilState::DepthStencilState(const VkCompareOp depthCompareOp, const bool depthWriteEnable,
+    const StencilOpState& front, const StencilOpState& back) noexcept:
+    VkPipelineDepthStencilStateCreateInfo{
+        VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO,
+        nullptr, // pNext,
+        0, // flags
+        MAGMA_BOOLEAN(depthCompareOp != VK_COMPARE_OP_ALWAYS), // depthTestEnable
+        MAGMA_BOOLEAN(depthWriteEnable),
+        depthCompareOp,
+        VK_FALSE, // depthBoundsTestEnable
+        MAGMA_BOOLEAN((front.compareOp != VK_COMPARE_OP_ALWAYS) || (back.compareOp != VK_COMPARE_OP_ALWAYS)), // stencilTestEnable
+        front,
+        back,
+        0.f, // minDepthBounds
+        1.f  // maxDepthBounds
+    }
+{}
 
 constexpr DepthStencilState::DepthStencilState(const DepthStencilState& state,
-    const StencilOpState& front, const StencilOpState& back):
+    const StencilOpState& front, const StencilOpState& back) noexcept:
     DepthStencilState(state.depthCompareOp, state.depthCompareOp, front, back)
 {}
 
@@ -54,6 +54,8 @@ inline std::size_t DepthStencilState::hash() const
         depthTestEnable,
         depthWriteEnable,
         depthCompareOp,
+        depthBoundsTestEnable,
+        stencilTestEnable,
         front.failOp,
         front.passOp,
         front.depthFailOp,
@@ -68,8 +70,6 @@ inline std::size_t DepthStencilState::hash() const
         back.compareMask,
         back.writeMask,
         back.reference,
-        stencilTestEnable,
-        depthBoundsTestEnable,
         minDepthBounds,
         maxDepthBounds);
 }
@@ -89,11 +89,9 @@ constexpr bool DepthStencilState::operator==(const DepthStencilState& other) con
 }
 
 constexpr DepthBoundsState::DepthBoundsState(const DepthStencilState& state,
-    float minDepthBounds, float maxDepthBounds):
-    DepthStencilState(state.depthCompareOp, state.depthWriteEnable)
+    const float minDepthBounds, const float maxDepthBounds) noexcept:
+    DepthStencilState(state)
 {
-    front = state.front;
-    back = state.back;
     depthBoundsTestEnable = VK_TRUE;
     this->minDepthBounds = minDepthBounds;
     this->maxDepthBounds = maxDepthBounds;

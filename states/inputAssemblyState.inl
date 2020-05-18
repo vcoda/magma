@@ -1,15 +1,15 @@
 namespace magma
 {
-constexpr InputAssemblyState::InputAssemblyState(VkPrimitiveTopology topology,
-    bool primitiveRestartEnable /* false */):
-    VkPipelineInputAssemblyStateCreateInfo{}
-{
-    sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-    pNext = nullptr;
-    flags = 0;
-    this->topology = topology;
-    this->primitiveRestartEnable = MAGMA_BOOLEAN(primitiveRestartEnable);
-}
+constexpr InputAssemblyState::InputAssemblyState(const VkPrimitiveTopology topology,
+    const bool primitiveRestartEnable /* false */) noexcept:
+    VkPipelineInputAssemblyStateCreateInfo{
+        VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
+        nullptr, // pNext
+        0, // flags
+        topology,
+        MAGMA_BOOLEAN(primitiveRestartEnable)
+    }
+{}
 
 inline std::size_t InputAssemblyState::hash() const
 {

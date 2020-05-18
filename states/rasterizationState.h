@@ -27,7 +27,7 @@ namespace magma
             VkCullModeFlags cullMode,
             VkFrontFace frontFace,
             bool depthClampEnable = false,
-            bool rasterizerDiscardEnable = false);
+            bool rasterizerDiscardEnable = false) noexcept;
         std::size_t hash() const;
         constexpr bool operator==(const RasterizationState&) const;
     };
@@ -42,7 +42,7 @@ namespace magma
         constexpr DepthBiasRasterizationState(const RasterizationState& state,
             float depthBiasConstantFactor,
             float depthBiasClamp,
-            float depthBiasSlopeFactor);
+            float depthBiasSlopeFactor) noexcept;
     };
 
     /* When overestimation is enabled, if any part of the primitive, including its edges,
@@ -55,7 +55,7 @@ namespace magma
     {
         constexpr ConservativeRasterizationState(const RasterizationState& state,
             VkConservativeRasterizationModeEXT conservativeRasterizationMode,
-            float extraPrimitiveOverestimationSize = 0.f);
+            float extraPrimitiveOverestimationSize = 0.f) noexcept;
         std::size_t hash() const;
         constexpr bool operator==(const ConservativeRasterizationState&) const;
 
@@ -71,7 +71,7 @@ namespace magma
     struct RasterizationOrderState : RasterizationState
     {
         constexpr RasterizationOrderState(const RasterizationState& state,
-            VkRasterizationOrderAMD rasterizationOrder);
+            VkRasterizationOrderAMD rasterizationOrder) noexcept;
         std::size_t hash() const;
         constexpr bool operator==(const RasterizationOrderState&) const;
 

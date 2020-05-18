@@ -1,17 +1,15 @@
 namespace magma
 {
-constexpr ClearAttachment::ClearAttachment():
-    VkClearAttachment{}
+constexpr ClearAttachment::ClearAttachment(const VkImageAspectFlags aspectMask, const uint32_t attachment) noexcept:
+    VkClearAttachment{
+        aspectMask,
+        attachment,
+        VkClearValue{}
+    }
 {}
 
-constexpr ColorClearAttachment::ColorClearAttachment(uint32_t attachment)
-{
-    aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-    colorAttachment = attachment;
-}
-
-constexpr ColorClearAttachment::ColorClearAttachment(uint32_t attachment, float r, float g, float b, float a /* 1.f */):
-    ColorClearAttachment(attachment)
+constexpr ColorClearAttachment::ColorClearAttachment(const uint32_t attachment, const float r, const float g, const float b, const float a /* 1.f */) noexcept:
+    ClearAttachment(VK_IMAGE_ASPECT_COLOR_BIT, attachment)
 {
     clearValue.color.float32[0] = r;
     clearValue.color.float32[1] = g;
@@ -19,8 +17,8 @@ constexpr ColorClearAttachment::ColorClearAttachment(uint32_t attachment, float 
     clearValue.color.float32[3] = a;
 }
 
-constexpr ColorClearAttachment::ColorClearAttachment(uint32_t attachment, int32_t r, int32_t g, int32_t b, int32_t a):
-    ColorClearAttachment(attachment)
+constexpr ColorClearAttachment::ColorClearAttachment(const uint32_t attachment, const int32_t r, const int32_t g, const int32_t b, const int32_t a) noexcept:
+    ClearAttachment(VK_IMAGE_ASPECT_COLOR_BIT, attachment)
 {
     clearValue.color.int32[0] = r;
     clearValue.color.int32[1] = g;
@@ -28,8 +26,8 @@ constexpr ColorClearAttachment::ColorClearAttachment(uint32_t attachment, int32_
     clearValue.color.int32[3] = a;
 }
 
-constexpr ColorClearAttachment::ColorClearAttachment(uint32_t attachment, uint32_t r, uint32_t g, uint32_t b, uint32_t a):
-    ColorClearAttachment(attachment)
+constexpr ColorClearAttachment::ColorClearAttachment(const uint32_t attachment, const uint32_t r, const uint32_t g, const uint32_t b, const uint32_t a) noexcept:
+    ClearAttachment(VK_IMAGE_ASPECT_COLOR_BIT, attachment)
 {
     clearValue.color.uint32[0] = r;
     clearValue.color.uint32[1] = g;
@@ -37,8 +35,8 @@ constexpr ColorClearAttachment::ColorClearAttachment(uint32_t attachment, uint32
     clearValue.color.uint32[3] = a;
 }
 
-constexpr ColorClearAttachment::ColorClearAttachment(uint32_t attachment, const float color[4]):
-    ColorClearAttachment(attachment)
+constexpr ColorClearAttachment::ColorClearAttachment(const uint32_t attachment, const float color[4]) noexcept:
+    ClearAttachment(VK_IMAGE_ASPECT_COLOR_BIT, attachment)
 {
     clearValue.color.float32[0] = color[0];
     clearValue.color.float32[1] = color[1];
@@ -46,8 +44,8 @@ constexpr ColorClearAttachment::ColorClearAttachment(uint32_t attachment, const 
     clearValue.color.float32[3] = color[3];
 }
 
-constexpr ColorClearAttachment::ColorClearAttachment(uint32_t attachment, const int32_t color[4]):
-    ColorClearAttachment(attachment)
+constexpr ColorClearAttachment::ColorClearAttachment(const uint32_t attachment, const int32_t color[4]) noexcept:
+    ClearAttachment(VK_IMAGE_ASPECT_COLOR_BIT, attachment)
 {
     clearValue.color.int32[0] = color[0];
     clearValue.color.int32[1] = color[1];
@@ -55,8 +53,8 @@ constexpr ColorClearAttachment::ColorClearAttachment(uint32_t attachment, const 
     clearValue.color.int32[3] = color[3];
 }
 
-constexpr ColorClearAttachment::ColorClearAttachment(uint32_t attachment, const uint32_t color[4]):
-    ColorClearAttachment(attachment)
+constexpr ColorClearAttachment::ColorClearAttachment(const uint32_t attachment, const uint32_t color[4]) noexcept:
+    ClearAttachment(VK_IMAGE_ASPECT_COLOR_BIT, attachment)
 {
     clearValue.color.uint32[0] = color[0];
     clearValue.color.uint32[1] = color[1];
@@ -64,40 +62,36 @@ constexpr ColorClearAttachment::ColorClearAttachment(uint32_t attachment, const 
     clearValue.color.uint32[3] = color[3];
 }
 
-constexpr ColorClearAttachment::ColorClearAttachment(uint32_t attachment, const ClearColor& color):
-    ColorClearAttachment(attachment)
+constexpr ColorClearAttachment::ColorClearAttachment(const uint32_t attachment, const ClearColor& color) noexcept:
+    ClearAttachment(VK_IMAGE_ASPECT_COLOR_BIT, attachment)
 {
     clearValue = color;
 }
 
-constexpr DepthClearAttachment::DepthClearAttachment(float depth)
+constexpr DepthClearAttachment::DepthClearAttachment(const float depth) noexcept:
+    ClearAttachment(VK_IMAGE_ASPECT_DEPTH_BIT, 0)
 {
-    aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
-    colorAttachment = 0;
     clearValue.depthStencil.depth = depth;
     clearValue.depthStencil.stencil = 0;
 }
 
-constexpr StencilClearAttachment::StencilClearAttachment(uint8_t stencil)
+constexpr StencilClearAttachment::StencilClearAttachment(const uint8_t stencil) noexcept:
+    ClearAttachment(VK_IMAGE_ASPECT_STENCIL_BIT, 0)
 {
-    aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
-    colorAttachment = 0;
     clearValue.depthStencil.depth = 0.f;
     clearValue.depthStencil.stencil = stencil;
 }
 
-constexpr DepthStencilClearAttachment::DepthStencilClearAttachment(float depth, uint8_t stencil)
+constexpr DepthStencilClearAttachment::DepthStencilClearAttachment(const float depth, const uint8_t stencil) noexcept:
+    ClearAttachment(VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT, 0)
 {
-    aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
-    colorAttachment = 0;
     clearValue.depthStencil.depth = depth;
     clearValue.depthStencil.stencil = stencil;
 }
 
-constexpr DepthStencilClearAttachment::DepthStencilClearAttachment(const ClearDepthStencil& depthStencil)
+constexpr DepthStencilClearAttachment::DepthStencilClearAttachment(const ClearDepthStencil& depthStencil) noexcept:
+    ClearAttachment(VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT, 0)
 {
-    aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
-    colorAttachment = 0;
     clearValue = depthStencil;
 }
 } // namespace magma

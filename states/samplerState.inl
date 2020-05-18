@@ -1,7 +1,7 @@
 namespace magma
 {
-constexpr SamplerState::SamplerState(VkFilter magFilter, VkFilter minFilter,
-    VkSamplerMipmapMode mipmapMode, VkSamplerAddressMode addressMode):
+constexpr SamplerState::SamplerState(const VkFilter magFilter, const VkFilter minFilter,
+    const VkSamplerMipmapMode mipmapMode, const VkSamplerAddressMode addressMode) noexcept:
     magFilter(magFilter),
     minFilter(minFilter),
     mipmapMode(mipmapMode),
@@ -31,19 +31,19 @@ constexpr bool SamplerState::operator==(const SamplerState& other) const
         (maxAnisotropy == other.maxAnisotropy);
 }
 
-constexpr AnisotropicSamplerState::AnisotropicSamplerState(VkFilter magFilter, VkFilter minFilter, VkSamplerAddressMode addressMode,
-    float maxAnisotropy /* std::numeric_limits<float>::max() */ ):
+constexpr AnisotropicSamplerState::AnisotropicSamplerState(const VkFilter magFilter, const VkFilter minFilter, const VkSamplerAddressMode addressMode,
+    const float maxAnisotropy /* std::numeric_limits<float>::max() */) noexcept:
     SamplerState(magFilter, minFilter, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode)
 {
     anisotropyEnable = true;
     // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between
     // 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive.
-    if (maxAnisotropy < 1.f)
-        maxAnisotropy = 1.f;
     this->maxAnisotropy = maxAnisotropy;
+    if (this->maxAnisotropy < 1.f)
+        this->maxAnisotropy = 1.f;
 }
 
-constexpr DepthSamplerState::DepthSamplerState(VkFilter magFilter, VkFilter minFilter, VkCompareOp compareOp):
+constexpr DepthSamplerState::DepthSamplerState(const VkFilter magFilter, const VkFilter minFilter, const VkCompareOp compareOp) noexcept:
     magFilter(magFilter),
     minFilter(minFilter),
     compareOp(compareOp)

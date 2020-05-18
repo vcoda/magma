@@ -23,7 +23,7 @@ namespace magma
     {
     public:
         constexpr LoadStoreOp(VkAttachmentLoadOp loadOp,
-            VkAttachmentStoreOp storeOp);
+            VkAttachmentStoreOp storeOp) noexcept;
 
     private:
         VkAttachmentLoadOp loadOp;
@@ -44,20 +44,20 @@ namespace magma
             VkAttachmentLoadOp stencilLoadOp,
             VkAttachmentStoreOp stencilStoreOp,
             VkImageLayout initialLayout,
-            VkImageLayout finalLayout);
+            VkImageLayout finalLayout) noexcept;
         constexpr AttachmentDescription(VkFormat format,
             uint32_t sampleCount,
             const LoadStoreOp& colorDepthOp,
             const LoadStoreOp& stencilOp,
             VkImageLayout initialLayout,
-            VkImageLayout finalLayout);
+            VkImageLayout finalLayout) noexcept;
         constexpr AttachmentDescription(const LoadStoreOp& colorDepthOp,
             const LoadStoreOp& stencilOp,
             VkImageLayout initialLayout,
-            VkImageLayout finalLayout);
+            VkImageLayout finalLayout) noexcept;
         constexpr AttachmentDescription(VkFormat format,
             uint32_t sampleCount,
-            const AttachmentDescription& predefined);
+            const AttachmentDescription& predefined) noexcept;
         std::size_t hash() const;
     };
 } // namespace magma

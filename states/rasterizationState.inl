@@ -1,23 +1,24 @@
 namespace magma
 {
-constexpr RasterizationState::RasterizationState(VkPolygonMode polygonMode, VkCullModeFlags cullMode, VkFrontFace frontFace,
-    bool depthClampEnable /* false */, bool rasterizerDiscardEnable /* false */):
-    VkPipelineRasterizationStateCreateInfo{}
-{
-    sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-    pNext = nullptr;
-    flags = 0;
-    this->depthClampEnable = MAGMA_BOOLEAN(depthClampEnable);
-    this->rasterizerDiscardEnable = MAGMA_BOOLEAN(rasterizerDiscardEnable);
-    this->polygonMode = polygonMode;
-    this->cullMode = cullMode;
-    this->frontFace = frontFace;
-    depthBiasEnable = VK_FALSE;
-    depthBiasConstantFactor = 0.f;
-    depthBiasClamp = 0.f;
-    depthBiasSlopeFactor = 0.f;
-    lineWidth = 1.f;
-}
+constexpr RasterizationState::RasterizationState(const VkPolygonMode polygonMode,
+    const VkCullModeFlags cullMode, const VkFrontFace frontFace,
+    const bool depthClampEnable /* false */, const bool rasterizerDiscardEnable /* false */) noexcept:
+    VkPipelineRasterizationStateCreateInfo{
+        VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO,
+        nullptr, // pNext
+        0, // flags
+        MAGMA_BOOLEAN(depthClampEnable),
+        MAGMA_BOOLEAN(rasterizerDiscardEnable),
+        polygonMode,
+        cullMode,
+        frontFace,
+        VK_FALSE, // depthBiasEnable
+        0.f, // depthBiasConstantFactor
+        0.f, // depthBiasClamp
+        0.f, // depthBiasSlopeFactor
+        1.f  // lineWidth
+    }
+{}
 
 inline std::size_t RasterizationState::hash() const
 {
@@ -52,8 +53,8 @@ constexpr bool RasterizationState::operator==(const RasterizationState& other) c
 }
 
 constexpr DepthBiasRasterizationState::DepthBiasRasterizationState(const RasterizationState& state,
-    float depthBiasConstantFactor, float depthBiasClamp, float depthBiasSlopeFactor):
-    RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable)
+    const float depthBiasConstantFactor, const float depthBiasClamp, const float depthBiasSlopeFactor) noexcept:
+    RasterizationState(state)
 {
     depthBiasEnable = VK_TRUE;
     this->depthBiasConstantFactor = depthBiasConstantFactor;
@@ -63,16 +64,17 @@ constexpr DepthBiasRasterizationState::DepthBiasRasterizationState(const Rasteri
 
 #ifdef VK_EXT_conservative_rasterization
 constexpr ConservativeRasterizationState::ConservativeRasterizationState(const RasterizationState& state,
-    VkConservativeRasterizationModeEXT conservativeRasterizationMode,
-    float extraPrimitiveOverestimationSize /* 0 */):
+    const VkConservativeRasterizationModeEXT conservativeRasterizationMode,
+    const float extraPrimitiveOverestimationSize /* 0 */) noexcept:
     RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable),
-    conservative{}
+    conservative{
+        VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_CONSERVATIVE_STATE_CREATE_INFO_EXT,
+        nullptr, // pNext
+        0, // flags
+        conservativeRasterizationMode,
+        extraPrimitiveOverestimationSize
+    }
 {
-    conservative.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_CONSERVATIVE_STATE_CREATE_INFO_EXT;
-    conservative.pNext = nullptr;
-    conservative.flags = 0;
-    conservative.conservativeRasterizationMode = conservativeRasterizationMode;
-    conservative.extraPrimitiveOverestimationSize = extraPrimitiveOverestimationSize;
     pNext = &conservative;
 }
 
@@ -98,13 +100,14 @@ constexpr bool ConservativeRasterizationState::operator==(const ConservativeRast
 
 #ifdef VK_AMD_rasterization_order
 constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationState& state,
-    VkRasterizationOrderAMD rasterizationOrder):
+    const VkRasterizationOrderAMD rasterizationOrder) noexcept:
     RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable),
-    order{}
+    order{
+        VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD,
+        nullptr, // pNext
+        rasterizationOrder
+    }
 {
-    order.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD;
-    order.pNext = nullptr;
-    order.rasterizationOrder = rasterizationOrder;
     pNext = &order;
 }
 

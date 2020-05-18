@@ -22,37 +22,35 @@ namespace magma
 {
     struct ClearAttachment : VkClearAttachment
     {
-        constexpr ClearAttachment();
+        constexpr ClearAttachment() noexcept = default;
+        constexpr ClearAttachment(VkImageAspectFlags aspectMask, uint32_t attachment) noexcept;
     };
 
     struct ColorClearAttachment : ClearAttachment
     {
-        constexpr ColorClearAttachment(uint32_t attachment, float r, float g, float b, float a = 1.f);
-        constexpr ColorClearAttachment(uint32_t attachment, int32_t r, int32_t g, int32_t b, int32_t a);
-        constexpr ColorClearAttachment(uint32_t attachment, uint32_t r, uint32_t g, uint32_t b, uint32_t a);
-        constexpr ColorClearAttachment(uint32_t attachment, const float color[4]);
-        constexpr ColorClearAttachment(uint32_t attachment, const int32_t color[4]);
-        constexpr ColorClearAttachment(uint32_t attachment, const uint32_t color[4]);
-        constexpr ColorClearAttachment(uint32_t attachment, const ClearColor& color);
-
-    private:
-        constexpr ColorClearAttachment(uint32_t attachment);
+        constexpr ColorClearAttachment(uint32_t attachment, float r, float g, float b, float a = 1.f) noexcept;
+        constexpr ColorClearAttachment(uint32_t attachment, int32_t r, int32_t g, int32_t b, int32_t a) noexcept;
+        constexpr ColorClearAttachment(uint32_t attachment, uint32_t r, uint32_t g, uint32_t b, uint32_t a) noexcept;
+        constexpr ColorClearAttachment(uint32_t attachment, const float color[4]) noexcept;
+        constexpr ColorClearAttachment(uint32_t attachment, const int32_t color[4]) noexcept;
+        constexpr ColorClearAttachment(uint32_t attachment, const uint32_t color[4]) noexcept;
+        constexpr ColorClearAttachment(uint32_t attachment, const ClearColor& color) noexcept;
     };
 
     struct DepthClearAttachment : ClearAttachment
     {
-        constexpr DepthClearAttachment(float depth);
+        constexpr DepthClearAttachment(float depth) noexcept;
     };
 
     struct StencilClearAttachment : ClearAttachment
     {
-        constexpr StencilClearAttachment(uint8_t stencil);
+        constexpr StencilClearAttachment(uint8_t stencil) noexcept;
     };
 
     struct DepthStencilClearAttachment : ClearAttachment
     {
-        constexpr DepthStencilClearAttachment(float depth, uint8_t stencil);
-        constexpr DepthStencilClearAttachment(const ClearDepthStencil& depthStencil);
+        constexpr DepthStencilClearAttachment(float depth, uint8_t stencil) noexcept;
+        constexpr DepthStencilClearAttachment(const ClearDepthStencil& depthStencil) noexcept;
     };
 } // namespace magma
 

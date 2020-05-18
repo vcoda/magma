@@ -1,18 +1,18 @@
 namespace magma
 {
-constexpr AdvancedColorBlendAttachmentState::AdvancedColorBlendAttachmentState(VkBlendOp advancedBlendOp,
-    VkColorComponentFlags colorWriteMask /* colorwritemask::rgba */):
-    VkPipelineColorBlendAttachmentState{}
-{
-    blendEnable = VK_TRUE;
-    srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
-    dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
-    colorBlendOp = advancedBlendOp;
-    srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-    dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-    alphaBlendOp = advancedBlendOp;
-    this->colorWriteMask = colorWriteMask;
-}
+constexpr AdvancedColorBlendAttachmentState::AdvancedColorBlendAttachmentState(const VkBlendOp advancedBlendOp,
+    const VkColorComponentFlags colorWriteMask /* colorwritemask::rgba */) noexcept:
+    VkPipelineColorBlendAttachmentState{
+        VK_TRUE, // blendEnable
+        VK_BLEND_FACTOR_ZERO, // srcColorBlendFactor
+        VK_BLEND_FACTOR_ZERO, // dstColorBlendFactor
+        advancedBlendOp, // colorBlendOp
+        VK_BLEND_FACTOR_ZERO, // srcAlphaBlendFactor
+        VK_BLEND_FACTOR_ZERO, // dstAlphaBlendFactor
+        advancedBlendOp, // alphaBlendOp
+        colorWriteMask // colorWriteMask
+    }
+{}
 
 inline std::size_t AdvancedColorBlendAttachmentState::hash() const
 {

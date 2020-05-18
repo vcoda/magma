@@ -95,6 +95,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptors/attachment.h"
 #include "descriptors/bindings.h"
 #include "descriptors/descriptors.h"
+#include "descriptors/samplerBindings.h"
 #include "descriptors/subpass.h"
 
 #include "barriers/bufferMemoryBarrier.h"

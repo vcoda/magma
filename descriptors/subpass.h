@@ -50,7 +50,7 @@ namespace magma
 
     struct SubpassDependency : VkSubpassDependency
     {
-        constexpr SubpassDependency();
+        constexpr SubpassDependency() = default;
         constexpr SubpassDependency(uint32_t srcSubpass,
             uint32_t dstSubpass,
             VkPipelineStageFlags srcStageMask,

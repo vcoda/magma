@@ -24,13 +24,13 @@ namespace magma
 
     struct MemoryBarrier : VkMemoryBarrier
     {
-        constexpr MemoryBarrier(VkAccessFlags srcAccessMask,
-            VkAccessFlags dstAccessMask): VkMemoryBarrier{}
-        {
-            sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-            pNext = nullptr;
-            this->srcAccessMask = srcAccessMask;
-            this->dstAccessMask = dstAccessMask;
-        }
+        constexpr MemoryBarrier(const VkAccessFlags srcAccessMask, const VkAccessFlags dstAccessMask) noexcept:
+            VkMemoryBarrier{
+                VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+                nullptr, // pNext
+                srcAccessMask,
+                dstAccessMask
+            }
+        {}
     };
 } // namespace magma

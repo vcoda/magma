@@ -513,6 +513,9 @@
     <ClInclude Include="..\..\core\hashing\fnv1string.h">
       <Filter>Header Files\core\hashing</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\descriptors\samplerBindings.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -890,6 +893,15 @@
       <Filter>Header Files\objects</Filter>
     </None>
     <None Include="..\..\objects\shaderModule.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\barriers\bufferMemoryBarrier.inl">
+      <Filter>Header Files\barriers</Filter>
+    </None>
+    <None Include="..\..\misc\pushConstants.inl">
+      <Filter>Header Files\misc</Filter>
+    </None>
+    <None Include="..\..\objects\descriptorSetLayout.inl">
       <Filter>Header Files\objects</Filter>
     </None>
   </ItemGroup>

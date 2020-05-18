@@ -24,13 +24,13 @@ namespace magma
 
     struct StencilOpState : VkStencilOpState
     {
-        constexpr StencilOpState(VkStencilOp failOp,
-            VkStencilOp passOp,
-            VkStencilOp depthFailOp,
-            VkCompareOp compareOp,
-            uint32_t compareMask = 0x0,
-            uint32_t writeMask = 0x0,
-            uint32_t reference = 0):
+        constexpr StencilOpState(const VkStencilOp failOp,
+            const VkStencilOp passOp,
+            const VkStencilOp depthFailOp,
+            const VkCompareOp compareOp,
+            const uint32_t compareMask = 0x0,
+            const uint32_t writeMask = 0x0,
+            const uint32_t reference = 0) noexcept:
             VkStencilOpState{failOp, passOp, depthFailOp, compareOp, compareMask, writeMask, reference}
         {}
         std::size_t hash() const;
@@ -53,10 +53,10 @@ namespace magma
         constexpr DepthStencilState(VkCompareOp depthCompareOp,
             bool depthWriteEnable,
             const StencilOpState& front = renderstates::stencilAlwaysDontWrite,
-            const StencilOpState& back = renderstates::stencilAlwaysDontWrite);
+            const StencilOpState& back = renderstates::stencilAlwaysDontWrite) noexcept;
         constexpr DepthStencilState(const DepthStencilState& state,
             const StencilOpState& front,
-            const StencilOpState& back);
+            const StencilOpState& back) noexcept;
         std::size_t hash() const;
         constexpr bool operator==(const DepthStencilState&) const;
     };
@@ -69,7 +69,7 @@ namespace magma
     {
         constexpr DepthBoundsState(const DepthStencilState& state,
             float minDepthBounds,
-            float maxDepthBounds);
+            float maxDepthBounds) noexcept;
     };
 }
 

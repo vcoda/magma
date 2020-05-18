@@ -1,17 +1,26 @@
 namespace magma
 {
-constexpr LoadStoreOp::LoadStoreOp(VkAttachmentLoadOp loadOp, VkAttachmentStoreOp storeOp):
-    loadOp(loadOp), storeOp(storeOp)
+constexpr LoadStoreOp::LoadStoreOp(const VkAttachmentLoadOp loadOp, const VkAttachmentStoreOp storeOp) noexcept:
+    loadOp(loadOp),
+    storeOp(storeOp)
 {}
 
-constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t sampleCount,
-    VkAttachmentLoadOp loadOp, VkAttachmentStoreOp storeOp,
-    VkAttachmentLoadOp stencilLoadOp, VkAttachmentStoreOp stencilStoreOp,
-    VkImageLayout initialLayout, VkImageLayout finalLayout):
-    VkAttachmentDescription{}
+constexpr AttachmentDescription::AttachmentDescription(const VkFormat format, const uint32_t sampleCount,
+    const VkAttachmentLoadOp loadOp, const VkAttachmentStoreOp storeOp,
+    const VkAttachmentLoadOp stencilLoadOp, const VkAttachmentStoreOp stencilStoreOp,
+    const VkImageLayout initialLayout, const VkImageLayout finalLayout) noexcept:
+    VkAttachmentDescription{
+        0, // flags
+        format,
+        VK_SAMPLE_COUNT_1_BIT, // samples
+        loadOp,
+        storeOp,
+        stencilLoadOp,
+        stencilStoreOp,
+        initialLayout,
+        finalLayout
+    }
 {
-    flags = 0;
-    this->format = format;
     switch (sampleCount)
     {
     case 1: samples = VK_SAMPLE_COUNT_1_BIT; break;
@@ -23,28 +32,22 @@ constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t
     case 64: samples = VK_SAMPLE_COUNT_64_BIT; break;
     default: samples = VK_SAMPLE_COUNT_1_BIT;
     }
-    this->loadOp = loadOp;
-    this->storeOp = storeOp;
-    this->stencilLoadOp = stencilLoadOp;
-    this->stencilStoreOp = stencilStoreOp;
-    this->initialLayout = initialLayout;
-    this->finalLayout = finalLayout;
 }
 
-constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t sampleCount,
+constexpr AttachmentDescription::AttachmentDescription(const VkFormat format, const uint32_t sampleCount,
     const LoadStoreOp& colorDepthOp, const LoadStoreOp& stencilOp,
-    VkImageLayout initialLayout, VkImageLayout finalLayout):
+    const VkImageLayout initialLayout, const VkImageLayout finalLayout) noexcept:
     AttachmentDescription(format, sampleCount, colorDepthOp.loadOp, colorDepthOp.storeOp,
         stencilOp.loadOp, stencilOp.storeOp, initialLayout, finalLayout)
 {}
 
 constexpr AttachmentDescription::AttachmentDescription(const LoadStoreOp& colorDepthOp, const LoadStoreOp& stencilOp,
-    VkImageLayout initialLayout, VkImageLayout finalLayout):
+    const VkImageLayout initialLayout, const VkImageLayout finalLayout) noexcept:
     AttachmentDescription(VK_FORMAT_UNDEFINED, VK_SAMPLE_COUNT_1_BIT, colorDepthOp.loadOp, colorDepthOp.storeOp,
         stencilOp.loadOp, stencilOp.storeOp, initialLayout, finalLayout)
 {}
 
-constexpr AttachmentDescription::AttachmentDescription(VkFormat format, uint32_t sampleCount, const AttachmentDescription& predefined):
+constexpr AttachmentDescription::AttachmentDescription(const VkFormat format, const uint32_t sampleCount, const AttachmentDescription& predefined) noexcept:
     AttachmentDescription(format, sampleCount, predefined.loadOp, predefined.storeOp,
         predefined.stencilLoadOp, predefined.stencilStoreOp, initialLayout, finalLayout)
 {}

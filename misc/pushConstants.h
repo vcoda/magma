@@ -24,24 +24,17 @@ namespace magma
 
     struct PushConstantRange : VkPushConstantRange
     {
-        PushConstantRange() = default;
-        constexpr PushConstantRange(VkShaderStageFlags stageFlags, uint32_t offset, std::size_t size):
-            VkPushConstantRange{}
-        {
-            this->stageFlags = stageFlags;
-            this->offset = offset;
-            this->size = static_cast<uint32_t>(size);
-        }
-
-        std::size_t hash() const
-        {
-            return core::hashArgs(
-                stageFlags,
-                offset,
-                size);
-        }
+        constexpr PushConstantRange(VkShaderStageFlags stageFlags,
+            uint32_t offset,
+            std::size_t size) noexcept;
+        std::size_t hash() const;
     };
+} // namespace magma
 
+#include "pushConstants.inl"
+
+namespace magma
+{
     namespace pushconstants
     {
         /* Defines a set of push constant ranges for use in a single pipeline layout. */
@@ -49,77 +42,77 @@ namespace magma
         template<typename Type>
         struct PushConstantRange : magma::PushConstantRange
         {
-            constexpr PushConstantRange(VkShaderStageFlags flags, uint32_t offset = 0):
+            constexpr PushConstantRange(const VkShaderStageFlags flags, const uint32_t offset = 0) noexcept:
                 magma::PushConstantRange(flags, offset, sizeof(Type)) {}
         };
 
         template<typename Type>
         struct VertexConstantRange : PushConstantRange<Type>
         {
-            constexpr VertexConstantRange(uint32_t offset = 0):
+            constexpr VertexConstantRange(const uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_VERTEX_BIT, offset) {}
         };
 
         template<typename Type>
         struct TesselationControlConstantRange : PushConstantRange<Type>
         {
-            constexpr TesselationControlConstantRange(uint32_t offset = 0):
+            constexpr TesselationControlConstantRange(const uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, offset) {}
         };
 
         template<typename Type>
         struct TesselationEvaluationConstantRange : PushConstantRange<Type>
         {
-            constexpr TesselationEvaluationConstantRange(uint32_t offset = 0):
+            constexpr TesselationEvaluationConstantRange(const uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, offset) {}
         };
 
         template<typename Type>
         struct GeometryConstantRange : PushConstantRange<Type>
         {
-            constexpr GeometryConstantRange(uint32_t offset = 0):
+            constexpr GeometryConstantRange(const uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_GEOMETRY_BIT, offset) {}
         };
 
         template<typename Type>
         struct FragmentConstantRange : PushConstantRange<Type>
         {
-            constexpr FragmentConstantRange(uint32_t offset = 0):
+            constexpr FragmentConstantRange(const uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_FRAGMENT_BIT, offset) {}
         };
 
         template<typename Type>
         struct ComputeConstantRange : PushConstantRange<Type>
         {
-            constexpr ComputeConstantRange(uint32_t offset = 0):
+            constexpr ComputeConstantRange(const uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_COMPUTE_BIT, offset) {}
         };
 
         template<typename Type>
         struct GraphicsConstantRange : PushConstantRange<Type>
         {
-            constexpr GraphicsConstantRange(uint32_t offset = 0):
+            constexpr GraphicsConstantRange(const uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_ALL_GRAPHICS, offset) {}
         };
 
         template<typename Type>
         struct AllConstantRange : PushConstantRange<Type>
         {
-            constexpr AllConstantRange(uint32_t offset = 0):
+            constexpr AllConstantRange(const uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_ALL, offset) {}
         };
 
         template<typename Type>
         struct VertexGeometryConstantRange : PushConstantRange<Type>
         {
-            constexpr VertexGeometryConstantRange(uint32_t offset = 0):
+            constexpr VertexGeometryConstantRange(const uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT, offset) {}
         };
 
         template<typename Type>
         struct VertexFragmentConstantRange : PushConstantRange<Type>
         {
-            constexpr VertexFragmentConstantRange(uint32_t offset = 0):
+            constexpr VertexFragmentConstantRange(const uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, offset) {}
         };
     } // namespace pushconstants

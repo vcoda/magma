@@ -1,13 +1,13 @@
 namespace magma
 {
-constexpr TesselationState::TesselationState(uint32_t patchControlPoints /* 0 */):
-    VkPipelineTessellationStateCreateInfo{}
-{
-    sType = VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO;
-    pNext = nullptr;
-    flags = 0;
-    this->patchControlPoints = patchControlPoints;
-}
+constexpr TesselationState::TesselationState(const uint32_t patchControlPoints /* 0 */) noexcept:
+    VkPipelineTessellationStateCreateInfo{
+        VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO,
+        nullptr,
+        0, // flags
+        patchControlPoints
+    }
+{}
 
 inline std::size_t TesselationState::hash() const
 {

@@ -25,18 +25,18 @@ namespace magma
 
     struct ColorBlendAttachmentState : VkPipelineColorBlendAttachmentState
     {
-        constexpr ColorBlendAttachmentState(VkColorComponentFlags colorWriteMask = colorwritemask::rgba);
+        constexpr ColorBlendAttachmentState(VkColorComponentFlags colorWriteMask = colorwritemask::rgba) noexcept;
         constexpr ColorBlendAttachmentState(VkBlendFactor srcBlendFactor,
             VkBlendFactor dstBlendFactor,
             VkBlendOp blendOp,
-            VkColorComponentFlags colorWriteMask = colorwritemask::rgba);
+            VkColorComponentFlags colorWriteMask = colorwritemask::rgba) noexcept;
         constexpr ColorBlendAttachmentState(VkBlendFactor srcColorBlendFactor,
             VkBlendFactor dstColorBlendFactor,
             VkBlendOp colorBlendOp,
             VkBlendFactor srcAlphaBlendFactor,
             VkBlendFactor dstAlphaBlendFactor,
             VkBlendOp alphaBlendOp,
-            VkColorComponentFlags colorWriteMask = colorwritemask::rgba);
+            VkColorComponentFlags colorWriteMask = colorwritemask::rgba) noexcept;
         std::size_t hash() const;
         constexpr bool operator==(const ColorBlendAttachmentState&) const;
     };
@@ -51,12 +51,12 @@ namespace magma
         constexpr ColorBlendState(const ColorBlendAttachmentState& attachment,
             bool logicOpEnable = false,
             VkLogicOp logicOp = VK_LOGIC_OP_CLEAR,
-            const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f});
+            const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f}) noexcept;
         std::size_t hash() const;
         constexpr bool operator==(const ColorBlendState&) const;
 
     protected:
-        constexpr ColorBlendState();
+        constexpr ColorBlendState() noexcept;
     };
 
     /* Multiple attachment color blend state takes care about array of blend attachment states and
@@ -81,7 +81,7 @@ namespace magma
     struct ColorLogicOpState : ColorBlendState
     {
         constexpr ColorLogicOpState(const ColorBlendAttachmentState& attachment,
-            VkLogicOp logicOp);
+            VkLogicOp logicOp) noexcept;
     };
 } // namespace magma
 

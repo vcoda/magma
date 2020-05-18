@@ -1,25 +1,32 @@
 namespace magma
 {
-constexpr MultisampleState::MultisampleState(VkSampleCountFlagBits rasterizationSamples):
-    VkPipelineMultisampleStateCreateInfo{}
-{
-    sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-    pNext = nullptr;
-    flags = 0;
-    this->rasterizationSamples = rasterizationSamples;
-    sampleShadingEnable = VK_FALSE;
-    minSampleShading = 0.f;
-    pSampleMask = nullptr;
-    alphaToCoverageEnable = VK_FALSE;
-    alphaToOneEnable = VK_FALSE;
-}
+constexpr MultisampleState::MultisampleState(const VkSampleCountFlagBits rasterizationSamples) noexcept:
+    VkPipelineMultisampleStateCreateInfo{
+        VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
+        nullptr, // pNext
+        0, // flags
+        rasterizationSamples,
+        VK_FALSE, // sampleShadingEnable
+        0.f, // minSampleShading
+        nullptr, // pSampleMask
+        VK_FALSE, // alphaToCoverageEnable
+        VK_FALSE, // alphaToOneEnable
+    }
+{}
 
-constexpr MultisampleState::MultisampleState(uint32_t sampleCount):
-    VkPipelineMultisampleStateCreateInfo{}
+constexpr MultisampleState::MultisampleState(const uint32_t sampleCount) noexcept:
+    VkPipelineMultisampleStateCreateInfo{
+        VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
+        nullptr, // pNext
+        0, // flags
+        VK_SAMPLE_COUNT_1_BIT,
+        VK_FALSE, // sampleShadingEnable
+        0.f, // minSampleShading
+        nullptr, // pSampleMask
+        VK_FALSE, // alphaToCoverageEnable
+        VK_FALSE, // alphaToOneEnable
+    }
 {
-    sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-    pNext = nullptr;
-    flags = 0;
     switch (sampleCount)
     {
     case 1: rasterizationSamples = VK_SAMPLE_COUNT_1_BIT; break;
@@ -29,14 +36,8 @@ constexpr MultisampleState::MultisampleState(uint32_t sampleCount):
     case 16: rasterizationSamples = VK_SAMPLE_COUNT_16_BIT; break;
     case 32: rasterizationSamples = VK_SAMPLE_COUNT_32_BIT; break;
     case 64: rasterizationSamples = VK_SAMPLE_COUNT_64_BIT; break;
-    default:
-        rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+    default: rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
     }
-    sampleShadingEnable = VK_FALSE;
-    minSampleShading = 0.f;
-    pSampleMask = nullptr;
-    alphaToCoverageEnable = VK_FALSE;
-    alphaToOneEnable = VK_FALSE;
 }
 
 inline std::size_t MultisampleState::hash() const
@@ -69,9 +70,8 @@ constexpr bool MultisampleState::operator==(const MultisampleState& other) const
         (alphaToOneEnable == other.alphaToOneEnable);
 }
 
-constexpr MultisampleShadingState::MultisampleShadingState(const MultisampleState& state,
-    float minSampleShading /* 1 */):
-    MultisampleState(state.rasterizationSamples)
+constexpr MultisampleShadingState::MultisampleShadingState(const MultisampleState& state, const float minSampleShading /* 1 */) noexcept:
+    MultisampleState(state)
 {
     sampleShadingEnable = VK_TRUE;
     this->minSampleShading = minSampleShading;

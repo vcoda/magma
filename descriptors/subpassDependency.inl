@@ -1,24 +1,18 @@
 namespace magma
 {
-constexpr SubpassDependency::SubpassDependency()
+constexpr SubpassDependency::SubpassDependency(const uint32_t srcSubpass, const uint32_t dstSubpass,
+    const VkPipelineStageFlags srcStageMask, const VkPipelineStageFlags dstStageMask,
+    const VkDependencyFlags dependencyFlags /* VK_DEPENDENCY_BY_REGION_BIT */):
+    VkSubpassDependency{
+        srcSubpass,
+        dstSubpass,
+        srcStageMask,
+        dstStageMask,
+        0, // srcAccessMask
+        0, // dstAccessMask
+        dependencyFlags
+    }
 {
-    srcSubpass = 0;
-    dstSubpass = 0;
-    srcStageMask = 0;
-    dstStageMask = 0;
-    srcAccessMask = 0;
-    dstAccessMask = 0;
-    dependencyFlags = 0;
-}
-
-constexpr SubpassDependency::SubpassDependency(uint32_t srcSubpass, uint32_t dstSubpass,
-    VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
-    VkDependencyFlags dependencyFlags /* VK_DEPENDENCY_BY_REGION_BIT */)
-{
-    this->srcSubpass = srcSubpass;
-    this->dstSubpass = dstSubpass;
-    this->srcStageMask = srcStageMask;
-    this->dstStageMask = dstStageMask;
     switch (srcStageMask)
     {
     case VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT:
@@ -37,7 +31,6 @@ constexpr SubpassDependency::SubpassDependency(uint32_t srcSubpass, uint32_t dst
         dstAccessMask = VK_ACCESS_SHADER_READ_BIT; // ->Read
         break;
     }
-    this->dependencyFlags = dependencyFlags;
 }
 
 inline std::size_t SubpassDependency::hash() const

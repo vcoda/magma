@@ -23,7 +23,7 @@ namespace magma
     {
         constexpr VertexInputBinding(uint32_t binding,
             uint32_t stride,
-            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX);
+            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
     };
 
     /* Structure specifying vertex input attribute description. */
@@ -37,7 +37,7 @@ namespace magma
         constexpr VertexInputAttribute(uint32_t location,
             uint32_t binding,
             VkFormat format,
-            uint32_t offset);
+            uint32_t offset) noexcept;
         template<typename Vertex, typename Type, bool normalized = false>
         VertexInputAttribute(uint32_t location,
             Type Vertex::*attrib,

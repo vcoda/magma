@@ -1,49 +1,49 @@
 namespace magma
 {
 constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
-    VkColorComponentFlags colorWriteMask /* colorwritemask::rgba */):
-    VkPipelineColorBlendAttachmentState{}
-{
-    blendEnable = VK_FALSE;
-    srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
-    dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
-    colorBlendOp = VK_BLEND_OP_ADD;
-    srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-    dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-    alphaBlendOp = VK_BLEND_OP_ADD;
-    this->colorWriteMask = colorWriteMask;
-}
+    const VkColorComponentFlags colorWriteMask /* colorwritemask::rgba */) noexcept:
+    VkPipelineColorBlendAttachmentState{
+        VK_FALSE, // blendEnable
+        VK_BLEND_FACTOR_ONE, // srcColorBlendFactor
+        VK_BLEND_FACTOR_ZERO, // dstColorBlendFactor
+        VK_BLEND_OP_ADD, // colorBlendOp
+        VK_BLEND_FACTOR_ONE, // srcAlphaBlendFactor
+        VK_BLEND_FACTOR_ZERO, // dstAlphaBlendFactor
+        VK_BLEND_OP_ADD, // alphaBlendOp
+        colorWriteMask // colorWriteMask
+    }
+{}
 
 constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
-    VkBlendFactor srcBlendFactor, VkBlendFactor dstBlendFactor, VkBlendOp blendOp,
-    VkColorComponentFlags colorWriteMask /* colorwritemask::rgba */):
-    VkPipelineColorBlendAttachmentState{}
-{
-    blendEnable = VK_TRUE;
-    srcColorBlendFactor = srcBlendFactor;
-    dstColorBlendFactor = dstBlendFactor;
-    colorBlendOp = blendOp;
-    srcAlphaBlendFactor = srcBlendFactor;
-    dstAlphaBlendFactor = dstBlendFactor;
-    alphaBlendOp = blendOp;
-    this->colorWriteMask = colorWriteMask;
-}
+    const VkBlendFactor srcBlendFactor, const VkBlendFactor dstBlendFactor, const VkBlendOp blendOp,
+    const VkColorComponentFlags colorWriteMask /* colorwritemask::rgba */) noexcept:
+    VkPipelineColorBlendAttachmentState{
+        VK_TRUE, // blendEnable
+        srcBlendFactor, // srcColorBlendFactor
+        dstBlendFactor, // dstColorBlendFactor
+        blendOp, // colorBlendOp
+        srcBlendFactor, // srcAlphaBlendFactor
+        dstBlendFactor, // dstAlphaBlendFactor
+        blendOp, // alphaBlendOp
+        colorWriteMask // colorWriteMask
+    }
+{}
 
 constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
-    VkBlendFactor srcColorBlendFactor, VkBlendFactor dstColorBlendFactor, VkBlendOp colorBlendOp,
-    VkBlendFactor srcAlphaBlendFactor, VkBlendFactor dstAlphaBlendFactor, VkBlendOp alphaBlendOp,
-    VkColorComponentFlags colorWriteMask /* colorwritemask::rgba */):
-    VkPipelineColorBlendAttachmentState{}
-{
-    blendEnable = VK_TRUE;
-    this->srcColorBlendFactor = srcColorBlendFactor;
-    this->dstColorBlendFactor = dstColorBlendFactor;
-    this->colorBlendOp = colorBlendOp;
-    this->srcAlphaBlendFactor = srcAlphaBlendFactor;
-    this->dstAlphaBlendFactor = dstAlphaBlendFactor;
-    this->alphaBlendOp = alphaBlendOp;
-    this->colorWriteMask = colorWriteMask;
-}
+    const VkBlendFactor srcColorBlendFactor, const VkBlendFactor dstColorBlendFactor, const VkBlendOp colorBlendOp,
+    const VkBlendFactor srcAlphaBlendFactor, const VkBlendFactor dstAlphaBlendFactor, const VkBlendOp alphaBlendOp,
+    const VkColorComponentFlags colorWriteMask /* colorwritemask::rgba */) noexcept:
+    VkPipelineColorBlendAttachmentState{
+        VK_TRUE, // blendEnable
+        srcColorBlendFactor,
+        dstColorBlendFactor,
+        colorBlendOp,
+        srcAlphaBlendFactor,
+        dstAlphaBlendFactor,
+        alphaBlendOp,
+        colorWriteMask
+    }
+{}
 
 inline std::size_t ColorBlendAttachmentState::hash() const
 {
@@ -70,35 +70,34 @@ constexpr bool ColorBlendAttachmentState::operator==(const ColorBlendAttachmentS
         (colorWriteMask == other.colorWriteMask);
 }
 
-constexpr ColorBlendState::ColorBlendState():
-    VkPipelineColorBlendStateCreateInfo{}
-{
-    sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-    pNext = nullptr;
-    flags = 0;
-    logicOpEnable = VK_FALSE;
-    logicOp = VK_LOGIC_OP_CLEAR;
-    attachmentCount = 0;
-    pAttachments = nullptr;
-    blendConstants[0] = 0.f;
-    blendConstants[1] = 0.f;
-    blendConstants[2] = 0.f;
-    blendConstants[3] = 0.f;
-}
+constexpr ColorBlendState::ColorBlendState() noexcept:
+    VkPipelineColorBlendStateCreateInfo{
+        VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
+        nullptr, // pNext
+        0, // flags
+        VK_FALSE, // logicOpEnable
+        VK_LOGIC_OP_CLEAR, // logicOp
+        0, // attachmentCount
+        nullptr, // pAttachments
+        {0.f, 0.f, 0.f, 0.f} // blendConstants
+    }
+{}
 
 constexpr ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& attachment,
     bool logicOpEnable /* false */,
     VkLogicOp logicOp /* VK_LOGIC_OP_CLEAR */,
-    const std::initializer_list<float>& blendConstants /* {1, 1, 1, 1} */):
-    VkPipelineColorBlendStateCreateInfo{}
+    const std::initializer_list<float>& blendConstants /* {1, 1, 1, 1} */) noexcept:
+    VkPipelineColorBlendStateCreateInfo{
+        VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
+        nullptr, // pNext
+        0, // flags
+        MAGMA_BOOLEAN(logicOpEnable),
+        logicOp,
+        1, // attachmentCount
+        &attachment, // pAttachments
+        {0.f, 0.f, 0.f, 0.f} // blendConstants
+    }
 {
-    sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-    pNext = nullptr;
-    flags = 0;
-    this->logicOpEnable = MAGMA_BOOLEAN(logicOpEnable);
-    this->logicOp = logicOp;
-    attachmentCount = 1;
-    pAttachments = &attachment;
     const auto c = blendConstants.begin();
     this->blendConstants[0] = c[0];
     this->blendConstants[1] = c[1];
@@ -147,7 +146,7 @@ constexpr bool ColorBlendState::operator==(const ColorBlendState& other) const
         (blendConstants[3] == other.blendConstants[3]);
 }
 
-constexpr ColorLogicOpState::ColorLogicOpState(const ColorBlendAttachmentState& attachment, VkLogicOp logicOp):
+constexpr ColorLogicOpState::ColorLogicOpState(const ColorBlendAttachmentState& attachment, const VkLogicOp logicOp) noexcept:
     ColorBlendState(attachment, true, logicOp)
 {}
 } // namespace magma

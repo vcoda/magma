@@ -24,69 +24,69 @@ namespace magma
 
     struct Descriptor : public VkDescriptorPoolSize
     {
-        constexpr Descriptor(VkDescriptorType type, uint32_t descriptorCount):
-            VkDescriptorPoolSize{}
-        {
-            this->type = type;
-            this->descriptorCount = descriptorCount;
-        }
+        constexpr Descriptor(const VkDescriptorType type, const uint32_t descriptorCount) noexcept:
+            VkDescriptorPoolSize{
+                type,
+                descriptorCount
+            }
+        {}
     };
 
     namespace descriptors
     {
         struct Sampler : Descriptor
         {
-            constexpr Sampler(uint32_t count): Descriptor(VK_DESCRIPTOR_TYPE_SAMPLER, count) {}
+            constexpr Sampler(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_SAMPLER, count) {}
         };
 
         struct CombinedImageSampler : Descriptor
         {
-            constexpr CombinedImageSampler(uint32_t count): Descriptor(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, count) {}
+            constexpr CombinedImageSampler(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, count) {}
         };
 
         struct SampledImage : Descriptor
         {
-            constexpr SampledImage(uint32_t count): Descriptor(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, count) {}
+            constexpr SampledImage(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, count) {}
         };
 
         struct StorageImage : Descriptor
         {
-            constexpr StorageImage(uint32_t count): Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, count) {}
+            constexpr StorageImage(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, count) {}
         };
 
         struct UniformTexelBuffer : Descriptor
         {
-            constexpr UniformTexelBuffer(uint32_t count): Descriptor(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, count) {}
+            constexpr UniformTexelBuffer(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, count) {}
         };
 
         struct StorageTexelBuffer : Descriptor
         {
-            constexpr StorageTexelBuffer(uint32_t count): Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, count) {}
+            constexpr StorageTexelBuffer(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, count) {}
         };
 
         struct UniformBuffer : Descriptor
         {
-            constexpr UniformBuffer(uint32_t count): Descriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, count) {}
+            constexpr UniformBuffer(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, count) {}
         };
 
         struct StorageBuffer : Descriptor
         {
-            constexpr StorageBuffer(uint32_t count): Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, count) {}
+            constexpr StorageBuffer(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, count) {}
         };
 
         struct DynamicUniformBuffer : Descriptor
         {
-            constexpr DynamicUniformBuffer(uint32_t count): Descriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, count) {}
+            constexpr DynamicUniformBuffer(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, count) {}
         };
 
         struct DynamicStorageBuffer : Descriptor
         {
-            constexpr DynamicStorageBuffer(uint32_t count): Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, count) {}
+            constexpr DynamicStorageBuffer(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, count) {}
         };
 
         struct InputAttachment : Descriptor
         {
-            constexpr InputAttachment(uint32_t count): Descriptor(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, count) {}
+            constexpr InputAttachment(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, count) {}
         };
     } // namespace descriptors
 } // namespace magma

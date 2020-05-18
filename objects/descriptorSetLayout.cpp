@@ -27,38 +27,43 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DescriptorSetLayout::Binding::Binding(uint32_t binding, const Descriptor& descriptor, VkShaderStageFlags stageFlags,
-    const ImmutableSamplerList& immutableSamplers /* {} */) noexcept:
-    VkDescriptorSetLayoutBinding{}
+DescriptorSetLayout::SamplerBinding::SamplerBinding(uint32_t binding, const Descriptor& descriptor,
+    VkShaderStageFlags stageFlags, const ImmutableSamplerList& immutableSamplers) noexcept:
+    Binding(binding, descriptor, stageFlags),
+    immutableSamplers(immutableSamplers)
 {
-    this->binding = binding;
-    descriptorType = descriptor.type;
-    descriptorCount = descriptor.descriptorCount;
-    this->stageFlags = stageFlags;
-    if (0 == immutableSamplers.size())
-        pImmutableSamplers = nullptr;
-    else
-    {
-        MAGMA_STACK_ARRAY(VkSampler, dereferencedImmutableSamplers, immutableSamplers.size());
-        for (const auto& sampler : immutableSamplers)
-            dereferencedImmutableSamplers.put(*sampler);
-        pImmutableSamplers = core::copyArray(static_cast<const VkSampler *>(dereferencedImmutableSamplers),
-            dereferencedImmutableSamplers.size());
-    }
+    copyImmutableSamplers();
 }
 
-DescriptorSetLayout::Binding::~Binding()
+DescriptorSetLayout::SamplerBinding::SamplerBinding(const SamplerBinding& binding) noexcept:
+    Binding(binding),
+    immutableSamplers(binding.immutableSamplers)
+{
+    copyImmutableSamplers();
+}
+
+DescriptorSetLayout::SamplerBinding& DescriptorSetLayout::SamplerBinding::operator=(const SamplerBinding& other) noexcept
+{
+    if (this != &other)
+    {
+        binding = other.binding;
+        descriptorType = other.descriptorType;
+        descriptorCount = other.descriptorCount;
+        stageFlags = other.stageFlags;
+        immutableSamplers = other.immutableSamplers;
+        copyImmutableSamplers();
+    }
+    return *this;
+}
+
+DescriptorSetLayout::SamplerBinding::~SamplerBinding()
 {
     delete[] pImmutableSamplers;
 }
 
-std::size_t DescriptorSetLayout::Binding::hash() const noexcept
+std::size_t DescriptorSetLayout::SamplerBinding::hash() const noexcept
 {
-    std::size_t hash = core::hashArgs(
-        binding,
-        descriptorType,
-        descriptorCount,
-        stageFlags);
+    std::size_t hash = Binding::hash();
     if (pImmutableSamplers)
     {   // pImmutableSamplers must be a valid pointer to an array of descriptorCount valid VkSampler handles.
         core::hashCombine(hash, core::hashArray(pImmutableSamplers, descriptorCount));
@@ -66,38 +71,58 @@ std::size_t DescriptorSetLayout::Binding::hash() const noexcept
     return hash;
 }
 
+void DescriptorSetLayout::SamplerBinding::copyImmutableSamplers() noexcept
+{
+    if (pImmutableSamplers)
+    {
+        delete[] pImmutableSamplers;
+        pImmutableSamplers = nullptr;
+    }
+    if (!immutableSamplers.empty())
+    {
+        MAGMA_ASSERT(descriptorCount <= immutableSamplers.size());
+        pImmutableSamplers = new(std::nothrow) VkSampler[immutableSamplers.size()];
+        if (pImmutableSamplers)
+        {
+            VkSampler *dereferencedSampler = (VkSampler *)pImmutableSamplers;
+            for (const auto& sampler : immutableSamplers)
+                *dereferencedSampler++ = *sampler;
+        }
+    }
+}
+
 DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const Binding& binding,
     VkDescriptorSetLayoutCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT, std::move(device), std::move(allocator))
-{
-    VkDescriptorSetLayoutCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = flags;
-    info.bindingCount = 1;
-    info.pBindings = &binding;
-    const VkResult create = vkCreateDescriptorSetLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create descriptor set layout");
-    bindings.push_back(binding);
-    hash = core::hashArgs(
-        info.sType,
-        info.flags,
-        info.bindingCount);
-}
+    DescriptorSetLayout(std::move(device), {binding}, {}, flags, std::move(allocator))
+{}
+
+DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const SamplerBinding& samplerBinding,
+    VkDescriptorSetLayoutCreateFlags flags /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    DescriptorSetLayout(std::move(device), {}, {samplerBinding}, flags, std::move(allocator))
+{}
 
 DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const std::initializer_list<Binding>& bindings,
+    const std::initializer_list<SamplerBinding>& samplerBindings /* {} */,
     VkDescriptorSetLayoutCreateFlags flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT, std::move(device), std::move(allocator)),
-    bindings(bindings)
+    bindings(bindings),
+    samplerBindings(samplerBindings)
 {
+    static_assert(sizeof(VkDescriptorSetLayoutBinding) == sizeof(Binding), "type size mismatch");
+    MAGMA_STACK_ARRAY(VkDescriptorSetLayoutBinding, dereferencedBindings, this->bindings.size() + this->samplerBindings.size());
+    for (const auto& binding : this->bindings)
+        dereferencedBindings.put(binding);
+    for (const auto& binding : this->samplerBindings)
+        dereferencedBindings.put(binding);
     VkDescriptorSetLayoutCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
     info.pNext = nullptr;
     info.flags = flags;
     info.bindingCount = MAGMA_COUNT(bindings);
-    info.pBindings = bindings.begin();
+    info.pBindings = dereferencedBindings;
     const VkResult create = vkCreateDescriptorSetLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create descriptor set layout");
     hash = core::hashArgs(
@@ -114,7 +139,9 @@ DescriptorSetLayout::~DescriptorSetLayout()
 std::size_t DescriptorSetLayout::getHash() const noexcept
 {   // Compute complex hash on demand
     std::size_t hash = this->hash;
-    for (const Binding& binding : bindings)
+    for (const auto& binding : bindings)
+        core::hashCombine(hash, binding.hash());
+    for (const auto& binding : samplerBindings)
         core::hashCombine(hash, binding.hash());
     return hash;
 }
