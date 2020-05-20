@@ -40,7 +40,7 @@ constexpr MultisampleState::MultisampleState(const uint32_t sampleCount) noexcep
     }
 }
 
-inline std::size_t MultisampleState::hash() const
+inline std::size_t MultisampleState::hash() const noexcept
 {
     std::size_t hash = core::hashArgs(
         sType,
@@ -59,7 +59,7 @@ inline std::size_t MultisampleState::hash() const
     return hash;
 }
 
-constexpr bool MultisampleState::operator==(const MultisampleState& other) const
+constexpr bool MultisampleState::operator==(const MultisampleState& other) const noexcept
 {
     return (flags == other.flags) &&
         (rasterizationSamples == other.rasterizationSamples) &&

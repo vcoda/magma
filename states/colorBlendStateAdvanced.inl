@@ -14,7 +14,7 @@ constexpr AdvancedColorBlendAttachmentState::AdvancedColorBlendAttachmentState(c
     }
 {}
 
-inline std::size_t AdvancedColorBlendAttachmentState::hash() const
+inline std::size_t AdvancedColorBlendAttachmentState::hash() const noexcept
 {
     return core::hashArgs(
         blendEnable,
@@ -27,7 +27,7 @@ inline std::size_t AdvancedColorBlendAttachmentState::hash() const
         colorWriteMask);
 }
 
-constexpr bool AdvancedColorBlendAttachmentState::operator==(const AdvancedColorBlendAttachmentState& other) const
+constexpr bool AdvancedColorBlendAttachmentState::operator==(const AdvancedColorBlendAttachmentState& other) const noexcept
 {
     return (blendEnable == other.blendEnable) &&
         (srcColorBlendFactor == other.srcColorBlendFactor) &&

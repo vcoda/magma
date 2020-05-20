@@ -29,8 +29,8 @@ namespace magma
     {
         constexpr MultisampleState(VkSampleCountFlagBits rasterizationSamples) noexcept;
         constexpr MultisampleState(uint32_t sampleCount) noexcept;
-        std::size_t hash() const;
-        constexpr bool operator==(const MultisampleState&) const;
+        std::size_t hash() const noexcept;
+        constexpr bool operator==(const MultisampleState&) const noexcept;
     };
 
     /* Sample shading can be used to specify a minimum number of unique samples

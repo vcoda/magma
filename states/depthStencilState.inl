@@ -12,7 +12,7 @@ inline std::size_t StencilOpState::hash() const
         reference);
 }
 
-constexpr bool StencilOpState::operator==(const StencilOpState& other) const
+constexpr bool StencilOpState::operator==(const StencilOpState& other) const noexcept
 {
     return (failOp == other.failOp) &&
         (passOp == other.passOp) &&
@@ -46,7 +46,7 @@ constexpr DepthStencilState::DepthStencilState(const DepthStencilState& state,
     DepthStencilState(state.depthCompareOp, state.depthCompareOp, front, back)
 {}
 
-inline std::size_t DepthStencilState::hash() const
+inline std::size_t DepthStencilState::hash() const noexcept
 {
     return core::hashArgs(
         sType,
@@ -74,7 +74,7 @@ inline std::size_t DepthStencilState::hash() const
         maxDepthBounds);
 }
 
-constexpr bool DepthStencilState::operator==(const DepthStencilState& other) const
+constexpr bool DepthStencilState::operator==(const DepthStencilState& other) const noexcept
 {
     return (flags == other.flags) &&
         (depthTestEnable == other.depthTestEnable) &&

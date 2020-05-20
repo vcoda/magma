@@ -34,7 +34,7 @@ namespace magma
             VkStencilOpState{failOp, passOp, depthFailOp, compareOp, compareMask, writeMask, reference}
         {}
         std::size_t hash() const;
-        constexpr bool operator==(const StencilOpState&) const;
+        constexpr bool operator==(const StencilOpState&) const noexcept;
     };
 
     namespace renderstates
@@ -57,8 +57,8 @@ namespace magma
         constexpr DepthStencilState(const DepthStencilState& state,
             const StencilOpState& front,
             const StencilOpState& back) noexcept;
-        std::size_t hash() const;
-        constexpr bool operator==(const DepthStencilState&) const;
+        std::size_t hash() const noexcept;
+        constexpr bool operator==(const DepthStencilState&) const noexcept;
     };
 
     /* The depth bounds test conditionally disables coverage of a sample

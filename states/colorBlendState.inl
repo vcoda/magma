@@ -45,7 +45,7 @@ constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
     }
 {}
 
-inline std::size_t ColorBlendAttachmentState::hash() const
+inline std::size_t ColorBlendAttachmentState::hash() const noexcept
 {
     return core::hashArgs(
         blendEnable,
@@ -58,7 +58,7 @@ inline std::size_t ColorBlendAttachmentState::hash() const
         colorWriteMask);
 }
 
-constexpr bool ColorBlendAttachmentState::operator==(const ColorBlendAttachmentState& other) const
+constexpr bool ColorBlendAttachmentState::operator==(const ColorBlendAttachmentState& other) const noexcept
 {
     return (blendEnable == other.blendEnable) &&
         (srcColorBlendFactor == other.srcColorBlendFactor) &&
@@ -105,7 +105,7 @@ constexpr ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& atta
     this->blendConstants[3] = c[3];
 }
 
-inline std::size_t ColorBlendState::hash() const
+inline std::size_t ColorBlendState::hash() const noexcept
 {
     std::size_t hash = core::hashArgs(
         sType,
@@ -126,7 +126,7 @@ inline std::size_t ColorBlendState::hash() const
     return hash;
 }
 
-constexpr bool ColorBlendState::operator==(const ColorBlendState& other) const
+constexpr bool ColorBlendState::operator==(const ColorBlendState& other) const noexcept
 {
     return (flags == other.flags) &&
         (logicOpEnable == other.logicOpEnable) &&

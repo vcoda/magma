@@ -10,7 +10,7 @@ constexpr SamplerState::SamplerState(const VkFilter magFilter, const VkFilter mi
     maxAnisotropy(1.f)
 {}
 
-inline std::size_t SamplerState::hash() const
+inline std::size_t SamplerState::hash() const noexcept
 {
     return core::hashArgs(
         magFilter,
@@ -21,7 +21,7 @@ inline std::size_t SamplerState::hash() const
         maxAnisotropy);
 }
 
-constexpr bool SamplerState::operator==(const SamplerState& other) const
+constexpr bool SamplerState::operator==(const SamplerState& other) const noexcept
 {
     return (magFilter == other.magFilter) &&
         (minFilter == other.minFilter) &&
@@ -49,7 +49,7 @@ constexpr DepthSamplerState::DepthSamplerState(const VkFilter magFilter, const V
     compareOp(compareOp)
 {}
 
-inline std::size_t DepthSamplerState::hash() const
+inline std::size_t DepthSamplerState::hash() const noexcept
 {
     return core::hashArgs(
         magFilter,
@@ -57,7 +57,7 @@ inline std::size_t DepthSamplerState::hash() const
         compareOp);
 }
 
-constexpr bool DepthSamplerState::operator==(const DepthSamplerState& other) const
+constexpr bool DepthSamplerState::operator==(const DepthSamplerState& other) const noexcept
 {
     return (magFilter == other.magFilter) &&
         (minFilter == other.minFilter) &&

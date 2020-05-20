@@ -28,8 +28,8 @@ namespace magma
             VkFilter minFilter,
             VkSamplerMipmapMode mipmapMode,
             VkSamplerAddressMode addressMode) noexcept;
-        std::size_t hash() const;
-        constexpr bool operator==(const SamplerState&) const;
+        std::size_t hash() const noexcept;
+        constexpr bool operator==(const SamplerState&) const noexcept;
 
     protected:
         VkFilter magFilter;
@@ -59,8 +59,8 @@ namespace magma
         constexpr DepthSamplerState(VkFilter magFilter,
             VkFilter minFilter,
             VkCompareOp compareOp) noexcept;
-        std::size_t hash() const;
-        constexpr bool operator==(const DepthSamplerState&) const;
+        std::size_t hash() const noexcept;
+        constexpr bool operator==(const DepthSamplerState&) const noexcept;
 
     private:
         VkFilter magFilter;

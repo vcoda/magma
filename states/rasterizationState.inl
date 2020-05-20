@@ -20,7 +20,7 @@ constexpr RasterizationState::RasterizationState(const VkPolygonMode polygonMode
     }
 {}
 
-inline std::size_t RasterizationState::hash() const
+inline std::size_t RasterizationState::hash() const noexcept
 {
     return core::hashArgs(
         sType,
@@ -37,7 +37,7 @@ inline std::size_t RasterizationState::hash() const
         lineWidth);
 }
 
-constexpr bool RasterizationState::operator==(const RasterizationState& other) const
+constexpr bool RasterizationState::operator==(const RasterizationState& other) const noexcept
 {
     return (flags == other.flags) &&
         (depthClampEnable == other.depthClampEnable) &&
@@ -78,7 +78,7 @@ constexpr ConservativeRasterizationState::ConservativeRasterizationState(const R
     pNext = &conservative;
 }
 
-inline std::size_t ConservativeRasterizationState::hash() const
+inline std::size_t ConservativeRasterizationState::hash() const noexcept
 {
     std::size_t hash = core::hashArgs(
         conservative.sType,
@@ -89,7 +89,7 @@ inline std::size_t ConservativeRasterizationState::hash() const
     return hash;
 }
 
-constexpr bool ConservativeRasterizationState::operator==(const ConservativeRasterizationState& other) const
+constexpr bool ConservativeRasterizationState::operator==(const ConservativeRasterizationState& other) const noexcept
 {
     return RasterizationState::operator==(other) &&
         (conservative.flags == other.conservative.flags) &&
@@ -111,7 +111,7 @@ constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationSt
     pNext = &order;
 }
 
-inline std::size_t RasterizationOrderState::hash() const
+inline std::size_t RasterizationOrderState::hash() const noexcept
 {
     std::size_t hash = core::hashArgs(
         order.sType,
@@ -120,7 +120,7 @@ inline std::size_t RasterizationOrderState::hash() const
     return hash;
 }
 
-constexpr bool RasterizationOrderState::operator==(const RasterizationOrderState& other) const
+constexpr bool RasterizationOrderState::operator==(const RasterizationOrderState& other) const noexcept
 {
     return RasterizationState::operator==(other) &&
         (order.rasterizationOrder == other.order.rasterizationOrder);

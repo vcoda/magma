@@ -1,6 +1,6 @@
 namespace magma
 {
-constexpr bool Format::depth() const
+constexpr bool Format::depth() const noexcept
 {
     switch (format)
     {
@@ -13,7 +13,7 @@ constexpr bool Format::depth() const
     }
 }
 
-constexpr bool Format::stencil() const
+constexpr bool Format::stencil() const noexcept
 {
     switch (format)
     {
@@ -24,7 +24,7 @@ constexpr bool Format::stencil() const
     }
 }
 
-constexpr bool Format::depthStencil() const
+constexpr bool Format::depthStencil() const noexcept
 {
     switch (format)
     {
@@ -37,7 +37,7 @@ constexpr bool Format::depthStencil() const
     }
 }
 
-constexpr bool Format::blockCompressed() const
+constexpr bool Format::blockCompressed() const noexcept
 {
     switch (format)
     {
@@ -63,7 +63,7 @@ constexpr bool Format::blockCompressed() const
     }
 }
 
-constexpr bool Format::ETC2() const
+constexpr bool Format::ETC2() const noexcept
 {
     switch (format)
     {
@@ -79,7 +79,7 @@ constexpr bool Format::ETC2() const
     }
 }
 
-constexpr bool Format::EAC() const
+constexpr bool Format::EAC() const noexcept
 {
     switch (format)
     {
@@ -93,7 +93,7 @@ constexpr bool Format::EAC() const
     }
 }
 
-constexpr bool Format::ASTC() const
+constexpr bool Format::ASTC() const noexcept
 {
     switch (format)
     {
@@ -132,7 +132,7 @@ constexpr bool Format::ASTC() const
 }
 
 #ifdef VK_IMG_format_pvrtc
-constexpr bool Format::PVRTC() const
+constexpr bool Format::PVRTC() const noexcept
 {
     switch (format)
     {
@@ -151,7 +151,7 @@ constexpr bool Format::PVRTC() const
 }
 #endif // VK_IMG_format_pvrtc
 
-constexpr bool Format::compressed() const
+constexpr bool Format::compressed() const noexcept
 {
     return
 #ifdef VK_IMG_format_pvrtc
@@ -160,7 +160,7 @@ constexpr bool Format::compressed() const
         blockCompressed() || ETC2() || EAC() || ASTC();
 }
 
-constexpr bool Format::floatingPoint() const
+constexpr bool Format::floatingPoint() const noexcept
 {
     switch (format)
     {
@@ -188,7 +188,7 @@ constexpr bool Format::floatingPoint() const
     }
 }
 
-constexpr bool Format::sRGB() const
+constexpr bool Format::sRGB() const noexcept
 {
     switch (format)
     {
@@ -233,7 +233,7 @@ constexpr bool Format::sRGB() const
     }
 }
 
-constexpr std::size_t Format::size() const
+constexpr std::size_t Format::size() const noexcept
 {
     switch (format) // TODO: add all other formats in the future.
     {

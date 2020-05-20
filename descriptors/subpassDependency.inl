@@ -33,7 +33,7 @@ constexpr SubpassDependency::SubpassDependency(const uint32_t srcSubpass, const 
     }
 }
 
-inline std::size_t SubpassDependency::hash() const
+inline std::size_t SubpassDependency::hash() const noexcept
 {
     return core::hashArgs(
         srcSubpass,

@@ -11,7 +11,7 @@ constexpr InputAssemblyState::InputAssemblyState(const VkPrimitiveTopology topol
     }
 {}
 
-inline std::size_t InputAssemblyState::hash() const
+inline std::size_t InputAssemblyState::hash() const noexcept
 {
     return core::hashArgs(
         sType,
@@ -20,7 +20,7 @@ inline std::size_t InputAssemblyState::hash() const
         primitiveRestartEnable);
 }
 
-constexpr bool InputAssemblyState::operator==(const InputAssemblyState& other) const
+constexpr bool InputAssemblyState::operator==(const InputAssemblyState& other) const noexcept
 {
     return (flags == other.flags) &&
         (topology == other.topology) &&

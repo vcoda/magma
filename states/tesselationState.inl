@@ -9,7 +9,7 @@ constexpr TesselationState::TesselationState(const uint32_t patchControlPoints /
     }
 {}
 
-inline std::size_t TesselationState::hash() const
+inline std::size_t TesselationState::hash() const noexcept
 {
     return core::hashArgs(
         sType,
@@ -17,7 +17,7 @@ inline std::size_t TesselationState::hash() const
         patchControlPoints);
 }
 
-constexpr bool TesselationState::operator==(const TesselationState& other) const
+constexpr bool TesselationState::operator==(const TesselationState& other) const noexcept
 {
     return (flags == other.flags) && (patchControlPoints == other.patchControlPoints);
 }
