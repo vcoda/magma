@@ -26,7 +26,7 @@ template<typename T> inline void memzero(T& o) noexcept
     memset(&o, 0, sizeof(T));
 }
 
-template<typename T, int N> inline void memzero(T (&a)[N]) noexcept
+template<typename T, std::size_t N> inline void memzero(T (&a)[N]) noexcept
 {
     memset(a, 0, sizeof(T) * N);
 }
