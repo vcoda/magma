@@ -26,8 +26,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ResourcePool::DeviceResources ResourcePool::countDeviceResources() const noexcept
+ResourcePool::DeviceResources ResourcePool::countDeviceResources() const
 {
+    std::lock_guard<std::mutex> guard(mutex);
     DeviceResources statistics;
     statistics.semaphoreCount = semaphores.count();
     statistics.fenceCount = fences.count();
@@ -93,8 +94,9 @@ ResourcePool::DeviceResources ResourcePool::countDeviceResources() const noexcep
     return statistics;
 }
 
-ResourcePool::PhysicalDeviceResources ResourcePool::countPhysicalDeviceResources() const noexcept
+ResourcePool::PhysicalDeviceResources ResourcePool::countPhysicalDeviceResources() const
 {
+    std::lock_guard<std::mutex> guard(mutex);
     PhysicalDeviceResources statistics;
 #ifdef VK_KHR_display
     statistics.displayCount = displays.count();
@@ -103,8 +105,9 @@ ResourcePool::PhysicalDeviceResources ResourcePool::countPhysicalDeviceResources
     return statistics;
 }
 
-VkDeviceSize ResourcePool::countAllocatedDeviceLocalMemory() const noexcept
+VkDeviceSize ResourcePool::countAllocatedDeviceLocalMemory() const
 {
+    std::lock_guard<std::mutex> guard(mutex);
     VkDeviceSize deviceLocalAllocatedSize = 0;
     deviceMemories.forEach<DeviceMemory>(
         [&deviceLocalAllocatedSize](const DeviceMemory *memory)
@@ -115,8 +118,9 @@ VkDeviceSize ResourcePool::countAllocatedDeviceLocalMemory() const noexcept
     return deviceLocalAllocatedSize;
 }
 
-VkDeviceSize ResourcePool::countAllocatedHostVisibleMemory() const noexcept
+VkDeviceSize ResourcePool::countAllocatedHostVisibleMemory() const
 {
+    std::lock_guard<std::mutex> guard(mutex);
     VkDeviceSize hostVisibleAllocatedSize = 0;
     deviceMemories.forEach<DeviceMemory>(
         [&hostVisibleAllocatedSize](const DeviceMemory *memory)
@@ -127,8 +131,9 @@ VkDeviceSize ResourcePool::countAllocatedHostVisibleMemory() const noexcept
     return hostVisibleAllocatedSize;
 }
 
-VkDeviceSize ResourcePool::countAllocatedBufferMemory() const noexcept
+VkDeviceSize ResourcePool::countAllocatedBufferMemory() const
 {
+    std::lock_guard<std::mutex> guard(mutex);
     VkDeviceSize bufferAllocatedSize = 0;
     buffers.forEach<Buffer>(
         [&bufferAllocatedSize](const Buffer *buffer)
@@ -140,8 +145,9 @@ VkDeviceSize ResourcePool::countAllocatedBufferMemory() const noexcept
     return bufferAllocatedSize;
 }
 
-VkDeviceSize ResourcePool::countAllocatedImageMemory() const noexcept
+VkDeviceSize ResourcePool::countAllocatedImageMemory() const
 {
+    std::lock_guard<std::mutex> guard(mutex);
     VkDeviceSize imageAllocatedSize = 0;
     images.forEach<Image>(
         [&imageAllocatedSize](const Image *image)
@@ -153,8 +159,9 @@ VkDeviceSize ResourcePool::countAllocatedImageMemory() const noexcept
     return imageAllocatedSize;
 }
 
-VkDeviceSize ResourcePool::countAllocatedAccelerationStructureMemory() const noexcept
+VkDeviceSize ResourcePool::countAllocatedAccelerationStructureMemory() const
 {
+    std::lock_guard<std::mutex> guard(mutex);
     VkDeviceSize accelerationStructureAllocatedSize = 0;
 #ifdef VK_NV_ray_tracing
     images.forEach<AccelerationStructure>(
@@ -168,8 +175,9 @@ VkDeviceSize ResourcePool::countAllocatedAccelerationStructureMemory() const noe
     return accelerationStructureAllocatedSize;
 }
 
-bool ResourcePool::hasAnyDeviceResource() const noexcept
+bool ResourcePool::hasAnyDeviceResource() const
 {
+    std::lock_guard<std::mutex> guard(mutex);
     return semaphores.count() > 0 ||
         fences.count() > 0 ||
         deviceMemories.count() > 0 ||

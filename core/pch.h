@@ -36,6 +36,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <limits>
 
 #include <atomic>
+#include <mutex>
 #include <thread>
 
 #ifdef _WIN32

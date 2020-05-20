@@ -4,44 +4,58 @@ template<typename Type>
 inline void ResourcePool::Pool<Type>::registerResource(const Type *resource) noexcept
 {
     try {
+        std::lock_guard<std::mutex> guard(mutex);
         resources.insert(resource);
-    } catch (...) {}
+    } catch (...) {
+    }
 }
 
 template<typename Type>
 inline void ResourcePool::Pool<Type>::unregisterResource(const Type *resource) noexcept
 {
     try {
+        std::lock_guard<std::mutex> guard(mutex);
         auto it = resources.find(resource);
         MAGMA_ASSERT(it != resources.end());
         if (it != resources.end())
             resources.erase(it);
-    } catch (...) {}
+    } catch (...) {
+    }
 }
 
 template<typename Type>
 inline uint32_t ResourcePool::Pool<Type>::count() const noexcept
 {
-    return static_cast<uint32_t>(resources.size());
+    try {
+        std::lock_guard<std::mutex> guard(mutex);
+        return static_cast<uint32_t>(resources.size());
+    } catch (...) {
+        return 0;
+    }
 }
 
 template<typename Type>
 template<typename ChildType>
 void ResourcePool::Pool<Type>::forEach(const std::function<void(const ChildType *resource)>& fn) const noexcept
 {
-    for (const Type *resource : resources)
-    {
-        const ChildType *child = dynamic_cast<const ChildType *>(resource);
-        if (child)
-            fn(child);
+    try {
+        std::lock_guard<std::mutex> guard(mutex);
+        for (const Type *resource : resources)
+        {
+            const ChildType *child = dynamic_cast<const ChildType *>(resource);
+            if (child)
+                fn(child);
+        }
+    } catch (...) {
     }
 }
 
 #ifdef MAGMA_X64
 #define MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(Type, pool)\
 template<>\
-inline ResourcePool::Pool<Type>& ResourcePool::getPool<Type>() noexcept\
+inline ResourcePool::Pool<Type>& ResourcePool::getPool<Type>()\
 {\
+    std::lock_guard<std::mutex> guard(mutex);\
     return pool;\
 }
 

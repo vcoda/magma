@@ -71,20 +71,21 @@ namespace magma
         };
 
     public:
-        DeviceResources countDeviceResources() const noexcept;
-        PhysicalDeviceResources countPhysicalDeviceResources() const noexcept;
-        VkDeviceSize countAllocatedDeviceLocalMemory() const noexcept;
-        VkDeviceSize countAllocatedHostVisibleMemory() const noexcept;
-        VkDeviceSize countAllocatedBufferMemory() const noexcept;
-        VkDeviceSize countAllocatedImageMemory() const noexcept;
-        VkDeviceSize countAllocatedAccelerationStructureMemory() const noexcept;
-        bool hasAnyDeviceResource() const noexcept;
+        DeviceResources countDeviceResources() const;
+        PhysicalDeviceResources countPhysicalDeviceResources() const;
+        VkDeviceSize countAllocatedDeviceLocalMemory() const;
+        VkDeviceSize countAllocatedHostVisibleMemory() const;
+        VkDeviceSize countAllocatedBufferMemory() const;
+        VkDeviceSize countAllocatedImageMemory() const;
+        VkDeviceSize countAllocatedAccelerationStructureMemory() const;
+        bool hasAnyDeviceResource() const;
 
     private:
         template<typename Type>
         class Pool final : public core::NonCopyable
         {
             std::unordered_set<const Type *> resources;
+            mutable std::mutex mutex;
 
         public:
             void registerResource(const Type *resource) noexcept;
@@ -95,7 +96,10 @@ namespace magma
         };
 
         template<typename Type>
-        Pool<Type>& getPool() noexcept;
+        Pool<Type>& getPool();
+
+    private:
+        mutable std::mutex mutex;
 
         // Core types
         Pool<NonDispatchable<VkSemaphore>> semaphores;
