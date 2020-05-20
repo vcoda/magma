@@ -45,7 +45,7 @@ namespace magma
            The sampler objects must not be destroyed before the final use of the set layout
            and any descriptor pools and sets created using it. */
 
-        class SamplerBinding final : public Binding
+        class SamplerBinding : public Binding
         {
         public:
             SamplerBinding(uint32_t binding,
