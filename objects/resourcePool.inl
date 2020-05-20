@@ -1,7 +1,7 @@
 namespace magma
 {
-template<typename Type>
-inline void ResourcePool::Pool<Type>::registerResource(const Type *resource) noexcept
+template<typename Base>
+inline void ResourcePool::Pool<Base>::registerResource(const Base *resource) noexcept
 {
     try {
         std::lock_guard<std::mutex> guard(mutex);
@@ -10,8 +10,8 @@ inline void ResourcePool::Pool<Type>::registerResource(const Type *resource) noe
     }
 }
 
-template<typename Type>
-inline void ResourcePool::Pool<Type>::unregisterResource(const Type *resource) noexcept
+template<typename Base>
+inline void ResourcePool::Pool<Base>::unregisterResource(const Base *resource) noexcept
 {
     try {
         std::lock_guard<std::mutex> guard(mutex);
@@ -23,8 +23,8 @@ inline void ResourcePool::Pool<Type>::unregisterResource(const Type *resource) n
     }
 }
 
-template<typename Type>
-inline uint32_t ResourcePool::Pool<Type>::count() const noexcept
+template<typename Base>
+inline uint32_t ResourcePool::Pool<Base>::count() const noexcept
 {
     try {
         std::lock_guard<std::mutex> guard(mutex);
@@ -34,18 +34,19 @@ inline uint32_t ResourcePool::Pool<Type>::count() const noexcept
     }
 }
 
-template<typename Type>
-template<typename ChildType>
-void ResourcePool::Pool<Type>::forEach(const std::function<void(const ChildType *resource)>& fn) const noexcept
+template<typename Base>
+template<typename Derived>
+void ResourcePool::Pool<Base>::forEach(const std::function<void(const Derived *resource)>& fn) const noexcept
 {
     try {
         std::lock_guard<std::mutex> guard(mutex);
-        for (const Type *resource : resources)
-        {
-            const ChildType *child = dynamic_cast<const ChildType *>(resource);
-            if (child)
-                fn(child);
-        }
+        std::for_each(resources.begin(), resources.end(),
+            [&fn](const Base *base)
+            {
+                const Derived *derived = dynamic_cast<const Derived *>(base);
+                if (derived)
+                    fn(derived);
+            });
     } catch (...) {
     }
 }

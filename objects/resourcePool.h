@@ -81,18 +81,18 @@ namespace magma
         bool hasAnyDeviceResource() const;
 
     private:
-        template<typename Type>
+        template<typename Base>
         class Pool final : public core::NonCopyable
         {
-            std::unordered_set<const Type *> resources;
+            std::unordered_set<const Base *> resources;
             mutable std::mutex mutex;
 
         public:
-            void registerResource(const Type *resource) noexcept;
-            void unregisterResource(const Type *resouce) noexcept;
+            void registerResource(const Base *resource) noexcept;
+            void unregisterResource(const Base *resouce) noexcept;
             uint32_t count() const noexcept;
-            template<typename ChildType>
-            void forEach(const std::function<void(const ChildType *resource)>& fn) const noexcept;
+            template<typename Derived>
+            void forEach(const std::function<void(const Derived *resource)>& fn) const noexcept;
         };
 
         template<typename Type>
