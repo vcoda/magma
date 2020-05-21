@@ -30,12 +30,12 @@ namespace magma
     struct SubpassDescription : VkSubpassDescription
     {
         SubpassDescription() noexcept;
-        SubpassDescription(VkImageLayout colorLayout);
+        SubpassDescription(VkImageLayout colorLayout) noexcept;
         SubpassDescription(VkImageLayout colorLayout,
-            VkImageLayout depthStencilLayout);
-        SubpassDescription(const std::vector<VkImageLayout>& colorLayouts);
+            VkImageLayout depthStencilLayout) noexcept;
+        SubpassDescription(const std::vector<VkImageLayout>& colorLayouts) noexcept;
         SubpassDescription(const std::vector<VkImageLayout>& colorLayouts,
-            const VkImageLayout& depthStencilLayout);
+            const VkImageLayout& depthStencilLayout) noexcept;
         SubpassDescription(const SubpassDescription&) noexcept;
         SubpassDescription& operator=(const SubpassDescription&) noexcept;
         ~SubpassDescription();

@@ -45,15 +45,16 @@ inline SubpassDescription::SubpassDescription(VkPipelineBindPoint pipelineBindPo
     pInputAttachments = nullptr;
 }
 
-SubpassDescription::SubpassDescription(VkImageLayout colorLayout):
+SubpassDescription::SubpassDescription(VkImageLayout colorLayout) noexcept:
     SubpassDescription(VK_PIPELINE_BIND_POINT_GRAPHICS)
 {
-    VkAttachmentReference *colorReference = new VkAttachmentReference[1];
+    VkAttachmentReference *colorReference = new(std::nothrow) VkAttachmentReference[1];
+    if (colorReference)
     {
         colorReference->attachment = 0;
         colorReference->layout = colorLayout;
+        colorAttachmentCount = 1;
     }
-    colorAttachmentCount = 1;
     pColorAttachments = colorReference;
     pResolveAttachments = nullptr;
     pDepthStencilAttachment = nullptr;
@@ -61,19 +62,23 @@ SubpassDescription::SubpassDescription(VkImageLayout colorLayout):
     pPreserveAttachments = nullptr;
 }
 
-SubpassDescription::SubpassDescription(VkImageLayout colorLayout, VkImageLayout depthStencilLayout):
+SubpassDescription::SubpassDescription(VkImageLayout colorLayout, VkImageLayout depthStencilLayout) noexcept:
     SubpassDescription(VK_PIPELINE_BIND_POINT_GRAPHICS)
 {
     if (colorLayout != VK_IMAGE_LAYOUT_UNDEFINED)
     {
-        VkAttachmentReference *colorReference = new VkAttachmentReference[1];
-        colorReference->attachment = 0;
-        colorReference->layout = colorLayout;
-        colorAttachmentCount = 1;
+        VkAttachmentReference *colorReference = new(std::nothrow) VkAttachmentReference[1];
+        if (colorReference)
+        {
+            colorReference->attachment = 0;
+            colorReference->layout = colorLayout;
+            colorAttachmentCount = 1;
+        }
         pColorAttachments = colorReference;
     }
     pResolveAttachments = nullptr;
-    VkAttachmentReference *depthStencilReference = new VkAttachmentReference;
+    VkAttachmentReference *depthStencilReference = new(std::nothrow) VkAttachmentReference;
+    if (depthStencilReference)
     {
         depthStencilReference->attachment = 1;
         depthStencilReference->layout = depthStencilLayout;
@@ -83,17 +88,20 @@ SubpassDescription::SubpassDescription(VkImageLayout colorLayout, VkImageLayout 
     pPreserveAttachments = nullptr;
 }
 
-SubpassDescription::SubpassDescription(const std::vector<VkImageLayout>& colorLayouts):
+SubpassDescription::SubpassDescription(const std::vector<VkImageLayout>& colorLayouts) noexcept:
     SubpassDescription(VK_PIPELINE_BIND_POINT_GRAPHICS)
 {
     if (!colorLayouts.empty())
     {
-        VkAttachmentReference *colorReferences = new VkAttachmentReference[colorLayouts.size()];
-        for (auto layout : colorLayouts)
+        VkAttachmentReference *colorReferences = new(std::nothrow) VkAttachmentReference[colorLayouts.size()];
+        if (colorReferences)
         {
-            colorReferences[colorAttachmentCount].attachment = colorAttachmentCount;
-            colorReferences[colorAttachmentCount].layout = layout;
-            ++colorAttachmentCount;
+            for (auto layout : colorLayouts)
+            {
+                colorReferences[colorAttachmentCount].attachment = colorAttachmentCount;
+                colorReferences[colorAttachmentCount].layout = layout;
+                ++colorAttachmentCount;
+            }
         }
         pColorAttachments = colorReferences;
     }
@@ -103,12 +111,15 @@ SubpassDescription::SubpassDescription(const std::vector<VkImageLayout>& colorLa
     pPreserveAttachments = nullptr;
 }
 
-SubpassDescription::SubpassDescription(const std::vector<VkImageLayout>& colorLayouts, const VkImageLayout& depthStencilLayout):
+SubpassDescription::SubpassDescription(const std::vector<VkImageLayout>& colorLayouts, const VkImageLayout& depthStencilLayout) noexcept:
     SubpassDescription(colorLayouts)
 {
-    VkAttachmentReference *depthStencilReference = new VkAttachmentReference;
-    depthStencilReference->attachment = colorAttachmentCount;
-    depthStencilReference->layout = depthStencilLayout;
+    VkAttachmentReference *depthStencilReference = new(std::nothrow) VkAttachmentReference;
+    if (depthStencilReference)
+    {
+        depthStencilReference->attachment = colorAttachmentCount;
+        depthStencilReference->layout = depthStencilLayout;
+    }
     pDepthStencilAttachment = depthStencilReference;
 }
 
