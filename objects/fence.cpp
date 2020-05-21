@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Fence::Fence(std::shared_ptr<Device> device,
-    bool signaled /* false */,
+    const bool signaled /* false */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_FENCE, std::move(device), std::move(allocator))
 {
@@ -58,7 +58,8 @@ VkResult Fence::getStatus() const noexcept
 
 bool Fence::wait(uint64_t timeout /* UINT64_MAX */) const noexcept
 {
-    const VkResult wait = vkWaitForFences(MAGMA_HANDLE(device), 1, &handle, VK_TRUE, timeout);
+    constexpr VkBool32 waitAll = VK_TRUE;
+    const VkResult wait = vkWaitForFences(MAGMA_HANDLE(device), 1, &handle, waitAll, timeout);
     return (VK_SUCCESS == wait) || (VK_TIMEOUT == wait);
 }
 } // namespace magma
