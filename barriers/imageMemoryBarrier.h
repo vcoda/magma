@@ -36,7 +36,7 @@ namespace magma
             VkImageSubresourceRange subresourceRange);
 
     private:
-        std::shared_ptr<Image> resource;
+        std::shared_ptr<Image> resource; // Store resource as its layout may be changed
         friend class CommandBuffer;
     };
 } // namespace magma
