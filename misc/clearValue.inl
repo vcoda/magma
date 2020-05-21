@@ -1,5 +1,9 @@
 namespace magma
 {
+constexpr ClearValue::ClearValue() noexcept:
+	value{}
+{}
+
 constexpr ClearColor::ClearColor(const float r, const float g, const float b, const float a /* 1.f */) noexcept
 {
     value.color.float32[0] = r;

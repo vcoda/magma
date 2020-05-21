@@ -1,5 +1,9 @@
 namespace magma
 {
+constexpr ClearAttachment::ClearAttachment() noexcept:
+	VkClearAttachment{}
+{}
+
 constexpr ClearAttachment::ClearAttachment(const VkImageAspectFlags aspectMask, const uint32_t attachment) noexcept:
     VkClearAttachment{
         aspectMask,

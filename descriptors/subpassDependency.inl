@@ -1,5 +1,9 @@
 namespace magma
 {
+constexpr SubpassDependency::SubpassDependency():
+	VkSubpassDependency{}
+{}
+
 constexpr SubpassDependency::SubpassDependency(const uint32_t srcSubpass, const uint32_t dstSubpass,
     const VkPipelineStageFlags srcStageMask, const VkPipelineStageFlags dstStageMask,
     const VkDependencyFlags dependencyFlags /* VK_DEPENDENCY_BY_REGION_BIT */):
