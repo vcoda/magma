@@ -122,7 +122,25 @@ uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore,
         MAGMA_OPTIONAL_HANDLE(semaphore),
         MAGMA_OPTIONAL_HANDLE(fence),
         &imageIndex);
-    MAGMA_THROW_FAILURE(acquire, "failed to acquire swapchain image");
+    switch (acquire)
+    {
+    case VK_SUCCESS:
+    case VK_TIMEOUT:
+    case VK_NOT_READY:
+    case VK_SUBOPTIMAL_KHR:
+        return imageIndex;
+    case VK_ERROR_OUT_OF_HOST_MEMORY:
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY:
+        MAGMA_THROW_OUT_OF_MEMORY(acquire, "failed to wait acquire next image");
+    case VK_ERROR_DEVICE_LOST:
+        MAGMA_THROW_DEVICE_LOST("device is lost while acquire next image");
+    case VK_ERROR_OUT_OF_DATE_KHR:
+    case VK_ERROR_SURFACE_LOST_KHR:
+#ifdef VK_EXT_full_screen_exclusive
+    case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
+#endif
+        MAGMA_THROW_FAILURE(acquire, "failed to acquire swapchain image");
+    }
     return imageIndex;
 }
 
