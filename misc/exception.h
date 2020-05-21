@@ -57,6 +57,20 @@ namespace magma
             BadResult(VK_ERROR_DEVICE_LOST, message, file, line) {}
     };
 
+    class OutOfHostMemoryException : public BadResult
+    {
+    public:
+        OutOfHostMemoryException(const char *const message, const char *file, int line):
+            BadResult(VK_ERROR_OUT_OF_HOST_MEMORY, message, file, line) {}
+    };
+
+    class OutOfDeviceMemoryException : public BadResult
+    {
+    public:
+        OutOfDeviceMemoryException(const char *const message, const char *file, int line):
+            BadResult(VK_ERROR_OUT_OF_DEVICE_MEMORY, message, file, line) {}
+    };
+
     class ExtensionNotPresent: public Exception
     {
     public:
@@ -81,6 +95,13 @@ namespace magma
 #define MAGMA_THROW_PRESENT_FAILURE(result, message)\
     if (!MAGMA_PRESENT_SUCCEEDED(result))\
         throw PresentException(result, message, __FILE__, __LINE__)
+#define MAGMA_THROW_OUT_OF_MEMORY(result, message)\
+    if (VK_ERROR_OUT_OF_HOST_MEMORY == result)\
+        throw OutOfHostMemoryException(message, __FILE__, __LINE__);\
+    else if (VK_ERROR_OUT_OF_DEVICE_MEMORY == result)\
+        throw OutOfDeviceMemoryException(message, __FILE__, __LINE__);\
+    else\
+        throw Exception("unknown error", __FILE__, __LINE__)
 #define MAGMA_THROW_UNSUPPORTED_EXTENSION(pfn, extension)\
     if (!pfn)\
         throw ExtensionNotPresent(extension, __FILE__, __LINE__)
