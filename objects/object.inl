@@ -21,6 +21,16 @@ inline Object<Type>::Object(VkObjectType objectType, std::shared_ptr<Device> dev
 }
 
 template<typename Type>
+inline VkObjectType Object<Type>::getObjectType() const noexcept
+{
+#ifdef MAGMA_X64
+    return ObjectType<Type>::getObjectType();
+#else
+    return objectType;
+#endif
+}
+
+template<typename Type>
 inline void Object<Type>::setObjectName(const char *name) noexcept
 {
     MAGMA_ASSERT(name);

@@ -41,9 +41,7 @@ namespace magma
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator) noexcept;
         virtual ~Object() = default;
-#if !defined(MAGMA_X64)
-        VkObjectType getObjectType() const noexcept { return objectType; }
-#endif
+        VkObjectType getObjectType() const noexcept;
         std::shared_ptr<Device> getDevice() const noexcept { return device; }
         std::shared_ptr<IAllocator> getAllocator() const noexcept { return allocator; }
         virtual uint64_t getHandle() const noexcept = 0;
