@@ -1,6 +1,6 @@
 namespace magma
 {
-inline std::size_t StencilOpState::hash() const
+inline std::size_t StencilOpState::hash() const noexcept
 {
     return core::hashArgs(
         failOp,
