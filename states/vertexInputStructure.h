@@ -39,8 +39,8 @@ namespace magma
         explicit VertexInputStructure(uint32_t binding,
             const VertexInputAttribute(&attributes)[vertexAttributeCount],
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX);
-        VertexInputStructure(const VertexInputStructure& other);
-        VertexInputStructure& operator=(const VertexInputStructure& other);
+        VertexInputStructure(const VertexInputStructure& other) noexcept;
+        VertexInputStructure& operator=(const VertexInputStructure& other) noexcept;
         virtual uint32_t stride(uint32_t binding) const noexcept override;
     };
 

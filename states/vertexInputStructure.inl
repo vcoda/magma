@@ -82,7 +82,7 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, cons
 }
 
 template<typename Vertex>
-inline VertexInputStructure<Vertex>::VertexInputStructure(const VertexInputStructure& other)
+inline VertexInputStructure<Vertex>::VertexInputStructure(const VertexInputStructure& other) noexcept
 {
     sType = other.sType;
     pNext = other.pNext;
@@ -94,7 +94,7 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(const VertexInputStruc
 }
 
 template<typename Vertex>
-inline VertexInputStructure<Vertex>& VertexInputStructure<Vertex>::operator=(const VertexInputStructure<Vertex>& other)
+inline VertexInputStructure<Vertex>& VertexInputStructure<Vertex>::operator=(const VertexInputStructure<Vertex>& other) noexcept
 {
     if (this != &other)
     {
