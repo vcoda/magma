@@ -46,7 +46,7 @@ namespace magma
     public:
         ~Device();
         std::shared_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
-        bool waitIdle() const noexcept;
+        bool waitIdle() const;
         bool resetFences(std::vector<std::shared_ptr<Fence>>& fences) const noexcept;
         bool waitForFences(std::vector<std::shared_ptr<Fence>>& fences,
             bool waitAll, uint64_t timeout = UINT64_MAX) const noexcept;

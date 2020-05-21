@@ -119,10 +119,20 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
     MAGMA_THROW("failed to get device queue");
 }
 
-bool Device::waitIdle() const noexcept
+bool Device::waitIdle() const
 {
-    const VkResult wait = vkDeviceWaitIdle(handle);
-    return (VK_SUCCESS == wait);
+    const VkResult waitIdle = vkDeviceWaitIdle(handle);
+    switch (waitIdle)
+    {
+    case VK_SUCCESS:
+        return true;
+    case VK_ERROR_OUT_OF_HOST_MEMORY:
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY:
+        MAGMA_THROW_OUT_OF_MEMORY(waitIdle, "failed to wait for device idle");
+    case VK_ERROR_DEVICE_LOST:
+        MAGMA_THROW_DEVICE_LOST("device is lost while wait for device idle");
+    }
+    return false;
 }
 
 bool Device::resetFences(std::vector<std::shared_ptr<Fence>>& fences) const noexcept
