@@ -50,6 +50,13 @@ namespace magma
             BadResult(result, message, file, line) {}
     };
 
+    class DeviceLostException : public BadResult
+    {
+    public:
+        DeviceLostException(const char *const message, const char *file, int line):
+            BadResult(VK_ERROR_DEVICE_LOST, message, file, line) {}
+    };
+
     class ExtensionNotPresent: public Exception
     {
     public:
@@ -66,6 +73,8 @@ namespace magma
 } // namespace magma
 
 #define MAGMA_THROW(message) throw Exception(message, __FILE__, __LINE__)
+#define MAGMA_THROW_DEVICE_LOST(message) throw DeviceLostException(message, __FILE__, __LINE__)
+
 #define MAGMA_THROW_FAILURE(result, message)\
     if (!MAGMA_SUCCEEDED(result))\
         throw BadResult(result, message, __FILE__, __LINE__)
