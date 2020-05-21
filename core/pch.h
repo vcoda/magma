@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include <cstring>
+#include <cstdarg>
 #include <cassert>
 
 #include <memory>
