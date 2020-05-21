@@ -43,5 +43,5 @@ namespace magma
 #define MAGMA_EXTENSION_PREFIX "VK_"
 #define MAGMA_EXTENSION(extension)\
     const bool extension;\
-	static constexpr std::size_t __hash_of_ ## extension = magma::core::hashString(MAGMA_EXTENSION_PREFIX #extension);
+    static constexpr std::size_t __hash_of_ ## extension = magma::core::hashString(MAGMA_EXTENSION_PREFIX #extension);
 #define MAGMA_CHECK_EXTENSION(extension) extension(hasExtension(__hash_of_ ## extension))

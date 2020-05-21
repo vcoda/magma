@@ -1,7 +1,7 @@
 namespace magma
 {
 constexpr SubpassDependency::SubpassDependency():
-	VkSubpassDependency{}
+    VkSubpassDependency{}
 {}
 
 constexpr SubpassDependency::SubpassDependency(const uint32_t srcSubpass, const uint32_t dstSubpass,

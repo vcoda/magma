@@ -43,5 +43,5 @@ namespace magma
 #define MAGMA_LAYER_PREFIX "VK_LAYER_"
 #define MAGMA_LAYER(layer)\
     const bool layer;\
-	static constexpr std::size_t __hash_of_ ## layer = core::hashString(MAGMA_LAYER_PREFIX #layer);
+    static constexpr std::size_t __hash_of_ ## layer = core::hashString(MAGMA_LAYER_PREFIX #layer);
 #define MAGMA_CHECK_LAYER(layer) layer(hasLayer(__hash_of_ ## layer))

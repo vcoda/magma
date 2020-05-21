@@ -22,7 +22,7 @@ namespace magma
 {
     struct ClearAttachment : VkClearAttachment
     {
-		constexpr ClearAttachment() noexcept;
+        constexpr ClearAttachment() noexcept;
         constexpr ClearAttachment(VkImageAspectFlags aspectMask, uint32_t attachment) noexcept;
     };
 
