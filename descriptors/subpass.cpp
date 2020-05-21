@@ -25,7 +25,7 @@ namespace magma
 SubpassDescription::SubpassDescription() noexcept
 {
     flags = 0;
-    this->pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+    pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
     inputAttachmentCount = 0;
     pInputAttachments = nullptr;
     colorAttachmentCount = 0;
