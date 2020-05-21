@@ -86,3 +86,4 @@ from any third-party libraries, except [shaderc](https://github.com/google/shade
 ## Language
 
 Code is written in modern C++11/14 and takes advantage of new language features, STL and shared pointers.
+Supported compilers: MSC, GCC.
