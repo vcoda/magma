@@ -1,8 +1,8 @@
 namespace magma
 {
-constexpr ClearValue::ClearValue() noexcept:
+constexpr ClearValue::ClearValue() noexcept
 #ifndef _MSC_VER
-    value{}
+    : value{}
 #endif
 {}
 
