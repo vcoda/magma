@@ -21,7 +21,7 @@ namespace magma
 {
     struct ClearValue
     {
-        constexpr ClearValue() noexcept {}
+        constexpr ClearValue() noexcept;
         constexpr operator VkClearValue&() noexcept { return value; }
         constexpr operator const VkClearValue&() const noexcept { return value; }
 
