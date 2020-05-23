@@ -29,7 +29,9 @@ namespace magma
             const char *name) noexcept;
         InstanceExtension(VkInstance instance,
             const char *name,
-            const char *extension);
+            const char *extension,
+            const char *file,
+            long line);
         operator Func() const noexcept { return reinterpret_cast<Func>(pfn); }
 
     private:
@@ -38,7 +40,7 @@ namespace magma
 } // namespace magma
 
 #define MAGMA_INSTANCE_EXTENSION(func, extension)\
-    magma::InstanceExtension<PFN_##func> func(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(func), extension)
+    magma::InstanceExtension<PFN_##func> func(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(func), extension, __FILE__, __LINE__)
 #define MAGMA_OPTIONAL_INSTANCE_EXTENSION(func)\
     magma::InstanceExtension<PFN_##func> func(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(func))
 

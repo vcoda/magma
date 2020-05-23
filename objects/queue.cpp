@@ -181,6 +181,25 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
     presentInfo.pImageIndices = &imageIndex;
     presentInfo.pResults = nullptr;
     const VkResult present = vkQueuePresentKHR(handle, &presentInfo);
-    MAGMA_THROW_PRESENT_FAILURE(present, "queue present failed");
+    switch (present)
+    {
+    case VK_SUCCESS:
+    case VK_SUBOPTIMAL_KHR:
+        break;
+    case VK_ERROR_OUT_OF_HOST_MEMORY:
+        throw exception::OutOfHostMemory("queue present failed");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY:
+        throw exception::OutOfDeviceMemory("queue present failed");
+    case VK_ERROR_DEVICE_LOST:
+        throw exception::DeviceLost("queue present failed");
+    case VK_ERROR_OUT_OF_DATE_KHR:
+        throw exception::OutOfDate("queue present failed");
+    case VK_ERROR_SURFACE_LOST_KHR:
+        throw exception::SurfaceLost("queue present failed");
+#ifdef VK_EXT_full_screen_exclusive
+    case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
+        throw exception::FullScreenExclusiveModeLost("queue present failed");
+#endif
+    } // switch
 }
 } // namespace magma

@@ -127,10 +127,11 @@ bool Device::waitIdle() const
     case VK_SUCCESS:
         return true;
     case VK_ERROR_OUT_OF_HOST_MEMORY:
+        throw exception::OutOfHostMemory("failed to wait for device become idle");
     case VK_ERROR_OUT_OF_DEVICE_MEMORY:
-        MAGMA_THROW_OUT_OF_MEMORY(waitIdle, "failed to wait for device idle");
+        throw exception::OutOfDeviceMemory("failed to wait for device become idle");
     case VK_ERROR_DEVICE_LOST:
-        MAGMA_THROW_DEVICE_LOST("device is lost while wait for device idle");
+        throw exception::DeviceLost("failed to wait for device become idle");
     }
     return false;
 }

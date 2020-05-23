@@ -71,11 +71,11 @@ namespace magma
             bool warningsAsErrors = false;
         };
 
-        class CompileException : public Exception
+        class CompileException : public exception::Exception
         {
         public:
             CompileException(shaderc_compilation_result_t result,
-                const char *file, int line);
+                const char *file, long line);
             shaderc_compilation_status getStatus() const noexcept { return status; }
             std::size_t numWarnings() const noexcept { return warnings; }
             std::size_t numErrors() const noexcept { return errors; }

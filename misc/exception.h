@@ -16,97 +16,181 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include <exception>
 
 namespace magma
 {
-    class Exception : public std::runtime_error
+    namespace exception
     {
-    public:
-        Exception(const char *const message, const char *file = nullptr, int line = -1);
-        Exception(const std::string& message, const char *file = nullptr, int line = -1);
-        const char *file() const noexcept { return fl; }
-        int line() const noexcept { return ln; }
+        /* Base exception class.
+           Provides (optional) information as file name and
+           line number where it was thrown. */
 
-    private:
-        const char *fl;
-        int ln;
-    };
+        class Exception : public std::exception
+        {
+        public:
+            explicit Exception() noexcept;
+            explicit Exception(const char *message) noexcept;
+            explicit Exception(const std::string message) noexcept;
+            explicit Exception(const char *message,
+                const char *file, long line) noexcept;
+            explicit Exception(const std::string message,
+                const char *file, long line) noexcept;
+            Exception(const Exception&) noexcept;
+            virtual ~Exception() = default;
+            Exception& operator=(const Exception&) noexcept;
+            const char* what() const noexcept override;
+            const char *file() const noexcept { return file_; }
+            long line() const noexcept { return line_; }
 
-    class BadResult : public Exception
-    {
-    public:
-        BadResult(const VkResult result, const char *const message, const char *file, int line);
-        BadResult(const VkResult result, const std::string& message, const char *file, int line);
-        VkResult getResult() const noexcept { return result; }
+        private:
+            const char *builtin;
+            std::string message;
+            const char *file_;
+            long line_;
+        };
 
-    private:
-        VkResult result;
-    };
+        /* Run time error codes are returned when a command needs to communicate
+           a failure that could only be detected at runtime. */
 
-    class PresentException : public BadResult
-    {
-    public:
-        PresentException(const VkResult result, const char *const message, const char *file, int line):
-            BadResult(result, message, file, line) {}
-    };
+        class ErrorResult : public Exception
+        {
+        public:
+            explicit ErrorResult(VkResult result, const char *message) noexcept;
+            explicit ErrorResult(VkResult result, const std::string message) noexcept;
+            explicit ErrorResult(VkResult result, const char *message,
+                const char *file, long line) noexcept;
+            explicit ErrorResult(VkResult result, const std::string message,
+                const char *file, long line) noexcept;
+            VkResult error() const noexcept { return result; }
 
-    class DeviceLostException : public BadResult
-    {
-    public:
-        DeviceLostException(const char *const message, const char *file, int line):
-            BadResult(VK_ERROR_DEVICE_LOST, message, file, line) {}
-    };
+        private:
+            VkResult result;
+        };
 
-    class OutOfHostMemoryException : public BadResult
-    {
-    public:
-        OutOfHostMemoryException(const char *const message, const char *file, int line):
-            BadResult(VK_ERROR_OUT_OF_HOST_MEMORY, message, file, line) {}
-    };
+        /* A host memory allocation has failed. */
 
-    class OutOfDeviceMemoryException : public BadResult
-    {
-    public:
-        OutOfDeviceMemoryException(const char *const message, const char *file, int line):
-            BadResult(VK_ERROR_OUT_OF_DEVICE_MEMORY, message, file, line) {}
-    };
+        class OutOfHostMemory : public ErrorResult
+        {
+        public:
+            explicit OutOfHostMemory(const char *message) noexcept:
+                ErrorResult(VK_ERROR_OUT_OF_HOST_MEMORY, message) {}
+        };
 
-    class ExtensionNotPresent: public Exception
-    {
-    public:
-        ExtensionNotPresent(const char *const extension, const char *file, int line):
-            Exception(extension, file, line) {}
-    };
+        /* A device memory allocation has failed. */
 
-    class NotImplemented : public Exception
-    {
-    public:
-        NotImplemented(const char *const function, const char *file, int line):
-            Exception(function, file, line) {}
-    };
+        class OutOfDeviceMemory : public ErrorResult
+        {
+        public:
+            explicit OutOfDeviceMemory(const char *message) noexcept:
+                ErrorResult(VK_ERROR_OUT_OF_DEVICE_MEMORY, message) {}
+        };
+
+        /* Initialization of an object could not be completed
+           for implementation-specific reasons. */
+
+        class InitializationFailed : public ErrorResult
+        {
+        public:
+            explicit InitializationFailed(const char *message) noexcept:
+                ErrorResult(VK_ERROR_INITIALIZATION_FAILED, message) {}
+            explicit InitializationFailed(const std::string message) noexcept:
+                ErrorResult(VK_ERROR_INITIALIZATION_FAILED, std::move(message)) {}
+        };
+
+        /* The logical or physical device has been lost. */
+
+        class DeviceLost : public ErrorResult
+        {
+        public:
+            explicit DeviceLost(const char *const message) noexcept:
+                ErrorResult(VK_ERROR_DEVICE_LOST, message) {}
+        };
+
+        /* The requested version of Vulkan is not supported by the driver
+           or is otherwise incompatible for implementation-specific reasons. */
+
+        class IncompatibleDriver : public ErrorResult
+        {
+        public:
+            explicit IncompatibleDriver(const char *const message) noexcept:
+                ErrorResult(VK_ERROR_INCOMPATIBLE_DRIVER, message) {}
+        };
+
+        /* A surface is no longer available. */
+
+        class SurfaceLost : public ErrorResult
+        {
+        public:
+            explicit SurfaceLost(const char *const message) noexcept:
+                ErrorResult(VK_ERROR_SURFACE_LOST_KHR, message) {}
+        };
+
+        /* A surface has changed in such a way that it is no longer compatible with the swapchain,
+           and further presentation requests using the swapchain will fail. Applications must query
+           the new surface properties and recreate their swapchain if they wish to continue presenting to the surface. */
+
+        class OutOfDate : public ErrorResult
+        {
+        public:
+            explicit OutOfDate(const char *const message) noexcept:
+                ErrorResult(VK_ERROR_OUT_OF_DATE_KHR, message) {}
+        };
+
+        /* An operation on a swapchain created with VK_FULL_SCREEN_EXCLUSIVE_APPLICATION_CONTROLLED_EXT
+           failed as it did not have exlusive full-screen access. This may occur due to
+           implementation-dependent reasons, outside of the application’s control. */
+
+#ifdef VK_EXT_full_screen_exclusive
+        class FullScreenExclusiveModeLost : public ErrorResult
+        {
+        public:
+            explicit FullScreenExclusiveModeLost(const char *const message) noexcept:
+                ErrorResult(VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, message) {}
+        };
+#endif // VK_EXT_full_screen_exclusive
+
+        /* Vulkan instance doesn't support requested extension. */
+
+        class UnsupportedInstanceExtension : public Exception
+        {
+        public:
+            explicit UnsupportedInstanceExtension(const char *extension,
+                const char *file, long line) noexcept:
+                Exception(extension, file, line) {}
+        };
+
+        /* Logical device doesn't support requested extension. */
+
+        class UnsupportedDeviceExtension : public Exception
+        {
+        public:
+            explicit UnsupportedDeviceExtension(const char *extension,
+                const char *file, long line) noexcept:
+                Exception(extension, file, line) {}
+        };
+
+        /* Functionality not implemented or implemented partially. */
+
+        class NotImplemented : public Exception
+        {
+        public:
+            explicit NotImplemented(const char *function,
+                const char *file, long line) noexcept:
+                Exception(function, file, line) {}
+        };
+    } // namespace exception
 } // namespace magma
 
-#define MAGMA_THROW(message) throw Exception(message, __FILE__, __LINE__)
-#define MAGMA_THROW_DEVICE_LOST(message) throw DeviceLostException(message, __FILE__, __LINE__)
+
+#define MAGMA_THROW(message) throw magma::exception::Exception(message, __FILE__, __LINE__)
 
 #define MAGMA_THROW_FAILURE(result, message)\
     if (!MAGMA_SUCCEEDED(result))\
-        throw BadResult(result, message, __FILE__, __LINE__)
-#define MAGMA_THROW_PRESENT_FAILURE(result, message)\
-    if (!MAGMA_PRESENT_SUCCEEDED(result))\
-        throw PresentException(result, message, __FILE__, __LINE__)
-#define MAGMA_THROW_OUT_OF_MEMORY(result, message)\
-    if (VK_ERROR_OUT_OF_HOST_MEMORY == result)\
-        throw OutOfHostMemoryException(message, __FILE__, __LINE__);\
-    else if (VK_ERROR_OUT_OF_DEVICE_MEMORY == result)\
-        throw OutOfDeviceMemoryException(message, __FILE__, __LINE__);\
-    else\
-        throw Exception("unknown error", __FILE__, __LINE__)
-#define MAGMA_THROW_UNSUPPORTED_EXTENSION(pfn, extension)\
-    if (!pfn)\
-        throw ExtensionNotPresent(extension, __FILE__, __LINE__)
+        throw magma::exception::ErrorResult(result, message, __FILE__, __LINE__)
+
 #ifdef _MSC_VER
-#   define MAGMA_THROW_NOT_IMPLEMENTED throw NotImplemented(__FUNCSIG__, __FILE__, __LINE__)
+#define MAGMA_THROW_NOT_IMPLEMENTED throw magma::exception::NotImplemented(__FUNCSIG__, __FILE__, __LINE__)
 #else
-#   define MAGMA_THROW_NOT_IMPLEMENTED throw NotImplemented(__PRETTY_FUNCTION__, __FILE__, __LINE__)
+#define MAGMA_THROW_NOT_IMPLEMENTED throw magma::exception::NotImplemented(__PRETTY_FUNCTION__, __FILE__, __LINE__)
 #endif

@@ -21,31 +21,99 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Exception::Exception(const char *const message,
-    const char *file /* nullptr */, int line /* -1 */):
-    std::runtime_error(message),
-    fl(file),
-    ln(line)
+namespace exception
+{
+Exception::Exception() noexcept:
+    builtin(nullptr),
+    file_(__FILE__),
+    line_(__LINE__)
 {}
 
-Exception::Exception(const std::string& message,
-    const char *file /* nullptr */, int line /* -1 */):
-    std::runtime_error(message.c_str()),
-    fl(file),
-    ln(line)
+Exception::Exception(const char *message) noexcept:
+    builtin(message),
+    file_(__FILE__),
+    line_(__LINE__)
 {}
 
-BadResult::BadResult(const VkResult result,
-    const char *const message,
-    const char *file, int line):
+Exception::Exception(const std::string message) noexcept:
+    builtin(nullptr),
+    message(std::move(message)),
+    file_(__FILE__),
+    line_(__LINE__)
+{}
+
+Exception::Exception(const char *message, const char *file, long line) noexcept:
+    builtin(message),
+    file_(file),
+    line_(line)
+{}
+
+Exception::Exception(const std::string message, const char *file, long line) noexcept:
+    builtin(nullptr),
+    message(std::move(message)),
+    file_(file),
+    line_(line)
+{}
+
+Exception::Exception(const Exception& other) noexcept:
+    builtin(other.builtin),
+    file_(other.file_),
+    line_(other.line_)
+{
+    if (!other.message.empty())
+    {   // Try copy
+        try {
+            message = other.message;
+        } catch (...) {
+        }
+    }
+}
+
+Exception& Exception::operator=(const Exception& other) noexcept
+{
+    if (this != &other)
+    {
+        builtin = other.builtin;
+        if (!other.message.empty())
+        {   // Try copy
+            try {
+                message = other.message;
+            } catch (...) {
+            }
+        }
+        file_ = other.file_;
+        line_ = other.line_;
+    }
+    return *this;
+}
+
+const char* Exception::what() const noexcept
+{
+    if (builtin)
+        return builtin;
+    if (!message.empty())
+        return message.c_str();
+    return "unknown";
+}
+
+ErrorResult::ErrorResult(VkResult result, const char *message) noexcept:
+    Exception(message),
+    result(result)
+{}
+
+ErrorResult::ErrorResult(VkResult result, const std::string message) noexcept:
+    Exception(std::move(message)),
+    result(result)
+{}
+
+ErrorResult::ErrorResult(VkResult result, const char *message, const char *file, long line) noexcept:
     Exception(message, file, line),
     result(result)
 {}
 
-BadResult::BadResult(const VkResult result,
-    const std::string& message,
-    const char *file, int line):
-    Exception(message, file, line),
+ErrorResult::ErrorResult(VkResult result, const std::string message, const char *file, long line) noexcept:
+    Exception(std::move(message), file, line),
     result(result)
 {}
+} // namespace exception
 } // namespace magma

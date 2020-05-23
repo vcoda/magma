@@ -103,16 +103,16 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
         shaderModule = std::make_shared<ShaderModule>(device, reinterpret_cast<const uint32_t *>(bytecode), bytecodeSize,
             0, 0, nullptr, device->getAllocator());
         shaderc_result_release(result);
-    } catch (const BadResult& badResult)
+    } catch (const exception::ErrorResult&)
     {
         shaderc_result_release(result);
-        throw badResult;
+        throw;
     }
     return shaderModule;
 }
 
 CompileException::CompileException(shaderc_compilation_result_t result,
-    const char *file, int line):
+    const char *file, long line):
     Exception(shaderc_result_get_error_message(result), file, line),
     status(shaderc_result_get_compilation_status(result)),
     warnings(shaderc_result_get_num_warnings(result)),
