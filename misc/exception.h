@@ -31,23 +31,22 @@ namespace magma
         public:
             explicit Exception() noexcept;
             explicit Exception(const char *message) noexcept;
-            explicit Exception(const std::string message) noexcept;
+            explicit Exception(std::string message) noexcept;
             explicit Exception(const char *message,
                 const char *file, long line) noexcept;
-            explicit Exception(const std::string message,
+            explicit Exception(std::string message,
                 const char *file, long line) noexcept;
             Exception(const Exception&) noexcept;
             virtual ~Exception() = default;
             Exception& operator=(const Exception&) noexcept;
             const char* what() const noexcept override;
-            const char *file() const noexcept { return file_; }
-            long line() const noexcept { return line_; }
+            const char *file() const noexcept { return source; }
+            long line() const noexcept { return ln; }
 
         private:
-            const char *builtin;
             std::string message;
-            const char *file_;
-            long line_;
+            const char *source;
+            long ln;
         };
 
         /* Run time error codes are returned when a command needs to communicate
@@ -56,12 +55,16 @@ namespace magma
         class ErrorResult : public Exception
         {
         public:
-            explicit ErrorResult(VkResult result, const char *message) noexcept;
-            explicit ErrorResult(VkResult result, const std::string message) noexcept;
+            explicit ErrorResult(VkResult result, const char *message) noexcept:
+                Exception(message), result(result) {}
+            explicit ErrorResult(VkResult result, std::string message) noexcept:
+                Exception(std::move(message)), result(result) {}
             explicit ErrorResult(VkResult result, const char *message,
-                const char *file, long line) noexcept;
-            explicit ErrorResult(VkResult result, const std::string message,
-                const char *file, long line) noexcept;
+                const char *file, long line) noexcept:
+                Exception(message, file, line), result(result) {}
+            explicit ErrorResult(VkResult result, std::string message,
+                const char *file, long line) noexcept:
+                Exception(std::move(message), file, line), result(result) {}
             VkResult error() const noexcept { return result; }
 
         private:
@@ -94,7 +97,7 @@ namespace magma
         public:
             explicit InitializationFailed(const char *message) noexcept:
                 ErrorResult(VK_ERROR_INITIALIZATION_FAILED, message) {}
-            explicit InitializationFailed(const std::string message) noexcept:
+            explicit InitializationFailed(std::string message) noexcept:
                 ErrorResult(VK_ERROR_INITIALIZATION_FAILED, std::move(message)) {}
         };
 
@@ -103,7 +106,7 @@ namespace magma
         class DeviceLost : public ErrorResult
         {
         public:
-            explicit DeviceLost(const char *const message) noexcept:
+            explicit DeviceLost(const char *message) noexcept:
                 ErrorResult(VK_ERROR_DEVICE_LOST, message) {}
         };
 
@@ -113,7 +116,7 @@ namespace magma
         class IncompatibleDriver : public ErrorResult
         {
         public:
-            explicit IncompatibleDriver(const char *const message) noexcept:
+            explicit IncompatibleDriver(const char *message) noexcept:
                 ErrorResult(VK_ERROR_INCOMPATIBLE_DRIVER, message) {}
         };
 
@@ -122,7 +125,7 @@ namespace magma
         class SurfaceLost : public ErrorResult
         {
         public:
-            explicit SurfaceLost(const char *const message) noexcept:
+            explicit SurfaceLost(const char *message) noexcept:
                 ErrorResult(VK_ERROR_SURFACE_LOST_KHR, message) {}
         };
 
@@ -133,7 +136,7 @@ namespace magma
         class OutOfDate : public ErrorResult
         {
         public:
-            explicit OutOfDate(const char *const message) noexcept:
+            explicit OutOfDate(const char *message) noexcept:
                 ErrorResult(VK_ERROR_OUT_OF_DATE_KHR, message) {}
         };
 
@@ -145,7 +148,7 @@ namespace magma
         class FullScreenExclusiveModeLost : public ErrorResult
         {
         public:
-            explicit FullScreenExclusiveModeLost(const char *const message) noexcept:
+            explicit FullScreenExclusiveModeLost(const char *message) noexcept:
                 ErrorResult(VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, message) {}
         };
 #endif // VK_EXT_full_screen_exclusive
