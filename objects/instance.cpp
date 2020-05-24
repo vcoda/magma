@@ -28,7 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 // Redefine macro for Instance object as here we use handle directly
 #undef MAGMA_INSTANCE_EXTENSION
 #define MAGMA_INSTANCE_EXTENSION(func, extension)\
-    magma::InstanceExtension<PFN_##func> func(handle, MAGMA_STRINGIZE(func), extension, __FILE__, __LINE__)
+    magma::InstanceExtension<PFN_##func> func(handle, MAGMA_STRINGIZE(func), extension, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__})
 
 #ifdef MAGMA_DEBUG
 static magma::core::RefCountChecker _refCountChecker;

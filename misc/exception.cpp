@@ -24,13 +24,11 @@ namespace magma
 namespace exception
 {
 Exception::Exception() noexcept:
-    source(__FILE__),
-    ln(__LINE__)
+    location_{}
 {}
 
 Exception::Exception(const char *message) noexcept:
-    source(__FILE__),
-    ln(__LINE__)
+    location_{}
 {   // Alloc string
     try {
         this->message = message;
@@ -40,13 +38,11 @@ Exception::Exception(const char *message) noexcept:
 
 Exception::Exception(std::string message) noexcept:
     message(std::move(message)),
-    source(__FILE__),
-    ln(__LINE__)
+    location_{}
 {}
 
-Exception::Exception(const char *message, const char *file, long line) noexcept:
-    source(file),
-    ln(line)
+Exception::Exception(const char *message, const source_location& location) noexcept:
+    location_(location)
 {   // Alloc string
     try {
         this->message = message;
@@ -54,15 +50,13 @@ Exception::Exception(const char *message, const char *file, long line) noexcept:
     }
 }
 
-Exception::Exception(std::string message, const char *file, long line) noexcept:
+Exception::Exception(std::string message, const source_location& location) noexcept:
     message(std::move(message)),
-    source(file),
-    ln(line)
+    location_(location)
 {}
 
 Exception::Exception(const Exception& other) noexcept:
-    source(other.source),
-    ln(other.ln)
+    location_(other.location_)
 {
     if (!other.message.empty())
     {   // Try copy
@@ -84,8 +78,7 @@ Exception& Exception::operator=(const Exception& other) noexcept
             } catch (...) {
             }
         }
-        source = other.source;
-        ln = other.ln;
+        location_ = other.location_;
     }
     return *this;
 }

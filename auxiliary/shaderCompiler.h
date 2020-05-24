@@ -75,7 +75,7 @@ namespace magma
         {
         public:
             CompileException(shaderc_compilation_result_t result,
-                const char *file, long line);
+                const magma::exception::source_location& location);
             shaderc_compilation_status getStatus() const noexcept { return status; }
             std::size_t numWarnings() const noexcept { return warnings; }
             std::size_t numErrors() const noexcept { return errors; }

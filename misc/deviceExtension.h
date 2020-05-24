@@ -29,8 +29,7 @@ namespace magma
         DeviceExtension(VkDevice device,
             const char *name,
             const char *extension,
-            const char *file,
-            long line);
+            const exception::source_location& location);
         operator Func() const noexcept { return reinterpret_cast<Func>(pfn); }
 
     private:
@@ -39,7 +38,7 @@ namespace magma
 } // namespace magma
 
 #define MAGMA_DEVICE_EXTENSION(func, extension)\
-    magma::DeviceExtension<PFN_##func> func(MAGMA_HANDLE(device), MAGMA_STRINGIZE(func), extension, __FILE__, __LINE__)
+    magma::DeviceExtension<PFN_##func> func(MAGMA_HANDLE(device), MAGMA_STRINGIZE(func), extension, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__})
 #define MAGMA_OPTIONAL_DEVICE_EXTENSION(func)\
     magma::DeviceExtension<PFN_##func> func(MAGMA_HANDLE(device), MAGMA_STRINGIZE(func))
 

@@ -22,6 +22,25 @@ namespace magma
 {
     namespace exception
     {
+        /* The source_location class represents certain information about the source code,
+           such as file names, line numbers, and function names. Previously, functions
+           that desire to obtain this information about the call site (for logging, testing,
+           or debugging purposes) must use macros so that predefined macros like
+           __LINE__ and __FILE__ are expanded in the context of the caller. The source_location
+           class provides a better alternative. */
+
+        struct source_location
+        {
+            /* constexpr */ std::uint_least32_t line() const noexcept { return ln; }
+            /* constexpr */ std::uint_least32_t column() const noexcept { return 0; }
+            /* constexpr */ const char* file_name() const noexcept { return file; }
+            /* constexpr */ const char* function_name() const noexcept { return function; }
+
+            const char *file = nullptr;
+            long ln = 0;
+            const char *function = nullptr;
+        };
+
         /* Base exception class. Provides (optional) information as
            file name and line number where it was thrown. */
 
@@ -32,20 +51,18 @@ namespace magma
             explicit Exception(const char *message) noexcept;
             explicit Exception(std::string message) noexcept;
             explicit Exception(const char *message,
-                const char *file, long line) noexcept;
+                const source_location& location) noexcept;
             explicit Exception(std::string message,
-                const char *file, long line) noexcept;
+                const source_location& location) noexcept;
             Exception(const Exception&) noexcept;
             virtual ~Exception() = default;
             Exception& operator=(const Exception&) noexcept;
             const char* what() const noexcept override;
-            const char *file() const noexcept { return source; }
-            long line() const noexcept { return ln; }
+            const source_location& location() const noexcept { return location_; }
 
         private:
             std::string message;
-            const char *source;
-            long ln;
+            source_location location_;
         };
 
         /* Run time error codes are returned when a command needs to communicate
@@ -59,11 +76,11 @@ namespace magma
             explicit ErrorResult(VkResult result, std::string message) noexcept:
                 Exception(std::move(message)), result(result) {}
             explicit ErrorResult(VkResult result, const char *message,
-                const char *file, long line) noexcept:
-                Exception(message, file, line), result(result) {}
+                const source_location& location) noexcept:
+                Exception(message, location), result(result) {}
             explicit ErrorResult(VkResult result, std::string message,
-                const char *file, long line) noexcept:
-                Exception(std::move(message), file, line), result(result) {}
+                const source_location& location) noexcept:
+                Exception(std::move(message), location), result(result) {}
             VkResult error() const noexcept { return result; }
 
         private:
@@ -76,8 +93,8 @@ namespace magma
         {
         public:
             explicit OutOfHostMemory(const char *message,
-                const char *file, long line) noexcept:
-                ErrorResult(VK_ERROR_OUT_OF_HOST_MEMORY, message, file, line) {}
+                const source_location& location) noexcept:
+                ErrorResult(VK_ERROR_OUT_OF_HOST_MEMORY, message, location) {}
         };
 
         /* A device memory allocation has failed. */
@@ -86,8 +103,8 @@ namespace magma
         {
         public:
             explicit OutOfDeviceMemory(const char *message,
-                const char *file, long line) noexcept:
-                ErrorResult(VK_ERROR_OUT_OF_DEVICE_MEMORY, message, file, line) {}
+                const source_location& location) noexcept:
+                ErrorResult(VK_ERROR_OUT_OF_DEVICE_MEMORY, message, location) {}
         };
 
         /* Initialization of an object could not be completed
@@ -172,8 +189,8 @@ namespace magma
         {
         public:
             explicit UnsupportedInstanceExtension(const char *extension,
-                const char *file, long line) noexcept:
-                Exception(extension, file, line) {}
+                const source_location& location) noexcept:
+                Exception(extension, location) {}
         };
 
         /* Logical device doesn't support requested extension. */
@@ -182,8 +199,8 @@ namespace magma
         {
         public:
             explicit UnsupportedDeviceExtension(const char *extension,
-                const char *file, long line) noexcept:
-                Exception(extension, file, line) {}
+                const source_location& location) noexcept:
+                Exception(extension, location) {}
         };
 
         /* Functionality not implemented or implemented partially. */
@@ -192,13 +209,13 @@ namespace magma
         {
         public:
             explicit NotImplemented(const char *function,
-                const char *file, long line) noexcept:
-                Exception(function, file, line) {}
+                const source_location& location) noexcept:
+                Exception(function, location) {}
         };
     } // namespace exception
 } // namespace magma
 
-#define MAGMA_THROW(message) throw magma::exception::Exception(message, __FILE__, __LINE__)
+#define MAGMA_THROW(message) throw magma::exception::Exception(message, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__})
 
 #define MAGMA_THROW_FAILURE(result, message)\
     switch (result) {\
@@ -211,15 +228,15 @@ namespace magma
     case VK_SUBOPTIMAL_KHR:\
         break;\
     case VK_ERROR_OUT_OF_HOST_MEMORY:\
-        throw magma::exception::OutOfHostMemory(message, __FILE__, __LINE__);\
+        throw magma::exception::OutOfHostMemory(message, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
     case VK_ERROR_OUT_OF_DEVICE_MEMORY:\
-        throw magma::exception::OutOfDeviceMemory(message, __FILE__, __LINE__);\
+        throw magma::exception::OutOfDeviceMemory(message, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
     default:\
-        throw magma::exception::ErrorResult(result, message, __FILE__, __LINE__);\
+        throw magma::exception::ErrorResult(result, message, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
     }
 
 #ifdef _MSC_VER
-#define MAGMA_THROW_NOT_IMPLEMENTED throw magma::exception::NotImplemented(__FUNCSIG__, __FILE__, __LINE__)
+#define MAGMA_THROW_NOT_IMPLEMENTED throw magma::exception::NotImplemented(__FUNCSIG__, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__})
 #else
-#define MAGMA_THROW_NOT_IMPLEMENTED throw magma::exception::NotImplemented(__PRETTY_FUNCTION__, __FILE__, __LINE__)
+#define MAGMA_THROW_NOT_IMPLEMENTED throw magma::exception::NotImplemented(__PRETTY_FUNCTION__, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__})
 #endif

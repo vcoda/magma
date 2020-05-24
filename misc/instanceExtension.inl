@@ -12,8 +12,8 @@ inline InstanceExtension<Func>::InstanceExtension(VkInstance instance, const cha
 }
 
 template<typename Func>
-inline InstanceExtension<Func>::InstanceExtension(VkInstance instance, const char *name,
-    const char *extension, const char *file, long line)
+inline InstanceExtension<Func>::InstanceExtension(VkInstance instance, const char *name, const char *extension,
+    const exception::source_location& location)
 {
     if (!pfn)
     {
@@ -21,7 +21,7 @@ inline InstanceExtension<Func>::InstanceExtension(VkInstance instance, const cha
         MAGMA_ASSERT(name);
         pfn = vkGetInstanceProcAddr(instance, name);
         if (!pfn)
-            throw exception::UnsupportedInstanceExtension(extension, file, line);
+            throw exception::UnsupportedInstanceExtension(extension, location);
     }
 }
 

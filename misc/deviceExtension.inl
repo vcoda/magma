@@ -12,8 +12,8 @@ inline DeviceExtension<Func>::DeviceExtension(VkDevice device, const char *name)
 }
 
 template<typename Func>
-inline DeviceExtension<Func>::DeviceExtension(VkDevice device, const char *name,
-    const char *extension, const char *file, long line)
+inline DeviceExtension<Func>::DeviceExtension(VkDevice device, const char *name, const char *extension,
+    const exception::source_location& location)
 {
     if (!pfn)
     {
@@ -21,7 +21,7 @@ inline DeviceExtension<Func>::DeviceExtension(VkDevice device, const char *name,
         MAGMA_ASSERT(name);
         pfn = vkGetDeviceProcAddr(device, name);
         if (!pfn)
-            throw exception::UnsupportedDeviceExtension(extension, file, line);
+            throw exception::UnsupportedDeviceExtension(extension, location);
     }
 }
 
