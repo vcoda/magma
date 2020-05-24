@@ -208,6 +208,7 @@ namespace magma
     case VK_EVENT_SET:\
     case VK_EVENT_RESET:\
     case VK_INCOMPLETE:\
+    case VK_SUBOPTIMAL_KHR:\
         break;\
     case VK_ERROR_OUT_OF_HOST_MEMORY:\
         throw magma::exception::OutOfHostMemory(message, __FILE__, __LINE__);\
