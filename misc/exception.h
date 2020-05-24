@@ -140,6 +140,18 @@ namespace magma
                 ErrorResult(VK_ERROR_OUT_OF_DATE_KHR, message) {}
         };
 
+        /* The display used by a swapchain does not use the same presentable image layout,
+           or is incompatible in a way that prevents sharing an image. */
+
+#ifdef VK_KHR_display_swapchain
+        class IncompatibleDisplay : public ErrorResult
+        {
+        public:
+            explicit IncompatibleDisplay(const char *message) noexcept:
+                ErrorResult(VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, message) {}
+        };
+#endif // VK_KHR_display_swapchain
+
         /* An operation on a swapchain created with VK_FULL_SCREEN_EXCLUSIVE_APPLICATION_CONTROLLED_EXT
            failed as it did not have exlusive full-screen access. This may occur due to
            implementation-dependent reasons, outside of the application’s control. */
