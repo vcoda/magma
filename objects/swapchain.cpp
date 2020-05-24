@@ -106,7 +106,27 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
 #else
     MAGMA_UNUSED(debugReportCallback);
 #endif // VK_EXT_debug_report
-    MAGMA_THROW_FAILURE(create, "failed to create swapchain");
+    switch (create)
+    {
+    case VK_SUCCESS:
+        break;
+    case VK_ERROR_OUT_OF_HOST_MEMORY:
+        throw exception::OutOfHostMemory("failed to create swapchain");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY:
+        throw exception::OutOfDeviceMemory("failed to create swapchain");
+    case VK_ERROR_INITIALIZATION_FAILED:
+        throw exception::InitializationFailed("failed to create swapchain");
+    case VK_ERROR_DEVICE_LOST:
+        throw exception::DeviceLost("failed to create swapchain");
+    case VK_ERROR_SURFACE_LOST_KHR:
+        throw exception::SurfaceLost("failed to create swapchain");
+#ifdef VK_KHR_display_swapchain
+    case VK_ERROR_INCOMPATIBLE_DISPLAY_KHR:
+        throw exception::IncompatibleDisplay("failed to create swapchain");
+#endif
+    default:
+        MAGMA_THROW_FAILURE(create, "failed to create swapchain");
+    }
 }
 
 Swapchain::~Swapchain()
