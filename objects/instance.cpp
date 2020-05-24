@@ -60,21 +60,13 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
     createInfo.enabledExtensionCount = MAGMA_COUNT(extensionNames);
     createInfo.ppEnabledExtensionNames = extensionNames.data();
     const VkResult create = vkCreateInstance(&createInfo, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
-    switch (create)
-    {
-    case VK_SUCCESS:
-        break;
-    case VK_ERROR_OUT_OF_HOST_MEMORY:
-        throw exception::OutOfHostMemory("failed to create instance");
-    case VK_ERROR_OUT_OF_DEVICE_MEMORY:
-        throw exception::OutOfDeviceMemory("failed to create instance");
+    switch (create) {
     case VK_ERROR_INITIALIZATION_FAILED:
         throw exception::InitializationFailed("failed to create instance");
     case VK_ERROR_INCOMPATIBLE_DRIVER:
         throw exception::IncompatibleDriver("failed to create instance");
-    default:
-        MAGMA_THROW_FAILURE(create, "failed to create instance");
     }
+    MAGMA_THROW_FAILURE(create, "failed to create instance");
 #ifdef MAGMA_DEBUG
     _refCountChecker.addRef();
 #endif

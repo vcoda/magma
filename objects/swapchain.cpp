@@ -106,14 +106,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
 #else
     MAGMA_UNUSED(debugReportCallback);
 #endif // VK_EXT_debug_report
-    switch (create)
-    {
-    case VK_SUCCESS:
-        break;
-    case VK_ERROR_OUT_OF_HOST_MEMORY:
-        throw exception::OutOfHostMemory("failed to create swapchain");
-    case VK_ERROR_OUT_OF_DEVICE_MEMORY:
-        throw exception::OutOfDeviceMemory("failed to create swapchain");
+    switch (create) {
     case VK_ERROR_INITIALIZATION_FAILED:
         throw exception::InitializationFailed("failed to create swapchain");
     case VK_ERROR_DEVICE_LOST:
@@ -124,9 +117,8 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     case VK_ERROR_INCOMPATIBLE_DISPLAY_KHR:
         throw exception::IncompatibleDisplay("failed to create swapchain");
 #endif
-    default:
-        MAGMA_THROW_FAILURE(create, "failed to create swapchain");
     }
+    MAGMA_THROW_FAILURE(create, "failed to create swapchain");
 }
 
 Swapchain::~Swapchain()
@@ -142,17 +134,7 @@ uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore,
         MAGMA_OPTIONAL_HANDLE(semaphore),
         MAGMA_OPTIONAL_HANDLE(fence),
         &imageIndex);
-    switch (acquire)
-    {
-    case VK_SUCCESS:
-    case VK_TIMEOUT:
-    case VK_NOT_READY:
-    case VK_SUBOPTIMAL_KHR:
-        return imageIndex;
-    case VK_ERROR_OUT_OF_HOST_MEMORY:
-        throw exception::OutOfHostMemory("failed to acquire next image");
-    case VK_ERROR_OUT_OF_DEVICE_MEMORY:
-        throw exception::OutOfDeviceMemory("failed to acquire next image");
+    switch (acquire) {
     case VK_ERROR_DEVICE_LOST:
         throw exception::DeviceLost("failed to acquire next image");
     case VK_ERROR_OUT_OF_DATE_KHR:
@@ -164,6 +146,7 @@ uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore,
         throw exception::FullScreenExclusiveModeLost("failed to acquire next image");
 #endif
     } // switch
+    MAGMA_THROW_FAILURE(acquire, "failed to acquire next image");
     return imageIndex;
 }
 

@@ -75,8 +75,9 @@ namespace magma
         class OutOfHostMemory : public ErrorResult
         {
         public:
-            explicit OutOfHostMemory(const char *message) noexcept:
-                ErrorResult(VK_ERROR_OUT_OF_HOST_MEMORY, message) {}
+            explicit OutOfHostMemory(const char *message,
+                const char *file, long line) noexcept:
+                ErrorResult(VK_ERROR_OUT_OF_HOST_MEMORY, message, file, line) {}
         };
 
         /* A device memory allocation has failed. */
@@ -84,8 +85,9 @@ namespace magma
         class OutOfDeviceMemory : public ErrorResult
         {
         public:
-            explicit OutOfDeviceMemory(const char *message) noexcept:
-                ErrorResult(VK_ERROR_OUT_OF_DEVICE_MEMORY, message) {}
+            explicit OutOfDeviceMemory(const char *message,
+                const char *file, long line) noexcept:
+                ErrorResult(VK_ERROR_OUT_OF_DEVICE_MEMORY, message, file, line) {}
         };
 
         /* Initialization of an object could not be completed
@@ -197,9 +199,24 @@ namespace magma
 } // namespace magma
 
 #define MAGMA_THROW(message) throw magma::exception::Exception(message, __FILE__, __LINE__)
+
 #define MAGMA_THROW_FAILURE(result, message)\
-    if (!MAGMA_SUCCEEDED(result))\
-        throw magma::exception::ErrorResult(result, message, __FILE__, __LINE__)
+    switch (result) {\
+    case VK_SUCCESS:\
+    case VK_NOT_READY:\
+    case VK_TIMEOUT:\
+    case VK_EVENT_SET:\
+    case VK_EVENT_RESET:\
+    case VK_INCOMPLETE:\
+        break;\
+    case VK_ERROR_OUT_OF_HOST_MEMORY:\
+        throw magma::exception::OutOfHostMemory(message, __FILE__, __LINE__);\
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY:\
+        throw magma::exception::OutOfDeviceMemory(message, __FILE__, __LINE__);\
+    default:\
+        throw magma::exception::ErrorResult(result, message, __FILE__, __LINE__);\
+    }
+
 #ifdef _MSC_VER
 #define MAGMA_THROW_NOT_IMPLEMENTED throw magma::exception::NotImplemented(__FUNCSIG__, __FILE__, __LINE__)
 #else

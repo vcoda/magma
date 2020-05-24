@@ -82,21 +82,13 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     info.ppEnabledExtensionNames = extensions.data();
     info.pEnabledFeatures = extendedDeviceFeatures.empty() ? &deviceFeatures : nullptr;
     const VkResult create = vkCreateDevice(MAGMA_HANDLE(physicalDevice), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
-    switch (create)
-    {
-    case VK_SUCCESS:
-        break;
-    case VK_ERROR_OUT_OF_HOST_MEMORY:
-        throw exception::OutOfHostMemory("failed to create logical device");
-    case VK_ERROR_OUT_OF_DEVICE_MEMORY:
-        throw exception::OutOfDeviceMemory("failed to create logical device");
+    switch (create) {
     case VK_ERROR_INITIALIZATION_FAILED:
         throw exception::InitializationFailed("failed to create logical device");
     case VK_ERROR_DEVICE_LOST:
         throw exception::DeviceLost("failed to create logical device");
-    default:
-        MAGMA_THROW_FAILURE(create, "failed to create logical device");
     }
+    MAGMA_THROW_FAILURE(create, "failed to create logical device");
     queues.reserve(queueDescriptors.size());
     for (const auto& desc : queueDescriptors)
         queues.emplace_back(desc, std::weak_ptr<Queue>());
@@ -136,18 +128,10 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
 bool Device::waitIdle() const
 {
     const VkResult waitIdle = vkDeviceWaitIdle(handle);
-    switch (waitIdle)
-    {
-    case VK_SUCCESS:
-        return true;
-    case VK_ERROR_OUT_OF_HOST_MEMORY:
-        throw exception::OutOfHostMemory("failed to wait for device become idle");
-    case VK_ERROR_OUT_OF_DEVICE_MEMORY:
-        throw exception::OutOfDeviceMemory("failed to wait for device become idle");
-    case VK_ERROR_DEVICE_LOST:
+    if (VK_ERROR_DEVICE_LOST == waitIdle)
         throw exception::DeviceLost("failed to wait for device become idle");
-    }
-    return false;
+    MAGMA_THROW_FAILURE(waitIdle, "failed to wait for device become idle");
+    return true;
 }
 
 bool Device::resetFences(std::vector<std::shared_ptr<Fence>>& fences) const noexcept
