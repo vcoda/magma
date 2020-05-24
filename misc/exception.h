@@ -22,9 +22,8 @@ namespace magma
 {
     namespace exception
     {
-        /* Base exception class.
-           Provides (optional) information as file name and
-           line number where it was thrown. */
+        /* Base exception class. Provides (optional) information as
+           file name and line number where it was thrown. */
 
         class Exception : public std::exception
         {
@@ -197,13 +196,10 @@ namespace magma
     } // namespace exception
 } // namespace magma
 
-
 #define MAGMA_THROW(message) throw magma::exception::Exception(message, __FILE__, __LINE__)
-
 #define MAGMA_THROW_FAILURE(result, message)\
     if (!MAGMA_SUCCEEDED(result))\
         throw magma::exception::ErrorResult(result, message, __FILE__, __LINE__)
-
 #ifdef _MSC_VER
 #define MAGMA_THROW_NOT_IMPLEMENTED throw magma::exception::NotImplemented(__FUNCSIG__, __FILE__, __LINE__)
 #else
