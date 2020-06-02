@@ -94,9 +94,9 @@ constexpr
 constexpr
 #include "spirv/output/fontf"
     constexpr std::size_t vsBlitHash = core::hashArray(vsBlit);
-    const VertexShaderStage vertexShader(std::make_shared<ShaderModule>(device, vsBlit, vsBlitHash, 0, nullptr, allocator), "main");
+    const VertexShaderStage vertexShader(std::make_shared<ShaderModule>(device, vsBlit, vsBlitHash, 0, allocator), "main");
     constexpr std::size_t fsFontHash = core::hashArray(fsFont);
-    const FragmentShaderStage fragmentShader(std::make_shared<ShaderModule>(device, fsFont, fsFontHash, 0, nullptr, allocator), "main");
+    const FragmentShaderStage fragmentShader(std::make_shared<ShaderModule>(device, fsFont, fsFontHash, 0, allocator), "main");
     // Create font pipeline
     pipeline = std::make_shared<GraphicsPipeline>(std::move(device),
         std::vector<PipelineShaderStage>{vertexShader, fragmentShader},

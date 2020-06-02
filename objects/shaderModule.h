@@ -41,21 +41,30 @@ namespace magma
             std::size_t bytecodeSize,
             std::size_t bytecodeHash = 0,
             VkShaderModuleCreateFlags flags = 0,
-            std::shared_ptr<ValidationCache> validationCache = nullptr,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr
+#       ifdef VK_EXT_validation_cache
+            ,std::shared_ptr<ValidationCache> validationCache = nullptr
+#       endif
+            );
         explicit ShaderModule(std::shared_ptr<Device> device,
             const std::vector<SpirvWord>& bytecode,
             std::size_t bytecodeHash = 0,
             VkShaderModuleCreateFlags flags = 0,
-            std::shared_ptr<ValidationCache> validationCache = nullptr,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr
+#       ifdef VK_EXT_validation_cache
+            ,std::shared_ptr<ValidationCache> validationCache = nullptr
+#       endif
+        );
         template<std::size_t WordCount>
         explicit ShaderModule(std::shared_ptr<Device> device,
             const SpirvWord (&bytecode)[WordCount],
             std::size_t bytecodeHash = 0,
             VkShaderModuleCreateFlags flags = 0,
-            std::shared_ptr<ValidationCache> validationCache = nullptr,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr
+#       ifdef VK_EXT_validation_cache
+            ,std::shared_ptr<ValidationCache> validationCache = nullptr
+#       endif
+        );
         ~ShaderModule();
         std::size_t getHash() noexcept;
 

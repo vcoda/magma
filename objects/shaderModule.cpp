@@ -27,28 +27,30 @@ namespace magma
 {
 ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *bytecode, std::size_t bytecodeSize,
     std::size_t bytecodeHash /* 0 */, VkShaderModuleCreateFlags flags /* 0 */,
-    std::shared_ptr<ValidationCache> validationCache /* nullptr */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_SHADER_MODULE, std::move(device), std::move(allocator))
+    std::shared_ptr<IAllocator> allocator /* nullptr */
+#ifdef VK_EXT_validation_cache
+    ,std::shared_ptr<ValidationCache> validationCache /* nullptr */
+#endif
+    ): NonDispatchable(VK_OBJECT_TYPE_SHADER_MODULE, std::move(device), std::move(allocator))
 {
 #ifdef VK_EXT_validation_cache
-    VkShaderModuleValidationCacheCreateInfoEXT cacheCreateInfo;
+    VkShaderModuleValidationCacheCreateInfoEXT cacheCreateInfo = {};
 #endif
     VkShaderModuleCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-    if (!validationCache)
-        info.pNext = nullptr;
-    else
-    {
 #ifdef VK_EXT_validation_cache
+    if (validationCache)
+    {
         cacheCreateInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_VALIDATION_CACHE_CREATE_INFO_EXT;
         cacheCreateInfo.pNext = nullptr;
         cacheCreateInfo.validationCache = MAGMA_OPTIONAL_HANDLE(validationCache);
         info.pNext = &cacheCreateInfo;
-#else
-        info.pNext = nullptr;
-#endif // VK_EXT_validation_cache
     }
+    else
+        info.pNext = nullptr;
+#else
+    info.pNext = nullptr;
+#endif // VK_EXT_validation_cache
     info.flags = flags;
     MAGMA_ASSERT(0 == bytecodeSize % sizeof(SpirvWord)); // A module is defined as a stream of words, not a stream of bytes
     info.codeSize = bytecodeSize;
@@ -59,6 +61,14 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
         info.sType,
         info.flags,
         info.codeSize);
+#ifdef VK_EXT_validation_cache
+    if (validationCache)
+    {
+        core::hashCombine(hash, core::hashArgs(
+            cacheCreateInfo.sType,
+            cacheCreateInfo.validationCache));
+    }
+#endif
     if (bytecodeHash)
         core::hashCombine(hash, bytecodeHash);
     else
@@ -70,10 +80,16 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
 
 ShaderModule::ShaderModule(std::shared_ptr<Device> device, const std::vector<SpirvWord>& bytecode,
     std::size_t bytecodeHash /* 0 */, VkShaderModuleCreateFlags flags /* 0 */,
-    std::shared_ptr<ValidationCache> validationCache /* nullptr */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    ShaderModule(std::move(device), bytecode.data(), bytecode.size() * sizeof(SpirvWord), bytecodeHash, flags,
-        std::move(validationCache), std::move(allocator))
+    std::shared_ptr<IAllocator> allocator /* nullptr */
+#ifdef VK_EXT_validation_cache
+    ,std::shared_ptr<ValidationCache> validationCache /* nullptr */
+#endif
+    ): ShaderModule(std::move(device), bytecode.data(), bytecode.size() * sizeof(SpirvWord), bytecodeHash, flags,
+        std::move(allocator)
+#ifdef VK_EXT_validation_cache
+        ,std::move(validationCache)
+#endif
+    )
 {}
 
 ShaderModule::~ShaderModule()
