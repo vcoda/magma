@@ -21,17 +21,18 @@ namespace magma
 {
     namespace aux
     {
-        typedef std::shared_ptr<class BaseFramebuffer> BaseFramebufferPtr;
-        typedef std::shared_ptr<class BlitRectangle> BlitRectanglePtr;
-        typedef std::shared_ptr<class Framebuffer> FramebufferPtr;
-        typedef std::shared_ptr<class FrameGrabber> FrameGrabberPtr;
-        typedef std::shared_ptr<class GraphicsPipelineCache> GraphicsPipelineCachePtr;
-        typedef std::shared_ptr<class ImmediateRender> ImmediateRenderPtr;
-        typedef std::shared_ptr<class IShaderIncludeHandler> ShaderIncludeHandlerPtr;
-        typedef std::shared_ptr<class MipmapGenerator> MipmapGeneratorPtr;
-        typedef std::shared_ptr<class MultisampleFramebuffer> MultisampleFramebufferPtr;
-        typedef std::shared_ptr<class ShaderCompiler> ShaderCompilerPtr;
-        typedef std::shared_ptr<class SwapchainFramebuffer> SwapchainFramebufferPtr;
-        typedef std::shared_ptr<class TextShader> TextShaderPtr;
+        MAGMA_TYPEDEF_SHARED_PTR(BaseFramebuffer)
+        MAGMA_TYPEDEF_SHARED_PTR(BlitRectangle)
+        MAGMA_TYPEDEF_SHARED_PTR(Framebuffer)
+        MAGMA_TYPEDEF_SHARED_PTR(FrameGrabber)
+        MAGMA_TYPEDEF_SHARED_PTR(GraphicsPipelineCache)
+        MAGMA_TYPEDEF_SHARED_PTR(ImmediateRender)
+        MAGMA_TYPEDEF_SHARED_PTR(MipmapGenerator)
+        MAGMA_TYPEDEF_SHARED_PTR(MultisampleFramebuffer)
+        MAGMA_TYPEDEF_SHARED_PTR(ShaderCompiler)
+        MAGMA_TYPEDEF_SHARED_PTR(SwapchainFramebuffer)
+        MAGMA_TYPEDEF_SHARED_PTR(TextShader)
+
+        MAGMA_TYPEDEF_INTERFACE_SHARED_PTR(ShaderIncludeHandler)
     } // namespace aux
 } // namespace magma
