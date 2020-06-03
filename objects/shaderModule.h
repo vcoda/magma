@@ -22,6 +22,7 @@ namespace magma
 {
     class Device;
     class ValidationCache;
+    class ShaderReflection;
     class IAllocator;
 
     /* See https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.pdf
@@ -41,15 +42,17 @@ namespace magma
             std::size_t bytecodeSize,
             std::size_t bytecodeHash = 0,
             VkShaderModuleCreateFlags flags = 0,
+            bool reflect = false,
             std::shared_ptr<IAllocator> allocator = nullptr
 #       ifdef VK_EXT_validation_cache
             ,std::shared_ptr<ValidationCache> validationCache = nullptr
 #       endif
-            );
+        );
         explicit ShaderModule(std::shared_ptr<Device> device,
             const std::vector<SpirvWord>& bytecode,
             std::size_t bytecodeHash = 0,
             VkShaderModuleCreateFlags flags = 0,
+            bool reflect = false,
             std::shared_ptr<IAllocator> allocator = nullptr
 #       ifdef VK_EXT_validation_cache
             ,std::shared_ptr<ValidationCache> validationCache = nullptr
@@ -60,6 +63,7 @@ namespace magma
             const SpirvWord (&bytecode)[WordCount],
             std::size_t bytecodeHash = 0,
             VkShaderModuleCreateFlags flags = 0,
+            bool reflect = false,
             std::shared_ptr<IAllocator> allocator = nullptr
 #       ifdef VK_EXT_validation_cache
             ,std::shared_ptr<ValidationCache> validationCache = nullptr
@@ -67,10 +71,12 @@ namespace magma
         );
         ~ShaderModule();
         std::size_t getHash() noexcept;
+        std::shared_ptr<ShaderReflection> getReflection() const noexcept { return reflection; }
 
     private:
         std::size_t hash;
         std::vector<char> bytecode;
+        std::shared_ptr<ShaderReflection> reflection;
     };
 } // namespace magma
 

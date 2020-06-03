@@ -144,12 +144,12 @@ std::shared_ptr<ShaderModule> BlitRectangle::createVertexShader(std::shared_ptr<
 constexpr
 #include "spirv/output/blitv_nv"
         constexpr std::size_t vsBlitNVHash = core::hashArray(vsBlitNV);
-        return std::make_shared<ShaderModule>(std::move(device), vsBlitNV, vsBlitNVHash, 0, std::move(allocator));
+        return std::make_shared<ShaderModule>(std::move(device), vsBlitNV, vsBlitNVHash, 0, false, std::move(allocator));
     }
 constexpr
 #include "spirv/output/blitv"
     constexpr std::size_t vsBlitHash = core::hashArray(vsBlit);
-    return std::make_shared<ShaderModule>(std::move(device), vsBlit, vsBlitHash, 0, std::move(allocator));
+    return std::make_shared<ShaderModule>(std::move(device), vsBlit, vsBlitHash, 0, false, std::move(allocator));
 }
 
 std::shared_ptr<ShaderModule> BlitRectangle::createFragmentShader(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) const
@@ -157,7 +157,7 @@ std::shared_ptr<ShaderModule> BlitRectangle::createFragmentShader(std::shared_pt
 constexpr
 #include "spirv/output/blitf"
     constexpr std::size_t fsBlitHash = core::hashArray(fsBlit);
-    return std::make_shared<ShaderModule>(std::move(device), fsBlit, fsBlitHash, 0, std::move(allocator));
+    return std::make_shared<ShaderModule>(std::move(device), fsBlit, fsBlitHash, 0, false, std::move(allocator));
 }
 } // namespace aux
 } // namespace magma

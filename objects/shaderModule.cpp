@@ -20,18 +20,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "shaderModule.h"
 #include "device.h"
 #include "validationCache.h"
+#include "../shaders/shaderReflection.h"
 #include "../allocator/allocator.h"
 #include "../misc/exception.h"
 
 namespace magma
 {
 ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *bytecode, std::size_t bytecodeSize,
-    std::size_t bytecodeHash /* 0 */, VkShaderModuleCreateFlags flags /* 0 */,
+    std::size_t bytecodeHash /* 0 */, VkShaderModuleCreateFlags flags /* 0 */, bool reflect /* false */,
     std::shared_ptr<IAllocator> allocator /* nullptr */
 #ifdef VK_EXT_validation_cache
     ,std::shared_ptr<ValidationCache> validationCache /* nullptr */
 #endif
-    ): NonDispatchable(VK_OBJECT_TYPE_SHADER_MODULE, std::move(device), std::move(allocator))
+    ): NonDispatchable(VK_OBJECT_TYPE_SHADER_MODULE, std::move(device), std::move(allocator)),
+       reflection(reflect ? std::make_shared<ShaderReflection>(bytecode, bytecodeSize) : nullptr)
 {
 #ifdef VK_EXT_validation_cache
     VkShaderModuleValidationCacheCreateInfoEXT cacheCreateInfo = {};
@@ -79,12 +81,12 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
 }
 
 ShaderModule::ShaderModule(std::shared_ptr<Device> device, const std::vector<SpirvWord>& bytecode,
-    std::size_t bytecodeHash /* 0 */, VkShaderModuleCreateFlags flags /* 0 */,
+    std::size_t bytecodeHash /* 0 */, VkShaderModuleCreateFlags flags /* 0 */, bool reflect /* false */,
     std::shared_ptr<IAllocator> allocator /* nullptr */
 #ifdef VK_EXT_validation_cache
     ,std::shared_ptr<ValidationCache> validationCache /* nullptr */
 #endif
-    ): ShaderModule(std::move(device), bytecode.data(), bytecode.size() * sizeof(SpirvWord), bytecodeHash, flags,
+    ): ShaderModule(std::move(device), bytecode.data(), bytecode.size() * sizeof(SpirvWord), bytecodeHash, flags, reflect,
         std::move(allocator)
 #ifdef VK_EXT_validation_cache
         ,std::move(validationCache)

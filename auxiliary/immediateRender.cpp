@@ -162,12 +162,12 @@ constexpr
     if (vertexShader)
     {
         constexpr std::size_t vsImmHash = core::hashArray(vsImm);
-        return std::make_shared<ShaderModule>(device, vsImm, vsImmHash, 0, allocator);
+        return std::make_shared<ShaderModule>(device, vsImm, vsImmHash, 0, false, allocator);
     }
 constexpr
 #include "spirv/output/immf"
     constexpr std::size_t fsImmHash = core::hashArray(fsImm);
-    return std::make_shared<ShaderModule>(device, fsImm, fsImmHash, 0, allocator);
+    return std::make_shared<ShaderModule>(device, fsImm, fsImmHash, 0, false, allocator);
 }
 
 std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTopology topology)
