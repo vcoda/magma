@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <exception>
+#include "../third-party/SPIRV-Reflect/spirv_reflect.h"
 
 namespace magma
 {
@@ -203,6 +204,21 @@ namespace magma
                 Exception(extension, location) {}
         };
 
+        /* SPIRV-Reflect error result. */
+
+        class ReflectException : public Exception
+        {
+        public:
+            ReflectException(SpvReflectResult result,
+                const char *message,
+                const source_location& location) noexcept:
+                Exception(message, location), result(result) {}
+            SpvReflectResult error() const noexcept { return result; }
+
+        private:
+            SpvReflectResult result;
+        };
+
         /* Functionality not implemented or implemented partially. */
 
         class NotImplemented : public Exception
@@ -233,6 +249,15 @@ namespace magma
         throw magma::exception::OutOfDeviceMemory(message, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
     default:\
         throw magma::exception::ErrorResult(result, message, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
+    }
+
+#define MAGMA_THROW_REFLECTION_FAILURE(result, message)\
+    switch (result) {\
+    case SPV_REFLECT_RESULT_SUCCESS:\
+    case SPV_REFLECT_RESULT_NOT_READY:\
+        break;\
+    default:\
+        throw magma::exception::ReflectException(result, message, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
     }
 
 #ifdef _MSC_VER
