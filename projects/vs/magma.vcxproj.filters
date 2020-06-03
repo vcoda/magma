@@ -519,6 +519,9 @@
     <ClInclude Include="..\..\core\constexprHash.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\shaders\shaderReflection.h">
+      <Filter>Header Files\shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -796,6 +799,12 @@
     </ClCompile>
     <ClCompile Include="..\..\objects\resourcePool.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shaders\shaderReflection.cpp">
+      <Filter>Source Files\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\SPIRV-Reflect\spirv_reflect.c">
+      <Filter>Source Files\shaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

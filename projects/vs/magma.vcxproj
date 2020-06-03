@@ -274,6 +274,7 @@
     <ClInclude Include="..\..\objects\vertexBuffer.h" />
     <ClInclude Include="..\..\shaders\pipelineShaderStage.h" />
     <ClInclude Include="..\..\shaders\rayTracingShaderGroup.h" />
+    <ClInclude Include="..\..\shaders\shaderReflection.h" />
     <ClInclude Include="..\..\shaders\specialization.h" />
     <ClInclude Include="..\..\shaders\shaderStages.h" />
     <ClInclude Include="..\..\states\colorBlendState.h" />
@@ -381,6 +382,7 @@
     <ClCompile Include="..\..\objects\vertexBuffer.cpp" />
     <ClCompile Include="..\..\shaders\pipelineShaderStage.cpp" />
     <ClCompile Include="..\..\shaders\rayTracingShaderGroup.cpp" />
+    <ClCompile Include="..\..\shaders\shaderReflection.cpp" />
     <ClCompile Include="..\..\shaders\specialization.cpp" />
     <ClCompile Include="..\..\states\colorBlendState.cpp" />
     <ClCompile Include="..\..\states\colorBlendStateAdvanced.cpp" />
@@ -388,6 +390,16 @@
     <ClCompile Include="..\..\states\vertexInputState.cpp" />
     <ClCompile Include="..\..\states\vertexInputStructure.cpp" />
     <ClCompile Include="..\..\states\viewportState.cpp" />
+    <ClCompile Include="..\..\third-party\SPIRV-Reflect\spirv_reflect.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\allocator\objectAllocator.inl" />
