@@ -916,6 +916,9 @@
     <None Include="..\..\objects\descriptorSetLayout.inl">
       <Filter>Header Files\objects</Filter>
     </None>
+    <None Include="..\..\shaders\shaderReflection.inl">
+      <Filter>Header Files\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">

@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../core/noncopyable.h"
-#include "../third-party/SPIRV-Reflect/spirv_reflect.h"
+#include "../misc/exception.h"
 
 namespace magma
 {
@@ -37,8 +37,25 @@ namespace magma
         SpvSourceLanguage sourceLanguage() const noexcept { return module.source_language; }
         uint32_t sourceLanguageVersion() const noexcept { return module.source_language_version; }
         const SpvReflectEntryPoint& getEntryPoint(const char *name) const noexcept;
+        std::vector<const SpvReflectDescriptorBinding *> enumerateDescriptorBindings() const;
+        std::vector<const SpvReflectDescriptorBinding *> enumerateEntryPointDescriptorBindings(const char *name) const;
+        std::vector<const SpvReflectDescriptorSet *> enumerateDescriptorSets() const;
+        std::vector<const SpvReflectDescriptorSet *> enumerateEntryPointDescriptorSets(const char *name) const;
+        std::vector<const SpvReflectInterfaceVariable *> enumerateInputVariables() const;
+        std::vector<const SpvReflectInterfaceVariable *> enumerateEntryPointInputVariables(const char *name) const;
+        std::vector<const SpvReflectInterfaceVariable *> enumerateOutputVariables() const;
+        std::vector<const SpvReflectInterfaceVariable *> enumerateEntryPointOutputVariables(const char *name) const;
+        std::vector<const SpvReflectBlockVariable *> enumeratePushConstantBlocks() const;
+        std::vector<const SpvReflectBlockVariable *> enumerateEntryPointPushConstantBlocks(const char *name) const;
 
     private:
+        template<typename Type, typename Func>
+        std::vector<const Type *> enumerateObjects(Func, const char *) const;
+        template<typename Type, typename Func>
+        std::vector<const Type *> enumerateEntryPointObjects(Func, const char *, const char *) const;
+
         SpvReflectShaderModule module;
     };
 } // namespace magma
+
+#include "shaderReflection.inl"

@@ -37,4 +37,79 @@ const SpvReflectEntryPoint& ShaderReflection::getEntryPoint(const char *name) co
 {
     return *spvReflectGetEntryPoint(&module, name);
 }
+
+std::vector<const SpvReflectDescriptorBinding *> ShaderReflection::enumerateDescriptorBindings() const
+{
+    return enumerateObjects<SpvReflectDescriptorBinding>(
+        spvReflectEnumerateDescriptorBindings,
+        "failed to enumerate descriptor bindings");
+}
+
+std::vector<const SpvReflectDescriptorBinding *> ShaderReflection::enumerateEntryPointDescriptorBindings(const char *name) const
+{
+     return enumerateEntryPointObjects<SpvReflectDescriptorBinding>(
+         spvReflectEnumerateEntryPointDescriptorBindings,
+         name,
+         "failed to enumerate entry point descriptor bindings");
+}
+
+std::vector<const SpvReflectDescriptorSet *> ShaderReflection::enumerateDescriptorSets() const
+{
+    return enumerateObjects<SpvReflectDescriptorSet>(
+        spvReflectEnumerateDescriptorSets,
+        "failed to enumerate descriptor sets");
+}
+
+std::vector<const SpvReflectDescriptorSet *> ShaderReflection::enumerateEntryPointDescriptorSets(const char *name) const
+{
+    return enumerateEntryPointObjects<SpvReflectDescriptorSet>(
+         spvReflectEnumerateEntryPointDescriptorSets,
+         name,
+         "failed to enumerate entry point descriptor sets");
+}
+
+std::vector<const SpvReflectInterfaceVariable *> ShaderReflection::enumerateInputVariables() const
+{
+    return enumerateObjects<SpvReflectInterfaceVariable>(
+        spvReflectEnumerateInputVariables,
+        "failed to enumerate input variables");
+}
+
+std::vector<const SpvReflectInterfaceVariable *> ShaderReflection::enumerateEntryPointInputVariables(const char *name) const
+{
+    return enumerateEntryPointObjects<SpvReflectInterfaceVariable>(
+        spvReflectEnumerateEntryPointInputVariables,
+        name,
+        "failed to enumerate entry point input variables");
+}
+
+std::vector<const SpvReflectInterfaceVariable *> ShaderReflection::enumerateOutputVariables() const
+{
+    return enumerateObjects<SpvReflectInterfaceVariable>(
+        spvReflectEnumerateOutputVariables,
+        "failed to enumerate output variables");
+}
+
+std::vector<const SpvReflectInterfaceVariable *> ShaderReflection::enumerateEntryPointOutputVariables(const char *name) const
+{
+    return enumerateEntryPointObjects<SpvReflectInterfaceVariable>(
+        spvReflectEnumerateEntryPointOutputVariables,
+        name,
+        "failed to enumerate entry point output variables");
+}
+
+std::vector<const SpvReflectBlockVariable *> ShaderReflection::enumeratePushConstantBlocks() const
+{
+    return enumerateObjects<SpvReflectBlockVariable>(
+        spvReflectEnumeratePushConstantBlocks,
+        "failed to enumerate push constant blocks");
+}
+
+std::vector<const SpvReflectBlockVariable *> ShaderReflection::enumerateEntryPointPushConstantBlocks(const char *name) const
+{
+    return enumerateEntryPointObjects<SpvReflectBlockVariable>(
+        spvReflectEnumerateEntryPointPushConstantBlocks,
+        name,
+        "failed to enumerate entry point push constant blocks");
+}
 } // namespace magma
