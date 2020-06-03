@@ -17,12 +17,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #include "shaderReflection.h"
+#include "../misc/exception.h"
 
 namespace magma
 {
 ShaderReflection::ShaderReflection(std::size_t size, const void *bytecode)
 {
-    spvReflectCreateShaderModule(size, bytecode, &module);
+    const SpvReflectResult result = spvReflectCreateShaderModule(size, bytecode, &module);
+    MAGMA_THROW_REFLECTION_FAILURE(result, "failed to create shader reflection")
 }
 
 ShaderReflection::~ShaderReflection() noexcept
