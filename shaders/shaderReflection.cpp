@@ -17,14 +17,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #include "shaderReflection.h"
+#include "../objects/shaderModule.h"
 #include "../misc/exception.h"
 
 namespace magma
 {
-ShaderReflection::ShaderReflection(const uint32_t *bytecode, std::size_t bytecodeSize)
+ShaderReflection::ShaderReflection(const SpirvWord *bytecode, std::size_t bytecodeSize)
 {
-    const std::size_t size = bytecodeSize * sizeof(uint32_t);
-    const SpvReflectResult result = spvReflectCreateShaderModule(size, bytecode, &module);
+    MAGMA_ASSERT(0 == bytecodeSize % sizeof(SpirvWord)); // A module is defined as a stream of words, not a stream of bytes
+    const SpvReflectResult result = spvReflectCreateShaderModule(bytecodeSize * sizeof(SpirvWord), bytecode, &module);
     MAGMA_THROW_REFLECTION_FAILURE(result, "failed to create shader reflection")
 }
 
