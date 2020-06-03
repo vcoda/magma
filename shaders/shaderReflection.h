@@ -30,6 +30,11 @@ namespace magma
     public:
         ShaderReflection(std::size_t size, const void *bytecode);
         ~ShaderReflection() noexcept;
+        uint32_t entryPointCount() const noexcept { return module.entry_point_count; }
+        const char *entryPointName(uint32_t index) const noexcept { return module.entry_points[index].name; }
+        VkShaderStageFlagBits shaderStage() const noexcept { return static_cast<VkShaderStageFlagBits>(module.shader_stage); };
+        SpvSourceLanguage sourceLanguage() const noexcept { return module.source_language; }
+        uint32_t sourceLanguageVersion() const noexcept { return module.source_language_version; }
 
     private:
         SpvReflectShaderModule module;
