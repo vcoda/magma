@@ -82,7 +82,7 @@ Some auxiliary objects use built-in precompiled shaders. Hash of a bytecode of t
 
 There are dependencies from the following third party libraries:
 
-* [shaderc](https://github.com/google/shaderc) - a collection of tools, libraries, and tests for Vulkan shader compilation..
+* [shaderc](https://github.com/google/shaderc) - a collection of tools, libraries, and tests for Vulkan shader compilation.
 * [SPIRV-Reflect](https://github.com/chaoticbob/SPIRV-Reflect) - a lightweight library that provides a C/C++ reflection API for SPIR-V shader bytecode in Vulkan applications.
 
 Library depends on STL and has not been designed to be used with custom containers. It doesn't use any file input/output.
