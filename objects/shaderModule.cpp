@@ -35,11 +35,13 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
     ): NonDispatchable(VK_OBJECT_TYPE_SHADER_MODULE, std::move(device), std::move(allocator)),
        reflection(reflect ? std::make_shared<ShaderReflection>(bytecode, bytecodeSize) : nullptr)
 {
+    MAGMA_ASSERT(0 == bytecodeSize % sizeof(SpirvWord)); // A module is defined as a stream of words, not a stream of bytes
 #ifdef VK_EXT_validation_cache
     VkShaderModuleValidationCacheCreateInfoEXT cacheCreateInfo = {};
 #endif
     VkShaderModuleCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+    info.pNext = nullptr;
 #ifdef VK_EXT_validation_cache
     if (validationCache)
     {
@@ -48,13 +50,8 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
         cacheCreateInfo.validationCache = MAGMA_OPTIONAL_HANDLE(validationCache);
         info.pNext = &cacheCreateInfo;
     }
-    else
-        info.pNext = nullptr;
-#else
-    info.pNext = nullptr;
 #endif // VK_EXT_validation_cache
     info.flags = flags;
-    MAGMA_ASSERT(0 == bytecodeSize % sizeof(SpirvWord)); // A module is defined as a stream of words, not a stream of bytes
     info.codeSize = bytecodeSize;
     info.pCode = bytecode;
     const VkResult create = vkCreateShaderModule(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);

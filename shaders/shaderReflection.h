@@ -28,14 +28,13 @@ namespace magma
     class ShaderReflection : public core::NonCopyable
     {
     public:
-        ShaderReflection(const uint32_t *bytecode,
-            std::size_t bytecodeSize);
+        ShaderReflection(const uint32_t *bytecode, std::size_t bytecodeSize);
         ~ShaderReflection() noexcept;
-        uint32_t entryPointCount() const noexcept { return module.entry_point_count; }
-        const char *entryPointName(uint32_t index) const noexcept { return module.entry_points[index].name; }
-        VkShaderStageFlagBits shaderStage() const noexcept { return static_cast<VkShaderStageFlagBits>(module.shader_stage); };
-        SpvSourceLanguage sourceLanguage() const noexcept { return module.source_language; }
-        uint32_t sourceLanguageVersion() const noexcept { return module.source_language_version; }
+        uint32_t getEntryPointCount() const noexcept { return module.entry_point_count; }
+        const char *getEntryPointName(uint32_t index) const noexcept { return module.entry_points[index].name; }
+        VkShaderStageFlagBits getShaderStage() const noexcept { return static_cast<VkShaderStageFlagBits>(module.shader_stage); };
+        SpvSourceLanguage getSourceLanguage() const noexcept { return module.source_language; }
+        uint32_t getSourceLanguageVersion() const noexcept { return module.source_language_version; }
         const SpvReflectEntryPoint& getEntryPoint(const char *name) const noexcept;
         std::vector<const SpvReflectDescriptorBinding *> enumerateDescriptorBindings() const;
         std::vector<const SpvReflectDescriptorBinding *> enumerateEntryPointDescriptorBindings(const char *name) const;
