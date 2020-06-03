@@ -36,6 +36,7 @@ namespace magma
         VkShaderStageFlagBits shaderStage() const noexcept { return static_cast<VkShaderStageFlagBits>(module.shader_stage); };
         SpvSourceLanguage sourceLanguage() const noexcept { return module.source_language; }
         uint32_t sourceLanguageVersion() const noexcept { return module.source_language_version; }
+        const SpvReflectEntryPoint& getEntryPoint(const char *name) const noexcept;
 
     private:
         SpvReflectShaderModule module;

@@ -32,4 +32,9 @@ ShaderReflection::~ShaderReflection() noexcept
 {
     spvReflectDestroyShaderModule(&module);
 }
+
+const SpvReflectEntryPoint& ShaderReflection::getEntryPoint(const char *name) const noexcept
+{
+    return *spvReflectGetEntryPoint(&module, name);
+}
 } // namespace magma
