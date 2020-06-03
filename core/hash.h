@@ -17,8 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "hashCombine.h"
-#include "hashing/fnv1.h"
-#include "hashing/fnv1string.h"
 
 namespace magma
 {
@@ -50,12 +48,6 @@ inline std::size_t hashArgs(const T& arg, Args... args) noexcept
     return value;
 }
 
-template<typename T, std::size_t N>
-constexpr std::size_t hashArray(const T (&a)[N]) noexcept
-{
-    return hashing::Fnv1a<T, N, N>().hash(a);
-}
-
 template<typename T> inline std::size_t hashArray(const T *const arr, std::size_t count) noexcept
 {
     std::hash<T> hasher;
@@ -81,11 +73,6 @@ template<typename T> inline std::size_t hashList(const std::list<T>& ls) noexcep
     for (const auto& it : ls)
         hashCombine(value, hasher(it));
     return value;
-}
-
-template<typename T> constexpr std::size_t hashString(const T *const str) noexcept
-{
-    return hashing::string::Fnv1a<T, 0>().hash(str);
 }
 
 template<typename T> inline std::size_t hashString(const std::basic_string<T>& str) noexcept

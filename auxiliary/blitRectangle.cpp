@@ -39,6 +39,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/colorBlendState.h"
 #include "../states/samplerState.h"
 #include "../misc/exception.h"
+#include "../core/constexprHash.h"
 
 namespace magma
 {

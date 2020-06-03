@@ -516,6 +516,9 @@
     <ClInclude Include="..\..\descriptors\samplerBindings.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\core\constexprHash.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
