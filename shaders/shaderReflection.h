@@ -28,7 +28,8 @@ namespace magma
     class ShaderReflection : public core::NonCopyable
     {
     public:
-        ShaderReflection(std::size_t size, const void *bytecode);
+        ShaderReflection(const uint32_t *bytecode,
+            std::size_t bytecodeSize);
         ~ShaderReflection() noexcept;
         uint32_t entryPointCount() const noexcept { return module.entry_point_count; }
         const char *entryPointName(uint32_t index) const noexcept { return module.entry_points[index].name; }

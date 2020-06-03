@@ -21,8 +21,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ShaderReflection::ShaderReflection(std::size_t size, const void *bytecode)
+ShaderReflection::ShaderReflection(const uint32_t *bytecode, std::size_t bytecodeSize)
 {
+    const std::size_t size = bytecodeSize * sizeof(uint32_t);
     const SpvReflectResult result = spvReflectCreateShaderModule(size, bytecode, &module);
     MAGMA_THROW_REFLECTION_FAILURE(result, "failed to create shader reflection")
 }
