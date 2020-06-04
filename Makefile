@@ -107,6 +107,7 @@ MAGMA_OBJS= \
 	\
 	shaders/pipelineShaderStage.o \
 	shaders/rayTracingShaderGroup.o \
+	shaders/shaderReflection.o \
 	shaders/specialization.o \
 	\
 	states/colorBlendState.o \
@@ -114,7 +115,9 @@ MAGMA_OBJS= \
 	states/multisampleState.o \
 	states/vertexInputState.o \
 	states/vertexInputStructure.o \
-	states/viewportState.o
+	states/viewportState.o \
+	\
+	third-party/SPIRV-Reflect/spirv_reflect.o
 
 DEPS := $(MAGMA_OBJS:.o=.d)
 
