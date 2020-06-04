@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../core/noncopyable.h"
-#include "../misc/exception.h"
+#include "../third-party/SPIRV-Reflect/spirv_reflect.h"
 
 namespace magma
 {
