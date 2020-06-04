@@ -35,6 +35,7 @@ namespace magma
         ShaderReflection(const uint32_t *bytecode, std::size_t bytecodeSize);
         ~ShaderReflection() noexcept;
         const SpirvWord *getBytecode() const noexcept;
+        std::size_t getBytecodeSize() const noexcept;
         uint32_t getEntryPointCount() const noexcept { return module.entry_point_count; }
         const char *getEntryPointName(uint32_t index) const noexcept { return module.entry_points[index].name; }
         VkShaderStageFlagBits getShaderStage() const noexcept { return static_cast<VkShaderStageFlagBits>(module.shader_stage); };

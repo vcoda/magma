@@ -39,6 +39,13 @@ const SpirvWord *ShaderReflection::getBytecode() const noexcept
     return spvReflectGetCode(&module);
 }
 
+std::size_t ShaderReflection::getBytecodeSize() const noexcept
+{
+    const std::size_t bytecodeSize = spvReflectGetCodeSize(&module);
+    MAGMA_ASSERT(0 == bytecodeSize % sizeof(SpirvWord));
+    return bytecodeSize;
+}
+
 const SpvReflectEntryPoint& ShaderReflection::getEntryPoint(const char *name) const noexcept
 {
     return *spvReflectGetEntryPoint(&module, name);
