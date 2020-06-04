@@ -52,6 +52,8 @@ namespace magma
         std::vector<const SpvReflectInterfaceVariable *> enumerateEntryPointOutputVariables(const char *name) const;
         std::vector<const SpvReflectBlockVariable *> enumeratePushConstantBlocks() const;
         std::vector<const SpvReflectBlockVariable *> enumerateEntryPointPushConstantBlocks(const char *name) const;
+        const SpvReflectDescriptorBinding *getDescriptorBinding(const char *entrypoint, uint32_t binding, uint32_t set) const;
+        const SpvReflectDescriptorSet *getDescriptorSet(const char *entrypoint, uint32_t set) const;
 
     private:
         template<typename Type, typename Func>

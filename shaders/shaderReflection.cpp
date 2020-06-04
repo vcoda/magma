@@ -124,4 +124,24 @@ std::vector<const SpvReflectBlockVariable *> ShaderReflection::enumerateEntryPoi
         name,
         "failed to enumerate entry point push constant blocks");
 }
+
+const SpvReflectDescriptorBinding* ShaderReflection::getDescriptorBinding(const char *entrypoint, uint32_t binding, uint32_t set) const
+{
+    SpvReflectResult result;
+    const SpvReflectDescriptorBinding *descriptorBinding = entrypoint ?
+        spvReflectGetEntryPointDescriptorBinding(&module, entrypoint, binding, set, &result) :
+        spvReflectGetDescriptorBinding(&module, binding, set, &result);
+    MAGMA_THROW_REFLECTION_FAILURE(result, "failed to get descriptor binding");
+    return descriptorBinding;
+}
+
+const SpvReflectDescriptorSet *ShaderReflection::getDescriptorSet(const char *entrypoint, uint32_t set) const
+{
+    SpvReflectResult result;
+    const SpvReflectDescriptorSet *descriptorSet = entrypoint ?
+        spvReflectGetEntryPointDescriptorSet(&module, entrypoint, set, &result) :
+        spvReflectGetDescriptorSet(&module, set, &result);
+    MAGMA_THROW_REFLECTION_FAILURE(result, "failed to get descriptor set");
+    return descriptorSet;
+}
 } // namespace magma
