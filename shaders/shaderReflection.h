@@ -58,6 +58,8 @@ namespace magma
         const SpvReflectInterfaceVariable *getInputVariable(const char *entrypoint, const char *semantic) const;
         const SpvReflectInterfaceVariable *getOutputVariable(const char *entrypoint, uint32_t location) const;
         const SpvReflectInterfaceVariable *getOutputVariable(const char *entrypoint, const char *semantic) const;
+        const SpvReflectBlockVariable *getPushConstantBlock(const uint32_t index) const;
+        const SpvReflectBlockVariable *getPushConstantBlock(const char *entrypoint) const;
 
     private:
         template<typename Type, typename Func>

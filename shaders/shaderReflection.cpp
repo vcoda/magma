@@ -184,4 +184,20 @@ const SpvReflectInterfaceVariable *ShaderReflection::getOutputVariable(const cha
     MAGMA_THROW_REFLECTION_FAILURE(result, "failed to get output variable by semantic")
     return outputVariable;
 }
+
+const SpvReflectBlockVariable *ShaderReflection::getPushConstantBlock(const uint32_t index) const
+{
+    SpvReflectResult result;
+    const SpvReflectBlockVariable *pushConstantBlock = spvReflectGetPushConstantBlock(&module, index, &result);
+    MAGMA_THROW_REFLECTION_FAILURE(result, "failed to get push constant block by index")
+    return pushConstantBlock;
+}
+
+const SpvReflectBlockVariable *ShaderReflection::getPushConstantBlock(const char *entrypoint) const
+{
+    SpvReflectResult result;
+    const SpvReflectBlockVariable *pushConstantBlock = spvReflectGetEntryPointPushConstantBlock(&module, entrypoint, &result);
+    MAGMA_THROW_REFLECTION_FAILURE(result, "failed to get push constant block for entry point")
+    return pushConstantBlock;
+}
 } // namespace magma
