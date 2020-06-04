@@ -74,9 +74,10 @@ namespace magma
         std::shared_ptr<const ShaderReflection> getReflection() const noexcept { return reflection; }
 
     private:
-        std::size_t hash;
-        std::vector<char> bytecode;
         std::shared_ptr<ShaderReflection> reflection;
+        std::size_t hash;
+        mutable std::size_t bytecodeHash;
+        mutable std::vector<SpirvWord> bytecode;
     };
 } // namespace magma
 

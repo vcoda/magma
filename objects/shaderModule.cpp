@@ -33,7 +33,9 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
     ,std::shared_ptr<ValidationCache> validationCache /* nullptr */
 #endif
     ): NonDispatchable(VK_OBJECT_TYPE_SHADER_MODULE, std::move(device), std::move(allocator)),
-       reflection(reflect ? std::make_shared<ShaderReflection>(bytecode, bytecodeSize) : nullptr)
+    reflection(reflect ? std::make_shared<ShaderReflection>(bytecode, bytecodeSize) : nullptr),
+    hash(0),
+    bytecodeHash(bytecodeHash)
 {
     MAGMA_ASSERT(0 == bytecodeSize % sizeof(SpirvWord)); // A module is defined as a stream of words, not a stream of bytes
 #ifdef VK_EXT_validation_cache
@@ -68,11 +70,10 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
             cacheCreateInfo.validationCache));
     }
 #endif
-    if (bytecodeHash)
-        core::hashCombine(hash, bytecodeHash);
-    else
+    if (0 == bytecodeHash && !reflect)
     {   // Store bytecode for future hash computation
-        this->bytecode.resize(info.codeSize); // codeSize is the size, in bytes, of the code pointed to by pCode
+        const std::size_t wordCount = info.codeSize / sizeof(SpirvWord);
+        this->bytecode.resize(wordCount);
         memcpy(this->bytecode.data(), info.pCode, info.codeSize);
     }
 }
@@ -96,14 +97,16 @@ ShaderModule::~ShaderModule()
     vkDestroyShaderModule(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
-std::size_t ShaderModule::getHash() noexcept
+std::size_t ShaderModule::getHash() const noexcept
 {
-    if (!bytecode.empty())
+    if (0 == bytecodeHash)
     {   // Compute hash on demand, may take time for large shaders
-        const std::size_t bytecodeHash = core::hashVector(bytecode);
-        core::hashCombine(hash, bytecodeHash);
-        std::vector<char>().swap(bytecode);
+        bytecodeHash = reflection ? reflection->computeBytecodeHash() : core::hashVector(bytecode);
+        if (!bytecode.empty())
+            std::vector<SpirvWord>().swap(bytecode);
     }
+    std::size_t hash = this->hash;
+    core::hashCombine(hash, bytecodeHash);
     return hash;
 }
 } // namespace magma
