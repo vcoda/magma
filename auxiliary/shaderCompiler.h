@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <shaderc/shaderc.h>
 #include "../core/noncopyable.h"
-#include "../exceptions/exception.h"
 
 namespace magma
 {
