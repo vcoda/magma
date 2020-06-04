@@ -32,7 +32,7 @@ namespace magma
     class ShaderReflection : public core::NonCopyable
     {
     public:
-        ShaderReflection(const uint32_t *bytecode, std::size_t bytecodeSize);
+        ShaderReflection(const SpirvWord *bytecode, std::size_t bytecodeSize);
         ~ShaderReflection() noexcept;
         const SpirvWord *getBytecode() const noexcept;
         std::size_t getBytecodeSize() const noexcept;

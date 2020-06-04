@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #include "shaderReflection.h"
-#include "../objects/shaderModule.h"
 #include "../misc/exception.h"
 
 namespace magma
@@ -25,7 +24,7 @@ namespace magma
 ShaderReflection::ShaderReflection(const SpirvWord *bytecode, std::size_t bytecodeSize)
 {
     MAGMA_ASSERT(0 == bytecodeSize % sizeof(SpirvWord)); // A module is defined as a stream of words, not a stream of bytes
-    const SpvReflectResult result = spvReflectCreateShaderModule(bytecodeSize * sizeof(SpirvWord), bytecode, &module);
+    const SpvReflectResult result = spvReflectCreateShaderModule(bytecodeSize, bytecode, &module);
     MAGMA_THROW_REFLECTION_FAILURE(result, "failed to create shader reflection")
 }
 
