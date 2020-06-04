@@ -42,6 +42,7 @@ namespace magma
         SpvSourceLanguage getSourceLanguage() const noexcept { return module.source_language; }
         uint32_t getSourceLanguageVersion() const noexcept { return module.source_language_version; }
         const SpvReflectEntryPoint& getEntryPoint(const char *name) const noexcept;
+        SpvExecutionModel getExecutionModel() const noexcept { return module.spirv_execution_model; }
         std::vector<const SpvReflectDescriptorBinding *> enumerateDescriptorBindings(const char *entrypoint = nullptr) const;
         std::vector<const SpvReflectDescriptorSet *> enumerateDescriptorSets(const char *entrypoint = nullptr) const;
         std::vector<const SpvReflectInterfaceVariable *> enumerateInputVariables(const char *entrypoint = nullptr) const;
