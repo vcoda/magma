@@ -34,6 +34,11 @@ ShaderReflection::~ShaderReflection() noexcept
     spvReflectDestroyShaderModule(&module);
 }
 
+const SpirvWord *ShaderReflection::getBytecode() const noexcept
+{
+    return spvReflectGetCode(&module);
+}
+
 const SpvReflectEntryPoint& ShaderReflection::getEntryPoint(const char *name) const noexcept
 {
     return *spvReflectGetEntryPoint(&module, name);

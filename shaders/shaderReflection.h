@@ -21,6 +21,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* See https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.pdf
+       2.3 Physical Layout of a SPIR-V Module and Instruction */
+    typedef uint32_t SpirvWord;
+
     /* SPIRV-Reflect is a lightweight library that provides a C/C++ reflection API
        for SPIR-V shader bytecode in Vulkan applications.
        https://github.com/chaoticbob/SPIRV-Reflect */
@@ -30,6 +34,7 @@ namespace magma
     public:
         ShaderReflection(const uint32_t *bytecode, std::size_t bytecodeSize);
         ~ShaderReflection() noexcept;
+        const SpirvWord *getBytecode() const noexcept;
         uint32_t getEntryPointCount() const noexcept { return module.entry_point_count; }
         const char *getEntryPointName(uint32_t index) const noexcept { return module.entry_points[index].name; }
         VkShaderStageFlagBits getShaderStage() const noexcept { return static_cast<VkShaderStageFlagBits>(module.shader_stage); };
