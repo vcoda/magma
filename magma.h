@@ -77,6 +77,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "shaders/specialization.h"
 #include "shaders/pipelineShaderStage.h"
+#include "shaders/shaderReflection.h"
 #include "shaders/shaderStages.h"
 #include "shaders/rayTracingShaderGroup.h"
 
