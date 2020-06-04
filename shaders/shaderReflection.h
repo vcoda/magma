@@ -25,9 +25,9 @@ namespace magma
        2.3 Physical Layout of a SPIR-V Module and Instruction */
     typedef uint32_t SpirvWord;
 
-    /* SPIRV-Reflect is a lightweight library that provides a C/C++ reflection API
-       for SPIR-V shader bytecode in Vulkan applications.
-       https://github.com/chaoticbob/SPIRV-Reflect */
+    /* https://github.com/chaoticbob/SPIRV-Reflect
+       SPIRV-Reflect is a lightweight library that provides a C/C++ reflection API
+       for SPIR-V shader bytecode in Vulkan applications. */
 
     class ShaderReflection : public core::NonCopyable
     {
