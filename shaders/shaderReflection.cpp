@@ -50,79 +50,96 @@ const SpvReflectEntryPoint& ShaderReflection::getEntryPoint(const char *name) co
     return *spvReflectGetEntryPoint(&module, name);
 }
 
-std::vector<const SpvReflectDescriptorBinding *> ShaderReflection::enumerateDescriptorBindings() const
+std::vector<const SpvReflectDescriptorBinding *> ShaderReflection::enumerateDescriptorBindings(const char *entrypoint /* nullptr */) const
 {
-    return enumerateObjects<SpvReflectDescriptorBinding>(
-        spvReflectEnumerateDescriptorBindings,
-        "failed to enumerate descriptor bindings");
+    std::vector<const SpvReflectDescriptorBinding *> descriptorBindings;
+    uint32_t count = 0;
+    entrypoint ? spvReflectEnumerateEntryPointDescriptorBindings(&module, entrypoint, &count, nullptr)
+               : spvReflectEnumerateDescriptorBindings(&module, &count, nullptr);
+    if (count)
+    {
+        descriptorBindings.resize(count);
+        auto data = const_cast<SpvReflectDescriptorBinding **>(descriptorBindings.data());
+        const SpvReflectResult result = entrypoint ?
+            spvReflectEnumerateEntryPointDescriptorBindings(&module, entrypoint, &count, data) :
+            spvReflectEnumerateDescriptorBindings(&module, &count, data);
+        MAGMA_THROW_REFLECTION_FAILURE(result, "failed to enumerate descriptor bindings")
+    }
+    return descriptorBindings;
 }
 
-std::vector<const SpvReflectDescriptorBinding *> ShaderReflection::enumerateEntryPointDescriptorBindings(const char *name) const
+std::vector<const SpvReflectDescriptorSet *> ShaderReflection::enumerateDescriptorSets(const char *entrypoint /* nullptr */) const
 {
-     return enumerateEntryPointObjects<SpvReflectDescriptorBinding>(
-         spvReflectEnumerateEntryPointDescriptorBindings,
-         name,
-         "failed to enumerate entry point descriptor bindings");
+    std::vector<const SpvReflectDescriptorSet *> descriptorSets;
+    uint32_t count = 0;
+    entrypoint ? spvReflectEnumerateEntryPointDescriptorSets(&module, entrypoint, &count, nullptr)
+               : spvReflectEnumerateDescriptorSets(&module, &count, nullptr);
+    if (count)
+    {
+        descriptorSets.resize(count);
+        auto data = const_cast<SpvReflectDescriptorSet **>(descriptorSets.data());
+        const SpvReflectResult result = entrypoint ?
+            spvReflectEnumerateEntryPointDescriptorSets(&module, entrypoint, &count, data) :
+            spvReflectEnumerateDescriptorSets(&module, &count, data);
+        MAGMA_THROW_REFLECTION_FAILURE(result, "failed to enumerate descriptor sets")
+    }
+    return descriptorSets;
 }
 
-std::vector<const SpvReflectDescriptorSet *> ShaderReflection::enumerateDescriptorSets() const
+std::vector<const SpvReflectInterfaceVariable *> ShaderReflection::enumerateInputVariables(const char *entrypoint /* nullptr */) const
 {
-    return enumerateObjects<SpvReflectDescriptorSet>(
-        spvReflectEnumerateDescriptorSets,
-        "failed to enumerate descriptor sets");
+    std::vector<const SpvReflectInterfaceVariable *> inputVariables;
+    uint32_t count = 0;
+    entrypoint ? spvReflectEnumerateEntryPointInputVariables(&module, entrypoint, &count, nullptr)
+               : spvReflectEnumerateInputVariables(&module, &count, nullptr);
+    if (count)
+    {
+        inputVariables.resize(count);
+        auto data = const_cast<SpvReflectInterfaceVariable **>(inputVariables.data());
+        const SpvReflectResult result = entrypoint ?
+            spvReflectEnumerateEntryPointInputVariables(&module, entrypoint, &count, data) :
+            spvReflectEnumerateInputVariables(&module, &count, data);
+        MAGMA_THROW_REFLECTION_FAILURE(result, "failed to enumerate input variables")
+    }
+    return inputVariables;
 }
 
-std::vector<const SpvReflectDescriptorSet *> ShaderReflection::enumerateEntryPointDescriptorSets(const char *name) const
+
+std::vector<const SpvReflectInterfaceVariable *> ShaderReflection::enumerateOutputVariables(const char *entrypoint /* nullptr */) const
 {
-    return enumerateEntryPointObjects<SpvReflectDescriptorSet>(
-         spvReflectEnumerateEntryPointDescriptorSets,
-         name,
-         "failed to enumerate entry point descriptor sets");
+    std::vector<const SpvReflectInterfaceVariable *> outputVariables;
+    uint32_t count = 0;
+    entrypoint ? spvReflectEnumerateEntryPointOutputVariables(&module, entrypoint, &count, nullptr)
+               : spvReflectEnumerateOutputVariables(&module, &count, nullptr);
+    if (count)
+    {
+        outputVariables.resize(count);
+        auto data = const_cast<SpvReflectInterfaceVariable **>(outputVariables.data());
+        const SpvReflectResult result = entrypoint ?
+            spvReflectEnumerateEntryPointOutputVariables(&module, entrypoint, &count, data) :
+            spvReflectEnumerateOutputVariables(&module, &count, data);
+        MAGMA_THROW_REFLECTION_FAILURE(result, "failed to enumerate output variables")
+    }
+    return outputVariables;
 }
 
-std::vector<const SpvReflectInterfaceVariable *> ShaderReflection::enumerateInputVariables() const
-{
-    return enumerateObjects<SpvReflectInterfaceVariable>(
-        spvReflectEnumerateInputVariables,
-        "failed to enumerate input variables");
-}
 
-std::vector<const SpvReflectInterfaceVariable *> ShaderReflection::enumerateEntryPointInputVariables(const char *name) const
+std::vector<const SpvReflectBlockVariable *> ShaderReflection::enumeratePushConstantBlocks(const char *entrypoint /* nullptr */) const
 {
-    return enumerateEntryPointObjects<SpvReflectInterfaceVariable>(
-        spvReflectEnumerateEntryPointInputVariables,
-        name,
-        "failed to enumerate entry point input variables");
-}
-
-std::vector<const SpvReflectInterfaceVariable *> ShaderReflection::enumerateOutputVariables() const
-{
-    return enumerateObjects<SpvReflectInterfaceVariable>(
-        spvReflectEnumerateOutputVariables,
-        "failed to enumerate output variables");
-}
-
-std::vector<const SpvReflectInterfaceVariable *> ShaderReflection::enumerateEntryPointOutputVariables(const char *name) const
-{
-    return enumerateEntryPointObjects<SpvReflectInterfaceVariable>(
-        spvReflectEnumerateEntryPointOutputVariables,
-        name,
-        "failed to enumerate entry point output variables");
-}
-
-std::vector<const SpvReflectBlockVariable *> ShaderReflection::enumeratePushConstantBlocks() const
-{
-    return enumerateObjects<SpvReflectBlockVariable>(
-        spvReflectEnumeratePushConstantBlocks,
-        "failed to enumerate push constant blocks");
-}
-
-std::vector<const SpvReflectBlockVariable *> ShaderReflection::enumerateEntryPointPushConstantBlocks(const char *name) const
-{
-    return enumerateEntryPointObjects<SpvReflectBlockVariable>(
-        spvReflectEnumerateEntryPointPushConstantBlocks,
-        name,
-        "failed to enumerate entry point push constant blocks");
+    std::vector<const SpvReflectBlockVariable *> pushConstantBlocks;
+    uint32_t count = 0;
+    entrypoint ? spvReflectEnumerateEntryPointPushConstantBlocks(&module, entrypoint, &count, nullptr)
+               : spvReflectEnumeratePushConstantBlocks(&module, &count, nullptr);
+    if (count)
+    {
+        pushConstantBlocks.resize(count);
+        auto data = const_cast<SpvReflectBlockVariable **>(pushConstantBlocks.data());
+        const SpvReflectResult result = entrypoint ?
+            spvReflectEnumerateEntryPointPushConstantBlocks(&module, entrypoint, &count, data) :
+            spvReflectEnumeratePushConstantBlocks(&module, &count, data);
+        MAGMA_THROW_REFLECTION_FAILURE(result, "failed to enumerate push constant blocks")
+    }
+    return pushConstantBlocks;
 }
 
 const SpvReflectDescriptorBinding* ShaderReflection::getDescriptorBinding(const char *entrypoint, uint32_t binding, uint32_t set) const

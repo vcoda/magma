@@ -507,7 +507,6 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
     <None Include="..\..\objects\srcTransferBuffer.inl" />
     <None Include="..\..\objects\storageBuffer.inl" />
     <None Include="..\..\objects\vertexBuffer.inl" />
-    <None Include="..\..\shaders\shaderReflection.inl" />
     <None Include="..\..\states\colorBlendState.inl" />
     <None Include="..\..\states\colorBlendStateAdvanced.inl" />
     <None Include="..\..\states\depthStencilState.inl" />

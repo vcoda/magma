@@ -42,16 +42,11 @@ namespace magma
         SpvSourceLanguage getSourceLanguage() const noexcept { return module.source_language; }
         uint32_t getSourceLanguageVersion() const noexcept { return module.source_language_version; }
         const SpvReflectEntryPoint& getEntryPoint(const char *name) const noexcept;
-        std::vector<const SpvReflectDescriptorBinding *> enumerateDescriptorBindings() const;
-        std::vector<const SpvReflectDescriptorBinding *> enumerateEntryPointDescriptorBindings(const char *name) const;
-        std::vector<const SpvReflectDescriptorSet *> enumerateDescriptorSets() const;
-        std::vector<const SpvReflectDescriptorSet *> enumerateEntryPointDescriptorSets(const char *name) const;
-        std::vector<const SpvReflectInterfaceVariable *> enumerateInputVariables() const;
-        std::vector<const SpvReflectInterfaceVariable *> enumerateEntryPointInputVariables(const char *name) const;
-        std::vector<const SpvReflectInterfaceVariable *> enumerateOutputVariables() const;
-        std::vector<const SpvReflectInterfaceVariable *> enumerateEntryPointOutputVariables(const char *name) const;
-        std::vector<const SpvReflectBlockVariable *> enumeratePushConstantBlocks() const;
-        std::vector<const SpvReflectBlockVariable *> enumerateEntryPointPushConstantBlocks(const char *name) const;
+        std::vector<const SpvReflectDescriptorBinding *> enumerateDescriptorBindings(const char *entrypoint = nullptr) const;
+        std::vector<const SpvReflectDescriptorSet *> enumerateDescriptorSets(const char *entrypoint = nullptr) const;
+        std::vector<const SpvReflectInterfaceVariable *> enumerateInputVariables(const char *entrypoint = nullptr) const;
+        std::vector<const SpvReflectInterfaceVariable *> enumerateOutputVariables(const char *entrypoint = nullptr) const;
+        std::vector<const SpvReflectBlockVariable *> enumeratePushConstantBlocks(const char *entrypoint = nullptr) const;
         const SpvReflectDescriptorBinding *getDescriptorBinding(const char *entrypoint, uint32_t binding, uint32_t set) const;
         const SpvReflectDescriptorSet *getDescriptorSet(const char *entrypoint, uint32_t set) const;
         const SpvReflectInterfaceVariable *getInputVariable(const char *entrypoint, uint32_t location) const;
@@ -62,13 +57,7 @@ namespace magma
         const SpvReflectBlockVariable *getPushConstantBlock(const char *entrypoint) const;
 
     private:
-        template<typename Type, typename Func>
-        std::vector<const Type *> enumerateObjects(Func, const char *) const;
-        template<typename Type, typename Func>
-        std::vector<const Type *> enumerateEntryPointObjects(Func, const char *, const char *) const;
-
         SpvReflectShaderModule module;
     };
 } // namespace magma
 
-#include "shaderReflection.inl"
