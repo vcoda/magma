@@ -107,7 +107,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "misc/clearValue.h"
 #include "misc/deviceExtension.h"
 #include "misc/deviceQueueDescriptor.h"
-#include "misc/exception.h"
 #include "misc/format.h"
 #include "misc/imageSubresourceRange.h"
 #include "misc/instanceExtension.h"
@@ -137,3 +136,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "helpers/stackArray.h"
 #include "helpers/stringize.h"
 #include "helpers/uniformArray.h"
+
+#include "exceptions/compileException.h"
+#include "exceptions/exception.h"
+#include "exceptions/reflectException.h"

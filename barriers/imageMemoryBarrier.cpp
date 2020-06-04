@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "imageMemoryBarrier.h"
 #include "../objects/image.h"
 #include "../misc/imageSubresourceRange.h"
-#include "../misc/exception.h"
+#include "../exceptions/notImplemented.h"
 
 namespace magma
 {

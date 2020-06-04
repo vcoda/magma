@@ -43,7 +43,6 @@ MAGMA_OBJS= \
 	helpers/stringize.o \
 	\
 	misc/deviceQueueDescriptor.o \
-	misc/exception.o \
 	misc/format.o \
 	misc/geometry.o \
 	misc/scopedDebugMarker.o \
@@ -116,6 +115,8 @@ MAGMA_OBJS= \
 	states/vertexInputState.o \
 	states/vertexInputStructure.o \
 	states/viewportState.o \
+	\
+	exceptions/exception.o \
 	\
 	third-party/SPIRV-Reflect/spirv_reflect.o
 

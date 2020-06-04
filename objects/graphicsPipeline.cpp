@@ -31,7 +31,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/depthStencilState.h"
 #include "../states/colorBlendState.h"
 #include "../allocator/allocator.h"
-#include "../misc/exception.h"
+#include "../exceptions/errorResult.h"
 #include "../core/hash.h"
 #include "../helpers/stackArray.h"
 

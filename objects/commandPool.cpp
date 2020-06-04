@@ -21,9 +21,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandBuffer.h"
 #include "device.h"
 #include "../allocator/allocator.h"
-#include "../misc/deviceExtension.h"
-#include "../misc/exception.h"
 #include "../allocator/linearPlacementPool.h"
+#include "../misc/deviceExtension.h"
+#include "../exceptions/errorResult.h"
 #include "../helpers/stackArray.h"
 
 namespace magma

@@ -26,7 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandBuffer.h"
 #include "../allocator/allocator.h"
 #include "../misc/deviceExtension.h"
-#include "../misc/exception.h"
+#include "../exceptions/errorResult.h"
 #include "../core/copyMemory.h"
 
 namespace magma

@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "objectAllocator.h"
-#include "../misc/exception.h"
+#include "../exceptions/exception.h"
 
 namespace magma
 {

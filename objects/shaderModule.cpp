@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "validationCache.h"
 #include "../shaders/shaderReflection.h"
 #include "../allocator/allocator.h"
-#include "../misc/exception.h"
+#include "../exceptions/errorResult.h"
 
 namespace magma
 {

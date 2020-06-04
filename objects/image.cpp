@@ -28,7 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../barriers/imageMemoryBarrier.h"
 #include "../misc/deviceExtension.h"
 #include "../misc/format.h"
-#include "../misc/exception.h"
+#include "../exceptions/errorResult.h"
 
 namespace magma
 {

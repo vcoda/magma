@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #ifdef _WIN32
 #include "shaderCompiler.h"
 #include "../objects/shaderModule.h"
+#include "../exceptions/errorResult.h"
+#include "../exceptions/compileException.h"
 
 namespace magma
 {
@@ -94,7 +96,7 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     shaderc_compile_options_release(options);
     const shaderc_compilation_status status = shaderc_result_get_compilation_status(result);
     if (status != shaderc_compilation_status_success)
-        throw CompileException(result, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});
+        throw exception::CompileException(result, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});
     // Create shader module
     const char *bytecode = shaderc_result_get_bytes(result);
     const std::size_t bytecodeSize = shaderc_result_get_length(result);
@@ -111,14 +113,7 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     return shaderModule;
 }
 
-CompileException::CompileException(shaderc_compilation_result_t result, const magma::exception::source_location& location):
-    Exception(shaderc_result_get_error_message(result), location),
-    status(shaderc_result_get_compilation_status(result)),
-    warnings(shaderc_result_get_num_warnings(result)),
-    errors(shaderc_result_get_num_errors(result))
-{
-    shaderc_result_release(result);
-}
+
 } // namespace aux
 } // namespace magma
 #endif // _WIN32

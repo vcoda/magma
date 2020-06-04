@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <shaderc/shaderc.h>
 #include "../core/noncopyable.h"
-#include "../misc/exception.h"
+#include "../exceptions/exception.h"
 
 namespace magma
 {
@@ -69,21 +69,6 @@ namespace magma
             bool generateDebugInfo = false;
             bool suppressWarnings = false;
             bool warningsAsErrors = false;
-        };
-
-        class CompileException : public exception::Exception
-        {
-        public:
-            CompileException(shaderc_compilation_result_t result,
-                const magma::exception::source_location& location);
-            shaderc_compilation_status getStatus() const noexcept { return status; }
-            std::size_t numWarnings() const noexcept { return warnings; }
-            std::size_t numErrors() const noexcept { return errors; }
-
-        private:
-            shaderc_compilation_status status;
-            std::size_t warnings;
-            std::size_t errors;
         };
     } // namespace aux
 } // namespace magma

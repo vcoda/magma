@@ -85,6 +85,12 @@
     <Filter Include="Header Files\core\hashing">
       <UniqueIdentifier>{04d644f9-6aee-43bf-877d-32661cf831db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\exceptions">
+      <UniqueIdentifier>{7859cd49-d97f-4f21-9c77-038bf5c5ed15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\exceptions">
+      <UniqueIdentifier>{ea5144b2-86bc-40ee-ad4e-6266b532f316}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\allocator\allocator.h">
@@ -148,9 +154,6 @@
       <Filter>Header Files\misc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\misc\deviceExtension.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\exception.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\misc\format.h">
@@ -522,6 +525,27 @@
     <ClInclude Include="..\..\shaders\shaderReflection.h">
       <Filter>Header Files\shaders</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\exceptions\reflectException.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\exceptions\exception.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\exceptions\sourcelocation.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\exceptions\compileException.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\exceptions\unsupportedExtension.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\exceptions\notImplemented.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\exceptions\errorResult.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -553,9 +577,6 @@
     </ClCompile>
     <ClCompile Include="..\..\helpers\stringize.cpp">
       <Filter>Source Files\helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\misc\exception.cpp">
-      <Filter>Source Files\misc</Filter>
     </ClCompile>
     <ClCompile Include="..\..\misc\format.cpp">
       <Filter>Source Files\misc</Filter>
@@ -805,6 +826,9 @@
     </ClCompile>
     <ClCompile Include="..\..\third-party\SPIRV-Reflect\spirv_reflect.c">
       <Filter>Source Files\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\exceptions\exception.cpp">
+      <Filter>Source Files\exceptions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

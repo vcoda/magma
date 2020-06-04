@@ -183,6 +183,13 @@
     <ClInclude Include="..\..\descriptors\descriptors.h" />
     <ClInclude Include="..\..\descriptors\samplerBindings.h" />
     <ClInclude Include="..\..\descriptors\subpass.h" />
+    <ClInclude Include="..\..\exceptions\compileException.h" />
+    <ClInclude Include="..\..\exceptions\errorResult.h" />
+    <ClInclude Include="..\..\exceptions\exception.h" />
+    <ClInclude Include="..\..\exceptions\notImplemented.h" />
+    <ClInclude Include="..\..\exceptions\reflectException.h" />
+    <ClInclude Include="..\..\exceptions\sourcelocation.h" />
+    <ClInclude Include="..\..\exceptions\unsupportedExtension.h" />
     <ClInclude Include="..\..\extensions\instanceLayers.h" />
     <ClInclude Include="..\..\extensions\layers.h" />
     <ClInclude Include="..\..\extensions\physicalDeviceExtensions.h" />
@@ -202,7 +209,6 @@
     <ClInclude Include="..\..\misc\clearValue.h" />
     <ClInclude Include="..\..\misc\deviceExtension.h" />
     <ClInclude Include="..\..\misc\deviceQueueDescriptor.h" />
-    <ClInclude Include="..\..\misc\exception.h" />
     <ClInclude Include="..\..\misc\format.h" />
     <ClInclude Include="..\..\misc\geometry.h" />
     <ClInclude Include="..\..\misc\imageSubresourceRange.h" />
@@ -311,6 +317,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\descriptors\subpass.cpp" />
+    <ClCompile Include="..\..\exceptions\exception.cpp" />
     <ClCompile Include="..\..\extensions\instanceExtensions.cpp" />
     <ClCompile Include="..\..\extensions\instanceLayers.cpp" />
     <ClCompile Include="..\..\extensions\layers.cpp" />
@@ -320,7 +327,6 @@
     <ClCompile Include="..\..\helpers\executeCommandBuffer.cpp" />
     <ClCompile Include="..\..\helpers\stringize.cpp" />
     <ClCompile Include="..\..\misc\deviceQueueDescriptor.cpp" />
-    <ClCompile Include="..\..\misc\exception.cpp" />
     <ClCompile Include="..\..\misc\format.cpp" />
     <ClCompile Include="..\..\misc\geometry.cpp" />
     <ClCompile Include="..\..\misc\scopedDebugMarker.cpp" />

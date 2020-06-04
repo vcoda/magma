@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "display.h"
 #include "physicalDevice.h"
 #include "../misc/instanceExtension.h"
+#include "../exceptions/errorResult.h"
 
 namespace magma
 {

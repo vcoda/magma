@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../helpers/stackArray.h"
 #include "../misc/format.h"
-#include "../misc/exception.h"
+#include "../exceptions/errorResult.h"
 
 namespace magma
 {

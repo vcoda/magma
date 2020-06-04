@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "deviceQueueDescriptor.h"
 #include "../objects/physicalDevice.h"
-#include "../misc/exception.h"
+#include "../exceptions/exception.h"
 #include "../core/copy.h"
 
 namespace magma

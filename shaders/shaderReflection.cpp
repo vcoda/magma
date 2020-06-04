@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #include "shaderReflection.h"
-#include "../misc/exception.h"
+#include "../exceptions/reflectException.h"
 
 namespace magma
 {

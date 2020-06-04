@@ -16,56 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <exception>
-#include "../third-party/SPIRV-Reflect/spirv_reflect.h"
+#include "exception.h"
 
 namespace magma
 {
     namespace exception
     {
-        /* The source_location class represents certain information about the source code,
-           such as file names, line numbers, and function names. Previously, functions
-           that desire to obtain this information about the call site (for logging, testing,
-           or debugging purposes) must use macros so that predefined macros like
-           __LINE__ and __FILE__ are expanded in the context of the caller. The source_location
-           class provides a better alternative. */
-
-        struct source_location
-        {
-            /* constexpr */ std::uint_least32_t line() const noexcept { return ln; }
-            /* constexpr */ std::uint_least32_t column() const noexcept { return 0; }
-            /* constexpr */ const char* file_name() const noexcept { return file; }
-            /* constexpr */ const char* function_name() const noexcept { return function; }
-
-            const char *file = nullptr;
-            long ln = 0;
-            const char *function = nullptr;
-        };
-
-        /* Base exception class. Provides (optional) information as
-           file name and line number where it was thrown. */
-
-        class Exception : public std::exception
-        {
-        public:
-            explicit Exception() noexcept;
-            explicit Exception(const char *message) noexcept;
-            explicit Exception(std::string message) noexcept;
-            explicit Exception(const char *message,
-                const source_location& location) noexcept;
-            explicit Exception(std::string message,
-                const source_location& location) noexcept;
-            Exception(const Exception&) noexcept;
-            virtual ~Exception() = default;
-            Exception& operator=(const Exception&) noexcept;
-            const char* what() const noexcept override;
-            const source_location& location() const noexcept { return location_; }
-
-        private:
-            std::string message;
-            source_location location_;
-        };
-
         /* Run time error codes are returned when a command needs to communicate
            a failure that could only be detected at runtime. */
 
@@ -183,55 +139,8 @@ namespace magma
                 ErrorResult(VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, message) {}
         };
 #endif // VK_EXT_full_screen_exclusive
-
-        /* Vulkan instance doesn't support requested extension. */
-
-        class UnsupportedInstanceExtension : public Exception
-        {
-        public:
-            explicit UnsupportedInstanceExtension(const char *extension,
-                const source_location& location) noexcept:
-                Exception(extension, location) {}
-        };
-
-        /* Logical device doesn't support requested extension. */
-
-        class UnsupportedDeviceExtension : public Exception
-        {
-        public:
-            explicit UnsupportedDeviceExtension(const char *extension,
-                const source_location& location) noexcept:
-                Exception(extension, location) {}
-        };
-
-        /* SPIRV-Reflect error result. */
-
-        class ReflectException : public Exception
-        {
-        public:
-            ReflectException(SpvReflectResult result,
-                const char *message,
-                const source_location& location) noexcept:
-                Exception(message, location), result(result) {}
-            SpvReflectResult error() const noexcept { return result; }
-
-        private:
-            SpvReflectResult result;
-        };
-
-        /* Functionality not implemented or implemented partially. */
-
-        class NotImplemented : public Exception
-        {
-        public:
-            explicit NotImplemented(const char *function,
-                const source_location& location) noexcept:
-                Exception(function, location) {}
-        };
     } // namespace exception
 } // namespace magma
-
-#define MAGMA_THROW(message) throw magma::exception::Exception(message, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__})
 
 #define MAGMA_THROW_FAILURE(result, message)\
     switch (result) {\
@@ -244,24 +153,12 @@ namespace magma
     case VK_SUBOPTIMAL_KHR:\
         break;\
     case VK_ERROR_OUT_OF_HOST_MEMORY:\
-        throw magma::exception::OutOfHostMemory(message, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
+        throw magma::exception::OutOfHostMemory(message,\
+            magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
     case VK_ERROR_OUT_OF_DEVICE_MEMORY:\
-        throw magma::exception::OutOfDeviceMemory(message, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
+        throw magma::exception::OutOfDeviceMemory(message,\
+            magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
     default:\
-        throw magma::exception::ErrorResult(result, message, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
+        throw magma::exception::ErrorResult(result, message,\
+            magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
     }
-
-#define MAGMA_THROW_REFLECTION_FAILURE(result, message)\
-    switch (result) {\
-    case SPV_REFLECT_RESULT_SUCCESS:\
-    case SPV_REFLECT_RESULT_NOT_READY:\
-        break;\
-    default:\
-        throw magma::exception::ReflectException(result, message, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
-    }
-
-#ifdef _MSC_VER
-#define MAGMA_THROW_NOT_IMPLEMENTED throw magma::exception::NotImplemented(__FUNCSIG__, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__})
-#else
-#define MAGMA_THROW_NOT_IMPLEMENTED throw magma::exception::NotImplemented(__PRETTY_FUNCTION__, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__})
-#endif

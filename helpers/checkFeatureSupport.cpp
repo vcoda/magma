@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "stringize.h"
 #include "../objects/surface.h"
 #include "../objects/physicalDevice.h"
-#include "../misc/exception.h"
+#include "../exceptions/exception.h"
 
 namespace magma
 {
