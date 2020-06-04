@@ -212,6 +212,7 @@ const SpvReflectBlockVariable *ShaderReflection::getPushConstantBlock(const uint
 
 const SpvReflectBlockVariable *ShaderReflection::getPushConstantBlock(const char *entrypoint) const
 {
+    MAGMA_ASSERT(entrypoint);
     SpvReflectResult result;
     const SpvReflectBlockVariable *pushConstantBlock = spvReflectGetEntryPointPushConstantBlock(&module, entrypoint, &result);
     MAGMA_THROW_REFLECTION_FAILURE(result, "failed to get push constant block for entry point")
