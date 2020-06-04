@@ -62,4 +62,3 @@ namespace magma
         SpvReflectShaderModule module;
     };
 } // namespace magma
-

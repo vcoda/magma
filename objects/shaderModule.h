@@ -70,8 +70,8 @@ namespace magma
 #       endif
         );
         ~ShaderModule();
-        std::size_t getHash() noexcept;
         std::shared_ptr<const ShaderReflection> getReflection() const noexcept { return reflection; }
+        std::size_t getHash() const noexcept;
 
     private:
         std::shared_ptr<ShaderReflection> reflection;
