@@ -38,10 +38,10 @@ namespace magma
         std::size_t getBytecodeSize() const noexcept;
         uint32_t getEntryPointCount() const noexcept { return module.entry_point_count; }
         const char *getEntryPointName(uint32_t index) const noexcept { return module.entry_points[index].name; }
+        const SpvReflectEntryPoint& getEntryPoint(const char *name) const noexcept;
         VkShaderStageFlagBits getShaderStage() const noexcept { return static_cast<VkShaderStageFlagBits>(module.shader_stage); };
         SpvSourceLanguage getSourceLanguage() const noexcept { return module.source_language; }
         uint32_t getSourceLanguageVersion() const noexcept { return module.source_language_version; }
-        const SpvReflectEntryPoint& getEntryPoint(const char *name) const noexcept;
         SpvExecutionModel getExecutionModel() const noexcept { return module.spirv_execution_model; }
         std::vector<const SpvReflectDescriptorBinding *> enumerateDescriptorBindings(const char *entrypoint = nullptr) const;
         std::vector<const SpvReflectDescriptorSet *> enumerateDescriptorSets(const char *entrypoint = nullptr) const;
