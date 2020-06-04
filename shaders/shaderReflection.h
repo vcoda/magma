@@ -36,6 +36,7 @@ namespace magma
         ~ShaderReflection() noexcept;
         const SpirvWord *getBytecode() const noexcept;
         std::size_t getBytecodeSize() const noexcept;
+        std::size_t computeBytecodeHash() const noexcept;
         uint32_t getEntryPointCount() const noexcept { return module.entry_point_count; }
         const char *getEntryPointName(uint32_t index) const noexcept { return module.entry_points[index].name; }
         const SpvReflectEntryPoint& getEntryPoint(const char *name) const noexcept;
