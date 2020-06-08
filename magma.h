@@ -138,5 +138,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "helpers/uniformArray.h"
 
 #include "exceptions/compileException.h"
-#include "exceptions/exception.h"
+#include "exceptions/errorResult.h"
+#include "exceptions/notImplemented.h"
 #include "exceptions/reflectionErrorResult.h"
+#include "exceptions/unsupportedExtension.h"
