@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ShaderReflection::ShaderReflection(const SpirvWord *bytecode, std::size_t bytecodeSize)
+ShaderReflection::ShaderReflection(const SpirvWord *bytecode, const std::size_t bytecodeSize)
 {
     MAGMA_ASSERT(0 == bytecodeSize % sizeof(SpirvWord)); // A module is defined as a stream of words, not a stream of bytes
     const SpvReflectResult result = spvReflectCreateShaderModule(bytecodeSize, bytecode, &module);
@@ -148,7 +148,7 @@ std::vector<const SpvReflectBlockVariable *> ShaderReflection::enumeratePushCons
     return pushConstantBlocks;
 }
 
-const SpvReflectDescriptorBinding* ShaderReflection::getDescriptorBinding(const char *entrypoint, uint32_t binding, uint32_t set) const
+const SpvReflectDescriptorBinding* ShaderReflection::getDescriptorBinding(const char *entrypoint, const uint32_t binding, const uint32_t set) const
 {
     SpvReflectResult result;
     const SpvReflectDescriptorBinding *descriptorBinding = entrypoint ?
@@ -158,7 +158,7 @@ const SpvReflectDescriptorBinding* ShaderReflection::getDescriptorBinding(const 
     return descriptorBinding;
 }
 
-const SpvReflectDescriptorSet *ShaderReflection::getDescriptorSet(const char *entrypoint, uint32_t set) const
+const SpvReflectDescriptorSet *ShaderReflection::getDescriptorSet(const char *entrypoint, const uint32_t set) const
 {
     SpvReflectResult result;
     const SpvReflectDescriptorSet *descriptorSet = entrypoint ?
@@ -168,7 +168,7 @@ const SpvReflectDescriptorSet *ShaderReflection::getDescriptorSet(const char *en
     return descriptorSet;
 }
 
-const SpvReflectInterfaceVariable* ShaderReflection::getInputVariable(const char *entrypoint, uint32_t location) const
+const SpvReflectInterfaceVariable* ShaderReflection::getInputVariable(const char *entrypoint, const uint32_t location) const
 {
     SpvReflectResult result;
     const SpvReflectInterfaceVariable* inputVariable = entrypoint ?
@@ -188,7 +188,7 @@ const SpvReflectInterfaceVariable *ShaderReflection::getInputVariable(const char
     return inputVariable;
 }
 
-const SpvReflectInterfaceVariable *ShaderReflection::getOutputVariable(const char *entrypoint, uint32_t location) const
+const SpvReflectInterfaceVariable *ShaderReflection::getOutputVariable(const char *entrypoint, const uint32_t location) const
 {
     SpvReflectResult result;
     const SpvReflectInterfaceVariable* outputVariable = entrypoint ?
