@@ -187,7 +187,7 @@
     <ClInclude Include="..\..\exceptions\errorResult.h" />
     <ClInclude Include="..\..\exceptions\exception.h" />
     <ClInclude Include="..\..\exceptions\notImplemented.h" />
-    <ClInclude Include="..\..\exceptions\reflectException.h" />
+    <ClInclude Include="..\..\exceptions\reflectionErrorResult.h" />
     <ClInclude Include="..\..\exceptions\sourcelocation.h" />
     <ClInclude Include="..\..\exceptions\unsupportedExtension.h" />
     <ClInclude Include="..\..\extensions\instanceLayers.h" />

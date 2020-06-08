@@ -525,9 +525,6 @@
     <ClInclude Include="..\..\shaders\shaderReflection.h">
       <Filter>Header Files\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\exceptions\reflectException.h">
-      <Filter>Header Files\exceptions</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\exceptions\exception.h">
       <Filter>Header Files\exceptions</Filter>
     </ClInclude>
@@ -544,6 +541,9 @@
       <Filter>Header Files\exceptions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\exceptions\errorResult.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\exceptions\reflectionErrorResult.h">
       <Filter>Header Files\exceptions</Filter>
     </ClInclude>
   </ItemGroup>

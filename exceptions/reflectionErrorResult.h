@@ -25,10 +25,10 @@ namespace magma
     {
         /* SPIRV-Reflect error result. */
 
-        class ReflectException : public Exception
+        class ReflectionErrorResult : public Exception
         {
         public:
-            ReflectException(SpvReflectResult result,
+            ReflectionErrorResult(SpvReflectResult result,
                 const char *message,
                 const source_location& location) noexcept:
                 Exception(message, location), result(result) {}
@@ -46,6 +46,6 @@ namespace magma
     case SPV_REFLECT_RESULT_NOT_READY:\
         break;\
     default:\
-        throw magma::exception::ReflectException(result, message,\
+        throw magma::exception::ReflectionErrorResult(result, message,\
             magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
     }
