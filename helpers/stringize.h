@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../objects/objectType.h"
+#include "../third-party/SPIRV-Reflect/spirv_reflect.h"
 
 namespace magma
 {
@@ -96,5 +97,11 @@ namespace magma
         const char *stringize(VkPresentModeKHR) noexcept;
         const char *stringize(VkSurfaceTransformFlagBitsKHR) noexcept;
         const char *stringize(VkCompositeAlphaFlagBitsKHR) noexcept;
+
+        const char *stringize(SpvReflectResult) noexcept;
+        const char *stringize(SpvReflectTypeFlagBits) noexcept;
+        const char *stringize(SpvReflectDecorationFlagBits) noexcept;
+        const char *stringize(SpvReflectResourceType) noexcept;
+        const char *stringize(SpvReflectGenerator) noexcept;
     } // namespace helpers
 } // namespace magma
