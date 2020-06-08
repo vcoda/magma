@@ -39,13 +39,3 @@ namespace magma
         };
     } // namespace exception
 } // namespace magma
-
-#define MAGMA_THROW_REFLECTION_FAILURE(result, message)\
-    switch (result) {\
-    case SPV_REFLECT_RESULT_SUCCESS:\
-    case SPV_REFLECT_RESULT_NOT_READY:\
-        break;\
-    default:\
-        throw magma::exception::ReflectionErrorResult(result, message,\
-            magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
-    }

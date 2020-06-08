@@ -19,6 +19,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "shaderReflection.h"
 #include "../exceptions/reflectionErrorResult.h"
 
+#define MAGMA_THROW_REFLECTION_FAILURE(result, message)\
+    switch (result) {\
+    case SPV_REFLECT_RESULT_SUCCESS:\
+    case SPV_REFLECT_RESULT_NOT_READY:\
+        break;\
+    default:\
+        throw magma::exception::ReflectionErrorResult(result, message,\
+            magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
+    }
+
 namespace magma
 {
 ShaderReflection::ShaderReflection(const SpirvWord *bytecode, const std::size_t bytecodeSize)
