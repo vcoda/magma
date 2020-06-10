@@ -57,7 +57,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
         std::move(allocator))
 {
     const auto copyRegions = buildCopyRegions(mipOffsets, bufferLayout);
-    copyFromBuffer(buffer, copyRegions, cmdBuffer, flush);
+    copyFromBuffer(std::move(buffer), std::move(cmdBuffer), copyRegions, flush);
 }
 
 Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
@@ -91,7 +91,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
             copyFn(mipLevel, mipData[level], static_cast<std::size_t>(mipSizes[level]));
         }
     });
-    copyFromBuffer(buffer, copyRegions, cmdBuffer, true);
+    copyFromBuffer(std::move(buffer), std::move(cmdBuffer), copyRegions, true);
 }
 
 Image2D::Image2D(std::shared_ptr<Device> device,

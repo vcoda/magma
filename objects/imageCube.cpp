@@ -56,7 +56,7 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
         std::move(allocator))
 {
     const auto copyRegions = buildCopyRegions(mipOffsets, bufferLayout);
-    copyFromBuffer(buffer, copyRegions, cmdBuffer, flush);
+    copyFromBuffer(std::move(buffer), std::move(cmdBuffer), copyRegions, flush);
 }
 
 ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t dimension,
@@ -93,6 +93,6 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
             }
         }
     });
-    copyFromBuffer(buffer, copyRegions, cmdBuffer, true);
+    copyFromBuffer(std::move(buffer), std::move(cmdBuffer), copyRegions, true);
 }
 } // namespace magma

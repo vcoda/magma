@@ -291,10 +291,9 @@ std::vector<VkBufferImageCopy> Image::buildCopyRegions(const ImageMipmapLayout& 
     return copyRegions;
 }
 
-void Image::copyFromBuffer(std::shared_ptr<Buffer> buffer, const std::vector<VkBufferImageCopy>& copyRegions,
-    std::shared_ptr<CommandBuffer> cmdBuffer, bool flush /* true */)
-{
-    // Define array layers to copy
+void Image::copyFromBuffer(std::shared_ptr<Buffer> buffer, std::shared_ptr<CommandBuffer> cmdBuffer,
+    const std::vector<VkBufferImageCopy>& copyRegions, bool flush /* true */)
+{   // Define array layers to copy
     VkImageSubresourceRange subresourceRange;
     subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
     subresourceRange.baseMipLevel = 0;
