@@ -35,9 +35,9 @@ namespace magma
             VkFormat format,
             const VkExtent2D& extent,
             std::shared_ptr<Buffer> buffer,
-            VkDeviceSize bufferOffset,
-            const ImageMipmapLayout& mipOffsets,
             std::shared_ptr<CommandBuffer> cmdBuffer,
+            const ImageMipmapLayout& mipOffsets,
+            const CopyLayout& bufferLayout = {0, 0, 0},
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             bool flush = true);

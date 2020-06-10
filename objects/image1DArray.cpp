@@ -41,8 +41,9 @@ Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format,
 {}
 
 Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format, uint32_t width, uint32_t arrayLayers,
-    std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset, const ImageMipmapLayout& mipOffsets,
-    std::shared_ptr<CommandBuffer> cmdBuffer,
+    std::shared_ptr<Buffer> buffer, std::shared_ptr<CommandBuffer> cmdBuffer,
+    const ImageMipmapLayout& mipOffsets,
+    const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool flush /* true */):
@@ -57,13 +58,12 @@ Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format, uint
         std::move(allocator))
 {
     MAGMA_ASSERT(MAGMA_COUNT(mipOffsets) % arrayLayers == 0);
-    const auto copyRegions = buildCopyRegions(mipOffsets, bufferOffset);
+    const auto copyRegions = buildCopyRegions(mipOffsets, bufferLayout);
     copyFromBuffer(buffer, copyRegions, cmdBuffer, flush);
 }
 
 Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format, uint32_t width,
-    const ImageArrayMipmapData& mipData, const ImageMipmapLayout& mipSizes,
-    std::shared_ptr<CommandBuffer> cmdBuffer,
+    const ImageArrayMipmapData& mipData, const ImageMipmapLayout& mipSizes, std::shared_ptr<CommandBuffer> cmdBuffer,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
@@ -79,7 +79,7 @@ Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format, uint
 {   // Calculate aligned size and mip offsets
     VkDeviceSize bufferSize = 0;
     const auto mipOffsets = buildMipOffsets(mipSizes, bufferSize);
-    const auto copyRegions = buildCopyRegions(mipOffsets, 0);
+    const auto copyRegions = buildCopyRegions(mipOffsets, {0, 0, 0});
     // Copy array layers to host visible buffer
     auto buffer = std::make_shared<SrcTransferBuffer>(this->device, bufferSize, nullptr, 0, sharing, allocator);
     helpers::mapScoped<uint8_t>(buffer, [&](uint8_t *data)

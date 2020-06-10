@@ -198,7 +198,7 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
 }
 #endif // VK_KHR_device_group
 
-void Image::copyMipLevel(uint32_t level, std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset,
+void Image::copyMipLevel(uint32_t level, std::shared_ptr<Buffer> buffer, const CopyLayout& bufferLayout,
     const VkOffset3D& imageOffset, std::shared_ptr<CommandBuffer> cmdBuffer,
     VkPipelineStageFlags barrierDstStageMask /* VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT */,
     bool flush /* true */)
@@ -214,9 +214,9 @@ void Image::copyMipLevel(uint32_t level, std::shared_ptr<Buffer> buffer, VkDevic
         const ImageMemoryBarrier preCopyBarrier(shared_from_this(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_TRANSFER_WRITE_BIT, preCopyBarrier);
         VkBufferImageCopy region;
-        region.bufferOffset = bufferOffset;
-        region.bufferRowLength = 0;
-        region.bufferImageHeight = 0;
+        region.bufferOffset = bufferLayout.offset;
+        region.bufferRowLength = bufferLayout.rowLength;
+        region.bufferImageHeight = bufferLayout.imageHeight;
         region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
         region.imageSubresource.mipLevel = level;
         region.imageSubresource.baseArrayLayer = subresourceRange.baseArrayLayer;
@@ -266,19 +266,20 @@ ImageMipmapLayout Image::buildMipOffsets(const ImageMipmapLayout& mipSizes, VkDe
     return mipOffsets;
 }
 
-std::vector<VkBufferImageCopy> Image::buildCopyRegions(const ImageMipmapLayout& mipOffsets, VkDeviceSize bufferOffset) const noexcept
+std::vector<VkBufferImageCopy> Image::buildCopyRegions(const ImageMipmapLayout& mipOffsets, const CopyLayout& bufferLayout) const noexcept
 {
     const uint32_t mipCount = MAGMA_COUNT(mipOffsets);
     MAGMA_ASSERT(mipCount > 0);
     MAGMA_ASSERT(mipCount <= mipLevels * arrayLayers);
     std::vector<VkBufferImageCopy> copyRegions;
+    VkDeviceSize bufferOffset = bufferLayout.offset;
     for (uint32_t i = 0; i < mipCount; ++i)
     {
         bufferOffset += mipOffsets[i];
         VkBufferImageCopy region;
         region.bufferOffset = bufferOffset;
-        region.bufferRowLength = 0;
-        region.bufferImageHeight = 0;
+        region.bufferRowLength = bufferLayout.rowLength;
+        region.bufferImageHeight = bufferLayout.imageHeight;
         region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
         region.imageSubresource.mipLevel = i % mipLevels;
         region.imageSubresource.baseArrayLayer = i / mipLevels;

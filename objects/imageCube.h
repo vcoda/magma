@@ -36,9 +36,9 @@ namespace magma
             uint32_t dimension,
             uint32_t mipLevels,
             std::shared_ptr<Buffer> buffer,
-            VkDeviceSize bufferOffset,
-            const ImageMipmapLayout& mipOffsets,
             std::shared_ptr<CommandBuffer> cmdBuffer,
+            const ImageMipmapLayout& mipOffsets,
+            const CopyLayout& bufferLayout = {0, 0, 0},
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             bool flush = true);
