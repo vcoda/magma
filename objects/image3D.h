@@ -31,5 +31,14 @@ namespace magma
             VkImageUsageFlags usage,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
+        explicit Image3D(std::shared_ptr<Device> device,
+            VkFormat format,
+            const VkExtent3D& extent,
+            std::shared_ptr<Buffer> buffer,
+            std::shared_ptr<CommandBuffer> cmdBuffer,
+            const CopyLayout& bufferLayout = {0, 0, 0},
+            const Sharing& sharing = Sharing(),
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            bool flush = true);
     };
 } // namespace magma

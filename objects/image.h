@@ -33,6 +33,9 @@ namespace magma
     class Image : public NonDispatchableResource<Image, VkImage>
     {
     public:
+        struct CopyLayout;
+
+    public:
         ~Image();
         VkImageType getType() const noexcept { return imageType; }
         VkFormat getFormat() const noexcept { return format; }
@@ -101,6 +104,13 @@ namespace magma
         VkImageUsageFlags usage;
         VkImageCreateFlags flags;
         friend class ImageView;
+    };
+
+    struct Image::CopyLayout
+    {
+        VkDeviceSize offset = 0;
+        uint32_t rowLength = 0;
+        uint32_t imageHeight = 0;
     };
 
     typedef std::vector<const void *> ImageMipmapData;
