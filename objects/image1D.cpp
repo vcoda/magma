@@ -40,7 +40,7 @@ Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width
 {}
 
 Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t width,
-    std::shared_ptr<const SrcTransferBuffer> buffer, const ImageMipmapLayout& mipOffsets,
+    std::shared_ptr<const SrcTransferBuffer> buffer, const MipmapLayout& mipOffsets,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
@@ -60,7 +60,7 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint
 }
 
 Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t width,
-    const ImageMipmapData& mipData, const ImageMipmapLayout& mipSizes,
+    const MipmapData& mipData, const MipmapLayout& mipSizes,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):

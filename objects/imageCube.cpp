@@ -39,7 +39,7 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
 {}
 
 ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t dimension, uint32_t mipLevels,
-    std::shared_ptr<const SrcTransferBuffer> buffer, const ImageMipmapLayout& mipOffsets,
+    std::shared_ptr<const SrcTransferBuffer> buffer, const MipmapLayout& mipOffsets,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
@@ -59,7 +59,7 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, 
 }
 
 ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t dimension,
-    const ImageMipmapData mipData[6], const ImageMipmapLayout& mipSizes,
+    const MipmapData mipData[6], const MipmapLayout& mipSizes,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):

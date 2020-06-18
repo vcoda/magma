@@ -24,7 +24,6 @@ namespace magma
     class Buffer;
     class SrcTransferBuffer;
     class CommandBuffer;
-    typedef std::vector<VkDeviceSize> ImageMipmapLayout;
 
     /* Images represent multidimensional - up to 3 - arrays of data
        which can be used for various purposes (e.g. attachments, textures),
@@ -35,6 +34,9 @@ namespace magma
     {
     public:
         struct CopyLayout;
+        typedef std::vector<VkDeviceSize> MipmapLayout;
+        typedef std::vector<const void *> MipmapData;
+        typedef std::vector<MipmapData> ArrayMipmapData;
 
     public:
         ~Image();
@@ -85,9 +87,9 @@ namespace magma
             VkImageType imageType,
             VkFormat format,
             const VkExtent3D& extent);
-        ImageMipmapLayout setupMipOffsets(const ImageMipmapLayout& mipSizes,
+        MipmapLayout setupMipOffsets(const MipmapLayout& mipSizes,
             VkDeviceSize& bufferSize) const noexcept;
-        std::vector<VkBufferImageCopy> setupCopyRegions(const ImageMipmapLayout& mipOffsets,
+        std::vector<VkBufferImageCopy> setupCopyRegions(const MipmapLayout& mipOffsets,
             const CopyLayout& bufferLayout) const noexcept;
         void copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<const Buffer> buffer,
@@ -113,7 +115,4 @@ namespace magma
         uint32_t rowLength = 0;
         uint32_t imageHeight = 0;
     };
-
-    typedef std::vector<const void *> ImageMipmapData;
-    typedef std::vector<ImageMipmapData> ImageArrayMipmapData;
 } // namespace magma
