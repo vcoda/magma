@@ -137,7 +137,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "helpers/stringize.h"
 #include "helpers/uniformArray.h"
 
-#include "exceptions/compileException.h"
+#include "exceptions/compileError.h"
 #include "exceptions/errorResult.h"
 #include "exceptions/notImplemented.h"
 #include "exceptions/reflectionErrorResult.h"
