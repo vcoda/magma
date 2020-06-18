@@ -27,10 +27,10 @@ namespace magma
     {
         /* aux::ShaderCompiler exception. */
 
-        class CompileException : public Exception
+        class CompileError : public Exception
         {
         public:
-            CompileException(shaderc_compilation_result_t result,
+            CompileError(shaderc_compilation_result_t result,
                 const source_location& location):
                 Exception(shaderc_result_get_error_message(result), location),
                 status_(shaderc_result_get_compilation_status(result)),

@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "shaderCompiler.h"
 #include "../objects/shaderModule.h"
 #include "../exceptions/errorResult.h"
-#include "../exceptions/compileException.h"
+#include "../exceptions/compileError.h"
 
 namespace magma
 {
@@ -96,7 +96,7 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     shaderc_compile_options_release(options);
     const shaderc_compilation_status status = shaderc_result_get_compilation_status(result);
     if (status != shaderc_compilation_status_success)
-        throw exception::CompileException(result, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});
+        throw exception::CompileError(result, exception::source_location{__FILE__, __LINE__, __FUNCTION__});
     // Create shader module
     const char *bytecode = shaderc_result_get_bytes(result);
     const std::size_t bytecodeSize = shaderc_result_get_length(result);

@@ -183,7 +183,7 @@
     <ClInclude Include="..\..\descriptors\descriptors.h" />
     <ClInclude Include="..\..\descriptors\samplerBindings.h" />
     <ClInclude Include="..\..\descriptors\subpass.h" />
-    <ClInclude Include="..\..\exceptions\compileException.h" />
+    <ClInclude Include="..\..\exceptions\compileError.h" />
     <ClInclude Include="..\..\exceptions\errorResult.h" />
     <ClInclude Include="..\..\exceptions\exception.h" />
     <ClInclude Include="..\..\exceptions\notImplemented.h" />

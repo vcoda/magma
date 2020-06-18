@@ -531,9 +531,6 @@
     <ClInclude Include="..\..\exceptions\sourcelocation.h">
       <Filter>Header Files\exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\exceptions\compileException.h">
-      <Filter>Header Files\exceptions</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\exceptions\unsupportedExtension.h">
       <Filter>Header Files\exceptions</Filter>
     </ClInclude>
@@ -544,6 +541,9 @@
       <Filter>Header Files\exceptions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\exceptions\reflectionErrorResult.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\exceptions\compileError.h">
       <Filter>Header Files\exceptions</Filter>
     </ClInclude>
   </ItemGroup>
