@@ -21,7 +21,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class SrcTransferBuffer;
-    class CommandBuffer;
 
     /* Buffer that is suitable to use as predicate with conditional rendering extension. */
 
@@ -37,7 +36,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         explicit ConditionalRenderingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<SrcTransferBuffer> srcBuffer,
+            std::shared_ptr<const SrcTransferBuffer> buffer,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);

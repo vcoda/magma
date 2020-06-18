@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class SrcTransferBuffer;
+
     /* Texel buffer that is accessed from the shader stage through buffer view. */
 
     class StorageTexelBuffer : public Buffer
@@ -33,7 +35,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         explicit StorageTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<SrcTransferBuffer> srcBuffer,
+            std::shared_ptr<const SrcTransferBuffer> buffer,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
@@ -46,7 +48,7 @@ namespace magma
     public:
         explicit DynamicStorageTexelBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
-            const void *data = nullptr,
+            const void *initialData = nullptr,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,

@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class SrcTransferBuffer;
+
     /* Uniform texel buffer that is accessed from the shader stage through buffer view. */
 
     class UniformTexelBuffer : public Buffer
@@ -33,7 +35,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         explicit UniformTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<SrcTransferBuffer> srcBuffer,
+            std::shared_ptr<const SrcTransferBuffer> buffer,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);

@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class SrcTransferBuffer;
+
     /* A storage buffer described in a shader as a structure with various members
        that load, store, and atomic operations can be performed on. */
 
@@ -41,7 +43,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         explicit StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<SrcTransferBuffer> srcBuffer,
+            std::shared_ptr<const SrcTransferBuffer> buffer,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);

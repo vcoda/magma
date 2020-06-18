@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class SrcTransferBuffer;
+
     /* Base index buffer class. Holds index type and count as helper for indexed draw calls. */
 
     class BaseIndexBuffer : public Buffer
@@ -55,7 +57,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         explicit IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<SrcTransferBuffer> srcBuffer,
+            std::shared_ptr<const SrcTransferBuffer> buffer,
             VkIndexType indexType,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),

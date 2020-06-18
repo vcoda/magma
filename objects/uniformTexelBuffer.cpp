@@ -39,15 +39,15 @@ UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer));
 }
 
-UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<SrcTransferBuffer> srcBuffer,
+UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> buffer,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Buffer(std::move(cmdBuffer->getDevice()), srcBuffer->getMemory()->getSize(),
+    Buffer(std::move(cmdBuffer->getDevice()), buffer->getMemory()->getSize(),
         VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         flags, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer));
+    copyTransfer(std::move(cmdBuffer), std::move(buffer));
 }
 } // namespace magma
