@@ -41,7 +41,7 @@ Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format,
 {}
 
 Image1DArray::Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t width, uint32_t arrayLayers,
-    std::shared_ptr<Buffer> buffer, const ImageMipmapLayout& mipOffsets,
+    std::shared_ptr<const SrcTransferBuffer> buffer, const ImageMipmapLayout& mipOffsets,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,

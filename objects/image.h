@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Buffer;
+    class SrcTransferBuffer;
     class CommandBuffer;
     typedef std::vector<VkDeviceSize> ImageMipmapLayout;
 

@@ -36,7 +36,7 @@ namespace magma
             VkFormat format,
             uint32_t width,
             uint32_t arrayLayers,
-            std::shared_ptr<Buffer> buffer,
+            std::shared_ptr<const SrcTransferBuffer> buffer,
             const ImageMipmapLayout& mipOffsets,
             const CopyLayout& bufferLayout = {0, 0, 0},
             const Sharing& sharing = Sharing(),

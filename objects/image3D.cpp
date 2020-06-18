@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "image3D.h"
+#include "srcTransferBuffer.h"
 #include "commandBuffer.h"
 
 namespace magma
@@ -37,7 +38,8 @@ Image3D::Image3D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
         std::move(allocator))
 {}
 
-Image3D::Image3D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent3D& extent, std::shared_ptr<Buffer> buffer,
+Image3D::Image3D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent3D& extent,
+    std::shared_ptr<const SrcTransferBuffer> buffer,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,

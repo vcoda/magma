@@ -34,7 +34,7 @@ namespace magma
         explicit Image1D(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
             uint32_t width,
-            std::shared_ptr<Buffer> buffer,
+            std::shared_ptr<const SrcTransferBuffer> buffer,
             const ImageMipmapLayout& mipOffsets,
             const CopyLayout& bufferLayout = {0, 0, 0},
             const Sharing& sharing = Sharing(),

@@ -41,7 +41,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
 {}
 
 Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
-    std::shared_ptr<Buffer> buffer, const ImageMipmapLayout& mipOffsets,
+    std::shared_ptr<const SrcTransferBuffer> buffer, const ImageMipmapLayout& mipOffsets,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
