@@ -20,8 +20,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptorSet.h"
 #include "vertexBuffer.h"
 #include "indexBuffer.h"
+#include "image.h"
 #include "pipeline.h"
 #include "pipelineLayout.h"
+#include "queryPool.h"
+#include "event.h"
+#include "../barriers/memoryBarrier.h"
+#include "../barriers/bufferMemoryBarrier.h"
+#include "../barriers/imageMemoryBarrier.h"
 #include "../misc/clearValue.h"
 #include "../misc/clearAttachment.h"
 #include "../misc/viewport.h"
@@ -131,7 +137,7 @@ namespace magma
         template<uint32_t descriptorSetCount>
         void bindDescriptorSets(
             const std::shared_ptr<Pipeline>& pipeline,
-            const std::shared_ptr<magma::DescriptorSet>(&descriptorSets)[descriptorSetCount],
+            const std::shared_ptr<DescriptorSet>(&descriptorSets)[descriptorSetCount],
             const std::initializer_list<uint32_t>& dynamicOffsets = {}) noexcept;
 
         void bindIndexBuffer(
@@ -183,40 +189,40 @@ namespace magma
             VkDeviceSize offset) const noexcept;
 
         void copyBuffer(
-            const std::shared_ptr<Buffer>& srcBuffer,
+            const std::shared_ptr<const Buffer>& srcBuffer,
             const std::shared_ptr<Buffer>& dstBuffer,
             VkDeviceSize srcOffset = 0,
             VkDeviceSize dstOffset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) const noexcept;
         void copyBuffer(
-            const std::shared_ptr<Buffer>& srcBuffer,
+            const std::shared_ptr<const Buffer>& srcBuffer,
             const std::shared_ptr<Buffer>& dstBuffer,
             const VkBufferCopy& region) const noexcept;
 
         void copyImage(
-            const std::shared_ptr<Image>& srcImage,
+            const std::shared_ptr<const Image>& srcImage,
             const std::shared_ptr<Image>& dstImage,
             const VkImageCopy& region) const noexcept;
         void blitImage(
-            const std::shared_ptr<Image>& srcImage,
+            const std::shared_ptr<const Image>& srcImage,
             const std::shared_ptr<Image>& dstImage,
             const VkImageBlit& region,
             VkFilter filter) const noexcept;
 
         void copyBufferToImage(
-            const std::shared_ptr<Buffer>& srcBuffer,
+            const std::shared_ptr<const Buffer>& srcBuffer,
             const std::shared_ptr<Image>& dstImage,
             const VkBufferImageCopy& region) const noexcept;
         void copyBufferToImage(
-            const std::shared_ptr<Buffer>& srcBuffer,
+            const std::shared_ptr<const Buffer>& srcBuffer,
             const std::shared_ptr<Image>& dstImage,
             const std::vector<VkBufferImageCopy>& regions) const noexcept;
         void copyImageToBuffer(
-            const std::shared_ptr<Image>& srcImage,
+            const std::shared_ptr<const Image>& srcImage,
             const std::shared_ptr<Buffer>& dstBuffer,
             const VkBufferImageCopy& region) const noexcept;
         void copyImageToBuffer(
-            const std::shared_ptr<Image>& srcImage,
+            const std::shared_ptr<const Image>& srcImage,
             const std::shared_ptr<Buffer>& dstBuffer,
             const std::vector<VkBufferImageCopy>& regions) const noexcept;
 

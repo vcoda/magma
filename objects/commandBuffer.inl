@@ -125,7 +125,7 @@ inline void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& p
 }
 
 template<uint32_t descriptorSetCount>
-inline void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline, const std::shared_ptr<magma::DescriptorSet>(&descriptorSets)[descriptorSetCount],
+inline void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline, const std::shared_ptr<DescriptorSet>(&descriptorSets)[descriptorSetCount],
     const std::initializer_list<uint32_t>& dynamicOffsets /* {} */) noexcept
 {
     MAGMA_STACK_ARRAY(VkDescriptorSet, dereferencedDescriptorSets, descriptorSetCount);
@@ -203,12 +203,146 @@ inline void CommandBuffer::dispatchIndirect(const std::shared_ptr<Buffer>& buffe
     vkCmdDispatchIndirect(handle, *buffer, offset);
 }
 
+inline void CommandBuffer::copyBuffer(const std::shared_ptr<const Buffer>& srcBuffer, const std::shared_ptr<Buffer>& dstBuffer, const VkBufferCopy& region) const noexcept
+{
+    vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, 1, &region);
+}
+
+inline void CommandBuffer::copyImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage, const VkImageCopy& region) const noexcept
+{
+    vkCmdCopyImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &region);
+}
+
+inline void CommandBuffer::blitImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage, const VkImageBlit& region, VkFilter filter) const noexcept
+{
+    vkCmdBlitImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &region, filter);
+}
+
+inline void CommandBuffer::copyBufferToImage(const std::shared_ptr<const Buffer>& srcBuffer, const std::shared_ptr<Image>& dstImage, const VkBufferImageCopy& region) const noexcept
+{
+    vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstImage->getLayout(), 1, &region);
+}
+
+inline void CommandBuffer::copyBufferToImage(const std::shared_ptr<const Buffer>& srcBuffer, const std::shared_ptr<Image>& dstImage, const std::vector<VkBufferImageCopy>& regions) const noexcept
+{
+    vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstImage->getLayout(), MAGMA_COUNT(regions), regions.data());
+}
+
+inline void CommandBuffer::copyImageToBuffer(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Buffer>& dstBuffer, const VkBufferImageCopy& region) const noexcept
+{
+    vkCmdCopyImageToBuffer(handle, *srcImage, srcImage->getLayout(), *dstBuffer, 1, &region);
+}
+
+inline void CommandBuffer::copyImageToBuffer(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Buffer>& dstBuffer, const std::vector<VkBufferImageCopy>& regions) const noexcept
+{
+    vkCmdCopyImageToBuffer(handle, *srcImage, srcImage->getLayout(), *dstBuffer, MAGMA_COUNT(regions), regions.data());
+}
+
+inline void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, VkDeviceSize dataSize, const void *data,
+    VkDeviceSize offset /* 0 */) const noexcept
+{
+    /* Buffer updates performed with vkCmdUpdateBuffer first copy the data
+       into command buffer memory when the command is recorded
+       (which requires additional storage and may incur an additional allocation),
+       and then copy the data from the command buffer into dstBuffer
+       when the command is executed on a device. */
+    vkCmdUpdateBuffer(handle, *buffer, offset, dataSize,
+        (const uint32_t *)data); // Compatibility with old SDK
+}
+
 template<typename Type>
 inline void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, const std::vector<Type>& data,
     VkDeviceSize offset /* 0 */) const noexcept
 {
     const VkDeviceSize dataSize = static_cast<VkDeviceSize>(sizeof(Type) * data.size());
     udpateBuffer(buffer, dataSize, data.data(), offset);
+}
+
+inline void CommandBuffer::clearColorImage(const std::shared_ptr<Image>& image, const ClearColor& color, const VkImageSubresourceRange& range) const noexcept
+{
+    const VkClearColorValue& clearColor = static_cast<const VkClearValue&>(color).color;
+    vkCmdClearColorImage(handle, *image, VK_IMAGE_LAYOUT_GENERAL, &clearColor, 1, &range);
+}
+
+inline void CommandBuffer::clearDepthStencilImage(const std::shared_ptr<Image>& image, const ClearDepthStencil& depthStencil, const VkImageSubresourceRange& range) const noexcept
+{
+    const VkClearDepthStencilValue& clearDepthStencil = static_cast<const VkClearValue&>(depthStencil).depthStencil;
+    vkCmdClearDepthStencilImage(handle, *image, VK_IMAGE_LAYOUT_GENERAL, &clearDepthStencil, 1, &range);
+}
+
+inline void CommandBuffer::clearAttachments(const std::initializer_list<ClearAttachment>& attachments, const VkClearRect& clearRect) const noexcept
+{
+    vkCmdClearAttachments(handle, MAGMA_COUNT(attachments), attachments.begin(), 1, &clearRect);
+}
+
+inline void CommandBuffer::resolveImage(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Image>& dstImage, const VkImageResolve& region) const noexcept
+{
+    vkCmdResolveImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &region);
+}
+
+inline void CommandBuffer::setEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags stageMask) noexcept
+{
+    MAGMA_ASSERT(!(stageMask & VK_PIPELINE_STAGE_HOST_BIT));
+    vkCmdSetEvent(handle, *event, stageMask);
+}
+
+inline void CommandBuffer::resetEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags stageMask) noexcept
+{
+    MAGMA_ASSERT(!(stageMask & VK_PIPELINE_STAGE_HOST_BIT));
+    vkCmdResetEvent(handle, *event, stageMask);
+}
+
+inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
+{
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
+        1, &barrier,
+        0, nullptr,
+        0, nullptr);
+}
+
+inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const BufferMemoryBarrier& barrier,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
+{
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
+        0, nullptr,
+        1, &barrier,
+        0, nullptr);
+}
+
+inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
+{
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
+        0, nullptr,
+        0, nullptr,
+        1, &barrier);
+    barrier.resource->setLayout(barrier.newLayout);
+}
+
+inline void CommandBuffer::beginQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex, bool precise) noexcept
+{
+    MAGMA_ASSERT(queryIndex < queryPool->getQueryCount());
+    VkQueryControlFlags flags = 0;
+    if (precise)
+        flags |= VK_QUERY_CONTROL_PRECISE_BIT;
+    vkCmdBeginQuery(handle, *queryPool, queryIndex, flags);
+}
+
+inline void CommandBuffer::endQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex) noexcept
+{
+    MAGMA_ASSERT(queryIndex < queryPool->getQueryCount());
+    vkCmdEndQuery(handle, *queryPool, queryIndex);
+}
+
+inline void CommandBuffer::resetQueryPool(const std::shared_ptr<QueryPool>& queryPool) noexcept
+{
+    vkCmdResetQueryPool(handle, *queryPool, 0, queryPool->getQueryCount());
+}
+
+inline void CommandBuffer::writeTimestamp(VkPipelineStageFlagBits pipelineStage, const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex) noexcept
+{
+    vkCmdWriteTimestamp(handle, pipelineStage, *queryPool, queryIndex);
 }
 
 template<typename Type, uint32_t pushConstantCount>
