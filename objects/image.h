@@ -89,7 +89,7 @@ namespace magma
         std::vector<VkBufferImageCopy> setupCopyRegions(const ImageMipmapLayout& mipOffsets,
             const CopyLayout& bufferLayout) const noexcept;
         void copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<Buffer> buffer,
+            std::shared_ptr<const Buffer> buffer,
             const std::vector<VkBufferImageCopy>& copyRegions,
             bool flush = true);
 

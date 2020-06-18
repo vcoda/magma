@@ -54,7 +54,7 @@ namespace magma
         void copyHost(const void *data,
             CopyMemoryFunction copyFn) noexcept;
         void copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<Buffer> buffer,
+            std::shared_ptr<const Buffer> buffer,
             VkDeviceSize srcOffset = 0,
             bool flush = true);
 
