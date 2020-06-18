@@ -34,9 +34,9 @@ UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         flags, sharing, allocator)
 {
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data,
+    auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
         0, sharing, std::move(allocator), std::move(copyFn));
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer));
+    copyTransfer(std::move(cmdBuffer), std::move(buffer));
 }
 
 UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> buffer,

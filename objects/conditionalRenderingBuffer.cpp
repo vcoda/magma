@@ -36,9 +36,9 @@ ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBu
         flags, sharing, allocator)
 {
     MAGMA_ASSERT(data);
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data,
+    auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
         0, sharing, std::move(allocator), std::move(copyFn));
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer));
+    copyTransfer(std::move(cmdBuffer), std::move(buffer));
 }
 
 ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> buffer,
