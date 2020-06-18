@@ -31,11 +31,10 @@ namespace magma
             VkImageUsageFlags usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
-        explicit Image3D(std::shared_ptr<Device> device,
+        explicit Image3D(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
             const VkExtent3D& extent,
             std::shared_ptr<Buffer> buffer,
-            std::shared_ptr<CommandBuffer> cmdBuffer,
             const CopyLayout& bufferLayout = {0, 0, 0},
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,

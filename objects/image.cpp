@@ -198,8 +198,8 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
 }
 #endif // VK_KHR_device_group
 
-void Image::copyMipLevel(uint32_t level, std::shared_ptr<Buffer> buffer, const CopyLayout& bufferLayout,
-    const VkOffset3D& imageOffset, std::shared_ptr<CommandBuffer> cmdBuffer,
+void Image::copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t level,
+    std::shared_ptr<Buffer> buffer, const CopyLayout& bufferLayout, const VkOffset3D& imageOffset,
     VkPipelineStageFlags barrierDstStageMask /* VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT */,
     bool flush /* true */)
 {
@@ -291,7 +291,7 @@ std::vector<VkBufferImageCopy> Image::buildCopyRegions(const ImageMipmapLayout& 
     return copyRegions;
 }
 
-void Image::copyFromBuffer(std::shared_ptr<Buffer> buffer, std::shared_ptr<CommandBuffer> cmdBuffer,
+void Image::copyFromBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Buffer> buffer,
     const std::vector<VkBufferImageCopy>& copyRegions, bool flush /* true */)
 {   // Define array layers to copy
     VkImageSubresourceRange subresourceRange;

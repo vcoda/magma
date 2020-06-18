@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "image2D.h"
 #include "srcTransferBuffer.h"
+#include "commandBuffer.h"
 #include "deviceMemory.h"
 #include "../helpers/mapScoped.h"
 #include "../core/copyMemory.h"
@@ -39,14 +40,13 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
         std::move(allocator))
 {}
 
-Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
-    std::shared_ptr<Buffer> buffer, std::shared_ptr<CommandBuffer> cmdBuffer,
-    const ImageMipmapLayout& mipOffsets,
+Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
+    std::shared_ptr<Buffer> buffer, const ImageMipmapLayout& mipOffsets,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool flush /* true */):
-    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
+    Image(std::move(cmdBuffer->getDevice()), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         MAGMA_COUNT(mipOffsets), // mipLevels
         1, // arrayLayers
         1, // samples
@@ -60,12 +60,12 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
     copyFromBuffer(std::move(buffer), std::move(cmdBuffer), copyRegions, flush);
 }
 
-Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
-    const ImageMipmapData& mipData, const ImageMipmapLayout& mipSizes, std::shared_ptr<CommandBuffer> cmdBuffer,
+Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
+    const ImageMipmapData& mipData, const ImageMipmapLayout& mipSizes,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
+    Image(std::move(cmdBuffer->getDevice()), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         MAGMA_COUNT(mipSizes), // mipLevels
         1, // arrayLayers
         1, // samples
@@ -91,7 +91,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
             copyFn(mipLevel, mipData[level], static_cast<std::size_t>(mipSizes[level]));
         }
     });
-    copyFromBuffer(std::move(buffer), std::move(cmdBuffer), copyRegions, true);
+    copyFromBuffer(std::move(cmdBuffer), std::move(buffer), copyRegions, true);
 }
 
 Image2D::Image2D(std::shared_ptr<Device> device,

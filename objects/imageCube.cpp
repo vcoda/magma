@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "imageCube.h"
 #include "srcTransferBuffer.h"
-#include "deviceMemory.h"
+#include "commandBuffer.h"
 #include "../helpers/mapScoped.h"
 #include "../core/copyMemory.h"
 
@@ -38,14 +38,13 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
         std::move(allocator))
 {}
 
-ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t dimension, uint32_t mipLevels,
-    std::shared_ptr<Buffer> buffer, std::shared_ptr<CommandBuffer> cmdBuffer,
-    const ImageMipmapLayout& mipOffsets,
+ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t dimension, uint32_t mipLevels,
+    std::shared_ptr<Buffer> buffer, const ImageMipmapLayout& mipOffsets,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool flush /* true */):
-    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1},
+    Image(std::move(cmdBuffer->getDevice()), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1},
         mipLevels,
         6, // arrayLayers
         1, // samples
@@ -59,12 +58,12 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
     copyFromBuffer(std::move(buffer), std::move(cmdBuffer), copyRegions, flush);
 }
 
-ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t dimension,
-    const ImageMipmapData mipData[6], const ImageMipmapLayout& mipSizes, std::shared_ptr<CommandBuffer> cmdBuffer,
+ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t dimension,
+    const ImageMipmapData mipData[6], const ImageMipmapLayout& mipSizes,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1},
+    Image(std::move(cmdBuffer->getDevice()), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1},
         MAGMA_COUNT(mipSizes), // mipLevels
         6, // arrayLayers
         1, // samples
@@ -93,6 +92,6 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
             }
         }
     });
-    copyFromBuffer(std::move(buffer), std::move(cmdBuffer), copyRegions, true);
+    copyFromBuffer(std::move(cmdBuffer), std::move(buffer), copyRegions, true);
 }
 } // namespace magma

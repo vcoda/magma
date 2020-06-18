@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "image1DArray.h"
 #include "srcTransferBuffer.h"
-#include "deviceMemory.h"
+#include "commandBuffer.h"
 #include "../helpers/mapScoped.h"
 #include "../core/copyMemory.h"
 
@@ -40,14 +40,13 @@ Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format,
         std::move(allocator))
 {}
 
-Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format, uint32_t width, uint32_t arrayLayers,
-    std::shared_ptr<Buffer> buffer, std::shared_ptr<CommandBuffer> cmdBuffer,
-    const ImageMipmapLayout& mipOffsets,
+Image1DArray::Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t width, uint32_t arrayLayers,
+    std::shared_ptr<Buffer> buffer, const ImageMipmapLayout& mipOffsets,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool flush /* true */):
-    Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
+    Image(std::move(cmdBuffer->getDevice()), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
         MAGMA_COUNT(mipOffsets) / arrayLayers, // mipLevels
         arrayLayers,
         1, // samples
@@ -62,12 +61,12 @@ Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format, uint
     copyFromBuffer(std::move(buffer), std::move(cmdBuffer), copyRegions, flush);
 }
 
-Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format, uint32_t width,
-    const ImageArrayMipmapData& mipData, const ImageMipmapLayout& mipSizes, std::shared_ptr<CommandBuffer> cmdBuffer,
+Image1DArray::Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t width,
+    const ImageArrayMipmapData& mipData, const ImageMipmapLayout& mipSizes,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
+    Image(std::move(cmdBuffer->getDevice()), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
         MAGMA_COUNT(mipSizes), // mipLevels
         MAGMA_COUNT(mipData), // arrayLayers
         1, // samples
@@ -96,6 +95,6 @@ Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format, uint
             }
         }
     });
-    copyFromBuffer(std::move(buffer), std::move(cmdBuffer), copyRegions, true);
+    copyFromBuffer(std::move(cmdBuffer), std::move(buffer), copyRegions, true);
 }
 } // namespace magma
