@@ -18,7 +18,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "buffer.h"
-#include "srcTransferBuffer.h"
 #include "device.h"
 #include "deviceMemory.h"
 #include "queue.h"
@@ -120,18 +119,16 @@ void Buffer::copyHost(const void *data, CopyMemoryFunction copyFn) noexcept
     }
 }
 
-void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer,
-    std::shared_ptr<SrcTransferBuffer> srcBuffer,
-    VkDeviceSize srcOffset /* 0 */,
-    bool flush /* true */)
+void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Buffer> buffer,
+    VkDeviceSize srcOffset /* 0 */, bool flush /* true */)
 {
     cmdBuffer->begin();
     {
         VkBufferCopy region;
         region.srcOffset = srcOffset;
         region.dstOffset = 0;
-        region.size = srcBuffer->getMemory()->getSize();
-        vkCmdCopyBuffer(*cmdBuffer, *srcBuffer, handle, 1, &region);
+        region.size = buffer->getMemory()->getSize();
+        vkCmdCopyBuffer(*cmdBuffer, *buffer, handle, 1, &region);
     }
     cmdBuffer->end();
     if (flush)

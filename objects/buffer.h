@@ -22,7 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class CommandBuffer;
-    class SrcTransferBuffer;
 
     /* Buffers represent linear arrays of data which are used
        for various purposes by binding them to a graphics or compute
@@ -55,7 +54,7 @@ namespace magma
         void copyHost(const void *data,
             CopyMemoryFunction copyFn) noexcept;
         void copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<SrcTransferBuffer> srcBuffer,
+            std::shared_ptr<Buffer> buffer,
             VkDeviceSize srcOffset = 0,
             bool flush = true);
 
