@@ -54,8 +54,8 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, 
         sharing,
         std::move(allocator))
 {
-    const auto copyRegions = buildCopyRegions(mipOffsets, bufferLayout);
-    copyFromBuffer(std::move(buffer), std::move(cmdBuffer), copyRegions, flush);
+    const auto copyRegions = setupCopyRegions(mipOffsets, bufferLayout);
+    copyFromBuffer(std::move(cmdBuffer), std::move(buffer), copyRegions, flush);
 }
 
 ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t dimension,
@@ -74,8 +74,8 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, 
         std::move(allocator))
 {   // Calculate aligned size and mip offsets
     VkDeviceSize bufferSize = 0;
-    const auto mipOffsets = buildMipOffsets(mipSizes, bufferSize);
-    const auto copyRegions = buildCopyRegions(mipOffsets, {0, 0, 0});
+    const auto mipOffsets = setupMipOffsets(mipSizes, bufferSize);
+    const auto copyRegions = setupCopyRegions(mipOffsets, {0, 0, 0});
     // Copy array layers to host visible buffer
     auto buffer = std::make_shared<SrcTransferBuffer>(this->device, bufferSize, nullptr, 0, sharing, allocator);
     helpers::mapScoped<uint8_t>(buffer, [&](uint8_t *data)
