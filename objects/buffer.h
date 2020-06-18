@@ -56,7 +56,8 @@ namespace magma
             CopyMemoryFunction copyFn) noexcept;
         void copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<SrcTransferBuffer> srcBuffer,
-            VkDeviceSize srcOffset = 0);
+            VkDeviceSize srcOffset = 0,
+            bool flush = true);
 
     protected:
         VkBufferUsageFlags usage;
