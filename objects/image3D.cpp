@@ -62,6 +62,6 @@ Image3D::Image3D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
     region.imageSubresource.layerCount = 1;
     region.imageOffset = {0, 0, 0};
     region.imageExtent = extent;
-    copyFromBuffer(std::move(cmdBuffer), std::move(buffer), {region}, flush);
+    copyTransfer(std::move(cmdBuffer), std::move(buffer), {region}, flush);
 }
 } // namespace magma

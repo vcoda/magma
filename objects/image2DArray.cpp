@@ -59,7 +59,7 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
 {
     MAGMA_ASSERT(MAGMA_COUNT(mipOffsets) % arrayLayers == 0);
     const auto copyRegions = setupCopyRegions(mipOffsets, bufferLayout);
-    copyFromBuffer(std::move(cmdBuffer), std::move(buffer), copyRegions, flush);
+    copyTransfer(std::move(cmdBuffer), std::move(buffer), copyRegions, flush);
 }
 
 Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
@@ -96,6 +96,6 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
             }
         }
     });
-    copyFromBuffer(std::move(cmdBuffer), std::move(buffer), copyRegions, true);
+    copyTransfer(std::move(cmdBuffer), std::move(buffer), copyRegions, true);
 }
 } // namespace magma

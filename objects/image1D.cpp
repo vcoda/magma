@@ -56,7 +56,7 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint
         std::move(allocator))
 {
     const auto copyRegions = setupCopyRegions(mipOffsets, bufferLayout);
-    copyFromBuffer(std::move(cmdBuffer), std::move(buffer), copyRegions, flush);
+    copyTransfer(std::move(cmdBuffer), std::move(buffer), copyRegions, flush);
 }
 
 Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t width,
@@ -90,6 +90,6 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint
             copyFn(mipLevel, mipData[level], static_cast<std::size_t>(mipSizes[level]));
         }
     });
-    copyFromBuffer(std::move(cmdBuffer), std::move(buffer), copyRegions, true);
+    copyTransfer(std::move(cmdBuffer), std::move(buffer), copyRegions, true);
 }
 } // namespace magma

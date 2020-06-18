@@ -224,7 +224,7 @@ void Image::copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t leve
         region.imageOffset = imageOffset;
         region.imageExtent = getMipExtent(level);
         // Copy image data
-        cmdBuffer->copyBufferToImage(buffer, shared_from_this(), region);
+        cmdBuffer->copyBufferToImage(std::move(buffer), shared_from_this(), region);
         // Change image layout from transfer dest optimal to shader read only
         const ImageMemoryBarrier postCopyBarrier(shared_from_this(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, subresourceRange);
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, barrierDstStageMask, postCopyBarrier);
@@ -291,7 +291,7 @@ std::vector<VkBufferImageCopy> Image::setupCopyRegions(const ImageMipmapLayout& 
     return copyRegions;
 }
 
-void Image::copyFromBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Buffer> buffer,
+void Image::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Buffer> buffer,
     const std::vector<VkBufferImageCopy>& copyRegions, bool flush /* true */)
 {   // Define array layers to copy
     VkImageSubresourceRange subresourceRange;
@@ -307,7 +307,7 @@ void Image::copyFromBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared
         const ImageMemoryBarrier preCopyBarrier(weakRef, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_TRANSFER_WRITE_BIT, preCopyBarrier);
         // Copy image data
-        cmdBuffer->copyBufferToImage(buffer, weakRef, copyRegions);
+        cmdBuffer->copyBufferToImage(std::move(buffer), weakRef, copyRegions);
         // Change image layout from transfer dest optimal to shader read only
         const ImageMemoryBarrier postCopyBarrier(weakRef, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, subresourceRange);
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, postCopyBarrier);
