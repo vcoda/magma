@@ -25,14 +25,14 @@ namespace magma
     class UniformTexelBuffer : public Buffer
     {
     public:
-        explicit UniformTexelBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+        explicit UniformTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkDeviceSize size,
             const void *data,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
-        explicit UniformTexelBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+        explicit UniformTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<SrcTransferBuffer> srcBuffer,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),

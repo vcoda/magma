@@ -13,12 +13,12 @@ inline uint32_t BaseIndexBuffer::getIndexCount() const noexcept
 }
 
 template<typename IndexType, uint32_t indexArraySize>
-inline IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmd, const IndexType (&indices)[indexArraySize],
+inline IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, const IndexType (&indices)[indexArraySize],
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    IndexBuffer(std::move(copyCmd), static_cast<VkDeviceSize>(sizeof(IndexType) * indexArraySize), indices,
+    IndexBuffer(std::move(cmdBuffer), static_cast<VkDeviceSize>(sizeof(IndexType) * indexArraySize), indices,
         std::is_same<IndexType, uint16_t>::value ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32,
         flags, sharing, std::move(allocator), std::move(copyFn))
 {
@@ -28,12 +28,12 @@ inline IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmd, const In
 }
 
 template<typename IndexType>
-inline IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmd, const std::vector<IndexType>& indices,
+inline IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, const std::vector<IndexType>& indices,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    IndexBuffer(std::move(copyCmd), static_cast<VkDeviceSize>(sizeof(IndexType) * indices.size()), indices.data(),
+    IndexBuffer(std::move(cmdBuffer), static_cast<VkDeviceSize>(sizeof(IndexType) * indices.size()), indices.data(),
         std::is_same<IndexType, uint16_t>::value ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32,
         flags, sharing, std::move(allocator), std::move(copyFn))
 {

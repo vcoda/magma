@@ -31,32 +31,32 @@ BaseIndexBuffer::BaseIndexBuffer(std::shared_ptr<Device> device, VkDeviceSize si
     indexType(indexType)
 {}
 
-IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmd, VkDeviceSize size, const void *data, VkIndexType indexType,
+IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data, VkIndexType indexType,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    BaseIndexBuffer(copyCmd->getDevice(), size, indexType,
+    BaseIndexBuffer(std::move(cmdBuffer->getDevice()), size, indexType,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         flags, sharing, allocator)
 {
     MAGMA_ASSERT(data);
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(
-        device, size, data, 0, sharing, std::move(allocator), std::move(copyFn));
-    copyTransfer(std::move(copyCmd), std::move(srcBuffer));
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data,
+        0, sharing, std::move(allocator), std::move(copyFn));
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer));
 }
 
-IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> copyCmd, std::shared_ptr<SrcTransferBuffer> srcBuffer, VkIndexType indexType,
+IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<SrcTransferBuffer> srcBuffer, VkIndexType indexType,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    BaseIndexBuffer(copyCmd->getDevice(), srcBuffer->getMemory()->getSize(), indexType,
+    BaseIndexBuffer(std::move(cmdBuffer->getDevice()), srcBuffer->getMemory()->getSize(), indexType,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         flags, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(copyCmd), std::move(srcBuffer));
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer));
 }
 
 DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkDeviceSize size, VkIndexType indexType,

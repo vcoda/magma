@@ -45,28 +45,28 @@ namespace magma
     class VertexBuffer : public BaseVertexBuffer
     {
     public:
-        explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+        explicit VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkDeviceSize size,
             const void *data,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
-        explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+        explicit VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<SrcTransferBuffer> srcBuffer,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
         // Templates
         template<typename VertexType, uint32_t vertexArraySize>
-        explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+        explicit VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             const VertexType (&vertices)[vertexArraySize],
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         template<typename VertexType>
-        explicit VertexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+        explicit VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             const std::vector<VertexType>& vertices,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),

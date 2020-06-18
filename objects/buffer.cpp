@@ -120,22 +120,22 @@ void Buffer::copyHost(const void *data, CopyMemoryFunction copyFn) noexcept
     }
 }
 
-void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> copyCmdBuffer,
+void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer,
     std::shared_ptr<SrcTransferBuffer> srcBuffer,
     VkDeviceSize srcOffset /* 0 */)
 {
-    copyCmdBuffer->begin();
+    cmdBuffer->begin();
     {
         VkBufferCopy region;
         region.srcOffset = srcOffset;
         region.dstOffset = 0;
         region.size = srcBuffer->getMemory()->getSize();
-        vkCmdCopyBuffer(*copyCmdBuffer, *srcBuffer, handle, 1, &region);
+        vkCmdCopyBuffer(*cmdBuffer, *srcBuffer, handle, 1, &region);
     }
-    copyCmdBuffer->end();
+    cmdBuffer->end();
     std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_TRANSFER_BIT, 0));
-    std::shared_ptr<Fence> fence(copyCmdBuffer->getFence());
-    if (!queue->submit(std::move(copyCmdBuffer), 0, nullptr, nullptr, fence))
+    std::shared_ptr<Fence> fence(cmdBuffer->getFence());
+    if (!queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence))
         MAGMA_THROW("failed to submit command buffer to transfer queue");
     if (!fence->wait())
         MAGMA_THROW("failed to wait fence");

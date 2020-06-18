@@ -46,7 +46,7 @@ namespace magma
     class IndexBuffer : public BaseIndexBuffer
     {
     public:
-        explicit IndexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+        explicit IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkDeviceSize size,
             const void *data,
             VkIndexType indexType,
@@ -54,7 +54,7 @@ namespace magma
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
-        explicit IndexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+        explicit IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<SrcTransferBuffer> srcBuffer,
             VkIndexType indexType,
             VkBufferCreateFlags flags = 0,
@@ -62,14 +62,14 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
         // Templates
         template<typename IndexType, uint32_t indexArraySize>
-        explicit IndexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+        explicit IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             const IndexType (&indices)[indexArraySize],
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         template<typename IndexType>
-        explicit IndexBuffer(std::shared_ptr<CommandBuffer> copyCmd,
+        explicit IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             const std::vector<IndexType>& indices,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),

@@ -25,32 +25,32 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_NV_ray_tracing
-RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> copyCmd, VkDeviceSize size, const void *data,
+RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Buffer(copyCmd->getDevice(), size,
+    Buffer(std::move(cmdBuffer->getDevice()), size,
         VK_BUFFER_USAGE_RAY_TRACING_BIT_NV | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         flags, sharing, allocator)
 {
     MAGMA_ASSERT(data);
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(
-        device, size, data, 0, sharing, std::move(allocator), std::move(copyFn));
-    copyTransfer(std::move(copyCmd), std::move(srcBuffer));
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data,
+        0, sharing, std::move(allocator), std::move(copyFn));
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer));
 }
 
-RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> copyCmd, std::shared_ptr<SrcTransferBuffer> srcBuffer,
+RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<SrcTransferBuffer> srcBuffer,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Buffer(copyCmd->getDevice(), srcBuffer->getMemory()->getSize(),
+    Buffer(std::move(cmdBuffer->getDevice()), srcBuffer->getMemory()->getSize(),
         VK_BUFFER_USAGE_RAY_TRACING_BIT_NV | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         flags, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(copyCmd), std::move(srcBuffer));
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer));
 }
 #endif // VK_NV_ray_tracing
 } // namespace magma
