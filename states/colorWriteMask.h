@@ -21,6 +21,8 @@ namespace magma
 {
     namespace colorwritemask
     {
+        constexpr VkColorComponentFlags none(0);
+
         constexpr VkColorComponentFlags r(VK_COLOR_COMPONENT_R_BIT);
         constexpr VkColorComponentFlags g(VK_COLOR_COMPONENT_G_BIT);
         constexpr VkColorComponentFlags b(VK_COLOR_COMPONENT_B_BIT);
