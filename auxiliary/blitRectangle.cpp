@@ -68,12 +68,13 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     descriptorSetLayout = std::make_shared<DescriptorSetLayout>(device, bindings::FragmentStageBinding(0, imageSampler), 0, allocator);
     descriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
     // Create texture samplers
-    nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, allocator);
-    bilinearSampler = std::make_shared<Sampler>(device, samplers::magMinLinearMipNearestClampToEdge, allocator);
+    const BorderColor borderColor = DefaultBorderColor();
+    nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, borderColor, allocator);
+    bilinearSampler = std::make_shared<Sampler>(device, samplers::magMinLinearMipNearestClampToEdge, borderColor, allocator);
 #ifdef VK_EXT_filter_cubic
     // Check for hardware support
     if (physicalDevice->checkExtensionSupport("VK_IMG_filter_cubic") || physicalDevice->checkExtensionSupport("VK_EXT_filter_cubic"))
-        cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, allocator);
+        cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, borderColor, allocator);
 #endif
     // Create blit pipeline
     pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, std::initializer_list<PushConstantRange>{}, allocator);
