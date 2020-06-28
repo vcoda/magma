@@ -19,26 +19,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include <cstring>
 #include <cstdarg>
-#include <cassert>
 
 #include <memory>
 #include <vector>
 #include <list>
 #include <map>
-#include <set>
 #include <unordered_map>
+#include <set>
 #include <unordered_set>
 #include <string>
 #include <initializer_list>
 #include <functional>
-#include <stdexcept>
-
-#include <algorithm>
 #include <limits>
 
 #include <atomic>
 #include <mutex>
-#include <thread>
 
 #ifdef _WIN32
 #ifndef NOMINMAX

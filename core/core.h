@@ -21,7 +21,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #else
 #include <mm_malloc.h>
 #endif
-#include <memory>
 #include <cassert>
 
 #include "dereference.h"

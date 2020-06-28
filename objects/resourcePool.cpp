@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
+#include <algorithm>
 #include "resourcePool.h"
 #include "../objects/deviceMemory.h"
 #include "../objects/buffer.h"
