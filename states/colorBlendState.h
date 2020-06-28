@@ -91,6 +91,7 @@ namespace magma
 {
     namespace blendstates
     {
+        constexpr ColorBlendAttachmentState writeNone(colorwritemask::none);
         constexpr ColorBlendAttachmentState writeR(colorwritemask::r);
         constexpr ColorBlendAttachmentState writeG(colorwritemask::g);
         constexpr ColorBlendAttachmentState writeB(colorwritemask::b);
@@ -156,6 +157,7 @@ namespace magma
 
     namespace renderstates
     {
+        constexpr ColorBlendState dontWriteRgba(blendstates::writeNone);
         constexpr ColorBlendState dontBlendR(blendstates::writeR);
         constexpr ColorBlendState dontBlendRg(blendstates::writeRg);
         constexpr ColorBlendState dontBlendRgb(blendstates::writeRgb);
