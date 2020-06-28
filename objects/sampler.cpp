@@ -32,7 +32,6 @@ Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_SAMPLER, std::move(device), std::move(allocator))
 {
-    const VkPhysicalDeviceProperties properties = this->device->getPhysicalDevice()->getProperties();
     VkSamplerCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
     info.pNext = nullptr;
@@ -45,10 +44,14 @@ Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
     info.addressModeW = state.addressMode;
     info.mipLodBias = 0.f;
     info.anisotropyEnable = MAGMA_BOOLEAN(state.anisotropyEnable);
-    if (info.anisotropyEnable)
-        info.maxAnisotropy = std::min(state.maxAnisotropy, properties.limits.maxSamplerAnisotropy);
-    else
+    if (!info.anisotropyEnable || (1.f == state.maxAnisotropy))
         info.maxAnisotropy = 1.f;
+    else
+    {   // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive
+        const VkPhysicalDeviceProperties properties = this->device->getPhysicalDevice()->getProperties();
+        const VkPhysicalDeviceLimits& limits = properties.limits;
+        info.maxAnisotropy = std::max(1.f, std::min(state.maxAnisotropy, limits.maxSamplerAnisotropy));
+    }
     info.compareEnable = VK_FALSE;
     info.compareOp = VK_COMPARE_OP_NEVER;
     info.minLod = 0.f;
@@ -70,7 +73,6 @@ LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Sampler(std::move(device), std::move(allocator))
 {
-    const VkPhysicalDeviceProperties properties = this->device->getPhysicalDevice()->getProperties();
     VkSamplerCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
     info.pNext = nullptr;
@@ -83,10 +85,14 @@ LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state
     info.addressModeW = state.addressMode;
     info.mipLodBias = mipLodBias;
     info.anisotropyEnable = MAGMA_BOOLEAN(state.anisotropyEnable);
-    if (info.anisotropyEnable)
-        info.maxAnisotropy = std::min(state.maxAnisotropy, properties.limits.maxSamplerAnisotropy);
-    else
+    if (!info.anisotropyEnable || (1.f == state.maxAnisotropy))
         info.maxAnisotropy = 1.f;
+    else
+    {   // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive
+        const VkPhysicalDeviceProperties properties = this->device->getPhysicalDevice()->getProperties();
+        const VkPhysicalDeviceLimits& limits = properties.limits;
+        info.maxAnisotropy = std::max(1.f, std::min(state.maxAnisotropy, limits.maxSamplerAnisotropy));
+    }
     info.compareEnable = VK_FALSE;
     info.compareOp = VK_COMPARE_OP_NEVER;
     info.minLod = minLod;
