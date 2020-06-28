@@ -17,11 +17,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
+#include "../misc/borderColor.h"
 
 namespace magma
 {
     class SamplerState;
     class DepthSamplerState;
+    using DefaultBorderColor = OpaqueBorderColor<float, 0>;
 
     /* Sampler objects represent the state of an image sampler
        which is used by the implementation to read image data
@@ -32,6 +34,7 @@ namespace magma
     public:
         explicit Sampler(std::shared_ptr<Device> device,
             const SamplerState& state,
+            const BorderColor& borderColor = DefaultBorderColor(),
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~Sampler();
 
@@ -51,6 +54,7 @@ namespace magma
             float mipLodBias,
             float minLod,
             float maxLod,
+            const BorderColor& borderColor = DefaultBorderColor(),
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
@@ -62,6 +66,7 @@ namespace magma
     public:
         explicit DepthSampler(std::shared_ptr<Device> device,
             const DepthSamplerState& state,
+            const BorderColor& borderColor = DefaultBorderColor(),
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
@@ -74,6 +79,7 @@ namespace magma
     public:
         explicit UnnormalizedSampler(std::shared_ptr<Device> device,
             bool linearFilter,
+            const BorderColor& borderColor = DefaultBorderColor(),
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma

@@ -546,6 +546,9 @@
     <ClInclude Include="..\..\exceptions\compileError.h">
       <Filter>Header Files\exceptions</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\misc\borderColor.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -939,6 +942,9 @@
     </None>
     <None Include="..\..\objects\descriptorSetLayout.inl">
       <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\misc\borderColor.inl">
+      <Filter>Header Files\misc</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
