@@ -125,11 +125,8 @@ namespace magma
 
         void bindDescriptorSet(
             const std::shared_ptr<Pipeline>& pipeline,
-            const std::shared_ptr<DescriptorSet>& descriptorSet) noexcept;
-        void bindDescriptorSet(
-            const std::shared_ptr<Pipeline>& pipeline,
             const std::shared_ptr<DescriptorSet>& descriptorSet,
-            uint32_t dynamicOffset) noexcept;
+            uint32_t dynamicOffset = uint32_t(-1)) noexcept;
         void bindDescriptorSet(const std::shared_ptr<Pipeline>& pipeline,
             const std::shared_ptr<DescriptorSet>& descriptorSet,
             const std::initializer_list<uint32_t>& dynamicOffsets) noexcept;

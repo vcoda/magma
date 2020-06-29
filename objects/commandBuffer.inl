@@ -103,16 +103,13 @@ inline void CommandBuffer::setStencilReference(bool frontFace, bool backFace, ui
     vkCmdSetStencilReference(handle, MAGMA_STENCIL_FACE_MASK(frontFace, backFace), reference);
 }
 
-inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pipeline, const std::shared_ptr<DescriptorSet>& descriptorSet) noexcept
+inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pipeline, const std::shared_ptr<DescriptorSet>& descriptorSet,
+    uint32_t dynamicOffset /* -1 */) noexcept
 {
     const VkDescriptorSet dereferencedDescriptorSet[1] = {*descriptorSet};
-    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), 0, 1, dereferencedDescriptorSet, 0, nullptr);
-}
-
-inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pipeline, const std::shared_ptr<DescriptorSet>& descriptorSet, uint32_t dynamicOffset) noexcept
-{
-    const VkDescriptorSet dereferencedDescriptorSet[1] = {*descriptorSet};
-    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), 0, 1, dereferencedDescriptorSet, 1, &dynamicOffset);
+    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), 0, 1, dereferencedDescriptorSet,
+        (0xFFFFFFFF == dynamicOffset) ? 0 : 1,
+        (0xFFFFFFFF == dynamicOffset) ? nullptr : &dynamicOffset);
 }
 
 inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pipeline, const std::shared_ptr<DescriptorSet>& descriptorSet,
