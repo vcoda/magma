@@ -52,18 +52,21 @@ namespace magma
                 std::shared_ptr<magma::ShaderModule> fragmentShader,
                 std::shared_ptr<PipelineCache> pipelineCache = nullptr,
                 std::shared_ptr<IAllocator> allocator = nullptr);
-            void blit(std::shared_ptr<Framebuffer> bltDst,
-                std::shared_ptr<const ImageView> bltSrc,
-                std::shared_ptr<CommandBuffer> cmdBuffer,
-                VkFilter filter,
-                bool negativeViewportHeight = false,
-                const char *labelName  = nullptr,
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
                 std::shared_ptr<magma::ShaderModule> vertexShader,
                 std::shared_ptr<magma::ShaderModule> fragmentShader,
                 std::shared_ptr<PipelineCache> pipelineCache = nullptr,
                 std::shared_ptr<IAllocator> allocator = nullptr);
+            void beginRenderPass(std::shared_ptr<CommandBuffer> cmdBuffer,
+                std::shared_ptr<Framebuffer> framebuffer,
+                const char *labelName = nullptr,
                 uint32_t labelColor = 0xFFFFFFFF) const noexcept;
+            void endRenderPass();
+            void blit(std::shared_ptr<CommandBuffer> cmdBuffer,
+                std::shared_ptr<const ImageView> image,
+                VkFilter filter,
+                const VkRect2D& rc,
+                bool negativeViewportHeight = false) const noexcept;
 
         private:
             std::shared_ptr<ShaderModule> createVertexShader(std::shared_ptr<Device> device,
@@ -82,8 +85,9 @@ namespace magma
             std::shared_ptr<PipelineLayout> pipelineLayout;
             std::shared_ptr<GraphicsPipeline> pipeline;
             std::vector<ClearValue> clearValues;
-            mutable std::shared_ptr<const ImageView> prevBltSrc;
-            mutable VkFilter prevFilter = VK_FILTER_NEAREST;
+            mutable std::shared_ptr<CommandBuffer> cmdBuffer;
+            mutable std::shared_ptr<const ImageView> oldImage;
+            mutable VkFilter oldFilter = VK_FILTER_NEAREST;
         };
     } // namespace aux
 } // namespace magma

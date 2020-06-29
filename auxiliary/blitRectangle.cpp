@@ -123,36 +123,44 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     }
 }
 
-void BlitRectangle::blit(std::shared_ptr<Framebuffer> bltDst, std::shared_ptr<const ImageView> bltSrc,
-    std::shared_ptr<CommandBuffer> cmdBuffer, VkFilter filter,
-    bool negativeViewportHeight /* false */, const char *labelName /* nullptr */,
+void BlitRectangle::beginRenderPass(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Framebuffer> framebuffer,
+    const char *labelName /* nullptr */,
     uint32_t labelColor /* 0xFFFFFFFF */) const noexcept
 {
-    MAGMA_ASSERT(bltDst);
-    MAGMA_ASSERT(bltSrc);
-    MAGMA_ASSERT(cmdBuffer);
-    if (bltSrc != prevBltSrc || filter != prevFilter)
-    {
-        descriptorSet->update(0, bltSrc,
-            (VK_FILTER_NEAREST == filter) ? nearestSampler :
-            ((VK_FILTER_LINEAR == filter) ? bilinearSampler : cubicSampler));
-        prevBltSrc = bltSrc;
-        prevFilter = filter;
-    }
+    MAGMA_ASSERT(framebuffer);
     if (labelName)
-        cmdBuffer->beginRenderPass(renderPass, bltDst, clearValues, labelName, labelColor);
+        cmdBuffer->beginRenderPass(renderPass, framebuffer, clearValues, labelName, labelColor);
     else
-        cmdBuffer->beginRenderPass(renderPass, bltDst, clearValues);
-    {
-        const uint32_t width = bltDst->getExtent().width;
-        const int32_t height = static_cast<int32_t>(bltDst->getExtent().height);
-        cmdBuffer->setViewport(0, 0, width, negativeViewportHeight ? -height : height);
-        cmdBuffer->setScissor(Scissor(0, 0, bltDst->getExtent()));
-        cmdBuffer->bindDescriptorSet(pipeline, descriptorSet);
-        cmdBuffer->bindPipeline(pipeline);
-        cmdBuffer->draw(3);
-    }
+        cmdBuffer->beginRenderPass(renderPass, framebuffer, clearValues);
+    this->cmdBuffer = std::move(cmdBuffer);
+}
+
+void BlitRectangle::endRenderPass()
+{
     cmdBuffer->endRenderPass();
+}
+
+void BlitRectangle::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const ImageView> image, VkFilter filter, const VkRect2D& rc,
+    bool negativeViewportHeight /* false */) const noexcept
+{
+    MAGMA_ASSERT(image);
+    MAGMA_ASSERT(cmdBuffer);
+    if (image != oldImage || filter != oldFilter)
+    {
+        std::shared_ptr<Sampler> sampler = (VK_FILTER_NEAREST == filter) ? nearestSampler :
+            ((VK_FILTER_LINEAR == filter) ? bilinearSampler : cubicSampler);
+        descriptorSet->update(0, image, std::move(sampler));
+        oldImage = std::move(image);
+        oldFilter = filter;
+    }
+    int32_t height = static_cast<int32_t>(rc.extent.height);
+    if (negativeViewportHeight)
+        height = -height;
+    cmdBuffer->setViewport(rc.offset.x, rc.offset.y, rc.extent.width, height);
+    cmdBuffer->setScissor(rc);
+    cmdBuffer->bindDescriptorSet(pipeline, descriptorSet);
+    cmdBuffer->bindPipeline(pipeline);
+    cmdBuffer->draw(3);
 }
 
 std::shared_ptr<ShaderModule> BlitRectangle::createVertexShader(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) const
