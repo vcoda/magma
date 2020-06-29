@@ -61,7 +61,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     BlitRectangle(renderPass,
         createVertexShader(renderPass->getDevice(), allocator),
-        fragmentShader,
+        std::move(fragmentShader),
         std::move(pipelineCache), std::move(allocator))
 {}
 
@@ -94,8 +94,8 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     const char *fsEntry = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
     pipeline = std::make_shared<GraphicsPipeline>(device,
         std::vector<PipelineShaderStage>{
-            VertexShaderStage(vertexShader, vsEntry),
-            FragmentShaderStage(fragmentShader, fsEntry)
+            VertexShaderStage(std::move(vertexShader), vsEntry),
+            FragmentShaderStage(std::move(fragmentShader), fsEntry)
         },
         renderstates::nullVertexInput,
         renderstates::triangleList,
