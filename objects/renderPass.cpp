@@ -53,7 +53,6 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
         }
     }
     const uint32_t colorAttachmentCount = multisampleAttachmentCount ? multisampleAttachmentCount : resolveAttachmentCount;
-    MAGMA_ASSERT(colorAttachmentCount);
     resolveAttachmentCount = std::max(0U, multisampleAttachmentCount);
     MAGMA_STACK_ARRAY(VkAttachmentReference, colorAttachments, colorAttachmentCount);
     MAGMA_STACK_ARRAY(VkAttachmentReference, resolveAttachments, resolveAttachmentCount);
