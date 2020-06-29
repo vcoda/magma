@@ -49,8 +49,7 @@ namespace magma
                 std::shared_ptr<PipelineCache> pipelineCache = nullptr,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
-                const PipelineShaderStage& vertexShader,
-                const PipelineShaderStage& fragmentShader,
+                std::shared_ptr<magma::ShaderModule> fragmentShader,
                 std::shared_ptr<PipelineCache> pipelineCache = nullptr,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             void blit(std::shared_ptr<Framebuffer> bltDst,
@@ -59,6 +58,11 @@ namespace magma
                 VkFilter filter,
                 bool negativeViewportHeight = false,
                 const char *labelName  = nullptr,
+            explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
+                std::shared_ptr<magma::ShaderModule> vertexShader,
+                std::shared_ptr<magma::ShaderModule> fragmentShader,
+                std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+                std::shared_ptr<IAllocator> allocator = nullptr);
                 uint32_t labelColor = 0xFFFFFFFF) const noexcept;
 
         private:

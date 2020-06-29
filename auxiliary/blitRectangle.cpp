@@ -31,6 +31,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/pipelineLayout.h"
 #include "../objects/commandBuffer.h"
 #include "../shaders/shaderStages.h"
+#include "../shaders/shaderReflection.h"
 #include "../states/vertexInputStructure.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/rasterizationState.h"
@@ -49,13 +50,24 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     BlitRectangle(renderPass,
-        VertexShaderStage(createVertexShader(renderPass->getDevice(), allocator), "main"),
-        FragmentShaderStage(createFragmentShader(renderPass->getDevice(), allocator), "main"),
+        createVertexShader(renderPass->getDevice(), allocator),
+        createFragmentShader(renderPass->getDevice(), allocator),
         std::move(pipelineCache), std::move(allocator))
 {}
 
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
-    const PipelineShaderStage& vertexShader, const PipelineShaderStage& fragmentShader,
+    std::shared_ptr<magma::ShaderModule> fragmentShader,
+    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    BlitRectangle(renderPass,
+        createVertexShader(renderPass->getDevice(), allocator),
+        fragmentShader,
+        std::move(pipelineCache), std::move(allocator))
+{}
+
+BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
+    std::shared_ptr<magma::ShaderModule> vertexShader,
+    std::shared_ptr<magma::ShaderModule> fragmentShader,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     renderPass(std::move(renderPass))
@@ -78,8 +90,13 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
 #endif
     // Create blit pipeline
     pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, std::initializer_list<PushConstantRange>{}, allocator);
+    const char *vsEntry = vertexShader->getReflection() ? vertexShader->getReflection()->getEntryPointName(0) : "main";
+    const char *fsEntry = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
     pipeline = std::make_shared<GraphicsPipeline>(device,
-        std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
+        std::vector<PipelineShaderStage>{
+            VertexShaderStage(vertexShader, vsEntry),
+            FragmentShaderStage(fragmentShader, fsEntry)
+        },
         renderstates::nullVertexInput,
         renderstates::triangleList,
 #ifdef VK_NV_fill_rectangle
