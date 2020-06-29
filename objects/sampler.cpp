@@ -100,7 +100,7 @@ LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state
     info.borderColor = borderColor.getColor();
     info.unnormalizedCoordinates = VK_FALSE;
     const VkResult create = vkCreateSampler(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create LOD sampler");
+    MAGMA_THROW_FAILURE(create, "failed to create lod sampler");
 }
 
 DepthSampler::DepthSampler(std::shared_ptr<Device> device, const DepthSamplerState& state,

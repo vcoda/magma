@@ -69,20 +69,18 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
     stringBuffer = std::make_shared<DynamicStorageBuffer>(device, sizeof(String) * maxStrings);
     glyphBuffer = std::make_shared<DynamicStorageBuffer>(device, sizeof(Glyph) * maxChars);
     // Define layout of descriptor set
-    constexpr Descriptor oneUniformBuffer = descriptors::UniformBuffer(1);
-    constexpr Descriptor oneStorageBuffer = descriptors::StorageBuffer(1);
     descriptorPool = std::make_shared<DescriptorPool>(device, 1,
         std::vector<Descriptor>
         {
-            oneUniformBuffer,
+            descriptors::UniformBuffer(1),
             descriptors::StorageBuffer(2)
         });
     descriptorSetLayout = std::make_shared<DescriptorSetLayout>(device,
         std::initializer_list<DescriptorSetLayout::Binding>
         {
-            bindings::FragmentStageBinding(0, oneUniformBuffer),
-            bindings::FragmentStageBinding(1, oneStorageBuffer),
-            bindings::FragmentStageBinding(2, oneStorageBuffer)
+            bindings::FragmentStageBinding(0, descriptors::UniformBuffer(1)),
+            bindings::FragmentStageBinding(1, descriptors::StorageBuffer(1)),
+            bindings::FragmentStageBinding(2, descriptors::StorageBuffer(1))
         });
     descriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
     descriptorSet->update(0, uniforms);

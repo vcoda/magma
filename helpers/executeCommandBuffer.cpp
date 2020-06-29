@@ -45,7 +45,7 @@ bool executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
         callback(cmdBuffer);
         cmdBuffer->end();
     }
-    std::shared_ptr<magma::Fence> fence(cmdBuffer->getFence());
+    std::shared_ptr<Fence> fence(cmdBuffer->getFence());
     std::shared_ptr<Queue> queue = cmdPool->getDevice()->getQueue(queueType, 0);
     const bool submitted = queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
     const bool waited = fence->wait();
