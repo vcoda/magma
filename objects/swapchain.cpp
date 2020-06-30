@@ -159,15 +159,15 @@ uint32_t Swapchain::getImageCount() const
     return imageCount;
 }
 
-std::vector<std::shared_ptr<SwapchainColorAttachment2D>> Swapchain::getImages() const
+std::vector<std::shared_ptr<SwapchainColorAttachment>> Swapchain::getImages() const
 {
     uint32_t imageCount = getImageCount();
     MAGMA_STACK_ARRAY(VkImage, swapchainImages, imageCount);
     const VkResult get = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &imageCount, swapchainImages);
     MAGMA_THROW_FAILURE(get, "failed to get swapchain images");
-    std::vector<std::shared_ptr<SwapchainColorAttachment2D>> colorAttachments;
+    std::vector<std::shared_ptr<SwapchainColorAttachment>> colorAttachments;
     for (const VkImage image : swapchainImages)
-        colorAttachments.emplace_back(new SwapchainColorAttachment2D(device, image, surfaceFormat.format, extent));
+        colorAttachments.emplace_back(new SwapchainColorAttachment(device, image, surfaceFormat.format, extent));
     return colorAttachments;
 }
 } // namespace magma

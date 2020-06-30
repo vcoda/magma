@@ -23,7 +23,7 @@ namespace magma
     class Device;
     class CommandBuffer;
     class Queue;
-    class SwapchainColorAttachment2D;
+    class SwapchainColorAttachment;
     class LinearTiledImage2D;
     class IAllocator;
 
@@ -36,7 +36,7 @@ namespace magma
         public:
             explicit FrameGrabber(std::shared_ptr<Device> device,
                 std::shared_ptr<IAllocator> allocator = nullptr);
-            void captureFrame(std::shared_ptr<SwapchainColorAttachment2D> srcImage,
+            void captureFrame(std::shared_ptr<SwapchainColorAttachment> srcImage,
                 std::shared_ptr<CommandBuffer> cmdBuffer);
             void readPixels(std::function<void(uint32_t col,
                 uint32_t row,

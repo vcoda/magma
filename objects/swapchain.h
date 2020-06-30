@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Surface;
-    class SwapchainColorAttachment2D;
+    class SwapchainColorAttachment;
     class Queue;
     class Fence;
     class Semaphore;
@@ -52,7 +52,7 @@ namespace magma
         const VkExtent2D& getExtent() const noexcept { return extent; }
         uint32_t getImageIndex() const noexcept { return imageIndex; }
         uint32_t getImageCount() const;
-        std::vector<std::shared_ptr<SwapchainColorAttachment2D>> getImages() const;
+        std::vector<std::shared_ptr<SwapchainColorAttachment>> getImages() const;
         uint32_t acquireNextImage(std::shared_ptr<const Semaphore> semaphore,
             std::shared_ptr<const Fence> fence,
             uint64_t timeout = UINT64_MAX);

@@ -38,9 +38,9 @@ Framebuffer::Framebuffer(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     BaseFramebuffer(extent)
 {   // Create multisample attachments
-    color = std::make_shared<ColorAttachment2D>(device, colorFormat, extent, 1, 1, true, allocator);
+    color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, true, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
-        depthStencil = std::make_shared<DepthStencilAttachment2D>(device, depthStencilFormat, extent, 1, 1, false, allocator);
+        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, 1, false, allocator);
     // Create attachment views
     colorView = std::make_shared<ImageView>(color, swizzle, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
@@ -76,11 +76,11 @@ MultisampleFramebuffer::MultisampleFramebuffer(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     BaseFramebuffer(extent)
 {   // Create multisample attachments
-    color = std::make_shared<ColorAttachment2D>(device, colorFormat, extent, 1, sampleCount, true, allocator);
+    color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, sampleCount, true, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
-        depthStencil = std::make_shared<DepthStencilAttachment2D>(device, depthStencilFormat, extent, 1, sampleCount, false, allocator);
+        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, sampleCount, false, allocator);
     // Create color resolve attachment
-    resolve = std::make_shared<ColorAttachment2D>(device, colorFormat, extent, 1, 1, true, allocator);
+    resolve = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, true, allocator);
     // Create attachment views
     colorView = std::make_shared<ImageView>(color, swizzle, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
@@ -120,7 +120,7 @@ uint32_t MultisampleFramebuffer::getSampleCount() const noexcept
     return color->getSamples();
 }
 
-SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachment2D> color,
+SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachment> color,
     VkFormat depthFormat /* VK_FORMAT_UNDEFINED */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
@@ -132,7 +132,7 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
     attachments.push_back(colorView);
     if (depthFormat != VK_FORMAT_UNDEFINED)
     {
-        depthStencil = std::make_shared<DepthStencilAttachment2D>(device, depthFormat, extent, 1, color->getSamples(), false, allocator);
+        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthFormat, extent, 1, color->getSamples(), false, allocator);
         depthStencilView = std::make_shared<ImageView>(depthStencil, swizzle, allocator);
         attachments.push_back(depthStencilView);
     }

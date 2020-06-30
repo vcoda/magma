@@ -22,9 +22,9 @@ namespace magma
 {
     class Device;
     class Framebuffer;
-    class ColorAttachment2D;
-    class DepthStencilAttachment2D;
-    class SwapchainColorAttachment2D;
+    class ColorAttachment;
+    class DepthStencilAttachment;
+    class SwapchainColorAttachment;
     class ImageView;
     class RenderPass;
     class IAllocator;
@@ -92,8 +92,8 @@ namespace magma
                 std::shared_ptr<IAllocator> allocator = nullptr);
 
         private:
-            std::shared_ptr<ColorAttachment2D> color;
-            std::shared_ptr<DepthStencilAttachment2D> depthStencil;
+            std::shared_ptr<ColorAttachment> color;
+            std::shared_ptr<DepthStencilAttachment> depthStencil;
         };
 
         /* Multi-sample frame buffer with resolve attachment. */
@@ -117,9 +117,9 @@ namespace magma
             virtual std::shared_ptr<const ImageView> getColorView() const noexcept override { return resolveView; }
 
         private:
-            std::shared_ptr<ColorAttachment2D> color;
-            std::shared_ptr<DepthStencilAttachment2D> depthStencil;
-            std::shared_ptr<ColorAttachment2D> resolve;
+            std::shared_ptr<ColorAttachment> color;
+            std::shared_ptr<DepthStencilAttachment> depthStencil;
+            std::shared_ptr<ColorAttachment> resolve;
             std::shared_ptr<ImageView> resolveView;
         };
 
@@ -128,7 +128,7 @@ namespace magma
         class SwapchainFramebuffer : public BaseFramebuffer
         {
         public:
-            explicit SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachment2D> color,
+            explicit SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachment> color,
                 VkFormat depthFormat = VK_FORMAT_UNDEFINED,
                 const VkComponentMapping& swizzle = {
                     VK_COMPONENT_SWIZZLE_IDENTITY,
@@ -138,7 +138,7 @@ namespace magma
                 std::shared_ptr<IAllocator> allocator = nullptr);
 
         private:
-            std::shared_ptr<DepthStencilAttachment2D> depthStencil;
+            std::shared_ptr<DepthStencilAttachment> depthStencil;
         };
     } // namespace aux
 } // namespace magma

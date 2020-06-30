@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ColorAttachment2D::ColorAttachment2D(std::shared_ptr<Device> device,
+ColorAttachment::ColorAttachment(std::shared_ptr<Device> device,
     VkFormat colorFormat,
     const VkExtent2D& extent,
     uint32_t mipLevels,
@@ -34,7 +34,7 @@ ColorAttachment2D::ColorAttachment2D(std::shared_ptr<Device> device,
         Sharing(), std::move(allocator))
 {}
 
-DepthStencilAttachment2D::DepthStencilAttachment2D(std::shared_ptr<Device> device,
+DepthStencilAttachment::DepthStencilAttachment(std::shared_ptr<Device> device,
     VkFormat depthStencilFormat,
     const VkExtent2D& extent,
     uint32_t mipLevels,
@@ -47,14 +47,14 @@ DepthStencilAttachment2D::DepthStencilAttachment2D(std::shared_ptr<Device> devic
         Sharing(), std::move(allocator))
 {}
 
-SwapchainColorAttachment2D::SwapchainColorAttachment2D(std::shared_ptr<Device> device,
+SwapchainColorAttachment::SwapchainColorAttachment(std::shared_ptr<Device> device,
     VkImage handle, VkFormat format, const VkExtent2D& extent):
     Image2D(std::move(device), handle, format, extent)
 {
     layout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 }
 
-SwapchainColorAttachment2D::~SwapchainColorAttachment2D()
+SwapchainColorAttachment::~SwapchainColorAttachment()
 {   // vkDestroyImage() shouldn't have effect on it as it was not created via vkCreateImage().
     handle = VK_NULL_HANDLE;
 }

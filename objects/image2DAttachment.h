@@ -22,10 +22,10 @@ namespace magma
 {
     /* Two-dimensional image that can be used as color attachment to framebuffer. */
 
-    class ColorAttachment2D : public Image2D
+    class ColorAttachment: public Image2D
     {
     public:
-        explicit ColorAttachment2D(std::shared_ptr<Device> device,
+        explicit ColorAttachment(std::shared_ptr<Device> device,
             VkFormat colorFormat,
             const VkExtent2D& extent,
             uint32_t mipLevels,
@@ -36,10 +36,10 @@ namespace magma
 
     /* Two-dimensional image that can be used as depth/stencil attachment to framebuffer. */
 
-    class DepthStencilAttachment2D : public Image2D
+    class DepthStencilAttachment : public Image2D
     {
     public:
-        explicit DepthStencilAttachment2D(std::shared_ptr<Device> device,
+        explicit DepthStencilAttachment(std::shared_ptr<Device> device,
             VkFormat depthStencilFormat,
             const VkExtent2D& extent,
             uint32_t mipLevels,
@@ -51,16 +51,16 @@ namespace magma
     /* Two-dimensional image that represents swapchain's color attachment to framebuffer.
        It is managed internally by swapchain and never created or destroyed by user. */
 
-    class SwapchainColorAttachment2D : public Image2D
+    class SwapchainColorAttachment : public Image2D
     {
-        explicit SwapchainColorAttachment2D(std::shared_ptr<Device> device,
+        explicit SwapchainColorAttachment(std::shared_ptr<Device> device,
             VkImage handle,
             VkFormat format,
             const VkExtent2D& extent);
         friend class Swapchain;
 
     public:
-        virtual ~SwapchainColorAttachment2D();
+        virtual ~SwapchainColorAttachment();
         VkExtent2D getExtent() const noexcept { return {extent.width, extent.height}; }
     };
 } // namespace magma
