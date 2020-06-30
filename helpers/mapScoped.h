@@ -29,95 +29,129 @@ namespace magma
     namespace helpers
     {
         template<typename Type>
-        inline void mapScoped(
-            const std::shared_ptr<Buffer>& buffer,
-            std::function<void(Type *data)> fn)
+        inline void mapScoped(const std::shared_ptr<Buffer>& buffer,
+            std::function<void(Type *data)> callbackFn)
         {
             MAGMA_ASSERT(buffer);
-            MAGMA_ASSERT(fn);
-            std::shared_ptr<DeviceMemory> memory = buffer->getMemory();
+            MAGMA_ASSERT(callbackFn);
+            std::shared_ptr<DeviceMemory> memory(buffer->getMemory());
             if (memory)
             {
                 void *const data = memory->map();
                 if (data)
                 {
-                    fn(static_cast<Type *>(data));
+                    callbackFn(static_cast<Type *>(data));
                     memory->unmap();
                 }
             }
         }
 
         template<typename Block>
-        inline void mapScoped(
-            const std::shared_ptr<UniformBuffer<Block>>& buffer,
-            bool clearMemory,
-            std::function<void(Block *block)> fn)
+        inline void mapScoped(const std::shared_ptr<UniformBuffer<Block>>& buffer,
+            std::function<void(Block *block)> callbackFn)
         {
             MAGMA_ASSERT(buffer);
-            MAGMA_ASSERT(fn);
-            ZeroMemoryFunction zeroFn = clearMemory ? core::zeroMemory : nullptr;
-            Block *const block = buffer->map(zeroFn);
+            MAGMA_ASSERT(callbackFn);
+            Block *const block = buffer->map();
             if (block)
             {
-                fn(block);
+                callbackFn(block);
+                buffer->unmap();
+            }
+        }
+
+        template<typename Block>
+        inline void mapScopedMemzero(const std::shared_ptr<UniformBuffer<Block>>& buffer,
+            std::function<void(Block *block)> callbackFn)
+        {
+            MAGMA_ASSERT(buffer);
+            MAGMA_ASSERT(callbackFn);
+            Block *const block = buffer->map(core::zeroMemory);
+            if (block)
+            {
+                callbackFn(block);
                 buffer->unmap();
             }
         }
 
         template<typename Type>
-        inline void mapScoped(
-            const std::shared_ptr<UniformBuffer<Type>>& buffer,
-            bool clearMemory,
-            std::function<void(UniformArray<Type>& array)> fn)
+        inline void mapScoped(const std::shared_ptr<UniformBuffer<Type>>& buffer,
+            std::function<void(UniformArray<Type>& array)> callbackFn)
         {
             MAGMA_ASSERT(buffer);
-            MAGMA_ASSERT(fn);
-            ZeroMemoryFunction zeroFn = clearMemory ? core::zeroMemory : nullptr;
-            Type *const data = buffer->map(zeroFn);
+            MAGMA_ASSERT(callbackFn);
+            Type *const data = buffer->map();
             if (data)
             {
-                UniformArray<Type> array(data,
-                    buffer->getArraySize());
-                fn(array);
+                UniformArray<Type> array(data, buffer->getArraySize());
+                callbackFn(array);
                 buffer->unmap();
             }
         }
 
         template<typename Type>
-        inline void mapScoped(
-            const std::shared_ptr<DynamicUniformBuffer<Type>>& buffer,
-            bool clearMemory,
-            std::function<void(AlignedUniformArray<Type>& array)> fn)
+        inline void mapScopedMemzero(const std::shared_ptr<UniformBuffer<Type>>& buffer,
+            std::function<void(UniformArray<Type>& array)> callbackFn)
         {
             MAGMA_ASSERT(buffer);
-            MAGMA_ASSERT(fn);
-            ZeroMemoryFunction zeroFn = clearMemory ? core::zeroMemory : nullptr;
-            Type *const data = buffer->map(zeroFn);
+            MAGMA_ASSERT(callbackFn);
+            Type *const data = buffer->map(core::zeroMemory);
+            if (data)
+            {
+                UniformArray<Type> array(data, buffer->getArraySize());
+                callbackFn(array);
+                buffer->unmap();
+            }
+        }
+
+        template<typename Type>
+        inline void mapScoped(const std::shared_ptr<DynamicUniformBuffer<Type>>& buffer,
+            std::function<void(AlignedUniformArray<Type>& array)> callbackFn)
+        {
+            MAGMA_ASSERT(buffer);
+            MAGMA_ASSERT(callbackFn);
+            Type *const data = buffer->map();
             if (data)
             {
                 AlignedUniformArray<Type> array(data,
                     buffer->getArraySize(),
                     buffer->getElementAlignment());
-                fn(array);
+                callbackFn(array);
                 buffer->unmap();
             }
         }
 
         template<typename Type>
-        inline void mapScoped(
-            const std::shared_ptr<Image>& image,
+        inline void mapScopedMemzero(const std::shared_ptr<DynamicUniformBuffer<Type>>& buffer,
+            std::function<void(AlignedUniformArray<Type>& array)> callbackFn)
+        {
+            MAGMA_ASSERT(buffer);
+            MAGMA_ASSERT(callbackFn);
+            Type *const data = buffer->map(core::zeroMemory);
+            if (data)
+            {
+                AlignedUniformArray<Type> array(data,
+                    buffer->getArraySize(),
+                    buffer->getElementAlignment());
+                callbackFn(array);
+                buffer->unmap();
+            }
+        }
+
+        template<typename Type>
+        inline void mapScoped(const std::shared_ptr<Image>& image,
             VkDeviceSize offset,
-            std::function<void(Type *data)> fn)
+            std::function<void(Type *data)> callbackFn)
         {
             MAGMA_ASSERT(image);
-            MAGMA_ASSERT(fn);
+            MAGMA_ASSERT(callbackFn);
             std::shared_ptr<DeviceMemory> memory = image->getMemory();
             if (memory)
             {
                 void *const data = memory->map(offset);
                 if (data)
                 {
-                    fn(static_cast<Type *>(data));
+                    callbackFn(static_cast<Type *>(data));
                     memory->unmap();
                 }
             }
