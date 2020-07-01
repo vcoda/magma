@@ -18,7 +18,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "baseFramebuffer.h"
+#include "../objects/device.h"
+#include "../objects/physicalDevice.h"
 #include "../objects/framebuffer.h"
+#include "../misc/format.h"
 
 namespace magma
 {
@@ -56,6 +59,30 @@ std::shared_ptr<magma::Framebuffer> Framebuffer::getFramebuffer() noexcept
 std::shared_ptr<const magma::Framebuffer> Framebuffer::getFramebuffer() const noexcept
 {
     return framebuffer;
+}
+
+VkImageLayout Framebuffer::finalDepthStencilLayout(std::shared_ptr<Device> device,
+    const VkFormat depthStencilFormat, bool shouldReadDepth) const
+{
+#ifdef VK_KHR_separate_depth_stencil_layouts
+    std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+    if (physicalDevice->checkExtensionSupport("VK_KHR_separate_depth_stencil_layouts"))
+    {
+        const Format format(depthStencilFormat);
+        if (format.depth())
+        {
+            return shouldReadDepth ? VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL_KHR :
+                VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL_KHR;
+        }
+        if (format.stencil())
+        {
+            return shouldReadDepth ? VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL_KHR :
+                VK_IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL_KHR;
+        }
+    }
+#endif // VK_KHR_separate_depth_stencil_layouts
+    return shouldReadDepth ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL :
+        VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 }
 } // namespace aux
 } // namespace magma

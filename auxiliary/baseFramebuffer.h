@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class Device;
     class Framebuffer;
     class RenderPass;
 
@@ -39,6 +40,8 @@ namespace magma
 
         protected:
             explicit Framebuffer(uint32_t sampleCount) noexcept;
+            VkImageLayout finalDepthStencilLayout(std::shared_ptr<Device> device,
+                const VkFormat depthStencilFormat, bool shouldReadDepth) const;
 
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<magma::Framebuffer> framebuffer;
