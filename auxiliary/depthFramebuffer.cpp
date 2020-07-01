@@ -33,11 +33,10 @@ DepthFramebuffer::DepthFramebuffer(std::shared_ptr<Device> device, const VkForma
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Framebuffer(1)
 {
-    constexpr bool shaderSampled = true;
     depth = std::make_shared<DepthStencilAttachment>(device, depthFormat, extent,
          1, // mipLevels
          1, // samples
-         shaderSampled,
+         true, // VK_IMAGE_USAGE_SAMPLED_BIT
          allocator);
     depthView = std::make_shared<ImageView>(depth, VkComponentMapping{
         VK_COMPONENT_SWIZZLE_IDENTITY,
