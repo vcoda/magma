@@ -38,6 +38,7 @@ namespace magma
                 const VkFormat colorFormat,
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
+                bool shouldReadDepth,
                 const VkComponentMapping& swizzle = {
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY,

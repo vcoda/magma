@@ -45,16 +45,13 @@ DepthFramebuffer::DepthFramebuffer(std::shared_ptr<Device> device, const VkForma
         VK_COMPONENT_SWIZZLE_IDENTITY,
         VK_COMPONENT_SWIZZLE_IDENTITY},
         allocator);
-    VkImageLayout finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
-#ifdef VK_KHR_separate_depth_stencil_layouts
-    if (device->getPhysicalDevice()->checkExtensionSupport("VK_KHR_separate_depth_stencil_layouts"))
-        finalLayout = VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL_KHR;
-#endif
+    // We should be able to read depth in the shader when a render pass instance ends
+    const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthFormat, true);
     const AttachmentDescription depthAttachment(depthFormat, 1,
          op::clearStore, // Clear depth, store
          op::dontCare, // Stencil don't care
-         VK_IMAGE_LAYOUT_UNDEFINED,
-         finalLayout);
+         VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
+         finalLayout); // Depth image will be transitioned to when a render pass instance ends
     renderPass = std::make_shared<RenderPass>(std::move(device), depthAttachment, allocator);
     framebuffer = std::make_shared<magma::Framebuffer>(renderPass, depthView, 0, std::move(allocator));
 }

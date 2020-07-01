@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
 #include "../objects/framebuffer.h"
+#include "../misc/format.h"
 
 namespace magma
 {
@@ -30,7 +31,7 @@ namespace aux
 {
 ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device> device,
     const VkFormat colorFormat, const VkFormat depthStencilFormat,
-    const VkExtent2D& extent, const uint32_t sampleCount,
+    const VkExtent2D& extent, const uint32_t sampleCount, bool shouldReadDepth,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Framebuffer(sampleCount)
@@ -55,16 +56,19 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
         op::dontCareStore, // Don't care about clear as attachment used for MSAA resolve
         op::dontCare, // Stencil not applicable
         VK_IMAGE_LAYOUT_UNDEFINED,
-        VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL); // Resolve image will be transitioned to when a render pass instance ends
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
-    {
-        const AttachmentDescription depthStencilAttachment(depthStencilFormat, sampleCount,
+    {   // Final layout is the layout the attachment image subresource will be transitioned to
+        // when a render pass instance ends.
+        const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, shouldReadDepth);
+        const Format format(depthStencilFormat);
+        const AttachmentDescription depthStencilAttachment(depthStencilFormat, 1,
             op::clearStore, // Clear depth, store
-            op::clearStore, // Clear stencil, store
-            VK_IMAGE_LAYOUT_UNDEFINED,
-            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+            format.depthStencil() || format.stencil() ? op::clearStore : op::dontCare,
+            VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
+            finalLayout); // Depth image will be transitioned to when a render pass instance ends
         // Create color/depth framebuffer
-        renderPass = std::make_shared<RenderPass>(device, std::initializer_list<AttachmentDescription>{
+        renderPass = std::make_shared<RenderPass>(std::move(device), std::initializer_list<AttachmentDescription>{
             colorAttachment, depthStencilAttachment, resolveAttachment}, allocator);
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass, std::vector<std::shared_ptr<ImageView>>{
             colorView, depthStencilView, resolveView}, 0, allocator);

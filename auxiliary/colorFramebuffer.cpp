@@ -23,13 +23,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
 #include "../objects/framebuffer.h"
+#include "../misc/format.h"
 
 namespace magma
 {
 namespace aux
 {
 ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device,
-    const VkFormat colorFormat, const VkFormat depthStencilFormat, const VkExtent2D& extent,
+    const VkFormat colorFormat, const VkFormat depthStencilFormat,
+    const VkExtent2D& extent, bool shouldReadDepth,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Framebuffer(1)
@@ -45,15 +47,18 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device,
     const AttachmentDescription colorAttachment(colorFormat, 1,
         op::clearStore, // Clear color, store
         op::dontCare, // Stencil not applicable
-        VK_IMAGE_LAYOUT_UNDEFINED,
-        VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+        VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL); // Color image will be transitioned to when a render pass instance ends
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
-    {
+    {   // Final layout is the layout the attachment image subresource will be transitioned to
+        // when a render pass instance ends.
+        const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, shouldReadDepth);
+        const Format format(depthStencilFormat);
         const AttachmentDescription depthStencilAttachment(depthStencilFormat, 1,
             op::clearStore, // Clear depth, store
-            op::clearStore, // Clear stencil, store
-            VK_IMAGE_LAYOUT_UNDEFINED,
-            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+            format.depthStencil() || format.stencil() ? op::clearStore : op::dontCare,
+            VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
+            finalLayout); // Depth image will be transitioned to when a render pass instance ends
         // Create color/depth framebuffer
         renderPass = std::make_shared<RenderPass>(std::move(device), std::initializer_list<AttachmentDescription>{
             colorAttachment, depthStencilAttachment});
