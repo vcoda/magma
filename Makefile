@@ -17,12 +17,16 @@ MAGMA_OBJS= \
 	allocator/allocator.o \
 	allocator/objectAllocator.o \
 	\
+	auxiliary/baseFramebuffer.o \
 	auxiliary/blitRectangle.o \
-	auxiliary/framebuffers.o \
+	auxiliary/colorFramebuffer.o \
+	auxiliary/colorMultisampleFramebuffer.o \
+	auxiliary/depthFramebuffer.o \
 	auxiliary/frameGrabber.o \
 	auxiliary/graphicsPipelineCache.o \
 	auxiliary/immediateRender.o \
 	auxiliary/mipmapGenerator.o \
+	auxiliary/swapchainFramebuffer.o \
 	auxiliary/textShader.o \
 	\
 	barriers/bufferMemoryBarrier.o \

@@ -149,13 +149,17 @@
     <ClInclude Include="..\..\allocator\linearPlacementPool.h" />
     <ClInclude Include="..\..\allocator\objectAllocator.h" />
     <ClInclude Include="..\..\auxiliary\blitRectangle.h" />
-    <ClInclude Include="..\..\auxiliary\framebuffers.h" />
+    <ClInclude Include="..\..\auxiliary\colorFramebuffer.h" />
+    <ClInclude Include="..\..\auxiliary\baseFramebuffer.h" />
+    <ClInclude Include="..\..\auxiliary\colorMultisampleFramebuffer.h" />
     <ClInclude Include="..\..\auxiliary\graphicsPipelineCache.h" />
     <ClInclude Include="..\..\auxiliary\immediateRender.h" />
     <ClInclude Include="..\..\auxiliary\mipmapGenerator.h" />
     <ClInclude Include="..\..\auxiliary\packedTypes.h" />
     <ClInclude Include="..\..\auxiliary\frameGrabber.h" />
     <ClInclude Include="..\..\auxiliary\shaderCompiler.h" />
+    <ClInclude Include="..\..\auxiliary\depthFramebuffer.h" />
+    <ClInclude Include="..\..\auxiliary\swapchainFramebuffer.h" />
     <ClInclude Include="..\..\auxiliary\textShader.h" />
     <ClInclude Include="..\..\auxiliary\typedefs.h" />
     <ClInclude Include="..\..\barriers\bufferMemoryBarrier.h" />
@@ -301,13 +305,17 @@
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp" />
     <ClCompile Include="..\..\allocator\objectAllocator.cpp" />
+    <ClCompile Include="..\..\auxiliary\baseFramebuffer.cpp" />
     <ClCompile Include="..\..\auxiliary\blitRectangle.cpp" />
-    <ClCompile Include="..\..\auxiliary\framebuffers.cpp" />
+    <ClCompile Include="..\..\auxiliary\colorFramebuffer.cpp" />
+    <ClCompile Include="..\..\auxiliary\colorMultisampleFramebuffer.cpp" />
     <ClCompile Include="..\..\auxiliary\graphicsPipelineCache.cpp" />
     <ClCompile Include="..\..\auxiliary\immediateRender.cpp" />
     <ClCompile Include="..\..\auxiliary\mipmapGenerator.cpp" />
     <ClCompile Include="..\..\auxiliary\frameGrabber.cpp" />
     <ClCompile Include="..\..\auxiliary\shaderCompiler.cpp" />
+    <ClCompile Include="..\..\auxiliary\depthFramebuffer.cpp" />
+    <ClCompile Include="..\..\auxiliary\swapchainFramebuffer.cpp" />
     <ClCompile Include="..\..\auxiliary\textShader.cpp" />
     <ClCompile Include="..\..\barriers\bufferMemoryBarrier.cpp" />
     <ClCompile Include="..\..\barriers\imageMemoryBarrier.cpp" />

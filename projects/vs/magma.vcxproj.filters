@@ -102,9 +102,6 @@
     <ClInclude Include="..\..\auxiliary\blitRectangle.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\auxiliary\framebuffers.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\auxiliary\immediateRender.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
@@ -549,15 +546,27 @@
     <ClInclude Include="..\..\misc\borderColor.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\auxiliary\colorFramebuffer.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\auxiliary\baseFramebuffer.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\auxiliary\depthFramebuffer.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\auxiliary\colorMultisampleFramebuffer.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\auxiliary\swapchainFramebuffer.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
       <Filter>Source Files\allocator</Filter>
     </ClCompile>
     <ClCompile Include="..\..\auxiliary\blitRectangle.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\framebuffers.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
     <ClCompile Include="..\..\auxiliary\immediateRender.cpp">
@@ -832,6 +841,21 @@
     </ClCompile>
     <ClCompile Include="..\..\exceptions\exception.cpp">
       <Filter>Source Files\exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\auxiliary\colorFramebuffer.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\auxiliary\depthFramebuffer.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\auxiliary\colorMultisampleFramebuffer.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\auxiliary\swapchainFramebuffer.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\auxiliary\baseFramebuffer.cpp">
+      <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
