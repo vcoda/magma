@@ -63,7 +63,7 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device,
         renderPass = std::make_shared<RenderPass>(std::move(device), std::initializer_list<AttachmentDescription>{
             colorAttachment, depthStencilAttachment});
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass, std::vector<std::shared_ptr<ImageView>>{
-            colorView, depthStencilView});
+            colorView, depthStencilView}, 0, std::move(allocator));
     }
     else
     {   // Create color only framebuffer

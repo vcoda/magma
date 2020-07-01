@@ -71,14 +71,14 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
         renderPass = std::make_shared<RenderPass>(std::move(device), std::initializer_list<AttachmentDescription>{
             colorAttachment, depthStencilAttachment, resolveAttachment}, allocator);
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass, std::vector<std::shared_ptr<ImageView>>{
-            colorView, depthStencilView, resolveView}, 0, allocator);
+            colorView, depthStencilView, resolveView}, 0, std::move(allocator));
     }
     else
     {   // Create color only framebuffer
-        renderPass = std::make_shared<RenderPass>(device, std::initializer_list<AttachmentDescription>{
+        renderPass = std::make_shared<RenderPass>(std::move(device), std::initializer_list<AttachmentDescription>{
             colorAttachment, resolveAttachment}, allocator);
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass, std::vector<std::shared_ptr<ImageView>>{
-            colorView, resolveView}, 0, allocator);
+            colorView, resolveView}, 0, std::move(allocator));
     }
 }
 } // namespace aux
