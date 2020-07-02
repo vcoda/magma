@@ -36,14 +36,11 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
 {
     std::shared_ptr<Device> device = color->getDevice();
     colorView = std::make_shared<ImageView>(color, swizzle, allocator);
-    std::vector<std::shared_ptr<ImageView>> attachments;
-    attachments.push_back(colorView);
     if (depthFormat != VK_FORMAT_UNDEFINED)
     {
         const VkExtent2D extent{color->getMipExtent(0).width, color->getMipExtent(0).height};
         depthStencil = std::make_shared<DepthStencilAttachment>(device, depthFormat, extent, 1, color->getSamples(), false, allocator);
         depthStencilView = std::make_shared<ImageView>(depthStencil, swizzle, allocator);
-        attachments.push_back(depthStencilView);
     }
     const AttachmentDescription colorAttachment(color->getFormat(), 1,
         op::clearStore, // Clear color, store
@@ -57,14 +54,16 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
             op::clearDontCare, // Stencil don't care
             VK_IMAGE_LAYOUT_UNDEFINED,
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
-        renderPass = std::make_shared<RenderPass>(device, std::initializer_list<AttachmentDescription>{
+        renderPass = std::make_shared<RenderPass>(std::move(device), std::initializer_list<AttachmentDescription>{
             colorAttachment, depthStencilAttachment}, allocator);
+        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, std::vector<std::shared_ptr<ImageView>>{
+            colorView, depthStencilView}, 0, std::move(allocator));
     }
     else
     {
-        renderPass = std::make_shared<RenderPass>(device, colorAttachment, allocator);
+        renderPass = std::make_shared<RenderPass>(std::move(device), colorAttachment, allocator);
+        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, colorView, 0, std::move(allocator));
     }
-    framebuffer = std::make_shared<magma::Framebuffer>(renderPass, attachments, 0, allocator);
 }
 } // namespace aux
 } // namespace magma
