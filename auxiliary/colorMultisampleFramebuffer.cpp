@@ -53,12 +53,12 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
     const AttachmentDescription colorAttachment(colorFormat, sampleCount,
         op::clearStore, // Clear color, store
         op::dontCare, // Stencil not applicable
-        VK_IMAGE_LAYOUT_UNDEFINED,
+        VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
         VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
     const AttachmentDescription resolveAttachment(colorFormat, 1,
         op::store, // Don't care about clear as attachment used for MSAA resolve
         op::dontCare, // Stencil not applicable
-        VK_IMAGE_LAYOUT_UNDEFINED,
+        VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL); // Resolve image will be transitioned to when a render pass instance ends
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Final layout is the layout the attachment image subresource will be transitioned to

@@ -46,7 +46,7 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
     const AttachmentDescription colorAttachment(color->getFormat(), 1,
         op::clearStore, // Clear color, store
         op::dontCare, // Stencil don't care
-        VK_IMAGE_LAYOUT_UNDEFINED,
+        VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
         VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {
