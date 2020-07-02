@@ -35,10 +35,13 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Framebuffer(1)
-{   // Create color/depth attachments
+{   // Create color attachment
     color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, true, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
-        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, 1, false, allocator);
+    {   // Create depth/stencil attachment
+        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent,
+            1, 1, shouldReadDepth, allocator);
+    }
     // Create attachment views
     colorView = std::make_shared<ImageView>(color, swizzle, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
