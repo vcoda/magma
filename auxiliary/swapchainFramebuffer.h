@@ -34,7 +34,7 @@ namespace magma
         {
         public:
             explicit SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachment> color,
-                VkFormat depthFormat = VK_FORMAT_UNDEFINED,
+                VkFormat depthStencilFormat = VK_FORMAT_UNDEFINED,
                 const VkComponentMapping& swizzle = {
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY,

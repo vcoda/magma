@@ -23,23 +23,24 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
 #include "../objects/framebuffer.h"
+#include "../misc/format.h"
 
 namespace magma
 {
 namespace aux
 {
 SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachment> color,
-    VkFormat depthFormat /* VK_FORMAT_UNDEFINED */,
+    VkFormat depthStencilFormat /* VK_FORMAT_UNDEFINED */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Framebuffer(1)
 {
     std::shared_ptr<Device> device = color->getDevice();
     colorView = std::make_shared<ImageView>(color, swizzle, allocator);
-    if (depthFormat != VK_FORMAT_UNDEFINED)
+    if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {
         const VkExtent2D extent{color->getMipExtent(0).width, color->getMipExtent(0).height};
-        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthFormat, extent, 1, color->getSamples(), false, allocator);
+        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, color->getSamples(), false, allocator);
         depthStencilView = std::make_shared<ImageView>(depthStencil, swizzle, allocator);
     }
     const AttachmentDescription colorAttachment(color->getFormat(), 1,
@@ -47,13 +48,14 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
         op::dontCare, // Stencil don't care
         VK_IMAGE_LAYOUT_UNDEFINED,
         VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
-    if (depthFormat != VK_FORMAT_UNDEFINED)
+    if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {
-        const AttachmentDescription depthStencilAttachment(depthFormat, 1,
+        const Format format(depthStencilFormat);
+        const AttachmentDescription depthStencilAttachment(depthStencilFormat, 1,
             op::clearStore, // Clear depth, store
-            op::clearDontCare, // Stencil don't care
-            VK_IMAGE_LAYOUT_UNDEFINED,
-            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+            format.depthStencil() || format.stencil() ? op::clearStore : op::dontCare,
+            VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL); // Stay as attachment
         renderPass = std::make_shared<RenderPass>(std::move(device), std::initializer_list<AttachmentDescription>{
             colorAttachment, depthStencilAttachment}, allocator);
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass, std::vector<std::shared_ptr<ImageView>>{
