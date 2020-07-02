@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #if defined(__x86_64__) || defined(_M_AMD64)
 #include <smmintrin.h>
+#include <thread>
 #include "copyThread.inl"
 #endif
 

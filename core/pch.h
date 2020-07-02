@@ -30,6 +30,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <initializer_list>
 #include <functional>
+#include <algorithm>
 #include <limits>
 
 #include <atomic>
