@@ -28,16 +28,17 @@ namespace magma
     {
     public:
         bool hasLayer(const char *name) const noexcept;
+        void forEach(std::function<void(const VkLayerProperties&)> fn) const noexcept;
 
     protected:
         Layers(const std::vector<VkLayerProperties>&);
-        inline bool hasLayer(std::size_t hash) const noexcept
-        {
-            return layers.find(hash) != layers.end();
+        inline bool hasLayer(std::size_t hash) const noexcept {
+            return hashes.find(hash) != hashes.end();
         }
 
     private:
-        std::unordered_set<std::size_t> layers;
+        std::map<std::string, VkLayerProperties> layers;
+        std::unordered_set<std::size_t> hashes;
     };
 } // namespace magma
 

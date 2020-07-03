@@ -28,16 +28,17 @@ namespace magma
     {
     public:
         bool hasExtension(const char *name) const noexcept;
+        void forEach(std::function<void(const std::string& /* extensionName */, uint32_t /* specVersion */)> fn) const noexcept;
 
     protected:
         Extensions(const std::vector<VkExtensionProperties>&);
-        inline bool hasExtension(std::size_t hash) const noexcept
-        {
-            return extensions.find(hash) != extensions.end();
+        inline bool hasExtension(std::size_t hash) const noexcept {
+            return hashes.find(hash) != hashes.end();
         }
 
     private:
-        std::unordered_set<std::size_t> extensions;
+        std::map<std::string, uint32_t> extensions;
+        std::unordered_set<std::size_t> hashes;
     };
 } // namespace magma
 

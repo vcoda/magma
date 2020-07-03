@@ -24,7 +24,10 @@ namespace magma
 Extensions::Extensions(const std::vector<VkExtensionProperties>& properties)
 {
     for (const auto& property : properties)
-        extensions.emplace(core::hashString(property.extensionName));
+    {
+        extensions.emplace(property.extensionName, property.specVersion);
+        hashes.emplace(core::hashString(property.extensionName));
+    }
 }
 
 bool Extensions::hasExtension(const char *name) const noexcept
@@ -32,5 +35,11 @@ bool Extensions::hasExtension(const char *name) const noexcept
     static const std::string prefix(MAGMA_EXTENSION_PREFIX);
     const std::size_t hash = core::hashString((prefix + name).c_str());
     return hasExtension(hash);
+}
+
+void Extensions::forEach(std::function<void(const std::string&, uint32_t)> fn) const noexcept
+{
+    for (const auto& ext : extensions)
+        fn(ext.first, ext.second);
 }
 } // namespace magma

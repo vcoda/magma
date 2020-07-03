@@ -24,7 +24,10 @@ namespace magma
 Layers::Layers(const std::vector<VkLayerProperties>& properties)
 {
     for (const auto& property : properties)
-        layers.emplace(core::hashString(property.layerName));
+    {
+        layers.emplace(property.layerName, property);
+        hashes.emplace(core::hashString(property.layerName));
+    }
 }
 
 bool Layers::hasLayer(const char *name) const noexcept
@@ -32,5 +35,11 @@ bool Layers::hasLayer(const char *name) const noexcept
     static const std::string prefix(MAGMA_LAYER_PREFIX);
     const std::size_t hash = core::hashString((prefix + name).c_str());
     return hasLayer(hash);
+}
+
+void Layers::forEach(std::function<void(const VkLayerProperties&)> fn) const noexcept
+{
+    for (const auto& layer : layers)
+        fn(layer.second);
 }
 } // namespace magma
