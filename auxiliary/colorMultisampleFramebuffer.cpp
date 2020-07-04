@@ -65,7 +65,7 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
         // when a render pass instance ends.
         const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, shouldReadDepth);
         const Format format(depthStencilFormat);
-        const AttachmentDescription depthStencilAttachment(depthStencilFormat, 1,
+        const AttachmentDescription depthStencilAttachment(depthStencilFormat, sampleCount,
             op::clearStore, // Clear depth, store
             format.depthStencil() || format.stencil() ? op::clearStore : op::dontCare,
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
