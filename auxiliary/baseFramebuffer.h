@@ -24,6 +24,8 @@ namespace magma
     class Framebuffer;
     class RenderPass;
 
+    struct MultisampleState;
+
     namespace aux
     {
         /* Framebuffer's base class with shared functionality. */
@@ -33,6 +35,7 @@ namespace magma
         public:
             const VkExtent2D& getExtent() const noexcept;
             uint32_t getSampleCount() const noexcept;
+            const MultisampleState& getMultisampleState() const noexcept;
             std::shared_ptr<RenderPass> getRenderPass() noexcept;
             std::shared_ptr<const RenderPass> getRenderPass() const noexcept;
             std::shared_ptr<magma::Framebuffer> getFramebuffer() noexcept;

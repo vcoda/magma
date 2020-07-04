@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
 #include "../objects/framebuffer.h"
+#include "../states/multisampleState.h"
 #include "../misc/format.h"
 
 namespace magma
@@ -39,6 +40,22 @@ const VkExtent2D& Framebuffer::getExtent() const noexcept
 uint32_t Framebuffer::getSampleCount() const noexcept
 {
     return sampleCount;
+}
+
+const MultisampleState& Framebuffer::getMultisampleState() const noexcept
+{
+    switch (sampleCount)
+    {
+    case 1: return renderstates::dontMultisample;
+    case 2: return renderstates::multisample2;
+    case 4: return renderstates::multisample4;
+    case 8: return renderstates::multisample8;
+    case 16: return renderstates::multisample16;
+    case 32: return renderstates::multisample32;
+    case 64: return renderstates::multisample64;
+    default:
+        return renderstates::dontMultisample;
+    }
 }
 
 std::shared_ptr<RenderPass> Framebuffer::getRenderPass() noexcept
