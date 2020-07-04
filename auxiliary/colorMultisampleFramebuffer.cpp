@@ -36,14 +36,15 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Framebuffer(sampleCount)
 {   // Create multisample color attachment
-    color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, sampleCount, true, allocator);
+    color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, sampleCount, false, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create multisample depth attachment
         depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent,
             1, sampleCount, shouldReadDepth, allocator);
     }
     // Create color resolve attachment
-    resolve = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, true, allocator);
+    constexpr bool sampled = true;
+    resolve = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, sampled, allocator);
     // Create attachment views
     colorView = std::make_shared<ImageView>(color, swizzle, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
