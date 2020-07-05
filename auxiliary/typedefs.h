@@ -23,12 +23,14 @@ namespace magma
     {
         MAGMA_TYPEDEF_SHARED_PTR(BaseFramebuffer)
         MAGMA_TYPEDEF_SHARED_PTR(BlitRectangle)
-        MAGMA_TYPEDEF_SHARED_PTR(Framebuffer)
+        MAGMA_TYPEDEF_SHARED_PTR(ColorFramebuffer)
+        MAGMA_TYPEDEF_SHARED_PTR(ColorMultisampleFramebuffer)
+        MAGMA_TYPEDEF_SHARED_PTR(DepthFramebuffer);
         MAGMA_TYPEDEF_SHARED_PTR(FrameGrabber)
         MAGMA_TYPEDEF_SHARED_PTR(GraphicsPipelineCache)
         MAGMA_TYPEDEF_SHARED_PTR(ImmediateRender)
         MAGMA_TYPEDEF_SHARED_PTR(MipmapGenerator)
-        MAGMA_TYPEDEF_SHARED_PTR(MultisampleFramebuffer)
+        MAGMA_TYPEDEF_SHARED_PTR(MultiAttachmentFramebuffer)
         MAGMA_TYPEDEF_SHARED_PTR(ShaderCompiler)
         MAGMA_TYPEDEF_SHARED_PTR(SwapchainFramebuffer)
         MAGMA_TYPEDEF_SHARED_PTR(TextShader)
