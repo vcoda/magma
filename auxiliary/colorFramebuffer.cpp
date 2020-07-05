@@ -60,8 +60,7 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device,
         VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL); // Color image will be transitioned to when a render pass instance ends
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
-    {   // Final layout is the layout the attachment image subresource will be transitioned to
-        // when a render pass instance ends.
+    {   // Choose optimal depth/stencil layout
         const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, shouldReadDepth);
         const Format format(depthStencilFormat);
         const AttachmentDescription depthStencilAttachment(depthStencilFormat, 1,

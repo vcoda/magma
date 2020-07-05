@@ -27,7 +27,7 @@ namespace magma
 
     namespace aux
     {
-        /* Auxiliary frame buffer class that is responsible for management of
+        /* Auxiliary frame buffer that is responsible for management of
            color, depth/stencil and resolve attachments, image view reinterpretation,
            render pass and framebuffer construction. */
 
