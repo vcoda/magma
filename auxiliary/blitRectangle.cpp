@@ -74,11 +74,12 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
 {
     std::shared_ptr<Device> device = this->renderPass->getDevice();
     std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-    // Descriptor set for single image view in fragment shader
-    const Descriptor imageSampler(descriptors::CombinedImageSampler(1));
-    descriptorPool = std::make_shared<DescriptorPool>(device, 1, std::vector<Descriptor>{imageSampler}, false, allocator);
-    descriptorSetLayout = std::make_shared<DescriptorSetLayout>(device, bindings::FragmentStageBinding(0, imageSampler), 0, allocator);
-    descriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
+    constexpr uint32_t maxDescriptorSets = 10;
+    descriptorPool = std::make_shared<DescriptorPool>(device, maxDescriptorSets,
+        descriptors::CombinedImageSampler(maxDescriptorSets), false, allocator);
+    descriptorSetLayout = std::make_shared<DescriptorSetLayout>(device,
+        bindings::FragmentStageBinding(0, descriptors::CombinedImageSampler(1)),
+        0, allocator);
     // Create texture samplers
     const BorderColor borderColor = DefaultBorderColor();
     nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, borderColor, allocator);
@@ -145,20 +146,24 @@ void BlitRectangle::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
 {
     MAGMA_ASSERT(image);
     MAGMA_ASSERT(cmdBuffer);
-    if (image != oldImage || filter != oldFilter)
-    {
+    std::shared_ptr<DescriptorSet> imageDescriptorSet;
+    auto it = descriptorSets.find(image);
+    if (it != descriptorSets.end())
+        imageDescriptorSet = it->second;
+    else
+    {   // Allocate descriptor set per image
+        imageDescriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
         std::shared_ptr<Sampler> sampler = (VK_FILTER_NEAREST == filter) ? nearestSampler :
             ((VK_FILTER_LINEAR == filter) ? bilinearSampler : cubicSampler);
-        descriptorSet->update(0, image, std::move(sampler));
-        oldImage = std::move(image);
-        oldFilter = filter;
+        imageDescriptorSet->update(0, image, std::move(sampler));
+        descriptorSets[image] = imageDescriptorSet;
     }
     int32_t height = static_cast<int32_t>(rc.extent.height);
     if (negativeViewportHeight)
         height = -height;
     cmdBuffer->setViewport(rc.offset.x, rc.offset.y, rc.extent.width, height);
     cmdBuffer->setScissor(rc);
-    cmdBuffer->bindDescriptorSet(pipeline, descriptorSet);
+    cmdBuffer->bindDescriptorSet(pipeline, imageDescriptorSet);
     cmdBuffer->bindPipeline(pipeline);
     cmdBuffer->draw(3);
 }

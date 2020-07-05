@@ -77,7 +77,6 @@ namespace magma
         private:
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<DescriptorPool> descriptorPool;
-            std::shared_ptr<DescriptorSet> descriptorSet;
             std::shared_ptr<DescriptorSetLayout> descriptorSetLayout;
             std::shared_ptr<Sampler> nearestSampler;
             std::shared_ptr<Sampler> bilinearSampler;
@@ -88,6 +87,7 @@ namespace magma
             mutable std::shared_ptr<CommandBuffer> cmdBuffer;
             mutable std::shared_ptr<const ImageView> oldImage;
             mutable VkFilter oldFilter = VK_FILTER_NEAREST;
+            mutable std::map<std::shared_ptr<const ImageView>, std::shared_ptr<DescriptorSet>> descriptorSets;
         };
     } // namespace aux
 } // namespace magma
