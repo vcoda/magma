@@ -124,23 +124,6 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     }
 }
 
-void BlitRectangle::beginRenderPass(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Framebuffer> framebuffer,
-    const char *labelName /* nullptr */,
-    uint32_t labelColor /* 0xFFFFFFFF */) const noexcept
-{
-    MAGMA_ASSERT(framebuffer);
-    if (labelName)
-        cmdBuffer->beginRenderPass(renderPass, framebuffer, clearValues, labelName, labelColor);
-    else
-        cmdBuffer->beginRenderPass(renderPass, framebuffer, clearValues);
-    this->cmdBuffer = std::move(cmdBuffer);
-}
-
-void BlitRectangle::endRenderPass()
-{
-    cmdBuffer->endRenderPass();
-}
-
 void BlitRectangle::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const ImageView> image, VkFilter filter, const VkRect2D& rc,
     bool negativeViewportHeight /* false */) const noexcept
 {

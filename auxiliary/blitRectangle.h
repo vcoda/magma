@@ -57,11 +57,6 @@ namespace magma
                 std::shared_ptr<magma::ShaderModule> fragmentShader,
                 std::shared_ptr<PipelineCache> pipelineCache = nullptr,
                 std::shared_ptr<IAllocator> allocator = nullptr);
-            void beginRenderPass(std::shared_ptr<CommandBuffer> cmdBuffer,
-                std::shared_ptr<Framebuffer> framebuffer,
-                const char *labelName = nullptr,
-                uint32_t labelColor = 0xFFFFFFFF) const noexcept;
-            void endRenderPass();
             void blit(std::shared_ptr<CommandBuffer> cmdBuffer,
                 std::shared_ptr<const ImageView> image,
                 VkFilter filter,
@@ -84,9 +79,6 @@ namespace magma
             std::shared_ptr<PipelineLayout> pipelineLayout;
             std::shared_ptr<GraphicsPipeline> pipeline;
             std::vector<ClearValue> clearValues;
-            mutable std::shared_ptr<CommandBuffer> cmdBuffer;
-            mutable std::shared_ptr<const ImageView> oldImage;
-            mutable VkFilter oldFilter = VK_FILTER_NEAREST;
             mutable std::map<std::shared_ptr<const ImageView>, std::shared_ptr<DescriptorSet>> descriptorSets;
         };
     } // namespace aux
