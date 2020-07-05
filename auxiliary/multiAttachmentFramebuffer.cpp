@@ -56,12 +56,7 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
         attachments.emplace_back(std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent,
             1, 1, shouldReadDepth, allocator));
         // Create depth/stencil view
-        attachmentViews.push_back(std::make_shared<ImageView>(attachments.back(), VkComponentMapping{
-            VK_COMPONENT_SWIZZLE_IDENTITY,
-            VK_COMPONENT_SWIZZLE_IDENTITY,
-            VK_COMPONENT_SWIZZLE_IDENTITY,
-            VK_COMPONENT_SWIZZLE_IDENTITY},
-            allocator));
+        attachmentViews.push_back(std::make_shared<ImageView>(attachments.back(), dontSwizzle, allocator));
     }
     // Setup attachment descriptions
     std::vector<AttachmentDescription> attachmentDescriptions;
