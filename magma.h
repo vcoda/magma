@@ -129,6 +129,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "auxiliary/graphicsPipelineCache.h"
 #include "auxiliary/immediateRender.h"
 #include "auxiliary/mipmapGenerator.h"
+#include "auxiliary/multiAttachmentFramebuffer.h"
 #include "auxiliary/packedTypes.h"
 #include "auxiliary/shaderCompiler.h"
 #include "auxiliary/swapchainFramebuffer.h"
