@@ -155,6 +155,7 @@
     <ClInclude Include="..\..\auxiliary\graphicsPipelineCache.h" />
     <ClInclude Include="..\..\auxiliary\immediateRender.h" />
     <ClInclude Include="..\..\auxiliary\mipmapGenerator.h" />
+    <ClInclude Include="..\..\auxiliary\multiAttachmentFramebuffer.h" />
     <ClInclude Include="..\..\auxiliary\packedTypes.h" />
     <ClInclude Include="..\..\auxiliary\frameGrabber.h" />
     <ClInclude Include="..\..\auxiliary\shaderCompiler.h" />
@@ -313,6 +314,7 @@
     <ClCompile Include="..\..\auxiliary\immediateRender.cpp" />
     <ClCompile Include="..\..\auxiliary\mipmapGenerator.cpp" />
     <ClCompile Include="..\..\auxiliary\frameGrabber.cpp" />
+    <ClCompile Include="..\..\auxiliary\multiAttachmentFramebuffer.cpp" />
     <ClCompile Include="..\..\auxiliary\shaderCompiler.cpp" />
     <ClCompile Include="..\..\auxiliary\depthFramebuffer.cpp" />
     <ClCompile Include="..\..\auxiliary\swapchainFramebuffer.cpp" />

@@ -561,6 +561,9 @@
     <ClInclude Include="..\..\auxiliary\swapchainFramebuffer.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\auxiliary\multiAttachmentFramebuffer.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -855,6 +858,9 @@
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
     <ClCompile Include="..\..\auxiliary\baseFramebuffer.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\auxiliary\multiAttachmentFramebuffer.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>
