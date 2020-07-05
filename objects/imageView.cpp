@@ -86,10 +86,12 @@ ImageView::ImageView(std::shared_ptr<Image> resource,
                            VK_COMPONENT_SWIZZLE_IDENTITY,
                            VK_COMPONENT_SWIZZLE_IDENTITY,
                            VK_COMPONENT_SWIZZLE_IDENTITY};
-    if (format.depthStencil())
-        info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
-    else if (format.depth())
+    if (format.depth())
         info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+    else if (format.stencil())
+        info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
+    else if (format.depthStencil())
+        info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
     else
         info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
     info.subresourceRange.baseMipLevel = baseMipLevel;
