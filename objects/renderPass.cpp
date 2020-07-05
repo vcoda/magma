@@ -30,11 +30,11 @@ namespace magma
 {
 RenderPass::RenderPass(std::shared_ptr<Device> device, const AttachmentDescription& attachment,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    RenderPass(std::move(device), {attachment}, std::move(allocator))
+    RenderPass(std::move(device), std::vector<AttachmentDescription>{attachment}, std::move(allocator))
 {}
 
 RenderPass::RenderPass(std::shared_ptr<Device> device,
-    const std::initializer_list<AttachmentDescription>& attachments,
+    const std::vector<AttachmentDescription>& attachments,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator)),
     attachments(attachments)
@@ -121,7 +121,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     info.pNext = nullptr;
     info.flags = 0;
     info.attachmentCount = MAGMA_COUNT(attachments);
-    info.pAttachments = attachments.begin();
+    info.pAttachments = attachments.data();
     info.subpassCount = 1;
     info.pSubpasses = &subpass;
     info.dependencyCount = 2;
@@ -143,9 +143,9 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
 }
 
 RenderPass::RenderPass(std::shared_ptr<Device> device,
-    const std::initializer_list<AttachmentDescription>& attachments,
-    const std::initializer_list<SubpassDescription>& subpasses,
-    const std::initializer_list<SubpassDependency>& dependencies /* {} */,
+    const std::vector<AttachmentDescription>& attachments,
+    const std::vector<SubpassDescription>& subpasses,
+    const std::vector<SubpassDependency>& dependencies /* {} */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator))
 {
@@ -154,11 +154,11 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     info.pNext = nullptr;
     info.flags = 0;
     info.attachmentCount = MAGMA_COUNT(attachments);
-    info.pAttachments = attachments.begin();
+    info.pAttachments = attachments.data();
     info.subpassCount = MAGMA_COUNT(subpasses);
-    info.pSubpasses = subpasses.begin();
+    info.pSubpasses = subpasses.data();
     info.dependencyCount = MAGMA_COUNT(dependencies);
-    info.pDependencies = dependencies.begin();
+    info.pDependencies = dependencies.data();
     const VkResult create = vkCreateRenderPass(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create render pass");
     hash = core::hashArgs(
