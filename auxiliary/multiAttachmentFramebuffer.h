@@ -35,7 +35,7 @@ namespace magma
         {
         public:
             explicit MultiAttachmentFramebuffer(std::shared_ptr<Device> device,
-                const std::vector<VkFormat>& colorAttachmentFormats,
+                const std::initializer_list<VkFormat>& colorAttachmentFormats,
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
                 bool shouldReadDepth,

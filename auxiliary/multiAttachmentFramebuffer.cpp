@@ -30,7 +30,7 @@ namespace magma
 namespace aux
 {
 MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> device,
-    const std::vector<VkFormat>& colorAttachmentFormats, const VkFormat depthStencilFormat,
+    const std::initializer_list<VkFormat>& colorAttachmentFormats, const VkFormat depthStencilFormat,
     const VkExtent2D& extent, bool shouldReadDepth,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const std::vector<VkComponentMapping>& swizzles /* {} */):
