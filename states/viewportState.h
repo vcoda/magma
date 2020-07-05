@@ -26,19 +26,19 @@ namespace magma
     class ViewportState final : public VkPipelineViewportStateCreateInfo
     {
     public:
-        ViewportState() noexcept;
-        ViewportState(float x, float y, float width, float height,
+        explicit ViewportState() noexcept;
+        explicit ViewportState(float x, float y, float width, float height,
             float minDepth = 0.f, float maxDepth = 1.f) noexcept;
-        ViewportState(float x, float y, const VkExtent2D& extent,
+        explicit ViewportState(float x, float y, const VkExtent2D& extent,
             float minDepth = 0.f, float maxDepth = 1.f) noexcept;
-        ViewportState(uint32_t x, uint32_t y, uint32_t width, int32_t height,
+        explicit ViewportState(uint32_t x, uint32_t y, uint32_t width, int32_t height,
             float minDepth = 0.f, float maxDepth = 1.f) noexcept;
-        ViewportState(const VkRect2D& viewport, const VkRect2D& scissor,
+        explicit ViewportState(const VkRect2D& viewport, const VkRect2D& scissor,
             float minDepth = 0.f, float maxDepth = 1.f) noexcept;
-        ViewportState(const VkViewport& viewport) noexcept;
-        ViewportState(const VkViewport& viewport, const VkRect2D& scissor) noexcept;
-        ViewportState(const std::vector<VkViewport>& viewports);
-        ViewportState(const std::vector<VkViewport>& viewports,
+        explicit ViewportState(const VkViewport& viewport) noexcept;
+        explicit ViewportState(const VkViewport& viewport, const VkRect2D& scissor) noexcept;
+        explicit ViewportState(const std::vector<VkViewport>& viewports);
+        explicit ViewportState(const std::vector<VkViewport>& viewports,
             const std::vector<VkRect2D>& scissors) noexcept;
         ViewportState(const ViewportState&) noexcept;
         ViewportState& operator=(const ViewportState&) noexcept;

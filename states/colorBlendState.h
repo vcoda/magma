@@ -64,7 +64,7 @@ namespace magma
 
     struct MultiColorBlendState final : ColorBlendState
     {
-        MultiColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
+        explicit MultiColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
             const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f}) noexcept;
         MultiColorBlendState(const ColorBlendState&) noexcept;
         MultiColorBlendState(const MultiColorBlendState&) noexcept;

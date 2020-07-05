@@ -49,7 +49,7 @@ namespace magma
 
     struct MultisampleCoverageState final : MultisampleState
     {
-        MultisampleCoverageState(const MultisampleState& state,
+        explicit MultisampleCoverageState(const MultisampleState& state,
             uint64_t coverageMask,
             bool alphaToCoverage = false,
             bool alphaToOne = false);

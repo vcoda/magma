@@ -40,15 +40,15 @@ namespace magma
     struct AdvancedColorBlendState final : ColorBlendState
     {
     public:
-        AdvancedColorBlendState(const AdvancedColorBlendAttachmentState& attachment,
+        explicit AdvancedColorBlendState(const AdvancedColorBlendAttachmentState& attachment,
             bool srcPremultiplied,
             bool dstPremultiplied,
             VkBlendOverlapEXT blendOverlap);
-        AdvancedColorBlendState(const std::initializer_list<AdvancedColorBlendAttachmentState>& attachments,
+        explicit AdvancedColorBlendState(const std::initializer_list<AdvancedColorBlendAttachmentState>& attachments,
             bool srcPremultiplied,
             bool dstPremultiplied,
             VkBlendOverlapEXT blendOverlap);
-        AdvancedColorBlendState(const std::vector<AdvancedColorBlendAttachmentState>& attachments,
+        explicit AdvancedColorBlendState(const std::vector<AdvancedColorBlendAttachmentState>& attachments,
             bool srcPremultiplied,
             bool dstPremultiplied,
             VkBlendOverlapEXT blendOverlap);
