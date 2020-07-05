@@ -47,6 +47,8 @@ namespace magma
                 std::shared_ptr<IAllocator> allocator = nullptr);
             std::shared_ptr<ImageView> getColorView() noexcept { return colorView; }
             std::shared_ptr<const ImageView> getColorView() const noexcept { return colorView; }
+            std::shared_ptr<ImageView> getDepthStencilView() noexcept { return depthStencilView; }
+            std::shared_ptr<const ImageView> getDepthStencilView() const noexcept { return depthStencilView; }
 
         private:
             std::shared_ptr<Image2D> color;
