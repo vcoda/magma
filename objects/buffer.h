@@ -63,9 +63,9 @@ namespace magma
         void copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<const Buffer> buffer,
             VkDeviceSize srcOffset = 0,
+            VkDeviceSize dstOffset = 0,
             bool flush = true);
 
-    protected:
-        VkBufferUsageFlags usage;
+        const VkBufferUsageFlags usage;
     };
 } // namespace magma

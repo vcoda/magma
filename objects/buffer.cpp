@@ -140,14 +140,14 @@ void Buffer::copyHost(const void *data, CopyMemoryFunction copyFn) noexcept
 }
 
 void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const Buffer> buffer,
-    VkDeviceSize srcOffset /* 0 */, bool flush /* true */)
+    VkDeviceSize srcOffset /* 0 */, VkDeviceSize dstOffset /* 0 */, bool flush /* true */)
 {
     cmdBuffer->begin();
     {
         VkBufferCopy region;
         region.srcOffset = srcOffset;
-        region.dstOffset = 0;
         region.size = buffer->getMemory()->getSize();
+        region.dstOffset = dstOffset;
         // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
         const auto weakThis = std::shared_ptr<Buffer>(this, [](Buffer *) {});
         cmdBuffer->copyBuffer(buffer, weakThis, region);
