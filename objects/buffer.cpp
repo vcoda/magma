@@ -54,6 +54,26 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     bindMemory(std::move(memory));
 }
 
+Buffer::Buffer(std::shared_ptr<DeviceMemory> memory, VkDeviceSize size, VkDeviceSize offset,
+    VkBufferUsageFlags usage, VkBufferCreateFlags flags,
+    const Sharing& sharing, std::shared_ptr<IAllocator> allocator):
+    NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, size, memory->getDevice(), std::move(allocator)),
+    usage(usage)
+{
+    VkBufferCreateInfo info;
+    info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    info.pNext = nullptr;
+    info.flags = flags;
+    info.size = size;
+    info.usage = usage;
+    info.sharingMode = sharing.getMode();
+    info.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
+    info.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
+    const VkResult create = vkCreateBuffer(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    MAGMA_THROW_FAILURE(create, "failed to create buffer");
+    bindMemory(std::move(memory), offset);
+}
+
 Buffer::~Buffer()
 {
     vkDestroyBuffer(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
