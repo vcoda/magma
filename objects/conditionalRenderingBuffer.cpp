@@ -52,7 +52,7 @@ ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBu
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         flags, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset, 0, this->getSize());
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }
 #endif // VK_EXT_conditional_rendering
 } // namespace magma

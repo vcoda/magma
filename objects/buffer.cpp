@@ -147,7 +147,7 @@ void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_
         VkBufferCopy region;
         region.srcOffset = srcOffset;
         region.dstOffset = dstOffset;
-        region.size = buffer->getSize();
+        region.size = this->getSize();
         // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
         const auto weakThis = std::shared_ptr<Buffer>(this, [](Buffer *) {});
         cmdBuffer->copyBuffer(buffer, weakThis, region);
