@@ -169,7 +169,7 @@ void CommandBuffer::copyBuffer(const std::shared_ptr<const Buffer>& srcBuffer, c
     region.srcOffset = srcOffset;
     region.dstOffset = dstOffset;
     if (VK_WHOLE_SIZE == size)
-        region.size = dstBuffer->getMemory()->getSize();
+        region.size = dstBuffer->getSize();
     else
         region.size = size;
     vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, 1, &region);
@@ -186,7 +186,7 @@ void CommandBuffer::fillBuffer(const std::shared_ptr<Buffer>& buffer, uint32_t v
     VkDeviceSize offset /* 0 */) const noexcept
 {
     if (0 == size)
-        size = buffer->getMemory()->getSize();
+        size = buffer->getSize();
     vkCmdFillBuffer(handle, *buffer, offset, size, value);
 }
 
@@ -272,7 +272,7 @@ void CommandBuffer::copyQueryResults(const std::shared_ptr<QueryPool>& queryPool
     if (std::numeric_limits<uint32_t>::max() == queryCount)
         queryCount = queryPool->getQueryCount();
     MAGMA_ASSERT(firstQuery + queryCount <= queryPool->getQueryCount());
-    MAGMA_ASSERT(dstOffset < buffer->getMemory()->getSize());
+    MAGMA_ASSERT(dstOffset < buffer->getSize());
     VkQueryResultFlags flags = 0;
     if (write64Bit)
         flags |= VK_QUERY_RESULT_64_BIT;
@@ -397,7 +397,7 @@ void CommandBuffer::beginConditionalRendering(const std::shared_ptr<Buffer>& buf
     VkDeviceSize offset /* 0 */,
     bool inverted /* false */) noexcept
 {
-    MAGMA_ASSERT(offset <= buffer->getMemory()->getSize() - sizeof(uint32_t));
+    MAGMA_ASSERT(offset <= buffer->getSize() - sizeof(uint32_t));
     MAGMA_ASSERT(offset % sizeof(uint32_t) == 0);
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBeginConditionalRenderingEXT);
     if (vkCmdBeginConditionalRenderingEXT)
