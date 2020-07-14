@@ -47,16 +47,18 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize 
     copyTransfer(std::move(cmdBuffer), std::move(buffer));
 }
 
-IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> buffer, VkIndexType indexType,
+IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer, VkIndexType indexType,
+    VkDeviceSize size /* 0 */,
+    VkDeviceSize srcOffset /* 0 */,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    BaseIndexBuffer(std::move(cmdBuffer->getDevice()), buffer->getMemory()->getSize(), indexType,
+    BaseIndexBuffer(cmdBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(), indexType,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         flags, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(cmdBuffer), std::move(buffer));
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset, 0, this->getSize());
 }
 
 DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkDeviceSize size, VkIndexType indexType,

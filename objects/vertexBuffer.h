@@ -55,7 +55,9 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         explicit VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<const SrcTransferBuffer> buffer,
+            std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+            VkDeviceSize size = 0,
+            VkDeviceSize srcOffset = 0,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);

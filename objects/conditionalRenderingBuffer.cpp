@@ -41,16 +41,18 @@ ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBu
     copyTransfer(std::move(cmdBuffer), std::move(buffer));
 }
 
-ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> buffer,
+ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+    VkDeviceSize size /* 0 */,
+    VkDeviceSize srcOffset /* 0 */,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Buffer(std::move(cmdBuffer->getDevice()), buffer->getSize(),
+    Buffer(cmdBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(),
         VK_BUFFER_USAGE_CONDITIONAL_RENDERING_BIT_EXT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         flags, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(cmdBuffer), std::move(buffer));
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset, 0, this->getSize());
 }
 #endif // VK_EXT_conditional_rendering
 } // namespace magma
