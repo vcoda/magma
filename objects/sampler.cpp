@@ -104,7 +104,6 @@ LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state
 }
 
 DepthSampler::DepthSampler(std::shared_ptr<Device> device, const DepthSamplerState& state,
-    const BorderColor& borderColor /* DefaultBorderColor */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Sampler(std::move(device), std::move(allocator))
 {
@@ -115,9 +114,9 @@ DepthSampler::DepthSampler(std::shared_ptr<Device> device, const DepthSamplerSta
     info.magFilter = state.magFilter;
     info.minFilter = state.minFilter;
     info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
-    info.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-    info.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-    info.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+    info.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
+    info.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
+    info.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
     info.mipLodBias = 0.f;
     info.anisotropyEnable = VK_FALSE;
     info.maxAnisotropy = 1.f;
@@ -125,7 +124,7 @@ DepthSampler::DepthSampler(std::shared_ptr<Device> device, const DepthSamplerSta
     info.compareOp = state.compareOp;
     info.minLod = 0.f;
     info.maxLod = std::numeric_limits<float>::max();
-    info.borderColor = borderColor.getColor();
+    info.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
     info.unnormalizedCoordinates = VK_FALSE;
     const VkResult create = vkCreateSampler(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create depth sampler");

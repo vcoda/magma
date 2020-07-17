@@ -66,7 +66,6 @@ namespace magma
     public:
         explicit DepthSampler(std::shared_ptr<Device> device,
             const DepthSamplerState& state,
-            const BorderColor& borderColor = DefaultBorderColor(),
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
