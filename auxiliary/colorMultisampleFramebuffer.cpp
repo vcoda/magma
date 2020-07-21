@@ -52,7 +52,11 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
     resolveView = std::make_shared<ImageView>(resolve, swizzle, allocator);
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, sampleCount,
-        op::clearStore, // Clear color, store
+        // https://static.docs.arm.com/100971/0101/arm_mali_application_developer_best_practices_developer_guide_100971_0101_00_en_00.pdf
+        // Typically, after the multisampled image is resolved, we don't need the
+        // multisampled image anymore. Therefore, the multisampled image must be
+        // discarded by using STORE_OP_DONT_CARE.
+        op::clear, // Clear color, don't care about store
         op::dontCare, // Stencil not applicable
         VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
         VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
@@ -66,8 +70,8 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
         const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, shouldReadDepth);
         const Format format(depthStencilFormat);
         const AttachmentDescription depthStencilAttachment(depthStencilFormat, sampleCount,
-            op::clearStore, // Clear depth, store
-            format.depthStencil() || format.stencil() ? op::clearStore : op::dontCare,
+            op::clear, // Depth clear, don't care about store
+            format.depthStencil() || format.stencil() ? op::clear : op::dontCare,
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
             finalLayout); // Depth image will be transitioned to when a render pass instance ends
         // Create color/depth framebuffer
