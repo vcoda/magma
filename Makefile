@@ -21,6 +21,7 @@ MAGMA_OBJS= \
 	auxiliary/blitRectangle.o \
 	auxiliary/colorFramebuffer.o \
 	auxiliary/colorMultisampleFramebuffer.o \
+	auxiliary/colorMultisampleReadFramebuffer.o \
 	auxiliary/depthFramebuffer.o \
 	auxiliary/frameGrabber.o \
 	auxiliary/graphicsPipelineCache.o \

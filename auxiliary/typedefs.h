@@ -25,6 +25,7 @@ namespace magma
         MAGMA_TYPEDEF_SHARED_PTR(BlitRectangle)
         MAGMA_TYPEDEF_SHARED_PTR(ColorFramebuffer)
         MAGMA_TYPEDEF_SHARED_PTR(ColorMultisampleFramebuffer)
+        MAGMA_TYPEDEF_SHARED_PTR(ColorMultisampleReadFramebuffer)
         MAGMA_TYPEDEF_SHARED_PTR(DepthFramebuffer);
         MAGMA_TYPEDEF_SHARED_PTR(FrameGrabber)
         MAGMA_TYPEDEF_SHARED_PTR(GraphicsPipelineCache)
