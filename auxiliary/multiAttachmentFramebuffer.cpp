@@ -31,7 +31,7 @@ namespace aux
 {
 MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> device,
     const std::initializer_list<VkFormat>& colorAttachmentFormats, const VkFormat depthStencilFormat,
-    const VkExtent2D& extent, bool shouldReadDepth,
+    const VkExtent2D& extent, bool shouldReadDepth, bool separateDepthPass,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const std::vector<VkComponentMapping>& swizzles /* {} */):
     Framebuffer(1)
@@ -73,14 +73,26 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
         const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, shouldReadDepth);
         const Format format(depthStencilFormat);
         attachmentDescriptions.emplace_back(depthStencilFormat, 1,
-            op::clearStore, // Clear depth, store
+            separateDepthPass ? op::dontCare : op::clearStore, // Don't care if depth pass is separate
             format.depthStencil() || format.stencil() ? op::clearStore : op::dontCare,
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
             finalLayout); // Depth image will be transitioned to when a render pass instance ends
     }
     // Create color/depth framebuffer
-    renderPass = std::make_shared<RenderPass>(std::move(device), attachmentDescriptions);
-    framebuffer = std::make_shared<magma::Framebuffer>(renderPass, attachmentViews, 0, std::move(allocator));
+    renderPass = std::make_shared<RenderPass>(device, attachmentDescriptions, allocator);
+    framebuffer = std::make_shared<magma::Framebuffer>(renderPass, attachmentViews, 0, allocator);
+    // Create depth only framebuffer if separate depth pass is requested
+    if (separateDepthPass && (depthStencilFormat != VK_FORMAT_UNDEFINED))
+    {
+        const Format format(depthStencilFormat);
+        AttachmentDescription depthOnly(depthStencilFormat, 1,
+            op::clearStore, // Clear depth, store
+            format.depthStencil() || format.stencil() ? op::clearStore : op::dontCare,
+            VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL); // Stay as attachment when a depth pass instance ends
+        depthRenderPass = std::make_shared<RenderPass>(std::move(device), depthOnly, allocator);
+        depthFramebuffer = std::make_shared<magma::Framebuffer>(depthRenderPass, attachmentViews.back(), 0, std::move(allocator));
+    }
 }
 } // namespace aux
 } // namespace magma

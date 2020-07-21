@@ -39,16 +39,23 @@ namespace magma
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
                 bool shouldReadDepth,
+                bool separateDepthPass,
                 std::shared_ptr<IAllocator> allocator = nullptr,
                 const std::vector<VkComponentMapping>& swizzles = {});
             std::shared_ptr<ImageView> getAttachmentView(uint32_t index) noexcept { return attachmentViews[index]; }
             std::shared_ptr<const ImageView> getAttachmentView(uint32_t index) const noexcept { return attachmentViews[index]; }
             std::shared_ptr<ImageView> getDepthStencilView() noexcept { return attachmentViews.back(); }
             std::shared_ptr<const ImageView> getDepthStencilView() const noexcept { return attachmentViews.back(); }
+            std::shared_ptr<RenderPass> getDepthRenderPass() noexcept { return depthRenderPass; }
+            std::shared_ptr<const RenderPass> getDepthRenderPass() const noexcept { return depthRenderPass; }
+            std::shared_ptr<magma::Framebuffer> getDepthFramebuffer() noexcept { return depthFramebuffer; }
+            std::shared_ptr<const magma::Framebuffer> getDepthFramebuffer() const noexcept { return depthFramebuffer; }
 
         private:
             std::vector<std::shared_ptr<Image2D>> attachments;
             std::vector<std::shared_ptr<ImageView>> attachmentViews;
+            std::shared_ptr<RenderPass> depthRenderPass;
+            std::shared_ptr<magma::Framebuffer> depthFramebuffer;
         };
     } // namespace aux
 } // namespace magma
