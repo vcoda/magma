@@ -31,7 +31,7 @@ namespace aux
 {
 ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device> device,
     const VkFormat colorFormat, const VkFormat depthStencilFormat,
-    const VkExtent2D& extent, const uint32_t sampleCount, bool shouldReadDepth,
+    const VkExtent2D& extent, const uint32_t sampleCount,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Framebuffer(sampleCount)
@@ -40,7 +40,7 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create multisample depth attachment
         depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent,
-            1, sampleCount, shouldReadDepth, allocator);
+            1, sampleCount, false, allocator);
     }
     // Create color resolve attachment
     constexpr bool sampled = true;
@@ -61,13 +61,13 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
         VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
         VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
     const AttachmentDescription resolveAttachment(colorFormat, 1,
-        op::store, // Don't care about clear as attachment used for MSAA resolve
+        op::store, // Don't care about clear for MSAA resolve attachment
         op::dontCare, // Stencil not applicable
         VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL); // Resolve image will be transitioned to when a render pass instance ends
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Choose optimal depth/stencil layout
-        const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, shouldReadDepth);
+        const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, false);
         const Format format(depthStencilFormat);
         const AttachmentDescription depthStencilAttachment(depthStencilFormat, sampleCount,
             op::clear, // Depth clear, don't care about store
