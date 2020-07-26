@@ -1,6 +1,6 @@
 /*
 Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2019 Victor Coda.
+Copyright (C) 2018-2020 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,13 +24,7 @@ namespace magma
     {
         SpecializationEntry() noexcept = default;
         template<typename Block, typename Type>
-        explicit SpecializationEntry(uint32_t index, Type Block::*member) noexcept
-        {
-            constantID = index;
-            const ptrdiff_t diff = reinterpret_cast<ptrdiff_t>(&(((Block*)0)->*member));
-            offset = static_cast<uint32_t>(diff);
-            size = sizeof(Type);
-        }
+        explicit SpecializationEntry(uint32_t index, Type Block::*member) noexcept;
     };
 
     /* Specialization constants are a mechanism whereby constants in a SPIR-V module
@@ -43,16 +37,15 @@ namespace magma
     public:
         template<typename Block>
         explicit Specialization(const Block& data,
-            const std::initializer_list<SpecializationEntry>& mapEntries) noexcept
-        {
-            mapEntryCount = MAGMA_COUNT(mapEntries);
-            pMapEntries = core::copyInitializerList(mapEntries);
-            dataSize = sizeof(Block);
-            pData = core::copyArray<char>(&data, dataSize);
-        }
+            const SpecializationEntry& entry) noexcept;
+        template<typename Block>
+        explicit Specialization(const Block& data,
+            const std::initializer_list<SpecializationEntry>& mapEntries) noexcept;
         Specialization(const Specialization&) noexcept;
         Specialization& operator=(const Specialization&) noexcept;
         ~Specialization();
         std::size_t hash() const noexcept;
     };
 } // namespace magma
+
+#include "specialization.inl"
