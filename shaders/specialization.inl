@@ -14,7 +14,7 @@ inline Specialization::Specialization(const Block& data, const SpecializationEnt
 {
     mapEntryCount = 1;
     pMapEntries = new(std::nothrow) SpecializationEntry[1];
-    memcpy(pMapEntries, &entry, sizeof(VkSpecializationMapEntry));
+    core::copy((VkSpecializationMapEntry *)pMapEntries, (VkSpecializationMapEntry *)&entry);
     dataSize = sizeof(Block);
     pData = core::copyArray<char>(&data, dataSize);
 }
