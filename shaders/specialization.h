@@ -24,7 +24,7 @@ namespace magma
     {
         SpecializationEntry() noexcept = default;
         template<typename Block, typename Type>
-        explicit SpecializationEntry(uint32_t index, Type Block::*member) noexcept;
+        SpecializationEntry(uint32_t index, Type Block::*member) noexcept;
     };
 
     /* Specialization constants are a mechanism whereby constants in a SPIR-V module
