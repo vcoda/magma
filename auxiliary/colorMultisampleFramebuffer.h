@@ -37,12 +37,12 @@ namespace magma
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
                 uint32_t sampleCount,
+                std::shared_ptr<IAllocator> allocator = nullptr,
                 const VkComponentMapping& swizzle = {
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY,
-                    VK_COMPONENT_SWIZZLE_IDENTITY},
-                std::shared_ptr<IAllocator> allocator = nullptr);
+                    VK_COMPONENT_SWIZZLE_IDENTITY});
             std::shared_ptr<ImageView> getColorView() noexcept { return resolveView; }
             std::shared_ptr<const ImageView> getColorView() const noexcept { return resolveView; }
 

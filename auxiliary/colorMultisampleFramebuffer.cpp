@@ -32,8 +32,8 @@ namespace aux
 ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device> device,
     const VkFormat colorFormat, const VkFormat depthStencilFormat,
     const VkExtent2D& extent, const uint32_t sampleCount,
-    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
     Framebuffer(sampleCount)
 {   // Create multisample color attachment
     color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, sampleCount, false, allocator);
@@ -45,10 +45,18 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
     // Create color resolve attachment
     constexpr bool sampled = true;
     resolve = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, sampled, allocator);
-    // Create attachment views
+    // Create color view
     colorView = std::make_shared<ImageView>(color, swizzle, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
-        depthStencilView = std::make_shared<ImageView>(depthStencil, swizzle, allocator);
+    {   // Create depth/stencil view
+        constexpr VkComponentMapping dontSwizzle = {
+            VK_COMPONENT_SWIZZLE_IDENTITY,
+            VK_COMPONENT_SWIZZLE_IDENTITY,
+            VK_COMPONENT_SWIZZLE_IDENTITY,
+            VK_COMPONENT_SWIZZLE_IDENTITY};
+        depthStencilView = std::make_shared<ImageView>(depthStencil, dontSwizzle, allocator);
+    }
+    // Create resolve view
     resolveView = std::make_shared<ImageView>(resolve, swizzle, allocator);
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, sampleCount,

@@ -32,18 +32,19 @@ namespace aux
 DepthFramebuffer::DepthFramebuffer(std::shared_ptr<Device> device, const VkFormat depthFormat, const VkExtent2D& extent,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Framebuffer(1)
-{
+{   // Create depth attachment
     depth = std::make_shared<DepthStencilAttachment>(device, depthFormat, extent,
          1, // mipLevels
          1, // samples
          true, // VK_IMAGE_USAGE_SAMPLED_BIT
          allocator);
-    depthView = std::make_shared<ImageView>(depth, VkComponentMapping{
+    // Create depth view
+    constexpr VkComponentMapping dontSwizzle = {
         VK_COMPONENT_SWIZZLE_IDENTITY,
         VK_COMPONENT_SWIZZLE_IDENTITY,
         VK_COMPONENT_SWIZZLE_IDENTITY,
-        VK_COMPONENT_SWIZZLE_IDENTITY},
-        allocator);
+        VK_COMPONENT_SWIZZLE_IDENTITY};
+    depthView = std::make_shared<ImageView>(depth, dontSwizzle, allocator);
     // We should be able to read depth in the shader when a render pass instance ends
     const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthFormat, true);
     const AttachmentDescription depthAttachment(depthFormat, 1,

@@ -30,16 +30,16 @@ namespace magma
 namespace aux
 {
 ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkFormat colorFormat, const VkExtent2D& extent,
-    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    ColorFramebuffer(std::move(device), colorFormat, VK_FORMAT_UNDEFINED, extent, false, swizzle, std::move(allocator))
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
+    ColorFramebuffer(std::move(device), colorFormat, VK_FORMAT_UNDEFINED, extent, false, std::move(allocator), swizzle)
 {}
 
 ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device,
     const VkFormat colorFormat, const VkFormat depthStencilFormat,
     const VkExtent2D& extent, bool shouldReadDepth,
-    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
     Framebuffer(1)
 {   // Create color attachment
     color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, true, allocator);
@@ -52,12 +52,12 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device,
     colorView = std::make_shared<ImageView>(color, swizzle, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil view
-        depthStencilView = std::make_shared<ImageView>(depthStencil, VkComponentMapping{
+        constexpr VkComponentMapping dontSwizzle = {
             VK_COMPONENT_SWIZZLE_IDENTITY,
             VK_COMPONENT_SWIZZLE_IDENTITY,
             VK_COMPONENT_SWIZZLE_IDENTITY,
-            VK_COMPONENT_SWIZZLE_IDENTITY},
-            allocator);
+            VK_COMPONENT_SWIZZLE_IDENTITY};
+        depthStencilView = std::make_shared<ImageView>(depthStencil, dontSwizzle, allocator);
     }
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, 1,

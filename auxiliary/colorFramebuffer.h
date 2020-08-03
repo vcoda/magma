@@ -28,32 +28,32 @@ namespace magma
     namespace aux
     {
         /* Auxiliary frame buffer that is responsible for management of
-           color, depth/stencil and resolve attachments, image view reinterpretation,
+           color and (optional) depth/stencil attachments, image view reinterpretation,
            render pass and framebuffer construction. */
 
         class ColorFramebuffer : public Framebuffer
         {
         public:
-			explicit ColorFramebuffer(std::shared_ptr<Device> device,
+            explicit ColorFramebuffer(std::shared_ptr<Device> device,
                 const VkFormat colorFormat,
                 const VkExtent2D& extent,
+                std::shared_ptr<IAllocator> allocator = nullptr,
                 const VkComponentMapping& swizzle = {
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY,
-                    VK_COMPONENT_SWIZZLE_IDENTITY},
-                std::shared_ptr<IAllocator> allocator = nullptr);
+                    VK_COMPONENT_SWIZZLE_IDENTITY});
             explicit ColorFramebuffer(std::shared_ptr<Device> device,
                 const VkFormat colorFormat,
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
                 bool shouldReadDepth,
+                std::shared_ptr<IAllocator> allocator = nullptr,
                 const VkComponentMapping& swizzle = {
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY,
-                    VK_COMPONENT_SWIZZLE_IDENTITY},
-                std::shared_ptr<IAllocator> allocator = nullptr);
+                    VK_COMPONENT_SWIZZLE_IDENTITY});
             std::shared_ptr<ImageView> getColorView() noexcept { return colorView; }
             std::shared_ptr<const ImageView> getColorView() const noexcept { return colorView; }
             std::shared_ptr<ImageView> getDepthStencilView() noexcept { return depthStencilView; }

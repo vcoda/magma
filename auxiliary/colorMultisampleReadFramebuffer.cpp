@@ -45,10 +45,18 @@ ColorMultisampleReadFramebuffer::ColorMultisampleReadFramebuffer(std::shared_ptr
     }
     // Create color resolve attachment
     resolve = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, colorSampled, allocator);
-    // Create attachment views
+    // Create color view
     colorView = std::make_shared<ImageView>(color, swizzle, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
-        depthStencilView = std::make_shared<ImageView>(depthStencil, swizzle, allocator);
+    {   // Create depth/stencil view
+        constexpr VkComponentMapping dontSwizzle = {
+            VK_COMPONENT_SWIZZLE_IDENTITY,
+            VK_COMPONENT_SWIZZLE_IDENTITY,
+            VK_COMPONENT_SWIZZLE_IDENTITY,
+            VK_COMPONENT_SWIZZLE_IDENTITY};
+        depthStencilView = std::make_shared<ImageView>(depthStencil, dontSwizzle, allocator);
+    }
+    // Create resolve view
     resolveView = std::make_shared<ImageView>(resolve, swizzle, allocator);
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, sampleCount,
