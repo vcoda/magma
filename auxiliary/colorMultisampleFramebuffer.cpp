@@ -30,6 +30,15 @@ namespace magma
 namespace aux
 {
 ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device> device,
+    const VkFormat colorFormat, const VkExtent2D& extent, const uint32_t sampleCount,
+    const bool clearOp /* true */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
+    ColorMultisampleFramebuffer(std::move(device), colorFormat, VK_FORMAT_UNDEFINED, extent, sampleCount,
+        clearOp, std::move(allocator), swizzle)
+{}
+
+ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device> device,
     const VkFormat colorFormat, const VkFormat depthStencilFormat,
     const VkExtent2D& extent, const uint32_t sampleCount,
     const bool clearOp /* true */,

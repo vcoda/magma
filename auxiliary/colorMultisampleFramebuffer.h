@@ -34,6 +34,17 @@ namespace magma
         public:
             explicit ColorMultisampleFramebuffer(std::shared_ptr<Device> device,
                 const VkFormat colorFormat,
+                const VkExtent2D& extent,
+                uint32_t sampleCount,
+                bool clearOp = true,
+                std::shared_ptr<IAllocator> allocator = nullptr,
+                const VkComponentMapping& swizzle = {
+                    VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY});
+            explicit ColorMultisampleFramebuffer(std::shared_ptr<Device> device,
+                const VkFormat colorFormat,
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
                 uint32_t sampleCount,
