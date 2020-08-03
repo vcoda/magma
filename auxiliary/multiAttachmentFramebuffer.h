@@ -40,6 +40,7 @@ namespace magma
                 const VkExtent2D& extent,
                 bool shouldReadDepth,
                 bool separateDepthPass,
+                bool clearOp = true,
                 std::shared_ptr<IAllocator> allocator = nullptr,
                 const std::vector<VkComponentMapping>& swizzles = {});
             std::shared_ptr<ImageView> getAttachmentView(uint32_t index) noexcept { return attachmentViews[index]; }

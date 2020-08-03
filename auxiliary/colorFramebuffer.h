@@ -37,6 +37,7 @@ namespace magma
             explicit ColorFramebuffer(std::shared_ptr<Device> device,
                 const VkFormat colorFormat,
                 const VkExtent2D& extent,
+                bool clearOp = true,
                 std::shared_ptr<IAllocator> allocator = nullptr,
                 const VkComponentMapping& swizzle = {
                     VK_COMPONENT_SWIZZLE_IDENTITY,
@@ -48,6 +49,7 @@ namespace magma
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
                 bool shouldReadDepth,
+                bool clearOp = true,
                 std::shared_ptr<IAllocator> allocator = nullptr,
                 const VkComponentMapping& swizzle = {
                     VK_COMPONENT_SWIZZLE_IDENTITY,

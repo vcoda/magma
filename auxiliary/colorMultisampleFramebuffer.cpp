@@ -32,6 +32,7 @@ namespace aux
 ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device> device,
     const VkFormat colorFormat, const VkFormat depthStencilFormat,
     const VkExtent2D& extent, const uint32_t sampleCount,
+    const bool clearOp /* true */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
     Framebuffer(sampleCount)
@@ -64,7 +65,7 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
         // Typically, after the multisampled image is resolved, we don't need the
         // multisampled image anymore. Therefore, the multisampled image must be
         // discarded by using STORE_OP_DONT_CARE.
-        op::clear, // Clear color, don't care about store
+        clearOp ? op::clear : op::dontCare, // Clear (optionally) color, don't care about store
         op::dontCare, // Stencil not applicable
         VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
         VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
@@ -78,8 +79,8 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
         const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, false);
         const Format format(depthStencilFormat);
         const AttachmentDescription depthStencilAttachment(depthStencilFormat, sampleCount,
-            op::clear, // Depth clear, don't care about store
-            format.depthStencil() || format.stencil() ? op::clear : op::dontCare,
+            op::clear, // Clear depth, don't care about store
+            format.depthStencil() || format.stencil() ? op::clear : op::dontCare, // Clear stencil if present
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
             finalLayout); // Depth image will be transitioned to when a render pass instance ends
         // Create color/depth framebuffer

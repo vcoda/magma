@@ -32,6 +32,7 @@ namespace aux
 MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> device,
     const std::initializer_list<VkFormat>& colorAttachmentFormats, const VkFormat depthStencilFormat,
     const VkExtent2D& extent, bool shouldReadDepth, bool separateDepthPass,
+    bool clearOp /* true */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const std::vector<VkComponentMapping>& swizzles /* {} */):
     Framebuffer(1)
@@ -64,6 +65,7 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     {
         attachmentDescriptions.emplace_back(format, 1,
             op::clearStore, // Clear color, store
+            clearOp ? op::clearStore : op::store, // Clear (optionally) color, store
             op::dontCare, // Stencil not applicable
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
             VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL); // Color image will be transitioned to when a render pass instance ends

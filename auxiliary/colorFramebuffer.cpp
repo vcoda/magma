@@ -30,14 +30,15 @@ namespace magma
 namespace aux
 {
 ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkFormat colorFormat, const VkExtent2D& extent,
+    const bool clearOp /* true */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
-    ColorFramebuffer(std::move(device), colorFormat, VK_FORMAT_UNDEFINED, extent, false, std::move(allocator), swizzle)
+    ColorFramebuffer(std::move(device), colorFormat, VK_FORMAT_UNDEFINED, extent, false, clearOp, std::move(allocator), swizzle)
 {}
 
-ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device,
-    const VkFormat colorFormat, const VkFormat depthStencilFormat,
-    const VkExtent2D& extent, bool shouldReadDepth,
+ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkFormat colorFormat,
+    const VkFormat depthStencilFormat, const VkExtent2D& extent, bool shouldReadDepth,
+    const bool clearOp /* true */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
     Framebuffer(1)
@@ -61,7 +62,7 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device,
     }
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, 1,
-        op::clearStore, // Clear color, store
+        clearOp ? op::clearStore : op::store, // Clear (optionally) color, store
         op::dontCare, // Stencil not applicable
         VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL); // Color image will be transitioned to when a render pass instance ends
@@ -71,7 +72,7 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device,
         const Format format(depthStencilFormat);
         const AttachmentDescription depthStencilAttachment(depthStencilFormat, 1,
             op::clearStore, // Clear depth, store
-            format.depthStencil() || format.stencil() ? op::clearStore : op::dontCare,
+            format.depthStencil() || format.stencil() ? op::clearStore : op::dontCare, // Clear stencil if present
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
             finalLayout); // Depth image will be transitioned to when a render pass instance ends
         // Create color/depth framebuffer
