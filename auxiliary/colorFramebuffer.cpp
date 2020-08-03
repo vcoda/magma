@@ -37,7 +37,7 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
 {}
 
 ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkFormat colorFormat,
-    const VkFormat depthStencilFormat, const VkExtent2D& extent, bool shouldReadDepth,
+    const VkFormat depthStencilFormat, const VkExtent2D& extent, const bool depthSampled,
     const bool clearOp /* true */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
@@ -47,7 +47,7 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil attachment
         depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent,
-            1, 1, shouldReadDepth, allocator);
+            1, 1, depthSampled, allocator);
     }
     // Create color view
     colorView = std::make_shared<ImageView>(color, swizzle, allocator);
@@ -68,7 +68,7 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL); // Color image will be transitioned to when a render pass instance ends
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Choose optimal depth/stencil layout
-        const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, shouldReadDepth);
+        const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, depthSampled);
         const Format format(depthStencilFormat);
         const AttachmentDescription depthStencilAttachment(depthStencilFormat, 1,
             op::clearStore, // Clear depth, store

@@ -48,7 +48,7 @@ namespace magma
                 const VkFormat colorFormat,
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
-                bool shouldReadDepth,
+                bool depthSampled,
                 bool clearOp = true,
                 std::shared_ptr<IAllocator> allocator = nullptr,
                 const VkComponentMapping& swizzle = {

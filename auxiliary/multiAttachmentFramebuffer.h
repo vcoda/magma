@@ -38,7 +38,7 @@ namespace magma
                 const std::initializer_list<VkFormat>& colorAttachmentFormats,
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
-                bool shouldReadDepth,
+                bool depthSampled,
                 bool separateDepthPass,
                 bool clearOp = true,
                 std::shared_ptr<IAllocator> allocator = nullptr,

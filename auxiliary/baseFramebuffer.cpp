@@ -79,7 +79,7 @@ std::shared_ptr<const magma::Framebuffer> Framebuffer::getFramebuffer() const no
 }
 
 VkImageLayout Framebuffer::finalDepthStencilLayout(std::shared_ptr<Device> device,
-    const VkFormat depthStencilFormat, bool shouldReadDepth) const
+    const VkFormat depthStencilFormat, const bool depthSampled) const
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts
     std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
@@ -88,17 +88,17 @@ VkImageLayout Framebuffer::finalDepthStencilLayout(std::shared_ptr<Device> devic
         const Format format(depthStencilFormat);
         if (format.depth())
         {
-            return shouldReadDepth ? VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL_KHR :
+            return depthSampled ? VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL_KHR :
                 VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL_KHR;
         }
         if (format.stencil())
         {
-            return shouldReadDepth ? VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL_KHR :
+            return depthSampled ? VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL_KHR :
                 VK_IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL_KHR;
         }
     }
 #endif // VK_KHR_separate_depth_stencil_layouts
-    return shouldReadDepth ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL :
+    return depthSampled ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL :
         VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 }
 } // namespace aux

@@ -31,7 +31,7 @@ namespace aux
 {
 MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> device,
     const std::initializer_list<VkFormat>& colorAttachmentFormats, const VkFormat depthStencilFormat,
-    const VkExtent2D& extent, bool shouldReadDepth, bool separateDepthPass,
+    const VkExtent2D& extent, bool depthSampled, bool separateDepthPass,
     bool clearOp /* true */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const std::vector<VkComponentMapping>& swizzles /* {} */):
@@ -55,7 +55,7 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil attachment
         attachments.emplace_back(std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent,
-            1, 1, shouldReadDepth, allocator));
+            1, 1, depthSampled, allocator));
         // Create depth/stencil view
         attachmentViews.push_back(std::make_shared<ImageView>(attachments.back(), dontSwizzle, allocator));
     }
@@ -64,7 +64,6 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     for (const VkFormat format : colorAttachmentFormats)
     {
         attachmentDescriptions.emplace_back(format, 1,
-            op::clearStore, // Clear color, store
             clearOp ? op::clearStore : op::store, // Clear (optionally) color, store
             op::dontCare, // Stencil not applicable
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
@@ -72,7 +71,7 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     }
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Choose optimal depth/stencil layout
-        const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, shouldReadDepth);
+        const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, depthSampled);
         const Format format(depthStencilFormat);
         attachmentDescriptions.emplace_back(depthStencilFormat, 1,
             separateDepthPass ? op::dontCare : op::clearStore, // Don't care if depth pass is separate
