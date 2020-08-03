@@ -34,6 +34,15 @@ namespace magma
         class ColorFramebuffer : public Framebuffer
         {
         public:
+			explicit ColorFramebuffer(std::shared_ptr<Device> device,
+                const VkFormat colorFormat,
+                const VkExtent2D& extent,
+                const VkComponentMapping& swizzle = {
+                    VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY},
+                std::shared_ptr<IAllocator> allocator = nullptr);
             explicit ColorFramebuffer(std::shared_ptr<Device> device,
                 const VkFormat colorFormat,
                 const VkFormat depthStencilFormat,

@@ -29,6 +29,12 @@ namespace magma
 {
 namespace aux
 {
+ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkFormat colorFormat, const VkExtent2D& extent,
+    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    ColorFramebuffer(std::move(device), colorFormat, VK_FORMAT_UNDEFINED, extent, false, swizzle, std::move(allocator))
+{}
+
 ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device,
     const VkFormat colorFormat, const VkFormat depthStencilFormat,
     const VkExtent2D& extent, bool shouldReadDepth,
