@@ -29,7 +29,8 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, VkDeviceSize size, Vk
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), std::move(allocator)),
     size(size),
-    flags(flags)
+    flags(flags),
+    mapped(false)
 {
     VkMemoryAllocateInfo info;
     info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -44,7 +45,9 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, VkDeviceSize size, Vk
 DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask, VkDeviceSize size, VkMemoryPropertyFlags flags,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), std::move(allocator)),
-    size(size)
+    size(size),
+    flags(flags),
+    mapped(false)
 {
     VkMemoryAllocateFlagsInfoKHR flagsInfo;
     flagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
@@ -63,6 +66,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask, 
 
 DeviceMemory::~DeviceMemory()
 {
+    MAGMA_ASSERT(!mapped);
     vkFreeMemory(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
@@ -73,12 +77,15 @@ void *DeviceMemory::map(
 {
     void *data;
     const VkResult map = vkMapMemory(MAGMA_HANDLE(device), handle, offset, size, flags, &data);
+    mapped = (VK_SUCCESS == map);
     return (VK_SUCCESS == map) ? data : nullptr;
 }
 
 void DeviceMemory::unmap() noexcept
 {
+    MAGMA_ASSERT(mapped);
     vkUnmapMemory(*device, handle);
+    mapped = false;
 }
 
 bool DeviceMemory::flushMappedRange(

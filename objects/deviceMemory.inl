@@ -12,6 +12,11 @@ inline bool DeviceMemory::hostVisible() const noexcept
         VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
 }
 
+inline bool DeviceMemory::hostMapped() const noexcept
+{
+    return mapped;
+}
+
 template<typename Type>
 inline Type *DeviceMemory::map(VkDeviceSize offset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */,

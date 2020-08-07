@@ -42,6 +42,7 @@ namespace magma
         VkDeviceSize getSize() const noexcept { return size; }
         bool local() const noexcept;
         bool hostVisible() const noexcept;
+        bool hostMapped() const noexcept;
         void *map(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE,
             VkMemoryMapFlags flags = 0) noexcept;
@@ -61,6 +62,7 @@ namespace magma
     private:
         VkDeviceSize size;
         VkMemoryPropertyFlags flags;
+        bool mapped;
     };
 } // namespace magma
 
