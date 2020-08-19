@@ -63,10 +63,10 @@ constexpr DepthBiasRasterizationState::DepthBiasRasterizationState(const Rasteri
 }
 
 constexpr WideLineRasterizationState::WideLineRasterizationState(const RasterizationState& state,
-	float lineWidth) noexcept:
-	RasterizationState(state)
+    float lineWidth) noexcept:
+    RasterizationState(state)
 {
-	this->lineWidth = lineWidth;
+    this->lineWidth = lineWidth;
 }
 
 #ifdef VK_EXT_conservative_rasterization

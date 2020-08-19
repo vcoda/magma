@@ -45,15 +45,15 @@ namespace magma
             float depthBiasSlopeFactor) noexcept;
     };
 
-	/* In order to use this state, wideLines member of the VkPhysicalDeviceFeatures structure should be set to VK_TRUE.
-	   When this feature is supported, the range and granularity of supported line widths are indicated by the
-	   lineWidthRange and lineWidthGranularity members of the VkPhysicalDeviceLimits structure, respectively. */
+    /* In order to use this state, wideLines member of the VkPhysicalDeviceFeatures structure should be set to VK_TRUE.
+       When this feature is supported, the range and granularity of supported line widths are indicated by the
+       lineWidthRange and lineWidthGranularity members of the VkPhysicalDeviceLimits structure, respectively. */
 
-	struct WideLineRasterizationState : RasterizationState
-	{
-		constexpr WideLineRasterizationState(const RasterizationState& state,
-			float lineWidth) noexcept;
-	};
+    struct WideLineRasterizationState : RasterizationState
+    {
+        constexpr WideLineRasterizationState(const RasterizationState& state,
+            float lineWidth) noexcept;
+    };
 
     /* When overestimation is enabled, if any part of the primitive, including its edges,
        covers any part of the rectangular pixel area, then a fragment is generated with all
