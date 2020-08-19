@@ -62,6 +62,13 @@ constexpr DepthBiasRasterizationState::DepthBiasRasterizationState(const Rasteri
     this->depthBiasSlopeFactor = depthBiasSlopeFactor;
 }
 
+constexpr WideLineRasterizationState::WideLineRasterizationState(const RasterizationState& state,
+	float lineWidth) noexcept:
+	RasterizationState(state)
+{
+	this->lineWidth = lineWidth;
+}
+
 #ifdef VK_EXT_conservative_rasterization
 constexpr ConservativeRasterizationState::ConservativeRasterizationState(const RasterizationState& state,
     const VkConservativeRasterizationModeEXT conservativeRasterizationMode,
