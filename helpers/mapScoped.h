@@ -46,30 +46,30 @@ namespace magma
             }
         }
 
-        template<typename Block>
-        inline void mapScoped(const std::shared_ptr<UniformBuffer<Block>>& buffer,
-            std::function<void(Block *block)> callbackFn)
+        template<typename Type>
+        inline void mapScoped(const std::shared_ptr<UniformBuffer<Type>>& buffer,
+            std::function<void(typename UniformBuffer<Type>::UniformType *data)> callbackFn)
         {
             MAGMA_ASSERT(buffer);
             MAGMA_ASSERT(callbackFn);
-            Block *const block = buffer->map();
-            if (block)
+            Type *const data = buffer->map();
+            if (data)
             {
-                callbackFn(block);
+                callbackFn(data);
                 buffer->unmap();
             }
         }
 
-        template<typename Block>
-        inline void mapScopedMemzero(const std::shared_ptr<UniformBuffer<Block>>& buffer,
-            std::function<void(Block *block)> callbackFn)
+        template<typename Type>
+        inline void mapScopedMemzero(const std::shared_ptr<UniformBuffer<Type>>& buffer,
+            std::function<void(typename UniformBuffer<Type>::UniformType *data)> callbackFn)
         {
             MAGMA_ASSERT(buffer);
             MAGMA_ASSERT(callbackFn);
-            Block *const block = buffer->map(core::zeroMemory);
-            if (block)
+            Type *const data = buffer->map(core::zeroMemory);
+            if (data)
             {
-                callbackFn(block);
+                callbackFn(data);
                 buffer->unmap();
             }
         }

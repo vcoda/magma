@@ -26,33 +26,35 @@ namespace magma
     /* An array of uniform values that are used in various shader stages.
        It is host visible so can be mapped by user to write uniform values. */
 
-    template<typename Block>
+    template<typename Type>
     class UniformBuffer : public Buffer
     {
     public:
+        typedef Type UniformType;
+
         explicit UniformBuffer(std::shared_ptr<Device> device,
             uint32_t arraySize = 1,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr):
-            Buffer(std::move(device), sizeof(Block) * arraySize,
+            Buffer(std::move(device), sizeof(Type) * arraySize,
                 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                 flags, sharing, std::move(allocator)),
             arraySize(arraySize)
         {
-            static_assert(std::alignment_of<Block>() == 16, "uniform block should have 16-byte alignment");
+            static_assert(std::alignment_of<Type>() == 16, "uniform type should have 16-byte alignment");
         }
 
-        Block *map(ZeroMemoryFunction zeroFn = nullptr) noexcept
+        Type *map(ZeroMemoryFunction zeroFn = nullptr) noexcept
         {
             if (memory)
             {
-                if (void *block = memory->map(0, size))
+                if (void *data = memory->map(0, size))
                 {
                     if (zeroFn)
-                        zeroFn(block, static_cast<std::size_t>(size));
-                    return reinterpret_cast<Block *>(block);
+                        zeroFn(data, static_cast<std::size_t>(size));
+                    return reinterpret_cast<Type *>(data);
                 }
             }
             return nullptr;
@@ -78,6 +80,8 @@ namespace magma
     class DynamicUniformBuffer : public UniformBuffer<Type>
     {
     public:
+        typedef Type UniformType;
+
         explicit DynamicUniformBuffer(std::shared_ptr<Device> device,
             uint32_t arraySize,
             VkBufferCreateFlags flags = 0,
@@ -128,6 +132,6 @@ namespace magma
         const VkDeviceSize alignment;
     };
 
-    template<typename Block> using UniformBufferPtr = std::shared_ptr<UniformBuffer<Block>>;
-    template<typename Block> using DynamicUniformBufferPtr = std::shared_ptr<DynamicUniformBuffer<Block>>;
+    template<typename Type> using UniformBufferPtr = std::shared_ptr<UniformBuffer<Type>>;
+    template<typename Type> using DynamicUniformBufferPtr = std::shared_ptr<DynamicUniformBuffer<Type>>;
 } // namespace magma
