@@ -145,7 +145,7 @@ namespace magma
         {
             MAGMA_ASSERT(image);
             MAGMA_ASSERT(callbackFn);
-            std::shared_ptr<DeviceMemory> memory = image->getMemory();
+            std::shared_ptr<DeviceMemory> memory(image->getMemory());
             if (memory)
             {
                 void *const data = memory->map(offset);
