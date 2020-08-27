@@ -26,6 +26,7 @@ namespace magma
     class ImageView;
     class RenderPass;
     class ShaderModule;
+    class Specialization;
     class PipelineShaderStage;
     class Sampler;
     class DescriptorPool;
@@ -50,11 +51,13 @@ namespace magma
                 std::shared_ptr<IAllocator> allocator = nullptr);
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
                 std::shared_ptr<magma::ShaderModule> fragmentShader,
+                std::shared_ptr<Specialization> specialization = nullptr,
                 std::shared_ptr<PipelineCache> pipelineCache = nullptr,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
                 std::shared_ptr<magma::ShaderModule> vertexShader,
                 std::shared_ptr<magma::ShaderModule> fragmentShader,
+                std::shared_ptr<Specialization> specialization = nullptr,
                 std::shared_ptr<PipelineCache> pipelineCache = nullptr,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             void blit(std::shared_ptr<CommandBuffer> cmdBuffer,

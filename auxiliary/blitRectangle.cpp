@@ -32,6 +32,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/commandBuffer.h"
 #include "../shaders/shaderStages.h"
 #include "../shaders/shaderReflection.h"
+#include "../shaders/specialization.h"
 #include "../states/vertexInputStructure.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/rasterizationState.h"
@@ -52,22 +53,25 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     BlitRectangle(renderPass,
         createVertexShader(renderPass->getDevice(), allocator),
         createFragmentShader(renderPass->getDevice(), allocator),
+        nullptr, // No specialization
         std::move(pipelineCache), std::move(allocator))
 {}
 
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<ShaderModule> fragmentShader,
+    std::shared_ptr<Specialization> specialization /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     BlitRectangle(renderPass,
         createVertexShader(renderPass->getDevice(), allocator),
-        std::move(fragmentShader),
+        std::move(fragmentShader), std::move(specialization),
         std::move(pipelineCache), std::move(allocator))
 {}
 
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<ShaderModule> vertexShader,
     std::shared_ptr<ShaderModule> fragmentShader,
+    std::shared_ptr<Specialization> specialization /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     renderPass(std::move(renderPass))
@@ -96,7 +100,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     pipeline = std::make_shared<GraphicsPipeline>(device,
         std::vector<PipelineShaderStage>{
             VertexShaderStage(std::move(vertexShader), vsEntry),
-            FragmentShaderStage(std::move(fragmentShader), fsEntry)
+            FragmentShaderStage(std::move(fragmentShader), fsEntry, std::move(specialization))
         },
         renderstates::nullVertexInput,
         renderstates::triangleList,
