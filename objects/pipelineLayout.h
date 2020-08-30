@@ -55,6 +55,7 @@ namespace magma
             PipelineLayout(std::vector<std::shared_ptr<DescriptorSetLayout>>(setLayouts, setLayouts + setLayoutCount), pushConstantRanges, allocator) {}
         ~PipelineLayout();
         const std::vector<std::shared_ptr<DescriptorSetLayout>>& getSetLayouts() const noexcept { return setLayouts; }
+        bool hasSetLayout(std::shared_ptr<DescriptorSetLayout> setLayout) const noexcept;
         std::size_t getHash() const noexcept;
 
     private:

@@ -99,6 +99,16 @@ PipelineLayout::~PipelineLayout()
     vkDestroyPipelineLayout(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
+bool PipelineLayout::hasSetLayout(std::shared_ptr<DescriptorSetLayout> setLayout) const noexcept
+{
+    for (auto& layout : setLayouts)
+    {
+        if (layout->getHandle() == setLayout->getHandle())
+            return true;
+    }
+    return false;
+}
+
 std::size_t PipelineLayout::getHash() const noexcept
 {   // Compute complex hash on demand
     std::size_t hash = this->hash;
