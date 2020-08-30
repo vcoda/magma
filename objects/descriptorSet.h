@@ -40,7 +40,7 @@ namespace magma
         explicit DescriptorSet(VkDescriptorSet handle,
             std::shared_ptr<Device> device,
             std::shared_ptr<DescriptorPool> pool,
-            std::shared_ptr<DescriptorSetLayout> setLayout) noexcept;
+            std::shared_ptr<DescriptorSetLayout> layout) noexcept;
         friend class DescriptorPool;
 
     public:
@@ -52,10 +52,10 @@ namespace magma
         void update(uint32_t index,
             std::shared_ptr<const BufferView> texelBufferView) noexcept;
         std::shared_ptr<DescriptorPool> getPool() const noexcept { return pool; }
-        std::shared_ptr<DescriptorSetLayout> getSetLayout() const noexcept { return setLayout; }
+        std::shared_ptr<DescriptorSetLayout> getLayout() const noexcept { return layout; }
 
     private:
         std::shared_ptr<DescriptorPool> pool;
-        std::shared_ptr<DescriptorSetLayout> setLayout;
+        std::shared_ptr<DescriptorSetLayout> layout;
     };
 } // namespace magma

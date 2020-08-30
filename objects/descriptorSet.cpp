@@ -29,18 +29,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DescriptorSet::DescriptorSet(VkDescriptorSet handle, std::shared_ptr<Device> device, std::shared_ptr<DescriptorPool> pool,
-    std::shared_ptr<DescriptorSetLayout> setLayout) noexcept:
+DescriptorSet::DescriptorSet(VkDescriptorSet handle,
+    std::shared_ptr<Device> device,
+    std::shared_ptr<DescriptorPool> pool,
+    std::shared_ptr<DescriptorSetLayout> layout) noexcept:
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, std::move(device), nullptr),
     pool(std::move(pool)),
-    setLayout(std::move(setLayout))
+    layout(std::move(layout))
 {
     this->handle = handle;
 }
 
 void DescriptorSet::update(uint32_t index, std::shared_ptr<const Buffer> buffer) noexcept
 {
-    const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
+    const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
     MAGMA_ASSERT(1 == binding.descriptorCount);
     const VkDescriptorBufferInfo info = buffer->getDescriptor();
     VkWriteDescriptorSet descriptorWrite;
@@ -59,7 +61,7 @@ void DescriptorSet::update(uint32_t index, std::shared_ptr<const Buffer> buffer)
 
 void DescriptorSet::update(uint32_t index, std::shared_ptr<const ImageView> imageView, std::shared_ptr<const Sampler> sampler) noexcept
 {
-    const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
+    const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
     const Format format(imageView->getImage()->getFormat());
     MAGMA_ASSERT(1 == binding.descriptorCount);
     VkDescriptorImageInfo info;
@@ -94,7 +96,7 @@ void DescriptorSet::update(uint32_t index, std::shared_ptr<const ImageView> imag
 
 void DescriptorSet::update(uint32_t index, std::shared_ptr<const BufferView> texelBufferView) noexcept
 {
-    const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
+    const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
     MAGMA_ASSERT(1 == binding.descriptorCount);
     const VkBufferView bufferViews[1] = {*texelBufferView};
     VkWriteDescriptorSet descriptorWrite;
