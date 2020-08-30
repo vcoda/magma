@@ -21,12 +21,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class Device;
     class DescriptorPool;
     class DescriptorSetLayout;
     class Buffer;
+    class BufferView;
     class Sampler;
     class ImageView;
-    class BufferView;
 
     /*  A descriptor set object is an opaque object that contains storage for a set of descriptors,
         where the types and number of descriptors is defined by a descriptor set layout.
