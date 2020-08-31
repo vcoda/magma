@@ -229,19 +229,22 @@ void TextShader::begin()
 
 void TextShader::end()
 {
-    helpers::mapScoped<Uniforms>(uniforms, [this](auto *constants)
-    {   // Globals
-        constants->stringCount = MAGMA_COUNT(strings);
-    });
-    helpers::mapScoped<String>(stringBuffer, [this](auto *data)
-    {   // Copy string descriptions
-        for (auto& str : strings)
-            *data++ = str;
-    });
-    helpers::mapScoped<Glyph>(glyphBuffer, [this](auto *data)
-    {   // Copy glyph data
-        core::copyMemory(data, chars.data(), sizeof(Glyph) * chars.size());
-    });
+    helpers::mapScoped<Uniforms>(uniforms,
+        [this](auto *constants)
+        {   // Globals
+            constants->stringCount = MAGMA_COUNT(strings);
+        });
+    helpers::mapScoped<String>(stringBuffer,
+        [this](auto *data)
+        {   // Copy string descriptions
+            for (auto& str : strings)
+                *data++ = str;
+        });
+    helpers::mapScoped<Glyph>(glyphBuffer,
+        [this](auto *data)
+        {   // Copy glyph data
+            core::copyMemory(data, chars.data(), sizeof(Glyph) * chars.size());
+        });
 }
 
 void TextShader::print(uint32_t x, uint32_t y, uint32_t color, const char *format, ...)
