@@ -19,9 +19,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "physicalDeviceExtensions.h"
 #include "../objects/physicalDevice.h"
+#include "../core/constexprHash.h"
 
 namespace magma
 {
+#define MAGMA_CHECK_EXTENSION(extension)\
+    extension(this->hasExtension(core::hashString(MAGMA_EXTENSION_PREFIX #extension)))
+
 PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const PhysicalDevice> device):
     Extensions(device->enumerateExtensions()),
 

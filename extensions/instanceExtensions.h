@@ -28,36 +28,36 @@ namespace magma
     class InstanceExtensions : public Extensions
     {
     public:
-        MAGMA_EXTENSION(ANDROID_native_buffer)
+        const bool ANDROID_native_buffer;
 
-        MAGMA_EXTENSION(EXT_acquire_xlib_display)
-        MAGMA_EXTENSION(EXT_debug_report)
-        MAGMA_EXTENSION(EXT_debug_utils)
-        MAGMA_EXTENSION(EXT_direct_mode_display)
-        MAGMA_EXTENSION(EXT_display_surface_counter)
-        MAGMA_EXTENSION(EXT_metal_surface)
-        MAGMA_EXTENSION(EXT_swapchain_colorspace)
+        const bool EXT_acquire_xlib_display;
+        const bool EXT_debug_report;
+        const bool EXT_debug_utils;
+        const bool EXT_direct_mode_display;
+        const bool EXT_display_surface_counter;
+        const bool EXT_metal_surface;
+        const bool EXT_swapchain_colorspace;
 
-        MAGMA_EXTENSION(KHR_android_surface)
-        MAGMA_EXTENSION(KHR_device_group_creation)
-        MAGMA_EXTENSION(KHR_display)
-        MAGMA_EXTENSION(KHR_external_fence_capabilities)
-        MAGMA_EXTENSION(KHR_external_memory_capabilities)
-        MAGMA_EXTENSION(KHR_external_semaphore_capabilities)
-        MAGMA_EXTENSION(KHR_get_display_properties2)
-        MAGMA_EXTENSION(KHR_get_physical_device_properties2)
-        MAGMA_EXTENSION(KHR_get_surface_capabilities2)
-        MAGMA_EXTENSION(KHR_surface)
-        MAGMA_EXTENSION(KHR_surface_protected_capabilities)
-        MAGMA_EXTENSION(KHR_wayland_surface)
-        MAGMA_EXTENSION(KHR_win32_surface)
-        MAGMA_EXTENSION(KHR_xcb_surface)
-        MAGMA_EXTENSION(KHR_xlib_surface)
+        const bool KHR_android_surface;
+        const bool KHR_device_group_creation;
+        const bool KHR_display;
+        const bool KHR_external_fence_capabilities;
+        const bool KHR_external_memory_capabilities;
+        const bool KHR_external_semaphore_capabilities;
+        const bool KHR_get_display_properties2;
+        const bool KHR_get_physical_device_properties2;
+        const bool KHR_get_surface_capabilities2;
+        const bool KHR_surface;
+        const bool KHR_surface_protected_capabilities;
+        const bool KHR_wayland_surface;
+        const bool KHR_win32_surface;
+        const bool KHR_xcb_surface;
+        const bool KHR_xlib_surface;
 
-        MAGMA_EXTENSION(MVK_ios_surface)
-        MAGMA_EXTENSION(MVK_macos_surface)
+        const bool MVK_ios_surface;
+        const bool MVK_macos_surface;
 
-        MAGMA_EXTENSION(NV_external_memory_capabilities)
+        const bool NV_external_memory_capabilities;
 
         InstanceExtensions(const char *layerName = nullptr);
     };

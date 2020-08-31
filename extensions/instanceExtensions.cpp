@@ -19,9 +19,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "instanceExtensions.h"
 #include "../objects/instance.h"
+#include "../core/constexprHash.h"
 
 namespace magma
 {
+#define MAGMA_CHECK_EXTENSION(extension)\
+    extension(this->hasExtension(core::hashString(MAGMA_EXTENSION_PREFIX #extension)))
+
 InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
     Extensions(Instance::enumerateExtensions(layerName)),
 

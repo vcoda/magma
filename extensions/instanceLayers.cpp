@@ -19,9 +19,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "instanceLayers.h"
 #include "../objects/instance.h"
+#include "../core/constexprHash.h"
 
 namespace magma
 {
+#define MAGMA_CHECK_LAYER(layer)\
+    layer(this->hasLayer(core::hashString(MAGMA_LAYER_PREFIX #layer)))
+
 InstanceLayers::InstanceLayers():
     Layers(Instance::enumerateLayers()),
 

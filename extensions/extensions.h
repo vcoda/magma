@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/constexprHash.h"
+
+#define MAGMA_EXTENSION_PREFIX "VK_"
 
 namespace magma
 {
@@ -32,18 +33,11 @@ namespace magma
 
     protected:
         Extensions(const std::vector<VkExtensionProperties>&);
-        inline bool hasExtension(std::size_t hash) const noexcept {
-            return hashes.find(hash) != hashes.end();
-        }
+        bool hasExtension(std::size_t hash) const noexcept
+            { return hashes.find(hash) != hashes.end(); }
 
     private:
         std::map<std::string, uint32_t> extensions;
         std::unordered_set<std::size_t> hashes;
     };
 } // namespace magma
-
-#define MAGMA_EXTENSION_PREFIX "VK_"
-#define MAGMA_EXTENSION(extension)\
-    const bool extension;\
-    static constexpr std::size_t __hash_of_ ## extension = magma::core::hashString(MAGMA_EXTENSION_PREFIX #extension);
-#define MAGMA_CHECK_EXTENSION(extension) extension(hasExtension(__hash_of_ ## extension))

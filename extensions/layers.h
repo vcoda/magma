@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/constexprHash.h"
+
+#define MAGMA_LAYER_PREFIX "VK_LAYER_"
 
 namespace magma
 {
@@ -32,18 +33,11 @@ namespace magma
 
     protected:
         Layers(const std::vector<VkLayerProperties>&);
-        inline bool hasLayer(std::size_t hash) const noexcept {
-            return hashes.find(hash) != hashes.end();
-        }
+        bool hasLayer(std::size_t hash) const noexcept
+            { return hashes.find(hash) != hashes.end(); }
 
     private:
         std::map<std::string, VkLayerProperties> layers;
         std::unordered_set<std::size_t> hashes;
     };
 } // namespace magma
-
-#define MAGMA_LAYER_PREFIX "VK_LAYER_"
-#define MAGMA_LAYER(layer)\
-    const bool layer;\
-    static constexpr std::size_t __hash_of_ ## layer = core::hashString(MAGMA_LAYER_PREFIX #layer);
-#define MAGMA_CHECK_LAYER(layer) layer(hasLayer(__hash_of_ ## layer))
