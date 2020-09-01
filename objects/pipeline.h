@@ -36,8 +36,11 @@ namespace magma
         ~Pipeline();
         VkPipelineBindPoint getBindPoint() const noexcept { return bindPoint; }
         std::shared_ptr<PipelineLayout> getLayout() noexcept { return layout; }
+		std::shared_ptr<const PipelineLayout> getLayout() const noexcept { return layout; }
         std::shared_ptr<PipelineCache> getPipelineCache() noexcept { return pipelineCache; }
+		std::shared_ptr<const PipelineCache> getPipelineCache() const noexcept { return pipelineCache; }
         std::shared_ptr<Pipeline> getBasePipeline() noexcept { return basePipeline; }
+		std::shared_ptr<const Pipeline> getBasePipeline() const noexcept { return basePipeline; }
         std::size_t getHash() const noexcept { return hash; }
 #ifdef VK_AMD_shader_info
         VkShaderStatisticsInfoAMD getShaderStatistics(VkShaderStageFlagBits stage) const;
