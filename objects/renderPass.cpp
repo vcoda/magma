@@ -57,6 +57,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     MAGMA_STACK_ARRAY(VkAttachmentReference, colorAttachments, colorAttachmentCount);
     MAGMA_STACK_ARRAY(VkAttachmentReference, resolveAttachments, resolveAttachmentCount);
     VkAttachmentReference depthStencilAttachment = {0, VK_IMAGE_LAYOUT_UNDEFINED};
+    bool hasDepthStencilAttachment = false;
     uint32_t attachmentIndex = 0, colorIndex = 0, resolveIndex = 0;
     for (const auto& attachmentDesc : attachments)
     {
@@ -67,6 +68,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
             {
                 const VkImageLayout depthStencilLayout = optimalDepthStencilLayout(format);
                 depthStencilAttachment = {attachmentIndex, depthStencilLayout};
+                hasDepthStencilAttachment = true;
             }
         }
         else
@@ -87,7 +89,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     subpass.colorAttachmentCount = colorAttachmentCount;
     subpass.pColorAttachments = colorAttachments;
     subpass.pResolveAttachments = resolveAttachments;
-    subpass.pDepthStencilAttachment = &depthStencilAttachment;
+    subpass.pDepthStencilAttachment = hasDepthStencilAttachment ? &depthStencilAttachment : nullptr;
     subpass.preserveAttachmentCount = 0;
     subpass.pPreserveAttachments = nullptr;
     SubpassDependency dependencies[2];
@@ -100,7 +102,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     dependencies[0].dstAccessMask = 0;
     if (colorAttachmentCount > 0)
         dependencies[0].dstAccessMask |= VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-    if (depthStencilAttachment.attachment > 0)
+    if (hasDepthStencilAttachment)
         dependencies[0].dstAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
     dependencies[0].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
     // Dependency at the end of the render pass
@@ -111,7 +113,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     dependencies[1].srcAccessMask = 0;
     if (colorAttachmentCount > 0)
         dependencies[1].srcAccessMask |= VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-    if (depthStencilAttachment.attachment > 0)
+    if (hasDepthStencilAttachment)
         dependencies[1].srcAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
     dependencies[1].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
     dependencies[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
