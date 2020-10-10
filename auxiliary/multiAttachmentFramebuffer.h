@@ -40,7 +40,7 @@ namespace magma
                 const VkExtent2D& extent,
                 bool depthSampled,
                 bool separateDepthPass,
-                bool clearOp = true,
+                bool colorClearOp = true,
                 std::shared_ptr<IAllocator> allocator = nullptr,
                 const std::vector<VkComponentMapping>& swizzles = {});
             std::shared_ptr<ImageView> getAttachmentView(uint32_t index) noexcept { return attachmentViews[index]; }
@@ -51,12 +51,14 @@ namespace magma
             std::shared_ptr<const RenderPass> getDepthRenderPass() const noexcept { return depthRenderPass; }
             std::shared_ptr<magma::Framebuffer> getDepthFramebuffer() noexcept { return depthFramebuffer; }
             std::shared_ptr<const magma::Framebuffer> getDepthFramebuffer() const noexcept { return depthFramebuffer; }
+            bool hasColorClear() const noexcept { return colorClearOp; }
 
         private:
             std::vector<std::shared_ptr<Image2D>> attachments;
             std::vector<std::shared_ptr<ImageView>> attachmentViews;
             std::shared_ptr<RenderPass> depthRenderPass;
             std::shared_ptr<magma::Framebuffer> depthFramebuffer;
+            bool colorClearOp;
         };
     } // namespace aux
 } // namespace magma

@@ -36,7 +36,7 @@ namespace magma
                 const VkFormat colorFormat,
                 const VkExtent2D& extent,
                 uint32_t sampleCount,
-                bool clearOp = true,
+                bool colorClearOp = true,
                 std::shared_ptr<IAllocator> allocator = nullptr,
                 const VkComponentMapping& swizzle = {
                     VK_COMPONENT_SWIZZLE_IDENTITY,
@@ -48,7 +48,7 @@ namespace magma
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
                 uint32_t sampleCount,
-                bool clearOp = true,
+                bool colorClearOp = true,
                 std::shared_ptr<IAllocator> allocator = nullptr,
                 const VkComponentMapping& swizzle = {
                     VK_COMPONENT_SWIZZLE_IDENTITY,
@@ -57,6 +57,7 @@ namespace magma
                     VK_COMPONENT_SWIZZLE_IDENTITY});
             std::shared_ptr<ImageView> getColorView() noexcept { return resolveView; }
             std::shared_ptr<const ImageView> getColorView() const noexcept { return resolveView; }
+            bool hasColorClear() const noexcept { return colorClearOp; }
 
         private:
             std::shared_ptr<Image2D> color;
@@ -65,6 +66,7 @@ namespace magma
             std::shared_ptr<ImageView> colorView;
             std::shared_ptr<ImageView> depthStencilView;
             std::shared_ptr<ImageView> resolveView;
+            bool colorClearOp;
         };
     } // namespace aux
 } // namespace magma

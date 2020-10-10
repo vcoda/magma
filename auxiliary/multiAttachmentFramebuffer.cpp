@@ -32,10 +32,11 @@ namespace aux
 MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> device,
     const std::initializer_list<VkFormat>& colorAttachmentFormats, const VkFormat depthStencilFormat,
     const VkExtent2D& extent, bool depthSampled, bool separateDepthPass,
-    bool clearOp /* true */,
+    const bool colorClearOp /* true */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const std::vector<VkComponentMapping>& swizzles /* {} */):
-    Framebuffer(1)
+    Framebuffer(1),
+    colorClearOp(colorClearOp)
 {
     constexpr VkComponentMapping dontSwizzle = {
         VK_COMPONENT_SWIZZLE_IDENTITY,
@@ -45,8 +46,7 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     uint32_t index = 0;
     for (const VkFormat colorFormat : colorAttachmentFormats)
     {   // Create color attachment
-        attachments.emplace_back(std::make_shared<ColorAttachment>(device, colorFormat, extent,
-            1, 1, true, allocator));
+        attachments.emplace_back(std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, true, allocator));
         // Create color view
         attachmentViews.emplace_back(std::make_shared<ImageView>(attachments.back(),
             swizzles.empty() ? dontSwizzle : swizzles[index++],
@@ -64,7 +64,7 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     for (const VkFormat format : colorAttachmentFormats)
     {
         attachmentDescriptions.emplace_back(format, 1,
-            clearOp ? op::clearStore : op::store, // Clear (optionally) color, store
+            colorClearOp ? op::clearStore : op::store, // Clear (optionally) color, store
             op::dontCare, // Stencil not applicable
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
             VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL); // Color image will be transitioned to when a render pass instance ends

@@ -31,20 +31,21 @@ namespace aux
 {
 ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device> device,
     const VkFormat colorFormat, const VkExtent2D& extent, const uint32_t sampleCount,
-    const bool clearOp /* true */,
+    const bool colorClearOp /* true */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
     ColorMultisampleFramebuffer(std::move(device), colorFormat, VK_FORMAT_UNDEFINED, extent, sampleCount,
-        clearOp, std::move(allocator), swizzle)
+        colorClearOp, std::move(allocator), swizzle)
 {}
 
 ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device> device,
     const VkFormat colorFormat, const VkFormat depthStencilFormat,
     const VkExtent2D& extent, const uint32_t sampleCount,
-    const bool clearOp /* true */,
+    const bool colorClearOp /* true */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
-    Framebuffer(sampleCount)
+    Framebuffer(sampleCount),
+    colorClearOp(colorClearOp)
 {   // Create multisample color attachment
     color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, sampleCount, false, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
@@ -74,7 +75,7 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
         // Typically, after the multisampled image is resolved, we don't need the
         // multisampled image anymore. Therefore, the multisampled image must be
         // discarded by using STORE_OP_DONT_CARE.
-        clearOp ? op::clear : op::dontCare, // Clear (optionally) color, don't care about store
+        colorClearOp ? op::clear : op::dontCare, // Clear (optionally) color, don't care about store
         op::dontCare, // Stencil not applicable
         VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
         VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);

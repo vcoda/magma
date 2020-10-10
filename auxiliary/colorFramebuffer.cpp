@@ -30,18 +30,19 @@ namespace magma
 namespace aux
 {
 ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkFormat colorFormat, const VkExtent2D& extent,
-    const bool clearOp /* true */,
+    const bool colorClearOp /* true */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
-    ColorFramebuffer(std::move(device), colorFormat, VK_FORMAT_UNDEFINED, extent, false, clearOp, std::move(allocator), swizzle)
+    ColorFramebuffer(std::move(device), colorFormat, VK_FORMAT_UNDEFINED, extent, false, colorClearOp, std::move(allocator), swizzle)
 {}
 
 ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkFormat colorFormat,
     const VkFormat depthStencilFormat, const VkExtent2D& extent, const bool depthSampled,
-    const bool clearOp /* true */,
+    const bool colorClearOp /* true */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
-    Framebuffer(1)
+    Framebuffer(1),
+    colorClearOp(colorClearOp)
 {   // Create color attachment
     color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, true, allocator);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
@@ -62,7 +63,7 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
     }
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, 1,
-        clearOp ? op::clearStore : op::store, // Clear (optionally) color, store
+        colorClearOp ? op::clearStore : op::store, // Clear (optionally) color, store
         op::dontCare, // Stencil not applicable
         VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL); // Color image will be transitioned to when a render pass instance ends
