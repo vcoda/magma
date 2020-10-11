@@ -31,12 +31,15 @@ namespace aux
 {
 MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> device,
     const std::initializer_list<VkFormat>& colorAttachmentFormats, const VkFormat depthStencilFormat,
-    const VkExtent2D& extent, bool depthSampled, bool separateDepthPass,
+    const VkExtent2D& extent, bool depthSampled,
     const bool colorClearOp /* true */,
+    const bool depthClearOp /* true */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const std::vector<VkComponentMapping>& swizzles /* {} */):
     Framebuffer(1),
-    colorClearOp(colorClearOp)
+    depthStencilFormat(depthStencilFormat),
+    colorClearOp(colorClearOp),
+    depthClearOp(depthClearOp)
 {
     constexpr VkComponentMapping dontSwizzle = {
         VK_COMPONENT_SWIZZLE_IDENTITY,
@@ -74,7 +77,7 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
         const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, depthSampled);
         const Format format(depthStencilFormat);
         attachmentDescriptions.emplace_back(depthStencilFormat, 1,
-            separateDepthPass ? op::dontCare : op::clearStore, // Don't care if depth pass is separate
+            depthClearOp ? op::clearStore : op::dontCare, // Don't care if cleared in separate depth pass
             format.depthStencil() || format.stencil() ? op::clearStore : op::dontCare,
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
             finalLayout); // Depth image will be transitioned to when a render pass instance ends
@@ -82,18 +85,34 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     // Create color/depth framebuffer
     renderPass = std::make_shared<RenderPass>(device, attachmentDescriptions, allocator);
     framebuffer = std::make_shared<magma::Framebuffer>(renderPass, attachmentViews, 0, allocator);
-    // Create depth only framebuffer if separate depth pass is requested
-    if (separateDepthPass && (depthStencilFormat != VK_FORMAT_UNDEFINED))
-    {
+}
+
+std::shared_ptr<magma::Framebuffer> MultiAttachmentFramebuffer::getDepthFramebuffer()
+{
+    lazyDepthRenderPass();
+    return depthFramebuffer;
+}
+
+std::shared_ptr<const magma::Framebuffer> MultiAttachmentFramebuffer::getDepthFramebuffer() const
+{
+    lazyDepthRenderPass();
+    return depthFramebuffer;
+}
+
+std::shared_ptr<RenderPass> MultiAttachmentFramebuffer::lazyDepthRenderPass() const
+{
+    if (!depthRenderPass && (depthStencilFormat != VK_FORMAT_UNDEFINED))
+    {   // Lazy initialization of depth-only render pass
         const Format format(depthStencilFormat);
-        AttachmentDescription depthOnly(depthStencilFormat, 1,
+        AttachmentDescription depthAttachment(depthStencilFormat, 1,
             op::clearStore, // Clear depth, store
             format.depthStencil() || format.stencil() ? op::clearStore : op::dontCare,
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL); // Stay as attachment when a depth pass instance ends
-        depthRenderPass = std::make_shared<RenderPass>(std::move(device), depthOnly, allocator);
-        depthFramebuffer = std::make_shared<magma::Framebuffer>(depthRenderPass, attachmentViews.back(), 0, std::move(allocator));
+        depthRenderPass = std::make_shared<RenderPass>(renderPass->getDevice(), depthAttachment, renderPass->getAllocator());
+        depthFramebuffer = std::make_shared<magma::Framebuffer>(depthRenderPass, attachmentViews.back(), 0, framebuffer->getAllocator());
     }
+    return depthRenderPass;
 }
 } // namespace aux
 } // namespace magma
