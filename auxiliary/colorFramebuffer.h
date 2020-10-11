@@ -67,7 +67,7 @@ namespace magma
             std::shared_ptr<Image2D> depthStencil;
             std::shared_ptr<ImageView> colorView;
             std::shared_ptr<ImageView> depthStencilView;
-            bool colorClearOp;
+            const bool colorClearOp;
         };
     } // namespace aux
 } // namespace magma
