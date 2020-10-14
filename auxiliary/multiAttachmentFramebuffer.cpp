@@ -33,13 +33,13 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     const std::initializer_list<VkFormat>& colorAttachmentFormats, const VkFormat depthStencilFormat,
     const VkExtent2D& extent, bool depthSampled,
     const bool colorClearOp /* true */,
-    const bool depthClearOp /* true */,
+    const bool depthStencilClearOp /* true */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const std::vector<VkComponentMapping>& swizzles /* {} */):
     Framebuffer(1),
     depthStencilFormat(depthStencilFormat),
     colorClearOp(colorClearOp),
-    depthClearOp(depthClearOp)
+    depthStencilClearOp(depthStencilClearOp)
 {
     constexpr VkComponentMapping dontSwizzle = {
         VK_COMPONENT_SWIZZLE_IDENTITY,
@@ -76,9 +76,11 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     {   // Choose optimal depth/stencil layout
         const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, depthSampled);
         const Format format(depthStencilFormat);
+        const bool hasStencil = format.depthStencil() || format.stencil();
         attachmentDescriptions.emplace_back(depthStencilFormat, 1,
-            depthClearOp ? op::clearStore : op::dontCare, // Don't care if cleared in separate depth pass
-            format.depthStencil() || format.stencil() ? op::clearStore : op::dontCare,
+            depthStencilClearOp ? op::clearStore : op::loadStore, // Clear depth or preserve from a separate depth pass
+            hasStencil ? (depthStencilClearOp ? op::clearStore : op::loadStore) // Clear stencil or preserve from a separate depth pass
+                       : op::dontCare, // No stencil aspect
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
             finalLayout); // Depth image will be transitioned to when a render pass instance ends
     }
@@ -104,9 +106,10 @@ std::shared_ptr<RenderPass> MultiAttachmentFramebuffer::lazyDepthRenderPass() co
     if (!depthRenderPass && (depthStencilFormat != VK_FORMAT_UNDEFINED))
     {   // Lazy initialization of depth-only render pass
         const Format format(depthStencilFormat);
+        const bool hasStencil = format.depthStencil() || format.stencil();
         AttachmentDescription depthAttachment(depthStencilFormat, 1,
             op::clearStore, // Clear depth, store
-            format.depthStencil() || format.stencil() ? op::clearStore : op::dontCare,
+            hasStencil ? op::clearStore : op::dontCare, // Clear stencil, store
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL); // Stay as attachment when a depth pass instance ends
         depthRenderPass = std::make_shared<RenderPass>(renderPass->getDevice(), depthAttachment, renderPass->getAllocator());
