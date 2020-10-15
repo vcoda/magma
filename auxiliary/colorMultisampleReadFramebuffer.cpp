@@ -34,7 +34,7 @@ ColorMultisampleReadFramebuffer::ColorMultisampleReadFramebuffer(std::shared_ptr
     const uint32_t sampleCount, const bool depthSampled, const bool stencilSampled,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Framebuffer(sampleCount)
+    Framebuffer(colorFormat, depthStencilFormat, sampleCount)
 {   // Create multisample color attachment
     constexpr bool colorSampled = true;
     color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, sampleCount, colorSampled, allocator);
@@ -72,7 +72,6 @@ ColorMultisampleReadFramebuffer::ColorMultisampleReadFramebuffer(std::shared_ptr
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Choose optimal depth/stencil layout
         const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, depthSampled || stencilSampled);
-        const Format format(depthStencilFormat);
         const AttachmentDescription depthStencilAttachment(depthStencilFormat, sampleCount,
             depthSampled ? op::clearStore : op::clear, // Depth clear, optionally store for multi-sample read
             stencilSampled ? op::clearStore : op::clear, // Stencil clear, optionally store for multi-sample read

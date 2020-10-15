@@ -33,7 +33,7 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
     VkFormat depthStencilFormat /* VK_FORMAT_UNDEFINED */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Framebuffer(1)
+    Framebuffer(color->getFormat(), depthStencilFormat, color->getSamples())
 {
     std::shared_ptr<Device> device = color->getDevice();
     colorView = std::make_shared<ImageView>(color, swizzle, allocator);
@@ -50,10 +50,9 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
         VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {
-        const Format format(depthStencilFormat);
         const AttachmentDescription depthStencilAttachment(depthStencilFormat, 1,
             op::clearStore, // Clear depth, store
-            format.depthStencil() || format.stencil() ? op::clearStore : op::dontCare,
+            hasStencil() ? op::clearStore : op::dontCare,
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL); // Stay as attachment
         renderPass = std::make_shared<RenderPass>(std::move(device), std::initializer_list<AttachmentDescription>{

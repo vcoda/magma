@@ -35,7 +35,7 @@ namespace magma
         {
         public:
             explicit ColorFramebuffer(std::shared_ptr<Device> device,
-                const VkFormat colorFormat,
+                VkFormat colorFormat,
                 const VkExtent2D& extent,
                 bool colorClearOp = true,
                 std::shared_ptr<IAllocator> allocator = nullptr,
@@ -45,8 +45,8 @@ namespace magma
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY});
             explicit ColorFramebuffer(std::shared_ptr<Device> device,
-                const VkFormat colorFormat,
-                const VkFormat depthStencilFormat,
+                VkFormat colorFormat,
+                VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
                 bool depthSampled,
                 bool clearOp = true,
@@ -63,11 +63,11 @@ namespace magma
             bool hasColorClear() const noexcept { return colorClearOp; }
 
         private:
+            const bool colorClearOp;
             std::shared_ptr<Image2D> color;
             std::shared_ptr<Image2D> depthStencil;
             std::shared_ptr<ImageView> colorView;
             std::shared_ptr<ImageView> depthStencilView;
-            const bool colorClearOp;
         };
     } // namespace aux
 } // namespace magma

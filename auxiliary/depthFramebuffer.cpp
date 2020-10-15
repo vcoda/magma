@@ -31,7 +31,7 @@ namespace aux
 {
 DepthFramebuffer::DepthFramebuffer(std::shared_ptr<Device> device, const VkFormat depthFormat, const VkExtent2D& extent,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Framebuffer(1)
+    Framebuffer(VK_FORMAT_UNDEFINED, depthFormat, 1)
 {   // Create depth attachment
     depth = std::make_shared<DepthStencilAttachment>(device, depthFormat, extent,
          1, // mipLevels

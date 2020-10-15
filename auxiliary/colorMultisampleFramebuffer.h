@@ -60,13 +60,13 @@ namespace magma
             bool hasColorClear() const noexcept { return colorClearOp; }
 
         private:
+            const bool colorClearOp;
             std::shared_ptr<Image2D> color;
             std::shared_ptr<Image2D> depthStencil;
             std::shared_ptr<Image2D> resolve;
             std::shared_ptr<ImageView> colorView;
             std::shared_ptr<ImageView> depthStencilView;
             std::shared_ptr<ImageView> resolveView;
-            const bool colorClearOp;
         };
     } // namespace aux
 } // namespace magma

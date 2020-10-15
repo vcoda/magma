@@ -22,24 +22,34 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/physicalDevice.h"
 #include "../objects/framebuffer.h"
 #include "../states/multisampleState.h"
-#include "../misc/format.h"
 
 namespace magma
 {
 namespace aux
 {
-Framebuffer::Framebuffer(uint32_t sampleCount) noexcept:
+Framebuffer::Framebuffer(const VkFormat colorFormat, const VkFormat depthStencilFormat, const uint32_t sampleCount) noexcept:
+    colorFormat(colorFormat),
+    depthStencilFormat(depthStencilFormat),
     sampleCount(sampleCount)
-{}
+{
+    MAGMA_ASSERT(!this->colorFormat.depth());
+    MAGMA_ASSERT(!this->colorFormat.stencil());
+    MAGMA_ASSERT(!this->colorFormat.depthStencil());
+}
+
+bool Framebuffer::hasDepth() const noexcept
+{
+    return depthStencilFormat.depth() || depthStencilFormat.depthStencil();
+}
+
+bool Framebuffer::hasStencil() const noexcept
+{
+    return depthStencilFormat.stencil() || depthStencilFormat.depthStencil();
+}
 
 const VkExtent2D& Framebuffer::getExtent() const noexcept
 {
     return framebuffer->getExtent();
-}
-
-uint32_t Framebuffer::getSampleCount() const noexcept
-{
-    return sampleCount;
 }
 
 const MultisampleState& Framebuffer::getMultisampleState() const noexcept
@@ -56,26 +66,6 @@ const MultisampleState& Framebuffer::getMultisampleState() const noexcept
     default:
         return renderstates::dontMultisample;
     }
-}
-
-std::shared_ptr<RenderPass> Framebuffer::getRenderPass() noexcept
-{
-    return renderPass;
-}
-
-std::shared_ptr<const RenderPass> Framebuffer::getRenderPass() const noexcept
-{
-    return renderPass;
-}
-
-std::shared_ptr<magma::Framebuffer> Framebuffer::getFramebuffer() noexcept
-{
-    return framebuffer;
-}
-
-std::shared_ptr<const magma::Framebuffer> Framebuffer::getFramebuffer() const noexcept
-{
-    return framebuffer;
 }
 
 VkImageLayout Framebuffer::finalDepthStencilLayout(std::shared_ptr<Device> device,

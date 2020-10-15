@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../core/noncopyable.h"
+#include "../misc/format.h"
 
 namespace magma
 {
@@ -33,22 +34,31 @@ namespace magma
         class Framebuffer
         {
         public:
+            VkFormat getColorFormat() const noexcept { return colorFormat; }
+            VkFormat getDepthStencilFormat() const noexcept { return depthStencilFormat; }
+            bool hasColor() const noexcept { return colorFormat.valid(); }
+            bool hasDepth() const noexcept;
+            bool hasStencil() const noexcept;
             const VkExtent2D& getExtent() const noexcept;
-            uint32_t getSampleCount() const noexcept;
+            uint32_t getSampleCount() const noexcept { return sampleCount; }
             const MultisampleState& getMultisampleState() const noexcept;
-            std::shared_ptr<RenderPass> getRenderPass() noexcept;
-            std::shared_ptr<const RenderPass> getRenderPass() const noexcept;
-            std::shared_ptr<magma::Framebuffer> getFramebuffer() noexcept;
-            std::shared_ptr<const magma::Framebuffer> getFramebuffer() const noexcept;
+            std::shared_ptr<RenderPass> getRenderPass() noexcept { return renderPass; }
+            std::shared_ptr<const RenderPass> getRenderPass() const noexcept { return renderPass; }
+            std::shared_ptr<magma::Framebuffer> getFramebuffer() noexcept { return framebuffer; }
+            std::shared_ptr<const magma::Framebuffer> getFramebuffer() const noexcept { return framebuffer; }
 
         protected:
-            explicit Framebuffer(uint32_t sampleCount) noexcept;
+            explicit Framebuffer(VkFormat colorFormat,
+                VkFormat depthStencilFormat,
+                uint32_t sampleCount) noexcept;
             VkImageLayout finalDepthStencilLayout(std::shared_ptr<Device> device,
                 const VkFormat depthStencilFormat, bool depthSampled) const;
 
+            const Format colorFormat;
+            const Format depthStencilFormat;
+            const uint32_t sampleCount;
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<magma::Framebuffer> framebuffer;
-            uint32_t sampleCount;
         };
     } // namespace aux
 } // namespace magma
