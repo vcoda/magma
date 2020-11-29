@@ -293,6 +293,10 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     const VkRect2D& renderArea /* {0, 0, 0, 0} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
+    static_assert(sizeof(VkClearValue) == sizeof(ClearValue), "size of ClearValue must be equal to size of VkClearValue");
+    if (clearValues.empty()) {
+        MAGMA_ASSERT(!renderPass->hasClearOp());
+    }
     VkRenderPassBeginInfo beginInfo;
     beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     beginInfo.pNext = nullptr;
@@ -305,7 +309,6 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
         beginInfo.renderArea.extent = framebuffer->getExtent();
     beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
     beginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
-    static_assert(sizeof(VkClearValue) == sizeof(ClearValue), "size of ClearValue must be equal to size of VkClearValue");
     vkCmdBeginRenderPass(handle, &beginInfo, contents);
 #ifdef MAGMA_DEBUG_LABEL
     beginRenderPassMarked = VK_FALSE;
@@ -360,6 +363,10 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     const std::vector<VkRect2D>& deviceRenderAreas /* {} */, const std::vector<ClearValue>& clearValues /* {} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
+    static_assert(sizeof(VkClearValue) == sizeof(ClearValue), "size of ClearValue must be equal to size of VkClearValue");
+    if (clearValues.empty()) {
+        MAGMA_ASSERT(!renderPass->hasClearOp());
+    }
     VkDeviceGroupRenderPassBeginInfo deviceGroupBeginInfo;
     deviceGroupBeginInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO;
     deviceGroupBeginInfo.pNext = nullptr;
@@ -376,7 +383,6 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     beginInfo.renderArea.extent = deviceRenderAreas.empty() ? framebuffer->getExtent() : VkExtent2D{0, 0};
     beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
     beginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
-    static_assert(sizeof(VkClearValue) == sizeof(ClearValue), "size of ClearValue must be equal to size of VkClearValue");
     vkCmdBeginRenderPass(handle, &beginInfo, contents);
 #ifdef MAGMA_DEBUG
     beginRenderPassMarked = VK_FALSE;
