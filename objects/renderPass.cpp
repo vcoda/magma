@@ -182,6 +182,16 @@ RenderPass::~RenderPass()
     vkDestroyRenderPass(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
 }
 
+bool RenderPass::hasClearOp() const noexcept
+{
+	for (const auto& attachment : attachments)
+	{
+		if (VK_ATTACHMENT_LOAD_OP_CLEAR == attachment.loadOp)
+			return true;
+	}
+	return false;
+}
+
 VkImageLayout RenderPass::optimalDepthStencilLayout(const Format& format) const
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts
