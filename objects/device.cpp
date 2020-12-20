@@ -31,8 +31,8 @@ namespace magma
 {
 Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     const std::vector<DeviceQueueDescriptor>& queueDescriptors,
-    const std::vector<const char *>& layers,
-    const std::vector<const char *>& extensions,
+    const std::vector<const char *>& enabledLayers,
+    const std::vector<const char *>& enabledExtensions,
     const VkPhysicalDeviceFeatures& deviceFeatures,
     const std::vector<void *>& extendedDeviceFeatures,
     std::shared_ptr<IAllocator> allocator):
@@ -76,10 +76,10 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     info.flags = 0;
     info.queueCreateInfoCount = MAGMA_COUNT(queueDescriptors);
     info.pQueueCreateInfos = queueDescriptors.data();
-    info.enabledLayerCount = MAGMA_COUNT(layers);
-    info.ppEnabledLayerNames = layers.data();
-    info.enabledExtensionCount = MAGMA_COUNT(extensions);
-    info.ppEnabledExtensionNames = extensions.data();
+    info.enabledLayerCount = MAGMA_COUNT(enabledLayers);
+    info.ppEnabledLayerNames = enabledLayers.data();
+    info.enabledExtensionCount = MAGMA_COUNT(enabledExtensions);
+    info.ppEnabledExtensionNames = enabledExtensions.data();
     info.pEnabledFeatures = extendedDeviceFeatures.empty() ? &deviceFeatures : nullptr;
     const VkResult create = vkCreateDevice(MAGMA_HANDLE(physicalDevice), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     switch (create) {
@@ -92,6 +92,11 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     queues.reserve(queueDescriptors.size());
     for (const auto& desc : queueDescriptors)
         queues.emplace_back(desc, std::weak_ptr<Queue>());
+    // Store enabled layers and extensions
+    for (const auto& layer : enabledLayers)
+        this->enabledLayers.emplace_back(layer);
+    for (const auto& extension : enabledExtensions)
+        this->enabledExtensions.emplace_back(extension);
 }
 
 Device::~Device()
@@ -164,4 +169,17 @@ VkPeerMemoryFeatureFlags Device::getGroupPeerMemoryFeatures(uint32_t heapIndex, 
     return peerMemoryFeatures;
 }
 #endif // VK_KHR_device_group
+
+bool Device::checkNegativeViewportHeightEnabled(bool khronos) const noexcept
+{
+    const std::string name = khronos ?
+        VK_KHR_MAINTENANCE1_EXTENSION_NAME :
+        VK_AMD_NEGATIVE_VIEWPORT_HEIGHT_EXTENSION_NAME;
+    for (const auto& extension : enabledExtensions)
+    {
+        if (extension == name)
+            return true;
+    }
+    return false;
+}
 } // namespace magma

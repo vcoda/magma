@@ -36,8 +36,8 @@ namespace magma
     {
         explicit Device(std::shared_ptr<PhysicalDevice> physicalDevice,
             const std::vector<DeviceQueueDescriptor>& queueDescriptors,
-            const std::vector<const char *>& layers,
-            const std::vector<const char *>& extensions,
+            const std::vector<const char *>& enabledLayers,
+            const std::vector<const char *>& enabledExtensions,
             const VkPhysicalDeviceFeatures& deviceFeatures,
             const std::vector<void *>& extendedDeviceFeatures,
             std::shared_ptr<IAllocator> allocator);
@@ -60,10 +60,15 @@ namespace magma
         std::shared_ptr<const PhysicalDevice> getPhysicalDevice() const noexcept { return physicalDevice; }
         std::shared_ptr<ResourcePool> getResourcePool() noexcept { return resourcePool; }
         std::shared_ptr<const ResourcePool> getResourcePool() const noexcept { return resourcePool; }
+        const std::vector<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
+        const std::vector<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
+        bool checkNegativeViewportHeightEnabled(bool khronos) const noexcept;
 
     private:
         std::shared_ptr<PhysicalDevice> physicalDevice;
         mutable std::vector<std::pair<DeviceQueueDescriptor, std::weak_ptr<Queue>>> queues;
         std::shared_ptr<ResourcePool> resourcePool;
+        std::vector<std::string> enabledLayers;
+        std::vector<std::string> enabledExtensions;
     };
 } // namespace magma
