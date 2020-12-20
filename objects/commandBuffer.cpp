@@ -45,6 +45,8 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     info.commandBufferCount = 1;
     const VkResult alloc = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &info, &handle);
     MAGMA_THROW_FAILURE(alloc, "failed to allocate primary command buffer");
+    maintenance1KHREnable = device->checkNegativeViewportHeightEnabled(true);
+    negativeHeightAMDEnable = device->checkNegativeViewportHeightEnabled(false);
 }
 
 CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle, std::shared_ptr<CommandPool> pool):
@@ -52,7 +54,10 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle,
     level(level),
     pool(std::move(pool)),
     fence(std::make_shared<Fence>(this->device))
-{}
+{
+    maintenance1KHREnable = device->checkNegativeViewportHeightEnabled(true);
+    negativeHeightAMDEnable = device->checkNegativeViewportHeightEnabled(false);
+}
 
 CommandBuffer::~CommandBuffer()
 {

@@ -492,6 +492,8 @@ namespace magma
         uint32_t deviceMask = 0xFFFFFFFF;
         VkBool32 occlusionQueryEnable = VK_FALSE;
         VkBool32 conditionalRenderingEnable = VK_FALSE;
+        VkBool32 maintenance1KHREnable = VK_FALSE;
+        VkBool32 negativeHeightAMDEnable = VK_FALSE;
         VkQueryControlFlags queryFlags = 0;
         VkQueryPipelineStatisticFlags pipelineStatistics = 0;
 #ifdef MAGMA_DEBUG_LABEL

@@ -11,8 +11,18 @@ inline void CommandBuffer::setViewport(float x, float y, float width, float heig
     VkViewport viewport;
     viewport.x = x;
     viewport.y = y;
+    if (height < 0)
+    {
+        if (maintenance1KHREnable)
+            viewport.y = -height - y; // Move origin to bottom left  
+    }
     viewport.width = width;
     viewport.height = height;
+    if (height < 0)
+    {
+        if (!(maintenance1KHREnable || negativeHeightAMDEnable))
+            viewport.height = -height; // Negative viewport height not supported
+    }
     viewport.minDepth = minDepth;
     viewport.maxDepth = maxDepth;
     vkCmdSetViewport(handle, 0, 1, &viewport);
@@ -21,14 +31,7 @@ inline void CommandBuffer::setViewport(float x, float y, float width, float heig
 inline void CommandBuffer::setViewport(uint32_t x, uint32_t y, uint32_t width, int32_t height,
     float minDepth /* 0 */, float maxDepth /* 1 */) noexcept
 {
-    VkViewport viewport;
-    viewport.x = static_cast<float>(x);
-    viewport.y = static_cast<float>(y);
-    viewport.width = static_cast<float>(width);
-    viewport.height = static_cast<float>(height);
-    viewport.minDepth = minDepth;
-    viewport.maxDepth = maxDepth;
-    vkCmdSetViewport(handle, 0, 1, &viewport);
+    setViewport(static_cast<float>(x), static_cast<float>(y), static_cast<float>(width), static_cast<float>(height), minDepth, maxDepth);
 }
 
 inline void CommandBuffer::setViewport(const VkViewport& viewport) noexcept
