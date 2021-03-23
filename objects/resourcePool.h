@@ -87,8 +87,6 @@ namespace magma
 		core::Pool<Type>& getPool();
 
     private:
-        mutable std::mutex mutex;
-
         // Core types
         core::Pool<NonDispatchable<VkSemaphore>> semaphores;
         core::Pool<NonDispatchable<VkFence>> fences;
@@ -130,6 +128,7 @@ namespace magma
 #ifdef VK_NV_ray_tracing
         core::Pool<NonDispatchable<VkAccelerationStructureNV>> accelerationStructures;
 #endif
+		mutable std::mutex mtx;
     };
 } // namespace magma
 

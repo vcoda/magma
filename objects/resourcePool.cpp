@@ -29,7 +29,7 @@ namespace magma
 {
 ResourcePool::DeviceResources ResourcePool::countDeviceResources() const
 {
-    std::lock_guard<std::mutex> guard(mutex);
+    std::lock_guard<std::mutex> guard(mtx);
     DeviceResources statistics;
     statistics.semaphoreCount = semaphores.count();
     statistics.fenceCount = fences.count();
@@ -97,7 +97,7 @@ ResourcePool::DeviceResources ResourcePool::countDeviceResources() const
 
 ResourcePool::PhysicalDeviceResources ResourcePool::countPhysicalDeviceResources() const
 {
-    std::lock_guard<std::mutex> guard(mutex);
+    std::lock_guard<std::mutex> guard(mtx);
     PhysicalDeviceResources statistics;
 #ifdef VK_KHR_display
     statistics.displayCount = displays.count();
@@ -108,7 +108,7 @@ ResourcePool::PhysicalDeviceResources ResourcePool::countPhysicalDeviceResources
 
 VkDeviceSize ResourcePool::countAllocatedDeviceLocalMemory() const
 {
-    std::lock_guard<std::mutex> guard(mutex);
+    std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize deviceLocalAllocatedSize = 0;
     deviceMemories.forEach<DeviceMemory>(
         [&deviceLocalAllocatedSize](const DeviceMemory *memory)
@@ -121,7 +121,7 @@ VkDeviceSize ResourcePool::countAllocatedDeviceLocalMemory() const
 
 VkDeviceSize ResourcePool::countAllocatedHostVisibleMemory() const
 {
-    std::lock_guard<std::mutex> guard(mutex);
+    std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize hostVisibleAllocatedSize = 0;
     deviceMemories.forEach<DeviceMemory>(
         [&hostVisibleAllocatedSize](const DeviceMemory *memory)
@@ -134,7 +134,7 @@ VkDeviceSize ResourcePool::countAllocatedHostVisibleMemory() const
 
 VkDeviceSize ResourcePool::countAllocatedBufferMemory() const
 {
-    std::lock_guard<std::mutex> guard(mutex);
+    std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize bufferAllocatedSize = 0;
     buffers.forEach<Buffer>(
         [&bufferAllocatedSize](const Buffer *buffer)
@@ -148,7 +148,7 @@ VkDeviceSize ResourcePool::countAllocatedBufferMemory() const
 
 VkDeviceSize ResourcePool::countAllocatedImageMemory() const
 {
-    std::lock_guard<std::mutex> guard(mutex);
+    std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize imageAllocatedSize = 0;
     images.forEach<Image>(
         [&imageAllocatedSize](const Image *image)
@@ -162,7 +162,7 @@ VkDeviceSize ResourcePool::countAllocatedImageMemory() const
 
 VkDeviceSize ResourcePool::countAllocatedAccelerationStructureMemory() const
 {
-    std::lock_guard<std::mutex> guard(mutex);
+    std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize accelerationStructureAllocatedSize = 0;
 #ifdef VK_NV_ray_tracing
     images.forEach<AccelerationStructure>(
@@ -178,7 +178,7 @@ VkDeviceSize ResourcePool::countAllocatedAccelerationStructureMemory() const
 
 bool ResourcePool::hasAnyDeviceResource() const
 {
-    std::lock_guard<std::mutex> guard(mutex);
+    std::lock_guard<std::mutex> guard(mtx);
     return semaphores.count() > 0 ||
         fences.count() > 0 ||
         deviceMemories.count() > 0 ||
