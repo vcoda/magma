@@ -58,7 +58,7 @@ namespace magma
             if (device)
             {   // Put resource in pool
                 std::shared_ptr<ResourcePool> pool = device->getResourcePool();
-                pool->getPool<NonDispatchable<Type>>().registerResource(this);
+                pool->getPool<NonDispatchable<Type>>().add(this);
             }
 #endif // MAGMA_X64
         }
@@ -69,7 +69,7 @@ namespace magma
             if (std::shared_ptr<Device> device = Object<Type>::getDevice())
             {   // Remove resource from pool
                 std::shared_ptr<ResourcePool> pool = device->getResourcePool();
-                pool->getPool<NonDispatchable<Type>>().unregisterResource(this);
+                pool->getPool<NonDispatchable<Type>>().remove(this);
             }
 #endif // MAGMA_X64
         }

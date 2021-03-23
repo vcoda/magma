@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/noncopyable.h"
+#include "../core/pool.h"
 
 namespace magma
 {
@@ -83,67 +83,52 @@ namespace magma
         VkDeviceSize countAllocatedAccelerationStructureMemory() const;
         bool hasAnyDeviceResource() const;
 
-    private:
-        template<typename Base>
-        class Pool final : public core::NonCopyable
-        {
-            std::unordered_set<const Base *> resources;
-            mutable std::mutex mutex;
-
-        public:
-            void registerResource(const Base *resource) noexcept;
-            void unregisterResource(const Base *resouce) noexcept;
-            uint32_t count() const noexcept;
-            template<typename Derived>
-            void forEach(const std::function<void(const Derived *resource)>& fn) const noexcept;
-        };
-
         template<typename Type>
-        Pool<Type>& getPool();
+		core::Pool<Type>& getPool();
 
     private:
         mutable std::mutex mutex;
 
         // Core types
-        Pool<NonDispatchable<VkSemaphore>> semaphores;
-        Pool<NonDispatchable<VkFence>> fences;
-        Pool<NonDispatchable<VkDeviceMemory>> deviceMemories;
-        Pool<NonDispatchable<VkBuffer>> buffers;
-        Pool<NonDispatchable<VkImage>> images;
-        Pool<NonDispatchable<VkEvent>> events;
-        Pool<NonDispatchable<VkQueryPool>> queryPools;
-        Pool<NonDispatchable<VkBufferView>> bufferViews;
-        Pool<NonDispatchable<VkImageView>> imageViews;
-        Pool<NonDispatchable<VkShaderModule>> shaderModules;
-        Pool<NonDispatchable<VkPipelineCache>> pipelineCaches;
-        Pool<NonDispatchable<VkPipelineLayout>> pipelineLayouts;
-        Pool<NonDispatchable<VkRenderPass>> renderPasses;
-        Pool<NonDispatchable<VkPipeline>> pipelines;
-        Pool<NonDispatchable<VkDescriptorSetLayout>> descriptorSetLayouts;
-        Pool<NonDispatchable<VkSampler>> samplers;
-        Pool<NonDispatchable<VkDescriptorPool>> descriptorPools;
-        Pool<NonDispatchable<VkDescriptorSet>> descriptorSets;
-        Pool<NonDispatchable<VkFramebuffer>> framebuffers;
-        Pool<NonDispatchable<VkCommandPool>> commandPools;
+        core::Pool<NonDispatchable<VkSemaphore>> semaphores;
+        core::Pool<NonDispatchable<VkFence>> fences;
+        core::Pool<NonDispatchable<VkDeviceMemory>> deviceMemories;
+        core::Pool<NonDispatchable<VkBuffer>> buffers;
+        core::Pool<NonDispatchable<VkImage>> images;
+        core::Pool<NonDispatchable<VkEvent>> events;
+        core::Pool<NonDispatchable<VkQueryPool>> queryPools;
+        core::Pool<NonDispatchable<VkBufferView>> bufferViews;
+        core::Pool<NonDispatchable<VkImageView>> imageViews;
+        core::Pool<NonDispatchable<VkShaderModule>> shaderModules;
+        core::Pool<NonDispatchable<VkPipelineCache>> pipelineCaches;
+        core::Pool<NonDispatchable<VkPipelineLayout>> pipelineLayouts;
+        core::Pool<NonDispatchable<VkRenderPass>> renderPasses;
+        core::Pool<NonDispatchable<VkPipeline>> pipelines;
+        core::Pool<NonDispatchable<VkDescriptorSetLayout>> descriptorSetLayouts;
+        core::Pool<NonDispatchable<VkSampler>> samplers;
+        core::Pool<NonDispatchable<VkDescriptorPool>> descriptorPools;
+        core::Pool<NonDispatchable<VkDescriptorSet>> descriptorSets;
+        core::Pool<NonDispatchable<VkFramebuffer>> framebuffers;
+        core::Pool<NonDispatchable<VkCommandPool>> commandPools;
         // Non-core types
 #ifdef VK_KHR_surface
-        Pool<NonDispatchable<VkSurfaceKHR>> surfaces;
+        core::Pool<NonDispatchable<VkSurfaceKHR>> surfaces;
 #endif
 #ifdef VK_KHR_swapchain
-        Pool<NonDispatchable<VkSwapchainKHR>> swapchains;
+        core::Pool<NonDispatchable<VkSwapchainKHR>> swapchains;
 #endif
 #ifdef VK_KHR_display
-        Pool<NonDispatchable<VkDisplayKHR>> displays;
-        Pool<NonDispatchable<VkDisplayModeKHR>> displayModes;
+        core::Pool<NonDispatchable<VkDisplayKHR>> displays;
+        core::Pool<NonDispatchable<VkDisplayModeKHR>> displayModes;
 #endif
 #ifdef VK_EXT_debug_report
-        Pool<NonDispatchable<VkDebugReportCallbackEXT>> debugReportCallbacks;
+        core::Pool<NonDispatchable<VkDebugReportCallbackEXT>> debugReportCallbacks;
 #endif
 #ifdef VK_EXT_debug_utils
-        Pool<NonDispatchable<VkDebugUtilsMessengerEXT>> debugUtilsMessengers;
+        core::Pool<NonDispatchable<VkDebugUtilsMessengerEXT>> debugUtilsMessengers;
 #endif
 #ifdef VK_NV_ray_tracing
-        Pool<NonDispatchable<VkAccelerationStructureNV>> accelerationStructures;
+        core::Pool<NonDispatchable<VkAccelerationStructureNV>> accelerationStructures;
 #endif
     };
 } // namespace magma

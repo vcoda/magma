@@ -1,62 +1,11 @@
 namespace magma
 {
-template<typename Base>
-inline void ResourcePool::Pool<Base>::registerResource(const Base *resource) noexcept
-{
-    try {
-        std::lock_guard<std::mutex> guard(mutex);
-        resources.insert(resource);
-    } catch (...) {
-    }
-}
-
-template<typename Base>
-inline void ResourcePool::Pool<Base>::unregisterResource(const Base *resource) noexcept
-{
-    try {
-        std::lock_guard<std::mutex> guard(mutex);
-        auto it = resources.find(resource);
-        MAGMA_ASSERT(it != resources.end());
-        if (it != resources.end())
-            resources.erase(it);
-    } catch (...) {
-    }
-}
-
-template<typename Base>
-inline uint32_t ResourcePool::Pool<Base>::count() const noexcept
-{
-    try {
-        std::lock_guard<std::mutex> guard(mutex);
-        return static_cast<uint32_t>(resources.size());
-    } catch (...) {
-        return 0;
-    }
-}
-
-template<typename Base>
-template<typename Derived>
-void ResourcePool::Pool<Base>::forEach(const std::function<void(const Derived *resource)>& fn) const noexcept
-{
-    try {
-        std::lock_guard<std::mutex> guard(mutex);
-        std::for_each(resources.begin(), resources.end(),
-            [&fn](const Base *base)
-            {
-                const Derived *derived = dynamic_cast<const Derived *>(base);
-                if (derived)
-                    fn(derived);
-            });
-    } catch (...) {
-    }
-}
-
 #ifdef MAGMA_X64
 #define MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(Type, pool)\
 template<>\
-inline ResourcePool::Pool<Type>& ResourcePool::getPool<Type>()\
+inline core::Pool<Type>& ResourcePool::getPool<Type>()\
 {\
-    std::lock_guard<std::mutex> guard(mutex);\
+    std::lock_guard<std::mutex> guard(mtx);\
     return pool;\
 }
 
