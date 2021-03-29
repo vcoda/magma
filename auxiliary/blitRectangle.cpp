@@ -97,6 +97,15 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, std::initializer_list<PushConstantRange>{}, allocator);
     const char *vsEntry = vertexShader->getReflection() ? vertexShader->getReflection()->getEntryPointName(0) : "main";
     const char *fsEntry = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
+    const VkSampleCountFlagBits samples = this->renderPass->getAttachments().front().samples;
+    const magma::MultisampleState multisampleState = 
+        (samples & VK_SAMPLE_COUNT_2_BIT) ? renderstates::multisample2 :
+        (samples & VK_SAMPLE_COUNT_4_BIT) ? renderstates::multisample4 : 
+        (samples & VK_SAMPLE_COUNT_8_BIT) ? renderstates::multisample8 :
+        (samples & VK_SAMPLE_COUNT_16_BIT) ? renderstates::multisample16 :
+        (samples & VK_SAMPLE_COUNT_32_BIT) ? renderstates::multisample32 :
+        (samples & VK_SAMPLE_COUNT_64_BIT) ? renderstates::multisample64 :
+        renderstates::dontMultisample;
     pipeline = std::make_shared<GraphicsPipeline>(device,
         std::vector<PipelineShaderStage>{
             VertexShaderStage(std::move(vertexShader), vsEntry),
@@ -108,7 +117,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         physicalDevice->checkExtensionSupport("VK_NV_fill_rectangle") ? renderstates::fillRectangleCullNoneCCW :
 #endif
         renderstates::fillCullNoneCCW,
-        renderstates::dontMultisample,
+        multisampleState,
         renderstates::depthAlwaysDontWrite,
         renderstates::dontBlendRgba,
         std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
