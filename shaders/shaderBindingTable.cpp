@@ -25,8 +25,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_NV_ray_tracing
-ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const std::vector<uint8_t>& shaderGroupHandles, uint32_t groupCount):
-    SrcTransferBuffer(device, device->getPhysicalDevice()->getRayTracingProperties().shaderGroupHandleSize * groupCount)
+ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const void *shaderGroupHandles, uint32_t groupCount):
+    SrcTransferBuffer(device, device->getPhysicalDevice()->getRayTracingProperties().shaderGroupHandleSize * groupCount) // TODO: VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR
 {
     uint8_t *shaderBindingData = getMemory()->map<uint8_t>();
     if (shaderBindingData)
@@ -36,11 +36,15 @@ ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const std
         const uint32_t baseAlignment = rayTracingProperties.shaderGroupBaseAlignment;
         for (uint32_t groupIndex = 0; groupIndex < groupCount; ++groupIndex)
         {
-            memcpy(shaderBindingData, shaderGroupHandles.data() + groupIndex * handleSize, handleSize);
+            memcpy(shaderBindingData, (const uint8_t *)shaderGroupHandles + groupIndex * handleSize, handleSize);
             shaderBindingData += baseAlignment;
         }
         getMemory()->unmap();
     }
 }
+
+ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const std::vector<uint8_t>& shaderGroupHandles, uint32_t groupCount):
+    ShaderBindingTable(std::move(device), shaderGroupHandles.data(), groupCount) 
+{}
 #endif // VK_NV_ray_tracing
 } // namespace magma

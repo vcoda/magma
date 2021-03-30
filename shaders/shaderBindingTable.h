@@ -29,6 +29,9 @@ namespace magma
     {
     public:
         explicit ShaderBindingTable(std::shared_ptr<Device> device,
+            const void *shaderGroupHandles,
+            uint32_t groupCount);
+        explicit ShaderBindingTable(std::shared_ptr<Device> device,
             const std::vector<uint8_t>& shaderGroupHandles,
             uint32_t groupCount);
     };
