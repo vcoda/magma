@@ -84,5 +84,43 @@ namespace magma
             constexpr VertexFragmentStageBinding(const uint32_t binding, const Descriptor& descriptor) noexcept:
                 DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT) {}
         };
+
+#ifdef VK_NV_ray_tracing
+        struct RayGenStageBinding : DescriptorSetLayout::Binding
+        {
+            constexpr RayGenStageBinding(const uint32_t binding, const Descriptor& descriptor) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_RAYGEN_BIT_NV) {}
+        };
+
+        struct AnyHitStageBinding : DescriptorSetLayout::Binding
+        {
+            constexpr AnyHitStageBinding(const uint32_t binding, const Descriptor& descriptor) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_ANY_HIT_BIT_NV) {}
+        };
+
+        struct ClosestHitStageBinding : DescriptorSetLayout::Binding
+        {
+            constexpr ClosestHitStageBinding(const uint32_t binding, const Descriptor& descriptor) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_CLOSEST_HIT_BIT_NV) {}
+        };
+
+        struct MissStageBinding : DescriptorSetLayout::Binding
+        {
+            constexpr MissStageBinding(const uint32_t binding, const Descriptor& descriptor) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_MISS_BIT_NV) {}
+        };
+
+        struct IntersectionStageBinding : DescriptorSetLayout::Binding
+        {
+            constexpr IntersectionStageBinding(const uint32_t binding, const Descriptor& descriptor) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_INTERSECTION_BIT_NV) {}
+        };
+
+        struct CallableStageBinding : DescriptorSetLayout::Binding
+        {
+            constexpr CallableStageBinding(const uint32_t binding, const Descriptor& descriptor) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_CALLABLE_BIT_NV) {}
+        };
+#endif
     } // namespace bindings
 } // namespace magma
