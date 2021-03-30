@@ -34,8 +34,8 @@ namespace magma
     public:
         ~AccelerationStructure();
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
-            const std::vector<uint32_t>& deviceIndices,
-            VkDeviceSize offset /* 0 */);
+            const std::vector<uint32_t>& deviceIndices = {},
+            VkDeviceSize offset = 0);
         VkAccelerationStructureTypeNV getType() const noexcept { return type; }
         const VkAccelerationStructureInfoNV& getInfo() const noexcept { return info; }
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }

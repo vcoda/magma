@@ -63,7 +63,8 @@ AccelerationStructure::~AccelerationStructure()
     delete[] info.pGeometries;
 }
 
-void AccelerationStructure::bindMemory(std::shared_ptr<DeviceMemory> memory, const std::vector<uint32_t>& deviceIndices,
+void AccelerationStructure::bindMemory(std::shared_ptr<DeviceMemory> memory,
+    const std::vector<uint32_t>& deviceIndices /* {} */,
     VkDeviceSize offset /* 0 */)
 {
     VkBindAccelerationStructureMemoryInfoNV info;
@@ -73,7 +74,7 @@ void AccelerationStructure::bindMemory(std::shared_ptr<DeviceMemory> memory, con
     info.memory = *memory;
     info.memoryOffset = offset;
     info.deviceIndexCount = MAGMA_COUNT(deviceIndices);
-    info.pDeviceIndices = nullptr;
+    info.pDeviceIndices = deviceIndices.data();
     MAGMA_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult bind = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &info);
     MAGMA_THROW_FAILURE(bind, "failed to bind acceleration structure memory");
