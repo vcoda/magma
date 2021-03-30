@@ -43,7 +43,7 @@ namespace magma
     class TrianglesHitRayTracingShaderGroup : public RayTracingShaderGroup
     {
     public:
-        explicit TrianglesHitRayTracingShaderGroup(uint32_t closestHitShader, uint32_t anyHitShader) noexcept:
+        explicit TrianglesHitRayTracingShaderGroup(uint32_t closestHitShader, uint32_t anyHitShader = VK_SHADER_UNUSED_NV) noexcept:
             RayTracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_NV, VK_SHADER_UNUSED_NV, closestHitShader, anyHitShader, VK_SHADER_UNUSED_NV) {}
     };
 
