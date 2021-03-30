@@ -104,13 +104,13 @@ VkMemoryRequirements2 AccelerationStructure::getMemoryRequirements(VkAcceleratio
     return memRequirements;
 }
 
-uint64_t AccelerationStructure::getStructureHandle() const
+uint64_t AccelerationStructure::getReferenceHandle() const
 {
-    uint64_t structureHandle;
+    uint64_t refHandle;
     MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureHandleNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    const VkResult get = vkGetAccelerationStructureHandleNV(MAGMA_HANDLE(device), handle, sizeof(structureHandle), &structureHandle);
+    const VkResult get = vkGetAccelerationStructureHandleNV(MAGMA_HANDLE(device), handle, sizeof(uint64_t), &refHandle);
     MAGMA_THROW_FAILURE(get, "failed to get acceleration structure handle");
-    return structureHandle;
+    return refHandle;
 }
 #endif // VK_NV_ray_tracing
 } // namespace magma
