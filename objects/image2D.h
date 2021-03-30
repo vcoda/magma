@@ -76,4 +76,17 @@ namespace magma
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
+
+    /* Supports unfiltered loads, stores, and atomics in a shader. */
+
+    class StorageImage2D : public Image
+    {
+    public:
+        explicit StorageImage2D(std::shared_ptr<Device> device,
+            VkFormat format,
+            const VkExtent2D& extent,
+            uint32_t mipLevels,
+            const Sharing& sharing = Sharing(),
+            std::shared_ptr<IAllocator> allocator = nullptr);
+    };
 } // namespace magma
