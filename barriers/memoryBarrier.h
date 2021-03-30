@@ -17,6 +17,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
+#ifdef MemoryBarrier
+#undef MemoryBarrier
+#endif
+
 namespace magma
 {
     /* Global memory barriers apply to memory accesses involving
