@@ -35,17 +35,21 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     NonDispatchableResource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, compactedSize, std::move(device), std::move(allocator)),
     type(type)
 {
-    MAGMA_ASSERT(geometries.size() > 0);
     info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_INFO_NV;
     info.pNext = nullptr;
     info.type = type;
     info.flags = flags;
     info.instanceCount = instanceCount;
     info.geometryCount = MAGMA_COUNT(geometries);
-    info.pGeometries = new VkGeometryNV[info.geometryCount];
-    uint32_t i = 0;
-    for (const auto& geometry : geometries)
-        (const_cast<VkGeometryNV *>(info.pGeometries))[i++] = geometry;
+    if (0 == info.geometryCount)
+        info.pGeometries = nullptr;
+    else
+    {
+        VkGeometryNV *pGeometries = new VkGeometryNV[info.geometryCount];
+        info.pGeometries = pGeometries;
+        for (const auto& geometry : geometries)
+            *pGeometries++ = geometry;
+    }
     VkAccelerationStructureCreateInfoNV createInfo;
     createInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_NV;
     createInfo.pNext = nullptr;
