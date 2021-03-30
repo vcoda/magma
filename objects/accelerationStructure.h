@@ -39,7 +39,7 @@ namespace magma
         VkAccelerationStructureTypeNV getType() const noexcept { return type; }
         const VkAccelerationStructureInfoNV& getInfo() const noexcept { return info; }
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
-        VkMemoryRequirements2 getMemoryRequirements() const;
+        VkMemoryRequirements2 getMemoryRequirements(VkAccelerationStructureMemoryRequirementsTypeNV type) const;
         uint64_t getStructureHandle() const;
 
     protected:

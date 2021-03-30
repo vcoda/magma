@@ -81,16 +81,18 @@ void AccelerationStructure::bindMemory(std::shared_ptr<DeviceMemory> memory, con
     this->memory = std::move(memory);
 }
 
-VkMemoryRequirements2 AccelerationStructure::getMemoryRequirements() const
+VkMemoryRequirements2 AccelerationStructure::getMemoryRequirements(VkAccelerationStructureMemoryRequirementsTypeNV type) const
 {
     VkAccelerationStructureMemoryRequirementsInfoNV info;
     info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_INFO_NV;
     info.pNext = nullptr;
+    info.type = type;
     info.accelerationStructure = handle;
-    VkMemoryRequirements2 memoryRequirements;
+    VkMemoryRequirements2 memRequirements = {};
+    memRequirements.sType = VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2;
     MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureMemoryRequirementsNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    vkGetAccelerationStructureMemoryRequirementsNV(MAGMA_HANDLE(device), &info, &memoryRequirements);
-    return memoryRequirements;
+    vkGetAccelerationStructureMemoryRequirementsNV(MAGMA_HANDLE(device), &info, &memRequirements);
+    return memRequirements;
 }
 
 uint64_t AccelerationStructure::getStructureHandle() const
