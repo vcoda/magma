@@ -88,5 +88,12 @@ namespace magma
         {
             constexpr InputAttachment(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, count) {}
         };
+
+#ifdef VK_NV_ray_tracing
+        struct AccelerationStructure : Descriptor
+        {
+            constexpr AccelerationStructure(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV, count) {}
+        };
+#endif
     } // namespace descriptors
 } // namespace magma
