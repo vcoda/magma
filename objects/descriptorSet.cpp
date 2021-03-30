@@ -66,21 +66,37 @@ void DescriptorSet::update(uint32_t index, std::shared_ptr<const ImageView> imag
     const Format format(imageView->getImage()->getFormat());
     MAGMA_ASSERT(1 == binding.descriptorCount);
     VkDescriptorImageInfo info;
-    info.sampler = *sampler;
+    info.sampler = MAGMA_OPTIONAL_HANDLE(sampler);
     info.imageView = *imageView;
-#ifdef VK_KHR_separate_depth_stencil_layouts
-    if (format.depth()) // Read-only image in a shader where only the depth aspect is accessed
-        info.imageLayout = VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL_KHR;
-    else if (format.stencil()) // Read-only image in a shader where only the stencil aspect is accessed
-        info.imageLayout = VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL_KHR;
-    else if (format.depthStencil()) // Read-only image in a shader where both depth and stencil is accessed
-        info.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
-#else
-    if (format.depth() || format.stencil() || format.depthStencil())
-        info.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
-#endif // VK_KHR_separate_depth_stencil_layouts
-    else // Read-only image in a shader
-        info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    if (!sampler)
+    {
+        MAGMA_ASSERT(imageView->getImage()->getUsage() & VK_IMAGE_USAGE_STORAGE_BIT);
+        if (imageView->getImage()->getUsage() & VK_IMAGE_USAGE_STORAGE_BIT)
+            info.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
+        else
+            info.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    } 
+    else 
+    {
+        MAGMA_ASSERT(imageView->getImage()->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
+        if (imageView->getImage()->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT)
+        {
+    #ifdef VK_KHR_separate_depth_stencil_layouts
+            if (format.depth()) // Read-only image in a shader where only the depth aspect is accessed
+                info.imageLayout = VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL_KHR;
+            else if (format.stencil()) // Read-only image in a shader where only the stencil aspect is accessed
+                info.imageLayout = VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL_KHR;
+            else if (format.depthStencil()) // Read-only image in a shader where both depth and stencil is accessed
+                info.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+    #else
+            if (format.depth() || format.stencil() || format.depthStencil())
+                info.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+    #endif // VK_KHR_separate_depth_stencil_layouts
+            else // Read-only image in a shader
+                info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        } 
+        else info.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    }
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     descriptorWrite.pNext = nullptr;
