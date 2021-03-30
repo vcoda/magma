@@ -480,16 +480,18 @@ void CommandBuffer::traceRays(const std::shared_ptr<Buffer>& raygenShaderBinding
     const std::shared_ptr<Buffer>& callableShaderBindingTableBuffer, VkDeviceSize callableShaderBindingOffset, VkDeviceSize callableShaderBindingStride,
     uint32_t width, uint32_t height, uint32_t depth) noexcept
 {
+    MAGMA_ASSERT(raygenShaderBindingTableBuffer);
     MAGMA_ASSERT(width);
     MAGMA_ASSERT(height);
+    MAGMA_ASSERT(depth);
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdTraceRaysNV);
     if (vkCmdTraceRaysNV)
     {
         vkCmdTraceRaysNV(handle,
             *raygenShaderBindingTableBuffer, raygenShaderBindingOffset,
-            *missShaderBindingTableBuffer, missShaderBindingOffset, missShaderBindingStride,
-            *hitShaderBindingTableBuffer, hitShaderBindingOffset, hitShaderBindingStride,
-            *callableShaderBindingTableBuffer, callableShaderBindingOffset, callableShaderBindingStride,
+            MAGMA_OPTIONAL_HANDLE(missShaderBindingTableBuffer), missShaderBindingOffset, missShaderBindingStride,
+            MAGMA_OPTIONAL_HANDLE(hitShaderBindingTableBuffer), hitShaderBindingOffset, hitShaderBindingStride,
+            MAGMA_OPTIONAL_HANDLE(callableShaderBindingTableBuffer), callableShaderBindingOffset, callableShaderBindingStride,
             width, height, depth);
     }
 }
