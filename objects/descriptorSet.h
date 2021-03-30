@@ -28,6 +28,9 @@ namespace magma
     class BufferView;
     class Sampler;
     class ImageView;
+#ifdef VK_NV_ray_tracing
+    class AccelerationStructure;
+#endif
 
     /*  A descriptor set object is an opaque object that contains storage for a set of descriptors,
         where the types and number of descriptors is defined by a descriptor set layout.
@@ -52,6 +55,10 @@ namespace magma
             std::shared_ptr<const Sampler> sampler) noexcept;
         void update(uint32_t index,
             std::shared_ptr<const BufferView> texelBufferView) noexcept;
+#ifdef VK_NV_ray_tracing
+        void update(uint32_t index, 
+            std::shared_ptr<const AccelerationStructure> accelerationStructure) noexcept;
+#endif
         std::shared_ptr<DescriptorPool> getPool() noexcept { return pool; }
         std::shared_ptr<const DescriptorPool> getPool() const noexcept { return pool; }
         std::shared_ptr<DescriptorSetLayout> getLayout() noexcept { return layout; }

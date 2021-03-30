@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "bufferView.h"
 #include "image.h"
 #include "imageView.h"
+#include "accelerationStructure.h"
 #include "sampler.h"
 #include "../misc/format.h"
 
@@ -112,4 +113,30 @@ void DescriptorSet::update(uint32_t index, std::shared_ptr<const BufferView> tex
     descriptorWrite.pTexelBufferView = bufferViews;
     vkUpdateDescriptorSets(MAGMA_HANDLE(device), 1, &descriptorWrite, 0, nullptr);
 }
+
+#ifdef VK_NV_ray_tracing
+void DescriptorSet::update(uint32_t index, std::shared_ptr<const AccelerationStructure> accelerationStructure) noexcept
+{
+    const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
+    MAGMA_ASSERT(1 == binding.descriptorCount);
+    const VkAccelerationStructureNV accelerationStructures[1] = {*accelerationStructure};
+    VkWriteDescriptorSetAccelerationStructureNV accelerationStructureDescriptorWrite;
+    accelerationStructureDescriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_NV;
+    accelerationStructureDescriptorWrite.pNext = nullptr;
+    accelerationStructureDescriptorWrite.accelerationStructureCount = 1;
+    accelerationStructureDescriptorWrite.pAccelerationStructures = accelerationStructures;
+    VkWriteDescriptorSet descriptorWrite;
+    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    descriptorWrite.pNext = &accelerationStructureDescriptorWrite;
+    descriptorWrite.dstSet = handle;
+    descriptorWrite.dstBinding = binding.binding;
+    descriptorWrite.dstArrayElement = 0;
+    descriptorWrite.descriptorCount = binding.descriptorCount;
+    descriptorWrite.descriptorType = binding.descriptorType;
+    descriptorWrite.pImageInfo = nullptr;
+    descriptorWrite.pBufferInfo = nullptr;
+    descriptorWrite.pTexelBufferView = nullptr;
+    vkUpdateDescriptorSets(MAGMA_HANDLE(device), 1, &descriptorWrite, 0, nullptr);
+}
+#endif // VK_NV_ray_tracing
 } // namespace magma
