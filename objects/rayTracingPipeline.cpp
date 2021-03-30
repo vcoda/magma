@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineLayout.h"
 #include "pipelineCache.h"
 #include "device.h"
+#include "physicalDevice.h"
 #include "../allocator/allocator.h"
 #include "../misc/deviceExtension.h"
 #include "../exceptions/errorResult.h"
@@ -39,7 +40,9 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */):
     Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, std::move(device), std::move(layout),
-        std::move(pipelineCache), std::move(basePipeline), std::move(allocator))
+        std::move(pipelineCache), std::move(basePipeline), std::move(allocator)),
+    groupCount(MAGMA_COUNT(groups)),
+    maxRecursionDepth(maxRecursionDepth)
 {
     if (stages.empty())
         MAGMA_THROW("shader stages are empty");
@@ -56,7 +59,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
         dereferencedStages.put(stage);
     info.stageCount = MAGMA_COUNT(dereferencedStages);
     info.pStages = dereferencedStages;
-    info.groupCount = MAGMA_COUNT(groups);
+    info.groupCount = groupCount;
     info.pGroups = groups.data();
     info.maxRecursionDepth = maxRecursionDepth;
     info.layout = MAGMA_HANDLE(layout);
@@ -78,14 +81,14 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
     core::hashCombine(hash, this->layout->getHash());
 }
 
-std::vector<VkShaderModule> RayTracingPipeline::getShaderGroupHandles(uint32_t firstGroup, uint32_t groupCount) const
+std::vector<uint8_t> RayTracingPipeline::getShaderGroupHandles() const
 {
-    std::vector<VkShaderModule> shaders(groupCount);
-    const std::size_t dataSize = sizeof(VkShaderModule) * groupCount;
+    const VkPhysicalDeviceRayTracingPropertiesNV& rayTracingProperties = device->getPhysicalDevice()->getRayTracingProperties();
+    std::vector<uint8_t> shaderGroupHandles(groupCount * rayTracingProperties.shaderGroupHandleSize);
     MAGMA_DEVICE_EXTENSION(vkGetRayTracingShaderGroupHandlesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    const VkResult get = vkGetRayTracingShaderGroupHandlesNV(MAGMA_HANDLE(device), handle, firstGroup, groupCount, dataSize, shaders.data());
+    const VkResult get = vkGetRayTracingShaderGroupHandlesNV(MAGMA_HANDLE(device), handle, 0, groupCount, shaderGroupHandles.size(), shaderGroupHandles.data());
     MAGMA_THROW_FAILURE(get, "failed to get ray tracing shader handles");
-    return shaders;
+    return shaderGroupHandles;
 }
 
 void RayTracingPipeline::compileDeferred(uint32_t shaderIndex)

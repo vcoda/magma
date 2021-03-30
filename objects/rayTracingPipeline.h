@@ -40,8 +40,12 @@ namespace magma
             std::shared_ptr<RayTracingPipeline> basePipeline = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkPipelineCreateFlags flags = 0);
-        std::vector<VkShaderModule> getShaderGroupHandles(uint32_t firstGroup, uint32_t groupCount) const;
+        std::vector<uint8_t> getShaderGroupHandles() const;
         void compileDeferred(uint32_t shaderIndex);
+
+    private:
+        uint32_t groupCount;
+        uint32_t maxRecursionDepth;
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma
