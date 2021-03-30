@@ -111,6 +111,7 @@ MAGMA_OBJS= \
 	\
 	shaders/pipelineShaderStage.o \
 	shaders/rayTracingShaderGroup.o \
+	shaders/shaderBindingTable.o \
 	shaders/shaderReflection.o \
 	shaders/specialization.o \
 	\

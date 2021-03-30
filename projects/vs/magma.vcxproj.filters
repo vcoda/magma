@@ -570,6 +570,9 @@
     <ClInclude Include="..\..\core\pool.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\shaders\shaderBindingTable.h">
+      <Filter>Header Files\shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -871,6 +874,9 @@
     </ClCompile>
     <ClCompile Include="..\..\auxiliary\colorMultisampleReadFramebuffer.cpp">
       <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shaders\shaderBindingTable.cpp">
+      <Filter>Source Files\shaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

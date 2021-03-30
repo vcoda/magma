@@ -288,6 +288,7 @@
     <ClInclude Include="..\..\objects\vertexBuffer.h" />
     <ClInclude Include="..\..\shaders\pipelineShaderStage.h" />
     <ClInclude Include="..\..\shaders\rayTracingShaderGroup.h" />
+    <ClInclude Include="..\..\shaders\shaderBindingTable.h" />
     <ClInclude Include="..\..\shaders\shaderReflection.h" />
     <ClInclude Include="..\..\shaders\specialization.h" />
     <ClInclude Include="..\..\shaders\shaderStages.h" />
@@ -402,6 +403,7 @@
     <ClCompile Include="..\..\objects\vertexBuffer.cpp" />
     <ClCompile Include="..\..\shaders\pipelineShaderStage.cpp" />
     <ClCompile Include="..\..\shaders\rayTracingShaderGroup.cpp" />
+    <ClCompile Include="..\..\shaders\shaderBindingTable.cpp" />
     <ClCompile Include="..\..\shaders\shaderReflection.cpp" />
     <ClCompile Include="..\..\shaders\specialization.cpp" />
     <ClCompile Include="..\..\states\colorBlendState.cpp" />
