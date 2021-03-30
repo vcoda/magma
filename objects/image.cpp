@@ -76,7 +76,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     info.initialLayout = layout;
     const VkResult create = vkCreateImage(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create image");
-    VkMemoryRequirements memoryRequirements;
+    VkMemoryRequirements memoryRequirements = {};
     vkGetImageMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
     size = memoryRequirements.size;
     VkMemoryPropertyFlags memoryFlags;

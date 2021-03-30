@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "allocator/allocator.h"
 #include "allocator/objectAllocator.h"
 
+#include "objects/accelerationStructure.h"
 #include "objects/buffer.h"
 #include "objects/bufferView.h"
 #include "objects/commandBuffer.h"
@@ -110,6 +111,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "misc/deviceExtension.h"
 #include "misc/deviceQueueDescriptor.h"
 #include "misc/format.h"
+#include "misc/geometry.h"
 #include "misc/imageSubresourceRange.h"
 #include "misc/instanceExtension.h"
 #include "misc/pushConstants.h"

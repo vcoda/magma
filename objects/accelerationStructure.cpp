@@ -23,7 +23,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../misc/geometry.h"
 #include "../misc/deviceExtension.h"
-#include "../helpers/stackArray.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
@@ -58,9 +57,9 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     MAGMA_DEVICE_EXTENSION(vkCreateAccelerationStructureNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult create = vkCreateAccelerationStructureNV(MAGMA_HANDLE(device), &createInfo, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create acceleration structure");
-    const VkMemoryRequirements2 memRequirements = getMemoryRequirements(VK_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_OBJECT_NV);
+    const VkMemoryRequirements2 memoryRequirements = getMemoryRequirements(VK_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_OBJECT_NV);
     std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(this->device, 
-        memRequirements.memoryRequirements.size, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+        memoryRequirements.memoryRequirements.size, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
     bindMemory(std::move(memory));
 }
 
@@ -97,11 +96,11 @@ VkMemoryRequirements2 AccelerationStructure::getMemoryRequirements(VkAcceleratio
     info.pNext = nullptr;
     info.type = type;
     info.accelerationStructure = handle;
-    VkMemoryRequirements2 memRequirements = {};
-    memRequirements.sType = VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2;
+    VkMemoryRequirements2 memoryRequirements = {};
+    memoryRequirements.sType = VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2;
     MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureMemoryRequirementsNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    vkGetAccelerationStructureMemoryRequirementsNV(MAGMA_HANDLE(device), &info, &memRequirements);
-    return memRequirements;
+    vkGetAccelerationStructureMemoryRequirementsNV(MAGMA_HANDLE(device), &info, &memoryRequirements);
+    return memoryRequirements;
 }
 
 uint64_t AccelerationStructure::getReferenceHandle() const

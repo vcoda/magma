@@ -83,7 +83,7 @@ std::vector<VkQueueFamilyProperties> PhysicalDevice::getQueueFamilyProperties() 
 
 VkPhysicalDeviceMemoryProperties PhysicalDevice::getMemoryProperties() const noexcept
 {
-    VkPhysicalDeviceMemoryProperties memoryProperties;
+    VkPhysicalDeviceMemoryProperties memoryProperties = {};
     vkGetPhysicalDeviceMemoryProperties(handle, &memoryProperties);
     return memoryProperties;
 }

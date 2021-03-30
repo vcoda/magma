@@ -47,7 +47,7 @@ namespace magma
         explicit Buffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkBufferUsageFlags usage,
-            VkMemoryPropertyFlags memFlags,
+            VkMemoryPropertyFlags memoryFlags,
             VkBufferCreateFlags flags,
             const Sharing& sharing,
             std::shared_ptr<IAllocator> allocator);
