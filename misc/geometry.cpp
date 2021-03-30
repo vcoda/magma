@@ -88,7 +88,7 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<const VertexBuffer> vertexD
     geometry.aabbs.offset = 0;
 }
 
-GeometryBVH::GeometryBVH(std::shared_ptr<const Buffer> aabbData, uint32_t numAABBs, uint32_t stride, VkDeviceSize offset,
+GeometryAABBs::GeometryAABBs(std::shared_ptr<const Buffer> aabbData, uint32_t numAABBs, uint32_t stride, VkDeviceSize offset,
     VkGeometryFlagsNV flags /* 0 */) noexcept:
     Geometry(VK_GEOMETRY_TYPE_AABBS_NV, flags)
 {

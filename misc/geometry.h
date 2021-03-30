@@ -27,10 +27,8 @@ namespace magma
     class Geometry : public VkGeometryNV
     {
     public:
-        bool isTriangles() const noexcept
-            { return VK_GEOMETRY_TYPE_TRIANGLES_NV == geometryType; }
-        bool isBVH() const noexcept
-            { return VK_GEOMETRY_TYPE_AABBS_NV == geometryType; }
+        bool triangles() const noexcept { return VK_GEOMETRY_TYPE_TRIANGLES_NV == geometryType; }
+        bool AABBs() const noexcept { return VK_GEOMETRY_TYPE_AABBS_NV == geometryType; }
 
     protected:
         explicit Geometry(VkGeometryTypeNV geometryType,
@@ -63,10 +61,10 @@ namespace magma
             VkGeometryFlagsNV flags = 0) noexcept;
     };
 
-    class GeometryBVH : public Geometry
+    class GeometryAABBs: public Geometry
     {
     public:
-        explicit GeometryBVH(std::shared_ptr<const Buffer> aabbData,
+        explicit GeometryAABBs(std::shared_ptr<const Buffer> aabbData,
             uint32_t numAABBs,
             uint32_t stride,
             VkDeviceSize offset,
