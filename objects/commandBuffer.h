@@ -209,11 +209,19 @@ namespace magma
             uint32_t mipLevel = 0,
             const VkOffset3D& srcOffset = VkOffset3D{0, 0, 0},
             const VkOffset3D& dstOffset = VkOffset3D{0, 0, 0}) const noexcept;
+
         void blitImage(
             const std::shared_ptr<const Image>& srcImage,
             const std::shared_ptr<Image>& dstImage,
             const VkImageBlit& region,
             VkFilter filter) const noexcept;
+        void blitImage(
+            const std::shared_ptr<const Image>& srcImage,
+            const std::shared_ptr<Image>& dstImage,
+            VkFilter filter,
+            uint32_t mipLevel = 0,
+            const VkOffset3D& srcOffset = VkOffset3D{0, 0, 0},
+            const VkOffset3D& dstOffset = VkOffset3D{0, 0, 0}) const noexcept;
 
         void copyBufferToImage(
             const std::shared_ptr<const Buffer>& srcBuffer,

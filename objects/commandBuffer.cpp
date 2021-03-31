@@ -192,6 +192,27 @@ void CommandBuffer::copyImage(const std::shared_ptr<const Image>& srcImage, cons
     vkCmdCopyImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &region);
 }
 
+void CommandBuffer::blitImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage, VkFilter filter,
+    uint32_t mipLevel /* 0 */, const VkOffset3D& srcOffset /* 0, 0, 0 */, const VkOffset3D& dstOffset /* 0, 0, 0 */) const noexcept
+{
+    const VkExtent3D srcExtent = srcImage->getMipExtent(mipLevel);
+    const VkExtent3D dstExtent = dstImage->getMipExtent(mipLevel);
+    VkImageBlit region;
+    region.srcSubresource = srcImage->getSubresourceLayers(mipLevel);
+    region.srcOffsets[0] = srcOffset;
+    region.srcOffsets[1] = VkOffset3D{
+        static_cast<int32_t>(srcExtent.width),
+        static_cast<int32_t>(srcExtent.height),
+        1};
+    region.dstSubresource = dstImage->getSubresourceLayers(mipLevel);
+    region.dstOffsets[0] = dstOffset;
+    region.dstOffsets[1] = VkOffset3D{
+        static_cast<int32_t>(dstExtent.width),
+        static_cast<int32_t>(dstExtent.height),
+        1};
+    vkCmdBlitImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &region, filter);
+}
+
 // inline void CommandBuffer::copyImage
 // inline void CommandBuffer::blitImage
 // inline void CommandBuffer::copyBufferToImage
