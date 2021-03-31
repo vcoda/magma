@@ -44,7 +44,7 @@ namespace magma
         VkFormat getFormat() const noexcept { return format; }
         VkImageLayout getLayout() const noexcept { return layout; }
         void setLayout(VkImageLayout layout) noexcept { this->layout = layout; }
-        VkExtent3D getMipExtent(uint32_t level) const;
+        VkExtent3D getMipExtent(uint32_t level) const noexcept;
         uint32_t getMipLevels() const noexcept { return mipLevels; }
         uint32_t getArrayLayers() const noexcept { return arrayLayers; }
         uint32_t getSamples() const noexcept { return samples; }
