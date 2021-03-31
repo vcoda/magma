@@ -203,6 +203,12 @@ namespace magma
             const std::shared_ptr<const Image>& srcImage,
             const std::shared_ptr<Image>& dstImage,
             const VkImageCopy& region) const noexcept;
+        void copyImage(
+            const std::shared_ptr<const Image>& srcImage,
+            const std::shared_ptr<Image>& dstImage,
+            uint32_t mipLevel = 0,
+            const VkOffset3D& srcOffset = VkOffset3D{0, 0, 0},
+            const VkOffset3D& dstOffset = VkOffset3D{0, 0, 0}) const noexcept;
         void blitImage(
             const std::shared_ptr<const Image>& srcImage,
             const std::shared_ptr<Image>& dstImage,

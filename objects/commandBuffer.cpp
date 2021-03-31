@@ -180,6 +180,18 @@ void CommandBuffer::copyBuffer(const std::shared_ptr<const Buffer>& srcBuffer, c
     vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, 1, &region);
 }
 
+void CommandBuffer::copyImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage,
+    uint32_t mipLevel /* 0 */, const VkOffset3D& srcOffset /* 0, 0, 0 */, const VkOffset3D& dstOffset /* 0, 0, 0 */) const noexcept
+{
+    VkImageCopy region;
+    region.srcSubresource = srcImage->getSubresourceLayers(mipLevel);
+    region.srcOffset = srcOffset;
+    region.dstSubresource = dstImage->getSubresourceLayers(mipLevel);
+    region.dstOffset = dstOffset;
+    region.extent = dstImage->getMipExtent(mipLevel);
+    vkCmdCopyImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &region);
+}
+
 // inline void CommandBuffer::copyImage
 // inline void CommandBuffer::blitImage
 // inline void CommandBuffer::copyBufferToImage
