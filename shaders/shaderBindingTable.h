@@ -22,7 +22,9 @@ namespace magma
 {
     class RayTracingPipeline;
 
-    /* Manages placement of opaque shader handles in a host visible buffer. */
+    /* A shader binding table is a resource which establishes the relationship
+       between the ray tracing pipeline and the acceleration structures
+       that were built for the ray tracing pipeline. */
 
 #ifdef VK_NV_ray_tracing
     class ShaderBindingTable : public Buffer
