@@ -25,8 +25,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_NV_ray_tracing
-ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const void *shaderGroupHandles, uint32_t groupCount):
-    SrcTransferBuffer(device, device->getPhysicalDevice()->getRayTracingProperties().shaderGroupHandleSize * groupCount) // TODO: VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR
+ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const void *shaderGroupHandles, uint32_t groupCount,
+    VkBufferCreateFlags flags /* 0 */,
+    const Sharing& sharing /* default */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Buffer(device,
+        device->getPhysicalDevice()->getRayTracingProperties().shaderGroupHandleSize * groupCount,
+        // Note that VK_BUFFER_USAGE_RAY_TRACING_BIT_NV = VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR in newer SDK revision
+        VK_BUFFER_USAGE_RAY_TRACING_BIT_NV | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+        flags, sharing, std::move(allocator))
 {
     uint8_t *shaderBindingData = getMemory()->map<uint8_t>();
     if (shaderBindingData)
@@ -43,8 +51,12 @@ ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const voi
     }
 }
 
-ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const std::vector<uint8_t>& shaderGroupHandles, uint32_t groupCount):
-    ShaderBindingTable(std::move(device), shaderGroupHandles.data(), groupCount) 
+ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const std::vector<uint8_t>& shaderGroupHandles, uint32_t groupCount,
+    VkBufferCreateFlags flags /* 0 */,
+    const Sharing& sharing /* default */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    ShaderBindingTable(std::move(device), shaderGroupHandles.data(), groupCount, 
+        flags, sharing, std::move(allocator)) 
 {}
 #endif // VK_NV_ray_tracing
 } // namespace magma

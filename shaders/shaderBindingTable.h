@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../objects/srcTransferBuffer.h"
+#include "../objects/buffer.h"
 
 namespace magma
 {
@@ -25,15 +25,21 @@ namespace magma
     /* Manages placement of opaque shader handles in a host visible buffer. */
 
 #ifdef VK_NV_ray_tracing
-    class ShaderBindingTable : public SrcTransferBuffer
+    class ShaderBindingTable : public Buffer
     {
     public:
         explicit ShaderBindingTable(std::shared_ptr<Device> device,
             const void *shaderGroupHandles,
-            uint32_t groupCount);
+            uint32_t groupCount,
+            VkBufferCreateFlags flags = 0,
+            const Sharing& sharing = Sharing(),
+            std::shared_ptr<IAllocator> allocator = nullptr);
         explicit ShaderBindingTable(std::shared_ptr<Device> device,
             const std::vector<uint8_t>& shaderGroupHandles,
-            uint32_t groupCount);
+            uint32_t groupCount,
+            VkBufferCreateFlags flags = 0,
+            const Sharing& sharing = Sharing(),
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma
