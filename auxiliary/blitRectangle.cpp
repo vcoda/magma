@@ -88,9 +88,13 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     const BorderColor borderColor = DefaultBorderColor();
     nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, borderColor, allocator);
     bilinearSampler = std::make_shared<Sampler>(device, samplers::magMinLinearMipNearestClampToEdge, borderColor, allocator);
+    // Check for cubic filtering support
 #ifdef VK_EXT_filter_cubic
-    // Check for hardware support
-    if (physicalDevice->checkExtensionSupport("VK_IMG_filter_cubic") || physicalDevice->checkExtensionSupport("VK_EXT_filter_cubic"))
+    if (device->extensionEnabled(VK_EXT_FILTER_CUBIC_EXTENSION_NAME))
+        cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, borderColor, allocator);
+#endif
+#ifdef VK_IMG_filter_cubic
+    if (device->extensionEnabled(VK_IMG_FILTER_CUBIC_EXTENSION_NAME) && !cubicSampler)
         cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, borderColor, allocator);
 #endif
     // Create blit pipeline
