@@ -72,8 +72,8 @@ VkImageLayout Framebuffer::finalDepthStencilLayout(std::shared_ptr<Device> devic
     const VkFormat depthStencilFormat, const bool depthSampled) const
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts
-    std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-    if (physicalDevice->checkExtensionSupport("VK_KHR_separate_depth_stencil_layouts"))
+    if (device->getPhysicalDevice()->checkExtensionSupport(VK_KHR_SEPARATE_DEPTH_STENCIL_LAYOUTS_EXTENSION_NAME) &&
+        device->separateDepthStencilLayoutsEnabled())
     {
         const Format format(depthStencilFormat);
         if (format.depth())
