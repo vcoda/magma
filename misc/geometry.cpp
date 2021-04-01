@@ -60,33 +60,21 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<const Buffer> vertexData, V
 }
 
 GeometryTriangles::GeometryTriangles(std::shared_ptr<const VertexBuffer> vertexData, VkDeviceSize vertexStride, VkFormat vertexFormat,
-    std::shared_ptr<const IndexBuffer> indexData, std::shared_ptr<const Buffer> transformData,
-    VkDeviceSize vertexOffset /* 0 */,
-    VkDeviceSize indexOffset /* 0 */,
-    VkDeviceSize transformOffset /* 0 */,
-    VkGeometryFlagsNV flags /* 0 */) noexcept:
-    Geometry(VK_GEOMETRY_TYPE_TRIANGLES_NV, flags)
-{
-    geometry.triangles.sType = VK_STRUCTURE_TYPE_GEOMETRY_TRIANGLES_NV;
-    geometry.triangles.pNext = nullptr;
-    geometry.triangles.vertexData = MAGMA_OPTIONAL_HANDLE(vertexData);
-    geometry.triangles.vertexOffset = vertexOffset;
-    geometry.triangles.vertexCount = vertexData->getVertexCount();
-    geometry.triangles.vertexStride = vertexStride;
-    geometry.triangles.vertexFormat = vertexFormat;
-    geometry.triangles.indexData = MAGMA_OPTIONAL_HANDLE(indexData);
-    geometry.triangles.indexOffset = indexOffset;
-    geometry.triangles.indexCount = indexData->getIndexCount();
-    geometry.triangles.indexType = indexData->getIndexType();
-    geometry.triangles.transformData = MAGMA_OPTIONAL_HANDLE(transformData);
-    geometry.triangles.transformOffset = transformOffset;
-    geometry.aabbs.sType = VK_STRUCTURE_TYPE_GEOMETRY_AABB_NV;
-    geometry.aabbs.pNext = nullptr;
-    geometry.aabbs.aabbData = VK_NULL_HANDLE;
-    geometry.aabbs.numAABBs = 0;
-    geometry.aabbs.stride = 0;
-    geometry.aabbs.offset = 0;
-}
+    std::shared_ptr<const IndexBuffer> indexData, std::shared_ptr<const Buffer> transformData /* nullptr */,
+    VkDeviceSize vertexOffset /* 0 */, VkDeviceSize indexOffset /* 0 */, VkDeviceSize transformOffset /* 0 */, VkGeometryFlagsNV flags /* 0 */) noexcept:
+    GeometryTriangles(vertexData, 
+        vertexOffset, 
+        vertexData->getVertexCount(),
+        vertexStride,
+        vertexFormat,
+        indexData,
+        indexOffset, 
+        indexData->getIndexCount(), 
+        indexData->getIndexType(), 
+        std::move(transformData), 
+        transformOffset, 
+        flags)
+{}
 
 GeometryTriangles::GeometryTriangles(std::shared_ptr<const VertexBuffer> vertexData, const VkVertexInputAttributeDescription& attribute, VkDeviceSize vertexStride,
     std::shared_ptr<const IndexBuffer> indexData, std::shared_ptr<const Buffer> transformData /* nullptr */,

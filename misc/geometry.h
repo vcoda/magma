@@ -54,7 +54,7 @@ namespace magma
             VkDeviceSize vertexStride,
             VkFormat vertexFormat,
             std::shared_ptr<const IndexBuffer> indexData,
-            std::shared_ptr<const Buffer> transformData,
+            std::shared_ptr<const Buffer> transformData = nullptr,
             VkDeviceSize vertexOffset = 0,
             VkDeviceSize indexOffset = 0,
             VkDeviceSize transformOffset = 0,
