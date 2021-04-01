@@ -59,6 +59,15 @@ namespace magma
             VkDeviceSize indexOffset = 0,
             VkDeviceSize transformOffset = 0,
             VkGeometryFlagsNV flags = 0) noexcept;
+        explicit GeometryTriangles(std::shared_ptr<const VertexBuffer> vertexData,
+            const VkVertexInputAttributeDescription& attribute,
+            VkDeviceSize vertexStride,
+            std::shared_ptr<const IndexBuffer> indexData,
+            std::shared_ptr<const Buffer> transformData = nullptr,
+            VkDeviceSize vertexOffset = 0,
+            VkDeviceSize indexOffset = 0,
+            VkDeviceSize transformOffset = 0,
+            VkGeometryFlagsNV flags = 0) noexcept;
     };
 
     class GeometryAABBs: public Geometry
