@@ -42,6 +42,10 @@ namespace magma
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
+        explicit ShaderBindingTable(std::shared_ptr<const RayTracingPipeline> pipeline,
+            VkBufferCreateFlags flags = 0,
+            const Sharing& sharing = Sharing(),
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma

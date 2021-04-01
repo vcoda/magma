@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
 #include "../objects/deviceMemory.h"
+#include "../objects/rayTracingPipeline.h"
 
 namespace magma
 {
@@ -56,6 +57,14 @@ ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const std
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     ShaderBindingTable(std::move(device), shaderGroupHandles.data(), groupCount, 
+        flags, sharing, std::move(allocator)) 
+{}
+
+ShaderBindingTable::ShaderBindingTable(std::shared_ptr<const RayTracingPipeline> pipeline,
+    VkBufferCreateFlags flags /* 0 */,
+    const Sharing& sharing /* default */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    ShaderBindingTable(pipeline->getDevice(), pipeline->getShaderGroupHandles(), pipeline->getGroupCount(), 
         flags, sharing, std::move(allocator)) 
 {}
 #endif // VK_NV_ray_tracing
