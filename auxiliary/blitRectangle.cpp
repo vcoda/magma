@@ -114,7 +114,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         renderstates::nullVertexInput,
         renderstates::triangleList,
 #ifdef VK_NV_fill_rectangle
-        physicalDevice->checkExtensionSupport("VK_NV_fill_rectangle") ? renderstates::fillRectangleCullNoneCCW :
+        device->extensionEnabled(VK_NV_FILL_RECTANGLE_EXTENSION_NAME) ? renderstates::fillRectangleCullNoneCCW :
 #endif
         renderstates::fillCullNoneCCW,
         multisampleState,
@@ -166,13 +166,15 @@ void BlitRectangle::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
 
 std::shared_ptr<ShaderModule> BlitRectangle::createVertexShader(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) const
 {   // https://www.khronos.org/registry/OpenGL/extensions/NV/NV_fill_rectangle.txt;
-    if (device->getPhysicalDevice()->checkExtensionSupport("VK_NV_fill_rectangle"))
+#ifdef VK_NV_fill_rectangle
+    if (device->extensionEnabled(VK_NV_FILL_RECTANGLE_EXTENSION_NAME))
     {
 constexpr
 #include "spirv/output/blitv_nv"
         constexpr std::size_t vsBlitNVHash = core::hashArray(vsBlitNV);
         return std::make_shared<ShaderModule>(std::move(device), vsBlitNV, vsBlitNVHash, 0, false, std::move(allocator));
     }
+#endif // VK_NV_fill_rectangle
 constexpr
 #include "spirv/output/blitv"
     constexpr std::size_t vsBlitHash = core::hashArray(vsBlit);
