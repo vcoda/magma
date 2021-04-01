@@ -75,4 +75,44 @@ DynamicVertexBuffer::DynamicVertexBuffer(std::shared_ptr<Device> device, VkDevic
     if (initial)
         copyHost(initial, std::move(copyFn));
 }
+
+#ifdef VK_NV_ray_tracing
+AccelerationStructureVertexBuffer::AccelerationStructureVertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
+    VkBufferCreateFlags flags /* 0 */,
+    const Sharing& sharing /* default */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    CopyMemoryFunction copyFn /* nullptr */):
+    BaseVertexBuffer(cmdBuffer->getDevice(), size,
+        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT |
+#ifdef VK_KHR_acceleration_structure
+        VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR |
+#endif
+        VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        flags, sharing, allocator)
+{
+    MAGMA_ASSERT(data);
+    auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
+        0, sharing, std::move(allocator), std::move(copyFn));
+    copyTransfer(std::move(cmdBuffer), std::move(buffer));
+}
+
+AccelerationStructureVertexBuffer::AccelerationStructureVertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+    VkDeviceSize size /* 0 */,
+    VkDeviceSize srcOffset /* 0 */,
+    VkBufferCreateFlags flags /* 0 */,
+    const Sharing& sharing /* default */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    BaseVertexBuffer(cmdBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(),
+        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT |
+#ifdef VK_KHR_acceleration_structure
+        VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR |
+#endif
+        VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        flags, sharing, std::move(allocator))
+{
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
+}
+#endif // VK_NV_ray_tracing
 } // namespace magma
