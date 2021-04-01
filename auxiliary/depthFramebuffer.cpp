@@ -46,7 +46,7 @@ DepthFramebuffer::DepthFramebuffer(std::shared_ptr<Device> device, const VkForma
         VK_COMPONENT_SWIZZLE_IDENTITY};
     depthView = std::make_shared<ImageView>(depth, dontSwizzle, allocator);
     // We should be able to read depth in the shader when a render pass instance ends
-    const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthFormat, true);
+    const VkImageLayout finalLayout = optimalDepthStencilLayout(device, depthFormat, true);
     const AttachmentDescription depthAttachment(depthFormat, 1,
          op::clearStore, // Clear depth, store
          op::dontCare, // Stencil don't care

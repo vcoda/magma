@@ -71,7 +71,7 @@ ColorMultisampleReadFramebuffer::ColorMultisampleReadFramebuffer(std::shared_ptr
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL); // Resolve image will be transitioned to when a render pass instance ends
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Choose optimal depth/stencil layout
-        const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, depthSampled || stencilSampled);
+        const VkImageLayout finalLayout = optimalDepthStencilLayout(device, depthStencilFormat, depthSampled || stencilSampled);
         const AttachmentDescription depthStencilAttachment(depthStencilFormat, sampleCount,
             depthSampled ? op::clearStore : op::clear, // Depth clear, optionally store for multi-sample read
             stencilSampled ? op::clearStore : op::clear, // Stencil clear, optionally store for multi-sample read

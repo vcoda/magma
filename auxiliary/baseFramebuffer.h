@@ -51,8 +51,8 @@ namespace magma
             explicit Framebuffer(VkFormat colorFormat,
                 VkFormat depthStencilFormat,
                 uint32_t sampleCount) noexcept;
-            VkImageLayout finalDepthStencilLayout(std::shared_ptr<Device> device,
-                const VkFormat depthStencilFormat, bool depthSampled) const;
+            VkImageLayout optimalDepthStencilLayout(std::shared_ptr<Device> device,
+                const VkFormat depthStencilFormat, bool sampled) const;
 
             const Format colorFormat;
             const Format depthStencilFormat;

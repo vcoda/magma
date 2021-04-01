@@ -72,7 +72,7 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     }
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Choose optimal depth/stencil layout
-        const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, depthSampled);
+        const VkImageLayout finalLayout = optimalDepthStencilLayout(device, depthStencilFormat, depthSampled);
         attachmentDescriptions.emplace_back(depthStencilFormat, 1,
             depthStencilClearOp ? op::clearStore : op::loadStore, // Clear depth or preserve from a separate depth pass
             hasStencil() ? (depthStencilClearOp ? op::clearStore : op::loadStore) // Clear stencil or preserve from a separate depth pass

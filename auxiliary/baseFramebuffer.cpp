@@ -68,8 +68,8 @@ const MultisampleState& Framebuffer::getMultisampleState() const noexcept
     }
 }
 
-VkImageLayout Framebuffer::finalDepthStencilLayout(std::shared_ptr<Device> device,
-    const VkFormat depthStencilFormat, const bool depthSampled) const
+VkImageLayout Framebuffer::optimalDepthStencilLayout(std::shared_ptr<Device> device,
+    const VkFormat depthStencilFormat, const bool sampled) const
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts
     if (device->getPhysicalDevice()->checkExtensionSupport(VK_KHR_SEPARATE_DEPTH_STENCIL_LAYOUTS_EXTENSION_NAME) &&
@@ -78,17 +78,17 @@ VkImageLayout Framebuffer::finalDepthStencilLayout(std::shared_ptr<Device> devic
         const Format format(depthStencilFormat);
         if (format.depth())
         {
-            return depthSampled ? VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL_KHR :
+            return sampled ? VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL_KHR :
                 VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL_KHR;
         }
         if (format.stencil())
         {
-            return depthSampled ? VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL_KHR :
+            return sampled ? VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL_KHR :
                 VK_IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL_KHR;
         }
     }
 #endif // VK_KHR_separate_depth_stencil_layouts
-    return depthSampled ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL :
+    return sampled ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL :
         VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 }
 } // namespace aux

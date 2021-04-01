@@ -69,7 +69,7 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL); // Color image will be transitioned to when a render pass instance ends
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Choose optimal depth/stencil layout
-        const VkImageLayout finalLayout = finalDepthStencilLayout(device, depthStencilFormat, depthSampled);
+        const VkImageLayout finalLayout = optimalDepthStencilLayout(device, depthStencilFormat, depthSampled);
         const AttachmentDescription depthStencilAttachment(depthStencilFormat, 1,
             op::clearStore, // Clear depth, store
             hasStencil() ? op::clearStore : op::dontCare, // Clear stencil if present
