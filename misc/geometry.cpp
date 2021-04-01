@@ -34,8 +34,7 @@ Geometry::Geometry(VkGeometryTypeNV geometryType, VkGeometryFlagsNV flags) noexc
 
 GeometryTriangles::GeometryTriangles(std::shared_ptr<const Buffer> vertexData, VkDeviceSize vertexOffset, uint32_t vertexCount, VkDeviceSize vertexStride, VkFormat vertexFormat,
     std::shared_ptr<const Buffer> indexData, VkDeviceSize indexOffset, uint32_t indexCount, VkIndexType indexType,
-    std::shared_ptr<const Buffer> transformData, VkDeviceSize transformOffset,
-    VkGeometryFlagsNV flags /* 0 */) noexcept:
+    std::shared_ptr<const Buffer> transformData, VkDeviceSize transformOffset, VkGeometryFlagsNV flags /* 0 */) noexcept:
     Geometry(VK_GEOMETRY_TYPE_TRIANGLES_NV, flags)
 {
     geometry.triangles.sType = VK_STRUCTURE_TYPE_GEOMETRY_TRIANGLES_NV;
