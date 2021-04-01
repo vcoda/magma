@@ -204,17 +204,14 @@ bool Device::separateDepthStencilLayoutsEnabled() const noexcept
 
 bool Device::negativeViewportHeightEnabled(bool khronos) const noexcept
 {
-    const std::string name = khronos ?
-        VK_KHR_MAINTENANCE1_EXTENSION_NAME :
-        VK_AMD_NEGATIVE_VIEWPORT_HEIGHT_EXTENSION_NAME;
-    for (const auto& extension : enabledExtensions)
-    {
-        if (extension == name)
-            return true;
-    }
+#if defined(VK_KHR_maintenance1) && defined(VK_AMD_negative_viewport_height)
+    return extensionEnabled(khronos ? 
+        VK_KHR_MAINTENANCE1_EXTENSION_NAME : 
+        VK_AMD_NEGATIVE_VIEWPORT_HEIGHT_EXTENSION_NAME);
+#else
     return false;
+#endif
 }
-
 
 const void *Device::findExtendedFeatures(VkStructureType featuresType) const noexcept
 {
