@@ -174,6 +174,20 @@ VkPeerMemoryFeatureFlags Device::getGroupPeerMemoryFeatures(uint32_t heapIndex, 
 }
 #endif // VK_KHR_device_group
 
+bool Device::extensionEnabled(const char *extensionName) const
+{
+    MAGMA_ASSERT(extensionName);
+    if (physicalDevice->checkExtensionSupport(extensionName))
+    {
+        for (const auto& extension : enabledExtensions)
+        {
+            if (extension == extensionName)
+                return true;
+        }
+    }
+    return false;
+}
+
 bool Device::separateDepthStencilLayoutsEnabled() const noexcept
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts

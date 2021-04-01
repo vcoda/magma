@@ -64,6 +64,7 @@ namespace magma
         const std::vector<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
         const VkPhysicalDeviceFeatures& getEnabledFeatures() const noexcept { return enabledFeatures; }
         const std::vector<void *>& getEnabledExtendedFeatures() const noexcept { return enabledExtendedFeatures; }
+        bool extensionEnabled(const char *extensionName) const;
         bool separateDepthStencilLayoutsEnabled() const noexcept;
         bool negativeViewportHeightEnabled(bool khronos) const noexcept;
 
