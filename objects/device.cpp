@@ -186,4 +186,24 @@ bool Device::checkNegativeViewportHeightEnabled(bool khronos) const noexcept
     }
     return false;
 }
+
+
+const void *Device::findExtendedFeatures(VkStructureType featuresType) const noexcept
+{
+#ifdef VK_KHR_get_physical_device_properties2
+    for (auto features : enabledExtendedFeatures)
+    {
+        struct VkFeaturesNode
+        {
+            VkStructureType sType;
+            void *pNext;
+            // ...
+        };
+        const VkFeaturesNode *featuresNode = reinterpret_cast<const VkFeaturesNode *>(features);
+        if (featuresNode->sType == featuresType)
+            return features;
+    }
+#endif
+    return nullptr;
+}
 } // namespace magma
