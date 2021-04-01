@@ -65,7 +65,7 @@ namespace magma
         const VkPhysicalDeviceFeatures& getEnabledFeatures() const noexcept { return enabledFeatures; }
         const std::vector<void *>& getEnabledExtendedFeatures() const noexcept { return enabledExtendedFeatures; }
         bool separateDepthStencilLayoutsEnabled() const noexcept;
-        bool checkNegativeViewportHeightEnabled(bool khronos) const noexcept;
+        bool negativeViewportHeightEnabled(bool khronos) const noexcept;
 
     private:
         const void *findExtendedFeatures(VkStructureType featuresType) const noexcept;

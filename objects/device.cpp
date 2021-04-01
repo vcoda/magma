@@ -188,7 +188,7 @@ bool Device::separateDepthStencilLayoutsEnabled() const noexcept
     return false;
 }
 
-bool Device::checkNegativeViewportHeightEnabled(bool khronos) const noexcept
+bool Device::negativeViewportHeightEnabled(bool khronos) const noexcept
 {
     const std::string name = khronos ?
         VK_KHR_MAINTENANCE1_EXTENSION_NAME :
