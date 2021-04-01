@@ -195,8 +195,8 @@ bool RenderPass::hasClearOp() const noexcept
 VkImageLayout RenderPass::optimalDepthStencilLayout(const Format& format) const
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts
-    std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-    if (physicalDevice->checkExtensionSupport("VK_KHR_separate_depth_stencil_layouts"))
+    if (device->separateDepthStencilLayoutsEnabled() &&
+        device->getPhysicalDevice()->checkExtensionSupport("VK_KHR_separate_depth_stencil_layouts"))
     {
         if (format.depth())
             return VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL_KHR;
