@@ -62,6 +62,8 @@ namespace magma
         std::shared_ptr<const ResourcePool> getResourcePool() const noexcept { return resourcePool; }
         const std::vector<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
         const std::vector<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
+        const VkPhysicalDeviceFeatures& getEnabledFeatures() const noexcept { return enabledFeatures; }
+        const std::vector<void *>& getEnabledExtendedFeatures() const noexcept { return enabledExtendedFeatures; }
         bool checkNegativeViewportHeightEnabled(bool khronos) const noexcept;
 
     private:
@@ -70,5 +72,9 @@ namespace magma
         std::shared_ptr<ResourcePool> resourcePool;
         std::vector<std::string> enabledLayers;
         std::vector<std::string> enabledExtensions;
+        VkPhysicalDeviceFeatures enabledFeatures;
+#ifdef VK_KHR_get_physical_device_properties2
+        std::vector<void *> enabledExtendedFeatures;
+#endif
     };
 } // namespace magma
