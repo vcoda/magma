@@ -23,6 +23,8 @@ namespace magma
     class VertexBuffer;
     class IndexBuffer;
 
+    /* Structure specifying a geometry in a bottom-level acceleration structure. */
+
 #ifdef VK_NV_ray_tracing
     class Geometry : public VkGeometryNV
     {
@@ -34,6 +36,8 @@ namespace magma
         explicit Geometry(VkGeometryTypeNV geometryType,
             VkGeometryFlagsNV flags) noexcept;
     };
+
+    /* Structure specifying a triangle geometry in a bottom-level acceleration structure. */
 
     class GeometryTriangles : public Geometry
     {
@@ -70,7 +74,9 @@ namespace magma
             VkGeometryFlagsNV flags = 0) noexcept;
     };
 
-    class GeometryAABBs: public Geometry
+    /* Structure specifying axis-aligned bounding box geometry in a bottom-level acceleration structure. */
+
+    class GeometryAABBs : public Geometry
     {
     public:
         explicit GeometryAABBs(std::shared_ptr<const Buffer> aabbData,
