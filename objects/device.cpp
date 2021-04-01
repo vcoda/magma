@@ -174,6 +174,20 @@ VkPeerMemoryFeatureFlags Device::getGroupPeerMemoryFeatures(uint32_t heapIndex, 
 }
 #endif // VK_KHR_device_group
 
+bool Device::separateDepthStencilLayoutsEnabled() const noexcept
+{
+#ifdef VK_KHR_separate_depth_stencil_layouts
+    const void *features = findExtendedFeatures(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SEPARATE_DEPTH_STENCIL_LAYOUTS_FEATURES_KHR);
+    if (features)
+    {
+        const VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR *separateDepthStencilFeatures = 
+            reinterpret_cast<const VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR *>(features);
+        return separateDepthStencilFeatures->separateDepthStencilLayouts ? true : false;
+    }
+#endif
+    return false;
+}
+
 bool Device::checkNegativeViewportHeightEnabled(bool khronos) const noexcept
 {
     const std::string name = khronos ?
