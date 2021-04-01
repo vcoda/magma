@@ -75,4 +75,44 @@ DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkDeviceS
     if (initial)
         copyHost(initial, std::move(copyFn));
 }
+
+#ifdef VK_NV_ray_tracing
+AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data, VkIndexType indexType,
+    VkBufferCreateFlags flags /* 0 */,
+    const Sharing& sharing /* default */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    CopyMemoryFunction copyFn /* nullptr */):
+    BaseIndexBuffer(cmdBuffer->getDevice(), size, indexType,
+        VK_BUFFER_USAGE_INDEX_BUFFER_BIT |
+#ifdef VK_KHR_acceleration_structure
+        VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR |
+#endif
+        VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        flags, sharing, allocator)
+{
+    MAGMA_ASSERT(data);
+    auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
+        0, sharing, std::move(allocator), std::move(copyFn));
+    copyTransfer(std::move(cmdBuffer), std::move(buffer));
+}
+
+AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer, VkIndexType indexType,
+    VkDeviceSize size /* 0 */,
+    VkDeviceSize srcOffset /* 0 */,
+    VkBufferCreateFlags flags /* 0 */,
+    const Sharing& sharing /* default */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    BaseIndexBuffer(cmdBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(), indexType,
+        VK_BUFFER_USAGE_INDEX_BUFFER_BIT | 
+#ifdef VK_KHR_acceleration_structure
+        VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR |
+#endif
+        VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        flags, sharing, std::move(allocator))
+{
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
+}
+#endif // VK_NV_ray_tracing
 } // namespace magma
