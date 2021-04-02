@@ -95,16 +95,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
         dereferencedStages.put(stage);
     info.stageCount = MAGMA_COUNT(dereferencedStages);
     info.pStages = dereferencedStages;
-    if (vertexInputState.vertexBindingDescriptionCount > 0)
-        info.pVertexInputState = &vertexInputState;
-    else
-    {
-        vertexBindingDesc = VertexInputBinding(0, vertexInputState.stride(0));
-        pipelineVertexInput = vertexInputState;
-        pipelineVertexInput.vertexBindingDescriptionCount = 1;
-        pipelineVertexInput.pVertexBindingDescriptions = &vertexBindingDesc;
-        info.pVertexInputState = &pipelineVertexInput;
-    }
+    info.pVertexInputState = &vertexInputState;
     info.pInputAssemblyState = &inputAssemblyState;
     if (0 == tesselationState.patchControlPoints)
         info.pTessellationState = nullptr;
