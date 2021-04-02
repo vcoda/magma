@@ -27,7 +27,7 @@ namespace magma
     class BaseIndexBuffer : public Buffer
     {
     public:
-        VkIndexType getIndexType() const noexcept;
+        VkIndexType getIndexType() const noexcept { return indexType; }
         uint32_t getIndexCount() const noexcept;
 
     protected:
@@ -64,21 +64,6 @@ namespace magma
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
-        // Templates
-        template<typename IndexType, uint32_t indexArraySize>
-        explicit IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            const IndexType (&indices)[indexArraySize],
-            VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            CopyMemoryFunction copyFn = nullptr);
-        template<typename IndexType>
-        explicit IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            const std::vector<IndexType>& indices,
-            VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            CopyMemoryFunction copyFn = nullptr);
     };
 
     /* Dynamic index buffer that can be mapped for host access. */
@@ -119,5 +104,3 @@ namespace magma
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma
-
-#include "indexBuffer.inl"

@@ -31,6 +31,13 @@ BaseIndexBuffer::BaseIndexBuffer(std::shared_ptr<Device> device, VkDeviceSize si
     indexType(indexType)
 {}
 
+uint32_t BaseIndexBuffer::getIndexCount() const noexcept
+{
+    if (VK_INDEX_TYPE_UINT16 == indexType)
+        return static_cast<uint32_t>(size / sizeof(uint16_t));
+    return static_cast<uint32_t>(size / sizeof(uint32_t));
+}
+
 IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data, VkIndexType indexType,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,

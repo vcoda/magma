@@ -27,8 +27,12 @@ namespace magma
     class BaseVertexBuffer : public Buffer
     {
     public:
-        void setVertexCount(uint32_t count) noexcept;
-        uint32_t getVertexCount() const noexcept;
+        void setVertexCount(uint32_t count) noexcept { vertexCount = count; }
+        uint32_t getVertexCount() const noexcept 
+        { 
+            MAGMA_ASSERT(vertexCount);
+            return vertexCount;
+        }
 
     protected:
         explicit BaseVertexBuffer(std::shared_ptr<Device> device,
@@ -61,21 +65,6 @@ namespace magma
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
-        // Templates
-        template<typename VertexType, uint32_t vertexArraySize>
-        explicit VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            const VertexType (&vertices)[vertexArraySize],
-            VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            CopyMemoryFunction copyFn = nullptr);
-        template<typename VertexType>
-        explicit VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            const std::vector<VertexType>& vertices,
-            VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            CopyMemoryFunction copyFn = nullptr);
     };
 
     /* Dynamic vertex buffer that can be mapped for host access. */
@@ -113,5 +102,3 @@ namespace magma
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma
-
-#include "vertexBuffer.inl"
