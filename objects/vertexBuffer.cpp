@@ -85,7 +85,8 @@ AccelerationStructureVertexBuffer::AccelerationStructureVertexBuffer(std::shared
     BaseVertexBuffer(cmdBuffer->getDevice(), size,
         VK_BUFFER_USAGE_VERTEX_BUFFER_BIT |
 #ifdef VK_KHR_acceleration_structure
-        VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR |
+        (device->extensionEnabled(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME) ? 
+            VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR : 0) |
 #endif
         VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
@@ -106,7 +107,8 @@ AccelerationStructureVertexBuffer::AccelerationStructureVertexBuffer(std::shared
     BaseVertexBuffer(cmdBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(),
         VK_BUFFER_USAGE_VERTEX_BUFFER_BIT |
 #ifdef VK_KHR_acceleration_structure
-        VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR |
+        (device->extensionEnabled(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME) ? 
+            VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR : 0) |
 #endif
         VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
