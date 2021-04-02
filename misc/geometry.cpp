@@ -58,8 +58,8 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<const Buffer> vertexData, V
     geometry.aabbs.offset = 0;
 }
 
-GeometryTriangles::GeometryTriangles(std::shared_ptr<const VertexBuffer> vertexData, VkDeviceSize vertexStride, VkFormat vertexFormat,
-    std::shared_ptr<const IndexBuffer> indexData, std::shared_ptr<const Buffer> transformData /* nullptr */,
+GeometryTriangles::GeometryTriangles(std::shared_ptr<const BaseVertexBuffer> vertexData, VkDeviceSize vertexStride, VkFormat vertexFormat,
+    std::shared_ptr<const BaseIndexBuffer> indexData, std::shared_ptr<const Buffer> transformData /* nullptr */,
     VkDeviceSize vertexOffset /* 0 */, VkDeviceSize indexOffset /* 0 */, VkDeviceSize transformOffset /* 0 */, VkGeometryFlagsNV flags /* 0 */) noexcept:
     GeometryTriangles(vertexData, 
         vertexOffset, 
@@ -75,8 +75,8 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<const VertexBuffer> vertexD
         flags)
 {}
 
-GeometryTriangles::GeometryTriangles(std::shared_ptr<const VertexBuffer> vertexData, const VkVertexInputAttributeDescription& attribute, VkDeviceSize vertexStride,
-    std::shared_ptr<const IndexBuffer> indexData, std::shared_ptr<const Buffer> transformData /* nullptr */,
+GeometryTriangles::GeometryTriangles(std::shared_ptr<const BaseVertexBuffer> vertexData, const VkVertexInputAttributeDescription& attribute, VkDeviceSize vertexStride,
+    std::shared_ptr<const BaseIndexBuffer> indexData, std::shared_ptr<const Buffer> transformData /* nullptr */,
     VkDeviceSize vertexOffset /* 0 */, VkDeviceSize indexOffset /* 0 */, VkDeviceSize transformOffset /* 0 */, VkGeometryFlagsNV flags /* 0 */) noexcept:
     GeometryTriangles(vertexData, 
         vertexOffset + attribute.offset, 

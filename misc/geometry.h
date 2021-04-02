@@ -20,8 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Buffer;
-    class VertexBuffer;
-    class IndexBuffer;
+    class BaseVertexBuffer;
+    class BaseIndexBuffer;
 
     /* Structure specifying a geometry in a bottom-level acceleration structure. */
 
@@ -54,19 +54,19 @@ namespace magma
             std::shared_ptr<const Buffer> transformData,
             VkDeviceSize transformOffset,
             VkGeometryFlagsNV flags = 0) noexcept;
-        explicit GeometryTriangles(std::shared_ptr<const VertexBuffer> vertexData,
+        explicit GeometryTriangles(std::shared_ptr<const BaseVertexBuffer> vertexData,
             VkDeviceSize vertexStride,
             VkFormat vertexFormat,
-            std::shared_ptr<const IndexBuffer> indexData,
+            std::shared_ptr<const BaseIndexBuffer> indexData,
             std::shared_ptr<const Buffer> transformData = nullptr,
             VkDeviceSize vertexOffset = 0,
             VkDeviceSize indexOffset = 0,
             VkDeviceSize transformOffset = 0,
             VkGeometryFlagsNV flags = 0) noexcept;
-        explicit GeometryTriangles(std::shared_ptr<const VertexBuffer> vertexData,
+        explicit GeometryTriangles(std::shared_ptr<const BaseVertexBuffer> vertexData,
             const VkVertexInputAttributeDescription& attribute,
             VkDeviceSize vertexStride,
-            std::shared_ptr<const IndexBuffer> indexData,
+            std::shared_ptr<const BaseIndexBuffer> indexData,
             std::shared_ptr<const Buffer> transformData = nullptr,
             VkDeviceSize vertexOffset = 0,
             VkDeviceSize indexOffset = 0,
