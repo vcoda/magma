@@ -50,6 +50,8 @@ namespace magma
 
     private:
         VkImageLayout optimalDepthStencilLayout(const Format& format) const;
+        SubpassDependency subpassStartDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept;
+        SubpassDependency subpassEndDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept;
 
         std::vector<AttachmentDescription> attachments;
         std::size_t hash = 0;
