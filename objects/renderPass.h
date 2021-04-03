@@ -54,6 +54,6 @@ namespace magma
         SubpassDependency subpassEndDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept;
 
         std::vector<AttachmentDescription> attachments;
-        std::size_t hash = 0;
+        std::size_t hash;
     };
 } // namespace magma

@@ -37,7 +37,8 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     const std::vector<AttachmentDescription>& attachments,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator)),
-    attachments(attachments)
+    attachments(attachments),
+    hash(0)
 {
     uint32_t multisampleAttachmentCount = 0;
     uint32_t resolveAttachmentCount = 0;
@@ -111,7 +112,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     info.pDependencies = dependencies;
     const VkResult create = vkCreateRenderPass(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create render pass");
-     hash = core::hashArgs(
+    hash = core::hashArgs(
         info.sType,
         info.flags,
         info.attachmentCount,
@@ -130,7 +131,8 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     const std::vector<SubpassDescription>& subpasses,
     const std::vector<SubpassDependency>& dependencies /* {} */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator)),
+    hash(0)
 {
     VkRenderPassCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
