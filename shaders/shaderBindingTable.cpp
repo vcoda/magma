@@ -31,7 +31,7 @@ ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const voi
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Buffer(device,
-        device->getPhysicalDevice()->getRayTracingProperties().shaderGroupHandleSize * groupCount,
+        device->getPhysicalDevice()->getRayTracingProperties().shaderGroupBaseAlignment * groupCount,
         // Note that VK_BUFFER_USAGE_RAY_TRACING_BIT_NV = VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR in newer SDK revision
         VK_BUFFER_USAGE_RAY_TRACING_BIT_NV | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
