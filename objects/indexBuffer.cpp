@@ -90,7 +90,7 @@ AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_p
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     BaseIndexBuffer(cmdBuffer->getDevice(), size, indexType,
-        VK_BUFFER_USAGE_INDEX_BUFFER_BIT |
+        VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
 #ifdef VK_KHR_acceleration_structure
         (device->extensionEnabled(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME) ? 
             VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR : 0) |
@@ -112,7 +112,7 @@ AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_p
     const Sharing& sharing /* default */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     BaseIndexBuffer(cmdBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(), indexType,
-        VK_BUFFER_USAGE_INDEX_BUFFER_BIT | 
+        VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
 #ifdef VK_KHR_acceleration_structure
         (device->extensionEnabled(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME) ? 
             VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR : 0) |
