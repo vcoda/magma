@@ -121,6 +121,12 @@ namespace magma
             constexpr CallableStageBinding(const uint32_t binding, const Descriptor& descriptor) noexcept:
                 DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_CALLABLE_BIT_NV) {}
         };
+
+        struct RaygenClosestHitStageBinding : DescriptorSetLayout::Binding
+        {
+            constexpr RaygenClosestHitStageBinding(const uint32_t binding, const Descriptor& descriptor) noexcept:
+                DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_RAYGEN_BIT_NV | VK_SHADER_STAGE_CLOSEST_HIT_BIT_NV) {}
+        };
 #endif
     } // namespace bindings
 } // namespace magma
