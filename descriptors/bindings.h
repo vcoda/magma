@@ -86,9 +86,9 @@ namespace magma
         };
 
 #ifdef VK_NV_ray_tracing
-        struct RayGenStageBinding : DescriptorSetLayout::Binding
+        struct RaygenStageBinding : DescriptorSetLayout::Binding
         {
-            constexpr RayGenStageBinding(const uint32_t binding, const Descriptor& descriptor) noexcept:
+            constexpr RaygenStageBinding(const uint32_t binding, const Descriptor& descriptor) noexcept:
                 DescriptorSetLayout::Binding(binding, descriptor, VK_SHADER_STAGE_RAYGEN_BIT_NV) {}
         };
 
