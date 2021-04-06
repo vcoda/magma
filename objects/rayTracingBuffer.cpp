@@ -25,6 +25,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_NV_ray_tracing
+RayTracingBuffer::RayTracingBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
+    VkBufferCreateFlags flags /* 0 */,
+    const Sharing& sharing /* default */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Buffer(std::move(device), size,
+        VK_BUFFER_USAGE_RAY_TRACING_BIT_NV | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        flags, sharing, std::move(allocator))
+{}
+
 RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,

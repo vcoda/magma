@@ -28,6 +28,11 @@ namespace magma
     class RayTracingBuffer : public Buffer
     {
     public:
+        explicit RayTracingBuffer(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            VkBufferCreateFlags flags = 0,
+            const Sharing& sharing = Sharing(),
+            std::shared_ptr<IAllocator> allocator = nullptr);
         explicit RayTracingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkDeviceSize size,
             const void *data,
