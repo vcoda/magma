@@ -53,6 +53,7 @@ MAGMA_OBJS= \
 	misc/scopedDebugMarker.o \
 	\
 	objects/accelerationStructure.o \
+	objects/accelerationStructureInstanceBuffer.o \
 	objects/buffer.o \
 	objects/bufferView.o \
 	objects/commandBuffer.o \
