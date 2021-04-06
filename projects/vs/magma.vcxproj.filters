@@ -573,6 +573,9 @@
     <ClInclude Include="..\..\shaders\shaderBindingTable.h">
       <Filter>Header Files\shaders</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\accelerationStructureInstanceBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -877,6 +880,9 @@
     </ClCompile>
     <ClCompile Include="..\..\shaders\shaderBindingTable.cpp">
       <Filter>Source Files\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\accelerationStructureInstanceBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
