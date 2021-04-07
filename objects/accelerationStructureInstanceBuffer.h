@@ -36,6 +36,7 @@ namespace magma
         void setTransform(const TransformMatrix& transform) noexcept { this->transform = transform; }
         void setCustomIndex(uint32_t instanceIndex) noexcept { instanceCustomIndex = instanceIndex; }
         void setVisibilityMask(uint8_t mask) noexcept { this->mask = mask; }
+        void setShaderBindingTableOffset(uint32_t offset) noexcept { instanceShaderBindingTableRecordOffset = offset; }
         void enableTriangleCull() noexcept { flags &= ~VK_GEOMETRY_INSTANCE_TRIANGLE_CULL_DISABLE_BIT_NV; }
         void disableTriangleCull() noexcept { flags |= VK_GEOMETRY_INSTANCE_TRIANGLE_CULL_DISABLE_BIT_NV; }
         bool triangleCullEnabled() const noexcept { return flags & VK_GEOMETRY_INSTANCE_TRIANGLE_CULL_DISABLE_BIT_NV; }
