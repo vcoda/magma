@@ -41,7 +41,7 @@ AccelerationStructureInstance::AccelerationStructureInstance() noexcept
     accelerationStructureReference = VK_NULL_HANDLE;
 }
 
-void AccelerationStructureInstance::setAccelerationStructure(std::shared_ptr<AccelerationStructure> accelerationStructure)
+void AccelerationStructureInstance::setAccelerationStructure(std::shared_ptr<const AccelerationStructure> accelerationStructure)
 {
     accelerationStructureReference = accelerationStructure->getReferenceHandle();
 }
@@ -61,7 +61,7 @@ AccelerationStructureInstanceBuffer::AccelerationStructureInstanceBuffer(std::sh
 {
     static_assert(sizeof(AccelerationStructureInstance) == sizeof(VkAccelerationStructureInstanceKHR), "invalid structure size");
     for (uint32_t instanceIndex = 0; instanceIndex < instanceCount; ++instanceIndex)
-        instances[instanceIndex].setCustomIndex(instanceIndex);
+        instances[instanceIndex].setInstanceIndex(instanceIndex);
 }
 
 bool AccelerationStructureInstanceBuffer::update(std::shared_ptr<CommandBuffer> cmdBuffer,
@@ -83,13 +83,13 @@ bool AccelerationStructureInstanceBuffer::update(std::shared_ptr<CommandBuffer> 
     region.size = sizeof(AccelerationStructureInstance) * instanceCount;
     cmdBuffer->copyBuffer(stagingBuffer, shared_from_this(), region);
     // Make sure the copy to instance buffer is finished before triggering the acceleration structure build
-    constexpr magma::MemoryBarrier instanceBufferBarrier(
+    constexpr magma::MemoryBarrier copyTransferBarrier(
         VK_ACCESS_TRANSFER_WRITE_BIT,
         VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_NV);
     cmdBuffer->pipelineBarrier(
         VK_PIPELINE_STAGE_TRANSFER_BIT,
         VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_NV,
-        instanceBufferBarrier);
+        copyTransferBarrier);
     return true;
 }
 #endif // VK_NV_ray_tracing

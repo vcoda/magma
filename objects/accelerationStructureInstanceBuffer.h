@@ -34,7 +34,7 @@ namespace magma
     public:
         AccelerationStructureInstance() noexcept;
         void setTransform(const TransformMatrix& transform) noexcept { this->transform = transform; }
-        void setCustomIndex(uint32_t instanceIndex) noexcept { instanceCustomIndex = instanceIndex; }
+        void setInstanceIndex(uint32_t instanceIndex) noexcept { instanceCustomIndex = instanceIndex; }
         void setVisibilityMask(uint8_t mask) noexcept { this->mask = mask; }
         void setShaderBindingTableOffset(uint32_t offset) noexcept { instanceShaderBindingTableRecordOffset = offset; }
         void enableTriangleCull() noexcept { flags &= ~VK_GEOMETRY_INSTANCE_TRIANGLE_CULL_DISABLE_BIT_NV; }
@@ -45,11 +45,11 @@ namespace magma
         bool triangleFrontCCW() const noexcept { return flags & VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_NV; }
         void forceGeometryOpaque(bool opaque) noexcept { if (opaque) flags |= VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV; 
                                                          else flags &= ~VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV; }
-        bool geometryForcedOpaque() const noexcept { return flags & VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV; }
         void forceGeometryNoOpaque(bool noOpaque) noexcept { if (noOpaque) flags |= VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV;
-                                                           else flags &= ~VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV; }
-        bool geometryForcedNoOpaque() const noexcept { return flags & VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV; }
-        void setAccelerationStructure(std::shared_ptr<AccelerationStructure> accelerationStructure);
+                                                             else flags &= ~VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV; }
+        bool geometryIsOpaque() const noexcept { return flags & VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV; }
+        bool geometryIsNoOpaque() const noexcept { return flags & VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV; }
+        void setAccelerationStructure(std::shared_ptr<const AccelerationStructure> accelerationStructure);
     };
 
     /* Buffer containing an array of VkAccelerationStructureInstanceKHR structures 
