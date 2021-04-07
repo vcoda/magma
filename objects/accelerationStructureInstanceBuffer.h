@@ -66,6 +66,7 @@ namespace magma
             CopyMemoryFunction copyFn = nullptr);
         uint32_t getInstanceCount() const noexcept { return (uint32_t)instances.size(); }
         AccelerationStructureInstance& getInstance(uint32_t instanceIndex) noexcept { return instances[instanceIndex]; }
+        const AccelerationStructureInstance& getInstance(uint32_t instanceIndex) const noexcept { return instances[instanceIndex]; }
         bool update(std::shared_ptr<CommandBuffer> cmdBuffer,
             uint32_t firstInstance, 
             uint32_t instanceCount);
