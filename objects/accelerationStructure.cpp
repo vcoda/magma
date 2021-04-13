@@ -56,9 +56,9 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     MAGMA_DEVICE_EXTENSION(vkCreateAccelerationStructureNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult create = vkCreateAccelerationStructureNV(MAGMA_HANDLE(device), &createInfo, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create acceleration structure");
-    const VkMemoryRequirements2 memoryRequirements = getMemoryRequirements(VK_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_OBJECT_NV);
-    std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(this->device, 
-        memoryRequirements.memoryRequirements.size, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+    const VkMemoryRequirements memoryRequirements = getObjectMemoryRequirements();
+    std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(
+        this->device, memoryRequirements.size, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
     bindMemory(std::move(memory));
 }
 
