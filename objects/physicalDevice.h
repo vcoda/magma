@@ -82,7 +82,7 @@ namespace magma
 
     private:
         // VK_KHR_get_physical_device_properties2
-        void getExtendedProperties(void *properties) const;
+        void getProperties2(void *properties) const;
 
         std::shared_ptr<Instance> instance;
         mutable std::set<std::string> extensions; // Cached implicit extensions

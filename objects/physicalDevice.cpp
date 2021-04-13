@@ -262,7 +262,7 @@ VkPhysicalDeviceShaderCorePropertiesAMD PhysicalDevice::getShaderCoreProperties(
 {
     VkPhysicalDeviceShaderCorePropertiesAMD shaderCoreProperties = {};
     shaderCoreProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_AMD;
-    getExtendedProperties(&shaderCoreProperties);
+    getProperties2(&shaderCoreProperties);
     return shaderCoreProperties;
 }
 #endif // VK_AMD_shader_core_properties
@@ -272,7 +272,7 @@ VkPhysicalDeviceShaderCoreProperties2AMD PhysicalDevice::getShaderCoreProperties
 {
     VkPhysicalDeviceShaderCoreProperties2AMD shaderCoreProperties2 = {};
     shaderCoreProperties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_2_AMD;
-    getExtendedProperties(&shaderCoreProperties2);
+    getProperties2(&shaderCoreProperties2);
     return shaderCoreProperties2;
 }
 #endif // VK_AMD_shader_core_properties2
@@ -282,7 +282,7 @@ VkPhysicalDeviceRayTracingPropertiesNV PhysicalDevice::getRayTracingProperties()
 {
     VkPhysicalDeviceRayTracingPropertiesNV rayTracingProperties = {};
     rayTracingProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PROPERTIES_NV;
-    getExtendedProperties(&rayTracingProperties);
+    getProperties2(&rayTracingProperties);
     return rayTracingProperties;
 }
 #endif // VK_NV_ray_tracing
@@ -333,7 +333,7 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
     return core::compare(cacheHeader, &header);
 }
 
-void PhysicalDevice::getExtendedProperties(void *properties) const
+void PhysicalDevice::getProperties2(void *properties) const
 {
 #ifdef VK_KHR_get_physical_device_properties2
     if (properties)
