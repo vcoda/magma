@@ -56,7 +56,6 @@ namespace magma
     private:
         VkMemoryRequirements2 getMemoryRequirements(VkAccelerationStructureMemoryRequirementsTypeNV type) const;
 
-        VkAccelerationStructureTypeNV type;
         VkAccelerationStructureInfoNV info;
     };
 
