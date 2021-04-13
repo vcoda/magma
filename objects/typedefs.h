@@ -19,6 +19,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    MAGMA_TYPEDEF_SHARED_PTR(AccelerationStructure)
+    MAGMA_TYPEDEF_SHARED_PTR(AccelerationStructureInstanceBuffer)
+    MAGMA_TYPEDEF_SHARED_PTR(BottomLevelAccelerationStructure)
     MAGMA_TYPEDEF_SHARED_PTR(Buffer)
     MAGMA_TYPEDEF_SHARED_PTR(BufferView)
     MAGMA_TYPEDEF_SHARED_PTR(ColorAttachment2D)
@@ -79,6 +82,7 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(Swapchain)
     MAGMA_TYPEDEF_SHARED_PTR(SwapchainColorAttachment2D)
     MAGMA_TYPEDEF_SHARED_PTR(TimestampQuery)
+    MAGMA_TYPEDEF_SHARED_PTR(TopLevelAccelerationStructure)
     MAGMA_TYPEDEF_SHARED_PTR(UniformTexelBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(ValidationCache)
     MAGMA_TYPEDEF_SHARED_PTR(VertexBuffer)
