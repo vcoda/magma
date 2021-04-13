@@ -59,6 +59,8 @@ namespace magma
         VkAccelerationStructureInfoNV info;
     };
 
+    /* Top-level acceleration structure containing instance data referring to bottom-level acceleration structures.*/
+
     class TopLevelAccelerationStructure : public AccelerationStructure
     {
     public:
@@ -72,6 +74,8 @@ namespace magma
         {}
     };
 
+    /* Bottom-level acceleration structure containing the AABBs or geometry to be intersected. */
+    
     class BottomLevelAccelerationStructure : public AccelerationStructure
     {
     public:
