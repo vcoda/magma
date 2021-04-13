@@ -89,6 +89,30 @@ void AccelerationStructure::bindMemory(std::shared_ptr<DeviceMemory> memory,
     this->memory = std::move(memory);
 }
 
+VkMemoryRequirements AccelerationStructure::getObjectMemoryRequirements() const
+{
+    return getMemoryRequirements(VK_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_OBJECT_NV).memoryRequirements;
+}
+
+VkMemoryRequirements AccelerationStructure::getBuildScratchMemoryRequirements() const
+{
+    return getMemoryRequirements(VK_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_BUILD_SCRATCH_NV).memoryRequirements;
+}
+        
+VkMemoryRequirements AccelerationStructure::getUpdateScratchMemoryRequirements() const
+{
+    return getMemoryRequirements(VK_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_UPDATE_SCRATCH_NV).memoryRequirements;
+}
+
+uint64_t AccelerationStructure::getReferenceHandle() const
+{
+    uint64_t refHandle;
+    MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureHandleNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
+    const VkResult get = vkGetAccelerationStructureHandleNV(MAGMA_HANDLE(device), handle, sizeof(uint64_t), &refHandle);
+    MAGMA_THROW_FAILURE(get, "failed to get acceleration structure handle");
+    return refHandle;
+}
+
 VkMemoryRequirements2 AccelerationStructure::getMemoryRequirements(VkAccelerationStructureMemoryRequirementsTypeNV type) const
 {
     VkAccelerationStructureMemoryRequirementsInfoNV info;
@@ -101,15 +125,6 @@ VkMemoryRequirements2 AccelerationStructure::getMemoryRequirements(VkAcceleratio
     MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureMemoryRequirementsNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     vkGetAccelerationStructureMemoryRequirementsNV(MAGMA_HANDLE(device), &info, &memoryRequirements);
     return memoryRequirements;
-}
-
-uint64_t AccelerationStructure::getReferenceHandle() const
-{
-    uint64_t refHandle;
-    MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureHandleNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    const VkResult get = vkGetAccelerationStructureHandleNV(MAGMA_HANDLE(device), handle, sizeof(uint64_t), &refHandle);
-    MAGMA_THROW_FAILURE(get, "failed to get acceleration structure handle");
-    return refHandle;
 }
 #endif // VK_NV_ray_tracing
 } // namespace magma

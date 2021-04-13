@@ -39,7 +39,9 @@ namespace magma
         VkAccelerationStructureTypeNV getType() const noexcept { return type; }
         const VkAccelerationStructureInfoNV& getInfo() const noexcept { return info; }
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
-        VkMemoryRequirements2 getMemoryRequirements(VkAccelerationStructureMemoryRequirementsTypeNV type) const;
+        VkMemoryRequirements getObjectMemoryRequirements() const;
+        VkMemoryRequirements getBuildScratchMemoryRequirements() const;
+        VkMemoryRequirements getUpdateScratchMemoryRequirements() const;
         uint64_t getReferenceHandle() const;
 
     protected:
@@ -52,6 +54,8 @@ namespace magma
             std::shared_ptr<IAllocator> allocator);
 
     private:
+        VkMemoryRequirements2 getMemoryRequirements(VkAccelerationStructureMemoryRequirementsTypeNV type) const;
+
         VkAccelerationStructureTypeNV type;
         VkAccelerationStructureInfoNV info;
     };
