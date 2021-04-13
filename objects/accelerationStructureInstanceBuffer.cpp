@@ -49,8 +49,7 @@ void AccelerationStructureInstance::setAccelerationStructure(std::shared_ptr<con
 AccelerationStructureInstanceBuffer::AccelerationStructureInstanceBuffer(std::shared_ptr<Device> device, uint32_t instanceCount,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    CopyMemoryFunction copyFn /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     RayTracingBuffer(device, 
         sizeof(AccelerationStructureInstance) * instanceCount,
         flags, sharing, allocator),

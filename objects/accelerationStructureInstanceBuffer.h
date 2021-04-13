@@ -62,8 +62,7 @@ namespace magma
             uint32_t instanceCount,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            CopyMemoryFunction copyFn = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr);
         uint32_t getInstanceCount() const noexcept { return (uint32_t)instances.size(); }
         AccelerationStructureInstance& getInstance(uint32_t instanceIndex) noexcept { return instances[instanceIndex]; }
         const AccelerationStructureInstance& getInstance(uint32_t instanceIndex) const noexcept { return instances[instanceIndex]; }
