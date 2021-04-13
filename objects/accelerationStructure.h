@@ -35,7 +35,8 @@ namespace magma
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices = {},
             VkDeviceSize offset = 0);
-        VkAccelerationStructureTypeNV getType() const noexcept { return type; }
+        bool topLevel() const noexcept { return VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NV == info.type; }
+        bool bottomLevel() const noexcept { return VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NV == info.type; }
         const VkAccelerationStructureInfoNV& getInfo() const noexcept { return info; }
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
         VkMemoryRequirements getObjectMemoryRequirements() const;
