@@ -155,7 +155,7 @@ void BlitRectangle::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
         imageDescriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
         std::shared_ptr<Sampler> sampler = (VK_FILTER_NEAREST == filter) ? nearestSampler :
             ((VK_FILTER_LINEAR == filter) ? bilinearSampler : cubicSampler);
-        imageDescriptorSet->update(0, image, std::move(sampler));
+        imageDescriptorSet->writeDescriptor(0, image, std::move(sampler));
         descriptorSets[image] = imageDescriptorSet;
     }
     int32_t height = static_cast<int32_t>(rc.extent.height);

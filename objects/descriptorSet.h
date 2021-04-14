@@ -44,28 +44,38 @@ namespace magma
         explicit DescriptorSet(VkDescriptorSet handle,
             std::shared_ptr<Device> device,
             std::shared_ptr<DescriptorPool> pool,
-            std::shared_ptr<DescriptorSetLayout> layout) noexcept;
-        friend class DescriptorPool;
+            std::shared_ptr<DescriptorSetLayout> layout,
+            const std::size_t maxDescriptors = 16);
 
     public:
-        void update(uint32_t index,
-            std::shared_ptr<const Buffer> buffer) noexcept;
-        void update(uint32_t index,
-            std::shared_ptr<const ImageView> imageView,
-            std::shared_ptr<const Sampler> sampler) noexcept;
-        void update(uint32_t index,
-            std::shared_ptr<const BufferView> texelBufferView) noexcept;
-#ifdef VK_NV_ray_tracing
-        void update(uint32_t index, 
-            std::shared_ptr<const AccelerationStructure> accelerationStructure) noexcept;
-#endif
         std::shared_ptr<DescriptorPool> getPool() noexcept { return pool; }
         std::shared_ptr<const DescriptorPool> getPool() const noexcept { return pool; }
         std::shared_ptr<DescriptorSetLayout> getLayout() noexcept { return layout; }
         std::shared_ptr<const DescriptorSetLayout> getLayout() const noexcept { return layout; }
+        void writeDescriptor(uint32_t index,
+            std::shared_ptr<const Buffer> buffer);
+        void writeDescriptor(uint32_t index,
+            std::shared_ptr<const ImageView> imageView,
+            std::shared_ptr<const Sampler> sampler);
+        void writeDescriptor(uint32_t index,
+            std::shared_ptr<const BufferView> bufferView);
+#ifdef VK_NV_ray_tracing
+        void writeDescriptor(uint32_t index, 
+            std::shared_ptr<const AccelerationStructure> accelerationStructure);
+#endif
+        void update() noexcept;
 
     private:
         std::shared_ptr<DescriptorPool> pool;
         std::shared_ptr<DescriptorSetLayout> layout;
+        std::vector<VkDescriptorBufferInfo> bufferDescriptors;
+        std::vector<VkDescriptorImageInfo> imageDescriptors;
+        std::vector<VkBufferView> bufferViews;
+#ifdef VK_NV_ray_tracing
+        std::vector<VkWriteDescriptorSetAccelerationStructureNV> accelerationDescriptors;
+        std::vector<VkAccelerationStructureNV> accelerationStructures;
+#endif
+        std::vector<VkWriteDescriptorSet> descriptorWrites;
+        friend class DescriptorPool;
     };
 } // namespace magma

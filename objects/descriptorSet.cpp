@@ -33,19 +33,27 @@ namespace magma
 DescriptorSet::DescriptorSet(VkDescriptorSet handle,
     std::shared_ptr<Device> device,
     std::shared_ptr<DescriptorPool> pool,
-    std::shared_ptr<DescriptorSetLayout> layout) noexcept:
+    std::shared_ptr<DescriptorSetLayout> layout,
+    const std::size_t maxDescriptors /* 16 */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, std::move(device), nullptr),
     pool(std::move(pool)),
     layout(std::move(layout))
-{
+{   // Make sure that pointer adresses will be preserved after push_back()
+    bufferDescriptors.reserve(maxDescriptors);
+    imageDescriptors.reserve(maxDescriptors);
+    bufferViews.reserve(maxDescriptors);
+#ifdef VK_NV_ray_tracing
+    accelerationDescriptors.reserve(maxDescriptors);
+    accelerationStructures.reserve(maxDescriptors);
+#endif
     this->handle = handle;
 }
 
-void DescriptorSet::update(uint32_t index, std::shared_ptr<const Buffer> buffer) noexcept
+void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Buffer> buffer)
 {
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
     MAGMA_ASSERT(1 == binding.descriptorCount);
-    const VkDescriptorBufferInfo info = buffer->getDescriptor();
+    bufferDescriptors.push_back(buffer->getDescriptor());
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     descriptorWrite.pNext = nullptr;
@@ -55,12 +63,12 @@ void DescriptorSet::update(uint32_t index, std::shared_ptr<const Buffer> buffer)
     descriptorWrite.descriptorCount = binding.descriptorCount;
     descriptorWrite.descriptorType = binding.descriptorType;
     descriptorWrite.pImageInfo = nullptr;
-    descriptorWrite.pBufferInfo = &info;
+    descriptorWrite.pBufferInfo = &bufferDescriptors.back();
     descriptorWrite.pTexelBufferView = nullptr;
-    vkUpdateDescriptorSets(MAGMA_HANDLE(device), 1, &descriptorWrite, 0, nullptr);
+    descriptorWrites.push_back(descriptorWrite);
 }
 
-void DescriptorSet::update(uint32_t index, std::shared_ptr<const ImageView> imageView, std::shared_ptr<const Sampler> sampler) noexcept
+void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const ImageView> imageView, std::shared_ptr<const Sampler> sampler)
 {
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
     const Format format(imageView->getImage()->getFormat());
@@ -97,6 +105,7 @@ void DescriptorSet::update(uint32_t index, std::shared_ptr<const ImageView> imag
         } 
         else info.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     }
+    imageDescriptors.push_back(info);
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     descriptorWrite.pNext = nullptr;
@@ -105,17 +114,17 @@ void DescriptorSet::update(uint32_t index, std::shared_ptr<const ImageView> imag
     descriptorWrite.dstArrayElement = 0;
     descriptorWrite.descriptorCount = binding.descriptorCount;
     descriptorWrite.descriptorType = binding.descriptorType;
-    descriptorWrite.pImageInfo = &info;
+    descriptorWrite.pImageInfo = &imageDescriptors.back();
     descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = nullptr;
-    vkUpdateDescriptorSets(MAGMA_HANDLE(device), 1, &descriptorWrite, 0, nullptr);
+    descriptorWrites.push_back(descriptorWrite);
 }
 
-void DescriptorSet::update(uint32_t index, std::shared_ptr<const BufferView> texelBufferView) noexcept
+void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const BufferView> bufferView)
 {
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
     MAGMA_ASSERT(1 == binding.descriptorCount);
-    const VkBufferView bufferViews[1] = {*texelBufferView};
+    bufferViews.push_back(*bufferView);
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     descriptorWrite.pNext = nullptr;
@@ -126,33 +135,51 @@ void DescriptorSet::update(uint32_t index, std::shared_ptr<const BufferView> tex
     descriptorWrite.descriptorType = binding.descriptorType;
     descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = nullptr;
-    descriptorWrite.pTexelBufferView = bufferViews;
-    vkUpdateDescriptorSets(MAGMA_HANDLE(device), 1, &descriptorWrite, 0, nullptr);
+    descriptorWrite.pTexelBufferView = &bufferViews.back();
+    descriptorWrites.push_back(descriptorWrite);
 }
 
 #ifdef VK_NV_ray_tracing
-void DescriptorSet::update(uint32_t index, std::shared_ptr<const AccelerationStructure> accelerationStructure) noexcept
+void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const AccelerationStructure> accelerationStructure)
 {
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
     MAGMA_ASSERT(1 == binding.descriptorCount);
-    const VkAccelerationStructureNV accelerationStructures[1] = {*accelerationStructure};
-    VkWriteDescriptorSetAccelerationStructureNV accelerationStructureDescriptorWrite;
-    accelerationStructureDescriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_NV;
-    accelerationStructureDescriptorWrite.pNext = nullptr;
-    accelerationStructureDescriptorWrite.accelerationStructureCount = 1;
-    accelerationStructureDescriptorWrite.pAccelerationStructures = accelerationStructures;
+    accelerationStructures.push_back(*accelerationStructure);
+    VkWriteDescriptorSetAccelerationStructureNV descriptor;
+    descriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_NV;
+    descriptor.pNext = nullptr;
+    descriptor.accelerationStructureCount = 1;
+    descriptor.pAccelerationStructures = &accelerationStructures.back();
+    accelerationDescriptors.push_back(descriptor);
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.pNext = &accelerationStructureDescriptorWrite;
+    descriptorWrite.pNext = &accelerationDescriptors.back();
     descriptorWrite.dstSet = handle;
     descriptorWrite.dstBinding = binding.binding;
     descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = accelerationStructureDescriptorWrite.accelerationStructureCount;
+    descriptorWrite.descriptorCount = descriptor.accelerationStructureCount;
     descriptorWrite.descriptorType = binding.descriptorType;
     descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = nullptr;
-    vkUpdateDescriptorSets(MAGMA_HANDLE(device), 1, &descriptorWrite, 0, nullptr);
+    descriptorWrites.push_back(descriptorWrite);
 }
 #endif // VK_NV_ray_tracing
+
+void DescriptorSet::update() noexcept
+{
+    if (!descriptorWrites.empty())
+    {
+        device->updateDescriptorSets(descriptorWrites);
+        // This shouldn't free actual memory (otherwise reserve() should be called again)
+        bufferDescriptors.clear();
+        imageDescriptors.clear();
+        bufferViews.clear();
+#ifdef VK_NV_ray_tracing
+        accelerationDescriptors.clear();
+        accelerationStructures.clear();
+#endif  
+        descriptorWrites.clear();
+    }
+}
 } // namespace magma

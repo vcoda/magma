@@ -83,9 +83,9 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
             bindings::FragmentStageBinding(2, descriptors::StorageBuffer(1))
         });
     descriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
-    descriptorSet->update(0, uniforms);
-    descriptorSet->update(1, stringBuffer);
-    descriptorSet->update(2, glyphBuffer);
+    descriptorSet->writeDescriptor(0, uniforms);
+    descriptorSet->writeDescriptor(1, stringBuffer);
+    descriptorSet->writeDescriptor(2, glyphBuffer);
     std::shared_ptr<PipelineLayout> pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout);
     // Load shaders
 constexpr
