@@ -147,7 +147,7 @@ void DescriptorSet::update(uint32_t index, std::shared_ptr<const AccelerationStr
     descriptorWrite.dstSet = handle;
     descriptorWrite.dstBinding = binding.binding;
     descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = binding.descriptorCount;
+    descriptorWrite.descriptorCount = accelerationStructureDescriptorWrite.accelerationStructureCount;
     descriptorWrite.descriptorType = binding.descriptorType;
     descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = nullptr;
