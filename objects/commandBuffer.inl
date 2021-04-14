@@ -110,6 +110,7 @@ inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pi
     uint32_t dynamicOffset /* -1 */) noexcept
 {
     MAGMA_ASSERT(pipeline->getLayout()->hasSetLayout(descriptorSet->getLayout()));
+    descriptorSet->update();
     const VkDescriptorSet dereferencedDescriptorSet[1] = {*descriptorSet};
     vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), 0, 1, dereferencedDescriptorSet,
         (0xFFFFFFFF == dynamicOffset) ? 0 : 1,
