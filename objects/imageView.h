@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Image;
+    class Sampler;
 
     /* Image objects are not directly accessed by pipeline shaders
        for reading or writing image data. Instead, image views representing
@@ -57,6 +58,7 @@ namespace magma
         uint32_t getMipLevelCount() const noexcept { return levelCount; }
         uint32_t getBaseArrayLayer() const noexcept { return baseArrayLayer; }
         uint32_t getArrayLayerCount() const noexcept { return layerCount; }
+        VkDescriptorImageInfo getDescriptor(std::shared_ptr<const Sampler> sampler) const noexcept;
 
     private:
         std::shared_ptr<Image> image;
