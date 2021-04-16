@@ -49,6 +49,7 @@ DescriptorSet::DescriptorSet(VkDescriptorSet handle,
 
 void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Buffer> buffer)
 {
+    MAGMA_ASSERT(bufferDescriptors.capacity() - bufferDescriptors.size() >= 1);
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
     MAGMA_ASSERT(1 == binding.descriptorCount);
     bufferDescriptors.push_back(buffer->getDescriptor());
@@ -68,6 +69,7 @@ void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Buffer
 
 void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const ImageView> imageView, std::shared_ptr<const Sampler> sampler)
 {
+    MAGMA_ASSERT(imageDescriptors.capacity() - imageDescriptors.size() >= 1);
     MAGMA_ASSERT(imageView->getImage()->getUsage() & (sampler ? VK_IMAGE_USAGE_SAMPLED_BIT : VK_IMAGE_USAGE_STORAGE_BIT));
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
     MAGMA_ASSERT(1 == binding.descriptorCount);
@@ -88,6 +90,7 @@ void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const ImageV
 
 void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const BufferView> bufferView)
 {
+    MAGMA_ASSERT(bufferViews.capacity() - bufferViews.size() >= 1);
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
     MAGMA_ASSERT(1 == binding.descriptorCount);
     bufferViews.push_back(*bufferView);
@@ -108,6 +111,7 @@ void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Buffer
 #ifdef VK_NV_ray_tracing
 void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const AccelerationStructure> accelerationStructure)
 {
+    MAGMA_ASSERT(accelerationStructures.capacity() - accelerationStructures.size() >= 1);
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
     MAGMA_ASSERT(1 == binding.descriptorCount);
     accelerationStructures.push_back(*accelerationStructure);
@@ -134,6 +138,7 @@ void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Accele
 
 void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::shared_ptr<const Buffer>>& bufferArray)
 {
+    MAGMA_ASSERT(bufferDescriptors.capacity() - bufferDescriptors.size() >= bufferArray.size());
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
     MAGMA_ASSERT(binding.descriptorCount <= bufferArray.size());
     for (auto& buffer : bufferArray)
@@ -155,6 +160,7 @@ void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::
 void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::shared_ptr<const ImageView>>& imageViewArray,
     const std::vector<std::shared_ptr<const Sampler>>& samplerArray)
 {
+    MAGMA_ASSERT(imageDescriptors.capacity() - imageDescriptors.size() >= imageViewArray.size());
     MAGMA_ASSERT(imageViewArray.size() <= samplerArray.size());
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
     MAGMA_ASSERT(binding.descriptorCount <= imageViewArray.size());
@@ -181,6 +187,7 @@ void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::
 
 void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::shared_ptr<const BufferView>>& bufferViewArray)
 {
+    MAGMA_ASSERT(bufferViews.capacity() - bufferViews.size() >= bufferViewArray.size());
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
     MAGMA_ASSERT(binding.descriptorCount <= bufferViewArray.size());
     for (auto& bufferView : bufferViewArray)
