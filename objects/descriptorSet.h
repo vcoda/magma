@@ -63,6 +63,13 @@ namespace magma
         void writeDescriptor(uint32_t index, 
             std::shared_ptr<const AccelerationStructure> accelerationStructure);
 #endif
+        void writeDescriptorArray(uint32_t index, 
+            const std::vector<std::shared_ptr<const Buffer>>& bufferArray);
+        void writeDescriptorArray(uint32_t index,
+            const std::vector<std::shared_ptr<const ImageView>>& imageViewArray,
+            const std::vector<std::shared_ptr<const Sampler>>& samplerArray);
+        void writeDescriptorArray(uint32_t index, 
+            const std::vector<std::shared_ptr<const BufferView>>& bufferViewArray);
         void update() noexcept;
 
     private:
