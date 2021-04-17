@@ -121,6 +121,7 @@ namespace magma
 
         const bool KHR_16bit_storage;
         const bool KHR_8bit_storage;
+        const bool KHR_acceleration_structure;
         const bool KHR_bind_memory2;
         const bool KHR_buffer_device_address;
         const bool KHR_create_renderpass2;
@@ -154,7 +155,9 @@ namespace magma
         const bool KHR_pipeline_executable_properties;
         const bool KHR_pipeline_library;
         const bool KHR_push_descriptor;
+        const bool KHR_ray_query;
         const bool KHR_ray_tracing;
+        const bool KHR_ray_tracing_pipeline;
         const bool KHR_relaxed_block_layout;
         const bool KHR_sampler_mirror_clamp_to_edge;
         const bool KHR_sampler_ycbcr_conversion;

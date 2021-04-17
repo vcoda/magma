@@ -120,6 +120,7 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
 
     MAGMA_CHECK_EXTENSION(KHR_16bit_storage),
     MAGMA_CHECK_EXTENSION(KHR_8bit_storage),
+    MAGMA_CHECK_EXTENSION(KHR_acceleration_structure),
     MAGMA_CHECK_EXTENSION(KHR_bind_memory2),
     MAGMA_CHECK_EXTENSION(KHR_buffer_device_address),
     MAGMA_CHECK_EXTENSION(KHR_create_renderpass2),
@@ -153,7 +154,9 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(KHR_pipeline_executable_properties),
     MAGMA_CHECK_EXTENSION(KHR_pipeline_library),
     MAGMA_CHECK_EXTENSION(KHR_push_descriptor),
+    MAGMA_CHECK_EXTENSION(KHR_ray_query),
     MAGMA_CHECK_EXTENSION(KHR_ray_tracing),
+    MAGMA_CHECK_EXTENSION(KHR_ray_tracing_pipeline),
     MAGMA_CHECK_EXTENSION(KHR_relaxed_block_layout),
     MAGMA_CHECK_EXTENSION(KHR_sampler_mirror_clamp_to_edge),
     MAGMA_CHECK_EXTENSION(KHR_sampler_ycbcr_conversion),
