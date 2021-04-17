@@ -137,7 +137,5 @@ StorageImage2D::StorageImage2D(std::shared_ptr<Device> device, VkFormat format, 
         0, // flags
         sharing,
         std::move(allocator))
-{
-    layout = VK_IMAGE_LAYOUT_GENERAL;
-}
+{}
 } // namespace magma
