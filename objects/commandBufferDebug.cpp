@@ -28,7 +28,6 @@ void CommandBuffer::beginDebugMarker(const char *name, uint32_t color) noexcept
 {
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
-    MAGMA_ASSERT(color);
 #ifdef MAGMA_DEBUG
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDebugMarkerBeginEXT);
     if (vkCmdDebugMarkerBeginEXT)
@@ -62,7 +61,6 @@ void CommandBuffer::insertDebugMarker(const char *name, uint32_t color) noexcept
 {
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
-    MAGMA_ASSERT(color);
 #ifdef MAGMA_DEBUG
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDebugMarkerInsertEXT);
     if (vkCmdDebugMarkerInsertEXT)
@@ -89,7 +87,6 @@ void CommandBuffer::beginDebugLabel(const char *name, uint32_t color) noexcept
 {
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
-    MAGMA_ASSERT(color);
 #ifdef MAGMA_DEBUG
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBeginDebugUtilsLabelEXT);
     if (vkCmdBeginDebugUtilsLabelEXT)
@@ -121,7 +118,6 @@ void CommandBuffer::insertDebugLabel(const char *name, uint32_t color) noexcept
 {
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
-    MAGMA_ASSERT(color);
 #ifdef MAGMA_DEBUG
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdInsertDebugUtilsLabelEXT);
     if (vkCmdInsertDebugUtilsLabelEXT)
