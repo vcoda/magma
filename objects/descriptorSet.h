@@ -53,23 +53,23 @@ namespace magma
         std::shared_ptr<const DescriptorPool> getPool() const noexcept { return pool; }
         std::shared_ptr<DescriptorSetLayout> getLayout() noexcept { return layout; }
         std::shared_ptr<const DescriptorSetLayout> getLayout() const noexcept { return layout; }
-        void writeDescriptor(uint32_t index,
+        void writeDescriptor(uint32_t binding,
             std::shared_ptr<const Buffer> buffer);
-        void writeDescriptor(uint32_t index,
+        void writeDescriptor(uint32_t binding,
             std::shared_ptr<const ImageView> imageView,
             std::shared_ptr<const Sampler> sampler);
-        void writeDescriptor(uint32_t index,
+        void writeDescriptor(uint32_t binding,
             std::shared_ptr<const BufferView> bufferView);
 #ifdef VK_NV_ray_tracing
-        void writeDescriptor(uint32_t index, 
+        void writeDescriptor(uint32_t binding, 
             std::shared_ptr<const AccelerationStructure> accelerationStructure);
 #endif
-        void writeDescriptorArray(uint32_t index, 
+        void writeDescriptorArray(uint32_t binding, 
             const std::vector<std::shared_ptr<const Buffer>>& bufferArray);
-        void writeDescriptorArray(uint32_t index,
+        void writeDescriptorArray(uint32_t binding,
             const std::vector<std::shared_ptr<const ImageView>>& imageViewArray,
             const std::vector<std::shared_ptr<const Sampler>>& samplerArray);
-        void writeDescriptorArray(uint32_t index, 
+        void writeDescriptorArray(uint32_t binding, 
             const std::vector<std::shared_ptr<const BufferView>>& bufferViewArray);
         void update();
 
