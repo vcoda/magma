@@ -74,7 +74,8 @@ void DescriptorPool::reset()
     MAGMA_THROW_FAILURE(reset, "failed to reset descriptor pool");
 }
 
-std::shared_ptr<DescriptorSet> DescriptorPool::allocateDescriptorSet(std::shared_ptr<DescriptorSetLayout> setLayout)
+std::shared_ptr<DescriptorSet> DescriptorPool::allocateDescriptorSet(std::shared_ptr<DescriptorSetLayout> setLayout,
+    uint32_t maxDescriptorWrites /* 16 */)
 {
     VkDescriptorSetAllocateInfo info;
     info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
@@ -86,7 +87,7 @@ std::shared_ptr<DescriptorSet> DescriptorPool::allocateDescriptorSet(std::shared
     VkDescriptorSet descriptorSet;
     const VkResult alloc = vkAllocateDescriptorSets(MAGMA_HANDLE(device), &info, &descriptorSet);
     MAGMA_THROW_FAILURE(alloc, "failed to allocate descriptor set");
-    return std::shared_ptr<DescriptorSet>(new DescriptorSet(descriptorSet,  device, shared_from_this(), setLayout));
+    return std::shared_ptr<DescriptorSet>(new DescriptorSet(descriptorSet,  device, shared_from_this(), setLayout, maxDescriptorWrites));
 }
 
 void DescriptorPool::freeDescriptorSet(std::shared_ptr<DescriptorSet>& descriptorSet) noexcept
@@ -96,7 +97,8 @@ void DescriptorPool::freeDescriptorSet(std::shared_ptr<DescriptorSet>& descripto
     descriptorSet.reset();
 }
 
-std::vector<std::shared_ptr<DescriptorSet>> DescriptorPool::allocateDescriptorSets(const std::vector<std::shared_ptr<DescriptorSetLayout>>& setLayouts)
+std::vector<std::shared_ptr<DescriptorSet>> DescriptorPool::allocateDescriptorSets(const std::vector<std::shared_ptr<DescriptorSetLayout>>& setLayouts,
+    uint32_t maxDescriptorWrites /* 16 */)
 {
     VkDescriptorSetAllocateInfo info;
     info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
@@ -113,7 +115,7 @@ std::vector<std::shared_ptr<DescriptorSet>> DescriptorPool::allocateDescriptorSe
     std::vector<std::shared_ptr<DescriptorSet>> descriptorSets;
     int i = 0;
     for (const VkDescriptorSet descriptorSet : nativeDescriptorSets)
-        descriptorSets.emplace_back(new DescriptorSet(descriptorSet, device, shared_from_this(), setLayouts[i++]));
+        descriptorSets.emplace_back(new DescriptorSet(descriptorSet, device, shared_from_this(), setLayouts[i++], maxDescriptorWrites));
     return descriptorSets;
 }
 

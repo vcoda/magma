@@ -45,7 +45,7 @@ namespace magma
             std::shared_ptr<Device> device,
             std::shared_ptr<DescriptorPool> pool,
             std::shared_ptr<DescriptorSetLayout> layout,
-            const std::size_t maxDescriptors = 16);
+            uint32_t maxDescriptorWrites);
 
     public:
         ~DescriptorSet();

@@ -32,18 +32,19 @@ DescriptorSet::DescriptorSet(VkDescriptorSet handle,
     std::shared_ptr<Device> device,
     std::shared_ptr<DescriptorPool> pool,
     std::shared_ptr<DescriptorSetLayout> layout,
-    const std::size_t maxDescriptors /* 16 */):
+    uint32_t maxDescriptorWrites):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, std::move(device), nullptr),
     pool(std::move(pool)),
     layout(std::move(layout))
 {   // Make sure that pointer adresses will be preserved after push_back()
-    bufferDescriptors.reserve(maxDescriptors);
-    imageDescriptors.reserve(maxDescriptors);
-    bufferViews.reserve(maxDescriptors);
+    bufferDescriptors.reserve(maxDescriptorWrites);
+    imageDescriptors.reserve(maxDescriptorWrites);
+    bufferViews.reserve(maxDescriptorWrites);
 #ifdef VK_NV_ray_tracing
-    accelerationDescriptors.reserve(maxDescriptors);
-    accelerationStructures.reserve(maxDescriptors);
+    accelerationDescriptors.reserve(maxDescriptorWrites);
+    accelerationStructures.reserve(maxDescriptorWrites);
 #endif
+    descriptorWrites.reserve(maxDescriptorWrites);
     this->handle = handle;
 }
 
