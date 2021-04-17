@@ -233,7 +233,7 @@ void DescriptorSet::release()
 #endif  
     for (auto& descriptor : descriptorWrites)
     {
-        if (descriptor.descriptorCount > 0)
+        if (descriptor.descriptorCount > 1) // Is array?
         {   // Free memory allocated in writeDescriptorArray()
             delete[] descriptor.pImageInfo;
             delete[] descriptor.pBufferInfo;
