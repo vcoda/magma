@@ -47,6 +47,11 @@ DescriptorSet::DescriptorSet(VkDescriptorSet handle,
     this->handle = handle;
 }
 
+DescriptorSet::~DescriptorSet()
+{
+    release(); // Take care if update() has not been called
+}
+
 void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Buffer> buffer)
 {
     MAGMA_ASSERT(bufferDescriptors.capacity() - bufferDescriptors.size() >= 1);
@@ -138,11 +143,12 @@ void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Accele
 
 void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::shared_ptr<const Buffer>>& bufferArray)
 {
-    MAGMA_ASSERT(bufferDescriptors.capacity() - bufferDescriptors.size() >= bufferArray.size());
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
+    MAGMA_ASSERT(binding.descriptorCount > 1);
     MAGMA_ASSERT(binding.descriptorCount <= bufferArray.size());
-    for (auto& buffer : bufferArray)
-        bufferDescriptors.push_back(buffer->getDescriptor());
+    VkDescriptorBufferInfo *bufferInfo = new VkDescriptorBufferInfo[bufferArray.size()];
+    for (size_t i = 0, n = bufferArray.size(); i < n; ++i)
+        bufferInfo[i] = bufferArray[i]->getDescriptor();
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     descriptorWrite.pNext = nullptr;
@@ -152,7 +158,7 @@ void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::
     descriptorWrite.descriptorCount = binding.descriptorCount;
     descriptorWrite.descriptorType = binding.descriptorType;
     descriptorWrite.pImageInfo = nullptr;
-    descriptorWrite.pBufferInfo = &bufferDescriptors.back() - (bufferArray.size() - 1);
+    descriptorWrite.pBufferInfo = bufferInfo;
     descriptorWrite.pTexelBufferView = nullptr;
     descriptorWrites.push_back(descriptorWrite);
 }
@@ -160,16 +166,15 @@ void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::
 void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::shared_ptr<const ImageView>>& imageViewArray,
     const std::vector<std::shared_ptr<const Sampler>>& samplerArray)
 {
-    MAGMA_ASSERT(imageDescriptors.capacity() - imageDescriptors.size() >= imageViewArray.size());
     MAGMA_ASSERT(imageViewArray.size() <= samplerArray.size());
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
+    MAGMA_ASSERT(binding.descriptorCount > 1);
     MAGMA_ASSERT(binding.descriptorCount <= imageViewArray.size());
-    int i = 0;
-    for (auto& imageView : imageViewArray)
+    VkDescriptorImageInfo *imageInfo = new VkDescriptorImageInfo[imageViewArray.size()];
+    for (size_t i = 0, n = imageViewArray.size(); i < n; ++i)
     {
-        std::shared_ptr<const Sampler> sampler = samplerArray[i++];
-        MAGMA_ASSERT(imageView->getImage()->getUsage() & (sampler ? VK_IMAGE_USAGE_SAMPLED_BIT : VK_IMAGE_USAGE_STORAGE_BIT));
-        imageDescriptors.push_back(imageView->getDescriptor(std::move(sampler)));
+        MAGMA_ASSERT(imageViewArray[i]->getImage()->getUsage() & (samplerArray[i] ? VK_IMAGE_USAGE_SAMPLED_BIT : VK_IMAGE_USAGE_STORAGE_BIT));
+        imageInfo[i] = imageViewArray[i]->getDescriptor(samplerArray[i]);
     }
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -179,7 +184,7 @@ void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::
     descriptorWrite.dstArrayElement = 0;
     descriptorWrite.descriptorCount = binding.descriptorCount;
     descriptorWrite.descriptorType = binding.descriptorType;
-    descriptorWrite.pImageInfo = &imageDescriptors.back() - (imageViewArray.size() - 1);
+    descriptorWrite.pImageInfo = imageInfo;
     descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = nullptr;
     descriptorWrites.push_back(descriptorWrite);
@@ -187,11 +192,12 @@ void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::
 
 void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::shared_ptr<const BufferView>>& bufferViewArray)
 {
-    MAGMA_ASSERT(bufferViews.capacity() - bufferViews.size() >= bufferViewArray.size());
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
+    MAGMA_ASSERT(binding.descriptorCount > 1);
     MAGMA_ASSERT(binding.descriptorCount <= bufferViewArray.size());
-    for (auto& bufferView : bufferViewArray)
-        bufferViews.push_back(*bufferView);
+    VkBufferView *texelBufferView = new VkBufferView[bufferViewArray.size()];
+    for (size_t i = 0, n = bufferViewArray.size(); i < n; ++i)
+        texelBufferView[i] = *bufferViewArray[i];
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     descriptorWrite.pNext = nullptr;
@@ -202,24 +208,38 @@ void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::
     descriptorWrite.descriptorType = binding.descriptorType;
     descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = nullptr;
-    descriptorWrite.pTexelBufferView = &bufferViews.back() - (bufferViewArray.size() - 1);
+    descriptorWrite.pTexelBufferView = texelBufferView;
     descriptorWrites.push_back(descriptorWrite);
 }
 
-void DescriptorSet::update() noexcept
+void DescriptorSet::update()
 {
     if (!descriptorWrites.empty())
     {
         device->updateDescriptorSets(descriptorWrites);
-        // This shouldn't free actual memory (otherwise reserve() should be called again)
-        bufferDescriptors.clear();
-        imageDescriptors.clear();
-        bufferViews.clear();
-#ifdef VK_NV_ray_tracing
-        accelerationDescriptors.clear();
-        accelerationStructures.clear();
-#endif  
-        descriptorWrites.clear();
+        release();
     }
+}
+
+void DescriptorSet::release()
+{   // This shouldn't free actual memory (otherwise reserve() should be called again)
+    bufferDescriptors.clear();
+    imageDescriptors.clear();
+    bufferViews.clear();
+#ifdef VK_NV_ray_tracing
+    accelerationDescriptors.clear();
+    accelerationStructures.clear();
+#endif  
+    for (auto& descriptor : descriptorWrites)
+    {
+        if (descriptor.descriptorCount > 0)
+        {   // Free memory allocated in writeDescriptorArray()
+            delete[] descriptor.pImageInfo;
+            delete[] descriptor.pBufferInfo;
+            delete[] descriptor.pTexelBufferView;
+        }
+    }
+    descriptorWrites.clear();
+    descriptorWrites.shrink_to_fit(); // Free memory
 }
 } // namespace magma

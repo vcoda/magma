@@ -48,6 +48,7 @@ namespace magma
             const std::size_t maxDescriptors = 16);
 
     public:
+        ~DescriptorSet();
         std::shared_ptr<DescriptorPool> getPool() noexcept { return pool; }
         std::shared_ptr<const DescriptorPool> getPool() const noexcept { return pool; }
         std::shared_ptr<DescriptorSetLayout> getLayout() noexcept { return layout; }
@@ -70,9 +71,11 @@ namespace magma
             const std::vector<std::shared_ptr<const Sampler>>& samplerArray);
         void writeDescriptorArray(uint32_t index, 
             const std::vector<std::shared_ptr<const BufferView>>& bufferViewArray);
-        void update() noexcept;
+        void update();
 
     private:
+        void release();
+
         std::shared_ptr<DescriptorPool> pool;
         std::shared_ptr<DescriptorSetLayout> layout;
         std::vector<VkDescriptorBufferInfo> bufferDescriptors;
