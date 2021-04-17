@@ -80,8 +80,8 @@ namespace magma
         ~DescriptorSetLayout();
         uint32_t getBindingCount() const noexcept { return static_cast<uint32_t>(bindings.size()); }
         uint32_t getSamplerBindingCount() const noexcept { return static_cast<uint32_t>(samplerBindings.size()); }
-        const Binding& getBinding(uint32_t index) const noexcept { return bindings[index]; }
-        const SamplerBinding& getSamplerBinding(uint32_t index) const noexcept { return samplerBindings[index]; }
+        const Binding& getBinding(uint32_t binding) const;
+        const SamplerBinding& getSamplerBinding(uint32_t binding) const;
         std::size_t getHash() const noexcept;
 
     private:

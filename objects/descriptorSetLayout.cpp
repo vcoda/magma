@@ -136,6 +136,22 @@ DescriptorSetLayout::~DescriptorSetLayout()
     vkDestroyDescriptorSetLayout(MAGMA_HANDLE(device), handle, nullptr);
 }
 
+const DescriptorSetLayout::Binding& DescriptorSetLayout::getBinding(uint32_t binding) const
+{ 
+    for (auto& it : bindings)
+        if (it.binding == binding)
+            return it;
+    throw exception::Exception("binding not found");
+}
+        
+const DescriptorSetLayout::SamplerBinding& DescriptorSetLayout::getSamplerBinding(uint32_t binding) const
+{ 
+    for (auto& it : samplerBindings)
+        if (it.binding == binding)
+            return it;
+    throw exception::Exception("binding not found");
+}
+
 std::size_t DescriptorSetLayout::getHash() const noexcept
 {   // Compute complex hash on demand
     std::size_t hash = this->hash;
