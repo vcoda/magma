@@ -20,7 +20,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     MAGMA_TYPEDEF_SHARED_PTR(AccelerationStructure)
+    MAGMA_TYPEDEF_SHARED_PTR(AccelerationStructureIndexBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(AccelerationStructureInstanceBuffer)
+    MAGMA_TYPEDEF_SHARED_PTR(AccelerationStructureVertexBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(BottomLevelAccelerationStructure)
     MAGMA_TYPEDEF_SHARED_PTR(Buffer)
     MAGMA_TYPEDEF_SHARED_PTR(BufferView)
@@ -60,6 +62,7 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(IndexBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(IndirectBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(Instance)
+    MAGMA_TYPEDEF_SHARED_PTR(LinearTiledImage2D)
     MAGMA_TYPEDEF_SHARED_PTR(OcclusionQuery)
     MAGMA_TYPEDEF_SHARED_PTR(PhysicalDevice)
     MAGMA_TYPEDEF_SHARED_PTR(PhysicalDeviceGroup)
@@ -77,6 +80,7 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(ShaderModule)
     MAGMA_TYPEDEF_SHARED_PTR(SrcTransferBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(StorageBuffer)
+    MAGMA_TYPEDEF_SHARED_PTR(StorageImage2D);
     MAGMA_TYPEDEF_SHARED_PTR(StorageTexelBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(Surface)
     MAGMA_TYPEDEF_SHARED_PTR(Swapchain)
