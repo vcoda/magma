@@ -18,6 +18,26 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "rayTracingBuffer.h"
 
+#if defined(VK_NV_ray_tracing) && !defined(VK_SHADER_UNUSED_KHR)
+
+/* With early SDK definition wasn't provided in the headers 
+   so I declare own structs which matches the specified layout. */
+
+typedef struct VkTransformMatrixNV {
+    float    matrix[3][4];
+} VkTransformMatrixNV;
+
+typedef struct VkAccelerationStructureInstanceNV {
+    VkTransformMatrixNV           transform;
+    uint32_t                      instanceCustomIndex:24;
+    uint32_t                      mask:8;
+    uint32_t                      instanceShaderBindingTableRecordOffset:24;
+    VkFlags                       flags:8;
+    uint64_t                      accelerationStructureReference;
+} VkAccelerationStructureInstanceNV;
+
+#endif // VK_NV_ray_tracing && !VK_SHADER_UNUSED_KHR
+
 namespace magma
 {
     class AccelerationStructure;
@@ -25,11 +45,11 @@ namespace magma
     class SrcTransferBuffer;
 
 #ifdef VK_NV_ray_tracing
-    typedef VkTransformMatrixKHR TransformMatrix;
+    typedef VkTransformMatrixNV TransformMatrix;
 
     /* Single acceleration structure instance for building into an acceleration structure geometry. */
 
-    class AccelerationStructureInstance : public VkAccelerationStructureInstanceKHR
+    class AccelerationStructureInstance : public VkAccelerationStructureInstanceNV
     {
     public:
         AccelerationStructureInstance() noexcept;
