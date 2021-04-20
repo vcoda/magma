@@ -97,6 +97,16 @@ namespace magma
         const char *stringize(VkPresentModeKHR) noexcept;
         const char *stringize(VkSurfaceTransformFlagBitsKHR) noexcept;
         const char *stringize(VkCompositeAlphaFlagBitsKHR) noexcept;
+#ifdef VK_NV_ray_tracing
+        const char *stringize(VkRayTracingShaderGroupTypeNV) noexcept;
+        const char *stringize(VkGeometryTypeNV) noexcept;
+        const char *stringize(VkAccelerationStructureTypeNV) noexcept;
+        const char *stringize(VkCopyAccelerationStructureModeNV) noexcept;
+        const char *stringize(VkAccelerationStructureMemoryRequirementsTypeNV) noexcept;
+        const char *stringize(VkGeometryFlagBitsNV) noexcept;
+        const char *stringize(VkGeometryInstanceFlagBitsNV) noexcept;
+        const char *stringize(VkBuildAccelerationStructureFlagBitsNV) noexcept;
+#endif // VK_NV_ray_tracing
 
         const char *stringize(SpvReflectResult) noexcept;
         const char *stringize(SpvReflectTypeFlagBits) noexcept;
