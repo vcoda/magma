@@ -26,15 +26,29 @@ namespace magma
     class InstanceLayers : public Layers
     {
     public:
+        const bool GalaxyOverlayVkLayer;
+        const bool GalaxyOverlayVkLayer_DEBUG;
+        const bool GalaxyOverlayVkLayer_VERBOSE;
+
+        const bool GraphicsSpy;
+        const bool libVK_LAYER_RGA_pipeline_extraction;
+        const bool MoltenVK;
+        const bool VirtualSwapchain;
+
         const bool AMD_switchable_graphics;
+        const bool AMD_switchable_graphics_32;
+        const bool AMD_switchable_graphics_64;
 
         const bool bandicam_helper;
         const bool DxtoryHookHelper;
+        const bool fossilize;
         const bool fpsmon;
 
         const bool GOOGLE_threading;
         const bool GOOGLE_unique_objects;
 
+        // https://github.com/KhronosGroup/Vulkan-ExtensionLayer
+        const bool KHRONOS_synchronization2;
         const bool KHRONOS_timeline_semaphore;
         const bool KHRONOS_validation;
 
@@ -42,18 +56,25 @@ namespace magma
         const bool LUNARG_assistant_layer;
         const bool LUNARG_core_validation;
         const bool LUNARG_demo_layer;
+        const bool LUNARG_device_profile_api;
         const bool LUNARG_device_simulation;
+        const bool LUNARG_gfxreconstruct;
         const bool LUNARG_image;
         const bool LUNARG_monitor;
         const bool LUNARG_object_tracker;
+        const bool LUNARG_overlay;
         const bool LUNARG_override;
         const bool LUNARG_parameter_validation;
         const bool LUNARG_screenshot;
         const bool LUNARG_standard_validation;
         const bool LUNARG_starter_layer;
         const bool LUNARG_swapchain;
+        const bool LUNARG_TestingIntercept;
+        const bool LUNARG_VkGHL32;
+        const bool LUNARG_VkGHL64;
         const bool LUNARG_vktrace;
 
+        const bool MESA_device_select;
         const bool MESA_overlay;
 
         const bool NV_nomad;
@@ -75,10 +96,14 @@ namespace magma
         const bool VALVE_steam_overlay_32;
         const bool VALVE_steam_overlay_64;
 
+        const bool VKBASALT_post_processing;
         const bool VKBASALT_PostProcess32;
         const bool VKBASALT_PostProcess64;
 
         const bool vkpipeline_db;
+
+        const bool XGCV4_64;
+        const bool XSPLIT_64;
 
         InstanceLayers();
     };

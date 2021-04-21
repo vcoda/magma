@@ -25,19 +25,34 @@ namespace magma
 {
 #define MAGMA_CHECK_LAYER(layer)\
     layer(this->hasLayer(core::hashString(MAGMA_LAYER_PREFIX #layer)))
+#define MAGMA_CHECK_LAYER_NOPREFIX(layer)\
+    layer(this->hasLayer(core::hashString(#layer)))
 
 InstanceLayers::InstanceLayers():
     Layers(Instance::enumerateLayers()),
 
+    MAGMA_CHECK_LAYER_NOPREFIX(GalaxyOverlayVkLayer),
+    MAGMA_CHECK_LAYER_NOPREFIX(GalaxyOverlayVkLayer_DEBUG),
+    MAGMA_CHECK_LAYER_NOPREFIX(GalaxyOverlayVkLayer_VERBOSE),
+
+    MAGMA_CHECK_LAYER_NOPREFIX(GraphicsSpy),
+    MAGMA_CHECK_LAYER_NOPREFIX(libVK_LAYER_RGA_pipeline_extraction),
+    MAGMA_CHECK_LAYER_NOPREFIX(MoltenVK),
+    MAGMA_CHECK_LAYER_NOPREFIX(VirtualSwapchain),
+
     MAGMA_CHECK_LAYER(AMD_switchable_graphics),
+    MAGMA_CHECK_LAYER(AMD_switchable_graphics_32),
+    MAGMA_CHECK_LAYER(AMD_switchable_graphics_64),
 
     MAGMA_CHECK_LAYER(bandicam_helper),
     MAGMA_CHECK_LAYER(DxtoryHookHelper),
+    MAGMA_CHECK_LAYER(fossilize),
     MAGMA_CHECK_LAYER(fpsmon),
 
     MAGMA_CHECK_LAYER(GOOGLE_threading),
     MAGMA_CHECK_LAYER(GOOGLE_unique_objects),
 
+    MAGMA_CHECK_LAYER(KHRONOS_synchronization2),
     MAGMA_CHECK_LAYER(KHRONOS_timeline_semaphore),
     MAGMA_CHECK_LAYER(KHRONOS_validation),
 
@@ -45,18 +60,25 @@ InstanceLayers::InstanceLayers():
     MAGMA_CHECK_LAYER(LUNARG_assistant_layer),
     MAGMA_CHECK_LAYER(LUNARG_core_validation),
     MAGMA_CHECK_LAYER(LUNARG_demo_layer),
+    MAGMA_CHECK_LAYER(LUNARG_device_profile_api),
     MAGMA_CHECK_LAYER(LUNARG_device_simulation),
+    MAGMA_CHECK_LAYER(LUNARG_gfxreconstruct),
     MAGMA_CHECK_LAYER(LUNARG_image),
     MAGMA_CHECK_LAYER(LUNARG_monitor),
     MAGMA_CHECK_LAYER(LUNARG_object_tracker),
+    MAGMA_CHECK_LAYER(LUNARG_overlay),
     MAGMA_CHECK_LAYER(LUNARG_override),
     MAGMA_CHECK_LAYER(LUNARG_parameter_validation),
     MAGMA_CHECK_LAYER(LUNARG_screenshot),
     MAGMA_CHECK_LAYER(LUNARG_standard_validation),
     MAGMA_CHECK_LAYER(LUNARG_starter_layer),
     MAGMA_CHECK_LAYER(LUNARG_swapchain),
+    MAGMA_CHECK_LAYER(LUNARG_TestingIntercept),
+    MAGMA_CHECK_LAYER(LUNARG_VkGHL32),
+    MAGMA_CHECK_LAYER(LUNARG_VkGHL64),
     MAGMA_CHECK_LAYER(LUNARG_vktrace),
 
+    MAGMA_CHECK_LAYER(MESA_device_select),
     MAGMA_CHECK_LAYER(MESA_overlay),
 
     MAGMA_CHECK_LAYER(NV_nomad),
@@ -78,9 +100,13 @@ InstanceLayers::InstanceLayers():
     MAGMA_CHECK_LAYER(VALVE_steam_overlay_32),
     MAGMA_CHECK_LAYER(VALVE_steam_overlay_64),
 
+    MAGMA_CHECK_LAYER(VKBASALT_post_processing),
     MAGMA_CHECK_LAYER(VKBASALT_PostProcess32),
     MAGMA_CHECK_LAYER(VKBASALT_PostProcess64),
 
-    MAGMA_CHECK_LAYER(vkpipeline_db)
+    MAGMA_CHECK_LAYER(vkpipeline_db),
+
+    MAGMA_CHECK_LAYER(XGCV4_64),
+    MAGMA_CHECK_LAYER(XSPLIT_64)
 {}
 } // namespace magma
