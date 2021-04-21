@@ -83,7 +83,7 @@ InstanceLayers::InstanceLayers():
 
     MAGMA_CHECK_LAYER(NV_nomad),
     MAGMA_CHECK_LAYER(NV_nsight),
-    MAGMA_CHECK_LAYER(NV_nsight_sys),
+    NV_nsight_sys(hasLayer(core::hashString("VK_LAYER_NV_nsight-sys"))),
     MAGMA_CHECK_LAYER(NV_optimus),
     MAGMA_CHECK_LAYER(NV_vgd),
 
