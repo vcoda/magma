@@ -28,7 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma warning(disable : 4100 4127)
 #endif
 #define VMA_IMPLEMENTATION
-#include "../third-party/VulkanMemoryAllocator/src/vk_mem_alloc.h"
+#include "../third-party/VulkanMemoryAllocator/include/vk_mem_alloc.h"
 
 static_assert(sizeof(magma::MemoryBudget) == sizeof(VmaBudget),
     "VmaBudget structure size mismatch");
@@ -170,9 +170,8 @@ std::vector<void *> DeviceMemoryAllocator::allocPages(const std::vector<VkMemory
 
 void *DeviceMemoryAllocator::realloc(void *allocation, VkDeviceSize size)
 {
-    const VkResult result = vmaResizeAllocation(handle, reinterpret_cast<VmaAllocation>(allocation), size);
-    MAGMA_THROW_FAILURE(result, "failed to allocate memory pages");
-    return allocation;
+    MAGMA_THROW_FAILURE(VK_ERROR_FEATURE_NOT_PRESENT, "vmaResizeAllocation() deprecated");
+    return nullptr;
 }
 
 void DeviceMemoryAllocator::free(void *allocation) noexcept
