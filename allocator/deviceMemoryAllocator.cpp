@@ -114,6 +114,7 @@ void *DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memoryRequirement
     allocInfo.memoryTypeBits = 0;
     allocInfo.pool = VK_NULL_HANDLE;
     allocInfo.pUserData = nullptr;
+    allocInfo.priority = 0.f;
     VmaAllocation allocation;
     const VkResult result = vmaAllocateMemory(handle, &memoryRequirements, &allocInfo, &allocation, nullptr);
     MAGMA_THROW_FAILURE(result, "failed to allocate memory");
@@ -168,6 +169,7 @@ std::vector<void *> DeviceMemoryAllocator::allocPages(const std::vector<VkMemory
         allocInfo.memoryTypeBits = 0;
         allocInfo.pool = VK_NULL_HANDLE;
         allocInfo.pUserData = nullptr;
+        allocInfo.priority = 0.f;
         allocInfos.push_back(allocInfo);
     }
     const size_t allocationCount = MAGMA_COUNT(allocInfos);
