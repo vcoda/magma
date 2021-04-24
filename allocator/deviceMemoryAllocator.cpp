@@ -71,7 +71,7 @@ void *DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memoryRequirement
     bool cpuFrequentlyWriteGpuRead)
 {
     VmaAllocationCreateInfo allocInfo;
-    allocInfo.flags = 0;
+    allocInfo.flags = VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT;
     if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
     {   // Memory will be used on device only, so fast access from the device is preferred
         allocInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
@@ -129,7 +129,7 @@ std::vector<void *> DeviceMemoryAllocator::allocPages(const std::vector<VkMemory
     for (const VkMemoryPropertyFlags flags : memoryFlags)
     {
         VmaAllocationCreateInfo allocInfo;
-        allocInfo.flags = 0;
+        allocInfo.flags = VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT;
         if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
         {   // Memory will be used on device only, so fast access from the device is preferred
             allocInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
