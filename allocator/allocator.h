@@ -67,6 +67,7 @@ namespace magma
         uint32_t deviceMemoryBlocksFreed;
     };
 
+    class Device;
     class CommandBuffer;
 
     /* Previous generation APIs (OpenGL, DirectX 11) manage memory automatically.
@@ -78,11 +79,11 @@ namespace magma
        This object provides an interface for memory allocator that can allocate a bigger
        memory blocks in different heaps and then sub-allocate ranges for your resources. */
 
-    class CommandBuffer;
-
     class IDeviceMemoryAllocator : public core::NonCopyable
     {
     public:
+        virtual std::shared_ptr<Device> getDevice() const noexcept = 0;
+        virtual std::shared_ptr<IAllocator> getAllocator() const noexcept = 0;
         virtual void *alloc(const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
             bool cpuFrequentlyWriteGpuRead) = 0;

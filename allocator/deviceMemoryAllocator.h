@@ -23,8 +23,6 @@ VK_DEFINE_HANDLE(VmaDefragmentationContext)
 
 namespace magma
 {
-    class Device;
-
     /* The Vulkan Memory Allocator provides a simple and easy to integrate API
        to help you allocate memory for Vulkan buffer and image storage.
        https://gpuopen.com/vulkan-memory-allocator */
@@ -36,8 +34,8 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~DeviceMemoryAllocator();
         VmaAllocator getHandle() const noexcept { return handle; }
-        std::shared_ptr<Device> getDevice() const noexcept { return device; }
-        std::shared_ptr<IAllocator> getAllocator() const noexcept { return allocator; }
+        virtual std::shared_ptr<Device> getDevice() const noexcept override { return device; }
+        virtual std::shared_ptr<IAllocator> getAllocator() const noexcept override { return allocator; }
         virtual void *alloc(const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
             bool cpuFrequentlyWriteGpuRead) override;
