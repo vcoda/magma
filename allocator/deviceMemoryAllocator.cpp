@@ -104,7 +104,12 @@ void *DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memoryRequirement
         // VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD
         allocInfo.usage = VMA_MEMORY_USAGE_UNKNOWN;
     }
-    allocInfo.requiredFlags = 0;
+    if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+        allocInfo.requiredFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    else if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
+        allocInfo.requiredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+    else
+        allocInfo.requiredFlags = 0;
     allocInfo.preferredFlags = 0;
     allocInfo.memoryTypeBits = 0;
     allocInfo.pool = VK_NULL_HANDLE;
@@ -153,7 +158,12 @@ std::vector<void *> DeviceMemoryAllocator::allocPages(const std::vector<VkMemory
             // VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD
             allocInfo.usage = VMA_MEMORY_USAGE_UNKNOWN;
         }
-        allocInfo.requiredFlags = 0;
+        if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+            allocInfo.requiredFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+        else if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
+            allocInfo.requiredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+        else
+            allocInfo.requiredFlags = 0;
         allocInfo.preferredFlags = 0;
         allocInfo.memoryTypeBits = 0;
         allocInfo.pool = VK_NULL_HANDLE;
