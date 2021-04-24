@@ -576,6 +576,9 @@
     <ClInclude Include="..\..\objects\accelerationStructureInstanceBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\allocator\deviceMemoryAllocator.h">
+      <Filter>Header Files\allocator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocator.cpp">
@@ -883,6 +886,9 @@
     </ClCompile>
     <ClCompile Include="..\..\objects\accelerationStructureInstanceBuffer.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\allocator\deviceMemoryAllocator.cpp">
+      <Filter>Source Files\allocator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 /*
 Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2020 Victor Coda.
+Copyright (C) 2018-2021 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -49,5 +49,67 @@ namespace magma
         virtual void internalFreeNotification(std::size_t size,
             VkInternalAllocationType allocationType,
             VkSystemAllocationScope allocationScope) = 0;
+    };
+
+    struct MemoryBudget
+    {
+        VkDeviceSize blockBytes;
+        VkDeviceSize allocationBytes;
+        VkDeviceSize usage;
+        VkDeviceSize budget;
+    };
+
+    struct DefragmentationStats
+    {
+        VkDeviceSize bytesMoved;
+        VkDeviceSize bytesFreed;
+        uint32_t allocationsMoved;
+        uint32_t deviceMemoryBlocksFreed;
+    };
+
+    class CommandBuffer;
+
+    /* Previous generation APIs (OpenGL, DirectX 11) manage memory automatically.
+       In contrast, Vulkan requires explicit memory management that makes it possible to:
+           * Better manage memory
+           * Better optimize for specific platforms
+           * Alias (overlap) transient resources
+       Allocation of separate memory block per resource is inefficient and limited by OS.
+       This object provides an interface for memory allocator that can allocate a bigger
+       memory blocks in different heaps and then sub-allocate ranges for your resources. */
+
+    class CommandBuffer;
+
+    class IDeviceMemoryAllocator : public core::NonCopyable
+    {
+    public:
+        virtual void *alloc(const VkMemoryRequirements& memoryRequirements,
+            VkMemoryPropertyFlags flags,
+            bool cpuFrequentlyWriteGpuRead) = 0;
+        virtual std::vector<void *> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
+            const std::vector<VkMemoryPropertyFlags>& flags) = 0;
+        virtual void *realloc(void *memory,
+            VkDeviceSize size) = 0;
+        virtual void free(void *memory) noexcept = 0;
+        virtual void freePages(std::vector<void *>& memoryPages) noexcept = 0;
+        virtual VkDeviceMemory getMemoryHandle(void *memory) const noexcept = 0;
+        virtual VkResult map(void *memory,
+            VkDeviceSize offset,
+            void **data) noexcept = 0;
+        virtual void unmap(void *memory) noexcept = 0;
+        virtual VkResult flushMappedRange(void *memory,
+            VkDeviceSize offset,
+            VkDeviceSize size) noexcept = 0;
+        virtual VkResult invalidateMappedRange(void *memory,
+            VkDeviceSize offset,
+            VkDeviceSize size) noexcept = 0;
+        virtual std::vector<MemoryBudget> getBudget() const noexcept = 0;
+        virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept = 0;
+        virtual VkResult beginCpuDefragmentation(std::vector<void *>& allocations,
+            DefragmentationStats* stats = nullptr) noexcept = 0;
+        virtual VkResult beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer,
+            std::vector<void *>& allocations,
+            DefragmentationStats* stats = nullptr) noexcept = 0;
+        virtual VkResult endDefragmentation() noexcept = 0;
     };
 } // namespace magma
