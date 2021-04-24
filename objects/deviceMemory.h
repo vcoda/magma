@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class IDeviceMemoryAllocator;
+
     /* Device memory is memory that is visible to the device -
        for example the contents of the image or buffer objects,
        which can be natively used by the device. */
@@ -27,6 +29,10 @@ namespace magma
     class DeviceMemory : public NonDispatchable<VkDeviceMemory>
     {
     public:
+        explicit DeviceMemory(std::shared_ptr<IDeviceMemoryAllocator> allocator,
+            const VkMemoryRequirements& memoryRequirements,
+            VkMemoryPropertyFlags flags,
+            bool cpuFrequentlyWriteGpuRead);
         explicit DeviceMemory(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkMemoryPropertyFlags flags,
@@ -39,6 +45,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
 #endif
         ~DeviceMemory();
+        std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return allocator; }
         VkDeviceSize getSize() const noexcept { return size; }
         bool local() const noexcept;
         bool hostVisible() const noexcept;
@@ -59,7 +66,8 @@ namespace magma
     private:
         uint32_t getTypeIndex(VkMemoryPropertyFlags flags) const;
 
-    private:
+        std::shared_ptr<IDeviceMemoryAllocator> allocator;
+        void *memory;
         VkDeviceSize size;
         VkMemoryPropertyFlags flags;
         bool mapped;
