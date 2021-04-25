@@ -34,9 +34,10 @@ namespace magma
     {
     public:
         explicit DeviceMemory(std::shared_ptr<IDeviceMemoryAllocator> allocator,
-            const VkMemoryRequirements& memoryRequirements,
-            VkMemoryPropertyFlags flags,
-            bool cpuFrequentlyWriteGpuRead);
+            DeviceMemoryBlock memory,
+            VkDeviceMemory handle,
+            VkDeviceSize size,
+            VkMemoryPropertyFlags flags) noexcept;
         explicit DeviceMemory(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkMemoryPropertyFlags flags,
