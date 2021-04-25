@@ -54,10 +54,10 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     bindMemory(std::move(memory));
 }
 
-Buffer::Buffer(std::shared_ptr<DeviceMemory> memory, VkDeviceSize size, VkDeviceSize offset,
-    VkBufferUsageFlags usage, VkBufferCreateFlags flags,
-    const Sharing& sharing, std::shared_ptr<IAllocator> allocator):
-    NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, size, memory->getDevice(), std::move(allocator)),
+Buffer::Buffer(std::shared_ptr<IDeviceMemoryAllocator> allocator, VkDeviceSize size,
+    VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags, VkBufferCreateFlags flags,
+    bool cpuFrequentlyWriteGpuRead, const Sharing& sharing):
+    NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, size, allocator->getDevice(), allocator->getAllocator()),
     usage(usage)
 {
     VkBufferCreateInfo info;
@@ -71,6 +71,10 @@ Buffer::Buffer(std::shared_ptr<DeviceMemory> memory, VkDeviceSize size, VkDevice
     info.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     const VkResult create = vkCreateBuffer(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create buffer");
+    VkMemoryRequirements memoryRequirements = {};
+    vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
+    std::shared_ptr<DeviceMemory> memory(allocator->alloc(
+        memoryRequirements, memoryFlags, cpuFrequentlyWriteGpuRead));
     bindMemory(std::move(memory), offset);
 }
 

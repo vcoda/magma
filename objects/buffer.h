@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class CommandBuffer;
+    class IDeviceMemoryAllocator;
 
     /* Buffers represent linear arrays of data which are used
        for various purposes by binding them to a graphics or compute
@@ -51,13 +52,13 @@ namespace magma
             VkBufferCreateFlags flags,
             const Sharing& sharing,
             std::shared_ptr<IAllocator> allocator);
-        explicit Buffer(std::shared_ptr<DeviceMemory> memory,
+        explicit Buffer(std::shared_ptr<IDeviceMemoryAllocator> allocator,
             VkDeviceSize size,
-            VkDeviceSize offset,
             VkBufferUsageFlags usage,
+            VkMemoryPropertyFlags memoryFlags,
             VkBufferCreateFlags flags,
-            const Sharing& sharing,
-            std::shared_ptr<IAllocator> allocator);
+            bool cpuFrequentlyWriteGpuRead,
+            const Sharing& sharing);
         void copyHost(const void *data,
             CopyMemoryFunction copyFn) noexcept;
         void copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer,
