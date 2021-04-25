@@ -172,7 +172,7 @@ std::vector<void *> DeviceMemoryAllocator::allocPages(const std::vector<VkMemory
         allocInfo.priority = 0.f;
         allocInfos.push_back(allocInfo);
     }
-    const size_t allocationCount = MAGMA_COUNT(allocInfos);
+    const std::size_t allocationCount = MAGMA_COUNT(allocInfos);
     std::vector<void *> memoryPages(allocationCount);
     const VkResult result = vmaAllocateMemoryPages(handle, memoryRequirements.data(), allocInfos.data(), allocationCount,
         reinterpret_cast<VmaAllocation *>(memoryPages.data()), nullptr);
