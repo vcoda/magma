@@ -83,9 +83,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask, 
 DeviceMemory::~DeviceMemory()
 {
     MAGMA_ASSERT(!mapped);
-    if (memory)
-        allocator->free(memory);
-    else
+    if (!memory) // If not a sub-allocation
         vkFreeMemory(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(Object::allocator));
 }
 

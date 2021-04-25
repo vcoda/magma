@@ -68,7 +68,12 @@ namespace magma
     };
 
     class Device;
+    class DeviceMemory;
     class CommandBuffer;
+
+    /* Opaque handle to memory sub-allocation.
+       Each device memory allocator hides the implementation details under it. */
+    typedef void *DeviceMemoryBlock;
 
     /* Previous generation APIs (OpenGL, DirectX 11) manage memory automatically.
        In contrast, Vulkan requires explicit memory management that makes it possible to:
@@ -82,35 +87,39 @@ namespace magma
     class IDeviceMemoryAllocator : public core::IDestructible
     {
     public:
-        virtual std::shared_ptr<Device> getDevice() const noexcept = 0;
-        virtual std::shared_ptr<IAllocator> getAllocator() const noexcept = 0;
-        virtual void *alloc(const VkMemoryRequirements& memoryRequirements,
+        virtual std::shared_ptr<DeviceMemory> alloc(const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
             bool cpuFrequentlyWriteGpuRead) = 0;
-        virtual std::vector<void *> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
+        virtual std::vector<std::shared_ptr<DeviceMemory>> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
             const std::vector<VkMemoryPropertyFlags>& flags) = 0;
-        virtual void *realloc(void *memory,
+        virtual std::shared_ptr<DeviceMemory> realloc(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize size) = 0;
-        virtual void free(void *memory) noexcept = 0;
-        virtual void freePages(std::vector<void *>& memoryPages) noexcept = 0;
-        virtual VkDeviceMemory getMemoryHandle(void *memory) const noexcept = 0;
-        virtual VkResult map(void *memory,
-            VkDeviceSize offset,
-            void **data) noexcept = 0;
-        virtual void unmap(void *memory) noexcept = 0;
-        virtual VkResult flushMappedRange(void *memory,
-            VkDeviceSize offset,
-            VkDeviceSize size) noexcept = 0;
-        virtual VkResult invalidateMappedRange(void *memory,
-            VkDeviceSize offset,
-            VkDeviceSize size) noexcept = 0;
+        virtual void free(std::shared_ptr<DeviceMemory>& memory) noexcept = 0;
+        virtual void freePages(std::vector<std::shared_ptr<DeviceMemory>>& memoryPages) noexcept = 0;
+        virtual std::shared_ptr<Device> getDevice() const noexcept = 0;
+        virtual std::shared_ptr<IAllocator> getAllocator() const noexcept = 0;
+        virtual VkDeviceMemory getMemoryHandle(DeviceMemoryBlock memory) const noexcept = 0;
         virtual std::vector<MemoryBudget> getBudget() const noexcept = 0;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept = 0;
-        virtual VkResult beginCpuDefragmentation(std::vector<void *>& allocations,
+
+        virtual VkResult beginCpuDefragmentation(std::vector<std::shared_ptr<DeviceMemory>>& memoryPages,
             DefragmentationStats* stats = nullptr) noexcept = 0;
         virtual VkResult beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::vector<void *>& allocations,
+            std::vector<std::shared_ptr<DeviceMemory>>& memoryPages,
             DefragmentationStats* stats = nullptr) noexcept = 0;
         virtual VkResult endDefragmentation() noexcept = 0;
+
+    private:
+        virtual VkResult map(DeviceMemoryBlock memory,
+            VkDeviceSize offset,
+            void **data) noexcept = 0;
+        virtual void unmap(DeviceMemoryBlock memory) noexcept = 0;
+        virtual VkResult flushMappedRange(DeviceMemoryBlock memory,
+            VkDeviceSize offset,
+            VkDeviceSize size) noexcept = 0;
+        virtual VkResult invalidateMappedRange(DeviceMemoryBlock memory,
+            VkDeviceSize offset,
+            VkDeviceSize size) noexcept = 0;
+        friend class DeviceMemory;
     };
 } // namespace magma

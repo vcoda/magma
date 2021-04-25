@@ -27,43 +27,47 @@ namespace magma
        to help you allocate memory for Vulkan buffer and image storage.
        https://gpuopen.com/vulkan-memory-allocator */
 
-    class DeviceMemoryAllocator : public IDeviceMemoryAllocator
+    class DeviceMemoryAllocator : public IDeviceMemoryAllocator,
+        public std::enable_shared_from_this<DeviceMemoryAllocator>
     {
     public:
         explicit DeviceMemoryAllocator(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~DeviceMemoryAllocator();
         VmaAllocator getHandle() const noexcept { return handle; }
-        virtual std::shared_ptr<Device> getDevice() const noexcept override { return device; }
-        virtual std::shared_ptr<IAllocator> getAllocator() const noexcept override { return allocator; }
-        virtual void *alloc(const VkMemoryRequirements& memoryRequirements,
+        virtual std::shared_ptr<DeviceMemory> alloc(const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
             bool cpuFrequentlyWriteGpuRead) override;
-        virtual std::vector<void *> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
-            const std::vector<VkMemoryPropertyFlags>& memoryFlags) override;
-        virtual void *realloc(void *memory,
+        virtual std::vector<std::shared_ptr<DeviceMemory>> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
+            const std::vector<VkMemoryPropertyFlags>& flags) override;
+        virtual std::shared_ptr<DeviceMemory> realloc(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize size) override;
-        virtual void free(void *memory) noexcept override;
-        virtual void freePages(std::vector<void *>& memoryPages) noexcept override;
-        virtual VkDeviceMemory getMemoryHandle(void *memory) const noexcept override;
-        virtual VkResult map(void *memory,
-            VkDeviceSize offset,
-            void **data) noexcept override;
-        virtual void unmap(void *memory) noexcept override;
-        virtual VkResult flushMappedRange(void *memory,
-            VkDeviceSize offset,
-            VkDeviceSize size) noexcept override;
-        virtual VkResult invalidateMappedRange(void *memory,
-            VkDeviceSize offset,
-            VkDeviceSize size) noexcept override;
+        virtual void free(std::shared_ptr<DeviceMemory>& memory) noexcept override;
+        virtual void freePages(std::vector<std::shared_ptr<DeviceMemory>>& memoryPages) noexcept override;
+        virtual std::shared_ptr<Device> getDevice() const noexcept override { return device; }
+        virtual std::shared_ptr<IAllocator> getAllocator() const noexcept override { return allocator; }
+        virtual VkDeviceMemory getMemoryHandle(DeviceMemoryBlock memory) const noexcept override;
         virtual std::vector<MemoryBudget> getBudget() const noexcept override;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept override;
-        virtual VkResult beginCpuDefragmentation(std::vector<void *>& allocations,
+
+        virtual VkResult beginCpuDefragmentation(std::vector<std::shared_ptr<DeviceMemory>>& memoryPages,
             DefragmentationStats* stats = nullptr) noexcept override;
         virtual VkResult beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::vector<void *>& allocations,
-            DefragmentationStats *stats = nullptr) noexcept override;
+            std::vector<std::shared_ptr<DeviceMemory>>& memoryPages,
+            DefragmentationStats* stats = nullptr) noexcept override;
         virtual VkResult endDefragmentation() noexcept override;
+
+    private:
+        virtual VkResult map(DeviceMemoryBlock memory,
+            VkDeviceSize offset,
+            void **data) noexcept override;
+        virtual void unmap(DeviceMemoryBlock memory) noexcept override;
+        virtual VkResult flushMappedRange(DeviceMemoryBlock memory,
+            VkDeviceSize offset,
+            VkDeviceSize size) noexcept override;
+        virtual VkResult invalidateMappedRange(DeviceMemoryBlock memory,
+            VkDeviceSize offset,
+            VkDeviceSize size) noexcept override;
 
     private:
         std::shared_ptr<Device> device;
