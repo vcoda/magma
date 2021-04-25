@@ -68,11 +68,9 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     VkMemoryRequirements memoryRequirements = {};
     vkGetImageMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
     size = memoryRequirements.size;
-    VkMemoryPropertyFlags memoryFlags;
-    if (VK_IMAGE_TILING_LINEAR == tiling)
-        memoryFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-    else
-        memoryFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    VkMemoryPropertyFlags memoryFlags = (VK_IMAGE_TILING_LINEAR == tiling)
+        ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
+        : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(this->device,
         memoryRequirements.size, memoryFlags));
     bindMemory(std::move(memory));

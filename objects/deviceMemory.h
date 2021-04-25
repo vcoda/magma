@@ -33,15 +33,15 @@ namespace magma
     class DeviceMemory : public NonDispatchable<VkDeviceMemory>
     {
     public:
+        explicit DeviceMemory(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            VkMemoryPropertyFlags flags,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         explicit DeviceMemory(std::shared_ptr<IDeviceMemoryAllocator> allocator,
             DeviceMemoryBlock memory,
             VkDeviceMemory handle,
             VkDeviceSize size,
             VkMemoryPropertyFlags flags) noexcept;
-        explicit DeviceMemory(std::shared_ptr<Device> device,
-            VkDeviceSize size,
-            VkMemoryPropertyFlags flags,
-            std::shared_ptr<IAllocator> allocator = nullptr);
 #ifdef VK_KHR_device_group
         explicit DeviceMemory(std::shared_ptr<Device> device,
             uint32_t deviceMask,

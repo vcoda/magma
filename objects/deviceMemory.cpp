@@ -25,18 +25,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DeviceMemory::DeviceMemory(std::shared_ptr<IDeviceMemoryAllocator> allocator, DeviceMemoryBlock memory, VkDeviceMemory handle,
-    VkDeviceSize size, VkMemoryPropertyFlags flags) noexcept:
-    NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, allocator->getDevice(), allocator->getAllocator()),
-    allocator(std::move(allocator)),
-    memory(memory),
-    size(size),
-    flags(flags),
-    mapped(false)
-{
-    this->handle = handle; 
-}
-
 DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, VkDeviceSize size, VkMemoryPropertyFlags flags,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), std::move(allocator)),
@@ -53,6 +41,18 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, VkDeviceSize size, Vk
     info.memoryTypeIndex = getTypeIndex(flags);
     const VkResult allocate = vkAllocateMemory(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(allocate, "failed to allocate memory");
+}
+
+DeviceMemory::DeviceMemory(std::shared_ptr<IDeviceMemoryAllocator> allocator, DeviceMemoryBlock memory, VkDeviceMemory handle,
+    VkDeviceSize size, VkMemoryPropertyFlags flags) noexcept:
+    NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, allocator->getDevice(), allocator->getAllocator()),
+    allocator(std::move(allocator)),
+    memory(memory),
+    size(size),
+    flags(flags),
+    mapped(false)
+{
+    this->handle = handle; 
 }
 
 #ifdef VK_KHR_device_group
