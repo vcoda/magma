@@ -24,6 +24,7 @@ namespace magma
     class Buffer;
     class SrcTransferBuffer;
     class CommandBuffer;
+    class IDeviceMemoryAllocator;
 
     /* Images represent multidimensional - up to 3 - arrays of data
        which can be used for various purposes (e.g. attachments, textures),
@@ -84,6 +85,17 @@ namespace magma
             VkImageCreateFlags flags,
             const Sharing& sharing,
             std::shared_ptr<IAllocator> allocator);
+        explicit Image(std::shared_ptr<IDeviceMemoryAllocator> allocator,
+            VkImageType imageType,
+            VkFormat format,
+            const VkExtent3D& extent,
+            uint32_t mipLevels,
+            uint32_t arrayLayers,
+            uint32_t samples,
+            VkImageTiling tiling,
+            VkImageUsageFlags usage,
+            VkImageCreateFlags flags,
+            const Sharing& sharing);
         explicit Image(std::shared_ptr<Device> device,
             VkImage handle,
             VkImageType imageType,
