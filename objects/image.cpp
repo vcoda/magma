@@ -74,7 +74,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     info.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
     info.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     info.initialLayout = layout;
-    const VkResult create = vkCreateImage(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateImage(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create image");
     VkMemoryRequirements memoryRequirements = {};
     vkGetImageMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
@@ -105,7 +105,7 @@ Image::Image(std::shared_ptr<Device> device, VkImage handle, VkImageType imageTy
 
 Image::~Image()
 {
-    vkDestroyImage(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyImage(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 VkExtent3D Image::getMipExtent(uint32_t level) const noexcept

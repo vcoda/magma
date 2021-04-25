@@ -48,7 +48,7 @@ DebugUtilsMessenger::DebugUtilsMessenger(std::shared_ptr<const Instance> instanc
         info.messageType = messageType;
         info.pfnUserCallback = userCallback;
         info.pUserData = userData;
-        const VkResult create = vkCreateDebugUtilsMessengerEXT(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+        const VkResult create = vkCreateDebugUtilsMessengerEXT(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
         MAGMA_THROW_FAILURE(create, "failed to create debug messenger");
     }
 }
@@ -57,7 +57,7 @@ DebugUtilsMessenger::~DebugUtilsMessenger()
 {
     MAGMA_OPTIONAL_INSTANCE_EXTENSION(vkDestroyDebugUtilsMessengerEXT);
     if (vkDestroyDebugUtilsMessengerEXT)
-        vkDestroyDebugUtilsMessengerEXT(MAGMA_HANDLE(instance), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+        vkDestroyDebugUtilsMessengerEXT(MAGMA_HANDLE(instance), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 void DebugUtilsMessenger::message(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageTypes,

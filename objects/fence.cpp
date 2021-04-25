@@ -35,13 +35,13 @@ Fence::Fence(std::shared_ptr<Device> device,
     info.flags = 0;
     if (signaled)
         info.flags |= VK_FENCE_CREATE_SIGNALED_BIT;
-    const VkResult create = vkCreateFence(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateFence(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create fence");
 }
 
 Fence::~Fence()
 {
-    vkDestroyFence(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyFence(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 bool Fence::reset() noexcept

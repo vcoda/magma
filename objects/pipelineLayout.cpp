@@ -44,7 +44,7 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
     info.pSetLayouts = nullptr;
     info.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
     info.pPushConstantRanges = pushConstantRanges.begin();
-    const VkResult create = vkCreatePipelineLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreatePipelineLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create pipeline layout");
     hash = core::hashArgs(
         info.sType,
@@ -83,7 +83,7 @@ PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<DescriptorSetLa
     info.pSetLayouts = dereferencedSetLayouts;
     info.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
     info.pPushConstantRanges = pushConstantRanges.begin();
-    const VkResult create = vkCreatePipelineLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreatePipelineLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create pipeline layout");
     hash = core::hashArgs(
         info.sType,
@@ -96,7 +96,7 @@ PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<DescriptorSetLa
 
 PipelineLayout::~PipelineLayout()
 {
-    vkDestroyPipelineLayout(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyPipelineLayout(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 bool PipelineLayout::hasSetLayout(std::shared_ptr<DescriptorSetLayout> setLayout) const noexcept

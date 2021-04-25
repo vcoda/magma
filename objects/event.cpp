@@ -32,13 +32,13 @@ Event::Event(std::shared_ptr<Device> device,
     info.sType = VK_STRUCTURE_TYPE_EVENT_CREATE_INFO;
     info.pNext = nullptr;
     info.flags = 0;
-    const VkResult create = vkCreateEvent(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateEvent(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create event");
 }
 
 Event::~Event()
 {
-    vkDestroyEvent(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyEvent(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 VkResult Event::getStatus() const noexcept

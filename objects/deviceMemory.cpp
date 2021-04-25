@@ -51,7 +51,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, VkDeviceSize size, Vk
     info.pNext = nullptr;
     info.allocationSize = size;
     info.memoryTypeIndex = getTypeIndex(flags);
-    const VkResult allocate = vkAllocateMemory(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(Object::allocator), &handle);
+    const VkResult allocate = vkAllocateMemory(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(allocate, "failed to allocate memory");
 }
 
@@ -75,7 +75,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask, 
     info.pNext = &flagsInfo;
     info.allocationSize = size;
     info.memoryTypeIndex = getTypeIndex(flags);
-    const VkResult allocate = vkAllocateMemory(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(Object::allocator), &handle);
+    const VkResult allocate = vkAllocateMemory(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(allocate, "failed to allocate memory");
 }
 #endif // VK_KHR_device_group
@@ -84,7 +84,7 @@ DeviceMemory::~DeviceMemory()
 {
     MAGMA_ASSERT(!mapped);
     if (!memory) // If not a sub-allocation
-        vkFreeMemory(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(Object::allocator));
+        vkFreeMemory(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 void *DeviceMemory::map(

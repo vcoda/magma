@@ -54,7 +54,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     createInfo.compactedSize = compactedSize;
     createInfo.info = info;
     MAGMA_DEVICE_EXTENSION(vkCreateAccelerationStructureNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    const VkResult create = vkCreateAccelerationStructureNV(MAGMA_HANDLE(device), &createInfo, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateAccelerationStructureNV(MAGMA_HANDLE(device), &createInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create acceleration structure");
     const VkMemoryRequirements memoryRequirements = getObjectMemoryRequirements();
     std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(
@@ -65,7 +65,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
 AccelerationStructure::~AccelerationStructure()
 {
     MAGMA_DEVICE_EXTENSION(vkDestroyAccelerationStructureNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    vkDestroyAccelerationStructureNV(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyAccelerationStructureNV(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
     delete[] info.pGeometries;
 }
 

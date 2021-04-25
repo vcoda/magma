@@ -123,7 +123,7 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const s
     info.flags = flags;
     info.bindingCount = MAGMA_COUNT(bindings);
     info.pBindings = dereferencedBindings;
-    const VkResult create = vkCreateDescriptorSetLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateDescriptorSetLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create descriptor set layout");
     hash = core::hashArgs(
         info.sType,

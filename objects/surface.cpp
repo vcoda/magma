@@ -34,7 +34,7 @@ Surface::Surface(std::shared_ptr<const Instance> instance, std::shared_ptr<IAllo
 
 Surface::~Surface()
 {
-    vkDestroySurfaceKHR(MAGMA_HANDLE(instance), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroySurfaceKHR(MAGMA_HANDLE(instance), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
@@ -51,7 +51,7 @@ Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance,
     info.flags = flags;
     info.hinstance = hinstance;
     info.hwnd = hwnd;
-    const VkResult create = vkCreateWin32SurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateWin32SurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create Win32 surface");
 }
 
@@ -69,7 +69,7 @@ XlibSurface::XlibSurface(std::shared_ptr<const Instance> instance,
     info.flags = flags;
     info.dpy = dpy;
     info.window = window;
-    const VkResult create = vkCreateXlibSurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateXlibSurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create Xlib surface");
 }
 
@@ -87,7 +87,7 @@ XcbSurface::XcbSurface(std::shared_ptr<const Instance> instance,
     info.flags = flags;
     info.connection = connection;
     info.window = window;
-    const VkResult create = vkCreateXcbSurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateXcbSurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create XCB surface");
 }
 
@@ -105,7 +105,7 @@ WaylandSurface::WaylandSurface(std::shared_ptr<const Instance> instance,
     info.flags = flags;
     info.display = display;
     info.surface = surface;
-    const VkResult create = vkCreateWaylandSurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateWaylandSurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create Wayland surface");
 }
 
@@ -123,7 +123,7 @@ MirSurface::MirSurface(std::shared_ptr<const Instance> instance,
     info.flags = flags;
     info.connection = connection;
     info.mirSurface = surface;
-    const VkResult create = vkCreateMirSurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateMirSurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create Mir surface");
 }
 
@@ -139,7 +139,7 @@ AndroidSurface::AndroidSurface(std::shared_ptr<const Instance> instance,
     info.pNext = nullptr;
     info.flags = flags;
     info.window = window;
-    const VkResult create = vkCreateAndroidSurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateAndroidSurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create Android surface");
 }
 
@@ -155,7 +155,7 @@ iOSSurface::iOSSurface(std::shared_ptr<const Instance> instance,
     info.pNext = nullptr;
     info.flags = flags;
     info.pView = view;
-    const VkResult create = vkCreateIOSSurfaceMVK(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateIOSSurfaceMVK(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create iOS surface");
 }
 
@@ -171,7 +171,7 @@ MacOSSurface::MacOSSurface(std::shared_ptr<const Instance> instance,
     info.pNext = nullptr;
     info.flags = flags;
     info.pView = view;
-    const VkResult create = vkCreateMacOSSurfaceMVK(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateMacOSSurfaceMVK(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create macOS surface");
 }
 
@@ -187,7 +187,7 @@ MetalSurface::MetalSurface(std::shared_ptr<const Instance> instance,
     info.pNext = nullptr;
     info.flags = flags;
     info.pLayer = layer;
-    const VkResult create = vkCreateMetalSurfaceEXT(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateMetalSurfaceEXT(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create Metal surface");
 }
 #endif // VK_USE_PLATFORM_METAL_EXT
@@ -214,7 +214,7 @@ DisplaySurface::DisplaySurface(std::shared_ptr<const Instance> instance,
     info.alphaMode = alphaMode;
     info.imageExtent = displayMode->getVisibleRegion();
     MAGMA_INSTANCE_EXTENSION(vkCreateDisplayPlaneSurfaceKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
-    const VkResult create = vkCreateDisplayPlaneSurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateDisplayPlaneSurfaceKHR(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create display surface");
 }
 #endif // VK_KHR_display

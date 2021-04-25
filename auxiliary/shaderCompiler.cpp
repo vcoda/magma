@@ -103,7 +103,7 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     std::shared_ptr<ShaderModule> shaderModule;
     try {
         shaderModule = std::make_shared<ShaderModule>(device, reinterpret_cast<const uint32_t *>(bytecode), bytecodeSize,
-            0, 0, false, device->getAllocator());
+            0, 0, false, device->getHostAllocator());
         shaderc_result_release(result);
     } catch (const exception::ErrorResult&)
     {

@@ -43,7 +43,7 @@ DisplayMode::DisplayMode(std::shared_ptr<const Display> display, const VkExtent2
     info.parameters.visibleRegion = visibleRegion;
     info.parameters.refreshRate = refreshRate;
     MAGMA_INSTANCE_EXTENSION(vkCreateDisplayModeKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
-    const VkResult create = vkCreateDisplayModeKHR(MAGMA_HANDLE(physicalDevice), *display, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateDisplayModeKHR(MAGMA_HANDLE(physicalDevice), *display, &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create display mode");
 }
 

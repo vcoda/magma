@@ -106,8 +106,8 @@ std::shared_ptr<RenderPass> MultiAttachmentFramebuffer::lazyDepthRenderPass() co
             hasStencil() ? op::clearStore : op::dontCare, // Clear stencil, store
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL); // Stay as attachment when a depth pass instance ends
-        depthRenderPass = std::make_shared<RenderPass>(renderPass->getDevice(), depthAttachment, renderPass->getAllocator());
-        depthFramebuffer = std::make_shared<magma::Framebuffer>(depthRenderPass, attachmentViews.back(), 0, framebuffer->getAllocator());
+        depthRenderPass = std::make_shared<RenderPass>(renderPass->getDevice(), depthAttachment, renderPass->getHostAllocator());
+        depthFramebuffer = std::make_shared<magma::Framebuffer>(depthRenderPass, attachmentViews.back(), 0, framebuffer->getHostAllocator());
     }
     return depthRenderPass;
 }

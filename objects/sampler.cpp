@@ -58,13 +58,13 @@ Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
     info.maxLod = std::numeric_limits<float>::max();
     info.borderColor = borderColor.getColor();
     info.unnormalizedCoordinates = VK_FALSE;
-    const VkResult create = vkCreateSampler(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateSampler(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create sampler");
 }
 
 Sampler::~Sampler()
 {
-    vkDestroySampler(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroySampler(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state,
@@ -99,7 +99,7 @@ LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state
     info.maxLod = maxLod;
     info.borderColor = borderColor.getColor();
     info.unnormalizedCoordinates = VK_FALSE;
-    const VkResult create = vkCreateSampler(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateSampler(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create lod sampler");
 }
 
@@ -126,7 +126,7 @@ DepthSampler::DepthSampler(std::shared_ptr<Device> device, const DepthSamplerSta
     info.maxLod = std::numeric_limits<float>::max();
     info.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
     info.unnormalizedCoordinates = VK_FALSE;
-    const VkResult create = vkCreateSampler(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateSampler(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create depth sampler");
 }
 
@@ -154,7 +154,7 @@ UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool li
     info.maxLod = 0.f;
     info.borderColor = borderColor.getColor();
     info.unnormalizedCoordinates = VK_TRUE;
-    const VkResult create = vkCreateSampler(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateSampler(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create unnormalized sampler");
 }
 } // namespace magma

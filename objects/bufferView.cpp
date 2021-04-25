@@ -47,12 +47,12 @@ BufferView::BufferView(std::shared_ptr<Buffer> resource,
     info.format = format;
     info.offset = offset;
     info.range = range;
-    const VkResult create = vkCreateBufferView(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateBufferView(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create buffer view");
 }
 
 BufferView::~BufferView()
 {
-    vkDestroyBufferView(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyBufferView(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 } // namespace magma

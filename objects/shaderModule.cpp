@@ -56,7 +56,7 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
     info.flags = flags;
     info.codeSize = bytecodeSize;
     info.pCode = bytecode;
-    const VkResult create = vkCreateShaderModule(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateShaderModule(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create shader module");
     hash = core::hashArgs(
         info.sType,
@@ -94,7 +94,7 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const std::vector<Spi
 
 ShaderModule::~ShaderModule()
 {
-    vkDestroyShaderModule(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyShaderModule(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 std::size_t ShaderModule::getHash() const noexcept

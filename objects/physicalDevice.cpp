@@ -99,7 +99,7 @@ std::shared_ptr<Device> PhysicalDevice::createDevice(
         std::const_pointer_cast<PhysicalDevice>(shared_from_this()),
         queueDescriptors, layers, extensions,
         deviceFeatures, extendedDeviceFeatures,
-        this->allocator));
+        this->hostAllocator));
 }
 
 std::vector<VkLayerProperties> PhysicalDevice::enumerateLayers() const

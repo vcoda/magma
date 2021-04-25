@@ -99,13 +99,13 @@ ImageView::ImageView(std::shared_ptr<Image> resource,
     info.subresourceRange.levelCount = levelCount;
     info.subresourceRange.baseArrayLayer = baseArrayLayer;
     info.subresourceRange.layerCount = layerCount;
-    const VkResult create = vkCreateImageView(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateImageView(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create image view");
 }
 
 ImageView::~ImageView()
 {
-    vkDestroyImageView(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyImageView(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 VkDescriptorImageInfo ImageView::getDescriptor(std::shared_ptr<const Sampler> sampler) const noexcept

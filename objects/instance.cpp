@@ -59,7 +59,7 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
     createInfo.ppEnabledLayerNames = layerNames.data();
     createInfo.enabledExtensionCount = MAGMA_COUNT(extensionNames);
     createInfo.ppEnabledExtensionNames = extensionNames.data();
-    const VkResult create = vkCreateInstance(&createInfo, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateInstance(&createInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     switch (create) {
     case VK_ERROR_INITIALIZATION_FAILED:
         throw exception::InitializationFailed("failed to create instance");
@@ -74,7 +74,7 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
 
 Instance::~Instance()
 {
-    vkDestroyInstance(handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyInstance(handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 #ifdef MAGMA_DEBUG
     _refCountChecker.release();
 #endif
@@ -97,7 +97,7 @@ std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId)
     const VkResult enumerate = vkEnumeratePhysicalDevices(handle, &physicalDeviceCount, physicalDevices);
     MAGMA_THROW_FAILURE(enumerate, "failed to enumerate physical devices");
     VkPhysicalDevice physicalDevice = physicalDevices[deviceId];
-    return std::shared_ptr<PhysicalDevice>(new PhysicalDevice(shared_from_this(), physicalDevice, allocator));
+    return std::shared_ptr<PhysicalDevice>(new PhysicalDevice(shared_from_this(), physicalDevice, hostAllocator));
 }
 
 #ifdef VK_KHR_device_group
@@ -126,7 +126,7 @@ std::shared_ptr<PhysicalDeviceGroup> Instance::getPhysicalDeviceGroup(uint32_t g
     for (uint32_t deviceId = 0; deviceId < deviceGroupProperties.physicalDeviceCount; ++deviceId)
     {
         VkPhysicalDevice physicalDevice = deviceGroupProperties.physicalDevices[deviceId];
-        physicalDevices.emplace_back(new PhysicalDevice(shared_from_this(), physicalDevice, allocator));
+        physicalDevices.emplace_back(new PhysicalDevice(shared_from_this(), physicalDevice, hostAllocator));
     }
     return std::shared_ptr<PhysicalDeviceGroup>(new PhysicalDeviceGroup(physicalDevices, groupId));
 }
