@@ -56,18 +56,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     info.extent = extent;
     info.mipLevels = mipLevels;
     info.arrayLayers = arrayLayers;
-    switch (samples)
-    {
-    case 1: info.samples = VK_SAMPLE_COUNT_1_BIT; break;
-    case 2: info.samples = VK_SAMPLE_COUNT_2_BIT; break;
-    case 4: info.samples = VK_SAMPLE_COUNT_4_BIT; break;
-    case 8: info.samples = VK_SAMPLE_COUNT_8_BIT; break;
-    case 16: info.samples = VK_SAMPLE_COUNT_16_BIT; break;
-    case 32: info.samples = VK_SAMPLE_COUNT_32_BIT; break;
-    case 64: info.samples = VK_SAMPLE_COUNT_64_BIT; break;
-    default:
-        MAGMA_THROW("invalid <samples> parameter");
-    }
+    info.samples = getSampleCountBit(samples);
     info.tiling = tiling;
     info.usage = usage;
     info.sharingMode = sharing.getMode();
@@ -340,6 +329,22 @@ void Image::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
             MAGMA_THROW("failed to submit command buffer to graphics queue");
         if (!fence->wait())
             MAGMA_THROW("failed to wait fence");
+    }
+}
+
+VkSampleCountFlagBits Image::getSampleCountBit(uint32_t samples)
+{
+    switch (samples)
+    {
+    case 1: return VK_SAMPLE_COUNT_1_BIT;
+    case 2: return VK_SAMPLE_COUNT_2_BIT;
+    case 4: return VK_SAMPLE_COUNT_4_BIT;
+    case 8: return VK_SAMPLE_COUNT_8_BIT;
+    case 16: return VK_SAMPLE_COUNT_16_BIT;
+    case 32: return VK_SAMPLE_COUNT_32_BIT;
+    case 64: return VK_SAMPLE_COUNT_64_BIT;
+    default:
+        MAGMA_THROW("invalid <samples> parameter");
     }
 }
 } // namespace magma

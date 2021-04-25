@@ -97,6 +97,7 @@ namespace magma
             std::shared_ptr<const Buffer> buffer,
             const std::vector<VkBufferImageCopy>& copyRegions,
             bool flush = true);
+        static VkSampleCountFlagBits getSampleCountBit(uint32_t samples);
 
     protected:
         VkImageType imageType;
