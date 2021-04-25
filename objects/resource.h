@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
+#include "../allocator/allocator.h"
 
 namespace magma
 {
@@ -29,18 +30,6 @@ namespace magma
     {
     public:
         class Sharing;
-
-        VkDeviceSize getSize() const noexcept { return size; }
-        VkDeviceSize getOffset() const noexcept { return offset; }
-        std::shared_ptr<DeviceMemory> getMemory() noexcept { return memory; }
-        std::shared_ptr<const DeviceMemory> getMemory() const noexcept { return memory; }
-
-    protected:
-        explicit Resource(VkDeviceSize size) noexcept;
-
-        VkDeviceSize size;
-        VkDeviceSize offset;
-        std::shared_ptr<DeviceMemory> memory;
     };
 
     /* Buffer and image objects are created with a sharing mode
@@ -73,13 +62,30 @@ namespace magma
         public Resource,
         public std::enable_shared_from_this<Child>
     {
+    public:
+        VkDeviceSize getSize() const noexcept { return size; }
+        VkDeviceSize getOffset() const noexcept { return offset; }
+        std::shared_ptr<DeviceMemory> getMemory() noexcept { return memory; }
+        std::shared_ptr<const DeviceMemory> getMemory() const noexcept { return memory; }
+
     protected:
         explicit NonDispatchableResource(VkObjectType objectType,
             VkDeviceSize size,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator) noexcept:
             NonDispatchable<Type>(objectType, std::move(device), std::move(allocator)),
-            Resource(size)
+            size(size),
+            offset(0)
         {}
+
+        ~NonDispatchableResource()
+        {
+            if (this->deviceAllocator)
+                this->deviceAllocator->free(memory);
+        }
+
+        VkDeviceSize size;
+        VkDeviceSize offset;
+        std::shared_ptr<DeviceMemory> memory;
     };
 } // namespace magma

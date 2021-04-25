@@ -22,10 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Resource::Resource(VkDeviceSize size) noexcept:
-    size(size), offset(0)
-{}
-
 Resource::Sharing::Sharing(const std::vector<uint32_t>& queueFamilyIndices) noexcept:
     queueFamilyIndices(std::move(queueFamilyIndices))
 {}
