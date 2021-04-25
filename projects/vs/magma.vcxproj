@@ -309,7 +309,7 @@
     <ClInclude Include="..\..\states\colorWriteMask.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\allocator\allocator.cpp" />
+    <ClCompile Include="..\..\allocator\allocationCallbacks.cpp" />
     <ClCompile Include="..\..\allocator\deviceMemoryAllocator.cpp" />
     <ClCompile Include="..\..\allocator\objectAllocator.cpp" />
     <ClCompile Include="..\..\auxiliary\baseFramebuffer.cpp" />

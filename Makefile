@@ -14,7 +14,7 @@ else
 endif
 
 MAGMA_OBJS= \
-	allocator/allocator.o \
+	allocator/allocationCallbacks.o \
 	allocator/objectAllocator.o \
 	\
 	auxiliary/baseFramebuffer.o \

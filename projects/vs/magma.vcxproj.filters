@@ -581,7 +581,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\allocator\allocator.cpp">
+    <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
       <Filter>Source Files\allocator</Filter>
     </ClCompile>
     <ClCompile Include="..\..\auxiliary\blitRectangle.cpp">
