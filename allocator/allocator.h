@@ -42,13 +42,13 @@ namespace magma
             std::size_t size,
             std::size_t alignment,
             VkSystemAllocationScope allocationScope) = 0;
-        virtual void free(void *memory) = 0;
+        virtual void free(void *memory) noexcept = 0;
         virtual void internalAllocationNotification(std::size_t size,
             VkInternalAllocationType allocationType,
-            VkSystemAllocationScope allocationScope) = 0;
+            VkSystemAllocationScope allocationScope) noexcept = 0;
         virtual void internalFreeNotification(std::size_t size,
             VkInternalAllocationType allocationType,
-            VkSystemAllocationScope allocationScope) = 0;
+            VkSystemAllocationScope allocationScope) noexcept = 0;
     };
 
     struct MemoryBudget
