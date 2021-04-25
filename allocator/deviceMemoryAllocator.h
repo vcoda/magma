@@ -49,7 +49,6 @@ namespace magma
         virtual VkDeviceMemory getMemoryHandle(DeviceMemoryBlock memory) const noexcept override;
         virtual std::vector<MemoryBudget> getBudget() const noexcept override;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept override;
-
         virtual VkResult beginCpuDefragmentation(std::vector<std::shared_ptr<DeviceMemory>>& memoryPages,
             DefragmentationStats* stats = nullptr) noexcept override;
         virtual VkResult beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer,
