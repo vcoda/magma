@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/noncopyable.h"
+#include "../core/destructible.h"
 
 namespace magma
 {
@@ -32,7 +32,7 @@ namespace magma
        Rather, this can be useful for certain embedded systems, for debugging purposes
        (e.g. putting a guard page after all host allocations), or for memory allocation logging. */
 
-    class IAllocator : public AllocationCallbacks, public core::NonCopyable
+    class IAllocator : public core::IDestructible, public AllocationCallbacks
     {
     public:
         virtual void *alloc(std::size_t size,
@@ -79,7 +79,7 @@ namespace magma
        This object provides an interface for memory allocator that can allocate a bigger
        memory blocks in different heaps and then sub-allocate ranges for your resources. */
 
-    class IDeviceMemoryAllocator : public core::NonCopyable
+    class IDeviceMemoryAllocator : public core::IDestructible
     {
     public:
         virtual std::shared_ptr<Device> getDevice() const noexcept = 0;
