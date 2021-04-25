@@ -39,6 +39,8 @@ MAGMA_OBJS= \
 	\
 	descriptors/subpass.o \
 	\
+	exceptions/exception.o \
+	\
 	extensions/extensions.o \
 	extensions/instanceExtensions.o \
 	extensions/instanceLayers.o \
@@ -124,8 +126,6 @@ MAGMA_OBJS= \
 	states/vertexInputState.o \
 	states/vertexInputStructure.o \
 	states/viewportState.o \
-	\
-	exceptions/exception.o \
 	\
 	third-party/SPIRV-Reflect/spirv_reflect.o
 
