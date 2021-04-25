@@ -22,6 +22,10 @@ namespace magma
 {
     class IDeviceMemoryAllocator;
 
+    /* Opaque handle to memory sub-allocation.
+       Each device memory allocator hides the implementation details under it. */
+    typedef void *DeviceMemoryBlock;
+
     /* Device memory is memory that is visible to the device -
        for example the contents of the image or buffer objects,
        which can be natively used by the device. */
@@ -46,6 +50,7 @@ namespace magma
 #endif
         ~DeviceMemory();
         std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return allocator; }
+        DeviceMemoryBlock getAllocation() const noexcept { return memory; }
         VkDeviceSize getSize() const noexcept { return size; }
         bool local() const noexcept;
         bool hostVisible() const noexcept;
@@ -67,7 +72,7 @@ namespace magma
         uint32_t getTypeIndex(VkMemoryPropertyFlags flags) const;
 
         std::shared_ptr<IDeviceMemoryAllocator> allocator;
-        void *memory;
+        DeviceMemoryBlock memory;
         VkDeviceSize size;
         VkMemoryPropertyFlags flags;
         bool mapped;
