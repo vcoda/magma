@@ -211,11 +211,13 @@ VkDeviceMemory DeviceMemoryAllocator::getMemoryHandle(void *allocation) const no
 VkResult DeviceMemoryAllocator::map(void *allocation, VkDeviceSize offset, void **data) noexcept
 {
     MAGMA_ASSERT(data);
+    *data = nullptr;
     const VkResult map = vmaMapMemory(handle, reinterpret_cast<VmaAllocation>(allocation), data);
     if (VK_SUCCESS == map)
-        *data = (uint8_t*)*data + offset;
-    else
-        *data = nullptr;
+    {   // When succeeded, *ppData contains pointer to first byte of this memory,
+        // so pointer should be offseted manually using <offset> parameter.
+        *((uint8_t**)data) += offset;
+    }
     return map;
 }
 

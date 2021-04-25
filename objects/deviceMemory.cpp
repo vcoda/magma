@@ -94,7 +94,7 @@ void *DeviceMemory::map(
     VkDeviceSize size /* VK_WHOLE_SIZE */,
     VkMemoryMapFlags flags /* 0 */) noexcept
 {
-    void *data;
+    void *data = nullptr;
     VkResult map;
     if (memory)
         map = allocator->map(memory, offset, &data);
