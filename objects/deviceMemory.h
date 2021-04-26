@@ -53,6 +53,8 @@ namespace magma
         std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return allocator; }
         DeviceMemoryBlock getAllocation() const noexcept { return memory; }
         VkDeviceSize getSize() const noexcept { return memoryRequirements.size; }
+        VkDeviceSize getAlignment() const noexcept { return memoryRequirements.alignment; }
+        uint32_t getTypeBits() const noexcept { return memoryRequirements.memoryTypeBits; }
         bool local() const noexcept;
         bool hostVisible() const noexcept;
         bool hostMapped() const noexcept;
