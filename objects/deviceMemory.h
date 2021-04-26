@@ -34,25 +34,25 @@ namespace magma
     {
     public:
         explicit DeviceMemory(std::shared_ptr<Device> device,
-            VkDeviceSize size,
+            const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit DeviceMemory(std::shared_ptr<IDeviceMemoryAllocator> allocator,
             DeviceMemoryBlock memory,
             VkDeviceMemory handle,
-            VkDeviceSize size,
+            const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags) noexcept;
 #ifdef VK_KHR_device_group
         explicit DeviceMemory(std::shared_ptr<Device> device,
             uint32_t deviceMask,
-            VkDeviceSize size,
+            const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
             std::shared_ptr<IAllocator> allocator = nullptr);
 #endif
         ~DeviceMemory();
         std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return allocator; }
         DeviceMemoryBlock getAllocation() const noexcept { return memory; }
-        VkDeviceSize getSize() const noexcept { return size; }
+        VkDeviceSize getSize() const noexcept { return memoryRequirements.size; }
         bool local() const noexcept;
         bool hostVisible() const noexcept;
         bool hostMapped() const noexcept;
@@ -74,7 +74,7 @@ namespace magma
 
         std::shared_ptr<IDeviceMemoryAllocator> allocator;
         DeviceMemoryBlock memory;
-        VkDeviceSize size;
+        VkMemoryRequirements memoryRequirements;
         VkMemoryPropertyFlags flags;
         bool mapped;
     };

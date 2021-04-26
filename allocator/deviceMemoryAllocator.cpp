@@ -120,7 +120,7 @@ std::shared_ptr<DeviceMemory> DeviceMemoryAllocator::alloc(const VkMemoryRequire
     VmaAllocationInfo allocationInfo;
     const VkResult result = vmaAllocateMemory(handle, &memoryRequirements, &allocInfo, &allocation, &allocationInfo);
     MAGMA_THROW_FAILURE(result, "failed to allocate memory");
-    return std::make_shared<DeviceMemory>(shared_from_this(), allocation, allocationInfo.deviceMemory, allocationInfo.size, flags);
+    return std::make_shared<DeviceMemory>(shared_from_this(), allocation, allocationInfo.deviceMemory, memoryRequirements, flags);
 }
 
 std::vector<std::shared_ptr<DeviceMemory>> DeviceMemoryAllocator::allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
@@ -185,7 +185,7 @@ std::vector<std::shared_ptr<DeviceMemory>> DeviceMemoryAllocator::allocPages(con
     for (std::size_t i = 0; i < allocationCount; ++i)
     {
         auto memory(std::make_shared<DeviceMemory>(shared_from_this(), allocations[i],
-            allocationInfos[i].deviceMemory, allocationInfos[i].size, memoryFlags[i]));
+            allocationInfos[i].deviceMemory, memoryRequirements[i], memoryFlags[i]));
         memoryPages.push_back(std::move(memory));
     }
     return memoryPages;

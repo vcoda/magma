@@ -25,30 +25,30 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, VkDeviceSize size, VkMemoryPropertyFlags flags,
+DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), std::move(allocator)),
     allocator(nullptr),
     memory(nullptr),
-    size(size),
+    memoryRequirements(memoryRequirements),
     flags(flags),
     mapped(false)
 {
     VkMemoryAllocateInfo info;
     info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     info.pNext = nullptr;
-    info.allocationSize = size;
+    info.allocationSize = memoryRequirements.size;
     info.memoryTypeIndex = getTypeIndex(flags);
     const VkResult allocate = vkAllocateMemory(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(allocate, "failed to allocate memory");
 }
 
 DeviceMemory::DeviceMemory(std::shared_ptr<IDeviceMemoryAllocator> allocator, DeviceMemoryBlock memory, VkDeviceMemory handle,
-    VkDeviceSize size, VkMemoryPropertyFlags flags) noexcept:
+    const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags) noexcept:
     NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, allocator->getDevice(), allocator->getAllocator()),
     allocator(std::move(allocator)),
     memory(memory),
-    size(size),
+    memoryRequirements(memoryRequirements),
     flags(flags),
     mapped(false)
 {
@@ -56,13 +56,13 @@ DeviceMemory::DeviceMemory(std::shared_ptr<IDeviceMemoryAllocator> allocator, De
 }
 
 #ifdef VK_KHR_device_group
-DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask, VkDeviceSize size, VkMemoryPropertyFlags flags,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask, const VkMemoryRequirements& memoryRequirements,
+    VkMemoryPropertyFlags flags, std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), std::move(allocator)),
-    size(size),
-    flags(flags),
     allocator(nullptr),
     memory(nullptr),
+    memoryRequirements(memoryRequirements),
+    flags(flags),
     mapped(false)
 {
     VkMemoryAllocateFlagsInfoKHR flagsInfo;
@@ -73,7 +73,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask, 
     VkMemoryAllocateInfo info;
     info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     info.pNext = &flagsInfo;
-    info.allocationSize = size;
+    info.allocationSize = memoryRequirements.size;
     info.memoryTypeIndex = getTypeIndex(flags);
     const VkResult allocate = vkAllocateMemory(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(allocate, "failed to allocate memory");

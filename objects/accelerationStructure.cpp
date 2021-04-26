@@ -58,7 +58,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     MAGMA_THROW_FAILURE(create, "failed to create acceleration structure");
     const VkMemoryRequirements memoryRequirements = getObjectMemoryRequirements();
     std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(
-        this->device, memoryRequirements.size, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+        this->device, memoryRequirements, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
     bindMemory(std::move(memory));
 }
 

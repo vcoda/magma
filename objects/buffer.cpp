@@ -50,7 +50,7 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     VkMemoryRequirements memoryRequirements = {};
     vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
     std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(
-        this->device, memoryRequirements.size, memoryFlags));
+        this->device, memoryRequirements, memoryFlags));
     bindMemory(std::move(memory));
 }
 
@@ -73,8 +73,7 @@ Buffer::Buffer(std::shared_ptr<IDeviceMemoryAllocator> allocator, VkDeviceSize s
     MAGMA_THROW_FAILURE(create, "failed to create buffer");
     VkMemoryRequirements memoryRequirements = {};
     vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
-    std::shared_ptr<DeviceMemory> memory(allocator->alloc(
-        memoryRequirements, memoryFlags, cpuFrequentlyWriteGpuRead));
+    std::shared_ptr<DeviceMemory> memory(allocator->alloc(memoryRequirements, memoryFlags, cpuFrequentlyWriteGpuRead));
     bindMemory(std::move(memory), offset);
 }
 
