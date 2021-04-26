@@ -75,9 +75,9 @@ namespace magma
         uint32_t getTypeIndex(VkMemoryPropertyFlags flags) const;
 
         std::shared_ptr<IDeviceMemoryAllocator> allocator;
-        DeviceMemoryBlock memory;
-        VkMemoryRequirements memoryRequirements;
-        VkMemoryPropertyFlags flags;
+        const DeviceMemoryBlock memory;
+        const VkMemoryRequirements memoryRequirements;
+        const VkMemoryPropertyFlags flags;
         bool mapped;
     };
 } // namespace magma

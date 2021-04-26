@@ -68,7 +68,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     VkMemoryRequirements memoryRequirements = {};
     vkGetImageMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
     size = memoryRequirements.size;
-    VkMemoryPropertyFlags memoryFlags = (VK_IMAGE_TILING_LINEAR == tiling)
+    const VkMemoryPropertyFlags memoryFlags = (VK_IMAGE_TILING_LINEAR == tiling)
         ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
         : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(
@@ -111,7 +111,7 @@ Image::Image(std::shared_ptr<IDeviceMemoryAllocator> allocator, VkImageType imag
     VkMemoryRequirements memoryRequirements = {};
     vkGetImageMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
     size = memoryRequirements.size;
-    VkMemoryPropertyFlags memoryFlags = (VK_IMAGE_TILING_LINEAR == tiling)
+    const VkMemoryPropertyFlags memoryFlags = (VK_IMAGE_TILING_LINEAR == tiling)
         ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
         : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     std::shared_ptr<DeviceMemory> memory(allocator->alloc(memoryRequirements, memoryFlags, false));
