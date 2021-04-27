@@ -17,7 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "objectType.h"
-#include "../allocator/objectAllocator.h"
+#include "../core/noncopyable.h"
+#include "../allocator/cxxAllocator.h"
 #include "../misc/deviceExtension.h"
 #include "../helpers/castToDebugReport.h"
 
@@ -30,12 +31,12 @@ namespace magma
     /* Base non-copyable object for dispatchable and non-dispatchable handles. */
 
     template<typename Type>
-    class Object : public core::NonCopyable,
+    class Object : public CxxAllocator,
+        public core::NonCopyable
 #ifdef MAGMA_X64
         // Use custom template specialization for ::getObjectType() method
-        public ObjectType<Type>,
+        ,public ObjectType<Type>
 #endif
-        public memory::Allocator
     {
     public:
         explicit Object(VkObjectType objectType,

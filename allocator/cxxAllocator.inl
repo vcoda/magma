@@ -1,8 +1,6 @@
 namespace magma
 {
-namespace memory
-{
-inline void *Allocator::operator new(std::size_t size)
+inline void *CxxAllocator::operator new(std::size_t size)
 {
     void *ptr = allocator ?
         allocator->alloc(size) :
@@ -15,7 +13,7 @@ inline void *Allocator::operator new(std::size_t size)
     return ptr;
 }
 
-inline void *Allocator::operator new(std::size_t size, const std::nothrow_t&) noexcept
+inline void *CxxAllocator::operator new(std::size_t size, const std::nothrow_t&) noexcept
 {
     void *ptr = allocator ?
         allocator->alloc(size) :
@@ -26,12 +24,12 @@ inline void *Allocator::operator new(std::size_t size, const std::nothrow_t&) no
     return ptr;
 }
 
-inline void* Allocator::operator new(std::size_t, void* where) noexcept
+inline void* CxxAllocator::operator new(std::size_t, void* where) noexcept
 {
     return where;
 }
 
-inline void Allocator::operator delete(void *ptr)
+inline void CxxAllocator::operator delete(void *ptr)
 {
 #ifdef MAGMA_DEBUG
     if (ptr) --allocCount;
@@ -41,5 +39,4 @@ inline void Allocator::operator delete(void *ptr)
     else
         free(ptr);
 }
-} // namespace memory
 } // namespace magma
