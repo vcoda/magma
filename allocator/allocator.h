@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../core/destructible.h"
+#include "../core/noncopyable.h"
 
 namespace magma
 {
@@ -120,5 +121,21 @@ namespace magma
             VkDeviceSize offset,
             VkDeviceSize size) noexcept = 0;
         friend class DeviceMemory;
+    };
+
+    /* Aggregates host and device memory allocators. */
+
+    class Allocator : public core::NonCopyable
+    {
+    public:
+        explicit Allocator(std::shared_ptr<IAllocator> hostAllocator, 
+            std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator) noexcept:
+            hostAllocator(std::move(hostAllocator)), deviceAllocator(std::move(deviceAllocator)) {}
+        std::shared_ptr<IAllocator> getHostAllocator() const noexcept { return hostAllocator; }
+        std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return deviceAllocator; }
+
+    private:
+        std::shared_ptr<IAllocator> hostAllocator;
+        std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
     };
 } // namespace magma
