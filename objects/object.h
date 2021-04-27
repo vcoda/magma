@@ -42,6 +42,10 @@ namespace magma
         explicit Object(VkObjectType objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> hostAllocator) noexcept;
+        explicit Object(VkObjectType objectType,
+            std::shared_ptr<Device> device,
+            std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator,
+            std::shared_ptr<IAllocator> hostAllocator) noexcept;
         virtual ~Object() = default;
         VkObjectType getObjectType() const noexcept;
         std::shared_ptr<Device> getDevice() const noexcept { return device; }
