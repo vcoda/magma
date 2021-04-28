@@ -50,15 +50,9 @@ namespace magma
             VkBufferUsageFlags usage,
             VkMemoryPropertyFlags memoryFlags,
             VkBufferCreateFlags flags,
-            const Sharing& sharing,
-            std::shared_ptr<IAllocator> allocator);
-        explicit Buffer(std::shared_ptr<IDeviceMemoryAllocator> allocator,
-            VkDeviceSize size,
-            VkBufferUsageFlags usage,
-            VkMemoryPropertyFlags memoryFlags,
-            VkBufferCreateFlags flags,
             bool cpuFrequentlyWriteGpuRead,
-            const Sharing& sharing);
+            const Sharing& sharing,
+            std::shared_ptr<Allocator> allocator);
         void copyHost(const void *data,
             CopyMemoryFunction copyFn) noexcept;
         void copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer,

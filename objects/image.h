@@ -84,18 +84,7 @@ namespace magma
             VkImageUsageFlags usage,
             VkImageCreateFlags flags,
             const Sharing& sharing,
-            std::shared_ptr<IAllocator> allocator);
-        explicit Image(std::shared_ptr<IDeviceMemoryAllocator> allocator,
-            VkImageType imageType,
-            VkFormat format,
-            const VkExtent3D& extent,
-            uint32_t mipLevels,
-            uint32_t arrayLayers,
-            uint32_t samples,
-            VkImageTiling tiling,
-            VkImageUsageFlags usage,
-            VkImageCreateFlags flags,
-            const Sharing& sharing);
+            std::shared_ptr<Allocator> allocator);
         explicit Image(std::shared_ptr<Device> device,
             VkImage handle,
             VkImageType imageType,
