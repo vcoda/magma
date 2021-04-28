@@ -88,6 +88,7 @@ void AccelerationStructure::bindMemory(std::shared_ptr<DeviceMemory> memory,
     MAGMA_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult bind = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &info);
     MAGMA_THROW_FAILURE(bind, "failed to bind acceleration structure memory");
+    this->size = memory->getSize();
     this->offset = offset;
     this->memory = std::move(memory);
 }
