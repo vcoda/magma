@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class DeviceMemory;
+    class IDeviceMemoryAllocator;
     class PhysicalDevice;
 
     /* Base resource class. */
@@ -67,6 +68,7 @@ namespace magma
         VkDeviceSize getOffset() const noexcept { return offset; }
         std::shared_ptr<DeviceMemory> getMemory() noexcept { return memory; }
         std::shared_ptr<const DeviceMemory> getMemory() const noexcept { return memory; }
+        std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return deviceAllocator; }
 
     protected:
         explicit NonDispatchableResource(VkObjectType objectType,
@@ -82,19 +84,15 @@ namespace magma
             VkDeviceSize size,
             std::shared_ptr<Device> device,
             std::shared_ptr<Allocator> allocator) noexcept:
-            NonDispatchable<Type>(objectType, std::move(device), allocator->getDeviceAllocator(), allocator->getHostAllocator()),
+            NonDispatchable<Type>(objectType, std::move(device), allocator->getHostAllocator()),
             size(size),
-            offset(0)
+            offset(0),
+            deviceAllocator(allocator->getDeviceAllocator())
         {}
-
-        ~NonDispatchableResource()
-        {
-            if (this->deviceAllocator)
-                this->deviceAllocator->free(memory);
-        }
 
         VkDeviceSize size;
         VkDeviceSize offset;
         std::shared_ptr<DeviceMemory> memory;
+        std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
     };
 } // namespace magma

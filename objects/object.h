@@ -25,7 +25,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
-    class IDeviceMemoryAllocator;
     class IAllocator;
 
     /* Base non-copyable object for dispatchable and non-dispatchable handles. */
@@ -42,14 +41,9 @@ namespace magma
         explicit Object(VkObjectType objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> hostAllocator) noexcept;
-        explicit Object(VkObjectType objectType,
-            std::shared_ptr<Device> device,
-            std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator,
-            std::shared_ptr<IAllocator> hostAllocator) noexcept;
         virtual ~Object() = default;
         VkObjectType getObjectType() const noexcept;
         std::shared_ptr<Device> getDevice() const noexcept { return device; }
-        std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return deviceAllocator; }
         std::shared_ptr<IAllocator> getHostAllocator() const noexcept { return hostAllocator; }
         virtual uint64_t getHandle() const noexcept = 0;
         void setObjectName(const char *name) noexcept;
@@ -65,7 +59,6 @@ namespace magma
         VkObjectType objectType;
 #endif
         std::shared_ptr<Device> device;
-        std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
         std::shared_ptr<IAllocator> hostAllocator;
     };
 } // namespace magma

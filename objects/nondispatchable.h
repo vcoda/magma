@@ -46,32 +46,16 @@ namespace magma
     protected:
         explicit NonDispatchable(VkObjectType objectType,
             std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> allocator) noexcept:
+            std::shared_ptr<IAllocator> hostAllocator) noexcept:
 #ifdef MAGMA_X64
             Object<Type>(objectType, device, std::move(allocator)),
 #else
-            Object<Type>(objectType, std::move(device), std::move(allocator)),
+            Object<Type>(objectType, std::move(device), std::move(hostAllocator)),
 #endif
             handle(VK_NULL_HANDLE)
         {
 #ifdef MAGMA_X64
             if (device)
-            {   // Put resource in pool
-                std::shared_ptr<ResourcePool> pool = device->getResourcePool();
-                pool->getPool<NonDispatchable<Type>>().add(this);
-            }
-#endif // MAGMA_X64
-        }
-
-        explicit NonDispatchable(VkObjectType objectType,
-            std::shared_ptr<Device> device,
-            std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator,
-            std::shared_ptr<IAllocator> hostAllocator) noexcept:
-            Object<Type>(objectType, std::move(device), std::move(deviceAllocator), std::move(hostAllocator)),
-            handle(VK_NULL_HANDLE)
-        {
-#ifdef MAGMA_X64
-            if (std::shared_ptr<Device> device = Object<Type>::getDevice())
             {   // Put resource in pool
                 std::shared_ptr<ResourcePool> pool = device->getResourcePool();
                 pool->getPool<NonDispatchable<Type>>().add(this);

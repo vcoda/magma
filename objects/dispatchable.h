@@ -40,14 +40,14 @@ namespace magma
     protected:
         explicit Dispatchable(VkObjectType objectType,
             std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> allocator) noexcept:
-            Object<Type>(objectType, std::move(device), std::move(allocator)),
+            std::shared_ptr<IAllocator> hostAllocator) noexcept:
+            Object<Type>(objectType, std::move(device), std::move(hostAllocator)),
             handle(nullptr) {}
         explicit Dispatchable(VkObjectType objectType,
             NativeHandle handle,
             std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> allocator) noexcept:
-            Object<Type>(objectType, std::move(device), std::move(allocator)),
+            std::shared_ptr<IAllocator> hostAllocator) noexcept:
+            Object<Type>(objectType, std::move(device), std::move(hostAllocator)),
             handle(handle) {}
 
     protected:

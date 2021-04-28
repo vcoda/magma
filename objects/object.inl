@@ -21,19 +21,6 @@ inline Object<Type>::Object(VkObjectType objectType, std::shared_ptr<Device> dev
 }
 
 template<typename Type>
-inline Object<Type>::Object(VkObjectType objectType, std::shared_ptr<Device> device, 
-    std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator, std::shared_ptr<IAllocator> hostAllocator) noexcept:
-#if !defined(MAGMA_X64)
-    objectType(objectType),
-#endif
-    device(std::move(device)),
-    deviceAllocator(std::move(deviceAllocator)),
-    hostAllocator(std::move(hostAllocator))
-{
-    MAGMA_UNUSED(objectType);
-}
-
-template<typename Type>
 inline VkObjectType Object<Type>::getObjectType() const noexcept
 {
 #ifdef MAGMA_X64
