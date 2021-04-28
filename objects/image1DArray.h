@@ -30,8 +30,8 @@ namespace magma
             uint32_t width,
             uint32_t mipLevels,
             uint32_t arrayLayers,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Sharing& sharing = Sharing());
         explicit Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
             uint32_t width,
@@ -39,16 +39,16 @@ namespace magma
             std::shared_ptr<const SrcTransferBuffer> buffer,
             const MipmapLayout& mipOffsets,
             const CopyLayout& bufferLayout = {0, 0, 0},
+            std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
             bool flush = true);
         explicit Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
             uint32_t width,
             const ArrayMipmapData& mipData,
             const MipmapLayout& mipSizes,
+            std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
     };
 } // namespace magma

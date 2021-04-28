@@ -29,24 +29,24 @@ namespace magma
             VkFormat format,
             const VkExtent2D& extent,
             uint32_t mipLevels,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Sharing& sharing = Sharing());
         explicit Image2D(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
             const VkExtent2D& extent,
             std::shared_ptr<const SrcTransferBuffer> buffer,
             const MipmapLayout& mipOffsets,
             const CopyLayout& bufferLayout = {0, 0, 0},
+            std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
             bool flush = true);
         explicit Image2D(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
             const VkExtent2D& extent,
             const MipmapData& mipData,
             const MipmapLayout& mipSizes,
+            std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
 
     protected:
@@ -58,7 +58,7 @@ namespace magma
             VkImageTiling tiling,
             VkImageUsageFlags usage,
             const Sharing& sharing,
-            std::shared_ptr<IAllocator> allocator);
+            std::shared_ptr<Allocator> allocator);
         Image2D(std::shared_ptr<Device> device,
             VkImage handle,
             VkFormat format,
@@ -73,8 +73,8 @@ namespace magma
         explicit LinearTiledImage2D(std::shared_ptr<Device> device,
             VkFormat format,
             const VkExtent2D& extent,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Sharing& sharing = Sharing());
     };
 
     /* Supports unfiltered loads, stores, and atomics in a shader.
@@ -87,7 +87,7 @@ namespace magma
             VkFormat format,
             const VkExtent2D& extent,
             uint32_t mipLevels,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Sharing& sharing = Sharing());
     };
 } // namespace magma

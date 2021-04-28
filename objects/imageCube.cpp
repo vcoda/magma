@@ -26,8 +26,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t dimension, uint32_t mipLevels,
-    const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Sharing& sharing /* default */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1}, mipLevels,
         6, // arrayLayers
         1, // samples
@@ -41,8 +41,8 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
 ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t dimension, uint32_t mipLevels,
     std::shared_ptr<const SrcTransferBuffer> buffer, const MipmapLayout& mipOffsets,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool flush /* true */):
     Image(std::move(cmdBuffer->getDevice()), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1},
         mipLevels,
@@ -60,8 +60,8 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, 
 
 ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t dimension,
     const MipmapData mipData[6], const MipmapLayout& mipSizes,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(std::move(cmdBuffer->getDevice()), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1},
         MAGMA_COUNT(mipSizes), // mipLevels
@@ -71,13 +71,13 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, 
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
         sharing,
-        std::move(allocator))
+        allocator)
 {   // Calculate aligned size and mip offsets
     VkDeviceSize bufferSize = 0;
     const auto mipOffsets = setupMipOffsets(mipSizes, bufferSize);
     const auto copyRegions = setupCopyRegions(mipOffsets, {0, 0, 0});
     // Copy array layers to host visible buffer
-    auto buffer = std::make_shared<SrcTransferBuffer>(this->device, bufferSize, nullptr, 0, sharing, allocator);
+    auto buffer = std::make_shared<SrcTransferBuffer>(this->device, bufferSize, nullptr, std::move(allocator), 0, sharing);
     helpers::mapScoped<uint8_t>(buffer, [&](uint8_t *data)
     {
         if (!copyFn)

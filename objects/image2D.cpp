@@ -27,8 +27,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent, uint32_t mipLevels,
-    const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Sharing& sharing /* default */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         mipLevels,
         1, // arrayLayers
@@ -43,8 +43,8 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
 Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
     std::shared_ptr<const SrcTransferBuffer> buffer, const MipmapLayout& mipOffsets,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool flush /* true */):
     Image(std::move(cmdBuffer->getDevice()), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         MAGMA_COUNT(mipOffsets), // mipLevels
@@ -62,8 +62,8 @@ Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
 
 Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
     const MipmapData& mipData, const MipmapLayout& mipSizes,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(std::move(cmdBuffer->getDevice()), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         MAGMA_COUNT(mipSizes), // mipLevels
@@ -73,13 +73,13 @@ Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
         sharing,
-        std::move(allocator))
+        allocator)
 {   // Calculate aligned size and mip offsets
     VkDeviceSize bufferSize = 0;
     const auto mipOffsets = setupMipOffsets(mipSizes, bufferSize);
     const auto copyRegions = setupCopyRegions(mipOffsets, {0, 0, 0});
     // Copy mip levels to host visible buffer
-    auto buffer = std::make_shared<SrcTransferBuffer>(this->device, bufferSize, nullptr, 0, sharing, allocator);
+    auto buffer = std::make_shared<SrcTransferBuffer>(this->device, bufferSize, nullptr, std::move(allocator), 0, sharing);
     helpers::mapScoped<uint8_t>(buffer, [&](uint8_t *data)
     {
         if (!copyFn)
@@ -97,7 +97,7 @@ Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
 Image2D::Image2D(std::shared_ptr<Device> device,
     VkFormat format, const VkExtent2D& extent, uint32_t mipLevels, uint32_t samples,
     VkImageTiling tiling, VkImageUsageFlags usage, const Sharing& sharing,
-    std::shared_ptr<IAllocator> allocator):
+    std::shared_ptr<Allocator> allocator):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         mipLevels,
         1, // arrayLayers
@@ -114,8 +114,8 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkImage handle, VkFormat format
 {}
 
 LinearTiledImage2D::LinearTiledImage2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
-    const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Sharing& sharing /* default */):
     Image2D(std::move(device), format, extent,
         1, // mipLevels,
         1, // samples
@@ -126,8 +126,8 @@ LinearTiledImage2D::LinearTiledImage2D(std::shared_ptr<Device> device, VkFormat 
 {}
 
 StorageImage2D::StorageImage2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent, uint32_t mipLevels,
-    const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Sharing& sharing /* default */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         mipLevels,
         1, // arrayLayers

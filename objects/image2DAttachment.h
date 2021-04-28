@@ -30,8 +30,8 @@ namespace magma
             const VkExtent2D& extent,
             uint32_t mipLevels,
             uint32_t samples,
-            bool sampled = true,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<Allocator> allocator = nullptr,
+            bool sampled = true);
     };
 
     /* Two-dimensional image that can be used as depth/stencil attachment to framebuffer. */
@@ -44,8 +44,8 @@ namespace magma
             const VkExtent2D& extent,
             uint32_t mipLevels,
             uint32_t samples,
-            bool sampled = false,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<Allocator> allocator = nullptr,
+            bool sampled = false);
     };
 
     /* Two-dimensional image that represents swapchain's color attachment to framebuffer.
