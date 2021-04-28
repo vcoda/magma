@@ -24,14 +24,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 IndirectBuffer::IndirectBuffer(std::shared_ptr<Device> device,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
     uint32_t drawCommandCount /* 1 */,
     VkBufferCreateFlags flags /* 0 */,
-    const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    const Sharing& sharing /* default */):
     Buffer(std::move(device), sizeof(VkDrawIndirectCommand) * drawCommandCount,
         VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT,
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-        flags, sharing, std::move(allocator))
+        flags, true, sharing, std::move(allocator))
 {}
 
 void IndirectBuffer::writeDrawCommand(uint32_t vertexCount,

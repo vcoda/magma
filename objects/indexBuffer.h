@@ -38,7 +38,7 @@ namespace magma
             VkMemoryPropertyFlags memFlags,
             VkBufferCreateFlags flags,
             const Sharing& sharing,
-            std::shared_ptr<IAllocator> allocator);
+            std::shared_ptr<Allocator> allocator);
 
         VkIndexType indexType;
     };
@@ -52,18 +52,18 @@ namespace magma
             VkDeviceSize size,
             const void *data,
             VkIndexType indexType,
+            std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         explicit IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             VkIndexType indexType,
+            std::shared_ptr<Allocator> allocator = nullptr,
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,
             VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            const Sharing& sharing = Sharing());
     };
 
     /* Dynamic index buffer that can be mapped for host access. */
@@ -74,10 +74,10 @@ namespace magma
         DynamicIndexBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkIndexType indexType,
+            std::shared_ptr<Allocator> allocator = nullptr,
             const void *initial = nullptr,
             VkBufferCreateFlags flags = 0 ,
             const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
     };
 
@@ -89,18 +89,18 @@ namespace magma
             VkDeviceSize size,
             const void *data,
             VkIndexType indexType,
+            std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         explicit AccelerationStructureIndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             VkIndexType indexType,
+            std::shared_ptr<Allocator> allocator = nullptr,
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,
             VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            const Sharing& sharing = Sharing());
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma
