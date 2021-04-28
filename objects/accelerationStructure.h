@@ -51,7 +51,7 @@ namespace magma
             const std::list<Geometry>& geometries,
             VkBuildAccelerationStructureFlagsNV flags,
             VkDeviceSize compactedSize,
-            std::shared_ptr<IAllocator> allocator);
+            std::shared_ptr<Allocator> allocator);
 
     private:
         VkMemoryRequirements2 getMemoryRequirements(VkAccelerationStructureMemoryRequirementsTypeNV type) const;
@@ -66,9 +66,9 @@ namespace magma
     public:
         explicit TopLevelAccelerationStructure(std::shared_ptr<Device> device,
             uint32_t instanceCount,
+            std::shared_ptr<Allocator> allocator = nullptr,
             VkBuildAccelerationStructureFlagsNV flags = 0,
-            VkDeviceSize compactedSize = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr):
+            VkDeviceSize compactedSize = 0):
             AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NV,
                 instanceCount, std::list<Geometry>{}, flags, compactedSize, std::move(allocator))
         {}
@@ -81,9 +81,9 @@ namespace magma
     public:
         explicit BottomLevelAccelerationStructure(std::shared_ptr<Device> device,
             const std::list<Geometry>& geometries,
+            std::shared_ptr<Allocator> allocator = nullptr,
             VkBuildAccelerationStructureFlagsNV flags = 0,
-            VkDeviceSize compactedSize = 0,
-            std::shared_ptr<IAllocator> allocator = nullptr):
+            VkDeviceSize compactedSize = 0):
             AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NV,
                 0, geometries, flags, compactedSize, std::move(allocator))
         {}

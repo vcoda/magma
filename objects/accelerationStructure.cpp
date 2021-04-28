@@ -30,8 +30,8 @@ namespace magma
 #ifdef VK_NV_ray_tracing
 AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkAccelerationStructureTypeNV type,
     uint32_t instanceCount, const std::list<Geometry>& geometries, VkBuildAccelerationStructureFlagsNV flags,
-    VkDeviceSize compactedSize, std::shared_ptr<IAllocator> allocator):
-    NonDispatchableResource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, compactedSize, std::move(device), std::move(allocator))
+    VkDeviceSize compactedSize, std::shared_ptr<Allocator> allocator):
+    NonDispatchableResource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, device, allocator)
 {
     info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_INFO_NV;
     info.pNext = nullptr;
@@ -57,8 +57,12 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     const VkResult create = vkCreateAccelerationStructureNV(MAGMA_HANDLE(device), &createInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create acceleration structure");
     const VkMemoryRequirements memoryRequirements = getObjectMemoryRequirements();
-    std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(
-        this->device, memoryRequirements, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+    std::shared_ptr<DeviceMemory> memory = std::make_shared<DeviceMemory>(
+        std::move(device),
+        memoryRequirements, 
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        false, 
+        std::move(allocator));
     bindMemory(std::move(memory));
 }
 
