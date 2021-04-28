@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../allocator/objectAllocator.h"
+#include "../allocator/cxxAllocator.h"
 
 namespace magma
 {
@@ -24,7 +24,7 @@ namespace magma
     {
         /* Linear placement allocator. */
 
-        class LinearPlacementPool : public IObjectAllocator
+        class LinearPlacementPool : public ICxxAllocator
         {
         public:
             LinearPlacementPool(const std::size_t sizeofType, uint32_t maxObjectCount):
