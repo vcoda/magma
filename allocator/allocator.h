@@ -88,24 +88,24 @@ namespace magma
     class IDeviceMemoryAllocator : public core::IDestructible
     {
     public:
-        virtual std::shared_ptr<DeviceMemory> alloc(const VkMemoryRequirements& memoryRequirements,
+        virtual DeviceMemoryBlock alloc(const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
             bool cpuFrequentlyWriteGpuRead) = 0;
-        virtual std::vector<std::shared_ptr<DeviceMemory>> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
+        virtual std::vector<DeviceMemoryBlock> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
             const std::vector<VkMemoryPropertyFlags>& flags) = 0;
-        virtual std::shared_ptr<DeviceMemory> realloc(std::shared_ptr<DeviceMemory> memory,
+        virtual DeviceMemoryBlock realloc(DeviceMemoryBlock memory,
             VkDeviceSize size) = 0;
-        virtual void free(std::shared_ptr<DeviceMemory>& memory) noexcept = 0;
-        virtual void freePages(std::vector<std::shared_ptr<DeviceMemory>>& memoryPages) noexcept = 0;
+        virtual void free(DeviceMemoryBlock memory) noexcept = 0;
+        virtual void freePages(std::vector<DeviceMemoryBlock>& memoryPages) noexcept = 0;
         virtual std::shared_ptr<Device> getDevice() const noexcept = 0;
         virtual std::shared_ptr<IAllocator> getAllocator() const noexcept = 0;
         virtual VkDeviceMemory getMemoryHandle(DeviceMemoryBlock memory) const noexcept = 0;
         virtual std::vector<MemoryBudget> getBudget() const noexcept = 0;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept = 0;
-        virtual VkResult beginCpuDefragmentation(std::vector<std::shared_ptr<DeviceMemory>>& memoryPages,
+        virtual VkResult beginCpuDefragmentation(std::vector<DeviceMemoryBlock>& memoryPages,
             DefragmentationStats* stats = nullptr) noexcept = 0;
         virtual VkResult beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::vector<std::shared_ptr<DeviceMemory>>& memoryPages,
+            std::vector<DeviceMemoryBlock>& memoryPages,
             DefragmentationStats* stats = nullptr) noexcept = 0;
         virtual VkResult endDefragmentation() noexcept = 0;
 

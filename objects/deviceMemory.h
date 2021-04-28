@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class Allocator;
     class IDeviceMemoryAllocator;
 
     /* Opaque handle to memory sub-allocation.
@@ -36,21 +37,17 @@ namespace magma
         explicit DeviceMemory(std::shared_ptr<Device> device,
             const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-        explicit DeviceMemory(std::shared_ptr<IDeviceMemoryAllocator> allocator,
-            DeviceMemoryBlock memory,
-            VkDeviceMemory handle,
-            const VkMemoryRequirements& memoryRequirements,
-            VkMemoryPropertyFlags flags) noexcept;
+            bool cpuFrequentlyWriteGpuRead,
+            std::shared_ptr<Allocator> allocator = nullptr);
 #ifdef VK_KHR_device_group
         explicit DeviceMemory(std::shared_ptr<Device> device,
             uint32_t deviceMask,
             const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<Allocator> allocator = nullptr);
 #endif
         ~DeviceMemory();
-        std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return allocator; }
+        std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return deviceAllocator; }
         DeviceMemoryBlock getAllocation() const noexcept { return memory; }
         VkDeviceSize getSize() const noexcept { return memoryRequirements.size; }
         VkDeviceSize getAlignment() const noexcept { return memoryRequirements.alignment; }
@@ -74,10 +71,10 @@ namespace magma
     private:
         uint32_t getTypeIndex(VkMemoryPropertyFlags flags) const;
 
-        std::shared_ptr<IDeviceMemoryAllocator> allocator;
-        const DeviceMemoryBlock memory;
         const VkMemoryRequirements memoryRequirements;
         const VkMemoryPropertyFlags flags;
+        std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
+        DeviceMemoryBlock memory;
         bool mapped;
     };
 } // namespace magma

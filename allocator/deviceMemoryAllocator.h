@@ -35,24 +35,24 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~DeviceMemoryAllocator();
         VmaAllocator getHandle() const noexcept { return handle; }
-        virtual std::shared_ptr<DeviceMemory> alloc(const VkMemoryRequirements& memoryRequirements,
+        virtual DeviceMemoryBlock alloc(const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
             bool cpuFrequentlyWriteGpuRead) override;
-        virtual std::vector<std::shared_ptr<DeviceMemory>> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
+        virtual std::vector<DeviceMemoryBlock> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
             const std::vector<VkMemoryPropertyFlags>& flags) override;
-        virtual std::shared_ptr<DeviceMemory> realloc(std::shared_ptr<DeviceMemory> memory,
+        virtual DeviceMemoryBlock realloc(DeviceMemoryBlock memory,
             VkDeviceSize size) override;
-        virtual void free(std::shared_ptr<DeviceMemory>& memory) noexcept override;
-        virtual void freePages(std::vector<std::shared_ptr<DeviceMemory>>& memoryPages) noexcept override;
+        virtual void free(DeviceMemoryBlock memory) noexcept override;
+        virtual void freePages(std::vector<DeviceMemoryBlock>& memoryPages) noexcept override;
         virtual std::shared_ptr<Device> getDevice() const noexcept override { return device; }
         virtual std::shared_ptr<IAllocator> getAllocator() const noexcept override { return allocator; }
         virtual VkDeviceMemory getMemoryHandle(DeviceMemoryBlock memory) const noexcept override;
         virtual std::vector<MemoryBudget> getBudget() const noexcept override;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept override;
-        virtual VkResult beginCpuDefragmentation(std::vector<std::shared_ptr<DeviceMemory>>& memoryPages,
+        virtual VkResult beginCpuDefragmentation(std::vector<DeviceMemoryBlock>& memoryPages,
             DefragmentationStats* stats = nullptr) noexcept override;
         virtual VkResult beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::vector<std::shared_ptr<DeviceMemory>>& memoryPages,
+            std::vector<DeviceMemoryBlock>& memoryPages,
             DefragmentationStats* stats = nullptr) noexcept override;
         virtual VkResult endDefragmentation() noexcept override;
 

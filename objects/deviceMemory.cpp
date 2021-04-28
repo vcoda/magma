@@ -25,44 +25,43 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), std::move(allocator)),
-    allocator(nullptr),
+DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
+    const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
+    bool cpuFrequentlyWriteGpuRead,
+    std::shared_ptr<Allocator> allocator /* nullptr */):
+    NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), allocator->getHostAllocator()),
+    memoryRequirements(memoryRequirements),
+    flags(flags),
+    deviceAllocator(allocator->getDeviceAllocator()),
     memory(nullptr),
-    memoryRequirements(memoryRequirements),
-    flags(flags),
     mapped(false)
 {
-    VkMemoryAllocateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    info.pNext = nullptr;
-    info.allocationSize = memoryRequirements.size;
-    info.memoryTypeIndex = getTypeIndex(flags);
-    const VkResult allocate = vkAllocateMemory(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(allocate, "failed to allocate memory");
-}
-
-DeviceMemory::DeviceMemory(std::shared_ptr<IDeviceMemoryAllocator> allocator, DeviceMemoryBlock memory, VkDeviceMemory handle,
-    const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags) noexcept:
-    NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, allocator->getDevice(), allocator->getAllocator()),
-    allocator(std::move(allocator)),
-    memory(memory),
-    memoryRequirements(memoryRequirements),
-    flags(flags),
-    mapped(false)
-{
-    this->handle = handle; 
+    if (deviceAllocator)
+    {
+        memory = deviceAllocator->alloc(memoryRequirements, flags, cpuFrequentlyWriteGpuRead);
+        handle = deviceAllocator->getMemoryHandle(memory);
+    }
+    else
+    {
+        VkMemoryAllocateInfo info;
+        info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        info.pNext = nullptr;
+        info.allocationSize = memoryRequirements.size;
+        info.memoryTypeIndex = getTypeIndex(flags);
+        const VkResult allocate = vkAllocateMemory(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_THROW_FAILURE(allocate, "failed to allocate memory");
+    }
 }
 
 #ifdef VK_KHR_device_group
-DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask, const VkMemoryRequirements& memoryRequirements,
-    VkMemoryPropertyFlags flags, std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), std::move(allocator)),
-    allocator(nullptr),
-    memory(nullptr),
+DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask,
+    const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
+    std::shared_ptr<Allocator> allocator /* nullptr */):
+    NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), allocator->getHostAllocator()),
     memoryRequirements(memoryRequirements),
     flags(flags),
+    deviceAllocator(),
+    memory(nullptr),
     mapped(false)
 {
     VkMemoryAllocateFlagsInfoKHR flagsInfo;
@@ -83,7 +82,9 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask, 
 DeviceMemory::~DeviceMemory()
 {
     MAGMA_ASSERT(!mapped);
-    if (!memory) // If not a sub-allocation
+    if (memory)
+        deviceAllocator->free(memory);
+    else
         vkFreeMemory(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
@@ -95,7 +96,7 @@ void *DeviceMemory::map(
     void *data = nullptr;
     VkResult map;
     if (memory)
-        map = allocator->map(memory, offset, &data);
+        map = deviceAllocator->map(memory, offset, &data);
     else
         map = vkMapMemory(MAGMA_HANDLE(device), handle, offset, size, flags, &data);
     mapped = (VK_SUCCESS == map);
@@ -106,7 +107,7 @@ void DeviceMemory::unmap() noexcept
 {
     MAGMA_ASSERT(mapped);
     if (memory)
-        allocator->unmap(memory);
+        deviceAllocator->unmap(memory);
     else
         vkUnmapMemory(*device, handle);
     mapped = false;
@@ -118,7 +119,7 @@ bool DeviceMemory::flushMappedRange(
 {
     VkResult flush;
     if (memory)
-        flush = allocator->flushMappedRange(memory, offset, size);
+        flush = deviceAllocator->flushMappedRange(memory, offset, size);
     else
     {
         VkMappedMemoryRange memoryRange;
@@ -138,7 +139,7 @@ bool DeviceMemory::invalidateMappedRange(
 {
     VkResult invalidate;
     if (memory)
-        invalidate = allocator->invalidateMappedRange(memory, offset, size);
+        invalidate = deviceAllocator->invalidateMappedRange(memory, offset, size);
     else
     {
         VkMappedMemoryRange memoryRange;

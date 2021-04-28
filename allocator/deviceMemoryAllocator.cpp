@@ -68,7 +68,7 @@ DeviceMemoryAllocator::~DeviceMemoryAllocator()
     vmaDestroyAllocator(handle);
 }
 
-std::shared_ptr<DeviceMemory> DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
+DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
     bool cpuFrequentlyWriteGpuRead)
 {
     VmaAllocationCreateInfo allocInfo;
@@ -117,13 +117,13 @@ std::shared_ptr<DeviceMemory> DeviceMemoryAllocator::alloc(const VkMemoryRequire
     allocInfo.pUserData = nullptr;
     allocInfo.priority = 0.f;
     VmaAllocation allocation;
-    VmaAllocationInfo allocationInfo;
-    const VkResult result = vmaAllocateMemory(handle, &memoryRequirements, &allocInfo, &allocation, &allocationInfo);
+    const VkResult result = vmaAllocateMemory(handle, &memoryRequirements, &allocInfo, &allocation, nullptr);
     MAGMA_THROW_FAILURE(result, "failed to allocate memory");
-    return std::make_shared<DeviceMemory>(shared_from_this(), allocation, allocationInfo.deviceMemory, memoryRequirements, flags);
+    return reinterpret_cast<DeviceMemoryBlock>(allocation);
+    //return std::make_shared<DeviceMemory>(shared_from_this(), allocation, allocationInfo.deviceMemory, memoryRequirements, flags);
 }
 
-std::vector<std::shared_ptr<DeviceMemory>> DeviceMemoryAllocator::allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
+std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
     const std::vector<VkMemoryPropertyFlags>& memoryFlags)
 {
     std::vector<VmaAllocationCreateInfo> allocInfos;
@@ -174,61 +174,35 @@ std::vector<std::shared_ptr<DeviceMemory>> DeviceMemoryAllocator::allocPages(con
         allocInfo.priority = 0.f;
         allocInfos.push_back(allocInfo);
     }
-    const std::size_t allocationCount = MAGMA_COUNT(allocInfos);
-    std::vector<VmaAllocation> allocations(allocationCount);
-    std::vector<VmaAllocationInfo> allocationInfos(allocationCount);
+    std::vector<VmaAllocation> allocations(MAGMA_COUNT(allocInfos));
     const VkResult result = vmaAllocateMemoryPages(handle, memoryRequirements.data(), allocInfos.data(),
-        allocationCount, allocations.data(), allocationInfos.data());
+        allocations.size(), allocations.data(), nullptr);
     MAGMA_THROW_FAILURE(result, "failed to allocate memory pages");
-    std::vector<std::shared_ptr<DeviceMemory>> memoryPages;
-    memoryPages.reserve(allocationCount);
-    for (std::size_t i = 0; i < allocationCount; ++i)
-    {
-        auto memory(std::make_shared<DeviceMemory>(shared_from_this(), allocations[i],
-            allocationInfos[i].deviceMemory, memoryRequirements[i], memoryFlags[i]));
-        memoryPages.push_back(std::move(memory));
-    }
+    std::vector<DeviceMemoryBlock> memoryPages;
+    memoryPages.reserve(allocations.size());
+    for (auto& allocation : allocations)
+        memoryPages.push_back(reinterpret_cast<DeviceMemoryBlock>(allocation));
     return memoryPages;
 }
 
-std::shared_ptr<DeviceMemory> DeviceMemoryAllocator::realloc(std::shared_ptr<DeviceMemory> memory, VkDeviceSize size)
+DeviceMemoryBlock DeviceMemoryAllocator::realloc(DeviceMemoryBlock memory, VkDeviceSize size)
 {
     MAGMA_THROW_FAILURE(VK_ERROR_FEATURE_NOT_PRESENT, "vmaResizeAllocation() deprecated");
     return nullptr;
 }
 
-void DeviceMemoryAllocator::free(std::shared_ptr<DeviceMemory>& memory) noexcept
+void DeviceMemoryAllocator::free(DeviceMemoryBlock allocation) noexcept
 {   
-    if (memory.use_count() == 1)
-    {   // Free allocation for last shared_ptr instance managing the object
-        DeviceMemoryBlock allocation = memory->getAllocation();
-        MAGMA_ASSERT(allocation);
-        if (allocation)
-            vmaFreeMemory(handle, reinterpret_cast<VmaAllocation>(allocation));
-        memory.reset();
-    }
+    vmaFreeMemory(handle, reinterpret_cast<VmaAllocation>(allocation));
 }
 
-void DeviceMemoryAllocator::freePages(std::vector<std::shared_ptr<DeviceMemory>>& memoryPages) noexcept
+void DeviceMemoryAllocator::freePages(std::vector<DeviceMemoryBlock>& allocations) noexcept
 {
-    if (!memoryPages.empty())
+    if (!allocations.empty())
     {
-        std::vector<VmaAllocation> allocations;
-        allocations.reserve(memoryPages.size());
-        for (auto& memory : memoryPages)
-        {
-            if (memory.use_count() == 1)
-            {   // Free allocation for last shared_ptr instance managing the object
-                DeviceMemoryBlock allocation = memory->getAllocation();
-                MAGMA_ASSERT(allocation);
-                if (allocation)
-                    allocations.push_back(reinterpret_cast<VmaAllocation>(allocation));
-                memory.reset();
-            }
-        }
-        vmaFreeMemoryPages(handle, MAGMA_COUNT(allocations), allocations.data());
-        memoryPages.clear();
-        memoryPages.shrink_to_fit();
+        vmaFreeMemoryPages(handle, MAGMA_COUNT(allocations), reinterpret_cast<VmaAllocation *>(allocations.data()));
+        allocations.clear();
+        allocations.shrink_to_fit();
     }
 }
 
@@ -254,22 +228,13 @@ VkResult DeviceMemoryAllocator::checkCorruption(uint32_t memoryTypeBits) noexcep
     return vmaCheckCorruption(handle, memoryTypeBits);
 }
 
-VkResult DeviceMemoryAllocator::beginCpuDefragmentation(std::vector<std::shared_ptr<DeviceMemory>>& memoryPages,
+VkResult DeviceMemoryAllocator::beginCpuDefragmentation(std::vector<DeviceMemoryBlock>& allocations,
     DefragmentationStats* stats /* nullptr */) noexcept
 {
-    std::vector<VmaAllocation> allocations;
-    allocations.reserve(memoryPages.size());
-    for (auto& memory : memoryPages)
-    {
-        DeviceMemoryBlock allocation = memory->getAllocation();
-        MAGMA_ASSERT(allocation);
-        if (allocation)
-            allocations.push_back(reinterpret_cast<VmaAllocation>(allocation));
-    }
     VmaDefragmentationInfo2 cpuDefragInfo;
     cpuDefragInfo.flags = 0;
     cpuDefragInfo.allocationCount = MAGMA_COUNT(allocations);
-    cpuDefragInfo.pAllocations = allocations.data();
+    cpuDefragInfo.pAllocations = reinterpret_cast<VmaAllocation *>(allocations.data());
     cpuDefragInfo.pAllocationsChanged = nullptr;
     cpuDefragInfo.poolCount = 0;
     cpuDefragInfo.pPools = nullptr;
@@ -281,22 +246,13 @@ VkResult DeviceMemoryAllocator::beginCpuDefragmentation(std::vector<std::shared_
     return vmaDefragmentationBegin(handle, &cpuDefragInfo, reinterpret_cast<VmaDefragmentationStats*>(stats), &defragmentationContext);
 }
 
-VkResult DeviceMemoryAllocator::beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer, std::vector<std::shared_ptr<DeviceMemory>>& memoryPages,
+VkResult DeviceMemoryAllocator::beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer, std::vector<DeviceMemoryBlock>& allocations,
     DefragmentationStats* stats /* nullptr */) noexcept
 {
-    std::vector<VmaAllocation> allocations;
-    allocations.reserve(memoryPages.size());
-    for (auto& memory : memoryPages)
-    {
-        DeviceMemoryBlock allocation = memory->getAllocation();
-        MAGMA_ASSERT(allocation);
-        if (allocation)
-            allocations.push_back(reinterpret_cast<VmaAllocation>(allocation));
-    }
     VmaDefragmentationInfo2 gpuDefragInfo;
     gpuDefragInfo.flags = 0;
     gpuDefragInfo.allocationCount = MAGMA_COUNT(allocations);
-    gpuDefragInfo.pAllocations = allocations.data();
+    gpuDefragInfo.pAllocations = reinterpret_cast<VmaAllocation *>(allocations.data());
     gpuDefragInfo.pAllocationsChanged = nullptr;
     gpuDefragInfo.poolCount = 0;
     gpuDefragInfo.pPools = nullptr;
