@@ -72,20 +72,18 @@ namespace magma
 
     protected:
         explicit NonDispatchableResource(VkObjectType objectType,
-            VkDeviceSize size,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator) noexcept:
             NonDispatchable<Type>(objectType, std::move(device), std::move(allocator)),
-            size(size),
+            size(0),
             offset(0)
         {}
 
         explicit NonDispatchableResource(VkObjectType objectType,
-            VkDeviceSize size,
             std::shared_ptr<Device> device,
             std::shared_ptr<Allocator> allocator) noexcept:
             NonDispatchable<Type>(objectType, std::move(device), allocator->getHostAllocator()),
-            size(size),
+            size(0),
             offset(0),
             deviceAllocator(allocator->getDeviceAllocator())
         {}

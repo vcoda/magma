@@ -32,7 +32,7 @@ namespace magma
 Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags, VkBufferCreateFlags flags,
     bool cpuFrequentlyWriteGpuRead, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
-    NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, size, device, allocator),
+    NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, device, allocator),
     usage(usage)
 {
     VkBufferCreateInfo info;
@@ -67,6 +67,7 @@ void Buffer::bindMemory(std::shared_ptr<DeviceMemory> memory,
 {
     const VkResult bind = vkBindBufferMemory(MAGMA_HANDLE(device), handle, *memory, offset);
     MAGMA_THROW_FAILURE(bind, "failed to bind buffer memory");
+    this->size = memory->getSize();
     this->offset = offset;
     this->memory = std::move(memory);
 }

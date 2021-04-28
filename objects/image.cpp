@@ -35,7 +35,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
     VkImageTiling tiling, VkImageUsageFlags usage, VkImageCreateFlags flags,
     const Sharing& sharing, std::shared_ptr<Allocator> allocator):
-    NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, 0, device, allocator),
+    NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, device, allocator),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
@@ -66,21 +66,19 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     MAGMA_THROW_FAILURE(create, "failed to create image");
     VkMemoryRequirements memoryRequirements = {};
     vkGetImageMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
-    size = memoryRequirements.size;
-    const VkMemoryPropertyFlags memoryFlags = (VK_IMAGE_TILING_LINEAR == tiling)
-        ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
-        : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     std::shared_ptr<DeviceMemory> memory = std::make_shared<DeviceMemory>(
         std::move(device),
         memoryRequirements, 
-        memoryFlags, 
+        (VK_IMAGE_TILING_LINEAR == tiling)
+            ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
+            : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, 
         false, 
         std::move(allocator));
     bindMemory(std::move(memory));
 }
 
 Image::Image(std::shared_ptr<Device> device, VkImage handle, VkImageType imageType, VkFormat format, const VkExtent3D& extent):
-    NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, 0, std::move(device), nullptr),
+    NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, std::move(device), std::shared_ptr<Allocator>() /* FIX IT */),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
@@ -177,6 +175,7 @@ void Image::bindMemory(std::shared_ptr<DeviceMemory> memory,
 {
     const VkResult bind = vkBindImageMemory(MAGMA_HANDLE(device), handle, *memory, offset);
     MAGMA_THROW_FAILURE(bind, "failed to bind image memory");
+    this->size = memory->getSize();
     this->offset = offset;
     this->memory = std::move(memory);
 }
