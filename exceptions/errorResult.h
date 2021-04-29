@@ -85,6 +85,15 @@ namespace magma
                 ErrorResult(VK_ERROR_DEVICE_LOST, message) {}
         };
 
+        /* Mapping of a memory object has failed. */
+
+        class MemoryMapFailed : public ErrorResult
+        {
+        public:
+            explicit MemoryMapFailed(const char *message) noexcept:
+                ErrorResult(VK_ERROR_MEMORY_MAP_FAILED, message) {}
+        };
+
         /* The requested version of Vulkan is not supported by the driver
            or is otherwise incompatible for implementation-specific reasons. */
 
