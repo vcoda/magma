@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "deviceMemory.h"
 #include "srcTransferBuffer.h"
 #include "commandBuffer.h"
+#include "../exceptions/errorResult.h"
 
 namespace magma
 {
@@ -56,11 +57,24 @@ AccelerationStructureInstanceBuffer::AccelerationStructureInstanceBuffer(std::sh
     stagingBuffer(std::make_shared<SrcTransferBuffer>(std::move(device),
         sizeof(AccelerationStructureInstance) * instanceCount, nullptr,
         flags, sharing, std::move(allocator))),
-    instances(instanceCount)
+    instances(nullptr),
+    instanceCount(instanceCount)
 {
     static_assert(sizeof(AccelerationStructureInstance) == sizeof(VkAccelerationStructureInstanceKHR), "invalid structure size");
+    instances = stagingBuffer->getMemory()->map<AccelerationStructureInstance>();
+    if (!instances)
+        throw exception::MemoryMapFailed("failed to map staging buffer of acceleration structure instances");
     for (uint32_t instanceIndex = 0; instanceIndex < instanceCount; ++instanceIndex)
+    {   
+        new (&instances[instanceIndex]) AccelerationStructureInstance();
         instances[instanceIndex].setInstanceIndex(instanceIndex);
+    }
+}
+
+AccelerationStructureInstanceBuffer::~AccelerationStructureInstanceBuffer()
+{
+    if (stagingBuffer->getMemory()->hostMapped())
+        stagingBuffer->getMemory()->unmap();
 }
 
 bool AccelerationStructureInstanceBuffer::update(std::shared_ptr<CommandBuffer> cmdBuffer,
@@ -68,13 +82,6 @@ bool AccelerationStructureInstanceBuffer::update(std::shared_ptr<CommandBuffer> 
 {
     if (firstInstance + instanceCount > getInstanceCount())
         return false;
-    void *dst = stagingBuffer->getMemory()->map(firstInstance * sizeof(AccelerationStructureInstance));
-    if (dst)
-    {
-        const AccelerationStructureInstance *src = instances.data() + firstInstance;
-        memcpy(dst, src, sizeof(AccelerationStructureInstance) * instanceCount);
-        stagingBuffer->getMemory()->unmap();
-    }
     // Copy staging buffer to instance buffer
     VkBufferCopy region;
     region.srcOffset = firstInstance * sizeof(AccelerationStructureInstance);

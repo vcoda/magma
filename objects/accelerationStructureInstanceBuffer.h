@@ -83,7 +83,8 @@ namespace magma
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
             std::shared_ptr<IAllocator> allocator = nullptr);
-        uint32_t getInstanceCount() const noexcept { return (uint32_t)instances.size(); }
+        ~AccelerationStructureInstanceBuffer();
+        uint32_t getInstanceCount() const noexcept { return instanceCount; }
         AccelerationStructureInstance& getInstance(uint32_t instanceIndex) noexcept { return instances[instanceIndex]; }
         const AccelerationStructureInstance& getInstance(uint32_t instanceIndex) const noexcept { return instances[instanceIndex]; }
         bool update(std::shared_ptr<CommandBuffer> cmdBuffer,
@@ -92,7 +93,8 @@ namespace magma
 
     private:
         std::shared_ptr<SrcTransferBuffer> stagingBuffer;
-        std::vector<AccelerationStructureInstance> instances;
+        AccelerationStructureInstance *instances;
+        uint32_t instanceCount;
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma
