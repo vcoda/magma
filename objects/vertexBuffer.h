@@ -40,7 +40,7 @@ namespace magma
             VkBufferUsageFlags usage,
             VkMemoryPropertyFlags memoryFlags,
             VkBufferCreateFlags flags,
-            bool cpuFrequentlyWriteGpuRead,
+            bool pciPinnedMemory,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
 

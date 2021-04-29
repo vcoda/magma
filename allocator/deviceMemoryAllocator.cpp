@@ -69,22 +69,22 @@ DeviceMemoryAllocator::~DeviceMemoryAllocator()
 }
 
 DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
-    bool cpuFrequentlyWriteGpuRead)
+    bool pciPinnedMemory)
 {
     VmaAllocationCreateInfo allocInfo;
     allocInfo.flags = VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT;
     if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
-    {   // Memory will be used on device only, so fast access from the device is preferred
-        allocInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
+    {   // Memory that is both mappable on host and preferably fast to access by GPU
+        if (pciPinnedMemory) // Hint to VMA allocator to allocate DEVICE_LOCAL and HOST_VISIBLE memory
+            allocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
+        else // Memory will be used on device only, so fast access from the device is preferred
+            allocInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
     } 
     else if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
     {
         if (flags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT && !(flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT))
-        {   // Memory that is both mappable on host and preferably fast to access by GPU
-            if (cpuFrequentlyWriteGpuRead)
-                allocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
-            else // Usage: staging copy of resources used as transfer source
-                allocInfo.usage = VMA_MEMORY_USAGE_CPU_ONLY;
+        {   // Usage: staging copy of resources used as transfer source
+            allocInfo.usage = VMA_MEMORY_USAGE_CPU_ONLY;
         } 
         else if (flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT)
         {   // Memory mappable on host and cached, can be used for readback from GPU
@@ -111,7 +111,10 @@ DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memor
         allocInfo.requiredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
     else
         allocInfo.requiredFlags = 0;
-    allocInfo.preferredFlags = 0;
+    if (pciPinnedMemory)
+        allocInfo.preferredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+    else
+        allocInfo.preferredFlags = 0;
     allocInfo.memoryTypeBits = 0;
     allocInfo.pool = VK_NULL_HANDLE;
     allocInfo.pUserData = nullptr;

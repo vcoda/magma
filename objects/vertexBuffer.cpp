@@ -26,8 +26,8 @@ namespace magma
 {
 BaseVertexBuffer::BaseVertexBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
     VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags, VkBufferCreateFlags flags,
-    bool cpuFrequentlyWriteGpuRead, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
-    Buffer(std::move(device), size, usage, memoryFlags, flags, cpuFrequentlyWriteGpuRead, sharing, std::move(allocator)),
+    bool pciPinnedMemory, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
+    Buffer(std::move(device), size, usage, memoryFlags, flags, pciPinnedMemory, sharing, std::move(allocator)),
     vertexCount(0)
 {}
 

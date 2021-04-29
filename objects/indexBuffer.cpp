@@ -26,8 +26,8 @@ namespace magma
 {
 BaseIndexBuffer::BaseIndexBuffer(std::shared_ptr<Device> device, VkDeviceSize size, VkIndexType indexType,
     VkBufferUsageFlags usage, VkMemoryPropertyFlags memFlags, VkBufferCreateFlags flags,
-    const Sharing& sharing, std::shared_ptr<Allocator> allocator):
-    Buffer(std::move(device), size, usage, memFlags, flags, false, sharing, std::move(allocator)),
+    bool pciPinnedMemory, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
+    Buffer(std::move(device), size, usage, memFlags, flags, pciPinnedMemory, sharing, std::move(allocator)),
     indexType(indexType)
 {}
 
@@ -46,7 +46,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize 
     BaseIndexBuffer(cmdBuffer->getDevice(), size, indexType,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, sharing, allocator)
+        flags, false, sharing, allocator)
 {
     MAGMA_ASSERT(data);
     auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
@@ -63,7 +63,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
     BaseIndexBuffer(cmdBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(), indexType,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, sharing, std::move(allocator))
+        flags, false, sharing, std::move(allocator))
 {
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }
@@ -97,7 +97,7 @@ AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_p
 #endif
         VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, sharing, allocator)
+        flags, false, sharing, allocator)
 {
     MAGMA_ASSERT(data);
     auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
@@ -119,7 +119,7 @@ AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_p
 #endif
         VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, sharing, std::move(allocator))
+        flags, false, sharing, std::move(allocator))
 {
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }

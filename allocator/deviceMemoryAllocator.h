@@ -37,7 +37,7 @@ namespace magma
         VmaAllocator getHandle() const noexcept { return handle; }
         virtual DeviceMemoryBlock alloc(const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
-            bool cpuFrequentlyWriteGpuRead) override;
+            bool pciPinnedMemory) override;
         virtual std::vector<DeviceMemoryBlock> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
             const std::vector<VkMemoryPropertyFlags>& flags) override;
         virtual DeviceMemoryBlock realloc(DeviceMemoryBlock memory,

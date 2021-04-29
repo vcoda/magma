@@ -37,7 +37,7 @@ namespace magma
         explicit DeviceMemory(std::shared_ptr<Device> device,
             const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
-            bool cpuFrequentlyWriteGpuRead,
+            bool pciPinnedMemory,
             std::shared_ptr<Allocator> allocator = nullptr);
 #ifdef VK_KHR_device_group
         explicit DeviceMemory(std::shared_ptr<Device> device,
