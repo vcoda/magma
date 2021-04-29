@@ -53,6 +53,7 @@ namespace magma
         VkDeviceSize getAlignment() const noexcept { return memoryRequirements.alignment; }
         uint32_t getTypeBits() const noexcept { return memoryRequirements.memoryTypeBits; }
         bool local() const noexcept;
+        bool pciPinned() const noexcept;
         bool hostVisible() const noexcept;
         bool hostMapped() const noexcept;
         void *map(VkDeviceSize offset = 0,

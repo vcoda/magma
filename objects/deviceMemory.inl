@@ -5,6 +5,14 @@ inline bool DeviceMemory::local() const noexcept
     return flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 }
 
+inline bool DeviceMemory::pciPinned() const noexcept
+{
+    // Pinned memory is virtual memory pages that are specially marked so that they cannot be paged out.
+    // Higher bandwidth is possible between the host and the device when using page-locked (or "pinned") memory.
+    // On discrete AMD GPU there is around 256 MiB of DEVICE_LOCAL + HOST_VISIBLE memory pool.
+    return flags & (VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
+}
+
 inline bool DeviceMemory::hostVisible() const noexcept
 {
     return flags & (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
