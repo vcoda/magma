@@ -61,7 +61,7 @@ VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }
 
-DynamicVertexBuffer::DynamicVertexBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
+DynamicVertexBuffer::DynamicVertexBuffer(std::shared_ptr<Device> device, VkDeviceSize size, bool pciPinnedMemory,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const void *initial /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
@@ -69,9 +69,8 @@ DynamicVertexBuffer::DynamicVertexBuffer(std::shared_ptr<Device> device, VkDevic
     CopyMemoryFunction copyFn /* nullptr */):
     BaseVertexBuffer(std::move(device), size,
         VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-        flags, true, // Set as frequently updated
-        sharing, std::move(allocator))
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | (pciPinnedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
+        flags, pciPinnedMemory, sharing, std::move(allocator))
 {
     if (initial)
         copyHost(initial, std::move(copyFn));

@@ -75,6 +75,7 @@ namespace magma
     public:
         explicit DynamicVertexBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
+            bool pciPinnedMemory,
             std::shared_ptr<Allocator> allocator = nullptr,
             const void *initial = nullptr,
             VkBufferCreateFlags flags = 0,
