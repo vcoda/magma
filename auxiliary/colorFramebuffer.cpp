@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
 #include "../objects/framebuffer.h"
+#include "../allocator/allocator.h"
 #include "../misc/format.h"
 
 namespace magma
@@ -30,28 +31,29 @@ namespace magma
 namespace aux
 {
 ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkFormat colorFormat, const VkExtent2D& extent,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
     const bool colorClearOp /* true */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
-    ColorFramebuffer(std::move(device), colorFormat, VK_FORMAT_UNDEFINED, extent, false, colorClearOp, std::move(allocator), swizzle)
+    ColorFramebuffer(std::move(device), colorFormat, VK_FORMAT_UNDEFINED, extent, std::move(allocator), colorClearOp, false, swizzle)
 {}
 
 ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkFormat colorFormat,
-    const VkFormat depthStencilFormat, const VkExtent2D& extent, const bool depthSampled,
+    const VkFormat depthStencilFormat, const VkExtent2D& extent, 
+    std::shared_ptr<Allocator> allocator /* nullptr */,
     const bool colorClearOp /* true */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const bool depthSampled, /* false */
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
     Framebuffer(colorFormat, depthStencilFormat, 1),
     colorClearOp(colorClearOp)
 {   // Create color attachment
-    color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, true, allocator);
+    color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, allocator, true);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil attachment
         depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent,
-            1, 1, depthSampled, allocator);
+            1, 1, allocator, depthSampled);
     }
     // Create color view
-    colorView = std::make_shared<ImageView>(color, swizzle, allocator);
+    colorView = std::make_shared<ImageView>(color, allocator->getHostAllocator(), swizzle);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil view
         constexpr VkComponentMapping dontSwizzle = {
@@ -59,7 +61,7 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
             VK_COMPONENT_SWIZZLE_IDENTITY,
             VK_COMPONENT_SWIZZLE_IDENTITY,
             VK_COMPONENT_SWIZZLE_IDENTITY};
-        depthStencilView = std::make_shared<ImageView>(depthStencil, dontSwizzle, allocator);
+        depthStencilView = std::make_shared<ImageView>(depthStencil, allocator->getHostAllocator(), dontSwizzle);
     }
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, 1,
@@ -76,15 +78,17 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
             finalLayout); // Depth image will be transitioned to when a render pass instance ends
         // Create color/depth framebuffer
-        renderPass = std::make_shared<RenderPass>(std::move(device), std::initializer_list<AttachmentDescription>{
-            colorAttachment, depthStencilAttachment});
-        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, std::vector<std::shared_ptr<ImageView>>{
-            colorView, depthStencilView}, 0, std::move(allocator));
+        renderPass = std::make_shared<RenderPass>(std::move(device),
+            std::initializer_list<AttachmentDescription>{colorAttachment, depthStencilAttachment}, 
+            allocator->getHostAllocator());
+        framebuffer = std::make_shared<magma::Framebuffer>(renderPass,
+            std::vector<std::shared_ptr<ImageView>>{colorView, depthStencilView}, 
+            allocator->getHostAllocator(), 0);
     }
     else
     {   // Create color only framebuffer
-        renderPass = std::make_shared<RenderPass>(std::move(device), colorAttachment, allocator);
-        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, colorView, 0, std::move(allocator));
+        renderPass = std::make_shared<RenderPass>(std::move(device), colorAttachment, allocator->getHostAllocator());
+        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, colorView, allocator->getHostAllocator(), 0);
     }
 }
 } // namespace aux

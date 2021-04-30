@@ -25,7 +25,7 @@ namespace magma
     class Queue;
     class SwapchainColorAttachment;
     class LinearTiledImage2D;
-    class IAllocator;
+    class Allocator;
 
     namespace aux
     {
@@ -35,7 +35,7 @@ namespace magma
         {
         public:
             explicit FrameGrabber(std::shared_ptr<Device> device,
-                std::shared_ptr<IAllocator> allocator = nullptr);
+                std::shared_ptr<Allocator> allocator = nullptr);
             void captureFrame(std::shared_ptr<SwapchainColorAttachment> srcImage,
                 std::shared_ptr<CommandBuffer> cmdBuffer);
             void readPixels(std::function<void(uint32_t col,
@@ -51,7 +51,7 @@ namespace magma
 
             std::shared_ptr<Device> device;
             std::shared_ptr<Queue> queue;
-            std::shared_ptr<IAllocator> allocator;
+            std::shared_ptr<Allocator> allocator;
             std::shared_ptr<LinearTiledImage2D> dstImage;
             bool swizzleBgra = false;
         };

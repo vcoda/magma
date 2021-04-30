@@ -34,6 +34,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/multisampleState.h"
 #include "../states/depthStencilState.h"
 #include "../states/colorBlendState.h"
+#include "../allocator/allocator.h"
 #include "../helpers/mapScoped.h"
 #include "../core/copyMemory.h"
 #include "../core/constexprHash.h"
@@ -59,29 +60,30 @@ struct alignas(16) TextShader::String
 TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
     const std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<Allocator> allocator /* nullptr */):
     maxChars(maxChars),
     maxStrings(maxStrings)
 {
     std::shared_ptr<Device> device = renderPass->getDevice();
     // Create uniform and storage buffers
-    uniforms = std::make_shared<UniformBuffer<Uniforms>>(device);
-    stringBuffer = std::make_shared<DynamicStorageBuffer>(device, sizeof(String) * maxStrings);
-    glyphBuffer = std::make_shared<DynamicStorageBuffer>(device, sizeof(Glyph) * maxChars);
+    uniforms = std::make_shared<UniformBuffer<Uniforms>>(device, allocator);
+    stringBuffer = std::make_shared<DynamicStorageBuffer>(device, sizeof(String) * maxStrings, allocator);
+    glyphBuffer = std::make_shared<DynamicStorageBuffer>(device, sizeof(Glyph) * maxChars, allocator);
     // Define layout of descriptor set
     descriptorPool = std::make_shared<DescriptorPool>(device, 1,
-        std::vector<Descriptor>
-        {
+        std::vector<Descriptor>{
             descriptors::UniformBuffer(1),
             descriptors::StorageBuffer(2)
-        });
+        },
+        false, allocator->getHostAllocator());
     descriptorSetLayout = std::make_shared<DescriptorSetLayout>(device,
-        std::initializer_list<DescriptorSetLayout::Binding>
-        {
+        std::initializer_list<DescriptorSetLayout::Binding>{
             bindings::FragmentStageBinding(0, descriptors::UniformBuffer(1)),
             bindings::FragmentStageBinding(1, descriptors::StorageBuffer(1)),
             bindings::FragmentStageBinding(2, descriptors::StorageBuffer(1))
-        });
+        },
+        std::initializer_list<DescriptorSetLayout::SamplerBinding>{},
+        0, allocator->getHostAllocator());
     descriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
     descriptorSet->writeDescriptor(0, uniforms);
     descriptorSet->writeDescriptor(1, stringBuffer);
@@ -93,9 +95,9 @@ constexpr
 constexpr
 #include "spirv/output/fontf"
     constexpr std::size_t vsBlitHash = core::hashArray(vsBlit);
-    const VertexShaderStage vertexShader(std::make_shared<ShaderModule>(device, vsBlit, vsBlitHash, 0, false, allocator), "main");
+    const VertexShaderStage vertexShader(std::make_shared<ShaderModule>(device, vsBlit, vsBlitHash, 0, false, allocator->getHostAllocator()), "main");
     constexpr std::size_t fsFontHash = core::hashArray(fsFont);
-    const FragmentShaderStage fragmentShader(std::make_shared<ShaderModule>(device, fsFont, fsFontHash, 0, false, allocator), "main");
+    const FragmentShaderStage fragmentShader(std::make_shared<ShaderModule>(device, fsFont, fsFontHash, 0, false, allocator->getHostAllocator()), "main");
     // Create font pipeline
     pipeline = std::make_shared<GraphicsPipeline>(std::move(device),
         std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
@@ -110,7 +112,7 @@ constexpr
         std::move(renderPass), 0,
         std::move(pipelineCache),
         nullptr, // basePipeline
-        std::move(allocator));
+        allocator->getHostAllocator());
 
     // Initialize glyphs
     core::memzero(ascii); // Zero control codes
