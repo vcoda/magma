@@ -22,7 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class DeviceMemory;
-    class IDeviceMemoryAllocator;
     class PhysicalDevice;
 
     /* Base resource class. */
