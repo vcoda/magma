@@ -41,9 +41,9 @@ namespace magma
             const SpirvWord *bytecode,
             std::size_t bytecodeSize,
             std::size_t bytecodeHash = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr,
             VkShaderModuleCreateFlags flags = 0,
-            bool reflect = false,
-            std::shared_ptr<IAllocator> allocator = nullptr
+            bool reflect = false
 #       ifdef VK_EXT_validation_cache
             ,std::shared_ptr<ValidationCache> validationCache = nullptr
 #       endif
@@ -51,9 +51,9 @@ namespace magma
         explicit ShaderModule(std::shared_ptr<Device> device,
             const std::vector<SpirvWord>& bytecode,
             std::size_t bytecodeHash = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr,
             VkShaderModuleCreateFlags flags = 0,
-            bool reflect = false,
-            std::shared_ptr<IAllocator> allocator = nullptr
+            bool reflect = false
 #       ifdef VK_EXT_validation_cache
             ,std::shared_ptr<ValidationCache> validationCache = nullptr
 #       endif
@@ -62,9 +62,9 @@ namespace magma
         explicit ShaderModule(std::shared_ptr<Device> device,
             const SpirvWord (&bytecode)[WordCount],
             std::size_t bytecodeHash = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr,
             VkShaderModuleCreateFlags flags = 0,
-            bool reflect = false,
-            std::shared_ptr<IAllocator> allocator = nullptr
+            bool reflect = false
 #       ifdef VK_EXT_validation_cache
             ,std::shared_ptr<ValidationCache> validationCache = nullptr
 #       endif

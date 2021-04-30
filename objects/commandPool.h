@@ -40,9 +40,9 @@ namespace magma
     public:
         explicit CommandPool(std::shared_ptr<Device> device,
             uint32_t queueFamilyIndex,
+            std::shared_ptr<IAllocator> allocator = nullptr,
             bool transient = false,
             bool resetCommandBuffer = true,
-            std::shared_ptr<IAllocator> allocator = nullptr,
             uint32_t poolCommandBufferCount = 256);
         ~CommandPool();
         bool reset(bool releaseResources) noexcept;

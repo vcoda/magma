@@ -28,7 +28,7 @@ namespace magma
 DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
     std::shared_ptr<Allocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), allocator->getHostAllocator()),
+    NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), allocator ? allocator->getHostAllocator() : nullptr),
     memoryRequirements(memoryRequirements),
     flags(flags),
     deviceAllocator(allocator->getDeviceAllocator()),

@@ -49,16 +49,17 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */):
     GraphicsPipeline(std::move(device), stages, vertexInputState, inputAssemblyState,
         TesselationState(), // No tesselation state
         ViewportState(), // No viewport state (supposed to be dynamic)
         rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
         std::move(layout), std::move(renderPass), subpass,
-        std::move(pipelineCache), std::move(basePipeline), std::move(allocator), flags)
+        std::move(allocator), std::move(pipelineCache), std::move(basePipeline),
+        flags)
 {}
 
 GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
@@ -75,9 +76,9 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */):
     Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout),
         std::move(pipelineCache), std::move(basePipeline), std::move(allocator))

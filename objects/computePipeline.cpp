@@ -28,10 +28,10 @@ namespace magma
 {
 ComputePipeline::ComputePipeline(std::shared_ptr<Device> device,
     const PipelineShaderStage& stage,
-    std::shared_ptr<PipelineLayout> layout /* nullptr */,
+    std::shared_ptr<PipelineLayout> layout,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<ComputePipeline> basePipeline /* nullptr */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */):
     Pipeline(VK_PIPELINE_BIND_POINT_COMPUTE, std::move(device), std::move(layout),
         std::move(pipelineCache), std::move(basePipeline), std::move(allocator))

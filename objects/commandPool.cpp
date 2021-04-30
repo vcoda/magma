@@ -30,9 +30,9 @@ namespace magma
 {
 CommandPool::CommandPool(std::shared_ptr<Device> device,
     uint32_t queueFamilyIndex,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool transient /* false */,
     bool resetCommandBuffer /* true */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
     uint32_t poolCommandBufferCount /* 256 */):
     NonDispatchable(VK_OBJECT_TYPE_COMMAND_POOL, std::move(device), std::move(allocator))
 {

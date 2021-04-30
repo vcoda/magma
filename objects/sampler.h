@@ -34,8 +34,8 @@ namespace magma
     public:
         explicit Sampler(std::shared_ptr<Device> device,
             const SamplerState& state,
-            const BorderColor& borderColor = DefaultBorderColor(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const BorderColor& borderColor = DefaultBorderColor());
         ~Sampler();
 
     protected:
@@ -54,8 +54,8 @@ namespace magma
             float mipLodBias,
             float minLod,
             float maxLod,
-            const BorderColor& borderColor = DefaultBorderColor(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const BorderColor& borderColor = DefaultBorderColor());
     };
 
     /* Depth map comparison sampler. Used to enable comparison against
@@ -78,7 +78,7 @@ namespace magma
     public:
         explicit UnnormalizedSampler(std::shared_ptr<Device> device,
             bool linearFilter,
-            const BorderColor& borderColor = DefaultBorderColor(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const BorderColor& borderColor = DefaultBorderColor());
     };
 } // namespace magma

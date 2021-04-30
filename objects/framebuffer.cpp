@@ -29,9 +29,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shared_ptr<ImageView> attachment,
-    VkFramebufferCreateFlags flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, std::move(renderPass->getDevice()), std::move(allocator)),
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkFramebufferCreateFlags flags /* 0 */):
+    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
     attachments(attachments),
     extent{attachment->getImage()->getMipExtent(0).width,
         attachment->getImage()->getMipExtent(0).height}
@@ -52,9 +52,9 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shar
 }
 
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std::vector<std::shared_ptr<ImageView>>& attachments,
-    VkFramebufferCreateFlags flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, std::move(renderPass->getDevice()), std::move(allocator)),
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkFramebufferCreateFlags flags /* 0 */):
+    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
     attachments(std::move(attachments)),
     extent{this->attachments.front()->getImage()->getMipExtent(0).width,
         this->attachments.front()->getImage()->getMipExtent(0).height}

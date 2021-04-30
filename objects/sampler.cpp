@@ -28,8 +28,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
-    const BorderColor& borderColor /* DefaultBorderColor */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const BorderColor& borderColor /* DefaultBorderColor */):
     NonDispatchable(VK_OBJECT_TYPE_SAMPLER, std::move(device), std::move(allocator))
 {
     VkSamplerCreateInfo info;
@@ -69,8 +69,8 @@ Sampler::~Sampler()
 
 LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state,
     float mipLodBias, float minLod, float maxLod,
-    const BorderColor& borderColor /* DefaultBorderColor */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const BorderColor& borderColor /* DefaultBorderColor */):
     Sampler(std::move(device), std::move(allocator))
 {
     VkSamplerCreateInfo info;
@@ -131,8 +131,8 @@ DepthSampler::DepthSampler(std::shared_ptr<Device> device, const DepthSamplerSta
 }
 
 UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool linearFilter,
-    const BorderColor& borderColor /* DefaultBorderColor */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const BorderColor& borderColor /* DefaultBorderColor */):
     Sampler(std::move(device), std::move(allocator))
 {
     VkSamplerCreateInfo info;

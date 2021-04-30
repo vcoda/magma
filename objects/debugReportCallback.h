@@ -32,14 +32,14 @@ namespace magma
     public:
         explicit DebugReportCallback(std::shared_ptr<const Instance> instance,
             PFN_vkDebugReportCallbackEXT userCallback,
+            std::shared_ptr<IAllocator> allocator = nullptr,
             VkDebugReportFlagsEXT flags =
                 VK_DEBUG_REPORT_INFORMATION_BIT_EXT |
                 VK_DEBUG_REPORT_WARNING_BIT_EXT |
                 VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT |
                 VK_DEBUG_REPORT_ERROR_BIT_EXT |
                 VK_DEBUG_REPORT_DEBUG_BIT_EXT,
-            void *userData = nullptr,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            void *userData = nullptr);
         ~DebugReportCallback();
         void message(VkDebugReportFlagsEXT flags,
             VkObjectType objectType,

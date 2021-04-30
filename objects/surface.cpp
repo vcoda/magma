@@ -41,8 +41,8 @@ Surface::~Surface()
 Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance,
     HINSTANCE hinstance,
     HWND hwnd,
-    VkWin32SurfaceCreateFlagsKHR flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkWin32SurfaceCreateFlagsKHR flags /* 0 */):
     Surface(std::move(instance), std::move(allocator))
 {
     VkWin32SurfaceCreateInfoKHR info;
@@ -59,8 +59,8 @@ Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance,
 XlibSurface::XlibSurface(std::shared_ptr<const Instance> instance,
     ::Display *dpy,
     Window window,
-    VkXlibSurfaceCreateFlagsKHR flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkXlibSurfaceCreateFlagsKHR flags /* 0 */):
     Surface(std::move(instance), std::move(allocator))
 {
     VkXlibSurfaceCreateInfoKHR info;
@@ -77,8 +77,8 @@ XlibSurface::XlibSurface(std::shared_ptr<const Instance> instance,
 XcbSurface::XcbSurface(std::shared_ptr<const Instance> instance,
     xcb_connection_t *connection,
     xcb_window_t window,
-    VkXcbSurfaceCreateFlagsKHR flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkXcbSurfaceCreateFlagsKHR flags /* 0 */):
     Surface(std::move(instance), std::move(allocator))
 {
     VkXcbSurfaceCreateInfoKHR info;
@@ -95,8 +95,8 @@ XcbSurface::XcbSurface(std::shared_ptr<const Instance> instance,
 WaylandSurface::WaylandSurface(std::shared_ptr<const Instance> instance,
     wl_display *display,
     wl_surface *surface,
-    VkWaylandSurfaceCreateFlagsKHR flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkWaylandSurfaceCreateFlagsKHR flags /* 0 */):
     Surface(std::move(instance), std::move(allocator))
 {
     VkWaylandSurfaceCreateInfoKHR info;
@@ -113,8 +113,8 @@ WaylandSurface::WaylandSurface(std::shared_ptr<const Instance> instance,
 MirSurface::MirSurface(std::shared_ptr<const Instance> instance,
     MirConnection *connection,
     MirSurface *surface,
-    VkMirSurfaceCreateFlagsKHR flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkMirSurfaceCreateFlagsKHR flags /* 0 */):
     Surface(std::move(instance), std::move(allocator))
 {
     VkMirSurfaceCreateInfoKHR info;
@@ -130,8 +130,8 @@ MirSurface::MirSurface(std::shared_ptr<const Instance> instance,
 #elif defined(VK_USE_PLATFORM_ANDROID_KHR)
 AndroidSurface::AndroidSurface(std::shared_ptr<const Instance> instance,
     ANativeWindow *window,
-    VkAndroidSurfaceCreateFlagsKHR flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkAndroidSurfaceCreateFlagsKHR flags /* 0 */):
     Surface(std::move(instance), std::move(allocator))
 {
     VkAndroidSurfaceCreateInfoKHR info;
@@ -146,8 +146,8 @@ AndroidSurface::AndroidSurface(std::shared_ptr<const Instance> instance,
 #elif defined(VK_USE_PLATFORM_IOS_MVK)
 iOSSurface::iOSSurface(std::shared_ptr<const Instance> instance,
     const void *view,
-    VkIOSSurfaceCreateFlagsMVK flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkIOSSurfaceCreateFlagsMVK flags /* 0 */):
     Surface(std::move(instance), std::move(allocator))
 {
     VkIOSSurfaceCreateInfoMVK info;
@@ -162,8 +162,8 @@ iOSSurface::iOSSurface(std::shared_ptr<const Instance> instance,
 #elif defined(VK_USE_PLATFORM_MACOS_MVK)
 MacOSSurface::MacOSSurface(std::shared_ptr<const Instance> instance,
     const void *view,
-    VkMacOSSurfaceCreateFlagsMVK flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkMacOSSurfaceCreateFlagsMVK flags /* 0 */):
     Surface(std::move(instance), std::move(allocator))
 {
     VkMacOSSurfaceCreateInfoMVK info;
@@ -178,8 +178,8 @@ MacOSSurface::MacOSSurface(std::shared_ptr<const Instance> instance,
 #elif defined(VK_USE_PLATFORM_METAL_EXT)
 MetalSurface::MetalSurface(std::shared_ptr<const Instance> instance,
     const CAMetalLayer *layer,
-    VkMacOSSurfaceCreateFlagsMVK flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkMacOSSurfaceCreateFlagsMVK flags /* 0 */):
     Surface(std::move(instance), std::move(allocator))
 {
     VkMetalSurfaceCreateInfoEXT info;

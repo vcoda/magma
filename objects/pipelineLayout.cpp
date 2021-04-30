@@ -28,12 +28,12 @@ namespace magma
 {
 PipelineLayout::PipelineLayout(std::shared_ptr<Device> device, const PushConstantRange& pushConstantRange,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    PipelineLayout(std::move(device), {pushConstantRange}, std::move(allocator))
+    PipelineLayout(std::move(device), std::move(allocator), {pushConstantRange})
 {}
 
 PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
-    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, std::move(device), std::move(allocator))
 {
     VkPipelineLayoutCreateInfo info;
@@ -57,18 +57,18 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
 
 PipelineLayout::PipelineLayout(std::shared_ptr<DescriptorSetLayout> setLayout, const PushConstantRange& pushConstantRange,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    PipelineLayout(std::move(setLayout), {pushConstantRange}, std::move(allocator))
+    PipelineLayout(std::move(setLayout), std::move(allocator), {pushConstantRange})
 {}
 
 PipelineLayout::PipelineLayout(std::shared_ptr<DescriptorSetLayout> setLayout,
-    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    PipelineLayout(std::vector<std::shared_ptr<DescriptorSetLayout>>{setLayout}, std::move(pushConstantRanges), std::move(allocator))
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */):
+    PipelineLayout(std::vector<std::shared_ptr<DescriptorSetLayout>>{setLayout}, std::move(allocator), std::move(pushConstantRanges))
 {}
 
 PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<DescriptorSetLayout>>& setLayouts,
-    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, std::move(setLayouts[0]->getDevice()), std::move(allocator)),
     setLayouts(setLayouts)
 {
