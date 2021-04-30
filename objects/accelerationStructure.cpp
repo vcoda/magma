@@ -61,7 +61,6 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
         std::move(device),
         memoryRequirements, 
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        false, 
         std::move(allocator));
     bindMemory(std::move(memory));
 }
