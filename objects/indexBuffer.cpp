@@ -25,9 +25,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 BaseIndexBuffer::BaseIndexBuffer(std::shared_ptr<Device> device, VkDeviceSize size, VkIndexType indexType,
-    VkBufferUsageFlags usage, VkMemoryPropertyFlags memFlags, VkBufferCreateFlags flags,
-    bool pciPinnedMemory, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
-    Buffer(std::move(device), size, usage, memFlags, flags, pciPinnedMemory, sharing, std::move(allocator)),
+    VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags, VkBufferCreateFlags flags,
+    const Sharing& sharing, std::shared_ptr<Allocator> allocator):
+    Buffer(std::move(device), size, usage, memoryFlags, flags, sharing, std::move(allocator)),
     indexType(indexType)
 {}
 
@@ -46,7 +46,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize 
     BaseIndexBuffer(cmdBuffer->getDevice(), size, indexType,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, false, sharing, allocator)
+        flags, sharing, allocator)
 {
     MAGMA_ASSERT(data);
     auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
@@ -63,7 +63,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
     BaseIndexBuffer(cmdBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(), indexType,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, false, sharing, std::move(allocator))
+        flags, sharing, std::move(allocator))
 {
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }
@@ -76,8 +76,10 @@ DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkDeviceS
     CopyMemoryFunction copyFn /* nullptr */):
     BaseIndexBuffer(std::move(device), size, indexType,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | (pciPinnedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
-        flags, pciPinnedMemory, sharing, std::move(allocator))
+        (pciPinnedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT 
+                         : VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
+                         | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
+        flags, sharing, std::move(allocator))
 {
     if (initial)
         copyHost(initial, std::move(copyFn));
@@ -97,7 +99,7 @@ AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_p
 #endif
         VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, false, sharing, allocator)
+        flags, sharing, allocator)
 {
     MAGMA_ASSERT(data);
     auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
@@ -119,7 +121,7 @@ AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_p
 #endif
         VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, false, sharing, std::move(allocator))
+        flags, sharing, std::move(allocator))
 {
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }

@@ -89,8 +89,7 @@ namespace magma
     {
     public:
         virtual DeviceMemoryBlock alloc(const VkMemoryRequirements& memoryRequirements,
-            VkMemoryPropertyFlags flags,
-            bool pciPinnedMemory) = 0;
+            VkMemoryPropertyFlags flags) = 0;
         virtual std::vector<DeviceMemoryBlock> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
             const std::vector<VkMemoryPropertyFlags>& flags) = 0;
         virtual DeviceMemoryBlock realloc(DeviceMemoryBlock memory,

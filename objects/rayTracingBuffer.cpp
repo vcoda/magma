@@ -31,7 +31,7 @@ RayTracingBuffer::RayTracingBuffer(std::shared_ptr<Device> device, VkDeviceSize 
     Buffer(std::move(device), size,
         VK_BUFFER_USAGE_RAY_TRACING_BIT_NV | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, false, sharing, std::move(allocator))
+        flags, sharing, std::move(allocator))
 {}
 
 RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
@@ -42,7 +42,7 @@ RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkD
     Buffer(cmdBuffer->getDevice(), size,
         VK_BUFFER_USAGE_RAY_TRACING_BIT_NV | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, false, sharing, allocator)
+        flags, sharing, allocator)
 {
     MAGMA_ASSERT(data);
     auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
@@ -59,7 +59,7 @@ RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std
     Buffer(cmdBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(),
         VK_BUFFER_USAGE_RAY_TRACING_BIT_NV | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, false, sharing, std::move(allocator))
+        flags, sharing, std::move(allocator))
 {
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }

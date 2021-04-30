@@ -51,13 +51,15 @@ namespace magma
             const Sharing& sharing = Sharing());
     };
 
-    /* Dynamic storage buffer that can be mapped for host access. */
+    /* Dynamic storage buffer for fast data transfer from host to device 
+       when using page-locked (or "pinned") memory. */
 
     class DynamicStorageBuffer : public Buffer
     {
     public:
         explicit DynamicStorageBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
+            bool pciPinnedMemory,
             std::shared_ptr<Allocator> allocator = nullptr,
             const void *initial = nullptr,
             VkBufferCreateFlags flags = 0,

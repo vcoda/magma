@@ -43,13 +43,15 @@ namespace magma
             const Sharing& sharing = Sharing());
     };
 
-    /* Dynamic storage texel buffer */
+    /* Dynamic storage texel buffer for fast data transfer from host to device 
+       when using page-locked (or "pinned") memory. */
 
     class DynamicStorageTexelBuffer : public Buffer
     {
     public:
         explicit DynamicStorageTexelBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
+            bool pciPinnedMemory,
             std::shared_ptr<Allocator> allocator = nullptr,
             const void *initial = nullptr,
             VkBufferCreateFlags flags = 0,

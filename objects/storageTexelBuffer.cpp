@@ -32,7 +32,7 @@ StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
     Buffer(std::move(cmdBuffer->getDevice()), size,
         VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, false, sharing, allocator)
+        flags, sharing, allocator)
 {
     MAGMA_ASSERT(data);
     auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
@@ -49,12 +49,12 @@ StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
     Buffer(cmdBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(),
         VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, false, sharing, std::move(allocator))
+        flags, sharing, std::move(allocator))
 {
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }
 
-DynamicStorageTexelBuffer::DynamicStorageTexelBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
+DynamicStorageTexelBuffer::DynamicStorageTexelBuffer(std::shared_ptr<Device> device, VkDeviceSize size, bool pciPinnedMemory,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const void *initial /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
@@ -62,8 +62,10 @@ DynamicStorageTexelBuffer::DynamicStorageTexelBuffer(std::shared_ptr<Device> dev
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(std::move(device), size,
         VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT,
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-        flags, true, // Set as frequently updated
+        (pciPinnedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT 
+                         : VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
+                         | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
+        flags,
         sharing, std::move(allocator))
 {
     if (initial)

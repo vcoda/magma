@@ -40,7 +40,6 @@ namespace magma
             VkBufferUsageFlags usage,
             VkMemoryPropertyFlags memoryFlags,
             VkBufferCreateFlags flags,
-            bool pciPinnedMemory,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
 
@@ -68,7 +67,8 @@ namespace magma
             const Sharing& sharing = Sharing());
     };
 
-    /* Dynamic vertex buffer that can be mapped for host access. */
+    /* Dynamic vertex buffer for fast data transfer from host to device 
+       when using page-locked (or "pinned") memory. */
 
     class DynamicVertexBuffer : public BaseVertexBuffer
     {

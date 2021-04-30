@@ -50,7 +50,6 @@ namespace magma
             VkBufferUsageFlags usage,
             VkMemoryPropertyFlags memoryFlags,
             VkBufferCreateFlags flags,
-            bool pciPinnedMemory,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
         void copyHost(const void *data,

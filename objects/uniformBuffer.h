@@ -33,10 +33,10 @@ namespace magma
         typedef Type UniformType;
 
         explicit UniformBuffer(std::shared_ptr<Device> device,
+            std::shared_ptr<Allocator> allocator = nullptr,
             uint32_t arraySize = 1,
             VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr):
+            const Sharing& sharing = Sharing()):
             Buffer(std::move(device), sizeof(Type) * arraySize,
                 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,

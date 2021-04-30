@@ -31,7 +31,7 @@ IndirectBuffer::IndirectBuffer(std::shared_ptr<Device> device,
     Buffer(std::move(device), sizeof(VkDrawIndirectCommand) * drawCommandCount,
         VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT,
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-        flags, true, sharing, std::move(allocator))
+        flags, sharing, std::move(allocator))
 {}
 
 void IndirectBuffer::writeDrawCommand(uint32_t vertexCount,

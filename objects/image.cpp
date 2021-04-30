@@ -72,7 +72,6 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
         (VK_IMAGE_TILING_LINEAR == tiling)
             ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
             : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, 
-        false, 
         std::move(allocator));
     bindMemory(std::move(memory));
 }

@@ -33,7 +33,7 @@ ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBu
     Buffer(std::move(cmdBuffer->getDevice()), size,
         VK_BUFFER_USAGE_CONDITIONAL_RENDERING_BIT_EXT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, false, sharing, allocator)
+        flags, sharing, allocator)
 {
     MAGMA_ASSERT(data);
     auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
@@ -50,7 +50,7 @@ ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBu
     Buffer(cmdBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(),
         VK_BUFFER_USAGE_CONDITIONAL_RENDERING_BIT_EXT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, false, sharing, std::move(allocator))
+        flags, sharing, std::move(allocator))
 {
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }

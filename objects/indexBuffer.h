@@ -37,7 +37,6 @@ namespace magma
             VkBufferUsageFlags usage,
             VkMemoryPropertyFlags memFlags,
             VkBufferCreateFlags flags,
-            bool pciPinnedMemory,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
 
@@ -67,7 +66,8 @@ namespace magma
             const Sharing& sharing = Sharing());
     };
 
-    /* Dynamic index buffer that can be mapped for host access. */
+    /* Dynamic index buffer for fast data transfer from host to device 
+       when using page-locked (or "pinned") memory. */
 
     class DynamicIndexBuffer : public BaseIndexBuffer
     {
