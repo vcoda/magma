@@ -24,16 +24,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
    so I declare own structs which matches the specified layout. */
 
 typedef struct VkTransformMatrixNV {
-    float    matrix[3][4];
+    float matrix[3][4];
 } VkTransformMatrixNV;
 
 typedef struct VkAccelerationStructureInstanceNV {
-    VkTransformMatrixNV           transform;
-    uint32_t                      instanceCustomIndex:24;
-    uint32_t                      mask:8;
-    uint32_t                      instanceShaderBindingTableRecordOffset:24;
-    VkFlags                       flags:8;
-    uint64_t                      accelerationStructureReference;
+    VkTransformMatrixNV transform;
+    uint32_t instanceCustomIndex:24;
+    uint32_t mask:8;
+    uint32_t instanceShaderBindingTableRecordOffset:24;
+    VkFlags flags:8;
+    uint64_t accelerationStructureReference;
 } VkAccelerationStructureInstanceNV;
 
 #endif // VK_NV_ray_tracing && !VK_SHADER_UNUSED_KHR
@@ -83,7 +83,8 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing());
-        uint32_t getInstanceCount() const noexcept { return (uint32_t)instances.size(); }
+        ~AccelerationStructureInstanceBuffer();
+        uint32_t getInstanceCount() const noexcept { return instanceCount; }
         AccelerationStructureInstance& getInstance(uint32_t instanceIndex) noexcept { return instances[instanceIndex]; }
         const AccelerationStructureInstance& getInstance(uint32_t instanceIndex) const noexcept { return instances[instanceIndex]; }
         bool update(std::shared_ptr<CommandBuffer> cmdBuffer,
@@ -92,7 +93,8 @@ namespace magma
 
     private:
         std::shared_ptr<SrcTransferBuffer> stagingBuffer;
-        std::vector<AccelerationStructureInstance> instances;
+        AccelerationStructureInstance *instances;
+        uint32_t instanceCount;
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma

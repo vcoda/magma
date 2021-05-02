@@ -48,7 +48,7 @@ namespace magma
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> hostAllocator) noexcept:
 #ifdef MAGMA_X64
-            Object<Type>(objectType, device, std::move(allocator)),
+            Object<Type>(objectType, device, std::move(hostAllocator)),
 #else
             Object<Type>(objectType, std::move(device), std::move(hostAllocator)),
 #endif

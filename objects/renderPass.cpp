@@ -186,6 +186,8 @@ VkImageLayout RenderPass::optimalDepthStencilLayout(const Format& format) const
         if (format.stencil())
             return VK_IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL_KHR;
     }
+#else
+    MAGMA_UNUSED(format);
 #endif // VK_KHR_separate_depth_stencil_layouts
     return VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 }

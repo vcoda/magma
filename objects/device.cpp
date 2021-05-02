@@ -39,9 +39,9 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     Dispatchable<VkDevice>(VK_OBJECT_TYPE_DEVICE, nullptr, std::move(allocator)),
     physicalDevice(std::move(physicalDevice)),
     resourcePool(std::make_shared<ResourcePool>()),
-    enabledFeatures(deviceFeatures),
+    enabledFeatures(deviceFeatures)
 #ifdef VK_KHR_get_physical_device_properties2
-    enabledExtendedFeatures(extendedDeviceFeatures)
+    ,enabledExtendedFeatures(extendedDeviceFeatures)
 #endif
 {
 #ifdef VK_KHR_get_physical_device_properties2
@@ -227,6 +227,7 @@ bool Device::negativeViewportHeightEnabled(bool khronos) const noexcept
         VK_KHR_MAINTENANCE1_EXTENSION_NAME : 
         VK_AMD_NEGATIVE_VIEWPORT_HEIGHT_EXTENSION_NAME);
 #else
+    MAGMA_UNUSED(khronos);
     return false;
 #endif
 }
@@ -246,6 +247,8 @@ const void *Device::findExtendedFeatures(VkStructureType featuresType) const noe
         if (featuresNode->sType == featuresType)
             return features;
     }
+#else
+    MAGMA_UNUSED(featuresType);
 #endif
     return nullptr;
 }

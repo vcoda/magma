@@ -87,6 +87,9 @@ VkImageLayout Framebuffer::optimalDepthStencilLayout(std::shared_ptr<Device> dev
                 VK_IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL_KHR;
         }
     }
+#else
+    MAGMA_UNUSED(device);
+    MAGMA_UNUSED(depthStencilFormat);
 #endif // VK_KHR_separate_depth_stencil_layouts
     return sampled ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL :
         VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;

@@ -90,13 +90,13 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     bilinearSampler = std::make_shared<Sampler>(device, samplers::magMinLinearMipNearestClampToEdge, borderColor, allocator);
     // Check for cubic filtering support
 #ifdef VK_EXT_filter_cubic
-    if (device->extensionEnabled(VK_EXT_FILTER_CUBIC_EXTENSION_NAME))
+    bool hasCubicFilter = device->extensionEnabled(VK_EXT_FILTER_CUBIC_EXTENSION_NAME);
+    #ifdef VK_IMG_filter_cubic
+    hasCubicFilter |= device->extensionEnabled(VK_IMG_FILTER_CUBIC_EXTENSION_NAME)
+    #endif
+    if (hasCubicFilter)
         cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, borderColor, allocator);
-#endif
-#ifdef VK_IMG_filter_cubic
-    if (device->extensionEnabled(VK_IMG_FILTER_CUBIC_EXTENSION_NAME) && !cubicSampler)
-        cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, borderColor, allocator);
-#endif
+#endif // VK_EXT_filter_cubic
     // Create blit pipeline
     pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, std::initializer_list<PushConstantRange>{}, allocator);
     const char *vsEntry = vertexShader->getReflection() ? vertexShader->getReflection()->getEntryPointName(0) : "main";
