@@ -227,6 +227,7 @@ bool Device::negativeViewportHeightEnabled(bool khronos) const noexcept
         VK_KHR_MAINTENANCE1_EXTENSION_NAME : 
         VK_AMD_NEGATIVE_VIEWPORT_HEIGHT_EXTENSION_NAME);
 #else
+    MAGMA_UNUSED(khronos);
     return false;
 #endif
 }
@@ -246,6 +247,8 @@ const void *Device::findExtendedFeatures(VkStructureType featuresType) const noe
         if (featuresNode->sType == featuresType)
             return features;
     }
+#else
+    MAGMA_UNUSED(featuresType);
 #endif
     return nullptr;
 }
