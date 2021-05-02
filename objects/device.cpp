@@ -39,9 +39,9 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     Dispatchable<VkDevice>(VK_OBJECT_TYPE_DEVICE, nullptr, std::move(allocator)),
     physicalDevice(std::move(physicalDevice)),
     resourcePool(std::make_shared<ResourcePool>()),
-    enabledFeatures(deviceFeatures),
+    enabledFeatures(deviceFeatures)
 #ifdef VK_KHR_get_physical_device_properties2
-    enabledExtendedFeatures(extendedDeviceFeatures)
+    ,enabledExtendedFeatures(extendedDeviceFeatures)
 #endif
 {
 #ifdef VK_KHR_get_physical_device_properties2
