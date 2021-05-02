@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
 #include "../objects/framebuffer.h"
+#include "../allocator/allocator.h"
 #include "../misc/format.h"
 
 namespace magma
@@ -30,18 +31,18 @@ namespace magma
 namespace aux
 {
 SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachment> color,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
     VkFormat depthStencilFormat /* VK_FORMAT_UNDEFINED */,
-    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
     Framebuffer(color->getFormat(), depthStencilFormat, color->getSamples())
 {
     std::shared_ptr<Device> device = color->getDevice();
-    colorView = std::make_shared<ImageView>(color, swizzle, allocator);
+    colorView = std::make_shared<ImageView>(color, 0, 1, 0, 1, allocator->getHostAllocator(), swizzle);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {
         const VkExtent2D extent{color->getMipExtent(0).width, color->getMipExtent(0).height};
-        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, color->getSamples(), false, allocator);
-        depthStencilView = std::make_shared<ImageView>(depthStencil, swizzle, allocator);
+        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, color->getSamples(), allocator, false);
+        depthStencilView = std::make_shared<ImageView>(depthStencil, allocator->getHostAllocator());
     }
     const AttachmentDescription colorAttachment(color->getFormat(), 1,
         op::clearStore, // Clear color, store
@@ -55,15 +56,17 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
             hasStencil() ? op::clearStore : op::dontCare,
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL); // Stay as attachment
-        renderPass = std::make_shared<RenderPass>(std::move(device), std::initializer_list<AttachmentDescription>{
-            colorAttachment, depthStencilAttachment}, allocator);
-        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, std::vector<std::shared_ptr<ImageView>>{
-            colorView, depthStencilView}, 0, std::move(allocator));
+        renderPass = std::make_shared<RenderPass>(std::move(device), 
+            std::initializer_list<AttachmentDescription>{colorAttachment, depthStencilAttachment},
+            allocator->getHostAllocator());
+        framebuffer = std::make_shared<magma::Framebuffer>(renderPass,
+            std::vector<std::shared_ptr<ImageView>>{colorView, depthStencilView},
+            allocator->getHostAllocator(), 0);
     }
     else
-    {
-        renderPass = std::make_shared<RenderPass>(std::move(device), colorAttachment, allocator);
-        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, colorView, 0, std::move(allocator));
+    {   // Create color only framebuffer
+        renderPass = std::make_shared<RenderPass>(std::move(device), colorAttachment, allocator->getHostAllocator());
+        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, colorView, allocator->getHostAllocator(), 0);
     }
 }
 } // namespace aux

@@ -23,42 +23,43 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
 #include "../objects/framebuffer.h"
+#include "../allocator/allocator.h"
 
 namespace magma
 {
 namespace aux
 {
 MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> device,
-    const std::initializer_list<VkFormat>& colorAttachmentFormats, const VkFormat depthStencilFormat,
-    const VkExtent2D& extent, bool depthSampled,
+    const std::initializer_list<VkFormat>& colorAttachmentFormats,
+    const VkFormat depthStencilFormat, const VkExtent2D& extent, bool depthSampled,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
     const bool colorClearOp /* true */,
     const bool depthStencilClearOp /* true */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
     const std::vector<VkComponentMapping>& swizzles /* {} */):
     Framebuffer(*colorAttachmentFormats.begin(), depthStencilFormat, 1),
     colorClearOp(colorClearOp),
     depthStencilClearOp(depthStencilClearOp)
 {
-    constexpr VkComponentMapping dontSwizzle = {
-        VK_COMPONENT_SWIZZLE_IDENTITY,
-        VK_COMPONENT_SWIZZLE_IDENTITY,
-        VK_COMPONENT_SWIZZLE_IDENTITY,
-        VK_COMPONENT_SWIZZLE_IDENTITY};
     uint32_t index = 0;
     for (const VkFormat colorFormat : colorAttachmentFormats)
     {   // Create color attachment
-        attachments.emplace_back(std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, true, allocator));
+        attachments.emplace_back(std::make_shared<ColorAttachment>(device, colorFormat, extent,
+            1, 1, allocator, true));
         // Create color view
-        attachmentViews.emplace_back(std::make_shared<ImageView>(attachments.back(),
-            swizzles.empty() ? dontSwizzle : swizzles[index++],
-            allocator));
+        constexpr VkComponentMapping dontSwizzle = {
+            VK_COMPONENT_SWIZZLE_IDENTITY,
+            VK_COMPONENT_SWIZZLE_IDENTITY,
+            VK_COMPONENT_SWIZZLE_IDENTITY,
+            VK_COMPONENT_SWIZZLE_IDENTITY};
+        attachmentViews.emplace_back(std::make_shared<ImageView>(attachments.back(), 0, 1, 0, 1,
+            allocator->getHostAllocator(), swizzles.empty() ? dontSwizzle : swizzles[index++]));
     }
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil attachment
         attachments.emplace_back(std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent,
-            1, 1, depthSampled, allocator));
+            1, 1, allocator, depthSampled));
         // Create depth/stencil view
-        attachmentViews.push_back(std::make_shared<ImageView>(attachments.back(), dontSwizzle, allocator));
+        attachmentViews.push_back(std::make_shared<ImageView>(attachments.back(), allocator->getHostAllocator()));
     }
     // Setup attachment descriptions
     std::vector<AttachmentDescription> attachmentDescriptions;
@@ -81,8 +82,8 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
             finalLayout); // Depth image will be transitioned to when a render pass instance ends
     }
     // Create color/depth framebuffer
-    renderPass = std::make_shared<RenderPass>(device, attachmentDescriptions, allocator);
-    framebuffer = std::make_shared<magma::Framebuffer>(renderPass, attachmentViews, 0, allocator);
+    renderPass = std::make_shared<RenderPass>(device, attachmentDescriptions, allocator->getHostAllocator());
+    framebuffer = std::make_shared<magma::Framebuffer>(renderPass, attachmentViews, allocator->getHostAllocator(), 0);
 }
 
 std::shared_ptr<magma::Framebuffer> MultiAttachmentFramebuffer::getDepthFramebuffer()
@@ -107,7 +108,7 @@ std::shared_ptr<RenderPass> MultiAttachmentFramebuffer::lazyDepthRenderPass() co
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL); // Stay as attachment when a depth pass instance ends
         depthRenderPass = std::make_shared<RenderPass>(renderPass->getDevice(), depthAttachment, renderPass->getHostAllocator());
-        depthFramebuffer = std::make_shared<magma::Framebuffer>(depthRenderPass, attachmentViews.back(), 0, framebuffer->getHostAllocator());
+        depthFramebuffer = std::make_shared<magma::Framebuffer>(depthRenderPass, attachmentViews.back(), framebuffer->getHostAllocator(), 0);
     }
     return depthRenderPass;
 }
