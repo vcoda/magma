@@ -64,7 +64,7 @@ namespace magma
             std::shared_ptr<Device> device;
             std::shared_ptr<IShaderInclude> includeHandler;
             shaderc_compiler_t compiler;
-            shaderc_optimization_level optimizationLevel = shaderc_optimization_level_performance;
+            shaderc_optimization_level optimizationLevel = shaderc_optimization_level_zero;
             bool generateDebugInfo = false;
             bool suppressWarnings = false;
             bool warningsAsErrors = false;
