@@ -47,19 +47,19 @@ namespace magma
         {
         public:
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
-                std::shared_ptr<PipelineCache> pipelineCache = nullptr,
-                std::shared_ptr<IAllocator> allocator = nullptr);
+                std::shared_ptr<IAllocator> allocator = nullptr,
+                std::shared_ptr<PipelineCache> pipelineCache = nullptr);
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
                 std::shared_ptr<magma::ShaderModule> fragmentShader,
+                std::shared_ptr<IAllocator> allocator = nullptr,
                 std::shared_ptr<Specialization> specialization = nullptr,
-                std::shared_ptr<PipelineCache> pipelineCache = nullptr,
-                std::shared_ptr<IAllocator> allocator = nullptr);
+                std::shared_ptr<PipelineCache> pipelineCache = nullptr);
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
                 std::shared_ptr<magma::ShaderModule> vertexShader,
                 std::shared_ptr<magma::ShaderModule> fragmentShader,
+                std::shared_ptr<IAllocator> allocator = nullptr,
                 std::shared_ptr<Specialization> specialization = nullptr,
-                std::shared_ptr<PipelineCache> pipelineCache = nullptr,
-                std::shared_ptr<IAllocator> allocator = nullptr);
+                std::shared_ptr<PipelineCache> pipelineCache = nullptr);
             void blit(std::shared_ptr<CommandBuffer> cmdBuffer,
                 std::shared_ptr<const ImageView> image,
                 VkFilter filter,

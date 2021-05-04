@@ -33,7 +33,7 @@ namespace magma
     class PipelineCache;
     class DynamicVertexBuffer;
     class RenderPass;
-    class IAllocator;
+    class Allocator;
 
     class VertexInputState;
     struct InputAssemblyState;
@@ -62,7 +62,7 @@ namespace magma
                 std::shared_ptr<PipelineCache> pipelineCache,
                 std::shared_ptr<PipelineLayout> layout,
                 std::shared_ptr<RenderPass> renderPass,
-                std::shared_ptr<IAllocator> allocator = nullptr);
+                std::shared_ptr<Allocator> allocator = nullptr);
             std::shared_ptr<Device> getDevice() const noexcept { return device; }
             uint32_t getMaxVertexCount() const noexcept { return maxVertexCount; }
             uint32_t getVertexCount() const noexcept { return vertexCount; }
@@ -106,7 +106,7 @@ namespace magma
             std::shared_ptr<Device> device;
             std::shared_ptr<PipelineLayout> layout;
             std::shared_ptr<RenderPass> renderPass;
-            std::shared_ptr<IAllocator> allocator;
+            std::shared_ptr<Allocator> allocator;
             std::shared_ptr<DynamicVertexBuffer> vertexBuffer;
             std::shared_ptr<GraphicsPipelineCache> pipelineCache;
             std::list<Primitive> primitives;

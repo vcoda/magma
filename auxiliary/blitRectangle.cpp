@@ -48,46 +48,45 @@ namespace magma
 namespace aux
 {
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */):
     BlitRectangle(renderPass,
         createVertexShader(renderPass->getDevice(), allocator),
         createFragmentShader(renderPass->getDevice(), allocator),
-        nullptr, // No specialization
-        std::move(pipelineCache), std::move(allocator))
+        std::move(allocator), nullptr, std::move(pipelineCache))
 {}
 
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<ShaderModule> fragmentShader,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<Specialization> specialization /* nullptr */,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */):
     BlitRectangle(renderPass,
         createVertexShader(renderPass->getDevice(), allocator),
-        std::move(fragmentShader), std::move(specialization),
-        std::move(pipelineCache), std::move(allocator))
+        std::move(fragmentShader), 
+        std::move(allocator), std::move(specialization), std::move(pipelineCache))
 {}
 
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<ShaderModule> vertexShader,
     std::shared_ptr<ShaderModule> fragmentShader,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<Specialization> specialization /* nullptr */,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */):
     renderPass(std::move(renderPass))
 {
     std::shared_ptr<Device> device = this->renderPass->getDevice();
     std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
     constexpr uint32_t maxDescriptorSets = 10;
     descriptorPool = std::make_shared<DescriptorPool>(device, maxDescriptorSets,
-        descriptors::CombinedImageSampler(maxDescriptorSets), false, allocator);
+        descriptors::CombinedImageSampler(maxDescriptorSets), allocator);
     descriptorSetLayout = std::make_shared<DescriptorSetLayout>(device,
         bindings::FragmentStageBinding(0, descriptors::CombinedImageSampler(1)),
-        0, allocator);
+        allocator, 0);
     // Create texture samplers
     const BorderColor borderColor = DefaultBorderColor();
-    nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, borderColor, allocator);
-    bilinearSampler = std::make_shared<Sampler>(device, samplers::magMinLinearMipNearestClampToEdge, borderColor, allocator);
+    nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, allocator, borderColor);
+    bilinearSampler = std::make_shared<Sampler>(device, samplers::magMinLinearMipNearestClampToEdge, allocator, borderColor);
     // Check for cubic filtering support
 #ifdef VK_EXT_filter_cubic
     bool hasCubicFilter = device->extensionEnabled(VK_EXT_FILTER_CUBIC_EXTENSION_NAME);
@@ -98,7 +97,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, borderColor, allocator);
 #endif // VK_EXT_filter_cubic
     // Create blit pipeline
-    pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, std::initializer_list<PushConstantRange>{}, allocator);
+    pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, allocator);
     const char *vsEntry = vertexShader->getReflection() ? vertexShader->getReflection()->getEntryPointName(0) : "main";
     const char *fsEntry = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
     const VkSampleCountFlagBits samples = this->renderPass->getAttachments().front().samples;
@@ -127,9 +126,9 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
         pipelineLayout,
         this->renderPass, 0,
+        std::move(allocator),
         std::move(pipelineCache),
-        nullptr, // basePipeline
-        std::move(allocator));
+        nullptr); // basePipeline
     for (const auto& attachment : this->renderPass->getAttachments())
     {
         if (VK_ATTACHMENT_LOAD_OP_CLEAR == attachment.loadOp)
@@ -176,13 +175,13 @@ std::shared_ptr<ShaderModule> BlitRectangle::createVertexShader(std::shared_ptr<
 constexpr
 #include "spirv/output/blitv_nv"
         constexpr std::size_t vsBlitNVHash = core::hashArray(vsBlitNV);
-        return std::make_shared<ShaderModule>(std::move(device), vsBlitNV, vsBlitNVHash, 0, false, std::move(allocator));
+        return std::make_shared<ShaderModule>(std::move(device), vsBlitNV, vsBlitNVHash, std::move(allocator), 0, false);
     }
 #endif // VK_NV_fill_rectangle
 constexpr
 #include "spirv/output/blitv"
     constexpr std::size_t vsBlitHash = core::hashArray(vsBlit);
-    return std::make_shared<ShaderModule>(std::move(device), vsBlit, vsBlitHash, 0, false, std::move(allocator));
+    return std::make_shared<ShaderModule>(std::move(device), vsBlit, vsBlitHash, std::move(allocator), 0, false);
 }
 
 std::shared_ptr<ShaderModule> BlitRectangle::createFragmentShader(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) const
@@ -190,7 +189,7 @@ std::shared_ptr<ShaderModule> BlitRectangle::createFragmentShader(std::shared_pt
 constexpr
 #include "spirv/output/blitf"
     constexpr std::size_t fsBlitHash = core::hashArray(fsBlit);
-    return std::make_shared<ShaderModule>(std::move(device), fsBlit, fsBlitHash, 0, false, std::move(allocator));
+    return std::make_shared<ShaderModule>(std::move(device), fsBlit, fsBlitHash, std::move(allocator), 0, false);
 }
 } // namespace aux
 } // namespace magma

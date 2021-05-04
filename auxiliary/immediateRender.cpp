@@ -37,14 +37,14 @@ namespace aux
 ImmediateRender::ImmediateRender(const uint32_t maxVertexCount,
     std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
     std::shared_ptr<PipelineLayout> layout, std::shared_ptr<RenderPass> renderPass,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<Allocator> allocator /* nullptr */):
     maxVertexCount(maxVertexCount),
     device(std::move(device)),
     layout(std::move(layout)),
     renderPass(std::move(renderPass)),
     allocator(std::move(allocator)),
-    vertexBuffer(std::make_shared<DynamicVertexBuffer>(this->device, sizeof(Vertex) * maxVertexCount, nullptr, 0, Resource::Sharing(), this->allocator)),
-    pipelineCache(std::make_shared<GraphicsPipelineCache>(this->device, std::move(pipelineCache), this->allocator)),
+    vertexBuffer(std::make_shared<DynamicVertexBuffer>(this->device, sizeof(Vertex) * maxVertexCount, false, this->allocator, nullptr, 0, Resource::Sharing())),
+    pipelineCache(std::make_shared<GraphicsPipelineCache>(this->device, std::move(pipelineCache), this->allocator->getHostAllocator())),
     vertexShader(VertexShaderStage(createShader(true), "main")),
     fragmentShader(FragmentShaderStage(createShader(false), "main")),
     rasterizationState(renderstates::fillCullBackCCW),
@@ -56,7 +56,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount,
     if (!this->layout)
     {   // If layout not specified, create default one
         constexpr pushconstants::VertexConstantRange<Transform> pushConstantRange;
-        this->layout = std::make_shared<PipelineLayout>(this->device, pushConstantRange, this->allocator);
+        this->layout = std::make_shared<PipelineLayout>(this->device, pushConstantRange, this->allocator->getHostAllocator());
     }
 }
 
@@ -162,12 +162,12 @@ constexpr
     if (vertexShader)
     {
         constexpr std::size_t vsImmHash = core::hashArray(vsImm);
-        return std::make_shared<ShaderModule>(device, vsImm, vsImmHash, 0, false, allocator);
+        return std::make_shared<ShaderModule>(device, vsImm, vsImmHash, allocator->getHostAllocator(), 0, false);
     }
 constexpr
 #include "spirv/output/immf"
     constexpr std::size_t fsImmHash = core::hashArray(fsImm);
-    return std::make_shared<ShaderModule>(device, fsImm, fsImmHash, 0, false, allocator);
+    return std::make_shared<ShaderModule>(device, fsImm, fsImmHash, allocator->getHostAllocator(), 0, false);
 }
 
 std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTopology topology)

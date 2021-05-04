@@ -113,7 +113,7 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
         stages, vertexInputState, inputAssemblyState, tesselationState, viewportState,
         rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
         std::move(pipelineLayout), std::move(renderPass), subpass,
-        pipelineCache, std::move(basePipeline), allocator, info.flags);
+        allocator, pipelineCache, std::move(basePipeline), info.flags);
     MAGMA_ASSERT(pipeline->getHash() == hash); // Check hash computation
     pipelines.emplace(hash, pipeline);
     basePipelines.emplace(baseHash, pipeline);
