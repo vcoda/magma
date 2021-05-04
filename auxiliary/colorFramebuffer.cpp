@@ -53,10 +53,10 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
             1, 1, allocator, depthSampled);
     }
     // Create color view
-    colorView = std::make_shared<ImageView>(color, 0, 1, 0, 1, allocator->getHostAllocator(), swizzle);
+    colorView = std::make_shared<ImageView>(color, 0, 1, 0, 1, MAGMA_HOST_ALLOCATOR(allocator), swizzle);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil view
-        depthStencilView = std::make_shared<ImageView>(depthStencil, allocator->getHostAllocator());
+        depthStencilView = std::make_shared<ImageView>(depthStencil, MAGMA_HOST_ALLOCATOR(allocator));
     }
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, 1,
@@ -75,15 +75,15 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
         // Create color/depth framebuffer
         renderPass = std::make_shared<RenderPass>(std::move(device),
             std::initializer_list<AttachmentDescription>{colorAttachment, depthStencilAttachment}, 
-            allocator->getHostAllocator());
+            MAGMA_HOST_ALLOCATOR(allocator));
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass,
             std::vector<std::shared_ptr<ImageView>>{colorView, depthStencilView}, 
-            allocator->getHostAllocator(), 0);
+            MAGMA_HOST_ALLOCATOR(allocator), 0);
     }
     else
     {   // Create color only framebuffer
-        renderPass = std::make_shared<RenderPass>(std::move(device), colorAttachment, allocator->getHostAllocator());
-        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, colorView, allocator->getHostAllocator(), 0);
+        renderPass = std::make_shared<RenderPass>(std::move(device), colorAttachment, MAGMA_HOST_ALLOCATOR(allocator));
+        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, colorView, MAGMA_HOST_ALLOCATOR(allocator), 0);
     }
 }
 } // namespace aux

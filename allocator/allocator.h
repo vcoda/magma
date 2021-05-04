@@ -138,3 +138,6 @@ namespace magma
         std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
     };
 } // namespace magma
+
+#define MAGMA_HOST_ALLOCATOR(allocator) allocator ? allocator->getHostAllocator() : nullptr
+#define MAGMA_DEVICE_ALLOCATOR(allocator) allocator ? allocator->getDeviceAllocator() : nullptr

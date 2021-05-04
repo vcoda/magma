@@ -44,7 +44,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount,
     renderPass(std::move(renderPass)),
     allocator(std::move(allocator)),
     vertexBuffer(std::make_shared<DynamicVertexBuffer>(this->device, sizeof(Vertex) * maxVertexCount, false, this->allocator, nullptr, 0, Resource::Sharing())),
-    pipelineCache(std::make_shared<GraphicsPipelineCache>(this->device, std::move(pipelineCache), this->allocator->getHostAllocator())),
+    pipelineCache(std::make_shared<GraphicsPipelineCache>(this->device, std::move(pipelineCache), this->MAGMA_HOST_ALLOCATOR(allocator))),
     vertexShader(VertexShaderStage(createShader(true), "main")),
     fragmentShader(FragmentShaderStage(createShader(false), "main")),
     rasterizationState(renderstates::fillCullBackCCW),
@@ -56,7 +56,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount,
     if (!this->layout)
     {   // If layout not specified, create default one
         constexpr pushconstants::VertexConstantRange<Transform> pushConstantRange;
-        this->layout = std::make_shared<PipelineLayout>(this->device, pushConstantRange, this->allocator->getHostAllocator());
+        this->layout = std::make_shared<PipelineLayout>(this->device, pushConstantRange, this->MAGMA_HOST_ALLOCATOR(allocator));
     }
 }
 
@@ -162,12 +162,12 @@ constexpr
     if (vertexShader)
     {
         constexpr std::size_t vsImmHash = core::hashArray(vsImm);
-        return std::make_shared<ShaderModule>(device, vsImm, vsImmHash, allocator->getHostAllocator(), 0, false);
+        return std::make_shared<ShaderModule>(device, vsImm, vsImmHash, MAGMA_HOST_ALLOCATOR(allocator), 0, false);
     }
 constexpr
 #include "spirv/output/immf"
     constexpr std::size_t fsImmHash = core::hashArray(fsImm);
-    return std::make_shared<ShaderModule>(device, fsImm, fsImmHash, allocator->getHostAllocator(), 0, false);
+    return std::make_shared<ShaderModule>(device, fsImm, fsImmHash, MAGMA_HOST_ALLOCATOR(allocator), 0, false);
 }
 
 std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTopology topology)

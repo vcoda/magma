@@ -37,12 +37,12 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
     Framebuffer(color->getFormat(), depthStencilFormat, color->getSamples())
 {
     std::shared_ptr<Device> device = color->getDevice();
-    colorView = std::make_shared<ImageView>(color, 0, 1, 0, 1, allocator->getHostAllocator(), swizzle);
+    colorView = std::make_shared<ImageView>(color, 0, 1, 0, 1, MAGMA_HOST_ALLOCATOR(allocator), swizzle);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {
         const VkExtent2D extent{color->getMipExtent(0).width, color->getMipExtent(0).height};
         depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, color->getSamples(), allocator, false);
-        depthStencilView = std::make_shared<ImageView>(depthStencil, allocator->getHostAllocator());
+        depthStencilView = std::make_shared<ImageView>(depthStencil, MAGMA_HOST_ALLOCATOR(allocator));
     }
     const AttachmentDescription colorAttachment(color->getFormat(), 1,
         op::clearStore, // Clear color, store
@@ -58,15 +58,15 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL); // Stay as attachment
         renderPass = std::make_shared<RenderPass>(std::move(device), 
             std::initializer_list<AttachmentDescription>{colorAttachment, depthStencilAttachment},
-            allocator->getHostAllocator());
+            MAGMA_HOST_ALLOCATOR(allocator));
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass,
             std::vector<std::shared_ptr<ImageView>>{colorView, depthStencilView},
-            allocator->getHostAllocator(), 0);
+            MAGMA_HOST_ALLOCATOR(allocator), 0);
     }
     else
     {   // Create color only framebuffer
-        renderPass = std::make_shared<RenderPass>(std::move(device), colorAttachment, allocator->getHostAllocator());
-        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, colorView, allocator->getHostAllocator(), 0);
+        renderPass = std::make_shared<RenderPass>(std::move(device), colorAttachment, MAGMA_HOST_ALLOCATOR(allocator));
+        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, colorView, MAGMA_HOST_ALLOCATOR(allocator), 0);
     }
 }
 } // namespace aux

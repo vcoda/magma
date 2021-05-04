@@ -40,7 +40,7 @@ DepthFramebuffer::DepthFramebuffer(std::shared_ptr<Device> device, const VkForma
          allocator,
          true); // VK_IMAGE_USAGE_SAMPLED_BIT
     // Create depth view
-    depthView = std::make_shared<ImageView>(depth, allocator->getHostAllocator());
+    depthView = std::make_shared<ImageView>(depth, MAGMA_HOST_ALLOCATOR(allocator));
     // We should be able to read depth in the shader when a render pass instance ends
     const VkImageLayout finalLayout = optimalDepthStencilLayout(device, depthFormat, true);
     const AttachmentDescription depthAttachment(depthFormat, 1,
@@ -48,8 +48,8 @@ DepthFramebuffer::DepthFramebuffer(std::shared_ptr<Device> device, const VkForma
          op::dontCare, // Stencil don't care
          VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
          finalLayout); // Depth image will be transitioned to when a render pass instance ends
-    renderPass = std::make_shared<RenderPass>(std::move(device), depthAttachment, allocator->getHostAllocator());
-    framebuffer = std::make_shared<magma::Framebuffer>(renderPass, depthView, allocator->getHostAllocator(), 0);
+    renderPass = std::make_shared<RenderPass>(std::move(device), depthAttachment, MAGMA_HOST_ALLOCATOR(allocator));
+    framebuffer = std::make_shared<magma::Framebuffer>(renderPass, depthView, MAGMA_HOST_ALLOCATOR(allocator), 0);
 }
 } // namespace aux
 } // namespace magma

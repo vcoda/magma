@@ -75,7 +75,7 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
             descriptors::UniformBuffer(1),
             descriptors::StorageBuffer(2)
         },
-        allocator->getHostAllocator());
+        MAGMA_HOST_ALLOCATOR(allocator));
     descriptorSetLayout = std::make_shared<DescriptorSetLayout>(device,
         std::initializer_list<DescriptorSetLayout::Binding>{
             bindings::FragmentStageBinding(0, descriptors::UniformBuffer(1)),
@@ -83,7 +83,7 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
             bindings::FragmentStageBinding(2, descriptors::StorageBuffer(1))
         },
         std::initializer_list<DescriptorSetLayout::SamplerBinding>{},
-        allocator->getHostAllocator(), 0);
+        MAGMA_HOST_ALLOCATOR(allocator), 0);
     descriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
     descriptorSet->writeDescriptor(0, uniforms);
     descriptorSet->writeDescriptor(1, stringBuffer);
@@ -95,9 +95,9 @@ constexpr
 constexpr
 #include "spirv/output/fontf"
     constexpr std::size_t vsBlitHash = core::hashArray(vsBlit);
-    const VertexShaderStage vertexShader(std::make_shared<ShaderModule>(device, vsBlit, vsBlitHash, allocator->getHostAllocator(), 0, false), "main");
+    const VertexShaderStage vertexShader(std::make_shared<ShaderModule>(device, vsBlit, vsBlitHash, MAGMA_HOST_ALLOCATOR(allocator), 0, false), "main");
     constexpr std::size_t fsFontHash = core::hashArray(fsFont);
-    const FragmentShaderStage fragmentShader(std::make_shared<ShaderModule>(device, fsFont, fsFontHash, allocator->getHostAllocator(), 0, false), "main");
+    const FragmentShaderStage fragmentShader(std::make_shared<ShaderModule>(device, fsFont, fsFontHash, MAGMA_HOST_ALLOCATOR(allocator), 0, false), "main");
     // Create font pipeline
     pipeline = std::make_shared<GraphicsPipeline>(std::move(device),
         std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
@@ -110,7 +110,7 @@ constexpr
         std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
         std::move(pipelineLayout),
         std::move(renderPass), 0,
-        allocator->getHostAllocator(),
+        MAGMA_HOST_ALLOCATOR(allocator),
         std::move(pipelineCache),
         nullptr); // basePipeline
 

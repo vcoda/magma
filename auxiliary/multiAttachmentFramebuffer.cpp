@@ -52,14 +52,14 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
             VK_COMPONENT_SWIZZLE_IDENTITY,
             VK_COMPONENT_SWIZZLE_IDENTITY};
         attachmentViews.emplace_back(std::make_shared<ImageView>(attachments.back(), 0, 1, 0, 1,
-            allocator->getHostAllocator(), swizzles.empty() ? dontSwizzle : swizzles[index++]));
+            MAGMA_HOST_ALLOCATOR(allocator), swizzles.empty() ? dontSwizzle : swizzles[index++]));
     }
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil attachment
         attachments.emplace_back(std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent,
             1, 1, allocator, depthSampled));
         // Create depth/stencil view
-        attachmentViews.push_back(std::make_shared<ImageView>(attachments.back(), allocator->getHostAllocator()));
+        attachmentViews.push_back(std::make_shared<ImageView>(attachments.back(), MAGMA_HOST_ALLOCATOR(allocator)));
     }
     // Setup attachment descriptions
     std::vector<AttachmentDescription> attachmentDescriptions;
@@ -82,8 +82,8 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
             finalLayout); // Depth image will be transitioned to when a render pass instance ends
     }
     // Create color/depth framebuffer
-    renderPass = std::make_shared<RenderPass>(device, attachmentDescriptions, allocator->getHostAllocator());
-    framebuffer = std::make_shared<magma::Framebuffer>(renderPass, attachmentViews, allocator->getHostAllocator(), 0);
+    renderPass = std::make_shared<RenderPass>(device, attachmentDescriptions, MAGMA_HOST_ALLOCATOR(allocator));
+    framebuffer = std::make_shared<magma::Framebuffer>(renderPass, attachmentViews, MAGMA_HOST_ALLOCATOR(allocator), 0);
 }
 
 std::shared_ptr<magma::Framebuffer> MultiAttachmentFramebuffer::getDepthFramebuffer()

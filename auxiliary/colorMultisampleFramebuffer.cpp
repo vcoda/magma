@@ -57,13 +57,13 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
     constexpr bool sampled = true;
     resolve = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, allocator, sampled);
     // Create color view
-    colorView = std::make_shared<ImageView>(color, 0, 1, 0, 1, allocator->getHostAllocator(), swizzle);
+    colorView = std::make_shared<ImageView>(color, 0, 1, 0, 1, MAGMA_HOST_ALLOCATOR(allocator), swizzle);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil view
-        depthStencilView = std::make_shared<ImageView>(depthStencil, allocator->getHostAllocator());
+        depthStencilView = std::make_shared<ImageView>(depthStencil, MAGMA_HOST_ALLOCATOR(allocator));
     }
     // Create resolve view
-    resolveView = std::make_shared<ImageView>(resolve, allocator->getHostAllocator());
+    resolveView = std::make_shared<ImageView>(resolve, MAGMA_HOST_ALLOCATOR(allocator));
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, sampleCount,
         // https://static.docs.arm.com/100971/0101/arm_mali_application_developer_best_practices_developer_guide_100971_0101_00_en_00.pdf
@@ -90,19 +90,19 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
         // Create color/depth framebuffer
         renderPass = std::make_shared<RenderPass>(std::move(device),
             std::initializer_list<AttachmentDescription>{colorAttachment, depthStencilAttachment, resolveAttachment},
-            allocator->getHostAllocator());
+            MAGMA_HOST_ALLOCATOR(allocator));
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass,
             std::vector<std::shared_ptr<ImageView>>{colorView, depthStencilView, resolveView},
-            allocator->getHostAllocator(), 0);
+            MAGMA_HOST_ALLOCATOR(allocator), 0);
     }
     else
     {   // Create color only framebuffer
         renderPass = std::make_shared<RenderPass>(std::move(device),
             std::initializer_list<AttachmentDescription>{colorAttachment, resolveAttachment},
-            allocator->getHostAllocator());
+            MAGMA_HOST_ALLOCATOR(allocator));
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass,
             std::vector<std::shared_ptr<ImageView>>{colorView, resolveView},
-            allocator->getHostAllocator(), 0);
+            MAGMA_HOST_ALLOCATOR(allocator), 0);
     }
 }
 } // namespace aux
