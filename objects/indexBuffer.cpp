@@ -51,7 +51,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize 
     MAGMA_ASSERT(data);
     auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
         std::move(allocator), 0, sharing, std::move(copyFn));
-    copyTransfer(std::move(cmdBuffer), std::move(buffer));
+    copyTransfer(std::move(cmdBuffer), std::move(buffer), size);
 }
 
 IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer, VkIndexType indexType,
@@ -65,7 +65,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         flags, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), size, srcOffset);
 }
 
 DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkDeviceSize size, VkIndexType indexType, bool pciPinnedMemory,
@@ -104,7 +104,7 @@ AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_p
     MAGMA_ASSERT(data);
     auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
         std::move(allocator), 0, sharing, std::move(copyFn));
-    copyTransfer(std::move(cmdBuffer), std::move(buffer));
+    copyTransfer(std::move(cmdBuffer), std::move(buffer), size);
 }
 
 AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer, VkIndexType indexType,
@@ -123,7 +123,7 @@ AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_p
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         flags, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), size, srcOffset);
 }
 #endif // VK_NV_ray_tracing
 } // namespace magma

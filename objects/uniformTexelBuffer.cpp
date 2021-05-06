@@ -50,6 +50,6 @@ UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         flags, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), size, srcOffset);
 }
 } // namespace magma
