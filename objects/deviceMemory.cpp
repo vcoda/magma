@@ -38,9 +38,14 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
 {
     if (deviceAllocator)
     {
-        memory = deviceAllocator->alloc(memoryRequirements, flags, object, 
-            (VK_OBJECT_TYPE_BUFFER == type) ? SuballocationType::Buffer : 
-            ((VK_OBJECT_TYPE_IMAGE == type) ? SuballocationType::Image : SuballocationType::Unknown));
+        SuballocationType suballocType;
+        switch (type)
+        {
+        case VK_OBJECT_TYPE_BUFFER: suballocType = SuballocationType::Buffer; break;
+        case VK_OBJECT_TYPE_IMAGE: suballocType = SuballocationType::Image; break;
+        default: suballocType = SuballocationType::Unknown;
+        };
+        memory = deviceAllocator->alloc(memoryRequirements, flags, object, suballocType);
         handle = deviceAllocator->getMemoryHandle(memory);
     }
     else
