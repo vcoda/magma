@@ -97,7 +97,7 @@ namespace magma
         virtual void free(DeviceMemoryBlock memory) noexcept = 0;
         virtual void freePages(std::vector<DeviceMemoryBlock>& memoryPages) noexcept = 0;
         virtual std::shared_ptr<Device> getDevice() const noexcept = 0;
-        virtual std::shared_ptr<IAllocator> getAllocator() const noexcept = 0;
+        virtual std::shared_ptr<IAllocator> getHostAllocator() const noexcept = 0;
         virtual VkDeviceMemory getMemoryHandle(DeviceMemoryBlock memory) const noexcept = 0;
         virtual std::vector<MemoryBudget> getBudget() const noexcept = 0;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept = 0;

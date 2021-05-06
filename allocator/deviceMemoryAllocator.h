@@ -44,7 +44,7 @@ namespace magma
         virtual void free(DeviceMemoryBlock memory) noexcept override;
         virtual void freePages(std::vector<DeviceMemoryBlock>& memoryPages) noexcept override;
         virtual std::shared_ptr<Device> getDevice() const noexcept override { return device; }
-        virtual std::shared_ptr<IAllocator> getAllocator() const noexcept override { return allocator; }
+        virtual std::shared_ptr<IAllocator> getHostAllocator() const noexcept override { return hostAllocator; }
         virtual VkDeviceMemory getMemoryHandle(DeviceMemoryBlock memory) const noexcept override;
         virtual std::vector<MemoryBudget> getBudget() const noexcept override;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept override;
@@ -69,8 +69,8 @@ namespace magma
 
     private:
         std::shared_ptr<Device> device;
-        std::shared_ptr<IAllocator> allocator;
         VmaAllocator handle;
+        std::shared_ptr<IAllocator> hostAllocator;
         VmaDefragmentationContext defragmentationContext;
     };
 } // namespace magma

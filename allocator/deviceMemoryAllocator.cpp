@@ -39,10 +39,10 @@ static_assert(sizeof(magma::DefragmentationStats) == sizeof(VmaDefragmentationSt
 namespace magma
 {
 DeviceMemoryAllocator::DeviceMemoryAllocator(std::shared_ptr<Device> device,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> hostAllocator /* nullptr */):
     device(std::move(device)),
-    allocator(std::move(allocator)),
     handle(VK_NULL_HANDLE),
+    hostAllocator(std::move(hostAllocator)),
     defragmentationContext(VK_NULL_HANDLE)
 {
     std::shared_ptr<PhysicalDevice> physicalDevice = this->device->getPhysicalDevice();
@@ -51,7 +51,7 @@ DeviceMemoryAllocator::DeviceMemoryAllocator(std::shared_ptr<Device> device,
     allocatorInfo.physicalDevice = *physicalDevice;
     allocatorInfo.device = *this->device;
     allocatorInfo.preferredLargeHeapBlockSize = 0;
-    allocatorInfo.pAllocationCallbacks = this->allocator.get();
+    allocatorInfo.pAllocationCallbacks = this->hostAllocator.get();
     allocatorInfo.pDeviceMemoryCallbacks = nullptr;
     allocatorInfo.frameInUseCount = 0;
     allocatorInfo.pHeapSizeLimit = nullptr;
