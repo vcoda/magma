@@ -41,8 +41,8 @@ namespace magma
 DeviceMemoryAllocator::DeviceMemoryAllocator(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> hostAllocator /* nullptr */):
     device(std::move(device)),
-    handle(VK_NULL_HANDLE),
     hostAllocator(std::move(hostAllocator)),
+    allocator(VK_NULL_HANDLE),
     defragmentationContext(VK_NULL_HANDLE)
 {
     std::shared_ptr<PhysicalDevice> physicalDevice = this->device->getPhysicalDevice();
@@ -59,17 +59,19 @@ DeviceMemoryAllocator::DeviceMemoryAllocator(std::shared_ptr<Device> device,
     allocatorInfo.pRecordSettings = nullptr;
     allocatorInfo.instance = *physicalDevice->getInstance();
     allocatorInfo.vulkanApiVersion = physicalDevice->getInstance()->getApiVersion();
-    const VkResult result = vmaCreateAllocator(&allocatorInfo, &handle);
+    const VkResult result = vmaCreateAllocator(&allocatorInfo, &allocator);
     MAGMA_THROW_FAILURE(result, "failed to create VMA allocator");
 }
 
 DeviceMemoryAllocator::~DeviceMemoryAllocator()
 {
-    vmaDestroyAllocator(handle);
+    vmaDestroyAllocator(allocator);
 }
 
-DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags)
+DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memoryRequirements,
+    VkMemoryPropertyFlags flags, const void *handle, SuballocationType suballocType)
 {
+    MAGMA_ASSERT(handle);
     VmaAllocationCreateInfo allocInfo;
     allocInfo.flags = VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT;
     if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
@@ -119,7 +121,18 @@ DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memor
     allocInfo.pUserData = nullptr;
     allocInfo.priority = 0.f;
     VmaAllocation allocation;
-    const VkResult result = vmaAllocateMemory(handle, &memoryRequirements, &allocInfo, &allocation, nullptr);
+    VkResult result;
+    switch (suballocType)
+    {
+    case SuballocationType::Buffer:
+        result = vmaAllocateMemoryForBuffer(allocator, *reinterpret_cast<const VkBuffer *>(handle), &allocInfo, &allocation, nullptr);
+        break;
+    case SuballocationType::Image:
+        result = vmaAllocateMemoryForImage(allocator, *reinterpret_cast<const VkImage *>(handle), &allocInfo, &allocation, nullptr);
+        break;
+    default: // SuballocationType::Unknown
+        result = vmaAllocateMemory(allocator, &memoryRequirements, &allocInfo, &allocation, nullptr);
+    }
     MAGMA_THROW_FAILURE(result, "failed to allocate memory");
     return reinterpret_cast<DeviceMemoryBlock>(allocation);
 }
@@ -182,7 +195,7 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
         allocInfos.push_back(allocInfo);
     }
     std::vector<VmaAllocation> allocations(MAGMA_COUNT(allocInfos));
-    const VkResult result = vmaAllocateMemoryPages(handle, memoryRequirements.data(), allocInfos.data(),
+    const VkResult result = vmaAllocateMemoryPages(allocator, memoryRequirements.data(), allocInfos.data(),
         allocations.size(), allocations.data(), nullptr);
     MAGMA_THROW_FAILURE(result, "failed to allocate memory pages");
     std::vector<DeviceMemoryBlock> memoryPages;
@@ -200,14 +213,14 @@ DeviceMemoryBlock DeviceMemoryAllocator::realloc(DeviceMemoryBlock memory, VkDev
 
 void DeviceMemoryAllocator::free(DeviceMemoryBlock allocation) noexcept
 {   
-    vmaFreeMemory(handle, reinterpret_cast<VmaAllocation>(allocation));
+    vmaFreeMemory(allocator, reinterpret_cast<VmaAllocation>(allocation));
 }
 
 void DeviceMemoryAllocator::freePages(std::vector<DeviceMemoryBlock>& allocations) noexcept
 {
     if (!allocations.empty())
     {
-        vmaFreeMemoryPages(handle, MAGMA_COUNT(allocations), reinterpret_cast<VmaAllocation *>(allocations.data()));
+        vmaFreeMemoryPages(allocator, MAGMA_COUNT(allocations), reinterpret_cast<VmaAllocation *>(allocations.data()));
         allocations.clear();
         allocations.shrink_to_fit();
     }
@@ -216,14 +229,14 @@ void DeviceMemoryAllocator::freePages(std::vector<DeviceMemoryBlock>& allocation
 VkDeviceMemory DeviceMemoryAllocator::getMemoryHandle(DeviceMemoryBlock allocation) const noexcept
 {
     VmaAllocationInfo allocInfo = {};
-    vmaGetAllocationInfo(handle, reinterpret_cast<VmaAllocation>(allocation), &allocInfo);
+    vmaGetAllocationInfo(allocator, reinterpret_cast<VmaAllocation>(allocation), &allocInfo);
     return allocInfo.deviceMemory;
 }
 
 std::vector<MemoryBudget> DeviceMemoryAllocator::getBudget() const noexcept
 {
     VmaBudget budgets[VK_MAX_MEMORY_HEAPS];
-    vmaGetBudget(handle, budgets);
+    vmaGetBudget(allocator, budgets);
     const VkPhysicalDeviceMemoryProperties& memoryProperties = device->getPhysicalDevice()->getMemoryProperties();
     std::vector<MemoryBudget> heapBudgets(memoryProperties.memoryHeapCount);
     memcpy(heapBudgets.data(), budgets, sizeof(VmaBudget) * memoryProperties.memoryHeapCount);
@@ -232,7 +245,7 @@ std::vector<MemoryBudget> DeviceMemoryAllocator::getBudget() const noexcept
 
 VkResult DeviceMemoryAllocator::checkCorruption(uint32_t memoryTypeBits) noexcept
 {
-    return vmaCheckCorruption(handle, memoryTypeBits);
+    return vmaCheckCorruption(allocator, memoryTypeBits);
 }
 
 VkResult DeviceMemoryAllocator::beginCpuDefragmentation(std::vector<DeviceMemoryBlock>& allocations,
@@ -250,7 +263,7 @@ VkResult DeviceMemoryAllocator::beginCpuDefragmentation(std::vector<DeviceMemory
     cpuDefragInfo.maxGpuBytesToMove = 0;
     cpuDefragInfo.maxGpuAllocationsToMove = 0;
     cpuDefragInfo.commandBuffer = VK_NULL_HANDLE;
-    return vmaDefragmentationBegin(handle, &cpuDefragInfo, reinterpret_cast<VmaDefragmentationStats*>(stats), &defragmentationContext);
+    return vmaDefragmentationBegin(allocator, &cpuDefragInfo, reinterpret_cast<VmaDefragmentationStats*>(stats), &defragmentationContext);
 }
 
 VkResult DeviceMemoryAllocator::beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer, std::vector<DeviceMemoryBlock>& allocations,
@@ -268,19 +281,19 @@ VkResult DeviceMemoryAllocator::beginGpuDefragmentation(std::shared_ptr<CommandB
     gpuDefragInfo.maxGpuBytesToMove = VK_WHOLE_SIZE;
     gpuDefragInfo.maxGpuAllocationsToMove = std::numeric_limits<uint32_t>::max();
     gpuDefragInfo.commandBuffer = *cmdBuffer;
-    return vmaDefragmentationBegin(handle, &gpuDefragInfo, reinterpret_cast<VmaDefragmentationStats*>(stats), &defragmentationContext);
+    return vmaDefragmentationBegin(allocator, &gpuDefragInfo, reinterpret_cast<VmaDefragmentationStats*>(stats), &defragmentationContext);
 }
 
 VkResult DeviceMemoryAllocator::endDefragmentation() noexcept
 {
-    return vmaDefragmentationEnd(handle, defragmentationContext);
+    return vmaDefragmentationEnd(allocator, defragmentationContext);
 }
 
 VkResult DeviceMemoryAllocator::map(DeviceMemoryBlock allocation, VkDeviceSize offset, void **data) noexcept
 {
     MAGMA_ASSERT(data);
     *data = nullptr;
-    const VkResult map = vmaMapMemory(handle, reinterpret_cast<VmaAllocation>(allocation), data);
+    const VkResult map = vmaMapMemory(allocator, reinterpret_cast<VmaAllocation>(allocation), data);
     if (VK_SUCCESS == map)
     {   // When succeeded, *ppData contains pointer to first byte of this memory,
         // so pointer should be offseted manually using <offset> parameter.
@@ -291,18 +304,18 @@ VkResult DeviceMemoryAllocator::map(DeviceMemoryBlock allocation, VkDeviceSize o
 
 void DeviceMemoryAllocator::unmap(DeviceMemoryBlock allocation) noexcept
 {
-    vmaUnmapMemory(handle, reinterpret_cast<VmaAllocation>(allocation));
+    vmaUnmapMemory(allocator, reinterpret_cast<VmaAllocation>(allocation));
 }
 
 VkResult DeviceMemoryAllocator::flushMappedRange(DeviceMemoryBlock allocation, VkDeviceSize offset, VkDeviceSize size) noexcept
 {
-    vmaFlushAllocation(handle, reinterpret_cast<VmaAllocation>(allocation), offset, size);
+    vmaFlushAllocation(allocator, reinterpret_cast<VmaAllocation>(allocation), offset, size);
     return VK_SUCCESS;
 }
 
 VkResult DeviceMemoryAllocator::invalidateMappedRange(DeviceMemoryBlock allocation, VkDeviceSize offset, VkDeviceSize size) noexcept
 {
-    vmaInvalidateAllocation(handle, reinterpret_cast<VmaAllocation>(allocation), offset, size);
+    vmaInvalidateAllocation(allocator, reinterpret_cast<VmaAllocation>(allocation), offset, size);
     return VK_SUCCESS;
 }
 } // namespace magma

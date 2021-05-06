@@ -34,9 +34,11 @@ namespace magma
         explicit DeviceMemoryAllocator(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~DeviceMemoryAllocator();
-        VmaAllocator getHandle() const noexcept { return handle; }
+        VmaAllocator getHandle() const noexcept { return allocator; }
         virtual DeviceMemoryBlock alloc(const VkMemoryRequirements& memoryRequirements,
-            VkMemoryPropertyFlags flags) override;
+            VkMemoryPropertyFlags flags,
+            const void *handle,
+            SuballocationType suballocType) override;
         virtual std::vector<DeviceMemoryBlock> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
             const std::vector<VkMemoryPropertyFlags>& flags) override;
         virtual DeviceMemoryBlock realloc(DeviceMemoryBlock memory,
@@ -69,8 +71,8 @@ namespace magma
 
     private:
         std::shared_ptr<Device> device;
-        VmaAllocator handle;
         std::shared_ptr<IAllocator> hostAllocator;
+        VmaAllocator allocator;
         VmaDefragmentationContext defragmentationContext;
     };
 } // namespace magma

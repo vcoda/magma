@@ -72,6 +72,11 @@ namespace magma
     class DeviceMemory;
     class CommandBuffer;
 
+    enum class SuballocationType
+    {
+        Unknown, Buffer, Image
+    };
+
     /* Opaque handle to memory sub-allocation.
        Each device memory allocator hides the implementation details under it. */
     typedef void *DeviceMemoryBlock;
@@ -89,7 +94,9 @@ namespace magma
     {
     public:
         virtual DeviceMemoryBlock alloc(const VkMemoryRequirements& memoryRequirements,
-            VkMemoryPropertyFlags flags) = 0;
+            VkMemoryPropertyFlags flags,
+            const void *handle,
+            SuballocationType suballocType) = 0;
         virtual std::vector<DeviceMemoryBlock> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
             const std::vector<VkMemoryPropertyFlags>& flags) = 0;
         virtual DeviceMemoryBlock realloc(DeviceMemoryBlock memory,

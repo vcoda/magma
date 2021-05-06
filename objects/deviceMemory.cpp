@@ -26,7 +26,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
-    const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
+    const VkMemoryRequirements& memoryRequirements,
+    VkMemoryPropertyFlags flags, VkObjectType type, const void *object,
     std::shared_ptr<Allocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), MAGMA_HOST_ALLOCATOR(allocator)),
     memoryRequirements(memoryRequirements),
@@ -37,7 +38,9 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
 {
     if (deviceAllocator)
     {
-        memory = deviceAllocator->alloc(memoryRequirements, flags);
+        memory = deviceAllocator->alloc(memoryRequirements, flags, object, 
+            (VK_OBJECT_TYPE_BUFFER == type) ? SuballocationType::Buffer : 
+            ((VK_OBJECT_TYPE_IMAGE == type) ? SuballocationType::Image : SuballocationType::Unknown));
         handle = deviceAllocator->getMemoryHandle(memory);
     }
     else
