@@ -91,10 +91,10 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
 #ifdef VK_EXT_filter_cubic
     bool hasCubicFilter = device->extensionEnabled(VK_EXT_FILTER_CUBIC_EXTENSION_NAME);
     #ifdef VK_IMG_filter_cubic
-    hasCubicFilter |= device->extensionEnabled(VK_IMG_FILTER_CUBIC_EXTENSION_NAME)
+    hasCubicFilter |= device->extensionEnabled(VK_IMG_FILTER_CUBIC_EXTENSION_NAME);
     #endif
     if (hasCubicFilter)
-        cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, borderColor, allocator);
+        cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, allocator, borderColor);
 #endif // VK_EXT_filter_cubic
     // Create blit pipeline
     pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, allocator);
