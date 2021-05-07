@@ -34,18 +34,19 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, device, allocator),
     flags(flags),
-    usage(usage)
+    usage(usage),
+    sharing(sharing)
 {
-    VkBufferCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = flags;
-    info.size = size;
-    info.usage = usage;
-    info.sharingMode = sharing.getMode();
-    info.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
-    info.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
-    const VkResult create = vkCreateBuffer(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    VkBufferCreateInfo bufferInfo;
+    bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bufferInfo.pNext = nullptr;
+    bufferInfo.flags = flags;
+    bufferInfo.size = size;
+    bufferInfo.usage = usage;
+    bufferInfo.sharingMode = sharing.getMode();
+    bufferInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
+    bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
+    const VkResult create = vkCreateBuffer(MAGMA_HANDLE(device), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create buffer");
     VkMemoryRequirements memoryRequirements = {};
     vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
@@ -111,6 +112,23 @@ void Buffer::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     this->memory = std::move(memory);
 }
 #endif // VK_KHR_device_group
+
+void Buffer::onDefragmentation()
+{
+    vkDestroyBuffer(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    VkBufferCreateInfo bufferInfo;
+    bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bufferInfo.pNext = nullptr;
+    bufferInfo.flags = flags;
+    bufferInfo.size = size;
+    bufferInfo.usage = usage;
+    bufferInfo.sharingMode = sharing.getMode();
+    bufferInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
+    bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
+    const VkResult create = vkCreateBuffer(MAGMA_HANDLE(device), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(create, "failed to recreate buffer");
+    bindMemory(std::move(memory), offset);
+}
 
 void Buffer::copyHost(const void *data, CopyMemoryFunction copyFn) noexcept
 {

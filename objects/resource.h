@@ -30,6 +30,7 @@ namespace magma
     {
     public:
         class Sharing;
+        virtual void onDefragmentation() = 0;
     };
 
     /* Buffer and image objects are created with a sharing mode

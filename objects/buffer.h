@@ -44,6 +44,7 @@ namespace magma
             const std::vector<uint32_t>& deviceIndices,
             VkDeviceSize offset = 0);
 #endif
+        virtual void onDefragmentation() override;
 
     protected:
         explicit Buffer(std::shared_ptr<Device> device,
@@ -64,5 +65,8 @@ namespace magma
 
         const VkBufferCreateFlags flags;
         const VkBufferUsageFlags usage;
+
+    private:
+        const Sharing sharing;
     };
 } // namespace magma

@@ -36,6 +36,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     VkImageTiling tiling, VkImageUsageFlags usage, VkImageCreateFlags flags,
     const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, device, allocator),
+    flags(flags),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
@@ -43,26 +44,27 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     mipLevels(mipLevels),
     arrayLayers(arrayLayers),
     samples(samples),
+    tiling(tiling),
     usage(usage),
-    flags(flags)
+    sharing(sharing)
 {
-    VkImageCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = flags;
-    info.imageType = imageType;
-    info.format = format;
-    info.extent = extent;
-    info.mipLevels = mipLevels;
-    info.arrayLayers = arrayLayers;
-    info.samples = getSampleCountBit(samples);
-    info.tiling = tiling;
-    info.usage = usage;
-    info.sharingMode = sharing.getMode();
-    info.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
-    info.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
-    info.initialLayout = layout;
-    const VkResult create = vkCreateImage(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    VkImageCreateInfo imageInfo;
+    imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+    imageInfo.pNext = nullptr;
+    imageInfo.flags = flags;
+    imageInfo.imageType = imageType;
+    imageInfo.format = format;
+    imageInfo.extent = extent;
+    imageInfo.mipLevels = mipLevels;
+    imageInfo.arrayLayers = arrayLayers;
+    imageInfo.samples = getSampleCountBit(samples);
+    imageInfo.tiling = tiling;
+    imageInfo.usage = usage;
+    imageInfo.sharingMode = sharing.getMode();
+    imageInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
+    imageInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
+    imageInfo.initialLayout = layout;
+    const VkResult create = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create image");
     VkMemoryRequirements memoryRequirements = {};
     vkGetImageMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
@@ -205,6 +207,30 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     this->memory = std::move(memory);
 }
 #endif // VK_KHR_device_group
+
+void Image::onDefragmentation()
+{
+    vkDestroyImage(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    VkImageCreateInfo imageInfo;
+    imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+    imageInfo.pNext = nullptr;
+    imageInfo.flags = flags;
+    imageInfo.imageType = imageType;
+    imageInfo.format = format;
+    imageInfo.extent = extent;
+    imageInfo.mipLevels = mipLevels;
+    imageInfo.arrayLayers = arrayLayers;
+    imageInfo.samples = getSampleCountBit(samples);
+    imageInfo.tiling = tiling;
+    imageInfo.usage = usage;
+    imageInfo.sharingMode = sharing.getMode();
+    imageInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
+    imageInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
+    imageInfo.initialLayout = layout;
+    const VkResult create = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(create, "failed to recreate image");
+    bindMemory(std::move(memory), offset);
+}
 
 void Image::copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t level,
     std::shared_ptr<Buffer> buffer, const CopyLayout& bufferLayout, const VkOffset3D& imageOffset,

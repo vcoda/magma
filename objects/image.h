@@ -50,6 +50,7 @@ namespace magma
         uint32_t getArrayLayers() const noexcept { return arrayLayers; }
         uint32_t getSamples() const noexcept { return samples; }
         VkImageUsageFlags getUsage() const noexcept { return usage; }
+        VkImageCreateFlags getFlags() const noexcept { return flags; }
         VkSubresourceLayout getSubresourceLayout(uint32_t mipLevel,
             uint32_t arrayLayer = 0) const noexcept;
         VkImageSubresourceLayers getSubresourceLayers(uint32_t mipLevel, 
@@ -64,6 +65,7 @@ namespace magma
             const std::vector<VkRect2D>& splitInstanceBindRegions,
             VkDeviceSize offset = 0);
 #endif
+        virtual void onDefragmentation() override;
         void copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer,
             uint32_t level,
             std::shared_ptr<Buffer> buffer,
@@ -101,6 +103,7 @@ namespace magma
         static VkSampleCountFlagBits getSampleCountBit(uint32_t samples);
 
     protected:
+        VkImageCreateFlags flags;
         VkImageType imageType;
         VkFormat format;
         VkImageLayout layout;
@@ -108,9 +111,12 @@ namespace magma
         uint32_t mipLevels;
         uint32_t arrayLayers;
         uint32_t samples;
+        VkImageTiling tiling;
         VkImageUsageFlags usage;
-        VkImageCreateFlags flags;
         friend class ImageView;
+        
+    private:
+        const Sharing sharing;
     };
 
     struct Image::CopyLayout
