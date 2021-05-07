@@ -95,6 +95,31 @@ DeviceMemory::~DeviceMemory()
         vkFreeMemory(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
+void DeviceMemory::bind(const void *object, VkObjectType type,
+    VkDeviceSize offset /* 0 */)
+{
+    VkResult bind;
+    switch (type)
+    {
+    case VK_OBJECT_TYPE_BUFFER:
+        if (memory)
+            bind = deviceAllocator->bindMemory(memory, offset, object, SuballocationType::Buffer);
+        else
+            bind = vkBindBufferMemory(MAGMA_HANDLE(device), *reinterpret_cast<const VkBuffer *>(object), handle, offset);
+        MAGMA_THROW_FAILURE(bind, "failed to bind buffer memory");
+        break;
+    case VK_OBJECT_TYPE_IMAGE:
+        if (memory)
+            bind = deviceAllocator->bindMemory(memory, offset, object, SuballocationType::Image);
+        else
+            bind = vkBindImageMemory(MAGMA_HANDLE(device), *reinterpret_cast<const VkImage *>(object), handle, offset);
+        MAGMA_THROW_FAILURE(bind, "failed to bind image memory");
+        break;
+    default:
+        MAGMA_THROW("unsupported resource type");
+    };
+}
+
 void *DeviceMemory::map(
     VkDeviceSize offset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */,

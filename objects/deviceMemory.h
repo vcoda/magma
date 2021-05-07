@@ -57,6 +57,9 @@ namespace magma
         bool pciPinned() const noexcept;
         bool hostVisible() const noexcept;
         bool hostMapped() const noexcept;
+        void bind(const void *object,
+            VkObjectType type,
+            VkDeviceSize offset /* 0 */);
         void *map(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE,
             VkMemoryMapFlags flags = 0) noexcept;
