@@ -45,6 +45,7 @@ float sprite(vec4 glyph, vec2 size, vec2 pos)
 void main()
 {
   vec2 fragCoord = floor(gl_FragCoord.xy);
+  oColor = vec4(0.);
   for (uint i = 0; i < stringCount; ++i)
   {
     String s = strings[i];
