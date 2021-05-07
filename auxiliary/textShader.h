@@ -18,6 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "../core/noncopyable.h"
 
+#define MAGMA_TEXT_SHADER_GLYPHS 128
+
 namespace magma
 {
     class Buffer;
@@ -70,7 +72,7 @@ namespace magma
             std::shared_ptr<GraphicsPipeline> pipeline;
             uint32_t width = 0;
             uint32_t height = 0;
-            Glyph ascii[128];
+            Glyph glyphs[MAGMA_TEXT_SHADER_GLYPHS];
             std::list<String> strings;
             std::vector<Glyph> chars;
             uint32_t offset = 0;
