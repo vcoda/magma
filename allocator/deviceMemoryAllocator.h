@@ -52,9 +52,11 @@ namespace magma
         virtual std::vector<MemoryBudget> getBudget() const noexcept override;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept override;
         virtual VkResult beginCpuDefragmentation(std::vector<DeviceMemoryBlock>& memoryPages,
+            bool incremental,
             DefragmentationStats* stats = nullptr) noexcept override;
         virtual VkResult beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer,
             std::vector<DeviceMemoryBlock>& memoryPages,
+            bool incremental,
             DefragmentationStats* stats = nullptr) noexcept override;
         virtual VkResult endDefragmentation() noexcept override;
 

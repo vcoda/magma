@@ -186,11 +186,11 @@ VkResult DeviceMemoryAllocator::checkCorruption(uint32_t memoryTypeBits) noexcep
     return vmaCheckCorruption(allocator, memoryTypeBits);
 }
 
-VkResult DeviceMemoryAllocator::beginCpuDefragmentation(std::vector<DeviceMemoryBlock>& allocations,
+VkResult DeviceMemoryAllocator::beginCpuDefragmentation(std::vector<DeviceMemoryBlock>& allocations, bool incremental,
     DefragmentationStats* stats /* nullptr */) noexcept
 {
     VmaDefragmentationInfo2 cpuDefragInfo;
-    cpuDefragInfo.flags = 0;
+    cpuDefragInfo.flags = incremental ? VMA_DEFRAGMENTATION_FLAG_INCREMENTAL : 0;
     cpuDefragInfo.allocationCount = MAGMA_COUNT(allocations);
     cpuDefragInfo.pAllocations = reinterpret_cast<VmaAllocation *>(allocations.data());
     cpuDefragInfo.pAllocationsChanged = nullptr;
@@ -204,11 +204,11 @@ VkResult DeviceMemoryAllocator::beginCpuDefragmentation(std::vector<DeviceMemory
     return vmaDefragmentationBegin(allocator, &cpuDefragInfo, reinterpret_cast<VmaDefragmentationStats*>(stats), &defragmentationContext);
 }
 
-VkResult DeviceMemoryAllocator::beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer, std::vector<DeviceMemoryBlock>& allocations,
+VkResult DeviceMemoryAllocator::beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer, std::vector<DeviceMemoryBlock>& allocations, bool incremental,
     DefragmentationStats* stats /* nullptr */) noexcept
 {
     VmaDefragmentationInfo2 gpuDefragInfo;
-    gpuDefragInfo.flags = 0;
+    gpuDefragInfo.flags = incremental ? VMA_DEFRAGMENTATION_FLAG_INCREMENTAL : 0;
     gpuDefragInfo.allocationCount = MAGMA_COUNT(allocations);
     gpuDefragInfo.pAllocations = reinterpret_cast<VmaAllocation *>(allocations.data());
     gpuDefragInfo.pAllocationsChanged = nullptr;
