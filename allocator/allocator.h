@@ -104,10 +104,10 @@ namespace magma
             VkDeviceSize size) = 0;
         virtual void free(DeviceMemoryBlock memory) noexcept = 0;
         virtual void freePages(std::vector<DeviceMemoryBlock>& memoryPages) noexcept = 0;
-        virtual void bindMemory(DeviceMemoryBlock memory,
+        virtual VkResult bindMemory(DeviceMemoryBlock memory,
             VkDeviceSize offset,
             const void *handle,
-            SuballocationType suballocType) const = 0;
+            SuballocationType suballocType) const noexcept = 0;
         virtual VkDeviceMemory getMemoryHandle(DeviceMemoryBlock memory) const noexcept = 0;
         virtual std::vector<MemoryBudget> getBudget() const noexcept = 0;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept = 0;

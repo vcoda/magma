@@ -164,23 +164,18 @@ void DeviceMemoryAllocator::freePages(std::vector<DeviceMemoryBlock>& allocation
     }
 }
 
-void DeviceMemoryAllocator::bindMemory(DeviceMemoryBlock memory, VkDeviceSize offset,
-    const void *handle, SuballocationType suballocType) const
+VkResult DeviceMemoryAllocator::bindMemory(DeviceMemoryBlock memory, VkDeviceSize offset,
+    const void *handle, SuballocationType suballocType) const noexcept
 {
     VmaAllocation allocation = reinterpret_cast<VmaAllocation>(memory);
-    VkResult result;
     switch (suballocType)
     {
     case SuballocationType::Buffer:
-        result = vmaBindBufferMemory2(allocator, allocation, offset, *reinterpret_cast<const VkBuffer *>(handle), nullptr);
-        MAGMA_THROW_FAILURE(result, "failed to bind buffer memory");
-        break;
+        return vmaBindBufferMemory2(allocator, allocation, offset, *reinterpret_cast<const VkBuffer *>(handle), nullptr);
     case SuballocationType::Image:
-        result = vmaBindImageMemory2(allocator, allocation, offset, *reinterpret_cast<const VkImage *>(handle), nullptr);
-        MAGMA_THROW_FAILURE(result, "failed to bind image memory");
-        break;
+        return vmaBindImageMemory2(allocator, allocation, offset, *reinterpret_cast<const VkImage *>(handle), nullptr);
     default:
-        MAGMA_THROW("unsupported suballocation type");
+        return VK_ERROR_UNKNOWN;
     }
 }
 
