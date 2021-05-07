@@ -46,6 +46,10 @@ namespace magma
             VkDeviceSize size) override;
         virtual void free(DeviceMemoryBlock memory) noexcept override;
         virtual void freePages(std::vector<DeviceMemoryBlock>& memoryPages) noexcept override;
+        virtual void bindMemory(DeviceMemoryBlock memory,
+            VkDeviceSize offset,
+            const void *handle,
+            SuballocationType suballocType) const override;
         virtual std::shared_ptr<Device> getDevice() const noexcept override { return device; }
         virtual std::shared_ptr<IAllocator> getHostAllocator() const noexcept override { return hostAllocator; }
         virtual VkDeviceMemory getMemoryHandle(DeviceMemoryBlock memory) const noexcept override;
