@@ -69,7 +69,6 @@ namespace magma
     };
 
     class Device;
-    class DeviceMemory;
     class CommandBuffer;
 
     enum class SuballocationType
