@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 VK_DEFINE_HANDLE(VmaAllocator)
 VK_DEFINE_HANDLE(VmaDefragmentationContext)
+enum VmaMemoryUsage : int;
 
 namespace magma
 {
@@ -68,6 +69,7 @@ namespace magma
         virtual VkResult invalidateMappedRange(DeviceMemoryBlock memory,
             VkDeviceSize offset,
             VkDeviceSize size) noexcept override;
+        static VmaMemoryUsage chooseMemoryUsage(VkMemoryPropertyFlags flags) noexcept;
 
     private:
         std::shared_ptr<Device> device;

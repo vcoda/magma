@@ -74,45 +74,14 @@ DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memor
     MAGMA_ASSERT(handle);
     VmaAllocationCreateInfo allocInfo;
     allocInfo.flags = VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT;
-    if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
-    {   // Memory that is both mappable on host and preferably fast to access by GPU
-        if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
-            allocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU; // PCI "pinned" memory
-        else // Memory will be used on device only, so fast access from the device is preferred
-            allocInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
-    } 
-    else if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
-    {
-        if (flags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT && !(flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT))
-        {   // Usage: staging copy of resources used as transfer source
-            allocInfo.usage = VMA_MEMORY_USAGE_CPU_ONLY;
-        } 
-        else if (flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT)
-        {   // Memory mappable on host and cached, can be used for readback from GPU
-            allocInfo.usage = VMA_MEMORY_USAGE_GPU_TO_CPU;
-        }
-        else
-        {   // Unknown usage scenario
-            allocInfo.usage = VMA_MEMORY_USAGE_UNKNOWN;
-        }
-    } 
-    else if (flags & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT)
-    {   // Exists mostly on mobile platforms, always created as dedicated allocation
-        allocInfo.usage = VMA_MEMORY_USAGE_GPU_LAZILY_ALLOCATED;
-    } 
-    else
-    {   // VK_MEMORY_PROPERTY_PROTECTED_BIT
-        // VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD
-        // VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD
-        allocInfo.usage = VMA_MEMORY_USAGE_UNKNOWN;
-    }
+    allocInfo.usage = chooseMemoryUsage(flags);
     if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
         allocInfo.requiredFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     else if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
         allocInfo.requiredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
     else
         allocInfo.requiredFlags = 0;
-    if (VMA_MEMORY_USAGE_CPU_TO_GPU == allocInfo.usage)
+    if (VMA_MEMORY_USAGE_CPU_TO_GPU == allocInfo.usage) // PCI "pinned" memory
         allocInfo.preferredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
     else
         allocInfo.preferredFlags = 0;
@@ -146,45 +115,14 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
     {
         VmaAllocationCreateInfo allocInfo;
         allocInfo.flags = VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT;
-        if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
-        {   // Memory that is both mappable on host and preferably fast to access by GPU
-            if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
-                allocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU; // PCI "pinned" memory
-            else // Memory will be used on device only, so fast access from the device is preferred
-                allocInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
-        } 
-        else if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
-        {
-            if (flags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT && !(flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT))
-            {   // Usage: staging copy of resources used as transfer source
-                allocInfo.usage = VMA_MEMORY_USAGE_CPU_ONLY;
-            }
-            else if (flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT)
-            {   // Memory mappable on host and cached, can be used for readback from GPU
-                allocInfo.usage = VMA_MEMORY_USAGE_GPU_TO_CPU;
-            }
-            else
-            {   // Unknown usage scenario
-                allocInfo.usage = VMA_MEMORY_USAGE_UNKNOWN;
-            }
-        }
-        else if (flags & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT)
-        {   // Exists mostly on mobile platforms, always created as dedicated allocation
-            allocInfo.usage = VMA_MEMORY_USAGE_GPU_LAZILY_ALLOCATED;
-        }
-        else
-        {   // VK_MEMORY_PROPERTY_PROTECTED_BIT
-            // VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD
-            // VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD
-            allocInfo.usage = VMA_MEMORY_USAGE_UNKNOWN;
-        }
+        allocInfo.usage = chooseMemoryUsage(flags);
         if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
             allocInfo.requiredFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
         else if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
             allocInfo.requiredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
         else
             allocInfo.requiredFlags = 0;
-        if (VMA_MEMORY_USAGE_CPU_TO_GPU == allocInfo.usage)
+        if (VMA_MEMORY_USAGE_CPU_TO_GPU == allocInfo.usage) // PCI "pinned" memory
             allocInfo.preferredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
         else
             allocInfo.preferredFlags = 0;
@@ -317,5 +255,32 @@ VkResult DeviceMemoryAllocator::invalidateMappedRange(DeviceMemoryBlock allocati
 {
     vmaInvalidateAllocation(allocator, reinterpret_cast<VmaAllocation>(allocation), offset, size);
     return VK_SUCCESS;
+}
+
+VmaMemoryUsage DeviceMemoryAllocator::chooseMemoryUsage(VkMemoryPropertyFlags flags) noexcept
+{
+    if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+    {
+        if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
+            return VMA_MEMORY_USAGE_CPU_TO_GPU; // Memory that is both mappable on host and preferably fast to access by GPU
+        else // Memory will be used on device only, so fast access from the device is preferred
+            return VMA_MEMORY_USAGE_GPU_ONLY; 
+    } 
+    else if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
+    {
+        if (flags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT && !(flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT))
+            return VMA_MEMORY_USAGE_CPU_ONLY; // Staging copy of resources used as transfer source
+        else if (flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT)
+            return VMA_MEMORY_USAGE_GPU_TO_CPU; // Memory mappable on host and cached, can be used for readback from GPU
+        return VMA_MEMORY_USAGE_UNKNOWN; // Unknown usage scenario
+    } 
+    else if (flags & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT)
+    {   // Exists mostly on mobile platforms, always created as dedicated allocation
+        return VMA_MEMORY_USAGE_GPU_LAZILY_ALLOCATED;
+    }
+    // VK_MEMORY_PROPERTY_PROTECTED_BIT
+    // VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD
+    // VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD
+    return VMA_MEMORY_USAGE_UNKNOWN;
 }
 } // namespace magma
