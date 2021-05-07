@@ -174,8 +174,7 @@ std::vector<VkSparseImageMemoryRequirements> Image::getSparseMemoryRequirements(
 void Image::bindMemory(std::shared_ptr<DeviceMemory> memory,
     VkDeviceSize offset /* 0 */)
 {
-    const VkResult bind = vkBindImageMemory(MAGMA_HANDLE(device), handle, *memory, offset);
-    MAGMA_THROW_FAILURE(bind, "failed to bind image memory");
+    memory->bind(&handle, VK_OBJECT_TYPE_IMAGE, offset);
     this->size = memory->getSize();
     this->offset = offset;
     this->memory = std::move(memory);

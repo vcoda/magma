@@ -66,8 +66,7 @@ Buffer::~Buffer()
 void Buffer::bindMemory(std::shared_ptr<DeviceMemory> memory,
     VkDeviceSize offset /* 0 */)
 {
-    const VkResult bind = vkBindBufferMemory(MAGMA_HANDLE(device), handle, *memory, offset);
-    MAGMA_THROW_FAILURE(bind, "failed to bind buffer memory");
+    memory->bind(&handle, VK_OBJECT_TYPE_BUFFER, offset);
     this->size = memory->getSize();
     this->offset = offset;
     this->memory = std::move(memory);
