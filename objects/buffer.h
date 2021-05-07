@@ -33,6 +33,10 @@ namespace magma
     {
     public:
         ~Buffer();
+        VkBufferCreateFlags getFlags() const noexcept { return flags; }
+        VkBufferUsageFlags getUsage() const noexcept { return usage; }
+        VkMemoryRequirements getMemoryRequirements() const noexcept;
+        VkDescriptorBufferInfo getDescriptor() const noexcept;
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0);
 #ifdef VK_KHR_device_group
@@ -40,9 +44,6 @@ namespace magma
             const std::vector<uint32_t>& deviceIndices,
             VkDeviceSize offset = 0);
 #endif
-        VkBufferUsageFlags getUsage() const noexcept { return usage; }
-        VkMemoryRequirements getMemoryRequirements() const noexcept;
-        VkDescriptorBufferInfo getDescriptor() const noexcept;
 
     protected:
         explicit Buffer(std::shared_ptr<Device> device,
@@ -61,6 +62,7 @@ namespace magma
             VkDeviceSize dstOffset = 0,
             bool flush = true);
 
+        const VkBufferCreateFlags flags;
         const VkBufferUsageFlags usage;
     };
 } // namespace magma

@@ -33,6 +33,7 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags, VkBufferCreateFlags flags,
     const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, device, allocator),
+    flags(flags),
     usage(usage)
 {
     VkBufferCreateInfo info;
@@ -61,6 +62,22 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
 Buffer::~Buffer()
 {
     vkDestroyBuffer(*device, handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+}
+
+VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
+{
+    VkMemoryRequirements memoryRequirements;
+    vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
+    return memoryRequirements;
+}
+
+VkDescriptorBufferInfo Buffer::getDescriptor() const noexcept
+{
+    VkDescriptorBufferInfo info;
+    info.buffer = handle;
+    info.offset = 0;
+    info.range = VK_WHOLE_SIZE;
+    return info;
 }
 
 void Buffer::bindMemory(std::shared_ptr<DeviceMemory> memory,
@@ -94,22 +111,6 @@ void Buffer::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     this->memory = std::move(memory);
 }
 #endif // VK_KHR_device_group
-
-VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
-{
-    VkMemoryRequirements memoryRequirements;
-    vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
-    return memoryRequirements;
-}
-
-VkDescriptorBufferInfo Buffer::getDescriptor() const noexcept
-{
-    VkDescriptorBufferInfo info;
-    info.buffer = handle;
-    info.offset = 0;
-    info.range = VK_WHOLE_SIZE;
-    return info;
-}
 
 void Buffer::copyHost(const void *data, CopyMemoryFunction copyFn) noexcept
 {
