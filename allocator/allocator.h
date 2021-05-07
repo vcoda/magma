@@ -93,6 +93,8 @@ namespace magma
     class IDeviceMemoryAllocator : public core::IDestructible
     {
     public:
+        virtual std::shared_ptr<Device> getDevice() const noexcept = 0;
+        virtual std::shared_ptr<IAllocator> getHostAllocator() const noexcept = 0;
         virtual DeviceMemoryBlock alloc(const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
             const void *handle,
@@ -107,8 +109,6 @@ namespace magma
             VkDeviceSize offset,
             const void *handle,
             SuballocationType suballocType) const = 0;
-        virtual std::shared_ptr<Device> getDevice() const noexcept = 0;
-        virtual std::shared_ptr<IAllocator> getHostAllocator() const noexcept = 0;
         virtual VkDeviceMemory getMemoryHandle(DeviceMemoryBlock memory) const noexcept = 0;
         virtual std::vector<MemoryBudget> getBudget() const noexcept = 0;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept = 0;

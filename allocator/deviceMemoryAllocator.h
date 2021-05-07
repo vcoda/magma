@@ -36,6 +36,8 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~DeviceMemoryAllocator();
         VmaAllocator getHandle() const noexcept { return allocator; }
+        virtual std::shared_ptr<Device> getDevice() const noexcept override { return device; }
+        virtual std::shared_ptr<IAllocator> getHostAllocator() const noexcept override { return hostAllocator; }
         virtual DeviceMemoryBlock alloc(const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
             const void *handle,
@@ -50,8 +52,6 @@ namespace magma
             VkDeviceSize offset,
             const void *handle,
             SuballocationType suballocType) const override;
-        virtual std::shared_ptr<Device> getDevice() const noexcept override { return device; }
-        virtual std::shared_ptr<IAllocator> getHostAllocator() const noexcept override { return hostAllocator; }
         virtual VkDeviceMemory getMemoryHandle(DeviceMemoryBlock memory) const noexcept override;
         virtual std::vector<MemoryBudget> getBudget() const noexcept override;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept override;
