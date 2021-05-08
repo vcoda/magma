@@ -40,9 +40,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     if (deviceAllocator)
     {
         memory = deviceAllocator->alloc(memoryRequirements, flags, object, objectType);
-        const MemoryBlockInfo memoryInfo = deviceAllocator->getMemoryBlockInfo(memory);
-        handle = memoryInfo.deviceMemory;
-        offset = memoryInfo.offset; // Block offset inside device memory, may be changed after defragmentation
+        onDefragmentation();
     }
     else
     {
@@ -96,15 +94,9 @@ void DeviceMemory::bind(const void *object, VkObjectType objectType,
 {
     VkResult bind;
     if (memory)
-    {
         bind = deviceAllocator->bindMemory(memory, offset, object, objectType);
-        // The following can be changed after call to vmaDefragment(),
-        // so query values as memory may be re-binded in onDefragmentation().
-        const MemoryBlockInfo memoryInfo = deviceAllocator->getMemoryBlockInfo(memory);
-        this->handle = memoryInfo.deviceMemory;
-        this->offset = memoryInfo.offset;
-    }
-    else switch (objectType)
+    else 
+    switch (objectType)
     {
     case VK_OBJECT_TYPE_BUFFER:
         bind = vkBindBufferMemory(MAGMA_HANDLE(device), MAGMA_BUFFER_HANDLE(object), handle, offset);
@@ -182,6 +174,18 @@ bool DeviceMemory::invalidateMappedRange(
         invalidate = vkInvalidateMappedMemoryRanges(MAGMA_HANDLE(device), 1, &memoryRange);
     }
     return (VK_SUCCESS == invalidate);
+}
+
+void DeviceMemory::onDefragmentation() noexcept
+{   
+    if (memory)
+    {
+        const MemoryBlockInfo memoryInfo = deviceAllocator->getMemoryBlockInfo(memory);
+        // The following can be changed after call to vmaDefragment()
+        // if allocation is passed to the function, or if allocation is lost:
+        handle = memoryInfo.deviceMemory;
+        offset = memoryInfo.offset;
+    }
 }
 
 uint32_t DeviceMemory::getTypeIndex(VkMemoryPropertyFlags flags) const
