@@ -77,6 +77,7 @@ namespace magma
 
     class Device;
     class CommandBuffer;
+    class Resource;
 
     /* Opaque handle to memory sub-allocation.
        Each device memory allocator hides the implementation details under it. */
@@ -113,14 +114,14 @@ namespace magma
         virtual MemoryBlockInfo getMemoryBlockInfo(DeviceMemoryBlock memory) const noexcept = 0;
         virtual std::vector<MemoryBudget> getBudget() const noexcept = 0;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept = 0;
-        virtual VkResult beginCpuDefragmentation(std::vector<DeviceMemoryBlock>& memoryPages,
+        virtual VkResult beginCpuDefragmentation(const std::list<std::shared_ptr<Resource>>& resources,
             bool incremental,
-            DefragmentationStats* stats = nullptr) noexcept = 0;
+            DefragmentationStats* stats = nullptr) = 0;
         virtual VkResult beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::vector<DeviceMemoryBlock>& memoryPages,
+            const std::list<std::shared_ptr<Resource>>& resources,
             bool incremental,
-            DefragmentationStats* stats = nullptr) noexcept = 0;
-        virtual VkResult endDefragmentation() noexcept = 0;
+            DefragmentationStats* stats = nullptr) = 0;
+        virtual VkResult endDefragmentation() = 0;
 
     private:
         virtual VkResult map(DeviceMemoryBlock memory,

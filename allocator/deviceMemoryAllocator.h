@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "allocator.h"
 
 VK_DEFINE_HANDLE(VmaAllocator)
+VK_DEFINE_HANDLE(VmaAllocation)
 VK_DEFINE_HANDLE(VmaDefragmentationContext)
 enum VmaMemoryUsage : int;
 
@@ -55,14 +56,14 @@ namespace magma
         virtual MemoryBlockInfo getMemoryBlockInfo(DeviceMemoryBlock memory) const noexcept override;
         virtual std::vector<MemoryBudget> getBudget() const noexcept override;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept override;
-        virtual VkResult beginCpuDefragmentation(std::vector<DeviceMemoryBlock>& memoryPages,
+        virtual VkResult beginCpuDefragmentation(const std::list<std::shared_ptr<Resource>>& resources,
             bool incremental,
-            DefragmentationStats* stats = nullptr) noexcept override;
+            DefragmentationStats* stats = nullptr) override;
         virtual VkResult beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::vector<DeviceMemoryBlock>& memoryPages,
+            const std::list<std::shared_ptr<Resource>>& resources,
             bool incremental,
-            DefragmentationStats* stats = nullptr) noexcept override;
-        virtual VkResult endDefragmentation() noexcept override;
+            DefragmentationStats* stats = nullptr) override;
+        virtual VkResult endDefragmentation() override;
 
     private:
         virtual VkResult map(DeviceMemoryBlock memory,
@@ -75,6 +76,7 @@ namespace magma
         virtual VkResult invalidateMappedRange(DeviceMemoryBlock memory,
             VkDeviceSize offset,
             VkDeviceSize size) noexcept override;
+        std::vector<VmaAllocation> gatherSuballocations(const std::list<std::shared_ptr<Resource>>& resources);
         static VmaMemoryUsage chooseMemoryUsage(VkMemoryPropertyFlags flags) noexcept;
 
     private:
@@ -82,5 +84,7 @@ namespace magma
         std::shared_ptr<IAllocator> hostAllocator;
         VmaAllocator allocator;
         VmaDefragmentationContext defragmentationContext;
+        std::vector<std::shared_ptr<Resource>> defragmentationResources;
+        std::vector<VkBool32> allocationsChanged;
     };
 } // namespace magma

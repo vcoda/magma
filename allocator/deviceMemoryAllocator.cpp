@@ -205,14 +205,15 @@ VkResult DeviceMemoryAllocator::checkCorruption(uint32_t memoryTypeBits) noexcep
     return vmaCheckCorruption(allocator, memoryTypeBits);
 }
 
-VkResult DeviceMemoryAllocator::beginCpuDefragmentation(std::vector<DeviceMemoryBlock>& allocations, bool incremental,
-    DefragmentationStats* stats /* nullptr */) noexcept
+VkResult DeviceMemoryAllocator::beginCpuDefragmentation(const std::list<std::shared_ptr<Resource>>& resources, bool incremental,
+    DefragmentationStats* stats /* nullptr */)
 {
+    std::vector<VmaAllocation> allocations = gatherSuballocations(resources);
     VmaDefragmentationInfo2 cpuDefragInfo;
     cpuDefragInfo.flags = incremental ? VMA_DEFRAGMENTATION_FLAG_INCREMENTAL : 0;
     cpuDefragInfo.allocationCount = MAGMA_COUNT(allocations);
-    cpuDefragInfo.pAllocations = reinterpret_cast<VmaAllocation *>(allocations.data());
-    cpuDefragInfo.pAllocationsChanged = nullptr;
+    cpuDefragInfo.pAllocations = allocations.data();
+    cpuDefragInfo.pAllocationsChanged = allocationsChanged.data();
     cpuDefragInfo.poolCount = 0;
     cpuDefragInfo.pPools = nullptr;
     cpuDefragInfo.maxCpuBytesToMove = VK_WHOLE_SIZE;
@@ -223,14 +224,16 @@ VkResult DeviceMemoryAllocator::beginCpuDefragmentation(std::vector<DeviceMemory
     return vmaDefragmentationBegin(allocator, &cpuDefragInfo, reinterpret_cast<VmaDefragmentationStats*>(stats), &defragmentationContext);
 }
 
-VkResult DeviceMemoryAllocator::beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer, std::vector<DeviceMemoryBlock>& allocations, bool incremental,
-    DefragmentationStats* stats /* nullptr */) noexcept
+VkResult DeviceMemoryAllocator::beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer,
+    const std::list<std::shared_ptr<Resource>>& resources, bool incremental,
+    DefragmentationStats* stats /* nullptr */)
 {
+    std::vector<VmaAllocation> allocations = gatherSuballocations(resources);
     VmaDefragmentationInfo2 gpuDefragInfo;
     gpuDefragInfo.flags = incremental ? VMA_DEFRAGMENTATION_FLAG_INCREMENTAL : 0;
     gpuDefragInfo.allocationCount = MAGMA_COUNT(allocations);
-    gpuDefragInfo.pAllocations = reinterpret_cast<VmaAllocation *>(allocations.data());
-    gpuDefragInfo.pAllocationsChanged = nullptr;
+    gpuDefragInfo.pAllocations = allocations.data();
+    gpuDefragInfo.pAllocationsChanged = allocationsChanged.data();
     gpuDefragInfo.poolCount = 0;
     gpuDefragInfo.pPools = nullptr;
     gpuDefragInfo.maxCpuBytesToMove = 0;
@@ -241,9 +244,23 @@ VkResult DeviceMemoryAllocator::beginGpuDefragmentation(std::shared_ptr<CommandB
     return vmaDefragmentationBegin(allocator, &gpuDefragInfo, reinterpret_cast<VmaDefragmentationStats*>(stats), &defragmentationContext);
 }
 
-VkResult DeviceMemoryAllocator::endDefragmentation() noexcept
-{
-    return vmaDefragmentationEnd(allocator, defragmentationContext);
+VkResult DeviceMemoryAllocator::endDefragmentation()
+{   // https://gpuopen-librariesandsdks.github.io/VulkanMemoryAllocator/html/defragmentation.html
+    const VkResult result = vmaDefragmentationEnd(allocator, defragmentationContext);
+    for (std::size_t i = 0, count = allocationsChanged.size(); i < count; ++i)
+    {
+        if (allocationsChanged[i])
+        {
+            std::shared_ptr<Resource>& resource = defragmentationResources[i];
+            resource->getMemory()->onDefragmented();
+            resource->onDefragmented();
+        }
+    }
+    allocationsChanged.clear();
+    allocationsChanged.shrink_to_fit();
+    defragmentationResources.clear();
+    defragmentationResources.shrink_to_fit();
+    return result;
 }
 
 VkResult DeviceMemoryAllocator::map(DeviceMemoryBlock allocation, VkDeviceSize offset, void **data) noexcept
@@ -274,6 +291,30 @@ VkResult DeviceMemoryAllocator::invalidateMappedRange(DeviceMemoryBlock allocati
 {
     vmaInvalidateAllocation(allocator, reinterpret_cast<VmaAllocation>(allocation), offset, size);
     return VK_SUCCESS;
+}
+
+std::vector<VmaAllocation> DeviceMemoryAllocator::gatherSuballocations(const std::list<std::shared_ptr<Resource>>& objects)
+{
+    std::vector<VmaAllocation> allocations;
+    allocations.reserve(objects.size());
+    defragmentationResources.clear();
+    defragmentationResources.reserve(objects.size());
+    for (auto& resource : objects)
+    {
+        std::shared_ptr<DeviceMemory> deviceMemory = resource->getMemory();
+        if (deviceMemory)
+        {
+            DeviceMemoryBlock suballocation = deviceMemory->getAllocation();
+            if (suballocation)
+            {
+                allocations.push_back(reinterpret_cast<VmaAllocation>(suballocation));
+                defragmentationResources.push_back(resource);
+            }
+        }
+    }
+    allocationsChanged.clear();
+    allocationsChanged.resize(allocations.size(), VK_FALSE);
+    return allocations;
 }
 
 VmaMemoryUsage DeviceMemoryAllocator::chooseMemoryUsage(VkMemoryPropertyFlags flags) noexcept
