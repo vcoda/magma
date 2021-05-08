@@ -94,13 +94,13 @@ void Buffer::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     const std::vector<uint32_t>& deviceIndices,
     VkDeviceSize offset /* 0 */)
 {
-    VkBindBufferMemoryDeviceGroupInfo deviceGroupBindInfo;
-    deviceGroupBindInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_DEVICE_GROUP_INFO;
+    VkBindBufferMemoryDeviceGroupInfoKHR deviceGroupBindInfo;
+    deviceGroupBindInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_DEVICE_GROUP_INFO_KHR;
     deviceGroupBindInfo.pNext = nullptr;
     deviceGroupBindInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
     deviceGroupBindInfo.pDeviceIndices = deviceIndices.data();
-    VkBindBufferMemoryInfo bindInfo;
-    bindInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO;
+    VkBindBufferMemoryInfoKHR bindInfo;
+    bindInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO_KHR;
     bindInfo.pNext = &deviceGroupBindInfo;
     bindInfo.buffer = handle;
     bindInfo.memory = *memory;

@@ -186,15 +186,15 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     const std::vector<uint32_t>& deviceIndices,
     VkDeviceSize offset /* 0 */)
 {
-    VkBindImageMemoryDeviceGroupInfo deviceGroupBindInfo;
-    deviceGroupBindInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO;
+    VkBindImageMemoryDeviceGroupInfoKHR deviceGroupBindInfo;
+    deviceGroupBindInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO_KHR;
     deviceGroupBindInfo.pNext = nullptr;
     deviceGroupBindInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
     deviceGroupBindInfo.pDeviceIndices = deviceIndices.data();
     deviceGroupBindInfo.splitInstanceBindRegionCount = 0;
     deviceGroupBindInfo.pSplitInstanceBindRegions = nullptr;
-    VkBindImageMemoryInfo bindInfo;
-    bindInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO;
+    VkBindImageMemoryInfoKHR bindInfo;
+    bindInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR;
     bindInfo.pNext = &deviceGroupBindInfo;
     bindInfo.image = handle;
     bindInfo.memory = *memory;
@@ -212,15 +212,15 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     const std::vector<VkRect2D>& splitInstanceBindRegions,
     VkDeviceSize offset /* 0 */)
 {
-    VkBindImageMemoryDeviceGroupInfo deviceGroupBindInfo;
-    deviceGroupBindInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO;
+    VkBindImageMemoryDeviceGroupInfoKHR deviceGroupBindInfo;
+    deviceGroupBindInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO_KHR;
     deviceGroupBindInfo.pNext = nullptr;
     deviceGroupBindInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
     deviceGroupBindInfo.pDeviceIndices = deviceIndices.data();
     deviceGroupBindInfo.splitInstanceBindRegionCount = MAGMA_COUNT(splitInstanceBindRegions);
     deviceGroupBindInfo.pSplitInstanceBindRegions = splitInstanceBindRegions.data();
-    VkBindImageMemoryInfo bindInfo;
-    bindInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO;
+    VkBindImageMemoryInfoKHR bindInfo;
+    bindInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR;
     bindInfo.pNext = &deviceGroupBindInfo;
     bindInfo.image = handle;
     bindInfo.memory = *memory;
