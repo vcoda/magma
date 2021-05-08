@@ -105,14 +105,14 @@ void DeviceMemory::bind(const void *object, VkObjectType type,
         if (memory)
             bind = deviceAllocator->bindMemory(memory, offset, object, SuballocationType::Buffer);
         else
-            bind = vkBindBufferMemory(MAGMA_HANDLE(device), *reinterpret_cast<const VkBuffer *>(object), handle, offset);
+            bind = vkBindBufferMemory(MAGMA_HANDLE(device), MAGMA_BUFFER_HANDLE(object), handle, offset);
         MAGMA_THROW_FAILURE(bind, "failed to bind buffer memory");
         break;
     case VK_OBJECT_TYPE_IMAGE:
         if (memory)
             bind = deviceAllocator->bindMemory(memory, offset, object, SuballocationType::Image);
         else
-            bind = vkBindImageMemory(MAGMA_HANDLE(device), *reinterpret_cast<const VkImage *>(object), handle, offset);
+            bind = vkBindImageMemory(MAGMA_HANDLE(device), MAGMA_IMAGE_HANDLE(object), handle, offset);
         MAGMA_THROW_FAILURE(bind, "failed to bind image memory");
         break;
     default:

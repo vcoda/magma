@@ -94,10 +94,10 @@ DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memor
     switch (suballocType)
     {
     case SuballocationType::Buffer:
-        result = vmaAllocateMemoryForBuffer(allocator, *reinterpret_cast<const VkBuffer *>(handle), &allocInfo, &allocation, nullptr);
+        result = vmaAllocateMemoryForBuffer(allocator, MAGMA_BUFFER_HANDLE(handle), &allocInfo, &allocation, nullptr);
         break;
     case SuballocationType::Image:
-        result = vmaAllocateMemoryForImage(allocator, *reinterpret_cast<const VkImage *>(handle), &allocInfo, &allocation, nullptr);
+        result = vmaAllocateMemoryForImage(allocator, MAGMA_IMAGE_HANDLE(handle), &allocInfo, &allocation, nullptr);
         break;
     default: // SuballocationType::Unknown
         result = vmaAllocateMemory(allocator, &memoryRequirements, &allocInfo, &allocation, nullptr);
@@ -171,9 +171,9 @@ VkResult DeviceMemoryAllocator::bindMemory(DeviceMemoryBlock memory, VkDeviceSiz
     switch (suballocType)
     {
     case SuballocationType::Buffer:
-        return vmaBindBufferMemory2(allocator, allocation, offset, *reinterpret_cast<const VkBuffer *>(handle), nullptr);
+        return vmaBindBufferMemory2(allocator, allocation, offset, MAGMA_BUFFER_HANDLE(handle), nullptr);
     case SuballocationType::Image:
-        return vmaBindImageMemory2(allocator, allocation, offset, *reinterpret_cast<const VkImage *>(handle), nullptr);
+        return vmaBindImageMemory2(allocator, allocation, offset, MAGMA_IMAGE_HANDLE(handle), nullptr);
     default:
         return VK_ERROR_UNKNOWN;
     }

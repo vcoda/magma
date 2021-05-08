@@ -22,9 +22,20 @@ namespace magma
 namespace core
 {
 template<typename Type>
-inline typename Type::NativeHandle dereference(const std::shared_ptr<Type>& obj)
+inline typename Type::NativeHandle dereference(const std::shared_ptr<Type>& p)
 {
-    if (obj) return *obj;
+    if (p) return *p;
+#ifdef VK_NULL_HANDLE
+    return VK_NULL_HANDLE;
+#else
+    return 0;
+#endif
+}
+
+template<typename NativeHandle>
+inline NativeHandle reinterpret(const void *p)
+{
+    if (p) return *reinterpret_cast<const NativeHandle *>(p);
 #ifdef VK_NULL_HANDLE
     return VK_NULL_HANDLE;
 #else

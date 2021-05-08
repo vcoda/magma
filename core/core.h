@@ -97,9 +97,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_STRINGIZE_FIELD(field) case field: return MAGMA_STRINGIZE(field); break
 #define MAGMA_DEFAULT_UNKNOWN default: return "<unknown>"
 
-#define MAGMA_HANDLE(obj) *(this->obj)
-#define MAGMA_OPTIONAL_HANDLE(obj) core::dereference(obj)
-#define MAGMA_OPTIONAL_INSTANCE(obj) this->obj ? this->obj.get() : nullptr
+#define MAGMA_HANDLE(p) *(this->p)
+#define MAGMA_BUFFER_HANDLE(p) core::reinterpret<VkBuffer>(p)
+#define MAGMA_IMAGE_HANDLE(p) core::reinterpret<VkImage>(p)
+#define MAGMA_OPTIONAL_HANDLE(p) core::dereference(p)
+#define MAGMA_OPTIONAL_INSTANCE(p) this->p ? this->p.get() : nullptr
 
 #define MAGMA_SUCCEEDED(result)\
     ((VK_SUCCESS == result) ||\
