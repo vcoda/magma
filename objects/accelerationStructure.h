@@ -32,10 +32,6 @@ namespace magma
     {
     public:
         ~AccelerationStructure();
-        void bindMemory(std::shared_ptr<DeviceMemory> memory,
-            const std::vector<uint32_t>& deviceIndices = {},
-            VkDeviceSize offset = 0);
-        virtual void onDefragmentation() override {}
         bool topLevel() const noexcept { return VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NV == info.type; }
         bool bottomLevel() const noexcept { return VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NV == info.type; }
         const VkAccelerationStructureInfoNV& getInfo() const noexcept { return info; }
@@ -44,6 +40,14 @@ namespace magma
         VkMemoryRequirements getBuildScratchMemoryRequirements() const;
         VkMemoryRequirements getUpdateScratchMemoryRequirements() const;
         uint64_t getReferenceHandle() const;
+        virtual void bindMemory(std::shared_ptr<DeviceMemory> memory,
+            VkDeviceSize offset = 0) override;
+#ifdef VK_KHR_device_group
+        virtual void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+            const std::vector<uint32_t>& deviceIndices,
+            VkDeviceSize offset = 0) override;
+#endif
+        virtual void onDefragmentation() override {}
 
     protected:
         explicit AccelerationStructure(std::shared_ptr<Device> device,

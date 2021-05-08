@@ -56,6 +56,13 @@ namespace magma
         std::shared_ptr<DeviceMemory> getMemory() noexcept { return memory; }
         std::shared_ptr<const DeviceMemory> getMemory() const noexcept { return memory; }
         std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return deviceAllocator; }
+        virtual void bindMemory(std::shared_ptr<DeviceMemory> memory,
+            VkDeviceSize offset = 0) = 0;
+#ifdef VK_KHR_device_group
+        virtual void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+            const std::vector<uint32_t>& deviceIndices,
+            VkDeviceSize offset = 0) = 0;
+#endif
         virtual void onDefragmentation() = 0;
 
     protected:

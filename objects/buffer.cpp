@@ -108,6 +108,8 @@ void Buffer::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     MAGMA_DEVICE_EXTENSION(vkBindBufferMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
     const VkResult bind = vkBindBufferMemory2KHR(MAGMA_HANDLE(device), 1, &bindInfo);
     MAGMA_THROW_FAILURE(bind, "failed to bind buffer memory within device group");
+    this->size = memory->getSize();
+    this->offset = offset;
     this->memory = std::move(memory);
 }
 #endif // VK_KHR_device_group

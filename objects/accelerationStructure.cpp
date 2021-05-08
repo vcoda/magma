@@ -75,6 +75,26 @@ AccelerationStructure::~AccelerationStructure()
 }
 
 void AccelerationStructure::bindMemory(std::shared_ptr<DeviceMemory> memory,
+    VkDeviceSize offset /* 0 */)
+{
+    VkBindAccelerationStructureMemoryInfoNV info;
+    info.sType = VK_STRUCTURE_TYPE_BIND_ACCELERATION_STRUCTURE_MEMORY_INFO_NV;
+    info.pNext = nullptr;
+    info.accelerationStructure = handle;
+    info.memory = *memory;
+    info.memoryOffset = offset;
+    info.deviceIndexCount = 0;
+    info.pDeviceIndices = nullptr;
+    MAGMA_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
+    const VkResult bind = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &info);
+    MAGMA_THROW_FAILURE(bind, "failed to bind acceleration structure memory");
+    this->size = memory->getSize();
+    this->offset = offset;
+    this->memory = std::move(memory);
+}
+
+#ifdef VK_KHR_device_group
+void AccelerationStructure::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     const std::vector<uint32_t>& deviceIndices /* {} */,
     VkDeviceSize offset /* 0 */)
 {
@@ -93,6 +113,7 @@ void AccelerationStructure::bindMemory(std::shared_ptr<DeviceMemory> memory,
     this->offset = offset;
     this->memory = std::move(memory);
 }
+#endif // VK_KHR_device_group
 
 VkMemoryRequirements AccelerationStructure::getObjectMemoryRequirements() const
 {

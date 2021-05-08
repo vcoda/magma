@@ -37,12 +37,12 @@ namespace magma
         VkBufferUsageFlags getUsage() const noexcept { return usage; }
         VkMemoryRequirements getMemoryRequirements() const noexcept;
         VkDescriptorBufferInfo getDescriptor() const noexcept;
-        void bindMemory(std::shared_ptr<DeviceMemory> memory,
-            VkDeviceSize offset = 0);
+        virtual void bindMemory(std::shared_ptr<DeviceMemory> memory,
+            VkDeviceSize offset = 0) override;
 #ifdef VK_KHR_device_group
-        void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+        virtual void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
-            VkDeviceSize offset = 0);
+            VkDeviceSize offset = 0) override;
 #endif
         virtual void onDefragmentation() override;
 

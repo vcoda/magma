@@ -57,9 +57,12 @@ namespace magma
             uint32_t arrayLayer = 0) const noexcept;
         VkMemoryRequirements getMemoryRequirements() const noexcept;
         std::vector<VkSparseImageMemoryRequirements> getSparseMemoryRequirements() const;
-        void bindMemory(std::shared_ptr<DeviceMemory> memory,
-            VkDeviceSize offset = 0);
+        virtual void bindMemory(std::shared_ptr<DeviceMemory> memory,
+            VkDeviceSize offset = 0) override;
 #ifdef VK_KHR_device_group
+        virtual void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+            const std::vector<uint32_t>& deviceIndices,
+            VkDeviceSize offset = 0) override;
         void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
             const std::vector<VkRect2D>& splitInstanceBindRegions,

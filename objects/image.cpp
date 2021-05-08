@@ -183,7 +183,33 @@ void Image::bindMemory(std::shared_ptr<DeviceMemory> memory,
 
 #ifdef VK_KHR_device_group
 void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
-    const std::vector<uint32_t>& deviceIndices, const std::vector<VkRect2D>& splitInstanceBindRegions,
+    const std::vector<uint32_t>& deviceIndices,
+    VkDeviceSize offset /* 0 */)
+{
+    VkBindImageMemoryDeviceGroupInfo deviceGroupBindInfo;
+    deviceGroupBindInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO;
+    deviceGroupBindInfo.pNext = nullptr;
+    deviceGroupBindInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
+    deviceGroupBindInfo.pDeviceIndices = deviceIndices.data();
+    deviceGroupBindInfo.splitInstanceBindRegionCount = 0;
+    deviceGroupBindInfo.pSplitInstanceBindRegions = nullptr;
+    VkBindImageMemoryInfo bindInfo;
+    bindInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO;
+    bindInfo.pNext = &deviceGroupBindInfo;
+    bindInfo.image = handle;
+    bindInfo.memory = *memory;
+    bindInfo.memoryOffset = offset;
+    MAGMA_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
+    const VkResult bind = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindInfo);
+    MAGMA_THROW_FAILURE(bind, "failed to bind image memory within device group");
+    this->size = memory->getSize();
+    this->offset = offset;
+    this->memory = std::move(memory);
+}
+
+void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+    const std::vector<uint32_t>& deviceIndices,
+    const std::vector<VkRect2D>& splitInstanceBindRegions,
     VkDeviceSize offset /* 0 */)
 {
     VkBindImageMemoryDeviceGroupInfo deviceGroupBindInfo;
@@ -202,6 +228,7 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     MAGMA_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
     const VkResult bind = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindInfo);
     MAGMA_THROW_FAILURE(bind, "failed to bind image memory within device group");
+    this->size = memory->getSize();
     this->offset = offset;
     this->memory = std::move(memory);
 }
