@@ -112,7 +112,7 @@ namespace magma
         VkDeviceSize getElementAlignment() const noexcept { return alignment; }
 
     private:
-        VkDeviceSize minOffsetAlignment(std::shared_ptr<Device> device) const noexcept
+        static VkDeviceSize minOffsetAlignment(std::shared_ptr<Device> device) noexcept
         {   // Check hardware requirements
             std::shared_ptr<const PhysicalDevice> physicalDevice = std::move(device->getPhysicalDevice());
             const VkPhysicalDeviceProperties& properties = physicalDevice->getProperties();
@@ -120,7 +120,7 @@ namespace magma
             return limits.minUniformBufferOffsetAlignment;
         }
 
-        uint32_t alignedArraySize(std::shared_ptr<Device> device, uint32_t arraySize) const noexcept
+        static uint32_t alignedArraySize(std::shared_ptr<Device> device, uint32_t arraySize) noexcept
         {
             const VkDeviceSize alignment = minOffsetAlignment(std::move(device));
             if (elementSize >= alignment)
