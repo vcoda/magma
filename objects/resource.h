@@ -63,7 +63,7 @@ namespace magma
             const std::vector<uint32_t>& deviceIndices,
             VkDeviceSize offset = 0) = 0;
 #endif
-        virtual void onDefragmentation() = 0;
+        virtual void onDefragmented() = 0;
 
     protected:
         explicit Resource(const Sharing& sharing,

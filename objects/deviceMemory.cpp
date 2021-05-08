@@ -40,7 +40,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     if (deviceAllocator)
     {
         memory = deviceAllocator->alloc(memoryRequirements, flags, object, objectType);
-        onDefragmentation();
+        onDefragmented();
     }
     else
     {
@@ -176,7 +176,7 @@ bool DeviceMemory::invalidateMappedRange(
     return (VK_SUCCESS == invalidate);
 }
 
-void DeviceMemory::onDefragmentation() noexcept
+void DeviceMemory::onDefragmented() noexcept
 {   
     if (memory)
     {

@@ -47,7 +47,7 @@ namespace magma
             const std::vector<uint32_t>& deviceIndices,
             VkDeviceSize offset = 0) override;
 #endif
-        virtual void onDefragmentation() override {}
+        virtual void onDefragmented() override;
 
     protected:
         explicit AccelerationStructure(std::shared_ptr<Device> device,

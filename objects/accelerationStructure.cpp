@@ -115,6 +115,11 @@ void AccelerationStructure::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> 
 }
 #endif // VK_KHR_device_group
 
+void AccelerationStructure::onDefragmented()
+{ 
+    // Currently there is no allocator that deal with it
+}
+
 VkMemoryRequirements AccelerationStructure::getObjectMemoryRequirements() const
 {
     return getMemoryRequirements(VK_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_OBJECT_NV).memoryRequirements;

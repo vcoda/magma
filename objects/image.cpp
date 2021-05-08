@@ -234,7 +234,7 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
 }
 #endif // VK_KHR_device_group
 
-void Image::onDefragmentation()
+void Image::onDefragmented()
 {
     vkDestroyImage(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
     VkImageCreateInfo imageInfo;

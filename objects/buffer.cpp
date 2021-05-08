@@ -114,7 +114,7 @@ void Buffer::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
 }
 #endif // VK_KHR_device_group
 
-void Buffer::onDefragmentation()
+void Buffer::onDefragmented()
 {
     vkDestroyBuffer(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
     VkBufferCreateInfo bufferInfo;
