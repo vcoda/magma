@@ -52,6 +52,16 @@ Predefined render states are usually "constexpr" objects, which means that they 
 The library often allocates temporary arrays on the stack instead of creating them in the heap. This may cause stack overflow
 in abuse cases, but speeds up allocations and reduces memory fragmentation in run-time.
 
+## Memory management
+
+While it is legal to create buffers and images without custom memory allocator, it is highly encouraging to provide 
+both host and device memory allocators during resource creation. Keep in mind that there is an implementation-dependent
+maximum number of device memory allocations reported by VkPhysicalDeviceLimits::maxMemoryAllocationCount, so per-object allocation
+suitable only for a small graphics applications. Custom allocator allows sub-allocations from larger memory chunks
+and reduces memory fragmentation in dynamic resource allocation scenarios. Magma provides IDeviceMemoryAllocator interface
+that allows you to implement your own allocator or use default which is written on top of [Vulkan Memory Allocator](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator).
+Usually "allocator" parameter is the first among default parameters passed in constructor, which simplifies construction expressions.
+
 ## Features
 
 Magma was written mainly around [Vulkan 1.0](https://renderdoc.org/vkspec_chunked/index.html) specification, but has built-in support for some extensions:
