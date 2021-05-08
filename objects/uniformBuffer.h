@@ -34,12 +34,13 @@ namespace magma
 
         explicit UniformBuffer(std::shared_ptr<Device> device,
             std::shared_ptr<Allocator> allocator = nullptr,
+            bool pciPinnedMemory = false,
             uint32_t arraySize = 1,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing()):
             Buffer(std::move(device), sizeof(Type) * arraySize,
                 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                (pciPinnedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0) | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                 flags, sharing, std::move(allocator)),
             arraySize(arraySize)
         {
@@ -84,10 +85,11 @@ namespace magma
 
         explicit DynamicUniformBuffer(std::shared_ptr<Device> device,
             uint32_t arraySize,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            bool pciPinnedMemory = false,
             VkBufferCreateFlags flags = 0,
-            const Resource::Sharing& sharing = Resource::Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr):
-            UniformBuffer<Type>(device, alignedArraySize(device, arraySize), flags, sharing, std::move(allocator)),
+            const Resource::Sharing& sharing = Resource::Sharing()):
+            UniformBuffer<Type>(device, std::move(allocator), pciPinnedMemory, alignedArraySize(device, arraySize), flags, sharing),
             alignment(std::max(
                 minOffsetAlignment(device),
                 static_cast<VkDeviceSize>(elementSize)
