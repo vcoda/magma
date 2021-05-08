@@ -134,12 +134,12 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
     MAGMA_THROW("failed to get device queue");
 }
 
-void Device::updateDescriptorSet(const VkWriteDescriptorSet& descriptorWrite) const noexcept
+void Device::updateWriteDescriptor(const VkWriteDescriptorSet& descriptorWrite) const noexcept
 {
     vkUpdateDescriptorSets(handle, 1, &descriptorWrite, 0, nullptr);
 }
 
-void Device::updateDescriptorCopy(const VkCopyDescriptorSet& descriptorCopy) const noexcept
+void Device::updateCopyDescriptor(const VkCopyDescriptorSet& descriptorCopy) const noexcept
 {
     vkUpdateDescriptorSets(handle, 0, nullptr, 1, &descriptorCopy);
 }
