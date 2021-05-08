@@ -52,6 +52,13 @@ namespace magma
             VkSystemAllocationScope allocationScope) noexcept = 0;
     };
 
+    struct MemoryBlockInfo
+    {
+        VkDeviceMemory deviceMemory;
+        VkDeviceSize offset;
+        VkDeviceSize size;
+    };
+
     struct MemoryBudget
     {
         VkDeviceSize blockBytes;
@@ -66,13 +73,6 @@ namespace magma
         VkDeviceSize bytesFreed;
         uint32_t allocationsMoved;
         uint32_t deviceMemoryBlocksFreed;
-    };
-
-    struct MemoryBlockInfo
-    {
-        VkDeviceMemory deviceMemory;
-        VkDeviceSize offset;
-        VkDeviceSize size;
     };
 
     class Device;
