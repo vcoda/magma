@@ -34,6 +34,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     flags(flags),
     deviceAllocator(MAGMA_DEVICE_ALLOCATOR(allocator)),
     memory(nullptr),
+    offset(0),
     mapped(false)
 {
     if (deviceAllocator)
@@ -41,6 +42,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
         memory = deviceAllocator->alloc(memoryRequirements, flags, object, objectType);
         const MemoryBlockInfo memoryInfo = deviceAllocator->getMemoryBlockInfo(memory);
         handle = memoryInfo.deviceMemory;
+        offset = memoryInfo.offset; // Block offset inside device memory, may be changed after defragmentation
     }
     else
     {
@@ -94,9 +96,15 @@ void DeviceMemory::bind(const void *object, VkObjectType objectType,
 {
     VkResult bind;
     if (memory)
+    {
         bind = deviceAllocator->bindMemory(memory, offset, object, objectType);
-    else 
-    switch (objectType)
+        // The following can be changed after call to vmaDefragment(),
+        // so query values as memory may be re-binded in onDefragmentation().
+        const MemoryBlockInfo memoryInfo = deviceAllocator->getMemoryBlockInfo(memory);
+        this->handle = memoryInfo.deviceMemory;
+        this->offset = memoryInfo.offset;
+    }
+    else switch (objectType)
     {
     case VK_OBJECT_TYPE_BUFFER:
         bind = vkBindBufferMemory(MAGMA_HANDLE(device), MAGMA_BUFFER_HANDLE(object), handle, offset);

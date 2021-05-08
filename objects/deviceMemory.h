@@ -50,6 +50,7 @@ namespace magma
         ~DeviceMemory();
         std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return deviceAllocator; }
         DeviceMemoryBlock getAllocation() const noexcept { return memory; }
+        VkDeviceSize getOffset() const noexcept { return offset; }
         VkDeviceSize getSize() const noexcept { return memoryRequirements.size; }
         VkDeviceSize getAlignment() const noexcept { return memoryRequirements.alignment; }
         uint32_t getTypeBits() const noexcept { return memoryRequirements.memoryTypeBits; }
@@ -80,6 +81,7 @@ namespace magma
         const VkMemoryPropertyFlags flags;
         std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
         DeviceMemoryBlock memory;
+        VkDeviceSize offset;
         bool mapped;
     };
 } // namespace magma
