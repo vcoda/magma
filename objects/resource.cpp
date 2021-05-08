@@ -22,6 +22,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+Resource::Resource(const Sharing& sharing, std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator) noexcept:
+    size(0),
+    offset(0),
+    sharing(sharing),
+    deviceAllocator(std::move(deviceAllocator))
+{}
+
 Resource::Sharing::Sharing(const std::vector<uint32_t>& queueFamilyIndices) noexcept:
     queueFamilyIndices(std::move(queueFamilyIndices))
 {}

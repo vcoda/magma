@@ -65,8 +65,5 @@ namespace magma
 
         const VkBufferCreateFlags flags;
         const VkBufferUsageFlags usage;
-
-    private:
-        const Sharing sharing;
     };
 } // namespace magma

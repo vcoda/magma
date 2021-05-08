@@ -114,9 +114,6 @@ namespace magma
         VkImageTiling tiling;
         VkImageUsageFlags usage;
         friend class ImageView;
-        
-    private:
-        const Sharing sharing;
     };
 
     struct Image::CopyLayout

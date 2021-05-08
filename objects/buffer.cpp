@@ -32,10 +32,9 @@ namespace magma
 Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags, VkBufferCreateFlags flags,
     const Sharing& sharing, std::shared_ptr<Allocator> allocator):
-    NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, device, allocator),
+    NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, device, sharing, allocator),
     flags(flags),
-    usage(usage),
-    sharing(sharing)
+    usage(usage)
 {
     VkBufferCreateInfo bufferInfo;
     bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;

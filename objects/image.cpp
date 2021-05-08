@@ -35,7 +35,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
     VkImageTiling tiling, VkImageUsageFlags usage, VkImageCreateFlags flags,
     const Sharing& sharing, std::shared_ptr<Allocator> allocator):
-    NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, device, allocator),
+    NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, device, sharing, allocator),
     flags(flags),
     imageType(imageType),
     format(format),
@@ -45,8 +45,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     arrayLayers(arrayLayers),
     samples(samples),
     tiling(tiling),
-    usage(usage),
-    sharing(sharing)
+    usage(usage)
 {
     VkImageCreateInfo imageInfo;
     imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -81,7 +80,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
 }
 
 Image::Image(std::shared_ptr<Device> device, VkImage handle, VkImageType imageType, VkFormat format, const VkExtent3D& extent):
-    NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, std::move(device), std::shared_ptr<Allocator>() /* FIX IT */),
+    NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, std::move(device), Sharing(), std::shared_ptr<Allocator>() /* FIX IT */),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
