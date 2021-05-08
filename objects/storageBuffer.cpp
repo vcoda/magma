@@ -62,9 +62,7 @@ DynamicStorageBuffer::DynamicStorageBuffer(std::shared_ptr<Device> device, VkDev
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(std::move(device), size,
         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
-        (pciPinnedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT 
-                         : VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
-                         | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
+        (pciPinnedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0) | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
         flags,
         sharing, std::move(allocator))
 {

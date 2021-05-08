@@ -76,9 +76,7 @@ DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkDeviceS
     CopyMemoryFunction copyFn /* nullptr */):
     BaseIndexBuffer(std::move(device), size, indexType,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
-        (pciPinnedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT 
-                         : VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
-                         | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
+        (pciPinnedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0) | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
         flags, sharing, std::move(allocator))
 {
     if (initial)
