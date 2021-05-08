@@ -38,7 +38,7 @@ namespace magma
             const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
             const void *object,
-            VkObjectType type,
+            VkObjectType objectType,
             std::shared_ptr<Allocator> allocator = nullptr);
 #ifdef VK_KHR_device_group
         explicit DeviceMemory(std::shared_ptr<Device> device,
@@ -58,7 +58,7 @@ namespace magma
         bool hostVisible() const noexcept;
         bool hostMapped() const noexcept;
         void bind(const void *object,
-            VkObjectType type,
+            VkObjectType objectType,
             VkDeviceSize offset /* 0 */);
         void *map(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE,

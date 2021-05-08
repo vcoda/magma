@@ -71,11 +71,6 @@ namespace magma
     class Device;
     class CommandBuffer;
 
-    enum class SuballocationType
-    {
-        Unknown, Buffer, Image
-    };
-
     /* Opaque handle to memory sub-allocation.
        Each device memory allocator hides the implementation details under it. */
     typedef void *DeviceMemoryBlock;
@@ -97,7 +92,7 @@ namespace magma
         virtual DeviceMemoryBlock alloc(const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
             const void *handle,
-            SuballocationType suballocType) = 0;
+            VkObjectType objectType) = 0;
         virtual std::vector<DeviceMemoryBlock> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
             const std::vector<VkMemoryPropertyFlags>& flags) = 0;
         virtual DeviceMemoryBlock realloc(DeviceMemoryBlock memory,
@@ -107,7 +102,7 @@ namespace magma
         virtual VkResult bindMemory(DeviceMemoryBlock memory,
             VkDeviceSize offset,
             const void *handle,
-            SuballocationType suballocType) const noexcept = 0;
+            VkObjectType objectType) const noexcept = 0;
         virtual VkDeviceMemory getMemoryHandle(DeviceMemoryBlock memory) const noexcept = 0;
         virtual std::vector<MemoryBudget> getBudget() const noexcept = 0;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept = 0;

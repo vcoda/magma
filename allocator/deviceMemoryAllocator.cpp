@@ -69,7 +69,7 @@ DeviceMemoryAllocator::~DeviceMemoryAllocator()
 }
 
 DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memoryRequirements,
-    VkMemoryPropertyFlags flags, const void *handle, SuballocationType suballocType)
+    VkMemoryPropertyFlags flags, const void *handle, VkObjectType objectType)
 {
     MAGMA_ASSERT(handle);
     VmaAllocationCreateInfo allocInfo;
@@ -91,15 +91,15 @@ DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memor
     allocInfo.priority = 0.f;
     VmaAllocation allocation;
     VkResult result;
-    switch (suballocType)
+    switch (objectType)
     {
-    case SuballocationType::Buffer:
+    case VK_OBJECT_TYPE_BUFFER:
         result = vmaAllocateMemoryForBuffer(allocator, MAGMA_BUFFER_HANDLE(handle), &allocInfo, &allocation, nullptr);
         break;
-    case SuballocationType::Image:
+    case VK_OBJECT_TYPE_IMAGE:
         result = vmaAllocateMemoryForImage(allocator, MAGMA_IMAGE_HANDLE(handle), &allocInfo, &allocation, nullptr);
         break;
-    default: // SuballocationType::Unknown
+    default:
         result = vmaAllocateMemory(allocator, &memoryRequirements, &allocInfo, &allocation, nullptr);
     }
     MAGMA_THROW_FAILURE(result, "failed to allocate memory");
@@ -165,14 +165,14 @@ void DeviceMemoryAllocator::freePages(std::vector<DeviceMemoryBlock>& allocation
 }
 
 VkResult DeviceMemoryAllocator::bindMemory(DeviceMemoryBlock memory, VkDeviceSize offset,
-    const void *handle, SuballocationType suballocType) const noexcept
+    const void *handle, VkObjectType objectType) const noexcept
 {
     VmaAllocation allocation = reinterpret_cast<VmaAllocation>(memory);
-    switch (suballocType)
+    switch (objectType)
     {
-    case SuballocationType::Buffer:
+    case VK_OBJECT_TYPE_BUFFER:
         return vmaBindBufferMemory2(allocator, allocation, offset, MAGMA_BUFFER_HANDLE(handle), nullptr);
-    case SuballocationType::Image:
+    case VK_OBJECT_TYPE_IMAGE:
         return vmaBindImageMemory2(allocator, allocation, offset, MAGMA_IMAGE_HANDLE(handle), nullptr);
     default:
         return VK_ERROR_UNKNOWN;

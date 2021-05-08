@@ -41,7 +41,7 @@ namespace magma
         virtual DeviceMemoryBlock alloc(const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
             const void *handle,
-            SuballocationType suballocType) override;
+            VkObjectType objectType) override;
         virtual std::vector<DeviceMemoryBlock> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
             const std::vector<VkMemoryPropertyFlags>& flags) override;
         virtual DeviceMemoryBlock realloc(DeviceMemoryBlock memory,
@@ -51,7 +51,7 @@ namespace magma
         virtual VkResult bindMemory(DeviceMemoryBlock memory,
             VkDeviceSize offset,
             const void *handle,
-            SuballocationType suballocType) const noexcept override;
+            VkObjectType objectType) const noexcept override;
         virtual VkDeviceMemory getMemoryHandle(DeviceMemoryBlock memory) const noexcept override;
         virtual std::vector<MemoryBudget> getBudget() const noexcept override;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept override;
