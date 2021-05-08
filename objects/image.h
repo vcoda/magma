@@ -40,6 +40,7 @@ namespace magma
 
     public:
         ~Image();
+        VkImageCreateFlags getFlags() const noexcept { return flags; }
         VkImageType getType() const noexcept { return imageType; }
         VkFormat getFormat() const noexcept { return format; }
         VkImageLayout getLayout() const noexcept { return layout; }
@@ -99,6 +100,7 @@ namespace magma
             bool flush = true);
 
     protected:
+        VkImageCreateFlags flags;
         VkImageType imageType;
         VkFormat format;
         VkImageLayout layout;
@@ -107,8 +109,6 @@ namespace magma
         uint32_t arrayLayers;
         uint32_t samples;
         VkImageUsageFlags usage;
-        VkImageCreateFlags flags;
-        friend class ImageView;
     };
 
     struct Image::CopyLayout

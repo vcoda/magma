@@ -37,6 +37,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     VkImageTiling tiling, VkImageUsageFlags usage, VkImageCreateFlags flags,
     const Sharing& sharing, std::shared_ptr<IAllocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, 0, std::move(device), std::move(allocator)),
+    flags(flags),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
@@ -44,8 +45,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     mipLevels(mipLevels),
     arrayLayers(arrayLayers),
     samples(samples),
-    usage(usage),
-    flags(flags)
+    usage(usage)
 {
     VkImageCreateInfo info;
     info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
