@@ -68,6 +68,13 @@ namespace magma
         uint32_t deviceMemoryBlocksFreed;
     };
 
+    struct MemoryBlockInfo
+    {
+        VkDeviceMemory deviceMemory;
+        VkDeviceSize offset;
+        VkDeviceSize size;
+    };
+
     class Device;
     class CommandBuffer;
 
@@ -103,7 +110,7 @@ namespace magma
             VkDeviceSize offset,
             const void *handle,
             VkObjectType objectType) const noexcept = 0;
-        virtual VkDeviceMemory getMemoryHandle(DeviceMemoryBlock memory) const noexcept = 0;
+        virtual MemoryBlockInfo getMemoryBlockInfo(DeviceMemoryBlock memory) const noexcept = 0;
         virtual std::vector<MemoryBudget> getBudget() const noexcept = 0;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept = 0;
         virtual VkResult beginCpuDefragmentation(std::vector<DeviceMemoryBlock>& memoryPages,

@@ -179,11 +179,15 @@ VkResult DeviceMemoryAllocator::bindMemory(DeviceMemoryBlock memory, VkDeviceSiz
     }
 }
 
-VkDeviceMemory DeviceMemoryAllocator::getMemoryHandle(DeviceMemoryBlock allocation) const noexcept
+MemoryBlockInfo DeviceMemoryAllocator::getMemoryBlockInfo(DeviceMemoryBlock allocation) const noexcept
 {
     VmaAllocationInfo allocInfo = {};
     vmaGetAllocationInfo(allocator, reinterpret_cast<VmaAllocation>(allocation), &allocInfo);
-    return allocInfo.deviceMemory;
+    MemoryBlockInfo memoryInfo;
+    memoryInfo.deviceMemory = allocInfo.deviceMemory;
+    memoryInfo.offset = allocInfo.offset;
+    memoryInfo.size = allocInfo.size;
+    return memoryInfo;
 }
 
 std::vector<MemoryBudget> DeviceMemoryAllocator::getBudget() const noexcept

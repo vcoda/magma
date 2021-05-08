@@ -39,7 +39,8 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     if (deviceAllocator)
     {
         memory = deviceAllocator->alloc(memoryRequirements, flags, object, objectType);
-        handle = deviceAllocator->getMemoryHandle(memory);
+        const MemoryBlockInfo memoryInfo = deviceAllocator->getMemoryBlockInfo(memory);
+        handle = memoryInfo.deviceMemory;
     }
     else
     {

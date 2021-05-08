@@ -52,7 +52,7 @@ namespace magma
             VkDeviceSize offset,
             const void *handle,
             VkObjectType objectType) const noexcept override;
-        virtual VkDeviceMemory getMemoryHandle(DeviceMemoryBlock memory) const noexcept override;
+        virtual MemoryBlockInfo getMemoryBlockInfo(DeviceMemoryBlock memory) const noexcept override;
         virtual std::vector<MemoryBudget> getBudget() const noexcept override;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept override;
         virtual VkResult beginCpuDefragmentation(std::vector<DeviceMemoryBlock>& memoryPages,
