@@ -236,7 +236,6 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
 
 void Image::onDefragmented()
 {
-    vkDestroyImage(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
     VkImageCreateInfo imageInfo;
     imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     imageInfo.pNext = nullptr;
@@ -253,8 +252,9 @@ void Image::onDefragmented()
     imageInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
     imageInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     imageInfo.initialLayout = layout;
+    vkDestroyImage(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
     const VkResult create = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to recreate image");
+    MAGMA_THROW_FAILURE(create, "failed to recreate defragmented image");
     bindMemory(std::move(memory), offset);
 }
 
