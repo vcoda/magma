@@ -47,13 +47,13 @@ ColorMultisampleReadFramebuffer::ColorMultisampleReadFramebuffer(std::shared_ptr
     // Create color resolve attachment
     resolve = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, allocator, colorSampled);
     // Create color view
-    colorView = std::make_shared<ImageView>(color, 0, 1, 0, 1, MAGMA_HOST_ALLOCATOR(allocator), swizzle);
+    colorView = std::make_shared<ImageView>(color, swizzle);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil view
-        depthStencilView = std::make_shared<ImageView>(depthStencil, MAGMA_HOST_ALLOCATOR(allocator));
+        depthStencilView = std::make_shared<ImageView>(depthStencil);
     }
     // Create resolve view
-    resolveView = std::make_shared<ImageView>(resolve, MAGMA_HOST_ALLOCATOR(allocator));
+    resolveView = std::make_shared<ImageView>(resolve);
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, sampleCount,
         op::clearStore, // Clear color, store for multi-sample read

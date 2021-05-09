@@ -51,15 +51,15 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
             VK_COMPONENT_SWIZZLE_IDENTITY,
             VK_COMPONENT_SWIZZLE_IDENTITY,
             VK_COMPONENT_SWIZZLE_IDENTITY};
-        attachmentViews.emplace_back(std::make_shared<ImageView>(attachments.back(), 0, 1, 0, 1,
-            MAGMA_HOST_ALLOCATOR(allocator), swizzles.empty() ? dontSwizzle : swizzles[index++]));
+        attachmentViews.emplace_back(std::make_shared<ImageView>(attachments.back(),
+            swizzles.empty() ? dontSwizzle : swizzles[index++]));
     }
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil attachment
         attachments.emplace_back(std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent,
             1, 1, allocator, depthSampled));
         // Create depth/stencil view
-        attachmentViews.push_back(std::make_shared<ImageView>(attachments.back(), MAGMA_HOST_ALLOCATOR(allocator)));
+        attachmentViews.push_back(std::make_shared<ImageView>(attachments.back()));
     }
     // Setup attachment descriptions
     std::vector<AttachmentDescription> attachmentDescriptions;

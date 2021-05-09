@@ -53,10 +53,10 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
             1, 1, allocator, depthSampled);
     }
     // Create color view
-    colorView = std::make_shared<ImageView>(color, 0, 1, 0, 1, MAGMA_HOST_ALLOCATOR(allocator), swizzle);
+    colorView = std::make_shared<ImageView>(color, swizzle);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil view
-        depthStencilView = std::make_shared<ImageView>(depthStencil, MAGMA_HOST_ALLOCATOR(allocator));
+        depthStencilView = std::make_shared<ImageView>(depthStencil);
     }
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, 1,

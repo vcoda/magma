@@ -37,12 +37,12 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
     Framebuffer(color->getFormat(), depthStencilFormat, color->getSamples())
 {
     std::shared_ptr<Device> device = color->getDevice();
-    colorView = std::make_shared<ImageView>(color, 0, 1, 0, 1, MAGMA_HOST_ALLOCATOR(allocator), swizzle);
+    colorView = std::make_shared<ImageView>(color, swizzle);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {
         const VkExtent2D extent{color->getMipExtent(0).width, color->getMipExtent(0).height};
         depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, color->getSamples(), allocator, false);
-        depthStencilView = std::make_shared<ImageView>(depthStencil, MAGMA_HOST_ALLOCATOR(allocator));
+        depthStencilView = std::make_shared<ImageView>(depthStencil);
     }
     const AttachmentDescription colorAttachment(color->getFormat(), 1,
         op::clearStore, // Clear color, store

@@ -31,7 +31,6 @@ namespace magma
     public:
         explicit BufferView(std::shared_ptr<Buffer> resource,
             VkFormat format,
-            std::shared_ptr<IAllocator> allocator = nullptr,
             VkDeviceSize offset = 0,
             VkDeviceSize range = VK_WHOLE_SIZE);
         ~BufferView();

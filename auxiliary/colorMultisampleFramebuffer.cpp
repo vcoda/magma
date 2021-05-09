@@ -57,13 +57,13 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
     constexpr bool sampled = true;
     resolve = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, allocator, sampled);
     // Create color view
-    colorView = std::make_shared<ImageView>(color, 0, 1, 0, 1, MAGMA_HOST_ALLOCATOR(allocator), swizzle);
+    colorView = std::make_shared<ImageView>(color, swizzle);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil view
-        depthStencilView = std::make_shared<ImageView>(depthStencil, MAGMA_HOST_ALLOCATOR(allocator));
+        depthStencilView = std::make_shared<ImageView>(depthStencil);
     }
     // Create resolve view
-    resolveView = std::make_shared<ImageView>(resolve, MAGMA_HOST_ALLOCATOR(allocator));
+    resolveView = std::make_shared<ImageView>(resolve);
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, sampleCount,
         // https://static.docs.arm.com/100971/0101/arm_mali_application_developer_best_practices_developer_guide_100971_0101_00_en_00.pdf

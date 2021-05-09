@@ -27,10 +27,9 @@ namespace magma
 {
 BufferView::BufferView(std::shared_ptr<Buffer> resource,
     VkFormat format,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkDeviceSize offset /* 0 */,
     VkDeviceSize range /* VK_WHOLE_SIZE */):
-    NonDispatchable(VK_OBJECT_TYPE_BUFFER_VIEW, resource->getDevice(), std::move(allocator)),
+    NonDispatchable(VK_OBJECT_TYPE_BUFFER_VIEW, resource->getDevice(), resource->getHostAllocator()),
     buffer(std::move(resource)),
     format(format),
     offset(offset),
