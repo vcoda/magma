@@ -124,7 +124,7 @@ void *DeviceMemory::map(
             result = deviceAllocator->map(memory, offset, &mappedRange);
         else
             result = vkMapMemory(MAGMA_HANDLE(device), handle, offset, size, flags, &mappedRange);
-        if (VK_SUCCESS != result)
+        if (result != VK_SUCCESS)
         {   // VK_ERROR_OUT_OF_HOST_MEMORY
             // VK_ERROR_OUT_OF_DEVICE_MEMORY
             // VK_ERROR_MEMORY_MAP_FAILED
