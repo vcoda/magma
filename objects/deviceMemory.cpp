@@ -35,7 +35,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     deviceAllocator(MAGMA_DEVICE_ALLOCATOR(allocator)),
     memory(nullptr),
     offset(0),
-    mapped(false)
+    mappedRange(nullptr)
 {
     if (deviceAllocator)
     {
@@ -63,7 +63,8 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask,
     flags(flags),
     deviceAllocator(),
     memory(nullptr),
-    mapped(false)
+    offset(0),
+    mappedRange(nullptr)
 {
     VkMemoryAllocateFlagsInfoKHR flagsInfo;
     flagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
@@ -82,7 +83,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask,
 
 DeviceMemory::~DeviceMemory()
 {
-    MAGMA_ASSERT(!mapped);
+    MAGMA_ASSERT(!mappedRange);
     if (memory)
         deviceAllocator->free(memory);
     else
@@ -116,24 +117,33 @@ void *DeviceMemory::map(
     VkDeviceSize size /* VK_WHOLE_SIZE */,
     VkMemoryMapFlags flags /* 0 */) noexcept
 {
-    void *data = nullptr;
-    VkResult map;
-    if (memory)
-        map = deviceAllocator->map(memory, offset, &data);
-    else
-        map = vkMapMemory(MAGMA_HANDLE(device), handle, offset, size, flags, &data);
-    mapped = (VK_SUCCESS == map);
-    return data;
+    if (!mappedRange)
+    {
+        VkResult result;
+        if (memory)
+            result = deviceAllocator->map(memory, offset, &mappedRange);
+        else
+            result = vkMapMemory(MAGMA_HANDLE(device), handle, offset, size, flags, &mappedRange);
+        if (VK_SUCCESS != result)
+        {   // VK_ERROR_OUT_OF_HOST_MEMORY
+            // VK_ERROR_OUT_OF_DEVICE_MEMORY
+            // VK_ERROR_MEMORY_MAP_FAILED
+            return nullptr;
+        }
+    }
+    return mappedRange;
 }
 
 void DeviceMemory::unmap() noexcept
 {
-    MAGMA_ASSERT(mapped);
-    if (memory)
-        deviceAllocator->unmap(memory);
-    else
-        vkUnmapMemory(*device, handle);
-    mapped = false;
+    if (mappedRange)
+    {
+        if (memory)
+            deviceAllocator->unmap(memory);
+        else
+            vkUnmapMemory(*device, handle);
+        mappedRange = nullptr;
+    }
 }
 
 bool DeviceMemory::flushMappedRange(

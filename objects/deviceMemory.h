@@ -58,7 +58,7 @@ namespace magma
         bool pinned() const noexcept;
         bool hostVisible() const noexcept;
         bool hostCached() const noexcept;
-        bool hostMapped() const noexcept;
+        bool mapped() const noexcept;
         void bind(const void *object,
             VkObjectType objectType,
             VkDeviceSize offset /* 0 */);
@@ -84,7 +84,7 @@ namespace magma
         std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
         DeviceMemoryBlock memory;
         VkDeviceSize offset;
-        bool mapped;
+        void *mappedRange;
     };
 } // namespace magma
 

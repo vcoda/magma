@@ -73,7 +73,7 @@ AccelerationStructureInstanceBuffer::AccelerationStructureInstanceBuffer(std::sh
 
 AccelerationStructureInstanceBuffer::~AccelerationStructureInstanceBuffer()
 {
-    if (stagingBuffer->getMemory()->hostMapped())
+    if (stagingBuffer->getMemory()->mapped())
         stagingBuffer->getMemory()->unmap();
 }
 

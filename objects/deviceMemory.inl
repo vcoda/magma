@@ -23,9 +23,9 @@ inline bool DeviceMemory::hostCached() const noexcept
     return flags & (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
 }
 
-inline bool DeviceMemory::hostMapped() const noexcept
+inline bool DeviceMemory::mapped() const noexcept
 {
-    return mapped;
+    return mappedRange != nullptr;
 }
 
 template<typename Type>
