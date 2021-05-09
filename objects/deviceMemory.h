@@ -53,7 +53,7 @@ namespace magma
         VkDeviceSize getOffset() const noexcept { return offset; }
         VkDeviceSize getSize() const noexcept { return memoryRequirements.size; }
         VkDeviceSize getAlignment() const noexcept { return memoryRequirements.alignment; }
-        uint32_t getTypeBits() const noexcept { return memoryRequirements.memoryTypeBits; }
+        uint32_t getMemoryTypeBits() const noexcept { return memoryRequirements.memoryTypeBits; }
         bool local() const noexcept;
         bool pinned() const noexcept;
         bool hostVisible() const noexcept;
