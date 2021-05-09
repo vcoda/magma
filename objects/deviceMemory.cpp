@@ -50,7 +50,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
         info.allocationSize = memoryRequirements.size;
         info.memoryTypeIndex = getTypeIndex(flags);
         const VkResult allocate = vkAllocateMemory(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-        MAGMA_THROW_FAILURE(allocate, "failed to allocate memory");
+        MAGMA_THROW_FAILURE(allocate, "failed to allocate device memory");
     }
 }
 
@@ -77,7 +77,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask,
     info.allocationSize = memoryRequirements.size;
     info.memoryTypeIndex = getTypeIndex(flags);
     const VkResult allocate = vkAllocateMemory(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(allocate, "failed to allocate memory");
+    MAGMA_THROW_FAILURE(allocate, "failed to allocate device memory within device group");
 }
 #endif // VK_KHR_device_group
 
