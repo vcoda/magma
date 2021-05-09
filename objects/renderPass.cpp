@@ -129,7 +129,14 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
 RenderPass::RenderPass(std::shared_ptr<Device> device,
     const std::vector<AttachmentDescription>& attachments,
     const std::vector<SubpassDescription>& subpasses,
-    const std::vector<SubpassDependency>& dependencies /* {} */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    RenderPass(std::move(device), attachments, subpasses, {}, std::move(allocator))
+{}
+
+RenderPass::RenderPass(std::shared_ptr<Device> device,
+    const std::vector<AttachmentDescription>& attachments,
+    const std::vector<SubpassDescription>& subpasses,
+    const std::vector<SubpassDependency>& dependencies,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator)),
     hash(0)
