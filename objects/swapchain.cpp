@@ -41,7 +41,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     VkSurfaceTransformFlagBitsKHR preTransform,
     VkCompositeAlphaFlagBitsKHR compositeAlpha,
     VkPresentModeKHR presentMode,
-    VkSwapchainCreateFlagsKHR flags /* 0 */,
+    VkSwapchainCreateFlagsKHR flags,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<const DebugReportCallback> debugReportCallback /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_SWAPCHAIN_KHR, std::move(device), std::move(allocator)),
