@@ -84,9 +84,8 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         bindings::FragmentStageBinding(0, descriptors::CombinedImageSampler(1)),
         allocator, 0);
     // Create texture samplers
-    const BorderColor borderColor = DefaultBorderColor();
-    nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, allocator, borderColor);
-    bilinearSampler = std::make_shared<Sampler>(device, samplers::magMinLinearMipNearestClampToEdge, allocator, borderColor);
+    nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, allocator);
+    bilinearSampler = std::make_shared<Sampler>(device, samplers::magMinLinearMipNearestClampToEdge, allocator);
     // Check for cubic filtering support
 #ifdef VK_EXT_filter_cubic
     bool hasCubicFilter = device->extensionEnabled(VK_EXT_FILTER_CUBIC_EXTENSION_NAME);
@@ -94,7 +93,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     hasCubicFilter |= device->extensionEnabled(VK_IMG_FILTER_CUBIC_EXTENSION_NAME);
     #endif
     if (hasCubicFilter)
-        cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, allocator, borderColor);
+        cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, allocator);
 #endif // VK_EXT_filter_cubic
     // Create blit pipeline
     pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, allocator);

@@ -28,8 +28,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const BorderColor& borderColor /* DefaultBorderColor */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Sampler(std::move(device), state, OpaqueBorderColor<float, 0>(), std::move(allocator))
+{}
+
+Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state, const BorderColor& borderColor,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_SAMPLER, std::move(device), std::move(allocator))
 {
     VkSamplerCreateInfo info;
@@ -68,9 +72,8 @@ Sampler::~Sampler()
 }
 
 LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state,
-    float mipLodBias, float minLod, float maxLod,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const BorderColor& borderColor /* DefaultBorderColor */):
+    float mipLodBias, float minLod, float maxLod, const BorderColor& borderColor,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     Sampler(std::move(device), std::move(allocator))
 {
     VkSamplerCreateInfo info;
@@ -131,8 +134,12 @@ DepthSampler::DepthSampler(std::shared_ptr<Device> device, const DepthSamplerSta
 }
 
 UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool linearFilter,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const BorderColor& borderColor /* DefaultBorderColor */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    UnnormalizedSampler(std::move(device), linearFilter, OpaqueBorderColor<float, 0>(), std::move(allocator))
+{}
+
+UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool linearFilter, const BorderColor& borderColor,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     Sampler(std::move(device), std::move(allocator))
 {
     VkSamplerCreateInfo info;
