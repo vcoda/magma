@@ -65,14 +65,14 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     imageInfo.initialLayout = layout;
     const VkResult create = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create image");
-    VkMemoryRequirements memoryRequirements = {};
-    vkGetImageMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
+    const VkMemoryRequirements memoryRequirements = getMemoryRequirements();
+    const VkMemoryPropertyFlags memoryFlags = (VK_IMAGE_TILING_LINEAR == tiling)
+        ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
+        : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     std::shared_ptr<DeviceMemory> memory = std::make_shared<DeviceMemory>(
         std::move(device),
         memoryRequirements, 
-        (VK_IMAGE_TILING_LINEAR == tiling)
-            ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
-            : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        memoryFlags,
         &handle,
         VK_OBJECT_TYPE_IMAGE,
         std::move(allocator));
@@ -157,7 +157,7 @@ VkImageSubresourceLayers Image::getSubresourceLayers(uint32_t mipLevel, uint32_t
 
 VkMemoryRequirements Image::getMemoryRequirements() const noexcept
 {
-    VkMemoryRequirements memoryRequirements;
+    VkMemoryRequirements memoryRequirements = {};
     vkGetImageMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
     return memoryRequirements;
 }

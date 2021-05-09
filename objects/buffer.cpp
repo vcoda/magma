@@ -47,8 +47,7 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     const VkResult create = vkCreateBuffer(MAGMA_HANDLE(device), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create buffer");
-    VkMemoryRequirements memoryRequirements = {};
-    vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
+    const VkMemoryRequirements memoryRequirements = getMemoryRequirements();
     std::shared_ptr<DeviceMemory> memory = std::make_shared<DeviceMemory>(
         std::move(device),
         memoryRequirements, 
@@ -66,7 +65,7 @@ Buffer::~Buffer()
 
 VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
 {
-    VkMemoryRequirements memoryRequirements;
+    VkMemoryRequirements memoryRequirements = {};
     vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
     return memoryRequirements;
 }
