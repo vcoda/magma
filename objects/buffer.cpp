@@ -72,11 +72,11 @@ VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
 
 VkDescriptorBufferInfo Buffer::getDescriptor() const noexcept
 {
-    VkDescriptorBufferInfo info;
-    info.buffer = handle;
-    info.offset = 0;
-    info.range = VK_WHOLE_SIZE;
-    return info;
+    VkDescriptorBufferInfo descriptor;
+    descriptor.buffer = handle;
+    descriptor.offset = 0;
+    descriptor.range = VK_WHOLE_SIZE;
+    return descriptor;
 }
 
 void Buffer::bindMemory(std::shared_ptr<DeviceMemory> memory,
