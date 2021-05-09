@@ -5,7 +5,7 @@ inline bool DeviceMemory::local() const noexcept
     return flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 }
 
-inline bool DeviceMemory::pciPinned() const noexcept
+inline bool DeviceMemory::pinned() const noexcept
 {
     // Pinned memory is virtual memory pages that are specially marked so that they cannot be paged out.
     // Higher bandwidth is possible between the host and the device when using page-locked (or "pinned") memory.

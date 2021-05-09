@@ -75,7 +75,7 @@ namespace magma
         DynamicIndexBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkIndexType indexType,
-            bool pciPinnedMemory,
+            bool pinnedMemory,
             std::shared_ptr<Allocator> allocator = nullptr,
             const void *initial = nullptr,
             VkBufferCreateFlags flags = 0 ,
