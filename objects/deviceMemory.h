@@ -57,6 +57,7 @@ namespace magma
         bool local() const noexcept;
         bool pinned() const noexcept;
         bool hostVisible() const noexcept;
+        bool hostCached() const noexcept;
         bool hostMapped() const noexcept;
         void bind(const void *object,
             VkObjectType objectType,
