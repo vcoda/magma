@@ -15,9 +15,7 @@ inline bool DeviceMemory::pinned() const noexcept
 
 inline bool DeviceMemory::hostVisible() const noexcept
 {
-    return flags & (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
-        VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
+    return flags & (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 }
 
 inline bool DeviceMemory::hostCached() const noexcept
