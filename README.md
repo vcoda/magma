@@ -54,13 +54,13 @@ in abuse cases, but speeds up allocations and reduces memory fragmentation in ru
 
 ## Memory management
 
-While it is legal to create buffers and images without custom memory allocator, it is highly encouraging to provide 
-both host and device memory allocators during resource creation. Keep in mind that there is an implementation-dependent
-maximum number of device memory allocations reported by VkPhysicalDeviceLimits::maxMemoryAllocationCount, so per-object allocation
-suitable only for a small graphics applications. Custom allocator allows sub-allocations from larger memory chunks
-and reduces memory fragmentation in dynamic resource allocation scenarios. Magma provides IDeviceMemoryAllocator interface
-that allows you to implement your own allocator or use default which is written on top of [Vulkan Memory Allocator](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator).
-Usually "allocator" parameter is the first among default parameters passed in constructor, which simplifies construction expressions.
+While it is legal to create buffers and images without custom memory allocator, it is highly encouraging to provide
+host and device memory allocators during resource creation. Keep in mind that there is an implementation-dependent
+limit of memory allocations reported by VkPhysicalDeviceLimits::maxMemoryAllocationCount, so per-object allocation
+approach suitable only for a small graphics applications. Custom allocator allows sub-allocations from larger memory chunks
+and reduces memory fragmentation in dynamic scenarios. Magma provides IDeviceMemoryAllocator interface that allows you 
+to implement your own allocator or use a default one which is written on top of [Vulkan Memory Allocator](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator).
+Usually "allocator" parameter is the first among default parameters passed in the constructor which simplifies construction expressions.
 
 ## Features
 
@@ -94,7 +94,7 @@ There are dependencies from the following third party libraries:
 
 * [shaderc](https://github.com/google/shaderc) - a collection of tools, libraries, and tests for Vulkan shader compilation.
 * [SPIRV-Reflect](https://github.com/chaoticbob/SPIRV-Reflect) - a lightweight library that provides a C/C++ reflection API for SPIR-V shader bytecode in Vulkan applications.
-* [Vulkan Memory Allocator](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator) - Vulkan memory allocation library
+* [Vulkan Memory Allocator](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator) - Vulkan memory allocation library.
 
 Library depends on STL and has not been designed to be used with custom containers. It doesn't use any file input/output.
 
