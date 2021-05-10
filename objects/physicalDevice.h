@@ -78,6 +78,7 @@ namespace magma
         std::shared_ptr<Instance> getInstance() const noexcept { return instance; }
         std::shared_ptr<Device> createDefaultDevice() const;
         bool checkExtensionSupport(const char *extensionName) const;
+        bool checkPinnedMemorySupport() const noexcept;
         bool checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept;
 
     private:
