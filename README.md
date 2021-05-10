@@ -56,10 +56,10 @@ in abuse cases, but speeds up allocations and reduces memory fragmentation in ru
 
 While it is legal to create buffers and images without custom memory allocator, it is highly encouraging to provide
 host and device memory allocators during resource creation. Keep in mind that there is an implementation-dependent
-limit of memory allocations reported by VkPhysicalDeviceLimits::maxMemoryAllocationCount, so per-object allocation
+limit of a number of memory allocations reported by VkPhysicalDeviceLimits::maxMemoryAllocationCount, so per-object allocation
 approach suitable only for a small graphics applications. Custom allocator allows sub-allocations from larger memory chunks
 and reduces memory fragmentation in dynamic scenarios. Magma provides IDeviceMemoryAllocator interface that allows you 
-to implement your own allocator or use a default one which is written on top of [Vulkan Memory Allocator](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator).
+to implement your own allocator or you can use a default one which is written on top of [Vulkan Memory Allocator](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator).
 Usually "allocator" parameter is the first among default parameters passed in the constructor which simplifies construction expressions.
 
 ## Features
