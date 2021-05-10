@@ -89,7 +89,7 @@ bool AccelerationStructureInstanceBuffer::update(std::shared_ptr<CommandBuffer> 
     region.size = sizeof(AccelerationStructureInstance) * instanceCount;
     cmdBuffer->copyBuffer(stagingBuffer, shared_from_this(), region);
     // Make sure the copy to instance buffer is finished before triggering the acceleration structure build
-    constexpr magma::MemoryBarrier copyTransferBarrier(
+    constexpr MemoryBarrier copyTransferBarrier(
         VK_ACCESS_TRANSFER_WRITE_BIT,
         VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_NV);
     cmdBuffer->pipelineBarrier(

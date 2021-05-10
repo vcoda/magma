@@ -100,7 +100,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     const char *vsEntry = vertexShader->getReflection() ? vertexShader->getReflection()->getEntryPointName(0) : "main";
     const char *fsEntry = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
     const VkSampleCountFlagBits samples = this->renderPass->getAttachments().front().samples;
-    const magma::MultisampleState multisampleState = 
+    const MultisampleState multisampleState = 
         (samples & VK_SAMPLE_COUNT_2_BIT) ? renderstates::multisample2 :
         (samples & VK_SAMPLE_COUNT_4_BIT) ? renderstates::multisample4 : 
         (samples & VK_SAMPLE_COUNT_8_BIT) ? renderstates::multisample8 :
