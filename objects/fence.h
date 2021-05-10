@@ -29,8 +29,8 @@ namespace magma
     {
     public:
         explicit Fence(std::shared_ptr<Device> device,
-            bool signaled = false,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            bool signaled = false);
         ~Fence();
         bool reset() noexcept;
         VkResult getStatus() const noexcept;

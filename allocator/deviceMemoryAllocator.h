@@ -19,7 +19,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "allocator.h"
 
 VK_DEFINE_HANDLE(VmaAllocator)
+VK_DEFINE_HANDLE(VmaAllocation)
 VK_DEFINE_HANDLE(VmaDefragmentationContext)
+enum VmaMemoryUsage : int;
 
 namespace magma
 {
@@ -34,27 +36,34 @@ namespace magma
         explicit DeviceMemoryAllocator(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~DeviceMemoryAllocator();
-        VmaAllocator getHandle() const noexcept { return handle; }
-        virtual std::shared_ptr<DeviceMemory> alloc(const VkMemoryRequirements& memoryRequirements,
-            VkMemoryPropertyFlags flags,
-            bool cpuFrequentlyWriteGpuRead) override;
-        virtual std::vector<std::shared_ptr<DeviceMemory>> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
-            const std::vector<VkMemoryPropertyFlags>& flags) override;
-        virtual std::shared_ptr<DeviceMemory> realloc(std::shared_ptr<DeviceMemory> memory,
-            VkDeviceSize size) override;
-        virtual void free(std::shared_ptr<DeviceMemory>& memory) noexcept override;
-        virtual void freePages(std::vector<std::shared_ptr<DeviceMemory>>& memoryPages) noexcept override;
+        VmaAllocator getHandle() const noexcept { return allocator; }
         virtual std::shared_ptr<Device> getDevice() const noexcept override { return device; }
-        virtual std::shared_ptr<IAllocator> getAllocator() const noexcept override { return allocator; }
-        virtual VkDeviceMemory getMemoryHandle(DeviceMemoryBlock memory) const noexcept override;
+        virtual std::shared_ptr<IAllocator> getHostAllocator() const noexcept override { return hostAllocator; }
+        virtual DeviceMemoryBlock alloc(const VkMemoryRequirements& memoryRequirements,
+            VkMemoryPropertyFlags flags,
+            const void *handle,
+            VkObjectType objectType) override;
+        virtual std::vector<DeviceMemoryBlock> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
+            const std::vector<VkMemoryPropertyFlags>& flags) override;
+        virtual DeviceMemoryBlock realloc(DeviceMemoryBlock memory,
+            VkDeviceSize size) override;
+        virtual void free(DeviceMemoryBlock memory) noexcept override;
+        virtual void freePages(std::vector<DeviceMemoryBlock>& memoryPages) noexcept override;
+        virtual VkResult bindMemory(DeviceMemoryBlock memory,
+            VkDeviceSize offset,
+            const void *handle,
+            VkObjectType objectType) const noexcept override;
+        virtual MemoryBlockInfo getMemoryBlockInfo(DeviceMemoryBlock memory) const noexcept override;
         virtual std::vector<MemoryBudget> getBudget() const noexcept override;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept override;
-        virtual VkResult beginCpuDefragmentation(std::vector<std::shared_ptr<DeviceMemory>>& memoryPages,
-            DefragmentationStats* stats = nullptr) noexcept override;
+        virtual VkResult beginCpuDefragmentation(const std::list<std::shared_ptr<Resource>>& resources,
+            bool incremental,
+            DefragmentationStats* stats = nullptr) override;
         virtual VkResult beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::vector<std::shared_ptr<DeviceMemory>>& memoryPages,
-            DefragmentationStats* stats = nullptr) noexcept override;
-        virtual VkResult endDefragmentation() noexcept override;
+            const std::list<std::shared_ptr<Resource>>& resources,
+            bool incremental,
+            DefragmentationStats* stats = nullptr) override;
+        virtual VkResult endDefragmentation() override;
 
     private:
         virtual VkResult map(DeviceMemoryBlock memory,
@@ -67,11 +76,15 @@ namespace magma
         virtual VkResult invalidateMappedRange(DeviceMemoryBlock memory,
             VkDeviceSize offset,
             VkDeviceSize size) noexcept override;
+        std::vector<VmaAllocation> gatherSuballocations(const std::list<std::shared_ptr<Resource>>& resources);
+        static VmaMemoryUsage chooseMemoryUsage(VkMemoryPropertyFlags flags) noexcept;
 
     private:
         std::shared_ptr<Device> device;
-        std::shared_ptr<IAllocator> allocator;
-        VmaAllocator handle;
+        std::shared_ptr<IAllocator> hostAllocator;
+        VmaAllocator allocator;
         VmaDefragmentationContext defragmentationContext;
+        std::vector<std::shared_ptr<Resource>> defragmentationResources;
+        std::vector<VkBool32> allocationsChanged;
     };
 } // namespace magma

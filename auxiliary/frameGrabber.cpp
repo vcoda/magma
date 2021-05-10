@@ -32,7 +32,7 @@ namespace magma
 namespace aux
 {
 FrameGrabber::FrameGrabber(std::shared_ptr<Device> device,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<Allocator> allocator /* nullptr */):
     device(std::move(device)),
     queue(this->device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0)),
     allocator(std::move(allocator))
@@ -41,7 +41,7 @@ FrameGrabber::FrameGrabber(std::shared_ptr<Device> device,
 void FrameGrabber::captureFrame(std::shared_ptr<SwapchainColorAttachment> srcImage, std::shared_ptr<CommandBuffer> cmdBuffer)
 {   // Allocate linear tiled image to copy pixels to
     dstImage = std::make_shared<LinearTiledImage2D>(device, VK_FORMAT_R8G8B8A8_UNORM,
-        srcImage->getExtent(), Resource::Sharing(), allocator);
+        srcImage->getExtent(), allocator);
     const bool canBlitTiled = checkBlitSupport(srcImage->getFormat(), dstImage->getFormat());
     cmdBuffer->begin();
     {

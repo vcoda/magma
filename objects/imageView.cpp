@@ -28,10 +28,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 ImageView::ImageView(std::shared_ptr<Image> resource,
-    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    ImageView(std::move(resource), 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS, swizzle,
-        std::move(allocator))
+    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
+    ImageView(std::move(resource), 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS, swizzle)
 {}
 
 ImageView::ImageView(std::shared_ptr<Image> resource,
@@ -39,9 +37,8 @@ ImageView::ImageView(std::shared_ptr<Image> resource,
     uint32_t levelCount /* VK_REMAINING_MIP_LEVELS */,
     uint32_t baseArrayLayer /* 0 */,
     uint32_t layerCount /* VK_REMAINING_ARRAY_LAYERS */,
-    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, std::move(resource->getDevice()), std::move(allocator)),
+    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
+    NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, resource->getDevice(), resource->getHostAllocator()),
     image(std::move(resource)),
     baseMipLevel(baseMipLevel),
     levelCount(levelCount),
@@ -99,43 +96,43 @@ ImageView::ImageView(std::shared_ptr<Image> resource,
     info.subresourceRange.levelCount = levelCount;
     info.subresourceRange.baseArrayLayer = baseArrayLayer;
     info.subresourceRange.layerCount = layerCount;
-    const VkResult create = vkCreateImageView(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateImageView(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create image view");
 }
 
 ImageView::~ImageView()
 {
-    vkDestroyImageView(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyImageView(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 VkDescriptorImageInfo ImageView::getDescriptor(std::shared_ptr<const Sampler> sampler) const noexcept
 {
     const Format format(image->getFormat());
-    VkDescriptorImageInfo info;
-    info.sampler = MAGMA_OPTIONAL_HANDLE(sampler); // VK_NULL_HANDLE for storage image
-    info.imageView = handle;
-    info.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    VkDescriptorImageInfo descriptor;
+    descriptor.sampler = MAGMA_OPTIONAL_HANDLE(sampler); // VK_NULL_HANDLE for storage image
+    descriptor.imageView = handle;
+    descriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     if (image->getUsage() & VK_IMAGE_USAGE_STORAGE_BIT)
-        info.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
+        descriptor.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
     else if (image->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT)
     {
 #ifdef VK_KHR_separate_depth_stencil_layouts
         if (device->separateDepthStencilLayoutsEnabled())
         {
             if (format.depth()) // Read-only image in a shader where only the depth aspect is accessed
-                info.imageLayout = VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL_KHR;
+                descriptor.imageLayout = VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL_KHR;
             else if (format.stencil()) // Read-only image in a shader where only the stencil aspect is accessed
-                info.imageLayout = VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL_KHR;
+                descriptor.imageLayout = VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL_KHR;
             else if (format.depthStencil()) // Read-only image in a shader where both depth and stencil is accessed
-                info.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+                descriptor.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
         }
         else
 #endif // VK_KHR_separate_depth_stencil_layouts
         if (format.depth() || format.stencil() || format.depthStencil())
-            info.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+            descriptor.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
         else
-            info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL; // Read-only image in a shader
+            descriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL; // Read-only image in a shader
     }
-    return info;
+    return descriptor;
 }
 } // namespace magma

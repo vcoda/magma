@@ -23,7 +23,7 @@ namespace magma
     class Device;
     class Image2D;
     class ImageView;
-    class IAllocator;
+    class Allocator;
 
     namespace aux
     {
@@ -36,8 +36,8 @@ namespace magma
                 const VkFormat colorFormat,
                 const VkExtent2D& extent,
                 uint32_t sampleCount,
+                std::shared_ptr<Allocator> allocator = nullptr,
                 bool colorClearOp = true,
-                std::shared_ptr<IAllocator> allocator = nullptr,
                 const VkComponentMapping& swizzle = {
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY,
@@ -48,8 +48,8 @@ namespace magma
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
                 uint32_t sampleCount,
+                std::shared_ptr<Allocator> allocator = nullptr,
                 bool colorClearOp = true,
-                std::shared_ptr<IAllocator> allocator = nullptr,
                 const VkComponentMapping& swizzle = {
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY,

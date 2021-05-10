@@ -37,22 +37,22 @@ namespace magma
             const PushConstantRange& pushConstantRange,
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit PipelineLayout(std::shared_ptr<Device> device,
-            const std::initializer_list<PushConstantRange>& pushConstantRanges = {},
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const std::initializer_list<PushConstantRange>& pushConstantRanges = {});
         explicit PipelineLayout(std::shared_ptr<DescriptorSetLayout> setLayout,
             const PushConstantRange& pushConstantRange,
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit PipelineLayout(std::shared_ptr<DescriptorSetLayout> setLayout,
-            const std::initializer_list<PushConstantRange>& pushConstantRanges = {},
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const std::initializer_list<PushConstantRange>& pushConstantRanges = {});
         explicit PipelineLayout(const std::vector<std::shared_ptr<DescriptorSetLayout>>& setLayouts,
-            const std::initializer_list<PushConstantRange>& pushConstantRanges = {},
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const std::initializer_list<PushConstantRange>& pushConstantRanges = {});
         template<uint32_t setLayoutCount>
         explicit PipelineLayout(const std::shared_ptr<DescriptorSetLayout>(&setLayouts)[setLayoutCount],
-            const std::initializer_list<PushConstantRange>& pushConstantRanges = {},
-            std::shared_ptr<IAllocator> allocator = nullptr):
-            PipelineLayout(std::vector<std::shared_ptr<DescriptorSetLayout>>(setLayouts, setLayouts + setLayoutCount), pushConstantRanges, allocator) {}
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const std::initializer_list<PushConstantRange>& pushConstantRanges = {}):
+            PipelineLayout(std::vector<std::shared_ptr<DescriptorSetLayout>>(setLayouts, setLayouts + setLayoutCount), std::move(allocator), pushConstantRanges) {}
         ~PipelineLayout();
         const std::vector<std::shared_ptr<DescriptorSetLayout>>& getSetLayouts() const noexcept { return setLayouts; }
         bool hasSetLayout(std::shared_ptr<DescriptorSetLayout> setLayout) const noexcept;

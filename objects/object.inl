@@ -10,12 +10,12 @@
 namespace magma
 {
 template<typename Type>
-inline Object<Type>::Object(VkObjectType objectType, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) noexcept:
+inline Object<Type>::Object(VkObjectType objectType, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> hostAllocator) noexcept:
 #if !defined(MAGMA_X64)
     objectType(objectType),
 #endif
     device(std::move(device)),
-    allocator(std::move(allocator))
+    hostAllocator(std::move(hostAllocator))
 {
     MAGMA_UNUSED(objectType);
 }

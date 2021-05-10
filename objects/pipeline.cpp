@@ -41,7 +41,7 @@ Pipeline::Pipeline(VkPipelineBindPoint bindPoint, std::shared_ptr<Device> device
 
 Pipeline::~Pipeline()
 {
-    vkDestroyPipeline(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyPipeline(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 #ifdef VK_AMD_shader_info

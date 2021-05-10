@@ -23,7 +23,7 @@ namespace magma
     class Device;
     class Image2D;
     class ImageView;
-    class IAllocator;
+    class Allocator;
 
     namespace aux
     {
@@ -40,12 +40,12 @@ namespace magma
                 uint32_t sampleCount,
                 bool depthSampled,
                 bool stencilSampled,
+                std::shared_ptr<Allocator> allocator = nullptr,
                 const VkComponentMapping& swizzle = {
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY,
-                    VK_COMPONENT_SWIZZLE_IDENTITY},
-                std::shared_ptr<IAllocator> allocator = nullptr);
+                    VK_COMPONENT_SWIZZLE_IDENTITY});
             std::shared_ptr<ImageView> getMultisampleColorView() noexcept { return colorView; }
             std::shared_ptr<const ImageView> getMultisampleColorView() const noexcept { return colorView; }
             std::shared_ptr<ImageView> getMultisampleDepthStencilView() noexcept { return depthStencilView; }

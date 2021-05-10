@@ -27,8 +27,8 @@ namespace magma
     public:
         explicit DstTransferBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
+            std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            const Sharing& sharing = Sharing());
     };
 } // namespace magma

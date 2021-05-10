@@ -28,9 +28,8 @@ namespace magma
 BufferView::BufferView(std::shared_ptr<Buffer> resource,
     VkFormat format,
     VkDeviceSize offset /* 0 */,
-    VkDeviceSize range /* VK_WHOLE_SIZE */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_BUFFER_VIEW, resource->getDevice(), std::move(allocator)),
+    VkDeviceSize range /* VK_WHOLE_SIZE */):
+    NonDispatchable(VK_OBJECT_TYPE_BUFFER_VIEW, resource->getDevice(), resource->getHostAllocator()),
     buffer(std::move(resource)),
     format(format),
     offset(offset),
@@ -47,12 +46,12 @@ BufferView::BufferView(std::shared_ptr<Buffer> resource,
     info.format = format;
     info.offset = offset;
     info.range = range;
-    const VkResult create = vkCreateBufferView(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateBufferView(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create buffer view");
 }
 
 BufferView::~BufferView()
 {
-    vkDestroyBufferView(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyBufferView(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 } // namespace magma

@@ -29,10 +29,10 @@ namespace magma
 #ifdef VK_EXT_debug_utils
 DebugUtilsMessenger::DebugUtilsMessenger(std::shared_ptr<const Instance> instance,
     PFN_vkDebugUtilsMessengerCallbackEXT userCallback,
-    VkDebugUtilsMessageSeverityFlagsEXT messageSeverity,
-    VkDebugUtilsMessageTypeFlagsEXT messageType,
-    void *userData /* nullptr */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkDebugUtilsMessageSeverityFlagsEXT messageSeverity /* VERBOSE_BIT | INFO_BIT | WARNING_BIT ERROR_BIT */,
+    VkDebugUtilsMessageTypeFlagsEXT messageType /* GENERAL_BIT | VALIDATION_BIT | PERFORMANCE_BIT */,
+    void *userData /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT, nullptr, std::move(allocator)),
     instance(std::move(instance))
 {
@@ -48,7 +48,7 @@ DebugUtilsMessenger::DebugUtilsMessenger(std::shared_ptr<const Instance> instanc
         info.messageType = messageType;
         info.pfnUserCallback = userCallback;
         info.pUserData = userData;
-        const VkResult create = vkCreateDebugUtilsMessengerEXT(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+        const VkResult create = vkCreateDebugUtilsMessengerEXT(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
         MAGMA_THROW_FAILURE(create, "failed to create debug messenger");
     }
 }
@@ -57,7 +57,7 @@ DebugUtilsMessenger::~DebugUtilsMessenger()
 {
     MAGMA_OPTIONAL_INSTANCE_EXTENSION(vkDestroyDebugUtilsMessengerEXT);
     if (vkDestroyDebugUtilsMessengerEXT)
-        vkDestroyDebugUtilsMessengerEXT(MAGMA_HANDLE(instance), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+        vkDestroyDebugUtilsMessengerEXT(MAGMA_HANDLE(instance), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 void DebugUtilsMessenger::message(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageTypes,

@@ -41,7 +41,11 @@ namespace magma
         explicit RenderPass(std::shared_ptr<Device> device,
             const std::vector<AttachmentDescription>& attachments,
             const std::vector<SubpassDescription>& subpasses,
-            const std::vector<SubpassDependency>& dependencies = {},
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        explicit RenderPass(std::shared_ptr<Device> device,
+            const std::vector<AttachmentDescription>& attachments,
+            const std::vector<SubpassDescription>& subpasses,
+            const std::vector<SubpassDependency>& dependencies,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~RenderPass();
         const std::vector<AttachmentDescription>& getAttachments() const noexcept { return attachments; }

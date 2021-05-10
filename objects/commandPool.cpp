@@ -30,9 +30,9 @@ namespace magma
 {
 CommandPool::CommandPool(std::shared_ptr<Device> device,
     uint32_t queueFamilyIndex,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool transient /* false */,
     bool resetCommandBuffer /* true */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
     uint32_t poolCommandBufferCount /* 256 */):
     NonDispatchable(VK_OBJECT_TYPE_COMMAND_POOL, std::move(device), std::move(allocator))
 {
@@ -45,7 +45,7 @@ CommandPool::CommandPool(std::shared_ptr<Device> device,
     if (resetCommandBuffer)
         info.flags |= VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     info.queueFamilyIndex = queueFamilyIndex;
-    const VkResult create = vkCreateCommandPool(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateCommandPool(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create command pool");
     if (!getOverridenAllocator())
         pool = std::make_unique<memory::LinearPlacementPool>(sizeof(CommandBuffer), poolCommandBufferCount);
@@ -53,7 +53,7 @@ CommandPool::CommandPool(std::shared_ptr<Device> device,
 
 CommandPool::~CommandPool()
 {
-    vkDestroyCommandPool(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyCommandPool(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 bool CommandPool::reset(bool releaseResources) noexcept

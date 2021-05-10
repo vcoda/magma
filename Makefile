@@ -16,8 +16,8 @@ endif
 MAGMA_OBJS= \
 	allocator/alignedAllocator.o \
 	allocator/allocationCallbacks.o \
+	allocator/cxxAllocator.o \
 	allocator/deviceMemoryAllocator.o \
-	allocator/objectAllocator.o \
 	\
 	auxiliary/baseFramebuffer.o \
 	auxiliary/blitRectangle.o \

@@ -85,7 +85,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     info.enabledExtensionCount = MAGMA_COUNT(enabledExtensions);
     info.ppEnabledExtensionNames = enabledExtensions.data();
     info.pEnabledFeatures = extendedDeviceFeatures.empty() ? &deviceFeatures : nullptr;
-    const VkResult create = vkCreateDevice(MAGMA_HANDLE(physicalDevice), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateDevice(MAGMA_HANDLE(physicalDevice), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     switch (create) {
     case VK_ERROR_INITIALIZATION_FAILED:
         throw exception::InitializationFailed("failed to create logical device");
@@ -106,7 +106,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
 Device::~Device()
 {
     MAGMA_ASSERT(resourcePool->hasAnyDeviceResource() == false);
-    vkDestroyDevice(handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyDevice(handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const

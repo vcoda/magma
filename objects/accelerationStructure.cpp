@@ -30,8 +30,8 @@ namespace magma
 #ifdef VK_NV_ray_tracing
 AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkAccelerationStructureTypeNV type,
     uint32_t instanceCount, const std::list<Geometry>& geometries, VkBuildAccelerationStructureFlagsNV flags,
-    VkDeviceSize compactedSize, std::shared_ptr<IAllocator> allocator):
-    NonDispatchableResource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, compactedSize, std::move(device), std::move(allocator))
+    VkDeviceSize compactedSize, std::shared_ptr<Allocator> allocator):
+    NonDispatchableResource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, device, Sharing(), allocator)
 {
     info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_INFO_NV;
     info.pNext = nullptr;
@@ -54,38 +54,70 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     createInfo.compactedSize = compactedSize;
     createInfo.info = info;
     MAGMA_DEVICE_EXTENSION(vkCreateAccelerationStructureNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    const VkResult create = vkCreateAccelerationStructureNV(MAGMA_HANDLE(device), &createInfo, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateAccelerationStructureNV(MAGMA_HANDLE(device), &createInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create acceleration structure");
     const VkMemoryRequirements memoryRequirements = getObjectMemoryRequirements();
-    std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(
-        this->device, memoryRequirements.size, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+    std::shared_ptr<DeviceMemory> memory = std::make_shared<DeviceMemory>(
+        std::move(device),
+        memoryRequirements, 
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        &handle,
+        VK_OBJECT_TYPE_BUFFER,
+        std::move(allocator));
     bindMemory(std::move(memory));
 }
 
 AccelerationStructure::~AccelerationStructure()
 {
     MAGMA_DEVICE_EXTENSION(vkDestroyAccelerationStructureNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    vkDestroyAccelerationStructureNV(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyAccelerationStructureNV(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
     delete[] info.pGeometries;
 }
 
 void AccelerationStructure::bindMemory(std::shared_ptr<DeviceMemory> memory,
+    VkDeviceSize offset /* 0 */)
+{
+    VkBindAccelerationStructureMemoryInfoNV bindInfo;
+    bindInfo.sType = VK_STRUCTURE_TYPE_BIND_ACCELERATION_STRUCTURE_MEMORY_INFO_NV;
+    bindInfo.pNext = nullptr;
+    bindInfo.accelerationStructure = handle;
+    bindInfo.memory = *memory;
+    bindInfo.memoryOffset = memory->getOffset() + offset;
+    bindInfo.deviceIndexCount = 0;
+    bindInfo.pDeviceIndices = nullptr;
+    MAGMA_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
+    const VkResult bind = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &bindInfo);
+    MAGMA_THROW_FAILURE(bind, "failed to bind acceleration structure memory");
+    this->size = memory->getSize();
+    this->offset = offset;
+    this->memory = std::move(memory);
+}
+
+#ifdef VK_KHR_device_group
+void AccelerationStructure::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     const std::vector<uint32_t>& deviceIndices /* {} */,
     VkDeviceSize offset /* 0 */)
 {
-    VkBindAccelerationStructureMemoryInfoNV info;
-    info.sType = VK_STRUCTURE_TYPE_BIND_ACCELERATION_STRUCTURE_MEMORY_INFO_NV;
-    info.pNext = nullptr;
-    info.accelerationStructure = handle;
-    info.memory = *memory;
-    info.memoryOffset = offset;
-    info.deviceIndexCount = MAGMA_COUNT(deviceIndices);
-    info.pDeviceIndices = deviceIndices.data();
+    VkBindAccelerationStructureMemoryInfoNV bindInfo;
+    bindInfo.sType = VK_STRUCTURE_TYPE_BIND_ACCELERATION_STRUCTURE_MEMORY_INFO_NV;
+    bindInfo.pNext = nullptr;
+    bindInfo.accelerationStructure = handle;
+    bindInfo.memory = *memory;
+    bindInfo.memoryOffset = memory->getOffset() + offset;
+    bindInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
+    bindInfo.pDeviceIndices = deviceIndices.data();
     MAGMA_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    const VkResult bind = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &info);
+    const VkResult bind = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &bindInfo);
     MAGMA_THROW_FAILURE(bind, "failed to bind acceleration structure memory");
+    this->size = memory->getSize();
     this->offset = offset;
     this->memory = std::move(memory);
+}
+#endif // VK_KHR_device_group
+
+void AccelerationStructure::onDefragmented()
+{ 
+    // Currently there is no allocator that deal with it
 }
 
 VkMemoryRequirements AccelerationStructure::getObjectMemoryRequirements() const
@@ -114,15 +146,15 @@ uint64_t AccelerationStructure::getReferenceHandle() const
 
 VkMemoryRequirements2 AccelerationStructure::getMemoryRequirements(VkAccelerationStructureMemoryRequirementsTypeNV type) const
 {
-    VkAccelerationStructureMemoryRequirementsInfoNV info;
-    info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_INFO_NV;
-    info.pNext = nullptr;
-    info.type = type;
-    info.accelerationStructure = handle;
+    VkAccelerationStructureMemoryRequirementsInfoNV memoryInfo;
+    memoryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_INFO_NV;
+    memoryInfo.pNext = nullptr;
+    memoryInfo.type = type;
+    memoryInfo.accelerationStructure = handle;
     VkMemoryRequirements2 memoryRequirements = {};
     memoryRequirements.sType = VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2;
     MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureMemoryRequirementsNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    vkGetAccelerationStructureMemoryRequirementsNV(MAGMA_HANDLE(device), &info, &memoryRequirements);
+    vkGetAccelerationStructureMemoryRequirementsNV(MAGMA_HANDLE(device), &memoryInfo, &memoryRequirements);
     return memoryRequirements;
 }
 #endif // VK_NV_ray_tracing

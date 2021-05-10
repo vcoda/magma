@@ -24,6 +24,7 @@ namespace magma
     class Buffer;
     class SrcTransferBuffer;
     class CommandBuffer;
+    class IDeviceMemoryAllocator;
 
     /* Images represent multidimensional - up to 3 - arrays of data
        which can be used for various purposes (e.g. attachments, textures),
@@ -56,14 +57,18 @@ namespace magma
             uint32_t arrayLayer = 0) const noexcept;
         VkMemoryRequirements getMemoryRequirements() const noexcept;
         std::vector<VkSparseImageMemoryRequirements> getSparseMemoryRequirements() const;
-        void bindMemory(std::shared_ptr<DeviceMemory> memory,
-            VkDeviceSize offset = 0);
+        virtual void bindMemory(std::shared_ptr<DeviceMemory> memory,
+            VkDeviceSize offset = 0) override;
 #ifdef VK_KHR_device_group
+        virtual void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+            const std::vector<uint32_t>& deviceIndices,
+            VkDeviceSize offset = 0) override;
         void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
             const std::vector<VkRect2D>& splitInstanceBindRegions,
             VkDeviceSize offset = 0);
 #endif
+        virtual void onDefragmented() override;
         void copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer,
             uint32_t level,
             std::shared_ptr<Buffer> buffer,
@@ -84,7 +89,7 @@ namespace magma
             VkImageUsageFlags usage,
             VkImageCreateFlags flags,
             const Sharing& sharing,
-            std::shared_ptr<IAllocator> allocator);
+            std::shared_ptr<Allocator> allocator);
         explicit Image(std::shared_ptr<Device> device,
             VkImage handle,
             VkImageType imageType,
@@ -98,6 +103,7 @@ namespace magma
             std::shared_ptr<const Buffer> buffer,
             const std::vector<VkBufferImageCopy>& copyRegions,
             bool flush = true);
+        static VkSampleCountFlagBits getSampleCountBit(uint32_t samples);
 
     protected:
         VkImageCreateFlags flags;
@@ -108,6 +114,7 @@ namespace magma
         uint32_t mipLevels;
         uint32_t arrayLayers;
         uint32_t samples;
+        VkImageTiling tiling;
         VkImageUsageFlags usage;
     };
 

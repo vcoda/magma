@@ -28,8 +28,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const Descriptor& descriptor,
-    bool freeDescriptorSet /* false */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    bool freeDescriptorSet /* false */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_POOL, std::move(device), std::move(allocator))
 {
     VkDescriptorPoolCreateInfo info;
@@ -41,13 +41,13 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets,
     info.maxSets = maxSets;
     info.poolSizeCount = 1;
     info.pPoolSizes = &descriptor;
-    const VkResult create = vkCreateDescriptorPool(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateDescriptorPool(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create descriptor pool");
 }
 
 DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const std::vector<Descriptor>& descriptors,
-    bool freeDescriptorSet /* false */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    bool freeDescriptorSet /* false */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_POOL, std::move(device), std::move(allocator))
 {
     VkDescriptorPoolCreateInfo info;
@@ -59,13 +59,13 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets,
     info.maxSets = maxSets;
     info.poolSizeCount = MAGMA_COUNT(descriptors);
     info.pPoolSizes = descriptors.data();
-    const VkResult create = vkCreateDescriptorPool(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateDescriptorPool(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create descriptor pool");
 }
 
 DescriptorPool::~DescriptorPool()
 {
-    vkDestroyDescriptorPool(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyDescriptorPool(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 void DescriptorPool::reset()

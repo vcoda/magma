@@ -48,17 +48,18 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     const std::initializer_list<VkDynamicState>& dynamicStates,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<RenderPass> renderPass,
-    uint32_t subpass /* 0 */,
+    uint32_t subpass,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */):
     GraphicsPipeline(std::move(device), stages, vertexInputState, inputAssemblyState,
         TesselationState(), // No tesselation state
         ViewportState(), // No viewport state (supposed to be dynamic)
         rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
         std::move(layout), std::move(renderPass), subpass,
-        std::move(pipelineCache), std::move(basePipeline), std::move(allocator), flags)
+        std::move(allocator), std::move(pipelineCache), std::move(basePipeline),
+        flags)
 {}
 
 GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
@@ -74,10 +75,10 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     const std::initializer_list<VkDynamicState>& dynamicStates,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<RenderPass> renderPass,
-    uint32_t subpass /* 0 */,
+    uint32_t subpass,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */):
     Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout),
         std::move(pipelineCache), std::move(basePipeline), std::move(allocator))
@@ -123,7 +124,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     info.subpass = subpass;
     info.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
     info.basePipelineIndex = -1;
-    const VkResult create = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create graphics pipeline");
     hash = core::hashArgs(
         info.sType,

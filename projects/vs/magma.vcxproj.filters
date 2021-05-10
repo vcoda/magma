@@ -96,7 +96,7 @@
     <ClInclude Include="..\..\allocator\allocator.h">
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\allocator\objectAllocator.h">
+    <ClInclude Include="..\..\allocator\cxxAllocator.h">
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
     <ClInclude Include="..\..\auxiliary\blitRectangle.h">
@@ -851,7 +851,7 @@
     <ClCompile Include="..\..\core\pch.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\allocator\objectAllocator.cpp">
+    <ClCompile Include="..\..\allocator\cxxAllocator.cpp">
       <Filter>Source Files\allocator</Filter>
     </ClCompile>
     <ClCompile Include="..\..\objects\resourcePool.cpp">
@@ -982,7 +982,7 @@
     <None Include="..\..\auxiliary\shaderCompiler.inl">
       <Filter>Header Files\auxiliary</Filter>
     </None>
-    <None Include="..\..\allocator\objectAllocator.inl">
+    <None Include="..\..\allocator\cxxAllocator.inl">
       <Filter>Header Files\allocator</Filter>
     </None>
     <None Include="..\..\descriptors\subpassDependency.inl">

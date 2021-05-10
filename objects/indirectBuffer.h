@@ -26,10 +26,10 @@ namespace magma
     {
     public:
         explicit IndirectBuffer(std::shared_ptr<Device> device,
+            std::shared_ptr<Allocator> allocator = nullptr,
             uint32_t drawCommandCount = 1,
             VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            const Sharing& sharing = Sharing());
         void writeDrawCommand(uint32_t vertexCount,
             uint32_t firstVertex = 0,
             uint32_t cmdIndex = 0) noexcept;

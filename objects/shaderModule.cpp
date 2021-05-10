@@ -27,8 +27,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *bytecode, std::size_t bytecodeSize,
-    std::size_t bytecodeHash /* 0 */, VkShaderModuleCreateFlags flags /* 0 */, bool reflect /* false */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */
+    std::size_t bytecodeHash /* 0 */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkShaderModuleCreateFlags flags /* 0 */,
+    bool reflect /* false */
 #ifdef VK_EXT_validation_cache
     ,std::shared_ptr<ValidationCache> validationCache /* nullptr */
 #endif
@@ -56,7 +58,7 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
     info.flags = flags;
     info.codeSize = bytecodeSize;
     info.pCode = bytecode;
-    const VkResult create = vkCreateShaderModule(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateShaderModule(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create shader module");
     hash = core::hashArgs(
         info.sType,
@@ -79,13 +81,15 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
 }
 
 ShaderModule::ShaderModule(std::shared_ptr<Device> device, const std::vector<SpirvWord>& bytecode,
-    std::size_t bytecodeHash /* 0 */, VkShaderModuleCreateFlags flags /* 0 */, bool reflect /* false */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */
+    std::size_t bytecodeHash /* 0 */, 
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkShaderModuleCreateFlags flags /* 0 */,
+    bool reflect /* false */
 #ifdef VK_EXT_validation_cache
     ,std::shared_ptr<ValidationCache> validationCache /* nullptr */
 #endif
-    ): ShaderModule(std::move(device), bytecode.data(), bytecode.size() * sizeof(SpirvWord), bytecodeHash, flags, reflect,
-        std::move(allocator)
+    ): ShaderModule(std::move(device), bytecode.data(), bytecode.size() * sizeof(SpirvWord), bytecodeHash, std::move(allocator),
+        flags, reflect
 #ifdef VK_EXT_validation_cache
         ,std::move(validationCache)
 #endif
@@ -94,7 +98,7 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const std::vector<Spi
 
 ShaderModule::~ShaderModule()
 {
-    vkDestroyShaderModule(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyShaderModule(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 std::size_t ShaderModule::getHash() const noexcept

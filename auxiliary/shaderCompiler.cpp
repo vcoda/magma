@@ -102,8 +102,8 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     const std::size_t bytecodeSize = shaderc_result_get_length(result);
     std::shared_ptr<ShaderModule> shaderModule;
     try {
-        shaderModule = std::make_shared<ShaderModule>(device, reinterpret_cast<const uint32_t *>(bytecode), bytecodeSize,
-            0, 0, false, device->getAllocator());
+        shaderModule = std::make_shared<ShaderModule>(device, reinterpret_cast<const uint32_t *>(bytecode), bytecodeSize, 0,
+            device->getHostAllocator(), 0, false);
         shaderc_result_release(result);
     } catch (const exception::ErrorResult&)
     {

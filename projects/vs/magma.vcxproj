@@ -149,7 +149,7 @@
     <ClInclude Include="..\..\allocator\allocator.h" />
     <ClInclude Include="..\..\allocator\deviceMemoryAllocator.h" />
     <ClInclude Include="..\..\allocator\linearPlacementPool.h" />
-    <ClInclude Include="..\..\allocator\objectAllocator.h" />
+    <ClInclude Include="..\..\allocator\cxxAllocator.h" />
     <ClInclude Include="..\..\auxiliary\blitRectangle.h" />
     <ClInclude Include="..\..\auxiliary\colorFramebuffer.h" />
     <ClInclude Include="..\..\auxiliary\baseFramebuffer.h" />
@@ -314,7 +314,7 @@
     <ClCompile Include="..\..\allocator\alignedAllocator.cpp" />
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp" />
     <ClCompile Include="..\..\allocator\deviceMemoryAllocator.cpp" />
-    <ClCompile Include="..\..\allocator\objectAllocator.cpp" />
+    <ClCompile Include="..\..\allocator\cxxAllocator.cpp" />
     <ClCompile Include="..\..\auxiliary\baseFramebuffer.cpp" />
     <ClCompile Include="..\..\auxiliary\blitRectangle.cpp" />
     <ClCompile Include="..\..\auxiliary\colorFramebuffer.cpp" />
@@ -431,7 +431,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\allocator\objectAllocator.inl" />
+    <None Include="..\..\allocator\cxxAllocator.inl" />
     <None Include="..\..\auxiliary\immediateRender.inl" />
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">
       <FileType>Document</FileType>

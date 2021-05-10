@@ -29,9 +29,10 @@ namespace magma
 {
 #ifdef VK_EXT_debug_report
 DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instance,
-    PFN_vkDebugReportCallbackEXT userCallback, VkDebugReportFlagsEXT flags,
-    void *userData /* nullptr */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    PFN_vkDebugReportCallbackEXT userCallback, 
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkDebugReportFlagsEXT flags /* INFORMATION_BIT | WARNING_BIT_EXT | PERFORMANCE_WARNING_BIT_EXT | ERROR_BIT DEBUG_BIT */,
+    void *userData /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT, nullptr, std::move(allocator)),
     instance(std::move(instance))
 {
@@ -49,7 +50,7 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
         info.flags = flags;
         info.pfnCallback = userCallback;
         info.pUserData = userData;
-        const VkResult create = vkCreateDebugReportCallbackEXT(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+        const VkResult create = vkCreateDebugReportCallbackEXT(MAGMA_HANDLE(instance), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
         MAGMA_THROW_FAILURE(create, "failed to create debug report callback");
     }
 }
@@ -58,7 +59,7 @@ DebugReportCallback::~DebugReportCallback()
 {
     MAGMA_OPTIONAL_INSTANCE_EXTENSION(vkDestroyDebugReportCallbackEXT);
     if (vkDestroyDebugReportCallbackEXT)
-        vkDestroyDebugReportCallbackEXT(MAGMA_HANDLE(instance), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+        vkDestroyDebugReportCallbackEXT(MAGMA_HANDLE(instance), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkObjectType objectType,

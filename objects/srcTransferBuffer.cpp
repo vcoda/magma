@@ -23,9 +23,9 @@ namespace magma
 {
 SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
     const void *data /* nullptr */,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(std::move(device), size,
         VK_BUFFER_USAGE_TRANSFER_SRC_BIT,

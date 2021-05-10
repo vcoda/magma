@@ -33,19 +33,19 @@ namespace magma
         explicit ShaderBindingTable(std::shared_ptr<Device> device,
             const void *shaderGroupHandles,
             uint32_t groupCount,
+            std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            const Sharing& sharing = Sharing());
         explicit ShaderBindingTable(std::shared_ptr<Device> device,
             const std::vector<uint8_t>& shaderGroupHandles,
             uint32_t groupCount,
+            std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            const Sharing& sharing = Sharing());
         explicit ShaderBindingTable(std::shared_ptr<const RayTracingPipeline> pipeline,
+            std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            const Sharing& sharing = Sharing());
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma

@@ -23,7 +23,7 @@ namespace magma
     class Device;
     class Image2D;
     class ImageView;
-    class IAllocator;
+    class Allocator;
 
     namespace aux
     {
@@ -39,9 +39,9 @@ namespace magma
                 const VkFormat depthStencilFormat,
                 const VkExtent2D& extent,
                 bool depthSampled,
+                std::shared_ptr<Allocator> allocator = nullptr,
                 bool colorClearOp = true,
                 bool depthStencilClearOp = true, // Set to false in case of separate depth pass
-                std::shared_ptr<IAllocator> allocator = nullptr,
                 const std::vector<VkComponentMapping>& swizzles = {});
             std::shared_ptr<ImageView> getAttachmentView(uint32_t index) noexcept { return attachmentViews[index]; }
             std::shared_ptr<const ImageView> getAttachmentView(uint32_t index) const noexcept { return attachmentViews[index]; }

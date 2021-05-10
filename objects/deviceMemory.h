@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class Allocator;
     class IDeviceMemoryAllocator;
 
     /* Opaque handle to memory sub-allocation.
@@ -33,29 +34,34 @@ namespace magma
     class DeviceMemory : public NonDispatchable<VkDeviceMemory>
     {
     public:
-        explicit DeviceMemory(std::shared_ptr<IDeviceMemoryAllocator> allocator,
-            DeviceMemoryBlock memory,
-            VkDeviceMemory handle,
-            VkDeviceSize size,
-            VkMemoryPropertyFlags flags) noexcept;
         explicit DeviceMemory(std::shared_ptr<Device> device,
-            VkDeviceSize size,
+            const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            const void *object,
+            VkObjectType objectType,
+            std::shared_ptr<Allocator> allocator = nullptr);
 #ifdef VK_KHR_device_group
         explicit DeviceMemory(std::shared_ptr<Device> device,
             uint32_t deviceMask,
-            VkDeviceSize size,
+            const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<Allocator> allocator = nullptr);
 #endif
         ~DeviceMemory();
-        std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return allocator; }
+        std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return deviceAllocator; }
         DeviceMemoryBlock getAllocation() const noexcept { return memory; }
-        VkDeviceSize getSize() const noexcept { return size; }
+        VkDeviceSize getOffset() const noexcept { return offset; }
+        VkDeviceSize getSize() const noexcept { return memoryRequirements.size; }
+        VkDeviceSize getAlignment() const noexcept { return memoryRequirements.alignment; }
+        uint32_t getMemoryTypeBits() const noexcept { return memoryRequirements.memoryTypeBits; }
         bool local() const noexcept;
+        bool pinned() const noexcept;
         bool hostVisible() const noexcept;
-        bool hostMapped() const noexcept;
+        bool hostCached() const noexcept;
+        bool mapped() const noexcept;
+        void bind(const void *object,
+            VkObjectType objectType,
+            VkDeviceSize offset /* 0 */);
         void *map(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE,
             VkMemoryMapFlags flags = 0) noexcept;
@@ -68,15 +74,17 @@ namespace magma
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
         bool invalidateMappedRange(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
+        void onDefragmented() noexcept;
 
     private:
         uint32_t getTypeIndex(VkMemoryPropertyFlags flags) const;
 
-        std::shared_ptr<IDeviceMemoryAllocator> allocator;
+        const VkMemoryRequirements memoryRequirements;
+        const VkMemoryPropertyFlags flags;
+        std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
         DeviceMemoryBlock memory;
-        VkDeviceSize size;
-        VkMemoryPropertyFlags flags;
-        bool mapped;
+        VkDeviceSize offset;
+        void *mappedRange;
     };
 } // namespace magma
 

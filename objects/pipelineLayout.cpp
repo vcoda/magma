@@ -28,12 +28,12 @@ namespace magma
 {
 PipelineLayout::PipelineLayout(std::shared_ptr<Device> device, const PushConstantRange& pushConstantRange,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    PipelineLayout(std::move(device), {pushConstantRange}, std::move(allocator))
+    PipelineLayout(std::move(device), std::move(allocator), {pushConstantRange})
 {}
 
 PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
-    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, std::move(device), std::move(allocator))
 {
     VkPipelineLayoutCreateInfo info;
@@ -44,7 +44,7 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
     info.pSetLayouts = nullptr;
     info.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
     info.pPushConstantRanges = pushConstantRanges.begin();
-    const VkResult create = vkCreatePipelineLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreatePipelineLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create pipeline layout");
     hash = core::hashArgs(
         info.sType,
@@ -57,18 +57,18 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
 
 PipelineLayout::PipelineLayout(std::shared_ptr<DescriptorSetLayout> setLayout, const PushConstantRange& pushConstantRange,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    PipelineLayout(std::move(setLayout), {pushConstantRange}, std::move(allocator))
+    PipelineLayout(std::move(setLayout), std::move(allocator), {pushConstantRange})
 {}
 
 PipelineLayout::PipelineLayout(std::shared_ptr<DescriptorSetLayout> setLayout,
-    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    PipelineLayout(std::vector<std::shared_ptr<DescriptorSetLayout>>{setLayout}, std::move(pushConstantRanges), std::move(allocator))
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */):
+    PipelineLayout(std::vector<std::shared_ptr<DescriptorSetLayout>>{setLayout}, std::move(allocator), std::move(pushConstantRanges))
 {}
 
 PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<DescriptorSetLayout>>& setLayouts,
-    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, std::move(setLayouts[0]->getDevice()), std::move(allocator)),
     setLayouts(setLayouts)
 {
@@ -83,7 +83,7 @@ PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<DescriptorSetLa
     info.pSetLayouts = dereferencedSetLayouts;
     info.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
     info.pPushConstantRanges = pushConstantRanges.begin();
-    const VkResult create = vkCreatePipelineLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreatePipelineLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create pipeline layout");
     hash = core::hashArgs(
         info.sType,
@@ -96,7 +96,7 @@ PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<DescriptorSetLa
 
 PipelineLayout::~PipelineLayout()
 {
-    vkDestroyPipelineLayout(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyPipelineLayout(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 bool PipelineLayout::hasSetLayout(std::shared_ptr<DescriptorSetLayout> setLayout) const noexcept

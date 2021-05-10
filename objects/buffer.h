@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class CommandBuffer;
+    class IDeviceMemoryAllocator;
 
     /* Buffers represent linear arrays of data which are used
        for various purposes by binding them to a graphics or compute
@@ -32,16 +33,18 @@ namespace magma
     {
     public:
         ~Buffer();
-        void bindMemory(std::shared_ptr<DeviceMemory> memory,
-            VkDeviceSize offset = 0);
-#ifdef VK_KHR_device_group
-        void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
-            const std::vector<uint32_t>& deviceIndices,
-            VkDeviceSize offset = 0);
-#endif
+        VkBufferCreateFlags getFlags() const noexcept { return flags; }
         VkBufferUsageFlags getUsage() const noexcept { return usage; }
         VkMemoryRequirements getMemoryRequirements() const noexcept;
         VkDescriptorBufferInfo getDescriptor() const noexcept;
+        virtual void bindMemory(std::shared_ptr<DeviceMemory> memory,
+            VkDeviceSize offset = 0) override;
+#ifdef VK_KHR_device_group
+        virtual void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+            const std::vector<uint32_t>& deviceIndices,
+            VkDeviceSize offset = 0) override;
+#endif
+        virtual void onDefragmented() override;
 
     protected:
         explicit Buffer(std::shared_ptr<Device> device,
@@ -50,22 +53,17 @@ namespace magma
             VkMemoryPropertyFlags memoryFlags,
             VkBufferCreateFlags flags,
             const Sharing& sharing,
-            std::shared_ptr<IAllocator> allocator);
-        explicit Buffer(std::shared_ptr<DeviceMemory> memory,
-            VkDeviceSize size,
-            VkDeviceSize offset,
-            VkBufferUsageFlags usage,
-            VkBufferCreateFlags flags,
-            const Sharing& sharing,
-            std::shared_ptr<IAllocator> allocator);
+            std::shared_ptr<Allocator> allocator);
         void copyHost(const void *data,
             CopyMemoryFunction copyFn) noexcept;
         void copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<const Buffer> buffer,
+            std::shared_ptr<const Buffer> srcBuffer,
+            VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,
             VkDeviceSize dstOffset = 0,
             bool flush = true);
 
+        const VkBufferCreateFlags flags;
         const VkBufferUsageFlags usage;
     };
 } // namespace magma

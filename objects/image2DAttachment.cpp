@@ -26,8 +26,8 @@ ColorAttachment::ColorAttachment(std::shared_ptr<Device> device,
     const VkExtent2D& extent,
     uint32_t mipLevels,
     uint32_t samples,
-    bool sampled /* true */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    bool sampled /* true */):
     Image2D(std::move(device), colorFormat, extent, mipLevels, samples,
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | (sampled ? VK_IMAGE_USAGE_SAMPLED_BIT : 0),
@@ -39,8 +39,8 @@ DepthStencilAttachment::DepthStencilAttachment(std::shared_ptr<Device> device,
     const VkExtent2D& extent,
     uint32_t mipLevels,
     uint32_t samples,
-    bool sampled /* false */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    bool sampled /* false */):
     Image2D(std::move(device), depthStencilFormat, extent, mipLevels, samples,
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | (sampled ? VK_IMAGE_USAGE_SAMPLED_BIT : 0),

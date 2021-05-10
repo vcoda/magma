@@ -31,6 +31,7 @@ namespace magma
     public:
         explicit DebugUtilsMessenger(std::shared_ptr<const Instance> instance,
             PFN_vkDebugUtilsMessengerCallbackEXT userCallback,
+            std::shared_ptr<IAllocator> allocator = nullptr,
             VkDebugUtilsMessageSeverityFlagsEXT messageSeverity =
                 VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
                 VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT |
@@ -40,8 +41,7 @@ namespace magma
                 VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
                 VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
                 VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT,
-            void *userData = nullptr,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            void *userData = nullptr);
         ~DebugUtilsMessenger();
         void message(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
             VkDebugUtilsMessageTypeFlagsEXT messageTypes,

@@ -56,6 +56,10 @@ void *AlignedAllocator::realloc(void *original, std::size_t size, std::size_t al
 
 void AlignedAllocator::free(void *memory) noexcept
 {
+#ifdef _MSC_VER
+    _aligned_free(memory);
+#else
     ::free(memory);
+#endif
 }
 } // namespace magma

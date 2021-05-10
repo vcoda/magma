@@ -45,7 +45,7 @@ namespace magma
             VkSurfaceTransformFlagBitsKHR preTransform,
             VkCompositeAlphaFlagBitsKHR compositeAlpha,
             VkPresentModeKHR presentMode,
-            VkSwapchainCreateFlagsKHR flags = 0,
+            VkSwapchainCreateFlagsKHR flags,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<const DebugReportCallback> debugReportCallback = nullptr);
         ~Swapchain();

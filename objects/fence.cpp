@@ -25,8 +25,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Fence::Fence(std::shared_ptr<Device> device,
-    const bool signaled /* false */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const bool signaled /* false */):
     NonDispatchable(VK_OBJECT_TYPE_FENCE, std::move(device), std::move(allocator))
 {
     VkFenceCreateInfo info;
@@ -35,13 +35,13 @@ Fence::Fence(std::shared_ptr<Device> device,
     info.flags = 0;
     if (signaled)
         info.flags |= VK_FENCE_CREATE_SIGNALED_BIT;
-    const VkResult create = vkCreateFence(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateFence(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create fence");
 }
 
 Fence::~Fence()
 {
-    vkDestroyFence(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyFence(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 bool Fence::reset() noexcept

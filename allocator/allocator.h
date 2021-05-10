@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../core/destructible.h"
+#include "../core/noncopyable.h"
 
 namespace magma
 {
@@ -51,6 +52,13 @@ namespace magma
             VkSystemAllocationScope allocationScope) noexcept = 0;
     };
 
+    struct MemoryBlockInfo
+    {
+        VkDeviceMemory deviceMemory;
+        VkDeviceSize offset;
+        VkDeviceSize size;
+    };
+
     struct MemoryBudget
     {
         VkDeviceSize blockBytes;
@@ -68,8 +76,8 @@ namespace magma
     };
 
     class Device;
-    class DeviceMemory;
     class CommandBuffer;
+    class Resource;
 
     /* Opaque handle to memory sub-allocation.
        Each device memory allocator hides the implementation details under it. */
@@ -87,26 +95,33 @@ namespace magma
     class IDeviceMemoryAllocator : public core::IDestructible
     {
     public:
-        virtual std::shared_ptr<DeviceMemory> alloc(const VkMemoryRequirements& memoryRequirements,
-            VkMemoryPropertyFlags flags,
-            bool cpuFrequentlyWriteGpuRead) = 0;
-        virtual std::vector<std::shared_ptr<DeviceMemory>> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
-            const std::vector<VkMemoryPropertyFlags>& flags) = 0;
-        virtual std::shared_ptr<DeviceMemory> realloc(std::shared_ptr<DeviceMemory> memory,
-            VkDeviceSize size) = 0;
-        virtual void free(std::shared_ptr<DeviceMemory>& memory) noexcept = 0;
-        virtual void freePages(std::vector<std::shared_ptr<DeviceMemory>>& memoryPages) noexcept = 0;
         virtual std::shared_ptr<Device> getDevice() const noexcept = 0;
-        virtual std::shared_ptr<IAllocator> getAllocator() const noexcept = 0;
-        virtual VkDeviceMemory getMemoryHandle(DeviceMemoryBlock memory) const noexcept = 0;
+        virtual std::shared_ptr<IAllocator> getHostAllocator() const noexcept = 0;
+        virtual DeviceMemoryBlock alloc(const VkMemoryRequirements& memoryRequirements,
+            VkMemoryPropertyFlags flags,
+            const void *handle,
+            VkObjectType objectType) = 0;
+        virtual std::vector<DeviceMemoryBlock> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
+            const std::vector<VkMemoryPropertyFlags>& flags) = 0;
+        virtual DeviceMemoryBlock realloc(DeviceMemoryBlock memory,
+            VkDeviceSize size) = 0;
+        virtual void free(DeviceMemoryBlock memory) noexcept = 0;
+        virtual void freePages(std::vector<DeviceMemoryBlock>& memoryPages) noexcept = 0;
+        virtual VkResult bindMemory(DeviceMemoryBlock memory,
+            VkDeviceSize offset,
+            const void *handle,
+            VkObjectType objectType) const noexcept = 0;
+        virtual MemoryBlockInfo getMemoryBlockInfo(DeviceMemoryBlock memory) const noexcept = 0;
         virtual std::vector<MemoryBudget> getBudget() const noexcept = 0;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept = 0;
-        virtual VkResult beginCpuDefragmentation(std::vector<std::shared_ptr<DeviceMemory>>& memoryPages,
-            DefragmentationStats* stats = nullptr) noexcept = 0;
+        virtual VkResult beginCpuDefragmentation(const std::list<std::shared_ptr<Resource>>& resources,
+            bool incremental,
+            DefragmentationStats* stats = nullptr) = 0;
         virtual VkResult beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::vector<std::shared_ptr<DeviceMemory>>& memoryPages,
-            DefragmentationStats* stats = nullptr) noexcept = 0;
-        virtual VkResult endDefragmentation() noexcept = 0;
+            const std::list<std::shared_ptr<Resource>>& resources,
+            bool incremental,
+            DefragmentationStats* stats = nullptr) = 0;
+        virtual VkResult endDefragmentation() = 0;
 
     private:
         virtual VkResult map(DeviceMemoryBlock memory,
@@ -121,4 +136,23 @@ namespace magma
             VkDeviceSize size) noexcept = 0;
         friend class DeviceMemory;
     };
+
+    /* Aggregates host and device memory allocators. */
+
+    class Allocator : public core::NonCopyable
+    {
+    public:
+        explicit Allocator(std::shared_ptr<IAllocator> hostAllocator, 
+            std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator) noexcept:
+            hostAllocator(std::move(hostAllocator)), deviceAllocator(std::move(deviceAllocator)) {}
+        std::shared_ptr<IAllocator> getHostAllocator() const noexcept { return hostAllocator; }
+        std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return deviceAllocator; }
+
+    private:
+        std::shared_ptr<IAllocator> hostAllocator;
+        std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
+    };
 } // namespace magma
+
+#define MAGMA_HOST_ALLOCATOR(allocator) allocator ? allocator->getHostAllocator() : nullptr
+#define MAGMA_DEVICE_ALLOCATOR(allocator) allocator ? allocator->getDeviceAllocator() : nullptr

@@ -19,8 +19,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "core/pch.h"
 
-#include "allocator/allocator.h"
-#include "allocator/objectAllocator.h"
+#include "allocator/alignedAllocator.h"
+#include "allocator/cxxAllocator.h"
+#include "allocator/deviceMemoryAllocator.h"
 
 #include "objects/accelerationStructure.h"
 #include "objects/accelerationStructureInstanceBuffer.h"

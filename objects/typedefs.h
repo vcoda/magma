@@ -72,6 +72,7 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(PipelineStatisticsQuery)
     MAGMA_TYPEDEF_SHARED_PTR(RayTracingBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(RayTracingPipeline)
+    MAGMA_TYPEDEF_SHARED_PTR(Resource)
     MAGMA_TYPEDEF_SHARED_PTR(QueryPool)
     MAGMA_TYPEDEF_SHARED_PTR(Queue)
     MAGMA_TYPEDEF_SHARED_PTR(RenderPass)
@@ -102,6 +103,7 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(MetalSurface)
 
     MAGMA_TYPEDEF_INTERFACE_SHARED_PTR(Allocator)
+    MAGMA_TYPEDEF_INTERFACE_SHARED_PTR(DeviceMemoryAllocator)
 
     MAGMA_TYPEDEF_UNIQUE_PTR(InstanceExtensions)
     MAGMA_TYPEDEF_UNIQUE_PTR(PhysicalDeviceExtensions)

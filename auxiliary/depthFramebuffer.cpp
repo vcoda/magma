@@ -24,27 +24,23 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
 #include "../objects/framebuffer.h"
+#include "../allocator/allocator.h"
 
 namespace magma
 {
 namespace aux
 {
 DepthFramebuffer::DepthFramebuffer(std::shared_ptr<Device> device, const VkFormat depthFormat, const VkExtent2D& extent,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<Allocator> allocator /* nullptr */):
     Framebuffer(VK_FORMAT_UNDEFINED, depthFormat, 1)
 {   // Create depth attachment
     depth = std::make_shared<DepthStencilAttachment>(device, depthFormat, extent,
          1, // mipLevels
          1, // samples
-         true, // VK_IMAGE_USAGE_SAMPLED_BIT
-         allocator);
+         allocator,
+         true); // VK_IMAGE_USAGE_SAMPLED_BIT
     // Create depth view
-    constexpr VkComponentMapping dontSwizzle = {
-        VK_COMPONENT_SWIZZLE_IDENTITY,
-        VK_COMPONENT_SWIZZLE_IDENTITY,
-        VK_COMPONENT_SWIZZLE_IDENTITY,
-        VK_COMPONENT_SWIZZLE_IDENTITY};
-    depthView = std::make_shared<ImageView>(depth, dontSwizzle, allocator);
+    depthView = std::make_shared<ImageView>(depth);
     // We should be able to read depth in the shader when a render pass instance ends
     const VkImageLayout finalLayout = optimalDepthStencilLayout(device, depthFormat, true);
     const AttachmentDescription depthAttachment(depthFormat, 1,
@@ -52,8 +48,8 @@ DepthFramebuffer::DepthFramebuffer(std::shared_ptr<Device> device, const VkForma
          op::dontCare, // Stencil don't care
          VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
          finalLayout); // Depth image will be transitioned to when a render pass instance ends
-    renderPass = std::make_shared<RenderPass>(std::move(device), depthAttachment, allocator);
-    framebuffer = std::make_shared<magma::Framebuffer>(renderPass, depthView, 0, std::move(allocator));
+    renderPass = std::make_shared<RenderPass>(std::move(device), depthAttachment, MAGMA_HOST_ALLOCATOR(allocator));
+    framebuffer = std::make_shared<magma::Framebuffer>(renderPass, depthView, MAGMA_HOST_ALLOCATOR(allocator), 0);
 }
 } // namespace aux
 } // namespace magma

@@ -29,8 +29,8 @@ namespace magma
             VkFormat format,
             uint32_t dimension,
             uint32_t mipLevels,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Sharing& sharing = Sharing());
         explicit ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
             uint32_t dimension,
@@ -38,16 +38,16 @@ namespace magma
             std::shared_ptr<const SrcTransferBuffer> buffer,
             const MipmapLayout& mipOffsets,
             const CopyLayout& bufferLayout = {0, 0, 0},
+            std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
             bool flush = true);
         explicit ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
             uint32_t dimension,
             const MipmapData mipData[6],
             const MipmapLayout& mipSizes,
+            std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
     };
 } // namespace magma

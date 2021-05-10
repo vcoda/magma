@@ -48,15 +48,15 @@ void AccelerationStructureInstance::setAccelerationStructure(std::shared_ptr<con
 }
 
 AccelerationStructureInstanceBuffer::AccelerationStructureInstanceBuffer(std::shared_ptr<Device> device, uint32_t instanceCount,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    const Sharing& sharing /* default */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    const Sharing& sharing /* default */):
     RayTracingBuffer(device, 
         sizeof(AccelerationStructureInstance) * instanceCount,
-        flags, sharing, allocator),
+        allocator, flags, sharing),
     stagingBuffer(std::make_shared<SrcTransferBuffer>(std::move(device),
         sizeof(AccelerationStructureInstance) * instanceCount, nullptr,
-        flags, sharing, std::move(allocator))),
+        std::move(allocator), flags, sharing)),
     instances(nullptr),
     instanceCount(instanceCount)
 {
@@ -73,7 +73,7 @@ AccelerationStructureInstanceBuffer::AccelerationStructureInstanceBuffer(std::sh
 
 AccelerationStructureInstanceBuffer::~AccelerationStructureInstanceBuffer()
 {
-    if (stagingBuffer->getMemory()->hostMapped())
+    if (stagingBuffer->getMemory()->mapped())
         stagingBuffer->getMemory()->unmap();
 }
 

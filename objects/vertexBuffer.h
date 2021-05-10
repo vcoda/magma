@@ -38,10 +38,10 @@ namespace magma
         explicit BaseVertexBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkBufferUsageFlags usage,
-            VkMemoryPropertyFlags memFlags,
+            VkMemoryPropertyFlags memoryFlags,
             VkBufferCreateFlags flags,
             const Sharing& sharing,
-            std::shared_ptr<IAllocator> allocator);
+            std::shared_ptr<Allocator> allocator);
 
         uint32_t vertexCount;
     };
@@ -54,30 +54,32 @@ namespace magma
         explicit VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkDeviceSize size,
             const void *data,
+            std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         explicit VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+            std::shared_ptr<Allocator> allocator = nullptr,
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,
             VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            const Sharing& sharing = Sharing());
     };
 
-    /* Dynamic vertex buffer that can be mapped for host access. */
+    /* Dynamic vertex buffer for fast data transfer from host to device 
+       when using page-locked (or "pinned") memory. */
 
     class DynamicVertexBuffer : public BaseVertexBuffer
     {
     public:
         explicit DynamicVertexBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
+            bool pinnedMemory,
+            std::shared_ptr<Allocator> allocator = nullptr,
             const void *initial = nullptr,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
     };
 
@@ -88,17 +90,17 @@ namespace magma
         explicit AccelerationStructureVertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkDeviceSize size,
             const void *data,
+            std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         explicit AccelerationStructureVertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+            std::shared_ptr<Allocator> allocator = nullptr,
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,
             VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            const Sharing& sharing = Sharing());
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma

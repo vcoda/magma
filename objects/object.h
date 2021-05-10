@@ -17,7 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "objectType.h"
-#include "../allocator/objectAllocator.h"
+#include "../core/noncopyable.h"
+#include "../allocator/cxxAllocator.h"
 #include "../misc/deviceExtension.h"
 #include "../helpers/castToDebugReport.h"
 
@@ -29,21 +30,21 @@ namespace magma
     /* Base non-copyable object for dispatchable and non-dispatchable handles. */
 
     template<typename Type>
-    class Object : public core::NonCopyable,
+    class Object : public CxxAllocator,
+        public core::NonCopyable
 #ifdef MAGMA_X64
         // Use custom template specialization for ::getObjectType() method
-        public ObjectType<Type>,
+        ,public ObjectType<Type>
 #endif
-        public memory::Allocator
     {
     public:
         explicit Object(VkObjectType objectType,
             std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> allocator) noexcept;
+            std::shared_ptr<IAllocator> hostAllocator) noexcept;
         virtual ~Object() = default;
         VkObjectType getObjectType() const noexcept;
         std::shared_ptr<Device> getDevice() const noexcept { return device; }
-        std::shared_ptr<IAllocator> getAllocator() const noexcept { return allocator; }
+        std::shared_ptr<IAllocator> getHostAllocator() const noexcept { return hostAllocator; }
         virtual uint64_t getHandle() const noexcept = 0;
         void setObjectName(const char *name) noexcept;
         void setObjectTag(uint64_t tagName, std::size_t tagSize, const void *tag) noexcept;
@@ -58,7 +59,7 @@ namespace magma
         VkObjectType objectType;
 #endif
         std::shared_ptr<Device> device;
-        std::shared_ptr<IAllocator> allocator;
+        std::shared_ptr<IAllocator> hostAllocator;
     };
 } // namespace magma
 

@@ -28,16 +28,16 @@ namespace magma
         explicit SrcTransferBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             const void *data = nullptr,
+            std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
         template<typename Type>
         explicit SrcTransferBuffer(std::shared_ptr<Device> device,
             const std::vector<Type>& data,
+            std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),
-            std::shared_ptr<IAllocator> allocator = nullptr,
             CopyMemoryFunction copyFn = nullptr);
     };
 } // namespace magma

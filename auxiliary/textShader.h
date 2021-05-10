@@ -30,7 +30,7 @@ namespace magma
     class DescriptorSetLayout;
     class PipelineCache;
     class GraphicsPipeline;
-    class IAllocator;
+    class Allocator;
 
     namespace aux
     {
@@ -44,7 +44,7 @@ namespace magma
             explicit TextShader(const uint32_t maxChars, const uint32_t maxStrings,
                 std::shared_ptr<RenderPass> renderPass,
                 std::shared_ptr<PipelineCache> pipelineCache = nullptr,
-                std::shared_ptr<IAllocator> allocator = nullptr);
+                std::shared_ptr<Allocator> allocator = nullptr);
             void draw(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept;
             void begin();
             void end();

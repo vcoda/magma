@@ -23,7 +23,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "queue.h"
 #include "fence.h"
 #include "commandBuffer.h"
-#include "../allocator/allocator.h"
 #include "../misc/deviceExtension.h"
 #include "../exceptions/errorResult.h"
 #include "../core/copyMemory.h"
@@ -32,58 +31,59 @@ namespace magma
 {
 Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags, VkBufferCreateFlags flags,
-    const Sharing& sharing, std::shared_ptr<IAllocator> allocator):
-    NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, size, std::move(device), std::move(allocator)),
+    const Sharing& sharing, std::shared_ptr<Allocator> allocator):
+    NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, device, sharing, allocator),
+    flags(flags),
     usage(usage)
 {
-    VkBufferCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = flags;
-    info.size = size;
-    info.usage = usage;
-    info.sharingMode = sharing.getMode();
-    info.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
-    info.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
-    const VkResult create = vkCreateBuffer(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    VkBufferCreateInfo bufferInfo;
+    bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bufferInfo.pNext = nullptr;
+    bufferInfo.flags = flags;
+    bufferInfo.size = size;
+    bufferInfo.usage = usage;
+    bufferInfo.sharingMode = sharing.getMode();
+    bufferInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
+    bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
+    const VkResult create = vkCreateBuffer(MAGMA_HANDLE(device), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create buffer");
-    VkMemoryRequirements memoryRequirements = {};
-    vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
-    std::shared_ptr<DeviceMemory> memory(std::make_shared<DeviceMemory>(
-        this->device, memoryRequirements.size, memoryFlags));
+    const VkMemoryRequirements memoryRequirements = getMemoryRequirements();
+    std::shared_ptr<DeviceMemory> memory = std::make_shared<DeviceMemory>(
+        std::move(device),
+        memoryRequirements, 
+        memoryFlags,
+        &handle,
+        VK_OBJECT_TYPE_BUFFER,
+        std::move(allocator));
     bindMemory(std::move(memory));
-}
-
-Buffer::Buffer(std::shared_ptr<DeviceMemory> memory, VkDeviceSize size, VkDeviceSize offset,
-    VkBufferUsageFlags usage, VkBufferCreateFlags flags,
-    const Sharing& sharing, std::shared_ptr<IAllocator> allocator):
-    NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, size, memory->getDevice(), std::move(allocator)),
-    usage(usage)
-{
-    VkBufferCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = flags;
-    info.size = size;
-    info.usage = usage;
-    info.sharingMode = sharing.getMode();
-    info.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
-    info.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
-    const VkResult create = vkCreateBuffer(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create buffer");
-    bindMemory(std::move(memory), offset);
 }
 
 Buffer::~Buffer()
 {
-    vkDestroyBuffer(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyBuffer(*device, handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+}
+
+VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
+{
+    VkMemoryRequirements memoryRequirements = {};
+    vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
+    return memoryRequirements;
+}
+
+VkDescriptorBufferInfo Buffer::getDescriptor() const noexcept
+{
+    VkDescriptorBufferInfo descriptor;
+    descriptor.buffer = handle;
+    descriptor.offset = 0;
+    descriptor.range = VK_WHOLE_SIZE;
+    return descriptor;
 }
 
 void Buffer::bindMemory(std::shared_ptr<DeviceMemory> memory,
     VkDeviceSize offset /* 0 */)
 {
-    const VkResult bind = vkBindBufferMemory(MAGMA_HANDLE(device), handle, *memory, offset);
-    MAGMA_THROW_FAILURE(bind, "failed to bind buffer memory");
+    memory->bind(&handle, VK_OBJECT_TYPE_BUFFER, offset);
+    this->size = memory->getSize();
     this->offset = offset;
     this->memory = std::move(memory);
 }
@@ -93,38 +93,41 @@ void Buffer::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     const std::vector<uint32_t>& deviceIndices,
     VkDeviceSize offset /* 0 */)
 {
-    VkBindBufferMemoryDeviceGroupInfo deviceGroupBindInfo;
-    deviceGroupBindInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_DEVICE_GROUP_INFO;
+    VkBindBufferMemoryDeviceGroupInfoKHR deviceGroupBindInfo;
+    deviceGroupBindInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_DEVICE_GROUP_INFO_KHR;
     deviceGroupBindInfo.pNext = nullptr;
     deviceGroupBindInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
     deviceGroupBindInfo.pDeviceIndices = deviceIndices.data();
-    VkBindBufferMemoryInfo bindInfo;
-    bindInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO;
+    VkBindBufferMemoryInfoKHR bindInfo;
+    bindInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO_KHR;
     bindInfo.pNext = &deviceGroupBindInfo;
     bindInfo.buffer = handle;
     bindInfo.memory = *memory;
-    bindInfo.memoryOffset = offset;
+    bindInfo.memoryOffset = memory->getOffset() + offset;
     MAGMA_DEVICE_EXTENSION(vkBindBufferMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
     const VkResult bind = vkBindBufferMemory2KHR(MAGMA_HANDLE(device), 1, &bindInfo);
     MAGMA_THROW_FAILURE(bind, "failed to bind buffer memory within device group");
+    this->size = memory->getSize();
+    this->offset = offset;
     this->memory = std::move(memory);
 }
 #endif // VK_KHR_device_group
 
-VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
+void Buffer::onDefragmented()
 {
-    VkMemoryRequirements memoryRequirements;
-    vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
-    return memoryRequirements;
-}
-
-VkDescriptorBufferInfo Buffer::getDescriptor() const noexcept
-{
-    VkDescriptorBufferInfo info;
-    info.buffer = handle;
-    info.offset = 0;
-    info.range = VK_WHOLE_SIZE;
-    return info;
+    VkBufferCreateInfo bufferInfo;
+    bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bufferInfo.pNext = nullptr;
+    bufferInfo.flags = flags;
+    bufferInfo.size = size;
+    bufferInfo.usage = usage;
+    bufferInfo.sharingMode = sharing.getMode();
+    bufferInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
+    bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
+    vkDestroyBuffer(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    const VkResult create = vkCreateBuffer(MAGMA_HANDLE(device), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(create, "failed to recreate defragmented buffer");
+    bindMemory(std::move(memory), offset);
 }
 
 void Buffer::copyHost(const void *data, CopyMemoryFunction copyFn) noexcept
@@ -139,18 +142,23 @@ void Buffer::copyHost(const void *data, CopyMemoryFunction copyFn) noexcept
     }
 }
 
-void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const Buffer> buffer,
-    VkDeviceSize srcOffset /* 0 */, VkDeviceSize dstOffset /* 0 */, bool flush /* true */)
+void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const Buffer> srcBuffer,
+    VkDeviceSize size /* 0 */,
+    VkDeviceSize srcOffset /* 0 */,
+    VkDeviceSize dstOffset /* 0 */,
+    bool flush /* true */)
 {
     cmdBuffer->begin();
     {
         VkBufferCopy region;
         region.srcOffset = srcOffset;
         region.dstOffset = dstOffset;
-        region.size = this->getSize();
+        if (!size)
+            size = srcBuffer->getSize() - srcOffset;
+        region.size = std::min(this->getSize(), size);
         // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
         const auto weakThis = std::shared_ptr<Buffer>(this, [](Buffer *) {});
-        cmdBuffer->copyBuffer(buffer, weakThis, region);
+        cmdBuffer->copyBuffer(srcBuffer, weakThis, region);
     }
     cmdBuffer->end();
     if (flush)

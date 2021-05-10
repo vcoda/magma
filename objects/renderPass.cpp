@@ -110,7 +110,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     info.pSubpasses = &subpass;
     info.dependencyCount = 2;
     info.pDependencies = dependencies;
-    const VkResult create = vkCreateRenderPass(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateRenderPass(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create render pass");
     hash = core::hashArgs(
         info.sType,
@@ -129,7 +129,14 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
 RenderPass::RenderPass(std::shared_ptr<Device> device,
     const std::vector<AttachmentDescription>& attachments,
     const std::vector<SubpassDescription>& subpasses,
-    const std::vector<SubpassDependency>& dependencies /* {} */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    RenderPass(std::move(device), attachments, subpasses, {}, std::move(allocator))
+{}
+
+RenderPass::RenderPass(std::shared_ptr<Device> device,
+    const std::vector<AttachmentDescription>& attachments,
+    const std::vector<SubpassDescription>& subpasses,
+    const std::vector<SubpassDependency>& dependencies,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator)),
     hash(0)
@@ -144,7 +151,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     info.pSubpasses = subpasses.data();
     info.dependencyCount = MAGMA_COUNT(dependencies);
     info.pDependencies = dependencies.data();
-    const VkResult create = vkCreateRenderPass(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateRenderPass(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create render pass");
     hash = core::hashArgs(
         info.sType,
@@ -162,7 +169,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
 
 RenderPass::~RenderPass()
 {
-    vkDestroyRenderPass(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroyRenderPass(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 bool RenderPass::hasClearOp() const noexcept

@@ -92,21 +92,21 @@ void DescriptorSetLayout::SamplerBinding::copyImmutableSamplers() noexcept
 }
 
 DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const Binding& binding,
-    VkDescriptorSetLayoutCreateFlags flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    DescriptorSetLayout(std::move(device), {binding}, {}, flags, std::move(allocator))
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkDescriptorSetLayoutCreateFlags flags /* 0 */):
+    DescriptorSetLayout(std::move(device), {binding}, {}, std::move(allocator), flags)
 {}
 
 DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const SamplerBinding& samplerBinding,
-    VkDescriptorSetLayoutCreateFlags flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    DescriptorSetLayout(std::move(device), {}, {samplerBinding}, flags, std::move(allocator))
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkDescriptorSetLayoutCreateFlags flags /* 0 */):
+    DescriptorSetLayout(std::move(device), {}, {samplerBinding}, std::move(allocator), flags)
 {}
 
 DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const std::initializer_list<Binding>& bindings,
     const std::initializer_list<SamplerBinding>& samplerBindings /* {} */,
-    VkDescriptorSetLayoutCreateFlags flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkDescriptorSetLayoutCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT, std::move(device), std::move(allocator)),
     bindings(bindings),
     samplerBindings(samplerBindings)
@@ -123,7 +123,7 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const s
     info.flags = flags;
     info.bindingCount = MAGMA_COUNT(bindings);
     info.pBindings = dereferencedBindings;
-    const VkResult create = vkCreateDescriptorSetLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+    const VkResult create = vkCreateDescriptorSetLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create descriptor set layout");
     hash = core::hashArgs(
         info.sType,

@@ -23,7 +23,6 @@ namespace magma
 {
     class SamplerState;
     class DepthSamplerState;
-    using DefaultBorderColor = OpaqueBorderColor<float, 0>;
 
     /* Sampler objects represent the state of an image sampler
        which is used by the implementation to read image data
@@ -34,7 +33,10 @@ namespace magma
     public:
         explicit Sampler(std::shared_ptr<Device> device,
             const SamplerState& state,
-            const BorderColor& borderColor = DefaultBorderColor(),
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        explicit Sampler(std::shared_ptr<Device> device,
+            const SamplerState& state,
+            const BorderColor& borderColor,
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~Sampler();
 
@@ -54,7 +56,7 @@ namespace magma
             float mipLodBias,
             float minLod,
             float maxLod,
-            const BorderColor& borderColor = DefaultBorderColor(),
+            const BorderColor& borderColor,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
@@ -78,7 +80,10 @@ namespace magma
     public:
         explicit UnnormalizedSampler(std::shared_ptr<Device> device,
             bool linearFilter,
-            const BorderColor& borderColor = DefaultBorderColor(),
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        explicit UnnormalizedSampler(std::shared_ptr<Device> device,
+            bool linearFilter,
+            const BorderColor& borderColor,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma

@@ -32,8 +32,7 @@ namespace magma
         explicit BufferView(std::shared_ptr<Buffer> resource,
             VkFormat format,
             VkDeviceSize offset = 0,
-            VkDeviceSize range = VK_WHOLE_SIZE,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            VkDeviceSize range = VK_WHOLE_SIZE);
         ~BufferView();
         std::shared_ptr<Buffer> getBuffer() noexcept { return buffer; }
         std::shared_ptr<const Buffer> getBuffer() const noexcept { return buffer; }

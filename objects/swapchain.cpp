@@ -41,7 +41,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     VkSurfaceTransformFlagBitsKHR preTransform,
     VkCompositeAlphaFlagBitsKHR compositeAlpha,
     VkPresentModeKHR presentMode,
-    VkSwapchainCreateFlagsKHR flags /* 0 */,
+    VkSwapchainCreateFlagsKHR flags,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<const DebugReportCallback> debugReportCallback /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_SWAPCHAIN_KHR, std::move(device), std::move(allocator)),
@@ -74,12 +74,12 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     if (std::dynamic_pointer_cast<const DisplaySurface>(surface))
     {
         MAGMA_DEVICE_EXTENSION(vkCreateSharedSwapchainsKHR, VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME);
-        create = vkCreateSharedSwapchainsKHR(MAGMA_HANDLE(device), 1, &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+        create = vkCreateSharedSwapchainsKHR(MAGMA_HANDLE(device), 1, &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     }
     else
 #endif // VK_KHR_display_swapchain && VK_KHR_display_surface
     {
-        create = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
+        create = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     }
 #ifdef VK_EXT_debug_report
     if (create != VK_SUCCESS && debugReportCallback)
@@ -124,7 +124,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
 
 Swapchain::~Swapchain()
 {
-    vkDestroySwapchainKHR(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+    vkDestroySwapchainKHR(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore, std::shared_ptr<const Fence> fence,
