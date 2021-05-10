@@ -34,10 +34,12 @@ StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceS
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         flags, sharing, allocator)
 {
-    MAGMA_ASSERT(data);
-    auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
-        std::move(allocator), 0, sharing, std::move(copyFn));
-    copyTransfer(std::move(cmdBuffer), std::move(buffer), size);
+    if (data)
+    {   // Data is optional for storage buffer, copy if provided
+        auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
+            std::move(allocator), 0, sharing, std::move(copyFn));
+        copyTransfer(std::move(cmdBuffer), std::move(buffer), size);
+    }
 }
 
 StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,

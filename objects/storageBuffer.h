@@ -37,7 +37,7 @@ namespace magma
             CopyMemoryFunction copyFn = nullptr);
         template<typename Type>
         explicit StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            const std::vector<Type>& vertices,
+            const std::vector<Type>& data,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing(),

@@ -6,7 +6,7 @@ inline StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, co
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
-    StorageBuffer(std::move(cmdBuffer), data.data(), static_cast<VkDeviceSize>(sizeof(Type) * data.size()),
+    StorageBuffer(std::move(cmdBuffer), static_cast<VkDeviceSize>(sizeof(Type) * data.size()), data.data(),
         std::move(allocator), flags, sharing, std::move(copyFn))
 {}
 } // namespace magma
