@@ -14,14 +14,15 @@ inline bool DeviceMemory::pinned() const noexcept
 
 inline bool DeviceMemory::hostVisible() const noexcept
 {
-    constexpr VkMemoryPropertyFlags hostVisibleFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+    constexpr VkMemoryPropertyFlags hostVisibleFlags =
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
     return (flags & hostVisibleFlags) == hostVisibleFlags;
 }
 
 inline bool DeviceMemory::hostCached() const noexcept
 {
-    constexpr VkMemoryPropertyFlags hostCachedFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
-    return (flags & hostCachedFlags) == hostCachedFlags;
+    return hostVisible() && (flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
 }
 
 inline bool DeviceMemory::mapped() const noexcept
