@@ -141,7 +141,7 @@ const DescriptorSetLayout::Binding& DescriptorSetLayout::getBinding(uint32_t bin
     for (auto& it : bindings)
         if (it.binding == binding)
             return it;
-    throw exception::Exception("binding not found");
+    MAGMA_THROW("binding not found");
 }
         
 const DescriptorSetLayout::SamplerBinding& DescriptorSetLayout::getSamplerBinding(uint32_t binding) const
@@ -149,7 +149,7 @@ const DescriptorSetLayout::SamplerBinding& DescriptorSetLayout::getSamplerBindin
     for (auto& it : samplerBindings)
         if (it.binding == binding)
             return it;
-    throw exception::Exception("binding not found");
+    MAGMA_THROW("binding not found");
 }
 
 std::size_t DescriptorSetLayout::getHash() const noexcept
