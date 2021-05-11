@@ -277,6 +277,16 @@ VkPhysicalDeviceShaderCoreProperties2AMD PhysicalDevice::getShaderCoreProperties
 }
 #endif // VK_AMD_shader_core_properties2
 
+#ifdef VK_NV_mesh_shader
+VkPhysicalDeviceMeshShaderPropertiesNV PhysicalDevice::getMeshShaderProperties() const
+{
+    VkPhysicalDeviceMeshShaderPropertiesNV meshShaderProperties = {};
+    meshShaderProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_NV;
+    getProperties2(&meshShaderProperties);
+    return meshShaderProperties;
+}
+#endif // VK_NV_mesh_shader
+
 #ifdef VK_NV_ray_tracing
 VkPhysicalDeviceRayTracingPropertiesNV PhysicalDevice::getRayTracingProperties() const
 {

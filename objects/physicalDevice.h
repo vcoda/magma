@@ -71,6 +71,9 @@ namespace magma
 #ifdef VK_AMD_shader_core_properties2
         VkPhysicalDeviceShaderCoreProperties2AMD getShaderCoreProperties2() const;
 #endif
+#ifdef VK_NV_mesh_shader
+        VkPhysicalDeviceMeshShaderPropertiesNV getMeshShaderProperties() const;
+#endif
 #ifdef VK_NV_ray_tracing
         VkPhysicalDeviceRayTracingPropertiesNV getRayTracingProperties() const;
 #endif
