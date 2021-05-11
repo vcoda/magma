@@ -78,6 +78,21 @@ namespace magma
 #ifdef VK_NV_ray_tracing
         VkPhysicalDeviceRayTracingPropertiesNV getRayTracingProperties() const;
 #endif
+#ifdef VK_EXT_transform_feedback
+        VkPhysicalDeviceTransformFeedbackFeaturesEXT getTransformFeedbackFeatures() const;
+        VkPhysicalDeviceTransformFeedbackPropertiesEXT getTransformFeedbackProperties() const;
+#endif
+#ifdef VK_EXT_conservative_rasterization
+        VkPhysicalDeviceConservativeRasterizationPropertiesEXT getConservativeRasterizationProperties() const;
+#endif
+#ifdef VK_EXT_descriptor_indexing
+        VkPhysicalDeviceDescriptorIndexingFeaturesEXT getDescriptorIndexingFeatures() const;
+        VkPhysicalDeviceDescriptorIndexingPropertiesEXT getDescriptorIndexingProperties() const;
+#endif
+#ifdef VK_EXT_inline_uniform_block
+        VkPhysicalDeviceInlineUniformBlockFeaturesEXT getInlineUniformBlockFeatures() const;
+        VkPhysicalDeviceInlineUniformBlockPropertiesEXT getInlineUniformBlockProperties() const;
+#endif
         // Non-API
         std::shared_ptr<Instance> getInstance() const noexcept { return instance; }
         std::shared_ptr<Device> createDefaultDevice() const;

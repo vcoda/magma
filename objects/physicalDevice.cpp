@@ -305,6 +305,70 @@ VkPhysicalDeviceRayTracingPropertiesNV PhysicalDevice::getRayTracingProperties()
 }
 #endif // VK_NV_ray_tracing
 
+#ifdef VK_EXT_transform_feedback
+VkPhysicalDeviceTransformFeedbackFeaturesEXT PhysicalDevice::getTransformFeedbackFeatures() const
+{
+    VkPhysicalDeviceTransformFeedbackFeaturesEXT transformFeedbackFeatures = {};
+    transformFeedbackFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TRANSFORM_FEEDBACK_FEATURES_EXT;
+    getFeatures2(&transformFeedbackFeatures);
+    return transformFeedbackFeatures;
+}
+
+VkPhysicalDeviceTransformFeedbackPropertiesEXT PhysicalDevice::getTransformFeedbackProperties() const
+{
+    VkPhysicalDeviceTransformFeedbackPropertiesEXT transformFeedbackProperties = {};
+    transformFeedbackProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TRANSFORM_FEEDBACK_PROPERTIES_EXT;
+    getProperties2(&transformFeedbackProperties);
+    return transformFeedbackProperties;
+}
+#endif // VK_EXT_transform_feedback
+
+#ifdef VK_EXT_conservative_rasterization
+VkPhysicalDeviceConservativeRasterizationPropertiesEXT PhysicalDevice::getConservativeRasterizationProperties() const
+{
+    VkPhysicalDeviceConservativeRasterizationPropertiesEXT conservativeRasterizationProperties = {};
+    conservativeRasterizationProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CONSERVATIVE_RASTERIZATION_PROPERTIES_EXT;
+    getProperties2(&conservativeRasterizationProperties);
+    return conservativeRasterizationProperties;
+}
+#endif // VK_EXT_conservative_rasterization
+
+#ifdef VK_EXT_descriptor_indexing
+VkPhysicalDeviceDescriptorIndexingFeaturesEXT PhysicalDevice::getDescriptorIndexingFeatures() const
+{
+    VkPhysicalDeviceDescriptorIndexingFeatures descriptorIndexingFeatures = {};
+    descriptorIndexingFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES_EXT;
+    getFeatures2(&descriptorIndexingFeatures);
+    return descriptorIndexingFeatures;
+}
+
+VkPhysicalDeviceDescriptorIndexingPropertiesEXT PhysicalDevice::getDescriptorIndexingProperties() const
+{
+    VkPhysicalDeviceDescriptorIndexingPropertiesEXT descriptorIndexingProperties = {};
+    descriptorIndexingProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES_EXT;
+    getProperties2(&descriptorIndexingProperties);
+    return descriptorIndexingProperties;
+}
+#endif // VK_EXT_descriptor_indexing
+
+#ifdef VK_EXT_inline_uniform_block
+VkPhysicalDeviceInlineUniformBlockFeaturesEXT PhysicalDevice::getInlineUniformBlockFeatures() const
+{
+    VkPhysicalDeviceInlineUniformBlockFeaturesEXT inlineUniformBlockFeatures = {};
+    inlineUniformBlockFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_INLINE_UNIFORM_BLOCK_FEATURES_EXT;
+    getFeatures2(&inlineUniformBlockFeatures);
+    return inlineUniformBlockFeatures;
+}
+
+VkPhysicalDeviceInlineUniformBlockPropertiesEXT PhysicalDevice::getInlineUniformBlockProperties() const
+{
+    VkPhysicalDeviceInlineUniformBlockPropertiesEXT inlineUniformBlockProperties = {};
+    inlineUniformBlockProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_INLINE_UNIFORM_BLOCK_PROPERTIES_EXT;
+    getProperties2(&inlineUniformBlockProperties);
+    return inlineUniformBlockProperties;
+}
+#endif // VK_EXT_inline_uniform_block
+
 std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
 {
     const std::vector<float> defaultQueuePriorities = {1.0f};
