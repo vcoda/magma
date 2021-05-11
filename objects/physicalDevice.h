@@ -72,6 +72,7 @@ namespace magma
         VkPhysicalDeviceShaderCoreProperties2AMD getShaderCoreProperties2() const;
 #endif
 #ifdef VK_NV_mesh_shader
+        VkPhysicalDeviceMeshShaderFeaturesNV getMeshShaderFeatures() const;
         VkPhysicalDeviceMeshShaderPropertiesNV getMeshShaderProperties() const;
 #endif
 #ifdef VK_NV_ray_tracing
@@ -86,6 +87,7 @@ namespace magma
 
     private:
         // VK_KHR_get_physical_device_properties2
+        void getFeatures2(void *features) const;
         void getProperties2(void *properties) const;
 
         std::shared_ptr<Instance> instance;

@@ -278,6 +278,14 @@ VkPhysicalDeviceShaderCoreProperties2AMD PhysicalDevice::getShaderCoreProperties
 #endif // VK_AMD_shader_core_properties2
 
 #ifdef VK_NV_mesh_shader
+VkPhysicalDeviceMeshShaderFeaturesNV PhysicalDevice::getMeshShaderFeatures() const
+{
+    VkPhysicalDeviceMeshShaderFeaturesNV meshShaderFeatures = {};
+    meshShaderFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_NV;
+    getFeatures2(&meshShaderFeatures);
+    return meshShaderFeatures;
+}
+
 VkPhysicalDeviceMeshShaderPropertiesNV PhysicalDevice::getMeshShaderProperties() const
 {
     VkPhysicalDeviceMeshShaderPropertiesNV meshShaderProperties = {};
@@ -359,13 +367,29 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
     return core::compare(cacheHeader, &header);
 }
 
+void PhysicalDevice::getFeatures2(void *features) const
+{
+#ifdef VK_KHR_get_physical_device_properties2
+    if (features)
+    {
+        VkPhysicalDeviceFeatures2KHR features2;
+        features2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR;
+        features2.pNext = features;
+        MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceFeatures2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
+        vkGetPhysicalDeviceFeatures2KHR(handle, &features2);
+    }
+#else
+    MAGMA_UNUSED(features);
+#endif // VK_KHR_get_physical_device_properties2
+}
+
 void PhysicalDevice::getProperties2(void *properties) const
 {
 #ifdef VK_KHR_get_physical_device_properties2
     if (properties)
     {
-        VkPhysicalDeviceProperties2 properties2;
-        properties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+        VkPhysicalDeviceProperties2KHR properties2;
+        properties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
         properties2.pNext = properties;
         MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
         vkGetPhysicalDeviceProperties2KHR(handle, &properties2);
