@@ -260,306 +260,210 @@ std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint3
 #ifdef VK_AMD_shader_core_properties
 VkPhysicalDeviceShaderCorePropertiesAMD PhysicalDevice::getShaderCoreProperties() const
 {
-    VkPhysicalDeviceShaderCorePropertiesAMD shaderCoreProperties = {};
-    shaderCoreProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_AMD;
-    getProperties2(&shaderCoreProperties);
-    return shaderCoreProperties;
+    return getProperties<VkPhysicalDeviceShaderCorePropertiesAMD>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_AMD);
 }
 #endif // VK_AMD_shader_core_properties
 
 #ifdef VK_AMD_shader_core_properties2
 VkPhysicalDeviceShaderCoreProperties2AMD PhysicalDevice::getShaderCoreProperties2() const
 {
-    VkPhysicalDeviceShaderCoreProperties2AMD shaderCoreProperties2 = {};
-    shaderCoreProperties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_2_AMD;
-    getProperties2(&shaderCoreProperties2);
-    return shaderCoreProperties2;
+    return getProperties<VkPhysicalDeviceShaderCoreProperties2AMD>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_2_AMD);
 }
 #endif // VK_AMD_shader_core_properties2
 
 #ifdef VK_EXT_blend_operation_advanced
 VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT PhysicalDevice::getBlendOperationAdvancedFeatures() const
 {
-    VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT blendOperationAdvancedFeatures = {};
-    blendOperationAdvancedFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_FEATURES_EXT;
-    getFeatures2(&blendOperationAdvancedFeatures);
-    return blendOperationAdvancedFeatures;
+    return getFeatures<VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_FEATURES_EXT);
 }
         
 VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT PhysicalDevice::getBlendOperationAdvancedProperties() const
 {
-    VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT blendOperationAdvancedProperties = {};
-    blendOperationAdvancedProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_PROPERTIES_EXT;
-    getProperties2(&blendOperationAdvancedProperties);
-    return blendOperationAdvancedProperties;
+    return getProperties<VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_PROPERTIES_EXT);
 }
 #endif // VK_EXT_blend_operation_advanced
 
 #ifdef VK_EXT_conditional_rendering
 VkPhysicalDeviceConditionalRenderingFeaturesEXT PhysicalDevice::getConditionalRenderingFeatures() const
 {
-    VkPhysicalDeviceConditionalRenderingFeaturesEXT conditionalRenderingFeatures = {};
-    conditionalRenderingFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CONDITIONAL_RENDERING_FEATURES_EXT;
-    getFeatures2(&conditionalRenderingFeatures);
-    return conditionalRenderingFeatures;
+    return getFeatures<VkPhysicalDeviceConditionalRenderingFeaturesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CONDITIONAL_RENDERING_FEATURES_EXT);
 }
 #endif // VK_EXT_conditional_rendering
 
 #ifdef VK_EXT_conservative_rasterization
 VkPhysicalDeviceConservativeRasterizationPropertiesEXT PhysicalDevice::getConservativeRasterizationProperties() const
 {
-    VkPhysicalDeviceConservativeRasterizationPropertiesEXT conservativeRasterizationProperties = {};
-    conservativeRasterizationProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CONSERVATIVE_RASTERIZATION_PROPERTIES_EXT;
-    getProperties2(&conservativeRasterizationProperties);
-    return conservativeRasterizationProperties;
+    return getProperties<VkPhysicalDeviceConservativeRasterizationPropertiesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CONSERVATIVE_RASTERIZATION_PROPERTIES_EXT);
 }
 #endif // VK_EXT_conservative_rasterization
 
 #ifdef VK_EXT_descriptor_indexing
 VkPhysicalDeviceDescriptorIndexingFeaturesEXT PhysicalDevice::getDescriptorIndexingFeatures() const
 {
-    VkPhysicalDeviceDescriptorIndexingFeatures descriptorIndexingFeatures = {};
-    descriptorIndexingFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES_EXT;
-    getFeatures2(&descriptorIndexingFeatures);
-    return descriptorIndexingFeatures;
+    return getFeatures<VkPhysicalDeviceDescriptorIndexingFeaturesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES_EXT);
 }
 
 VkPhysicalDeviceDescriptorIndexingPropertiesEXT PhysicalDevice::getDescriptorIndexingProperties() const
 {
-    VkPhysicalDeviceDescriptorIndexingPropertiesEXT descriptorIndexingProperties = {};
-    descriptorIndexingProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES_EXT;
-    getProperties2(&descriptorIndexingProperties);
-    return descriptorIndexingProperties;
+    return getProperties<VkPhysicalDeviceDescriptorIndexingPropertiesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES_EXT);
 }
 #endif // VK_EXT_descriptor_indexing
 
 #ifdef VK_EXT_fragment_shader_interlock
 VkPhysicalDeviceFragmentShaderInterlockFeaturesEXT PhysicalDevice::getFragmentShaderInterlockFeatures() const
 {
-    VkPhysicalDeviceFragmentShaderInterlockFeaturesEXT fragmentShaderInterlockFeatures = {};
-    fragmentShaderInterlockFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADER_INTERLOCK_FEATURES_EXT;
-    getFeatures2(&fragmentShaderInterlockFeatures);
-    return fragmentShaderInterlockFeatures;
+    return getFeatures<VkPhysicalDeviceFragmentShaderInterlockFeaturesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADER_INTERLOCK_FEATURES_EXT);
 }
 #endif // VK_EXT_fragment_shader_interlock
 
 #ifdef VK_EXT_inline_uniform_block
 VkPhysicalDeviceInlineUniformBlockFeaturesEXT PhysicalDevice::getInlineUniformBlockFeatures() const
 {
-    VkPhysicalDeviceInlineUniformBlockFeaturesEXT inlineUniformBlockFeatures = {};
-    inlineUniformBlockFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_INLINE_UNIFORM_BLOCK_FEATURES_EXT;
-    getFeatures2(&inlineUniformBlockFeatures);
-    return inlineUniformBlockFeatures;
+    return getFeatures<VkPhysicalDeviceInlineUniformBlockFeaturesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_INLINE_UNIFORM_BLOCK_FEATURES_EXT);
 }
 
 VkPhysicalDeviceInlineUniformBlockPropertiesEXT PhysicalDevice::getInlineUniformBlockProperties() const
 {
-    VkPhysicalDeviceInlineUniformBlockPropertiesEXT inlineUniformBlockProperties = {};
-    inlineUniformBlockProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_INLINE_UNIFORM_BLOCK_PROPERTIES_EXT;
-    getProperties2(&inlineUniformBlockProperties);
-    return inlineUniformBlockProperties;
+    return getProperties<VkPhysicalDeviceInlineUniformBlockPropertiesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_INLINE_UNIFORM_BLOCK_PROPERTIES_EXT);
 }
 #endif // VK_EXT_inline_uniform_block
 
 #ifdef VK_EXT_subgroup_size_control
 VkPhysicalDeviceSubgroupSizeControlFeaturesEXT PhysicalDevice::getSubgroupSizeControlFeatures() const
 {
-    VkPhysicalDeviceSubgroupSizeControlFeaturesEXT subgroupSizeControlFeatures = {};
-    subgroupSizeControlFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_SIZE_CONTROL_FEATURES_EXT;
-    getFeatures2(&subgroupSizeControlFeatures);
-    return subgroupSizeControlFeatures;
+    return getFeatures<VkPhysicalDeviceSubgroupSizeControlFeaturesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_SIZE_CONTROL_FEATURES_EXT);
 }
 
 VkPhysicalDeviceSubgroupSizeControlPropertiesEXT PhysicalDevice::getSubgroupSizeControlProperties() const
 {
-    VkPhysicalDeviceSubgroupSizeControlPropertiesEXT subgroupSizeControlProperties = {};
-    subgroupSizeControlProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_SIZE_CONTROL_PROPERTIES_EXT;
-    getProperties2(&subgroupSizeControlProperties);
-    return subgroupSizeControlProperties;
+    return getProperties<VkPhysicalDeviceSubgroupSizeControlPropertiesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_SIZE_CONTROL_PROPERTIES_EXT);
 }
 #endif // VK_EXT_subgroup_size_control
 
 #ifdef VK_EXT_transform_feedback
 VkPhysicalDeviceTransformFeedbackFeaturesEXT PhysicalDevice::getTransformFeedbackFeatures() const
 {
-    VkPhysicalDeviceTransformFeedbackFeaturesEXT transformFeedbackFeatures = {};
-    transformFeedbackFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TRANSFORM_FEEDBACK_FEATURES_EXT;
-    getFeatures2(&transformFeedbackFeatures);
-    return transformFeedbackFeatures;
+    return getFeatures<VkPhysicalDeviceTransformFeedbackFeaturesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TRANSFORM_FEEDBACK_FEATURES_EXT);
 }
 
 VkPhysicalDeviceTransformFeedbackPropertiesEXT PhysicalDevice::getTransformFeedbackProperties() const
 {
-    VkPhysicalDeviceTransformFeedbackPropertiesEXT transformFeedbackProperties = {};
-    transformFeedbackProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TRANSFORM_FEEDBACK_PROPERTIES_EXT;
-    getProperties2(&transformFeedbackProperties);
-    return transformFeedbackProperties;
+    return getProperties<VkPhysicalDeviceTransformFeedbackPropertiesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TRANSFORM_FEEDBACK_PROPERTIES_EXT);
 }
 #endif // VK_EXT_transform_feedback
 
 #ifdef VK_EXT_vertex_attribute_divisor
 VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT PhysicalDevice::getVertexAttributeDivisorFeatures() const
 {
-    VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT vertexAttributeDivisorFeatures = {};
-    vertexAttributeDivisorFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_ATTRIBUTE_DIVISOR_FEATURES_EXT;
-    getFeatures2(&vertexAttributeDivisorFeatures);
-    return vertexAttributeDivisorFeatures;
+    return getFeatures<VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_ATTRIBUTE_DIVISOR_FEATURES_EXT);
 }
 #endif // VK_EXT_vertex_attribute_divisor
 
 #ifdef VK_KHR_8bit_storage
 VkPhysicalDevice8BitStorageFeaturesKHR PhysicalDevice::get8BitStorageFeatures() const
 {
-    VkPhysicalDevice8BitStorageFeaturesKHR eightBitStorageFeatures = {};
-    eightBitStorageFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES_KHR;
-    getFeatures2(&eightBitStorageFeatures);
-    return eightBitStorageFeatures;
+    return getFeatures<VkPhysicalDevice8BitStorageFeaturesKHR>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES_KHR);
 }
 #endif // VK_KHR_8bit_storage
 
 #ifdef VK_KHR_16bit_storage
 VkPhysicalDevice16BitStorageFeaturesKHR PhysicalDevice::get16BitStorageFeatures() const
 {
-    VkPhysicalDevice16BitStorageFeaturesKHR sixteenBitStorageFeatures = {};
-    sixteenBitStorageFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES_KHR;
-    getFeatures2(&sixteenBitStorageFeatures);
-    return sixteenBitStorageFeatures;
+    return getFeatures<VkPhysicalDevice16BitStorageFeaturesKHR>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES_KHR);
 }
 #endif // VK_KHR_16bit_storage
 
 #ifdef VK_KHR_buffer_device_address
 VkPhysicalDeviceBufferDeviceAddressFeaturesKHR PhysicalDevice::getBufferDeviceAddressFeatures() const
 {
-    VkPhysicalDeviceBufferDeviceAddressFeaturesKHR bufferDeviceAddressFeatures = {};
-    bufferDeviceAddressFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES_KHR;
-    getFeatures2(&bufferDeviceAddressFeatures);
-    return bufferDeviceAddressFeatures;
+    return getFeatures<VkPhysicalDeviceBufferDeviceAddressFeaturesKHR>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES_KHR);
 }
-#endif
+#endif // VK_KHR_buffer_device_address
 
 #ifdef VK_KHR_multiview
 VkPhysicalDeviceMultiviewFeaturesKHR PhysicalDevice::getMultiviewFeatures() const
 {
-    VkPhysicalDeviceMultiviewFeaturesKHR multiviewFeatures = {};
-    multiviewFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_FEATURES_KHR;
-    getFeatures2(&multiviewFeatures);
-    return multiviewFeatures;
+    return getFeatures<VkPhysicalDeviceMultiviewFeaturesKHR>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_FEATURES_KHR);
 }
 #endif // VK_KHR_multiview
 
 #ifdef VK_KHR_shader_atomic_int64
 VkPhysicalDeviceShaderAtomicInt64FeaturesKHR PhysicalDevice::getShaderAtomicInt64Features() const
 {
-    VkPhysicalDeviceShaderAtomicInt64FeaturesKHR shaderAtomicInt64Features = {};
-    shaderAtomicInt64Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_INT64_FEATURES_KHR;
-    getFeatures2(&shaderAtomicInt64Features);
-    return shaderAtomicInt64Features;
+    return getFeatures<VkPhysicalDeviceShaderAtomicInt64FeaturesKHR>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_INT64_FEATURES_KHR);
 }
 #endif // VK_KHR_shader_atomic_int64
 
 #ifdef VK_KHR_shader_clock
 VkPhysicalDeviceShaderClockFeaturesKHR PhysicalDevice::getShaderClockFeatures() const
 {
-    VkPhysicalDeviceShaderClockFeaturesKHR shaderClockFeatures = {};
-    shaderClockFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CLOCK_FEATURES_KHR;
-    getFeatures2(&shaderClockFeatures);
-    return shaderClockFeatures;
+    return getFeatures<VkPhysicalDeviceShaderClockFeaturesKHR>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CLOCK_FEATURES_KHR);
 }
 #endif // VK_KHR_shader_clock
 
 #ifdef VK_KHR_shader_float16_int8
 VkPhysicalDeviceShaderFloat16Int8FeaturesKHR PhysicalDevice::getShaderFloat16Int8Features() const
 {
-    VkPhysicalDeviceShaderFloat16Int8FeaturesKHR shaderFloat16Int8Features = {};
-    shaderFloat16Int8Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES_KHR;
-    getFeatures2(&shaderFloat16Int8Features);
-    return shaderFloat16Int8Features;
+    return getFeatures<VkPhysicalDeviceShaderFloat16Int8FeaturesKHR>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES_KHR);
 }
 #endif // VK_KHR_shader_float16_int8
 
 #ifdef VK_KHR_variable_pointers
 VkPhysicalDeviceVariablePointersFeaturesKHR PhysicalDevice::getVariablePointersFeatures() const
 {
-    VkPhysicalDeviceVariablePointersFeaturesKHR variablePointersFeatures = {};
-    variablePointersFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTERS_FEATURES_KHR;
-    getFeatures2(&variablePointersFeatures);
-    return variablePointersFeatures;
+    return getFeatures<VkPhysicalDeviceVariablePointersFeaturesKHR>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTERS_FEATURES_KHR);
 }
 #endif // VK_KHR_variable_pointers
 
 #ifdef VK_KHR_vulkan_memory_model
 VkPhysicalDeviceVulkanMemoryModelFeaturesKHR PhysicalDevice::getVulkanMemoryModelFeatures() const
 {
-    VkPhysicalDeviceVulkanMemoryModelFeaturesKHR vulkanMemoryModelFeatures = {};
-    vulkanMemoryModelFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_MEMORY_MODEL_FEATURES_KHR;
-    getFeatures2(&vulkanMemoryModelFeatures);
-    return vulkanMemoryModelFeatures;
+    return getFeatures<VkPhysicalDeviceVulkanMemoryModelFeaturesKHR>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_MEMORY_MODEL_FEATURES_KHR);
 }
-#endif
+#endif // VK_KHR_vulkan_memory_model
 
 #ifdef VK_NV_compute_shader_derivatives
 VkPhysicalDeviceComputeShaderDerivativesFeaturesNV PhysicalDevice::getComputeShaderDerivativesFeatures() const
 {
-    VkPhysicalDeviceComputeShaderDerivativesFeaturesNV computeShaderDerivativesFeatures = {};
-    computeShaderDerivativesFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COMPUTE_SHADER_DERIVATIVES_FEATURES_NV;
-    getFeatures2(&computeShaderDerivativesFeatures);
-    return computeShaderDerivativesFeatures;
+    return getFeatures<VkPhysicalDeviceComputeShaderDerivativesFeaturesNV>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COMPUTE_SHADER_DERIVATIVES_FEATURES_NV);
 }
 #endif // VK_NV_compute_shader_derivatives
 
 #ifdef VK_NV_cooperative_matrix
 VkPhysicalDeviceCooperativeMatrixFeaturesNV PhysicalDevice::getCooperativeMatrixFeatures() const
 {
-    VkPhysicalDeviceCooperativeMatrixFeaturesNV cooperativeMatrixFeatures = {};
-    cooperativeMatrixFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COOPERATIVE_MATRIX_FEATURES_NV;
-    getFeatures2(&cooperativeMatrixFeatures);
-    return cooperativeMatrixFeatures;
+    return getFeatures<VkPhysicalDeviceCooperativeMatrixFeaturesNV>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COOPERATIVE_MATRIX_FEATURES_NV);
 }
 
 VkPhysicalDeviceCooperativeMatrixPropertiesNV PhysicalDevice::getCooperativeMatrixProperties() const
 {
-    VkPhysicalDeviceCooperativeMatrixPropertiesNV cooperativeMatrixProperties = {};
-    cooperativeMatrixProperties.sType = VK_STRUCTURE_TYPE_COOPERATIVE_MATRIX_PROPERTIES_NV;
-    getProperties2(&cooperativeMatrixProperties);
-    return cooperativeMatrixProperties;
+    return getProperties<VkPhysicalDeviceCooperativeMatrixPropertiesNV>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COOPERATIVE_MATRIX_PROPERTIES_NV);
 }
 #endif // VK_NV_cooperative_matrix
 
 #ifdef VK_NV_mesh_shader
 VkPhysicalDeviceMeshShaderFeaturesNV PhysicalDevice::getMeshShaderFeatures() const
 {
-    VkPhysicalDeviceMeshShaderFeaturesNV meshShaderFeatures = {};
-    meshShaderFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_NV;
-    getFeatures2(&meshShaderFeatures);
-    return meshShaderFeatures;
+    return getFeatures<VkPhysicalDeviceMeshShaderFeaturesNV>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_NV);
 }
 
 VkPhysicalDeviceMeshShaderPropertiesNV PhysicalDevice::getMeshShaderProperties() const
 {
-    VkPhysicalDeviceMeshShaderPropertiesNV meshShaderProperties = {};
-    meshShaderProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_NV;
-    getProperties2(&meshShaderProperties);
-    return meshShaderProperties;
+    return getProperties<VkPhysicalDeviceMeshShaderPropertiesNV>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_NV);
 }
 #endif // VK_NV_mesh_shader
 
 #ifdef VK_NV_ray_tracing
 VkPhysicalDeviceRayTracingPropertiesNV PhysicalDevice::getRayTracingProperties() const
 {
-    VkPhysicalDeviceRayTracingPropertiesNV rayTracingProperties = {};
-    rayTracingProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PROPERTIES_NV;
-    getProperties2(&rayTracingProperties);
-    return rayTracingProperties;
+    return getProperties<VkPhysicalDeviceRayTracingPropertiesNV>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PROPERTIES_NV);
 }
 #endif // VK_NV_ray_tracing
 
 #ifdef VK_NV_shading_rate_image
 VkPhysicalDeviceShadingRateImageFeaturesNV PhysicalDevice::getShadingRateImageFeatures() const
 {
-    VkPhysicalDeviceShadingRateImageFeaturesNV shadingRateImageFeatures = {};
-    shadingRateImageFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADING_RATE_IMAGE_FEATURES_NV;
-    getFeatures2(&shadingRateImageFeatures);
-    return shadingRateImageFeatures;
+    return getFeatures<VkPhysicalDeviceShadingRateImageFeaturesNV>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADING_RATE_IMAGE_FEATURES_NV);
 }
 #endif // VK_NV_shading_rate_image
 
@@ -625,36 +529,50 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
     return core::compare(cacheHeader, &header);
 }
 
-void PhysicalDevice::getFeatures2(void *features) const
+void PhysicalDevice::getFeatures2(VkPhysicalDeviceFeatures2KHR& physicalDeviceFeatures2) const
 {
+    MAGMA_UNUSED(physicalDeviceFeatures2);
 #ifdef VK_KHR_get_physical_device_properties2
-    if (features)
-    {
-        VkPhysicalDeviceFeatures2KHR features2;
-        features2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR;
-        features2.pNext = features;
-        MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceFeatures2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
-        vkGetPhysicalDeviceFeatures2KHR(handle, &features2);
-    }
-#else
-    MAGMA_UNUSED(features);
+    MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceFeatures2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
+    vkGetPhysicalDeviceFeatures2KHR(handle, &physicalDeviceFeatures2);
 #endif // VK_KHR_get_physical_device_properties2
 }
 
-void PhysicalDevice::getProperties2(void *properties) const
-{
+void PhysicalDevice::getProperties2(VkPhysicalDeviceProperties2KHR& physicalDeviceProperties2) const
+{   
+    MAGMA_UNUSED(physicalDeviceProperties2);
 #ifdef VK_KHR_get_physical_device_properties2
-    if (properties)
-    {
-        VkPhysicalDeviceProperties2KHR properties2;
-        properties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
-        properties2.pNext = properties;
-        MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
-        vkGetPhysicalDeviceProperties2KHR(handle, &properties2);
-    }
-#else
-    MAGMA_UNUSED(properties);
+    MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
+    vkGetPhysicalDeviceProperties2KHR(handle, &physicalDeviceProperties2);
 #endif // VK_KHR_get_physical_device_properties2
+}
+
+template<typename PhysicalDeviceFeatures>
+inline PhysicalDeviceFeatures PhysicalDevice::getFeatures(VkStructureType sType) const
+{
+    PhysicalDeviceFeatures physicalDeviceFeatures = {};
+    physicalDeviceFeatures.sType = sType;
+#ifdef VK_KHR_get_physical_device_properties2
+    VkPhysicalDeviceFeatures2KHR physicalDeviceFeatures2;
+    physicalDeviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR;
+    physicalDeviceFeatures2.pNext = &physicalDeviceFeatures;
+    getFeatures2(physicalDeviceFeatures2);
+#endif
+    return physicalDeviceFeatures;
+}
+
+template<typename PhysicalDeviceProperties>
+inline PhysicalDeviceProperties PhysicalDevice::getProperties(VkStructureType sType) const
+{
+    PhysicalDeviceProperties physicalDeviceProperties = {};
+    physicalDeviceProperties.sType = sType;
+#ifdef VK_KHR_get_physical_device_properties2
+    VkPhysicalDeviceProperties2KHR physicalDeviceProperties2;
+    physicalDeviceProperties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
+    physicalDeviceProperties2.pNext = &physicalDeviceProperties;
+    getProperties2(physicalDeviceProperties2);
+#endif
+    return physicalDeviceProperties;
 }
 
 #ifdef VK_KHR_device_group
