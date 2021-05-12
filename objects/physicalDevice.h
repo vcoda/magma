@@ -99,6 +99,9 @@ namespace magma
 #ifdef VK_KHR_16bit_storage
         VkPhysicalDevice16BitStorageFeaturesKHR get16BitStorageFeatures() const;
 #endif
+#ifdef VK_KHR_buffer_device_address
+        VkPhysicalDeviceBufferDeviceAddressFeaturesKHR getBufferDeviceAddressFeatures() const;
+#endif
 #ifdef VK_KHR_multiview
         VkPhysicalDeviceMultiviewFeaturesKHR getMultiviewFeatures() const;
 #endif
@@ -119,6 +122,9 @@ namespace magma
 #endif
 #ifdef VK_KHR_variable_pointers
         VkPhysicalDeviceVariablePointersFeaturesKHR getVariablePointersFeatures() const;
+#endif
+#ifdef VK_KHR_vulkan_memory_model
+        VkPhysicalDeviceVulkanMemoryModelFeaturesKHR getVulkanMemoryModelFeatures() const;
 #endif
         // Non-API
         std::shared_ptr<Instance> getInstance() const noexcept { return instance; }

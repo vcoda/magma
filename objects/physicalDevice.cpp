@@ -389,6 +389,16 @@ VkPhysicalDevice16BitStorageFeaturesKHR PhysicalDevice::get16BitStorageFeatures(
 }
 #endif // VK_KHR_16bit_storage
 
+#ifdef VK_KHR_buffer_device_address
+VkPhysicalDeviceBufferDeviceAddressFeaturesKHR PhysicalDevice::getBufferDeviceAddressFeatures() const
+{
+    VkPhysicalDeviceBufferDeviceAddressFeaturesKHR bufferDeviceAddressFeatures = {};
+    bufferDeviceAddressFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES_KHR;
+    getFeatures2(&bufferDeviceAddressFeatures);
+    return bufferDeviceAddressFeatures;
+}
+#endif
+
 #ifdef VK_KHR_multiview
 VkPhysicalDeviceMultiviewFeaturesKHR PhysicalDevice::getMultiviewFeatures() const
 {
@@ -458,6 +468,16 @@ VkPhysicalDeviceVariablePointersFeaturesKHR PhysicalDevice::getVariablePointersF
     return variablePointersFeatures;
 }
 #endif // VK_KHR_variable_pointers
+
+#ifdef VK_KHR_vulkan_memory_model
+VkPhysicalDeviceVulkanMemoryModelFeaturesKHR PhysicalDevice::getVulkanMemoryModelFeatures() const
+{
+    VkPhysicalDeviceVulkanMemoryModelFeaturesKHR vulkanMemoryModelFeatures = {};
+    vulkanMemoryModelFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_MEMORY_MODEL_FEATURES_KHR;
+    getFeatures2(&vulkanMemoryModelFeatures);
+    return vulkanMemoryModelFeatures;
+}
+#endif
 
 std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
 {
