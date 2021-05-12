@@ -369,6 +369,66 @@ VkPhysicalDeviceInlineUniformBlockPropertiesEXT PhysicalDevice::getInlineUniform
 }
 #endif // VK_EXT_inline_uniform_block
 
+#ifdef VK_KHR_8bit_storage
+VkPhysicalDevice8BitStorageFeaturesKHR PhysicalDevice::get8BitStorageFeatures() const
+{
+    VkPhysicalDevice8BitStorageFeaturesKHR eightBitStorageFeatures = {};
+    eightBitStorageFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES_KHR;
+    getFeatures2(&eightBitStorageFeatures);
+    return eightBitStorageFeatures;
+}
+#endif // VK_KHR_8bit_storage
+
+#ifdef VK_KHR_16bit_storage
+VkPhysicalDevice16BitStorageFeaturesKHR PhysicalDevice::get16BitStorageFeatures() const
+{
+    VkPhysicalDevice16BitStorageFeaturesKHR sixteenBitStorageFeatures = {};
+    sixteenBitStorageFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES_KHR;
+    getFeatures2(&sixteenBitStorageFeatures);
+    return sixteenBitStorageFeatures;
+}
+#endif // VK_KHR_16bit_storage
+
+#ifdef VK_KHR_multiview
+VkPhysicalDeviceMultiviewFeaturesKHR PhysicalDevice::getMultiviewFeatures() const
+{
+    VkPhysicalDeviceMultiviewFeaturesKHR multiviewFeatures = {};
+    multiviewFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_FEATURES_KHR;
+    getFeatures2(&multiviewFeatures);
+    return multiviewFeatures;
+}
+#endif // VK_KHR_multiview
+
+#ifdef VK_KHR_sampler_ycbcr_conversion
+VkBool32 PhysicalDevice::getSamplerYcbcrConversionFeature() const
+{
+    VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR samplerYcbcrConversionFeatures = {};
+    samplerYcbcrConversionFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_YCBCR_CONVERSION_FEATURES_KHR;
+    getFeatures2(&samplerYcbcrConversionFeatures);
+    return samplerYcbcrConversionFeatures.samplerYcbcrConversion;
+}
+#endif // VK_KHR_sampler_ycbcr_conversion
+
+#ifdef VK_KHR_shader_draw_parameters
+VkBool32 PhysicalDevice::getShaderDrawParametersFeature() const
+{
+    VkPhysicalDeviceShaderDrawParametersFeatures shaderDrawParametersFeatures = {};
+    shaderDrawParametersFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES;
+    getFeatures2(&shaderDrawParametersFeatures);
+    return shaderDrawParametersFeatures.shaderDrawParameters;
+}
+#endif // VK_KHR_shader_draw_parameters
+
+#ifdef VK_KHR_variable_pointers
+VkPhysicalDeviceVariablePointersFeaturesKHR PhysicalDevice::getVariablePointersFeatures() const
+{
+    VkPhysicalDeviceVariablePointersFeaturesKHR variablePointersFeatures = {};
+    variablePointersFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTERS_FEATURES_KHR;
+    getFeatures2(&variablePointersFeatures);
+    return variablePointersFeatures;
+}
+#endif // VK_KHR_variable_pointers
+
 std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
 {
     const std::vector<float> defaultQueuePriorities = {1.0f};

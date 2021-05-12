@@ -93,6 +93,24 @@ namespace magma
         VkPhysicalDeviceInlineUniformBlockFeaturesEXT getInlineUniformBlockFeatures() const;
         VkPhysicalDeviceInlineUniformBlockPropertiesEXT getInlineUniformBlockProperties() const;
 #endif
+#ifdef VK_KHR_8bit_storage
+        VkPhysicalDevice8BitStorageFeaturesKHR get8BitStorageFeatures() const;
+#endif
+#ifdef VK_KHR_16bit_storage
+        VkPhysicalDevice16BitStorageFeaturesKHR get16BitStorageFeatures() const;
+#endif
+#ifdef VK_KHR_multiview
+        VkPhysicalDeviceMultiviewFeaturesKHR getMultiviewFeatures() const;
+#endif
+#ifdef VK_KHR_sampler_ycbcr_conversion
+        VkBool32 getSamplerYcbcrConversionFeature() const;
+#endif
+#ifdef VK_KHR_shader_draw_parameters
+        VkBool32 getShaderDrawParametersFeature() const;
+#endif
+#ifdef VK_KHR_variable_pointers
+        VkPhysicalDeviceVariablePointersFeaturesKHR getVariablePointersFeatures() const;
+#endif
         // Non-API
         std::shared_ptr<Instance> getInstance() const noexcept { return instance; }
         std::shared_ptr<Device> createDefaultDevice() const;
