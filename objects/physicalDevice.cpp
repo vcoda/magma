@@ -277,90 +277,6 @@ VkPhysicalDeviceShaderCoreProperties2AMD PhysicalDevice::getShaderCoreProperties
 }
 #endif // VK_AMD_shader_core_properties2
 
-#ifdef VK_NV_compute_shader_derivatives
-VkPhysicalDeviceComputeShaderDerivativesFeaturesNV PhysicalDevice::getComputeShaderDerivativesFeatures() const
-{
-    VkPhysicalDeviceComputeShaderDerivativesFeaturesNV computeShaderDerivativesFeatures = {};
-    computeShaderDerivativesFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COMPUTE_SHADER_DERIVATIVES_FEATURES_NV;
-    getFeatures2(&computeShaderDerivativesFeatures);
-    return computeShaderDerivativesFeatures;
-}
-#endif // VK_NV_compute_shader_derivatives
-
-#ifdef VK_NV_cooperative_matrix
-VkPhysicalDeviceCooperativeMatrixFeaturesNV PhysicalDevice::getCooperativeMatrixFeatures() const
-{
-    VkPhysicalDeviceCooperativeMatrixFeaturesNV cooperativeMatrixFeatures = {};
-    cooperativeMatrixFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COOPERATIVE_MATRIX_FEATURES_NV;
-    getFeatures2(&cooperativeMatrixFeatures);
-    return cooperativeMatrixFeatures;
-}
-
-VkPhysicalDeviceCooperativeMatrixPropertiesNV PhysicalDevice::getCooperativeMatrixProperties() const
-{
-    VkPhysicalDeviceCooperativeMatrixPropertiesNV cooperativeMatrixProperties = {};
-    cooperativeMatrixProperties.sType = VK_STRUCTURE_TYPE_COOPERATIVE_MATRIX_PROPERTIES_NV;
-    getProperties2(&cooperativeMatrixProperties);
-    return cooperativeMatrixProperties;
-}
-#endif // VK_NV_cooperative_matrix
-
-#ifdef VK_NV_mesh_shader
-VkPhysicalDeviceMeshShaderFeaturesNV PhysicalDevice::getMeshShaderFeatures() const
-{
-    VkPhysicalDeviceMeshShaderFeaturesNV meshShaderFeatures = {};
-    meshShaderFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_NV;
-    getFeatures2(&meshShaderFeatures);
-    return meshShaderFeatures;
-}
-
-VkPhysicalDeviceMeshShaderPropertiesNV PhysicalDevice::getMeshShaderProperties() const
-{
-    VkPhysicalDeviceMeshShaderPropertiesNV meshShaderProperties = {};
-    meshShaderProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_NV;
-    getProperties2(&meshShaderProperties);
-    return meshShaderProperties;
-}
-#endif // VK_NV_mesh_shader
-
-#ifdef VK_NV_ray_tracing
-VkPhysicalDeviceRayTracingPropertiesNV PhysicalDevice::getRayTracingProperties() const
-{
-    VkPhysicalDeviceRayTracingPropertiesNV rayTracingProperties = {};
-    rayTracingProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PROPERTIES_NV;
-    getProperties2(&rayTracingProperties);
-    return rayTracingProperties;
-}
-#endif // VK_NV_ray_tracing
-
-#ifdef VK_NV_shading_rate_image
-VkPhysicalDeviceShadingRateImageFeaturesNV PhysicalDevice::getShadingRateImageFeatures() const
-{
-    VkPhysicalDeviceShadingRateImageFeaturesNV shadingRateImageFeatures = {};
-    shadingRateImageFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADING_RATE_IMAGE_FEATURES_NV;
-    getFeatures2(&shadingRateImageFeatures);
-    return shadingRateImageFeatures;
-}
-#endif // VK_NV_shading_rate_image
-
-#ifdef VK_EXT_transform_feedback
-VkPhysicalDeviceTransformFeedbackFeaturesEXT PhysicalDevice::getTransformFeedbackFeatures() const
-{
-    VkPhysicalDeviceTransformFeedbackFeaturesEXT transformFeedbackFeatures = {};
-    transformFeedbackFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TRANSFORM_FEEDBACK_FEATURES_EXT;
-    getFeatures2(&transformFeedbackFeatures);
-    return transformFeedbackFeatures;
-}
-
-VkPhysicalDeviceTransformFeedbackPropertiesEXT PhysicalDevice::getTransformFeedbackProperties() const
-{
-    VkPhysicalDeviceTransformFeedbackPropertiesEXT transformFeedbackProperties = {};
-    transformFeedbackProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TRANSFORM_FEEDBACK_PROPERTIES_EXT;
-    getProperties2(&transformFeedbackProperties);
-    return transformFeedbackProperties;
-}
-#endif // VK_EXT_transform_feedback
-
 #ifdef VK_EXT_blend_operation_advanced
 VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT PhysicalDevice::getBlendOperationAdvancedFeatures() const
 {
@@ -463,6 +379,24 @@ VkPhysicalDeviceSubgroupSizeControlPropertiesEXT PhysicalDevice::getSubgroupSize
 }
 #endif // VK_EXT_subgroup_size_control
 
+#ifdef VK_EXT_transform_feedback
+VkPhysicalDeviceTransformFeedbackFeaturesEXT PhysicalDevice::getTransformFeedbackFeatures() const
+{
+    VkPhysicalDeviceTransformFeedbackFeaturesEXT transformFeedbackFeatures = {};
+    transformFeedbackFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TRANSFORM_FEEDBACK_FEATURES_EXT;
+    getFeatures2(&transformFeedbackFeatures);
+    return transformFeedbackFeatures;
+}
+
+VkPhysicalDeviceTransformFeedbackPropertiesEXT PhysicalDevice::getTransformFeedbackProperties() const
+{
+    VkPhysicalDeviceTransformFeedbackPropertiesEXT transformFeedbackProperties = {};
+    transformFeedbackProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TRANSFORM_FEEDBACK_PROPERTIES_EXT;
+    getProperties2(&transformFeedbackProperties);
+    return transformFeedbackProperties;
+}
+#endif // VK_EXT_transform_feedback
+
 #ifdef VK_EXT_vertex_attribute_divisor
 VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT PhysicalDevice::getVertexAttributeDivisorFeatures() const
 {
@@ -562,6 +496,72 @@ VkPhysicalDeviceVulkanMemoryModelFeaturesKHR PhysicalDevice::getVulkanMemoryMode
     return vulkanMemoryModelFeatures;
 }
 #endif
+
+#ifdef VK_NV_compute_shader_derivatives
+VkPhysicalDeviceComputeShaderDerivativesFeaturesNV PhysicalDevice::getComputeShaderDerivativesFeatures() const
+{
+    VkPhysicalDeviceComputeShaderDerivativesFeaturesNV computeShaderDerivativesFeatures = {};
+    computeShaderDerivativesFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COMPUTE_SHADER_DERIVATIVES_FEATURES_NV;
+    getFeatures2(&computeShaderDerivativesFeatures);
+    return computeShaderDerivativesFeatures;
+}
+#endif // VK_NV_compute_shader_derivatives
+
+#ifdef VK_NV_cooperative_matrix
+VkPhysicalDeviceCooperativeMatrixFeaturesNV PhysicalDevice::getCooperativeMatrixFeatures() const
+{
+    VkPhysicalDeviceCooperativeMatrixFeaturesNV cooperativeMatrixFeatures = {};
+    cooperativeMatrixFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COOPERATIVE_MATRIX_FEATURES_NV;
+    getFeatures2(&cooperativeMatrixFeatures);
+    return cooperativeMatrixFeatures;
+}
+
+VkPhysicalDeviceCooperativeMatrixPropertiesNV PhysicalDevice::getCooperativeMatrixProperties() const
+{
+    VkPhysicalDeviceCooperativeMatrixPropertiesNV cooperativeMatrixProperties = {};
+    cooperativeMatrixProperties.sType = VK_STRUCTURE_TYPE_COOPERATIVE_MATRIX_PROPERTIES_NV;
+    getProperties2(&cooperativeMatrixProperties);
+    return cooperativeMatrixProperties;
+}
+#endif // VK_NV_cooperative_matrix
+
+#ifdef VK_NV_mesh_shader
+VkPhysicalDeviceMeshShaderFeaturesNV PhysicalDevice::getMeshShaderFeatures() const
+{
+    VkPhysicalDeviceMeshShaderFeaturesNV meshShaderFeatures = {};
+    meshShaderFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_NV;
+    getFeatures2(&meshShaderFeatures);
+    return meshShaderFeatures;
+}
+
+VkPhysicalDeviceMeshShaderPropertiesNV PhysicalDevice::getMeshShaderProperties() const
+{
+    VkPhysicalDeviceMeshShaderPropertiesNV meshShaderProperties = {};
+    meshShaderProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_NV;
+    getProperties2(&meshShaderProperties);
+    return meshShaderProperties;
+}
+#endif // VK_NV_mesh_shader
+
+#ifdef VK_NV_ray_tracing
+VkPhysicalDeviceRayTracingPropertiesNV PhysicalDevice::getRayTracingProperties() const
+{
+    VkPhysicalDeviceRayTracingPropertiesNV rayTracingProperties = {};
+    rayTracingProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PROPERTIES_NV;
+    getProperties2(&rayTracingProperties);
+    return rayTracingProperties;
+}
+#endif // VK_NV_ray_tracing
+
+#ifdef VK_NV_shading_rate_image
+VkPhysicalDeviceShadingRateImageFeaturesNV PhysicalDevice::getShadingRateImageFeatures() const
+{
+    VkPhysicalDeviceShadingRateImageFeaturesNV shadingRateImageFeatures = {};
+    shadingRateImageFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADING_RATE_IMAGE_FEATURES_NV;
+    getFeatures2(&shadingRateImageFeatures);
+    return shadingRateImageFeatures;
+}
+#endif // VK_NV_shading_rate_image
 
 std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
 {
