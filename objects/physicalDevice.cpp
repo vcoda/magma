@@ -409,6 +409,26 @@ VkBool32 PhysicalDevice::getSamplerYcbcrConversionFeature() const
 }
 #endif // VK_KHR_sampler_ycbcr_conversion
 
+#ifdef VK_KHR_shader_atomic_int64
+VkPhysicalDeviceShaderAtomicInt64FeaturesKHR PhysicalDevice::getShaderAtomicInt64Features() const
+{
+    VkPhysicalDeviceShaderAtomicInt64FeaturesKHR shaderAtomicInt64Features = {};
+    shaderAtomicInt64Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_INT64_FEATURES_KHR;
+    getFeatures2(&shaderAtomicInt64Features);
+    return shaderAtomicInt64Features;
+}
+#endif // VK_KHR_shader_atomic_int64
+
+#ifdef VK_KHR_shader_clock
+VkPhysicalDeviceShaderClockFeaturesKHR PhysicalDevice::getShaderClockFeatures() const
+{
+    VkPhysicalDeviceShaderClockFeaturesKHR shaderClockFeatures = {};
+    shaderClockFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CLOCK_FEATURES_KHR;
+    getFeatures2(&shaderClockFeatures);
+    return shaderClockFeatures;
+}
+#endif // VK_KHR_shader_clock
+
 #ifdef VK_KHR_shader_draw_parameters
 VkBool32 PhysicalDevice::getShaderDrawParametersFeature() const
 {
@@ -418,6 +438,16 @@ VkBool32 PhysicalDevice::getShaderDrawParametersFeature() const
     return shaderDrawParametersFeatures.shaderDrawParameters;
 }
 #endif // VK_KHR_shader_draw_parameters
+
+#ifdef VK_KHR_shader_float16_int8
+VkPhysicalDeviceShaderFloat16Int8FeaturesKHR PhysicalDevice::getShaderFloat16Int8Features() const
+{
+    VkPhysicalDeviceShaderFloat16Int8FeaturesKHR shaderFloat16Int8Features = {};
+    shaderFloat16Int8Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES_KHR;
+    getFeatures2(&shaderFloat16Int8Features);
+    return shaderFloat16Int8Features;
+}
+#endif // VK_KHR_shader_float16_int8
 
 #ifdef VK_KHR_variable_pointers
 VkPhysicalDeviceVariablePointersFeaturesKHR PhysicalDevice::getVariablePointersFeatures() const
