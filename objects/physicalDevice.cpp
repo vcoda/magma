@@ -361,6 +361,34 @@ VkPhysicalDeviceTransformFeedbackPropertiesEXT PhysicalDevice::getTransformFeedb
 }
 #endif // VK_EXT_transform_feedback
 
+#ifdef VK_EXT_blend_operation_advanced
+VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT PhysicalDevice::getBlendOperationAdvancedFeatures() const
+{
+    VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT blendOperationAdvancedFeatures = {};
+    blendOperationAdvancedFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_FEATURES_EXT;
+    getFeatures2(&blendOperationAdvancedFeatures);
+    return blendOperationAdvancedFeatures;
+}
+        
+VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT PhysicalDevice::getBlendOperationAdvancedProperties() const
+{
+    VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT blendOperationAdvancedProperties = {};
+    blendOperationAdvancedProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_PROPERTIES_EXT;
+    getProperties2(&blendOperationAdvancedProperties);
+    return blendOperationAdvancedProperties;
+}
+#endif // VK_EXT_blend_operation_advanced
+
+#ifdef VK_EXT_conditional_rendering
+VkPhysicalDeviceConditionalRenderingFeaturesEXT PhysicalDevice::getConditionalRenderingFeatures() const
+{
+    VkPhysicalDeviceConditionalRenderingFeaturesEXT conditionalRenderingFeatures = {};
+    conditionalRenderingFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CONDITIONAL_RENDERING_FEATURES_EXT;
+    getFeatures2(&conditionalRenderingFeatures);
+    return conditionalRenderingFeatures;
+}
+#endif // VK_EXT_conditional_rendering
+
 #ifdef VK_EXT_conservative_rasterization
 VkPhysicalDeviceConservativeRasterizationPropertiesEXT PhysicalDevice::getConservativeRasterizationProperties() const
 {
@@ -389,6 +417,16 @@ VkPhysicalDeviceDescriptorIndexingPropertiesEXT PhysicalDevice::getDescriptorInd
 }
 #endif // VK_EXT_descriptor_indexing
 
+#ifdef VK_EXT_fragment_shader_interlock
+VkPhysicalDeviceFragmentShaderInterlockFeaturesEXT PhysicalDevice::getFragmentShaderInterlockFeatures() const
+{
+    VkPhysicalDeviceFragmentShaderInterlockFeaturesEXT fragmentShaderInterlockFeatures = {};
+    fragmentShaderInterlockFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADER_INTERLOCK_FEATURES_EXT;
+    getFeatures2(&fragmentShaderInterlockFeatures);
+    return fragmentShaderInterlockFeatures;
+}
+#endif // VK_EXT_fragment_shader_interlock
+
 #ifdef VK_EXT_inline_uniform_block
 VkPhysicalDeviceInlineUniformBlockFeaturesEXT PhysicalDevice::getInlineUniformBlockFeatures() const
 {
@@ -406,6 +444,34 @@ VkPhysicalDeviceInlineUniformBlockPropertiesEXT PhysicalDevice::getInlineUniform
     return inlineUniformBlockProperties;
 }
 #endif // VK_EXT_inline_uniform_block
+
+#ifdef VK_EXT_subgroup_size_control
+VkPhysicalDeviceSubgroupSizeControlFeaturesEXT PhysicalDevice::getSubgroupSizeControlFeatures() const
+{
+    VkPhysicalDeviceSubgroupSizeControlFeaturesEXT subgroupSizeControlFeatures = {};
+    subgroupSizeControlFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_SIZE_CONTROL_FEATURES_EXT;
+    getFeatures2(&subgroupSizeControlFeatures);
+    return subgroupSizeControlFeatures;
+}
+
+VkPhysicalDeviceSubgroupSizeControlPropertiesEXT PhysicalDevice::getSubgroupSizeControlProperties() const
+{
+    VkPhysicalDeviceSubgroupSizeControlPropertiesEXT subgroupSizeControlProperties = {};
+    subgroupSizeControlProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_SIZE_CONTROL_PROPERTIES_EXT;
+    getProperties2(&subgroupSizeControlProperties);
+    return subgroupSizeControlProperties;
+}
+#endif // VK_EXT_subgroup_size_control
+
+#ifdef VK_EXT_vertex_attribute_divisor
+VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT PhysicalDevice::getVertexAttributeDivisorFeatures() const
+{
+    VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT vertexAttributeDivisorFeatures = {};
+    vertexAttributeDivisorFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_ATTRIBUTE_DIVISOR_FEATURES_EXT;
+    getFeatures2(&vertexAttributeDivisorFeatures);
+    return vertexAttributeDivisorFeatures;
+}
+#endif // VK_EXT_vertex_attribute_divisor
 
 #ifdef VK_KHR_8bit_storage
 VkPhysicalDevice8BitStorageFeaturesKHR PhysicalDevice::get8BitStorageFeatures() const

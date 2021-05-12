@@ -92,6 +92,13 @@ namespace magma
         VkPhysicalDeviceTransformFeedbackFeaturesEXT getTransformFeedbackFeatures() const;
         VkPhysicalDeviceTransformFeedbackPropertiesEXT getTransformFeedbackProperties() const;
 #endif
+#ifdef VK_EXT_blend_operation_advanced
+        VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT getBlendOperationAdvancedFeatures() const;
+        VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT getBlendOperationAdvancedProperties() const;
+#endif
+#ifdef VK_EXT_conditional_rendering
+        VkPhysicalDeviceConditionalRenderingFeaturesEXT getConditionalRenderingFeatures() const;
+#endif
 #ifdef VK_EXT_conservative_rasterization
         VkPhysicalDeviceConservativeRasterizationPropertiesEXT getConservativeRasterizationProperties() const;
 #endif
@@ -99,9 +106,19 @@ namespace magma
         VkPhysicalDeviceDescriptorIndexingFeaturesEXT getDescriptorIndexingFeatures() const;
         VkPhysicalDeviceDescriptorIndexingPropertiesEXT getDescriptorIndexingProperties() const;
 #endif
+#ifdef VK_EXT_fragment_shader_interlock
+        VkPhysicalDeviceFragmentShaderInterlockFeaturesEXT getFragmentShaderInterlockFeatures() const;
+#endif
 #ifdef VK_EXT_inline_uniform_block
         VkPhysicalDeviceInlineUniformBlockFeaturesEXT getInlineUniformBlockFeatures() const;
         VkPhysicalDeviceInlineUniformBlockPropertiesEXT getInlineUniformBlockProperties() const;
+#endif
+#ifdef VK_EXT_subgroup_size_control
+        VkPhysicalDeviceSubgroupSizeControlFeaturesEXT getSubgroupSizeControlFeatures() const;
+        VkPhysicalDeviceSubgroupSizeControlPropertiesEXT getSubgroupSizeControlProperties() const;
+#endif
+#ifdef VK_EXT_vertex_attribute_divisor
+        VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT getVertexAttributeDivisorFeatures() const;
 #endif
 #ifdef VK_KHR_8bit_storage
         VkPhysicalDevice8BitStorageFeaturesKHR get8BitStorageFeatures() const;
