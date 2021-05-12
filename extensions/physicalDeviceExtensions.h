@@ -60,6 +60,7 @@ namespace magma
         const bool EXT_calibrated_timestamps;
         const bool EXT_conditional_rendering;
         const bool EXT_conservative_rasterization;
+        const bool EXT_custom_border_color;
         const bool EXT_debug_marker;
         const bool EXT_depth_clip_enable;
         const bool EXT_depth_range_unrestricted;
@@ -180,7 +181,9 @@ namespace magma
         const bool KHR_vulkan_memory_model;
         const bool KHR_win32_keyed_mutex;
 
+        const bool NVX_binary_import;
         const bool NVX_device_generated_commands;
+        const bool NVX_image_view_handle;
         const bool NVX_multiview_per_view_attributes;
         const bool NV_clip_space_w_scaling;
         const bool NV_compute_shader_derivatives;

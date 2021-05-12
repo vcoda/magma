@@ -59,6 +59,7 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(EXT_calibrated_timestamps),
     MAGMA_CHECK_EXTENSION(EXT_conditional_rendering),
     MAGMA_CHECK_EXTENSION(EXT_conservative_rasterization),
+    MAGMA_CHECK_EXTENSION(EXT_custom_border_color),
     MAGMA_CHECK_EXTENSION(EXT_debug_marker),
     MAGMA_CHECK_EXTENSION(EXT_depth_clip_enable),
     MAGMA_CHECK_EXTENSION(EXT_depth_range_unrestricted),
@@ -179,7 +180,9 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(KHR_vulkan_memory_model),
     MAGMA_CHECK_EXTENSION(KHR_win32_keyed_mutex),
 
+    MAGMA_CHECK_EXTENSION(NVX_binary_import),
     MAGMA_CHECK_EXTENSION(NVX_device_generated_commands),
+    MAGMA_CHECK_EXTENSION(NVX_image_view_handle),
     MAGMA_CHECK_EXTENSION(NVX_multiview_per_view_attributes),
     MAGMA_CHECK_EXTENSION(NV_clip_space_w_scaling),
     MAGMA_CHECK_EXTENSION(NV_compute_shader_derivatives),
