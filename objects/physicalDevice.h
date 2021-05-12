@@ -105,17 +105,11 @@ namespace magma
 #ifdef VK_KHR_multiview
         VkPhysicalDeviceMultiviewFeaturesKHR getMultiviewFeatures() const;
 #endif
-#ifdef VK_KHR_sampler_ycbcr_conversion
-        VkBool32 getSamplerYcbcrConversionFeature() const;
-#endif
 #ifdef VK_KHR_shader_atomic_int64
         VkPhysicalDeviceShaderAtomicInt64FeaturesKHR getShaderAtomicInt64Features() const;
 #endif
 #ifdef VK_KHR_shader_clock
         VkPhysicalDeviceShaderClockFeaturesKHR getShaderClockFeatures() const;
-#endif
-#ifdef VK_KHR_shader_draw_parameters
-        VkBool32 getShaderDrawParametersFeature() const;
 #endif
 #ifdef VK_KHR_shader_float16_int8
         VkPhysicalDeviceShaderFloat16Int8FeaturesKHR getShaderFloat16Int8Features() const;

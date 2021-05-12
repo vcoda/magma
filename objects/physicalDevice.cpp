@@ -409,16 +409,6 @@ VkPhysicalDeviceMultiviewFeaturesKHR PhysicalDevice::getMultiviewFeatures() cons
 }
 #endif // VK_KHR_multiview
 
-#ifdef VK_KHR_sampler_ycbcr_conversion
-VkBool32 PhysicalDevice::getSamplerYcbcrConversionFeature() const
-{
-    VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR samplerYcbcrConversionFeatures = {};
-    samplerYcbcrConversionFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_YCBCR_CONVERSION_FEATURES_KHR;
-    getFeatures2(&samplerYcbcrConversionFeatures);
-    return samplerYcbcrConversionFeatures.samplerYcbcrConversion;
-}
-#endif // VK_KHR_sampler_ycbcr_conversion
-
 #ifdef VK_KHR_shader_atomic_int64
 VkPhysicalDeviceShaderAtomicInt64FeaturesKHR PhysicalDevice::getShaderAtomicInt64Features() const
 {
@@ -438,16 +428,6 @@ VkPhysicalDeviceShaderClockFeaturesKHR PhysicalDevice::getShaderClockFeatures() 
     return shaderClockFeatures;
 }
 #endif // VK_KHR_shader_clock
-
-#ifdef VK_KHR_shader_draw_parameters
-VkBool32 PhysicalDevice::getShaderDrawParametersFeature() const
-{
-    VkPhysicalDeviceShaderDrawParametersFeatures shaderDrawParametersFeatures = {};
-    shaderDrawParametersFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES;
-    getFeatures2(&shaderDrawParametersFeatures);
-    return shaderDrawParametersFeatures.shaderDrawParameters;
-}
-#endif // VK_KHR_shader_draw_parameters
 
 #ifdef VK_KHR_shader_float16_int8
 VkPhysicalDeviceShaderFloat16Int8FeaturesKHR PhysicalDevice::getShaderFloat16Int8Features() const
