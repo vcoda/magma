@@ -277,6 +277,34 @@ VkPhysicalDeviceShaderCoreProperties2AMD PhysicalDevice::getShaderCoreProperties
 }
 #endif // VK_AMD_shader_core_properties2
 
+#ifdef VK_NV_compute_shader_derivatives
+VkPhysicalDeviceComputeShaderDerivativesFeaturesNV PhysicalDevice::getComputeShaderDerivativesFeatures() const
+{
+    VkPhysicalDeviceComputeShaderDerivativesFeaturesNV computeShaderDerivativesFeatures = {};
+    computeShaderDerivativesFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COMPUTE_SHADER_DERIVATIVES_FEATURES_NV;
+    getFeatures2(&computeShaderDerivativesFeatures);
+    return computeShaderDerivativesFeatures;
+}
+#endif // VK_NV_compute_shader_derivatives
+
+#ifdef VK_NV_cooperative_matrix
+VkPhysicalDeviceCooperativeMatrixFeaturesNV PhysicalDevice::getCooperativeMatrixFeatures() const
+{
+    VkPhysicalDeviceCooperativeMatrixFeaturesNV cooperativeMatrixFeatures = {};
+    cooperativeMatrixFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COOPERATIVE_MATRIX_FEATURES_NV;
+    getFeatures2(&cooperativeMatrixFeatures);
+    return cooperativeMatrixFeatures;
+}
+
+VkPhysicalDeviceCooperativeMatrixPropertiesNV PhysicalDevice::getCooperativeMatrixProperties() const
+{
+    VkPhysicalDeviceCooperativeMatrixPropertiesNV cooperativeMatrixProperties = {};
+    cooperativeMatrixProperties.sType = VK_STRUCTURE_TYPE_COOPERATIVE_MATRIX_PROPERTIES_NV;
+    getProperties2(&cooperativeMatrixProperties);
+    return cooperativeMatrixProperties;
+}
+#endif // VK_NV_cooperative_matrix
+
 #ifdef VK_NV_mesh_shader
 VkPhysicalDeviceMeshShaderFeaturesNV PhysicalDevice::getMeshShaderFeatures() const
 {
@@ -304,6 +332,16 @@ VkPhysicalDeviceRayTracingPropertiesNV PhysicalDevice::getRayTracingProperties()
     return rayTracingProperties;
 }
 #endif // VK_NV_ray_tracing
+
+#ifdef VK_NV_shading_rate_image
+VkPhysicalDeviceShadingRateImageFeaturesNV PhysicalDevice::getShadingRateImageFeatures() const
+{
+    VkPhysicalDeviceShadingRateImageFeaturesNV shadingRateImageFeatures = {};
+    shadingRateImageFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADING_RATE_IMAGE_FEATURES_NV;
+    getFeatures2(&shadingRateImageFeatures);
+    return shadingRateImageFeatures;
+}
+#endif // VK_NV_shading_rate_image
 
 #ifdef VK_EXT_transform_feedback
 VkPhysicalDeviceTransformFeedbackFeaturesEXT PhysicalDevice::getTransformFeedbackFeatures() const
