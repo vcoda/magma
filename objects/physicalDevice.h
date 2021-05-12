@@ -166,31 +166,4 @@ namespace magma
         std::shared_ptr<Instance> instance;
         mutable std::set<std::string> extensions; // Cached implicit extensions
     };
-
-    /* A logical device can be created that connects to one or more physical devices. */
-
-#ifdef VK_KHR_device_group
-    class PhysicalDeviceGroup
-    {
-        explicit PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices,
-            uint32_t groupId) noexcept;
-        friend class Instance;
-
-    public:
-        std::shared_ptr<Device> createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
-            const std::vector<const char *>& layers,
-            const std::vector<const char *>& extensions,
-            const VkPhysicalDeviceFeatures& deviceFeatures,
-            const std::vector<void *>& extendedDeviceFeatures = {}) const;
-        uint32_t getGroupId() const { return groupId; }
-        uint32_t physicalDeviceCount() const
-            { return static_cast<uint32_t>(physicalDevices.size()); }
-        std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId) const
-            { return physicalDevices[deviceId]; }
-
-    private:
-        std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices;
-        uint32_t groupId;
-    };
-#endif // VK_KHR_device_group
 } // namespace magma

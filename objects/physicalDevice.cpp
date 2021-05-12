@@ -574,32 +574,4 @@ inline PhysicalDeviceProperties PhysicalDevice::getProperties(VkStructureType sT
 #endif
     return physicalDeviceProperties;
 }
-
-#ifdef VK_KHR_device_group
-PhysicalDeviceGroup::PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices, uint32_t groupId) noexcept:
-    physicalDevices(physicalDevices),
-    groupId(groupId)
-{}
-
-std::shared_ptr<Device> PhysicalDeviceGroup::createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
-    const std::vector<const char *>& layers,
-    const std::vector<const char *>& extensions,
-    const VkPhysicalDeviceFeatures& deviceFeatures,
-    const std::vector<void *>& extendedDeviceFeatures /* {} */) const
-{
-    VkDeviceGroupDeviceCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO;
-    info.pNext = nullptr;
-    info.physicalDeviceCount = physicalDeviceCount();
-    MAGMA_STACK_ARRAY(VkPhysicalDevice, dereferencedPhysicalDevices, info.physicalDeviceCount);
-    for (const auto& physicalDevice : physicalDevices)
-        dereferencedPhysicalDevices.put(*physicalDevice);
-    info.pPhysicalDevices = dereferencedPhysicalDevices;
-    std::vector<void *> extendedDeviceGroupFeatures = extendedDeviceFeatures;
-    extendedDeviceGroupFeatures.push_back(&info);
-    return physicalDevices.front()->createDevice(queueDescriptors,
-        layers, extensions,
-        deviceFeatures, extendedDeviceGroupFeatures);
-}
-#endif // VK_KHR_device_group
 } // namespace magma

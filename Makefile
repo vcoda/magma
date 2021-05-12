@@ -92,6 +92,7 @@ MAGMA_OBJS= \
 	objects/indirectBuffer.o \
 	objects/instance.o \
 	objects/physicalDevice.o \
+	objects/physicalDeviceGroup.o \
 	objects/pipeline.o \
 	objects/pipelineCache.o \
 	objects/pipelineLayout.o \

@@ -585,6 +585,9 @@
     <ClInclude Include="..\..\core\destructible.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\physicalDeviceGroup.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -898,6 +901,9 @@
     </ClCompile>
     <ClCompile Include="..\..\allocator\alignedAllocator.cpp">
       <Filter>Source Files\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\physicalDeviceGroup.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -267,6 +267,7 @@
     <ClInclude Include="..\..\objects\object.h" />
     <ClInclude Include="..\..\objects\objectType.h" />
     <ClInclude Include="..\..\objects\physicalDevice.h" />
+    <ClInclude Include="..\..\objects\physicalDeviceGroup.h" />
     <ClInclude Include="..\..\objects\pipeline.h" />
     <ClInclude Include="..\..\objects\pipelineCache.h" />
     <ClInclude Include="..\..\objects\pipelineLayout.h" />
@@ -387,6 +388,7 @@
     <ClCompile Include="..\..\objects\indirectBuffer.cpp" />
     <ClCompile Include="..\..\objects\instance.cpp" />
     <ClCompile Include="..\..\objects\physicalDevice.cpp" />
+    <ClCompile Include="..\..\objects\physicalDeviceGroup.cpp" />
     <ClCompile Include="..\..\objects\pipeline.cpp" />
     <ClCompile Include="..\..\objects\pipelineCache.cpp" />
     <ClCompile Include="..\..\objects\pipelineLayout.cpp" />
