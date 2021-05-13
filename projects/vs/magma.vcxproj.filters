@@ -588,6 +588,9 @@
     <ClInclude Include="..\..\objects\physicalDeviceGroup.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\extensions\physicalDeviceExtensionFeatures.h">
+      <Filter>Header Files\extensions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">

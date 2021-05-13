@@ -520,6 +520,111 @@ bool PhysicalDevice::checkExtensionSupport(const char *extensionName) const
     return extensions.find(extensionName) != extensions.end();
 }
 
+// Macro to shorten features query expression
+#define PHYSICAL_DEVICE_GET_FEATURES(StructureType, EnumField, member)\
+    features.member = getFeatures<VkPhysicalDevice##StructureType>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_##EnumField).member
+
+PhysicalDeviceExtensionFeatures PhysicalDevice::checkExtensionFeaturesSupport() const
+{
+    PhysicalDeviceExtensionFeatures features;
+    if (!checkExtensionSupport("VK_KHR_get_physical_device_properties2"))
+        return features;
+#ifdef VK_AMD_device_coherent_memory
+    PHYSICAL_DEVICE_GET_FEATURES(CoherentMemoryFeaturesAMD, COHERENT_MEMORY_FEATURES_AMD, deviceCoherentMemory);
+#endif
+#ifdef VK_EXT_depth_clip_enable
+    PHYSICAL_DEVICE_GET_FEATURES(DepthClipEnableFeaturesEXT, DEPTH_CLIP_ENABLE_FEATURES_EXT, depthClipEnable);
+#endif
+#ifdef VK_EXT_extended_dynamic_state
+    PHYSICAL_DEVICE_GET_FEATURES(ExtendedDynamicStateFeaturesEXT, EXTENDED_DYNAMIC_STATE_FEATURES_EXT, extendedDynamicState);
+#endif
+#ifdef VK_EXT_host_query_reset
+    PHYSICAL_DEVICE_GET_FEATURES(HostQueryResetFeaturesEXT, HOST_QUERY_RESET_FEATURES_EXT, hostQueryReset);
+#endif
+#ifdef VK_EXT_image_robustness
+    PHYSICAL_DEVICE_GET_FEATURES(ImageRobustnessFeaturesEXT, IMAGE_ROBUSTNESS_FEATURES_EXT, robustImageAccess);
+#endif
+#ifdef VK_EXT_index_type_uint8
+    PHYSICAL_DEVICE_GET_FEATURES(IndexTypeUint8FeaturesEXT, INDEX_TYPE_UINT8_FEATURES_EXT, indexTypeUint8);
+#endif
+#ifdef VK_EXT_memory_priority
+    PHYSICAL_DEVICE_GET_FEATURES(MemoryPriorityFeaturesEXT, MEMORY_PRIORITY_FEATURES_EXT, memoryPriority);
+#endif
+#ifdef VK_EXT_pipeline_creation_cache_control
+    PHYSICAL_DEVICE_GET_FEATURES(PipelineCreationCacheControlFeaturesEXT, PIPELINE_CREATION_CACHE_CONTROL_FEATURES_EXT, pipelineCreationCacheControl);
+#endif
+#ifdef VK_EXT_private_data
+    PHYSICAL_DEVICE_GET_FEATURES(PrivateDataFeaturesEXT, PRIVATE_DATA_FEATURES_EXT, privateData);
+#endif
+#ifdef VK_EXT_scalar_block_layout
+    PHYSICAL_DEVICE_GET_FEATURES(ScalarBlockLayoutFeaturesEXT, SCALAR_BLOCK_LAYOUT_FEATURES_EXT, scalarBlockLayout);
+#endif
+#ifdef VK_EXT_shader_demote_to_helper_invocation
+    PHYSICAL_DEVICE_GET_FEATURES(ShaderDemoteToHelperInvocationFeaturesEXT, SHADER_DEMOTE_TO_HELPER_INVOCATION_FEATURES_EXT, shaderDemoteToHelperInvocation);
+#endif
+#ifdef VK_EXT_texel_buffer_alignment
+    PHYSICAL_DEVICE_GET_FEATURES(TexelBufferAlignmentFeaturesEXT, TEXEL_BUFFER_ALIGNMENT_FEATURES_EXT, texelBufferAlignment);
+#endif
+#ifdef VK_EXT_ycbcr_image_arrays
+    PHYSICAL_DEVICE_GET_FEATURES(YcbcrImageArraysFeaturesEXT, YCBCR_IMAGE_ARRAYS_FEATURES_EXT, ycbcrImageArrays);
+#endif
+#ifdef VK_KHR_imageless_framebuffer
+    PHYSICAL_DEVICE_GET_FEATURES(ImagelessFramebufferFeaturesKHR, IMAGELESS_FRAMEBUFFER_FEATURES_KHR, imagelessFramebuffer);
+#endif
+#ifdef VK_KHR_pipeline_executable_properties
+    PHYSICAL_DEVICE_GET_FEATURES(PipelineExecutablePropertiesFeaturesKHR, PIPELINE_EXECUTABLE_PROPERTIES_FEATURES_KHR, pipelineExecutableInfo);
+#endif
+#ifdef VK_KHR_sampler_ycbcr_conversion
+    PHYSICAL_DEVICE_GET_FEATURES(SamplerYcbcrConversionFeaturesKHR, SAMPLER_YCBCR_CONVERSION_FEATURES_KHR, samplerYcbcrConversion);
+#endif
+#ifdef VK_KHR_separate_depth_stencil_layouts
+    PHYSICAL_DEVICE_GET_FEATURES(SeparateDepthStencilLayoutsFeaturesKHR, SEPARATE_DEPTH_STENCIL_LAYOUTS_FEATURES_KHR, separateDepthStencilLayouts);
+#endif
+#ifdef VK_KHR_shader_draw_parameters
+    PHYSICAL_DEVICE_GET_FEATURES(ShaderDrawParametersFeatures, SHADER_DRAW_PARAMETERS_FEATURES, shaderDrawParameters);
+#endif
+#ifdef VK_KHR_shader_subgroup_extended_types
+    PHYSICAL_DEVICE_GET_FEATURES(ShaderSubgroupExtendedTypesFeaturesKHR, SHADER_SUBGROUP_EXTENDED_TYPES_FEATURES_KHR, shaderSubgroupExtendedTypes);
+#endif
+#ifdef VK_KHR_shader_terminate_invocation
+    PHYSICAL_DEVICE_GET_FEATURES(ShaderTerminateInvocationFeaturesKHR, SHADER_TERMINATE_INVOCATION_FEATURES_KHR, shaderTerminateInvocation);
+#endif
+#ifdef VK_KHR_timeline_semaphore
+    PHYSICAL_DEVICE_GET_FEATURES(TimelineSemaphoreFeaturesKHR, TIMELINE_SEMAPHORE_FEATURES_KHR, timelineSemaphore);
+#endif
+#ifdef VK_KHR_uniform_buffer_standard_layout
+    PHYSICAL_DEVICE_GET_FEATURES(UniformBufferStandardLayoutFeaturesKHR, UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES_KHR, uniformBufferStandardLayout);
+#endif
+#ifdef VK_NV_corner_sampled_image
+    PHYSICAL_DEVICE_GET_FEATURES(CornerSampledImageFeaturesNV, CORNER_SAMPLED_IMAGE_FEATURES_NV, cornerSampledImage);
+#endif
+#ifdef VK_NV_coverage_reduction_mode
+    PHYSICAL_DEVICE_GET_FEATURES(CoverageReductionModeFeaturesNV, COVERAGE_REDUCTION_MODE_FEATURES_NV, coverageReductionMode);
+#endif
+#ifdef VK_NV_dedicated_allocation_image_aliasing
+    PHYSICAL_DEVICE_GET_FEATURES(DedicatedAllocationImageAliasingFeaturesNV, DEDICATED_ALLOCATION_IMAGE_ALIASING_FEATURES_NV, dedicatedAllocationImageAliasing);
+#endif
+#ifdef VK_NV_device_diagnostics_config
+    PHYSICAL_DEVICE_GET_FEATURES(DiagnosticsConfigFeaturesNV, DIAGNOSTICS_CONFIG_FEATURES_NV, diagnosticsConfig);
+#endif
+#ifdef VK_NV_fragment_shader_barycentric
+    PHYSICAL_DEVICE_GET_FEATURES(FragmentShaderBarycentricFeaturesNV, FRAGMENT_SHADER_BARYCENTRIC_FEATURES_NV, fragmentShaderBarycentric);
+#endif
+#ifdef VK_NV_representative_fragment_test
+    PHYSICAL_DEVICE_GET_FEATURES(RepresentativeFragmentTestFeaturesNV, REPRESENTATIVE_FRAGMENT_TEST_FEATURES_NV, representativeFragmentTest);
+#endif
+#ifdef VK_NV_scissor_exclusive
+    PHYSICAL_DEVICE_GET_FEATURES(ExclusiveScissorFeaturesNV, EXCLUSIVE_SCISSOR_FEATURES_NV, exclusiveScissor);
+#endif
+#ifdef VK_NV_shader_image_footprint
+    PHYSICAL_DEVICE_GET_FEATURES(ShaderImageFootprintFeaturesNV, SHADER_IMAGE_FOOTPRINT_FEATURES_NV, imageFootprint);
+#endif
+#ifdef VK_NV_shader_sm_builtins
+    PHYSICAL_DEVICE_GET_FEATURES(ShaderSMBuiltinsFeaturesNV, SHADER_SM_BUILTINS_FEATURES_NV, shaderSMBuiltins);
+#endif
+    return features;
+}
+
 bool PhysicalDevice::checkPinnedMemorySupport() const noexcept
 {
     const VkPhysicalDeviceMemoryProperties memoryProperties = getMemoryProperties();
