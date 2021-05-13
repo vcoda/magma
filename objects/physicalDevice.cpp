@@ -297,6 +297,18 @@ VkPhysicalDeviceConservativeRasterizationPropertiesEXT PhysicalDevice::getConser
 }
 #endif // VK_EXT_conservative_rasterization
 
+#ifdef VK_EXT_custom_border_color
+VkPhysicalDeviceCustomBorderColorFeaturesEXT PhysicalDevice::getCustomBorderColorFeatures() const
+{
+    return getFeatures<VkPhysicalDeviceCustomBorderColorFeaturesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CUSTOM_BORDER_COLOR_FEATURES_EXT);
+}
+
+VkPhysicalDeviceCustomBorderColorPropertiesEXT PhysicalDevice::getCustomBorderColorProperties() const
+{
+    return getProperties<VkPhysicalDeviceCustomBorderColorPropertiesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CUSTOM_BORDER_COLOR_PROPERTIES_EXT);
+}
+#endif // VK_EXT_custom_border_color
+
 #ifdef VK_EXT_descriptor_indexing
 VkPhysicalDeviceDescriptorIndexingFeaturesEXT PhysicalDevice::getDescriptorIndexingFeatures() const
 {
@@ -327,6 +339,18 @@ VkPhysicalDeviceInlineUniformBlockPropertiesEXT PhysicalDevice::getInlineUniform
     return getProperties<VkPhysicalDeviceInlineUniformBlockPropertiesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_INLINE_UNIFORM_BLOCK_PROPERTIES_EXT);
 }
 #endif // VK_EXT_inline_uniform_block
+
+#ifdef VK_EXT_line_rasterization
+VkPhysicalDeviceLineRasterizationFeaturesEXT PhysicalDevice::getLineRasterizationFeatures() const
+{
+    return getFeatures<VkPhysicalDeviceLineRasterizationFeaturesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_LINE_RASTERIZATION_FEATURES_EXT);
+}
+
+VkPhysicalDeviceLineRasterizationPropertiesEXT PhysicalDevice::getLineRasterizationProperties() const
+{
+    return getProperties<VkPhysicalDeviceLineRasterizationPropertiesEXT>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_LINE_RASTERIZATION_PROPERTIES_EXT);
+}
+#endif // VK_EXT_line_rasterization
 
 #ifdef VK_EXT_subgroup_size_control
 VkPhysicalDeviceSubgroupSizeControlFeaturesEXT PhysicalDevice::getSubgroupSizeControlFeatures() const

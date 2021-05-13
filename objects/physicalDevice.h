@@ -81,6 +81,10 @@ namespace magma
 #ifdef VK_EXT_conservative_rasterization
         VkPhysicalDeviceConservativeRasterizationPropertiesEXT getConservativeRasterizationProperties() const;
 #endif
+#ifdef VK_EXT_custom_border_color
+        VkPhysicalDeviceCustomBorderColorFeaturesEXT getCustomBorderColorFeatures() const;
+        VkPhysicalDeviceCustomBorderColorPropertiesEXT getCustomBorderColorProperties() const;
+#endif
 #ifdef VK_EXT_descriptor_indexing
         VkPhysicalDeviceDescriptorIndexingFeaturesEXT getDescriptorIndexingFeatures() const;
         VkPhysicalDeviceDescriptorIndexingPropertiesEXT getDescriptorIndexingProperties() const;
@@ -91,6 +95,10 @@ namespace magma
 #ifdef VK_EXT_inline_uniform_block
         VkPhysicalDeviceInlineUniformBlockFeaturesEXT getInlineUniformBlockFeatures() const;
         VkPhysicalDeviceInlineUniformBlockPropertiesEXT getInlineUniformBlockProperties() const;
+#endif
+#ifdef VK_EXT_line_rasterization
+        VkPhysicalDeviceLineRasterizationFeaturesEXT getLineRasterizationFeatures() const;
+        VkPhysicalDeviceLineRasterizationPropertiesEXT getLineRasterizationProperties() const;
 #endif
 #ifdef VK_EXT_subgroup_size_control
         VkPhysicalDeviceSubgroupSizeControlFeaturesEXT getSubgroupSizeControlFeatures() const;
