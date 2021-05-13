@@ -529,23 +529,19 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
     return core::compare(cacheHeader, &header);
 }
 
-void PhysicalDevice::getFeatures2(VkPhysicalDeviceFeatures2KHR& physicalDeviceFeatures2) const
-{
-    MAGMA_UNUSED(physicalDeviceFeatures2);
 #ifdef VK_KHR_get_physical_device_properties2
+void PhysicalDevice::getFeatures2(VkPhysicalDeviceFeatures2KHR& physicalDeviceFeatures) const
+{
     MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceFeatures2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
-    vkGetPhysicalDeviceFeatures2KHR(handle, &physicalDeviceFeatures2);
-#endif // VK_KHR_get_physical_device_properties2
+    vkGetPhysicalDeviceFeatures2KHR(handle, &physicalDeviceFeatures);
 }
 
-void PhysicalDevice::getProperties2(VkPhysicalDeviceProperties2KHR& physicalDeviceProperties2) const
+void PhysicalDevice::getProperties2(VkPhysicalDeviceProperties2KHR& physicalDeviceProperties) const
 {   
-    MAGMA_UNUSED(physicalDeviceProperties2);
-#ifdef VK_KHR_get_physical_device_properties2
     MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
-    vkGetPhysicalDeviceProperties2KHR(handle, &physicalDeviceProperties2);
-#endif // VK_KHR_get_physical_device_properties2
+    vkGetPhysicalDeviceProperties2KHR(handle, &physicalDeviceProperties);
 }
+#endif // VK_KHR_get_physical_device_properties2
 
 template<typename PhysicalDeviceFeatures>
 inline PhysicalDeviceFeatures PhysicalDevice::getFeatures(VkStructureType sType) const

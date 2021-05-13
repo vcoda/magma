@@ -155,9 +155,10 @@ namespace magma
         bool checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept;
 
     private:
-        // VK_KHR_get_physical_device_properties2
-        void getFeatures2(VkPhysicalDeviceFeatures2KHR& physicalDeviceFeatures2) const;
-        void getProperties2(VkPhysicalDeviceProperties2KHR& physicalDeviceProperties2) const;
+#ifdef VK_KHR_get_physical_device_properties2
+        void getFeatures2(VkPhysicalDeviceFeatures2KHR& physicalDeviceFeatures) const;
+        void getProperties2(VkPhysicalDeviceProperties2KHR& physicalDeviceProperties) const;
+#endif
         template<typename PhysicalDeviceFeatures>
         PhysicalDeviceFeatures getFeatures(VkStructureType sType) const;
         template<typename PhysicalDeviceProperties>
