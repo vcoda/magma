@@ -528,7 +528,9 @@ bool PhysicalDevice::checkExtensionSupport(const char *extensionName) const
 PhysicalDeviceExtensionFeatures PhysicalDevice::checkExtensionFeaturesSupport() const
 {
     PhysicalDeviceExtensionFeatures features;
-    if (!checkExtensionSupport("VK_KHR_get_physical_device_properties2"))
+#ifdef VK_KHR_get_physical_device_properties2
+    if (!instance->checkExtensionSupport(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
+#endif
         return features;
 #ifdef VK_AMD_device_coherent_memory
     PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(CoherentMemoryFeaturesAMD, COHERENT_MEMORY_FEATURES_AMD, deviceCoherentMemory);
