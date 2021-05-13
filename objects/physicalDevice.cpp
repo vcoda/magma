@@ -496,6 +496,13 @@ VkPhysicalDeviceShadingRateImageFeaturesNV PhysicalDevice::getShadingRateImageFe
 }
 #endif // VK_NV_shading_rate_image
 
+#ifdef VK_NV_shader_sm_builtins
+VkPhysicalDeviceShaderSMBuiltinsPropertiesNV PhysicalDevice::getShaderSMBuiltinsProperties() const
+{
+    return PHYSICAL_DEVICE_GET_PROPERTIES(ShaderSMBuiltinsPropertiesNV, SHADER_SM_BUILTINS_PROPERTIES_NV);
+}
+#endif // VK_NV_shader_sm_builtins
+
 std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
 {
     const std::vector<float> defaultQueuePriorities = {1.0f};

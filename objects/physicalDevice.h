@@ -156,6 +156,9 @@ namespace magma
 #ifdef VK_NV_shading_rate_image
         VkPhysicalDeviceShadingRateImageFeaturesNV getShadingRateImageFeatures() const;
 #endif
+#ifdef VK_NV_shader_sm_builtins
+        VkPhysicalDeviceShaderSMBuiltinsPropertiesNV getShaderSMBuiltinsProperties() const;
+#endif
         // Non-API
         std::shared_ptr<Instance> getInstance() const noexcept { return instance; }
         std::shared_ptr<Device> createDefaultDevice() const;
