@@ -24,6 +24,7 @@ namespace magma
     {   // AMD
         VkBool32 deviceCoherentMemory = 0;
         // EXT
+        VkBool32 advancedBlendCoherentOperations = 0;
         VkBool32 depthClipEnable = 0;
         VkBool32 extendedDynamicState = 0;
         VkBool32 hostQueryReset = 0;

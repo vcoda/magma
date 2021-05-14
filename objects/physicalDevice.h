@@ -73,7 +73,6 @@ namespace magma
         VkPhysicalDeviceShaderCoreProperties2AMD getShaderCoreProperties2() const;
 #endif
 #ifdef VK_EXT_blend_operation_advanced
-        VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT getBlendOperationAdvancedFeatures() const;
         VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT getBlendOperationAdvancedProperties() const;
 #endif
 #ifdef VK_EXT_conditional_rendering

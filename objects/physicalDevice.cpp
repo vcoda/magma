@@ -277,11 +277,6 @@ VkPhysicalDeviceShaderCoreProperties2AMD PhysicalDevice::getShaderCoreProperties
 #endif // VK_AMD_shader_core_properties2
 
 #ifdef VK_EXT_blend_operation_advanced
-VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT PhysicalDevice::getBlendOperationAdvancedFeatures() const
-{
-    return PHYSICAL_DEVICE_GET_FEATURES(BlendOperationAdvancedFeaturesEXT, BLEND_OPERATION_ADVANCED_FEATURES_EXT);
-}
-        
 VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT PhysicalDevice::getBlendOperationAdvancedProperties() const
 {
     return PHYSICAL_DEVICE_GET_PROPERTIES(BlendOperationAdvancedPropertiesEXT, BLEND_OPERATION_ADVANCED_PROPERTIES_EXT);
@@ -541,6 +536,9 @@ PhysicalDeviceExtensionFeatures PhysicalDevice::checkExtensionFeaturesSupport() 
         return features;
 #ifdef VK_AMD_device_coherent_memory
     PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(CoherentMemoryFeaturesAMD, COHERENT_MEMORY_FEATURES_AMD, deviceCoherentMemory);
+#endif
+#ifdef VK_EXT_blend_operation_advanced
+    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(BlendOperationAdvancedFeaturesEXT, BLEND_OPERATION_ADVANCED_FEATURES_EXT, advancedBlendCoherentOperations);
 #endif
 #ifdef VK_EXT_depth_clip_enable
     PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(DepthClipEnableFeaturesEXT, DEPTH_CLIP_ENABLE_FEATURES_EXT, depthClipEnable);
