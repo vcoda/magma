@@ -43,6 +43,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/depthStencilState.h"
 #include "../states/colorBlendState.h"
 #include "../states/samplerState.h"
+#include "../misc/format.h"
 #include "../allocator/allocator.h"
 
 namespace magma
@@ -89,6 +90,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
         FragmentShaderStage(fragmentShader, fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main")
     };
     // Create blending pipeline
+    const uint8_t components = Format(format).components();
     constexpr pushconstants::FragmentConstantRange<PushConstant> pushConstantRange;
     auto pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, pushConstantRange, hostAllocator);
     blendPipeline = std::make_shared<GraphicsPipeline>(device,
@@ -100,7 +102,11 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
         fillRectangleVertexShader->getRasterizationState(),
         renderstates::dontMultisample,
         renderstates::depthAlwaysDontWrite,
-        renderstates::blendNormalRgb,
+        (1 == components) ? renderstates::blendNormalR :
+        (2 == components) ? renderstates::blendNormalRg :
+        (3 == components) ? renderstates::blendNormalRgb :
+        (4 == components) ? renderstates::blendNormalRgba :
+                            renderstates::dontBlendRgba,
         std::initializer_list<VkDynamicState>{},
         std::move(pipelineLayout),
         renderPass, 0,

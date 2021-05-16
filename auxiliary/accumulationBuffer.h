@@ -57,7 +57,8 @@ namespace magma
             std::shared_ptr<magma::ImageView> getBufferView() const noexcept { return bufferView; }
             uint32_t getCount() const noexcept { return count; }
             void setAccumLimit(uint32_t count) { maxCount = count; }
-            void accumulate(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<ImageView> imageView);
+            void accumulate(std::shared_ptr<CommandBuffer> cmdBuffer,
+                std::shared_ptr<ImageView> imageView);
             void reset() noexcept { count = 0; }
 
         private:
