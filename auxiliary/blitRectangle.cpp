@@ -89,7 +89,10 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
 #endif // VK_EXT_filter_cubic
     // Load fullscreen vertex shader
     std::unique_ptr<FillRectangleVertexShader> fillRectangleVertexShader = std::make_unique<FillRectangleVertexShader>(this->renderPass->getDevice(), allocator);
-    const char *fsEntryPointName = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
+    const std::vector<PipelineShaderStage> shaderStages = {
+        VertexShaderStage(fillRectangleVertexShader->getShader(), fillRectangleVertexShader->getEntryPointName()),
+        FragmentShaderStage(fragmentShader, fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main", std::move(specialization))
+    };
     const VkSampleCountFlagBits samples = this->renderPass->getAttachments().front().samples;
     const MultisampleState multisampleState = 
         (samples & VK_SAMPLE_COUNT_2_BIT) ? renderstates::multisample2 :
@@ -102,10 +105,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     // Create blit pipeline
     auto pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, allocator);
     pipeline = std::make_shared<GraphicsPipeline>(device,
-        std::vector<PipelineShaderStage>{
-            VertexShaderStage(fillRectangleVertexShader->getShader(), fillRectangleVertexShader->getEntryPointName()),
-            FragmentShaderStage(std::move(fragmentShader), fsEntryPointName, std::move(specialization))
-        },
+        shaderStages,
         renderstates::nullVertexInput,
         renderstates::triangleList,
         fillRectangleVertexShader->getRasterizationState(),
