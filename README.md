@@ -1,4 +1,4 @@
-# Magma - abstraction layer to facilitate usage of Khronos Vulkan API
+# Abstraction layer to facilitate usage of Khronos Vulkan API
 
 <p align="center">
     <img src="resources/vulkan.gif" width="94px" height="107px">
