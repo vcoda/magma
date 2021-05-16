@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "textShader.h"
+#include "fillRectangleVertexShader.h"
 #include "../objects/commandBuffer.h"
 #include "../objects/storageBuffer.h"
 #include "../objects/renderPass.h"
@@ -28,6 +29,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/pipelineLayout.h"
 #include "../objects/graphicsPipeline.h"
 #include "../shaders/shaderStages.h"
+#include "../shaders/shaderReflection.h"
 #include "../states/vertexInputStructure.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/rasterizationState.h"
@@ -93,18 +95,19 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
     descriptorSet->writeDescriptor(1, stringBuffer);
     descriptorSet->writeDescriptor(2, glyphBuffer);
     std::shared_ptr<PipelineLayout> pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout);
-    // Load shaders
-constexpr
-#include "spirv/output/blitv"
+    // Load fullscreen vertex shader
+    auto vertexShader = std::make_unique<FillRectangleVertexShader>(device, hostAllocator);
 constexpr
 #include "spirv/output/fontf"
-    constexpr std::size_t vsBlitHash = core::hashArray(vsBlit);
-    const VertexShaderStage vertexShader(std::make_shared<ShaderModule>(device, vsBlit, vsBlitHash, MAGMA_HOST_ALLOCATOR(allocator), 0, false), "main");
     constexpr std::size_t fsFontHash = core::hashArray(fsFont);
-    const FragmentShaderStage fragmentShader(std::make_shared<ShaderModule>(device, fsFont, fsFontHash, MAGMA_HOST_ALLOCATOR(allocator), 0, false), "main");
+    std::shared_ptr<ShaderModule> fragmentShader = std::make_shared<ShaderModule>(device, fsFont, fsFontHash, hostAllocator, 0, true);
+    const std::vector<PipelineShaderStage> shaderStages = {
+        VertexShaderStage(vertexShader->getShader(), vertexShader->getEntryPointName()),
+        FragmentShaderStage(fragmentShader, fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main")
+    };
     // Create font pipeline
     pipeline = std::make_shared<GraphicsPipeline>(std::move(device),
-        std::vector<PipelineShaderStage>{vertexShader, fragmentShader},
+        shaderStages,
         renderstates::nullVertexInput,
         renderstates::triangleList,
         renderstates::fillCullNoneCCW,
