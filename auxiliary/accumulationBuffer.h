@@ -36,6 +36,8 @@ namespace magma
     class CommandBuffer;
     class Allocator;
 
+    struct Descriptor;
+
     namespace aux
     {
         /* Accumulation buffer is dedicated for integrating multiple images. 
@@ -50,6 +52,7 @@ namespace magma
                 VkFormat format,
                 const VkExtent2D& extent,
                 std::shared_ptr<ShaderModule> fragmentShader,
+                const magma::Descriptor& imageDescriptorType,
                 std::shared_ptr<Allocator> allocator = nullptr,
                 std::shared_ptr<PipelineCache> pipelineCache = nullptr);
             std::shared_ptr<magma::ImageView> getBufferView() const noexcept { return bufferView; }

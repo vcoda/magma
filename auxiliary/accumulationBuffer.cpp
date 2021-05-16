@@ -56,7 +56,7 @@ struct alignas(16) PushConstant
 };
 
 AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
-    std::shared_ptr<ShaderModule> fragmentShader,
+    std::shared_ptr<ShaderModule> fragmentShader, const magma::Descriptor& imageDescriptorType,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */):
     count(0),
@@ -75,11 +75,9 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     framebuffer = std::make_shared<Framebuffer>(renderPass, bufferView, hostAllocator);
     // Setup descriptor set
     constexpr uint32_t maxDescriptorSets = 1;
-    descriptorPool = std::make_shared<DescriptorPool>(device, maxDescriptorSets,
-        descriptors::CombinedImageSampler(1),
-        hostAllocator, false);
-    descriptorSetLayout = std::make_shared<DescriptorSetLayout>(device,
-        bindings::FragmentStageBinding(0, descriptors::CombinedImageSampler(1)),
+    descriptorPool = std::make_shared<DescriptorPool>(device, maxDescriptorSets, imageDescriptorType, hostAllocator, false);
+    descriptorSetLayout = std::make_shared<DescriptorSetLayout>(device, 
+        bindings::FragmentStageBinding(0, imageDescriptorType),
         hostAllocator, 0);
     descriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
     nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, hostAllocator);
@@ -121,7 +119,8 @@ void AccumulationBuffer::accumulate(std::shared_ptr<CommandBuffer> cmdBuffer, st
     MAGMA_ASSERT(cmdBuffer);
     if (count < maxCount)
     {
-        descriptorSet->writeDescriptor(0, imageView, nearestSampler);
+        const bool storageImage = imageView->getImage()->getUsage() & VK_IMAGE_USAGE_STORAGE_BIT;
+        descriptorSet->writeDescriptor(0, imageView, storageImage ? nullptr : nearestSampler);
         cmdBuffer->beginRenderPass(renderPass, framebuffer);
         {   // Calculate blending weight
             PushConstant blendWeight;
