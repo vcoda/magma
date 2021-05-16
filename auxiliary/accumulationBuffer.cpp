@@ -84,9 +84,9 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     descriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
     nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, hostAllocator);
     // Load fullscreen vertex shader
-    std::unique_ptr<FillRectangleVertexShader> fillRectangleVertexShader = std::make_unique<FillRectangleVertexShader>(renderPass->getDevice(), hostAllocator);
+    auto vertexShader = std::make_unique<FillRectangleVertexShader>(device, hostAllocator);
     const std::vector<PipelineShaderStage> shaderStages = {
-        VertexShaderStage(fillRectangleVertexShader->getShader(), fillRectangleVertexShader->getEntryPointName()),
+        VertexShaderStage(vertexShader->getShader(), vertexShader->getEntryPointName()),
         FragmentShaderStage(fragmentShader, fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main")
     };
     // Create blending pipeline
@@ -99,7 +99,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
         renderstates::triangleList,
         TesselationState(),
         ViewportState(0.f, 0.f, extent),
-        fillRectangleVertexShader->getRasterizationState(),
+        vertexShader->getRasterizationState(),
         renderstates::dontMultisample,
         renderstates::depthAlwaysDontWrite,
         (1 == components) ? renderstates::blendNormalR :

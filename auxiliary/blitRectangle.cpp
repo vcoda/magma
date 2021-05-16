@@ -88,9 +88,9 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, allocator);
 #endif // VK_EXT_filter_cubic
     // Load fullscreen vertex shader
-    std::unique_ptr<FillRectangleVertexShader> fillRectangleVertexShader = std::make_unique<FillRectangleVertexShader>(this->renderPass->getDevice(), allocator);
+    auto vertexShader = std::make_unique<FillRectangleVertexShader>(device, allocator);
     const std::vector<PipelineShaderStage> shaderStages = {
-        VertexShaderStage(fillRectangleVertexShader->getShader(), fillRectangleVertexShader->getEntryPointName()),
+        VertexShaderStage(vertexShader->getShader(), vertexShader->getEntryPointName()),
         FragmentShaderStage(fragmentShader, fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main", std::move(specialization))
     };
     const VkSampleCountFlagBits samples = this->renderPass->getAttachments().front().samples;
@@ -108,7 +108,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         shaderStages,
         renderstates::nullVertexInput,
         renderstates::triangleList,
-        fillRectangleVertexShader->getRasterizationState(),
+        vertexShader->getRasterizationState(),
         multisampleState,
         renderstates::depthAlwaysDontWrite,
         renderstates::dontBlendRgba,
