@@ -117,6 +117,8 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
 
 void AccumulationBuffer::accumulate(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const ImageView> imageView) noexcept
 {
+    MAGMA_ASSERT(imageView);
+    MAGMA_ASSERT(cmdBuffer);
     if (count < maxCount)
     {
         descriptorSet->writeDescriptor(0, imageView, nearestSampler);
