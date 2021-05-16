@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "blitRectangle.h"
+#include "fillRectangleVertexShader.h"
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
 #include "../objects/framebuffer.h"
@@ -47,32 +48,23 @@ namespace magma
 {
 namespace aux
 {
+constexpr
+#include "spirv/output/blitf"
+
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */):
+    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     BlitRectangle(renderPass,
-        createVertexShader(renderPass->getDevice(), allocator),
-        createFragmentShader(renderPass->getDevice(), allocator),
-        std::move(allocator), nullptr, std::move(pipelineCache))
+        std::make_shared<ShaderModule>(renderPass->getDevice(), fsBlit, core::hashArray(fsBlit), allocator, 0, true),
+        nullptr, // No specialization
+        std::move(pipelineCache), std::move(allocator))
 {}
 
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<ShaderModule> fragmentShader,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<Specialization> specialization /* nullptr */,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */):
-    BlitRectangle(renderPass,
-        createVertexShader(renderPass->getDevice(), allocator),
-        std::move(fragmentShader), 
-        std::move(allocator), std::move(specialization), std::move(pipelineCache))
-{}
-
-BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
-    std::shared_ptr<ShaderModule> vertexShader,
-    std::shared_ptr<ShaderModule> fragmentShader,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    std::shared_ptr<Specialization> specialization /* nullptr */,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */):
+    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     renderPass(std::move(renderPass))
 {
     std::shared_ptr<Device> device = this->renderPass->getDevice();
@@ -95,10 +87,9 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     if (hasCubicFilter)
         cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, allocator);
 #endif // VK_EXT_filter_cubic
-    // Create blit pipeline
-    pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, allocator);
-    const char *vsEntry = vertexShader->getReflection() ? vertexShader->getReflection()->getEntryPointName(0) : "main";
-    const char *fsEntry = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
+    // Load fullscreen vertex shader
+    std::unique_ptr<FillRectangleVertexShader> fillRectangleVertexShader = std::make_unique<FillRectangleVertexShader>(this->renderPass->getDevice(), allocator);
+    const char *fsEntryPointName = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
     const VkSampleCountFlagBits samples = this->renderPass->getAttachments().front().samples;
     const MultisampleState multisampleState = 
         (samples & VK_SAMPLE_COUNT_2_BIT) ? renderstates::multisample2 :
@@ -108,22 +99,21 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         (samples & VK_SAMPLE_COUNT_32_BIT) ? renderstates::multisample32 :
         (samples & VK_SAMPLE_COUNT_64_BIT) ? renderstates::multisample64 :
         renderstates::dontMultisample;
+    // Create blit pipeline
+    auto pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, allocator);
     pipeline = std::make_shared<GraphicsPipeline>(device,
         std::vector<PipelineShaderStage>{
-            VertexShaderStage(std::move(vertexShader), vsEntry),
-            FragmentShaderStage(std::move(fragmentShader), fsEntry, std::move(specialization))
+            VertexShaderStage(fillRectangleVertexShader->getShader(), fillRectangleVertexShader->getEntryPointName()),
+            FragmentShaderStage(std::move(fragmentShader), fsEntryPointName, std::move(specialization))
         },
         renderstates::nullVertexInput,
         renderstates::triangleList,
-#ifdef VK_NV_fill_rectangle
-        device->extensionEnabled(VK_NV_FILL_RECTANGLE_EXTENSION_NAME) ? renderstates::fillRectangleCullNoneCCW :
-#endif
-        renderstates::fillCullNoneCCW,
+        fillRectangleVertexShader->getRasterizationState(),
         multisampleState,
         renderstates::depthAlwaysDontWrite,
         renderstates::dontBlendRgba,
         std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
-        pipelineLayout,
+        std::move(pipelineLayout),
         this->renderPass, 0,
         std::move(allocator),
         std::move(pipelineCache),
@@ -164,31 +154,6 @@ void BlitRectangle::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
     cmdBuffer->bindDescriptorSet(pipeline, imageDescriptorSet);
     cmdBuffer->bindPipeline(pipeline);
     cmdBuffer->draw(3);
-}
-
-std::shared_ptr<ShaderModule> BlitRectangle::createVertexShader(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) const
-{   // https://www.khronos.org/registry/OpenGL/extensions/NV/NV_fill_rectangle.txt;
-#ifdef VK_NV_fill_rectangle
-    if (device->extensionEnabled(VK_NV_FILL_RECTANGLE_EXTENSION_NAME))
-    {
-constexpr
-#include "spirv/output/blitv_nv"
-        constexpr std::size_t vsBlitNVHash = core::hashArray(vsBlitNV);
-        return std::make_shared<ShaderModule>(std::move(device), vsBlitNV, vsBlitNVHash, std::move(allocator), 0, false);
-    }
-#endif // VK_NV_fill_rectangle
-constexpr
-#include "spirv/output/blitv"
-    constexpr std::size_t vsBlitHash = core::hashArray(vsBlit);
-    return std::make_shared<ShaderModule>(std::move(device), vsBlit, vsBlitHash, std::move(allocator), 0, false);
-}
-
-std::shared_ptr<ShaderModule> BlitRectangle::createFragmentShader(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) const
-{
-constexpr
-#include "spirv/output/blitf"
-    constexpr std::size_t fsBlitHash = core::hashArray(fsBlit);
-    return std::make_shared<ShaderModule>(std::move(device), fsBlit, fsBlitHash, std::move(allocator), 0, false);
 }
 } // namespace aux
 } // namespace magma

@@ -27,12 +27,10 @@ namespace magma
     class RenderPass;
     class ShaderModule;
     class Specialization;
-    class PipelineShaderStage;
-    class Sampler;
     class DescriptorPool;
     class DescriptorSet;
     class DescriptorSetLayout;
-    class PipelineLayout;
+    class Sampler;
     class PipelineCache;
     class GraphicsPipeline;
     class CommandBuffer;
@@ -47,30 +45,18 @@ namespace magma
         {
         public:
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
-                std::shared_ptr<IAllocator> allocator = nullptr,
-                std::shared_ptr<PipelineCache> pipelineCache = nullptr);
+                std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+                std::shared_ptr<IAllocator> allocator = nullptr);
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
-                std::shared_ptr<ShaderModule> fragmentShader,
-                std::shared_ptr<IAllocator> allocator = nullptr,
+                std::shared_ptr<magma::ShaderModule> fragmentShader,
                 std::shared_ptr<Specialization> specialization = nullptr,
-                std::shared_ptr<PipelineCache> pipelineCache = nullptr);
-            explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
-                std::shared_ptr<ShaderModule> vertexShader,
-                std::shared_ptr<ShaderModule> fragmentShader,
-                std::shared_ptr<IAllocator> allocator = nullptr,
-                std::shared_ptr<Specialization> specialization = nullptr,
-                std::shared_ptr<PipelineCache> pipelineCache = nullptr);
+                std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+                std::shared_ptr<IAllocator> allocator = nullptr);
             void blit(std::shared_ptr<CommandBuffer> cmdBuffer,
                 std::shared_ptr<const ImageView> image,
                 VkFilter filter,
                 const VkRect2D& rc,
                 bool negativeViewportHeight = false) const noexcept;
-
-        private:
-            std::shared_ptr<ShaderModule> createVertexShader(std::shared_ptr<Device> device,
-                std::shared_ptr<IAllocator> allocator) const;
-            std::shared_ptr<ShaderModule> createFragmentShader(std::shared_ptr<Device> device,
-                std::shared_ptr<IAllocator> allocator) const;
 
         private:
             std::shared_ptr<RenderPass> renderPass;
@@ -79,7 +65,6 @@ namespace magma
             std::shared_ptr<Sampler> nearestSampler;
             std::shared_ptr<Sampler> bilinearSampler;
             std::shared_ptr<Sampler> cubicSampler;
-            std::shared_ptr<PipelineLayout> pipelineLayout;
             std::shared_ptr<GraphicsPipeline> pipeline;
             std::vector<ClearValue> clearValues;
             mutable std::map<std::shared_ptr<const ImageView>, std::shared_ptr<DescriptorSet>> descriptorSets;
