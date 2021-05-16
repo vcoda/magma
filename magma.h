@@ -131,6 +131,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "auxiliary/colorFramebuffer.h"
 #include "auxiliary/colorMultisampleFramebuffer.h"
 #include "auxiliary/depthFramebuffer.h"
+#include "auxiliary/fillRectangleVertexShader.h"
 #include "auxiliary/frameGrabber.h"
 #include "auxiliary/graphicsPipelineCache.h"
 #include "auxiliary/immediateRender.h"
