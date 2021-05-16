@@ -53,7 +53,7 @@ namespace magma
                 std::shared_ptr<PipelineCache> pipelineCache = nullptr,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             void blit(std::shared_ptr<CommandBuffer> cmdBuffer,
-                std::shared_ptr<const ImageView> image,
+                std::shared_ptr<const ImageView> imageView,
                 VkFilter filter,
                 const VkRect2D& rc,
                 bool negativeViewportHeight = false) const noexcept;

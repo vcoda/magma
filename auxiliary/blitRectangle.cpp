@@ -128,13 +128,13 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     }
 }
 
-void BlitRectangle::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const ImageView> image, VkFilter filter, const VkRect2D& rc,
+void BlitRectangle::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const ImageView> imageView, VkFilter filter, const VkRect2D& rc,
     bool negativeViewportHeight /* false */) const noexcept
 {
-    MAGMA_ASSERT(image);
+    MAGMA_ASSERT(imageView);
     MAGMA_ASSERT(cmdBuffer);
     std::shared_ptr<DescriptorSet> imageDescriptorSet;
-    auto it = descriptorSets.find(image);
+    auto it = descriptorSets.find(imageView);
     if (it != descriptorSets.end())
         imageDescriptorSet = it->second;
     else
@@ -142,8 +142,8 @@ void BlitRectangle::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
         imageDescriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
         std::shared_ptr<Sampler> sampler = (VK_FILTER_NEAREST == filter) ? nearestSampler :
             ((VK_FILTER_LINEAR == filter) ? bilinearSampler : cubicSampler);
-        imageDescriptorSet->writeDescriptor(0, image, std::move(sampler));
-        descriptorSets[image] = imageDescriptorSet;
+        imageDescriptorSet->writeDescriptor(0, imageView, std::move(sampler));
+        descriptorSets[imageView] = imageDescriptorSet;
     }
     int32_t height = static_cast<int32_t>(rc.extent.height);
     if (negativeViewportHeight)
