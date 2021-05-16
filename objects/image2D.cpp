@@ -125,13 +125,13 @@ LinearTiledImage2D::LinearTiledImage2D(std::shared_ptr<Device> device, VkFormat 
         std::move(allocator))
 {}
 
-StorageImage2D::StorageImage2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent, uint32_t mipLevels,
+StorageImage2D::StorageImage2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent, uint32_t mipLevels, uint32_t samples,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         mipLevels,
         1, // arrayLayers
-        1, // samples
+        samples,
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
