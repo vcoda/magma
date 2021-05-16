@@ -115,7 +115,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
         nullptr); // basePipeline
 }
 
-void AccumulationBuffer::accumulate(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<ImageView> imageView) noexcept
+void AccumulationBuffer::accumulate(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const ImageView> imageView) noexcept
 {
     if (count < maxCount)
     {
