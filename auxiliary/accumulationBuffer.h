@@ -27,16 +27,14 @@ namespace magma
     class RenderPass;
     class ShaderModule;
     class Specialization;
-    class PipelineShaderStage;
     class Sampler;
     class DescriptorPool;
     class DescriptorSet;
     class DescriptorSetLayout;
-    class PipelineCache;
     class GraphicsPipeline;
+    class PipelineCache;
     class CommandBuffer;
     class Allocator;
-    class IAllocator;
 
     namespace aux
     {

@@ -27,12 +27,12 @@ namespace magma
     class RenderPass;
     class ShaderModule;
     class Specialization;
+    class Sampler;
     class DescriptorPool;
     class DescriptorSet;
     class DescriptorSetLayout;
-    class Sampler;
-    class PipelineCache;
     class GraphicsPipeline;
+    class PipelineCache;
     class CommandBuffer;
     class IAllocator;
 
