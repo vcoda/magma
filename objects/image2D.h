@@ -78,7 +78,7 @@ namespace magma
     };
 
     /* Supports unfiltered loads, stores, and atomics in a shader.
-       Transition image layout to VK_IMAGE_LAYOUT_GENERAL using image barrier. */
+       Do transition of image layout to VK_IMAGE_LAYOUT_GENERAL using image barrier. */
 
     class StorageImage2D : public Image
     {
