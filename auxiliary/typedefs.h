@@ -21,6 +21,7 @@ namespace magma
 {
     namespace aux
     {
+        MAGMA_TYPEDEF_SHARED_PTR(AccumulationBuffer)
         MAGMA_TYPEDEF_SHARED_PTR(BaseFramebuffer)
         MAGMA_TYPEDEF_SHARED_PTR(BlitRectangle)
         MAGMA_TYPEDEF_SHARED_PTR(ColorFramebuffer)

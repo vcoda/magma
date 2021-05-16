@@ -150,6 +150,7 @@
     <ClInclude Include="..\..\allocator\deviceMemoryAllocator.h" />
     <ClInclude Include="..\..\allocator\linearPlacementPool.h" />
     <ClInclude Include="..\..\allocator\cxxAllocator.h" />
+    <ClInclude Include="..\..\auxiliary\accumulationBuffer.h" />
     <ClInclude Include="..\..\auxiliary\blitRectangle.h" />
     <ClInclude Include="..\..\auxiliary\colorFramebuffer.h" />
     <ClInclude Include="..\..\auxiliary\baseFramebuffer.h" />
@@ -318,6 +319,7 @@
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp" />
     <ClCompile Include="..\..\allocator\deviceMemoryAllocator.cpp" />
     <ClCompile Include="..\..\allocator\cxxAllocator.cpp" />
+    <ClCompile Include="..\..\auxiliary\accumulationBuffer.cpp" />
     <ClCompile Include="..\..\auxiliary\baseFramebuffer.cpp" />
     <ClCompile Include="..\..\auxiliary\blitRectangle.cpp" />
     <ClCompile Include="..\..\auxiliary\colorFramebuffer.cpp" />

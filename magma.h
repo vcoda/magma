@@ -125,6 +125,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "extensions/instanceLayers.h"
 #include "extensions/physicalDeviceExtensions.h"
 
+#include "auxiliary/accumulationBuffer.h"
 #include "auxiliary/baseFramebuffer.h"
 #include "auxiliary/blitRectangle.h"
 #include "auxiliary/colorFramebuffer.h"

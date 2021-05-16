@@ -19,6 +19,7 @@ MAGMA_OBJS= \
 	allocator/cxxAllocator.o \
 	allocator/deviceMemoryAllocator.o \
 	\
+	auxiliary/accumulationBuffer.o \
 	auxiliary/baseFramebuffer.o \
 	auxiliary/blitRectangle.o \
 	auxiliary/colorFramebuffer.o \
