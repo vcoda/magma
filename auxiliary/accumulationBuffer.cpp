@@ -93,7 +93,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     const uint8_t components = Format(format).components();
     constexpr pushconstants::FragmentConstantRange<PushConstant> pushConstantRange;
     auto pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, pushConstantRange, hostAllocator);
-    blendPipeline = std::make_shared<GraphicsPipeline>(device,
+    blendPipeline = std::make_shared<GraphicsPipeline>(std::move(device),
         shaderStages,
         renderstates::nullVertexInput,
         renderstates::triangleList,
@@ -110,7 +110,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
         std::initializer_list<VkDynamicState>{},
         std::move(pipelineLayout),
         renderPass, 0,
-        hostAllocator,
+        std::move(hostAllocator),
         std::move(pipelineCache),
         nullptr); // basePipeline
 }

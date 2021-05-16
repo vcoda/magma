@@ -104,7 +104,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         renderstates::dontMultisample;
     // Create blit pipeline
     auto pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, allocator);
-    pipeline = std::make_shared<GraphicsPipeline>(device,
+    pipeline = std::make_shared<GraphicsPipeline>(std::move(device),
         shaderStages,
         renderstates::nullVertexInput,
         renderstates::triangleList,
