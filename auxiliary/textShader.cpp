@@ -71,6 +71,7 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
     maxStrings(maxStrings)
 {
     std::shared_ptr<Device> device = renderPass->getDevice();
+    std::shared_ptr<IAllocator> hostAllocator = MAGMA_HOST_ALLOCATOR(allocator);
     // Create uniform and storage buffers
     uniforms = std::make_shared<UniformBuffer<Uniforms>>(device, allocator);
     stringBuffer = std::make_shared<DynamicStorageBuffer>(device, sizeof(String) * maxStrings, false, allocator);
@@ -81,7 +82,7 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
             descriptors::UniformBuffer(1),
             descriptors::StorageBuffer(2)
         },
-        MAGMA_HOST_ALLOCATOR(allocator));
+        hostAllocator);
     descriptorSetLayout = std::make_shared<DescriptorSetLayout>(device,
         std::initializer_list<DescriptorSetLayout::Binding>{
             bindings::FragmentStageBinding(0, descriptors::UniformBuffer(1)),
@@ -89,7 +90,7 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
             bindings::FragmentStageBinding(2, descriptors::StorageBuffer(1))
         },
         std::initializer_list<DescriptorSetLayout::SamplerBinding>{},
-        MAGMA_HOST_ALLOCATOR(allocator), 0);
+        hostAllocator, 0);
     descriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
     descriptorSet->writeDescriptor(0, uniforms);
     descriptorSet->writeDescriptor(1, stringBuffer);
@@ -117,7 +118,7 @@ constexpr
         std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
         std::move(pipelineLayout),
         std::move(renderPass), 0,
-        MAGMA_HOST_ALLOCATOR(allocator),
+        std::move(hostAllocator),
         std::move(pipelineCache),
         nullptr); // basePipeline
 
