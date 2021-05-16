@@ -25,6 +25,7 @@ MAGMA_OBJS= \
 	auxiliary/colorMultisampleFramebuffer.o \
 	auxiliary/colorMultisampleReadFramebuffer.o \
 	auxiliary/depthFramebuffer.o \
+	auxiliary/fillRectangleVertexShader.o \
 	auxiliary/frameGrabber.o \
 	auxiliary/graphicsPipelineCache.o \
 	auxiliary/immediateRender.o \

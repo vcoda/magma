@@ -591,6 +591,9 @@
     <ClInclude Include="..\..\extensions\physicalDeviceExtensionFeatures.h">
       <Filter>Header Files\extensions</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\auxiliary\fillRectangleVertexShader.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -907,6 +910,9 @@
     </ClCompile>
     <ClCompile Include="..\..\objects\physicalDeviceGroup.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\auxiliary\fillRectangleVertexShader.cpp">
+      <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
