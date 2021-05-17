@@ -114,7 +114,7 @@ void AccumulationBuffer::accumulate(std::shared_ptr<CommandBuffer> cmdBuffer, st
         descriptorSet->writeDescriptor(imageView, nearestSampler);
         cmdBuffer->beginRenderPass(renderPass, framebuffer);
         {   // Choose pipeline depending from image type
-            const ImageType imageType = imageView->getImage()->storage() ? ImageType::Storage : ImageType::Combined;
+            const ImageType imageType = imageView->getImage()->storageImage() ? ImageType::Storage : ImageType::Combined;
             std::shared_ptr<GraphicsPipeline> blendPipeline = blendPipelines[imageType];   
             // Calculate blend weight
             const float weight = 1.f - count / (1.f + count);

@@ -51,15 +51,15 @@ namespace magma
         uint32_t getArrayLayers() const noexcept { return arrayLayers; }
         uint32_t getSamples() const noexcept { return samples; }
         VkImageUsageFlags getUsage() const noexcept { return usage; }
+        bool storageImage() const noexcept { return usage & VK_IMAGE_USAGE_STORAGE_BIT; }
+        bool colorAttachment() const noexcept { return usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT; }
+        bool depthStencilAttachment() const noexcept { return usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT; }
         VkSubresourceLayout getSubresourceLayout(uint32_t mipLevel,
             uint32_t arrayLayer = 0) const noexcept;
         VkImageSubresourceLayers getSubresourceLayers(uint32_t mipLevel, 
             uint32_t arrayLayer = 0) const noexcept;
         VkMemoryRequirements getMemoryRequirements() const noexcept;
         std::vector<VkSparseImageMemoryRequirements> getSparseMemoryRequirements() const;
-        bool storage() const noexcept { return usage & VK_IMAGE_USAGE_STORAGE_BIT; }
-        bool colorAttachment() const noexcept { return usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT; }
-        bool depthStencilAttachment() const noexcept { return usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT; }
         virtual void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0) override;
 #ifdef VK_KHR_device_group
