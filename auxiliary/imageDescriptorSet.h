@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../core/noncopyable.h"
-#include "../core/enumClassArray.h"
 
 namespace magma
 {
@@ -25,32 +24,32 @@ namespace magma
     class DescriptorPool;
     class DescriptorSet;
     class DescriptorSetLayout;
+    class ShaderReflection;
     class ImageView;
     class Sampler;
     class IAllocator;
 
     namespace aux
     {
-        enum class ImageType : uint8_t { Combined, Storage, Max };
-
-        /* Manages descriptor sets for diffirent image types (combined, storage, etc).
-           Image is implied to be bound to binding 0 in the fragment shader. */
+        /* Allocates descriptor set for first image binding found in shader reflection. */
 
         class ImageDescriptorSet : public core::NonCopyable
         {
         public:
-            explicit ImageDescriptorSet(std::shared_ptr<Device> device, 
+            explicit ImageDescriptorSet(std::shared_ptr<Device> device,
+                std::shared_ptr<const ShaderReflection> reflection,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             ~ImageDescriptorSet();
-            std::shared_ptr<DescriptorSetLayout> getLayout(ImageType imageType) const noexcept { return descriptorSetLayouts[imageType]; }
-            std::shared_ptr<DescriptorSet> getSet(ImageType imageType) const noexcept { return descriptorSets[imageType]; }
+            std::shared_ptr<DescriptorSetLayout> getLayout() const noexcept { return descriptorSetLayout; }
+            std::shared_ptr<DescriptorSet> getSet() const noexcept { return descriptorSet; }
             void writeDescriptor(std::shared_ptr<const ImageView> imageView,
                 std::shared_ptr<Sampler> sampler);
 
         private:
             std::shared_ptr<DescriptorPool> descriptorPool;
-            core::EnumClassArray<std::shared_ptr<DescriptorSetLayout>, ImageType> descriptorSetLayouts;
-            core::EnumClassArray<std::shared_ptr<DescriptorSet>, ImageType> descriptorSets;
+            std::shared_ptr<DescriptorSetLayout> descriptorSetLayout;
+            std::shared_ptr<DescriptorSet> descriptorSet;
+            uint32_t binding;
         };
     } // namespace aux
 } // namespace magma

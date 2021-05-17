@@ -67,7 +67,7 @@ namespace magma
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<ImageDescriptorSet> descriptorSet;
             std::shared_ptr<Sampler> nearestSampler;
-            core::EnumClassArray<std::shared_ptr<GraphicsPipeline>, ImageType> blendPipelines;
+            std::shared_ptr<GraphicsPipeline> blendPipeline;
             uint32_t count;
             uint32_t maxCount;
         };

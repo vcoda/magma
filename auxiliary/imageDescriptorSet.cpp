@@ -22,39 +22,56 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/imageView.h"
 #include "../objects/descriptorPool.h"
 #include "../objects/descriptorSet.h"
+#include "../shaders/shaderReflection.h"
 
 namespace magma
 {
 namespace aux
 {
 ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
-    std::shared_ptr<IAllocator> allocator /* nullptr */)
+    std::shared_ptr<const ShaderReflection> reflection,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    binding(0)
 {
-    const std::vector<Descriptor> descriptors{
-        descriptors::CombinedImageSampler(1),
-        descriptors::StorageImage(1)
-    };
-    descriptorPool = std::make_shared<DescriptorPool>(device, descriptorSets.size(), descriptors, allocator, false);
-    for (size_t i = 0; i < descriptorSetLayouts.size(); ++i)
+    const char *entrypoint = reflection->getEntryPointName(0);
+    for (const auto& binding : reflection->enumerateDescriptorBindings(entrypoint))
     {
-        descriptorSetLayouts[i] = std::make_shared<DescriptorSetLayout>(device,
-            bindings::FragmentStageBinding(0, descriptors[i]), allocator, 0);
-        descriptorSets[i] = descriptorPool->allocateDescriptorSet(descriptorSetLayouts[i]);
+        if (SPV_REFLECT_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER == binding->descriptor_type)
+        {
+            descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptors::CombinedImageSampler(1), allocator, false);
+            descriptorSetLayout = std::make_shared<DescriptorSetLayout>(std::move(device),
+                bindings::FragmentStageBinding(binding->binding, descriptors::CombinedImageSampler(1)),
+                std::move(allocator), 0);
+        }
+        else if (SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_IMAGE == binding->descriptor_type)
+        {
+            descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptors::StorageImage(1), allocator, false);
+            descriptorSetLayout = std::make_shared<DescriptorSetLayout>(std::move(device),
+                bindings::FragmentStageBinding(binding->binding, descriptors::StorageImage(1)),
+                std::move(allocator), 0);
+        }
+        if (descriptorSetLayout)
+        {
+            descriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
+            this->binding = binding->binding;
+            break;
+        }
     }
+    if (!descriptorSet)
+        MAGMA_THROW("image binding not found");
 }
 
 ImageDescriptorSet::~ImageDescriptorSet()
 {
-    for (uint32_t i = 0; i < descriptorSets.size(); ++i)
-        descriptorPool->freeDescriptorSet(descriptorSets[i]);
+     descriptorPool->freeDescriptorSet(descriptorSet);
 }
 
 void ImageDescriptorSet::writeDescriptor(std::shared_ptr<const ImageView> imageView, std::shared_ptr<Sampler> sampler)
 {
     if (imageView->getImage()->storageImage())
-        descriptorSets[ImageType::Storage]->writeDescriptor(0, imageView, nullptr);
+        descriptorSet->writeDescriptor(binding, imageView, nullptr);
     else
-        descriptorSets[ImageType::Combined]->writeDescriptor(0, imageView, sampler);
+        descriptorSet->writeDescriptor(binding, imageView, sampler);
 }
 } // namespace aux
 } // namespace magma
