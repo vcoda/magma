@@ -53,7 +53,7 @@ namespace magma
                 std::shared_ptr<ShaderModule> fragmentShader,
                 std::shared_ptr<Allocator> allocator = nullptr,
                 std::shared_ptr<PipelineCache> pipelineCache = nullptr);
-            std::shared_ptr<magma::ImageView> getBufferView() const noexcept { return bufferView; }
+            std::shared_ptr<ImageView> getBufferView() const noexcept { return bufferView; }
             uint32_t getCount() const noexcept { return count; }
             void setAccumLimit(uint32_t count) noexcept { maxCount = count; }
             void accumulate(std::shared_ptr<CommandBuffer> cmdBuffer,
