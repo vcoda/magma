@@ -17,6 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../core/noncopyable.h"
+#include "../core/enumClassArray.h"
+#include "imageDescriptorSet.h"
 
 namespace magma
 {
@@ -52,7 +54,6 @@ namespace magma
                 VkFormat format,
                 const VkExtent2D& extent,
                 std::shared_ptr<ShaderModule> fragmentShader,
-                const magma::Descriptor& imageDescriptorType,
                 std::shared_ptr<Allocator> allocator = nullptr,
                 std::shared_ptr<PipelineCache> pipelineCache = nullptr);
             std::shared_ptr<magma::ImageView> getBufferView() const noexcept { return bufferView; }
@@ -67,11 +68,9 @@ namespace magma
             std::shared_ptr<ImageView> bufferView;
             std::shared_ptr<Framebuffer> framebuffer;
             std::shared_ptr<RenderPass> renderPass;
-            std::shared_ptr<DescriptorPool> descriptorPool;
-            std::shared_ptr<DescriptorSet> descriptorSet;
-            std::shared_ptr<DescriptorSetLayout> descriptorSetLayout;
+            std::shared_ptr<ImageDescriptorSet> descriptorSet;
             std::shared_ptr<Sampler> nearestSampler;
-            std::shared_ptr<GraphicsPipeline> blendPipeline;
+            core::EnumClassArray<std::shared_ptr<GraphicsPipeline>, ImageType> blendPipelines;
             uint32_t count;
             uint32_t maxCount;
         };

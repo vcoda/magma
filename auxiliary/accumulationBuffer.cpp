@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "accumulationBuffer.h"
+#include "imageDescriptorSet.h"
 #include "fillRectangleVertexShader.h"
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
@@ -56,7 +57,7 @@ struct alignas(16) PushConstant
 };
 
 AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
-    std::shared_ptr<ShaderModule> fragmentShader, const magma::Descriptor& imageDescriptorType,
+    std::shared_ptr<ShaderModule> fragmentShader,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */):
     count(0),
@@ -73,13 +74,8 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     accumBuffer = std::make_shared<ColorAttachment>(device, format, extent, 1, 1, allocator);
     bufferView = std::make_shared<ImageView>(accumBuffer);
     framebuffer = std::make_shared<Framebuffer>(renderPass, bufferView, hostAllocator);
-    // Setup descriptor set
-    constexpr uint32_t maxDescriptorSets = 1;
-    descriptorPool = std::make_shared<DescriptorPool>(device, maxDescriptorSets, imageDescriptorType, hostAllocator, false);
-    descriptorSetLayout = std::make_shared<DescriptorSetLayout>(device, 
-        bindings::FragmentStageBinding(0, imageDescriptorType),
-        hostAllocator, 0);
-    descriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
+    // Create descriptor set for different image types
+    descriptorSet = std::make_shared<ImageDescriptorSet>(device, hostAllocator);
     nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, hostAllocator);
     // Load fullscreen vertex shader
     auto vertexShader = std::make_unique<FillRectangleVertexShader>(device, hostAllocator);
@@ -89,44 +85,50 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     };
     // Create blending pipeline
     const uint8_t components = Format(format).components();
-    constexpr pushconstants::FragmentConstantRange<PushConstant> pushConstantRange;
-    auto pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout, pushConstantRange, hostAllocator);
-    blendPipeline = std::make_shared<GraphicsPipeline>(std::move(device),
-        shaderStages,
-        renderstates::nullVertexInput,
-        renderstates::triangleList,
-        TesselationState(),
-        ViewportState(0.f, 0.f, extent),
-        vertexShader->getRasterizationState(),
-        renderstates::dontMultisample,
-        renderstates::depthAlwaysDontWrite,
-        (1 == components) ? renderstates::blendNormalR :
-        (2 == components) ? renderstates::blendNormalRg :
-        (3 == components) ? renderstates::blendNormalRgb :
-        (4 == components) ? renderstates::blendNormalRgba :
-                            renderstates::dontBlendRgba,
-        std::initializer_list<VkDynamicState>{},
-        std::move(pipelineLayout),
-        renderPass, 0,
-        std::move(hostAllocator),
-        std::move(pipelineCache),
-        nullptr); // basePipeline
+    for (uint32_t i = 0; i < blendPipelines.size(); ++i)
+    {
+        constexpr pushconstants::FragmentConstantRange<PushConstant> pushConstantRange;
+        auto pipelineLayout = std::make_shared<PipelineLayout>(descriptorSet->getLayout((ImageType)i), pushConstantRange, hostAllocator);
+        blendPipelines[i] = std::make_shared<GraphicsPipeline>(std::move(device),
+            shaderStages,
+            renderstates::nullVertexInput,
+            renderstates::triangleList,
+            TesselationState(),
+            ViewportState(0.f, 0.f, extent),
+            vertexShader->getRasterizationState(),
+            renderstates::dontMultisample,
+            renderstates::depthAlwaysDontWrite,
+            (1 == components) ? renderstates::blendNormalR :
+            (2 == components) ? renderstates::blendNormalRg :
+            (3 == components) ? renderstates::blendNormalRgb :
+            (4 == components) ? renderstates::blendNormalRgba :
+                                renderstates::dontBlendRgba,
+            std::initializer_list<VkDynamicState>{},
+            std::move(pipelineLayout),
+            renderPass, 0,
+            std::move(hostAllocator),
+            std::move(pipelineCache),
+            nullptr); // basePipeline
+    }
 }
 
 void AccumulationBuffer::accumulate(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const ImageView> imageView) noexcept
 {
-    MAGMA_ASSERT(imageView);
     MAGMA_ASSERT(cmdBuffer);
+    MAGMA_ASSERT(imageView);
     if (count < maxCount)
     {
-        const bool storageImage = imageView->getImage()->getUsage() & VK_IMAGE_USAGE_STORAGE_BIT;
-        descriptorSet->writeDescriptor(0, imageView, storageImage ? nullptr : nearestSampler);
+        descriptorSet->writeDescriptor(imageView, nearestSampler);
         cmdBuffer->beginRenderPass(renderPass, framebuffer);
-        {   // Calculate blending weight
+        {   // Choose pipeline depending from image type
+            const ImageType imageType = imageView->getImage()->storage() ? ImageType::Storage : ImageType::Combined;
+            std::shared_ptr<GraphicsPipeline> blendPipeline = blendPipelines[imageType];   
+            // Calculate blend weight
             PushConstant blendWeight;
             blendWeight.value = 1.f - count / (1.f + count);
             cmdBuffer->pushConstantBlock(blendPipeline->getLayout(), VK_SHADER_STAGE_FRAGMENT_BIT, blendWeight);
-            cmdBuffer->bindDescriptorSet(blendPipeline, descriptorSet);
+            // Do normal blending
+            cmdBuffer->bindDescriptorSet(blendPipeline, descriptorSet->getSet(imageType));
             cmdBuffer->bindPipeline(blendPipeline);
             cmdBuffer->draw(3);
         }
