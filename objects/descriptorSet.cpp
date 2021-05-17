@@ -102,9 +102,10 @@ void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Sample
 {
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
     MAGMA_ASSERT(VK_DESCRIPTOR_TYPE_SAMPLER == binding.descriptorType);
+    MAGMA_ASSERT(sampler);
     MAGMA_ASSERT(imageDescriptors.capacity() - imageDescriptors.size() >= 1);
     VkDescriptorImageInfo descriptor;
-    descriptor.sampler = MAGMA_OPTIONAL_HANDLE(sampler);
+    descriptor.sampler = *sampler;
     descriptor.imageView = VK_NULL_HANDLE;
     descriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     imageDescriptors.push_back(descriptor);
