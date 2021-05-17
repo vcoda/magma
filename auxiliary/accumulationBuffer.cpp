@@ -49,11 +49,6 @@ namespace magma
 {
 namespace aux
 {
-struct alignas(16) PushConstant
-{
-    float value;
-};
-
 AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
     std::shared_ptr<ShaderModule> fragmentShader,
     std::shared_ptr<Allocator> allocator /* nullptr */,
@@ -85,7 +80,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     const uint8_t components = Format(format).components();
     for (uint32_t i = 0; i < blendPipelines.size(); ++i)
     {
-        constexpr pushconstants::FragmentConstantRange<PushConstant> pushConstantRange;
+        constexpr pushconstants::FragmentConstantRange<float> pushConstantRange;
         auto pipelineLayout = std::make_shared<PipelineLayout>(descriptorSet->getLayout((ImageType)i), pushConstantRange, hostAllocator);
         blendPipelines[i] = std::make_shared<GraphicsPipeline>(std::move(device),
             shaderStages,
@@ -122,9 +117,8 @@ void AccumulationBuffer::accumulate(std::shared_ptr<CommandBuffer> cmdBuffer, st
             const ImageType imageType = imageView->getImage()->storage() ? ImageType::Storage : ImageType::Combined;
             std::shared_ptr<GraphicsPipeline> blendPipeline = blendPipelines[imageType];   
             // Calculate blend weight
-            PushConstant blendWeight;
-            blendWeight.value = 1.f - count / (1.f + count);
-            cmdBuffer->pushConstantBlock(blendPipeline->getLayout(), VK_SHADER_STAGE_FRAGMENT_BIT, blendWeight);
+            const float weight = 1.f - count / (1.f + count);
+            cmdBuffer->pushConstant(blendPipeline->getLayout(), VK_SHADER_STAGE_FRAGMENT_BIT, weight);
             // Do normal blending
             cmdBuffer->bindDescriptorSet(blendPipeline, descriptorSet->getSet(imageType));
             cmdBuffer->bindPipeline(blendPipeline);
