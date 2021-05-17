@@ -106,8 +106,8 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
             std::initializer_list<VkDynamicState>{},
             std::move(pipelineLayout),
             renderPass, 0,
-            std::move(hostAllocator),
-            std::move(pipelineCache),
+            hostAllocator,
+            pipelineCache,
             nullptr); // basePipeline
     }
 }
