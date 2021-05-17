@@ -30,9 +30,6 @@ namespace magma
     class ShaderModule;
     class Specialization;
     class Sampler;
-    class DescriptorPool;
-    class DescriptorSet;
-    class DescriptorSetLayout;
     class GraphicsPipeline;
     class PipelineCache;
     class CommandBuffer;
