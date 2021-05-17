@@ -56,9 +56,12 @@ DescriptorSet::~DescriptorSet()
 
 void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Buffer> buffer)
 {
-    MAGMA_ASSERT(bufferDescriptors.capacity() - bufferDescriptors.size() >= 1);
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
-    MAGMA_ASSERT(1 == binding.descriptorCount);
+    MAGMA_ASSERT((VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER == binding.descriptorType) ||
+                 (VK_DESCRIPTOR_TYPE_STORAGE_BUFFER == binding.descriptorType) ||
+                 (VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC == binding.descriptorType) ||
+                 (VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC == binding.descriptorType));
+    MAGMA_ASSERT(bufferDescriptors.capacity() - bufferDescriptors.size() >= 1);
     bufferDescriptors.push_back(buffer->getDescriptor());
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -143,9 +146,10 @@ void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const ImageV
 
 void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const BufferView> bufferView)
 {
-    MAGMA_ASSERT(bufferViews.capacity() - bufferViews.size() >= 1);
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
-    MAGMA_ASSERT(1 == binding.descriptorCount);
+    MAGMA_ASSERT((VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER == binding.descriptorType) ||
+                 (VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER == binding.descriptorType));
+    MAGMA_ASSERT(bufferViews.capacity() - bufferViews.size() >= 1);
     bufferViews.push_back(*bufferView);
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
