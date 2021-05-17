@@ -346,19 +346,19 @@ namespace magma
         void pushConstants(
             const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags,
-            const Type(&values)[pushConstantCount],
+            const Type(&constants)[pushConstantCount],
             uint32_t offset = 0) noexcept;
         template<typename Type>
         void pushConstants(
             const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags,
-            const std::vector<Type>& values,
+            const std::vector<Type>& constants,
             uint32_t offset = 0) noexcept;
-        template<typename BlockStructure>
+        template<typename BlockType>
         void pushConstantBlock(
             const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags,
-            const BlockStructure& block,
+            const BlockType& block,
             uint32_t offset = 0) noexcept;
 
         void beginRenderPass(
