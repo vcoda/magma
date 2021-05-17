@@ -597,6 +597,9 @@
     <ClInclude Include="..\..\auxiliary\fillRectangleVertexShader.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\core\enumClassArray.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
