@@ -366,6 +366,13 @@ inline void CommandBuffer::writeTimestamp(VkPipelineStageFlagBits pipelineStage,
     vkCmdWriteTimestamp(handle, pipelineStage, *queryPool, queryIndex);
 }
 
+template<typename Type>
+inline void CommandBuffer::pushConstant(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const Type& constant,
+    uint32_t offset /* 0 */) noexcept
+{
+    vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type)), &constant);
+}
+
 template<typename Type, uint32_t pushConstantCount>
 inline void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const Type(&values)[pushConstantCount],
     uint32_t offset /* 0 */) noexcept
