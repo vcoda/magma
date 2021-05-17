@@ -82,7 +82,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     {
         constexpr pushconstants::FragmentConstantRange<float> pushConstantRange;
         auto pipelineLayout = std::make_shared<PipelineLayout>(descriptorSet->getLayout((ImageType)i), pushConstantRange, hostAllocator);
-        blendPipelines[i] = std::make_shared<GraphicsPipeline>(std::move(device),
+        blendPipelines[i] = std::make_shared<GraphicsPipeline>(device,
             shaderStages,
             renderstates::nullVertexInput,
             renderstates::triangleList,
