@@ -56,6 +56,10 @@ namespace magma
         void writeDescriptor(uint32_t binding,
             std::shared_ptr<const Buffer> buffer);
         void writeDescriptor(uint32_t binding,
+            std::shared_ptr<const ImageView> imageView);
+        void writeDescriptor(uint32_t binding,
+            std::shared_ptr<const Sampler> sampler);
+        void writeDescriptor(uint32_t binding,
             std::shared_ptr<const ImageView> imageView,
             std::shared_ptr<const Sampler> sampler);
         void writeDescriptor(uint32_t binding,

@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "bufferView.h"
 #include "image.h"
 #include "imageView.h"
+#include "sampler.h"
 #include "accelerationStructure.h"
 
 namespace magma
@@ -73,12 +74,58 @@ void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Buffer
     descriptorWrites.push_back(descriptorWrite);
 }
 
+void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const ImageView> imageView)
+{
+    const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
+    MAGMA_ASSERT((VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE == binding.descriptorType) ||
+                 (VK_DESCRIPTOR_TYPE_STORAGE_IMAGE == binding.descriptorType));
+    MAGMA_ASSERT(imageDescriptors.capacity() - imageDescriptors.size() >= 1);
+    imageDescriptors.push_back(imageView->getDescriptor(nullptr));
+    VkWriteDescriptorSet descriptorWrite;
+    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    descriptorWrite.pNext = nullptr;
+    descriptorWrite.dstSet = handle;
+    descriptorWrite.dstBinding = binding.binding;
+    descriptorWrite.dstArrayElement = 0;
+    descriptorWrite.descriptorCount = binding.descriptorCount;
+    descriptorWrite.descriptorType = binding.descriptorType;
+    descriptorWrite.pImageInfo = &imageDescriptors.back();
+    descriptorWrite.pBufferInfo = nullptr;
+    descriptorWrite.pTexelBufferView = nullptr;
+    descriptorWrites.push_back(descriptorWrite);
+}
+
+void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Sampler> sampler)
+{
+    const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
+    MAGMA_ASSERT(VK_DESCRIPTOR_TYPE_SAMPLER == binding.descriptorType);
+    MAGMA_ASSERT(imageDescriptors.capacity() - imageDescriptors.size() >= 1);
+    VkDescriptorImageInfo descriptor;
+    descriptor.sampler = MAGMA_OPTIONAL_HANDLE(sampler);
+    descriptor.imageView = VK_NULL_HANDLE;
+    descriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    imageDescriptors.push_back(descriptor);
+    VkWriteDescriptorSet descriptorWrite;
+    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    descriptorWrite.pNext = nullptr;
+    descriptorWrite.dstSet = handle;
+    descriptorWrite.dstBinding = binding.binding;
+    descriptorWrite.dstArrayElement = 0;
+    descriptorWrite.descriptorCount = binding.descriptorCount;
+    descriptorWrite.descriptorType = binding.descriptorType;
+    descriptorWrite.pImageInfo = &imageDescriptors.back();
+    descriptorWrite.pBufferInfo = nullptr;
+    descriptorWrite.pTexelBufferView = nullptr;
+    descriptorWrites.push_back(descriptorWrite);
+}
+
 void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const ImageView> imageView, std::shared_ptr<const Sampler> sampler)
 {
-    MAGMA_ASSERT(imageDescriptors.capacity() - imageDescriptors.size() >= 1);
-    MAGMA_ASSERT(imageView->getImage()->getUsage() & (sampler ? VK_IMAGE_USAGE_SAMPLED_BIT : VK_IMAGE_USAGE_STORAGE_BIT));
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
-    MAGMA_ASSERT(1 == binding.descriptorCount);
+    MAGMA_ASSERT(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER == binding.descriptorType);
+    MAGMA_ASSERT(imageView->getImage()->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
+    MAGMA_ASSERT(sampler);
+    MAGMA_ASSERT(imageDescriptors.capacity() - imageDescriptors.size() >= 1);
     imageDescriptors.push_back(imageView->getDescriptor(std::move(sampler)));
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
