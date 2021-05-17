@@ -597,6 +597,9 @@
     <ClInclude Include="..\..\auxiliary\fillRectangleVertexShader.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\auxiliary\imageDescriptorSet.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\core\enumClassArray.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
@@ -921,6 +924,9 @@
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
     <ClCompile Include="..\..\auxiliary\fillRectangleVertexShader.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\auxiliary\imageDescriptorSet.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>
