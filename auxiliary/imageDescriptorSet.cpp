@@ -69,7 +69,7 @@ ImageDescriptorSet::~ImageDescriptorSet()
 void ImageDescriptorSet::writeDescriptor(std::shared_ptr<const ImageView> imageView, std::shared_ptr<Sampler> sampler)
 {
     if (imageView->getImage()->storageImage())
-        descriptorSet->writeDescriptor(binding, imageView, nullptr);
+        descriptorSet->writeDescriptor(binding, imageView);
     else
         descriptorSet->writeDescriptor(binding, imageView, sampler);
 }
