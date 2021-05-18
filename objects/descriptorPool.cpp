@@ -29,37 +29,38 @@ namespace magma
 {
 DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const Descriptor& descriptor,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    bool freeDescriptorSet /* false */):
-    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_POOL, std::move(device), std::move(allocator))
-{
-    VkDescriptorPoolCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = 0;
-    if (freeDescriptorSet)
-        info.flags |= VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-    info.maxSets = maxSets;
-    info.poolSizeCount = 1;
-    info.pPoolSizes = &descriptor;
-    const VkResult create = vkCreateDescriptorPool(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create descriptor pool");
-}
+    bool freeDescriptorSet /* false */,
+    uint32_t maxInlineUniformBlockBindings /* 0 */):
+    DescriptorPool(std::move(device), maxSets, std::vector<Descriptor>{descriptor}, std::move(allocator), freeDescriptorSet, maxInlineUniformBlockBindings)
+{}
 
 DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const std::vector<Descriptor>& descriptors,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    bool freeDescriptorSet /* false */):
+    bool freeDescriptorSet /* false */,
+    uint32_t maxInlineUniformBlockBindings /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_POOL, std::move(device), std::move(allocator))
 {
-    VkDescriptorPoolCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = 0;
+    MAGMA_UNUSED(maxInlineUniformBlockBindings);
+    VkDescriptorPoolCreateInfo poolInfo;
+    poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+    poolInfo.pNext = nullptr;
+    poolInfo.flags = 0;
     if (freeDescriptorSet)
-        info.flags |= VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-    info.maxSets = maxSets;
-    info.poolSizeCount = MAGMA_COUNT(descriptors);
-    info.pPoolSizes = descriptors.data();
-    const VkResult create = vkCreateDescriptorPool(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        poolInfo.flags |= VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+    poolInfo.maxSets = maxSets;
+    poolInfo.poolSizeCount = MAGMA_COUNT(descriptors);
+    poolInfo.pPoolSizes = descriptors.data();
+#ifdef VK_EXT_inline_uniform_block
+    VkDescriptorPoolInlineUniformBlockCreateInfoEXT inlineUniformBlockInfo;
+    if (maxInlineUniformBlockBindings > 0)
+    {
+		inlineUniformBlockInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_INLINE_UNIFORM_BLOCK_CREATE_INFO_EXT;
+        inlineUniformBlockInfo.pNext = nullptr;
+		inlineUniformBlockInfo.maxInlineUniformBlockBindings = maxInlineUniformBlockBindings;
+		poolInfo.pNext = &inlineUniformBlockInfo;
+    }
+#endif // VK_EXT_inline_uniform_block
+    const VkResult create = vkCreateDescriptorPool(MAGMA_HANDLE(device), &poolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(create, "failed to create descriptor pool");
 }
 
