@@ -16,7 +16,7 @@ void DescriptorSet::writeInlineUniformDescriptor(uint32_t index, const UniformBl
         inlineUniformBlocksHead = inlineUniformBlocks.data();
     }
     MAGMA_ASSERT(inlineUniformBlocksSpace > 0);
-    void *inlineUniformBlockData = nullptr;
+    void *inlineUniformBlockData;
     if (inlineUniformBlockData = std::align(16, sizeof(UniformBlockType), inlineUniformBlocksHead, inlineUniformBlocksSpace))
     {   // https://en.cppreference.com/w/cpp/memory/align
         memcpy(inlineUniformBlockData, &inlineUniformBlock, sizeof(UniformBlockType));
