@@ -19,6 +19,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "nondispatchable.h"
 #include "../descriptors/bindings.h"
 
+#ifdef VK_EXT_inline_uniform_block
+#define MAGMA_MAX_INLINE_UNIFORM_BLOCK_BUFFER_SIZE 4096
+#endif
+
 namespace magma
 {
     class Device;
@@ -95,6 +99,9 @@ namespace magma
         std::vector<VkBufferView> bufferViews;
 #ifdef VK_EXT_inline_uniform_block
         std::vector<VkWriteDescriptorSetInlineUniformBlockEXT> inlineUniformBlockDescriptors;
+        std::vector<char> inlineUniformBlocks; // Placement buffer
+        void *inlineUniformBlocksHead;
+        std::size_t inlineUniformBlocksSpace;
 #endif
 #ifdef VK_NV_ray_tracing
         std::vector<VkWriteDescriptorSetAccelerationStructureNV> accelerationDescriptors;

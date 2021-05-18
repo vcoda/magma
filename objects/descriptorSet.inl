@@ -8,13 +8,26 @@ void DescriptorSet::writeInlineUniformDescriptor(uint32_t index, const UniformBl
     MAGMA_ASSERT(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT == binding.descriptorType);
     MAGMA_ASSERT(sizeof(UniformBlockType) == binding.descriptorCount); // Check size in bytes
     MAGMA_ASSERT(inlineUniformBlockDescriptors.capacity() - inlineUniformBlockDescriptors.size() >= 1);
-    UniformBlockType *inlineUniformBlockCopy = new UniformBlockType; // Deleted in release()
-    memcpy(inlineUniformBlockCopy, &inlineUniformBlock, sizeof(UniformBlockType));
+    if (inlineUniformBlocks.empty())
+    {   // Allocate placement buffer on first use
+        inlineUniformBlocksSpace = MAGMA_MAX_INLINE_UNIFORM_BLOCK_BUFFER_SIZE;
+        inlineUniformBlocks.resize(inlineUniformBlocksSpace);
+        std::fill(inlineUniformBlocks.begin(), inlineUniformBlocks.end(), '\0');
+        inlineUniformBlocksHead = inlineUniformBlocks.data();
+    }
+    MAGMA_ASSERT(inlineUniformBlocksSpace > 0);
+    void *inlineUniformBlockData = nullptr;
+    if (inlineUniformBlockData = std::align(16, sizeof(UniformBlockType), inlineUniformBlocksHead, inlineUniformBlocksSpace))
+    {   // https://en.cppreference.com/w/cpp/memory/align
+        memcpy(inlineUniformBlockData, &inlineUniformBlock, sizeof(UniformBlockType));
+        inlineUniformBlocksHead = (char *)inlineUniformBlocksHead + sizeof(UniformBlockType);
+        inlineUniformBlocksSpace -= sizeof(UniformBlockType);
+    } 
     VkWriteDescriptorSetInlineUniformBlockEXT inlineUniformBlockDescriptorWrite;
     inlineUniformBlockDescriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_INLINE_UNIFORM_BLOCK_EXT; 
     inlineUniformBlockDescriptorWrite.pNext = nullptr;
     inlineUniformBlockDescriptorWrite.dataSize = sizeof(UniformBlockType);
-    inlineUniformBlockDescriptorWrite.pData = inlineUniformBlockCopy;
+    inlineUniformBlockDescriptorWrite.pData = inlineUniformBlockData;
     inlineUniformBlockDescriptors.push_back(inlineUniformBlockDescriptorWrite);
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;

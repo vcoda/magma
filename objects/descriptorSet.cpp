@@ -44,6 +44,8 @@ DescriptorSet::DescriptorSet(VkDescriptorSet handle,
     bufferViews.reserve(maxDescriptorWrites);
 #ifdef VK_EXT_inline_uniform_block
     inlineUniformBlockDescriptors.reserve(maxDescriptorWrites);
+    inlineUniformBlocksHead = nullptr;
+    inlineUniformBlocksSpace = 0;
 #endif
 #ifdef VK_NV_ray_tracing
     accelerationDescriptors.reserve(maxDescriptorWrites);
@@ -325,9 +327,9 @@ void DescriptorSet::release()
     samplerDescriptors.clear();
     bufferViews.clear();
 #ifdef VK_EXT_inline_uniform_block
-    for (auto& inlineUniformBlock : inlineUniformBlockDescriptors)
-        delete inlineUniformBlock.pData; // Won't call a destructor (if exists) because of void* type
     inlineUniformBlockDescriptors.clear();
+    inlineUniformBlocksHead = inlineUniformBlocks.data();
+    inlineUniformBlocksSpace = MAGMA_MAX_INLINE_UNIFORM_BLOCK_BUFFER_SIZE;
 #endif
 #ifdef VK_NV_ray_tracing
     accelerationDescriptors.clear();
