@@ -64,6 +64,11 @@ namespace magma
             std::shared_ptr<const Sampler> sampler);
         void writeDescriptor(uint32_t binding,
             std::shared_ptr<const BufferView> bufferView);
+#ifdef VK_EXT_inline_uniform_block
+        template<typename UniformBlockType>
+        void writeDescriptor(uint32_t binding,
+            const UniformBlockType& inlineUniformBlock);
+#endif
 #ifdef VK_NV_ray_tracing
         void writeDescriptor(uint32_t binding, 
             std::shared_ptr<const AccelerationStructure> accelerationStructure);
@@ -88,6 +93,9 @@ namespace magma
         std::vector<VkDescriptorImageInfo> imageDescriptors;
         std::vector<VkDescriptorImageInfo> samplerDescriptors;
         std::vector<VkBufferView> bufferViews;
+#ifdef VK_EXT_inline_uniform_block
+        std::vector<VkWriteDescriptorSetInlineUniformBlockEXT> inlineUniformBlockDescriptors;
+#endif
 #ifdef VK_NV_ray_tracing
         std::vector<VkWriteDescriptorSetAccelerationStructureNV> accelerationDescriptors;
         std::vector<VkAccelerationStructureNV> accelerationStructures;
@@ -96,3 +104,5 @@ namespace magma
         friend class DescriptorPool;
     };
 } // namespace magma
+
+#include "descriptorSet.inl"

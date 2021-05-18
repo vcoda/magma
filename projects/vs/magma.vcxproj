@@ -538,6 +538,7 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
     <None Include="..\..\misc\scissor.inl" />
     <None Include="..\..\misc\viewport.inl" />
     <None Include="..\..\objects\commandBuffer.inl" />
+    <None Include="..\..\objects\descriptorSet.inl" />
     <None Include="..\..\objects\descriptorSetLayout.inl" />
     <None Include="..\..\objects\deviceMemory.inl" />
     <None Include="..\..\objects\object.inl" />

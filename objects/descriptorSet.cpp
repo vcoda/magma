@@ -42,6 +42,9 @@ DescriptorSet::DescriptorSet(VkDescriptorSet handle,
     imageDescriptors.reserve(maxDescriptorWrites);
     samplerDescriptors.reserve(maxDescriptorWrites);
     bufferViews.reserve(maxDescriptorWrites);
+#ifdef VK_EXT_inline_uniform_block
+    inlineUniformBlockDescriptors.reserve(maxDescriptorWrites);
+#endif
 #ifdef VK_NV_ray_tracing
     accelerationDescriptors.reserve(maxDescriptorWrites);
     accelerationStructures.reserve(maxDescriptorWrites);
@@ -320,6 +323,11 @@ void DescriptorSet::release()
     imageDescriptors.clear();
     samplerDescriptors.clear();
     bufferViews.clear();
+#ifdef VK_EXT_inline_uniform_block
+    for (auto& inlineUniformBlock : inlineUniformBlockDescriptors)
+        delete inlineUniformBlock.pData; // Won't call a destructor (if exists) because of void* type
+    inlineUniformBlockDescriptors.clear();
+#endif
 #ifdef VK_NV_ray_tracing
     accelerationDescriptors.clear();
     accelerationStructures.clear();

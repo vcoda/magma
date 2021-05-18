@@ -1039,6 +1039,9 @@
     <None Include="..\..\shaders\specialization.inl">
       <Filter>Header Files\shaders</Filter>
     </None>
+    <None Include="..\..\objects\descriptorSet.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">
