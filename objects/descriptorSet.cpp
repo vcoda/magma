@@ -202,6 +202,10 @@ void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Accele
 void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::shared_ptr<const Buffer>>& bufferArray)
 {
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
+    MAGMA_ASSERT((VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER == binding.descriptorType) ||
+                 (VK_DESCRIPTOR_TYPE_STORAGE_BUFFER == binding.descriptorType) ||
+                 (VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC == binding.descriptorType) ||
+                 (VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC == binding.descriptorType));
     MAGMA_ASSERT(binding.descriptorCount > 1);
     MAGMA_ASSERT(binding.descriptorCount <= bufferArray.size());
     VkDescriptorBufferInfo *bufferInfo = new VkDescriptorBufferInfo[bufferArray.size()];
@@ -251,10 +255,11 @@ void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::
 void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::shared_ptr<const ImageView>>& imageViewArray,
     const std::vector<std::shared_ptr<const Sampler>>& samplerArray)
 {
-    MAGMA_ASSERT(imageViewArray.size() <= samplerArray.size());
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
+    MAGMA_ASSERT(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER == binding.descriptorType);
     MAGMA_ASSERT(binding.descriptorCount > 1);
     MAGMA_ASSERT(binding.descriptorCount <= imageViewArray.size());
+    MAGMA_ASSERT(imageViewArray.size() <= samplerArray.size());
     VkDescriptorImageInfo *imageInfo = new VkDescriptorImageInfo[imageViewArray.size()];
     for (size_t i = 0, n = imageViewArray.size(); i < n; ++i)
     {
@@ -278,6 +283,8 @@ void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::
 void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::shared_ptr<const BufferView>>& bufferViewArray)
 {
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
+    MAGMA_ASSERT((VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER == binding.descriptorType) ||
+                 (VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER == binding.descriptorType));
     MAGMA_ASSERT(binding.descriptorCount > 1);
     MAGMA_ASSERT(binding.descriptorCount <= bufferViewArray.size());
     VkBufferView *texelBufferView = new VkBufferView[bufferViewArray.size()];
