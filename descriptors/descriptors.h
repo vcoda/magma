@@ -90,9 +90,10 @@ namespace magma
         };
 
 #ifdef VK_EXT_inline_uniform_block
+        template<typename UniformBlockType>
         struct InlineUniformBlock : Descriptor
         {
-            constexpr InlineUniformBlock(const uint32_t byteCount) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT, byteCount) {}
+            constexpr InlineUniformBlock() noexcept: Descriptor(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT, sizeof(UniformBlockType)) {}
         };
 #endif
 
