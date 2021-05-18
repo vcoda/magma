@@ -178,8 +178,9 @@ void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Buffer
 #ifdef VK_NV_ray_tracing
 void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const AccelerationStructure> accelerationStructure)
 {
-    MAGMA_ASSERT(accelerationStructures.capacity() - accelerationStructures.size() >= 1);
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
+    MAGMA_ASSERT(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV == binding.descriptorType);
+    MAGMA_ASSERT(accelerationStructures.capacity() - accelerationStructures.size() >= 1);
     MAGMA_ASSERT(1 == binding.descriptorCount);
     accelerationStructures.push_back(*accelerationStructure);
     VkWriteDescriptorSetAccelerationStructureNV descriptor;
