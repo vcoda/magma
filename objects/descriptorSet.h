@@ -66,7 +66,7 @@ namespace magma
             std::shared_ptr<const BufferView> bufferView);
 #ifdef VK_EXT_inline_uniform_block
         template<typename UniformBlockType>
-        void writeDescriptor(uint32_t binding,
+        void writeInlineUniformDescriptor(uint32_t binding,
             const UniformBlockType& inlineUniformBlock);
 #endif
 #ifdef VK_NV_ray_tracing
