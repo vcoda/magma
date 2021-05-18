@@ -8,7 +8,7 @@ void DescriptorSet::writeDescriptor(uint32_t index, const UniformBlockType& inli
     MAGMA_ASSERT(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT == binding.descriptorType);
     MAGMA_ASSERT(1 == binding.descriptorCount);
     MAGMA_ASSERT(inlineUniformBlockDescriptors.capacity() - inlineUniformBlockDescriptors.size() >= 1);
-    UniformBlockType *inlineUniformBlockCopy = new UniformBlockType;
+    UniformBlockType *inlineUniformBlockCopy = new UniformBlockType; // Deleted in release()
     memcpy(inlineUniformBlockCopy, &inlineUniformBlock, sizeof(UniformBlockType));
     VkWriteDescriptorSetInlineUniformBlockEXT inlineUniformBlockDescriptorWrite;
     inlineUniformBlockDescriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_INLINE_UNIFORM_BLOCK_EXT; 

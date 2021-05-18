@@ -212,7 +212,7 @@ void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::
                  (VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC == binding.descriptorType));
     MAGMA_ASSERT(binding.descriptorCount > 1);
     MAGMA_ASSERT(binding.descriptorCount <= bufferArray.size());
-    VkDescriptorBufferInfo *bufferInfo = new VkDescriptorBufferInfo[bufferArray.size()];
+    VkDescriptorBufferInfo *bufferInfo = new VkDescriptorBufferInfo[bufferArray.size()]; // Deleted in release()
     for (size_t i = 0, n = bufferArray.size(); i < n; ++i)
         bufferInfo[i] = bufferArray[i]->getDescriptor();
     VkWriteDescriptorSet descriptorWrite;
@@ -236,7 +236,7 @@ void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::
                  (VK_DESCRIPTOR_TYPE_STORAGE_IMAGE == binding.descriptorType));
     MAGMA_ASSERT(binding.descriptorCount > 1);
     MAGMA_ASSERT(binding.descriptorCount <= imageViewArray.size());
-    VkDescriptorImageInfo *imageInfo = new VkDescriptorImageInfo[imageViewArray.size()];
+    VkDescriptorImageInfo *imageInfo = new VkDescriptorImageInfo[imageViewArray.size()]; // Deleted in release()
     for (size_t i = 0, n = imageViewArray.size(); i < n; ++i)
     {
         MAGMA_ASSERT(imageViewArray[i]->getImage()->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
@@ -264,7 +264,7 @@ void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::
     MAGMA_ASSERT(binding.descriptorCount > 1);
     MAGMA_ASSERT(binding.descriptorCount <= imageViewArray.size());
     MAGMA_ASSERT(imageViewArray.size() <= samplerArray.size());
-    VkDescriptorImageInfo *imageInfo = new VkDescriptorImageInfo[imageViewArray.size()];
+    VkDescriptorImageInfo *imageInfo = new VkDescriptorImageInfo[imageViewArray.size()]; // Deleted in release()
     for (size_t i = 0, n = imageViewArray.size(); i < n; ++i)
     {
         MAGMA_ASSERT(imageViewArray[i]->getImage()->getUsage() & (samplerArray[i] ? VK_IMAGE_USAGE_SAMPLED_BIT : VK_IMAGE_USAGE_STORAGE_BIT));
@@ -291,7 +291,7 @@ void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::
                  (VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER == binding.descriptorType));
     MAGMA_ASSERT(binding.descriptorCount > 1);
     MAGMA_ASSERT(binding.descriptorCount <= bufferViewArray.size());
-    VkBufferView *texelBufferView = new VkBufferView[bufferViewArray.size()];
+    VkBufferView *texelBufferView = new VkBufferView[bufferViewArray.size()]; // Deleted in release()
     for (size_t i = 0, n = bufferViewArray.size(); i < n; ++i)
         texelBufferView[i] = *bufferViewArray[i];
     VkWriteDescriptorSet descriptorWrite;
