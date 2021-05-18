@@ -89,6 +89,13 @@ namespace magma
             constexpr InputAttachment(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, count) {}
         };
 
+#ifdef VK_EXT_inline_uniform_block
+        struct InlineUniformBlock : Descriptor
+        {
+            constexpr InlineUniformBlock(const uint32_t byteCount) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT, byteCount) {}
+        };
+#endif
+
 #ifdef VK_NV_ray_tracing
         struct AccelerationStructure : Descriptor
         {
