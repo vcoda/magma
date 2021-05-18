@@ -186,7 +186,7 @@ void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Accele
     VkWriteDescriptorSetAccelerationStructureNV descriptor;
     descriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_NV;
     descriptor.pNext = nullptr;
-    descriptor.accelerationStructureCount = 1;
+    descriptor.accelerationStructureCount = binding.descriptorCount;
     descriptor.pAccelerationStructures = &accelerationStructures.back();
     accelerationDescriptors.push_back(descriptor);
     VkWriteDescriptorSet descriptorWrite;
