@@ -40,6 +40,7 @@ DescriptorSet::DescriptorSet(VkDescriptorSet handle,
 {   // Make sure that pointer adresses will be preserved after push_back()
     bufferDescriptors.reserve(maxDescriptorWrites);
     imageDescriptors.reserve(maxDescriptorWrites);
+    samplerDescriptors.reserve(maxDescriptorWrites);
     bufferViews.reserve(maxDescriptorWrites);
 #ifdef VK_NV_ray_tracing
     accelerationDescriptors.reserve(maxDescriptorWrites);
@@ -106,12 +107,12 @@ void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Sample
     MAGMA_ASSERT(VK_DESCRIPTOR_TYPE_SAMPLER == binding.descriptorType);
     MAGMA_ASSERT(1 == binding.descriptorCount);
     MAGMA_ASSERT(sampler);
-    MAGMA_ASSERT(imageDescriptors.capacity() - imageDescriptors.size() >= 1);
+    MAGMA_ASSERT(samplerDescriptors.capacity() - samplerDescriptors.size() >= 1);
     VkDescriptorImageInfo descriptor;
     descriptor.sampler = *sampler;
     descriptor.imageView = VK_NULL_HANDLE;
     descriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    imageDescriptors.push_back(descriptor);
+    samplerDescriptors.push_back(descriptor);
     VkWriteDescriptorSet descriptorWrite;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     descriptorWrite.pNext = nullptr;
@@ -120,7 +121,7 @@ void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Sample
     descriptorWrite.dstArrayElement = 0;
     descriptorWrite.descriptorCount = binding.descriptorCount;
     descriptorWrite.descriptorType = binding.descriptorType;
-    descriptorWrite.pImageInfo = &imageDescriptors.back();
+    descriptorWrite.pImageInfo = &samplerDescriptors.back();
     descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = nullptr;
     descriptorWrites.push_back(descriptorWrite);
@@ -317,6 +318,7 @@ void DescriptorSet::release()
 {   // This shouldn't free actual memory (otherwise reserve() should be called again)
     bufferDescriptors.clear();
     imageDescriptors.clear();
+    samplerDescriptors.clear();
     bufferViews.clear();
 #ifdef VK_NV_ray_tracing
     accelerationDescriptors.clear();

@@ -86,6 +86,7 @@ namespace magma
         std::shared_ptr<DescriptorSetLayout> layout;
         std::vector<VkDescriptorBufferInfo> bufferDescriptors;
         std::vector<VkDescriptorImageInfo> imageDescriptors;
+        std::vector<VkDescriptorImageInfo> samplerDescriptors;
         std::vector<VkBufferView> bufferViews;
 #ifdef VK_NV_ray_tracing
         std::vector<VkWriteDescriptorSetAccelerationStructureNV> accelerationDescriptors;
