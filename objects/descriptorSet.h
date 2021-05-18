@@ -71,6 +71,8 @@ namespace magma
         void writeDescriptorArray(uint32_t binding, 
             const std::vector<std::shared_ptr<const Buffer>>& bufferArray);
         void writeDescriptorArray(uint32_t binding,
+            const std::vector<std::shared_ptr<const ImageView>>& imageViewArray);
+        void writeDescriptorArray(uint32_t binding,
             const std::vector<std::shared_ptr<const ImageView>>& imageViewArray,
             const std::vector<std::shared_ptr<const Sampler>>& samplerArray);
         void writeDescriptorArray(uint32_t binding, 

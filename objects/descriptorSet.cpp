@@ -221,6 +221,33 @@ void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::
     descriptorWrites.push_back(descriptorWrite);
 }
 
+void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::shared_ptr<const ImageView>>& imageViewArray)
+{
+    const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
+    MAGMA_ASSERT((VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE == binding.descriptorType) ||
+                 (VK_DESCRIPTOR_TYPE_STORAGE_IMAGE == binding.descriptorType));
+    MAGMA_ASSERT(binding.descriptorCount > 1);
+    MAGMA_ASSERT(binding.descriptorCount <= imageViewArray.size());
+    VkDescriptorImageInfo *imageInfo = new VkDescriptorImageInfo[imageViewArray.size()];
+    for (size_t i = 0, n = imageViewArray.size(); i < n; ++i)
+    {
+        MAGMA_ASSERT(imageViewArray[i]->getImage()->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
+        imageInfo[i] = imageViewArray[i]->getDescriptor(nullptr);
+    }
+    VkWriteDescriptorSet descriptorWrite;
+    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    descriptorWrite.pNext = nullptr;
+    descriptorWrite.dstSet = handle;
+    descriptorWrite.dstBinding = binding.binding;
+    descriptorWrite.dstArrayElement = 0;
+    descriptorWrite.descriptorCount = binding.descriptorCount;
+    descriptorWrite.descriptorType = binding.descriptorType;
+    descriptorWrite.pImageInfo = imageInfo;
+    descriptorWrite.pBufferInfo = nullptr;
+    descriptorWrite.pTexelBufferView = nullptr;
+    descriptorWrites.push_back(descriptorWrite);
+}
+
 void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::shared_ptr<const ImageView>>& imageViewArray,
     const std::vector<std::shared_ptr<const Sampler>>& samplerArray)
 {
