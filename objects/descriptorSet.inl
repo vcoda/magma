@@ -24,7 +24,7 @@ void DescriptorSet::writeInlineUniformDescriptor(uint32_t index, const UniformBl
     descriptorWrite.dstSet = handle;
     descriptorWrite.dstBinding = binding.binding;
     descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = binding.descriptorCount; // The <descriptorCount> provides the total number of bytes a particular binding can hold
+    descriptorWrite.descriptorCount = sizeof(UniformBlockType); // The <descriptorCount> provides the total number of bytes a particular binding can hold
     descriptorWrite.descriptorType = binding.descriptorType;
     descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = nullptr;
