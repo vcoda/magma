@@ -10,10 +10,10 @@ void DescriptorSet::writeInlineUniformDescriptor(uint32_t index, const UniformBl
     MAGMA_ASSERT(inlineUniformBlockDescriptors.capacity() - inlineUniformBlockDescriptors.size() >= 1);
     if (inlineUniformBlocks.empty())
     {   // Allocate placement buffer on first use
-        inlineUniformBlocksSpace = MAGMA_MAX_INLINE_UNIFORM_BLOCK_BUFFER_SIZE;
-        inlineUniformBlocks.resize(inlineUniformBlocksSpace);
+        inlineUniformBlocks.resize(MAGMA_MAX_INLINE_UNIFORM_BLOCK_BUFFER_SIZE);
         std::fill(inlineUniformBlocks.begin(), inlineUniformBlocks.end(), '\0');
         inlineUniformBlocksHead = inlineUniformBlocks.data();
+        inlineUniformBlocksSpace = inlineUniformBlocks.size();
     }
     MAGMA_ASSERT(inlineUniformBlocksSpace > 0);
     void *inlineUniformBlockData;
