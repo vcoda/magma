@@ -328,8 +328,11 @@ void DescriptorSet::release()
     bufferViews.clear();
 #ifdef VK_EXT_inline_uniform_block
     inlineUniformBlockDescriptors.clear();
-    inlineUniformBlocksHead = inlineUniformBlocks.data();
-    inlineUniformBlocksSpace = MAGMA_MAX_INLINE_UNIFORM_BLOCK_BUFFER_SIZE;
+    if (!inlineUniformBlocks.empty())
+    {
+        inlineUniformBlocksHead = inlineUniformBlocks.data();
+        inlineUniformBlocksSpace = inlineUniformBlocks.size();
+    }
 #endif
 #ifdef VK_NV_ray_tracing
     accelerationDescriptors.clear();
