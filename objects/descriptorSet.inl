@@ -8,21 +8,10 @@ void DescriptorSet::writeInlineUniformDescriptor(uint32_t index, const UniformBl
     MAGMA_ASSERT(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT == binding.descriptorType);
     MAGMA_ASSERT(sizeof(UniformBlockType) == binding.descriptorCount); // Check size in bytes
     MAGMA_ASSERT(inlineUniformBlockDescriptors.capacity() - inlineUniformBlockDescriptors.size() >= 1);
-    if (inlineUniformBlocks.empty())
-    {   // Allocate placement buffer on first use
-        inlineUniformBlocks.resize(MAGMA_MAX_INLINE_UNIFORM_BLOCK_BUFFER_SIZE);
-        std::fill(inlineUniformBlocks.begin(), inlineUniformBlocks.end(), '\0');
-        inlineUniformBlocksHead = inlineUniformBlocks.data();
-        inlineUniformBlocksSpace = inlineUniformBlocks.size();
-    }
-    MAGMA_ASSERT(inlineUniformBlocksSpace > 0);
-    void *inlineUniformBlockData;
-    if (inlineUniformBlockData = std::align(16, sizeof(UniformBlockType), inlineUniformBlocksHead, inlineUniformBlocksSpace))
-    {   // https://en.cppreference.com/w/cpp/memory/align
+    MAGMA_ASSERT(inlineUniformBlockAllocator->hasSpace(sizeof(UniformBlockType)));
+    void *inlineUniformBlockData = inlineUniformBlockAllocator->alloc(sizeof(UniformBlockType), 16);
+    if (inlineUniformBlockData)
         memcpy(inlineUniformBlockData, &inlineUniformBlock, sizeof(UniformBlockType));
-        inlineUniformBlocksHead = (char *)inlineUniformBlocksHead + sizeof(UniformBlockType);
-        inlineUniformBlocksSpace -= sizeof(UniformBlockType);
-    } 
     VkWriteDescriptorSetInlineUniformBlockEXT inlineUniformBlockDescriptorWrite;
     inlineUniformBlockDescriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_INLINE_UNIFORM_BLOCK_EXT; 
     inlineUniformBlockDescriptorWrite.pNext = nullptr;

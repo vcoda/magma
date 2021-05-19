@@ -44,8 +44,7 @@ DescriptorSet::DescriptorSet(VkDescriptorSet handle,
     bufferViews.reserve(maxDescriptorWrites);
 #ifdef VK_EXT_inline_uniform_block
     inlineUniformBlockDescriptors.reserve(maxDescriptorWrites);
-    inlineUniformBlocksHead = nullptr;
-    inlineUniformBlocksSpace = 0;
+    inlineUniformBlockAllocator = std::make_unique<core::LinearAllocator>(MAGMA_MAX_INLINE_UNIFORM_BLOCK_POOL_SIZE);
 #endif
 #ifdef VK_NV_ray_tracing
     accelerationDescriptors.reserve(maxDescriptorWrites);
@@ -328,11 +327,7 @@ void DescriptorSet::release()
     bufferViews.clear();
 #ifdef VK_EXT_inline_uniform_block
     inlineUniformBlockDescriptors.clear();
-    if (!inlineUniformBlocks.empty())
-    {
-        inlineUniformBlocksHead = inlineUniformBlocks.data();
-        inlineUniformBlocksSpace = inlineUniformBlocks.size();
-    }
+    inlineUniformBlockAllocator->reset();
 #endif
 #ifdef VK_NV_ray_tracing
     accelerationDescriptors.clear();
