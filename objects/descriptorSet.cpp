@@ -87,7 +87,8 @@ void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const ImageV
 {
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
     MAGMA_ASSERT((VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE == binding.descriptorType) ||
-                 (VK_DESCRIPTOR_TYPE_STORAGE_IMAGE == binding.descriptorType));
+                 (VK_DESCRIPTOR_TYPE_STORAGE_IMAGE == binding.descriptorType) ||
+                 (VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT == binding.descriptorType));
     MAGMA_ASSERT(1 == binding.descriptorCount);
     MAGMA_ASSERT(imageDescriptors.capacity() - imageDescriptors.size() >= 1);
     imageDescriptors.push_back(imageView->getDescriptor(nullptr));
