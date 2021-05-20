@@ -25,6 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineLayout.h"
 #include "queryPool.h"
 #include "event.h"
+#include "../reflection/descriptorSetReflection.h"
 #include "../barriers/memoryBarrier.h"
 #include "../barriers/bufferMemoryBarrier.h"
 #include "../barriers/imageMemoryBarrier.h"
@@ -139,6 +140,10 @@ namespace magma
             const std::shared_ptr<Pipeline>& pipeline,
             const std::shared_ptr<DescriptorSet>(&descriptorSets)[descriptorSetCount],
             const std::initializer_list<uint32_t>& dynamicOffsets = {}) noexcept;
+        void bindDescriptorSet(
+            const std::shared_ptr<Pipeline>& pipeline,
+            const std::shared_ptr<reflection::DescriptorSet>& descriptorSet,
+            uint32_t dynamicOffset = uint32_t(-1)) noexcept;
 
         void bindIndexBuffer(
             const std::shared_ptr<BaseIndexBuffer>& indexBuffer,

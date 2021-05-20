@@ -78,20 +78,17 @@ bool DescriptorSet::dirty() const noexcept
 
 void DescriptorSet::update()
 {
-    if (dirty())
+    std::vector<VkWriteDescriptorSet> descriptorWrites;
+    descriptorWrites.reserve(bindings.size());
+    for (auto binding : bindings)
     {
-        std::vector<VkWriteDescriptorSet> descriptorWrites;
-        descriptorWrites.reserve(bindings.size());
-        for (auto binding : bindings)
+        if (binding->dirty())
         {
-            if (binding->dirty())
-            {
-                descriptorWrites.push_back(binding->getDescriptorWrite());
-                binding->updated = false;
-            }
+            descriptorWrites.push_back(binding->getDescriptorWrite());
+            binding->updated = false;
         }
-        device->updateDescriptorSets(descriptorWrites);
     }
+    device->updateDescriptorSets(descriptorWrites);
 }
 } // namespace reflection
 } // namespace magma
