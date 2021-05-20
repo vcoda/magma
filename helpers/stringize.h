@@ -112,6 +112,10 @@ namespace magma
         const char *stringize(SpvReflectTypeFlagBits) noexcept;
         const char *stringize(SpvReflectDecorationFlagBits) noexcept;
         const char *stringize(SpvReflectResourceType) noexcept;
+        const char *stringize(SpvReflectFormat) noexcept;
+        const char *stringize(SpvReflectVariableFlagBits) noexcept;
+        const char *stringize(SpvReflectDescriptorType) noexcept;
+        const char *stringize(SpvReflectShaderStageFlagBits) noexcept;
         const char *stringize(SpvReflectGenerator) noexcept;
     } // namespace helpers
 } // namespace magma
