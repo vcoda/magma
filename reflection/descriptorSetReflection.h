@@ -43,7 +43,7 @@ namespace magma
             std::shared_ptr<magma::DescriptorSetLayout> getLayout() const noexcept { return layout; }
 
         private:
-            void createLayout(std::shared_ptr<magma::Device> device,
+             std::shared_ptr<magma::DescriptorSetLayout> createLayout(std::shared_ptr<magma::Device> device,
                 uint32_t stageFlags,
                 std::shared_ptr<IAllocator> allocator /* nullptr */);
 
@@ -55,16 +55,18 @@ namespace magma
         class DescriptorSet : public NonDispatchable<VkDescriptorSet>
         {
         public:
-            explicit DescriptorSet(std::shared_ptr<magma::DescriptorPool> descriptorPool,
+            explicit DescriptorSet(std::shared_ptr<magma::DescriptorPool> pool,
                 DescriptorSetLayout& setLayout,
                 uint32_t stageFlags,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             ~DescriptorSet();
+            std::shared_ptr<magma::DescriptorSetLayout> getLayout() const noexcept { return layout; }
             bool dirty() const noexcept;
             void update();
 
         private:
-            std::shared_ptr<magma::DescriptorPool> descriptorPool;
+            std::shared_ptr<DescriptorPool> pool;
+            std::shared_ptr<magma::DescriptorSetLayout> layout;
             std::vector<DescriptorSetLayoutBinding *> bindings;
         };
 

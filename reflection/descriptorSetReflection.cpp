@@ -27,7 +27,7 @@ namespace magma
 {
 namespace reflection
 {
-void DescriptorSetLayout::createLayout(std::shared_ptr<magma::Device> device, uint32_t stageFlags,
+std::shared_ptr<magma::DescriptorSetLayout> DescriptorSetLayout::createLayout(std::shared_ptr<magma::Device> device, uint32_t stageFlags,
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
     std::vector<VkDescriptorSetLayoutBinding> bindings;
@@ -38,20 +38,21 @@ void DescriptorSetLayout::createLayout(std::shared_ptr<magma::Device> device, ui
     }
     layout = std::make_shared<magma::DescriptorSetLayout>(
         std::move(device), bindings, std::move(allocator), 0);
+    return layout;
 }
 
-DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> descriptorPool, DescriptorSetLayout& setLayout, uint32_t stageFlags,
+DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> pool, DescriptorSetLayout& setLayout, uint32_t stageFlags,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, descriptorPool->getDevice(), std::move(allocator)),
-    descriptorPool(std::move(descriptorPool)),
+    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, pool->getDevice(), allocator),
+    pool(std::move(pool)),
+    layout(setLayout.createLayout(this->pool->getDevice(), stageFlags, std::move(allocator))),
     bindings(setLayout.getBindings())
 {
-    setLayout.createLayout(this->descriptorPool->getDevice(), stageFlags, allocator);
     const VkDescriptorSetLayout dereferencedSetLayouts[1] = {*setLayout.getLayout()};
     VkDescriptorSetAllocateInfo allocInfo;
     allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     allocInfo.pNext = nullptr;
-    allocInfo.descriptorPool = *this->descriptorPool;
+    allocInfo.descriptorPool = *this->pool;
     allocInfo.descriptorSetCount = 1;
     allocInfo.pSetLayouts = dereferencedSetLayouts;
     const VkResult result = vkAllocateDescriptorSets(MAGMA_HANDLE(device), &allocInfo, &handle);
@@ -62,7 +63,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> descriptorPo
 
 DescriptorSet::~DescriptorSet()
 {
-    vkFreeDescriptorSets(MAGMA_HANDLE(device), *descriptorPool, 1, &handle);
+    vkFreeDescriptorSets(MAGMA_HANDLE(device), *pool, 1, &handle);
 }
 
 bool DescriptorSet::dirty() const noexcept
