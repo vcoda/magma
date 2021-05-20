@@ -27,7 +27,7 @@ namespace magma
 {
 namespace reflection
 {
-void DescriptorSetLayout::constructSetLayout(std::shared_ptr<magma::Device> device, uint32_t stageFlags,
+void DescriptorSetLayout::createLayout(std::shared_ptr<magma::Device> device, uint32_t stageFlags,
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
     std::vector<VkDescriptorSetLayoutBinding> bindings;
@@ -46,7 +46,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> descriptorPo
     descriptorPool(std::move(descriptorPool)),
     bindings(setLayout.getBindings())
 {
-    setLayout.constructSetLayout(this->descriptorPool->getDevice(), stageFlags, allocator);
+    setLayout.createLayout(this->descriptorPool->getDevice(), stageFlags, allocator);
     const VkDescriptorSetLayout dereferencedSetLayouts[1] = {*setLayout.getLayout()};
     VkDescriptorSetAllocateInfo allocInfo;
     allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
@@ -83,8 +83,11 @@ void DescriptorSet::update()
         descriptorWrites.reserve(bindings.size());
         for (auto binding : bindings)
         {
-            descriptorWrites.push_back(binding->descriptorWrite);
-            binding->updated = false;
+            if (binding->dirty())
+            {
+                descriptorWrites.push_back(binding->descriptorWrite);
+                binding->updated = false;
+            }
         }
         device->updateDescriptorSets(descriptorWrites);
     }

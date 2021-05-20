@@ -39,15 +39,17 @@ namespace magma
                     (bindings.push_back(std::forward<DescriptorSetLayoutBinding>(args)), void(), 0)...
                 };
             }
-            void constructSetLayout(std::shared_ptr<magma::Device> device,
-                uint32_t stageFlags,
-                std::shared_ptr<IAllocator> allocator /* nullptr */);
             const std::vector<DescriptorSetLayoutBinding *> getBindings() const noexcept { return bindings; }
             std::shared_ptr<magma::DescriptorSetLayout> getLayout() const noexcept { return layout; }
 
         private:
+            void createLayout(std::shared_ptr<magma::Device> device,
+                uint32_t stageFlags,
+                std::shared_ptr<IAllocator> allocator /* nullptr */);
+
             std::vector<DescriptorSetLayoutBinding *> bindings;
             std::shared_ptr<magma::DescriptorSetLayout> layout;
+            friend class DescriptorSet;
         };
 
         class DescriptorSet : public NonDispatchable<VkDescriptorSet>
