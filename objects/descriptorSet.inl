@@ -2,7 +2,7 @@ namespace magma
 {
 #ifdef VK_EXT_inline_uniform_block
 template<typename UniformBlockType>
-void DescriptorSet::writeInlineUniformDescriptor(uint32_t index, const UniformBlockType& inlineUniformBlock)
+inline void DescriptorSet::writeInlineUniformDescriptor(uint32_t index, const UniformBlockType& inlineUniformBlock)
 {
     const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
     MAGMA_ASSERT(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT == binding.descriptorType);
