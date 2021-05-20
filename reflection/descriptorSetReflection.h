@@ -65,6 +65,8 @@ namespace magma
             std::shared_ptr<magma::DescriptorPool> descriptorPool;
             std::vector<DescriptorSetLayoutBinding *> bindings;
         };
+
+        MAGMA_TYPEDEF_SHARED_PTR(DescriptorSet)
     } // namespace reflection
 } // namespace magma
 
