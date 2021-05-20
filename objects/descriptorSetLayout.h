@@ -77,6 +77,10 @@ namespace magma
             const std::initializer_list<SamplerBinding>& samplerBindings = {},
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkDescriptorSetLayoutCreateFlags flags = 0);
+        explicit DescriptorSetLayout(std::shared_ptr<Device> device,
+            const std::vector<VkDescriptorSetLayoutBinding>& bindings,
+            VkDescriptorSetLayoutCreateFlags flags = 0,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         ~DescriptorSetLayout();
         uint32_t getBindingCount() const noexcept { return static_cast<uint32_t>(bindings.size()); }
         uint32_t getSamplerBindingCount() const noexcept { return static_cast<uint32_t>(samplerBindings.size()); }
