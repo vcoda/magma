@@ -22,6 +22,10 @@ namespace magma
     class Sampler;
     class ImageView;
     class Buffer;
+    class BufferView;
+    class UniformTexelBuffer;
+    class StorageTexelBuffer;
+    class StorageBuffer;
 
     namespace reflection
     {
@@ -44,48 +48,117 @@ namespace magma
             friend class DescriptorSet;
         };
 
-        class Sampler : public DescriptorSetLayoutBinding
+        class ImageDescriptorBinding : public DescriptorSetLayoutBinding
         {
-        public:
-            Sampler(uint32_t binding = 0) noexcept:
-                DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_SAMPLER, 1, binding) {}
-            Sampler& operator=(std::shared_ptr<const magma::Sampler> sampler);
+        protected:
+            ImageDescriptorBinding(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding) noexcept:
+                DescriptorSetLayoutBinding(descriptorType, descriptorCount, binding) {}
+            void writeDescriptor(const VkDescriptorImageInfo& imageDescriptor) noexcept;
 
         private:
             VkDescriptorImageInfo imageDescriptor;
         };
-    
-        class CombinedImageSampler : public DescriptorSetLayoutBinding
-        {
-        public:
-            CombinedImageSampler(uint32_t binding = 0) noexcept:
-                DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, binding) {}
-            CombinedImageSampler& operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler);
 
-        private:
-            VkDescriptorImageInfo imageDescriptor;
-        };
-        
-        class SampledImage : public DescriptorSetLayoutBinding
+        class BufferDescriptorBinding : public DescriptorSetLayoutBinding
         {
-        public:
-            SampledImage(uint32_t binding = 0) noexcept:
-                DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1, binding) {}
-            SampledImage& operator=(std::shared_ptr<const ImageView> imageView);
-
-        private:
-            VkDescriptorImageInfo imageDescriptor;
-        };
-        
-        class UniformBuffer  : public DescriptorSetLayoutBinding
-        {
-        public:
-            UniformBuffer(uint32_t binding = 0) noexcept:
-                DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, binding) {}
-            UniformBuffer& operator=(std::shared_ptr<const Buffer> buffer);
+        protected:
+            BufferDescriptorBinding(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding) noexcept:
+                DescriptorSetLayoutBinding(descriptorType, descriptorCount, binding) {}
+            void writeDescriptor(std::shared_ptr<const Buffer> buffer) noexcept;
 
         private:
             VkDescriptorBufferInfo bufferDescriptor;
+        };
+
+        class TexelBufferDescriptorBinding : public DescriptorSetLayoutBinding
+        {
+        protected:
+            TexelBufferDescriptorBinding(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding) noexcept:
+                DescriptorSetLayoutBinding(descriptorType, descriptorCount, binding) {}
+            void writeDescriptor(std::shared_ptr<const BufferView> bufferView) noexcept;
+
+        private:
+            VkBufferView texelBufferView;
+        };
+
+        class Sampler : public ImageDescriptorBinding
+        {
+        public:
+            Sampler(uint32_t binding = 0) noexcept:
+                ImageDescriptorBinding(VK_DESCRIPTOR_TYPE_SAMPLER, 1, binding) {}
+            Sampler& operator=(std::shared_ptr<const magma::Sampler> sampler);
+        };
+    
+        class CombinedImageSampler : public ImageDescriptorBinding
+        {
+        public:
+            CombinedImageSampler(uint32_t binding = 0) noexcept:
+                ImageDescriptorBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, binding) {}
+            CombinedImageSampler& operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler);
+        };
+        
+        class SampledImage : public ImageDescriptorBinding
+        {
+        public:
+            SampledImage(uint32_t binding = 0) noexcept:
+                ImageDescriptorBinding(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1, binding) {}
+            SampledImage& operator=(std::shared_ptr<const ImageView> imageView);
+        };
+
+        class StorageImage : public ImageDescriptorBinding
+        {
+        public:
+            StorageImage(uint32_t binding = 0) noexcept:
+                ImageDescriptorBinding(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1, binding) {}
+            StorageImage& operator=(std::shared_ptr<const ImageView> imageView);
+        };
+        
+        class UniformTexelBuffer : public TexelBufferDescriptorBinding
+        {
+        public:
+            UniformTexelBuffer(uint32_t binding = 0) noexcept:
+                TexelBufferDescriptorBinding(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1, binding) {}
+            UniformTexelBuffer& operator=(std::shared_ptr<const BufferView> bufferView);
+        };
+
+        class StorageTexelBuffer : public TexelBufferDescriptorBinding
+        {
+        public:
+            StorageTexelBuffer(uint32_t binding = 0) noexcept:
+                TexelBufferDescriptorBinding(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1, binding) {}
+            StorageTexelBuffer& operator=(std::shared_ptr<const BufferView> bufferView);
+        };
+
+        class UniformBuffer : public BufferDescriptorBinding
+        {
+        public:
+            UniformBuffer(uint32_t binding = 0) noexcept:
+                BufferDescriptorBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, binding) {}
+            UniformBuffer& operator=(std::shared_ptr<const Buffer> buffer);
+        };
+
+        class StorageBuffer : public BufferDescriptorBinding
+        {
+        public:
+            StorageBuffer(uint32_t binding = 0) noexcept:
+                BufferDescriptorBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, binding) {}
+            StorageBuffer& operator=(std::shared_ptr<const magma::StorageBuffer> buffer);
+        };
+
+        class DynamicUniformBuffer : public BufferDescriptorBinding
+        {
+        public:
+            DynamicUniformBuffer(uint32_t binding = 0) noexcept:
+                BufferDescriptorBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1, binding) {}
+            DynamicUniformBuffer& operator=(std::shared_ptr<const Buffer> buffer);
+        };
+
+        class DynamicStorageBuffer : public BufferDescriptorBinding
+        {
+        public:
+            DynamicStorageBuffer(uint32_t binding = 0) noexcept:
+                BufferDescriptorBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1, binding) {}
+            DynamicStorageBuffer& operator=(std::shared_ptr<const magma::StorageBuffer> buffer);
         };
     } // namespace reflection
 } // namespace magma

@@ -19,8 +19,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "descriptorSetBinding.h"
 #include "../objects/sampler.h"
+#include "../objects/image.h"
 #include "../objects/imageView.h"
 #include "../objects/buffer.h"
+#include "../objects/bufferView.h"
+#include "../objects/uniformTexelBuffer.h"
+#include "../objects/storageTexelBuffer.h"
+#include "../objects/storageBuffer.h"
 
 namespace magma
 {
@@ -34,11 +39,9 @@ DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(VkDescriptorType descript
 DescriptorSetLayoutBinding::~DescriptorSetLayoutBinding()
 {}
 
-Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler)
+void ImageDescriptorBinding::writeDescriptor(const VkDescriptorImageInfo& info) noexcept
 {
-    imageDescriptor.sampler = *sampler;
-    imageDescriptor.imageView = VK_NULL_HANDLE;
-    imageDescriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    imageDescriptor = info;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     descriptorWrite.pNext = nullptr;
     descriptorWrite.dstSet = VK_NULL_HANDLE;
@@ -50,27 +53,9 @@ Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler)
     descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = nullptr;
     updated = true;
-    return *this;
 }
 
-CombinedImageSampler& CombinedImageSampler::operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler)
-{
-    imageDescriptor = combinedImageSampler.first->getDescriptor(combinedImageSampler.second);
-    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.pNext = nullptr;
-    descriptorWrite.dstSet = VK_NULL_HANDLE;
-    descriptorWrite.dstBinding = binding;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = descriptorCount;
-    descriptorWrite.descriptorType = descriptorType;
-    descriptorWrite.pImageInfo = &imageDescriptor;
-    descriptorWrite.pBufferInfo = nullptr;
-    descriptorWrite.pTexelBufferView = nullptr;
-    updated = true;
-    return *this;
-}
-
-UniformBuffer& UniformBuffer::operator=(std::shared_ptr<const Buffer> buffer)
+void BufferDescriptorBinding::writeDescriptor(std::shared_ptr<const Buffer> buffer) noexcept
 {
     bufferDescriptor.buffer = *buffer;
     bufferDescriptor.offset = 0;
@@ -86,6 +71,84 @@ UniformBuffer& UniformBuffer::operator=(std::shared_ptr<const Buffer> buffer)
     descriptorWrite.pBufferInfo = &bufferDescriptor;
     descriptorWrite.pTexelBufferView = nullptr;
     updated = true;
+}
+
+void TexelBufferDescriptorBinding::writeDescriptor(std::shared_ptr<const BufferView> bufferView) noexcept
+{
+    texelBufferView = *bufferView;
+    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    descriptorWrite.pNext = nullptr;
+    descriptorWrite.dstSet = VK_NULL_HANDLE;
+    descriptorWrite.dstBinding = binding;
+    descriptorWrite.dstArrayElement = 0;
+    descriptorWrite.descriptorCount = descriptorCount;
+    descriptorWrite.descriptorType = descriptorType;
+    descriptorWrite.pImageInfo = nullptr;
+    descriptorWrite.pBufferInfo = nullptr;
+    descriptorWrite.pTexelBufferView = &texelBufferView;
+    updated = true;
+}
+
+Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler)
+{
+    VkDescriptorImageInfo imageDescriptor;
+    imageDescriptor.sampler = *sampler;
+    imageDescriptor.imageView = VK_NULL_HANDLE;
+    imageDescriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    writeDescriptor(imageDescriptor);
+    return *this;
+}
+
+CombinedImageSampler& CombinedImageSampler::operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler)
+{
+    writeDescriptor(combinedImageSampler.first->getDescriptor(combinedImageSampler.second));
+    return *this;
+}
+
+StorageImage& StorageImage::operator=(std::shared_ptr<const ImageView> imageView)
+{
+    MAGMA_ASSERT(imageView->getImage()->storageImage());
+    writeDescriptor(imageView->getDescriptor(nullptr));
+    return *this;
+}
+
+UniformTexelBuffer& UniformTexelBuffer::operator=(std::shared_ptr<const BufferView> bufferView)
+{
+    MAGMA_ASSERT(bufferView->getBuffer()->getUsage() & VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT);
+    writeDescriptor(std::move(bufferView));
+    return *this;
+}
+
+StorageTexelBuffer& StorageTexelBuffer::operator=(std::shared_ptr<const BufferView> bufferView)
+{
+    MAGMA_ASSERT(bufferView->getBuffer()->getUsage() & VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT);
+    writeDescriptor(std::move(bufferView));
+    return *this;
+}
+
+UniformBuffer& UniformBuffer::operator=(std::shared_ptr<const Buffer> buffer)
+{
+    MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
+    writeDescriptor(std::move(buffer));
+    return *this;
+}
+
+StorageBuffer& StorageBuffer::operator=(std::shared_ptr<const magma::StorageBuffer> buffer)
+{
+    writeDescriptor(std::move(buffer));
+    return *this;
+}
+
+DynamicUniformBuffer& DynamicUniformBuffer::operator=(std::shared_ptr<const Buffer> buffer)
+{
+    MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
+    writeDescriptor(std::move(buffer));
+    return *this;
+}
+
+DynamicStorageBuffer& DynamicStorageBuffer::operator=(std::shared_ptr<const magma::StorageBuffer> buffer)
+{
+    writeDescriptor(std::move(buffer));
     return *this;
 }
 } // namespace reflection
