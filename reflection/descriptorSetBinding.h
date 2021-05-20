@@ -87,7 +87,7 @@ namespace magma
         public:
             Sampler(uint32_t binding = 0) noexcept:
                 ImageDescriptorBinding(VK_DESCRIPTOR_TYPE_SAMPLER, 1, binding) {}
-            Sampler& operator=(std::shared_ptr<const magma::Sampler> sampler);
+            Sampler& operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept;
         };
     
         class CombinedImageSampler : public ImageDescriptorBinding
@@ -95,7 +95,7 @@ namespace magma
         public:
             CombinedImageSampler(uint32_t binding = 0) noexcept:
                 ImageDescriptorBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, binding) {}
-            CombinedImageSampler& operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler);
+            CombinedImageSampler& operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler) noexcept;
         };
         
         class SampledImage : public ImageDescriptorBinding
@@ -103,7 +103,7 @@ namespace magma
         public:
             SampledImage(uint32_t binding = 0) noexcept:
                 ImageDescriptorBinding(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1, binding) {}
-            SampledImage& operator=(std::shared_ptr<const ImageView> imageView);
+            SampledImage& operator=(std::shared_ptr<const ImageView> imageView) noexcept;
         };
 
         class StorageImage : public ImageDescriptorBinding
@@ -111,7 +111,7 @@ namespace magma
         public:
             StorageImage(uint32_t binding = 0) noexcept:
                 ImageDescriptorBinding(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1, binding) {}
-            StorageImage& operator=(std::shared_ptr<const ImageView> imageView);
+            StorageImage& operator=(std::shared_ptr<const ImageView> imageView) noexcept;
         };
         
         class UniformTexelBuffer : public TexelBufferDescriptorBinding
@@ -119,7 +119,7 @@ namespace magma
         public:
             UniformTexelBuffer(uint32_t binding = 0) noexcept:
                 TexelBufferDescriptorBinding(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1, binding) {}
-            UniformTexelBuffer& operator=(std::shared_ptr<const BufferView> bufferView);
+            UniformTexelBuffer& operator=(std::shared_ptr<const BufferView> bufferView) noexcept;
         };
 
         class StorageTexelBuffer : public TexelBufferDescriptorBinding
@@ -127,7 +127,7 @@ namespace magma
         public:
             StorageTexelBuffer(uint32_t binding = 0) noexcept:
                 TexelBufferDescriptorBinding(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1, binding) {}
-            StorageTexelBuffer& operator=(std::shared_ptr<const BufferView> bufferView);
+            StorageTexelBuffer& operator=(std::shared_ptr<const BufferView> bufferView) noexcept;
         };
 
         class UniformBuffer : public BufferDescriptorBinding
@@ -135,7 +135,7 @@ namespace magma
         public:
             UniformBuffer(uint32_t binding = 0) noexcept:
                 BufferDescriptorBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, binding) {}
-            UniformBuffer& operator=(std::shared_ptr<const Buffer> buffer);
+            UniformBuffer& operator=(std::shared_ptr<const Buffer> buffer) noexcept;
         };
 
         class StorageBuffer : public BufferDescriptorBinding
@@ -143,7 +143,7 @@ namespace magma
         public:
             StorageBuffer(uint32_t binding = 0) noexcept:
                 BufferDescriptorBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, binding) {}
-            StorageBuffer& operator=(std::shared_ptr<const magma::StorageBuffer> buffer);
+            StorageBuffer& operator=(std::shared_ptr<const magma::StorageBuffer> buffer) noexcept;
         };
 
         class DynamicUniformBuffer : public BufferDescriptorBinding
@@ -151,7 +151,7 @@ namespace magma
         public:
             DynamicUniformBuffer(uint32_t binding = 0) noexcept:
                 BufferDescriptorBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1, binding) {}
-            DynamicUniformBuffer& operator=(std::shared_ptr<const Buffer> buffer);
+            DynamicUniformBuffer& operator=(std::shared_ptr<const Buffer> buffer) noexcept;
         };
 
         class DynamicStorageBuffer : public BufferDescriptorBinding
@@ -159,7 +159,7 @@ namespace magma
         public:
             DynamicStorageBuffer(uint32_t binding = 0) noexcept:
                 BufferDescriptorBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1, binding) {}
-            DynamicStorageBuffer& operator=(std::shared_ptr<const magma::StorageBuffer> buffer);
+            DynamicStorageBuffer& operator=(std::shared_ptr<const magma::StorageBuffer> buffer) noexcept;
         };
 
 #ifdef VK_EXT_inline_uniform_block

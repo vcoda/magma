@@ -89,7 +89,7 @@ void TexelBufferDescriptorBinding::writeDescriptor(std::shared_ptr<const BufferV
     updated = true;
 }
 
-Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler)
+Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept
 {
     VkDescriptorImageInfo imageDescriptor;
     imageDescriptor.sampler = *sampler;
@@ -99,54 +99,54 @@ Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler)
     return *this;
 }
 
-CombinedImageSampler& CombinedImageSampler::operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler)
+CombinedImageSampler& CombinedImageSampler::operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler) noexcept
 {
     writeDescriptor(combinedImageSampler.first->getDescriptor(combinedImageSampler.second));
     return *this;
 }
 
-StorageImage& StorageImage::operator=(std::shared_ptr<const ImageView> imageView)
+StorageImage& StorageImage::operator=(std::shared_ptr<const ImageView> imageView) noexcept
 {
     MAGMA_ASSERT(imageView->getImage()->storageImage());
     writeDescriptor(imageView->getDescriptor(nullptr));
     return *this;
 }
 
-UniformTexelBuffer& UniformTexelBuffer::operator=(std::shared_ptr<const BufferView> bufferView)
+UniformTexelBuffer& UniformTexelBuffer::operator=(std::shared_ptr<const BufferView> bufferView) noexcept
 {
     MAGMA_ASSERT(bufferView->getBuffer()->getUsage() & VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT);
     writeDescriptor(std::move(bufferView));
     return *this;
 }
 
-StorageTexelBuffer& StorageTexelBuffer::operator=(std::shared_ptr<const BufferView> bufferView)
+StorageTexelBuffer& StorageTexelBuffer::operator=(std::shared_ptr<const BufferView> bufferView) noexcept
 {
     MAGMA_ASSERT(bufferView->getBuffer()->getUsage() & VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT);
     writeDescriptor(std::move(bufferView));
     return *this;
 }
 
-UniformBuffer& UniformBuffer::operator=(std::shared_ptr<const Buffer> buffer)
+UniformBuffer& UniformBuffer::operator=(std::shared_ptr<const Buffer> buffer) noexcept
 {
     MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
     writeDescriptor(std::move(buffer));
     return *this;
 }
 
-StorageBuffer& StorageBuffer::operator=(std::shared_ptr<const magma::StorageBuffer> buffer)
+StorageBuffer& StorageBuffer::operator=(std::shared_ptr<const magma::StorageBuffer> buffer) noexcept
 {
     writeDescriptor(std::move(buffer));
     return *this;
 }
 
-DynamicUniformBuffer& DynamicUniformBuffer::operator=(std::shared_ptr<const Buffer> buffer)
+DynamicUniformBuffer& DynamicUniformBuffer::operator=(std::shared_ptr<const Buffer> buffer) noexcept
 {
     MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
     writeDescriptor(std::move(buffer));
     return *this;
 }
 
-DynamicStorageBuffer& DynamicStorageBuffer::operator=(std::shared_ptr<const magma::StorageBuffer> buffer)
+DynamicStorageBuffer& DynamicStorageBuffer::operator=(std::shared_ptr<const magma::StorageBuffer> buffer) noexcept
 {
     writeDescriptor(std::move(buffer));
     return *this;
