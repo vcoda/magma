@@ -615,6 +615,9 @@
     <ClInclude Include="..\..\reflection\descriptorSetReflection.h">
       <Filter>Header Files\reflection</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\reflection\descriptorSetBinding.h">
+      <Filter>Header Files\reflection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -942,6 +945,9 @@
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
     <ClCompile Include="..\..\reflection\descriptorSetReflection.cpp">
+      <Filter>Source Files\reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\reflection\descriptorSetBinding.cpp">
       <Filter>Source Files\reflection</Filter>
     </ClCompile>
   </ItemGroup>
