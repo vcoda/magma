@@ -26,6 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/uniformTexelBuffer.h"
 #include "../objects/storageTexelBuffer.h"
 #include "../objects/storageBuffer.h"
+#include "../objects/accelerationStructure.h"
 
 namespace magma
 {
@@ -33,6 +34,7 @@ namespace reflection
 {
 DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding):
     VkDescriptorSetLayoutBinding{binding, descriptorType, descriptorCount, 0, nullptr},
+    descriptorWrite{},
     updated(false)
 {}
 
@@ -151,5 +153,28 @@ DynamicStorageBuffer& DynamicStorageBuffer::operator=(std::shared_ptr<const magm
     writeDescriptor(std::move(buffer));
     return *this;
 }
+
+#ifdef VK_NV_ray_tracing
+AccelerationStructure& AccelerationStructure::operator=(std::shared_ptr<const magma::AccelerationStructure> accelerationStructure) noexcept
+{
+    this->accelerationStructure = *accelerationStructure;
+    accelerationStructureDescriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_NV;
+    accelerationStructureDescriptorWrite.pNext = nullptr;
+    accelerationStructureDescriptorWrite.accelerationStructureCount = descriptorCount;
+    accelerationStructureDescriptorWrite.pAccelerationStructures = &this->accelerationStructure;
+    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    descriptorWrite.pNext = &accelerationStructureDescriptorWrite;
+    descriptorWrite.dstSet = VK_NULL_HANDLE;
+    descriptorWrite.dstBinding = binding;
+    descriptorWrite.dstArrayElement = 0;
+    descriptorWrite.descriptorCount = descriptorCount;
+    descriptorWrite.descriptorType = descriptorType;
+    descriptorWrite.pImageInfo = nullptr;
+    descriptorWrite.pBufferInfo = nullptr;
+    descriptorWrite.pTexelBufferView = nullptr;
+    updated = true;
+    return *this;
+}
+#endif // VK_NV_ray_tracing
 } // namespace reflection
 } // namespace magma

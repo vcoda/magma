@@ -26,6 +26,9 @@ namespace magma
     class UniformTexelBuffer;
     class StorageTexelBuffer;
     class StorageBuffer;
+#ifdef VK_NV_ray_tracing
+    class AccelerationStructure;
+#endif
 
     namespace reflection
     {
@@ -175,6 +178,20 @@ namespace magma
             VkWriteDescriptorSetInlineUniformBlockEXT inlineUniformBlockDescriptorWrite;
         };
 #endif // VK_EXT_inline_uniform_block
+
+#ifdef VK_NV_ray_tracing
+        class AccelerationStructure : public DescriptorSetLayoutBinding
+        {
+        public:
+            AccelerationStructure(uint32_t binding = 0) noexcept:
+                DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV, 1, binding) {}
+            AccelerationStructure& operator=(std::shared_ptr<const magma::AccelerationStructure> accelerationStructure) noexcept;
+
+        private:
+            VkAccelerationStructureNV accelerationStructure = {};
+            VkWriteDescriptorSetAccelerationStructureNV accelerationStructureDescriptorWrite = {};
+        };
+#endif // VK_NV_ray_tracing
     } // namespace reflection
 } // namespace magma
 
