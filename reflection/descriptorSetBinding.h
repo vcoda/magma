@@ -37,7 +37,7 @@ namespace magma
         class DescriptorSetLayoutBinding : public VkDescriptorSetLayoutBinding
         {
         public:
-            ~DescriptorSetLayoutBinding();
+            virtual ~DescriptorSetLayoutBinding() = default;
             const VkWriteDescriptorSet& getDescriptorWrite() const noexcept { return descriptorWrite; }
             bool dirty() const noexcept { return updated; }
 

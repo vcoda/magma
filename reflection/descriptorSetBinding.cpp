@@ -38,9 +38,6 @@ DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(VkDescriptorType descript
     updated(false)
 {}
 
-DescriptorSetLayoutBinding::~DescriptorSetLayoutBinding()
-{}
-
 void ImageDescriptorBinding::writeDescriptor(const VkDescriptorImageInfo& info) noexcept
 {
     imageDescriptor = info;
