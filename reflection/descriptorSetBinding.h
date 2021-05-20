@@ -35,6 +35,7 @@ namespace magma
         {
         public:
             ~DescriptorSetLayoutBinding();
+            const VkWriteDescriptorSet& getDescriptorWrite() const noexcept { return descriptorWrite; }
             bool dirty() const noexcept { return updated; }
 
         protected:

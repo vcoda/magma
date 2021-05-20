@@ -85,7 +85,7 @@ void DescriptorSet::update()
         {
             if (binding->dirty())
             {
-                descriptorWrites.push_back(binding->descriptorWrite);
+                descriptorWrites.push_back(binding->getDescriptorWrite());
                 binding->updated = false;
             }
         }
