@@ -94,7 +94,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_CONCAT(a, b) a ## b
 #define MAGMA_STRINGIZE(name) #name
-#define MAGMA_STRINGIZE_FIELD(field) case field: return MAGMA_STRINGIZE(field); break
+#define MAGMA_STRINGIZE_FIELD(field) case field: return MAGMA_STRINGIZE(field);
 #define MAGMA_DEFAULT_UNKNOWN default: return "<unknown>"
 
 #define MAGMA_HANDLE(p) *(this->p)
