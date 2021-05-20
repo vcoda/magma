@@ -1063,6 +1063,9 @@
     <None Include="..\..\objects\descriptorSet.inl">
       <Filter>Header Files\objects</Filter>
     </None>
+    <None Include="..\..\reflection\descriptorSetBinding.inl">
+      <Filter>Header Files\reflection</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">

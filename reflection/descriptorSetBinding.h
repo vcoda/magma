@@ -161,5 +161,21 @@ namespace magma
                 BufferDescriptorBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1, binding) {}
             DynamicStorageBuffer& operator=(std::shared_ptr<const magma::StorageBuffer> buffer);
         };
+
+#ifdef VK_EXT_inline_uniform_block
+        template<typename UniformBlockType>
+        class InlineUniformBlock : public DescriptorSetLayoutBinding
+        {
+        public:
+            InlineUniformBlock(uint32_t binding = 0) noexcept;
+            ~InlineUniformBlock();
+            InlineUniformBlock& operator=(const UniformBlockType& inlineUniformBlock) noexcept;
+
+        private:
+            VkWriteDescriptorSetInlineUniformBlockEXT inlineUniformBlockDescriptorWrite;
+        };
+#endif // VK_EXT_inline_uniform_block
     } // namespace reflection
 } // namespace magma
+
+#include "descriptorSetBinding.inl"
