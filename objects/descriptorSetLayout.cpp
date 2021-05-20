@@ -132,8 +132,8 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const s
 }
 
 DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const std::vector<VkDescriptorSetLayoutBinding>& bindings,
-    VkDescriptorSetLayoutCreateFlags flags /* 0 */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkDescriptorSetLayoutCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT, std::move(device), std::move(allocator))
 {
     VkDescriptorSetLayoutCreateInfo layoutInfo;

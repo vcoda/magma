@@ -37,7 +37,7 @@ void DescriptorSetLayout::constructSetLayout(std::shared_ptr<magma::Device> devi
         bindings.push_back(*binding);
     }
     layout = std::make_shared<magma::DescriptorSetLayout>(
-        std::move(device), bindings, 0, std::move(allocator));
+        std::move(device), bindings, std::move(allocator), 0);
 }
 
 DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> descriptorPool, DescriptorSetLayout& setLayout, uint32_t stageFlags,
