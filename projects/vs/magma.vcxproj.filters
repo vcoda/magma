@@ -91,6 +91,12 @@
     <Filter Include="Header Files\exceptions">
       <UniqueIdentifier>{ea5144b2-86bc-40ee-ad4e-6266b532f316}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\reflection">
+      <UniqueIdentifier>{4f5cc067-aa18-4fa4-8a92-e9dc5a882ade}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\reflection">
+      <UniqueIdentifier>{e2281e2f-ef4a-4bfd-8305-9d0bac6a7ec0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\allocator\allocator.h">
@@ -606,6 +612,9 @@
     <ClInclude Include="..\..\core\linearAllocator.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\reflection\descriptorSetReflection.h">
+      <Filter>Header Files\reflection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -931,6 +940,9 @@
     </ClCompile>
     <ClCompile Include="..\..\auxiliary\imageDescriptorSet.cpp">
       <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\reflection\descriptorSetReflection.cpp">
+      <Filter>Source Files\reflection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
