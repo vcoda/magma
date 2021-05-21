@@ -46,13 +46,17 @@ std::shared_ptr<magma::DescriptorSetLayout> DescriptorSetLayout::createLayout(st
 }
 
 DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> pool, DescriptorSetLayout& setLayout, uint32_t setIndex, uint32_t stageFlags,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
+    const std::string& shaderFileName /* default */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, pool->getDevice(), allocator),
     pool(std::move(pool)),
     layout(setLayout.createLayout(this->pool->getDevice(), stageFlags, std::move(allocator))),
     setIndex(setIndex),
     bindings(setLayout.getBindings())
 {
+    if (shaderReflectionFactory && !shaderFileName.empty())
+        validateReflection(shaderReflectionFactory->getReflection(shaderFileName));
     const VkDescriptorSetLayout dereferencedSetLayouts[1] = {*setLayout.getLayout()};
     VkDescriptorSetAllocateInfo allocInfo;
     allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;

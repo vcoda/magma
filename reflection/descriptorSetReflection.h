@@ -29,6 +29,7 @@ namespace magma
     namespace reflection
     {
         class DescriptorSetLayoutBinding;
+        class IShaderReflectionFactory;
 
         class DescriptorSetLayout
         {
@@ -60,7 +61,9 @@ namespace magma
                 DescriptorSetLayout& setLayout,
                 uint32_t setIndex,
                 uint32_t stageFlags,
-                std::shared_ptr<IAllocator> allocator = nullptr);
+                std::shared_ptr<IAllocator> allocator = nullptr,
+                std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory = nullptr,
+                const std::string& shaderFileName = std::string());
             ~DescriptorSet();
             std::shared_ptr<magma::DescriptorSetLayout> getLayout() const noexcept { return layout; }
             bool dirty() const noexcept;
