@@ -23,6 +23,7 @@ namespace magma
     class Device;
     class DescriptorPool;
     class DescriptorSetLayout;
+    class ShaderReflection;
     class IAllocator;
 
     namespace reflection
@@ -66,6 +67,8 @@ namespace magma
             void update();
 
         private:
+            void validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection) const;
+
             std::shared_ptr<DescriptorPool> pool;
             std::shared_ptr<magma::DescriptorSetLayout> layout;
             uint32_t setIndex;

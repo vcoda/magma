@@ -19,8 +19,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "descriptorSetReflection.h"
 #include "descriptorSetBinding.h"
+#include "shaderReflectionFactory.h"
 #include "../objects/descriptorPool.h"
 #include "../objects/descriptorSetLayout.h"
+#include "../shaders/shaderReflection.h"
+#include "../helpers/spirvReflectionTypeCast.h"
+#include "../helpers/stringize.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
@@ -90,6 +94,42 @@ void DescriptorSet::update()
         }
     }
     device->updateDescriptorSets(descriptorWrites);
+}
+
+void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection) const
+{
+    std::vector<const SpvReflectDescriptorSet *> descriptorSets = shaderReflection->enumerateDescriptorSets();
+    if (setIndex >= descriptorSets.size())
+        MAGMA_THROW("set index exceeds number of reflected descriptor sets");
+    const SpvReflectDescriptorSet *descriptorSet = descriptorSets[setIndex];
+    for (const auto definedBinding : bindings)
+    {
+        const SpvReflectDescriptorBinding *reflectedBinding = nullptr;
+        for (uint32_t i = 0; i < descriptorSet->binding_count; ++i)
+        {
+            if (definedBinding->binding == descriptorSet->bindings[i]->binding)
+            {
+                reflectedBinding = descriptorSet->bindings[i];
+                break;
+            }
+        }
+        if (!reflectedBinding)
+        {
+            std::ostringstream oss;
+            oss << "binding #" << definedBinding->binding << " not found in the reflection";
+            MAGMA_THROW(oss.str());
+        }
+        const VkDescriptorType reflectedDescriptorType = helpers::castToDescriptorType(reflectedBinding->descriptor_type);
+        if (definedBinding->descriptorType != reflectedDescriptorType)
+        {
+            std::ostringstream oss;
+            oss << "descriptor type mismatch:" << std::endl
+                << "binding #" << definedBinding->binding << std::endl
+                << "expected: " << helpers::stringize(reflectedDescriptorType) << std::endl
+                << "defined: " << helpers::stringize(definedBinding->descriptorType);
+            MAGMA_THROW(oss.str());
+        }
+    }
 }
 } // namespace reflection
 } // namespace magma
