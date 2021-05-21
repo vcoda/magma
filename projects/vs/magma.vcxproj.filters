@@ -618,6 +618,9 @@
     <ClInclude Include="..\..\reflection\descriptorSetBinding.h">
       <Filter>Header Files\reflection</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\helpers\spirvReflectionTypeCast.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">

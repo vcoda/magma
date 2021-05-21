@@ -213,6 +213,7 @@
     <ClInclude Include="..\..\extensions\instanceExtensions.h" />
     <ClInclude Include="..\..\helpers\alignedUniformArray.h" />
     <ClInclude Include="..\..\helpers\castToDebugReport.h" />
+    <ClInclude Include="..\..\helpers\spirvReflectionTypeCast.h" />
     <ClInclude Include="..\..\helpers\checkFeatureSupport.h" />
     <ClInclude Include="..\..\helpers\executeCommandBuffer.h" />
     <ClInclude Include="..\..\helpers\mapScoped.h" />
