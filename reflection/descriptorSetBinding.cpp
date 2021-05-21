@@ -104,6 +104,12 @@ CombinedImageSampler& CombinedImageSampler::operator=(const std::pair<std::share
     return *this;
 }
 
+SampledImage& SampledImage::operator=(std::shared_ptr<const ImageView> imageView) noexcept
+{
+    writeDescriptor(imageView->getDescriptor(nullptr));
+    return *this;
+}
+
 StorageImage& StorageImage::operator=(std::shared_ptr<const ImageView> imageView) noexcept
 {
     MAGMA_ASSERT(imageView->getImage()->storageImage());
