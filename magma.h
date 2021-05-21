@@ -81,6 +81,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "reflection/descriptorSetBinding.h"
 #include "reflection/descriptorSetReflection.h"
+#include "reflection/shaderReflectionFactory.h"
 
 #include "shaders/pipelineShaderStage.h"
 #include "shaders/rayTracingShaderGroup.h"

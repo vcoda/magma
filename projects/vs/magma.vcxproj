@@ -300,6 +300,7 @@
     <ClInclude Include="..\..\objects\vertexBuffer.h" />
     <ClInclude Include="..\..\reflection\descriptorSetBinding.h" />
     <ClInclude Include="..\..\reflection\descriptorSetReflection.h" />
+    <ClInclude Include="..\..\reflection\shaderReflectionFactory.h" />
     <ClInclude Include="..\..\shaders\pipelineShaderStage.h" />
     <ClInclude Include="..\..\shaders\rayTracingShaderGroup.h" />
     <ClInclude Include="..\..\shaders\shaderBindingTable.h" />

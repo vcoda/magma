@@ -621,6 +621,9 @@
     <ClInclude Include="..\..\helpers\spirvReflectionTypeCast.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\reflection\shaderReflectionFactory.h">
+      <Filter>Header Files\reflection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
