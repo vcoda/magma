@@ -57,6 +57,7 @@ namespace magma
         public:
             explicit DescriptorSet(std::shared_ptr<magma::DescriptorPool> pool,
                 DescriptorSetLayout& setLayout,
+                uint32_t setIndex,
                 uint32_t stageFlags,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             ~DescriptorSet();
@@ -67,6 +68,7 @@ namespace magma
         private:
             std::shared_ptr<DescriptorPool> pool;
             std::shared_ptr<magma::DescriptorSetLayout> layout;
+            uint32_t setIndex;
             std::vector<DescriptorSetLayoutBinding *> bindings;
         };
 

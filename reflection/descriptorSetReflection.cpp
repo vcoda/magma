@@ -41,11 +41,12 @@ std::shared_ptr<magma::DescriptorSetLayout> DescriptorSetLayout::createLayout(st
     return layout;
 }
 
-DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> pool, DescriptorSetLayout& setLayout, uint32_t stageFlags,
+DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> pool, DescriptorSetLayout& setLayout, uint32_t setIndex, uint32_t stageFlags,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, pool->getDevice(), allocator),
     pool(std::move(pool)),
     layout(setLayout.createLayout(this->pool->getDevice(), stageFlags, std::move(allocator))),
+    setIndex(setIndex),
     bindings(setLayout.getBindings())
 {
     const VkDescriptorSetLayout dereferencedSetLayouts[1] = {*setLayout.getLayout()};
