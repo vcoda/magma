@@ -106,27 +106,29 @@ inline void CommandBuffer::setStencilReference(bool frontFace, bool backFace, ui
     vkCmdSetStencilReference(handle, MAGMA_STENCIL_FACE_MASK(frontFace, backFace), reference);
 }
 
-inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pipeline, const std::shared_ptr<DescriptorSet>& descriptorSet,
+inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pipeline, const std::shared_ptr<BaseDescriptorSet>& descriptorSet,
     uint32_t dynamicOffset /* -1 */) noexcept
 {
     MAGMA_ASSERT(pipeline->getLayout()->hasSetLayout(descriptorSet->getLayout()));
-    descriptorSet->update();
+    if (descriptorSet->dirty())
+        descriptorSet->update();
     const VkDescriptorSet dereferencedDescriptorSet[1] = {*descriptorSet};
-    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), 0, 1, dereferencedDescriptorSet,
+    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), descriptorSet->getIndex(), 1, dereferencedDescriptorSet,
         (0xFFFFFFFF == dynamicOffset) ? 0 : 1,
         (0xFFFFFFFF == dynamicOffset) ? nullptr : &dynamicOffset);
 }
 
-inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pipeline, const std::shared_ptr<DescriptorSet>& descriptorSet,
+inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pipeline, const std::shared_ptr<BaseDescriptorSet>& descriptorSet,
     const std::initializer_list<uint32_t>& dynamicOffsets) noexcept
 {
     MAGMA_ASSERT(pipeline->getLayout()->hasSetLayout(descriptorSet->getLayout()));
-    descriptorSet->update();
+    if (descriptorSet->dirty())
+        descriptorSet->update();
     const VkDescriptorSet dereferencedDescriptorSet[1] = {*descriptorSet};
-    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), 0, 1, dereferencedDescriptorSet, MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
+    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), descriptorSet->getIndex(), 1, dereferencedDescriptorSet, MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
 }
 
-inline void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline, const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
+inline void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline, const std::initializer_list<std::shared_ptr<BaseDescriptorSet>>& descriptorSets,
     const std::initializer_list<uint32_t>& dynamicOffsets /* {} */) noexcept
 {
 #ifdef MAGMA_DEBUG
@@ -134,25 +136,15 @@ inline void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& p
         MAGMA_ASSERT(pipeline->getLayout()->hasSetLayout(descriptorSet->getLayout()));
 #endif
     MAGMA_STACK_ARRAY(VkDescriptorSet, dereferencedDescriptorSets, descriptorSets.size());
+    uint32_t firstSet = std::numeric_limits<uint32_t>::max();
     for (const auto& descriptorSet : descriptorSets)
     {
-        descriptorSet->update();
+        firstSet = std::min(firstSet, descriptorSet->getIndex());
+        if (descriptorSet->dirty())
+            descriptorSet->update();
         dereferencedDescriptorSets.put(*descriptorSet);
     }
-    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), 0, dereferencedDescriptorSets.size(), dereferencedDescriptorSets, MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
-}
-
-template<uint32_t descriptorSetCount>
-inline void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline, const std::shared_ptr<DescriptorSet>(&descriptorSets)[descriptorSetCount],
-    const std::initializer_list<uint32_t>& dynamicOffsets /* {} */) noexcept
-{
-    MAGMA_STACK_ARRAY(VkDescriptorSet, dereferencedDescriptorSets, descriptorSetCount);
-    for (uint32_t i = 0; i < descriptorSetCount; ++i)
-    {
-        descriptorSets[i]->update();
-        dereferencedDescriptorSets.put(*descriptorSets[i]);
-    }
-    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), 0, descriptorSetCount, dereferencedDescriptorSets, MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
+    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), firstSet, dereferencedDescriptorSets.size(), dereferencedDescriptorSets, MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
 }
 
 inline void CommandBuffer::bindIndexBuffer(const std::shared_ptr<BaseIndexBuffer>& indexBuffer, VkDeviceSize offset /* 0 */) noexcept

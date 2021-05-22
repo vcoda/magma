@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "nondispatchable.h"
+#include "baseDescriptorSet.h"
 #include "../descriptors/bindings.h"
 #include "../core/linearAllocator.h"
 
@@ -36,6 +36,7 @@ namespace magma
 #ifdef VK_NV_ray_tracing
     class AccelerationStructure;
 #endif
+    class IAllocator;
 
     /*  A descriptor set object is an opaque object that contains storage for a set of descriptors,
         where the types and number of descriptors is defined by a descriptor set layout.
@@ -44,20 +45,14 @@ namespace magma
         the resources that need to be associated with the descriptor set, and determining
         the interface between shader stages and shader resources. */
 
-    class DescriptorSet : public NonDispatchable<VkDescriptorSet>
+    class DescriptorSet : public BaseDescriptorSet
     {
-        explicit DescriptorSet(VkDescriptorSet handle,
-            std::shared_ptr<Device> device,
-            std::shared_ptr<DescriptorPool> pool,
-            std::shared_ptr<DescriptorSetLayout> layout,
-            uint32_t maxDescriptorWrites);
-
     public:
+        explicit DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
+            uint32_t setIndex,
+            std::shared_ptr<DescriptorSetLayout> setLayout,
+            uint32_t maxDescriptorWrites = 16);
         ~DescriptorSet();
-        std::shared_ptr<DescriptorPool> getPool() noexcept { return pool; }
-        std::shared_ptr<const DescriptorPool> getPool() const noexcept { return pool; }
-        std::shared_ptr<DescriptorSetLayout> getLayout() noexcept { return layout; }
-        std::shared_ptr<const DescriptorSetLayout> getLayout() const noexcept { return layout; }
         void writeDescriptor(uint32_t binding,
             std::shared_ptr<const Buffer> buffer);
         void writeDescriptor(uint32_t binding,
@@ -75,25 +70,24 @@ namespace magma
             const UniformBlockType& inlineUniformBlock);
 #endif
 #ifdef VK_NV_ray_tracing
-        void writeDescriptor(uint32_t binding, 
+        void writeDescriptor(uint32_t binding,
             std::shared_ptr<const AccelerationStructure> accelerationStructure);
 #endif
-        void writeDescriptorArray(uint32_t binding, 
+        void writeDescriptorArray(uint32_t binding,
             const std::vector<std::shared_ptr<const Buffer>>& bufferArray);
         void writeDescriptorArray(uint32_t binding,
             const std::vector<std::shared_ptr<const ImageView>>& imageViewArray);
         void writeDescriptorArray(uint32_t binding,
             const std::vector<std::shared_ptr<const ImageView>>& imageViewArray,
             const std::vector<std::shared_ptr<const Sampler>>& samplerArray);
-        void writeDescriptorArray(uint32_t binding, 
+        void writeDescriptorArray(uint32_t binding,
             const std::vector<std::shared_ptr<const BufferView>>& bufferViewArray);
-        void update();
+        virtual bool dirty() const noexcept override;
+        virtual void update() override;
 
     private:
         void release();
 
-        std::shared_ptr<DescriptorPool> pool;
-        std::shared_ptr<DescriptorSetLayout> layout;
         std::vector<VkDescriptorBufferInfo> bufferDescriptors;
         std::vector<VkDescriptorImageInfo> imageDescriptors;
         std::vector<VkDescriptorImageInfo> samplerDescriptors;

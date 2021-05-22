@@ -91,6 +91,12 @@
     <Filter Include="Header Files\exceptions">
       <UniqueIdentifier>{ea5144b2-86bc-40ee-ad4e-6266b532f316}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\reflection">
+      <UniqueIdentifier>{4f5cc067-aa18-4fa4-8a92-e9dc5a882ade}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\reflection">
+      <UniqueIdentifier>{e2281e2f-ef4a-4bfd-8305-9d0bac6a7ec0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\allocator\allocator.h">
@@ -606,6 +612,24 @@
     <ClInclude Include="..\..\core\linearAllocator.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\reflection\descriptorSet.h">
+      <Filter>Header Files\reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\reflection\descriptorSetBinding.h">
+      <Filter>Header Files\reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\helpers\spirvReflectionTypeCast.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\reflection\shaderReflectionFactory.h">
+      <Filter>Header Files\reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\reflection\descriptorSetLayout.h">
+      <Filter>Header Files\reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\objects\baseDescriptorSet.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -932,6 +956,15 @@
     <ClCompile Include="..\..\auxiliary\imageDescriptorSet.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\reflection\descriptorSetReflection.cpp">
+      <Filter>Source Files\reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\reflection\descriptorSetBinding.cpp">
+      <Filter>Source Files\reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\baseDescriptorSet.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\auxiliary\immediateRender.inl">
@@ -1044,6 +1077,9 @@
     </None>
     <None Include="..\..\objects\descriptorSet.inl">
       <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\reflection\descriptorSetBinding.inl">
+      <Filter>Header Files\reflection</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

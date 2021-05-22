@@ -79,6 +79,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/uniformTexelBuffer.h"
 #include "objects/vertexBuffer.h"
 
+#include "reflection/descriptorSetBinding.h"
+#include "reflection/descriptorSetLayout.h"
+#include "reflection/descriptorSet.h"
+#include "reflection/shaderReflectionFactory.h"
+
 #include "shaders/pipelineShaderStage.h"
 #include "shaders/rayTracingShaderGroup.h"
 #include "shaders/shaderBindingTable.h"

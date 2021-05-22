@@ -131,6 +131,25 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const s
         info.bindingCount);
 }
 
+DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const std::vector<VkDescriptorSetLayoutBinding>& bindings,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkDescriptorSetLayoutCreateFlags flags /* 0 */):
+    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT, std::move(device), std::move(allocator))
+{
+    VkDescriptorSetLayoutCreateInfo layoutInfo;
+    layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+    layoutInfo.pNext = nullptr;
+    layoutInfo.flags = flags;
+    layoutInfo.bindingCount = MAGMA_COUNT(bindings);
+    layoutInfo.pBindings = bindings.data();
+    const VkResult result = vkCreateDescriptorSetLayout(MAGMA_HANDLE(device), &layoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create descriptor set layout");
+    hash = core::hashArgs(
+        layoutInfo.sType,
+        layoutInfo.flags,
+        layoutInfo.bindingCount);
+}
+
 DescriptorSetLayout::~DescriptorSetLayout()
 {
     vkDestroyDescriptorSetLayout(MAGMA_HANDLE(device), handle, nullptr);

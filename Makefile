@@ -61,6 +61,7 @@ MAGMA_OBJS= \
 	\
 	objects/accelerationStructure.o \
 	objects/accelerationStructureInstanceBuffer.o \
+	objects/baseDescriptorSet.o \
 	objects/buffer.o \
 	objects/bufferView.o \
 	objects/commandBuffer.o \
@@ -117,6 +118,9 @@ MAGMA_OBJS= \
 	objects/uniformTexelBuffer.o \
 	objects/validationCache.o \
 	objects/vertexBuffer.o \
+	\
+	reflection/descriptorSetBinding.o \
+	reflection/descriptorSetReflection.o \
 	\
 	shaders/pipelineShaderStage.o \
 	shaders/rayTracingShaderGroup.o \

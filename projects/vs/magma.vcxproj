@@ -213,6 +213,7 @@
     <ClInclude Include="..\..\extensions\instanceExtensions.h" />
     <ClInclude Include="..\..\helpers\alignedUniformArray.h" />
     <ClInclude Include="..\..\helpers\castToDebugReport.h" />
+    <ClInclude Include="..\..\helpers\spirvReflectionTypeCast.h" />
     <ClInclude Include="..\..\helpers\checkFeatureSupport.h" />
     <ClInclude Include="..\..\helpers\executeCommandBuffer.h" />
     <ClInclude Include="..\..\helpers\mapScoped.h" />
@@ -246,6 +247,7 @@
     <ClInclude Include="..\..\objects\debugUtilsMessenger.h" />
     <ClInclude Include="..\..\objects\descriptorPool.h" />
     <ClInclude Include="..\..\objects\descriptorSet.h" />
+    <ClInclude Include="..\..\objects\baseDescriptorSet.h" />
     <ClInclude Include="..\..\objects\descriptorSetLayout.h" />
     <ClInclude Include="..\..\objects\device.h" />
     <ClInclude Include="..\..\objects\deviceMemory.h" />
@@ -297,6 +299,10 @@
     <ClInclude Include="..\..\objects\uniformTexelBuffer.h" />
     <ClInclude Include="..\..\objects\validationCache.h" />
     <ClInclude Include="..\..\objects\vertexBuffer.h" />
+    <ClInclude Include="..\..\reflection\descriptorSetBinding.h" />
+    <ClInclude Include="..\..\reflection\descriptorSetLayout.h" />
+    <ClInclude Include="..\..\reflection\descriptorSet.h" />
+    <ClInclude Include="..\..\reflection\shaderReflectionFactory.h" />
     <ClInclude Include="..\..\shaders\pipelineShaderStage.h" />
     <ClInclude Include="..\..\shaders\rayTracingShaderGroup.h" />
     <ClInclude Include="..\..\shaders\shaderBindingTable.h" />
@@ -363,6 +369,7 @@
     <ClCompile Include="..\..\misc\scopedDebugMarker.cpp" />
     <ClCompile Include="..\..\objects\accelerationStructure.cpp" />
     <ClCompile Include="..\..\objects\accelerationStructureInstanceBuffer.cpp" />
+    <ClCompile Include="..\..\objects\baseDescriptorSet.cpp" />
     <ClCompile Include="..\..\objects\buffer.cpp" />
     <ClCompile Include="..\..\objects\bufferView.cpp" />
     <ClCompile Include="..\..\objects\commandBuffer.cpp" />
@@ -419,6 +426,8 @@
     <ClCompile Include="..\..\objects\uniformTexelBuffer.cpp" />
     <ClCompile Include="..\..\objects\validationCache.cpp" />
     <ClCompile Include="..\..\objects\vertexBuffer.cpp" />
+    <ClCompile Include="..\..\reflection\descriptorSetBinding.cpp" />
+    <ClCompile Include="..\..\reflection\descriptorSetReflection.cpp" />
     <ClCompile Include="..\..\shaders\pipelineShaderStage.cpp" />
     <ClCompile Include="..\..\shaders\rayTracingShaderGroup.cpp" />
     <ClCompile Include="..\..\shaders\shaderBindingTable.cpp" />
@@ -547,6 +556,7 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
     <None Include="..\..\objects\shaderModule.inl" />
     <None Include="..\..\objects\srcTransferBuffer.inl" />
     <None Include="..\..\objects\storageBuffer.inl" />
+    <None Include="..\..\reflection\descriptorSetBinding.inl" />
     <None Include="..\..\shaders\specialization.inl" />
     <None Include="..\..\states\colorBlendState.inl" />
     <None Include="..\..\states\colorBlendStateAdvanced.inl" />
