@@ -25,8 +25,8 @@ namespace magma
     namespace reflection
     {
         /* An abstract interface to query shader reflection for validatation purposes.
-           By design, library doesn't perform any filesystem I/O operations. Instead, user have
-           to create an implementation of this interface to provide his loading logic. */
+           By design, library doesn't performs any filesystem I/O operations. Instead,
+           user have to provide an implementation of his loading logic. */
 
         class IShaderReflectionFactory : public core::IDestructible
         {
