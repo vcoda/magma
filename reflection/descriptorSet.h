@@ -28,29 +28,16 @@ namespace magma
 
     namespace reflection
     {
+        class DescriptorSetLayout;
         class DescriptorSetLayoutBinding;
         class IShaderReflectionFactory;
 
-        class DescriptorSetLayout
-        {
-        public:
-            template<class... DescriptorSetLayoutBinding>
-            DescriptorSetLayout(DescriptorSetLayoutBinding&&... args)
-            {
-                std::initializer_list<int>{
-                    (bindings.push_back(std::forward<DescriptorSetLayoutBinding>(args)), void(), 0)...
-                };
-            }
-            const std::vector<DescriptorSetLayoutBinding *> getBindings() const noexcept { return bindings; }
-
-        private:
-            std::vector<DescriptorSetLayoutBinding *> bindings;
-        };
+        /* Descriptor set. */
 
         class DescriptorSet : public NonDispatchable<VkDescriptorSet>
         {
         public:
-            explicit DescriptorSet(std::shared_ptr<magma::DescriptorPool> pool,
+            explicit DescriptorSet(std::shared_ptr<magma::DescriptorPool> descriptorPool,
                 const DescriptorSetLayout& setLayout,
                 uint32_t setIndex,
                 uint32_t stageFlags,
@@ -65,7 +52,7 @@ namespace magma
         private:
             void validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection) const;
 
-            std::shared_ptr<DescriptorPool> pool;
+            std::shared_ptr<DescriptorPool> descriptorPool;
             std::shared_ptr<magma::DescriptorSetLayout> setLayout;
             std::vector<DescriptorSetLayoutBinding *> layoutBindings;
             uint32_t setIndex;
@@ -74,5 +61,3 @@ namespace magma
         MAGMA_TYPEDEF_SHARED_PTR(DescriptorSet)
     } // namespace reflection
 } // namespace magma
-
-#define MAGMA_REFLECT(Type, x, ...) Type() : magma::reflection::DescriptorSetLayout(x, __VA_ARGS__) {}

@@ -612,7 +612,7 @@
     <ClInclude Include="..\..\core\linearAllocator.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\reflection\descriptorSetReflection.h">
+    <ClInclude Include="..\..\reflection\descriptorSet.h">
       <Filter>Header Files\reflection</Filter>
     </ClInclude>
     <ClInclude Include="..\..\reflection\descriptorSetBinding.h">
@@ -622,6 +622,9 @@
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\reflection\shaderReflectionFactory.h">
+      <Filter>Header Files\reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\reflection\descriptorSetLayout.h">
       <Filter>Header Files\reflection</Filter>
     </ClInclude>
   </ItemGroup>

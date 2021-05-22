@@ -299,7 +299,8 @@
     <ClInclude Include="..\..\objects\validationCache.h" />
     <ClInclude Include="..\..\objects\vertexBuffer.h" />
     <ClInclude Include="..\..\reflection\descriptorSetBinding.h" />
-    <ClInclude Include="..\..\reflection\descriptorSetReflection.h" />
+    <ClInclude Include="..\..\reflection\descriptorSetLayout.h" />
+    <ClInclude Include="..\..\reflection\descriptorSet.h" />
     <ClInclude Include="..\..\reflection\shaderReflectionFactory.h" />
     <ClInclude Include="..\..\shaders\pipelineShaderStage.h" />
     <ClInclude Include="..\..\shaders\rayTracingShaderGroup.h" />

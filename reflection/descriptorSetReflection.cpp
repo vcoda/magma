@@ -17,8 +17,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "descriptorSetReflection.h"
+#include "descriptorSet.h"
 #include "descriptorSetBinding.h"
+#include "descriptorSetLayout.h"
 #include "shaderReflectionFactory.h"
 #include "../objects/descriptorPool.h"
 #include "../objects/descriptorSetLayout.h"
@@ -31,12 +32,13 @@ namespace magma
 {
 namespace reflection
 {
-DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> pool, const DescriptorSetLayout& layout, uint32_t setIndex, uint32_t stageFlags,
+DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> descriptorPool, const DescriptorSetLayout& layout, 
+    uint32_t setIndex, uint32_t stageFlags,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
     const std::string& shaderFileName /* default */):
-    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, pool->getDevice(), allocator),
-    pool(std::move(pool)),
+    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, descriptorPool->getDevice(), allocator),
+    descriptorPool(std::move(descriptorPool)),
     layoutBindings(layout.getBindings()),
     setIndex(setIndex)
 {   // Validation layout bindings
@@ -56,7 +58,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> pool, const 
     VkDescriptorSetAllocateInfo allocInfo;
     allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     allocInfo.pNext = nullptr;
-    allocInfo.descriptorPool = *this->pool;
+    allocInfo.descriptorPool = *this->descriptorPool;
     allocInfo.descriptorSetCount = 1;
     allocInfo.pSetLayouts = dereferencedSetLayouts;
     const VkResult result = vkAllocateDescriptorSets(MAGMA_HANDLE(device), &allocInfo, &handle);
@@ -68,7 +70,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> pool, const 
 
 DescriptorSet::~DescriptorSet()
 {
-    vkFreeDescriptorSets(MAGMA_HANDLE(device), *pool, 1, &handle);
+    vkFreeDescriptorSets(MAGMA_HANDLE(device), *descriptorPool, 1, &handle);
 }
 
 bool DescriptorSet::dirty() const noexcept

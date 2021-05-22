@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineLayout.h"
 #include "queryPool.h"
 #include "event.h"
-#include "../reflection/descriptorSetReflection.h"
+#include "../reflection/descriptorSet.h"
 #include "../barriers/memoryBarrier.h"
 #include "../barriers/bufferMemoryBarrier.h"
 #include "../barriers/imageMemoryBarrier.h"

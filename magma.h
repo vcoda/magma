@@ -80,7 +80,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/vertexBuffer.h"
 
 #include "reflection/descriptorSetBinding.h"
-#include "reflection/descriptorSetReflection.h"
+#include "reflection/descriptorSetLayout.h"
+#include "reflection/descriptorSet.h"
 #include "reflection/shaderReflectionFactory.h"
 
 #include "shaders/pipelineShaderStage.h"
