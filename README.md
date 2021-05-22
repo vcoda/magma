@@ -52,6 +52,16 @@ Predefined render states are usually "constexpr" objects, which means that they 
 The library often allocates temporary arrays on the stack instead of creating them in the heap. This may cause stack overflow
 in abuse cases, but speeds up allocations and reduces memory fragmentation in run-time.
 
+## Reflection
+
+Defining descriptor set layouts usually the most complicated part of Vulkan API and often results in a lot of entagled code.
+From conceptual point of view, it should be done using reflection data between C++ and GLSL code. Reflection is a mechanism 
+making it possible to investigate yourself. In programming languages, reflection is used to investigate format of objects at runtime,
+invoke methods and access fields of these objects. While C++ doesn't support true reflection, Magma tries to mimic it using variadics 
+and SPIR-V reflection data. This allows to define descriptor set layouts as regular C++ structures and check their validity against 
+specific shader bytecode. At run-time, you can assign resources (images, buffers etc.) to descriptor bindings and they will be 
+attached to shader after descriptor set is binded to command buffer.
+
 ## Memory management
 
 While it is legal to create buffers and images without custom memory allocator, it is highly encouraging to provide
