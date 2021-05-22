@@ -113,7 +113,7 @@ inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pi
     if (descriptorSet->dirty())
         descriptorSet->update();
     const VkDescriptorSet dereferencedDescriptorSet[1] = {*descriptorSet};
-    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), 0, 1, dereferencedDescriptorSet,
+    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), descriptorSet->getIndex(), 1, dereferencedDescriptorSet,
         (0xFFFFFFFF == dynamicOffset) ? 0 : 1,
         (0xFFFFFFFF == dynamicOffset) ? nullptr : &dynamicOffset);
 }
@@ -125,7 +125,7 @@ inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pi
     if (descriptorSet->dirty())
         descriptorSet->update();
     const VkDescriptorSet dereferencedDescriptorSet[1] = {*descriptorSet};
-    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), 0, 1, dereferencedDescriptorSet, MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
+    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), descriptorSet->getIndex(), 1, dereferencedDescriptorSet, MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
 }
 
 inline void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline, const std::initializer_list<std::shared_ptr<BaseDescriptorSet>>& descriptorSets,
