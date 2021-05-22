@@ -627,6 +627,9 @@
     <ClInclude Include="..\..\reflection\descriptorSetLayout.h">
       <Filter>Header Files\reflection</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\baseDescriptorSet.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -958,6 +961,9 @@
     </ClCompile>
     <ClCompile Include="..\..\reflection\descriptorSetBinding.cpp">
       <Filter>Source Files\reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\baseDescriptorSet.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

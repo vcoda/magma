@@ -247,6 +247,7 @@
     <ClInclude Include="..\..\objects\debugUtilsMessenger.h" />
     <ClInclude Include="..\..\objects\descriptorPool.h" />
     <ClInclude Include="..\..\objects\descriptorSet.h" />
+    <ClInclude Include="..\..\objects\baseDescriptorSet.h" />
     <ClInclude Include="..\..\objects\descriptorSetLayout.h" />
     <ClInclude Include="..\..\objects\device.h" />
     <ClInclude Include="..\..\objects\deviceMemory.h" />
@@ -368,6 +369,7 @@
     <ClCompile Include="..\..\misc\scopedDebugMarker.cpp" />
     <ClCompile Include="..\..\objects\accelerationStructure.cpp" />
     <ClCompile Include="..\..\objects\accelerationStructureInstanceBuffer.cpp" />
+    <ClCompile Include="..\..\objects\baseDescriptorSet.cpp" />
     <ClCompile Include="..\..\objects\buffer.cpp" />
     <ClCompile Include="..\..\objects\bufferView.cpp" />
     <ClCompile Include="..\..\objects\commandBuffer.cpp" />
