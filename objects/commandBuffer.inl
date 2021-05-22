@@ -136,13 +136,15 @@ inline void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& p
         MAGMA_ASSERT(pipeline->getLayout()->hasSetLayout(descriptorSet->getLayout()));
 #endif
     MAGMA_STACK_ARRAY(VkDescriptorSet, dereferencedDescriptorSets, descriptorSets.size());
+    uint32_t firstSet = std::numeric_limits<uint32_t>::max();
     for (const auto& descriptorSet : descriptorSets)
     {
+        firstSet = std::min(firstSet, descriptorSet->getIndex());
         if (descriptorSet->dirty())
             descriptorSet->update();
         dereferencedDescriptorSets.put(*descriptorSet);
     }
-    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), 0, dereferencedDescriptorSets.size(), dereferencedDescriptorSets, MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
+    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), firstSet, dereferencedDescriptorSets.size(), dereferencedDescriptorSets, MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
 }
 
 inline void CommandBuffer::bindIndexBuffer(const std::shared_ptr<BaseIndexBuffer>& indexBuffer, VkDeviceSize offset /* 0 */) noexcept
