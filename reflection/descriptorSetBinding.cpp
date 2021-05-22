@@ -19,13 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "descriptorSetBinding.h"
 #include "../objects/sampler.h"
-#include "../objects/image.h"
-#include "../objects/imageView.h"
-#include "../objects/buffer.h"
-#include "../objects/bufferView.h"
-#include "../objects/uniformTexelBuffer.h"
-#include "../objects/storageTexelBuffer.h"
-#include "../objects/storageBuffer.h"
 #include "../objects/accelerationStructure.h"
 
 namespace magma
@@ -38,7 +31,7 @@ DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(VkDescriptorType descript
     _dirty(false)
 {}
 
-void ImageDescriptorBinding::writeDescriptor(const VkDescriptorImageInfo& info) noexcept
+void DescriptorSetLayoutBinding::writeDescriptor(const VkDescriptorImageInfo& info) noexcept
 {
     imageDescriptor = info;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -54,7 +47,7 @@ void ImageDescriptorBinding::writeDescriptor(const VkDescriptorImageInfo& info) 
     _dirty = true;
 }
 
-void BufferDescriptorBinding::writeDescriptor(std::shared_ptr<const Buffer> buffer) noexcept
+void DescriptorSetLayoutBinding::writeDescriptor(std::shared_ptr<const Buffer> buffer) noexcept
 {
     bufferDescriptor.buffer = *buffer;
     bufferDescriptor.offset = 0;
@@ -72,7 +65,7 @@ void BufferDescriptorBinding::writeDescriptor(std::shared_ptr<const Buffer> buff
     _dirty = true;
 }
 
-void TexelBufferDescriptorBinding::writeDescriptor(std::shared_ptr<const BufferView> bufferView) noexcept
+void DescriptorSetLayoutBinding::writeDescriptor(std::shared_ptr<const BufferView> bufferView) noexcept
 {
     texelBufferView = *bufferView;
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -95,65 +88,6 @@ Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler) noexc
     imageDescriptor.imageView = VK_NULL_HANDLE;
     imageDescriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     writeDescriptor(imageDescriptor);
-    return *this;
-}
-
-CombinedImageSampler& CombinedImageSampler::operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler) noexcept
-{
-    writeDescriptor(combinedImageSampler.first->getDescriptor(combinedImageSampler.second));
-    return *this;
-}
-
-SampledImage& SampledImage::operator=(std::shared_ptr<const ImageView> imageView) noexcept
-{
-    writeDescriptor(imageView->getDescriptor(nullptr));
-    return *this;
-}
-
-StorageImage& StorageImage::operator=(std::shared_ptr<const ImageView> imageView) noexcept
-{
-    MAGMA_ASSERT(imageView->getImage()->storageImage());
-    writeDescriptor(imageView->getDescriptor(nullptr));
-    return *this;
-}
-
-UniformTexelBuffer& UniformTexelBuffer::operator=(std::shared_ptr<const BufferView> bufferView) noexcept
-{
-    MAGMA_ASSERT(bufferView->getBuffer()->getUsage() & VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT);
-    writeDescriptor(std::move(bufferView));
-    return *this;
-}
-
-StorageTexelBuffer& StorageTexelBuffer::operator=(std::shared_ptr<const BufferView> bufferView) noexcept
-{
-    MAGMA_ASSERT(bufferView->getBuffer()->getUsage() & VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT);
-    writeDescriptor(std::move(bufferView));
-    return *this;
-}
-
-UniformBuffer& UniformBuffer::operator=(std::shared_ptr<const Buffer> buffer) noexcept
-{
-    MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
-    writeDescriptor(std::move(buffer));
-    return *this;
-}
-
-StorageBuffer& StorageBuffer::operator=(std::shared_ptr<const magma::StorageBuffer> buffer) noexcept
-{
-    writeDescriptor(std::move(buffer));
-    return *this;
-}
-
-DynamicUniformBuffer& DynamicUniformBuffer::operator=(std::shared_ptr<const Buffer> buffer) noexcept
-{
-    MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
-    writeDescriptor(std::move(buffer));
-    return *this;
-}
-
-DynamicStorageBuffer& DynamicStorageBuffer::operator=(std::shared_ptr<const magma::StorageBuffer> buffer) noexcept
-{
-    writeDescriptor(std::move(buffer));
     return *this;
 }
 
