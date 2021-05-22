@@ -104,7 +104,7 @@ namespace magma
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1, binding) {}
             StorageImage& operator=(std::shared_ptr<const ImageView> imageView) noexcept
             {
-                MAGMA_ASSERT(imageView->getImage()->storageImage());
+                MAGMA_ASSERT(imageView->getImage()->getUsage() & VK_IMAGE_USAGE_STORAGE_BIT);
                 writeDescriptor(imageView->getDescriptor(nullptr));
                 return *this;
             }
