@@ -31,33 +31,28 @@ namespace magma
 {
 namespace reflection
 {
-std::shared_ptr<magma::DescriptorSetLayout> DescriptorSetLayout::createLayout(std::shared_ptr<magma::Device> device, uint32_t stageFlags,
-    std::shared_ptr<IAllocator> allocator /* nullptr */)
-{
-    std::vector<VkDescriptorSetLayoutBinding> bindings;
-    for (auto binding : getBindings())
-    {
-        binding->stageFlags = stageFlags; 
-        bindings.push_back(*binding);
-    }
-    layout = std::make_shared<magma::DescriptorSetLayout>(
-        std::move(device), bindings, std::move(allocator), 0);
-    return layout;
-}
-
-DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> pool, DescriptorSetLayout& setLayout, uint32_t setIndex, uint32_t stageFlags,
+DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> pool, const DescriptorSetLayout& layout, uint32_t setIndex, uint32_t stageFlags,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
     const std::string& shaderFileName /* default */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, pool->getDevice(), allocator),
     pool(std::move(pool)),
-    layout(setLayout.createLayout(this->pool->getDevice(), stageFlags, std::move(allocator))),
-    setIndex(setIndex),
-    bindings(setLayout.getBindings())
-{
+    layoutBindings(layout.getBindings()),
+    setIndex(setIndex)
+{   // Validation layout bindings
     if (shaderReflectionFactory && !shaderFileName.empty())
         validateReflection(shaderReflectionFactory->getReflection(shaderFileName));
-    const VkDescriptorSetLayout dereferencedSetLayouts[1] = {*setLayout.getLayout()};
+    // Prepare list of native bindings
+    std::vector<VkDescriptorSetLayoutBinding> bindings;
+    for (auto binding : layoutBindings)
+    {
+        binding->stageFlags = stageFlags; 
+        bindings.push_back(*binding);
+    }
+    // Create descriptor set layout
+    setLayout = std::make_shared<magma::DescriptorSetLayout>(device, bindings, std::move(allocator), 0);
+    // Allocate descriptor set
+    const VkDescriptorSetLayout dereferencedSetLayouts[1] = {*setLayout};
     VkDescriptorSetAllocateInfo allocInfo;
     allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     allocInfo.pNext = nullptr;
@@ -66,8 +61,9 @@ DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> pool, Descri
     allocInfo.pSetLayouts = dereferencedSetLayouts;
     const VkResult result = vkAllocateDescriptorSets(MAGMA_HANDLE(device), &allocInfo, &handle);
     MAGMA_THROW_FAILURE(result, "failed to allocate descriptor set");
-    for (auto binding : this->bindings)
-        binding->descriptorWrite.dstSet = handle; // Assign handle to write descriptor
+    // Assign handle
+    for (auto binding : layoutBindings)
+        binding->descriptorWrite.dstSet = handle;
 }
 
 DescriptorSet::~DescriptorSet()
@@ -77,7 +73,7 @@ DescriptorSet::~DescriptorSet()
 
 bool DescriptorSet::dirty() const noexcept
 {
-    for (auto binding : bindings)
+    for (auto binding : layoutBindings)
     {
         if (binding->dirty())
             return true;
@@ -88,8 +84,8 @@ bool DescriptorSet::dirty() const noexcept
 void DescriptorSet::update()
 {
     std::vector<VkWriteDescriptorSet> descriptorWrites;
-    descriptorWrites.reserve(bindings.size());
-    for (auto binding : bindings)
+    descriptorWrites.reserve(layoutBindings.size());
+    for (auto binding : layoutBindings)
     {
         if (binding->dirty())
         {
@@ -106,7 +102,7 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
     if (setIndex >= descriptorSets.size())
         MAGMA_THROW("set index exceeds number of reflected descriptor sets");
     const SpvReflectDescriptorSet *descriptorSet = descriptorSets[setIndex];
-    for (const auto definedBinding : bindings)
+    for (const auto definedBinding : layoutBindings)
     {
         const SpvReflectDescriptorBinding *reflectedBinding = nullptr;
         for (uint32_t i = 0; i < descriptorSet->binding_count; ++i)

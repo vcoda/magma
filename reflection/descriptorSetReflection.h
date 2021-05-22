@@ -42,30 +42,23 @@ namespace magma
                 };
             }
             const std::vector<DescriptorSetLayoutBinding *> getBindings() const noexcept { return bindings; }
-            std::shared_ptr<magma::DescriptorSetLayout> getLayout() const noexcept { return layout; }
 
         private:
-             std::shared_ptr<magma::DescriptorSetLayout> createLayout(std::shared_ptr<magma::Device> device,
-                uint32_t stageFlags,
-                std::shared_ptr<IAllocator> allocator /* nullptr */);
-
             std::vector<DescriptorSetLayoutBinding *> bindings;
-            std::shared_ptr<magma::DescriptorSetLayout> layout;
-            friend class DescriptorSet;
         };
 
         class DescriptorSet : public NonDispatchable<VkDescriptorSet>
         {
         public:
             explicit DescriptorSet(std::shared_ptr<magma::DescriptorPool> pool,
-                DescriptorSetLayout& setLayout,
+                const DescriptorSetLayout& setLayout,
                 uint32_t setIndex,
                 uint32_t stageFlags,
                 std::shared_ptr<IAllocator> allocator = nullptr,
                 std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory = nullptr,
                 const std::string& shaderFileName = std::string());
             ~DescriptorSet();
-            std::shared_ptr<magma::DescriptorSetLayout> getLayout() const noexcept { return layout; }
+            std::shared_ptr<magma::DescriptorSetLayout> getLayout() const noexcept { return setLayout; }
             bool dirty() const noexcept;
             void update();
 
@@ -73,9 +66,9 @@ namespace magma
             void validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection) const;
 
             std::shared_ptr<DescriptorPool> pool;
-            std::shared_ptr<magma::DescriptorSetLayout> layout;
+            std::shared_ptr<magma::DescriptorSetLayout> setLayout;
+            std::vector<DescriptorSetLayoutBinding *> layoutBindings;
             uint32_t setIndex;
-            std::vector<DescriptorSetLayoutBinding *> bindings;
         };
 
         MAGMA_TYPEDEF_SHARED_PTR(DescriptorSet)
