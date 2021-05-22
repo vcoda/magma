@@ -37,11 +37,9 @@ DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> descriptorPo
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
     const std::string& shaderFileName /* default */):
-    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, descriptorPool->getDevice(), allocator),
-    descriptorPool(std::move(descriptorPool)),
-    layoutBindings(layout.getBindings()),
-    setIndex(setIndex)
-{   // Validation layout bindings
+    BaseDescriptorSet(std::move(descriptorPool), setIndex, std::move(allocator)),
+    layoutBindings(layout.getBindings())
+{   // Validate descriptor bindings through shader reflection
     if (shaderReflectionFactory && !shaderFileName.empty())
         validateReflection(shaderReflectionFactory->getReflection(shaderFileName));
     // Prepare list of native bindings
@@ -76,10 +74,8 @@ DescriptorSet::~DescriptorSet()
 bool DescriptorSet::dirty() const noexcept
 {
     for (auto binding : layoutBindings)
-    {
         if (binding->dirty())
             return true;
-    }
     return false;
 }
 
@@ -95,7 +91,8 @@ void DescriptorSet::update()
             binding->_dirty = false;
         }
     }
-    device->updateDescriptorSets(descriptorWrites);
+    if (!descriptorWrites.empty())
+        device->updateDescriptorSets(descriptorWrites);
 }
 
 void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection) const

@@ -16,13 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../objects/nondispatchable.h"
+#include "../objects/baseDescriptorSet.h"
 
 namespace magma
 {
-    class Device;
-    class DescriptorPool;
-    class DescriptorSetLayout;
     class ShaderReflection;
     class IAllocator;
 
@@ -32,9 +29,14 @@ namespace magma
         class DescriptorSetLayoutBinding;
         class IShaderReflectionFactory;
 
-        /* Descriptor set. */
+        /*  A descriptor set object is an opaque object that contains storage for a set of descriptors,
+            where the types and number of descriptors is defined by a descriptor set layout.
+            The layout object may be used to define the association of each descriptor binding
+            with memory or other implementation resources. The layout is used both for determining
+            the resources that need to be associated with the descriptor set, and determining
+            the interface between shader stages and shader resources. */
 
-        class DescriptorSet : public NonDispatchable<VkDescriptorSet>
+        class DescriptorSet : public BaseDescriptorSet
         {
         public:
             explicit DescriptorSet(std::shared_ptr<magma::DescriptorPool> descriptorPool,
@@ -46,16 +48,13 @@ namespace magma
                 const std::string& shaderFileName = std::string());
             ~DescriptorSet();
             std::shared_ptr<magma::DescriptorSetLayout> getLayout() const noexcept { return setLayout; }
-            bool dirty() const noexcept;
-            void update();
+            virtual bool dirty() const noexcept override;
+            virtual void update() override;
 
         private:
             void validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection) const;
 
-            std::shared_ptr<DescriptorPool> descriptorPool;
-            std::shared_ptr<magma::DescriptorSetLayout> setLayout;
             std::vector<DescriptorSetLayoutBinding *> layoutBindings;
-            uint32_t setIndex;
         };
 
         MAGMA_TYPEDEF_SHARED_PTR(DescriptorSet)
