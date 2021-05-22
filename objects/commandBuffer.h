@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "dispatchable.h"
-#include "descriptorSet.h"
+#include "baseDescriptorSet.h"
 #include "vertexBuffer.h"
 #include "indexBuffer.h"
 #include "image.h"
@@ -25,7 +25,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineLayout.h"
 #include "queryPool.h"
 #include "event.h"
-#include "../reflection/descriptorSet.h"
 #include "../barriers/memoryBarrier.h"
 #include "../barriers/bufferMemoryBarrier.h"
 #include "../barriers/imageMemoryBarrier.h"
@@ -126,24 +125,15 @@ namespace magma
 
         void bindDescriptorSet(
             const std::shared_ptr<Pipeline>& pipeline,
-            const std::shared_ptr<DescriptorSet>& descriptorSet,
+            const std::shared_ptr<BaseDescriptorSet>& descriptorSet,
             uint32_t dynamicOffset = uint32_t(-1)) noexcept;
         void bindDescriptorSet(const std::shared_ptr<Pipeline>& pipeline,
-            const std::shared_ptr<DescriptorSet>& descriptorSet,
+            const std::shared_ptr<BaseDescriptorSet>& descriptorSet,
             const std::initializer_list<uint32_t>& dynamicOffsets) noexcept;
         void bindDescriptorSets(
             const std::shared_ptr<Pipeline>& pipeline,
-            const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
+            const std::initializer_list<std::shared_ptr<BaseDescriptorSet>>& descriptorSets,
             const std::initializer_list<uint32_t>& dynamicOffsets = {}) noexcept;
-        template<uint32_t descriptorSetCount>
-        void bindDescriptorSets(
-            const std::shared_ptr<Pipeline>& pipeline,
-            const std::shared_ptr<DescriptorSet>(&descriptorSets)[descriptorSetCount],
-            const std::initializer_list<uint32_t>& dynamicOffsets = {}) noexcept;
-        void bindDescriptorSet(
-            const std::shared_ptr<Pipeline>& pipeline,
-            const std::shared_ptr<reflection::DescriptorSet>& descriptorSet,
-            uint32_t dynamicOffset = uint32_t(-1)) noexcept;
 
         void bindIndexBuffer(
             const std::shared_ptr<BaseIndexBuffer>& indexBuffer,

@@ -4,7 +4,7 @@ namespace magma
 template<typename UniformBlockType>
 void DescriptorSet::writeInlineUniformDescriptor(uint32_t index, const UniformBlockType& inlineUniformBlock)
 {
-    const DescriptorSetLayout::Binding& binding = layout->getBinding(index);
+    const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
     MAGMA_ASSERT(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT == binding.descriptorType);
     MAGMA_ASSERT(sizeof(UniformBlockType) == binding.descriptorCount); // Check size in bytes
     MAGMA_ASSERT(inlineUniformBlockDescriptors.capacity() - inlineUniformBlockDescriptors.size() >= 1);
