@@ -49,6 +49,7 @@ namespace magma
     {
     public:
         explicit DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
+            uint32_t setIndex,
             std::shared_ptr<DescriptorSetLayout> setLayout,
             uint32_t maxDescriptorWrites = 16);
         ~DescriptorSet();

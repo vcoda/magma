@@ -78,7 +78,7 @@ void DescriptorPool::reset()
 std::shared_ptr<DescriptorSet> DescriptorPool::allocateDescriptorSet(std::shared_ptr<DescriptorSetLayout> setLayout,
     uint32_t maxDescriptorWrites /* 16 */)
 {
-    return std::make_shared<DescriptorSet>(shared_from_this(), std::move(setLayout), maxDescriptorWrites);
+    return std::make_shared<DescriptorSet>(shared_from_this(), 0, std::move(setLayout), maxDescriptorWrites);
 }
 
 void DescriptorPool::freeDescriptorSet(std::shared_ptr<DescriptorSet>& descriptorSet) noexcept

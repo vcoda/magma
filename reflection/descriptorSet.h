@@ -40,8 +40,8 @@ namespace magma
         {
         public:
             explicit DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
-                const DescriptorSetLayout& reflection,
                 uint32_t setIndex,
+                const DescriptorSetLayout& reflection,
                 uint32_t stageFlags,
                 std::shared_ptr<IAllocator> allocator = nullptr,
                 std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory = nullptr,

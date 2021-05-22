@@ -32,13 +32,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
-    std::shared_ptr<DescriptorSetLayout> setLayout,
+    uint32_t setIndex, std::shared_ptr<DescriptorSetLayout> setLayout,
     uint32_t maxDescriptorWrites /* 16 */):
-    BaseDescriptorSet(std::move(descriptorPool), 0, nullptr)
+    BaseDescriptorSet(std::move(descriptorPool), setIndex, std::move(setLayout))
 {
-    this->setLayout = setLayout;
-    // Allocate descriptor set
     const VkDescriptorSetLayout dereferencedSetLayouts[1] = {*setLayout};
+    // Allocate descriptor set
     VkDescriptorSetAllocateInfo allocInfo;
     allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     allocInfo.pNext = nullptr;
