@@ -39,7 +39,7 @@ namespace magma
         class DescriptorSet : public BaseDescriptorSet
         {
         public:
-            explicit DescriptorSet(std::shared_ptr<magma::DescriptorPool> descriptorPool,
+            explicit DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
                 const DescriptorSetLayout& reflection,
                 uint32_t setIndex,
                 uint32_t stageFlags,
@@ -47,7 +47,6 @@ namespace magma
                 std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory = nullptr,
                 const std::string& shaderFileName = std::string());
             ~DescriptorSet();
-            std::shared_ptr<magma::DescriptorSetLayout> getLayout() const noexcept { return setLayout; }
             virtual bool dirty() const noexcept override;
             virtual void update() override;
 

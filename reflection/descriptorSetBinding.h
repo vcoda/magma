@@ -54,7 +54,7 @@ namespace magma
             void writeDescriptor(std::shared_ptr<const Buffer> buffer) noexcept;
             void writeDescriptor(std::shared_ptr<const BufferView> bufferView) noexcept;
 
-            union 
+            union
             {
                 VkDescriptorImageInfo imageDescriptor;
                 VkDescriptorBufferInfo bufferDescriptor;

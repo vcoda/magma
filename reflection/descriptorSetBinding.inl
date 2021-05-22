@@ -18,7 +18,7 @@ inline InlineUniformBlock<UniformBlockType>::~InlineUniformBlock()
 template<typename UniformBlockType>
 inline InlineUniformBlock<UniformBlockType>& InlineUniformBlock<UniformBlockType>::operator=(const UniformBlockType& inlineUniformBlock) noexcept
 {
-    inlineUniformBlockDescriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_INLINE_UNIFORM_BLOCK_EXT; 
+    inlineUniformBlockDescriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_INLINE_UNIFORM_BLOCK_EXT;
     inlineUniformBlockDescriptorWrite.pNext = nullptr;
     inlineUniformBlockDescriptorWrite.dataSize = sizeof(UniformBlockType);
     inlineUniformBlockDescriptorWrite.pData = new(std::nothrow) UniformBlockType();

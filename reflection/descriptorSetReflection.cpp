@@ -32,7 +32,7 @@ namespace magma
 {
 namespace reflection
 {
-DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> descriptorPool,
+DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     const DescriptorSetLayout& reflection, uint32_t setIndex, uint32_t stageFlags,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
@@ -46,7 +46,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> descriptorPo
     std::vector<VkDescriptorSetLayoutBinding> bindings;
     for (auto binding : reflection.getBindings())
     {
-        binding->stageFlags = stageFlags; 
+        binding->stageFlags = stageFlags;
         bindings.push_back(*binding);
     }
     // Create descriptor set layout
