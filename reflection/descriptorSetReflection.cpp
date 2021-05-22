@@ -94,7 +94,7 @@ void DescriptorSet::update()
         if (binding->dirty())
         {
             descriptorWrites.push_back(binding->getDescriptorWrite());
-            binding->updated = false;
+            binding->_dirty = false;
         }
     }
     device->updateDescriptorSets(descriptorWrites);

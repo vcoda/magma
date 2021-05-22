@@ -34,7 +34,7 @@ inline InlineUniformBlock<UniformBlockType>& InlineUniformBlock<UniformBlockType
     descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = nullptr;
-    updated = true;
+    _dirty = true;
     return *this;
 }
 #endif // VK_EXT_inline_uniform_block
