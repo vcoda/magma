@@ -32,19 +32,19 @@ namespace magma
 {
 namespace reflection
 {
-DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> descriptorPool, const DescriptorSetLayout& layout, 
-    uint32_t setIndex, uint32_t stageFlags,
+DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> descriptorPool,
+    const DescriptorSetLayout& reflection, uint32_t setIndex, uint32_t stageFlags,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
     const std::string& shaderFileName /* default */):
     BaseDescriptorSet(std::move(descriptorPool), setIndex, std::move(allocator)),
-    layoutBindings(layout.getBindings())
+    reflection(reflection)
 {   // Validate descriptor bindings through shader reflection
     if (shaderReflectionFactory && !shaderFileName.empty())
         validateReflection(shaderReflectionFactory->getReflection(shaderFileName));
     // Prepare list of native bindings
     std::vector<VkDescriptorSetLayoutBinding> bindings;
-    for (auto binding : layoutBindings)
+    for (auto binding : reflection.getBindings())
     {
         binding->stageFlags = stageFlags; 
         bindings.push_back(*binding);
@@ -62,7 +62,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<magma::DescriptorPool> descriptorPo
     const VkResult result = vkAllocateDescriptorSets(MAGMA_HANDLE(device), &allocInfo, &handle);
     MAGMA_THROW_FAILURE(result, "failed to allocate descriptor set");
     // Assign handle
-    for (auto binding : layoutBindings)
+    for (auto binding : reflection.getBindings())
         binding->descriptorWrite.dstSet = handle;
 }
 
@@ -73,17 +73,14 @@ DescriptorSet::~DescriptorSet()
 
 bool DescriptorSet::dirty() const noexcept
 {
-    for (auto binding : layoutBindings)
-        if (binding->dirty())
-            return true;
-    return false;
+    return reflection.dirty();
 }
 
 void DescriptorSet::update()
 {
     std::vector<VkWriteDescriptorSet> descriptorWrites;
-    descriptorWrites.reserve(layoutBindings.size());
-    for (auto binding : layoutBindings)
+    descriptorWrites.reserve(reflection.getBindings().size());
+    for (auto binding : reflection.getBindings())
     {
         if (binding->dirty())
         {
@@ -101,7 +98,7 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
     if (setIndex >= descriptorSets.size())
         MAGMA_THROW("set index exceeds number of reflected descriptor sets");
     const SpvReflectDescriptorSet *descriptorSet = descriptorSets[setIndex];
-    for (const auto definedBinding : layoutBindings)
+    for (const auto definedBinding : reflection.getBindings())
     {
         const SpvReflectDescriptorBinding *reflectedBinding = nullptr;
         for (uint32_t i = 0; i < descriptorSet->binding_count; ++i)

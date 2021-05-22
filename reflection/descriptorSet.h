@@ -40,7 +40,7 @@ namespace magma
         {
         public:
             explicit DescriptorSet(std::shared_ptr<magma::DescriptorPool> descriptorPool,
-                const DescriptorSetLayout& setLayout,
+                const DescriptorSetLayout& reflection,
                 uint32_t setIndex,
                 uint32_t stageFlags,
                 std::shared_ptr<IAllocator> allocator = nullptr,
@@ -54,7 +54,7 @@ namespace magma
         private:
             void validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection) const;
 
-            std::vector<DescriptorSetLayoutBinding *> layoutBindings;
+            const DescriptorSetLayout& reflection;
         };
 
         MAGMA_TYPEDEF_SHARED_PTR(DescriptorSet)
