@@ -33,6 +33,10 @@ namespace magma
         explicit BaseDescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
             uint32_t setIndex,
             std::shared_ptr<IAllocator> allocator = nullptr);
+        explicit BaseDescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
+            uint32_t setIndex,
+            std::shared_ptr<DescriptorSetLayout> setLayout,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         uint32_t getIndex() const noexcept { return setIndex; }
         std::shared_ptr<DescriptorPool> getPool() noexcept { return descriptorPool; }
         std::shared_ptr<const DescriptorPool> getPool() const noexcept { return descriptorPool; }
@@ -42,8 +46,8 @@ namespace magma
         virtual void update() = 0;
 
     protected:
-        uint32_t setIndex;
-        std::shared_ptr<DescriptorPool> descriptorPool;
+        const uint32_t setIndex;
         std::shared_ptr<DescriptorSetLayout> setLayout;
+        std::shared_ptr<DescriptorPool> descriptorPool;
     };
 } // namespace magma

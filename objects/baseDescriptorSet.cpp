@@ -24,8 +24,14 @@ namespace magma
 {
 BaseDescriptorSet::BaseDescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool, uint32_t setIndex,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
+    BaseDescriptorSet(std::move(descriptorPool), setIndex, nullptr, std::move(allocator))
+{}
+
+BaseDescriptorSet::BaseDescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool, uint32_t setIndex, std::shared_ptr<DescriptorSetLayout> setLayout,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, descriptorPool->getDevice(), std::move(allocator)),
     setIndex(setIndex),
+    setLayout(std::move(setLayout)),
     descriptorPool(std::move(descriptorPool))
 {}
 } // namespace magma
