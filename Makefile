@@ -121,9 +121,6 @@ MAGMA_OBJS= \
 	objects/validationCache.o \
 	objects/vertexBuffer.o \
 	\
-	reflection/descriptorSetBinding.o \
-	reflection/descriptorSetReflection.o \
-	\
 	shaders/pipelineShaderStage.o \
 	shaders/rayTracingShaderGroup.o \
 	shaders/shaderBindingTable.o \

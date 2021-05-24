@@ -30,7 +30,6 @@ namespace magma
     class BufferView;
     class UniformTexelBuffer;
     class StorageTexelBuffer;
-    class StorageBuffer;
 #ifdef VK_NV_ray_tracing
     class AccelerationStructure;
 #endif
@@ -181,8 +180,9 @@ namespace magma
         public:
             StorageBuffer(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, binding) {}
-            StorageBuffer& operator=(std::shared_ptr<const magma::StorageBuffer> buffer) noexcept
+            StorageBuffer& operator=(std::shared_ptr<const Buffer> buffer) noexcept
             {
+                MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
                 writeDescriptor(std::move(buffer));
                 return *this;
             }
@@ -218,8 +218,9 @@ namespace magma
         public:
             DynamicStorageBuffer(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1, binding) {}
-            DynamicStorageBuffer& operator=(std::shared_ptr<const magma::StorageBuffer> buffer) noexcept
+            DynamicStorageBuffer& operator=(std::shared_ptr<const Buffer> buffer) noexcept
             {
+                MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
                 writeDescriptor(std::move(buffer));
                 return *this;
             }

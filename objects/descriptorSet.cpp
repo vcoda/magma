@@ -17,27 +17,43 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
+#include <iostream>
 #include "descriptorSet.h"
 #include "descriptorSetLayout.h"
 #include "descriptorPool.h"
 #include "device.h"
-#include "buffer.h"
-#include "bufferView.h"
-#include "image.h"
-#include "imageView.h"
-#include "sampler.h"
-#include "accelerationStructure.h"
+#include "../shaders/shaderReflection.h"
+#include "../shaders/shaderReflectionFactory.h"
+#include "../helpers/spirvReflectionTypeCast.h"
+#include "../helpers/stringize.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
 {
 DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
-    uint32_t setIndex, std::shared_ptr<DescriptorSetLayout> setLayout,
-    uint32_t maxDescriptorWrites /* 16 */):
-    BaseDescriptorSet(std::move(descriptorPool), setIndex, std::move(setLayout))
-{
-    const VkDescriptorSetLayout dereferencedSetLayouts[1] = {*setLayout};
+    uint32_t setIndex, const DescriptorSetReflection& setLayoutReflection, uint32_t stageFlags,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
+    const std::string& shaderFileName /* default */):
+    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, descriptorPool->getDevice(), std::move(allocator)),
+    setIndex(setIndex),
+    setLayoutReflection(setLayoutReflection),
+    setLayout(std::move(setLayout)),
+    descriptorPool(std::move(descriptorPool))
+{   // Validate descriptor bindings through shader reflection
+    if (shaderReflectionFactory && !shaderFileName.empty())
+        validateReflection(shaderReflectionFactory->getReflection(shaderFileName));
+    // Prepare list of native bindings
+    std::vector<VkDescriptorSetLayoutBinding> bindings;
+    for (auto binding : setLayoutReflection.getBindings())
+    {
+        binding->stageFlags = stageFlags;
+        bindings.push_back(*binding);
+    }
+    // Create descriptor set layout
+    setLayout = std::make_shared<magma::DescriptorSetLayout>(device, bindings, hostAllocator, 0);
     // Allocate descriptor set
+    const VkDescriptorSetLayout dereferencedSetLayouts[1] = {*setLayout};
     VkDescriptorSetAllocateInfo allocInfo;
     allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     allocInfo.pNext = nullptr;
@@ -46,316 +62,77 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     allocInfo.pSetLayouts = dereferencedSetLayouts;
     const VkResult result = vkAllocateDescriptorSets(MAGMA_HANDLE(device), &allocInfo, &handle);
     MAGMA_THROW_FAILURE(result, "failed to allocate descriptor set");
-    // Make sure that pointer adresses will be preserved after push_back()
-    bufferDescriptors.reserve(maxDescriptorWrites);
-    imageDescriptors.reserve(maxDescriptorWrites);
-    samplerDescriptors.reserve(maxDescriptorWrites);
-    bufferViews.reserve(maxDescriptorWrites);
-#ifdef VK_EXT_inline_uniform_block
-    inlineUniformBlockDescriptors.reserve(maxDescriptorWrites);
-    inlineUniformBlockAllocator = std::make_unique<core::LinearAllocator>(MAGMA_MAX_INLINE_UNIFORM_BLOCK_POOL_SIZE);
-#endif
-#ifdef VK_NV_ray_tracing
-    accelerationDescriptors.reserve(maxDescriptorWrites);
-    accelerationStructures.reserve(maxDescriptorWrites);
-#endif
-    descriptorWrites.reserve(maxDescriptorWrites);
-    this->handle = handle;
+    // Assign handle
+    for (auto binding : setLayoutReflection.getBindings())
+        binding->descriptorWrite.dstSet = handle;
 }
 
 DescriptorSet::~DescriptorSet()
 {
     vkFreeDescriptorSets(MAGMA_HANDLE(device), *descriptorPool, 1, &handle);
-    release(); // Take care if update() has not been called
-}
-
-void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Buffer> buffer)
-{
-    const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
-    MAGMA_ASSERT((VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER == binding.descriptorType) ||
-                 (VK_DESCRIPTOR_TYPE_STORAGE_BUFFER == binding.descriptorType) ||
-                 (VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC == binding.descriptorType) ||
-                 (VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC == binding.descriptorType));
-    MAGMA_ASSERT(1 == binding.descriptorCount);
-    MAGMA_ASSERT(bufferDescriptors.capacity() - bufferDescriptors.size() >= 1);
-    bufferDescriptors.push_back(buffer->getDescriptor());
-    VkWriteDescriptorSet descriptorWrite;
-    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.pNext = nullptr;
-    descriptorWrite.dstSet = handle;
-    descriptorWrite.dstBinding = binding.binding;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = binding.descriptorCount;
-    descriptorWrite.descriptorType = binding.descriptorType;
-    descriptorWrite.pImageInfo = nullptr;
-    descriptorWrite.pBufferInfo = &bufferDescriptors.back();
-    descriptorWrite.pTexelBufferView = nullptr;
-    descriptorWrites.push_back(descriptorWrite);
-}
-
-void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const ImageView> imageView)
-{
-    const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
-    MAGMA_ASSERT((VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE == binding.descriptorType) ||
-                 (VK_DESCRIPTOR_TYPE_STORAGE_IMAGE == binding.descriptorType) ||
-                 (VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT == binding.descriptorType));
-    MAGMA_ASSERT(1 == binding.descriptorCount);
-    MAGMA_ASSERT(imageDescriptors.capacity() - imageDescriptors.size() >= 1);
-    imageDescriptors.push_back(imageView->getDescriptor(nullptr));
-    VkWriteDescriptorSet descriptorWrite;
-    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.pNext = nullptr;
-    descriptorWrite.dstSet = handle;
-    descriptorWrite.dstBinding = binding.binding;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = binding.descriptorCount;
-    descriptorWrite.descriptorType = binding.descriptorType;
-    descriptorWrite.pImageInfo = &imageDescriptors.back();
-    descriptorWrite.pBufferInfo = nullptr;
-    descriptorWrite.pTexelBufferView = nullptr;
-    descriptorWrites.push_back(descriptorWrite);
-}
-
-void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const Sampler> sampler)
-{
-    const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
-    MAGMA_ASSERT(VK_DESCRIPTOR_TYPE_SAMPLER == binding.descriptorType);
-    MAGMA_ASSERT(1 == binding.descriptorCount);
-    MAGMA_ASSERT(sampler);
-    MAGMA_ASSERT(samplerDescriptors.capacity() - samplerDescriptors.size() >= 1);
-    VkDescriptorImageInfo descriptor;
-    descriptor.sampler = *sampler;
-    descriptor.imageView = VK_NULL_HANDLE;
-    descriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    samplerDescriptors.push_back(descriptor);
-    VkWriteDescriptorSet descriptorWrite;
-    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.pNext = nullptr;
-    descriptorWrite.dstSet = handle;
-    descriptorWrite.dstBinding = binding.binding;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = binding.descriptorCount;
-    descriptorWrite.descriptorType = binding.descriptorType;
-    descriptorWrite.pImageInfo = &samplerDescriptors.back();
-    descriptorWrite.pBufferInfo = nullptr;
-    descriptorWrite.pTexelBufferView = nullptr;
-    descriptorWrites.push_back(descriptorWrite);
-}
-
-void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const ImageView> imageView, std::shared_ptr<const Sampler> sampler)
-{
-    const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
-    MAGMA_ASSERT(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER == binding.descriptorType);
-    MAGMA_ASSERT(1 == binding.descriptorCount);
-    MAGMA_ASSERT(imageView->getImage()->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
-    MAGMA_ASSERT(sampler);
-    MAGMA_ASSERT(imageDescriptors.capacity() - imageDescriptors.size() >= 1);
-    imageDescriptors.push_back(imageView->getDescriptor(std::move(sampler)));
-    VkWriteDescriptorSet descriptorWrite;
-    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.pNext = nullptr;
-    descriptorWrite.dstSet = handle;
-    descriptorWrite.dstBinding = binding.binding;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = binding.descriptorCount;
-    descriptorWrite.descriptorType = binding.descriptorType;
-    descriptorWrite.pImageInfo = &imageDescriptors.back();
-    descriptorWrite.pBufferInfo = nullptr;
-    descriptorWrite.pTexelBufferView = nullptr;
-    descriptorWrites.push_back(descriptorWrite);
-}
-
-void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const BufferView> bufferView)
-{
-    const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
-    MAGMA_ASSERT((VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER == binding.descriptorType) ||
-                 (VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER == binding.descriptorType));
-    MAGMA_ASSERT(1 == binding.descriptorCount);
-    MAGMA_ASSERT(bufferViews.capacity() - bufferViews.size() >= 1);
-    bufferViews.push_back(*bufferView);
-    VkWriteDescriptorSet descriptorWrite;
-    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.pNext = nullptr;
-    descriptorWrite.dstSet = handle;
-    descriptorWrite.dstBinding = binding.binding;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = binding.descriptorCount;
-    descriptorWrite.descriptorType = binding.descriptorType;
-    descriptorWrite.pImageInfo = nullptr;
-    descriptorWrite.pBufferInfo = nullptr;
-    descriptorWrite.pTexelBufferView = &bufferViews.back();
-    descriptorWrites.push_back(descriptorWrite);
-}
-
-#ifdef VK_NV_ray_tracing
-void DescriptorSet::writeDescriptor(uint32_t index, std::shared_ptr<const AccelerationStructure> accelerationStructure)
-{
-    const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
-    MAGMA_ASSERT(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV == binding.descriptorType);
-    MAGMA_ASSERT(accelerationStructures.capacity() - accelerationStructures.size() >= 1);
-    MAGMA_ASSERT(1 == binding.descriptorCount);
-    accelerationStructures.push_back(*accelerationStructure);
-    VkWriteDescriptorSetAccelerationStructureNV descriptor;
-    descriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_NV;
-    descriptor.pNext = nullptr;
-    descriptor.accelerationStructureCount = binding.descriptorCount;
-    descriptor.pAccelerationStructures = &accelerationStructures.back();
-    accelerationDescriptors.push_back(descriptor);
-    VkWriteDescriptorSet descriptorWrite;
-    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.pNext = &accelerationDescriptors.back();
-    descriptorWrite.dstSet = handle;
-    descriptorWrite.dstBinding = binding.binding;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = descriptor.accelerationStructureCount;
-    descriptorWrite.descriptorType = binding.descriptorType;
-    descriptorWrite.pImageInfo = nullptr;
-    descriptorWrite.pBufferInfo = nullptr;
-    descriptorWrite.pTexelBufferView = nullptr;
-    descriptorWrites.push_back(descriptorWrite);
-}
-#endif // VK_NV_ray_tracing
-
-void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::shared_ptr<const Buffer>>& bufferArray)
-{
-    const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
-    MAGMA_ASSERT((VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER == binding.descriptorType) ||
-                 (VK_DESCRIPTOR_TYPE_STORAGE_BUFFER == binding.descriptorType) ||
-                 (VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC == binding.descriptorType) ||
-                 (VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC == binding.descriptorType));
-    MAGMA_ASSERT(binding.descriptorCount > 1);
-    MAGMA_ASSERT(binding.descriptorCount <= bufferArray.size());
-    VkDescriptorBufferInfo *bufferInfo = new VkDescriptorBufferInfo[bufferArray.size()]; // Deleted in release()
-    for (size_t i = 0, n = bufferArray.size(); i < n; ++i)
-        bufferInfo[i] = bufferArray[i]->getDescriptor();
-    VkWriteDescriptorSet descriptorWrite;
-    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.pNext = nullptr;
-    descriptorWrite.dstSet = handle;
-    descriptorWrite.dstBinding = binding.binding;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = binding.descriptorCount;
-    descriptorWrite.descriptorType = binding.descriptorType;
-    descriptorWrite.pImageInfo = nullptr;
-    descriptorWrite.pBufferInfo = bufferInfo;
-    descriptorWrite.pTexelBufferView = nullptr;
-    descriptorWrites.push_back(descriptorWrite);
-}
-
-void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::shared_ptr<const ImageView>>& imageViewArray)
-{
-    const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
-    MAGMA_ASSERT((VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE == binding.descriptorType) ||
-                 (VK_DESCRIPTOR_TYPE_STORAGE_IMAGE == binding.descriptorType));
-    MAGMA_ASSERT(binding.descriptorCount > 1);
-    MAGMA_ASSERT(binding.descriptorCount <= imageViewArray.size());
-    VkDescriptorImageInfo *imageInfo = new VkDescriptorImageInfo[imageViewArray.size()]; // Deleted in release()
-    for (size_t i = 0, n = imageViewArray.size(); i < n; ++i)
-    {
-        MAGMA_ASSERT(imageViewArray[i]->getImage()->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
-        imageInfo[i] = imageViewArray[i]->getDescriptor(nullptr);
-    }
-    VkWriteDescriptorSet descriptorWrite;
-    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.pNext = nullptr;
-    descriptorWrite.dstSet = handle;
-    descriptorWrite.dstBinding = binding.binding;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = binding.descriptorCount;
-    descriptorWrite.descriptorType = binding.descriptorType;
-    descriptorWrite.pImageInfo = imageInfo;
-    descriptorWrite.pBufferInfo = nullptr;
-    descriptorWrite.pTexelBufferView = nullptr;
-    descriptorWrites.push_back(descriptorWrite);
-}
-
-void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::shared_ptr<const ImageView>>& imageViewArray,
-    const std::vector<std::shared_ptr<const Sampler>>& samplerArray)
-{
-    const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
-    MAGMA_ASSERT(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER == binding.descriptorType);
-    MAGMA_ASSERT(binding.descriptorCount > 1);
-    MAGMA_ASSERT(binding.descriptorCount <= imageViewArray.size());
-    MAGMA_ASSERT(imageViewArray.size() <= samplerArray.size());
-    VkDescriptorImageInfo *imageInfo = new VkDescriptorImageInfo[imageViewArray.size()]; // Deleted in release()
-    for (size_t i = 0, n = imageViewArray.size(); i < n; ++i)
-    {
-        MAGMA_ASSERT(imageViewArray[i]->getImage()->getUsage() & (samplerArray[i] ? VK_IMAGE_USAGE_SAMPLED_BIT : VK_IMAGE_USAGE_STORAGE_BIT));
-        imageInfo[i] = imageViewArray[i]->getDescriptor(samplerArray[i]);
-    }
-    VkWriteDescriptorSet descriptorWrite;
-    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.pNext = nullptr;
-    descriptorWrite.dstSet = handle;
-    descriptorWrite.dstBinding = binding.binding;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = binding.descriptorCount;
-    descriptorWrite.descriptorType = binding.descriptorType;
-    descriptorWrite.pImageInfo = imageInfo;
-    descriptorWrite.pBufferInfo = nullptr;
-    descriptorWrite.pTexelBufferView = nullptr;
-    descriptorWrites.push_back(descriptorWrite);
-}
-
-void DescriptorSet::writeDescriptorArray(uint32_t index, const std::vector<std::shared_ptr<const BufferView>>& bufferViewArray)
-{
-    const DescriptorSetLayout::Binding& binding = setLayout->getBinding(index);
-    MAGMA_ASSERT((VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER == binding.descriptorType) ||
-                 (VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER == binding.descriptorType));
-    MAGMA_ASSERT(binding.descriptorCount > 1);
-    MAGMA_ASSERT(binding.descriptorCount <= bufferViewArray.size());
-    VkBufferView *texelBufferView = new VkBufferView[bufferViewArray.size()]; // Deleted in release()
-    for (size_t i = 0, n = bufferViewArray.size(); i < n; ++i)
-        texelBufferView[i] = *bufferViewArray[i];
-    VkWriteDescriptorSet descriptorWrite;
-    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.pNext = nullptr;
-    descriptorWrite.dstSet = handle;
-    descriptorWrite.dstBinding = binding.binding;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = binding.descriptorCount;
-    descriptorWrite.descriptorType = binding.descriptorType;
-    descriptorWrite.pImageInfo = nullptr;
-    descriptorWrite.pBufferInfo = nullptr;
-    descriptorWrite.pTexelBufferView = texelBufferView;
-    descriptorWrites.push_back(descriptorWrite);
 }
 
 bool DescriptorSet::dirty() const noexcept
 {
-    return !descriptorWrites.empty();
+    return setLayoutReflection.dirty();
 }
 
 void DescriptorSet::update()
 {
-    device->updateDescriptorSets(descriptorWrites);
-    release();
-}
-
-void DescriptorSet::release()
-{   // This shouldn't free actual memory (otherwise reserve() should be called again)
-    bufferDescriptors.clear();
-    imageDescriptors.clear();
-    samplerDescriptors.clear();
-    bufferViews.clear();
-#ifdef VK_EXT_inline_uniform_block
-    inlineUniformBlockDescriptors.clear();
-    inlineUniformBlockAllocator->reset();
-#endif
-#ifdef VK_NV_ray_tracing
-    accelerationDescriptors.clear();
-    accelerationStructures.clear();
-#endif  
-    for (auto& descriptor : descriptorWrites)
+    std::vector<VkWriteDescriptorSet> descriptorWrites;
+    descriptorWrites.reserve(setLayoutReflection.getBindings().size());
+    for (auto binding : setLayoutReflection.getBindings())
     {
-        if (descriptor.descriptorCount > 1) // Is array?
-        {   // Free memory allocated in writeDescriptorArray()
-            delete[] descriptor.pImageInfo;
-            delete[] descriptor.pBufferInfo;
-            delete[] descriptor.pTexelBufferView;
+        if (binding->dirty())
+        {
+            descriptorWrites.push_back(binding->getDescriptorWrite());
+            binding->written = false;
         }
     }
-    descriptorWrites.clear();
-    descriptorWrites.shrink_to_fit(); // Free memory
+    if (!descriptorWrites.empty())
+        device->updateDescriptorSets(descriptorWrites);
+}
+
+void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection) const
+{
+    std::vector<const SpvReflectDescriptorSet *> descriptorSets = shaderReflection->enumerateDescriptorSets();
+    if (setIndex >= descriptorSets.size())
+        MAGMA_THROW("set index exceeds number of reflected descriptor sets");
+    const SpvReflectDescriptorSet *descriptorSet = descriptorSets[setIndex];
+    for (const auto definedBinding : setLayoutReflection.getBindings())
+    {
+        const SpvReflectDescriptorBinding *reflectedBinding = nullptr;
+        for (uint32_t i = 0; i < descriptorSet->binding_count; ++i)
+        {
+            if (definedBinding->binding == descriptorSet->bindings[i]->binding)
+            {
+                reflectedBinding = descriptorSet->bindings[i];
+                break;
+            }
+        }
+        if (!reflectedBinding)
+        {
+            std::cout << "warning: binding #" << definedBinding->binding << " not found in the reflection";
+            continue;
+        }
+        const VkDescriptorType reflectedDescriptorType = helpers::castToDescriptorType(reflectedBinding->descriptor_type);
+        if (definedBinding->descriptorType != reflectedDescriptorType)
+        {
+            std::ostringstream oss;
+            oss << "descriptor type mismatch:" << std::endl
+                << "binding #" << definedBinding->binding << std::endl
+                << "expected: " << helpers::stringize(reflectedDescriptorType) << std::endl
+                << "defined: " << helpers::stringize(definedBinding->descriptorType);
+            MAGMA_THROW(oss.str());
+        }
+        if (definedBinding->descriptorCount != reflectedBinding->count)
+        {
+            std::ostringstream oss;
+            oss << "descriptor count mismatch:" << std::endl
+                << "binding #" << definedBinding->binding << std::endl
+                << "expected: " << reflectedBinding->count << ", defined: " << definedBinding->descriptorCount;
+            MAGMA_THROW(oss.str());
+        }
+    }
 }
 } // namespace magma

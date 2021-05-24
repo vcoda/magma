@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
-#include "../descriptors/descriptors.h"
+#include "../descriptors/binding.h"
 
 namespace magma
 {
@@ -32,67 +32,47 @@ namespace magma
     class DescriptorSetLayout : public NonDispatchable<VkDescriptorSetLayout>
     {
     public:
-        struct Binding : VkDescriptorSetLayoutBinding
-        {
-            constexpr Binding(uint32_t binding,
-                const Descriptor& descriptor,
-                VkShaderStageFlags stageFlags) noexcept;
-            std::size_t hash() const noexcept;
-        };
-
-        /* Can be used to initialize a set of immutable samplers.
-           Immutable samplers are permanently bound into the set layout and must not be changed.
-           The sampler objects must not be destroyed before the final use of the set layout
-           and any descriptor pools and sets created using it. */
-
-        class SamplerBinding : public Binding
-        {
-        public:
-            SamplerBinding(uint32_t binding,
-                const Descriptor& descriptor,
-                VkShaderStageFlags stageFlags,
-                const ImmutableSamplerList& immutableSamplers) noexcept;
-            SamplerBinding(const SamplerBinding&) noexcept;
-            SamplerBinding& operator=(const SamplerBinding&) noexcept;
-            ~SamplerBinding();
-            std::size_t hash() const noexcept;
-
-        private:
-            void copyImmutableSamplers() noexcept;
-
-            std::vector<std::shared_ptr<const Sampler>> immutableSamplers;
-        };
-
-    public:
-        explicit DescriptorSetLayout(std::shared_ptr<Device> device,
-            const Binding& binding,
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            VkDescriptorSetLayoutCreateFlags flags = 0);
-        explicit DescriptorSetLayout(std::shared_ptr<Device> device,
-            const SamplerBinding& binding,
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            VkDescriptorSetLayoutCreateFlags flags = 0);
-        explicit DescriptorSetLayout(std::shared_ptr<Device> device,
-            const std::initializer_list<Binding>& bindings,
-            const std::initializer_list<SamplerBinding>& samplerBindings = {},
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            VkDescriptorSetLayoutCreateFlags flags = 0);
         explicit DescriptorSetLayout(std::shared_ptr<Device> device,
             const std::vector<VkDescriptorSetLayoutBinding>& bindings,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkDescriptorSetLayoutCreateFlags flags = 0);
         ~DescriptorSetLayout();
-        uint32_t getBindingCount() const noexcept { return static_cast<uint32_t>(bindings.size()); }
-        uint32_t getSamplerBindingCount() const noexcept { return static_cast<uint32_t>(samplerBindings.size()); }
-        const Binding& getBinding(uint32_t binding) const;
-        const SamplerBinding& getSamplerBinding(uint32_t binding) const;
-        std::size_t getHash() const noexcept;
+        std::size_t getHash() const noexcept { return hash; }
 
     private:
-        std::vector<Binding> bindings;
-        std::vector<SamplerBinding> samplerBindings;
         std::size_t hash;
+    };
+
+    /* A reflection is a mechanism making it possible to investigate yourself.
+       This object contains list of descriptor bindings that is used to investigate
+       their formats and properties at runtime. */
+
+    class DescriptorSetReflection
+    {
+    public:
+        template<class... DescriptorSetLayoutBinding>
+        DescriptorSetReflection(DescriptorSetLayoutBinding&&... args)
+        {
+            // Use "temporary array" idiom
+            // https://stackoverflow.com/questions/28866559/writing-variadic-template-constructor
+            std::initializer_list<int>{
+                (bindings.push_back(std::forward<DescriptorSetLayoutBinding>(args)), void(), 0)...
+            };
+        }
+
+        bool dirty() const noexcept
+        {
+            for (auto binding : bindings)
+                if (binding->dirty())
+                    return true;
+            return false;
+        }
+
+        const std::vector<binding::DescriptorSetLayoutBinding *> getBindings() const noexcept { return bindings; }
+
+    private:
+        std::vector<binding::DescriptorSetLayoutBinding *> bindings;
     };
 } // namespace magma
 
-#include "descriptorSetLayout.inl"
+#define MAGMA_REFLECT(Type, x, ...) Type() : magma::DescriptorSetReflection(x, __VA_ARGS__) {}

@@ -74,15 +74,4 @@ void DescriptorPool::reset()
     const VkResult reset = vkResetDescriptorPool(MAGMA_HANDLE(device), handle, 0);
     MAGMA_THROW_FAILURE(reset, "failed to reset descriptor pool");
 }
-
-std::shared_ptr<DescriptorSet> DescriptorPool::allocateDescriptorSet(std::shared_ptr<DescriptorSetLayout> setLayout,
-    uint32_t maxDescriptorWrites /* 16 */)
-{
-    return std::make_shared<DescriptorSet>(shared_from_this(), 0, std::move(setLayout), maxDescriptorWrites);
-}
-
-void DescriptorPool::freeDescriptorSet(std::shared_ptr<DescriptorSet>& descriptorSet) noexcept
-{
-    descriptorSet.reset();
-}
 } // namespace magma
