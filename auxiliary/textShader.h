@@ -17,6 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../core/noncopyable.h"
+#include "../descriptors/binding.h"
+#include "../objects/descriptorSetLayout.h"
 
 #define MAGMA_TEXT_SHADER_GLYPHS 128
 
@@ -62,6 +64,14 @@ namespace magma
                 float c[4];
             };
 
+            struct SetLayout : public DescriptorSetReflection
+            {
+                binding::UniformBuffer uniforms = 0;
+                binding::StorageBuffer stringBuffer = 1;
+                binding::StorageBuffer glyphBuffer = 2;
+                MAGMA_REFLECT(SetLayout, &uniforms, &stringBuffer, &glyphBuffer)
+            };
+
             const uint32_t maxChars, maxStrings;
             std::shared_ptr<Buffer> uniforms;
             std::shared_ptr<Buffer> stringBuffer;
@@ -70,6 +80,7 @@ namespace magma
             std::shared_ptr<DescriptorSetLayout> descriptorSetLayout;
             std::shared_ptr<DescriptorSet> descriptorSet;
             std::shared_ptr<GraphicsPipeline> pipeline;
+            SetLayout setLayout;
             uint32_t width = 0;
             uint32_t height = 0;
             Glyph glyphs[MAGMA_TEXT_SHADER_GLYPHS];

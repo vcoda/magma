@@ -17,6 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../core/noncopyable.h"
+#include "../descriptors/binding.h"
+#include "../objects/descriptorSetLayout.h"
 #include "../misc/clearValue.h"
 
 namespace magma
@@ -59,14 +61,20 @@ namespace magma
                 bool negativeViewportHeight = false) const noexcept;
 
         private:
+            struct SetLayout : public DescriptorSetReflection
+            {
+                binding::CombinedImageSampler image = 0;
+                MAGMA_REFLECT(SetLayout, &image)
+            };
+
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<DescriptorPool> descriptorPool;
-            std::shared_ptr<DescriptorSetLayout> descriptorSetLayout;
             std::shared_ptr<Sampler> nearestSampler;
             std::shared_ptr<Sampler> bilinearSampler;
             std::shared_ptr<Sampler> cubicSampler;
             std::shared_ptr<GraphicsPipeline> pipeline;
             std::vector<ClearValue> clearValues;
+            mutable std::vector<SetLayout> setLayouts;
             mutable std::map<std::shared_ptr<const ImageView>, std::shared_ptr<DescriptorSet>> descriptorSets;
         };
     } // namespace aux

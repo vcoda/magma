@@ -76,26 +76,19 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
     uniforms = std::make_shared<UniformBuffer<Uniforms>>(device, allocator);
     stringBuffer = std::make_shared<DynamicStorageBuffer>(device, sizeof(String) * maxStrings, false, allocator);
     glyphBuffer = std::make_shared<DynamicStorageBuffer>(device, sizeof(Glyph) * maxChars, false, allocator);
-    // Define layout of descriptor set
+    // Define descriptor set layout
+    setLayout.uniforms = uniforms;
+    setLayout.stringBuffer = stringBuffer;
+    setLayout.glyphBuffer = glyphBuffer;
+    // Create descriptor set
     descriptorPool = std::make_shared<DescriptorPool>(device, 1,
         std::vector<Descriptor>{
             descriptors::UniformBuffer(1),
             descriptors::StorageBuffer(2)
         },
         hostAllocator);
-    descriptorSetLayout = std::make_shared<DescriptorSetLayout>(device,
-        std::initializer_list<DescriptorSetLayout::Binding>{
-            bindings::FragmentStageBinding(0, descriptors::UniformBuffer(1)),
-            bindings::FragmentStageBinding(1, descriptors::StorageBuffer(1)),
-            bindings::FragmentStageBinding(2, descriptors::StorageBuffer(1))
-        },
-        std::initializer_list<DescriptorSetLayout::SamplerBinding>{},
-        hostAllocator, 0);
-    descriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
-    descriptorSet->writeDescriptor(0, uniforms);
-    descriptorSet->writeDescriptor(1, stringBuffer);
-    descriptorSet->writeDescriptor(2, glyphBuffer);
-    std::shared_ptr<PipelineLayout> pipelineLayout = std::make_shared<PipelineLayout>(descriptorSetLayout);
+    descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, 0, setLayout, VK_SHADER_STAGE_FRAGMENT_BIT, hostAllocator);
+    std::shared_ptr<PipelineLayout> pipelineLayout = std::make_shared<PipelineLayout>(descriptorSet->getLayout());
     // Load fullscreen vertex shader
     auto vertexShader = std::make_unique<FillRectangleVertexShader>(device, hostAllocator);
 constexpr

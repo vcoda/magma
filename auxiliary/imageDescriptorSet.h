@@ -17,6 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../core/noncopyable.h"
+#include "../descriptors/binding.h"
+#include "../objects/descriptorSetLayout.h"
 
 namespace magma
 {
@@ -39,16 +41,29 @@ namespace magma
             explicit ImageDescriptorSet(std::shared_ptr<Device> device,
                 std::shared_ptr<const ShaderReflection> reflection,
                 std::shared_ptr<IAllocator> allocator = nullptr);
-            ~ImageDescriptorSet();
             std::shared_ptr<DescriptorSetLayout> getLayout() const noexcept { return descriptorSetLayout; }
             std::shared_ptr<DescriptorSet> getSet() const noexcept { return descriptorSet; }
             void writeDescriptor(std::shared_ptr<const ImageView> imageView,
                 std::shared_ptr<Sampler> sampler);
 
         private:
+            struct ImageSetLayout : public DescriptorSetReflection
+            {
+                binding::CombinedImageSampler image = 0;
+                MAGMA_REFLECT(ImageSetLayout, &image)
+            };
+
+            struct StorageImageSetLayout : public DescriptorSetReflection
+            {
+                binding::StorageImage image = 0;
+                MAGMA_REFLECT(StorageImageSetLayout, &image)
+            };
+
             std::shared_ptr<DescriptorPool> descriptorPool;
             std::shared_ptr<DescriptorSetLayout> descriptorSetLayout;
             std::shared_ptr<DescriptorSet> descriptorSet;
+            ImageSetLayout imageSetLayout;
+            StorageImageSetLayout storageImageSetLayout;
             uint32_t binding;
         };
     } // namespace aux
