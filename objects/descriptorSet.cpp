@@ -118,12 +118,16 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
         const VkDescriptorType reflectedDescriptorType = helpers::castToDescriptorType(reflectedBinding->descriptor_type);
         if (definedBinding->descriptorType != reflectedDescriptorType)
         {
-            std::ostringstream oss;
-            oss << "descriptor type mismatch:" << std::endl
-                << "binding #" << definedBinding->binding << std::endl
-                << "expected: " << helpers::stringize(reflectedDescriptorType) << std::endl
-                << "defined: " << helpers::stringize(definedBinding->descriptorType);
-            MAGMA_THROW(oss.str());
+            if ((VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC == definedBinding->descriptorType) &&
+                (SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_BUFFER != reflectedBinding->descriptor_type))
+            {
+                std::ostringstream oss;
+                oss << "descriptor type mismatch:" << std::endl
+                    << "binding #" << definedBinding->binding << std::endl
+                    << "expected: " << helpers::stringize(reflectedDescriptorType) << std::endl
+                    << "defined: " << helpers::stringize(definedBinding->descriptorType);
+                MAGMA_THROW(oss.str());
+            }
         }
         if (definedBinding->descriptorCount != reflectedBinding->count)
         {
