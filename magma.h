@@ -79,15 +79,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/uniformTexelBuffer.h"
 #include "objects/vertexBuffer.h"
 
-#include "reflection/descriptorSetBinding.h"
-#include "reflection/descriptorSetLayout.h"
-#include "reflection/descriptorSet.h"
-#include "reflection/shaderReflectionFactory.h"
-
 #include "shaders/pipelineShaderStage.h"
 #include "shaders/rayTracingShaderGroup.h"
 #include "shaders/shaderBindingTable.h"
 #include "shaders/shaderReflection.h"
+#include "shaders/shaderReflectionFactory.h"
 #include "shaders/shaderStages.h"
 #include "shaders/specialization.h"
 
@@ -104,9 +100,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "states/viewportState.h"
 
 #include "descriptors/attachment.h"
-#include "descriptors/bindings.h"
 #include "descriptors/descriptors.h"
-#include "descriptors/samplerBindings.h"
+#include "descriptors/binding.h"
+#include "descriptors/bindingArray.h"
 #include "descriptors/subpass.h"
 
 #include "barriers/bufferMemoryBarrier.h"

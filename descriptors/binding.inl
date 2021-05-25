@@ -1,10 +1,10 @@
 namespace magma
 {
-namespace reflection
+namespace binding
 {
 #ifdef VK_EXT_inline_uniform_block
 template<typename UniformBlockType>
-inline InlineUniformBlock<UniformBlockType>::InlineUniformBlock(uint32_t binding /* 0 */) noexcept:
+inline InlineUniformBlock<UniformBlockType>::InlineUniformBlock(uint32_t binding) noexcept:
     DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT, sizeof(UniformBlockType), binding),
     inlineUniformBlockDescriptorWrite{}
 {}
@@ -34,9 +34,9 @@ inline InlineUniformBlock<UniformBlockType>& InlineUniformBlock<UniformBlockType
     descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = nullptr;
-    _dirty = true;
+    written = true;
     return *this;
 }
 #endif // VK_EXT_inline_uniform_block
-} // namespace reflection
+} // namespace binding
 } // namespace magma

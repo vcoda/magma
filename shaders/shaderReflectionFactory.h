@@ -22,18 +22,15 @@ namespace magma
 {
     class ShaderReflection;
 
-    namespace reflection
+    /* An abstract interface to query shader reflection for validatation purposes.
+       By design, library doesn't performs any filesystem I/O operations. Instead,
+       user have to provide an implementation of his loading logic. */
+
+    class IShaderReflectionFactory : public core::IDestructible
     {
-        /* An abstract interface to query shader reflection for validatation purposes.
-           By design, library doesn't performs any filesystem I/O operations. Instead,
-           user have to provide an implementation of his loading logic. */
+    public:
+        virtual std::shared_ptr<const ShaderReflection> getReflection(const std::string& shaderFileName) = 0;
+    };
 
-        class IShaderReflectionFactory : public core::IDestructible
-        {
-        public:
-            virtual std::shared_ptr<const ShaderReflection> getReflection(const std::string& shaderFileName) = 0;
-        };
-
-        MAGMA_TYPEDEF_INTERFACE_SHARED_PTR(ShaderReflectionFactory)
-    } // namespace reflection
+    MAGMA_TYPEDEF_INTERFACE_SHARED_PTR(ShaderReflectionFactory)
 } // namespace magma

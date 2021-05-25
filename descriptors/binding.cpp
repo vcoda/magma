@@ -17,18 +17,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "descriptorSetBinding.h"
+#include "binding.h"
 #include "../objects/sampler.h"
 #include "../objects/accelerationStructure.h"
 
 namespace magma
 {
-namespace reflection
+namespace binding
 {
-DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding):
+DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding) noexcept:
     VkDescriptorSetLayoutBinding{binding, descriptorType, descriptorCount, 0, nullptr},
     descriptorWrite{},
-    _dirty(false)
+    written(false)
 {}
 
 void DescriptorSetLayoutBinding::writeDescriptor(const VkDescriptorImageInfo& info) noexcept
@@ -44,14 +44,12 @@ void DescriptorSetLayoutBinding::writeDescriptor(const VkDescriptorImageInfo& in
     descriptorWrite.pImageInfo = &imageDescriptor;
     descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = nullptr;
-    _dirty = true;
+    written = true;
 }
 
 void DescriptorSetLayoutBinding::writeDescriptor(std::shared_ptr<const Buffer> buffer) noexcept
 {
-    bufferDescriptor.buffer = *buffer;
-    bufferDescriptor.offset = 0;
-    bufferDescriptor.range = VK_WHOLE_SIZE;
+    bufferDescriptor = buffer->getDescriptor();
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     descriptorWrite.pNext = nullptr;
     descriptorWrite.dstSet = VK_NULL_HANDLE;
@@ -62,7 +60,7 @@ void DescriptorSetLayoutBinding::writeDescriptor(std::shared_ptr<const Buffer> b
     descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = &bufferDescriptor;
     descriptorWrite.pTexelBufferView = nullptr;
-    _dirty = true;
+    written = true;
 }
 
 void DescriptorSetLayoutBinding::writeDescriptor(std::shared_ptr<const BufferView> bufferView) noexcept
@@ -78,7 +76,7 @@ void DescriptorSetLayoutBinding::writeDescriptor(std::shared_ptr<const BufferVie
     descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = &texelBufferView;
-    _dirty = true;
+    written = true;
 }
 
 Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept
@@ -109,9 +107,9 @@ AccelerationStructure& AccelerationStructure::operator=(std::shared_ptr<const ma
     descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = nullptr;
-    _dirty = true;
+    written = true;
     return *this;
 }
 #endif // VK_NV_ray_tracing
-} // namespace reflection
+} // namespace binding
 } // namespace magma

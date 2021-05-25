@@ -16,26 +16,15 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "baseDescriptorSet.h"
-#include "../descriptors/bindings.h"
-#include "../core/linearAllocator.h"
-
-#ifdef VK_EXT_inline_uniform_block
-#define MAGMA_MAX_INLINE_UNIFORM_BLOCK_POOL_SIZE 4096
-#endif
+#include "nondispatchable.h"
 
 namespace magma
 {
-    class Device;
     class DescriptorPool;
     class DescriptorSetLayout;
-    class Buffer;
-    class BufferView;
-    class Sampler;
-    class ImageView;
-#ifdef VK_NV_ray_tracing
-    class AccelerationStructure;
-#endif
+    class DescriptorSetReflection;
+    class ShaderReflection;
+    class IShaderReflectionFactory;
     class IAllocator;
 
     /*  A descriptor set object is an opaque object that contains storage for a set of descriptors,
@@ -45,64 +34,31 @@ namespace magma
         the resources that need to be associated with the descriptor set, and determining
         the interface between shader stages and shader resources. */
 
-    class DescriptorSet : public BaseDescriptorSet
+    class DescriptorSet : public NonDispatchable<VkDescriptorSet>
     {
     public:
         explicit DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
             uint32_t setIndex,
-            std::shared_ptr<DescriptorSetLayout> setLayout,
-            uint32_t maxDescriptorWrites = 16);
+            const DescriptorSetReflection& setLayoutReflection,
+            uint32_t stageFlags,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory = nullptr,
+            const std::string& shaderFileName = std::string());
         ~DescriptorSet();
-        void writeDescriptor(uint32_t binding,
-            std::shared_ptr<const Buffer> buffer);
-        void writeDescriptor(uint32_t binding,
-            std::shared_ptr<const ImageView> imageView);
-        void writeDescriptor(uint32_t binding,
-            std::shared_ptr<const Sampler> sampler);
-        void writeDescriptor(uint32_t binding,
-            std::shared_ptr<const ImageView> imageView,
-            std::shared_ptr<const Sampler> sampler);
-        void writeDescriptor(uint32_t binding,
-            std::shared_ptr<const BufferView> bufferView);
-#ifdef VK_EXT_inline_uniform_block
-        template<typename UniformBlockType>
-        void writeInlineUniformDescriptor(uint32_t binding,
-            const UniformBlockType& inlineUniformBlock);
-#endif
-#ifdef VK_NV_ray_tracing
-        void writeDescriptor(uint32_t binding,
-            std::shared_ptr<const AccelerationStructure> accelerationStructure);
-#endif
-        void writeDescriptorArray(uint32_t binding,
-            const std::vector<std::shared_ptr<const Buffer>>& bufferArray);
-        void writeDescriptorArray(uint32_t binding,
-            const std::vector<std::shared_ptr<const ImageView>>& imageViewArray);
-        void writeDescriptorArray(uint32_t binding,
-            const std::vector<std::shared_ptr<const ImageView>>& imageViewArray,
-            const std::vector<std::shared_ptr<const Sampler>>& samplerArray);
-        void writeDescriptorArray(uint32_t binding,
-            const std::vector<std::shared_ptr<const BufferView>>& bufferViewArray);
-        virtual bool dirty() const noexcept override;
-        virtual void update() override;
+        uint32_t getIndex() const noexcept { return setIndex; }
+        std::shared_ptr<DescriptorPool> getPool() noexcept { return descriptorPool; }
+        std::shared_ptr<const DescriptorPool> getPool() const noexcept { return descriptorPool; }
+        std::shared_ptr<DescriptorSetLayout> getLayout() noexcept { return setLayout; }
+        std::shared_ptr<const DescriptorSetLayout> getLayout() const noexcept { return setLayout; }
+        bool dirty() const noexcept;
+        void update();
 
     private:
-        void release();
+        void validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection) const;
 
-        std::vector<VkDescriptorBufferInfo> bufferDescriptors;
-        std::vector<VkDescriptorImageInfo> imageDescriptors;
-        std::vector<VkDescriptorImageInfo> samplerDescriptors;
-        std::vector<VkBufferView> bufferViews;
-#ifdef VK_EXT_inline_uniform_block
-        std::vector<VkWriteDescriptorSetInlineUniformBlockEXT> inlineUniformBlockDescriptors;
-        std::unique_ptr<core::LinearAllocator> inlineUniformBlockAllocator;
-#endif
-#ifdef VK_NV_ray_tracing
-        std::vector<VkWriteDescriptorSetAccelerationStructureNV> accelerationDescriptors;
-        std::vector<VkAccelerationStructureNV> accelerationStructures;
-#endif
-        std::vector<VkWriteDescriptorSet> descriptorWrites;
-        friend class DescriptorPool;
+        const uint32_t setIndex;
+        const DescriptorSetReflection& setLayoutReflection;
+        std::shared_ptr<DescriptorSetLayout> setLayout;
+        std::shared_ptr<DescriptorPool> descriptorPool;
     };
-} // namespace magma
-
-#include "descriptorSet.inl"
+}

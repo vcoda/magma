@@ -54,6 +54,7 @@ namespace magma
         bool storageImage() const noexcept { return usage & VK_IMAGE_USAGE_STORAGE_BIT; }
         bool colorAttachment() const noexcept { return usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT; }
         bool depthStencilAttachment() const noexcept { return usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT; }
+        bool inputAttachment() const noexcept { return usage & VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT; }
         VkSubresourceLayout getSubresourceLayout(uint32_t mipLevel,
             uint32_t arrayLayer = 0) const noexcept;
         VkImageSubresourceLayers getSubresourceLayers(uint32_t mipLevel, 

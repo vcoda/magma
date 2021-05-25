@@ -39,20 +39,15 @@ ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
         if (SPV_REFLECT_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER == binding->descriptor_type)
         {
             descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptors::CombinedImageSampler(1), allocator, false);
-            descriptorSetLayout = std::make_shared<DescriptorSetLayout>(std::move(device),
-                bindings::FragmentStageBinding(binding->binding, descriptors::CombinedImageSampler(1)),
-                std::move(allocator), 0);
+            descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, 0, imageSetLayout, VK_SHADER_STAGE_FRAGMENT_BIT, std::move(allocator));
         }
         else if (SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_IMAGE == binding->descriptor_type)
         {
             descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptors::StorageImage(1), allocator, false);
-            descriptorSetLayout = std::make_shared<DescriptorSetLayout>(std::move(device),
-                bindings::FragmentStageBinding(binding->binding, descriptors::StorageImage(1)),
-                std::move(allocator), 0);
+            descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, 0, storageImageSetLayout, VK_SHADER_STAGE_FRAGMENT_BIT, std::move(allocator));
         }
-        if (descriptorSetLayout)
+        if (descriptorSet)
         {
-            descriptorSet = descriptorPool->allocateDescriptorSet(descriptorSetLayout);
             this->binding = binding->binding;
             break;
         }
@@ -61,17 +56,12 @@ ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
         MAGMA_THROW("image binding not found");
 }
 
-ImageDescriptorSet::~ImageDescriptorSet()
-{
-     descriptorPool->freeDescriptorSet(descriptorSet);
-}
-
 void ImageDescriptorSet::writeDescriptor(std::shared_ptr<const ImageView> imageView, std::shared_ptr<Sampler> sampler)
 {
     if (imageView->getImage()->storageImage())
-        descriptorSet->writeDescriptor(binding, imageView);
+        storageImageSetLayout.image = imageView;
     else
-        descriptorSet->writeDescriptor(binding, imageView, sampler);
+        imageSetLayout.image = {imageView, sampler};
 }
 } // namespace aux
 } // namespace magma

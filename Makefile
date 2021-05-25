@@ -40,6 +40,8 @@ MAGMA_OBJS= \
 	\
 	core/pch.o \
 	\
+	descriptors/binding.o \
+	descriptors/bindingArray.o \
 	descriptors/subpass.o \
 	\
 	exceptions/exception.o \
@@ -118,9 +120,6 @@ MAGMA_OBJS= \
 	objects/uniformTexelBuffer.o \
 	objects/validationCache.o \
 	objects/vertexBuffer.o \
-	\
-	reflection/descriptorSetBinding.o \
-	reflection/descriptorSetReflection.o \
 	\
 	shaders/pipelineShaderStage.o \
 	shaders/rayTracingShaderGroup.o \
