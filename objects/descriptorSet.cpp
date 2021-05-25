@@ -40,7 +40,13 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     setLayoutReflection(setLayoutReflection),
     setLayout(std::move(setLayout)),
     descriptorPool(std::move(descriptorPool))
-{   // Validate descriptor bindings through shader reflection
+{   // Check that all bindings have unique locations
+    std::vector<uint32_t> locations;
+    for (auto binding : setLayoutReflection.getBindings())
+        locations.push_back(binding->binding);
+    if (std::unique(locations.begin(), locations.end()) != locations.end())
+        MAGMA_THROW("elements of descriptor set layout should have unique binding locations");
+    // Validate descriptor bindings through shader reflection
     if (shaderReflectionFactory && !shaderFileName.empty())
         validateReflection(shaderReflectionFactory->getReflection(shaderFileName));
     // Prepare list of native bindings
