@@ -31,9 +31,9 @@ DescriptorSetLayoutBindingArray::~DescriptorSetLayoutBindingArray()
 {
     if (descriptorWrite.pImageInfo)
         delete[] descriptorWrite.pImageInfo;
-    if (descriptorWrite.pBufferInfo)
+    else if (descriptorWrite.pBufferInfo)
         delete[] descriptorWrite.pBufferInfo;
-    if (descriptorWrite.pTexelBufferView)
+    else if (descriptorWrite.pTexelBufferView)
         delete[] descriptorWrite.pTexelBufferView;
 }
 
