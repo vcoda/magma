@@ -41,12 +41,7 @@ StorageBufferArray& StorageBufferArray::operator=(std::initializer_list<std::sha
 {
     VkDescriptorBufferInfo *bufferInfo = new VkDescriptorBufferInfo[bufferArray.size()];
     for (auto& buffer : bufferArray)
-    {
-        bufferInfo[descriptorCount].buffer = *buffer;
-        bufferInfo[descriptorCount].offset = 0;
-        bufferInfo[descriptorCount].range = VK_WHOLE_SIZE;
-        ++descriptorCount;
-    }
+        bufferInfo[descriptorCount++] = buffer->getDescriptor();
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     descriptorWrite.pNext = nullptr;
     descriptorWrite.dstSet = VK_NULL_HANDLE;

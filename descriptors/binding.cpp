@@ -49,9 +49,7 @@ void DescriptorSetLayoutBinding::writeDescriptor(const VkDescriptorImageInfo& in
 
 void DescriptorSetLayoutBinding::writeDescriptor(std::shared_ptr<const Buffer> buffer) noexcept
 {
-    bufferDescriptor.buffer = *buffer;
-    bufferDescriptor.offset = 0;
-    bufferDescriptor.range = VK_WHOLE_SIZE;
+    bufferDescriptor = buffer->getDescriptor();
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     descriptorWrite.pNext = nullptr;
     descriptorWrite.dstSet = VK_NULL_HANDLE;
