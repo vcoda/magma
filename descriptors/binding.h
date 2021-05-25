@@ -226,6 +226,22 @@ namespace magma
             }
         };
 
+        /* An input attachment is a descriptor type associated with an image resource
+           via an image view that can be used for framebuffer local load operations in fragment shaders. */
+           
+        class InputAttachment : public DescriptorSetLayoutBinding
+        {
+        public:
+            InputAttachment(uint32_t binding) noexcept:
+                DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1, binding) {}
+            InputAttachment& operator=(std::shared_ptr<const ImageView> imageView) noexcept
+            {
+                MAGMA_ASSERT(imageView->getImage()->getUsage() & VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
+                writeDescriptor(imageView->getDescriptor(nullptr));
+                return *this;
+            }
+        };
+
         /* An inline uniform block is almost identical to a uniform buffer,
            and differs only in taking its storage directly from the encompassing
            descriptor set instead of being backed by buffer memory. It is typically
