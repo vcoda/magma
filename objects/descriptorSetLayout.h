@@ -74,10 +74,10 @@ namespace magma
     };
 } // namespace magma
 
-#define MAGMA_REFLECT(x, ...)\
+#define MAGMA_REFLECT(...)\
 virtual const std::vector<magma::binding::DescriptorSetLayoutBinding *> getBindings() override\
 {\
     static std::vector<magma::binding::DescriptorSetLayoutBinding *> bindings =\
-        buildArgsList(x, __VA_ARGS__);\
+        buildArgsList(__VA_ARGS__);\
     return bindings;\
 }
