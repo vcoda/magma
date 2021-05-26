@@ -24,7 +24,6 @@ namespace magma
 {
     class Device;
     class DescriptorPool;
-    class DescriptorSet;
     class DescriptorSetLayout;
     class ShaderReflection;
     class ImageView;
@@ -47,16 +46,16 @@ namespace magma
                 std::shared_ptr<Sampler> sampler);
 
         private:
-            struct ImageSetLayout : public DescriptorSetReflection
+            struct ImageSetLayout : public DescriptorSetDeclaration
             {
                 binding::CombinedImageSampler image = 0;
-                MAGMA_REFLECT(ImageSetLayout, &image)
+                MAGMA_REFLECT(&image)
             };
 
-            struct StorageImageSetLayout : public DescriptorSetReflection
+            struct StorageImageSetLayout : public DescriptorSetDeclaration
             {
                 binding::StorageImage image = 0;
-                MAGMA_REFLECT(StorageImageSetLayout, &image)
+                MAGMA_REFLECT(&image)
             };
 
             std::shared_ptr<DescriptorPool> descriptorPool;

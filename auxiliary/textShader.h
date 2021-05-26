@@ -29,7 +29,6 @@ namespace magma
     class RenderPass;
     class DescriptorPool;
     class DescriptorSet;
-    class DescriptorSetLayout;
     class PipelineCache;
     class GraphicsPipeline;
     class Allocator;
@@ -64,12 +63,12 @@ namespace magma
                 float c[4];
             };
 
-            struct SetLayout : public DescriptorSetReflection
+            struct SetLayout : public DescriptorSetDeclaration
             {
                 binding::UniformBuffer uniforms = 0;
                 binding::StorageBuffer stringBuffer = 1;
                 binding::StorageBuffer glyphBuffer = 2;
-                MAGMA_REFLECT(SetLayout, &uniforms, &stringBuffer, &glyphBuffer)
+                MAGMA_REFLECT(&uniforms, &stringBuffer, &glyphBuffer)
             };
 
             const uint32_t maxChars, maxStrings;

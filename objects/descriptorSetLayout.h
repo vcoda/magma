@@ -43,36 +43,41 @@ namespace magma
         std::size_t hash;
     };
 
-    /* A reflection is a mechanism making it possible to investigate yourself.
-       This object contains list of descriptor bindings that is used to investigate
-       their formats and properties at runtime. */
+    /* A descriptor set declaration provides a reflection mechanism making it possible to investigate yourself.
+       It contains list of descriptor bindings to investigate their properties at runtime. */
 
-    class DescriptorSetReflection
+    class DescriptorSetDeclaration
     {
     public:
-        template<class... DescriptorSetLayoutBinding>
-        DescriptorSetReflection(DescriptorSetLayoutBinding&&... args)
-        {
-            // Use "temporary array" idiom
-            // https://stackoverflow.com/questions/28866559/writing-variadic-template-constructor
-            std::initializer_list<int>{
-                (bindings.push_back(std::forward<DescriptorSetLayoutBinding>(args)), void(), 0)...
-            };
-        }
+        virtual const std::vector<binding::DescriptorSetLayoutBinding *> getBindings() = 0;
 
-        bool dirty() const noexcept
+        bool dirty()
         {
-            for (auto binding : bindings)
+            for (auto binding : getBindings())
                 if (binding->dirty())
                     return true;
             return false;
         }
 
-        const std::vector<binding::DescriptorSetLayoutBinding *> getBindings() const noexcept { return bindings; }
-
-    private:
-        std::vector<binding::DescriptorSetLayoutBinding *> bindings;
+    protected:
+        template<class... DescriptorSetLayoutBinding>
+        static std::vector<binding::DescriptorSetLayoutBinding *> buildArgsList(DescriptorSetLayoutBinding&&... args)
+        {
+            std::vector<binding::DescriptorSetLayoutBinding *> bindings;
+            // Use "temporary array" idiom
+            // https://stackoverflow.com/questions/28866559/writing-variadic-template-constructor
+            std::initializer_list<int>{
+                (bindings.push_back(std::forward<DescriptorSetLayoutBinding>(args)), void(), 0)...
+            };
+            return bindings;
+        }
     };
 } // namespace magma
 
-#define MAGMA_REFLECT(Type, x, ...) Type() : magma::DescriptorSetReflection(x, __VA_ARGS__) {}
+#define MAGMA_REFLECT(x, ...)\
+virtual const std::vector<magma::binding::DescriptorSetLayoutBinding *> getBindings() override\
+{\
+    static std::vector<magma::binding::DescriptorSetLayoutBinding *> bindings =\
+        buildArgsList(x, __VA_ARGS__);\
+    return bindings;\
+}

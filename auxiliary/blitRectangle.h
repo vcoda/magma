@@ -32,7 +32,6 @@ namespace magma
     class Sampler;
     class DescriptorPool;
     class DescriptorSet;
-    class DescriptorSetLayout;
     class GraphicsPipeline;
     class PipelineCache;
     class CommandBuffer;
@@ -61,10 +60,10 @@ namespace magma
                 bool negativeViewportHeight = false) const noexcept;
 
         private:
-            struct SetLayout : public DescriptorSetReflection
+            struct SetLayout : public DescriptorSetDeclaration
             {
                 binding::CombinedImageSampler image = 0;
-                MAGMA_REFLECT(SetLayout, &image)
+                MAGMA_REFLECT(&image)
             };
 
             std::shared_ptr<RenderPass> renderPass;
