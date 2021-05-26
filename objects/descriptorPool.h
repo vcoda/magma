@@ -37,12 +37,14 @@ namespace magma
             const Descriptor& descriptor,
             std::shared_ptr<IAllocator> allocator = nullptr,
             bool freeDescriptorSet = false,
+            bool updateAfterBind = false,
             uint32_t maxInlineUniformBlockBindings = 0);
         explicit DescriptorPool(std::shared_ptr<Device> device,
             uint32_t maxSets,
             const std::vector<Descriptor>& descriptors,
             std::shared_ptr<IAllocator> allocator = nullptr,
             bool freeDescriptorSet = false,
+            bool updateAfterBind = false,
             uint32_t maxInlineUniformBlockBindings = 0);
         ~DescriptorPool();
         void reset();

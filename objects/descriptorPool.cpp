@@ -30,13 +30,16 @@ namespace magma
 DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const Descriptor& descriptor,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool freeDescriptorSet /* false */,
+    bool updateAfterBind /* false */,
     uint32_t maxInlineUniformBlockBindings /* 0 */):
-    DescriptorPool(std::move(device), maxSets, std::vector<Descriptor>{descriptor}, std::move(allocator), freeDescriptorSet, maxInlineUniformBlockBindings)
+    DescriptorPool(std::move(device), maxSets, std::vector<Descriptor>{descriptor}, std::move(allocator),
+        freeDescriptorSet, updateAfterBind, maxInlineUniformBlockBindings)
 {}
 
 DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const std::vector<Descriptor>& descriptors,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool freeDescriptorSet /* false */,
+    bool updateAfterBind /* false */,
     uint32_t maxInlineUniformBlockBindings /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_POOL, std::move(device), std::move(allocator))
 {
@@ -47,6 +50,12 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets,
     poolInfo.flags = 0;
     if (freeDescriptorSet)
         poolInfo.flags |= VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+    if (updateAfterBind)
+    {
+#ifdef VK_EXT_descriptor_indexing
+        poolInfo.flags |= VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT;
+#endif
+    }
     poolInfo.maxSets = maxSets;
     poolInfo.poolSizeCount = MAGMA_COUNT(descriptors);
     poolInfo.pPoolSizes = descriptors.data();
