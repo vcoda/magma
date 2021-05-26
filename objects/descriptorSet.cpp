@@ -74,7 +74,8 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
 
 DescriptorSet::~DescriptorSet()
 {
-    vkFreeDescriptorSets(MAGMA_HANDLE(device), *descriptorPool, 1, &handle);
+    if (descriptorPool->canFreeDescriptorSet())
+        vkFreeDescriptorSets(MAGMA_HANDLE(device), *descriptorPool, 1, &handle);
 }
 
 bool DescriptorSet::dirty() const

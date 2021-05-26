@@ -41,7 +41,8 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets,
     bool freeDescriptorSet /* false */,
     bool updateAfterBind /* false */,
     uint32_t maxInlineUniformBlockBindings /* 0 */):
-    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_POOL, std::move(device), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_POOL, std::move(device), std::move(allocator)),
+    freeDescriptorSet(freeDescriptorSet)
 {
     MAGMA_UNUSED(maxInlineUniformBlockBindings);
     VkDescriptorPoolCreateInfo poolInfo;

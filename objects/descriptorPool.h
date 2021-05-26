@@ -48,5 +48,9 @@ namespace magma
             uint32_t maxInlineUniformBlockBindings = 0);
         ~DescriptorPool();
         void reset();
+        bool canFreeDescriptorSet() const noexcept { return freeDescriptorSet; }
+
+    private:
+        const bool freeDescriptorSet;
     };
 } // namespace magma
