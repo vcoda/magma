@@ -60,7 +60,7 @@ AccelerationStructureInstanceBuffer::AccelerationStructureInstanceBuffer(std::sh
     instances(nullptr),
     instanceCount(instanceCount)
 {
-    static_assert(sizeof(AccelerationStructureInstance) == sizeof(VkAccelerationStructureInstanceKHR), "invalid structure size");
+    static_assert(sizeof(AccelerationStructureInstance) == sizeof(VkAccelerationStructureInstanceNV), "invalid structure size");
     instances = stagingBuffer->getMemory()->map<AccelerationStructureInstance>();
     if (!instances)
         throw exception::MemoryMapFailed("failed to map staging buffer of acceleration structure instances");
