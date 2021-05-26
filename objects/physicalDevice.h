@@ -130,10 +130,10 @@ namespace magma
         VkPhysicalDeviceShaderClockFeaturesKHR getShaderClockFeatures() const;
 #endif
 #ifdef VK_KHR_shader_float16_int8
-        VkPhysicalDeviceShaderFloat16Int8FeaturesKHR getShaderFloat16Int8Features() const;
+        VkPhysicalDeviceFloat16Int8FeaturesKHR getShaderFloat16Int8Features() const;
 #endif
 #ifdef VK_KHR_variable_pointers
-        VkPhysicalDeviceVariablePointersFeaturesKHR getVariablePointersFeatures() const;
+        VkPhysicalDeviceVariablePointerFeaturesKHR getVariablePointersFeatures() const;
 #endif
 #ifdef VK_KHR_vulkan_memory_model
         VkPhysicalDeviceVulkanMemoryModelFeaturesKHR getVulkanMemoryModelFeatures() const;

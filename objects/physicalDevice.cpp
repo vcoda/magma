@@ -426,16 +426,16 @@ VkPhysicalDeviceShaderClockFeaturesKHR PhysicalDevice::getShaderClockFeatures() 
 #endif // VK_KHR_shader_clock
 
 #ifdef VK_KHR_shader_float16_int8
-VkPhysicalDeviceShaderFloat16Int8FeaturesKHR PhysicalDevice::getShaderFloat16Int8Features() const
+VkPhysicalDeviceFloat16Int8FeaturesKHR PhysicalDevice::getShaderFloat16Int8Features() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(ShaderFloat16Int8FeaturesKHR, SHADER_FLOAT16_INT8_FEATURES_KHR);
+    return PHYSICAL_DEVICE_GET_FEATURES(Float16Int8FeaturesKHR, FLOAT16_INT8_FEATURES_KHR);
 }
 #endif // VK_KHR_shader_float16_int8
 
 #ifdef VK_KHR_variable_pointers
-VkPhysicalDeviceVariablePointersFeaturesKHR PhysicalDevice::getVariablePointersFeatures() const
+VkPhysicalDeviceVariablePointerFeaturesKHR PhysicalDevice::getVariablePointersFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(VariablePointersFeaturesKHR, VARIABLE_POINTERS_FEATURES_KHR);
+    return PHYSICAL_DEVICE_GET_FEATURES(VariablePointerFeaturesKHR, VARIABLE_POINTER_FEATURES_KHR);
 }
 #endif // VK_KHR_variable_pointers
 
