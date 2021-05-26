@@ -22,7 +22,7 @@ namespace magma
 {
     class DescriptorPool;
     class DescriptorSetLayout;
-    class DescriptorSetReflection;
+    class DescriptorSetDeclaration;
     class ShaderReflection;
     class IShaderReflectionFactory;
     class IAllocator;
@@ -39,7 +39,7 @@ namespace magma
     public:
         explicit DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
             uint32_t setIndex,
-            const DescriptorSetReflection& setLayoutReflection,
+            DescriptorSetDeclaration& setLayoutDecl,
             uint32_t stageFlags,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory = nullptr,
@@ -50,14 +50,14 @@ namespace magma
         std::shared_ptr<const DescriptorPool> getPool() const noexcept { return descriptorPool; }
         std::shared_ptr<DescriptorSetLayout> getLayout() noexcept { return setLayout; }
         std::shared_ptr<const DescriptorSetLayout> getLayout() const noexcept { return setLayout; }
-        bool dirty() const noexcept;
+        bool dirty() const;
         void update();
 
     private:
         void validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection) const;
 
         const uint32_t setIndex;
-        const DescriptorSetReflection& setLayoutReflection;
+        DescriptorSetDeclaration& setLayoutDecl;
         std::shared_ptr<DescriptorSetLayout> setLayout;
         std::shared_ptr<DescriptorPool> descriptorPool;
     };

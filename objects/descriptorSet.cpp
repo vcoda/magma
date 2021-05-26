@@ -31,18 +31,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
-    uint32_t setIndex, const DescriptorSetReflection& setLayoutReflection, uint32_t stageFlags,
+    uint32_t setIndex, DescriptorSetDeclaration& setLayoutDecl, uint32_t stageFlags,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
     const std::string& shaderFileName /* default */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, descriptorPool->getDevice(), std::move(allocator)),
     setIndex(setIndex),
-    setLayoutReflection(setLayoutReflection),
-    setLayout(std::move(setLayout)),
+    setLayoutDecl(setLayoutDecl),
     descriptorPool(std::move(descriptorPool))
 {   // Check that all bindings have unique locations
     std::vector<uint32_t> locations;
-    for (auto binding : setLayoutReflection.getBindings())
+    for (auto binding : setLayoutDecl.getBindings())
         locations.push_back(binding->binding);
     if (std::unique(locations.begin(), locations.end()) != locations.end())
         MAGMA_THROW("elements of descriptor set layout should have unique binding locations");
@@ -51,7 +50,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
         validateReflection(shaderReflectionFactory->getReflection(shaderFileName));
     // Prepare list of native bindings
     std::vector<VkDescriptorSetLayoutBinding> bindings;
-    for (auto binding : setLayoutReflection.getBindings())
+    for (auto binding : setLayoutDecl.getBindings())
     {
         binding->stageFlags = stageFlags;
         bindings.push_back(*binding);
@@ -69,7 +68,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     const VkResult result = vkAllocateDescriptorSets(MAGMA_HANDLE(device), &allocInfo, &handle);
     MAGMA_THROW_FAILURE(result, "failed to allocate descriptor set");
     // Assign handle
-    for (auto binding : setLayoutReflection.getBindings())
+    for (auto binding : setLayoutDecl.getBindings())
         binding->descriptorWrite.dstSet = handle;
 }
 
@@ -78,16 +77,16 @@ DescriptorSet::~DescriptorSet()
     vkFreeDescriptorSets(MAGMA_HANDLE(device), *descriptorPool, 1, &handle);
 }
 
-bool DescriptorSet::dirty() const noexcept
+bool DescriptorSet::dirty() const
 {
-    return setLayoutReflection.dirty();
+    return setLayoutDecl.dirty();
 }
 
 void DescriptorSet::update()
 {
     std::vector<VkWriteDescriptorSet> descriptorWrites;
-    descriptorWrites.reserve(setLayoutReflection.getBindings().size());
-    for (auto binding : setLayoutReflection.getBindings())
+    descriptorWrites.reserve(setLayoutDecl.getBindings().size());
+    for (auto binding : setLayoutDecl.getBindings())
     {
         if (binding->dirty())
         {
@@ -105,7 +104,7 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
     if (setIndex >= descriptorSets.size())
         MAGMA_THROW("set index exceeds number of reflected descriptor sets");
     const SpvReflectDescriptorSet *descriptorSet = descriptorSets[setIndex];
-    for (const auto definedBinding : setLayoutReflection.getBindings())
+    for (const auto definedBinding : setLayoutDecl.getBindings())
     {
         const SpvReflectDescriptorBinding *reflectedBinding = nullptr;
         for (uint32_t i = 0; i < descriptorSet->binding_count; ++i)
