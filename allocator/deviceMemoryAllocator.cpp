@@ -175,7 +175,7 @@ VkResult DeviceMemoryAllocator::bindMemory(DeviceMemoryBlock memory, VkDeviceSiz
     case VK_OBJECT_TYPE_IMAGE:
         return vmaBindImageMemory2(allocator, allocation, offset, MAGMA_IMAGE_HANDLE(handle), nullptr);
     default:
-        return VK_ERROR_UNKNOWN;
+        return VK_ERROR_FORMAT_NOT_SUPPORTED;
     }
 }
 
