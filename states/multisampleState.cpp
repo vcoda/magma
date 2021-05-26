@@ -61,7 +61,7 @@ MultisampleCoverageState::~MultisampleCoverageState()
     delete[] pSampleMask;
 }
 
-namespace renderstates
+namespace renderstate
 {
 static constexpr uint64_t coverageMask = 0xFFFFFFFFFFFFFFFFULL;
 
@@ -78,5 +78,5 @@ const MultisampleCoverageState alphaToOneMultisample8(VK_SAMPLE_COUNT_8_BIT, cov
 const MultisampleCoverageState alphaToOneMultisample16(VK_SAMPLE_COUNT_16_BIT, coverageMask, false, true);
 const MultisampleCoverageState alphaToOneMultisample32(VK_SAMPLE_COUNT_32_BIT, coverageMask, false, true);
 const MultisampleCoverageState alphaToOneMultisample64(VK_SAMPLE_COUNT_64_BIT, coverageMask, false, true);
-} // namespace renderstates
+} // namespace renderstate
 } // namespace magma

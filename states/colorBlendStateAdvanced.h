@@ -65,7 +65,7 @@ namespace magma
 
 namespace magma
 {
-    namespace blendstates
+    namespace blendstate
     {
 #ifdef VK_EXT_blend_operation_advanced
         namespace advanced
@@ -251,5 +251,5 @@ namespace magma
             constexpr AdvancedColorBlendAttachmentState blendBlue(VK_BLEND_OP_BLUE_EXT); // (R,G,B,A) = (Rd, Gd, Bs', Ad)
         } // namespace advanced
 #endif // VK_EXT_blend_operation_advanced
-    } // namespace blendstates
+    } // namespace blendstate
 } // namespace magma

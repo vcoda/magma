@@ -37,7 +37,7 @@ namespace magma
         constexpr bool operator==(const StencilOpState&) const noexcept;
     };
 
-    namespace renderstates
+    namespace renderstate
     {
         constexpr StencilOpState stencilAlwaysDontWrite(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0x0, 0x0, 0);
     }
@@ -52,8 +52,8 @@ namespace magma
     {
         constexpr DepthStencilState(VkCompareOp depthCompareOp,
             bool depthWriteEnable,
-            const StencilOpState& front = renderstates::stencilAlwaysDontWrite,
-            const StencilOpState& back = renderstates::stencilAlwaysDontWrite) noexcept;
+            const StencilOpState& front = renderstate::stencilAlwaysDontWrite,
+            const StencilOpState& back = renderstate::stencilAlwaysDontWrite) noexcept;
         constexpr DepthStencilState(const DepthStencilState& state,
             const StencilOpState& front,
             const StencilOpState& back) noexcept;
@@ -77,7 +77,7 @@ namespace magma
 
 namespace magma
 {
-    namespace renderstates
+    namespace renderstate
     {
         constexpr StencilOpState stencilZeroDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_ZERO, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
         constexpr StencilOpState stencilZeroDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_ZERO, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
@@ -120,5 +120,5 @@ namespace magma
         // Carmack's reverse
         constexpr DepthStencilState shadowVolumeDepthFailClampStencil(depthLessDontWrite, stencilDecrementClampDepthFail, stencilIncrementClampDepthFail);
         constexpr DepthStencilState shadowVolumeDepthFailWrapStencil(depthLessDontWrite, stencilDecrementWrapDepthFail, stencilIncrementWrapDepthFail);
-    } // namespace renderstates
+    } // namespace renderstate
 } // namespace magma

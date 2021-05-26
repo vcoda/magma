@@ -101,7 +101,7 @@ namespace magma
 
 namespace magma
 {
-    namespace renderstates
+    namespace renderstate
     {
         extern const VertexInputStructure<int> nullVertexInput;
 
@@ -148,7 +148,7 @@ namespace magma
         extern const VertexInputStructure<vertexlayout::Pos3fNormal3fColor3f> pos3fNormal3fColor3f;
         extern const VertexInputStructure<vertexlayout::Pos3fNormal3fColor4f> pos3fNormal3fColor4f;
         extern const VertexInputStructure<vertexlayout::Pos3fNormal3fColor4b> pos3fNormal3fColor4b;
-    } // namespace renderstates
+    } // namespace renderstate
 } // namespace magma
 
 #include "vertexInputStructure.inl"

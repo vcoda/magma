@@ -47,10 +47,10 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount,
     pipelineCache(std::make_shared<GraphicsPipelineCache>(this->device, std::move(pipelineCache), this->MAGMA_HOST_ALLOCATOR(allocator))),
     vertexShader(VertexShaderStage(createShader(true), "main")),
     fragmentShader(FragmentShaderStage(createShader(false), "main")),
-    rasterizationState(renderstates::fillCullBackCCW),
-    multisampleState(renderstates::dontMultisample),
-    depthStencilState(renderstates::depthAlwaysDontWrite),
-    colorBlendState(renderstates::dontBlendRgba) // Make copyable
+    rasterizationState(renderstate::fillCullBackCCW),
+    multisampleState(renderstate::dontMultisample),
+    depthStencilState(renderstate::depthAlwaysDontWrite),
+    colorBlendState(renderstate::dontBlendRgba) // Make copyable
 {
     setIdentity();
     if (!this->layout)
@@ -178,17 +178,17 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTop
         {2, &Vertex::color},
         {3, &Vertex::texcoord}});
     constexpr const InputAssemblyState *inputAssemblyStates[] = {
-        &renderstates::pointList,
-        &renderstates::lineList,
-        &renderstates::lineStrip,
-        &renderstates::triangleList,
-        &renderstates::triangleStrip,
-        &renderstates::triangleFan,
-        &renderstates::lineListWithAdjacency,
-        &renderstates::lineStripWithAdjacency,
-        &renderstates::triangleListWithAdjacency,
-        &renderstates::triangleStripWithAdjacency,
-        &renderstates::patchList};
+        &renderstate::pointList,
+        &renderstate::lineList,
+        &renderstate::lineStrip,
+        &renderstate::triangleList,
+        &renderstate::triangleStrip,
+        &renderstate::triangleFan,
+        &renderstate::lineListWithAdjacency,
+        &renderstate::lineStripWithAdjacency,
+        &renderstate::triangleListWithAdjacency,
+        &renderstate::triangleStripWithAdjacency,
+        &renderstate::patchList};
     // Create new or grab existing graphics pipeline
     return pipelineCache->lookupPipeline({vertexShader, fragmentShader},
         vertexInputState, *inputAssemblyStates[topology],

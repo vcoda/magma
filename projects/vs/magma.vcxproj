@@ -195,7 +195,7 @@
     <ClInclude Include="..\..\core\zeroMemory.h" />
     <ClInclude Include="..\..\descriptors\attachment.h" />
     <ClInclude Include="..\..\descriptors\bindingArray.h" />
-    <ClInclude Include="..\..\descriptors\descriptors.h" />
+    <ClInclude Include="..\..\descriptors\descriptor.h" />
     <ClInclude Include="..\..\descriptors\binding.h" />
     <ClInclude Include="..\..\descriptors\subpass.h" />
     <ClInclude Include="..\..\exceptions\compileError.h" />

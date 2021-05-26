@@ -23,7 +23,7 @@ namespace magma
 {
 using namespace vertexlayout;
 
-namespace renderstates
+namespace renderstate
 {
 static constexpr VertexInputAttribute::Normalized<true> normalized;
 
@@ -134,5 +134,5 @@ const VertexInputStructure<Pos3fNormal3fColor4b> pos3fNormal3fColor4b(0, {
     {0, &Pos3fNormal3fColor4b::position},
     {1, &Pos3fNormal3fColor4b::normal},
     {2, &Pos3fNormal3fColor4b::attrib, normalized}});
-} // namespace renderstates
+} // namespace renderstate
 } // namespace magma

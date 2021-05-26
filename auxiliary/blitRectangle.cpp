@@ -70,7 +70,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
     constexpr uint32_t maxDescriptorSets = 10;
     descriptorPool = std::make_shared<DescriptorPool>(device, maxDescriptorSets,
-        descriptors::CombinedImageSampler(maxDescriptorSets), allocator);
+        descriptor::CombinedImageSampler(maxDescriptorSets), allocator);
     static SetLayout setLayout;
     std::shared_ptr<DescriptorSet> descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, 0, setLayout, VK_SHADER_STAGE_FRAGMENT_BIT, allocator);
     // Create texture samplers
@@ -93,23 +93,23 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     };
     const VkSampleCountFlagBits samples = this->renderPass->getAttachments().front().samples;
     const MultisampleState multisampleState = 
-        (samples & VK_SAMPLE_COUNT_2_BIT) ? renderstates::multisample2 :
-        (samples & VK_SAMPLE_COUNT_4_BIT) ? renderstates::multisample4 : 
-        (samples & VK_SAMPLE_COUNT_8_BIT) ? renderstates::multisample8 :
-        (samples & VK_SAMPLE_COUNT_16_BIT) ? renderstates::multisample16 :
-        (samples & VK_SAMPLE_COUNT_32_BIT) ? renderstates::multisample32 :
-        (samples & VK_SAMPLE_COUNT_64_BIT) ? renderstates::multisample64 :
-        renderstates::dontMultisample;
+        (samples & VK_SAMPLE_COUNT_2_BIT) ? renderstate::multisample2 :
+        (samples & VK_SAMPLE_COUNT_4_BIT) ? renderstate::multisample4 : 
+        (samples & VK_SAMPLE_COUNT_8_BIT) ? renderstate::multisample8 :
+        (samples & VK_SAMPLE_COUNT_16_BIT) ? renderstate::multisample16 :
+        (samples & VK_SAMPLE_COUNT_32_BIT) ? renderstate::multisample32 :
+        (samples & VK_SAMPLE_COUNT_64_BIT) ? renderstate::multisample64 :
+        renderstate::dontMultisample;
     // Create blit pipeline
     auto pipelineLayout = std::make_shared<PipelineLayout>(descriptorSet->getLayout(), allocator);
     pipeline = std::make_shared<GraphicsPipeline>(std::move(device),
         shaderStages,
-        renderstates::nullVertexInput,
-        renderstates::triangleList,
+        renderstate::nullVertexInput,
+        renderstate::triangleList,
         vertexShader->getRasterizationState(),
         multisampleState,
-        renderstates::depthAlwaysDontWrite,
-        renderstates::dontBlendRgba,
+        renderstate::depthAlwaysDontWrite,
+        renderstate::dontBlendRgba,
         std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
         std::move(pipelineLayout),
         this->renderPass, 0,

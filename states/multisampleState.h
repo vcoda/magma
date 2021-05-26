@@ -63,7 +63,7 @@ namespace magma
 
 namespace magma
 {
-    namespace renderstates
+    namespace renderstate
     {
         constexpr MultisampleState dontMultisample(VK_SAMPLE_COUNT_1_BIT);
 
@@ -87,5 +87,5 @@ namespace magma
         extern const MultisampleCoverageState alphaToOneMultisample16;
         extern const MultisampleCoverageState alphaToOneMultisample32;
         extern const MultisampleCoverageState alphaToOneMultisample64;
-    } // namespace renderstates
+    } // namespace renderstate
 } // namespace magma

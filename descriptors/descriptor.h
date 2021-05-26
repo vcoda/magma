@@ -32,7 +32,7 @@ namespace magma
         {}
     };
 
-    namespace descriptors
+    namespace descriptor
     {
         struct Sampler : Descriptor
         {
@@ -103,5 +103,5 @@ namespace magma
             constexpr AccelerationStructure(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV, count) {}
         };
 #endif
-    } // namespace descriptors
+    } // namespace descriptor
 } // namespace magma

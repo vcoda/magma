@@ -606,7 +606,7 @@
     <ClInclude Include="..\..\reflection\shaderReflectionFactory.h">
       <Filter>Header Files\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\descriptors.h">
+    <ClInclude Include="..\..\descriptors\descriptor.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\descriptors\bindingArray.h">

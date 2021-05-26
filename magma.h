@@ -100,9 +100,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "states/viewportState.h"
 
 #include "descriptors/attachment.h"
-#include "descriptors/descriptors.h"
 #include "descriptors/binding.h"
 #include "descriptors/bindingArray.h"
+#include "descriptors/descriptor.h"
 #include "descriptors/subpass.h"
 
 #include "barriers/bufferMemoryBarrier.h"

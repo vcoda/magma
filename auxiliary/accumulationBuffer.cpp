@@ -86,18 +86,18 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     auto pipelineLayout = std::make_shared<PipelineLayout>(descriptorSet->getLayout(), pushConstantRange, hostAllocator);
     blendPipeline = std::make_shared<GraphicsPipeline>(std::move(device),
         shaderStages,
-        renderstates::nullVertexInput,
-        renderstates::triangleList,
+        renderstate::nullVertexInput,
+        renderstate::triangleList,
         TesselationState(),
         ViewportState(0.f, 0.f, extent),
         vertexShader->getRasterizationState(),
-        renderstates::dontMultisample,
-        renderstates::depthAlwaysDontWrite,
-        (1 == components) ? renderstates::blendNormalR :
-        (2 == components) ? renderstates::blendNormalRg :
-        (3 == components) ? renderstates::blendNormalRgb :
-        (4 == components) ? renderstates::blendNormalRgba :
-                            renderstates::dontBlendRgba,
+        renderstate::dontMultisample,
+        renderstate::depthAlwaysDontWrite,
+        (1 == components) ? renderstate::blendNormalR :
+        (2 == components) ? renderstate::blendNormalRg :
+        (3 == components) ? renderstate::blendNormalRgb :
+        (4 == components) ? renderstate::blendNormalRgba :
+        renderstate::dontBlendRgba,
         std::initializer_list<VkDynamicState>{},
         std::move(pipelineLayout),
         renderPass, 0,

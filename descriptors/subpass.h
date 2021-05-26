@@ -62,7 +62,7 @@ namespace magma
 
 namespace magma
 {
-    namespace subpasses
+    namespace subpass
     {
         extern const SubpassDescription colorAttachment;
         extern const SubpassDescription colorDepthStencilAttachment;

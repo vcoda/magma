@@ -63,9 +63,9 @@ const RasterizationState& FillRectangleVertexShader::getRasterizationState() con
 {
     return
 #ifdef VK_NV_fill_rectangle
-    hasFillRectangle ? renderstates::fillRectangleCullNoneCCW :
+        hasFillRectangle ? renderstate::fillRectangleCullNoneCCW :
 #endif
-        renderstates::fillCullNoneCCW;
+        renderstate::fillCullNoneCCW;
 }
 } // namespace aux
 } // namespace magma

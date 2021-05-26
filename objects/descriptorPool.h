@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
-#include "../descriptors/descriptors.h"
+#include "../descriptors/descriptor.h"
 
 namespace magma
 {

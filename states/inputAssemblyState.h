@@ -36,7 +36,7 @@ namespace magma
 
 namespace magma
 {
-    namespace renderstates
+    namespace renderstate
     {
         constexpr InputAssemblyState pointList(VK_PRIMITIVE_TOPOLOGY_POINT_LIST);
         constexpr InputAssemblyState lineList(VK_PRIMITIVE_TOPOLOGY_LINE_LIST);
@@ -61,5 +61,5 @@ namespace magma
         constexpr InputAssemblyState triangleListWithAdjacencyRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY, true);
         constexpr InputAssemblyState triangleStripWithAdjacencyRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY, true);
         constexpr InputAssemblyState patchListRestart(VK_PRIMITIVE_TOPOLOGY_PATCH_LIST, true);
-    } // namespace renderstates
+    } // namespace renderstate
 } // namespace magma

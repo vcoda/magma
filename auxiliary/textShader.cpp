@@ -83,8 +83,8 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
     // Create descriptor set
     descriptorPool = std::make_shared<DescriptorPool>(device, 1,
         std::vector<Descriptor>{
-            descriptors::UniformBuffer(1),
-            descriptors::StorageBuffer(2)
+            descriptor::UniformBuffer(1),
+            descriptor::StorageBuffer(2)
         },
         hostAllocator);
     descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, 0, setLayout, VK_SHADER_STAGE_FRAGMENT_BIT, hostAllocator);
@@ -102,12 +102,12 @@ constexpr
     // Create font pipeline
     pipeline = std::make_shared<GraphicsPipeline>(std::move(device),
         shaderStages,
-        renderstates::nullVertexInput,
-        renderstates::triangleList,
-        renderstates::fillCullNoneCCW,
-        renderstates::dontMultisample,
-        renderstates::depthAlwaysDontWrite,
-        renderstates::blendNormalRgb,
+        renderstate::nullVertexInput,
+        renderstate::triangleList,
+        renderstate::fillCullNoneCCW,
+        renderstate::dontMultisample,
+        renderstate::depthAlwaysDontWrite,
+        renderstate::blendNormalRgb,
         std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
         std::move(pipelineLayout),
         std::move(renderPass), 0,
