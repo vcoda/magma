@@ -20,8 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #if defined(VK_NV_ray_tracing) && !defined(VK_SHADER_UNUSED_KHR)
 
-/* With early SDK definition wasn't provided in the headers
-   so I declare own structs which matches the specified layout. */
+/* With an early SDK definitions weren't provided in the headers
+   so I declared my own structures that obey vendor layout. */
 
 typedef struct VkTransformMatrixNV {
     float matrix[3][4];
