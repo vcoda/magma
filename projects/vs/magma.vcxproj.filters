@@ -486,9 +486,6 @@
     <ClInclude Include="..\..\core\noncopyableConstexpr.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\core\placementPool.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\allocator\linearPlacementPool.h">
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
@@ -603,14 +600,14 @@
     <ClInclude Include="..\..\helpers\spirvReflectionTypeCast.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\reflection\shaderReflectionFactory.h">
-      <Filter>Header Files\shaders</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\descriptors\descriptor.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\descriptors\bindingArray.h">
       <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shaders\shaderReflectionFactory.h">
+      <Filter>Header Files\shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1044,9 +1041,6 @@
     </None>
     <None Include="..\..\misc\pushConstants.inl">
       <Filter>Header Files\misc</Filter>
-    </None>
-    <None Include="..\..\objects\descriptorSetLayout.inl">
-      <Filter>Header Files\objects</Filter>
     </None>
     <None Include="..\..\misc\borderColor.inl">
       <Filter>Header Files\misc</Filter>

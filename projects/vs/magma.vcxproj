@@ -188,7 +188,6 @@
     <ClInclude Include="..\..\core\hash.h" />
     <ClInclude Include="..\..\core\noncopyable.h" />
     <ClInclude Include="..\..\core\pch.h" />
-    <ClInclude Include="..\..\core\placementPool.h" />
     <ClInclude Include="..\..\core\pool.h" />
     <ClInclude Include="..\..\core\refCountChecker.h" />
     <ClInclude Include="..\..\core\vectors.h" />
@@ -298,11 +297,11 @@
     <ClInclude Include="..\..\objects\uniformTexelBuffer.h" />
     <ClInclude Include="..\..\objects\validationCache.h" />
     <ClInclude Include="..\..\objects\vertexBuffer.h" />
-    <ClInclude Include="..\..\reflection\shaderReflectionFactory.h" />
     <ClInclude Include="..\..\shaders\pipelineShaderStage.h" />
     <ClInclude Include="..\..\shaders\rayTracingShaderGroup.h" />
     <ClInclude Include="..\..\shaders\shaderBindingTable.h" />
     <ClInclude Include="..\..\shaders\shaderReflection.h" />
+    <ClInclude Include="..\..\shaders\shaderReflectionFactory.h" />
     <ClInclude Include="..\..\shaders\specialization.h" />
     <ClInclude Include="..\..\shaders\shaderStages.h" />
     <ClInclude Include="..\..\states\colorBlendState.h" />
@@ -545,7 +544,6 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
     <None Include="..\..\misc\viewport.inl" />
     <None Include="..\..\objects\commandBuffer.inl" />
     <None Include="..\..\objects\descriptorSet.inl" />
-    <None Include="..\..\objects\descriptorSetLayout.inl" />
     <None Include="..\..\objects\deviceMemory.inl" />
     <None Include="..\..\objects\object.inl" />
     <None Include="..\..\objects\resourcePool.inl" />
