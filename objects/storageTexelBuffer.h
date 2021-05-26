@@ -43,7 +43,7 @@ namespace magma
             const Sharing& sharing = Sharing());
     };
 
-    /* Dynamic storage texel buffer for fast data transfer from host to device 
+    /* Dynamic storage texel buffer for fast data transfer from host to device
        when using page-locked (or "pinned") memory. */
 
     class DynamicStorageTexelBuffer : public Buffer

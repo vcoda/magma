@@ -147,7 +147,7 @@ void Device::updateCopyDescriptor(const VkCopyDescriptorSet& descriptorCopy) con
 void Device::updateDescriptorSets(const std::vector<VkWriteDescriptorSet>& descriptorWrites,
     const std::vector<VkCopyDescriptorSet>& descriptorCopies /* {} */) const noexcept
 {
-    vkUpdateDescriptorSets(handle, 
+    vkUpdateDescriptorSets(handle,
         MAGMA_COUNT(descriptorWrites), descriptorWrites.data(),
         MAGMA_COUNT(descriptorCopies), descriptorCopies.data());
 }
@@ -212,7 +212,7 @@ bool Device::separateDepthStencilLayoutsEnabled() const noexcept
     const void *features = findExtendedFeatures(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SEPARATE_DEPTH_STENCIL_LAYOUTS_FEATURES_KHR);
     if (features)
     {
-        const VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR *separateDepthStencilFeatures = 
+        const VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR *separateDepthStencilFeatures =
             reinterpret_cast<const VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR *>(features);
         return separateDepthStencilFeatures->separateDepthStencilLayouts ? true : false;
     }
@@ -223,8 +223,8 @@ bool Device::separateDepthStencilLayoutsEnabled() const noexcept
 bool Device::negativeViewportHeightEnabled(bool khronos) const noexcept
 {
 #if defined(VK_KHR_maintenance1) && defined(VK_AMD_negative_viewport_height)
-    return extensionEnabled(khronos ? 
-        VK_KHR_MAINTENANCE1_EXTENSION_NAME : 
+    return extensionEnabled(khronos ?
+        VK_KHR_MAINTENANCE1_EXTENSION_NAME :
         VK_AMD_NEGATIVE_VIEWPORT_HEIGHT_EXTENSION_NAME);
 #else
     MAGMA_UNUSED(khronos);

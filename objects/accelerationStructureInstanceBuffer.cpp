@@ -51,7 +51,7 @@ AccelerationStructureInstanceBuffer::AccelerationStructureInstanceBuffer(std::sh
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */):
-    RayTracingBuffer(device, 
+    RayTracingBuffer(device,
         sizeof(AccelerationStructureInstance) * instanceCount,
         allocator, flags, sharing),
     stagingBuffer(std::make_shared<SrcTransferBuffer>(std::move(device),
@@ -65,7 +65,7 @@ AccelerationStructureInstanceBuffer::AccelerationStructureInstanceBuffer(std::sh
     if (!instances)
         throw exception::MemoryMapFailed("failed to map staging buffer of acceleration structure instances");
     for (uint32_t instanceIndex = 0; instanceIndex < instanceCount; ++instanceIndex)
-    {   
+    {
         new (&instances[instanceIndex]) AccelerationStructureInstance();
         instances[instanceIndex].setInstanceIndex(instanceIndex);
     }

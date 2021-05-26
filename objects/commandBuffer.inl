@@ -14,7 +14,7 @@ inline void CommandBuffer::setViewport(float x, float y, float width, float heig
     if (height < 0)
     {
         if (maintenance1KHREnable)
-            viewport.y = -height - y; // Move origin to bottom left  
+            viewport.y = -height - y; // Move origin to bottom left
     }
     viewport.width = width;
     viewport.height = height;

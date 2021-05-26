@@ -92,9 +92,9 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         FragmentShaderStage(fragmentShader, fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main", std::move(specialization))
     };
     const VkSampleCountFlagBits samples = this->renderPass->getAttachments().front().samples;
-    const MultisampleState multisampleState = 
+    const MultisampleState multisampleState =
         (samples & VK_SAMPLE_COUNT_2_BIT) ? renderstate::multisample2 :
-        (samples & VK_SAMPLE_COUNT_4_BIT) ? renderstate::multisample4 : 
+        (samples & VK_SAMPLE_COUNT_4_BIT) ? renderstate::multisample4 :
         (samples & VK_SAMPLE_COUNT_8_BIT) ? renderstate::multisample8 :
         (samples & VK_SAMPLE_COUNT_16_BIT) ? renderstate::multisample16 :
         (samples & VK_SAMPLE_COUNT_32_BIT) ? renderstate::multisample32 :
@@ -137,7 +137,7 @@ void BlitRectangle::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
     if (it != descriptorSets.end())
         imageDescriptorSet = it->second;
     else
-    {   
+    {
         std::shared_ptr<Sampler> sampler = (VK_FILTER_NEAREST == filter) ? nearestSampler :
             ((VK_FILTER_LINEAR == filter) ? bilinearSampler : cubicSampler);
         setLayouts.push_back(SetLayout());

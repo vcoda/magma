@@ -36,8 +36,8 @@ namespace magma
                 uint32_t binding) noexcept;
         };
 
-        /* A storage buffer is a descriptor type associated with a buffer resource directly, 
-           described in a shader as a structure with various members that load, store, 
+        /* A storage buffer is a descriptor type associated with a buffer resource directly,
+           described in a shader as a structure with various members that load, store,
            and atomic operations can be performed on. */
 
         class StorageBufferArray : public DescriptorSetLayoutBindingArray

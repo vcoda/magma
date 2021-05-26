@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #if defined(VK_NV_ray_tracing) && !defined(VK_SHADER_UNUSED_KHR)
 
-/* With early SDK definition wasn't provided in the headers 
+/* With early SDK definition wasn't provided in the headers
    so I declare own structs which matches the specified layout. */
 
 typedef struct VkTransformMatrixNV {
@@ -63,7 +63,7 @@ namespace magma
         void setTriangleFrontCW() noexcept { flags &= ~VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_NV; }
         void setTriangleFrontCCW() noexcept { flags |= VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_NV; }
         bool triangleFrontCCW() const noexcept { return flags & VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_NV; }
-        void forceGeometryOpaque(bool opaque) noexcept { if (opaque) flags |= VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV; 
+        void forceGeometryOpaque(bool opaque) noexcept { if (opaque) flags |= VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV;
                                                          else flags &= ~VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV; }
         void forceGeometryNoOpaque(bool noOpaque) noexcept { if (noOpaque) flags |= VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV;
                                                              else flags &= ~VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV; }
@@ -72,7 +72,7 @@ namespace magma
         void setAccelerationStructure(std::shared_ptr<const AccelerationStructure> accelerationStructure);
     };
 
-    /* Buffer containing an array of VkAccelerationStructureInstanceKHR structures 
+    /* Buffer containing an array of VkAccelerationStructureInstanceKHR structures
        defining acceleration structures. */
 
     class AccelerationStructureInstanceBuffer : public RayTracingBuffer
@@ -88,7 +88,7 @@ namespace magma
         AccelerationStructureInstance& getInstance(uint32_t instanceIndex) noexcept { return instances[instanceIndex]; }
         const AccelerationStructureInstance& getInstance(uint32_t instanceIndex) const noexcept { return instances[instanceIndex]; }
         bool update(std::shared_ptr<CommandBuffer> cmdBuffer,
-            uint32_t firstInstance, 
+            uint32_t firstInstance,
             uint32_t instanceCount);
 
     private:

@@ -61,34 +61,34 @@ GeometryTriangles::GeometryTriangles(std::shared_ptr<const Buffer> vertexData, V
 GeometryTriangles::GeometryTriangles(std::shared_ptr<const BaseVertexBuffer> vertexData, VkDeviceSize vertexStride, VkFormat vertexFormat,
     std::shared_ptr<const BaseIndexBuffer> indexData, std::shared_ptr<const Buffer> transformData /* nullptr */,
     VkDeviceSize vertexOffset /* 0 */, VkDeviceSize indexOffset /* 0 */, VkDeviceSize transformOffset /* 0 */, VkGeometryFlagsNV flags /* 0 */) noexcept:
-    GeometryTriangles(vertexData, 
-        vertexOffset, 
+    GeometryTriangles(vertexData,
+        vertexOffset,
         vertexData->getVertexCount(),
         vertexStride,
         vertexFormat,
         indexData,
-        indexOffset, 
-        indexData->getIndexCount(), 
-        indexData->getIndexType(), 
-        std::move(transformData), 
-        transformOffset, 
+        indexOffset,
+        indexData->getIndexCount(),
+        indexData->getIndexType(),
+        std::move(transformData),
+        transformOffset,
         flags)
 {}
 
 GeometryTriangles::GeometryTriangles(std::shared_ptr<const BaseVertexBuffer> vertexData, const VkVertexInputAttributeDescription& attribute, VkDeviceSize vertexStride,
     std::shared_ptr<const BaseIndexBuffer> indexData, std::shared_ptr<const Buffer> transformData /* nullptr */,
     VkDeviceSize vertexOffset /* 0 */, VkDeviceSize indexOffset /* 0 */, VkDeviceSize transformOffset /* 0 */, VkGeometryFlagsNV flags /* 0 */) noexcept:
-    GeometryTriangles(vertexData, 
-        vertexOffset + attribute.offset, 
+    GeometryTriangles(vertexData,
+        vertexOffset + attribute.offset,
         vertexData->getVertexCount(),
         vertexStride,
         attribute.format,
         indexData,
-        indexOffset, 
-        indexData->getIndexCount(), 
-        indexData->getIndexType(), 
-        std::move(transformData), 
-        transformOffset, 
+        indexOffset,
+        indexData->getIndexCount(),
+        indexData->getIndexType(),
+        std::move(transformData),
+        transformOffset,
         flags)
 {}
 

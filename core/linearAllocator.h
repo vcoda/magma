@@ -62,8 +62,8 @@ namespace magma
 
             bool hasSpace(const std::size_t size) const noexcept
             {
-                return pool.empty() 
-                    ? poolSize >= size 
+                return pool.empty()
+                    ? poolSize >= size
                     : space >= size;
             }
 

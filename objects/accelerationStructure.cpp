@@ -59,7 +59,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     const VkMemoryRequirements memoryRequirements = getObjectMemoryRequirements();
     std::shared_ptr<DeviceMemory> memory = std::make_shared<DeviceMemory>(
         std::move(device),
-        memoryRequirements, 
+        memoryRequirements,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         &handle,
         VK_OBJECT_TYPE_BUFFER,
@@ -116,7 +116,7 @@ void AccelerationStructure::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> 
 #endif // VK_KHR_device_group
 
 void AccelerationStructure::onDefragmented()
-{ 
+{
     // Currently there is no allocator that deal with it
 }
 
@@ -129,7 +129,7 @@ VkMemoryRequirements AccelerationStructure::getBuildScratchMemoryRequirements() 
 {
     return getMemoryRequirements(VK_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_BUILD_SCRATCH_NV).memoryRequirements;
 }
-        
+
 VkMemoryRequirements AccelerationStructure::getUpdateScratchMemoryRequirements() const
 {
     return getMemoryRequirements(VK_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_UPDATE_SCRATCH_NV).memoryRequirements;

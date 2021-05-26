@@ -39,15 +39,15 @@ namespace magma
 
     namespace aux
     {
-        /* Accumulation buffer is dedicated for integrating multiple images. 
-           In order to maintain accuracy over a number of blending operations, 
-           the accumulation buffer should have a higher number of bits per component 
+        /* Accumulation buffer is dedicated for integrating multiple images.
+           In order to maintain accuracy over a number of blending operations,
+           the accumulation buffer should have a higher number of bits per component
            than a typical color buffer, so use R16_UNORM or R16_SFLOAT format. */
 
         class AccumulationBuffer : public core::NonCopyable
         {
         public:
-            explicit AccumulationBuffer(std::shared_ptr<Device> device, 
+            explicit AccumulationBuffer(std::shared_ptr<Device> device,
                 VkFormat format,
                 const VkExtent2D& extent,
                 std::shared_ptr<ShaderModule> fragmentShader,

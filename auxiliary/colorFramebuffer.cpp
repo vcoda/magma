@@ -38,7 +38,7 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
 {}
 
 ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkFormat colorFormat,
-    const VkFormat depthStencilFormat, const VkExtent2D& extent, 
+    const VkFormat depthStencilFormat, const VkExtent2D& extent,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const bool colorClearOp /* true */,
     const bool depthSampled, /* false */
@@ -74,10 +74,10 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
             finalLayout); // Depth image will be transitioned to when a render pass instance ends
         // Create color/depth framebuffer
         renderPass = std::make_shared<RenderPass>(std::move(device),
-            std::initializer_list<AttachmentDescription>{colorAttachment, depthStencilAttachment}, 
+            std::initializer_list<AttachmentDescription>{colorAttachment, depthStencilAttachment},
             MAGMA_HOST_ALLOCATOR(allocator));
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass,
-            std::vector<std::shared_ptr<ImageView>>{colorView, depthStencilView}, 
+            std::vector<std::shared_ptr<ImageView>>{colorView, depthStencilView},
             MAGMA_HOST_ALLOCATOR(allocator), 0);
     }
     else

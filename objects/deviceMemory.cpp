@@ -96,7 +96,7 @@ void DeviceMemory::bind(const void *object, VkObjectType objectType,
     VkResult bind;
     if (memory)
         bind = deviceAllocator->bindMemory(memory, offset, object, objectType);
-    else 
+    else
     switch (objectType)
     {
     case VK_OBJECT_TYPE_BUFFER:
@@ -187,7 +187,7 @@ bool DeviceMemory::invalidateMappedRange(
 }
 
 void DeviceMemory::onDefragmented() noexcept
-{   
+{
     if (memory)
     {
         const MemoryBlockInfo memoryInfo = deviceAllocator->getMemoryBlockInfo(memory);

@@ -50,7 +50,7 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     const VkMemoryRequirements memoryRequirements = getMemoryRequirements();
     std::shared_ptr<DeviceMemory> memory = std::make_shared<DeviceMemory>(
         std::move(device),
-        memoryRequirements, 
+        memoryRequirements,
         memoryFlags,
         &handle,
         VK_OBJECT_TYPE_BUFFER,

@@ -13,7 +13,7 @@ inline void DescriptorSet::writeInlineUniformDescriptor(uint32_t index, const Un
     if (inlineUniformBlockData)
         memcpy(inlineUniformBlockData, &inlineUniformBlock, sizeof(UniformBlockType));
     VkWriteDescriptorSetInlineUniformBlockEXT inlineUniformBlockDescriptorWrite;
-    inlineUniformBlockDescriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_INLINE_UNIFORM_BLOCK_EXT; 
+    inlineUniformBlockDescriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_INLINE_UNIFORM_BLOCK_EXT;
     inlineUniformBlockDescriptorWrite.pNext = nullptr;
     inlineUniformBlockDescriptorWrite.dataSize = sizeof(UniformBlockType);
     inlineUniformBlockDescriptorWrite.pData = inlineUniformBlockData;

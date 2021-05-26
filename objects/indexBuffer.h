@@ -66,7 +66,7 @@ namespace magma
             const Sharing& sharing = Sharing());
     };
 
-    /* Dynamic index buffer for fast data transfer from host to device 
+    /* Dynamic index buffer for fast data transfer from host to device
        when using page-locked (or "pinned") memory. */
 
     class DynamicIndexBuffer : public BaseIndexBuffer

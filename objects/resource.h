@@ -78,7 +78,7 @@ namespace magma
 
     /* Non-dispatchable resource object (buffer, image, acceleration structure etc.)
        that has template declaration to handle different resource types. */
-    
+
     template<typename This, typename Type>
     class NonDispatchableResource :
         public NonDispatchable<Type>,

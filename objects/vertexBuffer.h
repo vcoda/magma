@@ -28,8 +28,8 @@ namespace magma
     {
     public:
         void setVertexCount(uint32_t count) noexcept { vertexCount = count; }
-        uint32_t getVertexCount() const noexcept 
-        { 
+        uint32_t getVertexCount() const noexcept
+        {
             MAGMA_ASSERT(vertexCount);
             return vertexCount;
         }
@@ -67,7 +67,7 @@ namespace magma
             const Sharing& sharing = Sharing());
     };
 
-    /* Dynamic vertex buffer for fast data transfer from host to device 
+    /* Dynamic vertex buffer for fast data transfer from host to device
        when using page-locked (or "pinned") memory. */
 
     class DynamicVertexBuffer : public BaseVertexBuffer

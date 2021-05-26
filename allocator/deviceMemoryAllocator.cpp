@@ -150,7 +150,7 @@ DeviceMemoryBlock DeviceMemoryAllocator::realloc(DeviceMemoryBlock memory, VkDev
 }
 
 void DeviceMemoryAllocator::free(DeviceMemoryBlock allocation) noexcept
-{   
+{
     vmaFreeMemory(allocator, reinterpret_cast<VmaAllocation>(allocation));
 }
 
@@ -324,8 +324,8 @@ VmaMemoryUsage DeviceMemoryAllocator::chooseMemoryUsage(VkMemoryPropertyFlags fl
         if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
             return VMA_MEMORY_USAGE_CPU_TO_GPU; // Memory that is both mappable on host and preferably fast to access by GPU
         else // Memory will be used on device only, so fast access from the device is preferred
-            return VMA_MEMORY_USAGE_GPU_ONLY; 
-    } 
+            return VMA_MEMORY_USAGE_GPU_ONLY;
+    }
     else if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
     {
         if (flags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT && !(flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT))
@@ -333,7 +333,7 @@ VmaMemoryUsage DeviceMemoryAllocator::chooseMemoryUsage(VkMemoryPropertyFlags fl
         else if (flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT)
             return VMA_MEMORY_USAGE_GPU_TO_CPU; // Memory mappable on host and cached, can be used for readback from GPU
         return VMA_MEMORY_USAGE_UNKNOWN; // Unknown usage scenario
-    } 
+    }
     else if (flags & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT)
     {   // Exists mostly on mobile platforms, always created as dedicated allocation
         return VMA_MEMORY_USAGE_GPU_LAZILY_ALLOCATED;

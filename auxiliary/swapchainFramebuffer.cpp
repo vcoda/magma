@@ -56,7 +56,7 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
             hasStencil() ? op::clearStore : op::dontCare,
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL); // Stay as attachment
-        renderPass = std::make_shared<RenderPass>(std::move(device), 
+        renderPass = std::make_shared<RenderPass>(std::move(device),
             std::initializer_list<AttachmentDescription>{colorAttachment, depthStencilAttachment},
             MAGMA_HOST_ALLOCATOR(allocator));
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass,

@@ -56,16 +56,16 @@ ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const std
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */):
-    ShaderBindingTable(std::move(device), shaderGroupHandles.data(), groupCount, 
-        std::move(allocator), flags, sharing) 
+    ShaderBindingTable(std::move(device), shaderGroupHandles.data(), groupCount,
+        std::move(allocator), flags, sharing)
 {}
 
 ShaderBindingTable::ShaderBindingTable(std::shared_ptr<const RayTracingPipeline> pipeline,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */):
-    ShaderBindingTable(pipeline->getDevice(), pipeline->getShaderGroupHandles(), pipeline->getGroupCount(), 
-        std::move(allocator), flags, sharing) 
+    ShaderBindingTable(pipeline->getDevice(), pipeline->getShaderGroupHandles(), pipeline->getGroupCount(),
+        std::move(allocator), flags, sharing)
 {}
 #endif // VK_NV_ray_tracing
 } // namespace magma

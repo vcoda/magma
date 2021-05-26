@@ -84,7 +84,7 @@ namespace magma
         bool hasAnyDeviceResource() const;
 
         template<typename Type>
-		core::Pool<Type>& getPool();
+        core::Pool<Type>& getPool();
 
     private:
         // Core types
@@ -128,7 +128,7 @@ namespace magma
 #ifdef VK_NV_ray_tracing
         core::Pool<NonDispatchable<VkAccelerationStructureNV>> accelerationStructures;
 #endif
-		mutable std::mutex mtx;
+        mutable std::mutex mtx;
     };
 } // namespace magma
 

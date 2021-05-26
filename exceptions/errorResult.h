@@ -171,4 +171,3 @@ namespace magma
         throw magma::exception::ErrorResult(result, message,\
             magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
     }
-

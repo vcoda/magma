@@ -29,7 +29,7 @@ namespace magma
 {
 #ifdef VK_EXT_debug_report
 DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instance,
-    PFN_vkDebugReportCallbackEXT userCallback, 
+    PFN_vkDebugReportCallbackEXT userCallback,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkDebugReportFlagsEXT flags /* INFORMATION_BIT | WARNING_BIT_EXT | PERFORMANCE_WARNING_BIT_EXT | ERROR_BIT DEBUG_BIT */,
     void *userData /* nullptr */):

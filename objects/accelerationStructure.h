@@ -80,7 +80,7 @@ namespace magma
     };
 
     /* Bottom-level acceleration structure containing the AABBs or geometry to be intersected. */
-    
+
     class BottomLevelAccelerationStructure : public AccelerationStructure
     {
     public:

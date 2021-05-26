@@ -142,7 +142,7 @@ namespace magma
     class Allocator : public core::NonCopyable
     {
     public:
-        explicit Allocator(std::shared_ptr<IAllocator> hostAllocator, 
+        explicit Allocator(std::shared_ptr<IAllocator> hostAllocator,
             std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator) noexcept:
             hostAllocator(std::move(hostAllocator)), deviceAllocator(std::move(deviceAllocator)) {}
         std::shared_ptr<IAllocator> getHostAllocator() const noexcept { return hostAllocator; }

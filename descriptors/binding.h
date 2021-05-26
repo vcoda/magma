@@ -228,7 +228,7 @@ namespace magma
 
         /* An input attachment is a descriptor type associated with an image resource
            via an image view that can be used for framebuffer local load operations in fragment shaders. */
-           
+
         class InputAttachment : public DescriptorSetLayoutBinding
         {
         public:

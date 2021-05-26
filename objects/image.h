@@ -57,7 +57,7 @@ namespace magma
         bool inputAttachment() const noexcept { return usage & VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT; }
         VkSubresourceLayout getSubresourceLayout(uint32_t mipLevel,
             uint32_t arrayLayer = 0) const noexcept;
-        VkImageSubresourceLayers getSubresourceLayers(uint32_t mipLevel, 
+        VkImageSubresourceLayers getSubresourceLayers(uint32_t mipLevel,
             uint32_t arrayLayer = 0) const noexcept;
         VkMemoryRequirements getMemoryRequirements() const noexcept;
         std::vector<VkSparseImageMemoryRequirements> getSparseMemoryRequirements() const;

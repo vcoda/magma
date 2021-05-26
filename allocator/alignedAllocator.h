@@ -34,10 +34,10 @@ namespace magma
             VkSystemAllocationScope allocationScope) override;
         virtual void free(void *memory) noexcept override;
         virtual void internalAllocationNotification(std::size_t,
-            VkInternalAllocationType, 
+            VkInternalAllocationType,
             VkSystemAllocationScope) noexcept override {}
         virtual void internalFreeNotification(std::size_t,
-            VkInternalAllocationType, 
+            VkInternalAllocationType,
             VkSystemAllocationScope) noexcept override {}
     };
 } // namespace magma

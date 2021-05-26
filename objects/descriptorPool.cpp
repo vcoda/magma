@@ -64,10 +64,10 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets,
     VkDescriptorPoolInlineUniformBlockCreateInfoEXT inlineUniformBlockInfo;
     if (maxInlineUniformBlockBindings > 0)
     {
-		inlineUniformBlockInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_INLINE_UNIFORM_BLOCK_CREATE_INFO_EXT;
+        inlineUniformBlockInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_INLINE_UNIFORM_BLOCK_CREATE_INFO_EXT;
         inlineUniformBlockInfo.pNext = nullptr;
-		inlineUniformBlockInfo.maxInlineUniformBlockBindings = maxInlineUniformBlockBindings;
-		poolInfo.pNext = &inlineUniformBlockInfo;
+        inlineUniformBlockInfo.maxInlineUniformBlockBindings = maxInlineUniformBlockBindings;
+        poolInfo.pNext = &inlineUniformBlockInfo;
     }
 #endif // VK_EXT_inline_uniform_block
     const VkResult create = vkCreateDescriptorPool(MAGMA_HANDLE(device), &poolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);

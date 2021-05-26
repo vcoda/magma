@@ -23,7 +23,7 @@ namespace magma
 {
 uint8_t Format::components() const noexcept
 {   // TODO: add all other formats in the future
-    switch (format) 
+    switch (format)
     {
     case VK_FORMAT_R8_UNORM:
     case VK_FORMAT_R8_SNORM:

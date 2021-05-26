@@ -81,7 +81,7 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
 }
 
 ShaderModule::ShaderModule(std::shared_ptr<Device> device, const std::vector<SpirvWord>& bytecode,
-    std::size_t bytecodeHash /* 0 */, 
+    std::size_t bytecodeHash /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkShaderModuleCreateFlags flags /* 0 */,
     bool reflect /* false */
