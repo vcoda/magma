@@ -21,7 +21,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 VK_DEFINE_HANDLE(VmaAllocator)
 VK_DEFINE_HANDLE(VmaAllocation)
 VK_DEFINE_HANDLE(VmaDefragmentationContext)
-enum VmaMemoryUsage : int;
 
 namespace magma
 {
@@ -77,7 +76,7 @@ namespace magma
             VkDeviceSize offset,
             VkDeviceSize size) noexcept override;
         std::vector<VmaAllocation> gatherSuballocations(const std::list<std::shared_ptr<Resource>>& resources);
-        static VmaMemoryUsage chooseMemoryUsage(VkMemoryPropertyFlags flags) noexcept;
+        static int chooseMemoryUsage(VkMemoryPropertyFlags flags) noexcept;
 
     private:
         std::shared_ptr<Device> device;

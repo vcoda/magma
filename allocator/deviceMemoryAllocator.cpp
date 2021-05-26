@@ -74,7 +74,7 @@ DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memor
     MAGMA_ASSERT(handle);
     VmaAllocationCreateInfo allocInfo;
     allocInfo.flags = VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT;
-    allocInfo.usage = chooseMemoryUsage(flags);
+    allocInfo.usage = (VmaMemoryUsage)chooseMemoryUsage(flags);
     if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
         allocInfo.requiredFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     else if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
@@ -115,7 +115,7 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
     {
         VmaAllocationCreateInfo allocInfo;
         allocInfo.flags = VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT;
-        allocInfo.usage = chooseMemoryUsage(flags);
+        allocInfo.usage = (VmaMemoryUsage)chooseMemoryUsage(flags);
         if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
             allocInfo.requiredFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
         else if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
@@ -317,7 +317,7 @@ std::vector<VmaAllocation> DeviceMemoryAllocator::gatherSuballocations(const std
     return allocations;
 }
 
-VmaMemoryUsage DeviceMemoryAllocator::chooseMemoryUsage(VkMemoryPropertyFlags flags) noexcept
+int DeviceMemoryAllocator::chooseMemoryUsage(VkMemoryPropertyFlags flags) noexcept
 {
     if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
     {
