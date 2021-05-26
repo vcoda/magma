@@ -38,11 +38,11 @@ namespace magma
         {}
     };
 
-    namespace barriers
+    namespace barrier
     {
 #ifdef VK_NV_ray_tracing
         constexpr MemoryBarrier accelerationStructureReadWrite(VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_NV, VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_NV);
 #endif // VK_NV_ray_tracing
-    } // namespace barriers
+    } // namespace barrier
 } // namespace magma
 

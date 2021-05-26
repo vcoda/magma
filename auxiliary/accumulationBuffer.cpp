@@ -73,7 +73,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     framebuffer = std::make_shared<Framebuffer>(renderPass, bufferView, hostAllocator);
     // Create descriptor set for fragment shader
     descriptorSet = std::make_shared<ImageDescriptorSet>(device, reflection, hostAllocator);
-    nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, hostAllocator);
+    nearestSampler = std::make_shared<Sampler>(device, sampler::magMinMipNearestClampToEdge, hostAllocator);
     // Load fullscreen vertex shader
     auto vertexShader = std::make_unique<FillRectangleVertexShader>(device, hostAllocator);
     const std::vector<PipelineShaderStage> shaderStages = {

@@ -87,7 +87,7 @@ namespace magma
         extern const SubpassDescription depthReadOnly;
         extern const SubpassDescription stencilReadOnly;
 #endif // VK_KHR_separate_depth_stencil_layouts
-    } // namespace subpasses
+    } // namespace subpass
 } // namespace magma
 
 #include "subpassDependency.inl"

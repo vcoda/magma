@@ -74,8 +74,8 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     static SetLayout setLayout;
     std::shared_ptr<DescriptorSet> descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, 0, setLayout, VK_SHADER_STAGE_FRAGMENT_BIT, allocator);
     // Create texture samplers
-    nearestSampler = std::make_shared<Sampler>(device, samplers::magMinMipNearestClampToEdge, allocator);
-    bilinearSampler = std::make_shared<Sampler>(device, samplers::magMinLinearMipNearestClampToEdge, allocator);
+    nearestSampler = std::make_shared<Sampler>(device, sampler::magMinMipNearestClampToEdge, allocator);
+    bilinearSampler = std::make_shared<Sampler>(device, sampler::magMinLinearMipNearestClampToEdge, allocator);
     // Check for cubic filtering support
 #ifdef VK_EXT_filter_cubic
     bool hasCubicFilter = device->extensionEnabled(VK_EXT_FILTER_CUBIC_EXTENSION_NAME);
@@ -83,7 +83,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     hasCubicFilter |= device->extensionEnabled(VK_IMG_FILTER_CUBIC_EXTENSION_NAME);
     #endif
     if (hasCubicFilter)
-        cubicSampler = std::make_shared<Sampler>(device, samplers::magCubicMinLinearMipNearestClampToEdge, allocator);
+        cubicSampler = std::make_shared<Sampler>(device, sampler::magCubicMinLinearMipNearestClampToEdge, allocator);
 #endif // VK_EXT_filter_cubic
     // Load fullscreen vertex shader
     auto vertexShader = std::make_unique<FillRectangleVertexShader>(device, allocator);

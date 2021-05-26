@@ -74,7 +74,7 @@ namespace magma
 
 namespace magma
 {
-    namespace samplers
+    namespace sampler
     {
         constexpr SamplerState magMinMipNearestRepeat(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_ADDRESS_MODE_REPEAT);
         constexpr SamplerState magLinearMinMipNearestRepeat(VK_FILTER_LINEAR, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_ADDRESS_MODE_REPEAT);
@@ -175,5 +175,5 @@ namespace magma
         constexpr DepthSamplerState magMinLinearCompareNotEqual(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_COMPARE_OP_NOT_EQUAL);
         constexpr DepthSamplerState magMinLinearCompareGreaterOrEqual(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_COMPARE_OP_GREATER_OR_EQUAL);
         constexpr DepthSamplerState magMinLinearCompareAlways(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_COMPARE_OP_ALWAYS);
-    } // namespace samplers
+    } // namespace sampler
 } // namespace magma
