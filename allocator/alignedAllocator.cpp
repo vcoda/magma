@@ -46,7 +46,7 @@ void *AlignedAllocator::realloc(void *original, std::size_t size, std::size_t al
     void *ptr = _aligned_realloc(original, size, alignment);
 #else
     MAGMA_UNUSED(alignment);
-    void *ptr = realloc(original, size);
+    void *ptr = ::realloc(original, size);
     // TODO: check alignment, use posix_memalign/memcpy if not aligned!
 #endif
     if (!ptr)
