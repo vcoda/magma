@@ -110,9 +110,12 @@ inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pi
     uint32_t dynamicOffset /* -1 */) noexcept
 {
     MAGMA_ASSERT(pipeline->getLayout()->hasSetLayout(descriptorSet->getLayout()));
-    if (descriptorSet->dirty())
-        descriptorSet->update();
     const VkDescriptorSet dereferencedDescriptorSet[1] = {*descriptorSet};
+    std::vector<VkWriteDescriptorSet> writeDescriptors;
+    if (descriptorSet->dirty())
+        descriptorSet->populateWriteDescriptors(writeDescriptors);
+    if (!writeDescriptors.empty())
+        vkUpdateDescriptorSets(MAGMA_HANDLE(device), MAGMA_COUNT(writeDescriptors), writeDescriptors.data(), 0, nullptr);
     vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), descriptorSet->getIndex(), 1, dereferencedDescriptorSet,
         (0xFFFFFFFF == dynamicOffset) ? 0 : 1,
         (0xFFFFFFFF == dynamicOffset) ? nullptr : &dynamicOffset);
@@ -122,9 +125,12 @@ inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pi
     const std::initializer_list<uint32_t>& dynamicOffsets) noexcept
 {
     MAGMA_ASSERT(pipeline->getLayout()->hasSetLayout(descriptorSet->getLayout()));
-    if (descriptorSet->dirty())
-        descriptorSet->update();
     const VkDescriptorSet dereferencedDescriptorSet[1] = {*descriptorSet};
+    std::vector<VkWriteDescriptorSet> writeDescriptors;
+    if (descriptorSet->dirty())
+        descriptorSet->populateWriteDescriptors(writeDescriptors);
+    if (!writeDescriptors.empty())
+        vkUpdateDescriptorSets(MAGMA_HANDLE(device), MAGMA_COUNT(writeDescriptors), writeDescriptors.data(), 0, nullptr);
     vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), descriptorSet->getIndex(), 1, dereferencedDescriptorSet, MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
 }
 
@@ -137,13 +143,16 @@ inline void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& p
 #endif
     MAGMA_STACK_ARRAY(VkDescriptorSet, dereferencedDescriptorSets, descriptorSets.size());
     uint32_t firstSet = std::numeric_limits<uint32_t>::max();
+    std::vector<VkWriteDescriptorSet> writeDescriptors;
     for (const auto& descriptorSet : descriptorSets)
     {
         firstSet = std::min(firstSet, descriptorSet->getIndex());
         if (descriptorSet->dirty())
-            descriptorSet->update();
+            descriptorSet->populateWriteDescriptors(writeDescriptors);
         dereferencedDescriptorSets.put(*descriptorSet);
     }
+    if (!writeDescriptors.empty())
+        vkUpdateDescriptorSets(MAGMA_HANDLE(device), MAGMA_COUNT(writeDescriptors), writeDescriptors.data(), 0, nullptr);
     vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), firstSet, dereferencedDescriptorSets.size(), dereferencedDescriptorSets, MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
 }
 

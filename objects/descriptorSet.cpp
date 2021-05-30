@@ -67,9 +67,6 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     allocInfo.pSetLayouts = dereferencedSetLayouts;
     const VkResult result = vkAllocateDescriptorSets(MAGMA_HANDLE(device), &allocInfo, &handle);
     MAGMA_THROW_FAILURE(result, "failed to allocate descriptor set");
-    // Assign handle
-    for (auto binding : setLayoutDecl.getBindings())
-        binding->descriptorWrite.dstSet = handle;
 }
 
 DescriptorSet::~DescriptorSet()
@@ -78,25 +75,23 @@ DescriptorSet::~DescriptorSet()
         vkFreeDescriptorSets(MAGMA_HANDLE(device), *descriptorPool, 1, &handle);
 }
 
-bool DescriptorSet::dirty() const
+void DescriptorSet::populateWriteDescriptors(std::vector<VkWriteDescriptorSet>& writeDescriptors) const
 {
-    return setLayoutDecl.dirty();
-}
-
-void DescriptorSet::update()
-{
-    std::vector<VkWriteDescriptorSet> descriptorWrites;
-    descriptorWrites.reserve(setLayoutDecl.getBindings().size());
     for (auto binding : setLayoutDecl.getBindings())
     {
         if (binding->dirty())
         {
-            descriptorWrites.push_back(binding->getDescriptorWrite());
+            VkWriteDescriptorSet writeDescriptor = binding->getWriteDescriptor();
+            writeDescriptor.dstSet = handle;
+            writeDescriptors.push_back(writeDescriptor);
             binding->written = false;
         }
     }
-    if (!descriptorWrites.empty())
-        device->updateDescriptorSets(descriptorWrites);
+}
+
+bool DescriptorSet::dirty() const
+{
+    return setLayoutDecl.dirty();
 }
 
 void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection) const
