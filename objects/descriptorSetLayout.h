@@ -49,7 +49,7 @@ namespace magma
     class DescriptorSetDeclaration
     {
     public:
-        virtual const std::vector<binding::DescriptorSetLayoutBinding *> getBindings() = 0;
+        virtual const std::vector<binding::DescriptorSetLayoutBinding *>& getBindings() = 0;
 
         bool dirty()
         {
@@ -75,7 +75,7 @@ namespace magma
 } // namespace magma
 
 #define MAGMA_REFLECT(...)\
-virtual const std::vector<magma::binding::DescriptorSetLayoutBinding *> getBindings() override\
+virtual const std::vector<magma::binding::DescriptorSetLayoutBinding *>& getBindings() override\
 {\
     static std::vector<magma::binding::DescriptorSetLayoutBinding *> bindings =\
         buildArgsList(__VA_ARGS__);\
