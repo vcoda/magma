@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "dispatchable.h"
 #include "../misc/deviceQueueDescriptor.h"
+#include "../helpers/stackArray.h"
 
 namespace magma
 {
@@ -46,8 +47,8 @@ namespace magma
     public:
         ~Device();
         std::shared_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
-        void updateWriteDescriptor(const VkWriteDescriptorSet& descriptorWrite) const noexcept;
-        void updateCopyDescriptor(const VkCopyDescriptorSet& descriptorCopy) const noexcept;
+        void updateDescriptorWrites(const helpers::StackArray<VkWriteDescriptorSet>& descriptorWrites) const noexcept;
+        void updateDescriptorCopies(const helpers::StackArray<VkCopyDescriptorSet>& descriptorCopies) const noexcept;
         void updateDescriptorSets(const std::vector<VkWriteDescriptorSet>& descriptorWrites,
             const std::vector<VkCopyDescriptorSet>& descriptorCopies = {}) const noexcept;
         bool waitIdle() const;

@@ -26,6 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../shaders/shaderReflectionFactory.h"
 #include "../helpers/spirvReflectionTypeCast.h"
 #include "../helpers/stringize.h"
+#include "../helpers/stackArray.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
@@ -75,7 +76,35 @@ DescriptorSet::~DescriptorSet()
         vkFreeDescriptorSets(MAGMA_HANDLE(device), *descriptorPool, 1, &handle);
 }
 
-void DescriptorSet::populateWriteDescriptors(std::vector<VkWriteDescriptorSet>& writeDescriptors) const
+uint32_t DescriptorSet::getDirtyCount() const
+{
+    std::size_t dirtyCount = 0;
+    for (auto binding : setLayoutDecl.getBindings())
+        if (binding->dirty())
+            ++dirtyCount;
+    return dirtyCount;
+}
+
+bool DescriptorSet::dirty() const
+{
+    return setLayoutDecl.dirty();
+}
+
+void DescriptorSet::update()
+{
+    MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, getDirtyCount());
+    for (auto binding : setLayoutDecl.getBindings())
+    {
+        if (binding->dirty())
+        {
+            descriptorWrites.put(binding->getWriteDescriptor());
+            binding->written = false;
+        }
+    }
+    device->updateDescriptorWrites(descriptorWrites);
+}
+
+void DescriptorSet::populateDescriptorWrites(std::vector<VkWriteDescriptorSet>& descriptorWrites) const
 {
     for (auto binding : setLayoutDecl.getBindings())
     {
@@ -83,15 +112,10 @@ void DescriptorSet::populateWriteDescriptors(std::vector<VkWriteDescriptorSet>& 
         {
             VkWriteDescriptorSet writeDescriptor = binding->getWriteDescriptor();
             writeDescriptor.dstSet = handle;
-            writeDescriptors.push_back(writeDescriptor);
+            descriptorWrites.push_back(writeDescriptor);
             binding->written = false;
         }
     }
-}
-
-bool DescriptorSet::dirty() const
-{
-    return setLayoutDecl.dirty();
 }
 
 void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection) const
