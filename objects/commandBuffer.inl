@@ -128,36 +128,6 @@ inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pi
     vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), descriptorSet->getIndex(), 1, dereferencedDescriptorSet, MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
 }
 
-inline void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline, const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
-    const std::initializer_list<uint32_t>& dynamicOffsets /* {} */) noexcept
-{
-#ifdef MAGMA_DEBUG
-    for (const auto& descriptorSet : descriptorSets)
-        MAGMA_ASSERT(pipeline->getLayout()->hasSetLayout(descriptorSet->getLayout()));
-#endif
-    MAGMA_STACK_ARRAY(VkDescriptorSet, dereferencedDescriptorSets, descriptorSets.size());
-    uint32_t firstSet = std::numeric_limits<uint32_t>::max();
-    uint32_t dirtyCount = 0;
-    for (const auto& descriptorSet : descriptorSets)
-    {
-        dereferencedDescriptorSets.put(*descriptorSet);
-        firstSet = std::min(firstSet, descriptorSet->getIndex());
-        dirtyCount += descriptorSet->getDirtyCount();
-    }
-    if (dirtyCount > 0)
-    {
-        std::vector<VkWriteDescriptorSet> descriptorWrites;
-        descriptorWrites.reserve(dirtyCount);
-        for (const auto& descriptorSet : descriptorSets)
-        {
-            if (descriptorSet->dirty())
-                descriptorSet->populateDescriptorWrites(descriptorWrites);
-        }
-        vkUpdateDescriptorSets(MAGMA_HANDLE(device), MAGMA_COUNT(descriptorWrites), descriptorWrites.data(), 0, nullptr);
-    }
-    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), firstSet, dereferencedDescriptorSets.size(), dereferencedDescriptorSets, MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
-}
-
 inline void CommandBuffer::bindIndexBuffer(const std::shared_ptr<BaseIndexBuffer>& indexBuffer, VkDeviceSize offset /* 0 */) noexcept
 {
     vkCmdBindIndexBuffer(handle, *indexBuffer, offset, indexBuffer->getIndexType());
