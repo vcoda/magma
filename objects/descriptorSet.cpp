@@ -92,6 +92,7 @@ bool DescriptorSet::dirty() const
 
 void DescriptorSet::update()
 {
+    MAGMA_ASSERT(dirty());
     MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, getDirtyCount());
     for (auto binding : setLayoutDecl.getBindings())
     {
