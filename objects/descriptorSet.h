@@ -38,14 +38,13 @@ namespace magma
     {
     public:
         explicit DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
-            uint32_t setIndex,
             DescriptorSetDeclaration& setLayoutDecl,
             uint32_t stageFlags,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory = nullptr,
-            const std::string& shaderFileName = std::string());
+            const std::string& shaderFileName = std::string(),
+            uint32_t setIndex = 0);
         ~DescriptorSet();
-        uint32_t getIndex() const noexcept { return setIndex; }
         std::shared_ptr<DescriptorPool> getPool() noexcept { return descriptorPool; }
         std::shared_ptr<const DescriptorPool> getPool() const noexcept { return descriptorPool; }
         std::shared_ptr<DescriptorSetLayout> getLayout() noexcept { return setLayout; }
@@ -56,9 +55,9 @@ namespace magma
         void populateDescriptorWrites(std::vector<VkWriteDescriptorSet>& writeDescriptors) const;
 
     private:
-        void validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection) const;
+        void validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection,
+            uint32_t setIndex) const;
 
-        const uint32_t setIndex;
         DescriptorSetDeclaration& setLayoutDecl;
         std::shared_ptr<DescriptorSetLayout> setLayout;
         std::shared_ptr<DescriptorPool> descriptorPool;

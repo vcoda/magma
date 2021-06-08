@@ -155,7 +155,7 @@ bool CommandBuffer::reset(bool releaseResources) noexcept
 // inline void CommandBuffer::setStencilReference
 // inline void CommandBuffer::bindDescriptorSet
 
-void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline, const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
+void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline, uint32_t firstSet, const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
     const std::initializer_list<uint32_t>& dynamicOffsets /* {} */) noexcept
 {
 #ifdef MAGMA_DEBUG
@@ -163,12 +163,10 @@ void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline
         MAGMA_ASSERT(pipeline->getLayout()->hasSetLayout(descriptorSet->getLayout()));
 #endif
     MAGMA_STACK_ARRAY(VkDescriptorSet, dereferencedDescriptorSets, descriptorSets.size());
-    uint32_t firstSet = std::numeric_limits<uint32_t>::max();
     uint32_t dirtyCount = 0;
     for (const auto& descriptorSet : descriptorSets)
     {
         dereferencedDescriptorSets.put(*descriptorSet);
-        firstSet = std::min(firstSet, descriptorSet->getIndex());
         dirtyCount += descriptorSet->getDirtyCount();
     }
     if (dirtyCount > 0)

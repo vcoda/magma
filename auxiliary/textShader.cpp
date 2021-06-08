@@ -87,7 +87,7 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
             descriptor::StorageBuffer(2)
         },
         hostAllocator);
-    descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, 0, setLayout, VK_SHADER_STAGE_FRAGMENT_BIT, hostAllocator);
+    descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, setLayout, VK_SHADER_STAGE_FRAGMENT_BIT, hostAllocator);
     std::shared_ptr<PipelineLayout> pipelineLayout = std::make_shared<PipelineLayout>(descriptorSet->getLayout());
     // Load fullscreen vertex shader
     auto vertexShader = std::make_unique<FillRectangleVertexShader>(device, hostAllocator);
@@ -131,7 +131,7 @@ constexpr
 
 void TextShader::draw(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept
 {
-    cmdBuffer->bindDescriptorSet(pipeline, descriptorSet);
+    cmdBuffer->bindDescriptorSet(pipeline, 0, descriptorSet);
     cmdBuffer->bindPipeline(pipeline);
     cmdBuffer->draw(3);
 }

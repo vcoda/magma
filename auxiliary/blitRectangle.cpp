@@ -72,7 +72,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     descriptorPool = std::make_shared<DescriptorPool>(device, maxDescriptorSets,
         descriptor::CombinedImageSampler(maxDescriptorSets), allocator);
     static SetLayout setLayout;
-    std::shared_ptr<DescriptorSet> descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, 0, setLayout, VK_SHADER_STAGE_FRAGMENT_BIT, allocator);
+    std::shared_ptr<DescriptorSet> descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, setLayout, VK_SHADER_STAGE_FRAGMENT_BIT, allocator);
     // Create texture samplers
     nearestSampler = std::make_shared<Sampler>(device, sampler::magMinMipNearestClampToEdge, allocator);
     bilinearSampler = std::make_shared<Sampler>(device, sampler::magMinLinearMipNearestClampToEdge, allocator);
@@ -143,7 +143,7 @@ void BlitRectangle::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
         setLayouts.push_back(SetLayout());
         setLayouts.back().image = {imageView, sampler};
         // Allocate descriptor set per image
-        imageDescriptorSet = std::make_shared<DescriptorSet>(descriptorPool, 0, setLayouts.back(), VK_SHADER_STAGE_FRAGMENT_BIT, descriptorPool->getHostAllocator());
+        imageDescriptorSet = std::make_shared<DescriptorSet>(descriptorPool, setLayouts.back(), VK_SHADER_STAGE_FRAGMENT_BIT, descriptorPool->getHostAllocator());
         descriptorSets[imageView] = imageDescriptorSet;
     }
     int32_t height = static_cast<int32_t>(rc.extent.height);
@@ -151,7 +151,7 @@ void BlitRectangle::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
         height = -height;
     cmdBuffer->setViewport(rc.offset.x, rc.offset.y, rc.extent.width, height);
     cmdBuffer->setScissor(rc);
-    cmdBuffer->bindDescriptorSet(pipeline, imageDescriptorSet);
+    cmdBuffer->bindDescriptorSet(pipeline, 0, imageDescriptorSet);
     cmdBuffer->bindPipeline(pipeline);
     cmdBuffer->draw(3);
 }

@@ -32,12 +32,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
-    uint32_t setIndex, DescriptorSetDeclaration& setLayoutDecl, uint32_t stageFlags,
+    DescriptorSetDeclaration& setLayoutDecl, uint32_t stageFlags,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
-    const std::string& shaderFileName /* default */):
+    const std::string& shaderFileName /* default */,
+    uint32_t setIndex /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, descriptorPool->getDevice(), std::move(allocator)),
-    setIndex(setIndex),
     setLayoutDecl(setLayoutDecl),
     descriptorPool(std::move(descriptorPool))
 {   // Check that all bindings have unique locations
@@ -48,7 +48,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
         MAGMA_THROW("elements of descriptor set layout should have unique binding locations");
     // Validate descriptor bindings through shader reflection
     if (shaderReflectionFactory && !shaderFileName.empty())
-        validateReflection(shaderReflectionFactory->getReflection(shaderFileName));
+        validateReflection(shaderReflectionFactory->getReflection(shaderFileName), setIndex);
     // Prepare list of native bindings
     std::vector<VkDescriptorSetLayoutBinding> bindings;
     for (auto binding : setLayoutDecl.getBindings())
@@ -118,7 +118,7 @@ void DescriptorSet::populateDescriptorWrites(std::vector<VkWriteDescriptorSet>& 
     }
 }
 
-void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection) const
+void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection, uint32_t setIndex) const
 {
     std::vector<const SpvReflectDescriptorSet *> descriptorSets = shaderReflection->enumerateDescriptorSets();
     if (setIndex >= descriptorSets.size())
