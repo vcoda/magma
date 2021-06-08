@@ -97,7 +97,9 @@ void DescriptorSet::update()
     {
         if (binding->dirty())
         {
-            descriptorWrites.put(binding->getWriteDescriptor());
+            VkWriteDescriptorSet writeDescriptor = binding->getWriteDescriptor();
+            writeDescriptor.dstSet = handle;
+            descriptorWrites.put(writeDescriptor);
             binding->written = false;
         }
     }
