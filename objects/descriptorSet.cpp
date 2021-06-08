@@ -78,7 +78,7 @@ DescriptorSet::~DescriptorSet()
 
 uint32_t DescriptorSet::getDirtyCount() const
 {
-    std::size_t dirtyCount = 0;
+    uint32_t dirtyCount = 0;
     for (auto binding : setLayoutDecl.getBindings())
         if (binding->dirty())
             ++dirtyCount;
