@@ -51,7 +51,7 @@ int main()
         for (int i = 0; i < NUM_ITERATIONS; ++i)
             magma::core::copyMemory(dstBuffer1, srcBuffer1, BUFFER_SIZE);
     }
-    // Test copy correctness
+    // Check copy correctness
     if (checkBuffer(dstBuffer1, 0x7F))
         std::cout << "Memory copy Ok" << std::endl;
     else
@@ -68,7 +68,7 @@ int main()
         for (int i = 0; i < NUM_ITERATIONS; ++i)
             magma::core::zeroMemory(dstBuffer1, BUFFER_SIZE);
     }
-    // Test zero correctness
+    // Check zero correctness
     if (checkBuffer(dstBuffer1, 0))
         std::cout << "Memory zero Ok" << std::endl;
     else
