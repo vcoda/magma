@@ -20,6 +20,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_NV_ray_tracing
+    /* Ray tracing pipelines can contain multiple shader groups that can be bound individually.
+       Each shader group behaves as if it was a pipeline using the shader group’s state. */
+
     class RayTracingShaderGroup : public VkRayTracingShaderGroupCreateInfoNV
     {
     protected:
@@ -33,6 +36,8 @@ namespace magma
         std::size_t hash() const noexcept;
     };
 
+    /* General shader is the index of the ray generation, miss, or callable shader. */
+
     class GeneralRayTracingShaderGroup : public RayTracingShaderGroup
     {
     public:
@@ -40,12 +45,16 @@ namespace magma
             RayTracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_NV, generalShader, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV) {}
     };
 
+    /* Triangle hit shader is the optional index of the closest hit or any hit shader(s). */
+
     class TrianglesHitRayTracingShaderGroup : public RayTracingShaderGroup
     {
     public:
         explicit TrianglesHitRayTracingShaderGroup(uint32_t closestHitShader, uint32_t anyHitShader = VK_SHADER_UNUSED_NV) noexcept:
             RayTracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_NV, VK_SHADER_UNUSED_NV, closestHitShader, anyHitShader, VK_SHADER_UNUSED_NV) {}
     };
+
+    /* Procedural hit shader is the optional index of the intersection shader. */
 
     class ProceduralHitRayTracingShaderGroup : public RayTracingShaderGroup
     {
