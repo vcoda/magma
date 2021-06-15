@@ -22,13 +22,14 @@ namespace magma
     class LoadStoreOp
     {
     public:
-        constexpr LoadStoreOp(VkAttachmentLoadOp loadOp,
-            VkAttachmentStoreOp storeOp) noexcept;
+        constexpr LoadStoreOp(const VkAttachmentLoadOp loadOp, const VkAttachmentStoreOp storeOp) noexcept:
+            loadOp(loadOp), storeOp(storeOp) {}
+        const VkAttachmentLoadOp& getLoadOp() const noexcept { return loadOp; }
+        const VkAttachmentStoreOp& getStoreOp() const noexcept { return storeOp; }
 
     private:
         VkAttachmentLoadOp loadOp;
         VkAttachmentStoreOp storeOp;
-        friend struct AttachmentDescription;
     };
 
     /* An attachment description describes the properties of an attachment
