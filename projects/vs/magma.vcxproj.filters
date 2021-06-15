@@ -1048,9 +1048,6 @@
     <None Include="..\..\shaders\specialization.inl">
       <Filter>Header Files\shaders</Filter>
     </None>
-    <None Include="..\..\objects\descriptorSet.inl">
-      <Filter>Header Files\objects</Filter>
-    </None>
     <None Include="..\..\descriptors\binding.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
