@@ -691,7 +691,9 @@ const char *stringize(VkFilter param) noexcept
     {
     MAGMA_STRINGIZE_FIELD(VK_FILTER_NEAREST)
     MAGMA_STRINGIZE_FIELD(VK_FILTER_LINEAR)
-    MAGMA_STRINGIZE_FIELD(VK_FILTER_CUBIC_IMG)
+#ifdef VK_EXT_filter_cubic
+    MAGMA_STRINGIZE_FIELD(VK_FILTER_CUBIC_EXT)
+#endif
     MAGMA_DEFAULT_UNKNOWN;
     };
 }
@@ -802,6 +804,12 @@ const char *stringize(VkIndexType param) noexcept
     {
     MAGMA_STRINGIZE_FIELD(VK_INDEX_TYPE_UINT16)
     MAGMA_STRINGIZE_FIELD(VK_INDEX_TYPE_UINT32)
+#ifdef VK_EXT_index_type_uint8
+    MAGMA_STRINGIZE_FIELD(VK_INDEX_TYPE_UINT8_EXT)
+#endif
+#ifdef VK_NV_ray_tracing
+    MAGMA_STRINGIZE_FIELD(VK_INDEX_TYPE_NONE_NV)
+#endif
     MAGMA_DEFAULT_UNKNOWN;
     };
 }
