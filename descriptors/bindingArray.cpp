@@ -41,7 +41,7 @@ StorageBufferArray& StorageBufferArray::operator=(std::initializer_list<std::sha
 {
     VkDescriptorBufferInfo *bufferInfo;
     if (!descriptorWrite.pBufferInfo)
-        bufferInfo = new VkDescriptorBufferInfo[bufferArray.size()];
+        bufferInfo = new(std::nothrow) VkDescriptorBufferInfo[bufferArray.size()];
     else
     {
         if (bufferArray.size() <= descriptorCount)
@@ -49,12 +49,15 @@ StorageBufferArray& StorageBufferArray::operator=(std::initializer_list<std::sha
         else
         {   // Reallocate
             delete[] descriptorWrite.pBufferInfo;
-            bufferInfo = new VkDescriptorBufferInfo[bufferArray.size()];
+            bufferInfo = new(std::nothrow) VkDescriptorBufferInfo[bufferArray.size()];
         }
     }
     descriptorCount = 0;
-    for (auto& buffer : bufferArray)
-        bufferInfo[descriptorCount++] = buffer->getDescriptor();
+    if (bufferInfo)
+    {
+        for (auto& buffer : bufferArray)
+            bufferInfo[descriptorCount++] = buffer->getDescriptor();
+    }
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     descriptorWrite.pNext = nullptr;
     descriptorWrite.dstSet = VK_NULL_HANDLE;
