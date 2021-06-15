@@ -46,7 +46,7 @@ namespace magma
         public:
             virtual ~DescriptorSetLayoutBinding() = default;
             const VkWriteDescriptorSet& getWriteDescriptor() const noexcept { return descriptorWrite; }
-            bool dirty() const noexcept { return written; }
+            bool dirty() const noexcept { return changed; }
 
         protected:
             explicit DescriptorSetLayoutBinding(VkDescriptorType descriptorType,
@@ -62,7 +62,7 @@ namespace magma
                 VkBufferView texelBufferView;
             };
             VkWriteDescriptorSet descriptorWrite;
-            bool written;
+            bool changed;
             friend class DescriptorSet;
         };
 

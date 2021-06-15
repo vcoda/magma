@@ -65,7 +65,7 @@ StorageBufferArray& StorageBufferArray::operator=(std::initializer_list<std::sha
     descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = bufferInfo;
     descriptorWrite.pTexelBufferView = nullptr;
-    written = true;
+    changed = true;
     return *this;
 }
 } // namespace binding

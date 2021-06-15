@@ -101,7 +101,7 @@ void DescriptorSet::update()
             VkWriteDescriptorSet writeDescriptor = binding->getWriteDescriptor();
             writeDescriptor.dstSet = handle;
             descriptorWrites.put(writeDescriptor);
-            binding->written = false;
+            binding->changed = false;
         }
     }
     device->updateDescriptorWrites(descriptorWrites);
@@ -116,7 +116,7 @@ void DescriptorSet::populateDescriptorWrites(std::vector<VkWriteDescriptorSet>& 
             VkWriteDescriptorSet writeDescriptor = binding->getWriteDescriptor();
             writeDescriptor.dstSet = handle;
             descriptorWrites.push_back(writeDescriptor);
-            binding->written = false;
+            binding->changed = false;
         }
     }
 }

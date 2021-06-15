@@ -28,7 +28,7 @@ namespace binding
 DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding) noexcept:
     VkDescriptorSetLayoutBinding{binding, descriptorType, descriptorCount, 0, nullptr},
     descriptorWrite{},
-    written(false)
+    changed(false)
 {}
 
 void DescriptorSetLayoutBinding::writeDescriptor(const VkDescriptorImageInfo& info) noexcept
@@ -44,7 +44,7 @@ void DescriptorSetLayoutBinding::writeDescriptor(const VkDescriptorImageInfo& in
     descriptorWrite.pImageInfo = &imageDescriptor;
     descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = nullptr;
-    written = true;
+    changed = true;
 }
 
 void DescriptorSetLayoutBinding::writeDescriptor(std::shared_ptr<const Buffer> buffer) noexcept
@@ -60,7 +60,7 @@ void DescriptorSetLayoutBinding::writeDescriptor(std::shared_ptr<const Buffer> b
     descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = &bufferDescriptor;
     descriptorWrite.pTexelBufferView = nullptr;
-    written = true;
+    changed = true;
 }
 
 void DescriptorSetLayoutBinding::writeDescriptor(std::shared_ptr<const BufferView> bufferView) noexcept
@@ -76,7 +76,7 @@ void DescriptorSetLayoutBinding::writeDescriptor(std::shared_ptr<const BufferVie
     descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = &texelBufferView;
-    written = true;
+    changed = true;
 }
 
 Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept
@@ -107,7 +107,7 @@ AccelerationStructure& AccelerationStructure::operator=(std::shared_ptr<const ma
     descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = nullptr;
-    written = true;
+    changed = true;
     return *this;
 }
 #endif // VK_NV_ray_tracing
