@@ -23,9 +23,9 @@ namespace magma
 {
 namespace helpers
 {
-const char *stringize(VkBool32 param) noexcept
+const char *stringize(VkBool32 boolean) noexcept
 {
-    switch (param)
+    switch (boolean)
     {
     MAGMA_STRINGIZE_FIELD(VK_TRUE)
     MAGMA_STRINGIZE_FIELD(VK_FALSE)
@@ -91,9 +91,9 @@ const char *stringize(VkResult result) noexcept
     }
 }
 
-const char *stringize(VkSystemAllocationScope param) noexcept
+const char *stringize(VkSystemAllocationScope allocationScope) noexcept
 {
-    switch (param)
+    switch (allocationScope)
     {
     MAGMA_STRINGIZE_FIELD(VK_SYSTEM_ALLOCATION_SCOPE_COMMAND)
     MAGMA_STRINGIZE_FIELD(VK_SYSTEM_ALLOCATION_SCOPE_OBJECT)
@@ -104,18 +104,18 @@ const char *stringize(VkSystemAllocationScope param) noexcept
     };
 }
 
-const char *stringize(VkInternalAllocationType param) noexcept
+const char *stringize(VkInternalAllocationType allocationType) noexcept
 {
-    switch (param)
+    switch (allocationType)
     {
     MAGMA_STRINGIZE_FIELD(VK_INTERNAL_ALLOCATION_TYPE_EXECUTABLE)
     MAGMA_DEFAULT_UNKNOWN;
     };
 }
 
-const char *stringize(VkFormat param) noexcept
+const char *stringize(VkFormat format) noexcept
 {
-    switch (param)
+    switch (format)
     {
     MAGMA_STRINGIZE_FIELD(VK_FORMAT_UNDEFINED)
     MAGMA_STRINGIZE_FIELD(VK_FORMAT_R4G4_UNORM_PACK8)
@@ -350,9 +350,9 @@ const char *stringize(VkFormat param) noexcept
     };
 }
 
-const char *stringize(VkImageType param) noexcept
+const char *stringize(VkImageType imageType) noexcept
 {
-    switch (param)
+    switch (imageType)
     {
     MAGMA_STRINGIZE_FIELD(VK_IMAGE_TYPE_1D)
     MAGMA_STRINGIZE_FIELD(VK_IMAGE_TYPE_2D)
@@ -361,9 +361,9 @@ const char *stringize(VkImageType param) noexcept
     };
 }
 
-const char *stringize(VkImageTiling param) noexcept
+const char *stringize(VkImageTiling imageTiling) noexcept
 {
-    switch (param)
+    switch (imageTiling)
     {
     MAGMA_STRINGIZE_FIELD(VK_IMAGE_TILING_OPTIMAL)
     MAGMA_STRINGIZE_FIELD(VK_IMAGE_TILING_LINEAR)
@@ -371,9 +371,9 @@ const char *stringize(VkImageTiling param) noexcept
     };
 }
 
-const char *stringize(VkPhysicalDeviceType param) noexcept
+const char *stringize(VkPhysicalDeviceType deviceType) noexcept
 {
-    switch (param)
+    switch (deviceType)
     {
     MAGMA_STRINGIZE_FIELD(VK_PHYSICAL_DEVICE_TYPE_OTHER)
     MAGMA_STRINGIZE_FIELD(VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU)
@@ -384,9 +384,9 @@ const char *stringize(VkPhysicalDeviceType param) noexcept
     };
 }
 
-const char *stringize(VkQueryType param) noexcept
+const char *stringize(VkQueryType queryType) noexcept
 {
-    switch (param)
+    switch (queryType)
     {
     MAGMA_STRINGIZE_FIELD(VK_QUERY_TYPE_OCCLUSION)
     MAGMA_STRINGIZE_FIELD(VK_QUERY_TYPE_PIPELINE_STATISTICS)
@@ -395,9 +395,9 @@ const char *stringize(VkQueryType param) noexcept
     };
 }
 
-const char *stringize(VkSharingMode param) noexcept
+const char *stringize(VkSharingMode sharingMode) noexcept
 {
-    switch (param)
+    switch (sharingMode)
     {
     MAGMA_STRINGIZE_FIELD(VK_SHARING_MODE_EXCLUSIVE)
     MAGMA_STRINGIZE_FIELD(VK_SHARING_MODE_CONCURRENT)
@@ -405,9 +405,9 @@ const char *stringize(VkSharingMode param) noexcept
     };
 }
 
-const char *stringize(VkImageLayout param) noexcept
+const char *stringize(VkImageLayout imageLayout) noexcept
 {
-    switch (param)
+    switch (imageLayout)
     {
     MAGMA_STRINGIZE_FIELD(VK_IMAGE_LAYOUT_UNDEFINED)
     MAGMA_STRINGIZE_FIELD(VK_IMAGE_LAYOUT_GENERAL)
@@ -432,9 +432,9 @@ const char *stringize(VkImageLayout param) noexcept
     };
 }
 
-const char *stringize(VkImageViewType param) noexcept
+const char *stringize(VkImageViewType imageViewType) noexcept
 {
-    switch (param)
+    switch (imageViewType)
     {
     MAGMA_STRINGIZE_FIELD(VK_IMAGE_VIEW_TYPE_1D)
     MAGMA_STRINGIZE_FIELD(VK_IMAGE_VIEW_TYPE_2D)
@@ -447,9 +447,9 @@ const char *stringize(VkImageViewType param) noexcept
     };
 }
 
-const char *stringize(VkComponentSwizzle param) noexcept
+const char *stringize(VkComponentSwizzle componentSwizzle) noexcept
 {
-    switch (param)
+    switch (componentSwizzle)
     {
     MAGMA_STRINGIZE_FIELD(VK_COMPONENT_SWIZZLE_IDENTITY)
     MAGMA_STRINGIZE_FIELD(VK_COMPONENT_SWIZZLE_ZERO)
@@ -462,9 +462,9 @@ const char *stringize(VkComponentSwizzle param) noexcept
     };
 }
 
-const char *stringize(VkVertexInputRate param) noexcept
+const char *stringize(VkVertexInputRate vertexInputRate) noexcept
 {
-    switch (param)
+    switch (vertexInputRate)
     {
     MAGMA_STRINGIZE_FIELD(VK_VERTEX_INPUT_RATE_VERTEX)
     MAGMA_STRINGIZE_FIELD(VK_VERTEX_INPUT_RATE_INSTANCE)
@@ -472,9 +472,9 @@ const char *stringize(VkVertexInputRate param) noexcept
     };
 }
 
-const char *stringize(VkPrimitiveTopology param) noexcept
+const char *stringize(VkPrimitiveTopology primitiveTopology) noexcept
 {
-    switch (param)
+    switch (primitiveTopology)
     {
     MAGMA_STRINGIZE_FIELD(VK_PRIMITIVE_TOPOLOGY_POINT_LIST)
     MAGMA_STRINGIZE_FIELD(VK_PRIMITIVE_TOPOLOGY_LINE_LIST)
@@ -491,9 +491,9 @@ const char *stringize(VkPrimitiveTopology param) noexcept
     };
 }
 
-const char *stringize(VkPolygonMode param) noexcept
+const char *stringize(VkPolygonMode polygonMode) noexcept
 {
-    switch (param)
+    switch (polygonMode)
     {
     MAGMA_STRINGIZE_FIELD(VK_POLYGON_MODE_FILL)
     MAGMA_STRINGIZE_FIELD(VK_POLYGON_MODE_LINE)
@@ -505,9 +505,9 @@ const char *stringize(VkPolygonMode param) noexcept
     };
 }
 
-const char *stringize(VkFrontFace param) noexcept
+const char *stringize(VkFrontFace frontFace) noexcept
 {
-    switch (param)
+    switch (frontFace)
     {
     MAGMA_STRINGIZE_FIELD(VK_FRONT_FACE_COUNTER_CLOCKWISE)
     MAGMA_STRINGIZE_FIELD(VK_FRONT_FACE_CLOCKWISE)
@@ -515,9 +515,9 @@ const char *stringize(VkFrontFace param) noexcept
     };
 }
 
-const char *stringize(VkCompareOp param) noexcept
+const char *stringize(VkCompareOp compareOp) noexcept
 {
-    switch (param)
+    switch (compareOp)
     {
     MAGMA_STRINGIZE_FIELD(VK_COMPARE_OP_NEVER)
     MAGMA_STRINGIZE_FIELD(VK_COMPARE_OP_LESS)
@@ -531,9 +531,9 @@ const char *stringize(VkCompareOp param) noexcept
     };
 }
 
-const char *stringize(VkStencilOp param) noexcept
+const char *stringize(VkStencilOp stencilOp) noexcept
 {
-    switch (param)
+    switch (stencilOp)
     {
     MAGMA_STRINGIZE_FIELD(VK_STENCIL_OP_KEEP)
     MAGMA_STRINGIZE_FIELD(VK_STENCIL_OP_ZERO)
@@ -547,9 +547,9 @@ const char *stringize(VkStencilOp param) noexcept
     };
 }
 
-const char *stringize(VkLogicOp param) noexcept
+const char *stringize(VkLogicOp logicOp) noexcept
 {
-    switch (param)
+    switch (logicOp)
     {
     MAGMA_STRINGIZE_FIELD(VK_LOGIC_OP_CLEAR)
     MAGMA_STRINGIZE_FIELD(VK_LOGIC_OP_AND)
@@ -571,9 +571,9 @@ const char *stringize(VkLogicOp param) noexcept
     };
 }
 
-const char *stringize(VkBlendFactor param) noexcept
+const char *stringize(VkBlendFactor blendFactor) noexcept
 {
-    switch (param)
+    switch (blendFactor)
     {
     MAGMA_STRINGIZE_FIELD(VK_BLEND_FACTOR_ZERO)
     MAGMA_STRINGIZE_FIELD(VK_BLEND_FACTOR_ONE)
@@ -598,9 +598,9 @@ const char *stringize(VkBlendFactor param) noexcept
     };
 }
 
-const char *stringize(VkBlendOp param) noexcept
+const char *stringize(VkBlendOp blendOp) noexcept
 {
-    switch (param)
+    switch (blendOp)
     {
     MAGMA_STRINGIZE_FIELD(VK_BLEND_OP_ADD)
     MAGMA_STRINGIZE_FIELD(VK_BLEND_OP_SUBTRACT)
@@ -659,9 +659,9 @@ const char *stringize(VkBlendOp param) noexcept
     };
 }
 
-const char *stringize(VkDynamicState param) noexcept
+const char *stringize(VkDynamicState dynamicState) noexcept
 {
-    switch (param)
+    switch (dynamicState)
     {
     MAGMA_STRINGIZE_FIELD(VK_DYNAMIC_STATE_VIEWPORT)
     MAGMA_STRINGIZE_FIELD(VK_DYNAMIC_STATE_SCISSOR)
@@ -685,9 +685,9 @@ const char *stringize(VkDynamicState param) noexcept
     };
 }
 
-const char *stringize(VkFilter param) noexcept
+const char *stringize(VkFilter filter) noexcept
 {
-    switch (param)
+    switch (filter)
     {
     MAGMA_STRINGIZE_FIELD(VK_FILTER_NEAREST)
     MAGMA_STRINGIZE_FIELD(VK_FILTER_LINEAR)
@@ -698,9 +698,9 @@ const char *stringize(VkFilter param) noexcept
     };
 }
 
-const char *stringize(VkSamplerMipmapMode param) noexcept
+const char *stringize(VkSamplerMipmapMode mipmapMode) noexcept
 {
-    switch (param)
+    switch (mipmapMode)
     {
     MAGMA_STRINGIZE_FIELD(VK_SAMPLER_MIPMAP_MODE_NEAREST)
     MAGMA_STRINGIZE_FIELD(VK_SAMPLER_MIPMAP_MODE_LINEAR)
@@ -708,9 +708,9 @@ const char *stringize(VkSamplerMipmapMode param) noexcept
     };
 }
 
-const char *stringize(VkSamplerAddressMode param) noexcept
+const char *stringize(VkSamplerAddressMode addressMode) noexcept
 {
-    switch (param)
+    switch (addressMode)
     {
     MAGMA_STRINGIZE_FIELD(VK_SAMPLER_ADDRESS_MODE_REPEAT)
     MAGMA_STRINGIZE_FIELD(VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT)
@@ -721,9 +721,9 @@ const char *stringize(VkSamplerAddressMode param) noexcept
     };
 }
 
-const char *stringize(VkBorderColor param) noexcept
+const char *stringize(VkBorderColor borderColor) noexcept
 {
-    switch (param)
+    switch (borderColor)
     {
     MAGMA_STRINGIZE_FIELD(VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK)
     MAGMA_STRINGIZE_FIELD(VK_BORDER_COLOR_INT_TRANSPARENT_BLACK)
@@ -735,9 +735,9 @@ const char *stringize(VkBorderColor param) noexcept
     };
 }
 
-const char *stringize(VkDescriptorType param) noexcept
+const char *stringize(VkDescriptorType descriptorType) noexcept
 {
-    switch (param)
+    switch (descriptorType)
     {
     MAGMA_STRINGIZE_FIELD(VK_DESCRIPTOR_TYPE_SAMPLER)
     MAGMA_STRINGIZE_FIELD(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
@@ -754,9 +754,9 @@ const char *stringize(VkDescriptorType param) noexcept
     };
 }
 
-const char *stringize(VkAttachmentLoadOp param) noexcept
+const char *stringize(VkAttachmentLoadOp loadOp) noexcept
 {
-    switch (param)
+    switch (loadOp)
     {
     MAGMA_STRINGIZE_FIELD(VK_ATTACHMENT_LOAD_OP_LOAD)
     MAGMA_STRINGIZE_FIELD(VK_ATTACHMENT_LOAD_OP_CLEAR)
@@ -765,9 +765,9 @@ const char *stringize(VkAttachmentLoadOp param) noexcept
     };
 }
 
-const char *stringize(VkAttachmentStoreOp param) noexcept
+const char *stringize(VkAttachmentStoreOp storeOp) noexcept
 {
-    switch (param)
+    switch (storeOp)
     {
     MAGMA_STRINGIZE_FIELD(VK_ATTACHMENT_STORE_OP_STORE)
     MAGMA_STRINGIZE_FIELD(VK_ATTACHMENT_STORE_OP_DONT_CARE)
@@ -775,9 +775,9 @@ const char *stringize(VkAttachmentStoreOp param) noexcept
     };
 }
 
-const char *stringize(VkPipelineBindPoint param) noexcept
+const char *stringize(VkPipelineBindPoint bindPoint) noexcept
 {
-    switch (param)
+    switch (bindPoint)
     {
     MAGMA_STRINGIZE_FIELD(VK_PIPELINE_BIND_POINT_GRAPHICS)
     MAGMA_STRINGIZE_FIELD(VK_PIPELINE_BIND_POINT_COMPUTE)
@@ -788,9 +788,9 @@ const char *stringize(VkPipelineBindPoint param) noexcept
     };
 }
 
-const char *stringize(VkCommandBufferLevel param) noexcept
+const char *stringize(VkCommandBufferLevel cmdBufferLevel) noexcept
 {
-    switch (param)
+    switch (cmdBufferLevel)
     {
     MAGMA_STRINGIZE_FIELD(VK_COMMAND_BUFFER_LEVEL_PRIMARY)
     MAGMA_STRINGIZE_FIELD(VK_COMMAND_BUFFER_LEVEL_SECONDARY)
@@ -798,9 +798,9 @@ const char *stringize(VkCommandBufferLevel param) noexcept
     };
 }
 
-const char *stringize(VkIndexType param) noexcept
+const char *stringize(VkIndexType indexType) noexcept
 {
-    switch (param)
+    switch (indexType)
     {
     MAGMA_STRINGIZE_FIELD(VK_INDEX_TYPE_UINT16)
     MAGMA_STRINGIZE_FIELD(VK_INDEX_TYPE_UINT32)
@@ -814,9 +814,9 @@ const char *stringize(VkIndexType param) noexcept
     };
 }
 
-const char *stringize(VkSubpassContents param) noexcept
+const char *stringize(VkSubpassContents subpassContents) noexcept
 {
-    switch (param)
+    switch (subpassContents)
     {
     MAGMA_STRINGIZE_FIELD(VK_SUBPASS_CONTENTS_INLINE)
     MAGMA_STRINGIZE_FIELD(VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS)
@@ -824,9 +824,9 @@ const char *stringize(VkSubpassContents param) noexcept
     };
 }
 
-const char *stringize(VkObjectType param) noexcept
+const char *stringize(VkObjectType objectType) noexcept
 {
-    switch (param)
+    switch (objectType)
     {
     MAGMA_STRINGIZE_FIELD(VK_OBJECT_TYPE_UNKNOWN)
     MAGMA_STRINGIZE_FIELD(VK_OBJECT_TYPE_INSTANCE)
@@ -1177,9 +1177,9 @@ const char *stringize(VkPipelineCreateFlagBits bit) noexcept
     }
 }
 
-const char *stringize(VkShaderStageFlagBits flags) noexcept
+const char *stringize(VkShaderStageFlagBits bit) noexcept
 {
-    switch (flags)
+    switch (bit)
     {
     MAGMA_STRINGIZE_FIELD(VK_SHADER_STAGE_VERTEX_BIT)
     MAGMA_STRINGIZE_FIELD(VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT)
@@ -1205,9 +1205,9 @@ const char *stringize(VkShaderStageFlagBits flags) noexcept
     }
 }
 
-const char *stringize(VkCullModeFlagBits flags) noexcept
+const char *stringize(VkCullModeFlagBits bit) noexcept
 {
-    switch (flags)
+    switch (bit)
     {
     MAGMA_STRINGIZE_FIELD(VK_CULL_MODE_NONE)
     MAGMA_STRINGIZE_FIELD(VK_CULL_MODE_FRONT_BIT)
@@ -1342,9 +1342,9 @@ const char *stringize(VkCommandBufferResetFlagBits bit) noexcept
     }
 }
 
-const char *stringize(VkStencilFaceFlagBits flags) noexcept
+const char *stringize(VkStencilFaceFlagBits bit) noexcept
 {
-    switch (flags)
+    switch (bit)
     {
     MAGMA_STRINGIZE_FIELD(VK_STENCIL_FACE_FRONT_BIT)
     MAGMA_STRINGIZE_FIELD(VK_STENCIL_FACE_BACK_BIT)
@@ -1353,9 +1353,9 @@ const char *stringize(VkStencilFaceFlagBits flags) noexcept
     }
 }
 
-const char *stringize(VkColorSpaceKHR param) noexcept
+const char *stringize(VkColorSpaceKHR colorSpace) noexcept
 {
-    switch (param)
+    switch (colorSpace)
     {
     MAGMA_STRINGIZE_FIELD(VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
 #ifdef VK_EXT_swapchain_colorspace
@@ -1378,9 +1378,9 @@ const char *stringize(VkColorSpaceKHR param) noexcept
     };
 }
 
-const char *stringize(VkPresentModeKHR param) noexcept
+const char *stringize(VkPresentModeKHR presentMode) noexcept
 {
-    switch (param)
+    switch (presentMode)
     {
     MAGMA_STRINGIZE_FIELD(VK_PRESENT_MODE_IMMEDIATE_KHR)
     MAGMA_STRINGIZE_FIELD(VK_PRESENT_MODE_MAILBOX_KHR)
@@ -1456,9 +1456,9 @@ const char *stringize(VkAccelerationStructureTypeNV structureType) noexcept
     };
 }
 
-const char *stringize(VkCopyAccelerationStructureModeNV mode) noexcept
+const char *stringize(VkCopyAccelerationStructureModeNV copyMode) noexcept
 {
-    switch (mode)
+    switch (copyMode)
     {
     MAGMA_STRINGIZE_FIELD(VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_NV)
     MAGMA_STRINGIZE_FIELD(VK_COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_NV)
@@ -1466,9 +1466,9 @@ const char *stringize(VkCopyAccelerationStructureModeNV mode) noexcept
     };
 }
 
-const char *stringize(VkAccelerationStructureMemoryRequirementsTypeNV requirements) noexcept
+const char *stringize(VkAccelerationStructureMemoryRequirementsTypeNV memoryRequirementsType) noexcept
 {
-    switch (requirements)
+    switch (memoryRequirementsType)
     {
     MAGMA_STRINGIZE_FIELD(VK_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_OBJECT_NV)
     MAGMA_STRINGIZE_FIELD(VK_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_BUILD_SCRATCH_NV)
@@ -1581,9 +1581,9 @@ const char *stringize(SpvReflectDecorationFlagBits bit) noexcept
     }
 }
 
-const char *stringize(SpvReflectResourceType param) noexcept
+const char *stringize(SpvReflectResourceType resourceType) noexcept
 {
-    switch (param)
+    switch (resourceType)
     {
     MAGMA_STRINGIZE_FIELD(SPV_REFLECT_RESOURCE_FLAG_UNDEFINED)
     MAGMA_STRINGIZE_FIELD(SPV_REFLECT_RESOURCE_FLAG_SAMPLER)
@@ -1637,9 +1637,9 @@ const char *stringize(SpvReflectVariableFlagBits bit) noexcept
     }
 }
 
-const char *stringize(SpvReflectDescriptorType type) noexcept
+const char *stringize(SpvReflectDescriptorType descriptorType) noexcept
 {
-    switch (type)
+    switch (descriptorType)
     {
     MAGMA_STRINGIZE_FIELD(SPV_REFLECT_DESCRIPTOR_TYPE_SAMPLER)
     MAGMA_STRINGIZE_FIELD(SPV_REFLECT_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
@@ -1679,9 +1679,9 @@ const char *stringize(SpvReflectShaderStageFlagBits bit) noexcept
     }
 }
 
-const char *stringize(SpvReflectGenerator param) noexcept
+const char *stringize(SpvReflectGenerator generator) noexcept
 {
-    switch (param)
+    switch (generator)
     {
     MAGMA_STRINGIZE_FIELD(SPV_REFLECT_GENERATOR_KHRONOS_LLVM_SPIRV_TRANSLATOR)
     MAGMA_STRINGIZE_FIELD(SPV_REFLECT_GENERATOR_KHRONOS_SPIRV_TOOLS_ASSEMBLER)

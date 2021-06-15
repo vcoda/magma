@@ -25,11 +25,7 @@ namespace magma
     struct Descriptor : public VkDescriptorPoolSize
     {
         constexpr Descriptor(const VkDescriptorType type, const uint32_t descriptorCount) noexcept:
-            VkDescriptorPoolSize{
-                type,
-                descriptorCount
-            }
-        {}
+            VkDescriptorPoolSize{type, descriptorCount} {}
     };
 
     namespace descriptor
@@ -95,13 +91,13 @@ namespace magma
         {
             constexpr InlineUniformBlock() noexcept: Descriptor(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT, sizeof(UniformBlockType)) {}
         };
-#endif
+#endif // VK_EXT_inline_uniform_block
 
 #ifdef VK_NV_ray_tracing
         struct AccelerationStructure : Descriptor
         {
             constexpr AccelerationStructure(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV, count) {}
         };
-#endif
+#endif // VK_NV_ray_tracing
     } // namespace descriptor
 } // namespace magma
