@@ -39,7 +39,20 @@ DescriptorSetLayoutBindingArray::~DescriptorSetLayoutBindingArray()
 
 StorageBufferArray& StorageBufferArray::operator=(std::initializer_list<std::shared_ptr<const magma::StorageBuffer>> bufferArray) noexcept
 {
-    VkDescriptorBufferInfo *bufferInfo = new VkDescriptorBufferInfo[bufferArray.size()];
+    VkDescriptorBufferInfo *bufferInfo;
+    if (!descriptorWrite.pBufferInfo)
+        bufferInfo = new VkDescriptorBufferInfo[bufferArray.size()];
+    else
+    {
+        if (bufferArray.size() <= descriptorCount)
+            bufferInfo = const_cast<VkDescriptorBufferInfo *>(descriptorWrite.pBufferInfo);
+        else
+        {   // Reallocate
+            delete[] descriptorWrite.pBufferInfo;
+            bufferInfo = new VkDescriptorBufferInfo[bufferArray.size()];
+        }
+    }
+    descriptorCount = 0;
     for (auto& buffer : bufferArray)
         bufferInfo[descriptorCount++] = buffer->getDescriptor();
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
