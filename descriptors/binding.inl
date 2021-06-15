@@ -21,7 +21,8 @@ inline InlineUniformBlock<UniformBlockType>& InlineUniformBlock<UniformBlockType
     inlineUniformBlockDescriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_INLINE_UNIFORM_BLOCK_EXT;
     inlineUniformBlockDescriptorWrite.pNext = nullptr;
     inlineUniformBlockDescriptorWrite.dataSize = sizeof(UniformBlockType);
-    inlineUniformBlockDescriptorWrite.pData = new(std::nothrow) UniformBlockType();
+    if (!inlineUniformBlockDescriptorWrite.pData)
+        inlineUniformBlockDescriptorWrite.pData = new(std::nothrow) UniformBlockType();
     if (inlineUniformBlockDescriptorWrite.pData)
         memcpy((void *)inlineUniformBlockDescriptorWrite.pData, &inlineUniformBlock, sizeof(UniformBlockType));
     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
