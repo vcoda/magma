@@ -25,7 +25,7 @@ class ScopedProfiler
 public:
     ScopedProfiler(const char *message,
         std::function<void(float ms)> callback):
-        callback(callback),
+        callback(std::move(callback)),
         begin(std::chrono::high_resolution_clock::now())
     {
         std::cout << message << std::endl;
