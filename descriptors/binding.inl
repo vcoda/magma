@@ -12,7 +12,7 @@ inline InlineUniformBlock<UniformBlockType>::InlineUniformBlock(uint32_t binding
 template<typename UniformBlockType>
 inline InlineUniformBlock<UniformBlockType>::~InlineUniformBlock()
 {
-    delete (UniformBlockType *)inlineUniformBlockDescriptorWrite.pData;
+    delete reinterpret_cast<UniformBlockType *>(inlineUniformBlockDescriptorWrite.pData);
 }
 
 template<typename UniformBlockType>
