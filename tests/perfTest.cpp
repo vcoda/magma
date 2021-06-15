@@ -4,14 +4,12 @@
 #include <mm_malloc.h>
 #endif
 #include "scopedProfiler.h"
-#include "../detail/copyMemory.h"
-#include "../detail/zeroMemory.h"
+#include "../core/core.h"
+#include "../core/copyMemory.h"
+#include "../core/zeroMemory.h"
 
-namespace
-{
-    constexpr size_t BUFFER_SIZE = 1024 * 1024 * 32; // 32M
-    constexpr int NUM_ITERATIONS = 100;
-}
+constexpr size_t BUFFER_SIZE = 1024 * 1024 * 32; // 32M
+constexpr int NUM_ITERATIONS = 100;
 
 bool checkBuffer(const void *buffer, char value)
 {
@@ -49,9 +47,9 @@ int main()
     }
     std::cout << std::endl;
     {   // 2) Test our copy function
-        ScopedProfiler prof("Run magma::detail::copyMemory() performance test.", onFinish);
+        ScopedProfiler prof("Run magma::core::copyMemory() performance test.", onFinish);
         for (int i = 0; i < NUM_ITERATIONS; ++i)
-            magma::detail::copyMemory(dstBuffer1, srcBuffer1, BUFFER_SIZE);
+            magma::core::copyMemory(dstBuffer1, srcBuffer1, BUFFER_SIZE);
     }
     // Test copy correctness
     if (checkBuffer(dstBuffer1, 0x7F))
@@ -66,9 +64,9 @@ int main()
     }
     std::cout << std::endl;
     {   // 4) Test our zero function
-        ScopedProfiler prof("Run magma::detail::zeroMemory() performance test.", onFinish);
+        ScopedProfiler prof("Run magma::core::zeroMemory() performance test.", onFinish);
         for (int i = 0; i < NUM_ITERATIONS; ++i)
-            magma::detail::zeroMemory(dstBuffer1, BUFFER_SIZE);
+            magma::core::zeroMemory(dstBuffer1, BUFFER_SIZE);
     }
     // Test zero correctness
     if (checkBuffer(dstBuffer1, 0))
