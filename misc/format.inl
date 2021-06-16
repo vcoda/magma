@@ -1,5 +1,9 @@
 namespace magma
 {
+constexpr Format::Format(const VkFormat format) noexcept:
+    format(format)
+{}
+
 constexpr bool Format::depth() const noexcept
 {
     switch (format)

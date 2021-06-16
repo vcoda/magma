@@ -25,12 +25,8 @@ namespace magma
     class Format
     {
     public:
-        constexpr Format(VkFormat format) noexcept:
-            format(format) {}
-        constexpr operator VkFormat() const noexcept
-            { return format; }
-        constexpr bool valid() const noexcept
-            { return format != VK_FORMAT_UNDEFINED; }
+        constexpr Format(VkFormat format) noexcept;
+        constexpr bool valid() const noexcept { return format != VK_FORMAT_UNDEFINED; }
         constexpr bool depth() const noexcept;
         constexpr bool stencil() const noexcept;
         constexpr bool depthStencil() const noexcept;
@@ -46,6 +42,7 @@ namespace magma
         std::size_t size() const noexcept;
         std::size_t blockCompressedSize() const noexcept;
         std::pair<int, int> blockFootprint() const noexcept;
+        constexpr operator VkFormat() const noexcept { return format; }
 
     private:
         VkFormat format;
