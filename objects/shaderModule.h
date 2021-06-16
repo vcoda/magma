@@ -44,9 +44,9 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkShaderModuleCreateFlags flags = 0,
             bool reflect = false
-#       ifdef VK_EXT_validation_cache
+#ifdef VK_EXT_validation_cache
             ,std::shared_ptr<ValidationCache> validationCache = nullptr
-#       endif
+#endif
         );
         explicit ShaderModule(std::shared_ptr<Device> device,
             const std::vector<SpirvWord>& bytecode,
@@ -54,9 +54,9 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkShaderModuleCreateFlags flags = 0,
             bool reflect = false
-#       ifdef VK_EXT_validation_cache
+#ifdef VK_EXT_validation_cache
             ,std::shared_ptr<ValidationCache> validationCache = nullptr
-#       endif
+#endif
         );
         template<std::size_t WordCount>
         explicit ShaderModule(std::shared_ptr<Device> device,
@@ -65,9 +65,9 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkShaderModuleCreateFlags flags = 0,
             bool reflect = false
-#       ifdef VK_EXT_validation_cache
+#ifdef VK_EXT_validation_cache
             ,std::shared_ptr<ValidationCache> validationCache = nullptr
-#       endif
+#endif
         );
         ~ShaderModule();
         std::shared_ptr<const ShaderReflection> getReflection() const noexcept { return reflection; }

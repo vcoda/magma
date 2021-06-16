@@ -30,9 +30,6 @@ namespace magma
 
     class ResourcePool final : public core::NonCopyable
     {
-        template<typename Type>
-        friend class NonDispatchable;
-
     public:
         struct DeviceResources
         {
@@ -87,7 +84,6 @@ namespace magma
         core::Pool<Type>& getPool();
 
     private:
-        // Core types
         core::Pool<NonDispatchable<VkSemaphore>> semaphores;
         core::Pool<NonDispatchable<VkFence>> fences;
         core::Pool<NonDispatchable<VkDeviceMemory>> deviceMemories;
@@ -129,6 +125,8 @@ namespace magma
         core::Pool<NonDispatchable<VkAccelerationStructureNV>> accelerationStructures;
 #endif
         mutable std::mutex mtx;
+        template<typename Type>
+        friend class NonDispatchable;
     };
 } // namespace magma
 

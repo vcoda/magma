@@ -9,7 +9,6 @@ inline core::Pool<Type>& ResourcePool::getPool<Type>()\
     return pool;\
 }
 
-// Core types
 MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(NonDispatchable<VkSemaphore>, semaphores)
 MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(NonDispatchable<VkFence>, fences)
 MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(NonDispatchable<VkDeviceMemory>, deviceMemories)

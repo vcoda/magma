@@ -67,7 +67,10 @@ namespace magma
                 memory->unmap();
         }
 
-        virtual uint32_t getArraySize() const noexcept { return arraySize; }
+        virtual uint32_t getArraySize() const noexcept
+        {
+            return arraySize;
+        }
 
     protected:
         const uint32_t arraySize;
@@ -109,7 +112,10 @@ namespace magma
             return static_cast<uint32_t>(index * alignment);
         }
 
-        VkDeviceSize getElementAlignment() const noexcept { return alignment; }
+        VkDeviceSize getElementAlignment() const noexcept
+        {
+            return alignment;
+        }
 
     private:
         static VkDeviceSize minOffsetAlignment(std::shared_ptr<Device> device) noexcept
