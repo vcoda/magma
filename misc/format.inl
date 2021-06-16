@@ -37,7 +37,7 @@ constexpr bool Format::depthStencil() const noexcept
     }
 }
 
-constexpr bool Format::blockCompressed() const noexcept
+constexpr bool Format::bc() const noexcept
 {
     switch (format)
     {
@@ -63,7 +63,7 @@ constexpr bool Format::blockCompressed() const noexcept
     }
 }
 
-constexpr bool Format::ETC2() const noexcept
+constexpr bool Format::etc2() const noexcept
 {
     switch (format)
     {
@@ -79,7 +79,7 @@ constexpr bool Format::ETC2() const noexcept
     }
 }
 
-constexpr bool Format::EAC() const noexcept
+constexpr bool Format::eac() const noexcept
 {
     switch (format)
     {
@@ -93,7 +93,7 @@ constexpr bool Format::EAC() const noexcept
     }
 }
 
-constexpr bool Format::ASTC() const noexcept
+constexpr bool Format::astc() const noexcept
 {
     switch (format)
     {
@@ -131,11 +131,11 @@ constexpr bool Format::ASTC() const noexcept
     };
 }
 
-#ifdef VK_IMG_format_pvrtc
-constexpr bool Format::PVRTC() const noexcept
+constexpr bool Format::pvrtc() const noexcept
 {
     switch (format)
     {
+#ifdef VK_IMG_format_pvrtc
     case VK_FORMAT_PVRTC1_2BPP_UNORM_BLOCK_IMG:
     case VK_FORMAT_PVRTC1_4BPP_UNORM_BLOCK_IMG:
     case VK_FORMAT_PVRTC2_2BPP_UNORM_BLOCK_IMG:
@@ -145,19 +145,15 @@ constexpr bool Format::PVRTC() const noexcept
     case VK_FORMAT_PVRTC2_2BPP_SRGB_BLOCK_IMG:
     case VK_FORMAT_PVRTC2_4BPP_SRGB_BLOCK_IMG:
         return true;
+#endif // VK_IMG_format_pvrtc
     default:
         return false;
     }
 }
-#endif // VK_IMG_format_pvrtc
 
-constexpr bool Format::compressed() const noexcept
+constexpr bool Format::blockCompressed() const noexcept
 {
-    return
-#ifdef VK_IMG_format_pvrtc
-        PVRTC() ||
-#endif
-        blockCompressed() || ETC2() || EAC() || ASTC();
+    return bc() || etc2() || eac() || astc() || pvrtc();
 }
 
 constexpr bool Format::floatingPoint() const noexcept

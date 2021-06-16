@@ -34,14 +34,12 @@ namespace magma
         constexpr bool depth() const noexcept;
         constexpr bool stencil() const noexcept;
         constexpr bool depthStencil() const noexcept;
+        constexpr bool bc() const noexcept;
+        constexpr bool etc2() const noexcept;
+        constexpr bool eac() const noexcept;
+        constexpr bool astc() const noexcept;
+        constexpr bool pvrtc() const noexcept;
         constexpr bool blockCompressed() const noexcept;
-        constexpr bool ETC2() const noexcept;
-        constexpr bool EAC() const noexcept;
-        constexpr bool ASTC() const noexcept;
-#ifdef VK_IMG_format_pvrtc
-        constexpr bool PVRTC() const noexcept;
-#endif
-        constexpr bool compressed() const noexcept;
         constexpr bool floatingPoint() const noexcept;
         constexpr bool sRGB() const noexcept;
         uint8_t components() const noexcept;
