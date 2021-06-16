@@ -24,9 +24,9 @@ namespace magma
     class DeviceExtension
     {
     public:
-        DeviceExtension(VkDevice device,
+        explicit DeviceExtension(VkDevice device,
             const char *name) noexcept;
-        DeviceExtension(VkDevice device,
+        explicit DeviceExtension(VkDevice device,
             const char *name,
             const char *extension,
             const exception::source_location& location);

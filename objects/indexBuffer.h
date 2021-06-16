@@ -72,7 +72,7 @@ namespace magma
     class DynamicIndexBuffer : public BaseIndexBuffer
     {
     public:
-        DynamicIndexBuffer(std::shared_ptr<Device> device,
+        explicit DynamicIndexBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkIndexType indexType,
             bool pinnedMemory,

@@ -21,10 +21,10 @@ namespace magma
 {
     struct Scissor : VkRect2D
     {
-        constexpr Scissor(int32_t x, int32_t y, const VkExtent2D& extent) noexcept;
-        constexpr Scissor(float x, float y, const VkExtent2D& extent) noexcept;
-        constexpr Scissor(int32_t x, int32_t y, uint32_t width, uint32_t height) noexcept;
-        constexpr Scissor(float x, float y, float width, float height) noexcept;
+        constexpr explicit Scissor(int32_t x, int32_t y, const VkExtent2D& extent) noexcept;
+        constexpr explicit Scissor(float x, float y, const VkExtent2D& extent) noexcept;
+        constexpr explicit Scissor(int32_t x, int32_t y, uint32_t width, uint32_t height) noexcept;
+        constexpr explicit Scissor(float x, float y, float width, float height) noexcept;
     };
 } // namespace magma
 

@@ -25,9 +25,9 @@ namespace magma
     class InstanceExtension
     {
     public:
-        InstanceExtension(VkInstance instance,
+        explicit InstanceExtension(VkInstance instance,
             const char *name) noexcept;
-        InstanceExtension(VkInstance instance,
+        explicit InstanceExtension(VkInstance instance,
             const char *name,
             const char *extension,
             const exception::source_location& location);

@@ -32,18 +32,18 @@ namespace magma
 
     struct ClearColor : public ClearValue
     {
-        constexpr ClearColor(float r, float g, float b, float a = 1.f) noexcept;
-        constexpr ClearColor(int32_t r, int32_t g, int32_t b, int32_t a) noexcept;
-        constexpr ClearColor(uint32_t r, uint32_t g, uint32_t b, uint32_t a) noexcept;
-        constexpr ClearColor(const float color[4]) noexcept;
-        constexpr ClearColor(const int32_t color[4]) noexcept;
-        constexpr ClearColor(const uint32_t color[4]) noexcept;
-        constexpr ClearColor(uint32_t hexValue) noexcept;
+        constexpr explicit ClearColor(float r, float g, float b, float a = 1.f) noexcept;
+        constexpr explicit ClearColor(int32_t r, int32_t g, int32_t b, int32_t a) noexcept;
+        constexpr explicit ClearColor(uint32_t r, uint32_t g, uint32_t b, uint32_t a) noexcept;
+        constexpr explicit ClearColor(const float color[4]) noexcept;
+        constexpr explicit ClearColor(const int32_t color[4]) noexcept;
+        constexpr explicit ClearColor(const uint32_t color[4]) noexcept;
+        constexpr explicit ClearColor(uint32_t hexValue) noexcept;
     };
 
     struct ClearDepthStencil : public ClearValue
     {
-        constexpr ClearDepthStencil(float depth, uint8_t stencil = 0) noexcept;
+        constexpr explicit ClearDepthStencil(float depth, uint8_t stencil = 0) noexcept;
     };
 } // namespace magma
 
