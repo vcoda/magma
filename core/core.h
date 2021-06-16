@@ -115,6 +115,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     ((frontFace && backFace) ? VK_STENCIL_FRONT_AND_BACK :\
      (frontFace ? VK_STENCIL_FACE_FRONT_BIT : VK_STENCIL_FACE_BACK_BIT))
 
+#define MAGMA_RETURN_VALID_COUNT(count)\
+    MAGMA_ASSERT(count > 0);\
+    return count
+
 #define MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(type, normalized, format)\
     template<> struct VertexAttribute<type, normalized> : AttributeFormat<format> {}
 
