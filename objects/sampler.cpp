@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "physicalDevice.h"
 #include "../states/samplerState.h"
+#include "../misc/borderColor.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 
@@ -29,7 +30,7 @@ namespace magma
 {
 Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Sampler(std::move(device), state, OpaqueBorderColor<float, 0>(), std::move(allocator))
+    Sampler(std::move(device), state, border::opaqueBlackFloat, std::move(allocator))
 {}
 
 Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state, const BorderColor& borderColor,
@@ -135,7 +136,7 @@ DepthSampler::DepthSampler(std::shared_ptr<Device> device, const DepthSamplerSta
 
 UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool linearFilter,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    UnnormalizedSampler(std::move(device), linearFilter, OpaqueBorderColor<float, 0>(), std::move(allocator))
+    UnnormalizedSampler(std::move(device), linearFilter, border::opaqueBlackFloat, std::move(allocator))
 {}
 
 UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool linearFilter, const BorderColor& borderColor,

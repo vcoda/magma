@@ -1042,9 +1042,6 @@
     <None Include="..\..\misc\pushConstants.inl">
       <Filter>Header Files\misc</Filter>
     </None>
-    <None Include="..\..\misc\borderColor.inl">
-      <Filter>Header Files\misc</Filter>
-    </None>
     <None Include="..\..\shaders\specialization.inl">
       <Filter>Header Files\shaders</Filter>
     </None>

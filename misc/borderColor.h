@@ -24,38 +24,27 @@ namespace magma
     class BorderColor
     {
     public:
-        bool isCustom() const noexcept;
+        constexpr BorderColor(VkBorderColor color) noexcept:
+            color(color), customColor{} {}
+        constexpr BorderColor(VkClearColorValue color) noexcept:
+            color(VK_BORDER_COLOR_MAX_ENUM), customColor(color) {}
+        bool custom() const noexcept { return VK_BORDER_COLOR_MAX_ENUM == color; }
         VkBorderColor getColor() const noexcept { return color; }
         const VkClearColorValue& getCustomColor() const noexcept { return customColor; }
 
-    protected:
-        BorderColor(VkBorderColor color) noexcept:
-            color(color) {}
-        BorderColor(VkClearColorValue color) noexcept:
-            color(VK_BORDER_COLOR_MAX_ENUM), customColor(color) {}
-
     private:
-        VkBorderColor color;
-        VkClearColorValue customColor; // VK_EXT_custom_border_color
+        const VkBorderColor color;
+        const VkClearColorValue customColor; // VK_EXT_custom_border_color
     };
 
-    /* Predefined transparent border color. */
-
-    template<typename Type>
-    class TransparentBorderColor : public BorderColor
+    namespace border
     {
-    public:
-        TransparentBorderColor() noexcept;
-    };
-
-    /* Predefined opaque border color. */
-
-    template<typename Type, int>
-    class OpaqueBorderColor : public BorderColor
-    {
-    public:
-        OpaqueBorderColor() noexcept;
-    };
+        constexpr BorderColor transparentBlackFloat(VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK);
+        constexpr BorderColor transparentBlackInt(VK_BORDER_COLOR_INT_TRANSPARENT_BLACK);
+        constexpr BorderColor opaqueBlackFloat(VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK);
+        constexpr BorderColor opaqueBlackInt(VK_BORDER_COLOR_INT_OPAQUE_BLACK);
+        constexpr BorderColor opaqueWhiteFloat(VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE);
+        constexpr BorderColor opaqueWhiteInt(VK_BORDER_COLOR_INT_OPAQUE_WHITE);
+    } // border
 } // namespace
 
-#include "borderColor.inl"

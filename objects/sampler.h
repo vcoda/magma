@@ -17,12 +17,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
-#include "../misc/borderColor.h"
 
 namespace magma
 {
     class SamplerState;
     class DepthSamplerState;
+    class BorderColor;
 
     /* Sampler objects represent the state of an image sampler
        which is used by the implementation to read image data
