@@ -35,14 +35,14 @@ PipelineCache::PipelineCache(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_CACHE, std::move(device), std::move(allocator))
 {
-    VkPipelineCacheCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = 0;
-    info.initialDataSize = dataSize;
-    info.pInitialData = cacheData;
-    const VkResult create = vkCreatePipelineCache(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create pipeline cache");
+    VkPipelineCacheCreateInfo cacheInfo;
+    cacheInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+    cacheInfo.pNext = nullptr;
+    cacheInfo.flags = 0;
+    cacheInfo.initialDataSize = dataSize;
+    cacheInfo.pInitialData = cacheData;
+    const VkResult result = vkCreatePipelineCache(MAGMA_HANDLE(device), &cacheInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create pipeline cache");
 }
 
 PipelineCache::~PipelineCache()

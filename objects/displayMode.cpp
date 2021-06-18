@@ -36,15 +36,15 @@ DisplayMode::DisplayMode(std::shared_ptr<const Display> display, const VkExtent2
     visibleRegion(visibleRegion),
     refreshRate(refreshRate)
 {
-    VkDisplayModeCreateInfoKHR info;
-    info.sType = VK_STRUCTURE_TYPE_DISPLAY_MODE_CREATE_INFO_KHR;
-    info.pNext = nullptr;
-    info.flags = 0;
-    info.parameters.visibleRegion = visibleRegion;
-    info.parameters.refreshRate = refreshRate;
+    VkDisplayModeCreateInfoKHR displayModeInfo;
+    displayModeInfo.sType = VK_STRUCTURE_TYPE_DISPLAY_MODE_CREATE_INFO_KHR;
+    displayModeInfo.pNext = nullptr;
+    displayModeInfo.flags = 0;
+    displayModeInfo.parameters.visibleRegion = visibleRegion;
+    displayModeInfo.parameters.refreshRate = refreshRate;
     MAGMA_INSTANCE_EXTENSION(vkCreateDisplayModeKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
-    const VkResult create = vkCreateDisplayModeKHR(MAGMA_HANDLE(physicalDevice), *display, &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create display mode");
+    const VkResult result = vkCreateDisplayModeKHR(MAGMA_HANDLE(physicalDevice), *display, &displayModeInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create display mode");
 }
 
 const VkDisplayPlaneCapabilitiesKHR& DisplayMode::getPlaneCapabilities(uint32_t planeIndex) const

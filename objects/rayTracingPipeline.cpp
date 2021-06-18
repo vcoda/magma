@@ -48,32 +48,32 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
         MAGMA_THROW("shader stages are empty");
     if (groups.empty())
         MAGMA_THROW("shader groups are empty");
-    VkRayTracingPipelineCreateInfoNV info;
-    info.sType = VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_NV;
-    info.pNext = nullptr;
-    info.flags = flags;
+    VkRayTracingPipelineCreateInfoNV pipelineInfo;
+    pipelineInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_NV;
+    pipelineInfo.pNext = nullptr;
+    pipelineInfo.flags = flags;
     if (this->basePipeline)
-        info.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
+        pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, stages.size());
     for (auto& stage : stages)
         dereferencedStages.put(stage);
-    info.stageCount = MAGMA_COUNT(dereferencedStages);
-    info.pStages = dereferencedStages;
-    info.groupCount = groupCount;
-    info.pGroups = groups.data();
-    info.maxRecursionDepth = maxRecursionDepth;
-    info.layout = MAGMA_HANDLE(layout);
-    info.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
-    info.basePipelineIndex = -1;
+    pipelineInfo.stageCount = MAGMA_COUNT(dereferencedStages);
+    pipelineInfo.pStages = dereferencedStages;
+    pipelineInfo.groupCount = groupCount;
+    pipelineInfo.pGroups = groups.data();
+    pipelineInfo.maxRecursionDepth = maxRecursionDepth;
+    pipelineInfo.layout = MAGMA_HANDLE(layout);
+    pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
+    pipelineInfo.basePipelineIndex = -1;
     MAGMA_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    const VkResult create = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create ray tracing pipeline");
+    const VkResult result = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->pipelineCache), 1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create ray tracing pipeline");
     hash = core::hashArgs(
-        info.sType,
-        info.flags,
-        info.stageCount,
-        info.groupCount,
-        info.maxRecursionDepth);
+        pipelineInfo.sType,
+        pipelineInfo.flags,
+        pipelineInfo.stageCount,
+        pipelineInfo.groupCount,
+        pipelineInfo.maxRecursionDepth);
     for (const auto& stage : stages)
         core::hashCombine(hash, stage.getHash());
     for (const auto& group : groups)

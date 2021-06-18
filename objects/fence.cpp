@@ -29,14 +29,14 @@ Fence::Fence(std::shared_ptr<Device> device,
     const bool signaled /* false */):
     NonDispatchable(VK_OBJECT_TYPE_FENCE, std::move(device), std::move(allocator))
 {
-    VkFenceCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = 0;
+    VkFenceCreateInfo fenceInfo;
+    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+    fenceInfo.pNext = nullptr;
+    fenceInfo.flags = 0;
     if (signaled)
-        info.flags |= VK_FENCE_CREATE_SIGNALED_BIT;
-    const VkResult create = vkCreateFence(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create fence");
+        fenceInfo.flags |= VK_FENCE_CREATE_SIGNALED_BIT;
+    const VkResult result = vkCreateFence(MAGMA_HANDLE(device), &fenceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create fence");
 }
 
 Fence::~Fence()

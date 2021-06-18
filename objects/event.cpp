@@ -28,12 +28,12 @@ Event::Event(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_EVENT, std::move(device), std::move(allocator))
 {
-    VkEventCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_EVENT_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = 0;
-    const VkResult create = vkCreateEvent(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create event");
+    VkEventCreateInfo eventInfo;
+    eventInfo.sType = VK_STRUCTURE_TYPE_EVENT_CREATE_INFO;
+    eventInfo.pNext = nullptr;
+    eventInfo.flags = 0;
+    const VkResult result = vkCreateEvent(MAGMA_HANDLE(device), &eventInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create event");
 }
 
 Event::~Event()

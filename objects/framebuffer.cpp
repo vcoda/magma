@@ -36,19 +36,19 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shar
     extent{attachment->getImage()->getMipExtent(0).width,
         attachment->getImage()->getMipExtent(0).height}
 {
-    VkFramebufferCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = flags;
-    info.renderPass = *renderPass;
-    info.attachmentCount = 1;
     const VkImageView imageView = *attachment;
-    info.pAttachments = &imageView;
-    info.width = extent.width;
-    info.height = extent.height;
-    info.layers = 1;
-    const VkResult create = vkCreateFramebuffer(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create framebuffer");
+    VkFramebufferCreateInfo framebufferInfo;
+    framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+    framebufferInfo.pNext = nullptr;
+    framebufferInfo.flags = flags;
+    framebufferInfo.renderPass = *renderPass;
+    framebufferInfo.attachmentCount = 1;
+    framebufferInfo.pAttachments = &imageView;
+    framebufferInfo.width = extent.width;
+    framebufferInfo.height = extent.height;
+    framebufferInfo.layers = 1;
+    const VkResult result = vkCreateFramebuffer(MAGMA_HANDLE(device), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create framebuffer");
 }
 
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std::vector<std::shared_ptr<ImageView>>& attachments,
@@ -59,21 +59,21 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std
     extent{this->attachments.front()->getImage()->getMipExtent(0).width,
         this->attachments.front()->getImage()->getMipExtent(0).height}
 {
-    VkFramebufferCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = flags;
-    info.renderPass = *renderPass;
     MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, this->attachments.size());
     for (auto& attachment : this->attachments)
         dereferencedAttachments.put(*attachment);
-    info.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
-    info.pAttachments = dereferencedAttachments;
-    info.width = extent.width;
-    info.height = extent.height;
-    info.layers = 1;
-    const VkResult create = vkCreateFramebuffer(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create framebuffer");
+    VkFramebufferCreateInfo framebufferInfo;
+    framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+    framebufferInfo.pNext = nullptr;
+    framebufferInfo.flags = flags;
+    framebufferInfo.renderPass = *renderPass;
+    framebufferInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
+    framebufferInfo.pAttachments = dereferencedAttachments;
+    framebufferInfo.width = extent.width;
+    framebufferInfo.height = extent.height;
+    framebufferInfo.layers = 1;
+    const VkResult result = vkCreateFramebuffer(MAGMA_HANDLE(device), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create framebuffer");
 }
 
 Framebuffer::~Framebuffer()

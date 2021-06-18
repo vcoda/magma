@@ -45,59 +45,59 @@ ImageView::ImageView(std::shared_ptr<Image> resource,
     baseArrayLayer(baseArrayLayer),
     layerCount(layerCount)
 {
-    VkImageViewCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = 0;
-    info.image = *image;
+    VkImageViewCreateInfo viewInfo;
+    viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+    viewInfo.pNext = nullptr;
+    viewInfo.flags = 0;
+    viewInfo.image = *image;
     switch (image->getType())
     {
     case VK_IMAGE_TYPE_1D:
         if (image->getArrayLayers() == 1)
-            info.viewType = VK_IMAGE_VIEW_TYPE_1D;
+            viewInfo.viewType = VK_IMAGE_VIEW_TYPE_1D;
         else
-            info.viewType = VK_IMAGE_VIEW_TYPE_1D_ARRAY;
+            viewInfo.viewType = VK_IMAGE_VIEW_TYPE_1D_ARRAY;
         break;
     case VK_IMAGE_TYPE_2D:
         if (image->getFlags() & VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT)
-            info.viewType = VK_IMAGE_VIEW_TYPE_CUBE;
+            viewInfo.viewType = VK_IMAGE_VIEW_TYPE_CUBE;
         else
         {
             if (image->getArrayLayers() == 1)
-                info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+                viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
             else
-                info.viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
+                viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
         }
         break;
     case VK_IMAGE_TYPE_3D:
-        info.viewType = VK_IMAGE_VIEW_TYPE_3D;
+        viewInfo.viewType = VK_IMAGE_VIEW_TYPE_3D;
         break;
     default:
         throw std::runtime_error("invalid image type");
     }
-    info.format = image->getFormat();
-    const Format format(info.format);
+    viewInfo.format = image->getFormat();
+    const Format format(viewInfo.format);
     if (!(format.depth() || format.stencil() || format.depthStencil()))
-        info.components = swizzle;
+        viewInfo.components = swizzle;
     else
-        info.components = {VK_COMPONENT_SWIZZLE_IDENTITY,
-                           VK_COMPONENT_SWIZZLE_IDENTITY,
-                           VK_COMPONENT_SWIZZLE_IDENTITY,
-                           VK_COMPONENT_SWIZZLE_IDENTITY};
+        viewInfo.components = {VK_COMPONENT_SWIZZLE_IDENTITY,
+                               VK_COMPONENT_SWIZZLE_IDENTITY,
+                               VK_COMPONENT_SWIZZLE_IDENTITY,
+                               VK_COMPONENT_SWIZZLE_IDENTITY};
     if (format.depth())
-        info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+        viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
     else if (format.stencil())
-        info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
+        viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
     else if (format.depthStencil())
-        info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+        viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
     else
-        info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-    info.subresourceRange.baseMipLevel = baseMipLevel;
-    info.subresourceRange.levelCount = levelCount;
-    info.subresourceRange.baseArrayLayer = baseArrayLayer;
-    info.subresourceRange.layerCount = layerCount;
-    const VkResult create = vkCreateImageView(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create image view");
+        viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    viewInfo.subresourceRange.baseMipLevel = baseMipLevel;
+    viewInfo.subresourceRange.levelCount = levelCount;
+    viewInfo.subresourceRange.baseArrayLayer = baseArrayLayer;
+    viewInfo.subresourceRange.layerCount = layerCount;
+    const VkResult result = vkCreateImageView(MAGMA_HANDLE(device), &viewInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create image view");
 }
 
 ImageView::~ImageView()

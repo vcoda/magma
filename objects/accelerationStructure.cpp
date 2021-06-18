@@ -48,22 +48,18 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
         for (const auto& geometry : geometries)
             *pGeometries++ = geometry;
     }
-    VkAccelerationStructureCreateInfoNV createInfo;
-    createInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_NV;
-    createInfo.pNext = nullptr;
-    createInfo.compactedSize = compactedSize;
-    createInfo.info = info;
+    VkAccelerationStructureCreateInfoNV accelStructInfo;
+    accelStructInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_NV;
+    accelStructInfo.pNext = nullptr;
+    accelStructInfo.compactedSize = compactedSize;
+    accelStructInfo.info = info;
     MAGMA_DEVICE_EXTENSION(vkCreateAccelerationStructureNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    const VkResult create = vkCreateAccelerationStructureNV(MAGMA_HANDLE(device), &createInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create acceleration structure");
+    const VkResult result = vkCreateAccelerationStructureNV(MAGMA_HANDLE(device), &accelStructInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create acceleration structure");
     const VkMemoryRequirements memoryRequirements = getObjectMemoryRequirements();
     std::shared_ptr<DeviceMemory> memory = std::make_shared<DeviceMemory>(
-        std::move(device),
-        memoryRequirements,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        &handle,
-        VK_OBJECT_TYPE_BUFFER,
-        std::move(allocator));
+        std::move(device), memoryRequirements, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        &handle, VK_OBJECT_TYPE_BUFFER, std::move(allocator));
     bindMemory(std::move(memory));
 }
 

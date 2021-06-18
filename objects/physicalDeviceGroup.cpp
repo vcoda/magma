@@ -35,16 +35,16 @@ std::shared_ptr<Device> PhysicalDeviceGroup::createDevice(const std::vector<Devi
     const VkPhysicalDeviceFeatures& deviceFeatures,
     const std::vector<void *>& extendedDeviceFeatures /* {} */) const
 {
-    VkDeviceGroupDeviceCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO;
-    info.pNext = nullptr;
-    info.physicalDeviceCount = physicalDeviceCount();
-    MAGMA_STACK_ARRAY(VkPhysicalDevice, dereferencedPhysicalDevices, info.physicalDeviceCount);
+    MAGMA_STACK_ARRAY(VkPhysicalDevice, dereferencedPhysicalDevices, physicalDeviceCount());
     for (const auto& physicalDevice : physicalDevices)
         dereferencedPhysicalDevices.put(*physicalDevice);
-    info.pPhysicalDevices = dereferencedPhysicalDevices;
+    VkDeviceGroupDeviceCreateInfo groupInfo;
+    groupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO;
+    groupInfo.pNext = nullptr;
+    groupInfo.physicalDeviceCount = physicalDeviceCount();
+    groupInfo.pPhysicalDevices = dereferencedPhysicalDevices;
     std::vector<void *> extendedDeviceGroupFeatures = extendedDeviceFeatures;
-    extendedDeviceGroupFeatures.push_back(&info);
+    extendedDeviceGroupFeatures.push_back(&groupInfo);
     return physicalDevices.front()->createDevice(queueDescriptors,
         layers, extensions,
         deviceFeatures, extendedDeviceGroupFeatures);

@@ -63,7 +63,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     VkDescriptorSetAllocateInfo allocInfo;
     allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     allocInfo.pNext = nullptr;
-    allocInfo.descriptorPool = *this->descriptorPool;
+    allocInfo.descriptorPool = MAGMA_HANDLE(descriptorPool);
     allocInfo.descriptorSetCount = 1;
     allocInfo.pSetLayouts = dereferencedSetLayouts;
     const VkResult result = vkAllocateDescriptorSets(MAGMA_HANDLE(device), &allocInfo, &handle);

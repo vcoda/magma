@@ -37,14 +37,14 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     pool(std::move(pool)),
     fence(std::make_shared<Fence>(device))
 {
-    VkCommandBufferAllocateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    info.pNext = nullptr;
-    info.commandPool = MAGMA_HANDLE(pool);
-    info.level = level;
-    info.commandBufferCount = 1;
-    const VkResult alloc = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &info, &handle);
-    MAGMA_THROW_FAILURE(alloc, "failed to allocate primary command buffer");
+    VkCommandBufferAllocateInfo allocInfo;
+    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    allocInfo.pNext = nullptr;
+    allocInfo.commandPool = MAGMA_HANDLE(pool);
+    allocInfo.level = level;
+    allocInfo.commandBufferCount = 1;
+    const VkResult result = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &allocInfo, &handle);
+    MAGMA_THROW_FAILURE(result, "failed to allocate primary command buffer");
     maintenance1KHREnable = device->negativeViewportHeightEnabled(true);
     negativeHeightAMDEnable = device->negativeViewportHeightEnabled(false);
 }

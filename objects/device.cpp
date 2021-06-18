@@ -70,29 +70,29 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
         lastNode->pNext = nullptr; // End of list
     }
 #endif // VK_KHR_get_physical_device_properties2
-    VkDeviceCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+    VkDeviceCreateInfo deviceInfo;
+    deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 #ifdef VK_KHR_get_physical_device_properties2
-    info.pNext = extendedDeviceFeatures.empty() ? nullptr : &features;
+    deviceInfo.pNext = extendedDeviceFeatures.empty() ? nullptr : &features;
 #else
-    info.pNext = nullptr;
+    deviceInfo.pNext = nullptr;
 #endif
-    info.flags = 0;
-    info.queueCreateInfoCount = MAGMA_COUNT(queueDescriptors);
-    info.pQueueCreateInfos = queueDescriptors.data();
-    info.enabledLayerCount = MAGMA_COUNT(enabledLayers);
-    info.ppEnabledLayerNames = enabledLayers.data();
-    info.enabledExtensionCount = MAGMA_COUNT(enabledExtensions);
-    info.ppEnabledExtensionNames = enabledExtensions.data();
-    info.pEnabledFeatures = extendedDeviceFeatures.empty() ? &deviceFeatures : nullptr;
-    const VkResult create = vkCreateDevice(MAGMA_HANDLE(physicalDevice), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    switch (create) {
+    deviceInfo.flags = 0;
+    deviceInfo.queueCreateInfoCount = MAGMA_COUNT(queueDescriptors);
+    deviceInfo.pQueueCreateInfos = queueDescriptors.data();
+    deviceInfo.enabledLayerCount = MAGMA_COUNT(enabledLayers);
+    deviceInfo.ppEnabledLayerNames = enabledLayers.data();
+    deviceInfo.enabledExtensionCount = MAGMA_COUNT(enabledExtensions);
+    deviceInfo.ppEnabledExtensionNames = enabledExtensions.data();
+    deviceInfo.pEnabledFeatures = extendedDeviceFeatures.empty() ? &deviceFeatures : nullptr;
+    const VkResult result = vkCreateDevice(MAGMA_HANDLE(physicalDevice), &deviceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    switch (result) {
     case VK_ERROR_INITIALIZATION_FAILED:
         throw exception::InitializationFailed("failed to create logical device");
     case VK_ERROR_DEVICE_LOST:
         throw exception::DeviceLost("failed to create logical device");
     }
-    MAGMA_THROW_FAILURE(create, "failed to create logical device");
+    MAGMA_THROW_FAILURE(result, "failed to create logical device");
     queues.reserve(queueDescriptors.size());
     for (const auto& desc : queueDescriptors)
         queues.emplace_back(desc, std::weak_ptr<Queue>());

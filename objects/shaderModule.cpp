@@ -43,27 +43,27 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
 #ifdef VK_EXT_validation_cache
     VkShaderModuleValidationCacheCreateInfoEXT cacheCreateInfo = {};
 #endif
-    VkShaderModuleCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-    info.pNext = nullptr;
+    VkShaderModuleCreateInfo shaderInfo;
+    shaderInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+    shaderInfo.pNext = nullptr;
 #ifdef VK_EXT_validation_cache
     if (validationCache)
     {
         cacheCreateInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_VALIDATION_CACHE_CREATE_INFO_EXT;
         cacheCreateInfo.pNext = nullptr;
         cacheCreateInfo.validationCache = MAGMA_OPTIONAL_HANDLE(validationCache);
-        info.pNext = &cacheCreateInfo;
+        shaderInfo.pNext = &cacheCreateInfo;
     }
 #endif // VK_EXT_validation_cache
-    info.flags = flags;
-    info.codeSize = bytecodeSize;
-    info.pCode = bytecode;
-    const VkResult create = vkCreateShaderModule(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create shader module");
+    shaderInfo.flags = flags;
+    shaderInfo.codeSize = bytecodeSize;
+    shaderInfo.pCode = bytecode;
+    const VkResult result = vkCreateShaderModule(MAGMA_HANDLE(device), &shaderInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create shader module");
     hash = core::hashArgs(
-        info.sType,
-        info.flags,
-        info.codeSize);
+        shaderInfo.sType,
+        shaderInfo.flags,
+        shaderInfo.codeSize);
 #ifdef VK_EXT_validation_cache
     if (validationCache)
     {
@@ -74,9 +74,9 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
 #endif
     if (0 == bytecodeHash && !reflect)
     {   // Store bytecode for future hash computation
-        const std::size_t wordCount = info.codeSize / sizeof(SpirvWord);
+        const std::size_t wordCount = shaderInfo.codeSize / sizeof(SpirvWord);
         this->bytecode.resize(wordCount);
-        memcpy(this->bytecode.data(), info.pCode, info.codeSize);
+        memcpy(this->bytecode.data(), shaderInfo.pCode, shaderInfo.codeSize);
     }
 }
 

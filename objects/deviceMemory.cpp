@@ -44,13 +44,13 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     }
     else
     {
-        VkMemoryAllocateInfo info;
-        info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-        info.pNext = nullptr;
-        info.allocationSize = memoryRequirements.size;
-        info.memoryTypeIndex = getTypeIndex(flags);
-        const VkResult allocate = vkAllocateMemory(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-        MAGMA_THROW_FAILURE(allocate, "failed to allocate device memory");
+        VkMemoryAllocateInfo allocInfo;
+        allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        allocInfo.pNext = nullptr;
+        allocInfo.allocationSize = memoryRequirements.size;
+        allocInfo.memoryTypeIndex = getTypeIndex(flags);
+        const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &allocInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_THROW_FAILURE(result, "failed to allocate device memory");
     }
 }
 
@@ -71,12 +71,12 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask,
     flagsInfo.pNext = nullptr;
     flagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHR;
     flagsInfo.deviceMask = deviceMask;
-    VkMemoryAllocateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    info.pNext = &flagsInfo;
-    info.allocationSize = memoryRequirements.size;
-    info.memoryTypeIndex = getTypeIndex(flags);
-    const VkResult allocate = vkAllocateMemory(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    VkMemoryAllocateInfo allocInfo;
+    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocInfo.pNext = &flagsInfo;
+    allocInfo.allocationSize = memoryRequirements.size;
+    allocInfo.memoryTypeIndex = getTypeIndex(flags);
+    const VkResult allocate = vkAllocateMemory(MAGMA_HANDLE(device), &allocInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(allocate, "failed to allocate device memory within device group");
 }
 #endif // VK_KHR_device_group
@@ -150,9 +150,9 @@ bool DeviceMemory::flushMappedRange(
     VkDeviceSize offset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */) noexcept
 {
-    VkResult flush;
+    VkResult result;
     if (memory)
-        flush = deviceAllocator->flushMappedRange(memory, offset, size);
+        result = deviceAllocator->flushMappedRange(memory, offset, size);
     else
     {
         VkMappedMemoryRange memoryRange;
@@ -161,18 +161,18 @@ bool DeviceMemory::flushMappedRange(
         memoryRange.memory = handle;
         memoryRange.offset = offset;
         memoryRange.size = size;
-        flush = vkFlushMappedMemoryRanges(MAGMA_HANDLE(device), 1, &memoryRange);
+        result = vkFlushMappedMemoryRanges(MAGMA_HANDLE(device), 1, &memoryRange);
     }
-    return (VK_SUCCESS == flush);
+    return (VK_SUCCESS == result);
 }
 
 bool DeviceMemory::invalidateMappedRange(
     VkDeviceSize offset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */) noexcept
 {
-    VkResult invalidate;
+    VkResult result;
     if (memory)
-        invalidate = deviceAllocator->invalidateMappedRange(memory, offset, size);
+        result = deviceAllocator->invalidateMappedRange(memory, offset, size);
     else
     {
         VkMappedMemoryRange memoryRange;
@@ -181,9 +181,9 @@ bool DeviceMemory::invalidateMappedRange(
         memoryRange.memory = handle;
         memoryRange.offset = offset;
         memoryRange.size = size;
-        invalidate = vkInvalidateMappedMemoryRanges(MAGMA_HANDLE(device), 1, &memoryRange);
+        result = vkInvalidateMappedMemoryRanges(MAGMA_HANDLE(device), 1, &memoryRange);
     }
-    return (VK_SUCCESS == invalidate);
+    return (VK_SUCCESS == result);
 }
 
 void DeviceMemory::onDefragmented() noexcept

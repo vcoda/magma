@@ -36,17 +36,17 @@ CommandPool::CommandPool(std::shared_ptr<Device> device,
     uint32_t poolCommandBufferCount /* 256 */):
     NonDispatchable(VK_OBJECT_TYPE_COMMAND_POOL, std::move(device), std::move(allocator))
 {
-    VkCommandPoolCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = 0;
+    VkCommandPoolCreateInfo poolInfo;
+    poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    poolInfo.pNext = nullptr;
+    poolInfo.flags = 0;
     if (transient)
-        info.flags |= VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+        poolInfo.flags |= VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
     if (resetCommandBuffer)
-        info.flags |= VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-    info.queueFamilyIndex = queueFamilyIndex;
-    const VkResult create = vkCreateCommandPool(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create command pool");
+        poolInfo.flags |= VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+    poolInfo.queueFamilyIndex = queueFamilyIndex;
+    const VkResult result = vkCreateCommandPool(MAGMA_HANDLE(device), &poolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create command pool");
     if (!getOverridenAllocator())
         pool = std::make_unique<memory::LinearPlacementPool>(sizeof(CommandBuffer), poolCommandBufferCount);
 }

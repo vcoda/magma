@@ -85,31 +85,31 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
 {
     VkPipelineVertexInputStateCreateInfo pipelineVertexInput = {};
     VkVertexInputBindingDescription vertexBindingDesc = {};
-    VkGraphicsPipelineCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = flags;
+    VkGraphicsPipelineCreateInfo pipelineInfo;
+    pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    pipelineInfo.pNext = nullptr;
+    pipelineInfo.flags = flags;
     if (this->basePipeline)
-        info.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
+        pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, stages.size());
     for (auto& stage : stages)
         dereferencedStages.put(stage);
-    info.stageCount = MAGMA_COUNT(dereferencedStages);
-    info.pStages = dereferencedStages;
-    info.pVertexInputState = &vertexInputState;
-    info.pInputAssemblyState = &inputAssemblyState;
+    pipelineInfo.stageCount = MAGMA_COUNT(dereferencedStages);
+    pipelineInfo.pStages = dereferencedStages;
+    pipelineInfo.pVertexInputState = &vertexInputState;
+    pipelineInfo.pInputAssemblyState = &inputAssemblyState;
     if (0 == tesselationState.patchControlPoints)
-        info.pTessellationState = nullptr;
+        pipelineInfo.pTessellationState = nullptr;
     else
-        info.pTessellationState = &tesselationState;
-    info.pViewportState = &viewportState;
-    info.pRasterizationState = &rasterizationState;
-    info.pMultisampleState = &multisampleState;
-    info.pDepthStencilState = &depthStencilState;
-    info.pColorBlendState = &colorBlendState;
+        pipelineInfo.pTessellationState = &tesselationState;
+    pipelineInfo.pViewportState = &viewportState;
+    pipelineInfo.pRasterizationState = &rasterizationState;
+    pipelineInfo.pMultisampleState = &multisampleState;
+    pipelineInfo.pDepthStencilState = &depthStencilState;
+    pipelineInfo.pColorBlendState = &colorBlendState;
     VkPipelineDynamicStateCreateInfo dynamicState;
     if (0 == dynamicStates.size())
-        info.pDynamicState = nullptr;
+        pipelineInfo.pDynamicState = nullptr;
     else
     {
         dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
@@ -117,19 +117,19 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
         dynamicState.flags = 0;
         dynamicState.dynamicStateCount = MAGMA_COUNT(dynamicStates);
         dynamicState.pDynamicStates = dynamicStates.begin();
-        info.pDynamicState = &dynamicState;
+        pipelineInfo.pDynamicState = &dynamicState;
     }
-    info.layout = MAGMA_HANDLE(layout);
-    info.renderPass = *renderPass;
-    info.subpass = subpass;
-    info.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
-    info.basePipelineIndex = -1;
-    const VkResult create = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->pipelineCache), 1, &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create graphics pipeline");
+    pipelineInfo.layout = MAGMA_HANDLE(layout);
+    pipelineInfo.renderPass = *renderPass;
+    pipelineInfo.subpass = subpass;
+    pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
+    pipelineInfo.basePipelineIndex = -1;
+    const VkResult result = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->pipelineCache), 1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create graphics pipeline");
     hash = core::hashArgs(
-        info.sType,
-        info.flags,
-        info.stageCount);
+        pipelineInfo.sType,
+        pipelineInfo.flags,
+        pipelineInfo.stageCount);
     for (const auto& stage : stages)
         core::hashCombine(hash, stage.getHash());
     std::size_t stateHash = core::hashCombineList({

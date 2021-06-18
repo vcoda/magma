@@ -100,24 +100,24 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
         subpassEndDependency(colorAttachmentCount > 0, hasDepthStencilAttachment)
     };
     // Create render pass
-    VkRenderPassCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = 0;
-    info.attachmentCount = MAGMA_COUNT(attachments);
-    info.pAttachments = attachments.data();
-    info.subpassCount = 1;
-    info.pSubpasses = &subpass;
-    info.dependencyCount = 2;
-    info.pDependencies = dependencies;
-    const VkResult create = vkCreateRenderPass(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create render pass");
+    VkRenderPassCreateInfo renderPassInfo;
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+    renderPassInfo.pNext = nullptr;
+    renderPassInfo.flags = 0;
+    renderPassInfo.attachmentCount = MAGMA_COUNT(attachments);
+    renderPassInfo.pAttachments = attachments.data();
+    renderPassInfo.subpassCount = 1;
+    renderPassInfo.pSubpasses = &subpass;
+    renderPassInfo.dependencyCount = 2;
+    renderPassInfo.pDependencies = dependencies;
+    const VkResult result = vkCreateRenderPass(MAGMA_HANDLE(device), &renderPassInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create render pass");
     hash = core::hashArgs(
-        info.sType,
-        info.flags,
-        info.attachmentCount,
-        info.subpassCount,
-        info.dependencyCount);
+        renderPassInfo.sType,
+        renderPassInfo.flags,
+        renderPassInfo.attachmentCount,
+        renderPassInfo.subpassCount,
+        renderPassInfo.dependencyCount);
     for (const auto& attachment : attachments)
         core::hashCombine(hash, attachment.hash());
     core::hashCombine(hash, subpass.hash());
@@ -141,24 +141,24 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator)),
     hash(0)
 {
-    VkRenderPassCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = 0;
-    info.attachmentCount = MAGMA_COUNT(attachments);
-    info.pAttachments = attachments.data();
-    info.subpassCount = MAGMA_COUNT(subpasses);
-    info.pSubpasses = subpasses.data();
-    info.dependencyCount = MAGMA_COUNT(dependencies);
-    info.pDependencies = dependencies.data();
-    const VkResult create = vkCreateRenderPass(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create render pass");
+    VkRenderPassCreateInfo renderPassInfo;
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+    renderPassInfo.pNext = nullptr;
+    renderPassInfo.flags = 0;
+    renderPassInfo.attachmentCount = MAGMA_COUNT(attachments);
+    renderPassInfo.pAttachments = attachments.data();
+    renderPassInfo.subpassCount = MAGMA_COUNT(subpasses);
+    renderPassInfo.pSubpasses = subpasses.data();
+    renderPassInfo.dependencyCount = MAGMA_COUNT(dependencies);
+    renderPassInfo.pDependencies = dependencies.data();
+    const VkResult result = vkCreateRenderPass(MAGMA_HANDLE(device), &renderPassInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create render pass");
     hash = core::hashArgs(
-        info.sType,
-        info.flags,
-        info.attachmentCount,
-        info.subpassCount,
-        info.dependencyCount);
+        renderPassInfo.sType,
+        renderPassInfo.flags,
+        renderPassInfo.attachmentCount,
+        renderPassInfo.subpassCount,
+        renderPassInfo.dependencyCount);
     for (const auto& attachment : attachments)
         core::hashCombine(hash, attachment.hash());
     for (const auto& subpass : subpasses)

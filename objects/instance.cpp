@@ -51,23 +51,24 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
     appInfo.pEngineName = engineName;
     appInfo.engineVersion = 1;
     appInfo.apiVersion = apiVersion;
-    VkInstanceCreateInfo createInfo;
-    createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-    createInfo.pNext = nullptr;
-    createInfo.flags = 0;
-    createInfo.pApplicationInfo = &appInfo;
-    createInfo.enabledLayerCount = MAGMA_COUNT(layerNames);
-    createInfo.ppEnabledLayerNames = layerNames.data();
-    createInfo.enabledExtensionCount = MAGMA_COUNT(extensionNames);
-    createInfo.ppEnabledExtensionNames = extensionNames.data();
-    const VkResult create = vkCreateInstance(&createInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    switch (create) {
+    VkInstanceCreateInfo instanceInfo;
+    instanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    instanceInfo.pNext = nullptr;
+    instanceInfo.flags = 0;
+    instanceInfo.pApplicationInfo = &appInfo;
+    instanceInfo.enabledLayerCount = MAGMA_COUNT(layerNames);
+    instanceInfo.ppEnabledLayerNames = layerNames.data();
+    instanceInfo.enabledExtensionCount = MAGMA_COUNT(extensionNames);
+    instanceInfo.ppEnabledExtensionNames = extensionNames.data();
+    const VkResult result = vkCreateInstance(&instanceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    switch (result)
+    {
     case VK_ERROR_INITIALIZATION_FAILED:
         throw exception::InitializationFailed("failed to create instance");
     case VK_ERROR_INCOMPATIBLE_DRIVER:
         throw exception::IncompatibleDriver("failed to create instance");
     }
-    MAGMA_THROW_FAILURE(create, "failed to create instance");
+    MAGMA_THROW_FAILURE(result, "failed to create instance");
 #ifdef MAGMA_DEBUG
     _refCountChecker.addRef();
 #endif
