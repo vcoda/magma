@@ -65,7 +65,7 @@ AccelerationStructureInstanceBuffer::AccelerationStructureInstanceBuffer(std::sh
     if (!instances)
         throw exception::MemoryMapFailed("failed to map staging buffer of acceleration structure instances");
     for (uint32_t instanceIndex = 0; instanceIndex < instanceCount; ++instanceIndex)
-    {
+    {   // Call constructor for each instance
         new (&instances[instanceIndex]) AccelerationStructureInstance();
         instances[instanceIndex].setInstanceIndex(instanceIndex);
     }
