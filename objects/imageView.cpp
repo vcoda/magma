@@ -105,6 +105,12 @@ ImageView::~ImageView()
     vkDestroyImageView(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
+VkExtent2D ImageView::getExtent() const noexcept
+{
+    const VkExtent3D& extent = image->getMipExtent(0);
+    return VkExtent2D{extent.width, extent.height};
+}
+
 VkDescriptorImageInfo ImageView::getDescriptor(std::shared_ptr<const Sampler> sampler) const noexcept
 {
     const Format format(image->getFormat());
