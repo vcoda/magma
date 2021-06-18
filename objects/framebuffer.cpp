@@ -30,11 +30,12 @@ namespace magma
 {
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shared_ptr<ImageView> attachment,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
+    uint32_t layers /* 1 */,
     VkFramebufferCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
     attachments(attachments),
-    extent{attachment->getImage()->getMipExtent(0).width,
-        attachment->getImage()->getMipExtent(0).height}
+    extent(attachment->getExtent()),
+    layers(layers)
 {
     const VkImageView imageView = *attachment;
     VkFramebufferCreateInfo framebufferInfo;
@@ -46,18 +47,19 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shar
     framebufferInfo.pAttachments = &imageView;
     framebufferInfo.width = extent.width;
     framebufferInfo.height = extent.height;
-    framebufferInfo.layers = 1;
+    framebufferInfo.layers = layers;
     const VkResult result = vkCreateFramebuffer(MAGMA_HANDLE(device), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create framebuffer");
 }
 
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std::vector<std::shared_ptr<ImageView>>& attachments,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
+    uint32_t layers /* 1 */,
     VkFramebufferCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
-    attachments(std::move(attachments)),
-    extent{this->attachments.front()->getImage()->getMipExtent(0).width,
-        this->attachments.front()->getImage()->getMipExtent(0).height}
+    attachments(attachments),
+    extent(attachments.front()->getExtent()),
+    layers(layers)
 {
     MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, this->attachments.size());
     for (auto& attachment : this->attachments)

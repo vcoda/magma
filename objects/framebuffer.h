@@ -34,17 +34,22 @@ namespace magma
         explicit Framebuffer(std::shared_ptr<const RenderPass> renderPass,
             std::shared_ptr<ImageView> attachment,
             std::shared_ptr<IAllocator> allocator = nullptr,
+            uint32_t layers = 1,
             VkFramebufferCreateFlags = 0);
         explicit Framebuffer(std::shared_ptr<const RenderPass> renderPass,
             const std::vector<std::shared_ptr<ImageView>>& attachments,
             std::shared_ptr<IAllocator> allocator = nullptr,
+            uint32_t layers = 1,
             VkFramebufferCreateFlags = 0);
         ~Framebuffer();
         const std::vector<std::shared_ptr<ImageView>>& getAttachments() const noexcept { return attachments; }
         const VkExtent2D& getExtent() const noexcept { return extent; }
+        uint32_t getLayers() const noexcept { return layers; }
+        bool layered() const noexcept { return layers > 1; }
 
     private:
-        std::vector<std::shared_ptr<ImageView>> attachments;
-        VkExtent2D extent;
+        const std::vector<std::shared_ptr<ImageView>> attachments;
+        const VkExtent2D extent;
+        const uint32_t layers;
     };
 } // namespace magma
