@@ -383,6 +383,7 @@ namespace magma
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void setDeviceMask(
             uint32_t deviceMask) noexcept;
+        uint32_t getDeviceMask() const noexcept { return deviceMask; }
         void dispatchBase(
             uint32_t baseGroupX,
             uint32_t baseGroupY,
@@ -457,7 +458,6 @@ namespace magma
         bool primary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_PRIMARY == level; }
         std::shared_ptr<CommandPool> getPool() const noexcept { return pool; }
         std::shared_ptr<Fence> getFence() const noexcept;
-        uint32_t getDeviceMask() const noexcept { return deviceMask; }
 
         void enableOcclusionQuery(
             bool enable,
