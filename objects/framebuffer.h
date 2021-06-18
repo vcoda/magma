@@ -42,12 +42,14 @@ namespace magma
             uint32_t layers = 1,
             VkFramebufferCreateFlags = 0);
         ~Framebuffer();
+        std::shared_ptr<const RenderPass> getRenderPass() const noexcept { return renderPass; }
         const std::vector<std::shared_ptr<ImageView>>& getAttachments() const noexcept { return attachments; }
         const VkExtent2D& getExtent() const noexcept { return extent; }
         uint32_t getLayers() const noexcept { return layers; }
         bool layered() const noexcept { return layers > 1; }
 
     private:
+        std::shared_ptr<const RenderPass> renderPass;
         const std::vector<std::shared_ptr<ImageView>> attachments;
         const VkExtent2D extent;
         const uint32_t layers;

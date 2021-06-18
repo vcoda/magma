@@ -33,6 +33,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shar
     uint32_t layers /* 1 */,
     VkFramebufferCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
+    renderPass(std::move(renderPass)),
     attachments(attachments),
     extent(attachment->getExtent()),
     layers(layers)
@@ -42,7 +43,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shar
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
     framebufferInfo.pNext = nullptr;
     framebufferInfo.flags = flags;
-    framebufferInfo.renderPass = *renderPass;
+    framebufferInfo.renderPass = MAGMA_HANDLE(renderPass);
     framebufferInfo.attachmentCount = 1;
     framebufferInfo.pAttachments = &imageView;
     framebufferInfo.width = extent.width;
@@ -57,6 +58,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std
     uint32_t layers /* 1 */,
     VkFramebufferCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
+    renderPass(std::move(renderPass)),
     attachments(attachments),
     extent(attachments.front()->getExtent()),
     layers(layers)
@@ -68,7 +70,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
     framebufferInfo.pNext = nullptr;
     framebufferInfo.flags = flags;
-    framebufferInfo.renderPass = *renderPass;
+    framebufferInfo.renderPass = MAGMA_HANDLE(renderPass);
     framebufferInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
     framebufferInfo.pAttachments = dereferencedAttachments;
     framebufferInfo.width = extent.width;
