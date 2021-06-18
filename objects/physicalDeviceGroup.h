@@ -46,7 +46,7 @@ namespace magma
 
     private:
         std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices;
-        uint32_t groupId;
+        const uint32_t groupId;
     };
 #endif // VK_KHR_device_group
 } // namespace magma

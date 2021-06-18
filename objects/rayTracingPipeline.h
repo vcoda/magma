@@ -46,8 +46,8 @@ namespace magma
         void compileDeferred(uint32_t shaderIndex);
 
     private:
-        uint32_t groupCount;
-        uint32_t maxRecursionDepth;
+        const uint32_t groupCount;
+        const uint32_t maxRecursionDepth;
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma

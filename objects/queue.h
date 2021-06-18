@@ -82,8 +82,8 @@ namespace magma
             std::shared_ptr<const Semaphore> waitSemaphore);
 
     private:
-        VkQueueFlagBits flags;
-        uint32_t familyIndex;
-        uint32_t index;
+        const VkQueueFlagBits flags;
+        const uint32_t familyIndex;
+        const uint32_t index;
     };
 } // namespace magma

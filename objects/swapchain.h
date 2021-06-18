@@ -58,8 +58,8 @@ namespace magma
             uint64_t timeout = UINT64_MAX);
 
     private:
-        VkSurfaceFormatKHR surfaceFormat;
-        VkExtent2D extent;
+        const VkSurfaceFormatKHR surfaceFormat;
+        const VkExtent2D extent;
         uint32_t imageIndex;
     };
 } // namespace magma

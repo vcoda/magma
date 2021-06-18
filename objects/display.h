@@ -44,7 +44,7 @@ namespace magma
     private:
         std::shared_ptr<const Instance> instance;
         std::shared_ptr<const PhysicalDevice> physicalDevice;
-        uint32_t planeIndex;
+        const uint32_t planeIndex;
     };
 #endif // VK_KHR_display
 } // namespace magma

@@ -61,9 +61,9 @@ namespace magma
 
     private:
         std::shared_ptr<Image> image;
-        uint32_t baseMipLevel;
-        uint32_t levelCount;
-        uint32_t baseArrayLayer;
-        uint32_t layerCount;
+        const uint32_t baseMipLevel;
+        const uint32_t levelCount;
+        const uint32_t baseArrayLayer;
+        const uint32_t layerCount;
     };
 } // namespace magma

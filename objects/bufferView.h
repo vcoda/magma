@@ -42,8 +42,8 @@ namespace magma
 
     private:
         std::shared_ptr<Buffer> buffer;
-        VkFormat format;
-        VkDeviceSize offset;
-        VkDeviceSize range;
+        const VkFormat format;
+        const VkDeviceSize offset;
+        const VkDeviceSize range;
     };
 } // namespace magma

@@ -56,7 +56,7 @@ namespace magma
             std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator);
 
-        VkPipelineBindPoint bindPoint;
+        const VkPipelineBindPoint bindPoint;
         std::shared_ptr<PipelineLayout> layout;
         std::shared_ptr<PipelineCache> pipelineCache;
         std::shared_ptr<Pipeline> basePipeline;

@@ -52,7 +52,7 @@ namespace magma
         bool checkExtensionSupport(const char *extensionName) const;
 
     private:
-        uint32_t apiVersion;
+        const uint32_t apiVersion;
         mutable std::set<std::string> extensions; // Cached implicit extensions
     };
 } // namespace magma

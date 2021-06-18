@@ -42,8 +42,8 @@ namespace magma
             std::shared_ptr<IAllocator> allocator);
 
     protected:
-        VkQueryType queryType;
-        uint32_t queryCount;
+        const VkQueryType queryType;
+        const uint32_t queryCount;
     };
 
     /* Occlusion queries track the number of samples that pass

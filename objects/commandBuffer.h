@@ -503,7 +503,7 @@ namespace magma
 #endif // VK_KHR_device_group
 
     protected:
-        VkCommandBufferLevel level;
+        const VkCommandBufferLevel level;
         std::shared_ptr<CommandPool> pool;
         std::shared_ptr<Fence> fence;
         uint32_t deviceMask = 0xFFFFFFFF;

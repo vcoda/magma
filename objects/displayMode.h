@@ -41,8 +41,8 @@ namespace magma
     private:
         std::shared_ptr<const Instance> instance;
         std::shared_ptr<const PhysicalDevice> physicalDevice;
-        VkExtent2D visibleRegion;
-        uint32_t refreshRate;
+        const VkExtent2D visibleRegion;
+        const uint32_t refreshRate;
         mutable std::map<uint32_t, VkDisplayPlaneCapabilitiesKHR> capabilities;
     };
 #endif // VK_KHR_display

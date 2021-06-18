@@ -56,7 +56,7 @@ namespace magma
         // Additional storage is required under x86 target
         // as Vulkan non-dispatchable handles are defined as uint64_t
         // and thus cannot be used in custom template specialization.
-        VkObjectType objectType;
+        const VkObjectType objectType;
 #endif
         std::shared_ptr<Device> device;
         std::shared_ptr<IAllocator> hostAllocator;

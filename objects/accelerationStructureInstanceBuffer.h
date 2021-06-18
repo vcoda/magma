@@ -94,7 +94,7 @@ namespace magma
     private:
         std::shared_ptr<SrcTransferBuffer> stagingBuffer;
         AccelerationStructureInstance *instances;
-        uint32_t instanceCount;
+        const uint32_t instanceCount;
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma
