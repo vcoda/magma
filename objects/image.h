@@ -110,16 +110,16 @@ namespace magma
         static VkSampleCountFlagBits getSampleCountBit(uint32_t samples);
 
     protected:
-        VkImageCreateFlags flags;
-        VkImageType imageType;
-        VkFormat format;
+        const VkImageCreateFlags flags;
+        const VkImageType imageType;
+        const VkFormat format;
         VkImageLayout layout;
-        VkExtent3D extent;
-        uint32_t mipLevels;
-        uint32_t arrayLayers;
-        uint32_t samples;
-        VkImageTiling tiling;
-        VkImageUsageFlags usage;
+        const VkExtent3D extent;
+        const uint32_t mipLevels;
+        const uint32_t arrayLayers;
+        const uint32_t samples;
+        const VkImageTiling tiling;
+        const VkImageUsageFlags usage;
     };
 
     struct Image::CopyLayout

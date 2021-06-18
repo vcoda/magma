@@ -77,14 +77,16 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
 
 Image::Image(std::shared_ptr<Device> device, VkImage handle, VkImageType imageType, VkFormat format, const VkExtent3D& extent):
     NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, std::move(device), Sharing(), std::shared_ptr<Allocator>() /* FIX IT */),
+    flags(0),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
     extent(extent),
-    mipLevels(1),
-    arrayLayers(1),
+    mipLevels(mipLevels),
+    arrayLayers(arrayLayers),
     samples(1),
-    flags(0)
+    tiling(VK_IMAGE_TILING_OPTIMAL),
+    usage(0)
 {
     this->handle = handle;
 }
