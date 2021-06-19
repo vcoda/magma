@@ -49,7 +49,6 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
         op::dontCare, // Stencil don't care
         VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
         VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
-    constexpr uint32_t layers = 1;
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {
         const AttachmentDescription depthStencilAttachment(depthStencilFormat, 1,
@@ -62,12 +61,12 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
             MAGMA_HOST_ALLOCATOR(allocator));
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass,
             std::vector<std::shared_ptr<ImageView>>{colorView, depthStencilView},
-            MAGMA_HOST_ALLOCATOR(allocator), layers, 0);
+            MAGMA_HOST_ALLOCATOR(allocator), 0);
     }
     else
     {   // Create color only framebuffer
         renderPass = std::make_shared<RenderPass>(std::move(device), colorAttachment, MAGMA_HOST_ALLOCATOR(allocator));
-        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, colorView, MAGMA_HOST_ALLOCATOR(allocator), layers, 0);
+        framebuffer = std::make_shared<magma::Framebuffer>(renderPass, colorView, MAGMA_HOST_ALLOCATOR(allocator), 0);
     }
 }
 } // namespace aux

@@ -70,7 +70,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     // Create high-precision color buffer
     accumBuffer = std::make_shared<ColorAttachment>(device, format, extent, 1, 1, allocator);
     bufferView = std::make_shared<ImageView>(accumBuffer);
-    framebuffer = std::make_shared<Framebuffer>(renderPass, bufferView, hostAllocator);
+    framebuffer = std::make_shared<Framebuffer>(renderPass, bufferView, hostAllocator, 0);
     // Create descriptor set for fragment shader
     descriptorSet = std::make_shared<ImageDescriptorSet>(device, reflection, hostAllocator);
     nearestSampler = std::make_shared<Sampler>(device, sampler::magMinMipNearestClampToEdge, hostAllocator);

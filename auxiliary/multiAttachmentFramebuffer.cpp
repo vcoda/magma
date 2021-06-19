@@ -82,9 +82,8 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
             finalLayout); // Depth image will be transitioned to when a render pass instance ends
     }
     // Create color/depth framebuffer
-    constexpr uint32_t layers = 1;
     renderPass = std::make_shared<RenderPass>(device, attachmentDescriptions, MAGMA_HOST_ALLOCATOR(allocator));
-    framebuffer = std::make_shared<magma::Framebuffer>(renderPass, attachmentViews, MAGMA_HOST_ALLOCATOR(allocator), layers, 0);
+    framebuffer = std::make_shared<magma::Framebuffer>(renderPass, attachmentViews, MAGMA_HOST_ALLOCATOR(allocator), 0);
 }
 
 std::shared_ptr<magma::Framebuffer> MultiAttachmentFramebuffer::getDepthFramebuffer()
@@ -108,9 +107,8 @@ std::shared_ptr<RenderPass> MultiAttachmentFramebuffer::lazyDepthRenderPass() co
             hasStencil() ? op::clearStore : op::dontCare, // Clear stencil, store
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL); // Stay as attachment when a depth pass instance ends
-        constexpr uint32_t layers = 1;
         depthRenderPass = std::make_shared<RenderPass>(renderPass->getDevice(), depthAttachment, renderPass->getHostAllocator());
-        depthFramebuffer = std::make_shared<magma::Framebuffer>(depthRenderPass, attachmentViews.back(), framebuffer->getHostAllocator(), layers, 0);
+        depthFramebuffer = std::make_shared<magma::Framebuffer>(depthRenderPass, attachmentViews.back(), framebuffer->getHostAllocator(), 0);
     }
     return depthRenderPass;
 }

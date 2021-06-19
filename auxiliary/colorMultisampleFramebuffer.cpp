@@ -79,7 +79,6 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
         op::dontCare, // Stencil not applicable
         VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL); // Resolve image will be transitioned to when a render pass instance ends
-    constexpr uint32_t layers = 1;
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Choose optimal depth/stencil layout
         const VkImageLayout finalLayout = optimalDepthStencilLayout(device, depthStencilFormat, false);
@@ -94,7 +93,7 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
             MAGMA_HOST_ALLOCATOR(allocator));
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass,
             std::vector<std::shared_ptr<ImageView>>{colorView, depthStencilView, resolveView},
-            MAGMA_HOST_ALLOCATOR(allocator), layers, 0);
+            MAGMA_HOST_ALLOCATOR(allocator), 0);
     }
     else
     {   // Create color only framebuffer
@@ -103,7 +102,7 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
             MAGMA_HOST_ALLOCATOR(allocator));
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass,
             std::vector<std::shared_ptr<ImageView>>{colorView, resolveView},
-            MAGMA_HOST_ALLOCATOR(allocator), layers, 0);
+            MAGMA_HOST_ALLOCATOR(allocator), 0);
     }
 }
 } // namespace aux
