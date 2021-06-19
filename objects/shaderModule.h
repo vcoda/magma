@@ -58,9 +58,9 @@ namespace magma
             ,std::shared_ptr<ValidationCache> validationCache = nullptr
 #endif
         );
-        template<std::size_t WordCount>
+        template<std::size_t SpirvWordCount>
         explicit ShaderModule(std::shared_ptr<Device> device,
-            const SpirvWord (&bytecode)[WordCount],
+            const SpirvWord (&bytecode)[SpirvWordCount],
             std::size_t bytecodeHash = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkShaderModuleCreateFlags flags = 0,
