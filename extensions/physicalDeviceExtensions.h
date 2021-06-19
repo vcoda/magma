@@ -188,6 +188,8 @@ namespace magma
         const bool KHR_variable_pointers;
         const bool KHR_vulkan_memory_model;
         const bool KHR_win32_keyed_mutex;
+        const bool KHR_workgroup_memory_explicit_layout;
+        const bool KHR_zero_initialize_workgroup_memory;
 
         const bool NVX_binary_import;
         const bool NVX_device_generated_commands;
@@ -231,6 +233,8 @@ namespace magma
         const bool QCOM_render_pass_shader_resolve;
         const bool QCOM_render_pass_store_ops;
         const bool QCOM_render_pass_transform;
+
+        const bool VALVE_mutable_descriptor_type;
 
         PhysicalDeviceExtensions(std::shared_ptr<const PhysicalDevice> device);
     };

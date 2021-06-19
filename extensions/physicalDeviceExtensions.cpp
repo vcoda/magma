@@ -187,6 +187,8 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(KHR_variable_pointers),
     MAGMA_CHECK_EXTENSION(KHR_vulkan_memory_model),
     MAGMA_CHECK_EXTENSION(KHR_win32_keyed_mutex),
+    MAGMA_CHECK_EXTENSION(KHR_workgroup_memory_explicit_layout),
+    MAGMA_CHECK_EXTENSION(KHR_zero_initialize_workgroup_memory),
 
     MAGMA_CHECK_EXTENSION(NVX_binary_import),
     MAGMA_CHECK_EXTENSION(NVX_device_generated_commands),
@@ -229,6 +231,8 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
 
     MAGMA_CHECK_EXTENSION(QCOM_render_pass_shader_resolve),
     MAGMA_CHECK_EXTENSION(QCOM_render_pass_store_ops),
-    MAGMA_CHECK_EXTENSION(QCOM_render_pass_transform)
+    MAGMA_CHECK_EXTENSION(QCOM_render_pass_transform),
+
+    MAGMA_CHECK_EXTENSION(VALVE_mutable_descriptor_type)
 {}
 } // namespace magma
