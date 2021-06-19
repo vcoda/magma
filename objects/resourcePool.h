@@ -31,44 +31,8 @@ namespace magma
     class ResourcePool final : public core::NonCopyable
     {
     public:
-        struct DeviceResources
-        {
-            uint32_t semaphoreCount = 0;
-            uint32_t fenceCount = 0;
-            uint32_t deviceMemoryCount = 0;
-            uint32_t bufferCount = 0;
-            uint32_t image1DCount = 0;
-            uint32_t image1DArrayCount = 0;
-            uint32_t image2DCount = 0;
-            uint32_t image2DArrayCount = 0;
-            uint32_t image3DCount = 0;
-            uint32_t eventCount = 0;
-            uint32_t queryPoolCount = 0;
-            uint32_t bufferViewCount = 0;
-            uint32_t imageViewCount = 0;
-            uint32_t shaderModuleCount = 0;
-            uint32_t pipelineCacheCount = 0;
-            uint32_t pipelineLayoutCount = 0;
-            uint32_t renderPassCount = 0;
-            uint32_t graphicsPipelineCount = 0;
-            uint32_t computePipelineCount = 0;
-            uint32_t rayTracingPipelineCount = 0;
-            uint32_t descriptorSetLayoutCount = 0;
-            uint32_t samplerCount = 0;
-            uint32_t descriptorPoolCount = 0;
-            uint32_t descriptorSetCount = 0;
-            uint32_t framebufferCount = 0;
-            uint32_t commandPoolCount = 0;
-            // Non-core types
-            uint32_t swapchainCount = 0;
-            uint32_t accelerationStructureCount = 0;
-        };
-
-        struct PhysicalDeviceResources
-        {
-            uint32_t displayCount = 0;
-            uint32_t displayModeCount = 0;
-        };
+        struct DeviceResources;
+        struct PhysicalDeviceResources;
 
     public:
         DeviceResources countDeviceResources() const;
@@ -79,7 +43,6 @@ namespace magma
         VkDeviceSize countAllocatedImageMemory() const;
         VkDeviceSize countAllocatedAccelerationStructureMemory() const;
         bool hasAnyDeviceResource() const;
-
         template<typename Type>
         core::Pool<Type>& getPool();
 
@@ -127,6 +90,44 @@ namespace magma
         mutable std::mutex mtx;
         template<typename Type>
         friend class NonDispatchable;
+    };
+
+    struct ResourcePool::DeviceResources
+    {
+        uint32_t semaphoreCount = 0;
+        uint32_t fenceCount = 0;
+        uint32_t deviceMemoryCount = 0;
+        uint32_t bufferCount = 0;
+        uint32_t image1DCount = 0;
+        uint32_t image1DArrayCount = 0;
+        uint32_t image2DCount = 0;
+        uint32_t image2DArrayCount = 0;
+        uint32_t image3DCount = 0;
+        uint32_t eventCount = 0;
+        uint32_t queryPoolCount = 0;
+        uint32_t bufferViewCount = 0;
+        uint32_t imageViewCount = 0;
+        uint32_t shaderModuleCount = 0;
+        uint32_t pipelineCacheCount = 0;
+        uint32_t pipelineLayoutCount = 0;
+        uint32_t renderPassCount = 0;
+        uint32_t graphicsPipelineCount = 0;
+        uint32_t computePipelineCount = 0;
+        uint32_t rayTracingPipelineCount = 0;
+        uint32_t descriptorSetLayoutCount = 0;
+        uint32_t samplerCount = 0;
+        uint32_t descriptorPoolCount = 0;
+        uint32_t descriptorSetCount = 0;
+        uint32_t framebufferCount = 0;
+        uint32_t commandPoolCount = 0;
+        uint32_t swapchainCount = 0;
+        uint32_t accelerationStructureCount = 0;
+    };
+
+    struct ResourcePool::PhysicalDeviceResources
+    {
+        uint32_t displayCount = 0;
+        uint32_t displayModeCount = 0;
     };
 } // namespace magma
 
