@@ -5,7 +5,6 @@ namespace magma
 template<>\
 inline core::Pool<Type>& ResourcePool::getPool<Type>()\
 {\
-    std::lock_guard<std::mutex> guard(mtx);\
     return pool;\
 }
 
