@@ -31,10 +31,12 @@ namespace magma
     {
     public:
         const bool AMD_buffer_marker;
+        const bool AMD_calibrated_timestamps;
         const bool AMD_device_coherent_memory;
         const bool AMD_display_native_hdr;
         const bool AMD_draw_indirect_count;
         const bool AMD_gcn_shader;
+        const bool AMD_gpa_interface;
         const bool AMD_gpu_shader_half_float;
         const bool AMD_gpu_shader_int16;
         const bool AMD_memory_overallocation_behavior;
@@ -51,9 +53,11 @@ namespace magma
         const bool AMD_shader_info;
         const bool AMD_shader_trinary_minmax;
         const bool AMD_texture_gather_bias_lod;
+        const bool AMD_wave_limits;
 
         const bool ANDROID_external_memory_android_hardware_buffer;
 
+        const bool EXT_4444_formats;
         const bool EXT_astc_decode_mode;
         const bool EXT_blend_operation_advanced;
         const bool EXT_buffer_device_address;
@@ -68,6 +72,7 @@ namespace magma
         const bool EXT_discard_rectangles;
         const bool EXT_display_control;
         const bool EXT_display_surface_counter;
+        const bool EXT_extended_dynamic_state;
         const bool EXT_external_memory_dma_buf;
         const bool EXT_external_memory_host;
         const bool EXT_filter_cubic;
@@ -88,7 +93,9 @@ namespace magma
         const bool EXT_pipeline_creation_cache_control;
         const bool EXT_pipeline_creation_feedback;
         const bool EXT_post_depth_coverage;
+        const bool EXT_private_data;
         const bool EXT_queue_family_foreign;
+        const bool EXT_robustness2;
         const bool EXT_sample_locations;
         const bool EXT_sampler_filter_minmax;
         const bool EXT_scalar_block_layout;
@@ -125,6 +132,7 @@ namespace magma
         const bool KHR_acceleration_structure;
         const bool KHR_bind_memory2;
         const bool KHR_buffer_device_address;
+        const bool KHR_copy_commands2;
         const bool KHR_create_renderpass2;
         const bool KHR_dedicated_allocation;
         const bool KHR_deferred_host_operations;
@@ -185,11 +193,14 @@ namespace magma
         const bool NVX_device_generated_commands;
         const bool NVX_image_view_handle;
         const bool NVX_multiview_per_view_attributes;
+
+        const bool NV_acquire_winrt_display;
         const bool NV_clip_space_w_scaling;
         const bool NV_compute_shader_derivatives;
         const bool NV_cooperative_matrix;
         const bool NV_corner_sampled_image;
         const bool NV_coverage_reduction_mode;
+        const bool NV_cuda_kernel_launch;
         const bool NV_dedicated_allocation;
         const bool NV_dedicated_allocation_image_aliasing;
         const bool NV_device_diagnostic_checkpoints;
@@ -217,6 +228,8 @@ namespace magma
         const bool NV_viewport_swizzle;
         const bool NV_win32_keyed_mutex;
 
+        const bool QCOM_render_pass_shader_resolve;
+        const bool QCOM_render_pass_store_ops;
         const bool QCOM_render_pass_transform;
 
         PhysicalDeviceExtensions(std::shared_ptr<const PhysicalDevice> device);
