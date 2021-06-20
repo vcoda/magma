@@ -30,6 +30,7 @@ namespace magma
     class PhysicalDeviceExtensions : public Extensions
     {
     public:
+        // Advanced Micro Devices, Inc.
         const bool AMD_buffer_marker;
         const bool AMD_calibrated_timestamps;
         const bool AMD_device_coherent_memory;
@@ -55,13 +56,20 @@ namespace magma
         const bool AMD_texture_gather_bias_lod;
         const bool AMD_wave_limits;
 
+        // ANDROID (Google LLC)
         const bool ANDROID_external_memory_android_hardware_buffer;
 
+        // FUCHSIA (Google LLC)
+        const bool FUCHSIA_external_memory;
+        const bool FUCHSIA_external_semaphore;
+
+        // Multivendor
         const bool EXT_4444_formats;
         const bool EXT_astc_decode_mode;
         const bool EXT_blend_operation_advanced;
         const bool EXT_buffer_device_address;
         const bool EXT_calibrated_timestamps;
+        const bool EXT_color_write_enable;
         const bool EXT_conditional_rendering;
         const bool EXT_conservative_rasterization;
         const bool EXT_custom_border_color;
@@ -69,21 +77,26 @@ namespace magma
         const bool EXT_depth_clip_enable;
         const bool EXT_depth_range_unrestricted;
         const bool EXT_descriptor_indexing;
+        const bool EXT_device_memory_report;
         const bool EXT_discard_rectangles;
         const bool EXT_display_control;
         const bool EXT_display_surface_counter;
         const bool EXT_extended_dynamic_state;
+        const bool EXT_extended_dynamic_state2;
         const bool EXT_external_memory_dma_buf;
         const bool EXT_external_memory_host;
         const bool EXT_filter_cubic;
         const bool EXT_fragment_density_map;
+        const bool EXT_fragment_density_map2;
         const bool EXT_fragment_shader_interlock;
         const bool EXT_full_screen_exclusive;
         const bool EXT_global_priority;
+        const bool EXT_global_priority_query;
         const bool EXT_hdr_metadata;
         const bool EXT_headless_surface;
         const bool EXT_host_query_reset;
         const bool EXT_image_drm_format_modifier;
+        const bool EXT_image_robustness;
         const bool EXT_index_type_uint8;
         const bool EXT_inline_uniform_block;
         const bool EXT_line_rasterization;
@@ -94,13 +107,16 @@ namespace magma
         const bool EXT_pipeline_creation_feedback;
         const bool EXT_post_depth_coverage;
         const bool EXT_private_data;
+        const bool EXT_provoking_vertex;
         const bool EXT_queue_family_foreign;
         const bool EXT_robustness2;
         const bool EXT_sample_locations;
         const bool EXT_sampler_filter_minmax;
         const bool EXT_scalar_block_layout;
         const bool EXT_separate_stencil_usage;
+        const bool EXT_shader_atomic_float;
         const bool EXT_shader_demote_to_helper_invocation;
+        const bool EXT_shader_image_atomic_int64;
         const bool EXT_shader_stencil_export;
         const bool EXT_shader_subgroup_ballot;
         const bool EXT_shader_subgroup_vote;
@@ -114,19 +130,31 @@ namespace magma
         const bool EXT_validation_features;
         const bool EXT_validation_flags;
         const bool EXT_vertex_attribute_divisor;
+        const bool EXT_vertex_input_dynamic_state;
+        const bool EXT_video_decode_h264;
+        const bool EXT_video_decode_h265;
+        const bool EXT_video_encode_h264;
+        const bool EXT_ycbcr_2plane_444_formats;
         const bool EXT_ycbcr_image_arrays;
 
+        // GGP (Google, LLC)
+        const bool GGP_frame_token;
+
+        // Google LLC
         const bool GOOGLE_decorate_string;
         const bool GOOGLE_display_timing;
         const bool GOOGLE_hlsl_functionality1;
         const bool GOOGLE_user_type;
 
+        // Imagination Technologies
         const bool IMG_filter_cubic;
         const bool IMG_format_pvrtc;
 
+        // Intel Corporation
         const bool INTEL_performance_query;
         const bool INTEL_shader_integer_functions2;
 
+        // Khronos
         const bool KHR_16bit_storage;
         const bool KHR_8bit_storage;
         const bool KHR_acceleration_structure;
@@ -152,6 +180,7 @@ namespace magma
         const bool KHR_external_semaphore_capabilities;
         const bool KHR_external_semaphore_fd;
         const bool KHR_external_semaphore_win32;
+        const bool KHR_fragment_shading_rate;
         const bool KHR_get_memory_requirements2;
         const bool KHR_image_format_list;
         const bool KHR_imageless_framebuffer;
@@ -163,9 +192,9 @@ namespace magma
         const bool KHR_performance_query;
         const bool KHR_pipeline_executable_properties;
         const bool KHR_pipeline_library;
+        const bool KHR_portability_subset;
         const bool KHR_push_descriptor;
         const bool KHR_ray_query;
-        const bool KHR_ray_tracing;
         const bool KHR_ray_tracing_pipeline;
         const bool KHR_relaxed_block_layout;
         const bool KHR_sampler_mirror_clamp_to_edge;
@@ -178,24 +207,29 @@ namespace magma
         const bool KHR_shader_float_controls;
         const bool KHR_shader_non_semantic_info;
         const bool KHR_shader_subgroup_extended_types;
+        const bool KHR_shader_subgroup_uniform_control_flow;
+        const bool KHR_shader_terminate_invocation;
         const bool KHR_shared_presentable_image;
         const bool KHR_spirv_1_4;
         const bool KHR_storage_buffer_storage_class;
         const bool KHR_swapchain;
         const bool KHR_swapchain_mutable_format;
+        const bool KHR_synchronization2;
         const bool KHR_timeline_semaphore;
         const bool KHR_uniform_buffer_standard_layout;
         const bool KHR_variable_pointers;
+        const bool KHR_video_decode_queue;
+        const bool KHR_video_encode_queue;
+        const bool KHR_video_queue;
         const bool KHR_vulkan_memory_model;
         const bool KHR_win32_keyed_mutex;
         const bool KHR_workgroup_memory_explicit_layout;
         const bool KHR_zero_initialize_workgroup_memory;
 
-        const bool NVX_binary_import;
-        const bool NVX_device_generated_commands;
-        const bool NVX_image_view_handle;
-        const bool NVX_multiview_per_view_attributes;
+        // Nintendo Co., Ltd.
+        const bool NN_vi_surface;
 
+        // NVIDIA Corporation
         const bool NV_acquire_winrt_display;
         const bool NV_clip_space_w_scaling;
         const bool NV_compute_shader_derivatives;
@@ -214,9 +248,11 @@ namespace magma
         const bool NV_fill_rectangle;
         const bool NV_fragment_coverage_to_color;
         const bool NV_fragment_shader_barycentric;
+        const bool NV_fragment_shading_rate_enums;
         const bool NV_framebuffer_mixed_samples;
         const bool NV_geometry_shader_passthrough;
         const bool NV_glsl_shader;
+        const bool NV_inherited_viewport_scissor;
         const bool NV_mesh_shader;
         const bool NV_ray_tracing;
         const bool NV_representative_fragment_test;
@@ -229,11 +265,18 @@ namespace magma
         const bool NV_viewport_array2;
         const bool NV_viewport_swizzle;
         const bool NV_win32_keyed_mutex;
+        const bool NVX_binary_import;
+        const bool NVX_device_generated_commands;
+        const bool NVX_image_view_handle;
+        const bool NVX_multiview_per_view_attributes;
 
+        // Qualcomm Technologies, Inc.
         const bool QCOM_render_pass_shader_resolve;
         const bool QCOM_render_pass_store_ops;
         const bool QCOM_render_pass_transform;
+        const bool QCOM_rotated_copy_commands;
 
+        // Valve Corporation
         const bool VALVE_mutable_descriptor_type;
 
         PhysicalDeviceExtensions(std::shared_ptr<const PhysicalDevice> device);
