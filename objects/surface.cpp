@@ -190,7 +190,25 @@ MetalSurface::MetalSurface(std::shared_ptr<const Instance> instance,
     const VkResult result = vkCreateMetalSurfaceEXT(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create Metal surface");
 }
-#endif // VK_USE_PLATFORM_METAL_EXT
+
+#elif defined(VK_USE_PLATFORM_VI_NN)
+
+ViSurface::ViSurface(std::shared_ptr<const Instance> instance,
+    void *window,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkViSurfaceCreateFlagsNN flags /* 0 */):
+    Surface(std::move(instance), std::move(allocator))
+{
+    VkViSurfaceCreateInfoNN surfaceInfo;
+    surfaceInfo.sType = VK_STRUCTURE_TYPE_VI_SURFACE_CREATE_INFO_NN;
+    surfaceInfo.pNext = nullptr;
+    surfaceInfo.flags = flags;
+    surfaceInfo.window = window;
+    const VkResult result = vkCreateViSurfaceNN(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create Vi surface");
+}
+
+#endif // VK_USE_PLATFORM_VI_NN
 
 #ifdef VK_KHR_display
 DisplaySurface::DisplaySurface(std::shared_ptr<const Instance> instance,

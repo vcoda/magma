@@ -134,7 +134,19 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkMacOSSurfaceCreateFlagsMVK flags = 0);
     };
-#endif // VK_USE_PLATFORM_METAL_EXT
+
+#elif defined(VK_USE_PLATFORM_VI_NN)
+
+    class ViSurface : public Surface
+    {
+    public:
+        explicit ViSurface(std::shared_ptr<const Instance> instance,
+            void *window,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            VkViSurfaceCreateFlagsNN flags = 0);
+    };
+
+#endif // VK_USE_PLATFORM_VI_NN
 
 #ifdef VK_KHR_display
     class DisplayMode;
