@@ -28,16 +28,26 @@ namespace magma
     class InstanceExtensions : public Extensions
     {
     public:
+        // ANDROID (Google LLC)
         const bool ANDROID_native_buffer;
 
+        // Multivendor
         const bool EXT_acquire_xlib_display;
         const bool EXT_debug_report;
         const bool EXT_debug_utils;
         const bool EXT_direct_mode_display;
+        const bool EXT_directfb_surface;
         const bool EXT_display_surface_counter;
         const bool EXT_metal_surface;
         const bool EXT_swapchain_colorspace;
 
+        // FUCHSIA (Google LLC)
+        const bool FUCHSIA_imagepipe_surface;
+
+        // GGP (Google, LLC)
+        const bool GGP_stream_descriptor_surface;
+
+        // Khronos
         const bool KHR_android_surface;
         const bool KHR_device_group_creation;
         const bool KHR_display;
@@ -54,10 +64,15 @@ namespace magma
         const bool KHR_xcb_surface;
         const bool KHR_xlib_surface;
 
+        // MoltenVK
         const bool MVK_ios_surface;
         const bool MVK_macos_surface;
 
+        // NVIDIA Corporation
         const bool NV_external_memory_capabilities;
+
+        // BlackBerry Limited
+        const bool QNX_screen_surface;
 
         InstanceExtensions(const char *layerName = nullptr);
     };

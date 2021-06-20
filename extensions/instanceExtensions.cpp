@@ -35,9 +35,14 @@ InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
     MAGMA_CHECK_EXTENSION(EXT_debug_report),
     MAGMA_CHECK_EXTENSION(EXT_debug_utils),
     MAGMA_CHECK_EXTENSION(EXT_direct_mode_display),
+    MAGMA_CHECK_EXTENSION(EXT_directfb_surface),
     MAGMA_CHECK_EXTENSION(EXT_display_surface_counter),
     MAGMA_CHECK_EXTENSION(EXT_metal_surface),
     MAGMA_CHECK_EXTENSION(EXT_swapchain_colorspace),
+
+    MAGMA_CHECK_EXTENSION(FUCHSIA_imagepipe_surface),
+
+    MAGMA_CHECK_EXTENSION(GGP_stream_descriptor_surface),
 
     MAGMA_CHECK_EXTENSION(KHR_android_surface),
     MAGMA_CHECK_EXTENSION(KHR_device_group_creation),
@@ -58,6 +63,8 @@ InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
     MAGMA_CHECK_EXTENSION(MVK_ios_surface),
     MAGMA_CHECK_EXTENSION(MVK_macos_surface),
 
-    MAGMA_CHECK_EXTENSION(NV_external_memory_capabilities)
+    MAGMA_CHECK_EXTENSION(NV_external_memory_capabilities),
+
+    MAGMA_CHECK_EXTENSION(QNX_screen_surface)
 {}
 } // namespace magma
