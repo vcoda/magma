@@ -127,6 +127,25 @@ MirSurface::MirSurface(std::shared_ptr<const Instance> instance,
     MAGMA_THROW_FAILURE(result, "failed to create Mir surface");
 }
 
+#elif defined(VK_USE_PLATFORM_SCREEN_QNX)
+
+QnxSurface::QnxSurface(std::shared_ptr<const Instance> instance,
+    struct _screen_context *context,
+    struct _screen_window *window,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkScreenSurfaceCreateFlagsQNX flags /* 0 */):
+    Surface(std::move(instance), std::move(allocator))
+{
+    VkScreenSurfaceCreateInfoQNX surfaceInfo;
+    surfaceInfo.sType = VK_STRUCTURE_TYPE_SCREEN_SURFACE_CREATE_INFO_QNX;
+    surfaceInfo.pNext = nullptr;
+    surfaceInfo.flags = false;
+    surfaceInfo.context = context;
+    surfaceInfo.window = window;
+    const VkResult result = vkCreateScreenSurfaceQNX(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create QNX surface");
+}
+
 #elif defined(VK_USE_PLATFORM_ANDROID_KHR)
 AndroidSurface::AndroidSurface(std::shared_ptr<const Instance> instance,
     ANativeWindow *window,

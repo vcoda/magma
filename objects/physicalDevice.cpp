@@ -177,34 +177,40 @@ bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex,
     void *display /* nullptr */,
     const void *visualID /* nullptr */) const noexcept
 {
+    VkBool32 result;
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
     MAGMA_UNUSED(display);
     MAGMA_UNUSED(visualID);
-    const VkBool32 get = vkGetPhysicalDeviceWin32PresentationSupportKHR(handle, queueFamilyIndex);
+    result = vkGetPhysicalDeviceWin32PresentationSupportKHR(handle, queueFamilyIndex);
 #elif defined(VK_USE_PLATFORM_XLIB_KHR)
     MAGMA_ASSERT(display);
     MAGMA_ASSERT(visualID);
-    const VkBool32 get = vkGetPhysicalDeviceXlibPresentationSupportKHR(handle, queueFamilyIndex,
+    result = vkGetPhysicalDeviceXlibPresentationSupportKHR(handle, queueFamilyIndex,
         reinterpret_cast<::Display *>(display),
         *reinterpret_cast<const VisualID *>(visualID));
 #elif defined(VK_USE_PLATFORM_XCB_KHR)
     MAGMA_ASSERT(display);
     MAGMA_ASSERT(visualID);
-    const VkBool32 get = vkGetPhysicalDeviceXcbPresentationSupportKHR(handle, queueFamilyIndex,
+    result = vkGetPhysicalDeviceXcbPresentationSupportKHR(handle, queueFamilyIndex,
         reinterpret_cast<xcb_connection_t *>(display),
         *reinterpret_cast<const xcb_visualid_t *>(visualID));
 #elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
     MAGMA_ASSERT(display);
     MAGMA_UNUSED(visualID);
-    const VkBool32 get = vkGetPhysicalDeviceWaylandPresentationSupportKHR(handle, queueFamilyIndex,
+    result = vkGetPhysicalDeviceWaylandPresentationSupportKHR(handle, queueFamilyIndex,
         reinterpret_cast<wl_display *>(display));
 #elif defined(VK_USE_PLATFORM_MIR_KHR)
     MAGMA_ASSERT(display);
     MAGMA_UNUSED(visualID);
-    const VkBool32 get = vkGetPhysicalDeviceMirPresentationSupportKHR(handle, queueFamilyIndex,
+    result = vkGetPhysicalDeviceMirPresentationSupportKHR(handle, queueFamilyIndex,
         reinterpret_cast<MirConnection *>(display));
+#elif defined(VK_USE_PLATFORM_SCREEN_QNX)
+    MAGMA_ASSERT(display);
+    MAGMA_UNUSED(visualID);
+    result = vkGetPhysicalDeviceScreenPresentationSupportQNX(handle, queueFamilyIndex,
+        reinterpret_cast<_screen_window *>(display));
 #endif
-    return (get ? true : false);
+    return (result ? true : false);
 }
 
 #ifdef VK_KHR_display

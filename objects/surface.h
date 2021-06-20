@@ -95,6 +95,18 @@ namespace magma
             VkMirSurfaceCreateFlagsKHR flags = 0);
     };
 
+#elif defined(VK_USE_PLATFORM_SCREEN_QNX)
+
+    class QnxSurface : public Surface
+    {
+    public:
+        explicit QnxSurface(std::shared_ptr<const Instance> instance,
+            struct _screen_context *context,
+            struct _screen_window *window,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            VkScreenSurfaceCreateFlagsQNX flags = 0);
+    };
+
 #elif defined(VK_USE_PLATFORM_ANDROID_KHR)
     class AndroidSurface : public Surface
     {
