@@ -52,7 +52,7 @@ Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance,
     surfaceInfo.hinstance = hinstance;
     surfaceInfo.hwnd = hwnd;
     const VkResult result = vkCreateWin32SurfaceKHR(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to result Win32 surface");
+    MAGMA_THROW_FAILURE(result, "failed to create Win32 surface");
 }
 
 #elif defined(VK_USE_PLATFORM_XLIB_KHR)
@@ -70,7 +70,7 @@ XlibSurface::XlibSurface(std::shared_ptr<const Instance> instance,
     surfaceInfo.dpy = dpy;
     surfaceInfo.window = window;
     const VkResult result = vkCreateXlibSurfaceKHR(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to result Xlib surface");
+    MAGMA_THROW_FAILURE(result, "failed to create Xlib surface");
 }
 
 #elif defined(VK_USE_PLATFORM_XCB_KHR)
@@ -88,7 +88,7 @@ XcbSurface::XcbSurface(std::shared_ptr<const Instance> instance,
     surfaceInfo.connection = connection;
     surfaceInfo.window = window;
     const VkResult result = vkCreateXcbSurfaceKHR(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to result XCB surface");
+    MAGMA_THROW_FAILURE(result, "failed to create Xcb surface");
 }
 
 #elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
@@ -106,7 +106,7 @@ WaylandSurface::WaylandSurface(std::shared_ptr<const Instance> instance,
     surfaceInfo.display = display;
     surfaceInfo.surface = surface;
     const VkResult result = vkCreateWaylandSurfaceKHR(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to result Wayland surface");
+    MAGMA_THROW_FAILURE(result, "failed to create Wayland surface");
 }
 
 #elif defined(VK_USE_PLATFORM_MIR_KHR)
@@ -124,7 +124,7 @@ MirSurface::MirSurface(std::shared_ptr<const Instance> instance,
     surfaceInfo.connection = connection;
     surfaceInfo.mirSurface = surface;
     const VkResult result = vkCreateMirSurfaceKHR(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to result Mir surface");
+    MAGMA_THROW_FAILURE(result, "failed to create Mir surface");
 }
 
 #elif defined(VK_USE_PLATFORM_ANDROID_KHR)
@@ -140,7 +140,7 @@ AndroidSurface::AndroidSurface(std::shared_ptr<const Instance> instance,
     surfaceInfo.flags = flags;
     surfaceInfo.window = window;
     const VkResult result = vkCreateAndroidSurfaceKHR(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to result Android surface");
+    MAGMA_THROW_FAILURE(result, "failed to create Android surface");
 }
 
 #elif defined(VK_USE_PLATFORM_IOS_MVK)
@@ -156,7 +156,7 @@ iOSSurface::iOSSurface(std::shared_ptr<const Instance> instance,
     surfaceInfo.flags = flags;
     surfaceInfo.pView = view;
     const VkResult result = vkCreateIOSSurfaceMVK(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to result iOS surface");
+    MAGMA_THROW_FAILURE(result, "failed to create iOS surface");
 }
 
 #elif defined(VK_USE_PLATFORM_MACOS_MVK)
@@ -172,7 +172,7 @@ MacOSSurface::MacOSSurface(std::shared_ptr<const Instance> instance,
     surfaceInfo.flags = flags;
     surfaceInfo.pView = view;
     const VkResult result = vkCreateMacOSSurfaceMVK(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to result macOS surface");
+    MAGMA_THROW_FAILURE(result, "failed to create macOS surface");
 }
 
 #elif defined(VK_USE_PLATFORM_METAL_EXT)
@@ -188,7 +188,7 @@ MetalSurface::MetalSurface(std::shared_ptr<const Instance> instance,
     surfaceInfo.flags = flags;
     surfaceInfo.pLayer = layer;
     const VkResult result = vkCreateMetalSurfaceEXT(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to result Metal surface");
+    MAGMA_THROW_FAILURE(result, "failed to create Metal surface");
 }
 #endif // VK_USE_PLATFORM_METAL_EXT
 
