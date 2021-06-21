@@ -89,7 +89,7 @@ namespace magma
             uint32_t firstIndex = 0,
             uint32_t vertexOffset = 0,
             uint32_t firstInstance = 0) noexcept;
-        uint32_t writeDrawIndexedCommand(const VkDrawIndexedIndirectCommand& drawCmd) noexcept;
+        uint32_t writeDrawIndexedCommand(const VkDrawIndexedIndirectCommand& drawIndexedCmd) noexcept;
 
     private:
         VkDrawIndexedIndirectCommand *const mappedData;

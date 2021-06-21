@@ -53,17 +53,17 @@ uint32_t DrawIndirectBuffer::writeDrawCommand(uint32_t vertexCount,
     uint32_t firstVertex /* 0 */) noexcept
 {
     MAGMA_ASSERT(cmdCount < maxDrawCommands);
-    VkDrawIndirectCommand *drawIndirectCmd;
+    VkDrawIndirectCommand *drawCmd;
     if (persistentlyMapped())
-        drawIndirectCmd = mappedData + cmdCount;
+        drawCmd = mappedData + cmdCount;
     else
-        drawIndirectCmd = memory->map<VkDrawIndirectCommand>(sizeof(VkDrawIndirectCommand) * cmdCount, sizeof(VkDrawIndirectCommand));
-    if (drawIndirectCmd)
+        drawCmd = memory->map<VkDrawIndirectCommand>(sizeof(VkDrawIndirectCommand) * cmdCount, sizeof(VkDrawIndirectCommand));
+    if (drawCmd)
     {
-        drawIndirectCmd->vertexCount = vertexCount;
-        drawIndirectCmd->instanceCount = 1;
-        drawIndirectCmd->firstVertex = firstVertex;
-        drawIndirectCmd->firstInstance = 0;
+        drawCmd->vertexCount = vertexCount;
+        drawCmd->instanceCount = 1;
+        drawCmd->firstVertex = firstVertex;
+        drawCmd->firstInstance = 0;
         if (!persistentlyMapped())
             memory->unmap();
     }
@@ -75,17 +75,17 @@ uint32_t DrawIndirectBuffer::writeDrawInstancedCommand(uint32_t vertexCount, uin
     uint32_t firstInstance /* 0 */) noexcept
 {
     MAGMA_ASSERT(cmdCount < maxDrawCommands);
-    VkDrawIndirectCommand *drawIndirectCmd;
+    VkDrawIndirectCommand *drawCmd;
     if (persistentlyMapped())
-        drawIndirectCmd = mappedData + cmdCount;
+        drawCmd = mappedData + cmdCount;
     else
-        drawIndirectCmd = memory->map<VkDrawIndirectCommand>(sizeof(VkDrawIndirectCommand) * cmdCount, sizeof(VkDrawIndirectCommand));
-    if (drawIndirectCmd)
+        drawCmd = memory->map<VkDrawIndirectCommand>(sizeof(VkDrawIndirectCommand) * cmdCount, sizeof(VkDrawIndirectCommand));
+    if (drawCmd)
     {
-        drawIndirectCmd->vertexCount = vertexCount;
-        drawIndirectCmd->instanceCount = instanceCount;
-        drawIndirectCmd->firstVertex = firstVertex;
-        drawIndirectCmd->firstInstance = firstInstance;
+        drawCmd->vertexCount = vertexCount;
+        drawCmd->instanceCount = instanceCount;
+        drawCmd->firstVertex = firstVertex;
+        drawCmd->firstInstance = firstInstance;
         if (!persistentlyMapped())
             memory->unmap();
     }
@@ -121,18 +121,18 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(uint32_t indexCount,
     uint32_t vertexOffset /* 0 */) noexcept
 {
     MAGMA_ASSERT(cmdCount < maxDrawCommands);
-    VkDrawIndexedIndirectCommand *drawIndexedIndirectCmd;
+    VkDrawIndexedIndirectCommand *drawIndexedCmd;
     if (persistentlyMapped())
-        drawIndexedIndirectCmd = mappedData + cmdCount;
+        drawIndexedCmd = mappedData + cmdCount;
     else
-        drawIndexedIndirectCmd = memory->map<VkDrawIndexedIndirectCommand>(sizeof(VkDrawIndexedIndirectCommand) * cmdCount, sizeof(VkDrawIndexedIndirectCommand));
-    if (drawIndexedIndirectCmd)
+        drawIndexedCmd = memory->map<VkDrawIndexedIndirectCommand>(sizeof(VkDrawIndexedIndirectCommand) * cmdCount, sizeof(VkDrawIndexedIndirectCommand));
+    if (drawIndexedCmd)
     {
-        drawIndexedIndirectCmd->indexCount = indexCount;
-        drawIndexedIndirectCmd->instanceCount = 1;
-        drawIndexedIndirectCmd->firstIndex = firstIndex;
-        drawIndexedIndirectCmd->vertexOffset = vertexOffset;
-        drawIndexedIndirectCmd->firstInstance = 0;
+        drawIndexedCmd->indexCount = indexCount;
+        drawIndexedCmd->instanceCount = 1;
+        drawIndexedCmd->firstIndex = firstIndex;
+        drawIndexedCmd->vertexOffset = vertexOffset;
+        drawIndexedCmd->firstInstance = 0;
         if (!persistentlyMapped())
             memory->unmap();
     }
@@ -145,18 +145,18 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedInstancedCommand(uint32_t in
     uint32_t firstInstance /* 0 */) noexcept
 {
     MAGMA_ASSERT(cmdCount < maxDrawCommands);
-    VkDrawIndexedIndirectCommand *drawIndexedIndirectCmd;
+    VkDrawIndexedIndirectCommand *drawIndexedCmd;
     if (persistentlyMapped())
-        drawIndexedIndirectCmd = mappedData + cmdCount;
+        drawIndexedCmd = mappedData + cmdCount;
     else
-        drawIndexedIndirectCmd = memory->map<VkDrawIndexedIndirectCommand>(sizeof(VkDrawIndexedIndirectCommand) * cmdCount, sizeof(VkDrawIndexedIndirectCommand));
-    if (drawIndexedIndirectCmd)
+        drawIndexedCmd = memory->map<VkDrawIndexedIndirectCommand>(sizeof(VkDrawIndexedIndirectCommand) * cmdCount, sizeof(VkDrawIndexedIndirectCommand));
+    if (drawIndexedCmd)
     {
-        drawIndexedIndirectCmd->indexCount = indexCount;
-        drawIndexedIndirectCmd->instanceCount = instanceCount;
-        drawIndexedIndirectCmd->firstIndex = firstIndex;
-        drawIndexedIndirectCmd->vertexOffset = vertexOffset;
-        drawIndexedIndirectCmd->firstInstance = firstInstance;
+        drawIndexedCmd->indexCount = indexCount;
+        drawIndexedCmd->instanceCount = instanceCount;
+        drawIndexedCmd->firstIndex = firstIndex;
+        drawIndexedCmd->vertexOffset = vertexOffset;
+        drawIndexedCmd->firstInstance = firstInstance;
         if (!persistentlyMapped())
             memory->unmap();
     }
