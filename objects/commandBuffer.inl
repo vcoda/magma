@@ -191,14 +191,14 @@ inline void CommandBuffer::drawMultiIndexedInstanced(const std::vector<VkMultiDr
 }
 #endif // VK_EXT_multi_draw
 
-inline void CommandBuffer::drawIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset, uint32_t drawCount, uint32_t stride) const noexcept
+inline void CommandBuffer::drawIndirect(const std::shared_ptr<DrawIndirectBuffer>& buffer) const noexcept
 {
-    vkCmdDrawIndirect(handle, *buffer, offset, drawCount, stride);
+    vkCmdDrawIndirect(handle, *buffer, 0, buffer->getDrawCommandCount(), buffer->getStride());
 }
 
-inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset, uint32_t drawCount, uint32_t stride) const noexcept
+inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<DrawIndexedIndirectBuffer>& buffer) const noexcept
 {
-    vkCmdDrawIndexedIndirect(handle, *buffer, offset, drawCount, stride);
+    vkCmdDrawIndexedIndirect(handle, *buffer, 0, buffer->getDrawCommandCount(), buffer->getStride());
 }
 
 inline void CommandBuffer::dispatch(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) const noexcept

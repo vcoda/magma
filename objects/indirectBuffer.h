@@ -20,27 +20,78 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* A buffer that is suitable for passing to indirect draw commands. */
+    /* Indirect buffer allows to source the draw command's parameters indirectly from memory. */
 
     class IndirectBuffer : public Buffer
     {
     public:
+        ~IndirectBuffer();
+        uint32_t getMaxDrawCommands() const noexcept { return maxDrawCommands; }
+        uint32_t getDrawCommandCount() const noexcept { return cmdCount; }
+        uint32_t getStride() const noexcept { return stride; }
+        bool persistentlyMapped() const noexcept { return persistent; }
+        void reset() noexcept { cmdCount = 0; }
+
+    protected:
         explicit IndirectBuffer(std::shared_ptr<Device> device,
+            uint32_t maxDrawCommands,
+            std::size_t stride,
+            bool persistentlyMapped,
+            VkBufferCreateFlags flags,
+            const Sharing& sharing,
+            std::shared_ptr<Allocator> allocator);
+
+        const uint32_t maxDrawCommands;
+        const uint32_t stride;
+        const bool persistent;
+        uint32_t cmdCount;
+    };
+
+    /* An array of VkDrawIndirectCommand structures. */
+
+    class DrawIndirectBuffer : public IndirectBuffer
+    {
+    public:
+        explicit DrawIndirectBuffer(std::shared_ptr<Device> device,
+            uint32_t maxDrawIndexedCommands,
             std::shared_ptr<Allocator> allocator = nullptr,
-            uint32_t drawCommandCount = 1,
+            bool persistentlyMapped = false,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing());
-        void writeDrawCommand(uint32_t vertexCount,
-            uint32_t firstVertex = 0,
-            uint32_t cmdIndex = 0) noexcept;
-        void writeDrawCommand(uint32_t vertexCount,
+        uint32_t writeDrawCommand(uint32_t vertexCount,
+            uint32_t firstVertex = 0) noexcept;
+        uint32_t writeDrawInstancedCommand(uint32_t vertexCount,
             uint32_t instanceCount,
-            uint32_t firstVertex,
-            uint32_t firstInstance,
-            uint32_t cmdIndex = 0) noexcept;
-        void writeDrawCommand(const VkDrawIndirectCommand& drawCmd,
-            uint32_t cmdIndex = 0) noexcept;
-        void writeDrawCommands(const std::vector<VkDrawIndirectCommand>& drawCmdList) noexcept;
-        void writeDrawCommands(const std::list<VkDrawIndirectCommand>& drawCmdList) noexcept;
+            uint32_t firstVertex = 0,
+            uint32_t firstInstance = 0) noexcept;
+        uint32_t writeDrawCommand(const VkDrawIndirectCommand& drawCmd) noexcept;
+
+    private:
+        VkDrawIndirectCommand *const mappedData;
+    };
+
+    /* An array of VkDrawIndexedIndirectCommand structures. */
+
+    class DrawIndexedIndirectBuffer : public IndirectBuffer
+    {
+    public:
+        explicit DrawIndexedIndirectBuffer(std::shared_ptr<Device> device,
+            uint32_t maxDrawIndexedCommands,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            bool persistentlyMapped = false,
+            VkBufferCreateFlags flags = 0,
+            const Sharing& sharing = Sharing());
+        uint32_t writeDrawIndexedCommand(uint32_t indexCount,
+            uint32_t firstIndex = 0,
+            uint32_t vertexOffset = 0) noexcept;
+        uint32_t writeDrawIndexedInstancedCommand(uint32_t indexCount,
+            uint32_t instanceCount,
+            uint32_t firstIndex = 0,
+            uint32_t vertexOffset = 0,
+            uint32_t firstInstance = 0) noexcept;
+        uint32_t writeDrawIndexedCommand(const VkDrawIndexedIndirectCommand& drawCmd) noexcept;
+
+    private:
+        VkDrawIndexedIndirectCommand *const mappedData;
     };
 } // namespace magma

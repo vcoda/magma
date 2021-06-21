@@ -42,6 +42,8 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(DeviceMemory)
     MAGMA_TYPEDEF_SHARED_PTR(DisplayMode)
     MAGMA_TYPEDEF_SHARED_PTR(DisplaySurface)
+    MAGMA_TYPEDEF_SHARED_PTR(DrawIndexedIndirectBuffer)
+    MAGMA_TYPEDEF_SHARED_PTR(DrawIndirectBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(DstTransferBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(DynamicIndexBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(DynamicStorageBuffer)

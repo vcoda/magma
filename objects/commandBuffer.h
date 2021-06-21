@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptorSet.h"
 #include "vertexBuffer.h"
 #include "indexBuffer.h"
+#include "indirectBuffer.h"
 #include "image.h"
 #include "pipeline.h"
 #include "pipelineLayout.h"
@@ -181,15 +182,9 @@ namespace magma
             const std::vector<int32_t>& vertexOffsets = {}) const noexcept;
 #endif // VK_EXT_multi_draw
         void drawIndirect(
-            const std::shared_ptr<Buffer>& buffer,
-            VkDeviceSize offset,
-            uint32_t drawCount,
-            uint32_t stride) const noexcept;
+            const std::shared_ptr<DrawIndirectBuffer>& buffer) const noexcept;
         void drawIndexedIndirect(
-            const std::shared_ptr<Buffer>& buffer,
-            VkDeviceSize offset,
-            uint32_t drawCount,
-            uint32_t stride) const noexcept;
+            const std::shared_ptr<DrawIndexedIndirectBuffer>& buffer) const noexcept;
         void dispatch(
             uint32_t groupCountX,
             uint32_t groupCountY,
