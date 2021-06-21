@@ -99,6 +99,7 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(EXT_memory_priority),
     MAGMA_CHECK_EXTENSION(EXT_multi_draw),
     MAGMA_CHECK_EXTENSION(EXT_pci_bus_info),
+    MAGMA_CHECK_EXTENSION(EXT_physical_device_drm),
     MAGMA_CHECK_EXTENSION(EXT_pipeline_creation_cache_control),
     MAGMA_CHECK_EXTENSION(EXT_pipeline_creation_feedback),
     MAGMA_CHECK_EXTENSION(EXT_post_depth_coverage),
@@ -139,6 +140,8 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(GOOGLE_display_timing),
     MAGMA_CHECK_EXTENSION(GOOGLE_hlsl_functionality1),
     MAGMA_CHECK_EXTENSION(GOOGLE_user_type),
+
+    MAGMA_CHECK_EXTENSION(HUAWEI_subpass_shading),
 
     MAGMA_CHECK_EXTENSION(IMG_filter_cubic),
     MAGMA_CHECK_EXTENSION(IMG_format_pvrtc),
@@ -244,6 +247,7 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(NV_inherited_viewport_scissor),
     MAGMA_CHECK_EXTENSION(NV_mesh_shader),
     MAGMA_CHECK_EXTENSION(NV_ray_tracing),
+    MAGMA_CHECK_EXTENSION(NV_ray_tracing_motion_blur),
     MAGMA_CHECK_EXTENSION(NV_representative_fragment_test),
     MAGMA_CHECK_EXTENSION(NV_sample_mask_override_coverage),
     MAGMA_CHECK_EXTENSION(NV_scissor_exclusive),

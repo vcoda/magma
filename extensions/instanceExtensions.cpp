@@ -31,6 +31,7 @@ InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
 
     MAGMA_CHECK_EXTENSION(ANDROID_native_buffer),
 
+    MAGMA_CHECK_EXTENSION(EXT_acquire_drm_display),
     MAGMA_CHECK_EXTENSION(EXT_acquire_xlib_display),
     MAGMA_CHECK_EXTENSION(EXT_debug_report),
     MAGMA_CHECK_EXTENSION(EXT_debug_utils),

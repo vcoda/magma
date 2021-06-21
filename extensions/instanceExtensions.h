@@ -32,6 +32,7 @@ namespace magma
         const bool ANDROID_native_buffer;
 
         // Multivendor
+        const bool EXT_acquire_drm_display;
         const bool EXT_acquire_xlib_display;
         const bool EXT_debug_report;
         const bool EXT_debug_utils;

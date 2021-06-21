@@ -104,6 +104,7 @@ namespace magma
         const bool EXT_memory_priority;
         const bool EXT_multi_draw;
         const bool EXT_pci_bus_info;
+        const bool EXT_physical_device_drm;
         const bool EXT_pipeline_creation_cache_control;
         const bool EXT_pipeline_creation_feedback;
         const bool EXT_post_depth_coverage;
@@ -146,6 +147,9 @@ namespace magma
         const bool GOOGLE_display_timing;
         const bool GOOGLE_hlsl_functionality1;
         const bool GOOGLE_user_type;
+
+        // Huawei Technologies Co. Ltd.
+        const bool HUAWEI_subpass_shading;
 
         // Imagination Technologies
         const bool IMG_filter_cubic;
@@ -256,6 +260,7 @@ namespace magma
         const bool NV_inherited_viewport_scissor;
         const bool NV_mesh_shader;
         const bool NV_ray_tracing;
+        const bool NV_ray_tracing_motion_blur;
         const bool NV_representative_fragment_test;
         const bool NV_sample_mask_override_coverage;
         const bool NV_scissor_exclusive;
