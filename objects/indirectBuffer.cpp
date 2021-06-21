@@ -36,7 +36,7 @@ IndirectBuffer::IndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDrawC
 
 IndirectBuffer::~IndirectBuffer()
 {
-    if (persistent)
+    if (persistentlyMapped())
         memory->unmap();
 }
 
@@ -100,8 +100,7 @@ uint32_t DrawIndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawC
     else if (auto *drawIndirectCmd = memory->map<VkDrawIndirectCommand>(sizeof(VkDrawIndirectCommand) * cmdCount, sizeof(VkDrawIndirectCommand)))
     {
         memcpy(drawIndirectCmd, &drawCmd, sizeof(VkDrawIndirectCommand));
-        if (!persistentlyMapped())
-            memory->unmap();
+        memory->unmap();
     }
     return cmdCount++;
 }
@@ -170,8 +169,7 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(const VkDrawIndexedI
     else if (auto *drawIndexedIndirectCmd = memory->map<VkDrawIndexedIndirectCommand>(sizeof(VkDrawIndexedIndirectCommand) * cmdCount, sizeof(VkDrawIndexedIndirectCommand)))
     {
         memcpy(drawIndexedIndirectCmd, &drawCmd, sizeof(VkDrawIndexedIndirectCommand));
-        if (!persistentlyMapped())
-            memory->unmap();
+        memory->unmap();
     }
     return cmdCount++;
 }
