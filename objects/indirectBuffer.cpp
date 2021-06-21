@@ -96,8 +96,10 @@ uint32_t DrawIndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawC
 {
     MAGMA_ASSERT(cmdCount < maxDrawCommands);
     if (persistentlyMapped())
-        memcpy(mappedData + cmdCount, &drawCmd, sizeof(VkDrawIndirectCommand));
-    else if (auto *drawIndirectCmd = memory->map<VkDrawIndirectCommand>(sizeof(VkDrawIndirectCommand) * cmdCount, sizeof(VkDrawIndirectCommand)))
+    {
+        if (mappedData)
+            memcpy(mappedData + cmdCount, &drawCmd, sizeof(VkDrawIndirectCommand));
+    } else if (auto *drawIndirectCmd = memory->map<VkDrawIndirectCommand>(sizeof(VkDrawIndirectCommand) * cmdCount, sizeof(VkDrawIndirectCommand)))
     {
         memcpy(drawIndirectCmd, &drawCmd, sizeof(VkDrawIndirectCommand));
         memory->unmap();
@@ -165,8 +167,10 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(const VkDrawIndexedI
 {
     MAGMA_ASSERT(cmdCount < maxDrawCommands);
     if (persistentlyMapped())
-        memcpy(mappedData + cmdCount, &drawCmd, sizeof(VkDrawIndexedIndirectCommand));
-    else if (auto *drawIndexedIndirectCmd = memory->map<VkDrawIndexedIndirectCommand>(sizeof(VkDrawIndexedIndirectCommand) * cmdCount, sizeof(VkDrawIndexedIndirectCommand)))
+    {
+        if (mappedData)
+            memcpy(mappedData + cmdCount, &drawCmd, sizeof(VkDrawIndexedIndirectCommand));
+    } else if (auto *drawIndexedIndirectCmd = memory->map<VkDrawIndexedIndirectCommand>(sizeof(VkDrawIndexedIndirectCommand) * cmdCount, sizeof(VkDrawIndexedIndirectCommand)))
     {
         memcpy(drawIndexedIndirectCmd, &drawCmd, sizeof(VkDrawIndexedIndirectCommand));
         memory->unmap();
