@@ -102,6 +102,7 @@ namespace magma
         const bool EXT_line_rasterization;
         const bool EXT_memory_budget;
         const bool EXT_memory_priority;
+        const bool EXT_multi_draw;
         const bool EXT_pci_bus_info;
         const bool EXT_pipeline_creation_cache_control;
         const bool EXT_pipeline_creation_feedback;

@@ -168,6 +168,18 @@ namespace magma
             uint32_t firstIndex,
             int32_t vertexOffset,
             uint32_t firstInstance) const noexcept;
+#ifdef VK_EXT_multi_draw
+        void drawMultiIndexed(
+            const std::vector<VkMultiDrawIndexedInfoEXT>& indexInfo,
+            uint32_t stride,
+            const std::vector<int32_t>& vertexOffsets = {}) const noexcept;
+        void drawMultiIndexedInstanced(
+            const std::vector<VkMultiDrawIndexedInfoEXT>& indexInfo,
+            uint32_t instanceCount,
+            uint32_t firstInstance,
+            uint32_t stride,
+            const std::vector<int32_t>& vertexOffsets = {}) const noexcept;
+#endif // VK_EXT_multi_draw
         void drawIndirect(
             const std::shared_ptr<Buffer>& buffer,
             VkDeviceSize offset,
@@ -513,7 +525,10 @@ namespace magma
         VkBool32 negativeHeightAMDEnable = VK_FALSE;
         VkQueryControlFlags queryFlags = 0;
         VkQueryPipelineStatisticFlags pipelineStatistics = 0;
-#ifdef MAGMA_DEBUG_LABEL
+#ifdef VK_EXT_multi_draw
+        MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDrawMultiIndexedEXT);
+#endif
+#ifdef VK_EXT_debug_utils
         VkBool32 beginMarked = VK_FALSE;
         VkBool32 beginRenderPassMarked = VK_FALSE;
 #endif

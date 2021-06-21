@@ -97,6 +97,7 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(EXT_line_rasterization),
     MAGMA_CHECK_EXTENSION(EXT_memory_budget),
     MAGMA_CHECK_EXTENSION(EXT_memory_priority),
+    MAGMA_CHECK_EXTENSION(EXT_multi_draw),
     MAGMA_CHECK_EXTENSION(EXT_pci_bus_info),
     MAGMA_CHECK_EXTENSION(EXT_pipeline_creation_cache_control),
     MAGMA_CHECK_EXTENSION(EXT_pipeline_creation_feedback),
