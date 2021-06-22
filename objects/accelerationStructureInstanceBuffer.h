@@ -81,20 +81,24 @@ namespace magma
         explicit AccelerationStructureInstanceBuffer(std::shared_ptr<Device> device,
             uint32_t instanceCount,
             std::shared_ptr<Allocator> allocator = nullptr,
+            bool persistentlyMapped = false,
             VkBufferCreateFlags flags = 0,
             const Sharing& sharing = Sharing());
         ~AccelerationStructureInstanceBuffer();
         uint32_t getInstanceCount() const noexcept { return instanceCount; }
         AccelerationStructureInstance& getInstance(uint32_t instanceIndex) noexcept { return instances[instanceIndex]; }
         const AccelerationStructureInstance& getInstance(uint32_t instanceIndex) const noexcept { return instances[instanceIndex]; }
+        bool persistentlyMapped() const noexcept { return persistent; }
         bool update(std::shared_ptr<CommandBuffer> cmdBuffer,
             uint32_t firstInstance,
             uint32_t instanceCount);
 
     private:
-        std::shared_ptr<SrcTransferBuffer> stagingBuffer;
-        AccelerationStructureInstance *instances;
         const uint32_t instanceCount;
+        const bool persistent;
+        std::shared_ptr<SrcTransferBuffer> stagingBuffer;
+        std::vector<AccelerationStructureInstance> instanceArray;
+        AccelerationStructureInstance *instances;
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma

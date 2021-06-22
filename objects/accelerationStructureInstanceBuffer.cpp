@@ -49,44 +49,67 @@ void AccelerationStructureInstance::setAccelerationStructure(std::shared_ptr<con
 
 AccelerationStructureInstanceBuffer::AccelerationStructureInstanceBuffer(std::shared_ptr<Device> device, uint32_t instanceCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
+    bool persistentlyMapped /* false */,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */):
     RayTracingBuffer(device,
         sizeof(AccelerationStructureInstance) * instanceCount,
         allocator, flags, sharing),
+    instanceCount(instanceCount),
+    persistent(persistentlyMapped),
     stagingBuffer(std::make_shared<SrcTransferBuffer>(std::move(device),
         sizeof(AccelerationStructureInstance) * instanceCount, nullptr,
         std::move(allocator), flags, sharing)),
-    instances(nullptr),
-    instanceCount(instanceCount)
+    instances(nullptr)
 {
     static_assert(sizeof(AccelerationStructureInstance) == sizeof(VkAccelerationStructureInstanceNV), "invalid structure size");
-    instances = stagingBuffer->getMemory()->map<AccelerationStructureInstance>();
-    if (!instances)
-        throw exception::MemoryMapFailed("failed to map staging buffer of acceleration structure instances");
-    for (uint32_t instanceIndex = 0; instanceIndex < instanceCount; ++instanceIndex)
-    {   // Call constructor for each instance
-        new (&instances[instanceIndex]) AccelerationStructureInstance();
-        instances[instanceIndex].setInstanceIndex(instanceIndex);
+    if (persistentlyMapped)
+    {
+        instances = stagingBuffer->getMemory()->map<AccelerationStructureInstance>();
+        if (!instances)
+            throw exception::MemoryMapFailed("failed to map staging buffer of acceleration structure instances");
+        for (uint32_t instanceIndex = 0; instanceIndex < instanceCount; ++instanceIndex)
+        {   // Call constructor for each instance
+            new (&instances[instanceIndex]) AccelerationStructureInstance();
+        }
+    } else
+    {
+        instanceArray.resize(instanceCount);
+        instances = instanceArray.data();
     }
+    for (uint32_t instanceIndex = 0; instanceIndex < instanceCount; ++instanceIndex)
+        instances[instanceIndex].setInstanceIndex(instanceIndex);
 }
 
 AccelerationStructureInstanceBuffer::~AccelerationStructureInstanceBuffer()
 {
-    if (stagingBuffer->getMemory()->mapped())
+    if (persistentlyMapped())
         stagingBuffer->getMemory()->unmap();
 }
 
 bool AccelerationStructureInstanceBuffer::update(std::shared_ptr<CommandBuffer> cmdBuffer,
     uint32_t firstInstance, uint32_t instanceCount)
 {
+    MAGMA_ASSERT(firstInstance + instanceCount > getInstanceCount());
     if (firstInstance + instanceCount > getInstanceCount())
         return false;
+    const VkDeviceSize offset = sizeof(AccelerationStructureInstance) * firstInstance;
+    const VkDeviceSize size = sizeof(AccelerationStructureInstance) * instanceCount;
+    if (!persistentlyMapped())
+    {
+        void *data = stagingBuffer->getMemory()->map(offset, size);
+        MAGMA_ASSERT(data);
+        if (!data)
+            return false;
+        // Copy data to staging buffer
+        memcpy(data, &instances[firstInstance], size);
+        stagingBuffer->getMemory()->unmap();
+    }
     // Copy staging buffer to instance buffer
     VkBufferCopy region;
-    region.srcOffset = firstInstance * sizeof(AccelerationStructureInstance);
+    region.srcOffset = offset;
     region.dstOffset = region.srcOffset;
-    region.size = sizeof(AccelerationStructureInstance) * instanceCount;
+    region.size = size;
     cmdBuffer->copyBuffer(stagingBuffer, shared_from_this(), region);
     // Make sure the copy to instance buffer is finished before triggering the acceleration structure build
     constexpr MemoryBarrier copyTransferBarrier(
