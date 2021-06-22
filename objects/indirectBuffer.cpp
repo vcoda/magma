@@ -58,6 +58,7 @@ uint32_t DrawIndirectBuffer::writeDrawCommand(uint32_t vertexCount,
         drawCmd = mappedData + cmdCount;
     else
         drawCmd = memory->map<VkDrawIndirectCommand>(sizeof(VkDrawIndirectCommand) * cmdCount, sizeof(VkDrawIndirectCommand));
+    MAGMA_ASSERT(drawCmd);
     if (drawCmd)
     {
         drawCmd->vertexCount = vertexCount;
@@ -80,6 +81,7 @@ uint32_t DrawIndirectBuffer::writeDrawInstancedCommand(uint32_t vertexCount, uin
         drawCmd = mappedData + cmdCount;
     else
         drawCmd = memory->map<VkDrawIndirectCommand>(sizeof(VkDrawIndirectCommand) * cmdCount, sizeof(VkDrawIndirectCommand));
+    MAGMA_ASSERT(drawCmd);
     if (drawCmd)
     {
         drawCmd->vertexCount = vertexCount;
@@ -126,6 +128,7 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(uint32_t indexCount,
         drawIndexedCmd = mappedData + cmdCount;
     else
         drawIndexedCmd = memory->map<VkDrawIndexedIndirectCommand>(sizeof(VkDrawIndexedIndirectCommand) * cmdCount, sizeof(VkDrawIndexedIndirectCommand));
+    MAGMA_ASSERT(drawIndexedCmd);
     if (drawIndexedCmd)
     {
         drawIndexedCmd->indexCount = indexCount;
@@ -150,6 +153,7 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedInstancedCommand(uint32_t in
         drawIndexedCmd = mappedData + cmdCount;
     else
         drawIndexedCmd = memory->map<VkDrawIndexedIndirectCommand>(sizeof(VkDrawIndexedIndirectCommand) * cmdCount, sizeof(VkDrawIndexedIndirectCommand));
+    MAGMA_ASSERT(drawIndexedCmd);
     if (drawIndexedCmd)
     {
         drawIndexedCmd->indexCount = indexCount;
