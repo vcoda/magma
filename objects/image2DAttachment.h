@@ -22,7 +22,7 @@ namespace magma
 {
     /* Two-dimensional image that can be used as color attachment to framebuffer. */
 
-    class ColorAttachment: public Image2D
+    class ColorAttachment : public Image2D
     {
     public:
         explicit ColorAttachment(std::shared_ptr<Device> device,

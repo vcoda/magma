@@ -28,7 +28,6 @@ MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(NonDispatchable<VkDescriptorPool>, descri
 MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(NonDispatchable<VkDescriptorSet>, descriptorSets)
 MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(NonDispatchable<VkFramebuffer>, framebuffers)
 MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(NonDispatchable<VkCommandPool>, commandPools)
-// Non-core types
 #ifdef VK_KHR_surface
 MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(NonDispatchable<VkSurfaceKHR>, surfaces)
 #endif

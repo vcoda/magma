@@ -175,8 +175,7 @@ std::size_t SubpassDescription::hash() const noexcept
             core::hashCombine(hash, core::hashArgs(
                 pColorAttachments[i].attachment,
                 pColorAttachments[i].layout));
-        }
-        else if (pResolveAttachments)
+        } else if (pResolveAttachments)
         {
             core::hashCombine(hash, core::hashArgs(
                 pResolveAttachments[i].attachment,

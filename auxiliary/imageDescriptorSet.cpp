@@ -40,8 +40,7 @@ ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
         {
             descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::CombinedImageSampler(1), allocator, false);
             descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, imageSetLayout, VK_SHADER_STAGE_FRAGMENT_BIT, std::move(allocator));
-        }
-        else if (SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_IMAGE == binding->descriptor_type)
+        } else if (SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_IMAGE == binding->descriptor_type)
         {
             descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::StorageImage(1), allocator, false);
             descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, storageImageSetLayout, VK_SHADER_STAGE_FRAGMENT_BIT, std::move(allocator));

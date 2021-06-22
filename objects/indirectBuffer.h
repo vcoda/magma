@@ -53,7 +53,7 @@ namespace magma
     {
     public:
         explicit DrawIndirectBuffer(std::shared_ptr<Device> device,
-            uint32_t maxDrawIndexedCommands,
+            uint32_t maxDrawCommands,
             std::shared_ptr<Allocator> allocator = nullptr,
             bool persistentlyMapped = false,
             VkBufferCreateFlags flags = 0,
