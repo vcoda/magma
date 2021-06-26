@@ -94,7 +94,7 @@ bool AccelerationStructureInstanceBuffer::update(std::shared_ptr<CommandBuffer> 
     if (firstInstance + instanceCount > getInstanceCount())
         return false;
     const VkDeviceSize offset = sizeof(AccelerationStructureInstance) * firstInstance;
-    const VkDeviceSize size = sizeof(AccelerationStructureInstance) * instanceCount;
+    const std::size_t size = sizeof(AccelerationStructureInstance) * instanceCount;
     if (!persistentlyMapped())
     {
         void *data = stagingBuffer->getMemory()->map(offset, size);
