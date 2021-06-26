@@ -30,6 +30,8 @@ namespace magma
         VkClearValue value;
     };
 
+    /* Specifies the color image clear values to use when clearing a color image or attachment. */
+
     struct ClearColor : public ClearValue
     {
         constexpr explicit ClearColor(float r, float g, float b, float a = 1.f) noexcept;
@@ -40,6 +42,8 @@ namespace magma
         constexpr explicit ClearColor(const uint32_t color[4]) noexcept;
         constexpr explicit ClearColor(uint32_t hexValue) noexcept;
     };
+
+    /* Specifies the depth and stencil clear values to use when clearing a depth/stencil image or attachment. */
 
     struct ClearDepthStencil : public ClearValue
     {
