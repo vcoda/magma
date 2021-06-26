@@ -121,7 +121,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         if (VK_ATTACHMENT_LOAD_OP_CLEAR == attachment.loadOp)
         {   // The Vulkan spec states: clearValueCount must be greater than the largest attachment index in renderPass that specifies a loadOp
             // (or stencilLoadOp, if the attachment has a depth/stencil format) of VK_ATTACHMENT_LOAD_OP_CLEAR.
-            clearValues = std::vector<ClearValue>(this->renderPass->getAttachments().size(), clears::blackColor);
+            clearValues = std::vector<ClearValue>(this->renderPass->getAttachments().size(), clear::black);
             break;
         }
     }
