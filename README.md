@@ -29,7 +29,7 @@ different from my vision how such wrapper should be implemented and used. So eve
 Magma is all about initialization. It was designed with simplicity of object construction in mind.
 Initialization exploit C++ RAII idiom with constructor overloading and default parameters that can be omitted.
 Also library has a lot of pre-defined state objects, so developer can use them without initialization of custom states. 
-With this approach construction of most complex Vulkan object - VkPipeline - takes only a dozen lines of code.
+With this approach construction of the most complex Vulkan object - VkPipeline - takes only a dozen lines of code.
 
 All objects are inherited from two types: Dispatchable and NonDispatchable, according to API specification. These types in turn
 are inherited from base Object class. Render state objects are simply structures that inherited from Vulkan structures
@@ -57,10 +57,10 @@ in abuse cases, but speeds up allocations and reduces memory fragmentation in ru
 Defining descriptor set layouts usually the most complicated part of Vulkan API and often results in a lot of entagled code.
 From conceptual point of view, it should be done using reflection between C++ and GLSL code. Reflection is a mechanism 
 making it possible to investigate yourself. In programming languages, reflection is used to investigate format of objects at runtime,
-invoke methods and access fields of these objects. While C++ doesn't support true reflection, Magma tries to mimic it using variadics 
+invoke methods and access fields of these objects. While C++ doesn't support true reflection, Magma is trying to mimic it using variadics 
 and SPIR-V reflection data. This allows to define descriptor set layouts as regular C++ structures and check their validity against 
 specific shader bytecode. At run-time, you can assign resources (images, buffers, uniforms) to descriptor bindings and they will be 
-attached to shader when descriptor set is binded to command buffer.
+attached to shader when descriptor set is binded using command buffer.
 
 ## Memory management
 
@@ -74,20 +74,9 @@ Usually "allocator" parameter is the first among default parameters passed in th
 
 ## Features
 
-Magma was written mainly around [Vulkan 1.0](https://renderdoc.org/vkspec_chunked/index.html) specification, but has built-in support for some extensions:
-
-* VK_AMD_rasterization_order
-* VK_AMD_shader_core_properties
-* VK_EXT_blend_operation_advanced
-* VK_EXT_conditional_rendering
-* VK_EXT_conservative_rasterization
-* VK_EXT_debug_utils
-* VK_KHR_device_group
-* VK_KHR_display
-* VK_NV_fill_rectangle
-* VK_NV_raytracing
-
-and some other minor extensions. Support for new API features (1.1 and beyond) not implemented.
+Magma was written mainly around [Vulkan 1.0](https://renderdoc.org/vkspec_chunked/index.html) specification, but has built-in support for some extensions,
+like NVidia ray-tracing, fill rectangle primitive and some other minor extensions. There are a lot of mobile hardware that support only Vulkan 1.0,
+so it is better to have a wider range of compatible hardware rather than a questionable features. Support for new API versions (1.1 and beyond) still not implemented.
 
 ## Auxiliary
 
@@ -110,7 +99,7 @@ Library depends on STL and has not been designed to be used with custom containe
 
 ## Language
 
-Code is written in modern C++11/14 and takes advantage of new language features, STL and shared pointers.
+Code is written in modern C++11/14 and takes advantage of new language features.
 
 Supported compilers:
 
