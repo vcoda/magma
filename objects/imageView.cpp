@@ -105,6 +105,20 @@ ImageView::~ImageView()
     vkDestroyImageView(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
+uint32_t ImageView::getMipLevelCount() const noexcept
+{
+    if (VK_REMAINING_MIP_LEVELS == levelCount)
+        return image->getMipLevels() - baseMipLevel;
+    return levelCount;
+}
+
+uint32_t ImageView::getArrayLayerCount() const noexcept
+{
+    if (VK_REMAINING_ARRAY_LAYERS == layerCount)
+        return image->getArrayLayers() - baseArrayLayer;
+    return layerCount;
+}
+
 VkExtent2D ImageView::getExtent() const noexcept
 {
     const VkExtent3D& extent = image->getMipExtent(0);

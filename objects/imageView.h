@@ -53,9 +53,9 @@ namespace magma
         std::shared_ptr<Image> getImage() noexcept { return image; }
         std::shared_ptr<const Image> getImage() const noexcept { return image; }
         uint32_t getBaseMipLevel() const noexcept { return baseMipLevel; }
-        uint32_t getMipLevelCount() const noexcept { return levelCount; }
+        uint32_t getMipLevelCount() const noexcept;
         uint32_t getBaseArrayLayer() const noexcept { return baseArrayLayer; }
-        uint32_t getArrayLayerCount() const noexcept { return layerCount; }
+        uint32_t getArrayLayerCount() const noexcept;
         VkExtent2D getExtent() const noexcept;
         VkDescriptorImageInfo getDescriptor(std::shared_ptr<const Sampler> sampler) const noexcept;
 
