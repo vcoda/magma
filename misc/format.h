@@ -42,10 +42,6 @@ namespace magma
         std::size_t size() const noexcept;
         std::size_t blockCompressedSize() const noexcept;
         std::pair<int, int> blockFootprint() const noexcept;
-        constexpr bool operator==(VkFormat other) const noexcept { return format == other; }
-        constexpr bool operator==(const Format& other) const noexcept { return format == other.format; }
-        constexpr bool operator!=(VkFormat other) const noexcept { return format != other; }
-        constexpr bool operator!=(const Format& other) const noexcept { return format != other.format; }
         constexpr operator VkFormat() const noexcept { return format; }
 
     private:
