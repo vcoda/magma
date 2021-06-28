@@ -82,8 +82,8 @@ Image::Image(std::shared_ptr<Device> device, VkImage handle, VkImageType imageTy
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
     extent(extent),
-    mipLevels(mipLevels),
-    arrayLayers(arrayLayers),
+    mipLevels(1),
+    arrayLayers(1),
     samples(1),
     tiling(VK_IMAGE_TILING_OPTIMAL),
     usage(0)
