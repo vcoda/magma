@@ -107,9 +107,6 @@ namespace magma
     MAGMA_TYPEDEF_INTERFACE_SHARED_PTR(Allocator)
     MAGMA_TYPEDEF_INTERFACE_SHARED_PTR(DeviceMemoryAllocator)
 
-    MAGMA_TYPEDEF_UNIQUE_PTR(InstanceExtensions)
-    MAGMA_TYPEDEF_UNIQUE_PTR(PhysicalDeviceExtensions)
-
     class Display; // Declare explicitly because of Xlib's Diplay
     typedef std::shared_ptr<Display> DisplayPtr;
 

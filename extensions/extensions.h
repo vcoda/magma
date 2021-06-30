@@ -40,4 +40,6 @@ namespace magma
         std::map<std::string, uint32_t> extensions;
         std::unordered_set<std::size_t> hashes;
     };
+
+    MAGMA_TYPEDEF_UNIQUE_PTR(Extensions)
 } // namespace magma

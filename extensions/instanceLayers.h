@@ -107,4 +107,6 @@ namespace magma
 
         InstanceLayers();
     };
+
+    MAGMA_TYPEDEF_UNIQUE_PTR(InstanceLayers)
 } // namespace magma

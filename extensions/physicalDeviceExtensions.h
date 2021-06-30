@@ -287,4 +287,6 @@ namespace magma
 
         PhysicalDeviceExtensions(std::shared_ptr<const PhysicalDevice> device);
     };
+
+    MAGMA_TYPEDEF_UNIQUE_PTR(PhysicalDeviceExtensions)
 } // namespace magma
