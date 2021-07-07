@@ -27,7 +27,7 @@ different from my vision how such wrapper should be implemented and used. So eve
 ## Design
 
 Magma is all about initialization. It was designed with simplicity of object construction in mind.
-Initialization exploit C++ RAII idiom with constructor overloading and default parameters that can be omitted.
+Initialization exploit C++ [RAII](https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization) idiom with constructor overloading and default parameters that can be omitted.
 Also library has a lot of pre-defined state objects, so developer can use them without initialization of custom states. 
 With this approach construction of the most complex Vulkan object - VkPipeline - takes only a dozen lines of code.
 
