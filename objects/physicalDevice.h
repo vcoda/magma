@@ -122,6 +122,7 @@ namespace magma
 #endif
 #ifdef VK_KHR_multiview
         VkPhysicalDeviceMultiviewFeaturesKHR getMultiviewFeatures() const;
+        VkPhysicalDeviceMultiviewPropertiesKHR getMultiviewProperties() const;
 #endif
 #ifdef VK_KHR_shader_atomic_int64
         VkPhysicalDeviceShaderAtomicInt64FeaturesKHR getShaderAtomicInt64Features() const;

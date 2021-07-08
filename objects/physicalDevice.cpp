@@ -415,6 +415,11 @@ VkPhysicalDeviceMultiviewFeaturesKHR PhysicalDevice::getMultiviewFeatures() cons
 {
     return PHYSICAL_DEVICE_GET_FEATURES(MultiviewFeaturesKHR, MULTIVIEW_FEATURES_KHR);
 }
+
+VkPhysicalDeviceMultiviewPropertiesKHR PhysicalDevice::getMultiviewProperties() const
+{
+    return PHYSICAL_DEVICE_GET_PROPERTIES(MultiviewPropertiesKHR, MULTIVIEW_PROPERTIES_KHR);
+}
 #endif // VK_KHR_multiview
 
 #ifdef VK_KHR_shader_atomic_int64
