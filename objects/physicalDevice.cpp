@@ -410,6 +410,13 @@ VkPhysicalDeviceBufferDeviceAddressFeaturesKHR PhysicalDevice::getBufferDeviceAd
 }
 #endif // VK_KHR_buffer_device_address
 
+#ifdef VK_KHR_driver_properties
+VkPhysicalDeviceDriverPropertiesKHR PhysicalDevice::getDriverProperties() const
+{
+    return PHYSICAL_DEVICE_GET_PROPERTIES(DriverPropertiesKHR, DRIVER_PROPERTIES_KHR);
+}
+#endif // VK_KHR_driver_properties
+
 #ifdef VK_KHR_multiview
 VkPhysicalDeviceMultiviewFeaturesKHR PhysicalDevice::getMultiviewFeatures() const
 {

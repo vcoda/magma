@@ -120,6 +120,9 @@ namespace magma
 #ifdef VK_KHR_buffer_device_address
         VkPhysicalDeviceBufferDeviceAddressFeaturesKHR getBufferDeviceAddressFeatures() const;
 #endif
+#ifdef VK_KHR_driver_properties
+        VkPhysicalDeviceDriverPropertiesKHR getDriverProperties() const;
+#endif
 #ifdef VK_KHR_multiview
         VkPhysicalDeviceMultiviewFeaturesKHR getMultiviewFeatures() const;
         VkPhysicalDeviceMultiviewPropertiesKHR getMultiviewProperties() const;
