@@ -35,9 +35,10 @@ namespace magma
 } // namespace magma
 
 #ifdef _MSC_VER
-#define MAGMA_THROW_NOT_IMPLEMENTED throw magma::exception::NotImplemented(__FUNCSIG__,\
-    magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__})
+#define MAGMA_FUNCTION_SIGNATURE __FUNCSIG__
 #else
-#define MAGMA_THROW_NOT_IMPLEMENTED throw magma::exception::NotImplemented(__PRETTY_FUNCTION__,\
-    magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__})
+#define MAGMA_FUNCTION_SIGNATURE __PRETTY_FUNCTION__
 #endif
+
+#define MAGMA_THROW_NOT_IMPLEMENTED throw magma::exception::NotImplemented(MAGMA_FUNCTION_SIGNATURE,\
+    magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__})
