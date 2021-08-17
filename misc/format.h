@@ -43,6 +43,7 @@ namespace magma
         std::size_t blockCompressedSize() const noexcept;
         std::pair<int, int> blockFootprint() const noexcept;
         VkFormat unormToSrgb() const noexcept;
+        VkFormat srgbToUnorm() const noexcept;
         constexpr operator VkFormat() const noexcept { return format; }
 
     private:
