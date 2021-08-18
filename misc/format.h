@@ -25,6 +25,7 @@ namespace magma
     class Format
     {
     public:
+        constexpr Format(): format(VK_FORMAT_UNDEFINED) {}
         constexpr Format(VkFormat format) noexcept;
         constexpr bool valid() const noexcept { return format != VK_FORMAT_UNDEFINED; }
         constexpr bool depth() const noexcept;
