@@ -1,5 +1,9 @@
 namespace magma
 {
+constexpr Format::Format() noexcept:
+    format(VK_FORMAT_UNDEFINED)
+{}
+
 constexpr Format::Format(VkFormat format) noexcept:
     format(format)
 {}
