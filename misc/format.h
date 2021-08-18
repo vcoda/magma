@@ -47,7 +47,7 @@ namespace magma
         constexpr operator VkFormat() const noexcept { return format; }
 
     private:
-        VkFormat format;
+        const VkFormat format;
     };
 } // namespace magma
 
