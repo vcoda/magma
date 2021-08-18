@@ -27,7 +27,8 @@ namespace magma
     public:
         constexpr Format(): format(VK_FORMAT_UNDEFINED) {}
         constexpr Format(VkFormat format) noexcept;
-        constexpr bool valid() const noexcept { return format != VK_FORMAT_UNDEFINED; }
+        constexpr operator VkFormat() const noexcept;
+        constexpr bool valid() const noexcept;
         constexpr bool depth() const noexcept;
         constexpr bool stencil() const noexcept;
         constexpr bool depthStencil() const noexcept;
@@ -45,7 +46,6 @@ namespace magma
         std::pair<int, int> blockFootprint() const noexcept;
         VkFormat unormToSrgb() const noexcept;
         VkFormat srgbToUnorm() const noexcept;
-        constexpr operator VkFormat() const noexcept { return format; }
 
     private:
         const VkFormat format;

@@ -1,8 +1,18 @@
 namespace magma
 {
-constexpr Format::Format(const VkFormat format) noexcept:
+constexpr Format::Format(VkFormat format) noexcept:
     format(format)
 {}
+
+constexpr Format::operator VkFormat() const noexcept
+{
+    return format;
+}
+
+constexpr bool Format::valid() const noexcept
+{
+    return format != VK_FORMAT_UNDEFINED;
+}
 
 constexpr bool Format::depth() const noexcept
 {
