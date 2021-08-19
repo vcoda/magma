@@ -185,7 +185,7 @@ std::size_t Format::size() const noexcept
     case VK_FORMAT_R16_UINT:
     case VK_FORMAT_R16_SINT:
     case VK_FORMAT_R16_SFLOAT:
-        return sizeof(short);
+        return sizeof(int16_t);
     case VK_FORMAT_R16G16_UNORM:
     case VK_FORMAT_R16G16_SNORM:
     case VK_FORMAT_R16G16_USCALED:
@@ -193,7 +193,7 @@ std::size_t Format::size() const noexcept
     case VK_FORMAT_R16G16_UINT:
     case VK_FORMAT_R16G16_SINT:
     case VK_FORMAT_R16G16_SFLOAT:
-        return sizeof(short) * 2;
+        return sizeof(int16_t) * 2;
     case VK_FORMAT_R16G16B16_UNORM:
     case VK_FORMAT_R16G16B16_SNORM:
     case VK_FORMAT_R16G16B16_USCALED:
@@ -201,7 +201,7 @@ std::size_t Format::size() const noexcept
     case VK_FORMAT_R16G16B16_UINT:
     case VK_FORMAT_R16G16B16_SINT:
     case VK_FORMAT_R16G16B16_SFLOAT:
-        return sizeof(short) * 3;
+        return sizeof(int16_t) * 3;
     case VK_FORMAT_R16G16B16A16_UNORM:
     case VK_FORMAT_R16G16B16A16_SNORM:
     case VK_FORMAT_R16G16B16A16_USCALED:
@@ -209,37 +209,53 @@ std::size_t Format::size() const noexcept
     case VK_FORMAT_R16G16B16A16_UINT:
     case VK_FORMAT_R16G16B16A16_SINT:
     case VK_FORMAT_R16G16B16A16_SFLOAT:
-        return sizeof(short) * 4;
+        return sizeof(int16_t) * 4;
     case VK_FORMAT_R32_UINT:
+        return sizeof(uint32_t);
     case VK_FORMAT_R32_SINT:
+        return sizeof(int32_t);
     case VK_FORMAT_R32_SFLOAT:
         return sizeof(float);
     case VK_FORMAT_R32G32_UINT:
+        return sizeof(uint32_t) * 2;
     case VK_FORMAT_R32G32_SINT:
+        return sizeof(int32_t) * 2;
     case VK_FORMAT_R32G32_SFLOAT:
         return sizeof(float) * 2;
     case VK_FORMAT_R32G32B32_UINT:
+        return sizeof(uint32_t) * 3;
     case VK_FORMAT_R32G32B32_SINT:
+        return sizeof(int32_t) * 3;
     case VK_FORMAT_R32G32B32_SFLOAT:
         return sizeof(float) * 3;
     case VK_FORMAT_R32G32B32A32_UINT:
+        return sizeof(uint32_t) * 4;
     case VK_FORMAT_R32G32B32A32_SINT:
+        return sizeof(int32_t) * 4;
     case VK_FORMAT_R32G32B32A32_SFLOAT:
         return sizeof(float) * 4;
     case VK_FORMAT_R64_UINT:
+        return sizeof(uint64_t);
     case VK_FORMAT_R64_SINT:
+        return sizeof(int64_t);
     case VK_FORMAT_R64_SFLOAT:
         return sizeof(double);
     case VK_FORMAT_R64G64_UINT:
+        return sizeof(uint64_t) * 2;
     case VK_FORMAT_R64G64_SINT:
+        return sizeof(int64_t) * 2;
     case VK_FORMAT_R64G64_SFLOAT:
         return sizeof(double) * 2;
     case VK_FORMAT_R64G64B64_UINT:
+        return sizeof(uint64_t) * 3;
     case VK_FORMAT_R64G64B64_SINT:
+        return sizeof(int64_t) * 3;
     case VK_FORMAT_R64G64B64_SFLOAT:
         return sizeof(double) * 3;
     case VK_FORMAT_R64G64B64A64_UINT:
+        return sizeof(uint64_t) * 4;
     case VK_FORMAT_R64G64B64A64_SINT:
+        return sizeof(int64_t) * 4;
     case VK_FORMAT_R64G64B64A64_SFLOAT:
         return sizeof(double) * 4;
     default:
