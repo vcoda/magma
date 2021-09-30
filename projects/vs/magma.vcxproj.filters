@@ -609,6 +609,9 @@
     <ClInclude Include="..\..\shaders\shaderReflectionFactory.h">
       <Filter>Header Files\shaders</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\misc\createInfo.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">

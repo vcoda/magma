@@ -224,6 +224,7 @@
     <ClInclude Include="..\..\misc\borderColor.h" />
     <ClInclude Include="..\..\misc\clearAttachment.h" />
     <ClInclude Include="..\..\misc\clearValue.h" />
+    <ClInclude Include="..\..\misc\createInfo.h" />
     <ClInclude Include="..\..\misc\deviceExtension.h" />
     <ClInclude Include="..\..\misc\deviceQueueDescriptor.h" />
     <ClInclude Include="..\..\misc\format.h" />
