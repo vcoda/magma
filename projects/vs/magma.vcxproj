@@ -283,6 +283,7 @@
     <ClInclude Include="..\..\objects\rayTracingBuffer.h" />
     <ClInclude Include="..\..\objects\rayTracingPipeline.h" />
     <ClInclude Include="..\..\objects\renderPass.h" />
+    <ClInclude Include="..\..\objects\renderPassMultiview.h" />
     <ClInclude Include="..\..\objects\resource.h" />
     <ClInclude Include="..\..\objects\resourcePool.h" />
     <ClInclude Include="..\..\objects\sampler.h" />
@@ -410,6 +411,7 @@
     <ClCompile Include="..\..\objects\rayTracingBuffer.cpp" />
     <ClCompile Include="..\..\objects\rayTracingPipeline.cpp" />
     <ClCompile Include="..\..\objects\renderPass.cpp" />
+    <ClCompile Include="..\..\objects\renderPassMultiview.cpp" />
     <ClCompile Include="..\..\objects\resource.cpp" />
     <ClCompile Include="..\..\objects\resourcePool.cpp" />
     <ClCompile Include="..\..\objects\sampler.cpp" />

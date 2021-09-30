@@ -107,6 +107,7 @@ MAGMA_OBJS= \
 	objects/rayTracingBuffer.o \
 	objects/rayTracingPipeline.o \
 	objects/renderPass.o \
+	objects/renderPassMultiview.o \
 	objects/resource.o \
 	objects/resourcePool.o \
 	objects/sampler.o \

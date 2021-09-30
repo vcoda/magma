@@ -612,6 +612,9 @@
     <ClInclude Include="..\..\misc\createInfo.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\renderPassMultiview.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -943,6 +946,9 @@
     </ClCompile>
     <ClCompile Include="..\..\descriptors\bindingArray.cpp">
       <Filter>Source Files\descriptors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\renderPassMultiview.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
