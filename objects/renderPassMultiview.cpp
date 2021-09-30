@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef VK_KHR_multiview
 class RenderPassMultiviewCreateInfo : public CreateInfo
 {
 public:
@@ -86,4 +87,5 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
     viewOffsets(viewOffsets),
     correlationMasks(correlationMasks)
 {}
+#endif // VK_KHR_multiview
 } // namespace magma

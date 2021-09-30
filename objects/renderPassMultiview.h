@@ -24,6 +24,7 @@ namespace magma
        where it is more efficient to record a single set of commands
        to be executed with slightly different behavior for each "view". */
 
+#ifdef VK_KHR_multiview
     class MultiviewRenderPass : public RenderPass
     {
     public:
@@ -49,4 +50,5 @@ namespace magma
         const std::vector<int32_t> viewOffsets;
         const std::vector<uint32_t> correlationMasks;
     };
+#endif // VK_KHR_multiview
 } // namespace magma
