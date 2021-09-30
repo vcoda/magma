@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "nondispatchable.h"
 #include "../descriptors/attachment.h"
 #include "../descriptors/subpass.h"
+#include "../misc/createInfo.h"
 
 namespace magma
 {
@@ -34,19 +35,23 @@ namespace magma
     public:
         explicit RenderPass(std::shared_ptr<Device> device,
             const AttachmentDescription& attachment,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const CreateInfo& renderPassInfoEx = CreateInfo());
         explicit RenderPass(std::shared_ptr<Device> device,
             const std::vector<AttachmentDescription>& attachments,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const CreateInfo& renderPassInfoEx = CreateInfo());
         explicit RenderPass(std::shared_ptr<Device> device,
             const std::vector<AttachmentDescription>& attachments,
             const std::vector<SubpassDescription>& subpasses,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const CreateInfo& renderPassInfoEx = CreateInfo());
         explicit RenderPass(std::shared_ptr<Device> device,
             const std::vector<AttachmentDescription>& attachments,
             const std::vector<SubpassDescription>& subpasses,
             const std::vector<SubpassDependency>& dependencies,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const CreateInfo& renderPassInfoEx = CreateInfo());
         ~RenderPass();
         const std::vector<AttachmentDescription>& getAttachments() const noexcept { return attachments; }
         bool hasClearOp() const noexcept;
