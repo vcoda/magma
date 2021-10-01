@@ -68,7 +68,7 @@ uint32_t DrawIndirectBuffer::writeDrawCommand(uint32_t vertexCount,
         if (!persistentlyMapped())
             memory->unmap();
     }
-    return cmdCount++;
+    return ++cmdCount;
 }
 
 uint32_t DrawIndirectBuffer::writeDrawInstancedCommand(uint32_t vertexCount, uint32_t instanceCount,
@@ -91,7 +91,7 @@ uint32_t DrawIndirectBuffer::writeDrawInstancedCommand(uint32_t vertexCount, uin
         if (!persistentlyMapped())
             memory->unmap();
     }
-    return cmdCount++;
+    return ++cmdCount;
 }
 
 uint32_t DrawIndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawCmd) noexcept
@@ -106,7 +106,7 @@ uint32_t DrawIndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawC
         memcpy(data, &drawCmd, sizeof(VkDrawIndirectCommand));
         memory->unmap();
     }
-    return cmdCount++;
+    return ++cmdCount;
 }
 
 DrawIndexedIndirectBuffer::DrawIndexedIndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDrawIndexedCommands,
@@ -139,7 +139,7 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(uint32_t indexCount,
         if (!persistentlyMapped())
             memory->unmap();
     }
-    return cmdCount++;
+    return ++cmdCount;
 }
 
 uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedInstancedCommand(uint32_t indexCount, uint32_t instanceCount,
@@ -164,7 +164,7 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedInstancedCommand(uint32_t in
         if (!persistentlyMapped())
             memory->unmap();
     }
-    return cmdCount++;
+    return ++cmdCount;
 }
 
 uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(const VkDrawIndexedIndirectCommand& drawIndexedCmd) noexcept
@@ -179,6 +179,6 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(const VkDrawIndexedI
         memcpy(data, &drawIndexedCmd, sizeof(VkDrawIndexedIndirectCommand));
         memory->unmap();
     }
-    return cmdCount++;
+    return ++cmdCount;
 }
 } // namespace magma
