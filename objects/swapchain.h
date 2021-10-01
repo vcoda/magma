@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
+#include "../misc/createInfo.h"
 
 namespace magma
 {
@@ -47,7 +48,8 @@ namespace magma
             VkPresentModeKHR presentMode,
             VkSwapchainCreateFlagsKHR flags,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            std::shared_ptr<const DebugReportCallback> debugReportCallback = nullptr);
+            std::shared_ptr<const DebugReportCallback> debugReportCallback = nullptr,
+            const CreateInfo& swapchainInfoEx = CreateInfo());
         ~Swapchain();
         const VkExtent2D& getExtent() const noexcept { return extent; }
         uint32_t getImageIndex() const noexcept { return imageIndex; }

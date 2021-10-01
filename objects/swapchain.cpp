@@ -43,7 +43,8 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     VkPresentModeKHR presentMode,
     VkSwapchainCreateFlagsKHR flags,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    std::shared_ptr<const DebugReportCallback> debugReportCallback /* nullptr */):
+    std::shared_ptr<const DebugReportCallback> debugReportCallback /* nullptr */,
+    const CreateInfo& swapchainInfoEx /* default */):
     NonDispatchable(VK_OBJECT_TYPE_SWAPCHAIN_KHR, std::move(device), std::move(allocator)),
     surfaceFormat(surfaceFormat),
     extent(extent),
@@ -51,7 +52,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
 {
     VkSwapchainCreateInfoKHR swapchainInfo;
     swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    swapchainInfo.pNext = nullptr;
+    swapchainInfo.pNext = swapchainInfoEx.getNode();
     swapchainInfo.flags = flags;
     swapchainInfo.surface = *surface;
     swapchainInfo.minImageCount = minImageCount;
