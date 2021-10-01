@@ -55,7 +55,7 @@ public:
         core::hashCombine(hash, renderPassInfoEx.getHash());
     }
 
-    virtual const void *getNode() const noexcept
+    const void *getNode() const noexcept override
     {
         return &multiviewInfo;
     }
