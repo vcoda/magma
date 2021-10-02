@@ -106,12 +106,14 @@ namespace magma
 
         /* A surface is no longer available. */
 
+#ifdef VK_KHR_surface
         class SurfaceLost : public ErrorResult
         {
         public:
             explicit SurfaceLost(const char *message) noexcept:
                 ErrorResult(VK_ERROR_SURFACE_LOST_KHR, message) {}
         };
+#endif // VK_KHR_surface
 
         /* A surface has changed in such a way that it is no longer compatible with the swapchain,
            and further presentation requests using the swapchain will fail. Applications must query
