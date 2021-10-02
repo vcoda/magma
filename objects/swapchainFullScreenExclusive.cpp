@@ -78,18 +78,14 @@ void FullScreenExclusiveSwapchain::acquireFullScreenExclusiveMode()
     // SetWindowPos(hwnd, HWND_TOP, 0, 0, screenWidth, screenHeight, SWP_SHOWWINDOW).
     MAGMA_DEVICE_EXTENSION(vkAcquireFullScreenExclusiveModeEXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
     const VkResult result = vkAcquireFullScreenExclusiveModeEXT(MAGMA_HANDLE(device), handle);
-    const exception::source_location location{__FILE__, __LINE__, __FUNCTION__};
     switch (result)
     {
-    case VK_ERROR_OUT_OF_HOST_MEMORY:
-        throw exception::OutOfHostMemory("failed to aquire full screen exclusive mode", location);
-    case VK_ERROR_OUT_OF_DEVICE_MEMORY:
-        throw exception::OutOfDeviceMemory("failed to aquire full screen exclusive mode", location);
     case VK_ERROR_INITIALIZATION_FAILED:
         throw exception::InitializationFailed("failed to aquire full screen exclusive mode");
     case VK_ERROR_SURFACE_LOST_KHR:
         throw exception::SurfaceLost("failed to aquire full screen exclusive mode");
     }
+    MAGMA_THROW_FAILURE(result, "failed to aquire full screen exclusive mode");
     fullScreenExlusive = true;
 }
 
