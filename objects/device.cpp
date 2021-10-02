@@ -86,7 +86,8 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     deviceInfo.ppEnabledExtensionNames = enabledExtensions.data();
     deviceInfo.pEnabledFeatures = extendedDeviceFeatures.empty() ? &deviceFeatures : nullptr;
     const VkResult result = vkCreateDevice(MAGMA_HANDLE(physicalDevice), &deviceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    switch (result) {
+    switch (result)
+    {
     case VK_ERROR_INITIALIZATION_FAILED:
         throw exception::InitializationFailed("failed to create logical device");
     case VK_ERROR_DEVICE_LOST:
@@ -154,10 +155,10 @@ void Device::updateDescriptorSets(const std::vector<VkWriteDescriptorSet>& descr
 
 bool Device::waitIdle() const
 {
-    const VkResult waitIdle = vkDeviceWaitIdle(handle);
-    if (VK_ERROR_DEVICE_LOST == waitIdle)
+    const VkResult result = vkDeviceWaitIdle(handle);
+    if (VK_ERROR_DEVICE_LOST == result)
         throw exception::DeviceLost("failed to wait for device become idle");
-    MAGMA_THROW_FAILURE(waitIdle, "failed to wait for device become idle");
+    MAGMA_THROW_FAILURE(result, "failed to wait for device become idle");
     return true;
 }
 
@@ -166,8 +167,8 @@ bool Device::resetFences(std::vector<std::shared_ptr<Fence>>& fences) const noex
     MAGMA_STACK_ARRAY(VkFence, dereferencedFences, fences.size());
     for (const auto& fence : fences)
         dereferencedFences.put(*fence);
-    const VkResult reset = vkResetFences(handle, dereferencedFences.size(), dereferencedFences);
-    return (VK_SUCCESS == reset);
+    const VkResult result = vkResetFences(handle, dereferencedFences.size(), dereferencedFences);
+    return (VK_SUCCESS == result);
 }
 
 bool Device::waitForFences(std::vector<std::shared_ptr<Fence>>& fences, bool waitAll,
@@ -176,9 +177,9 @@ bool Device::waitForFences(std::vector<std::shared_ptr<Fence>>& fences, bool wai
     MAGMA_STACK_ARRAY(VkFence, dereferencedFences, fences.size());
     for (const auto& fence : fences)
         dereferencedFences.put(*fence);
-    const VkResult wait = vkWaitForFences(handle, dereferencedFences.size(), dereferencedFences,
+    const VkResult result = vkWaitForFences(handle, dereferencedFences.size(), dereferencedFences,
         MAGMA_BOOLEAN(waitAll), timeout);
-    return (VK_SUCCESS == wait) || (VK_TIMEOUT == wait);
+    return (VK_SUCCESS == result) || (VK_TIMEOUT == result);
 }
 
 #ifdef VK_KHR_device_group
