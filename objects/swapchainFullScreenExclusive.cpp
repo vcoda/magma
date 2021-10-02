@@ -29,18 +29,18 @@ public:
     SurfaceFullScreenExclusiveCreateInfo(VkFullScreenExclusiveEXT fullScreenExclusive,
         const CreateInfo& swapchainInfoEx = CreateInfo()) noexcept
     {
-        fullScreenExclusiveInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT;
-        fullScreenExclusiveInfo.pNext = (void *)swapchainInfoEx.getNode(); // API mistake
-        fullScreenExclusiveInfo.fullScreenExclusive = fullScreenExclusive;
+        fullScreenExclusiveSurfaceInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT;
+        fullScreenExclusiveSurfaceInfo.pNext = (void *)swapchainInfoEx.getNode(); // API mistake
+        fullScreenExclusiveSurfaceInfo.fullScreenExclusive = fullScreenExclusive;
     }
 
     const void *getNode() const noexcept override
     {
-        return &fullScreenExclusiveInfo;
+        return &fullScreenExclusiveSurfaceInfo;
     }
 
 private:
-    VkSurfaceFullScreenExclusiveInfoEXT fullScreenExclusiveInfo;
+    VkSurfaceFullScreenExclusiveInfoEXT fullScreenExclusiveSurfaceInfo;
 };
 
 FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surface> surface,
@@ -96,5 +96,56 @@ void FullScreenExclusiveSwapchain::releaseFullScreenExclusiveMode()
     MAGMA_THROW_FAILURE(result, "failed to release full screen exclusive mode");
     fullScreenExlusive = false;
 }
+
+#ifdef _WIN32
+class SurfaceFullScreenExclusiveWin32Info : public CreateInfo
+{
+public:
+    SurfaceFullScreenExclusiveWin32Info(HMONITOR hMonitor,
+        const CreateInfo& swapchainInfoEx = CreateInfo()) noexcept
+    {
+        fullScreenExclusiveWin32SurfaceInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT;
+        fullScreenExclusiveWin32SurfaceInfo.pNext = swapchainInfoEx.getNode();
+        fullScreenExclusiveWin32SurfaceInfo.hmonitor = hMonitor;
+    }
+
+    const void *getNode() const noexcept override
+    {
+        return &fullScreenExclusiveWin32SurfaceInfo;
+    }
+
+private:
+    VkSurfaceFullScreenExclusiveWin32InfoEXT fullScreenExclusiveWin32SurfaceInfo;
+};
+
+FullScreenExclusiveSwapchainWin32::FullScreenExclusiveSwapchainWin32(std::shared_ptr<Device> device, std::shared_ptr<const Surface> surface,
+    uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent,
+    VkImageUsageFlags usage,
+    VkSurfaceTransformFlagBitsKHR preTransform,
+    VkCompositeAlphaFlagBitsKHR compositeAlpha,
+    VkPresentModeKHR presentMode,
+    VkSwapchainCreateFlagsKHR flags,
+    VkFullScreenExclusiveEXT fullScreenExclusive,
+    HMONITOR hMonitor,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    std::shared_ptr<const DebugReportCallback> debugReportCallback /* nullptr */,
+    const CreateInfo& swapchainInfoEx /* default */):
+    FullScreenExclusiveSwapchain(std::move(device),
+        std::move(surface),
+        minImageCount,
+        surfaceFormat,
+        extent,
+        usage,
+        preTransform,
+        compositeAlpha,
+        presentMode,
+        flags,
+        fullScreenExclusive,
+        std::move(allocator),
+        std::move(debugReportCallback),
+        SurfaceFullScreenExclusiveWin32Info(hMonitor, swapchainInfoEx)),
+    hMonitor(hMonitor)
+{}
+#endif // _WIN32
 #endif // VK_EXT_full_screen_exclusive
 } // namespace magma

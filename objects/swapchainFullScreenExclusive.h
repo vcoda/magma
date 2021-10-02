@@ -52,4 +52,34 @@ namespace magma
         bool fullScreenExlusive;
     };
 #endif // VK_EXT_full_screen_exclusive
+
+    /* Allows to specify full-screen exclusive mode for physical display
+       that is represented by a monitor handle of type HMONITOR. See:
+       https://docs.microsoft.com/en-us/windows/win32/gdi/hmonitor-and-the-device-context */
+
+#ifdef _WIN32
+    class FullScreenExclusiveSwapchainWin32 : public FullScreenExclusiveSwapchain
+    {
+    public:
+        explicit FullScreenExclusiveSwapchainWin32(std::shared_ptr<Device> device,
+            std::shared_ptr<const Surface> surface,
+            uint32_t minImageCount,
+            VkSurfaceFormatKHR surfaceFormat,
+            const VkExtent2D& extent,
+            VkImageUsageFlags usage,
+            VkSurfaceTransformFlagBitsKHR preTransform,
+            VkCompositeAlphaFlagBitsKHR compositeAlpha,
+            VkPresentModeKHR presentMode,
+            VkSwapchainCreateFlagsKHR flags,
+            VkFullScreenExclusiveEXT fullScreenExclusive,
+            HMONITOR hMonitor,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            std::shared_ptr<const DebugReportCallback> debugReportCallback = nullptr,
+            const CreateInfo& swapchainInfoEx = CreateInfo());
+        HMONITOR getMonitorHandle() const noexcept { return hMonitor; }
+
+    private:
+        HMONITOR hMonitor;
+    };
+#endif // _WIN32
 } // namespace magma
