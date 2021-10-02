@@ -87,6 +87,9 @@ const char *stringize(VkResult result) noexcept
 #ifdef VK_EXT_global_priority
     MAGMA_STRINGIZE_FIELD(VK_ERROR_NOT_PERMITTED_EXT)
 #endif
+#ifdef VK_EXT_full_screen_exclusive
+    MAGMA_STRINGIZE_FIELD(VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT)
+#endif
     MAGMA_DEFAULT_UNKNOWN;
     }
 }
