@@ -81,11 +81,11 @@ void FullScreenExclusiveSwapchain::acquireFullScreenExclusiveMode()
     switch (result)
     {
     case VK_ERROR_INITIALIZATION_FAILED:
-        throw exception::InitializationFailed("failed to aquire full screen exclusive mode");
+        throw exception::InitializationFailed("failed to acquire full screen exclusive mode");
     case VK_ERROR_SURFACE_LOST_KHR:
-        throw exception::SurfaceLost("failed to aquire full screen exclusive mode");
+        throw exception::SurfaceLost("failed to acquire full screen exclusive mode");
     }
-    MAGMA_THROW_FAILURE(result, "failed to aquire full screen exclusive mode");
+    MAGMA_THROW_FAILURE(result, "failed to acquire full screen exclusive mode");
     fullScreenExlusive = true;
 }
 
