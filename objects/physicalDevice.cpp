@@ -698,6 +698,19 @@ void PhysicalDevice::getProperties2(VkPhysicalDeviceProperties2KHR& physicalDevi
 }
 #endif // VK_KHR_get_physical_device_properties2
 
+#ifdef VK_KHR_get_surface_capabilities2
+void PhysicalDevice::getSurfaceCapabilities2(std::shared_ptr<const Surface> surface, VkSurfaceCapabilities2KHR& surfaceCaps) const
+{
+    VkPhysicalDeviceSurfaceInfo2KHR surfaceInfo;
+    surfaceInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
+    surfaceInfo.pNext = nullptr;
+    surfaceInfo.surface = *surface;
+    MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceSurfaceCapabilities2KHR, VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME);
+    const VkResult result = vkGetPhysicalDeviceSurfaceCapabilities2KHR(handle, &surfaceInfo, &surfaceCaps);
+    MAGMA_THROW_FAILURE(result, "failed to get surface capabilities");
+}
+#endif // VK_KHR_get_surface_capabilities2
+
 template<typename PhysicalDeviceFeatures>
 inline PhysicalDeviceFeatures PhysicalDevice::getFeatures(VkStructureType sType) const
 {
