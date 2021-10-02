@@ -51,7 +51,6 @@ namespace magma
     private:
         bool fullScreenExlusive;
     };
-#endif // VK_EXT_full_screen_exclusive
 
     /* Allows to specify full-screen exclusive mode for physical display
        that is represented by a monitor handle of type HMONITOR. See:
@@ -82,4 +81,5 @@ namespace magma
         HMONITOR hMonitor;
     };
 #endif // _WIN32
+#endif // VK_EXT_full_screen_exclusive
 } // namespace magma
