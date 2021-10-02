@@ -72,6 +72,10 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
 
 void FullScreenExclusiveSwapchain::acquireFullScreenExclusiveMode()
 {
+    // To omit window compositor (which may result in better performance),
+    // your application should create borderless window that spans to entire monitor.
+    // For example, set window style as WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS and call
+    // SetWindowPos(hwnd, HWND_TOP, 0, 0, screenWidth, screenHeight, SWP_SHOWWINDOW).
     MAGMA_DEVICE_EXTENSION(vkAcquireFullScreenExclusiveModeEXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
     const VkResult result = vkAcquireFullScreenExclusiveModeEXT(MAGMA_HANDLE(device), handle);
     const exception::source_location location{__FILE__, __LINE__, __FUNCTION__};
