@@ -23,10 +23,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_EXT_full_screen_exclusive
-class SurfaceFullScreenExclusiveCreateInfo : public CreateInfo
+class SurfaceFullScreenExclusiveInfo : public CreateInfo
 {
 public:
-    SurfaceFullScreenExclusiveCreateInfo(VkFullScreenExclusiveEXT fullScreenExclusive,
+    SurfaceFullScreenExclusiveInfo(VkFullScreenExclusiveEXT fullScreenExclusive,
         const CreateInfo& swapchainInfoEx = CreateInfo()) noexcept
     {
         fullScreenExclusiveSurfaceInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT;
@@ -66,7 +66,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
         flags,
         std::move(allocator),
         std::move(debugReportCallback),
-        SurfaceFullScreenExclusiveCreateInfo(fullScreenExclusive, swapchainInfoEx)),
+        SurfaceFullScreenExclusiveInfo(fullScreenExclusive, swapchainInfoEx)),
     fullScreenExlusive(false)
 {}
 
