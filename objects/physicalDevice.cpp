@@ -174,6 +174,47 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared
 }
 
 #ifdef VK_EXT_full_screen_exclusive
+std::vector<VkPresentModeKHR> PhysicalDevice::getSurfaceFullScreenExclusivePresentModes(std::shared_ptr<const Surface> surface, VkFullScreenExclusiveEXT fullScreenExclusive,
+    void *hMonitor /* nullptr */) const
+{
+    std::vector<VkPresentModeKHR> surfacePresentModes;
+#ifdef VK_KHR_get_surface_capabilities2
+#ifdef _WIN32
+    VkSurfaceFullScreenExclusiveWin32InfoEXT fullScreenExclusiveWin32SurfaceInfo;
+    if (hMonitor)
+    {
+        fullScreenExclusiveWin32SurfaceInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT;
+        fullScreenExclusiveWin32SurfaceInfo.pNext = nullptr;
+        fullScreenExclusiveWin32SurfaceInfo.hmonitor = reinterpret_cast<HMONITOR>(hMonitor);
+    }
+#endif // _WIN32
+    VkSurfaceFullScreenExclusiveInfoEXT fullScreenExclusiveSurfaceInfo;
+    fullScreenExclusiveSurfaceInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT;
+#ifdef _WIN32
+    fullScreenExclusiveSurfaceInfo.pNext = hMonitor ? &fullScreenExclusiveWin32SurfaceInfo : nullptr;
+#else
+    fullScreenExclusiveSurfaceInfo.pNext = nullptr;
+    MAGMA_UNUSED(hMonitor);
+#endif
+    fullScreenExclusiveSurfaceInfo.fullScreenExclusive = fullScreenExclusive;
+    VkPhysicalDeviceSurfaceInfo2KHR surfaceInfo;
+    surfaceInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
+    surfaceInfo.pNext = &fullScreenExclusiveSurfaceInfo;
+    surfaceInfo.surface = *surface;
+    uint32_t presentModeCount;
+    MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceSurfacePresentModes2EXT, VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME);
+    VkResult result = vkGetPhysicalDeviceSurfacePresentModes2EXT(handle, &surfaceInfo, &presentModeCount, nullptr);
+    MAGMA_THROW_FAILURE(result, "failed to count full screen exclusive surface present modes");
+    if (presentModeCount > 0)
+    {
+        surfacePresentModes.resize(presentModeCount);
+        result = vkGetPhysicalDeviceSurfacePresentModes2EXT(handle, &surfaceInfo, &presentModeCount, surfacePresentModes.data());
+        MAGMA_THROW_FAILURE(result, "failed to get full screen exclusive surface present modes");
+    }
+#endif // VK_KHR_get_surface_capabilities2
+    return surfacePresentModes;
+}
+
 bool PhysicalDevice::getSurfaceFullScreenExclusiveSupport(std::shared_ptr<const Surface> surface) const
 {
     VkSurfaceCapabilitiesFullScreenExclusiveEXT surfaceFullScreenCaps = {};
