@@ -174,8 +174,8 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared
 }
 
 #ifdef VK_EXT_full_screen_exclusive
-std::vector<VkPresentModeKHR> PhysicalDevice::getSurfaceFullScreenExclusivePresentModes(std::shared_ptr<const Surface> surface, VkFullScreenExclusiveEXT fullScreenExclusive,
-    void *hMonitor /* nullptr */) const
+std::vector<VkPresentModeKHR> PhysicalDevice::getSurfaceFullScreenExclusivePresentModes(std::shared_ptr<const Surface> surface,
+    VkFullScreenExclusiveEXT fullScreenExclusive, void *hMonitor /* nullptr */) const
 {
     std::vector<VkPresentModeKHR> surfacePresentModes;
 #ifdef VK_KHR_get_surface_capabilities2
