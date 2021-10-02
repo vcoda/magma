@@ -173,6 +173,21 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared
     return surfacePresentModes;
 }
 
+#ifdef VK_EXT_full_screen_exclusive
+bool PhysicalDevice::getSurfaceFullScreenExclusiveSupport(std::shared_ptr<const Surface> surface) const
+{
+    VkSurfaceCapabilitiesFullScreenExclusiveEXT surfaceFullScreenCaps = {};
+    surfaceFullScreenCaps.sType = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_FULL_SCREEN_EXCLUSIVE_EXT;
+#ifdef VK_KHR_get_surface_capabilities2
+    VkSurfaceCapabilities2KHR surfaceCaps;
+    surfaceCaps.sType = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_KHR;
+    surfaceCaps.pNext = &surfaceFullScreenCaps;
+    getSurfaceCapabilities2(std::move(surface), surfaceCaps);
+#endif
+    return (VK_TRUE == surfaceFullScreenCaps.fullScreenExclusiveSupported);
+}
+#endif // VK_EXT_full_screen_exclusive
+
 bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex,
     void *display /* nullptr */,
     const void *visualID /* nullptr */) const noexcept

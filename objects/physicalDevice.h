@@ -57,6 +57,9 @@ namespace magma
         VkSurfaceCapabilitiesKHR getSurfaceCapabilities(std::shared_ptr<const Surface> surface) const;
         std::vector<VkSurfaceFormatKHR> getSurfaceFormats(std::shared_ptr<const Surface> surface) const;
         std::vector<VkPresentModeKHR> getSurfacePresentModes(std::shared_ptr<const Surface> surface) const;
+#ifdef VK_EXT_full_screen_exclusive
+        bool getSurfaceFullScreenExclusiveSupport(std::shared_ptr<const Surface> surface) const;
+#endif
         // VK_KHR_xxx_surface
         bool getPresentationSupport(uint32_t queueFamilyIndex,
             void *display = nullptr,
