@@ -259,7 +259,7 @@ bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex,
     result = vkGetPhysicalDeviceScreenPresentationSupportQNX(handle, queueFamilyIndex,
         reinterpret_cast<_screen_window *>(display));
 #endif
-    return (result ? true : false);
+    return (VK_TRUE == result);
 }
 
 #ifdef VK_KHR_display

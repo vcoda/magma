@@ -265,7 +265,7 @@ bool Device::separateDepthStencilLayoutsEnabled() const noexcept
     {
         const VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR *separateDepthStencilFeatures =
             reinterpret_cast<const VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR *>(features);
-        return separateDepthStencilFeatures->separateDepthStencilLayouts ? true : false;
+        return (VK_TRUE == separateDepthStencilFeatures->separateDepthStencilLayouts);
     }
 #endif
     return false;
