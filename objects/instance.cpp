@@ -26,10 +26,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../helpers/stackArray.h"
 #include "../core/refCountChecker.h"
 
-// Redefine macro for Instance object as here we use handle directly
-#undef MAGMA_INSTANCE_EXTENSION
-#define MAGMA_INSTANCE_EXTENSION(func, extension)\
-    magma::InstanceExtension<PFN_##func> func(handle, MAGMA_STRINGIZE(func), extension, MAGMA_SOURCE_LOCATION)
+// Redefine macro because here we use handle directly instead of using circular reference to itself
+#ifdef MAGMA_INSTANCE_EXTENSION
+#   undef MAGMA_INSTANCE_EXTENSION
+#   define MAGMA_INSTANCE_EXTENSION(func, extension) magma::InstanceExtension<PFN_##func> func(handle, MAGMA_STRINGIZE(func), extension, MAGMA_SOURCE_LOCATION)
+#endif
 
 #ifdef MAGMA_DEBUG
 static magma::core::RefCountChecker _refCountChecker;

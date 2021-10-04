@@ -28,6 +28,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../exceptions/errorResult.h"
 #include "../helpers/stackArray.h"
 
+// Redefine macro because here we use handle directly instead of using circular reference to itself
+#ifdef MAGMA_DEVICE_EXTENSION
+#   undef MAGMA_DEVICE_EXTENSION
+#   define MAGMA_DEVICE_EXTENSION(func, extension) magma::DeviceExtension<PFN_##func> func(handle, MAGMA_STRINGIZE(func), extension, MAGMA_SOURCE_LOCATION)
+#endif
+
 namespace magma
 {
 Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
