@@ -31,12 +31,12 @@ namespace magma
     {
     public:
         ~Surface();
+        bool hasFullScreenExclusiveSupport() const;
 
     protected:
         explicit Surface(std::shared_ptr<const Instance> instance,
             std::shared_ptr<IAllocator> allocator);
         std::shared_ptr<const Instance> getInstance() const noexcept { return instance; }
-        bool hasFullScreenExclusiveSupport() const;
 
     protected:
         std::shared_ptr<const Instance> instance;
