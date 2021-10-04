@@ -78,7 +78,7 @@ namespace magma
         HMONITOR getMonitorHandle() const noexcept { return hMonitor; }
 
     private:
-        HMONITOR hMonitor;
+        const HMONITOR hMonitor;
     };
 #endif // VK_USE_PLATFORM_WIN32_KHR
 #endif // VK_KHR_swapchain && VK_EXT_full_screen_exclusive
