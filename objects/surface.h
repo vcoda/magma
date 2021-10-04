@@ -26,7 +26,8 @@ namespace magma
        Separate platform-specific extensions each provide a function for creating a surface object
        for the respective platform. */
 
-    class Surface : public NonDispatchable<VkSurfaceKHR>
+    class Surface : public NonDispatchable<VkSurfaceKHR>,
+        public std::enable_shared_from_this<Surface>
     {
     public:
         ~Surface();
@@ -35,6 +36,7 @@ namespace magma
         explicit Surface(std::shared_ptr<const Instance> instance,
             std::shared_ptr<IAllocator> allocator);
         std::shared_ptr<const Instance> getInstance() const noexcept { return instance; }
+        bool hasFullScreenExclusiveSupport() const;
 
     protected:
         std::shared_ptr<const Instance> instance;

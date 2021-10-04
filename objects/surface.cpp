@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "surface.h"
 #include "instance.h"
 #include "device.h"
+#include "physicalDevice.h"
 #include "displayMode.h"
 #include "../allocator/allocator.h"
 #include "../misc/instanceExtension.h"
@@ -35,6 +36,20 @@ Surface::Surface(std::shared_ptr<const Instance> instance, std::shared_ptr<IAllo
 Surface::~Surface()
 {
     vkDestroySurfaceKHR(MAGMA_HANDLE(instance), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+}
+
+bool Surface::hasFullScreenExclusiveSupport() const
+{
+    bool fullScreenExclusiveSupported = false;
+#ifdef VK_EXT_full_screen_exclusive
+    if (instance->checkExtensionSupport(VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME) &&
+        instance->checkExtensionSupport(VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME))
+    {
+        std::shared_ptr<PhysicalDevice> physicalDevice = instance->getPhysicalDevice(0);
+        fullScreenExclusiveSupported = physicalDevice->getSurfaceFullScreenExclusiveSupport(shared_from_this());
+    }
+#endif // VK_EXT_full_screen_exclusive
+    return fullScreenExclusiveSupported;
 }
 
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
