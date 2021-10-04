@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class PhysicalDevice;
+    class Surface;
     class Queue;
     class Fence;
     class ResourcePool;
@@ -56,10 +57,16 @@ namespace magma
         bool waitForFences(std::vector<std::shared_ptr<Fence>>& fences,
             bool waitAll, uint64_t timeout = UINT64_MAX) const noexcept;
 #ifdef VK_KHR_device_group
+        VkDeviceGroupPresentModeFlagsKHR getDeviceGroupSurfacePresentModes(std::shared_ptr<const Surface> surface) const;
+#   ifdef VK_EXT_full_screen_exclusive
+        VkDeviceGroupPresentModeFlagsKHR getDeviceGroupSurfaceFullScreenExclusivePresentModes(std::shared_ptr<const Surface> surface,
+            VkFullScreenExclusiveEXT fullScreenExclusive,
+            void *hMonitor /* nullptr */) const;
+#   endif
         VkPeerMemoryFeatureFlags getGroupPeerMemoryFeatures(uint32_t heapIndex,
             uint32_t localDeviceIndex,
             uint32_t remoteDeviceIndex) const noexcept;
-#endif
+#endif // VK_KHR_device_group
         // Non-API
         std::shared_ptr<PhysicalDevice> getPhysicalDevice() noexcept { return physicalDevice; }
         std::shared_ptr<const PhysicalDevice> getPhysicalDevice() const noexcept { return physicalDevice; }

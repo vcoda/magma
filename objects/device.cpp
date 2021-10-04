@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "device.h"
 #include "physicalDevice.h"
+#include "surface.h"
 #include "queue.h"
 #include "fence.h"
 #include "resourcePool.h"
@@ -183,6 +184,48 @@ bool Device::waitForFences(std::vector<std::shared_ptr<Fence>>& fences, bool wai
 }
 
 #ifdef VK_KHR_device_group
+VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupSurfacePresentModes(std::shared_ptr<const Surface> surface) const
+{
+    VkDeviceGroupPresentModeFlagsKHR presentModes;
+    MAGMA_DEVICE_EXTENSION(vkGetDeviceGroupSurfacePresentModesKHR, VK_KHR_DEVICE_GROUP_EXTENSION_NAME);
+    const VkResult result = vkGetDeviceGroupSurfacePresentModesKHR(handle, *surface, &presentModes);
+    MAGMA_THROW_FAILURE(result, "failed to get surface present modes for a device group");
+    return presentModes;
+}
+
+#ifdef VK_EXT_full_screen_exclusive
+VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupSurfaceFullScreenExclusivePresentModes(std::shared_ptr<const Surface> surface,
+    VkFullScreenExclusiveEXT fullScreenExclusive, void *hMonitor /* nullptr */) const
+{
+    VkDeviceGroupPresentModeFlagsKHR presentModes = 0;
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    VkSurfaceFullScreenExclusiveWin32InfoEXT fullScreenExclusiveWin32SurfaceInfo;
+    fullScreenExclusiveWin32SurfaceInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT;
+    fullScreenExclusiveWin32SurfaceInfo.pNext = nullptr;
+    fullScreenExclusiveWin32SurfaceInfo.hmonitor = reinterpret_cast<HMONITOR>(hMonitor);
+#endif // VK_USE_PLATFORM_WIN32_KHR
+    VkSurfaceFullScreenExclusiveInfoEXT fullScreenExclusiveSurfaceInfo;
+    fullScreenExclusiveSurfaceInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT;
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    fullScreenExclusiveSurfaceInfo.pNext = hMonitor ? &fullScreenExclusiveWin32SurfaceInfo : nullptr;
+#else
+    fullScreenExclusiveSurfaceInfo.pNext = nullptr;
+    MAGMA_UNUSED(hMonitor);
+#endif
+    fullScreenExclusiveSurfaceInfo.fullScreenExclusive = fullScreenExclusive;
+#ifdef VK_KHR_get_surface_capabilities2
+    VkPhysicalDeviceSurfaceInfo2KHR surfaceInfo;
+    surfaceInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
+    surfaceInfo.pNext = &fullScreenExclusiveSurfaceInfo;
+    surfaceInfo.surface = *surface;
+    MAGMA_DEVICE_EXTENSION(vkGetDeviceGroupSurfacePresentModes2EXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
+    const VkResult result = vkGetDeviceGroupSurfacePresentModes2EXT(handle, &surfaceInfo, &presentModes);
+    MAGMA_THROW_FAILURE(result, "failed to get full-screen exclusive surface present modes for a device group");
+#endif // VK_KHR_get_surface_capabilities2
+    return presentModes;
+}
+#endif // VK_EXT_full_screen_exclusive
+
 VkPeerMemoryFeatureFlags Device::getGroupPeerMemoryFeatures(uint32_t heapIndex, uint32_t localDeviceIndex, uint32_t remoteDeviceIndex) const noexcept
 {
     VkPeerMemoryFeatureFlags peerMemoryFeatures = 0;
