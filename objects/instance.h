@@ -40,7 +40,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~Instance();
         uint32_t countPhysicalDevices() const;
-        std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId);
+        std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId) const;
 #ifdef VK_KHR_device_group
         std::vector<VkPhysicalDeviceGroupPropertiesKHR> enumeratePhysicalDeviceGroups() const;
         std::shared_ptr<PhysicalDeviceGroup> getPhysicalDeviceGroup(uint32_t groupId);

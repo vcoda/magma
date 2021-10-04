@@ -92,7 +92,7 @@ uint32_t Instance::countPhysicalDevices() const
     return physicalDeviceCount;
 }
 
-std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId)
+std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId) const
 {
     uint32_t physicalDeviceCount = countPhysicalDevices();
     if (deviceId >= physicalDeviceCount)
@@ -101,7 +101,8 @@ std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId)
     const VkResult enumerate = vkEnumeratePhysicalDevices(handle, &physicalDeviceCount, physicalDevices);
     MAGMA_THROW_FAILURE(enumerate, "failed to enumerate physical devices");
     VkPhysicalDevice physicalDevice = physicalDevices[deviceId];
-    return std::shared_ptr<PhysicalDevice>(new PhysicalDevice(shared_from_this(), physicalDevice, hostAllocator));
+    std::shared_ptr<Instance> self = std::const_pointer_cast<Instance>(shared_from_this());
+    return std::shared_ptr<PhysicalDevice>(new PhysicalDevice(self, physicalDevice, hostAllocator));
 }
 
 #ifdef VK_KHR_device_group
