@@ -38,6 +38,16 @@ PhysicalDevice::PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDev
     this->handle = handle;
 }
 
+std::shared_ptr<Device> PhysicalDevice::createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
+    const std::vector<const char *>& enabledLayers, const std::vector<const char *>& enabledExtensions,
+    const VkPhysicalDeviceFeatures& deviceFeatures, const std::vector<void *>& extendedDeviceFeatures /* {} */,
+    const CreateInfo& chainedInfo /* default */) const
+{   // std::make_shared() couldn't be used because of private constructor
+    return std::shared_ptr<Device>(new Device(std::const_pointer_cast<PhysicalDevice>(shared_from_this()),
+        queueDescriptors, enabledLayers, enabledExtensions, deviceFeatures, extendedDeviceFeatures,
+        chainedInfo, this->hostAllocator));
+}
+
 VkPhysicalDeviceFeatures PhysicalDevice::getFeatures() const noexcept
 {
     VkPhysicalDeviceFeatures features;
@@ -86,22 +96,6 @@ VkPhysicalDeviceMemoryProperties PhysicalDevice::getMemoryProperties() const noe
     VkPhysicalDeviceMemoryProperties memoryProperties = {};
     vkGetPhysicalDeviceMemoryProperties(handle, &memoryProperties);
     return memoryProperties;
-}
-
-std::shared_ptr<Device> PhysicalDevice::createDevice(
-    const std::vector<DeviceQueueDescriptor>& queueDescriptors,
-    const std::vector<const char *>& layers,
-    const std::vector<const char *>& extensions,
-    const VkPhysicalDeviceFeatures& deviceFeatures,
-    const std::vector<void *>& extendedDeviceFeatures /* {} */,
-    const CreateInfo& chainedInfo /* default */) const
-{
-    return std::shared_ptr<Device>(new Device(
-        std::const_pointer_cast<PhysicalDevice>(shared_from_this()),
-        queueDescriptors, layers, extensions,
-        deviceFeatures, extendedDeviceFeatures,
-        chainedInfo,
-        this->hostAllocator));
 }
 
 std::vector<VkLayerProperties> PhysicalDevice::enumerateLayers() const

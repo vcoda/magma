@@ -39,6 +39,12 @@ namespace magma
         friend class Instance;
 
     public:
+        std::shared_ptr<Device> createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
+            const std::vector<const char *>& enabledLayers,
+            const std::vector<const char *>& enabledExtensions,
+            const VkPhysicalDeviceFeatures& deviceFeatures,
+            const std::vector<void *>& extendedDeviceFeatures = {},
+            const CreateInfo& chainedInfo = CreateInfo()) const;
         VkPhysicalDeviceFeatures getFeatures() const noexcept;
         VkFormatProperties getFormatProperties(VkFormat format) const noexcept;
         VkImageFormatProperties getImageFormatProperties(VkFormat format,
@@ -47,12 +53,6 @@ namespace magma
         VkPhysicalDeviceProperties getProperties() const noexcept;
         std::vector<VkQueueFamilyProperties> getQueueFamilyProperties() const;
         VkPhysicalDeviceMemoryProperties getMemoryProperties() const noexcept;
-        std::shared_ptr<Device> createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
-            const std::vector<const char *>& layers,
-            const std::vector<const char *>& extensions,
-            const VkPhysicalDeviceFeatures& deviceFeatures,
-            const std::vector<void *>& extendedDeviceFeatures = {},
-            const CreateInfo& chainedInfo = CreateInfo()) const;
         std::vector<VkLayerProperties> enumerateLayers() const;
         std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr) const;
         bool getSurfaceSupport(std::shared_ptr<const Surface> surface) const noexcept;
