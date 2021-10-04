@@ -24,15 +24,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "fence.h"
 #include "resourcePool.h"
 #include "../allocator/allocator.h"
-#include "../misc/deviceExtension.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/stackArray.h"
 
-// Redefine macro because here we use handle directly instead of using circular reference to itself
-#ifdef MAGMA_DEVICE_EXTENSION
-#   undef MAGMA_DEVICE_EXTENSION
-#   define MAGMA_DEVICE_EXTENSION(func, extension) magma::DeviceExtension<PFN_##func> func(handle, MAGMA_STRINGIZE(func), extension, MAGMA_SOURCE_LOCATION)
+// Redefine macro because here we use handle directly
+// instead of using circular reference to itself
+#ifdef MAGMA_HANDLE
+#undef MAGMA_HANDLE
+#define MAGMA_HANDLE(p) handle
 #endif
+#include "../misc/deviceExtension.h"
 
 namespace magma
 {
@@ -93,7 +94,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     deviceInfo.enabledExtensionCount = MAGMA_COUNT(enabledExtensions);
     deviceInfo.ppEnabledExtensionNames = enabledExtensions.data();
     deviceInfo.pEnabledFeatures = extendedDeviceFeatures.empty() ? &deviceFeatures : nullptr;
-    const VkResult result = vkCreateDevice(MAGMA_HANDLE(physicalDevice), &deviceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateDevice(*physicalDevice, &deviceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     switch (result)
     {
     case VK_ERROR_INITIALIZATION_FAILED:

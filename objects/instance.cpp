@@ -21,16 +21,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "physicalDevice.h"
 #include "physicalDeviceGroup.h"
 #include "../allocator/allocator.h"
-#include "../misc/instanceExtension.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/stackArray.h"
 #include "../core/refCountChecker.h"
 
-// Redefine macro because here we use handle directly instead of using circular reference to itself
-#ifdef MAGMA_INSTANCE_EXTENSION
-#   undef MAGMA_INSTANCE_EXTENSION
-#   define MAGMA_INSTANCE_EXTENSION(func, extension) magma::InstanceExtension<PFN_##func> func(handle, MAGMA_STRINGIZE(func), extension, MAGMA_SOURCE_LOCATION)
+// Redefine macro because here we use handle directly
+// instead of using circular reference to itself
+#ifdef MAGMA_HANDLE
+#undef MAGMA_HANDLE
+#define MAGMA_HANDLE(p) handle
 #endif
+#include "../misc/instanceExtension.h"
 
 #ifdef MAGMA_DEBUG
 static magma::core::RefCountChecker _refCountChecker;
