@@ -94,7 +94,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     deviceInfo.enabledExtensionCount = MAGMA_COUNT(enabledExtensions);
     deviceInfo.ppEnabledExtensionNames = enabledExtensions.data();
     deviceInfo.pEnabledFeatures = extendedDeviceFeatures.empty() ? &deviceFeatures : nullptr;
-    const VkResult result = vkCreateDevice(*physicalDevice, &deviceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateDevice(*(this->physicalDevice), &deviceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     switch (result)
     {
     case VK_ERROR_INITIALIZATION_FAILED:
