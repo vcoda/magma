@@ -38,7 +38,7 @@ namespace magma
 } // namespace magma
 
 #define MAGMA_DEVICE_EXTENSION(func, extension)\
-    magma::DeviceExtension<PFN_##func> func(MAGMA_HANDLE(device), MAGMA_STRINGIZE(func), extension, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__})
+    magma::DeviceExtension<PFN_##func> func(MAGMA_HANDLE(device), MAGMA_STRINGIZE(func), extension, MAGMA_SOURCE_LOCATION)
 #define MAGMA_OPTIONAL_DEVICE_EXTENSION(func)\
     magma::DeviceExtension<PFN_##func> func(MAGMA_HANDLE(device), MAGMA_STRINGIZE(func))
 

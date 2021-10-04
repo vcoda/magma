@@ -20,13 +20,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../exceptions/reflectionErrorResult.h"
 
 #define MAGMA_THROW_REFLECTION_FAILURE(result, message)\
-    switch (result) {\
+    switch (result)\
+    {\
     case SPV_REFLECT_RESULT_SUCCESS:\
     case SPV_REFLECT_RESULT_NOT_READY:\
         break;\
     default:\
-        throw magma::exception::ReflectionErrorResult(result, message,\
-            magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
+        throw magma::exception::ReflectionErrorResult(result, message, MAGMA_SOURCE_LOCATION);\
     }
 
 namespace magma

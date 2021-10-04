@@ -40,5 +40,4 @@ namespace magma
 #define MAGMA_FUNCTION_SIGNATURE __PRETTY_FUNCTION__
 #endif
 
-#define MAGMA_THROW_NOT_IMPLEMENTED throw magma::exception::NotImplemented(MAGMA_FUNCTION_SIGNATURE,\
-    magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__})
+#define MAGMA_THROW_NOT_IMPLEMENTED throw magma::exception::NotImplemented(MAGMA_FUNCTION_SIGNATURE, MAGMA_SOURCE_LOCATION)

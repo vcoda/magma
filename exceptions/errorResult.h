@@ -169,12 +169,9 @@ namespace magma
 /* #endif */\
         break;\
     case VK_ERROR_OUT_OF_HOST_MEMORY:\
-        throw magma::exception::OutOfHostMemory(message,\
-            magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
+        throw magma::exception::OutOfHostMemory(message, MAGMA_SOURCE_LOCATION);\
     case VK_ERROR_OUT_OF_DEVICE_MEMORY:\
-        throw magma::exception::OutOfDeviceMemory(message,\
-            magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
+        throw magma::exception::OutOfDeviceMemory(message, MAGMA_SOURCE_LOCATION);\
     default:\
-        throw magma::exception::ErrorResult(result, message,\
-            magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__});\
+        throw magma::exception::ErrorResult(result, message,  MAGMA_SOURCE_LOCATION);\
     }

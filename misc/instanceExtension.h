@@ -39,7 +39,7 @@ namespace magma
 } // namespace magma
 
 #define MAGMA_INSTANCE_EXTENSION(func, extension)\
-    magma::InstanceExtension<PFN_##func> func(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(func), extension, magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__})
+    magma::InstanceExtension<PFN_##func> func(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(func), extension, MAGMA_SOURCE_LOCATION)
 #define MAGMA_OPTIONAL_INSTANCE_EXTENSION(func)\
     magma::InstanceExtension<PFN_##func> func(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(func))
 

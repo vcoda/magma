@@ -41,3 +41,5 @@ namespace magma
         };
     } // namespace exception
 } // namespace magma
+
+#define MAGMA_SOURCE_LOCATION magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__}

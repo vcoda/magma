@@ -49,5 +49,4 @@ namespace magma
     } // namespace exception
 } // namespace magma
 
-#define MAGMA_THROW(message) throw magma::exception::Exception(message,\
-    magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__})
+#define MAGMA_THROW(message) throw magma::exception::Exception(message, MAGMA_SOURCE_LOCATION)
