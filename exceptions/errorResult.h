@@ -119,12 +119,14 @@ namespace magma
            and further presentation requests using the swapchain will fail. Applications must query
            the new surface properties and recreate their swapchain if they wish to continue presenting to the surface. */
 
+#ifdef VK_KHR_swapchain
         class OutOfDate : public ErrorResult
         {
         public:
             explicit OutOfDate(const char *message) noexcept:
                 ErrorResult(VK_ERROR_OUT_OF_DATE_KHR, message) {}
         };
+#endif // VK_KHR_swapchain
 
         /* The display used by a swapchain does not use the same presentable image layout,
            or is incompatible in a way that prevents sharing an image. */
@@ -154,14 +156,17 @@ namespace magma
 } // namespace magma
 
 #define MAGMA_THROW_FAILURE(result, message)\
-    switch (result) {\
+    switch (result)\
+    {\
     case VK_SUCCESS:\
     case VK_NOT_READY:\
     case VK_TIMEOUT:\
     case VK_EVENT_SET:\
     case VK_EVENT_RESET:\
     case VK_INCOMPLETE:\
+/* #ifdef VK_KHR_swapchain */\
     case VK_SUBOPTIMAL_KHR:\
+/* #endif */\
         break;\
     case VK_ERROR_OUT_OF_HOST_MEMORY:\
         throw magma::exception::OutOfHostMemory(message,\

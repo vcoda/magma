@@ -35,6 +35,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef VK_KHR_swapchain
 Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surface> surface,
     uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent,
     VkImageUsageFlags usage,
@@ -114,8 +115,10 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
         throw exception::InitializationFailed("failed to create swapchain");
     case VK_ERROR_DEVICE_LOST:
         throw exception::DeviceLost("failed to create swapchain");
+#ifdef VK_KHR_surface
     case VK_ERROR_SURFACE_LOST_KHR:
         throw exception::SurfaceLost("failed to create swapchain");
+#endif
 #ifdef VK_KHR_display_swapchain
     case VK_ERROR_INCOMPATIBLE_DISPLAY_KHR:
         throw exception::IncompatibleDisplay("failed to create swapchain");
@@ -143,8 +146,10 @@ uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore,
         throw exception::DeviceLost("failed to acquire next image");
     case VK_ERROR_OUT_OF_DATE_KHR:
         throw exception::OutOfDate("failed to acquire next image");
+#ifdef VK_KHR_surface
     case VK_ERROR_SURFACE_LOST_KHR:
         throw exception::SurfaceLost("failed to acquire next image");
+#endif
 #ifdef VK_EXT_full_screen_exclusive
     case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
         throw exception::FullScreenExclusiveModeLost("failed to acquire next image");
@@ -173,4 +178,5 @@ std::vector<std::shared_ptr<SwapchainColorAttachment>> Swapchain::getImages() co
         colorAttachments.emplace_back(new SwapchainColorAttachment(device, image, surfaceFormat.format, extent));
     return colorAttachments;
 }
+#endif // VK_KHR_swapchain
 } // namespace magma

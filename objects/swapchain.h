@@ -34,6 +34,7 @@ namespace magma
        is displayed at a time, but multiple images can be queued for presentation.
        An application renders to the image, and then queues the image for presentation to the surface. */
 
+#ifdef VK_KHR_swapchain
     class Swapchain : public NonDispatchable<VkSwapchainKHR>
     {
     public:
@@ -64,4 +65,5 @@ namespace magma
         const VkExtent2D extent;
         uint32_t imageIndex;
     };
+#endif // VK_KHR_swapchain
 } // namespace magma

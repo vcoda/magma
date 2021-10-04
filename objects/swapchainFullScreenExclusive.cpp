@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-#ifdef VK_EXT_full_screen_exclusive
+#if defined(VK_KHR_swapchain) && defined(VK_EXT_full_screen_exclusive)
 class SurfaceFullScreenExclusiveInfo : public CreateInfo
 {
 public:
@@ -82,8 +82,10 @@ void FullScreenExclusiveSwapchain::acquireFullScreenExclusiveMode()
     {
     case VK_ERROR_INITIALIZATION_FAILED:
         throw exception::InitializationFailed("failed to acquire full-screen exclusive mode");
+#ifdef VK_KHR_surface
     case VK_ERROR_SURFACE_LOST_KHR:
         throw exception::SurfaceLost("failed to acquire full-screen exclusive mode");
+#endif
     }
     MAGMA_THROW_FAILURE(result, "failed to acquire full-screen exclusive mode");
     fullScreenExlusive = true;
@@ -147,5 +149,5 @@ FullScreenExclusiveSwapchainWin32::FullScreenExclusiveSwapchainWin32(std::shared
     hMonitor(hMonitor)
 {}
 #endif // VK_USE_PLATFORM_WIN32_KHR
-#endif // VK_EXT_full_screen_exclusive
+#endif // VK_KHR_swapchain && VK_EXT_full_screen_exclusive
 } // namespace magma

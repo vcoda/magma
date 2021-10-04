@@ -26,7 +26,7 @@ namespace magma
        This can increase performance on some systems by bypassing composition, however it can also result
        in disruptive or expensive transitions in the underlying windowing system when a change occurs. */
 
-#ifdef VK_EXT_full_screen_exclusive
+#if defined(VK_KHR_swapchain) && defined(VK_EXT_full_screen_exclusive)
     class FullScreenExclusiveSwapchain : public Swapchain
     {
     public:
@@ -81,5 +81,5 @@ namespace magma
         HMONITOR hMonitor;
     };
 #endif // VK_USE_PLATFORM_WIN32_KHR
-#endif // VK_EXT_full_screen_exclusive
+#endif // VK_KHR_swapchain && VK_EXT_full_screen_exclusive
 } // namespace magma

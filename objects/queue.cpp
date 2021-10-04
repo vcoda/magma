@@ -185,10 +185,14 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
     {
     case VK_ERROR_DEVICE_LOST:
         throw exception::DeviceLost("queue present failed");
+#ifdef VK_KHR_swapchain
     case VK_ERROR_OUT_OF_DATE_KHR:
         throw exception::OutOfDate("queue present failed");
+#endif
+#ifdef VK_KHR_surface
     case VK_ERROR_SURFACE_LOST_KHR:
         throw exception::SurfaceLost("queue present failed");
+#endif
 #ifdef VK_EXT_full_screen_exclusive
     case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
         throw exception::FullScreenExclusiveModeLost("queue present failed");
