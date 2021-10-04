@@ -97,7 +97,7 @@ void FullScreenExclusiveSwapchain::releaseFullScreenExclusiveMode()
     fullScreenExlusive = false;
 }
 
-#ifdef _WIN32
+#ifdef VK_USE_PLATFORM_WIN32_KHR
 class SurfaceFullScreenExclusiveWin32Info : public CreateInfo
 {
 public:
@@ -146,6 +146,6 @@ FullScreenExclusiveSwapchainWin32::FullScreenExclusiveSwapchainWin32(std::shared
         SurfaceFullScreenExclusiveWin32Info(hMonitor, swapchainInfoEx)),
     hMonitor(hMonitor)
 {}
-#endif // _WIN32
+#endif // VK_USE_PLATFORM_WIN32_KHR
 #endif // VK_EXT_full_screen_exclusive
 } // namespace magma

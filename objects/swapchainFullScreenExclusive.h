@@ -56,7 +56,7 @@ namespace magma
        that is represented by a monitor handle of type HMONITOR. See:
        https://docs.microsoft.com/en-us/windows/win32/gdi/hmonitor-and-the-device-context */
 
-#ifdef _WIN32
+#ifdef VK_USE_PLATFORM_WIN32_KHR
     class FullScreenExclusiveSwapchainWin32 : public FullScreenExclusiveSwapchain
     {
     public:
@@ -80,6 +80,6 @@ namespace magma
     private:
         HMONITOR hMonitor;
     };
-#endif // _WIN32
+#endif // VK_USE_PLATFORM_WIN32_KHR
 #endif // VK_EXT_full_screen_exclusive
 } // namespace magma
