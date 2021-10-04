@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "dispatchable.h"
 #include "../extensions/physicalDeviceExtensionFeatures.h"
+#include "../misc/createInfo.h"
 #include "../misc/deviceQueueDescriptor.h"
 
 namespace magma
@@ -50,7 +51,8 @@ namespace magma
             const std::vector<const char *>& layers,
             const std::vector<const char *>& extensions,
             const VkPhysicalDeviceFeatures& deviceFeatures,
-            const std::vector<void *>& extendedDeviceFeatures = {}) const;
+            const std::vector<void *>& extendedDeviceFeatures = {},
+            const CreateInfo& chainedCreateInfo = CreateInfo()) const;
         std::vector<VkLayerProperties> enumerateLayers() const;
         std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr) const;
         bool getSurfaceSupport(std::shared_ptr<const Surface> surface) const noexcept;

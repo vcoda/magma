@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "physicalDeviceGroup.h"
 #include "physicalDevice.h"
+#include "../misc/createInfo.h"
 #include "../helpers/stackArray.h"
 
 namespace magma
@@ -35,17 +36,32 @@ std::shared_ptr<Device> PhysicalDeviceGroup::createDevice(const std::vector<Devi
     const VkPhysicalDeviceFeatures& deviceFeatures,
     const std::vector<void *>& extendedDeviceFeatures /* {} */) const
 {
+    class DeviceGroupCreateInfo : public CreateInfo
+    {
+    public:
+        DeviceGroupCreateInfo(uint32_t physicalDeviceCount, const VkPhysicalDevice *physicalDevices)
+        {
+            deviceGroupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO;
+            deviceGroupInfo.pNext = nullptr;
+            deviceGroupInfo.physicalDeviceCount = physicalDeviceCount;
+            deviceGroupInfo.pPhysicalDevices = physicalDevices;
+        }
+
+        const void *getNode() const noexcept override
+        {
+            return &deviceGroupInfo;
+        }
+
+    private:
+        VkDeviceGroupDeviceCreateInfo deviceGroupInfo;
+    };
     MAGMA_STACK_ARRAY(VkPhysicalDevice, dereferencedPhysicalDevices, physicalDeviceCount());
     for (const auto& physicalDevice : physicalDevices)
         dereferencedPhysicalDevices.put(*physicalDevice);
-    VkDeviceGroupDeviceCreateInfo deviceGroupInfo;
-    deviceGroupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO;
-    deviceGroupInfo.pNext = nullptr;
-    deviceGroupInfo.physicalDeviceCount = physicalDeviceCount();
-    deviceGroupInfo.pPhysicalDevices = dereferencedPhysicalDevices;
-    std::vector<void *> extendedDeviceGroupFeatures = extendedDeviceFeatures;
-    extendedDeviceGroupFeatures.push_back(&deviceGroupInfo);
-    return physicalDevices.front()->createDevice(queueDescriptors, layers, extensions, deviceFeatures, extendedDeviceGroupFeatures);
+    // Create a logical device from multiple physical devices
+    return physicalDevices.front()->createDevice(queueDescriptors,
+        layers, extensions, deviceFeatures, extendedDeviceFeatures,
+        DeviceGroupCreateInfo(physicalDeviceCount(), dereferencedPhysicalDevices));
 }
 #endif // VK_KHR_device_group
 } // namespace magma

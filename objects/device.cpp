@@ -36,6 +36,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     const std::vector<const char *>& enabledExtensions,
     const VkPhysicalDeviceFeatures& deviceFeatures,
     const std::vector<void *>& extendedDeviceFeatures,
+    const CreateInfo& chainedCreateInfo,
     std::shared_ptr<IAllocator> allocator):
     Dispatchable<VkDevice>(VK_OBJECT_TYPE_DEVICE, nullptr, std::move(allocator)),
     physicalDevice(std::move(physicalDevice)),
@@ -55,7 +56,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
         struct VkFeaturesNode
         {
             VkStructureType sType;
-            void *pNext;
+            const void *pNext;
             // ...
         };
         auto curr = extendedDeviceFeatures.begin();
@@ -68,15 +69,15 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
             ++curr; ++next;
         }
         VkFeaturesNode *lastNode = reinterpret_cast<VkFeaturesNode *>(*curr);
-        lastNode->pNext = nullptr; // End of list
+        lastNode->pNext = chainedCreateInfo.getNode();
     }
 #endif // VK_KHR_get_physical_device_properties2
     VkDeviceCreateInfo deviceInfo;
     deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 #ifdef VK_KHR_get_physical_device_properties2
-    deviceInfo.pNext = extendedDeviceFeatures.empty() ? nullptr : &features;
+    deviceInfo.pNext = extendedDeviceFeatures.empty() ? chainedCreateInfo.getNode() : &features;
 #else
-    deviceInfo.pNext = nullptr;
+    deviceInfo.pNext = chainedCreateInfo.getNode();
 #endif
     deviceInfo.flags = 0;
     deviceInfo.queueCreateInfoCount = MAGMA_COUNT(queueDescriptors);

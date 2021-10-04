@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "dispatchable.h"
+#include "../misc/createInfo.h"
 #include "../misc/deviceQueueDescriptor.h"
 #include "../helpers/stackArray.h"
 
@@ -42,6 +43,7 @@ namespace magma
             const std::vector<const char *>& enabledExtensions,
             const VkPhysicalDeviceFeatures& deviceFeatures,
             const std::vector<void *>& extendedDeviceFeatures,
+            const CreateInfo& chainedCreateInfo,
             std::shared_ptr<IAllocator> allocator);
         friend PhysicalDevice;
 
