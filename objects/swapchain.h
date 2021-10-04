@@ -49,7 +49,7 @@ namespace magma
             VkSwapchainCreateFlagsKHR flags,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<const DebugReportCallback> debugReportCallback = nullptr,
-            const CreateInfo& swapchainInfoEx = CreateInfo());
+            const CreateInfo& chainedInfo = CreateInfo());
         ~Swapchain();
         const VkExtent2D& getExtent() const noexcept { return extent; }
         uint32_t getImageIndex() const noexcept { return imageIndex; }

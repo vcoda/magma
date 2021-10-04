@@ -27,10 +27,10 @@ class SurfaceFullScreenExclusiveInfo : public CreateInfo
 {
 public:
     SurfaceFullScreenExclusiveInfo(VkFullScreenExclusiveEXT fullScreenExclusive,
-        const CreateInfo& swapchainInfoEx = CreateInfo()) noexcept
+        const CreateInfo& chainedInfo = CreateInfo()) noexcept
     {
         fullScreenExclusiveSurfaceInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT;
-        fullScreenExclusiveSurfaceInfo.pNext = (void *)swapchainInfoEx.getNode(); // API mistake
+        fullScreenExclusiveSurfaceInfo.pNext = (void *)chainedInfo.getNode(); // API mistake
         fullScreenExclusiveSurfaceInfo.fullScreenExclusive = fullScreenExclusive;
     }
 
@@ -53,7 +53,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     VkFullScreenExclusiveEXT fullScreenExclusive,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<const DebugReportCallback> debugReportCallback /* nullptr */,
-    const CreateInfo& swapchainInfoEx /* default */):
+    const CreateInfo& chainedInfo /* default */):
     Swapchain(std::move(device),
         std::move(surface),
         minImageCount,
@@ -66,7 +66,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
         flags,
         std::move(allocator),
         std::move(debugReportCallback),
-        SurfaceFullScreenExclusiveInfo(fullScreenExclusive, swapchainInfoEx)),
+        SurfaceFullScreenExclusiveInfo(fullScreenExclusive, chainedInfo)),
     fullScreenExlusive(false)
 {}
 
@@ -102,10 +102,10 @@ class SurfaceFullScreenExclusiveWin32Info : public CreateInfo
 {
 public:
     SurfaceFullScreenExclusiveWin32Info(HMONITOR hMonitor,
-        const CreateInfo& swapchainInfoEx = CreateInfo()) noexcept
+        const CreateInfo& chainedInfo = CreateInfo()) noexcept
     {
         fullScreenExclusiveWin32SurfaceInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT;
-        fullScreenExclusiveWin32SurfaceInfo.pNext = swapchainInfoEx.getNode();
+        fullScreenExclusiveWin32SurfaceInfo.pNext = chainedInfo.getNode();
         fullScreenExclusiveWin32SurfaceInfo.hmonitor = hMonitor;
     }
 
@@ -129,7 +129,7 @@ FullScreenExclusiveSwapchainWin32::FullScreenExclusiveSwapchainWin32(std::shared
     HMONITOR hMonitor,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<const DebugReportCallback> debugReportCallback /* nullptr */,
-    const CreateInfo& swapchainInfoEx /* default */):
+    const CreateInfo& chainedInfo /* default */):
     FullScreenExclusiveSwapchain(std::move(device),
         std::move(surface),
         minImageCount,
@@ -143,7 +143,7 @@ FullScreenExclusiveSwapchainWin32::FullScreenExclusiveSwapchainWin32(std::shared
         fullScreenExclusive,
         std::move(allocator),
         std::move(debugReportCallback),
-        SurfaceFullScreenExclusiveWin32Info(hMonitor, swapchainInfoEx)),
+        SurfaceFullScreenExclusiveWin32Info(hMonitor, chainedInfo)),
     hMonitor(hMonitor)
 {}
 #endif // VK_USE_PLATFORM_WIN32_KHR

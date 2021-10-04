@@ -36,22 +36,22 @@ namespace magma
         explicit RenderPass(std::shared_ptr<Device> device,
             const AttachmentDescription& attachment,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            const CreateInfo& renderPassInfoEx = CreateInfo());
+            const CreateInfo& chainedInfo = CreateInfo());
         explicit RenderPass(std::shared_ptr<Device> device,
             const std::vector<AttachmentDescription>& attachments,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            const CreateInfo& renderPassInfoEx = CreateInfo());
+            const CreateInfo& chainedInfo = CreateInfo());
         explicit RenderPass(std::shared_ptr<Device> device,
             const std::vector<AttachmentDescription>& attachments,
             const std::vector<SubpassDescription>& subpasses,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            const CreateInfo& renderPassInfoEx = CreateInfo());
+            const CreateInfo& chainedInfo = CreateInfo());
         explicit RenderPass(std::shared_ptr<Device> device,
             const std::vector<AttachmentDescription>& attachments,
             const std::vector<SubpassDescription>& subpasses,
             const std::vector<SubpassDependency>& dependencies,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            const CreateInfo& renderPassInfoEx = CreateInfo());
+            const CreateInfo& chainedInfo = CreateInfo());
         ~RenderPass();
         const std::vector<AttachmentDescription>& getAttachments() const noexcept { return attachments; }
         bool hasClearOp() const noexcept;

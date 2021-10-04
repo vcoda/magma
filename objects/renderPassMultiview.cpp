@@ -28,13 +28,13 @@ public:
     RenderPassMultiviewCreateInfo(const std::vector<uint32_t>& viewMasks,
         const std::vector<int32_t>& viewOffsets,
         const std::vector<uint32_t>& correlationMasks,
-        const CreateInfo& renderPassInfoEx = CreateInfo()) noexcept:
+        const CreateInfo& chainedInfo = CreateInfo()) noexcept:
         viewMasks(viewMasks),
         viewOffsets(viewOffsets),
         correlationMasks(correlationMasks)
     {
         multiviewInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO_KHR;
-        multiviewInfo.pNext = renderPassInfoEx.getNode();
+        multiviewInfo.pNext = chainedInfo.getNode();
         multiviewInfo.subpassCount = MAGMA_COUNT(this->viewMasks);
         multiviewInfo.pViewMasks = this->viewMasks.data();
         multiviewInfo.dependencyCount = MAGMA_COUNT(this->viewOffsets);
@@ -52,7 +52,7 @@ public:
             core::hashCombine(hash, multiviewInfo.pViewOffsets[i]);
         for (uint32_t i = 0; i < multiviewInfo.correlationMaskCount; ++i)
             core::hashCombine(hash, multiviewInfo.pCorrelationMasks[i]);
-        core::hashCombine(hash, renderPassInfoEx.getHash());
+        core::hashCombine(hash, chainedInfo.getHash());
     }
 
     const void *getNode() const noexcept override
@@ -70,9 +70,9 @@ private:
 MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const std::vector<AttachmentDescription>& attachments,
     uint32_t viewMask, uint32_t correlationMask,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const CreateInfo& renderPassInfoEx /* default */):
+    const CreateInfo& chainedInfo /* default */):
     RenderPass(std::move(device), attachments, std::move(allocator),
-        RenderPassMultiviewCreateInfo({viewMask}, {/* viewOffsets */}, {correlationMask}, renderPassInfoEx)),
+        RenderPassMultiviewCreateInfo({viewMask}, {/* viewOffsets */}, {correlationMask}, chainedInfo)),
     viewMasks{viewMask},
     correlationMasks{correlationMask}
 {}
@@ -80,9 +80,9 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
 MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const std::vector<AttachmentDescription>& attachments,
     const std::vector<uint32_t>& viewMasks, const std::vector<int32_t> viewOffsets, const std::vector<uint32_t>& correlationMasks,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const CreateInfo& renderPassInfoEx /* default */):
+    const CreateInfo& chainedInfo /* default */):
     RenderPass(std::move(device), attachments, std::move(allocator),
-        RenderPassMultiviewCreateInfo(viewMasks, viewOffsets, correlationMasks, renderPassInfoEx)),
+        RenderPassMultiviewCreateInfo(viewMasks, viewOffsets, correlationMasks, chainedInfo)),
     viewMasks(viewMasks),
     viewOffsets(viewOffsets),
     correlationMasks(correlationMasks)

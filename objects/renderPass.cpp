@@ -30,14 +30,14 @@ namespace magma
 {
 RenderPass::RenderPass(std::shared_ptr<Device> device, const AttachmentDescription& attachment,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const CreateInfo& renderPassInfoEx /* default */):
-    RenderPass(std::move(device), std::vector<AttachmentDescription>{attachment}, std::move(allocator), renderPassInfoEx)
+    const CreateInfo& chainedInfo /* default */):
+    RenderPass(std::move(device), std::vector<AttachmentDescription>{attachment}, std::move(allocator), chainedInfo)
 {}
 
 RenderPass::RenderPass(std::shared_ptr<Device> device,
     const std::vector<AttachmentDescription>& attachments,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const CreateInfo& renderPassInfoEx /* default */):
+    const CreateInfo& chainedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator)),
     attachments(attachments),
     hash(0)
@@ -104,7 +104,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     // Create render pass
     VkRenderPassCreateInfo renderPassInfo;
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    renderPassInfo.pNext = renderPassInfoEx.getNode();
+    renderPassInfo.pNext = chainedInfo.getNode();
     renderPassInfo.flags = 0;
     renderPassInfo.attachmentCount = MAGMA_COUNT(attachments);
     renderPassInfo.pAttachments = attachments.data();
@@ -120,7 +120,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
         renderPassInfo.attachmentCount,
         renderPassInfo.subpassCount,
         renderPassInfo.dependencyCount);
-    core::hashCombine(hash, renderPassInfoEx.getHash());
+    core::hashCombine(hash, chainedInfo.getHash());
     for (const auto& attachment : attachments)
         core::hashCombine(hash, attachment.hash());
     core::hashCombine(hash, subpass.hash());
@@ -133,8 +133,8 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     const std::vector<AttachmentDescription>& attachments,
     const std::vector<SubpassDescription>& subpasses,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const CreateInfo& renderPassInfoEx /* default */):
-    RenderPass(std::move(device), attachments, subpasses, {}, std::move(allocator), renderPassInfoEx)
+    const CreateInfo& chainedInfo /* default */):
+    RenderPass(std::move(device), attachments, subpasses, {}, std::move(allocator), chainedInfo)
 {}
 
 RenderPass::RenderPass(std::shared_ptr<Device> device,
@@ -142,13 +142,13 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     const std::vector<SubpassDescription>& subpasses,
     const std::vector<SubpassDependency>& dependencies,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const CreateInfo& renderPassInfoEx /* default */):
+    const CreateInfo& chainedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator)),
     hash(0)
 {
     VkRenderPassCreateInfo renderPassInfo;
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    renderPassInfo.pNext = renderPassInfoEx.getNode();
+    renderPassInfo.pNext = chainedInfo.getNode();
     renderPassInfo.flags = 0;
     renderPassInfo.attachmentCount = MAGMA_COUNT(attachments);
     renderPassInfo.pAttachments = attachments.data();
@@ -164,7 +164,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
         renderPassInfo.attachmentCount,
         renderPassInfo.subpassCount,
         renderPassInfo.dependencyCount);
-    core::hashCombine(hash, renderPassInfoEx.getHash());
+    core::hashCombine(hash, chainedInfo.getHash());
     for (const auto& attachment : attachments)
         core::hashCombine(hash, attachment.hash());
     for (const auto& subpass : subpasses)

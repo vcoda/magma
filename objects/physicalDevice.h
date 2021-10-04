@@ -52,7 +52,7 @@ namespace magma
             const std::vector<const char *>& extensions,
             const VkPhysicalDeviceFeatures& deviceFeatures,
             const std::vector<void *>& extendedDeviceFeatures = {},
-            const CreateInfo& chainedCreateInfo = CreateInfo()) const;
+            const CreateInfo& chainedInfo = CreateInfo()) const;
         std::vector<VkLayerProperties> enumerateLayers() const;
         std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr) const;
         bool getSurfaceSupport(std::shared_ptr<const Surface> surface) const noexcept;

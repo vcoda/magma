@@ -43,7 +43,7 @@ namespace magma
             VkFullScreenExclusiveEXT fullScreenExclusive,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<const DebugReportCallback> debugReportCallback = nullptr,
-            const CreateInfo& swapchainInfoEx = CreateInfo());
+            const CreateInfo& chainedInfo = CreateInfo());
         void acquireFullScreenExclusiveMode();
         void releaseFullScreenExclusiveMode();
         bool hasFullScreenExclusiveMode() const noexcept { return fullScreenExlusive; }
@@ -74,7 +74,7 @@ namespace magma
             HMONITOR hMonitor,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<const DebugReportCallback> debugReportCallback = nullptr,
-            const CreateInfo& swapchainInfoEx = CreateInfo());
+            const CreateInfo& chainedInfo = CreateInfo());
         HMONITOR getMonitorHandle() const noexcept { return hMonitor; }
 
     private:

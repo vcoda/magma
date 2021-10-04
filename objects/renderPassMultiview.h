@@ -33,14 +33,14 @@ namespace magma
             uint32_t viewMask,
             uint32_t correlationMask,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            const CreateInfo& extendedInfo = CreateInfo());
+            const CreateInfo& chainedInfo = CreateInfo());
         explicit MultiviewRenderPass(std::shared_ptr<Device> device,
             const std::vector<AttachmentDescription>& attachments,
             const std::vector<uint32_t>& viewMasks,
             const std::vector<int32_t> viewOffsets,
             const std::vector<uint32_t>& correlationMasks,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            const CreateInfo& extendedInfo = CreateInfo());
+            const CreateInfo& chainedInfo = CreateInfo());
         const std::vector<uint32_t>& getViewMasks() const noexcept { return viewMasks; }
         const std::vector<int32_t>& getViewOffsets() const noexcept { return viewOffsets; }
         const std::vector<uint32_t>& getCorrelationMasks() const noexcept { return correlationMasks; }
