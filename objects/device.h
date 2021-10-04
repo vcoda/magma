@@ -63,9 +63,9 @@ namespace magma
             VkFullScreenExclusiveEXT fullScreenExclusive,
             void *hMonitor /* nullptr */) const;
 #   endif
-        VkPeerMemoryFeatureFlags getGroupPeerMemoryFeatures(uint32_t heapIndex,
+        VkPeerMemoryFeatureFlags getDeviceGroupPeerMemoryFeatures(uint32_t heapIndex,
             uint32_t localDeviceIndex,
-            uint32_t remoteDeviceIndex) const noexcept;
+            uint32_t remoteDeviceIndex) const;
 #endif // VK_KHR_device_group
         // Non-API
         std::shared_ptr<PhysicalDevice> getPhysicalDevice() noexcept { return physicalDevice; }
