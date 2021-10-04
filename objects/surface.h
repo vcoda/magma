@@ -46,8 +46,8 @@ namespace magma
     {
     public:
         explicit Win32Surface(std::shared_ptr<const Instance> instance,
-            HINSTANCE hinstance,
-            HWND hwnd,
+            HINSTANCE hInstance,
+            HWND hWnd,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkWin32SurfaceCreateFlagsKHR flags = 0);
     };

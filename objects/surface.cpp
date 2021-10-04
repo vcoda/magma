@@ -40,8 +40,8 @@ Surface::~Surface()
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
 
 Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance,
-    HINSTANCE hinstance,
-    HWND hwnd,
+    HINSTANCE hInstance,
+    HWND hWnd,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkWin32SurfaceCreateFlagsKHR flags /* 0 */):
     Surface(std::move(instance), std::move(allocator))
@@ -50,8 +50,8 @@ Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance,
     surfaceInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
     surfaceInfo.pNext = nullptr;
     surfaceInfo.flags = flags;
-    surfaceInfo.hinstance = hinstance;
-    surfaceInfo.hwnd = hwnd;
+    surfaceInfo.hinstance = hInstance;
+    surfaceInfo.hwnd = hWnd;
     const VkResult result = vkCreateWin32SurfaceKHR(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create Win32 surface");
 }
