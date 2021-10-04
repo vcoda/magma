@@ -81,11 +81,11 @@ void FullScreenExclusiveSwapchain::acquireFullScreenExclusiveMode()
     switch (result)
     {
     case VK_ERROR_INITIALIZATION_FAILED:
-        throw exception::InitializationFailed("failed to acquire full screen exclusive mode");
+        throw exception::InitializationFailed("failed to acquire full-screen exclusive mode");
     case VK_ERROR_SURFACE_LOST_KHR:
-        throw exception::SurfaceLost("failed to acquire full screen exclusive mode");
+        throw exception::SurfaceLost("failed to acquire full-screen exclusive mode");
     }
-    MAGMA_THROW_FAILURE(result, "failed to acquire full screen exclusive mode");
+    MAGMA_THROW_FAILURE(result, "failed to acquire full-screen exclusive mode");
     fullScreenExlusive = true;
 }
 
@@ -93,7 +93,7 @@ void FullScreenExclusiveSwapchain::releaseFullScreenExclusiveMode()
 {
     MAGMA_DEVICE_EXTENSION(vkReleaseFullScreenExclusiveModeEXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
     const VkResult result = vkReleaseFullScreenExclusiveModeEXT(MAGMA_HANDLE(device), handle);
-    MAGMA_THROW_FAILURE(result, "failed to release full screen exclusive mode");
+    MAGMA_THROW_FAILURE(result, "failed to release full-screen exclusive mode");
     fullScreenExlusive = false;
 }
 

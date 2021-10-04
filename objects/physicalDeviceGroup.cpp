@@ -38,16 +38,14 @@ std::shared_ptr<Device> PhysicalDeviceGroup::createDevice(const std::vector<Devi
     MAGMA_STACK_ARRAY(VkPhysicalDevice, dereferencedPhysicalDevices, physicalDeviceCount());
     for (const auto& physicalDevice : physicalDevices)
         dereferencedPhysicalDevices.put(*physicalDevice);
-    VkDeviceGroupDeviceCreateInfo groupInfo;
-    groupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO;
-    groupInfo.pNext = nullptr;
-    groupInfo.physicalDeviceCount = physicalDeviceCount();
-    groupInfo.pPhysicalDevices = dereferencedPhysicalDevices;
+    VkDeviceGroupDeviceCreateInfo deviceGroupInfo;
+    deviceGroupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO;
+    deviceGroupInfo.pNext = nullptr;
+    deviceGroupInfo.physicalDeviceCount = physicalDeviceCount();
+    deviceGroupInfo.pPhysicalDevices = dereferencedPhysicalDevices;
     std::vector<void *> extendedDeviceGroupFeatures = extendedDeviceFeatures;
-    extendedDeviceGroupFeatures.push_back(&groupInfo);
-    return physicalDevices.front()->createDevice(queueDescriptors,
-        layers, extensions,
-        deviceFeatures, extendedDeviceGroupFeatures);
+    extendedDeviceGroupFeatures.push_back(&deviceGroupInfo);
+    return physicalDevices.front()->createDevice(queueDescriptors, layers, extensions, deviceFeatures, extendedDeviceGroupFeatures);
 }
 #endif // VK_KHR_device_group
 } // namespace magma
