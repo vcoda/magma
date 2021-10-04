@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objectType.h"
 #include "../core/noncopyable.h"
 #include "../allocator/cxxAllocator.h"
-#include "../misc/deviceExtension.h"
+//#include "../misc/deviceExtension.h"
 #include "../helpers/castToDebugReport.h"
 
 namespace magma

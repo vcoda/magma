@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/descriptorPool.h"
 #include "../objects/descriptorSet.h"
 #include "../shaders/shaderReflection.h"
+#include "../exceptions/exception.h"
 
 namespace magma
 {
