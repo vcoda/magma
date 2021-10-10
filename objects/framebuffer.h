@@ -32,6 +32,14 @@ namespace magma
     {
     public:
         explicit Framebuffer(std::shared_ptr<const RenderPass> renderPass,
+            uint32_t width,
+            uint32_t height,
+            uint32_t layerCount,
+            uint32_t attachmentCount,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            VkFramebufferCreateFlags = 0,
+            const CreateInfo& chainedInfo = CreateInfo());
+        explicit Framebuffer(std::shared_ptr<const RenderPass> renderPass,
             std::shared_ptr<ImageView> attachment,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkFramebufferCreateFlags = 0);

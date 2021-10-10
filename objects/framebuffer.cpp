@@ -28,6 +28,30 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass,
+    uint32_t width, uint32_t height, uint32_t layerCount, uint32_t attachmentCount,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkFramebufferCreateFlags flags /* 0 */,
+    const CreateInfo& chainedInfo /* CreateInfo() */):
+    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
+    renderPass(std::move(renderPass)),
+    extent({width, height}),
+    layerCount(layerCount)
+{
+    VkFramebufferCreateInfo framebufferInfo;
+    framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+    framebufferInfo.pNext = chainedInfo.getNode();
+    framebufferInfo.flags = flags;
+    framebufferInfo.renderPass = MAGMA_HANDLE(renderPass);
+    framebufferInfo.attachmentCount = attachmentCount;
+    framebufferInfo.pAttachments = nullptr;
+    framebufferInfo.width = width;
+    framebufferInfo.height = height;
+    framebufferInfo.layers = layerCount;
+    const VkResult result = vkCreateFramebuffer(MAGMA_HANDLE(device), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create imageless framebuffer");
+}
+
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shared_ptr<ImageView> attachment,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkFramebufferCreateFlags flags /* 0 */):
