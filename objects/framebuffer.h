@@ -42,11 +42,13 @@ namespace magma
         explicit Framebuffer(std::shared_ptr<const RenderPass> renderPass,
             std::shared_ptr<ImageView> attachment,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            VkFramebufferCreateFlags = 0);
+            VkFramebufferCreateFlags = 0,
+            const CreateInfo& chainedInfo = CreateInfo());
         explicit Framebuffer(std::shared_ptr<const RenderPass> renderPass,
             const std::vector<std::shared_ptr<ImageView>>& attachments,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            VkFramebufferCreateFlags = 0);
+            VkFramebufferCreateFlags = 0,
+            const CreateInfo& chainedInfo = CreateInfo());
         ~Framebuffer();
         std::shared_ptr<const RenderPass> getRenderPass() const noexcept { return renderPass; }
         const std::vector<std::shared_ptr<ImageView>>& getAttachments() const noexcept { return attachments; }
