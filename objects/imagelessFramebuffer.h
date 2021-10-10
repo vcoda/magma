@@ -39,7 +39,7 @@ namespace magma
             VkImageCreateFlags flags = 0,
             const CreateInfo& chainedInfo = CreateInfo());
         explicit ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
-            const std::vector<ImagelessFramebuffer::AttachmentImageInfo>& attachments,
+            const std::vector<AttachmentImageInfo>& attachments,
             std::shared_ptr<IAllocator> allocator = nullptr,
             const CreateInfo& chainedInfo = CreateInfo());
     };
