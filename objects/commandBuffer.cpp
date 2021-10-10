@@ -361,7 +361,6 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     const VkRect2D& renderArea /* {0, 0, 0, 0} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    static_assert(sizeof(VkClearValue) == sizeof(ClearValue), "size of ClearValue must be equal to size of VkClearValue");
     if (clearValues.empty()) {
         MAGMA_ASSERT(!renderPass->hasClearOp());
     }
@@ -391,7 +390,6 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     const VkRect2D& renderArea /* {0, 0, 0, 0} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    static_assert(sizeof(VkClearValue) == sizeof(ClearValue), "size of ClearValue must be equal to size of VkClearValue");
     if (clearValues.empty()) {
         MAGMA_ASSERT(!renderPass->hasClearOp());
     }
@@ -470,7 +468,6 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     const std::vector<VkRect2D>& deviceRenderAreas /* {} */, const std::vector<ClearValue>& clearValues /* {} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    static_assert(sizeof(VkClearValue) == sizeof(ClearValue), "size of ClearValue must be equal to size of VkClearValue");
     if (clearValues.empty()) {
         MAGMA_ASSERT(!renderPass->hasClearOp());
     }
@@ -505,7 +502,6 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     const std::vector<ClearValue>& clearValues /* {} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    static_assert(sizeof(VkClearValue) == sizeof(ClearValue), "size of ClearValue must be equal to size of VkClearValue");
     if (clearValues.empty()) {
         MAGMA_ASSERT(!renderPass->hasClearOp());
     }

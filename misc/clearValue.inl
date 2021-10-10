@@ -4,7 +4,9 @@ constexpr ClearValue::ClearValue() noexcept
 #ifndef _MSC_VER
     : value{}
 #endif
-{}
+{
+    static_assert(sizeof(ClearValue) == sizeof(VkClearValue), "size of ClearValue must be equal to the size of VkClearValue");
+}
 
 constexpr ClearColor::ClearColor(const float r, const float g, const float b, const float a /* 1.f */) noexcept
 {
