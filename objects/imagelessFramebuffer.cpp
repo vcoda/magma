@@ -32,21 +32,21 @@ public:
         viewFormats(viewFormats)
     {
         MAGMA_ASSERT(!viewFormats.empty());
-        VkFramebufferAttachmentImageInfoKHR imageInfo;
-        imageInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
-        imageInfo.pNext = chainedInfo.getNode();
-        imageInfo.flags = flags;
-        imageInfo.usage = usage;
-        imageInfo.width = width;
-        imageInfo.height = height;
-        imageInfo.layerCount = layerCount;
-        imageInfo.viewFormatCount = MAGMA_COUNT(this->viewFormats);
-        imageInfo.pViewFormats = this->viewFormats.data();
-        imageInfos.push_back(imageInfo);
+        VkFramebufferAttachmentImageInfoKHR attachmentInfo;
+        attachmentInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
+        attachmentInfo.pNext = chainedInfo.getNode();
+        attachmentInfo.flags = flags;
+        attachmentInfo.usage = usage;
+        attachmentInfo.width = width;
+        attachmentInfo.height = height;
+        attachmentInfo.layerCount = layerCount;
+        attachmentInfo.viewFormatCount = MAGMA_COUNT(this->viewFormats);
+        attachmentInfo.pViewFormats = this->viewFormats.data();
+        attachmentInfos.push_back(attachmentInfo);
         framebufferAttachmentsInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR;
         framebufferAttachmentsInfo.pNext = chainedInfo.getNode();
         framebufferAttachmentsInfo.attachmentImageInfoCount = 1;
-        framebufferAttachmentsInfo.pAttachmentImageInfos = imageInfos.data();
+        framebufferAttachmentsInfo.pAttachmentImageInfos = attachmentInfos.data();
     }
 
     FramebufferAttachmentsCreateInfo(const std::vector<ImagelessFramebuffer::AttachmentImageInfo>& attachments,
@@ -55,22 +55,22 @@ public:
         for (const auto& info : attachments)
         {
             MAGMA_ASSERT(!info.viewFormats.empty());
-            VkFramebufferAttachmentImageInfoKHR imageInfo;
-            imageInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
-            imageInfo.pNext = chainedInfo.getNode();
-            imageInfo.flags = info.flags;
-            imageInfo.usage = info.usage;
-            imageInfo.width = info.width;
-            imageInfo.height = info.height;
-            imageInfo.layerCount = info.layerCount;
-            imageInfo.viewFormatCount = MAGMA_COUNT(info.viewFormats);
-            imageInfo.pViewFormats = info.viewFormats.data();
-            imageInfos.push_back(imageInfo);
+            VkFramebufferAttachmentImageInfoKHR attachmentInfo;
+            attachmentInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
+            attachmentInfo.pNext = chainedInfo.getNode();
+            attachmentInfo.flags = info.flags;
+            attachmentInfo.usage = info.usage;
+            attachmentInfo.width = info.width;
+            attachmentInfo.height = info.height;
+            attachmentInfo.layerCount = info.layerCount;
+            attachmentInfo.viewFormatCount = MAGMA_COUNT(info.viewFormats);
+            attachmentInfo.pViewFormats = info.viewFormats.data();
+            attachmentInfos.push_back(attachmentInfo);
         }
         framebufferAttachmentsInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR;
-        framebufferAttachmentsInfo.attachmentImageInfoCount = MAGMA_COUNT(imageInfos);
-        framebufferAttachmentsInfo.pAttachmentImageInfos = imageInfos.data();
         framebufferAttachmentsInfo.pNext = chainedInfo.getNode();
+        framebufferAttachmentsInfo.attachmentImageInfoCount = MAGMA_COUNT(attachmentInfos);
+        framebufferAttachmentsInfo.pAttachmentImageInfos = attachmentInfos.data();
     }
 
     const void *getNode() const noexcept override
@@ -80,7 +80,7 @@ public:
 
 private:
     const std::vector<VkFormat> viewFormats;
-    std::vector<VkFramebufferAttachmentImageInfoKHR> imageInfos;
+    std::vector<VkFramebufferAttachmentImageInfoKHR> attachmentInfos;
     VkFramebufferAttachmentsCreateInfoKHR framebufferAttachmentsInfo;
 };
 
