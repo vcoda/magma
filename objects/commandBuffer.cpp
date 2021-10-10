@@ -22,7 +22,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "deviceMemory.h"
 #include "framebuffer.h"
+#include "imagelessFramebuffer.h"
 #include "renderPass.h"
+#include "imageView.h"
 #include "fence.h"
 #include "accelerationStructure.h"
 #include "../misc/geometry.h"
@@ -380,6 +382,45 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     beginRenderPassMarked = VK_FALSE;
 #endif
 }
+
+#ifdef VK_KHR_imageless_framebuffer
+void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass,
+    const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
+    const std::vector<std::shared_ptr<ImageView>>& attachments,
+    const std::vector<ClearValue>& clearValues /* {} */,
+    const VkRect2D& renderArea /* {0, 0, 0, 0} */,
+    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+{
+    static_assert(sizeof(VkClearValue) == sizeof(ClearValue), "size of ClearValue must be equal to size of VkClearValue");
+    if (clearValues.empty()) {
+        MAGMA_ASSERT(!renderPass->hasClearOp());
+    }
+    MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachments.size());
+    for (const auto& attachment : attachments)
+        dereferencedAttachments.put(*attachment);
+    VkRenderPassAttachmentBeginInfoKHR attachmentBeginInfo;
+    attachmentBeginInfo.sType =  VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR;
+    attachmentBeginInfo.pNext = nullptr;
+    attachmentBeginInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
+    attachmentBeginInfo.pAttachments = dereferencedAttachments;
+    VkRenderPassBeginInfo beginInfo;
+    beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    beginInfo.pNext = &attachmentBeginInfo;
+    beginInfo.renderPass = *renderPass;
+    beginInfo.framebuffer = *framebuffer;
+    beginInfo.renderArea.offset = renderArea.offset;
+    if ((renderArea.extent.width != 0) || (renderArea.extent.height != 0))
+        beginInfo.renderArea.extent = renderArea.extent;
+    else
+        beginInfo.renderArea.extent = framebuffer->getExtent();
+    beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
+    beginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
+    vkCmdBeginRenderPass(handle, &beginInfo, contents);
+#ifdef MAGMA_DEBUG_LABEL
+    beginRenderPassMarked = VK_FALSE;
+#endif
+}
+#endif // VK_KHR_imageless_framebuffer
 
 // CommandBuffer::nextSubpass
 // CommandBuffer::endRenderPass

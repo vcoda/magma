@@ -39,8 +39,12 @@ namespace magma
 {
     class CommandPool;
     class Framebuffer;
+#ifdef VK_KHR_imageless_framebuffer
+    class ImagelessFramebuffer;
+#endif
     class RenderPass;
     class Image;
+    class ImageView;
     class Event;
     class Fence;
     class QueryPool;
@@ -372,6 +376,14 @@ namespace magma
             const std::vector<ClearValue>& clearValues = {},
             const VkRect2D& renderArea = {0, 0, 0, 0},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
+#ifdef VK_KHR_imageless_framebuffer
+        void beginRenderPass(const std::shared_ptr<RenderPass>& renderPass,
+            const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
+            const std::vector<std::shared_ptr<ImageView>>& attachments,
+            const std::vector<ClearValue>& clearValues = {},
+            const VkRect2D& renderArea = {0, 0, 0, 0},
+            VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
+#endif // VK_KHR_imageless_framebuffer
         void nextSubpass(VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void endRenderPass() noexcept;
 
@@ -491,6 +503,16 @@ namespace magma
             uint32_t renderPassColor,
             const VkRect2D& renderArea = {0, 0, 0, 0},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
+#ifdef VK_KHR_imageless_framebuffer
+        void beginRenderPass(const std::shared_ptr<RenderPass>& renderPass,
+            const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
+            const std::vector<std::shared_ptr<ImageView>>& attachments,
+            const std::vector<ClearValue>& clearValues,
+            const char *renderPassName,
+            uint32_t renderPassColor,
+            const VkRect2D& renderArea = {0, 0, 0, 0},
+            VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
+#endif // VK_KHR_imageless_framebuffer
 
 #ifdef VK_KHR_device_group
         bool beginDeviceGroup(
