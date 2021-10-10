@@ -60,6 +60,7 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(Image2DArray)
     MAGMA_TYPEDEF_SHARED_PTR(Image3D)
     MAGMA_TYPEDEF_SHARED_PTR(ImageCube)
+    MAGMA_TYPEDEF_SHARED_PTR(ImagelessFramebuffer)
     MAGMA_TYPEDEF_SHARED_PTR(ImageView)
     MAGMA_TYPEDEF_SHARED_PTR(IndexBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(IndirectBuffer)

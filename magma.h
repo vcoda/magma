@@ -52,6 +52,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/image2DAttachment.h"
 #include "objects/image3D.h"
 #include "objects/imageCube.h"
+#include "objects/imagelessFramebuffer.h"
 #include "objects/imageView.h"
 #include "objects/indexBuffer.h"
 #include "objects/indirectBuffer.h"

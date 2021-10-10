@@ -266,6 +266,7 @@
     <ClInclude Include="..\..\objects\image2DAttachment.h" />
     <ClInclude Include="..\..\objects\image3D.h" />
     <ClInclude Include="..\..\objects\imageCube.h" />
+    <ClInclude Include="..\..\objects\imagelessFramebuffer.h" />
     <ClInclude Include="..\..\objects\imageView.h" />
     <ClInclude Include="..\..\objects\indexBuffer.h" />
     <ClInclude Include="..\..\objects\indirectBuffer.h" />
@@ -398,6 +399,7 @@
     <ClCompile Include="..\..\objects\image2DAttachment.cpp" />
     <ClCompile Include="..\..\objects\image3D.cpp" />
     <ClCompile Include="..\..\objects\imageCube.cpp" />
+    <ClCompile Include="..\..\objects\imagelessFramebuffer.cpp" />
     <ClCompile Include="..\..\objects\imageView.cpp" />
     <ClCompile Include="..\..\objects\indexBuffer.cpp" />
     <ClCompile Include="..\..\objects\indirectBuffer.cpp" />

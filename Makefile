@@ -93,6 +93,7 @@ MAGMA_OBJS= \
 	objects/image2DAttachment.o \
 	objects/image3D.o \
 	objects/imageCube.o \
+	objects/imagelessFramebuffer.o \
 	objects/imageView.o \
 	objects/indexBuffer.o \
 	objects/indirectBuffer.o \
