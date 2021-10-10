@@ -43,12 +43,12 @@ namespace magma
         std::shared_ptr<const RenderPass> getRenderPass() const noexcept { return renderPass; }
         const std::vector<std::shared_ptr<ImageView>>& getAttachments() const noexcept { return attachments; }
         const VkExtent2D& getExtent() const noexcept { return extent; }
-        uint32_t getLayers() const noexcept;
-        bool layered() const noexcept { return getLayers() > 1; }
+        uint32_t getLayerCount() const noexcept { return layerCount; }
 
     private:
         std::shared_ptr<const RenderPass> renderPass;
         const std::vector<std::shared_ptr<ImageView>> attachments;
         const VkExtent2D extent;
+        const uint32_t layerCount;
     };
 } // namespace magma
