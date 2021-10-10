@@ -231,5 +231,23 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     MAGMA_UNUSED(renderPassColor);
 #endif // MAGMA_DEBUG_LABEL
 }
+
+#ifdef VK_KHR_imageless_framebuffer
+void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
+    const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
+    const std::vector<std::shared_ptr<ImageView>>& attachments, const std::vector<VkRect2D>& deviceRenderAreas,
+    const std::vector<ClearValue>& clearValues, const char *renderPassName, uint32_t renderPassColor,
+    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+{
+    beginDeviceGroupRenderPass(deviceMask, renderPass, framebuffer, attachments, deviceRenderAreas, clearValues, contents);
+#ifdef MAGMA_DEBUG_LABEL
+    beginDebugLabel(renderPassName, renderPassColor);
+    beginRenderPassMarked = VK_TRUE;
+#else
+    MAGMA_UNUSED(renderPassName);
+    MAGMA_UNUSED(renderPassColor);
+#endif // MAGMA_DEBUG_LABEL
+}
+#endif // VK_KHR_imageless_framebuffer
 #endif // VK_KHR_device_group
 } // namespace magma

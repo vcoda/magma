@@ -400,6 +400,16 @@ namespace magma
             const std::vector<VkRect2D>& deviceRenderAreas = {},
             const std::vector<ClearValue>& clearValues = {},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
+#   ifdef VK_KHR_imageless_framebuffer
+        void beginDeviceGroupRenderPass(
+            uint32_t deviceMask,
+            const std::shared_ptr<RenderPass>& renderPass,
+            const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
+            const std::vector<std::shared_ptr<ImageView>>& attachments,
+            const std::vector<VkRect2D>& deviceRenderAreas = {},
+            const std::vector<ClearValue>& clearValues = {},
+            VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
+#   endif // VK_KHR_imageless_framebuffer
         void setDeviceMask(
             uint32_t deviceMask) noexcept;
         uint32_t getDeviceMask() const noexcept { return deviceMask; }
@@ -529,6 +539,17 @@ namespace magma
             const char *renderPassName,
             uint32_t renderPassColor,
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
+#   ifdef VK_KHR_imageless_framebuffer
+        void beginDeviceGroupRenderPass(uint32_t deviceMask,
+            const std::shared_ptr<RenderPass>& renderPass,
+            const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
+            const std::vector<std::shared_ptr<ImageView>>& attachments,
+            const std::vector<VkRect2D>& deviceRenderAreas,
+            const std::vector<ClearValue>& clearValues,
+            const char *renderPassName,
+            uint32_t renderPassColor,
+            VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
+#   endif // VK_KHR_imageless_framebuffer
 #endif // VK_KHR_device_group
 
     protected:

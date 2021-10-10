@@ -496,6 +496,50 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
 #endif
 }
 
+#ifdef VK_KHR_imageless_framebuffer
+void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
+    const std::shared_ptr<RenderPass>& renderPass,
+    const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
+    const std::vector<std::shared_ptr<ImageView>>& attachments,
+    const std::vector<VkRect2D>& deviceRenderAreas /* {} */,
+    const std::vector<ClearValue>& clearValues /* {} */,
+    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+{
+    static_assert(sizeof(VkClearValue) == sizeof(ClearValue), "size of ClearValue must be equal to size of VkClearValue");
+    if (clearValues.empty()) {
+        MAGMA_ASSERT(!renderPass->hasClearOp());
+    }
+    VkDeviceGroupRenderPassBeginInfo deviceGroupBeginInfo;
+    deviceGroupBeginInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO;
+    deviceGroupBeginInfo.pNext = nullptr;
+    deviceGroupBeginInfo.deviceMask = deviceMask;
+    // Elements of VkDeviceGroupRenderPassBeginInfo::pDeviceRenderAreas override the value of VkRenderPassBeginInfo::renderArea
+    deviceGroupBeginInfo.deviceRenderAreaCount = MAGMA_COUNT(deviceRenderAreas);
+    deviceGroupBeginInfo.pDeviceRenderAreas = deviceRenderAreas.data();
+    MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachments.size());
+    for (const auto& attachment : attachments)
+        dereferencedAttachments.put(*attachment);
+    VkRenderPassAttachmentBeginInfoKHR attachmentBeginInfo;
+    attachmentBeginInfo.sType =  VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR;
+    attachmentBeginInfo.pNext = &deviceGroupBeginInfo;
+    attachmentBeginInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
+    attachmentBeginInfo.pAttachments = dereferencedAttachments;
+    VkRenderPassBeginInfo beginInfo;
+    beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    beginInfo.pNext = &attachmentBeginInfo;
+    beginInfo.renderPass = *renderPass;
+    beginInfo.framebuffer = *framebuffer;
+    beginInfo.renderArea.offset = VkOffset2D{0, 0};
+    beginInfo.renderArea.extent = deviceRenderAreas.empty() ? framebuffer->getExtent() : VkExtent2D{0, 0};
+    beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
+    beginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
+    vkCmdBeginRenderPass(handle, &beginInfo, contents);
+#ifdef MAGMA_DEBUG
+    beginRenderPassMarked = VK_FALSE;
+#endif
+}
+#endif // VK_KHR_imageless_framebuffer
+
 void CommandBuffer::dispatchBase(uint32_t baseGroupX, uint32_t baseGroupY, uint32_t baseGroupZ,
     uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) const noexcept
 {
