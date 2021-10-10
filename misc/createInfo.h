@@ -19,8 +19,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* A node in the chained input structures that
-       is assigned to pNext member of Vk*CreateInfo structure. */
+    /* A node in the chained input structures that is
+       assigned to pNext member of Vk*CreateInfo structure. */
 
     class CreateInfo
     {
