@@ -44,7 +44,7 @@ public:
         imageInfo.pViewFormats = this->viewFormats.data();
         imageInfos.push_back(imageInfo);
         framebufferAttachmentsInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR;
-        framebufferAttachmentsInfo.pNext = nullptr;
+        framebufferAttachmentsInfo.pNext = chainedInfo.getNode();
         framebufferAttachmentsInfo.attachmentImageInfoCount = 1;
         framebufferAttachmentsInfo.pAttachmentImageInfos = imageInfos.data();
     }
@@ -68,9 +68,9 @@ public:
             imageInfos.push_back(imageInfo);
         }
         framebufferAttachmentsInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR;
-        framebufferAttachmentsInfo.pNext = nullptr;
         framebufferAttachmentsInfo.attachmentImageInfoCount = MAGMA_COUNT(imageInfos);
         framebufferAttachmentsInfo.pAttachmentImageInfos = imageInfos.data();
+        framebufferAttachmentsInfo.pNext = chainedInfo.getNode();
     }
 
     const void *getNode() const noexcept override
