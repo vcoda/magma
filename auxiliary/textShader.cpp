@@ -114,13 +114,13 @@ constexpr
         std::move(hostAllocator),
         std::move(pipelineCache),
         nullptr); // basePipeline
-
     // Initialize glyphs
-    constexpr uint32_t glyphData[] = {
+    constexpr uint32_t glyphCount = 128;
+    constexpr uint32_t glyphData[glyphCount << 2] = {
 #include "glyphs.h"
     };
-    static_assert(sizeof(glyphs) == sizeof(glyphData), "ASCII glyph data size mismatch");
-    for (uint32_t i = 0, j = 0; i < MAGMA_TEXT_SHADER_GLYPHS; ++i)
+    glyphs.resize(glyphCount);
+    for (uint32_t i = 0, j = 0; i < glyphCount; ++i)
     {
         glyphs[i].c[0] = glyphData[j++];
         glyphs[i].c[1] = glyphData[j++];

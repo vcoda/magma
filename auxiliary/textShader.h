@@ -20,8 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../descriptors/binding.h"
 #include "../objects/descriptorSetLayout.h"
 
-#define MAGMA_TEXT_SHADER_GLYPHS 128
-
 namespace magma
 {
     class Buffer;
@@ -82,7 +80,7 @@ namespace magma
             SetLayout setLayout;
             uint32_t width = 0;
             uint32_t height = 0;
-            Glyph glyphs[MAGMA_TEXT_SHADER_GLYPHS];
+            std::vector<Glyph> glyphs;
             std::list<String> strings;
             std::vector<Glyph> chars;
             uint32_t offset = 0;
