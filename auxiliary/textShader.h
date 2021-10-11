@@ -63,7 +63,7 @@ namespace magma
                 float c[4];
             };
 
-            struct SetLayout : public DescriptorSetDeclaration
+            struct SetLayout : DescriptorSetDeclaration
             {
                 binding::UniformBuffer uniforms = 0;
                 binding::StorageBuffer stringBuffer = 1;

@@ -60,7 +60,7 @@ namespace magma
                 bool negativeViewportHeight = false) const noexcept;
 
         private:
-            struct SetLayout : public DescriptorSetDeclaration
+            struct SetLayout : DescriptorSetDeclaration
             {
                 binding::CombinedImageSampler image = 0;
                 MAGMA_REFLECT(&image)

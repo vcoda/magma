@@ -46,13 +46,13 @@ namespace magma
                 std::shared_ptr<Sampler> sampler);
 
         private:
-            struct ImageSetLayout : public DescriptorSetDeclaration
+            struct ImageSetLayout : DescriptorSetDeclaration
             {
                 binding::CombinedImageSampler image = 0;
                 MAGMA_REFLECT(&image)
             };
 
-            struct StorageImageSetLayout : public DescriptorSetDeclaration
+            struct StorageImageSetLayout : DescriptorSetDeclaration
             {
                 binding::StorageImage image = 0;
                 MAGMA_REFLECT(&image)
