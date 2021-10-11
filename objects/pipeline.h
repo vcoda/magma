@@ -46,7 +46,7 @@ namespace magma
         VkShaderStatisticsInfoAMD getShaderStatistics(VkShaderStageFlagBits stage) const;
         std::vector<uint8_t> getShaderBinary(VkShaderStageFlagBits stage) const;
         std::string getShaderDisassembly(VkShaderStageFlagBits stage) const;
-#endif
+#endif // VK_AMD_shader_info
 
     protected:
         explicit Pipeline(VkPipelineBindPoint bindPoint,
