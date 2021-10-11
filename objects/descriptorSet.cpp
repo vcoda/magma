@@ -58,7 +58,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
         bindings.push_back(*binding);
     }
     // Create descriptor set layout
-    setLayout = std::make_shared<magma::DescriptorSetLayout>(device, bindings, hostAllocator, 0);
+    setLayout = std::make_shared<DescriptorSetLayout>(device, bindings, hostAllocator, 0);
     // Allocate descriptor set
     const VkDescriptorSetLayout dereferencedSetLayouts[1] = {*setLayout};
     VkDescriptorSetAllocateInfo allocInfo;

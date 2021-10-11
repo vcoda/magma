@@ -49,7 +49,7 @@ namespace magma
                 std::shared_ptr<PipelineCache> pipelineCache = nullptr,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
-                std::shared_ptr<magma::ShaderModule> fragmentShader,
+                std::shared_ptr<ShaderModule> fragmentShader,
                 std::shared_ptr<Specialization> specialization = nullptr,
                 std::shared_ptr<PipelineCache> pipelineCache = nullptr,
                 std::shared_ptr<IAllocator> allocator = nullptr);
