@@ -46,23 +46,13 @@ namespace magma
                 std::shared_ptr<Sampler> sampler);
 
         private:
-            struct ImageSetLayout : DescriptorSetDeclaration
-            {
-                binding::CombinedImageSampler image = 0;
-                MAGMA_REFLECT(&image)
-            };
-
-            struct StorageImageSetLayout : DescriptorSetDeclaration
-            {
-                binding::StorageImage image = 0;
-                MAGMA_REFLECT(&image)
-            };
-
+            struct ImageSetLayout;
+            struct StorageImageSetLayout;
             std::shared_ptr<DescriptorPool> descriptorPool;
             std::shared_ptr<DescriptorSetLayout> descriptorSetLayout;
             std::shared_ptr<DescriptorSet> descriptorSet;
-            ImageSetLayout imageSetLayout;
-            StorageImageSetLayout storageImageSetLayout;
+            std::unique_ptr<ImageSetLayout> imageSetLayout;
+            std::unique_ptr<StorageImageSetLayout> storageImageSetLayout;
             uint32_t binding;
         };
     } // namespace aux

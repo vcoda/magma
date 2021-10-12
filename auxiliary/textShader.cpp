@@ -63,6 +63,19 @@ struct alignas(16) TextShader::String
     float color[4];
 };
 
+struct alignas(16) TextShader::Glyph
+{
+    uint32_t data[4];
+};
+
+struct TextShader::SetLayout : DescriptorSetDeclaration
+{
+    binding::UniformBuffer uniforms = 0;
+    binding::StorageBuffer stringBuffer = 1;
+    binding::StorageBuffer glyphBuffer = 2;
+    MAGMA_REFLECT(&uniforms, &stringBuffer, &glyphBuffer)
+};
+
 const TextShader::Glyph TextShader::glyphs[] = {
 #include "glyphs.h"
 };
@@ -79,9 +92,10 @@ TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
     stringBuffer = std::make_shared<DynamicStorageBuffer>(device, 8 * sizeof(String), false, this->allocator);
     glyphBuffer = std::make_shared<DynamicStorageBuffer>(device, 256 * sizeof(Glyph), false, this->allocator); // 4Kb
     // Define descriptor set layout
-    setLayout.uniforms = uniforms;
-    setLayout.stringBuffer = stringBuffer;
-    setLayout.glyphBuffer = glyphBuffer;
+    setLayout = std::make_unique<SetLayout>();
+    setLayout->uniforms = uniforms;
+    setLayout->stringBuffer = stringBuffer;
+    setLayout->glyphBuffer = glyphBuffer;
     // Create descriptor set
     descriptorPool = std::make_shared<DescriptorPool>(device, 1,
         std::vector<Descriptor>{
@@ -89,7 +103,7 @@ TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
             descriptor::StorageBuffer(2)
         },
         hostAllocator);
-    descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, setLayout, VK_SHADER_STAGE_FRAGMENT_BIT, hostAllocator);
+    descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, *setLayout, VK_SHADER_STAGE_FRAGMENT_BIT, hostAllocator);
     // Load fullscreen vertex shader
     auto vertexShader = std::make_unique<FillRectangleVertexShader>(device, hostAllocator);
 constexpr
@@ -146,7 +160,7 @@ void TextShader::end()
         if (maxStrings < strings.size())
         {   // Reallocate if not enough memory
             stringBuffer->realloc(strings.size() * sizeof(String), allocator);
-            setLayout.stringBuffer = stringBuffer;
+            setLayout->stringBuffer = stringBuffer;
         }
         helpers::mapScoped<String>(stringBuffer,
             [this](auto *data)
@@ -161,7 +175,7 @@ void TextShader::end()
         if (maxChars < chars.size())
         {   // Reallocate if not enough memory
             glyphBuffer->realloc(chars.size() * sizeof(Glyph), allocator);
-            setLayout.glyphBuffer = glyphBuffer;
+            setLayout->glyphBuffer = glyphBuffer;
         }
         helpers::mapScoped<Glyph>(glyphBuffer,
             [this](auto *data)

@@ -60,12 +60,7 @@ namespace magma
                 bool negativeViewportHeight = false) const noexcept;
 
         private:
-            struct SetLayout : DescriptorSetDeclaration
-            {
-                binding::CombinedImageSampler image = 0;
-                MAGMA_REFLECT(&image)
-            };
-
+            struct SetLayout;
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<DescriptorPool> descriptorPool;
             std::shared_ptr<Sampler> nearestSampler;

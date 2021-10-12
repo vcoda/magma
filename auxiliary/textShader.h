@@ -55,19 +55,8 @@ namespace magma
         private:
             struct Uniforms;
             struct String;
-            struct alignas(16) Glyph
-            {
-                uint32_t data[4];
-            };
-
-            struct SetLayout : DescriptorSetDeclaration
-            {
-                binding::UniformBuffer uniforms = 0;
-                binding::StorageBuffer stringBuffer = 1;
-                binding::StorageBuffer glyphBuffer = 2;
-                MAGMA_REFLECT(&uniforms, &stringBuffer, &glyphBuffer)
-            };
-
+            struct Glyph;
+            struct SetLayout;
             std::shared_ptr<Allocator> allocator;
             std::shared_ptr<Buffer> uniforms;
             std::shared_ptr<Buffer> stringBuffer;
@@ -76,7 +65,7 @@ namespace magma
             std::shared_ptr<DescriptorSetLayout> descriptorSetLayout;
             std::shared_ptr<DescriptorSet> descriptorSet;
             std::shared_ptr<GraphicsPipeline> pipeline;
-            SetLayout setLayout;
+            std::unique_ptr<SetLayout> setLayout;
             uint32_t width = 0;
             uint32_t height = 0;
             std::list<String> strings;

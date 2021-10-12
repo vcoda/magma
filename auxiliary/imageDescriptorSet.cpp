@@ -29,9 +29,23 @@ namespace magma
 {
 namespace aux
 {
+struct ImageDescriptorSet::ImageSetLayout : DescriptorSetDeclaration
+{
+    binding::CombinedImageSampler image = 0;
+    MAGMA_REFLECT(&image)
+};
+
+struct ImageDescriptorSet::StorageImageSetLayout : DescriptorSetDeclaration
+{
+    binding::StorageImage image = 0;
+    MAGMA_REFLECT(&image)
+};
+
 ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
     std::shared_ptr<const ShaderReflection> reflection,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
+    imageSetLayout(std::make_unique<ImageSetLayout>()),
+    storageImageSetLayout(std::make_unique<StorageImageSetLayout>()),
     binding(0)
 {
     const char *entrypoint = reflection->getEntryPointName(0);
@@ -40,11 +54,11 @@ ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
         if (SPV_REFLECT_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER == binding->descriptor_type)
         {
             descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::CombinedImageSampler(1), allocator, false);
-            descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, imageSetLayout, VK_SHADER_STAGE_FRAGMENT_BIT, std::move(allocator));
+            descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, *imageSetLayout, VK_SHADER_STAGE_FRAGMENT_BIT, std::move(allocator));
         } else if (SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_IMAGE == binding->descriptor_type)
         {
             descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::StorageImage(1), allocator, false);
-            descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, storageImageSetLayout, VK_SHADER_STAGE_FRAGMENT_BIT, std::move(allocator));
+            descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, *storageImageSetLayout, VK_SHADER_STAGE_FRAGMENT_BIT, std::move(allocator));
         }
         if (descriptorSet)
         {
@@ -59,9 +73,9 @@ ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
 void ImageDescriptorSet::writeDescriptor(std::shared_ptr<const ImageView> imageView, std::shared_ptr<Sampler> sampler)
 {
     if (imageView->getImage()->storageImage())
-        storageImageSetLayout.image = imageView;
+        storageImageSetLayout->image = imageView;
     else
-        imageSetLayout.image = {imageView, sampler};
+        imageSetLayout->image = {imageView, sampler};
 }
 } // namespace aux
 } // namespace magma

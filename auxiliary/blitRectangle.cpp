@@ -50,6 +50,12 @@ namespace aux
 constexpr
 #include "spirv/output/blitf"
 
+struct BlitRectangle::SetLayout : DescriptorSetDeclaration
+{
+    binding::CombinedImageSampler image = 0;
+    MAGMA_REFLECT(&image)
+};
+
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):

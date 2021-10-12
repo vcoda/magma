@@ -49,13 +49,6 @@ namespace magma
 
         class ImmediateRender : public core::NonCopyable
         {
-            struct Vertex;
-            struct Primitive;
-            struct Transform
-            {
-                float m[16];
-            };
-
         public:
             explicit ImmediateRender(const uint32_t maxVertexCount,
                 std::shared_ptr<Device> device,
@@ -101,6 +94,13 @@ namespace magma
         private:
             std::shared_ptr<ShaderModule> createShader(bool vertexShader) const;
             std::shared_ptr<GraphicsPipeline> lookupPipeline(VkPrimitiveTopology);
+
+            struct Vertex;
+            struct Primitive;
+            struct Transform
+            {
+                float m[16];
+            };
 
             const uint32_t maxVertexCount;
             std::shared_ptr<Device> device;
