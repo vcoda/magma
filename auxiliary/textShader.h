@@ -40,10 +40,9 @@ namespace magma
         class TextShader : public core::NonCopyable
         {
         public:
-            explicit TextShader(const uint32_t maxChars, const uint32_t maxStrings,
-                std::shared_ptr<RenderPass> renderPass,
-                std::shared_ptr<PipelineCache> pipelineCache = nullptr,
-                std::shared_ptr<Allocator> allocator = nullptr);
+            explicit TextShader(std::shared_ptr<RenderPass> renderPass,
+                std::shared_ptr<Allocator> allocator = nullptr,
+                std::shared_ptr<PipelineCache> pipelineCache = nullptr);
             void draw(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept;
             void begin();
             void end();
@@ -69,7 +68,7 @@ namespace magma
                 MAGMA_REFLECT(&uniforms, &stringBuffer, &glyphBuffer)
             };
 
-            const uint32_t maxChars, maxStrings;
+            std::shared_ptr<Allocator> allocator;
             std::shared_ptr<Buffer> uniforms;
             std::shared_ptr<Buffer> stringBuffer;
             std::shared_ptr<Buffer> glyphBuffer;

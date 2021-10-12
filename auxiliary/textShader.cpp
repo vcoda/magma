@@ -67,19 +67,17 @@ const TextShader::Glyph TextShader::glyphs[] = {
 #include "glyphs.h"
 };
 
-TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
-    const std::shared_ptr<RenderPass> renderPass,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
-    std::shared_ptr<Allocator> allocator /* nullptr */):
-    maxChars(maxChars),
-    maxStrings(maxStrings)
+TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */):
+    allocator(std::move(allocator))
 {
     std::shared_ptr<Device> device = renderPass->getDevice();
-    std::shared_ptr<IAllocator> hostAllocator = MAGMA_HOST_ALLOCATOR(allocator);
+    std::shared_ptr<IAllocator> hostAllocator = MAGMA_HOST_ALLOCATOR(this->allocator);
     // Create uniform and storage buffers
-    uniforms = std::make_shared<UniformBuffer<Uniforms>>(device, allocator);
-    stringBuffer = std::make_shared<DynamicStorageBuffer>(device, sizeof(String) * maxStrings, false, allocator);
-    glyphBuffer = std::make_shared<DynamicStorageBuffer>(device, sizeof(Glyph) * maxChars, false, allocator);
+    uniforms = std::make_shared<UniformBuffer<Uniforms>>(device, this->allocator);
+    stringBuffer = std::make_shared<DynamicStorageBuffer>(device, 8 * sizeof(String), false, this->allocator);
+    glyphBuffer = std::make_shared<DynamicStorageBuffer>(device, 256 * sizeof(Glyph), false, this->allocator); // 4Kb
     // Define descriptor set layout
     setLayout.uniforms = uniforms;
     setLayout.stringBuffer = stringBuffer;
@@ -92,7 +90,6 @@ TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
         },
         hostAllocator);
     descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, setLayout, VK_SHADER_STAGE_FRAGMENT_BIT, hostAllocator);
-    std::shared_ptr<PipelineLayout> pipelineLayout = std::make_shared<PipelineLayout>(descriptorSet->getLayout());
     // Load fullscreen vertex shader
     auto vertexShader = std::make_unique<FillRectangleVertexShader>(device, hostAllocator);
 constexpr
@@ -104,6 +101,7 @@ constexpr
         FragmentShaderStage(fragmentShader, fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main")
     };
     // Create font pipeline
+    std::shared_ptr<PipelineLayout> pipelineLayout = std::make_shared<PipelineLayout>(descriptorSet->getLayout());
     pipeline = std::make_shared<GraphicsPipeline>(std::move(device),
         shaderStages,
         renderstate::nullVertexInput,
@@ -142,18 +140,33 @@ void TextShader::end()
         {   // Globals
             constants->stringCount = MAGMA_COUNT(strings);
         });
-    helpers::mapScoped<String>(stringBuffer,
-        [this](auto *data)
-        {   // Copy string descriptions
-            for (auto& str : strings)
-                *data++ = str;
-        });
+    if (!strings.empty())
+    {
+        const std::size_t maxStrings = stringBuffer->getSize()/sizeof(String);
+        if (maxStrings < strings.size())
+        {   // Reallocate if not enough memory
+            stringBuffer->realloc(strings.size() * sizeof(String), allocator);
+            setLayout.stringBuffer = stringBuffer;
+        }
+        helpers::mapScoped<String>(stringBuffer,
+            [this](auto *data)
+            {   // Copy string descriptions
+                for (auto& str : strings)
+                    *data++ = str;
+            });
+    }
     if (!chars.empty())
     {
+        const std::size_t maxChars = glyphBuffer->getSize()/sizeof(Glyph);
+        if (maxChars < chars.size())
+        {   // Reallocate if not enough memory
+            glyphBuffer->realloc(chars.size() * sizeof(Glyph), allocator);
+            setLayout.glyphBuffer = glyphBuffer;
+        }
         helpers::mapScoped<Glyph>(glyphBuffer,
             [this](auto *data)
             {   // Copy glyph data
-                core::copyMemory(data, chars.data(), sizeof(Glyph) * chars.size());
+                core::copyMemory(data, chars.data(), chars.size() * sizeof(Glyph));
             });
     }
 }
@@ -171,8 +184,6 @@ void TextShader::print(uint32_t x, uint32_t y, uint32_t color, const char *forma
 #endif
     MAGMA_ASSERT(written != -1);
     const uint32_t length = static_cast<uint32_t>(strlen(sz));
-    if ((chars.size() + length >= maxChars) || (strings.size() >= maxStrings))
-        throw std::length_error("number of strings exceeded limit");
     String str;
     str.x = (float)x;
     str.y = (float)y;
