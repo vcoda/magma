@@ -25,7 +25,7 @@ layout(location = 0) out vec4 oColor;
 
 bool extractBit(uint n, uint k)
 {
-  return (n & (1 << k)) > 0 && (k < 32);
+  return (n & (1 << k)) > 0 && (k < 24);
 }
 
 bool sprite(uvec4 glyph, vec2 size, vec2 pos)
