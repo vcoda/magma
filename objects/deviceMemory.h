@@ -59,6 +59,10 @@ namespace magma
         bool hostVisible() const noexcept;
         bool hostCached() const noexcept;
         bool mapped() const noexcept;
+        void realloc(VkDeviceSize newSize,
+            const void *object,
+            VkObjectType objectType,
+            std::shared_ptr<Allocator> allocator = nullptr);
         void bind(const void *object,
             VkObjectType objectType,
             VkDeviceSize offset /* 0 */);
@@ -79,7 +83,7 @@ namespace magma
     private:
         uint32_t getTypeIndex(VkMemoryPropertyFlags flags) const;
 
-        const VkMemoryRequirements memoryRequirements;
+        VkMemoryRequirements memoryRequirements;
         const VkMemoryPropertyFlags flags;
         std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
         DeviceMemoryBlock memory;

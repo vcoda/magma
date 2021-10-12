@@ -37,21 +37,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     offset(0),
     mappedRange(nullptr)
 {
-    if (deviceAllocator)
-    {
-        memory = deviceAllocator->alloc(memoryRequirements, flags, object, objectType);
-        onDefragmented();
-    }
-    else
-    {
-        VkMemoryAllocateInfo allocInfo;
-        allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-        allocInfo.pNext = nullptr;
-        allocInfo.allocationSize = memoryRequirements.size;
-        allocInfo.memoryTypeIndex = getTypeIndex(flags);
-        const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &allocInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-        MAGMA_THROW_FAILURE(result, "failed to allocate device memory");
-    }
+    realloc(memoryRequirements.size, object, objectType, std::move(allocator));
 }
 
 #ifdef VK_KHR_device_group
@@ -88,6 +74,40 @@ DeviceMemory::~DeviceMemory()
         deviceAllocator->free(memory);
     else
         vkFreeMemory(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+}
+
+void DeviceMemory::realloc(VkDeviceSize newSize, const void *object, VkObjectType objectType,
+    std::shared_ptr<Allocator> allocator /* nullptr */)
+{
+    MAGMA_ASSERT(!mappedRange);
+    if (memory)
+    {
+        deviceAllocator->free(memory);
+        memory = nullptr;
+    }
+    else if (handle != VK_NULL_HANDLE)
+    {
+        vkFreeMemory(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+        handle = VK_NULL_HANDLE;
+    }
+    memoryRequirements.size = newSize;
+    hostAllocator = MAGMA_HOST_ALLOCATOR(allocator);
+    deviceAllocator = MAGMA_DEVICE_ALLOCATOR(allocator);
+    if (deviceAllocator)
+    {   // Use VMA allocator
+        memory = deviceAllocator->alloc(memoryRequirements, flags, object, objectType);
+        onDefragmented();
+    }
+    else
+    {
+        VkMemoryAllocateInfo allocInfo;
+        allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        allocInfo.pNext = nullptr;
+        allocInfo.allocationSize = memoryRequirements.size;
+        allocInfo.memoryTypeIndex = getTypeIndex(flags);
+        const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &allocInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_THROW_FAILURE(result, "failed to allocate device memory");
+    }
 }
 
 void DeviceMemory::bind(const void *object, VkObjectType objectType,
