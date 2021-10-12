@@ -36,11 +36,11 @@ bool sprite(uvec4 glyph, vec2 size, vec2 pos)
   pos = floor(pos);
   bvec4 bounds;
   bounds.xy = greaterThanEqual(pos, vec2(0.));
-  bounds.zw = lessThan(pos, size);
+  bounds.zw = lessThanEqual(pos, size);
   if (all(bounds))
   {
     vec2 d = size - pos;
-    uint bit = uint((d.x - 1.) + d.y * size.x);
+    uint bit = uint(d.x + d.y * size.x);
     return
       extractBit(glyph.x, bit - 72) ||
       extractBit(glyph.y, bit - 48) ||
