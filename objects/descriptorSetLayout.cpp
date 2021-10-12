@@ -53,6 +53,6 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const s
 
 DescriptorSetLayout::~DescriptorSetLayout()
 {
-    vkDestroyDescriptorSetLayout(MAGMA_HANDLE(device), handle, nullptr);
+    vkDestroyDescriptorSetLayout(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 } // namespace magma
