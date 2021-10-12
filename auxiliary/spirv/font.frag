@@ -1,3 +1,6 @@
+// 96-bit 8x12 Font
+// Created by Flyguy in 2015-04-16
+// https://www.shadertoy.com/view/Mt2GWD
 #version 450
 
 #define GLYPH_SIZE vec2(8, 12)
