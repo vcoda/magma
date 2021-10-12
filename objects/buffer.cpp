@@ -59,6 +59,29 @@ Buffer::~Buffer()
     vkDestroyBuffer(*device, handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
+void Buffer::realloc(VkDeviceSize newSize,
+    std::shared_ptr<Allocator> allocator /* nullptr */)
+{
+    if (getSize() == newSize)
+        return;
+    VkBufferCreateInfo bufferInfo;
+    bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bufferInfo.pNext = nullptr;
+    bufferInfo.flags = flags;
+    bufferInfo.size = newSize;
+    bufferInfo.usage = usage;
+    bufferInfo.sharingMode = sharing.getMode();
+    bufferInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
+    bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
+    vkDestroyBuffer(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    hostAllocator = MAGMA_HOST_ALLOCATOR(allocator);
+    deviceAllocator = MAGMA_DEVICE_ALLOCATOR(allocator);
+    const VkResult result = vkCreateBuffer(MAGMA_HANDLE(device), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to reallocate buffer");
+    memory->realloc(newSize, &handle, VK_OBJECT_TYPE_BUFFER, std::move(allocator));
+    bindMemory(std::move(memory), offset);
+}
+
 VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
 {
     VkMemoryRequirements memoryRequirements = {};
