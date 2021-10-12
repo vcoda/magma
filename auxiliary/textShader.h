@@ -58,7 +58,7 @@ namespace magma
             struct String;
             struct alignas(16) Glyph
             {
-                float c[4];
+                uint32_t data[4];
             };
 
             struct SetLayout : DescriptorSetDeclaration
@@ -80,8 +80,8 @@ namespace magma
             SetLayout setLayout;
             uint32_t width = 0;
             uint32_t height = 0;
-            std::vector<Glyph> glyphs;
             std::list<String> strings;
+            static const Glyph glyphs[];
             std::vector<Glyph> chars;
             uint32_t offset = 0;
         };

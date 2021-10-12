@@ -63,6 +63,10 @@ struct alignas(16) TextShader::String
     float color[4];
 };
 
+const TextShader::Glyph TextShader::glyphs[] = {
+#include "glyphs.h"
+};
+
 TextShader::TextShader(const uint32_t maxChars, const uint32_t maxStrings,
     const std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
@@ -114,19 +118,6 @@ constexpr
         std::move(hostAllocator),
         std::move(pipelineCache),
         nullptr); // basePipeline
-    // Initialize glyphs
-    constexpr uint32_t glyphCount = 128;
-    constexpr uint32_t glyphData[glyphCount << 2] = {
-#include "glyphs.h"
-    };
-    glyphs.resize(glyphCount);
-    for (uint32_t i = 0, j = 0; i < glyphCount; ++i)
-    {
-        glyphs[i].c[0] = glyphData[j++];
-        glyphs[i].c[1] = glyphData[j++];
-        glyphs[i].c[2] = glyphData[j++];
-        glyphs[i].c[3] = glyphData[j++];
-    }
 }
 
 void TextShader::draw(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept
