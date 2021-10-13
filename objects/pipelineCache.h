@@ -34,17 +34,7 @@ namespace magma
     class PipelineCache : public NonDispatchable<VkPipelineCache>
     {
     public:
-        struct Header
-        {
-            uint32_t size = 0;
-            VkPipelineCacheHeaderVersion version =
-                VK_PIPELINE_CACHE_HEADER_VERSION_ONE;
-            uint32_t vendorID = 0;
-            uint32_t deviceID = 0;
-            uint8_t cacheUUID[VK_UUID_SIZE] = {};
-        };
-
-    public:
+        struct Header;
         explicit PipelineCache(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator = nullptr);
         explicit PipelineCache(std::shared_ptr<Device> device,
@@ -60,5 +50,15 @@ namespace magma
         ~PipelineCache();
         std::vector<uint8_t> getData() const;
         void mergeCaches(const std::vector<std::shared_ptr<const PipelineCache>>& caches);
+    };
+
+    struct PipelineCache::Header
+    {
+        uint32_t size = 0;
+        VkPipelineCacheHeaderVersion version =
+            VK_PIPELINE_CACHE_HEADER_VERSION_ONE;
+        uint32_t vendorID = 0;
+        uint32_t deviceID = 0;
+        uint8_t cacheUUID[VK_UUID_SIZE] = {};
     };
 } // namespace magma
