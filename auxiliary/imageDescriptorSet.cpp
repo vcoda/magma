@@ -72,7 +72,7 @@ ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
 
 void ImageDescriptorSet::writeDescriptor(std::shared_ptr<const ImageView> imageView, std::shared_ptr<Sampler> sampler)
 {
-    if (imageView->getImage()->storageImage())
+    if (imageView->getImage()->hasStorageFlag())
         storageImageSetLayout->image = imageView;
     else
         imageSetLayout->image = {imageView, sampler};
