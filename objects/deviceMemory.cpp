@@ -96,7 +96,7 @@ void DeviceMemory::realloc(VkDeviceSize newSize, const void *object, VkObjectTyp
     if (deviceAllocator)
     {   // Use VMA allocator
         memory = deviceAllocator->alloc(memoryRequirements, flags, object, objectType);
-        onDefragmented();
+        onDefragment();
     }
     else
     {
@@ -206,7 +206,7 @@ bool DeviceMemory::invalidateMappedRange(
     return (VK_SUCCESS == result);
 }
 
-void DeviceMemory::onDefragmented() noexcept
+void DeviceMemory::onDefragment() noexcept
 {
     if (memory)
     {

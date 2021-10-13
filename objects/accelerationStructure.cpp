@@ -111,7 +111,7 @@ void AccelerationStructure::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> 
 }
 #endif // VK_KHR_device_group
 
-void AccelerationStructure::onDefragmented()
+void AccelerationStructure::onDefragment()
 {
     // Currently there is no allocator that deal with it
 }

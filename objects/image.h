@@ -72,7 +72,7 @@ namespace magma
             const std::vector<VkRect2D>& splitInstanceBindRegions,
             VkDeviceSize offset = 0);
 #endif
-        virtual void onDefragmented() override;
+        virtual void onDefragment() override;
         void copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer,
             uint32_t level,
             std::shared_ptr<Buffer> buffer,

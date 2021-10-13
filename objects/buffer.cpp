@@ -132,7 +132,7 @@ void Buffer::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
 }
 #endif // VK_KHR_device_group
 
-void Buffer::onDefragmented()
+void Buffer::onDefragment()
 {
     VkBufferCreateInfo bufferInfo;
     bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;

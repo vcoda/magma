@@ -232,7 +232,7 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
 }
 #endif // VK_KHR_device_group
 
-void Image::onDefragmented()
+void Image::onDefragment()
 {
     VkImageCreateInfo imageInfo;
     imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;

@@ -78,7 +78,7 @@ namespace magma
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
         bool invalidateMappedRange(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
-        void onDefragmented() noexcept;
+        void onDefragment() noexcept;
 
     private:
         uint32_t getTypeIndex(VkMemoryPropertyFlags flags) const;

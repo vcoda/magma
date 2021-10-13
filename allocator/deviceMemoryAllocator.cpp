@@ -252,8 +252,8 @@ VkResult DeviceMemoryAllocator::endDefragmentation()
         if (allocationsChanged[i])
         {
             std::shared_ptr<Resource>& resource = defragmentationResources[i];
-            resource->getMemory()->onDefragmented();
-            resource->onDefragmented();
+            resource->getMemory()->onDefragment();
+            resource->onDefragment();
         }
     }
     allocationsChanged.clear();
