@@ -38,7 +38,6 @@ namespace magma
             std::shared_ptr<IAllocator> allocator);
         std::shared_ptr<const Instance> getInstance() const noexcept { return instance; }
 
-    protected:
         std::shared_ptr<const Instance> instance;
     };
 
