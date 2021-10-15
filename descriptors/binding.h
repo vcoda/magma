@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class DescriptorSet;
     class Sampler;
     class ImageView;
     class Buffer;
@@ -63,7 +64,7 @@ namespace magma
             };
             VkWriteDescriptorSet descriptorWrite;
             bool changed;
-            friend class DescriptorSet;
+            friend DescriptorSet;
         };
 
         /* A sampler descriptor is a descriptor type associated with a sampler object,

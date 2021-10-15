@@ -70,6 +70,9 @@ ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
         MAGMA_THROW("image binding not found");
 }
 
+ImageDescriptorSet::~ImageDescriptorSet()
+{}
+
 void ImageDescriptorSet::writeDescriptor(std::shared_ptr<const ImageView> imageView, std::shared_ptr<Sampler> sampler)
 {
     if (imageView->getImage()->hasStorageFlag())
