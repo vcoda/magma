@@ -598,9 +598,7 @@ PhysicalDeviceExtensionFeatures PhysicalDevice::checkExtensionFeaturesSupport() 
 {
     PhysicalDeviceExtensionFeatures features;
 #ifdef VK_KHR_get_physical_device_properties2
-    if (!instance->checkExtensionSupport(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
-#endif
-        return features;
+    if (instance->checkExtensionSupport(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME)) {
 #ifdef VK_AMD_device_coherent_memory
     PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(CoherentMemoryFeaturesAMD, COHERENT_MEMORY_FEATURES_AMD, deviceCoherentMemory);
 #endif
@@ -697,6 +695,8 @@ PhysicalDeviceExtensionFeatures PhysicalDevice::checkExtensionFeaturesSupport() 
 #ifdef VK_NV_shader_sm_builtins
     PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(ShaderSMBuiltinsFeaturesNV, SHADER_SM_BUILTINS_FEATURES_NV, shaderSMBuiltins);
 #endif
+    }
+#endif // VK_KHR_get_physical_device_properties2
     return features;
 }
 
