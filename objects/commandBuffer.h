@@ -173,22 +173,22 @@ namespace magma
             uint32_t firstIndex,
             int32_t vertexOffset,
             uint32_t firstInstance) const noexcept;
-#ifdef VK_EXT_multi_draw
-        void drawMultiIndexed(
-            const std::vector<VkMultiDrawIndexedInfoEXT>& indexInfo,
-            uint32_t stride,
-            const std::vector<int32_t>& vertexOffsets = {}) const noexcept;
-        void drawMultiIndexedInstanced(
-            const std::vector<VkMultiDrawIndexedInfoEXT>& indexInfo,
-            uint32_t instanceCount,
-            uint32_t firstInstance,
-            uint32_t stride,
-            const std::vector<int32_t>& vertexOffsets = {}) const noexcept;
-#endif // VK_EXT_multi_draw
         void drawIndirect(
             const std::shared_ptr<DrawIndirectBuffer>& buffer) const noexcept;
         void drawIndexedIndirect(
             const std::shared_ptr<DrawIndexedIndirectBuffer>& buffer) const noexcept;
+#ifdef VK_EXT_multi_draw
+        void drawMulti(const std::vector<VkMultiDrawInfoEXT>& vertexInfo) const noexcept;
+        void drawMultiInstanced(const std::vector<VkMultiDrawInfoEXT>& vertexInfo,
+            uint32_t instanceCount,
+            uint32_t firstInstance) const noexcept;
+        void drawMultiIndexed(const std::vector<VkMultiDrawIndexedInfoEXT>& indexInfo,
+            const std::vector<int32_t>& vertexOffsets = {}) const noexcept;
+        void drawMultiIndexedInstanced(const std::vector<VkMultiDrawIndexedInfoEXT>& indexInfo,
+            uint32_t instanceCount,
+            uint32_t firstInstance,
+            const std::vector<int32_t>& vertexOffsets = {}) const noexcept;
+#endif // VK_EXT_multi_draw
         void dispatch(
             uint32_t groupCountX,
             uint32_t groupCountY,
