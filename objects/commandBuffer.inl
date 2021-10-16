@@ -181,13 +181,17 @@ inline void CommandBuffer::drawIndexedInstanced(uint32_t indexCount, uint32_t in
 inline void CommandBuffer::drawMultiIndexed(const std::vector<VkMultiDrawIndexedInfoEXT>& indexInfo, uint32_t stride,
     const std::vector<int32_t>& vertexOffsets /* {} */) const noexcept
 {
-    vkCmdDrawMultiIndexedEXT(handle, MAGMA_COUNT(indexInfo), indexInfo.data(), 1, 0, stride, vertexOffsets.data());
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDrawMultiIndexedEXT);
+    if (vkCmdDrawMultiIndexedEXT)
+        vkCmdDrawMultiIndexedEXT(handle, MAGMA_COUNT(indexInfo), indexInfo.data(), 1, 0, stride, vertexOffsets.data());
 }
 
 inline void CommandBuffer::drawMultiIndexedInstanced(const std::vector<VkMultiDrawIndexedInfoEXT>& indexInfo, uint32_t instanceCount, uint32_t firstInstance, uint32_t stride,
     const std::vector<int32_t>& vertexOffsets /* {} */) const noexcept
 {
-    vkCmdDrawMultiIndexedEXT(handle, MAGMA_COUNT(indexInfo), indexInfo.data(), instanceCount, firstInstance, stride, vertexOffsets.data());
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDrawMultiIndexedEXT);
+    if (vkCmdDrawMultiIndexedEXT)
+        vkCmdDrawMultiIndexedEXT(handle, MAGMA_COUNT(indexInfo), indexInfo.data(), instanceCount, firstInstance, stride, vertexOffsets.data());
 }
 #endif // VK_EXT_multi_draw
 

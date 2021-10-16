@@ -39,7 +39,7 @@ AccelerationStructureInstance::AccelerationStructureInstance() noexcept
     mask = 0xFF;
     instanceShaderBindingTableRecordOffset = 0;
     flags = 0;
-    accelerationStructureReference = VK_NULL_HANDLE;
+    accelerationStructureReference = 0;
 }
 
 void AccelerationStructureInstance::setAccelerationStructure(std::shared_ptr<const AccelerationStructure> accelerationStructure)

@@ -563,9 +563,6 @@ namespace magma
         VkBool32 negativeHeightAMDEnable = VK_FALSE;
         VkQueryControlFlags queryFlags = 0;
         VkQueryPipelineStatisticFlags pipelineStatistics = 0;
-#ifdef VK_EXT_multi_draw
-        MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDrawMultiIndexedEXT);
-#endif
 #ifdef VK_EXT_debug_utils
         VkBool32 beginMarked = VK_FALSE;
         VkBool32 beginRenderPassMarked = VK_FALSE;
