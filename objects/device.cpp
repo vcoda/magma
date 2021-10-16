@@ -60,23 +60,17 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
         features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR;
         features.features = deviceFeatures;
         features.pNext = extendedDeviceFeatures.front();
-        struct VkFeaturesNode
-        {
-            VkStructureType sType;
-            const void *pNext;
-            // ...
-        };
         auto curr = extendedDeviceFeatures.begin();
         auto next = curr; ++next;
         while (next != extendedDeviceFeatures.end())
         {   // Make linked list
-            VkFeaturesNode *currNode = reinterpret_cast<VkFeaturesNode *>(*curr);
-            VkFeaturesNode *nextNode = reinterpret_cast<VkFeaturesNode *>(*next);
+            VkBaseInStructure *currNode = reinterpret_cast<VkBaseInStructure *>(*curr);
+            VkBaseInStructure *nextNode = reinterpret_cast<VkBaseInStructure *>(*next);
             currNode->pNext = nextNode;
             ++curr; ++next;
         }
-        VkFeaturesNode *lastNode = reinterpret_cast<VkFeaturesNode *>(*curr);
-        lastNode->pNext = chainedInfo.getNode();
+        VkBaseInStructure *lastNode = reinterpret_cast<VkBaseInStructure *>(*curr);
+        lastNode->pNext = reinterpret_cast<const VkBaseInStructure *>(chainedInfo.getNode());
     }
 #endif // VK_KHR_get_physical_device_properties2
     VkDeviceCreateInfo deviceInfo;
