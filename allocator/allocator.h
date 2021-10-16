@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "../core/destructible.h"
 #include "../core/noncopyable.h"
+#include "../misc/compatibility.h"
 
 namespace magma
 {
