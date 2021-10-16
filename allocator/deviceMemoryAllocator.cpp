@@ -26,6 +26,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../exceptions/errorResult.h"
 
 #ifdef _MSC_VER
+// warning C4100: unreferenced formal parameter
+// warning C4127: conditional expression is constant
 #pragma warning(disable : 4100 4127)
 #endif
 #define VMA_IMPLEMENTATION
