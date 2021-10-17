@@ -31,7 +31,9 @@ void *AlignedAllocator::alloc(std::size_t size,
     void *ptr = _aligned_malloc(size, alignment);
 #else
     void *ptr = nullptr;
-    posix_memalign(&ptr, alignment, size);
+    const int result = posix_memalign(&ptr, alignment, size);
+    if (result != 0)
+        throw std::bad_alloc();
 #endif
     if (!ptr)
         throw std::bad_alloc();
