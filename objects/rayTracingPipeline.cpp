@@ -39,8 +39,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<RayTracingPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */):
-    Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, std::move(device), std::move(layout),
-        std::move(pipelineCache), std::move(basePipeline), std::move(allocator)),
+    Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator)),
     groupCount(MAGMA_COUNT(groups)),
     maxRecursionDepth(maxRecursionDepth)
 {
@@ -66,7 +65,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
     pipelineInfo.basePipelineIndex = -1;
     MAGMA_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    const VkResult result = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->pipelineCache), 1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create ray tracing pipeline");
     hash = core::hashArgs(
         pipelineInfo.sType,

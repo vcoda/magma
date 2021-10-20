@@ -33,8 +33,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<ComputePipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */):
-    Pipeline(VK_PIPELINE_BIND_POINT_COMPUTE, std::move(device), std::move(layout),
-        std::move(pipelineCache), std::move(basePipeline), std::move(allocator))
+    Pipeline(VK_PIPELINE_BIND_POINT_COMPUTE, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator))
 {
     VkComputePipelineCreateInfo pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
@@ -46,7 +45,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device,
     pipelineInfo.layout = MAGMA_HANDLE(layout);
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
     pipelineInfo.basePipelineIndex = -1;
-    const VkResult result = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(this->pipelineCache), 1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create compute pipeline");
     hash = core::hashArgs(
         pipelineInfo.sType,

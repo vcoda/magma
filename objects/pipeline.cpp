@@ -26,11 +26,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Pipeline::Pipeline(VkPipelineBindPoint bindPoint, std::shared_ptr<Device> device, std::shared_ptr<PipelineLayout> layout,
-    std::shared_ptr<PipelineCache> pipelineCache, std::shared_ptr<Pipeline> basePipeline, std::shared_ptr<IAllocator> allocator):
+    std::shared_ptr<Pipeline> basePipeline, std::shared_ptr<IAllocator> allocator):
     NonDispatchable<VkPipeline>(VK_OBJECT_TYPE_PIPELINE, std::move(device), std::move(allocator)),
     bindPoint(bindPoint),
     layout(std::move(layout)),
-    pipelineCache(std::move(pipelineCache)),
     basePipeline(std::move(basePipeline))
 {
     if (!this->layout)

@@ -37,8 +37,6 @@ namespace magma
         VkPipelineBindPoint getBindPoint() const noexcept { return bindPoint; }
         std::shared_ptr<PipelineLayout> getLayout() noexcept { return layout; }
         std::shared_ptr<const PipelineLayout> getLayout() const noexcept { return layout; }
-        std::shared_ptr<PipelineCache> getPipelineCache() noexcept { return pipelineCache; }
-        std::shared_ptr<const PipelineCache> getPipelineCache() const noexcept { return pipelineCache; }
         std::shared_ptr<Pipeline> getBasePipeline() noexcept { return basePipeline; }
         std::shared_ptr<const Pipeline> getBasePipeline() const noexcept { return basePipeline; }
         std::size_t getHash() const noexcept { return hash; }
@@ -52,13 +50,11 @@ namespace magma
         explicit Pipeline(VkPipelineBindPoint bindPoint,
             std::shared_ptr<Device> device,
             std::shared_ptr<PipelineLayout> layout,
-            std::shared_ptr<PipelineCache> pipelineCache,
             std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator);
 
         const VkPipelineBindPoint bindPoint;
         std::shared_ptr<PipelineLayout> layout;
-        std::shared_ptr<PipelineCache> pipelineCache;
         std::shared_ptr<Pipeline> basePipeline;
         std::size_t hash = 0;
     };
