@@ -140,4 +140,13 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
         core::hashCombine(hash, core::hash(subpass));
     }
 }
+
+GraphicsPipeline::GraphicsPipeline(VkPipeline pipeline, std::size_t hash,
+    std::shared_ptr<Device> device, std::shared_ptr<PipelineLayout> layout,
+    std::shared_ptr<IAllocator> allocator):
+    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout), nullptr, std::move(allocator))
+{
+    handle = pipeline;
+    this->hash = hash;
+}
 } // namespace magma

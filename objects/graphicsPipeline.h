@@ -73,5 +73,13 @@ namespace magma
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
             std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0);
+
+    protected:
+        explicit GraphicsPipeline(VkPipeline pipeline,
+            std::size_t hash,
+            std::shared_ptr<Device> device,
+            std::shared_ptr<PipelineLayout> layout,
+            std::shared_ptr<IAllocator> allocator);
+    };
     };
 } // namespace magma
