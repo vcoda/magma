@@ -82,8 +82,6 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     VkPipelineCreateFlags flags /* 0 */):
     Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator))
 {
-    VkPipelineVertexInputStateCreateInfo pipelineVertexInput = {};
-    VkVertexInputBindingDescription vertexBindingDesc = {};
     VkGraphicsPipelineCreateInfo pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     pipelineInfo.pNext = nullptr;
@@ -97,27 +95,19 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     pipelineInfo.pStages = dereferencedStages;
     pipelineInfo.pVertexInputState = &vertexInputState;
     pipelineInfo.pInputAssemblyState = &inputAssemblyState;
-    if (0 == tesselationState.patchControlPoints)
-        pipelineInfo.pTessellationState = nullptr;
-    else
-        pipelineInfo.pTessellationState = &tesselationState;
+    pipelineInfo.pTessellationState = tesselationState.patchControlPoints ? &tesselationState : nullptr;
     pipelineInfo.pViewportState = &viewportState;
     pipelineInfo.pRasterizationState = &rasterizationState;
     pipelineInfo.pMultisampleState = &multisampleState;
     pipelineInfo.pDepthStencilState = &depthStencilState;
     pipelineInfo.pColorBlendState = &colorBlendState;
-    VkPipelineDynamicStateCreateInfo dynamicState;
-    if (0 == dynamicStates.size())
-        pipelineInfo.pDynamicState = nullptr;
-    else
-    {
-        dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-        dynamicState.pNext = 0;
-        dynamicState.flags = 0;
-        dynamicState.dynamicStateCount = MAGMA_COUNT(dynamicStates);
-        dynamicState.pDynamicStates = dynamicStates.begin();
-        pipelineInfo.pDynamicState = &dynamicState;
-    }
+    VkPipelineDynamicStateCreateInfo dynamicStateInfo;
+    dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+    dynamicStateInfo.pNext = 0;
+    dynamicStateInfo.flags = 0;
+    dynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates);
+    dynamicStateInfo.pDynamicStates = dynamicStates.begin();
+    pipelineInfo.pDynamicState = dynamicStateInfo.pDynamicStates ? &dynamicStateInfo : nullptr;
     pipelineInfo.layout = MAGMA_HANDLE(layout);
     pipelineInfo.renderPass = *renderPass;
     pipelineInfo.subpass = subpass;
