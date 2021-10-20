@@ -80,6 +80,41 @@ namespace magma
             std::shared_ptr<Device> device,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<IAllocator> allocator);
+        friend class GraphicsPipelines;
     };
+
+    /* Exposes the Vulkan ability to create multiple graphics pipeline objects in a single call.
+       As there may be thousands of graphics pipelines in the complicated rendering pipeline,
+       it may be more efficient for the driver to create them at once. */
+
+    class GraphicsPipelines
+    {
+    public:
+        uint32_t newPipeline(const std::vector<PipelineShaderStage>& shaderStages,
+            const VertexInputState& vertexInputState,
+            const InputAssemblyState& inputAssemblyState,
+            const TesselationState& tesselationState,
+            const ViewportState& viewportState,
+            const RasterizationState& rasterizationState,
+            const MultisampleState& multisampleState,
+            const DepthStencilState& depthStencilState,
+            const ColorBlendState& colorBlendState,
+            const std::vector<VkDynamicState>& dynamicStates,
+            std::shared_ptr<PipelineLayout> layout,
+            std::shared_ptr<RenderPass> renderPass,
+            uint32_t subpass,
+            VkPipelineCreateFlags flags = 0);
+        void buildPipelines(std::shared_ptr<Device> device,
+            std::shared_ptr<PipelineCache> pipelineCache,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        uint32_t getPipelineCount() const noexcept { return MAGMA_COUNT(graphicsPipelines); }
+        std::shared_ptr<GraphicsPipeline> getPipeline(uint32_t index) const noexcept { return graphicsPipelines[index]; }
+
+    private:
+        std::vector<VkGraphicsPipelineCreateInfo> pipelineInfos;
+        std::vector<VkPipelineDynamicStateCreateInfo> dynamicStateInfos;
+        std::vector<std::size_t> hashes;
+        std::vector<std::shared_ptr<PipelineLayout>> pipelineLayouts;
+        std::vector<std::shared_ptr<GraphicsPipeline>> graphicsPipelines;
     };
 } // namespace magma
