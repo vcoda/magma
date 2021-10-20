@@ -64,7 +64,7 @@ ShaderBindingTable::ShaderBindingTable(std::shared_ptr<const RayTracingPipeline>
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */):
-    ShaderBindingTable(pipeline->getDevice(), pipeline->getShaderGroupHandles(), pipeline->getGroupCount(),
+    ShaderBindingTable(pipeline->getDevice(), pipeline->getShaderGroupHandles(), pipeline->getShaderGroupCount(),
         std::move(allocator), flags, sharing)
 {}
 #endif // VK_NV_ray_tracing

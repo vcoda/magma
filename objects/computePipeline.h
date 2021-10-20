@@ -27,7 +27,7 @@ namespace magma
     {
     public:
         explicit ComputePipeline(std::shared_ptr<Device> device,
-            const PipelineShaderStage& stage,
+            const PipelineShaderStage& shaderStage,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,

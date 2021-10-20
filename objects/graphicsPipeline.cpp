@@ -38,7 +38,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
-    const std::vector<PipelineShaderStage>& stages,
+    const std::vector<PipelineShaderStage>& shaderStages,
     const VertexInputState& vertexInputState,
     const InputAssemblyState& inputAssemblyState,
     const RasterizationState& rasterizationState,
@@ -53,7 +53,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */):
-    GraphicsPipeline(std::move(device), stages, vertexInputState, inputAssemblyState,
+    GraphicsPipeline(std::move(device), shaderStages, vertexInputState, inputAssemblyState,
         TesselationState(), // No tesselation state
         ViewportState(), // No viewport state (supposed to be dynamic)
         rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
@@ -63,7 +63,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
 {}
 
 GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
-    const std::vector<PipelineShaderStage>& stages,
+    const std::vector<PipelineShaderStage>& shaderStages,
     const VertexInputState& vertexInputState,
     const InputAssemblyState& inputAssemblyState,
     const TesselationState& tesselationState,
@@ -90,8 +90,8 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     pipelineInfo.flags = flags;
     if (this->basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
-    MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, stages.size());
-    for (auto& stage : stages)
+    MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
+    for (auto& stage : shaderStages)
         dereferencedStages.put(stage);
     pipelineInfo.stageCount = MAGMA_COUNT(dereferencedStages);
     pipelineInfo.pStages = dereferencedStages;
@@ -129,7 +129,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
         pipelineInfo.sType,
         pipelineInfo.flags,
         pipelineInfo.stageCount);
-    for (const auto& stage : stages)
+    for (const auto& stage : shaderStages)
         core::hashCombine(hash, stage.getHash());
     std::size_t stateHash = core::hashCombineList({
         vertexInputState.hash(),

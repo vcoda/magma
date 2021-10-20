@@ -27,7 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 ComputePipeline::ComputePipeline(std::shared_ptr<Device> device,
-    const PipelineShaderStage& stage,
+    const PipelineShaderStage& shaderStage,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
@@ -41,7 +41,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device,
     pipelineInfo.flags = flags;
     if (this->basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
-    pipelineInfo.stage = stage;
+    pipelineInfo.stage = shaderStage;
     pipelineInfo.layout = MAGMA_HANDLE(layout);
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
     pipelineInfo.basePipelineIndex = -1;
@@ -51,7 +51,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device,
         pipelineInfo.sType,
         pipelineInfo.flags,
         pipelineInfo.basePipelineHandle);
-    core::hashCombine(hash, stage.getHash());
+    core::hashCombine(hash, shaderStage.getHash());
     core::hashCombine(hash, this->layout->getHash());
 }
 } // namespace magma

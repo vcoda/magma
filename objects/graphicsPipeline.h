@@ -40,7 +40,7 @@ namespace magma
     {
     public:
         explicit GraphicsPipeline(std::shared_ptr<Device> device,
-            const std::vector<PipelineShaderStage>& stages,
+            const std::vector<PipelineShaderStage>& shaderStages,
             const VertexInputState& vertexInputState,
             const InputAssemblyState& inputAssemblyState,
             const RasterizationState& rasterizationState,
@@ -56,7 +56,7 @@ namespace magma
             std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0);
         explicit GraphicsPipeline(std::shared_ptr<Device> device,
-            const std::vector<PipelineShaderStage>& stages,
+            const std::vector<PipelineShaderStage>& shaderStages,
             const VertexInputState& vertexInputState,
             const InputAssemblyState& inputAssemblyState,
             const TesselationState& tesselationState,
