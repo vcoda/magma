@@ -257,13 +257,16 @@ void GraphicsPipelines::buildPipelines(std::shared_ptr<Device> device, std::shar
     }
     for (auto& dynamicStateInfo : dynamicStateInfos)
         delete[] dynamicStateInfo.pDynamicStates;
-    std::vector<VkGraphicsPipelineCreateInfo>().swap(pipelineInfos);
     std::vector<VkPipelineDynamicStateCreateInfo>().swap(dynamicStateInfos);
+    if (VK_SUCCESS == result)
+    {
+        graphicsPipelines.clear();
+        for (uint32_t i = 0, n = MAGMA_COUNT(pipelineInfos); i < n; ++i)
+            graphicsPipelines.emplace_back(new GraphicsPipeline(pipelines[i], hashes[i], device, pipelineLayouts[i], allocator));
+    }
+    std::vector<VkGraphicsPipelineCreateInfo>().swap(pipelineInfos);
     std::vector<std::size_t>().swap(hashes);
     std::vector<std::shared_ptr<PipelineLayout>>().swap(pipelineLayouts);
     MAGMA_THROW_FAILURE(result, "failed to create multiple graphics pipelines");
-    for (uint32_t i = 0, n = MAGMA_COUNT(pipelineInfos); i < n; ++i)
-        graphicsPipelines.emplace_back(new GraphicsPipeline(pipelines[i], hashes[i], device, pipelineLayouts[i], allocator));
-    std::vector<std::shared_ptr<PipelineLayout>>().swap(pipelineLayouts);
 }
 } // namespace magma
