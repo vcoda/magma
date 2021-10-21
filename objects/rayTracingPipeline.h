@@ -64,7 +64,7 @@ namespace magma
        As there may be thousands of ray tracing pipelines in the complicated rendering pipeline,
        it may be more efficient for the driver to create them at once. */
 
-    class RayTracingPipelines
+    class RayTracingPipelines : public core::NonCopyable
     {
     public:
         uint32_t newPipeline(const std::vector<PipelineShaderStage>& shaderStages,

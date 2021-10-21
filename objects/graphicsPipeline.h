@@ -87,7 +87,7 @@ namespace magma
        As there may be thousands of graphics pipelines in the complicated rendering pipeline,
        it may be more efficient for the driver to create them at once. */
 
-    class GraphicsPipelines
+    class GraphicsPipelines : public core::NonCopyable
     {
     public:
         uint32_t newPipeline(const std::vector<PipelineShaderStage>& shaderStages,
