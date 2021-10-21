@@ -96,5 +96,17 @@ void RayTracingPipeline::compileDeferred(uint32_t shaderIndex)
     const VkResult compile = vkCompileDeferredNV(MAGMA_HANDLE(device), handle, shaderIndex);
     MAGMA_THROW_FAILURE(compile, "failed to compile shader deferred");
 }
+
+RayTracingPipeline::RayTracingPipeline(VkPipeline pipeline,
+    uint32_t shaderGroupCount, uint32_t maxRecursionDepth, std::size_t hash,
+    std::shared_ptr<Device> device, std::shared_ptr<PipelineLayout> layout,
+    std::shared_ptr<IAllocator> allocator):
+    Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, std::move(device), std::move(layout), nullptr, std::move(allocator)),
+    shaderGroupCount(shaderGroupCount),
+    maxRecursionDepth(maxRecursionDepth)
+{
+    handle = pipeline;
+    this->hash = hash;
+}
 #endif // VK_NV_ray_tracing
 } // namespace magma

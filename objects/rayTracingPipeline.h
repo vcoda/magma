@@ -45,6 +45,16 @@ namespace magma
         std::vector<uint8_t> getShaderGroupHandles() const;
         void compileDeferred(uint32_t shaderIndex);
 
+    protected:
+        explicit RayTracingPipeline(VkPipeline pipeline,
+            uint32_t shaderGroupCount,
+            uint32_t maxRecursionDepth,
+            std::size_t hash,
+            std::shared_ptr<Device> device,
+            std::shared_ptr<PipelineLayout> layout,
+            std::shared_ptr<IAllocator> allocator);
+        friend class RayTracingPipelines;
+
     private:
         const uint32_t shaderGroupCount;
         const uint32_t maxRecursionDepth;
