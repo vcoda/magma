@@ -117,7 +117,7 @@ uint32_t RayTracingPipelines::newPipeline(const std::vector<PipelineShaderStage>
         MAGMA_THROW("shader stages are empty");
     if (shaderGroups.empty())
         MAGMA_THROW("shader groups are empty");
-    VkRayTracingPipelineCreateInfoNV pipelineInfo;
+    RayTracingPipelineCreateInfo pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_NV;
     pipelineInfo.pNext = nullptr;
     pipelineInfo.flags = flags;
@@ -165,34 +165,31 @@ void RayTracingPipelines::buildPipelines(std::shared_ptr<Device> device, std::sh
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
     this->device = std::move(device);
+    rayTracingPipelines.clear();
     std::vector<VkPipeline> pipelines(pipelineInfos.size(), VK_NULL_HANDLE);
     MAGMA_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult result = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), pipelines.data());
-    // We don't need these anymore after API call
-    for (auto& pipelineInfo : pipelineInfos)
+    MAGMA_THROW_FAILURE(result, "failed to create multiple ray tracing pipelines");
+    for (uint32_t i = 0, n = MAGMA_COUNT(pipelineInfos); i < n; ++i)
     {
-        for (uint32_t i = 0; i < pipelineInfo.stageCount; ++i)
-        {
-            delete[] pipelineInfo.pStages[i].pName;
-            delete pipelineInfo.pStages[i].pSpecializationInfo;
-        }
-        delete[] pipelineInfo.pStages;
-        delete[] pipelineInfo.pGroups;
+        rayTracingPipelines.emplace_back(new RayTracingPipeline(pipelines[i],
+            pipelineInfos[i].groupCount, pipelineInfos[i].maxRecursionDepth, hashes[i],
+            this->device, pipelineLayouts[i], allocator));
     }
-    if (VK_SUCCESS == result)
-    {
-        rayTracingPipelines.clear();
-        for (uint32_t i = 0, n = MAGMA_COUNT(pipelineInfos); i < n; ++i)
-        {
-            rayTracingPipelines.emplace_back(new RayTracingPipeline(pipelines[i],
-                pipelineInfos[i].groupCount, pipelineInfos[i].maxRecursionDepth, hashes[i],
-                this->device, pipelineLayouts[i], allocator));
-        }
-    }
-    std::vector<VkRayTracingPipelineCreateInfoNV>().swap(pipelineInfos);
+    std::vector<RayTracingPipelineCreateInfo>().swap(pipelineInfos);
     std::vector<std::size_t>().swap(hashes);
     std::vector<std::shared_ptr<PipelineLayout>>().swap(pipelineLayouts);
-    MAGMA_THROW_FAILURE(result, "failed to create multiple ray tracing pipelines");
+}
+
+RayTracingPipelines::RayTracingPipelineCreateInfo::~RayTracingPipelineCreateInfo()
+{
+    for (uint32_t i = 0; i < stageCount; ++i)
+    {
+        delete[] pStages[i].pName;
+        delete pStages[i].pSpecializationInfo;
+    }
+    delete[] pStages;
+    delete[] pGroups;
 }
 #endif // VK_NV_ray_tracing
 } // namespace magma

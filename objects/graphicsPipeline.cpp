@@ -165,7 +165,7 @@ uint32_t GraphicsPipelines::newPipeline(const std::vector<PipelineShaderStage>& 
     uint32_t subpass,
     VkPipelineCreateFlags flags /* 0 */)
 {
-    VkGraphicsPipelineCreateInfo pipelineInfo;
+    GraphicsPipelineCreateInfo pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     pipelineInfo.pNext = nullptr;
     pipelineInfo.flags = flags;
@@ -196,7 +196,7 @@ uint32_t GraphicsPipelines::newPipeline(const std::vector<PipelineShaderStage>& 
         pipelineInfo.pDynamicState = nullptr;
     else
     {
-        VkPipelineDynamicStateCreateInfo dynamicStateInfo;
+        PipelineDynamicStateCreateInfo dynamicStateInfo;
         dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
         dynamicStateInfo.pNext = 0;
         dynamicStateInfo.flags = 0;
@@ -243,30 +243,31 @@ uint32_t GraphicsPipelines::newPipeline(const std::vector<PipelineShaderStage>& 
 void GraphicsPipelines::buildPipelines(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
+    graphicsPipelines.clear();
     std::vector<VkPipeline> pipelines(pipelineInfos.size(), VK_NULL_HANDLE);
     const VkResult result = vkCreateGraphicsPipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache), MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), pipelines.data());
     // We don't need these anymore after API call
-    for (auto& pipelineInfo : pipelineInfos)
-    {
-        for (uint32_t i = 0; i < pipelineInfo.stageCount; ++i)
-        {
-            delete[] pipelineInfo.pStages[i].pName;
-            delete pipelineInfo.pStages[i].pSpecializationInfo;
-        }
-        delete[] pipelineInfo.pStages;
-    }
-    for (auto& dynamicStateInfo : dynamicStateInfos)
-        delete[] dynamicStateInfo.pDynamicStates;
-    std::vector<VkPipelineDynamicStateCreateInfo>().swap(dynamicStateInfos);
-    if (VK_SUCCESS == result)
-    {
-        graphicsPipelines.clear();
-        for (uint32_t i = 0, n = MAGMA_COUNT(pipelineInfos); i < n; ++i)
-            graphicsPipelines.emplace_back(new GraphicsPipeline(pipelines[i], hashes[i], device, pipelineLayouts[i], allocator));
-    }
-    std::vector<VkGraphicsPipelineCreateInfo>().swap(pipelineInfos);
+    std::vector<GraphicsPipelineCreateInfo>().swap(pipelineInfos);
+    std::vector<PipelineDynamicStateCreateInfo>().swap(dynamicStateInfos);
+    MAGMA_THROW_FAILURE(result, "failed to create multiple graphics pipelines");
+    for (uint32_t i = 0, n = MAGMA_COUNT(pipelineInfos); i < n; ++i)
+        graphicsPipelines.emplace_back(new GraphicsPipeline(pipelines[i], hashes[i], device, pipelineLayouts[i], allocator));
     std::vector<std::size_t>().swap(hashes);
     std::vector<std::shared_ptr<PipelineLayout>>().swap(pipelineLayouts);
-    MAGMA_THROW_FAILURE(result, "failed to create multiple graphics pipelines");
+}
+
+GraphicsPipelines::GraphicsPipelineCreateInfo::~GraphicsPipelineCreateInfo()
+{
+    for (uint32_t i = 0; i < stageCount; ++i)
+    {
+        delete[] pStages[i].pName;
+        delete pStages[i].pSpecializationInfo;
+    }
+    delete[] pStages;
+}
+
+GraphicsPipelines::PipelineDynamicStateCreateInfo::~PipelineDynamicStateCreateInfo()
+{
+    delete[] pDynamicStates;
 }
 } // namespace magma

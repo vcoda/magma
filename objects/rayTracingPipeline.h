@@ -66,6 +66,8 @@ namespace magma
 
     class RayTracingPipelines : public core::NonCopyable
     {
+        struct RayTracingPipelineCreateInfo;
+
     public:
         uint32_t newPipeline(const std::vector<PipelineShaderStage>& shaderStages,
             const std::vector<RayTracingShaderGroup>& shaderGroups,
@@ -80,10 +82,16 @@ namespace magma
 
     private:
         std::shared_ptr<Device> device;
-        std::vector<VkRayTracingPipelineCreateInfoNV> pipelineInfos;
+        std::vector<RayTracingPipelineCreateInfo> pipelineInfos;
         std::vector<std::size_t> hashes;
         std::vector<std::shared_ptr<PipelineLayout>> pipelineLayouts;
         std::vector<std::shared_ptr<RayTracingPipeline>> rayTracingPipelines;
     };
+
+    struct RayTracingPipelines::RayTracingPipelineCreateInfo : VkRayTracingPipelineCreateInfoNV
+    {
+        ~RayTracingPipelineCreateInfo();
+    };
+
 #endif // VK_NV_ray_tracing
 } // namespace magma

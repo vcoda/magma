@@ -89,6 +89,9 @@ namespace magma
 
     class GraphicsPipelines : public core::NonCopyable
     {
+        struct GraphicsPipelineCreateInfo;
+        struct PipelineDynamicStateCreateInfo;
+
     public:
         uint32_t newPipeline(const std::vector<PipelineShaderStage>& shaderStages,
             const VertexInputState& vertexInputState,
@@ -111,10 +114,20 @@ namespace magma
         std::shared_ptr<GraphicsPipeline> getPipeline(uint32_t index) const noexcept { return graphicsPipelines[index]; }
 
     private:
-        std::vector<VkGraphicsPipelineCreateInfo> pipelineInfos;
-        std::vector<VkPipelineDynamicStateCreateInfo> dynamicStateInfos;
+        std::vector<GraphicsPipelineCreateInfo> pipelineInfos;
+        std::vector<PipelineDynamicStateCreateInfo> dynamicStateInfos;
         std::vector<std::size_t> hashes;
         std::vector<std::shared_ptr<PipelineLayout>> pipelineLayouts;
         std::vector<std::shared_ptr<GraphicsPipeline>> graphicsPipelines;
+    };
+
+    struct GraphicsPipelines::GraphicsPipelineCreateInfo : VkGraphicsPipelineCreateInfo
+    {
+        ~GraphicsPipelineCreateInfo();
+    };
+
+    struct GraphicsPipelines::PipelineDynamicStateCreateInfo : VkPipelineDynamicStateCreateInfo
+    {
+        ~PipelineDynamicStateCreateInfo();
     };
 } // namespace magma
