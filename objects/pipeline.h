@@ -52,7 +52,8 @@ namespace magma
             std::shared_ptr<Device> device,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
-            std::shared_ptr<IAllocator> allocator);
+            std::shared_ptr<IAllocator> allocator,
+            std::size_t hash = 0);
 
         const VkPipelineBindPoint bindPoint;
         std::shared_ptr<PipelineLayout> layout;
