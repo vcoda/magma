@@ -155,15 +155,9 @@ uint32_t RayTracingPipelines::newPipeline(const std::vector<PipelineShaderStage>
 void RayTracingPipelines::buildPipelines(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
-    const std::vector<VkPipelineShaderStageCreateInfo> shaderStageInfos = copyAlignedShaderStageInfos();
-    uint32_t stageOffset = 0;
-    for (auto& pipelineInfo : pipelineInfos)
-    {   // Fixup shader stage pointers
-        pipelineInfo.pStages = &shaderStageInfos[stageOffset];
-        stageOffset += pipelineInfo.stageCount;
-    }
-    std::vector<VkPipeline> pipelines(pipelineInfos.size(), VK_NULL_HANDLE);
     this->device = std::move(device);
+    fixup(pipelineInfos);
+    std::vector<VkPipeline> pipelines(pipelineInfos.size(), VK_NULL_HANDLE);
     MAGMA_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult result = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),
         MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), pipelines.data());

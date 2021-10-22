@@ -66,11 +66,18 @@ namespace magma
     class Pipelines : public core::NonCopyable
     {
     protected:
-        std::vector<VkPipelineShaderStageCreateInfo> copyAlignedShaderStageInfos() const;
+        template<typename Type>
+        void fixup(std::vector<Type>& pipelineInfos) const;
 
         std::list<std::vector<PipelineShaderStage>> stages;
         std::list<std::shared_ptr<PipelineLayout>> layouts;
         std::list<std::shared_ptr<Pipeline>> basePipelines;
         std::list<std::size_t> hashes;
+
+    private:
+        void gatherShaderStageInfos() const;
+        mutable std::vector<VkPipelineShaderStageCreateInfo> shaderStageInfos;
     };
 } // namespace magma
+
+#include "pipeline.inl"

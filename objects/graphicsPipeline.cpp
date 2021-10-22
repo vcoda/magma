@@ -246,13 +246,7 @@ uint32_t GraphicsPipelines::newPipeline(const std::vector<PipelineShaderStage>& 
 void GraphicsPipelines::buildPipelines(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
-    const std::vector<VkPipelineShaderStageCreateInfo> shaderStageInfos = copyAlignedShaderStageInfos();
-    uint32_t stageOffset = 0;
-    for (auto& pipelineInfo : pipelineInfos)
-    {   // Fixup shader stage pointers
-        pipelineInfo.pStages = &shaderStageInfos[stageOffset];
-        stageOffset += pipelineInfo.stageCount;
-    }
+    fixup(pipelineInfos);
     std::vector<VkPipeline> pipelines(pipelineInfos.size(), VK_NULL_HANDLE);
     const VkResult result = vkCreateGraphicsPipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache), MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), pipelines.data());
     // Free temporarily allocated storage that had to be preserved until API call
