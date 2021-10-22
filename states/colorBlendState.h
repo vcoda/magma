@@ -46,17 +46,15 @@ namespace magma
        at the fragment's location. Blending is performed for each pixel sample,
        rather than just once for each fragment. */
 
-    struct ColorBlendState : VkPipelineColorBlendStateCreateInfo, core::NonCopyableConstexpr
+    struct ColorBlendState : VkPipelineColorBlendStateCreateInfo
     {
+        constexpr ColorBlendState() noexcept;
         constexpr ColorBlendState(const ColorBlendAttachmentState& attachment,
             bool logicOpEnable = false,
             VkLogicOp logicOp = VK_LOGIC_OP_CLEAR,
             const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f}) noexcept;
         std::size_t hash() const noexcept;
         constexpr bool operator==(const ColorBlendState&) const noexcept;
-
-    protected:
-        constexpr ColorBlendState() noexcept;
     };
 
     /* Multiple attachment color blend state takes care about array of blend attachment states and
