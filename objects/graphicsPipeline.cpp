@@ -272,12 +272,12 @@ void GraphicsPipelines::buildPipelines(std::shared_ptr<Device> device, std::shar
     pipelineInfos.clear();
     if (VK_SUCCESS == result)
     {
-        auto pipeline = pipelines.cbegin();
+        auto handle = pipelines.cbegin();
         auto hash = hashes.cbegin();
         auto layout = layouts.cbegin();
         graphicsPipelines.clear();
-        while (pipeline != pipelines.cend())
-            graphicsPipelines.emplace_back(new GraphicsPipeline(*pipeline++, *hash++, device, *layout++, allocator));
+        while (handle != pipelines.cend())
+            graphicsPipelines.emplace_back(new GraphicsPipeline(*handle++, *hash++, device, *layout++, allocator));
     }
     layouts.clear();
     hashes.clear();
