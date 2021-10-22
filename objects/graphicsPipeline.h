@@ -73,7 +73,7 @@ namespace magma
             std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0);
 
-    protected:
+    private:
         explicit GraphicsPipeline(VkPipeline pipeline,
             std::size_t hash,
             std::shared_ptr<Device> device,
