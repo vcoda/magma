@@ -182,6 +182,7 @@ void RayTracingPipelines::buildPipelines(std::shared_ptr<Device> device, std::sh
     layouts.clear();
     hashes.clear();
     pipelineInfos.clear();
+    MAGMA_THROW_FAILURE(result, "failed to create multiple ray tracing pipelines");
 }
 #endif // VK_NV_ray_tracing
 } // namespace magma
