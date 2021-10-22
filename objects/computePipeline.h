@@ -33,5 +33,35 @@ namespace magma
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
             std::shared_ptr<ComputePipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0);
+
+    private:
+        explicit ComputePipeline(VkPipeline pipeline,
+            std::shared_ptr<Device> device,
+            std::shared_ptr<PipelineLayout> layout,
+            std::shared_ptr<Pipeline> basePipeline,
+            std::shared_ptr<IAllocator> allocator,
+            std::size_t hash);
+        friend class ComputePipelines;
+    };
+
+    /* Exposes Vulkan's ability to create multiple compute pipeline objects in a single call. */
+
+    class ComputePipelines : public Pipelines
+    {
+    public:
+        explicit ComputePipelines(std::size_t capacity = 32);
+        uint32_t newPipeline(const PipelineShaderStage& shaderStage,
+            std::shared_ptr<PipelineLayout> layout,
+            std::shared_ptr<ComputePipeline> basePipeline = nullptr,
+            VkPipelineCreateFlags flags = 0);
+        void buildPipelines(std::shared_ptr<Device> device,
+            std::shared_ptr<PipelineCache> pipelineCache,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        uint32_t getPipelineCount() const noexcept { return MAGMA_COUNT(computePipelines); }
+        std::shared_ptr<ComputePipeline> getPipeline(uint32_t index) const noexcept { return computePipelines[index]; }
+
+    private:
+        std::vector<VkComputePipelineCreateInfo> pipelineInfos;
+        std::vector<std::shared_ptr<ComputePipeline>> computePipelines;
     };
 } // namespace magma
