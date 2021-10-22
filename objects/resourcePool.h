@@ -22,6 +22,7 @@ namespace magma
 {
     template<typename Type>
     class NonDispatchable;
+    class Device;
 
     /* Resource pool stores pointers to different Vulkan objects that were created by device.
        Pool allows to keep statistics about resource usage, memory allocations etc.
@@ -128,6 +129,14 @@ namespace magma
     {
         uint32_t displayCount = 0;
         uint32_t displayModeCount = 0;
+    };
+
+    /* The only purpose is to hide device interface. */
+
+    class DeviceResourcePool
+    {
+    public:
+        static std::shared_ptr<ResourcePool> getPool(std::shared_ptr<Device> device) noexcept;
     };
 } // namespace magma
 

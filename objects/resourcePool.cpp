@@ -19,11 +19,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include <algorithm>
 #include "resourcePool.h"
-#include "../objects/deviceMemory.h"
-#include "../objects/buffer.h"
-#include "../objects/image.h"
-#include "../objects/accelerationStructure.h"
-#include "../objects/pipeline.h"
+#include "device.h"
+#include "deviceMemory.h"
+#include "buffer.h"
+#include "image.h"
+#include "accelerationStructure.h"
+#include "pipeline.h"
 
 namespace magma
 {
@@ -206,5 +207,10 @@ bool ResourcePool::hasAnyDeviceResource() const
         accelerationStructures.count() > 0 ||
 #endif
         false;
+}
+
+std::shared_ptr<ResourcePool> DeviceResourcePool::getPool(std::shared_ptr<Device> device) noexcept
+{
+    return device ? device->getResourcePool() : nullptr;
 }
 } // namespace magma

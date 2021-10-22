@@ -27,7 +27,7 @@ namespace magma
        in the handle rather than acting as a reference to an underlying object. */
 
     template<typename Type>
-    class NonDispatchable : public Object<Type>
+    class NonDispatchable : public Object<Type>, DeviceResourcePool
     {
     public:
         typedef Type NativeHandle;
@@ -55,22 +55,18 @@ namespace magma
             handle(VK_NULL_HANDLE)
         {
 #ifdef MAGMA_X64
-            if (device)
-            {   // Put resource in pool
-                std::shared_ptr<ResourcePool> pool = device->getResourcePool();
+            std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(device);
+            if (pool) // Put resource in pool
                 pool->getPool<NonDispatchable<Type>>().add(this);
-            }
 #endif // MAGMA_X64
         }
 
         ~NonDispatchable()
         {
 #ifdef MAGMA_X64
-            if (std::shared_ptr<Device> device = Object<Type>::getDevice())
-            {   // Remove resource from pool
-                std::shared_ptr<ResourcePool> pool = device->getResourcePool();
+            std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(Object<Type>::getDevice());
+            if (pool) // Remove resource from pool
                 pool->getPool<NonDispatchable<Type>>().remove(this);
-            }
 #endif // MAGMA_X64
         }
 
