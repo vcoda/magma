@@ -58,32 +58,5 @@ namespace magma
         const uint32_t shaderGroupCount;
         const uint32_t maxRecursionDepth;
     };
-
-    /* Exposes the Vulkan ability to create multiple ray tracing pipeline objects in a single call.
-       As there may be thousands of ray tracing pipelines in the complicated rendering engine,
-       it may be more efficient for the driver to create them at once. */
-
-    class RayTracingPipelines : public Pipelines
-    {
-    public:
-        explicit RayTracingPipelines(std::size_t capacity = 32);
-        uint32_t newPipeline(const std::vector<PipelineShaderStage>& shaderStages,
-            const std::vector<RayTracingShaderGroup>& shaderGroups,
-            uint32_t maxRecursionDepth,
-            std::shared_ptr<PipelineLayout> layout,
-            std::shared_ptr<RayTracingPipeline> basePipeline = nullptr,
-            VkPipelineCreateFlags flags = 0);
-        void buildPipelines(std::shared_ptr<Device> device,
-            std::shared_ptr<PipelineCache> pipelineCache,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-        uint32_t getPipelineCount() const noexcept { return MAGMA_COUNT(rayTracingPipelines); }
-        std::shared_ptr<RayTracingPipeline> getPipeline(uint32_t index) const noexcept { return rayTracingPipelines[index]; }
-
-    private:
-        std::shared_ptr<Device> device;
-        std::list<std::vector<RayTracingShaderGroup>> groups;
-        std::vector<VkRayTracingPipelineCreateInfoNV> pipelineInfos;
-        std::vector<std::shared_ptr<RayTracingPipeline>> rayTracingPipelines;
-    };
 #endif // VK_NV_ray_tracing
 } // namespace magma

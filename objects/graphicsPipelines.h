@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class GraphicsPipeline;
     class RenderPass;
     class PipelineCache;
 
@@ -32,30 +33,15 @@ namespace magma
     struct ColorBlendState;
     class ViewportState;
 
-    /* Graphics pipelines consist of multiple shader stages,
-       multiple fixed-function pipeline stages, and a pipeline layout. */
+    /* Exposes Vulkan's ability to create multiple graphics pipeline objects in a single call.
+       As there may be thousands of graphics pipelines in the complicated rendering engine,
+       it may be more efficient for the driver to create them at once. */
 
-    class GraphicsPipeline : public Pipeline
+    class GraphicsPipelines : public Pipelines
     {
     public:
-        explicit GraphicsPipeline(std::shared_ptr<Device> device,
-            const std::vector<PipelineShaderStage>& shaderStages,
-            const VertexInputState& vertexInputState,
-            const InputAssemblyState& inputAssemblyState,
-            const RasterizationState& rasterizationState,
-            const MultisampleState& multisampleState,
-            const DepthStencilState& depthStencilState,
-            const ColorBlendState& colorBlendState,
-            const std::initializer_list<VkDynamicState>& dynamicStates,
-            std::shared_ptr<PipelineLayout> layout,
-            std::shared_ptr<RenderPass> renderPass,
-            uint32_t subpass,
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            std::shared_ptr<PipelineCache> pipelineCache = nullptr,
-            std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
-            VkPipelineCreateFlags flags = 0);
-        explicit GraphicsPipeline(std::shared_ptr<Device> device,
-            const std::vector<PipelineShaderStage>& shaderStages,
+        explicit GraphicsPipelines(std::size_t capacity = 256);
+        uint32_t newPipeline(const std::vector<PipelineShaderStage>& shaderStages,
             const VertexInputState& vertexInputState,
             const InputAssemblyState& inputAssemblyState,
             const TesselationState& tesselationState,
@@ -64,22 +50,31 @@ namespace magma
             const MultisampleState& multisampleState,
             const DepthStencilState& depthStencilState,
             const ColorBlendState& colorBlendState,
-            const std::initializer_list<VkDynamicState>& dynamicStates,
+            const std::vector<VkDynamicState>& dynamicStates,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<RenderPass> renderPass,
             uint32_t subpass,
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            std::shared_ptr<PipelineCache> pipelineCache = nullptr,
             std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0);
+        void buildPipelines(std::shared_ptr<Device> device,
+            std::shared_ptr<PipelineCache> pipelineCache,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        uint32_t getPipelineCount() const noexcept { return MAGMA_COUNT(graphicsPipelines); }
+        std::shared_ptr<GraphicsPipeline> getPipeline(uint32_t index) const noexcept { return graphicsPipelines[index]; }
 
     private:
-        explicit GraphicsPipeline(VkPipeline pipeline,
-            std::shared_ptr<Device> device,
-            std::shared_ptr<PipelineLayout> layout,
-            std::shared_ptr<Pipeline> basePipeline,
-            std::shared_ptr<IAllocator> allocator,
-            std::size_t hash);
-        friend class GraphicsPipelines;
+        std::list<VertexInputState> vertexInputStates;
+        std::list<InputAssemblyState> inputAssemblyStates;
+        std::list<TesselationState> tesselationStates;
+        std::list<ViewportState> viewportStates;
+        std::list<RasterizationState> rasterizationStates;
+        std::list<MultisampleState> multisampleStates;
+        std::list<DepthStencilState> depthStencilStates;
+        std::list<ColorBlendState> colorBlendStates;
+        std::list<std::vector<VkDynamicState>> dynamicStates;
+        std::list<VkPipelineDynamicStateCreateInfo> dynamicStateInfos;
+        std::list<std::shared_ptr<RenderPass>> renderPasses;
+        std::vector<VkGraphicsPipelineCreateInfo> pipelineInfos;
+        std::vector<std::shared_ptr<GraphicsPipeline>> graphicsPipelines;
     };
 } // namespace magma
