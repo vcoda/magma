@@ -419,6 +419,7 @@ namespace magma
 
         // Non-API utility methods
         bool primary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_PRIMARY == level; }
+        bool secondary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_SECONDARY == level; }
         std::shared_ptr<CommandPool> getPool() const noexcept { return pool; }
         std::shared_ptr<Fence> getFence() const noexcept;
 
