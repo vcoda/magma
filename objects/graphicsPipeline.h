@@ -89,7 +89,7 @@ namespace magma
     class GraphicsPipelines : public Pipelines
     {
     public:
-        GraphicsPipelines(std::size_t capacity = 256);
+        explicit GraphicsPipelines(std::size_t capacity = 256);
         uint32_t newPipeline(const std::vector<PipelineShaderStage>& shaderStages,
             const VertexInputState& vertexInputState,
             const InputAssemblyState& inputAssemblyState,
