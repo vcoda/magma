@@ -333,7 +333,7 @@ namespace magma
         void nextSubpass(VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void endRenderPass() noexcept;
 
-        void executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept;
+        void executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept;
 
 #ifdef VK_KHR_device_group
         bool beginDeviceGroup(uint32_t deviceMask,

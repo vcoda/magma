@@ -419,12 +419,15 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
 // CommandBuffer::nextSubpass
 // CommandBuffer::endRenderPass
 
-void CommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept
+void CommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept
 {
-    MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCommandBuffers, commandBuffers.size());
-    for (const auto& commandBuffer : commandBuffers)
-        dereferencedCommandBuffers.put(*commandBuffer);
-    vkCmdExecuteCommands(handle, dereferencedCommandBuffers.size(), dereferencedCommandBuffers);
+    MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCmdBuffers, cmdBuffers.size());
+    for (const auto& cmdBuffer : cmdBuffers)
+    {
+        MAGMA_ASSERT(cmdBuffer->secondary());
+        dereferencedCmdBuffers.put(*cmdBuffer);
+    }
+    vkCmdExecuteCommands(handle, dereferencedCmdBuffers.size(), dereferencedCmdBuffers);
 }
 
 #ifdef VK_KHR_device_group
