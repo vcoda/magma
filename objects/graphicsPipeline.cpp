@@ -150,6 +150,12 @@ GraphicsPipeline::GraphicsPipeline(VkPipeline pipeline, std::size_t hash,
     this->hash = hash;
 }
 
+GraphicsPipelines::GraphicsPipelines(std::size_t capacity /* 256 */)
+{
+    pipelineInfos.reserve(capacity);
+    graphicsPipelines.reserve(capacity);
+}
+
 uint32_t GraphicsPipelines::newPipeline(const std::vector<PipelineShaderStage>& shaderStages,
     const VertexInputState& vertexInputState,
     const InputAssemblyState& inputAssemblyState,
@@ -159,56 +165,54 @@ uint32_t GraphicsPipelines::newPipeline(const std::vector<PipelineShaderStage>& 
     const MultisampleState& multisampleState,
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
-    const std::vector<VkDynamicState>& dynamicStates,
+    const std::vector<VkDynamicState>& dynamicRenderStates,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass,
+    std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */)
 {
-    GraphicsPipelineCreateInfo pipelineInfo;
+    stages.push_back(shaderStages);
+    vertexInputStates.push_back(vertexInputState);
+    inputAssemblyStates.push_back(inputAssemblyState);
+    tesselationStates.push_back(tesselationState);
+    viewportStates.push_back(viewportState);
+    rasterizationStates.push_back(rasterizationState);
+    multisampleStates.push_back(multisampleState);
+    depthStencilStates.push_back(depthStencilState);
+    colorBlendStates.push_back(colorBlendState);
+    dynamicStates.push_back(dynamicRenderStates);
+    layouts.push_back(layout);
+    renderPasses.push_back(renderPass);
+    basePipelines.push_back(basePipeline);
+    VkPipelineDynamicStateCreateInfo dynamicStateInfo;
+    dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+    dynamicStateInfo.pNext = 0;
+    dynamicStateInfo.flags = 0;
+    dynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates.back());
+    dynamicStateInfo.pDynamicStates = dynamicStates.back().data();
+    dynamicStateInfos.push_back(dynamicStateInfo);
+    VkGraphicsPipelineCreateInfo pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     pipelineInfo.pNext = nullptr;
     pipelineInfo.flags = flags;
+    if (basePipeline)
+        pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     pipelineInfo.stageCount = MAGMA_COUNT(shaderStages);
-    VkPipelineShaderStageCreateInfo *shaderStageInfos = new VkPipelineShaderStageCreateInfo[pipelineInfo.stageCount];
-    for (uint32_t i = 0; i < pipelineInfo.stageCount; ++i)
-    {
-        const PipelineShaderStage& stage = shaderStages[i];
-        VkPipelineShaderStageCreateInfo& shaderStageInfo = shaderStageInfos[i];
-        shaderStageInfo.sType = stage.sType;
-        shaderStageInfo.pNext = stage.pNext;
-        shaderStageInfo.flags = stage.flags;
-        shaderStageInfo.stage = stage.stage;
-        shaderStageInfo.module = stage.module;
-        shaderStageInfo.pName = core::copyString(stage.pName);
-        shaderStageInfo.pSpecializationInfo = core::copy(stage.pSpecializationInfo);
-    }
-    pipelineInfo.pStages = shaderStageInfos;
-    pipelineInfo.pVertexInputState = &vertexInputState;
-    pipelineInfo.pInputAssemblyState = &inputAssemblyState;
-    pipelineInfo.pTessellationState = tesselationState.patchControlPoints ? &tesselationState : nullptr;
-    pipelineInfo.pViewportState = &viewportState;
-    pipelineInfo.pRasterizationState = &rasterizationState;
-    pipelineInfo.pMultisampleState = &multisampleState;
-    pipelineInfo.pDepthStencilState = &depthStencilState;
-    pipelineInfo.pColorBlendState = &colorBlendState;
-    if (dynamicStates.empty())
-        pipelineInfo.pDynamicState = nullptr;
-    else
-    {
-        PipelineDynamicStateCreateInfo dynamicStateInfo;
-        dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-        dynamicStateInfo.pNext = 0;
-        dynamicStateInfo.flags = 0;
-        dynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates);
-        dynamicStateInfo.pDynamicStates = core::copyVector(dynamicStates);
-        dynamicStateInfos.push_back(dynamicStateInfo);
-        pipelineInfo.pDynamicState = &dynamicStateInfos.back();
-    }
-    pipelineInfo.layout = *layout;
-    pipelineInfo.renderPass = *renderPass;
+    pipelineInfo.pStages = nullptr; // Fixup later
+    pipelineInfo.pVertexInputState = &vertexInputStates.back();
+    pipelineInfo.pInputAssemblyState = &inputAssemblyStates.back();
+    pipelineInfo.pTessellationState = &tesselationStates.back();
+    pipelineInfo.pViewportState = &viewportStates.back();
+    pipelineInfo.pRasterizationState = &rasterizationStates.back();
+    pipelineInfo.pMultisampleState = &multisampleStates.back();
+    pipelineInfo.pDepthStencilState = &depthStencilStates.back();
+    pipelineInfo.pColorBlendState = &colorBlendStates.back();
+    pipelineInfo.pDynamicState = &dynamicStateInfos.back();
+    pipelineInfo.layout = MAGMA_OPTIONAL_HANDLE(layouts.back());
+    pipelineInfo.renderPass = *renderPasses.back();
     pipelineInfo.subpass = subpass;
-    pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+    pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipelines.back());
     pipelineInfo.basePipelineIndex = -1;
     pipelineInfos.push_back(pipelineInfo);
     std::size_t hash = core::hashArgs(
@@ -226,7 +230,7 @@ uint32_t GraphicsPipelines::newPipeline(const std::vector<PipelineShaderStage>& 
         multisampleState.hash(),
         depthStencilState.hash(),
         colorBlendState.hash()});
-    for (auto state : dynamicStates)
+    for (auto state : dynamicRenderStates)
         core::hashCombine(stateHash, core::hash(state));
     core::hashCombine(hash, stateHash);
     core::hashCombine(hash, layout->getHash());
@@ -236,38 +240,56 @@ uint32_t GraphicsPipelines::newPipeline(const std::vector<PipelineShaderStage>& 
         core::hashCombine(hash, core::hash(subpass));
     }
     hashes.push_back(hash);
-    pipelineLayouts.emplace_back(layout);
     return MAGMA_COUNT(pipelineInfos) - 1;
 }
 
 void GraphicsPipelines::buildPipelines(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
-    graphicsPipelines.clear();
+    uint32_t stageCount = 0;
+    for (const auto& pipelineInfo : pipelineInfos)
+        stageCount += pipelineInfo.stageCount;
+    std::vector<VkPipelineShaderStageCreateInfo> shaderStageInfos;
+    shaderStageInfos.reserve(stageCount);
+    for (const auto& shaderStages : stages)
+    {   // Copy to array of Vulkan structures due to alignment
+        for (const auto& stage : shaderStages)
+            shaderStageInfos.push_back(stage);
+    }
+    uint32_t stageOffset = 0;
+    for (auto& pipelineInfo : pipelineInfos)
+    {   // Fixup shader stage pointers
+        pipelineInfo.pStages = &shaderStageInfos[stageOffset];
+        stageOffset += pipelineInfo.stageCount;
+    }
     std::vector<VkPipeline> pipelines(pipelineInfos.size(), VK_NULL_HANDLE);
     const VkResult result = vkCreateGraphicsPipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache), MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), pipelines.data());
-    // We don't need these anymore after API call
-    std::vector<GraphicsPipelineCreateInfo>().swap(pipelineInfos);
-    std::vector<PipelineDynamicStateCreateInfo>().swap(dynamicStateInfos);
-    MAGMA_THROW_FAILURE(result, "failed to create multiple graphics pipelines");
-    for (uint32_t i = 0, n = MAGMA_COUNT(pipelineInfos); i < n; ++i)
-        graphicsPipelines.emplace_back(new GraphicsPipeline(pipelines[i], hashes[i], device, pipelineLayouts[i], allocator));
-    std::vector<std::size_t>().swap(hashes);
-    std::vector<std::shared_ptr<PipelineLayout>>().swap(pipelineLayouts);
-}
-
-GraphicsPipelines::GraphicsPipelineCreateInfo::~GraphicsPipelineCreateInfo()
-{
-    for (uint32_t i = 0; i < stageCount; ++i)
+    // Free temporarily allocated storage that had to be preserved until API call
+    stages.clear();
+    vertexInputStates.clear();
+    inputAssemblyStates.clear();
+    tesselationStates.clear();
+    viewportStates.clear();
+    rasterizationStates.clear();
+    multisampleStates.clear();
+    depthStencilStates.clear();
+    colorBlendStates.clear();
+    dynamicStates.clear();
+    dynamicStateInfos.clear();
+    renderPasses.clear();
+    basePipelines.clear();
+    pipelineInfos.clear();
+    if (VK_SUCCESS == result)
     {
-        delete[] pStages[i].pName;
-        delete pStages[i].pSpecializationInfo;
+        auto pipeline = pipelines.cbegin();
+        auto hash = hashes.cbegin();
+        auto layout = layouts.cbegin();
+        graphicsPipelines.clear();
+        while (pipeline != pipelines.cend())
+            graphicsPipelines.emplace_back(new GraphicsPipeline(*pipeline++, *hash++, device, *layout++, allocator));
     }
-    delete[] pStages;
-}
-
-GraphicsPipelines::PipelineDynamicStateCreateInfo::~PipelineDynamicStateCreateInfo()
-{
-    delete[] pDynamicStates;
+    layouts.clear();
+    hashes.clear();
+    MAGMA_THROW_FAILURE(result, "failed to create multiple graphics pipelines");
 }
 } // namespace magma
