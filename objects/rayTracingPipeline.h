@@ -61,18 +61,18 @@ namespace magma
     };
 
     /* Exposes the Vulkan ability to create multiple ray tracing pipeline objects in a single call.
-       As there may be thousands of ray tracing pipelines in the complicated rendering pipeline,
+       As there may be thousands of ray tracing pipelines in the complicated rendering engine,
        it may be more efficient for the driver to create them at once. */
 
     class RayTracingPipelines : public core::NonCopyable
     {
-        struct RayTracingPipelineCreateInfo;
-
     public:
+        explicit RayTracingPipelines(std::size_t capacity = 32);
         uint32_t newPipeline(const std::vector<PipelineShaderStage>& shaderStages,
             const std::vector<RayTracingShaderGroup>& shaderGroups,
             uint32_t maxRecursionDepth,
             std::shared_ptr<PipelineLayout> layout,
+            std::shared_ptr<RayTracingPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0);
         void buildPipelines(std::shared_ptr<Device> device,
             std::shared_ptr<PipelineCache> pipelineCache,
@@ -82,16 +82,13 @@ namespace magma
 
     private:
         std::shared_ptr<Device> device;
-        std::vector<RayTracingPipelineCreateInfo> pipelineInfos;
-        std::vector<std::size_t> hashes;
-        std::vector<std::shared_ptr<PipelineLayout>> pipelineLayouts;
+        std::list<std::vector<PipelineShaderStage>> stages;
+        std::list<std::vector<RayTracingShaderGroup>> groups;
+        std::list<std::shared_ptr<PipelineLayout>> layouts;
+        std::list<std::shared_ptr<RayTracingPipeline>> basePipelines;
+        std::list<std::size_t> hashes;
+        std::vector<VkRayTracingPipelineCreateInfoNV> pipelineInfos;
         std::vector<std::shared_ptr<RayTracingPipeline>> rayTracingPipelines;
     };
-
-    struct RayTracingPipelines::RayTracingPipelineCreateInfo : VkRayTracingPipelineCreateInfoNV
-    {
-        ~RayTracingPipelineCreateInfo();
-    };
-
 #endif // VK_NV_ray_tracing
 } // namespace magma
