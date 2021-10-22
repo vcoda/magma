@@ -98,15 +98,18 @@ void RayTracingPipeline::compileDeferred(uint32_t shaderIndex)
 }
 
 RayTracingPipeline::RayTracingPipeline(VkPipeline pipeline,
-    uint32_t shaderGroupCount, uint32_t maxRecursionDepth, std::size_t hash,
-    std::shared_ptr<Device> device, std::shared_ptr<PipelineLayout> layout,
-    std::shared_ptr<IAllocator> allocator):
-    Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, std::move(device), std::move(layout), nullptr, std::move(allocator)),
+    std::shared_ptr<Device> device,
+    std::shared_ptr<PipelineLayout> layout,
+    std::shared_ptr<Pipeline> basePipeline,
+    std::shared_ptr<IAllocator> allocator,
+    uint32_t shaderGroupCount,
+    uint32_t maxRecursionDepth,
+    std::size_t hash):
+    Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator), hash),
     shaderGroupCount(shaderGroupCount),
     maxRecursionDepth(maxRecursionDepth)
 {
     handle = pipeline;
-    this->hash = hash;
 }
 
 RayTracingPipelines::RayTracingPipelines(std::size_t capacity /* 32 */)
@@ -164,22 +167,23 @@ void RayTracingPipelines::buildPipelines(std::shared_ptr<Device> device, std::sh
     // Free temporarily allocated storage that had to be preserved until API call
     stages.clear();
     groups.clear();
-    basePipelines.clear();
     if (VK_SUCCESS == result)
     {
         auto handle = pipelines.cbegin();
-        auto info = pipelineInfos.cbegin();
-        auto hash = hashes.cbegin();
         auto layout = layouts.cbegin();
+        auto basePipeline = basePipelines.cbegin();
+        auto hash = hashes.cbegin();
+        auto info = pipelineInfos.cbegin();
         rayTracingPipelines.clear();
         while (handle != pipelines.cend())
         {
-            rayTracingPipelines.emplace_back(new RayTracingPipeline(*handle++, info->groupCount, info->maxRecursionDepth,
-                *hash++, this->device, *layout++, allocator));
+            rayTracingPipelines.emplace_back(new RayTracingPipeline(*handle++, this->device, *layout++, *basePipeline++, allocator,
+                info->groupCount, info->maxRecursionDepth, *hash++));
             ++info;
         }
     }
     layouts.clear();
+    basePipelines.clear();
     hashes.clear();
     pipelineInfos.clear();
     MAGMA_THROW_FAILURE(result, "failed to create multiple ray tracing pipelines");

@@ -75,10 +75,11 @@ namespace magma
 
     private:
         explicit GraphicsPipeline(VkPipeline pipeline,
-            std::size_t hash,
             std::shared_ptr<Device> device,
             std::shared_ptr<PipelineLayout> layout,
-            std::shared_ptr<IAllocator> allocator);
+            std::shared_ptr<Pipeline> basePipeline,
+            std::shared_ptr<IAllocator> allocator,
+            std::size_t hash);
         friend class GraphicsPipelines;
     };
 

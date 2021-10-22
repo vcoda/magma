@@ -46,12 +46,13 @@ namespace magma
 
     private:
         explicit RayTracingPipeline(VkPipeline pipeline,
-            uint32_t shaderGroupCount,
-            uint32_t maxRecursionDepth,
-            std::size_t hash,
             std::shared_ptr<Device> device,
             std::shared_ptr<PipelineLayout> layout,
-            std::shared_ptr<IAllocator> allocator);
+            std::shared_ptr<Pipeline> basePipeline,
+            std::shared_ptr<IAllocator> allocator,
+            uint32_t shaderGroupCount,
+            uint32_t maxRecursionDepth,
+            std::size_t hash);
         friend class RayTracingPipelines;
 
         const uint32_t shaderGroupCount;

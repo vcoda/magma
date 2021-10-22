@@ -141,13 +141,15 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     }
 }
 
-GraphicsPipeline::GraphicsPipeline(VkPipeline pipeline, std::size_t hash,
-    std::shared_ptr<Device> device, std::shared_ptr<PipelineLayout> layout,
-    std::shared_ptr<IAllocator> allocator):
-    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout), nullptr, std::move(allocator))
+GraphicsPipeline::GraphicsPipeline(VkPipeline pipeline,
+    std::shared_ptr<Device> device,
+    std::shared_ptr<PipelineLayout> layout,
+    std::shared_ptr<Pipeline> basePipeline,
+    std::shared_ptr<IAllocator> allocator,
+    std::size_t hash):
+    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator), hash)
 {
     handle = pipeline;
-    this->hash = hash;
 }
 
 GraphicsPipelines::GraphicsPipelines(std::size_t capacity /* 256 */)
@@ -262,18 +264,19 @@ void GraphicsPipelines::buildPipelines(std::shared_ptr<Device> device, std::shar
     dynamicStates.clear();
     dynamicStateInfos.clear();
     renderPasses.clear();
-    basePipelines.clear();
     pipelineInfos.clear();
     if (VK_SUCCESS == result)
     {
         auto handle = pipelines.cbegin();
-        auto hash = hashes.cbegin();
         auto layout = layouts.cbegin();
+        auto basePipeline = basePipelines.cbegin();
+        auto hash = hashes.cbegin();
         graphicsPipelines.clear();
         while (handle != pipelines.cend())
-            graphicsPipelines.emplace_back(new GraphicsPipeline(*handle++, *hash++, device, *layout++, allocator));
+            graphicsPipelines.emplace_back(new GraphicsPipeline(*handle++, device, *layout++, *basePipeline++, allocator, *hash++));
     }
     layouts.clear();
+    basePipelines.clear();
     hashes.clear();
     MAGMA_THROW_FAILURE(result, "failed to create multiple graphics pipelines");
 }

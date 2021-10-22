@@ -49,8 +49,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device,
     MAGMA_THROW_FAILURE(result, "failed to create compute pipeline");
     hash = core::hashArgs(
         pipelineInfo.sType,
-        pipelineInfo.flags,
-        pipelineInfo.basePipelineHandle);
+        pipelineInfo.flags);
     core::hashCombine(hash, shaderStage.getHash());
     core::hashCombine(hash, this->layout->getHash());
 }
@@ -61,10 +60,9 @@ ComputePipeline::ComputePipeline(VkPipeline pipeline,
     std::shared_ptr<Pipeline> basePipeline,
     std::shared_ptr<IAllocator> allocator,
     std::size_t hash):
-    Pipeline(VK_PIPELINE_BIND_POINT_COMPUTE, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator))
+    Pipeline(VK_PIPELINE_BIND_POINT_COMPUTE, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator), hash)
 {
     handle = pipeline;
-    this->hash = hash;
 }
 
 ComputePipelines::ComputePipelines(std::size_t capacity /* 32 */)
