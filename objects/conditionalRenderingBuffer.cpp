@@ -20,7 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "conditionalRenderingBuffer.h"
 #include "srcTransferBuffer.h"
 #include "commandBuffer.h"
-#include "deviceMemory.h"
 
 namespace magma
 {

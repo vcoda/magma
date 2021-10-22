@@ -20,7 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "image2DArray.h"
 #include "srcTransferBuffer.h"
 #include "commandBuffer.h"
-#include "deviceMemory.h"
 #include "../helpers/mapScoped.h"
 #include "../core/copyMemory.h"
 

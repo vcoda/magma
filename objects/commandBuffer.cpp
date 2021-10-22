@@ -20,7 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandBuffer.h"
 #include "commandPool.h"
 #include "device.h"
-#include "deviceMemory.h"
 #include "framebuffer.h"
 #include "imagelessFramebuffer.h"
 #include "renderPass.h"
