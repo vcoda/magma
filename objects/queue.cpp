@@ -38,16 +38,17 @@ Queue::Queue(VkQueue handle, std::shared_ptr<Device> device,
     this->handle = handle;
 }
 
-bool Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& commandBuffers,
+bool Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& cmdBuffers,
     const std::vector<VkPipelineStageFlags>& waitStageMasks /* {} */,
     const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores /* {} */,
     const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores /* {} */,
     std::shared_ptr<const Fence> fence /* nullptr */,
     const void *extension /* nullptr */) noexcept
 {
-    if (commandBuffers.empty())
+    MAGMA_ASSERT(!cmdBuffers.empty());
+    if (cmdBuffers.empty())
         return false;
-    MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCommandBuffers, commandBuffers.size());
+    MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCmdBuffers, cmdBuffers.size());
     MAGMA_STACK_ARRAY(VkSemaphore, dereferencedWaitSemaphores, waitSemaphores.size());
     MAGMA_STACK_ARRAY(VkSemaphore, dereferencedSignalSemaphores, signalSemaphores.size());
     // https://www.khronos.org/registry/vulkan/specs/1.0/man/html/VkSubmitInfo.html
@@ -68,10 +69,14 @@ bool Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& comm
         submitInfo.pWaitSemaphores = dereferencedWaitSemaphores;
         submitInfo.pWaitDstStageMask = waitStageMasks.data();
     }
-    for (const auto& cmdBuffer : commandBuffers)
-        dereferencedCommandBuffers.put(*cmdBuffer);
-    submitInfo.commandBufferCount = MAGMA_COUNT(dereferencedCommandBuffers);
-    submitInfo.pCommandBuffers = dereferencedCommandBuffers;
+    // Dereference command buffers
+    for (const auto& cmdBuffer : cmdBuffers)
+    {
+        MAGMA_ASSERT(cmdBuffer->primary());
+        dereferencedCmdBuffers.put(*cmdBuffer);
+    }
+    submitInfo.commandBufferCount = MAGMA_COUNT(dereferencedCmdBuffers);
+    submitInfo.pCommandBuffers = dereferencedCmdBuffers;
     if (signalSemaphores.empty())
     {
         submitInfo.signalSemaphoreCount = 0;
@@ -88,27 +93,28 @@ bool Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& comm
     return (VK_SUCCESS == submit);
 }
 
-bool Queue::submit(std::shared_ptr<const CommandBuffer> commandBuffer,
+bool Queue::submit(std::shared_ptr<const CommandBuffer> cmdBuffer,
     VkPipelineStageFlags waitStageMask /* 0 */,
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
     std::shared_ptr<const Semaphore> signalSemaphore /* nullptr */,
     std::shared_ptr<const Fence> fence /* nullptr */) noexcept
 {
-    if (!commandBuffer)
+    MAGMA_ASSERT(cmdBuffer);
+    MAGMA_ASSERT(cmdBuffer->primary());
+    if (!cmdBuffer)
         return false;
-    std::vector<std::shared_ptr<const CommandBuffer>> commandBuffers = {commandBuffer};
     std::vector<std::shared_ptr<const Semaphore>> waitSemaphores;
     if (waitSemaphore)
         waitSemaphores.push_back(waitSemaphore);
     std::vector<std::shared_ptr<const Semaphore>> signalSemaphores;
     if (signalSemaphore)
         signalSemaphores.push_back(signalSemaphore);
-    return submit(commandBuffers, {waitStageMask}, waitSemaphores, signalSemaphores, std::move(fence));
+    return submit({cmdBuffer}, {waitStageMask}, waitSemaphores, signalSemaphores, std::move(fence));
 }
 
 #ifdef VK_KHR_device_group
-bool Queue::submitDeviceGroup(const std::vector<std::shared_ptr<const CommandBuffer>>& commandBuffers,
-    const std::vector<uint32_t>& commandBufferDeviceMasks /* {} */,
+bool Queue::submitDeviceGroup(const std::vector<std::shared_ptr<const CommandBuffer>>& cmdBuffers,
+    const std::vector<uint32_t>& cmdBufferDeviceMasks /* {} */,
     const std::vector<VkPipelineStageFlags>& waitStageMasks /* {} */,
     const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores /* {} */,
     const std::vector<uint32_t>& waitSemaphoreDeviceIndices /* {} */,
@@ -116,16 +122,17 @@ bool Queue::submitDeviceGroup(const std::vector<std::shared_ptr<const CommandBuf
     const std::vector<uint32_t>& signalSemaphoreDeviceIndices /* {} */,
     std::shared_ptr<const Fence> fence /* nullptr */) noexcept
 {
+    MAGMA_ASSERT_FOR_EACH(cmdBuffers, cmdBuffer, cmdBuffer->primary());
     VkDeviceGroupSubmitInfo deviceGroupSubmitInfo;
     deviceGroupSubmitInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_SUBMIT_INFO;
     deviceGroupSubmitInfo.pNext = nullptr;
     deviceGroupSubmitInfo.waitSemaphoreCount = MAGMA_COUNT(waitSemaphoreDeviceIndices);
     deviceGroupSubmitInfo.pWaitSemaphoreDeviceIndices = waitSemaphoreDeviceIndices.data();
-    deviceGroupSubmitInfo.commandBufferCount = MAGMA_COUNT(commandBufferDeviceMasks);
-    deviceGroupSubmitInfo.pCommandBufferDeviceMasks = commandBufferDeviceMasks.data();
+    deviceGroupSubmitInfo.commandBufferCount = MAGMA_COUNT(cmdBufferDeviceMasks);
+    deviceGroupSubmitInfo.pCommandBufferDeviceMasks = cmdBufferDeviceMasks.data();
     deviceGroupSubmitInfo.signalSemaphoreCount = MAGMA_COUNT(signalSemaphoreDeviceIndices);
     deviceGroupSubmitInfo.pSignalSemaphoreDeviceIndices = signalSemaphoreDeviceIndices.data();
-    return submit(commandBuffers, waitStageMasks, waitSemaphores, signalSemaphores, fence, &deviceGroupSubmitInfo);
+    return submit(cmdBuffers, waitStageMasks, waitSemaphores, signalSemaphores, fence, &deviceGroupSubmitInfo);
 }
 #endif // VK_KHR_device_group
 
