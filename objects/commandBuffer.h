@@ -333,8 +333,6 @@ namespace magma
         void nextSubpass(VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void endRenderPass() noexcept;
 
-        void executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept;
-
 #ifdef VK_KHR_device_group
         bool beginDeviceGroup(uint32_t deviceMask,
             VkCommandBufferUsageFlags flags = 0) noexcept;
@@ -514,6 +512,7 @@ namespace magma
     public:
         explicit PrimaryCommandBuffer(std::shared_ptr<CommandPool> pool):
             CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, std::move(pool)) {}
+        void executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept;
     };
 
     /* Secondary command buffer, which can be executed by primary command buffers,

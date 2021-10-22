@@ -419,17 +419,6 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
 // CommandBuffer::nextSubpass
 // CommandBuffer::endRenderPass
 
-void CommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept
-{
-    MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCmdBuffers, cmdBuffers.size());
-    for (const auto& cmdBuffer : cmdBuffers)
-    {
-        MAGMA_ASSERT(cmdBuffer->secondary());
-        dereferencedCmdBuffers.put(*cmdBuffer);
-    }
-    vkCmdExecuteCommands(handle, dereferencedCmdBuffers.size(), dereferencedCmdBuffers);
-}
-
 #ifdef VK_KHR_device_group
 void CommandBuffer::setDeviceMask(uint32_t deviceMask) noexcept
 {
@@ -642,5 +631,16 @@ std::shared_ptr<Fence> CommandBuffer::getFence() const noexcept
 {
     fence->reset();
     return fence;
+}
+
+void PrimaryCommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept
+{
+    MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCmdBuffers, cmdBuffers.size());
+    for (const auto& cmdBuffer : cmdBuffers)
+    {
+        MAGMA_ASSERT(cmdBuffer->secondary());
+        dereferencedCmdBuffers.put(*cmdBuffer);
+    }
+    vkCmdExecuteCommands(handle, dereferencedCmdBuffers.size(), dereferencedCmdBuffers);
 }
 } // namespace magma
