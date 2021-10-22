@@ -59,6 +59,34 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
     pVertexAttributeDescriptions = core::copyInitializerList<VkVertexInputAttributeDescription>(attributes);
 }
 
+VertexInputState::VertexInputState(const VertexInputState& other) noexcept
+{
+    sType = other.sType;
+    pNext = other.pNext;
+    flags = other.flags;
+    vertexBindingDescriptionCount = other.vertexBindingDescriptionCount;
+    pVertexBindingDescriptions = core::copyArray(other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
+    vertexAttributeDescriptionCount = other.vertexAttributeDescriptionCount;
+    pVertexAttributeDescriptions = core::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+}
+
+VertexInputState& VertexInputState::operator=(const VertexInputState& other) noexcept
+{
+    if (this != &other)
+    {
+        sType = other.sType;
+        pNext = other.pNext;
+        flags = other.flags;
+        vertexBindingDescriptionCount = other.vertexBindingDescriptionCount;
+        delete[] pVertexBindingDescriptions;
+        pVertexBindingDescriptions = core::copyArray(other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
+        vertexAttributeDescriptionCount = other.vertexAttributeDescriptionCount;
+        delete[] pVertexAttributeDescriptions;
+        pVertexAttributeDescriptions = core::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+    }
+    return *this;
+}
+
 VertexInputState::~VertexInputState()
 {
     delete[] pVertexBindingDescriptions;
