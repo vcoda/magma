@@ -22,7 +22,7 @@ namespace magma
 {
     class SrcTransferBuffer;
 
-    /* Buffer that is suitable to use as predicate with conditional rendering extension. */
+    /* A buffer containing the predicate for conditional rendering. */
 
 #ifdef VK_EXT_conditional_rendering
     class ConditionalRenderingBuffer : public Buffer
