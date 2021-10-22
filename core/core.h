@@ -48,8 +48,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #ifndef MAGMA_ASSERT
 #define MAGMA_ASSERT(condition) assert(condition)
 #endif
+#define MAGMA_ASSERT_FOR_EACH(container, iterator, condition)\
+    for (auto& iterator : container) MAGMA_ASSERT(condition)
 #else
 #define MAGMA_ASSERT(condition)
+#define MAGMA_ASSERT_FOR_EACH(container, iterator, condition)
 #endif // !MAGMA_DEBUG
 
 #ifdef _MSC_VER

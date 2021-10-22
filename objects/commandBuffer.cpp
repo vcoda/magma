@@ -159,10 +159,7 @@ bool CommandBuffer::reset(bool releaseResources) noexcept
 void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline, uint32_t firstSet, const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
     const std::initializer_list<uint32_t>& dynamicOffsets /* {} */) noexcept
 {
-#ifdef MAGMA_DEBUG
-    for (const auto& descriptorSet : descriptorSets)
-        MAGMA_ASSERT(pipeline->getLayout()->hasSetLayout(descriptorSet->getLayout()));
-#endif
+    MAGMA_ASSERT_FOR_EACH(descriptorSets, descriptorSet, pipeline->getLayout()->hasSetLayout(descriptorSet->getLayout()));
     MAGMA_STACK_ARRAY(VkDescriptorSet, dereferencedDescriptorSets, descriptorSets.size());
     uint32_t dirtyCount = 0;
     for (const auto& descriptorSet : descriptorSets)

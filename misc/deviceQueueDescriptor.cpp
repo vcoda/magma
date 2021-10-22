@@ -27,10 +27,7 @@ namespace magma
 DeviceQueueDescriptor::DeviceQueueDescriptor(std::shared_ptr<const PhysicalDevice> device,
     VkQueueFlagBits queueType, const std::vector<float>& queuePriorities /* 1 */)
 {
-#ifdef MAGMA_DEBUG
-    for (float priority : queuePriorities)
-        MAGMA_ASSERT((priority >= 0.f) && (priority <= 1.f));
-#endif
+    MAGMA_ASSERT_FOR_EACH(queuePriorities, priority, (priority >= 0.f) && (priority <= 1.f));
     sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
     pNext = nullptr;
     flags = 0;
