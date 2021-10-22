@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #ifdef _WIN32
 #include "shaderCompiler.h"
+#include "../objects/device.h"
 #include "../objects/shaderModule.h"
 #include "../exceptions/errorResult.h"
 #include "../exceptions/compileError.h"

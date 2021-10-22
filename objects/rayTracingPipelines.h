@@ -27,6 +27,7 @@ namespace magma
 
 #ifdef VK_NV_ray_tracing
     class RayTracingPipeline;
+    class PipelineCache;
 
     class RayTracingPipelines : public Pipelines
     {

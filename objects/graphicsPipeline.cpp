@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineCache.h"
 #include "device.h"
 #include "renderPass.h"
+#include "../shaders/pipelineShaderStage.h"
 #include "../states/vertexInputState.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/tesselationState.h"
@@ -32,7 +33,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/colorBlendState.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
-#include "../core/hash.h"
 #include "../helpers/stackArray.h"
 
 namespace magma

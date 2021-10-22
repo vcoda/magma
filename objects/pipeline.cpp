@@ -19,6 +19,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "pipeline.h"
 #include "device.h"
+#include "pipelineLayout.h"
+#include "../shaders/pipelineShaderStage.h"
 #include "../allocator/allocator.h"
 #include "../misc/deviceExtension.h"
 #include "../exceptions/errorResult.h"

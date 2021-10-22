@@ -20,6 +20,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "computePipelines.h"
 #include "computePipeline.h"
 #include "pipelineCache.h"
+#include "pipelineLayout.h"
+#include "device.h"
+#include "../shaders/pipelineShaderStage.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 

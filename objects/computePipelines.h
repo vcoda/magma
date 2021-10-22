@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class ComputePipeline;
+    class PipelineCache;
 
     /* Exposes Vulkan's ability to create multiple compute pipeline objects in a single call. */
 

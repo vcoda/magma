@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineCache.h"
 #include "device.h"
 #include "physicalDevice.h"
+#include "../shaders/pipelineShaderStage.h"
 #include "../allocator/allocator.h"
 #include "../misc/deviceExtension.h"
 #include "../exceptions/errorResult.h"

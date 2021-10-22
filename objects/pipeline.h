@@ -17,13 +17,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
-#include "pipelineLayout.h"
-#include "../shaders/pipelineShaderStage.h"
 
 namespace magma
 {
     class Device;
-    class PipelineCache;
+    class PipelineLayout;
     class IAllocator;
 
     /* Some Vulkan commands specify geometric objects to be drawn or computational work to be performed,
@@ -60,6 +58,8 @@ namespace magma
         std::shared_ptr<Pipeline> basePipeline;
         std::size_t hash = 0;
     };
+
+    class PipelineShaderStage;
 
     /* Vulkan has an ability to create multiple pipeline objects in a single call.
        This is a base class for such implementation. */

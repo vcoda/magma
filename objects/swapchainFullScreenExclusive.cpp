@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "swapchainFullScreenExclusive.h"
+#include "device.h"
 #include "../misc/deviceExtension.h"
 #include "../exceptions/errorResult.h"
 
