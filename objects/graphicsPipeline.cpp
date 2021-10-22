@@ -246,16 +246,7 @@ uint32_t GraphicsPipelines::newPipeline(const std::vector<PipelineShaderStage>& 
 void GraphicsPipelines::buildPipelines(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
-    uint32_t stageCount = 0;
-    for (const auto& pipelineInfo : pipelineInfos)
-        stageCount += pipelineInfo.stageCount;
-    std::vector<VkPipelineShaderStageCreateInfo> shaderStageInfos;
-    shaderStageInfos.reserve(stageCount);
-    for (const auto& shaderStages : stages)
-    {   // Copy to array of Vulkan structures due to alignment
-        for (const auto& stage : shaderStages)
-            shaderStageInfos.push_back(stage);
-    }
+    const std::vector<VkPipelineShaderStageCreateInfo> shaderStageInfos = copyAlignedShaderStageInfos();
     uint32_t stageOffset = 0;
     for (auto& pipelineInfo : pipelineInfos)
     {   // Fixup shader stage pointers

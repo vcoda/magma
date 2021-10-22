@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "nondispatchable.h"
 #include "pipelineLayout.h"
+#include "../shaders/pipelineShaderStage.h"
 
 namespace magma
 {
@@ -57,5 +58,19 @@ namespace magma
         std::shared_ptr<PipelineLayout> layout;
         std::shared_ptr<Pipeline> basePipeline;
         std::size_t hash = 0;
+    };
+
+    /* Vulkan has an ability to create multiple pipeline objects in a single call.
+       This is a base class for such implementation. */
+
+    class Pipelines : public core::NonCopyable
+    {
+    protected:
+        std::vector<VkPipelineShaderStageCreateInfo> copyAlignedShaderStageInfos() const;
+
+        std::list<std::vector<PipelineShaderStage>> stages;
+        std::list<std::shared_ptr<PipelineLayout>> layouts;
+        std::list<std::shared_ptr<Pipeline>> basePipelines;
+        std::list<std::size_t> hashes;
     };
 } // namespace magma

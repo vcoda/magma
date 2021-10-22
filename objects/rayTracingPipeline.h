@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "pipeline.h"
-#include "../shaders/pipelineShaderStage.h"
 #include "../shaders/rayTracingShaderGroup.h"
 
 namespace magma
@@ -64,7 +63,7 @@ namespace magma
        As there may be thousands of ray tracing pipelines in the complicated rendering engine,
        it may be more efficient for the driver to create them at once. */
 
-    class RayTracingPipelines : public core::NonCopyable
+    class RayTracingPipelines : public Pipelines
     {
     public:
         explicit RayTracingPipelines(std::size_t capacity = 32);
@@ -82,11 +81,7 @@ namespace magma
 
     private:
         std::shared_ptr<Device> device;
-        std::list<std::vector<PipelineShaderStage>> stages;
         std::list<std::vector<RayTracingShaderGroup>> groups;
-        std::list<std::shared_ptr<PipelineLayout>> layouts;
-        std::list<std::shared_ptr<RayTracingPipeline>> basePipelines;
-        std::list<std::size_t> hashes;
         std::vector<VkRayTracingPipelineCreateInfoNV> pipelineInfos;
         std::vector<std::shared_ptr<RayTracingPipeline>> rayTracingPipelines;
     };

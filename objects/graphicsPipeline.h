@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "pipeline.h"
-#include "../shaders/pipelineShaderStage.h"
 
 namespace magma
 {
@@ -87,7 +86,7 @@ namespace magma
        As there may be thousands of graphics pipelines in the complicated rendering engine,
        it may be more efficient for the driver to create them at once. */
 
-    class GraphicsPipelines : public core::NonCopyable
+    class GraphicsPipelines : public Pipelines
     {
     public:
         GraphicsPipelines(std::size_t capacity = 256);
@@ -113,7 +112,6 @@ namespace magma
         std::shared_ptr<GraphicsPipeline> getPipeline(uint32_t index) const noexcept { return graphicsPipelines[index]; }
 
     private:
-        std::list<std::vector<PipelineShaderStage>> stages;
         std::list<VertexInputState> vertexInputStates;
         std::list<InputAssemblyState> inputAssemblyStates;
         std::list<TesselationState> tesselationStates;
@@ -124,10 +122,7 @@ namespace magma
         std::list<ColorBlendState> colorBlendStates;
         std::list<std::vector<VkDynamicState>> dynamicStates;
         std::list<VkPipelineDynamicStateCreateInfo> dynamicStateInfos;
-        std::list<std::shared_ptr<PipelineLayout>> layouts;
         std::list<std::shared_ptr<RenderPass>> renderPasses;
-        std::list<std::shared_ptr<GraphicsPipeline>> basePipelines;
-        std::list<std::size_t> hashes;
         std::vector<VkGraphicsPipelineCreateInfo> pipelineInfos;
         std::vector<std::shared_ptr<GraphicsPipeline>> graphicsPipelines;
     };
