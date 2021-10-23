@@ -51,10 +51,9 @@ namespace magma
         {
         public:
             explicit ImmediateRender(const uint32_t maxVertexCount,
-                std::shared_ptr<Device> device,
-                std::shared_ptr<PipelineCache> pipelineCache,
-                std::shared_ptr<PipelineLayout> layout,
                 std::shared_ptr<RenderPass> renderPass,
+                std::shared_ptr<PipelineLayout> layout,
+                std::shared_ptr<PipelineCache> pipelineCache,
                 std::shared_ptr<Allocator> allocator = nullptr);
             std::shared_ptr<Device> getDevice() const noexcept { return device; }
             uint32_t getMaxVertexCount() const noexcept { return maxVertexCount; }
@@ -103,11 +102,10 @@ namespace magma
 
             const uint32_t maxVertexCount;
             std::shared_ptr<Device> device;
-            std::shared_ptr<PipelineLayout> layout;
             std::shared_ptr<RenderPass> renderPass;
-            std::shared_ptr<Allocator> allocator;
-            std::shared_ptr<DynamicVertexBuffer> vertexBuffer;
+            std::shared_ptr<PipelineLayout> layout;
             std::shared_ptr<GraphicsPipelineCache> pipelineCache;
+            std::shared_ptr<DynamicVertexBuffer> vertexBuffer;
             std::list<Primitive> primitives;
             std::vector<PipelineShaderStage> shaderStages;
             RasterizationState rasterizationState;

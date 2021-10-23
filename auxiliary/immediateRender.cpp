@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/deviceMemory.h"
 #include "../objects/commandBuffer.h"
 #include "../objects/graphicsPipeline.h"
+#include "../objects/renderPass.h"
 #include "../objects/shaderModule.h"
 #include "../states/vertexInputStructure.h"
 #include "../states/inputAssemblyState.h"
@@ -34,19 +35,15 @@ namespace magma
 {
 namespace aux
 {
-ImmediateRender::ImmediateRender(const uint32_t maxVertexCount,
-    std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
-    std::shared_ptr<PipelineLayout> layout, std::shared_ptr<RenderPass> renderPass,
+ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<RenderPass> renderPass,
+    std::shared_ptr<PipelineLayout> layout, std::shared_ptr<PipelineCache> pipelineCache,
     std::shared_ptr<Allocator> allocator /* nullptr */):
     maxVertexCount(maxVertexCount),
-    device(std::move(device)),
-    layout(std::move(layout)),
+    device(renderPass->getDevice()),
     renderPass(std::move(renderPass)),
-    allocator(std::move(allocator)),
-    vertexBuffer(std::make_shared<DynamicVertexBuffer>(this->device, sizeof(Vertex) * maxVertexCount, false, this->allocator, nullptr, 0, Resource::Sharing())),
-    pipelineCache(std::make_shared<GraphicsPipelineCache>(this->device, std::move(pipelineCache), this->MAGMA_HOST_ALLOCATOR(allocator))),
-    vertexShader(VertexShaderStage(createShader(true), "main")),
-    fragmentShader(FragmentShaderStage(createShader(false), "main")),
+    layout(std::move(layout)),
+    pipelineCache(std::make_shared<GraphicsPipelineCache>(device, std::move(pipelineCache), MAGMA_HOST_ALLOCATOR(allocator))),
+    vertexBuffer(std::make_shared<DynamicVertexBuffer>(device, sizeof(Vertex) * maxVertexCount, false, allocator, nullptr, 0, Resource::Sharing())),
     rasterizationState(renderstate::fillCullBackCCW),
     multisampleState(renderstate::dontMultisample),
     depthStencilState(renderstate::depthAlwaysDontWrite),
@@ -56,7 +53,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount,
     if (!this->layout)
     {   // If layout not specified, create default one
         constexpr pushconstants::VertexConstantRange<Transform> pushConstantRange;
-        this->layout = std::make_shared<PipelineLayout>(this->device, pushConstantRange, this->MAGMA_HOST_ALLOCATOR(allocator));
+        this->layout = std::make_shared<PipelineLayout>(device, pushConstantRange, MAGMA_HOST_ALLOCATOR(allocator));
     }
 constexpr
 #include "spirv/output/immv"
