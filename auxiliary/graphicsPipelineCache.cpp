@@ -36,7 +36,7 @@ namespace magma
 namespace aux
 {
 GraphicsPipelineCache::GraphicsPipelineCache(std::shared_ptr<Device> device,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+    std::shared_ptr<PipelineCache> pipelineCache,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     device(std::move(device)),
     pipelineCache(std::move(pipelineCache)),

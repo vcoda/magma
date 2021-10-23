@@ -47,7 +47,7 @@ namespace magma
         {
         public:
             explicit GraphicsPipelineCache(std::shared_ptr<Device> device,
-                std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+                std::shared_ptr<PipelineCache> pipelineCache,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             std::shared_ptr<Device> getDevice() const noexcept { return device; }
             std::shared_ptr<PipelineCache> getPipelineCache() const noexcept { return pipelineCache; }
