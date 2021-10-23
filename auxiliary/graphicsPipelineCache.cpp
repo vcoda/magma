@@ -47,7 +47,7 @@ GraphicsPipelineCache::GraphicsPipelineCache(std::shared_ptr<Device> device,
 }
 
 std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
-    const std::vector<PipelineShaderStage>& stages,
+    const std::vector<PipelineShaderStage>& shaderStages,
     const VertexInputState& vertexInputState,
     const InputAssemblyState& inputAssemblyState,
     const TesselationState& tesselationState,
@@ -67,12 +67,12 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
     info.pNext = nullptr;
     // Specify that the pipeline to be created is allowed to be the parent of a pipeline that will be created
     info.flags = flags | VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
-    info.stageCount = MAGMA_COUNT(stages);
+    info.stageCount = MAGMA_COUNT(shaderStages);
     std::size_t hash = core::hashArgs(
         info.sType,
         info.flags,
         info.stageCount);
-    for (const auto& stage : stages)
+    for (const auto& stage : shaderStages)
         core::hashCombine(hash, stage.getHash());
     std::size_t baseHash = core::hashCombineList({
         vertexInputState.hash(),
@@ -110,7 +110,7 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
     }
     // Create new pipeline using cache and base pipeline to speed up construction time
     std::shared_ptr<GraphicsPipeline> pipeline = std::make_shared<GraphicsPipeline>(device,
-        stages, vertexInputState, inputAssemblyState, tesselationState, viewportState,
+        shaderStages, vertexInputState, inputAssemblyState, tesselationState, viewportState,
         rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
         std::move(pipelineLayout), std::move(renderPass), subpass,
         allocator, pipelineCache, std::move(basePipeline), info.flags);

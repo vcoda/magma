@@ -53,7 +53,7 @@ namespace magma
             std::shared_ptr<PipelineCache> getPipelineCache() const noexcept { return pipelineCache; }
             std::shared_ptr<IAllocator> getAllocator() const noexcept { return allocator; }
             uint32_t getCachedPipelineCount() const noexcept { return MAGMA_COUNT(pipelines); }
-            std::shared_ptr<GraphicsPipeline> lookupPipeline(const std::vector<PipelineShaderStage>& stages,
+            std::shared_ptr<GraphicsPipeline> lookupPipeline(const std::vector<PipelineShaderStage>& shaderStages,
                 const VertexInputState& vertexInputState,
                 const InputAssemblyState& inputAssemblyState,
                 const TesselationState& tesselationState,
