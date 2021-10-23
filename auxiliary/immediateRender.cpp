@@ -58,6 +58,16 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount,
         constexpr pushconstants::VertexConstantRange<Transform> pushConstantRange;
         this->layout = std::make_shared<PipelineLayout>(this->device, pushConstantRange, this->MAGMA_HOST_ALLOCATOR(allocator));
     }
+constexpr
+#include "spirv/output/immv"
+constexpr
+#include "spirv/output/immf"
+    constexpr std::size_t vsImmHash = core::hashArray(vsImm);
+    constexpr std::size_t fsImmHash = core::hashArray(fsImm);
+    std::shared_ptr<ShaderModule> vertexShader = std::make_shared<ShaderModule>(device, vsImm, vsImmHash, MAGMA_HOST_ALLOCATOR(allocator), 0, false);
+    std::shared_ptr<ShaderModule> fragmentShader = std::make_shared<ShaderModule>(device, fsImm, fsImmHash, MAGMA_HOST_ALLOCATOR(allocator), 0, false);
+    shaderStages.push_back(VertexShaderStage(vertexShader, "main"));
+    shaderStages.push_back(FragmentShaderStage(fragmentShader, "main"));
 }
 
 bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,
@@ -155,21 +165,6 @@ bool ImmediateRender::reset() noexcept
     return true;
 }
 
-std::shared_ptr<ShaderModule> ImmediateRender::createShader(bool vertexShader) const
-{
-constexpr
-#include "spirv/output/immv"
-    if (vertexShader)
-    {
-        constexpr std::size_t vsImmHash = core::hashArray(vsImm);
-        return std::make_shared<ShaderModule>(device, vsImm, vsImmHash, MAGMA_HOST_ALLOCATOR(allocator), 0, false);
-    }
-constexpr
-#include "spirv/output/immf"
-    constexpr std::size_t fsImmHash = core::hashArray(fsImm);
-    return std::make_shared<ShaderModule>(device, fsImm, fsImmHash, MAGMA_HOST_ALLOCATOR(allocator), 0, false);
-}
-
 std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTopology topology)
 {
     static VertexInputStructure<Vertex> vertexInputState(0, {
@@ -190,7 +185,7 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTop
         &renderstate::triangleStripWithAdjacency,
         &renderstate::patchList};
     // Create new or grab existing graphics pipeline
-    return pipelineCache->lookupPipeline({vertexShader, fragmentShader},
+    return pipelineCache->lookupPipeline(shaderStages,
         vertexInputState, *inputAssemblyStates[topology],
         TesselationState(), ViewportState(),
         rasterizationState, multisampleState, depthStencilState, colorBlendState,

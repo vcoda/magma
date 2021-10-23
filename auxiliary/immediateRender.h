@@ -92,7 +92,6 @@ namespace magma
             void vertex(const float v[4]) noexcept;
 
         private:
-            std::shared_ptr<ShaderModule> createShader(bool vertexShader) const;
             std::shared_ptr<GraphicsPipeline> lookupPipeline(VkPrimitiveTopology);
 
             struct Vertex;
@@ -110,8 +109,7 @@ namespace magma
             std::shared_ptr<DynamicVertexBuffer> vertexBuffer;
             std::shared_ptr<GraphicsPipelineCache> pipelineCache;
             std::list<Primitive> primitives;
-            VertexShaderStage vertexShader;
-            FragmentShaderStage fragmentShader;
+            std::vector<PipelineShaderStage> shaderStages;
             RasterizationState rasterizationState;
             MultisampleState multisampleState;
             DepthStencilState depthStencilState;

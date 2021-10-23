@@ -24,13 +24,13 @@ struct ImmediateRender::Primitive
 inline void ImmediateRender::setVertexShader(const VertexShaderStage& shader) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
-    vertexShader = shader;
+    shaderStages.front() = shader;
 }
 
 inline void ImmediateRender::setFragmentShader(const FragmentShaderStage& shader) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
-    fragmentShader = shader;
+    shaderStages.back() = shader;
 }
 
 inline void ImmediateRender::setRasterizationState(const RasterizationState& state) noexcept
