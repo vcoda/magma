@@ -34,7 +34,7 @@ PipelineShaderStage::PipelineShaderStage(const VkShaderStageFlagBits stage, std:
     this->stage = stage;
     module = MAGMA_HANDLE(shaderModule);
     pName = core::copyString(entrypoint);
-    pSpecializationInfo = specialization.get();
+    pSpecializationInfo = this->specialization.get();
 }
 
 PipelineShaderStage::PipelineShaderStage(const PipelineShaderStage& other) noexcept:
