@@ -42,6 +42,7 @@ namespace magma
             VkSwapchainCreateFlagsKHR flags,
             VkFullScreenExclusiveEXT fullScreenExclusive,
             std::shared_ptr<IAllocator> allocator = nullptr,
+            std::shared_ptr<Swapchain> oldSwapchain = nullptr,
             std::shared_ptr<const DebugReportCallback> debugReportCallback = nullptr,
             const CreateInfo& chainedInfo = CreateInfo());
         void acquireFullScreenExclusiveMode();
@@ -73,6 +74,7 @@ namespace magma
             VkFullScreenExclusiveEXT fullScreenExclusive,
             HMONITOR hMonitor,
             std::shared_ptr<IAllocator> allocator = nullptr,
+            std::shared_ptr<Swapchain> oldSwapchain = nullptr,
             std::shared_ptr<const DebugReportCallback> debugReportCallback = nullptr,
             const CreateInfo& chainedInfo = CreateInfo());
         HMONITOR getMonitorHandle() const noexcept { return hMonitor; }

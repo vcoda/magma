@@ -49,6 +49,7 @@ namespace magma
             VkPresentModeKHR presentMode,
             VkSwapchainCreateFlagsKHR flags,
             std::shared_ptr<IAllocator> allocator = nullptr,
+            std::shared_ptr<Swapchain> oldSwapchain = nullptr,
             std::shared_ptr<const DebugReportCallback> debugReportCallback = nullptr,
             const CreateInfo& chainedInfo = CreateInfo());
         ~Swapchain();

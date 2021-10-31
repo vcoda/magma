@@ -54,6 +54,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     VkSwapchainCreateFlagsKHR flags,
     VkFullScreenExclusiveEXT fullScreenExclusive,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
+    std::shared_ptr<Swapchain> oldSwapchain /* nullptr */,
     std::shared_ptr<const DebugReportCallback> debugReportCallback /* nullptr */,
     const CreateInfo& chainedInfo /* default */):
     Swapchain(std::move(device),
@@ -67,6 +68,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
         presentMode,
         flags,
         std::move(allocator),
+        std::move(oldSwapchain),
         std::move(debugReportCallback),
         SurfaceFullScreenExclusiveInfo(fullScreenExclusive, chainedInfo)),
     fullScreenExlusive(false)
@@ -132,6 +134,7 @@ FullScreenExclusiveSwapchainWin32::FullScreenExclusiveSwapchainWin32(std::shared
     VkFullScreenExclusiveEXT fullScreenExclusive,
     HMONITOR hMonitor,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
+    std::shared_ptr<Swapchain> oldSwapchain /* nullptr */,
     std::shared_ptr<const DebugReportCallback> debugReportCallback /* nullptr */,
     const CreateInfo& chainedInfo /* default */):
     FullScreenExclusiveSwapchain(std::move(device),
@@ -146,6 +149,7 @@ FullScreenExclusiveSwapchainWin32::FullScreenExclusiveSwapchainWin32(std::shared
         flags,
         fullScreenExclusive,
         std::move(allocator),
+        std::move(oldSwapchain),
         std::move(debugReportCallback),
         SurfaceFullScreenExclusiveWin32Info(hMonitor, chainedInfo)),
     hMonitor(hMonitor)

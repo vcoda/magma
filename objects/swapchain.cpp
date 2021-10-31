@@ -44,6 +44,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     VkPresentModeKHR presentMode,
     VkSwapchainCreateFlagsKHR flags,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
+    std::shared_ptr<Swapchain> oldSwapchain /* nullptr */,
     std::shared_ptr<const DebugReportCallback> debugReportCallback /* nullptr */,
     const CreateInfo& chainedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_SWAPCHAIN_KHR, std::move(device), std::move(allocator)),
@@ -69,7 +70,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     swapchainInfo.compositeAlpha = compositeAlpha;
     swapchainInfo.presentMode = presentMode;
     swapchainInfo.clipped = VK_TRUE;
-    swapchainInfo.oldSwapchain = VK_NULL_HANDLE;
+    swapchainInfo.oldSwapchain = MAGMA_OPTIONAL_HANDLE(oldSwapchain);
     helpers::checkImageUsageSupport(surface, swapchainInfo.imageUsage, this->device->getPhysicalDevice());
     VkResult result;
 #if defined(VK_KHR_display_swapchain) && defined(VK_KHR_display_surface)
