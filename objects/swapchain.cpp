@@ -50,8 +50,11 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     NonDispatchable(VK_OBJECT_TYPE_SWAPCHAIN_KHR, std::move(device), std::move(allocator)),
     surfaceFormat(surfaceFormat),
     extent(extent),
-    imageIndex(0)
+    imageIndex(0),
+    retired(false)
 {
+    if (oldSwapchain && oldSwapchain->hadRetired())
+        throw exception::OutOfDate("old swapchain must be a non-retired");
     VkSwapchainCreateInfoKHR swapchainInfo;
     swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     swapchainInfo.pNext = chainedInfo.getNode();
@@ -83,6 +86,10 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
 #endif // VK_KHR_display_swapchain && VK_KHR_display_surface
     {
         result = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    }
+    if (oldSwapchain)
+    {   // oldSwapchain is retired even if creation of the new swapchain fails
+        oldSwapchain->retired = true;
     }
 #ifdef VK_EXT_debug_report
     if (result != VK_SUCCESS && debugReportCallback)

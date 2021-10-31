@@ -54,6 +54,7 @@ namespace magma
             const CreateInfo& chainedInfo = CreateInfo());
         ~Swapchain();
         const VkExtent2D& getExtent() const noexcept { return extent; }
+        bool hadRetired() const noexcept { return retired; }
         uint32_t getImageIndex() const noexcept { return imageIndex; }
         uint32_t getImageCount() const;
         std::vector<std::shared_ptr<SwapchainColorAttachment>> getImages() const;
@@ -65,6 +66,7 @@ namespace magma
         const VkSurfaceFormatKHR surfaceFormat;
         const VkExtent2D extent;
         uint32_t imageIndex;
+        bool retired;
     };
 #endif // VK_KHR_swapchain
 } // namespace magma
