@@ -65,8 +65,8 @@ namespace magma
     private:
         const VkSurfaceFormatKHR surfaceFormat;
         const VkExtent2D extent;
-        uint32_t imageIndex;
         bool retired;
+        uint32_t imageIndex;
     };
 #endif // VK_KHR_swapchain
 } // namespace magma

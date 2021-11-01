@@ -50,8 +50,8 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     NonDispatchable(VK_OBJECT_TYPE_SWAPCHAIN_KHR, std::move(device), std::move(allocator)),
     surfaceFormat(surfaceFormat),
     extent(extent),
-    imageIndex(0),
-    retired(false)
+    retired(false),
+    imageIndex(0)
 {
     if (oldSwapchain && oldSwapchain->hadRetired())
         throw exception::OutOfDate("old swapchain must be a non-retired");
