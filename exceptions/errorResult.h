@@ -104,14 +104,23 @@ namespace magma
                 ErrorResult(VK_ERROR_INCOMPATIBLE_DRIVER, message) {}
         };
 
+#ifdef VK_KHR_surface
         /* A surface is no longer available. */
 
-#ifdef VK_KHR_surface
         class SurfaceLost : public ErrorResult
         {
         public:
             explicit SurfaceLost(const char *message) noexcept:
                 ErrorResult(VK_ERROR_SURFACE_LOST_KHR, message) {}
+        };
+
+        /* The requested window is already connected to a surface. */
+
+        class NativeWindowInUse : public ErrorResult
+        {
+        public:
+            explicit NativeWindowInUse(const char *message) noexcept:
+                ErrorResult(VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, message) {}
         };
 #endif // VK_KHR_surface
 

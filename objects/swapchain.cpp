@@ -132,6 +132,8 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
 #ifdef VK_KHR_surface
     case VK_ERROR_SURFACE_LOST_KHR:
         throw exception::SurfaceLost("failed to create swapchain");
+    case VK_ERROR_NATIVE_WINDOW_IN_USE_KHR:
+        throw exception::NativeWindowInUse("failed to create swapchain");
 #endif
 #ifdef VK_KHR_display_swapchain
     case VK_ERROR_INCOMPATIBLE_DISPLAY_KHR:
