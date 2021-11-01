@@ -278,7 +278,7 @@ DisplaySurface::DisplaySurface(std::shared_ptr<const Instance> instance,
     surfaceInfo.imageExtent = displayMode->getVisibleRegion();
     MAGMA_INSTANCE_EXTENSION(vkCreateDisplayPlaneSurfaceKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
     const VkResult result = vkCreateDisplayPlaneSurfaceKHR(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to result display surface");
+    MAGMA_THROW_FAILURE(result, "failed to create display surface");
 }
 #endif // VK_KHR_display
 
