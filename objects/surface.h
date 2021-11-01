@@ -170,9 +170,12 @@ namespace magma
 
 #endif // VK_USE_PLATFORM_VI_NN
 
-#ifdef VK_KHR_display
     class DisplayMode;
 
+    /* Display surface describes the configuration of a single plane
+       within a complete display configuration. */
+
+#ifdef VK_KHR_display
     class DisplaySurface : public Surface
     {
     public:
