@@ -53,6 +53,7 @@ namespace magma
             std::shared_ptr<const DebugReportCallback> debugReportCallback = nullptr,
             const CreateInfo& chainedInfo = CreateInfo());
         ~Swapchain();
+        VkSurfaceFormatKHR getSurfaceFormat() const noexcept { return surfaceFormat; }
         const VkExtent2D& getExtent() const noexcept { return extent; }
         bool hadRetired() const noexcept { return retired; }
         uint32_t getImageIndex() const noexcept { return imageIndex; }
