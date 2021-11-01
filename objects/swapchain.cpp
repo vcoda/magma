@@ -123,24 +123,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
 #else
     MAGMA_UNUSED(debugReportCallback);
 #endif // VK_EXT_debug_report
-    switch (result)
-    {
-    case VK_ERROR_INITIALIZATION_FAILED:
-        throw exception::InitializationFailed("failed to create swapchain");
-    case VK_ERROR_DEVICE_LOST:
-        throw exception::DeviceLost("failed to create swapchain");
-#ifdef VK_KHR_surface
-    case VK_ERROR_SURFACE_LOST_KHR:
-        throw exception::SurfaceLost("failed to create swapchain");
-    case VK_ERROR_NATIVE_WINDOW_IN_USE_KHR:
-        throw exception::NativeWindowInUse("failed to create swapchain");
-#endif
-#ifdef VK_KHR_display_swapchain
-    case VK_ERROR_INCOMPATIBLE_DISPLAY_KHR:
-        throw exception::IncompatibleDisplay("failed to create swapchain");
-#endif
-    }
-    MAGMA_THROW_FAILURE(result, "failed to create swapchain");
+    handleError(result, "failed to create swapchain");
 }
 
 Swapchain::~Swapchain()
@@ -156,30 +139,15 @@ uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore,
         MAGMA_OPTIONAL_HANDLE(semaphore),
         MAGMA_OPTIONAL_HANDLE(fence),
         &imageIndex);
-    switch (result)
-    {
-    case VK_ERROR_DEVICE_LOST:
-        throw exception::DeviceLost("failed to acquire next image");
-    case VK_ERROR_OUT_OF_DATE_KHR:
-        throw exception::OutOfDate("failed to acquire next image");
-#ifdef VK_KHR_surface
-    case VK_ERROR_SURFACE_LOST_KHR:
-        throw exception::SurfaceLost("failed to acquire next image");
-#endif
-#ifdef VK_EXT_full_screen_exclusive
-    case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
-        throw exception::FullScreenExclusiveModeLost("failed to acquire next image");
-#endif
-    } // switch
-    MAGMA_THROW_FAILURE(result, "failed to acquire next image");
+    handleError(result, "failed to acquire next image");
     return imageIndex;
 }
 
 uint32_t Swapchain::getImageCount() const
 {
     uint32_t imageCount;
-    const VkResult get = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &imageCount, nullptr);
-    MAGMA_THROW_FAILURE(get, "failed to get swapchain image count");
+    const VkResult result = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &imageCount, nullptr);
+    MAGMA_THROW_FAILURE(result, "failed to get swapchain image count");
     return imageCount;
 }
 
@@ -187,12 +155,42 @@ std::vector<std::shared_ptr<SwapchainColorAttachment>> Swapchain::getImages() co
 {
     uint32_t imageCount = getImageCount();
     MAGMA_STACK_ARRAY(VkImage, swapchainImages, imageCount);
-    const VkResult get = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &imageCount, swapchainImages);
-    MAGMA_THROW_FAILURE(get, "failed to get swapchain images");
+    const VkResult result = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &imageCount, swapchainImages);
+    MAGMA_THROW_FAILURE(result, "failed to get swapchain images");
     std::vector<std::shared_ptr<SwapchainColorAttachment>> colorAttachments;
     for (const VkImage image : swapchainImages)
         colorAttachments.emplace_back(new SwapchainColorAttachment(device, image, surfaceFormat.format, extent));
     return colorAttachments;
+}
+
+void Swapchain::handleError(VkResult result, const char *message) const
+{
+    switch (result)
+    {
+    case VK_ERROR_INITIALIZATION_FAILED:
+        throw exception::InitializationFailed(message);
+    case VK_ERROR_DEVICE_LOST:
+        throw exception::DeviceLost(message);
+#ifdef VK_KHR_surface
+    case VK_ERROR_SURFACE_LOST_KHR:
+        throw exception::SurfaceLost(message);
+    case VK_ERROR_NATIVE_WINDOW_IN_USE_KHR:
+        throw exception::NativeWindowInUse(message);
+#endif
+#ifdef VK_KHR_swapchain
+    case VK_ERROR_OUT_OF_DATE_KHR:
+        throw exception::OutOfDate(message);
+#endif
+#ifdef VK_KHR_display_swapchain
+    case VK_ERROR_INCOMPATIBLE_DISPLAY_KHR:
+        throw exception::IncompatibleDisplay(message);
+#endif
+#ifdef VK_EXT_full_screen_exclusive
+    case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
+        throw exception::FullScreenExclusiveModeLost(message);
+#endif
+    }
+    MAGMA_THROW_FAILURE(result, message);
 }
 #endif // VK_KHR_swapchain
 } // namespace magma

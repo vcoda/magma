@@ -62,6 +62,10 @@ namespace magma
             std::shared_ptr<const Fence> fence,
             uint64_t timeout = UINT64_MAX);
 
+    protected:
+        void handleError(VkResult result,
+            const char *message) const;
+
     private:
         const VkSurfaceFormatKHR surfaceFormat;
         const VkExtent2D extent;
