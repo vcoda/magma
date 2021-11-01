@@ -72,7 +72,13 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     swapchainInfo.preTransform = preTransform;
     swapchainInfo.compositeAlpha = compositeAlpha;
     swapchainInfo.presentMode = presentMode;
-    swapchainInfo.clipped = VK_TRUE;
+    if (usage & VK_IMAGE_USAGE_TRANSFER_SRC_BIT) // Is read back allowed?
+    {   // Presentable images will own all of the pixels they contain
+        swapchainInfo.clipped = VK_FALSE;
+    } else
+    {   // Fragment shaders may not execute for obscured pixels
+        swapchainInfo.clipped = VK_TRUE;
+    }
     swapchainInfo.oldSwapchain = MAGMA_OPTIONAL_HANDLE(oldSwapchain);
     helpers::checkImageUsageSupport(surface, swapchainInfo.imageUsage, this->device->getPhysicalDevice());
     VkResult result;
