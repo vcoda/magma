@@ -281,4 +281,20 @@ DisplaySurface::DisplaySurface(std::shared_ptr<const Instance> instance,
     MAGMA_THROW_FAILURE(result, "failed to result display surface");
 }
 #endif // VK_KHR_display
+
+#ifdef VK_EXT_headless_surface
+HeadlessSurface::HeadlessSurface(std::shared_ptr<const Instance> instance,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkWin32SurfaceCreateFlagsKHR flags /* 0 */):
+    Surface(std::move(instance), std::move(allocator))
+{
+    VkHeadlessSurfaceCreateInfoEXT surfaceInfo;
+    surfaceInfo.sType = VK_STRUCTURE_TYPE_HEADLESS_SURFACE_CREATE_INFO_EXT;
+    surfaceInfo.pNext = nullptr;
+    surfaceInfo.flags = flags;
+    MAGMA_INSTANCE_EXTENSION(vkCreateHeadlessSurfaceEXT, VK_EXT_HEADLESS_SURFACE_EXTENSION_NAME);
+    const VkResult result = vkCreateHeadlessSurfaceEXT(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create headless surface");
+}
+#endif // VK_EXT_headless_surface
 } // namespace magma

@@ -185,4 +185,19 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 #endif // VK_KHR_display
+
+    /* Provides a mechanism to create surface objects independently of
+       any window system or display device. The presentation operation
+       for a swapchain created from a headless surface is by default a no-op,
+       resulting in no externally-visible result. */
+
+#ifdef VK_EXT_headless_surface
+    class HeadlessSurface : public Surface
+    {
+    public:
+        explicit HeadlessSurface(std::shared_ptr<const Instance> instance,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            VkHeadlessSurfaceCreateFlagsEXT flags = 0);
+    };
+#endif // VK_EXT_headless_surface
 } // namespace magma
