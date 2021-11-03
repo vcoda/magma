@@ -89,18 +89,6 @@ namespace magma
             VkWaylandSurfaceCreateFlagsKHR flags = 0);
     };
 
-#elif defined(VK_USE_PLATFORM_MIR_KHR)
-
-    class MirSurface : public Surface
-    {
-    public:
-        explicit MirSurface(std::shared_ptr<const Instance> instance,
-            MirConnection *connection,
-            MirSurface *surface,
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            VkMirSurfaceCreateFlagsKHR flags = 0);
-    };
-
 #elif defined(VK_USE_PLATFORM_SCREEN_QNX)
 
     class QnxSurface : public Surface

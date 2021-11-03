@@ -130,25 +130,6 @@ WaylandSurface::WaylandSurface(std::shared_ptr<const Instance> instance,
     MAGMA_THROW_FAILURE(result, "failed to create Wayland surface");
 }
 
-#elif defined(VK_USE_PLATFORM_MIR_KHR)
-
-MirSurface::MirSurface(std::shared_ptr<const Instance> instance,
-    MirConnection *connection,
-    MirSurface *surface,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    VkMirSurfaceCreateFlagsKHR flags /* 0 */):
-    Surface(std::move(instance), std::move(allocator))
-{
-    VkMirSurfaceCreateInfoKHR surfaceInfo;
-    surfaceInfo.sType = VK_STRUCTURE_TYPE_MIR_SURFACE_CREATE_INFO_KHR;
-    surfaceInfo.pNext = nullptr;
-    surfaceInfo.flags = flags;
-    surfaceInfo.connection = connection;
-    surfaceInfo.mirSurface = surface;
-    const VkResult result = vkCreateMirSurfaceKHR(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create Mir surface");
-}
-
 #elif defined(VK_USE_PLATFORM_SCREEN_QNX)
 
 QnxSurface::QnxSurface(std::shared_ptr<const Instance> instance,
