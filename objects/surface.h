@@ -154,7 +154,7 @@ namespace magma
         explicit MetalSurface(std::shared_ptr<const Instance> instance,
             const CAMetalLayer *layer,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            VkMacOSSurfaceCreateFlagsMVK flags = 0);
+            VkMetalSurfaceCreateFlagsEXT flags = 0);
     };
 
 #elif defined(VK_USE_PLATFORM_VI_NN)

@@ -224,7 +224,7 @@ MacOSSurface::MacOSSurface(std::shared_ptr<const Instance> instance,
 MetalSurface::MetalSurface(std::shared_ptr<const Instance> instance,
     const CAMetalLayer *layer,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    VkMacOSSurfaceCreateFlagsMVK flags /* 0 */):
+    VkMetalSurfaceCreateFlagsEXT flags /* 0 */):
     Surface(std::move(instance), std::move(allocator))
 {
     VkMetalSurfaceCreateInfoEXT surfaceInfo;
