@@ -26,23 +26,26 @@ namespace magma
        Separate platform-specific extensions each provide a function for creating a surface object
        for the respective platform. */
 
+#ifdef VK_KHR_surface
     class Surface : public NonDispatchable<VkSurfaceKHR>,
         public std::enable_shared_from_this<Surface>
     {
     public:
         ~Surface();
+        std::shared_ptr<const Instance> getInstance() const noexcept { return instance; }
         bool hasFullScreenExclusiveSupport() const;
 
     protected:
         explicit Surface(std::shared_ptr<const Instance> instance,
             std::shared_ptr<IAllocator> allocator);
-        std::shared_ptr<const Instance> getInstance() const noexcept { return instance; }
 
         std::shared_ptr<const Instance> instance;
     };
+#endif // VK_KHR_surface
 
-#if defined(VK_USE_PLATFORM_WIN32_KHR)
+    /*  Provides a mechanism to create a surface object that refers to a Win32 HWND. */
 
+#ifdef VK_KHR_win32_surface
     class Win32Surface : public Surface
     {
     public:
@@ -52,9 +55,12 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkWin32SurfaceCreateFlagsKHR flags = 0);
     };
+#endif // VK_KHR_win32_surface
 
-#elif defined(VK_USE_PLATFORM_XLIB_KHR)
+    /* Provides a mechanism to create a surface object that refers to an X11 Window,
+       using the Xlib client-side library. */
 
+#ifdef VK_KHR_xlib_surface
     class XlibSurface : public Surface
     {
     public:
@@ -64,9 +70,12 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkXlibSurfaceCreateFlagsKHR flags = 0);
     };
+#endif // VK_KHR_xlib_surface
 
-#elif defined(VK_USE_PLATFORM_XCB_KHR)
+    /* Provides a mechanism to create a surface object that refers to an X11 Window,
+       using the XCB client-side library. */
 
+#ifdef VK_KHR_xcb_surface
     class XcbSurface : public Surface
     {
     public:
@@ -76,9 +85,11 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkXcbSurfaceCreateFlagsKHR flags = 0);
     };
+#endif // VK_KHR_xcb_surface
 
-#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
+    /* Provides a mechanism to create a surface object that refers to a Wayland wl_surface. */
 
+#ifdef VK_KHR_wayland_surface
     class WaylandSurface : public Surface
     {
     public:
@@ -88,9 +99,11 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkWaylandSurfaceCreateFlagsKHR flags = 0);
     };
+#endif // VK_KHR_wayland_surface
 
-#elif defined(VK_USE_PLATFORM_SCREEN_QNX)
+    /* Provides a mechanism to create a surface object that refers to a QNX Screen window. */
 
+#ifdef VK_QNX_screen_surface
     class QnxSurface : public Surface
     {
     public:
@@ -100,9 +113,12 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkScreenSurfaceCreateFlagsQNX flags = 0);
     };
+#endif // VK_QNX_screen_surface
 
-#elif defined(VK_USE_PLATFORM_ANDROID_KHR)
+    /* Provides a mechanism to create a surface object that refers to an ANativeWindow,
+       Android's native surface type. */
 
+#ifdef VK_KHR_android_surface
     class AndroidSurface : public Surface
     {
     public:
@@ -111,9 +127,13 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkAndroidSurfaceCreateFlagsKHR flags = 0);
     };
+#endif // VK_KHR_android_surface
 
-#elif defined(VK_USE_PLATFORM_IOS_MVK)
+    /* Provides a mechanism to create a surface object based on a UIView,
+       the native surface type of iOS, which is underpinned by a CAMetalLayer,
+       to support rendering to the surface using Apple's Metal framework. */
 
+#ifdef VK_MVK_ios_surface
     class iOSSurface : public Surface
     {
     public:
@@ -122,9 +142,13 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkIOSSurfaceCreateFlagsMVK flags = 0);
     };
+#endif // VK_MVK_ios_surface
 
-#elif defined(VK_USE_PLATFORM_MACOS_MVK)
+    /* Provides a mechanism to create a surface object based on an NSView,
+       the native surface type of macOS, which is underpinned by a CAMetalLayer,
+       to support rendering to the surface using Apple's Metal framework. */
 
+#ifdef VK_MVK_macos_surface
     class MacOSSurface : public Surface
     {
     public:
@@ -133,9 +157,12 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkMacOSSurfaceCreateFlagsMVK flags = 0);
     };
+#endif // VK_MVK_macos_surface
 
-#elif defined(VK_USE_PLATFORM_METAL_EXT)
+    /* Provides a mechanism to create a surface object from CAMetalLayer,
+       which is the native rendering surface of Apple's Metal framework. */
 
+#ifdef VK_EXT_metal_surface
     class MetalSurface : public Surface
     {
     public:
@@ -144,9 +171,11 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkMetalSurfaceCreateFlagsEXT flags = 0);
     };
+#endif // VK_EXT_metal_surface
 
-#elif defined(VK_USE_PLATFORM_VI_NN)
+    /* Provides a mechanism to create a surface object associated with an nn::vi::Layer. */
 
+#ifdef VK_NN_vi_surface
     class ViSurface : public Surface
     {
     public:
@@ -155,15 +184,14 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkViSurfaceCreateFlagsNN flags = 0);
     };
-
-#endif // VK_USE_PLATFORM_VI_NN
-
-    class DisplayMode;
+#endif // VK_NN_vi_surface
 
     /* Display surface describes the configuration of a single plane
        within a complete display configuration. */
 
 #ifdef VK_KHR_display
+    class DisplayMode;
+
     class DisplaySurface : public Surface
     {
     public:
