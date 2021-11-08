@@ -129,6 +129,18 @@ namespace magma
     };
 #endif // VK_KHR_android_surface
 
+#ifdef VK_FUCHSIA_imagepipe_surface
+    class FuchsiaImagePipeSurface : public Surface
+    {
+    public:
+        explicit FuchsiaImagePipeSurface(std::shared_ptr<const Instance> instance,
+            zx_handle_t imagePipeHandle,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            VkImagePipeSurfaceCreateFlagsFUCHSIA flags = 0);
+
+    };
+#endif // VK_FUCHSIA_imagepipe_surface
+
     /* Provides a mechanism to create a surface object based on a UIView,
        the native surface type of iOS, which is underpinned by a CAMetalLayer,
        to support rendering to the surface using Apple's Metal framework. */

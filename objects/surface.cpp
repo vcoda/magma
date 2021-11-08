@@ -168,6 +168,21 @@ AndroidSurface::AndroidSurface(std::shared_ptr<const Instance> instance,
 }
 #endif // VK_KHR_android_surface
 
+#ifdef VK_FUCHSIA_imagepipe_surface
+FuchsiaImagePipeSurface::FuchsiaImagePipeSurface(std::shared_ptr<const Instance> instance, zx_handle_t imagePipeHandle,
+    std::shared_ptr<IAllocator> allocator /* nullptr */, VkImagePipeSurfaceCreateFlagsFUCHSIA flags /* 0 */):
+    Surface(std::move(instance), std::move(allocator))
+{
+    VkImagePipeSurfaceCreateInfoFUCHSIA surfaceInfo;
+    surfaceInfo.sType = VK_STRUCTURE_TYPE_IMAGEPIPE_SURFACE_CREATE_INFO_FUCHSIA;
+    surfaceInfo.pNext = nullptr;
+    surfaceInfo.flags = flags;
+    surfaceInfo.imagePipeHandle = imagePipeHandle;
+    const VkResult result = vkCreateImagePipeSurfaceFUCHSIA(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_SURFACE_FAILURE(result, "failed to create Fuchsia image pipe surface");
+}
+#endif // VK_FUCHSIA_imagepipe_surface
+
 #ifdef VK_MVK_ios_surface
 iOSSurface::iOSSurface(std::shared_ptr<const Instance> instance,
     const void *view,
