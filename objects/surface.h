@@ -198,6 +198,20 @@ namespace magma
     };
 #endif // VK_NN_vi_surface
 
+    /* Provides a mechanism to create a surface object that refers to a
+       Google Games Platform GgpStreamDescriptor */
+
+#ifdef VK_GGP_stream_descriptor_surface
+    class GgpStreamDescriptorSurface : public Surface
+    {
+    public:
+        explicit GgpStreamDescriptorSurface(std::shared_ptr<const Instance> instance,
+            GgpStreamDescriptor streamDescriptor,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            VkStreamDescriptorSurfaceCreateFlagsGGP flags = 0);
+    };
+#endif // VK_GGP_stream_descriptor_surface
+
     /* Display surface describes the configuration of a single plane
        within a complete display configuration. */
 

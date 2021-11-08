@@ -251,6 +251,21 @@ ViSurface::ViSurface(std::shared_ptr<const Instance> instance,
 }
 #endif // VK_NN_vi_surface
 
+#ifdef VK_GGP_stream_descriptor_surface
+GgpStreamDescriptorSurface::GgpStreamDescriptorSurface(std::shared_ptr<const Instance> instance, GgpStreamDescriptor streamDescriptor,
+    std::shared_ptr<IAllocator> allocator /* nullptr */, VkStreamDescriptorSurfaceCreateFlagsGGP flags /* 0 */):
+    Surface(std::move(instance), std::move(allocator))
+{
+    VkStreamDescriptorSurfaceCreateInfoGGP surfaceInfo;
+    surfaceInfo.sType = VK_STRUCTURE_TYPE_STREAM_DESCRIPTOR_SURFACE_CREATE_INFO_GGP;
+    surfaceInfo.pNext = nullptr;
+    surfaceInfo.flags = flags;
+    surfaceInfo.streamDescriptor = streamDescriptor;
+    const VkResult result = vkCreateStreamDescriptorSurfaceGGP(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_SURFACE_FAILURE(result, "failed to create GGP stream descriptor surface");
+}
+#endif // VK_GGP_stream_descriptor_surface
+
 #ifdef VK_KHR_display
 DisplaySurface::DisplaySurface(std::shared_ptr<const Instance> instance,
     std::shared_ptr<const DisplayMode> displayMode,
