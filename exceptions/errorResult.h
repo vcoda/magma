@@ -184,3 +184,14 @@ namespace magma
     default:\
         throw magma::exception::ErrorResult(result, message,  MAGMA_SOURCE_LOCATION);\
     }
+
+#define MAGMA_THROW_SURFACE_FAILURE(result, message)\
+    switch (result)\
+    {\
+    case VK_ERROR_OUT_OF_HOST_MEMORY:\
+        throw magma::exception::OutOfHostMemory(message, MAGMA_SOURCE_LOCATION);\
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY:\
+        throw magma::exception::OutOfDeviceMemory(message, MAGMA_SOURCE_LOCATION);\
+    case VK_ERROR_NATIVE_WINDOW_IN_USE_KHR:\
+        throw exception::NativeWindowInUse(message);\
+    }
