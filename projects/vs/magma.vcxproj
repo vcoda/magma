@@ -410,6 +410,7 @@
     <ClCompile Include="..\..\objects\indexBuffer.cpp" />
     <ClCompile Include="..\..\objects\indirectBuffer.cpp" />
     <ClCompile Include="..\..\objects\instance.cpp" />
+    <ClCompile Include="..\..\objects\object.cpp" />
     <ClCompile Include="..\..\objects\physicalDevice.cpp" />
     <ClCompile Include="..\..\objects\physicalDeviceGroup.cpp" />
     <ClCompile Include="..\..\objects\pipeline.cpp" />

@@ -19,37 +19,52 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objectType.h"
 #include "../core/noncopyable.h"
 #include "../allocator/cxxAllocator.h"
-#include "../misc/deviceExtension.h"
-#include "../helpers/castToDebugReport.h"
 
 namespace magma
 {
     class Device;
     class IAllocator;
 
-    /* Base non-copyable object for dispatchable and non-dispatchable handles. */
+    /* Base non-copyable class for dispatchable and non-dispatchable objects.
+       Allows to give a user-friendly name and to attach arbitrary data to an object. */
 
-    template<typename Type>
     class Object : public CxxAllocator,
         public core::NonCopyable
+    {
+    public:
+        explicit Object(std::shared_ptr<Device> device,
+            std::shared_ptr<IAllocator> hostAllocator) noexcept;
+        virtual ~Object() = default;
+        virtual VkObjectType getObjectType() const noexcept = 0;
+        virtual uint64_t getHandle() const noexcept = 0;
+        std::shared_ptr<Device> getDevice() const noexcept { return device; }
+        std::shared_ptr<IAllocator> getHostAllocator() const noexcept { return hostAllocator; }
+        void setDebugName(const char *name);
+        void setDebugTag(uint64_t tagName,
+            std::size_t tagSize,
+            const void *tag);
+        template<typename Type>
+        void setDebugTag(uint64_t tagName,
+            const Type& tag);
+
+    protected:
+        std::shared_ptr<Device> device;
+        std::shared_ptr<IAllocator> hostAllocator;
+    };
+
+    /* Template object that provides getObjectType() getter. */
+
+    template<typename Type>
+    class ObjectT : public Object
 #ifdef MAGMA_X64
-        // Use custom template specialization for ::getObjectType() method
-        ,public ObjectType<Type>
+        ,public ObjectType<Type> // Use custom template specialization
 #endif
     {
     public:
-        explicit Object(VkObjectType objectType,
+        explicit ObjectT(VkObjectType objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> hostAllocator) noexcept;
-        virtual ~Object() = default;
-        VkObjectType getObjectType() const noexcept;
-        std::shared_ptr<Device> getDevice() const noexcept { return device; }
-        std::shared_ptr<IAllocator> getHostAllocator() const noexcept { return hostAllocator; }
-        virtual uint64_t getHandle() const noexcept = 0;
-        void setObjectName(const char *name) noexcept;
-        void setObjectTag(uint64_t tagName, std::size_t tagSize, const void *tag) noexcept;
-        template<typename TagType>
-        void setObjectTag(uint64_t tagName, const TagType& tag) noexcept;
+        VkObjectType getObjectType() const noexcept override;
 
     protected:
 #if !defined(MAGMA_X64)
@@ -58,8 +73,6 @@ namespace magma
         // and thus cannot be used in custom template specialization.
         const VkObjectType objectType;
 #endif
-        std::shared_ptr<Device> device;
-        std::shared_ptr<IAllocator> hostAllocator;
     };
 } // namespace magma
 

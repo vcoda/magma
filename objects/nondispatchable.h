@@ -26,7 +26,8 @@ namespace magma
        in the handle rather than acting as a reference to an underlying object. */
 
     template<typename Type>
-    class NonDispatchable : public Object<Type>, DeviceResourcePool
+    class NonDispatchable : public ObjectT<Type>,
+        DeviceResourcePool
     {
     public:
         typedef Type NativeHandle;
@@ -38,7 +39,7 @@ namespace magma
             return reinterpret_cast<uint64_t>(handle);
 #else
             return handle;
-#endif
+#endif // MAGMA_X64
         }
         operator Type() const noexcept { return handle; }
 
@@ -46,15 +47,11 @@ namespace magma
         explicit NonDispatchable(VkObjectType objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> hostAllocator) noexcept:
-#ifdef MAGMA_X64
-            Object<Type>(objectType, device, std::move(hostAllocator)),
-#else
-            Object<Type>(objectType, std::move(device), std::move(hostAllocator)),
-#endif
+            ObjectT<Type>(objectType, std::move(device), std::move(hostAllocator)),
             handle(VK_NULL_HANDLE)
         {
 #ifdef MAGMA_X64
-            std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(device);
+            std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(ObjectT<Type>::getDevice());
             if (pool) // Put resource in pool
                 pool->getPool<NonDispatchable<Type>>().add(this);
 #endif // MAGMA_X64
@@ -63,7 +60,7 @@ namespace magma
         ~NonDispatchable()
         {
 #ifdef MAGMA_X64
-            std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(Object<Type>::getDevice());
+            std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(ObjectT<Type>::getDevice());
             if (pool) // Remove resource from pool
                 pool->getPool<NonDispatchable<Type>>().remove(this);
 #endif // MAGMA_X64
