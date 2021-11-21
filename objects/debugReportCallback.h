@@ -23,8 +23,10 @@ namespace magma
     class Instance;
     class IAllocator;
 
-    /* Debug report callbacks give more detailed feedback on the
-       application's use of Vulkan when events of interest occur. */
+    /* Due to the nature of the Vulkan interface, there is very little error information
+       available to the developer and application. By enabling optional validation layers
+       and using the VK_EXT_debug_report extension, developers can obtain much more
+       detailed feedback on the application's use of Vulkan. */
 
 #ifdef VK_EXT_debug_report
     class DebugReportCallback : public NonDispatchable<VkDebugReportCallbackEXT>
