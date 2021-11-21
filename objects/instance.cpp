@@ -41,7 +41,13 @@ namespace magma
 {
 Instance::Instance(const char *applicationName, const char *engineName, uint32_t apiVersion,
     const std::vector<const char *>& layerNames, const std::vector<const char *>& extensionNames,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+#if defined(VK_EXT_debug_utils)
+    PFN_vkDebugUtilsMessengerCallbackEXT debugCallback /* nullptr */,
+#elif defined(VK_EXT_debug_report)
+    PFN_vkDebugReportCallbackEXT debugCallback /* nullptr */,
+#endif
+    void *userData /* nullptr */):
     Dispatchable<VkInstance>(VK_OBJECT_TYPE_INSTANCE, nullptr, std::move(allocator)),
     apiVersion(apiVersion)
 {
@@ -62,6 +68,50 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
     instanceInfo.ppEnabledLayerNames = layerNames.data();
     instanceInfo.enabledExtensionCount = MAGMA_COUNT(extensionNames);
     instanceInfo.ppEnabledExtensionNames = extensionNames.data();
+#if defined(VK_EXT_debug_utils)
+    VkDebugUtilsMessengerCreateInfoEXT debugCallbackInfo;
+    if (debugCallback)
+    {
+        debugCallbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+        debugCallbackInfo.pNext = nullptr;
+        debugCallbackInfo.flags = 0;
+        debugCallbackInfo.messageSeverity =
+            VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
+            VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT |
+            VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+            VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+        debugCallbackInfo.messageType =
+            VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
+            VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+            VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+        debugCallbackInfo.pfnUserCallback = debugCallback;
+        debugCallbackInfo.pUserData = userData;
+        // To capture events that occur while creating or destroying an instance
+        // an application can link a VkDebugUtilsMessengerCreateInfoEXT structure
+        // to the pNext element of the VkInstanceCreateInfo structure.
+        instanceInfo.pNext = &debugCallbackInfo;
+    }
+#elif defined(VK_EXT_debug_report)
+    VkDebugReportCallbackCreateInfoEXT debugCallbackInfo;
+    if (debugCallback)
+    {
+#ifdef VK_HEADER_VERSION
+        debugCallbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
+#else   // Compatibility with older SDK
+        debugCallbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
+#endif
+        debugCallbackInfo.pNext = nullptr;
+        debugCallbackInfo.flags =
+            VK_DEBUG_REPORT_INFORMATION_BIT_EXT |
+            VK_DEBUG_REPORT_WARNING_BIT_EXT |
+            VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT |
+            VK_DEBUG_REPORT_ERROR_BIT_EXT |
+            VK_DEBUG_REPORT_DEBUG_BIT_EXT;
+        debugCallbackInfo.pfnCallback = debugCallback;
+        debugCallbackInfo.pUserData = userData;
+        instanceInfo.pNext = &debugCallbackInfo;
+    }
+#endif // VK_EXT_debug_report
     const VkResult result = vkCreateInstance(&instanceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     switch (result)
     {

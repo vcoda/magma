@@ -37,7 +37,14 @@ namespace magma
             uint32_t apiVersion,
             const std::vector<const char *>& layerNames,
             const std::vector<const char *>& extensionNames,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+#if defined(VK_EXT_debug_utils)
+            PFN_vkDebugUtilsMessengerCallbackEXT debugCallback = nullptr,
+#elif defined(VK_EXT_debug_report)
+            PFN_vkDebugReportCallbackEXT debugCallback = nullptr,
+#endif
+            void *userData = nullptr
+        );
         ~Instance();
         uint32_t countPhysicalDevices() const;
         std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId) const;
