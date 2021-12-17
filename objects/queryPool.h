@@ -88,6 +88,20 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
+    /* A query pool created with this type will capture two integers - numPrimitivesWritten and numPrimitivesNeeded -
+       for the specified vertex stream output from the last pre-rasterization shader stage.
+       The vertex stream output queried is zero by default. */
+
+#ifdef VK_EXT_transform_feedback
+    class TransformFeedbackStreamQuery : public QueryPool
+    {
+    public:
+        explicit TransformFeedbackStreamQuery(std::shared_ptr<Device> device,
+            uint32_t queryCount,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+    };
+#endif // VK_EXT_transform_feedback
+
     /* The acceleration structure object may be compacted
        in order to improve performance. Before copying, an application
        must query the size of the resulting acceleration structure. */

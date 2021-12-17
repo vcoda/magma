@@ -97,6 +97,7 @@ namespace magma
 #ifdef VK_EXT_transform_feedback
     MAGMA_TYPEDEF_SHARED_PTR(TransformFeedbackBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(TransformFeedbackIndirectBuffer)
+    MAGMA_TYPEDEF_SHARED_PTR(TransformFeedbackStreamQuery)
 #endif
 #ifdef VK_EXT_validation_cache
     MAGMA_TYPEDEF_SHARED_PTR(ValidationCache)

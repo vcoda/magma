@@ -82,6 +82,13 @@ TimestampQuery::TimestampQuery(std::shared_ptr<Device> device, uint32_t queryCou
     QueryPool(VK_QUERY_TYPE_TIMESTAMP, std::move(device), queryCount, 0, std::move(allocator))
 {}
 
+#ifdef VK_EXT_transform_feedback
+TransformFeedbackStreamQuery::TransformFeedbackStreamQuery(std::shared_ptr<Device> device, uint32_t queryCount,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    QueryPool(VK_QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT, std::move(device), queryCount, 0, std::move(allocator))
+{}
+#endif // VK_EXT_transform_feedback
+
 #ifdef VK_NV_ray_tracing
 AccelerationStructureCompactedSizeQuery::AccelerationStructureCompactedSizeQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
