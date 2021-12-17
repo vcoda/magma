@@ -20,6 +20,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* If VK_QUERY_RESULT_WITH_AVAILABILITY_BIT is used, the final element
+       of each query's result is an integer indicating whether the query's result
+       is available, with any non-zero value indicating that it is available. */
+
+    template<typename Type>
+    struct QueryResultWithAvailability
+    {
+        Type result; // Data depends on query type
+        int64_t availability;
+    };
+
     /* An object that contains a number of query entries
        and their associated state and results.
        Queries are managed using query pool objects. */
