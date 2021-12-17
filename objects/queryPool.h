@@ -73,8 +73,7 @@ namespace magma
             uint32_t queryCount,
             bool wait) const noexcept;
         std::vector<QueryResultWithAvailability<uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
-            uint32_t queryCount,
-            bool wait) const noexcept;
+            uint32_t queryCount) const noexcept;
     };
 
     /* Pipeline statistics queries allow the application to sample
@@ -93,8 +92,7 @@ namespace magma
             uint32_t queryCount,
             bool wait) const noexcept;
         std::vector<QueryResultWithAvailability<uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
-            uint32_t queryCount,
-            bool wait) const noexcept;
+            uint32_t queryCount) const noexcept;
 
     private:
         VkQueryPipelineStatisticFlags pipelineStatistics;
@@ -114,8 +112,7 @@ namespace magma
             uint32_t queryCount,
             bool wait) const noexcept;
         std::vector<QueryResultWithAvailability<uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
-            uint32_t queryCount,
-            bool wait) const noexcept;
+            uint32_t queryCount) const noexcept;
     };
 
     /* Transform feedback queries track the number of primitives attempted to be written and
@@ -141,8 +138,7 @@ namespace magma
             uint32_t queryCount,
             bool wait) const noexcept;
         std::vector<QueryResultWithAvailability<Result>> getResultsWithAvailability(uint32_t firstQuery,
-            uint32_t queryCount,
-            bool wait) const noexcept;
+            uint32_t queryCount) const noexcept;
     };
 #endif // VK_EXT_transform_feedback
 
