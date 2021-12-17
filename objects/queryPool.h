@@ -57,7 +57,7 @@ namespace magma
         template<typename Type>
         std::vector<Type> getQueryResults(uint32_t firstQuery,
             uint32_t queryCount,
-            VkQueryResultFlags flags) const;
+            VkQueryResultFlags flags) const noexcept;
 
     protected:
         const VkQueryType queryType;
