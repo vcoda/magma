@@ -39,9 +39,6 @@ namespace magma
     {
     public:
         ~QueryPool();
-        virtual std::vector<uint64_t> getResults(uint32_t firstQuery,
-            uint32_t queryCount,
-            bool wait) const noexcept;
         VkQueryType getType() const noexcept { return queryType; }
         uint32_t getQueryCount() const noexcept { return queryCount; }
 
@@ -51,6 +48,10 @@ namespace magma
             uint32_t queryCount,
             VkQueryPipelineStatisticFlags pipelineStatistics,
             std::shared_ptr<IAllocator> allocator);
+        template<typename Type>
+        std::vector<Type> getQueryResults(uint32_t firstQuery,
+            uint32_t queryCount,
+            VkQueryResultFlags flags) const;
 
     protected:
         const VkQueryType queryType;
@@ -68,6 +69,12 @@ namespace magma
         explicit OcclusionQuery(std::shared_ptr<Device> device,
             uint32_t queryCount,
             std::shared_ptr<IAllocator> allocator = nullptr);
+        std::vector<uint64_t> getResults(uint32_t firstQuery,
+            uint32_t queryCount,
+            bool wait) const noexcept;
+        std::vector<QueryResultWithAvailability<uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
+            uint32_t queryCount,
+            bool wait) const noexcept;
     };
 
     /* Pipeline statistics queries allow the application to sample
@@ -82,6 +89,12 @@ namespace magma
             VkQueryPipelineStatisticFlags pipelineStatistics,
             std::shared_ptr<IAllocator> allocator = nullptr);
         VkQueryPipelineStatisticFlags getStatisticFlags() const noexcept { return pipelineStatistics; }
+        std::vector<uint64_t> getResults(uint32_t firstQuery,
+            uint32_t queryCount,
+            bool wait) const noexcept;
+        std::vector<QueryResultWithAvailability<uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
+            uint32_t queryCount,
+            bool wait) const noexcept;
 
     private:
         VkQueryPipelineStatisticFlags pipelineStatistics;
@@ -97,19 +110,39 @@ namespace magma
         explicit TimestampQuery(std::shared_ptr<Device> device,
             uint32_t queryCount,
             std::shared_ptr<IAllocator> allocator = nullptr);
+        std::vector<uint64_t> getResults(uint32_t firstQuery,
+            uint32_t queryCount,
+            bool wait) const noexcept;
+        std::vector<QueryResultWithAvailability<uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
+            uint32_t queryCount,
+            bool wait) const noexcept;
     };
 
-    /* A query pool created with this type will capture two integers - numPrimitivesWritten and numPrimitivesNeeded -
-       for the specified vertex stream output from the last pre-rasterization shader stage.
-       The vertex stream output queried is zero by default. */
+    /* Transform feedback queries track the number of primitives attempted to be written and
+       actually written, by the vertex stream being captured, to a transform feedback buffer.
+       This query is updated during drawing commands while transform feedback is active.
+       The number of primitives actually written will be less than the number attempted to be written
+       if the bound transform feedback buffer size was too small for the number of primitives actually drawn. */
 
 #ifdef VK_EXT_transform_feedback
     class TransformFeedbackStreamQuery : public QueryPool
     {
     public:
+        struct Result
+        {
+            uint64_t numPrimitivesWritten;
+            uint64_t numPrimitivesNeeded;
+        };
+
         explicit TransformFeedbackStreamQuery(std::shared_ptr<Device> device,
             uint32_t queryCount,
             std::shared_ptr<IAllocator> allocator = nullptr);
+        std::vector<Result> getResults(uint32_t firstQuery,
+            uint32_t queryCount,
+            bool wait) const noexcept;
+        std::vector<QueryResultWithAvailability<Result>> getResultsWithAvailability(uint32_t firstQuery,
+            uint32_t queryCount,
+            bool wait) const noexcept;
     };
 #endif // VK_EXT_transform_feedback
 

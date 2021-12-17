@@ -46,29 +46,33 @@ QueryPool::~QueryPool()
     vkDestroyQueryPool(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-std::vector<uint64_t> QueryPool::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
+template<typename Type>
+inline std::vector<Type> QueryPool::getQueryResults(uint32_t firstQuery, uint32_t queryCount, VkQueryResultFlags flags) const
 {
-    VkQueryResultFlags flags = VK_QUERY_RESULT_64_BIT;
-    if (wait)
-        flags |= VK_QUERY_RESULT_WAIT_BIT;
-    else
-        flags |= VK_QUERY_RESULT_WITH_AVAILABILITY_BIT;
-    // TODO: VK_QUERY_RESULT_PARTIAL_BIT
-    const VkDeviceSize stride = sizeof(uint64_t);
-    std::vector<uint64_t> results(queryCount);
-    const VkResult get = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle,
-        firstQuery, queryCount,
-        sizeof(uint64_t) * results.size(), results.data(), stride,
-        flags);
-    if (MAGMA_SUCCEEDED(get))
-        return results;
-    return {};
+    constexpr VkDeviceSize stride = sizeof(Type);
+    std::vector<Type> data(queryCount);
+    const VkResult result = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, firstQuery, queryCount, sizeof(Type) * data.size(), data.data(), stride, flags);
+    if (!MAGMA_SUCCEEDED(result))
+        data.clear();
+    return data;
 }
 
 OcclusionQuery::OcclusionQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     QueryPool(VK_QUERY_TYPE_OCCLUSION, std::move(device), queryCount, 0, std::move(allocator))
 {}
+
+std::vector<uint64_t> OcclusionQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
+{
+    return getQueryResults<uint64_t>(firstQuery, queryCount,
+        VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
+}
+
+std::vector<QueryResultWithAvailability<uint64_t>> OcclusionQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
+{
+    return getQueryResults<QueryResultWithAvailability<uint64_t>>(firstQuery, queryCount,
+        VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
+}
 
 PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<Device> device,
     VkQueryPipelineStatisticFlags pipelineStatistics,
@@ -77,16 +81,52 @@ PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<Device> device,
     pipelineStatistics(pipelineStatistics)
 {}
 
+std::vector<uint64_t> PipelineStatisticsQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
+{
+    return getQueryResults<uint64_t>(firstQuery, queryCount,
+        VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
+}
+
+std::vector<QueryResultWithAvailability<uint64_t>> PipelineStatisticsQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
+{
+    return getQueryResults<QueryResultWithAvailability<uint64_t>>(firstQuery, queryCount,
+        VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
+}
+
 TimestampQuery::TimestampQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     QueryPool(VK_QUERY_TYPE_TIMESTAMP, std::move(device), queryCount, 0, std::move(allocator))
 {}
+
+std::vector<uint64_t> TimestampQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
+{
+    return getQueryResults<uint64_t>(firstQuery, queryCount,
+        VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
+}
+
+std::vector<QueryResultWithAvailability<uint64_t>> TimestampQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
+{
+    return getQueryResults<QueryResultWithAvailability<uint64_t>>(firstQuery, queryCount,
+        VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
+}
 
 #ifdef VK_EXT_transform_feedback
 TransformFeedbackStreamQuery::TransformFeedbackStreamQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     QueryPool(VK_QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT, std::move(device), queryCount, 0, std::move(allocator))
 {}
+
+std::vector<TransformFeedbackStreamQuery::Result> TransformFeedbackStreamQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
+{
+    return getQueryResults<Result>(firstQuery, queryCount,
+        VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
+}
+
+std::vector<QueryResultWithAvailability<TransformFeedbackStreamQuery::Result>> TransformFeedbackStreamQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
+{
+    return getQueryResults<QueryResultWithAvailability<Result>>(firstQuery, queryCount,
+        VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
+}
 #endif // VK_EXT_transform_feedback
 
 #ifdef VK_NV_ray_tracing
