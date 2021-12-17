@@ -18,6 +18,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "nondispatchable.h"
 
+#ifdef MAGMA_DEBUG
+#define MAGMA_INVALID_QUERY_RESULT 0xBADC0DEBADC0DE
+#else
+#define MAGMA_INVALID_QUERY_RESULT 0
+#endif
+
 namespace magma
 {
     /* If VK_QUERY_RESULT_WITH_AVAILABILITY_BIT is used, the final element
@@ -28,7 +34,7 @@ namespace magma
     struct QueryResultWithAvailability
     {
         Type result; // Data depends on query type
-        int64_t availability;
+        int64_t availability = MAGMA_INVALID_QUERY_RESULT;
     };
 
     /* An object that contains a number of query entries
@@ -127,8 +133,8 @@ namespace magma
     public:
         struct Result
         {
-            uint64_t numPrimitivesWritten;
-            uint64_t numPrimitivesNeeded;
+            uint64_t numPrimitivesWritten = MAGMA_INVALID_QUERY_RESULT;
+            uint64_t numPrimitivesNeeded = MAGMA_INVALID_QUERY_RESULT;
         };
 
         explicit TransformFeedbackStreamQuery(std::shared_ptr<Device> device,

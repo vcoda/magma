@@ -50,7 +50,7 @@ template<typename Type>
 inline std::vector<Type> QueryPool::getQueryResults(uint32_t firstQuery, uint32_t queryCount, VkQueryResultFlags flags) const
 {
     constexpr VkDeviceSize stride = sizeof(Type);
-    std::vector<Type> data(queryCount);
+    std::vector<Type> data(queryCount, {MAGMA_INVALID_QUERY_RESULT});
     const VkResult result = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, firstQuery, queryCount, sizeof(Type) * data.size(), data.data(), stride, flags);
     if (!MAGMA_SUCCEEDED(result))
         data.clear();
