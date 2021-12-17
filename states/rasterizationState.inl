@@ -20,6 +20,24 @@ constexpr RasterizationState::RasterizationState(const VkPolygonMode polygonMode
     }
 {}
 
+constexpr RasterizationState::RasterizationState(const RasterizationState& other) noexcept:
+    VkPipelineRasterizationStateCreateInfo{
+        other.sType,
+        other.pNext,
+        other.flags,
+        other.depthClampEnable,
+        other.rasterizerDiscardEnable,
+        other.polygonMode,
+        other.cullMode,
+        other.frontFace,
+        other.depthBiasEnable,
+        other.depthBiasConstantFactor,
+        other.depthBiasClamp,
+        other.depthBiasSlopeFactor,
+        other.lineWidth
+    }
+{}
+
 inline std::size_t RasterizationState::hash() const noexcept
 {
     return core::hashArgs(
@@ -73,7 +91,7 @@ constexpr WideLineRasterizationState::WideLineRasterizationState(const Rasteriza
 constexpr ConservativeRasterizationState::ConservativeRasterizationState(const RasterizationState& state,
     const VkConservativeRasterizationModeEXT conservativeRasterizationMode,
     const float extraPrimitiveOverestimationSize /* 0 */) noexcept:
-    RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable),
+    RasterizationState(state),
     conservative{
         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_CONSERVATIVE_STATE_CREATE_INFO_EXT,
         nullptr, // pNext
@@ -108,7 +126,7 @@ constexpr bool ConservativeRasterizationState::operator==(const ConservativeRast
 #ifdef VK_AMD_rasterization_order
 constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationState& state,
     const VkRasterizationOrderAMD rasterizationOrder) noexcept:
-    RasterizationState(state.polygonMode, state.cullMode, state.frontFace, state.depthClampEnable, state.rasterizerDiscardEnable),
+    RasterizationState(state),
     order{
         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD,
         nullptr, // pNext
