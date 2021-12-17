@@ -70,7 +70,7 @@ namespace magma
         std::size_t hash() const noexcept;
         constexpr bool operator==(const ConservativeRasterizationState&) const noexcept;
 
-        VkPipelineRasterizationConservativeStateCreateInfoEXT conservative;
+        const VkPipelineRasterizationConservativeStateCreateInfoEXT conservative;
     };
 #endif // VK_EXT_conservative_rasterization
 
@@ -102,7 +102,7 @@ namespace magma
         std::size_t hash() const noexcept;
         constexpr bool operator==(const RasterizationOrderState&) const noexcept;
 
-        VkPipelineRasterizationStateRasterizationOrderAMD order;
+        const VkPipelineRasterizationStateRasterizationOrderAMD order;
     };
 #endif // VK_AMD_rasterization_order
 }
