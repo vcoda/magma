@@ -123,6 +123,7 @@ MAGMA_OBJS= \
 	objects/surface.o \
 	objects/swapchain.o \
 	objects/swapchainFullScreenExclusive.o \
+	objects/transformFeedbackBuffer.o \
 	objects/uniformTexelBuffer.o \
 	objects/validationCache.o \
 	objects/vertexBuffer.o \

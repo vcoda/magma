@@ -1,0 +1,50 @@
+/*
+Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
+Copyright (C) 2018-2020 Victor Coda.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+*/
+#pragma once
+#include "buffer.h"
+
+namespace magma
+{
+#ifdef VK_EXT_transform_feedback
+    /* Transform feedback buffer to capture the primitives emitted by the graphics pipeline
+       from SPIR-V outputs decorated for transform feedback. The captured data can be drawn again
+       where the vertex count is derived from the byte counter without CPU intervention. */
+
+    class TransformFeedbackBuffer : public Buffer
+    {
+    public:
+        explicit TransformFeedbackBuffer(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            VkBufferCreateFlags flags = 0,
+            const Sharing& sharing = Sharing());
+    };
+
+    /* Transform feedback buffer as a source of indirect draw commands. */
+
+    class TransformFeedbackIndirectBuffer : public Buffer
+    {
+    public:
+        explicit TransformFeedbackIndirectBuffer(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            VkBufferCreateFlags flags = 0,
+            const Sharing& sharing = Sharing());
+    };
+#endif // VK_EXT_transform_feedback
+} // namespace magma

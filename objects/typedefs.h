@@ -94,6 +94,10 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(FullScreenExclusiveSwapchain)
     MAGMA_TYPEDEF_SHARED_PTR(FullScreenExclusiveSwapchainWin32)
 #endif
+#ifdef VK_EXT_transform_feedback
+    MAGMA_TYPEDEF_SHARED_PTR(TransformFeedbackBuffer)
+    MAGMA_TYPEDEF_SHARED_PTR(TransformFeedbackIndirectBuffer)
+#endif
 #ifdef VK_EXT_validation_cache
     MAGMA_TYPEDEF_SHARED_PTR(ValidationCache)
 #endif
