@@ -123,6 +123,38 @@ constexpr bool ConservativeRasterizationState::operator==(const ConservativeRast
 }
 #endif // VK_EXT_conservative_rasterization
 
+#ifdef VK_EXT_transform_feedback
+constexpr VertexStreamRasterizationState::VertexStreamRasterizationState(const RasterizationState& state, uint32_t rasterizationStream,
+    VkPipelineRasterizationStateStreamCreateFlagsEXT flags /* 0 */) noexcept:
+    RasterizationState(state),
+    stream{
+        VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_STREAM_CREATE_INFO_EXT,
+        nullptr, // pNext
+        flags,
+        rasterizationStream
+    }
+{
+    pNext = &stream;
+}
+
+inline std::size_t VertexStreamRasterizationState::hash() const noexcept
+{
+    std::size_t hash = core::hashArgs(
+        stream.sType,
+        stream.flags,
+        stream.rasterizationStream);
+    core::hashCombine(hash, RasterizationState::hash());
+    return hash;
+}
+
+constexpr bool VertexStreamRasterizationState::operator==(const VertexStreamRasterizationState& other) const noexcept
+{
+    return RasterizationState::operator==(other) &&
+        (stream.flags == other.stream.flags) &&
+        (stream.rasterizationStream == other.stream.rasterizationStream);
+}
+#endif // VK_EXT_transform_feedback
+
 #ifdef VK_AMD_rasterization_order
 constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationState& state,
     const VkRasterizationOrderAMD rasterizationOrder) noexcept:

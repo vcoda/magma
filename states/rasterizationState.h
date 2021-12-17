@@ -74,6 +74,22 @@ namespace magma
     };
 #endif // VK_EXT_conservative_rasterization
 
+    /* If the implementation is capable, a vertex stream other than zero can be rasterized.
+       If this structure is not present, rasterizationStream is assumed to be zero. */
+
+#ifdef VK_EXT_transform_feedback
+    struct VertexStreamRasterizationState : RasterizationState
+    {
+        constexpr VertexStreamRasterizationState(const RasterizationState& state,
+            uint32_t rasterizationStream,
+            VkPipelineRasterizationStateStreamCreateFlagsEXT flags = 0) noexcept;
+        std::size_t hash() const noexcept;
+        constexpr bool operator==(const VertexStreamRasterizationState&) const noexcept;
+
+        const VkPipelineRasterizationStateStreamCreateInfoEXT stream;
+    };
+#endif // VK_EXT_transform_feedback
+
     /* This extension enables applications to opt into a relaxed, implementation
        defined primitive rasterization order that may allow better parallel processing
        of primitives and thus enabling higher primitive throughput. */
