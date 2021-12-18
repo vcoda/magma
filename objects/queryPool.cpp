@@ -60,6 +60,7 @@ inline std::vector<Type> QueryPool::getQueryResults(uint32_t firstQuery, uint32_
     }
     const VkResult result = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, firstQuery, queryCount,
         sizeof(Type) * data.size(), data.data(), sizeof(Type), flags);
+    MAGMA_ASSERT((VK_SUCCESS == result) || (VK_NOT_READY == result));
     return data;
 }
 
