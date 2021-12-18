@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "physicalDevice.h"
 #include "device.h"
 #include "../allocator/allocator.h"
-#include "../misc/instanceExtension.h"
+#include "../misc/extProcAddress.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma

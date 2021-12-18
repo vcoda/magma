@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "surface.h"
 #include "display.h"
 #include "pipelineCache.h"
-#include "../misc/instanceExtension.h"
+#include "../misc/extProcAddress.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/stackArray.h"
 #include "../core/compare.h"

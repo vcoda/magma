@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "debugReportCallback.h"
 #include "instance.h"
 #include "../allocator/allocator.h"
-#include "../misc/instanceExtension.h"
+#include "../misc/extProcAddress.h"
 #include "../helpers/castToDebugReport.h"
 #include "../exceptions/errorResult.h"
 

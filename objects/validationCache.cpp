@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "validationCache.h"
 #include "device.h"
 #include "../allocator/allocator.h"
-#include "../misc/deviceExtension.h"
+#include "../misc/extProcAddress.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/stackArray.h"
 
@@ -50,8 +50,9 @@ ValidationCache::ValidationCache(std::shared_ptr<Device> device,
 
 ValidationCache::~ValidationCache()
 {
-    MAGMA_DEVICE_EXTENSION(vkDestroyValidationCacheEXT, VK_EXT_VALIDATION_CACHE_EXTENSION_NAME);
-    vkDestroyValidationCacheEXT(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkDestroyValidationCacheEXT); // Do not throw exception
+    if (vkDestroyValidationCacheEXT)
+        vkDestroyValidationCacheEXT(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 std::vector<uint8_t> ValidationCache::getData() const

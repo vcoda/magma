@@ -117,12 +117,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "misc/clearAttachment.h"
 #include "misc/clearValue.h"
-#include "misc/deviceExtension.h"
 #include "misc/deviceQueueDescriptor.h"
+#include "misc/extProcAddress.h"
 #include "misc/format.h"
 #include "misc/geometry.h"
 #include "misc/imageSubresourceRange.h"
-#include "misc/instanceExtension.h"
 #include "misc/pushConstants.h"
 #include "misc/scissor.h"
 #include "misc/scopedDebugMarker.h"

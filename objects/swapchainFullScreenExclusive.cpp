@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "swapchainFullScreenExclusive.h"
 #include "device.h"
-#include "../misc/deviceExtension.h"
+#include "../misc/extProcAddress.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma

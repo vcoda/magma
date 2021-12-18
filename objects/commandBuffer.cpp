@@ -27,7 +27,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "fence.h"
 #include "accelerationStructure.h"
 #include "../misc/geometry.h"
-#include "../misc/deviceExtension.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma

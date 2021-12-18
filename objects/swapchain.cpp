@@ -27,7 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "fence.h"
 #include "debugReportCallback.h"
 #include "../allocator/allocator.h"
-#include "../misc/deviceExtension.h"
+#include "../misc/extProcAddress.h"
 #include "../helpers/stackArray.h"
 #include "../helpers/stringize.h"
 #include "../helpers/checkFeatureSupport.h"

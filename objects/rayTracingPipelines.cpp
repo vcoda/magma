@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "../shaders/pipelineShaderStage.h"
 #include "../allocator/allocator.h"
-#include "../misc/deviceExtension.h"
+#include "../misc/extProcAddress.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma

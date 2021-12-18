@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "deviceMemory.h"
 #include "../allocator/allocator.h"
 #include "../misc/geometry.h"
-#include "../misc/deviceExtension.h"
+#include "../misc/extProcAddress.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
@@ -65,8 +65,9 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
 
 AccelerationStructure::~AccelerationStructure()
 {
-    MAGMA_DEVICE_EXTENSION(vkDestroyAccelerationStructureNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    vkDestroyAccelerationStructureNV(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkDestroyAccelerationStructureNV); // Do not throw exception
+    if (vkDestroyAccelerationStructureNV)
+        vkDestroyAccelerationStructureNV(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
     delete[] info.pGeometries;
 }
 

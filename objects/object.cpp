@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "object.h"
 #include "device.h"
-#include "../misc/deviceExtension.h"
+#include "../misc/extProcAddress.h"
 #include "../helpers/castToDebugReport.h"
 #include "../exceptions/errorResult.h"
 

@@ -147,9 +147,6 @@
     <ClInclude Include="..\..\misc\clearValue.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\misc\deviceExtension.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\misc\format.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
@@ -157,9 +154,6 @@
       <Filter>Header Files\misc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\misc\imageSubresourceRange.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\instanceExtension.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\misc\pushConstants.h">
@@ -636,6 +630,9 @@
     <ClInclude Include="..\..\objects\transformFeedbackBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\misc\extProcAddress.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1003,13 +1000,7 @@
     <None Include="..\..\misc\clearValue.inl">
       <Filter>Header Files\misc</Filter>
     </None>
-    <None Include="..\..\misc\deviceExtension.inl">
-      <Filter>Header Files\misc</Filter>
-    </None>
     <None Include="..\..\misc\imageSubresourceRange.inl">
-      <Filter>Header Files\misc</Filter>
-    </None>
-    <None Include="..\..\misc\instanceExtension.inl">
       <Filter>Header Files\misc</Filter>
     </None>
     <None Include="..\..\misc\scissor.inl">
