@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../objects/instance.h"
+#include "../objects/device.h"
 #include "../exceptions/unsupportedExtension.h"
 
 #define MAGMA_INSTANCE_EXTENSION(vkFunc, extensionName) static const PFN_##vkFunc vkFunc(reinterpret_cast<PFN_##vkFunc>(vkGetInstanceProcAddr(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(vkFunc))));\
