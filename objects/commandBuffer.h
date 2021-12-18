@@ -16,11 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "device.h"
 #include "dispatchable.h"
 #include "descriptorSet.h"
 #include "vertexBuffer.h"
 #include "indexBuffer.h"
 #include "indirectBuffer.h"
+#include "transformFeedbackBuffer.h"
 #include "image.h"
 #include "pipeline.h"
 #include "pipelineLayout.h"
@@ -142,6 +144,12 @@ namespace magma
         void bindVertexBuffers(uint32_t firstBinding,
             const std::vector<std::shared_ptr<BaseVertexBuffer>>& vertexBuffers,
             std::vector<VkDeviceSize> offsets = {}) noexcept;
+#ifdef VK_EXT_transform_feedback
+        void bindTransformFeedbackBuffers(uint32_t firstBinding,
+            const std::vector<std::shared_ptr<TransformFeedbackBuffer>>& transformFeedbackBuffers,
+            std::vector<VkDeviceSize> offsets = {},
+            std::vector<VkDeviceSize> sizes = {});
+#endif // VK_EXT_transform_feedback
 
         void draw(uint32_t vertexCount,
             uint32_t firstVertex = 0) const noexcept;
@@ -171,6 +179,14 @@ namespace magma
             uint32_t firstInstance,
             const std::vector<int32_t>& vertexOffsets = {}) const noexcept;
 #endif // VK_EXT_multi_draw
+#ifdef VK_EXT_transform_feedback
+        void drawIndirectByteCount(uint32_t instanceCount,
+            uint32_t firstInstance,
+            const std::shared_ptr<TransformFeedbackCounterBuffer>& counterBuffer,
+            VkDeviceSize counterBufferOffset,
+            uint32_t counterOffset,
+            uint32_t vertexStride) const noexcept;
+#endif // VK_EXT_transform_feedback
         void dispatch(uint32_t groupCountX,
             uint32_t groupCountY,
             uint32_t groupCountZ) const noexcept;
@@ -284,6 +300,14 @@ namespace magma
             uint32_t queryIndex) noexcept;
         void endQuery(const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex) noexcept;
+#ifdef VK_EXT_transform_feedback
+        void beginQueryIndexed(const std::shared_ptr<QueryPool>& queryPool,
+            uint32_t queryIndex,
+            uint32_t vertexStream) noexcept;
+        void endQueryIndexed(const std::shared_ptr<QueryPool>& queryPool,
+            uint32_t queryIndex,
+            uint32_t vertexStream) noexcept;
+#endif // VK_EXT_transform_feedback
         void resetQueryPool(const std::shared_ptr<QueryPool>& queryPool) noexcept;
         void writeTimestamp(VkPipelineStageFlagBits pipelineStage,
             const std::shared_ptr<QueryPool>& queryPool,
@@ -367,6 +391,14 @@ namespace magma
             bool inverted = false) noexcept;
         void endConditionalRendering() noexcept;
 #endif // VK_EXT_conditional_rendering
+#ifdef VK_EXT_transform_feedback
+        void beginTransformFeedback(uint32_t firstCounterBuffer,
+            const std::vector<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers,
+            const std::vector<VkDeviceSize>& counterBufferOffsets) noexcept;
+        void endTransformFeedback(uint32_t firstCounterBuffer,
+            const std::vector<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers,
+            const std::vector<VkDeviceSize>& counterBufferOffsets) noexcept;
+#endif // VK_EXT_transform_feedback
 
 #ifdef VK_NV_ray_tracing
         void buildAccelerationStructure(const std::shared_ptr<Buffer>& instanceData,

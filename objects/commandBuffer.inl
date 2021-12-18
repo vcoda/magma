@@ -219,6 +219,16 @@ inline void CommandBuffer::drawMultiIndexedInstanced(const std::vector<VkMultiDr
 }
 #endif // VK_EXT_multi_draw
 
+#ifdef VK_EXT_transform_feedback
+inline void CommandBuffer::drawIndirectByteCount(uint32_t instanceCount, uint32_t firstInstance, const std::shared_ptr<TransformFeedbackCounterBuffer>& counterBuffer,
+    VkDeviceSize counterBufferOffset, uint32_t counterOffset, uint32_t vertexStride) const noexcept
+{
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDrawIndirectByteCountEXT);
+    if (vkCmdDrawIndirectByteCountEXT)
+        vkCmdDrawIndirectByteCountEXT(handle, instanceCount, firstInstance, *counterBuffer, counterBufferOffset, counterOffset, vertexStride);
+}
+#endif // VK_EXT_transform_feedback
+
 inline void CommandBuffer::dispatch(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) const noexcept
 {
     vkCmdDispatch(handle, groupCountX, groupCountY, groupCountZ);
@@ -357,6 +367,22 @@ inline void CommandBuffer::endQuery(const std::shared_ptr<QueryPool>& queryPool,
     MAGMA_ASSERT(queryIndex < queryPool->getQueryCount());
     vkCmdEndQuery(handle, *queryPool, queryIndex);
 }
+
+#ifdef VK_EXT_transform_feedback
+inline void CommandBuffer::beginQueryIndexed(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex, uint32_t vertexStream) noexcept
+{
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBeginQueryIndexedEXT);
+    if (vkCmdBeginQueryIndexedEXT)
+        vkCmdBeginQueryIndexedEXT(handle, *queryPool, queryIndex, queryPool->getControlFlags(), vertexStream);
+}
+
+inline void CommandBuffer::endQueryIndexed(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex, uint32_t vertexStream) noexcept
+{
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdEndQueryIndexedEXT);
+    if (vkCmdEndQueryIndexedEXT)
+        vkCmdEndQueryIndexedEXT(handle, *queryPool, queryIndex, vertexStream);
+}
+#endif // VK_EXT_transform_feedback
 
 inline void CommandBuffer::resetQueryPool(const std::shared_ptr<QueryPool>& queryPool) noexcept
 {

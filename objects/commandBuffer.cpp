@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "commandBuffer.h"
 #include "commandPool.h"
-#include "device.h"
 #include "framebuffer.h"
 #include "imagelessFramebuffer.h"
 #include "renderPass.h"
@@ -183,12 +182,40 @@ void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline
 // inline void CommandBuffer::bindIndexBuffer
 // inline void CommandBuffer::bindVertexBuffer
 // inline void CommandBuffer::bindVertexBuffers
+
+#ifdef VK_EXT_transform_feedback
+void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const std::vector<std::shared_ptr<TransformFeedbackBuffer>>& transformFeedbackBuffers,
+    std::vector<VkDeviceSize> offsets /* empty */, std::vector<VkDeviceSize> sizes /* empty */)
+{
+    MAGMA_ASSERT(transformFeedbackBuffers.size() > 0);
+    if (!offsets.empty())
+        MAGMA_ASSERT(offsets.size() >= transformFeedbackBuffers.size());
+    if (!sizes.empty())
+        MAGMA_ASSERT(sizes.size() >= transformFeedbackBuffers.size());
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBindTransformFeedbackBuffersEXT);
+    if (vkCmdBindTransformFeedbackBuffersEXT)
+    {
+        MAGMA_STACK_ARRAY(VkBuffer, dereferencedBuffers, transformFeedbackBuffers.size());
+        for (const auto& buffer : transformFeedbackBuffers)
+            dereferencedBuffers.put(*buffer);
+        if (offsets.empty())
+            offsets.resize(transformFeedbackBuffers.size(), 0);
+        vkCmdBindTransformFeedbackBuffersEXT(handle, firstBinding, dereferencedBuffers.size(), dereferencedBuffers, offsets.data(), sizes.data());
+    }
+}
+#endif // VK_EXT_transform_feedback
+
 // inline void CommandBuffer::draw
 // inline void CommandBuffer::drawInstanced
 // inline void CommandBuffer::drawIndexed
 // inline void CommandBuffer::drawIndexedInstanced
 // inline void CommandBuffer::drawIndirect
 // inline void CommandBuffer::drawIndexedIndirect
+// inline void CommandBuffer::drawMulti
+// inline void CommandBuffer::drawMultiInstanced
+// inline void CommandBuffer::drawMultiIndexed
+// inline void CommandBuffer::drawMultiIndexedInstanced
+// inline void CommandBuffer::drawIndirectByteCount
 // inline void CommandBuffer::dispatch
 // inline void CommandBuffer::dispatchIndirect
 
@@ -325,6 +352,8 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
 
 // inline void CommandBuffer::beginQuery
 // inline void CommandBuffer::endQuery
+// inline void CommandBuffer::beginQueryIndexed
+// inline void CommandBuffer::endQueryIndexed
 // inline void CommandBuffer::resetQueryPool
 // inline void CommandBuffer::writeTimestamp
 
@@ -561,6 +590,32 @@ void CommandBuffer::endConditionalRendering() noexcept
         vkCmdEndConditionalRenderingEXT(handle);
 }
 #endif // VK_EXT_conditional_rendering
+
+#ifdef VK_EXT_transform_feedback
+void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const std::vector<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers, const std::vector<VkDeviceSize>& counterBufferOffsets) noexcept
+{
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBeginTransformFeedbackEXT);
+    if (vkCmdBeginTransformFeedbackEXT)
+    {
+        MAGMA_STACK_ARRAY(VkBuffer, dereferencedCounterBuffers, counterBuffers.size());
+        for (const auto& buffer : counterBuffers)
+            dereferencedCounterBuffers.put(*buffer);
+        vkCmdBeginTransformFeedbackEXT(handle, firstCounterBuffer, MAGMA_COUNT(counterBuffers), dereferencedCounterBuffers, counterBufferOffsets.data());
+    }
+}
+
+void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std::vector<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers, const std::vector<VkDeviceSize>& counterBufferOffsets) noexcept
+{
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdEndTransformFeedbackEXT);
+    if (vkCmdEndTransformFeedbackEXT)
+    {
+        MAGMA_STACK_ARRAY(VkBuffer, dereferencedCounterBuffers, counterBuffers.size());
+        for (const auto& buffer : counterBuffers)
+            dereferencedCounterBuffers.put(*buffer);
+        vkCmdEndTransformFeedbackEXT(handle, firstCounterBuffer, MAGMA_COUNT(counterBuffers), dereferencedCounterBuffers, counterBufferOffsets.data());
+    }
+}
+#endif // VK_EXT_transform_feedback
 
 #ifdef VK_NV_ray_tracing
 void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<Buffer>& instanceData, VkDeviceSize instanceOffset, bool update,
