@@ -35,12 +35,15 @@ namespace magma
             const Sharing& sharing = Sharing());
     };
 
-    /* Transform feedback buffer as a source of indirect draw commands. */
+    /* Counter buffer is used for storing and retrieving a byte counter with the following methods:
+       1. CommandBuffer::beginTransformFeedback()
+       2. CommandBuffer::endTransformFeedback()
+       3. CommandBuffer::drawIndirectByteCount() */
 
-    class TransformFeedbackIndirectBuffer : public Buffer
+    class TransformFeedbackCounterBuffer : public Buffer
     {
     public:
-        explicit TransformFeedbackIndirectBuffer(std::shared_ptr<Device> device,
+        explicit TransformFeedbackCounterBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
