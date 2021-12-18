@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "nondispatchable.h"
 
 #ifdef MAGMA_DEBUG
-#define MAGMA_INVALID_QUERY_RESULT 0xBADC0DEBADC0DE
+#define MAGMA_INVALID_QUERY_RESULT 0xBAADC0DEBAADC0DE
 #else
 #define MAGMA_INVALID_QUERY_RESULT 0
 #endif
