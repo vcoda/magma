@@ -83,6 +83,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/typedefs.h"
 #include "objects/uniformBuffer.h"
 #include "objects/uniformTexelBuffer.h"
+#include "objects/validationCache.h"
 #include "objects/vertexBuffer.h"
 
 #include "shaders/pipelineShaderStage.h"
