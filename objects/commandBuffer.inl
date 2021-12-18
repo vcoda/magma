@@ -18,7 +18,6 @@ inline void CommandBuffer::setViewport(const VkViewport& viewport) noexcept
 
 inline void CommandBuffer::setViewports(const std::initializer_list<Viewport>& viewports) noexcept
 {
-    MAGMA_ASSERT(viewports.size());
     vkCmdSetViewport(handle, 0, MAGMA_COUNT(viewports), viewports.begin());
 }
 
@@ -35,7 +34,6 @@ inline void CommandBuffer::setScissor(const VkRect2D& scissor) noexcept
 
 inline void CommandBuffer::setScissors(const std::initializer_list<VkRect2D>& scissors) noexcept
 {
-    MAGMA_ASSERT(scissors.size());
     vkCmdSetScissor(handle, 0, MAGMA_COUNT(scissors), scissors.begin());
 }
 
@@ -51,31 +49,26 @@ inline void CommandBuffer::setDepthBias(float depthBiasConstantFactor, float dep
 
 inline void CommandBuffer::setBlendConstants(const float blendConstants[4]) noexcept
 {
-    MAGMA_ASSERT(blendConstants);
     vkCmdSetBlendConstants(handle, blendConstants);
 }
 
 inline void CommandBuffer::setDepthBounds(float minDepthBounds, float maxDepthBounds) noexcept
 {
-    MAGMA_ASSERT(minDepthBounds <= maxDepthBounds);
     vkCmdSetDepthBounds(handle, minDepthBounds, maxDepthBounds);
 }
 
 inline void CommandBuffer::setStencilCompareMask(bool frontFace, bool backFace, uint32_t compareMask) noexcept
 {
-    MAGMA_ASSERT(frontFace || backFace);
     vkCmdSetStencilCompareMask(handle, MAGMA_STENCIL_FACE_MASK(frontFace, backFace), compareMask);
 }
 
 inline void CommandBuffer::setStencilWriteMask(bool frontFace, bool backFace, uint32_t writeMask) noexcept
 {
-    MAGMA_ASSERT(frontFace || backFace);
     vkCmdSetStencilWriteMask(handle, MAGMA_STENCIL_FACE_MASK(frontFace, backFace), writeMask);
 }
 
 inline void CommandBuffer::setStencilReference(bool frontFace, bool backFace, uint32_t reference) noexcept
 {
-    MAGMA_ASSERT(frontFace || backFace);
     vkCmdSetStencilReference(handle, MAGMA_STENCIL_FACE_MASK(frontFace, backFace), reference);
 }
 
@@ -331,13 +324,11 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
 
 inline void CommandBuffer::beginQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex) noexcept
 {
-    MAGMA_ASSERT(queryIndex < queryPool->getQueryCount());
     vkCmdBeginQuery(handle, *queryPool, queryIndex, queryPool->getControlFlags());
 }
 
 inline void CommandBuffer::endQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex) noexcept
 {
-    MAGMA_ASSERT(queryIndex < queryPool->getQueryCount());
     vkCmdEndQuery(handle, *queryPool, queryIndex);
 }
 
