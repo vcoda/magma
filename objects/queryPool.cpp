@@ -114,6 +114,7 @@ QueryResultWithAvailability<PipelineStatisticsQuery::Result> PipelineStatisticsQ
         Result result;
         const uint32_t last = spreadResults(data, result);
         const int64_t availability = static_cast<int64_t>(data[last]);
+        MAGMA_ASSERT(1 == availability); // Should always be 1 if result is VK_SUCCESS
         return QueryResultWithAvailability<Result>{result, availability};
     }
     return {}; // VK_NOT_READY
