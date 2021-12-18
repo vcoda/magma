@@ -280,8 +280,7 @@ namespace magma
             VkDependencyFlags dependencyFlags = 0) noexcept;
 
         void beginQuery(const std::shared_ptr<QueryPool>& queryPool,
-            uint32_t queryIndex,
-            bool precise) noexcept;
+            uint32_t queryIndex) noexcept;
         void endQuery(const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex) noexcept;
         void resetQueryPool(const std::shared_ptr<QueryPool>& queryPool) noexcept;

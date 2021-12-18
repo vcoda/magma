@@ -46,12 +46,14 @@ namespace magma
     public:
         ~QueryPool();
         VkQueryType getType() const noexcept { return queryType; }
+        VkQueryControlFlags getControlFlags() const noexcept { return controlFlags; }
         uint32_t getQueryCount() const noexcept { return queryCount; }
 
     protected:
         explicit QueryPool(VkQueryType queryType,
             std::shared_ptr<Device> device,
             uint32_t queryCount,
+            VkQueryControlFlags controlFlags,
             VkQueryPipelineStatisticFlags pipelineStatistics,
             std::shared_ptr<IAllocator> allocator);
         template<typename Type>
@@ -61,6 +63,7 @@ namespace magma
 
     protected:
         const VkQueryType queryType;
+        const VkQueryControlFlags controlFlags;
         const uint32_t queryCount;
     };
 
@@ -74,7 +77,9 @@ namespace magma
     public:
         explicit OcclusionQuery(std::shared_ptr<Device> device,
             uint32_t queryCount,
+            bool precise,
             std::shared_ptr<IAllocator> allocator = nullptr);
+        bool precise() const noexcept { return controlFlags & VK_QUERY_CONTROL_PRECISE_BIT; }
         std::vector<uint64_t> getResults(uint32_t firstQuery,
             uint32_t queryCount,
             bool wait) const noexcept;

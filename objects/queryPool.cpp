@@ -26,9 +26,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 QueryPool::QueryPool(VkQueryType queryType, std::shared_ptr<Device> device, uint32_t queryCount,
-    VkQueryPipelineStatisticFlags pipelineStatistics, std::shared_ptr<IAllocator> allocator):
+    VkQueryControlFlags controlFlags, VkQueryPipelineStatisticFlags pipelineStatistics,
+    std::shared_ptr<IAllocator> allocator):
     NonDispatchable(VK_OBJECT_TYPE_QUERY_POOL, std::move(device), std::move(allocator)),
     queryType(queryType),
+    controlFlags(controlFlags),
     queryCount(queryCount)
 {
     VkQueryPoolCreateInfo queryInfo;
@@ -61,9 +63,9 @@ inline std::vector<Type> QueryPool::getQueryResults(uint32_t firstQuery, uint32_
     return data;
 }
 
-OcclusionQuery::OcclusionQuery(std::shared_ptr<Device> device, uint32_t queryCount,
+OcclusionQuery::OcclusionQuery(std::shared_ptr<Device> device, uint32_t queryCount, bool precise,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    QueryPool(VK_QUERY_TYPE_OCCLUSION, std::move(device), queryCount, 0, std::move(allocator))
+    QueryPool(VK_QUERY_TYPE_OCCLUSION, std::move(device), queryCount, (precise ? VK_QUERY_CONTROL_PRECISE_BIT : 0), 0, std::move(allocator))
 {}
 
 std::vector<uint64_t> OcclusionQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
@@ -80,7 +82,7 @@ std::vector<QueryResultWithAvailability<uint64_t>> OcclusionQuery::getResultsWit
 
 PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<Device> device, VkQueryPipelineStatisticFlags flags,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    QueryPool(VK_QUERY_TYPE_PIPELINE_STATISTICS, std::move(device), 1, flags, std::move(allocator)),
+    QueryPool(VK_QUERY_TYPE_PIPELINE_STATISTICS, std::move(device), 1, 0, flags, std::move(allocator)),
     flags(flags)
 {
     // Pipeline statistics queries write one integer value for each bit
@@ -148,7 +150,7 @@ uint32_t PipelineStatisticsQuery::spreadResults(const std::vector<uint64_t>& dat
 
 TimestampQuery::TimestampQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    QueryPool(VK_QUERY_TYPE_TIMESTAMP, std::move(device), queryCount, 0, std::move(allocator))
+    QueryPool(VK_QUERY_TYPE_TIMESTAMP, std::move(device), queryCount, 0, 0, std::move(allocator))
 {}
 
 std::vector<uint64_t> TimestampQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
@@ -166,7 +168,7 @@ std::vector<QueryResultWithAvailability<uint64_t>> TimestampQuery::getResultsWit
 #ifdef VK_EXT_transform_feedback
 TransformFeedbackStreamQuery::TransformFeedbackStreamQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    QueryPool(VK_QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT, std::move(device), queryCount, 0, std::move(allocator))
+    QueryPool(VK_QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT, std::move(device), queryCount, 0, 0, std::move(allocator))
 {}
 
 std::vector<TransformFeedbackStreamQuery::Result> TransformFeedbackStreamQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
@@ -185,7 +187,7 @@ std::vector<QueryResultWithAvailability<TransformFeedbackStreamQuery::Result>> T
 #ifdef VK_NV_ray_tracing
 AccelerationStructureCompactedSizeQuery::AccelerationStructureCompactedSizeQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    QueryPool(VK_QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_NV, std::move(device), queryCount, 0, std::move(allocator))
+    QueryPool(VK_QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_NV, std::move(device), queryCount, 0, 0, std::move(allocator))
 {}
 #endif // VK_NV_ray_tracing
 } // namespace magma

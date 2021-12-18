@@ -346,13 +346,10 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
     barrier.resource->setLayout(barrier.newLayout);
 }
 
-inline void CommandBuffer::beginQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex, bool precise) noexcept
+inline void CommandBuffer::beginQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex) noexcept
 {
     MAGMA_ASSERT(queryIndex < queryPool->getQueryCount());
-    VkQueryControlFlags flags = 0;
-    if (precise)
-        flags |= VK_QUERY_CONTROL_PRECISE_BIT;
-    vkCmdBeginQuery(handle, *queryPool, queryIndex, flags);
+    vkCmdBeginQuery(handle, *queryPool, queryIndex, queryPool->getControlFlags());
 }
 
 inline void CommandBuffer::endQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex) noexcept
