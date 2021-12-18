@@ -74,9 +74,9 @@ std::vector<uint64_t> OcclusionQuery::getResults(uint32_t firstQuery, uint32_t q
         VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
 }
 
-std::vector<QueryResultWithAvailability<uint64_t>> OcclusionQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
+std::vector<QueryResult<uint64_t>> OcclusionQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
 {
-    return getQueryResults<QueryResultWithAvailability<uint64_t>>(firstQuery, queryCount,
+    return getQueryResults<QueryResult<uint64_t>>(firstQuery, queryCount,
         VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
 }
 
@@ -104,7 +104,7 @@ PipelineStatisticsQuery::Result PipelineStatisticsQuery::getResults(bool wait) c
     return result;
 }
 
-QueryResultWithAvailability<PipelineStatisticsQuery::Result> PipelineStatisticsQuery::getResultsWithAvailability() const noexcept
+QueryResult<PipelineStatisticsQuery::Result> PipelineStatisticsQuery::getResultsWithAvailability() const noexcept
 {
     const VkResult query = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, 0, 1, sizeof(uint64_t) * data.size(), data.data(), sizeof(uint64_t),
         VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
@@ -114,7 +114,7 @@ QueryResultWithAvailability<PipelineStatisticsQuery::Result> PipelineStatisticsQ
         const uint32_t last = spreadResults(data, result);
         const int64_t availability = static_cast<int64_t>(data[last]);
         MAGMA_ASSERT(1 == availability); // Should always be 1 if result is VK_SUCCESS
-        return QueryResultWithAvailability<Result>{result, availability};
+        return QueryResult<Result>{result, availability};
     }
     return {}; // VK_NOT_READY
 }
@@ -159,9 +159,9 @@ std::vector<uint64_t> TimestampQuery::getResults(uint32_t firstQuery, uint32_t q
         VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
 }
 
-std::vector<QueryResultWithAvailability<uint64_t>> TimestampQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
+std::vector<QueryResult<uint64_t>> TimestampQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
 {
-    return getQueryResults<QueryResultWithAvailability<uint64_t>>(firstQuery, queryCount,
+    return getQueryResults<QueryResult<uint64_t>>(firstQuery, queryCount,
         VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
 }
 
@@ -177,9 +177,9 @@ std::vector<TransformFeedbackStreamQuery::Result> TransformFeedbackStreamQuery::
         VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
 }
 
-std::vector<QueryResultWithAvailability<TransformFeedbackStreamQuery::Result>> TransformFeedbackStreamQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
+std::vector<QueryResult<TransformFeedbackStreamQuery::Result>> TransformFeedbackStreamQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
 {
-    return getQueryResults<QueryResultWithAvailability<Result>>(firstQuery, queryCount,
+    return getQueryResults<QueryResult<Result>>(firstQuery, queryCount,
         VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
 }
 #endif // VK_EXT_transform_feedback

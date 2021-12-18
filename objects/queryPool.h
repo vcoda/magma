@@ -31,9 +31,9 @@ namespace magma
        is available, with any non-zero value indicating that it is available. */
 
     template<typename Type>
-    struct QueryResultWithAvailability
+    struct QueryResult
     {
-        Type result; // Data depends on query type
+        Type result; // Depends on query type
         int64_t availability = 0;
     };
 
@@ -83,7 +83,7 @@ namespace magma
         std::vector<uint64_t> getResults(uint32_t firstQuery,
             uint32_t queryCount,
             bool wait) const noexcept;
-        std::vector<QueryResultWithAvailability<uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
+        std::vector<QueryResult<uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
             uint32_t queryCount) const noexcept;
     };
 
@@ -115,7 +115,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
         VkQueryPipelineStatisticFlags getStatisticFlags() const noexcept { return flags; }
         Result getResults(bool wait) const noexcept;
-        QueryResultWithAvailability<Result> getResultsWithAvailability() const noexcept;
+        QueryResult<Result> getResultsWithAvailability() const noexcept;
 
     private:
         uint32_t spreadResults(const std::vector<uint64_t>& data,
@@ -138,7 +138,7 @@ namespace magma
         std::vector<uint64_t> getResults(uint32_t firstQuery,
             uint32_t queryCount,
             bool wait) const noexcept;
-        std::vector<QueryResultWithAvailability<uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
+        std::vector<QueryResult<uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
             uint32_t queryCount) const noexcept;
     };
 
@@ -164,7 +164,7 @@ namespace magma
         std::vector<Result> getResults(uint32_t firstQuery,
             uint32_t queryCount,
             bool wait) const noexcept;
-        std::vector<QueryResultWithAvailability<Result>> getResultsWithAvailability(uint32_t firstQuery,
+        std::vector<QueryResult<Result>> getResultsWithAvailability(uint32_t firstQuery,
             uint32_t queryCount) const noexcept;
     };
 #endif // VK_EXT_transform_feedback
