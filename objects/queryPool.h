@@ -34,7 +34,7 @@ namespace magma
     struct QueryResultWithAvailability
     {
         Type result; // Data depends on query type
-        int64_t availability = MAGMA_INVALID_QUERY_RESULT;
+        int64_t availability = 0;
     };
 
     /* An object that contains a number of query entries
