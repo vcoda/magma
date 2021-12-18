@@ -1,5 +1,12 @@
 namespace magma
 {
+inline bool CommandBuffer::reset(bool releaseResources) noexcept
+{
+    const VkResult result = vkResetCommandBuffer(handle, releaseResources ? VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT : 0);
+    MAGMA_ASSERT(VK_SUCCESS == result);
+    return (VK_SUCCESS == result);
+}
+
 inline void CommandBuffer::bindPipeline(const std::shared_ptr<Pipeline>& pipeline) noexcept
 {
     vkCmdBindPipeline(handle, pipeline->getBindPoint(), *pipeline);

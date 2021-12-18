@@ -132,16 +132,7 @@ void CommandBuffer::end()
     MAGMA_THROW_FAILURE(result, "failed to record command buffer");
 }
 
-bool CommandBuffer::reset(bool releaseResources) noexcept
-{
-    VkCommandBufferResetFlags flags = 0;
-    if (releaseResources)
-        flags |= VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT;
-    const VkResult reset = vkResetCommandBuffer(handle, flags);
-    MAGMA_ASSERT(VK_SUCCESS == reset);
-    return (VK_SUCCESS == reset);
-}
-
+// inline void CommandBuffer::reset
 // inline void CommandBuffer::bindPipeline
 
 void CommandBuffer::setViewport(float x, float y, float width, float height,
