@@ -50,18 +50,17 @@ QueryPool::~QueryPool()
 template<typename Type>
 inline std::vector<Type> QueryPool::getQueryResults(uint32_t firstQuery, uint32_t queryCount, VkQueryResultFlags flags) const noexcept
 {
-    try
-    {
-        constexpr VkDeviceSize stride = sizeof(Type);
-        std::vector<Type> data(queryCount, {MAGMA_INVALID_QUERY_RESULT});
-        const VkResult result = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, firstQuery, queryCount, sizeof(Type) * data.size(), data.data(), stride, flags);
-        if (!MAGMA_SUCCEEDED(result))
-            data.clear();
-        return data;
-    } catch (...)
-    {
+    std::vector<Type> data;
+    try {
+        data.resize(queryCount,{MAGMA_INVALID_QUERY_RESULT});
+    } catch (...) {
         return {};
     }
+    const VkResult result = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, firstQuery, queryCount,
+        sizeof(Type) * data.size(), data.data(), sizeof(Type), flags);
+    if (!MAGMA_SUCCEEDED(result))
+        data.clear();
+    return data;
 }
 
 OcclusionQuery::OcclusionQuery(std::shared_ptr<Device> device, uint32_t queryCount,
@@ -81,8 +80,7 @@ std::vector<QueryResultWithAvailability<uint64_t>> OcclusionQuery::getResultsWit
         VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
 }
 
-PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<Device> device,
-    VkQueryPipelineStatisticFlags flags,
+PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<Device> device, VkQueryPipelineStatisticFlags flags,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     QueryPool(VK_QUERY_TYPE_PIPELINE_STATISTICS, std::move(device), 1, flags, std::move(allocator)),
     flags(flags)
