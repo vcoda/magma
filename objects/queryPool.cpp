@@ -194,5 +194,17 @@ AccelerationStructureCompactedSizeQuery::AccelerationStructureCompactedSizeQuery
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     QueryPool(VK_QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_NV, std::move(device), queryCount, 0, 0, std::move(allocator))
 {}
+
+std::vector<uint64_t> AccelerationStructureCompactedSizeQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
+{
+    return getQueryResults<uint64_t>(firstQuery, queryCount,
+        VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
+}
+
+std::vector<QueryResult<uint64_t>> AccelerationStructureCompactedSizeQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
+{
+    return getQueryResults<QueryResult<uint64_t>>(firstQuery, queryCount,
+        VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
+}
 #endif // VK_NV_ray_tracing
 } // namespace magma

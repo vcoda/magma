@@ -180,6 +180,11 @@ namespace magma
         explicit AccelerationStructureCompactedSizeQuery(std::shared_ptr<Device> device,
             uint32_t queryCount,
             std::shared_ptr<IAllocator> allocator = nullptr);
+        std::vector<uint64_t> getResults(uint32_t firstQuery,
+            uint32_t queryCount,
+            bool wait) const noexcept;
+        std::vector<QueryResult<uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
+            uint32_t queryCount) const noexcept;
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma
