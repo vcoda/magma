@@ -24,11 +24,7 @@ inline void CommandBuffer::setViewports(const std::initializer_list<Viewport>& v
 
 inline void CommandBuffer::setScissor(int32_t x, int32_t y, uint32_t width, uint32_t height) noexcept
 {
-    VkRect2D scissor;
-    scissor.offset.x = x;
-    scissor.offset.y = y;
-    scissor.extent.width = width;
-    scissor.extent.height = height;
+    const VkRect2D scissor = {x, y, width, height};
     vkCmdSetScissor(handle, 0, 1, &scissor);
 }
 
