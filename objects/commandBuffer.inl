@@ -5,29 +5,6 @@ inline void CommandBuffer::bindPipeline(const std::shared_ptr<Pipeline>& pipelin
     vkCmdBindPipeline(handle, pipeline->getBindPoint(), *pipeline);
 }
 
-inline void CommandBuffer::setViewport(float x, float y, float width, float height,
-    float minDepth /* 0 */, float maxDepth /* 1 */) noexcept
-{
-    VkViewport viewport;
-    viewport.x = x;
-    viewport.y = y;
-    if (height < 0)
-    {
-        if (maintenance1KHREnable)
-            viewport.y = -height - y; // Move origin to bottom left
-    }
-    viewport.width = width;
-    viewport.height = height;
-    if (height < 0)
-    {
-        if (!(maintenance1KHREnable || negativeHeightAMDEnable))
-            viewport.height = -height; // Negative viewport height not supported
-    }
-    viewport.minDepth = minDepth;
-    viewport.maxDepth = maxDepth;
-    vkCmdSetViewport(handle, 0, 1, &viewport);
-}
-
 inline void CommandBuffer::setViewport(uint32_t x, uint32_t y, uint32_t width, int32_t height,
     float minDepth /* 0 */, float maxDepth /* 1 */) noexcept
 {
