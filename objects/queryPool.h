@@ -90,18 +90,34 @@ namespace magma
     class PipelineStatisticsQuery : public QueryPool
     {
     public:
+        struct Result
+        {
+            uint64_t inputAssemblyVertices = MAGMA_INVALID_QUERY_RESULT;
+            uint64_t inputAssemblyPrimitives = MAGMA_INVALID_QUERY_RESULT;
+            uint64_t vertexShaderInvocations = MAGMA_INVALID_QUERY_RESULT;
+            uint64_t geometryShaderInvocations = MAGMA_INVALID_QUERY_RESULT;
+            uint64_t geometryShaderPrimitives = MAGMA_INVALID_QUERY_RESULT;
+            uint64_t clippingInvocations = MAGMA_INVALID_QUERY_RESULT;
+            uint64_t clippingPrimitives = MAGMA_INVALID_QUERY_RESULT;
+            uint64_t fragmentShaderInvocations = MAGMA_INVALID_QUERY_RESULT;
+            uint64_t tesselationControlShaderPatches = MAGMA_INVALID_QUERY_RESULT;
+            uint64_t tesselationEvaluationShaderInvocations = MAGMA_INVALID_QUERY_RESULT;
+            uint64_t computeShaderInvocations = MAGMA_INVALID_QUERY_RESULT;
+        };
+
         explicit PipelineStatisticsQuery(std::shared_ptr<Device> device,
             VkQueryPipelineStatisticFlags pipelineStatistics,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        VkQueryPipelineStatisticFlags getStatisticFlags() const noexcept { return pipelineStatistics; }
-        std::vector<uint64_t> getResults(uint32_t firstQuery,
-            uint32_t queryCount,
-            bool wait) const noexcept;
-        std::vector<QueryResultWithAvailability<uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
-            uint32_t queryCount) const noexcept;
+        VkQueryPipelineStatisticFlags getStatisticFlags() const noexcept { return flags; }
+        Result getResults(bool wait) const noexcept;
+        QueryResultWithAvailability<Result> getResultsWithAvailability() const noexcept;
 
     private:
-        VkQueryPipelineStatisticFlags pipelineStatistics;
+        uint32_t spreadResults(const std::vector<uint64_t>& data,
+            Result& result) const noexcept;
+
+        const VkQueryPipelineStatisticFlags flags;
+        mutable std::vector<uint64_t> data;
     };
 
     /* Timestamps provide applications with a mechanism

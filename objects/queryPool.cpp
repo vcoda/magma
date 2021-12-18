@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
+#include <nmmintrin.h>
 #include "queryPool.h"
 #include "device.h"
 #include "../allocator/allocator.h"
@@ -81,22 +82,74 @@ std::vector<QueryResultWithAvailability<uint64_t>> OcclusionQuery::getResultsWit
 }
 
 PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<Device> device,
-    VkQueryPipelineStatisticFlags pipelineStatistics,
+    VkQueryPipelineStatisticFlags flags,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    QueryPool(VK_QUERY_TYPE_PIPELINE_STATISTICS, std::move(device), 1, pipelineStatistics, std::move(allocator)),
-    pipelineStatistics(pipelineStatistics)
-{}
-
-std::vector<uint64_t> PipelineStatisticsQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
+    QueryPool(VK_QUERY_TYPE_PIPELINE_STATISTICS, std::move(device), 1, flags, std::move(allocator)),
+    flags(flags)
 {
-    return getQueryResults<uint64_t>(firstQuery, queryCount,
-        VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
+    // Pipeline statistics queries write one integer value for each bit
+    // that is enabled in the pipelineStatistics when the pool is created.
+    const int count = _mm_popcnt_u32(flags);
+    // If VK_QUERY_RESULT_WITH_AVAILABILITY_BIT is used, the final element
+    // of each query's result is an integer indicating whether the query's result
+    // is available, with any non-zero value indicating that it is available.
+    data.resize(count + 1, MAGMA_INVALID_QUERY_RESULT);
 }
 
-std::vector<QueryResultWithAvailability<uint64_t>> PipelineStatisticsQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
+PipelineStatisticsQuery::Result PipelineStatisticsQuery::getResults(bool wait) const noexcept
 {
-    return getQueryResults<QueryResultWithAvailability<uint64_t>>(firstQuery, queryCount,
+    const VkResult query = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, 0, 1, sizeof(uint64_t) * data.size(), data.data(), sizeof(uint64_t),
+        VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
+    if (VK_SUCCESS == query)
+    {
+        Result result;
+        spreadResults(data, result);
+        return result;
+    }
+    return {}; // VK_NOT_READY
+}
+
+QueryResultWithAvailability<PipelineStatisticsQuery::Result> PipelineStatisticsQuery::getResultsWithAvailability() const noexcept
+{
+    const VkResult query = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, 0, 1, sizeof(uint64_t) * data.size(), data.data(), sizeof(uint64_t),
         VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
+    if (VK_SUCCESS == query)
+    {
+        Result result;
+        const uint32_t last = spreadResults(data, result);
+        const int64_t availability = static_cast<int64_t>(data[last]);
+        return QueryResultWithAvailability<Result>{result, availability};
+    }
+    return {}; // VK_NOT_READY
+}
+
+uint32_t PipelineStatisticsQuery::spreadResults(const std::vector<uint64_t>& data, Result& result) const noexcept
+{
+    memset(&result, 0, sizeof(Result));
+    uint32_t i = 0;
+    if (flags & VK_QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_VERTICES_BIT)
+        result.inputAssemblyVertices = data[i++];
+    if (flags & VK_QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_PRIMITIVES_BIT)
+        result.inputAssemblyPrimitives = data[i++];
+    if (flags & VK_QUERY_PIPELINE_STATISTIC_VERTEX_SHADER_INVOCATIONS_BIT)
+        result.vertexShaderInvocations = data[i++];
+    if (flags & VK_QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_INVOCATIONS_BIT)
+        result.geometryShaderInvocations = data[i++];
+    if (flags & VK_QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_PRIMITIVES_BIT)
+        result.geometryShaderPrimitives = data[i++];
+    if (flags & VK_QUERY_PIPELINE_STATISTIC_CLIPPING_INVOCATIONS_BIT)
+        result.clippingInvocations = data[i++];
+    if (flags & VK_QUERY_PIPELINE_STATISTIC_CLIPPING_PRIMITIVES_BIT)
+        result.clippingPrimitives = data[i++];
+    if (flags & VK_QUERY_PIPELINE_STATISTIC_FRAGMENT_SHADER_INVOCATIONS_BIT)
+        result.fragmentShaderInvocations = data[i++];
+    if (flags & VK_QUERY_PIPELINE_STATISTIC_TESSELLATION_CONTROL_SHADER_PATCHES_BIT)
+        result.tesselationControlShaderPatches = data[i++];
+    if (flags & VK_QUERY_PIPELINE_STATISTIC_TESSELLATION_EVALUATION_SHADER_INVOCATIONS_BIT)
+        result.tesselationEvaluationShaderInvocations = data[i++];
+    if (flags & VK_QUERY_PIPELINE_STATISTIC_COMPUTE_SHADER_INVOCATIONS_BIT)
+        result.computeShaderInvocations = data[i++];
+    return i;
 }
 
 TimestampQuery::TimestampQuery(std::shared_ptr<Device> device, uint32_t queryCount,
