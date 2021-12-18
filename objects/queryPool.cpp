@@ -96,13 +96,10 @@ PipelineStatisticsQuery::Result PipelineStatisticsQuery::getResults(bool wait) c
 {
     const VkResult query = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, 0, 1, sizeof(uint64_t) * data.size(), data.data(), sizeof(uint64_t),
         VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
+    Result result;
     if (VK_SUCCESS == query)
-    {
-        Result result;
         spreadResults(data, result);
-        return result;
-    }
-    return {}; // VK_NOT_READY
+    return result;
 }
 
 QueryResultWithAvailability<PipelineStatisticsQuery::Result> PipelineStatisticsQuery::getResultsWithAvailability() const noexcept
