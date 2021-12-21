@@ -395,14 +395,16 @@ namespace magma
             bool inverted = false) noexcept;
         void endConditionalRendering() noexcept;
 #endif // VK_EXT_conditional_rendering
+
 #ifdef VK_EXT_transform_feedback
         void beginTransformFeedback() noexcept;
+        void endTransformFeedback() noexcept;
         void beginTransformFeedback(uint32_t firstCounterBuffer,
-            const std::vector<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers,
-            const std::vector<VkDeviceSize>& counterBufferOffsets) noexcept;
+            const std::initializer_list<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers,
+            const std::initializer_list<VkDeviceSize>& counterBufferOffsets = {}) noexcept;
         void endTransformFeedback(uint32_t firstCounterBuffer,
-            const std::vector<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers,
-            const std::vector<VkDeviceSize>& counterBufferOffsets) noexcept;
+            const std::initializer_list<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers,
+            const std::initializer_list<VkDeviceSize>& counterBufferOffsets = {}) noexcept;
 #endif // VK_EXT_transform_feedback
 
 #ifdef VK_NV_ray_tracing

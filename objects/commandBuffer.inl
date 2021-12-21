@@ -410,6 +410,22 @@ inline void CommandBuffer::endRenderPass() noexcept
     vkCmdEndRenderPass(handle);
 }
 
+#ifdef VK_EXT_transform_feedback
+inline void CommandBuffer::beginTransformFeedback() noexcept
+{
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBeginTransformFeedbackEXT);
+    if (vkCmdBeginTransformFeedbackEXT)
+        vkCmdBeginTransformFeedbackEXT(handle, 0, 0, nullptr, nullptr);
+}
+
+inline void CommandBuffer::endTransformFeedback() noexcept
+{
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdEndTransformFeedbackEXT);
+    if (vkCmdEndTransformFeedbackEXT)
+        vkCmdEndTransformFeedbackEXT(handle, 0, 0, nullptr, nullptr);
+}
+#endif // VK_EXT_transform_feedback
+
 inline void CommandBuffer::enableOcclusionQuery(bool enable, VkQueryControlFlags queryFlags) noexcept
 {
     occlusionQueryEnable = MAGMA_BOOLEAN(enable);

@@ -617,34 +617,36 @@ void CommandBuffer::endConditionalRendering() noexcept
 #endif // VK_EXT_conditional_rendering
 
 #ifdef VK_EXT_transform_feedback
-void CommandBuffer::beginTransformFeedback() noexcept
-{
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBeginTransformFeedbackEXT);
-    if (vkCmdBeginTransformFeedbackEXT)
-        vkCmdBeginTransformFeedbackEXT(handle, 0, 0, nullptr, nullptr);
-}
+// inline void CommandBuffer::beginTransformFeedback()
+// inline void CommandBuffer::endTransformFeedback()
 
-void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const std::vector<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers, const std::vector<VkDeviceSize>& counterBufferOffsets) noexcept
+void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers,
+    const std::initializer_list<VkDeviceSize>& counterBufferOffsets /* empty */) noexcept
 {
+    if (counterBufferOffsets.size() > 0)
+        MAGMA_ASSERT(counterBufferOffsets.size() >= counterBuffers.size());
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBeginTransformFeedbackEXT);
     if (vkCmdBeginTransformFeedbackEXT)
     {
         MAGMA_STACK_ARRAY(VkBuffer, dereferencedCounterBuffers, counterBuffers.size());
         for (const auto& buffer : counterBuffers)
             dereferencedCounterBuffers.put(*buffer);
-        vkCmdBeginTransformFeedbackEXT(handle, firstCounterBuffer, MAGMA_COUNT(counterBuffers), dereferencedCounterBuffers, counterBufferOffsets.data());
+        vkCmdBeginTransformFeedbackEXT(handle, firstCounterBuffer, dereferencedCounterBuffers.size(), dereferencedCounterBuffers, counterBufferOffsets.begin());
     }
 }
 
-void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std::vector<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers, const std::vector<VkDeviceSize>& counterBufferOffsets) noexcept
+void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers,
+    const std::initializer_list<VkDeviceSize>& counterBufferOffsets /* empty */) noexcept
 {
+    if (counterBufferOffsets.size() > 0)
+        MAGMA_ASSERT(counterBufferOffsets.size() >= counterBuffers.size());
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdEndTransformFeedbackEXT);
     if (vkCmdEndTransformFeedbackEXT)
     {
         MAGMA_STACK_ARRAY(VkBuffer, dereferencedCounterBuffers, counterBuffers.size());
         for (const auto& buffer : counterBuffers)
             dereferencedCounterBuffers.put(*buffer);
-        vkCmdEndTransformFeedbackEXT(handle, firstCounterBuffer, MAGMA_COUNT(counterBuffers), dereferencedCounterBuffers, counterBufferOffsets.data());
+        vkCmdEndTransformFeedbackEXT(handle, firstCounterBuffer, dereferencedCounterBuffers.size(), dereferencedCounterBuffers, counterBufferOffsets.begin());
     }
 }
 #endif // VK_EXT_transform_feedback
