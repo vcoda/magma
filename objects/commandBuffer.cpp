@@ -213,7 +213,7 @@ void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const st
     std::vector<VkDeviceSize> offsets /* empty */, const std::initializer_list<VkDeviceSize>& sizes /* empty */)
 {
     MAGMA_ASSERT(transformFeedbackBuffers.size() > 0);
-    if (!offsets.empty())
+    if (offsets.size() > 0)
         MAGMA_ASSERT(offsets.size() >= transformFeedbackBuffers.size());
     if (sizes.size() > 0)
         MAGMA_ASSERT(sizes.size() >= transformFeedbackBuffers.size());
