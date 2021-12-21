@@ -617,6 +617,13 @@ void CommandBuffer::endConditionalRendering() noexcept
 #endif // VK_EXT_conditional_rendering
 
 #ifdef VK_EXT_transform_feedback
+void CommandBuffer::beginTransformFeedback() noexcept
+{
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBeginTransformFeedbackEXT);
+    if (vkCmdBeginTransformFeedbackEXT)
+        vkCmdBeginTransformFeedbackEXT(handle, 0, 0, nullptr, nullptr);
+}
+
 void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const std::vector<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers, const std::vector<VkDeviceSize>& counterBufferOffsets) noexcept
 {
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBeginTransformFeedbackEXT);

@@ -396,6 +396,7 @@ namespace magma
         void endConditionalRendering() noexcept;
 #endif // VK_EXT_conditional_rendering
 #ifdef VK_EXT_transform_feedback
+        void beginTransformFeedback() noexcept;
         void beginTransformFeedback(uint32_t firstCounterBuffer,
             const std::vector<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers,
             const std::vector<VkDeviceSize>& counterBufferOffsets) noexcept;
