@@ -139,10 +139,10 @@ namespace magma
         void bindIndexBuffer(const std::shared_ptr<BaseIndexBuffer>& indexBuffer,
             VkDeviceSize offset = 0) noexcept;
         void bindVertexBuffer(uint32_t firstBinding,
-            const std::shared_ptr<BaseVertexBuffer>& vertexBuffer,
+            const std::shared_ptr<Buffer>& vertexBuffer,
             VkDeviceSize offset = 0) noexcept;
         void bindVertexBuffers(uint32_t firstBinding,
-            const std::vector<std::shared_ptr<BaseVertexBuffer>>& vertexBuffers,
+            const std::vector<std::shared_ptr<Buffer>>& vertexBuffers,
             std::vector<VkDeviceSize> offsets = {}) noexcept;
 #ifdef VK_EXT_transform_feedback
         void bindTransformFeedbackBuffer(uint32_t firstBinding,

@@ -106,14 +106,14 @@ inline void CommandBuffer::bindIndexBuffer(const std::shared_ptr<BaseIndexBuffer
     vkCmdBindIndexBuffer(handle, *indexBuffer, offset, indexBuffer->getIndexType());
 }
 
-inline void CommandBuffer::bindVertexBuffer(uint32_t firstBinding, const std::shared_ptr<BaseVertexBuffer>& vertexBuffer,
+inline void CommandBuffer::bindVertexBuffer(uint32_t firstBinding, const std::shared_ptr<Buffer>& vertexBuffer,
     VkDeviceSize offset /* 0 */) noexcept
 {
     const VkBuffer dereferencedBuffers[1] = {*vertexBuffer};
     vkCmdBindVertexBuffers(handle, firstBinding, 1, dereferencedBuffers, &offset);
 }
 
-inline void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::vector<std::shared_ptr<BaseVertexBuffer>>& vertexBuffers,
+inline void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::vector<std::shared_ptr<Buffer>>& vertexBuffers,
     std::vector<VkDeviceSize> offsets /* {} */) noexcept
 {
     MAGMA_ASSERT(vertexBuffers.size() > 0);
