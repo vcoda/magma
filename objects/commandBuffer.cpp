@@ -198,6 +198,17 @@ void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline
 // inline void CommandBuffer::bindVertexBuffers
 
 #ifdef VK_EXT_transform_feedback
+void CommandBuffer::bindTransformFeedbackBuffer(uint32_t firstBinding, const std::shared_ptr<TransformFeedbackBuffer>& transformFeedbackBuffer,
+    VkDeviceSize offset /* 0 */, VkDeviceSize size /* VK_WHOLE_SIZE */)
+{
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBindTransformFeedbackBuffersEXT);
+    if (vkCmdBindTransformFeedbackBuffersEXT)
+    {
+        const VkBuffer dereferencedBuffers[1] = {*transformFeedbackBuffer};
+        vkCmdBindTransformFeedbackBuffersEXT(handle, firstBinding, 1, dereferencedBuffers, &offset, &size);
+    }
+}
+
 void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const std::vector<std::shared_ptr<TransformFeedbackBuffer>>& transformFeedbackBuffers,
     std::vector<VkDeviceSize> offsets /* empty */, std::vector<VkDeviceSize> sizes /* empty */)
 {

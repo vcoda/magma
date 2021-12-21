@@ -145,6 +145,10 @@ namespace magma
             const std::vector<std::shared_ptr<BaseVertexBuffer>>& vertexBuffers,
             std::vector<VkDeviceSize> offsets = {}) noexcept;
 #ifdef VK_EXT_transform_feedback
+        void bindTransformFeedbackBuffer(uint32_t firstBinding,
+            const std::shared_ptr<TransformFeedbackBuffer>& transformFeedbackBuffer,
+            VkDeviceSize offset = 0,
+            VkDeviceSize size = VK_WHOLE_SIZE);
         void bindTransformFeedbackBuffers(uint32_t firstBinding,
             const std::vector<std::shared_ptr<TransformFeedbackBuffer>>& transformFeedbackBuffers,
             std::vector<VkDeviceSize> offsets = {},
