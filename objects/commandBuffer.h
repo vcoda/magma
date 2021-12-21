@@ -150,9 +150,9 @@ namespace magma
             VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE);
         void bindTransformFeedbackBuffers(uint32_t firstBinding,
-            const std::vector<std::shared_ptr<TransformFeedbackBuffer>>& transformFeedbackBuffers,
+            const std::initializer_list<std::shared_ptr<TransformFeedbackBuffer>>& transformFeedbackBuffers,
             std::vector<VkDeviceSize> offsets = {},
-            std::vector<VkDeviceSize> sizes = {});
+            const std::initializer_list<VkDeviceSize>& sizes = {});
 #endif // VK_EXT_transform_feedback
 
         void draw(uint32_t vertexCount,

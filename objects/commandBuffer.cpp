@@ -209,13 +209,13 @@ void CommandBuffer::bindTransformFeedbackBuffer(uint32_t firstBinding, const std
     }
 }
 
-void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const std::vector<std::shared_ptr<TransformFeedbackBuffer>>& transformFeedbackBuffers,
-    std::vector<VkDeviceSize> offsets /* empty */, std::vector<VkDeviceSize> sizes /* empty */)
+void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const std::initializer_list<std::shared_ptr<TransformFeedbackBuffer>>& transformFeedbackBuffers,
+    std::vector<VkDeviceSize> offsets /* empty */, const std::initializer_list<VkDeviceSize>& sizes /* empty */)
 {
     MAGMA_ASSERT(transformFeedbackBuffers.size() > 0);
     if (!offsets.empty())
         MAGMA_ASSERT(offsets.size() >= transformFeedbackBuffers.size());
-    if (!sizes.empty())
+    if (sizes.size() > 0)
         MAGMA_ASSERT(sizes.size() >= transformFeedbackBuffers.size());
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBindTransformFeedbackBuffersEXT);
     if (vkCmdBindTransformFeedbackBuffersEXT)
@@ -225,7 +225,7 @@ void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const st
             dereferencedBuffers.put(*buffer);
         if (offsets.empty())
             offsets.resize(transformFeedbackBuffers.size(), 0);
-        vkCmdBindTransformFeedbackBuffersEXT(handle, firstBinding, dereferencedBuffers.size(), dereferencedBuffers, offsets.data(), sizes.data());
+        vkCmdBindTransformFeedbackBuffersEXT(handle, firstBinding, dereferencedBuffers.size(), dereferencedBuffers, offsets.data(), sizes.begin());
     }
 }
 #endif // VK_EXT_transform_feedback
