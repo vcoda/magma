@@ -87,6 +87,12 @@ constexpr WideLineRasterizationState::WideLineRasterizationState(const Rasteriza
     this->lineWidth = lineWidth;
 }
 
+constexpr DiscardRasterizationState::DiscardRasterizationState(const RasterizationState& state) noexcept:
+    RasterizationState(state)
+{
+    rasterizerDiscardEnable = VK_TRUE;
+}
+
 #ifdef VK_EXT_conservative_rasterization
 constexpr ConservativeRasterizationState::ConservativeRasterizationState(const RasterizationState& state,
     const VkConservativeRasterizationModeEXT conservativeRasterizationMode,

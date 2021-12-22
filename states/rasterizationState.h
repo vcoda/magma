@@ -56,6 +56,14 @@ namespace magma
             float lineWidth) noexcept;
     };
 
+    /* Allows to construct rasterization state with enabled rasterizer discard flag from any existing state.
+       Primitives are discarded immediately before the rasterization stage. */
+
+    struct DiscardRasterizationState : RasterizationState
+    {
+        constexpr DiscardRasterizationState(const RasterizationState& state) noexcept;
+    };
+
     /* When overestimation is enabled, if any part of the primitive, including its edges,
        covers any part of the rectangular pixel area, then a fragment is generated with all
        coverage samples turned on. When underestimation is enabled, fragments are only generated
