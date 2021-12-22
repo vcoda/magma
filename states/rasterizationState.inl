@@ -94,7 +94,7 @@ constexpr ConservativeRasterizationState::ConservativeRasterizationState(const R
     RasterizationState(state),
     conservative{
         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_CONSERVATIVE_STATE_CREATE_INFO_EXT,
-        nullptr, // pNext
+        state.pNext,
         0, // flags
         conservativeRasterizationMode,
         extraPrimitiveOverestimationSize
@@ -129,7 +129,7 @@ constexpr VertexStreamRasterizationState::VertexStreamRasterizationState(const R
     RasterizationState(state),
     stream{
         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_STREAM_CREATE_INFO_EXT,
-        nullptr, // pNext
+        state.pNext,
         flags,
         rasterizationStream
     }
@@ -161,7 +161,7 @@ constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationSt
     RasterizationState(state),
     order{
         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD,
-        nullptr, // pNext
+        state.pNext,
         rasterizationOrder
     }
 {
