@@ -410,6 +410,23 @@ inline void CommandBuffer::endRenderPass() noexcept
     vkCmdEndRenderPass(handle);
 }
 
+#ifdef VK_KHR_device_group
+inline void CommandBuffer::setDeviceMask(uint32_t deviceMask) noexcept
+{
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdSetDeviceMaskKHR);
+    if (vkCmdSetDeviceMaskKHR)
+        vkCmdSetDeviceMaskKHR(handle, deviceMask);
+}
+
+inline void CommandBuffer::dispatchBase(uint32_t baseGroupX, uint32_t baseGroupY, uint32_t baseGroupZ,
+    uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) const noexcept
+{
+    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDispatchBaseKHR);
+    if (vkCmdDispatchBaseKHR)
+        vkCmdDispatchBaseKHR(handle, baseGroupX, baseGroupY, baseGroupZ, groupCountX, groupCountY, groupCountZ);
+}
+#endif // VK_KHR_device_group
+
 #ifdef VK_EXT_transform_feedback
 inline void CommandBuffer::beginTransformFeedback() noexcept
 {

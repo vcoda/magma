@@ -362,6 +362,13 @@ namespace magma
         void endRenderPass() noexcept;
 
 #ifdef VK_KHR_device_group
+        void setDeviceMask(uint32_t deviceMask) noexcept;
+        void dispatchBase(uint32_t baseGroupX,
+            uint32_t baseGroupY,
+            uint32_t baseGroupZ,
+            uint32_t groupCountX,
+            uint32_t groupCountY,
+            uint32_t groupCountZ) const noexcept;
         bool beginDeviceGroup(uint32_t deviceMask,
             VkCommandBufferUsageFlags flags = 0) noexcept;
         void beginDeviceGroupRenderPass(uint32_t deviceMask,
@@ -379,14 +386,6 @@ namespace magma
             const std::vector<ClearValue>& clearValues = {},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
 #   endif // VK_KHR_imageless_framebuffer
-        void setDeviceMask(uint32_t deviceMask) noexcept;
-        uint32_t getDeviceMask() const noexcept { return deviceMask; }
-        void dispatchBase(uint32_t baseGroupX,
-            uint32_t baseGroupY,
-            uint32_t baseGroupZ,
-            uint32_t groupCountX,
-            uint32_t groupCountY,
-            uint32_t groupCountZ) const noexcept;
 #endif // VK_KHR_device_group
 
 #ifdef VK_EXT_conditional_rendering
@@ -523,7 +522,6 @@ namespace magma
         const VkCommandBufferLevel level;
         std::shared_ptr<CommandPool> pool;
         std::shared_ptr<Fence> fence;
-        uint32_t deviceMask = 0xFFFFFFFF;
         VkBool32 occlusionQueryEnable = VK_FALSE;
         VkBool32 conditionalRenderingEnable = VK_FALSE;
         VkBool32 maintenance1KHREnable = VK_FALSE;

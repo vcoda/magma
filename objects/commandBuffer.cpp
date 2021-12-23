@@ -469,20 +469,12 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
 }
 #endif // VK_KHR_imageless_framebuffer
 
-// CommandBuffer::nextSubpass
-// CommandBuffer::endRenderPass
+// inline CommandBuffer::nextSubpass
+// inline CommandBuffer::endRenderPass
 
 #ifdef VK_KHR_device_group
-void CommandBuffer::setDeviceMask(uint32_t deviceMask) noexcept
-{
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdSetDeviceMaskKHR);
-    if (vkCmdSetDeviceMaskKHR)
-    {
-        MAGMA_ASSERT(deviceMask);
-        vkCmdSetDeviceMaskKHR(handle, deviceMask);
-        this->deviceMask = deviceMask;
-    }
-}
+// inline CommandBuffer::setDeviceMask
+// inline CommandBuffer::dispatchBase
 
 bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask,
     VkCommandBufferUsageFlags flags /* 0 */) noexcept
@@ -576,14 +568,6 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
 #endif
 }
 #endif // VK_KHR_imageless_framebuffer
-
-void CommandBuffer::dispatchBase(uint32_t baseGroupX, uint32_t baseGroupY, uint32_t baseGroupZ,
-    uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) const noexcept
-{
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDispatchBaseKHR);
-    if (vkCmdDispatchBaseKHR)
-        vkCmdDispatchBaseKHR(handle, baseGroupX, baseGroupY, baseGroupZ, groupCountX, groupCountY, groupCountZ);
-}
 #endif // VK_KHR_device_group
 
 #ifdef VK_EXT_conditional_rendering
