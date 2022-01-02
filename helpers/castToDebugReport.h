@@ -5,7 +5,7 @@ namespace magma
 {
 namespace helpers
 {
-constexpr VkDebugReportObjectTypeEXT castToDebugReportType(VkObjectType objectType) noexcept
+constexpr VkDebugReportObjectTypeEXT objectToDebugReportType(const VkObjectType objectType) noexcept
 {
     switch (objectType)
     {

@@ -45,7 +45,7 @@ void Object::setDebugName(const char *name)
             VkDebugMarkerObjectNameInfoEXT info;
             info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT;
             info.pNext = nullptr;
-            info.objectType = helpers::castToDebugReportType(getObjectType());
+            info.objectType = helpers::objectToDebugReportType(getObjectType());
             info.object = getHandle();
             info.pObjectName = name;
             const VkResult result = vkDebugMarkerSetObjectNameEXT(MAGMA_HANDLE(device), &info);
@@ -93,7 +93,7 @@ void Object::setDebugTag(uint64_t tagName, std::size_t tagSize, const void *tag)
             VkDebugMarkerObjectTagInfoEXT info;
             info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT;
             info.pNext = nullptr;
-            info.objectType = helpers::castToDebugReportType(getObjectType());
+            info.objectType = helpers::objectToDebugReportType(getObjectType());
             info.object = getHandle();
             info.tagName = tagName;
             info.tagSize = tagSize;

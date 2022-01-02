@@ -79,7 +79,7 @@ void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkObjectType obje
         vsprintf(message, format, args);
 #endif
         va_end(args);
-        const VkDebugReportObjectTypeEXT debugObjectType = helpers::castToDebugReportType(objectType);
+        const VkDebugReportObjectTypeEXT debugObjectType = helpers::objectToDebugReportType(objectType);
         vkDebugReportMessageEXT(MAGMA_HANDLE(instance), flags, debugObjectType, object, location, messageCode, layerPrefix, message);
     }
 }

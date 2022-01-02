@@ -22,7 +22,7 @@ namespace magma
 {
 namespace helpers
 {
-constexpr VkDescriptorType castToDescriptorType(SpvReflectDescriptorType descriptorType) noexcept
+constexpr VkDescriptorType spirvToDescriptorType(const SpvReflectDescriptorType descriptorType) noexcept
 {
     switch (descriptorType)
     {
