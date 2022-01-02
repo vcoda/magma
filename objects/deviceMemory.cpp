@@ -62,8 +62,8 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask,
     allocInfo.pNext = &flagsInfo;
     allocInfo.allocationSize = memoryRequirements.size;
     allocInfo.memoryTypeIndex = getTypeIndex(flags);
-    const VkResult allocate = vkAllocateMemory(MAGMA_HANDLE(device), &allocInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(allocate, "failed to allocate device memory within device group");
+    const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &allocInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to allocate device memory within device group");
 }
 #endif // VK_KHR_device_group
 
@@ -113,19 +113,18 @@ void DeviceMemory::realloc(VkDeviceSize newSize, const void *object, VkObjectTyp
 void DeviceMemory::bind(const void *object, VkObjectType objectType,
     VkDeviceSize offset /* 0 */)
 {
-    VkResult bind;
+    VkResult result;
     if (memory)
-        bind = deviceAllocator->bindMemory(memory, offset, object, objectType);
-    else
-    switch (objectType)
+        result = deviceAllocator->bindMemory(memory, offset, object, objectType);
+    else switch (objectType)
     {
     case VK_OBJECT_TYPE_BUFFER:
-        bind = vkBindBufferMemory(MAGMA_HANDLE(device), MAGMA_BUFFER_HANDLE(object), handle, offset);
-        MAGMA_THROW_FAILURE(bind, "failed to bind buffer memory");
+        result = vkBindBufferMemory(MAGMA_HANDLE(device), MAGMA_BUFFER_HANDLE(object), handle, offset);
+        MAGMA_THROW_FAILURE(result, "failed to bind buffer memory");
         break;
     case VK_OBJECT_TYPE_IMAGE:
-        bind = vkBindImageMemory(MAGMA_HANDLE(device), MAGMA_IMAGE_HANDLE(object), handle, offset);
-        MAGMA_THROW_FAILURE(bind, "failed to bind image memory");
+        result = vkBindImageMemory(MAGMA_HANDLE(device), MAGMA_IMAGE_HANDLE(object), handle, offset);
+        MAGMA_THROW_FAILURE(result, "failed to bind image memory");
         break;
     default:
         MAGMA_THROW("unsupported resource type");

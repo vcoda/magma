@@ -89,8 +89,8 @@ bool Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& cmdB
         submitInfo.signalSemaphoreCount = MAGMA_COUNT(dereferencedSignalSemaphores);
         submitInfo.pSignalSemaphores = dereferencedSignalSemaphores;
     }
-    const VkResult submit = vkQueueSubmit(handle, 1, &submitInfo, MAGMA_OPTIONAL_HANDLE(fence));
-    return (VK_SUCCESS == submit);
+    const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, MAGMA_OPTIONAL_HANDLE(fence));
+    return (VK_SUCCESS == result);
 }
 
 bool Queue::submit(std::shared_ptr<const CommandBuffer> cmdBuffer,
@@ -138,8 +138,8 @@ bool Queue::submitDeviceGroup(const std::vector<std::shared_ptr<const CommandBuf
 
 bool Queue::waitIdle() noexcept
 {
-    const VkResult wait = vkQueueWaitIdle(handle);
-    return (VK_SUCCESS == wait);
+    const VkResult result = vkQueueWaitIdle(handle);
+    return (VK_SUCCESS == result);
 }
 
 void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
@@ -187,8 +187,8 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
     presentInfo.pSwapchains = &dereferencedSwapchain;
     presentInfo.pImageIndices = &imageIndex;
     presentInfo.pResults = nullptr;
-    const VkResult present = vkQueuePresentKHR(handle, &presentInfo);
-    switch (present)
+    const VkResult result = vkQueuePresentKHR(handle, &presentInfo);
+    switch (result)
     {
     case VK_ERROR_DEVICE_LOST:
         throw exception::DeviceLost("queue present failed");
@@ -205,6 +205,6 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
         throw exception::FullScreenExclusiveModeLost("queue present failed");
 #endif
     } // switch
-    MAGMA_THROW_FAILURE(present, "queue present failed");
+    MAGMA_THROW_FAILURE(result, "queue present failed");
 }
 } // namespace magma

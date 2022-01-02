@@ -63,8 +63,8 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     imageInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
     imageInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     imageInfo.initialLayout = layout;
-    const VkResult create = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to create image");
+    const VkResult result = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create image");
     const VkMemoryRequirements memoryRequirements = getMemoryRequirements();
     const VkMemoryPropertyFlags memoryFlags = (VK_IMAGE_TILING_LINEAR == tiling)
         ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
@@ -198,8 +198,8 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     bindInfo.memory = *memory;
     bindInfo.memoryOffset = memory->getOffset() + offset;
     MAGMA_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
-    const VkResult bind = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindInfo);
-    MAGMA_THROW_FAILURE(bind, "failed to bind image memory within device group");
+    const VkResult result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindInfo);
+    MAGMA_THROW_FAILURE(result, "failed to bind image memory within device group");
     this->size = memory->getSize();
     this->offset = offset;
     this->memory = std::move(memory);
@@ -224,8 +224,8 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     bindInfo.memory = *memory;
     bindInfo.memoryOffset = memory->getOffset() + offset;
     MAGMA_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
-    const VkResult bind = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindInfo);
-    MAGMA_THROW_FAILURE(bind, "failed to bind image memory within device group");
+    const VkResult result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindInfo);
+    MAGMA_THROW_FAILURE(result, "failed to bind image memory within device group");
     this->size = memory->getSize();
     this->offset = offset;
     this->memory = std::move(memory);
@@ -251,8 +251,8 @@ void Image::onDefragment()
     imageInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     imageInfo.initialLayout = layout;
     vkDestroyImage(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
-    const VkResult create = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(create, "failed to recreate defragmented image");
+    const VkResult result = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to recreate defragmented image");
     bindMemory(std::move(memory), offset);
 }
 

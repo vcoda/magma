@@ -83,8 +83,8 @@ void AccelerationStructure::bindMemory(std::shared_ptr<DeviceMemory> memory,
     bindInfo.deviceIndexCount = 0;
     bindInfo.pDeviceIndices = nullptr;
     MAGMA_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    const VkResult bind = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &bindInfo);
-    MAGMA_THROW_FAILURE(bind, "failed to bind acceleration structure memory");
+    const VkResult result = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &bindInfo);
+    MAGMA_THROW_FAILURE(result, "failed to bind acceleration structure memory");
     this->size = memory->getSize();
     this->offset = offset;
     this->memory = std::move(memory);
@@ -104,8 +104,8 @@ void AccelerationStructure::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> 
     bindInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
     bindInfo.pDeviceIndices = deviceIndices.data();
     MAGMA_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    const VkResult bind = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &bindInfo);
-    MAGMA_THROW_FAILURE(bind, "failed to bind acceleration structure memory");
+    const VkResult result = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &bindInfo);
+    MAGMA_THROW_FAILURE(result, "failed to bind acceleration structure memory");
     this->size = memory->getSize();
     this->offset = offset;
     this->memory = std::move(memory);
@@ -136,8 +136,8 @@ uint64_t AccelerationStructure::getReferenceHandle() const
 {
     uint64_t refHandle;
     MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureHandleNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    const VkResult get = vkGetAccelerationStructureHandleNV(MAGMA_HANDLE(device), handle, sizeof(uint64_t), &refHandle);
-    MAGMA_THROW_FAILURE(get, "failed to get acceleration structure handle");
+    const VkResult result = vkGetAccelerationStructureHandleNV(MAGMA_HANDLE(device), handle, sizeof(uint64_t), &refHandle);
+    MAGMA_THROW_FAILURE(result, "failed to get acceleration structure handle");
     return refHandle;
 }
 

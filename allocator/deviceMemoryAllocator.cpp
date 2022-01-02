@@ -269,13 +269,13 @@ VkResult DeviceMemoryAllocator::map(DeviceMemoryBlock allocation, VkDeviceSize o
 {
     MAGMA_ASSERT(data);
     *data = nullptr;
-    const VkResult map = vmaMapMemory(allocator, reinterpret_cast<VmaAllocation>(allocation), data);
-    if (VK_SUCCESS == map)
+    const VkResult result = vmaMapMemory(allocator, reinterpret_cast<VmaAllocation>(allocation), data);
+    if (VK_SUCCESS == result)
     {   // When succeeded, *ppData contains pointer to first byte of this memory,
         // so pointer should be offseted manually using <offset> parameter.
         *((uint8_t**)data) += offset;
     }
-    return map;
+    return result;
 }
 
 void DeviceMemoryAllocator::unmap(DeviceMemoryBlock allocation) noexcept

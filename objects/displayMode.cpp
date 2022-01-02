@@ -54,8 +54,8 @@ const VkDisplayPlaneCapabilitiesKHR& DisplayMode::getPlaneCapabilities(uint32_t 
     {
         MAGMA_INSTANCE_EXTENSION(vkGetDisplayPlaneCapabilitiesKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
         VkDisplayPlaneCapabilitiesKHR planeCaps;
-        const VkResult get = vkGetDisplayPlaneCapabilitiesKHR(MAGMA_HANDLE(physicalDevice), handle, planeIndex, &planeCaps);
-        MAGMA_THROW_FAILURE(get, "failed to get display plane capabilities");
+        const VkResult result = vkGetDisplayPlaneCapabilitiesKHR(MAGMA_HANDLE(physicalDevice), handle, planeIndex, &planeCaps);
+        MAGMA_THROW_FAILURE(result, "failed to get display plane capabilities");
         capabilities[planeIndex] = planeCaps;
     }
     return capabilities[planeIndex];

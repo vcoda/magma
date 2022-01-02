@@ -71,12 +71,12 @@ bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
     beginInfo.pNext = nullptr;
     beginInfo.flags = flags;
     beginInfo.pInheritanceInfo = nullptr;
-    const VkResult begin = vkBeginCommandBuffer(handle, &beginInfo);
-    MAGMA_ASSERT(VK_SUCCESS == begin);
+    const VkResult result = vkBeginCommandBuffer(handle, &beginInfo);
+    MAGMA_ASSERT(VK_SUCCESS == result);
 #ifdef MAGMA_DEBUG_LABEL
     beginMarked = VK_FALSE;
 #endif
-    return (VK_SUCCESS == begin);
+    return (VK_SUCCESS == result);
 }
 
 bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass, const std::shared_ptr<Framebuffer>& framebuffer,
@@ -106,12 +106,12 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     beginInfo.pNext = nullptr;
     beginInfo.flags = flags | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT;
     beginInfo.pInheritanceInfo = &inheritanceInfo;
-    const VkResult begin = vkBeginCommandBuffer(handle, &beginInfo);
-    MAGMA_ASSERT(VK_SUCCESS == begin);
+    const VkResult result = vkBeginCommandBuffer(handle, &beginInfo);
+    MAGMA_ASSERT(VK_SUCCESS == result);
 #ifdef MAGMA_DEBUG_LABEL
     beginMarked = VK_FALSE;
 #endif
-    return (VK_SUCCESS == begin);
+    return (VK_SUCCESS == result);
 }
 
 void CommandBuffer::end()
@@ -488,12 +488,12 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask,
     beginInfo.pNext = &deviceGroupBeginInfo;
     beginInfo.flags = flags;
     beginInfo.pInheritanceInfo = nullptr;
-    const VkResult begin = vkBeginCommandBuffer(handle, &beginInfo);
-    MAGMA_ASSERT(VK_SUCCESS == begin);
+    const VkResult result = vkBeginCommandBuffer(handle, &beginInfo);
+    MAGMA_ASSERT(VK_SUCCESS == result);
 #ifdef MAGMA_DEBUG
     beginMarked = VK_FALSE;
 #endif
-    return (VK_SUCCESS == begin);
+    return (VK_SUCCESS == result);
 }
 
 void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
