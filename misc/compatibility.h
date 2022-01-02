@@ -70,6 +70,13 @@ typedef enum VkObjectType {
 } VkObjectType;
 #endif // !VK_VERSION_1_1
 
+#if VK_HEADER_VERSION < 34 // TODO: exact version
+#if defined(VK_EXT_debug_report) && defined(VK_KHR_display)
+constexpr VkDebugReportObjectTypeEXT VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_KHR_EXT = VkDebugReportObjectTypeEXT(29);
+constexpr VkDebugReportObjectTypeEXT VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_MODE_KHR_EXT = VkDebugReportObjectTypeEXT(30);
+#endif // VK_EXT_debug_report && VK_KHR_display
+#endif
+
 #if VK_HEADER_VERSION < 75
 typedef struct VkBaseOutStructure {
     VkStructureType               sType;

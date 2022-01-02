@@ -1,4 +1,5 @@
 #pragma once
+#include "../misc/compatibility.h"
 
 namespace magma
 {
