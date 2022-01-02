@@ -172,6 +172,7 @@
     <ClInclude Include="..\..\barriers\bufferMemoryBarrier.h" />
     <ClInclude Include="..\..\barriers\memoryBarrier.h" />
     <ClInclude Include="..\..\barriers\imageMemoryBarrier.h" />
+    <ClInclude Include="..\..\core\compare.h" />
     <ClInclude Include="..\..\core\constexprHash.h" />
     <ClInclude Include="..\..\core\enumClassArray.h" />
     <ClInclude Include="..\..\core\hashing\fnv1.h" />
