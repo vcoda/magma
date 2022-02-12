@@ -145,7 +145,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "auxiliary/immediateRender.h"
 #include "auxiliary/mipmapGenerator.h"
 #include "auxiliary/multiAttachmentFramebuffer.h"
-#include "auxiliary/packedTypes.h"
 #include "auxiliary/shaderCompiler.h"
 #include "auxiliary/swapchainFramebuffer.h"
 #include "auxiliary/textShader.h"
@@ -157,6 +156,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "helpers/stackArray.h"
 #include "helpers/stringize.h"
 #include "helpers/uniformArray.h"
+
+#include "packed/vector.h"
 
 #include "exceptions/compileError.h"
 #include "exceptions/errorResult.h"

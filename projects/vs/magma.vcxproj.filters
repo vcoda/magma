@@ -91,6 +91,9 @@
     <Filter Include="Header Files\exceptions">
       <UniqueIdentifier>{ea5144b2-86bc-40ee-ad4e-6266b532f316}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\packed">
+      <UniqueIdentifier>{7bcab66d-191b-4e8f-bf84-bd67a00c41d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\allocator\allocator.h">
@@ -411,9 +414,6 @@
     <ClInclude Include="..\..\extensions\layers.h">
       <Filter>Header Files\extensions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\auxiliary\packedTypes.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\misc\deviceQueueDescriptor.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
@@ -635,6 +635,9 @@
     </ClInclude>
     <ClInclude Include="..\..\core\compare.h">
       <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\packed\vector.h">
+      <Filter>Header Files\packed</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1095,6 +1098,15 @@
     </None>
     <None Include="..\..\objects\pipeline.inl">
       <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\packed\x10y10z10w2snorm.inl">
+      <Filter>Header Files\packed</Filter>
+    </None>
+    <None Include="..\..\packed\x10y10z10w2unorm.inl">
+      <Filter>Header Files\packed</Filter>
+    </None>
+    <None Include="..\..\packed\x11y11z10ufloat.inl">
+      <Filter>Header Files\packed</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
