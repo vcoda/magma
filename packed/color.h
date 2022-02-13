@@ -77,8 +77,37 @@ namespace magma
 
             static constexpr auto format = VK_FORMAT_R5G6B5_UNORM_PACK16;
         };
+
+        /* Specifies a four-component, 16-bit packed unsigned normalized format that has
+           a 5-bit B component in bits 11..15, a 5-bit G component in bits 6..10,
+           a 5-bit R component in bits 1..5, and a 1-bit A component in bit 0.
+           Corresponding format is VK_FORMAT_B5G5R5A1_UNORM_PACK16. */
+
+        struct A1r5g5b5unorm
+        {
+            union
+            {
+                struct
+                {
+                    uint16_t a: 1; // [0,1]
+                    uint16_t r: 5; // [0,31]
+                    uint16_t g: 5; // [0,31]
+                    uint16_t b: 5; // [0,31]
+                };
+                uint16_t v;
+            };
+
+            A1r5g5b5unorm() noexcept = default;
+            explicit A1r5g5b5unorm(uint16_t v) noexcept: v(v) {}
+            explicit A1r5g5b5unorm(float r, float g, float b, float a) noexcept;
+            explicit A1r5g5b5unorm(const float v[4]) noexcept:
+                A1r5g5b5unorm(v[0], v[1], v[2], v[3]) {}
+
+            static constexpr auto format = VK_FORMAT_B5G5R5A1_UNORM_PACK16;
+        };
     } // namespace packed
 } // namespace magma
 
 #include "r5g6b5unorm.inl"
 #include "b5g6r5unorm.inl"
+#include "a1r5g5b5unorm.inl"
