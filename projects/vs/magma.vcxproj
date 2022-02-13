@@ -305,6 +305,7 @@
     <ClInclude Include="..\..\objects\uniformTexelBuffer.h" />
     <ClInclude Include="..\..\objects\validationCache.h" />
     <ClInclude Include="..\..\objects\vertexBuffer.h" />
+    <ClInclude Include="..\..\packed\color.h" />
     <ClInclude Include="..\..\packed\vector.h" />
     <ClInclude Include="..\..\shaders\pipelineShaderStage.h" />
     <ClInclude Include="..\..\shaders\rayTracingShaderGroup.h" />
@@ -567,7 +568,7 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
     <None Include="..\..\packed\x10y10z10w2snorm.inl" />
     <None Include="..\..\packed\x10y10z10w2unorm.inl" />
     <None Include="..\..\packed\x11y11z10ufloat.inl" />
-    <None Include="..\..\packed\x5y6z5unorm.inl" />
+    <None Include="..\..\packed\r5g6b5unorm.inl" />
     <None Include="..\..\shaders\specialization.inl" />
     <None Include="..\..\states\colorBlendState.inl" />
     <None Include="..\..\states\colorBlendStateAdvanced.inl" />

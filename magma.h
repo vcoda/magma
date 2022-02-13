@@ -157,6 +157,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "helpers/stringize.h"
 #include "helpers/uniformArray.h"
 
+#include "packed/color.h"
 #include "packed/vector.h"
 
 #include "exceptions/compileError.h"

@@ -639,6 +639,9 @@
     <ClInclude Include="..\..\packed\vector.h">
       <Filter>Header Files\packed</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\packed\color.h">
+      <Filter>Header Files\packed</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1108,7 +1111,7 @@
     <None Include="..\..\packed\x11y11z10ufloat.inl">
       <Filter>Header Files\packed</Filter>
     </None>
-    <None Include="..\..\packed\x5y6z5unorm.inl">
+    <None Include="..\..\packed\r5g6b5unorm.inl">
       <Filter>Header Files\packed</Filter>
     </None>
   </ItemGroup>
