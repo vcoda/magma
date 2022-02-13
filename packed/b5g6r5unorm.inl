@@ -12,7 +12,8 @@ inline B5g6r5unorm::B5g6r5unorm(float b, float g, float r) noexcept
     v = _mm_min_ps(v, _mm_load_ps(hi));
     v = _mm_mul_ps(v, _mm_load_ps(scale));
     __m128i iv = _mm_cvtps_epi32(v); // Convert to int with rounding
-    this->v = (((uint16_t)_mm_extract_epi16(iv, 4) & 0x1F) << 11) |
+    this->v =
+        (((uint16_t)_mm_extract_epi16(iv, 4) & 0x1F) << 11) |
         (((uint16_t)_mm_extract_epi16(iv, 2) & 0x3F) << 5) |
         ((uint16_t)_mm_extract_epi16(iv, 0) & 0x1F);
 #else

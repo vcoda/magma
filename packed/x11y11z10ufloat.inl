@@ -69,7 +69,7 @@ inline X11y11z10ufloat::X11y11z10ufloat(float x, float y, float z) noexcept
         {   // Rebias the exponent to represent the value as a normalized float10
             i += 0xC8000000U;
         }
-        res[2] = ((i + 0x1FFFFU + ((i >> 18U) & 1U)) >> 18U) & 0x3ffU;
+        res[2] = ((i + 0x1FFFFU + ((i >> 18U) & 1U)) >> 18U) & 0x3FFU;
     }
     // Pack result into memory
     v = ((res[2] & 0x3FF) << 22) | ((res[1] & 0x7FF) << 11) | (res[0] & 0x7FF);
