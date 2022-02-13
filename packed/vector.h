@@ -16,15 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <cstdint>
-#include <cmath>
-
-#ifdef MAGMA_SSE
-#include <xmmintrin.h>
-#include <smmintrin.h>
-#else
-#include <algorithm>
-#endif
 
 namespace magma
 {

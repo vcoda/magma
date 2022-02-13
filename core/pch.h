@@ -36,6 +36,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <atomic>
 #include <mutex>
 
+#ifdef MAGMA_SSE
+#include <xmmintrin.h>
+#include <smmintrin.h>
+#endif
+
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
