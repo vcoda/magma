@@ -21,6 +21,32 @@ namespace magma
             static constexpr VkFormat format = type;
         };
 
+        /* Specifies a three-component, 16-bit packed unsigned normalized format that has
+           a 5-bit Z component in bits 11..15, a 6-bit Y component in bits 5..10,
+           and a 5-bit X component in bits 0..4.
+           Corresponding format is VK_FORMAT_B5G6R5_UNORM_PACK16. */
+
+        struct X5y6z5unorm : Vector<VK_FORMAT_B5G6R5_UNORM_PACK16>
+        {
+            union
+            {
+                struct layout
+                {
+                    uint16_t x: 5; // [0,31]
+                    uint16_t y: 6; // [0,63]
+                    uint16_t z: 5; // [0,31]
+                };
+                uint16_t v;
+            };
+
+            X5y6z5unorm() noexcept = default;
+            explicit X5y6z5unorm(float x, float y, float z) noexcept;
+            explicit X5y6z5unorm(const float v[3]) noexcept:
+                X5y6z5unorm(v[0], v[1], v[2]) {}
+            explicit X5y6z5unorm(uint16_t v) noexcept:
+                v(v) {}
+        };
+
         /* Specifies a four-component, 32-bit packed unsigned normalized format that has
            a 2-bit W component in bits 30..31, a 10-bit Z component in bits 20..29,
            a 10-bit Y component in bits 10..19, and a 10-bit X component in bits 0..9.
@@ -110,6 +136,7 @@ namespace magma
     } // namespace packed
 } // namespace magma
 
+#include "x5y6z5unorm.inl"
 #include "x10y10z10w2unorm.inl"
 #include "x10y10z10w2snorm.inl"
 #include "x11y11z10ufloat.inl"
