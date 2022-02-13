@@ -21,9 +21,9 @@ inline X10y10z10w2snorm::X10y10z10w2snorm(float x, float y, float z, int w /* 0 
     iv = _mm_or_si128(iv, _mm_castps_si128(v));
     this->v = ((w & 0x3) << 30) | _mm_cvtsi128_si32(iv);
 #else
-    x = std::min(std::max(x, -1.f), 1.f);
-    y = std::min(std::max(y, -1.f), 1.f);
-    z = std::min(std::max(z, -1.f), 1.f);
+    x = std::min(std::max(-1.f, x), 1.f);
+    y = std::min(std::max(-1.f, y), 1.f);
+    z = std::min(std::max(-1.f, z), 1.f);
     x = std::roundf(x * 511.f);
     y = std::roundf(y * 511.f);
     z = std::roundf(z * 511.f);
