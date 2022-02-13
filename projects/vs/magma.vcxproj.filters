@@ -1114,6 +1114,9 @@
     <None Include="..\..\packed\r5g6b5unorm.inl">
       <Filter>Header Files\packed</Filter>
     </None>
+    <None Include="..\..\packed\b5g6r5unorm.inl">
+      <Filter>Header Files\packed</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">
