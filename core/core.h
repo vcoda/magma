@@ -128,3 +128,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_TYPEDEF_SHARED_PTR(ClassName) typedef std::shared_ptr<class ClassName> ClassName##Ptr;
 #define MAGMA_TYPEDEF_UNIQUE_PTR(ClassName) typedef std::unique_ptr<class ClassName> ClassName##Ptr;
 #define MAGMA_TYPEDEF_INTERFACE_SHARED_PTR(ClassName) typedef std::shared_ptr<class I##ClassName> ClassName##Ptr;
+
+#ifdef MAGMA_SSE
+#define mm_permute_ps(v, c) _mm_shuffle_ps((v), (v), c)
+#endif

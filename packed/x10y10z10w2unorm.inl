@@ -13,10 +13,11 @@ inline X10y10z10w2unorm::X10y10z10w2unorm(float x, float y, float z, int w /* 0 
     v = _mm_mul_ps(v, _mm_load_ps(scale));
     __m128i iv = _mm_cvtps_epi32(v);
     iv = _mm_and_si128(iv, _mm_set_epi32(0x0, 0x3FF << 20, 0x3FF << 10, 0x3FF)); // Mask off any fraction
+    v = _mm_castsi128_ps(iv);
     // Horizontal bitwise OR
-    v = XM_PERMUTE_PS(_mm_castsi128_ps(iv), _MM_SHUFFLE(0, 3, 2, 1));
+    v = mm_permute_ps(v, _MM_SHUFFLE(0, 3, 2, 1));
     iv = _mm_or_si128(iv, _mm_castps_si128(v));
-    v = XM_PERMUTE_PS(v, _MM_SHUFFLE(0, 3, 2, 1));
+    v = mm_permute_ps(v, _MM_SHUFFLE(0, 3, 2, 1));
     iv = _mm_or_si128(iv, _mm_castps_si128(v));
     this->v = ((w & 0x3) << 30) | _mm_cvtsi128_si32(iv);
 #else
