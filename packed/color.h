@@ -24,6 +24,35 @@ namespace magma
 {
     namespace packed
     {
+        /* Specifies a four-component, 16-bit packed unsigned normalized format that has
+           a 4-bit R component in bits 12..15, a 4-bit G component in bits 8..11,
+           a 4-bit B component in bits 4..7, and a 4-bit A component in bits 0..3.
+           Corresponding format is VK_FORMAT_R4G4B4A4_UNORM_PACK16. */
+
+        struct R4g4b4a4Unorm
+        {
+            union
+            {
+                struct
+                {
+                    uint16_t a: 4; // [0,15]
+                    uint16_t b: 4; // [0,15]
+                    uint16_t g: 4; // [0,15]
+                    uint16_t r: 4; // [0,15]
+                };
+                uint16_t v;
+            };
+
+            R4g4b4a4Unorm() noexcept = default;
+            explicit R4g4b4a4Unorm(uint16_t v) noexcept: v(v) {}
+            explicit R4g4b4a4Unorm(float r, float g, float b, float a) noexcept;
+            explicit R4g4b4a4Unorm(uint8_t r, uint8_t g, uint8_t b, uint8_t a) noexcept;
+            explicit R4g4b4a4Unorm(const float v[4]) noexcept;
+            explicit R4g4b4a4Unorm(const uint8_t v[4]) noexcept;
+
+            static constexpr auto format = VK_FORMAT_R4G4B4A4_UNORM_PACK16;
+        };
+
         /* Specifies a three-component, 16-bit packed unsigned normalized format that has
            a 5-bit B component in bits 11..15, a 6-bit G component in bits 5..10,
            and a 5-bit R component in bits 0..4.
@@ -136,6 +165,7 @@ namespace magma
     } // namespace packed
 } // namespace magma
 
+#include "r4g4b4a4unorm.inl"
 #include "r5g6b5unorm.inl"
 #include "b5g6r5unorm.inl"
 #include "a1r5g5b5unorm.inl"
