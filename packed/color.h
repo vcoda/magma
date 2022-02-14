@@ -87,26 +87,27 @@ namespace magma
            and a 5-bit R component in bits 0..4.
            Corresponding format is VK_FORMAT_B5G6R5_UNORM_PACK16. */
 
-        struct R5g6b5unorm
+        struct R5g6b5Unorm
         {
             union
             {
                 struct
                 {
-                    uint16_t r: 5; // [0,31]
-                    uint16_t g: 6; // [0,63]
                     uint16_t b: 5; // [0,31]
+                    uint16_t g: 6; // [0,63]
+                    uint16_t r: 5; // [0,31]
                 };
                 uint16_t v;
             };
 
-            R5g6b5unorm() noexcept = default;
-            explicit R5g6b5unorm(uint16_t v) noexcept: v(v) {}
-            explicit R5g6b5unorm(float r, float g, float b) noexcept;
-            explicit R5g6b5unorm(const float v[3]) noexcept:
-                R5g6b5unorm(v[0], v[1], v[2]) {}
+            R5g6b5Unorm() noexcept = default;
+            explicit R5g6b5Unorm(uint16_t v) noexcept: v(v) {}
+            explicit R5g6b5Unorm(float r, float g, float b) noexcept;
+            explicit R5g6b5Unorm(uint8_t r, uint8_t g, uint8_t b) noexcept;
+            explicit R5g6b5Unorm(const float v[3]) noexcept;
+            explicit R5g6b5Unorm(const uint8_t v[3]) noexcept;
 
-            static constexpr auto format = VK_FORMAT_B5G6R5_UNORM_PACK16;
+            static constexpr auto format = VK_FORMAT_R5G6B5_UNORM_PACK16;
         };
 
         /* Specifies a three-component, 16-bit packed unsigned normalized format that has
@@ -114,26 +115,27 @@ namespace magma
            and a 5-bit B component in bits 0..4.
            Corresponding format is VK_FORMAT_R5G6B5_UNORM_PACK16. */
 
-        struct B5g6r5unorm
+        struct B5g6r5Unorm
         {
             union
             {
                 struct
                 {
-                    uint16_t b: 5; // [0,31]
-                    uint16_t g: 6; // [0,63]
                     uint16_t r: 5; // [0,31]
+                    uint16_t g: 6; // [0,63]
+                    uint16_t b: 5; // [0,31]
                 };
                 uint16_t v;
             };
 
-            B5g6r5unorm() noexcept = default;
-            explicit B5g6r5unorm(uint16_t v) noexcept: v(v) {}
-            explicit B5g6r5unorm(float b, float g, float r) noexcept;
-            explicit B5g6r5unorm(const float v[3]) noexcept:
-                B5g6r5unorm(v[0], v[1], v[2]) {}
+            B5g6r5Unorm() noexcept = default;
+            explicit B5g6r5Unorm(uint16_t v) noexcept: v(v) {}
+            explicit B5g6r5Unorm(float b, float g, float r) noexcept;
+            explicit B5g6r5Unorm(uint8_t b, uint8_t g, uint8_t r) noexcept;
+            explicit B5g6r5Unorm(const float v[3]) noexcept;
+            explicit B5g6r5Unorm(const uint8_t v[3]) noexcept;
 
-            static constexpr auto format = VK_FORMAT_R5G6B5_UNORM_PACK16;
+            static constexpr auto format = VK_FORMAT_B5G6R5_UNORM_PACK16;
         };
 
         /* Specifies a four-component, 16-bit packed unsigned normalized format that has
