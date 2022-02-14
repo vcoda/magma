@@ -565,8 +565,8 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
     <None Include="..\..\objects\shaderModule.inl" />
     <None Include="..\..\objects\srcTransferBuffer.inl" />
     <None Include="..\..\objects\storageBuffer.inl" />
-    <None Include="..\..\packed\a1b5g5r5unorm.inl" />
-    <None Include="..\..\packed\a1r5g5b5unorm.inl" />
+    <None Include="..\..\packed\b5g5r5a1unorm.inl" />
+    <None Include="..\..\packed\r5g5b5a1unorm.inl" />
     <None Include="..\..\packed\b4g4r4a4unorm.inl" />
     <None Include="..\..\packed\b5g6r5unorm.inl" />
     <None Include="..\..\packed\r4g4b4a4unorm.inl" />

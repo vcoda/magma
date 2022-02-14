@@ -1117,16 +1117,16 @@
     <None Include="..\..\packed\b5g6r5unorm.inl">
       <Filter>Header Files\packed</Filter>
     </None>
-    <None Include="..\..\packed\a1r5g5b5unorm.inl">
-      <Filter>Header Files\packed</Filter>
-    </None>
-    <None Include="..\..\packed\a1b5g5r5unorm.inl">
-      <Filter>Header Files\packed</Filter>
-    </None>
     <None Include="..\..\packed\r4g4b4a4unorm.inl">
       <Filter>Header Files\packed</Filter>
     </None>
     <None Include="..\..\packed\b4g4r4a4unorm.inl">
+      <Filter>Header Files\packed</Filter>
+    </None>
+    <None Include="..\..\packed\r5g5b5a1unorm.inl">
+      <Filter>Header Files\packed</Filter>
+    </None>
+    <None Include="..\..\packed\b5g5r5a1unorm.inl">
       <Filter>Header Files\packed</Filter>
     </None>
   </ItemGroup>
