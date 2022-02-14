@@ -53,6 +53,35 @@ namespace magma
             static constexpr auto format = VK_FORMAT_R4G4B4A4_UNORM_PACK16;
         };
 
+        /*  Specifies a four-component, 16-bit packed unsigned normalized format that has
+            a 4-bit B component in bits 12..15, a 4-bit G component in bits 8..11,
+            a 4-bit R component in bits 4..7, and a 4-bit A component in bits 0..3.
+            Corresponding format is VK_FORMAT_B4G4R4A4_UNORM_PACK16. */
+
+        struct B4g4r4a4Unorm
+        {
+            union
+            {
+                struct
+                {
+                    uint16_t a: 4; // [0,15]
+                    uint16_t r: 4; // [0,15]
+                    uint16_t g: 4; // [0,15]
+                    uint16_t b: 4; // [0,15]
+                };
+                uint16_t v;
+            };
+
+            B4g4r4a4Unorm() noexcept = default;
+            explicit B4g4r4a4Unorm(uint16_t v) noexcept: v(v) {}
+            explicit B4g4r4a4Unorm(float b, float g, float r, float a) noexcept;
+            explicit B4g4r4a4Unorm(uint8_t b, uint8_t g, uint8_t r, uint8_t a) noexcept;
+            explicit B4g4r4a4Unorm(const float v[4]) noexcept;
+            explicit B4g4r4a4Unorm(const uint8_t v[4]) noexcept;
+
+            static constexpr auto format = VK_FORMAT_B4G4R4A4_UNORM_PACK16;
+        };
+
         /* Specifies a three-component, 16-bit packed unsigned normalized format that has
            a 5-bit B component in bits 11..15, a 6-bit G component in bits 5..10,
            and a 5-bit R component in bits 0..4.
