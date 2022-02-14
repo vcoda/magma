@@ -83,9 +83,9 @@ namespace magma
         };
 
         /* Specifies a three-component, 16-bit packed unsigned normalized format that has
-           a 5-bit B component in bits 11..15, a 6-bit G component in bits 5..10,
-           and a 5-bit R component in bits 0..4.
-           Corresponding format is VK_FORMAT_B5G6R5_UNORM_PACK16. */
+           a 5-bit R component in bits 11..15, a 6-bit G component in bits 5..10,
+           and a 5-bit B component in bits 0..4.
+           Corresponding format is VK_FORMAT_R5G6B5_UNORM_PACK16. */
 
         struct R5g6b5Unorm
         {
@@ -111,9 +111,9 @@ namespace magma
         };
 
         /* Specifies a three-component, 16-bit packed unsigned normalized format that has
-           a 5-bit R component in bits 11..15, a 6-bit G component in bits 5..10,
-           and a 5-bit B component in bits 0..4.
-           Corresponding format is VK_FORMAT_R5G6B5_UNORM_PACK16. */
+           a 5-bit B component in bits 11..15, a 6-bit G component in bits 5..10,
+           and a 5-bit R component in bits 0..4..
+           Corresponding format is VK_FORMAT_B5G6R5_UNORM_PACK16. */
 
         struct B5g6r5Unorm
         {
