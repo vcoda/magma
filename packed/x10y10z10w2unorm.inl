@@ -2,7 +2,7 @@ namespace magma
 {
 namespace packed
 {
-inline X10y10z10w2unorm::X10y10z10w2unorm(float x, float y, float z, int w /* 0 */) noexcept
+inline X10y10z10w2Unorm::X10y10z10w2Unorm(float x, float y, float z, int w /* 0 */) noexcept
 {
 #ifdef MAGMA_SSE
     constexpr float hi[4] = {1.f, 1.f, 1.f, 1.f};

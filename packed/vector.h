@@ -26,7 +26,7 @@ namespace magma
            a 10-bit Y component in bits 10..19, and a 10-bit X component in bits 0..9.
            Corresponding format is VK_FORMAT_A2B10G10R10_UNORM_PACK32. */
 
-        struct X10y10z10w2unorm
+        struct X10y10z10w2Unorm
         {
             union
             {
@@ -40,11 +40,11 @@ namespace magma
                 uint32_t v;
             };
 
-            X10y10z10w2unorm() noexcept = default;
-            explicit X10y10z10w2unorm(uint32_t v) noexcept: v(v) {}
-            explicit X10y10z10w2unorm(float x, float y, float z, int w = 0) noexcept;
-            explicit X10y10z10w2unorm(const float v[3], int w = 0) noexcept:
-                X10y10z10w2unorm(v[0], v[1], v[2], w) {}
+            X10y10z10w2Unorm() noexcept = default;
+            explicit X10y10z10w2Unorm(uint32_t v) noexcept: v(v) {}
+            explicit X10y10z10w2Unorm(float x, float y, float z, int w = 0) noexcept;
+            explicit X10y10z10w2Unorm(const float v[3], int w = 0) noexcept:
+                X10y10z10w2Unorm(v[0], v[1], v[2], w) {}
 
             static constexpr auto format = VK_FORMAT_A2B10G10R10_UNORM_PACK32;
         };
@@ -54,7 +54,7 @@ namespace magma
            a 10-bit Y component in bits 10..19, and a 10-bit X component in bits 0..9.
            Corresponding format is VK_FORMAT_A2B10G10R10_SNORM_PACK32. */
 
-        struct X10y10z10w2snorm
+        struct X10y10z10w2Snorm
         {
             union
             {
@@ -68,11 +68,11 @@ namespace magma
                 uint32_t v;
             };
 
-            X10y10z10w2snorm() noexcept = default;
-            explicit X10y10z10w2snorm(uint32_t v) noexcept: v(v) {}
-            explicit X10y10z10w2snorm(float x, float y, float z, int w = 0) noexcept;
-            explicit X10y10z10w2snorm(const float v[3], int w = 0) noexcept:
-                X10y10z10w2snorm(v[0], v[1], v[2], w) {}
+            X10y10z10w2Snorm() noexcept = default;
+            explicit X10y10z10w2Snorm(uint32_t v) noexcept: v(v) {}
+            explicit X10y10z10w2Snorm(float x, float y, float z, int w = 0) noexcept;
+            explicit X10y10z10w2Snorm(const float v[3], int w = 0) noexcept:
+                X10y10z10w2Snorm(v[0], v[1], v[2], w) {}
 
             static constexpr auto format = VK_FORMAT_A2B10G10R10_SNORM_PACK32;
         };
@@ -86,7 +86,7 @@ namespace magma
            https://www.khronos.org/registry/DataFormat/specs/1.3/dataformat.1.3.html#10bitfp
            Corresponding format is VK_FORMAT_B10G11R11_UFLOAT_PACK32. */
 
-        struct X11y11z10ufloat
+        struct X11y11z10Ufloat
         {
             union
             {
@@ -102,11 +102,11 @@ namespace magma
                 uint32_t v;
             };
 
-            X11y11z10ufloat() noexcept = default;
-            explicit X11y11z10ufloat(uint32_t v) noexcept: v(v) {}
-            explicit X11y11z10ufloat(float x, float y, float z) noexcept;
-            explicit X11y11z10ufloat(const float v[3]) noexcept:
-                X11y11z10ufloat(v[0], v[1], v[2]) {}
+            X11y11z10Ufloat() noexcept = default;
+            explicit X11y11z10Ufloat(uint32_t v) noexcept: v(v) {}
+            explicit X11y11z10Ufloat(float x, float y, float z) noexcept;
+            explicit X11y11z10Ufloat(const float v[3]) noexcept:
+                X11y11z10Ufloat(v[0], v[1], v[2]) {}
 
             static constexpr auto format = VK_FORMAT_B10G11R11_UFLOAT_PACK32;
         };

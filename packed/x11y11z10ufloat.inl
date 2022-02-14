@@ -2,7 +2,7 @@ namespace magma
 {
 namespace packed
 {
-inline X11y11z10ufloat::X11y11z10ufloat(float x, float y, float z) noexcept
+inline X11y11z10Ufloat::X11y11z10Ufloat(float x, float y, float z) noexcept
 {
     union flint
     {
