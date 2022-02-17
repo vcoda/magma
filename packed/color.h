@@ -212,6 +212,7 @@ namespace magma
             explicit R9g9b9e5Ufloat(float r, float g, float b) noexcept;
             explicit R9g9b9e5Ufloat(const float v[3]) noexcept:
                 R9g9b9e5Ufloat(v[0], v[1], v[2]) {}
+            void unpack(float v[3]) noexcept;
 
             static constexpr auto format = VK_FORMAT_E5B9G9R9_UFLOAT_PACK32;
         };

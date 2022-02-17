@@ -72,6 +72,17 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     bm = (uint32_t)std::round(b * scale);
     e = (uint32_t)exp;
 }
+
+inline void R9g9b9e5Ufloat::unpack(float v[3]) noexcept
+{
+    constexpr int MANTISSA_BITS = 9;
+    constexpr int EXP_BIAS = 15;
+    int exp = e - EXP_BIAS - MANTISSA_BITS;
+    float scale = powf(2.f, (float)exp);
+    v[0] = rm * scale;
+    v[1] = gm * scale;
+    v[2] = bm * scale;
+}
 } // namespace packed
 } // namespace magma
 
