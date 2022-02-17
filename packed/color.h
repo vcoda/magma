@@ -157,8 +157,8 @@ namespace magma
 
             R5g5b5a1Unorm() noexcept = default;
             explicit R5g5b5a1Unorm(uint16_t v) noexcept: v(v) {}
-            explicit R5g5b5a1Unorm(float b, float g, float r, float a) noexcept;
-            explicit R5g5b5a1Unorm(uint8_t b, uint8_t g, uint8_t r, uint8_t a) noexcept;
+            explicit R5g5b5a1Unorm(float r, float g, float b, float a) noexcept;
+            explicit R5g5b5a1Unorm(uint8_t r, uint8_t g, uint8_t b, uint8_t a) noexcept;
             explicit R5g5b5a1Unorm(const float v[4]) noexcept;
             explicit R5g5b5a1Unorm(const uint8_t v[4]) noexcept;
 
