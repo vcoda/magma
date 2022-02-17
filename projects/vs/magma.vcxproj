@@ -571,6 +571,7 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
     <None Include="..\..\packed\b4g4r4a4unorm.inl" />
     <None Include="..\..\packed\b5g6r5unorm.inl" />
     <None Include="..\..\packed\r4g4b4a4unorm.inl" />
+    <None Include="..\..\packed\r9g9b9e5ufloat.inl" />
     <None Include="..\..\packed\x10y10z10w2snorm.inl" />
     <None Include="..\..\packed\x10y10z10w2unorm.inl" />
     <None Include="..\..\packed\x11y11z10ufloat.inl" />

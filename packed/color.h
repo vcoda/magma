@@ -193,6 +193,34 @@ namespace magma
 
             static constexpr auto format = VK_FORMAT_B5G5R5A1_UNORM_PACK16;
         };
+
+        /* Specifies a three-component, 32-bit packed unsigned floating-point format that has
+           a 5-bit shared exponent in bits 27..31, a 9-bit B component mantissa in bits 18..26,
+           a 9-bit G component mantissa in bits 9..17, and a 9-bit R component mantissa in bits 0..8.
+           https://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_texture_shared_exponent.txt */
+
+        struct R9g9b9e5Ufloat
+        {
+            union
+            {
+                struct
+                {
+                    uint32_t rm: 9; // r-mantissa
+                    uint32_t gm: 9; // g-mantissa
+                    uint32_t bm: 9; // b-mantissa
+                    uint32_t e: 5;  // shared exponent
+                };
+                uint32_t v;
+            };
+
+            R9g9b9e5Ufloat() noexcept = default;
+            explicit R9g9b9e5Ufloat(uint32_t v) noexcept: v(v) {}
+            explicit R9g9b9e5Ufloat(float r, float g, float b) noexcept;
+            explicit R9g9b9e5Ufloat(const float v[3]) noexcept:
+                R9g9b9e5Ufloat(v[0], v[1], v[2]) {}
+
+            static constexpr auto format = VK_FORMAT_E5B9G9R9_UFLOAT_PACK32;
+        };
     } // namespace packed
 } // namespace magma
 
@@ -202,3 +230,4 @@ namespace magma
 #include "b5g6r5unorm.inl"
 #include "r5g5b5a1unorm.inl"
 #include "b5g5r5a1unorm.inl"
+#include "r9g9b9e5ufloat.inl"
