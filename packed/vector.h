@@ -23,8 +23,7 @@ namespace magma
     {
         /* Specifies a four-component, 32-bit packed unsigned normalized format that has
            a 2-bit W component in bits 30..31, a 10-bit Z component in bits 20..29,
-           a 10-bit Y component in bits 10..19, and a 10-bit X component in bits 0..9.
-           Corresponding format is VK_FORMAT_A2B10G10R10_UNORM_PACK32. */
+           a 10-bit Y component in bits 10..19, and a 10-bit X component in bits 0..9. */
 
         struct X10y10z10w2Unorm
         {
@@ -51,8 +50,7 @@ namespace magma
 
         /* Specifies a four-component, 32-bit packed signed normalized format that has
            a 2-bit W component in bits 30..31, a 10-bit Z component in bits 20..29,
-           a 10-bit Y component in bits 10..19, and a 10-bit X component in bits 0..9.
-           Corresponding format is VK_FORMAT_A2B10G10R10_SNORM_PACK32. */
+           a 10-bit Y component in bits 10..19, and a 10-bit X component in bits 0..9. */
 
         struct X10y10z10w2Snorm
         {
@@ -83,8 +81,7 @@ namespace magma
            An unsigned 10-bit floating-point number has no sign bit, a 5-bit exponent, and a 5-bit mantissa.
            Unsigned 10- and 11-bit floating point numbers are defined here:
            https://www.khronos.org/registry/DataFormat/specs/1.3/dataformat.1.3.html#11bitfp
-           https://www.khronos.org/registry/DataFormat/specs/1.3/dataformat.1.3.html#10bitfp
-           Corresponding format is VK_FORMAT_B10G11R11_UFLOAT_PACK32. */
+           https://www.khronos.org/registry/DataFormat/specs/1.3/dataformat.1.3.html#10bitfp */
 
         struct X11y11z10Ufloat
         {
