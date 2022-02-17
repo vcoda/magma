@@ -17,7 +17,7 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     constexpr int MAX_EXP = MAX_VALID_BIASED_EXP - EXP_BIAS;
     constexpr int MAX_MANTISSA = (1 << MANTISSA_BITS) - 1;
     constexpr float MAX_RGB9E5 = float(MAX_MANTISSA) / (1 << MANTISSA_BITS) * (1 << MAX_EXP);
-    // (2^(exp - EXP_BIAS - MANTISSA_BITS))
+    // 2^(exp - EXP_BIAS - MANTISSA_BITS)
     constexpr double expPow2[MAX_VALID_BIASED_EXP + 1] = {
         5.96046e-08,
         1.19209e-07,
@@ -74,3 +74,15 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
 }
 } // namespace packed
 } // namespace magma
+
+/* Lookup table generation code:
+
+constexpr int MANTISSA_BITS = 9;
+constexpr int EXP_BIAS = 15;
+constexpr int MAX_VALID_BIASED_EXP = 31;
+for (int exp = 0; exp <= MAX_VALID_BIASED_EXP; ++exp)
+{
+    double val = pow(2.0, (double)exp - EXP_BIAS - MANTISSA_BITS);
+    std::cout << val << "," << std::endl;
+}
+*/
