@@ -642,6 +642,9 @@
     <ClInclude Include="..\..\packed\color.h">
       <Filter>Header Files\packed</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\packed\ieee754.h">
+      <Filter>Header Files\packed</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">

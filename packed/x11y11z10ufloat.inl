@@ -4,11 +4,7 @@ namespace packed
 {
 inline X11y11z10Ufloat::X11y11z10Ufloat(float x, float y, float z) noexcept
 {
-    union flint
-    {
-        float f;
-        uint32_t i;
-    } const ivec[3] = {x, y, z};
+    const Float32 ivec[3] = {x, y, z};
     uint32_t res[3];
     // X & Y components (5-bit exponent, 6-bit mantissa)
     for (uint32_t j = 0; j < 2; ++j)

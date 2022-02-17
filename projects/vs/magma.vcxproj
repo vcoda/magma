@@ -306,6 +306,7 @@
     <ClInclude Include="..\..\objects\validationCache.h" />
     <ClInclude Include="..\..\objects\vertexBuffer.h" />
     <ClInclude Include="..\..\packed\color.h" />
+    <ClInclude Include="..\..\packed\ieee754.h" />
     <ClInclude Include="..\..\packed\vector.h" />
     <ClInclude Include="..\..\shaders\pipelineShaderStage.h" />
     <ClInclude Include="..\..\shaders\rayTracingShaderGroup.h" />
