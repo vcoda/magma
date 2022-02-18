@@ -6,7 +6,7 @@ inline int floorLog2(float x)
 {
     Float32 f;
     f.f = x;
-    return f.e - 127;
+    return f.e - Float32::bias;
 }
 
 inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept

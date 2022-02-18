@@ -36,6 +36,8 @@ namespace magma
                 uint32_t e: 8;
                 uint32_t sign: 1;
             };
+
+            static constexpr int bias = 127; // Exponent bias
         };
     } // namespace packed
 } // namespace magma
