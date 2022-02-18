@@ -213,10 +213,12 @@ void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const st
     std::vector<VkDeviceSize> offsets /* empty */, const std::initializer_list<VkDeviceSize>& sizes /* empty */)
 {
     MAGMA_ASSERT(transformFeedbackBuffers.size() > 0);
-    if (offsets.size() > 0)
+    if (offsets.size() > 0) {
         MAGMA_ASSERT(offsets.size() >= transformFeedbackBuffers.size());
-    if (sizes.size() > 0)
+    }
+    if (sizes.size() > 0) {
         MAGMA_ASSERT(sizes.size() >= transformFeedbackBuffers.size());
+    }
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBindTransformFeedbackBuffersEXT);
     if (vkCmdBindTransformFeedbackBuffersEXT)
     {
@@ -607,8 +609,9 @@ void CommandBuffer::endConditionalRendering() noexcept
 void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers,
     const std::initializer_list<VkDeviceSize>& counterBufferOffsets /* empty */) noexcept
 {
-    if (counterBufferOffsets.size() > 0)
+    if (counterBufferOffsets.size() > 0) {
         MAGMA_ASSERT(counterBufferOffsets.size() >= counterBuffers.size());
+    }
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBeginTransformFeedbackEXT);
     if (vkCmdBeginTransformFeedbackEXT)
     {
@@ -622,8 +625,9 @@ void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const st
 void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers,
     const std::initializer_list<VkDeviceSize>& counterBufferOffsets /* empty */) noexcept
 {
-    if (counterBufferOffsets.size() > 0)
+    if (counterBufferOffsets.size() > 0) {
         MAGMA_ASSERT(counterBufferOffsets.size() >= counterBuffers.size());
+    }
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdEndTransformFeedbackEXT);
     if (vkCmdEndTransformFeedbackEXT)
     {
