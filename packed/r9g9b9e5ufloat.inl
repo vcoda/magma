@@ -59,11 +59,11 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     int exp = std::max(-EXP_BIAS - 1, floorLog2(maxRgb)) + 1 + EXP_BIAS;
     MAGMA_ASSERT(exp >= 0);
     MAGMA_ASSERT(exp <= MAX_VALID_BIASED_EXP);
-    int maxm = (int)std::round(maxRgb / expPow2[exp]);
+    int maxm = (int)std::round(maxRgb / expPow2[exp]); // max(r, g, b) / (2^(exp - EXP_BIAS - MANTISSA_BITS))
     MAGMA_ASSERT(maxm <= MAX_MANTISSA);
     if (MAX_MANTISSA + 1 == maxm)
     {
-        exp += 1;
+        ++exp;
         MAGMA_ASSERT(exp <= MAX_VALID_BIASED_EXP);
     }
     double scale = 1. / expPow2[exp];
