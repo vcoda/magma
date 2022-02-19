@@ -5,12 +5,10 @@ namespace packed
 inline B5g6r5Unorm::B5g6r5Unorm(float b, float g, float r) noexcept
 {
 #ifdef MAGMA_SSE
-    constexpr float hi[4] = {1.f, 1.f, 1.f, 0.f};
-    constexpr float scale[4] = {31.f, 63.f, 31.f, 0.f};
     __m128 v = _mm_set_ps(0.f, b, g, r); // Most to least significant bit order
     v = _mm_max_ps(v, _mm_setzero_ps());
-    v = _mm_min_ps(v, _mm_load_ps(hi));
-    v = _mm_mul_ps(v, _mm_load_ps(scale));
+    v = _mm_min_ps(v, _mm_set_ps(0.f, 1.f, 1.f, 1.f));
+    v = _mm_mul_ps(v, _mm_set_ps(0.f, 31.f, 63.f, 31.f));
     __m128i iv = _mm_cvtps_epi32(v); // Convert to int with rounding
     this->v =
         (((uint16_t)_mm_extract_epi16(iv, 4) & 0x1F) << 11) |
