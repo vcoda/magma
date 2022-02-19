@@ -18,39 +18,39 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     constexpr int MAX_MANTISSA = (1 << MANTISSA_BITS) - 1;
     constexpr float MAX_RGB9E5 = float(MAX_MANTISSA) / (1 << MANTISSA_BITS) * (1 << MAX_EXP);
     // 1/(2^(exp - EXP_BIAS - MANTISSA_BITS))
-    constexpr double invExpPow2[MAX_VALID_BIASED_EXP + 1] = {
-        1.67772e+07,
-        8.38861e+06,
-        4.1943e+06,
-        2.09715e+06,
-        1.04858e+06,
-        524288.0,
-        262144.0,
-        131072.0,
-        65536.0,
-        32768.0,
-        16384.0,
-        8192.0,
-        4096.0,
-        2048.0,
-        1024.0,
-        512.0,
-        256.0,
-        128.0,
-        64.0,
-        32.0,
-        16.0,
-        8.0,
-        4.0,
-        2.0,
-        1.0,
-        0.5,
-        0.25,
-        0.125,
-        0.0625,
-        0.03125,
-        0.015625,
-        0.0078125
+    constexpr float rcpExpPow2[MAX_VALID_BIASED_EXP + 1] = {
+        16777216.f,
+        8388608.f,
+        4194304.f,
+        2097152.f,
+        1048576.f,
+        524288.f,
+        262144.f,
+        131072.f,
+        65536.f,
+        32768.f,
+        16384.f,
+        8192.f,
+        4096.f,
+        2048.f,
+        1024.f,
+        512.f,
+        256.f,
+        128.f,
+        64.f,
+        32.f,
+        16.f,
+        8.f,
+        4.f,
+        2.f,
+        1.f,
+        0.5f,
+        0.25f,
+        0.125f,
+        0.0625f,
+        0.03125f,
+        0.015625f,
+        0.0078125f
     };
 #ifdef MAGMA_SSE
     __m128 v = _mm_set_ps(0.f, b, g, r);
@@ -67,10 +67,11 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     int fl = floorLog2(maxRgb);
     int exp = (-EXP_BIAS - 1 > fl ? -EXP_BIAS - 1 : fl) + 1 + EXP_BIAS;
     // TODO: end vectorize
-    v2 = _mm_mul_ss(max3, _mm_set_ss((float)invExpPow2[exp])); // max(r, g, b) / (2^(exp - EXP_BIAS - MANTISSA_BITS))
+    __m128 scale = _mm_set_ss(rcpExpPow2[exp]);
+    v2 = _mm_mul_ss(max3, scale); // max(r, g, b) / (2^(exp - EXP_BIAS - MANTISSA_BITS))
     int maxm = _mm_extract_epi32(_mm_cvtps_epi32(v2), 0); // Convert to int with rounding
     if (MAX_MANTISSA + 1 == maxm) ++exp;
-    __m128 scale = _mm_set_ps1((float)invExpPow2[exp]);
+    scale = _mm_set_ps1(rcpExpPow2[exp]);
     v = _mm_mul_ps(v, scale);
     __m128i iv = _mm_cvtps_epi32(v); // Convert to int with rounding
     this->v =
@@ -86,17 +87,18 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     int exp = std::max(-EXP_BIAS - 1, floorLog2(maxRgb)) + 1 + EXP_BIAS;
     MAGMA_ASSERT(exp >= 0);
     MAGMA_ASSERT(exp <= MAX_VALID_BIASED_EXP);
-    int maxm = (int)std::round(maxRgb * invExpPow2[exp]); // max(r, g, b) / (2^(exp - EXP_BIAS - MANTISSA_BITS))
+    float scale = rcpExpPow2[exp];
+    int maxm = (int)std::roundf(maxRgb * scale); // max(r, g, b) / (2^(exp - EXP_BIAS - MANTISSA_BITS))
     MAGMA_ASSERT(maxm <= MAX_MANTISSA);
     if (MAX_MANTISSA + 1 == maxm)
     {
         ++exp;
         MAGMA_ASSERT(exp <= MAX_VALID_BIASED_EXP);
     }
-    double scale = invExpPow2[exp];
-    rm = (uint32_t)std::round(r * scale);
-    gm = (uint32_t)std::round(g * scale);
-    bm = (uint32_t)std::round(b * scale);
+    scale = rcpExpPow2[exp];
+    rm = (uint32_t)std::roundf(r * scale);
+    gm = (uint32_t)std::roundf(g * scale);
+    bm = (uint32_t)std::roundf(b * scale);
     e = (uint32_t)exp;
 #endif // MAGMA_SSE
 }
@@ -119,9 +121,10 @@ inline void R9g9b9e5Ufloat::unpack(float v[3]) noexcept
 constexpr int MANTISSA_BITS = 9;
 constexpr int EXP_BIAS = 15;
 constexpr int MAX_VALID_BIASED_EXP = 31;
+std::cout.precision(std::numeric_limits<float>::max_digits10);
 for (int exp = 0; exp <= MAX_VALID_BIASED_EXP; ++exp)
 {
-    double val = pow(2.0, (double)exp - EXP_BIAS - MANTISSA_BITS);
-    std::cout << 1.0/val << "," << std::endl;
+    double val = 1.0 / pow(2.0, (double)exp - EXP_BIAS - MANTISSA_BITS);
+    std::cout << (float)val << (val < 1.0 ? "f" : ".f") << "," << std::endl;
 }
 */
