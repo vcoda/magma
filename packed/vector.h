@@ -41,8 +41,8 @@ namespace magma
 
             X10y10z10w2Unorm() noexcept = default;
             explicit X10y10z10w2Unorm(uint32_t v) noexcept: v(v) {}
-            explicit X10y10z10w2Unorm(float x, float y, float z, int w = 0) noexcept;
-            explicit X10y10z10w2Unorm(const float v[3], int w = 0) noexcept:
+            explicit X10y10z10w2Unorm(float x, float y, float z, uint32_t w = 0) noexcept;
+            explicit X10y10z10w2Unorm(const float v[3], uint32_t w = 0) noexcept:
                 X10y10z10w2Unorm(v[0], v[1], v[2], w) {}
 
             static constexpr auto format = VK_FORMAT_A2B10G10R10_UNORM_PACK32;
@@ -68,8 +68,8 @@ namespace magma
 
             X10y10z10w2Snorm() noexcept = default;
             explicit X10y10z10w2Snorm(uint32_t v) noexcept: v(v) {}
-            explicit X10y10z10w2Snorm(float x, float y, float z, int w = 0) noexcept;
-            explicit X10y10z10w2Snorm(const float v[3], int w = 0) noexcept:
+            explicit X10y10z10w2Snorm(float x, float y, float z, uint32_t w = 0) noexcept;
+            explicit X10y10z10w2Snorm(const float v[3], uint32_t w = 0) noexcept:
                 X10y10z10w2Snorm(v[0], v[1], v[2], w) {}
 
             static constexpr auto format = VK_FORMAT_A2B10G10R10_SNORM_PACK32;
