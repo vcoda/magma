@@ -103,7 +103,7 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
 #endif // MAGMA_SSE
 }
 
-inline void R9g9b9e5Ufloat::unpack(float v[3]) noexcept
+inline void R9g9b9e5Ufloat::unpack(float v[3]) const noexcept
 {
     constexpr int MAX_VALID_BIASED_EXP = 31;
     constexpr float expPow2[MAX_VALID_BIASED_EXP + 1] = {
