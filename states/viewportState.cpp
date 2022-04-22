@@ -179,23 +179,29 @@ std::size_t ViewportState::hash() const noexcept
         flags,
         viewportCount,
         scissorCount);
-    if (pViewports) for (uint32_t i = 0; i < viewportCount; ++i)
+    if (auto viewport = pViewports)
     {
-        core::hashCombine(hash, core::hashArgs(
-            pViewports[i].x,
-            pViewports[i].y,
-            pViewports[i].width,
-            pViewports[i].height,
-            pViewports[i].minDepth,
-            pViewports[i].maxDepth));
+        for (uint32_t i = 0; i < viewportCount; ++i, ++viewport)
+        {
+            core::hashCombine(hash, core::hashArgs(
+                viewport->x,
+                viewport->y,
+                viewport->width,
+                viewport->height,
+                viewport->minDepth,
+                viewport->maxDepth));
+        }
     }
-    if (pScissors) for (uint32_t i = 0; i < scissorCount; ++i)
+    if (auto scissor = pScissors)
     {
-        core::hashCombine(hash, core::hashArgs(
-            pScissors[i].offset.x,
-            pScissors[i].offset.y,
-            pScissors[i].extent.width,
-            pScissors[i].extent.height));
+        for (uint32_t i = 0; i < scissorCount; ++i, ++scissor)
+        {
+            core::hashCombine(hash, core::hashArgs(
+                scissor->offset.x,
+                scissor->offset.y,
+                scissor->extent.width,
+                scissor->extent.height));
+        }
     }
     return hash;
 }
