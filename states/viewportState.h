@@ -29,11 +29,10 @@ namespace magma
         explicit ViewportState() noexcept;
         explicit ViewportState(float x, float y, float width, float height,
             float minDepth = 0.f, float maxDepth = 1.f) noexcept;
-        explicit ViewportState(float x, float y, const VkExtent2D& extent,
+        explicit ViewportState(int32_t x, int32_t y, uint32_t width, int32_t height,
             float minDepth = 0.f, float maxDepth = 1.f) noexcept;
-        explicit ViewportState(uint32_t x, uint32_t y, uint32_t width, int32_t height,
-            float minDepth = 0.f, float maxDepth = 1.f) noexcept;
-        explicit ViewportState(const VkRect2D& viewport, const VkRect2D& scissor,
+        explicit ViewportState(const VkExtent2D& extent,
+            int32_t x = 0, int32_t y = 0,
             float minDepth = 0.f, float maxDepth = 1.f) noexcept;
         explicit ViewportState(const VkViewport& viewport) noexcept;
         explicit ViewportState(const VkViewport& viewport, const VkRect2D& scissor) noexcept;
@@ -45,10 +44,5 @@ namespace magma
         ~ViewportState();
         std::size_t hash() const noexcept;
         bool operator==(const ViewportState&) const noexcept;
-
-    private:
-        void initialize(const VkViewport& viewport, const VkRect2D& scissor) noexcept;
-        void initialize(const std::vector<VkViewport>& viewports,
-            const std::vector<VkRect2D>& scissors) noexcept;
     };
 } // namespace magma

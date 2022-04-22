@@ -90,7 +90,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
         renderstate::nullVertexInput,
         renderstate::triangleList,
         TesselationState(),
-        ViewportState(0.f, 0.f, extent),
+        ViewportState(extent),
         vertexShader->getRasterizationState(),
         renderstate::dontMultisample,
         renderstate::depthAlwaysDontWrite,
