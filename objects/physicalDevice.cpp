@@ -605,6 +605,9 @@ PhysicalDeviceExtensionFeatures PhysicalDevice::checkExtensionFeaturesSupport() 
 #ifdef VK_EXT_blend_operation_advanced
     PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(BlendOperationAdvancedFeaturesEXT, BLEND_OPERATION_ADVANCED_FEATURES_EXT, advancedBlendCoherentOperations);
 #endif
+#ifdef VK_EXT_depth_clip_control
+    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(DepthClipControlFeaturesEXT, DEPTH_CLIP_CONTROL_FEATURES_EXT, depthClipControl);
+#endif
 #ifdef VK_EXT_depth_clip_enable
     PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(DepthClipEnableFeaturesEXT, DEPTH_CLIP_ENABLE_FEATURES_EXT, depthClipEnable);
 #endif

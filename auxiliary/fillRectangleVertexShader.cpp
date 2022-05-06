@@ -61,11 +61,11 @@ const char *FillRectangleVertexShader::getEntryPointName() const noexcept
 
 const RasterizationState& FillRectangleVertexShader::getRasterizationState() const noexcept
 {
-    return
 #ifdef VK_NV_fill_rectangle
-        hasFillRectangle ? renderstate::fillRectangleCullNoneCCW :
+    if (hasFillRectangle)
+        return renderstate::fillCullNoneRectangleCCW;
 #endif
-        renderstate::fillCullNoneCCW;
+    return renderstate::fillCullNoneCCW;
 }
 } // namespace aux
 } // namespace magma

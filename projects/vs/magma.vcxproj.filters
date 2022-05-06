@@ -645,6 +645,15 @@
     <ClInclude Include="..\..\packed\ieee754.h">
       <Filter>Header Files\packed</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\states\rasterizationOrderState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\states\conservativeRasterizationState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\states\streamRasterizationState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1152,5 +1161,14 @@
     <CustomBuild Include="..\..\auxiliary\spirv\font.frag">
       <Filter>Source Files\auxiliary\spirv</Filter>
     </CustomBuild>
+    <None Include="..\..\states\rasterizationOrderState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\states\conservativeRasterizationState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\states\streamRasterizationState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
   </ItemGroup>
 </Project>

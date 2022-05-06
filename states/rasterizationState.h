@@ -63,57 +63,7 @@ namespace magma
     {
         constexpr DiscardRasterizationState(const RasterizationState& state) noexcept;
     };
-
-    /* When overestimation is enabled, if any part of the primitive, including its edges,
-       covers any part of the rectangular pixel area, then a fragment is generated with all
-       coverage samples turned on. When underestimation is enabled, fragments are only generated
-       if the rectangular pixel area is fully covered by the generating primitive. */
-
-#ifdef VK_EXT_conservative_rasterization
-    struct ConservativeRasterizationState : RasterizationState
-    {
-        constexpr ConservativeRasterizationState(const RasterizationState& state,
-            VkConservativeRasterizationModeEXT conservativeRasterizationMode,
-            float extraPrimitiveOverestimationSize = 0.f) noexcept;
-        std::size_t hash() const noexcept;
-        constexpr bool operator==(const ConservativeRasterizationState&) const noexcept;
-
-        const VkPipelineRasterizationConservativeStateCreateInfoEXT conservative;
-    };
-#endif // VK_EXT_conservative_rasterization
-
-    /* If the implementation is capable, a vertex stream other than zero can be rasterized.
-       If this structure is not present, rasterizationStream is assumed to be zero. */
-
-#ifdef VK_EXT_transform_feedback
-    struct VertexStreamRasterizationState : RasterizationState
-    {
-        constexpr VertexStreamRasterizationState(const RasterizationState& state,
-            uint32_t rasterizationStream,
-            VkPipelineRasterizationStateStreamCreateFlagsEXT flags = 0) noexcept;
-        std::size_t hash() const noexcept;
-        constexpr bool operator==(const VertexStreamRasterizationState&) const noexcept;
-
-        const VkPipelineRasterizationStateStreamCreateInfoEXT stream;
-    };
-#endif // VK_EXT_transform_feedback
-
-    /* This extension enables applications to opt into a relaxed, implementation
-       defined primitive rasterization order that may allow better parallel processing
-       of primitives and thus enabling higher primitive throughput. */
-
-#ifdef VK_AMD_rasterization_order
-    struct RasterizationOrderState : RasterizationState
-    {
-        constexpr RasterizationOrderState(const RasterizationState& state,
-            VkRasterizationOrderAMD rasterizationOrder) noexcept;
-        std::size_t hash() const noexcept;
-        constexpr bool operator==(const RasterizationOrderState&) const noexcept;
-
-        const VkPipelineRasterizationStateRasterizationOrderAMD order;
-    };
-#endif // VK_AMD_rasterization_order
-}
+} // namespace magma
 
 #include "rasterizationState.inl"
 
@@ -150,6 +100,18 @@ namespace magma
         constexpr RasterizationState pointCullBackCW(VK_POLYGON_MODE_POINT, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_CLOCKWISE);
         constexpr RasterizationState pointCullFrontCW(VK_POLYGON_MODE_POINT, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_CLOCKWISE);
         constexpr RasterizationState pointCullFrontAndBackCW(VK_POLYGON_MODE_POINT, VK_CULL_MODE_FRONT_AND_BACK, VK_FRONT_FACE_CLOCKWISE);
+
+#ifdef VK_NV_fill_rectangle
+        constexpr RasterizationState fillCullNoneRectangleCCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);
+        constexpr RasterizationState fillCullBackRectangleCCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);
+        constexpr RasterizationState fillCullFrontRectangleCCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);
+        constexpr RasterizationState fillCullFrontAndBackRectangleCCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_FRONT_AND_BACK, VK_FRONT_FACE_COUNTER_CLOCKWISE);
+
+        constexpr RasterizationState fillCullNoneRectangleCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);
+        constexpr RasterizationState fillCullBackRectangleCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_CLOCKWISE);
+        constexpr RasterizationState fillCullFrontRectangleCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_CLOCKWISE);
+        constexpr RasterizationState fillCullFrontAndBackRectangleCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_FRONT_AND_BACK, VK_FRONT_FACE_CLOCKWISE);
+#endif // VK_NV_fill_rectangle
 
         constexpr WideLineRasterizationState wideLine1_25CullNoneCCW(lineCullNoneCCW, 1.25f);
         constexpr WideLineRasterizationState wideLine1_25CullBackCCW(lineCullBackCCW, 1.25f);
@@ -270,111 +232,5 @@ namespace magma
         constexpr WideLineRasterizationState wideLine4_CullBackCW(lineCullBackCW, 4.f);
         constexpr WideLineRasterizationState wideLine4_CullFrontCW(lineCullFrontCW, 4.f);
         constexpr WideLineRasterizationState wideLine4_CullFrontAndBackCW(lineCullFrontAndBackCW, 4.f);
-
-#ifdef VK_NV_fill_rectangle
-        constexpr RasterizationState fillRectangleCullNoneCCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);
-        constexpr RasterizationState fillRectangleCullBackCCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);
-        constexpr RasterizationState fillRectangleCullFrontCCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);
-        constexpr RasterizationState fillRectangleCullFrontAndBackCCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_FRONT_AND_BACK, VK_FRONT_FACE_COUNTER_CLOCKWISE);
-
-        constexpr RasterizationState fillRectangleCullNoneCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);
-        constexpr RasterizationState fillRectangleCullBackCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_CLOCKWISE);
-        constexpr RasterizationState fillRectangleCullFrontCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_CLOCKWISE);
-        constexpr RasterizationState fillRectangleCullFrontAndBackCW(VK_POLYGON_MODE_FILL_RECTANGLE_NV, VK_CULL_MODE_FRONT_AND_BACK, VK_FRONT_FACE_CLOCKWISE);
-#endif // VK_NV_fill_rectangle
-
-#ifdef VK_EXT_conservative_rasterization
-        constexpr ConservativeRasterizationState fillCullNoneOverestimateCCW(fillCullNoneCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState fillCullBackOverestimateCCW(fillCullBackCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState fillCullFrontOverestimateCCW(fillCullFrontCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState fillCullFrontAndBackOverestimateCCW(fillCullFrontAndBackCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-
-        constexpr ConservativeRasterizationState lineCullNoneOverestimateCCW(lineCullNoneCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState lineCullBackOverestimateCCW(lineCullBackCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState lineCullFrontOverestimateCCW(lineCullFrontCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState lineCullFrontAndBackOverestimateCCW(lineCullFrontAndBackCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-
-        constexpr ConservativeRasterizationState pointCullNoneOverestimateCCW(pointCullNoneCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState pointCullBackOverestimateCCW(pointCullBackCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState pointCullFrontOverestimateCCW(pointCullFrontCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState pointCullFrontAndBackOverestimateCCW(pointCullFrontAndBackCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-
-        constexpr ConservativeRasterizationState fillCullNoneOverestimateCW(fillCullNoneCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState fillCullBackOverestimateCW(fillCullBackCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState fillCullFrontOverestimateCW(fillCullFrontCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState fillCullFrontAndBackOverestimateCW(fillCullFrontAndBackCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-
-        constexpr ConservativeRasterizationState lineCullNoneOverestimateCW(lineCullNoneCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState lineCullBackOverestimateCW(lineCullBackCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState lineCullFrontOverestimateCW(lineCullFrontCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState lineCullFrontAndBackOverestimateCW(lineCullFrontAndBackCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-
-        constexpr ConservativeRasterizationState pointCullNoneOverestimateCW(pointCullNoneCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState pointCullBackOverestimateCW(pointCullBackCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState pointCullFrontOverestimateCW(pointCullFrontCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState pointCullFrontAndBackOverestimateCW(pointCullFrontAndBackCW, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT);
-
-        constexpr ConservativeRasterizationState fillCullNoneUnderestimateCCW(fillCullNoneCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState fillCullBackUnderestimateCCW(fillCullBackCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState fillCullFrontUnderestimateCCW(fillCullFrontCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState fillCullFrontAndBackUnderestimateCCW(fillCullFrontAndBackCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-
-        constexpr ConservativeRasterizationState lineCullNoneUnderestimateCCW(lineCullNoneCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState lineCullBackUnderestimateCCW(lineCullBackCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState lineCullFrontUnderestimateCCW(lineCullFrontCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState lineCullFrontAndBackUnderestimateCCW(lineCullFrontAndBackCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-
-        constexpr ConservativeRasterizationState pointCullNoneUnderestimateCCW(pointCullNoneCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState pointCullBackUnderestimateCCW(pointCullBackCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState pointCullFrontUnderestimateCCW(pointCullFrontCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState pointCullFrontAndBackUnderestimateCCW(pointCullFrontAndBackCCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-
-        constexpr ConservativeRasterizationState fillCullNoneUnderestimateCW(fillCullNoneCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState fillCullBackUnderestimateCW(fillCullBackCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState fillCullFrontUnderestimateCW(fillCullFrontCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState fillCullFrontAndBackUnderestimateCW(fillCullFrontAndBackCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-
-        constexpr ConservativeRasterizationState lineCullNoneUnderestimateCW(lineCullNoneCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState lineCullBackUnderestimateCW(lineCullBackCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState lineCullFrontUnderestimateCW(lineCullFrontCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState lineCullFrontAndBackUnderestimateCW(lineCullFrontAndBackCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-
-        constexpr ConservativeRasterizationState pointCullNoneUnderestimateCW(pointCullNoneCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState pointCullBackUnderestimateCW(pointCullBackCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState pointCullFrontUnderestimateCW(pointCullFrontCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-        constexpr ConservativeRasterizationState pointCullFrontAndBackUnderestimateCW(pointCullFrontAndBackCW, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT);
-#endif // VK_EXT_conservative_rasterization
-
-#ifdef VK_AMD_rasterization_order
-        constexpr RasterizationOrderState fillCullNoneRelaxedCCW(fillCullNoneCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState fillCullBackRelaxedCCW(fillCullBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState fillCullFrontRelaxedCCW(fillCullFrontCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState fillCullFrontAndBackRelaxedCCW(fillCullFrontAndBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-
-        constexpr RasterizationOrderState lineCullNoneRelaxedCCW(lineCullNoneCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState lineCullBackRelaxedCCW(lineCullBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState lineCullFrontRelaxedCCW(lineCullFrontCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState lineCullFrontAndBackRelaxedCCW(lineCullFrontAndBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-
-        constexpr RasterizationOrderState pointCullNoneRelaxedCCW(pointCullNoneCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState pointCullBackRelaxedCCW(pointCullBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState pointCullFrontRelaxedCCW(pointCullFrontCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState pointCullFrontAndBackRelaxedCCW(pointCullFrontAndBackCCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-
-        constexpr RasterizationOrderState fillCullNoneRelaxedCW(fillCullNoneCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState fillCullBackRelaxedCW(fillCullBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState fillCullFrontRelaxedCW(fillCullFrontCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState fillCullFrontAndBackRelaxedCW(fillCullFrontAndBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-
-        constexpr RasterizationOrderState lineCullNoneRelaxedCW(lineCullNoneCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState lineCullBackRelaxedCW(lineCullBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState lineCullFrontRelaxedCW(lineCullFrontCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState lineCullFrontAndBackRelaxedCW(lineCullFrontAndBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-
-        constexpr RasterizationOrderState pointCullNoneRelaxedCW(pointCullNoneCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState pointCullBackRelaxedCW(pointCullBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState pointCullFrontRelaxedCW(pointCullFrontCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-        constexpr RasterizationOrderState pointCullFrontAndBackRelaxedCW(pointCullFrontAndBackCW, VK_RASTERIZATION_ORDER_RELAXED_AMD);
-#endif // VK_AMD_rasterization_order
     } // namespace renderstate
  } // namespace magma
