@@ -38,40 +38,48 @@ ViewportState::ViewportState(float x, float y, float width, float height,
     float minDepth /* 0 */, float maxDepth /* 1 */) noexcept:
     ViewportState()
 {
-    VkViewport viewport;
-    viewport.x = x;
-    viewport.y = y;
-    viewport.width = width;
-    viewport.height = height;
-    viewport.minDepth = minDepth;
-    viewport.maxDepth = maxDepth;
-    VkRect2D scissor;
-    scissor.offset.x = static_cast<int32_t>(x);
-    scissor.offset.y = static_cast<int32_t>(y);
-    scissor.extent.width = static_cast<uint32_t>(width);
-    scissor.extent.height = static_cast<uint32_t>(height >= 0.f ? height: -height);
-    pViewports = core::copyArray(&viewport, 1);
-    pScissors = core::copyArray(&scissor, 1);
+    if (VkViewport *viewport = new(std::nothrow) VkViewport)
+    {
+        viewport->x = x;
+        viewport->y = y;
+        viewport->width = width;
+        viewport->height = height;
+        viewport->minDepth = minDepth;
+        viewport->maxDepth = maxDepth;
+        pViewports = viewport;
+    }
+    if (VkRect2D *scissor = new(std::nothrow) VkRect2D)
+    {
+        scissor->offset.x = static_cast<int32_t>(x);
+        scissor->offset.y = static_cast<int32_t>(y);
+        scissor->extent.width = static_cast<uint32_t>(width);
+        scissor->extent.height = static_cast<uint32_t>(std::abs(height));
+        pScissors = scissor;
+    }
 }
 
 ViewportState::ViewportState(int32_t x, int32_t y, uint32_t width, int32_t height,
     float minDepth /* 0 */, float maxDepth /* 1 */) noexcept:
     ViewportState()
 {
-    VkViewport viewport;
-    viewport.x = static_cast<float>(x);
-    viewport.y = static_cast<float>(y);
-    viewport.width = static_cast<float>(width);
-    viewport.height = static_cast<float>(height);
-    viewport.minDepth = minDepth;
-    viewport.maxDepth = maxDepth;
-    VkRect2D scissor;
-    scissor.offset.x = x;
-    scissor.offset.y = y;
-    scissor.extent.width = width;
-    scissor.extent.height = static_cast<uint32_t>(height >= 0 ? height : -height);
-    pViewports = core::copyArray(&viewport, 1);
-    pScissors = core::copyArray(&scissor, 1);
+    if (VkViewport *viewport = new(std::nothrow) VkViewport)
+    {
+        viewport->x = static_cast<float>(x);
+        viewport->y = static_cast<float>(y);
+        viewport->width = static_cast<float>(width);
+        viewport->height = static_cast<float>(height);
+        viewport->minDepth = minDepth;
+        viewport->maxDepth = maxDepth;
+        pViewports = viewport;
+    }
+    if (VkRect2D *scissor = new(std::nothrow) VkRect2D)
+    {
+        scissor->offset.x = x;
+        scissor->offset.y = y;
+        scissor->extent.width = width;
+        scissor->extent.height = static_cast<uint32_t>(std::abs(height));
+        pScissors = scissor;
+    }
 }
 
 ViewportState::ViewportState(const VkExtent2D& extent,
@@ -79,65 +87,87 @@ ViewportState::ViewportState(const VkExtent2D& extent,
     float minDepth /* 0 */, float maxDepth /* 1 */) noexcept:
     ViewportState()
 {
-    VkViewport viewport;
-    viewport.x = static_cast<float>(x);
-    viewport.y = static_cast<float>(y);
-    viewport.width = static_cast<float>(extent.width);
-    viewport.height = static_cast<float>(extent.height);
-    viewport.minDepth = minDepth;
-    viewport.maxDepth = maxDepth;
-    VkRect2D scissor;
-    scissor.offset.x = x;
-    scissor.offset.y = y;
-    scissor.extent = extent;
-    pViewports = core::copyArray(&viewport, 1);
-    pScissors = core::copyArray(&scissor, 1);
+    if (VkViewport *viewport = new(std::nothrow) VkViewport)
+    {
+        viewport->x = static_cast<float>(x);
+        viewport->y = static_cast<float>(y);
+        viewport->width = static_cast<float>(extent.width);
+        viewport->height = static_cast<float>(extent.height);
+        viewport->minDepth = minDepth;
+        viewport->maxDepth = maxDepth;
+        pViewports = viewport;
+    }
+    if (VkRect2D *scissor = new(std::nothrow) VkRect2D)
+    {
+        scissor->offset.x = x;
+        scissor->offset.y = y;
+        scissor->extent = extent;
+        pScissors = scissor;
+    }
 }
 
 ViewportState::ViewportState(const VkViewport& viewport) noexcept:
     ViewportState()
 {
-    VkRect2D scissor;
-    scissor.offset.x = static_cast<int32_t>(viewport.x);
-    scissor.offset.y = static_cast<int32_t>(viewport.y);
-    scissor.extent.width = static_cast<uint32_t>(viewport.width);
-    scissor.extent.height = static_cast<uint32_t>(viewport.height);
-    pViewports = core::copyArray(&viewport, 1);
-    pScissors = core::copyArray(&scissor, 1);
+    pViewports = core::copy(&viewport);
+    if (VkRect2D *scissor = new(std::nothrow) VkRect2D)
+    {
+        scissor->offset.x = static_cast<int32_t>(viewport.x);
+        scissor->offset.y = static_cast<int32_t>(viewport.y);
+        scissor->extent.width = static_cast<uint32_t>(viewport.width);
+        scissor->extent.height = static_cast<uint32_t>(std::abs(viewport.height));
+        pScissors = scissor;
+    }
 }
 
 ViewportState::ViewportState(const VkViewport& viewport, const VkRect2D& scissor) noexcept:
     ViewportState()
 {
-    pViewports = core::copyArray(&viewport, 1);
-    pScissors = core::copyArray(&scissor, 1);
+    pViewports = core::copy(&viewport);
+    pScissors = core::copy(&scissor);
 }
 
-ViewportState::ViewportState(const std::vector<VkViewport>& viewports)
+ViewportState::ViewportState(const std::vector<VkViewport>& viewports):
+    ViewportState()
 {
-    std::vector<VkRect2D> scissors;
-    for (const VkViewport& viewport : viewports)
+    if (!viewports.empty())
     {
-        VkRect2D scissor;
-        scissor.offset.x = static_cast<int32_t>(viewport.x);
-        scissor.offset.y = static_cast<int32_t>(viewport.y);
-        scissor.extent.width = static_cast<uint32_t>(viewport.width);
-        scissor.extent.height = static_cast<uint32_t>(viewport.height);
-        scissors.push_back(scissor);
+        std::vector<VkRect2D> scissors;
+        for (const VkViewport& viewport : viewports)
+        {
+            VkRect2D scissor;
+            scissor.offset.x = static_cast<int32_t>(viewport.x);
+            scissor.offset.y = static_cast<int32_t>(viewport.y);
+            scissor.extent.width = static_cast<uint32_t>(viewport.width);
+            scissor.extent.height = static_cast<uint32_t>(std::abs(viewport.height));
+            scissors.push_back(scissor);
+        }
+        viewportCount = MAGMA_COUNT(viewports);
+        if (1 == viewportCount)
+            pViewports = core::copy(&viewports.front());
+        else
+            pViewports = core::copyVector(viewports);
+        scissorCount = MAGMA_COUNT(scissors);
+        if (1 == scissorCount)
+            pScissors = core::copy(&scissors.front());
+        else
+            pScissors = core::copyVector(scissors);
     }
-    viewportCount = MAGMA_COUNT(viewports);
-    pViewports = core::copyVector(viewports);
-    scissorCount = MAGMA_COUNT(scissors);
-    pScissors = core::copyVector(scissors);
 }
 
 ViewportState::ViewportState(const std::vector<VkViewport>& viewports, const std::vector<VkRect2D>& scissors) noexcept:
     ViewportState()
 {
     viewportCount = MAGMA_COUNT(viewports);
-    pViewports = core::copyVector(viewports);
+    if (1 == viewportCount)
+        pViewports = core::copy(&viewports.front());
+    else
+        pViewports = core::copyVector(viewports);
     scissorCount = MAGMA_COUNT(scissors);
-    pScissors = core::copyVector(scissors);
+    if (1 == scissorCount)
+        pScissors = core::copy(&scissors.front());
+    else
+        pScissors = core::copyVector(scissors);
 }
 
 ViewportState::ViewportState(const ViewportState& other) noexcept
@@ -146,30 +176,47 @@ ViewportState::ViewportState(const ViewportState& other) noexcept
     pNext = nullptr;
     flags = other.flags;
     viewportCount = other.viewportCount;
-    pViewports = core::copyArray(other.pViewports, viewportCount);
+    if (1 == viewportCount)
+        pViewports = core::copy(other.pViewports);
+    else
+        pViewports = core::copyArray(other.pViewports, other.viewportCount);
     scissorCount = other.scissorCount;
-    pScissors = core::copyArray(other.pScissors, scissorCount);
+    if (1 == scissorCount)
+        pScissors = core::copy(other.pScissors);
+    else
+        pScissors = core::copyArray(other.pScissors, other.scissorCount);
 }
 
 ViewportState& ViewportState::operator=(const ViewportState& other) noexcept
 {
     if (this != &other)
     {
+        this->~ViewportState();
         flags = other.flags;
         viewportCount = other.viewportCount;
-        delete[] pViewports;
-        pViewports = core::copyArray(other.pViewports, viewportCount);
+        if (1 == viewportCount)
+            pViewports = core::copy(other.pViewports);
+        else
+            pViewports = core::copyArray(other.pViewports, other.viewportCount);
         scissorCount = other.scissorCount;
-        delete[] pScissors;
-        pScissors = core::copyArray(other.pScissors, scissorCount);
+        if (1 == scissorCount)
+            pScissors = core::copy(other.pScissors);
+        else
+            pScissors = core::copyArray(other.pScissors, other.scissorCount);
     }
     return *this;
 }
 
 ViewportState::~ViewportState()
 {
-    delete[] pViewports;
-    delete[] pScissors;
+    if (1 == viewportCount)
+        delete pViewports;
+    else
+        delete[] pViewports;
+    if (1 == scissorCount)
+        delete pScissors;
+    else
+        delete[] pScissors;
 }
 
 std::size_t ViewportState::hash() const noexcept
