@@ -130,7 +130,15 @@ ViewportState::ViewportState(const ViewportState& other) noexcept:
     scissor(other.scissor)
 {
     sType = other.sType;
-    pNext = nullptr;
+    if (!other.pNext)
+        pNext = nullptr;
+    else
+    {
+#ifdef VK_EXT_depth_clip_control
+        depthClipControl = other.depthClipControl;
+        pNext = &depthClipControl;
+#endif
+    }
     flags = other.flags;
     viewportCount = other.viewportCount;
     pViewports = &viewport;
@@ -145,7 +153,15 @@ ViewportState& ViewportState::operator=(const ViewportState& other) noexcept
         viewport = other.viewport;
         scissor = other.scissor;
         sType = other.sType;
-        pNext = nullptr;
+        if (!other.pNext)
+            pNext = nullptr;
+        else
+        {
+#ifdef VK_EXT_depth_clip_control
+            depthClipControl = other.depthClipControl;
+            pNext = &depthClipControl;
+#endif
+        }
         flags = other.flags;
         viewportCount = other.viewportCount;
         pViewports = &viewport;
