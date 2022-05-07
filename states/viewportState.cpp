@@ -126,21 +126,19 @@ ViewportState::ViewportState(const VkViewport& viewport_, const VkRect2D& scisso
 ViewportState::ViewportState(const ViewportState& other) noexcept:
     viewport(other.viewport),
     scissor(other.scissor)
+#ifdef VK_EXT_depth_clip_control
+   ,depthClipControl(other.depthClipControl)
+#endif
 {
     sType = other.sType;
     if (!other.pNext)
         pNext = nullptr;
-    else
-    {
 #ifdef VK_EXT_depth_clip_control
-        if (other.depthClipControl.negativeOneToOne)
-        {
-            depthClipControl = other.depthClipControl;
-            pNext = &depthClipControl;
-        } else
-            pNext = nullptr;
+    else if (depthClipControl.negativeOneToOne)
+        pNext = &depthClipControl;
+    else
+        pNext = nullptr;
 #endif // VK_EXT_depth_clip_control
-    }
     flags = other.flags;
     viewportCount = other.viewportCount;
     pViewports = &viewport;
@@ -154,20 +152,18 @@ ViewportState& ViewportState::operator=(const ViewportState& other) noexcept
     {
         viewport = other.viewport;
         scissor = other.scissor;
+#ifdef VK_EXT_depth_clip_control
+        depthClipControl = other.depthClipControl;
+#endif
         sType = other.sType;
         if (!other.pNext)
             pNext = nullptr;
-        else
-        {
 #ifdef VK_EXT_depth_clip_control
-            if (other.depthClipControl.negativeOneToOne)
-            {
-                depthClipControl = other.depthClipControl;
-                pNext = &depthClipControl;
-            } else
-                pNext = nullptr;
+        else if (depthClipControl.negativeOneToOne)
+            pNext = &depthClipControl;
+        else
+            pNext = nullptr;
 #endif // VK_EXT_depth_clip_control
-        }
         flags = other.flags;
         viewportCount = other.viewportCount;
         pViewports = &viewport;
