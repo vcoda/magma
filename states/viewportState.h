@@ -38,7 +38,7 @@ namespace magma
         explicit ViewportState(const VkViewport& viewport, const VkRect2D& scissor) noexcept;
         ViewportState(const ViewportState&) noexcept;
         ViewportState& operator=(const ViewportState&) noexcept;
-        std::size_t hash() const noexcept;
+        virtual std::size_t hash() const noexcept;
         bool operator==(const ViewportState&) const noexcept;
 
     protected:

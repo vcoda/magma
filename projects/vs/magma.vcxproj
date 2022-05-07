@@ -329,6 +329,7 @@
     <ClInclude Include="..\..\states\vertexInputState.h" />
     <ClInclude Include="..\..\states\vertexInputStructure.h" />
     <ClInclude Include="..\..\states\vertexLayouts.h" />
+    <ClInclude Include="..\..\states\multiViewportState.h" />
     <ClInclude Include="..\..\states\viewportState.h" />
     <ClInclude Include="..\..\states\colorWriteMask.h" />
   </ItemGroup>
@@ -454,6 +455,7 @@
     <ClCompile Include="..\..\states\multisampleState.cpp" />
     <ClCompile Include="..\..\states\vertexInputState.cpp" />
     <ClCompile Include="..\..\states\vertexInputStructure.cpp" />
+    <ClCompile Include="..\..\states\multiViewportState.cpp" />
     <ClCompile Include="..\..\states\viewportState.cpp" />
     <ClCompile Include="..\..\third-party\SPIRV-Reflect\spirv_reflect.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
