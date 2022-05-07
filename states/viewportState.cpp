@@ -21,8 +21,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-inline ViewportState::ViewportState() noexcept:
+inline ViewportState::ViewportState(bool negativeOneToOne /* false */) noexcept:
     viewport{}, scissor{}
+#ifdef VK_EXT_depth_clip_control
+    ,depthClipControl{}
+#endif
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -31,11 +34,21 @@ inline ViewportState::ViewportState() noexcept:
     pViewports = nullptr;
     scissorCount = 1;
     pScissors = nullptr;
+    if (negativeOneToOne)
+    {
+#ifdef VK_EXT_depth_clip_control
+        depthClipControl.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_DEPTH_CLIP_CONTROL_CREATE_INFO_EXT;
+        depthClipControl.pNext = nullptr;
+        depthClipControl.negativeOneToOne = VK_TRUE;
+        pNext = &depthClipControl;
+#endif // VK_EXT_depth_clip_control
+    }
 }
 
 ViewportState::ViewportState(float x, float y, float width, float height,
-    float minDepth /* 0 */, float maxDepth /* 1 */) noexcept:
-    ViewportState()
+    float minDepth /* 0 */, float maxDepth /* 1 */,
+    bool negativeOneToOne /* false */) noexcept:
+    ViewportState(negativeOneToOne)
 {
     viewport.x = x;
     viewport.y = y;
@@ -52,8 +65,9 @@ ViewportState::ViewportState(float x, float y, float width, float height,
 }
 
 ViewportState::ViewportState(int32_t x, int32_t y, uint32_t width, int32_t height,
-    float minDepth /* 0 */, float maxDepth /* 1 */) noexcept:
-    ViewportState()
+    float minDepth /* 0 */, float maxDepth /* 1 */,
+    bool negativeOneToOne /* false */) noexcept:
+    ViewportState(negativeOneToOne)
 {
     viewport.x = static_cast<float>(x);
     viewport.y = static_cast<float>(y);
@@ -71,8 +85,9 @@ ViewportState::ViewportState(int32_t x, int32_t y, uint32_t width, int32_t heigh
 
 ViewportState::ViewportState(const VkExtent2D& extent,
     int32_t x /* 0 */, int32_t y /* 0 */,
-    float minDepth /* 0 */, float maxDepth /* 1 */) noexcept:
-    ViewportState()
+    float minDepth /* 0 */, float maxDepth /* 1 */,
+    bool negativeOneToOne /* false */) noexcept:
+    ViewportState(negativeOneToOne)
 {
     viewport.x = static_cast<float>(x);
     viewport.y = static_cast<float>(y);
@@ -87,8 +102,9 @@ ViewportState::ViewportState(const VkExtent2D& extent,
     pScissors = &scissor;
 }
 
-ViewportState::ViewportState(const VkViewport& viewport_) noexcept:
-    ViewportState()
+ViewportState::ViewportState(const VkViewport& viewport_,
+    bool negativeOneToOne /* false */) noexcept:
+    ViewportState(negativeOneToOne)
 {
     viewport = viewport_;
     scissor.offset.x = static_cast<int32_t>(viewport.x);
@@ -99,8 +115,9 @@ ViewportState::ViewportState(const VkViewport& viewport_) noexcept:
     pScissors = &scissor;
 }
 
-ViewportState::ViewportState(const VkViewport& viewport_, const VkRect2D& scissor_) noexcept:
-    ViewportState()
+ViewportState::ViewportState(const VkViewport& viewport_, const VkRect2D& scissor_,
+    bool negativeOneToOne /* false */) noexcept:
+    ViewportState(negativeOneToOne)
 {
     viewport = viewport_;
     scissor = scissor_;
@@ -154,7 +171,13 @@ std::size_t ViewportState::hash() const noexcept
         scissor.offset.x,
         scissor.offset.y,
         scissor.extent.width,
-        scissor.extent.height);
+        scissor.extent.height,
+#ifdef VK_EXT_depth_clip_control
+        depthClipControl.sType,
+        depthClipControl.negativeOneToOne,
+#endif // VK_EXT_depth_clip_control
+        0
+    );
     return hash;
 }
 
@@ -172,6 +195,10 @@ bool ViewportState::operator==(const ViewportState& other) const noexcept
         (scissor.offset.x == other.scissor.offset.x) &&
         (scissor.offset.y == other.scissor.offset.y) &&
         (scissor.extent.width == other.scissor.extent.width) &&
-        (scissor.extent.height == other.scissor.extent.height);
+        (scissor.extent.height == other.scissor.extent.height &&
+#ifdef VK_EXT_depth_clip_control
+        (depthClipControl.negativeOneToOne == other.depthClipControl.negativeOneToOne) &&
+#endif
+        true);
 }
 } // namespace magma

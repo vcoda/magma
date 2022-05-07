@@ -21,21 +21,28 @@ namespace magma
 {
     /* The viewport transformation is determined by the selected viewport's
        width and height in pixels and its center, as well as its depth range
-       min and max determining a depth range scale value. */
+       min and max determining a depth range scale value. If VK_EXT_depth_clip_control
+       is supported, fragment's depth may be in [0,1] or [-1,1] range. */
 
     class ViewportState : public VkPipelineViewportStateCreateInfo
     {
     public:
-        explicit ViewportState() noexcept;
+        explicit ViewportState(bool negativeOneToOne = false) noexcept;
         explicit ViewportState(float x, float y, float width, float height,
-            float minDepth = 0.f, float maxDepth = 1.f) noexcept;
+            float minDepth = 0.f, float maxDepth = 1.f,
+            bool negativeOneToOne = false) noexcept;
         explicit ViewportState(int32_t x, int32_t y, uint32_t width, int32_t height,
-            float minDepth = 0.f, float maxDepth = 1.f) noexcept;
+            float minDepth = 0.f, float maxDepth = 1.f,
+            bool negativeOneToOne = false) noexcept;
         explicit ViewportState(const VkExtent2D& extent,
             int32_t x = 0, int32_t y = 0,
-            float minDepth = 0.f, float maxDepth = 1.f) noexcept;
-        explicit ViewportState(const VkViewport& viewport) noexcept;
-        explicit ViewportState(const VkViewport& viewport, const VkRect2D& scissor) noexcept;
+            float minDepth = 0.f, float maxDepth = 1.f,
+            bool negativeOneToOne = false) noexcept;
+        explicit ViewportState(const VkViewport& viewport,
+            bool negativeOneToOne = false) noexcept;
+        explicit ViewportState(const VkViewport& viewport,
+            const VkRect2D& scissor,
+            bool negativeOneToOne = false) noexcept;
         ViewportState(const ViewportState&) noexcept;
         ViewportState& operator=(const ViewportState&) noexcept;
         virtual std::size_t hash() const noexcept;
@@ -44,5 +51,8 @@ namespace magma
     protected:
         VkViewport viewport;
         VkRect2D scissor;
+#ifdef VK_EXT_depth_clip_control
+        VkPipelineViewportDepthClipControlCreateInfoEXT depthClipControl;
+#endif // VK_EXT_depth_clip_control
     };
 } // namespace magma
