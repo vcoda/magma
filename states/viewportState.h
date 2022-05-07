@@ -27,7 +27,7 @@ namespace magma
     class ViewportState : public VkPipelineViewportStateCreateInfo
     {
     public:
-        explicit ViewportState(bool negativeOneToOne = false) noexcept;
+        explicit ViewportState() noexcept;
         explicit ViewportState(float x, float y, float width, float height,
             float minDepth = 0.f, float maxDepth = 1.f,
             bool negativeOneToOne = false) noexcept;
@@ -49,6 +49,8 @@ namespace magma
         bool operator==(const ViewportState&) const noexcept;
 
     protected:
+        ViewportState(bool negativeOneToOne) noexcept;
+
         VkViewport viewport;
         VkRect2D scissor;
 #ifdef VK_EXT_depth_clip_control

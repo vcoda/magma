@@ -21,10 +21,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-inline ViewportState::ViewportState(bool negativeOneToOne /* false */) noexcept:
-    viewport{}, scissor{}
+ViewportState::ViewportState() noexcept:
+    viewport{},
+    scissor{}
 #ifdef VK_EXT_depth_clip_control
-    ,depthClipControl{}
+   ,depthClipControl{}
 #endif
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -34,6 +35,13 @@ inline ViewportState::ViewportState(bool negativeOneToOne /* false */) noexcept:
     pViewports = nullptr;
     scissorCount = 1;
     pScissors = nullptr;
+}
+
+ViewportState::ViewportState(bool negativeOneToOne) noexcept:
+    ViewportState()
+{
+    pViewports = &viewport;
+    pScissors = &scissor;
     if (negativeOneToOne)
     {
 #ifdef VK_EXT_depth_clip_control
@@ -60,8 +68,6 @@ ViewportState::ViewportState(float x, float y, float width, float height,
     scissor.offset.y = static_cast<int32_t>(y);
     scissor.extent.width = static_cast<uint32_t>(width);
     scissor.extent.height = static_cast<uint32_t>(std::abs(height));
-    pViewports = &viewport;
-    pScissors = &scissor;
 }
 
 ViewportState::ViewportState(int32_t x, int32_t y, uint32_t width, int32_t height,
@@ -79,8 +85,6 @@ ViewportState::ViewportState(int32_t x, int32_t y, uint32_t width, int32_t heigh
     scissor.offset.y = y;
     scissor.extent.width = width;
     scissor.extent.height = static_cast<uint32_t>(std::abs(height));
-    pViewports = &viewport;
-    pScissors = &scissor;
 }
 
 ViewportState::ViewportState(const VkExtent2D& extent,
@@ -98,8 +102,6 @@ ViewportState::ViewportState(const VkExtent2D& extent,
     scissor.offset.x = x;
     scissor.offset.y = y;
     scissor.extent = extent;
-    pViewports = &viewport;
-    pScissors = &scissor;
 }
 
 ViewportState::ViewportState(const VkViewport& viewport_,
@@ -111,8 +113,6 @@ ViewportState::ViewportState(const VkViewport& viewport_,
     scissor.offset.y = static_cast<int32_t>(viewport.y);
     scissor.extent.width = static_cast<uint32_t>(viewport.width);
     scissor.extent.height = static_cast<uint32_t>(std::abs(viewport.height));
-    pViewports = &viewport;
-    pScissors = &scissor;
 }
 
 ViewportState::ViewportState(const VkViewport& viewport_, const VkRect2D& scissor_,
@@ -121,8 +121,6 @@ ViewportState::ViewportState(const VkViewport& viewport_, const VkRect2D& scisso
 {
     viewport = viewport_;
     scissor = scissor_;
-    pViewports = &viewport;
-    pScissors = &scissor;
 }
 
 ViewportState::ViewportState(const ViewportState& other) noexcept:
