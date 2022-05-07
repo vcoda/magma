@@ -114,10 +114,10 @@ namespace magma
         constexpr DepthStencilState depthGreaterOrEqualDontWrite(VK_COMPARE_OP_GREATER_OR_EQUAL, false);
         constexpr DepthStencilState depthAlwaysDontWrite(VK_COMPARE_OP_ALWAYS, false);
 
-        // Stencil shadow volume
+        // Depth pass
         constexpr DepthStencilState shadowVolumeDepthPassClampStencil(depthLessDontWrite, stencilIncrementClampDepthPass, stencilDecrementClampDepthPass);
         constexpr DepthStencilState shadowVolumeDepthPassWrapStencil(depthLessDontWrite, stencilIncrementWrapDepthPass, stencilDecrementWrapDepthPass);
-        // Carmack's reverse
+        // Depth fail / Carmack's reverse
         constexpr DepthStencilState shadowVolumeDepthFailClampStencil(depthLessDontWrite, stencilDecrementClampDepthFail, stencilIncrementClampDepthFail);
         constexpr DepthStencilState shadowVolumeDepthFailWrapStencil(depthLessDontWrite, stencilDecrementWrapDepthFail, stencilIncrementWrapDepthFail);
     } // namespace renderstate
