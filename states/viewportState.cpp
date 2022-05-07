@@ -135,9 +135,13 @@ ViewportState::ViewportState(const ViewportState& other) noexcept:
     else
     {
 #ifdef VK_EXT_depth_clip_control
-        depthClipControl = other.depthClipControl;
-        pNext = &depthClipControl;
-#endif
+        if (other.depthClipControl.negativeOneToOne)
+        {
+            depthClipControl = other.depthClipControl;
+            pNext = &depthClipControl;
+        } else
+            pNext = nullptr;
+#endif // VK_EXT_depth_clip_control
     }
     flags = other.flags;
     viewportCount = other.viewportCount;
@@ -158,9 +162,13 @@ ViewportState& ViewportState::operator=(const ViewportState& other) noexcept
         else
         {
 #ifdef VK_EXT_depth_clip_control
-            depthClipControl = other.depthClipControl;
-            pNext = &depthClipControl;
-#endif
+            if (other.depthClipControl.negativeOneToOne)
+            {
+                depthClipControl = other.depthClipControl;
+                pNext = &depthClipControl;
+            } else
+                pNext = nullptr;
+#endif // VK_EXT_depth_clip_control
         }
         flags = other.flags;
         viewportCount = other.viewportCount;
