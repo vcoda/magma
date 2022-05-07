@@ -166,9 +166,7 @@ ViewportState& ViewportState::operator=(const ViewportState& other) noexcept
 #endif // VK_EXT_depth_clip_control
         flags = other.flags;
         viewportCount = other.viewportCount;
-        pViewports = &viewport;
         scissorCount = other.scissorCount;
-        pScissors = &scissor;
     }
     return *this;
 }
