@@ -23,7 +23,7 @@ namespace magma
        width and height in pixels and its center, as well as its depth range
        min and max determining a depth range scale value. */
 
-    class ViewportState final : public VkPipelineViewportStateCreateInfo
+    class ViewportState : public VkPipelineViewportStateCreateInfo
     {
     public:
         explicit ViewportState() noexcept;
@@ -36,13 +36,13 @@ namespace magma
             float minDepth = 0.f, float maxDepth = 1.f) noexcept;
         explicit ViewportState(const VkViewport& viewport) noexcept;
         explicit ViewportState(const VkViewport& viewport, const VkRect2D& scissor) noexcept;
-        explicit ViewportState(const std::vector<VkViewport>& viewports);
-        explicit ViewportState(const std::vector<VkViewport>& viewports,
-            const std::vector<VkRect2D>& scissors) noexcept;
         ViewportState(const ViewportState&) noexcept;
         ViewportState& operator=(const ViewportState&) noexcept;
-        ~ViewportState();
         std::size_t hash() const noexcept;
         bool operator==(const ViewportState&) const noexcept;
+
+    protected:
+        VkViewport viewport;
+        VkRect2D scissor;
     };
 } // namespace magma
