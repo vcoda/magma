@@ -41,7 +41,7 @@ MultiViewportState::MultiViewportState(const std::vector<VkViewport>& viewports_
     pScissors = scissors.data();
 }
 
-MultiViewportState::MultiViewportState(const std::vector<VkViewport>& viewports_, const std::vector<VkRect2D>& scissors_) noexcept:
+MultiViewportState::MultiViewportState(const std::vector<VkViewport>& viewports_, const std::vector<VkRect2D>& scissors_):
     ViewportState(),
     viewports(viewports_),
     scissors(scissors_)
@@ -52,7 +52,7 @@ MultiViewportState::MultiViewportState(const std::vector<VkViewport>& viewports_
     pScissors = scissors.data();
 }
 
-MultiViewportState::MultiViewportState(const MultiViewportState& other) noexcept:
+MultiViewportState::MultiViewportState(const MultiViewportState& other):
     viewports(other.viewports),
     scissors(other.scissors)
 {
@@ -65,7 +65,7 @@ MultiViewportState::MultiViewportState(const MultiViewportState& other) noexcept
     pScissors = scissors.data();
 }
 
-MultiViewportState& MultiViewportState::operator=(const MultiViewportState& other) noexcept
+MultiViewportState& MultiViewportState::operator=(const MultiViewportState& other)
 {
     if (this != &other)
     {

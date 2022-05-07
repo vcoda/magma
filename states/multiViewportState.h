@@ -28,9 +28,9 @@ namespace magma
     public:
         explicit MultiViewportState(const std::vector<VkViewport>& viewports);
         explicit MultiViewportState(const std::vector<VkViewport>& viewports,
-            const std::vector<VkRect2D>& scissors) noexcept;
-        MultiViewportState(const MultiViewportState&) noexcept;
-        MultiViewportState& operator=(const MultiViewportState&) noexcept;
+            const std::vector<VkRect2D>& scissors);
+        MultiViewportState(const MultiViewportState&);
+        MultiViewportState& operator=(const MultiViewportState&);
         std::size_t hash() const noexcept override;
         bool operator==(const MultiViewportState&) const noexcept;
 
