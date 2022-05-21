@@ -192,8 +192,7 @@ std::size_t ViewportState::hash() const noexcept
         depthClipControl.sType,
         depthClipControl.negativeOneToOne,
 #endif // VK_EXT_depth_clip_control
-        0
-    );
+        0);
     return hash;
 }
 

@@ -139,7 +139,7 @@ std::size_t Format::nonCompressedSize() const noexcept
     case VK_FORMAT_R8_UINT:
     case VK_FORMAT_R8_SINT:
     case VK_FORMAT_R8_SRGB:
-        return sizeof(char);
+        return sizeof(uint8_t);
     case VK_FORMAT_R8G8_UNORM:
     case VK_FORMAT_R8G8_SNORM:
     case VK_FORMAT_R8G8_USCALED:
@@ -147,7 +147,7 @@ std::size_t Format::nonCompressedSize() const noexcept
     case VK_FORMAT_R8G8_UINT:
     case VK_FORMAT_R8G8_SINT:
     case VK_FORMAT_R8G8_SRGB:
-        return sizeof(char) * 2;
+        return sizeof(uint8_t) * 2;
     case VK_FORMAT_R8G8B8_UNORM:
     case VK_FORMAT_R8G8B8_SNORM:
     case VK_FORMAT_R8G8B8_USCALED:
@@ -162,7 +162,7 @@ std::size_t Format::nonCompressedSize() const noexcept
     case VK_FORMAT_B8G8R8_UINT:
     case VK_FORMAT_B8G8R8_SINT:
     case VK_FORMAT_B8G8R8_SRGB:
-        return sizeof(char) * 3;
+        return sizeof(uint8_t) * 3;
     case VK_FORMAT_R8G8B8A8_UNORM:
     case VK_FORMAT_R8G8B8A8_SNORM:
     case VK_FORMAT_R8G8B8A8_USCALED:
@@ -177,7 +177,7 @@ std::size_t Format::nonCompressedSize() const noexcept
     case VK_FORMAT_B8G8R8A8_UINT:
     case VK_FORMAT_B8G8R8A8_SINT:
     case VK_FORMAT_B8G8R8A8_SRGB:
-        return sizeof(char) * 4;
+        return sizeof(uint8_t) * 4;
     case VK_FORMAT_R16_UNORM:
     case VK_FORMAT_R16_SNORM:
     case VK_FORMAT_R16_USCALED:
