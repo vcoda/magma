@@ -128,7 +128,7 @@ uint8_t Format::components() const noexcept
     }
 }
 
-std::size_t Format::size() const noexcept
+std::size_t Format::nonCompressedSize() const noexcept
 {   // TODO: add all other formats in the future
     switch (format)
     {

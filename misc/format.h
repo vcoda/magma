@@ -42,6 +42,7 @@ namespace magma
         constexpr bool sRGB() const noexcept;
         uint8_t components() const noexcept;
         std::size_t size() const noexcept;
+        std::size_t nonCompressedSize() const noexcept;
         std::size_t blockCompressedSize() const noexcept;
         std::pair<int, int> blockFootprint() const noexcept;
         VkFormat unormToSrgb() const noexcept;

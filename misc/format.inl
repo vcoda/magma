@@ -246,4 +246,16 @@ constexpr bool Format::sRGB() const noexcept
         return false;
     }
 }
+
+inline std::size_t Format::size() const noexcept
+{
+    if (bc())
+        return blockCompressedSize();
+    if (pvrtc())
+    {   // Specifies a four-component, PVRTC compressed format where each
+        // 64-bit compressed texel block encodes an 8(4)x4 rectangle.
+        return 64/8;
+    }
+    return nonCompressedSize();
+}
 } // namespace magma
