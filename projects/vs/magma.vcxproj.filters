@@ -657,6 +657,9 @@
     <ClInclude Include="..\..\states\multiViewportState.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\auxiliary\sprite.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1015,6 +1018,9 @@
     </ClCompile>
     <ClCompile Include="..\..\states\multiViewportState.cpp">
       <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\auxiliary\sprite.cpp">
+      <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

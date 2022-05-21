@@ -165,6 +165,7 @@
     <ClInclude Include="..\..\auxiliary\frameGrabber.h" />
     <ClInclude Include="..\..\auxiliary\shaderCompiler.h" />
     <ClInclude Include="..\..\auxiliary\depthFramebuffer.h" />
+    <ClInclude Include="..\..\auxiliary\sprite.h" />
     <ClInclude Include="..\..\auxiliary\swapchainFramebuffer.h" />
     <ClInclude Include="..\..\auxiliary\textShader.h" />
     <ClInclude Include="..\..\auxiliary\typedefs.h" />
@@ -353,6 +354,7 @@
     <ClCompile Include="..\..\auxiliary\multiAttachmentFramebuffer.cpp" />
     <ClCompile Include="..\..\auxiliary\shaderCompiler.cpp" />
     <ClCompile Include="..\..\auxiliary\depthFramebuffer.cpp" />
+    <ClCompile Include="..\..\auxiliary\sprite.cpp" />
     <ClCompile Include="..\..\auxiliary\swapchainFramebuffer.cpp" />
     <ClCompile Include="..\..\auxiliary\textShader.cpp" />
     <ClCompile Include="..\..\barriers\bufferMemoryBarrier.cpp" />
