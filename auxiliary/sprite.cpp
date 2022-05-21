@@ -121,7 +121,7 @@ void Sprite::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<magm
     blitRegion.dstOffsets[1].x = position.x + static_cast<int32_t>(width);
     blitRegion.dstOffsets[1].y = position.y + static_cast<int32_t>(height);
     blitRegion.dstOffsets[1].z = 1;
-    cmdBuffer->blitImage(shared_from_this(), std::move(dstImage), blitRegion, filter);
+    cmdBuffer->blitImage(shared_from_this(), dstImage, blitRegion, filter);
 }
 } // namespace aux
 } // namespace magma
