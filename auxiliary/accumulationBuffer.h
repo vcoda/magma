@@ -17,8 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../core/noncopyable.h"
-#include "../core/enumClassArray.h"
-#include "imageDescriptorSet.h"
 
 namespace magma
 {
@@ -39,6 +37,8 @@ namespace magma
 
     namespace aux
     {
+        class ImageDescriptorSet;
+
         /* Accumulation buffer is dedicated for integrating multiple images.
            In order to maintain accuracy over a number of blending operations,
            the accumulation buffer should have a higher number of bits per component
