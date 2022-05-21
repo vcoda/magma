@@ -403,7 +403,7 @@ std::pair<int, int> Format::blockFootprint() const noexcept
         return std::make_pair(4, 4);
 #endif // VK_IMG_format_pvrtc
     default:
-        return std::make_pair(0, 0);
+        return std::make_pair(1, 1);
     };
 }
 
