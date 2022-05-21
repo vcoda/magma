@@ -20,9 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Device;
-    class CommandBuffer;
-
     namespace aux
     {
         /* Sprite is a two-dimensional bitmap that is integrated into a background image.
