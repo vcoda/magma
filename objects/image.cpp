@@ -257,8 +257,8 @@ void Image::onDefragment()
 }
 
 void Image::copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t level,
-    std::shared_ptr<Buffer> buffer, const CopyLayout& bufferLayout, const VkOffset3D& imageOffset,
-    VkPipelineStageFlags barrierDstStageMask /* VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT */,
+    std::shared_ptr<const Buffer> buffer, const CopyLayout& bufferLayout, const VkOffset3D& imageOffset,
+    VkImageLayout dstLayout, VkPipelineStageFlags barrierDstStageMask /* VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT */,
     bool flush /* true */)
 {
     VkImageSubresourceRange subresourceRange;
@@ -267,10 +267,13 @@ void Image::copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t leve
     subresourceRange.levelCount = 1;
     subresourceRange.baseArrayLayer = 0;
     subresourceRange.layerCount = 1;
+    // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
+    const auto weakThis = std::shared_ptr<Image>(this, [](Image *) {});
     cmdBuffer->begin();
-    {   // Change image layout to transfer dest optimal
-        const ImageMemoryBarrier preCopyBarrier(shared_from_this(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
+    {   // Image layout transition to transfer dest optimal
+        const ImageMemoryBarrier preCopyBarrier(weakThis, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_TRANSFER_WRITE_BIT, preCopyBarrier);
+        // Copy image
         VkBufferImageCopy region;
         region.bufferOffset = bufferLayout.offset;
         region.bufferRowLength = bufferLayout.rowLength;
@@ -281,10 +284,9 @@ void Image::copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t leve
         region.imageSubresource.layerCount = subresourceRange.layerCount;
         region.imageOffset = imageOffset;
         region.imageExtent = getMipExtent(level);
-        // Copy image data
-        cmdBuffer->copyBufferToImage(std::move(buffer), shared_from_this(), region);
-        // Change image layout from transfer dest optimal to shader read only
-        const ImageMemoryBarrier postCopyBarrier(shared_from_this(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, subresourceRange);
+        cmdBuffer->copyBufferToImage(std::move(buffer), weakThis, region);
+        // Image layout transition from transfer dest to specified layout
+        const ImageMemoryBarrier postCopyBarrier(weakThis, dstLayout, subresourceRange);
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, barrierDstStageMask, postCopyBarrier);
     }
     cmdBuffer->end();

@@ -75,9 +75,10 @@ namespace magma
         virtual void onDefragment() override;
         void copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer,
             uint32_t level,
-            std::shared_ptr<Buffer> buffer,
+            std::shared_ptr<const Buffer> buffer,
             const CopyLayout& bufferLayout,
             const VkOffset3D& imageOffset,
+            VkImageLayout dstLayout,
             VkPipelineStageFlags barrierDstStageMask = VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
             bool flush = true);
 
