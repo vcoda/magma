@@ -33,80 +33,113 @@ namespace magma
         {
             MAGMA_ASSERT(buffer);
             MAGMA_ASSERT(callbackFn);
-            std::shared_ptr<DeviceMemory> memory(buffer->getMemory());
-            if (memory)
+            std::shared_ptr<DeviceMemory> bufferMemory(buffer->getMemory());
+            if (bufferMemory)
             {
-                void *const data = memory->map();
-                if (data)
+                if (void *const data = bufferMemory->map())
                 {
-                    callbackFn(static_cast<Type *>(data));
-                    memory->unmap();
+                    try
+                    {
+                        callbackFn(static_cast<Type *>(data));
+                    }
+                    catch (...)
+                    {
+                        bufferMemory->unmap();
+                        throw;
+                    }
+                    bufferMemory->unmap();
                 }
             }
         }
 
         template<typename Type>
-        inline void mapScoped(const std::shared_ptr<UniformBuffer<Type>>& buffer,
+        inline void mapScoped(const std::shared_ptr<UniformBuffer<Type>>& uniformBuffer,
             std::function<void(typename UniformBuffer<Type>::UniformType *data)> callbackFn)
         {
-            MAGMA_ASSERT(buffer);
+            MAGMA_ASSERT(uniformBuffer);
             MAGMA_ASSERT(callbackFn);
-            Type *const data = buffer->map();
-            if (data)
+            if (Type *const data = uniformBuffer->map())
             {
-                callbackFn(data);
-                buffer->unmap();
+                try
+                {
+                    callbackFn(data);
+                }
+                catch (...)
+                {
+                    uniformBuffer->unmap();
+                    throw;
+                }
+                uniformBuffer->unmap();
             }
         }
 
-
         template<typename Type>
-        inline void mapScoped(const std::shared_ptr<UniformBuffer<Type>>& buffer,
+        inline void mapScoped(const std::shared_ptr<UniformBuffer<Type>>& uniformBuffer,
             std::function<void(UniformArray<Type>& array)> callbackFn)
         {
-            MAGMA_ASSERT(buffer);
+            MAGMA_ASSERT(uniformBuffer);
             MAGMA_ASSERT(callbackFn);
-            Type *const data = buffer->map();
-            if (data)
+            if (Type *const data = uniformBuffer->map())
             {
-                UniformArray<Type> array(data, buffer->getArraySize());
-                callbackFn(array);
-                buffer->unmap();
+                try
+                {
+                    UniformArray<Type> array(data, uniformBuffer->getArraySize());
+                    callbackFn(array);
+                }
+                catch (...)
+                {
+                    uniformBuffer->unmap();
+                    throw;
+                }
+                uniformBuffer->unmap();
             }
         }
 
         template<typename Type>
-        inline void mapScoped(const std::shared_ptr<DynamicUniformBuffer<Type>>& buffer,
+        inline void mapScoped(const std::shared_ptr<DynamicUniformBuffer<Type>>& uniformBuffer,
             std::function<void(AlignedUniformArray<Type>& array)> callbackFn)
         {
             MAGMA_ASSERT(buffer);
             MAGMA_ASSERT(callbackFn);
-            Type *const data = buffer->map();
-            if (data)
+            if (Type *const data = uniformBuffer->map())
             {
-                AlignedUniformArray<Type> array(data,
-                    buffer->getArraySize(),
-                    buffer->getElementAlignment());
-                callbackFn(array);
-                buffer->unmap();
+                try
+                {
+                    AlignedUniformArray<Type> array(data,
+                        uniformBuffer->getArraySize(),
+                        uniformBuffer->getElementAlignment());
+                    callbackFn(array);
+                }
+                catch (...)
+                {
+                    uniformBuffer->unmap();
+                    throw;
+                }
+                uniformBuffer->unmap();
             }
         }
 
         template<typename Type>
-        inline void mapScoped(const std::shared_ptr<Image>& image,
-            VkDeviceSize offset,
+        inline void mapScoped(const std::shared_ptr<Image>& image, VkDeviceSize offset,
             std::function<void(Type *data)> callbackFn)
         {
             MAGMA_ASSERT(image);
             MAGMA_ASSERT(callbackFn);
-            std::shared_ptr<DeviceMemory> memory(image->getMemory());
-            if (memory)
+            std::shared_ptr<DeviceMemory> imageMemory(image->getMemory());
+            if (imageMemory)
             {
-                void *const data = memory->map(offset);
-                if (data)
+                if (void *const data = imageMemory->map(offset))
                 {
-                    callbackFn(static_cast<Type *>(data));
-                    memory->unmap();
+                    try
+                    {
+                        callbackFn(static_cast<Type *>(data));
+                    }
+                    catch (...)
+                    {
+                        imageMemory->unmap();
+                        throw;
+                    }
+                    imageMemory->unmap();
                 }
             }
         }
