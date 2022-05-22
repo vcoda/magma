@@ -28,7 +28,7 @@ namespace magma
 {
 namespace aux
 {
-Sprite::Sprite(std::shared_ptr<magma::CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
+Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
     std::shared_ptr<const SrcTransferBuffer> buffer, VkDeviceSize offset,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */):
@@ -61,7 +61,7 @@ Sprite::Sprite(std::shared_ptr<magma::CommandBuffer> cmdBuffer, VkFormat format,
         false); // User is responsible for submitting command buffer to the graphics queue!
 }
 
-Sprite::Sprite(std::shared_ptr<magma::CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
+Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
     VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
@@ -103,7 +103,7 @@ Sprite::Sprite(std::shared_ptr<magma::CommandBuffer> cmdBuffer, VkFormat format,
         true); // Submit command buffer to the graphics queue as transfer buffer is going to be destroyed
 }
 
-void Sprite::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<magma::Image> dstImage,
+void Sprite::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Image> dstImage,
     VkFilter filter /* VK_FILTER_NEAREST */) const noexcept
 {
     VkImageBlit blitRegion;
