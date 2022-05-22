@@ -22,7 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/buffer.h"
 #include "../objects/uniformBuffer.h"
 #include "../objects/image.h"
-#include "../core/zeroMemory.h"
 
 namespace magma
 {
@@ -60,19 +59,6 @@ namespace magma
             }
         }
 
-        template<typename Type>
-        inline void mapScopedMemzero(const std::shared_ptr<UniformBuffer<Type>>& buffer,
-            std::function<void(typename UniformBuffer<Type>::UniformType *data)> callbackFn)
-        {
-            MAGMA_ASSERT(buffer);
-            MAGMA_ASSERT(callbackFn);
-            Type *const data = buffer->map(core::zeroMemory);
-            if (data)
-            {
-                callbackFn(data);
-                buffer->unmap();
-            }
-        }
 
         template<typename Type>
         inline void mapScoped(const std::shared_ptr<UniformBuffer<Type>>& buffer,
@@ -90,44 +76,12 @@ namespace magma
         }
 
         template<typename Type>
-        inline void mapScopedMemzero(const std::shared_ptr<UniformBuffer<Type>>& buffer,
-            std::function<void(UniformArray<Type>& array)> callbackFn)
-        {
-            MAGMA_ASSERT(buffer);
-            MAGMA_ASSERT(callbackFn);
-            Type *const data = buffer->map(core::zeroMemory);
-            if (data)
-            {
-                UniformArray<Type> array(data, buffer->getArraySize());
-                callbackFn(array);
-                buffer->unmap();
-            }
-        }
-
-        template<typename Type>
         inline void mapScoped(const std::shared_ptr<DynamicUniformBuffer<Type>>& buffer,
             std::function<void(AlignedUniformArray<Type>& array)> callbackFn)
         {
             MAGMA_ASSERT(buffer);
             MAGMA_ASSERT(callbackFn);
             Type *const data = buffer->map();
-            if (data)
-            {
-                AlignedUniformArray<Type> array(data,
-                    buffer->getArraySize(),
-                    buffer->getElementAlignment());
-                callbackFn(array);
-                buffer->unmap();
-            }
-        }
-
-        template<typename Type>
-        inline void mapScopedMemzero(const std::shared_ptr<DynamicUniformBuffer<Type>>& buffer,
-            std::function<void(AlignedUniformArray<Type>& array)> callbackFn)
-        {
-            MAGMA_ASSERT(buffer);
-            MAGMA_ASSERT(callbackFn);
-            Type *const data = buffer->map(core::zeroMemory);
             if (data)
             {
                 AlignedUniformArray<Type> array(data,
