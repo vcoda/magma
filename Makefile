@@ -32,6 +32,7 @@ MAGMA_OBJS= \
 	auxiliary/imageDescriptorSet.o \
 	auxiliary/immediateRender.o \
 	auxiliary/mipmapGenerator.o \
+	auxiliary/sprite.o \
 	auxiliary/swapchainFramebuffer.o \
 	auxiliary/textShader.o \
 	\
