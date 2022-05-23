@@ -105,7 +105,7 @@ void DescriptorSet::update()
             binding->changed = false;
         }
     }
-    device->updateDescriptorWrites(descriptorWrites);
+    device->updateDescriptorWrites(descriptorWrites, descriptorWriteCount);
 }
 
 void DescriptorSet::gatherDirtyDescriptorWrites(std::vector<VkWriteDescriptorSet>& descriptorWrites) const

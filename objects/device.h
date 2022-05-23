@@ -50,8 +50,10 @@ namespace magma
     public:
         ~Device();
         std::shared_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
-        void updateDescriptorWrites(const helpers::StackArray<VkWriteDescriptorSet>& descriptorWrites) const noexcept;
-        void updateDescriptorCopies(const helpers::StackArray<VkCopyDescriptorSet>& descriptorCopies) const noexcept;
+        void updateDescriptorWrites(const VkWriteDescriptorSet *descriptorWrites,
+            uint32_t descriptorWriteCount) const noexcept;
+        void updateDescriptorCopies(const VkCopyDescriptorSet *descriptorCopies,
+            uint32_t descriptorCopyCount) const noexcept;
         void updateDescriptorSets(const std::vector<VkWriteDescriptorSet>& descriptorWrites,
             const std::vector<VkCopyDescriptorSet>& descriptorCopies = {}) const noexcept;
         bool waitIdle() const;
