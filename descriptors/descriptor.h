@@ -22,7 +22,7 @@ namespace magma
     /* Descriptor contains a descriptor type and number of descriptors
        of that type to be allocated in the pool. */
 
-    struct Descriptor : public VkDescriptorPoolSize
+    struct Descriptor : VkDescriptorPoolSize
     {
         constexpr Descriptor(const VkDescriptorType type, const uint32_t descriptorCount) noexcept:
             VkDescriptorPoolSize{type, descriptorCount} {}
