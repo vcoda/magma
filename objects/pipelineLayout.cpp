@@ -103,8 +103,11 @@ bool PipelineLayout::hasSetLayout(std::shared_ptr<DescriptorSetLayout> setLayout
 {
     for (auto& layout : setLayouts)
     {
-        if (layout->getHandle() == setLayout->getHandle())
+        if (layout->getHandle() == setLayout->getHandle() ||
+            layout->getHash() == setLayout->getHash())
+        {
             return true;
+        }
     }
     return false;
 }
