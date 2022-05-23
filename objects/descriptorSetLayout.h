@@ -49,13 +49,16 @@ namespace magma
     class DescriptorSetDeclaration
     {
     public:
-        virtual const std::vector<binding::DescriptorSetLayoutBinding *>& getBindings() = 0;
+        virtual const std::vector<binding::DescriptorSetLayoutBinding *>& getDescriptorBindings() = 0;
 
         bool dirty()
         {
-            for (auto binding : getBindings())
+            const std::vector<binding::DescriptorSetLayoutBinding *>& descriptorBindings = getDescriptorBindings();
+            for (const auto binding : descriptorBindings)
+            {
                 if (binding->dirty())
                     return true;
+            }
             return false;
         }
 
@@ -74,10 +77,15 @@ namespace magma
     };
 } // namespace magma
 
+/* This macro helps to easily store an array of descriptor set layout bindings.
+   It adds and additional member of std::vector<> type to the structure
+   to allow multiple instances of the same set declaration. */
+
 #define MAGMA_REFLECT(...)\
-virtual const std::vector<magma::binding::DescriptorSetLayoutBinding *>& getBindings() override\
+std::vector<magma::binding::DescriptorSetLayoutBinding *> _bindings;\
+const std::vector<magma::binding::DescriptorSetLayoutBinding *>& getDescriptorBindings() override\
 {\
-    static std::vector<magma::binding::DescriptorSetLayoutBinding *> bindings =\
-        buildArgsList(__VA_ARGS__);\
-    return bindings;\
+    if (_bindings.empty())\
+        _bindings = buildArgsList(__VA_ARGS__);\
+    return _bindings;\
 }
