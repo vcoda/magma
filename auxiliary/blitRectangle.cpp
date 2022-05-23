@@ -34,6 +34,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../shaders/shaderStages.h"
 #include "../shaders/shaderReflection.h"
 #include "../shaders/specialization.h"
+#include "../descriptors/descriptorSetLayoutReflection.h"
 #include "../states/vertexInputStructure.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/rasterizationState.h"
@@ -50,7 +51,7 @@ namespace aux
 constexpr
 #include "spirv/output/blitf"
 
-struct BlitRectangle::SetLayout : DescriptorSetDeclaration
+struct BlitRectangle::SetLayout : DescriptorSetLayoutReflection
 {
     binding::CombinedImageSampler image = 0;
     MAGMA_REFLECT(&image)
@@ -146,7 +147,7 @@ void BlitRectangle::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
     {
         std::shared_ptr<Sampler> sampler = (VK_FILTER_NEAREST == filter) ? nearestSampler :
             ((VK_FILTER_LINEAR == filter) ? bilinearSampler : cubicSampler);
-        setLayouts.push_back(SetLayout());
+        setLayouts.emplace_back();
         setLayouts.back().image = {imageView, sampler};
         // Allocate descriptor set per image
         imageDescriptorSet = std::make_shared<DescriptorSet>(descriptorPool, setLayouts.back(), VK_SHADER_STAGE_FRAGMENT_BIT, descriptorPool->getHostAllocator());

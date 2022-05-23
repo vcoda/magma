@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptorSetLayout.h"
 #include "descriptorPool.h"
 #include "device.h"
+#include "../descriptors/descriptorSetLayoutReflection.h"
 #include "../shaders/shaderReflection.h"
 #include "../shaders/shaderReflectionFactory.h"
 #include "../helpers/spirvReflectionTypeCast.h"
@@ -33,16 +34,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
-    DescriptorSetDeclaration& setLayoutDeclaration, uint32_t stageFlags,
+    DescriptorSetLayoutReflection& layoutReflection, uint32_t stageFlags,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
     const std::string& shaderFileName /* default */,
     uint32_t setIndex /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, descriptorPool->getDevice(), std::move(allocator)),
-    setLayoutDeclaration(setLayoutDeclaration),
+    layoutReflection(layoutReflection),
     descriptorPool(std::move(descriptorPool))
 {   // Check that all bindings have unique locations
-    const std::vector<binding::DescriptorSetLayoutBinding *>& descriptorBindings = setLayoutDeclaration.getDescriptorBindings();
+    const std::vector<binding::DescriptorSetLayoutBinding *>& descriptorBindings = layoutReflection.getDescriptorBindings();
     std::vector<uint32_t> locations;
     for (const auto binding : descriptorBindings)
         locations.push_back(binding->binding);
@@ -81,7 +82,7 @@ DescriptorSet::~DescriptorSet()
 uint32_t DescriptorSet::getDirtyCount() const
 {
     uint32_t dirtyCount = 0;
-    const std::vector<binding::DescriptorSetLayoutBinding *>& descriptorBindings = setLayoutDeclaration.getDescriptorBindings();
+    const std::vector<binding::DescriptorSetLayoutBinding *>& descriptorBindings = layoutReflection.getDescriptorBindings();
     for (auto binding : descriptorBindings)
     {
         if (binding->dirty())
@@ -92,14 +93,14 @@ uint32_t DescriptorSet::getDirtyCount() const
 
 bool DescriptorSet::dirty() const
 {
-    return setLayoutDeclaration.dirty();
+    return layoutReflection.dirty();
 }
 
 void DescriptorSet::update()
 {
     MAGMA_ASSERT(dirty());
     MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, getDirtyCount());
-    const std::vector<binding::DescriptorSetLayoutBinding *>& descriptorBindings = setLayoutDeclaration.getDescriptorBindings();
+    const std::vector<binding::DescriptorSetLayoutBinding *>& descriptorBindings = layoutReflection.getDescriptorBindings();
     for (auto binding : descriptorBindings)
     {
         if (binding->dirty())
@@ -115,7 +116,7 @@ void DescriptorSet::update()
 
 void DescriptorSet::populateDescriptorWrites(std::vector<VkWriteDescriptorSet>& descriptorWrites) const
 {
-    const std::vector<binding::DescriptorSetLayoutBinding *>& descriptorBindings = setLayoutDeclaration.getDescriptorBindings();
+    const std::vector<binding::DescriptorSetLayoutBinding *>& descriptorBindings = layoutReflection.getDescriptorBindings();
     for (auto binding : descriptorBindings)
     {
         if (binding->dirty())
@@ -134,7 +135,7 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
     if (setIndex >= descriptorSets.size())
         MAGMA_THROW("set index exceeds number of reflected descriptor sets");
     const SpvReflectDescriptorSet *descriptorSet = descriptorSets[setIndex];
-    const std::vector<binding::DescriptorSetLayoutBinding *>& descriptorBindings = setLayoutDeclaration.getDescriptorBindings();
+    const std::vector<binding::DescriptorSetLayoutBinding *>& descriptorBindings = layoutReflection.getDescriptorBindings();
     for (const auto binding : descriptorBindings)
     {
         const SpvReflectDescriptorBinding *reflectedBinding = nullptr;

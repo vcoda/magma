@@ -22,7 +22,7 @@ namespace magma
 {
     class DescriptorPool;
     class DescriptorSetLayout;
-    class DescriptorSetDeclaration;
+    class DescriptorSetLayoutReflection;
     class ShaderReflection;
     class IShaderReflectionFactory;
     class IAllocator;
@@ -38,7 +38,7 @@ namespace magma
     {
     public:
         explicit DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
-            DescriptorSetDeclaration& setLayoutDeclaration,
+            DescriptorSetLayoutReflection& layoutReflection,
             uint32_t stageFlags,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory = nullptr,
@@ -58,7 +58,7 @@ namespace magma
         void validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection,
             uint32_t setIndex) const;
 
-        DescriptorSetDeclaration& setLayoutDeclaration;
+        DescriptorSetLayoutReflection& layoutReflection; // TODO: Can we avoid that dangerous store of reference?
         std::shared_ptr<DescriptorSetLayout> setLayout;
         std::shared_ptr<DescriptorPool> descriptorPool;
     };

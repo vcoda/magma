@@ -23,19 +23,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/descriptorPool.h"
 #include "../objects/descriptorSet.h"
 #include "../shaders/shaderReflection.h"
+#include "../descriptors/descriptorSetLayoutReflection.h"
 #include "../exceptions/exception.h"
 
 namespace magma
 {
 namespace aux
 {
-struct ImageDescriptorSet::ImageSetLayout : DescriptorSetDeclaration
+struct ImageDescriptorSet::ImageSetLayout : DescriptorSetLayoutReflection
 {
     binding::CombinedImageSampler image = 0;
     MAGMA_REFLECT(&image)
 };
 
-struct ImageDescriptorSet::StorageImageSetLayout : DescriptorSetDeclaration
+struct ImageDescriptorSet::StorageImageSetLayout : DescriptorSetLayoutReflection
 {
     binding::StorageImage image = 0;
     MAGMA_REFLECT(&image)

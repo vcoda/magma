@@ -115,6 +115,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptors/binding.h"
 #include "descriptors/bindingArray.h"
 #include "descriptors/descriptor.h"
+#include "descriptors/descriptorSetLayoutReflection.h"
 #include "descriptors/subpass.h"
 
 #include "barriers/bufferMemoryBarrier.h"

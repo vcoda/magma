@@ -197,6 +197,7 @@
     <ClInclude Include="..\..\descriptors\bindingArray.h" />
     <ClInclude Include="..\..\descriptors\descriptor.h" />
     <ClInclude Include="..\..\descriptors\binding.h" />
+    <ClInclude Include="..\..\descriptors\descriptorSetLayoutReflection.h" />
     <ClInclude Include="..\..\descriptors\subpass.h" />
     <ClInclude Include="..\..\exceptions\compileError.h" />
     <ClInclude Include="..\..\exceptions\errorResult.h" />
@@ -556,6 +557,7 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
     <None Include="..\..\barriers\bufferMemoryBarrier.inl" />
     <None Include="..\..\descriptors\attachment.inl" />
     <None Include="..\..\descriptors\binding.inl" />
+    <None Include="..\..\descriptors\descriptorSetLayoutReflection.inl" />
     <None Include="..\..\descriptors\subpassDependency.inl" />
     <None Include="..\..\helpers\alignedUniformArrayIterator.inl" />
     <None Include="..\..\misc\clearAttachment.inl" />
