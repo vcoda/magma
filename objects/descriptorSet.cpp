@@ -87,25 +87,28 @@ bool DescriptorSet::dirty() const
 void DescriptorSet::update()
 {
     MAGMA_ASSERT(dirty());
-    const std::vector<binding::DescriptorSetLayoutBinding *>& descriptorBindings = layoutReflection.getDescriptorBindings();
     uint32_t descriptorWriteCount = 0;
+    const std::vector<binding::DescriptorSetLayoutBinding *>& descriptorBindings = layoutReflection.getDescriptorBindings();
     for (const auto binding : descriptorBindings)
     {
         if (binding->dirty())
             ++descriptorWriteCount;
     }
-    MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, descriptorWriteCount);
-    for (auto binding : descriptorBindings)
+    if (descriptorWriteCount > 0)
     {
-        if (binding->dirty())
+        MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, descriptorWriteCount);
+        for (auto binding : descriptorBindings)
         {
-            VkWriteDescriptorSet writeDescriptor = binding->getWriteDescriptor();
-            writeDescriptor.dstSet = handle;
-            descriptorWrites.put(writeDescriptor);
-            binding->changed = false;
+            if (binding->dirty())
+            {
+                VkWriteDescriptorSet writeDescriptor = binding->getWriteDescriptor();
+                writeDescriptor.dstSet = handle;
+                descriptorWrites.put(writeDescriptor);
+                binding->changed = false;
+            }
         }
+        device->updateDescriptorWrites(descriptorWrites, descriptorWriteCount);
     }
-    device->updateDescriptorWrites(descriptorWrites, descriptorWriteCount);
 }
 
 void DescriptorSet::gatherDirtyDescriptorWrites(std::vector<VkWriteDescriptorSet>& descriptorWrites) const
