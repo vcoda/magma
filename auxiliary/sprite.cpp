@@ -136,11 +136,11 @@ void Sprite::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Imag
 
 bool Sprite::inBounds(const VkExtent3D& extent) const noexcept
 {
-    if (-x > static_cast<int32_t>(width) ||
-        -y > static_cast<int32_t>(height))
+    if (-x >= static_cast<int32_t>(width) ||
+        -y >= static_cast<int32_t>(height))
         return false;
-    if (x > static_cast<int32_t>(extent.width) ||
-        y > static_cast<int32_t>(extent.height))
+    if (x >= static_cast<int32_t>(extent.width) ||
+        y >= static_cast<int32_t>(extent.height))
         return false;
     return true;
 }
