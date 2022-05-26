@@ -106,22 +106,69 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
 void Sprite::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Image> dstImage,
     VkFilter filter /* VK_FILTER_NEAREST */) const noexcept
 {
-    VkImageBlit blitRegion;
-    blitRegion.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-    blitRegion.srcSubresource.mipLevel = 0;
-    blitRegion.srcSubresource.baseArrayLayer = 0;
-    blitRegion.srcSubresource.layerCount = 1;
-    blitRegion.srcOffsets[0] = {topLeft.x, topLeft.y, 0};
-    blitRegion.srcOffsets[1] = {bottomRight.x, bottomRight.y, 1};
-    blitRegion.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-    blitRegion.dstSubresource.mipLevel = 0;
-    blitRegion.dstSubresource.baseArrayLayer = 0;
-    blitRegion.dstSubresource.layerCount = 1;
-    blitRegion.dstOffsets[0] = {position.x, position.y, 0};
-    blitRegion.dstOffsets[1].x = position.x + static_cast<int32_t>(width);
-    blitRegion.dstOffsets[1].y = position.y + static_cast<int32_t>(height);
-    blitRegion.dstOffsets[1].z = 1;
-    cmdBuffer->blitImage(shared_from_this(), dstImage, blitRegion, filter);
+    const VkExtent3D dstExtent = dstImage->getMipExtent(0);
+    if (inBounds(dstExtent))
+    {
+        VkImageBlit blitRegion;
+        blitRegion.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        blitRegion.srcSubresource.mipLevel = 0;
+        blitRegion.srcSubresource.baseArrayLayer = 0;
+        blitRegion.srcSubresource.layerCount = 1;
+        blitRegion.srcOffsets[0] = {topLeft.x, topLeft.y, 0};
+        blitRegion.srcOffsets[1] = {bottomRight.x, bottomRight.y, 1};
+        blitRegion.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        blitRegion.dstSubresource.mipLevel = 0;
+        blitRegion.dstSubresource.baseArrayLayer = 0;
+        blitRegion.dstSubresource.layerCount = 1;
+        blitRegion.dstOffsets[0] = {x, y, 0};
+        blitRegion.dstOffsets[1].x = x + static_cast<int32_t>(width);
+        blitRegion.dstOffsets[1].y = y + static_cast<int32_t>(height);
+        blitRegion.dstOffsets[1].z = 1;
+        if (!isScaled()) // We can clip properly only unscaled sprite
+        {
+            int32_t dstWidth = static_cast<int32_t>(dstExtent.width);
+            int32_t dstHeight = static_cast<int32_t>(dstExtent.height);
+            clip(blitRegion.srcOffsets, blitRegion.dstOffsets, dstWidth, dstHeight);
+        }
+        cmdBuffer->blitImage(shared_from_this(), dstImage, blitRegion, filter);
+    }
+}
+
+bool Sprite::inBounds(const VkExtent3D& extent) const noexcept
+{
+    if (-x > static_cast<int32_t>(width) ||
+        -y > static_cast<int32_t>(height))
+        return false;
+    if (x > static_cast<int32_t>(extent.width) ||
+        y > static_cast<int32_t>(extent.height))
+        return false;
+    return true;
+}
+
+void Sprite::clip(VkOffset3D srcOffsets[2], VkOffset3D dstOffsets[2], int32_t dstWidth, int32_t dstHeight) const noexcept
+{   // Left
+    if (dstOffsets[0].x < 0)
+    {
+        dstOffsets[0].x = 0;
+        srcOffsets[0].x += isFlippedHorizontally() ? x : -x;
+    } // Top
+    if (dstOffsets[0].y < 0)
+    {
+        dstOffsets[0].y = 0;
+        srcOffsets[0].y += isFlippedVertically() ? y : -y;
+    } // Right
+    if (dstOffsets[1].x > dstWidth)
+    {
+        int32_t cx = dstOffsets[1].x - dstWidth;
+        dstOffsets[1].x = dstWidth;
+        srcOffsets[1].x += isFlippedHorizontally() ? cx : -cx;
+    } // Bottom
+    if (dstOffsets[1].y > dstHeight)
+    {
+        int32_t cy = dstOffsets[1].y - dstHeight;
+        dstOffsets[1].y = dstHeight;
+        srcOffsets[1].y += isFlippedVertically() ? cy : -cy;
+    }
 }
 } // namespace aux
 } // namespace magma
