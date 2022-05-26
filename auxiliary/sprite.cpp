@@ -96,7 +96,7 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
                 copyFn = core::copyMemory;
             copyFn(buffer, data, size);
         });
-    const CopyLayout bufferLayout = {offset, 0, 0};
+    constexpr CopyLayout bufferLayout = {0, 0, 0};
     constexpr VkOffset3D imageOffset{0, 0, 0};
     copyMipLevel(std::move(cmdBuffer), 0, std::move(buffer), bufferLayout, imageOffset,
         VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT,
