@@ -41,9 +41,9 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
         0, // flags
         sharing,
         std::move(allocator)),
+    x(0), y(0),
     width(extent.width),
     height(extent.height),
-    position{0, 0},
     topLeft{0, 0},
     bottomRight{static_cast<int32_t>(width), static_cast<int32_t>(height)}
 {
@@ -75,9 +75,9 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
         0, // flags
         sharing,
         std::move(allocator)),
+    x(0), y(0),
     width(extent.width),
     height(extent.height),
-    position{0, 0},
     topLeft{0, 0},
     bottomRight{static_cast<int32_t>(width), static_cast<int32_t>(height)}
 {

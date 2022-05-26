@@ -49,9 +49,8 @@ namespace magma
             void setHeight(uint32_t height_) noexcept { height = height_; }
             uint32_t getHeight() const noexcept { return height; }
             bool isScaled() const noexcept { return (width != extent.width) || (height != extent.height); }
-            void setPosition(int32_t x, int32_t y) noexcept { position = {x, y}; }
-            void setPosition(const VkOffset2D& position_) noexcept { position = position_; }
-            const VkOffset2D& getPosition() const noexcept { return position; }
+            void setPosition(int32_t x_, int32_t y_) noexcept { x = x_; y = y_; }
+            const VkOffset2D& getPosition() const noexcept { return {x, y}; }
             void flipHorizontal() noexcept { std::swap(topLeft.x, bottomRight.x); }
             bool isFlippedHorizontally() const noexcept { return topLeft.x > bottomRight.x; }
             void flipVertical() noexcept { std::swap(topLeft.y, bottomRight.y); }
@@ -61,9 +60,9 @@ namespace magma
                 VkFilter filter = VK_FILTER_NEAREST) const noexcept;
 
         private:
+            int32_t x, y;
             uint32_t width;
             uint32_t height;
-            VkOffset2D position;
             VkOffset2D topLeft;
             VkOffset2D bottomRight;
         };
