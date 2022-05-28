@@ -60,6 +60,7 @@ namespace magma
                 VkFilter filter = VK_FILTER_NEAREST) const noexcept;
 
         private:
+            bool checkBlitSupport() const noexcept;
             bool inBounds(const VkExtent3D& extent) const noexcept;
             void clip(VkOffset3D srcOffsets[2], VkOffset3D dstOffsets[2],
                 int32_t width, int32_t height) const noexcept;
