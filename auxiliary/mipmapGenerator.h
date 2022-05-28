@@ -33,7 +33,7 @@ namespace magma
         {
         public:
             explicit MipmapGenerator(std::shared_ptr<Device> device);
-            bool checkFormatSupport(VkFormat format) const noexcept;
+            bool checkBlitSupport(VkFormat format) const noexcept;
             bool generateMipmap(std::shared_ptr<Image> image,
                 uint32_t baseLevel,
                 VkFilter filter,

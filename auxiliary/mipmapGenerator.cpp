@@ -36,7 +36,7 @@ MipmapGenerator::MipmapGenerator(std::shared_ptr<Device> device):
     queue(this->device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0))
 {}
 
-bool MipmapGenerator::checkFormatSupport(VkFormat format) const noexcept
+bool MipmapGenerator::checkBlitSupport(VkFormat format) const noexcept
 {
     std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
     const VkFormatProperties& properties = physicalDevice->getFormatProperties(format);
