@@ -31,9 +31,9 @@ namespace magma
 {
 namespace aux
 {
-MipmapGenerator::MipmapGenerator(std::shared_ptr<Device> device):
-    device(std::move(device)),
-    queue(this->device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0))
+MipmapGenerator::MipmapGenerator(std::shared_ptr<Device> device_):
+    device(std::move(device_)),
+    queue(device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0))
 {}
 
 bool MipmapGenerator::checkBlitSupport(VkFormat format) const noexcept
@@ -53,20 +53,24 @@ bool MipmapGenerator::generateMipmap(std::shared_ptr<Image> image, uint32_t base
     VkExtent3D prevMipExtent = image->getMipExtent(baseLevel);
     for (uint32_t level = baseLevel + 1; level < image->getMipLevels(); ++level)
     {
-        const VkExtent3D& nextMipExtent = image->getMipExtent(level);
+        const VkExtent3D nextMipExtent = image->getMipExtent(level);
         VkImageBlit blitRegion;
         blitRegion.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
         blitRegion.srcSubresource.mipLevel = level - 1;
         blitRegion.srcSubresource.baseArrayLayer = 0;
         blitRegion.srcSubresource.layerCount = 1;
-        blitRegion.srcOffsets[0] = VkOffset3D{0, 0, 0};
-        blitRegion.srcOffsets[1] = VkOffset3D{int32_t(prevMipExtent.width), int32_t(prevMipExtent.height), 1};
+        blitRegion.srcOffsets[0] = {0, 0, 0};
+        blitRegion.srcOffsets[1].x = static_cast<int32_t>(prevMipExtent.width)
+        blitRegion.srcOffsets[1].y = static_cast<int32_t>(prevMipExtent.height);
+        blitRegion.srcOffsets[1].z = 1;
         blitRegion.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
         blitRegion.dstSubresource.mipLevel = level;
         blitRegion.dstSubresource.baseArrayLayer = 0;
         blitRegion.dstSubresource.layerCount = 1;
-        blitRegion.dstOffsets[0] = VkOffset3D{0, 0, 0};
-        blitRegion.dstOffsets[1] = VkOffset3D{int32_t(nextMipExtent.width), int32_t(nextMipExtent.height), 1};
+        blitRegion.dstOffsets[0] = {0, 0, 0};
+        blitRegion.dstOffsets[1].x = static_cast<int32_t>(nextMipExtent.width);
+        blitRegion.dstOffsets[1].y = static_cast<int32_t>(nextMipExtent.height);
+        blitRegion.dstOffsets[1].z = 1;
         const ImageSubresourceRange nextMipRange(image, level, 1);
         // Transition of next mip level to transfer dest optimal layout
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,

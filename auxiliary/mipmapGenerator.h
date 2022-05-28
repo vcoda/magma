@@ -27,7 +27,8 @@ namespace magma
 
     namespace aux
     {
-        /* Generates MIP levels from base texture level using blit operations. */
+        /* Generates mip levels from base texture level using a series of
+           image blit operations. */
 
         class MipmapGenerator : public core::NonCopyable
         {
