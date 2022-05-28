@@ -60,7 +60,7 @@ bool MipmapGenerator::generateMipmap(std::shared_ptr<Image> image, uint32_t base
         blitRegion.srcSubresource.baseArrayLayer = 0;
         blitRegion.srcSubresource.layerCount = 1;
         blitRegion.srcOffsets[0] = {0, 0, 0};
-        blitRegion.srcOffsets[1].x = static_cast<int32_t>(prevMipExtent.width)
+        blitRegion.srcOffsets[1].x = static_cast<int32_t>(prevMipExtent.width);
         blitRegion.srcOffsets[1].y = static_cast<int32_t>(prevMipExtent.height);
         blitRegion.srcOffsets[1].z = 1;
         blitRegion.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
