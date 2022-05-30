@@ -68,8 +68,8 @@ namespace magma
             int32_t x, y;
             uint32_t width;
             uint32_t height;
-            VkOffset2D topLeft;
-            VkOffset2D bottomRight;
+            VkOffset3D topLeft;
+            VkOffset3D bottomRight;
         };
     } // namespace aux
 } // namespace magma

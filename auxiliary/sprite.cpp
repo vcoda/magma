@@ -44,8 +44,8 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
     x(0), y(0),
     width(extent.width),
     height(extent.height),
-    topLeft{0, 0},
-    bottomRight{static_cast<int32_t>(width), static_cast<int32_t>(height)}
+    topLeft{0, 0, 0},
+    bottomRight{static_cast<int32_t>(width), static_cast<int32_t>(height), 1}
 {
     if (!checkBlitSupport())
         MAGMA_THROW("image format doesn't support source blit operation");
@@ -118,8 +118,8 @@ void Sprite::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Imag
         blitRegion.srcSubresource.mipLevel = 0;
         blitRegion.srcSubresource.baseArrayLayer = 0;
         blitRegion.srcSubresource.layerCount = 1;
-        blitRegion.srcOffsets[0] = {topLeft.x, topLeft.y, 0};
-        blitRegion.srcOffsets[1] = {bottomRight.x, bottomRight.y, 1};
+        blitRegion.srcOffsets[0] = topLeft;
+        blitRegion.srcOffsets[1] = bottomRight;
         blitRegion.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
         blitRegion.dstSubresource.mipLevel = 0;
         blitRegion.dstSubresource.baseArrayLayer = 0;
