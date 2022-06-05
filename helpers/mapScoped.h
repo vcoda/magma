@@ -66,15 +66,15 @@ namespace magma
 
         template<typename Type>
         inline void mapScoped(const std::shared_ptr<UniformBuffer<Type>>& uniformBuffer,
-            std::function<void(typename UniformBuffer<Type>::UniformType *data)> callbackFn)
+            std::function<void(typename UniformBuffer<Type>::UniformType *data)> mapFn)
         {
             MAGMA_ASSERT(uniformBuffer);
-            MAGMA_ASSERT(callbackFn);
+            MAGMA_ASSERT(mapFn);
             if (Type *const data = uniformBuffer->map())
             {
                 try
                 {
-                    callbackFn(data);
+                    mapFn(data);
                 }
                 catch (...)
                 {
@@ -87,16 +87,16 @@ namespace magma
 
         template<typename Type>
         inline void mapScoped(const std::shared_ptr<UniformBuffer<Type>>& uniformBuffer,
-            std::function<void(UniformArray<Type>& array)> callbackFn)
+            std::function<void(UniformArray<Type>& array)> mapFn)
         {
             MAGMA_ASSERT(uniformBuffer);
-            MAGMA_ASSERT(callbackFn);
+            MAGMA_ASSERT(mapFn);
             if (Type *const data = uniformBuffer->map())
             {
                 try
                 {
                     UniformArray<Type> array(data, uniformBuffer->getArraySize());
-                    callbackFn(array);
+                    mapFn(array);
                 }
                 catch (...)
                 {
@@ -109,10 +109,10 @@ namespace magma
 
         template<typename Type>
         inline void mapScoped(const std::shared_ptr<DynamicUniformBuffer<Type>>& uniformBuffer,
-            std::function<void(AlignedUniformArray<Type>& array)> callbackFn)
+            std::function<void(AlignedUniformArray<Type>& array)> mapFn)
         {
             MAGMA_ASSERT(buffer);
-            MAGMA_ASSERT(callbackFn);
+            MAGMA_ASSERT(mapFn);
             if (Type *const data = uniformBuffer->map())
             {
                 try
@@ -120,7 +120,7 @@ namespace magma
                     AlignedUniformArray<Type> array(data,
                         uniformBuffer->getArraySize(),
                         uniformBuffer->getElementAlignment());
-                    callbackFn(array);
+                    mapFn(array);
                 }
                 catch (...)
                 {
