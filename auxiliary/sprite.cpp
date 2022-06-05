@@ -47,8 +47,7 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
     topLeft{0, 0, 0},
     bottomRight{static_cast<int32_t>(width), static_cast<int32_t>(height), 1}
 {
-    if (!checkBlitSupport())
-        MAGMA_THROW("image format doesn't support source blit operation");
+    checkBlitSupport();
     const Format imageFormat(format);
     if (imageFormat.blockCompressed())
     {
@@ -83,8 +82,7 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
     topLeft{0, 0},
     bottomRight{static_cast<int32_t>(width), static_cast<int32_t>(height)}
 {
-    if (!checkBlitSupport())
-        MAGMA_THROW("image format doesn't support source blit operation");
+    checkBlitSupport();
     const Format imageFormat(format);
     if (imageFormat.blockCompressed())
     {
@@ -138,12 +136,13 @@ void Sprite::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Imag
     }
 }
 
-bool Sprite::checkBlitSupport() const noexcept
+void Sprite::checkBlitSupport() const
 {
     std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
     const VkFormatProperties properties = physicalDevice->getFormatProperties(format);
-    const bool optimalSrcBlit = (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT);
-    return optimalSrcBlit;
+    const bool srcBlit = (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT);
+    if (!srcBlit)
+        MAGMA_THROW("image format doesn't support source blit operation");
 }
 
 bool Sprite::inBounds(const VkExtent3D& extent) const noexcept
