@@ -24,8 +24,11 @@ namespace magma
 
     namespace helpers
     {
-        bool executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
-            std::function<void(std::shared_ptr<CommandBuffer>)> callback,
+        /* Helper function to execute a number of calls to command buffer.
+           It allocates command buffer, calls begin/end() and submits it to the graphics queue. */
+
+        void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
+            std::function<void(std::shared_ptr<CommandBuffer>)>& drawFn,
             bool primaryLevel = true,
             VkQueueFlagBits queueType = VK_QUEUE_GRAPHICS_BIT,
             const char *blockName = "magma::helpers::executeCommandBuffer",

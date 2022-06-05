@@ -28,8 +28,8 @@ namespace magma
 {
 namespace helpers
 {
-bool executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
-    std::function<void(std::shared_ptr<CommandBuffer>)> callback,
+void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
+    std::function<void(std::shared_ptr<CommandBuffer>)>& drawFn,
     bool primaryLevel /* true */,
     VkQueueFlagBits queueType /* VK_QUEUE_GRAPHICS_BIT */,
     const char *blockName /* magma::helpers::executeCommandBuffer */,
@@ -37,19 +37,22 @@ bool executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
 {
     std::shared_ptr<CommandBuffer> cmdBuffer;
     if (primaryLevel)
-        cmdBuffer = std::make_shared<PrimaryCommandBuffer>(cmdPool);
+        cmdBuffer = std::make_shared<PrimaryCommandBuffer>(std::move(cmdPool));
     else
-        cmdBuffer = std::make_shared<SecondaryCommandBuffer>(cmdPool);
+        cmdBuffer = std::make_shared<SecondaryCommandBuffer>(std::move(cmdPool));
     if (cmdBuffer->begin(blockName, blockColor))
     {
-        callback(cmdBuffer);
+        drawFn(cmdBuffer);
         cmdBuffer->end();
     }
-    std::shared_ptr<Fence> fence(cmdBuffer->getFence());
-    std::shared_ptr<Queue> queue = cmdPool->getDevice()->getQueue(queueType, 0);
-    const bool submitted = queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
-    const bool waited = fence->wait();
-    return submitted && waited;
+    std::shared_ptr<Fence> fence = cmdBuffer->getFence();
+    fence->reset();
+    {
+        std::shared_ptr<Device> device = cmdBuffer->getDevice();
+        std::shared_ptr<Queue> queue = device->getQueue(queueType, 0);
+        queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence);
+    }
+    fence->wait();
 }
 } // namespace helpers
 } // namespace magma
