@@ -29,7 +29,7 @@ namespace magma
        Buffers and images are created with a sharing mode
        controlling how they can be accessed from queues. */
 
-    class Resource
+    class Resource : public core::NonCopyable
     {
     public:
         class Sharing
@@ -50,12 +50,19 @@ namespace magma
             std::vector<uint32_t> queueFamilyIndices;
         };
 
+    public:
+        ~Resource();
         VkDeviceSize getSize() const noexcept { return size; }
         VkDeviceSize getOffset() const noexcept { return offset; }
         const Sharing& getSharing() const noexcept { return sharing; }
         std::shared_ptr<DeviceMemory> getMemory() noexcept { return memory; }
         std::shared_ptr<const DeviceMemory> getMemory() const noexcept { return memory; }
         std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return deviceAllocator; }
+        template<typename Type>
+        void setPayload(const Type& data);
+        template<typename Type>
+        Type& getPayload();
+        bool hasPayload() const noexcept { return payloadSize > 0; }
         virtual void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0) = 0;
 #ifdef VK_KHR_device_group
@@ -74,6 +81,12 @@ namespace magma
         const Sharing sharing;
         std::shared_ptr<DeviceMemory> memory;
         std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
+
+    private:
+        // User-defined data associated with the resource.
+        // It's an analogue of ID3D11DeviceChild::SetPrivateData().
+        void *payload;
+        size_t payloadSize;
     };
 
     /* Non-dispatchable resource object (buffer, image, acceleration structure etc.)
@@ -95,3 +108,5 @@ namespace magma
         {}
     };
 } // namespace magma
+
+#include "resource.inl"

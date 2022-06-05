@@ -26,8 +26,15 @@ Resource::Resource(const Sharing& sharing, std::shared_ptr<IDeviceMemoryAllocato
     size(0),
     offset(0),
     sharing(sharing),
-    deviceAllocator(std::move(deviceAllocator))
+    deviceAllocator(std::move(deviceAllocator)),
+    payload(nullptr),
+    payloadSize(0)
 {}
+
+Resource::~Resource()
+{
+    delete[] payload;
+}
 
 Resource::Sharing::Sharing(const std::vector<uint32_t>& queueFamilyIndices) noexcept:
     queueFamilyIndices(std::move(queueFamilyIndices))

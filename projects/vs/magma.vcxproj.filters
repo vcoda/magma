@@ -1162,6 +1162,9 @@
     <None Include="..\..\descriptors\descriptorSetLayoutReflection.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
+    <None Include="..\..\objects\resource.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">
