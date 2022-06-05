@@ -28,10 +28,10 @@ MAGMA_OBJS= \
 	auxiliary/depthFramebuffer.o \
 	auxiliary/fillRectangleVertexShader.o \
 	auxiliary/frameGrabber.o \
+	auxiliary/generateMipmap.o \
 	auxiliary/graphicsPipelineCache.o \
 	auxiliary/imageDescriptorSet.o \
 	auxiliary/immediateRender.o \
-	auxiliary/mipmapGenerator.o \
 	auxiliary/sprite.o \
 	auxiliary/swapchainFramebuffer.o \
 	auxiliary/textShader.o \

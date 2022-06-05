@@ -17,12 +17,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "mipmapGenerator.h"
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
 #include "../objects/commandBuffer.h"
-#include "../objects/queue.h"
-#include "../objects/fence.h"
 #include "../objects/image.h"
 #include "../barriers/imageMemoryBarrier.h"
 #include "../misc/imageSubresourceRange.h"
@@ -31,25 +28,20 @@ namespace magma
 {
 namespace aux
 {
-MipmapGenerator::MipmapGenerator(std::shared_ptr<Device> device_):
-    device(std::move(device_)),
-    queue(device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0))
-{}
-
-bool MipmapGenerator::checkBlitSupport(VkFormat format) const noexcept
+bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseLevel, VkFilter filter,
+    std::shared_ptr<CommandBuffer> cmdBuffer) noexcept
 {
+    MAGMA_ASSERT(image);
+    MAGMA_ASSERT(cmdBuffer);
+    if (!image || !cmdBuffer)
+        return false;
+    std::shared_ptr<Device> device = image->getDevice();
     std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-    const VkFormatProperties& properties = physicalDevice->getFormatProperties(format);
-    const bool optimalSrcBlit = (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT);
-    const bool optimalDstBlit = (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT);
-    return optimalSrcBlit && optimalDstBlit;
-}
-
-bool MipmapGenerator::generateMipmap(std::shared_ptr<Image> image, uint32_t baseLevel, VkFilter filter,
-    std::shared_ptr<CommandBuffer> cmdBuffer, bool flushCmdBuffer) const noexcept
-{
-    if (flushCmdBuffer)
-        cmdBuffer->begin();
+    const VkFormatProperties properties = physicalDevice->getFormatProperties(image->getFormat());
+    const bool srcBlit = (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT);
+    const bool dstBlit = (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT);
+    if (!srcBlit || !dstBlit)
+        return false;
     VkExtent3D prevMipExtent = image->getMipExtent(baseLevel);
     for (uint32_t level = baseLevel + 1; level < image->getMipLevels(); ++level)
     {
@@ -86,21 +78,6 @@ bool MipmapGenerator::generateMipmap(std::shared_ptr<Image> image, uint32_t base
     const ImageSubresourceRange blitMipsRange(image, baseLevel + 1, image->getMipLevels() - baseLevel - 1);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
         ImageMemoryBarrier(image, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, blitMipsRange));
-    if (flushCmdBuffer)
-    {
-        cmdBuffer->end();
-        return commit(cmdBuffer);
-    }
-    return true;
-}
-
-bool MipmapGenerator::commit(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept
-{
-    std::shared_ptr<Fence> fence = cmdBuffer->getFence();
-    if (!queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence))
-        return false;
-    if (!fence->wait())
-        return false;
     return true;
 }
 } // namespace aux

@@ -108,9 +108,6 @@
     <ClInclude Include="..\..\auxiliary\immediateRender.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\auxiliary\mipmapGenerator.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\auxiliary\shaderCompiler.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
@@ -663,6 +660,9 @@
     <ClInclude Include="..\..\descriptors\descriptorSetLayoutReflection.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\auxiliary\generateMipmap.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -672,9 +672,6 @@
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
     <ClCompile Include="..\..\auxiliary\immediateRender.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\mipmapGenerator.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
     <ClCompile Include="..\..\auxiliary\shaderCompiler.cpp">
@@ -1023,6 +1020,9 @@
       <Filter>Source Files\states</Filter>
     </ClCompile>
     <ClCompile Include="..\..\auxiliary\sprite.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\auxiliary\generateMipmap.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>

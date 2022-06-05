@@ -20,31 +20,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Device;
-    class CommandBuffer;
-    class Queue;
     class Image;
+    class CommandBuffer;
 
     namespace aux
     {
-        /* Generates mip levels from base texture level using a series of
-           image blit operations. */
+        /* Generates mip levels from base texture level using a series of image blit operations.
+           It's an analogue of glGenerateMipmap() function in OpenGL. */
 
-        class MipmapGenerator : public core::NonCopyable
-        {
-        public:
-            explicit MipmapGenerator(std::shared_ptr<Device> device);
-            bool checkBlitSupport(VkFormat format) const noexcept;
-            bool generateMipmap(std::shared_ptr<Image> image,
-                uint32_t baseLevel,
-                VkFilter filter,
-                const std::shared_ptr<CommandBuffer> cmdBuffer,
-                bool flushCmdBuffer) const noexcept;
-            bool commit(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept;
-
-        private:
-            std::shared_ptr<Device> device;
-            std::shared_ptr<Queue> queue;
-        };
+        bool generateMipmap(std::shared_ptr<Image> image,
+            uint32_t baseLevel,
+            VkFilter filter,
+            std::shared_ptr<CommandBuffer> cmdBuffer) noexcept;
     } // namespace aux
 } // namespace magma
