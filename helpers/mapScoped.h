@@ -28,19 +28,24 @@ namespace magma
     namespace helpers
     {
         template<typename Type>
-        inline void mapScoped(const std::shared_ptr<Buffer>& buffer,
-            std::function<void(Type *data)> callbackFn)
+        inline void mapRangeScoped(const std::shared_ptr<Buffer>& buffer,
+            VkDeviceSize offset,
+            VkDeviceSize size,
+            std::function<void(Type *data)> mapFn)
         {
             MAGMA_ASSERT(buffer);
-            MAGMA_ASSERT(callbackFn);
+            MAGMA_ASSERT(mapFn);
+            MAGMA_ASSERT(offset + size <= buffer->getSize());
             std::shared_ptr<DeviceMemory> bufferMemory(buffer->getMemory());
             if (bufferMemory)
             {
-                if (void *const data = bufferMemory->map())
-                {
+                if (void *const data = bufferMemory->map(offset, size))
+                {   // Mapping function may optionally throw an exception.
+                    // We should catch it and unmap the memory ahead of exeption handler,
+                    // otherwise DeviceMemory's destructor may complain about mapped state.
                     try
                     {
-                        callbackFn(static_cast<Type *>(data));
+                        mapFn(static_cast<Type *>(data));
                     }
                     catch (...)
                     {
@@ -50,6 +55,13 @@ namespace magma
                     bufferMemory->unmap();
                 }
             }
+        }
+
+        template<typename Type>
+        inline void mapScoped(const std::shared_ptr<Buffer>& buffer,
+            std::function<void(Type *data)> mapFn)
+        {
+            mapRangeScoped(buffer, 0, VK_WHOLE_SIZE, std::move(mapFn));
         }
 
         template<typename Type>
@@ -120,19 +132,22 @@ namespace magma
         }
 
         template<typename Type>
-        inline void mapScoped(const std::shared_ptr<Image>& image, VkDeviceSize offset,
-            std::function<void(Type *data)> callbackFn)
+        inline void mapRangeScoped(const std::shared_ptr<Image>& image,
+            VkDeviceSize offset,
+            VkDeviceSize size,
+            std::function<void(Type *data)> mapFn)
         {
             MAGMA_ASSERT(image);
-            MAGMA_ASSERT(callbackFn);
+            MAGMA_ASSERT(mapFn);
+            MAGMA_ASSERT(offset + size <= image->getSize());
             std::shared_ptr<DeviceMemory> imageMemory(image->getMemory());
             if (imageMemory)
             {
-                if (void *const data = imageMemory->map(offset))
+                if (void *const data = imageMemory->map(offset, size))
                 {
                     try
                     {
-                        callbackFn(static_cast<Type *>(data));
+                        mapFn(static_cast<Type *>(data));
                     }
                     catch (...)
                     {
@@ -142,6 +157,13 @@ namespace magma
                     imageMemory->unmap();
                 }
             }
+        }
+
+        template<typename Type>
+        inline void mapScoped(const std::shared_ptr<Image>& image,
+            std::function<void(Type *data)> mapFn)
+        {
+            mapRangeScoped(image, 0, VK_WHOLE_SIZE, std::move(mapFn));
         }
     } // namespace helpers
 } // namespace magma
