@@ -42,7 +42,16 @@ void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
         cmdBuffer = std::make_shared<SecondaryCommandBuffer>(std::move(cmdPool));
     if (cmdBuffer->begin(blockName, blockColor))
     {
-        drawFn(cmdBuffer);
+        try
+        {   // Draw function may optionally throw an exception.
+            // We should catch it and finish command buffer ahead of exeption handler.
+            drawFn(cmdBuffer);
+        }
+        catch (...)
+        {
+            cmdBuffer->end();
+            throw;
+        }
         cmdBuffer->end();
     }
     std::shared_ptr<Fence> fence = cmdBuffer->getFence();
