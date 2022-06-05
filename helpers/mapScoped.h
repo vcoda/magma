@@ -35,7 +35,7 @@ namespace magma
         {
             MAGMA_ASSERT(buffer);
             MAGMA_ASSERT(mapFn);
-            MAGMA_ASSERT(offset + size <= buffer->getSize());
+            MAGMA_ASSERT(offset + (VK_WHOLE_SIZE == size ? 0 : size) <= buffer->getSize());
             std::shared_ptr<DeviceMemory> bufferMemory(buffer->getMemory());
             if (bufferMemory)
             {
@@ -139,7 +139,7 @@ namespace magma
         {
             MAGMA_ASSERT(image);
             MAGMA_ASSERT(mapFn);
-            MAGMA_ASSERT(offset + size <= image->getSize());
+            MAGMA_ASSERT(offset + (VK_WHOLE_SIZE == size ? 0 : size) <= image->getSize());
             std::shared_ptr<DeviceMemory> imageMemory(image->getMemory());
             if (imageMemory)
             {
