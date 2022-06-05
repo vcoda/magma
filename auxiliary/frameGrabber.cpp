@@ -116,7 +116,7 @@ void FrameGrabber::readPixels(std::function<void(uint32_t col, uint32_t row, uin
     const VkSubresourceLayout subresourceLayout = dstImage->getSubresourceLayout(0);
     const VkDeviceSize rowPitch = subresourceLayout.rowPitch;
     const VkExtent3D extent = dstImage->getMipExtent(0);
-    helpers::mapScoped<uint8_t>(dstImage, subresourceLayout.offset,
+    helpers::mapRangeScoped<uint8_t>(dstImage, subresourceLayout.offset, VK_WHOLE_SIZE,
         [this, extent, rowPitch, forEachPixel](const uint8_t *data)
         {
             for (uint32_t y = 0; y < extent.height; ++y)
@@ -148,7 +148,7 @@ void FrameGrabber::readPixels(std::function<void(uint32_t row, const std::vector
     const VkSubresourceLayout subresourceLayout = dstImage->getSubresourceLayout(0);
     const VkDeviceSize rowPitch = subresourceLayout.rowPitch;
     const VkExtent3D extent = dstImage->getMipExtent(0);
-    helpers::mapScoped<uint8_t>(dstImage, subresourceLayout.offset,
+    helpers::mapRangeScoped<uint8_t>(dstImage, subresourceLayout.offset, VK_WHOLE_SIZE,
         [this, extent, rowPitch, forEachRow](const uint8_t *data)
         {
             std::vector<uint32_t> rowPixels(extent.width);
