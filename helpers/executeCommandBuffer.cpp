@@ -59,7 +59,7 @@ void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
     {
         std::shared_ptr<Device> device = cmdBuffer->getDevice();
         std::shared_ptr<Queue> queue = device->getQueue(queueType, 0);
-        queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence);
+        queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
     }
     fence->wait();
 }
