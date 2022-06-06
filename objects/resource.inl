@@ -17,8 +17,7 @@ inline void Resource::setPayload(const Type& data)
 template<typename Type>
 inline Type& Resource::getPayload()
 {
-    if (!payload)
-        MAGMA_THROW("payload has not been assigned");
+    MAGMA_ASSERT(payload);
     if (payloadSize < sizeof(Type))
         MAGMA_THROW("payload size not large enough");
     return *reinterpret_cast<Type *>(payload);
