@@ -17,6 +17,7 @@ inline void Resource::setPayload(const Type& data)
 template<typename Type>
 inline Type& Resource::getPayload()
 {
+    static_assert(std::is_trivially_copyable<Type>::value, "payload should be of trivially-copyable type");
     MAGMA_ASSERT(payload);
     if (payloadSize < sizeof(Type))
         MAGMA_THROW("payload size not large enough");
