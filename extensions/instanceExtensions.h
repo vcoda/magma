@@ -20,9 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Global functionality that affects the entire Vulkan API,
-       including instance and device-level objects and commands,
-       should be an instance extension.
+    /* Global functionality that affects the entire Vulkan API, including instance
+       and device-level objects and commands, should be an instance extension.
        Keep extensions list in alphabetical order. */
 
     class InstanceExtensions : public Extensions
