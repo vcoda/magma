@@ -29,51 +29,51 @@ namespace magma
     {
     public:
         // ANDROID (Google LLC)
-        const bool ANDROID_native_buffer;
+        const VkBool32 ANDROID_native_buffer : 1;
 
         // Multivendor
-        const bool EXT_acquire_drm_display;
-        const bool EXT_acquire_xlib_display;
-        const bool EXT_debug_report;
-        const bool EXT_debug_utils;
-        const bool EXT_direct_mode_display;
-        const bool EXT_directfb_surface;
-        const bool EXT_display_surface_counter;
-        const bool EXT_metal_surface;
-        const bool EXT_swapchain_colorspace;
+        const VkBool32 EXT_acquire_drm_display : 1;
+        const VkBool32 EXT_acquire_xlib_display : 1;
+        const VkBool32 EXT_debug_report : 1;
+        const VkBool32 EXT_debug_utils : 1;
+        const VkBool32 EXT_direct_mode_display : 1;
+        const VkBool32 EXT_directfb_surface : 1;
+        const VkBool32 EXT_display_surface_counter : 1;
+        const VkBool32 EXT_metal_surface : 1;
+        const VkBool32 EXT_swapchain_colorspace : 1;
 
         // FUCHSIA (Google LLC)
-        const bool FUCHSIA_imagepipe_surface;
+        const VkBool32 FUCHSIA_imagepipe_surface : 1;
 
         // GGP (Google, LLC)
-        const bool GGP_stream_descriptor_surface;
+        const VkBool32 GGP_stream_descriptor_surface : 1;
 
         // Khronos
-        const bool KHR_android_surface;
-        const bool KHR_device_group_creation;
-        const bool KHR_display;
-        const bool KHR_external_fence_capabilities;
-        const bool KHR_external_memory_capabilities;
-        const bool KHR_external_semaphore_capabilities;
-        const bool KHR_get_display_properties2;
-        const bool KHR_get_physical_device_properties2;
-        const bool KHR_get_surface_capabilities2;
-        const bool KHR_surface;
-        const bool KHR_surface_protected_capabilities;
-        const bool KHR_wayland_surface;
-        const bool KHR_win32_surface;
-        const bool KHR_xcb_surface;
-        const bool KHR_xlib_surface;
+        const VkBool32 KHR_android_surface : 1;
+        const VkBool32 KHR_device_group_creation : 1;
+        const VkBool32 KHR_display : 1;
+        const VkBool32 KHR_external_fence_capabilities : 1;
+        const VkBool32 KHR_external_memory_capabilities : 1;
+        const VkBool32 KHR_external_semaphore_capabilities : 1;
+        const VkBool32 KHR_get_display_properties2 : 1;
+        const VkBool32 KHR_get_physical_device_properties2 : 1;
+        const VkBool32 KHR_get_surface_capabilities2 : 1;
+        const VkBool32 KHR_surface : 1;
+        const VkBool32 KHR_surface_protected_capabilities : 1;
+        const VkBool32 KHR_wayland_surface : 1;
+        const VkBool32 KHR_win32_surface : 1;
+        const VkBool32 KHR_xcb_surface : 1;
+        const VkBool32 KHR_xlib_surface : 1;
 
         // MoltenVK
-        const bool MVK_ios_surface;
-        const bool MVK_macos_surface;
+        const VkBool32 MVK_ios_surface : 1;
+        const VkBool32 MVK_macos_surface : 1;
 
         // NVIDIA Corporation
-        const bool NV_external_memory_capabilities;
+        const VkBool32 NV_external_memory_capabilities : 1;
 
         // BlackBerry Limited
-        const bool QNX_screen_surface;
+        const VkBool32 QNX_screen_surface : 1;
 
         InstanceExtensions(const char *layerName = nullptr);
     };

@@ -26,84 +26,84 @@ namespace magma
     class InstanceLayers : public Layers
     {
     public:
-        const bool GalaxyOverlayVkLayer;
-        const bool GalaxyOverlayVkLayer_DEBUG;
-        const bool GalaxyOverlayVkLayer_VERBOSE;
+        const VkBool32 GalaxyOverlayVkLayer : 1;
+        const VkBool32 GalaxyOverlayVkLayer_DEBUG : 1;
+        const VkBool32 GalaxyOverlayVkLayer_VERBOSE : 1;
 
-        const bool GraphicsSpy;
-        const bool libVK_LAYER_RGA_pipeline_extraction;
-        const bool MoltenVK;
-        const bool VirtualSwapchain;
+        const VkBool32 GraphicsSpy : 1;
+        const VkBool32 libVK_LAYER_RGA_pipeline_extraction : 1;
+        const VkBool32 MoltenVK : 1;
+        const VkBool32 VirtualSwapchain : 1;
 
-        const bool AMD_switchable_graphics;
-        const bool AMD_switchable_graphics_32;
-        const bool AMD_switchable_graphics_64;
+        const VkBool32 AMD_switchable_graphics : 1;
+        const VkBool32 AMD_switchable_graphics_32 : 1;
+        const VkBool32 AMD_switchable_graphics_64 : 1;
 
-        const bool bandicam_helper;
-        const bool DxtoryHookHelper;
-        const bool fossilize;
-        const bool fpsmon;
+        const VkBool32 bandicam_helper : 1;
+        const VkBool32 DxtoryHookHelper : 1;
+        const VkBool32 fossilize : 1;
+        const VkBool32 fpsmon : 1;
 
-        const bool GOOGLE_threading;
-        const bool GOOGLE_unique_objects;
+        const VkBool32 GOOGLE_threading : 1;
+        const VkBool32 GOOGLE_unique_objects : 1;
 
         // https://github.com/KhronosGroup/Vulkan-ExtensionLayer
-        const bool KHRONOS_synchronization2;
-        const bool KHRONOS_timeline_semaphore;
-        const bool KHRONOS_validation;
+        const VkBool32 KHRONOS_synchronization2 : 1;
+        const VkBool32 KHRONOS_timeline_semaphore : 1;
+        const VkBool32 KHRONOS_validation : 1;
 
-        const bool LUNARG_api_dump;
-        const bool LUNARG_assistant_layer;
-        const bool LUNARG_core_validation;
-        const bool LUNARG_demo_layer;
-        const bool LUNARG_device_profile_api;
-        const bool LUNARG_device_simulation;
-        const bool LUNARG_gfxreconstruct;
-        const bool LUNARG_image;
-        const bool LUNARG_monitor;
-        const bool LUNARG_object_tracker;
-        const bool LUNARG_overlay;
-        const bool LUNARG_override;
-        const bool LUNARG_parameter_validation;
-        const bool LUNARG_screenshot;
-        const bool LUNARG_standard_validation;
-        const bool LUNARG_starter_layer;
-        const bool LUNARG_swapchain;
-        const bool LUNARG_TestingIntercept;
-        const bool LUNARG_VkGHL32;
-        const bool LUNARG_VkGHL64;
-        const bool LUNARG_vktrace;
+        const VkBool32 LUNARG_api_dump : 1;
+        const VkBool32 LUNARG_assistant_layer : 1;
+        const VkBool32 LUNARG_core_validation : 1;
+        const VkBool32 LUNARG_demo_layer : 1;
+        const VkBool32 LUNARG_device_profile_api : 1;
+        const VkBool32 LUNARG_device_simulation : 1;
+        const VkBool32 LUNARG_gfxreconstruct : 1;
+        const VkBool32 LUNARG_image : 1;
+        const VkBool32 LUNARG_monitor : 1;
+        const VkBool32 LUNARG_object_tracker : 1;
+        const VkBool32 LUNARG_overlay : 1;
+        const VkBool32 LUNARG_override : 1;
+        const VkBool32 LUNARG_parameter_validation : 1;
+        const VkBool32 LUNARG_screenshot : 1;
+        const VkBool32 LUNARG_standard_validation : 1;
+        const VkBool32 LUNARG_starter_layer : 1;
+        const VkBool32 LUNARG_swapchain : 1;
+        const VkBool32 LUNARG_TestingIntercept : 1;
+        const VkBool32 LUNARG_VkGHL32 : 1;
+        const VkBool32 LUNARG_VkGHL64 : 1;
+        const VkBool32 LUNARG_vktrace : 1;
 
-        const bool MESA_device_select;
-        const bool MESA_overlay;
+        const VkBool32 MESA_device_select : 1;
+        const VkBool32 MESA_overlay : 1;
 
-        const bool NV_nomad;
-        const bool NV_nsight;
-        const bool NV_nsight_sys;
-        const bool NV_optimus;
-        const bool NV_vgd;
+        const VkBool32 NV_nomad : 1;
+        const VkBool32 NV_nsight : 1;
+        const VkBool32 NV_nsight_sys : 1;
+        const VkBool32 NV_optimus : 1;
+        const VkBool32 NV_vgd : 1;
 
-        const bool PRIMUS_PrimusVK;
-        const bool RENDERDOC_Capture;
-        const bool reshade;
-        const bool RGA_pipeline_extraction;
-        const bool RTSS;
+        const VkBool32 PRIMUS_PrimusVK : 1;
+        const VkBool32 RENDERDOC_Capture : 1;
+        const VkBool32 reshade : 1;
+        const VkBool32 RGA_pipeline_extraction : 1;
+        const VkBool32 RTSS : 1;
 
-        const bool VALVE_steam_fossilize;
-        const bool VALVE_steam_fossilize_32;
-        const bool VALVE_steam_fossilize_64;
-        const bool VALVE_steam_overlay;
-        const bool VALVE_steam_overlay_32;
-        const bool VALVE_steam_overlay_64;
+        const VkBool32 VALVE_steam_fossilize : 1;
+        const VkBool32 VALVE_steam_fossilize_32 : 1;
+        const VkBool32 VALVE_steam_fossilize_64 : 1;
+        const VkBool32 VALVE_steam_overlay : 1;
+        const VkBool32 VALVE_steam_overlay_32 : 1;
+        const VkBool32 VALVE_steam_overlay_64 : 1;
 
-        const bool VKBASALT_post_processing;
-        const bool VKBASALT_PostProcess32;
-        const bool VKBASALT_PostProcess64;
+        const VkBool32 VKBASALT_post_processing : 1;
+        const VkBool32 VKBASALT_PostProcess32 : 1;
+        const VkBool32 VKBASALT_PostProcess64 : 1;
 
-        const bool vkpipeline_db;
+        const VkBool32 vkpipeline_db : 1;
 
-        const bool XGCV4_64;
-        const bool XSPLIT_64;
+        const VkBool32 XGCV4_64 : 1;
+        const VkBool32 XSPLIT_64 : 1;
 
         InstanceLayers();
     };
