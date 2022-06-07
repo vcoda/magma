@@ -26,6 +26,7 @@ namespace magma
     struct PhysicalDeviceExtensionFeatures
     {   // AMD
         VkBool32 deviceCoherentMemory : 1;
+
         // EXT
         VkBool32 advancedBlendCoherentOperations : 1;
         VkBool32 depthClipControl : 1;
@@ -41,6 +42,7 @@ namespace magma
         VkBool32 shaderDemoteToHelperInvocation : 1;
         VkBool32 texelBufferAlignment : 1;
         VkBool32 ycbcrImageArrays : 1;
+
         // KHR
         VkBool32 imagelessFramebuffer : 1;
         VkBool32 pipelineExecutableInfo : 1;
@@ -51,6 +53,7 @@ namespace magma
         VkBool32 shaderTerminateInvocation : 1;
         VkBool32 timelineSemaphore : 1;
         VkBool32 uniformBufferStandardLayout : 1;
+
         // NV
         VkBool32 cornerSampledImage : 1;
         VkBool32 coverageReductionMode : 1;
