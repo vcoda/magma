@@ -20,6 +20,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* A list of suported physical device features that is obtained through
+       VK_KHR_get_physical_device_properties2 extension. */
+
     struct PhysicalDeviceExtensionFeatures
     {   // AMD
         VkBool32 deviceCoherentMemory : 1;
