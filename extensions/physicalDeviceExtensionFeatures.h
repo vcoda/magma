@@ -22,41 +22,41 @@ namespace magma
 {
     struct PhysicalDeviceExtensionFeatures
     {   // AMD
-        VkBool32 deviceCoherentMemory = 0;
+        VkBool32 deviceCoherentMemory : 1;
         // EXT
-        VkBool32 advancedBlendCoherentOperations = 0;
-        VkBool32 depthClipControl = 0;
-        VkBool32 depthClipEnable = 0;
-        VkBool32 extendedDynamicState = 0;
-        VkBool32 hostQueryReset = 0;
-        VkBool32 robustImageAccess = 0;
-        VkBool32 indexTypeUint8 = 0;
-        VkBool32 memoryPriority = 0;
-        VkBool32 pipelineCreationCacheControl = 0;
-        VkBool32 privateData = 0;
-        VkBool32 scalarBlockLayout = 0;
-        VkBool32 shaderDemoteToHelperInvocation = 0;
-        VkBool32 texelBufferAlignment = 0;
-        VkBool32 ycbcrImageArrays = 0;
+        VkBool32 advancedBlendCoherentOperations : 1;
+        VkBool32 depthClipControl : 1;
+        VkBool32 depthClipEnable : 1;
+        VkBool32 extendedDynamicState : 1;
+        VkBool32 hostQueryReset : 1;
+        VkBool32 robustImageAccess : 1;
+        VkBool32 indexTypeUint8 : 1;
+        VkBool32 memoryPriority : 1;
+        VkBool32 pipelineCreationCacheControl : 1;
+        VkBool32 privateData : 1;
+        VkBool32 scalarBlockLayout : 1;
+        VkBool32 shaderDemoteToHelperInvocation : 1;
+        VkBool32 texelBufferAlignment : 1;
+        VkBool32 ycbcrImageArrays : 1;
         // KHR
-        VkBool32 imagelessFramebuffer = 0;
-        VkBool32 pipelineExecutableInfo = 0;
-        VkBool32 samplerYcbcrConversion = 0;
-        VkBool32 separateDepthStencilLayouts = 0;
-        VkBool32 shaderDrawParameters = 0;
-        VkBool32 shaderSubgroupExtendedTypes = 0;
-        VkBool32 shaderTerminateInvocation = 0;
-        VkBool32 timelineSemaphore = 0;
-        VkBool32 uniformBufferStandardLayout = 0;
+        VkBool32 imagelessFramebuffer : 1;
+        VkBool32 pipelineExecutableInfo : 1;
+        VkBool32 samplerYcbcrConversion : 1;
+        VkBool32 separateDepthStencilLayouts : 1;
+        VkBool32 shaderDrawParameters : 1;
+        VkBool32 shaderSubgroupExtendedTypes : 1;
+        VkBool32 shaderTerminateInvocation : 1;
+        VkBool32 timelineSemaphore : 1;
+        VkBool32 uniformBufferStandardLayout : 1;
         // NV
-        VkBool32 cornerSampledImage = 0;
-        VkBool32 coverageReductionMode = 0;
-        VkBool32 dedicatedAllocationImageAliasing = 0;
-        VkBool32 diagnosticsConfig = 0;
-        VkBool32 fragmentShaderBarycentric = 0;
-        VkBool32 representativeFragmentTest = 0;
-        VkBool32 exclusiveScissor = 0;
-        VkBool32 imageFootprint = 0;
-        VkBool32 shaderSMBuiltins = 0;
+        VkBool32 cornerSampledImage : 1;
+        VkBool32 coverageReductionMode : 1;
+        VkBool32 dedicatedAllocationImageAliasing : 1;
+        VkBool32 diagnosticsConfig : 1;
+        VkBool32 fragmentShaderBarycentric : 1;
+        VkBool32 representativeFragmentTest : 1;
+        VkBool32 exclusiveScissor : 1;
+        VkBool32 imageFootprint : 1;
+        VkBool32 shaderSMBuiltins : 1;
     };
 } // namespace magma
