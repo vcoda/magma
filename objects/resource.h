@@ -62,7 +62,7 @@ namespace magma
         void setPayload(const Type& data);
         template<typename Type>
         Type& getPayload();
-        bool hasPayload() const noexcept { return payloadSize > 0; }
+        bool hasPayload() const noexcept { return payload && payload->data; }
         virtual void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0) = 0;
 #ifdef VK_KHR_device_group
@@ -85,8 +85,11 @@ namespace magma
     private:
         // User-defined data associated with the resource.
         // It's an analogue of ID3D11DeviceChild::SetPrivateData().
-        void *payload;
-        size_t payloadSize;
+        struct Payload
+        {
+            void *data = nullptr;
+            size_t size = 0;
+        } *payload;
     };
 
     /* Non-dispatchable resource object (buffer, image, acceleration structure etc.)
