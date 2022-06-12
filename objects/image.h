@@ -75,12 +75,11 @@ namespace magma
         virtual void onDefragment() override;
         void copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer,
             uint32_t level,
-            std::shared_ptr<const Buffer> buffer,
+            std::shared_ptr<const Buffer> srcBuffer,
             const CopyLayout& bufferLayout,
             const VkOffset3D& imageOffset,
             VkImageLayout dstLayout,
-            VkPipelineStageFlags barrierDstStageMask = VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
-            bool flush = true);
+            VkPipelineStageFlags barrierDstStageMask = VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT);
 
     protected:
         explicit Image(std::shared_ptr<Device> device,
@@ -106,8 +105,7 @@ namespace magma
             const CopyLayout& bufferLayout) const noexcept;
         void copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<const Buffer> buffer,
-            const std::vector<VkBufferImageCopy>& copyRegions,
-            bool flush = true);
+            const std::vector<VkBufferImageCopy>& copyRegions);
         static VkSampleCountFlagBits getSampleCountBit(uint32_t samples);
 
     protected:

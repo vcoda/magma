@@ -4,6 +4,11 @@ inline bool CommandBuffer::reset(bool releaseResources) noexcept
 {
     const VkResult result = vkResetCommandBuffer(handle, releaseResources ? VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT : 0);
     MAGMA_ASSERT(VK_SUCCESS == result);
+    recordingState = VK_FALSE;
+    executableState = VK_FALSE;
+    withinRenderPass = VK_FALSE;
+    withinConditionalRendering = VK_FALSE;
+    withinTransformFeedback = VK_FALSE;
     return (VK_SUCCESS == result);
 }
 
@@ -400,14 +405,15 @@ inline void CommandBuffer::nextSubpass(VkSubpassContents contents /* VK_SUBPASS_
 
 inline void CommandBuffer::endRenderPass() noexcept
 {
-#ifdef MAGMA_DEBUG_LABEL
-    if (beginRenderPassMarked)
+    MAGMA_ASSERT(withinRenderPass);
+    if (withinRenderPass)
     {
+#ifdef MAGMA_DEBUG_LABEL
         endDebugLabel();
-        beginRenderPassMarked = VK_FALSE;
-    }
 #endif // MAGMA_DEBUG_LABEL
-    vkCmdEndRenderPass(handle);
+        vkCmdEndRenderPass(handle);
+        withinRenderPass = VK_FALSE;
+    }
 }
 
 #ifdef VK_KHR_device_group
@@ -432,14 +438,21 @@ inline void CommandBuffer::beginTransformFeedback() noexcept
 {
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBeginTransformFeedbackEXT);
     if (vkCmdBeginTransformFeedbackEXT)
+    {
         vkCmdBeginTransformFeedbackEXT(handle, 0, 0, nullptr, nullptr);
+        withinTransformFeedback = VK_TRUE;
+    }
 }
 
 inline void CommandBuffer::endTransformFeedback() noexcept
 {
+    MAGMA_ASSERT(withinTransformFeedback);
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdEndTransformFeedbackEXT);
     if (vkCmdEndTransformFeedbackEXT)
+    {
         vkCmdEndTransformFeedbackEXT(handle, 0, 0, nullptr, nullptr);
+        withinTransformFeedback = VK_FALSE;
+    }
 }
 #endif // VK_EXT_transform_feedback
 

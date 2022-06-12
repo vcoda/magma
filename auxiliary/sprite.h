@@ -32,7 +32,7 @@ namespace magma
             explicit Sprite(std::shared_ptr<CommandBuffer> cmdBuffer,
                 VkFormat format,
                 const VkExtent2D& extent,
-                std::shared_ptr<const SrcTransferBuffer> buffer,
+                std::shared_ptr<const SrcTransferBuffer> srcBuffer,
                 VkDeviceSize offset,
                 std::shared_ptr<Allocator> allocator = nullptr,
                 const Sharing& sharing = Sharing());

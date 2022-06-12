@@ -164,30 +164,16 @@ void Buffer::copyHost(const void *data, CopyMemoryFunction copyFn) noexcept
 void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const Buffer> srcBuffer,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
-    VkDeviceSize dstOffset /* 0 */,
-    bool flush /* true */)
+    VkDeviceSize dstOffset /* 0 */)
 {
-    cmdBuffer->begin();
-    {
-        VkBufferCopy region;
-        region.srcOffset = srcOffset;
-        region.dstOffset = dstOffset;
-        if (!size)
-            size = srcBuffer->getSize() - srcOffset;
-        region.size = std::min(this->getSize(), size);
-        // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
-        const auto weakThis = std::shared_ptr<Buffer>(this, [](Buffer *) {});
-        cmdBuffer->copyBuffer(srcBuffer, weakThis, region);
-    }
-    cmdBuffer->end();
-    if (flush)
-    {
-        std::shared_ptr<Queue> queue(device->getQueue(VK_QUEUE_TRANSFER_BIT, 0));
-        std::shared_ptr<Fence> fence(cmdBuffer->getFence());
-        if (!queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence))
-            MAGMA_THROW("failed to submit command buffer to transfer queue");
-        if (!fence->wait())
-            MAGMA_THROW("failed to wait fence");
-    }
+    VkBufferCopy region;
+    region.srcOffset = srcOffset;
+    region.dstOffset = dstOffset;
+    if (!size)
+        size = srcBuffer->getSize() - srcOffset;
+    region.size = std::min(this->getSize(), size);
+    // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
+    const auto weakThis = std::shared_ptr<Buffer>(this, [](Buffer *) {});
+    cmdBuffer->copyBuffer(srcBuffer, weakThis, region);
 }
 } // namespace magma

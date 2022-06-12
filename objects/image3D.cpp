@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "image3D.h"
 #include "srcTransferBuffer.h"
-#include "commandBuffer.h"
 
 namespace magma
 {
@@ -38,12 +37,11 @@ Image3D::Image3D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
 {}
 
 Image3D::Image3D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent3D& extent,
-    std::shared_ptr<const SrcTransferBuffer> buffer,
+    std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Sharing& sharing /* default */,
-    bool flush /* true */):
-    Image(std::move(cmdBuffer->getDevice()), VK_IMAGE_TYPE_3D, format, extent,
+    const Sharing& sharing /* default */):
+    Image(srcBuffer->getDevice(), VK_IMAGE_TYPE_3D, format, extent,
         1, // mipLevels,
         1, // arrayLayers
         1, // samples
@@ -63,6 +61,6 @@ Image3D::Image3D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
     region.imageSubresource.layerCount = 1;
     region.imageOffset = {0, 0, 0};
     region.imageExtent = extent;
-    copyTransfer(std::move(cmdBuffer), std::move(buffer), {region}, flush);
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), {region});
 }
 } // namespace magma

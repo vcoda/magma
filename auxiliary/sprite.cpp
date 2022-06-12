@@ -29,7 +29,7 @@ namespace magma
 namespace aux
 {
 Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
-    std::shared_ptr<const SrcTransferBuffer> buffer, VkDeviceSize offset,
+    std::shared_ptr<const SrcTransferBuffer> srcBuffer, VkDeviceSize offset,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */):
     Image(cmdBuffer->getDevice(), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
@@ -57,9 +57,8 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
     }
     const CopyLayout bufferLayout = {offset, 0, 0};
     constexpr VkOffset3D imageOffset{0, 0, 0};
-    copyMipLevel(std::move(cmdBuffer), 0, std::move(buffer), bufferLayout, imageOffset,
-        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT,
-        false); // User is responsible for submitting command buffer to the graphics queue!
+    copyMipLevel(std::move(cmdBuffer), 0, std::move(srcBuffer), bufferLayout, imageOffset,
+        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT);
 }
 
 Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
@@ -90,19 +89,23 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
         bottomRight.x *= footprint.first;
         bottomRight.y *= footprint.second;
     }
-    auto buffer = std::make_shared<SrcTransferBuffer>(device, size, nullptr, std::move(allocator), 0, sharing);
-    helpers::mapScoped<uint8_t>(buffer,
+    // Copy bitmap data to host visible buffer
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, nullptr, std::move(allocator), 0, sharing);
+    helpers::mapScoped<uint8_t>(srcBuffer,
         [size, data, &copyFn](uint8_t *buffer)
-        {   // Copy bitmap data to host visible buffer
+        {
             if (!copyFn)
                 copyFn = core::copyMemory;
             copyFn(buffer, data, size);
         });
     constexpr CopyLayout bufferLayout = {0, 0, 0};
     constexpr VkOffset3D imageOffset{0, 0, 0};
-    copyMipLevel(std::move(cmdBuffer), 0, std::move(buffer), bufferLayout, imageOffset,
-        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT,
-        true); // Submit command buffer to the graphics queue as transfer buffer is going to be destroyed
+    // Copy buffer to image
+    cmdBuffer->begin();
+    copyMipLevel(cmdBuffer, 0, srcBuffer, bufferLayout, imageOffset,
+        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT);
+    cmdBuffer->end();
+    commitAndWait(std::move(cmdBuffer));
 }
 
 void Sprite::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Image> dstImage,

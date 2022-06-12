@@ -28,15 +28,18 @@ StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Buffer(std::move(cmdBuffer->getDevice()), size,
+    Buffer(cmdBuffer->getDevice(), size,
         VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         flags, sharing, allocator)
 {
     MAGMA_ASSERT(data);
-    auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data,
         std::move(allocator), 0, sharing, std::move(copyFn));
-    copyTransfer(std::move(cmdBuffer), std::move(buffer), size);
+    cmdBuffer->begin();
+    copyTransfer(cmdBuffer, srcBuffer, size);
+    cmdBuffer->end();
+    commitAndWait(std::move(cmdBuffer));
 }
 
 StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
@@ -45,7 +48,7 @@ StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
     VkDeviceSize srcOffset /* 0 */,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */):
-    Buffer(cmdBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(),
+    Buffer(srcBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(),
         VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         flags, sharing, std::move(allocator))

@@ -40,12 +40,11 @@ Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width
 {}
 
 Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t width,
-    std::shared_ptr<const SrcTransferBuffer> buffer, const MipmapLayout& mipOffsets,
+    std::shared_ptr<const SrcTransferBuffer> srcBuffer, const MipmapLayout& mipOffsets,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Sharing& sharing /* default */,
-    bool flush /* true */):
-    Image(std::move(cmdBuffer->getDevice()), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
+    const Sharing& sharing /* default */):
+    Image(srcBuffer->getDevice(), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
         MAGMA_COUNT(mipOffsets), // mipLevels
         1, // arrayLayers
         1, // samples
@@ -56,7 +55,7 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint
         std::move(allocator))
 {
     const auto copyRegions = setupCopyRegions(mipOffsets, bufferLayout);
-    copyTransfer(std::move(cmdBuffer), std::move(buffer), copyRegions, flush);
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), copyRegions);
 }
 
 Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t width,
@@ -64,7 +63,7 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Image(std::move(cmdBuffer->getDevice()), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
+    Image(cmdBuffer->getDevice(), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
         MAGMA_COUNT(mipSizes), // mipLevels
         1, // arrayLayers
         1, // samples
@@ -78,18 +77,23 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint
     const auto mipOffsets = setupMipOffsets(mipSizes, bufferSize);
     const auto copyRegions = setupCopyRegions(mipOffsets, {0, 0, 0});
     // Copy mip levels to host visible buffer
-    auto buffer = std::make_shared<SrcTransferBuffer>(this->device, bufferSize, nullptr, std::move(allocator), 0, sharing);
-    helpers::mapScoped<uint8_t>(buffer, [&](uint8_t *data)
-    {
-        if (!copyFn)
-            copyFn = core::copyMemory;
-        for (uint32_t level = 0; level < mipLevels; ++level)
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, bufferSize, nullptr, std::move(allocator), 0, sharing);
+    helpers::mapScoped<uint8_t>(srcBuffer,
+        [&](uint8_t *data)
         {
-            const VkDeviceSize bufferOffset = copyRegions[level].bufferOffset;
-            void *mipLevel = data + bufferOffset;
-            copyFn(mipLevel, mipData[level], static_cast<std::size_t>(mipSizes[level]));
-        }
-    });
-    copyTransfer(std::move(cmdBuffer), std::move(buffer), copyRegions, true);
+            if (!copyFn)
+                copyFn = core::copyMemory;
+            for (uint32_t level = 0; level < mipLevels; ++level)
+            {
+                const VkDeviceSize bufferOffset = copyRegions[level].bufferOffset;
+                void *mipLevel = data + bufferOffset;
+                copyFn(mipLevel, mipData[level], static_cast<std::size_t>(mipSizes[level]));
+            }
+        });
+    // Copy buffer to image
+    cmdBuffer->begin();
+    copyTransfer(cmdBuffer, srcBuffer, copyRegions);
+    cmdBuffer->end();
+    commitAndWait(std::move(cmdBuffer));
 }
 } // namespace magma

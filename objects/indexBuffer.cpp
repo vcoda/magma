@@ -65,9 +65,12 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize 
         flags, sharing, allocator)
 {
     MAGMA_ASSERT(data);
-    auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data,
         std::move(allocator), 0, sharing, std::move(copyFn));
-    copyTransfer(std::move(cmdBuffer), std::move(buffer), size);
+    cmdBuffer->begin();
+    copyTransfer(cmdBuffer, srcBuffer, size);
+    cmdBuffer->end();
+    commitAndWait(std::move(cmdBuffer));
 }
 
 IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer, VkIndexType indexType,
@@ -76,7 +79,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
     VkDeviceSize srcOffset /* 0 */,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */):
-    BaseIndexBuffer(cmdBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(), indexType,
+    BaseIndexBuffer(srcBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(), indexType,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         flags, sharing, std::move(allocator))
@@ -116,9 +119,12 @@ AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_p
         flags, sharing, allocator)
 {
     MAGMA_ASSERT(data);
-    auto buffer = std::make_shared<SrcTransferBuffer>(device, size, data,
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data,
         std::move(allocator), 0, sharing, std::move(copyFn));
-    copyTransfer(std::move(cmdBuffer), std::move(buffer), size);
+    cmdBuffer->begin();
+    copyTransfer(cmdBuffer, srcBuffer, size);
+    cmdBuffer->end();
+    commitAndWait(std::move(cmdBuffer));
 }
 
 AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer, VkIndexType indexType,
@@ -127,7 +133,7 @@ AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_p
     VkDeviceSize srcOffset /* 0 */,
     VkBufferCreateFlags flags /* 0 */,
     const Sharing& sharing /* default */):
-    BaseIndexBuffer(cmdBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(), indexType,
+    BaseIndexBuffer(srcBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(), indexType,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
 #ifdef VK_KHR_acceleration_structure
         (device->extensionEnabled(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME) ?

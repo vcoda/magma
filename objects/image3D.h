@@ -33,10 +33,9 @@ namespace magma
         explicit Image3D(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
             const VkExtent3D& extent,
-            std::shared_ptr<const SrcTransferBuffer> buffer,
+            std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             const CopyLayout& bufferLayout = {0, 0, 0},
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Sharing& sharing = Sharing(),
-            bool flush = true);
+            const Sharing& sharing = Sharing());
     };
 } // namespace magma

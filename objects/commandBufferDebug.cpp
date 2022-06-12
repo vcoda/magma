@@ -143,7 +143,6 @@ bool CommandBuffer::begin(const char *blockName, uint32_t blockColor,
     const bool beginResult = begin(flags);
 #ifdef MAGMA_DEBUG_LABEL
     beginDebugLabel(blockName, blockColor);
-    beginMarked = VK_TRUE;
 #else
     MAGMA_UNUSED(blockName);
     MAGMA_UNUSED(blockColor);
@@ -155,15 +154,14 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     const char *blockName, uint32_t blockColor,
     VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
-    const bool result = beginInherited(renderPass, subpass, framebuffer, flags);
+    const bool beginResult = beginInherited(renderPass, subpass, framebuffer, flags);
 #ifdef MAGMA_DEBUG_LABEL
     beginDebugLabel(blockName, blockColor);
-    beginMarked = VK_TRUE;
 #else
     MAGMA_UNUSED(blockName);
     MAGMA_UNUSED(blockColor);
 #endif // MAGMA_DEBUG_LABEL
-    return result;
+    return beginResult;
 }
 
 void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
@@ -174,7 +172,6 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     beginRenderPass(renderPass, framebuffer, clearValues, renderArea, contents);
 #ifdef MAGMA_DEBUG_LABEL
     beginDebugLabel(renderPassName, renderPassColor);
-    beginRenderPassMarked = VK_TRUE;
 #else
     MAGMA_UNUSED(renderPassName);
     MAGMA_UNUSED(renderPassColor);
@@ -191,7 +188,6 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     beginRenderPass(renderPass, framebuffer, attachments, clearValues, renderArea, contents);
 #ifdef MAGMA_DEBUG_LABEL
     beginDebugLabel(renderPassName, renderPassColor);
-    beginRenderPassMarked = VK_TRUE;
 #else
     MAGMA_UNUSED(renderPassName);
     MAGMA_UNUSED(renderPassColor);
@@ -206,7 +202,6 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask, const char *blockName,
     const bool result = beginDeviceGroup(deviceMask, flags);
 #ifdef MAGMA_DEBUG_LABEL
     beginDebugLabel(blockName, blockColor);
-    beginMarked = VK_TRUE;
 #else
     MAGMA_UNUSED(blockName);
     MAGMA_UNUSED(blockColor);
@@ -223,7 +218,6 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     beginDeviceGroupRenderPass(deviceMask, renderPass, framebuffer, deviceRenderAreas, clearValues, contents);
 #ifdef MAGMA_DEBUG_LABEL
     beginDebugLabel(renderPassName, renderPassColor);
-    beginRenderPassMarked = VK_TRUE;
 #else
     MAGMA_UNUSED(renderPassName);
     MAGMA_UNUSED(renderPassColor);
@@ -240,7 +234,6 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     beginDeviceGroupRenderPass(deviceMask, renderPass, framebuffer, attachments, deviceRenderAreas, clearValues, contents);
 #ifdef MAGMA_DEBUG_LABEL
     beginDebugLabel(renderPassName, renderPassColor);
-    beginRenderPassMarked = VK_TRUE;
 #else
     MAGMA_UNUSED(renderPassName);
     MAGMA_UNUSED(renderPassColor);

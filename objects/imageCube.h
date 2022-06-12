@@ -35,12 +35,11 @@ namespace magma
             VkFormat format,
             uint32_t dimension,
             uint32_t mipLevels,
-            std::shared_ptr<const SrcTransferBuffer> buffer,
+            std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             const MipmapLayout& mipOffsets,
             const CopyLayout& bufferLayout = {0, 0, 0},
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Sharing& sharing = Sharing(),
-            bool flush = true);
+            const Sharing& sharing = Sharing());
         explicit ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
             uint32_t dimension,

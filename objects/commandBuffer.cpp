@@ -34,7 +34,16 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, pool->getDevice(), nullptr),
     level(level),
     pool(std::move(pool)),
-    fence(std::make_shared<Fence>(device))
+    fence(std::make_shared<Fence>(device)),
+    occlusionQueryEnable(VK_FALSE),
+    conditionalRenderingEnable(VK_FALSE),
+    maintenance1(pool->getDevice()->negativeViewportHeightEnabled(true)),
+    negativeViewportHeight(pool->getDevice()->negativeViewportHeightEnabled(false)),
+    recordingState(VK_FALSE),
+    executableState(VK_FALSE),
+    withinRenderPass(VK_FALSE),
+    withinConditionalRendering(VK_FALSE),
+    withinTransformFeedback(VK_FALSE)
 {
     VkCommandBufferAllocateInfo allocInfo;
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -44,19 +53,23 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     allocInfo.commandBufferCount = 1;
     const VkResult result = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &allocInfo, &handle);
     MAGMA_THROW_FAILURE(result, "failed to allocate primary command buffer");
-    maintenance1KHREnable = device->negativeViewportHeightEnabled(true);
-    negativeHeightAMDEnable = device->negativeViewportHeightEnabled(false);
 }
 
 CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle, std::shared_ptr<CommandPool> pool):
     Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, handle, pool->getDevice(), nullptr),
     level(level),
     pool(std::move(pool)),
-    fence(std::make_shared<Fence>(this->device))
-{
-    maintenance1KHREnable = device->negativeViewportHeightEnabled(true);
-    negativeHeightAMDEnable = device->negativeViewportHeightEnabled(false);
-}
+    fence(std::make_shared<Fence>(this->device)),
+    occlusionQueryEnable(VK_FALSE),
+    conditionalRenderingEnable(VK_FALSE),
+    maintenance1(pool->getDevice()->negativeViewportHeightEnabled(true)),
+    negativeViewportHeight(pool->getDevice()->negativeViewportHeightEnabled(false)),
+    recordingState(VK_FALSE),
+    executableState(VK_FALSE),
+    withinRenderPass(VK_FALSE),
+    withinConditionalRendering(VK_FALSE),
+    withinTransformFeedback(VK_FALSE)
+{}
 
 CommandBuffer::~CommandBuffer()
 {
@@ -72,11 +85,9 @@ bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
     beginInfo.flags = flags;
     beginInfo.pInheritanceInfo = nullptr;
     const VkResult result = vkBeginCommandBuffer(handle, &beginInfo);
-    MAGMA_ASSERT(VK_SUCCESS == result);
-#ifdef MAGMA_DEBUG_LABEL
-    beginMarked = VK_FALSE;
-#endif
-    return (VK_SUCCESS == result);
+    recordingState = (VK_SUCCESS == result);
+    MAGMA_ASSERT(recordingState);
+    return (VK_TRUE == recordingState);
 }
 
 bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass, const std::shared_ptr<Framebuffer>& framebuffer,
@@ -107,29 +118,29 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     beginInfo.flags = flags | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT;
     beginInfo.pInheritanceInfo = &inheritanceInfo;
     const VkResult result = vkBeginCommandBuffer(handle, &beginInfo);
-    MAGMA_ASSERT(VK_SUCCESS == result);
-#ifdef MAGMA_DEBUG_LABEL
-    beginMarked = VK_FALSE;
-#endif
-    return (VK_SUCCESS == result);
+    recordingState = (VK_SUCCESS == result);
+    MAGMA_ASSERT(recordingState);
+    return (VK_TRUE == recordingState);
 }
 
 void CommandBuffer::end()
 {
-#ifdef MAGMA_DEBUG_LABEL
-    if (beginMarked)
+    MAGMA_ASSERT(recordingState);
+    if (recordingState)
     {
+#ifdef MAGMA_DEBUG_LABEL
         endDebugLabel();
-        beginMarked = VK_FALSE;
-    }
 #endif // MAGMA_DEBUG_LABEL
-    /* Performance - critical commands generally do not have return codes.
-       If a run time error occurs in such commands, the implementation will defer
-       reporting the error until a specified point. For commands that record
-       into command buffers (vkCmd*), run time errors are reported by vkEndCommandBuffer. */
-    const VkResult result = vkEndCommandBuffer(handle);
-    // This is the only place where command buffer may throw an exception.
-    MAGMA_THROW_FAILURE(result, "failed to record command buffer");
+        /* Performance - critical commands generally do not have return codes.
+           If a run time error occurs in such commands, the implementation will defer
+           reporting the error until a specified point. For commands that record
+           into command buffers (vkCmd*), run time errors are reported by vkEndCommandBuffer. */
+        const VkResult result = vkEndCommandBuffer(handle);
+        recordingState = VK_FALSE;
+        // This is the only place where command buffer may throw an exception.
+        MAGMA_THROW_FAILURE(result, "failed to record command buffer");
+        executableState = VK_TRUE;
+    }
 }
 
 // inline void CommandBuffer::reset
@@ -143,14 +154,14 @@ void CommandBuffer::setViewport(float x, float y, float width, float height,
     viewport.y = y;
     if (height < 0)
     {
-        if (maintenance1KHREnable)
+        if (maintenance1)
             viewport.y = -height - y; // Move origin to bottom left
     }
     viewport.width = width;
     viewport.height = height;
     if (height < 0)
     {
-        if (!(maintenance1KHREnable || negativeHeightAMDEnable))
+        if (!(maintenance1 || negativeViewportHeight))
             viewport.height = -height; // Negative viewport height not supported
     }
     viewport.minDepth = minDepth;
@@ -421,9 +432,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
     beginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
     vkCmdBeginRenderPass(handle, &beginInfo, contents);
-#ifdef MAGMA_DEBUG_LABEL
-    beginRenderPassMarked = VK_FALSE;
-#endif
+    withinRenderPass = VK_TRUE;
 }
 
 #ifdef VK_KHR_imageless_framebuffer
@@ -458,9 +467,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
     beginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
     vkCmdBeginRenderPass(handle, &beginInfo, contents);
-#ifdef MAGMA_DEBUG_LABEL
-    beginRenderPassMarked = VK_FALSE;
-#endif
+    withinRenderPass = VK_TRUE;
 }
 #endif // VK_KHR_imageless_framebuffer
 
@@ -485,9 +492,7 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask,
     beginInfo.pInheritanceInfo = nullptr;
     const VkResult result = vkBeginCommandBuffer(handle, &beginInfo);
     MAGMA_ASSERT(VK_SUCCESS == result);
-#ifdef MAGMA_DEBUG
-    beginMarked = VK_FALSE;
-#endif
+    recordingState = VK_TRUE;
     return (VK_SUCCESS == result);
 }
 
@@ -516,9 +521,7 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
     beginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
     vkCmdBeginRenderPass(handle, &beginInfo, contents);
-#ifdef MAGMA_DEBUG
-    beginRenderPassMarked = VK_FALSE;
-#endif
+    withinRenderPass = VK_TRUE;
 }
 
 #ifdef VK_KHR_imageless_framebuffer
@@ -558,9 +561,7 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
     beginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
     vkCmdBeginRenderPass(handle, &beginInfo, contents);
-#ifdef MAGMA_DEBUG
-    beginRenderPassMarked = VK_FALSE;
-#endif
+    withinRenderPass = VK_TRUE;
 }
 #endif // VK_KHR_imageless_framebuffer
 #endif // VK_KHR_device_group
@@ -584,14 +585,19 @@ void CommandBuffer::beginConditionalRendering(const std::shared_ptr<Buffer>& buf
         if (inverted)
             beginInfo.flags |= VK_CONDITIONAL_RENDERING_INVERTED_BIT_EXT;
         vkCmdBeginConditionalRenderingEXT(handle, &beginInfo);
+        withinConditionalRendering = VK_TRUE;
     }
 }
 
 void CommandBuffer::endConditionalRendering() noexcept
 {
+    MAGMA_ASSERT(withinConditionalRendering);
     MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdEndConditionalRenderingEXT);
     if (vkCmdEndConditionalRenderingEXT)
+    {
         vkCmdEndConditionalRenderingEXT(handle);
+        withinConditionalRendering = VK_FALSE;
+    }
 }
 #endif // VK_EXT_conditional_rendering
 
@@ -612,12 +618,14 @@ void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const st
         for (const auto& buffer : counterBuffers)
             dereferencedCounterBuffers.put(*buffer);
         vkCmdBeginTransformFeedbackEXT(handle, firstCounterBuffer, dereferencedCounterBuffers.size(), dereferencedCounterBuffers, counterBufferOffsets.begin());
+        withinTransformFeedback = VK_TRUE;
     }
 }
 
 void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers,
     const std::initializer_list<VkDeviceSize>& counterBufferOffsets /* empty */) noexcept
 {
+    MAGMA_ASSERT(withinTransformFeedback);
     if (counterBufferOffsets.size() > 0) {
         MAGMA_ASSERT(counterBufferOffsets.size() >= counterBuffers.size());
     }
@@ -628,6 +636,7 @@ void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std:
         for (const auto& buffer : counterBuffers)
             dereferencedCounterBuffers.put(*buffer);
         vkCmdEndTransformFeedbackEXT(handle, firstCounterBuffer, dereferencedCounterBuffers.size(), dereferencedCounterBuffers, counterBufferOffsets.begin());
+        withinTransformFeedback = VK_FALSE;
     }
 }
 #endif // VK_EXT_transform_feedback
@@ -695,12 +704,6 @@ void CommandBuffer::traceRays(const std::shared_ptr<Buffer>& raygenShaderBinding
     }
 }
 #endif // VK_NV_ray_tracing
-
-std::shared_ptr<Fence> CommandBuffer::getFence() const noexcept
-{
-    fence->reset();
-    return fence;
-}
 
 void PrimaryCommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept
 {

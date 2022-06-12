@@ -41,12 +41,11 @@ Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, cons
 {}
 
 Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent, uint32_t arrayLayers,
-    std::shared_ptr<const SrcTransferBuffer> buffer, const MipmapLayout& mipOffsets,
+    std::shared_ptr<const SrcTransferBuffer> srcBuffer, const MipmapLayout& mipOffsets,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Sharing& sharing /* default */,
-    bool flush /* true */):
-    Image(std::move(cmdBuffer->getDevice()), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
+    const Sharing& sharing /* default */):
+    Image(srcBuffer->getDevice(), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         MAGMA_COUNT(mipOffsets) / arrayLayers, // mipLevels
         arrayLayers,
         1, // samples
@@ -58,7 +57,7 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
 {
     MAGMA_ASSERT(MAGMA_COUNT(mipOffsets) % arrayLayers == 0);
     const auto copyRegions = setupCopyRegions(mipOffsets, bufferLayout);
-    copyTransfer(std::move(cmdBuffer), std::move(buffer), copyRegions, flush);
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), copyRegions);
 }
 
 Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
@@ -66,7 +65,7 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Image(std::move(cmdBuffer->getDevice()), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
+    Image(cmdBuffer->getDevice(), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         MAGMA_COUNT(mipSizes), // mipLevels
         MAGMA_COUNT(mipData), // arrayLayers
         1, // samples
@@ -80,21 +79,26 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
     const auto mipOffsets = setupMipOffsets(mipSizes, bufferSize);
     const auto copyRegions = setupCopyRegions(mipOffsets, {0, 0, 0});
     // Copy array layers to host visible buffer
-    auto buffer = std::make_shared<SrcTransferBuffer>(this->device, bufferSize, nullptr, std::move(allocator), 0, sharing);
-    helpers::mapScoped<uint8_t>(buffer, [&](uint8_t *data)
-    {
-        if (!copyFn)
-            copyFn = core::copyMemory;
-        for (uint32_t layer = 0; layer < arrayLayers; ++layer)
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, bufferSize, nullptr, std::move(allocator), 0, sharing);
+    helpers::mapScoped<uint8_t>(srcBuffer,
+        [&](uint8_t *data)
         {
-            for (uint32_t level = 0; level < mipLevels; ++level)
+            if (!copyFn)
+                copyFn = core::copyMemory;
+            for (uint32_t layer = 0; layer < arrayLayers; ++layer)
             {
-                const VkDeviceSize bufferOffset = copyRegions[layer * mipLevels + level].bufferOffset;
-                void *mipLevel = data + bufferOffset;
-                copyFn(mipLevel, mipData[layer][level], static_cast<std::size_t>(mipSizes[level]));
+                for (uint32_t level = 0; level < mipLevels; ++level)
+                {
+                    const VkDeviceSize bufferOffset = copyRegions[layer * mipLevels + level].bufferOffset;
+                    void *mipLevel = data + bufferOffset;
+                    copyFn(mipLevel, mipData[layer][level], static_cast<std::size_t>(mipSizes[level]));
+                }
             }
-        }
-    });
-    copyTransfer(std::move(cmdBuffer), std::move(buffer), copyRegions, true);
+        });
+    // Copy buffer to image array
+    cmdBuffer->begin();
+    copyTransfer(cmdBuffer, srcBuffer, copyRegions);
+    cmdBuffer->end();
+    commitAndWait(std::move(cmdBuffer));
 }
 } // namespace magma

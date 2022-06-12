@@ -62,8 +62,7 @@ namespace magma
             std::shared_ptr<const Buffer> srcBuffer,
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,
-            VkDeviceSize dstOffset = 0,
-            bool flush = true);
+            VkDeviceSize dstOffset = 0);
 
         const VkBufferCreateFlags flags;
         const VkBufferUsageFlags usage;

@@ -453,11 +453,15 @@ namespace magma
             uint32_t color) noexcept;
 #endif // VK_EXT_debug_utils
 
-        // Non-API utility methods
+        std::shared_ptr<CommandPool> getPool() const noexcept { return pool; }
+        std::shared_ptr<Fence> getFence() const noexcept { return fence; }
         bool primary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_PRIMARY == level; }
         bool secondary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_SECONDARY == level; }
-        std::shared_ptr<CommandPool> getPool() const noexcept { return pool; }
-        std::shared_ptr<Fence> getFence() const noexcept;
+        bool recording() const noexcept { return recordingState; }
+        bool executable() const noexcept { return executableState; }
+        bool insideRenderPass() const noexcept { return withinRenderPass; }
+        bool insideConditionalRendering() const noexcept { return withinConditionalRendering; }
+        bool insideTransformFeedback() const noexcept { return withinTransformFeedback; }
 
         void enableOcclusionQuery(bool enable,
             VkQueryControlFlags queryFlags) noexcept;
@@ -522,16 +526,17 @@ namespace magma
         const VkCommandBufferLevel level;
         std::shared_ptr<CommandPool> pool;
         std::shared_ptr<Fence> fence;
-        VkBool32 occlusionQueryEnable = VK_FALSE;
-        VkBool32 conditionalRenderingEnable = VK_FALSE;
-        VkBool32 maintenance1KHREnable = VK_FALSE;
-        VkBool32 negativeHeightAMDEnable = VK_FALSE;
+        VkBool32 occlusionQueryEnable : 1;
+        VkBool32 conditionalRenderingEnable : 1;
+        VkBool32 maintenance1 : 1;
+        VkBool32 negativeViewportHeight : 1;
+        VkBool32 recordingState : 1;
+        VkBool32 executableState : 1;
+        VkBool32 withinRenderPass : 1;
+        VkBool32 withinConditionalRendering : 1;
+        VkBool32 withinTransformFeedback : 1;
         VkQueryControlFlags queryFlags = 0;
         VkQueryPipelineStatisticFlags pipelineStatistics = 0;
-#ifdef VK_EXT_debug_utils
-        VkBool32 beginMarked = VK_FALSE;
-        VkBool32 beginRenderPassMarked = VK_FALSE;
-#endif
     };
 
     /* Primary command buffer, which can execute secondary command buffers,

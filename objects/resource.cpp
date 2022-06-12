@@ -19,6 +19,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "resource.h"
 #include "physicalDevice.h"
+#include "commandBuffer.h"
+#include "queue.h"
+#include "fence.h"
 
 namespace magma
 {
@@ -37,6 +40,16 @@ Resource::~Resource()
         delete[] payload->data;
         delete payload;
     }
+}
+
+void Resource::commitAndWait(std::shared_ptr<CommandBuffer> cmdBuffer)
+{
+    std::shared_ptr<Device> device = cmdBuffer->getDevice();
+    std::shared_ptr<Queue> graphicsQueue = device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0);
+    std::shared_ptr<Fence> fence = cmdBuffer->getFence();
+    fence->reset();
+    graphicsQueue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence);
+    fence->wait();
 }
 
 Resource::Sharing::Sharing(const std::vector<uint32_t>& queueFamilyIndices) noexcept:

@@ -23,6 +23,7 @@ namespace magma
 {
     class DeviceMemory;
     class PhysicalDevice;
+    class CommandBuffer;
 
     /* Vulkan supports two primary resource types: buffers and images.
        Resources are views of memory with associated formatting and dimensionality.
@@ -75,6 +76,7 @@ namespace magma
     protected:
         explicit Resource(const Sharing& sharing,
             std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator) noexcept;
+        void commitAndWait(std::shared_ptr<CommandBuffer> cmdBuffer);
 
         VkDeviceSize size;
         VkDeviceSize offset;
