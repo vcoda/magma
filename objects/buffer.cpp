@@ -151,8 +151,7 @@ void Buffer::onDefragment()
 
 void Buffer::copyHost(const void *data, CopyMemoryFunction copyFn) noexcept
 {
-    void *buffer = memory->map();
-    if (buffer)
+    if (void *buffer = memory->map())
     {
         if (!copyFn)
             copyFn = core::copyMemory;
