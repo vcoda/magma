@@ -45,6 +45,7 @@ namespace magma
             bool resetCommandBuffer = true,
             uint32_t poolCommandBufferCount = 256);
         ~CommandPool();
+        uint32_t getQueueFamilyIndex() const noexcept { return queueFamilyIndex; }
         bool reset(bool releaseResources) noexcept;
         std::vector<std::shared_ptr<CommandBuffer>> allocateCommandBuffers(uint32_t commandBufferCount,
             bool primaryLevel);
@@ -54,6 +55,7 @@ namespace magma
 #endif
 
     private:
+        const uint32_t queueFamilyIndex;
         std::unique_ptr<memory::LinearPlacementPool> pool;
     };
 } // namespace magma
