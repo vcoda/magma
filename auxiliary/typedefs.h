@@ -32,7 +32,6 @@ namespace magma
         MAGMA_TYPEDEF_SHARED_PTR(FrameGrabber)
         MAGMA_TYPEDEF_SHARED_PTR(GraphicsPipelineCache)
         MAGMA_TYPEDEF_SHARED_PTR(ImmediateRender)
-        MAGMA_TYPEDEF_SHARED_PTR(MipmapGenerator)
         MAGMA_TYPEDEF_SHARED_PTR(MultiAttachmentFramebuffer)
         MAGMA_TYPEDEF_SHARED_PTR(ShaderCompiler)
         MAGMA_TYPEDEF_SHARED_PTR(Sprite)
