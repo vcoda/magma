@@ -663,6 +663,12 @@
     <ClInclude Include="..\..\auxiliary\generateMipmap.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\primaryCommandBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\objects\secondaryCommandBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1024,6 +1030,9 @@
     </ClCompile>
     <ClCompile Include="..\..\auxiliary\generateMipmap.cpp">
       <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\primaryCommandBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

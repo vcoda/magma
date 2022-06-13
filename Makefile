@@ -106,6 +106,7 @@ MAGMA_OBJS= \
 	objects/pipeline.o \
 	objects/pipelineCache.o \
 	objects/pipelineLayout.o \
+	objects/primaryCommandBuffer.o \
 	objects/queryPool.o \
 	objects/queue.o \
 	objects/rayTracingBuffer.o \

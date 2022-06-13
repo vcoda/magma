@@ -20,7 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "executeCommandBuffer.h"
 #include "../objects/device.h"
 #include "../objects/commandPool.h"
-#include "../objects/commandBuffer.h"
+#include "../objects/primaryCommandBuffer.h"
+#include "../objects/secondaryCommandBuffer.h"
 #include "../objects/queue.h"
 #include "../objects/fence.h"
 

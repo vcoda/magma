@@ -18,8 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "commandPool.h"
-#include "commandBuffer.h"
-#include "device.h"
+#include "primaryCommandBuffer.h"
+#include "secondaryCommandBuffer.h"
 #include "../allocator/allocator.h"
 #include "../allocator/linearPlacementPool.h"
 #include "../misc/extProcAddress.h"

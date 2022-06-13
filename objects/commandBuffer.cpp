@@ -712,15 +712,4 @@ void CommandBuffer::traceRays(const std::shared_ptr<Buffer>& raygenShaderBinding
     }
 }
 #endif // VK_NV_ray_tracing
-
-void PrimaryCommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept
-{
-    MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCmdBuffers, cmdBuffers.size());
-    for (const auto& cmdBuffer : cmdBuffers)
-    {
-        MAGMA_ASSERT(cmdBuffer->secondary());
-        dereferencedCmdBuffers.put(*cmdBuffer);
-    }
-    vkCmdExecuteCommands(handle, dereferencedCmdBuffers.size(), dereferencedCmdBuffers);
-}
 } // namespace magma

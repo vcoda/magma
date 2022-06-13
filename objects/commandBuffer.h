@@ -60,11 +60,6 @@ namespace magma
     struct BufferMemoryBarrier;
     class ImageMemoryBarrier;
 
-    namespace memory
-    {
-        class LinearPlacementPool;
-    }
-
     /* Command buffers are objects used to record commands which can be subsequently
        submitted to a device queue for execution. */
 
@@ -544,41 +539,6 @@ namespace magma
         VkBool32 withinTransformFeedback : 1;
         VkQueryControlFlags queryFlags;
         VkQueryPipelineStatisticFlags pipelineStatistics;
-    };
-
-    /* Primary command buffer, which can execute secondary command buffers,
-       and which is submitted to the queue. */
-
-    class PrimaryCommandBuffer : public CommandBuffer
-    {
-        friend CommandPool;
-        friend memory::LinearPlacementPool;
-
-        explicit PrimaryCommandBuffer(VkCommandBuffer handle,
-            std::shared_ptr<CommandPool> cmdPool):
-            CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, handle, std::move(cmdPool)) {}
-
-    public:
-        explicit PrimaryCommandBuffer(std::shared_ptr<CommandPool> cmdPool):
-            CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, std::move(cmdPool)) {}
-        void executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept;
-    };
-
-    /* Secondary command buffer, which can be executed by primary command buffers,
-       and which is not directly submitted to the queue. */
-
-    class SecondaryCommandBuffer : public CommandBuffer
-    {
-        friend CommandPool;
-        friend memory::LinearPlacementPool;
-
-        explicit SecondaryCommandBuffer(VkCommandBuffer handle,
-            std::shared_ptr<CommandPool> cmdPool):
-            CommandBuffer(VK_COMMAND_BUFFER_LEVEL_SECONDARY, handle, std::move(cmdPool)) {}
-
-    public:
-        explicit SecondaryCommandBuffer(std::shared_ptr<CommandPool> cmdPool):
-            CommandBuffer(VK_COMMAND_BUFFER_LEVEL_SECONDARY, std::move(cmdPool)) {}
     };
 } // namespace magma
 
