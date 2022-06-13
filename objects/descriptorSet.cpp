@@ -55,8 +55,9 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     // Prepare list of native bindings
     std::vector<VkDescriptorSetLayoutBinding> bindings;
     for (auto binding : descriptorBindings)
-    {
-        binding->stageFlags = stageFlags;
+    {   // Set global stage flags if they have not been assigned for binding
+        if (!binding->stageFlags)
+            binding->stageFlags = stageFlags;
         bindings.push_back(*binding);
     }
     // Create descriptor set layout
