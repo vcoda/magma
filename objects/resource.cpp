@@ -20,8 +20,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "resource.h"
 #include "physicalDevice.h"
 #include "commandBuffer.h"
+#include "commandPool.h"
 #include "queue.h"
 #include "fence.h"
+#include "../exceptions/exception.h"
 
 namespace magma
 {
@@ -44,11 +46,30 @@ Resource::~Resource()
 
 void Resource::commitAndWait(std::shared_ptr<CommandBuffer> cmdBuffer)
 {
+    std::shared_ptr<CommandPool> cmdPool = cmdBuffer->getPool();
     std::shared_ptr<Device> device = cmdBuffer->getDevice();
-    std::shared_ptr<Queue> graphicsQueue = device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0);
+    std::shared_ptr<Queue> bestQueue;
+    // Find appropriate device queue
+    for (auto queueFlag : {
+        VK_QUEUE_GRAPHICS_BIT,
+        VK_QUEUE_COMPUTE_BIT,
+        VK_QUEUE_TRANSFER_BIT})
+    {
+        try
+        {
+            std::shared_ptr<Queue> queue = device->getQueue(queueFlag, 0);
+            if (queue->getFamilyIndex() == cmdPool->getQueueFamilyIndex())
+            {
+                bestQueue = std::move(queue);
+                break;
+            }
+        } catch (...) {}
+    }
+    if (!bestQueue)
+        MAGMA_THROW("submission queue not found");
     std::shared_ptr<Fence> fence = cmdBuffer->getFence();
     fence->reset();
-    graphicsQueue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence);
+    bestQueue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence);
     fence->wait();
 }
 
