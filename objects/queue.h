@@ -41,19 +41,19 @@ namespace magma
         VkQueueFlagBits getFlags() const noexcept { return flags; }
         uint32_t getFamilyIndex() const noexcept { return familyIndex; }
         uint32_t getIndex() const noexcept { return index; }
-        void submit(const std::vector<std::shared_ptr<const CommandBuffer>>& cmdBuffers,
+        void submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
             const std::vector<VkPipelineStageFlags>& waitStageMasks = {},
             const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores = {},
             const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores = {},
             std::shared_ptr<const Fence> fence = nullptr,
             const void *extension = nullptr);
-        void submit(std::shared_ptr<const CommandBuffer> cmdBuffer,
+        void submit(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkPipelineStageFlags waitStageMask = 0,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
             std::shared_ptr<const Semaphore> signalSemaphore = nullptr,
             std::shared_ptr<const Fence> fence = nullptr);
 #ifdef VK_KHR_device_group
-        void submitDeviceGroup(const std::vector<std::shared_ptr<const CommandBuffer>>& cmdBuffers,
+        void submitDeviceGroup(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
             const std::vector<uint32_t>& cmdBufferDeviceMasks = {},
             const std::vector<VkPipelineStageFlags>& waitStageMasks = {},
             const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores = {},

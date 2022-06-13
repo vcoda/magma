@@ -4,11 +4,13 @@ inline bool CommandBuffer::reset(bool releaseResources) noexcept
 {
     const VkResult result = vkResetCommandBuffer(handle, releaseResources ? VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT : 0);
     MAGMA_ASSERT(VK_SUCCESS == result);
-    recordingState = VK_FALSE;
-    executableState = VK_FALSE;
-    withinRenderPass = VK_FALSE;
-    withinConditionalRendering = VK_FALSE;
-    withinTransformFeedback = VK_FALSE;
+    if (VK_SUCCESS == result)
+    {
+        state = State::Initial;
+        withinRenderPass = VK_FALSE;
+        withinConditionalRendering = VK_FALSE;
+        withinTransformFeedback = VK_FALSE;
+    }
     return (VK_SUCCESS == result);
 }
 
@@ -470,5 +472,11 @@ inline void CommandBuffer::enableConditionalRendering(bool enable) noexcept
 inline void CommandBuffer::queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept
 {
     this->pipelineStatistics = pipelineStatistics;
+}
+
+inline void CommandBuffer::onSubmit() noexcept
+{
+    const bool oneTimeSubmit = (VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT == usageFlags);
+    state = oneTimeSubmit ? State::Invalid : State::Pending;
 }
 } // namespace magma

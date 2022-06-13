@@ -38,7 +38,7 @@ Queue::Queue(VkQueue handle_, std::shared_ptr<Device> device,
     handle = handle_;
 }
 
-void Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& cmdBuffers,
+void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
     const std::vector<VkPipelineStageFlags>& waitStageMasks /* {} */,
     const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores /* {} */,
     const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores /* {} */,
@@ -93,9 +93,13 @@ void Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& cmdB
     if (VK_ERROR_DEVICE_LOST == result)
         throw exception::DeviceLost("queue submission command failed");
     MAGMA_THROW_FAILURE(result, "queue submission command failed");
+    for (auto& cmdBuffer : cmdBuffers)
+    {   // Change state of command buffer
+        cmdBuffer->onSubmit();
+    }
 }
 
-void Queue::submit(std::shared_ptr<const CommandBuffer> cmdBuffer,
+void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
     VkPipelineStageFlags waitStageMask /* 0 */,
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
     std::shared_ptr<const Semaphore> signalSemaphore /* nullptr */,
@@ -115,7 +119,7 @@ void Queue::submit(std::shared_ptr<const CommandBuffer> cmdBuffer,
 }
 
 #ifdef VK_KHR_device_group
-void Queue::submitDeviceGroup(const std::vector<std::shared_ptr<const CommandBuffer>>& cmdBuffers,
+void Queue::submitDeviceGroup(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
     const std::vector<uint32_t>& cmdBufferDeviceMasks /* {} */,
     const std::vector<VkPipelineStageFlags>& waitStageMasks /* {} */,
     const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores /* {} */,

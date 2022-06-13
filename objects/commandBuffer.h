@@ -41,6 +41,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class CommandPool;
+    class Queue;
     class Framebuffer;
 #ifdef VK_KHR_imageless_framebuffer
     class ImagelessFramebuffer;
@@ -70,15 +71,14 @@ namespace magma
     class CommandBuffer : public Dispatchable<VkCommandBuffer>
     {
         friend CommandPool;
-
-    protected:
-        explicit CommandBuffer(VkCommandBufferLevel level,
-            std::shared_ptr<CommandPool> pool);
-        explicit CommandBuffer(VkCommandBufferLevel level,
-            VkCommandBuffer handle,
-            std::shared_ptr<CommandPool> pool);
+        friend Queue;
 
     public:
+        enum class State
+        {
+            Initial, Recording, Executable, Pending, Invalid
+        };
+
         ~CommandBuffer();
         bool begin(VkCommandBufferUsageFlags flags = 0) noexcept;
         bool beginInherited(const std::shared_ptr<RenderPass>& renderPass,
@@ -457,8 +457,8 @@ namespace magma
         std::shared_ptr<Fence> getFence() const noexcept { return fence; }
         bool primary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_PRIMARY == level; }
         bool secondary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_SECONDARY == level; }
-        bool recording() const noexcept { return recordingState; }
-        bool executable() const noexcept { return executableState; }
+        State getState() const noexcept { return state; }
+        VkCommandBufferUsageFlags getUsageFlags() const noexcept { return usageFlags; }
         bool insideRenderPass() const noexcept { return withinRenderPass; }
         bool insideConditionalRendering() const noexcept { return withinConditionalRendering; }
         bool insideTransformFeedback() const noexcept { return withinTransformFeedback; }
@@ -523,20 +523,27 @@ namespace magma
 #endif // VK_KHR_device_group
 
     protected:
-        const VkCommandBufferLevel level;
+        explicit CommandBuffer(VkCommandBufferLevel level,
+            std::shared_ptr<CommandPool> cmdPool);
+        explicit CommandBuffer(VkCommandBufferLevel level,
+            VkCommandBuffer handle,
+            std::shared_ptr<CommandPool> cmdPool);
+        void onSubmit() noexcept;
+
         std::shared_ptr<CommandPool> cmdPool;
         std::shared_ptr<Fence> fence;
+        const VkCommandBufferLevel level;
+        VkCommandBufferUsageFlags usageFlags;
+        State state;
         VkBool32 occlusionQueryEnable : 1;
         VkBool32 conditionalRenderingEnable : 1;
         VkBool32 maintenance1 : 1;
         VkBool32 negativeViewportHeight : 1;
-        VkBool32 recordingState : 1;
-        VkBool32 executableState : 1;
         VkBool32 withinRenderPass : 1;
         VkBool32 withinConditionalRendering : 1;
         VkBool32 withinTransformFeedback : 1;
-        VkQueryControlFlags queryFlags = 0;
-        VkQueryPipelineStatisticFlags pipelineStatistics = 0;
+        VkQueryControlFlags queryFlags;
+        VkQueryPipelineStatisticFlags pipelineStatistics;
     };
 
     /* Primary command buffer, which can execute secondary command buffers,

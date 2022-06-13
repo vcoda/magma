@@ -32,18 +32,20 @@ namespace magma
 {
 CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<CommandPool> cmdPool_):
     Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, cmdPool_->getDevice(), nullptr),
-    level(level),
     cmdPool(std::move(cmdPool_)),
     fence(std::make_shared<Fence>(device)),
+    level(level),
+    usageFlags(0),
+    state(State::Initial),
     occlusionQueryEnable(VK_FALSE),
     conditionalRenderingEnable(VK_FALSE),
     maintenance1(device->negativeViewportHeightEnabled(true)),
     negativeViewportHeight(device->negativeViewportHeightEnabled(false)),
-    recordingState(VK_FALSE),
-    executableState(VK_FALSE),
     withinRenderPass(VK_FALSE),
     withinConditionalRendering(VK_FALSE),
-    withinTransformFeedback(VK_FALSE)
+    withinTransformFeedback(VK_FALSE),
+    queryFlags(0),
+    pipelineStatistics(0)
 {
     VkCommandBufferAllocateInfo allocInfo;
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -57,18 +59,20 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
 
 CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle, std::shared_ptr<CommandPool> cmdPool_):
     Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, handle, cmdPool_->getDevice(), nullptr),
-    level(level),
     cmdPool(std::move(cmdPool_)),
     fence(std::make_shared<Fence>(device)),
+    level(level),
+    usageFlags(0),
+    state(State::Initial),
     occlusionQueryEnable(VK_FALSE),
     conditionalRenderingEnable(VK_FALSE),
     maintenance1(device->negativeViewportHeightEnabled(true)),
     negativeViewportHeight(device->negativeViewportHeightEnabled(false)),
-    recordingState(VK_FALSE),
-    executableState(VK_FALSE),
     withinRenderPass(VK_FALSE),
     withinConditionalRendering(VK_FALSE),
-    withinTransformFeedback(VK_FALSE)
+    withinTransformFeedback(VK_FALSE),
+    queryFlags(0),
+    pipelineStatistics(0)
 {}
 
 CommandBuffer::~CommandBuffer()
@@ -85,9 +89,11 @@ bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
     beginInfo.flags = flags;
     beginInfo.pInheritanceInfo = nullptr;
     const VkResult result = vkBeginCommandBuffer(handle, &beginInfo);
-    recordingState = (VK_SUCCESS == result);
-    MAGMA_ASSERT(recordingState);
-    return (VK_TRUE == recordingState);
+    MAGMA_ASSERT(VK_SUCCESS == result);
+    if (VK_SUCCESS == result)
+        state = State::Recording;
+    usageFlags = flags;
+    return (VK_SUCCESS == result);
 }
 
 bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass, const std::shared_ptr<Framebuffer>& framebuffer,
@@ -118,15 +124,17 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     beginInfo.flags = flags | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT;
     beginInfo.pInheritanceInfo = &inheritanceInfo;
     const VkResult result = vkBeginCommandBuffer(handle, &beginInfo);
-    recordingState = (VK_SUCCESS == result);
-    MAGMA_ASSERT(recordingState);
-    return (VK_TRUE == recordingState);
+    MAGMA_ASSERT(VK_SUCCESS == result);
+    if (VK_SUCCESS == result)
+        state = State::Recording;
+    usageFlags = flags;
+    return (VK_SUCCESS == result);
 }
 
 void CommandBuffer::end()
 {
-    MAGMA_ASSERT(recordingState);
-    if (recordingState)
+    MAGMA_ASSERT(State::Recording == state);
+    if (State::Recording == state)
     {
 #ifdef MAGMA_DEBUG_LABEL
         endDebugLabel();
@@ -136,10 +144,9 @@ void CommandBuffer::end()
            reporting the error until a specified point. For commands that record
            into command buffers (vkCmd*), run time errors are reported by vkEndCommandBuffer. */
         const VkResult result = vkEndCommandBuffer(handle);
-        recordingState = VK_FALSE;
         // This is the only place where command buffer may throw an exception.
         MAGMA_THROW_FAILURE(result, "failed to record command buffer");
-        executableState = VK_TRUE;
+        state = State::Executable;
     }
 }
 
@@ -492,7 +499,8 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask,
     beginInfo.pInheritanceInfo = nullptr;
     const VkResult result = vkBeginCommandBuffer(handle, &beginInfo);
     MAGMA_ASSERT(VK_SUCCESS == result);
-    recordingState = VK_TRUE;
+    if (VK_SUCCESS == result)
+        state = State::Recording;
     return (VK_SUCCESS == result);
 }
 
