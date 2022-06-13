@@ -23,7 +23,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandPool.h"
 #include "queue.h"
 #include "fence.h"
-#include "../exceptions/exception.h"
 
 namespace magma
 {
