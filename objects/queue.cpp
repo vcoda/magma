@@ -28,26 +28,26 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Queue::Queue(VkQueue handle, std::shared_ptr<Device> device,
+Queue::Queue(VkQueue handle_, std::shared_ptr<Device> device,
     VkQueueFlagBits flags, uint32_t familyIndex, uint32_t index):
     Dispatchable(VK_OBJECT_TYPE_QUEUE, std::move(device), nullptr),
     flags(flags),
     familyIndex(familyIndex),
     index(index)
 {
-    this->handle = handle;
+    handle = handle_;
 }
 
-bool Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& cmdBuffers,
+void Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& cmdBuffers,
     const std::vector<VkPipelineStageFlags>& waitStageMasks /* {} */,
     const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores /* {} */,
     const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores /* {} */,
     std::shared_ptr<const Fence> fence /* nullptr */,
-    const void *extension /* nullptr */) noexcept
+    const void *extension /* nullptr */)
 {
     MAGMA_ASSERT(!cmdBuffers.empty());
     if (cmdBuffers.empty())
-        return false;
+        return;
     MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCmdBuffers, cmdBuffers.size());
     MAGMA_STACK_ARRAY(VkSemaphore, dereferencedWaitSemaphores, waitSemaphores.size());
     MAGMA_STACK_ARRAY(VkSemaphore, dereferencedSignalSemaphores, signalSemaphores.size());
@@ -90,19 +90,21 @@ bool Queue::submit(const std::vector<std::shared_ptr<const CommandBuffer>>& cmdB
         submitInfo.pSignalSemaphores = dereferencedSignalSemaphores;
     }
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, MAGMA_OPTIONAL_HANDLE(fence));
-    return (VK_SUCCESS == result);
+    if (VK_ERROR_DEVICE_LOST == result)
+        throw exception::DeviceLost("queue submission command failed");
+    MAGMA_THROW_FAILURE(result, "queue submission command failed");
 }
 
-bool Queue::submit(std::shared_ptr<const CommandBuffer> cmdBuffer,
+void Queue::submit(std::shared_ptr<const CommandBuffer> cmdBuffer,
     VkPipelineStageFlags waitStageMask /* 0 */,
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
     std::shared_ptr<const Semaphore> signalSemaphore /* nullptr */,
-    std::shared_ptr<const Fence> fence /* nullptr */) noexcept
+    std::shared_ptr<const Fence> fence /* nullptr */)
 {
     MAGMA_ASSERT(cmdBuffer);
     MAGMA_ASSERT(cmdBuffer->primary());
-    if (!cmdBuffer)
-        return false;
+    if (!cmdBuffer || !cmdBuffer->primary())
+        return;
     std::vector<std::shared_ptr<const Semaphore>> waitSemaphores;
     if (waitSemaphore)
         waitSemaphores.push_back(waitSemaphore);
@@ -113,14 +115,14 @@ bool Queue::submit(std::shared_ptr<const CommandBuffer> cmdBuffer,
 }
 
 #ifdef VK_KHR_device_group
-bool Queue::submitDeviceGroup(const std::vector<std::shared_ptr<const CommandBuffer>>& cmdBuffers,
+void Queue::submitDeviceGroup(const std::vector<std::shared_ptr<const CommandBuffer>>& cmdBuffers,
     const std::vector<uint32_t>& cmdBufferDeviceMasks /* {} */,
     const std::vector<VkPipelineStageFlags>& waitStageMasks /* {} */,
     const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores /* {} */,
     const std::vector<uint32_t>& waitSemaphoreDeviceIndices /* {} */,
     const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores /* {} */,
     const std::vector<uint32_t>& signalSemaphoreDeviceIndices /* {} */,
-    std::shared_ptr<const Fence> fence /* nullptr */) noexcept
+    std::shared_ptr<const Fence> fence /* nullptr */)
 {
     MAGMA_ASSERT_FOR_EACH(cmdBuffers, cmdBuffer, cmdBuffer->primary());
     VkDeviceGroupSubmitInfo deviceGroupSubmitInfo;
@@ -132,7 +134,7 @@ bool Queue::submitDeviceGroup(const std::vector<std::shared_ptr<const CommandBuf
     deviceGroupSubmitInfo.pCommandBufferDeviceMasks = cmdBufferDeviceMasks.data();
     deviceGroupSubmitInfo.signalSemaphoreCount = MAGMA_COUNT(signalSemaphoreDeviceIndices);
     deviceGroupSubmitInfo.pSignalSemaphoreDeviceIndices = signalSemaphoreDeviceIndices.data();
-    return submit(cmdBuffers, waitStageMasks, waitSemaphores, signalSemaphores, fence, &deviceGroupSubmitInfo);
+    submit(cmdBuffers, waitStageMasks, waitSemaphores, signalSemaphores, std::move(fence), &deviceGroupSubmitInfo);
 }
 #endif // VK_KHR_device_group
 
@@ -204,7 +206,7 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
     case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
         throw exception::FullScreenExclusiveModeLost("queue present failed");
 #endif
-    } // switch
+    }
     MAGMA_THROW_FAILURE(result, "queue present failed");
 }
 } // namespace magma

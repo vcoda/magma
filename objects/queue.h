@@ -41,26 +41,26 @@ namespace magma
         VkQueueFlagBits getFlags() const noexcept { return flags; }
         uint32_t getFamilyIndex() const noexcept { return familyIndex; }
         uint32_t getIndex() const noexcept { return index; }
-        bool submit(const std::vector<std::shared_ptr<const CommandBuffer>>& cmdBuffers,
+        void submit(const std::vector<std::shared_ptr<const CommandBuffer>>& cmdBuffers,
             const std::vector<VkPipelineStageFlags>& waitStageMasks = {},
             const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores = {},
             const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores = {},
             std::shared_ptr<const Fence> fence = nullptr,
-            const void *extension = nullptr) noexcept;
-        bool submit(std::shared_ptr<const CommandBuffer> cmdBuffer,
+            const void *extension = nullptr);
+        void submit(std::shared_ptr<const CommandBuffer> cmdBuffer,
             VkPipelineStageFlags waitStageMask = 0,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
             std::shared_ptr<const Semaphore> signalSemaphore = nullptr,
-            std::shared_ptr<const Fence> fence = nullptr) noexcept;
+            std::shared_ptr<const Fence> fence = nullptr);
 #ifdef VK_KHR_device_group
-        bool submitDeviceGroup(const std::vector<std::shared_ptr<const CommandBuffer>>& cmdBuffers,
+        void submitDeviceGroup(const std::vector<std::shared_ptr<const CommandBuffer>>& cmdBuffers,
             const std::vector<uint32_t>& cmdBufferDeviceMasks = {},
             const std::vector<VkPipelineStageFlags>& waitStageMasks = {},
             const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores = {},
             const std::vector<uint32_t>& waitSemaphoreDeviceIndices = {},
             const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores = {},
             const std::vector<uint32_t>& signalSemaphoreDeviceIndices = {},
-            std::shared_ptr<const Fence> fence = nullptr) noexcept;
+            std::shared_ptr<const Fence> fence = nullptr);
 #endif // VK_KHR_device_group
         bool waitIdle() noexcept;
         void present(std::shared_ptr<const Swapchain> swapchain,
