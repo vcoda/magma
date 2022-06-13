@@ -43,12 +43,8 @@ Resource::~Resource()
     }
 }
 
-void Resource::commitAndWait(std::shared_ptr<CommandBuffer> cmdBuffer)
+std::shared_ptr<Queue> Resource::chooseQueue(std::shared_ptr<Device> device, uint32_t queueFamilyIndex) const noexcept
 {
-    std::shared_ptr<CommandPool> cmdPool = cmdBuffer->getCommandPool();
-    std::shared_ptr<Device> device = cmdBuffer->getDevice();
-    std::shared_ptr<Queue> bestQueue;
-    // Find appropriate device queue
     for (auto queueFlag : {
         VK_QUEUE_GRAPHICS_BIT,
         VK_QUEUE_COMPUTE_BIT,
@@ -57,18 +53,23 @@ void Resource::commitAndWait(std::shared_ptr<CommandBuffer> cmdBuffer)
         try
         {
             std::shared_ptr<Queue> queue = device->getQueue(queueFlag, 0);
-            if (queue->getFamilyIndex() == cmdPool->getQueueFamilyIndex())
-            {
-                bestQueue = std::move(queue);
-                break;
-            }
+            if (queue->getFamilyIndex() == queueFamilyIndex)
+                return queue;
         } catch (...) {}
     }
-    if (!bestQueue)
+    return nullptr;
+}
+
+void Resource::commitAndWait(std::shared_ptr<CommandBuffer> cmdBuffer)
+{
+    std::shared_ptr<CommandPool> cmdPool = cmdBuffer->getCommandPool();
+    std::shared_ptr<Device> device = cmdBuffer->getDevice();
+    std::shared_ptr<Queue> queue = chooseQueue(device, cmdPool->getQueueFamilyIndex());
+    if (!queue)
         MAGMA_THROW("submission queue not found");
     std::shared_ptr<Fence> fence = cmdBuffer->getFence();
     fence->reset();
-    bestQueue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence);
+    queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence);
     fence->wait();
 }
 
