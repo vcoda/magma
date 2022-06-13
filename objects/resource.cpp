@@ -46,7 +46,7 @@ Resource::~Resource()
 
 void Resource::commitAndWait(std::shared_ptr<CommandBuffer> cmdBuffer)
 {
-    std::shared_ptr<CommandPool> cmdPool = cmdBuffer->getPool();
+    std::shared_ptr<CommandPool> cmdPool = cmdBuffer->getCommandPool();
     std::shared_ptr<Device> device = cmdBuffer->getDevice();
     std::shared_ptr<Queue> bestQueue;
     // Find appropriate device queue

@@ -453,7 +453,7 @@ namespace magma
             uint32_t color) noexcept;
 #endif // VK_EXT_debug_utils
 
-        std::shared_ptr<CommandPool> getPool() const noexcept { return pool; }
+        std::shared_ptr<CommandPool> getCommandPool() const noexcept { return cmdPool; }
         std::shared_ptr<Fence> getFence() const noexcept { return fence; }
         bool primary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_PRIMARY == level; }
         bool secondary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_SECONDARY == level; }
@@ -524,7 +524,7 @@ namespace magma
 
     protected:
         const VkCommandBufferLevel level;
-        std::shared_ptr<CommandPool> pool;
+        std::shared_ptr<CommandPool> cmdPool;
         std::shared_ptr<Fence> fence;
         VkBool32 occlusionQueryEnable : 1;
         VkBool32 conditionalRenderingEnable : 1;
@@ -548,12 +548,12 @@ namespace magma
         friend memory::LinearPlacementPool;
 
         explicit PrimaryCommandBuffer(VkCommandBuffer handle,
-            std::shared_ptr<CommandPool> pool):
-            CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, handle, std::move(pool)) {}
+            std::shared_ptr<CommandPool> cmdPool):
+            CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, handle, std::move(cmdPool)) {}
 
     public:
-        explicit PrimaryCommandBuffer(std::shared_ptr<CommandPool> pool):
-            CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, std::move(pool)) {}
+        explicit PrimaryCommandBuffer(std::shared_ptr<CommandPool> cmdPool):
+            CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, std::move(cmdPool)) {}
         void executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept;
     };
 
@@ -566,12 +566,12 @@ namespace magma
         friend memory::LinearPlacementPool;
 
         explicit SecondaryCommandBuffer(VkCommandBuffer handle,
-            std::shared_ptr<CommandPool> pool):
-            CommandBuffer(VK_COMMAND_BUFFER_LEVEL_SECONDARY, handle, std::move(pool)) {}
+            std::shared_ptr<CommandPool> cmdPool):
+            CommandBuffer(VK_COMMAND_BUFFER_LEVEL_SECONDARY, handle, std::move(cmdPool)) {}
 
     public:
-        explicit SecondaryCommandBuffer(std::shared_ptr<CommandPool> pool):
-            CommandBuffer(VK_COMMAND_BUFFER_LEVEL_SECONDARY, std::move(pool)) {}
+        explicit SecondaryCommandBuffer(std::shared_ptr<CommandPool> cmdPool):
+            CommandBuffer(VK_COMMAND_BUFFER_LEVEL_SECONDARY, std::move(cmdPool)) {}
     };
 } // namespace magma
 

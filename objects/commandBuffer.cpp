@@ -30,10 +30,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<CommandPool> pool):
-    Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, pool->getDevice(), nullptr),
+CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<CommandPool> cmdPool_):
+    Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, cmdPool_->getDevice(), nullptr),
     level(level),
-    pool(std::move(pool)),
+    cmdPool(std::move(cmdPool_)),
     fence(std::make_shared<Fence>(device)),
     occlusionQueryEnable(VK_FALSE),
     conditionalRenderingEnable(VK_FALSE),
@@ -48,17 +48,17 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     VkCommandBufferAllocateInfo allocInfo;
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     allocInfo.pNext = nullptr;
-    allocInfo.commandPool = MAGMA_HANDLE(pool);
+    allocInfo.commandPool = MAGMA_HANDLE(cmdPool);
     allocInfo.level = level;
     allocInfo.commandBufferCount = 1;
     const VkResult result = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &allocInfo, &handle);
     MAGMA_THROW_FAILURE(result, "failed to allocate primary command buffer");
 }
 
-CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle, std::shared_ptr<CommandPool> pool):
-    Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, handle, pool->getDevice(), nullptr),
+CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle, std::shared_ptr<CommandPool> cmdPool_):
+    Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, handle, cmdPool_->getDevice(), nullptr),
     level(level),
-    pool(std::move(pool)),
+    cmdPool(std::move(cmdPool_)),
     fence(std::make_shared<Fence>(device)),
     occlusionQueryEnable(VK_FALSE),
     conditionalRenderingEnable(VK_FALSE),
@@ -72,9 +72,9 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle,
 {}
 
 CommandBuffer::~CommandBuffer()
-{
-    if (handle) // Release if not freed through command pool
-        vkFreeCommandBuffers(MAGMA_HANDLE(device), MAGMA_HANDLE(pool), 1, &handle);
+{   // Release if not freed through command pool
+    if (handle)
+        vkFreeCommandBuffers(MAGMA_HANDLE(device), MAGMA_HANDLE(cmdPool), 1, &handle);
 }
 
 bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
