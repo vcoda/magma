@@ -94,8 +94,6 @@ namespace magma
     protected:
         explicit Resource(const Sharing& sharing,
             std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator) noexcept;
-        std::shared_ptr<Queue> chooseQueue(std::shared_ptr<Device> device,
-            uint32_t queueFamilyIndex) const noexcept;
         void commitAndWait(std::shared_ptr<CommandBuffer> cmdBuffer);
 
         VkDeviceSize size;
