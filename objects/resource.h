@@ -53,19 +53,35 @@ namespace magma
             std::vector<uint32_t> queueFamilyIndices;
         };
 
+        /* User-defined data associated with the resource.
+           It's an analogue of ID3D11DeviceChild::SetPrivateData(). */
+
+        class Payload : public core::NonCopyable
+        {
+        public:
+            Payload() noexcept;
+            ~Payload();
+            template<typename Type>
+            void setData(const Type& data);
+            template<typename Type>
+            Type& getData();
+            size_t getDataSize() const noexcept { return size; }
+            void freeData() noexcept;
+            bool hasData() const noexcept { return data != nullptr; }
+
+        private:
+            void *data;
+            size_t size;
+        };
+
     public:
-        ~Resource();
         VkDeviceSize getSize() const noexcept { return size; }
         VkDeviceSize getOffset() const noexcept { return offset; }
         const Sharing& getSharing() const noexcept { return sharing; }
         std::shared_ptr<DeviceMemory> getMemory() noexcept { return memory; }
         std::shared_ptr<const DeviceMemory> getMemory() const noexcept { return memory; }
         std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return deviceAllocator; }
-        template<typename Type>
-        void setPayload(const Type& data);
-        template<typename Type>
-        Type& getPayload();
-        bool hasPayload() const noexcept { return payload && payload->data; }
+        Payload& getPayload() noexcept { return payload; }
         virtual void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0) = 0;
 #ifdef VK_KHR_device_group
@@ -89,13 +105,7 @@ namespace magma
         std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
 
     private:
-        // User-defined data associated with the resource.
-        // It's an analogue of ID3D11DeviceChild::SetPrivateData().
-        struct Payload
-        {
-            void *data = nullptr;
-            size_t size = 0;
-        } *payload;
+        Payload payload;
     };
 
     /* Non-dispatchable resource object (buffer, image, acceleration structure etc.)

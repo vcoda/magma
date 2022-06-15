@@ -30,18 +30,8 @@ Resource::Resource(const Sharing& sharing, std::shared_ptr<IDeviceMemoryAllocato
     size(0),
     offset(0),
     sharing(sharing),
-    deviceAllocator(std::move(deviceAllocator)),
-    payload(nullptr)
+    deviceAllocator(std::move(deviceAllocator))
 {}
-
-Resource::~Resource()
-{
-    if (payload)
-    {
-        delete[] payload->data;
-        delete payload;
-    }
-}
 
 std::shared_ptr<Queue> Resource::chooseQueue(std::shared_ptr<Device> device, uint32_t queueFamilyIndex) const noexcept
 {
