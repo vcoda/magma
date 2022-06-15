@@ -11,7 +11,7 @@ inline Resource::Payload::~Payload()
 }
 
 template<typename Type>
-inline void Resource::Payload::setData(const Type& data)
+inline void Resource::Payload::setData(const Type& payload)
 {   // Objects of trivially-copyable types are the only C++ objects
     // that may be safely copied with std::memcpy().
     static_assert(std::is_trivially_copyable<Type>::value, "payload should be of trivially-copyable type");
@@ -20,7 +20,7 @@ inline void Resource::Payload::setData(const Type& data)
         free(data);
         data = malloc(sizeof(Type));
     }
-    memcpy(data, &data, sizeof(Type));
+    memcpy(data, &payload, sizeof(Type));
     size = sizeof(Type);
 }
 
