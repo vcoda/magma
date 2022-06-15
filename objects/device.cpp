@@ -138,6 +138,30 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
     MAGMA_THROW("failed to get device queue");
 }
 
+std::shared_ptr<Queue> Device::getQueueByFamily(uint32_t queueFamilyIndex) const noexcept
+{   // Look amongst non-expired instances
+    for (const auto& pair : queues)
+    {
+        if (pair.first.queueFamilyIndex == queueFamilyIndex)
+        {
+            if (!pair.second.expired())
+                return pair.second.lock();
+        }
+    }
+    for (auto flag : {
+        VK_QUEUE_GRAPHICS_BIT,
+        VK_QUEUE_COMPUTE_BIT,
+        VK_QUEUE_TRANSFER_BIT})
+    {   // Try to get new instance
+        try {
+            std::shared_ptr<Queue> queue = device->getQueue(flag, 0);
+            if (queue->getFamilyIndex() == queueFamilyIndex)
+                return queue;
+        } catch (...) {}
+    }
+    return nullptr;
+}
+
 void Device::updateDescriptorWrites(const VkWriteDescriptorSet *descriptorWrites, uint32_t descriptorWriteCount) const noexcept
 {
     vkUpdateDescriptorSets(handle, descriptorWriteCount, descriptorWrites, 0, nullptr);
