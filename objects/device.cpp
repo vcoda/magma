@@ -123,22 +123,22 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
             if (!pair.second.expired())
                 return pair.second.lock();
             // Get queue that supports specified flags
-            VkQueue queue = VK_NULL_HANDLE;
-            vkGetDeviceQueue(handle, queueDesc.queueFamilyIndex, queueIndex, &queue);
-            if (VK_NULL_HANDLE == queue)
+            VkQueue queueHandle = VK_NULL_HANDLE;
+            vkGetDeviceQueue(handle, queueDesc.queueFamilyIndex, queueIndex, &queueHandle);
+            if (VK_NULL_HANDLE == queueHandle)
                 MAGMA_THROW("failed to get device queue");
-            auto queueObj = std::shared_ptr<Queue>(new Queue(queue,
+            auto queue = std::shared_ptr<Queue>(new Queue(queueHandle,
                 std::const_pointer_cast<Device>(shared_from_this()),
                 flags, queueDesc.queueFamilyIndex, queueIndex));
             // Cache using weak_ptr to break circular references
-            pair.second = queueObj;
-            return queueObj;
+            pair.second = queue;
+            return queue;
         }
     }
     MAGMA_THROW("failed to get device queue");
 }
 
-std::shared_ptr<Queue> Device::getQueueByFamily(uint32_t queueFamilyIndex) const noexcept
+std::shared_ptr<Queue> Device::getQueueForFamily(uint32_t queueFamilyIndex) const
 {   // Look amongst non-expired instances
     for (const auto& pair : queues)
     {
@@ -154,12 +154,12 @@ std::shared_ptr<Queue> Device::getQueueByFamily(uint32_t queueFamilyIndex) const
         VK_QUEUE_TRANSFER_BIT})
     {   // Try to get new instance
         try {
-            std::shared_ptr<Queue> queue = device->getQueue(flag, 0);
+            auto queue = device->getQueue(flag, 0);
             if (queue->getFamilyIndex() == queueFamilyIndex)
                 return queue;
         } catch (...) {}
     }
-    return nullptr;
+    MAGMA_THROW("failed to get device queue");
 }
 
 void Device::updateDescriptorWrites(const VkWriteDescriptorSet *descriptorWrites, uint32_t descriptorWriteCount) const noexcept

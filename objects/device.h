@@ -50,7 +50,7 @@ namespace magma
     public:
         ~Device();
         std::shared_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
-        std::shared_ptr<Queue> getQueueByFamily(uint32_t queueFamilyIndex) const noexcept;
+        std::shared_ptr<Queue> getQueueForFamily(uint32_t queueFamilyIndex) const;
         void updateDescriptorWrites(const VkWriteDescriptorSet *descriptorWrites,
             uint32_t descriptorWriteCount) const noexcept;
         void updateDescriptorCopies(const VkCopyDescriptorSet *descriptorCopies,

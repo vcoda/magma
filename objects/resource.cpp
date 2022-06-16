@@ -36,10 +36,9 @@ Resource::Resource(const Sharing& sharing, std::shared_ptr<IDeviceMemoryAllocato
 void Resource::commitAndWait(std::shared_ptr<CommandBuffer> cmdBuffer)
 {
     std::shared_ptr<CommandPool> cmdPool = cmdBuffer->getCommandPool();
-    uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
-    std::shared_ptr<Queue> queue = cmdBuffer->getDevice()->getQueueByFamily(queueFamilyIndex);
-    if (!queue)
-        MAGMA_THROW("submission queue not found");
+    const uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
+    std::shared_ptr<Device> device = cmdBuffer->getDevice();
+    std::shared_ptr<Queue> queue = device->getQueueForFamily(queueFamilyIndex);
     std::shared_ptr<Fence> fence = cmdBuffer->getFence();
     fence->reset();
     queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence);
