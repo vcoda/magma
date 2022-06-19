@@ -3,7 +3,7 @@ namespace magma
 #ifdef MAGMA_X64
 #define MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(Type, pool)\
 template<>\
-inline core::Pool<Type>& ResourcePool::getPool<Type>()\
+inline core::ThreadSafeUnorderedSet<Type>& ResourcePool::getPool<Type>()\
 {\
     return pool;\
 }

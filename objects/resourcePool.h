@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/pool.h"
+#include "../core/noncopyable.h"
+#include "../core/threadSafeUnorderedSet.h"
 
 namespace magma
 {
@@ -45,48 +46,48 @@ namespace magma
         VkDeviceSize countAllocatedAccelerationStructureMemory() const;
         bool hasAnyDeviceResource() const;
         template<typename Type>
-        core::Pool<Type>& getPool();
+        core::ThreadSafeUnorderedSet<Type>& getPool();
 
     private:
-        core::Pool<NonDispatchable<VkSemaphore>> semaphores;
-        core::Pool<NonDispatchable<VkFence>> fences;
-        core::Pool<NonDispatchable<VkDeviceMemory>> deviceMemories;
-        core::Pool<NonDispatchable<VkBuffer>> buffers;
-        core::Pool<NonDispatchable<VkImage>> images;
-        core::Pool<NonDispatchable<VkEvent>> events;
-        core::Pool<NonDispatchable<VkQueryPool>> queryPools;
-        core::Pool<NonDispatchable<VkBufferView>> bufferViews;
-        core::Pool<NonDispatchable<VkImageView>> imageViews;
-        core::Pool<NonDispatchable<VkShaderModule>> shaderModules;
-        core::Pool<NonDispatchable<VkPipelineCache>> pipelineCaches;
-        core::Pool<NonDispatchable<VkPipelineLayout>> pipelineLayouts;
-        core::Pool<NonDispatchable<VkRenderPass>> renderPasses;
-        core::Pool<NonDispatchable<VkPipeline>> pipelines;
-        core::Pool<NonDispatchable<VkDescriptorSetLayout>> descriptorSetLayouts;
-        core::Pool<NonDispatchable<VkSampler>> samplers;
-        core::Pool<NonDispatchable<VkDescriptorPool>> descriptorPools;
-        core::Pool<NonDispatchable<VkDescriptorSet>> descriptorSets;
-        core::Pool<NonDispatchable<VkFramebuffer>> framebuffers;
-        core::Pool<NonDispatchable<VkCommandPool>> commandPools;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkSemaphore>> semaphores;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkFence>> fences;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkDeviceMemory>> deviceMemories;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkBuffer>> buffers;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkImage>> images;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkEvent>> events;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkQueryPool>> queryPools;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkBufferView>> bufferViews;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkImageView>> imageViews;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkShaderModule>> shaderModules;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkPipelineCache>> pipelineCaches;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkPipelineLayout>> pipelineLayouts;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkRenderPass>> renderPasses;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkPipeline>> pipelines;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkDescriptorSetLayout>> descriptorSetLayouts;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkSampler>> samplers;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkDescriptorPool>> descriptorPools;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkDescriptorSet>> descriptorSets;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkFramebuffer>> framebuffers;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkCommandPool>> commandPools;
         // Non-core types
 #ifdef VK_KHR_surface
-        core::Pool<NonDispatchable<VkSurfaceKHR>> surfaces;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkSurfaceKHR>> surfaces;
 #endif
 #ifdef VK_KHR_swapchain
-        core::Pool<NonDispatchable<VkSwapchainKHR>> swapchains;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkSwapchainKHR>> swapchains;
 #endif
 #ifdef VK_KHR_display
-        core::Pool<NonDispatchable<VkDisplayKHR>> displays;
-        core::Pool<NonDispatchable<VkDisplayModeKHR>> displayModes;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkDisplayKHR>> displays;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkDisplayModeKHR>> displayModes;
 #endif
 #ifdef VK_EXT_debug_report
-        core::Pool<NonDispatchable<VkDebugReportCallbackEXT>> debugReportCallbacks;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkDebugReportCallbackEXT>> debugReportCallbacks;
 #endif
 #ifdef VK_EXT_debug_utils
-        core::Pool<NonDispatchable<VkDebugUtilsMessengerEXT>> debugUtilsMessengers;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkDebugUtilsMessengerEXT>> debugUtilsMessengers;
 #endif
 #ifdef VK_NV_ray_tracing
-        core::Pool<NonDispatchable<VkAccelerationStructureNV>> accelerationStructures;
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkAccelerationStructureNV>> accelerationStructures;
 #endif
         mutable std::mutex mtx;
         template<typename Type>

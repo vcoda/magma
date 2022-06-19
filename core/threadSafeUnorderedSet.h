@@ -16,66 +16,52 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <unordered_set>
-#include "noncopyable.h"
 
 namespace magma
 {
     namespace core
     {
-        /* Set of existing objects. */
+        /* Thread safe unordered set with some sugar. */
 
         template<typename Type>
-        class Pool final : NonCopyable
+        class ThreadSafeUnorderedSet : std::unordered_set<Type *>
         {
+            typedef std::unordered_set<Type *> base;
+            mutable std::mutex mtx;
+
         public:
-            void add(const Type *obj) noexcept
+            void insert(Type *obj)
             {
                 std::lock_guard<std::mutex> guard(mtx);
-                try {
-                    pool.insert(obj);
-                } catch (...) {}
+                base::insert(obj);
             }
 
-            void remove(const Type *obj) noexcept
+            void erase(Type *obj)
             {
                 std::lock_guard<std::mutex> guard(mtx);
-                try {
-                    auto it = pool.find(obj);
-                    MAGMA_ASSERT(it != pool.end());
-                    if (it != pool.end())
-                        pool.erase(it);
-                } catch (...) {}
+                auto it = base::find(obj);
+                if (it != base::end())
+                    base::erase(it);
             }
 
             uint32_t count() const noexcept
             {
                 std::lock_guard<std::mutex> guard(mtx);
-                try {
-                    return static_cast<uint32_t>(pool.size());
-                } catch (...) {
-                    return 0;
-                }
+                return static_cast<uint32_t>(base::size());
             }
 
             template<typename DerivedType>
-            void forEach(const std::function<void(const DerivedType *obj)>& cb) const noexcept
+            void forEach(const std::function<void(const DerivedType *obj)>& fn) const
             {
                 std::lock_guard<std::mutex> guard(mtx);
-                try {
-                    std::for_each(pool.begin(), pool.end(),
-                        [&cb](const Type *base)
-                        {
-                            const DerivedType *derived = dynamic_cast<const DerivedType *>(base);
-                            if (derived)
-                                cb(derived);
-                        });
-                } catch (...) {}
+                std::for_each(base::begin(), base::end(),
+                    [&fn](const Type *it)
+                    {
+                        const DerivedType *obj = dynamic_cast<const DerivedType *>(it);
+                        if (obj)
+                            fn(obj);
+                    });
             }
-
-        private:
-            std::unordered_set<const Type *> pool;
-            mutable std::mutex mtx;
         };
     } // namespace core
 } // namespace magma

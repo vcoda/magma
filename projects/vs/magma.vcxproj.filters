@@ -546,9 +546,6 @@
     <ClInclude Include="..\..\auxiliary\colorMultisampleReadFramebuffer.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\core\pool.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\shaders\shaderBindingTable.h">
       <Filter>Header Files\shaders</Filter>
     </ClInclude>
@@ -668,6 +665,9 @@
     </ClInclude>
     <ClInclude Include="..\..\auxiliary\base.h">
       <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\threadSafeUnorderedSet.h">
+      <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

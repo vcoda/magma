@@ -53,7 +53,7 @@ namespace magma
 #ifdef MAGMA_X64
             std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(ObjectT<Type>::getDevice());
             if (pool) // Put resource in pool
-                pool->getPool<NonDispatchable<Type>>().add(this);
+                pool->getPool<NonDispatchable<Type>>().insert(this);
 #endif // MAGMA_X64
         }
 
@@ -62,7 +62,7 @@ namespace magma
 #ifdef MAGMA_X64
             std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(ObjectT<Type>::getDevice());
             if (pool) // Remove resource from pool
-                pool->getPool<NonDispatchable<Type>>().remove(this);
+                pool->getPool<NonDispatchable<Type>>().erase(this);
 #endif // MAGMA_X64
         }
 
