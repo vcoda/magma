@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/noncopyable.h"
+#include "base.h"
 #include "../descriptors/binding.h"
 #include "../objects/descriptorSetLayout.h"
 
@@ -34,7 +34,7 @@ namespace magma
     {
         /* Allocates descriptor set for the first image binding found in the shader reflection. */
 
-        class ImageDescriptorSet : public core::NonCopyable
+        class ImageDescriptorSet : public Base
         {
         public:
             explicit ImageDescriptorSet(std::shared_ptr<Device> device,

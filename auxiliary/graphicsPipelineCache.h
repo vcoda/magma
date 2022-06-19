@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/noncopyable.h"
+#include "base.h"
 #include "../shaders/pipelineShaderStage.h"
 
 namespace magma
@@ -43,7 +43,7 @@ namespace magma
            Utilizes pipeline cache along with lookup of base pipeline and lookup of
            existing pipeline by computing its hash. */
 
-        class GraphicsPipelineCache : public core::NonCopyable
+        class GraphicsPipelineCache : public Base
         {
         public:
             explicit GraphicsPipelineCache(std::shared_ptr<Device> device,

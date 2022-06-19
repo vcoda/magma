@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/noncopyable.h"
+#include "base.h"
 
 namespace magma
 {
@@ -44,7 +44,7 @@ namespace magma
            the accumulation buffer should have a higher number of bits per component
            than a typical color buffer, so use R16_UNORM or R16_SFLOAT format. */
 
-        class AccumulationBuffer : public core::NonCopyable
+        class AccumulationBuffer : public Base
         {
         public:
             explicit AccumulationBuffer(std::shared_ptr<Device> device,

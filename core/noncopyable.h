@@ -21,17 +21,16 @@ namespace magma
 {
     namespace core
     {
-        /* Non-copyable on stack object. */
+        /* Prevents objects of a class from being copy-constructed or assigned to each other. */
 
         class NonCopyable
         {
-        public:
-            NonCopyable() = default;
-            virtual ~NonCopyable() = default;
-
-        private:
             NonCopyable(const NonCopyable&) = delete;
-            NonCopyable& operator=(const NonCopyable&) = delete;
+            const NonCopyable& operator=(const NonCopyable&) = delete;
+
+        protected:
+            NonCopyable() = default;
+            ~NonCopyable() = default;
         };
     } // namespace core
 } // namespace magma

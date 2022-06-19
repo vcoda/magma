@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/noncopyable.h"
+#include "base.h"
 #include "../shaders/shaderStages.h"
 #include "../states/vertexLayouts.h"
 #include "../states/rasterizationState.h"
@@ -47,7 +47,7 @@ namespace magma
            to mess around with vertex buffer mapping, data copy,
            state changes etc. */
 
-        class ImmediateRender : public core::NonCopyable
+        class ImmediateRender : public Base
         {
         public:
             explicit ImmediateRender(const uint32_t maxVertexCount,

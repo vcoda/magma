@@ -140,7 +140,7 @@ namespace magma
 
     /* Aggregates host and device memory allocators. */
 
-    class Allocator : public core::NonCopyable
+    class Allocator final : core::NonCopyable
     {
     public:
         explicit Allocator(std::shared_ptr<IAllocator> hostAllocator,

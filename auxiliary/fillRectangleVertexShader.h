@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/noncopyable.h"
+#include "base.h"
 
 namespace magma
 {
@@ -32,7 +32,7 @@ namespace magma
            https://www.khronos.org/registry/OpenGL/extensions/NV/NV_fill_rectangle.txt
            https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VK_NV_fill_rectangle.html */
 
-        class FillRectangleVertexShader : public core::NonCopyable
+        class FillRectangleVertexShader : public Base
         {
         public:
             explicit FillRectangleVertexShader(std::shared_ptr<Device> device,

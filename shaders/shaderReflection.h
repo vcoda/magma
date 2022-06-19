@@ -29,11 +29,11 @@ namespace magma
        SPIRV-Reflect is a lightweight library that provides a C/C++ reflection API
        for SPIR-V shader bytecode in Vulkan applications. */
 
-    class ShaderReflection : public core::NonCopyable
+    class ShaderReflection : core::NonCopyable
     {
     public:
         explicit ShaderReflection(const SpirvWord *bytecode, std::size_t bytecodeSize);
-        ~ShaderReflection() noexcept;
+        virtual ~ShaderReflection() noexcept;
         const SpirvWord *getBytecode() const noexcept;
         std::size_t getBytecodeSize() const noexcept;
         std::size_t computeBytecodeHash() const noexcept;

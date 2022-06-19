@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/noncopyable.h"
+#include "base.h"
 #include "../descriptors/binding.h"
 #include "../objects/descriptorSetLayout.h"
 
@@ -37,7 +37,7 @@ namespace magma
            Simple, but sub-optimal solution to draw text on the screen.
            Supports only ASCII printable characters (32 - 127). */
 
-        class TextShader : public core::NonCopyable
+        class TextShader : public Base
         {
         public:
             explicit TextShader(std::shared_ptr<RenderPass> renderPass,

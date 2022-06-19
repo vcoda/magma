@@ -29,7 +29,7 @@ namespace magma
        This may be used for application profiling, memory usage optimization and so on.
        Each logical device has it's own resource pool. */
 
-    class ResourcePool final : public core::NonCopyable
+    class ResourcePool final : core::NonCopyable
     {
     public:
         struct DeviceResources;

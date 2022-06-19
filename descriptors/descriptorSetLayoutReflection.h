@@ -24,7 +24,7 @@ namespace magma
        descriptor set layout. It contains a list of bindings to allow update their
        descriptors writes, validating for unique locations, check for dirty state etc. */
 
-    class DescriptorSetLayoutReflection : public core::NonCopyable
+    class DescriptorSetLayoutReflection : core::NonCopyable
     {
     public:
         virtual const std::vector<binding::DescriptorSetLayoutBinding *>& getDescriptorBindings() = 0;

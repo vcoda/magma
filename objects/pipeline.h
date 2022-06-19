@@ -64,7 +64,8 @@ namespace magma
     /* Vulkan has an ability to create multiple pipeline objects in a single call.
        This is a base class for such implementation. */
 
-    class Pipelines : public core::NonCopyable
+    class Pipelines : public core::IDestructible,
+        /* private */ core::NonCopyable
     {
     protected:
         template<typename Type>

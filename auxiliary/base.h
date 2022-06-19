@@ -16,23 +16,18 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "../core/destructible.h"
+#include "../core/noncopyable.h"
 
 namespace magma
 {
-    namespace core
+    namespace aux
     {
-        /* Non-copyable constexpr object w/o virtual destructor. */
+        /* Base auxiliary object */
 
-        class NonCopyableConstexpr
+        class Base : public core::IDestructible,
+            /* private */ core::NonCopyable
         {
-        public:
-            NonCopyableConstexpr() = default;
-            ~NonCopyableConstexpr() = default;
-
-        private:
-            NonCopyableConstexpr(const NonCopyableConstexpr&) = delete;
-            NonCopyableConstexpr& operator=(const NonCopyableConstexpr&) = delete;
         };
-    } // core
+    } // namespace aux
 } // namespace magma
-

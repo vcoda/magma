@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #ifdef _WIN32
 #pragma once
 #include <shaderc/shaderc.h>
-#include "../core/noncopyable.h"
+#include "base.h"
 
 namespace magma
 {
@@ -29,7 +29,7 @@ namespace magma
     {
         /* An abstract interface for mapping an #include request to an include result. */
 
-        class IShaderInclude : public core::NonCopyable
+        class IShaderInclude : public core::IDestructible
         {
         public:
             virtual void *resolve(shaderc_include_type includeType,
@@ -44,7 +44,7 @@ namespace magma
            to compile GLSL shaders in run-time. Can be useful in case
            if shader code is generated dynamically. */
 
-        class ShaderCompiler : public core::NonCopyable
+        class ShaderCompiler : public Base
         {
         public:
             ShaderCompiler(std::shared_ptr<Device> device,

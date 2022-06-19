@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/noncopyable.h"
+#include "base.h"
 #include "../misc/format.h"
 
 namespace magma
@@ -31,7 +31,7 @@ namespace magma
     {
         /* Framebuffer's base class with shared functionality. */
 
-        class Framebuffer
+        class Framebuffer : public Base
         {
         public:
             VkFormat getColorFormat() const noexcept { return colorFormat; }

@@ -163,6 +163,7 @@
     <ClInclude Include="..\..\auxiliary\generateMipmap.h" />
     <ClInclude Include="..\..\auxiliary\multiAttachmentFramebuffer.h" />
     <ClInclude Include="..\..\auxiliary\frameGrabber.h" />
+    <ClInclude Include="..\..\auxiliary\base.h" />
     <ClInclude Include="..\..\auxiliary\shaderCompiler.h" />
     <ClInclude Include="..\..\auxiliary\depthFramebuffer.h" />
     <ClInclude Include="..\..\auxiliary\sprite.h" />
@@ -180,7 +181,6 @@
     <ClInclude Include="..\..\core\destructible.h" />
     <ClInclude Include="..\..\core\linearAllocator.h" />
     <ClInclude Include="..\..\core\memzero.h" />
-    <ClInclude Include="..\..\core\noncopyableConstexpr.h" />
     <ClInclude Include="..\..\core\copy.h" />
     <ClInclude Include="..\..\core\copyMemory.h" />
     <ClInclude Include="..\..\core\core.h" />

@@ -474,9 +474,6 @@
     <ClInclude Include="..\..\core\copy.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\core\noncopyableConstexpr.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\allocator\linearPlacementPool.h">
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
@@ -668,6 +665,9 @@
     </ClInclude>
     <ClInclude Include="..\..\objects\secondaryCommandBuffer.h">
       <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\auxiliary\base.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

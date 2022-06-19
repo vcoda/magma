@@ -32,7 +32,7 @@ namespace magma
        Buffers and images are created with a sharing mode
        controlling how they can be accessed from queues. */
 
-    class Resource : public core::NonCopyable
+    class Resource : core::NonCopyable
     {
     public:
         class Sharing
@@ -56,7 +56,7 @@ namespace magma
         /* User-defined data associated with the resource.
            It's an analogue of ID3D11DeviceChild::SetPrivateData(). */
 
-        class Payload : public core::NonCopyable
+        class Payload final : core::NonCopyable
         {
         public:
             Payload() noexcept;
