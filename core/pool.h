@@ -26,7 +26,7 @@ namespace magma
         /* Set of existing objects. */
 
         template<typename Type>
-        class Pool final : public NonCopyable
+        class Pool final : NonCopyable
         {
         public:
             void add(const Type *obj) noexcept
