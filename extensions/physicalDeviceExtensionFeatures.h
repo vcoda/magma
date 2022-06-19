@@ -24,10 +24,10 @@ namespace magma
        VK_KHR_get_physical_device_properties2 extension. */
 
     struct PhysicalDeviceExtensionFeatures
-    {   // AMD
+    {   // Advanced Micro Devices, Inc.
         VkBool32 deviceCoherentMemory : 1;
 
-        // EXT
+        // Multivendor
         VkBool32 advancedBlendCoherentOperations : 1;
         VkBool32 depthClipControl : 1;
         VkBool32 depthClipEnable : 1;
@@ -43,7 +43,7 @@ namespace magma
         VkBool32 texelBufferAlignment : 1;
         VkBool32 ycbcrImageArrays : 1;
 
-        // KHR
+        // Khronos Group
         VkBool32 imagelessFramebuffer : 1;
         VkBool32 pipelineExecutableInfo : 1;
         VkBool32 samplerYcbcrConversion : 1;
@@ -54,7 +54,7 @@ namespace magma
         VkBool32 timelineSemaphore : 1;
         VkBool32 uniformBufferStandardLayout : 1;
 
-        // NV
+        // NVIDIA Corporation
         VkBool32 cornerSampledImage : 1;
         VkBool32 coverageReductionMode : 1;
         VkBool32 dedicatedAllocationImageAliasing : 1;

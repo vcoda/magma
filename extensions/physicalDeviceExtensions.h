@@ -160,7 +160,7 @@ namespace magma
         const VkBool32 INTEL_performance_query : 1;
         const VkBool32 INTEL_shader_integer_functions2 : 1;
 
-        // Khronos
+        // Khronos Group
         const VkBool32 KHR_16bit_storage : 1;
         const VkBool32 KHR_8bit_storage : 1;
         const VkBool32 KHR_acceleration_structure : 1;

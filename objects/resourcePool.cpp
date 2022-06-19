@@ -36,26 +36,28 @@ ResourcePool::DeviceResources ResourcePool::countDeviceResources() const
     statistics.fenceCount = fences.count();
     statistics.deviceMemoryCount = deviceMemories.count();
     statistics.bufferCount = buffers.count();
-    images.forEach<Image>([&statistics](const Image *image) {
-        switch (image->getType())
+    images.forEach<Image>(
+        [&statistics](const Image *image)
         {
-        case VK_IMAGE_TYPE_1D:
-            if (image->getArrayLayers() == 1)
-                ++statistics.image1DCount;
-            else
-                ++statistics.image1DArrayCount;
-            break;
-        case VK_IMAGE_TYPE_2D:
-            if (image->getArrayLayers() == 1)
-                ++statistics.image2DCount;
-            else
-                ++statistics.image2DArrayCount;
-            break;
-        case VK_IMAGE_TYPE_3D:
-            ++statistics.image3DCount;
-            break;
-        }
-    });
+            switch (image->getType())
+            {
+            case VK_IMAGE_TYPE_1D:
+                if (image->getArrayLayers() == 1)
+                    ++statistics.image1DCount;
+                else
+                    ++statistics.image1DArrayCount;
+                break;
+            case VK_IMAGE_TYPE_2D:
+                if (image->getArrayLayers() == 1)
+                    ++statistics.image2DCount;
+                else
+                    ++statistics.image2DArrayCount;
+                break;
+            case VK_IMAGE_TYPE_3D:
+                ++statistics.image3DCount;
+                break;
+            }
+        });
     statistics.eventCount = events.count();
     statistics.queryPoolCount = queryPools.count();
     statistics.bufferViewCount = bufferViews.count();
@@ -64,22 +66,24 @@ ResourcePool::DeviceResources ResourcePool::countDeviceResources() const
     statistics.pipelineCacheCount = pipelineCaches.count();
     statistics.pipelineLayoutCount = pipelineLayouts.count();
     statistics.renderPassCount = renderPasses.count();
-    pipelines.forEach<Pipeline>([&statistics](const Pipeline *pipeline) {
-        switch (pipeline->getBindPoint())
+    pipelines.forEach<Pipeline>(
+        [&statistics](const Pipeline *pipeline)
         {
-        case VK_PIPELINE_BIND_POINT_GRAPHICS:
-            ++statistics.graphicsPipelineCount;
-            break;
-        case VK_PIPELINE_BIND_POINT_COMPUTE:
-            ++statistics.computePipelineCount;
-            break;
+            switch (pipeline->getBindPoint())
+            {
+            case VK_PIPELINE_BIND_POINT_GRAPHICS:
+                ++statistics.graphicsPipelineCount;
+                break;
+            case VK_PIPELINE_BIND_POINT_COMPUTE:
+                ++statistics.computePipelineCount;
+                break;
 #ifdef VK_NV_ray_tracing
-        case VK_PIPELINE_BIND_POINT_RAY_TRACING_NV:
-            ++statistics.rayTracingPipelineCount;
-            break;
+            case VK_PIPELINE_BIND_POINT_RAY_TRACING_NV:
+                ++statistics.rayTracingPipelineCount;
+                break;
 #endif
-        }
-    });
+            }
+        });
     statistics.descriptorSetLayoutCount = descriptorSetLayouts.count();
     statistics.samplerCount = samplers.count();
     statistics.descriptorPoolCount = descriptorPools.count();
