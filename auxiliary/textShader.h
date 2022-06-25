@@ -46,11 +46,9 @@ namespace magma
             void draw(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept;
             void begin();
             void end();
-            void print(uint32_t x,
-                uint32_t y,
+            void print(uint32_t x, uint32_t y,
                 uint32_t color,
-                const char *format,
-                ...);
+                const char *format, ...);
 
         private:
             struct Uniforms;
