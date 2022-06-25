@@ -65,9 +65,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif
 
 #define MAGMA_UNUSED(variable) variable
-#define MAGMA_BOOLEAN(condition)\
-    (condition) ? static_cast<VkBool32>(VK_TRUE)\
-                : static_cast<VkBool32>(VK_FALSE)
+#define MAGMA_BOOLEAN(condition) (condition) ? static_cast<VkBool32>(VK_TRUE) : static_cast<VkBool32>(VK_FALSE)
 #define MAGMA_COUNT(container) static_cast<uint32_t>(container.size())
 
 #define MAGMA_ALIGNMENT 16
