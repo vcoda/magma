@@ -439,6 +439,11 @@ VkPhysicalDeviceTransformFeedbackPropertiesEXT PhysicalDevice::getTransformFeedb
 #endif // VK_EXT_transform_feedback
 
 #ifdef VK_EXT_vertex_attribute_divisor
+VkPhysicalDeviceVertexAttributeDivisorPropertiesEXT PhysicalDevice::getVertexAttributeDivisorProperties() const
+{
+    return PHYSICAL_DEVICE_GET_PROPERTIES(VertexAttributeDivisorPropertiesEXT, VERTEX_ATTRIBUTE_DIVISOR_PROPERTIES_EXT);
+}
+
 VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT PhysicalDevice::getVertexAttributeDivisorFeatures() const
 {
     return PHYSICAL_DEVICE_GET_FEATURES(VertexAttributeDivisorFeaturesEXT, VERTEX_ATTRIBUTE_DIVISOR_FEATURES_EXT);

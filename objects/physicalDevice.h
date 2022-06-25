@@ -120,6 +120,7 @@ namespace magma
         VkPhysicalDeviceTransformFeedbackPropertiesEXT getTransformFeedbackProperties() const;
 #endif
 #ifdef VK_EXT_vertex_attribute_divisor
+        VkPhysicalDeviceVertexAttributeDivisorPropertiesEXT getVertexAttributeDivisorProperties() const;
         VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT getVertexAttributeDivisorFeatures() const;
 #endif
 #ifdef VK_KHR_8bit_storage
