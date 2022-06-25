@@ -44,6 +44,7 @@ namespace magma
         Sampler(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator):
             NonDispatchable(VK_OBJECT_TYPE_SAMPLER, std::move(device), std::move(allocator)) {}
+        float clampAnisotropy(const SamplerState& state) const noexcept;
     };
 
     /* Sampler with level of detail control. */
