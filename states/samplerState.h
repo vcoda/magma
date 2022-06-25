@@ -42,6 +42,9 @@ namespace magma
         friend class LodSampler;
     };
 
+    /* Anisotropic sampler state takes into account long and narrow (i.e. anisotropic)
+       projection of the pixel filter footprint into texture space. */
+
     class AnisotropicSamplerState : public SamplerState
     {
     public:
