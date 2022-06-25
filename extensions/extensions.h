@@ -17,8 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
-#define MAGMA_EXTENSION_PREFIX "VK_"
-
 namespace magma
 {
     /* For each extensions name we calculate its hash in compile-time.

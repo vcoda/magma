@@ -17,8 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
-#define MAGMA_LAYER_PREFIX "VK_LAYER_"
-
 namespace magma
 {
     /* For each layer name we calculate its hash in compile-time.

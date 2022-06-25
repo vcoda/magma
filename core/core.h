@@ -26,6 +26,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "dereference.h"
 #include "memzero.h"
 
+#define MAGMA_EXTENSION_PREFIX "VK_"
+#define MAGMA_LAYER_PREFIX "VK_LAYER_"
+
 #if defined(__LP64__) ||\
     defined(_WIN64) ||\
     (defined(__x86_64__) && !defined(__ILP32__) ) ||\
