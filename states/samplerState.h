@@ -54,7 +54,7 @@ namespace magma
             float maxAnisotropy = std::numeric_limits<float>::max()) noexcept;
     };
 
-    /* Depth map sampler state. */
+    /* Depth sampler state with comparison function for PCF etc. */
 
     class DepthSamplerState
     {
