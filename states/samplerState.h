@@ -40,6 +40,7 @@ namespace magma
         float maxAnisotropy;
         friend class Sampler;
         friend class LodSampler;
+        friend class ReductionSampler;
     };
 
     /* Anisotropic sampler state takes into account long and narrow (i.e. anisotropic)

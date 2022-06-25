@@ -164,4 +164,51 @@ UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool li
     const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create unnormalized sampler");
 }
+
+#ifdef VK_EXT_sampler_filter_minmax
+ReductionSampler::ReductionSampler(std::shared_ptr<Device> device, const SamplerState& state,
+    VkSamplerReductionModeEXT reductionMode,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    ReductionSampler(std::move(device), state, reductionMode, border::opaqueBlackFloat, std::move(allocator))
+{}
+
+ReductionSampler::ReductionSampler(std::shared_ptr<Device> device, const SamplerState& state,
+    VkSamplerReductionModeEXT reductionMode, const BorderColor& borderColor,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    Sampler(std::move(device), std::move(allocator))
+{
+    VkSamplerReductionModeCreateInfoEXT reductionModeInfo;
+    reductionModeInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO_EXT;
+    reductionModeInfo.pNext = nullptr;
+    reductionModeInfo.reductionMode = reductionMode;
+    VkSamplerCreateInfo samplerInfo;
+    samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+    samplerInfo.pNext = &reductionModeInfo;
+    samplerInfo.flags = 0;
+    samplerInfo.magFilter = state.magFilter;
+    samplerInfo.minFilter = state.minFilter;
+    samplerInfo.mipmapMode = state.mipmapMode;
+    samplerInfo.addressModeU = state.addressMode;
+    samplerInfo.addressModeV = state.addressMode;
+    samplerInfo.addressModeW = state.addressMode;
+    samplerInfo.mipLodBias = 0.f;
+    samplerInfo.anisotropyEnable = MAGMA_BOOLEAN(state.anisotropyEnable);
+    if (!samplerInfo.anisotropyEnable || (1.f == state.maxAnisotropy))
+        samplerInfo.maxAnisotropy = 1.f;
+    else
+    {   // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive
+        const VkPhysicalDeviceProperties properties = this->device->getPhysicalDevice()->getProperties();
+        const VkPhysicalDeviceLimits& limits = properties.limits;
+        samplerInfo.maxAnisotropy = std::max(1.f, std::min(state.maxAnisotropy, limits.maxSamplerAnisotropy));
+    }
+    samplerInfo.compareEnable = VK_FALSE;
+    samplerInfo.compareOp = VK_COMPARE_OP_NEVER;
+    samplerInfo.minLod = 0.f;
+    samplerInfo.maxLod = VK_LOD_CLAMP_NONE;
+    samplerInfo.borderColor = borderColor.getColor();
+    samplerInfo.unnormalizedCoordinates = VK_FALSE;
+    const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create minmax sampler");
+}
+#endif // VK_EXT_sampler_filter_minmax
 } // namespace magma

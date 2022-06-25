@@ -86,4 +86,24 @@ namespace magma
             const BorderColor& borderColor,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
+
+    /* Reduction sampler allows to produce a filtered texel value by computing
+       a component-wise minimum or maximum of the texels that would normally be averaged.
+       https://www.khronos.org/registry/vulkan/specs/1.3-extensions/man/html/VK_EXT_sampler_filter_minmax.html */
+
+#ifdef VK_EXT_sampler_filter_minmax
+    class ReductionSampler : public Sampler
+    {
+    public:
+        explicit ReductionSampler(std::shared_ptr<Device> device,
+            const SamplerState& state,
+            VkSamplerReductionModeEXT reductionMode,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        explicit ReductionSampler(std::shared_ptr<Device> device,
+            const SamplerState& state,
+            VkSamplerReductionModeEXT reductionMode,
+            const BorderColor& borderColor,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+    };
+#endif // VK_EXT_sampler_filter_minmax
 } // namespace magma

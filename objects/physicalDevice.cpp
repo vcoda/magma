@@ -407,6 +407,13 @@ VkPhysicalDeviceLineRasterizationPropertiesEXT PhysicalDevice::getLineRasterizat
 }
 #endif // VK_EXT_line_rasterization
 
+#ifdef VK_EXT_sampler_filter_minmax
+VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT PhysicalDevice::getSamplerFilterMinmaxProperties() const
+{
+    return PHYSICAL_DEVICE_GET_PROPERTIES(SamplerFilterMinmaxPropertiesEXT, SAMPLER_FILTER_MINMAX_PROPERTIES_EXT);
+}
+#endif // VK_EXT_sampler_filter_minmax
+
 #ifdef VK_EXT_subgroup_size_control
 VkPhysicalDeviceSubgroupSizeControlFeaturesEXT PhysicalDevice::getSubgroupSizeControlFeatures() const
 {

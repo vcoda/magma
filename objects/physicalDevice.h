@@ -108,6 +108,9 @@ namespace magma
         VkPhysicalDeviceLineRasterizationFeaturesEXT getLineRasterizationFeatures() const;
         VkPhysicalDeviceLineRasterizationPropertiesEXT getLineRasterizationProperties() const;
 #endif
+#ifdef VK_EXT_sampler_filter_minmax
+        VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT getSamplerFilterMinmaxProperties() const;
+#endif
 #ifdef VK_EXT_subgroup_size_control
         VkPhysicalDeviceSubgroupSizeControlFeaturesEXT getSubgroupSizeControlFeatures() const;
         VkPhysicalDeviceSubgroupSizeControlPropertiesEXT getSubgroupSizeControlProperties() const;
