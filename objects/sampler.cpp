@@ -63,7 +63,7 @@ Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state, cons
     samplerInfo.borderColor = borderColor.getColor();
     samplerInfo.unnormalizedCoordinates = VK_FALSE;
     const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to result sampler");
+    MAGMA_THROW_FAILURE(result, "failed to create sampler");
 }
 
 Sampler::~Sampler()
@@ -103,7 +103,7 @@ LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state
     samplerInfo.borderColor = borderColor.getColor();
     samplerInfo.unnormalizedCoordinates = VK_FALSE;
     const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to result lod sampler");
+    MAGMA_THROW_FAILURE(result, "failed to create lod sampler");
 }
 
 DepthSampler::DepthSampler(std::shared_ptr<Device> device, const DepthSamplerState& state,
@@ -130,7 +130,7 @@ DepthSampler::DepthSampler(std::shared_ptr<Device> device, const DepthSamplerSta
     samplerInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
     samplerInfo.unnormalizedCoordinates = VK_FALSE;
     const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to result depth sampler");
+    MAGMA_THROW_FAILURE(result, "failed to create depth sampler");
 }
 
 UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool linearFilter,
@@ -162,6 +162,6 @@ UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool li
     samplerInfo.borderColor = borderColor.getColor();
     samplerInfo.unnormalizedCoordinates = VK_TRUE;
     const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to result unnormalized sampler");
+    MAGMA_THROW_FAILURE(result, "failed to create unnormalized sampler");
 }
 } // namespace magma
