@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include <algorithm>
 #include "sampler.h"
 #include "device.h"
 #include "physicalDevice.h"
@@ -60,7 +59,7 @@ Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state, cons
     samplerInfo.compareEnable = VK_FALSE;
     samplerInfo.compareOp = VK_COMPARE_OP_NEVER;
     samplerInfo.minLod = 0.f;
-    samplerInfo.maxLod = std::numeric_limits<float>::max();
+    samplerInfo.maxLod = VK_LOD_CLAMP_NONE;
     samplerInfo.borderColor = borderColor.getColor();
     samplerInfo.unnormalizedCoordinates = VK_FALSE;
     const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
@@ -127,7 +126,7 @@ DepthSampler::DepthSampler(std::shared_ptr<Device> device, const DepthSamplerSta
     samplerInfo.compareEnable = VK_TRUE;
     samplerInfo.compareOp = state.compareOp;
     samplerInfo.minLod = 0.f;
-    samplerInfo.maxLod = std::numeric_limits<float>::max();
+    samplerInfo.maxLod = VK_LOD_CLAMP_NONE;
     samplerInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
     samplerInfo.unnormalizedCoordinates = VK_FALSE;
     const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
