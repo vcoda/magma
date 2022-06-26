@@ -21,12 +21,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "physicalDevice.h"
 #include "../states/samplerState.h"
-#include "../misc/borderColor.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
 {
+Sampler::Sampler(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator):
+    NonDispatchable(VK_OBJECT_TYPE_SAMPLER, std::move(device), std::move(allocator))
+{}
+
 Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Sampler(std::move(device), state, border::opaqueBlackFloat, std::move(allocator))
@@ -34,27 +37,15 @@ Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
 
 Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state, const BorderColor& borderColor,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_SAMPLER, std::move(device), std::move(allocator))
+    Sampler(std::move(device), std::move(allocator))
 {
-    VkSamplerCreateInfo samplerInfo;
-    samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-    samplerInfo.pNext = nullptr;
-    samplerInfo.flags = 0;
-    samplerInfo.magFilter = state.magFilter;
-    samplerInfo.minFilter = state.minFilter;
-    samplerInfo.mipmapMode = state.mipmapMode;
-    samplerInfo.addressModeU = state.addressMode;
-    samplerInfo.addressModeV = state.addressMode;
-    samplerInfo.addressModeW = state.addressMode;
-    samplerInfo.mipLodBias = 0.f;
-    samplerInfo.anisotropyEnable = MAGMA_BOOLEAN(state.anisotropyEnable);
-    samplerInfo.maxAnisotropy = clampAnisotropy(state);
-    samplerInfo.compareEnable = VK_FALSE;
-    samplerInfo.compareOp = VK_COMPARE_OP_NEVER;
-    samplerInfo.minLod = 0.f;
-    samplerInfo.maxLod = VK_LOD_CLAMP_NONE;
+    VkSamplerCreateInfo samplerInfo = state;
+    if (samplerInfo.anisotropyEnable)
+    {   // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive
+        const VkPhysicalDeviceProperties properties = device->getPhysicalDevice()->getProperties();
+        samplerInfo.maxAnisotropy = std::max(1.f, std::min(state.maxAnisotropy, properties.limits.maxSamplerAnisotropy));
+    }
     samplerInfo.borderColor = borderColor.getColor();
-    samplerInfo.unnormalizedCoordinates = VK_FALSE;
     const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create sampler");
 }
@@ -64,74 +55,24 @@ Sampler::~Sampler()
     vkDestroySampler(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-float Sampler::clampAnisotropy(const SamplerState& state) const noexcept
-{
-    if (!state.anisotropyEnable || (state.maxAnisotropy <= 1.f))
-        return 1.f;
-    // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive
-    const VkPhysicalDeviceProperties properties = device->getPhysicalDevice()->getProperties();
-    return std::max(1.f, std::min(state.maxAnisotropy, properties.limits.maxSamplerAnisotropy));
-}
-
 LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state,
     float mipLodBias, float minLod, float maxLod, const BorderColor& borderColor,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Sampler(std::move(device), std::move(allocator))
 {
-    VkSamplerCreateInfo samplerInfo;
-    samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-    samplerInfo.pNext = nullptr;
-    samplerInfo.flags = 0;
-    samplerInfo.magFilter = state.magFilter;
-    samplerInfo.minFilter = state.minFilter;
-    samplerInfo.mipmapMode = state.mipmapMode;
-    samplerInfo.addressModeU = state.addressMode;
-    samplerInfo.addressModeV = state.addressMode;
-    samplerInfo.addressModeW = state.addressMode;
+    VkSamplerCreateInfo samplerInfo = state;
     samplerInfo.mipLodBias = mipLodBias;
-    samplerInfo.anisotropyEnable = MAGMA_BOOLEAN(state.anisotropyEnable);
-    samplerInfo.maxAnisotropy = clampAnisotropy(state);
-    samplerInfo.compareEnable = VK_FALSE;
-    samplerInfo.compareOp = VK_COMPARE_OP_NEVER;
+    if (samplerInfo.anisotropyEnable)
+    {   // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive
+        const VkPhysicalDeviceProperties properties = device->getPhysicalDevice()->getProperties();
+        samplerInfo.maxAnisotropy = std::max(1.f, std::min(state.maxAnisotropy, properties.limits.maxSamplerAnisotropy));
+    }
     samplerInfo.minLod = minLod;
     samplerInfo.maxLod = maxLod;
     samplerInfo.borderColor = borderColor.getColor();
-    samplerInfo.unnormalizedCoordinates = VK_FALSE;
     const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create lod sampler");
 }
-
-DepthSampler::DepthSampler(std::shared_ptr<Device> device, const DepthSamplerState& state,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Sampler(std::move(device), std::move(allocator))
-{
-    VkSamplerCreateInfo samplerInfo;
-    samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-    samplerInfo.pNext = nullptr;
-    samplerInfo.flags = 0;
-    samplerInfo.magFilter = state.magFilter;
-    samplerInfo.minFilter = state.minFilter;
-    samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
-    samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
-    samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
-    samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
-    samplerInfo.mipLodBias = 0.f;
-    samplerInfo.anisotropyEnable = VK_FALSE;
-    samplerInfo.maxAnisotropy = 1.f;
-    samplerInfo.compareEnable = VK_TRUE;
-    samplerInfo.compareOp = state.compareOp;
-    samplerInfo.minLod = 0.f;
-    samplerInfo.maxLod = VK_LOD_CLAMP_NONE;
-    samplerInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
-    samplerInfo.unnormalizedCoordinates = VK_FALSE;
-    const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create depth sampler");
-}
-
-UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool linearFilter,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    UnnormalizedSampler(std::move(device), linearFilter, border::opaqueBlackFloat, std::move(allocator))
-{}
 
 UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool linearFilter, const BorderColor& borderColor,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
@@ -159,44 +100,4 @@ UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool li
     const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create unnormalized sampler");
 }
-
-#ifdef VK_EXT_sampler_filter_minmax
-ReductionSampler::ReductionSampler(std::shared_ptr<Device> device, const SamplerState& state,
-    VkSamplerReductionModeEXT reductionMode,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    ReductionSampler(std::move(device), state, reductionMode, border::opaqueBlackFloat, std::move(allocator))
-{}
-
-ReductionSampler::ReductionSampler(std::shared_ptr<Device> device, const SamplerState& state,
-    VkSamplerReductionModeEXT reductionMode, const BorderColor& borderColor,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Sampler(std::move(device), std::move(allocator))
-{
-    VkSamplerReductionModeCreateInfoEXT reductionModeInfo;
-    reductionModeInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO_EXT;
-    reductionModeInfo.pNext = nullptr;
-    reductionModeInfo.reductionMode = reductionMode;
-    VkSamplerCreateInfo samplerInfo;
-    samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-    samplerInfo.pNext = &reductionModeInfo;
-    samplerInfo.flags = 0;
-    samplerInfo.magFilter = state.magFilter;
-    samplerInfo.minFilter = state.minFilter;
-    samplerInfo.mipmapMode = state.mipmapMode;
-    samplerInfo.addressModeU = state.addressMode;
-    samplerInfo.addressModeV = state.addressMode;
-    samplerInfo.addressModeW = state.addressMode;
-    samplerInfo.mipLodBias = 0.f;
-    samplerInfo.anisotropyEnable = MAGMA_BOOLEAN(state.anisotropyEnable);
-    samplerInfo.maxAnisotropy = clampAnisotropy(state);
-    samplerInfo.compareEnable = VK_FALSE;
-    samplerInfo.compareOp = VK_COMPARE_OP_NEVER;
-    samplerInfo.minLod = 0.f;
-    samplerInfo.maxLod = VK_LOD_CLAMP_NONE;
-    samplerInfo.borderColor = borderColor.getColor();
-    samplerInfo.unnormalizedCoordinates = VK_FALSE;
-    const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create minmax sampler");
-}
-#endif // VK_EXT_sampler_filter_minmax
 } // namespace magma

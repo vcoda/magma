@@ -17,12 +17,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
+#include "../misc/borderColor.h"
 
 namespace magma
 {
-    class SamplerState;
-    class DepthSamplerState;
-    class BorderColor;
+    struct SamplerState;
 
     /* Sampler objects represent the state of an image sampler
        which is used by the implementation to read image data
@@ -42,9 +41,7 @@ namespace magma
 
     protected:
         Sampler(std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> allocator):
-            NonDispatchable(VK_OBJECT_TYPE_SAMPLER, std::move(device), std::move(allocator)) {}
-        float clampAnisotropy(const SamplerState& state) const noexcept;
+            std::shared_ptr<IAllocator> allocator);
     };
 
     /* Sampler with level of detail control. */
@@ -57,18 +54,7 @@ namespace magma
             float mipLodBias,
             float minLod,
             float maxLod,
-            const BorderColor& borderColor,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-    };
-
-    /* Depth map comparison sampler. Used to enable comparison against
-       a reference value during lookups. */
-
-    class DepthSampler : public Sampler
-    {
-    public:
-        explicit DepthSampler(std::shared_ptr<Device> device,
-            const DepthSamplerState& state,
+            const BorderColor& borderColor = border::opaqueBlackFloat,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
@@ -81,30 +67,7 @@ namespace magma
     public:
         explicit UnnormalizedSampler(std::shared_ptr<Device> device,
             bool linearFilter,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-        explicit UnnormalizedSampler(std::shared_ptr<Device> device,
-            bool linearFilter,
-            const BorderColor& borderColor,
+            const BorderColor& borderColor = border::opaqueBlackFloat,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
-
-    /* Reduction sampler allows to produce a filtered texel value by computing
-       a component-wise minimum or maximum of the texels that would normally be averaged.
-       https://www.khronos.org/registry/vulkan/specs/1.3-extensions/man/html/VK_EXT_sampler_filter_minmax.html */
-
-#ifdef VK_EXT_sampler_filter_minmax
-    class ReductionSampler : public Sampler
-    {
-    public:
-        explicit ReductionSampler(std::shared_ptr<Device> device,
-            const SamplerState& state,
-            VkSamplerReductionModeEXT reductionMode,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-        explicit ReductionSampler(std::shared_ptr<Device> device,
-            const SamplerState& state,
-            VkSamplerReductionModeEXT reductionMode,
-            const BorderColor& borderColor,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-    };
-#endif // VK_EXT_sampler_filter_minmax
 } // namespace magma

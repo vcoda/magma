@@ -669,6 +669,12 @@
     <ClInclude Include="..\..\core\threadSafeUnorderedSet.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\states\minmaxSamplerState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\states\depthComparisonSamplerState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1173,6 +1179,12 @@
     </None>
     <None Include="..\..\objects\resource.inl">
       <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\states\depthComparisonSamplerState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\states\minmaxSamplerState.inl">
+      <Filter>Header Files\states</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
