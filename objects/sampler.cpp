@@ -56,7 +56,8 @@ Sampler::~Sampler()
 }
 
 LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state,
-    float mipLodBias, float minLod, float maxLod, const BorderColor& borderColor,
+    float mipLodBias, float minLod, float maxLod,
+    const BorderColor& borderColor /* border::opaqueBlackFloat */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Sampler(std::move(device), std::move(allocator))
 {
@@ -74,7 +75,8 @@ LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state
     MAGMA_THROW_FAILURE(result, "failed to create lod sampler");
 }
 
-UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool linearFilter, const BorderColor& borderColor,
+UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool linearFilter,
+    const BorderColor& borderColor /* border::opaqueBlackFloat */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Sampler(std::move(device), std::move(allocator))
 {
