@@ -63,11 +63,8 @@ LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state
 {
     VkSamplerCreateInfo samplerInfo = state;
     samplerInfo.mipLodBias = mipLodBias;
-    if (samplerInfo.anisotropyEnable)
-    {   // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive
-        const VkPhysicalDeviceProperties properties = device->getPhysicalDevice()->getProperties();
-        samplerInfo.maxAnisotropy = std::max(1.f, std::min(state.maxAnisotropy, properties.limits.maxSamplerAnisotropy));
-    }
+    samplerInfo.anisotropyEnable = VK_FALSE;
+    samplerInfo.maxAnisotropy = 1.f;
     samplerInfo.minLod = minLod;
     samplerInfo.maxLod = maxLod;
     samplerInfo.borderColor = borderColor.getColor();
