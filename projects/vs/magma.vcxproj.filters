@@ -675,6 +675,12 @@
     <ClInclude Include="..\..\states\depthComparisonSamplerState.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\samplerYcbcrConversion.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\states\ycbcrSamplerState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1040,6 +1046,9 @@
     <ClCompile Include="..\..\objects\primaryCommandBuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\objects\samplerYcbcrConversion.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\auxiliary\immediateRender.inl">
@@ -1184,6 +1193,9 @@
       <Filter>Header Files\states</Filter>
     </None>
     <None Include="..\..\states\minmaxSamplerState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\states\ycbcrSamplerState.inl">
       <Filter>Header Files\states</Filter>
     </None>
   </ItemGroup>

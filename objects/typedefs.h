@@ -117,6 +117,9 @@ namespace magma
 #ifdef VK_KHR_multiview
     MAGMA_TYPEDEF_SHARED_PTR(MultiviewRenderPass)
 #endif
+#ifdef VK_KHR_sampler_ycbcr_conversion
+    MAGMA_TYPEDEF_SHARED_PTR(SamplerYcbcrConversion)
+#endif
 #ifdef VK_KHR_surface
     MAGMA_TYPEDEF_SHARED_PTR(Surface)
 #ifdef VK_KHR_win32_surface

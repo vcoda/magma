@@ -69,7 +69,9 @@ namespace magma
         core::ThreadSafeUnorderedSet<NonDispatchable<VkDescriptorSet>> descriptorSets;
         core::ThreadSafeUnorderedSet<NonDispatchable<VkFramebuffer>> framebuffers;
         core::ThreadSafeUnorderedSet<NonDispatchable<VkCommandPool>> commandPools;
-        // Non-core types
+#ifdef VK_KHR_sampler_ycbcr_conversion
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkSamplerYcbcrConversionKHR>> ycbcrSamplers;
+#endif
 #ifdef VK_KHR_surface
         core::ThreadSafeUnorderedSet<NonDispatchable<VkSurfaceKHR>> surfaces;
 #endif
@@ -118,6 +120,7 @@ namespace magma
         uint32_t rayTracingPipelineCount = 0;
         uint32_t descriptorSetLayoutCount = 0;
         uint32_t samplerCount = 0;
+        uint32_t ycbcrSamplerCount = 0;
         uint32_t descriptorPoolCount = 0;
         uint32_t descriptorSetCount = 0;
         uint32_t framebufferCount = 0;

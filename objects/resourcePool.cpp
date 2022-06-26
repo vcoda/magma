@@ -86,6 +86,9 @@ ResourcePool::DeviceResources ResourcePool::countDeviceResources() const
         });
     statistics.descriptorSetLayoutCount = descriptorSetLayouts.count();
     statistics.samplerCount = samplers.count();
+#ifdef VK_KHR_sampler_ycbcr_conversion
+    statistics.ycbcrSamplerCount = ycbcrSamplers.count();
+#endif
     statistics.descriptorPoolCount = descriptorPools.count();
     statistics.descriptorSetCount = descriptorSets.count();
     statistics.framebufferCount = framebuffers.count();

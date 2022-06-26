@@ -73,6 +73,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/renderPassMultiview.h"
 #include "objects/resource.h"
 #include "objects/sampler.h"
+#include "objects/samplerYcbcrConversion.h"
 #include "objects/secondaryCommandBuffer.h"
 #include "objects/semaphore.h"
 #include "objects/shaderModule.h"
@@ -115,6 +116,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "states/vertexInputState.h"
 #include "states/vertexInputStructure.h"
 #include "states/viewportState.h"
+#include "states/ycbcrSamplerState.h"
 
 #include "descriptors/attachment.h"
 #include "descriptors/binding.h"

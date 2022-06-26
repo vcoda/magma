@@ -294,6 +294,7 @@
     <ClInclude Include="..\..\objects\resource.h" />
     <ClInclude Include="..\..\objects\resourcePool.h" />
     <ClInclude Include="..\..\objects\sampler.h" />
+    <ClInclude Include="..\..\objects\samplerYcbcrConversion.h" />
     <ClInclude Include="..\..\objects\secondaryCommandBuffer.h" />
     <ClInclude Include="..\..\objects\semaphore.h" />
     <ClInclude Include="..\..\objects\shaderModule.h" />
@@ -338,6 +339,7 @@
     <ClInclude Include="..\..\states\multiViewportState.h" />
     <ClInclude Include="..\..\states\viewportState.h" />
     <ClInclude Include="..\..\states\colorWriteMask.h" />
+    <ClInclude Include="..\..\states\ycbcrSamplerState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\alignedAllocator.cpp" />
@@ -441,6 +443,7 @@
     <ClCompile Include="..\..\objects\resource.cpp" />
     <ClCompile Include="..\..\objects\resourcePool.cpp" />
     <ClCompile Include="..\..\objects\sampler.cpp" />
+    <ClCompile Include="..\..\objects\samplerYcbcrConversion.cpp" />
     <ClCompile Include="..\..\objects\semaphore.cpp" />
     <ClCompile Include="..\..\objects\shaderModule.cpp" />
     <ClCompile Include="..\..\objects\srcTransferBuffer.cpp" />
@@ -607,6 +610,7 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
     <None Include="..\..\states\tesselationState.inl" />
     <None Include="..\..\states\vertexInputState.inl" />
     <None Include="..\..\states\vertexInputStructure.inl" />
+    <None Include="..\..\states\ycbcrSamplerState.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -117,6 +117,7 @@ MAGMA_OBJS= \
 	objects/resource.o \
 	objects/resourcePool.o \
 	objects/sampler.o \
+	objects/samplerYcbcrConversion.o \
 	objects/semaphore.o \
 	objects/shaderModule.o \
 	objects/srcTransferBuffer.o \
