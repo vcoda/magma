@@ -1,6 +1,6 @@
 namespace magma
 {
-constexpr MinMaxSamplerState::MinMaxSamplerState(const SamplerState& state, VkSamplerReductionModeEXT reductionMode) noexcept:
+constexpr MinMaxSamplerState::MinMaxSamplerState(const SamplerState& state, const VkSamplerReductionModeEXT reductionMode) noexcept:
     SamplerState(state),
     reduction{
         VK_STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO_EXT,

@@ -1,7 +1,7 @@
 namespace magma
 {
-constexpr SamplerState::SamplerState(VkFilter magFilter, VkFilter minFilter,
-    VkSamplerMipmapMode mipmapMode, VkSamplerAddressMode addressMode) noexcept:
+constexpr SamplerState::SamplerState(const VkFilter magFilter, const VkFilter minFilter,
+    const VkSamplerMipmapMode mipmapMode, const VkSamplerAddressMode addressMode) noexcept:
     VkSamplerCreateInfo{
         VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
         nullptr, // pNext
