@@ -1,5 +1,5 @@
-constexpr StreamRasterizationState::StreamRasterizationState(const RasterizationState& state, uint32_t rasterizationStream,
-    VkPipelineRasterizationStateStreamCreateFlagsEXT flags /* 0 */) noexcept:
+constexpr StreamRasterizationState::StreamRasterizationState(const RasterizationState& state, const uint32_t rasterizationStream,
+    const VkPipelineRasterizationStateStreamCreateFlagsEXT flags /* 0 */) noexcept:
     RasterizationState(state),
     stream{
         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_STREAM_CREATE_INFO_EXT,
