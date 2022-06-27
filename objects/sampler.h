@@ -32,11 +32,8 @@ namespace magma
     public:
         explicit Sampler(std::shared_ptr<Device> device,
             const SamplerState& state,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-        explicit Sampler(std::shared_ptr<Device> device,
-            const SamplerState& state,
-            const BorderColor& borderColor,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const BorderColor& borderColor = border::opaqueBlackFloat);
         ~Sampler();
 
     protected:
@@ -54,8 +51,8 @@ namespace magma
             float mipLodBias,
             float minLod,
             float maxLod,
-            const BorderColor& borderColor = border::opaqueBlackFloat,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const BorderColor& borderColor = border::opaqueBlackFloat);
     };
 
     /* Unnormalized sampler specifies the usage of unnormalized texel coordinates
@@ -67,7 +64,7 @@ namespace magma
     public:
         explicit UnnormalizedSampler(std::shared_ptr<Device> device,
             bool linearFilter,
-            const BorderColor& borderColor = border::opaqueBlackFloat,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const BorderColor& borderColor = border::opaqueBlackFloat);
     };
 } // namespace magma

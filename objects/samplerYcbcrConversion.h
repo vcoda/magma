@@ -30,8 +30,9 @@ namespace magma
     {
     public:
         explicit SamplerYcbcrConversion(std::shared_ptr<Device> device,
-            const YcbcrConversionSamplerState& state,
             VkFormat format,
+            const YcbcrConversionSamplerState& state,
+            std::shared_ptr<IAllocator> allocator = nullptr,
             const VkComponentMapping& swizzle = {
                 VK_COMPONENT_SWIZZLE_IDENTITY,
                 VK_COMPONENT_SWIZZLE_IDENTITY,
@@ -39,8 +40,7 @@ namespace magma
                 VK_COMPONENT_SWIZZLE_IDENTITY},
             VkChromaLocationKHR xChromaOffset = VK_CHROMA_LOCATION_MIDPOINT_KHR,
             VkChromaLocationKHR yChromaOffset = VK_CHROMA_LOCATION_MIDPOINT_KHR,
-            bool forceExplicitReconstruction = false,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            bool forceExplicitReconstruction = false);
         ~SamplerYcbcrConversion();
     };
 } // namespace magma

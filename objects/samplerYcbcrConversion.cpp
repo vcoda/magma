@@ -27,12 +27,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 SamplerYcbcrConversion::SamplerYcbcrConversion(std::shared_ptr<Device> device,
-    const YcbcrConversionSamplerState& state, VkFormat format,
+    VkFormat format,
+    const YcbcrConversionSamplerState& state,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     VkChromaLocationKHR xChromaOffset /* VK_CHROMA_LOCATION_MIDPOINT_KHR */,
     VkChromaLocationKHR yChromaOffset /* VK_CHROMA_LOCATION_MIDPOINT_KHR */,
-    bool forceExplicitReconstruction /* false */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    bool forceExplicitReconstruction /* false */):
     NonDispatchable(VK_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_KHR, std::move(device), std::move(allocator))
 {
     VkSamplerYcbcrConversionCreateInfoKHR samplerInfo;

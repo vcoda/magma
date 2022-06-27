@@ -31,19 +31,16 @@ Sampler::Sampler(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> all
 {}
 
 Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Sampler(std::move(device), state, border::opaqueBlackFloat, std::move(allocator))
-{}
-
-Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state, const BorderColor& borderColor,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const BorderColor& borderColor /* opaqueBlackFloat */):
     Sampler(std::move(device), std::move(allocator))
 {
     VkSamplerCreateInfo samplerInfo = state;
     if (samplerInfo.anisotropyEnable)
     {   // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive
         const VkPhysicalDeviceProperties properties = device->getPhysicalDevice()->getProperties();
-        samplerInfo.maxAnisotropy = std::max(1.f, std::min(state.maxAnisotropy, properties.limits.maxSamplerAnisotropy));
+        const VkPhysicalDeviceLimits& limits = properties.limits;
+        samplerInfo.maxAnisotropy = std::max(1.f, std::min(state.maxAnisotropy, limits.maxSamplerAnisotropy));
     }
     samplerInfo.borderColor = borderColor.getColor();
     const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
@@ -57,8 +54,8 @@ Sampler::~Sampler()
 
 LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state,
     float mipLodBias, float minLod, float maxLod,
-    const BorderColor& borderColor /* border::opaqueBlackFloat */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const BorderColor& borderColor /* opaqueBlackFloat */):
     Sampler(std::move(device), std::move(allocator))
 {
     VkSamplerCreateInfo samplerInfo = state;
@@ -73,8 +70,8 @@ LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state
 }
 
 UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool linearFilter,
-    const BorderColor& borderColor /* border::opaqueBlackFloat */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const BorderColor& borderColor /* opaqueBlackFloat */):
     Sampler(std::move(device), std::move(allocator))
 {
     VkSamplerCreateInfo samplerInfo;
