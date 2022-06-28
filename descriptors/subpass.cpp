@@ -164,7 +164,7 @@ std::size_t SubpassDescription::hash() const noexcept
     uint32_t i;
     for (i = 0; i < inputAttachmentCount; ++i)
     {
-        core::hashCombine(hash, core::hashArgs(
+        hash = core::hashCombine(hash, core::hashArgs(
             pInputAttachments[i].attachment,
             pInputAttachments[i].layout));
     }
@@ -172,25 +172,25 @@ std::size_t SubpassDescription::hash() const noexcept
     {
         if (pColorAttachments)
         {
-            core::hashCombine(hash, core::hashArgs(
+            hash = core::hashCombine(hash, core::hashArgs(
                 pColorAttachments[i].attachment,
                 pColorAttachments[i].layout));
         } else if (pResolveAttachments)
         {
-            core::hashCombine(hash, core::hashArgs(
+            hash = core::hashCombine(hash, core::hashArgs(
                 pResolveAttachments[i].attachment,
                 pResolveAttachments[i].layout));
         }
     }
     if (pDepthStencilAttachment)
     {
-        core::hashCombine(hash, core::hashArgs(
+        hash = core::hashCombine(hash, core::hashArgs(
             pDepthStencilAttachment->attachment,
             pDepthStencilAttachment->layout));
     }
     for (i = 0; i < preserveAttachmentCount; ++i)
     {
-        core::hashCombine(hash, core::hash(
+        hash = core::hashCombine(hash, core::hash(
             pPreserveAttachments[i]));
     }
     return hash;

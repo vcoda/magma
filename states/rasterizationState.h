@@ -29,7 +29,7 @@ namespace magma
             bool depthClampEnable = false,
             bool rasterizerDiscardEnable = false) noexcept;
         constexpr RasterizationState(const RasterizationState&) noexcept;
-        std::size_t hash() const noexcept;
+        constexpr std::size_t hash() const noexcept;
         constexpr bool operator==(const RasterizationState&) const noexcept;
     };
 

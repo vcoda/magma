@@ -110,7 +110,7 @@ std::size_t AdvancedColorBlendState::hash() const noexcept
         attachmentCount);
     for (uint32_t i = 0; i < attachmentCount; ++i)
     {
-        core::hashCombine(hash, core::hashArgs(
+        hash = core::hashCombine(hash, core::hashArgs(
             pAttachments[i].blendEnable,
             pAttachments[i].srcColorBlendFactor,
             pAttachments[i].dstColorBlendFactor,
@@ -120,14 +120,13 @@ std::size_t AdvancedColorBlendState::hash() const noexcept
             pAttachments[i].alphaBlendOp,
             pAttachments[i].colorWriteMask));
     }
-    core::hashCombine(hash, core::hashArray(blendConstants, 4));
+    hash = core::hashCombine(hash, core::hashArray(blendConstants, 4));
     auto colorBlendAdvanced = reinterpret_cast<const VkPipelineColorBlendAdvancedStateCreateInfoEXT *>(pNext);
-    core::hashCombine(hash, core::hashArgs(
+    return core::hashCombine(hash, core::hashArgs(
         colorBlendAdvanced->sType,
         colorBlendAdvanced->srcPremultiplied,
         colorBlendAdvanced->dstPremultiplied,
         colorBlendAdvanced->blendOverlap));
-    return hash;
 }
 
 bool AdvancedColorBlendState::operator==(const AdvancedColorBlendState& other) const noexcept

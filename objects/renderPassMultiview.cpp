@@ -47,12 +47,12 @@ public:
             multiviewInfo.dependencyCount,
             multiviewInfo.correlationMaskCount);
         for (uint32_t i = 0; i < multiviewInfo.subpassCount; ++i)
-            core::hashCombine(hash, multiviewInfo.pViewMasks[i]);
+            hash = core::hashCombine(hash, multiviewInfo.pViewMasks[i]);
         for (uint32_t i = 0; i < multiviewInfo.dependencyCount; ++i)
-            core::hashCombine(hash, multiviewInfo.pViewOffsets[i]);
+            hash = core::hashCombine(hash, multiviewInfo.pViewOffsets[i]);
         for (uint32_t i = 0; i < multiviewInfo.correlationMaskCount; ++i)
-            core::hashCombine(hash, multiviewInfo.pCorrelationMasks[i]);
-        core::hashCombine(hash, chainedInfo.getHash());
+            hash = core::hashCombine(hash, multiviewInfo.pCorrelationMasks[i]);
+        hash = core::hashCombine(hash, chainedInfo.getHash());
     }
 
     const void *getNode() const noexcept override

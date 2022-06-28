@@ -52,7 +52,7 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
         info.setLayoutCount,
         info.pushConstantRangeCount);
     for (const auto& pushConstantRange : pushConstantRanges)
-        core::hashCombine(hash, pushConstantRange.hash());
+        hash = core::hashCombine(hash, pushConstantRange.hash());
 }
 
 PipelineLayout::PipelineLayout(std::shared_ptr<DescriptorSetLayout> setLayout, const PushConstantRange& pushConstantRange,
@@ -91,7 +91,7 @@ PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<DescriptorSetLa
         info.setLayoutCount,
         info.pushConstantRangeCount);
     for (const auto& pushConstantRange : pushConstantRanges)
-        core::hashCombine(hash, pushConstantRange.hash());
+        hash = core::hashCombine(hash, pushConstantRange.hash());
 }
 
 PipelineLayout::~PipelineLayout()
@@ -116,7 +116,7 @@ std::size_t PipelineLayout::getHash() const noexcept
 {   // Compute complex hash on demand
     std::size_t hash = this->hash;
     for (const std::shared_ptr<DescriptorSetLayout>& layout : setLayouts)
-        core::hashCombine(hash, layout->getHash());
+        hash = core::hashCombine(hash, layout->getHash());
     return hash;
 }
 } // namespace magma

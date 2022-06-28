@@ -59,9 +59,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif // !MAGMA_DEBUG
 
 #ifdef _MSC_VER
-#define MAGMA_CONSTEXPR constexpr
+#if _HAS_CXX17
+#define MAGMA_NODISCARD [[nodiscard]]
 #else
-#define MAGMA_CONSTEXPR
+#define MAGMA_NODISCARD
+#endif
 #endif
 
 #define MAGMA_UNUSED(variable) variable

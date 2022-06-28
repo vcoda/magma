@@ -22,7 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/shaderModule.h"
 #include "../shaders/shaderReflection.h"
 #include "../states/rasterizationState.h"
-#include "../core/constexprHash.h"
 
 namespace magma
 {

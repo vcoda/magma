@@ -42,7 +42,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/depthStencilState.h"
 #include "../states/colorBlendState.h"
 #include "../states/samplerState.h"
-#include "../core/constexprHash.h"
 
 namespace magma
 {

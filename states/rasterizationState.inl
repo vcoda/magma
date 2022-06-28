@@ -38,7 +38,7 @@ constexpr RasterizationState::RasterizationState(const RasterizationState& other
     }
 {}
 
-inline std::size_t RasterizationState::hash() const noexcept
+constexpr std::size_t RasterizationState::hash() const noexcept
 {
     return core::hashArgs(
         sType,

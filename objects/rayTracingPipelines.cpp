@@ -65,10 +65,10 @@ uint32_t RayTracingPipelines::newPipeline(const std::vector<PipelineShaderStage>
         pipelineInfo.groupCount,
         pipelineInfo.maxRecursionDepth);
     for (const auto& stage : shaderStages)
-        core::hashCombine(hash, stage.getHash());
+        hash = core::hashCombine(hash, stage.getHash());
     for (const auto& group : shaderGroups)
-        core::hashCombine(hash, group.hash());
-    core::hashCombine(hash, layout->getHash());
+        hash = core::hashCombine(hash, group.hash());
+    hash = core::hashCombine(hash, layout->getHash());
     hashes.push_back(hash);
     return MAGMA_COUNT(pipelineInfos) - 1;
 }

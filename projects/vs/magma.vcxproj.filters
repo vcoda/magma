@@ -465,9 +465,6 @@
     <ClInclude Include="..\..\core\core.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\core\hashCombine.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\core\hash.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
@@ -494,9 +491,6 @@
     </ClInclude>
     <ClInclude Include="..\..\core\hashing\fnv1string.h">
       <Filter>Header Files\core\hashing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\constexprHash.h">
-      <Filter>Header Files\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\shaders\shaderReflection.h">
       <Filter>Header Files\shaders</Filter>
@@ -680,6 +674,9 @@
     </ClInclude>
     <ClInclude Include="..\..\states\ycbcrSamplerState.h">
       <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\hashing\constexprHash.h">
+      <Filter>Header Files\core\hashing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

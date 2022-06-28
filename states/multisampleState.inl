@@ -40,7 +40,7 @@ constexpr MultisampleState::MultisampleState(const uint32_t sampleCount) noexcep
     }
 }
 
-inline std::size_t MultisampleState::hash() const noexcept
+constexpr std::size_t MultisampleState::hash() const noexcept
 {
     std::size_t hash = core::hashArgs(
         sType,
@@ -52,9 +52,9 @@ inline std::size_t MultisampleState::hash() const noexcept
         alphaToOneEnable);
     if (pSampleMask)
     {
-        core::hashCombine(hash, core::hash(pSampleMask[0]));
+        hash = core::hashCombine(hash, core::hash(pSampleMask[0]));
         if (rasterizationSamples > VK_SAMPLE_COUNT_32_BIT)
-            core::hashCombine(hash, core::hash(pSampleMask[1]));
+            hash = core::hashCombine(hash, core::hash(pSampleMask[1]));
     }
     return hash;
 }

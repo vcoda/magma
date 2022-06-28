@@ -73,8 +73,8 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
         info.flags,
         info.stageCount);
     for (const auto& stage : shaderStages)
-        core::hashCombine(hash, stage.getHash());
-    std::size_t baseHash = core::hashCombineList({
+        hash = core::hashCombine(hash, stage.getHash());
+    std::size_t baseHash = core::combineHashList({
         vertexInputState.hash(),
         inputAssemblyState.hash(),
         tesselationState.hash(),
@@ -84,15 +84,15 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
         depthStencilState.hash(),
         colorBlendState.hash()});
     for (auto state : dynamicStates)
-        core::hashCombine(baseHash, core::hash(state));
-    core::hashCombine(hash, baseHash);
+        hash = core::hashCombine(baseHash, core::hash(state));
+    hash = core::hashCombine(hash, baseHash);
     if (!pipelineLayout)
         pipelineLayout = std::make_shared<PipelineLayout>(device);
-    core::hashCombine(hash, pipelineLayout->getHash());
+    hash = core::hashCombine(hash, pipelineLayout->getHash());
     if (renderPass)
     {
-        core::hashCombine(hash, renderPass->getHash());
-        core::hashCombine(hash, core::hash(subpass));
+        hash = core::hashCombine(hash, renderPass->getHash());
+        hash = core::hashCombine(hash, core::hash(subpass));
     }
     // Lookup for existing pipeline
     auto it = pipelines.find(hash);
@@ -133,7 +133,7 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupBasePipeline(
 {
     if (!basePipelines.empty())
     {   // Compute hash of render and dynamic states
-        std::size_t hash = core::hashCombineList({
+        std::size_t hash = core::combineHashList({
             vertexInputState.hash(),
             inputAssemblyState.hash(),
             tesselationState.hash(),
@@ -143,7 +143,7 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupBasePipeline(
             depthStencilState.hash(),
             colorBlendState.hash()});
         for (auto state : dynamicStates)
-            core::hashCombine(hash, core::hash(state));
+            hash = core::hashCombine(hash, core::hash(state));
         auto it = basePipelines.find(hash);
         if (it != basePipelines.end())
             return it->second;

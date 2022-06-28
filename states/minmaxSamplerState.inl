@@ -11,10 +11,10 @@ constexpr MinMaxSamplerState::MinMaxSamplerState(const SamplerState& state, cons
     pNext = &reduction;
 }
 
-inline std::size_t MinMaxSamplerState::hash() const noexcept
+constexpr std::size_t MinMaxSamplerState::hash() const noexcept
 {
     std::size_t hash = SamplerState::hash();
-    core::hashCombine(hash, core::hashArgs(
+    hash = core::hashCombine(hash, core::hashArgs(
         reduction.sType,
         reduction.reductionMode));
     return hash;

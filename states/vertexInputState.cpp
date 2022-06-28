@@ -117,14 +117,14 @@ std::size_t VertexInputState::hash() const noexcept
         vertexAttributeDescriptionCount);
     for (uint32_t i = 0; i < vertexBindingDescriptionCount; ++i)
     {
-        core::hashCombine(hash, core::hashArgs(
+        hash = core::hashCombine(hash, core::hashArgs(
             pVertexBindingDescriptions[i].binding,
             pVertexBindingDescriptions[i].stride,
             pVertexBindingDescriptions[i].inputRate));
     }
     for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
     {
-        core::hashCombine(hash, core::hashArgs(
+        hash = core::hashCombine(hash, core::hashArgs(
             pVertexAttributeDescriptions[i].location,
             pVertexAttributeDescriptions[i].binding,
             pVertexAttributeDescriptions[i].format,

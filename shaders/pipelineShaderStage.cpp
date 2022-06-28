@@ -80,10 +80,10 @@ std::size_t PipelineShaderStage::getHash() const noexcept
         flags,
         stage,
         module);
-    core::hashCombine(hash, shaderModule->getHash());
-    core::hashCombine(hash, core::hashString(std::string(pName)));
+    hash = core::hashCombine(hash, shaderModule->getHash());
+    hash = core::hashCombine(hash, core::hashString(std::string(pName)));
     if (specialization)
-        core::hashCombine(hash, specialization->hash());
+        hash = core::hashCombine(hash, specialization->hash());
     return hash;
 }
 } // namespace magma

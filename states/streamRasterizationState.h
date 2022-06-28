@@ -30,7 +30,7 @@ namespace magma
         constexpr StreamRasterizationState(const RasterizationState& state,
             uint32_t rasterizationStream,
             VkPipelineRasterizationStateStreamCreateFlagsEXT flags = 0) noexcept;
-        std::size_t hash() const noexcept;
+        constexpr std::size_t hash() const noexcept;
         constexpr bool operator==(const StreamRasterizationState&) const noexcept;
 
         const VkPipelineRasterizationStateStreamCreateInfoEXT stream;

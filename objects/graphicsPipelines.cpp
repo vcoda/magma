@@ -107,8 +107,8 @@ uint32_t GraphicsPipelines::newPipeline(const std::vector<PipelineShaderStage>& 
         pipelineInfo.flags,
         pipelineInfo.stageCount);
     for (const auto& stage : shaderStages)
-        core::hashCombine(hash, stage.getHash());
-    std::size_t stateHash = core::hashCombineList({
+        hash = core::hashCombine(hash, stage.getHash());
+    std::size_t stateHash = core::combineHashList({
         vertexInputState.hash(),
         inputAssemblyState.hash(),
         tesselationState.hash(),
@@ -118,13 +118,13 @@ uint32_t GraphicsPipelines::newPipeline(const std::vector<PipelineShaderStage>& 
         depthStencilState.hash(),
         colorBlendState.hash()});
     for (auto state : dynamicRenderStates)
-        core::hashCombine(stateHash, core::hash(state));
-    core::hashCombine(hash, stateHash);
-    core::hashCombine(hash, layout->getHash());
+        hash = core::hashCombine(stateHash, core::hash(state));
+    hash = core::hashCombine(hash, stateHash);
+    hash = core::hashCombine(hash, layout->getHash());
     if (renderPass)
     {
-        core::hashCombine(hash, renderPass->getHash());
-        core::hashCombine(hash, core::hash(subpass));
+        hash = core::hashCombine(hash, renderPass->getHash());
+        hash = core::hashCombine(hash, core::hash(subpass));
     }
     hashes.push_back(hash);
     return MAGMA_COUNT(pipelineInfos) - 1;

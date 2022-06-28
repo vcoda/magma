@@ -59,7 +59,7 @@ namespace magma
         constexpr AttachmentDescription(VkFormat format,
             uint32_t sampleCount,
             const AttachmentDescription& predefined) noexcept;
-        std::size_t hash() const noexcept;
+        constexpr std::size_t hash() const noexcept;
     };
 } // namespace magma
 

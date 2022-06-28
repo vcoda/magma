@@ -30,7 +30,7 @@ namespace magma
             VkSamplerMipmapMode mipmapMode,
             VkSamplerAddressMode addressMode) noexcept;
         constexpr SamplerState(const SamplerState&) noexcept;
-        std::size_t hash() const noexcept;
+        constexpr std::size_t hash() const noexcept;
         constexpr bool operator==(const SamplerState&) const noexcept;
     };
 

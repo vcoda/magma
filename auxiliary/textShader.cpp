@@ -40,7 +40,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../helpers/mapScoped.h"
 #include "../core/copyMemory.h"
-#include "../core/constexprHash.h"
 
 #ifdef _MSC_VER
 #pragma warning(disable : 4244) // conversion from 'const uint32_t' to 'float', possible loss of data

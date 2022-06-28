@@ -47,7 +47,7 @@ constexpr AttachmentDescription::AttachmentDescription(const VkFormat format, co
         predefined.stencilLoadOp, predefined.stencilStoreOp, initialLayout, finalLayout)
 {}
 
-inline std::size_t AttachmentDescription::hash() const noexcept
+constexpr std::size_t AttachmentDescription::hash() const noexcept
 {
     return core::hashArgs(
         flags,

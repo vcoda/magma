@@ -67,11 +67,11 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
 #ifdef VK_EXT_validation_cache
     if (validationCache)
     {
-        core::hashCombine(hash, core::hashArgs(
+        hash = core::hashCombine(hash, core::hashArgs(
             cacheCreateInfo.sType,
             cacheCreateInfo.validationCache));
     }
-#endif
+#endif // VK_EXT_validation_cache
     if (0 == bytecodeHash && !reflect)
     {   // Store bytecode for future hash computation
         const std::size_t wordCount = shaderInfo.codeSize / sizeof(SpirvWord);
@@ -105,12 +105,13 @@ std::size_t ShaderModule::getHash() const noexcept
 {
     if (0 == bytecodeHash)
     {   // Compute hash on demand, may take time for large shaders
-        bytecodeHash = reflection ? reflection->computeBytecodeHash() : core::hashVector(bytecode);
+        if (reflection)
+            bytecodeHash = reflection->computeBytecodeHash();
+        else
+            bytecodeHash = core::hashArray(bytecode.data(), bytecode.size());
         if (!bytecode.empty())
             std::vector<SpirvWord>().swap(bytecode);
     }
-    std::size_t hash = this->hash;
-    core::hashCombine(hash, bytecodeHash);
-    return hash;
+    return core::hashCombine(hash, bytecodeHash);
 }
 } // namespace magma
