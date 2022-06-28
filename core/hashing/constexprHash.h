@@ -28,10 +28,10 @@ namespace magma
     {
         template<class Int>
         struct ConstexprHash
-	    {
+        {
             // Robert Jenkins' reversible 32 bit mix hash function
             constexpr std::size_t hash(uint32_t x) const noexcept
-		    {
+            {
                 x += (x << 12); // x *= (1 + (1 << 12))
                 x ^= (x >> 22);
                 x += (x << 4);  // x *= (1 + (1 << 4))
@@ -42,7 +42,7 @@ namespace magma
                 x += (x << 7);
                 x += (x << 12);
                 return x;
-		    }
+            }
 
             // Thomas Wang 64 bit mix hash function
             constexpr std::size_t hash(uint64_t x) const noexcept
@@ -57,8 +57,8 @@ namespace magma
                 return x;
             }
 
-	        constexpr std::size_t operator()(const Int x) const noexcept
-		    {
+            constexpr std::size_t operator()(const Int x) const noexcept
+            {
 #           if _HAS_CXX17
                 if constexpr
 #           else
@@ -69,7 +69,7 @@ namespace magma
                 else
                     return hash(static_cast<uint64_t>(x));
             }
-	    };
+        };
 
         template<>
         struct ConstexprHash<float>
