@@ -107,7 +107,7 @@ constexpr ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& atta
 
 constexpr std::size_t ColorBlendState::hash() const noexcept
 {
-    std::size_t hash = core::hashArgs(
+    return core::hashArgs(
         sType,
         flags,
         logicOpEnable,
@@ -125,7 +125,6 @@ constexpr std::size_t ColorBlendState::hash() const noexcept
         blendConstants[1],
         blendConstants[2],
         blendConstants[3]);
-    return hash;
 }
 
 constexpr bool ColorBlendState::operator==(const ColorBlendState& other) const noexcept

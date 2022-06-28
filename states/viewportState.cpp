@@ -173,7 +173,7 @@ ViewportState& ViewportState::operator=(const ViewportState& other) noexcept
 
 std::size_t ViewportState::hash() const noexcept
 {
-    std::size_t hash = core::hashArgs(
+    return core::hashArgs(
         sType,
         flags,
         viewportCount,
@@ -193,7 +193,6 @@ std::size_t ViewportState::hash() const noexcept
         depthClipControl.negativeOneToOne,
 #endif // VK_EXT_depth_clip_control
         0);
-    return hash;
 }
 
 bool ViewportState::operator==(const ViewportState& other) const noexcept
