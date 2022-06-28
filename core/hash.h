@@ -34,8 +34,8 @@ namespace magma
         template<typename Type>
         constexpr std::size_t hash(Type *p) noexcept
         {
-            ConstexprHash<std::size_t> hasher;
-            return hasher(reinterpret_cast<std::size_t>(p));
+            ConstexprHash<uintptr_t> hasher;
+            return hasher(reinterpret_cast<uintptr_t>(p));
         }
 
         MAGMA_NODISCARD constexpr std::size_t hashCombine(const std::size_t seed, const std::size_t hash) noexcept
