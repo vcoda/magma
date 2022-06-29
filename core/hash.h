@@ -38,11 +38,6 @@ namespace magma
             return hasher(reinterpret_cast<uintptr_t>(p));
         }
 
-        MAGMA_NODISCARD constexpr std::size_t hashCombine(const std::size_t seed, const std::size_t hash) noexcept
-        {   // https://www.boost.org/doc/libs/1_46_1/doc/html/hash/reference.html#boost.hash_combine
-            return seed ^ (hash + 0x9e3779b9 + (seed << 6) + (seed >> 2));
-        }
-
         namespace hashing
         {
             template<typename Type>

@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma warning(disable : 4127) // conditional expression is constant
 #endif
 #endif
+#include "combine.h"
 
 namespace magma
 {
@@ -76,20 +77,22 @@ namespace magma
         {
             constexpr std::size_t operator()(const float x) const noexcept
             {
-                constexpr float prime = 16777619.0f;
-                constexpr uint32_t basis = 2166136261U;
-                return basis ^ (std::size_t)(x * prime);
+                const uint32_t integer = static_cast<uint32_t>(x);
+                const uint32_t fractional = static_cast<uint32_t>(x * 1000000.f);
+                const ConstexprHash<uint32_t> hasher;
+                return hashCombine(hasher(integer), hasher(fractional));
             }
         };
 
         template<>
         struct ConstexprHash<double>
         {
-            constexpr std::size_t operator()(const float x) const noexcept
+            constexpr std::size_t operator()(const double x) const noexcept
             {
-                constexpr double prime = 1099511628211.0;
-                constexpr uint64_t basis = 14695981039346656037ULL;
-                return basis ^ (std::size_t)(x * prime);
+                const uint64_t integer = static_cast<uint64_t>(x);
+                const uint64_t fractional = static_cast<uint64_t>(x * 1000000000.);
+                const ConstexprHash<uint64_t> hasher;
+                return hashCombine(hasher(integer), hasher(fractional));
             }
         };
     } // namespace core

@@ -678,6 +678,9 @@
     <ClInclude Include="..\..\core\hashing\constexprHash.h">
       <Filter>Header Files\core\hashing</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\core\hashing\combine.h">
+      <Filter>Header Files\core\hashing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
