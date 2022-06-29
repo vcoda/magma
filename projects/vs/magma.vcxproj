@@ -180,7 +180,6 @@
     <ClInclude Include="..\..\core\hashing\fnv1string.h" />
     <ClInclude Include="..\..\core\destructible.h" />
     <ClInclude Include="..\..\core\hashing\constexpr.h" />
-    <ClInclude Include="..\..\core\hashing\modf.h" />
     <ClInclude Include="..\..\core\linearAllocator.h" />
     <ClInclude Include="..\..\core\memzero.h" />
     <ClInclude Include="..\..\core\copy.h" />

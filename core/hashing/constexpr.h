@@ -22,7 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif
 #endif
 #include "combine.h"
-#include "modf.h"
 
 namespace magma
 {
@@ -84,10 +83,13 @@ namespace magma
         {
             constexpr std::size_t operator()(const float x) const noexcept
             {
-                const ConstexprModf<uint32_t> y(x);
+                const float ax = x >= 0 ? x : -x;
+                const float frac = ax - static_cast<uint32_t>(ax);
+                const uint32_t fractional = static_cast<uint32_t>(frac * 1000000.f); // shift left
+                const uint32_t integer = static_cast<uint32_t>(x);
                 const ConstexprHash<uint32_t> hasher;
-                const std::size_t intHash = hasher(y.i);
-                const std::size_t fracHash = hasher(y.f);
+                const std::size_t intHash = hasher(integer);
+                const std::size_t fracHash = hasher(fractional);
                 return hashCombine(intHash, fracHash);
             }
         };
@@ -97,10 +99,13 @@ namespace magma
         {
             constexpr std::size_t operator()(const double x) const noexcept
             {
-                const ConstexprModf<uint64_t> y(x);
+                const double ax = x >= 0 ? x : -x;
+                const double frac = ax - static_cast<uint64_t>(ax);
+                const uint64_t fractional = static_cast<uint64_t>(frac * 1000000.); // shift left
+                const uint64_t integer = static_cast<uint64_t>(x);
                 const ConstexprHash<uint64_t> hasher;
-                const std::size_t intHash = hasher(y.i);
-                const std::size_t fracHash = hasher(y.f);
+                const std::size_t intHash = hasher(integer);
+                const std::size_t fracHash = hasher(fractional);
                 return hashCombine(intHash, fracHash);
             }
         };
