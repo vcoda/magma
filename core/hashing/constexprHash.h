@@ -30,8 +30,30 @@ namespace magma
         template<class Int>
         struct ConstexprHash
         {
-            // Robert Jenkins' reversible 32 bit mix hash function
-            constexpr std::size_t hash(uint32_t x) const noexcept
+            constexpr std::size_t operator()(const Int x) const noexcept
+            {
+#           if _HAS_CXX17
+                if constexpr
+#           else
+                if
+#           endif
+                   (sizeof(Int) <= 4)
+                {
+                    const ConstexprHash<uint32_t> hasher;
+                    return hasher(static_cast<uint32_t>(x));
+                }
+                else
+                {
+                    const ConstexprHash<uint64_t> hasher;
+                    return hasher(static_cast<uint64_t>(x));
+                }
+            }
+        };
+
+        template<>
+        struct ConstexprHash<uint32_t>
+        {   // Robert Jenkins' reversible 32 bit mix hash function
+            constexpr std::size_t operator()(uint32_t x) const noexcept
             {
                 x += (x << 12); // x *= (1 + (1 << 12))
                 x ^= (x >> 22);
@@ -44,9 +66,12 @@ namespace magma
                 x += (x << 12);
                 return x;
             }
+        };
 
-            // Thomas Wang 64 bit mix hash function
-            constexpr std::size_t hash(uint64_t x) const noexcept
+        template<>
+        struct ConstexprHash<uint64_t>
+        {   // Thomas Wang 64 bit mix hash function
+            constexpr std::size_t operator()(uint64_t x) const noexcept
             {
                 x = (~x) + (x << 21); // x *= (1 << 21) - 1; x -= 1;
                 x = x ^ (x >> 24);
@@ -57,19 +82,6 @@ namespace magma
                 x = x + (x << 31); // x *= 1 + (1 << 31)
                 return x;
             }
-
-            constexpr std::size_t operator()(const Int x) const noexcept
-            {
-#           if _HAS_CXX17
-                if constexpr
-#           else
-                if
-#           endif
-                   (sizeof(Int) <= 4)
-                    return hash(static_cast<uint32_t>(x));
-                else
-                    return hash(static_cast<uint64_t>(x));
-            }
         };
 
         template<>
@@ -77,10 +89,12 @@ namespace magma
         {
             constexpr std::size_t operator()(const float x) const noexcept
             {
+                const ConstexprHash<uint32_t> hasher;
                 const uint32_t integer = static_cast<uint32_t>(x);
                 const uint32_t fractional = static_cast<uint32_t>(x * 1000000.f);
-                const ConstexprHash<uint32_t> hasher;
-                return hashCombine(hasher(integer), hasher(fractional));
+                const std::size_t hashInt = hasher(integer);
+                const std::size_t hashFrac = hasher(fractional);
+                return hashCombine(hashInt, hashFrac);
             }
         };
 
@@ -89,10 +103,12 @@ namespace magma
         {
             constexpr std::size_t operator()(const double x) const noexcept
             {
+                const ConstexprHash<uint64_t> hasher;
                 const uint64_t integer = static_cast<uint64_t>(x);
                 const uint64_t fractional = static_cast<uint64_t>(x * 1000000000.);
-                const ConstexprHash<uint64_t> hasher;
-                return hashCombine(hasher(integer), hasher(fractional));
+                const std::size_t hashInt = hasher(integer);
+                const std::size_t hashFrac = hasher(fractional);
+                return hashCombine(hashInt, hashFrac);
             }
         };
     } // namespace core
