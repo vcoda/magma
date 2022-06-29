@@ -38,15 +38,9 @@ namespace magma
                 if
 #           endif
                    (sizeof(Int) <= 4)
-                {
-                    const ConstexprHash<uint32_t> hasher;
-                    return hasher(static_cast<uint32_t>(x));
-                }
+                    return ConstexprHash<uint32_t>()(static_cast<uint32_t>(x));
                 else
-                {
-                    const ConstexprHash<uint64_t> hasher;
-                    return hasher(static_cast<uint64_t>(x));
-                }
+                    return ConstexprHash<uint64_t>()(static_cast<uint64_t>(x));
             }
         };
 
