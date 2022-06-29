@@ -83,7 +83,7 @@ namespace magma
         {
             constexpr std::size_t operator()(const float x) const noexcept
             {
-                const float ax = x >= 0 ? x : -x;
+                const float ax = x >= 0.f ? x : -x;
                 const float frac = ax - static_cast<uint32_t>(ax);
                 const uint32_t fractional = static_cast<uint32_t>(frac * 1000000.f); // shift left
                 const uint32_t integer = static_cast<uint32_t>(x);
@@ -99,7 +99,7 @@ namespace magma
         {
             constexpr std::size_t operator()(const double x) const noexcept
             {
-                const double ax = x >= 0 ? x : -x;
+                const double ax = x >= 0. ? x : -x;
                 const double frac = ax - static_cast<uint64_t>(ax);
                 const uint64_t fractional = static_cast<uint64_t>(frac * 1000000.); // shift left
                 const uint64_t integer = static_cast<uint64_t>(x);
