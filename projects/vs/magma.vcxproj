@@ -175,10 +175,12 @@
     <ClInclude Include="..\..\barriers\imageMemoryBarrier.h" />
     <ClInclude Include="..\..\core\compare.h" />
     <ClInclude Include="..\..\core\enumClassArray.h" />
+    <ClInclude Include="..\..\core\hashing\combine.h" />
     <ClInclude Include="..\..\core\hashing\fnv1.h" />
     <ClInclude Include="..\..\core\hashing\fnv1string.h" />
     <ClInclude Include="..\..\core\destructible.h" />
-    <ClInclude Include="..\..\core\hashing\constexprHash.h" />
+    <ClInclude Include="..\..\core\hashing\constexpr.h" />
+    <ClInclude Include="..\..\core\hashing\modf.h" />
     <ClInclude Include="..\..\core\linearAllocator.h" />
     <ClInclude Include="..\..\core\memzero.h" />
     <ClInclude Include="..\..\core\copy.h" />

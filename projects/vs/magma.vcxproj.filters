@@ -675,10 +675,13 @@
     <ClInclude Include="..\..\states\ycbcrSamplerState.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\core\hashing\constexprHash.h">
+    <ClInclude Include="..\..\core\hashing\combine.h">
       <Filter>Header Files\core\hashing</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\core\hashing\combine.h">
+    <ClInclude Include="..\..\core\hashing\constexpr.h">
+      <Filter>Header Files\core\hashing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\hashing\modf.h">
       <Filter>Header Files\core\hashing</Filter>
     </ClInclude>
   </ItemGroup>
