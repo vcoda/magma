@@ -96,7 +96,7 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
         {
             if (!copyFn)
                 copyFn = core::copyMemory;
-            copyFn(buffer, data, size);
+            copyFn(buffer, data, static_cast<size_t>(size));
         });
     constexpr CopyLayout bufferLayout = {0, 0, 0};
     constexpr VkOffset3D imageOffset{0, 0, 0};
