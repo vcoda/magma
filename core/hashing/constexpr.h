@@ -30,6 +30,8 @@ namespace magma
         template<class Int>
         struct ConstexprHash
         {
+            static_assert(sizeof(Int) <= sizeof(uint64_t), "integral type is too wide");
+
             constexpr std::size_t operator()(const Int x) const noexcept
             {
 #           if _HAS_CXX17
