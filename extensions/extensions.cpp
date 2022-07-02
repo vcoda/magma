@@ -43,4 +43,9 @@ void Extensions::forEach(std::function<void(const std::string&, uint32_t)> fn) c
     for (const auto& ext : extensions)
         fn(ext.first, ext.second);
 }
+
+bool Extensions::hasExtension(std::size_t hash) const noexcept
+{
+    return hashes.find(hash) != hashes.end();
+}
 } // namespace magma

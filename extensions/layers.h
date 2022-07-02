@@ -31,8 +31,7 @@ namespace magma
 
     protected:
         Layers(const std::vector<VkLayerProperties>&);
-        bool hasLayer(std::size_t hash) const noexcept
-            { return hashes.find(hash) != hashes.end(); }
+        bool hasLayer(std::size_t hash) const noexcept;
 
     private:
         std::map<std::string, VkLayerProperties> layers;

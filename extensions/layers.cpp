@@ -43,4 +43,10 @@ void Layers::forEach(std::function<void(const VkLayerProperties&)> fn) const noe
     for (const auto& layer : layers)
         fn(layer.second);
 }
+
+bool Layers::hasLayer(std::size_t hash) const noexcept
+{
+    return hashes.find(hash) != hashes.end();
+}
+
 } // namespace magma

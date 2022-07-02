@@ -31,8 +31,7 @@ namespace magma
 
     protected:
         Extensions(const std::vector<VkExtensionProperties>&);
-        bool hasExtension(std::size_t hash) const noexcept
-            { return hashes.find(hash) != hashes.end(); }
+        bool hasExtension(std::size_t hash) const noexcept;
 
     private:
         std::map<std::string, uint32_t> extensions;
