@@ -56,6 +56,7 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(IndirectBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(Instance)
     MAGMA_TYPEDEF_SHARED_PTR(LinearTiledImage2D)
+    MAGMA_TYPEDEF_SHARED_PTR(LodSampler)
     MAGMA_TYPEDEF_SHARED_PTR(OcclusionQuery)
     MAGMA_TYPEDEF_SHARED_PTR(PhysicalDevice)
     MAGMA_TYPEDEF_SHARED_PTR(Pipeline)
@@ -78,6 +79,7 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(SwapchainColorAttachment)
     MAGMA_TYPEDEF_SHARED_PTR(TimestampQuery)
     MAGMA_TYPEDEF_SHARED_PTR(UniformTexelBuffer)
+    MAGMA_TYPEDEF_SHARED_PTR(UnnormalizedSampler)
     MAGMA_TYPEDEF_SHARED_PTR(VertexBuffer)
 
 #ifdef VK_EXT_conditional_rendering
