@@ -156,9 +156,6 @@
     <ClInclude Include="..\..\misc\imageSubresourceRange.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\misc\pushConstants.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\misc\scissor.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
@@ -681,6 +678,9 @@
     <ClInclude Include="..\..\core\hashing\constexpr.h">
       <Filter>Header Files\core\hashing</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\misc\pushConstantRange.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1141,9 +1141,6 @@
     <None Include="..\..\barriers\bufferMemoryBarrier.inl">
       <Filter>Header Files\barriers</Filter>
     </None>
-    <None Include="..\..\misc\pushConstants.inl">
-      <Filter>Header Files\misc</Filter>
-    </None>
     <None Include="..\..\shaders\specialization.inl">
       <Filter>Header Files\shaders</Filter>
     </None>
@@ -1197,6 +1194,9 @@
     </None>
     <None Include="..\..\states\ycbcrSamplerState.inl">
       <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\misc\pushConstantRange.inl">
+      <Filter>Header Files\misc</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

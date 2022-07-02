@@ -233,7 +233,7 @@
     <ClInclude Include="..\..\misc\format.h" />
     <ClInclude Include="..\..\misc\geometry.h" />
     <ClInclude Include="..\..\misc\imageSubresourceRange.h" />
-    <ClInclude Include="..\..\misc\pushConstants.h" />
+    <ClInclude Include="..\..\misc\pushConstantRange.h" />
     <ClInclude Include="..\..\misc\scissor.h" />
     <ClInclude Include="..\..\misc\scopedDebugMarker.h" />
     <ClInclude Include="..\..\misc\viewport.h" />
@@ -572,7 +572,7 @@ $(VK_SDK_PATH)\Bin32\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o .
     <None Include="..\..\misc\clearValue.inl" />
     <None Include="..\..\misc\format.inl" />
     <None Include="..\..\misc\imageSubresourceRange.inl" />
-    <None Include="..\..\misc\pushConstants.inl" />
+    <None Include="..\..\misc\pushConstantRange.inl" />
     <None Include="..\..\misc\scissor.inl" />
     <None Include="..\..\misc\viewport.inl" />
     <None Include="..\..\objects\commandBuffer.inl" />

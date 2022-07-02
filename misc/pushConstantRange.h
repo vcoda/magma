@@ -30,11 +30,11 @@ namespace magma
     };
 } // namespace magma
 
-#include "pushConstants.inl"
+#include "pushConstantRange.inl"
 
 namespace magma
 {
-    namespace pushconstants
+    namespace pushconstant
     {
         /* Defines a set of push constant ranges for use in a single pipeline layout. */
 
@@ -114,5 +114,5 @@ namespace magma
             constexpr VertexFragmentConstantRange(const uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, offset) {}
         };
-    } // namespace pushconstants
+    } // namespace pushconstant
 } // namespace magma
