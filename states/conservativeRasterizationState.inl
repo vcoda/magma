@@ -13,15 +13,14 @@ constexpr ConservativeRasterizationState::ConservativeRasterizationState(const R
     pNext = &conservative;
 }
 
-inline std::size_t ConservativeRasterizationState::hash() const noexcept
+constexpr std::size_t ConservativeRasterizationState::hash() const noexcept
 {
     std::size_t hash = RasterizationState::hash();
-    core::hashCombine(hash, core::hashArgs(
+    return core::hashCombine(hash, core::hashArgs(
         conservative.sType,
         conservative.flags,
         conservative.conservativeRasterizationMode,
         conservative.extraPrimitiveOverestimationSize));
-    return hash;
 }
 
 constexpr bool ConservativeRasterizationState::operator==(const ConservativeRasterizationState& other) const noexcept

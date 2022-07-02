@@ -21,7 +21,7 @@ constexpr YcbcrConversionSamplerState::YcbcrConversionSamplerState(const VkSampl
     }
 {}
 
-inline std::size_t YcbcrConversionSamplerState::hash() const noexcept
+constexpr std::size_t YcbcrConversionSamplerState::hash() const noexcept
 {
     return core::hashArgs(
         sType,

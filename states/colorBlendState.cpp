@@ -88,7 +88,7 @@ std::size_t MultiColorBlendState::hash() const noexcept
         attachmentCount);
     for (uint32_t i = 0; i < attachmentCount; ++i)
     {
-        core::hashCombine(hash, core::hashArgs(
+        hash = core::hashCombine(hash, core::hashArgs(
             pAttachments[i].blendEnable,
             pAttachments[i].srcColorBlendFactor,
             pAttachments[i].dstColorBlendFactor,
@@ -98,8 +98,11 @@ std::size_t MultiColorBlendState::hash() const noexcept
             pAttachments[i].alphaBlendOp,
             pAttachments[i].colorWriteMask));
     }
-    core::hashCombine(hash, core::hashArray(blendConstants, 4));
-    return hash;
+    return core::hashCombine(hash, core::hashArgs(
+        blendConstants[0],
+        blendConstants[1],
+        blendConstants[2],
+        blendConstants[3]));
 }
 
 bool MultiColorBlendState::operator==(const MultiColorBlendState& other) const noexcept

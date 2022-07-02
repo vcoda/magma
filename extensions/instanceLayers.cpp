@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "instanceLayers.h"
 #include "../objects/instance.h"
-#include "../core/constexprHash.h"
 
 namespace magma
 {

@@ -55,8 +55,8 @@ uint32_t ComputePipelines::newPipeline(const PipelineShaderStage& shaderStage, s
     std::size_t hash = core::hashArgs(
         pipelineInfo.sType,
         pipelineInfo.flags);
-    core::hashCombine(hash, shaderStage.getHash());
-    core::hashCombine(hash, layout->getHash());
+    hash = core::hashCombine(hash, shaderStage.getHash());
+    hash = core::hashCombine(hash, layout->getHash());
     hashes.push_back(hash);
     return MAGMA_COUNT(pipelineInfos) - 1;
 }

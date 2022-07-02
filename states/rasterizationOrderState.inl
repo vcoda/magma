@@ -10,13 +10,12 @@ constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationSt
     pNext = &order;
 }
 
-inline std::size_t RasterizationOrderState::hash() const noexcept
+constexpr std::size_t RasterizationOrderState::hash() const noexcept
 {
     std::size_t hash = RasterizationState::hash();
-    core::hashCombine(hash, core::hashArgs(
+    return core::hashCombine(hash, core::hashArgs(
         order.sType,
         order.rasterizationOrder));
-    return hash;
 }
 
 constexpr bool RasterizationOrderState::operator==(const RasterizationOrderState& other) const noexcept

@@ -91,7 +91,7 @@ std::size_t MultiViewportState::hash() const noexcept
         scissorCount);
     for (const VkViewport& viewport : viewports)
     {
-        core::hashCombine(hash, core::hashArgs(
+        hash = core::hashCombine(hash, core::hashArgs(
             viewport.x,
             viewport.y,
             viewport.width,
@@ -101,7 +101,7 @@ std::size_t MultiViewportState::hash() const noexcept
     }
     for (const VkRect2D& scissor : scissors)
     {
-        core::hashCombine(hash, core::hashArgs(
+        hash = core::hashCombine(hash, core::hashArgs(
             scissor.offset.x,
             scissor.offset.y,
             scissor.extent.width,

@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "physicalDeviceExtensions.h"
 #include "../objects/physicalDevice.h"
-#include "../core/constexprHash.h"
 
 namespace magma
 {

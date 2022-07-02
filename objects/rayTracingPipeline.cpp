@@ -75,10 +75,10 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
         pipelineInfo.groupCount,
         pipelineInfo.maxRecursionDepth);
     for (const auto& stage : shaderStages)
-        core::hashCombine(hash, stage.getHash());
+        hash = core::hashCombine(hash, stage.getHash());
     for (const auto& group : shaderGroups)
-        core::hashCombine(hash, group.hash());
-    core::hashCombine(hash, this->layout->getHash());
+        hash = core::hashCombine(hash, group.hash());
+    hash = core::hashCombine(hash, this->layout->getHash());
 }
 
 std::vector<uint8_t> RayTracingPipeline::getShaderGroupHandles() const

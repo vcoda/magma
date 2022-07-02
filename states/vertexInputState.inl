@@ -9,6 +9,14 @@ constexpr VertexInputBinding::VertexInputBinding(const uint32_t binding, const u
     }
 {}
 
+constexpr std::size_t VertexInputBinding::hash()
+{
+    return core::hashArgs(
+        binding,
+        stride,
+        inputRate);
+}
+
 constexpr VertexInputAttribute::VertexInputAttribute(const uint32_t location, const uint32_t binding, const VkFormat format, const uint32_t offset) noexcept:
     VkVertexInputAttributeDescription{
         location,
@@ -17,4 +25,13 @@ constexpr VertexInputAttribute::VertexInputAttribute(const uint32_t location, co
         offset
     }
 {}
+
+constexpr std::size_t VertexInputAttribute::hash()
+{
+    return core::hashArgs(
+        location,
+        binding,
+        format,
+        offset);
+}
 } // namespace magma

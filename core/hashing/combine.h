@@ -16,23 +16,14 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "hashing/fnv1.h"
-#include "hashing/fnv1string.h"
 
 namespace magma
 {
-namespace core
-{
-template<typename T, std::size_t N>
-constexpr std::size_t hashArray(const T (&a)[N]) noexcept
-{
-    return hashing::Fnv1a<T, N, N>().hash(a);
-}
-
-template<typename T>
-constexpr std::size_t hashString(const T *const str) noexcept
-{
-    return hashing::string::Fnv1a<T, 0>().hash(str);
-}
-} // namespace core
+    namespace core
+    {
+        MAGMA_NODISCARD constexpr std::size_t hashCombine(const std::size_t seed, const std::size_t hash) noexcept
+        {   // https://www.boost.org/doc/libs/1_46_1/doc/html/hash/reference.html#boost.hash_combine
+            return seed ^ (hash + 0x9e3779b9 + (seed << 6) + (seed >> 2));
+        }
+    } // namespace core
 } // namespace magma

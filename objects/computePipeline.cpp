@@ -51,8 +51,8 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device,
     hash = core::hashArgs(
         pipelineInfo.sType,
         pipelineInfo.flags);
-    core::hashCombine(hash, shaderStage.getHash());
-    core::hashCombine(hash, this->layout->getHash());
+    hash = core::hashCombine(hash, shaderStage.getHash());
+    hash = core::hashCombine(hash, this->layout->getHash());
 }
 
 ComputePipeline::ComputePipeline(VkPipeline pipeline,

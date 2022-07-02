@@ -28,8 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/inputAssemblyState.h"
 #include "../states/viewportState.h"
 #include "../states/tesselationState.h"
-#include "../misc/pushConstants.h"
-#include "../core/constexprHash.h"
+#include "../misc/pushConstantRange.h"
 
 namespace magma
 {
@@ -52,7 +51,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
     setIdentity();
     if (!this->layout)
     {   // If layout not specified, create default one
-        constexpr pushconstants::VertexConstantRange<Transform> pushConstantRange;
+        constexpr pushconstant::VertexConstantRange<Transform> pushConstantRange;
         this->layout = std::make_shared<PipelineLayout>(device, pushConstantRange, MAGMA_HOST_ALLOCATOR(allocator));
     }
 constexpr

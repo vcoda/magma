@@ -54,13 +54,12 @@ std::size_t Specialization::hash() const noexcept
     std::size_t hash = 0;
     for (uint32_t i = 0; i < mapEntryCount; ++i)
     {
-        core::hashCombine(hash, core::hashArgs(
+        hash = core::hashCombine(hash, core::hashArgs(
             pMapEntries[i].constantID,
             pMapEntries[i].offset,
             pMapEntries[i].size));
     }
-    core::hashCombine(hash, core::hashArray(
+    return core::hashCombine(hash, core::hashArray(
         reinterpret_cast<const uint8_t *>(pData), dataSize));
-    return hash;
 }
 } // namespace magma

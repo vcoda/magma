@@ -47,7 +47,7 @@ constexpr SamplerState::SamplerState(const SamplerState& other) noexcept:
     }
 {}
 
-inline std::size_t SamplerState::hash() const noexcept
+constexpr std::size_t SamplerState::hash() const noexcept
 {
     return core::hashArgs(
         sType,

@@ -18,7 +18,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "extensions.h"
-#include "../core/constexprHash.h"
 
 namespace magma
 {
@@ -34,7 +33,7 @@ Extensions::Extensions(const std::vector<VkExtensionProperties>& properties)
 bool Extensions::hasExtension(const char *name) const noexcept
 {
     static const std::string prefix(MAGMA_EXTENSION_PREFIX);
-    const std::size_t hash = core::hashString((prefix + name).c_str());
+    const std::size_t hash = core::hashString(prefix + name);
     return hasExtension(hash);
 }
 

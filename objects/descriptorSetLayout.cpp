@@ -43,7 +43,7 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const s
         layoutInfo.bindingCount);
     for (const auto& binding : bindings)
     {
-        core::hashCombine(hash, core::hashArgs(
+        hash = core::hashCombine(hash, core::hashArgs(
             binding.binding,
             binding.descriptorType,
             binding.descriptorCount,

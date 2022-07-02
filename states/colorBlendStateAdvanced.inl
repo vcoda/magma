@@ -14,7 +14,7 @@ constexpr AdvancedColorBlendAttachmentState::AdvancedColorBlendAttachmentState(c
     }
 {}
 
-inline std::size_t AdvancedColorBlendAttachmentState::hash() const noexcept
+constexpr std::size_t AdvancedColorBlendAttachmentState::hash() const noexcept
 {
     return core::hashArgs(
         blendEnable,

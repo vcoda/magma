@@ -174,18 +174,18 @@
     <ClInclude Include="..\..\barriers\memoryBarrier.h" />
     <ClInclude Include="..\..\barriers\imageMemoryBarrier.h" />
     <ClInclude Include="..\..\core\compare.h" />
-    <ClInclude Include="..\..\core\constexprHash.h" />
     <ClInclude Include="..\..\core\enumClassArray.h" />
+    <ClInclude Include="..\..\core\hashing\combine.h" />
     <ClInclude Include="..\..\core\hashing\fnv1.h" />
     <ClInclude Include="..\..\core\hashing\fnv1string.h" />
     <ClInclude Include="..\..\core\destructible.h" />
+    <ClInclude Include="..\..\core\hashing\constexpr.h" />
     <ClInclude Include="..\..\core\linearAllocator.h" />
     <ClInclude Include="..\..\core\memzero.h" />
     <ClInclude Include="..\..\core\copy.h" />
     <ClInclude Include="..\..\core\copyMemory.h" />
     <ClInclude Include="..\..\core\core.h" />
     <ClInclude Include="..\..\core\dereference.h" />
-    <ClInclude Include="..\..\core\hashCombine.h" />
     <ClInclude Include="..\..\core\hash.h" />
     <ClInclude Include="..\..\core\noncopyable.h" />
     <ClInclude Include="..\..\core\pch.h" />
@@ -233,7 +233,7 @@
     <ClInclude Include="..\..\misc\format.h" />
     <ClInclude Include="..\..\misc\geometry.h" />
     <ClInclude Include="..\..\misc\imageSubresourceRange.h" />
-    <ClInclude Include="..\..\misc\pushConstants.h" />
+    <ClInclude Include="..\..\misc\pushConstantRange.h" />
     <ClInclude Include="..\..\misc\scissor.h" />
     <ClInclude Include="..\..\misc\scopedDebugMarker.h" />
     <ClInclude Include="..\..\misc\viewport.h" />
@@ -366,6 +366,7 @@
     <ClCompile Include="..\..\auxiliary\textShader.cpp" />
     <ClCompile Include="..\..\barriers\bufferMemoryBarrier.cpp" />
     <ClCompile Include="..\..\barriers\imageMemoryBarrier.cpp" />
+    <ClCompile Include="..\..\magma.cpp" />
     <ClCompile Include="..\..\core\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -572,7 +573,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\misc\clearValue.inl" />
     <None Include="..\..\misc\format.inl" />
     <None Include="..\..\misc\imageSubresourceRange.inl" />
-    <None Include="..\..\misc\pushConstants.inl" />
+    <None Include="..\..\misc\pushConstantRange.inl" />
     <None Include="..\..\misc\scissor.inl" />
     <None Include="..\..\misc\viewport.inl" />
     <None Include="..\..\objects\commandBuffer.inl" />

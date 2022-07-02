@@ -11,14 +11,13 @@ constexpr StreamRasterizationState::StreamRasterizationState(const Rasterization
     pNext = &stream;
 }
 
-inline std::size_t StreamRasterizationState::hash() const noexcept
+constexpr std::size_t StreamRasterizationState::hash() const noexcept
 {
     std::size_t hash = RasterizationState::hash();
-    core::hashCombine(hash, core::hashArgs(
+    return core::hashCombine(hash, core::hashArgs(
         stream.sType,
         stream.flags,
         stream.rasterizationStream));
-    return hash;
 }
 
 constexpr bool StreamRasterizationState::operator==(const StreamRasterizationState& other) const noexcept

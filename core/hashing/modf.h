@@ -19,19 +19,22 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-namespace core
-{
-constexpr void hashCombine(std::size_t& seed, std::size_t hash) noexcept
-{   // https://www.boost.org/doc/libs/1_46_1/doc/html/hash/reference.html#boost.hash_combine
-    seed ^= (hash + 0x9e3779b9 + (seed << 6) + (seed >> 2));
-}
+    namespace core
+    {
+        template<class Int>
+        struct ConstexprModf
+        {
+            Int integer;
+            Int fractional;
 
-inline std::size_t hashCombineList(const std::initializer_list<std::size_t>& hashes) noexcept
-{
-    std::size_t value = 0;
-    for (const std::size_t hash : hashes)
-        hashCombine(value, hash);
-    return value;
-}
-} // namespace core
+            template<class Float>
+            constexpr ConstexprModf(const Float x) noexcept
+            {
+                integer = static_cast<Int>(x);
+                Float ax = x >= 0 ? x : -x;
+                Float frac = ax - static_cast<Int>(ax);
+                fractional = frac * static_cast<Float>(1000000.0); // shift left
+            }
+        };
+    } // namespace core
 } // namespace magma

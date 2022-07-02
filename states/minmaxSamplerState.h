@@ -28,7 +28,7 @@ namespace magma
     {
         constexpr MinMaxSamplerState(const SamplerState& state,
             VkSamplerReductionModeEXT reductionMode) noexcept;
-        std::size_t hash() const noexcept;
+        constexpr std::size_t hash() const noexcept;
         constexpr bool operator==(const MinMaxSamplerState&) const noexcept;
 
         const VkSamplerReductionModeCreateInfoEXT reduction;

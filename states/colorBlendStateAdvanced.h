@@ -29,7 +29,7 @@ namespace magma
     public:
         constexpr AdvancedColorBlendAttachmentState(VkBlendOp advancedBlendOp,
             VkColorComponentFlags colorWriteMask = colorwritemask::rgba) noexcept;
-        std::size_t hash() const noexcept;
+        constexpr std::size_t hash() const noexcept;
         constexpr bool operator==(const AdvancedColorBlendAttachmentState&) const noexcept;
     };
 

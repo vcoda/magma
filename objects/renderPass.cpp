@@ -120,13 +120,13 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
         renderPassInfo.attachmentCount,
         renderPassInfo.subpassCount,
         renderPassInfo.dependencyCount);
-    core::hashCombine(hash, chainedInfo.getHash());
+    hash = core::hashCombine(hash, chainedInfo.getHash());
     for (const auto& attachment : attachments)
-        core::hashCombine(hash, attachment.hash());
-    core::hashCombine(hash, subpass.hash());
+        hash = core::hashCombine(hash, attachment.hash());
+    hash = core::hashCombine(hash, subpass.hash());
     core::memzero(subpass); // Aware destructor
     for (const auto& dependency : dependencies)
-        core::hashCombine(hash, dependency.hash());
+        hash = core::hashCombine(hash, dependency.hash());
 }
 
 RenderPass::RenderPass(std::shared_ptr<Device> device,
@@ -164,13 +164,13 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
         renderPassInfo.attachmentCount,
         renderPassInfo.subpassCount,
         renderPassInfo.dependencyCount);
-    core::hashCombine(hash, chainedInfo.getHash());
+    hash = core::hashCombine(hash, chainedInfo.getHash());
     for (const auto& attachment : attachments)
-        core::hashCombine(hash, attachment.hash());
+        hash = core::hashCombine(hash, attachment.hash());
     for (const auto& subpass : subpasses)
-        core::hashCombine(hash, subpass.hash());
+        hash = core::hashCombine(hash, subpass.hash());
     for (const auto& dependency : dependencies)
-        core::hashCombine(hash, dependency.hash());
+        hash = core::hashCombine(hash, dependency.hash());
 }
 
 RenderPass::~RenderPass()

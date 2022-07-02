@@ -26,6 +26,7 @@ namespace magma
             loadOp(loadOp), storeOp(storeOp) {}
         constexpr VkAttachmentLoadOp getLoadOp() const noexcept { return loadOp; }
         constexpr VkAttachmentStoreOp getStoreOp() const noexcept { return storeOp; }
+        constexpr std::size_t hash() const noexcept;
 
     private:
         VkAttachmentLoadOp loadOp;
@@ -59,7 +60,7 @@ namespace magma
         constexpr AttachmentDescription(VkFormat format,
             uint32_t sampleCount,
             const AttachmentDescription& predefined) noexcept;
-        std::size_t hash() const noexcept;
+        constexpr std::size_t hash() const noexcept;
     };
 } // namespace magma
 

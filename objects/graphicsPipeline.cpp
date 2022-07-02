@@ -120,8 +120,8 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
         pipelineInfo.flags,
         pipelineInfo.stageCount);
     for (const auto& stage : shaderStages)
-        core::hashCombine(hash, stage.getHash());
-    std::size_t stateHash = core::hashCombineList({
+        hash = core::hashCombine(hash, stage.getHash());
+    std::size_t stateHash = core::combineHashList({
         vertexInputState.hash(),
         inputAssemblyState.hash(),
         tesselationState.hash(),
@@ -131,13 +131,13 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
         depthStencilState.hash(),
         colorBlendState.hash()});
     for (auto state : dynamicStates)
-        core::hashCombine(stateHash, core::hash(state));
-    core::hashCombine(hash, stateHash);
-    core::hashCombine(hash, this->layout->getHash());
+        hash = core::hashCombine(stateHash, core::hash(state));
+    hash = core::hashCombine(hash, stateHash);
+    hash = core::hashCombine(hash, this->layout->getHash());
     if (renderPass)
     {
-        core::hashCombine(hash, renderPass->getHash());
-        core::hashCombine(hash, core::hash(subpass));
+        hash = core::hashCombine(hash, renderPass->getHash());
+        hash = core::hashCombine(hash, core::hash(subpass));
     }
 }
 
