@@ -66,26 +66,25 @@ namespace magma
     namespace renderstate
     {
         constexpr MultisampleState dontMultisample(VK_SAMPLE_COUNT_1_BIT);
+        constexpr MultisampleState multisampleTwo(VK_SAMPLE_COUNT_2_BIT);
+        constexpr MultisampleState multisampleFour(VK_SAMPLE_COUNT_4_BIT);
+        constexpr MultisampleState multisampleEight(VK_SAMPLE_COUNT_8_BIT);
+        constexpr MultisampleState multisampleSixteen(VK_SAMPLE_COUNT_16_BIT);
+        constexpr MultisampleState multisampleThirtyTwo(VK_SAMPLE_COUNT_32_BIT);
+        constexpr MultisampleState multisampleSixtyFour(VK_SAMPLE_COUNT_64_BIT);
 
-        constexpr MultisampleState multisample2(VK_SAMPLE_COUNT_2_BIT);
-        constexpr MultisampleState multisample4(VK_SAMPLE_COUNT_4_BIT);
-        constexpr MultisampleState multisample8(VK_SAMPLE_COUNT_8_BIT);
-        constexpr MultisampleState multisample16(VK_SAMPLE_COUNT_16_BIT);
-        constexpr MultisampleState multisample32(VK_SAMPLE_COUNT_32_BIT);
-        constexpr MultisampleState multisample64(VK_SAMPLE_COUNT_64_BIT);
+        extern const MultisampleCoverageState alphaToCoverageMultisampleTwo;
+        extern const MultisampleCoverageState alphaToCoverageMultisampleFour;
+        extern const MultisampleCoverageState alphaToCoverageMultisampleEight;
+        extern const MultisampleCoverageState alphaToCoverageMultisampleSixteen;
+        extern const MultisampleCoverageState alphaToCoverageMultisampleThirtyTwo;
+        extern const MultisampleCoverageState alphaToCoverageMultisampleSixtyFour;
 
-        extern const MultisampleCoverageState alphaToCoverageMultisample2;
-        extern const MultisampleCoverageState alphaToCoverageMultisample4;
-        extern const MultisampleCoverageState alphaToCoverageMultisample8;
-        extern const MultisampleCoverageState alphaToCoverageMultisample16;
-        extern const MultisampleCoverageState alphaToCoverageMultisample32;
-        extern const MultisampleCoverageState alphaToCoverageMultisample64;
-
-        extern const MultisampleCoverageState alphaToOneMultisample2;
-        extern const MultisampleCoverageState alphaToOneMultisample4;
-        extern const MultisampleCoverageState alphaToOneMultisample8;
-        extern const MultisampleCoverageState alphaToOneMultisample16;
-        extern const MultisampleCoverageState alphaToOneMultisample32;
-        extern const MultisampleCoverageState alphaToOneMultisample64;
+        extern const MultisampleCoverageState alphaToOneMultisampleTwo;
+        extern const MultisampleCoverageState alphaToOneMultisampleFour;
+        extern const MultisampleCoverageState alphaToOneMultisampleEight;
+        extern const MultisampleCoverageState alphaToOneMultisampleSixteen;
+        extern const MultisampleCoverageState alphaToOneMultisampleThirtyTwo;
+        extern const MultisampleCoverageState alphaToOneMultisampleSixtyFour;
     } // namespace renderstate
 } // namespace magma

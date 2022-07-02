@@ -67,8 +67,8 @@ namespace magma
     constexpr size_t magMinMipLinearRepeatHash = sampler::magMinMipLinearRepeat.hash();
     // Depth comparison sampler state
     constexpr size_t magMinNearestLessOrEqualHash = sampler::magMinNearestLessOrEqual.hash();
-    // Multisamples state
-    constexpr size_t multisampleFourHash = renderstate::multisample4.hash();
+    // Multisample state
+    constexpr size_t multisampleFourHash = renderstate::multisampleFour.hash();
     // Extended states
 #ifdef VK_AMD_rasterization_order
     constexpr size_t fillCullNoneStrictCCWHash = renderstate::fillCullNoneStrictCCW.hash();

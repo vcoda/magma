@@ -98,12 +98,12 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     };
     const VkSampleCountFlagBits samples = this->renderPass->getAttachments().front().samples;
     const MultisampleState multisampleState =
-        (samples & VK_SAMPLE_COUNT_2_BIT) ? renderstate::multisample2 :
-        (samples & VK_SAMPLE_COUNT_4_BIT) ? renderstate::multisample4 :
-        (samples & VK_SAMPLE_COUNT_8_BIT) ? renderstate::multisample8 :
-        (samples & VK_SAMPLE_COUNT_16_BIT) ? renderstate::multisample16 :
-        (samples & VK_SAMPLE_COUNT_32_BIT) ? renderstate::multisample32 :
-        (samples & VK_SAMPLE_COUNT_64_BIT) ? renderstate::multisample64 :
+        (samples & VK_SAMPLE_COUNT_2_BIT) ? renderstate::multisampleTwo :
+        (samples & VK_SAMPLE_COUNT_4_BIT) ? renderstate::multisampleFour :
+        (samples & VK_SAMPLE_COUNT_8_BIT) ? renderstate::multisampleEight :
+        (samples & VK_SAMPLE_COUNT_16_BIT) ? renderstate::multisampleSixteen :
+        (samples & VK_SAMPLE_COUNT_32_BIT) ? renderstate::multisampleThirtyTwo :
+        (samples & VK_SAMPLE_COUNT_64_BIT) ? renderstate::multisampleSixtyFour :
         renderstate::dontMultisample;
     // Create blit pipeline
     auto pipelineLayout = std::make_shared<PipelineLayout>(descriptorSet->getLayout(), allocator);
