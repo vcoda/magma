@@ -103,7 +103,7 @@ namespace magma
             {
                 const double ax = x >= 0. ? x : -x;
                 const double frac = ax - static_cast<uint64_t>(ax);
-                const uint64_t fractional = static_cast<uint64_t>(frac * 1000000.); // shift left
+                const uint64_t fractional = static_cast<uint64_t>(frac * 1000000000.); // shift left
                 const uint64_t integer = static_cast<uint64_t>(x);
                 const ConstexprHash<uint64_t> hasher;
                 const std::size_t intHash = hasher(integer);
