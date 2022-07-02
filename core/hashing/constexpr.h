@@ -76,7 +76,7 @@ namespace magma
                 x = x + (x << 2) + (x << 4); // x *= 1 + (1 << 2) + (1 << 4)
                 x = x ^ (x >> 28);
                 x = x + (x << 31); // x *= 1 + (1 << 31)
-                return x;
+                return static_cast<std::size_t>(x);
             }
         };
 
