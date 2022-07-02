@@ -14,6 +14,8 @@ else
 endif
 
 MAGMA_OBJS= \
+	magma.o \
+	\
 	allocator/alignedAllocator.o \
 	allocator/allocationCallbacks.o \
 	allocator/cxxAllocator.o \
