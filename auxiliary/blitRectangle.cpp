@@ -21,7 +21,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "fillRectangleVertexShader.h"
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
-#include "../objects/framebuffer.h"
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
 #include "../objects/shaderModule.h"
