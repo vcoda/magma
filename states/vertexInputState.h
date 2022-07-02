@@ -24,6 +24,7 @@ namespace magma
         constexpr VertexInputBinding(uint32_t binding,
             uint32_t stride,
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
+        constexpr std::size_t hash();
     };
 
     /* Structure specifying vertex input attribute description. */
@@ -42,6 +43,7 @@ namespace magma
         VertexInputAttribute(uint32_t location,
             Type Vertex::*attrib,
             Normalized<normalized> normalize = Normalized<false>()) noexcept;
+        constexpr std::size_t hash();
     };
 
     /* Applications specify vertex input attribute and vertex input binding descriptions
