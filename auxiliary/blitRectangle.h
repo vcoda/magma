@@ -39,8 +39,8 @@ namespace magma
 
     namespace aux
     {
-        /* Auxiliary object that helps quickly blit source texture
-           into destination framebuffer. */
+        /* Auxiliary object that helps to quickly blit
+           source texture into destination framebuffer. */
 
         class BlitRectangle : public Base
         {
