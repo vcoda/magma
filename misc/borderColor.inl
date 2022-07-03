@@ -6,19 +6,22 @@ constexpr BorderColor::BorderColor(VkBorderColor color) noexcept:
     format(VK_FORMAT_UNDEFINED)
 {}
 
+#ifdef VK_EXT_custom_border_color
 constexpr BorderColor::BorderColor(VkClearColorValue customColor, VkFormat format /* VK_FORMAT_UNDEFINED */) noexcept:
-    color(VK_BORDER_COLOR_MAX_ENUM),
+    color(VK_BORDER_COLOR_FLOAT_CUSTOM_EXT),
     customColor(customColor),
     format(format)
 {}
 
 constexpr bool BorderColor::custom() const noexcept
 {
-    return VK_BORDER_COLOR_MAX_ENUM == color;
+    return VK_BORDER_COLOR_FLOAT_CUSTOM_EXT == color;
 }
+#endif // VK_EXT_custom_border_color
 
 constexpr std::size_t BorderColor::hash() const noexcept
 {
+#ifdef VK_EXT_custom_border_color
     if (custom())
     {
         return core::hashArgs(
@@ -28,6 +31,7 @@ constexpr std::size_t BorderColor::hash() const noexcept
             customColor.float32[3],
             format);
     }
+#endif // VK_EXT_custom_border_color
     return core::hash(color);
 }
 } // namespace magma

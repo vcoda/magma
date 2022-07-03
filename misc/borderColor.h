@@ -25,19 +25,22 @@ namespace magma
     {
     public:
         constexpr BorderColor(VkBorderColor color) noexcept;
+        constexpr VkBorderColor getColor() const noexcept { return color; }
+#ifdef VK_EXT_custom_border_color
         constexpr BorderColor(VkClearColorValue customColor,
             VkFormat format = VK_FORMAT_UNDEFINED) noexcept;
-        constexpr VkBorderColor getColor() const noexcept { return color; }
         constexpr const VkClearColorValue& getCustomColor() const noexcept { return customColor; }
         constexpr VkFormat getFormat() const noexcept { return format; }
         constexpr bool custom() const noexcept;
+#endif
         constexpr std::size_t hash() const noexcept;
 
     private:
         const VkBorderColor color;
-        // VK_EXT_custom_border_color
+#ifdef VK_EXT_custom_border_color
         const VkClearColorValue customColor;
         const VkFormat format;
+#endif
     };
 } // namespace magma
 
