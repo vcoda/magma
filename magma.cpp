@@ -36,6 +36,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "states/depthComparisonSamplerState.h"
 #include "states/minmaxSamplerState.h"
 #include "states/ycbcrSamplerState.h"
+#include "misc/borderColor.h"
 #include "misc/pushConstantRange.h"
 #endif // MAGMA_VERIFY_CONSTEXPR
 
@@ -89,6 +90,10 @@ namespace magma
 #ifdef VK_KHR_sampler_ycbcr_conversion
     constexpr size_t rgbIdentityFullNearestHash = sampler::rgbIdentityFullNearest.hash();
 #endif
+    // Custom border color
+    constexpr VkClearColorValue redColor{1.f, 0.f, 0.f, 1.f};
+    constexpr BorderColor customBorderColor(redColor);
+    constexpr size_t customBorderColorHash = customBorderColor.hash();
     // Push constant
     struct PushConstants
     {
