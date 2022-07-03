@@ -47,6 +47,22 @@ constexpr SamplerState::SamplerState(const SamplerState& other) noexcept:
     }
 {}
 
+constexpr MagFilter SamplerState::getMagFilter() const noexcept
+{
+    return (VK_FILTER_LINEAR == magFilter) ? MagFilter::Bilinear : MagFilter::Nearest;
+}
+
+constexpr MipFilter SamplerState::getMipFilter() const noexcept
+{
+    if (VK_SAMPLER_MIPMAP_MODE_NEAREST == mipmapMode)
+        return (VK_FILTER_LINEAR == minFilter) ? MipFilter::Bilinear : MipFilter::Nearest;
+    // VK_SAMPLER_MIPMAP_MODE_LINEAR
+    if (VK_FILTER_LINEAR == minFilter)
+        return anisotropyEnable ? MipFilter::Anisotropic : MipFilter::Trilinear;
+    else // VK_FILTER_NEAREST
+        return MipFilter::Partial;
+}
+
 constexpr std::size_t SamplerState::hash() const noexcept
 {
     return core::hashArgs(

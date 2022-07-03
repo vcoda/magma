@@ -19,6 +19,22 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Nearest filtering is a sampling of nearest texel.
+       Bilinear filtering is an interpolation of four texels in two directions.
+       Trilinear filtering also performs linear interpolation between mipmaps.
+       Anisotropic filtering performs long and narrow projection of the pixel
+       filter footprint into texture space. */
+
+    enum class MagFilter
+    {
+        Nearest, Bilinear
+    };
+
+    enum class MipFilter
+    {
+        Nearest, Bilinear, Trilinear, Anisotropic, Partial
+    };
+
     /* Sampler state defines texture filtration parameters
        during texture sampling in the fragment shader. */
 
@@ -30,6 +46,8 @@ namespace magma
             VkSamplerMipmapMode mipmapMode,
             VkSamplerAddressMode addressMode) noexcept;
         constexpr SamplerState(const SamplerState&) noexcept;
+        constexpr MagFilter getMagFilter() const noexcept;
+        constexpr MipFilter getMipFilter() const noexcept;
         constexpr std::size_t hash() const noexcept;
         constexpr bool operator==(const SamplerState&) const noexcept;
     };

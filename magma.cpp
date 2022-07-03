@@ -101,5 +101,11 @@ namespace magma
     };
     constexpr pushconstant::VertexFragmentConstantRange<PushConstants> pushConstant;
     constexpr size_t pushConstantHash = pushConstant.hash();
+    // Verify mipmap filter
+    static_assert(sampler::magMinMipNearestRepeat.getMipFilter() == MipFilter::Nearest, "expected nearest filter");
+    static_assert(sampler::magMinLinearMipNearestRepeat.getMipFilter() == MipFilter::Bilinear, "expected bilinear filter");
+    static_assert(sampler::magMinMipLinearRepeat.getMipFilter() == MipFilter::Trilinear, "expected trilinear filter");
+    static_assert(sampler::magMinLinearMipAnisotropicRepeat.getMipFilter() == MipFilter::Anisotropic, "expected anisotropic filter");
+    static_assert(sampler::magLinearMinNearestMipLinearRepeat.getMipFilter() == MipFilter::Partial, "expected mixed filter");
 #endif // MAGMA_VERIFY_CONSTEXPR
 } // namespace magma
