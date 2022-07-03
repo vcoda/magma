@@ -64,7 +64,6 @@ namespace magma
     public:
         explicit UnnormalizedSampler(std::shared_ptr<Device> device,
             bool linearFilter,
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            const BorderColor& borderColor = border::opaqueBlackFloat);
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 } // namespace magma

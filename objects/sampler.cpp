@@ -92,11 +92,9 @@ LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state
 }
 
 UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool linearFilter,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const BorderColor& borderColor /* opaqueBlackFloat */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     Sampler(std::move(device), std::move(allocator))
 {
-    MAGMA_ASSERT(!borderColor.custom());
     VkSamplerCreateInfo samplerInfo;
     samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
     samplerInfo.pNext = nullptr;
@@ -114,7 +112,7 @@ UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool li
     samplerInfo.compareOp = VK_COMPARE_OP_NEVER;
     samplerInfo.minLod = 0.f;
     samplerInfo.maxLod = 0.f;
-    samplerInfo.borderColor = borderColor.getColor();
+    samplerInfo.borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK;
     samplerInfo.unnormalizedCoordinates = VK_TRUE;
     const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create unnormalized sampler");
