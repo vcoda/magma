@@ -45,18 +45,13 @@ Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
     samplerInfo.borderColor = borderColor.getColor();
 #ifdef VK_EXT_custom_border_color
     VkSamplerCustomBorderColorCreateInfoEXT customBorderColor;
-    if ((VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER == state.addressModeU) ||
-        (VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER == state.addressModeV) ||
-        (VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER == state.addressModeW))
+    if (borderColor.custom())
     {
-        if (borderColor.custom())
-        {
-            customBorderColor.sType = VK_STRUCTURE_TYPE_SAMPLER_CUSTOM_BORDER_COLOR_CREATE_INFO_EXT;
-            customBorderColor.pNext = nullptr;
-            customBorderColor.customBorderColor = borderColor.getCustomColor();
-            customBorderColor.format = borderColor.getFormat();
-            samplerInfo.pNext = &customBorderColor;
-        }
+        customBorderColor.sType = VK_STRUCTURE_TYPE_SAMPLER_CUSTOM_BORDER_COLOR_CREATE_INFO_EXT;
+        customBorderColor.pNext = nullptr;
+        customBorderColor.customBorderColor = borderColor.getCustomColor();
+        customBorderColor.format = borderColor.getFormat();
+        samplerInfo.pNext = &customBorderColor;
     }
 #endif // VK_EXT_custom_border_color
     const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
@@ -83,18 +78,13 @@ LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state
     samplerInfo.borderColor = borderColor.getColor();
 #ifdef VK_EXT_custom_border_color
     VkSamplerCustomBorderColorCreateInfoEXT customBorderColor;
-    if ((VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER == state.addressModeU) ||
-        (VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER == state.addressModeV) ||
-        (VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER == state.addressModeW))
+    if (borderColor.custom())
     {
-        if (borderColor.custom())
-        {
-            customBorderColor.sType = VK_STRUCTURE_TYPE_SAMPLER_CUSTOM_BORDER_COLOR_CREATE_INFO_EXT;
-            customBorderColor.pNext = nullptr;
-            customBorderColor.customBorderColor = borderColor.getCustomColor();
-            customBorderColor.format = borderColor.getFormat();
-            samplerInfo.pNext = &customBorderColor;
-        }
+        customBorderColor.sType = VK_STRUCTURE_TYPE_SAMPLER_CUSTOM_BORDER_COLOR_CREATE_INFO_EXT;
+        customBorderColor.pNext = nullptr;
+        customBorderColor.customBorderColor = borderColor.getCustomColor();
+        customBorderColor.format = borderColor.getFormat();
+        samplerInfo.pNext = &customBorderColor;
     }
 #endif // VK_EXT_custom_border_color
     const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
