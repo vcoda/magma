@@ -1,9 +1,11 @@
 namespace magma
 {
 constexpr BorderColor::BorderColor(VkBorderColor color) noexcept:
-    color(color),
-    customColor{},
+    color(color)
+#ifdef VK_EXT_custom_border_color
+   ,customColor{},
     format(VK_FORMAT_UNDEFINED)
+#endif
 {}
 
 #ifdef VK_EXT_custom_border_color

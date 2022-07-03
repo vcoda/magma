@@ -32,7 +32,7 @@ namespace magma
         constexpr const VkClearColorValue& getCustomColor() const noexcept { return customColor; }
         constexpr VkFormat getFormat() const noexcept { return format; }
         constexpr bool custom() const noexcept;
-#endif
+#endif // VK_EXT_custom_border_color
         constexpr std::size_t hash() const noexcept;
 
     private:
