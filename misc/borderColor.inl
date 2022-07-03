@@ -6,9 +6,9 @@ constexpr BorderColor::BorderColor(VkBorderColor color) noexcept:
     format(VK_FORMAT_UNDEFINED)
 {}
 
-constexpr BorderColor::BorderColor(VkClearColorValue color, VkFormat format /* VK_FORMAT_UNDEFINED */) noexcept:
+constexpr BorderColor::BorderColor(VkClearColorValue customColor, VkFormat format /* VK_FORMAT_UNDEFINED */) noexcept:
     color(VK_BORDER_COLOR_MAX_ENUM),
-    customColor(color),
+    customColor(customColor),
     format(format)
 {}
 

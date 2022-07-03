@@ -25,7 +25,7 @@ namespace magma
     {
     public:
         constexpr BorderColor(VkBorderColor color) noexcept;
-        constexpr BorderColor(VkClearColorValue color,
+        constexpr BorderColor(VkClearColorValue customColor,
             VkFormat format = VK_FORMAT_UNDEFINED) noexcept;
         constexpr VkBorderColor getColor() const noexcept { return color; }
         constexpr const VkClearColorValue& getCustomColor() const noexcept { return customColor; }
