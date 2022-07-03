@@ -569,6 +569,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\descriptors\descriptorSetLayoutReflection.inl" />
     <None Include="..\..\descriptors\subpassDependency.inl" />
     <None Include="..\..\helpers\alignedUniformArrayIterator.inl" />
+    <None Include="..\..\misc\borderColor.inl" />
     <None Include="..\..\misc\clearAttachment.inl" />
     <None Include="..\..\misc\clearValue.inl" />
     <None Include="..\..\misc\format.inl" />

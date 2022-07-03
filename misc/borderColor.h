@@ -24,19 +24,27 @@ namespace magma
     class BorderColor
     {
     public:
-        constexpr BorderColor(VkBorderColor color) noexcept:
-            color(color), customColor{} {}
-        constexpr BorderColor(VkClearColorValue color) noexcept:
-            color(VK_BORDER_COLOR_MAX_ENUM), customColor(color) {}
-        bool custom() const noexcept { return VK_BORDER_COLOR_MAX_ENUM == color; }
-        VkBorderColor getColor() const noexcept { return color; }
-        const VkClearColorValue& getCustomColor() const noexcept { return customColor; }
+        constexpr BorderColor(VkBorderColor color) noexcept;
+        constexpr BorderColor(VkClearColorValue color,
+            VkFormat format = VK_FORMAT_UNDEFINED) noexcept;
+        constexpr VkBorderColor getColor() const noexcept { return color; }
+        constexpr const VkClearColorValue& getCustomColor() const noexcept { return customColor; }
+        constexpr VkFormat getFormat() const noexcept { return format; }
+        constexpr bool custom() const noexcept;
+        constexpr std::size_t hash() const noexcept;
 
     private:
         const VkBorderColor color;
-        const VkClearColorValue customColor; // VK_EXT_custom_border_color
+        // VK_EXT_custom_border_color
+        const VkClearColorValue customColor;
+        const VkFormat format;
     };
+} // namespace magma
 
+#include "borderColor.inl"
+
+namespace magma
+{
     namespace border
     {
         constexpr BorderColor transparentBlackFloat(VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK);
@@ -45,6 +53,5 @@ namespace magma
         constexpr BorderColor opaqueBlackInt(VK_BORDER_COLOR_INT_OPAQUE_BLACK);
         constexpr BorderColor opaqueWhiteFloat(VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE);
         constexpr BorderColor opaqueWhiteInt(VK_BORDER_COLOR_INT_OPAQUE_WHITE);
-    } // border
-} // namespace
-
+    } // namespace border
+} // namespace magma

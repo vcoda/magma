@@ -1201,6 +1201,9 @@
     <None Include="..\..\misc\pushConstantRange.inl">
       <Filter>Header Files\misc</Filter>
     </None>
+    <None Include="..\..\misc\borderColor.inl">
+      <Filter>Header Files\misc</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">
