@@ -26,7 +26,7 @@ namespace magma
         constexpr PushConstantRange(VkShaderStageFlags stageFlags,
             uint32_t offset,
             std::size_t size) noexcept;
-        constexpr std::size_t hash() const noexcept;
+        constexpr hash_t hash() const noexcept;
     };
 } // namespace magma
 

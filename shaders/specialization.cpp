@@ -49,9 +49,9 @@ Specialization::~Specialization()
     delete[] reinterpret_cast<const char *>(pData);
 }
 
-std::size_t Specialization::hash() const noexcept
+hash_t Specialization::hash() const noexcept
 {
-    std::size_t hash = 0;
+    hash_t hash = 0;
     for (uint32_t i = 0; i < mapEntryCount; ++i)
     {
         hash = core::hashCombine(hash, core::hashArgs(

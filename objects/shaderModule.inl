@@ -2,7 +2,7 @@ namespace magma
 {
 template<std::size_t SpirvWordCount>
 inline ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord (&bytecode)[SpirvWordCount],
-    std::size_t bytecodeHash /* 0 */,
+    hash_t bytecodeHash /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkShaderModuleCreateFlags flags /* 0 */,
     bool reflect /* false */

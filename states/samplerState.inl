@@ -63,7 +63,7 @@ constexpr MipFilter SamplerState::getMipFilter() const noexcept
         return MipFilter::Partial;
 }
 
-constexpr std::size_t SamplerState::hash() const noexcept
+constexpr hash_t SamplerState::hash() const noexcept
 {
     return core::hashArgs(
         sType,

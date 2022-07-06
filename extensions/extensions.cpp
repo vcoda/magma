@@ -33,7 +33,7 @@ Extensions::Extensions(const std::vector<VkExtensionProperties>& properties)
 bool Extensions::hasExtension(const char *name) const noexcept
 {
     static const std::string prefix(MAGMA_EXTENSION_PREFIX);
-    const std::size_t hash = core::hashString(prefix + name);
+    const hash_t hash = core::hashString(prefix + name);
     return hasExtension(hash);
 }
 
@@ -43,7 +43,7 @@ void Extensions::forEach(std::function<void(const std::string&, uint32_t)> fn) c
         fn(ext.first, ext.second);
 }
 
-bool Extensions::hasExtension(std::size_t hash) const noexcept
+bool Extensions::hasExtension(hash_t hash) const noexcept
 {
     return hashes.find(hash) != hashes.end();
 }

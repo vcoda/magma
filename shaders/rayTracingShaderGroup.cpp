@@ -34,7 +34,7 @@ RayTracingShaderGroup::RayTracingShaderGroup(VkRayTracingShaderGroupTypeNV type,
     this->intersectionShader = intersectionShader;
 }
 
-std::size_t RayTracingShaderGroup::hash() const noexcept
+hash_t RayTracingShaderGroup::hash() const noexcept
 {
     return core::hashArgs(
         sType,

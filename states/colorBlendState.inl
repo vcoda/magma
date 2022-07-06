@@ -45,7 +45,7 @@ constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
     }
 {}
 
-constexpr std::size_t ColorBlendAttachmentState::hash() const noexcept
+constexpr hash_t ColorBlendAttachmentState::hash() const noexcept
 {
     return core::hashArgs(
         blendEnable,
@@ -105,7 +105,7 @@ constexpr ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& atta
     this->blendConstants[3] = c[3];
 }
 
-constexpr std::size_t ColorBlendState::hash() const noexcept
+constexpr hash_t ColorBlendState::hash() const noexcept
 {
     return core::hashArgs(
         sType,

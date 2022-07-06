@@ -37,9 +37,9 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkDescriptorSetLayoutCreateFlags flags = 0);
         ~DescriptorSetLayout();
-        std::size_t getHash() const noexcept { return hash; }
+        hash_t getHash() const noexcept { return hash; }
 
     private:
-        std::size_t hash;
+        hash_t hash;
     };
 } // namespace magma

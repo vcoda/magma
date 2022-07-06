@@ -33,7 +33,7 @@ namespace magma
             const uint32_t reference = 0) noexcept:
             VkStencilOpState{failOp, passOp, depthFailOp, compareOp, compareMask, writeMask, reference}
         {}
-        constexpr std::size_t hash() const noexcept;
+        constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const StencilOpState&) const noexcept;
     };
 
@@ -57,7 +57,7 @@ namespace magma
         constexpr DepthStencilState(const DepthStencilState& state,
             const StencilOpState& front,
             const StencilOpState& back) noexcept;
-        constexpr std::size_t hash() const noexcept;
+        constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const DepthStencilState&) const noexcept;
     };
 

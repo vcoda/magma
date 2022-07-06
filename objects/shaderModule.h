@@ -40,7 +40,7 @@ namespace magma
         explicit ShaderModule(std::shared_ptr<Device> device,
             const SpirvWord *bytecode,
             std::size_t bytecodeSize,
-            std::size_t bytecodeHash = 0,
+            hash_t bytecodeHash = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkShaderModuleCreateFlags flags = 0,
             bool reflect = false
@@ -50,7 +50,7 @@ namespace magma
         );
         explicit ShaderModule(std::shared_ptr<Device> device,
             const std::vector<SpirvWord>& bytecode,
-            std::size_t bytecodeHash = 0,
+            hash_t bytecodeHash = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkShaderModuleCreateFlags flags = 0,
             bool reflect = false
@@ -61,7 +61,7 @@ namespace magma
         template<std::size_t SpirvWordCount>
         explicit ShaderModule(std::shared_ptr<Device> device,
             const SpirvWord (&bytecode)[SpirvWordCount],
-            std::size_t bytecodeHash = 0,
+            hash_t bytecodeHash = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkShaderModuleCreateFlags flags = 0,
             bool reflect = false
@@ -71,12 +71,12 @@ namespace magma
         );
         ~ShaderModule();
         std::shared_ptr<const ShaderReflection> getReflection() const noexcept { return reflection; }
-        std::size_t getHash() const noexcept;
+        hash_t getHash() const noexcept;
 
     private:
         std::shared_ptr<ShaderReflection> reflection;
-        std::size_t hash;
-        mutable std::size_t bytecodeHash;
+        hash_t hash;
+        mutable hash_t bytecodeHash;
         mutable std::vector<SpirvWord> bytecode;
     };
 } // namespace magma

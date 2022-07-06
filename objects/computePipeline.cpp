@@ -60,7 +60,7 @@ ComputePipeline::ComputePipeline(VkPipeline pipeline,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<Pipeline> basePipeline,
     std::shared_ptr<IAllocator> allocator,
-    std::size_t hash):
+    hash_t hash):
     Pipeline(VK_PIPELINE_BIND_POINT_COMPUTE, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator), hash)
 {
     handle = pipeline;

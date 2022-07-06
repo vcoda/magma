@@ -105,7 +105,7 @@ RayTracingPipeline::RayTracingPipeline(VkPipeline pipeline,
     std::shared_ptr<IAllocator> allocator,
     uint32_t shaderGroupCount,
     uint32_t maxRecursionDepth,
-    std::size_t hash):
+    hash_t hash):
     Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator), hash),
     shaderGroupCount(shaderGroupCount),
     maxRecursionDepth(maxRecursionDepth)

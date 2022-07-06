@@ -45,7 +45,7 @@ namespace magma
             bool negativeOneToOne = false) noexcept;
         ViewportState(const ViewportState&) noexcept;
         ViewportState& operator=(const ViewportState&) noexcept;
-        virtual std::size_t hash() const noexcept;
+        virtual hash_t hash() const noexcept;
         bool operator==(const ViewportState&) const noexcept;
 
     protected:

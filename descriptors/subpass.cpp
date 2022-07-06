@@ -153,9 +153,9 @@ SubpassDescription::~SubpassDescription()
     delete pDepthStencilAttachment;
 }
 
-std::size_t SubpassDescription::hash() const noexcept
+hash_t SubpassDescription::hash() const noexcept
 {
-    std::size_t hash = core::hashArgs(
+    hash_t hash = core::hashArgs(
         flags,
         pipelineBindPoint,
         inputAttachmentCount,

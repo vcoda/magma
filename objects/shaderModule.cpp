@@ -27,7 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *bytecode, std::size_t bytecodeSize,
-    std::size_t bytecodeHash /* 0 */,
+    hash_t bytecodeHash /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkShaderModuleCreateFlags flags /* 0 */,
     bool reflect /* false */
@@ -81,7 +81,7 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
 }
 
 ShaderModule::ShaderModule(std::shared_ptr<Device> device, const std::vector<SpirvWord>& bytecode,
-    std::size_t bytecodeHash /* 0 */,
+    hash_t bytecodeHash /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkShaderModuleCreateFlags flags /* 0 */,
     bool reflect /* false */
@@ -101,7 +101,7 @@ ShaderModule::~ShaderModule()
     vkDestroyShaderModule(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-std::size_t ShaderModule::getHash() const noexcept
+hash_t ShaderModule::getHash() const noexcept
 {
     if (0 == bytecodeHash)
     {   // Compute hash on demand, may take time for large shaders

@@ -44,63 +44,63 @@ namespace magma
 {
 #ifdef MAGMA_VERIFY_CONSTEXPR
     // Attachment description
-    constexpr size_t loadStoreHash = op::loadStore.hash();
+    constexpr hash_t loadStoreHash = op::loadStore.hash();
     constexpr AttachmentDescription rgbaUnormAttachment(VK_FORMAT_R8G8B8A8_UNORM, 4, op::load, op::store,
         VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
-    constexpr size_t attachmentHash = rgbaUnormAttachment.hash();
+    constexpr hash_t attachmentHash = rgbaUnormAttachment.hash();
     // Subpass dependency
     constexpr SubpassDependency subpassDependency(0, 1, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
-    constexpr size_t subpassDependencyHash = subpassDependency.hash();
+    constexpr hash_t subpassDependencyHash = subpassDependency.hash();
     // Input assembly state
-    constexpr size_t triangleListHash = renderstate::triangleList.hash();
+    constexpr hash_t triangleListHash = renderstate::triangleList.hash();
     // Tesselation state
     constexpr TesselationState eightControlPointsPatch(8);
-    constexpr size_t eightControlPointsPatchHash = eightControlPointsPatch.hash();
+    constexpr hash_t eightControlPointsPatchHash = eightControlPointsPatch.hash();
     // Rasterization state
-    constexpr size_t fillCullBackCCWHash = renderstate::fillCullBackCCW.hash();
+    constexpr hash_t fillCullBackCCWHash = renderstate::fillCullBackCCW.hash();
     // Depth/stencil states
-    constexpr size_t depthLessOrEqualHash = renderstate::depthLessOrEqual.hash();
-    constexpr size_t stencilOneDepthPassHash = renderstate::stencilOneDepthPass.hash();
+    constexpr hash_t depthLessOrEqualHash = renderstate::depthLessOrEqual.hash();
+    constexpr hash_t stencilOneDepthPassHash = renderstate::stencilOneDepthPass.hash();
     // Blend states
-    constexpr size_t writeNoneHash = blendstate::writeNone.hash();
-    constexpr size_t dontWriteRgbaHash = renderstate::dontWriteRgba.hash();
+    constexpr hash_t writeNoneHash = blendstate::writeNone.hash();
+    constexpr hash_t dontWriteRgbaHash = renderstate::dontWriteRgba.hash();
     // Sampler state
-    constexpr size_t magMinMipLinearRepeatHash = sampler::magMinMipLinearRepeat.hash();
+    constexpr hash_t magMinMipLinearRepeatHash = sampler::magMinMipLinearRepeat.hash();
     // Depth comparison sampler state
-    constexpr size_t magMinNearestLessOrEqualHash = sampler::magMinNearestLessOrEqual.hash();
+    constexpr hash_t magMinNearestLessOrEqualHash = sampler::magMinNearestLessOrEqual.hash();
     // Multisample state
-    constexpr size_t multisampleFourHash = renderstate::multisampleFour.hash();
+    constexpr hash_t multisampleFourHash = renderstate::multisampleFour.hash();
     // Extended states
 #ifdef VK_AMD_rasterization_order
-    constexpr size_t fillCullNoneStrictCCWHash = renderstate::fillCullNoneStrictCCW.hash();
+    constexpr hash_t fillCullNoneStrictCCWHash = renderstate::fillCullNoneStrictCCW.hash();
 #endif
 #ifdef VK_EXT_conservative_rasterization
-    constexpr size_t fillCullNoneOverestimateCCWHash = renderstate::fillCullNoneOverestimateCCW.hash();
+    constexpr hash_t fillCullNoneOverestimateCCWHash = renderstate::fillCullNoneOverestimateCCW.hash();
 #endif
 #ifdef VK_EXT_transform_feedback
     constexpr StreamRasterizationState fillCullNoneCCWStreamOne(renderstate::fillCullNoneCCW, 1);
-    constexpr size_t fillCullNoneCCWStreamOneHash = fillCullNoneCCWStreamOne.hash();
+    constexpr hash_t fillCullNoneCCWStreamOneHash = fillCullNoneCCWStreamOne.hash();
 #endif
 #ifdef VK_EXT_blend_operation_advanced
-    constexpr size_t blendOverlayRgbaHash = blendstate::advanced::blendOverlayRgba.hash();
+    constexpr hash_t blendOverlayRgbaHash = blendstate::advanced::blendOverlayRgba.hash();
 #endif
 #ifdef VK_EXT_sampler_filter_minmax
-    constexpr size_t magMinMipLinearRepeatWeightedAverageHash = sampler::magMinMipLinearRepeatWeightedAverage.hash();
+    constexpr hash_t magMinMipLinearRepeatWeightedAverageHash = sampler::magMinMipLinearRepeatWeightedAverage.hash();
 #endif
 #ifdef VK_KHR_sampler_ycbcr_conversion
-    constexpr size_t rgbIdentityFullNearestHash = sampler::rgbIdentityFullNearest.hash();
+    constexpr hash_t rgbIdentityFullNearestHash = sampler::rgbIdentityFullNearest.hash();
 #endif
     // Custom border color
     constexpr VkClearColorValue redColor{1.f, 0.f, 0.f, 1.f};
     constexpr BorderColor customBorderColor(redColor);
-    constexpr size_t customBorderColorHash = customBorderColor.hash();
+    constexpr hash_t customBorderColorHash = customBorderColor.hash();
     // Push constant
     struct PushConstants
     {
         float m[16];
     };
     constexpr pushconstant::VertexFragmentConstantRange<PushConstants> pushConstant;
-    constexpr size_t pushConstantHash = pushConstant.hash();
+    constexpr hash_t pushConstantHash = pushConstant.hash();
     // Verify mipmap filter
     static_assert(sampler::magMinMipNearestRepeat.getMipFilter() == MipFilter::Nearest, "expected nearest filter");
     static_assert(sampler::magMinLinearMipNearestRepeat.getMipFilter() == MipFilter::Bilinear, "expected bilinear filter");

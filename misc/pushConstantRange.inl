@@ -8,7 +8,7 @@ constexpr PushConstantRange::PushConstantRange(const VkShaderStageFlags stageFla
     }
 {}
 
-constexpr std::size_t PushConstantRange::hash() const noexcept
+constexpr hash_t PushConstantRange::hash() const noexcept
 {
     return core::hashArgs(
         stageFlags,

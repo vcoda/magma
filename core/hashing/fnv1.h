@@ -46,7 +46,7 @@ namespace magma
             template<typename T, std::size_t N, std::size_t I>
             struct Fnv1
             {
-                constexpr std::size_t hash(const T (&a)[N]) noexcept
+                constexpr hash_t hash(const T (&a)[N]) noexcept
                 {
                     return (Fnv1<T, N, I-1>().hash(a) * a[I-1]) ^ fnv::prime;
                 }
@@ -55,7 +55,7 @@ namespace magma
             template<typename T, std::size_t N>
             struct Fnv1<T, N, 1>
             {
-                constexpr std::size_t hash(const T (&a)[N]) noexcept
+                constexpr hash_t hash(const T (&a)[N]) noexcept
                 {
                     return (fnv::basis * a[0]) ^ fnv::prime;
                 }
@@ -66,7 +66,7 @@ namespace magma
             template<typename T, std::size_t N, std::size_t I>
             struct Fnv1a
             {
-                constexpr std::size_t hash(const T (&a)[N]) noexcept
+                constexpr hash_t hash(const T (&a)[N]) noexcept
                 {
                     return (Fnv1a<T, N, I-1>().hash(a) ^ a[I-1]) * fnv::prime;
                 }
@@ -75,7 +75,7 @@ namespace magma
             template<typename T, std::size_t N>
             struct Fnv1a<T, N, 1>
             {
-                constexpr std::size_t hash(const T (&a)[N]) noexcept
+                constexpr hash_t hash(const T (&a)[N]) noexcept
                 {
                     return (fnv::basis ^ a[0]) * fnv::prime;
                 }

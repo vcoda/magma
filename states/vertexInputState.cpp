@@ -108,9 +108,9 @@ uint32_t VertexInputState::stride(uint32_t binding) const noexcept
     return static_cast<uint32_t>(stride);
 }
 
-std::size_t VertexInputState::hash() const noexcept
+hash_t VertexInputState::hash() const noexcept
 {
-    std::size_t hash = core::hashArgs(
+    hash_t hash = core::hashArgs(
         sType,
         flags,
         vertexBindingDescriptionCount,

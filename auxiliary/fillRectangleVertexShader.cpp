@@ -39,14 +39,14 @@ FillRectangleVertexShader::FillRectangleVertexShader(std::shared_ptr<Device> dev
     {
         constexpr
         #include "spirv/output/blitv_nv"
-        constexpr std::size_t hash = core::hashArray(vsBlitNV);
+        constexpr hash_t hash = core::hashArray(vsBlitNV);
         shader = std::make_shared<ShaderModule>(std::move(device), vsBlitNV, hash, std::move(allocator), 0, true);
     }
     else
     {
         constexpr
         #include "spirv/output/blitv"
-        constexpr std::size_t hash = core::hashArray(vsBlit);
+        constexpr hash_t hash = core::hashArray(vsBlit);
         shader = std::make_shared<ShaderModule>(std::move(device), vsBlit, hash, std::move(allocator), 0, true);
     }
 }

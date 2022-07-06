@@ -11,7 +11,7 @@ constexpr InputAssemblyState::InputAssemblyState(const VkPrimitiveTopology topol
     }
 {}
 
-constexpr std::size_t InputAssemblyState::hash() const noexcept
+constexpr hash_t InputAssemblyState::hash() const noexcept
 {
     return core::hashArgs(
         sType,

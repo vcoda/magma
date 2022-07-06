@@ -108,7 +108,7 @@ TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
     auto vertexShader = std::make_unique<FillRectangleVertexShader>(device, hostAllocator);
 constexpr
 #include "spirv/output/fontf"
-    constexpr std::size_t fsFontHash = core::hashArray(fsFont);
+    constexpr hash_t fsFontHash = core::hashArray(fsFont);
     std::shared_ptr<ShaderModule> fragmentShader = std::make_shared<ShaderModule>(device, fsFont, fsFontHash, hostAllocator, 0, true);
     const std::vector<PipelineShaderStage> shaderStages = {
         VertexShaderStage(vertexShader->getShader(), vertexShader->getEntryPointName()),

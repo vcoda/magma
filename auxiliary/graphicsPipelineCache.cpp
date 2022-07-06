@@ -68,13 +68,13 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
     // Specify that the pipeline to be created is allowed to be the parent of a pipeline that will be created
     info.flags = flags | VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
     info.stageCount = MAGMA_COUNT(shaderStages);
-    std::size_t hash = core::hashArgs(
+    hash_t hash = core::hashArgs(
         info.sType,
         info.flags,
         info.stageCount);
     for (const auto& stage : shaderStages)
         hash = core::hashCombine(hash, stage.getHash());
-    std::size_t baseHash = core::combineHashList({
+    hash_t baseHash = core::combineHashList({
         vertexInputState.hash(),
         inputAssemblyState.hash(),
         tesselationState.hash(),
@@ -133,7 +133,7 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupBasePipeline(
 {
     if (!basePipelines.empty())
     {   // Compute hash of render and dynamic states
-        std::size_t hash = core::combineHashList({
+        hash_t hash = core::combineHashList({
             vertexInputState.hash(),
             inputAssemblyState.hash(),
             tesselationState.hash(),

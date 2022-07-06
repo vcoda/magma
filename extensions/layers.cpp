@@ -33,7 +33,7 @@ Layers::Layers(const std::vector<VkLayerProperties>& properties)
 bool Layers::hasLayer(const char *name) const noexcept
 {
     static const std::string prefix(MAGMA_LAYER_PREFIX);
-    const std::size_t hash = core::hashString(prefix + name);
+    const hash_t hash = core::hashString(prefix + name);
     return hasLayer(hash);
 }
 
@@ -43,7 +43,7 @@ void Layers::forEach(std::function<void(const VkLayerProperties&)> fn) const noe
         fn(layer.second);
 }
 
-bool Layers::hasLayer(std::size_t hash) const noexcept
+bool Layers::hasLayer(hash_t hash) const noexcept
 {
     return hashes.find(hash) != hashes.end();
 }

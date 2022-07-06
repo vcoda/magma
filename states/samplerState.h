@@ -48,7 +48,7 @@ namespace magma
         constexpr SamplerState(const SamplerState&) noexcept;
         constexpr MagFilter getMagFilter() const noexcept;
         constexpr MipFilter getMipFilter() const noexcept;
-        constexpr std::size_t hash() const noexcept;
+        constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const SamplerState&) const noexcept;
     };
 

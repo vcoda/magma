@@ -21,7 +21,7 @@ constexpr bool BorderColor::custom() const noexcept
 }
 #endif // VK_EXT_custom_border_color
 
-constexpr std::size_t BorderColor::hash() const noexcept
+constexpr hash_t BorderColor::hash() const noexcept
 {
 #ifdef VK_EXT_custom_border_color
     if (custom())

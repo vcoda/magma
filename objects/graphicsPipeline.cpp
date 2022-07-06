@@ -121,7 +121,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
         pipelineInfo.stageCount);
     for (const auto& stage : shaderStages)
         hash = core::hashCombine(hash, stage.getHash());
-    std::size_t stateHash = core::combineHashList({
+    hash_t stateHash = core::combineHashList({
         vertexInputState.hash(),
         inputAssemblyState.hash(),
         tesselationState.hash(),
@@ -146,7 +146,7 @@ GraphicsPipeline::GraphicsPipeline(VkPipeline pipeline,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<Pipeline> basePipeline,
     std::shared_ptr<IAllocator> allocator,
-    std::size_t hash):
+    hash_t hash):
     Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator), hash)
 {
     handle = pipeline;

@@ -58,7 +58,7 @@ uint32_t RayTracingPipelines::newPipeline(const std::vector<PipelineShaderStage>
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipelines.back());
     pipelineInfo.basePipelineIndex = -1;
     pipelineInfos.push_back(pipelineInfo);
-    std::size_t hash = core::hashArgs(
+    hash_t hash = core::hashArgs(
         pipelineInfo.sType,
         pipelineInfo.flags,
         pipelineInfo.stageCount,

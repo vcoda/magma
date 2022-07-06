@@ -73,9 +73,9 @@ PipelineShaderStage::~PipelineShaderStage()
     delete[] pName;
 }
 
-std::size_t PipelineShaderStage::getHash() const noexcept
+hash_t PipelineShaderStage::getHash() const noexcept
 {   // Compute complex hash on demand
-    std::size_t hash = core::hashArgs(
+    hash_t hash = core::hashArgs(
         sType,
         flags,
         stage,

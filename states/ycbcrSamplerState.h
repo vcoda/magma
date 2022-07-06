@@ -27,7 +27,7 @@ namespace magma
         constexpr YcbcrConversionSamplerState(VkSamplerYcbcrModelConversionKHR ycbcrModel,
             VkSamplerYcbcrRangeKHR ycbcrRange,
             VkFilter chromaFilter) noexcept;
-        constexpr std::size_t hash() const noexcept;
+        constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const YcbcrConversionSamplerState&) const noexcept;
     };
 } // namespace magma

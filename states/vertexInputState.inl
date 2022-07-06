@@ -9,7 +9,7 @@ constexpr VertexInputBinding::VertexInputBinding(const uint32_t binding, const u
     }
 {}
 
-constexpr std::size_t VertexInputBinding::hash()
+constexpr hash_t VertexInputBinding::hash()
 {
     return core::hashArgs(
         binding,
@@ -26,7 +26,7 @@ constexpr VertexInputAttribute::VertexInputAttribute(const uint32_t location, co
     }
 {}
 
-constexpr std::size_t VertexInputAttribute::hash()
+constexpr hash_t VertexInputAttribute::hash()
 {
     return core::hashArgs(
         location,

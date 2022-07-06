@@ -79,7 +79,7 @@ namespace magma
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator,
-            std::size_t hash);
+            hash_t hash);
         friend class GraphicsPipelines;
     };
 } // namespace magma

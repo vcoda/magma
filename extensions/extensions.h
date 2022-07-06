@@ -31,11 +31,11 @@ namespace magma
 
     protected:
         Extensions(const std::vector<VkExtensionProperties>&);
-        bool hasExtension(std::size_t hash) const noexcept;
+        bool hasExtension(hash_t hash) const noexcept;
 
     private:
         std::map<std::string, uint32_t> extensions;
-        std::unordered_set<std::size_t> hashes;
+        std::unordered_set<hash_t> hashes;
     };
 
     MAGMA_TYPEDEF_UNIQUE_PTR(Extensions)

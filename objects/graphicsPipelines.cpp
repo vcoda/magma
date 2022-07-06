@@ -102,13 +102,13 @@ uint32_t GraphicsPipelines::newPipeline(const std::vector<PipelineShaderStage>& 
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipelines.back());
     pipelineInfo.basePipelineIndex = -1;
     pipelineInfos.push_back(pipelineInfo);
-    std::size_t hash = core::hashArgs(
+    hash_t hash = core::hashArgs(
         pipelineInfo.sType,
         pipelineInfo.flags,
         pipelineInfo.stageCount);
     for (const auto& stage : shaderStages)
         hash = core::hashCombine(hash, stage.getHash());
-    std::size_t stateHash = core::combineHashList({
+    hash_t stateHash = core::combineHashList({
         vertexInputState.hash(),
         inputAssemblyState.hash(),
         tesselationState.hash(),

@@ -55,7 +55,7 @@ std::size_t ShaderReflection::getBytecodeSize() const noexcept
     return bytecodeSize;
 }
 
-std::size_t ShaderReflection::computeBytecodeHash() const noexcept
+hash_t ShaderReflection::computeBytecodeHash() const noexcept
 {
     const std::size_t wordCount = getBytecodeSize() / sizeof(SpirvWord);
     return core::hashArray(getBytecode(), wordCount);

@@ -40,9 +40,9 @@ constexpr MultisampleState::MultisampleState(const uint32_t sampleCount) noexcep
     }
 }
 
-constexpr std::size_t MultisampleState::hash() const noexcept
+constexpr hash_t MultisampleState::hash() const noexcept
 {
-    std::size_t hash = core::hashArgs(
+    hash_t hash = core::hashArgs(
         sType,
         flags,
         rasterizationSamples,

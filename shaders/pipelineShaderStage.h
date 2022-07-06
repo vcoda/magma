@@ -41,7 +41,7 @@ namespace magma
         std::shared_ptr<ShaderModule> getShaderModule() noexcept { return shaderModule; }
         std::shared_ptr<const ShaderModule> getShaderModule() const noexcept { return shaderModule; }
         bool hasSpecialization() const noexcept { return specialization != nullptr; }
-        std::size_t getHash() const noexcept;
+        hash_t getHash() const noexcept;
 
     private:
         std::shared_ptr<ShaderModule> shaderModule;

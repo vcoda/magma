@@ -39,7 +39,7 @@ namespace magma
         SubpassDescription(const SubpassDescription&) noexcept;
         SubpassDescription& operator=(const SubpassDescription&) noexcept;
         ~SubpassDescription();
-        std::size_t hash() const noexcept;
+        hash_t hash() const noexcept;
 
     private:
         SubpassDescription(VkPipelineBindPoint pipelineBindPoint) noexcept;
@@ -56,7 +56,7 @@ namespace magma
             VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
             VkDependencyFlags dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT);
-        constexpr std::size_t hash() const noexcept;
+        constexpr hash_t hash() const noexcept;
     };
 } // namespace magma
 

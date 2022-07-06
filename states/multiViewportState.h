@@ -31,7 +31,7 @@ namespace magma
             const std::vector<VkRect2D>& scissors);
         MultiViewportState(const MultiViewportState&);
         MultiViewportState& operator=(const MultiViewportState&);
-        std::size_t hash() const noexcept override;
+        hash_t hash() const noexcept override;
         bool operator==(const MultiViewportState&) const noexcept;
 
     private:

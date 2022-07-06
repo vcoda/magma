@@ -55,7 +55,7 @@ namespace magma
         ~RenderPass();
         const std::vector<AttachmentDescription>& getAttachments() const noexcept { return attachments; }
         bool hasClearOp() const noexcept;
-        std::size_t getHash() const noexcept { return hash; }
+        hash_t getHash() const noexcept { return hash; }
 
     private:
         VkImageLayout optimalDepthStencilLayout(const Format& format) const;
@@ -63,6 +63,6 @@ namespace magma
         SubpassDependency subpassEndDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept;
 
         std::vector<AttachmentDescription> attachments;
-        std::size_t hash;
+        hash_t hash;
     };
 } // namespace magma

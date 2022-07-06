@@ -13,9 +13,9 @@ constexpr ConservativeRasterizationState::ConservativeRasterizationState(const R
     pNext = &conservative;
 }
 
-constexpr std::size_t ConservativeRasterizationState::hash() const noexcept
+constexpr hash_t ConservativeRasterizationState::hash() const noexcept
 {
-    std::size_t hash = RasterizationState::hash();
+    hash_t hash = RasterizationState::hash();
     return core::hashCombine(hash, core::hashArgs(
         conservative.sType,
         conservative.flags,

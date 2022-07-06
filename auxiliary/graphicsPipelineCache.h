@@ -82,8 +82,8 @@ namespace magma
             std::shared_ptr<Device> device;
             std::shared_ptr<PipelineCache> pipelineCache;
             std::shared_ptr<IAllocator> allocator;
-            std::unordered_map<std::size_t, std::shared_ptr<GraphicsPipeline>> pipelines;
-            std::unordered_map<std::size_t, std::shared_ptr<GraphicsPipeline>> basePipelines;
+            std::unordered_map<hash_t, std::shared_ptr<GraphicsPipeline>> pipelines;
+            std::unordered_map<hash_t, std::shared_ptr<GraphicsPipeline>> basePipelines;
         };
     } // namespace aux
 } // namespace magma

@@ -62,7 +62,7 @@ namespace magma
         struct VertexAttribute : AttributeFormat<VK_FORMAT_UNDEFINED>
         {
             constexpr VertexAttribute();
-            constexpr std::size_t getSize() const { return sizeof(Type); }
+            constexpr hash_t getSize() const { return sizeof(Type); }
             constexpr bool hasNormalization() const { return normalized; }
         };
 

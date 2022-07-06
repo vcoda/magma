@@ -82,9 +82,9 @@ MultiViewportState& MultiViewportState::operator=(const MultiViewportState& othe
     return *this;
 }
 
-std::size_t MultiViewportState::hash() const noexcept
+hash_t MultiViewportState::hash() const noexcept
 {
-    std::size_t hash = core::hashArgs(
+    hash_t hash = core::hashArgs(
         sType,
         flags,
         viewportCount,

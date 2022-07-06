@@ -171,7 +171,7 @@ ViewportState& ViewportState::operator=(const ViewportState& other) noexcept
     return *this;
 }
 
-std::size_t ViewportState::hash() const noexcept
+hash_t ViewportState::hash() const noexcept
 {
     return core::hashArgs(
         sType,

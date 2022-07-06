@@ -52,7 +52,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator,
             uint32_t shaderGroupCount,
             uint32_t maxRecursionDepth,
-            std::size_t hash);
+            hash_t hash);
         friend class RayTracingPipelines;
 
         const uint32_t shaderGroupCount;

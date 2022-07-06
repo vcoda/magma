@@ -38,7 +38,7 @@ namespace magma
         std::shared_ptr<const PipelineLayout> getLayout() const noexcept { return layout; }
         std::shared_ptr<Pipeline> getBasePipeline() noexcept { return basePipeline; }
         std::shared_ptr<const Pipeline> getBasePipeline() const noexcept { return basePipeline; }
-        std::size_t getHash() const noexcept { return hash; }
+        hash_t getHash() const noexcept { return hash; }
 #ifdef VK_AMD_shader_info
         VkShaderStatisticsInfoAMD getShaderStatistics(VkShaderStageFlagBits stage) const;
         std::vector<uint8_t> getShaderBinary(VkShaderStageFlagBits stage) const;
@@ -51,12 +51,12 @@ namespace magma
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator,
-            std::size_t hash = 0);
+            hash_t hash = 0);
 
         const VkPipelineBindPoint bindPoint;
         std::shared_ptr<PipelineLayout> layout;
         std::shared_ptr<Pipeline> basePipeline;
-        std::size_t hash = 0;
+        hash_t hash = 0;
     };
 
     class PipelineShaderStage;
@@ -74,7 +74,7 @@ namespace magma
         std::list<std::vector<PipelineShaderStage>> stages;
         std::list<std::shared_ptr<PipelineLayout>> layouts;
         std::list<std::shared_ptr<Pipeline>> basePipelines;
-        std::list<std::size_t> hashes;
+        std::list<hash_t> hashes;
 
     private:
         void gatherShaderStageInfos() const;

@@ -33,7 +33,7 @@ namespace magma
             uint32_t intersectionShader) noexcept;
 
     public:
-        std::size_t hash() const noexcept;
+        hash_t hash() const noexcept;
     };
 
     /* General shader is the index of the ray generation, miss, or callable shader. */

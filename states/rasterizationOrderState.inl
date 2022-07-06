@@ -10,9 +10,9 @@ constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationSt
     pNext = &order;
 }
 
-constexpr std::size_t RasterizationOrderState::hash() const noexcept
+constexpr hash_t RasterizationOrderState::hash() const noexcept
 {
-    std::size_t hash = RasterizationState::hash();
+    hash_t hash = RasterizationState::hash();
     return core::hashCombine(hash, core::hashArgs(
         order.sType,
         order.rasterizationOrder));

@@ -31,11 +31,11 @@ namespace magma
 
     protected:
         Layers(const std::vector<VkLayerProperties>&);
-        bool hasLayer(std::size_t hash) const noexcept;
+        bool hasLayer(hash_t hash) const noexcept;
 
     private:
         std::map<std::string, VkLayerProperties> layers;
-        std::unordered_set<std::size_t> hashes;
+        std::unordered_set<hash_t> hashes;
     };
 
     MAGMA_TYPEDEF_UNIQUE_PTR(Layers)

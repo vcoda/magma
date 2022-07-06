@@ -78,9 +78,9 @@ MultiColorBlendState::~MultiColorBlendState()
     delete[] pAttachments;
 }
 
-std::size_t MultiColorBlendState::hash() const noexcept
+hash_t MultiColorBlendState::hash() const noexcept
 {
-    std::size_t hash = core::hashArgs(
+    hash_t hash = core::hashArgs(
         sType,
         flags,
         logicOpEnable,

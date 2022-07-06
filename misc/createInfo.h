@@ -25,11 +25,11 @@ namespace magma
     class CreateInfo
     {
     public:
-        CreateInfo() noexcept: hash(0) {}
+        CreateInfo() noexcept: hash(0ull) {}
         virtual const void *getNode() const noexcept { return nullptr; }
-        virtual std::size_t getHash() const noexcept { return hash; }
+        virtual hash_t getHash() const noexcept { return hash; }
 
     protected:
-        std::size_t hash;
+        hash_t hash;
     };
 } // namespace magma

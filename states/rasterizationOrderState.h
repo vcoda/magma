@@ -29,7 +29,7 @@ namespace magma
     {
         constexpr RasterizationOrderState(const RasterizationState& state,
             VkRasterizationOrderAMD rasterizationOrder) noexcept;
-        constexpr std::size_t hash() const noexcept;
+        constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const RasterizationOrderState&) const noexcept;
 
         const VkPipelineRasterizationStateRasterizationOrderAMD order;

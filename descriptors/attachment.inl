@@ -1,6 +1,6 @@
 namespace magma
 {
-constexpr std::size_t LoadStoreOp::hash() const noexcept
+constexpr hash_t LoadStoreOp::hash() const noexcept
 {
     return core::hashArgs(
         loadOp,
@@ -54,7 +54,7 @@ constexpr AttachmentDescription::AttachmentDescription(const VkFormat format, co
         predefined.stencilLoadOp, predefined.stencilStoreOp, initialLayout, finalLayout)
 {}
 
-constexpr std::size_t AttachmentDescription::hash() const noexcept
+constexpr hash_t AttachmentDescription::hash() const noexcept
 {
     return core::hashArgs(
         flags,

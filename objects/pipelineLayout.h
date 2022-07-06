@@ -56,10 +56,10 @@ namespace magma
         ~PipelineLayout();
         const std::vector<std::shared_ptr<DescriptorSetLayout>>& getSetLayouts() const noexcept { return setLayouts; }
         bool hasSetLayout(std::shared_ptr<DescriptorSetLayout> setLayout) const noexcept;
-        std::size_t getHash() const noexcept;
+        hash_t getHash() const noexcept;
 
     private:
         std::vector<std::shared_ptr<DescriptorSetLayout>> setLayouts;
-        std::size_t hash;
+        hash_t hash;
     };
 } // namespace magma
