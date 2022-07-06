@@ -9,7 +9,7 @@ constexpr BorderColor::BorderColor(VkBorderColor color) noexcept:
 {}
 
 #ifdef VK_EXT_custom_border_color
-constexpr BorderColor::BorderColor(VkClearColorValue customColor, VkFormat format /* VK_FORMAT_UNDEFINED */) noexcept:
+constexpr BorderColor::BorderColor(const VkClearColorValue customColor, const VkFormat format /* VK_FORMAT_UNDEFINED */) noexcept:
     color(VK_BORDER_COLOR_FLOAT_CUSTOM_EXT),
     customColor(customColor),
     format(format)
