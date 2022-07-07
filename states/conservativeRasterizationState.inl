@@ -1,3 +1,5 @@
+namespace magma
+{
 constexpr ConservativeRasterizationState::ConservativeRasterizationState(const RasterizationState& state,
     const VkConservativeRasterizationModeEXT conservativeRasterizationMode,
     const float extraPrimitiveOverestimationSize /* 0 */) noexcept:
@@ -30,3 +32,4 @@ constexpr bool ConservativeRasterizationState::operator==(const ConservativeRast
         (conservative.conservativeRasterizationMode == other.conservative.conservativeRasterizationMode) &&
         (conservative.extraPrimitiveOverestimationSize == other.conservative.extraPrimitiveOverestimationSize);
 }
+} // namespace magma

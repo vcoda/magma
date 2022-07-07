@@ -62,7 +62,7 @@ const RasterizationState& FillRectangleVertexShader::getRasterizationState() con
 {
 #ifdef VK_NV_fill_rectangle
     if (hasFillRectangle)
-        return renderstate::fillCullNoneRectangleCCW;
+        return renderstate::fillRectangleCullNoneCCW;
 #endif
     return renderstate::fillCullNoneCCW;
 }

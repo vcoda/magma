@@ -1,3 +1,5 @@
+namespace magma
+{
 constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationState& state,
     const VkRasterizationOrderAMD rasterizationOrder) noexcept:
     RasterizationState(state),
@@ -23,3 +25,4 @@ constexpr bool RasterizationOrderState::operator==(const RasterizationOrderState
     return RasterizationState::operator==(other) &&
         (order.rasterizationOrder == other.order.rasterizationOrder);
 }
+} // namespace magma
