@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    namespace colorwritemask
+    namespace colormask
     {
         constexpr VkColorComponentFlags none(0);
 
@@ -41,5 +41,5 @@ namespace magma
         constexpr VkColorComponentFlags gba(VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
 
         constexpr VkColorComponentFlags rgba(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
-    } // namespace colorwritemask
+    } // namespace colormask
 } // namespace magma

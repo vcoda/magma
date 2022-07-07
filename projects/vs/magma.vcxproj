@@ -338,7 +338,7 @@
     <ClInclude Include="..\..\states\vertexLayouts.h" />
     <ClInclude Include="..\..\states\multiViewportState.h" />
     <ClInclude Include="..\..\states\viewportState.h" />
-    <ClInclude Include="..\..\states\colorWriteMask.h" />
+    <ClInclude Include="..\..\states\colorMask.h" />
     <ClInclude Include="..\..\states\ycbcrSamplerState.h" />
   </ItemGroup>
   <ItemGroup>

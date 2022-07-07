@@ -348,9 +348,6 @@
     <ClInclude Include="..\..\states\colorBlendStateAdvanced.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\states\colorWriteMask.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\objects\dispatchable.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -680,6 +677,9 @@
     </ClInclude>
     <ClInclude Include="..\..\misc\pushConstantRange.h">
       <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\states\colorMask.h">
+      <Filter>Header Files\states</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,7 @@
 namespace magma
 {
 constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
-    const VkColorComponentFlags colorWriteMask /* colorwritemask::rgba */) noexcept:
+    const VkColorComponentFlags colorWriteMask /* colormask::rgba */) noexcept:
     VkPipelineColorBlendAttachmentState{
         VK_FALSE, // blendEnable
         VK_BLEND_FACTOR_ONE, // srcColorBlendFactor
@@ -16,7 +16,7 @@ constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
 
 constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
     const VkBlendFactor srcBlendFactor, const VkBlendFactor dstBlendFactor, const VkBlendOp blendOp,
-    const VkColorComponentFlags colorWriteMask /* colorwritemask::rgba */) noexcept:
+    const VkColorComponentFlags colorWriteMask /* colormask::rgba */) noexcept:
     VkPipelineColorBlendAttachmentState{
         VK_TRUE, // blendEnable
         srcBlendFactor, // srcColorBlendFactor
@@ -32,7 +32,7 @@ constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
 constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
     const VkBlendFactor srcColorBlendFactor, const VkBlendFactor dstColorBlendFactor, const VkBlendOp colorBlendOp,
     const VkBlendFactor srcAlphaBlendFactor, const VkBlendFactor dstAlphaBlendFactor, const VkBlendOp alphaBlendOp,
-    const VkColorComponentFlags colorWriteMask /* colorwritemask::rgba */) noexcept:
+    const VkColorComponentFlags colorWriteMask /* colormask::rgba */) noexcept:
     VkPipelineColorBlendAttachmentState{
         VK_TRUE, // blendEnable
         srcColorBlendFactor,
