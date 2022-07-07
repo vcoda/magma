@@ -24,7 +24,7 @@ namespace magma
 
     struct ColorBlendAttachmentState : VkPipelineColorBlendAttachmentState
     {
-        constexpr ColorBlendAttachmentState(VkColorComponentFlags colorWriteMask = colormask::rgba) noexcept;
+        constexpr ColorBlendAttachmentState(VkColorComponentFlags colorWriteMask = colormask::none) noexcept;
         constexpr ColorBlendAttachmentState(VkBlendFactor srcBlendFactor,
             VkBlendFactor dstBlendFactor,
             VkBlendOp blendOp,

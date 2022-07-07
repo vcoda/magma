@@ -1,6 +1,6 @@
 namespace magma
 {
-constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(const VkColorComponentFlags colorWriteMask /* colormask::rgba */) noexcept:
+constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(const VkColorComponentFlags colorWriteMask /* colormask::none */) noexcept:
     VkPipelineColorBlendAttachmentState{
         VK_FALSE, // blendEnable
         VK_BLEND_FACTOR_ONE, // srcColorBlendFactor
