@@ -85,7 +85,7 @@ constexpr ColorBlendState::ColorBlendState() noexcept:
 
 constexpr ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& attachment,
     bool logicOpEnable /* false */,
-    VkLogicOp logicOp /* VK_LOGIC_OP_CLEAR */,
+    const VkLogicOp logicOp /* VK_LOGIC_OP_CLEAR */,
     const std::initializer_list<float>& blendConstants /* {1, 1, 1, 1} */) noexcept:
     VkPipelineColorBlendStateCreateInfo{
         VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
