@@ -681,6 +681,9 @@
     <ClInclude Include="..\..\states\colorMask.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\states\colorBlendAttachmentState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1203,6 +1206,9 @@
     </None>
     <None Include="..\..\misc\borderColor.inl">
       <Filter>Header Files\misc</Filter>
+    </None>
+    <None Include="..\..\states\colorBlendAttachmentState.inl">
+      <Filter>Header Files\states</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

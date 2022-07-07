@@ -320,6 +320,7 @@
     <ClInclude Include="..\..\shaders\shaderReflectionFactory.h" />
     <ClInclude Include="..\..\shaders\specialization.h" />
     <ClInclude Include="..\..\shaders\shaderStages.h" />
+    <ClInclude Include="..\..\states\colorBlendAttachmentState.h" />
     <ClInclude Include="..\..\states\colorBlendState.h" />
     <ClInclude Include="..\..\states\colorBlendStateAdvanced.h" />
     <ClInclude Include="..\..\states\conservativeRasterizationState.h" />
@@ -597,6 +598,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\packed\x11y11z10ufloat.inl" />
     <None Include="..\..\packed\r5g6b5unorm.inl" />
     <None Include="..\..\shaders\specialization.inl" />
+    <None Include="..\..\states\colorBlendAttachmentState.inl" />
     <None Include="..\..\states\colorBlendState.inl" />
     <None Include="..\..\states\colorBlendStateAdvanced.inl" />
     <None Include="..\..\states\conservativeRasterizationState.inl" />

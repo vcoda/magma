@@ -98,6 +98,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "shaders/shaderStages.h"
 #include "shaders/specialization.h"
 
+#include "states/colorBlendAttachmentState.h"
 #include "states/colorBlendState.h"
 #include "states/colorBlendStateAdvanced.h"
 #include "states/colorMask.h"
