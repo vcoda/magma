@@ -101,6 +101,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "states/colorBlendAttachmentState.h"
 #include "states/colorBlendState.h"
 #include "states/colorBlendStateAdvanced.h"
+#include "states/colorLogicOpState.h"
 #include "states/colorMask.h"
 #include "states/conservativeRasterizationState.h"
 #include "states/depthComparisonSamplerState.h"

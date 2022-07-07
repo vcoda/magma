@@ -323,6 +323,7 @@
     <ClInclude Include="..\..\states\colorBlendAttachmentState.h" />
     <ClInclude Include="..\..\states\colorBlendState.h" />
     <ClInclude Include="..\..\states\colorBlendStateAdvanced.h" />
+    <ClInclude Include="..\..\states\colorLogicOpState.h" />
     <ClInclude Include="..\..\states\conservativeRasterizationState.h" />
     <ClInclude Include="..\..\states\depthComparisonSamplerState.h" />
     <ClInclude Include="..\..\states\depthStencilState.h" />
