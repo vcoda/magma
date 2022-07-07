@@ -42,12 +42,12 @@ namespace magma
 {
 #define MAGMA_DEFINE_RASTERIZATION_ORDER_STATE_PERMUTATIONS(name, Order, rasterizationOrder)\
     constexpr RasterizationOrderState name##Order##CullNoneCCW(name##CullNoneCCW, rasterizationOrder);\
-    constexpr RasterizationOrderState name##Order##CullBackCCW(name##CullFrontCCW, rasterizationOrder);\
-    constexpr RasterizationOrderState name##Order##CullFrontCCW(name##CullBackCCW, rasterizationOrder);\
+    constexpr RasterizationOrderState name##Order##CullFrontCCW(name##CullFrontCCW, rasterizationOrder);\
+    constexpr RasterizationOrderState name##Order##CullBackCCW(name##CullBackCCW, rasterizationOrder);\
     constexpr RasterizationOrderState name##Order##CullFrontAndBackCCW(name##CullFrontAndBackCCW, rasterizationOrder);\
     constexpr RasterizationOrderState name##Order##CullNoneCW(name##CullNoneCW, rasterizationOrder);\
-    constexpr RasterizationOrderState name##Order##CullBackCW(name##CullFrontCW, rasterizationOrder);\
-    constexpr RasterizationOrderState name##Order##CullFrontCW(name##CullBackCW, rasterizationOrder);\
+    constexpr RasterizationOrderState name##Order##CullFrontCW(name##CullFrontCW, rasterizationOrder);\
+    constexpr RasterizationOrderState name##Order##CullBackCW(name##CullBackCW, rasterizationOrder);\
     constexpr RasterizationOrderState name##Order##CullFrontAndBackCW(name##CullFrontAndBackCW, rasterizationOrder);
 
     namespace renderstate
