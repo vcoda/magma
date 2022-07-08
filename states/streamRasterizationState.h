@@ -35,7 +35,7 @@ namespace magma
 
         const VkPipelineRasterizationStateStreamCreateInfoEXT stream;
     };
-
-    #include "streamRasterizationState.inl"
 } // namespace magma
+
+#include "streamRasterizationState.inl"
 #endif // VK_EXT_transform_feedback

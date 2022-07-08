@@ -1,3 +1,5 @@
+namespace magma
+{
 constexpr StreamRasterizationState::StreamRasterizationState(const RasterizationState& state, const uint32_t rasterizationStream,
     const VkPipelineRasterizationStateStreamCreateFlagsEXT flags /* 0 */) noexcept:
     RasterizationState(state),
@@ -26,3 +28,4 @@ constexpr bool StreamRasterizationState::operator==(const StreamRasterizationSta
         (stream.flags == other.stream.flags) &&
         (stream.rasterizationStream == other.stream.rasterizationStream);
 }
+} // namespace magma
