@@ -36,30 +36,22 @@ namespace magma
 
 namespace magma
 {
+#define MAGMA_DEFINE_INPUT_ASSEMBLY_STATE_PERMUTATIONS(name, topology)\
+    constexpr InputAssemblyState name(topology, false);\
+    constexpr InputAssemblyState name##Restart(topology, true);
+
     namespace renderstate
     {
-        constexpr InputAssemblyState pointList(VK_PRIMITIVE_TOPOLOGY_POINT_LIST);
-        constexpr InputAssemblyState lineList(VK_PRIMITIVE_TOPOLOGY_LINE_LIST);
-        constexpr InputAssemblyState lineStrip(VK_PRIMITIVE_TOPOLOGY_LINE_STRIP);
-        constexpr InputAssemblyState triangleList(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
-        constexpr InputAssemblyState triangleStrip(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP);
-        constexpr InputAssemblyState triangleFan(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN);
-        constexpr InputAssemblyState lineListWithAdjacency(VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY);
-        constexpr InputAssemblyState lineStripWithAdjacency(VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY);
-        constexpr InputAssemblyState triangleListWithAdjacency(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY);
-        constexpr InputAssemblyState triangleStripWithAdjacency(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY);
-        constexpr InputAssemblyState patchList(VK_PRIMITIVE_TOPOLOGY_PATCH_LIST);
-
-        constexpr InputAssemblyState pointListRestart(VK_PRIMITIVE_TOPOLOGY_POINT_LIST, true);
-        constexpr InputAssemblyState lineListRestart(VK_PRIMITIVE_TOPOLOGY_LINE_LIST, true);
-        constexpr InputAssemblyState lineStripRestart(VK_PRIMITIVE_TOPOLOGY_LINE_STRIP, true);
-        constexpr InputAssemblyState triangleListRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, true);
-        constexpr InputAssemblyState triangleStripRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP, true);
-        constexpr InputAssemblyState triangleFanRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN, true);
-        constexpr InputAssemblyState lineListWithAdjacencyRestart(VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY, true);
-        constexpr InputAssemblyState lineStripWithAdjacencyRestart(VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY, true);
-        constexpr InputAssemblyState triangleListWithAdjacencyRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY, true);
-        constexpr InputAssemblyState triangleStripWithAdjacencyRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY, true);
-        constexpr InputAssemblyState patchListRestart(VK_PRIMITIVE_TOPOLOGY_PATCH_LIST, true);
+        MAGMA_DEFINE_INPUT_ASSEMBLY_STATE_PERMUTATIONS(pointList, VK_PRIMITIVE_TOPOLOGY_POINT_LIST)
+        MAGMA_DEFINE_INPUT_ASSEMBLY_STATE_PERMUTATIONS(lineList, VK_PRIMITIVE_TOPOLOGY_LINE_LIST)
+        MAGMA_DEFINE_INPUT_ASSEMBLY_STATE_PERMUTATIONS(lineStrip, VK_PRIMITIVE_TOPOLOGY_LINE_STRIP)
+        MAGMA_DEFINE_INPUT_ASSEMBLY_STATE_PERMUTATIONS(triangleList, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST)
+        MAGMA_DEFINE_INPUT_ASSEMBLY_STATE_PERMUTATIONS(triangleStrip, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP)
+        MAGMA_DEFINE_INPUT_ASSEMBLY_STATE_PERMUTATIONS(triangleFan, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN)
+        MAGMA_DEFINE_INPUT_ASSEMBLY_STATE_PERMUTATIONS(lineListWithAdjacency, VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY)
+        MAGMA_DEFINE_INPUT_ASSEMBLY_STATE_PERMUTATIONS(lineStripWithAdjacency, VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY)
+        MAGMA_DEFINE_INPUT_ASSEMBLY_STATE_PERMUTATIONS(triangleListWithAdjacency, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY)
+        MAGMA_DEFINE_INPUT_ASSEMBLY_STATE_PERMUTATIONS(triangleStripWithAdjacency, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY)
+        MAGMA_DEFINE_INPUT_ASSEMBLY_STATE_PERMUTATIONS(patchList, VK_PRIMITIVE_TOPOLOGY_PATCH_LIST)
     } // namespace renderstate
 } // namespace magma
