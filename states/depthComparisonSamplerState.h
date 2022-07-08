@@ -34,24 +34,19 @@ namespace magma
 
 namespace magma
 {
+#define MAGMA_DEFINE_DEPTH_COMPARISON_SAMPLER_STATE_PERMUTATIONS(Filter, magFilter, minFilter)\
+    constexpr DepthComparisonSamplerState magMin##Filter##Never(magFilter, minFilter, VK_COMPARE_OP_NEVER);\
+    constexpr DepthComparisonSamplerState magMin##Filter##Less(magFilter, minFilter, VK_COMPARE_OP_LESS);\
+    constexpr DepthComparisonSamplerState magMin##Filter##Equal(magFilter, minFilter, VK_COMPARE_OP_EQUAL);\
+    constexpr DepthComparisonSamplerState magMin##Filter##LessOrEqual(magFilter, minFilter, VK_COMPARE_OP_LESS_OR_EQUAL);\
+    constexpr DepthComparisonSamplerState magMin##Filter##Greater(magFilter, minFilter, VK_COMPARE_OP_GREATER);\
+    constexpr DepthComparisonSamplerState magMin##Filter##NotEqual(magFilter, minFilter, VK_COMPARE_OP_NOT_EQUAL);\
+    constexpr DepthComparisonSamplerState magMin##Filter##GreaterOrEqual(magFilter, minFilter, VK_COMPARE_OP_GREATER_OR_EQUAL);\
+    constexpr DepthComparisonSamplerState magMin##Filter##Always(magFilter, minFilter, VK_COMPARE_OP_ALWAYS);
+
     namespace sampler
     {
-        constexpr DepthComparisonSamplerState magMinNearestNever(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_COMPARE_OP_NEVER);
-        constexpr DepthComparisonSamplerState magMinNearestLess(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_COMPARE_OP_LESS);
-        constexpr DepthComparisonSamplerState magMinNearestEqual(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_COMPARE_OP_EQUAL);
-        constexpr DepthComparisonSamplerState magMinNearestLessOrEqual(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_COMPARE_OP_LESS_OR_EQUAL);
-        constexpr DepthComparisonSamplerState magMinNearestGreater(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_COMPARE_OP_GREATER);
-        constexpr DepthComparisonSamplerState magMinNearestNotEqual(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_COMPARE_OP_NOT_EQUAL);
-        constexpr DepthComparisonSamplerState magMinNearestGreaterOrEqual(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_COMPARE_OP_GREATER_OR_EQUAL);
-        constexpr DepthComparisonSamplerState magMinNearestAlways(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_COMPARE_OP_ALWAYS);
-
-        constexpr DepthComparisonSamplerState magMinLinearNever(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_COMPARE_OP_NEVER);
-        constexpr DepthComparisonSamplerState magMinLinearLess(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_COMPARE_OP_LESS);
-        constexpr DepthComparisonSamplerState magMinLinearEqual(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_COMPARE_OP_EQUAL);
-        constexpr DepthComparisonSamplerState magMinLinearLessOrEqual(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_COMPARE_OP_LESS_OR_EQUAL);
-        constexpr DepthComparisonSamplerState magMinLinearGreater(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_COMPARE_OP_GREATER);
-        constexpr DepthComparisonSamplerState magMinLinearNotEqual(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_COMPARE_OP_NOT_EQUAL);
-        constexpr DepthComparisonSamplerState magMinLinearGreaterOrEqual(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_COMPARE_OP_GREATER_OR_EQUAL);
-        constexpr DepthComparisonSamplerState magMinLinearAlways(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_COMPARE_OP_ALWAYS);
+        MAGMA_DEFINE_DEPTH_COMPARISON_SAMPLER_STATE_PERMUTATIONS(Nearest, VK_FILTER_NEAREST, VK_FILTER_NEAREST)
+        MAGMA_DEFINE_DEPTH_COMPARISON_SAMPLER_STATE_PERMUTATIONS(Linear, VK_FILTER_LINEAR, VK_FILTER_LINEAR)
     } // namespace sampler
 } // namespace magma

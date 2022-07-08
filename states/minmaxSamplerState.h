@@ -39,159 +39,42 @@ namespace magma
 
 namespace magma
 {
+#define MAGMA_DEFINE_MINMAX_SAMPLER_STATE_PERMUTATIONS(AddressMode, Suffix, reductionMode)\
+    constexpr MinMaxSamplerState magMinMipNearest##AddressMode##Suffix(magMinMipNearest##AddressMode, reductionMode);\
+    constexpr MinMaxSamplerState magLinearMinMipNearest##AddressMode##Suffix(magLinearMinMipNearest##AddressMode, reductionMode);\
+    constexpr MinMaxSamplerState magNearestMinLinearMipNearest##AddressMode##Suffix(magNearestMinLinearMipNearest##AddressMode, reductionMode);\
+    constexpr MinMaxSamplerState magMinNearestMipLinear##AddressMode##Suffix(magMinNearestMipLinear##AddressMode, reductionMode);\
+    constexpr MinMaxSamplerState magMinLinearMipNearest##AddressMode##Suffix(magMinLinearMipNearest##AddressMode, reductionMode);\
+    constexpr MinMaxSamplerState magNearestMinMipLinear##AddressMode##Suffix(magNearestMinMipLinear##AddressMode, reductionMode);\
+    constexpr MinMaxSamplerState magLinearMinNearestMipLinear##AddressMode##Suffix(magLinearMinNearestMipLinear##AddressMode, reductionMode);\
+    constexpr MinMaxSamplerState magMinMipLinear##AddressMode##Suffix(magMinMipLinear##AddressMode, reductionMode);\
+    constexpr MinMaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix(magMinLinearMipAnisotropic##AddressMode, reductionMode);
+
     namespace sampler
     {
-        constexpr MinMaxSamplerState magMinMipNearestRepeatWeightedAverage(magMinMipNearestRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magLinearMinMipNearestRepeatWeightedAverage(magLinearMinMipNearestRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magNearestMinLinearMipNearestRepeatWeightedAverage(magNearestMinLinearMipNearestRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinNearestMipLinearRepeatWeightedAverage(magMinNearestMipLinearRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipNearestRepeatWeightedAverage(magMinLinearMipNearestRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magNearestMinMipLinearRepeatWeightedAverage(magNearestMinMipLinearRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magLinearMinNearestMipLinearRepeatWeightedAverage(magLinearMinNearestMipLinearRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinMipLinearRepeatWeightedAverage(magMinMipLinearRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipAnisotropicRepeatWeightedAverage(magMinLinearMipAnisotropicRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-
-        constexpr MinMaxSamplerState magMinMipNearestMirroredRepeatWeightedAverage(magMinMipNearestMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magLinearMinMipNearestMirroredRepeatWeightedAverage(magLinearMinMipNearestMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magNearestMinLinearMipNearestMirroredRepeatWeightedAverage(magNearestMinLinearMipNearestMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinNearestMipLinearMirroredRepeatWeightedAverage(magMinNearestMipLinearMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipNearestMirroredRepeatWeightedAverage(magMinLinearMipNearestMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magNearestMinMipLinearMirroredRepeatWeightedAverage(magNearestMinMipLinearMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magLinearMinNearestMipLinearMirroredRepeatWeightedAverage(magLinearMinNearestMipLinearMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinMipLinearMirroredRepeatWeightedAverage(magMinMipLinearMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipAnisotropicMirroredRepeatWeightedAverage(magMinLinearMipAnisotropicMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-
-        constexpr MinMaxSamplerState magMinMipNearestClampToEdgeWeightedAverage(magMinMipNearestClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magLinearMinMipNearestClampToEdgeWeightedAverage(magLinearMinMipNearestClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magNearestMinLinearMipNearestClampToEdgeWeightedAverage(magNearestMinLinearMipNearestClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinNearestMipLinearClampToEdgeWeightedAverage(magMinNearestMipLinearClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipNearestClampToEdgeWeightedAverage(magMinLinearMipNearestClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magNearestMinMipLinearClampToEdgeWeightedAverage(magNearestMinMipLinearClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magLinearMinNearestMipLinearClampToEdgeWeightedAverage(magLinearMinNearestMipLinearClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinMipLinearClampToEdgeWeightedAverage(magMinMipLinearClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipAnisotropicClampToEdgeWeightedAverage(magMinLinearMipAnisotropicClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-
-        constexpr MinMaxSamplerState magMinMipNearestClampToBorderWeightedAverage(magMinMipNearestClampToBorder, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magLinearMinMipNearestClampToBorderWeightedAverage(magLinearMinMipNearestClampToBorder, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magNearestMinLinearMipNearestClampToBorderWeightedAverage(magNearestMinLinearMipNearestClampToBorder, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinNearestMipLinearClampToBorderWeightedAverage(magMinNearestMipLinearClampToBorder, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipNearestClampToBorderWeightedAverage(magMinLinearMipNearestClampToBorder, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magNearestMinMipLinearClampToBorderWeightedAverage(magNearestMinMipLinearClampToBorder, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magLinearMinNearestMipLinearClampToBorderWeightedAverage(magLinearMinNearestMipLinearClampToBorder, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinMipLinearClampToBorderWeightedAverage(magMinMipLinearClampToBorder, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipAnisotropicClampToBorderWeightedAverage(magMinLinearMipAnisotropicClampToBorder, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-
-        constexpr MinMaxSamplerState magMinMipNearestRepeatMin(magMinMipNearestRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magLinearMinMipNearestRepeatMin(magLinearMinMipNearestRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magNearestMinLinearMipNearestRepeatMin(magNearestMinLinearMipNearestRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinNearestMipLinearRepeatMin(magMinNearestMipLinearRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipNearestRepeatMin(magMinLinearMipNearestRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magNearestMinMipLinearRepeatMin(magNearestMinMipLinearRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magLinearMinNearestMipLinearRepeatMin(magLinearMinNearestMipLinearRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinMipLinearRepeatMin(magMinMipLinearRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipAnisotropicRepeatMin(magMinLinearMipAnisotropicRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-
-        constexpr MinMaxSamplerState magMinMipNearestMirroredRepeatMin(magMinMipNearestMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magLinearMinMipNearestMirroredRepeatMin(magLinearMinMipNearestMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magNearestMinLinearMipNearestMirroredRepeatMin(magNearestMinLinearMipNearestMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinNearestMipLinearMirroredRepeatMin(magMinNearestMipLinearMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipNearestMirroredRepeatMin(magMinLinearMipNearestMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magNearestMinMipLinearMirroredRepeatMin(magNearestMinMipLinearMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magLinearMinNearestMipLinearMirroredRepeatMin(magLinearMinNearestMipLinearMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinMipLinearMirroredRepeatMin(magMinMipLinearMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipAnisotropicMirroredRepeatMin(magMinLinearMipAnisotropicMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-
-        constexpr MinMaxSamplerState magMinMipNearestClampToEdgeMin(magMinMipNearestClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magLinearMinMipNearestClampToEdgeMin(magLinearMinMipNearestClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magNearestMinLinearMipNearestClampToEdgeMin(magNearestMinLinearMipNearestClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinNearestMipLinearClampToEdgeMin(magMinNearestMipLinearClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipNearestClampToEdgeMin(magMinLinearMipNearestClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magNearestMinMipLinearClampToEdgeMin(magNearestMinMipLinearClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magLinearMinNearestMipLinearClampToEdgeMin(magLinearMinNearestMipLinearClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinMipLinearClampToEdgeMin(magMinMipLinearClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipAnisotropicClampToEdgeMin(magMinLinearMipAnisotropicClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-
-        constexpr MinMaxSamplerState magMinMipNearestClampToBorderMin(magMinMipNearestClampToBorder, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magLinearMinMipNearestClampToBorderMin(magLinearMinMipNearestClampToBorder, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magNearestMinLinearMipNearestClampToBorderMin(magNearestMinLinearMipNearestClampToBorder, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinNearestMipLinearClampToBorderMin(magMinNearestMipLinearClampToBorder, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipNearestClampToBorderMin(magMinLinearMipNearestClampToBorder, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magNearestMinMipLinearClampToBorderMin(magNearestMinMipLinearClampToBorder, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magLinearMinNearestMipLinearClampToBorderMin(magLinearMinNearestMipLinearClampToBorder, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinMipLinearClampToBorderMin(magMinMipLinearClampToBorder, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipAnisotropicClampToBorderMin(magMinLinearMipAnisotropicClampToBorder, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-
-        constexpr MinMaxSamplerState magMinMipNearestRepeatMax(magMinMipNearestRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magLinearMinMipNearestRepeatMax(magLinearMinMipNearestRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magNearestMinLinearMipNearestRepeatMax(magNearestMinLinearMipNearestRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinNearestMipLinearRepeatMax(magMinNearestMipLinearRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipNearestRepeatMax(magMinLinearMipNearestRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magNearestMinMipLinearRepeatMax(magNearestMinMipLinearRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magLinearMinNearestMipLinearRepeatMax(magLinearMinNearestMipLinearRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinMipLinearRepeatMax(magMinMipLinearRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipAnisotropicRepeatMax(magMinLinearMipAnisotropicRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-
-        constexpr MinMaxSamplerState magMinMipNearestMirroredRepeatMax(magMinMipNearestMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magLinearMinMipNearestMirroredRepeatMax(magLinearMinMipNearestMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magNearestMinLinearMipNearestMirroredRepeatMax(magNearestMinLinearMipNearestMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinNearestMipLinearMirroredRepeatMax(magMinNearestMipLinearMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipNearestMirroredRepeatMax(magMinLinearMipNearestMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magNearestMinMipLinearMirroredRepeatMax(magNearestMinMipLinearMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magLinearMinNearestMipLinearMirroredRepeatMax(magLinearMinNearestMipLinearMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinMipLinearMirroredRepeatMax(magMinMipLinearMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipAnisotropicMirroredRepeatMax(magMinLinearMipAnisotropicMirroredRepeat, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-
-        constexpr MinMaxSamplerState magMinMipNearestClampToEdgeMax(magMinMipNearestClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magLinearMinMipNearestClampToEdgeMax(magLinearMinMipNearestClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magNearestMinLinearMipNearestClampToEdgeMax(magNearestMinLinearMipNearestClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinNearestMipLinearClampToEdgeMax(magMinNearestMipLinearClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipNearestClampToEdgeMax(magMinLinearMipNearestClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magNearestMinMipLinearClampToEdgeMax(magNearestMinMipLinearClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magLinearMinNearestMipLinearClampToEdgeMax(magLinearMinNearestMipLinearClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinMipLinearClampToEdgeMax(magMinMipLinearClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipAnisotropicClampToEdgeMax(magMinLinearMipAnisotropicClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-
-        constexpr MinMaxSamplerState magMinMipNearestClampToBorderMax(magMinMipNearestClampToBorder, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magLinearMinMipNearestClampToBorderMax(magLinearMinMipNearestClampToBorder, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magNearestMinLinearMipNearestClampToBorderMax(magNearestMinLinearMipNearestClampToBorder, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinNearestMipLinearClampToBorderMax(magMinNearestMipLinearClampToBorder, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipNearestClampToBorderMax(magMinLinearMipNearestClampToBorder, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magNearestMinMipLinearClampToBorderMax(magNearestMinMipLinearClampToBorder, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magLinearMinNearestMipLinearClampToBorderMax(magLinearMinNearestMipLinearClampToBorder, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinMipLinearClampToBorderMax(magMinMipLinearClampToBorder, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipAnisotropicClampToBorderMax(magMinLinearMipAnisotropicClampToBorder, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-
+        MAGMA_DEFINE_MINMAX_SAMPLER_STATE_PERMUTATIONS(Repeat, WeightedAverage, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT)
+        MAGMA_DEFINE_MINMAX_SAMPLER_STATE_PERMUTATIONS(MirroredRepeat, WeightedAverage, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT)
+        MAGMA_DEFINE_MINMAX_SAMPLER_STATE_PERMUTATIONS(ClampToEdge, WeightedAverage, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT)
+        MAGMA_DEFINE_MINMAX_SAMPLER_STATE_PERMUTATIONS(ClampToBorder, WeightedAverage, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT)
 #   ifdef VK_KHR_sampler_mirror_clamp_to_edge
-        constexpr MinMaxSamplerState magMinMipNearestMirrorClampToEdgeWeightedAverage(magMinMipNearestMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magLinearMinMipNearestMirrorClampToEdgeWeightedAverage(magLinearMinMipNearestMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magNearestMinLinearMipNearestMirrorClampToEdgeWeightedAverage(magNearestMinLinearMipNearestMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinNearestMipLinearMirrorClampToEdgeWeightedAverage(magMinNearestMipLinearMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipNearestMirrorClampToEdgeWeightedAverage(magMinLinearMipNearestMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magNearestMinMipLinearMirrorClampToEdgeWeightedAverage(magNearestMinMipLinearMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magLinearMinNearestMipLinearMirrorClampToEdgeWeightedAverage(magLinearMinNearestMipLinearMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinMipLinearMirrorClampToEdgeWeightedAverage(magMinMipLinearMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipAnisotropicMirrorClampToEdgeWeightedAverage(magMinLinearMipAnisotropicMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT);
+        MAGMA_DEFINE_MINMAX_SAMPLER_STATE_PERMUTATIONS(MirrorClampToEdge, WeightedAverage, VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT)
+#   endif
 
-        constexpr MinMaxSamplerState magMinMipNearestMirrorClampToEdgeMin(magMinMipNearestMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magLinearMinMipNearestMirrorClampToEdgeMin(magLinearMinMipNearestMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magNearestMinLinearMipNearestMirrorClampToEdgeMin(magNearestMinLinearMipNearestMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinNearestMipLinearMirrorClampToEdgeMin(magMinNearestMipLinearMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipNearestMirrorClampToEdgeMin(magMinLinearMipNearestMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magNearestMinMipLinearMirrorClampToEdgeMin(magNearestMinMipLinearMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magLinearMinNearestMipLinearMirrorClampToEdgeMin(magLinearMinNearestMipLinearMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinMipLinearMirrorClampToEdgeMin(magMinMipLinearMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipAnisotropicMirrorClampToEdgeMin(magMinLinearMipAnisotropicMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MIN_EXT);
+        MAGMA_DEFINE_MINMAX_SAMPLER_STATE_PERMUTATIONS(Repeat, Min, VK_SAMPLER_REDUCTION_MODE_MIN_EXT)
+        MAGMA_DEFINE_MINMAX_SAMPLER_STATE_PERMUTATIONS(MirroredRepeat, Min, VK_SAMPLER_REDUCTION_MODE_MIN_EXT)
+        MAGMA_DEFINE_MINMAX_SAMPLER_STATE_PERMUTATIONS(ClampToEdge, Min, VK_SAMPLER_REDUCTION_MODE_MIN_EXT)
+        MAGMA_DEFINE_MINMAX_SAMPLER_STATE_PERMUTATIONS(ClampToBorder, Min, VK_SAMPLER_REDUCTION_MODE_MIN_EXT)
+#   ifdef VK_KHR_sampler_mirror_clamp_to_edge
+        MAGMA_DEFINE_MINMAX_SAMPLER_STATE_PERMUTATIONS(MirrorClampToEdge, Min, VK_SAMPLER_REDUCTION_MODE_MIN_EXT)
+#   endif
 
-        constexpr MinMaxSamplerState magMinMipNearestMirrorClampToEdgeMax(magMinMipNearestMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magLinearMinMipNearestMirrorClampToEdgeMax(magLinearMinMipNearestMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magNearestMinLinearMipNearestMirrorClampToEdgeMax(magNearestMinLinearMipNearestMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinNearestMipLinearMirrorClampToEdgeMax(magMinNearestMipLinearMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipNearestMirrorClampToEdgeMax(magMinLinearMipNearestMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magNearestMinMipLinearMirrorClampToEdgeMax(magNearestMinMipLinearMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magLinearMinNearestMipLinearMirrorClampToEdgeMax(magLinearMinNearestMipLinearMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinMipLinearMirrorClampToEdgeMax(magMinMipLinearMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-        constexpr MinMaxSamplerState magMinLinearMipAnisotropicMirrorClampToEdgeMax(magMinLinearMipAnisotropicMirrorClampToEdge, VK_SAMPLER_REDUCTION_MODE_MAX_EXT);
-#   endif // VK_KHR_sampler_mirror_clamp_to_edge
+        MAGMA_DEFINE_MINMAX_SAMPLER_STATE_PERMUTATIONS(Repeat, Max, VK_SAMPLER_REDUCTION_MODE_MAX_EXT)
+        MAGMA_DEFINE_MINMAX_SAMPLER_STATE_PERMUTATIONS(MirroredRepeat, Max, VK_SAMPLER_REDUCTION_MODE_MAX_EXT)
+        MAGMA_DEFINE_MINMAX_SAMPLER_STATE_PERMUTATIONS(ClampToEdge, Max, VK_SAMPLER_REDUCTION_MODE_MAX_EXT)
+        MAGMA_DEFINE_MINMAX_SAMPLER_STATE_PERMUTATIONS(ClampToBorder, Max, VK_SAMPLER_REDUCTION_MODE_MAX_EXT)
+#   ifdef VK_KHR_sampler_mirror_clamp_to_edge
+        MAGMA_DEFINE_MINMAX_SAMPLER_STATE_PERMUTATIONS(MirrorClampToEdge, Max, VK_SAMPLER_REDUCTION_MODE_MAX_EXT)
+#   endif
     } // namespace sampler
 } // namespace magma
 #endif // VK_EXT_sampler_filter_minmax
