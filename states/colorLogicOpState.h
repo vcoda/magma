@@ -34,21 +34,21 @@ namespace magma
 namespace magma
 {
 #define MAGMA_DEFINE_COLOR_LOGIC_OP_STATE_PERMUTATIONS(name, logicOp)\
-    constexpr ColorLogicOpState name##R(blendstate::write##R, logicOp);\
-    constexpr ColorLogicOpState name##G(blendstate::write##G, logicOp);\
-    constexpr ColorLogicOpState name##B(blendstate::write##B, logicOp);\
-    constexpr ColorLogicOpState name##A(blendstate::write##A, logicOp);\
-    constexpr ColorLogicOpState name##Rg(blendstate::write##Rg, logicOp);\
-    constexpr ColorLogicOpState name##Rb(blendstate::write##Rb, logicOp);\
-    constexpr ColorLogicOpState name##Ra(blendstate::write##Ra, logicOp);\
-    constexpr ColorLogicOpState name##Gb(blendstate::write##Gb, logicOp);\
-    constexpr ColorLogicOpState name##Ga(blendstate::write##Ga, logicOp);\
-    constexpr ColorLogicOpState name##Ba(blendstate::write##Ba, logicOp);\
-    constexpr ColorLogicOpState name##Rgb(blendstate::write##Rgb, logicOp);\
-    constexpr ColorLogicOpState name##Rga(blendstate::write##Rga, logicOp);\
-    constexpr ColorLogicOpState name##Rba(blendstate::write##Rba, logicOp);\
-    constexpr ColorLogicOpState name##Gba(blendstate::write##Gba, logicOp);\
-    constexpr ColorLogicOpState name##Rgba(blendstate::write##Rgba, logicOp);
+    constexpr ColorLogicOpState name##R(blendstate::writeR, logicOp);\
+    constexpr ColorLogicOpState name##G(blendstate::writeG, logicOp);\
+    constexpr ColorLogicOpState name##B(blendstate::writeB, logicOp);\
+    constexpr ColorLogicOpState name##A(blendstate::writeA, logicOp);\
+    constexpr ColorLogicOpState name##Rg(blendstate::writeRg, logicOp);\
+    constexpr ColorLogicOpState name##Rb(blendstate::writeRb, logicOp);\
+    constexpr ColorLogicOpState name##Ra(blendstate::writeRa, logicOp);\
+    constexpr ColorLogicOpState name##Gb(blendstate::writeGb, logicOp);\
+    constexpr ColorLogicOpState name##Ga(blendstate::writeGa, logicOp);\
+    constexpr ColorLogicOpState name##Ba(blendstate::writeBa, logicOp);\
+    constexpr ColorLogicOpState name##Rgb(blendstate::writeRgb, logicOp);\
+    constexpr ColorLogicOpState name##Rga(blendstate::writeRga, logicOp);\
+    constexpr ColorLogicOpState name##Rba(blendstate::writeRba, logicOp);\
+    constexpr ColorLogicOpState name##Gba(blendstate::writeGba, logicOp);\
+    constexpr ColorLogicOpState name##Rgba(blendstate::writeRgba, logicOp);
 
     namespace renderstate
     {
