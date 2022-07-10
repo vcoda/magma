@@ -41,10 +41,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../helpers/mapScoped.h"
 #include "../core/copyMemory.h"
 
-#ifdef _MSC_VER
-#pragma warning(disable : 4244) // conversion from 'const uint32_t' to 'float', possible loss of data
-#endif
-
 namespace magma
 {
 namespace aux
@@ -152,7 +148,7 @@ void TextShader::end()
         });
     if (!strings.empty())
     {
-        const std::size_t maxStrings = stringBuffer->getSize()/sizeof(String);
+        const VkDeviceSize maxStrings = stringBuffer->getSize()/sizeof(String);
         if (maxStrings < strings.size())
         {   // Reallocate if not enough memory
             stringBuffer->realloc(strings.size() * sizeof(String), allocator);
@@ -167,7 +163,7 @@ void TextShader::end()
     }
     if (!chars.empty())
     {
-        const std::size_t maxChars = glyphBuffer->getSize()/sizeof(Glyph);
+        const VkDeviceSize maxChars = glyphBuffer->getSize()/sizeof(Glyph);
         if (maxChars < chars.size())
         {   // Reallocate if not enough memory
             glyphBuffer->realloc(chars.size() * sizeof(Glyph), allocator);
