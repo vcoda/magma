@@ -16,10 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifdef _MSC_VER
-#if !_HAS_CXX17
-#pragma warning(disable : 4127) // conditional expression is constant
-#endif
+#ifndef MAGMA_CXX17
+  #ifdef _MSC_VER
+    #pragma warning(disable : 4127) // conditional expression is constant
+  #endif
 #endif
 #include "combine.h"
 
