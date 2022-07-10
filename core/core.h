@@ -26,9 +26,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "dereference.h"
 #include "memzero.h"
 
-#define MAGMA_EXTENSION_PREFIX "VK_"
-#define MAGMA_LAYER_PREFIX "VK_LAYER_"
-
 #if defined(__LP64__) ||\
     defined(_WIN64) ||\
     (defined(__x86_64__) && !defined(__ILP32__) ) ||\
@@ -37,7 +34,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     defined (_M_IA64) ||\
     defined(__aarch64__) ||\
     defined(__powerpc64__)
-#define MAGMA_X64
+  #define MAGMA_X64
 #endif
 
 #if defined(_MSC_VER)
@@ -51,22 +48,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif
 
 #ifdef _DEBUG
-#define MAGMA_DEBUG
-#ifdef VK_EXT_debug_utils
-#define MAGMA_DEBUG_LABEL
-#endif
+  #define MAGMA_DEBUG
+  #ifdef VK_EXT_debug_utils
+    #define MAGMA_DEBUG_LABEL
+  #endif
 #endif
 
 #ifdef MAGMA_DEBUG
-#ifndef MAGMA_ASSERT
-#define MAGMA_ASSERT(condition) assert(condition)
-#endif
-#define MAGMA_ASSERT_FOR_EACH(container, iterator, condition)\
+  #define MAGMA_ASSERT(condition) assert(condition)
+  #define MAGMA_ASSERT_FOR_EACH(container, iterator, condition)\
     for (auto& iterator : container) MAGMA_ASSERT(condition)
 #else
-#define MAGMA_ASSERT(condition)
-#define MAGMA_ASSERT_FOR_EACH(container, iterator, condition)
-#endif // !MAGMA_DEBUG
+  #define MAGMA_ASSERT(condition)
+  #define MAGMA_ASSERT_FOR_EACH(container, iterator, condition)
+#endif
 
 #define MAGMA_UNUSED(variable) variable
 #define MAGMA_BOOLEAN(condition) (condition) ? static_cast<VkBool32>(VK_TRUE) : static_cast<VkBool32>(VK_FALSE)
@@ -77,28 +72,29 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_ALIGNED(p) (((uintptr_t)(const void *)(p)) % (MAGMA_ALIGNMENT) == 0)
 
 #if defined(_M_AMD64) || defined(__x86_64__)
-#define MAGMA_XMM_REGISTERS 16
+  #define MAGMA_XMM_REGISTERS 16
 #else
-#define MAGMA_XMM_REGISTERS 8
+  #define MAGMA_XMM_REGISTERS 8
 #endif
 #define MAGMA_XMM_BLOCK_SIZE (sizeof(__m128i) * MAGMA_XMM_REGISTERS)
-
 #define MAGMA_CONCURRENT_COPY_THREADS 4
 #define MAGMA_COPY_PAGE_SIZE (MAGMA_XMM_BLOCK_SIZE * MAGMA_CONCURRENT_COPY_THREADS)
 
 #ifdef _MSC_VER
-#define MAGMA_MALLOC(size) _mm_malloc(size, MAGMA_ALIGNMENT)
-#define MAGMA_FREE(p) _mm_free(p)
-#define MAGMA_ALLOCA(size) _malloca(size)
-#define MAGMA_FREEA(p) _freea(p)
+  #define MAGMA_MALLOC(size) _mm_malloc(size, MAGMA_ALIGNMENT)
+  #define MAGMA_FREE(p) _mm_free(p)
+  #define MAGMA_ALLOCA(size) _malloca(size)
+  #define MAGMA_FREEA(p) _freea(p)
 #else
-#define MAGMA_MALLOC(size) malloc(size)
-#define MAGMA_FREE(p) free(p)
-#define MAGMA_ALLOCA(size) alloca(size)
-#define MAGMA_FREEA(p)
-#endif // !_MSC_VER
+  #define MAGMA_MALLOC(size) malloc(size)
+  #define MAGMA_FREE(p) free(p)
+  #define MAGMA_ALLOCA(size) alloca(size)
+  #define MAGMA_FREEA(p)
+#endif
 
 #define MAGMA_MAX_STRING 4096
+#define MAGMA_EXTENSION_PREFIX "VK_"
+#define MAGMA_LAYER_PREFIX "VK_LAYER_"
 
 #define MAGMA_CONCAT(a, b) a ## b
 #define MAGMA_STRINGIZE(name) #name
@@ -135,5 +131,5 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_TYPEDEF_INTERFACE_SHARED_PTR(ClassName) typedef std::shared_ptr<class I##ClassName> ClassName##Ptr;
 
 #ifdef MAGMA_SSE
-#define mm_permute_ps(v, c) _mm_shuffle_ps((v), (v), c)
+  #define mm_permute_ps(v, c) _mm_shuffle_ps((v), (v), c)
 #endif

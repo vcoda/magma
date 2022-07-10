@@ -36,18 +36,22 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <atomic>
 #include <mutex>
 
-#ifdef MAGMA_SSE
-#include <xmmintrin.h>
-#include <smmintrin.h>
+#ifdef _WIN32
+  #ifndef WIN32_LEAN_AND_MEAN
+    #define WIN32_LEAN_AND_MEAN
+  #endif
+  #ifndef NOMINMAX
+    #define NOMINMAX
+  #endif
+#endif // _WIN32
+
+#ifndef VULKAN_H_
+  #include <vulkan/vulkan.h>
 #endif
 
-#ifdef _WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-#endif
-#ifndef VULKAN_H_
-#include <vulkan/vulkan.h>
+#ifdef MAGMA_SSE
+  #include <xmmintrin.h>
+  #include <smmintrin.h>
 #endif
 
 #include "core.h"
