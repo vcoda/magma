@@ -296,7 +296,7 @@ DisplaySurface::DisplaySurface(std::shared_ptr<const Instance> instance,
 #ifdef VK_EXT_headless_surface
 HeadlessSurface::HeadlessSurface(std::shared_ptr<const Instance> instance,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    VkWin32SurfaceCreateFlagsKHR flags /* 0 */):
+    VkHeadlessSurfaceCreateFlagsEXT flags /* 0 */):
     Surface(std::move(instance), std::move(allocator))
 {
     VkHeadlessSurfaceCreateInfoEXT surfaceInfo;

@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
+#include <cmath>
 #include "viewportState.h"
 
 namespace magma
@@ -67,7 +68,7 @@ ViewportState::ViewportState(float x, float y, float width, float height,
     scissor.offset.x = static_cast<int32_t>(x);
     scissor.offset.y = static_cast<int32_t>(y);
     scissor.extent.width = static_cast<uint32_t>(width);
-    scissor.extent.height = static_cast<uint32_t>(std::abs(height));
+    scissor.extent.height = static_cast<uint32_t>(std::fabs(height));
 }
 
 ViewportState::ViewportState(int32_t x, int32_t y, uint32_t width, int32_t height,
@@ -112,7 +113,7 @@ ViewportState::ViewportState(const VkViewport& viewport_,
     scissor.offset.x = static_cast<int32_t>(viewport.x);
     scissor.offset.y = static_cast<int32_t>(viewport.y);
     scissor.extent.width = static_cast<uint32_t>(viewport.width);
-    scissor.extent.height = static_cast<uint32_t>(std::abs(viewport.height));
+    scissor.extent.height = static_cast<uint32_t>(std::fabs(viewport.height));
 }
 
 ViewportState::ViewportState(const VkViewport& viewport_, const VkRect2D& scissor_,

@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
+#include <cmath>
 #include "multiViewportState.h"
 #include "../core/compare.h"
 
@@ -34,7 +35,7 @@ MultiViewportState::MultiViewportState(const std::vector<VkViewport>& viewports_
         scissor.offset.x = static_cast<int32_t>(viewport.x);
         scissor.offset.y = static_cast<int32_t>(viewport.y);
         scissor.extent.width = static_cast<uint32_t>(viewport.width);
-        scissor.extent.height = static_cast<uint32_t>(std::abs(viewport.height));
+        scissor.extent.height = static_cast<uint32_t>(std::fabs(viewport.height));
         scissors.push_back(scissor);
     }
     scissorCount = MAGMA_COUNT(scissors);

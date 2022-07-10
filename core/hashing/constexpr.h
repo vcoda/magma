@@ -30,20 +30,7 @@ namespace magma
         template<class Int>
         struct ConstexprHash
         {
-            static_assert(sizeof(Int) <= sizeof(uint64_t), "integral type is too wide");
-
-            constexpr hash_t operator()(const Int x) const noexcept
-            {
-#           if _HAS_CXX17
-                if constexpr
-#           else
-                if
-#           endif
-                   (sizeof(Int) <= 4)
-                    return ConstexprHash<uint32_t>()(static_cast<uint32_t>(x));
-                else
-                    return ConstexprHash<uint64_t>()(static_cast<uint64_t>(x));
-            }
+            constexpr hash_t operator()(const Int x) const noexcept;
         };
 
         template<>
@@ -111,5 +98,20 @@ namespace magma
                 return hashCombine(intHash, fracHash);
             }
         };
+
+        template<class Int>
+        constexpr hash_t ConstexprHash<Int>::operator()(const Int x) const noexcept
+        {
+            static_assert(sizeof(Int) <= sizeof(uint64_t), "integral type is too wide");
+#       ifdef MAGMA_CXX17
+            if constexpr
+#       else
+            if
+#       endif
+               (sizeof(Int) <= 4)
+                return ConstexprHash<uint32_t>()(static_cast<uint32_t>(x));
+            else
+                return ConstexprHash<uint64_t>()(static_cast<uint64_t>(x));
+        }
     } // namespace core
 } // namespace magma

@@ -68,14 +68,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_ASSERT_FOR_EACH(container, iterator, condition)
 #endif // !MAGMA_DEBUG
 
-#ifdef _MSC_VER
-#if _HAS_CXX17
-#define MAGMA_NODISCARD [[nodiscard]]
-#else
-#define MAGMA_NODISCARD
-#endif
-#endif
-
 #define MAGMA_UNUSED(variable) variable
 #define MAGMA_BOOLEAN(condition) (condition) ? static_cast<VkBool32>(VK_TRUE) : static_cast<VkBool32>(VK_FALSE)
 #define MAGMA_COUNT(container) static_cast<uint32_t>(container.size())

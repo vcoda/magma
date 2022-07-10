@@ -50,7 +50,7 @@ namespace magma
             uint32_t getHeight() const noexcept { return height; }
             bool isScaled() const noexcept { return (width != extent.width) || (height != extent.height); }
             void setPosition(int32_t x_, int32_t y_) noexcept { x = x_; y = y_; }
-            const VkOffset2D& getPosition() const noexcept { return {x, y}; }
+            VkOffset2D getPosition() const noexcept { return {x, y}; }
             void flipHorizontal() noexcept { std::swap(topLeft.x, bottomRight.x); }
             bool isFlippedHorizontally() const noexcept { return topLeft.x > bottomRight.x; }
             void flipVertical() noexcept { std::swap(topLeft.y, bottomRight.y); }
