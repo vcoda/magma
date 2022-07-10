@@ -40,6 +40,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_X64
 #endif
 
+#if defined(_MSC_VER)
+  #if _HAS_CXX17
+    #define MAGMA_CXX17
+  #endif
+#elif defined(__MINGW32__) || defined(__GNUC__)
+  #if __cplusplus >= 201703L
+    #define MAGMA_CXX17
+  #endif
+#endif
+
 #ifdef _DEBUG
 #define MAGMA_DEBUG
 #ifdef VK_EXT_debug_utils
