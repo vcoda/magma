@@ -76,10 +76,6 @@ struct TextShader::SetLayout : DescriptorSetLayoutReflection
     MAGMA_REFLECT(&uniforms, &stringBuffer, &glyphBuffer)
 };
 
-const TextShader::Glyph TextShader::glyphs[] = {
-#include "glyphs.h"
-};
-
 TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */):
@@ -187,6 +183,9 @@ void TextShader::end()
 
 void TextShader::print(uint32_t x, uint32_t y, uint32_t color, const char *format, ...)
 {
+    constexpr Glyph glyphs[] = {
+        #include "data/glyphs"
+    };
     char sz[MAGMA_MAX_STRING];
     va_list args;
     va_start(args, format);

@@ -67,7 +67,6 @@ namespace magma
             uint32_t width = 0;
             uint32_t height = 0;
             std::list<String> strings;
-            static const Glyph glyphs[];
             std::vector<Glyph> chars;
             uint32_t offset = 0;
         };
