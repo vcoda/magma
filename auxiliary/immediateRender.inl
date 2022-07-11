@@ -14,7 +14,7 @@ struct ImmediateRender::Primitive
 {
     std::shared_ptr<GraphicsPipeline> pipeline;
     float lineWidth;
-    Transform transform;
+    float transform[4][4];
     uint32_t vertexCount;
     uint32_t firstVertex;
     const char *labelName;
@@ -66,18 +66,18 @@ inline void ImmediateRender::setLineWidth(float width) noexcept
 inline void ImmediateRender::setIdentity() noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
-    constexpr float identity[16] = {
-        1.f, 0.f, 0.f, 0.f,
-        0.f, 1.f, 0.f, 0.f,
-        0.f, 0.f, 1.f, 0.f,
-        0.f, 0.f, 0.f, 1.f};
+    constexpr float identity[4][4] = {
+        {1.f, 0.f, 0.f, 0.f},
+        {0.f, 1.f, 0.f, 0.f},
+        {0.f, 0.f, 1.f, 0.f},
+        {0.f, 0.f, 0.f, 1.f}};
     setTransform(identity);
 }
 
-inline void ImmediateRender::setTransform(const float matrix[16]) noexcept
+inline void ImmediateRender::setTransform(const float matrix[4][4]) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
-    memcpy(transform.m, matrix, sizeof(transform.m));
+    memcpy(transform, matrix, sizeof(transform));
 }
 
 inline void ImmediateRender::normal(float x, float y, float z) noexcept

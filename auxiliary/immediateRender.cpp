@@ -51,6 +51,10 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
     setIdentity();
     if (!this->layout)
     {   // If layout not specified, create default one
+        struct Transform
+        {
+            float m[4][4];
+        };
         constexpr pushconstant::VertexConstantRange<Transform> pushConstantRange;
         this->layout = std::make_shared<PipelineLayout>(device, pushConstantRange, MAGMA_HOST_ALLOCATOR(allocator));
     }
@@ -87,7 +91,7 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,
     Primitive primitive;
     primitive.pipeline = lookupPipeline(topology);
     primitive.lineWidth = lineWidth;
-    primitive.transform = transform;
+    memcpy(primitive.transform, transform, sizeof(transform));
     primitive.vertexCount = 0;
     primitive.firstVertex = vertexCount;
     primitive.labelName = labelName;

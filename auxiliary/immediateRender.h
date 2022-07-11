@@ -68,7 +68,7 @@ namespace magma
             void setColorBlendState(const ColorBlendState& state) noexcept;
             void setLineWidth(float width) noexcept;
             void setIdentity() noexcept;
-            void setTransform(const float matrix[16]) noexcept;
+            void setTransform(const float matrix[4][4]) noexcept;
             // Primitive generation
             bool beginPrimitive(VkPrimitiveTopology topology,
                 const char *labelName = nullptr,
@@ -95,10 +95,6 @@ namespace magma
 
             struct Vertex;
             struct Primitive;
-            struct Transform
-            {
-                float m[16];
-            };
 
             const uint32_t maxVertexCount;
             std::shared_ptr<Device> device;
@@ -113,7 +109,7 @@ namespace magma
             DepthStencilState depthStencilState;
             MultiColorBlendState colorBlendState;
             float lineWidth = 1.f;
-            Transform transform;
+            float transform[4][4];
             Vertex *current = nullptr;
             bool insidePrimitive = false;
             uint32_t vertexCount = 0;
