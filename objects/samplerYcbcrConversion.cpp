@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "../states/ycbcrSamplerState.h"
 #include "../allocator/allocator.h"
+#include "../misc/extProcAddress.h"
 #include "../exceptions/errorResult.h"
 
 #ifdef VK_KHR_sampler_ycbcr_conversion
@@ -46,12 +47,14 @@ SamplerYcbcrConversion::SamplerYcbcrConversion(std::shared_ptr<Device> device,
     samplerInfo.yChromaOffset = yChromaOffset;
     samplerInfo.chromaFilter = state.chromaFilter;
     samplerInfo.forceExplicitReconstruction = MAGMA_BOOLEAN(forceExplicitReconstruction);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateSamplerYcbcrConversionKHR, VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME);
     const VkResult result = vkCreateSamplerYcbcrConversionKHR(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create Ycbcr sampler");
 }
 
 SamplerYcbcrConversion::~SamplerYcbcrConversion()
 {
+    MAGMA_DEVICE_EXTENSION(vkDestroySamplerYcbcrConversionKHR);
     vkDestroySamplerYcbcrConversionKHR(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 } // namespace magma
