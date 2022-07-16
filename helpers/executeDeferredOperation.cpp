@@ -39,10 +39,11 @@ VkResult executeDeferredOperation(std::shared_ptr<DeferredOperation> deferredOpe
     const uint32_t deferredOpConcurrency = std::min(hardwareConcurrency, maxDeferredOpConcurrency);
     maxConcurrency = maxConcurrency ? std::min(maxConcurrency, deferredOpConcurrency)
                                     : deferredOpConcurrency;
-    std::vector<std::future<void>> joins;
+    std::vector<std::future<void>> tasks;
+    tasks.reserve(maxConcurrency);
     for (uint32_t i = 0; i < maxConcurrency; ++i)
     {
-        joins.emplace_back(
+        tasks.emplace_back(
             std::async(std::launch::async,
                 [&deferredOperation]()
                 {   // Applications can join multiple threads to the same deferred operation,
@@ -52,7 +53,7 @@ VkResult executeDeferredOperation(std::shared_ptr<DeferredOperation> deferredOpe
                     MAGMA_ASSERT(result != VK_THREAD_DONE_KHR);
                 }));
     }
-    for (auto& future : joins)
+    for (auto& future : tasks)
         future.get();
     // If the deferred operation is complete, it returns the appropriate return value from
     // the original command. This value must be one of the VkResult values which could have been
