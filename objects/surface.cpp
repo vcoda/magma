@@ -287,7 +287,7 @@ DisplaySurface::DisplaySurface(std::shared_ptr<const Instance> instance,
     surfaceInfo.globalAlpha = 1.f;
     surfaceInfo.alphaMode = alphaMode;
     surfaceInfo.imageExtent = displayMode->getVisibleRegion();
-    MAGMA_INSTANCE_EXTENSION(vkCreateDisplayPlaneSurfaceKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkCreateDisplayPlaneSurfaceKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
     const VkResult result = vkCreateDisplayPlaneSurfaceKHR(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_SURFACE_FAILURE(result, "failed to create display surface");
 }
@@ -303,7 +303,7 @@ HeadlessSurface::HeadlessSurface(std::shared_ptr<const Instance> instance,
     surfaceInfo.sType = VK_STRUCTURE_TYPE_HEADLESS_SURFACE_CREATE_INFO_EXT;
     surfaceInfo.pNext = nullptr;
     surfaceInfo.flags = flags;
-    MAGMA_INSTANCE_EXTENSION(vkCreateHeadlessSurfaceEXT, VK_EXT_HEADLESS_SURFACE_EXTENSION_NAME);
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkCreateHeadlessSurfaceEXT, VK_EXT_HEADLESS_SURFACE_EXTENSION_NAME);
     const VkResult result = vkCreateHeadlessSurfaceEXT(MAGMA_HANDLE(instance), &surfaceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_SURFACE_FAILURE(result, "failed to create headless surface");
 }
