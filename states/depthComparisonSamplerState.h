@@ -34,7 +34,7 @@ namespace magma
 
 namespace magma
 {
-#define MAGMA_DEFINE_DEPTH_COMPARISON_SAMPLER_STATE_PERMUTATIONS(Filter, magFilter, minFilter)\
+#define MAGMA_DEPTH_COMPARISON_SAMPLER_STATE_PERMUTATIONS(Filter, magFilter, minFilter)\
     constexpr DepthComparisonSamplerState magMin##Filter##Never(magFilter, minFilter, VK_COMPARE_OP_NEVER);\
     constexpr DepthComparisonSamplerState magMin##Filter##Less(magFilter, minFilter, VK_COMPARE_OP_LESS);\
     constexpr DepthComparisonSamplerState magMin##Filter##Equal(magFilter, minFilter, VK_COMPARE_OP_EQUAL);\
@@ -46,7 +46,7 @@ namespace magma
 
     namespace sampler
     {
-        MAGMA_DEFINE_DEPTH_COMPARISON_SAMPLER_STATE_PERMUTATIONS(Nearest, VK_FILTER_NEAREST, VK_FILTER_NEAREST)
-        MAGMA_DEFINE_DEPTH_COMPARISON_SAMPLER_STATE_PERMUTATIONS(Linear, VK_FILTER_LINEAR, VK_FILTER_LINEAR)
+        MAGMA_DEPTH_COMPARISON_SAMPLER_STATE_PERMUTATIONS(Nearest, VK_FILTER_NEAREST, VK_FILTER_NEAREST)
+        MAGMA_DEPTH_COMPARISON_SAMPLER_STATE_PERMUTATIONS(Linear, VK_FILTER_LINEAR, VK_FILTER_LINEAR)
     } // namespace sampler
 } // namespace magma

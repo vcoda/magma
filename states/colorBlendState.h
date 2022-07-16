@@ -56,7 +56,7 @@ namespace magma
 
 namespace magma
 {
-#define MAGMA_DEFINE_COLOR_BLEND_STATE_PERMUTATIONS(name, state)\
+#define MAGMA_COLOR_BLEND_STATE_PERMUTATIONS(name, state)\
     constexpr ColorBlendState name##R(blendstate::state##R);\
     constexpr ColorBlendState name##G(blendstate::state##G);\
     constexpr ColorBlendState name##B(blendstate::state##B);\
@@ -77,15 +77,15 @@ namespace magma
     {
         constexpr ColorBlendState dontWriteRgba(blendstate::writeNone);
 
-        MAGMA_DEFINE_COLOR_BLEND_STATE_PERMUTATIONS(dontBlend, write)
-        MAGMA_DEFINE_COLOR_BLEND_STATE_PERMUTATIONS(blendAdd, add)
-        MAGMA_DEFINE_COLOR_BLEND_STATE_PERMUTATIONS(blendSubtract, subtract)
-        MAGMA_DEFINE_COLOR_BLEND_STATE_PERMUTATIONS(blendReverseSubtract, reverseSubtract)
-        MAGMA_DEFINE_COLOR_BLEND_STATE_PERMUTATIONS(blendMin, min)
-        MAGMA_DEFINE_COLOR_BLEND_STATE_PERMUTATIONS(blendMax, max)
-        MAGMA_DEFINE_COLOR_BLEND_STATE_PERMUTATIONS(blendMultiply, multiply)
-        MAGMA_DEFINE_COLOR_BLEND_STATE_PERMUTATIONS(blendNormal, normal)
-        MAGMA_DEFINE_COLOR_BLEND_STATE_PERMUTATIONS(blendNormalPremultiplied, normalPremultiplied)
-        MAGMA_DEFINE_COLOR_BLEND_STATE_PERMUTATIONS(blendScreen, screen)
+        MAGMA_COLOR_BLEND_STATE_PERMUTATIONS(dontBlend, write)
+        MAGMA_COLOR_BLEND_STATE_PERMUTATIONS(blendAdd, add)
+        MAGMA_COLOR_BLEND_STATE_PERMUTATIONS(blendSubtract, subtract)
+        MAGMA_COLOR_BLEND_STATE_PERMUTATIONS(blendReverseSubtract, reverseSubtract)
+        MAGMA_COLOR_BLEND_STATE_PERMUTATIONS(blendMin, min)
+        MAGMA_COLOR_BLEND_STATE_PERMUTATIONS(blendMax, max)
+        MAGMA_COLOR_BLEND_STATE_PERMUTATIONS(blendMultiply, multiply)
+        MAGMA_COLOR_BLEND_STATE_PERMUTATIONS(blendNormal, normal)
+        MAGMA_COLOR_BLEND_STATE_PERMUTATIONS(blendNormalPremultiplied, normalPremultiplied)
+        MAGMA_COLOR_BLEND_STATE_PERMUTATIONS(blendScreen, screen)
     } // namespace renderstate
 } // namespace magma
