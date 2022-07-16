@@ -27,7 +27,7 @@ void CommandBuffer::beginDebugMarker(const char *name, uint32_t color) noexcept
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
 #ifdef MAGMA_DEBUG
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDebugMarkerBeginEXT);
+    MAGMA_DEVICE_EXTENSION(vkCmdDebugMarkerBeginEXT);
     if (vkCmdDebugMarkerBeginEXT)
     {
         VkDebugMarkerMarkerInfoEXT markerInfo;
@@ -49,7 +49,7 @@ void CommandBuffer::beginDebugMarker(const char *name, uint32_t color) noexcept
 void CommandBuffer::endDebugMarker() noexcept
 {
 #ifdef MAGMA_DEBUG
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDebugMarkerEndEXT);
+    MAGMA_DEVICE_EXTENSION(vkCmdDebugMarkerEndEXT);
     if (vkCmdDebugMarkerEndEXT)
         vkCmdDebugMarkerEndEXT(handle);
 #endif // MAGMA_DEBUG
@@ -60,7 +60,7 @@ void CommandBuffer::insertDebugMarker(const char *name, uint32_t color) noexcept
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
 #ifdef MAGMA_DEBUG
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDebugMarkerInsertEXT);
+    MAGMA_DEVICE_EXTENSION(vkCmdDebugMarkerInsertEXT);
     if (vkCmdDebugMarkerInsertEXT)
     {
         VkDebugMarkerMarkerInfoEXT markerInfo;
@@ -86,7 +86,7 @@ void CommandBuffer::beginDebugLabel(const char *name, uint32_t color) noexcept
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
 #ifdef MAGMA_DEBUG
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBeginDebugUtilsLabelEXT);
+    MAGMA_DEVICE_EXTENSION(vkCmdBeginDebugUtilsLabelEXT);
     if (vkCmdBeginDebugUtilsLabelEXT)
     {
         VkDebugUtilsLabelEXT labelInfo;
@@ -107,7 +107,7 @@ void CommandBuffer::beginDebugLabel(const char *name, uint32_t color) noexcept
 
 void CommandBuffer::endDebugLabel() noexcept
 {
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdEndDebugUtilsLabelEXT);
+    MAGMA_DEVICE_EXTENSION(vkCmdEndDebugUtilsLabelEXT);
     if (vkCmdEndDebugUtilsLabelEXT)
         vkCmdEndDebugUtilsLabelEXT(handle);
 }
@@ -117,7 +117,7 @@ void CommandBuffer::insertDebugLabel(const char *name, uint32_t color) noexcept
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
 #ifdef MAGMA_DEBUG
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdInsertDebugUtilsLabelEXT);
+    MAGMA_DEVICE_EXTENSION(vkCmdInsertDebugUtilsLabelEXT);
     if (vkCmdInsertDebugUtilsLabelEXT)
     {
         VkDebugUtilsLabelEXT labelInfo;

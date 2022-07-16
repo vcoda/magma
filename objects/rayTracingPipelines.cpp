@@ -79,7 +79,7 @@ void RayTracingPipelines::buildPipelines(std::shared_ptr<Device> device, std::sh
     this->device = std::move(device);
     fixup(pipelineInfos);
     std::vector<VkPipeline> pipelines(pipelineInfos.size(), VK_NULL_HANDLE);
-    MAGMA_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult result = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),
         MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), pipelines.data());
     // Free temporarily allocated storage that had to be preserved until API call

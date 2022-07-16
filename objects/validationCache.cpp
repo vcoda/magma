@@ -37,7 +37,7 @@ ValidationCache::ValidationCache(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_VALIDATION_CACHE_EXT, std::move(device), std::move(allocator))
 {
-    MAGMA_DEVICE_EXTENSION(vkCreateValidationCacheEXT, VK_EXT_VALIDATION_CACHE_EXTENSION_NAME);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateValidationCacheEXT, VK_EXT_VALIDATION_CACHE_EXTENSION_NAME);
     VkValidationCacheCreateInfoEXT cacheInfo;
     cacheInfo.sType = VK_STRUCTURE_TYPE_VALIDATION_CACHE_CREATE_INFO_EXT;
     cacheInfo.pNext = nullptr;
@@ -50,15 +50,14 @@ ValidationCache::ValidationCache(std::shared_ptr<Device> device,
 
 ValidationCache::~ValidationCache()
 {
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkDestroyValidationCacheEXT); // Do not throw exception
-    if (vkDestroyValidationCacheEXT)
-        vkDestroyValidationCacheEXT(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    MAGMA_DEVICE_EXTENSION(vkDestroyValidationCacheEXT);
+    vkDestroyValidationCacheEXT(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 std::vector<uint8_t> ValidationCache::getData() const
 {
-    MAGMA_DEVICE_EXTENSION(vkGetValidationCacheDataEXT, VK_EXT_VALIDATION_CACHE_EXTENSION_NAME);
     std::size_t dataSize;
+    MAGMA_DEVICE_EXTENSION(vkGetValidationCacheDataEXT);
     VkResult result = vkGetValidationCacheDataEXT(MAGMA_HANDLE(device), handle, &dataSize, nullptr);
     MAGMA_THROW_FAILURE(result, "failed to get validation cache size");
     std::vector<uint8_t> data(dataSize);
@@ -69,10 +68,10 @@ std::vector<uint8_t> ValidationCache::getData() const
 
 void ValidationCache::mergeCaches(const std::vector<std::shared_ptr<const ValidationCache>>& caches)
 {
-    MAGMA_DEVICE_EXTENSION(vkMergeValidationCachesEXT, VK_EXT_VALIDATION_CACHE_EXTENSION_NAME);
     MAGMA_STACK_ARRAY(VkValidationCacheEXT, dereferencedCaches, caches.size());
     for (const auto& cache : caches)
         dereferencedCaches.put(*cache);
+    MAGMA_DEVICE_EXTENSION(vkMergeValidationCachesEXT);
     const VkResult result = vkMergeValidationCachesEXT(MAGMA_HANDLE(device), handle, MAGMA_COUNT(dereferencedCaches), dereferencedCaches);
     MAGMA_THROW_FAILURE(result, "failed to merge validation caches");
 }

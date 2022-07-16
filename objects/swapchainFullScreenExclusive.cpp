@@ -80,7 +80,7 @@ void FullScreenExclusiveSwapchain::acquireFullScreenExclusiveMode()
     // your application should create borderless window that spans to entire monitor.
     // For example, set window style as WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS and call
     // SetWindowPos(hwnd, HWND_TOP, 0, 0, screenWidth, screenHeight, SWP_SHOWWINDOW).
-    MAGMA_DEVICE_EXTENSION(vkAcquireFullScreenExclusiveModeEXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkAcquireFullScreenExclusiveModeEXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
     const VkResult result = vkAcquireFullScreenExclusiveModeEXT(MAGMA_HANDLE(device), handle);
     handleError(result, "failed to acquire full-screen exclusive mode");
     fullScreenExlusive = true;
@@ -88,7 +88,7 @@ void FullScreenExclusiveSwapchain::acquireFullScreenExclusiveMode()
 
 void FullScreenExclusiveSwapchain::releaseFullScreenExclusiveMode()
 {
-    MAGMA_DEVICE_EXTENSION(vkReleaseFullScreenExclusiveModeEXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkReleaseFullScreenExclusiveModeEXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
     const VkResult result = vkReleaseFullScreenExclusiveModeEXT(MAGMA_HANDLE(device), handle);
     handleError(result, "failed to release full-screen exclusive mode");
     fullScreenExlusive = false;

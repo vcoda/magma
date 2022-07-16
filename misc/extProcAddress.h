@@ -20,9 +20,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/device.h"
 #include "../exceptions/unsupportedExtension.h"
 
-#define MAGMA_INSTANCE_EXTENSION(vkFunc, extensionName) static const PFN_##vkFunc vkFunc(reinterpret_cast<PFN_##vkFunc>(vkGetInstanceProcAddr(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(vkFunc))));\
-    if (!vkFunc) throw magma::exception::UnsupportedInstanceExtension(extensionName, MAGMA_SOURCE_LOCATION);
-#define MAGMA_DEVICE_EXTENSION(vkFunc, extensionName) static const PFN_##vkFunc vkFunc(reinterpret_cast<PFN_##vkFunc>(vkGetDeviceProcAddr(MAGMA_HANDLE(device), MAGMA_STRINGIZE(vkFunc))));\
-    if (!vkFunc) throw magma::exception::UnsupportedDeviceExtension(extensionName, MAGMA_SOURCE_LOCATION);
-#define MAGMA_OPTIONAL_INSTANCE_EXTENSION(vkFunc) static const PFN_##vkFunc vkFunc(reinterpret_cast<PFN_##vkFunc>(vkGetInstanceProcAddr(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(vkFunc))))
-#define MAGMA_OPTIONAL_DEVICE_EXTENSION(vkFunc) static const PFN_##vkFunc vkFunc(reinterpret_cast<PFN_##vkFunc>(vkGetDeviceProcAddr(MAGMA_HANDLE(device), MAGMA_STRINGIZE(vkFunc))))
+#define MAGMA_INSTANCE_EXTENSION(function)\
+    static const PFN_##function function = reinterpret_cast<PFN_##function>(\
+        vkGetInstanceProcAddr(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(function)))
+
+#define MAGMA_DEVICE_EXTENSION(function)\
+    static const PFN_##function function = reinterpret_cast<PFN_##function>(\
+        vkGetDeviceProcAddr(MAGMA_HANDLE(device), MAGMA_STRINGIZE(function)))
+
+#define MAGMA_REQUIRED_INSTANCE_EXTENSION(function, extensionName)\
+    MAGMA_INSTANCE_EXTENSION(function);\
+    if (nullptr == function)\
+        throw magma::exception::UnsupportedExtension(extensionName, MAGMA_SOURCE_LOCATION);
+
+#define MAGMA_REQUIRED_DEVICE_EXTENSION(function, extensionName)\
+    MAGMA_DEVICE_EXTENSION(function);\
+    if (nullptr == function)\
+        throw magma::exception::UnsupportedExtension(extensionName, MAGMA_SOURCE_LOCATION);

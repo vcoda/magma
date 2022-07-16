@@ -50,7 +50,7 @@ Pipeline::~Pipeline()
 #ifdef VK_AMD_shader_info
 VkShaderStatisticsInfoAMD Pipeline::getShaderStatistics(VkShaderStageFlagBits stage) const
 {
-    MAGMA_DEVICE_EXTENSION(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO_EXTENSION_NAME);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO_EXTENSION_NAME);
     std::size_t infoSize = sizeof(VkShaderStatisticsInfoAMD);
     VkShaderStatisticsInfoAMD info;
     const VkResult result = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_STATISTICS_AMD, &infoSize, &info);
@@ -60,7 +60,7 @@ VkShaderStatisticsInfoAMD Pipeline::getShaderStatistics(VkShaderStageFlagBits st
 
 std::vector<uint8_t> Pipeline::getShaderBinary(VkShaderStageFlagBits stage) const
 {
-    MAGMA_DEVICE_EXTENSION(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO_EXTENSION_NAME);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO_EXTENSION_NAME);
     std::size_t binarySize;
     VkResult result = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_BINARY_AMD, &binarySize, nullptr);
     if (VK_SUCCESS == result)
@@ -75,7 +75,7 @@ std::vector<uint8_t> Pipeline::getShaderBinary(VkShaderStageFlagBits stage) cons
 
 std::string Pipeline::getShaderDisassembly(VkShaderStageFlagBits stage) const
 {
-    MAGMA_DEVICE_EXTENSION(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO_EXTENSION_NAME);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO_EXTENSION_NAME);
     std::size_t disassemblySize;
     VkResult result = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, nullptr);
     if (VK_SUCCESS == result)

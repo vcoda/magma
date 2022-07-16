@@ -24,20 +24,10 @@ namespace magma
     {
         /* Vulkan instance doesn't support requested extension. */
 
-        class UnsupportedInstanceExtension : public Exception
+        class UnsupportedExtension : public Exception
         {
         public:
-            explicit UnsupportedInstanceExtension(const char *extension,
-                const source_location& location) noexcept:
-                Exception(extension, location) {}
-        };
-
-        /* Logical device doesn't support requested extension. */
-
-        class UnsupportedDeviceExtension : public Exception
-        {
-        public:
-            explicit UnsupportedDeviceExtension(const char *extension,
+            explicit UnsupportedExtension(const char *extension,
                 const source_location& location) noexcept:
                 Exception(extension, location) {}
         };

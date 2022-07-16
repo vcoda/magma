@@ -170,14 +170,14 @@ inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<DrawIndexed
 #ifdef VK_EXT_multi_draw
 inline void CommandBuffer::drawMulti(const std::vector<VkMultiDrawInfoEXT>& vertexInfo) const noexcept
 {
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDrawMultiEXT);
+    MAGMA_DEVICE_EXTENSION(vkCmdDrawMultiEXT);
     if (vkCmdDrawMultiEXT)
         vkCmdDrawMultiEXT(handle, MAGMA_COUNT(vertexInfo), vertexInfo.data(), 1, 0, sizeof(VkMultiDrawInfoEXT));
 }
 
 inline void CommandBuffer::drawMultiInstanced(const std::vector<VkMultiDrawInfoEXT>& vertexInfo, uint32_t instanceCount, uint32_t firstInstance) const noexcept
 {
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDrawMultiEXT);
+    MAGMA_DEVICE_EXTENSION(vkCmdDrawMultiEXT);
     if (vkCmdDrawMultiEXT)
         vkCmdDrawMultiEXT(handle, MAGMA_COUNT(vertexInfo), vertexInfo.data(), instanceCount, firstInstance, sizeof(VkMultiDrawInfoEXT));
 }
@@ -185,7 +185,7 @@ inline void CommandBuffer::drawMultiInstanced(const std::vector<VkMultiDrawInfoE
 inline void CommandBuffer::drawMultiIndexed(const std::vector<VkMultiDrawIndexedInfoEXT>& indexInfo,
     const std::vector<int32_t>& vertexOffsets /* {} */) const noexcept
 {
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDrawMultiIndexedEXT);
+    MAGMA_DEVICE_EXTENSION(vkCmdDrawMultiIndexedEXT);
     if (vkCmdDrawMultiIndexedEXT)
         vkCmdDrawMultiIndexedEXT(handle, MAGMA_COUNT(indexInfo), indexInfo.data(), 1, 0, sizeof(VkMultiDrawIndexedInfoEXT), vertexOffsets.data());
 }
@@ -193,7 +193,7 @@ inline void CommandBuffer::drawMultiIndexed(const std::vector<VkMultiDrawIndexed
 inline void CommandBuffer::drawMultiIndexedInstanced(const std::vector<VkMultiDrawIndexedInfoEXT>& indexInfo, uint32_t instanceCount, uint32_t firstInstance,
     const std::vector<int32_t>& vertexOffsets /* {} */) const noexcept
 {
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDrawMultiIndexedEXT);
+    MAGMA_DEVICE_EXTENSION(vkCmdDrawMultiIndexedEXT);
     if (vkCmdDrawMultiIndexedEXT)
         vkCmdDrawMultiIndexedEXT(handle, MAGMA_COUNT(indexInfo), indexInfo.data(), instanceCount, firstInstance, sizeof(VkMultiDrawIndexedInfoEXT), vertexOffsets.data());
 }
@@ -203,7 +203,7 @@ inline void CommandBuffer::drawMultiIndexedInstanced(const std::vector<VkMultiDr
 inline void CommandBuffer::drawIndirectByteCount(uint32_t instanceCount, uint32_t firstInstance, const std::shared_ptr<TransformFeedbackCounterBuffer>& counterBuffer,
     VkDeviceSize counterBufferOffset, uint32_t counterOffset, uint32_t vertexStride) const noexcept
 {
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDrawIndirectByteCountEXT);
+    MAGMA_DEVICE_EXTENSION(vkCmdDrawIndirectByteCountEXT);
     if (vkCmdDrawIndirectByteCountEXT)
         vkCmdDrawIndirectByteCountEXT(handle, instanceCount, firstInstance, *counterBuffer, counterBufferOffset, counterOffset, vertexStride);
 }
@@ -349,14 +349,14 @@ inline void CommandBuffer::endQuery(const std::shared_ptr<QueryPool>& queryPool,
 #ifdef VK_EXT_transform_feedback
 inline void CommandBuffer::beginQueryIndexed(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex, uint32_t vertexStream) noexcept
 {
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBeginQueryIndexedEXT);
+    MAGMA_DEVICE_EXTENSION(vkCmdBeginQueryIndexedEXT);
     if (vkCmdBeginQueryIndexedEXT)
         vkCmdBeginQueryIndexedEXT(handle, *queryPool, queryIndex, queryPool->getControlFlags(), vertexStream);
 }
 
 inline void CommandBuffer::endQueryIndexed(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex, uint32_t vertexStream) noexcept
 {
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdEndQueryIndexedEXT);
+    MAGMA_DEVICE_EXTENSION(vkCmdEndQueryIndexedEXT);
     if (vkCmdEndQueryIndexedEXT)
         vkCmdEndQueryIndexedEXT(handle, *queryPool, queryIndex, vertexStream);
 }
@@ -421,7 +421,7 @@ inline void CommandBuffer::endRenderPass() noexcept
 #ifdef VK_KHR_device_group
 inline void CommandBuffer::setDeviceMask(uint32_t deviceMask) noexcept
 {
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdSetDeviceMaskKHR);
+    MAGMA_DEVICE_EXTENSION(vkCmdSetDeviceMaskKHR);
     if (vkCmdSetDeviceMaskKHR)
         vkCmdSetDeviceMaskKHR(handle, deviceMask);
 }
@@ -429,7 +429,7 @@ inline void CommandBuffer::setDeviceMask(uint32_t deviceMask) noexcept
 inline void CommandBuffer::dispatchBase(uint32_t baseGroupX, uint32_t baseGroupY, uint32_t baseGroupZ,
     uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) const noexcept
 {
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdDispatchBaseKHR);
+    MAGMA_DEVICE_EXTENSION(vkCmdDispatchBaseKHR);
     if (vkCmdDispatchBaseKHR)
         vkCmdDispatchBaseKHR(handle, baseGroupX, baseGroupY, baseGroupZ, groupCountX, groupCountY, groupCountZ);
 }
@@ -438,7 +438,7 @@ inline void CommandBuffer::dispatchBase(uint32_t baseGroupX, uint32_t baseGroupY
 #ifdef VK_EXT_transform_feedback
 inline void CommandBuffer::beginTransformFeedback() noexcept
 {
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdBeginTransformFeedbackEXT);
+    MAGMA_DEVICE_EXTENSION(vkCmdBeginTransformFeedbackEXT);
     if (vkCmdBeginTransformFeedbackEXT)
     {
         vkCmdBeginTransformFeedbackEXT(handle, 0, 0, nullptr, nullptr);
@@ -449,7 +449,7 @@ inline void CommandBuffer::beginTransformFeedback() noexcept
 inline void CommandBuffer::endTransformFeedback() noexcept
 {
     MAGMA_ASSERT(withinTransformFeedback);
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkCmdEndTransformFeedbackEXT);
+    MAGMA_DEVICE_EXTENSION(vkCmdEndTransformFeedbackEXT);
     if (vkCmdEndTransformFeedbackEXT)
     {
         vkCmdEndTransformFeedbackEXT(handle, 0, 0, nullptr, nullptr);

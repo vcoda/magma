@@ -37,7 +37,7 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
     instance(std::move(instance))
 {
     MAGMA_ASSERT(userCallback);
-    MAGMA_OPTIONAL_INSTANCE_EXTENSION(vkCreateDebugReportCallbackEXT);
+    MAGMA_INSTANCE_EXTENSION(vkCreateDebugReportCallbackEXT);
     if (vkCreateDebugReportCallbackEXT)
     {
         VkDebugReportCallbackCreateInfoEXT callbackInfo;
@@ -57,7 +57,7 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
 
 DebugReportCallback::~DebugReportCallback()
 {
-    MAGMA_OPTIONAL_INSTANCE_EXTENSION(vkDestroyDebugReportCallbackEXT);
+    MAGMA_INSTANCE_EXTENSION(vkDestroyDebugReportCallbackEXT);
     if (vkDestroyDebugReportCallbackEXT)
         vkDestroyDebugReportCallbackEXT(MAGMA_HANDLE(instance), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
@@ -67,7 +67,7 @@ void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkObjectType obje
 {
     MAGMA_ASSERT(layerPrefix);
     MAGMA_ASSERT(format);
-    MAGMA_OPTIONAL_INSTANCE_EXTENSION(vkDebugReportMessageEXT);
+    MAGMA_INSTANCE_EXTENSION(vkDebugReportMessageEXT);
     if (vkDebugReportMessageEXT)
     {
         char message[MAGMA_MAX_STRING];

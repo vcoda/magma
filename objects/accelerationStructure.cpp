@@ -53,7 +53,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     accelStructInfo.pNext = nullptr;
     accelStructInfo.compactedSize = compactedSize;
     accelStructInfo.info = info;
-    MAGMA_DEVICE_EXTENSION(vkCreateAccelerationStructureNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateAccelerationStructureNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult result = vkCreateAccelerationStructureNV(MAGMA_HANDLE(device), &accelStructInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create acceleration structure");
     const VkMemoryRequirements memoryRequirements = getObjectMemoryRequirements();
@@ -65,9 +65,8 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
 
 AccelerationStructure::~AccelerationStructure()
 {
-    MAGMA_OPTIONAL_DEVICE_EXTENSION(vkDestroyAccelerationStructureNV); // Do not throw exception
-    if (vkDestroyAccelerationStructureNV)
-        vkDestroyAccelerationStructureNV(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    MAGMA_DEVICE_EXTENSION(vkDestroyAccelerationStructureNV);
+    vkDestroyAccelerationStructureNV(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
     delete[] info.pGeometries;
 }
 
@@ -82,7 +81,7 @@ void AccelerationStructure::bindMemory(std::shared_ptr<DeviceMemory> memory,
     bindInfo.memoryOffset = memory->getOffset() + offset;
     bindInfo.deviceIndexCount = 0;
     bindInfo.pDeviceIndices = nullptr;
-    MAGMA_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
+    MAGMA_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV);
     const VkResult result = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &bindInfo);
     MAGMA_THROW_FAILURE(result, "failed to bind acceleration structure memory");
     this->size = memory->getSize();
@@ -103,7 +102,7 @@ void AccelerationStructure::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> 
     bindInfo.memoryOffset = memory->getOffset() + offset;
     bindInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
     bindInfo.pDeviceIndices = deviceIndices.data();
-    MAGMA_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
+    MAGMA_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV);
     const VkResult result = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &bindInfo);
     MAGMA_THROW_FAILURE(result, "failed to bind acceleration structure memory");
     this->size = memory->getSize();
@@ -135,7 +134,7 @@ VkMemoryRequirements AccelerationStructure::getUpdateScratchMemoryRequirements()
 uint64_t AccelerationStructure::getReferenceHandle() const
 {
     uint64_t refHandle;
-    MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureHandleNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
+    MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureHandleNV);
     const VkResult result = vkGetAccelerationStructureHandleNV(MAGMA_HANDLE(device), handle, sizeof(uint64_t), &refHandle);
     MAGMA_THROW_FAILURE(result, "failed to get acceleration structure handle");
     return refHandle;
@@ -150,7 +149,7 @@ VkMemoryRequirements2 AccelerationStructure::getMemoryRequirements(VkAcceleratio
     memoryInfo.accelerationStructure = handle;
     VkMemoryRequirements2 memoryRequirements = {};
     memoryRequirements.sType = VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2;
-    MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureMemoryRequirementsNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
+    MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureMemoryRequirementsNV);
     vkGetAccelerationStructureMemoryRequirementsNV(MAGMA_HANDLE(device), &memoryInfo, &memoryRequirements);
     return memoryRequirements;
 }

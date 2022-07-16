@@ -65,7 +65,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
     pipelineInfo.layout = MAGMA_HANDLE(layout);
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
     pipelineInfo.basePipelineIndex = -1;
-    MAGMA_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult result = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create ray tracing pipeline");
     hash = core::hashArgs(
@@ -85,7 +85,7 @@ std::vector<uint8_t> RayTracingPipeline::getShaderGroupHandles() const
 {
     const VkPhysicalDeviceRayTracingPropertiesNV& rayTracingProperties = device->getPhysicalDevice()->getRayTracingProperties();
     std::vector<uint8_t> shaderGroupHandles(shaderGroupCount * rayTracingProperties.shaderGroupHandleSize);
-    MAGMA_DEVICE_EXTENSION(vkGetRayTracingShaderGroupHandlesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
+    MAGMA_DEVICE_EXTENSION(vkGetRayTracingShaderGroupHandlesNV);
     const VkResult result = vkGetRayTracingShaderGroupHandlesNV(MAGMA_HANDLE(device), handle, 0, shaderGroupCount, shaderGroupHandles.size(), shaderGroupHandles.data());
     MAGMA_THROW_FAILURE(result, "failed to get ray tracing shader handles");
     return shaderGroupHandles;
@@ -93,7 +93,7 @@ std::vector<uint8_t> RayTracingPipeline::getShaderGroupHandles() const
 
 void RayTracingPipeline::compileDeferred(uint32_t shaderIndex)
 {
-    MAGMA_DEVICE_EXTENSION(vkCompileDeferredNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
+    MAGMA_DEVICE_EXTENSION(vkCompileDeferredNV);
     const VkResult result = vkCompileDeferredNV(MAGMA_HANDLE(device), handle, shaderIndex);
     MAGMA_THROW_FAILURE(result, "failed to compile shader deferred");
 }

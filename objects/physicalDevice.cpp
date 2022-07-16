@@ -195,7 +195,7 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfaceFullScreenExclusivePrese
     surfaceInfo.pNext = &fullScreenExclusiveSurfaceInfo;
     surfaceInfo.surface = *surface;
     uint32_t presentModeCount;
-    MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceSurfacePresentModes2EXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceSurfacePresentModes2EXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
     VkResult result = vkGetPhysicalDeviceSurfacePresentModes2EXT(handle, &surfaceInfo, &presentModeCount, nullptr);
     MAGMA_THROW_FAILURE(result, "failed to count full-screen exclusive surface present modes");
     if (presentModeCount > 0)
@@ -266,7 +266,7 @@ bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex,
 std::vector<VkDisplayPropertiesKHR> PhysicalDevice::getDisplayProperties() const
 {
     uint32_t propertyCount;
-    MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceDisplayPropertiesKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceDisplayPropertiesKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
     VkResult result = vkGetPhysicalDeviceDisplayPropertiesKHR(handle, &propertyCount, nullptr);
     MAGMA_THROW_FAILURE(result, "failed to count display properties");
     std::vector<VkDisplayPropertiesKHR> displayProperties(propertyCount);
@@ -281,7 +281,7 @@ std::vector<VkDisplayPropertiesKHR> PhysicalDevice::getDisplayProperties() const
 std::vector<VkDisplayPlanePropertiesKHR> PhysicalDevice::getDisplayPlaneProperties() const
 {
     uint32_t propertyCount;
-    MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceDisplayPropertiesKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceDisplayPropertiesKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
     VkResult result = vkGetPhysicalDeviceDisplayPlanePropertiesKHR(handle, &propertyCount, nullptr);
     MAGMA_THROW_FAILURE(result, "failed to count display plane properties");
     std::vector<VkDisplayPlanePropertiesKHR> displayPlaneProperties(propertyCount);
@@ -296,7 +296,7 @@ std::vector<VkDisplayPlanePropertiesKHR> PhysicalDevice::getDisplayPlaneProperti
 std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint32_t planeIndex) const
 {
     uint32_t displayCount;
-    MAGMA_INSTANCE_EXTENSION(vkGetDisplayPlaneSupportedDisplaysKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetDisplayPlaneSupportedDisplaysKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
     VkResult result = vkGetDisplayPlaneSupportedDisplaysKHR(handle, planeIndex, &displayCount, nullptr);
     MAGMA_THROW_FAILURE(result, "failed to count supported displays");
     std::vector<std::shared_ptr<Display>> supportedDisplays;
@@ -751,13 +751,13 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
 #ifdef VK_KHR_get_physical_device_properties2
 void PhysicalDevice::getFeatures2(VkPhysicalDeviceFeatures2KHR& physicalDeviceFeatures) const
 {
-    MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceFeatures2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceFeatures2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
     vkGetPhysicalDeviceFeatures2KHR(handle, &physicalDeviceFeatures);
 }
 
 void PhysicalDevice::getProperties2(VkPhysicalDeviceProperties2KHR& physicalDeviceProperties) const
 {
-    MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
     vkGetPhysicalDeviceProperties2KHR(handle, &physicalDeviceProperties);
 }
 #endif // VK_KHR_get_physical_device_properties2
@@ -769,7 +769,7 @@ void PhysicalDevice::getSurfaceCapabilities2(std::shared_ptr<const Surface> surf
     surfaceInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
     surfaceInfo.pNext = nullptr;
     surfaceInfo.surface = *surface;
-    MAGMA_INSTANCE_EXTENSION(vkGetPhysicalDeviceSurfaceCapabilities2KHR, VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME);
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceSurfaceCapabilities2KHR, VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME);
     const VkResult result = vkGetPhysicalDeviceSurfaceCapabilities2KHR(handle, &surfaceInfo, &surfaceCaps);
     MAGMA_THROW_FAILURE(result, "failed to get surface capabilities");
 }

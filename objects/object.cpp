@@ -39,7 +39,7 @@ void Object::setDebugName(const char *name)
     if (device)
     {
 #ifdef VK_EXT_debug_marker
-        MAGMA_OPTIONAL_DEVICE_EXTENSION(vkDebugMarkerSetObjectNameEXT);
+        MAGMA_DEVICE_EXTENSION(vkDebugMarkerSetObjectNameEXT);
         if (vkDebugMarkerSetObjectNameEXT)
         {
             VkDebugMarkerObjectNameInfoEXT info;
@@ -55,7 +55,7 @@ void Object::setDebugName(const char *name)
         {
 #endif // VK_EXT_debug_marker
 #ifdef VK_EXT_debug_utils
-            MAGMA_OPTIONAL_DEVICE_EXTENSION(vkSetDebugUtilsObjectNameEXT);
+            MAGMA_DEVICE_EXTENSION(vkSetDebugUtilsObjectNameEXT);
             if (vkSetDebugUtilsObjectNameEXT)
             {
                 VkDebugUtilsObjectNameInfoEXT info;
@@ -87,7 +87,7 @@ void Object::setDebugTag(uint64_t tagName, std::size_t tagSize, const void *tag)
     if (device)
     {
 #ifdef VK_EXT_debug_marker
-        MAGMA_OPTIONAL_DEVICE_EXTENSION(vkDebugMarkerSetObjectTagEXT);
+        MAGMA_DEVICE_EXTENSION(vkDebugMarkerSetObjectTagEXT);
         if (vkDebugMarkerSetObjectTagEXT)
         {
             VkDebugMarkerObjectTagInfoEXT info;
@@ -105,7 +105,7 @@ void Object::setDebugTag(uint64_t tagName, std::size_t tagSize, const void *tag)
         {
 #endif // VK_EXT_debug_marker
 #ifdef VK_EXT_debug_utils
-            MAGMA_OPTIONAL_DEVICE_EXTENSION(vkSetDebugUtilsObjectTagEXT);
+            MAGMA_DEVICE_EXTENSION(vkSetDebugUtilsObjectTagEXT);
             if (vkSetDebugUtilsObjectTagEXT)
             {
                 VkDebugUtilsObjectTagInfoEXT info;

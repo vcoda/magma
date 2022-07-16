@@ -159,7 +159,7 @@ std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId) c
 std::vector<VkPhysicalDeviceGroupPropertiesKHR> Instance::enumeratePhysicalDeviceGroups() const
 {
     uint32_t physicalDeviceGroupCount = 0;
-    MAGMA_INSTANCE_EXTENSION(vkEnumeratePhysicalDeviceGroupsKHR, VK_KHR_DEVICE_GROUP_CREATION_EXTENSION_NAME);
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkEnumeratePhysicalDeviceGroupsKHR, VK_KHR_DEVICE_GROUP_CREATION_EXTENSION_NAME);
     VkResult result = vkEnumeratePhysicalDeviceGroupsKHR(handle, &physicalDeviceGroupCount, nullptr);
     MAGMA_THROW_FAILURE(result, "failed to count groups of physical devices");
     std::vector<VkPhysicalDeviceGroupPropertiesKHR> physicalDeviceGroups(physicalDeviceGroupCount);

@@ -37,7 +37,7 @@ DebugUtilsMessenger::DebugUtilsMessenger(std::shared_ptr<const Instance> instanc
     instance(std::move(instance))
 {
     MAGMA_ASSERT(userCallback);
-    MAGMA_OPTIONAL_INSTANCE_EXTENSION(vkCreateDebugUtilsMessengerEXT);
+    MAGMA_INSTANCE_EXTENSION(vkCreateDebugUtilsMessengerEXT);
     if (vkCreateDebugUtilsMessengerEXT)
     {
         VkDebugUtilsMessengerCreateInfoEXT messengerInfo;
@@ -55,7 +55,7 @@ DebugUtilsMessenger::DebugUtilsMessenger(std::shared_ptr<const Instance> instanc
 
 DebugUtilsMessenger::~DebugUtilsMessenger()
 {
-    MAGMA_OPTIONAL_INSTANCE_EXTENSION(vkDestroyDebugUtilsMessengerEXT);
+    MAGMA_INSTANCE_EXTENSION(vkDestroyDebugUtilsMessengerEXT);
     if (vkDestroyDebugUtilsMessengerEXT)
         vkDestroyDebugUtilsMessengerEXT(MAGMA_HANDLE(instance), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
@@ -64,7 +64,7 @@ void DebugUtilsMessenger::message(VkDebugUtilsMessageSeverityFlagBitsEXT message
     const char *messageIdName, int32_t messageIdNumber, const char *format, ...) const noexcept
 {
     MAGMA_ASSERT(format);
-    MAGMA_OPTIONAL_INSTANCE_EXTENSION(vkSubmitDebugUtilsMessageEXT);
+    MAGMA_INSTANCE_EXTENSION(vkSubmitDebugUtilsMessageEXT);
     if (vkSubmitDebugUtilsMessageEXT)
     {
         char message[MAGMA_MAX_STRING];
