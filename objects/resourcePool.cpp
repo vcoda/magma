@@ -93,7 +93,9 @@ ResourcePool::DeviceResources ResourcePool::countDeviceResources() const
     statistics.descriptorSetCount = descriptorSets.count();
     statistics.framebufferCount = framebuffers.count();
     statistics.commandPoolCount = commandPools.count();
-    // Non-core types
+#ifdef VK_KHR_deferred_host_operations
+    statistics.deferredOperationCount = deferredOperations.count();
+#endif
 #ifdef VK_KHR_swapchain
     statistics.swapchainCount = swapchains.count();
 #endif
@@ -207,6 +209,9 @@ bool ResourcePool::hasAnyDeviceResource() const
         descriptorSets.count() > 0 ||
         framebuffers.count() > 0 ||
         commandPools.count() > 0 ||
+#ifdef VK_KHR_deferred_host_operations
+        deferredOperations.count() > 0 ||
+#endif
 #ifdef VK_KHR_swapchain
         swapchains.count() > 0 ||
 #endif

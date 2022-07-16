@@ -69,6 +69,9 @@ namespace magma
         core::ThreadSafeUnorderedSet<NonDispatchable<VkDescriptorSet>> descriptorSets;
         core::ThreadSafeUnorderedSet<NonDispatchable<VkFramebuffer>> framebuffers;
         core::ThreadSafeUnorderedSet<NonDispatchable<VkCommandPool>> commandPools;
+#ifdef VK_KHR_deferred_host_operations
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkDeferredOperationKHR>> deferredOperations;
+#endif
 #ifdef VK_KHR_sampler_ycbcr_conversion
         core::ThreadSafeUnorderedSet<NonDispatchable<VkSamplerYcbcrConversionKHR>> ycbcrSamplers;
 #endif
@@ -125,6 +128,7 @@ namespace magma
         uint32_t descriptorSetCount = 0;
         uint32_t framebufferCount = 0;
         uint32_t commandPoolCount = 0;
+        uint32_t deferredOperationCount = 0;
         uint32_t swapchainCount = 0;
         uint32_t accelerationStructureCount = 0;
     };

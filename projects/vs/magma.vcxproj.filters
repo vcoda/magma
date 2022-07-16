@@ -687,6 +687,9 @@
     <ClInclude Include="..\..\states\colorLogicOpState.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\deferredOperation.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1057,6 +1060,9 @@
     </ClCompile>
     <ClCompile Include="..\..\magma.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\deferredOperation.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

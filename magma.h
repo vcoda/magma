@@ -33,6 +33,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/computePipelines.h"
 #include "objects/debugReportCallback.h"
 #include "objects/debugUtilsMessenger.h"
+#include "objects/deferredOperation.h"
 #include "objects/descriptorPool.h"
 #include "objects/descriptorSet.h"
 #include "objects/descriptorSetLayout.h"
