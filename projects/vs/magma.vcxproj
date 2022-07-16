@@ -214,6 +214,7 @@
     <ClInclude Include="..\..\extensions\instanceExtensions.h" />
     <ClInclude Include="..\..\helpers\alignedUniformArray.h" />
     <ClInclude Include="..\..\helpers\castToDebugReport.h" />
+    <ClInclude Include="..\..\helpers\executeDeferredOperation.h" />
     <ClInclude Include="..\..\helpers\spirvReflectionTypeCast.h" />
     <ClInclude Include="..\..\helpers\checkFeatureSupport.h" />
     <ClInclude Include="..\..\helpers\executeCommandBuffer.h" />
@@ -369,6 +370,7 @@
     <ClCompile Include="..\..\auxiliary\textShader.cpp" />
     <ClCompile Include="..\..\barriers\bufferMemoryBarrier.cpp" />
     <ClCompile Include="..\..\barriers\imageMemoryBarrier.cpp" />
+    <ClCompile Include="..\..\helpers\executeDeferredOperation.cpp" />
     <ClCompile Include="..\..\magma.cpp" />
     <ClCompile Include="..\..\core\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

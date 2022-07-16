@@ -57,6 +57,7 @@ MAGMA_OBJS= \
 	\
 	helpers/checkFeatureSupport.o \
 	helpers/executeCommandBuffer.o \
+	helpers/executeDeferredOperation.o \
 	helpers/stringize.o \
 	\
 	misc/deviceQueueDescriptor.o \
