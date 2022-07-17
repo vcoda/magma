@@ -30,8 +30,8 @@ inline Type& Resource::Payload::getData()
 {
     static_assert(std::is_trivially_copyable<Type>::value, "payload should be of trivially-copyable type");
     MAGMA_ASSERT(data);
-    if (size < sizeof(Type))
-        MAGMA_THROW("payload size not large enough");
+    if (!data || size < sizeof(Type))
+        MAGMA_THROW(!data ? "payload not exists" : "payload size it too little");
     Type& payload = *reinterpret_cast<Type *>(data);
     return payload;
 }
