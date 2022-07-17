@@ -62,7 +62,7 @@ namespace magma
             Payload() noexcept;
             ~Payload();
             template<typename Type>
-            void setData(const Type& payload);
+            void setData(const Type& payload) noexcept;
             template<typename Type>
             Type& getData();
             size_t getDataSize() const noexcept { return size; }
