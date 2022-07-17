@@ -20,7 +20,8 @@ inline void Resource::Payload::setData(const Type& payload)
         free(data);
         data = malloc(sizeof(Type));
     }
-    memcpy(data, &payload, sizeof(Type));
+    if (data)
+        memcpy(data, &payload, sizeof(Type));
     size = sizeof(Type);
 }
 
