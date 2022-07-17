@@ -45,9 +45,10 @@ namespace magma
         VkDeviceSize countAllocatedImageMemory() const;
         VkDeviceSize countAllocatedAccelerationStructureMemory() const;
         bool hasAnyDeviceResource() const;
+    #ifdef MAGMA_X64
         template<typename Type>
         core::ThreadSafeUnorderedSet<Type>& getPool();
-
+    #endif
     private:
         core::ThreadSafeUnorderedSet<NonDispatchable<VkSemaphore>> semaphores;
         core::ThreadSafeUnorderedSet<NonDispatchable<VkFence>> fences;
