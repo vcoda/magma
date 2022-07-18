@@ -69,6 +69,9 @@ namespace magma
         bool getPresentationSupport(uint32_t queueFamilyIndex,
             void *display = nullptr,
             const void *visualID = nullptr) const noexcept;
+#ifdef VK_EXT_tooling_info
+        std::vector<VkPhysicalDeviceToolPropertiesEXT> getToolProperties() const;
+#endif
 #ifdef VK_KHR_display
         std::vector<VkDisplayPropertiesKHR> getDisplayProperties() const;
         std::vector<VkDisplayPlanePropertiesKHR> getDisplayPlaneProperties() const;

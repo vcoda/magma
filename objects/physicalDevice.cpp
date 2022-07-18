@@ -262,6 +262,24 @@ bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex,
     return (VK_TRUE == result);
 }
 
+#ifdef VK_EXT_tooling_info
+std::vector<VkPhysicalDeviceToolPropertiesEXT> PhysicalDevice::getToolProperties() const
+{
+    uint32_t toolCount;
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceToolPropertiesEXT, VK_EXT_TOOLING_INFO_EXTENSION_NAME);
+    VkResult result = vkGetPhysicalDeviceToolPropertiesEXT(handle, &toolCount, nullptr);
+    MAGMA_THROW_FAILURE(result, "failed to count tool properties");
+    std::vector<VkPhysicalDeviceToolPropertiesEXT> toolProperties;
+    if (toolCount > 0)
+    {
+        toolProperties.resize(toolCount);
+        result = vkGetPhysicalDeviceToolPropertiesEXT(handle, &toolCount, toolProperties.data());
+        MAGMA_THROW_FAILURE(result, "failed to get tool properties");
+    }
+    return toolProperties;
+}
+#endif // VK_EXT_tooling_info
+
 #ifdef VK_KHR_display
 std::vector<VkDisplayPropertiesKHR> PhysicalDevice::getDisplayProperties() const
 {
