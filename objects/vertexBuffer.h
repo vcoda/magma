@@ -34,8 +34,9 @@ namespace magma
         explicit BaseVertexBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkBufferUsageFlags usage,
-            VkMemoryPropertyFlags memoryFlags,
             VkBufferCreateFlags flags,
+            VkMemoryPropertyFlags memoryFlags,
+            float memoryPriority,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
 
@@ -52,6 +53,7 @@ namespace magma
             const void *data,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
+            float memoryPriority = 0.f,
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
         explicit VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
@@ -60,6 +62,7 @@ namespace magma
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,
             VkBufferCreateFlags flags = 0,
+            float memoryPriority = 0.f,
             const Sharing& sharing = Sharing());
     };
 
@@ -73,8 +76,9 @@ namespace magma
             VkDeviceSize size,
             bool pinnedMemory,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const void *initial = nullptr,
+            const void *initialData = nullptr,
             VkBufferCreateFlags flags = 0,
+            float memoryPriority = 0.f,
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
     };
@@ -88,6 +92,7 @@ namespace magma
             const void *data,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
+            float memoryPriority = 0.f,
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
         explicit AccelerationStructureVertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
@@ -96,6 +101,7 @@ namespace magma
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,
             VkBufferCreateFlags flags = 0,
+            float memoryPriority = 0.f,
             const Sharing& sharing = Sharing());
     };
 #endif // VK_NV_ray_tracing

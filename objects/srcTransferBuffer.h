@@ -30,6 +30,7 @@ namespace magma
             const void *data = nullptr,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
+            float memoryPriority = 0.f,
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
         template<typename Type>
@@ -37,6 +38,7 @@ namespace magma
             const std::vector<Type>& data,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
+            float memoryPriority = 0.f,
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
     };

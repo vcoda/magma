@@ -52,8 +52,9 @@ namespace magma
         explicit Buffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkBufferUsageFlags usage,
-            VkMemoryPropertyFlags memoryFlags,
             VkBufferCreateFlags flags,
+            VkMemoryPropertyFlags memoryFlags,
+            float memoryPriority,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
         void copyHost(const void *data,

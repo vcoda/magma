@@ -33,13 +33,7 @@ namespace magma
             const void *data,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing(),
-            CopyMemoryFunction copyFn = nullptr);
-        template<typename Type>
-        explicit StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            const std::vector<Type>& data,
-            std::shared_ptr<Allocator> allocator = nullptr,
-            VkBufferCreateFlags flags = 0,
+            float memoryPriority = 0.f,
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
         explicit StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
@@ -48,7 +42,9 @@ namespace magma
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,
             VkBufferCreateFlags flags = 0,
-            const Sharing& sharing = Sharing());
+            float memoryPriority = 0.f,
+            const Sharing& sharing = Sharing(),
+            CopyMemoryFunction copyFn = nullptr);
     };
 
     /* Dynamic storage buffer for fast data transfer from host to device
@@ -61,8 +57,9 @@ namespace magma
             VkDeviceSize size,
             bool pinnedMemory,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const void *initial = nullptr,
             VkBufferCreateFlags flags = 0,
+            const void *initialData = nullptr,
+            float memoryPriority = 0.f,
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
     };

@@ -24,10 +24,11 @@ namespace magma
 DstTransferBuffer::DstTransferBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
+    float memoryPriority /* 0.f */,
     const Sharing& sharing /* default */):
     Buffer(std::move(device), size,
-        VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-        flags, sharing, std::move(allocator))
+        VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, memoryPriority,
+        sharing, std::move(allocator))
 {}
 } // namespace magma

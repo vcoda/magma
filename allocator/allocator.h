@@ -100,10 +100,12 @@ namespace magma
         virtual std::shared_ptr<IAllocator> getHostAllocator() const noexcept = 0;
         virtual DeviceMemoryBlock alloc(const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
+            float priority,
             const void *handle,
             VkObjectType objectType) = 0;
         virtual std::vector<DeviceMemoryBlock> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
-            const std::vector<VkMemoryPropertyFlags>& flags) = 0;
+            const std::vector<VkMemoryPropertyFlags>& flags,
+            const std::vector<float>& priorities) = 0;
         virtual DeviceMemoryBlock realloc(DeviceMemoryBlock memory,
             VkDeviceSize size) = 0;
         virtual void free(DeviceMemoryBlock memory) noexcept = 0;

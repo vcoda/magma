@@ -37,6 +37,7 @@ namespace magma
         explicit DeviceMemory(std::shared_ptr<Device> device,
             const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
+            float priority,
             const void *object,
             VkObjectType objectType,
             std::shared_ptr<Allocator> allocator = nullptr);
@@ -45,6 +46,7 @@ namespace magma
             uint32_t deviceMask,
             const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
+            float priority,
             std::shared_ptr<Allocator> allocator = nullptr);
 #endif
         ~DeviceMemory();
@@ -54,12 +56,14 @@ namespace magma
         VkDeviceSize getSize() const noexcept { return memoryRequirements.size; }
         VkDeviceSize getAlignment() const noexcept { return memoryRequirements.alignment; }
         uint32_t getMemoryTypeBits() const noexcept { return memoryRequirements.memoryTypeBits; }
+        float getPriority() const noexcept { return priority; }
         bool local() const noexcept;
         bool pinned() const noexcept;
         bool hostVisible() const noexcept;
         bool hostCached() const noexcept;
         bool mapped() const noexcept;
         void realloc(VkDeviceSize newSize,
+            float priority,
             const void *object,
             VkObjectType objectType,
             std::shared_ptr<Allocator> allocator = nullptr);
@@ -85,6 +89,7 @@ namespace magma
 
         VkMemoryRequirements memoryRequirements;
         const VkMemoryPropertyFlags flags;
+        const float priority;
         std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
         DeviceMemoryBlock memory;
         VkDeviceSize offset;

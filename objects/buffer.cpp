@@ -30,7 +30,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
-    VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags, VkBufferCreateFlags flags,
+    VkBufferUsageFlags usage, VkBufferCreateFlags flags,
+    VkMemoryPropertyFlags memoryFlags, float memoryPriority,
     const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, device, sharing, allocator),
     flags(flags),
@@ -49,8 +50,10 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     MAGMA_THROW_FAILURE(result, "failed to create buffer");
     const VkMemoryRequirements memoryRequirements = getMemoryRequirements();
     std::shared_ptr<DeviceMemory> memory = std::make_shared<DeviceMemory>(
-        std::move(device), memoryRequirements, memoryFlags,
-        &handle, VK_OBJECT_TYPE_BUFFER, std::move(allocator));
+        std::move(device),
+        memoryRequirements, memoryFlags, memoryPriority,
+        &handle, VK_OBJECT_TYPE_BUFFER,
+        std::move(allocator));
     bindMemory(std::move(memory));
 }
 
@@ -78,7 +81,7 @@ void Buffer::realloc(VkDeviceSize newSize,
     deviceAllocator = MAGMA_DEVICE_ALLOCATOR(allocator);
     const VkResult result = vkCreateBuffer(MAGMA_HANDLE(device), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to reallocate buffer");
-    memory->realloc(newSize, &handle, VK_OBJECT_TYPE_BUFFER, std::move(allocator));
+    memory->realloc(newSize, memory->getPriority(), &handle, VK_OBJECT_TYPE_BUFFER, std::move(allocator));
     bindMemory(std::move(memory), offset);
 }
 

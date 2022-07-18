@@ -27,16 +27,16 @@ namespace magma
 ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
+    float memoryPriority /* 0.f */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(std::move(cmdBuffer->getDevice()), size,
-        VK_BUFFER_USAGE_CONDITIONAL_RENDERING_BIT_EXT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, sharing, allocator)
+        VK_BUFFER_USAGE_CONDITIONAL_RENDERING_BIT_EXT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memoryPriority,
+        sharing, allocator)
 {
     MAGMA_ASSERT(data);
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data,
-        std::move(allocator), 0, sharing, std::move(copyFn));
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), 0, 0.f, sharing, std::move(copyFn));
     cmdBuffer->begin();
     copyTransfer(cmdBuffer, srcBuffer, size);
     cmdBuffer->end();
@@ -48,11 +48,13 @@ ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBu
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
     VkBufferCreateFlags flags /* 0 */,
+    float memoryPriority /* 0.f */,
     const Sharing& sharing /* default */):
-    Buffer(cmdBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(),
-        VK_BUFFER_USAGE_CONDITIONAL_RENDERING_BIT_EXT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, sharing, std::move(allocator))
+    Buffer(cmdBuffer->getDevice(),
+        size > 0 ? size : srcBuffer->getSize(),
+        VK_BUFFER_USAGE_CONDITIONAL_RENDERING_BIT_EXT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memoryPriority,
+        sharing, std::move(allocator))
 {
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), size, srcOffset);
 }

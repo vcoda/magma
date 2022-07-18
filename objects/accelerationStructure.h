@@ -56,6 +56,7 @@ namespace magma
             const std::list<Geometry>& geometries,
             VkBuildAccelerationStructureFlagsNV flags,
             VkDeviceSize compactedSize,
+            float memoryPriority,
             std::shared_ptr<Allocator> allocator);
 
     private:
@@ -73,9 +74,10 @@ namespace magma
             uint32_t instanceCount,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBuildAccelerationStructureFlagsNV flags = 0,
-            VkDeviceSize compactedSize = 0):
+            VkDeviceSize compactedSize = 0,
+            float memoryPriority = 0.f):
             AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NV,
-                instanceCount, std::list<Geometry>{}, flags, compactedSize, std::move(allocator))
+                instanceCount, std::list<Geometry>{}, flags, compactedSize, memoryPriority, std::move(allocator))
         {}
     };
 
@@ -88,9 +90,10 @@ namespace magma
             const std::list<Geometry>& geometries,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBuildAccelerationStructureFlagsNV flags = 0,
-            VkDeviceSize compactedSize = 0):
+            VkDeviceSize compactedSize = 0,
+            float memoryPriority = 0.f):
             AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NV,
-                0, geometries, flags, compactedSize, std::move(allocator))
+                0, geometries, flags, compactedSize, memoryPriority, std::move(allocator))
         {}
     };
 #endif // VK_NV_ray_tracing

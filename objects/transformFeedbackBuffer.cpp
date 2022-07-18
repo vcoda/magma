@@ -23,19 +23,25 @@ namespace magma
 {
 #ifdef VK_EXT_transform_feedback
 TransformFeedbackBuffer::TransformFeedbackBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
-    std::shared_ptr<Allocator> allocator /* nullptr */, VkBufferCreateFlags flags /* 0 */, const Sharing& sharing /* default */):
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    VkBufferCreateFlags flags /* 0 */,
+    float memoryPriority /* 0.f */,
+    const Sharing& sharing /* default */):
     Buffer(std::move(device), size,
-        VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_BUFFER_BIT_EXT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, sharing, std::move(allocator))
+        VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_BUFFER_BIT_EXT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, flags,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memoryPriority,
+        sharing, std::move(allocator))
 {}
 
 TransformFeedbackCounterBuffer::TransformFeedbackCounterBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
-    std::shared_ptr<Allocator> allocator /* nullptr */, VkBufferCreateFlags flags /* 0 */, const Sharing& sharing /* default */):
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    VkBufferCreateFlags flags /* 0 */,
+    float memoryPriority /* 0.f */,
+    const Sharing& sharing /* default */):
     Buffer(std::move(device), size,
-        VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_COUNTER_BUFFER_BIT_EXT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        flags, sharing, std::move(allocator))
+        VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_COUNTER_BUFFER_BIT_EXT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT, flags,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memoryPriority,
+        sharing, std::move(allocator))
 {}
 #endif // VK_EXT_transform_feedback
 } // namespace magma

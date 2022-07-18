@@ -90,7 +90,7 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
         bottomRight.y *= footprint.second;
     }
     // Copy bitmap data to host visible buffer
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, nullptr, std::move(allocator), 0, sharing);
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, nullptr, std::move(allocator), 0, 0.f, sharing);
     helpers::mapScoped<uint8_t>(srcBuffer,
         [size, data, &copyFn](uint8_t *buffer)
         {

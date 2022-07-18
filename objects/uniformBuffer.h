@@ -34,14 +34,16 @@ namespace magma
 
         explicit UniformBuffer(std::shared_ptr<Device> device,
             std::shared_ptr<Allocator> allocator = nullptr,
-            bool pinnedMemory = false,
-            uint32_t arraySize = 1,
             VkBufferCreateFlags flags = 0,
+            bool pinnedMemory = false,
+            float memoryPriority = 0.f,
+            uint32_t arraySize = 1,
             const Sharing& sharing = Sharing()):
             Buffer(std::move(device), sizeof(Type) * arraySize,
-                VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, flags,
                 (pinnedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0) | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                flags, sharing, std::move(allocator)),
+                memoryPriority,
+                sharing, std::move(allocator)),
             arraySize(arraySize)
         {
             static_assert(std::alignment_of<Type>() == 16, "uniform type should have 16-byte alignment");
@@ -89,10 +91,11 @@ namespace magma
         explicit DynamicUniformBuffer(std::shared_ptr<Device> device,
             uint32_t arraySize,
             std::shared_ptr<Allocator> allocator = nullptr,
-            bool pinnedMemory = false,
             VkBufferCreateFlags flags = 0,
+            bool pinnedMemory = false,
+            float memoryPriority = 0.f,
             const Resource::Sharing& sharing = Resource::Sharing()):
-            UniformBuffer<Type>(device, std::move(allocator), pinnedMemory, alignedArraySize(device, arraySize), flags, sharing),
+            UniformBuffer<Type>(device, std::move(allocator), flags, pinnedMemory, memoryPriority, alignedArraySize(device, arraySize), sharing),
             alignment(std::max(
                 minOffsetAlignment(device),
                 static_cast<VkDeviceSize>(elementSize)

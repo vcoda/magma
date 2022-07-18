@@ -27,41 +27,54 @@ namespace magma
 {
 DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     const VkMemoryRequirements& memoryRequirements,
-    VkMemoryPropertyFlags flags, const void *object, VkObjectType objectType,
+    VkMemoryPropertyFlags flags, float priority,
+    const void *object, VkObjectType objectType,
     std::shared_ptr<Allocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), MAGMA_HOST_ALLOCATOR(allocator)),
     memoryRequirements(memoryRequirements),
     flags(flags),
+    priority(priority),
     deviceAllocator(MAGMA_DEVICE_ALLOCATOR(allocator)),
     memory(nullptr),
     offset(0),
     mappedRange(nullptr)
 {
-    realloc(memoryRequirements.size, object, objectType, std::move(allocator));
+    realloc(memoryRequirements.size, priority, object, objectType, std::move(allocator));
 }
 
 #ifdef VK_KHR_device_group
 DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask,
-    const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
+    const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags, float priority,
     std::shared_ptr<Allocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), MAGMA_HOST_ALLOCATOR(allocator)),
     memoryRequirements(memoryRequirements),
     flags(flags),
+    priority(priority),
     deviceAllocator(),
     memory(nullptr),
     offset(0),
     mappedRange(nullptr)
 {
-    VkMemoryAllocateFlagsInfoKHR flagsInfo;
-    flagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
-    flagsInfo.pNext = nullptr;
-    flagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHR;
-    flagsInfo.deviceMask = deviceMask;
+    VkMemoryAllocateFlagsInfoKHR allocFlagsInfo;
+    allocFlagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
+    allocFlagsInfo.pNext = nullptr;
+    allocFlagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHR;
+    allocFlagsInfo.deviceMask = deviceMask;
     VkMemoryAllocateInfo allocInfo;
     allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    allocInfo.pNext = &flagsInfo;
+    allocInfo.pNext = &allocFlagsInfo;
     allocInfo.allocationSize = memoryRequirements.size;
     allocInfo.memoryTypeIndex = getTypeIndex(flags);
+#ifdef VK_EXT_memory_priority
+    VkMemoryPriorityAllocateInfoEXT memoryPriorityInfo;
+    if (priority > 0.f)
+    {
+        memoryPriorityInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;
+        memoryPriorityInfo.pNext = nullptr;
+        memoryPriorityInfo.priority = priority;
+        allocFlagsInfo.pNext = &memoryPriorityInfo;
+    }
+#endif // VK_EXT_memory_priority
     const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &allocInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to allocate device memory within device group");
 }
@@ -76,7 +89,7 @@ DeviceMemory::~DeviceMemory()
         vkFreeMemory(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-void DeviceMemory::realloc(VkDeviceSize newSize, const void *object, VkObjectType objectType,
+void DeviceMemory::realloc(VkDeviceSize newSize, float priority, const void *object, VkObjectType objectType,
     std::shared_ptr<Allocator> allocator /* nullptr */)
 {
     MAGMA_ASSERT(!mappedRange);
@@ -95,7 +108,7 @@ void DeviceMemory::realloc(VkDeviceSize newSize, const void *object, VkObjectTyp
     deviceAllocator = MAGMA_DEVICE_ALLOCATOR(allocator);
     if (deviceAllocator)
     {   // Use VMA allocator
-        memory = deviceAllocator->alloc(memoryRequirements, flags, object, objectType);
+        memory = deviceAllocator->alloc(memoryRequirements, flags, priority, object, objectType);
         onDefragment();
     }
     else
@@ -105,6 +118,16 @@ void DeviceMemory::realloc(VkDeviceSize newSize, const void *object, VkObjectTyp
         allocInfo.pNext = nullptr;
         allocInfo.allocationSize = memoryRequirements.size;
         allocInfo.memoryTypeIndex = getTypeIndex(flags);
+    #ifdef VK_EXT_memory_priority
+        VkMemoryPriorityAllocateInfoEXT memoryPriorityInfo;
+        if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
+        {
+            memoryPriorityInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;
+            memoryPriorityInfo.pNext = nullptr;
+            memoryPriorityInfo.priority = priority;
+            allocInfo.pNext = &memoryPriorityInfo;
+        }
+    #endif // VK_EXT_memory_priority
         const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &allocInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
         MAGMA_THROW_FAILURE(result, "failed to allocate device memory");
     }

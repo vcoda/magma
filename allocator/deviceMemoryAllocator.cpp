@@ -50,6 +50,8 @@ DeviceMemoryAllocator::DeviceMemoryAllocator(std::shared_ptr<Device> device,
     std::shared_ptr<PhysicalDevice> physicalDevice = this->device->getPhysicalDevice();
     VmaAllocatorCreateInfo allocatorInfo;
     allocatorInfo.flags = 0;
+    if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
+        allocatorInfo.flags |= VMA_ALLOCATOR_CREATE_EXT_MEMORY_PRIORITY_BIT;
     allocatorInfo.physicalDevice = *physicalDevice;
     allocatorInfo.device = *this->device;
     allocatorInfo.preferredLargeHeapBlockSize = 0;
@@ -71,7 +73,7 @@ DeviceMemoryAllocator::~DeviceMemoryAllocator()
 }
 
 DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memoryRequirements,
-    VkMemoryPropertyFlags flags, const void *handle, VkObjectType objectType)
+    VkMemoryPropertyFlags flags, float priority, const void *handle, VkObjectType objectType)
 {
     MAGMA_ASSERT(handle);
     VmaAllocationCreateInfo allocInfo;
@@ -90,7 +92,7 @@ DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memor
     allocInfo.memoryTypeBits = 0;
     allocInfo.pool = VK_NULL_HANDLE;
     allocInfo.pUserData = nullptr;
-    allocInfo.priority = 0.f;
+    allocInfo.priority = priority;
     VmaAllocation allocation;
     VkResult result;
     switch (objectType)
@@ -109,12 +111,13 @@ DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memor
 }
 
 std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
-    const std::vector<VkMemoryPropertyFlags>& memoryFlags)
+    const std::vector<VkMemoryPropertyFlags>& memoryFlags, const std::vector<float>& priorities)
 {
     std::vector<VmaAllocationCreateInfo> allocInfos;
     allocInfos.reserve(memoryFlags.size());
-    for (const VkMemoryPropertyFlags flags : memoryFlags)
+    for (std::size_t i = 0, n = memoryFlags.size(); i < n; ++i)
     {
+        const VkMemoryPropertyFlags flags = memoryFlags[i];
         VmaAllocationCreateInfo allocInfo;
         allocInfo.flags = VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT;
         allocInfo.usage = (VmaMemoryUsage)chooseMemoryUsage(flags);
@@ -131,7 +134,7 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
         allocInfo.memoryTypeBits = 0;
         allocInfo.pool = VK_NULL_HANDLE;
         allocInfo.pUserData = nullptr;
-        allocInfo.priority = 0.f;
+        allocInfo.priority = priorities.empty() ? 0.f : priorities[i];
         allocInfos.push_back(allocInfo);
     }
     std::vector<VmaAllocation> allocations(MAGMA_COUNT(allocInfos));
