@@ -129,6 +129,7 @@ std::vector<VkExtensionProperties> PhysicalDevice::enumerateExtensions(const cha
     return extensions;
 }
 
+#ifdef VK_KHR_surface
 bool PhysicalDevice::getSurfaceSupport(std::shared_ptr<const Surface> surface) const noexcept
 {
     VkBool32 supported = VK_FALSE;
@@ -171,6 +172,7 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared
     MAGMA_THROW_FAILURE(result, "failed to get surface present modes of physical device");
     return presentModes;
 }
+#endif // VK_KHR_surface
 
 #ifdef VK_EXT_full_screen_exclusive
 std::vector<VkPresentModeKHR> PhysicalDevice::getSurfaceFullScreenExclusivePresentModes(std::shared_ptr<const Surface> surface,
