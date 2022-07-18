@@ -666,9 +666,6 @@
     <ClInclude Include="..\..\objects\samplerYcbcrConversion.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\states\ycbcrSamplerState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\core\hashing\combine.h">
       <Filter>Header Files\core\hashing</Filter>
     </ClInclude>
@@ -692,6 +689,9 @@
     </ClInclude>
     <ClInclude Include="..\..\helpers\executeDeferredOperation.h">
       <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\states\samplerYcbcrConversionState.h">
+      <Filter>Header Files\states</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1213,9 +1213,6 @@
     <None Include="..\..\states\minmaxSamplerState.inl">
       <Filter>Header Files\states</Filter>
     </None>
-    <None Include="..\..\states\ycbcrSamplerState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
     <None Include="..\..\misc\pushConstantRange.inl">
       <Filter>Header Files\misc</Filter>
     </None>
@@ -1223,6 +1220,9 @@
       <Filter>Header Files\misc</Filter>
     </None>
     <None Include="..\..\states\colorBlendAttachmentState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\states\samplerYcbcrConversionState.inl">
       <Filter>Header Files\states</Filter>
     </None>
   </ItemGroup>

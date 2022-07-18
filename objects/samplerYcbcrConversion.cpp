@@ -19,17 +19,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "samplerYcbcrConversion.h"
 #include "device.h"
-#include "../states/ycbcrSamplerState.h"
+#include "../states/samplerYcbcrConversionState.h"
 #include "../allocator/allocator.h"
 #include "../misc/extProcAddress.h"
 #include "../exceptions/errorResult.h"
 
-#ifdef VK_KHR_sampler_ycbcr_conversion
 namespace magma
 {
+#ifdef VK_KHR_sampler_ycbcr_conversion
 SamplerYcbcrConversion::SamplerYcbcrConversion(std::shared_ptr<Device> device,
     VkFormat format,
-    const YcbcrConversionSamplerState& state,
+    const SamplerYcbcrConversionState& state,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     VkChromaLocationKHR xChromaOffset /* VK_CHROMA_LOCATION_MIDPOINT_KHR */,
@@ -57,5 +57,5 @@ SamplerYcbcrConversion::~SamplerYcbcrConversion()
     MAGMA_DEVICE_EXTENSION(vkDestroySamplerYcbcrConversionKHR);
     vkDestroySamplerYcbcrConversionKHR(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
-} // namespace magma
 #endif // VK_KHR_sampler_ycbcr_conversion
+} // namespace magma

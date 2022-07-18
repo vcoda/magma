@@ -114,12 +114,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "states/rasterizationOrderState.h"
 #include "states/rasterizationState.h"
 #include "states/samplerState.h"
+#include "states/samplerYcbcrConversionState.h"
 #include "states/streamRasterizationState.h"
 #include "states/tesselationState.h"
 #include "states/vertexInputState.h"
 #include "states/vertexInputStructure.h"
 #include "states/viewportState.h"
-#include "states/ycbcrSamplerState.h"
 
 #include "descriptors/attachment.h"
 #include "descriptors/binding.h"

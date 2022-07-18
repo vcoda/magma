@@ -343,7 +343,7 @@
     <ClInclude Include="..\..\states\multiViewportState.h" />
     <ClInclude Include="..\..\states\viewportState.h" />
     <ClInclude Include="..\..\states\colorMask.h" />
-    <ClInclude Include="..\..\states\ycbcrSamplerState.h" />
+    <ClInclude Include="..\..\states\samplerYcbcrConversionState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\alignedAllocator.cpp" />
@@ -619,7 +619,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\states\tesselationState.inl" />
     <None Include="..\..\states\vertexInputState.inl" />
     <None Include="..\..\states\vertexInputStructure.inl" />
-    <None Include="..\..\states\ycbcrSamplerState.inl" />
+    <None Include="..\..\states\samplerYcbcrConversionState.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

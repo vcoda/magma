@@ -1,6 +1,6 @@
 namespace magma
 {
-constexpr YcbcrConversionSamplerState::YcbcrConversionSamplerState(const VkSamplerYcbcrModelConversionKHR ycbcrModel,
+constexpr SamplerYcbcrConversionState::SamplerYcbcrConversionState(const VkSamplerYcbcrModelConversionKHR ycbcrModel,
     const VkSamplerYcbcrRangeKHR ycbcrRange, const VkFilter chromaFilter) noexcept:
     VkSamplerYcbcrConversionCreateInfoKHR{
         VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO_KHR,
@@ -21,7 +21,7 @@ constexpr YcbcrConversionSamplerState::YcbcrConversionSamplerState(const VkSampl
     }
 {}
 
-constexpr hash_t YcbcrConversionSamplerState::hash() const noexcept
+constexpr hash_t SamplerYcbcrConversionState::hash() const noexcept
 {
     return core::hashArgs(
         sType,
@@ -38,7 +38,7 @@ constexpr hash_t YcbcrConversionSamplerState::hash() const noexcept
         forceExplicitReconstruction);
 }
 
-constexpr bool YcbcrConversionSamplerState::operator==(const YcbcrConversionSamplerState& other) const noexcept
+constexpr bool SamplerYcbcrConversionState::operator==(const SamplerYcbcrConversionState& other) const noexcept
 {
     return (format == other.format) &&
         (ycbcrModel == other.ycbcrModel) &&

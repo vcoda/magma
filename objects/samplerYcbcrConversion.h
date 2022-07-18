@@ -18,20 +18,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "nondispatchable.h"
 
-#ifdef VK_KHR_sampler_ycbcr_conversion
 namespace magma
 {
-    struct YcbcrConversionSamplerState;
+    struct SamplerYcbcrConversionState;
 
     /* Provides the ability to perform specified color space conversions
        during texture sampling operations for the YCbCr color space natively. */
 
+#ifdef VK_KHR_sampler_ycbcr_conversion
     class SamplerYcbcrConversion : public NonDispatchable<VkSamplerYcbcrConversionKHR>
     {
     public:
         explicit SamplerYcbcrConversion(std::shared_ptr<Device> device,
             VkFormat format,
-            const YcbcrConversionSamplerState& state,
+            const SamplerYcbcrConversionState& state,
             std::shared_ptr<IAllocator> allocator = nullptr,
             const VkComponentMapping& swizzle = {
                 VK_COMPONENT_SWIZZLE_IDENTITY,
@@ -43,5 +43,5 @@ namespace magma
             bool forceExplicitReconstruction = false);
         ~SamplerYcbcrConversion();
     };
-} // namespace magma
 #endif // VK_KHR_sampler_ycbcr_conversion
+} // namespace magma
