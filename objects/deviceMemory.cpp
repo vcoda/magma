@@ -113,22 +113,22 @@ void DeviceMemory::realloc(VkDeviceSize newSize, const void *object, VkObjectTyp
 void DeviceMemory::bind(const void *object, VkObjectType objectType,
     VkDeviceSize offset /* 0 */)
 {
-    VkResult result;
+    MAGMA_ASSERT((VK_OBJECT_TYPE_BUFFER == objectType) || (VK_OBJECT_TYPE_IMAGE == objectType));
+    VkResult result = VK_ERROR_UNKNOWN;
     if (memory)
+    {   // Use VMA allocator
         result = deviceAllocator->bindMemory(memory, offset, object, objectType);
-    else switch (objectType)
+    }
+    else
     {
-    case VK_OBJECT_TYPE_BUFFER:
-        result = vkBindBufferMemory(MAGMA_HANDLE(device), MAGMA_BUFFER_HANDLE(object), handle, offset);
-        MAGMA_THROW_FAILURE(result, "failed to bind buffer memory");
-        break;
-    case VK_OBJECT_TYPE_IMAGE:
-        result = vkBindImageMemory(MAGMA_HANDLE(device), MAGMA_IMAGE_HANDLE(object), handle, offset);
-        MAGMA_THROW_FAILURE(result, "failed to bind image memory");
-        break;
-    default:
-        MAGMA_THROW("unsupported resource type");
-    };
+        if (VK_OBJECT_TYPE_BUFFER == objectType)
+            result = vkBindBufferMemory(MAGMA_HANDLE(device), MAGMA_BUFFER_HANDLE(object), handle, offset);
+        else if (VK_OBJECT_TYPE_IMAGE == objectType)
+            result = vkBindImageMemory(MAGMA_HANDLE(device), MAGMA_IMAGE_HANDLE(object), handle, offset);
+    }
+    MAGMA_THROW_FAILURE(result, VK_OBJECT_TYPE_BUFFER == objectType
+        ? "failed to bind buffer memory"
+        : "failed to bind image memory");
 }
 
 void *DeviceMemory::map(
