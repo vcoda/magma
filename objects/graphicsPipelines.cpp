@@ -101,6 +101,20 @@ uint32_t GraphicsPipelines::newPipeline(const std::vector<PipelineShaderStage>& 
     pipelineInfo.subpass = subpass;
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipelines.back());
     pipelineInfo.basePipelineIndex = -1;
+#ifdef VK_EXT_pipeline_creation_feedback
+    if (layout->getDevice()->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
+    {
+        creationFeedbacks.push_back(VkPipelineCreationFeedbackEXT());
+        VkPipelineCreationFeedbackCreateInfoEXT creationFeedbackInfo;
+        creationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
+        creationFeedbackInfo.pNext = nullptr;
+        creationFeedbackInfo.pPipelineCreationFeedback = &creationFeedbacks.back();
+        creationFeedbackInfo.pipelineStageCreationFeedbackCount = 0;
+        creationFeedbackInfo.pPipelineStageCreationFeedbacks = nullptr;
+        creationFeedbackInfos.push_back(creationFeedbackInfo);
+        pipelineInfo.pNext = &creationFeedbackInfos.back();
+    }
+#endif // VK_EXT_pipeline_creation_feedback
     pipelineInfos.push_back(pipelineInfo);
     hash_t hash = core::hashArgs(
         pipelineInfo.sType,
@@ -150,18 +164,33 @@ void GraphicsPipelines::buildPipelines(std::shared_ptr<Device> device, std::shar
     dynamicStateInfos.clear();
     renderPasses.clear();
     pipelineInfos.clear();
+#ifdef VK_EXT_pipeline_creation_feedback
+    creationFeedbackInfos.clear();
+#endif
     if (VK_SUCCESS == result)
     {
         auto handle = pipelines.cbegin();
         auto layout = layouts.cbegin();
         auto basePipeline = basePipelines.cbegin();
+    #ifdef VK_EXT_pipeline_creation_feedback
+        auto creationFeedback = creationFeedbacks.cbegin();
+    #endif
         auto hash = hashes.cbegin();
         graphicsPipelines.clear();
         while (handle != pipelines.cend())
-            graphicsPipelines.emplace_back(new GraphicsPipeline(*handle++, device, *layout++, *basePipeline++, allocator, *hash++));
+        {
+            graphicsPipelines.emplace_back(new GraphicsPipeline(*handle++, device, *layout++, *basePipeline++, allocator,
+            #ifdef VK_EXT_pipeline_creation_feedback
+                *creationFeedback,
+            #endif
+                *hash++));
+        }
     }
     layouts.clear();
     basePipelines.clear();
+#ifdef VK_EXT_pipeline_creation_feedback
+    creationFeedbacks.clear();
+#endif
     hashes.clear();
     MAGMA_THROW_FAILURE(result, "failed to create multiple graphics pipelines");
 }

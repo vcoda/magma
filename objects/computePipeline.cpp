@@ -46,6 +46,19 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device,
     pipelineInfo.layout = MAGMA_HANDLE(layout);
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
     pipelineInfo.basePipelineIndex = -1;
+#ifdef VK_EXT_pipeline_creation_feedback
+    VkPipelineCreationFeedbackCreateInfoEXT creationFeedbackInfo;
+    VkPipelineCreationFeedbackEXT stageCreationFeedback;
+    if (getDevice()->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
+    {
+        creationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
+        creationFeedbackInfo.pNext = nullptr;
+        creationFeedbackInfo.pPipelineCreationFeedback = &creationFeedback;
+        creationFeedbackInfo.pipelineStageCreationFeedbackCount = 1;
+        creationFeedbackInfo.pPipelineStageCreationFeedbacks = &stageCreationFeedback;
+        pipelineInfo.pNext = &creationFeedbackInfo;
+    }
+#endif // VK_EXT_pipeline_creation_feedback
     const VkResult result = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create compute pipeline");
     hash = core::hashArgs(
@@ -60,8 +73,15 @@ ComputePipeline::ComputePipeline(VkPipeline pipeline,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<Pipeline> basePipeline,
     std::shared_ptr<IAllocator> allocator,
+#ifdef VK_EXT_pipeline_creation_feedback
+    VkPipelineCreationFeedbackEXT creationFeedback,
+#endif
     hash_t hash):
-    Pipeline(VK_PIPELINE_BIND_POINT_COMPUTE, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator), hash)
+    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator),
+    #ifdef VK_EXT_pipeline_creation_feedback
+        creationFeedback,
+    #endif
+        hash)
 {
     handle = pipeline;
 }

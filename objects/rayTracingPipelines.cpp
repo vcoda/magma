@@ -57,6 +57,20 @@ uint32_t RayTracingPipelines::newPipeline(const std::vector<PipelineShaderStage>
     pipelineInfo.layout = MAGMA_HANDLE(layouts.back());
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipelines.back());
     pipelineInfo.basePipelineIndex = -1;
+#ifdef VK_EXT_pipeline_creation_feedback
+    if (layout->getDevice()->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
+    {
+        creationFeedbacks.push_back(VkPipelineCreationFeedbackEXT());
+        VkPipelineCreationFeedbackCreateInfoEXT creationFeedbackInfo;
+        creationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
+        creationFeedbackInfo.pNext = nullptr;
+        creationFeedbackInfo.pPipelineCreationFeedback = &creationFeedbacks.back();
+        creationFeedbackInfo.pipelineStageCreationFeedbackCount = 0;
+        creationFeedbackInfo.pPipelineStageCreationFeedbacks = nullptr;
+        creationFeedbackInfos.push_back(creationFeedbackInfo);
+        pipelineInfo.pNext = &creationFeedbackInfos.back();
+    }
+#endif // VK_EXT_pipeline_creation_feedback
     pipelineInfos.push_back(pipelineInfo);
     hash_t hash = core::hashArgs(
         pipelineInfo.sType,
@@ -85,23 +99,36 @@ void RayTracingPipelines::buildPipelines(std::shared_ptr<Device> device, std::sh
     // Free temporarily allocated storage that had to be preserved until API call
     stages.clear();
     groups.clear();
+#ifdef VK_EXT_pipeline_creation_feedback
+    creationFeedbackInfos.clear();
+#endif
     if (VK_SUCCESS == result)
     {
         auto handle = pipelines.cbegin();
         auto layout = layouts.cbegin();
         auto basePipeline = basePipelines.cbegin();
         auto hash = hashes.cbegin();
+    #ifdef VK_EXT_pipeline_creation_feedback
+        auto creationFeedback = creationFeedbacks.cbegin();
+    #endif
         auto info = pipelineInfos.cbegin();
         rayTracingPipelines.clear();
         while (handle != pipelines.cend())
         {
             rayTracingPipelines.emplace_back(new RayTracingPipeline(*handle++, this->device, *layout++, *basePipeline++, allocator,
-                info->groupCount, info->maxRecursionDepth, *hash++));
+                info->groupCount, info->maxRecursionDepth,
+            #ifdef VK_EXT_pipeline_creation_feedback
+                *creationFeedback,
+            #endif
+                *hash++));
             ++info;
         }
     }
     layouts.clear();
     basePipelines.clear();
+#ifdef VK_EXT_pipeline_creation_feedback
+    creationFeedbacks.clear();
+#endif
     hashes.clear();
     pipelineInfos.clear();
     MAGMA_THROW_FAILURE(result, "failed to create multiple ray tracing pipelines");

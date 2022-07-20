@@ -44,6 +44,11 @@ namespace magma
         std::vector<uint8_t> getShaderBinary(VkShaderStageFlagBits stage) const;
         std::string getShaderDisassembly(VkShaderStageFlagBits stage) const;
 #endif // VK_AMD_shader_info
+    #ifdef VK_EXT_pipeline_creation_feedback
+        bool hitPipelineCache() const noexcept;
+        bool usedBasePipeline() const noexcept;
+        uint64_t getCreationDuration() const noexcept;
+    #endif // VK_EXT_pipeline_creation_feedback
 
     protected:
         explicit Pipeline(VkPipelineBindPoint bindPoint,
@@ -56,6 +61,9 @@ namespace magma
         const VkPipelineBindPoint bindPoint;
         std::shared_ptr<PipelineLayout> layout;
         std::shared_ptr<Pipeline> basePipeline;
+    #ifdef VK_EXT_pipeline_creation_feedback
+        VkPipelineCreationFeedbackEXT creationFeedback = {0, 0ull};
+    #endif
         hash_t hash = 0;
     };
 

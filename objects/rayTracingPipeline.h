@@ -52,6 +52,9 @@ namespace magma
             std::shared_ptr<IAllocator> allocator,
             uint32_t shaderGroupCount,
             uint32_t maxRecursionDepth,
+        #ifdef VK_EXT_pipeline_creation_feedback
+            VkPipelineCreationFeedbackEXT creationFeedback,
+        #endif
             hash_t hash);
         friend class RayTracingPipelines;
 

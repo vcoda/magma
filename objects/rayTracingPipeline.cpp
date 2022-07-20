@@ -65,6 +65,19 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
     pipelineInfo.layout = MAGMA_HANDLE(layout);
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
     pipelineInfo.basePipelineIndex = -1;
+#ifdef VK_EXT_pipeline_creation_feedback
+    VkPipelineCreationFeedbackCreateInfoEXT creationFeedbackInfo;
+    MAGMA_STACK_ARRAY(VkPipelineCreationFeedbackEXT, stageCreationFeedbacks, shaderStages.size());
+    if (getDevice()->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
+    {
+        creationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
+        creationFeedbackInfo.pNext = nullptr;
+        creationFeedbackInfo.pPipelineCreationFeedback = &creationFeedback;
+        creationFeedbackInfo.pipelineStageCreationFeedbackCount = pipelineInfo.stageCount;
+        creationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks;
+        pipelineInfo.pNext = &creationFeedbackInfo;
+    }
+#endif // VK_EXT_pipeline_creation_feedback
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult result = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create ray tracing pipeline");
@@ -105,8 +118,15 @@ RayTracingPipeline::RayTracingPipeline(VkPipeline pipeline,
     std::shared_ptr<IAllocator> allocator,
     uint32_t shaderGroupCount,
     uint32_t maxRecursionDepth,
+#ifdef VK_EXT_pipeline_creation_feedback
+    VkPipelineCreationFeedbackEXT creationFeedback,
+#endif
     hash_t hash):
-    Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator), hash),
+    Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator),
+    #ifdef VK_EXT_pipeline_creation_feedback
+        creationFeedback,
+    #endif
+        hash),
     shaderGroupCount(shaderGroupCount),
     maxRecursionDepth(maxRecursionDepth)
 {

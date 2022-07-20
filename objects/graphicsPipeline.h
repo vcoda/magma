@@ -79,6 +79,9 @@ namespace magma
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator,
+        #ifdef VK_EXT_pipeline_creation_feedback
+            VkPipelineCreationFeedbackEXT creationFeedback,
+        #endif
             hash_t hash);
         friend class GraphicsPipelines;
     };
