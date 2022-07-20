@@ -149,7 +149,8 @@ void GraphicsPipelines::buildPipelines(std::shared_ptr<Device> device, std::shar
 {
     fixup(pipelineInfos);
     std::vector<VkPipeline> pipelines(pipelineInfos.size(), VK_NULL_HANDLE);
-    const VkResult result = vkCreateGraphicsPipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache), MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), pipelines.data());
+    const VkResult result = vkCreateGraphicsPipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache),
+        MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), pipelines.data());
     // Free temporarily allocated storage that had to be preserved until API call
     stages.clear();
     vertexInputStates.clear();
@@ -179,7 +180,12 @@ void GraphicsPipelines::buildPipelines(std::shared_ptr<Device> device, std::shar
         graphicsPipelines.clear();
         while (handle != pipelines.cend())
         {
-            graphicsPipelines.emplace_back(new GraphicsPipeline(*handle++, device, *layout++, *basePipeline++, allocator,
+            graphicsPipelines.emplace_back(new GraphicsPipeline(
+                *handle++,
+                device,
+                *layout++,
+                *basePipeline++,
+                allocator,
             #ifdef VK_EXT_pipeline_creation_feedback
                 *creationFeedback++,
             #endif

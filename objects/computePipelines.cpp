@@ -79,7 +79,8 @@ void ComputePipelines::buildPipelines(std::shared_ptr<Device> device, std::share
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
     std::vector<VkPipeline> pipelines(pipelineInfos.size(), VK_NULL_HANDLE);
-    const VkResult result = vkCreateComputePipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache), MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), pipelines.data());
+    const VkResult result = vkCreateComputePipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache),
+        MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), pipelines.data());
     // Free temporarily allocated storage that had to be preserved until API call
     stages.clear();
     pipelineInfos.clear();
@@ -98,7 +99,12 @@ void ComputePipelines::buildPipelines(std::shared_ptr<Device> device, std::share
         computePipelines.clear();
         while (handle != pipelines.cend())
         {
-            computePipelines.emplace_back(new ComputePipeline(*handle++, device, *layout++, *basePipeline++, allocator,
+            computePipelines.emplace_back(new ComputePipeline(
+                *handle++,
+                device,
+                *layout++,
+                *basePipeline++,
+                allocator,
         #ifdef VK_EXT_pipeline_creation_feedback
                 *creationFeedback++,
         #endif

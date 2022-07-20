@@ -115,7 +115,12 @@ void RayTracingPipelines::buildPipelines(std::shared_ptr<Device> device, std::sh
         rayTracingPipelines.clear();
         while (handle != pipelines.cend())
         {
-            rayTracingPipelines.emplace_back(new RayTracingPipeline(*handle++, this->device, *layout++, *basePipeline++, allocator,
+            rayTracingPipelines.emplace_back(new RayTracingPipeline(
+                *handle++,
+                this->device,
+                *layout++,
+                *basePipeline++,
+                allocator,
                 info->groupCount, info->maxRecursionDepth,
             #ifdef VK_EXT_pipeline_creation_feedback
                 *creationFeedback++,
