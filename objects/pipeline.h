@@ -39,11 +39,11 @@ namespace magma
         std::shared_ptr<Pipeline> getBasePipeline() noexcept { return basePipeline; }
         std::shared_ptr<const Pipeline> getBasePipeline() const noexcept { return basePipeline; }
         hash_t getHash() const noexcept { return hash; }
-#ifdef VK_AMD_shader_info
+    #ifdef VK_AMD_shader_info
         VkShaderStatisticsInfoAMD getShaderStatistics(VkShaderStageFlagBits stage) const;
         std::vector<uint8_t> getShaderBinary(VkShaderStageFlagBits stage) const;
         std::string getShaderDisassembly(VkShaderStageFlagBits stage) const;
-#endif // VK_AMD_shader_info
+    #endif // VK_AMD_shader_info
     #ifdef VK_EXT_pipeline_creation_feedback
         bool hitPipelineCache() const noexcept;
         bool usedBasePipeline() const noexcept;
@@ -56,15 +56,18 @@ namespace magma
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator,
-            hash_t hash = 0);
+        #ifdef VK_EXT_pipeline_creation_feedback
+            VkPipelineCreationFeedbackEXT creationFeedback = {0, 0ull},
+        #endif
+            hash_t hash = 0ull);
 
         const VkPipelineBindPoint bindPoint;
         std::shared_ptr<PipelineLayout> layout;
         std::shared_ptr<Pipeline> basePipeline;
     #ifdef VK_EXT_pipeline_creation_feedback
-        VkPipelineCreationFeedbackEXT creationFeedback = {0, 0ull};
+        VkPipelineCreationFeedbackEXT creationFeedback;
     #endif
-        hash_t hash = 0;
+        hash_t hash;
     };
 
     class PipelineShaderStage;
@@ -82,10 +85,15 @@ namespace magma
         std::list<std::vector<PipelineShaderStage>> stages;
         std::list<std::shared_ptr<PipelineLayout>> layouts;
         std::list<std::shared_ptr<Pipeline>> basePipelines;
+    #ifdef VK_EXT_pipeline_creation_feedback
+        std::list<VkPipelineCreationFeedbackEXT> creationFeedbacks;
+        std::list<VkPipelineCreationFeedbackCreateInfoEXT> creationFeedbackInfos;
+    #endif
         std::list<hash_t> hashes;
 
     private:
         void gatherShaderStageInfos() const;
+
         mutable std::vector<VkPipelineShaderStageCreateInfo> shaderStageInfos;
     };
 } // namespace magma

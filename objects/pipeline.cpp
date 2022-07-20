@@ -29,11 +29,17 @@ namespace magma
 {
 Pipeline::Pipeline(VkPipelineBindPoint bindPoint, std::shared_ptr<Device> device, std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<Pipeline> basePipeline, std::shared_ptr<IAllocator> allocator,
+#ifdef VK_EXT_pipeline_creation_feedback
+    VkPipelineCreationFeedbackEXT creationFeedback /* {0, 0ull} */,
+#endif
     hash_t hash /* 0 */):
     NonDispatchable<VkPipeline>(VK_OBJECT_TYPE_PIPELINE, std::move(device), std::move(allocator)),
     bindPoint(bindPoint),
     layout(std::move(layout)),
     basePipeline(std::move(basePipeline)),
+#ifdef VK_EXT_pipeline_creation_feedback
+    creationFeedback(creationFeedback),
+#endif
     hash(hash)
 {
     if (!this->layout)
