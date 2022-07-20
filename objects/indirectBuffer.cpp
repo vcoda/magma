@@ -26,10 +26,9 @@ IndirectBuffer::IndirectBuffer(std::shared_ptr<Device> device, VkBufferCreateFla
     uint32_t maxDrawCommands, std::size_t stride, bool persistentlyMapped, float memoryPriority,
     const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     Buffer(std::move(device),
-        flags, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT,
         static_cast<VkDeviceSize>(maxDrawCommands * stride),
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-        memoryPriority,
+        VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT, flags,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, memoryPriority,
         sharing, std::move(allocator)),
     maxDrawCommands(maxDrawCommands),
     stride(static_cast<uint32_t>(stride)),
