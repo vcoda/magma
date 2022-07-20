@@ -48,7 +48,7 @@ namespace magma
         std::shared_ptr<const Pipeline> pipeline;
         const VkPipelineExecutablePropertiesKHR properties;
         const uint32_t executableIndex;
-        mutable std::vector<std::unique_ptr<char>> data;
+        mutable std::vector<std::unique_ptr<char[]>> data;
         friend class Pipeline;
     };
 #endif // VK_KHR_pipeline_executable_properties
