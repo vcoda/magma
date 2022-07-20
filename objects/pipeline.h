@@ -81,6 +81,8 @@ namespace magma
     protected:
         template<typename Type>
         void fixup(std::vector<Type>& pipelineInfos) const;
+        void postCreateCleanup();
+        void postBuildCleanup();
 
         std::list<std::vector<PipelineShaderStage>> stages;
         std::list<std::shared_ptr<PipelineLayout>> layouts;

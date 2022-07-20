@@ -95,6 +95,24 @@ std::string Pipeline::getShaderDisassembly(VkShaderStageFlagBits stage) const
 }
 #endif // VK_AMD_shader_info
 
+void Pipelines::postCreateCleanup()
+{
+    stages.clear();
+#ifdef VK_EXT_pipeline_creation_feedback
+    creationFeedbackInfos.clear();
+#endif
+}
+
+void Pipelines::postBuildCleanup()
+{
+    layouts.clear();
+    basePipelines.clear();
+#ifdef VK_EXT_pipeline_creation_feedback
+    creationFeedbacks.clear();
+#endif
+    hashes.clear();
+}
+
 void Pipelines::gatherShaderStageInfos() const
 {
     std::size_t stageCount = 0;

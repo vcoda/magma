@@ -152,7 +152,7 @@ void GraphicsPipelines::buildPipelines(std::shared_ptr<Device> device, std::shar
     const VkResult result = vkCreateGraphicsPipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache),
         MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), pipelines.data());
     // Free temporarily allocated storage that had to be preserved until API call
-    stages.clear();
+    postCreateCleanup();
     vertexInputStates.clear();
     inputAssemblyStates.clear();
     tesselationStates.clear();
@@ -165,9 +165,6 @@ void GraphicsPipelines::buildPipelines(std::shared_ptr<Device> device, std::shar
     dynamicStateInfos.clear();
     renderPasses.clear();
     pipelineInfos.clear();
-#ifdef VK_EXT_pipeline_creation_feedback
-    creationFeedbackInfos.clear();
-#endif
     if (VK_SUCCESS == result)
     {
         auto handle = pipelines.cbegin();
@@ -192,12 +189,8 @@ void GraphicsPipelines::buildPipelines(std::shared_ptr<Device> device, std::shar
                 *hash++));
         }
     }
-    layouts.clear();
-    basePipelines.clear();
-#ifdef VK_EXT_pipeline_creation_feedback
-    creationFeedbacks.clear();
-#endif
-    hashes.clear();
+    // Free temporarily allocated storage that had to be preserved until ctor calls
+    postBuildCleanup();
     MAGMA_THROW_FAILURE(result, "failed to create multiple graphics pipelines");
 }
 } // namespace magma

@@ -82,11 +82,8 @@ void ComputePipelines::buildPipelines(std::shared_ptr<Device> device, std::share
     const VkResult result = vkCreateComputePipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache),
         MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), pipelines.data());
     // Free temporarily allocated storage that had to be preserved until API call
-    stages.clear();
+    postCreateCleanup();
     pipelineInfos.clear();
-#ifdef VK_EXT_pipeline_creation_feedback
-    creationFeedbackInfos.clear();
-#endif
     if (VK_SUCCESS == result)
     {
         auto handle = pipelines.cbegin();
@@ -105,18 +102,14 @@ void ComputePipelines::buildPipelines(std::shared_ptr<Device> device, std::share
                 *layout++,
                 *basePipeline++,
                 allocator,
-        #ifdef VK_EXT_pipeline_creation_feedback
+            #ifdef VK_EXT_pipeline_creation_feedback
                 *creationFeedback++,
-        #endif
+            #endif
                 *hash++));
         }
     }
-    layouts.clear();
-    basePipelines.clear();
-#ifdef VK_EXT_pipeline_creation_feedback
-    creationFeedbacks.clear();
-#endif
-    hashes.clear();
+    // Free temporarily allocated storage that had to be preserved until ctor calls
+    postBuildCleanup();
     MAGMA_THROW_FAILURE(result, "failed to create multiple compute pipelines");
 }
 } // namespace magma

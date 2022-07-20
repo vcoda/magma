@@ -97,11 +97,8 @@ void RayTracingPipelines::buildPipelines(std::shared_ptr<Device> device, std::sh
     const VkResult result = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),
         MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), pipelines.data());
     // Free temporarily allocated storage that had to be preserved until API call
-    stages.clear();
+    postCreateCleanup();
     groups.clear();
-#ifdef VK_EXT_pipeline_creation_feedback
-    creationFeedbackInfos.clear();
-#endif
     if (VK_SUCCESS == result)
     {
         auto handle = pipelines.cbegin();
@@ -129,13 +126,9 @@ void RayTracingPipelines::buildPipelines(std::shared_ptr<Device> device, std::sh
             ++info;
         }
     }
-    layouts.clear();
-    basePipelines.clear();
-#ifdef VK_EXT_pipeline_creation_feedback
-    creationFeedbacks.clear();
-#endif
-    hashes.clear();
-    pipelineInfos.clear();
+    // Free temporarily allocated storage that had to be preserved until ctor calls
+    postBuildCleanup();
+    pipelineInfos.clear(); // Free here because we need groupCount and maxRecursionDepth fields
     MAGMA_THROW_FAILURE(result, "failed to create multiple ray tracing pipelines");
 }
 #endif // VK_NV_ray_tracing
