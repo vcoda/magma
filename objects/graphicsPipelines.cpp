@@ -181,7 +181,7 @@ void GraphicsPipelines::buildPipelines(std::shared_ptr<Device> device, std::shar
         {
             graphicsPipelines.emplace_back(new GraphicsPipeline(*handle++, device, *layout++, *basePipeline++, allocator,
             #ifdef VK_EXT_pipeline_creation_feedback
-                *creationFeedback,
+                *creationFeedback++,
             #endif
                 *hash++));
         }

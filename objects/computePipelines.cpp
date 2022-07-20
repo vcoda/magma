@@ -100,7 +100,7 @@ void ComputePipelines::buildPipelines(std::shared_ptr<Device> device, std::share
         {
             computePipelines.emplace_back(new ComputePipeline(*handle++, device, *layout++, *basePipeline++, allocator,
         #ifdef VK_EXT_pipeline_creation_feedback
-                *creationFeedback,
+                *creationFeedback++,
         #endif
                 *hash++));
         }

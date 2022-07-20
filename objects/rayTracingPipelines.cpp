@@ -118,7 +118,7 @@ void RayTracingPipelines::buildPipelines(std::shared_ptr<Device> device, std::sh
             rayTracingPipelines.emplace_back(new RayTracingPipeline(*handle++, this->device, *layout++, *basePipeline++, allocator,
                 info->groupCount, info->maxRecursionDepth,
             #ifdef VK_EXT_pipeline_creation_feedback
-                *creationFeedback,
+                *creationFeedback++,
             #endif
                 *hash++));
             ++info;
