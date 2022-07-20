@@ -1,0 +1,55 @@
+/*
+Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
+Copyright (C) 2018-2022 Victor Coda.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+*/
+#pragma once
+#include "nondispatchable.h"
+
+namespace magma
+{
+    class Pipeline;
+
+    /* When a pipeline is created, its state and shaders are compiled into zero or more
+       device-specific executables, which are used when executing commands against that pipeline.
+       This extension adds a mechanism to query properties and statistics about the
+       different executables produced by the pipeline compilation process. This is intended
+       to be used by debugging and performance tools to allow them to provide more detailed
+       information to the user. Certain compile-time shader statistics provided through this extension
+       may be useful to developers for debugging or performance analysis. */
+
+#ifdef VK_KHR_pipeline_executable_properties
+    class PipelineExecutable final : public core::NonCopyable
+    {
+    public:
+        const VkPipelineExecutablePropertiesKHR& getProperties() const noexcept { return properties; }
+        uint32_t getIndex() const noexcept { return executableIndex; }
+        std::vector<VkPipelineExecutableStatisticKHR> getStatistics() const;
+        std::vector<VkPipelineExecutableInternalRepresentationKHR> getInternalRepresentations() const;
+
+    private:
+        explicit PipelineExecutable(std::shared_ptr<const Pipeline> pipeline,
+            const VkPipelineExecutablePropertiesKHR& properties,
+            uint32_t executableIndex) noexcept;
+
+        std::shared_ptr<Device> device;
+        std::shared_ptr<const Pipeline> pipeline;
+        const VkPipelineExecutablePropertiesKHR properties;
+        const uint32_t executableIndex;
+        mutable std::vector<std::unique_ptr<char>> data;
+        friend class Pipeline;
+    };
+#endif // VK_KHR_pipeline_executable_properties
+} // namespace magma

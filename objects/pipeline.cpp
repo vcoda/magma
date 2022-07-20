@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipeline.h"
 #include "device.h"
 #include "pipelineLayout.h"
+#include "pipelineExecutable.h"
 #include "../shaders/pipelineShaderStage.h"
 #include "../allocator/allocator.h"
 #include "../misc/extProcAddress.h"
@@ -52,6 +53,33 @@ Pipeline::~Pipeline()
 {
     vkDestroyPipeline(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
+
+#ifdef VK_KHR_pipeline_executable_properties
+std::vector<std::shared_ptr<PipelineExecutable>> Pipeline::getExecutables() const
+{
+    VkPipelineInfoKHR pipelineInfo;
+    pipelineInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INFO_KHR;
+    pipelineInfo.pNext = nullptr;
+    pipelineInfo.pipeline = handle;
+    uint32_t executableCount = 0;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetPipelineExecutablePropertiesKHR, VK_KHR_PIPELINE_EXECUTABLE_PROPERTIES_EXTENSION_NAME);
+    VkResult result = vkGetPipelineExecutablePropertiesKHR(MAGMA_HANDLE(device), &pipelineInfo, &executableCount, nullptr);
+    std::vector<VkPipelineExecutablePropertiesKHR> executableProperties;
+    if (executableCount > 0)
+    {
+        VkPipelineExecutablePropertiesKHR properties = {};
+        properties.sType = VK_STRUCTURE_TYPE_PIPELINE_EXECUTABLE_PROPERTIES_KHR;
+        executableProperties.resize(executableCount, properties);
+        result = vkGetPipelineExecutablePropertiesKHR(MAGMA_HANDLE(device), &pipelineInfo, &executableCount, executableProperties.data());
+    }
+    MAGMA_THROW_FAILURE(result, "failed to get properties of pipeline executables");
+    std::vector<std::shared_ptr<PipelineExecutable>> executables;
+    uint32_t index = 0;
+    for (const auto& properties : executableProperties)
+        executables.emplace_back(new PipelineExecutable(shared_from_this(), properties, index++));
+    return executables;
+}
+#endif // VK_KHR_pipeline_executable_properties
 
 #ifdef VK_AMD_shader_info
 VkShaderStatisticsInfoAMD Pipeline::getShaderStatistics(VkShaderStageFlagBits stage) const

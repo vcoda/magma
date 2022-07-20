@@ -693,6 +693,9 @@
     <ClInclude Include="..\..\states\samplerYcbcrConversionState.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\pipelineExecutable.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1069,6 +1072,9 @@
     </ClCompile>
     <ClCompile Include="..\..\helpers\executeDeferredOperation.cpp">
       <Filter>Source Files\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\pipelineExecutable.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -22,6 +22,7 @@ namespace magma
 {
     class Device;
     class PipelineLayout;
+    class PipelineExecutable;
     class IAllocator;
 
     /* Some Vulkan commands specify geometric objects to be drawn or computational work to be performed,
@@ -29,7 +30,8 @@ namespace magma
        or control data transfer between memory organized as images and buffers. Commands are effectively sent
        through a processing pipeline, either a graphics pipeline or a compute pipeline. */
 
-    class Pipeline : public NonDispatchable<VkPipeline>
+    class Pipeline : public NonDispatchable<VkPipeline>,
+        public std::enable_shared_from_this<Pipeline>
     {
     public:
         ~Pipeline();
@@ -39,6 +41,9 @@ namespace magma
         std::shared_ptr<Pipeline> getBasePipeline() noexcept { return basePipeline; }
         std::shared_ptr<const Pipeline> getBasePipeline() const noexcept { return basePipeline; }
         hash_t getHash() const noexcept { return hash; }
+    #ifdef VK_KHR_pipeline_executable_properties
+        std::vector<std::shared_ptr<PipelineExecutable>> getExecutables() const;
+    #endif // VK_KHR_pipeline_executable_properties
     #ifdef VK_AMD_shader_info
         VkShaderStatisticsInfoAMD getShaderStatistics(VkShaderStageFlagBits stage) const;
         std::vector<uint8_t> getShaderBinary(VkShaderStageFlagBits stage) const;

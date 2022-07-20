@@ -109,6 +109,7 @@ MAGMA_OBJS= \
 	objects/physicalDeviceGroup.o \
 	objects/pipeline.o \
 	objects/pipelineCache.o \
+	objects/pipelineExecutable.o \
 	objects/pipelineLayout.o \
 	objects/primaryCommandBuffer.o \
 	objects/queryPool.o \

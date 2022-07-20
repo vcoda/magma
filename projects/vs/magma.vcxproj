@@ -284,6 +284,7 @@
     <ClInclude Include="..\..\objects\physicalDeviceGroup.h" />
     <ClInclude Include="..\..\objects\pipeline.h" />
     <ClInclude Include="..\..\objects\pipelineCache.h" />
+    <ClInclude Include="..\..\objects\pipelineExecutable.h" />
     <ClInclude Include="..\..\objects\pipelineLayout.h" />
     <ClInclude Include="..\..\objects\primaryCommandBuffer.h" />
     <ClInclude Include="..\..\objects\queryPool.h" />
@@ -438,6 +439,7 @@
     <ClCompile Include="..\..\objects\physicalDeviceGroup.cpp" />
     <ClCompile Include="..\..\objects\pipeline.cpp" />
     <ClCompile Include="..\..\objects\pipelineCache.cpp" />
+    <ClCompile Include="..\..\objects\pipelineExecutable.cpp" />
     <ClCompile Include="..\..\objects\pipelineLayout.cpp" />
     <ClCompile Include="..\..\objects\primaryCommandBuffer.cpp" />
     <ClCompile Include="..\..\objects\queryPool.cpp" />
