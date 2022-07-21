@@ -140,7 +140,9 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
         else
             allocInfo.priority = 0.f;
         allocInfos.push_back(allocInfo);
-        ++flags; ++priority;
+        ++flags;
+        if (priority != priorities.cend())
+            ++priority;
     }
     std::vector<VmaAllocation> allocations(MAGMA_COUNT(allocInfos));
     const VkResult result = vmaAllocateMemoryPages(allocator, memoryRequirements.data(), allocInfos.data(),
