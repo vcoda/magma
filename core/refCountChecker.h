@@ -26,7 +26,7 @@ namespace magma
         /* Reference counter to check that there are no circular references
            that prevents destruction of Vulkan objects. */
 
-        class RefCountChecker
+        class RefCountChecker final
         {
         public:
             RefCountChecker():
