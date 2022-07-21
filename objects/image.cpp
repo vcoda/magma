@@ -319,6 +319,7 @@ std::vector<VkBufferImageCopy> Image::setupCopyRegions(const MipmapLayout& mipOf
     MAGMA_ASSERT(mipCount > 0);
     MAGMA_ASSERT(mipCount <= mipLevels * arrayLayers);
     std::vector<VkBufferImageCopy> copyRegions;
+    copyRegions.reserve(mipCount);
     VkDeviceSize bufferOffset = bufferLayout.offset;
     for (uint32_t i = 0; i < mipCount; ++i)
     {
