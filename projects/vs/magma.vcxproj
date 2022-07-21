@@ -175,6 +175,7 @@
     <ClInclude Include="..\..\barriers\imageMemoryBarrier.h" />
     <ClInclude Include="..\..\core\compare.h" />
     <ClInclude Include="..\..\core\enumClassArray.h" />
+    <ClInclude Include="..\..\core\forEach.h" />
     <ClInclude Include="..\..\core\hashing\combine.h" />
     <ClInclude Include="..\..\core\hashing\fnv1.h" />
     <ClInclude Include="..\..\core\hashing\fnv1string.h" />
