@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "pipelineExecutable.h"
 #include "pipeline.h"
+#include "../core/forEach.h"
 #include "../misc/extProcAddress.h"
 #include "../exceptions/errorResult.h"
 
@@ -75,14 +76,16 @@ std::vector<VkPipelineExecutableInternalRepresentationKHR> PipelineExecutable::g
         result = vkGetPipelineExecutableInternalRepresentationsKHR(MAGMA_HANDLE(device), &pipelineExecutableInfo,
             &internalRepresentationCount, internalRepresentations.data());
         MAGMA_ASSERT(SUCCEEDED(result));
-        for (auto& ir : internalRepresentations)
-        {
-            if (ir.dataSize > 0)
-            {   // Allocate memory for internal representation data to be written by Vulkan
-                data.emplace_back(new char[ir.dataSize]);
-                ir.pData = data.back().get();
-            }
+        if (data.empty())
+        {   // Allocate memory for internal representation data to be written by Vulkan
+            for (const auto& ir : internalRepresentations)
+                data.emplace_back(ir.dataSize ? new char[ir.dataSize] : nullptr);
         }
+        core::forEach(internalRepresentations, data,
+            [](auto& ir, auto& data)
+            {   // Assign cached pointer
+                ir->pData = data->get();
+            });
         result = vkGetPipelineExecutableInternalRepresentationsKHR(MAGMA_HANDLE(device), &pipelineExecutableInfo,
             &internalRepresentationCount, internalRepresentations.data());
     }
