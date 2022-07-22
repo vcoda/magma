@@ -23,9 +23,10 @@ namespace magma
     /* A list of suported physical device features that is obtained through
        VK_KHR_get_physical_device_properties2 extension. */
 
-    struct PhysicalDeviceExtensionFeatures
+    struct PhysicalDeviceExtendedFeatures
     {   // Advanced Micro Devices, Inc.
         VkBool32 deviceCoherentMemory : 1;
+        VkBool32 shaderEarlyAndLateFragmentTests : 1;
 
         // Multivendor
         VkBool32 advancedBlendCoherentOperations : 1;

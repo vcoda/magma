@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "dispatchable.h"
-#include "../extensions/physicalDeviceExtensionFeatures.h"
+#include "../extensions/physicalDeviceExtendedFeatures.h"
 #include "../misc/createInfo.h"
 #include "../misc/deviceQueueDescriptor.h"
 
@@ -179,11 +179,10 @@ namespace magma
 #ifdef VK_NV_shader_sm_builtins
         VkPhysicalDeviceShaderSMBuiltinsPropertiesNV getShaderSMBuiltinsProperties() const;
 #endif
-        // Non-API
+        PhysicalDeviceExtendedFeatures getExtendedFeatures() const;
         std::shared_ptr<Instance> getInstance() const noexcept { return instance; }
         std::shared_ptr<Device> createDefaultDevice() const;
         bool checkExtensionSupport(const char *extensionName) const;
-        PhysicalDeviceExtensionFeatures checkExtensionFeaturesSupport() const;
         bool checkPinnedMemorySupport() const noexcept;
         bool checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept;
 

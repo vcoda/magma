@@ -629,13 +629,16 @@ bool PhysicalDevice::checkExtensionSupport(const char *extensionName) const
     return extensions.find(extensionName) != extensions.end();
 }
 
-PhysicalDeviceExtensionFeatures PhysicalDevice::checkExtensionFeaturesSupport() const
+PhysicalDeviceExtendedFeatures PhysicalDevice::getExtendedFeatures() const
 {
-    PhysicalDeviceExtensionFeatures features = {};
+    PhysicalDeviceExtendedFeatures features = {};
 #ifdef VK_KHR_get_physical_device_properties2
     if (instance->checkExtensionSupport(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME)) {
 #ifdef VK_AMD_device_coherent_memory
     PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(CoherentMemoryFeaturesAMD, COHERENT_MEMORY_FEATURES_AMD, deviceCoherentMemory);
+#endif
+#ifdef VK_AMD_shader_early_and_late_fragment_tests
+    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(ShaderEarlyAndLateFragmentTestsFeaturesAMD, SHADER_EARLY_AND_LATE_FRAGMENT_TESTS_FEATURES_AMD, shaderEarlyAndLateFragmentTests);
 #endif
 #ifdef VK_EXT_blend_operation_advanced
     PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(BlendOperationAdvancedFeaturesEXT, BLEND_OPERATION_ADVANCED_FEATURES_EXT, advancedBlendCoherentOperations);

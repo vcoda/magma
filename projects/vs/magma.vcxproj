@@ -209,7 +209,7 @@
     <ClInclude Include="..\..\exceptions\unsupportedExtension.h" />
     <ClInclude Include="..\..\extensions\instanceLayers.h" />
     <ClInclude Include="..\..\extensions\layers.h" />
-    <ClInclude Include="..\..\extensions\physicalDeviceExtensionFeatures.h" />
+    <ClInclude Include="..\..\extensions\physicalDeviceExtendedFeatures.h" />
     <ClInclude Include="..\..\extensions\physicalDeviceExtensions.h" />
     <ClInclude Include="..\..\extensions\extensions.h" />
     <ClInclude Include="..\..\extensions\instanceExtensions.h" />

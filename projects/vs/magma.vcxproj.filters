@@ -552,9 +552,6 @@
     <ClInclude Include="..\..\objects\physicalDeviceGroup.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\extensions\physicalDeviceExtensionFeatures.h">
-      <Filter>Header Files\extensions</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\auxiliary\accumulationBuffer.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
@@ -698,6 +695,9 @@
     </ClInclude>
     <ClInclude Include="..\..\misc\pipelineExecutable.h">
       <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\extensions\physicalDeviceExtendedFeatures.h">
+      <Filter>Header Files\extensions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
