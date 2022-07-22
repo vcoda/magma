@@ -107,6 +107,10 @@ namespace magma
 #ifdef VK_EXT_validation_cache
     MAGMA_TYPEDEF_SHARED_PTR(ValidationCache)
 #endif
+
+#ifdef VK_KHR_deferred_host_operations
+    MAGMA_TYPEDEF_SHARED_PTR(DeferredOperation)
+#endif
 #ifdef VK_KHR_device_group
     MAGMA_TYPEDEF_SHARED_PTR(PhysicalDeviceGroup)
 #endif
@@ -119,6 +123,9 @@ namespace magma
 #endif
 #ifdef VK_KHR_multiview
     MAGMA_TYPEDEF_SHARED_PTR(MultiviewRenderPass)
+#endif
+#ifdef VK_KHR_pipeline_executable_properties
+    MAGMA_TYPEDEF_SHARED_PTR(PipelineExecutable)
 #endif
 #ifdef VK_KHR_sampler_ycbcr_conversion
     MAGMA_TYPEDEF_SHARED_PTR(SamplerYcbcrConversion)
