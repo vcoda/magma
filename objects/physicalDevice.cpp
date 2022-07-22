@@ -336,267 +336,267 @@ std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint3
 #endif // VK_KHR_display
 
 // Macro to shorten query expressions
-#define PHYSICAL_DEVICE_GET_FEATURES(StructureType, EnumField) getFeatures<VkPhysicalDevice##StructureType>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_##EnumField)
-#define PHYSICAL_DEVICE_GET_PROPERTIES(StructureType, EnumField) getProperties<VkPhysicalDevice##StructureType>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_##EnumField)
-#define PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(StructureType, EnumField, member) features.member = getFeatures<VkPhysicalDevice##StructureType>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_##EnumField).member
+#define MAGMA_PHYSICAL_DEVICE_GET_FEATURES(FeaturesType, StructureType) getFeatures<VkPhysicalDevice##FeaturesType>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_##StructureType)
+#define MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(PropertiesType, StructureType) getProperties<VkPhysicalDevice##PropertiesType>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_##StructureType)
+#define MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(FeaturesType, StructureType, member) features.member = getFeatures<VkPhysicalDevice##FeaturesType>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_##StructureType).member
 
 #ifdef VK_AMD_shader_core_properties
 VkPhysicalDeviceShaderCorePropertiesAMD PhysicalDevice::getShaderCoreProperties() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(ShaderCorePropertiesAMD, SHADER_CORE_PROPERTIES_AMD);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(ShaderCorePropertiesAMD, SHADER_CORE_PROPERTIES_AMD);
 }
 #endif // VK_AMD_shader_core_properties
 
 #ifdef VK_AMD_shader_core_properties2
 VkPhysicalDeviceShaderCoreProperties2AMD PhysicalDevice::getShaderCoreProperties2() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(ShaderCoreProperties2AMD, SHADER_CORE_PROPERTIES_2_AMD);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(ShaderCoreProperties2AMD, SHADER_CORE_PROPERTIES_2_AMD);
 }
 #endif // VK_AMD_shader_core_properties2
 
 #ifdef VK_EXT_blend_operation_advanced
 VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT PhysicalDevice::getBlendOperationAdvancedProperties() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(BlendOperationAdvancedPropertiesEXT, BLEND_OPERATION_ADVANCED_PROPERTIES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(BlendOperationAdvancedPropertiesEXT, BLEND_OPERATION_ADVANCED_PROPERTIES_EXT);
 }
 #endif // VK_EXT_blend_operation_advanced
 
 #ifdef VK_EXT_conditional_rendering
 VkPhysicalDeviceConditionalRenderingFeaturesEXT PhysicalDevice::getConditionalRenderingFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(ConditionalRenderingFeaturesEXT, CONDITIONAL_RENDERING_FEATURES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(ConditionalRenderingFeaturesEXT, CONDITIONAL_RENDERING_FEATURES_EXT);
 }
 #endif // VK_EXT_conditional_rendering
 
 #ifdef VK_EXT_conservative_rasterization
 VkPhysicalDeviceConservativeRasterizationPropertiesEXT PhysicalDevice::getConservativeRasterizationProperties() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(ConservativeRasterizationPropertiesEXT, CONSERVATIVE_RASTERIZATION_PROPERTIES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(ConservativeRasterizationPropertiesEXT, CONSERVATIVE_RASTERIZATION_PROPERTIES_EXT);
 }
 #endif // VK_EXT_conservative_rasterization
 
 #ifdef VK_EXT_custom_border_color
 VkPhysicalDeviceCustomBorderColorFeaturesEXT PhysicalDevice::getCustomBorderColorFeatures() const
 {
-   return PHYSICAL_DEVICE_GET_FEATURES(CustomBorderColorFeaturesEXT, CUSTOM_BORDER_COLOR_FEATURES_EXT);
+   return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(CustomBorderColorFeaturesEXT, CUSTOM_BORDER_COLOR_FEATURES_EXT);
 }
 
 VkPhysicalDeviceCustomBorderColorPropertiesEXT PhysicalDevice::getCustomBorderColorProperties() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(CustomBorderColorPropertiesEXT, CUSTOM_BORDER_COLOR_PROPERTIES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(CustomBorderColorPropertiesEXT, CUSTOM_BORDER_COLOR_PROPERTIES_EXT);
 }
 #endif // VK_EXT_custom_border_color
 
 #ifdef VK_EXT_descriptor_indexing
 VkPhysicalDeviceDescriptorIndexingFeaturesEXT PhysicalDevice::getDescriptorIndexingFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(DescriptorIndexingFeaturesEXT, DESCRIPTOR_INDEXING_FEATURES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(DescriptorIndexingFeaturesEXT, DESCRIPTOR_INDEXING_FEATURES_EXT);
 }
 
 VkPhysicalDeviceDescriptorIndexingPropertiesEXT PhysicalDevice::getDescriptorIndexingProperties() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(DescriptorIndexingPropertiesEXT, DESCRIPTOR_INDEXING_PROPERTIES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(DescriptorIndexingPropertiesEXT, DESCRIPTOR_INDEXING_PROPERTIES_EXT);
 }
 #endif // VK_EXT_descriptor_indexing
 
 #ifdef VK_EXT_fragment_shader_interlock
 VkPhysicalDeviceFragmentShaderInterlockFeaturesEXT PhysicalDevice::getFragmentShaderInterlockFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(FragmentShaderInterlockFeaturesEXT, FRAGMENT_SHADER_INTERLOCK_FEATURES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(FragmentShaderInterlockFeaturesEXT, FRAGMENT_SHADER_INTERLOCK_FEATURES_EXT);
 }
 #endif // VK_EXT_fragment_shader_interlock
 
 #ifdef VK_EXT_inline_uniform_block
 VkPhysicalDeviceInlineUniformBlockFeaturesEXT PhysicalDevice::getInlineUniformBlockFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(InlineUniformBlockFeaturesEXT, INLINE_UNIFORM_BLOCK_FEATURES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(InlineUniformBlockFeaturesEXT, INLINE_UNIFORM_BLOCK_FEATURES_EXT);
 }
 
 VkPhysicalDeviceInlineUniformBlockPropertiesEXT PhysicalDevice::getInlineUniformBlockProperties() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(InlineUniformBlockPropertiesEXT, INLINE_UNIFORM_BLOCK_PROPERTIES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(InlineUniformBlockPropertiesEXT, INLINE_UNIFORM_BLOCK_PROPERTIES_EXT);
 }
 #endif // VK_EXT_inline_uniform_block
 
 #ifdef VK_EXT_line_rasterization
 VkPhysicalDeviceLineRasterizationFeaturesEXT PhysicalDevice::getLineRasterizationFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(LineRasterizationFeaturesEXT, LINE_RASTERIZATION_FEATURES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(LineRasterizationFeaturesEXT, LINE_RASTERIZATION_FEATURES_EXT);
 }
 
 VkPhysicalDeviceLineRasterizationPropertiesEXT PhysicalDevice::getLineRasterizationProperties() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(LineRasterizationPropertiesEXT, LINE_RASTERIZATION_PROPERTIES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(LineRasterizationPropertiesEXT, LINE_RASTERIZATION_PROPERTIES_EXT);
 }
 #endif // VK_EXT_line_rasterization
 
 #ifdef VK_EXT_sampler_filter_minmax
 VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT PhysicalDevice::getSamplerFilterMinmaxProperties() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(SamplerFilterMinmaxPropertiesEXT, SAMPLER_FILTER_MINMAX_PROPERTIES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(SamplerFilterMinmaxPropertiesEXT, SAMPLER_FILTER_MINMAX_PROPERTIES_EXT);
 }
 #endif // VK_EXT_sampler_filter_minmax
 
 #ifdef VK_EXT_subgroup_size_control
 VkPhysicalDeviceSubgroupSizeControlFeaturesEXT PhysicalDevice::getSubgroupSizeControlFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(SubgroupSizeControlFeaturesEXT, SUBGROUP_SIZE_CONTROL_FEATURES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(SubgroupSizeControlFeaturesEXT, SUBGROUP_SIZE_CONTROL_FEATURES_EXT);
 }
 
 VkPhysicalDeviceSubgroupSizeControlPropertiesEXT PhysicalDevice::getSubgroupSizeControlProperties() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(SubgroupSizeControlPropertiesEXT, SUBGROUP_SIZE_CONTROL_PROPERTIES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(SubgroupSizeControlPropertiesEXT, SUBGROUP_SIZE_CONTROL_PROPERTIES_EXT);
 }
 #endif // VK_EXT_subgroup_size_control
 
 #ifdef VK_EXT_transform_feedback
 VkPhysicalDeviceTransformFeedbackFeaturesEXT PhysicalDevice::getTransformFeedbackFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(TransformFeedbackFeaturesEXT, TRANSFORM_FEEDBACK_FEATURES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(TransformFeedbackFeaturesEXT, TRANSFORM_FEEDBACK_FEATURES_EXT);
 }
 
 VkPhysicalDeviceTransformFeedbackPropertiesEXT PhysicalDevice::getTransformFeedbackProperties() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(TransformFeedbackPropertiesEXT, TRANSFORM_FEEDBACK_PROPERTIES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(TransformFeedbackPropertiesEXT, TRANSFORM_FEEDBACK_PROPERTIES_EXT);
 }
 #endif // VK_EXT_transform_feedback
 
 #ifdef VK_EXT_vertex_attribute_divisor
 VkPhysicalDeviceVertexAttributeDivisorPropertiesEXT PhysicalDevice::getVertexAttributeDivisorProperties() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(VertexAttributeDivisorPropertiesEXT, VERTEX_ATTRIBUTE_DIVISOR_PROPERTIES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(VertexAttributeDivisorPropertiesEXT, VERTEX_ATTRIBUTE_DIVISOR_PROPERTIES_EXT);
 }
 
 VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT PhysicalDevice::getVertexAttributeDivisorFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(VertexAttributeDivisorFeaturesEXT, VERTEX_ATTRIBUTE_DIVISOR_FEATURES_EXT);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(VertexAttributeDivisorFeaturesEXT, VERTEX_ATTRIBUTE_DIVISOR_FEATURES_EXT);
 }
 #endif // VK_EXT_vertex_attribute_divisor
 
 #ifdef VK_KHR_8bit_storage
 VkPhysicalDevice8BitStorageFeaturesKHR PhysicalDevice::get8BitStorageFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(8BitStorageFeaturesKHR, 8BIT_STORAGE_FEATURES_KHR);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(8BitStorageFeaturesKHR, 8BIT_STORAGE_FEATURES_KHR);
 }
 #endif // VK_KHR_8bit_storage
 
 #ifdef VK_KHR_16bit_storage
 VkPhysicalDevice16BitStorageFeaturesKHR PhysicalDevice::get16BitStorageFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(16BitStorageFeaturesKHR, 16BIT_STORAGE_FEATURES_KHR);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(16BitStorageFeaturesKHR, 16BIT_STORAGE_FEATURES_KHR);
 }
 #endif // VK_KHR_16bit_storage
 
 #ifdef VK_KHR_buffer_device_address
 VkPhysicalDeviceBufferDeviceAddressFeaturesKHR PhysicalDevice::getBufferDeviceAddressFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(BufferDeviceAddressFeaturesKHR, BUFFER_DEVICE_ADDRESS_FEATURES_KHR);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(BufferDeviceAddressFeaturesKHR, BUFFER_DEVICE_ADDRESS_FEATURES_KHR);
 }
 #endif // VK_KHR_buffer_device_address
 
 #ifdef VK_KHR_driver_properties
 VkPhysicalDeviceDriverPropertiesKHR PhysicalDevice::getDriverProperties() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(DriverPropertiesKHR, DRIVER_PROPERTIES_KHR);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(DriverPropertiesKHR, DRIVER_PROPERTIES_KHR);
 }
 #endif // VK_KHR_driver_properties
 
 #ifdef VK_KHR_multiview
 VkPhysicalDeviceMultiviewFeaturesKHR PhysicalDevice::getMultiviewFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(MultiviewFeaturesKHR, MULTIVIEW_FEATURES_KHR);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(MultiviewFeaturesKHR, MULTIVIEW_FEATURES_KHR);
 }
 
 VkPhysicalDeviceMultiviewPropertiesKHR PhysicalDevice::getMultiviewProperties() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(MultiviewPropertiesKHR, MULTIVIEW_PROPERTIES_KHR);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(MultiviewPropertiesKHR, MULTIVIEW_PROPERTIES_KHR);
 }
 #endif // VK_KHR_multiview
 
 #ifdef VK_KHR_shader_atomic_int64
 VkPhysicalDeviceShaderAtomicInt64FeaturesKHR PhysicalDevice::getShaderAtomicInt64Features() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(ShaderAtomicInt64FeaturesKHR, SHADER_ATOMIC_INT64_FEATURES_KHR);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(ShaderAtomicInt64FeaturesKHR, SHADER_ATOMIC_INT64_FEATURES_KHR);
 }
 #endif // VK_KHR_shader_atomic_int64
 
 #ifdef VK_KHR_shader_clock
 VkPhysicalDeviceShaderClockFeaturesKHR PhysicalDevice::getShaderClockFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(ShaderClockFeaturesKHR, SHADER_CLOCK_FEATURES_KHR);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(ShaderClockFeaturesKHR, SHADER_CLOCK_FEATURES_KHR);
 }
 #endif // VK_KHR_shader_clock
 
 #ifdef VK_KHR_shader_float16_int8
 VkPhysicalDeviceFloat16Int8FeaturesKHR PhysicalDevice::getShaderFloat16Int8Features() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(Float16Int8FeaturesKHR, FLOAT16_INT8_FEATURES_KHR);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(Float16Int8FeaturesKHR, FLOAT16_INT8_FEATURES_KHR);
 }
 #endif // VK_KHR_shader_float16_int8
 
 #ifdef VK_KHR_variable_pointers
 VkPhysicalDeviceVariablePointerFeaturesKHR PhysicalDevice::getVariablePointersFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(VariablePointerFeaturesKHR, VARIABLE_POINTER_FEATURES_KHR);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(VariablePointerFeaturesKHR, VARIABLE_POINTER_FEATURES_KHR);
 }
 #endif // VK_KHR_variable_pointers
 
 #ifdef VK_KHR_vulkan_memory_model
 VkPhysicalDeviceVulkanMemoryModelFeaturesKHR PhysicalDevice::getVulkanMemoryModelFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(VulkanMemoryModelFeaturesKHR, VULKAN_MEMORY_MODEL_FEATURES_KHR);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(VulkanMemoryModelFeaturesKHR, VULKAN_MEMORY_MODEL_FEATURES_KHR);
 }
 #endif // VK_KHR_vulkan_memory_model
 
 #ifdef VK_NV_compute_shader_derivatives
 VkPhysicalDeviceComputeShaderDerivativesFeaturesNV PhysicalDevice::getComputeShaderDerivativesFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(ComputeShaderDerivativesFeaturesNV, COMPUTE_SHADER_DERIVATIVES_FEATURES_NV);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(ComputeShaderDerivativesFeaturesNV, COMPUTE_SHADER_DERIVATIVES_FEATURES_NV);
 }
 #endif // VK_NV_compute_shader_derivatives
 
 #ifdef VK_NV_cooperative_matrix
 VkPhysicalDeviceCooperativeMatrixFeaturesNV PhysicalDevice::getCooperativeMatrixFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(CooperativeMatrixFeaturesNV, COOPERATIVE_MATRIX_FEATURES_NV);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(CooperativeMatrixFeaturesNV, COOPERATIVE_MATRIX_FEATURES_NV);
 }
 
 VkPhysicalDeviceCooperativeMatrixPropertiesNV PhysicalDevice::getCooperativeMatrixProperties() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(CooperativeMatrixPropertiesNV, COOPERATIVE_MATRIX_PROPERTIES_NV);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(CooperativeMatrixPropertiesNV, COOPERATIVE_MATRIX_PROPERTIES_NV);
 }
 #endif // VK_NV_cooperative_matrix
 
 #ifdef VK_NV_mesh_shader
 VkPhysicalDeviceMeshShaderFeaturesNV PhysicalDevice::getMeshShaderFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(MeshShaderFeaturesNV, MESH_SHADER_FEATURES_NV);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(MeshShaderFeaturesNV, MESH_SHADER_FEATURES_NV);
 }
 
 VkPhysicalDeviceMeshShaderPropertiesNV PhysicalDevice::getMeshShaderProperties() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(MeshShaderPropertiesNV, MESH_SHADER_PROPERTIES_NV);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(MeshShaderPropertiesNV, MESH_SHADER_PROPERTIES_NV);
 }
 #endif // VK_NV_mesh_shader
 
 #ifdef VK_NV_ray_tracing
 VkPhysicalDeviceRayTracingPropertiesNV PhysicalDevice::getRayTracingProperties() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(RayTracingPropertiesNV, RAY_TRACING_PROPERTIES_NV);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(RayTracingPropertiesNV, RAY_TRACING_PROPERTIES_NV);
 }
 #endif // VK_NV_ray_tracing
 
 #ifdef VK_NV_shading_rate_image
 VkPhysicalDeviceShadingRateImageFeaturesNV PhysicalDevice::getShadingRateImageFeatures() const
 {
-    return PHYSICAL_DEVICE_GET_FEATURES(ShadingRateImageFeaturesNV, SHADING_RATE_IMAGE_FEATURES_NV);
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(ShadingRateImageFeaturesNV, SHADING_RATE_IMAGE_FEATURES_NV);
 }
 #endif // VK_NV_shading_rate_image
 
 #ifdef VK_NV_shader_sm_builtins
 VkPhysicalDeviceShaderSMBuiltinsPropertiesNV PhysicalDevice::getShaderSMBuiltinsProperties() const
 {
-    return PHYSICAL_DEVICE_GET_PROPERTIES(ShaderSMBuiltinsPropertiesNV, SHADER_SM_BUILTINS_PROPERTIES_NV);
+    return MAGMA_PHYSICAL_DEVICE_GET_PROPERTIES(ShaderSMBuiltinsPropertiesNV, SHADER_SM_BUILTINS_PROPERTIES_NV);
 }
 #endif // VK_NV_shader_sm_builtins
 
@@ -635,106 +635,106 @@ PhysicalDeviceExtendedFeatures PhysicalDevice::getExtendedFeatures() const
 #ifdef VK_KHR_get_physical_device_properties2
     if (instance->checkExtensionSupport(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME)) {
 #ifdef VK_AMD_device_coherent_memory
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(CoherentMemoryFeaturesAMD, COHERENT_MEMORY_FEATURES_AMD, deviceCoherentMemory);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(CoherentMemoryFeaturesAMD, COHERENT_MEMORY_FEATURES_AMD, deviceCoherentMemory);
 #endif
 #ifdef VK_AMD_shader_early_and_late_fragment_tests
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(ShaderEarlyAndLateFragmentTestsFeaturesAMD, SHADER_EARLY_AND_LATE_FRAGMENT_TESTS_FEATURES_AMD, shaderEarlyAndLateFragmentTests);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(ShaderEarlyAndLateFragmentTestsFeaturesAMD, SHADER_EARLY_AND_LATE_FRAGMENT_TESTS_FEATURES_AMD, shaderEarlyAndLateFragmentTests);
 #endif
 #ifdef VK_EXT_blend_operation_advanced
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(BlendOperationAdvancedFeaturesEXT, BLEND_OPERATION_ADVANCED_FEATURES_EXT, advancedBlendCoherentOperations);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(BlendOperationAdvancedFeaturesEXT, BLEND_OPERATION_ADVANCED_FEATURES_EXT, advancedBlendCoherentOperations);
 #endif
 #ifdef VK_EXT_depth_clip_control
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(DepthClipControlFeaturesEXT, DEPTH_CLIP_CONTROL_FEATURES_EXT, depthClipControl);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(DepthClipControlFeaturesEXT, DEPTH_CLIP_CONTROL_FEATURES_EXT, depthClipControl);
 #endif
 #ifdef VK_EXT_depth_clip_enable
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(DepthClipEnableFeaturesEXT, DEPTH_CLIP_ENABLE_FEATURES_EXT, depthClipEnable);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(DepthClipEnableFeaturesEXT, DEPTH_CLIP_ENABLE_FEATURES_EXT, depthClipEnable);
 #endif
 #ifdef VK_EXT_extended_dynamic_state
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(ExtendedDynamicStateFeaturesEXT, EXTENDED_DYNAMIC_STATE_FEATURES_EXT, extendedDynamicState);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(ExtendedDynamicStateFeaturesEXT, EXTENDED_DYNAMIC_STATE_FEATURES_EXT, extendedDynamicState);
 #endif
 #ifdef VK_EXT_host_query_reset
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(HostQueryResetFeaturesEXT, HOST_QUERY_RESET_FEATURES_EXT, hostQueryReset);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(HostQueryResetFeaturesEXT, HOST_QUERY_RESET_FEATURES_EXT, hostQueryReset);
 #endif
 #ifdef VK_EXT_image_robustness
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(ImageRobustnessFeaturesEXT, IMAGE_ROBUSTNESS_FEATURES_EXT, robustImageAccess);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(ImageRobustnessFeaturesEXT, IMAGE_ROBUSTNESS_FEATURES_EXT, robustImageAccess);
 #endif
 #ifdef VK_EXT_index_type_uint8
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(IndexTypeUint8FeaturesEXT, INDEX_TYPE_UINT8_FEATURES_EXT, indexTypeUint8);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(IndexTypeUint8FeaturesEXT, INDEX_TYPE_UINT8_FEATURES_EXT, indexTypeUint8);
 #endif
 #ifdef VK_EXT_memory_priority
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(MemoryPriorityFeaturesEXT, MEMORY_PRIORITY_FEATURES_EXT, memoryPriority);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(MemoryPriorityFeaturesEXT, MEMORY_PRIORITY_FEATURES_EXT, memoryPriority);
 #endif
 #ifdef VK_EXT_pipeline_creation_cache_control
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(PipelineCreationCacheControlFeaturesEXT, PIPELINE_CREATION_CACHE_CONTROL_FEATURES_EXT, pipelineCreationCacheControl);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(PipelineCreationCacheControlFeaturesEXT, PIPELINE_CREATION_CACHE_CONTROL_FEATURES_EXT, pipelineCreationCacheControl);
 #endif
 #ifdef VK_EXT_private_data
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(PrivateDataFeaturesEXT, PRIVATE_DATA_FEATURES_EXT, privateData);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(PrivateDataFeaturesEXT, PRIVATE_DATA_FEATURES_EXT, privateData);
 #endif
 #ifdef VK_EXT_scalar_block_layout
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(ScalarBlockLayoutFeaturesEXT, SCALAR_BLOCK_LAYOUT_FEATURES_EXT, scalarBlockLayout);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(ScalarBlockLayoutFeaturesEXT, SCALAR_BLOCK_LAYOUT_FEATURES_EXT, scalarBlockLayout);
 #endif
 #ifdef VK_EXT_shader_demote_to_helper_invocation
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(ShaderDemoteToHelperInvocationFeaturesEXT, SHADER_DEMOTE_TO_HELPER_INVOCATION_FEATURES_EXT, shaderDemoteToHelperInvocation);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(ShaderDemoteToHelperInvocationFeaturesEXT, SHADER_DEMOTE_TO_HELPER_INVOCATION_FEATURES_EXT, shaderDemoteToHelperInvocation);
 #endif
 #ifdef VK_EXT_texel_buffer_alignment
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(TexelBufferAlignmentFeaturesEXT, TEXEL_BUFFER_ALIGNMENT_FEATURES_EXT, texelBufferAlignment);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(TexelBufferAlignmentFeaturesEXT, TEXEL_BUFFER_ALIGNMENT_FEATURES_EXT, texelBufferAlignment);
 #endif
 #ifdef VK_EXT_ycbcr_image_arrays
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(YcbcrImageArraysFeaturesEXT, YCBCR_IMAGE_ARRAYS_FEATURES_EXT, ycbcrImageArrays);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(YcbcrImageArraysFeaturesEXT, YCBCR_IMAGE_ARRAYS_FEATURES_EXT, ycbcrImageArrays);
 #endif
 #ifdef VK_KHR_imageless_framebuffer
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(ImagelessFramebufferFeaturesKHR, IMAGELESS_FRAMEBUFFER_FEATURES_KHR, imagelessFramebuffer);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(ImagelessFramebufferFeaturesKHR, IMAGELESS_FRAMEBUFFER_FEATURES_KHR, imagelessFramebuffer);
 #endif
 #ifdef VK_KHR_pipeline_executable_properties
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(PipelineExecutablePropertiesFeaturesKHR, PIPELINE_EXECUTABLE_PROPERTIES_FEATURES_KHR, pipelineExecutableInfo);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(PipelineExecutablePropertiesFeaturesKHR, PIPELINE_EXECUTABLE_PROPERTIES_FEATURES_KHR, pipelineExecutableInfo);
 #endif
 #ifdef VK_KHR_sampler_ycbcr_conversion
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(SamplerYcbcrConversionFeaturesKHR, SAMPLER_YCBCR_CONVERSION_FEATURES_KHR, samplerYcbcrConversion);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(SamplerYcbcrConversionFeaturesKHR, SAMPLER_YCBCR_CONVERSION_FEATURES_KHR, samplerYcbcrConversion);
 #endif
 #ifdef VK_KHR_separate_depth_stencil_layouts
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(SeparateDepthStencilLayoutsFeaturesKHR, SEPARATE_DEPTH_STENCIL_LAYOUTS_FEATURES_KHR, separateDepthStencilLayouts);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(SeparateDepthStencilLayoutsFeaturesKHR, SEPARATE_DEPTH_STENCIL_LAYOUTS_FEATURES_KHR, separateDepthStencilLayouts);
 #endif
 #ifdef VK_KHR_shader_draw_parameters
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(ShaderDrawParametersFeatures, SHADER_DRAW_PARAMETERS_FEATURES, shaderDrawParameters);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(ShaderDrawParametersFeatures, SHADER_DRAW_PARAMETERS_FEATURES, shaderDrawParameters);
 #endif
 #ifdef VK_KHR_shader_subgroup_extended_types
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(ShaderSubgroupExtendedTypesFeaturesKHR, SHADER_SUBGROUP_EXTENDED_TYPES_FEATURES_KHR, shaderSubgroupExtendedTypes);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(ShaderSubgroupExtendedTypesFeaturesKHR, SHADER_SUBGROUP_EXTENDED_TYPES_FEATURES_KHR, shaderSubgroupExtendedTypes);
 #endif
 #ifdef VK_KHR_shader_terminate_invocation
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(ShaderTerminateInvocationFeaturesKHR, SHADER_TERMINATE_INVOCATION_FEATURES_KHR, shaderTerminateInvocation);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(ShaderTerminateInvocationFeaturesKHR, SHADER_TERMINATE_INVOCATION_FEATURES_KHR, shaderTerminateInvocation);
 #endif
 #ifdef VK_KHR_timeline_semaphore
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(TimelineSemaphoreFeaturesKHR, TIMELINE_SEMAPHORE_FEATURES_KHR, timelineSemaphore);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(TimelineSemaphoreFeaturesKHR, TIMELINE_SEMAPHORE_FEATURES_KHR, timelineSemaphore);
 #endif
 #ifdef VK_KHR_uniform_buffer_standard_layout
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(UniformBufferStandardLayoutFeaturesKHR, UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES_KHR, uniformBufferStandardLayout);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(UniformBufferStandardLayoutFeaturesKHR, UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES_KHR, uniformBufferStandardLayout);
 #endif
 #ifdef VK_NV_corner_sampled_image
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(CornerSampledImageFeaturesNV, CORNER_SAMPLED_IMAGE_FEATURES_NV, cornerSampledImage);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(CornerSampledImageFeaturesNV, CORNER_SAMPLED_IMAGE_FEATURES_NV, cornerSampledImage);
 #endif
 #ifdef VK_NV_coverage_reduction_mode
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(CoverageReductionModeFeaturesNV, COVERAGE_REDUCTION_MODE_FEATURES_NV, coverageReductionMode);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(CoverageReductionModeFeaturesNV, COVERAGE_REDUCTION_MODE_FEATURES_NV, coverageReductionMode);
 #endif
 #ifdef VK_NV_dedicated_allocation_image_aliasing
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(DedicatedAllocationImageAliasingFeaturesNV, DEDICATED_ALLOCATION_IMAGE_ALIASING_FEATURES_NV, dedicatedAllocationImageAliasing);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(DedicatedAllocationImageAliasingFeaturesNV, DEDICATED_ALLOCATION_IMAGE_ALIASING_FEATURES_NV, dedicatedAllocationImageAliasing);
 #endif
 #ifdef VK_NV_device_diagnostics_config
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(DiagnosticsConfigFeaturesNV, DIAGNOSTICS_CONFIG_FEATURES_NV, diagnosticsConfig);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(DiagnosticsConfigFeaturesNV, DIAGNOSTICS_CONFIG_FEATURES_NV, diagnosticsConfig);
 #endif
 #ifdef VK_NV_fragment_shader_barycentric
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(FragmentShaderBarycentricFeaturesNV, FRAGMENT_SHADER_BARYCENTRIC_FEATURES_NV, fragmentShaderBarycentric);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(FragmentShaderBarycentricFeaturesNV, FRAGMENT_SHADER_BARYCENTRIC_FEATURES_NV, fragmentShaderBarycentric);
 #endif
 #ifdef VK_NV_representative_fragment_test
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(RepresentativeFragmentTestFeaturesNV, REPRESENTATIVE_FRAGMENT_TEST_FEATURES_NV, representativeFragmentTest);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(RepresentativeFragmentTestFeaturesNV, REPRESENTATIVE_FRAGMENT_TEST_FEATURES_NV, representativeFragmentTest);
 #endif
 #ifdef VK_NV_scissor_exclusive
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(ExclusiveScissorFeaturesNV, EXCLUSIVE_SCISSOR_FEATURES_NV, exclusiveScissor);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(ExclusiveScissorFeaturesNV, EXCLUSIVE_SCISSOR_FEATURES_NV, exclusiveScissor);
 #endif
 #ifdef VK_NV_shader_image_footprint
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(ShaderImageFootprintFeaturesNV, SHADER_IMAGE_FOOTPRINT_FEATURES_NV, imageFootprint);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(ShaderImageFootprintFeaturesNV, SHADER_IMAGE_FOOTPRINT_FEATURES_NV, imageFootprint);
 #endif
 #ifdef VK_NV_shader_sm_builtins
-    PHYSICAL_DEVICE_GET_FEATURE_BOOLEAN(ShaderSMBuiltinsFeaturesNV, SHADER_SM_BUILTINS_FEATURES_NV, shaderSMBuiltins);
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(ShaderSMBuiltinsFeaturesNV, SHADER_SM_BUILTINS_FEATURES_NV, shaderSMBuiltins);
 #endif
     }
 #endif // VK_KHR_get_physical_device_properties2
