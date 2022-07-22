@@ -44,6 +44,8 @@ InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
 
     MAGMA_CHECK_EXTENSION(GGP_stream_descriptor_surface),
 
+    MAGMA_CHECK_EXTENSION(GOOGLE_surfaceless_query),
+
     MAGMA_CHECK_EXTENSION(KHR_android_surface),
     MAGMA_CHECK_EXTENSION(KHR_device_group_creation),
     MAGMA_CHECK_EXTENSION(KHR_display),
@@ -53,6 +55,7 @@ InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
     MAGMA_CHECK_EXTENSION(KHR_get_display_properties2),
     MAGMA_CHECK_EXTENSION(KHR_get_physical_device_properties2),
     MAGMA_CHECK_EXTENSION(KHR_get_surface_capabilities2),
+    MAGMA_CHECK_EXTENSION(KHR_portability_enumeration),
     MAGMA_CHECK_EXTENSION(KHR_surface),
     MAGMA_CHECK_EXTENSION(KHR_surface_protected_capabilities),
     MAGMA_CHECK_EXTENSION(KHR_wayland_surface),

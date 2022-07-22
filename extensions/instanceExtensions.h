@@ -47,6 +47,8 @@ namespace magma
         // GGP (Google, LLC)
         const VkBool32 GGP_stream_descriptor_surface : 1;
 
+        const VkBool32 GOOGLE_surfaceless_query : 1;
+
         // Khronos
         const VkBool32 KHR_android_surface : 1;
         const VkBool32 KHR_device_group_creation : 1;
@@ -57,6 +59,7 @@ namespace magma
         const VkBool32 KHR_get_display_properties2 : 1;
         const VkBool32 KHR_get_physical_device_properties2 : 1;
         const VkBool32 KHR_get_surface_capabilities2 : 1;
+        const VkBool32 KHR_portability_enumeration : 1;
         const VkBool32 KHR_surface : 1;
         const VkBool32 KHR_surface_protected_capabilities : 1;
         const VkBool32 KHR_wayland_surface : 1;
