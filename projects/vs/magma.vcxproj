@@ -235,6 +235,7 @@
     <ClInclude Include="..\..\misc\format.h" />
     <ClInclude Include="..\..\misc\geometry.h" />
     <ClInclude Include="..\..\misc\imageSubresourceRange.h" />
+    <ClInclude Include="..\..\misc\pipelineExecutable.h" />
     <ClInclude Include="..\..\misc\pushConstantRange.h" />
     <ClInclude Include="..\..\misc\scissor.h" />
     <ClInclude Include="..\..\misc\scopedDebugMarker.h" />
@@ -285,7 +286,6 @@
     <ClInclude Include="..\..\objects\physicalDeviceGroup.h" />
     <ClInclude Include="..\..\objects\pipeline.h" />
     <ClInclude Include="..\..\objects\pipelineCache.h" />
-    <ClInclude Include="..\..\objects\pipelineExecutable.h" />
     <ClInclude Include="..\..\objects\pipelineLayout.h" />
     <ClInclude Include="..\..\objects\primaryCommandBuffer.h" />
     <ClInclude Include="..\..\objects\queryPool.h" />
@@ -395,6 +395,7 @@
     <ClCompile Include="..\..\misc\deviceQueueDescriptor.cpp" />
     <ClCompile Include="..\..\misc\format.cpp" />
     <ClCompile Include="..\..\misc\geometry.cpp" />
+    <ClCompile Include="..\..\misc\pipelineExecutable.cpp" />
     <ClCompile Include="..\..\misc\scopedDebugMarker.cpp" />
     <ClCompile Include="..\..\objects\accelerationStructure.cpp" />
     <ClCompile Include="..\..\objects\accelerationStructureInstanceBuffer.cpp" />
@@ -440,7 +441,6 @@
     <ClCompile Include="..\..\objects\physicalDeviceGroup.cpp" />
     <ClCompile Include="..\..\objects\pipeline.cpp" />
     <ClCompile Include="..\..\objects\pipelineCache.cpp" />
-    <ClCompile Include="..\..\objects\pipelineExecutable.cpp" />
     <ClCompile Include="..\..\objects\pipelineLayout.cpp" />
     <ClCompile Include="..\..\objects\primaryCommandBuffer.cpp" />
     <ClCompile Include="..\..\objects\queryPool.cpp" />

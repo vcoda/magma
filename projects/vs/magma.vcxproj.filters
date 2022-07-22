@@ -693,11 +693,11 @@
     <ClInclude Include="..\..\states\samplerYcbcrConversionState.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\pipelineExecutable.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\core\forEach.h">
       <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\misc\pipelineExecutable.h">
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1076,8 +1076,8 @@
     <ClCompile Include="..\..\helpers\executeDeferredOperation.cpp">
       <Filter>Source Files\helpers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\objects\pipelineExecutable.cpp">
-      <Filter>Source Files\objects</Filter>
+    <ClCompile Include="..\..\misc\pipelineExecutable.cpp">
+      <Filter>Source Files\misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -16,10 +16,11 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "nondispatchable.h"
+#include "../core/noncopyable.h"
 
 namespace magma
 {
+    class Device;
     class Pipeline;
 
     /* When a pipeline is created, its state and shaders are compiled into zero or more

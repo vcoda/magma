@@ -20,10 +20,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipeline.h"
 #include "device.h"
 #include "pipelineLayout.h"
-#include "pipelineExecutable.h"
 #include "../shaders/pipelineShaderStage.h"
-#include "../allocator/allocator.h"
+#include "../misc/pipelineExecutable.h"
 #include "../misc/extProcAddress.h"
+#include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
