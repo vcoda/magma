@@ -45,6 +45,7 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(AMD_shader_ballot),
     MAGMA_CHECK_EXTENSION(AMD_shader_core_properties),
     MAGMA_CHECK_EXTENSION(AMD_shader_core_properties2),
+    MAGMA_CHECK_EXTENSION(AMD_shader_early_and_late_fragment_tests),
     MAGMA_CHECK_EXTENSION(AMD_shader_explicit_vertex_parameter),
     MAGMA_CHECK_EXTENSION(AMD_shader_fragment_mask),
     MAGMA_CHECK_EXTENSION(AMD_shader_image_load_store_lod),
@@ -55,6 +56,9 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
 
     MAGMA_CHECK_EXTENSION(ANDROID_external_memory_android_hardware_buffer),
 
+    MAGMA_CHECK_EXTENSION(ARM_rasterization_order_attachment_access),
+
+    MAGMA_CHECK_EXTENSION(FUCHSIA_buffer_collection),
     MAGMA_CHECK_EXTENSION(FUCHSIA_external_memory),
     MAGMA_CHECK_EXTENSION(FUCHSIA_external_semaphore),
 
@@ -62,6 +66,7 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(EXT_astc_decode_mode),
     MAGMA_CHECK_EXTENSION(EXT_blend_operation_advanced),
     MAGMA_CHECK_EXTENSION(EXT_buffer_device_address),
+    MAGMA_CHECK_EXTENSION(EXT_border_color_swizzle),
     MAGMA_CHECK_EXTENSION(EXT_calibrated_timestamps),
     MAGMA_CHECK_EXTENSION(EXT_color_write_enable),
     MAGMA_CHECK_EXTENSION(EXT_conditional_rendering),
@@ -69,6 +74,7 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(EXT_custom_border_color),
     MAGMA_CHECK_EXTENSION(EXT_debug_marker),
     MAGMA_CHECK_EXTENSION(EXT_depth_clip_enable),
+    MAGMA_CHECK_EXTENSION(EXT_depth_clip_control),
     MAGMA_CHECK_EXTENSION(EXT_depth_range_unrestricted),
     MAGMA_CHECK_EXTENSION(EXT_descriptor_indexing),
     MAGMA_CHECK_EXTENSION(EXT_device_memory_report),
@@ -96,7 +102,9 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(EXT_line_rasterization),
     MAGMA_CHECK_EXTENSION(EXT_memory_budget),
     MAGMA_CHECK_EXTENSION(EXT_memory_priority),
+    MAGMA_CHECK_EXTENSION(EXT_metal_objects),
     MAGMA_CHECK_EXTENSION(EXT_multi_draw),
+    MAGMA_CHECK_EXTENSION(EXT_multisampled_render_to_single_sampled),
     MAGMA_CHECK_EXTENSION(EXT_pci_bus_info),
     MAGMA_CHECK_EXTENSION(EXT_physical_device_drm),
     MAGMA_CHECK_EXTENSION(EXT_pipeline_creation_cache_control),
@@ -141,6 +149,7 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(GOOGLE_user_type),
 
     MAGMA_CHECK_EXTENSION(HUAWEI_subpass_shading),
+    MAGMA_CHECK_EXTENSION(HUAWEI_invocation_mask),
 
     MAGMA_CHECK_EXTENSION(IMG_filter_cubic),
     MAGMA_CHECK_EXTENSION(IMG_format_pvrtc),
@@ -163,6 +172,7 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(KHR_display_swapchain),
     MAGMA_CHECK_EXTENSION(KHR_draw_indirect_count),
     MAGMA_CHECK_EXTENSION(KHR_driver_properties),
+    MAGMA_CHECK_EXTENSION(KHR_dynamic_rendering),
     MAGMA_CHECK_EXTENSION(KHR_external_fence),
     MAGMA_CHECK_EXTENSION(KHR_external_fence_fd),
     MAGMA_CHECK_EXTENSION(KHR_external_fence_win32),
@@ -173,8 +183,11 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(KHR_external_semaphore_capabilities),
     MAGMA_CHECK_EXTENSION(KHR_external_semaphore_fd),
     MAGMA_CHECK_EXTENSION(KHR_external_semaphore_win32),
+    MAGMA_CHECK_EXTENSION(KHR_format_feature_flags2),
+    MAGMA_CHECK_EXTENSION(KHR_fragment_shader_barycentric),
     MAGMA_CHECK_EXTENSION(KHR_fragment_shading_rate),
     MAGMA_CHECK_EXTENSION(KHR_get_memory_requirements2),
+    MAGMA_CHECK_EXTENSION(KHR_global_priority),
     MAGMA_CHECK_EXTENSION(KHR_image_format_list),
     MAGMA_CHECK_EXTENSION(KHR_imageless_framebuffer),
     MAGMA_CHECK_EXTENSION(KHR_incremental_present),
@@ -186,8 +199,11 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(KHR_pipeline_executable_properties),
     MAGMA_CHECK_EXTENSION(KHR_pipeline_library),
     MAGMA_CHECK_EXTENSION(KHR_portability_subset),
+    MAGMA_CHECK_EXTENSION(KHR_present_id),
+    MAGMA_CHECK_EXTENSION(KHR_present_wait),
     MAGMA_CHECK_EXTENSION(KHR_push_descriptor),
     MAGMA_CHECK_EXTENSION(KHR_ray_query),
+    MAGMA_CHECK_EXTENSION(KHR_ray_tracing_maintenance1),
     MAGMA_CHECK_EXTENSION(KHR_ray_tracing_pipeline),
     MAGMA_CHECK_EXTENSION(KHR_relaxed_block_layout),
     MAGMA_CHECK_EXTENSION(KHR_sampler_mirror_clamp_to_edge),
@@ -198,6 +214,7 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(KHR_shader_draw_parameters),
     MAGMA_CHECK_EXTENSION(KHR_shader_float16_int8),
     MAGMA_CHECK_EXTENSION(KHR_shader_float_controls),
+    MAGMA_CHECK_EXTENSION(KHR_shader_integer_dot_product),
     MAGMA_CHECK_EXTENSION(KHR_shader_non_semantic_info),
     MAGMA_CHECK_EXTENSION(KHR_shader_subgroup_extended_types),
     MAGMA_CHECK_EXTENSION(KHR_shader_subgroup_uniform_control_flow),
@@ -262,11 +279,15 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(NVX_image_view_handle),
     MAGMA_CHECK_EXTENSION(NVX_multiview_per_view_attributes),
 
+    MAGMA_CHECK_EXTENSION(QCOM_fragment_density_map_offset),
+    MAGMA_CHECK_EXTENSION(QCOM_image_processing),
     MAGMA_CHECK_EXTENSION(QCOM_render_pass_shader_resolve),
     MAGMA_CHECK_EXTENSION(QCOM_render_pass_store_ops),
     MAGMA_CHECK_EXTENSION(QCOM_render_pass_transform),
     MAGMA_CHECK_EXTENSION(QCOM_rotated_copy_commands),
+    MAGMA_CHECK_EXTENSION(QCOM_tile_properties),
 
+    MAGMA_CHECK_EXTENSION(VALVE_descriptor_set_host_mapping),
     MAGMA_CHECK_EXTENSION(VALVE_mutable_descriptor_type)
 {}
 } // namespace magma

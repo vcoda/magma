@@ -48,6 +48,7 @@ namespace magma
         const VkBool32 AMD_shader_ballot : 1;
         const VkBool32 AMD_shader_core_properties : 1;
         const VkBool32 AMD_shader_core_properties2 : 1;
+        const VkBool32 AMD_shader_early_and_late_fragment_tests : 1;
         const VkBool32 AMD_shader_explicit_vertex_parameter : 1;
         const VkBool32 AMD_shader_fragment_mask : 1;
         const VkBool32 AMD_shader_image_load_store_lod : 1;
@@ -59,7 +60,11 @@ namespace magma
         // ANDROID (Google LLC)
         const VkBool32 ANDROID_external_memory_android_hardware_buffer : 1;
 
+        // ARM Limited
+        const VkBool32 ARM_rasterization_order_attachment_access : 1;
+
         // FUCHSIA (Google LLC)
+        const VkBool32 FUCHSIA_buffer_collection : 1;
         const VkBool32 FUCHSIA_external_memory : 1;
         const VkBool32 FUCHSIA_external_semaphore : 1;
 
@@ -67,14 +72,15 @@ namespace magma
         const VkBool32 EXT_4444_formats : 1;
         const VkBool32 EXT_astc_decode_mode : 1;
         const VkBool32 EXT_blend_operation_advanced : 1;
+        const VkBool32 EXT_border_color_swizzle : 1;
         const VkBool32 EXT_buffer_device_address : 1;
         const VkBool32 EXT_calibrated_timestamps : 1;
-
         const VkBool32 EXT_color_write_enable : 1;
         const VkBool32 EXT_conditional_rendering : 1;
         const VkBool32 EXT_conservative_rasterization : 1;
         const VkBool32 EXT_custom_border_color : 1;
         const VkBool32 EXT_debug_marker : 1;
+        const VkBool32 EXT_depth_clip_control : 1;
         const VkBool32 EXT_depth_clip_enable : 1;
         const VkBool32 EXT_depth_range_unrestricted : 1;
         const VkBool32 EXT_descriptor_indexing : 1;
@@ -103,7 +109,9 @@ namespace magma
         const VkBool32 EXT_line_rasterization : 1;
         const VkBool32 EXT_memory_budget : 1;
         const VkBool32 EXT_memory_priority : 1;
+        const VkBool32 EXT_metal_objects : 1;
         const VkBool32 EXT_multi_draw : 1;
+        const VkBool32 EXT_multisampled_render_to_single_sampled : 1;
         const VkBool32 EXT_pci_bus_info : 1;
         const VkBool32 EXT_physical_device_drm : 1;
         const VkBool32 EXT_pipeline_creation_cache_control : 1;
@@ -151,6 +159,7 @@ namespace magma
 
         // Huawei Technologies Co. Ltd.
         const VkBool32 HUAWEI_subpass_shading : 1;
+        const VkBool32 HUAWEI_invocation_mask : 1;
 
         // Imagination Technologies
         const VkBool32 IMG_filter_cubic : 1;
@@ -176,6 +185,7 @@ namespace magma
         const VkBool32 KHR_display_swapchain : 1;
         const VkBool32 KHR_draw_indirect_count : 1;
         const VkBool32 KHR_driver_properties : 1;
+        const VkBool32 KHR_dynamic_rendering : 1;
         const VkBool32 KHR_external_fence : 1;
         const VkBool32 KHR_external_fence_fd : 1;
         const VkBool32 KHR_external_fence_win32 : 1;
@@ -186,8 +196,11 @@ namespace magma
         const VkBool32 KHR_external_semaphore_capabilities : 1;
         const VkBool32 KHR_external_semaphore_fd : 1;
         const VkBool32 KHR_external_semaphore_win32 : 1;
+        const VkBool32 KHR_format_feature_flags2 : 1;
+        const VkBool32 KHR_fragment_shader_barycentric : 1;
         const VkBool32 KHR_fragment_shading_rate : 1;
         const VkBool32 KHR_get_memory_requirements2 : 1;
+        const VkBool32 KHR_global_priority : 1;
         const VkBool32 KHR_image_format_list : 1;
         const VkBool32 KHR_imageless_framebuffer : 1;
         const VkBool32 KHR_incremental_present : 1;
@@ -199,8 +212,11 @@ namespace magma
         const VkBool32 KHR_pipeline_executable_properties : 1;
         const VkBool32 KHR_pipeline_library : 1;
         const VkBool32 KHR_portability_subset : 1;
+        const VkBool32 KHR_present_id : 1;
+        const VkBool32 KHR_present_wait : 1;
         const VkBool32 KHR_push_descriptor : 1;
         const VkBool32 KHR_ray_query : 1;
+        const VkBool32 KHR_ray_tracing_maintenance1 : 1;
         const VkBool32 KHR_ray_tracing_pipeline : 1;
         const VkBool32 KHR_relaxed_block_layout : 1;
         const VkBool32 KHR_sampler_mirror_clamp_to_edge : 1;
@@ -211,6 +227,7 @@ namespace magma
         const VkBool32 KHR_shader_draw_parameters : 1;
         const VkBool32 KHR_shader_float16_int8 : 1;
         const VkBool32 KHR_shader_float_controls : 1;
+        const VkBool32 KHR_shader_integer_dot_product : 1;
         const VkBool32 KHR_shader_non_semantic_info : 1;
         const VkBool32 KHR_shader_subgroup_extended_types : 1;
         const VkBool32 KHR_shader_subgroup_uniform_control_flow : 1;
@@ -278,15 +295,19 @@ namespace magma
         const VkBool32 NVX_multiview_per_view_attributes : 1;
 
         // Qualcomm Technologies, Inc.
+        const VkBool32 QCOM_fragment_density_map_offset : 1;
+        const VkBool32 QCOM_image_processing : 1;
         const VkBool32 QCOM_render_pass_shader_resolve : 1;
         const VkBool32 QCOM_render_pass_store_ops : 1;
         const VkBool32 QCOM_render_pass_transform : 1;
         const VkBool32 QCOM_rotated_copy_commands : 1;
+        const VkBool32 QCOM_tile_properties : 1;
 
         // Valve Corporation
+        const VkBool32 VALVE_descriptor_set_host_mapping : 1;
         const VkBool32 VALVE_mutable_descriptor_type : 1;
 
-        PhysicalDeviceExtensions(std::shared_ptr<const PhysicalDevice> device);
+        explicit PhysicalDeviceExtensions(std::shared_ptr<const PhysicalDevice> device);
     };
 
     MAGMA_TYPEDEF_UNIQUE_PTR(PhysicalDeviceExtensions)
