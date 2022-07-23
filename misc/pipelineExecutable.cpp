@@ -19,16 +19,19 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "pipelineExecutable.h"
 #include "../objects/pipeline.h"
-#include "../misc/extProcAddress.h"
 #include "../exceptions/errorResult.h"
 #include "../core/forEach.h"
+
+#undef MAGMA_HANDLE
+#define MAGMA_HANDLE(p) *pipeline->getDevice()
+
+#include "../misc/extProcAddress.h"
 
 namespace magma
 {
 #ifdef VK_KHR_pipeline_executable_properties
 PipelineExecutable::PipelineExecutable(std::shared_ptr<const Pipeline> pipeline,
     const VkPipelineExecutablePropertiesKHR& properties, uint32_t executableIndex) noexcept:
-    device(pipeline->getDevice()),
     pipeline(std::move(pipeline)),
     properties(properties),
     executableIndex(executableIndex)

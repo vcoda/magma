@@ -20,7 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Device;
     class Pipeline;
 
     /* When a pipeline is created, its state and shaders are compiled into zero or more
@@ -45,12 +44,11 @@ namespace magma
             const VkPipelineExecutablePropertiesKHR& properties,
             uint32_t executableIndex) noexcept;
 
-        std::shared_ptr<Device> device;
         std::shared_ptr<const Pipeline> pipeline;
         const VkPipelineExecutablePropertiesKHR properties;
         const uint32_t executableIndex;
         mutable std::vector<std::unique_ptr<char[]>> data;
-        friend class Pipeline;
+        friend Pipeline;
     };
 #endif // VK_KHR_pipeline_executable_properties
 } // namespace magma
