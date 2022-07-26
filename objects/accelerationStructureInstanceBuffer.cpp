@@ -51,7 +51,7 @@ AccelerationStructureInstanceBuffer::AccelerationStructureInstanceBuffer(std::sh
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
     bool persistentlyMapped /* false */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */):
     RayTracingBuffer(device, sizeof(AccelerationStructureInstance) * instanceCount, allocator, flags, memoryPriority, sharing),
     instanceCount(instanceCount),

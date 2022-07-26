@@ -58,7 +58,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
             bool persistentlyMapped = false,
-            float memoryPriority = 0.f,
+            float memoryPriority = MAGMA_MEMORY_PRIORITY,
             const Sharing& sharing = Sharing());
         uint32_t writeDrawCommand(uint32_t vertexCount,
             uint32_t firstVertex = 0) noexcept;
@@ -82,7 +82,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
             bool persistentlyMapped = false,
-            float memoryPriority = 0.f,
+            float memoryPriority = MAGMA_MEMORY_PRIORITY,
             const Sharing& sharing = Sharing());
         uint32_t writeDrawIndexedCommand(uint32_t indexCount,
             uint32_t firstIndex = 0,

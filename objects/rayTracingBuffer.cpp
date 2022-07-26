@@ -27,7 +27,7 @@ namespace magma
 RayTracingBuffer::RayTracingBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */):
     Buffer(std::move(device), size,
         flags, VK_BUFFER_USAGE_RAY_TRACING_BIT_NV | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
@@ -38,7 +38,7 @@ RayTracingBuffer::RayTracingBuffer(std::shared_ptr<Device> device, VkDeviceSize 
 RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(cmdBuffer->getDevice(), size,
@@ -59,7 +59,7 @@ RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */):
     Buffer(srcBuffer->getDevice(),
         size > 0 ? size : srcBuffer->getSize(),

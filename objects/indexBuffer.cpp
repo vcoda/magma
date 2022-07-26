@@ -58,7 +58,7 @@ uint32_t BaseIndexBuffer::getIndexCount() const noexcept
 IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data, VkIndexType indexType,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     BaseIndexBuffer(cmdBuffer->getDevice(), size,
@@ -79,7 +79,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */):
     BaseIndexBuffer(srcBuffer->getDevice(),
         size > 0 ? size : srcBuffer->getSize(),
@@ -94,7 +94,7 @@ DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkDeviceS
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const void *initialData /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     BaseIndexBuffer(std::move(device), size,
@@ -111,7 +111,7 @@ DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkDeviceS
 AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data, VkIndexType indexType,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     BaseIndexBuffer(cmdBuffer->getDevice(), size,
@@ -137,7 +137,7 @@ AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_p
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */):
     BaseIndexBuffer(srcBuffer->getDevice(),
         size > 0 ? size : srcBuffer->getSize(),

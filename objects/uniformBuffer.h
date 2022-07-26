@@ -36,7 +36,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
             bool pinnedMemory = false,
-            float memoryPriority = 0.f,
+            float memoryPriority = MAGMA_MEMORY_PRIORITY,
             uint32_t arraySize = 1,
             const Sharing& sharing = Sharing()):
             Buffer(std::move(device), sizeof(Type) * arraySize,
@@ -93,7 +93,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
             bool pinnedMemory = false,
-            float memoryPriority = 0.f,
+            float memoryPriority = MAGMA_MEMORY_PRIORITY,
             const Resource::Sharing& sharing = Resource::Sharing()):
             UniformBuffer<Type>(device, std::move(allocator), flags, pinnedMemory, memoryPriority, alignedArraySize(device, arraySize), sharing),
             alignment(std::max(

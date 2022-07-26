@@ -83,7 +83,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
             bool persistentlyMapped = false,
-            float memoryPriority = 0.f,
+            float memoryPriority = MAGMA_MEMORY_PRIORITY,
             const Sharing& sharing = Sharing());
         ~AccelerationStructureInstanceBuffer();
         uint32_t getInstanceCount() const noexcept { return instanceCount; }

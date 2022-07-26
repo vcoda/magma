@@ -25,7 +25,7 @@ namespace magma
 TransformFeedbackBuffer::TransformFeedbackBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */):
     Buffer(std::move(device), size,
         VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_BUFFER_BIT_EXT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, flags,
@@ -36,7 +36,7 @@ TransformFeedbackBuffer::TransformFeedbackBuffer(std::shared_ptr<Device> device,
 TransformFeedbackCounterBuffer::TransformFeedbackCounterBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */):
     Buffer(std::move(device), size,
         VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_COUNTER_BUFFER_BIT_EXT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT, flags,

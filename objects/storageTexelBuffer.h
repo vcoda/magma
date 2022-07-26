@@ -32,7 +32,7 @@ namespace magma
             const void *data,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
-            float memoryPriority = 0.f,
+            float memoryPriority = MAGMA_MEMORY_PRIORITY,
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
         explicit StorageTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
@@ -41,7 +41,7 @@ namespace magma
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,
             VkBufferCreateFlags flags = 0,
-            float memoryPriority = 0.f,
+            float memoryPriority = MAGMA_MEMORY_PRIORITY,
             const Sharing& sharing = Sharing());
     };
 
@@ -57,7 +57,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
             const void *initialData = nullptr,
-            float memoryPriority = 0.f,
+            float memoryPriority = MAGMA_MEMORY_PRIORITY,
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
     };

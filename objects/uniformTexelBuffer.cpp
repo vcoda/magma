@@ -26,7 +26,7 @@ namespace magma
 UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(cmdBuffer->getDevice(), size,
@@ -46,7 +46,7 @@ UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */):
     Buffer(srcBuffer->getDevice(),
         size > 0 ? size : srcBuffer->getSize(),

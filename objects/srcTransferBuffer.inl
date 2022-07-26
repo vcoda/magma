@@ -4,7 +4,7 @@ template<typename Type>
 inline SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<Device> device, const std::vector<Type>& data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     SrcTransferBuffer(std::move(device),

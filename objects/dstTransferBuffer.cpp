@@ -24,7 +24,7 @@ namespace magma
 DstTransferBuffer::DstTransferBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */):
     Buffer(std::move(device), size,
         VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags,

@@ -33,7 +33,7 @@ BaseVertexBuffer::BaseVertexBuffer(std::shared_ptr<Device> device, VkDeviceSize 
 VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     BaseVertexBuffer(cmdBuffer->getDevice(), size,
@@ -54,7 +54,7 @@ VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */):
     BaseVertexBuffer(cmdBuffer->getDevice(),
         size > 0 ? size : srcBuffer->getSize(),
@@ -69,7 +69,7 @@ DynamicVertexBuffer::DynamicVertexBuffer(std::shared_ptr<Device> device, VkDevic
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const void *initialData /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     BaseVertexBuffer(std::move(device), size,
@@ -86,7 +86,7 @@ DynamicVertexBuffer::DynamicVertexBuffer(std::shared_ptr<Device> device, VkDevic
 AccelerationStructureVertexBuffer::AccelerationStructureVertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     BaseVertexBuffer(cmdBuffer->getDevice(), size,
@@ -112,7 +112,7 @@ AccelerationStructureVertexBuffer::AccelerationStructureVertexBuffer(std::shared
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */):
     BaseVertexBuffer(cmdBuffer->getDevice(),
         size > 0 ? size : srcBuffer->getSize(),

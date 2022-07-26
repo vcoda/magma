@@ -46,7 +46,7 @@ DrawIndirectBuffer::DrawIndirectBuffer(std::shared_ptr<Device> device, uint32_t 
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
     bool persistentlyMapped /* false */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* Sharing() */):
     IndirectBuffer(std::move(device), flags, maxDrawCommands, sizeof(VkDrawIndirectCommand),
         persistentlyMapped, memoryPriority, sharing, std::move(allocator)),
@@ -117,7 +117,7 @@ DrawIndexedIndirectBuffer::DrawIndexedIndirectBuffer(std::shared_ptr<Device> dev
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
     bool persistentlyMapped /* false */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* Sharing() */):
     IndirectBuffer(std::move(device), flags, maxDrawIndexedCommands, sizeof(VkDrawIndexedIndirectCommand),
         persistentlyMapped, memoryPriority, sharing, std::move(allocator)),

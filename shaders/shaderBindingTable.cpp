@@ -29,7 +29,7 @@ namespace magma
 ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const void *shaderGroupHandles, uint32_t groupCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */):
     Buffer(device,
         device->getPhysicalDevice()->getRayTracingProperties().shaderGroupBaseAlignment * groupCount,
@@ -56,7 +56,7 @@ ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const voi
 ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const std::vector<uint8_t>& shaderGroupHandles, uint32_t groupCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */):
     ShaderBindingTable(std::move(device), shaderGroupHandles.data(), groupCount,
         std::move(allocator), flags, memoryPriority, sharing)
@@ -65,7 +65,7 @@ ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const std
 ShaderBindingTable::ShaderBindingTable(std::shared_ptr<const RayTracingPipeline> pipeline,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */):
     ShaderBindingTable(pipeline->getDevice(), pipeline->getShaderGroupHandles(), pipeline->getShaderGroupCount(),
         std::move(allocator), flags, memoryPriority, sharing)

@@ -29,7 +29,7 @@ namespace magma
             VkDeviceSize size,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBufferCreateFlags flags = 0,
-            float memoryPriority = 0.f,
+            float memoryPriority = MAGMA_MEMORY_PRIORITY,
             const Sharing& sharing = Sharing());
     };
 } // namespace magma

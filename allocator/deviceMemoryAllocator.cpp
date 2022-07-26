@@ -138,7 +138,7 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
         if (priority != priorities.cend())
             allocInfo.priority = *priority;
         else
-            allocInfo.priority = 0.f;
+            allocInfo.priority = MAGMA_MEMORY_PRIORITY;
         allocInfos.push_back(allocInfo);
         ++flags;
         if (priority != priorities.cend())

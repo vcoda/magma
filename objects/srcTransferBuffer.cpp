@@ -25,7 +25,7 @@ SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<Device> device, VkDeviceSiz
     const void *data /* nullptr */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* 0.f */,
+    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(std::move(device), size,
