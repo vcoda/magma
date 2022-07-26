@@ -57,6 +57,7 @@ namespace magma
         VkDeviceSize getAlignment() const noexcept { return memoryRequirements.alignment; }
         uint32_t getMemoryTypeBits() const noexcept { return memoryRequirements.memoryTypeBits; }
         float getPriority() const noexcept { return priority; }
+        void setPriority(float priority) noexcept;
         bool local() const noexcept;
         bool pinned() const noexcept;
         bool hostVisible() const noexcept;

@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "physicalDevice.h"
 #include "../allocator/allocator.h"
+#include "../misc/extProcAddress.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
@@ -88,6 +89,17 @@ DeviceMemory::~DeviceMemory()
         deviceAllocator->free(memory);
     else
         vkFreeMemory(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+}
+
+void DeviceMemory::setPriority(float priority) noexcept
+{
+    MAGMA_ASSERT((priority >= 0.f) && (priority <= 1.f));
+    MAGMA_UNUSED(priority);
+#ifdef VK_EXT_pageable_device_local_memory
+    MAGMA_DEVICE_EXTENSION(vkSetDeviceMemoryPriorityEXT);
+    if (vkSetDeviceMemoryPriorityEXT)
+        vkSetDeviceMemoryPriorityEXT(MAGMA_HANDLE(device), handle, priority);
+#endif // VK_EXT_pageable_device_local_memory
 }
 
 void DeviceMemory::realloc(VkDeviceSize newSize, float priority, const void *object, VkObjectType objectType,
