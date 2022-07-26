@@ -67,8 +67,9 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device, uint32_t deviceMask,
     allocInfo.memoryTypeIndex = getTypeIndex(flags);
 #ifdef VK_EXT_memory_priority
     VkMemoryPriorityAllocateInfoEXT memoryPriorityInfo;
-    if (priority > 0.f)
+    if (this->device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
     {
+        MAGMA_ASSERT((priority >= 0.f) && (priority <= 1.f));
         memoryPriorityInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;
         memoryPriorityInfo.pNext = nullptr;
         memoryPriorityInfo.priority = priority;
@@ -122,6 +123,7 @@ void DeviceMemory::realloc(VkDeviceSize newSize, float priority, const void *obj
         VkMemoryPriorityAllocateInfoEXT memoryPriorityInfo;
         if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
         {
+            MAGMA_ASSERT((priority >= 0.f) && (priority <= 1.f));
             memoryPriorityInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;
             memoryPriorityInfo.pNext = nullptr;
             memoryPriorityInfo.priority = priority;

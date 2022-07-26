@@ -75,6 +75,7 @@ DeviceMemoryAllocator::~DeviceMemoryAllocator()
 DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memoryRequirements,
     VkMemoryPropertyFlags flags, float priority, const void *handle, VkObjectType objectType)
 {
+    MAGMA_ASSERT((priority >= 0.f) && (priority <= 1.f));
     MAGMA_ASSERT(handle);
     VmaAllocationCreateInfo allocInfo;
     allocInfo.flags = VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT;
@@ -135,14 +136,16 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
         allocInfo.memoryTypeBits = 0;
         allocInfo.pool = VK_NULL_HANDLE;
         allocInfo.pUserData = nullptr;
-        if (priority != priorities.cend())
-            allocInfo.priority = *priority;
-        else
+        if (priority == priorities.cend())
             allocInfo.priority = MAGMA_MEMORY_PRIORITY;
+        else
+        {
+            MAGMA_ASSERT((*priority >= 0.f) && (*priority <= 1.f));
+            allocInfo.priority = *priority;
+            ++priority;
+        }
         allocInfos.push_back(allocInfo);
         ++flags;
-        if (priority != priorities.cend())
-            ++priority;
     }
     std::vector<VmaAllocation> allocations(MAGMA_COUNT(allocInfos));
     const VkResult result = vmaAllocateMemoryPages(allocator, memoryRequirements.data(), allocInfos.data(),
