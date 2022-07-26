@@ -37,6 +37,7 @@ namespace magma
         VkBool32 robustImageAccess : 1;
         VkBool32 indexTypeUint8 : 1;
         VkBool32 memoryPriority : 1;
+        VkBool32 pageableDeviceLocalMemory : 1;
         VkBool32 pipelineCreationCacheControl : 1;
         VkBool32 privateData : 1;
         VkBool32 scalarBlockLayout : 1;

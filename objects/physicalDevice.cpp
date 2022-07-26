@@ -664,6 +664,9 @@ PhysicalDeviceExtendedFeatures PhysicalDevice::getExtendedFeatures() const
 #ifdef VK_EXT_memory_priority
     MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(MemoryPriorityFeaturesEXT, MEMORY_PRIORITY_FEATURES_EXT, memoryPriority);
 #endif
+#ifdef VK_EXT_pageable_device_local_memory
+    MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(PageableDeviceLocalMemoryFeaturesEXT, PAGEABLE_DEVICE_LOCAL_MEMORY_FEATURES_EXT, pageableDeviceLocalMemory);
+#endif
 #ifdef VK_EXT_pipeline_creation_cache_control
     MAGMA_PHYSICAL_DEVICE_GET_BOOLEAN_FEATURE(PipelineCreationCacheControlFeaturesEXT, PIPELINE_CREATION_CACHE_CONTROL_FEATURES_EXT, pipelineCreationCacheControl);
 #endif
