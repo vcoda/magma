@@ -113,6 +113,9 @@ namespace magma
         VkPhysicalDeviceLineRasterizationFeaturesEXT getLineRasterizationFeatures() const;
         VkPhysicalDeviceLineRasterizationPropertiesEXT getLineRasterizationProperties() const;
 #endif
+#ifdef VK_EXT_primitive_topology_list_restart
+       VkPhysicalDevicePrimitiveTopologyListRestartFeaturesEXT getPrimitiveTopologyListRestartFeatures() const;
+#endif
 #ifdef VK_EXT_sampler_filter_minmax
         VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT getSamplerFilterMinmaxProperties() const;
 #endif

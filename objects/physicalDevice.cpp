@@ -430,6 +430,13 @@ VkPhysicalDeviceLineRasterizationPropertiesEXT PhysicalDevice::getLineRasterizat
 }
 #endif // VK_EXT_line_rasterization
 
+#ifdef VK_EXT_primitive_topology_list_restart
+VkPhysicalDevicePrimitiveTopologyListRestartFeaturesEXT PhysicalDevice::getPrimitiveTopologyListRestartFeatures() const
+{
+    return MAGMA_PHYSICAL_DEVICE_GET_FEATURES(PrimitiveTopologyListRestartFeaturesEXT, PRIMITIVE_TOPOLOGY_LIST_RESTART_FEATURES_EXT);
+}
+#endif // VK_EXT_primitive_topology_list_restart
+
 #ifdef VK_EXT_sampler_filter_minmax
 VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT PhysicalDevice::getSamplerFilterMinmaxProperties() const
 {
