@@ -58,6 +58,7 @@ hash_t RasterizationState::chainedHash() const noexcept
                     provoking->sType,
                     provoking->provokingVertexMode));
             }
+            break;
     #endif // VK_EXT_provoking_vertex
     #ifdef VK_EXT_transform_feedback
         case VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_STREAM_CREATE_INFO_EXT:
@@ -68,6 +69,7 @@ hash_t RasterizationState::chainedHash() const noexcept
                     stream->flags,
                     stream->rasterizationStream));
             }
+            break;
     #endif // VK_EXT_transform_feedback
         // Add any new rasterization state descriptors here
         default:
