@@ -699,6 +699,9 @@
     <ClInclude Include="..\..\extensions\physicalDeviceExtendedFeatures.h">
       <Filter>Header Files\extensions</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\states\provokingVertexState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1232,6 +1235,9 @@
       <Filter>Header Files\states</Filter>
     </None>
     <None Include="..\..\states\samplerYcbcrConversionState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\states\provokingVertexState.inl">
       <Filter>Header Files\states</Filter>
     </None>
   </ItemGroup>

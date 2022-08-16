@@ -111,6 +111,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "states/minmaxSamplerState.h"
 #include "states/multisampleState.h"
 #include "states/multiViewportState.h"
+#include "states/provokingVertexState.h"
 #include "states/rasterizationOrderState.h"
 #include "states/rasterizationState.h"
 #include "states/samplerState.h"
