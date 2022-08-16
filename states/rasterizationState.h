@@ -29,7 +29,9 @@ namespace magma
             bool depthClampEnable = false,
             bool rasterizerDiscardEnable = false) noexcept;
         constexpr RasterizationState(const RasterizationState&) noexcept;
+        bool chained() const noexcept { return pNext != nullptr; }
         constexpr hash_t hash() const noexcept;
+        hash_t chainedHash() const noexcept;
         constexpr bool operator==(const RasterizationState&) const noexcept;
     };
 

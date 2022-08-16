@@ -475,6 +475,7 @@
     <ClCompile Include="..\..\states\colorBlendState.cpp" />
     <ClCompile Include="..\..\states\colorBlendStateAdvanced.cpp" />
     <ClCompile Include="..\..\states\multisampleState.cpp" />
+    <ClCompile Include="..\..\states\rasterizationState.cpp" />
     <ClCompile Include="..\..\states\vertexInputState.cpp" />
     <ClCompile Include="..\..\states\vertexInputStructure.cpp" />
     <ClCompile Include="..\..\states\multiViewportState.cpp" />

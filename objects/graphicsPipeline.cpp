@@ -139,7 +139,9 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
         inputAssemblyState.hash(),
         tesselationState.hash(),
         viewportState.hash(),
-        rasterizationState.hash(),
+        rasterizationState.chained()
+            ? rasterizationState.chainedHash()
+            : rasterizationState.hash(),
         multisampleState.hash(),
         depthStencilState.hash(),
         colorBlendState.hash()});
