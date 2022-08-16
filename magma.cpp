@@ -54,10 +54,13 @@ namespace magma
     constexpr hash_t multisampleFourHash = renderstate::multisampleFour.hash();
     // Extended states
 #ifdef VK_AMD_rasterization_order
-    constexpr hash_t fillCullNoneStrictCCWHash = renderstate::fillCullNoneStrictCCW.hash();
+    constexpr hash_t fillStrictCullNoneCCWHash = renderstate::fillStrictCullNoneCCW.hash();
 #endif
 #ifdef VK_EXT_conservative_rasterization
-    constexpr hash_t fillCullNoneOverestimateCCWHash = renderstate::fillCullNoneOverestimateCCW.hash();
+    constexpr hash_t fillOverestimateCullNoneCCWHash = renderstate::fillOverestimateCullNoneCCW.hash();
+#endif
+#ifdef VK_EXT_provoking_vertex
+    constexpr hash_t fillProvokingFirstCullBackCCWHash = renderstate::fillProvokingFirstCullBackCCW.hash();
 #endif
 #ifdef VK_EXT_transform_feedback
     constexpr StreamRasterizationState fillCullNoneCCWStreamOne(renderstate::fillCullNoneCCW, 1);
