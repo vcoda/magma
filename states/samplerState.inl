@@ -85,26 +85,6 @@ constexpr hash_t SamplerState::hash() const noexcept
         unnormalizedCoordinates);
 }
 
-constexpr bool SamplerState::operator==(const SamplerState& other) const noexcept
-{
-    return (flags == other.flags) &&
-        (magFilter == other.magFilter) &&
-        (minFilter == other.minFilter) &&
-        (mipmapMode == other.mipmapMode) &&
-        (addressModeU == other.addressModeU) &&
-        (addressModeV == other.addressModeV) &&
-        (addressModeW == other.addressModeW) &&
-        (mipLodBias == other.mipLodBias) &&
-        (anisotropyEnable == other.anisotropyEnable) &&
-        (maxAnisotropy == other.maxAnisotropy) &&
-        (compareEnable == other.compareEnable) &&
-        (compareOp == other.compareOp) &&
-        (minLod == other.minLod) &&
-        (maxLod == other.maxLod) &&
-        (borderColor == other.borderColor) &&
-        (unnormalizedCoordinates == other.unnormalizedCoordinates);
-}
-
 inline hash_t SamplerState::chainedHash() const noexcept
 {
     hash_t hash = SamplerState::hash();
@@ -128,6 +108,26 @@ inline hash_t SamplerState::chainedHash() const noexcept
         next = reinterpret_cast<const VkBaseInStructure *>(next->pNext);
     }
     return hash;
+}
+
+constexpr bool SamplerState::operator==(const SamplerState& other) const noexcept
+{
+    return (flags == other.flags) &&
+        (magFilter == other.magFilter) &&
+        (minFilter == other.minFilter) &&
+        (mipmapMode == other.mipmapMode) &&
+        (addressModeU == other.addressModeU) &&
+        (addressModeV == other.addressModeV) &&
+        (addressModeW == other.addressModeW) &&
+        (mipLodBias == other.mipLodBias) &&
+        (anisotropyEnable == other.anisotropyEnable) &&
+        (maxAnisotropy == other.maxAnisotropy) &&
+        (compareEnable == other.compareEnable) &&
+        (compareOp == other.compareOp) &&
+        (minLod == other.minLod) &&
+        (maxLod == other.maxLod) &&
+        (borderColor == other.borderColor) &&
+        (unnormalizedCoordinates == other.unnormalizedCoordinates);
 }
 
 constexpr AnisotropicSamplerState::AnisotropicSamplerState(const VkSamplerAddressMode addressMode,
