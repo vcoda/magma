@@ -17,29 +17,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "magma.h"
-
 //#define MAGMA_VERIFY_CONSTEXPR
-#ifdef MAGMA_VERIFY_CONSTEXPR
-#include "descriptors/attachment.h"
-#include "descriptors/subpass.h"
-#include "states/inputAssemblyState.h"
-#include "states/tesselationState.h"
-#include "states/rasterizationState.h"
-#include "states/conservativeRasterizationState.h"
-#include "states/rasterizationOrderState.h"
-#include "states/streamRasterizationState.h"
-#include "states/depthStencilState.h"
-#include "states/colorBlendState.h"
-#include "states/colorBlendStateAdvanced.h"
-#include "states/multisampleState.h"
-#include "states/samplerState.h"
-#include "states/depthComparisonSamplerState.h"
-#include "states/minmaxSamplerState.h"
-#include "states/ycbcrSamplerState.h"
-#include "misc/borderColor.h"
-#include "misc/pushConstantRange.h"
-#endif // MAGMA_VERIFY_CONSTEXPR
+#if defined(MAGMA_VERIFY_CONSTEXPR)
+#include "magma.h"
+#endif
 
 namespace magma
 {
