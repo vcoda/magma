@@ -53,23 +53,22 @@ namespace magma
     {
     public:
         AccelerationStructureInstance() noexcept;
-        void setTransform(const TransformMatrix& transform) noexcept { this->transform = transform; }
+        void setTransform(const TransformMatrix& transform_) noexcept { transform = transform_; }
         void setInstanceIndex(uint32_t instanceIndex) noexcept { instanceCustomIndex = instanceIndex; }
-        void setVisibilityMask(uint8_t mask) noexcept { this->mask = mask; }
+        void setVisibilityMask(uint8_t mask_) noexcept { mask = mask_; }
         void setShaderBindingTableOffset(uint32_t offset) noexcept { instanceShaderBindingTableRecordOffset = offset; }
-        void enableTriangleCull() noexcept { flags &= ~VK_GEOMETRY_INSTANCE_TRIANGLE_CULL_DISABLE_BIT_NV; }
-        void disableTriangleCull() noexcept { flags |= VK_GEOMETRY_INSTANCE_TRIANGLE_CULL_DISABLE_BIT_NV; }
-        bool triangleCullEnabled() const noexcept { return flags & VK_GEOMETRY_INSTANCE_TRIANGLE_CULL_DISABLE_BIT_NV; }
-        void setTriangleFrontCW() noexcept { flags &= ~VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_NV; }
-        void setTriangleFrontCCW() noexcept { flags |= VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_NV; }
-        bool triangleFrontCCW() const noexcept { return flags & VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_NV; }
-        void forceGeometryOpaque(bool opaque) noexcept { if (opaque) flags |= VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV;
-                                                         else flags &= ~VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV; }
-        void forceGeometryNoOpaque(bool noOpaque) noexcept { if (noOpaque) flags |= VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV;
-                                                             else flags &= ~VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV; }
-        bool geometryIsOpaque() const noexcept { return flags & VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV; }
-        bool geometryIsNoOpaque() const noexcept { return flags & VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV; }
+        void setCullTriangles(bool enable) noexcept { setFlag(VK_GEOMETRY_INSTANCE_TRIANGLE_CULL_DISABLE_BIT_NV, !enable); }
+        bool cullEnabled() const noexcept { return !(flags & VK_GEOMETRY_INSTANCE_TRIANGLE_CULL_DISABLE_BIT_NV); }
+        void setFrontTriangle(bool ccw) noexcept { setFlag(VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_NV, ccw); }
+        bool frontTriangleCCw() const noexcept { return flags & VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_NV; }
+        void setForceOpaque(bool opaque) noexcept { setFlag(VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV, opaque); }
+        void setForceNoOpaque(bool noOpaque) noexcept { setFlag(VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV, noOpaque); }
+        bool opaque() const noexcept { return flags & VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV; }
+        bool noOpaque() const noexcept { return flags & VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV; }
         void setAccelerationStructure(std::shared_ptr<const AccelerationStructure> accelerationStructure);
+
+    private:
+        void setFlag(VkGeometryInstanceFlagBitsKHR bit, bool set) noexcept { if (set) flags |= bit; else flags &= ~bit; }
     };
 
     /* Buffer containing an array of VkAccelerationStructureInstanceKHR structures
