@@ -43,7 +43,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
     layout(std::move(layout)),
     pipelineCache(std::make_shared<GraphicsPipelineCache>(device, std::move(pipelineCache), MAGMA_HOST_ALLOCATOR(allocator))),
     vertexBuffer(std::make_shared<DynamicVertexBuffer>(device, sizeof(Vertex) * maxVertexCount, false, allocator, nullptr, 0, 0.f, Resource::Sharing())),
-    rasterizationState(renderstate::fillCullBackCCW),
+    rasterizationState(renderstate::fillCullBackCCw),
     multisampleState(renderstate::dontMultisample),
     depthStencilState(renderstate::depthAlwaysDontWrite),
     colorBlendState(renderstate::dontBlendRgba) // Make copyable

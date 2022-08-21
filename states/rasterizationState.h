@@ -72,22 +72,22 @@ namespace magma
 namespace magma
 {
 #define MAGMA_RASTERIZATION_STATE_PERMUTATIONS(name, polygonMode)\
-    constexpr RasterizationState name##CullNoneCCW(polygonMode, VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
-    constexpr RasterizationState name##CullFrontCCW(polygonMode, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
-    constexpr RasterizationState name##CullBackCCW(polygonMode, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
-    constexpr RasterizationState name##CullFrontAndBackCCW(polygonMode, VK_CULL_MODE_FRONT_AND_BACK, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
-    constexpr RasterizationState name##CullNoneCW(polygonMode, VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);\
-    constexpr RasterizationState name##CullFrontCW(polygonMode, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_CLOCKWISE);\
-    constexpr RasterizationState name##CullBackCW(polygonMode, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_CLOCKWISE);\
-    constexpr RasterizationState name##CullFrontAndBackCW(polygonMode, VK_CULL_MODE_FRONT_AND_BACK, VK_FRONT_FACE_CLOCKWISE);
+    constexpr RasterizationState name##CullNoneCCw(polygonMode, VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
+    constexpr RasterizationState name##CullFrontCCw(polygonMode, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
+    constexpr RasterizationState name##CullBackCCw(polygonMode, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
+    constexpr RasterizationState name##CullFrontAndBackCCw(polygonMode, VK_CULL_MODE_FRONT_AND_BACK, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
+    constexpr RasterizationState name##CullNoneCw(polygonMode, VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);\
+    constexpr RasterizationState name##CullFrontCw(polygonMode, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_CLOCKWISE);\
+    constexpr RasterizationState name##CullBackCw(polygonMode, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_CLOCKWISE);\
+    constexpr RasterizationState name##CullFrontAndBackCw(polygonMode, VK_CULL_MODE_FRONT_AND_BACK, VK_FRONT_FACE_CLOCKWISE);
 
     namespace renderstate
     {
         MAGMA_RASTERIZATION_STATE_PERMUTATIONS(fill, VK_POLYGON_MODE_FILL)
         MAGMA_RASTERIZATION_STATE_PERMUTATIONS(line, VK_POLYGON_MODE_LINE)
         MAGMA_RASTERIZATION_STATE_PERMUTATIONS(point, VK_POLYGON_MODE_POINT)
-#ifdef VK_NV_fill_rectangle
+    #ifdef VK_NV_fill_rectangle
         MAGMA_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, VK_POLYGON_MODE_FILL_RECTANGLE_NV)
-#endif
+    #endif
     } // namespace renderstate
 } // namespace magma

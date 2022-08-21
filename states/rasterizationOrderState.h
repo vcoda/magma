@@ -40,15 +40,15 @@ namespace magma
 
 namespace magma
 {
-#define MAGMA_RASTERIZATION_ORDER_STATE_PERMUTATIONS(name, Order, rasterizationOrder)\
-    constexpr RasterizationOrderState name##Order##CullNoneCCW(name##CullNoneCCW, rasterizationOrder);\
-    constexpr RasterizationOrderState name##Order##CullFrontCCW(name##CullFrontCCW, rasterizationOrder);\
-    constexpr RasterizationOrderState name##Order##CullBackCCW(name##CullBackCCW, rasterizationOrder);\
-    constexpr RasterizationOrderState name##Order##CullFrontAndBackCCW(name##CullFrontAndBackCCW, rasterizationOrder);\
-    constexpr RasterizationOrderState name##Order##CullNoneCW(name##CullNoneCW, rasterizationOrder);\
-    constexpr RasterizationOrderState name##Order##CullFrontCW(name##CullFrontCW, rasterizationOrder);\
-    constexpr RasterizationOrderState name##Order##CullBackCW(name##CullBackCW, rasterizationOrder);\
-    constexpr RasterizationOrderState name##Order##CullFrontAndBackCW(name##CullFrontAndBackCW, rasterizationOrder);
+#define MAGMA_RASTERIZATION_ORDER_STATE_PERMUTATIONS(polygonMode, Order, rasterizationOrder)\
+    constexpr RasterizationOrderState polygonMode##CullNoneCCw##Order(polygonMode##CullNoneCCw, rasterizationOrder);\
+    constexpr RasterizationOrderState polygonMode##CullFrontCCw##Order(polygonMode##CullFrontCCw, rasterizationOrder);\
+    constexpr RasterizationOrderState polygonMode##CullBackCCw##Order(polygonMode##CullBackCCw, rasterizationOrder);\
+    constexpr RasterizationOrderState polygonMode##CullFrontAndBackCCw##Order(polygonMode##CullFrontAndBackCCw, rasterizationOrder);\
+    constexpr RasterizationOrderState polygonMode##CullNoneCw##Order(polygonMode##CullNoneCw, rasterizationOrder);\
+    constexpr RasterizationOrderState polygonMode##CullFrontCw##Order(polygonMode##CullFrontCw, rasterizationOrder);\
+    constexpr RasterizationOrderState polygonMode##CullBackCw##Order(polygonMode##CullBackCw, rasterizationOrder);\
+    constexpr RasterizationOrderState polygonMode##CullFrontAndBackCw##Order(polygonMode##CullFrontAndBackCw, rasterizationOrder);
 
     namespace renderstate
     {

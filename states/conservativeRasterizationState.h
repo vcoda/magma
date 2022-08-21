@@ -42,15 +42,15 @@ namespace magma
 
 namespace magma
 {
-#define MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(name, Mode, conservativeRasterizationMode)\
-    constexpr ConservativeRasterizationState name##Mode##CullNoneCCW(name##CullNoneCCW, conservativeRasterizationMode);\
-    constexpr ConservativeRasterizationState name##Mode##CullFrontCCW(name##CullFrontCCW, conservativeRasterizationMode);\
-    constexpr ConservativeRasterizationState name##Mode##CullBackCCW(name##CullBackCCW, conservativeRasterizationMode);\
-    constexpr ConservativeRasterizationState name##Mode##CullFrontAndBackCCW(name##CullFrontAndBackCCW, conservativeRasterizationMode);\
-    constexpr ConservativeRasterizationState name##Mode##CullNoneCW(name##CullNoneCW, conservativeRasterizationMode);\
-    constexpr ConservativeRasterizationState name##Mode##CullFrontCW(name##CullFrontCW, conservativeRasterizationMode);\
-    constexpr ConservativeRasterizationState name##Mode##CullBackCW(name##CullBackCW, conservativeRasterizationMode);\
-    constexpr ConservativeRasterizationState name##Mode##CullFrontAndBackCW(name##CullFrontAndBackCW, conservativeRasterizationMode);
+#define MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(polygonMode, ConservativeMode, conservativeRasterizationMode)\
+    constexpr ConservativeRasterizationState polygonMode##CullNoneCCw##ConservativeMode(polygonMode##CullNoneCCw, conservativeRasterizationMode);\
+    constexpr ConservativeRasterizationState polygonMode##CullFrontCCw##ConservativeMode(polygonMode##CullFrontCCw, conservativeRasterizationMode);\
+    constexpr ConservativeRasterizationState polygonMode##CullBackCCw##ConservativeMode(polygonMode##CullBackCCw, conservativeRasterizationMode);\
+    constexpr ConservativeRasterizationState polygonMode##CullFrontAndBackCCw##ConservativeMode(polygonMode##CullFrontAndBackCCw, conservativeRasterizationMode);\
+    constexpr ConservativeRasterizationState polygonMode##CullNoneCw##ConservativeMode(polygonMode##CullNoneCw, conservativeRasterizationMode);\
+    constexpr ConservativeRasterizationState polygonMode##CullFrontCw##ConservativeMode(polygonMode##CullFrontCw, conservativeRasterizationMode);\
+    constexpr ConservativeRasterizationState polygonMode##CullBackCw##ConservativeMode(polygonMode##CullBackCw, conservativeRasterizationMode);\
+    constexpr ConservativeRasterizationState polygonMode##CullFrontAndBackCw##ConservativeMode(polygonMode##CullFrontAndBackCw, conservativeRasterizationMode);
 
     namespace renderstate
     {
@@ -60,10 +60,10 @@ namespace magma
         MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(fill, Underestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT)
         MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(line, Underestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT)
         MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(point, Underestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT)
-#ifdef VK_NV_fill_rectangle
+    #ifdef VK_NV_fill_rectangle
         MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Overestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT)
         MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Underestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT)
-#endif
+    #endif
     } // namespace renderstate
 } // namespace magma
 #endif // VK_EXT_conservative_rasterization
