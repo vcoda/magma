@@ -63,8 +63,7 @@ namespace magma
     constexpr hash_t fillCullBackCCwProvokingFirstHash = renderstate::fillCullBackCCwProvokingFirst.hash();
 #endif
 #ifdef VK_EXT_transform_feedback
-    constexpr StreamRasterizationState fillCullNoneCCwStreamOne(renderstate::fillCullNoneCCw, 1);
-    constexpr hash_t fillCullNoneCCwStreamOneHash = fillCullNoneCCwStreamOne.hash();
+    constexpr hash_t fillCullNoneCCwStream1Hash = renderstate::fillCullNoneCCwStream1.hash();
 #endif
 #ifdef VK_EXT_blend_operation_advanced
     constexpr hash_t blendOverlayRgbaHash = blendstate::advanced::blendOverlayRgba.hash();
