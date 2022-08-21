@@ -29,8 +29,8 @@ namespace magma
             VkLineRasterizationModeEXT lineRasterizationMode) noexcept;
         constexpr LineRasterizationState(const RasterizationState& state,
             VkLineRasterizationModeEXT lineRasterizationMode,
-            uint32_t lineStippleFactor,
-            uint16_t lineStipplePattern) noexcept;
+            uint32_t stippleFactor,
+            uint16_t stipplePattern) noexcept;
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const LineRasterizationState&) const noexcept;
 

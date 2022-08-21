@@ -16,15 +16,15 @@ constexpr LineRasterizationState::LineRasterizationState(const RasterizationStat
 }
 
 constexpr LineRasterizationState::LineRasterizationState(const RasterizationState& state,
-    VkLineRasterizationModeEXT lineRasterizationMode, uint32_t lineStippleFactor, uint16_t lineStipplePattern) noexcept:
+    VkLineRasterizationModeEXT lineRasterizationMode, uint32_t stippleFactor, uint16_t stipplePattern) noexcept:
     RasterizationState(state),
     line{
         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT,
         state.pNext,
         lineRasterizationMode,
         VK_TRUE, // stippledLineEnable
-        lineStippleFactor,
-        lineStipplePattern
+        stippleFactor,
+        stipplePattern
     }
 {
     pNext = &line;
