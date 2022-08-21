@@ -38,7 +38,7 @@ Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
     VkSamplerCreateInfo samplerInfo = state;
     if (samplerInfo.anisotropyEnable)
     {   // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive
-        const VkPhysicalDeviceProperties properties = device->getPhysicalDevice()->getProperties();
+        const VkPhysicalDeviceProperties properties = this->device->getPhysicalDevice()->getProperties();
         const VkPhysicalDeviceLimits& limits = properties.limits;
         samplerInfo.maxAnisotropy = std::max(1.f, std::min(state.maxAnisotropy, limits.maxSamplerAnisotropy));
     }
