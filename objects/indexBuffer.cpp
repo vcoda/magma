@@ -28,7 +28,7 @@ BaseIndexBuffer::BaseIndexBuffer(std::shared_ptr<Device> device, VkDeviceSize si
     VkBufferUsageFlags usage, VkBufferCreateFlags flags, VkIndexType indexType,
     VkMemoryPropertyFlags memoryFlags, float memoryPriority,
     const Sharing& sharing, std::shared_ptr<Allocator> allocator):
-    Buffer(std::move(device), size, flags, usage, memoryFlags, memoryPriority, sharing, std::move(allocator)),
+    Buffer(std::move(device), size, usage, flags, memoryFlags, memoryPriority, sharing, std::move(allocator)),
     indexType(indexType)
 {}
 
