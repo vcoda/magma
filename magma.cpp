@@ -59,6 +59,9 @@ namespace magma
 #ifdef VK_EXT_conservative_rasterization
     constexpr hash_t fillCullNoneCCwOverestimateHash = renderstate::fillCullNoneCCwOverestimate.hash();
 #endif
+#ifdef VK_EXT_line_rasterization
+    constexpr hash_t stippledLineBresenhamPatternAx2Hash = renderstate::stippledLineBresenhamPatternAx2.hash();
+#endif
 #ifdef VK_EXT_provoking_vertex
     constexpr hash_t fillCullBackCCwProvokingFirstHash = renderstate::fillCullBackCCwProvokingFirst.hash();
 #endif

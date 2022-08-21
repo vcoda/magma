@@ -40,4 +40,31 @@ namespace magma
 
 #include "lineRasterizationState.inl"
 
+namespace magma
+{
+#define MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_FACTORS(Mode, Pattern, lineRasterizationMode, stipplePattern)\
+    constexpr LineRasterizationState stippledLine##Mode##Pattern##x1(fillCullNoneCCw, lineRasterizationMode, 1, stipplePattern);\
+    constexpr LineRasterizationState stippledLine##Mode##Pattern##x2(fillCullNoneCCw, lineRasterizationMode, 2, stipplePattern);\
+    constexpr LineRasterizationState stippledLine##Mode##Pattern##x4(fillCullNoneCCw, lineRasterizationMode, 4, stipplePattern);\
+    constexpr LineRasterizationState stippledLine##Mode##Pattern##x6(fillCullNoneCCw, lineRasterizationMode, 6, stipplePattern);\
+    constexpr LineRasterizationState stippledLine##Mode##Pattern##x8(fillCullNoneCCw, lineRasterizationMode, 8, stipplePattern);
+
+#define MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_PATTERNS(Mode, lineRasterizationMode)\
+    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_FACTORS(Mode, PatternA, lineRasterizationMode, 0b0101010101010101);\
+    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_FACTORS(Mode, PatternB, lineRasterizationMode, 0b0111011101110111);\
+    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_FACTORS(Mode, PatternC, lineRasterizationMode, 0b0001111100011111);\
+    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_FACTORS(Mode, PatternD, lineRasterizationMode, 0b0001000100010001);
+
+#define MAGMA_LINE_RASTERIZATION_STATE_PERMUTATIONS(Mode, lineRasterizationMode)\
+    constexpr LineRasterizationState solidLine##Mode(fillCullNoneCCw, lineRasterizationMode);\
+    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_PATTERNS(Mode, lineRasterizationMode)
+
+    namespace renderstate
+    {
+        MAGMA_LINE_RASTERIZATION_STATE_PERMUTATIONS(Default, VK_LINE_RASTERIZATION_MODE_DEFAULT_EXT)
+        MAGMA_LINE_RASTERIZATION_STATE_PERMUTATIONS(Rectangular, VK_LINE_RASTERIZATION_MODE_RECTANGULAR_EXT)
+        MAGMA_LINE_RASTERIZATION_STATE_PERMUTATIONS(Bresenham, VK_LINE_RASTERIZATION_MODE_BRESENHAM_EXT)
+        MAGMA_LINE_RASTERIZATION_STATE_PERMUTATIONS(SmoothRectangular, VK_LINE_RASTERIZATION_MODE_RECTANGULAR_SMOOTH_EXT)
+    } // namespace renderstate
+} // namespace magma
 #endif // VK_EXT_line_rasterization
