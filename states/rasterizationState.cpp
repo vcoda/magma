@@ -50,6 +50,19 @@ hash_t RasterizationState::chainedHash() const noexcept
             }
             break;
     #endif // VK_EXT_conservative_rasterization
+    #ifdef VK_EXT_line_rasterization
+        case VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT:
+            {
+                auto line = reinterpret_cast<const VkPipelineRasterizationLineStateCreateInfoEXT *>(next);
+                hash = core::hashCombine(hash, core::hashArgs(
+                    line->sType,
+                    line->lineRasterizationMode,
+                    line->stippledLineEnable,
+                    line->lineStippleFactor,
+                    line->lineStipplePattern));
+            }
+            break;
+    #endif // VK_EXT_line_rasterization
     #ifdef VK_EXT_provoking_vertex
         case VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_PROVOKING_VERTEX_STATE_CREATE_INFO_EXT:
             {

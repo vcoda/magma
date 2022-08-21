@@ -702,6 +702,9 @@
     <ClInclude Include="..\..\states\provokingVertexState.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\states\lineRasterizationState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1241,6 +1244,9 @@
       <Filter>Header Files\states</Filter>
     </None>
     <None Include="..\..\states\provokingVertexState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\states\lineRasterizationState.inl">
       <Filter>Header Files\states</Filter>
     </None>
   </ItemGroup>

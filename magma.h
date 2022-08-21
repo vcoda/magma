@@ -108,6 +108,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "states/depthComparisonSamplerState.h"
 #include "states/depthStencilState.h"
 #include "states/inputAssemblyState.h"
+#include "states/lineRasterizationState.h"
 #include "states/minmaxSamplerState.h"
 #include "states/multisampleState.h"
 #include "states/multiViewportState.h"
