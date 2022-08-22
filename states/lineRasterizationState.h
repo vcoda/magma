@@ -42,22 +42,24 @@ namespace magma
 
 namespace magma
 {
-#define MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_PATTERNS(Mode, Factor, lineRasterizationMode, stippleFactor)\
-    constexpr LineRasterizationState stippledLine##Mode##PatternA##Factor(fillCullNoneCCw, lineRasterizationMode, stippleFactor, 0b0101010101010101);\
-    constexpr LineRasterizationState stippledLine##Mode##PatternB##Factor(fillCullNoneCCw, lineRasterizationMode, stippleFactor, 0b0111011101110111);\
-    constexpr LineRasterizationState stippledLine##Mode##PatternC##Factor(fillCullNoneCCw, lineRasterizationMode, stippleFactor, 0b0001111100011111);\
-    constexpr LineRasterizationState stippledLine##Mode##PatternD##Factor(fillCullNoneCCw, lineRasterizationMode, stippleFactor, 0b0001000100010001);
+#define MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_FACTORS(Mode, Pattern, lineRasterizationMode, stipplePattern)\
+    constexpr LineRasterizationState stippledLine##Mode##Pattern(fillCullNoneCCw, lineRasterizationMode, 1, stipplePattern);\
+    constexpr LineRasterizationState stippledLine##Mode##Pattern##x2(fillCullNoneCCw, lineRasterizationMode, 2, stipplePattern);\
+    constexpr LineRasterizationState stippledLine##Mode##Pattern##x4(fillCullNoneCCw, lineRasterizationMode, 4, stipplePattern);\
+    constexpr LineRasterizationState stippledLine##Mode##Pattern##x6(fillCullNoneCCw, lineRasterizationMode, 6, stipplePattern);\
+    constexpr LineRasterizationState stippledLine##Mode##Pattern##x8(fillCullNoneCCw, lineRasterizationMode, 8, stipplePattern);
 
-#define MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_FACTORS(Mode, lineRasterizationMode)\
-    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_PATTERNS(Mode, x1, lineRasterizationMode, 1);\
-    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_PATTERNS(Mode, x2, lineRasterizationMode, 2);\
-    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_PATTERNS(Mode, x4, lineRasterizationMode, 4);\
-    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_PATTERNS(Mode, x6, lineRasterizationMode, 6);\
-    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_PATTERNS(Mode, x8, lineRasterizationMode, 8);
+#define MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_PATTERNS(Mode, lineRasterizationMode)\
+    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_FACTORS(Mode, PatternA, lineRasterizationMode, 0b0101010101010101); /*Í Í Í Í Í Í Í Í */\
+    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_FACTORS(Mode, PatternB, lineRasterizationMode, 0b0111011101110111); /*ÍÍÍ ÍÍÍ ÍÍÍ ÍÍÍ */\
+    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_FACTORS(Mode, PatternC, lineRasterizationMode, 0b0001111100011111); /*ÍÍÍÍÍ   ÍÍÍÍÍ   */\
+    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_FACTORS(Mode, PatternD, lineRasterizationMode, 0b0000110000111111); /*ÍÍÍÍÍÍ    ÍÍ    */\
+    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_FACTORS(Mode, PatternE, lineRasterizationMode, 0b0000100001111111); /*ÍÍÍÍÍÍÍ    Í    */\
+    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_FACTORS(Mode, PatternF, lineRasterizationMode, 0b0001000100010001); /*Í   Í   Í   Í   */
 
 #define MAGMA_LINE_RASTERIZATION_STATE_PERMUTATIONS(Mode, lineRasterizationMode)\
     constexpr LineRasterizationState solidLine##Mode(fillCullNoneCCw, lineRasterizationMode);\
-    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_FACTORS(Mode, lineRasterizationMode)
+    MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_PATTERNS(Mode, lineRasterizationMode)
 
     namespace renderstate
     {
