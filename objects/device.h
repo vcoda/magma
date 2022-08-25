@@ -88,7 +88,7 @@ namespace magma
         bool stippledLinesEnabled() const noexcept;
 
     private:
-        const void *findExtendedFeatures(VkStructureType sType) const noexcept;
+        const void *findEnabledExtendedFeatures(VkStructureType sType) const noexcept;
 
         std::shared_ptr<PhysicalDevice> physicalDevice;
         mutable std::vector<std::pair<DeviceQueueDescriptor, std::weak_ptr<Queue>>> queues;

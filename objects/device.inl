@@ -2,7 +2,7 @@
 template<>\
 inline const VkPhysicalDevice##FeaturesType *Device::getEnabledExtendedFeatures<VkPhysicalDevice##FeaturesType>() const noexcept\
 {\
-    return reinterpret_cast<const VkPhysicalDevice##FeaturesType *>(findExtendedFeatures(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_##StructureType));\
+    return reinterpret_cast<const VkPhysicalDevice##FeaturesType *>(findEnabledExtendedFeatures(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_##StructureType));\
 }
 
 // Keep features in alphabetical order!
