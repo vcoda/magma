@@ -276,13 +276,9 @@ bool Device::extensionEnabled(const char *extensionName) const
 bool Device::separateDepthStencilLayoutsEnabled() const noexcept
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts
-    const void *features = findExtendedFeatures(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SEPARATE_DEPTH_STENCIL_LAYOUTS_FEATURES_KHR);
-    if (features)
-    {
-        const VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR *separateDepthStencilFeatures =
-            reinterpret_cast<const VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR *>(features);
+    const auto separateDepthStencilFeatures = getEnabledExtendedFeatures<VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR>();
+    if (separateDepthStencilFeatures)
         return (VK_TRUE == separateDepthStencilFeatures->separateDepthStencilLayouts);
-    }
 #endif
     return false;
 }
