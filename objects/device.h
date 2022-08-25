@@ -80,9 +80,8 @@ namespace magma
         const std::vector<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
         const std::vector<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
         const VkPhysicalDeviceFeatures& getEnabledFeatures() const noexcept { return enabledFeatures; }
-#ifdef VK_KHR_get_physical_device_properties2
-        const std::vector<void *>& getEnabledExtendedFeatures() const noexcept { return enabledExtendedFeatures; }
-#endif
+        template<typename PhysicalDeviceFeatures>
+        const PhysicalDeviceFeatures *getEnabledExtendedFeatures() const noexcept;
         bool extensionEnabled(const char *extensionName) const;
         bool separateDepthStencilLayoutsEnabled() const noexcept;
         bool negativeViewportHeightEnabled(bool khronos) const noexcept;
@@ -99,3 +98,5 @@ namespace magma
         std::vector<void *> enabledExtendedFeatures;
     };
 } // namespace magma
+
+#include "device.inl"

@@ -1249,6 +1249,9 @@
     <None Include="..\..\states\lineRasterizationState.inl">
       <Filter>Header Files\states</Filter>
     </None>
+    <None Include="..\..\objects\device.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">
