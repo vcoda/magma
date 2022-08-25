@@ -88,7 +88,7 @@ namespace magma
         bool negativeViewportHeightEnabled(bool khronos) const noexcept;
 
     private:
-        const void *findExtendedFeatures(VkStructureType featuresType) const noexcept;
+        const void *findExtendedFeatures(VkStructureType sType) const noexcept;
 
         std::shared_ptr<PhysicalDevice> physicalDevice;
         mutable std::vector<std::pair<DeviceQueueDescriptor, std::weak_ptr<Queue>>> queues;
@@ -96,8 +96,6 @@ namespace magma
         std::vector<std::string> enabledLayers;
         std::vector<std::string> enabledExtensions;
         VkPhysicalDeviceFeatures enabledFeatures;
-#ifdef VK_KHR_get_physical_device_properties2
         std::vector<void *> enabledExtendedFeatures;
-#endif
     };
 } // namespace magma

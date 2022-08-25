@@ -48,10 +48,8 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     Dispatchable<VkDevice>(VK_OBJECT_TYPE_DEVICE, nullptr, std::move(allocator)),
     physicalDevice(std::move(physicalDevice)),
     resourcePool(std::make_shared<ResourcePool>()),
-    enabledFeatures(deviceFeatures)
-#ifdef VK_KHR_get_physical_device_properties2
-    ,enabledExtendedFeatures(extendedDeviceFeatures)
-#endif
+    enabledFeatures(deviceFeatures),
+    enabledExtendedFeatures(extendedDeviceFeatures)
 {
 #ifdef VK_KHR_get_physical_device_properties2
     VkPhysicalDeviceFeatures2KHR features;
@@ -301,24 +299,14 @@ bool Device::negativeViewportHeightEnabled(bool khronos) const noexcept
 #endif
 }
 
-const void *Device::findExtendedFeatures(VkStructureType featuresType) const noexcept
+const void *Device::findExtendedFeatures(VkStructureType sType) const noexcept
 {
-#ifdef VK_KHR_get_physical_device_properties2
-    for (auto features : enabledExtendedFeatures)
+    for (auto it : enabledExtendedFeatures)
     {
-        struct VkFeaturesNode
-        {
-            VkStructureType sType;
-            void *pNext;
-            // ...
-        };
-        const VkFeaturesNode *featuresNode = reinterpret_cast<const VkFeaturesNode *>(features);
-        if (featuresNode->sType == featuresType)
+        const VkBaseInStructure *features = reinterpret_cast<const VkBaseInStructure *>(it);
+        if (features->sType == sType)
             return features;
     }
-#else
-    MAGMA_UNUSED(featuresType);
-#endif
     return nullptr;
 }
 } // namespace magma
