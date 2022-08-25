@@ -56,6 +56,15 @@ inline void CommandBuffer::setLineWidth(float lineWidth) noexcept
     vkCmdSetLineWidth(handle, lineWidth);
 }
 
+#ifdef VK_EXT_line_rasterization
+inline void CommandBuffer::setLineStipple(uint32_t stippleFactor, uint16_t stipplePattern) noexcept
+{
+    MAGMA_DEVICE_EXTENSION(vkCmdSetLineStippleEXT);
+    if (vkCmdSetLineStippleEXT)
+        vkCmdSetLineStippleEXT(handle, stippleFactor, stipplePattern);
+}
+#endif // VK_EXT_line_rasterization
+
 inline void CommandBuffer::setDepthBias(float depthBiasConstantFactor, float depthBiasClamp, float depthBiasSlopeFactor) noexcept
 {
     vkCmdSetDepthBias(handle, depthBiasConstantFactor, depthBiasClamp, depthBiasSlopeFactor);

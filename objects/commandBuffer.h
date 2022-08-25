@@ -102,6 +102,10 @@ namespace magma
         void setScissors(const std::initializer_list<VkRect2D>& scissors) noexcept;
 
         void setLineWidth(float lineWidth) noexcept;
+    #ifdef VK_EXT_line_rasterization
+        void setLineStipple(uint32_t stippleFactor,
+            uint16_t stipplePattern) noexcept;
+    #endif
         void setDepthBias(float depthBiasConstantFactor,
             float depthBiasClamp,
             float depthBiasSlopeFactor) noexcept;
