@@ -67,6 +67,8 @@ namespace magma
             void setDepthStencilState(const DepthStencilState& state) noexcept;
             void setColorBlendState(const ColorBlendState& state) noexcept;
             void setLineWidth(float width) noexcept;
+            void setLineStippleFactor(uint32_t stippleFactor) noexcept;
+            void setLineStipplePattern(uint16_t stipplePattern) noexcept;
             void setIdentity() noexcept;
             void setTransform(const float matrix[4][4]) noexcept;
             // Primitive generation
@@ -109,6 +111,8 @@ namespace magma
             DepthStencilState depthStencilState;
             MultiColorBlendState colorBlendState;
             float lineWidth = 1.f;
+            uint32_t lineStippleFactor = 1;
+            uint16_t lineStipplePattern = 0b1111111111111111;
             float transform[4][4];
             Vertex *current = nullptr;
             bool insidePrimitive = false;

@@ -14,11 +14,15 @@ struct ImmediateRender::Primitive
 {
     std::shared_ptr<GraphicsPipeline> pipeline;
     float lineWidth;
+    uint32_t lineStippleFactor;
+    uint16_t lineStipplePattern;
     float transform[4][4];
     uint32_t vertexCount;
     uint32_t firstVertex;
     const char *labelName;
     uint32_t labelColor;
+    uint32_t wideLineState : 1;
+    uint32_t stippledLineState: 1;
 };
 
 inline void ImmediateRender::setVertexShader(const VertexShaderStage& shader) noexcept
@@ -61,6 +65,18 @@ inline void ImmediateRender::setLineWidth(float width) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
     lineWidth = width;
+}
+
+inline void ImmediateRender::setLineStippleFactor(uint32_t stippleFactor) noexcept
+{
+    MAGMA_ASSERT(!insidePrimitive);
+    lineStippleFactor = stippleFactor;
+}
+
+inline void ImmediateRender::setLineStipplePattern(uint16_t stipplePattern) noexcept
+{
+    MAGMA_ASSERT(!insidePrimitive);
+    lineStipplePattern = stipplePattern;
 }
 
 inline void ImmediateRender::setIdentity() noexcept

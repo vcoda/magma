@@ -91,11 +91,20 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,
     Primitive primitive;
     primitive.pipeline = lookupPipeline(topology);
     primitive.lineWidth = lineWidth;
+    primitive.lineStippleFactor = lineStippleFactor;
+    primitive.lineStipplePattern = lineStipplePattern;
     memcpy(primitive.transform, transform, sizeof(transform));
     primitive.vertexCount = 0;
     primitive.firstVertex = vertexCount;
     primitive.labelName = labelName;
     primitive.labelColor = labelColor;
+    primitive.wideLineState = (rasterizationState.lineWidth > 1.f);
+    primitive.stippledLineState = 0;
+#ifdef VK_EXT_line_rasterization
+    auto lineRasterizationState = rasterizationState.findNode<VkPipelineRasterizationLineStateCreateInfoEXT>(VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT);
+    if (lineRasterizationState)
+        primitive.stippledLineState = lineRasterizationState->stippledLineEnable;
+#endif
     primitives.push_back(primitive);
     insidePrimitive = true;
     return true;
@@ -136,7 +145,12 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer> cmdBuffer,
             cmdBuffer->bindPipeline(primitive.pipeline);
             prevPipeline = primitive.pipeline;
         }
-        cmdBuffer->setLineWidth(primitive.lineWidth);
+        if (!primitive.wideLineState)
+            cmdBuffer->setLineWidth(primitive.lineWidth);
+    #ifdef VK_EXT_line_rasterization
+        if (!primitive.stippledLineState)
+            cmdBuffer->setLineStipple(primitive.lineStippleFactor, primitive.lineStipplePattern);
+    #endif
         if (layout)
             cmdBuffer->pushConstantBlock(layout, VK_SHADER_STAGE_VERTEX_BIT, primitive.transform);
         cmdBuffer->draw(primitive.vertexCount, primitive.firstVertex);
