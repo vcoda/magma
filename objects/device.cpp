@@ -309,7 +309,7 @@ bool Device::stippledLinesEnabled() const noexcept
     return false;
 }
 
-const void *Device::findEnabledExtendedFeatures(VkStructureType sType) const noexcept
+const VkBaseInStructure *Device::findEnabledExtendedFeatures(VkStructureType sType) const noexcept
 {
     for (auto it : enabledExtendedFeatures)
     {
