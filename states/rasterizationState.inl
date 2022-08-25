@@ -55,6 +55,19 @@ constexpr hash_t RasterizationState::hash() const noexcept
         lineWidth);
 }
 
+template<class Node>
+inline const Node *RasterizationState::findNode(VkStructureType sType) const noexcept
+{
+    const VkBaseInStructure *state = reinterpret_cast<const VkBaseInStructure *>(pNext);
+    while (state)
+    {
+        if (state->sType == sType)
+            return reinterpret_cast<const Node *>(state);
+        state = reinterpret_cast<const VkBaseInStructure *>(state->pNext);
+    }
+    return nullptr;
+}
+
 constexpr bool RasterizationState::operator==(const RasterizationState& other) const noexcept
 {
     return (flags == other.flags) &&
