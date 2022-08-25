@@ -68,6 +68,16 @@ constexpr
     std::shared_ptr<ShaderModule> fragmentShader = std::make_shared<ShaderModule>(device, fsImm, fsImmHash, MAGMA_HOST_ALLOCATOR(allocator), 0, false);
     shaderStages.push_back(VertexShaderStage(vertexShader, "main"));
     shaderStages.push_back(FragmentShaderStage(fragmentShader, "main"));
+#ifdef VK_EXT_line_rasterization
+    auto lineRasterizationFeatures = device->getEnabledExtendedFeatures<VkPhysicalDeviceLineRasterizationFeaturesEXT>();
+    if (lineRasterizationFeatures)
+    {   // Check if stippled lines feature is enabled on device
+        stippledLinesEnabled =
+            lineRasterizationFeatures->stippledRectangularLines ||
+            lineRasterizationFeatures->stippledBresenhamLines ||
+            lineRasterizationFeatures->stippledSmoothLines;
+    }
+#endif // VK_EXT_line_rasterization
 }
 
 bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,

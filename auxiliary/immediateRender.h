@@ -117,6 +117,7 @@ namespace magma
             Vertex *current = nullptr;
             bool insidePrimitive = false;
             uint32_t vertexCount = 0;
+            bool stippledLinesEnabled = false;
         };
     } // namespace aux
 } // namespace magma
