@@ -99,7 +99,14 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,
         pointSize(1.f);
     }
     Primitive primitive;
-    primitive.pipeline = lookupPipeline(topology);
+    primitive.wideLineState = (rasterizationState.lineWidth > 1.f);
+    primitive.stippledLineState = 0;
+#ifdef VK_EXT_line_rasterization
+    auto lineRasterizationState = rasterizationState.findNode<VkPipelineRasterizationLineStateCreateInfoEXT>(VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT);
+    if (lineRasterizationState)
+        primitive.stippledLineState = lineRasterizationState->stippledLineEnable;
+#endif
+    primitive.pipeline = lookupPipeline(topology, primitive.wideLineState, primitive.stippledLineState);
     primitive.lineWidth = lineWidth;
     primitive.lineStippleFactor = lineStippleFactor;
     primitive.lineStipplePattern = lineStipplePattern;
@@ -108,13 +115,6 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,
     primitive.firstVertex = vertexCount;
     primitive.labelName = labelName;
     primitive.labelColor = labelColor;
-    primitive.wideLineState = (rasterizationState.lineWidth > 1.f);
-    primitive.stippledLineState = 0;
-#ifdef VK_EXT_line_rasterization
-    auto lineRasterizationState = rasterizationState.findNode<VkPipelineRasterizationLineStateCreateInfoEXT>(VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT);
-    if (lineRasterizationState)
-        primitive.stippledLineState = lineRasterizationState->stippledLineEnable;
-#endif
     primitives.push_back(primitive);
     insidePrimitive = true;
     return true;
@@ -192,7 +192,7 @@ bool ImmediateRender::reset() noexcept
     return true;
 }
 
-std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTopology topology)
+std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTopology topology, bool wideLineState, bool stippledLineState)
 {
     static VertexInputStructure<Vertex> vertexInputState(0, {
         {0, &Vertex::position},
@@ -212,22 +212,12 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTop
         &renderstate::triangleStripWithAdjacency,
         &renderstate::patchList};
     std::vector<VkDynamicState> dynamicStates = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
-    if (rasterizationState.lineWidth == 1.f)
-    {   // Enable dynamic line width state if necessary
-        if (lineWidth > 1.f)
-            dynamicStates.push_back(VK_DYNAMIC_STATE_LINE_WIDTH);
-    }
+    if (!wideLineState)
+        dynamicStates.push_back(VK_DYNAMIC_STATE_LINE_WIDTH);
 #ifdef VK_EXT_line_rasterization
-    if (stippledLinesEnabled)
-    {
-        auto lineRasterizationState = rasterizationState.findNode<VkPipelineRasterizationLineStateCreateInfoEXT>(VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT);
-        if (!lineRasterizationState || !lineRasterizationState->stippledLineEnable)
-        {   // Enable dynamic line stipple state if necessary
-            if ((lineStippleFactor > 1) || (lineStipplePattern != std::numeric_limits<unsigned short>::max()))
-                dynamicStates.push_back(VK_DYNAMIC_STATE_LINE_STIPPLE_EXT);
-        }
-    }
-#endif // VK_EXT_line_rasterization
+    if (!stippledLineState && stippledLinesEnabled)
+        dynamicStates.push_back(VK_DYNAMIC_STATE_LINE_STIPPLE_EXT);
+#endif
     // Create new or grab existing graphics pipeline
     return pipelineCache->lookupPipeline(shaderStages,
         vertexInputState, *inputAssemblyStates[topology],

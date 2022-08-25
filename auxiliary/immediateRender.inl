@@ -12,6 +12,8 @@ struct ImmediateRender::Vertex
 
 struct ImmediateRender::Primitive
 {
+    uint32_t wideLineState : 1;
+    uint32_t stippledLineState: 1;
     std::shared_ptr<GraphicsPipeline> pipeline;
     float lineWidth;
     uint32_t lineStippleFactor;
@@ -21,8 +23,6 @@ struct ImmediateRender::Primitive
     uint32_t firstVertex;
     const char *labelName;
     uint32_t labelColor;
-    uint32_t wideLineState : 1;
-    uint32_t stippledLineState: 1;
 };
 
 inline void ImmediateRender::setVertexShader(const VertexShaderStage& shader) noexcept
