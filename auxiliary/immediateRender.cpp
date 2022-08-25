@@ -159,8 +159,11 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer> cmdBuffer,
             cmdBuffer->setLineWidth(primitive.lineWidth);
     #ifdef VK_EXT_line_rasterization
         if (!primitive.stippledLineState)
-            cmdBuffer->setLineStipple(primitive.lineStippleFactor, primitive.lineStipplePattern);
-    #endif
+        {
+            if (stippledLinesEnabled)
+                cmdBuffer->setLineStipple(primitive.lineStippleFactor, primitive.lineStipplePattern);
+        }
+    #endif // VK_EXT_line_rasterization
         if (layout)
             cmdBuffer->pushConstantBlock(layout, VK_SHADER_STAGE_VERTEX_BIT, primitive.transform);
         cmdBuffer->draw(primitive.vertexCount, primitive.firstVertex);
@@ -208,12 +211,29 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTop
         &renderstate::triangleListWithAdjacency,
         &renderstate::triangleStripWithAdjacency,
         &renderstate::patchList};
+    std::vector<VkDynamicState> dynamicStates = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
+    if (rasterizationState.lineWidth == 1.f)
+    {   // Enable dynamic line width state if necessary
+        if (lineWidth > 1.f)
+            dynamicStates.push_back(VK_DYNAMIC_STATE_LINE_WIDTH);
+    }
+#ifdef VK_EXT_line_rasterization
+    if (stippledLinesEnabled)
+    {
+        auto lineRasterizationState = rasterizationState.findNode<VkPipelineRasterizationLineStateCreateInfoEXT>(VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT);
+        if (!lineRasterizationState || !lineRasterizationState->stippledLineEnable)
+        {   // Enable dynamic line stipple state if necessary
+            if ((lineStippleFactor > 1) || (lineStipplePattern != std::numeric_limits<unsigned short>::max()))
+                dynamicStates.push_back(VK_DYNAMIC_STATE_LINE_STIPPLE_EXT);
+        }
+    }
+#endif // VK_EXT_line_rasterization
     // Create new or grab existing graphics pipeline
     return pipelineCache->lookupPipeline(shaderStages,
         vertexInputState, *inputAssemblyStates[topology],
         TesselationState(), ViewportState(),
-        rasterizationState, multisampleState, depthStencilState, colorBlendState,
-        {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR, VK_DYNAMIC_STATE_LINE_WIDTH},
+        rasterizationState, multisampleState,
+        depthStencilState, colorBlendState, dynamicStates,
         layout, renderPass, 0);
 }
 } // namespace aux
