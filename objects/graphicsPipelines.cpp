@@ -52,7 +52,7 @@ uint32_t GraphicsPipelines::newPipeline(const std::vector<PipelineShaderStage>& 
     const MultisampleState& multisampleState,
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
-    const std::vector<VkDynamicState>& dynamicRenderStates,
+    const std::vector<VkDynamicState>& dynamicStates_,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass,
@@ -68,7 +68,7 @@ uint32_t GraphicsPipelines::newPipeline(const std::vector<PipelineShaderStage>& 
     multisampleStates.push_back(multisampleState);
     depthStencilStates.push_back(depthStencilState);
     colorBlendStates.push_back(colorBlendState);
-    dynamicStates.push_back(dynamicRenderStates);
+    dynamicStates.push_back(dynamicStates_);
     layouts.push_back(layout);
     renderPasses.push_back(renderPass);
     basePipelines.push_back(basePipeline);
@@ -133,7 +133,7 @@ uint32_t GraphicsPipelines::newPipeline(const std::vector<PipelineShaderStage>& 
         multisampleState.hash(),
         depthStencilState.hash(),
         colorBlendState.hash()});
-    for (auto state : dynamicRenderStates)
+    for (auto state : dynamicStates_)
         hash = core::hashCombine(stateHash, core::hash(state));
     hash = core::hashCombine(hash, stateHash);
     hash = core::hashCombine(hash, layout->getHash());

@@ -45,7 +45,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     const MultisampleState& multisampleState,
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
-    const std::initializer_list<VkDynamicState>& dynamicStates,
+    const std::vector<VkDynamicState>& dynamicStates,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass,
@@ -72,7 +72,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     const MultisampleState& multisampleState,
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
-    const std::initializer_list<VkDynamicState>& dynamicStates,
+    const std::vector<VkDynamicState>& dynamicStates,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass,
@@ -106,7 +106,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     dynamicStateInfo.pNext = 0;
     dynamicStateInfo.flags = 0;
     dynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates);
-    dynamicStateInfo.pDynamicStates = dynamicStates.begin();
+    dynamicStateInfo.pDynamicStates = dynamicStates.data();
     pipelineInfo.pDynamicState = dynamicStateInfo.pDynamicStates ? &dynamicStateInfo : nullptr;
     pipelineInfo.layout = MAGMA_HANDLE(layout);
     pipelineInfo.renderPass = *renderPass;

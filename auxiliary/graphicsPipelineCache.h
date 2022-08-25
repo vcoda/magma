@@ -62,7 +62,7 @@ namespace magma
                 const MultisampleState& multisampleState,
                 const DepthStencilState& depthStencilState,
                 const ColorBlendState& colorBlendState,
-                const std::initializer_list<VkDynamicState>& dynamicStates,
+                const std::vector<VkDynamicState>& dynamicStates,
                 std::shared_ptr<PipelineLayout> pipelineLayout,
                 std::shared_ptr<RenderPass> renderPass,
                 uint32_t subpass = 0,
@@ -76,7 +76,7 @@ namespace magma
                 const MultisampleState& multisampleState,
                 const DepthStencilState& depthStencilState,
                 const ColorBlendState& colorBlendState,
-                const std::initializer_list<VkDynamicState>& dynamicStates = {}) const noexcept;
+                const std::vector<VkDynamicState>& dynamicStates = {}) const noexcept;
 
         private:
             std::shared_ptr<Device> device;

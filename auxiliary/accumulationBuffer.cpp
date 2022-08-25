@@ -99,7 +99,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
         (3 == components) ? renderstate::blendNormalRgb :
         (4 == components) ? renderstate::blendNormalRgba :
         renderstate::dontBlendRgba,
-        std::initializer_list<VkDynamicState>{},
+        std::vector<VkDynamicState>{},
         std::move(pipelineLayout),
         renderPass, 0,
         std::move(hostAllocator),

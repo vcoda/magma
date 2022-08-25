@@ -56,7 +56,7 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
     const MultisampleState& multisampleState,
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
-    const std::initializer_list<VkDynamicState>& dynamicStates,
+    const std::vector<VkDynamicState>& dynamicStates,
     std::shared_ptr<PipelineLayout> pipelineLayout,
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass /* 0 */,
@@ -129,7 +129,7 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupBasePipeline(
     const MultisampleState& multisampleState,
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
-    const std::initializer_list<VkDynamicState>& dynamicStates /* {} */) const noexcept
+    const std::vector<VkDynamicState>& dynamicStates /* {} */) const noexcept
 {
     if (!basePipelines.empty())
     {   // Compute hash of render and dynamic states
