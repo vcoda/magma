@@ -91,12 +91,7 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,
     }
     Primitive primitive;
     primitive.wideLineState = (rasterizationState.lineWidth > 1.f);
-    primitive.stippledLineState = 0;
-#ifdef VK_EXT_line_rasterization
-    auto lineRasterizationState = rasterizationState.findNode<VkPipelineRasterizationLineStateCreateInfoEXT>(VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT);
-    if (lineRasterizationState)
-        primitive.stippledLineState = lineRasterizationState->stippledLineEnable;
-#endif
+    primitive.stippledLineState = stippledLineState;
     primitive.pipeline = lookupPipeline(topology, primitive.wideLineState, primitive.stippledLineState);
     primitive.lineWidth = lineWidth;
     primitive.lineStippleFactor = lineStippleFactor;

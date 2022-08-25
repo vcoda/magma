@@ -41,6 +41,12 @@ inline void ImmediateRender::setRasterizationState(const RasterizationState& sta
 {
     MAGMA_ASSERT(!insidePrimitive);
     rasterizationState = state;
+#ifdef VK_EXT_line_rasterization
+    auto lineRasterizationState = rasterizationState.findNode<VkPipelineRasterizationLineStateCreateInfoEXT>(
+        VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT);
+    if (lineRasterizationState)
+        stippledLineState = lineRasterizationState->stippledLineEnable;
+#endif
 }
 
 inline void ImmediateRender::setMultisampleState(const MultisampleState& state) noexcept
