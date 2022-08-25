@@ -85,6 +85,7 @@ namespace magma
         bool extensionEnabled(const char *extensionName) const;
         bool separateDepthStencilLayoutsEnabled() const noexcept;
         bool negativeViewportHeightEnabled(bool khronos) const noexcept;
+        bool stippledLinesEnabled() const noexcept;
 
     private:
         const void *findExtendedFeatures(VkStructureType sType) const noexcept;

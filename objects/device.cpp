@@ -299,6 +299,20 @@ bool Device::negativeViewportHeightEnabled(bool khronos) const noexcept
 #endif
 }
 
+bool Device::stippledLinesEnabled() const noexcept
+{
+#ifdef VK_EXT_line_rasterization
+    auto lineRasterizationFeatures = getEnabledExtendedFeatures<VkPhysicalDeviceLineRasterizationFeaturesEXT>();
+    if (lineRasterizationFeatures)
+    {
+        return (VK_TRUE == lineRasterizationFeatures->stippledRectangularLines) ||
+            (VK_TRUE == lineRasterizationFeatures->stippledBresenhamLines) ||
+            (VK_TRUE == lineRasterizationFeatures->stippledSmoothLines);
+    }
+#endif // VK_EXT_line_rasterization
+    return false;
+}
+
 const void *Device::findExtendedFeatures(VkStructureType sType) const noexcept
 {
     for (auto it : enabledExtendedFeatures)
