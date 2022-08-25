@@ -12,8 +12,8 @@ struct ImmediateRender::Vertex
 
 struct ImmediateRender::Primitive
 {
-    uint32_t wideLineState : 1;
-    uint32_t stippledLineState: 1;
+    VkBool32 wideLineState : 1;
+    VkBool32 stippledLineState: 1;
     std::shared_ptr<GraphicsPipeline> pipeline;
     float lineWidth;
     uint32_t lineStippleFactor;
