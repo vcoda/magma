@@ -100,6 +100,7 @@ namespace magma
             struct Primitive;
 
             const uint32_t maxVertexCount;
+            const bool stippledLinesEnabled;
             std::shared_ptr<Device> device;
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<PipelineLayout> layout;
@@ -118,7 +119,6 @@ namespace magma
             Vertex *current = nullptr;
             bool insidePrimitive = false;
             uint32_t vertexCount = 0;
-            bool stippledLinesEnabled = false;
         };
     } // namespace aux
 } // namespace magma
