@@ -273,16 +273,6 @@ bool Device::extensionEnabled(const char *extensionName) const
     return false;
 }
 
-bool Device::separateDepthStencilLayoutsEnabled() const noexcept
-{
-#ifdef VK_KHR_separate_depth_stencil_layouts
-    const auto separateDepthStencilFeatures = getEnabledExtendedFeatures<VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR>();
-    if (separateDepthStencilFeatures)
-        return (VK_TRUE == separateDepthStencilFeatures->separateDepthStencilLayouts);
-#endif
-    return false;
-}
-
 bool Device::negativeViewportHeightEnabled(bool khronos) const noexcept
 {
 #if defined(VK_KHR_maintenance1) && defined(VK_AMD_negative_viewport_height)
@@ -295,15 +285,25 @@ bool Device::negativeViewportHeightEnabled(bool khronos) const noexcept
 #endif
 }
 
+bool Device::separateDepthStencilLayoutsEnabled() const noexcept
+{
+#ifdef VK_KHR_separate_depth_stencil_layouts
+    auto separateDepthStencilFeatures = getEnabledExtendedFeatures<VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR>();
+    if (separateDepthStencilFeatures)
+        return (VK_TRUE == separateDepthStencilFeatures->separateDepthStencilLayouts);
+#endif
+    return false;
+}
+
 bool Device::stippledLinesEnabled() const noexcept
 {
 #ifdef VK_EXT_line_rasterization
     auto lineRasterizationFeatures = getEnabledExtendedFeatures<VkPhysicalDeviceLineRasterizationFeaturesEXT>();
     if (lineRasterizationFeatures)
     {
-        return (VK_TRUE == lineRasterizationFeatures->stippledRectangularLines) ||
-            (VK_TRUE == lineRasterizationFeatures->stippledBresenhamLines) ||
-            (VK_TRUE == lineRasterizationFeatures->stippledSmoothLines);
+        return lineRasterizationFeatures->stippledRectangularLines ||
+            lineRasterizationFeatures->stippledBresenhamLines ||
+            lineRasterizationFeatures->stippledSmoothLines;
     }
 #endif // VK_EXT_line_rasterization
     return false;
