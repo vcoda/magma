@@ -180,6 +180,7 @@ bool ImmediateRender::reset() noexcept
 
 std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTopology topology, bool wideLineState, bool stippledLineState)
 {
+    MAGMA_UNUSED(stippledLineState);
     static VertexInputStructure<Vertex> vertexInputState(0, {
         {0, &Vertex::position},
         {1, &Vertex::normalPSize},
