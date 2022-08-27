@@ -22,8 +22,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-#define MAGMA_CHECK_EXTENSION(extension)\
-    extension(this->hasExtension(core::hashString(MAGMA_EXTENSION_PREFIX #extension)))
+#define MAGMA_CHECK_EXTENSION(name)\
+    name(hasExtension(core::hashString(MAGMA_EXTENSION_PREFIX #name)))
 
 InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
     Extensions(Instance::enumerateExtensions(layerName)),

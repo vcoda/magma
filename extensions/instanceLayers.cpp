@@ -22,10 +22,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-#define MAGMA_CHECK_LAYER(layer)\
-    layer(this->hasLayer(core::hashString(MAGMA_LAYER_PREFIX #layer)))
-#define MAGMA_CHECK_LAYER_NOPREFIX(layer)\
-    layer(this->hasLayer(core::hashString(#layer)))
+#define MAGMA_CHECK_LAYER(name)\
+    name(hasLayer(core::hashString(MAGMA_LAYER_PREFIX #name)))
+#define MAGMA_CHECK_LAYER_NOPREFIX(name)\
+    name(hasLayer(core::hashString(#name)))
 
 InstanceLayers::InstanceLayers():
     Layers(Instance::enumerateLayers()),
