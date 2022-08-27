@@ -48,7 +48,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
     rasterizationState(renderstate::fillCullBackCCw),
     multisampleState(renderstate::dontMultisample),
     depthStencilState(renderstate::depthAlwaysDontWrite),
-    colorBlendState(renderstate::dontBlendRgba) // Make copyable
+    colorBlendState(renderstate::dontBlendRgba)
 {
     setIdentity();
     if (!this->layout)
@@ -145,11 +145,8 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer> cmdBuffer,
         if (wideLinesEnabled && !primitive.wideLineState)
             cmdBuffer->setLineWidth(primitive.lineWidth);
     #ifdef VK_EXT_line_rasterization
-        if (!primitive.stippledLineState)
-        {
-            if (stippledLinesEnabled)
-                cmdBuffer->setLineStipple(primitive.lineStippleFactor, primitive.lineStipplePattern);
-        }
+        if (stippledLinesEnabled && !primitive.stippledLineState)
+            cmdBuffer->setLineStipple(primitive.lineStippleFactor, primitive.lineStipplePattern);
     #endif // VK_EXT_line_rasterization
         if (layout)
             cmdBuffer->pushConstantBlock(layout, VK_SHADER_STAGE_VERTEX_BIT, primitive.transform);
@@ -203,7 +200,7 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTop
     if (wideLinesEnabled && !wideLineState)
         dynamicStates.push_back(VK_DYNAMIC_STATE_LINE_WIDTH);
 #ifdef VK_EXT_line_rasterization
-    if (!stippledLineState && stippledLinesEnabled)
+    if (stippledLinesEnabled && !stippledLineState)
         dynamicStates.push_back(VK_DYNAMIC_STATE_LINE_STIPPLE_EXT);
 #endif
     // Create new or grab existing graphics pipeline
