@@ -71,6 +71,7 @@ namespace magma
         // Multivendor
         const VkBool32 EXT_4444_formats : 1;
         const VkBool32 EXT_astc_decode_mode : 1;
+        const VkBool32 EXT_attachment_feedback_loop_layout : 1;
         const VkBool32 EXT_blend_operation_advanced : 1;
         const VkBool32 EXT_border_color_swizzle : 1;
         const VkBool32 EXT_buffer_device_address : 1;
@@ -99,35 +100,51 @@ namespace magma
         const VkBool32 EXT_full_screen_exclusive : 1;
         const VkBool32 EXT_global_priority : 1;
         const VkBool32 EXT_global_priority_query : 1;
+        const VkBool32 EXT_graphics_pipeline_library : 1;
         const VkBool32 EXT_hdr_metadata : 1;
         const VkBool32 EXT_headless_surface : 1;
         const VkBool32 EXT_host_query_reset : 1;
+        const VkBool32 EXT_image_2d_view_of_3d : 1;
+        const VkBool32 EXT_image_compression_control : 1;
+        const VkBool32 EXT_image_compression_control_swapchain : 1;
         const VkBool32 EXT_image_drm_format_modifier : 1;
         const VkBool32 EXT_image_robustness : 1;
+        const VkBool32 EXT_image_view_min_lod : 1;
         const VkBool32 EXT_index_type_uint8 : 1;
         const VkBool32 EXT_inline_uniform_block : 1;
         const VkBool32 EXT_line_rasterization : 1;
+        const VkBool32 EXT_load_store_op_none : 1;
         const VkBool32 EXT_memory_budget : 1;
         const VkBool32 EXT_memory_priority : 1;
         const VkBool32 EXT_metal_objects : 1;
         const VkBool32 EXT_multi_draw : 1;
         const VkBool32 EXT_multisampled_render_to_single_sampled : 1;
+        const VkBool32 EXT_non_seamless_cube_map : 1;
+        const VkBool32 EXT_pageable_device_local_memory : 1;
         const VkBool32 EXT_pci_bus_info : 1;
         const VkBool32 EXT_physical_device_drm : 1;
         const VkBool32 EXT_pipeline_creation_cache_control : 1;
         const VkBool32 EXT_pipeline_creation_feedback : 1;
+        const VkBool32 EXT_pipeline_properties : 1;
+        const VkBool32 EXT_pipeline_robustness : 1;
         const VkBool32 EXT_post_depth_coverage : 1;
+        const VkBool32 EXT_primitive_topology_list_restart : 1;
+        const VkBool32 EXT_primitives_generated_query : 1;
         const VkBool32 EXT_private_data : 1;
         const VkBool32 EXT_provoking_vertex : 1;
         const VkBool32 EXT_queue_family_foreign : 1;
+        const VkBool32 EXT_rasterization_order_attachment_access : 1;
+        const VkBool32 EXT_rgba10x6_formats : 1;
         const VkBool32 EXT_robustness2 : 1;
         const VkBool32 EXT_sample_locations : 1;
         const VkBool32 EXT_sampler_filter_minmax : 1;
         const VkBool32 EXT_scalar_block_layout : 1;
         const VkBool32 EXT_separate_stencil_usage : 1;
         const VkBool32 EXT_shader_atomic_float : 1;
+        const VkBool32 EXT_shader_atomic_float2 : 1;
         const VkBool32 EXT_shader_demote_to_helper_invocation : 1;
         const VkBool32 EXT_shader_image_atomic_int64 : 1;
+        const VkBool32 EXT_shader_module_identifier : 1;
         const VkBool32 EXT_shader_stencil_export : 1;
         const VkBool32 EXT_shader_subgroup_ballot : 1;
         const VkBool32 EXT_shader_subgroup_vote : 1;
@@ -145,6 +162,7 @@ namespace magma
         const VkBool32 EXT_video_decode_h264 : 1;
         const VkBool32 EXT_video_decode_h265 : 1;
         const VkBool32 EXT_video_encode_h264 : 1;
+        const VkBool32 EXT_video_encode_h265 : 1;
         const VkBool32 EXT_ycbcr_2plane_444_formats : 1;
         const VkBool32 EXT_ycbcr_image_arrays : 1;
 
@@ -207,6 +225,7 @@ namespace magma
         const VkBool32 KHR_maintenance1 : 1;
         const VkBool32 KHR_maintenance2 : 1;
         const VkBool32 KHR_maintenance3 : 1;
+        const VkBool32 KHR_maintenance4 : 1;
         const VkBool32 KHR_multiview : 1;
         const VkBool32 KHR_performance_query : 1;
         const VkBool32 KHR_pipeline_executable_properties : 1;
@@ -267,6 +286,7 @@ namespace magma
         const VkBool32 NV_device_generated_commands : 1;
         const VkBool32 NV_external_memory : 1;
         const VkBool32 NV_external_memory_capabilities : 1;
+        const VkBool32 NV_external_memory_rdma : 1;
         const VkBool32 NV_external_memory_win32 : 1;
         const VkBool32 NV_fill_rectangle : 1;
         const VkBool32 NV_fragment_coverage_to_color : 1;
@@ -276,6 +296,7 @@ namespace magma
         const VkBool32 NV_geometry_shader_passthrough : 1;
         const VkBool32 NV_glsl_shader : 1;
         const VkBool32 NV_inherited_viewport_scissor : 1;
+        const VkBool32 NV_linear_color_attachment : 1;
         const VkBool32 NV_mesh_shader : 1;
         const VkBool32 NV_ray_tracing : 1;
         const VkBool32 NV_ray_tracing_motion_blur : 1;
@@ -289,6 +310,8 @@ namespace magma
         const VkBool32 NV_viewport_array2 : 1;
         const VkBool32 NV_viewport_swizzle : 1;
         const VkBool32 NV_win32_keyed_mutex : 1;
+
+        // NVX (experimental) extensions
         const VkBool32 NVX_binary_import : 1;
         const VkBool32 NVX_device_generated_commands : 1;
         const VkBool32 NVX_image_view_handle : 1;
