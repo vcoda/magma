@@ -38,6 +38,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
     std::shared_ptr<PipelineLayout> layout, std::shared_ptr<PipelineCache> pipelineCache,
     std::shared_ptr<Allocator> allocator /* nullptr */):
     maxVertexCount(maxVertexCount),
+    wideLinesEnabled(renderPass->getDevice()->getEnabledFeatures().wideLines),
     stippledLinesEnabled(renderPass->getDevice()->stippledLinesEnabled()),
     device(renderPass->getDevice()),
     renderPass(std::move(renderPass)),
@@ -141,7 +142,7 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer> cmdBuffer,
             cmdBuffer->bindPipeline(primitive.pipeline);
             prevPipeline = primitive.pipeline;
         }
-        if (!primitive.wideLineState)
+        if (wideLinesEnabled && !primitive.wideLineState)
             cmdBuffer->setLineWidth(primitive.lineWidth);
     #ifdef VK_EXT_line_rasterization
         if (!primitive.stippledLineState)
@@ -199,7 +200,7 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTop
         &renderstate::triangleStripWithAdjacency,
         &renderstate::patchList};
     std::vector<VkDynamicState> dynamicStates = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
-    if (!wideLineState)
+    if (wideLinesEnabled && !wideLineState)
         dynamicStates.push_back(VK_DYNAMIC_STATE_LINE_WIDTH);
 #ifdef VK_EXT_line_rasterization
     if (!stippledLineState && stippledLinesEnabled)

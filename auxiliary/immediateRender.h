@@ -100,6 +100,7 @@ namespace magma
             struct Primitive;
 
             const uint32_t maxVertexCount;
+            const bool wideLinesEnabled;
             const bool stippledLinesEnabled;
             std::shared_ptr<Device> device;
             std::shared_ptr<RenderPass> renderPass;
