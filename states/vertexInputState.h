@@ -27,14 +27,22 @@ namespace magma
         constexpr hash_t hash() const noexcept;
     };
 
-#ifdef VK_EXT_vertex_attribute_divisor
-    struct VertexInputBindingDivisor : VkVertexInputBindingDivisorDescriptionEXT
+    /* Allows to specify individual divisor value for binding.
+       Divisor is the number of successive instances that will use the same
+       value of the vertex attribute when instanced rendering is enabled.
+       For example, if the divisor is N, the same vertex attribute will be applied
+       to N successive instances before moving on to the next vertex attribute. */
+
+    struct VertexInputBindingDivisor : VertexInputBinding
     {
         constexpr VertexInputBindingDivisor(uint32_t binding,
-            uint32_t divisor);
+            uint32_t stride,
+            uint32_t divisor,
+            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
         constexpr hash_t hash() const noexcept;
+
+        const uint32_t divisor;
     };
-#endif // VK_EXT_vertex_attribute_divisor
 
     /* Structure specifying vertex input attribute description. */
 
@@ -63,14 +71,15 @@ namespace magma
     public:
         VertexInputState() noexcept;
         explicit VertexInputState(const VertexInputBinding& binding,
-            const std::initializer_list<VertexInputAttribute>& attributes,
-            uint32_t attributeDivisor = 1) noexcept;
+            const std::initializer_list<VertexInputAttribute>& attributes) noexcept;
         explicit VertexInputState(const std::initializer_list<VertexInputBinding>& bindings,
-            const std::initializer_list<VertexInputAttribute>& attributes
+            const std::initializer_list<VertexInputAttribute>& attributes) noexcept;
     #ifdef VK_EXT_vertex_attribute_divisor
-           ,const std::initializer_list<VertexInputBindingDivisor>& attributeDivisors = {}
+        explicit VertexInputState(const VertexInputBindingDivisor& binding,
+            const std::initializer_list<VertexInputAttribute>& attributes) noexcept;
+        explicit VertexInputState(const std::initializer_list<VertexInputBindingDivisor>& bindings,
+            const std::initializer_list<VertexInputAttribute>& attributes) noexcept;
     #endif
-        ) noexcept;
         VertexInputState(const VertexInputState&) noexcept;
         VertexInputState& operator=(const VertexInputState&) noexcept;
         virtual ~VertexInputState();
