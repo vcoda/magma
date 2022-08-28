@@ -33,10 +33,17 @@ VertexInputState::VertexInputState() noexcept
     pVertexBindingDescriptions = nullptr;
     vertexAttributeDescriptionCount = 0;
     pVertexAttributeDescriptions = nullptr;
+#ifdef VK_EXT_vertex_attribute_divisor
+    divisor.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
+    divisor.pNext = nullptr;
+    divisor.vertexBindingDivisorCount = 0;
+    divisor.pVertexBindingDivisors = nullptr;
+#endif // VK_EXT_vertex_attribute_divisor
 }
 
 VertexInputState::VertexInputState(const VertexInputBinding& binding,
-    const std::initializer_list<VertexInputAttribute>& attributes) noexcept
+    const std::initializer_list<VertexInputAttribute>& attributes,
+    uint32_t attributeDivisor /* 1 */) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -45,10 +52,27 @@ VertexInputState::VertexInputState(const VertexInputBinding& binding,
     pVertexBindingDescriptions = core::copyArray<VkVertexInputBindingDescription>(&binding, 1);
     vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
     pVertexAttributeDescriptions = core::copyInitializerList<VkVertexInputAttributeDescription>(attributes);
+#ifdef VK_EXT_vertex_attribute_divisor
+    if (attributeDivisor != 1)
+    {
+        VkVertexInputBindingDivisorDescriptionEXT *vertexBindingDivisor = new(std::nothrow) VkVertexInputBindingDivisorDescriptionEXT[1];
+        vertexBindingDivisor->binding = binding.binding;
+        vertexBindingDivisor->divisor = attributeDivisor;
+        divisor.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
+        divisor.pNext = nullptr;
+        divisor.vertexBindingDivisorCount = 1;
+        divisor.pVertexBindingDivisors = vertexBindingDivisor;
+        pNext = &divisor;
+    }
+#endif // VK_EXT_vertex_attribute_divisor
 }
 
 VertexInputState::VertexInputState(const std::initializer_list<VertexInputBinding>& bindings,
-    const std::initializer_list<VertexInputAttribute>& attributes) noexcept
+    const std::initializer_list<VertexInputAttribute>& attributes
+#ifdef VK_EXT_vertex_attribute_divisor
+   ,const std::initializer_list<VertexInputBindingDivisor>& attributeDivisors
+#endif
+    ) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;
@@ -57,17 +81,35 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
     pVertexBindingDescriptions = core::copyInitializerList<VkVertexInputBindingDescription>(bindings);
     vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
     pVertexAttributeDescriptions = core::copyInitializerList<VkVertexInputAttributeDescription>(attributes);
+#ifdef VK_EXT_vertex_attribute_divisor
+    if (attributeDivisors.size() > 0)
+    {
+        divisor.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
+        divisor.pNext = nullptr;
+        divisor.vertexBindingDivisorCount = MAGMA_COUNT(attributeDivisors);
+        divisor.pVertexBindingDivisors = core::copyInitializerList<VkVertexInputBindingDivisorDescriptionEXT>(attributeDivisors);
+        pNext = &divisor;
+    }
+#endif // VK_EXT_vertex_attribute_divisor
 }
 
 VertexInputState::VertexInputState(const VertexInputState& other) noexcept
 {
     sType = other.sType;
-    pNext = other.pNext;
+    pNext = nullptr;
     flags = other.flags;
     vertexBindingDescriptionCount = other.vertexBindingDescriptionCount;
     pVertexBindingDescriptions = core::copyArray(other.pVertexBindingDescriptions, vertexBindingDescriptionCount);
     vertexAttributeDescriptionCount = other.vertexAttributeDescriptionCount;
     pVertexAttributeDescriptions = core::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+#ifdef VK_EXT_vertex_attribute_divisor
+    divisor.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
+    divisor.pNext = nullptr;
+    divisor.vertexBindingDivisorCount = other.divisor.vertexBindingDivisorCount;
+    divisor.pVertexBindingDivisors = core::copyArray(other.divisor.pVertexBindingDivisors, other.divisor.vertexBindingDivisorCount);
+    if (other.pNext)
+        pNext = &divisor;
+#endif // VK_EXT_vertex_attribute_divisor
 }
 
 VertexInputState& VertexInputState::operator=(const VertexInputState& other) noexcept
@@ -75,7 +117,7 @@ VertexInputState& VertexInputState::operator=(const VertexInputState& other) noe
     if (this != &other)
     {
         sType = other.sType;
-        pNext = other.pNext;
+        pNext = nullptr;
         flags = other.flags;
         vertexBindingDescriptionCount = other.vertexBindingDescriptionCount;
         delete[] pVertexBindingDescriptions;
@@ -83,6 +125,15 @@ VertexInputState& VertexInputState::operator=(const VertexInputState& other) noe
         vertexAttributeDescriptionCount = other.vertexAttributeDescriptionCount;
         delete[] pVertexAttributeDescriptions;
         pVertexAttributeDescriptions = core::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+#ifdef VK_EXT_vertex_attribute_divisor
+        divisor.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
+        divisor.pNext = nullptr;
+        divisor.vertexBindingDivisorCount = other.divisor.vertexBindingDivisorCount;
+        delete[] divisor.pVertexBindingDivisors;
+        divisor.pVertexBindingDivisors = core::copyArray(other.divisor.pVertexBindingDivisors, other.divisor.vertexBindingDivisorCount);
+        if (other.pNext)
+            pNext = &divisor;
+#endif // VK_EXT_vertex_attribute_divisor
     }
     return *this;
 }
@@ -91,6 +142,9 @@ VertexInputState::~VertexInputState()
 {
     delete[] pVertexBindingDescriptions;
     delete[] pVertexAttributeDescriptions;
+#ifdef VK_EXT_vertex_attribute_divisor
+    delete[] divisor.pVertexBindingDivisors;
+#endif
 }
 
 uint32_t VertexInputState::stride(uint32_t binding) const noexcept
@@ -130,6 +184,17 @@ hash_t VertexInputState::hash() const noexcept
             pVertexAttributeDescriptions[i].format,
             pVertexAttributeDescriptions[i].offset));
     }
+#ifdef VK_EXT_vertex_attribute_divisor
+    hash = core::hashCombine(hash, core::hashArgs(
+        divisor.sType,
+        divisor.vertexBindingDivisorCount));
+    for (uint32_t i = 0; i < divisor.vertexBindingDivisorCount; ++i)
+    {
+        hash = core::hashCombine(hash, core::hashArgs(
+            divisor.pVertexBindingDivisors[i].binding,
+            divisor.pVertexBindingDivisors[i].divisor));
+    }
+#endif // VK_EXT_vertex_attribute_divisor
     return hash;
 }
 
@@ -139,6 +204,12 @@ bool VertexInputState::operator==(const VertexInputState& other) const noexcept
         (vertexBindingDescriptionCount == other.vertexBindingDescriptionCount) &&
         (vertexAttributeDescriptionCount == other.vertexAttributeDescriptionCount) &&
         core::compareArrays(pVertexBindingDescriptions, other.pVertexBindingDescriptions, vertexBindingDescriptionCount) &&
-        core::compareArrays(pVertexAttributeDescriptions, other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
+        core::compareArrays(pVertexAttributeDescriptions, other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount) &&
+    #ifdef VK_EXT_vertex_attribute_divisor
+        (divisor.vertexBindingDivisorCount == other.divisor.vertexBindingDivisorCount) &&
+        core::compareArrays(divisor.pVertexBindingDivisors, other.divisor.pVertexBindingDivisors, divisor.vertexBindingDivisorCount);
+    #else
+        true;
+    #endif
 }
 } // namespace magma

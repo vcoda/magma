@@ -27,6 +27,15 @@ namespace magma
         constexpr hash_t hash() const noexcept;
     };
 
+#ifdef VK_EXT_vertex_attribute_divisor
+    struct VertexInputBindingDivisor : VkVertexInputBindingDivisorDescriptionEXT
+    {
+        constexpr VertexInputBindingDivisor(uint32_t binding,
+            uint32_t divisor);
+        constexpr hash_t hash() const noexcept;
+    };
+#endif // VK_EXT_vertex_attribute_divisor
+
     /* Structure specifying vertex input attribute description. */
 
     struct VertexInputAttribute : VkVertexInputAttributeDescription
@@ -53,16 +62,25 @@ namespace magma
     {
     public:
         VertexInputState() noexcept;
-        VertexInputState(const VertexInputBinding& binding,
-            const std::initializer_list<VertexInputAttribute>& attributes) noexcept;
-        VertexInputState(const std::initializer_list<VertexInputBinding>& bindings,
-            const std::initializer_list<VertexInputAttribute>& attributes) noexcept;
+        explicit VertexInputState(const VertexInputBinding& binding,
+            const std::initializer_list<VertexInputAttribute>& attributes,
+            uint32_t attributeDivisor = 1) noexcept;
+        explicit VertexInputState(const std::initializer_list<VertexInputBinding>& bindings,
+            const std::initializer_list<VertexInputAttribute>& attributes
+    #ifdef VK_EXT_vertex_attribute_divisor
+           ,const std::initializer_list<VertexInputBindingDivisor>& attributeDivisors = {}
+    #endif
+        ) noexcept;
         VertexInputState(const VertexInputState&) noexcept;
         VertexInputState& operator=(const VertexInputState&) noexcept;
         virtual ~VertexInputState();
         virtual uint32_t stride(uint32_t binding) const noexcept;
         hash_t hash() const noexcept;
         bool operator==(const VertexInputState&) const noexcept;
+
+    #ifdef VK_EXT_vertex_attribute_divisor
+        VkPipelineVertexInputDivisorStateCreateInfoEXT divisor;
+    #endif
     };
 } // namespace magma
 
