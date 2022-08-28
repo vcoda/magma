@@ -40,3 +40,6 @@ namespace magma
 
     MAGMA_TYPEDEF_UNIQUE_PTR(Extensions)
 } // namespace magma
+
+#define MAGMA_CHECK_EXTENSION(name)\
+    name(hasExtension(core::hashString(MAGMA_EXTENSION_PREFIX #name)))
