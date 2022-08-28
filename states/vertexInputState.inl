@@ -9,7 +9,7 @@ constexpr VertexInputBinding::VertexInputBinding(const uint32_t binding, const u
     }
 {}
 
-constexpr hash_t VertexInputBinding::hash()
+constexpr hash_t VertexInputBinding::hash() const noexcept
 {
     return core::hashArgs(
         binding,
@@ -26,7 +26,7 @@ constexpr VertexInputAttribute::VertexInputAttribute(const uint32_t location, co
     }
 {}
 
-constexpr hash_t VertexInputAttribute::hash()
+constexpr hash_t VertexInputAttribute::hash() const noexcept
 {
     return core::hashArgs(
         location,
