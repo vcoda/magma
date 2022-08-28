@@ -268,9 +268,6 @@ namespace magma
         const VkBool32 KHR_workgroup_memory_explicit_layout : 1;
         const VkBool32 KHR_zero_initialize_workgroup_memory : 1;
 
-        // Nintendo Co., Ltd.
-        const VkBool32 NN_vi_surface : 1;
-
         // NVIDIA Corporation
         const VkBool32 NV_acquire_winrt_display : 1;
         const VkBool32 NV_clip_space_w_scaling : 1;

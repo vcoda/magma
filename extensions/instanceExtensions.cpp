@@ -66,6 +66,8 @@ InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
     MAGMA_CHECK_EXTENSION(MVK_ios_surface),
     MAGMA_CHECK_EXTENSION(MVK_macos_surface),
 
+    MAGMA_CHECK_EXTENSION(NN_vi_surface),
+
     MAGMA_CHECK_EXTENSION(NV_external_memory_capabilities),
 
     MAGMA_CHECK_EXTENSION(QNX_screen_surface)

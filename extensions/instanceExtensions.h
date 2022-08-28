@@ -71,6 +71,9 @@ namespace magma
         const VkBool32 MVK_ios_surface : 1;
         const VkBool32 MVK_macos_surface : 1;
 
+        // Nintendo Co., Ltd.
+        const VkBool32 NN_vi_surface : 1;
+
         // NVIDIA Corporation
         const VkBool32 NV_external_memory_capabilities : 1;
 

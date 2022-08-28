@@ -255,8 +255,6 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(KHR_workgroup_memory_explicit_layout),
     MAGMA_CHECK_EXTENSION(KHR_zero_initialize_workgroup_memory),
 
-    MAGMA_CHECK_EXTENSION(NN_vi_surface),
-
     MAGMA_CHECK_EXTENSION(NV_acquire_winrt_display),
     MAGMA_CHECK_EXTENSION(NV_clip_space_w_scaling),
     MAGMA_CHECK_EXTENSION(NV_compute_shader_derivatives),
