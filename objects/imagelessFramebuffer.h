@@ -41,6 +41,8 @@ namespace magma
                 uint32_t layerCount,
                 const std::vector<VkFormat> viewFormats,
                 VkImageCreateFlags flags /* 0 */);
+            AttachmentImageInfo(const AttachmentImageInfo&);
+            AttachmentImageInfo& operator=(const AttachmentImageInfo&);
         };
 
         explicit ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,

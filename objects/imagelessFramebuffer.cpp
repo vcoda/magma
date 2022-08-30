@@ -62,6 +62,38 @@ ImagelessFramebuffer::AttachmentImageInfo::AttachmentImageInfo(VkImageUsageFlags
     viewFormats(std::move(viewFormats))
 {}
 
+ImagelessFramebuffer::AttachmentImageInfo::AttachmentImageInfo(const AttachmentImageInfo& other):
+    viewFormats(other.viewFormats)
+{
+    sType = other.sType;
+    pNext = other.pNext;
+    flags = other.flags;
+    usage = other.usage;
+    width = other.width;
+    height = other.height;
+    layerCount = other.layerCount;
+    viewFormatCount = other.viewFormatCount;
+    pViewFormats = viewFormats.data();
+}
+
+ImagelessFramebuffer::AttachmentImageInfo& ImagelessFramebuffer::AttachmentImageInfo::operator=(const ImagelessFramebuffer::AttachmentImageInfo& other)
+{
+    if (this != &other)
+    {
+        sType = other.sType;
+        pNext = other.pNext;
+        flags = other.flags;
+        usage = other.usage;
+        width = other.width;
+        height = other.height;
+        layerCount = other.layerCount;
+        viewFormatCount = other.viewFormatCount;
+        viewFormats = other.viewFormats;
+        pViewFormats = viewFormats.data();
+    }
+    return *this;
+}
+
 ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
     uint32_t width, uint32_t height, uint32_t layerCount, VkImageUsageFlags usage,
     const std::vector<VkFormat>& viewFormats,
