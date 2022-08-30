@@ -76,7 +76,7 @@ ImageDescriptorSet::~ImageDescriptorSet()
 
 void ImageDescriptorSet::writeDescriptor(std::shared_ptr<const ImageView> imageView, std::shared_ptr<Sampler> sampler)
 {
-    if (imageView->getImage()->hasStorageFlag())
+    if (imageView->getImage()->getUsage() & VK_IMAGE_USAGE_STORAGE_BIT)
         storageImageSetLayout->image = imageView;
     else
         imageSetLayout->image = {imageView, sampler};

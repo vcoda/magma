@@ -51,10 +51,6 @@ namespace magma
         uint32_t getArrayLayers() const noexcept { return arrayLayers; }
         uint32_t getSamples() const noexcept { return samples; }
         VkImageUsageFlags getUsage() const noexcept { return usage; }
-        bool hasStorageFlag() const noexcept { return usage & VK_IMAGE_USAGE_STORAGE_BIT; }
-        bool hasColorAttachmentFlag() const noexcept { return usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT; }
-        bool hasDepthStencilAttachmentFlag() const noexcept { return usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT; }
-        bool hasInputAttachmentFlag() const noexcept { return usage & VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT; }
         const std::vector<VkFormat>& getViewFormats() const noexcept { return viewFormats; }
         VkSubresourceLayout getSubresourceLayout(uint32_t mipLevel,
             uint32_t arrayLayer = 0) const noexcept;
