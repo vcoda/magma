@@ -17,13 +17,13 @@ constexpr hash_t VertexInputBinding::hash() const noexcept
         inputRate);
 }
 
-constexpr VertexInputDivisorBinding::VertexInputDivisorBinding(const uint32_t binding, const uint32_t stride, const uint32_t divisor,
+constexpr VertexInputBindingDivisor::VertexInputBindingDivisor(const uint32_t binding, const uint32_t stride, const uint32_t divisor,
     const VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */) noexcept:
     VertexInputBinding(binding, stride, inputRate),
     divisor(divisor)
 {}
 
-constexpr hash_t VertexInputDivisorBinding::hash() const noexcept
+constexpr hash_t VertexInputBindingDivisor::hash() const noexcept
 {
     return core::hashArgs(
         binding,
