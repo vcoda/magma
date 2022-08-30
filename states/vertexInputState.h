@@ -35,13 +35,12 @@ namespace magma
 
     struct VertexInputBindingDivisor : VertexInputBinding
     {
+        uint32_t divisor;
         constexpr VertexInputBindingDivisor(uint32_t binding,
             uint32_t stride,
             uint32_t divisor,
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
         constexpr hash_t hash() const noexcept;
-
-        const uint32_t divisor;
     };
 
     /* Structure specifying vertex input attribute description. */
