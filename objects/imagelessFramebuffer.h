@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "framebuffer.h"
 
+#ifdef VK_KHR_imageless_framebuffer
 namespace magma
 {
     class Image;
@@ -26,7 +27,6 @@ namespace magma
        allowing more flexibility in how they are used, and avoiding the need
        for many of the confusing compatibility rules. */
 
-#ifdef VK_KHR_imageless_framebuffer
     class ImagelessFramebuffer : public Framebuffer
     {
     public:
@@ -57,5 +57,7 @@ namespace magma
             const std::vector<AttachmentImageInfo>& attachments,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
-#endif // VK_KHR_imageless_framebuffer
 } // namespace magma
+
+#include "imagelessFramebuffer.inl"
+#endif // VK_KHR_imageless_framebuffer
