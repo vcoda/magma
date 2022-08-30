@@ -18,99 +18,97 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "imagelessFramebuffer.h"
+#include "device.h"
+#include "renderPass.h"
+#include "../allocator/allocator.h"
+#include "../exceptions/errorResult.h"
+#include "../helpers/stackArray.h"
 
 namespace magma
 {
 #ifdef VK_KHR_imageless_framebuffer
-class FramebufferAttachmentsCreateInfo : public CreateInfo
-{
-public:
-    FramebufferAttachmentsCreateInfo(uint32_t width, uint32_t height, uint32_t layerCount,
-        VkImageCreateFlags flags, VkImageUsageFlags usage,
-        const std::vector<VkFormat>& viewFormats,
-        const CreateInfo& chainedInfo = CreateInfo()) noexcept:
-        viewFormats(viewFormats)
-    {
-        MAGMA_ASSERT(!viewFormats.empty());
-        VkFramebufferAttachmentImageInfoKHR attachmentInfo;
-        attachmentInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
-        attachmentInfo.pNext = chainedInfo.getNode();
-        attachmentInfo.flags = flags;
-        attachmentInfo.usage = usage;
-        attachmentInfo.width = width;
-        attachmentInfo.height = height;
-        attachmentInfo.layerCount = layerCount;
-        attachmentInfo.viewFormatCount = MAGMA_COUNT(this->viewFormats);
-        attachmentInfo.pViewFormats = this->viewFormats.data();
-        attachmentInfos.push_back(attachmentInfo);
-        framebufferAttachmentsInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR;
-        framebufferAttachmentsInfo.pNext = chainedInfo.getNode();
-        framebufferAttachmentsInfo.attachmentImageInfoCount = 1;
-        framebufferAttachmentsInfo.pAttachmentImageInfos = attachmentInfos.data();
-    }
-
-    FramebufferAttachmentsCreateInfo(const std::vector<ImagelessFramebuffer::AttachmentImageInfo>& attachments,
-        const CreateInfo& chainedInfo = CreateInfo()) noexcept
-    {
-        for (const auto& info : attachments)
-        {
-            MAGMA_ASSERT(!info.viewFormats.empty());
-            VkFramebufferAttachmentImageInfoKHR attachmentInfo;
-            attachmentInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
-            attachmentInfo.pNext = chainedInfo.getNode();
-            attachmentInfo.flags = info.flags;
-            attachmentInfo.usage = info.usage;
-            attachmentInfo.width = info.width;
-            attachmentInfo.height = info.height;
-            attachmentInfo.layerCount = info.layerCount;
-            attachmentInfo.viewFormatCount = MAGMA_COUNT(info.viewFormats);
-            attachmentInfo.pViewFormats = info.viewFormats.data();
-            attachmentInfos.push_back(attachmentInfo);
-        }
-        framebufferAttachmentsInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR;
-        framebufferAttachmentsInfo.pNext = chainedInfo.getNode();
-        framebufferAttachmentsInfo.attachmentImageInfoCount = MAGMA_COUNT(attachmentInfos);
-        framebufferAttachmentsInfo.pAttachmentImageInfos = attachmentInfos.data();
-    }
-
-    const void *getNode() const noexcept override
-    {
-        return &framebufferAttachmentsInfo;
-    }
-
-private:
-    const std::vector<VkFormat> viewFormats;
-    std::vector<VkFramebufferAttachmentImageInfoKHR> attachmentInfos;
-    VkFramebufferAttachmentsCreateInfoKHR framebufferAttachmentsInfo;
-};
+ImagelessFramebuffer::AttachmentImageInfo::AttachmentImageInfo(
+    uint32_t width, uint32_t height, uint32_t layerCount,
+    const std::vector<VkFormat> viewFormats,
+    VkImageUsageFlags usage /* 0 */,
+    VkImageCreateFlags flags /* 0 */):
+    VkFramebufferAttachmentImageInfoKHR{
+        VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR,
+        nullptr, // pNext
+        flags,
+        usage,
+        width,
+        height,
+        layerCount,
+        MAGMA_COUNT(viewFormats),
+        viewFormats.data()
+    },
+    viewFormats(std::move(viewFormats))
+{}
 
 ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
     uint32_t width, uint32_t height, uint32_t layerCount, VkImageUsageFlags usage,
     const std::vector<VkFormat>& viewFormats,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    VkImageCreateFlags flags /* 0 */,
-    const CreateInfo& chainedInfo /* default */):
-    Framebuffer(std::move(renderPass),
-        width,
-        height,
-        layerCount,
-        1,
-        std::move(allocator),
-        VK_FRAMEBUFFER_CREATE_IMAGELESS_BIT_KHR,
-        FramebufferAttachmentsCreateInfo(width, height, layerCount, flags, usage, viewFormats, chainedInfo))
-{}
+    VkImageCreateFlags flags /* 0 */):
+    Framebuffer(std::move(renderPass), width, height, layerCount, std::move(allocator))
+{
+    VkFramebufferCreateInfo framebufferInfo;
+    VkFramebufferAttachmentsCreateInfoKHR framebufferAttachmentsInfo;
+    VkFramebufferAttachmentImageInfoKHR framebufferAttachmentImageInfo;
+    framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+    framebufferInfo.pNext = &framebufferAttachmentsInfo;
+    framebufferInfo.flags = VK_FRAMEBUFFER_CREATE_IMAGELESS_BIT_KHR;
+    framebufferInfo.renderPass = MAGMA_HANDLE(renderPass);
+    framebufferInfo.attachmentCount = 1;
+    framebufferInfo.pAttachments = nullptr;
+    framebufferInfo.width = width;
+    framebufferInfo.height = height;
+    framebufferInfo.layers = layerCount;
+    framebufferAttachmentsInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR;
+    framebufferAttachmentsInfo.pNext = nullptr;
+    framebufferAttachmentsInfo.attachmentImageInfoCount = framebufferInfo.attachmentCount;
+    framebufferAttachmentsInfo.pAttachmentImageInfos = &framebufferAttachmentImageInfo;
+    framebufferAttachmentImageInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
+    framebufferAttachmentImageInfo.pNext = nullptr;
+    framebufferAttachmentImageInfo.flags = flags;
+    framebufferAttachmentImageInfo.usage = usage;
+    framebufferAttachmentImageInfo.width = width;
+    framebufferAttachmentImageInfo.height = height;
+    framebufferAttachmentImageInfo.layerCount = layerCount;
+    framebufferAttachmentImageInfo.viewFormatCount = MAGMA_COUNT(viewFormats);
+    framebufferAttachmentImageInfo.pViewFormats = viewFormats.data();
+    const VkResult result = vkCreateFramebuffer(MAGMA_HANDLE(device), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create imageless framebuffer");
+}
 
-ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass, const std::vector<AttachmentImageInfo>& attachments,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const CreateInfo& chainedInfo /* default */):
+ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
+    const std::vector<AttachmentImageInfo>& attachments,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
     Framebuffer(std::move(renderPass),
         attachments.front().width,
         attachments.front().height,
         attachments.front().layerCount,
-        MAGMA_COUNT(attachments),
-        std::move(allocator),
-        VK_FRAMEBUFFER_CREATE_IMAGELESS_BIT_KHR,
-        FramebufferAttachmentsCreateInfo(attachments, chainedInfo))
-{}
+        std::move(allocator))
+{
+    MAGMA_STACK_ARRAY(VkFramebufferAttachmentImageInfoKHR, attachmentImageInfos, attachments.size());
+    for (auto& attachment : attachments)
+        attachmentImageInfos.put(attachment);
+    VkFramebufferCreateInfo framebufferInfo;
+    VkFramebufferAttachmentsCreateInfoKHR framebufferAttachmentsInfo;
+    framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+    framebufferInfo.pNext = &framebufferAttachmentsInfo;
+    framebufferInfo.flags = VK_FRAMEBUFFER_CREATE_IMAGELESS_BIT_KHR;
+    framebufferInfo.renderPass = MAGMA_HANDLE(renderPass);
+    framebufferInfo.attachmentCount = MAGMA_COUNT(attachments);
+    framebufferInfo.pAttachments = nullptr;
+    framebufferInfo.width = extent.width;
+    framebufferInfo.height = extent.height;
+    framebufferInfo.layers = layerCount;
+    framebufferAttachmentsInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR;
+    framebufferAttachmentsInfo.pNext = nullptr;
+    framebufferAttachmentsInfo.attachmentImageInfoCount = framebufferInfo.attachmentCount;
+    framebufferAttachmentsInfo.pAttachmentImageInfos = attachmentImageInfos;
+}
 #endif // VK_KHR_imageless_framebuffer
 } // namespace magma

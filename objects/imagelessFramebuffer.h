@@ -28,7 +28,17 @@ namespace magma
     class ImagelessFramebuffer : public Framebuffer
     {
     public:
-        struct AttachmentImageInfo;
+        struct AttachmentImageInfo : VkFramebufferAttachmentImageInfoKHR
+        {
+            std::vector<VkFormat> viewFormats;
+            AttachmentImageInfo(uint32_t width,
+                uint32_t height,
+                uint32_t layerCount,
+                const std::vector<VkFormat> viewFormats,
+                VkImageUsageFlags usage /* 0 */,
+                VkImageCreateFlags flags /* 0 */);
+        };
+
         explicit ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
             uint32_t width,
             uint32_t height,
@@ -36,22 +46,10 @@ namespace magma
             VkImageUsageFlags usage,
             const std::vector<VkFormat>& viewFormats,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            VkImageCreateFlags flags = 0,
-            const CreateInfo& chainedInfo = CreateInfo());
+            VkImageCreateFlags flags = 0);
         explicit ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
             const std::vector<AttachmentImageInfo>& attachments,
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            const CreateInfo& chainedInfo = CreateInfo());
-    };
-
-    struct ImagelessFramebuffer::AttachmentImageInfo
-    {
-        uint32_t width = 0;
-        uint32_t height = 0;
-        uint32_t layerCount = 0;
-        VkImageUsageFlags usage = 0;
-        VkImageCreateFlags flags = 0;
-        std::vector<VkFormat> viewFormats;
+            std::shared_ptr<IAllocator> allocator = nullptr);
     };
 #endif // VK_KHR_imageless_framebuffer
 } // namespace magma

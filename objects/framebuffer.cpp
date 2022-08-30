@@ -29,10 +29,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass,
+    uint32_t width, uint32_t height, uint32_t layerCount,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
+    renderPass(std::move(renderPass)),
+    extent({width, height}),
+    layerCount(layerCount)
+{}
+
+Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass,
     uint32_t width, uint32_t height, uint32_t layerCount, uint32_t attachmentCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    VkFramebufferCreateFlags flags /* 0 */,
-    const CreateInfo& chainedInfo /* CreateInfo() */):
+    VkFramebufferCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
     renderPass(std::move(renderPass)),
     extent({width, height}),
@@ -40,7 +48,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass,
 {
     VkFramebufferCreateInfo framebufferInfo;
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    framebufferInfo.pNext = chainedInfo.getNode();
+    framebufferInfo.pNext = nullptr;
     framebufferInfo.flags = flags;
     framebufferInfo.renderPass = MAGMA_HANDLE(renderPass);
     framebufferInfo.attachmentCount = attachmentCount;
@@ -54,8 +62,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass,
 
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shared_ptr<ImageView> attachment,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    VkFramebufferCreateFlags flags /* 0 */,
-    const CreateInfo& chainedInfo /* CreateInfo() */):
+    VkFramebufferCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
     renderPass(std::move(renderPass)),
     attachments({attachment}),
@@ -65,7 +72,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shar
     const VkImageView imageView = *attachment;
     VkFramebufferCreateInfo framebufferInfo;
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    framebufferInfo.pNext = chainedInfo.getNode();
+    framebufferInfo.pNext = nullptr;
     framebufferInfo.flags = flags;
     framebufferInfo.renderPass = MAGMA_HANDLE(renderPass);
     framebufferInfo.attachmentCount = 1;
@@ -79,8 +86,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shar
 
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std::vector<std::shared_ptr<ImageView>>& attachments,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    VkFramebufferCreateFlags flags /* 0 */,
-    const CreateInfo& chainedInfo /* CreateInfo() */):
+    VkFramebufferCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
     renderPass(std::move(renderPass)),
     attachments(attachments),
@@ -92,7 +98,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std
         dereferencedAttachments.put(*attachment);
     VkFramebufferCreateInfo framebufferInfo;
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    framebufferInfo.pNext = chainedInfo.getNode();
+    framebufferInfo.pNext = nullptr;
     framebufferInfo.flags = flags;
     framebufferInfo.renderPass = MAGMA_HANDLE(renderPass);
     framebufferInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);

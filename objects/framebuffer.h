@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
-#include "../misc/createInfo.h"
 
 namespace magma
 {
@@ -31,6 +30,13 @@ namespace magma
 
     class Framebuffer : public NonDispatchable<VkFramebuffer>
     {
+    protected:
+        Framebuffer(std::shared_ptr<const RenderPass> renderPass,
+            uint32_t width,
+            uint32_t height,
+            uint32_t layerCount,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+
     public:
         explicit Framebuffer(std::shared_ptr<const RenderPass> renderPass,
             uint32_t width,
@@ -38,25 +44,22 @@ namespace magma
             uint32_t layerCount,
             uint32_t attachmentCount,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            VkFramebufferCreateFlags = 0,
-            const CreateInfo& chainedInfo = CreateInfo());
+            VkFramebufferCreateFlags = 0);
         explicit Framebuffer(std::shared_ptr<const RenderPass> renderPass,
             std::shared_ptr<ImageView> attachment,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            VkFramebufferCreateFlags = 0,
-            const CreateInfo& chainedInfo = CreateInfo());
+            VkFramebufferCreateFlags = 0);
         explicit Framebuffer(std::shared_ptr<const RenderPass> renderPass,
             const std::vector<std::shared_ptr<ImageView>>& attachments,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            VkFramebufferCreateFlags = 0,
-            const CreateInfo& chainedInfo = CreateInfo());
+            VkFramebufferCreateFlags = 0);
         ~Framebuffer();
         std::shared_ptr<const RenderPass> getRenderPass() const noexcept { return renderPass; }
         const std::vector<std::shared_ptr<ImageView>>& getAttachments() const noexcept { return attachments; }
         const VkExtent2D& getExtent() const noexcept { return extent; }
         uint32_t getLayerCount() const noexcept { return layerCount; }
 
-    private:
+    protected:
         std::shared_ptr<const RenderPass> renderPass;
         const std::vector<std::shared_ptr<ImageView>> attachments;
         const VkExtent2D extent;
