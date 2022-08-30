@@ -31,6 +31,7 @@ namespace magma
             uint32_t mipLevels,
             uint32_t arrayLayers,
             std::shared_ptr<Allocator> allocator = nullptr,
+            const std::vector<VkFormat> viewFormats = {},
             const Sharing& sharing = Sharing());
         explicit Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
@@ -40,6 +41,7 @@ namespace magma
             const MipmapLayout& mipOffsets,
             const CopyLayout& bufferLayout = {0, 0, 0},
             std::shared_ptr<Allocator> allocator = nullptr,
+            const std::vector<VkFormat> viewFormats = {},
             const Sharing& sharing = Sharing());
         explicit Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
@@ -47,6 +49,7 @@ namespace magma
             const ArrayMipmapData& mipData,
             const MipmapLayout& mipSizes,
             std::shared_ptr<Allocator> allocator = nullptr,
+            const std::vector<VkFormat> viewFormats = {},
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
     };

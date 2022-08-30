@@ -55,6 +55,7 @@ namespace magma
         bool hasColorAttachmentFlag() const noexcept { return usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT; }
         bool hasDepthStencilAttachmentFlag() const noexcept { return usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT; }
         bool hasInputAttachmentFlag() const noexcept { return usage & VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT; }
+        const std::vector<VkFormat>& getViewFormats() const noexcept { return viewFormats; }
         VkSubresourceLayout getSubresourceLayout(uint32_t mipLevel,
             uint32_t arrayLayer = 0) const noexcept;
         VkImageSubresourceLayers getSubresourceLayers(uint32_t mipLevel,
@@ -92,6 +93,7 @@ namespace magma
             VkImageTiling tiling,
             VkImageUsageFlags usage,
             VkImageCreateFlags flags,
+            const std::vector<VkFormat> viewFormats,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
         explicit Image(std::shared_ptr<Device> device,
@@ -119,6 +121,7 @@ namespace magma
         const uint32_t samples;
         const VkImageTiling tiling;
         const VkImageUsageFlags usage;
+        std::vector<VkFormat> viewFormats;
     };
 
     struct Image::CopyLayout

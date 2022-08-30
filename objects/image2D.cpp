@@ -27,6 +27,7 @@ namespace magma
 {
 Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent, uint32_t mipLevels,
     std::shared_ptr<Allocator> allocator /* nullptr */,
+    const std::vector<VkFormat> viewFormats /* empty */,
     const Sharing& sharing /* default */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         mipLevels,
@@ -35,6 +36,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
+        std::move(viewFormats),
         sharing,
         std::move(allocator))
 {}
@@ -43,6 +45,7 @@ Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
     std::shared_ptr<const SrcTransferBuffer> srcBuffer, const MipmapLayout& mipOffsets,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
+    const std::vector<VkFormat> viewFormats /* empty */,
     const Sharing& sharing /* default */):
     Image(srcBuffer->getDevice(), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         MAGMA_COUNT(mipOffsets), // mipLevels
@@ -51,6 +54,7 @@ Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
+        std::move(viewFormats),
         sharing,
         std::move(allocator))
 {
@@ -61,6 +65,7 @@ Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
 Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
     const MipmapData& mipData, const MipmapLayout& mipSizes,
     std::shared_ptr<Allocator> allocator /* nullptr */,
+    const std::vector<VkFormat> viewFormats /* empty */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(cmdBuffer->getDevice(), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
@@ -70,6 +75,7 @@ Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
+        std::move(viewFormats),
         sharing,
         allocator)
 {   // Calculate aligned size and mip offsets
@@ -97,10 +103,9 @@ Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
     commitAndWait(std::move(cmdBuffer));
 }
 
-Image2D::Image2D(std::shared_ptr<Device> device,
-    VkFormat format, const VkExtent2D& extent, uint32_t mipLevels, uint32_t samples,
-    VkImageTiling tiling, VkImageUsageFlags usage, const Sharing& sharing,
-    std::shared_ptr<Allocator> allocator):
+Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
+    uint32_t mipLevels, uint32_t samples, VkImageTiling tiling, VkImageUsageFlags usage,
+    const std::vector<VkFormat> viewFormats, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         mipLevels,
         1, // arrayLayers
@@ -108,6 +113,7 @@ Image2D::Image2D(std::shared_ptr<Device> device,
         tiling,
         usage,
         0, // flags
+        std::move(viewFormats),
         sharing,
         std::move(allocator))
 {}
@@ -124,6 +130,7 @@ LinearTiledImage2D::LinearTiledImage2D(std::shared_ptr<Device> device, VkFormat 
         1, // samples
         VK_IMAGE_TILING_LINEAR,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+        {}, // viewFormats
         sharing,
         std::move(allocator))
 {}
@@ -138,6 +145,7 @@ StorageImage2D::StorageImage2D(std::shared_ptr<Device> device, VkFormat format, 
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
+        {}, // viewFormats
         sharing,
         std::move(allocator))
 {}

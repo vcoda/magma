@@ -41,7 +41,9 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {
         const VkExtent2D extent{color->getMipExtent(0).width, color->getMipExtent(0).height};
-        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, color->getSamples(), allocator, false);
+        const std::vector<VkFormat> depthStencilViewFormats = {depthStencilFormat};
+        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, color->getSamples(),
+            allocator, std::move(depthStencilViewFormats), false);
         depthStencilView = std::make_shared<ImageView>(depthStencil);
     }
     const AttachmentDescription colorAttachment(color->getFormat(), 1,

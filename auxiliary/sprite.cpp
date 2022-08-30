@@ -39,6 +39,7 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT, // Transfer only
         0, // flags
+        {}, // viewFormats
         sharing,
         std::move(allocator)),
     x(0), y(0),
@@ -73,6 +74,7 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT, // Transfer only
         0, // flags
+        {}, // viewFormats
         sharing,
         std::move(allocator)),
     x(0), y(0),

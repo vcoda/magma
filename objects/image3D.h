@@ -29,6 +29,7 @@ namespace magma
             VkFormat format,
             const VkExtent3D& extent,
             std::shared_ptr<Allocator> allocator = nullptr,
+            const std::vector<VkFormat> viewFormats = {},
             const Sharing& sharing = Sharing());
         explicit Image3D(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
@@ -36,6 +37,7 @@ namespace magma
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             const CopyLayout& bufferLayout = {0, 0, 0},
             std::shared_ptr<Allocator> allocator = nullptr,
+            const std::vector<VkFormat> viewFormats = {},
             const Sharing& sharing = Sharing());
     };
 } // namespace magma

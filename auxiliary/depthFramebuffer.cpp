@@ -34,10 +34,12 @@ DepthFramebuffer::DepthFramebuffer(std::shared_ptr<Device> device, const VkForma
     std::shared_ptr<Allocator> allocator /* nullptr */):
     Framebuffer(VK_FORMAT_UNDEFINED, depthFormat, 1)
 {   // Create depth attachment
+    const std::vector<VkFormat> depthViewFormats = {depthFormat};
     depth = std::make_shared<DepthStencilAttachment>(device, depthFormat, extent,
          1, // mipLevels
          1, // samples
          allocator,
+         std::move(depthViewFormats),
          true); // VK_IMAGE_USAGE_SAMPLED_BIT
     // Create depth view
     depthView = std::make_shared<ImageView>(depth);

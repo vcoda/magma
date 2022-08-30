@@ -31,6 +31,7 @@ namespace magma
             uint32_t mipLevels,
             uint32_t samples,
             std::shared_ptr<Allocator> allocator = nullptr,
+            const std::vector<VkFormat> viewFormats = {},
             bool sampled = true);
     };
 
@@ -45,6 +46,7 @@ namespace magma
             uint32_t mipLevels,
             uint32_t samples,
             std::shared_ptr<Allocator> allocator = nullptr,
+            const std::vector<VkFormat> viewFormats = {},
             bool sampled = false);
     };
 

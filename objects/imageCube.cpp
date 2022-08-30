@@ -27,6 +27,7 @@ namespace magma
 {
 ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t dimension, uint32_t mipLevels,
     std::shared_ptr<Allocator> allocator /* nullptr */,
+    const std::vector<VkFormat> viewFormats /* empty */,
     const Sharing& sharing /* default */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1}, mipLevels,
         6, // arrayLayers
@@ -34,6 +35,7 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
+        std::move(viewFormats),
         sharing,
         std::move(allocator))
 {}
@@ -42,6 +44,7 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, 
     std::shared_ptr<const SrcTransferBuffer> srcBuffer, const MipmapLayout& mipOffsets,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
+    const std::vector<VkFormat> viewFormats /* empty */,
     const Sharing& sharing /* default */):
     Image(srcBuffer->getDevice(), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1},
         mipLevels,
@@ -50,6 +53,7 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, 
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
+        std::move(viewFormats),
         sharing,
         std::move(allocator))
 {
@@ -60,6 +64,7 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, 
 ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t dimension,
     const MipmapData mipData[6], const MipmapLayout& mipSizes,
     std::shared_ptr<Allocator> allocator /* nullptr */,
+    const std::vector<VkFormat> viewFormats /* empty */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(cmdBuffer->getDevice(), VK_IMAGE_TYPE_2D, format, VkExtent3D{dimension, dimension, 1},
@@ -69,6 +74,7 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, 
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
+        std::move(viewFormats),
         sharing,
         allocator)
 {   // Calculate aligned size and mip offsets

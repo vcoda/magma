@@ -38,14 +38,18 @@ ColorMultisampleReadFramebuffer::ColorMultisampleReadFramebuffer(std::shared_ptr
     Framebuffer(colorFormat, depthStencilFormat, sampleCount)
 {   // Create multisample color attachment
     constexpr bool colorSampled = true;
-    color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, sampleCount, allocator, colorSampled);
+    const std::vector<VkFormat> colorViewFormats = {colorFormat};
+    color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, sampleCount,
+        allocator, colorViewFormats, colorSampled);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create multisample depth attachment
-        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent,
-            1, sampleCount, allocator, depthSampled | stencilSampled);
+        const std::vector<VkFormat> depthStencilViewFormats = {depthStencilFormat};
+        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, sampleCount,
+            allocator, std::move(depthStencilViewFormats), depthSampled | stencilSampled);
     }
     // Create color resolve attachment
-    resolve = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, allocator, colorSampled);
+    resolve = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1,
+        allocator, std::move(colorViewFormats), colorSampled);
     // Create color view
     colorView = std::make_shared<ImageView>(color, swizzle);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)

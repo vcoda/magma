@@ -28,6 +28,7 @@ namespace magma
 Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
     uint32_t mipLevels, uint32_t arrayLayers,
     std::shared_ptr<Allocator> allocator /* nullptr */,
+    const std::vector<VkFormat> viewFormats /* empty */,
     const Sharing& sharing /* default */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         mipLevels,
@@ -36,6 +37,7 @@ Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, cons
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
+        std::move(viewFormats),
         sharing,
         std::move(allocator))
 {}
@@ -44,6 +46,7 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
     std::shared_ptr<const SrcTransferBuffer> srcBuffer, const MipmapLayout& mipOffsets,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
+    const std::vector<VkFormat> viewFormats /* empty */,
     const Sharing& sharing /* default */):
     Image(srcBuffer->getDevice(), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         MAGMA_COUNT(mipOffsets) / arrayLayers, // mipLevels
@@ -52,6 +55,7 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
+        std::move(viewFormats),
         sharing,
         std::move(allocator))
 {
@@ -63,6 +67,7 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
 Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
     const ArrayMipmapData& mipData, const MipmapLayout& mipSizes,
     std::shared_ptr<Allocator> allocator /* nullptr */,
+    const std::vector<VkFormat> viewFormats /* empty */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(cmdBuffer->getDevice(), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
@@ -72,6 +77,7 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
+        std::move(viewFormats),
         sharing,
         std::move(allocator))
 {   // Calculate aligned size and mip offsets

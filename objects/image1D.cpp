@@ -27,6 +27,7 @@ namespace magma
 {
 Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width, uint32_t mipLevels,
     std::shared_ptr<Allocator> allocator /* nullptr */,
+    const std::vector<VkFormat> viewFormats /* empty */,
     const Sharing& sharing /* default */):
     Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
         mipLevels,
@@ -35,6 +36,7 @@ Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
+        std::move(viewFormats),
         sharing,
         std::move(allocator))
 {}
@@ -43,6 +45,7 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint
     std::shared_ptr<const SrcTransferBuffer> srcBuffer, const MipmapLayout& mipOffsets,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
+    const std::vector<VkFormat> viewFormats /* empty */,
     const Sharing& sharing /* default */):
     Image(srcBuffer->getDevice(), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
         MAGMA_COUNT(mipOffsets), // mipLevels
@@ -51,6 +54,7 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
+        std::move(viewFormats),
         sharing,
         std::move(allocator))
 {
@@ -61,6 +65,7 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint
 Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t width,
     const MipmapData& mipData, const MipmapLayout& mipSizes,
     std::shared_ptr<Allocator> allocator /* nullptr */,
+    const std::vector<VkFormat> viewFormats /* empty */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image(cmdBuffer->getDevice(), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
@@ -70,6 +75,7 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint
         VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         0, // flags
+        std::move(viewFormats),
         sharing,
         allocator)
 {   // Calculate aligned size and mip offsets
