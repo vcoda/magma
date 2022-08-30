@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "imagelessFramebuffer.h"
 #include "device.h"
+#include "image.h"
 #include "renderPass.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
@@ -27,10 +28,25 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_imageless_framebuffer
-ImagelessFramebuffer::AttachmentImageInfo::AttachmentImageInfo(
-    uint32_t width, uint32_t height, uint32_t layerCount,
-    const std::vector<VkFormat> viewFormats,
-    VkImageUsageFlags usage /* 0 */,
+ImagelessFramebuffer::AttachmentImageInfo::AttachmentImageInfo(std::shared_ptr<const Image> image):
+    VkFramebufferAttachmentImageInfoKHR{
+        VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR,
+        nullptr, // pNext
+        image->getFlags(),
+        image->getUsage(),
+        image->getMipExtent(0).width,
+        image->getMipExtent(0).height,
+        image->getArrayLayers(),
+        MAGMA_COUNT(image->getViewFormats()),
+        nullptr // pViewFormats
+    },
+    viewFormats(image->getViewFormats())
+{
+    pViewFormats = viewFormats.data();
+}
+
+ImagelessFramebuffer::AttachmentImageInfo::AttachmentImageInfo(VkImageUsageFlags usage,
+    uint32_t width, uint32_t height, uint32_t layerCount, const std::vector<VkFormat> viewFormats,
     VkImageCreateFlags flags /* 0 */):
     VkFramebufferAttachmentImageInfoKHR{
         VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR,

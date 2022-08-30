@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class Image;
+
     /* Allows framebuffer to be created without the need for creating images first,
        allowing more flexibility in how they are used, and avoiding the need
        for many of the confusing compatibility rules. */
@@ -31,11 +33,13 @@ namespace magma
         struct AttachmentImageInfo : VkFramebufferAttachmentImageInfoKHR
         {
             std::vector<VkFormat> viewFormats;
-            AttachmentImageInfo(uint32_t width,
+            AttachmentImageInfo() = default;
+            explicit AttachmentImageInfo(std::shared_ptr<const Image> image);
+            explicit AttachmentImageInfo(VkImageUsageFlags usage,
+                uint32_t width,
                 uint32_t height,
                 uint32_t layerCount,
                 const std::vector<VkFormat> viewFormats,
-                VkImageUsageFlags usage /* 0 */,
                 VkImageCreateFlags flags /* 0 */);
         };
 
