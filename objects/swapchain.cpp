@@ -163,6 +163,15 @@ std::vector<std::shared_ptr<SwapchainColorAttachment>> Swapchain::getImages() co
     return colorAttachments;
 }
 
+#ifdef VK_AMD_display_native_hdr
+void Swapchain::setLocalDimming(bool enable) noexcept
+{
+    MAGMA_DEVICE_EXTENSION(vkSetLocalDimmingAMD);
+    if (vkSetLocalDimmingAMD)
+        vkSetLocalDimmingAMD(MAGMA_HANDLE(device), handle, MAGMA_BOOLEAN(enable));
+}
+#endif // VK_AMD_display_native_hdr
+
 void Swapchain::handleError(VkResult result, const char *message) const
 {
     switch (result)

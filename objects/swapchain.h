@@ -62,6 +62,9 @@ namespace magma
         uint32_t acquireNextImage(std::shared_ptr<const Semaphore> semaphore,
             std::shared_ptr<const Fence> fence,
             uint64_t timeout = UINT64_MAX);
+    #ifdef VK_AMD_display_native_hdr
+        void setLocalDimming(bool enable) noexcept;
+    #endif
 
     protected:
         void handleError(VkResult result,
