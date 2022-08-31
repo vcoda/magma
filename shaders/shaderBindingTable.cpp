@@ -28,15 +28,15 @@ namespace magma
 #ifdef VK_NV_ray_tracing
 ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const void *shaderGroupHandles, uint32_t groupCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
+    const Descriptor& optional /* default */,
     const Sharing& sharing /* default */):
     Buffer(device,
         device->getPhysicalDevice()->getRayTracingProperties().shaderGroupBaseAlignment * groupCount,
+        0, // flags
         // Note that VK_BUFFER_USAGE_RAY_TRACING_BIT_NV = VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR in newer SDK revision
-        VK_BUFFER_USAGE_RAY_TRACING_BIT_NV | VK_BUFFER_USAGE_TRANSFER_SRC_BIT, flags,
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, memoryPriority,
-        sharing, std::move(allocator))
+        VK_BUFFER_USAGE_RAY_TRACING_BIT_NV | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+        optional, sharing, std::move(allocator))
 {
     uint8_t *shaderBindingData = getMemory()->map<uint8_t>();
     if (shaderBindingData)
@@ -55,20 +55,18 @@ ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const voi
 
 ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const std::vector<uint8_t>& shaderGroupHandles, uint32_t groupCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
+    const Descriptor& optional /* default */,
     const Sharing& sharing /* default */):
     ShaderBindingTable(std::move(device), shaderGroupHandles.data(), groupCount,
-        std::move(allocator), flags, memoryPriority, sharing)
+        std::move(allocator), optional, sharing)
 {}
 
 ShaderBindingTable::ShaderBindingTable(std::shared_ptr<const RayTracingPipeline> pipeline,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
+    const Descriptor& optional /* default */,
     const Sharing& sharing /* default */):
     ShaderBindingTable(pipeline->getDevice(), pipeline->getShaderGroupHandles(), pipeline->getShaderGroupCount(),
-        std::move(allocator), flags, memoryPriority, sharing)
+        std::move(allocator), optional, sharing)
 {}
 #endif // VK_NV_ray_tracing
 } // namespace magma

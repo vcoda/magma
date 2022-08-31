@@ -35,15 +35,17 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachm
     VkFormat depthStencilFormat /* VK_FORMAT_UNDEFINED */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
     Framebuffer(color->getFormat(), depthStencilFormat, color->getSamples())
-{
+{   // Create color view
     std::shared_ptr<Device> device = color->getDevice();
     colorView = std::make_shared<ImageView>(color, swizzle);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
-    {
+    {   // Let it know what view format will be paired with the image
+        Image::Descriptor imageFormatList;
+        imageFormatList.viewFormats.push_back(colorFormat);
+        // Create depth/stencil attachment
         const VkExtent2D extent{color->getMipExtent(0).width, color->getMipExtent(0).height};
-        const std::vector<VkFormat> depthStencilViewFormats = {depthStencilFormat};
         depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, color->getSamples(),
-            allocator, std::move(depthStencilViewFormats), false);
+            allocator, imageFormatList, false);
         depthStencilView = std::make_shared<ImageView>(depthStencil);
     }
     const AttachmentDescription colorAttachment(color->getFormat(), 1,

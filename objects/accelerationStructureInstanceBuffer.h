@@ -80,9 +80,8 @@ namespace magma
         explicit AccelerationStructureInstanceBuffer(std::shared_ptr<Device> device,
             uint32_t instanceCount,
             std::shared_ptr<Allocator> allocator = nullptr,
-            VkBufferCreateFlags flags = 0,
             bool persistentlyMapped = false,
-            float memoryPriority = MAGMA_MEMORY_PRIORITY,
+            const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
         ~AccelerationStructureInstanceBuffer();
         uint32_t getInstanceCount() const noexcept { return instanceCount; }

@@ -45,15 +45,17 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
     Framebuffer(colorFormat, depthStencilFormat, 1),
     colorClearOp(colorClearOp)
-{   // Create color attachment
-    const std::vector<VkFormat> colorViewFormats = {colorFormat};
+{   // Let it know what view format will be paired with the image
+    Image::Descriptor imageFormatList;
+    imageFormatList.viewFormats.push_back(colorFormat);
+    // Create color attachment
     color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1,
-        allocator, std::move(colorViewFormats), true);
+        allocator, imageFormatList, true);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil attachment
-        const std::vector<VkFormat> depthStencilViewFormats = {depthStencilFormat};
+        imageFormatList.viewFormats.back() = depthStencilFormat;
         depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, 1,
-            allocator, std::move(depthStencilViewFormats), depthSampled);
+            allocator, imageFormatList, depthSampled);
     }
     // Create color view
     colorView = std::make_shared<ImageView>(color, swizzle);
@@ -69,12 +71,12 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL); // Color image will be transitioned to when a render pass instance ends
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Choose optimal depth/stencil layout
-        const VkImageLayout finalLayout = optimalDepthStencilLayout(device, depthStencilFormat, depthSampled);
+        const VkImageLayout depthStencilLayout = optimalDepthStencilLayout(device, depthStencilFormat, depthSampled);
         const AttachmentDescription depthStencilAttachment(depthStencilFormat, 1,
             op::clearStore, // Clear depth, store
             hasStencil() ? op::clearStore : op::dontCare, // Clear stencil if present
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
-            finalLayout); // Depth image will be transitioned to when a render pass instance ends
+            depthStencilLayout); // Depth image will be transitioned to when a render pass instance ends
         // Create color/depth framebuffer
         renderPass = std::make_shared<RenderPass>(std::move(device),
             std::initializer_list<AttachmentDescription>{colorAttachment, depthStencilAttachment},

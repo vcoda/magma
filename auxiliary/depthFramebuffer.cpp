@@ -33,13 +33,15 @@ namespace aux
 DepthFramebuffer::DepthFramebuffer(std::shared_ptr<Device> device, const VkFormat depthFormat, const VkExtent2D& extent,
     std::shared_ptr<Allocator> allocator /* nullptr */):
     Framebuffer(VK_FORMAT_UNDEFINED, depthFormat, 1)
-{   // Create depth attachment
-    const std::vector<VkFormat> depthViewFormats = {depthFormat};
+{   // Let it know what view format will be paired with the image
+    Image::Descriptor imageFormatList;
+    imageFormatList.viewFormats.push_back(depthFormat);
+    // Create depth attachment
     depth = std::make_shared<DepthStencilAttachment>(device, depthFormat, extent,
          1, // mipLevels
          1, // samples
          allocator,
-         std::move(depthViewFormats),
+         imageFormatList,
          true); // VK_IMAGE_USAGE_SAMPLED_BIT
     // Create depth view
     depthView = std::make_shared<ImageView>(depth);

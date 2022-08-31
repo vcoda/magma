@@ -32,6 +32,9 @@ namespace magma
     class Buffer : public NonDispatchableResource<Buffer, VkBuffer>
     {
     public:
+        struct Descriptor;
+
+    public:
         ~Buffer();
         void realloc(VkDeviceSize newSize,
             std::shared_ptr<Allocator> allocator = nullptr);
@@ -51,10 +54,10 @@ namespace magma
     protected:
         explicit Buffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
-            VkBufferUsageFlags usage,
             VkBufferCreateFlags flags,
+            VkBufferUsageFlags usage,
             VkMemoryPropertyFlags memoryFlags,
-            float memoryPriority,
+            const Descriptor& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
         void copyHost(const void *data,
@@ -67,5 +70,13 @@ namespace magma
 
         const VkBufferCreateFlags flags;
         const VkBufferUsageFlags usage;
+    };
+
+    struct Buffer::Descriptor
+    {
+        VkBufferCreateFlags flags = 0;
+        bool lazy = false;
+        // VK_EXT_memory_priority
+        float memoryPriority = MAGMA_DEFAULT_MEMORY_PRIORITY;
     };
 } // namespace magma

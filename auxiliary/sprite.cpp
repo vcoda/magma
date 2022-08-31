@@ -36,10 +36,10 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
         1, // mipLevels
         1, // arrayLayers
         1, // samples
-        VK_IMAGE_TILING_OPTIMAL,
-        VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT, // Transfer only
         0, // flags
-        {}, // viewFormats
+        VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT, // Transfer only
+        VK_IMAGE_TILING_OPTIMAL,
+        Descriptor(),
         sharing,
         std::move(allocator)),
     x(0), y(0),
@@ -71,10 +71,10 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
         1, // mipLevels
         1, // arrayLayers
         1, // samples
-        VK_IMAGE_TILING_OPTIMAL,
-        VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT, // Transfer only
         0, // flags
-        {}, // viewFormats
+        VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT, // Transfer only
+        VK_IMAGE_TILING_OPTIMAL,
+        Descriptor(),
         sharing,
         std::move(allocator)),
     x(0), y(0),
@@ -92,7 +92,7 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
         bottomRight.y *= footprint.second;
     }
     // Copy bitmap data to host visible buffer
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, nullptr, std::move(allocator), 0, 0.f, sharing);
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, nullptr, std::move(allocator), Buffer::Descriptor(), sharing);
     helpers::mapScoped<uint8_t>(srcBuffer,
         [size, data, &copyFn](uint8_t *buffer)
         {

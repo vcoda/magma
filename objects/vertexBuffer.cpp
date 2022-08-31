@@ -24,25 +24,24 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 BaseVertexBuffer::BaseVertexBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
-    VkBufferUsageFlags usage, VkBufferCreateFlags flags, VkMemoryPropertyFlags memoryFlags, float memoryPriority,
-    const Sharing& sharing, std::shared_ptr<Allocator> allocator):
-    Buffer(std::move(device), size, usage, flags, memoryFlags, memoryPriority, sharing, std::move(allocator)),
+    VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags,
+    const Descriptor& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
+    Buffer(std::move(device), size, 0 /* flags */, usage, memoryFlags, optional, sharing, std::move(allocator)),
     vertexCount(0)
 {}
 
 VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
+    const Descriptor& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     BaseVertexBuffer(cmdBuffer->getDevice(), size,
-        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memoryPriority,
-        sharing, allocator)
+        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        optional, sharing, allocator)
 {
     MAGMA_ASSERT(data);
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), 0, 0.f, sharing, std::move(copyFn));
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Descriptor(), sharing, std::move(copyFn));
     cmdBuffer->begin();
     copyTransfer(cmdBuffer, srcBuffer, size);
     cmdBuffer->end();
@@ -53,14 +52,13 @@ VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
-    VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
+    const Descriptor& optional /* default */,
     const Sharing& sharing /* default */):
     BaseVertexBuffer(cmdBuffer->getDevice(),
         size > 0 ? size : srcBuffer->getSize(),
-        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memoryPriority,
-        sharing, std::move(allocator))
+        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        optional, sharing, std::move(allocator))
 {
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), size, srcOffset);
 }
@@ -68,15 +66,13 @@ VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared
 DynamicVertexBuffer::DynamicVertexBuffer(std::shared_ptr<Device> device, VkDeviceSize size, bool pinnedMemory,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const void *initialData /* nullptr */,
-    VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
+    const Descriptor& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     BaseVertexBuffer(std::move(device), size,
-        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, flags,
+        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
         (pinnedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0) | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-        memoryPriority,
-        sharing, std::move(allocator))
+        optional, sharing, std::move(allocator))
 {
     if (initialData)
         copyHost(initialData, std::move(copyFn));
@@ -85,8 +81,7 @@ DynamicVertexBuffer::DynamicVertexBuffer(std::shared_ptr<Device> device, VkDevic
 #ifdef VK_NV_ray_tracing
 AccelerationStructureVertexBuffer::AccelerationStructureVertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
+    const Descriptor& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     BaseVertexBuffer(cmdBuffer->getDevice(), size,
@@ -95,12 +90,12 @@ AccelerationStructureVertexBuffer::AccelerationStructureVertexBuffer(std::shared
         (device->extensionEnabled(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME) ?
             VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR : 0) |
 #endif
-        VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memoryPriority,
-        sharing, allocator)
+        VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        optional, sharing, allocator)
 {
     MAGMA_ASSERT(data);
-    auto srcBuffer =  std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), 0, 0.f, sharing, std::move(copyFn));
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Descriptor(), sharing, std::move(copyFn));
     cmdBuffer->begin();
     copyTransfer(cmdBuffer, srcBuffer, size);
     cmdBuffer->end();
@@ -111,8 +106,7 @@ AccelerationStructureVertexBuffer::AccelerationStructureVertexBuffer(std::shared
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
-    VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
+    const Descriptor& optional /* default */,
     const Sharing& sharing /* default */):
     BaseVertexBuffer(cmdBuffer->getDevice(),
         size > 0 ? size : srcBuffer->getSize(),
@@ -121,9 +115,9 @@ AccelerationStructureVertexBuffer::AccelerationStructureVertexBuffer(std::shared
         (device->extensionEnabled(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME) ?
             VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR : 0) |
 #endif
-        VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memoryPriority,
-        sharing, std::move(allocator))
+        VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        optional, sharing, std::move(allocator))
 {
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), size, srcOffset);
 }

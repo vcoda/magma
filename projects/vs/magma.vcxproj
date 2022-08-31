@@ -155,7 +155,6 @@
     <ClInclude Include="..\..\auxiliary\colorFramebuffer.h" />
     <ClInclude Include="..\..\auxiliary\baseFramebuffer.h" />
     <ClInclude Include="..\..\auxiliary\colorMultisampleFramebuffer.h" />
-    <ClInclude Include="..\..\auxiliary\colorMultisampleReadFramebuffer.h" />
     <ClInclude Include="..\..\auxiliary\fillRectangleVertexShader.h" />
     <ClInclude Include="..\..\auxiliary\graphicsPipelineCache.h" />
     <ClInclude Include="..\..\auxiliary\imageDescriptorSet.h" />
@@ -359,7 +358,6 @@
     <ClCompile Include="..\..\auxiliary\blitRectangle.cpp" />
     <ClCompile Include="..\..\auxiliary\colorFramebuffer.cpp" />
     <ClCompile Include="..\..\auxiliary\colorMultisampleFramebuffer.cpp" />
-    <ClCompile Include="..\..\auxiliary\colorMultisampleReadFramebuffer.cpp" />
     <ClCompile Include="..\..\auxiliary\fillRectangleVertexShader.cpp" />
     <ClCompile Include="..\..\auxiliary\graphicsPipelineCache.cpp" />
     <ClCompile Include="..\..\auxiliary\imageDescriptorSet.cpp" />

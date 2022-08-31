@@ -30,7 +30,7 @@ namespace magma
             const VkExtent2D& extent,
             uint32_t mipLevels,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const std::vector<VkFormat> viewFormats = {},
+            const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
         explicit Image2D(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
@@ -39,7 +39,7 @@ namespace magma
             const MipmapLayout& mipOffsets,
             const CopyLayout& bufferLayout = {0, 0, 0},
             std::shared_ptr<Allocator> allocator = nullptr,
-            const std::vector<VkFormat> viewFormats = {},
+            const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
         explicit Image2D(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
@@ -47,7 +47,7 @@ namespace magma
             const MipmapData& mipData,
             const MipmapLayout& mipSizes,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const std::vector<VkFormat> viewFormats = {},
+            const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
 
@@ -57,9 +57,10 @@ namespace magma
             const VkExtent2D& extent,
             uint32_t mipLevels,
             uint32_t samples,
-            VkImageTiling tiling,
+            VkImageCreateFlags flags,
             VkImageUsageFlags usage,
-            const std::vector<VkFormat> viewFormats,
+            VkImageTiling tiling,
+            const Descriptor& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
         Image2D(std::shared_ptr<Device> device,
@@ -77,13 +78,14 @@ namespace magma
             VkFormat format,
             const VkExtent2D& extent,
             std::shared_ptr<Allocator> allocator = nullptr,
+            const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
     };
 
     /* Supports unfiltered loads, stores, and atomics in a shader.
        Do transition of image layout to VK_IMAGE_LAYOUT_GENERAL using image barrier. */
 
-    class StorageImage2D : public Image
+    class StorageImage2D : public Image2D
     {
     public:
         explicit StorageImage2D(std::shared_ptr<Device> device,
@@ -92,6 +94,7 @@ namespace magma
             uint32_t mipLevels,
             uint32_t samples,
             std::shared_ptr<Allocator> allocator = nullptr,
+            const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
     };
 } // namespace magma

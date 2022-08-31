@@ -39,13 +39,15 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     Framebuffer(*colorAttachmentFormats.begin(), depthStencilFormat, 1),
     colorClearOp(colorClearOp),
     depthStencilClearOp(depthStencilClearOp)
-{
+{   // Let it know what view format will be paired with the image
+    Image::Descriptor imageFormatList;
+    imageFormatList.viewFormats.push_back(VK_FORMAT_UNDEFINED);
     uint32_t index = 0;
     for (const VkFormat colorFormat : colorAttachmentFormats)
     {   // Create color attachment
-        const std::vector<VkFormat> colorViewFormats = {colorFormat};
+        imageFormatList.viewFormats.back() = colorFormat;
         attachments.emplace_back(std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1,
-            allocator, std::move(colorViewFormats), true));
+            allocator, imageFormatList, true));
         // Create color view
         constexpr VkComponentMapping dontSwizzle = {
             VK_COMPONENT_SWIZZLE_IDENTITY,
@@ -57,9 +59,9 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     }
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil attachment
-        const std::vector<VkFormat> depthStencilViewFormats = {depthStencilFormat};
+        imageFormatList.viewFormats.back() = depthStencilFormat;
         attachments.emplace_back(std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, 1,
-            allocator, std::move(depthStencilViewFormats), depthSampled));
+            allocator, imageFormatList, depthSampled));
         // Create depth/stencil view
         attachmentViews.push_back(std::make_shared<ImageView>(attachments.back()));
     }

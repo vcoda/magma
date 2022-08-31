@@ -38,6 +38,9 @@ namespace magma
                 uint32_t sampleCount,
                 std::shared_ptr<Allocator> allocator = nullptr,
                 bool colorClearOp = true,
+                bool msaaColorSampled = false,
+                bool msaaDepthSampled = false,
+                bool msaaStencilSampled = false,
                 const VkComponentMapping& swizzle = {
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY,
@@ -50,6 +53,9 @@ namespace magma
                 uint32_t sampleCount,
                 std::shared_ptr<Allocator> allocator = nullptr,
                 bool colorClearOp = true,
+                bool msaaColorSampled = false,
+                bool msaaDepthSampled = false,
+                bool msaaStencilSampled = false,
                 const VkComponentMapping& swizzle = {
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY,
@@ -57,15 +63,19 @@ namespace magma
                     VK_COMPONENT_SWIZZLE_IDENTITY});
             std::shared_ptr<ImageView> getColorView() noexcept { return resolveView; }
             std::shared_ptr<const ImageView> getColorView() const noexcept { return resolveView; }
+            std::shared_ptr<ImageView> getMultisampleColorView() noexcept { return msaaColorView; }
+            std::shared_ptr<const ImageView> getMultisampleColorView() const noexcept { return msaaColorView; }
+            std::shared_ptr<ImageView> getMultisampleDepthStencilView() noexcept { return msaaDepthStencilView; }
+            std::shared_ptr<const ImageView> getMultisampleDepthStencilView() const noexcept { return msaaDepthStencilView; }
             bool hasColorClear() const noexcept { return colorClearOp; }
 
         private:
             const bool colorClearOp;
-            std::shared_ptr<Image2D> color;
-            std::shared_ptr<Image2D> depthStencil;
+            std::shared_ptr<Image2D> msaaColor;
+            std::shared_ptr<Image2D> msaaDepthStencil;
             std::shared_ptr<Image2D> resolve;
-            std::shared_ptr<ImageView> colorView;
-            std::shared_ptr<ImageView> depthStencilView;
+            std::shared_ptr<ImageView> msaaColorView;
+            std::shared_ptr<ImageView> msaaDepthStencilView;
             std::shared_ptr<ImageView> resolveView;
         };
     } // namespace aux

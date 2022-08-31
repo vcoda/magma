@@ -34,6 +34,7 @@ namespace magma
     class Image : public NonDispatchableResource<Image, VkImage>
     {
     public:
+        struct Descriptor;
         struct CopyLayout;
         typedef std::vector<VkDeviceSize> MipmapLayout;
         typedef std::vector<const void *> MipmapData;
@@ -86,10 +87,10 @@ namespace magma
             uint32_t mipLevels,
             uint32_t arrayLayers,
             uint32_t samples,
-            VkImageTiling tiling,
-            VkImageUsageFlags usage,
             VkImageCreateFlags flags,
-            const std::vector<VkFormat> viewFormats,
+            VkImageUsageFlags usage,
+            VkImageTiling tiling,
+            const Descriptor& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
         explicit Image(std::shared_ptr<Device> device,
@@ -118,6 +119,16 @@ namespace magma
         const VkImageTiling tiling;
         const VkImageUsageFlags usage;
         std::vector<VkFormat> viewFormats;
+    };
+
+    struct Image::Descriptor
+    {
+        VkImageCreateFlags flags;
+        bool lazy = false;
+        // VK_KHR_image_format_list
+        std::vector<VkFormat> viewFormats;
+        // VK_EXT_memory_priority
+        float memoryPriority = MAGMA_DEFAULT_MEMORY_PRIORITY;
     };
 
     struct Image::CopyLayout

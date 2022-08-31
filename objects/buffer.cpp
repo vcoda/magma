@@ -30,9 +30,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
-    VkBufferUsageFlags usage, VkBufferCreateFlags flags,
-    VkMemoryPropertyFlags memoryFlags, float memoryPriority,
-    const Sharing& sharing, std::shared_ptr<Allocator> allocator):
+    VkBufferCreateFlags flags, VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags,
+    const Descriptor& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, device, sharing, allocator),
     flags(flags),
     usage(usage)
@@ -40,7 +39,7 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     VkBufferCreateInfo bufferInfo;
     bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
     bufferInfo.pNext = nullptr;
-    bufferInfo.flags = flags;
+    bufferInfo.flags = flags | optional.flags;
     bufferInfo.size = size;
     bufferInfo.usage = usage;
     bufferInfo.sharingMode = sharing.getMode();
@@ -49,9 +48,11 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     const VkResult result = vkCreateBuffer(MAGMA_HANDLE(device), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create buffer");
     const VkMemoryRequirements memoryRequirements = getMemoryRequirements();
+    if (optional.lazy && !(memoryFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT))
+        memoryFlags |= VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
     std::shared_ptr<DeviceMemory> memory = std::make_shared<DeviceMemory>(
         std::move(device),
-        memoryRequirements, memoryFlags, memoryPriority,
+        memoryRequirements, memoryFlags, optional.memoryPriority,
         &handle, VK_OBJECT_TYPE_BUFFER,
         std::move(allocator));
     bindMemory(std::move(memory));

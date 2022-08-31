@@ -49,16 +49,15 @@ void AccelerationStructureInstance::setAccelerationStructure(std::shared_ptr<con
 
 AccelerationStructureInstanceBuffer::AccelerationStructureInstanceBuffer(std::shared_ptr<Device> device, uint32_t instanceCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    VkBufferCreateFlags flags /* 0 */,
     bool persistentlyMapped /* false */,
-    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
+    const Descriptor& optional /* default */,
     const Sharing& sharing /* default */):
-    RayTracingBuffer(device, sizeof(AccelerationStructureInstance) * instanceCount, allocator, flags, memoryPriority, sharing),
+    RayTracingBuffer(device, sizeof(AccelerationStructureInstance) * instanceCount, allocator, optional, sharing),
     instanceCount(instanceCount),
     persistent(persistentlyMapped),
     stagingBuffer(std::make_shared<SrcTransferBuffer>(std::move(device),
         sizeof(AccelerationStructureInstance) * instanceCount, nullptr,
-        std::move(allocator), 0, memoryPriority, sharing)),
+        std::move(allocator), optional, sharing)),
     instances(nullptr)
 {
     static_assert(sizeof(AccelerationStructureInstance) == sizeof(VkAccelerationStructureInstanceNV), "invalid structure size");

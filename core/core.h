@@ -72,7 +72,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_ALIGNED(p) (((uintptr_t)(const void *)(p)) % (MAGMA_ALIGNMENT) == 0)
 
 // https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VkMemoryPriorityAllocateInfoEXT.html
-#define MAGMA_MEMORY_PRIORITY 0.5f
+#define MAGMA_DEFAULT_MEMORY_PRIORITY 0.5f
 
 #if defined(_M_AMD64) || defined(__x86_64__)
   #define MAGMA_XMM_REGISTERS 16

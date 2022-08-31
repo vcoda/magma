@@ -34,78 +34,94 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
     const VkFormat colorFormat, const VkExtent2D& extent, const uint32_t sampleCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const bool colorClearOp /* true */,
+    const bool msaaColorSampled /* false */,
+    const bool msaaDepthSampled /* false */,
+    const bool msaaStencilSampled /* false */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
     ColorMultisampleFramebuffer(std::move(device), colorFormat, VK_FORMAT_UNDEFINED, extent, sampleCount,
-        std::move(allocator), colorClearOp, swizzle)
+        std::move(allocator), colorClearOp, msaaColorSampled, msaaDepthSampled, msaaStencilSampled, swizzle)
 {}
 
 ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device> device,
     const VkFormat colorFormat, const VkFormat depthStencilFormat, const VkExtent2D& extent, const uint32_t sampleCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const bool colorClearOp /* true */,
+    const bool msaaColorSampled /* false */,
+    const bool msaaDepthSampled /* false */,
+    const bool msaaStencilSampled /* false */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):
     Framebuffer(colorFormat, depthStencilFormat, sampleCount),
     colorClearOp(colorClearOp)
-{   // Create multisample color attachment
-    const std::vector<VkFormat> colorViewFormats = {colorFormat};
-    color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, sampleCount,
-        allocator, colorViewFormats, true);
+{   // Let it know what view format will be paired with the image
+    Image::Descriptor imageFormatList;
+    imageFormatList.viewFormats.push_back(colorFormat);
+    // Create multisample color attachment
+    msaaColor = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, sampleCount,
+        allocator, imageFormatList, msaaColorSampled); // TODO: should be true?
+    // Create color resolve attachment
+    resolve = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1,
+        allocator, imageFormatList, true);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create multisample depth attachment
-        const std::vector<VkFormat> depthStencilViewFormats = {depthStencilFormat};
-        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, sampleCount,
-            allocator, std::move(depthStencilViewFormats), false);
+        imageFormatList.viewFormats.back() = depthStencilFormat;
+        msaaDepthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, sampleCount,
+            allocator, imageFormatList, msaaDepthSampled || msaaStencilSampled);
     }
-    // Create color resolve attachment
-    constexpr bool sampled = true;
-    resolve = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1,
-        allocator, std::move(colorViewFormats), sampled);
-    // Create color view
-    colorView = std::make_shared<ImageView>(color, swizzle);
+    // Create color and resolve views
+    msaaColorView = std::make_shared<ImageView>(msaaColor, swizzle);
+    resolveView = std::make_shared<ImageView>(resolve);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil view
-        depthStencilView = std::make_shared<ImageView>(depthStencil);
+        msaaDepthStencilView = std::make_shared<ImageView>(msaaDepthStencil);
     }
-    // Create resolve view
-    resolveView = std::make_shared<ImageView>(resolve);
+    // Typically, after the multisampled image is resolved, we don't need the
+    // multisampled image anymore. Therefore, the multisampled image must be
+    // discarded by using STORE_OP_DONT_CARE.
+    // https://static.docs.arm.com/100971/0101/arm_mali_application_developer_best_practices_developer_guide_100971_0101_00_en_00.pdf
+    const LoadStoreOp msaaColorOp = msaaColorSampled
+        ? (colorClearOp ? op::clearStore : op::store)
+        : (colorClearOp ? op::clear : op::dontCare);
+    // Color MSAA image will be transitioned to when a render pass instance ends
+    const VkImageLayout msaaColorLayout = msaaColorSampled
+        ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+        : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
     // Setup attachment descriptors
-    const AttachmentDescription colorAttachment(colorFormat, sampleCount,
-        // https://static.docs.arm.com/100971/0101/arm_mali_application_developer_best_practices_developer_guide_100971_0101_00_en_00.pdf
-        // Typically, after the multisampled image is resolved, we don't need the
-        // multisampled image anymore. Therefore, the multisampled image must be
-        // discarded by using STORE_OP_DONT_CARE.
-        colorClearOp ? op::clear : op::dontCare, // Clear (optionally) color, don't care about store
+    const AttachmentDescription msaaColorAttachment(colorFormat, sampleCount,
+        msaaColorOp,
         op::dontCare, // Stencil not applicable
         VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
-        VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+        msaaColorLayout);
     const AttachmentDescription resolveAttachment(colorFormat, 1,
         op::store, // Don't care about clear for MSAA resolve attachment
         op::dontCare, // Stencil not applicable
         VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL); // Resolve image will be transitioned to when a render pass instance ends
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
-    {   // Choose optimal depth/stencil layout
-        const VkImageLayout finalLayout = optimalDepthStencilLayout(device, depthStencilFormat, false);
-        const AttachmentDescription depthStencilAttachment(depthStencilFormat, sampleCount,
-            op::clear, // Clear depth, don't care about store
-            hasStencil() ? op::clear : op::dontCare, // Clear stencil if present
+    {   // Clear depth/stencil, store if depth (and/or stencil) sampled
+        const LoadStoreOp msaaDepthOp = msaaDepthSampled ? op::clearStore : op::clear;
+        const LoadStoreOp msaaStencilOp = msaaStencilSampled ? op::clearStore : op::clear;
+        // Choose optimal depth/stencil layout
+        const VkImageLayout msaaDepthStencilLayout = optimalDepthStencilLayout(device, depthStencilFormat, msaaDepthSampled || msaaStencilSampled);
+        const AttachmentDescription msaaDepthStencilAttachment(depthStencilFormat, sampleCount,
+            msaaDepthOp,
+            hasStencil() ? msaaStencilOp : op::dontCare,
             VK_IMAGE_LAYOUT_UNDEFINED, // Don't care
-            finalLayout); // Depth image will be transitioned to when a render pass instance ends
-        // Create color/depth framebuffer
+            msaaDepthStencilLayout); // Depth image will be transitioned to when a render pass instance ends
+        // Create color/depth multisample framebuffer
         renderPass = std::make_shared<RenderPass>(std::move(device),
-            std::initializer_list<AttachmentDescription>{colorAttachment, depthStencilAttachment, resolveAttachment},
+            std::initializer_list<AttachmentDescription>{msaaColorAttachment, msaaDepthStencilAttachment, resolveAttachment},
             MAGMA_HOST_ALLOCATOR(allocator));
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass,
-            std::vector<std::shared_ptr<ImageView>>{colorView, depthStencilView, resolveView},
+            std::vector<std::shared_ptr<ImageView>>{msaaColorView, msaaDepthStencilView, resolveView},
             MAGMA_HOST_ALLOCATOR(allocator), 0);
     }
     else
-    {   // Create color only framebuffer
+    {   // Create color only multisample framebuffer
         renderPass = std::make_shared<RenderPass>(std::move(device),
-            std::initializer_list<AttachmentDescription>{colorAttachment, resolveAttachment},
+            std::initializer_list<AttachmentDescription>{msaaColorAttachment, resolveAttachment},
             MAGMA_HOST_ALLOCATOR(allocator));
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass,
-            std::vector<std::shared_ptr<ImageView>>{colorView, resolveView},
+            std::vector<std::shared_ptr<ImageView>>{msaaColorView, resolveView},
             MAGMA_HOST_ALLOCATOR(allocator), 0);
     }
 }

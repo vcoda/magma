@@ -25,17 +25,17 @@ namespace magma
 {
 StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
+    const Descriptor& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(cmdBuffer->getDevice(), size,
-        VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memoryPriority,
-        sharing, allocator)
+        0, // flags
+        VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        optional, sharing, allocator)
 {
     MAGMA_ASSERT(data);
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), 0, 0.f, sharing, std::move(copyFn));
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Descriptor(), sharing, std::move(copyFn));
     cmdBuffer->begin();
     copyTransfer(cmdBuffer, srcBuffer, size);
     cmdBuffer->end();
@@ -46,30 +46,29 @@ StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
-    VkBufferCreateFlags flags /* 0 */,
-    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
+    const Descriptor& optional /* default */,
     const Sharing& sharing /* default */):
     Buffer(srcBuffer->getDevice(),
         size > 0 ? size : srcBuffer->getSize(),
-        VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, flags,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memoryPriority,
-        sharing, std::move(allocator))
+        0, // flags
+        VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        optional, sharing, std::move(allocator))
 {
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), size, srcOffset);
 }
 
 DynamicStorageTexelBuffer::DynamicStorageTexelBuffer(std::shared_ptr<Device> device, VkDeviceSize size, bool pinnedMemory,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    VkBufferCreateFlags flags /* 0 */,
     const void *initialData /* nullptr */,
-    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
+    const Descriptor& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(std::move(device), size,
-        VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT, flags,
+        0, // flags
+        VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT,
         (pinnedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0) | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-        memoryPriority,
-        sharing, std::move(allocator))
+        optional, sharing, std::move(allocator))
 {
     if (initialData)
         copyHost(initialData, std::move(copyFn));

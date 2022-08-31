@@ -68,8 +68,11 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
         VK_IMAGE_LAYOUT_UNDEFINED,
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     renderPass = std::make_shared<RenderPass>(device, attachment, hostAllocator);
+    // Let it know what view format will be paired with the image
+    Image::Descriptor imageFormatList;
+    imageFormatList.viewFormats.push_back(format);
     // Create high-precision color buffer
-    accumBuffer = std::make_shared<ColorAttachment>(device, format, extent, 1, 1, allocator);
+    accumBuffer = std::make_shared<ColorAttachment>(device, format, extent, 1, 1, allocator, imageFormatList);
     bufferView = std::make_shared<ImageView>(accumBuffer);
     framebuffer = std::make_shared<Framebuffer>(renderPass, bufferView, hostAllocator, 0);
     // Create descriptor set for fragment shader

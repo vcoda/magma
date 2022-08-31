@@ -33,8 +33,8 @@ namespace magma
 {
 Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat format,
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
-    VkImageTiling tiling, VkImageUsageFlags usage, VkImageCreateFlags flags,
-    const std::vector<VkFormat> viewFormats_, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
+    VkImageCreateFlags flags, VkImageUsageFlags usage, VkImageTiling tiling,
+    const Descriptor& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, device, sharing, allocator),
     flags(flags),
     imageType(imageType),
@@ -45,13 +45,12 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     arrayLayers(arrayLayers),
     samples(samples),
     tiling(tiling),
-    usage(usage),
-    viewFormats(std::move(viewFormats_))
+    usage(usage)
 {
     VkImageCreateInfo imageInfo;
     imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     imageInfo.pNext = nullptr;
-    imageInfo.flags = flags;
+    imageInfo.flags = flags | optional.flags;
     imageInfo.imageType = imageType;
     imageInfo.format = format;
     imageInfo.extent = extent;
@@ -65,24 +64,26 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     imageInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     imageInfo.initialLayout = layout;
 #ifdef VK_KHR_image_format_list
-    VkImageFormatListCreateInfoKHR imageFormatList;
-    if (!viewFormats.empty())
+    VkImageFormatListCreateInfoKHR imageFormatListInfo;
+    viewFormats = optional.viewFormats;
+    bool imageFormatList = device->extensionEnabled(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME);
+    if (imageFormatList && !viewFormats.empty())
     {
-        imageInfo.pNext = &imageFormatList;
-        imageFormatList.sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR;
-        imageFormatList.pNext = nullptr;
-        imageFormatList.viewFormatCount = MAGMA_COUNT(viewFormats);
-        imageFormatList.pViewFormats = viewFormats.data();
+        imageInfo.pNext = &imageFormatListInfo;
+        imageFormatListInfo.sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR;
+        imageFormatListInfo.pNext = nullptr;
+        imageFormatListInfo.viewFormatCount = MAGMA_COUNT(viewFormats);
+        imageFormatListInfo.pViewFormats = viewFormats.data();
     }
 #endif // VK_KHR_image_format_list
     const VkResult result = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create image");
     const VkMemoryRequirements memoryRequirements = getMemoryRequirements();
-    const VkMemoryPropertyFlags memoryFlags = (VK_IMAGE_TILING_LINEAR == tiling)
+    VkMemoryPropertyFlags memoryFlags = (VK_IMAGE_TILING_LINEAR == tiling)
         ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
-        : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+        : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT | (optional.lazy ? VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT : 0);
     std::shared_ptr<DeviceMemory> memory = std::make_shared<DeviceMemory>(
-        std::move(device), memoryRequirements, memoryFlags, 0.f,
+        std::move(device), memoryRequirements, memoryFlags, optional.memoryPriority,
         &handle, VK_OBJECT_TYPE_IMAGE, std::move(allocator));
     bindMemory(std::move(memory));
 }

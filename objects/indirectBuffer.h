@@ -34,11 +34,10 @@ namespace magma
 
     protected:
         explicit IndirectBuffer(std::shared_ptr<Device> device,
-            VkBufferCreateFlags flags,
             uint32_t maxDrawCommands,
             std::size_t stride,
             bool persistentlyMapped,
-            float memoryPriority,
+            const Descriptor& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
 
@@ -56,9 +55,8 @@ namespace magma
         explicit DrawIndirectBuffer(std::shared_ptr<Device> device,
             uint32_t maxDrawCommands,
             std::shared_ptr<Allocator> allocator = nullptr,
-            VkBufferCreateFlags flags = 0,
             bool persistentlyMapped = false,
-            float memoryPriority = MAGMA_MEMORY_PRIORITY,
+            const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
         uint32_t writeDrawCommand(uint32_t vertexCount,
             uint32_t firstVertex = 0) noexcept;
@@ -80,9 +78,8 @@ namespace magma
         explicit DrawIndexedIndirectBuffer(std::shared_ptr<Device> device,
             uint32_t maxDrawIndexedCommands,
             std::shared_ptr<Allocator> allocator = nullptr,
-            VkBufferCreateFlags flags = 0,
             bool persistentlyMapped = false,
-            float memoryPriority = MAGMA_MEMORY_PRIORITY,
+            const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
         uint32_t writeDrawIndexedCommand(uint32_t indexCount,
             uint32_t firstIndex = 0,

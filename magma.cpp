@@ -26,7 +26,6 @@ namespace magma
 {
 #ifdef MAGMA_VERIFY_CONSTEXPR
     // Attachment description
-    constexpr hash_t loadStoreHash = op::loadStore.hash();
     constexpr AttachmentDescription rgbaUnormAttachment(VK_FORMAT_R8G8B8A8_UNORM, 4, op::load, op::store,
         VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
     constexpr hash_t attachmentHash = rgbaUnormAttachment.hash();

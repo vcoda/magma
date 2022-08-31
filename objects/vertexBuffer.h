@@ -34,9 +34,8 @@ namespace magma
         explicit BaseVertexBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkBufferUsageFlags usage,
-            VkBufferCreateFlags flags,
             VkMemoryPropertyFlags memoryFlags,
-            float memoryPriority,
+            const Descriptor& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
 
@@ -52,8 +51,7 @@ namespace magma
             VkDeviceSize size,
             const void *data,
             std::shared_ptr<Allocator> allocator = nullptr,
-            VkBufferCreateFlags flags = 0,
-            float memoryPriority = MAGMA_MEMORY_PRIORITY,
+            const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
         explicit VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
@@ -61,8 +59,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,
-            VkBufferCreateFlags flags = 0,
-            float memoryPriority = MAGMA_MEMORY_PRIORITY,
+            const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
     };
 
@@ -77,8 +74,7 @@ namespace magma
             bool pinnedMemory,
             std::shared_ptr<Allocator> allocator = nullptr,
             const void *initialData = nullptr,
-            VkBufferCreateFlags flags = 0,
-            float memoryPriority = MAGMA_MEMORY_PRIORITY,
+            const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
     };
@@ -91,8 +87,7 @@ namespace magma
             VkDeviceSize size,
             const void *data,
             std::shared_ptr<Allocator> allocator = nullptr,
-            VkBufferCreateFlags flags = 0,
-            float memoryPriority = MAGMA_MEMORY_PRIORITY,
+            const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
         explicit AccelerationStructureVertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
@@ -100,8 +95,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,
-            VkBufferCreateFlags flags = 0,
-            float memoryPriority = MAGMA_MEMORY_PRIORITY,
+            const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
     };
 #endif // VK_NV_ray_tracing

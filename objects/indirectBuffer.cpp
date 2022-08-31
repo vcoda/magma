@@ -22,14 +22,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-IndirectBuffer::IndirectBuffer(std::shared_ptr<Device> device, VkBufferCreateFlags flags,
-    uint32_t maxDrawCommands, std::size_t stride, bool persistentlyMapped, float memoryPriority,
-    const Sharing& sharing, std::shared_ptr<Allocator> allocator):
+IndirectBuffer::IndirectBuffer(std::shared_ptr<Device> device,
+    uint32_t maxDrawCommands, std::size_t stride, bool persistentlyMapped,
+    const Descriptor& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     Buffer(std::move(device),
         static_cast<VkDeviceSize>(maxDrawCommands * stride),
-        VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT, flags,
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, memoryPriority,
-        sharing, std::move(allocator)),
+        0, // flags
+        VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+        optional, sharing, std::move(allocator)),
     maxDrawCommands(maxDrawCommands),
     stride(static_cast<uint32_t>(stride)),
     persistent(persistentlyMapped),
@@ -44,12 +45,11 @@ IndirectBuffer::~IndirectBuffer()
 
 DrawIndirectBuffer::DrawIndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDrawCommands,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    VkBufferCreateFlags flags /* 0 */,
     bool persistentlyMapped /* false */,
-    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
+    const Descriptor& optional /* default */,
     const Sharing& sharing /* Sharing() */):
-    IndirectBuffer(std::move(device), flags, maxDrawCommands, sizeof(VkDrawIndirectCommand),
-        persistentlyMapped, memoryPriority, sharing, std::move(allocator)),
+    IndirectBuffer(std::move(device), maxDrawCommands, sizeof(VkDrawIndirectCommand),
+        persistentlyMapped, optional, sharing, std::move(allocator)),
     mappedData(persistentlyMapped ? memory->map<VkDrawIndirectCommand>() : nullptr)
 {}
 
@@ -115,12 +115,11 @@ uint32_t DrawIndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawC
 
 DrawIndexedIndirectBuffer::DrawIndexedIndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDrawIndexedCommands,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    VkBufferCreateFlags flags /* 0 */,
     bool persistentlyMapped /* false */,
-    float memoryPriority /* MAGMA_MEMORY_PRIORITY */,
+    const Descriptor& optional /* default */,
     const Sharing& sharing /* Sharing() */):
-    IndirectBuffer(std::move(device), flags, maxDrawIndexedCommands, sizeof(VkDrawIndexedIndirectCommand),
-        persistentlyMapped, memoryPriority, sharing, std::move(allocator)),
+    IndirectBuffer(std::move(device), maxDrawIndexedCommands, sizeof(VkDrawIndexedIndirectCommand),
+        persistentlyMapped, optional, sharing, std::move(allocator)),
     mappedData(persistentlyMapped ? memory->map<VkDrawIndexedIndirectCommand>() : nullptr)
 {}
 
