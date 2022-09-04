@@ -30,7 +30,8 @@ namespace magma
         VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
     constexpr hash_t attachmentHash = rgbaUnormAttachment.hash();
     // Subpass dependency
-    constexpr SubpassDependency subpassDependency(0, 1, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+    constexpr SubpassExternalDependency subpassDependency(VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+        VK_ACCESS_SHADER_READ_BIT, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT);
     constexpr hash_t subpassDependencyHash = subpassDependency.hash();
     // Input assembly state
     constexpr hash_t triangleListHash = renderstate::triangleList.hash();

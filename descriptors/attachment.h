@@ -16,37 +16,16 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "loadStoreOp.h"
 
 namespace magma
 {
-    class LoadStoreOp
-    {
-    public:
-        constexpr LoadStoreOp(const VkAttachmentLoadOp loadOp, const VkAttachmentStoreOp storeOp) noexcept:
-            loadOp(loadOp), storeOp(storeOp) {}
-        constexpr VkAttachmentLoadOp getLoadOp() const noexcept { return loadOp; }
-        constexpr VkAttachmentStoreOp getStoreOp() const noexcept { return storeOp; }
-        constexpr hash_t hash() const noexcept;
-
-    private:
-        VkAttachmentLoadOp loadOp;
-        VkAttachmentStoreOp storeOp;
-    };
-
     /* An attachment description describes the properties of an attachment
        including its format, sample count, and how its contents are treated
        at the beginning and end of each render pass instance. */
 
     struct AttachmentDescription : VkAttachmentDescription
     {
-        constexpr AttachmentDescription(VkFormat format,
-            uint32_t sampleCount,
-            VkAttachmentLoadOp loadOp,
-            VkAttachmentStoreOp storeOp,
-            VkAttachmentLoadOp stencilLoadOp,
-            VkAttachmentStoreOp stencilStoreOp,
-            VkImageLayout initialLayout,
-            VkImageLayout finalLayout) noexcept;
         constexpr AttachmentDescription(VkFormat format,
             uint32_t sampleCount,
             const LoadStoreOp& colorDepthOp,
@@ -57,24 +36,8 @@ namespace magma
             const LoadStoreOp& stencilOp,
             VkImageLayout initialLayout,
             VkImageLayout finalLayout) noexcept;
-        constexpr AttachmentDescription(VkFormat format,
-            uint32_t sampleCount,
-            const AttachmentDescription& predefined) noexcept;
         constexpr hash_t hash() const noexcept;
     };
 } // namespace magma
 
 #include "attachment.inl"
-
-namespace magma
-{
-    namespace op
-    {
-        constexpr LoadStoreOp load(VK_ATTACHMENT_LOAD_OP_LOAD, VK_ATTACHMENT_STORE_OP_DONT_CARE);
-        constexpr LoadStoreOp clear(VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_DONT_CARE);
-        constexpr LoadStoreOp store(VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_STORE);
-        constexpr LoadStoreOp loadStore(VK_ATTACHMENT_LOAD_OP_LOAD, VK_ATTACHMENT_STORE_OP_STORE);
-        constexpr LoadStoreOp clearStore(VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE);
-        constexpr LoadStoreOp dontCare(VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE);
-    } // namespace op
-} // namespace magma

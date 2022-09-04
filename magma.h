@@ -134,6 +134,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "barriers/bufferMemoryBarrier.h"
 #include "barriers/imageMemoryBarrier.h"
 #include "barriers/memoryBarrier.h"
+#include "barriers/subpassDependency.h"
+#include "barriers/subpassDependency2.h"
 
 #include "misc/clearAttachment.h"
 #include "misc/clearValue.h"

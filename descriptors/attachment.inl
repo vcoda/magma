@@ -1,24 +1,16 @@
 namespace magma
 {
-constexpr hash_t LoadStoreOp::hash() const noexcept
-{
-    return core::hashArgs(
-        loadOp,
-        storeOp);
-}
-
 constexpr AttachmentDescription::AttachmentDescription(const VkFormat format, const uint32_t sampleCount,
-    const VkAttachmentLoadOp loadOp, const VkAttachmentStoreOp storeOp,
-    const VkAttachmentLoadOp stencilLoadOp, const VkAttachmentStoreOp stencilStoreOp,
+    const LoadStoreOp& colorDepthOp, const LoadStoreOp& stencilOp,
     const VkImageLayout initialLayout, const VkImageLayout finalLayout) noexcept:
     VkAttachmentDescription{
         0, // flags
         format,
         VK_SAMPLE_COUNT_1_BIT, // samples
-        loadOp,
-        storeOp,
-        stencilLoadOp,
-        stencilStoreOp,
+        colorDepthOp.load,
+        colorDepthOp.store,
+        stencilOp.load,
+        stencilOp.store,
         initialLayout,
         finalLayout
     }
@@ -36,22 +28,9 @@ constexpr AttachmentDescription::AttachmentDescription(const VkFormat format, co
     }
 }
 
-constexpr AttachmentDescription::AttachmentDescription(const VkFormat format, const uint32_t sampleCount,
-    const LoadStoreOp& colorDepthOp, const LoadStoreOp& stencilOp,
-    const VkImageLayout initialLayout, const VkImageLayout finalLayout) noexcept:
-    AttachmentDescription(format, sampleCount, colorDepthOp.getLoadOp(), colorDepthOp.getStoreOp(),
-        stencilOp.getLoadOp(), stencilOp.getStoreOp(), initialLayout, finalLayout)
-{}
-
 constexpr AttachmentDescription::AttachmentDescription(const LoadStoreOp& colorDepthOp, const LoadStoreOp& stencilOp,
     const VkImageLayout initialLayout, const VkImageLayout finalLayout) noexcept:
-    AttachmentDescription(VK_FORMAT_UNDEFINED, VK_SAMPLE_COUNT_1_BIT, colorDepthOp.getLoadOp(), colorDepthOp.getStoreOp(),
-        stencilOp.getLoadOp(), stencilOp.getStoreOp(), initialLayout, finalLayout)
-{}
-
-constexpr AttachmentDescription::AttachmentDescription(const VkFormat format, const uint32_t sampleCount, const AttachmentDescription& predefined) noexcept:
-    AttachmentDescription(format, sampleCount, predefined.loadOp, predefined.storeOp,
-        predefined.stencilLoadOp, predefined.stencilStoreOp, initialLayout, finalLayout)
+    AttachmentDescription(VK_FORMAT_UNDEFINED, VK_SAMPLE_COUNT_1_BIT, colorDepthOp, stencilOp, initialLayout, finalLayout)
 {}
 
 constexpr hash_t AttachmentDescription::hash() const noexcept

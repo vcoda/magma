@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "nondispatchable.h"
 #include "../descriptors/attachment.h"
 #include "../descriptors/subpass.h"
+#include "../barriers/subpassDependency.h"
 #include "../misc/createInfo.h"
 
 namespace magma

@@ -708,6 +708,12 @@
     <ClInclude Include="..\..\barriers\subpassDependency2.h">
       <Filter>Header Files\barriers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\descriptors\loadStoreOp.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\barriers\subpassDependency.h">
+      <Filter>Header Files\barriers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1171,9 +1177,6 @@
     <None Include="..\..\allocator\cxxAllocator.inl">
       <Filter>Header Files\allocator</Filter>
     </None>
-    <None Include="..\..\descriptors\subpassDependency.inl">
-      <Filter>Header Files\descriptors</Filter>
-    </None>
     <None Include="..\..\objects\resourcePool.inl">
       <Filter>Header Files\objects</Filter>
     </None>
@@ -1259,6 +1262,9 @@
       <Filter>Header Files\objects</Filter>
     </None>
     <None Include="..\..\barriers\subpassDependency2.inl">
+      <Filter>Header Files\barriers</Filter>
+    </None>
+    <None Include="..\..\barriers\subpassDependency.inl">
       <Filter>Header Files\barriers</Filter>
     </None>
   </ItemGroup>
