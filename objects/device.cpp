@@ -48,8 +48,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     Dispatchable<VkDevice>(VK_OBJECT_TYPE_DEVICE, nullptr, std::move(allocator)),
     physicalDevice(std::move(physicalDevice)),
     resourcePool(std::make_shared<ResourcePool>()),
-    enabledFeatures(deviceFeatures),
-    enabledExtendedFeatures(extendedDeviceFeatures)
+    enabledFeatures(deviceFeatures)
 {
 #ifdef VK_KHR_get_physical_device_properties2
     VkPhysicalDeviceFeatures2KHR features;
@@ -66,6 +65,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
             VkBaseInStructure *nextNode = reinterpret_cast<VkBaseInStructure *>(*next);
             currNode->pNext = nextNode;
             ++curr; ++next;
+            enabledExtendedFeatures.push_back(currNode);
         }
         VkBaseInStructure *lastNode = reinterpret_cast<VkBaseInStructure *>(*curr);
         lastNode->pNext = reinterpret_cast<const VkBaseInStructure *>(chainedInfo.getNode());
@@ -311,9 +311,8 @@ bool Device::stippledLinesEnabled() const noexcept
 
 const VkBaseInStructure *Device::findEnabledExtendedFeatures(VkStructureType sType) const noexcept
 {
-    for (auto it : enabledExtendedFeatures)
+    for (auto features : enabledExtendedFeatures)
     {
-        const VkBaseInStructure *features = reinterpret_cast<const VkBaseInStructure *>(it);
         if (features->sType == sType)
             return features;
     }

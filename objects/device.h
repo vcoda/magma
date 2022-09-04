@@ -97,7 +97,7 @@ namespace magma
         std::vector<std::string> enabledLayers;
         std::vector<std::string> enabledExtensions;
         VkPhysicalDeviceFeatures enabledFeatures;
-        std::vector<void *> enabledExtendedFeatures;
+        std::vector<const VkBaseInStructure *> enabledExtendedFeatures;
     };
 } // namespace magma
 
