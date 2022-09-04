@@ -20,7 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/imageView.h"
 #include "../objects/buffer.h"
 #include "../objects/bufferView.h"
-#include "../objects/storageBuffer.h"
 
 namespace magma
 {

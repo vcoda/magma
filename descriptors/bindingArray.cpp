@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "bindingArray.h"
+#include "../objects/storageBuffer.h"
 
 namespace magma
 {
