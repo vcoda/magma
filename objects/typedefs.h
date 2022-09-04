@@ -118,6 +118,9 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(DisplayMode)
     MAGMA_TYPEDEF_SHARED_PTR(DisplaySurface)
 #endif
+#ifdef VK_KHR_fragment_shading_rate
+    MAGMA_TYPEDEF_SHARED_PTR(FragmentShadingRateAttachment)
+#endif
 #ifdef VK_KHR_imageless_framebuffer
     MAGMA_TYPEDEF_SHARED_PTR(ImagelessFramebuffer)
 #endif

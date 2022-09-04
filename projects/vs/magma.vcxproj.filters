@@ -702,6 +702,9 @@
     <ClInclude Include="..\..\states\lineRasterizationState.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\fragmentShadingRateAttachment.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1081,6 +1084,9 @@
     </ClCompile>
     <ClCompile Include="..\..\states\rasterizationState.cpp">
       <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\fragmentShadingRateAttachment.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -262,6 +262,7 @@
     <ClInclude Include="..\..\objects\dstTransferBuffer.h" />
     <ClInclude Include="..\..\objects\event.h" />
     <ClInclude Include="..\..\objects\fence.h" />
+    <ClInclude Include="..\..\objects\fragmentShadingRateAttachment.h" />
     <ClInclude Include="..\..\objects\framebuffer.h" />
     <ClInclude Include="..\..\objects\graphicsPipeline.h" />
     <ClInclude Include="..\..\objects\graphicsPipelines.h" />
@@ -420,6 +421,7 @@
     <ClCompile Include="..\..\objects\dstTransferBuffer.cpp" />
     <ClCompile Include="..\..\objects\event.cpp" />
     <ClCompile Include="..\..\objects\fence.cpp" />
+    <ClCompile Include="..\..\objects\fragmentShadingRateAttachment.cpp" />
     <ClCompile Include="..\..\objects\framebuffer.cpp" />
     <ClCompile Include="..\..\objects\graphicsPipeline.cpp" />
     <ClCompile Include="..\..\objects\graphicsPipelines.cpp" />
