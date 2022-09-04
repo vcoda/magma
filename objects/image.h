@@ -108,6 +108,9 @@ namespace magma
             const std::vector<VkBufferImageCopy>& copyRegions,
             VkImageLayout dstLayout);
         static VkSampleCountFlagBits getSampleCountBit(uint32_t samples);
+        static VkFormat checkFormatFeature(std::shared_ptr<Device> device,
+            VkFormat format,
+            VkFormatFeatureFlags requiredFeature);
 
     protected:
         const VkImageCreateFlags flags;

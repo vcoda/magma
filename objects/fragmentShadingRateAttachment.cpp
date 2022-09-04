@@ -19,9 +19,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "fragmentShadingRateAttachment.h"
 #include "device.h"
-#include "physicalDevice.h"
-#include "srcTransferBuffer.h"
 #include "commandBuffer.h"
+#include "srcTransferBuffer.h"
 
 namespace magma
 {
@@ -34,7 +33,7 @@ FragmentShadingRateAttachment::FragmentShadingRateAttachment(std::shared_ptr<Com
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image2D(cmdBuffer->getDevice(),
-        checkFormatFeature(cmdBuffer->getDevice(), format),
+        checkFormatFeature(cmdBuffer->getDevice(), format, VK_FORMAT_FEATURE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR),
         extent,
         1, // mipLevels
         arrayLayers,
@@ -70,7 +69,7 @@ FragmentShadingRateAttachment::FragmentShadingRateAttachment(std::shared_ptr<Com
     const Descriptor& optional /* default */,
     const Sharing& sharing /* default */):
     Image2D(cmdBuffer->getDevice(),
-        checkFormatFeature(cmdBuffer->getDevice(), format),
+        checkFormatFeature(cmdBuffer->getDevice(), format, VK_FORMAT_FEATURE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR),
         extent,
         1, // mipLevels
         arrayLayers,
@@ -87,16 +86,6 @@ FragmentShadingRateAttachment::FragmentShadingRateAttachment(std::shared_ptr<Com
             VK_IMAGE_LAYOUT_FRAGMENT_SHADING_RATE_ATTACHMENT_OPTIMAL_KHR,
             VK_PIPELINE_STAGE_TRANSFER_BIT);
     }
-}
-
-VkFormat FragmentShadingRateAttachment::checkFormatFeature(std::shared_ptr<Device> device, VkFormat format)
-{
-    std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-    const VkFormatProperties properties = physicalDevice->getFormatProperties(format);
-    bool fragmentShadingRateAttachment = (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR);
-    if (!fragmentShadingRateAttachment)
-        MAGMA_THROW("inappropriate format of fragment shading rate attachment");
-    return format;
 }
 #endif // VK_KHR_fragment_shading_rate
 } // namespace magma

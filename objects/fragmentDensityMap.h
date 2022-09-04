@@ -49,10 +49,6 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
-
-    private:
-        static VkFormat checkFormatFeature(std::shared_ptr<Device> device,
-            VkFormat format);
     };
 #endif // VK_EXT_fragment_density_map
 } // namespace magma

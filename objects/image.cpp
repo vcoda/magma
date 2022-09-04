@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "image.h"
 #include "buffer.h"
 #include "device.h"
+#include "physicalDevice.h"
 #include "deviceMemory.h"
 #include "queue.h"
 #include "fence.h"
@@ -387,5 +388,15 @@ VkSampleCountFlagBits Image::getSampleCountBit(uint32_t samples)
     default:
         MAGMA_THROW("invalid <samples> parameter");
     }
+}
+
+VkFormat Image::checkFormatFeature(std::shared_ptr<Device> device, VkFormat format, VkFormatFeatureFlags requiredFeature)
+{
+    std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+    const VkFormatProperties properties = physicalDevice->getFormatProperties(format);
+    bool fragmentShadingRateAttachment = (properties.optimalTilingFeatures & requiredFeature);
+    if (!fragmentShadingRateAttachment)
+        MAGMA_THROW("format doesn't suport required feature");
+    return format;
 }
 } // namespace magma

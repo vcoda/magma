@@ -19,9 +19,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "fragmentDensityMap.h"
 #include "device.h"
-#include "physicalDevice.h"
-#include "srcTransferBuffer.h"
 #include "commandBuffer.h"
+#include "srcTransferBuffer.h"
 
 namespace magma
 {
@@ -34,7 +33,7 @@ FragmentDensityMap::FragmentDensityMap(std::shared_ptr<CommandBuffer> cmdBuffer,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image2D(cmdBuffer->getDevice(),
-        checkFormatFeature(cmdBuffer->getDevice(), format),
+        checkFormatFeature(cmdBuffer->getDevice(), format, VK_FORMAT_FEATURE_FRAGMENT_DENSITY_MAP_BIT_EXT),
         extent,
         1, // mipLevels
         arrayLayers,
@@ -70,7 +69,7 @@ FragmentDensityMap::FragmentDensityMap(std::shared_ptr<CommandBuffer> cmdBuffer,
     const Descriptor& optional /* default */,
     const Sharing& sharing /* default */):
     Image2D(cmdBuffer->getDevice(),
-        checkFormatFeature(cmdBuffer->getDevice(), format),
+        checkFormatFeature(cmdBuffer->getDevice(), format, VK_FORMAT_FEATURE_FRAGMENT_DENSITY_MAP_BIT_EXT),
         extent,
         1, // mipLevels
         arrayLayers,
@@ -87,16 +86,6 @@ FragmentDensityMap::FragmentDensityMap(std::shared_ptr<CommandBuffer> cmdBuffer,
             VK_IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT,
             VK_PIPELINE_STAGE_TRANSFER_BIT);
     }
-}
-
-VkFormat FragmentDensityMap::checkFormatFeature(std::shared_ptr<Device> device, VkFormat format)
-{
-    std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-    const VkFormatProperties properties = physicalDevice->getFormatProperties(format);
-    bool fragmentShadingRateAttachment = (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_FRAGMENT_DENSITY_MAP_BIT_EXT);
-    if (!fragmentShadingRateAttachment)
-        MAGMA_THROW("inappropriate format of fragment density map");
-    return format;
 }
 #endif // VK_EXT_fragment_density_map
 } // namespace magma
