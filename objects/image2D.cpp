@@ -105,12 +105,13 @@ Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
     commitAndWait(std::move(cmdBuffer));
 }
 
-Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent, uint32_t mipLevels, uint32_t samples,
+Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
+    uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
     VkImageCreateFlags flags, VkImageUsageFlags usage, VkImageTiling tiling,
     const Descriptor& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
         mipLevels,
-        1, // arrayLayers
+        arrayLayers,
         samples,
         flags,
         usage,
@@ -130,6 +131,7 @@ LinearTiledImage2D::LinearTiledImage2D(std::shared_ptr<Device> device, VkFormat 
     const Sharing& sharing /* default */):
     Image2D(std::move(device), format, extent,
         1, // mipLevels,
+        1, // arrayLayers
         1, // samples
         0, // flags
         VK_IMAGE_USAGE_TRANSFER_DST_BIT,
@@ -145,6 +147,7 @@ StorageImage2D::StorageImage2D(std::shared_ptr<Device> device, VkFormat format, 
     const Sharing& sharing /* default */):
     Image2D(std::move(device), format, extent,
         mipLevels,
+        1, // arrayLayers
         samples,
         0, // flags
         VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,

@@ -56,6 +56,7 @@ namespace magma
             VkFormat format,
             const VkExtent2D& extent,
             uint32_t mipLevels,
+            uint32_t arrayLayers,
             uint32_t samples,
             VkImageCreateFlags flags,
             VkImageUsageFlags usage,
