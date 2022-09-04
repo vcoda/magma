@@ -59,7 +59,8 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint
         std::move(allocator))
 {
     const auto copyRegions = setupCopyRegions(mipOffsets, bufferLayout);
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), copyRegions);
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), copyRegions,
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
 Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t width,
@@ -98,7 +99,8 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint
         });
     // Copy buffer to image
     cmdBuffer->begin();
-    copyTransfer(cmdBuffer, srcBuffer, copyRegions);
+    copyTransfer(cmdBuffer, srcBuffer, copyRegions,
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     cmdBuffer->end();
     commitAndWait(std::move(cmdBuffer));
 }

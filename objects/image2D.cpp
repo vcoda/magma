@@ -59,7 +59,8 @@ Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
         std::move(allocator))
 {
     const auto copyRegions = setupCopyRegions(mipOffsets, bufferLayout);
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), copyRegions);
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), copyRegions,
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
 Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
@@ -98,7 +99,8 @@ Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
         });
     // Copy buffer to image
     cmdBuffer->begin();
-    copyTransfer(cmdBuffer, srcBuffer, copyRegions);
+    copyTransfer(cmdBuffer, srcBuffer, copyRegions,
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     cmdBuffer->end();
     commitAndWait(std::move(cmdBuffer));
 }

@@ -58,7 +58,8 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, 
         std::move(allocator))
 {
     const auto copyRegions = setupCopyRegions(mipOffsets, bufferLayout);
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), copyRegions);
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), copyRegions,
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
 ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t dimension,
@@ -100,7 +101,8 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, 
         });
     // Copy buffer to cubemap image
     cmdBuffer->begin();
-    copyTransfer(cmdBuffer, srcBuffer, copyRegions);
+    copyTransfer(cmdBuffer, srcBuffer, copyRegions,
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     cmdBuffer->end();
     commitAndWait(std::move(cmdBuffer));
 }

@@ -69,7 +69,8 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
 {
     MAGMA_ASSERT(MAGMA_COUNT(mipOffsets) % arrayLayers == 0);
     const auto copyRegions = setupCopyRegions(mipOffsets, bufferLayout);
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), copyRegions);
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), copyRegions,
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
 Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
@@ -115,7 +116,8 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
         });
     // Copy buffer to image array
     cmdBuffer->begin();
-    copyTransfer(cmdBuffer, srcBuffer, copyRegions);
+    copyTransfer(cmdBuffer, srcBuffer, copyRegions,
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     cmdBuffer->end();
     commitAndWait(std::move(cmdBuffer));
 }

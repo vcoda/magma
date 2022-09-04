@@ -353,7 +353,7 @@ std::vector<VkBufferImageCopy> Image::setupCopyRegions(const MipmapLayout& mipOf
 }
 
 void Image::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const Buffer> srcBuffer,
-    const std::vector<VkBufferImageCopy>& copyRegions)
+    const std::vector<VkBufferImageCopy>& copyRegions, VkImageLayout dstLayout)
 {   // Define array layers to copy
     VkImageSubresourceRange subresourceRange;
     subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -369,7 +369,7 @@ void Image::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
     // Copy image data
     cmdBuffer->copyBufferToImage(std::move(srcBuffer), weakThis, copyRegions);
     // Change image layout from transfer dest optimal to shader read only
-    const ImageMemoryBarrier postCopyBarrier(weakThis, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, subresourceRange);
+    const ImageMemoryBarrier postCopyBarrier(weakThis, dstLayout, subresourceRange);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, postCopyBarrier);
 }
 
