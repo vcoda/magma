@@ -705,6 +705,9 @@
     <ClInclude Include="..\..\objects\fragmentShadingRateAttachment.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\barriers\subpassDependency2.h">
+      <Filter>Header Files\barriers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1254,6 +1257,9 @@
     </None>
     <None Include="..\..\objects\imagelessFramebuffer.inl">
       <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\barriers\subpassDependency2.inl">
+      <Filter>Header Files\barriers</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
