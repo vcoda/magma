@@ -89,6 +89,7 @@ MAGMA_OBJS= \
 	objects/dstTransferBuffer.o \
 	objects/event.o \
 	objects/fence.o \
+	objects/fragmentDensityMap.o \
 	objects/fragmentShadingRateAttachment.o \
 	objects/framebuffer.o \
 	objects/graphicsPipeline.o \

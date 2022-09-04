@@ -92,12 +92,15 @@ namespace magma
 #ifdef VK_EXT_debug_utils
     MAGMA_TYPEDEF_SHARED_PTR(DebugUtilsMessenger)
 #endif
-#ifdef VK_EXT_headless_surface
-    MAGMA_TYPEDEF_SHARED_PTR(HeadlessSurface)
+#ifdef VK_EXT_fragment_density_map
+    MAGMA_TYPEDEF_SHARED_PTR(FragmentDensityMap)
 #endif
 #ifdef VK_EXT_full_screen_exclusive
     MAGMA_TYPEDEF_SHARED_PTR(FullScreenExclusiveSwapchain)
     MAGMA_TYPEDEF_SHARED_PTR(FullScreenExclusiveSwapchainWin32)
+#endif
+#ifdef VK_EXT_headless_surface
+    MAGMA_TYPEDEF_SHARED_PTR(HeadlessSurface)
 #endif
 #ifdef VK_EXT_transform_feedback
     MAGMA_TYPEDEF_SHARED_PTR(TransformFeedbackBuffer)
