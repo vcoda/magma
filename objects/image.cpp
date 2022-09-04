@@ -269,7 +269,7 @@ void Image::onDefragment()
     bindMemory(std::move(memory), offset);
 }
 
-void Image::copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t level,
+void Image::copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t level, uint32_t arrayLayer,
     std::shared_ptr<const Buffer> buffer, const CopyLayout& bufferLayout, const VkOffset3D& imageOffset,
     VkImageLayout dstLayout, VkPipelineStageFlags barrierDstStageMask /* VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT */)
 {
@@ -277,7 +277,7 @@ void Image::copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t leve
     subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
     subresourceRange.baseMipLevel = level;
     subresourceRange.levelCount = 1;
-    subresourceRange.baseArrayLayer = 0;
+    subresourceRange.baseArrayLayer = arrayLayer;
     subresourceRange.layerCount = 1;
     // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
     const auto weakThis = std::shared_ptr<Image>(this, [](Image *) {});
@@ -291,7 +291,7 @@ void Image::copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t leve
     region.bufferImageHeight = bufferLayout.imageHeight;
     region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
     region.imageSubresource.mipLevel = level;
-    region.imageSubresource.baseArrayLayer = subresourceRange.baseArrayLayer;
+    region.imageSubresource.baseArrayLayer = arrayLayer;
     region.imageSubresource.layerCount = subresourceRange.layerCount;
     region.imageOffset = imageOffset;
     region.imageExtent = getMipExtent(level);

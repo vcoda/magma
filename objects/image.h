@@ -73,6 +73,7 @@ namespace magma
         virtual void onDefragment() override;
         void copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer,
             uint32_t level,
+            uint32_t arrayLayer,
             std::shared_ptr<const Buffer> srcBuffer,
             const CopyLayout& bufferLayout,
             const VkOffset3D& imageOffset,
