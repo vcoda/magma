@@ -99,5 +99,12 @@ namespace magma
             constexpr AccelerationStructure(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV, count) {}
         };
 #endif // VK_NV_ray_tracing
+
+    #ifdef VK_VALVE_mutable_descriptor_type
+        struct Mutable : Descriptor
+        {
+            constexpr Mutable(const uint32_t count) noexcept: Descriptor(VK_DESCRIPTOR_TYPE_MUTABLE_VALVE, count) {}
+        };
+    #endif // VK_VALVE_mutable_descriptor_type
     } // namespace descriptor
 } // namespace magma
