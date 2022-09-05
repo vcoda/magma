@@ -170,6 +170,20 @@ namespace magma
             uint32_t firstInstance) const noexcept;
         void drawIndirect(const std::shared_ptr<DrawIndirectBuffer>& buffer) const noexcept;
         void drawIndexedIndirect(const std::shared_ptr<DrawIndexedIndirectBuffer>& buffer) const noexcept;
+    #if defined(VK_KHR_draw_indirect_count) || defined(VK_AMD_draw_indirect_count)
+        void drawIndirectCount(const std::shared_ptr<Buffer>& buffer,
+            VkDeviceSize offset,
+            const std::shared_ptr<Buffer>& countBuffer,
+            VkDeviceSize countBufferOffset,
+            uint32_t maxDrawCount,
+            uint32_t stride) const noexcept;
+    void drawIndexedIndirectCount(const std::shared_ptr<Buffer>& buffer,
+            VkDeviceSize offset,
+            const std::shared_ptr<Buffer>& countBuffer,
+            VkDeviceSize countBufferOffset,
+            uint32_t maxDrawCount,
+            uint32_t stride) const noexcept;
+    #endif // VK_KHR_draw_indirect_count || VK_AMD_draw_indirect_count
 #ifdef VK_EXT_multi_draw
         void drawMulti(const std::vector<VkMultiDrawInfoEXT>& vertexInfo) const noexcept;
         void drawMultiInstanced(const std::vector<VkMultiDrawInfoEXT>& vertexInfo,

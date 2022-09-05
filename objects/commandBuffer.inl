@@ -176,6 +176,44 @@ inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<DrawIndexed
     vkCmdDrawIndexedIndirect(handle, *buffer, 0, buffer->getDrawCommandCount(), buffer->getStride());
 }
 
+#if defined(VK_KHR_draw_indirect_count) || defined(VK_AMD_draw_indirect_count)
+inline void CommandBuffer::drawIndirectCount(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset, const std::shared_ptr<Buffer>& countBuffer, VkDeviceSize countBufferOffset,
+    uint32_t maxDrawCount, uint32_t stride) const noexcept
+{
+#ifdef VK_KHR_draw_indirect_count
+    MAGMA_DEVICE_EXTENSION(vkCmdDrawIndirectCountKHR);
+    if (vkCmdDrawIndirectCountKHR)
+        vkCmdDrawIndirectCountKHR(handle, *buffer, offset, *countBuffer, countBufferOffset, maxDrawCount, stride);
+    else
+#endif // VK_KHR_draw_indirect_count
+    {
+#ifdef VK_AMD_draw_indirect_count
+        MAGMA_DEVICE_EXTENSION(vkCmdDrawIndirectCountAMD);
+        if (vkCmdDrawIndirectCountAMD)
+            vkCmdDrawIndirectCountAMD(handle, *buffer, offset, *countBuffer, countBufferOffset, maxDrawCount, stride);
+#endif // VK_AMD_draw_indirect_count
+    }
+}
+
+inline void CommandBuffer::drawIndexedIndirectCount(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset, const std::shared_ptr<Buffer>& countBuffer, VkDeviceSize countBufferOffset,
+    uint32_t maxDrawCount, uint32_t stride) const noexcept
+{
+#ifdef VK_KHR_draw_indirect_count
+    MAGMA_DEVICE_EXTENSION(vkCmdDrawIndexedIndirectCountKHR);
+    if (vkCmdDrawIndexedIndirectCountKHR)
+        vkCmdDrawIndexedIndirectCountKHR(handle, *buffer, offset, *countBuffer, countBufferOffset, maxDrawCount, stride);
+    else
+#endif // VK_KHR_draw_indirect_count
+    {
+#ifdef VK_AMD_draw_indirect_count
+        MAGMA_DEVICE_EXTENSION(vkCmdDrawIndexedIndirectCountAMD);
+        if (vkCmdDrawIndexedIndirectCountAMD)
+            vkCmdDrawIndexedIndirectCountAMD(handle, *buffer, offset, *countBuffer, countBufferOffset, maxDrawCount, stride);
+#endif // VK_AMD_draw_indirect_count
+    }
+}
+#endif // VK_KHR_draw_indirect_count || VK_AMD_draw_indirect_count
+
 #ifdef VK_EXT_multi_draw
 inline void CommandBuffer::drawMulti(const std::vector<VkMultiDrawInfoEXT>& vertexInfo) const noexcept
 {
