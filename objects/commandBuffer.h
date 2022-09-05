@@ -175,14 +175,12 @@ namespace magma
             VkDeviceSize offset,
             const std::shared_ptr<Buffer>& countBuffer,
             VkDeviceSize countBufferOffset,
-            uint32_t maxDrawCount,
-            uint32_t stride) const noexcept;
+            uint32_t maxDrawCount) const noexcept;
     void drawIndexedIndirectCount(const std::shared_ptr<Buffer>& buffer,
             VkDeviceSize offset,
             const std::shared_ptr<Buffer>& countBuffer,
             VkDeviceSize countBufferOffset,
-            uint32_t maxDrawCount,
-            uint32_t stride) const noexcept;
+            uint32_t maxDrawCount) const noexcept;
     #endif // VK_KHR_draw_indirect_count || VK_AMD_draw_indirect_count
 #ifdef VK_EXT_multi_draw
         void drawMulti(const std::vector<VkMultiDrawInfoEXT>& vertexInfo) const noexcept;
