@@ -29,6 +29,8 @@ namespace magma
         void addNode(const Structure& node);
         const void *getChainedNodes() const noexcept;
         hash_t getHash() const noexcept;
+        std::size_t numNodes() const noexcept { return chain.size(); }
+        bool isEmpty() const noexcept { return chain.empty(); }
 
     private:
         struct Node
