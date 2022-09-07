@@ -2,6 +2,7 @@ namespace magma
 {
 template<class Structure>
 inline StructureChain::Node::Node(const Structure& node):
+    hash(core::hashArray(reinterpret_cast<const uint8_t *>(&node), sizeof(Structure))),
     blob(sizeof(Structure))
 {
     memcpy(blob.data(), &node, sizeof(Structure));

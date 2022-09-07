@@ -38,4 +38,15 @@ const void *StructureChain::getChainedNodes() const noexcept
     last->pNext = nullptr;
     return head->getNode();
 }
+
+hash_t StructureChain::getHash() const noexcept
+{
+    if (chain.empty())
+        return 0ull;
+    auto curr = chain.begin();
+    hash_t hash = curr->hash;
+    while (++curr != chain.end())
+        hash = core::hashCombine(hash, curr->hash);
+    return hash;
+}
 } // namespace magma

@@ -28,6 +28,7 @@ namespace magma
         template<class Structure>
         void addNode(const Structure& node);
         const void *getChainedNodes() const noexcept;
+        hash_t getHash() const noexcept;
 
     private:
         struct Node
@@ -35,7 +36,8 @@ namespace magma
             template<class Structure>
             Node(const Structure& node);
             VkBaseOutStructure *getNode() noexcept;
-            std::vector<char> blob;
+            const hash_t hash;
+            std::vector<uint8_t> blob;
         };
 
         mutable std::list<Node> chain;
