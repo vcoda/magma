@@ -717,6 +717,9 @@
     <ClInclude Include="..\..\barriers\subpassDependency.h">
       <Filter>Header Files\barriers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\misc\structureChain.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1103,6 +1106,9 @@
     <ClCompile Include="..\..\objects\fragmentShadingRateAttachment.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\misc\structureChain.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\auxiliary\immediateRender.inl">
@@ -1272,6 +1278,9 @@
     </None>
     <None Include="..\..\barriers\subpassDependency.inl">
       <Filter>Header Files\barriers</Filter>
+    </None>
+    <None Include="..\..\misc\structureChain.inl">
+      <Filter>Header Files\misc</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

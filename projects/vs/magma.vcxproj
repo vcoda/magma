@@ -228,6 +228,7 @@
     <ClInclude Include="..\..\helpers\uniformArrayIterator.h" />
     <ClInclude Include="..\..\magma.h" />
     <ClInclude Include="..\..\misc\borderColor.h" />
+    <ClInclude Include="..\..\misc\structureChain.h" />
     <ClInclude Include="..\..\misc\clearAttachment.h" />
     <ClInclude Include="..\..\misc\clearValue.h" />
     <ClInclude Include="..\..\misc\compatibility.h" />
@@ -397,6 +398,7 @@
     <ClCompile Include="..\..\helpers\checkFeatureSupport.cpp" />
     <ClCompile Include="..\..\helpers\executeCommandBuffer.cpp" />
     <ClCompile Include="..\..\helpers\stringize.cpp" />
+    <ClCompile Include="..\..\misc\structureChain.cpp" />
     <ClCompile Include="..\..\misc\deviceQueueDescriptor.cpp" />
     <ClCompile Include="..\..\misc\format.cpp" />
     <ClCompile Include="..\..\misc\geometry.cpp" />
@@ -594,6 +596,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\misc\imageSubresourceRange.inl" />
     <None Include="..\..\misc\pushConstantRange.inl" />
     <None Include="..\..\misc\scissor.inl" />
+    <None Include="..\..\misc\structureChain.inl" />
     <None Include="..\..\misc\viewport.inl" />
     <None Include="..\..\objects\commandBuffer.inl" />
     <None Include="..\..\objects\device.inl" />
