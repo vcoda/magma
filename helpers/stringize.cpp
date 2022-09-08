@@ -1378,7 +1378,7 @@ const char *stringize(VkColorSpaceKHR colorSpace) noexcept
     MAGMA_STRINGIZE_FIELD(VK_COLOR_SPACE_EXTENDED_SRGB_NONLINEAR_EXT)
 #endif // VK_EXT_swapchain_colorspace
     MAGMA_DEFAULT_UNKNOWN;
-    };
+    }
 }
 
 const char *stringize(VkPresentModeKHR presentMode) noexcept
@@ -1394,7 +1394,7 @@ const char *stringize(VkPresentModeKHR presentMode) noexcept
     MAGMA_STRINGIZE_FIELD(VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR)
 #endif
     MAGMA_DEFAULT_UNKNOWN;
-    };
+    }
 }
 
 const char *stringize(VkSurfaceTransformFlagBitsKHR bit) noexcept
@@ -1411,7 +1411,7 @@ const char *stringize(VkSurfaceTransformFlagBitsKHR bit) noexcept
     MAGMA_STRINGIZE_FIELD(VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_270_BIT_KHR)
     MAGMA_STRINGIZE_FIELD(VK_SURFACE_TRANSFORM_INHERIT_BIT_KHR)
     MAGMA_DEFAULT_UNKNOWN;
-    };
+    }
 }
 
 const char *stringize(VkCompositeAlphaFlagBitsKHR bit) noexcept
@@ -1424,7 +1424,7 @@ const char *stringize(VkCompositeAlphaFlagBitsKHR bit) noexcept
     MAGMA_STRINGIZE_FIELD(VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR)
     MAGMA_STRINGIZE_FIELD(VK_COMPOSITE_ALPHA_FLAG_BITS_MAX_ENUM_KHR)
     MAGMA_DEFAULT_UNKNOWN;
-    };
+    }
 }
 
 #ifdef VK_EXT_fullscreen_exclusive
@@ -1459,7 +1459,7 @@ const char *stringize(VkDriverIdKHR driverId) noexcept
     MAGMA_STRINGIZE_FIELD(VK_DRIVER_ID_GGP_PROPRIETARY_KHR)
     MAGMA_STRINGIZE_FIELD(VK_DRIVER_ID_BROADCOM_PROPRIETARY_KHR)
     MAGMA_DEFAULT_UNKNOWN;
-    };
+    }
 }
 #endif // VK_KHR_driver_properties
 
@@ -1472,7 +1472,7 @@ const char *stringize(VkRayTracingShaderGroupTypeNV groupType) noexcept
     MAGMA_STRINGIZE_FIELD(VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_NV)
     MAGMA_STRINGIZE_FIELD(VK_RAY_TRACING_SHADER_GROUP_TYPE_PROCEDURAL_HIT_GROUP_NV)
     MAGMA_DEFAULT_UNKNOWN;
-    };
+    }
 }
 
 const char *stringize(VkGeometryTypeNV geometryType) noexcept
@@ -1482,7 +1482,7 @@ const char *stringize(VkGeometryTypeNV geometryType) noexcept
     MAGMA_STRINGIZE_FIELD(VK_GEOMETRY_TYPE_TRIANGLES_NV)
     MAGMA_STRINGIZE_FIELD(VK_GEOMETRY_TYPE_AABBS_NV)
     MAGMA_DEFAULT_UNKNOWN;
-    };
+    }
 }
 
 const char *stringize(VkAccelerationStructureTypeNV structureType) noexcept
@@ -1492,7 +1492,7 @@ const char *stringize(VkAccelerationStructureTypeNV structureType) noexcept
     MAGMA_STRINGIZE_FIELD(VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NV)
     MAGMA_STRINGIZE_FIELD(VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NV)
     MAGMA_DEFAULT_UNKNOWN;
-    };
+    }
 }
 
 const char *stringize(VkCopyAccelerationStructureModeNV copyMode) noexcept
@@ -1502,7 +1502,7 @@ const char *stringize(VkCopyAccelerationStructureModeNV copyMode) noexcept
     MAGMA_STRINGIZE_FIELD(VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_NV)
     MAGMA_STRINGIZE_FIELD(VK_COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_NV)
     MAGMA_DEFAULT_UNKNOWN;
-    };
+    }
 }
 
 const char *stringize(VkAccelerationStructureMemoryRequirementsTypeNV memoryRequirementsType) noexcept
@@ -1513,7 +1513,7 @@ const char *stringize(VkAccelerationStructureMemoryRequirementsTypeNV memoryRequ
     MAGMA_STRINGIZE_FIELD(VK_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_BUILD_SCRATCH_NV)
     MAGMA_STRINGIZE_FIELD(VK_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_UPDATE_SCRATCH_NV)
     MAGMA_DEFAULT_UNKNOWN;
-    };
+    }
 }
 
 const char *stringize(VkGeometryFlagBitsNV bit) noexcept
@@ -1523,7 +1523,7 @@ const char *stringize(VkGeometryFlagBitsNV bit) noexcept
     MAGMA_STRINGIZE_FIELD(VK_GEOMETRY_OPAQUE_BIT_NV)
     MAGMA_STRINGIZE_FIELD(VK_GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_NV)
     MAGMA_DEFAULT_UNKNOWN;
-    };
+    }
 }
 
 const char *stringize(VkGeometryInstanceFlagBitsNV bit) noexcept
@@ -1535,7 +1535,7 @@ const char *stringize(VkGeometryInstanceFlagBitsNV bit) noexcept
     MAGMA_STRINGIZE_FIELD(VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV)
     MAGMA_STRINGIZE_FIELD(VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV)
     MAGMA_DEFAULT_UNKNOWN;
-    };
+    }
 }
 
 const char *stringize(VkBuildAccelerationStructureFlagBitsNV bit) noexcept
@@ -1548,7 +1548,7 @@ const char *stringize(VkBuildAccelerationStructureFlagBitsNV bit) noexcept
     MAGMA_STRINGIZE_FIELD(VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_BUILD_BIT_NV)
     MAGMA_STRINGIZE_FIELD(VK_BUILD_ACCELERATION_STRUCTURE_LOW_MEMORY_BIT_NV)
     MAGMA_DEFAULT_UNKNOWN;
-    };
+    }
 }
 #endif // VK_NV_ray_tracing
 
