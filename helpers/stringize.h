@@ -97,6 +97,9 @@ namespace magma
         const char *stringize(VkPresentModeKHR) noexcept;
         const char *stringize(VkSurfaceTransformFlagBitsKHR) noexcept;
         const char *stringize(VkCompositeAlphaFlagBitsKHR) noexcept;
+    #ifdef VK_EXT_fullscreen_exclusive
+        const char *stringize(VkFullScreenExclusiveEXT) noexcept;
+    #endif
 #ifdef VK_KHR_driver_properties
         const char *stringize(VkDriverIdKHR) noexcept;
 #endif

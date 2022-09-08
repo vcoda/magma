@@ -1427,6 +1427,20 @@ const char *stringize(VkCompositeAlphaFlagBitsKHR bit) noexcept
     };
 }
 
+#ifdef VK_EXT_fullscreen_exclusive
+const char *stringize(VkFullScreenExclusiveEXT fullScreenExclusive) noexcept
+{
+    switch fullScreenExclusive)
+    {
+    MAGMA_STRINGIZE_FIELD(VK_FULL_SCREEN_EXCLUSIVE_DEFAULT_EXT)
+    MAGMA_STRINGIZE_FIELD(VK_FULL_SCREEN_EXCLUSIVE_ALLOWED_EXT)
+    MAGMA_STRINGIZE_FIELD(VK_FULL_SCREEN_EXCLUSIVE_DISALLOWED_EXT)
+    MAGMA_STRINGIZE_FIELD(VK_FULL_SCREEN_EXCLUSIVE_APPLICATION_CONTROLLED_EXT)
+    MAGMA_DEFAULT_UNKNOWN;
+    }
+}
+#endif // VK_EXT_fullscreen_exclusive
+
 #ifdef VK_KHR_driver_properties
 const char *stringize(VkDriverIdKHR driverId) noexcept
 {
