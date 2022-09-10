@@ -93,6 +93,7 @@ MAGMA_OBJS= \
 	objects/fragmentDensityMap.o \
 	objects/fragmentShadingRateAttachment.o \
 	objects/framebuffer.o \
+	objects/fullScreenExclusiveSwapchain.o \
 	objects/graphicsPipeline.o \
 	objects/graphicsPipelines.o \
 	objects/image.o \
@@ -133,7 +134,6 @@ MAGMA_OBJS= \
 	objects/storageTexelBuffer.o \
 	objects/surface.o \
 	objects/swapchain.o \
-	objects/swapchainFullScreenExclusive.o \
 	objects/transformFeedbackBuffer.o \
 	objects/uniformTexelBuffer.o \
 	objects/validationCache.o \

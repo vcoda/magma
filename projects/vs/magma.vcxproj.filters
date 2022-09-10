@@ -582,9 +582,6 @@
     <ClInclude Include="..\..\objects\renderPassMultiview.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\swapchainFullScreenExclusive.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\objects\imagelessFramebuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -719,6 +716,9 @@
     </ClInclude>
     <ClInclude Include="..\..\misc\structureChain.h">
       <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\objects\fullScreenExclusiveSwapchain.h">
+      <Filter>Header Files\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1049,9 +1049,6 @@
     <ClCompile Include="..\..\objects\renderPassMultiview.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\objects\swapchainFullScreenExclusive.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\objects\imagelessFramebuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
@@ -1108,6 +1105,9 @@
     </ClCompile>
     <ClCompile Include="..\..\misc\structureChain.cpp">
       <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\fullScreenExclusiveSwapchain.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

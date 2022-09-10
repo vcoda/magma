@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
-#include "../misc/createInfo.h"
+#include "../misc/structureChain.h"
 
 namespace magma
 {
@@ -26,7 +26,12 @@ namespace magma
     class Queue;
     class Fence;
     class Semaphore;
+#ifdef VK_EXT_debug_report
     class DebugReportCallback;
+#endif
+#ifdef VK_EXT_debug_utils
+    class DebugUtilsMessenger;
+#endif
 
     /* Swapchain provides the ability to present rendering results to a surface.
        It is an abstraction for an array of presentable images that are associated with a surface.
@@ -50,8 +55,13 @@ namespace magma
             VkSwapchainCreateFlagsKHR flags,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<Swapchain> oldSwapchain = nullptr,
-            std::shared_ptr<const DebugReportCallback> debugReportCallback = nullptr,
-            const CreateInfo& chainedInfo = CreateInfo());
+        #ifdef VK_EXT_debug_report
+            std::shared_ptr<DebugReportCallback> debugReportCallback = nullptr,
+        #endif
+        #ifdef VK_EXT_debug_utils
+            std::shared_ptr<DebugUtilsMessenger> debugUtilsMessenger = nullptr,
+        #endif
+            const StructureChain& extendedInfo = StructureChain());
         ~Swapchain();
         VkSurfaceFormatKHR getSurfaceFormat() const noexcept { return surfaceFormat; }
         const VkExtent2D& getExtent() const noexcept { return extent; }
@@ -67,14 +77,19 @@ namespace magma
     #endif
 
     protected:
+        Swapchain(std::shared_ptr<Device> device,
+            VkSurfaceFormatKHR surfaceFormat,
+            const VkExtent2D& extent,
+            std::shared_ptr<Swapchain> oldSwapchain,
+            std::shared_ptr<IAllocator> allocator);
         void handleError(VkResult result,
             const char *message) const;
 
-    private:
         const VkSurfaceFormatKHR surfaceFormat;
         const VkExtent2D extent;
         bool retired;
         uint32_t imageIndex;
+        friend class FullScreenExclusiveSwapchain;
     };
 #endif // VK_KHR_swapchain
 } // namespace magma

@@ -17,13 +17,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "swapchain.h"
+#include "fullScreenExclusiveSwapchain.h"
 #include "device.h"
 #include "physicalDevice.h"
 #include "surface.h"
-#include "image2DAttachment.h"
-#include "semaphore.h"
-#include "fence.h"
 #include "debugReportCallback.h"
 #include "debugUtilsMessenger.h"
 #include "../allocator/allocator.h"
@@ -34,26 +31,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Swapchain::Swapchain(std::shared_ptr<Device> device, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent,
-    std::shared_ptr<Swapchain> oldSwapchain, std::shared_ptr<IAllocator> allocator):
-    NonDispatchable(VK_OBJECT_TYPE_SWAPCHAIN_KHR, std::move(device), std::move(allocator)),
-    surfaceFormat(surfaceFormat),
-    extent(extent),
-    retired(false),
-    imageIndex(0)
-{
-    if (oldSwapchain && oldSwapchain->hadRetired())
-        throw exception::OutOfDate("old swapchain must be a non-retired");
-}
-
-#ifdef VK_KHR_swapchain
-Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surface> surface,
+#if defined(VK_KHR_swapchain) && defined(VK_EXT_full_screen_exclusive)
+FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surface> surface,
     uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent,
-    VkImageUsageFlags usage,
-    VkSurfaceTransformFlagBitsKHR preTransform,
-    VkCompositeAlphaFlagBitsKHR compositeAlpha,
-    VkPresentModeKHR presentMode,
-    VkSwapchainCreateFlagsKHR flags,
+    VkImageUsageFlags usage, VkSurfaceTransformFlagBitsKHR preTransform, VkCompositeAlphaFlagBitsKHR compositeAlpha,
+    VkPresentModeKHR presentMode, VkSwapchainCreateFlagsKHR flags, VkFullScreenExclusiveEXT fullScreenExclusive,
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    HMONITOR hMonitor /* NULL */,
+#endif
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<Swapchain> oldSwapchain /* nullptr */,
 #ifdef VK_EXT_debug_report
@@ -63,11 +48,31 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     std::shared_ptr<DebugUtilsMessenger> debugUtilsMessenger /* nullptr */,
 #endif
     const StructureChain& extendedInfo /* default */):
-    Swapchain(std::move(device), surfaceFormat, extent, oldSwapchain, std::move(allocator))
+    Swapchain(std::move(device), surfaceFormat, extent, oldSwapchain, std::move(allocator)),
+    fullScreenExlusive(false)
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+   ,hMonitor(hMonitor)
+#endif
 {
+    VkSurfaceFullScreenExclusiveInfoEXT fullScreenExclusiveInfo;
+    fullScreenExclusiveInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT,
+    fullScreenExclusiveInfo.pNext = (void *)extendedInfo.getChainedNodes();
+    fullScreenExclusiveInfo.fullScreenExclusive = fullScreenExclusive;
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    VkSurfaceFullScreenExclusiveWin32InfoEXT fullScreenExclusiveWin32Info;
+    if (hMonitor)
+    {
+        fullScreenExclusiveWin32Info.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT,
+        fullScreenExclusiveWin32Info.pNext = fullScreenExclusiveInfo.pNext;
+        fullScreenExclusiveWin32Info.hmonitor = hMonitor;
+        fullScreenExclusiveInfo.pNext = &fullScreenExclusiveWin32Info;
+    }
+#endif // VK_USE_PLATFORM_WIN32_KHR
+    if (oldSwapchain && oldSwapchain->hadRetired())
+        throw exception::OutOfDate("old swapchain must be a non-retired");
     VkSwapchainCreateInfoKHR swapchainInfo;
     swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    swapchainInfo.pNext = extendedInfo.getChainedNodes();
+    swapchainInfo.pNext = &fullScreenExclusiveInfo;
     swapchainInfo.flags = flags;
     swapchainInfo.surface = *surface;
     swapchainInfo.minImageCount = minImageCount;
@@ -87,15 +92,14 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     else
         swapchainInfo.clipped = VK_TRUE; // Fragment shaders may not execute for obscured pixels
     swapchainInfo.oldSwapchain = MAGMA_OPTIONAL_HANDLE(oldSwapchain);
-    helpers::checkImageUsageSupport(surface, swapchainInfo.imageUsage, this->device->getPhysicalDevice());
+    helpers::checkImageUsageSupport(surface, swapchainInfo.imageUsage, getDevice()->getPhysicalDevice());
     VkResult result;
 #if defined(VK_KHR_display_swapchain) && defined(VK_KHR_display_surface)
     if (std::dynamic_pointer_cast<const DisplaySurface>(surface))
     {
         MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateSharedSwapchainsKHR, VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME);
         result = vkCreateSharedSwapchainsKHR(MAGMA_HANDLE(device), 1, &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    }
-    else
+    } else
 #endif // VK_KHR_display_swapchain && VK_KHR_display_surface
     {
         result = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
@@ -108,15 +112,19 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     if (result != VK_SUCCESS)
     {
         char errorStr[MAGMA_MAX_STRING];
-        sprintf_s(errorStr, MAGMA_MAX_STRING, "initialization of swapchain failed with the following parameters:\n"
+        sprintf_s(errorStr, MAGMA_MAX_STRING, "initialization of fullscreen exclusive swapchain failed with the following parameters:\n"
             "minImageCount: %u\nimageFormat: %s\nimageColorSpace: %s\nimageExtent: {%u, %u}\nimageArrayLayers: %u\n"
             "imageUsage: %s\nimageSharingMode: %s\npreTransform: %s\ncompositeAlpha: %s\npresentMode: %s\nclipped: %s\n"
         #ifdef MAGMA_X64
-            "oldSwapchain: %p\n",
+            "oldSwapchain: %p\n"
         #else
-            "oldSwapchain: %llu\n",
+            "oldSwapchain: %llu\n"
         #endif
-            swapchainInfo.minImageCount,
+            "fullScreenExclusive: %s\n"
+        #ifdef VK_USE_PLATFORM_WIN32_KHR
+            "hMonitor: %p\n"
+        #endif
+           ,swapchainInfo.minImageCount,
             helpers::stringize(swapchainInfo.imageFormat),
             helpers::stringize(swapchainInfo.imageColorSpace),
             swapchainInfo.imageExtent.width,
@@ -128,7 +136,12 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
             helpers::stringize(swapchainInfo.compositeAlpha),
             helpers::stringize(swapchainInfo.presentMode),
             helpers::stringize(swapchainInfo.clipped),
-            swapchainInfo.oldSwapchain);
+            swapchainInfo.oldSwapchain,
+            helpers::stringize(fullScreenExclusiveInfo.fullScreenExclusive)
+        #ifdef VK_USE_PLATFORM_WIN32_KHR
+           ,hMonitor
+        #endif
+            );
     #ifdef VK_EXT_debug_report
         if (debugReportCallback)
         {
@@ -148,83 +161,27 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     #endif // VK_EXT_debug_utils
     }
 #endif // VK_EXT_debug_report || VK_EXT_debug_utils
-    handleError(result, "failed to create swapchain");
+    handleError(result, "failed to create fullscreen exclusive swapchain");
 }
 
-Swapchain::~Swapchain()
+void FullScreenExclusiveSwapchain::acquireFullScreenExclusiveMode()
 {
-    vkDestroySwapchainKHR(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    // To omit window compositor (which may result in better performance),
+    // your application should create borderless window that spans to entire monitor.
+    // For example, set window style as WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS and call
+    // SetWindowPos(hwnd, HWND_TOP, 0, 0, screenWidth, screenHeight, SWP_SHOWWINDOW).
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkAcquireFullScreenExclusiveModeEXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
+    const VkResult result = vkAcquireFullScreenExclusiveModeEXT(MAGMA_HANDLE(device), handle);
+    handleError(result, "failed to acquire full-screen exclusive mode");
+    fullScreenExlusive = true;
 }
 
-uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore, std::shared_ptr<const Fence> fence,
-    uint64_t timeout /* UINT64_MAX */)
+void FullScreenExclusiveSwapchain::releaseFullScreenExclusiveMode()
 {
-    uint32_t imageIndex = 0;
-    const VkResult result = vkAcquireNextImageKHR(MAGMA_HANDLE(device), handle, timeout,
-        MAGMA_OPTIONAL_HANDLE(semaphore),
-        MAGMA_OPTIONAL_HANDLE(fence),
-        &imageIndex);
-    handleError(result, "failed to acquire next image");
-    return imageIndex;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkReleaseFullScreenExclusiveModeEXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
+    const VkResult result = vkReleaseFullScreenExclusiveModeEXT(MAGMA_HANDLE(device), handle);
+    handleError(result, "failed to release full-screen exclusive mode");
+    fullScreenExlusive = false;
 }
-
-uint32_t Swapchain::getImageCount() const
-{
-    uint32_t imageCount;
-    const VkResult result = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &imageCount, nullptr);
-    MAGMA_THROW_FAILURE(result, "failed to get swapchain image count");
-    return imageCount;
-}
-
-std::vector<std::shared_ptr<SwapchainColorAttachment>> Swapchain::getImages() const
-{
-    uint32_t imageCount = getImageCount();
-    MAGMA_STACK_ARRAY(VkImage, swapchainImages, imageCount);
-    const VkResult result = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &imageCount, swapchainImages);
-    MAGMA_THROW_FAILURE(result, "failed to get swapchain images");
-    std::vector<std::shared_ptr<SwapchainColorAttachment>> colorAttachments;
-    for (const VkImage image : swapchainImages)
-        colorAttachments.emplace_back(new SwapchainColorAttachment(device, image, surfaceFormat.format, extent));
-    return colorAttachments;
-}
-
-#ifdef VK_AMD_display_native_hdr
-void Swapchain::setLocalDimming(bool enable) noexcept
-{
-    MAGMA_DEVICE_EXTENSION(vkSetLocalDimmingAMD);
-    if (vkSetLocalDimmingAMD)
-        vkSetLocalDimmingAMD(MAGMA_HANDLE(device), handle, MAGMA_BOOLEAN(enable));
-}
-#endif // VK_AMD_display_native_hdr
-
-void Swapchain::handleError(VkResult result, const char *message) const
-{
-    switch (result)
-    {
-    case VK_ERROR_INITIALIZATION_FAILED:
-        throw exception::InitializationFailed(message);
-    case VK_ERROR_DEVICE_LOST:
-        throw exception::DeviceLost(message);
-#ifdef VK_KHR_surface
-    case VK_ERROR_SURFACE_LOST_KHR:
-        throw exception::SurfaceLost(message);
-    case VK_ERROR_NATIVE_WINDOW_IN_USE_KHR:
-        throw exception::NativeWindowInUse(message);
-#endif
-#ifdef VK_KHR_swapchain
-    case VK_ERROR_OUT_OF_DATE_KHR:
-        throw exception::OutOfDate(message);
-#endif
-#ifdef VK_KHR_display_swapchain
-    case VK_ERROR_INCOMPATIBLE_DISPLAY_KHR:
-        throw exception::IncompatibleDisplay(message);
-#endif
-#ifdef VK_EXT_full_screen_exclusive
-    case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
-        throw exception::FullScreenExclusiveModeLost(message);
-#endif
-    }
-    MAGMA_THROW_FAILURE(result, message);
-}
-#endif // VK_KHR_swapchain
+#endif // VK_KHR_swapchain && VK_EXT_full_screen_exclusive
 } // namespace magma

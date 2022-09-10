@@ -41,47 +41,33 @@ namespace magma
             VkPresentModeKHR presentMode,
             VkSwapchainCreateFlagsKHR flags,
             VkFullScreenExclusiveEXT fullScreenExclusive,
+        #ifdef VK_USE_PLATFORM_WIN32_KHR
+            // Allows to specify full-screen exclusive mode for physical display
+            // that is represented by a monitor handle of type HMONITOR. See:
+            // https://docs.microsoft.com/en-us/windows/win32/gdi/hmonitor-and-the-device-context
+            HMONITOR hMonitor = NULL,
+        #endif
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<Swapchain> oldSwapchain = nullptr,
-            std::shared_ptr<const DebugReportCallback> debugReportCallback = nullptr,
-            const CreateInfo& chainedInfo = CreateInfo());
+        #ifdef VK_EXT_debug_report
+            std::shared_ptr<DebugReportCallback> debugReportCallback = nullptr,
+        #endif
+        #ifdef VK_EXT_debug_utils
+            std::shared_ptr<DebugUtilsMessenger> debugUtilsMessenger = nullptr,
+        #endif
+            const StructureChain& extendedInfo = StructureChain());
         void acquireFullScreenExclusiveMode();
         void releaseFullScreenExclusiveMode();
         bool hasFullScreenExclusiveMode() const noexcept { return fullScreenExlusive; }
+    #ifdef VK_USE_PLATFORM_WIN32_KHR
+        HMONITOR getMonitorHandle() const noexcept { return hMonitor; }
+    #endif
 
     private:
         bool fullScreenExlusive;
-    };
-
-    /* Allows to specify full-screen exclusive mode for physical display
-       that is represented by a monitor handle of type HMONITOR. See:
-       https://docs.microsoft.com/en-us/windows/win32/gdi/hmonitor-and-the-device-context */
-
-#ifdef VK_USE_PLATFORM_WIN32_KHR
-    class FullScreenExclusiveSwapchainWin32 : public FullScreenExclusiveSwapchain
-    {
-    public:
-        explicit FullScreenExclusiveSwapchainWin32(std::shared_ptr<Device> device,
-            std::shared_ptr<const Surface> surface,
-            uint32_t minImageCount,
-            VkSurfaceFormatKHR surfaceFormat,
-            const VkExtent2D& extent,
-            VkImageUsageFlags usage,
-            VkSurfaceTransformFlagBitsKHR preTransform,
-            VkCompositeAlphaFlagBitsKHR compositeAlpha,
-            VkPresentModeKHR presentMode,
-            VkSwapchainCreateFlagsKHR flags,
-            VkFullScreenExclusiveEXT fullScreenExclusive,
-            HMONITOR hMonitor,
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            std::shared_ptr<Swapchain> oldSwapchain = nullptr,
-            std::shared_ptr<const DebugReportCallback> debugReportCallback = nullptr,
-            const CreateInfo& chainedInfo = CreateInfo());
-        HMONITOR getMonitorHandle() const noexcept { return hMonitor; }
-
-    private:
+    #ifdef VK_USE_PLATFORM_WIN32_KHR
         const HMONITOR hMonitor;
+    #endif
     };
-#endif // VK_USE_PLATFORM_WIN32_KHR
 #endif // VK_KHR_swapchain && VK_EXT_full_screen_exclusive
 } // namespace magma
