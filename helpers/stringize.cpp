@@ -25,12 +25,7 @@ namespace helpers
 {
 const char *stringize(VkBool32 boolean) noexcept
 {
-    switch (boolean)
-    {
-    MAGMA_STRINGIZE_FIELD(VK_TRUE)
-    MAGMA_STRINGIZE_FIELD(VK_FALSE)
-    MAGMA_DEFAULT_UNKNOWN;
-    }
+    return boolean ? "VK_TRUE" : "VK_FALSE";
 }
 
 const char *stringize(VkResult result) noexcept
