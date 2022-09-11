@@ -112,6 +112,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "states/inputAssemblyState.h"
 #include "states/lineRasterizationState.h"
 #include "states/minmaxSamplerState.h"
+#include "states/multisampleCoverageReductionState.h"
 #include "states/multisampleState.h"
 #include "states/multiViewportState.h"
 #include "states/provokingVertexState.h"

@@ -720,6 +720,9 @@
     <ClInclude Include="..\..\objects\fullScreenExclusiveSwapchain.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\states\multisampleCoverageReductionState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1281,6 +1284,9 @@
     </None>
     <None Include="..\..\misc\structureChain.inl">
       <Filter>Header Files\misc</Filter>
+    </None>
+    <None Include="..\..\states\multisampleCoverageReductionState.inl">
+      <Filter>Header Files\states</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

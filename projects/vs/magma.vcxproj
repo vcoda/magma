@@ -339,6 +339,7 @@
     <ClInclude Include="..\..\states\inputAssemblyState.h" />
     <ClInclude Include="..\..\states\lineRasterizationState.h" />
     <ClInclude Include="..\..\states\minmaxSamplerState.h" />
+    <ClInclude Include="..\..\states\multisampleCoverageReductionState.h" />
     <ClInclude Include="..\..\states\multisampleState.h" />
     <ClInclude Include="..\..\states\provokingVertexState.h" />
     <ClInclude Include="..\..\states\rasterizationOrderState.h" />
@@ -629,6 +630,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\states\inputAssemblyState.inl" />
     <None Include="..\..\states\lineRasterizationState.inl" />
     <None Include="..\..\states\minmaxSamplerState.inl" />
+    <None Include="..\..\states\multisampleCoverageReductionState.inl" />
     <None Include="..\..\states\multisampleState.inl" />
     <None Include="..\..\states\provokingVertexState.inl" />
     <None Include="..\..\states\rasterizationOrderState.inl" />
