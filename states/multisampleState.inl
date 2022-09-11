@@ -40,6 +40,20 @@ constexpr MultisampleState::MultisampleState(const uint32_t sampleCount) noexcep
     }
 }
 
+constexpr MultisampleState::MultisampleState(const MultisampleState& other) noexcept:
+    VkPipelineMultisampleStateCreateInfo{
+        other.sType,
+        other.pNext,
+        other.flags,
+        other.rasterizationSamples,
+        other.sampleShadingEnable,
+        other.minSampleShading,
+        other.pSampleMask,
+        other.alphaToCoverageEnable,
+        other.alphaToOneEnable
+    }
+{}
+
 constexpr hash_t MultisampleState::hash() const noexcept
 {
     hash_t hash = core::hashArgs(
