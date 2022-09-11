@@ -9,6 +9,10 @@ inline const VkPhysicalDevice##Features *Device::getEnabledExtendedFeatures<VkPh
 // Keep extensions in alphabetical order!
 namespace magma
 {
+#ifdef VK_AMD_device_coherent_memory
+MAGMA_SPECIALIZE_DEVICE_ENABLED_EXTENDED_FEATURES(CoherentMemoryFeaturesAMD, COHERENT_MEMORY_FEATURES_AMD)
+#endif
+
 #ifdef VK_EXT_4444_formats
 MAGMA_SPECIALIZE_DEVICE_ENABLED_EXTENDED_FEATURES(4444FormatsFeaturesEXT, 4444_FORMATS_FEATURES_EXT)
 #endif
