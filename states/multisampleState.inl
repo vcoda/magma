@@ -84,10 +84,17 @@ constexpr bool MultisampleState::operator==(const MultisampleState& other) const
         (alphaToOneEnable == other.alphaToOneEnable);
 }
 
-constexpr MultisampleShadingState::MultisampleShadingState(const MultisampleState& state, const float minSampleShading /* 1 */) noexcept:
+constexpr SampleShadingState::SampleShadingState(uint32_t sampleCount, const float minSampleShading_ /* 1 */) noexcept:
+    MultisampleState(sampleCount)
+{
+    sampleShadingEnable = VK_TRUE;
+    minSampleShading = minSampleShading_;
+}
+
+constexpr SampleShadingState::SampleShadingState(const MultisampleState& state, const float minSampleShading_ /* 1 */) noexcept:
     MultisampleState(state)
 {
     sampleShadingEnable = VK_TRUE;
-    this->minSampleShading = minSampleShading;
+    minSampleShading = minSampleShading_;
 }
 } // namespace magma

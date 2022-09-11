@@ -39,9 +39,11 @@ namespace magma
        a separate set of associated data are evaluated for each sample,
        and each set of values is evaluated at the sample location. */
 
-    struct MultisampleShadingState : MultisampleState
+    struct SampleShadingState : MultisampleState
     {
-        constexpr MultisampleShadingState(const MultisampleState& state,
+        constexpr SampleShadingState(uint32_t sampleCount,
+            float minSampleShading = 1.f) noexcept;
+        constexpr SampleShadingState(const MultisampleState& state,
             float minSampleShading = 1.f) noexcept;
     };
 
