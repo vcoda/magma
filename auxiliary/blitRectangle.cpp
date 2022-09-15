@@ -59,7 +59,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     BlitRectangle(renderPass,
-        std::make_shared<ShaderModule>(renderPass->getDevice(), fsBlit, core::hashArray(fsBlit), allocator, 0, true),
+        std::make_shared<ShaderModule>(renderPass->getDevice(), fsBlit, core::hashArray(fsBlit), allocator, true),
         nullptr, // No specialization
         std::move(pipelineCache), std::move(allocator))
 {}

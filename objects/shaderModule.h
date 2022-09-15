@@ -42,33 +42,33 @@ namespace magma
             std::size_t bytecodeSize,
             hash_t bytecodeHash = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
+            bool reflect = false,
             VkShaderModuleCreateFlags flags = 0,
-            bool reflect = false
-#ifdef VK_EXT_validation_cache
-            ,std::shared_ptr<ValidationCache> validationCache = nullptr
-#endif
-        );
+        #ifdef VK_EXT_validation_cache
+            std::shared_ptr<ValidationCache> validationCache = nullptr,
+        #endif
+            const StructureChain& extendedInfo = StructureChain());
         explicit ShaderModule(std::shared_ptr<Device> device,
             const std::vector<SpirvWord>& bytecode,
             hash_t bytecodeHash = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
+            bool reflect = false,
             VkShaderModuleCreateFlags flags = 0,
-            bool reflect = false
-#ifdef VK_EXT_validation_cache
-            ,std::shared_ptr<ValidationCache> validationCache = nullptr
-#endif
-        );
+        #ifdef VK_EXT_validation_cache
+            std::shared_ptr<ValidationCache> validationCache = nullptr,
+        #endif
+            const StructureChain& extendedInfo = StructureChain());
         template<std::size_t SpirvWordCount>
         explicit ShaderModule(std::shared_ptr<Device> device,
             const SpirvWord (&bytecode)[SpirvWordCount],
             hash_t bytecodeHash = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
+            bool reflect = false,
             VkShaderModuleCreateFlags flags = 0,
-            bool reflect = false
-#ifdef VK_EXT_validation_cache
-            ,std::shared_ptr<ValidationCache> validationCache = nullptr
-#endif
-        );
+        #ifdef VK_EXT_validation_cache
+            std::shared_ptr<ValidationCache> validationCache = nullptr,
+        #endif
+            const StructureChain& extendedInfo = StructureChain());
         ~ShaderModule();
         std::shared_ptr<const ShaderReflection> getReflection() const noexcept { return reflection; }
         hash_t getHash() const noexcept;
