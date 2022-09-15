@@ -44,6 +44,7 @@ namespace magma
         const VkBool32 AMD_mixed_attachment_samples : 1;
         const VkBool32 AMD_negative_viewport_height : 1;
         const VkBool32 AMD_pipeline_compiler_control : 1;
+        const VkBool32 AMD_programmable_sample_locations : 1;
         const VkBool32 AMD_rasterization_order : 1;
         const VkBool32 AMD_shader_ballot : 1;
         const VkBool32 AMD_shader_core_properties : 1;
@@ -59,6 +60,7 @@ namespace magma
 
         // ANDROID (Google LLC)
         const VkBool32 ANDROID_external_memory_android_hardware_buffer : 1;
+        const VkBool32 ANDROID_native_buffer : 1;
 
         // ARM Limited
         const VkBool32 ARM_rasterization_order_attachment_access : 1;
@@ -311,8 +313,11 @@ namespace magma
         // NVX (experimental) extensions
         const VkBool32 NVX_binary_import : 1;
         const VkBool32 NVX_device_generated_commands : 1;
+        const VkBool32 NVX_display_timing : 1;
+        const VkBool32 NVX_image_clear_padding : 1;
         const VkBool32 NVX_image_view_handle : 1;
         const VkBool32 NVX_multiview_per_view_attributes : 1;
+        const VkBool32 NVX_raytracing : 1;
 
         // Qualcomm Technologies, Inc.
         const VkBool32 QCOM_fragment_density_map_offset : 1;

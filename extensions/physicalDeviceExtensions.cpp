@@ -38,6 +38,7 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(AMD_mixed_attachment_samples),
     MAGMA_CHECK_EXTENSION(AMD_negative_viewport_height),
     MAGMA_CHECK_EXTENSION(AMD_pipeline_compiler_control),
+    MAGMA_CHECK_EXTENSION(AMD_programmable_sample_locations),
     MAGMA_CHECK_EXTENSION(AMD_rasterization_order),
     MAGMA_CHECK_EXTENSION(AMD_shader_ballot),
     MAGMA_CHECK_EXTENSION(AMD_shader_core_properties),
@@ -52,6 +53,7 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(AMD_wave_limits),
 
     MAGMA_CHECK_EXTENSION(ANDROID_external_memory_android_hardware_buffer),
+    MAGMA_CHECK_EXTENSION(ANDROID_native_buffer),
 
     MAGMA_CHECK_EXTENSION(ARM_rasterization_order_attachment_access),
 
@@ -290,10 +292,14 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(NV_viewport_array2),
     MAGMA_CHECK_EXTENSION(NV_viewport_swizzle),
     MAGMA_CHECK_EXTENSION(NV_win32_keyed_mutex),
+
     MAGMA_CHECK_EXTENSION(NVX_binary_import),
     MAGMA_CHECK_EXTENSION(NVX_device_generated_commands),
+    MAGMA_CHECK_EXTENSION(NVX_display_timing),
+    MAGMA_CHECK_EXTENSION(NVX_image_clear_padding),
     MAGMA_CHECK_EXTENSION(NVX_image_view_handle),
     MAGMA_CHECK_EXTENSION(NVX_multiview_per_view_attributes),
+    MAGMA_CHECK_EXTENSION(NVX_raytracing),
 
     MAGMA_CHECK_EXTENSION(QCOM_fragment_density_map_offset),
     MAGMA_CHECK_EXTENSION(QCOM_image_processing),
