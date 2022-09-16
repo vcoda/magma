@@ -35,7 +35,7 @@ namespace magma
             uint32_t minImageCount,
             VkSurfaceFormatKHR surfaceFormat,
             const VkExtent2D& extent,
-            VkImageUsageFlags usage,
+            VkImageUsageFlags imageUsage,
             VkSurfaceTransformFlagBitsKHR preTransform,
             VkCompositeAlphaFlagBitsKHR compositeAlpha,
             VkPresentModeKHR presentMode,
@@ -55,6 +55,7 @@ namespace magma
         #ifdef VK_EXT_debug_utils
             std::shared_ptr<DebugUtilsMessenger> debugUtilsMessenger = nullptr,
         #endif
+            const Sharing& sharing = Sharing(),
             const StructureChain& extendedInfo = StructureChain());
         void acquireFullScreenExclusiveMode();
         void releaseFullScreenExclusiveMode();

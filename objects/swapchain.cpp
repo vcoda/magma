@@ -34,11 +34,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Swapchain::Swapchain(std::shared_ptr<Device> device, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent,
-    std::shared_ptr<Swapchain> oldSwapchain, std::shared_ptr<IAllocator> allocator):
+#ifdef VK_KHR_swapchain
+Swapchain::Swapchain(std::shared_ptr<Device> device, VkSurfaceFormatKHR surfaceFormat,
+    const VkExtent2D& extent, VkImageUsageFlags imageUsage, VkSwapchainCreateFlagsKHR flags,
+    const Sharing& sharing, std::shared_ptr<Swapchain> oldSwapchain, std::shared_ptr<IAllocator> allocator):
     NonDispatchable(VK_OBJECT_TYPE_SWAPCHAIN_KHR, std::move(device), std::move(allocator)),
     surfaceFormat(surfaceFormat),
     extent(extent),
+    imageUsage(imageUsage),
+    flags(flags),
+    sharing(sharing),
     retired(false),
     imageIndex(0)
 {
@@ -46,14 +51,10 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, VkSurfaceFormatKHR surfaceF
         throw exception::OutOfDate("old swapchain must be a non-retired");
 }
 
-#ifdef VK_KHR_swapchain
 Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surface> surface,
     uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent,
-    VkImageUsageFlags usage,
-    VkSurfaceTransformFlagBitsKHR preTransform,
-    VkCompositeAlphaFlagBitsKHR compositeAlpha,
-    VkPresentModeKHR presentMode,
-    VkSwapchainCreateFlagsKHR flags,
+    VkImageUsageFlags imageUsage, VkSurfaceTransformFlagBitsKHR preTransform, VkCompositeAlphaFlagBitsKHR compositeAlpha,
+    VkPresentModeKHR presentMode, VkSwapchainCreateFlagsKHR flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<Swapchain> oldSwapchain /* nullptr */,
 #ifdef VK_EXT_debug_report
@@ -62,8 +63,9 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
 #ifdef VK_EXT_debug_utils
     std::shared_ptr<DebugUtilsMessenger> debugUtilsMessenger /* nullptr */,
 #endif
+    const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
-    Swapchain(std::move(device), surfaceFormat, extent, oldSwapchain, std::move(allocator))
+    Swapchain(std::move(device), surfaceFormat, extent, imageUsage, flags, sharing, oldSwapchain, std::move(allocator))
 {
     VkSwapchainCreateInfoKHR swapchainInfo;
     swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
@@ -75,14 +77,14 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     swapchainInfo.imageColorSpace = surfaceFormat.colorSpace;
     swapchainInfo.imageExtent = extent;
     swapchainInfo.imageArrayLayers = 1;
-    swapchainInfo.imageUsage = usage;
-    swapchainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-    swapchainInfo.queueFamilyIndexCount = 0;
-    swapchainInfo.pQueueFamilyIndices = nullptr;
+    swapchainInfo.imageUsage = imageUsage;
+    swapchainInfo.imageSharingMode = sharing.getMode();
+    swapchainInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
+    swapchainInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     swapchainInfo.preTransform = preTransform;
     swapchainInfo.compositeAlpha = compositeAlpha;
     swapchainInfo.presentMode = presentMode;
-    if (usage & VK_IMAGE_USAGE_TRANSFER_SRC_BIT) // Is read back allowed?
+    if (imageUsage & VK_IMAGE_USAGE_TRANSFER_SRC_BIT) // Is read back allowed?
         swapchainInfo.clipped = VK_FALSE; // Presentable images will own all of the pixels they contain
     else
         swapchainInfo.clipped = VK_TRUE; // Fragment shaders may not execute for obscured pixels

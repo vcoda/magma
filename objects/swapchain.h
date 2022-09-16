@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
+#include "../misc/sharing.h"
 #include "../misc/structureChain.h"
 
 namespace magma
@@ -48,11 +49,11 @@ namespace magma
             uint32_t minImageCount,
             VkSurfaceFormatKHR surfaceFormat,
             const VkExtent2D& extent,
-            VkImageUsageFlags usage,
+            VkImageUsageFlags imageUsage,
             VkSurfaceTransformFlagBitsKHR preTransform,
             VkCompositeAlphaFlagBitsKHR compositeAlpha,
             VkPresentModeKHR presentMode,
-            VkSwapchainCreateFlagsKHR flags,
+            VkSwapchainCreateFlagsKHR flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<Swapchain> oldSwapchain = nullptr,
         #ifdef VK_EXT_debug_report
@@ -61,10 +62,14 @@ namespace magma
         #ifdef VK_EXT_debug_utils
             std::shared_ptr<DebugUtilsMessenger> debugUtilsMessenger = nullptr,
         #endif
+            const Sharing& sharing = Sharing(),
             const StructureChain& extendedInfo = StructureChain());
         ~Swapchain();
         VkSurfaceFormatKHR getSurfaceFormat() const noexcept { return surfaceFormat; }
         const VkExtent2D& getExtent() const noexcept { return extent; }
+        VkImageUsageFlags getImageUsage() const noexcept { return imageUsage; }
+        VkSwapchainCreateFlagsKHR getFlags() const noexcept { return flags; }
+        const Sharing& getSharing() const noexcept { return sharing; }
         bool hadRetired() const noexcept { return retired; }
         uint32_t getImageIndex() const noexcept { return imageIndex; }
         uint32_t getImageCount() const;
@@ -80,6 +85,9 @@ namespace magma
         Swapchain(std::shared_ptr<Device> device,
             VkSurfaceFormatKHR surfaceFormat,
             const VkExtent2D& extent,
+            VkImageUsageFlags imageUsage,
+            VkSwapchainCreateFlagsKHR flags,
+            const Sharing& sharing,
             std::shared_ptr<Swapchain> oldSwapchain,
             std::shared_ptr<IAllocator> allocator);
         void handleError(VkResult result,
@@ -87,6 +95,9 @@ namespace magma
 
         const VkSurfaceFormatKHR surfaceFormat;
         const VkExtent2D extent;
+        const VkImageUsageFlags imageUsage;
+        const VkSwapchainCreateFlagsKHR flags;
+        const Sharing sharing;
         bool retired;
         uint32_t imageIndex;
         friend class FullScreenExclusiveSwapchain;

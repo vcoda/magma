@@ -34,7 +34,7 @@ namespace magma
 #if defined(VK_KHR_swapchain) && defined(VK_EXT_full_screen_exclusive)
 FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surface> surface,
     uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent,
-    VkImageUsageFlags usage, VkSurfaceTransformFlagBitsKHR preTransform, VkCompositeAlphaFlagBitsKHR compositeAlpha,
+    VkImageUsageFlags imageUsage, VkSurfaceTransformFlagBitsKHR preTransform, VkCompositeAlphaFlagBitsKHR compositeAlpha,
     VkPresentModeKHR presentMode, VkSwapchainCreateFlagsKHR flags, VkFullScreenExclusiveEXT fullScreenExclusive,
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     HMONITOR hMonitor /* NULL */,
@@ -47,8 +47,9 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
 #ifdef VK_EXT_debug_utils
     std::shared_ptr<DebugUtilsMessenger> debugUtilsMessenger /* nullptr */,
 #endif
+    const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
-    Swapchain(std::move(device), surfaceFormat, extent, oldSwapchain, std::move(allocator)),
+    Swapchain(std::move(device), surfaceFormat, extent, imageUsage, flags, sharing, oldSwapchain, std::move(allocator)),
     fullScreenExlusive(false)
 #ifdef VK_USE_PLATFORM_WIN32_KHR
    ,hMonitor(hMonitor)
@@ -80,14 +81,14 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     swapchainInfo.imageColorSpace = surfaceFormat.colorSpace;
     swapchainInfo.imageExtent = extent;
     swapchainInfo.imageArrayLayers = 1;
-    swapchainInfo.imageUsage = usage;
-    swapchainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-    swapchainInfo.queueFamilyIndexCount = 0;
-    swapchainInfo.pQueueFamilyIndices = nullptr;
+    swapchainInfo.imageUsage = imageUsage;
+    swapchainInfo.imageSharingMode = sharing.getMode();
+    swapchainInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
+    swapchainInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     swapchainInfo.preTransform = preTransform;
     swapchainInfo.compositeAlpha = compositeAlpha;
     swapchainInfo.presentMode = presentMode;
-    if (usage & VK_IMAGE_USAGE_TRANSFER_SRC_BIT) // Is read back allowed?
+    if (imageUsage & VK_IMAGE_USAGE_TRANSFER_SRC_BIT) // Is read back allowed?
         swapchainInfo.clipped = VK_FALSE; // Presentable images will own all of the pixels they contain
     else
         swapchainInfo.clipped = VK_TRUE; // Fragment shaders may not execute for obscured pixels
