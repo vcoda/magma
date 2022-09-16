@@ -150,6 +150,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "misc/pushConstantRange.h"
 #include "misc/scissor.h"
 #include "misc/scopedDebugMarker.h"
+#include "misc/sharing.h"
 #include "misc/structureChain.h"
 #include "misc/viewport.h"
 

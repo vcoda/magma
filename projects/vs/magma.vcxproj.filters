@@ -723,6 +723,9 @@
     <ClInclude Include="..\..\states\multisampleCoverageReductionState.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\misc\sharing.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1111,6 +1114,9 @@
     </ClCompile>
     <ClCompile Include="..\..\objects\fullScreenExclusiveSwapchain.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\sharing.cpp">
+      <Filter>Source Files\misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

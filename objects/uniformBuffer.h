@@ -92,7 +92,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             bool pinnedMemory = false,
             const Buffer::Descriptor& optional = Buffer::Descriptor(),
-            const Resource::Sharing& sharing = Resource::Sharing()):
+            const Sharing& sharing = Sharing()):
             UniformBuffer<Type>(device, std::move(allocator), pinnedMemory, memoryPriority, alignedArraySize(device, arraySize), optional, sharing),
             alignment(std::max(
                 minOffsetAlignment(device),

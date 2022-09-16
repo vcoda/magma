@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "nondispatchable.h"
 #include "../allocator/allocator.h"
+#include "../misc/sharing.h"
 #include "../exceptions/exception.h"
 
 namespace magma
@@ -35,24 +36,6 @@ namespace magma
     class Resource : core::NonCopyable
     {
     public:
-        class Sharing
-        {
-        public:
-            Sharing() = default;
-            Sharing(const std::vector<uint32_t>& queueFamilyIndices) noexcept;
-            Sharing(std::shared_ptr<const PhysicalDevice> device,
-                const std::initializer_list<VkQueueFlagBits>& queueTypes);
-            VkSharingMode getMode() const noexcept;
-            uint32_t getQueueFamiliesCount() const noexcept;
-            const std::vector<uint32_t>& getQueueFamilyIndices() const noexcept { return queueFamilyIndices; }
-
-        private:
-            uint32_t chooseFamilyIndex(VkQueueFlagBits queueType,
-                const std::vector<VkQueueFamilyProperties>& queueFamilyProperties) const noexcept;
-
-            std::vector<uint32_t> queueFamilyIndices;
-        };
-
         /* User-defined data associated with the resource.
            It's an analogue of ID3D11DeviceChild::SetPrivateData(). */
 

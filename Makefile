@@ -65,6 +65,7 @@ MAGMA_OBJS= \
 	misc/geometry.o \
 	misc/pipelineExecutable.o \
 	misc/scopedDebugMarker.o \
+	misc/sharing.o \
 	misc/structureChain.o \
 	\
 	objects/accelerationStructure.o \
