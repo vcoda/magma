@@ -41,7 +41,7 @@ namespace magma
             VkPresentModeKHR presentMode,
             VkSwapchainCreateFlagsKHR flags,
             VkFullScreenExclusiveEXT fullScreenExclusive,
-        #ifdef VK_USE_PLATFORM_WIN32_KHR
+        #ifdef VK_KHR_win32_surface
             // Allows to specify full-screen exclusive mode for physical display
             // that is represented by a monitor handle of type HMONITOR. See:
             // https://docs.microsoft.com/en-us/windows/win32/gdi/hmonitor-and-the-device-context
@@ -59,14 +59,14 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
         void acquireFullScreenExclusiveMode();
         void releaseFullScreenExclusiveMode();
-        bool hasFullScreenExclusiveMode() const noexcept { return fullScreenExlusive; }
-    #ifdef VK_USE_PLATFORM_WIN32_KHR
+        bool fullScreenExclusiveMode() const noexcept { return fullScreenExlusive; }
+    #ifdef VK_KHR_win32_surface
         HMONITOR getMonitorHandle() const noexcept { return hMonitor; }
     #endif
 
     private:
         bool fullScreenExlusive;
-    #ifdef VK_USE_PLATFORM_WIN32_KHR
+    #ifdef VK_KHR_win32_surface
         const HMONITOR hMonitor;
     #endif
     };

@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "fullScreenExclusiveSwapchain.h"
 #include "device.h"
-#include "physicalDevice.h"
 #include "surface.h"
 #include "debugReportCallback.h"
 #include "debugUtilsMessenger.h"
@@ -36,7 +35,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent,
     VkImageUsageFlags imageUsage, VkSurfaceTransformFlagBitsKHR preTransform, VkCompositeAlphaFlagBitsKHR compositeAlpha,
     VkPresentModeKHR presentMode, VkSwapchainCreateFlagsKHR flags, VkFullScreenExclusiveEXT fullScreenExclusive,
-#ifdef VK_USE_PLATFORM_WIN32_KHR
+#ifdef VK_KHR_win32_surface
     HMONITOR hMonitor /* NULL */,
 #endif
     std::shared_ptr<IAllocator> allocator /* nullptr */,
@@ -51,27 +50,12 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     const StructureChain& extendedInfo /* default */):
     Swapchain(std::move(device), surfaceFormat, extent, imageUsage, flags, sharing, oldSwapchain, std::move(allocator)),
     fullScreenExlusive(false)
-#ifdef VK_USE_PLATFORM_WIN32_KHR
+#ifdef VK_KHR_win32_surface
    ,hMonitor(hMonitor)
 #endif
 {
-    VkSurfaceFullScreenExclusiveInfoEXT fullScreenExclusiveInfo;
-    fullScreenExclusiveInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT,
-    fullScreenExclusiveInfo.pNext = (void *)extendedInfo.getChainedNodes();
-    fullScreenExclusiveInfo.fullScreenExclusive = fullScreenExclusive;
-#ifdef VK_USE_PLATFORM_WIN32_KHR
-    VkSurfaceFullScreenExclusiveWin32InfoEXT fullScreenExclusiveWin32Info;
-    if (hMonitor)
-    {
-        fullScreenExclusiveWin32Info.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT,
-        fullScreenExclusiveWin32Info.pNext = fullScreenExclusiveInfo.pNext;
-        fullScreenExclusiveWin32Info.hmonitor = hMonitor;
-        fullScreenExclusiveInfo.pNext = &fullScreenExclusiveWin32Info;
-    }
-#endif // VK_USE_PLATFORM_WIN32_KHR
-    if (oldSwapchain && oldSwapchain->hadRetired())
-        throw exception::OutOfDate("old swapchain must be a non-retired");
     VkSwapchainCreateInfoKHR swapchainInfo;
+    VkSurfaceFullScreenExclusiveInfoEXT fullScreenExclusiveInfo;
     swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     swapchainInfo.pNext = &fullScreenExclusiveInfo;
     swapchainInfo.flags = flags;
@@ -88,11 +72,21 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     swapchainInfo.preTransform = preTransform;
     swapchainInfo.compositeAlpha = compositeAlpha;
     swapchainInfo.presentMode = presentMode;
-    if (imageUsage & VK_IMAGE_USAGE_TRANSFER_SRC_BIT) // Is read back allowed?
-        swapchainInfo.clipped = VK_FALSE; // Presentable images will own all of the pixels they contain
-    else
-        swapchainInfo.clipped = VK_TRUE; // Fragment shaders may not execute for obscured pixels
+    swapchainInfo.clipped = (imageUsage & VK_IMAGE_USAGE_TRANSFER_SRC_BIT); // Is pixels readback required?
     swapchainInfo.oldSwapchain = MAGMA_OPTIONAL_HANDLE(oldSwapchain);
+    fullScreenExclusiveInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT,
+    fullScreenExclusiveInfo.pNext = (void *)extendedInfo.getChainedNodes();
+    fullScreenExclusiveInfo.fullScreenExclusive = fullScreenExclusive;
+#ifdef VK_KHR_win32_surface
+    VkSurfaceFullScreenExclusiveWin32InfoEXT fullScreenExclusiveWin32Info;
+    if (hMonitor)
+    {
+        fullScreenExclusiveWin32Info.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT,
+        fullScreenExclusiveWin32Info.pNext = fullScreenExclusiveInfo.pNext;
+        fullScreenExclusiveWin32Info.hmonitor = hMonitor;
+        fullScreenExclusiveInfo.pNext = &fullScreenExclusiveWin32Info;
+    }
+#endif // VK_KHR_win32_surface
     helpers::checkImageUsageSupport(surface, swapchainInfo.imageUsage, getDevice()->getPhysicalDevice());
     VkResult result;
 #if defined(VK_KHR_display_swapchain) && defined(VK_KHR_display_surface)
@@ -102,13 +96,9 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
         result = vkCreateSharedSwapchainsKHR(MAGMA_HANDLE(device), 1, &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     } else
 #endif // VK_KHR_display_swapchain && VK_KHR_display_surface
-    {
-        result = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    }
+    result = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     if (oldSwapchain)
-    {   // oldSwapchain is retired even if creation of the new swapchain fails
-        oldSwapchain->retired = true;
-    }
+        oldSwapchain->retired = true; // oldSwapchain is retired even if creation of the new swapchain fails
 #if defined(VK_EXT_debug_report) || defined(VK_EXT_debug_utils)
     if (result != VK_SUCCESS)
     {
@@ -121,28 +111,27 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
         #else
             "oldSwapchain: %llu\n"
         #endif
-            "fullScreenExclusive: %s\n"
-        #ifdef VK_USE_PLATFORM_WIN32_KHR
+        #ifdef VK_KHR_win32_surface
             "hMonitor: %p\n"
         #endif
-           ,swapchainInfo.minImageCount,
+            "fullScreenExclusive: %s\n",
+            swapchainInfo.minImageCount,
             helpers::stringize(swapchainInfo.imageFormat),
             helpers::stringize(swapchainInfo.imageColorSpace),
             swapchainInfo.imageExtent.width,
             swapchainInfo.imageExtent.height,
             swapchainInfo.imageArrayLayers,
-            helpers::stringize(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT),
+            helpers::stringize(imageUsage),
             helpers::stringize(swapchainInfo.imageSharingMode),
             helpers::stringize(swapchainInfo.preTransform),
             helpers::stringize(swapchainInfo.compositeAlpha),
             helpers::stringize(swapchainInfo.presentMode),
             helpers::stringize(swapchainInfo.clipped),
             swapchainInfo.oldSwapchain,
-            helpers::stringize(fullScreenExclusiveInfo.fullScreenExclusive)
-        #ifdef VK_USE_PLATFORM_WIN32_KHR
-           ,hMonitor
+        #ifdef VK_KHR_win32_surface
+            hMonitor,
         #endif
-            );
+            helpers::stringize(fullScreenExclusiveInfo.fullScreenExclusive));
     #ifdef VK_EXT_debug_report
         if (debugReportCallback)
         {
