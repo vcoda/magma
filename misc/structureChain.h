@@ -27,10 +27,10 @@ namespace magma
     public:
         template<class Structure>
         void addNode(const Structure& node);
+        uint32_t getNumNodes() const noexcept { return MAGMA_COUNT(chain); }
+        bool isEmpty() const noexcept { return chain.empty(); }
         const void *getChainedNodes() const noexcept;
         hash_t getHash() const noexcept;
-        std::size_t numNodes() const noexcept { return chain.size(); }
-        bool isEmpty() const noexcept { return chain.empty(); }
 
     private:
         struct Node
