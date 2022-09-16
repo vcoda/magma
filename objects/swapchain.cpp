@@ -124,7 +124,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
             swapchainInfo.imageExtent.width,
             swapchainInfo.imageExtent.height,
             swapchainInfo.imageArrayLayers,
-            helpers::stringize(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT),
+            helpers::stringize(imageUsage),
             helpers::stringize(swapchainInfo.imageSharingMode),
             helpers::stringize(swapchainInfo.preTransform),
             helpers::stringize(swapchainInfo.compositeAlpha),
