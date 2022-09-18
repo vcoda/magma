@@ -121,7 +121,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
             swapchainInfo.imageExtent.width,
             swapchainInfo.imageExtent.height,
             swapchainInfo.imageArrayLayers,
-            helpers::stringize(imageUsage),
+            helpers::stringifyImageUsageFlags(imageUsage).c_str(),
             helpers::stringize(swapchainInfo.imageSharingMode),
             helpers::stringize(swapchainInfo.preTransform),
             helpers::stringize(swapchainInfo.compositeAlpha),
