@@ -314,6 +314,7 @@
     <ClInclude Include="..\..\objects\surface.h" />
     <ClInclude Include="..\..\objects\swapchain.h" />
     <ClInclude Include="..\..\objects\fullScreenExclusiveSwapchain.h" />
+    <ClInclude Include="..\..\objects\swapchainImage.h" />
     <ClInclude Include="..\..\objects\transformFeedbackBuffer.h" />
     <ClInclude Include="..\..\objects\typedefs.h" />
     <ClInclude Include="..\..\objects\uniformBuffer.h" />
@@ -474,6 +475,7 @@
     <ClCompile Include="..\..\objects\surface.cpp" />
     <ClCompile Include="..\..\objects\swapchain.cpp" />
     <ClCompile Include="..\..\objects\fullScreenExclusiveSwapchain.cpp" />
+    <ClCompile Include="..\..\objects\swapchainImage.cpp" />
     <ClCompile Include="..\..\objects\transformFeedbackBuffer.cpp" />
     <ClCompile Include="..\..\objects\uniformTexelBuffer.cpp" />
     <ClCompile Include="..\..\objects\validationCache.cpp" />

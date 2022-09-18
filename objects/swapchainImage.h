@@ -1,0 +1,62 @@
+/*
+Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
+Copyright (C) 2018-2022 Victor Coda.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+*/
+#pragma once
+#include "image2D.h"
+
+namespace magma
+{
+#ifdef VK_KHR_swapchain
+    class Swapchain;
+
+    /* The presentable image of a swapchain that is owned by the presentation engine.
+       Presentable images can also be created by user and bound to swapchain memory.
+       These images can be used anywhere swapchain images are used, and are useful in logical
+       devices with multiple physical devices to create peer memory bindings of swapchain memory.
+       All presentable images are initially in the VK_IMAGE_LAYOUT_UNDEFINED layout,
+       thus before using presentable images, the application must transition them
+       to a valid layout for the intended use. */
+
+    class SwapchainImage : public Image2D
+    {
+    public:
+        explicit SwapchainImage(std::shared_ptr<Swapchain> swapchain);
+        ~SwapchainImage();
+        VkExtent2D getExtent() const noexcept { return {extent.width, extent.height}; }
+        void bindMemory(std::shared_ptr<DeviceMemory> memory,
+            VkDeviceSize offset = 0) override;
+    #ifdef VK_KHR_device_group
+        void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+            const std::vector<uint32_t>& deviceIndices,
+            VkDeviceSize offset = 0) override;
+        void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+            const std::vector<uint32_t>& deviceIndices,
+            const std::vector<VkRect2D>& splitInstanceBindRegions,
+            VkDeviceSize offset = 0) override;
+    #endif // VK_KHR_device_group
+
+    private:
+        explicit SwapchainImage(std::shared_ptr<Device> device,
+            VkImage handle,
+            VkFormat format,
+            const VkExtent2D& extent);
+        MAGMA_FRIEND_MAKE_SHARED(SwapchainImage);
+
+        const bool implementationControlled;
+    };
+#endif // VK_KHR_swapchain
+} // namespace magma

@@ -723,6 +723,9 @@
     <ClInclude Include="..\..\states\multisampleCoverageReductionState.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\swapchainImage.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\misc\sharing.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
@@ -1113,6 +1116,9 @@
       <Filter>Source Files\misc</Filter>
     </ClCompile>
     <ClCompile Include="..\..\objects\fullScreenExclusiveSwapchain.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\swapchainImage.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\misc\sharing.cpp">

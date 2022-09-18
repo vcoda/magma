@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "swapchainFramebuffer.h"
 #include "../objects/device.h"
+#include "../objects/swapchainImage.h"
 #include "../objects/image2DAttachment.h"
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
@@ -30,7 +31,7 @@ namespace magma
 {
 namespace aux
 {
-SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachment> color,
+SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainImage> color,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkFormat depthStencilFormat /* VK_FORMAT_UNDEFINED */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */):

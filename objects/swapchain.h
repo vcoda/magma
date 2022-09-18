@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Surface;
-    class SwapchainColorAttachment;
+    class SwapchainImage;
     class Queue;
     class Fence;
     class Semaphore;
@@ -73,10 +73,14 @@ namespace magma
         bool hadRetired() const noexcept { return retired; }
         uint32_t getImageIndex() const noexcept { return imageIndex; }
         uint32_t getImageCount() const;
-        std::vector<std::shared_ptr<SwapchainColorAttachment>> getImages() const;
+        const std::vector<std::shared_ptr<SwapchainImage>>& getImages();
         uint32_t acquireNextImage(std::shared_ptr<const Semaphore> semaphore,
             std::shared_ptr<const Fence> fence,
             uint64_t timeout = UINT64_MAX);
+    #ifdef VK_KHR_bind_memory2
+        void bindImage(std::shared_ptr<SwapchainImage> image,
+            uint32_t imageIndex);
+    #endif
     #ifdef VK_AMD_display_native_hdr
         void setLocalDimming(bool enable) noexcept;
     #endif
@@ -100,6 +104,7 @@ namespace magma
         const Sharing sharing;
         bool retired;
         uint32_t imageIndex;
+        std::vector<std::shared_ptr<SwapchainImage>> images;
         friend class FullScreenExclusiveSwapchain;
     };
 #endif // VK_KHR_swapchain

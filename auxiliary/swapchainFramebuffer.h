@@ -22,8 +22,8 @@ namespace magma
 {
     class Device;
     class Image2D;
+    class SwapchainImage;
     class ImageView;
-    class SwapchainColorAttachment;
     class Allocator;
 
     namespace aux
@@ -33,7 +33,7 @@ namespace magma
         class SwapchainFramebuffer : public Framebuffer
         {
         public:
-            explicit SwapchainFramebuffer(std::shared_ptr<SwapchainColorAttachment> color,
+            explicit SwapchainFramebuffer(std::shared_ptr<SwapchainImage> color,
                 std::shared_ptr<Allocator> allocator = nullptr,
                 VkFormat depthStencilFormat = VK_FORMAT_UNDEFINED,
                 const VkComponentMapping& swizzle = {

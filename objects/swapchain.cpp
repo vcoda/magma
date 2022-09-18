@@ -18,10 +18,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "swapchain.h"
+#include "swapchainImage.h"
 #include "device.h"
 #include "physicalDevice.h"
 #include "surface.h"
-#include "image2DAttachment.h"
 #include "semaphore.h"
 #include "fence.h"
 #include "debugReportCallback.h"
@@ -178,17 +178,49 @@ uint32_t Swapchain::getImageCount() const
     return imageCount;
 }
 
-std::vector<std::shared_ptr<SwapchainColorAttachment>> Swapchain::getImages() const
+const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages()
 {
-    uint32_t imageCount = getImageCount();
-    MAGMA_STACK_ARRAY(VkImage, swapchainImages, imageCount);
-    const VkResult result = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &imageCount, swapchainImages);
-    MAGMA_THROW_FAILURE(result, "failed to get swapchain images");
-    std::vector<std::shared_ptr<SwapchainColorAttachment>> colorAttachments;
-    for (const VkImage image : swapchainImages)
-        colorAttachments.emplace_back(new SwapchainColorAttachment(device, image, surfaceFormat.format, extent));
-    return colorAttachments;
+    if (images.empty())
+    {
+        uint32_t imageCount = getImageCount();
+        MAGMA_ASSERT(imageCount > 0);
+        MAGMA_STACK_ARRAY(VkImage, swapchainImages, imageCount);
+        const VkResult result = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &imageCount, swapchainImages);
+        MAGMA_THROW_FAILURE(result, "failed to get swapchain images");
+        for (const VkImage handle: swapchainImages)
+        {   // Image has been created by swapchain internally, so we just assign image handle
+            auto image = std::make_shared<SwapchainImage>(device, handle, surfaceFormat.format, extent);
+            images.push_back(std::move(image));
+        }
+    }
+    return images;
 }
+
+#ifdef VK_KHR_bind_memory2
+void Swapchain::bindImage(std::shared_ptr<SwapchainImage> image, uint32_t imageIndex)
+{
+    VkBindImageMemoryInfoKHR bindImageMemoryInfo;
+    VkBindImageMemorySwapchainInfoKHR bindImageMemorySwapchainInfo;
+    bindImageMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR;
+    bindImageMemoryInfo.pNext = &bindImageMemorySwapchainInfo;
+    bindImageMemoryInfo.image = *image;
+    // If swapchain is not NULL, the swapchain and imageIndex are used to determine
+    // the memory that the image is bound to, instead of memory and memoryOffset.
+    bindImageMemoryInfo.memory = VK_NULL_HANDLE;
+    bindImageMemoryInfo.memoryOffset = 0;
+    bindImageMemorySwapchainInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_SWAPCHAIN_INFO_KHR;
+    bindImageMemorySwapchainInfo.pNext = nullptr;
+    bindImageMemorySwapchainInfo.swapchain = handle;
+    bindImageMemorySwapchainInfo.imageIndex = imageIndex;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
+    const VkResult result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindImageMemoryInfo);
+    MAGMA_THROW_FAILURE(result, "failed to bind image to swapchain");
+    const uint32_t imageCount = imageIndex + 1;
+    if (imageCount > images.size())
+        images.resize(imageCount);
+    images[imageIndex] = std::move(image);
+}
+#endif // VK_KHR_bind_memory2
 
 #ifdef VK_AMD_display_native_hdr
 void Swapchain::setLocalDimming(bool enable) noexcept

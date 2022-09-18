@@ -65,7 +65,7 @@ namespace magma
         virtual void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
             VkDeviceSize offset = 0) override;
-        void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+        virtual void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
             const std::vector<VkRect2D>& splitInstanceBindRegions,
             VkDeviceSize offset = 0);

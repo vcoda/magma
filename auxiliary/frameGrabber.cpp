@@ -20,10 +20,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "frameGrabber.h"
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
+#include "../objects/swapchainImage.h"
 #include "../objects/commandBuffer.h"
 #include "../objects/queue.h"
 #include "../objects/fence.h"
-#include "../objects/image2DAttachment.h"
 #include "../barriers/imageMemoryBarrier.h"
 #include "../helpers/mapScoped.h"
 
@@ -38,7 +38,7 @@ FrameGrabber::FrameGrabber(std::shared_ptr<Device> device,
     allocator(std::move(allocator))
 {}
 
-void FrameGrabber::captureFrame(std::shared_ptr<SwapchainColorAttachment> srcImage, std::shared_ptr<CommandBuffer> cmdBuffer)
+void FrameGrabber::captureFrame(std::shared_ptr<SwapchainImage> srcImage, std::shared_ptr<CommandBuffer> cmdBuffer)
 {   // Allocate linear tiled image to copy pixels to
     dstImage = std::make_shared<LinearTiledImage2D>(device, VK_FORMAT_R8G8B8A8_UNORM,
         srcImage->getExtent(), allocator);

@@ -86,6 +86,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/storageTexelBuffer.h"
 #include "objects/surface.h"
 #include "objects/swapchain.h"
+#include "objects/swapchainImage.h"
 #include "objects/transformFeedbackBuffer.h"
 #include "objects/typedefs.h"
 #include "objects/uniformBuffer.h"

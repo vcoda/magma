@@ -77,7 +77,6 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(StorageBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(StorageImage2D);
     MAGMA_TYPEDEF_SHARED_PTR(StorageTexelBuffer)
-    MAGMA_TYPEDEF_SHARED_PTR(SwapchainColorAttachment)
     MAGMA_TYPEDEF_SHARED_PTR(TimestampQuery)
     MAGMA_TYPEDEF_SHARED_PTR(UniformTexelBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(UnnormalizedSampler)
@@ -136,6 +135,7 @@ namespace magma
 #ifdef VK_KHR_sampler_ycbcr_conversion
     MAGMA_TYPEDEF_SHARED_PTR(SamplerYcbcrConversion)
 #endif
+
 #ifdef VK_KHR_surface
     MAGMA_TYPEDEF_SHARED_PTR(Surface)
 #ifdef VK_KHR_win32_surface
@@ -169,9 +169,12 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(ViSurface)
 #endif
 #endif // VK_KHR_surface
+
 #ifdef VK_KHR_swapchain
     MAGMA_TYPEDEF_SHARED_PTR(Swapchain)
+    MAGMA_TYPEDEF_SHARED_PTR(SwapchainImage)
 #endif
+
 #ifdef VK_NV_ray_tracing
     MAGMA_TYPEDEF_SHARED_PTR(AccelerationStructure)
     MAGMA_TYPEDEF_SHARED_PTR(AccelerationStructureCompactedSizeQuery)

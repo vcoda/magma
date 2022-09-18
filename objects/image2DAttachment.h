@@ -49,20 +49,4 @@ namespace magma
             const Descriptor& optional = Descriptor(),
             bool sampled = false);
     };
-
-    /* Two-dimensional image that represents swapchain's color attachment to framebuffer.
-       It is managed internally by swapchain and never created or destroyed by user. */
-
-    class SwapchainColorAttachment : public Image2D
-    {
-        explicit SwapchainColorAttachment(std::shared_ptr<Device> device,
-            VkImage handle,
-            VkFormat format,
-            const VkExtent2D& extent);
-        friend class Swapchain;
-
-    public:
-        virtual ~SwapchainColorAttachment();
-        VkExtent2D getExtent() const noexcept { return {extent.width, extent.height}; }
-    };
 } // namespace magma

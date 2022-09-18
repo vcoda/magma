@@ -54,16 +54,4 @@ DepthStencilAttachment::DepthStencilAttachment(std::shared_ptr<Device> device,
         VK_IMAGE_TILING_OPTIMAL,
         optional, Sharing(), std::move(allocator))
 {}
-
-SwapchainColorAttachment::SwapchainColorAttachment(std::shared_ptr<Device> device,
-    VkImage handle, VkFormat format, const VkExtent2D& extent):
-    Image2D(std::move(device), handle, format, extent)
-{
-    layout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-}
-
-SwapchainColorAttachment::~SwapchainColorAttachment()
-{   // vkDestroyImage() shouldn't have effect on it as it was not created via vkCreateImage().
-    handle = VK_NULL_HANDLE;
-}
 } // namespace magma
