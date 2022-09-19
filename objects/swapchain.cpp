@@ -223,6 +223,39 @@ void Swapchain::bindImage(std::shared_ptr<SwapchainImage> image, uint32_t imageI
         images.resize(imageCount);
     images[imageIndex] = std::move(image);
 }
+
+#ifdef VK_KHR_device_group
+void Swapchain::bindImage(std::shared_ptr<SwapchainImage> image, const std::vector<uint32_t>& deviceIndices,
+    const std::vector<VkRect2D>& splitInstanceBindRegions /* empty */)
+{
+    VkBindImageMemoryInfoKHR bindImageMemoryInfo;
+    VkBindImageMemoryDeviceGroupInfoKHR bindImageMemoryDeviceGroupInfo;
+    VkBindImageMemorySwapchainInfoKHR bindImageMemorySwapchainInfo;
+    bindImageMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR;
+    bindImageMemoryInfo.pNext = &bindImageMemoryDeviceGroupInfo;
+    bindImageMemoryInfo.image = *image;
+    bindImageMemoryInfo.memory = VK_NULL_HANDLE;
+    bindImageMemoryInfo.memoryOffset = 0;
+    bindImageMemoryDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO_KHR;
+    bindImageMemoryDeviceGroupInfo.pNext = &bindImageMemorySwapchainInfo;
+    bindImageMemoryDeviceGroupInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
+    bindImageMemoryDeviceGroupInfo.pDeviceIndices = deviceIndices.data();
+    bindImageMemoryDeviceGroupInfo.splitInstanceBindRegionCount = MAGMA_COUNT(splitInstanceBindRegions);
+    bindImageMemoryDeviceGroupInfo.pSplitInstanceBindRegions = splitInstanceBindRegions.data();
+    bindImageMemorySwapchainInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_SWAPCHAIN_INFO_KHR;
+    bindImageMemorySwapchainInfo.pNext = nullptr;
+    bindImageMemorySwapchainInfo.swapchain = handle;
+    bindImageMemorySwapchainInfo.imageIndex = imageIndex;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
+    const VkResult result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindImageMemoryInfo);
+    MAGMA_THROW_FAILURE(result, "failed to bind image to swapchain within device group");
+    image->setChainIndex(imageIndex);
+    const uint32_t imageCount = imageIndex + 1;
+    if (imageCount > images.size())
+        images.resize(imageCount);
+    images[imageIndex] = std::move(image);
+}
+#endif // VK_KHR_device_group
 #endif // VK_KHR_bind_memory2
 
 #ifdef VK_AMD_display_native_hdr
