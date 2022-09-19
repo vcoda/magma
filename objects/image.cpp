@@ -394,8 +394,8 @@ VkFormat Image::checkFormatFeature(std::shared_ptr<Device> device, VkFormat form
 {
     std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
     const VkFormatProperties properties = physicalDevice->getFormatProperties(format);
-    bool fragmentShadingRateAttachment = (properties.optimalTilingFeatures & requiredFeature);
-    if (!fragmentShadingRateAttachment)
+    const bool hasFeature = (properties.optimalTilingFeatures & requiredFeature);
+    if (!hasFeature)
         MAGMA_THROW("format doesn't suport required feature");
     return format;
 }
