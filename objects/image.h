@@ -24,7 +24,6 @@ namespace magma
     class Buffer;
     class SrcTransferBuffer;
     class CommandBuffer;
-    class IDeviceMemoryAllocator;
 
     /* Images represent multidimensional - up to 3 - arrays of data
        which can be used for various purposes (e.g. attachments, textures),
