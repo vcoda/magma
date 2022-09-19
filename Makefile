@@ -135,6 +135,7 @@ MAGMA_OBJS= \
 	objects/storageTexelBuffer.o \
 	objects/surface.o \
 	objects/swapchain.o \
+	objects/swapchainImage.o \
 	objects/transformFeedbackBuffer.o \
 	objects/uniformTexelBuffer.o \
 	objects/validationCache.o \
