@@ -198,21 +198,21 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     const std::vector<uint32_t>& deviceIndices,
     VkDeviceSize offset /* 0 */)
 {
-    VkBindImageMemoryDeviceGroupInfoKHR deviceGroupBindInfo;
-    deviceGroupBindInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO_KHR;
-    deviceGroupBindInfo.pNext = nullptr;
-    deviceGroupBindInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
-    deviceGroupBindInfo.pDeviceIndices = deviceIndices.data();
-    deviceGroupBindInfo.splitInstanceBindRegionCount = 0;
-    deviceGroupBindInfo.pSplitInstanceBindRegions = nullptr;
-    VkBindImageMemoryInfoKHR bindInfo;
-    bindInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR;
-    bindInfo.pNext = &deviceGroupBindInfo;
-    bindInfo.image = handle;
-    bindInfo.memory = *memory;
-    bindInfo.memoryOffset = memory->getOffset() + offset;
+    VkBindImageMemoryInfoKHR bindMemoryInfo;
+    VkBindImageMemoryDeviceGroupInfoKHR bindMemoryDeviceGroupInfo;
+    bindMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR;
+    bindMemoryInfo.pNext = &bindMemoryDeviceGroupInfo;
+    bindMemoryInfo.image = handle;
+    bindMemoryInfo.memory = *memory;
+    bindMemoryInfo.memoryOffset = memory->getOffset() + offset;
+    bindMemoryDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO_KHR;
+    bindMemoryDeviceGroupInfo.pNext = nullptr;
+    bindMemoryDeviceGroupInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
+    bindMemoryDeviceGroupInfo.pDeviceIndices = deviceIndices.data();
+    bindMemoryDeviceGroupInfo.splitInstanceBindRegionCount = 0;
+    bindMemoryDeviceGroupInfo.pSplitInstanceBindRegions = nullptr;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
-    const VkResult result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindInfo);
+    const VkResult result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindMemoryInfo);
     MAGMA_THROW_FAILURE(result, "failed to bind image memory within device group");
     this->size = memory->getSize();
     this->offset = offset;
@@ -224,21 +224,21 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     const std::vector<VkRect2D>& splitInstanceBindRegions,
     VkDeviceSize offset /* 0 */)
 {
-    VkBindImageMemoryDeviceGroupInfoKHR deviceGroupBindInfo;
-    deviceGroupBindInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO_KHR;
-    deviceGroupBindInfo.pNext = nullptr;
-    deviceGroupBindInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
-    deviceGroupBindInfo.pDeviceIndices = deviceIndices.data();
-    deviceGroupBindInfo.splitInstanceBindRegionCount = MAGMA_COUNT(splitInstanceBindRegions);
-    deviceGroupBindInfo.pSplitInstanceBindRegions = splitInstanceBindRegions.data();
-    VkBindImageMemoryInfoKHR bindInfo;
-    bindInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR;
-    bindInfo.pNext = &deviceGroupBindInfo;
-    bindInfo.image = handle;
-    bindInfo.memory = *memory;
-    bindInfo.memoryOffset = memory->getOffset() + offset;
+    VkBindImageMemoryInfoKHR bindMemoryInfo;
+    VkBindImageMemoryDeviceGroupInfoKHR bindMemoryDeviceGroupInfo;
+    bindMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR;
+    bindMemoryInfo.pNext = &bindMemoryDeviceGroupInfo;
+    bindMemoryInfo.image = handle;
+    bindMemoryInfo.memory = *memory;
+    bindMemoryInfo.memoryOffset = memory->getOffset() + offset;
+    bindMemoryDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO_KHR;
+    bindMemoryDeviceGroupInfo.pNext = nullptr;
+    bindMemoryDeviceGroupInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
+    bindMemoryDeviceGroupInfo.pDeviceIndices = deviceIndices.data();
+    bindMemoryDeviceGroupInfo.splitInstanceBindRegionCount = MAGMA_COUNT(splitInstanceBindRegions);
+    bindMemoryDeviceGroupInfo.pSplitInstanceBindRegions = splitInstanceBindRegions.data();
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
-    const VkResult result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindInfo);
+    const VkResult result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindMemoryInfo);
     MAGMA_THROW_FAILURE(result, "failed to bind image memory within device group");
     this->size = memory->getSize();
     this->offset = offset;

@@ -116,19 +116,19 @@ void Buffer::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     const std::vector<uint32_t>& deviceIndices,
     VkDeviceSize offset /* 0 */)
 {
-    VkBindBufferMemoryDeviceGroupInfoKHR deviceGroupBindInfo;
-    deviceGroupBindInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_DEVICE_GROUP_INFO_KHR;
-    deviceGroupBindInfo.pNext = nullptr;
-    deviceGroupBindInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
-    deviceGroupBindInfo.pDeviceIndices = deviceIndices.data();
-    VkBindBufferMemoryInfoKHR bindInfo;
-    bindInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO_KHR;
-    bindInfo.pNext = &deviceGroupBindInfo;
-    bindInfo.buffer = handle;
-    bindInfo.memory = *memory;
-    bindInfo.memoryOffset = memory->getOffset() + offset;
+    VkBindBufferMemoryInfoKHR bindMemoryInfo;
+    VkBindBufferMemoryDeviceGroupInfoKHR bindMemoryDeviceGroupInfo;
+    bindMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO_KHR;
+    bindMemoryInfo.pNext = &bindMemoryDeviceGroupInfo;
+    bindMemoryInfo.buffer = handle;
+    bindMemoryInfo.memory = *memory;
+    bindMemoryInfo.memoryOffset = memory->getOffset() + offset;
+    bindMemoryDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_DEVICE_GROUP_INFO_KHR;
+    bindMemoryDeviceGroupInfo.pNext = nullptr;
+    bindMemoryDeviceGroupInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
+    bindMemoryDeviceGroupInfo.pDeviceIndices = deviceIndices.data();
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindBufferMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
-    const VkResult result = vkBindBufferMemory2KHR(MAGMA_HANDLE(device), 1, &bindInfo);
+    const VkResult result = vkBindBufferMemory2KHR(MAGMA_HANDLE(device), 1, &bindMemoryInfo);
     MAGMA_THROW_FAILURE(result, "failed to bind buffer memory within device group");
     this->size = memory->getSize();
     this->offset = offset;
