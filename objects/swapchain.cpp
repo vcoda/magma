@@ -187,10 +187,12 @@ const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages()
         MAGMA_STACK_ARRAY(VkImage, swapchainImages, imageCount);
         const VkResult result = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &imageCount, swapchainImages);
         MAGMA_THROW_FAILURE(result, "failed to get swapchain images");
+        uint32_t imageIndex = 0;
         for (const VkImage handle: swapchainImages)
         {   // Image has been created by swapchain internally, so we just assign image handle
-            auto image = std::make_shared<SwapchainImage>(device, handle, surfaceFormat.format, extent);
+            auto image = std::make_shared<SwapchainImage>(device, handle, surfaceFormat.format, extent, imageIndex);
             images.push_back(std::move(image));
+            ++imageIndex;
         }
     }
     return images;
@@ -215,6 +217,7 @@ void Swapchain::bindImage(std::shared_ptr<SwapchainImage> image, uint32_t imageI
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
     const VkResult result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindImageMemoryInfo);
     MAGMA_THROW_FAILURE(result, "failed to bind image to swapchain");
+    image->setChainIndex(imageIndex);
     const uint32_t imageCount = imageIndex + 1;
     if (imageCount > images.size())
         images.resize(imageCount);

@@ -37,6 +37,8 @@ namespace magma
         explicit SwapchainImage(std::shared_ptr<Swapchain> swapchain);
         ~SwapchainImage();
         VkExtent2D getExtent() const noexcept { return {extent.width, extent.height}; }
+        int32_t getChainIndex() const noexcept { return chainIndex; }
+        bool isChained() const noexcept { return chainIndex >= 0; }
         void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0) override;
     #ifdef VK_KHR_device_group
@@ -53,10 +55,14 @@ namespace magma
         explicit SwapchainImage(std::shared_ptr<Device> device,
             VkImage handle,
             VkFormat format,
-            const VkExtent2D& extent);
+            const VkExtent2D& extent,
+            uint32_t chainIndex);
+        void setChainIndex(uint32_t chainIndex) noexcept;
+        friend Swapchain;
         MAGMA_FRIEND_MAKE_SHARED(SwapchainImage);
 
         const bool implementationControlled;
+        int32_t chainIndex;
     };
 #endif // VK_KHR_swapchain
 } // namespace magma

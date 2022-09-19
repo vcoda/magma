@@ -25,9 +25,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_swapchain
-SwapchainImage::SwapchainImage(std::shared_ptr<Device> device, VkImage handle, VkFormat format, const VkExtent2D& extent):
+SwapchainImage::SwapchainImage(std::shared_ptr<Device> device, VkImage handle, VkFormat format,
+    const VkExtent2D& extent, uint32_t chainIndex):
     Image2D(std::move(device), handle, format, extent),
-    implementationControlled(true)
+    implementationControlled(true),
+    chainIndex(static_cast<int32_t>(chainIndex))
 {}
 
 // Images can also be created by using vkCreateImage with VkImageSwapchainCreateInfoKHR
@@ -38,7 +40,8 @@ SwapchainImage::SwapchainImage(std::shared_ptr<Device> device, VkImage handle, V
 // Unlike images retrieved from vkGetSwapchainImagesKHR, these images must be destroyed with vkDestroyImage.
 SwapchainImage::SwapchainImage(std::shared_ptr<Swapchain> swapchain):
     Image2D(swapchain->getDevice(), VK_NULL_HANDLE, swapchain->getSurfaceFormat().format, swapchain->getExtent()),
-    implementationControlled(false)
+    implementationControlled(false),
+    chainIndex(-1)
 {   // https://registry.khronos.org/vulkan/specs/1.3-extensions/html/vkspec.html#swapchain-wsi-image-create-info
     VkImageCreateFlags flags = 0;
 #ifdef VK_KHR_device_group
@@ -112,5 +115,10 @@ void SwapchainImage::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     MAGMA_UNUSED(offset);
 }
 #endif // VK_KHR_device_group
+
+void SwapchainImage::setChainIndex(uint32_t chainIndex_) noexcept
+{
+    chainIndex = static_cast<int32_t>(chainIndex_);
+}
 #endif // VK_KHR_swapchain
 } // namespace magma
