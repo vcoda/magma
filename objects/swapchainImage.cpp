@@ -63,7 +63,7 @@ SwapchainImage::SwapchainImage(std::shared_ptr<Swapchain> swapchain):
     imageInfo.format = swapchain->getSurfaceFormat().format;
     imageInfo.extent = extent;
     imageInfo.mipLevels = 1;
-    imageInfo.arrayLayers = 1; // TODO: swapchain->getArrayLayers()
+    imageInfo.arrayLayers = swapchain->getArrayLayers();
     imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
     imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
     imageInfo.usage = swapchain->getImageUsage();

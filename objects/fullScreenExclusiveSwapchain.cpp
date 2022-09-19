@@ -32,7 +32,7 @@ namespace magma
 {
 #if defined(VK_KHR_swapchain) && defined(VK_EXT_full_screen_exclusive)
 FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surface> surface,
-    uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent,
+    uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent, uint32_t arrayLayers,
     VkImageUsageFlags imageUsage, VkSurfaceTransformFlagBitsKHR preTransform, VkCompositeAlphaFlagBitsKHR compositeAlpha,
     VkPresentModeKHR presentMode, VkSwapchainCreateFlagsKHR flags, VkFullScreenExclusiveEXT fullScreenExclusive,
 #ifdef VK_KHR_win32_surface
@@ -48,7 +48,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
 #endif
     const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
-    Swapchain(std::move(device), surfaceFormat, extent, imageUsage, flags, sharing, oldSwapchain, std::move(allocator)),
+    Swapchain(std::move(device), surfaceFormat, extent, arrayLayers, imageUsage, flags, sharing, oldSwapchain, std::move(allocator)),
     fullScreenExlusive(false)
 #ifdef VK_KHR_win32_surface
    ,hMonitor(hMonitor)
@@ -64,7 +64,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     swapchainInfo.imageFormat = surfaceFormat.format;
     swapchainInfo.imageColorSpace = surfaceFormat.colorSpace;
     swapchainInfo.imageExtent = extent;
-    swapchainInfo.imageArrayLayers = 1;
+    swapchainInfo.imageArrayLayers = arrayLayers;
     swapchainInfo.imageUsage = imageUsage;
     swapchainInfo.imageSharingMode = sharing.getMode();
     swapchainInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();

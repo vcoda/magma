@@ -49,6 +49,7 @@ namespace magma
             uint32_t minImageCount,
             VkSurfaceFormatKHR surfaceFormat,
             const VkExtent2D& extent,
+            uint32_t arrayLayers,
             VkImageUsageFlags imageUsage,
             VkSurfaceTransformFlagBitsKHR preTransform,
             VkCompositeAlphaFlagBitsKHR compositeAlpha,
@@ -67,6 +68,7 @@ namespace magma
         ~Swapchain();
         VkSurfaceFormatKHR getSurfaceFormat() const noexcept { return surfaceFormat; }
         const VkExtent2D& getExtent() const noexcept { return extent; }
+        uint32_t getArrayLayers() const noexcept { return arrayLayers; }
         VkImageUsageFlags getImageUsage() const noexcept { return imageUsage; }
         VkSwapchainCreateFlagsKHR getFlags() const noexcept { return flags; }
         const Sharing& getSharing() const noexcept { return sharing; }
@@ -95,6 +97,7 @@ namespace magma
         Swapchain(std::shared_ptr<Device> device,
             VkSurfaceFormatKHR surfaceFormat,
             const VkExtent2D& extent,
+            uint32_t arrayLayers,
             VkImageUsageFlags imageUsage,
             VkSwapchainCreateFlagsKHR flags,
             const Sharing& sharing,
@@ -107,6 +110,7 @@ namespace magma
 
         const VkSurfaceFormatKHR surfaceFormat;
         const VkExtent2D extent;
+        const uint32_t arrayLayers;
         const VkImageUsageFlags imageUsage;
         const VkSwapchainCreateFlagsKHR flags;
         const Sharing sharing;
