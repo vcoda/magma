@@ -100,6 +100,8 @@ namespace magma
             const Sharing& sharing,
             std::shared_ptr<Swapchain> oldSwapchain,
             std::shared_ptr<IAllocator> allocator);
+        void addImage(std::shared_ptr<SwapchainImage> image,
+            uint32_t imageIndex);
         void handleError(VkResult result,
             const char *message) const;
 
@@ -109,8 +111,8 @@ namespace magma
         const VkSwapchainCreateFlagsKHR flags;
         const Sharing sharing;
         bool retired;
+        std::vector<std::shared_ptr<SwapchainImage>> bindedImages;
         uint32_t imageIndex;
-        std::vector<std::shared_ptr<SwapchainImage>> images;
         friend class FullScreenExclusiveSwapchain;
     };
 #endif // VK_KHR_swapchain

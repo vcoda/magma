@@ -180,7 +180,7 @@ uint32_t Swapchain::getImageCount() const
 
 const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages()
 {
-    if (images.empty())
+    if (bindedImages.empty())
     {
         uint32_t imageCount = getImageCount();
         MAGMA_ASSERT(imageCount > 0);
@@ -191,11 +191,11 @@ const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages()
         for (const VkImage handle: swapchainImages)
         {   // Image has been created by swapchain internally, so we just assign image handle
             auto image = std::make_shared<SwapchainImage>(device, handle, surfaceFormat.format, extent, imageIndex);
-            images.push_back(std::move(image));
+            bindedImages.push_back(std::move(image));
             ++imageIndex;
         }
     }
-    return images;
+    return bindedImages;
 }
 
 #ifdef VK_KHR_bind_memory2
@@ -217,11 +217,7 @@ void Swapchain::bindImage(std::shared_ptr<SwapchainImage> image, uint32_t imageI
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
     const VkResult result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindImageMemoryInfo);
     MAGMA_THROW_FAILURE(result, "failed to bind image to swapchain");
-    image->setChainIndex(imageIndex);
-    const uint32_t imageCount = imageIndex + 1;
-    if (imageCount > images.size())
-        images.resize(imageCount);
-    images[imageIndex] = std::move(image);
+    addImage(std::move(image), imageIndex);
 }
 
 #ifdef VK_KHR_device_group
@@ -250,11 +246,7 @@ void Swapchain::bindImage(std::shared_ptr<SwapchainImage> image, uint32_t imageI
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
     const VkResult result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindImageMemoryInfo);
     MAGMA_THROW_FAILURE(result, "failed to bind image to swapchain within device group");
-    image->setChainIndex(imageIndex);
-    const uint32_t imageCount = imageIndex + 1;
-    if (imageCount > images.size())
-        images.resize(imageCount);
-    images[imageIndex] = std::move(image);
+    addImage(std::move(image), imageIndex);
 }
 #endif // VK_KHR_device_group
 #endif // VK_KHR_bind_memory2
@@ -267,6 +259,15 @@ void Swapchain::setLocalDimming(bool enable) noexcept
         vkSetLocalDimmingAMD(MAGMA_HANDLE(device), handle, MAGMA_BOOLEAN(enable));
 }
 #endif // VK_AMD_display_native_hdr
+
+void Swapchain::addImage(std::shared_ptr<SwapchainImage> image, uint32_t imageIndex)
+{
+    image->setChainIndex(imageIndex);
+    const uint32_t imageCount = imageIndex + 1;
+    if (imageCount > bindedImages.size())
+        bindedImages.resize(imageCount);
+    bindedImages[imageIndex] = std::move(image);
+}
 
 void Swapchain::handleError(VkResult result, const char *message) const
 {
