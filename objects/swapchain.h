@@ -82,6 +82,7 @@ namespace magma
             uint32_t imageIndex);
     #ifdef VK_KHR_device_group
         void bindImage(std::shared_ptr<SwapchainImage> image,
+            uint32_t imageIndex,
             const std::vector<uint32_t>& deviceIndices,
             const std::vector<VkRect2D>& splitInstanceBindRegions = {});
     #endif // VK_KHR_device_group
