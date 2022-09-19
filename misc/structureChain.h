@@ -33,15 +33,7 @@ namespace magma
         hash_t getHash() const noexcept;
 
     private:
-        struct Node
-        {
-            template<class Structure>
-            Node(const Structure& node);
-            VkBaseOutStructure *getNode() noexcept;
-            const hash_t hash;
-            std::vector<uint8_t> blob;
-        };
-
+        struct Node;
         mutable std::list<Node> chain;
     };
 } // namespace magma

@@ -1,5 +1,14 @@
 namespace magma
 {
+struct StructureChain::Node
+{
+    template<class Structure>
+    Node(const Structure& node);
+    VkBaseOutStructure *getNode() noexcept;
+    const hash_t hash;
+    std::vector<uint8_t> blob;
+};
+
 template<class Structure>
 inline StructureChain::Node::Node(const Structure& node):
     hash(core::hashArray(reinterpret_cast<const uint8_t *>(&node), sizeof(Structure))),
