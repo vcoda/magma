@@ -38,15 +38,15 @@ BufferView::BufferView(std::shared_ptr<Buffer> resource,
     MAGMA_ASSERT(buffer->getUsage() &
         (VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT |
          VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT));
-    VkBufferViewCreateInfo viewInfo;
-    viewInfo.sType = VK_STRUCTURE_TYPE_BUFFER_VIEW_CREATE_INFO;
-    viewInfo.pNext = nullptr;
-    viewInfo.flags = 0;
-    viewInfo.buffer = *buffer;
-    viewInfo.format = format;
-    viewInfo.offset = offset;
-    viewInfo.range = range;
-    const VkResult result = vkCreateBufferView(MAGMA_HANDLE(device), &viewInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    VkBufferViewCreateInfo bufferViewInfo;
+    bufferViewInfo.sType = VK_STRUCTURE_TYPE_BUFFER_VIEW_CREATE_INFO;
+    bufferViewInfo.pNext = nullptr;
+    bufferViewInfo.flags = 0;
+    bufferViewInfo.buffer = *buffer;
+    bufferViewInfo.format = format;
+    bufferViewInfo.offset = offset;
+    bufferViewInfo.range = range;
+    const VkResult result = vkCreateBufferView(MAGMA_HANDLE(device), &bufferViewInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create buffer view");
 }
 

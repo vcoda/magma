@@ -33,41 +33,41 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     VkDeviceSize compactedSize, float memoryPriority, std::shared_ptr<Allocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, device, Sharing(), allocator)
 {
-    info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_INFO_NV;
-    info.pNext = nullptr;
-    info.type = type;
-    info.flags = flags;
-    info.instanceCount = instanceCount;
-    info.geometryCount = MAGMA_COUNT(geometries);
-    if (0 == info.geometryCount)
-        info.pGeometries = nullptr;
+    VkAccelerationStructureCreateInfoNV accelerationStructureInfo;
+    accelerationStructureInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_NV;
+    accelerationStructureInfo.pNext = nullptr;
+    accelerationStructureInfo.compactedSize = compactedSize;
+    accelerationStructureInfo.info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_INFO_NV;
+    accelerationStructureInfo.info.pNext = nullptr;
+    accelerationStructureInfo.info.type = type;
+    accelerationStructureInfo.info.flags = flags;
+    accelerationStructureInfo.info.instanceCount = instanceCount;
+    accelerationStructureInfo.info.geometryCount = MAGMA_COUNT(geometries);
+    if (0 == accelerationStructureInfo.info.geometryCount)
+        accelerationStructureInfo.info.pGeometries = nullptr;
     else
     {
-        VkGeometryNV *pGeometries = new VkGeometryNV[info.geometryCount];
-        info.pGeometries = pGeometries;
+        VkGeometryNV *pGeometries = new VkGeometryNV[accelerationStructureInfo.info.geometryCount];
+        accelerationStructureInfo.info.pGeometries = pGeometries;
         for (const auto& geometry : geometries)
             *pGeometries++ = geometry;
     }
-    VkAccelerationStructureCreateInfoNV accelStructInfo;
-    accelStructInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_NV;
-    accelStructInfo.pNext = nullptr;
-    accelStructInfo.compactedSize = compactedSize;
-    accelStructInfo.info = info;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateAccelerationStructureNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    const VkResult result = vkCreateAccelerationStructureNV(MAGMA_HANDLE(device), &accelStructInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateAccelerationStructureNV(MAGMA_HANDLE(device), &accelerationStructureInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create acceleration structure");
     const VkMemoryRequirements memoryRequirements = getObjectMemoryRequirements();
     std::shared_ptr<DeviceMemory> memory = std::make_shared<DeviceMemory>(std::move(device),
         memoryRequirements, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memoryPriority,
         &handle, VK_OBJECT_TYPE_BUFFER, std::move(allocator));
     bindMemory(std::move(memory));
+    this->accelerationStructureInfo = accelerationStructureInfo.info;
 }
 
 AccelerationStructure::~AccelerationStructure()
 {
     MAGMA_DEVICE_EXTENSION(vkDestroyAccelerationStructureNV);
     vkDestroyAccelerationStructureNV(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
-    delete[] info.pGeometries;
+    delete[] accelerationStructureInfo.pGeometries;
 }
 
 void AccelerationStructure::bindMemory(std::shared_ptr<DeviceMemory> memory,

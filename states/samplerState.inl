@@ -96,10 +96,10 @@ inline hash_t SamplerState::chainedHash() const noexcept
     #ifdef VK_EXT_sampler_filter_minmax
         case VK_STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO_EXT:
             {
-                auto reduction = reinterpret_cast<const VkSamplerReductionModeCreateInfoEXT *>(next);
+                auto reductionModeInfo = reinterpret_cast<const VkSamplerReductionModeCreateInfoEXT *>(next);
                 hash = core::hashCombine(hash, core::hashArgs(
-                    reduction->sType,
-                    reduction->reductionMode));
+                    reductionModeInfo->sType,
+                    reductionModeInfo->reductionMode));
             }
     #endif // VK_EXT_sampler_filter_minmax
         default:

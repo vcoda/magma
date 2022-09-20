@@ -36,20 +36,20 @@ void Object::setDebugName(const char *name)
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
 #ifdef MAGMA_DEBUG
+    VkResult result = VK_SUCCESS;
     if (device)
     {
 #ifdef VK_EXT_debug_marker
         MAGMA_DEVICE_EXTENSION(vkDebugMarkerSetObjectNameEXT);
         if (vkDebugMarkerSetObjectNameEXT)
         {
-            VkDebugMarkerObjectNameInfoEXT info;
-            info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT;
-            info.pNext = nullptr;
-            info.objectType = helpers::objectToDebugReportType(getObjectType());
-            info.object = getHandle();
-            info.pObjectName = name;
-            const VkResult result = vkDebugMarkerSetObjectNameEXT(MAGMA_HANDLE(device), &info);
-            MAGMA_THROW_FAILURE(result, "failed to give a user-friendly name to an object");
+            VkDebugMarkerObjectNameInfoEXT objectNameInfo;
+            objectNameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT;
+            objectNameInfo.pNext = nullptr;
+            objectNameInfo.objectType = helpers::objectToDebugReportType(getObjectType());
+            objectNameInfo.object = getHandle();
+            objectNameInfo.pObjectName = name;
+            result = vkDebugMarkerSetObjectNameEXT(MAGMA_HANDLE(device), &objectNameInfo);
         }
         else
         {
@@ -58,20 +58,20 @@ void Object::setDebugName(const char *name)
             MAGMA_DEVICE_EXTENSION(vkSetDebugUtilsObjectNameEXT);
             if (vkSetDebugUtilsObjectNameEXT)
             {
-                VkDebugUtilsObjectNameInfoEXT info;
-                info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
-                info.pNext = nullptr;
-                info.objectType = getObjectType();
-                info.objectHandle = getHandle();
-                info.pObjectName = name;
-                const VkResult result = vkSetDebugUtilsObjectNameEXT(MAGMA_HANDLE(device), &info);
-                MAGMA_THROW_FAILURE(result, "failed to give a user-friendly name to an object");
+                VkDebugUtilsObjectNameInfoEXT objectNameInfo;
+                objectNameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
+                objectNameInfo.pNext = nullptr;
+                objectNameInfo.objectType = getObjectType();
+                objectNameInfo.objectHandle = getHandle();
+                objectNameInfo.pObjectName = name;
+                result = vkSetDebugUtilsObjectNameEXT(MAGMA_HANDLE(device), &objectNameInfo);
             }
 #endif // VK_EXT_debug_utils
 #ifdef VK_EXT_debug_marker
         }
 #endif
     }
+    MAGMA_THROW_FAILURE(result, "failed to set debug object name");
 #endif // MAGMA_DEBUG
 }
 
@@ -84,22 +84,22 @@ void Object::setDebugTag(uint64_t tagName, std::size_t tagSize, const void *tag)
     MAGMA_ASSERT(tagSize > 0);
     MAGMA_ASSERT(tag);
 #ifdef MAGMA_DEBUG
+    VkResult result = VK_SUCCESS;
     if (device)
     {
 #ifdef VK_EXT_debug_marker
         MAGMA_DEVICE_EXTENSION(vkDebugMarkerSetObjectTagEXT);
         if (vkDebugMarkerSetObjectTagEXT)
         {
-            VkDebugMarkerObjectTagInfoEXT info;
-            info.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT;
-            info.pNext = nullptr;
-            info.objectType = helpers::objectToDebugReportType(getObjectType());
-            info.object = getHandle();
-            info.tagName = tagName;
-            info.tagSize = tagSize;
-            info.pTag = tag;
-            const VkResult result = vkDebugMarkerSetObjectTagEXT(MAGMA_HANDLE(device), &info);
-            MAGMA_THROW_FAILURE(result, "failed to attach arbitrary data to an object");
+            VkDebugMarkerObjectTagInfoEXT objectTagInfo;
+            objectTagInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT;
+            objectTagInfo.pNext = nullptr;
+            objectTagInfo.objectType = helpers::objectToDebugReportType(getObjectType());
+            objectTagInfo.object = getHandle();
+            objectTagInfo.tagName = tagName;
+            objectTagInfo.tagSize = tagSize;
+            objectTagInfo.pTag = tag;
+            result = vkDebugMarkerSetObjectTagEXT(MAGMA_HANDLE(device), &objectTagInfo);
         }
         else
         {
@@ -108,22 +108,22 @@ void Object::setDebugTag(uint64_t tagName, std::size_t tagSize, const void *tag)
             MAGMA_DEVICE_EXTENSION(vkSetDebugUtilsObjectTagEXT);
             if (vkSetDebugUtilsObjectTagEXT)
             {
-                VkDebugUtilsObjectTagInfoEXT info;
-                info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_TAG_INFO_EXT;
-                info.pNext = nullptr;
-                info.objectType = getObjectType();
-                info.objectHandle = getHandle();
-                info.tagName = tagName;
-                info.tagSize = tagSize;
-                info.pTag = tag;
-                const VkResult result = vkSetDebugUtilsObjectTagEXT(MAGMA_HANDLE(device), &info);
-                MAGMA_THROW_FAILURE(result, "failed to attach arbitrary data to an object");
+                VkDebugUtilsObjectTagInfoEXT objectTagInfo;
+                objectTagInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_TAG_INFO_EXT;
+                objectTagInfo.pNext = nullptr;
+                objectTagInfo.objectType = getObjectType();
+                objectTagInfo.objectHandle = getHandle();
+                objectTagInfo.tagName = tagName;
+                objectTagInfo.tagSize = tagSize;
+                objectTagInfo.pTag = tag;
+                result = vkSetDebugUtilsObjectTagEXT(MAGMA_HANDLE(device), &objectTagInfo);
             }
 #endif // VK_EXT_debug_utils
 #ifdef VK_EXT_debug_marker
         }
 #endif
     }
+    MAGMA_THROW_FAILURE(result, "failed to set object tag");
 #endif // MAGMA_DEBUG
 }
 } // namespace magma

@@ -47,16 +47,16 @@ std::vector<VkPipelineExecutableStatisticKHR> PipelineExecutable::getStatistics(
     uint32_t statisticCount = 0;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetPipelineExecutableStatisticsKHR, VK_KHR_PIPELINE_EXECUTABLE_PROPERTIES_EXTENSION_NAME);
     VkResult result = vkGetPipelineExecutableStatisticsKHR(MAGMA_HANDLE(device), &pipelineExecutableInfo, &statisticCount, nullptr);
-    std::vector<VkPipelineExecutableStatisticKHR> statistics;
+    std::vector<VkPipelineExecutableStatisticKHR> pipelineExecutableStatistics;
     if (statisticCount > 0)
     {
-        VkPipelineExecutableStatisticKHR statistic = {};
-        statistic.sType = VK_STRUCTURE_TYPE_PIPELINE_EXECUTABLE_STATISTIC_KHR;
-        statistics.resize(statisticCount, statistic);
-        result = vkGetPipelineExecutableStatisticsKHR(MAGMA_HANDLE(device), &pipelineExecutableInfo, &statisticCount, statistics.data());
+        VkPipelineExecutableStatisticKHR pipelineExecutableStatistic = {};
+        pipelineExecutableStatistic.sType = VK_STRUCTURE_TYPE_PIPELINE_EXECUTABLE_STATISTIC_KHR;
+        pipelineExecutableStatistics.resize(statisticCount, pipelineExecutableStatistic);
+        result = vkGetPipelineExecutableStatisticsKHR(MAGMA_HANDLE(device), &pipelineExecutableInfo, &statisticCount, pipelineExecutableStatistics.data());
     }
     MAGMA_THROW_FAILURE(result, "failed to get statistics of pipeline executable");
-    return statistics;
+    return pipelineExecutableStatistics;
 }
 
 std::vector<VkPipelineExecutableInternalRepresentationKHR> PipelineExecutable::getInternalRepresentations() const
@@ -72,9 +72,9 @@ std::vector<VkPipelineExecutableInternalRepresentationKHR> PipelineExecutable::g
     std::vector<VkPipelineExecutableInternalRepresentationKHR> internalRepresentations;
     if (internalRepresentationCount > 0)
     {
-        VkPipelineExecutableInternalRepresentationKHR internalRepresentation = {};
-        internalRepresentation.sType = VK_STRUCTURE_TYPE_PIPELINE_EXECUTABLE_INTERNAL_REPRESENTATION_KHR;
-        internalRepresentations.resize(internalRepresentationCount, internalRepresentation);
+        VkPipelineExecutableInternalRepresentationKHR pipelineExecutableInternalRepresentation = {};
+        pipelineExecutableInternalRepresentation.sType = VK_STRUCTURE_TYPE_PIPELINE_EXECUTABLE_INTERNAL_REPRESENTATION_KHR;
+        internalRepresentations.resize(internalRepresentationCount, pipelineExecutableInternalRepresentation);
         result = vkGetPipelineExecutableInternalRepresentationsKHR(MAGMA_HANDLE(device), &pipelineExecutableInfo,
             &internalRepresentationCount, internalRepresentations.data());
         MAGMA_ASSERT(SUCCEEDED(result));

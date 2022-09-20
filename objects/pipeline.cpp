@@ -84,12 +84,12 @@ std::vector<std::shared_ptr<PipelineExecutable>> Pipeline::getExecutables() cons
 #ifdef VK_AMD_shader_info
 VkShaderStatisticsInfoAMD Pipeline::getShaderStatistics(VkShaderStageFlagBits stage) const
 {
-    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO_EXTENSION_NAME);
     std::size_t infoSize = sizeof(VkShaderStatisticsInfoAMD);
-    VkShaderStatisticsInfoAMD info;
-    const VkResult result = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_STATISTICS_AMD, &infoSize, &info);
+    VkShaderStatisticsInfoAMD shaderStatisticInfo;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO_EXTENSION_NAME);
+    const VkResult result = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_STATISTICS_AMD, &infoSize, &shaderStatisticInfo);
     MAGMA_THROW_FAILURE(result, "failed to get shader statistics");
-    return info;
+    return shaderStatisticInfo;
 }
 
 std::vector<uint8_t> Pipeline::getShaderBinary(VkShaderStageFlagBits stage) const

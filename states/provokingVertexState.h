@@ -31,7 +31,7 @@ namespace magma
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const ProvokingVertexRasterizationState&) const noexcept;
 
-        const VkPipelineRasterizationProvokingVertexStateCreateInfoEXT provoking;
+        const VkPipelineRasterizationProvokingVertexStateCreateInfoEXT provokingVertexInfo;
     };
 } // namespace magma
 

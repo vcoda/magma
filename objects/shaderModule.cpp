@@ -41,41 +41,41 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
     bytecodeHash(bytecodeHash)
 {
     MAGMA_ASSERT(bytecodeSize % sizeof(SpirvWord) == 0); // A module is defined as a stream of words, not a stream of bytes
-    VkShaderModuleCreateInfo shaderInfo;
-    shaderInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-    shaderInfo.pNext = extendedInfo.getChainedNodes();
-    shaderInfo.flags = flags;
-    shaderInfo.codeSize = bytecodeSize;
-    shaderInfo.pCode = bytecode;
+    VkShaderModuleCreateInfo shaderModuleInfo;
+    shaderModuleInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+    shaderModuleInfo.pNext = extendedInfo.getChainedNodes();
+    shaderModuleInfo.flags = flags;
+    shaderModuleInfo.codeSize = bytecodeSize;
+    shaderModuleInfo.pCode = bytecode;
 #ifdef VK_EXT_validation_cache
-    VkShaderModuleValidationCacheCreateInfoEXT validationCacheInfo = {};
+    VkShaderModuleValidationCacheCreateInfoEXT shaderModuleValidationCacheInfo = {};
     if (validationCache)
     {
-        validationCacheInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_VALIDATION_CACHE_CREATE_INFO_EXT;
-        validationCacheInfo.pNext = extendedInfo.getChainedNodes();
-        validationCacheInfo.validationCache = MAGMA_OPTIONAL_HANDLE(validationCache);
-        shaderInfo.pNext = &validationCacheInfo;
+        shaderModuleInfo.pNext = &shaderModuleValidationCacheInfo;
+        shaderModuleValidationCacheInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_VALIDATION_CACHE_CREATE_INFO_EXT;
+        shaderModuleValidationCacheInfo.pNext = extendedInfo.getChainedNodes();
+        shaderModuleValidationCacheInfo.validationCache = MAGMA_OPTIONAL_HANDLE(validationCache);
     }
 #endif // VK_EXT_validation_cache
-    const VkResult result = vkCreateShaderModule(MAGMA_HANDLE(device), &shaderInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateShaderModule(MAGMA_HANDLE(device), &shaderModuleInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create shader module");
     hash = core::hashArgs(
-        shaderInfo.sType,
-        shaderInfo.flags,
-        shaderInfo.codeSize);
+        shaderModuleInfo.sType,
+        shaderModuleInfo.flags,
+        shaderModuleInfo.codeSize);
 #ifdef VK_EXT_validation_cache
     if (validationCache)
     {
         hash = core::hashCombine(hash, core::hashArgs(
-            validationCacheInfo.sType,
-            validationCacheInfo.validationCache));
+            shaderModuleValidationCacheInfo.sType,
+            shaderModuleValidationCacheInfo.validationCache));
     }
 #endif // VK_EXT_validation_cache
     if (0 == bytecodeHash && !reflect)
     {   // Store bytecode for future hash computation
-        const std::size_t wordCount = shaderInfo.codeSize / sizeof(SpirvWord);
+        const std::size_t wordCount = shaderModuleInfo.codeSize / sizeof(SpirvWord);
         this->bytecode.resize(wordCount);
-        memcpy(this->bytecode.data(), shaderInfo.pCode, shaderInfo.codeSize);
+        memcpy(this->bytecode.data(), shaderModuleInfo.pCode, shaderModuleInfo.codeSize);
     }
 }
 

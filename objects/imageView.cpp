@@ -45,58 +45,58 @@ ImageView::ImageView(std::shared_ptr<Image> resource,
     baseArrayLayer(baseArrayLayer),
     layerCount(layerCount)
 {
-    VkImageViewCreateInfo viewInfo;
-    viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-    viewInfo.pNext = nullptr;
-    viewInfo.flags = 0;
-    viewInfo.image = *image;
+    VkImageViewCreateInfo imageViewInfo;
+    imageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+    imageViewInfo.pNext = nullptr;
+    imageViewInfo.flags = 0;
+    imageViewInfo.image = *image;
     switch (image->getType())
     {
     case VK_IMAGE_TYPE_1D:
         if (image->getArrayLayers() == 1)
-            viewInfo.viewType = VK_IMAGE_VIEW_TYPE_1D;
+            imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_1D;
         else
-            viewInfo.viewType = VK_IMAGE_VIEW_TYPE_1D_ARRAY;
+            imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_1D_ARRAY;
         break;
     case VK_IMAGE_TYPE_2D:
         if (image->getFlags() & VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT)
-            viewInfo.viewType = VK_IMAGE_VIEW_TYPE_CUBE;
+            imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_CUBE;
         else
         {
             if (image->getArrayLayers() == 1)
-                viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+                imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
             else
-                viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
+                imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
         }
         break;
     case VK_IMAGE_TYPE_3D:
-        viewInfo.viewType = VK_IMAGE_VIEW_TYPE_3D;
+        imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_3D;
         break;
     default:
         throw std::runtime_error("invalid image type");
     }
-    viewInfo.format = image->getFormat();
-    const Format format(viewInfo.format);
+    imageViewInfo.format = image->getFormat();
+    const Format format(imageViewInfo.format);
     if (!(format.depth() || format.stencil() || format.depthStencil()))
-        viewInfo.components = swizzle;
+        imageViewInfo.components = swizzle;
     else
-        viewInfo.components = {VK_COMPONENT_SWIZZLE_IDENTITY,
+        imageViewInfo.components = {VK_COMPONENT_SWIZZLE_IDENTITY,
                                VK_COMPONENT_SWIZZLE_IDENTITY,
                                VK_COMPONENT_SWIZZLE_IDENTITY,
                                VK_COMPONENT_SWIZZLE_IDENTITY};
     if (format.depth())
-        viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+        imageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
     else if (format.stencil())
-        viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
+        imageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
     else if (format.depthStencil())
-        viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+        imageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
     else
-        viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-    viewInfo.subresourceRange.baseMipLevel = baseMipLevel;
-    viewInfo.subresourceRange.levelCount = levelCount;
-    viewInfo.subresourceRange.baseArrayLayer = baseArrayLayer;
-    viewInfo.subresourceRange.layerCount = layerCount;
-    const VkResult result = vkCreateImageView(MAGMA_HANDLE(device), &viewInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        imageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    imageViewInfo.subresourceRange.baseMipLevel = baseMipLevel;
+    imageViewInfo.subresourceRange.levelCount = levelCount;
+    imageViewInfo.subresourceRange.baseArrayLayer = baseArrayLayer;
+    imageViewInfo.subresourceRange.layerCount = layerCount;
+    const VkResult result = vkCreateImageView(MAGMA_HANDLE(device), &imageViewInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create image view");
 }
 
@@ -127,11 +127,10 @@ VkExtent2D ImageView::getExtent() const noexcept
 
 VkDescriptorImageInfo ImageView::getDescriptor(std::shared_ptr<const Sampler> sampler) const noexcept
 {
-    const Format format(image->getFormat());
-    VkDescriptorImageInfo descriptor;
-    descriptor.sampler = MAGMA_OPTIONAL_HANDLE(sampler); // VK_NULL_HANDLE for storage image
-    descriptor.imageView = handle;
-    descriptor.imageLayout = image->getLayout();
-    return descriptor;
+    VkDescriptorImageInfo imageDescriptorInfo;
+    imageDescriptorInfo.sampler = MAGMA_OPTIONAL_HANDLE(sampler); // VK_NULL_HANDLE for storage image
+    imageDescriptorInfo.imageView = handle;
+    imageDescriptorInfo.imageLayout = image->getLayout();
+    return imageDescriptorInfo;
 }
 } // namespace magma

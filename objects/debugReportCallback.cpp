@@ -40,17 +40,17 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
     MAGMA_INSTANCE_EXTENSION(vkCreateDebugReportCallbackEXT);
     if (vkCreateDebugReportCallbackEXT)
     {
-        VkDebugReportCallbackCreateInfoEXT callbackInfo;
-#ifdef VK_HEADER_VERSION
-        callbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
-#else   // Compatibility with old SDK
-        callbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
-#endif
-        callbackInfo.pNext = nullptr;
-        callbackInfo.flags = flags;
-        callbackInfo.pfnCallback = userCallback;
-        callbackInfo.pUserData = userData;
-        const VkResult result = vkCreateDebugReportCallbackEXT(MAGMA_HANDLE(instance), &callbackInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        VkDebugReportCallbackCreateInfoEXT debugReportCallbackInfo;
+    #ifdef VK_HEADER_VERSION
+        debugReportCallbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
+    #else   // Compatibility with old SDK
+        debugReportCallbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
+    #endif
+        debugReportCallbackInfo.pNext = nullptr;
+        debugReportCallbackInfo.flags = flags;
+        debugReportCallbackInfo.pfnCallback = userCallback;
+        debugReportCallbackInfo.pUserData = userData;
+        const VkResult result = vkCreateDebugReportCallbackEXT(MAGMA_HANDLE(instance), &debugReportCallbackInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
         MAGMA_THROW_FAILURE(result, "failed to create debug report callback");
     }
 }

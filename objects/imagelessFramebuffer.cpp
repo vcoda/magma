@@ -90,9 +90,9 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
         attachments.front().layerCount,
         std::move(allocator))
 {
-    MAGMA_STACK_ARRAY(VkFramebufferAttachmentImageInfoKHR, attachmentImageInfos, attachments.size());
+    MAGMA_STACK_ARRAY(VkFramebufferAttachmentImageInfoKHR, framebufferAttachmentImageInfos, attachments.size());
     for (auto& attachment : attachments)
-        attachmentImageInfos.put(attachment);
+        framebufferAttachmentImageInfos.put(attachment);
     VkFramebufferCreateInfo framebufferInfo;
     VkFramebufferAttachmentsCreateInfoKHR framebufferAttachmentsInfo;
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -107,7 +107,7 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     framebufferAttachmentsInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR;
     framebufferAttachmentsInfo.pNext = nullptr;
     framebufferAttachmentsInfo.attachmentImageInfoCount = framebufferInfo.attachmentCount;
-    framebufferAttachmentsInfo.pAttachmentImageInfos = attachmentImageInfos;
+    framebufferAttachmentsInfo.pAttachmentImageInfos = framebufferAttachmentImageInfos;
     const VkResult result = vkCreateFramebuffer(MAGMA_HANDLE(device), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create imageless framebuffer");
 }

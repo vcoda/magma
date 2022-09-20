@@ -47,16 +47,16 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device,
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
     pipelineInfo.basePipelineIndex = -1;
 #ifdef VK_EXT_pipeline_creation_feedback
-    VkPipelineCreationFeedbackCreateInfoEXT creationFeedbackInfo;
+    VkPipelineCreationFeedbackCreateInfoEXT pipelineCreationFeedbackInfo;
     VkPipelineCreationFeedbackEXT stageCreationFeedback;
     if (getDevice()->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
     {
-        creationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
-        creationFeedbackInfo.pNext = nullptr;
-        creationFeedbackInfo.pPipelineCreationFeedback = &creationFeedback;
-        creationFeedbackInfo.pipelineStageCreationFeedbackCount = 1;
-        creationFeedbackInfo.pPipelineStageCreationFeedbacks = &stageCreationFeedback;
-        pipelineInfo.pNext = &creationFeedbackInfo;
+        pipelineInfo.pNext = &pipelineCreationFeedbackInfo;
+        pipelineCreationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
+        pipelineCreationFeedbackInfo.pNext = nullptr;
+        pipelineCreationFeedbackInfo.pPipelineCreationFeedback = &creationFeedback;
+        pipelineCreationFeedbackInfo.pipelineStageCreationFeedbackCount = 1;
+        pipelineCreationFeedbackInfo.pPipelineStageCreationFeedbacks = &stageCreationFeedback;
     }
 #endif // VK_EXT_pipeline_creation_feedback
     const VkResult result = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);

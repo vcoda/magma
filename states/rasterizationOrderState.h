@@ -32,7 +32,7 @@ namespace magma
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const RasterizationOrderState&) const noexcept;
 
-        const VkPipelineRasterizationStateRasterizationOrderAMD order;
+        const VkPipelineRasterizationStateRasterizationOrderAMD rasterizationOrderInfo;
     };
 } // namespace magma
 

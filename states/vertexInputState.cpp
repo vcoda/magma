@@ -34,10 +34,10 @@ VertexInputState::VertexInputState() noexcept
     vertexAttributeDescriptionCount = 0;
     pVertexAttributeDescriptions = nullptr;
 #ifdef VK_EXT_vertex_attribute_divisor
-    divisor.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
-    divisor.pNext = nullptr;
-    divisor.vertexBindingDivisorCount = 0;
-    divisor.pVertexBindingDivisors = nullptr;
+    vertexInputDivisorInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
+    vertexInputDivisorInfo.pNext = nullptr;
+    vertexInputDivisorInfo.vertexBindingDivisorCount = 0;
+    vertexInputDivisorInfo.pVertexBindingDivisors = nullptr;
 #endif // VK_EXT_vertex_attribute_divisor
 }
 
@@ -52,10 +52,10 @@ VertexInputState::VertexInputState(const VertexInputBinding& binding,
     vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
     pVertexAttributeDescriptions = core::copyInitializerList<VkVertexInputAttributeDescription>(attributes);
 #ifdef VK_EXT_vertex_attribute_divisor
-    divisor.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
-    divisor.pNext = nullptr;
-    divisor.vertexBindingDivisorCount = 0;
-    divisor.pVertexBindingDivisors = nullptr;
+    vertexInputDivisorInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
+    vertexInputDivisorInfo.pNext = nullptr;
+    vertexInputDivisorInfo.vertexBindingDivisorCount = 0;
+    vertexInputDivisorInfo.pVertexBindingDivisors = nullptr;
 #endif // VK_EXT_vertex_attribute_divisor
 }
 
@@ -70,10 +70,10 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
     vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
     pVertexAttributeDescriptions = core::copyInitializerList<VkVertexInputAttributeDescription>(attributes);
 #ifdef VK_EXT_vertex_attribute_divisor
-    divisor.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
-    divisor.pNext = nullptr;
-    divisor.vertexBindingDivisorCount = 0;
-    divisor.pVertexBindingDivisors = nullptr;
+    vertexInputDivisorInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
+    vertexInputDivisorInfo.pNext = nullptr;
+    vertexInputDivisorInfo.vertexBindingDivisorCount = 0;
+    vertexInputDivisorInfo.pVertexBindingDivisors = nullptr;
 #endif // VK_EXT_vertex_attribute_divisor
 }
 
@@ -82,26 +82,26 @@ VertexInputState::VertexInputState(const VertexInputBindingDivisor& binding,
     const std::initializer_list<VertexInputAttribute>& attributes) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    pNext = &divisor;
+    pNext = &vertexInputDivisorInfo;
     flags = 0;
     vertexBindingDescriptionCount = 1;
     pVertexBindingDescriptions = core::copyArray<VkVertexInputBindingDescription>(&binding, 1);
     vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
     pVertexAttributeDescriptions = core::copyInitializerList<VkVertexInputAttributeDescription>(attributes);
-    divisor.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
-    divisor.pNext = nullptr;
-    divisor.vertexBindingDivisorCount = 1;
+    vertexInputDivisorInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
+    vertexInputDivisorInfo.pNext = nullptr;
+    vertexInputDivisorInfo.vertexBindingDivisorCount = 1;
     VkVertexInputBindingDivisorDescriptionEXT *vertexBindingDivisor = new(std::nothrow) VkVertexInputBindingDivisorDescriptionEXT[1];
     vertexBindingDivisor->binding = binding.binding;
     vertexBindingDivisor->divisor = binding.divisor;
-    divisor.pVertexBindingDivisors = vertexBindingDivisor;
+    vertexInputDivisorInfo.pVertexBindingDivisors = vertexBindingDivisor;
 }
 
 VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindingDivisor>& bindings,
     const std::initializer_list<VertexInputAttribute>& attributes) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    pNext = &divisor;
+    pNext = &vertexInputDivisorInfo;
     flags = 0;
     vertexBindingDescriptionCount = 0;
     VkVertexInputBindingDescription *vertexBindingDescriptions = new(std::nothrow) VkVertexInputBindingDescription[bindings.size()];
@@ -114,16 +114,16 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
     pVertexBindingDescriptions = vertexBindingDescriptions;
     vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
     pVertexAttributeDescriptions = core::copyInitializerList<VkVertexInputAttributeDescription>(attributes);
-    divisor.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
-    divisor.pNext = nullptr;
-    divisor.vertexBindingDivisorCount = 0;
+    vertexInputDivisorInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
+    vertexInputDivisorInfo.pNext = nullptr;
+    vertexInputDivisorInfo.vertexBindingDivisorCount = 0;
     VkVertexInputBindingDivisorDescriptionEXT *vertexBindingDivisors = new(std::nothrow) VkVertexInputBindingDivisorDescriptionEXT[vertexBindingDescriptionCount];
     for (const auto& binding : bindings)
     {
-        vertexBindingDivisors[divisor.vertexBindingDivisorCount].binding = binding.binding;
-        vertexBindingDivisors[divisor.vertexBindingDivisorCount++].divisor = binding.divisor;
+        vertexBindingDivisors[vertexInputDivisorInfo.vertexBindingDivisorCount].binding = binding.binding;
+        vertexBindingDivisors[vertexInputDivisorInfo.vertexBindingDivisorCount++].divisor = binding.divisor;
     }
-    divisor.pVertexBindingDivisors = vertexBindingDivisors;
+    vertexInputDivisorInfo.pVertexBindingDivisors = vertexBindingDivisors;
 }
 #endif // VK_EXT_vertex_attribute_divisor
 
@@ -137,12 +137,12 @@ VertexInputState::VertexInputState(const VertexInputState& other) noexcept
     vertexAttributeDescriptionCount = other.vertexAttributeDescriptionCount;
     pVertexAttributeDescriptions = core::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
 #ifdef VK_EXT_vertex_attribute_divisor
-    divisor.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
-    divisor.pNext = nullptr;
-    divisor.vertexBindingDivisorCount = other.divisor.vertexBindingDivisorCount;
-    divisor.pVertexBindingDivisors = core::copyArray(other.divisor.pVertexBindingDivisors, other.divisor.vertexBindingDivisorCount);
     if (other.pNext)
-        pNext = &divisor;
+        pNext = &vertexInputDivisorInfo;
+    vertexInputDivisorInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
+    vertexInputDivisorInfo.pNext = nullptr;
+    vertexInputDivisorInfo.vertexBindingDivisorCount = other.vertexInputDivisorInfo.vertexBindingDivisorCount;
+    vertexInputDivisorInfo.pVertexBindingDivisors = core::copyArray(other.vertexInputDivisorInfo.pVertexBindingDivisors, other.vertexInputDivisorInfo.vertexBindingDivisorCount);
 #endif // VK_EXT_vertex_attribute_divisor
 }
 
@@ -160,13 +160,13 @@ VertexInputState& VertexInputState::operator=(const VertexInputState& other) noe
         delete[] pVertexAttributeDescriptions;
         pVertexAttributeDescriptions = core::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
 #ifdef VK_EXT_vertex_attribute_divisor
-        divisor.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
-        divisor.pNext = nullptr;
-        divisor.vertexBindingDivisorCount = other.divisor.vertexBindingDivisorCount;
-        delete[] divisor.pVertexBindingDivisors;
-        divisor.pVertexBindingDivisors = core::copyArray(other.divisor.pVertexBindingDivisors, other.divisor.vertexBindingDivisorCount);
         if (other.pNext)
-            pNext = &divisor;
+            pNext = &vertexInputDivisorInfo;
+        vertexInputDivisorInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
+        vertexInputDivisorInfo.pNext = nullptr;
+        vertexInputDivisorInfo.vertexBindingDivisorCount = other.vertexInputDivisorInfo.vertexBindingDivisorCount;
+        delete[] vertexInputDivisorInfo.pVertexBindingDivisors;
+        vertexInputDivisorInfo.pVertexBindingDivisors = core::copyArray(other.vertexInputDivisorInfo.pVertexBindingDivisors, other.vertexInputDivisorInfo.vertexBindingDivisorCount);
 #endif // VK_EXT_vertex_attribute_divisor
     }
     return *this;
@@ -177,7 +177,7 @@ VertexInputState::~VertexInputState()
     delete[] pVertexBindingDescriptions;
     delete[] pVertexAttributeDescriptions;
 #ifdef VK_EXT_vertex_attribute_divisor
-    delete[] divisor.pVertexBindingDivisors;
+    delete[] vertexInputDivisorInfo.pVertexBindingDivisors;
 #endif
 }
 
@@ -220,13 +220,13 @@ hash_t VertexInputState::hash() const noexcept
     }
 #ifdef VK_EXT_vertex_attribute_divisor
     hash = core::hashCombine(hash, core::hashArgs(
-        divisor.sType,
-        divisor.vertexBindingDivisorCount));
-    for (uint32_t i = 0; i < divisor.vertexBindingDivisorCount; ++i)
+        vertexInputDivisorInfo.sType,
+        vertexInputDivisorInfo.vertexBindingDivisorCount));
+    for (uint32_t i = 0; i < vertexInputDivisorInfo.vertexBindingDivisorCount; ++i)
     {
         hash = core::hashCombine(hash, core::hashArgs(
-            divisor.pVertexBindingDivisors[i].binding,
-            divisor.pVertexBindingDivisors[i].divisor));
+            vertexInputDivisorInfo.pVertexBindingDivisors[i].binding,
+            vertexInputDivisorInfo.pVertexBindingDivisors[i].divisor));
     }
 #endif // VK_EXT_vertex_attribute_divisor
     return hash;
@@ -240,8 +240,8 @@ bool VertexInputState::operator==(const VertexInputState& other) const noexcept
         core::compareArrays(pVertexBindingDescriptions, other.pVertexBindingDescriptions, vertexBindingDescriptionCount) &&
         core::compareArrays(pVertexAttributeDescriptions, other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount) &&
     #ifdef VK_EXT_vertex_attribute_divisor
-        (divisor.vertexBindingDivisorCount == other.divisor.vertexBindingDivisorCount) &&
-        core::compareArrays(divisor.pVertexBindingDivisors, other.divisor.pVertexBindingDivisors, divisor.vertexBindingDivisorCount);
+        (vertexInputDivisorInfo.vertexBindingDivisorCount == other.vertexInputDivisorInfo.vertexBindingDivisorCount) &&
+        core::compareArrays(vertexInputDivisorInfo.pVertexBindingDivisors, other.vertexInputDivisorInfo.pVertexBindingDivisors, vertexInputDivisorInfo.vertexBindingDivisorCount);
     #else
         true;
     #endif

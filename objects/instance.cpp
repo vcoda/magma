@@ -52,6 +52,7 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
     apiVersion(apiVersion)
 {
     VkApplicationInfo appInfo;
+    VkInstanceCreateInfo instanceInfo;
     appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     appInfo.pNext = nullptr;
     appInfo.pApplicationName = applicationName;
@@ -59,7 +60,6 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
     appInfo.pEngineName = engineName;
     appInfo.engineVersion = 1;
     appInfo.apiVersion = apiVersion;
-    VkInstanceCreateInfo instanceInfo;
     instanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     instanceInfo.pNext = nullptr;
     instanceInfo.flags = 0;
@@ -69,47 +69,46 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
     instanceInfo.enabledExtensionCount = MAGMA_COUNT(extensionNames);
     instanceInfo.ppEnabledExtensionNames = extensionNames.data();
 #if defined(VK_EXT_debug_utils)
-    VkDebugUtilsMessengerCreateInfoEXT debugCallbackInfo;
+    VkDebugUtilsMessengerCreateInfoEXT debugUtilsMessengerInfo;
     if (debugCallback)
-    {
-        debugCallbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-        debugCallbackInfo.pNext = nullptr;
-        debugCallbackInfo.flags = 0;
-        debugCallbackInfo.messageSeverity =
+    {   // To capture events that occur while creating or destroying an instance
+        // an application can link a VkDebugUtilsMessengerCreateInfoEXT structure
+        // to the pNext element of the VkInstanceCreateInfo structure.
+        instanceInfo.pNext = &debugUtilsMessengerInfo;
+        debugUtilsMessengerInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+        debugUtilsMessengerInfo.pNext = nullptr;
+        debugUtilsMessengerInfo.flags = 0;
+        debugUtilsMessengerInfo.messageSeverity =
             VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
             VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT |
             VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
             VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-        debugCallbackInfo.messageType =
+        debugUtilsMessengerInfo.messageType =
             VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
             VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
             VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
-        debugCallbackInfo.pfnUserCallback = debugCallback;
-        debugCallbackInfo.pUserData = userData;
-        // To capture events that occur while creating or destroying an instance
-        // an application can link a VkDebugUtilsMessengerCreateInfoEXT structure
-        // to the pNext element of the VkInstanceCreateInfo structure.
-        instanceInfo.pNext = &debugCallbackInfo;
+        debugUtilsMessengerInfo.pfnUserCallback = debugCallback;
+        debugUtilsMessengerInfo.pUserData = userData;
     }
 #elif defined(VK_EXT_debug_report)
-    VkDebugReportCallbackCreateInfoEXT debugCallbackInfo;
+    VkDebugReportCallbackCreateInfoEXT debugReportCallbackInfo;
     if (debugCallback)
     {
-#ifdef VK_HEADER_VERSION
-        debugCallbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
-#else   // Compatibility with older SDK
-        debugCallbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
-#endif
-        debugCallbackInfo.pNext = nullptr;
-        debugCallbackInfo.flags =
+        instanceInfo.pNext = &debugReportCallbackInfo;
+    #ifdef VK_HEADER_VERSION
+        debugReportCallbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
+    #else // Compatibility with older SDK
+        debugReportCallbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
+    #endif
+        debugReportCallbackInfo.pNext = nullptr;
+        debugReportCallbackInfo.flags =
             VK_DEBUG_REPORT_INFORMATION_BIT_EXT |
             VK_DEBUG_REPORT_WARNING_BIT_EXT |
             VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT |
             VK_DEBUG_REPORT_ERROR_BIT_EXT |
             VK_DEBUG_REPORT_DEBUG_BIT_EXT;
-        debugCallbackInfo.pfnCallback = debugCallback;
-        debugCallbackInfo.pUserData = userData;
-        instanceInfo.pNext = &debugCallbackInfo;
+        debugReportCallbackInfo.pfnCallback = debugCallback;
+        debugReportCallbackInfo.pUserData = userData;
     }
 #endif // VK_EXT_debug_report
     const VkResult result = vkCreateInstance(&instanceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);

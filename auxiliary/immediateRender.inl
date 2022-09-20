@@ -42,10 +42,10 @@ inline void ImmediateRender::setRasterizationState(const RasterizationState& sta
     MAGMA_ASSERT(!insidePrimitive);
     rasterizationState = state;
 #ifdef VK_EXT_line_rasterization
-    auto lineRasterizationState = rasterizationState.findNode<VkPipelineRasterizationLineStateCreateInfoEXT>(
+    auto lineRasterizationInfo = rasterizationState.findNode<VkPipelineRasterizationLineStateCreateInfoEXT>(
         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT);
-    if (lineRasterizationState)
-        stippledLineState = lineRasterizationState->stippledLineEnable;
+    if (lineRasterizationInfo)
+        stippledLineState = lineRasterizationInfo->stippledLineEnable;
 #endif
 }
 

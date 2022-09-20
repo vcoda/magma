@@ -82,15 +82,14 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     VkPipelineCreateFlags flags /* 0 */):
     Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator))
 {
-    VkGraphicsPipelineCreateInfo pipelineInfo;
-    pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    pipelineInfo.pNext = nullptr;
-    pipelineInfo.flags = flags;
-    if (this->basePipeline)
-        pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
     for (auto& stage : shaderStages)
         dereferencedStages.put(stage);
+    VkGraphicsPipelineCreateInfo pipelineInfo;
+    VkPipelineDynamicStateCreateInfo pipelineDynamicStateInfo;
+    pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    pipelineInfo.pNext = nullptr;
+    pipelineInfo.flags = flags | (this->basePipeline ? VK_PIPELINE_CREATE_DERIVATIVE_BIT : 0);
     pipelineInfo.stageCount = MAGMA_COUNT(dereferencedStages);
     pipelineInfo.pStages = dereferencedStages;
     pipelineInfo.pVertexInputState = &vertexInputState;
@@ -101,29 +100,28 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     pipelineInfo.pMultisampleState = &multisampleState;
     pipelineInfo.pDepthStencilState = &depthStencilState;
     pipelineInfo.pColorBlendState = &colorBlendState;
-    VkPipelineDynamicStateCreateInfo dynamicStateInfo;
-    dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-    dynamicStateInfo.pNext = 0;
-    dynamicStateInfo.flags = 0;
-    dynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates);
-    dynamicStateInfo.pDynamicStates = dynamicStates.data();
-    pipelineInfo.pDynamicState = dynamicStateInfo.pDynamicStates ? &dynamicStateInfo : nullptr;
+    pipelineInfo.pDynamicState = dynamicStates.empty() ? nullptr : &pipelineDynamicStateInfo;
     pipelineInfo.layout = MAGMA_HANDLE(layout);
     pipelineInfo.renderPass = *renderPass;
     pipelineInfo.subpass = subpass;
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
     pipelineInfo.basePipelineIndex = -1;
+    pipelineDynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+    pipelineDynamicStateInfo.pNext = nullptr;
+    pipelineDynamicStateInfo.flags = 0;
+    pipelineDynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates);
+    pipelineDynamicStateInfo.pDynamicStates = dynamicStates.data();
 #ifdef VK_EXT_pipeline_creation_feedback
-    VkPipelineCreationFeedbackCreateInfoEXT creationFeedbackInfo;
+    VkPipelineCreationFeedbackCreateInfoEXT pipelineCreationFeedbackInfo;
     MAGMA_STACK_ARRAY(VkPipelineCreationFeedbackEXT, stageCreationFeedbacks, shaderStages.size());
     if (getDevice()->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
     {
-        creationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
-        creationFeedbackInfo.pNext = nullptr;
-        creationFeedbackInfo.pPipelineCreationFeedback = &creationFeedback;
-        creationFeedbackInfo.pipelineStageCreationFeedbackCount = pipelineInfo.stageCount;
-        creationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks;
-        pipelineInfo.pNext = &creationFeedbackInfo;
+        pipelineInfo.pNext = &pipelineCreationFeedbackInfo;
+        pipelineCreationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
+        pipelineCreationFeedbackInfo.pNext = nullptr;
+        pipelineCreationFeedbackInfo.pPipelineCreationFeedback = &creationFeedback;
+        pipelineCreationFeedbackInfo.pipelineStageCreationFeedbackCount = pipelineInfo.stageCount;
+        pipelineCreationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks;
     }
 #endif // VK_EXT_pipeline_creation_feedback
     const VkResult result = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);

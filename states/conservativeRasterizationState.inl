@@ -4,7 +4,7 @@ constexpr ConservativeRasterizationState::ConservativeRasterizationState(const R
     const VkConservativeRasterizationModeEXT conservativeRasterizationMode,
     const float extraPrimitiveOverestimationSize /* 0 */) noexcept:
     RasterizationState(state),
-    conservative{
+    conservativeRasterizationInfo{
         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_CONSERVATIVE_STATE_CREATE_INFO_EXT,
         state.pNext,
         0, // flags
@@ -12,24 +12,24 @@ constexpr ConservativeRasterizationState::ConservativeRasterizationState(const R
         extraPrimitiveOverestimationSize
     }
 {
-    pNext = &conservative;
+    pNext = &conservativeRasterizationInfo;
 }
 
 constexpr hash_t ConservativeRasterizationState::hash() const noexcept
 {
     hash_t hash = RasterizationState::hash();
     return core::hashCombine(hash, core::hashArgs(
-        conservative.sType,
-        conservative.flags,
-        conservative.conservativeRasterizationMode,
-        conservative.extraPrimitiveOverestimationSize));
+        conservativeRasterizationInfo.sType,
+        conservativeRasterizationInfo.flags,
+        conservativeRasterizationInfo.conservativeRasterizationMode,
+        conservativeRasterizationInfo.extraPrimitiveOverestimationSize));
 }
 
 constexpr bool ConservativeRasterizationState::operator==(const ConservativeRasterizationState& other) const noexcept
 {
     return RasterizationState::operator==(other) &&
-        (conservative.flags == other.conservative.flags) &&
-        (conservative.conservativeRasterizationMode == other.conservative.conservativeRasterizationMode) &&
-        (conservative.extraPrimitiveOverestimationSize == other.conservative.extraPrimitiveOverestimationSize);
+        (conservativeRasterizationInfo.flags == other.conservativeRasterizationInfo.flags) &&
+        (conservativeRasterizationInfo.conservativeRasterizationMode == other.conservativeRasterizationInfo.conservativeRasterizationMode) &&
+        (conservativeRasterizationInfo.extraPrimitiveOverestimationSize == other.conservativeRasterizationInfo.extraPrimitiveOverestimationSize);
 }
 } // namespace magma

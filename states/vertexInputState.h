@@ -87,7 +87,7 @@ namespace magma
         bool operator==(const VertexInputState&) const noexcept;
 
     #ifdef VK_EXT_vertex_attribute_divisor
-        VkPipelineVertexInputDivisorStateCreateInfoEXT divisor;
+        VkPipelineVertexInputDivisorStateCreateInfoEXT vertexInputDivisorInfo;
     #endif
     };
 } // namespace magma

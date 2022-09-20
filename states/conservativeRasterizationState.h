@@ -34,7 +34,7 @@ namespace magma
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const ConservativeRasterizationState&) const noexcept;
 
-        const VkPipelineRasterizationConservativeStateCreateInfoEXT conservative;
+        const VkPipelineRasterizationConservativeStateCreateInfoEXT conservativeRasterizationInfo;
     };
 } // namespace magma
 

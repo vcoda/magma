@@ -33,7 +33,7 @@ namespace magma
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const StreamRasterizationState&) const noexcept;
 
-        const VkPipelineRasterizationStateStreamCreateInfoEXT stream;
+        const VkPipelineRasterizationStateStreamCreateInfoEXT streamRasterizationInfo;
     };
 } // namespace magma
 

@@ -32,9 +32,9 @@ namespace magma
     {
     public:
         ~AccelerationStructure();
-        bool topLevel() const noexcept { return VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NV == info.type; }
-        bool bottomLevel() const noexcept { return VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NV == info.type; }
-        const VkAccelerationStructureInfoNV& getInfo() const noexcept { return info; }
+        bool topLevel() const noexcept { return VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NV == accelerationStructureInfo.type; }
+        bool bottomLevel() const noexcept { return VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NV == accelerationStructureInfo.type; }
+        const VkAccelerationStructureInfoNV& getInfo() const noexcept { return accelerationStructureInfo; }
         std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
         VkMemoryRequirements getObjectMemoryRequirements() const;
         VkMemoryRequirements getBuildScratchMemoryRequirements() const;
@@ -62,7 +62,7 @@ namespace magma
     private:
         VkMemoryRequirements2 getMemoryRequirements(VkAccelerationStructureMemoryRequirementsTypeNV type) const;
 
-        VkAccelerationStructureInfoNV info;
+        VkAccelerationStructureInfoNV accelerationStructureInfo;
     };
 
     /* Top-level acceleration structure containing instance data referring to bottom-level acceleration structures.*/

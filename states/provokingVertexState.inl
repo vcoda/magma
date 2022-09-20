@@ -3,26 +3,26 @@ namespace magma
 constexpr ProvokingVertexRasterizationState::ProvokingVertexRasterizationState(const RasterizationState& state,
     const VkProvokingVertexModeEXT provokingVertexMode) noexcept:
     RasterizationState(state),
-    provoking{
+    provokingVertexInfo{
         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_PROVOKING_VERTEX_STATE_CREATE_INFO_EXT,
         state.pNext,
         provokingVertexMode
     }
 {
-    pNext = &provoking;
+    pNext = &provokingVertexInfo;
 }
 
 constexpr hash_t ProvokingVertexRasterizationState::hash() const noexcept
 {
     hash_t hash = RasterizationState::hash();
     return core::hashCombine(hash, core::hashArgs(
-        provoking.sType,
-        provoking.provokingVertexMode));
+        provokingVertexInfo.sType,
+        provokingVertexInfo.provokingVertexMode));
 }
 
 constexpr bool ProvokingVertexRasterizationState::operator==(const ProvokingVertexRasterizationState& other) const noexcept
 {
     return RasterizationState::operator==(other) &&
-        (provoking.provokingVertexMode == other.provoking.provokingVertexMode);
+        (provokingVertexInfo.provokingVertexMode == other.provokingVertexInfo.provokingVertexMode);
 }
 } // namespace magma

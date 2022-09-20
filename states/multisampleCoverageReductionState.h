@@ -40,7 +40,7 @@ namespace magma
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const MultisampleCoverageReductionState&) const noexcept;
 
-        const VkPipelineCoverageReductionStateCreateInfoNV coverageReduction;
+        const VkPipelineCoverageReductionStateCreateInfoNV coverageReductionInfo;
     };
 } // namespace magma
 

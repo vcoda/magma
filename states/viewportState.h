@@ -54,7 +54,7 @@ namespace magma
         VkViewport viewport;
         VkRect2D scissor;
 #ifdef VK_EXT_depth_clip_control
-        VkPipelineViewportDepthClipControlCreateInfoEXT depthClipControl;
+        VkPipelineViewportDepthClipControlCreateInfoEXT depthClipControlInfo;
 #endif
     };
 } // namespace magma

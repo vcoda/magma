@@ -37,14 +37,14 @@ ValidationCache::ValidationCache(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_VALIDATION_CACHE_EXT, std::move(device), std::move(allocator))
 {
+    VkValidationCacheCreateInfoEXT validationCacheInfo;
+    validationCacheInfo.sType = VK_STRUCTURE_TYPE_VALIDATION_CACHE_CREATE_INFO_EXT;
+    validationCacheInfo.pNext = nullptr;
+    validationCacheInfo.flags = 0;
+    validationCacheInfo.initialDataSize = dataSize;
+    validationCacheInfo.pInitialData = cacheData;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateValidationCacheEXT, VK_EXT_VALIDATION_CACHE_EXTENSION_NAME);
-    VkValidationCacheCreateInfoEXT cacheInfo;
-    cacheInfo.sType = VK_STRUCTURE_TYPE_VALIDATION_CACHE_CREATE_INFO_EXT;
-    cacheInfo.pNext = nullptr;
-    cacheInfo.flags = 0;
-    cacheInfo.initialDataSize = dataSize;
-    cacheInfo.pInitialData = cacheData;
-    const VkResult result = vkCreateValidationCacheEXT(MAGMA_HANDLE(device), &cacheInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateValidationCacheEXT(MAGMA_HANDLE(device), &validationCacheInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create validation cache");
 }
 

@@ -31,7 +31,7 @@ namespace magma
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const MinMaxSamplerState&) const noexcept;
 
-        const VkSamplerReductionModeCreateInfoEXT reduction;
+        const VkSamplerReductionModeCreateInfoEXT reductionModeInfo;
     };
 }
 

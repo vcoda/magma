@@ -83,12 +83,12 @@ CommandBuffer::~CommandBuffer()
 
 bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
-    VkCommandBufferBeginInfo beginInfo;
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.pNext = nullptr;
-    beginInfo.flags = flags;
-    beginInfo.pInheritanceInfo = nullptr;
-    const VkResult result = vkBeginCommandBuffer(handle, &beginInfo);
+    VkCommandBufferBeginInfo cmdBufferBeginInfo;
+    cmdBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    cmdBufferBeginInfo.pNext = nullptr;
+    cmdBufferBeginInfo.flags = flags;
+    cmdBufferBeginInfo.pInheritanceInfo = nullptr;
+    const VkResult result = vkBeginCommandBuffer(handle, &cmdBufferBeginInfo);
     MAGMA_ASSERT(VK_SUCCESS == result);
     if (VK_SUCCESS == result)
         state = State::Recording;
@@ -99,31 +99,31 @@ bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
 bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass, const std::shared_ptr<Framebuffer>& framebuffer,
     VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
-    VkCommandBufferInheritanceInfo inheritanceInfo;
-    inheritanceInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
-    inheritanceInfo.pNext = nullptr;
-    inheritanceInfo.renderPass = *renderPass;
-    inheritanceInfo.subpass = subpass;
-    inheritanceInfo.framebuffer = *framebuffer;
-    inheritanceInfo.occlusionQueryEnable = occlusionQueryEnable;
-    inheritanceInfo.queryFlags = queryFlags;
-    inheritanceInfo.pipelineStatistics = pipelineStatistics;
+    VkCommandBufferBeginInfo cmdBufferBeginInfo;
+    VkCommandBufferInheritanceInfo cmdBufferInheritanceInfo;
+    cmdBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    cmdBufferBeginInfo.pNext = nullptr;
+    cmdBufferBeginInfo.flags = flags | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT;
+    cmdBufferBeginInfo.pInheritanceInfo = &cmdBufferInheritanceInfo;
+    cmdBufferInheritanceInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
+    cmdBufferInheritanceInfo.pNext = nullptr;
+    cmdBufferInheritanceInfo.renderPass = *renderPass;
+    cmdBufferInheritanceInfo.subpass = subpass;
+    cmdBufferInheritanceInfo.framebuffer = *framebuffer;
+    cmdBufferInheritanceInfo.occlusionQueryEnable = occlusionQueryEnable;
+    cmdBufferInheritanceInfo.queryFlags = queryFlags;
+    cmdBufferInheritanceInfo.pipelineStatistics = pipelineStatistics;
 #ifdef VK_EXT_conditional_rendering
-    VkCommandBufferInheritanceConditionalRenderingInfoEXT conditionalRenderingInfo;
-    if (conditionalRenderingEnable)
+    VkCommandBufferInheritanceConditionalRenderingInfoEXT cmdBufferInheritanceConditionalRenderingInfo;
+    if (device->extensionEnabled(VK_EXT_CONDITIONAL_RENDERING_EXTENSION_NAME))
     {
-        conditionalRenderingInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_CONDITIONAL_RENDERING_INFO_EXT;
-        conditionalRenderingInfo.pNext = nullptr;
-        conditionalRenderingInfo.conditionalRenderingEnable = conditionalRenderingEnable;
-        inheritanceInfo.pNext = &conditionalRenderingInfo;
+        cmdBufferInheritanceInfo.pNext = &cmdBufferInheritanceConditionalRenderingInfo;
+        cmdBufferInheritanceConditionalRenderingInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_CONDITIONAL_RENDERING_INFO_EXT;
+        cmdBufferInheritanceConditionalRenderingInfo.pNext = nullptr;
+        cmdBufferInheritanceConditionalRenderingInfo.conditionalRenderingEnable = conditionalRenderingEnable;
     }
 #endif // VK_EXT_conditional_rendering
-    VkCommandBufferBeginInfo beginInfo;
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.pNext = nullptr;
-    beginInfo.flags = flags | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT;
-    beginInfo.pInheritanceInfo = &inheritanceInfo;
-    const VkResult result = vkBeginCommandBuffer(handle, &beginInfo);
+    const VkResult result = vkBeginCommandBuffer(handle, &cmdBufferBeginInfo);
     MAGMA_ASSERT(VK_SUCCESS == result);
     if (VK_SUCCESS == result)
         state = State::Recording;
@@ -426,19 +426,16 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     if (clearValues.empty()) {
         MAGMA_ASSERT(!renderPass->hasClearOp());
     }
-    VkRenderPassBeginInfo beginInfo;
-    beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    beginInfo.pNext = nullptr;
-    beginInfo.renderPass = *renderPass;
-    beginInfo.framebuffer = *framebuffer;
-    beginInfo.renderArea.offset = renderArea.offset;
-    if ((renderArea.extent.width != 0) || (renderArea.extent.height != 0))
-        beginInfo.renderArea.extent = renderArea.extent;
-    else
-        beginInfo.renderArea.extent = framebuffer->getExtent();
-    beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
-    beginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
-    vkCmdBeginRenderPass(handle, &beginInfo, contents);
+    VkRenderPassBeginInfo renderPassBeginInfo;
+    renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    renderPassBeginInfo.pNext = nullptr;
+    renderPassBeginInfo.renderPass = *renderPass;
+    renderPassBeginInfo.framebuffer = *framebuffer;
+    renderPassBeginInfo.renderArea.offset = renderArea.offset;
+    renderPassBeginInfo.renderArea.extent = (renderArea.extent.width || renderArea.extent.height) ? renderArea.extent : framebuffer->getExtent();
+    renderPassBeginInfo.clearValueCount = MAGMA_COUNT(clearValues);
+    renderPassBeginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
+    vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
     withinRenderPass = VK_TRUE;
 }
 
@@ -456,24 +453,21 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachments.size());
     for (const auto& attachment : attachments)
         dereferencedAttachments.put(*attachment);
-    VkRenderPassAttachmentBeginInfoKHR attachmentBeginInfo;
-    attachmentBeginInfo.sType =  VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR;
-    attachmentBeginInfo.pNext = nullptr;
-    attachmentBeginInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
-    attachmentBeginInfo.pAttachments = dereferencedAttachments;
-    VkRenderPassBeginInfo beginInfo;
-    beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    beginInfo.pNext = &attachmentBeginInfo;
-    beginInfo.renderPass = *renderPass;
-    beginInfo.framebuffer = *framebuffer;
-    beginInfo.renderArea.offset = renderArea.offset;
-    if ((renderArea.extent.width != 0) || (renderArea.extent.height != 0))
-        beginInfo.renderArea.extent = renderArea.extent;
-    else
-        beginInfo.renderArea.extent = framebuffer->getExtent();
-    beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
-    beginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
-    vkCmdBeginRenderPass(handle, &beginInfo, contents);
+    VkRenderPassBeginInfo renderPassBeginInfo;
+    VkRenderPassAttachmentBeginInfoKHR renderPassBeginAttachmentInfo;
+    renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    renderPassBeginInfo.pNext = &renderPassBeginAttachmentInfo;
+    renderPassBeginInfo.renderPass = *renderPass;
+    renderPassBeginInfo.framebuffer = *framebuffer;
+    renderPassBeginInfo.renderArea.offset = renderArea.offset;
+    renderPassBeginInfo.renderArea.extent = (renderArea.extent.width || renderArea.extent.height) ? renderArea.extent : framebuffer->getExtent();
+    renderPassBeginInfo.clearValueCount = MAGMA_COUNT(clearValues);
+    renderPassBeginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
+    renderPassBeginAttachmentInfo.sType =  VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR;
+    renderPassBeginAttachmentInfo.pNext = nullptr;
+    renderPassBeginAttachmentInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
+    renderPassBeginAttachmentInfo.pAttachments = dereferencedAttachments;
+    vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
     withinRenderPass = VK_TRUE;
 }
 #endif // VK_KHR_imageless_framebuffer
@@ -488,16 +482,16 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
 bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask,
     VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
-    VkDeviceGroupCommandBufferBeginInfo deviceGroupBeginInfo;
-    deviceGroupBeginInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_COMMAND_BUFFER_BEGIN_INFO;
-    deviceGroupBeginInfo.pNext = nullptr;
-    deviceGroupBeginInfo.deviceMask = deviceMask;
-    VkCommandBufferBeginInfo beginInfo;
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.pNext = &deviceGroupBeginInfo;
-    beginInfo.flags = flags;
-    beginInfo.pInheritanceInfo = nullptr;
-    const VkResult result = vkBeginCommandBuffer(handle, &beginInfo);
+    VkCommandBufferBeginInfo cmdBufferBeginInfo;
+    VkDeviceGroupCommandBufferBeginInfo cmdBufferBeginDeviceGroupInfo;
+    cmdBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    cmdBufferBeginInfo.pNext = &cmdBufferBeginDeviceGroupInfo;
+    cmdBufferBeginInfo.flags = flags;
+    cmdBufferBeginInfo.pInheritanceInfo = nullptr;
+    cmdBufferBeginDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_COMMAND_BUFFER_BEGIN_INFO;
+    cmdBufferBeginDeviceGroupInfo.pNext = nullptr;
+    cmdBufferBeginDeviceGroupInfo.deviceMask = deviceMask;
+    const VkResult result = vkBeginCommandBuffer(handle, &cmdBufferBeginInfo);
     MAGMA_ASSERT(VK_SUCCESS == result);
     if (VK_SUCCESS == result)
         state = State::Recording;
@@ -512,23 +506,22 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     if (clearValues.empty()) {
         MAGMA_ASSERT(!renderPass->hasClearOp());
     }
-    VkDeviceGroupRenderPassBeginInfo deviceGroupBeginInfo;
-    deviceGroupBeginInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO;
-    deviceGroupBeginInfo.pNext = nullptr;
-    deviceGroupBeginInfo.deviceMask = deviceMask;
-    // Elements of VkDeviceGroupRenderPassBeginInfo::pDeviceRenderAreas override the value of VkRenderPassBeginInfo::renderArea
-    deviceGroupBeginInfo.deviceRenderAreaCount = MAGMA_COUNT(deviceRenderAreas);
-    deviceGroupBeginInfo.pDeviceRenderAreas = deviceRenderAreas.data();
-    VkRenderPassBeginInfo beginInfo;
-    beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    beginInfo.pNext = &deviceGroupBeginInfo;
-    beginInfo.renderPass = *renderPass;
-    beginInfo.framebuffer = *framebuffer;
-    beginInfo.renderArea.offset = VkOffset2D{0, 0};
-    beginInfo.renderArea.extent = deviceRenderAreas.empty() ? framebuffer->getExtent() : VkExtent2D{0, 0};
-    beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
-    beginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
-    vkCmdBeginRenderPass(handle, &beginInfo, contents);
+    VkRenderPassBeginInfo renderPassBeginInfo;
+    VkDeviceGroupRenderPassBeginInfo renderPassBeginDeviceGroupInfo;
+    renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    renderPassBeginInfo.pNext = &renderPassBeginDeviceGroupInfo;
+    renderPassBeginInfo.renderPass = *renderPass;
+    renderPassBeginInfo.framebuffer = *framebuffer;
+    renderPassBeginInfo.renderArea.offset = VkOffset2D{0, 0};
+    renderPassBeginInfo.renderArea.extent = deviceRenderAreas.empty() ? framebuffer->getExtent() : VkExtent2D{0, 0};
+    renderPassBeginInfo.clearValueCount = MAGMA_COUNT(clearValues);
+    renderPassBeginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
+    renderPassBeginDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO;
+    renderPassBeginDeviceGroupInfo.pNext = nullptr;
+    renderPassBeginDeviceGroupInfo.deviceMask = deviceMask;
+    renderPassBeginDeviceGroupInfo.deviceRenderAreaCount = MAGMA_COUNT(deviceRenderAreas);
+    renderPassBeginDeviceGroupInfo.pDeviceRenderAreas = deviceRenderAreas.data();
+    vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
     withinRenderPass = VK_TRUE;
 }
 
@@ -544,31 +537,30 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     if (clearValues.empty()) {
         MAGMA_ASSERT(!renderPass->hasClearOp());
     }
-    VkDeviceGroupRenderPassBeginInfo deviceGroupBeginInfo;
-    deviceGroupBeginInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO;
-    deviceGroupBeginInfo.pNext = nullptr;
-    deviceGroupBeginInfo.deviceMask = deviceMask;
-    // Elements of VkDeviceGroupRenderPassBeginInfo::pDeviceRenderAreas override the value of VkRenderPassBeginInfo::renderArea
-    deviceGroupBeginInfo.deviceRenderAreaCount = MAGMA_COUNT(deviceRenderAreas);
-    deviceGroupBeginInfo.pDeviceRenderAreas = deviceRenderAreas.data();
     MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachments.size());
     for (const auto& attachment : attachments)
         dereferencedAttachments.put(*attachment);
-    VkRenderPassAttachmentBeginInfoKHR attachmentBeginInfo;
-    attachmentBeginInfo.sType =  VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR;
-    attachmentBeginInfo.pNext = &deviceGroupBeginInfo;
-    attachmentBeginInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
-    attachmentBeginInfo.pAttachments = dereferencedAttachments;
-    VkRenderPassBeginInfo beginInfo;
-    beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    beginInfo.pNext = &attachmentBeginInfo;
-    beginInfo.renderPass = *renderPass;
-    beginInfo.framebuffer = *framebuffer;
-    beginInfo.renderArea.offset = VkOffset2D{0, 0};
-    beginInfo.renderArea.extent = deviceRenderAreas.empty() ? framebuffer->getExtent() : VkExtent2D{0, 0};
-    beginInfo.clearValueCount = MAGMA_COUNT(clearValues);
-    beginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
-    vkCmdBeginRenderPass(handle, &beginInfo, contents);
+    VkRenderPassBeginInfo renderPassBeginInfo;
+    VkDeviceGroupRenderPassBeginInfo renderPassBeginDeviceGroupInfo;
+    VkRenderPassAttachmentBeginInfoKHR renderPassBeginAttachmentInfo;
+    renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    renderPassBeginInfo.pNext = &renderPassBeginDeviceGroupInfo;
+    renderPassBeginInfo.renderPass = *renderPass;
+    renderPassBeginInfo.framebuffer = *framebuffer;
+    renderPassBeginInfo.renderArea.offset = VkOffset2D{0, 0};
+    renderPassBeginInfo.renderArea.extent = deviceRenderAreas.empty() ? framebuffer->getExtent() : VkExtent2D{0, 0};
+    renderPassBeginInfo.clearValueCount = MAGMA_COUNT(clearValues);
+    renderPassBeginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
+    renderPassBeginDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO;
+    renderPassBeginDeviceGroupInfo.pNext = &renderPassBeginAttachmentInfo;
+    renderPassBeginDeviceGroupInfo.deviceMask = deviceMask;
+    renderPassBeginDeviceGroupInfo.deviceRenderAreaCount = MAGMA_COUNT(deviceRenderAreas);
+    renderPassBeginDeviceGroupInfo.pDeviceRenderAreas = deviceRenderAreas.data();
+    renderPassBeginAttachmentInfo.sType =  VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR;
+    renderPassBeginAttachmentInfo.pNext = nullptr;
+    renderPassBeginAttachmentInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
+    renderPassBeginAttachmentInfo.pAttachments = dereferencedAttachments;
+    vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
     withinRenderPass = VK_TRUE;
 }
 #endif // VK_KHR_imageless_framebuffer
@@ -584,15 +576,13 @@ void CommandBuffer::beginConditionalRendering(const std::shared_ptr<Buffer>& buf
     MAGMA_DEVICE_EXTENSION(vkCmdBeginConditionalRenderingEXT);
     if (vkCmdBeginConditionalRenderingEXT)
     {
-        VkConditionalRenderingBeginInfoEXT beginInfo;
-        beginInfo.sType = VK_STRUCTURE_TYPE_CONDITIONAL_RENDERING_BEGIN_INFO_EXT;
-        beginInfo.pNext = nullptr;
-        beginInfo.buffer = *buffer;
-        beginInfo.offset = offset;
-        beginInfo.flags = 0;
-        if (inverted)
-            beginInfo.flags |= VK_CONDITIONAL_RENDERING_INVERTED_BIT_EXT;
-        vkCmdBeginConditionalRenderingEXT(handle, &beginInfo);
+        VkConditionalRenderingBeginInfoEXT conditionalRenderingBeginInfo;
+        conditionalRenderingBeginInfo.sType = VK_STRUCTURE_TYPE_CONDITIONAL_RENDERING_BEGIN_INFO_EXT;
+        conditionalRenderingBeginInfo.pNext = nullptr;
+        conditionalRenderingBeginInfo.buffer = *buffer;
+        conditionalRenderingBeginInfo.offset = offset;
+        conditionalRenderingBeginInfo.flags = inverted ? VK_CONDITIONAL_RENDERING_INVERTED_BIT_EXT : 0;
+        vkCmdBeginConditionalRenderingEXT(handle, &conditionalRenderingBeginInfo);
         withinConditionalRendering = VK_TRUE;
     }
 }

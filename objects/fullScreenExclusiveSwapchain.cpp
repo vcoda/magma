@@ -81,10 +81,10 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     VkSurfaceFullScreenExclusiveWin32InfoEXT fullScreenExclusiveWin32Info;
     if (hMonitor)
     {
+        fullScreenExclusiveInfo.pNext = &fullScreenExclusiveWin32Info;
         fullScreenExclusiveWin32Info.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT,
         fullScreenExclusiveWin32Info.pNext = fullScreenExclusiveInfo.pNext;
         fullScreenExclusiveWin32Info.hmonitor = hMonitor;
-        fullScreenExclusiveInfo.pNext = &fullScreenExclusiveWin32Info;
     }
 #endif // VK_KHR_win32_surface
     helpers::checkImageUsageSupport(surface, swapchainInfo.imageUsage, getDevice()->getPhysicalDevice());

@@ -44,33 +44,32 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets,
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_POOL, std::move(device), std::move(allocator)),
     freeDescriptorSet(freeDescriptorSet)
 {
+    MAGMA_UNUSED(updateAfterBind);
     MAGMA_UNUSED(maxInlineUniformBlockBindings);
-    VkDescriptorPoolCreateInfo poolInfo;
-    poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-    poolInfo.pNext = nullptr;
-    poolInfo.flags = 0;
+    VkDescriptorPoolCreateInfo descriptorPoolInfo;
+    descriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+    descriptorPoolInfo.pNext = nullptr;
+    descriptorPoolInfo.flags = 0;
     if (freeDescriptorSet)
-        poolInfo.flags |= VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-    if (updateAfterBind)
-    {
+        descriptorPoolInfo.flags |= VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
 #ifdef VK_EXT_descriptor_indexing
-        poolInfo.flags |= VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT;
+    if (updateAfterBind)
+        descriptorPoolInfo.flags |= VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT;
 #endif
-    }
-    poolInfo.maxSets = maxSets;
-    poolInfo.poolSizeCount = MAGMA_COUNT(descriptors);
-    poolInfo.pPoolSizes = descriptors.data();
+    descriptorPoolInfo.maxSets = maxSets;
+    descriptorPoolInfo.poolSizeCount = MAGMA_COUNT(descriptors);
+    descriptorPoolInfo.pPoolSizes = descriptors.data();
 #ifdef VK_EXT_inline_uniform_block
-    VkDescriptorPoolInlineUniformBlockCreateInfoEXT inlineUniformBlockInfo;
-    if (maxInlineUniformBlockBindings > 0)
+    VkDescriptorPoolInlineUniformBlockCreateInfoEXT descriptorPoolInlineUniformBlockInfo;
+    if ((maxInlineUniformBlockBindings > 0) && getDevice()->extensionEnabled(VK_EXT_INLINE_UNIFORM_BLOCK_EXTENSION_NAME))
     {
-        inlineUniformBlockInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_INLINE_UNIFORM_BLOCK_CREATE_INFO_EXT;
-        inlineUniformBlockInfo.pNext = nullptr;
-        inlineUniformBlockInfo.maxInlineUniformBlockBindings = maxInlineUniformBlockBindings;
-        poolInfo.pNext = &inlineUniformBlockInfo;
+        descriptorPoolInfo.pNext = &descriptorPoolInlineUniformBlockInfo;
+        descriptorPoolInlineUniformBlockInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_INLINE_UNIFORM_BLOCK_CREATE_INFO_EXT;
+        descriptorPoolInlineUniformBlockInfo.pNext = nullptr;
+        descriptorPoolInlineUniformBlockInfo.maxInlineUniformBlockBindings = maxInlineUniformBlockBindings;
     }
 #endif // VK_EXT_inline_uniform_block
-    const VkResult result = vkCreateDescriptorPool(MAGMA_HANDLE(device), &poolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateDescriptorPool(MAGMA_HANDLE(device), &descriptorPoolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create descriptor pool");
 }
 

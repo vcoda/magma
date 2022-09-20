@@ -3,7 +3,7 @@ namespace magma
 constexpr LineRasterizationState::LineRasterizationState(const RasterizationState& state,
     VkLineRasterizationModeEXT lineRasterizationMode) noexcept:
     RasterizationState(state),
-    line{
+    lineRasterizationInfo{
         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT,
         state.pNext,
         lineRasterizationMode,
@@ -12,13 +12,13 @@ constexpr LineRasterizationState::LineRasterizationState(const RasterizationStat
         0 // lineStipplePattern
     }
 {
-    pNext = &line;
+    pNext = &lineRasterizationInfo;
 }
 
 constexpr LineRasterizationState::LineRasterizationState(const RasterizationState& state,
     VkLineRasterizationModeEXT lineRasterizationMode, uint32_t stippleFactor, uint16_t stipplePattern) noexcept:
     RasterizationState(state),
-    line{
+    lineRasterizationInfo{
         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT,
         state.pNext,
         lineRasterizationMode,
@@ -27,26 +27,26 @@ constexpr LineRasterizationState::LineRasterizationState(const RasterizationStat
         stipplePattern
     }
 {
-    pNext = &line;
+    pNext = &lineRasterizationInfo;
 }
 
 constexpr hash_t LineRasterizationState::hash() const noexcept
 {
     hash_t hash = RasterizationState::hash();
     return core::hashCombine(hash, core::hashArgs(
-        line.sType,
-        line.lineRasterizationMode,
-        line.stippledLineEnable,
-        line.lineStippleFactor,
-        line.lineStipplePattern));
+        lineRasterizationInfo.sType,
+        lineRasterizationInfo.lineRasterizationMode,
+        lineRasterizationInfo.stippledLineEnable,
+        lineRasterizationInfo.lineStippleFactor,
+        lineRasterizationInfo.lineStipplePattern));
 }
 
 constexpr bool LineRasterizationState::operator==(const LineRasterizationState& other) const noexcept
 {
     return RasterizationState::operator==(other) &&
-        (line.lineRasterizationMode == other.line.lineRasterizationMode) &&
-        (line.stippledLineEnable == other.line.stippledLineEnable) &&
-        (line.lineStippleFactor == other.line.lineStippleFactor) &&
-        (line.lineStipplePattern == other.line.lineStipplePattern);
+        (lineRasterizationInfo.lineRasterizationMode == other.lineRasterizationInfo.lineRasterizationMode) &&
+        (lineRasterizationInfo.stippledLineEnable == other.lineRasterizationInfo.stippledLineEnable) &&
+        (lineRasterizationInfo.lineStippleFactor == other.lineRasterizationInfo.lineStippleFactor) &&
+        (lineRasterizationInfo.lineStipplePattern == other.lineRasterizationInfo.lineStipplePattern);
 }
 } // namespace magma
