@@ -36,16 +36,16 @@ Display::Display(std::shared_ptr<const PhysicalDevice> physicalDevice, VkDisplay
 
 std::vector<VkDisplayModePropertiesKHR> Display::getModeProperties() const
 {
-    uint32_t propertyCount;
+    uint32_t propertyCount = 0;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetDisplayModePropertiesKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
     VkResult result = vkGetDisplayModePropertiesKHR(MAGMA_HANDLE(physicalDevice), handle, &propertyCount, nullptr);
-    MAGMA_THROW_FAILURE(result, "failed to count display mode properties");
-    std::vector<VkDisplayModePropertiesKHR> displayModeProperties(propertyCount);
+    std::vector<VkDisplayModePropertiesKHR> displayModeProperties;
     if (propertyCount > 0)
     {
+        displayModeProperties.resize(propertyCount);
         result = vkGetDisplayModePropertiesKHR(MAGMA_HANDLE(physicalDevice), handle, &propertyCount, displayModeProperties.data());
-        MAGMA_THROW_FAILURE(result, "failed to get display mode properties");
     }
+    MAGMA_THROW_FAILURE(result, "failed to get display mode properties");
     return displayModeProperties;
 }
 #endif // VK_KHR_display
