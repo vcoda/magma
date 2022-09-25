@@ -16,24 +16,22 @@ constexpr ColorBlendState::ColorBlendState() noexcept:
 constexpr ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& attachment,
     bool logicOpEnable /* false */,
     const VkLogicOp logicOp /* VK_LOGIC_OP_CLEAR */,
+    VkPipelineColorBlendStateCreateFlags flags /* 0 */,
     const std::initializer_list<float>& blendConstants /* {1, 1, 1, 1} */) noexcept:
     VkPipelineColorBlendStateCreateInfo{
         VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
         nullptr, // pNext
-        0, // flags
+        flags,
         MAGMA_BOOLEAN(logicOpEnable),
         logicOp,
         1, // attachmentCount
-        &attachment, // pAttachments
-        {0.f, 0.f, 0.f, 0.f} // blendConstants
+        &attachment,
+        {blendConstants.begin()[0],
+         blendConstants.begin()[1],
+         blendConstants.begin()[2],
+         blendConstants.begin()[3]}
     }
-{
-    const auto c = blendConstants.begin();
-    this->blendConstants[0] = c[0];
-    this->blendConstants[1] = c[1];
-    this->blendConstants[2] = c[2];
-    this->blendConstants[3] = c[3];
-}
+{}
 
 constexpr hash_t ColorBlendState::hash() const noexcept
 {

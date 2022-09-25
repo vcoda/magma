@@ -24,11 +24,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 MultiColorBlendState::MultiColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
+    VkPipelineColorBlendStateCreateFlags flags /* 0 */,
     const std::initializer_list<float>& blendConstants /* {1, 1, 1, 1} */) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     pNext = nullptr;
-    flags = 0;
+    flags = flags;
     this->logicOpEnable = VK_FALSE;
     this->logicOp = VK_LOGIC_OP_CLEAR;
     attachmentCount = MAGMA_COUNT(attachments);

@@ -24,11 +24,12 @@ constexpr bool StencilOpState::operator==(const StencilOpState& other) const noe
 }
 
 constexpr DepthStencilState::DepthStencilState(const VkCompareOp depthCompareOp, const bool depthWriteEnable,
-    const StencilOpState& front, const StencilOpState& back) noexcept:
+    const StencilOpState& front, const StencilOpState& back,
+    VkPipelineDepthStencilStateCreateFlags flags /* 0 */) noexcept:
     VkPipelineDepthStencilStateCreateInfo{
         VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO,
         nullptr, // pNext,
-        0, // flags
+        flags,
         MAGMA_BOOLEAN(depthCompareOp != VK_COMPARE_OP_ALWAYS), // depthTestEnable
         MAGMA_BOOLEAN(depthWriteEnable),
         depthCompareOp,
@@ -42,8 +43,9 @@ constexpr DepthStencilState::DepthStencilState(const VkCompareOp depthCompareOp,
 {}
 
 constexpr DepthStencilState::DepthStencilState(const DepthStencilState& state,
-    const StencilOpState& front, const StencilOpState& back) noexcept:
-    DepthStencilState(state.depthCompareOp, state.depthCompareOp, front, back)
+    const StencilOpState& front, const StencilOpState& back,
+    VkPipelineDepthStencilStateCreateFlags flags /* 0 */) noexcept:
+    DepthStencilState(state.depthCompareOp, state.depthCompareOp, front, back, flags)
 {}
 
 constexpr hash_t DepthStencilState::hash() const noexcept

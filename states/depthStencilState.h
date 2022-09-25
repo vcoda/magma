@@ -53,10 +53,12 @@ namespace magma
         constexpr DepthStencilState(VkCompareOp depthCompareOp,
             bool depthWriteEnable,
             const StencilOpState& front = renderstate::stencilAlwaysDontWrite,
-            const StencilOpState& back = renderstate::stencilAlwaysDontWrite) noexcept;
+            const StencilOpState& back = renderstate::stencilAlwaysDontWrite,
+            VkPipelineDepthStencilStateCreateFlags flags = 0) noexcept;
         constexpr DepthStencilState(const DepthStencilState& state,
             const StencilOpState& front,
-            const StencilOpState& back) noexcept;
+            const StencilOpState& back,
+            VkPipelineDepthStencilStateCreateFlags flags = 0) noexcept;
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const DepthStencilState&) const noexcept;
     };
