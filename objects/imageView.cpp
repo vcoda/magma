@@ -121,7 +121,7 @@ uint32_t ImageView::getArrayLayerCount() const noexcept
 
 VkExtent2D ImageView::getExtent() const noexcept
 {
-    const VkExtent3D& extent = image->getMipExtent(0);
+    const VkExtent3D extent = image->getMipExtent(baseMipLevel);
     return VkExtent2D{extent.width, extent.height};
 }
 
