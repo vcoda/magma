@@ -80,10 +80,14 @@ ImageView::ImageView(std::shared_ptr<Image> resource,
     if (!(format.depth() || format.stencil() || format.depthStencil()))
         imageViewInfo.components = swizzle;
     else
-        imageViewInfo.components = {VK_COMPONENT_SWIZZLE_IDENTITY,
-                               VK_COMPONENT_SWIZZLE_IDENTITY,
-                               VK_COMPONENT_SWIZZLE_IDENTITY,
-                               VK_COMPONENT_SWIZZLE_IDENTITY};
+    {   // Depth/stencil shouldn't have swizzling
+        imageViewInfo.components = {
+            VK_COMPONENT_SWIZZLE_IDENTITY,
+            VK_COMPONENT_SWIZZLE_IDENTITY,
+            VK_COMPONENT_SWIZZLE_IDENTITY,
+            VK_COMPONENT_SWIZZLE_IDENTITY
+        };
+    }
     if (format.depth())
         imageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
     else if (format.stencil())
