@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../misc/deviceQueueDescriptor.h"
+#include "../misc/structureChain.h"
 
 namespace magma
 {
@@ -34,15 +35,14 @@ namespace magma
 
     public:
         std::shared_ptr<Device> createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
-            const std::vector<const char *>& layers,
-            const std::vector<const char *>& extensions,
+            const std::vector<const char *>& enabledLayers,
+            const std::vector<const char *>& enabledExtensions,
             const VkPhysicalDeviceFeatures& deviceFeatures,
-            const std::vector<void *>& extendedDeviceFeatures = {}) const;
+            const std::vector<void *>& extendedDeviceFeatures = {},
+            const StructureChain& extendedInfo = StructureChain()) const;
         uint32_t getGroupId() const { return groupId; }
-        uint32_t physicalDeviceCount() const
-            { return static_cast<uint32_t>(physicalDevices.size()); }
-        std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId) const
-            { return physicalDevices[deviceId]; }
+        uint32_t getPhysicalDeviceCount() const { return MAGMA_COUNT(physicalDevices); }
+        std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId) const { return physicalDevices[deviceId]; }
 
     private:
         std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices;

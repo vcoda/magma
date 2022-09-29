@@ -44,7 +44,7 @@ namespace magma
             const std::vector<const char *>& enabledExtensions,
             const VkPhysicalDeviceFeatures& deviceFeatures,
             const std::vector<void *>& extendedDeviceFeatures = {},
-            const CreateInfo& chainedInfo = CreateInfo()) const;
+            const StructureChain& extendedInfo = StructureChain()) const;
         VkPhysicalDeviceFeatures getFeatures() const noexcept;
         VkFormatProperties getFormatProperties(VkFormat format) const noexcept;
         VkImageFormatProperties getImageFormatProperties(VkFormat format,

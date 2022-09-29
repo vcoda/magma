@@ -43,9 +43,8 @@ namespace magma
             const std::vector<const char *>& enabledExtensions,
             const VkPhysicalDeviceFeatures& deviceFeatures,
             const std::vector<void *>& extendedDeviceFeatures,
-            const CreateInfo& chainedInfo,
+            const StructureChain& extendedInfo,
             std::shared_ptr<IAllocator> allocator);
-        friend PhysicalDevice;
         MAGMA_FRIEND_MAKE_SHARED(Device);
 
     public:

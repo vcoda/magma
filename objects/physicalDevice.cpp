@@ -40,12 +40,18 @@ PhysicalDevice::PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDev
 
 std::shared_ptr<Device> PhysicalDevice::createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
     const std::vector<const char *>& enabledLayers, const std::vector<const char *>& enabledExtensions,
-    const VkPhysicalDeviceFeatures& deviceFeatures, const std::vector<void *>& extendedDeviceFeatures /* {} */,
-    const CreateInfo& chainedInfo /* default */) const
-{   // std::make_shared() couldn't be used because of private constructor
-    return std::shared_ptr<Device>(new Device(std::const_pointer_cast<PhysicalDevice>(shared_from_this()),
-        queueDescriptors, enabledLayers, enabledExtensions, deviceFeatures, extendedDeviceFeatures,
-        chainedInfo, this->hostAllocator));
+    const VkPhysicalDeviceFeatures& deviceFeatures, const std::vector<void *>& extendedDeviceFeatures /* empty */,
+    const StructureChain& extendedInfo /* default */) const
+{
+    return std::make_shared<Device>(
+        std::const_pointer_cast<PhysicalDevice>(shared_from_this()),
+        queueDescriptors,
+        enabledLayers,
+        enabledExtensions,
+        deviceFeatures,
+        extendedDeviceFeatures,
+        extendedInfo,
+        hostAllocator);
 }
 
 VkPhysicalDeviceFeatures PhysicalDevice::getFeatures() const noexcept
