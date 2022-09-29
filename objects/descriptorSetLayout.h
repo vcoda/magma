@@ -35,7 +35,8 @@ namespace magma
         explicit DescriptorSetLayout(std::shared_ptr<Device> device,
             const std::vector<VkDescriptorSetLayoutBinding>& bindings,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            VkDescriptorSetLayoutCreateFlags flags = 0);
+            VkDescriptorSetLayoutCreateFlags flags = 0,
+            const StructureChain& extendedInfo = StructureChain());
         ~DescriptorSetLayout();
         hash_t getHash() const noexcept { return hash; }
 

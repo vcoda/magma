@@ -49,7 +49,7 @@ namespace magma
         bool reset(bool releaseResources) noexcept;
         std::vector<std::shared_ptr<CommandBuffer>> allocateCommandBuffers(uint32_t commandBufferCount,
             bool primaryLevel);
-        void freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept;
+        void freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept;
 #ifdef VK_KHR_maintenance1
         void trim(VkCommandPoolTrimFlagsKHR flags = 0);
 #endif

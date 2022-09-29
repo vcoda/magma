@@ -38,7 +38,8 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
     const std::string& shaderFileName /* default */,
-    uint32_t setIndex /* 0 */):
+    uint32_t setIndex /* 0 */,
+    const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, descriptorPool->getDevice(), std::move(allocator)),
     layoutReflection(layoutReflection),
     descriptorPool(std::move(descriptorPool))
@@ -64,13 +65,13 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     setLayout = std::make_shared<DescriptorSetLayout>(device, bindings, hostAllocator, 0);
     // Allocate descriptor set
     const VkDescriptorSetLayout dereferencedSetLayouts[1] = {*setLayout};
-    VkDescriptorSetAllocateInfo allocInfo;
-    allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-    allocInfo.pNext = nullptr;
-    allocInfo.descriptorPool = MAGMA_HANDLE(descriptorPool);
-    allocInfo.descriptorSetCount = 1;
-    allocInfo.pSetLayouts = dereferencedSetLayouts;
-    const VkResult result = vkAllocateDescriptorSets(MAGMA_HANDLE(device), &allocInfo, &handle);
+    VkDescriptorSetAllocateInfo descriptorSetAllocateInfo;
+    descriptorSetAllocateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+    descriptorSetAllocateInfo.pNext = extendedInfo.getChainedNodes();
+    descriptorSetAllocateInfo.descriptorPool = MAGMA_HANDLE(descriptorPool);
+    descriptorSetAllocateInfo.descriptorSetCount = 1;
+    descriptorSetAllocateInfo.pSetLayouts = dereferencedSetLayouts;
+    const VkResult result = vkAllocateDescriptorSets(MAGMA_HANDLE(device), &descriptorSetAllocateInfo, &handle);
     MAGMA_THROW_FAILURE(result, "failed to allocate descriptor set");
 }
 

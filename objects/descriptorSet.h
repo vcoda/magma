@@ -43,7 +43,8 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory = nullptr,
             const std::string& shaderFileName = std::string(),
-            uint32_t setIndex = 0);
+            uint32_t setIndex = 0,
+            const StructureChain& extendedInfo = StructureChain());
         ~DescriptorSet();
         std::shared_ptr<DescriptorPool> getPool() noexcept { return descriptorPool; }
         std::shared_ptr<const DescriptorPool> getPool() const noexcept { return descriptorPool; }

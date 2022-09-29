@@ -35,21 +35,20 @@ CommandPool::CommandPool(std::shared_ptr<Device> device,
     bool resetCommandBuffer /* true */,
     uint32_t poolCommandBufferCount /* 256 */):
     NonDispatchable(VK_OBJECT_TYPE_COMMAND_POOL, std::move(device), std::move(allocator)),
-    queueFamilyIndex(queueFamilyIndex)
+    queueFamilyIndex(queueFamilyIndex),
+    pool(getOverridenAllocator() ? nullptr : std::make_unique<memory::LinearPlacementPool>(sizeof(CommandBuffer), poolCommandBufferCount))
 {
-    VkCommandPoolCreateInfo poolInfo;
-    poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    poolInfo.pNext = nullptr;
-    poolInfo.flags = 0;
+    VkCommandPoolCreateInfo cmdPoolInfo;
+    cmdPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    cmdPoolInfo.pNext = nullptr;
+    cmdPoolInfo.flags = 0;
     if (transient)
-        poolInfo.flags |= VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+        cmdPoolInfo.flags |= VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
     if (resetCommandBuffer)
-        poolInfo.flags |= VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-    poolInfo.queueFamilyIndex = queueFamilyIndex;
-    const VkResult result = vkCreateCommandPool(MAGMA_HANDLE(device), &poolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        cmdPoolInfo.flags |= VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+    cmdPoolInfo.queueFamilyIndex = queueFamilyIndex;
+    const VkResult result = vkCreateCommandPool(MAGMA_HANDLE(device), &cmdPoolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create command pool");
-    if (!getOverridenAllocator())
-        pool = std::make_unique<memory::LinearPlacementPool>(sizeof(CommandBuffer), poolCommandBufferCount);
 }
 
 CommandPool::~CommandPool()
@@ -68,52 +67,52 @@ bool CommandPool::reset(bool releaseResources) noexcept
 
 std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(uint32_t commandBufferCount, bool primaryLevel)
 {
-    VkCommandBufferAllocateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    info.pNext = nullptr;
-    info.commandPool = handle;
-    info.level = primaryLevel ? VK_COMMAND_BUFFER_LEVEL_PRIMARY : VK_COMMAND_BUFFER_LEVEL_SECONDARY;
-    info.commandBufferCount = commandBufferCount;
+    VkCommandBufferAllocateInfo cmdBufferAllocateInfo;
+    cmdBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    cmdBufferAllocateInfo.pNext = nullptr;
+    cmdBufferAllocateInfo.commandPool = handle;
+    cmdBufferAllocateInfo.level = primaryLevel ? VK_COMMAND_BUFFER_LEVEL_PRIMARY : VK_COMMAND_BUFFER_LEVEL_SECONDARY;
+    cmdBufferAllocateInfo.commandBufferCount = commandBufferCount;
     MAGMA_STACK_ARRAY(VkCommandBuffer, cmdBufferHandles, commandBufferCount);
-    const VkResult result = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &info, cmdBufferHandles);
+    const VkResult result = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &cmdBufferAllocateInfo, cmdBufferHandles);
     MAGMA_THROW_FAILURE(result, "failed to allocate command buffers");
-    std::vector<std::shared_ptr<CommandBuffer>> commandBuffers;
+    std::vector<std::shared_ptr<CommandBuffer>> cmdBuffers;
     for (const VkCommandBuffer handle : cmdBufferHandles)
     {
-        CommandBuffer *commandBuffer = nullptr;
+        CommandBuffer *cmdBuffer = nullptr;
         if (pool)
         {   // Optimize command buffer object allocation using placement new
             if (primaryLevel)
-                commandBuffer = pool->placementNew<PrimaryCommandBuffer>(handle, shared_from_this());
+                cmdBuffer = pool->placementNew<PrimaryCommandBuffer>(handle, shared_from_this());
             else
-                commandBuffer = pool->placementNew<SecondaryCommandBuffer>(handle, shared_from_this());
-            if (commandBuffer)
-                commandBuffers.emplace_back(commandBuffer, [](CommandBuffer *commandBuffer) {
-                    // Release resource ownership, but don't delete in memory because of placement new
-                    commandBuffer->~CommandBuffer();
-                });
+                cmdBuffer = pool->placementNew<SecondaryCommandBuffer>(handle, shared_from_this());
+            if (cmdBuffer)
+                cmdBuffers.emplace_back(cmdBuffer,
+                    [](CommandBuffer *cmdBuffer) {
+                        cmdBuffer->~CommandBuffer(); // Release resource ownership, but don't delete in memory because of placement new
+                    });
         }
-        if (!commandBuffer)
+        if (!cmdBuffer)
         {
             if (primaryLevel)
-                commandBuffer = new PrimaryCommandBuffer(handle, shared_from_this());
+                cmdBuffer = new PrimaryCommandBuffer(handle, shared_from_this());
             else
-                commandBuffer = new SecondaryCommandBuffer(handle, shared_from_this());
-            commandBuffers.emplace_back(commandBuffer);
+                cmdBuffer = new SecondaryCommandBuffer(handle, shared_from_this());
+            cmdBuffers.emplace_back(cmdBuffer);
         }
     }
-    return commandBuffers;
+    return cmdBuffers;
 }
 
-void CommandPool::freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& commandBuffers) noexcept
+void CommandPool::freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept
 {
-    MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCommandBuffers, commandBuffers.size());
-    for (const auto& buffer : commandBuffers)
-        dereferencedCommandBuffers.put(*buffer);
-    vkFreeCommandBuffers(MAGMA_HANDLE(device), handle, dereferencedCommandBuffers.size(), dereferencedCommandBuffers);
-    for (auto& buffer : commandBuffers)
+    MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCmdBuffers, cmdBuffers.size());
+    for (const auto& cmdBuffer : cmdBuffers)
+        dereferencedCmdBuffers.put(*cmdBuffer);
+    vkFreeCommandBuffers(MAGMA_HANDLE(device), handle, dereferencedCmdBuffers.size(), dereferencedCmdBuffers);
+    for (auto& buffer : cmdBuffers)
         buffer->handle = VK_NULL_HANDLE; // Do not call vkFreeCommandBuffers() in destructor
-    commandBuffers.clear();
+    cmdBuffers.clear();
 }
 
 #ifdef VK_KHR_maintenance1

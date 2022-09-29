@@ -26,21 +26,23 @@ namespace magma
 {
 DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const std::vector<VkDescriptorSetLayoutBinding>& bindings,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    VkDescriptorSetLayoutCreateFlags flags /* 0 */):
+    VkDescriptorSetLayoutCreateFlags flags /* 0 */,
+    const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT, std::move(device), std::move(allocator))
 {
-    VkDescriptorSetLayoutCreateInfo layoutInfo;
-    layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    layoutInfo.pNext = nullptr;
-    layoutInfo.flags = flags;
-    layoutInfo.bindingCount = MAGMA_COUNT(bindings);
-    layoutInfo.pBindings = bindings.data();
-    const VkResult result = vkCreateDescriptorSetLayout(MAGMA_HANDLE(device), &layoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    VkDescriptorSetLayoutCreateInfo descriptorSetLayoutInfo;
+    descriptorSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+    descriptorSetLayoutInfo.pNext = extendedInfo.getChainedNodes();
+    descriptorSetLayoutInfo.flags = flags;
+    descriptorSetLayoutInfo.bindingCount = MAGMA_COUNT(bindings);
+    descriptorSetLayoutInfo.pBindings = bindings.data();
+    const VkResult result = vkCreateDescriptorSetLayout(MAGMA_HANDLE(device), &descriptorSetLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create descriptor set layout");
     hash = core::hashArgs(
-        layoutInfo.sType,
-        layoutInfo.flags,
-        layoutInfo.bindingCount);
+        descriptorSetLayoutInfo.sType,
+        descriptorSetLayoutInfo.flags,
+        descriptorSetLayoutInfo.bindingCount,
+        extendedInfo.getHash());
     for (const auto& binding : bindings)
     {
         hash = core::hashCombine(hash, core::hashArgs(

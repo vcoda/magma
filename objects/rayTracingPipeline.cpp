@@ -66,16 +66,16 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
     pipelineInfo.basePipelineIndex = -1;
 #ifdef VK_EXT_pipeline_creation_feedback
-    VkPipelineCreationFeedbackCreateInfoEXT creationFeedbackInfo;
+    VkPipelineCreationFeedbackCreateInfoEXT pipelineCreationFeedbackInfo;
     MAGMA_STACK_ARRAY(VkPipelineCreationFeedbackEXT, stageCreationFeedbacks, shaderStages.size());
     if (getDevice()->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
     {
-        creationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
-        creationFeedbackInfo.pNext = nullptr;
-        creationFeedbackInfo.pPipelineCreationFeedback = &creationFeedback;
-        creationFeedbackInfo.pipelineStageCreationFeedbackCount = pipelineInfo.stageCount;
-        creationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks;
-        pipelineInfo.pNext = &creationFeedbackInfo;
+        pipelineInfo.pNext = &pipelineCreationFeedbackInfo;
+        pipelineCreationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
+        pipelineCreationFeedbackInfo.pNext = nullptr;
+        pipelineCreationFeedbackInfo.pPipelineCreationFeedback = &creationFeedback;
+        pipelineCreationFeedbackInfo.pipelineStageCreationFeedbackCount = pipelineInfo.stageCount;
+        pipelineCreationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks;
     }
 #endif // VK_EXT_pipeline_creation_feedback
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
