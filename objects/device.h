@@ -46,6 +46,7 @@ namespace magma
             const CreateInfo& chainedInfo,
             std::shared_ptr<IAllocator> allocator);
         friend PhysicalDevice;
+        MAGMA_FRIEND_MAKE_SHARED(Device);
 
     public:
         ~Device();
