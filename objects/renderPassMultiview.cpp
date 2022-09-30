@@ -18,74 +18,135 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "renderPassMultiview.h"
+#include "device.h"
+#include "../allocator/allocator.h"
+#include "../helpers/stackArray.h"
+#include "../misc/format.h"
+#include "../exceptions/errorResult.h"
 
 namespace magma
 {
 #ifdef VK_KHR_multiview
-class RenderPassMultiviewCreateInfo : public CreateInfo
-{
-public:
-    RenderPassMultiviewCreateInfo(const std::vector<uint32_t>& viewMasks,
-        const std::vector<int32_t>& viewOffsets,
-        const std::vector<uint32_t>& correlationMasks,
-        const CreateInfo& chainedInfo = CreateInfo()) noexcept:
-        viewMasks(viewMasks),
-        viewOffsets(viewOffsets),
-        correlationMasks(correlationMasks)
-    {
-        multiviewInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO_KHR;
-        multiviewInfo.pNext = chainedInfo.getNode();
-        multiviewInfo.subpassCount = MAGMA_COUNT(this->viewMasks);
-        multiviewInfo.pViewMasks = this->viewMasks.data();
-        multiviewInfo.dependencyCount = MAGMA_COUNT(this->viewOffsets);
-        multiviewInfo.pViewOffsets = this->viewOffsets.data();
-        multiviewInfo.correlationMaskCount = MAGMA_COUNT(this->correlationMasks);
-        multiviewInfo.pCorrelationMasks = this->correlationMasks.data();
-        hash = core::hashArgs(
-            multiviewInfo.sType,
-            multiviewInfo.subpassCount,
-            multiviewInfo.dependencyCount,
-            multiviewInfo.correlationMaskCount);
-        for (uint32_t i = 0; i < multiviewInfo.subpassCount; ++i)
-            hash = core::hashCombine(hash, multiviewInfo.pViewMasks[i]);
-        for (uint32_t i = 0; i < multiviewInfo.dependencyCount; ++i)
-            hash = core::hashCombine(hash, multiviewInfo.pViewOffsets[i]);
-        for (uint32_t i = 0; i < multiviewInfo.correlationMaskCount; ++i)
-            hash = core::hashCombine(hash, multiviewInfo.pCorrelationMasks[i]);
-        hash = core::hashCombine(hash, chainedInfo.getHash());
-    }
-
-    const void *getNode() const noexcept override
-    {
-        return &multiviewInfo;
-    }
-
-private:
-    const std::vector<uint32_t> viewMasks;
-    const std::vector<int32_t> viewOffsets;
-    const std::vector<uint32_t> correlationMasks;
-    VkRenderPassMultiviewCreateInfoKHR multiviewInfo;
-};
-
 MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const std::vector<AttachmentDescription>& attachments,
     uint32_t viewMask, uint32_t correlationMask,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const CreateInfo& chainedInfo /* default */):
-    RenderPass(std::move(device), attachments, std::move(allocator),
-        RenderPassMultiviewCreateInfo({viewMask}, {/* viewOffsets */}, {correlationMask}, chainedInfo)),
-    viewMasks{viewMask},
-    correlationMasks{correlationMask}
+    const StructureChain& extendedInfo /* default */):
+    MultiviewRenderPass(std::move(device), attachments, {viewMask}, {/* viewOffsets */}, {correlationMask}, std::move(allocator), extendedInfo)
 {}
 
 MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const std::vector<AttachmentDescription>& attachments,
     const std::vector<uint32_t>& viewMasks, const std::vector<int32_t> viewOffsets, const std::vector<uint32_t>& correlationMasks,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const CreateInfo& chainedInfo /* default */):
-    RenderPass(std::move(device), attachments, std::move(allocator),
-        RenderPassMultiviewCreateInfo(viewMasks, viewOffsets, correlationMasks, chainedInfo)),
+    const StructureChain& extendedInfo /* default */):
+    RenderPass(std::move(device), std::move(allocator), attachments),
     viewMasks(viewMasks),
     viewOffsets(viewOffsets),
     correlationMasks(correlationMasks)
-{}
+{
+    uint32_t multisampleAttachmentCount = 0;
+    uint32_t resolveAttachmentCount = 0;
+    for (const auto& attachmentDesc : attachments)
+    {
+        const Format format(attachmentDesc.format);
+        if (!format.depth() && !format.stencil() && !format.depthStencil())
+        {
+            if (attachmentDesc.samples > 1)
+                ++multisampleAttachmentCount;
+            else
+                ++resolveAttachmentCount;
+        }
+    }
+    const uint32_t colorAttachmentCount = multisampleAttachmentCount ? multisampleAttachmentCount : resolveAttachmentCount;
+    resolveAttachmentCount = std::max(0U, multisampleAttachmentCount);
+    MAGMA_STACK_ARRAY(VkAttachmentReference, colorAttachments, colorAttachmentCount);
+    MAGMA_STACK_ARRAY(VkAttachmentReference, resolveAttachments, resolveAttachmentCount);
+    VkAttachmentReference depthStencilAttachment = {0, VK_IMAGE_LAYOUT_UNDEFINED};
+    bool hasDepthStencilAttachment = false;
+    uint32_t attachmentIndex = 0, colorIndex = 0, resolveIndex = 0;
+    for (const auto& attachmentDesc : attachments)
+    {
+        const Format format(attachmentDesc.format);
+        if (format.depth() || format.stencil() || format.depthStencil())
+        {
+            if (VK_IMAGE_LAYOUT_UNDEFINED == depthStencilAttachment.layout)
+            {
+                const VkImageLayout depthStencilLayout = optimalDepthStencilLayout(format);
+                depthStencilAttachment = {attachmentIndex, depthStencilLayout};
+                hasDepthStencilAttachment = true;
+            }
+        }
+        else
+        {
+            if (attachmentDesc.samples > 1 || resolveAttachmentCount < 1)
+                colorAttachments[colorIndex++] = {attachmentIndex, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL};
+            else
+                resolveAttachments[resolveIndex++] = {attachmentIndex, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL};
+        }
+        ++attachmentIndex;
+    }
+    // Describe render pass
+    SubpassDescription subpassDescription;
+    subpassDescription.flags = 0;
+    subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+    subpassDescription.inputAttachmentCount = 0;
+    subpassDescription.pInputAttachments = nullptr;
+    subpassDescription.colorAttachmentCount = colorAttachmentCount;
+    subpassDescription.pColorAttachments = colorAttachments;
+    subpassDescription.pResolveAttachments = resolveAttachments;
+    subpassDescription.pDepthStencilAttachment = hasDepthStencilAttachment ? &depthStencilAttachment : nullptr;
+    subpassDescription.preserveAttachmentCount = 0;
+    subpassDescription.pPreserveAttachments = nullptr;
+    SubpassDependency dependencies[] = {
+        // Dependency at the beginning of the render pass
+        subpassStartDependency(colorAttachmentCount > 0, hasDepthStencilAttachment),
+        // Dependency at the end of the render pass
+        subpassEndDependency(colorAttachmentCount > 0, hasDepthStencilAttachment)
+    };
+    // Create render pass
+    VkRenderPassCreateInfo renderPassInfo;
+    VkRenderPassMultiviewCreateInfoKHR renderPassMultiviewInfo;
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+    renderPassInfo.pNext = &renderPassMultiviewInfo;
+    renderPassInfo.flags = 0;
+    renderPassInfo.attachmentCount = MAGMA_COUNT(attachments);
+    renderPassInfo.pAttachments = attachments.data();
+    renderPassInfo.subpassCount = 1;
+    renderPassInfo.pSubpasses = &subpassDescription;
+    renderPassInfo.dependencyCount = 2;
+    renderPassInfo.pDependencies = dependencies;
+    renderPassMultiviewInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO_KHR;
+    renderPassMultiviewInfo.pNext = extendedInfo.getChainedNodes();
+    renderPassMultiviewInfo.subpassCount = MAGMA_COUNT(this->viewMasks);
+    renderPassMultiviewInfo.pViewMasks = this->viewMasks.data();
+    renderPassMultiviewInfo.dependencyCount = MAGMA_COUNT(this->viewOffsets);
+    renderPassMultiviewInfo.pViewOffsets = this->viewOffsets.data();
+    renderPassMultiviewInfo.correlationMaskCount = MAGMA_COUNT(this->correlationMasks);
+    renderPassMultiviewInfo.pCorrelationMasks = this->correlationMasks.data();
+    const VkResult result = vkCreateRenderPass(MAGMA_HANDLE(device), &renderPassInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create multiview render pass");
+    hash = core::hashArgs(
+        renderPassInfo.sType,
+        renderPassInfo.flags,
+        renderPassInfo.attachmentCount,
+        renderPassInfo.subpassCount,
+        renderPassInfo.dependencyCount,
+        renderPassMultiviewInfo.sType,
+        renderPassMultiviewInfo.subpassCount,
+        renderPassMultiviewInfo.dependencyCount,
+        renderPassMultiviewInfo.correlationMaskCount,
+        extendedInfo.getHash());
+    for (const auto& attachment : attachments)
+        hash = core::hashCombine(hash, attachment.hash());
+    hash = core::hashCombine(hash, subpassDescription.getHash());
+    core::memzero(subpassDescription); // Aware destructor
+    for (const auto& dependency : dependencies)
+        hash = core::hashCombine(hash, dependency.hash());
+    for (uint32_t i = 0; i < renderPassMultiviewInfo.subpassCount; ++i)
+        hash = core::hashCombine(hash, renderPassMultiviewInfo.pViewMasks[i]);
+    for (uint32_t i = 0; i < renderPassMultiviewInfo.dependencyCount; ++i)
+        hash = core::hashCombine(hash, renderPassMultiviewInfo.pViewOffsets[i]);
+    for (uint32_t i = 0; i < renderPassMultiviewInfo.correlationMaskCount; ++i)
+        hash = core::hashCombine(hash, renderPassMultiviewInfo.pCorrelationMasks[i]);
+}
 #endif // VK_KHR_multiview
 } // namespace magma

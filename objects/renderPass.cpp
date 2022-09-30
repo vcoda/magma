@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include <algorithm>
 #include "renderPass.h"
 #include "device.h"
 #include "physicalDevice.h"
@@ -28,19 +27,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+RenderPass::RenderPass(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator,
+    const std::vector<AttachmentDescription>& attachments):
+    NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator)),
+    attachments(attachments),
+    hash(0ull)
+{}
+
 RenderPass::RenderPass(std::shared_ptr<Device> device, const AttachmentDescription& attachment,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const StructureChain& extendedInfo /* default */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */, const StructureChain& extendedInfo /* default */):
     RenderPass(std::move(device), std::vector<AttachmentDescription>{attachment}, std::move(allocator), extendedInfo)
 {}
 
-RenderPass::RenderPass(std::shared_ptr<Device> device,
-    const std::vector<AttachmentDescription>& attachments,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const StructureChain& extendedInfo /* default */):
-    NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator)),
-    attachments(attachments),
-    hash(0)
+RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<AttachmentDescription>& attachments,
+    std::shared_ptr<IAllocator> allocator /* nullptr */, const StructureChain& extendedInfo /* default */):
+    RenderPass(std::move(device), std::move(allocator), attachments)
 {
     uint32_t multisampleAttachmentCount = 0;
     uint32_t resolveAttachmentCount = 0;
