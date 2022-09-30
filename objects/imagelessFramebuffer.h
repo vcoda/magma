@@ -30,21 +30,7 @@ namespace magma
     class ImagelessFramebuffer : public Framebuffer
     {
     public:
-        struct AttachmentImageInfo : VkFramebufferAttachmentImageInfoKHR
-        {
-            std::vector<VkFormat> viewFormats;
-            AttachmentImageInfo() = default;
-            explicit AttachmentImageInfo(std::shared_ptr<const Image> image);
-            explicit AttachmentImageInfo(VkImageUsageFlags usage,
-                uint32_t width,
-                uint32_t height,
-                uint32_t layerCount,
-                const std::vector<VkFormat> viewFormats,
-                VkImageCreateFlags flags /* 0 */);
-            AttachmentImageInfo(const AttachmentImageInfo&);
-            AttachmentImageInfo& operator=(const AttachmentImageInfo&);
-        };
-
+        struct AttachmentImageInfo;
         explicit ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
             uint32_t width,
             uint32_t height,
@@ -56,6 +42,22 @@ namespace magma
         explicit ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
             const std::vector<AttachmentImageInfo>& attachments,
             std::shared_ptr<IAllocator> allocator = nullptr);
+    };
+
+    struct ImagelessFramebuffer::AttachmentImageInfo : VkFramebufferAttachmentImageInfoKHR
+    {
+        AttachmentImageInfo() = default;
+        explicit AttachmentImageInfo(std::shared_ptr<const Image> image);
+        explicit AttachmentImageInfo(VkImageUsageFlags usage,
+            uint32_t width,
+            uint32_t height,
+            uint32_t layerCount,
+            const std::vector<VkFormat> viewFormats,
+            VkImageCreateFlags flags /* 0 */);
+        AttachmentImageInfo(const AttachmentImageInfo&);
+        AttachmentImageInfo& operator=(const AttachmentImageInfo&);
+
+        std::vector<VkFormat> viewFormats;
     };
 } // namespace magma
 
