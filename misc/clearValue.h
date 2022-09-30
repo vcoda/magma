@@ -32,7 +32,7 @@ namespace magma
 
     /* Specifies the color image clear values to use when clearing a color image or attachment. */
 
-    struct ClearColor : public ClearValue
+    struct ClearColor : ClearValue
     {
         constexpr explicit ClearColor(float r, float g, float b, float a = 1.f) noexcept;
         constexpr explicit ClearColor(int32_t r, int32_t g, int32_t b, int32_t a) noexcept;
@@ -45,7 +45,7 @@ namespace magma
 
     /* Specifies the depth and stencil clear values to use when clearing a depth/stencil image or attachment. */
 
-    struct ClearDepthStencil : public ClearValue
+    struct ClearDepthStencil : ClearValue
     {
         constexpr explicit ClearDepthStencil(float depth, uint8_t stencil = 0) noexcept;
     };
