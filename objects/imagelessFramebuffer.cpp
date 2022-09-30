@@ -29,19 +29,16 @@ namespace magma
 {
 #ifdef VK_KHR_imageless_framebuffer
 ImagelessFramebuffer::AttachmentImageInfo::AttachmentImageInfo(std::shared_ptr<const Image> image):
-    VkFramebufferAttachmentImageInfoKHR{
-        VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR,
-        nullptr, // pNext
-        image->getFlags(),
-        image->getUsage(),
-        image->getMipExtent(0).width,
-        image->getMipExtent(0).height,
-        image->getArrayLayers(),
-        MAGMA_COUNT(image->getViewFormats()),
-        nullptr // pViewFormats
-    },
     viewFormats(image->getViewFormats())
 {
+    sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
+    pNext = nullptr;
+    flags = image->getFlags();
+    usage = image->getUsage();
+    width = image->getMipExtent(0).width;
+    height = image->getMipExtent(0).height;
+    layerCount = image->getArrayLayers();
+    viewFormatCount = MAGMA_COUNT(image->getViewFormats());
     pViewFormats = viewFormats.data();
 }
 
