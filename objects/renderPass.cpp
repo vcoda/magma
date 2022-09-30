@@ -30,14 +30,14 @@ namespace magma
 {
 RenderPass::RenderPass(std::shared_ptr<Device> device, const AttachmentDescription& attachment,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const CreateInfo& chainedInfo /* default */):
-    RenderPass(std::move(device), std::vector<AttachmentDescription>{attachment}, std::move(allocator), chainedInfo)
+    const StructureChain& extendedInfo /* default */):
+    RenderPass(std::move(device), std::vector<AttachmentDescription>{attachment}, std::move(allocator), extendedInfo)
 {}
 
 RenderPass::RenderPass(std::shared_ptr<Device> device,
     const std::vector<AttachmentDescription>& attachments,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const CreateInfo& chainedInfo /* default */):
+    const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator)),
     attachments(attachments),
     hash(0)
@@ -84,17 +84,17 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
         ++attachmentIndex;
     }
     // Describe render pass
-    SubpassDescription subpass;
-    subpass.flags = 0;
-    subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-    subpass.inputAttachmentCount = 0;
-    subpass.pInputAttachments = nullptr;
-    subpass.colorAttachmentCount = colorAttachmentCount;
-    subpass.pColorAttachments = colorAttachments;
-    subpass.pResolveAttachments = resolveAttachments;
-    subpass.pDepthStencilAttachment = hasDepthStencilAttachment ? &depthStencilAttachment : nullptr;
-    subpass.preserveAttachmentCount = 0;
-    subpass.pPreserveAttachments = nullptr;
+    SubpassDescription subpassDescription;
+    subpassDescription.flags = 0;
+    subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+    subpassDescription.inputAttachmentCount = 0;
+    subpassDescription.pInputAttachments = nullptr;
+    subpassDescription.colorAttachmentCount = colorAttachmentCount;
+    subpassDescription.pColorAttachments = colorAttachments;
+    subpassDescription.pResolveAttachments = resolveAttachments;
+    subpassDescription.pDepthStencilAttachment = hasDepthStencilAttachment ? &depthStencilAttachment : nullptr;
+    subpassDescription.preserveAttachmentCount = 0;
+    subpassDescription.pPreserveAttachments = nullptr;
     SubpassDependency dependencies[] = {
         // Dependency at the beginning of the render pass
         subpassStartDependency(colorAttachmentCount > 0, hasDepthStencilAttachment),
@@ -104,12 +104,12 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     // Create render pass
     VkRenderPassCreateInfo renderPassInfo;
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    renderPassInfo.pNext = chainedInfo.getNode();
+    renderPassInfo.pNext = extendedInfo.getChainedNodes();
     renderPassInfo.flags = 0;
     renderPassInfo.attachmentCount = MAGMA_COUNT(attachments);
     renderPassInfo.pAttachments = attachments.data();
     renderPassInfo.subpassCount = 1;
-    renderPassInfo.pSubpasses = &subpass;
+    renderPassInfo.pSubpasses = &subpassDescription;
     renderPassInfo.dependencyCount = 2;
     renderPassInfo.pDependencies = dependencies;
     const VkResult result = vkCreateRenderPass(MAGMA_HANDLE(device), &renderPassInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
@@ -119,12 +119,12 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
         renderPassInfo.flags,
         renderPassInfo.attachmentCount,
         renderPassInfo.subpassCount,
-        renderPassInfo.dependencyCount);
-    hash = core::hashCombine(hash, chainedInfo.getHash());
+        renderPassInfo.dependencyCount,
+        extendedInfo.getHash());
     for (const auto& attachment : attachments)
         hash = core::hashCombine(hash, attachment.hash());
-    hash = core::hashCombine(hash, subpass.hash());
-    core::memzero(subpass); // Aware destructor
+    hash = core::hashCombine(hash, subpassDescription.getHash());
+    core::memzero(subpassDescription); // Aware destructor
     for (const auto& dependency : dependencies)
         hash = core::hashCombine(hash, dependency.hash());
 }
@@ -133,8 +133,8 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     const std::vector<AttachmentDescription>& attachments,
     const std::vector<SubpassDescription>& subpasses,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const CreateInfo& chainedInfo /* default */):
-    RenderPass(std::move(device), attachments, subpasses, {}, std::move(allocator), chainedInfo)
+    const StructureChain& extendedInfo /* default */):
+    RenderPass(std::move(device), attachments, subpasses, {}, std::move(allocator), extendedInfo)
 {}
 
 RenderPass::RenderPass(std::shared_ptr<Device> device,
@@ -142,13 +142,13 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     const std::vector<SubpassDescription>& subpasses,
     const std::vector<SubpassDependency>& dependencies,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const CreateInfo& chainedInfo /* default */):
+    const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator)),
     hash(0)
 {
     VkRenderPassCreateInfo renderPassInfo;
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    renderPassInfo.pNext = chainedInfo.getNode();
+    renderPassInfo.pNext = extendedInfo.getChainedNodes();
     renderPassInfo.flags = 0;
     renderPassInfo.attachmentCount = MAGMA_COUNT(attachments);
     renderPassInfo.pAttachments = attachments.data();
@@ -163,12 +163,12 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
         renderPassInfo.flags,
         renderPassInfo.attachmentCount,
         renderPassInfo.subpassCount,
-        renderPassInfo.dependencyCount);
-    hash = core::hashCombine(hash, chainedInfo.getHash());
+        renderPassInfo.dependencyCount,
+        extendedInfo.getHash());
     for (const auto& attachment : attachments)
         hash = core::hashCombine(hash, attachment.hash());
     for (const auto& subpass : subpasses)
-        hash = core::hashCombine(hash, subpass.hash());
+        hash = core::hashCombine(hash, subpass.getHash());
     for (const auto& dependency : dependencies)
         hash = core::hashCombine(hash, dependency.hash());
 }

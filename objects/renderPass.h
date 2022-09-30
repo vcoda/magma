@@ -20,7 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../descriptors/attachment.h"
 #include "../descriptors/subpass.h"
 #include "../barriers/subpassDependency.h"
-#include "../misc/createInfo.h"
 
 namespace magma
 {
@@ -37,28 +36,28 @@ namespace magma
         explicit RenderPass(std::shared_ptr<Device> device,
             const AttachmentDescription& attachment,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            const CreateInfo& chainedInfo = CreateInfo());
+            const StructureChain& extendedInfo = StructureChain());
         explicit RenderPass(std::shared_ptr<Device> device,
             const std::vector<AttachmentDescription>& attachments,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            const CreateInfo& chainedInfo = CreateInfo());
+            const StructureChain& extendedInfo = StructureChain());
         explicit RenderPass(std::shared_ptr<Device> device,
             const std::vector<AttachmentDescription>& attachments,
             const std::vector<SubpassDescription>& subpasses,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            const CreateInfo& chainedInfo = CreateInfo());
+            const StructureChain& extendedInfo = StructureChain());
         explicit RenderPass(std::shared_ptr<Device> device,
             const std::vector<AttachmentDescription>& attachments,
             const std::vector<SubpassDescription>& subpasses,
             const std::vector<SubpassDependency>& dependencies,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            const CreateInfo& chainedInfo = CreateInfo());
+            const StructureChain& extendedInfo = StructureChain());
         ~RenderPass();
         const std::vector<AttachmentDescription>& getAttachments() const noexcept { return attachments; }
         bool hasClearOp() const noexcept;
         hash_t getHash() const noexcept { return hash; }
 
-    private:
+    protected:
         VkImageLayout optimalDepthStencilLayout(const Format& format) const;
         SubpassDependency subpassStartDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept;
         SubpassDependency subpassEndDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept;
