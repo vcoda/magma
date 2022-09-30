@@ -50,7 +50,7 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     const std::vector<VkFormat>& viewFormats,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkImageCreateFlags flags /* 0 */):
-    Framebuffer(std::move(renderPass), width, height, layerCount, std::move(allocator))
+    Framebuffer(std::move(renderPass), VkExtent2D{width, height}, layerCount, std::move(allocator))
 {
     VkFramebufferCreateInfo framebufferInfo;
     VkFramebufferAttachmentsCreateInfoKHR framebufferAttachmentsInfo;
@@ -85,8 +85,7 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     const std::vector<AttachmentImageInfo>& attachments,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Framebuffer(std::move(renderPass),
-        attachments.front().width,
-        attachments.front().height,
+        VkExtent2D{attachments.front().width, attachments.front().height},
         attachments.front().layerCount,
         std::move(allocator))
 {

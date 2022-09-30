@@ -28,23 +28,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass,
-    uint32_t width, uint32_t height, uint32_t layerCount,
+Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const VkExtent2D& extent, uint32_t layerCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
     renderPass(std::move(renderPass)),
-    extent({width, height}),
+    extent(extent),
     layerCount(layerCount)
 {}
 
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shared_ptr<ImageView> attachment,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkFramebufferCreateFlags flags /* 0 */):
-    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
-    renderPass(std::move(renderPass)),
-    attachments({attachment}),
-    extent(attachment->getExtent()),
-    layerCount(attachment->getArrayLayerCount())
+    Framebuffer(std::move(renderPass), attachment->getExtent(), layerCount, std::move(allocator))
 {
     const VkImageView imageView = *attachment;
     VkFramebufferCreateInfo framebufferInfo;
@@ -59,19 +54,16 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shar
     framebufferInfo.layers = layerCount;
     const VkResult result = vkCreateFramebuffer(MAGMA_HANDLE(device), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create framebuffer");
+    attachments.push_back(attachment);
 }
 
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std::vector<std::shared_ptr<ImageView>>& attachments,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkFramebufferCreateFlags flags /* 0 */):
-    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
-    renderPass(std::move(renderPass)),
-    attachments(attachments),
-    extent(attachments.front()->getExtent()),
-    layerCount(attachments.front()->getArrayLayerCount())
+    Framebuffer(std::move(renderPass), attachments.front()->getExtent(), attachments.front()->getArrayLayerCount(), std::move(allocator))
 {
-    MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, this->attachments.size());
-    for (auto& attachment : this->attachments)
+    MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachments.size());
+    for (auto& attachment : attachments)
         dereferencedAttachments.put(*attachment);
     VkFramebufferCreateInfo framebufferInfo;
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -85,6 +77,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std
     framebufferInfo.layers = layerCount;
     const VkResult result = vkCreateFramebuffer(MAGMA_HANDLE(device), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create framebuffer");
+    this->attachments = attachments;
 }
 
 Framebuffer::~Framebuffer()
