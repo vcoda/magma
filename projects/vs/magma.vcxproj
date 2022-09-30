@@ -233,7 +233,6 @@
     <ClInclude Include="..\..\misc\clearAttachment.h" />
     <ClInclude Include="..\..\misc\clearValue.h" />
     <ClInclude Include="..\..\misc\compatibility.h" />
-    <ClInclude Include="..\..\misc\createInfo.h" />
     <ClInclude Include="..\..\misc\deviceQueueDescriptor.h" />
     <ClInclude Include="..\..\misc\extProcAddress.h" />
     <ClInclude Include="..\..\misc\format.h" />

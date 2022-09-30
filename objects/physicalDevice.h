@@ -18,7 +18,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "dispatchable.h"
 #include "../extensions/physicalDeviceExtendedFeatures.h"
-#include "../misc/createInfo.h"
 #include "../misc/deviceQueueDescriptor.h"
 
 namespace magma
