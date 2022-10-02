@@ -76,7 +76,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std
     framebufferInfo.height = extent.height;
     framebufferInfo.layers = layerCount;
     const VkResult result = vkCreateFramebuffer(MAGMA_HANDLE(device), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create framebuffer");
+    MAGMA_THROW_FAILURE(result, "failed to create multi-attachment framebuffer");
     this->attachments = attachments;
 }
 

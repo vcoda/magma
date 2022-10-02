@@ -90,7 +90,7 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     framebufferAttachmentsInfo.attachmentImageInfoCount = framebufferInfo.attachmentCount;
     framebufferAttachmentsInfo.pAttachmentImageInfos = attachmentImageInfos;
     const VkResult result = vkCreateFramebuffer(MAGMA_HANDLE(device), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create imageless framebuffer");
+    MAGMA_THROW_FAILURE(result, "failed to create multi-attachment imageless framebuffer");
 }
 
 ImagelessFramebuffer::AttachmentImage::AttachmentImage(VkImageUsageFlags usage,
