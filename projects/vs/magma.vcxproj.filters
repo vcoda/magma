@@ -1282,8 +1282,6 @@
     <None Include="..\..\objects\device.inl">
       <Filter>Header Files\objects</Filter>
     </None>
-    <None Include="..\..\objects\imagelessFramebuffer.inl">
-      <Filter>Header Files\objects</Filter>
     </None>
     <None Include="..\..\barriers\subpassDependency2.inl">
       <Filter>Header Files\barriers</Filter>

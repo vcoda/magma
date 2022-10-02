@@ -18,7 +18,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "framebuffer.h"
 
-#ifdef VK_KHR_imageless_framebuffer
 namespace magma
 {
     class Image;
@@ -27,10 +26,11 @@ namespace magma
        allowing more flexibility in how they are used, and avoiding the need
        for many of the confusing compatibility rules. */
 
+#ifdef VK_KHR_imageless_framebuffer
     class ImagelessFramebuffer : public Framebuffer
     {
     public:
-        struct AttachmentImageInfo;
+        struct AttachmentImage;
         explicit ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
             uint32_t width,
             uint32_t height,
@@ -40,26 +40,24 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkImageCreateFlags flags = 0);
         explicit ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
-            const std::vector<AttachmentImageInfo>& attachments,
+            const std::vector<AttachmentImage>& attachments,
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
-    struct ImagelessFramebuffer::AttachmentImageInfo : VkFramebufferAttachmentImageInfoKHR
+    struct ImagelessFramebuffer::AttachmentImage : VkFramebufferAttachmentImageInfoKHR
     {
-        AttachmentImageInfo() = default;
-        explicit AttachmentImageInfo(std::shared_ptr<const Image> image);
-        explicit AttachmentImageInfo(VkImageUsageFlags usage,
+        AttachmentImage() = default;
+        explicit AttachmentImage(VkImageUsageFlags usage,
             uint32_t width,
             uint32_t height,
             uint32_t layerCount,
             const std::vector<VkFormat> viewFormats,
-            VkImageCreateFlags flags /* 0 */);
-        AttachmentImageInfo(const AttachmentImageInfo&);
-        AttachmentImageInfo& operator=(const AttachmentImageInfo&);
+            VkImageCreateFlags flags = 0);
+        explicit AttachmentImage(std::shared_ptr<const Image> image);
+        AttachmentImage(const AttachmentImage&);
+        AttachmentImage& operator=(const AttachmentImage&);
 
         std::vector<VkFormat> viewFormats;
     };
-} // namespace magma
-
-#include "imagelessFramebuffer.inl"
 #endif // VK_KHR_imageless_framebuffer
+} // namespace magma

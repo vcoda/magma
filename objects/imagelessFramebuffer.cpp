@@ -28,20 +28,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_imageless_framebuffer
-ImagelessFramebuffer::AttachmentImageInfo::AttachmentImageInfo(std::shared_ptr<const Image> image):
-    viewFormats(image->getViewFormats())
-{
-    sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
-    pNext = nullptr;
-    flags = image->getFlags();
-    usage = image->getUsage();
-    width = image->getMipExtent(0).width;
-    height = image->getMipExtent(0).height;
-    layerCount = image->getArrayLayers();
-    viewFormatCount = MAGMA_COUNT(image->getViewFormats());
-    pViewFormats = viewFormats.data();
-}
-
 ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
     uint32_t width, uint32_t height, uint32_t layerCount, VkImageUsageFlags usage,
     const std::vector<VkFormat>& viewFormats,
@@ -79,16 +65,15 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
 }
 
 ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
-    const std::vector<AttachmentImageInfo>& attachments,
+    const std::vector<AttachmentImage>& attachments,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Framebuffer(std::move(renderPass),
         VkExtent2D{attachments.front().width, attachments.front().height},
-        attachments.front().layerCount,
-        std::move(allocator))
+        attachments.front().layerCount, std::move(allocator))
 {
-    MAGMA_STACK_ARRAY(VkFramebufferAttachmentImageInfoKHR, framebufferAttachmentImageInfos, attachments.size());
+    MAGMA_STACK_ARRAY(VkFramebufferAttachmentImageInfoKHR, attachmentImageInfos, attachments.size());
     for (auto& attachment : attachments)
-        framebufferAttachmentImageInfos.put(attachment);
+        attachmentImageInfos.put(attachment);
     VkFramebufferCreateInfo framebufferInfo;
     VkFramebufferAttachmentsCreateInfoKHR framebufferAttachmentsInfo;
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -103,9 +88,72 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     framebufferAttachmentsInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR;
     framebufferAttachmentsInfo.pNext = nullptr;
     framebufferAttachmentsInfo.attachmentImageInfoCount = framebufferInfo.attachmentCount;
-    framebufferAttachmentsInfo.pAttachmentImageInfos = framebufferAttachmentImageInfos;
+    framebufferAttachmentsInfo.pAttachmentImageInfos = attachmentImageInfos;
     const VkResult result = vkCreateFramebuffer(MAGMA_HANDLE(device), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create imageless framebuffer");
+}
+
+ImagelessFramebuffer::AttachmentImage::AttachmentImage(VkImageUsageFlags usage,
+    uint32_t width, uint32_t height, uint32_t layerCount, const std::vector<VkFormat> viewFormats,
+    VkImageCreateFlags flags /* 0 */):
+    VkFramebufferAttachmentImageInfoKHR{
+        VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR,
+        nullptr, // pNext
+        flags,
+        usage,
+        width,
+        height,
+        layerCount,
+        MAGMA_COUNT(viewFormats),
+        viewFormats.data()
+    },
+    viewFormats(std::move(viewFormats))
+{}
+
+ImagelessFramebuffer::AttachmentImage::AttachmentImage(std::shared_ptr<const Image> image):
+    viewFormats(image->getViewFormats())
+{
+    sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
+    pNext = nullptr;
+    flags = image->getFlags();
+    usage = image->getUsage();
+    width = image->getMipExtent(0).width;
+    height = image->getMipExtent(0).height;
+    layerCount = image->getArrayLayers();
+    viewFormatCount = MAGMA_COUNT(viewFormats);
+    pViewFormats = viewFormats.data();
+}
+
+ImagelessFramebuffer::AttachmentImage::AttachmentImage(const AttachmentImage& other):
+    viewFormats(other.viewFormats)
+{
+    sType = other.sType;
+    pNext = other.pNext;
+    flags = other.flags;
+    usage = other.usage;
+    width = other.width;
+    height = other.height;
+    layerCount = other.layerCount;
+    viewFormatCount = other.viewFormatCount;
+    pViewFormats = viewFormats.data();
+}
+
+ImagelessFramebuffer::AttachmentImage& ImagelessFramebuffer::AttachmentImage::operator=(const AttachmentImage& other)
+{
+    if (this != &other)
+    {
+        sType = other.sType;
+        pNext = other.pNext;
+        flags = other.flags;
+        usage = other.usage;
+        width = other.width;
+        height = other.height;
+        layerCount = other.layerCount;
+        viewFormatCount = other.viewFormatCount;
+        viewFormats = other.viewFormats;
+        pViewFormats = viewFormats.data();
+    }
+    return *this;
 }
 #endif // VK_KHR_imageless_framebuffer
 } // namespace magma

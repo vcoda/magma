@@ -30,12 +30,6 @@ namespace magma
 
     class Framebuffer : public NonDispatchable<VkFramebuffer>
     {
-    protected:
-        Framebuffer(std::shared_ptr<const RenderPass> renderPass,
-            const VkExtent2D& extent,
-            uint32_t layerCount,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-
     public:
         explicit Framebuffer(std::shared_ptr<const RenderPass> renderPass,
             std::shared_ptr<ImageView> attachment,
@@ -52,6 +46,11 @@ namespace magma
         uint32_t getLayerCount() const noexcept { return layerCount; }
 
     protected:
+        Framebuffer(std::shared_ptr<const RenderPass> renderPass,
+            const VkExtent2D& extent,
+            uint32_t layerCount,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+
         std::shared_ptr<const RenderPass> renderPass;
         std::vector<std::shared_ptr<ImageView>> attachments;
         const VkExtent2D extent;
