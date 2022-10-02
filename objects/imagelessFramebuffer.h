@@ -48,7 +48,7 @@ namespace magma
 
     struct ImagelessFramebuffer::AttachmentImage final : VkFramebufferAttachmentImageInfoKHR
     {
-        AttachmentImage() = default;
+        AttachmentImage() noexcept: VkFramebufferAttachmentImageInfoKHR{} {}
         explicit AttachmentImage(VkImageUsageFlags usage,
             uint32_t width,
             uint32_t height,
