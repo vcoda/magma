@@ -38,10 +38,12 @@ namespace magma
             VkImageUsageFlags usage,
             const std::vector<VkFormat>& viewFormats,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            VkImageCreateFlags flags = 0);
+            VkImageCreateFlags flags = 0,
+            const StructureChain& extendedInfo = StructureChain());
         explicit ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
             const std::vector<AttachmentImage>& attachments,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const StructureChain& extendedInfo = StructureChain());
     };
 
     struct ImagelessFramebuffer::AttachmentImage : VkFramebufferAttachmentImageInfoKHR

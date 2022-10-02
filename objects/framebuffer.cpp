@@ -38,13 +38,14 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const VkE
 
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shared_ptr<ImageView> attachment,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    VkFramebufferCreateFlags flags /* 0 */):
+    VkFramebufferCreateFlags flags /* 0 */,
+    const StructureChain& extendedInfo /* default */):
     Framebuffer(std::move(renderPass), attachment->getExtent(), layerCount, std::move(allocator))
 {
     const VkImageView imageView = *attachment;
     VkFramebufferCreateInfo framebufferInfo;
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    framebufferInfo.pNext = nullptr;
+    framebufferInfo.pNext = extendedInfo.getChainedNodes();
     framebufferInfo.flags = flags;
     framebufferInfo.renderPass = MAGMA_HANDLE(renderPass);
     framebufferInfo.attachmentCount = 1;
@@ -59,7 +60,8 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shar
 
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std::vector<std::shared_ptr<ImageView>>& attachments,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    VkFramebufferCreateFlags flags /* 0 */):
+    VkFramebufferCreateFlags flags /* 0 */,
+    const StructureChain& extendedInfo /* default */):
     Framebuffer(std::move(renderPass), attachments.front()->getExtent(), attachments.front()->getArrayLayerCount(), std::move(allocator))
 {
     MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachments.size());
@@ -67,7 +69,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std
         dereferencedAttachments.put(*attachment);
     VkFramebufferCreateInfo framebufferInfo;
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    framebufferInfo.pNext = nullptr;
+    framebufferInfo.pNext = extendedInfo.getChainedNodes();
     framebufferInfo.flags = flags;
     framebufferInfo.renderPass = MAGMA_HANDLE(renderPass);
     framebufferInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);

@@ -32,7 +32,8 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     uint32_t width, uint32_t height, uint32_t layerCount, VkImageUsageFlags usage,
     const std::vector<VkFormat>& viewFormats,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    VkImageCreateFlags flags /* 0 */):
+    VkImageCreateFlags flags /* 0 */,
+    const StructureChain& extendedInfo /* default */):
     Framebuffer(std::move(renderPass), VkExtent2D{width, height}, layerCount, std::move(allocator))
 {
     VkFramebufferCreateInfo framebufferInfo;
@@ -48,7 +49,7 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     framebufferInfo.height = height;
     framebufferInfo.layers = layerCount;
     framebufferAttachmentsInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR;
-    framebufferAttachmentsInfo.pNext = nullptr;
+    framebufferAttachmentsInfo.pNext = extendedInfo.getChainedNodes();
     framebufferAttachmentsInfo.attachmentImageInfoCount = framebufferInfo.attachmentCount;
     framebufferAttachmentsInfo.pAttachmentImageInfos = &framebufferAttachmentImageInfo;
     framebufferAttachmentImageInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
@@ -64,9 +65,9 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     MAGMA_THROW_FAILURE(result, "failed to create imageless framebuffer");
 }
 
-ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
-    const std::vector<AttachmentImage>& attachments,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass, const std::vector<AttachmentImage>& attachments,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const StructureChain& extendedInfo /* default */):
     Framebuffer(std::move(renderPass),
         VkExtent2D{attachments.front().width, attachments.front().height},
         attachments.front().layerCount, std::move(allocator))
@@ -86,7 +87,7 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     framebufferInfo.height = extent.height;
     framebufferInfo.layers = layerCount;
     framebufferAttachmentsInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR;
-    framebufferAttachmentsInfo.pNext = nullptr;
+    framebufferAttachmentsInfo.pNext = extendedInfo.getChainedNodes();
     framebufferAttachmentsInfo.attachmentImageInfoCount = framebufferInfo.attachmentCount;
     framebufferAttachmentsInfo.pAttachmentImageInfos = attachmentImageInfos;
     const VkResult result = vkCreateFramebuffer(MAGMA_HANDLE(device), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
