@@ -726,6 +726,9 @@
     <ClInclude Include="..\..\misc\sharing.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\misc\framebufferAttachmentImage.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1119,6 +1122,9 @@
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\misc\sharing.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\framebufferAttachmentImage.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>
   </ItemGroup>

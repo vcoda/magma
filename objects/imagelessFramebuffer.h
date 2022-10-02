@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Image;
+    struct FramebufferAttachmentImage;
 
     /* Allows framebuffer to be created without the need for creating images first,
        allowing more flexibility in how they are used, and avoiding the need
@@ -30,7 +30,6 @@ namespace magma
     class ImagelessFramebuffer : public Framebuffer
     {
     public:
-        struct AttachmentImage;
         explicit ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
             uint32_t width,
             uint32_t height,
@@ -41,25 +40,13 @@ namespace magma
             VkImageCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         explicit ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
-            const std::vector<AttachmentImage>& attachments,
+            const FramebufferAttachmentImage& attachment,
             std::shared_ptr<IAllocator> allocator = nullptr,
             const StructureChain& extendedInfo = StructureChain());
-    };
-
-    struct ImagelessFramebuffer::AttachmentImage final : VkFramebufferAttachmentImageInfoKHR
-    {
-        AttachmentImage() noexcept: VkFramebufferAttachmentImageInfoKHR{} {}
-        explicit AttachmentImage(VkImageUsageFlags usage,
-            uint32_t width,
-            uint32_t height,
-            uint32_t layerCount,
-            const std::vector<VkFormat>& viewFormats,
-            VkImageCreateFlags flags = 0) noexcept;
-        explicit AttachmentImage(std::shared_ptr<const Image> image) noexcept;
-        AttachmentImage(const AttachmentImage&) noexcept;
-        AttachmentImage(AttachmentImage&&) noexcept = default;
-        ~AttachmentImage() { delete[] pViewFormats; }
-        AttachmentImage& operator=(const AttachmentImage&) noexcept;
+        explicit ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
+            const std::vector<FramebufferAttachmentImage>& attachments,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const StructureChain& extendedInfo = StructureChain());
     };
 #endif // VK_KHR_imageless_framebuffer
 } // namespace magma

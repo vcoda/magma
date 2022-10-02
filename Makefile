@@ -62,6 +62,7 @@ MAGMA_OBJS= \
 	\
 	misc/deviceQueueDescriptor.o \
 	misc/format.o \
+	misc/framebufferAttachmentImage.o \
 	misc/geometry.o \
 	misc/pipelineExecutable.o \
 	misc/scopedDebugMarker.o \

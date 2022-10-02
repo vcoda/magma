@@ -145,6 +145,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "misc/deviceQueueDescriptor.h"
 #include "misc/extProcAddress.h"
 #include "misc/format.h"
+#include "misc/framebufferAttachmentImage.h"
 #include "misc/geometry.h"
 #include "misc/imageSubresourceRange.h"
 #include "misc/pipelineExecutable.h"

@@ -228,6 +228,7 @@
     <ClInclude Include="..\..\helpers\uniformArrayIterator.h" />
     <ClInclude Include="..\..\magma.h" />
     <ClInclude Include="..\..\misc\borderColor.h" />
+    <ClInclude Include="..\..\misc\framebufferAttachmentImage.h" />
     <ClInclude Include="..\..\misc\sharing.h" />
     <ClInclude Include="..\..\misc\structureChain.h" />
     <ClInclude Include="..\..\misc\clearAttachment.h" />
@@ -400,6 +401,7 @@
     <ClCompile Include="..\..\helpers\checkFeatureSupport.cpp" />
     <ClCompile Include="..\..\helpers\executeCommandBuffer.cpp" />
     <ClCompile Include="..\..\helpers\stringize.cpp" />
+    <ClCompile Include="..\..\misc\framebufferAttachmentImage.cpp" />
     <ClCompile Include="..\..\misc\sharing.cpp" />
     <ClCompile Include="..\..\misc\structureChain.cpp" />
     <ClCompile Include="..\..\misc\deviceQueueDescriptor.cpp" />
