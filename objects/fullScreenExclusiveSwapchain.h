@@ -60,13 +60,13 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
         void acquireFullScreenExclusiveMode();
         void releaseFullScreenExclusiveMode();
-        bool fullScreenExclusiveMode() const noexcept { return fullScreenExlusive; }
+        bool fullScreenExclusiveMode() const noexcept { return fullScreenExclusive; }
     #ifdef VK_KHR_win32_surface
         HMONITOR getMonitorHandle() const noexcept { return hMonitor; }
     #endif
 
     private:
-        bool fullScreenExlusive;
+        bool fullScreenExclusive;
     #ifdef VK_KHR_win32_surface
         const HMONITOR hMonitor;
     #endif

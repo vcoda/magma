@@ -49,7 +49,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
     Swapchain(std::move(device), surfaceFormat, extent, arrayLayers, imageUsage, flags, sharing, oldSwapchain, std::move(allocator)),
-    fullScreenExlusive(false)
+    fullScreenExclusive(false)
 #ifdef VK_KHR_win32_surface
    ,hMonitor(hMonitor)
 #endif
@@ -163,7 +163,7 @@ void FullScreenExclusiveSwapchain::acquireFullScreenExclusiveMode()
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkAcquireFullScreenExclusiveModeEXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
     const VkResult result = vkAcquireFullScreenExclusiveModeEXT(MAGMA_HANDLE(device), handle);
     handleError(result, "failed to acquire full-screen exclusive mode");
-    fullScreenExlusive = true;
+    fullScreenExclusive = true;
 }
 
 void FullScreenExclusiveSwapchain::releaseFullScreenExclusiveMode()
@@ -171,7 +171,7 @@ void FullScreenExclusiveSwapchain::releaseFullScreenExclusiveMode()
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkReleaseFullScreenExclusiveModeEXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
     const VkResult result = vkReleaseFullScreenExclusiveModeEXT(MAGMA_HANDLE(device), handle);
     handleError(result, "failed to release full-screen exclusive mode");
-    fullScreenExlusive = false;
+    fullScreenExclusive = false;
 }
 #endif // VK_KHR_swapchain && VK_EXT_full_screen_exclusive
 } // namespace magma
