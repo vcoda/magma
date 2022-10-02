@@ -46,20 +46,20 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
     };
 
-    struct ImagelessFramebuffer::AttachmentImage : VkFramebufferAttachmentImageInfoKHR
+    struct ImagelessFramebuffer::AttachmentImage final : VkFramebufferAttachmentImageInfoKHR
     {
         AttachmentImage() = default;
         explicit AttachmentImage(VkImageUsageFlags usage,
             uint32_t width,
             uint32_t height,
             uint32_t layerCount,
-            const std::vector<VkFormat> viewFormats,
+            const std::vector<VkFormat>& viewFormats,
             VkImageCreateFlags flags = 0);
         explicit AttachmentImage(std::shared_ptr<const Image> image);
         AttachmentImage(const AttachmentImage&);
+        AttachmentImage(AttachmentImage&&) = default;
+        ~AttachmentImage() { delete[] pViewFormats; }
         AttachmentImage& operator=(const AttachmentImage&);
-
-        std::vector<VkFormat> viewFormats;
     };
 #endif // VK_KHR_imageless_framebuffer
 } // namespace magma
