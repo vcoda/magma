@@ -96,10 +96,6 @@ namespace magma
 #endif
 #ifdef VK_EXT_full_screen_exclusive
     MAGMA_TYPEDEF_SHARED_PTR(FullScreenExclusiveSwapchain)
-    MAGMA_TYPEDEF_SHARED_PTR(FullScreenExclusiveSwapchainWin32)
-#endif
-#ifdef VK_EXT_headless_surface
-    MAGMA_TYPEDEF_SHARED_PTR(HeadlessSurface)
 #endif
 #ifdef VK_EXT_transform_feedback
     MAGMA_TYPEDEF_SHARED_PTR(TransformFeedbackBuffer)
@@ -156,6 +152,9 @@ namespace magma
 #ifdef VK_KHR_android_surface
     MAGMA_TYPEDEF_SHARED_PTR(AndroidSurface)
 #endif
+#ifdef VK_FUCHSIA_imagepipe_surface
+    MAGMA_TYPEDEF_SHARED_PTR(FuchsiaImagePipeSurface)
+#endif
 #ifdef VK_MVK_ios_surface
     MAGMA_TYPEDEF_SHARED_PTR(iOSSurface)
 #endif
@@ -167,6 +166,12 @@ namespace magma
 #endif
 #ifdef VK_NN_vi_surface
     MAGMA_TYPEDEF_SHARED_PTR(ViSurface)
+#endif
+#ifdef VK_GGP_stream_descriptor_surface
+    MAGMA_TYPEDEF_SHARED_PTR(GgpStreamDescriptorSurface)
+#endif
+#ifdef VK_EXT_headless_surface
+    MAGMA_TYPEDEF_SHARED_PTR(HeadlessSurface)
 #endif
 #endif // VK_KHR_surface
 
