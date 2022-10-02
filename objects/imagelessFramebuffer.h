@@ -54,12 +54,12 @@ namespace magma
             uint32_t height,
             uint32_t layerCount,
             const std::vector<VkFormat>& viewFormats,
-            VkImageCreateFlags flags = 0);
-        explicit AttachmentImage(std::shared_ptr<const Image> image);
-        AttachmentImage(const AttachmentImage&);
-        AttachmentImage(AttachmentImage&&) = default;
+            VkImageCreateFlags flags = 0) noexcept;
+        explicit AttachmentImage(std::shared_ptr<const Image> image) noexcept;
+        AttachmentImage(const AttachmentImage&) noexcept;
+        AttachmentImage(AttachmentImage&&) noexcept = default;
         ~AttachmentImage() { delete[] pViewFormats; }
-        AttachmentImage& operator=(const AttachmentImage&);
+        AttachmentImage& operator=(const AttachmentImage&) noexcept;
     };
 #endif // VK_KHR_imageless_framebuffer
 } // namespace magma

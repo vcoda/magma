@@ -94,7 +94,7 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
 
 ImagelessFramebuffer::AttachmentImage::AttachmentImage(VkImageUsageFlags usage,
     uint32_t width, uint32_t height, uint32_t layerCount, const std::vector<VkFormat>& viewFormats,
-    VkImageCreateFlags flags /* 0 */):
+    VkImageCreateFlags flags /* 0 */) noexcept:
     VkFramebufferAttachmentImageInfoKHR{
         VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR,
         nullptr, flags, usage, width, height, layerCount,
@@ -102,7 +102,7 @@ ImagelessFramebuffer::AttachmentImage::AttachmentImage(VkImageUsageFlags usage,
     }
 {}
 
-ImagelessFramebuffer::AttachmentImage::AttachmentImage(std::shared_ptr<const Image> image)
+ImagelessFramebuffer::AttachmentImage::AttachmentImage(std::shared_ptr<const Image> image) noexcept
 {
     sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
     pNext = nullptr;
@@ -115,7 +115,7 @@ ImagelessFramebuffer::AttachmentImage::AttachmentImage(std::shared_ptr<const Ima
     pViewFormats = core::copyVector(image->getViewFormats());
 }
 
-ImagelessFramebuffer::AttachmentImage::AttachmentImage(const AttachmentImage& other)
+ImagelessFramebuffer::AttachmentImage::AttachmentImage(const AttachmentImage& other) noexcept
 {
     sType = other.sType;
     pNext = other.pNext;
@@ -129,7 +129,7 @@ ImagelessFramebuffer::AttachmentImage::AttachmentImage(const AttachmentImage& ot
     pViewFormats = core::copyArray(other.pViewFormats, other.viewFormatCount);
 }
 
-ImagelessFramebuffer::AttachmentImage& ImagelessFramebuffer::AttachmentImage::operator=(const AttachmentImage& other)
+ImagelessFramebuffer::AttachmentImage& ImagelessFramebuffer::AttachmentImage::operator=(const AttachmentImage& other) noexcept
 {
     if (this != &other)
     {
