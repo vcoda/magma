@@ -62,7 +62,9 @@ Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance,
     HWND hWnd,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkWin32SurfaceCreateFlagsKHR flags /* 0 */):
-    Surface(std::move(instance), std::move(allocator))
+    Surface(std::move(instance), std::move(allocator)),
+    hInstance(hInstance),
+    hWnd(hWnd)
 {
     VkWin32SurfaceCreateInfoKHR surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
@@ -81,7 +83,9 @@ XlibSurface::XlibSurface(std::shared_ptr<const Instance> instance,
     Window window,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkXlibSurfaceCreateFlagsKHR flags /* 0 */):
-    Surface(std::move(instance), std::move(allocator))
+    Surface(std::move(instance), std::move(allocator)),
+    dpy(dpy),
+    window(window)
 {
     VkXlibSurfaceCreateInfoKHR surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR;
@@ -100,7 +104,9 @@ XcbSurface::XcbSurface(std::shared_ptr<const Instance> instance,
     xcb_window_t window,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkXcbSurfaceCreateFlagsKHR flags /* 0 */):
-    Surface(std::move(instance), std::move(allocator))
+    Surface(std::move(instance), std::move(allocator)),
+    connection(connection),
+    window(window)
 {
     VkXcbSurfaceCreateInfoKHR surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
@@ -119,7 +125,9 @@ WaylandSurface::WaylandSurface(std::shared_ptr<const Instance> instance,
     wl_surface *surface,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkWaylandSurfaceCreateFlagsKHR flags /* 0 */):
-    Surface(std::move(instance), std::move(allocator))
+    Surface(std::move(instance), std::move(allocator)),
+    display(display),
+    surface(surface)
 {
     VkWaylandSurfaceCreateInfoKHR surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR;
@@ -138,7 +146,9 @@ QnxSurface::QnxSurface(std::shared_ptr<const Instance> instance,
     struct _screen_window *window,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkScreenSurfaceCreateFlagsQNX flags /* 0 */):
-    Surface(std::move(instance), std::move(allocator))
+    Surface(std::move(instance), std::move(allocator)),
+    context(context),
+    window(window)
 {
     VkScreenSurfaceCreateInfoQNX surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_SCREEN_SURFACE_CREATE_INFO_QNX;
@@ -156,7 +166,8 @@ AndroidSurface::AndroidSurface(std::shared_ptr<const Instance> instance,
     ANativeWindow *window,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkAndroidSurfaceCreateFlagsKHR flags /* 0 */):
-    Surface(std::move(instance), std::move(allocator))
+    Surface(std::move(instance), std::move(allocator)),
+    window(window)
 {
     VkAndroidSurfaceCreateInfoKHR surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR;
@@ -171,7 +182,8 @@ AndroidSurface::AndroidSurface(std::shared_ptr<const Instance> instance,
 #ifdef VK_FUCHSIA_imagepipe_surface
 FuchsiaImagePipeSurface::FuchsiaImagePipeSurface(std::shared_ptr<const Instance> instance, zx_handle_t imagePipeHandle,
     std::shared_ptr<IAllocator> allocator /* nullptr */, VkImagePipeSurfaceCreateFlagsFUCHSIA flags /* 0 */):
-    Surface(std::move(instance), std::move(allocator))
+    Surface(std::move(instance), std::move(allocator)),
+    imagePipeHandle(imagePipeHandle)
 {
     VkImagePipeSurfaceCreateInfoFUCHSIA surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_IMAGEPIPE_SURFACE_CREATE_INFO_FUCHSIA;
@@ -188,7 +200,8 @@ iOSSurface::iOSSurface(std::shared_ptr<const Instance> instance,
     const void *view,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkIOSSurfaceCreateFlagsMVK flags /* 0 */):
-    Surface(std::move(instance), std::move(allocator))
+    Surface(std::move(instance), std::move(allocator)),
+    view(view)
 {
     VkIOSSurfaceCreateInfoMVK surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_IOS_SURFACE_CREATE_INFO_MVK;
@@ -205,7 +218,8 @@ MacOSSurface::MacOSSurface(std::shared_ptr<const Instance> instance,
     const void *view,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkMacOSSurfaceCreateFlagsMVK flags /* 0 */):
-    Surface(std::move(instance), std::move(allocator))
+    Surface(std::move(instance), std::move(allocator)),
+    view(view)
 {
     VkMacOSSurfaceCreateInfoMVK surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_MACOS_SURFACE_CREATE_INFO_MVK;
@@ -222,7 +236,8 @@ MetalSurface::MetalSurface(std::shared_ptr<const Instance> instance,
     const CAMetalLayer *layer,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkMetalSurfaceCreateFlagsEXT flags /* 0 */):
-    Surface(std::move(instance), std::move(allocator))
+    Surface(std::move(instance), std::move(allocator)),
+    layer(layer)
 {
     VkMetalSurfaceCreateInfoEXT surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT;
@@ -239,7 +254,8 @@ ViSurface::ViSurface(std::shared_ptr<const Instance> instance,
     void *window,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkViSurfaceCreateFlagsNN flags /* 0 */):
-    Surface(std::move(instance), std::move(allocator))
+    Surface(std::move(instance), std::move(allocator)),
+    window(window)
 {
     VkViSurfaceCreateInfoNN surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_VI_SURFACE_CREATE_INFO_NN;
@@ -268,19 +284,24 @@ GgpStreamDescriptorSurface::GgpStreamDescriptorSurface(std::shared_ptr<const Ins
 
 #ifdef VK_KHR_display
 DisplaySurface::DisplaySurface(std::shared_ptr<const Instance> instance,
-    std::shared_ptr<const DisplayMode> displayMode,
+    std::shared_ptr<const DisplayMode> displayMode_,
     uint32_t planeIndex,
     uint32_t planeStackIndex,
     VkSurfaceTransformFlagBitsKHR transform,
     VkDisplayPlaneAlphaFlagBitsKHR alphaMode,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    Surface(std::move(instance), std::move(allocator))
+    Surface(std::move(instance), std::move(allocator)),
+    displayMode(std::move(displayMode_)),
+    planeIndex(planeIndex),
+    planeStackIndex(planeStackIndex),
+    transform(transform),
+    alphaMode(alphaMode)
 {
     VkDisplaySurfaceCreateInfoKHR displaySurfaceInfo;
     displaySurfaceInfo.sType = VK_STRUCTURE_TYPE_DISPLAY_SURFACE_CREATE_INFO_KHR;
     displaySurfaceInfo.pNext = nullptr;
     displaySurfaceInfo.flags = 0;
-    displaySurfaceInfo.displayMode = *displayMode;
+    displaySurfaceInfo.displayMode = MAGMA_HANDLE(displayMode);
     displaySurfaceInfo.planeIndex = planeIndex;
     displaySurfaceInfo.planeStackIndex = planeStackIndex;
     displaySurfaceInfo.transform = transform;

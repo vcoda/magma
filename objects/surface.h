@@ -54,6 +54,12 @@ namespace magma
             HWND hWnd,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkWin32SurfaceCreateFlagsKHR flags = 0);
+        HINSTANCE getInstance() const noexcept { return hInstance; }
+        HWND getWindow() const noexcept { return hWnd; }
+
+    private:
+        const HINSTANCE hInstance;
+        const HWND hWnd;
     };
 #endif // VK_KHR_win32_surface
 
@@ -69,6 +75,12 @@ namespace magma
             Window window,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkXlibSurfaceCreateFlagsKHR flags = 0);
+        const ::Display *getDisplay() const noexcept { return dpy; }
+        Window getWindow() const noexcept { return window; }
+
+    private:
+        const ::Display *const dpy;
+        const Window window;
     };
 #endif // VK_KHR_xlib_surface
 
@@ -84,6 +96,12 @@ namespace magma
             xcb_window_t window,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkXcbSurfaceCreateFlagsKHR flags = 0);
+        const xcb_connection_t *getConnection() const noexcept { return connection; }
+        xcb_window_t getWindow() const noexcept { return window; }
+
+    private:
+        const xcb_connection_t *const connection;
+        const xcb_window_t window;
     };
 #endif // VK_KHR_xcb_surface
 
@@ -98,6 +116,12 @@ namespace magma
             wl_surface *surface,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkWaylandSurfaceCreateFlagsKHR flags = 0);
+        const wl_display *getDisplay() const noexcept { return display; }
+        const wl_surface *getSurface() const noexcept { return surface; }
+
+    private:
+        const wl_display *const display;
+        const wl_surface *const surface;
     };
 #endif // VK_KHR_wayland_surface
 
@@ -112,6 +136,12 @@ namespace magma
             struct _screen_window *window,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkScreenSurfaceCreateFlagsQNX flags = 0);
+        struct _screen_context const *getContext() const noexcept { return context; }
+        struct _screen_window const *getWindow() const noexcept { return window; }
+
+    private:
+        struct _screen_context const *const context;
+        struct _screen_window const *const window;
     };
 #endif // VK_QNX_screen_surface
 
@@ -126,6 +156,10 @@ namespace magma
             ANativeWindow *window,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkAndroidSurfaceCreateFlagsKHR flags = 0);
+        const ANativeWindow *getWindow() const noexcept { return window; }
+
+    private:
+        const ANativeWindow *const window;
     };
 #endif // VK_KHR_android_surface
 
@@ -137,7 +171,10 @@ namespace magma
             zx_handle_t imagePipeHandle,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkImagePipeSurfaceCreateFlagsFUCHSIA flags = 0);
+        const zx_handle_t getImagePipe() const noexcept { return imagePipeHandle; }
 
+    private:
+        const zx_handle_t imagePipeHandle;
     };
 #endif // VK_FUCHSIA_imagepipe_surface
 
@@ -153,6 +190,10 @@ namespace magma
             const void *view,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkIOSSurfaceCreateFlagsMVK flags = 0);
+        const void *getView() const noexcept { return view; }
+
+    private:
+        const void *const view;
     };
 #endif // VK_MVK_ios_surface
 
@@ -168,6 +209,10 @@ namespace magma
             const void *view,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkMacOSSurfaceCreateFlagsMVK flags = 0);
+        const void *getView() const noexcept { return view; }
+
+    private:
+        const void *const view;
     };
 #endif // VK_MVK_macos_surface
 
@@ -182,6 +227,10 @@ namespace magma
             const CAMetalLayer *layer,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkMetalSurfaceCreateFlagsEXT flags = 0);
+        const CAMetalLayer *getLayer() const noexcept { return layer; }
+
+    private:
+        const CAMetalLayer *layer;
     };
 #endif // VK_EXT_metal_surface
 
@@ -195,6 +244,10 @@ namespace magma
             void *window,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkViSurfaceCreateFlagsNN flags = 0);
+        const void *getWindow() const noexcept { return window; }
+
+    private:
+        const void *const window;
     };
 #endif // VK_NN_vi_surface
 
@@ -209,6 +262,10 @@ namespace magma
             GgpStreamDescriptor streamDescriptor,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkStreamDescriptorSurfaceCreateFlagsGGP flags = 0);
+        const GgpStreamDescriptor getStreamDescriptor() const noexcept { return streamDescriptor; }
+
+    private:
+        const GgpStreamDescriptor streamDescriptor;
     };
 #endif // VK_GGP_stream_descriptor_surface
 
@@ -228,6 +285,17 @@ namespace magma
             VkSurfaceTransformFlagBitsKHR transform,
             VkDisplayPlaneAlphaFlagBitsKHR alphaMode,
             std::shared_ptr<IAllocator> allocator = nullptr);
+        uint32_t getPlaneIndex() const noexcept { return planeIndex; }
+        uint32_t getPlaneStackIndex() const noexcept { return planeStackIndex; }
+        VkSurfaceTransformFlagBitsKHR getTransform() const noexcept { return transform; }
+        VkDisplayPlaneAlphaFlagBitsKHR getAlphaMode() const noexcept { return alphaMode; }
+
+    private:
+        std::shared_ptr<const DisplayMode> displayMode;
+        const uint32_t planeIndex;
+        const uint32_t planeStackIndex;
+        const VkSurfaceTransformFlagBitsKHR transform;
+        const VkDisplayPlaneAlphaFlagBitsKHR alphaMode;
     };
 #endif // VK_KHR_display
 
