@@ -156,7 +156,6 @@ ViewportState& ViewportState::operator=(const ViewportState& other) noexcept
 #ifdef VK_EXT_depth_clip_control
         depthClipControlInfo = other.depthClipControlInfo;
 #endif
-        sType = other.sType;
         if (!other.pNext)
             pNext = nullptr;
 #ifdef VK_EXT_depth_clip_control

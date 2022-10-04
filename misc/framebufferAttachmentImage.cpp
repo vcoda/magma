@@ -74,8 +74,6 @@ FramebufferAttachmentImage& FramebufferAttachmentImage::operator=(const Framebuf
 {
     if (this != &other)
     {
-        sType = other.sType;
-        pNext = other.pNext;
         flags = other.flags;
         usage = other.usage;
         width = other.width;

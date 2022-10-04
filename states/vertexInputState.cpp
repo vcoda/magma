@@ -150,8 +150,6 @@ VertexInputState& VertexInputState::operator=(const VertexInputState& other) noe
 {
     if (this != &other)
     {
-        sType = other.sType;
-        pNext = nullptr;
         flags = other.flags;
         vertexBindingDescriptionCount = other.vertexBindingDescriptionCount;
         delete[] pVertexBindingDescriptions;

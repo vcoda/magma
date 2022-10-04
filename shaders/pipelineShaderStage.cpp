@@ -56,8 +56,6 @@ PipelineShaderStage& PipelineShaderStage::operator=(const PipelineShaderStage& o
     {
         shaderModule = other.shaderModule;
         specialization = other.specialization;
-        sType = other.sType;
-        pNext = other.pNext;
         flags = other.flags;
         stage = other.stage;
         module = other.module;

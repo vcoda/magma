@@ -72,8 +72,6 @@ MultiViewportState& MultiViewportState::operator=(const MultiViewportState& othe
     {
         viewports = other.viewports,
         scissors = other.scissors;
-        sType = other.sType;
-        pNext = nullptr;
         flags = other.flags;
         viewportCount = other.viewportCount;
         pViewports = viewports.data();

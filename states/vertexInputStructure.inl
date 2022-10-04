@@ -98,8 +98,6 @@ inline VertexInputStructure<Vertex>& VertexInputStructure<Vertex>::operator=(con
 {
     if (this != &other)
     {
-        sType = other.sType;
-        pNext = other.pNext;
         flags = other.flags;
         vertexBindingDescriptionCount = other.vertexBindingDescriptionCount;
         delete[] pVertexBindingDescriptions;
