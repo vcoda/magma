@@ -150,8 +150,8 @@ std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId) c
     const VkResult result = vkEnumeratePhysicalDevices(handle, &physicalDeviceCount, physicalDevices);
     MAGMA_THROW_FAILURE(result, "failed to enumerate physical devices");
     VkPhysicalDevice physicalDevice = physicalDevices[deviceId];
-    std::shared_ptr<Instance> self = std::const_pointer_cast<Instance>(shared_from_this());
-    return std::shared_ptr<PhysicalDevice>(new PhysicalDevice(self, physicalDevice, hostAllocator));
+    std::shared_ptr<Instance> instance = std::const_pointer_cast<Instance>(shared_from_this());
+    return std::shared_ptr<PhysicalDevice>(new PhysicalDevice(instance, physicalDevice, hostAllocator));
 }
 
 #ifdef VK_KHR_device_group
@@ -170,17 +170,18 @@ std::vector<VkPhysicalDeviceGroupPropertiesKHR> Instance::enumeratePhysicalDevic
     return physicalDeviceGroups;
 }
 
-std::shared_ptr<PhysicalDeviceGroup> Instance::getPhysicalDeviceGroup(uint32_t groupId)
+std::shared_ptr<PhysicalDeviceGroup> Instance::getPhysicalDeviceGroup(uint32_t groupId) const
 {
     const std::vector<VkPhysicalDeviceGroupPropertiesKHR>& deviceGroups = enumeratePhysicalDeviceGroups();
     if (groupId >= MAGMA_COUNT(deviceGroups))
         MAGMA_THROW("invalid <groupId> parameter");
     std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices;
     const VkPhysicalDeviceGroupProperties& deviceGroupProperties = deviceGroups[groupId];
+    std::shared_ptr<Instance> instance = std::const_pointer_cast<Instance>(shared_from_this());
     for (uint32_t deviceId = 0; deviceId < deviceGroupProperties.physicalDeviceCount; ++deviceId)
     {
         VkPhysicalDevice physicalDevice = deviceGroupProperties.physicalDevices[deviceId];
-        physicalDevices.emplace_back(new PhysicalDevice(shared_from_this(), physicalDevice, hostAllocator));
+        physicalDevices.emplace_back(new PhysicalDevice(instance, physicalDevice, hostAllocator));
     }
     return std::shared_ptr<PhysicalDeviceGroup>(new PhysicalDeviceGroup(physicalDevices, groupId));
 }
