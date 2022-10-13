@@ -136,10 +136,10 @@ std::vector<VkExtensionProperties> PhysicalDevice::enumerateExtensions(const cha
 }
 
 #ifdef VK_KHR_surface
-bool PhysicalDevice::getSurfaceSupport(std::shared_ptr<const Surface> surface) const noexcept
+bool PhysicalDevice::getSurfaceSupport(std::shared_ptr<const Surface> surface, uint32_t queueFamilyIndex) const noexcept
 {
     VkBool32 supported = VK_FALSE;
-    const VkResult result = vkGetPhysicalDeviceSurfaceSupportKHR(handle, 0, *surface, &supported);
+    const VkResult result = vkGetPhysicalDeviceSurfaceSupportKHR(handle, queueFamilyIndex, *surface, &supported);
     return (VK_SUCCESS == result) && (VK_TRUE == supported);
 }
 

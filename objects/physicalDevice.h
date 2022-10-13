@@ -55,7 +55,8 @@ namespace magma
         std::vector<VkLayerProperties> enumerateLayers() const;
         std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr) const;
     #ifdef VK_KHR_surface
-        bool getSurfaceSupport(std::shared_ptr<const Surface> surface) const noexcept;
+        bool getSurfaceSupport(std::shared_ptr<const Surface> surface,
+            uint32_t queueFamilyIndex) const noexcept;
         VkSurfaceCapabilitiesKHR getSurfaceCapabilities(std::shared_ptr<const Surface> surface) const;
         std::vector<VkSurfaceFormatKHR> getSurfaceFormats(std::shared_ptr<const Surface> surface) const;
         std::vector<VkPresentModeKHR> getSurfacePresentModes(std::shared_ptr<const Surface> surface) const;
