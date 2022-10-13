@@ -160,13 +160,13 @@ std::vector<VkPhysicalDeviceGroupPropertiesKHR> Instance::enumeratePhysicalDevic
     uint32_t physicalDeviceGroupCount = 0;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkEnumeratePhysicalDeviceGroupsKHR, VK_KHR_DEVICE_GROUP_CREATION_EXTENSION_NAME);
     VkResult result = vkEnumeratePhysicalDeviceGroupsKHR(handle, &physicalDeviceGroupCount, nullptr);
-    MAGMA_THROW_FAILURE(result, "failed to count groups of physical devices");
-    std::vector<VkPhysicalDeviceGroupPropertiesKHR> physicalDeviceGroups(physicalDeviceGroupCount);
+    std::vector<VkPhysicalDeviceGroupPropertiesKHR> physicalDeviceGroups;
     if (physicalDeviceGroupCount > 0)
     {
+        physicalDeviceGroups.resize(physicalDeviceGroupCount);
         result = vkEnumeratePhysicalDeviceGroupsKHR(handle, &physicalDeviceGroupCount, physicalDeviceGroups.data());
-        MAGMA_THROW_FAILURE(result, "failed to enumerate groups of physical devices");
     }
+    MAGMA_THROW_FAILURE(result, "failed to enumerate physical device groups");
     return physicalDeviceGroups;
 }
 
@@ -190,28 +190,28 @@ std::vector<VkLayerProperties> Instance::enumerateLayers()
 {
     uint32_t propertyCount = 0;
     VkResult result = vkEnumerateInstanceLayerProperties(&propertyCount, nullptr);
-    MAGMA_THROW_FAILURE(result, "failed to count instance layers");
-    std::vector<VkLayerProperties> layers(propertyCount);
+    std::vector<VkLayerProperties> properties;
     if (propertyCount > 0)
     {
-        result = vkEnumerateInstanceLayerProperties(&propertyCount, layers.data());
-        MAGMA_THROW_FAILURE(result, "failed to enumerate instance layers");
+        properties.resize(propertyCount);
+        result = vkEnumerateInstanceLayerProperties(&propertyCount, properties.data());
     }
-    return layers;
+    MAGMA_THROW_FAILURE(result, "failed to enumerate instance layers");
+    return properties;
 }
 
 std::vector<VkExtensionProperties> Instance::enumerateExtensions(const char *layerName /* nullptr */)
 {
     uint32_t propertyCount = 0;
     VkResult result = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, nullptr);
-    MAGMA_THROW_FAILURE(result, "failed to count instance extensions");
-    std::vector<VkExtensionProperties> extensions(propertyCount);
+    std::vector<VkExtensionProperties> properties;
     if (propertyCount > 0)
     {
-        result = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, extensions.data());
-        MAGMA_THROW_FAILURE(result, "failed to enumerate instance extensions");
+        properties.resize(propertyCount);
+        result = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, properties.data());
     }
-    return extensions;
+    MAGMA_THROW_FAILURE(result, "failed to enumerate instance extensions");
+    return properties;
 }
 
 bool Instance::checkExtensionSupport(const char *extensionName) const
