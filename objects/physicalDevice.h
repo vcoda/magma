@@ -190,14 +190,14 @@ namespace magma
         bool checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept;
 
     private:
-#ifdef VK_KHR_get_physical_device_properties2
-        void getFeatures2(VkPhysicalDeviceFeatures2KHR& physicalDeviceFeatures) const;
-        void getProperties2(VkPhysicalDeviceProperties2KHR& physicalDeviceProperties) const;
-#endif
-#ifdef VK_KHR_get_surface_capabilities2
+    #ifdef VK_KHR_get_physical_device_properties2
+        void getFeatures2(void *physicalDeviceFeatures) const;
+        void getProperties2(void *physicalDeviceProperties) const;
+    #endif
+    #ifdef VK_KHR_get_surface_capabilities2
         void getSurfaceCapabilities2(std::shared_ptr<const Surface> surface,
-            VkSurfaceCapabilities2KHR& surfaceCaps) const;
-#endif
+            void *surfaceCaps) const;
+    #endif
         template<typename PhysicalDeviceFeatures>
         PhysicalDeviceFeatures getFeatures(VkStructureType sType) const;
         template<typename PhysicalDeviceProperties>

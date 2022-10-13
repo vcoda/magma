@@ -223,10 +223,7 @@ bool PhysicalDevice::getSurfaceFullScreenExclusiveSupport(std::shared_ptr<const 
     VkSurfaceCapabilitiesFullScreenExclusiveEXT surfaceFullScreenCaps = {};
     surfaceFullScreenCaps.sType = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_FULL_SCREEN_EXCLUSIVE_EXT;
 #ifdef VK_KHR_get_surface_capabilities2
-    VkSurfaceCapabilities2KHR surfaceCaps;
-    surfaceCaps.sType = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_KHR;
-    surfaceCaps.pNext = &surfaceFullScreenCaps;
-    getSurfaceCapabilities2(std::move(surface), surfaceCaps);
+    getSurfaceCapabilities2(std::move(surface), &surfaceFullScreenCaps);
 #endif
     return (VK_TRUE == surfaceFullScreenCaps.fullScreenExclusiveSupported);
 }
@@ -791,28 +788,37 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
 }
 
 #ifdef VK_KHR_get_physical_device_properties2
-void PhysicalDevice::getFeatures2(VkPhysicalDeviceFeatures2KHR& physicalDeviceFeatures) const
+void PhysicalDevice::getFeatures2(void *physicalDeviceFeatures) const
 {
+    VkPhysicalDeviceFeatures2KHR physicalDeviceFeatures2;
+    physicalDeviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR;
+    physicalDeviceFeatures2.pNext = physicalDeviceFeatures;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceFeatures2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
-    vkGetPhysicalDeviceFeatures2KHR(handle, &physicalDeviceFeatures);
+    vkGetPhysicalDeviceFeatures2KHR(handle, &physicalDeviceFeatures2);
 }
 
-void PhysicalDevice::getProperties2(VkPhysicalDeviceProperties2KHR& physicalDeviceProperties) const
+void PhysicalDevice::getProperties2(void *physicalDeviceProperties) const
 {
+    VkPhysicalDeviceProperties2KHR physicalDeviceProperties2;
+    physicalDeviceProperties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
+    physicalDeviceProperties2.pNext = physicalDeviceProperties;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
-    vkGetPhysicalDeviceProperties2KHR(handle, &physicalDeviceProperties);
+    vkGetPhysicalDeviceProperties2KHR(handle, &physicalDeviceProperties2);
 }
 #endif // VK_KHR_get_physical_device_properties2
 
 #ifdef VK_KHR_get_surface_capabilities2
-void PhysicalDevice::getSurfaceCapabilities2(std::shared_ptr<const Surface> surface, VkSurfaceCapabilities2KHR& surfaceCaps) const
+void PhysicalDevice::getSurfaceCapabilities2(std::shared_ptr<const Surface> surface, void *surfaceCaps) const
 {
-    VkPhysicalDeviceSurfaceInfo2KHR surfaceInfo;
-    surfaceInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
-    surfaceInfo.pNext = nullptr;
-    surfaceInfo.surface = *surface;
+    VkPhysicalDeviceSurfaceInfo2KHR physicalDeviceSurfaceInfo2;
+    physicalDeviceSurfaceInfo2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
+    physicalDeviceSurfaceInfo2.pNext = nullptr;
+    physicalDeviceSurfaceInfo2.surface = *surface;
+    VkSurfaceCapabilities2KHR surfaceCaps2;
+    surfaceCaps2.sType = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_KHR;
+    surfaceCaps2.pNext = surfaceCaps;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceSurfaceCapabilities2KHR, VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME);
-    const VkResult result = vkGetPhysicalDeviceSurfaceCapabilities2KHR(handle, &surfaceInfo, &surfaceCaps);
+    const VkResult result = vkGetPhysicalDeviceSurfaceCapabilities2KHR(handle, &physicalDeviceSurfaceInfo2, &surfaceCaps2);
     MAGMA_THROW_FAILURE(result, "failed to get surface capabilities");
 }
 #endif // VK_KHR_get_surface_capabilities2
@@ -823,10 +829,7 @@ inline PhysicalDeviceFeatures PhysicalDevice::getFeatures(VkStructureType sType)
     PhysicalDeviceFeatures physicalDeviceFeatures = {};
     physicalDeviceFeatures.sType = sType;
 #ifdef VK_KHR_get_physical_device_properties2
-    VkPhysicalDeviceFeatures2KHR physicalDeviceFeatures2;
-    physicalDeviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR;
-    physicalDeviceFeatures2.pNext = &physicalDeviceFeatures;
-    getFeatures2(physicalDeviceFeatures2);
+    getFeatures2(&physicalDeviceFeatures);
 #endif
     return physicalDeviceFeatures;
 }
@@ -837,10 +840,7 @@ inline PhysicalDeviceProperties PhysicalDevice::getProperties(VkStructureType sT
     PhysicalDeviceProperties physicalDeviceProperties = {};
     physicalDeviceProperties.sType = sType;
 #ifdef VK_KHR_get_physical_device_properties2
-    VkPhysicalDeviceProperties2KHR physicalDeviceProperties2;
-    physicalDeviceProperties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
-    physicalDeviceProperties2.pNext = &physicalDeviceProperties;
-    getProperties2(physicalDeviceProperties2);
+    getProperties2(&physicalDeviceProperties);
 #endif
     return physicalDeviceProperties;
 }
