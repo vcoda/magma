@@ -26,8 +26,7 @@ const void *StructureChain::getChainedNodes() const noexcept
     if (chain.empty())
         return nullptr;
     auto head = chain.begin();
-    auto curr = head;
-    auto next = head;
+    auto curr = head, next = head;
     while (++next != chain.end())
     {
         VkBaseOutStructure *node = curr->getNode();

@@ -44,7 +44,7 @@ namespace magma
         void setDebugTag(uint64_t tagName,
             std::size_t tagSize,
             const void *tag);
-        template<typename Type>
+        template<class Type>
         void setDebugTag(uint64_t tagName,
             const Type& tag);
 
@@ -55,7 +55,7 @@ namespace magma
 
     /* Template object that provides getObjectType() getter. */
 
-    template<typename Type>
+    template<class Type>
     class ObjectT : public Object
 #ifdef MAGMA_X64
         ,public ObjectType<Type> // Use custom template specialization

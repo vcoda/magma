@@ -35,9 +35,7 @@ BufferView::BufferView(std::shared_ptr<Buffer> resource,
     offset(offset),
     range(range)
 {
-    MAGMA_ASSERT(buffer->getUsage() &
-        (VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT |
-         VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT));
+    MAGMA_ASSERT(buffer->getUsage() & (VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT));
     VkBufferViewCreateInfo bufferViewInfo;
     bufferViewInfo.sType = VK_STRUCTURE_TYPE_BUFFER_VIEW_CREATE_INFO;
     bufferViewInfo.pNext = nullptr;

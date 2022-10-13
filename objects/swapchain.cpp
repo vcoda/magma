@@ -208,8 +208,6 @@ void Swapchain::bindImage(std::shared_ptr<SwapchainImage> image, uint32_t imageI
     bindImageMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR;
     bindImageMemoryInfo.pNext = &bindImageMemorySwapchainInfo;
     bindImageMemoryInfo.image = *image;
-    // If swapchain is not NULL, the swapchain and imageIndex are used to determine
-    // the memory that the image is bound to, instead of memory and memoryOffset.
     bindImageMemoryInfo.memory = VK_NULL_HANDLE;
     bindImageMemoryInfo.memoryOffset = 0;
     bindImageMemorySwapchainInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_SWAPCHAIN_INFO_KHR;

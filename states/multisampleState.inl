@@ -10,7 +10,7 @@ constexpr MultisampleState::MultisampleState(const VkSampleCountFlagBits rasteri
         0.f, // minSampleShading
         nullptr, // pSampleMask
         VK_FALSE, // alphaToCoverageEnable
-        VK_FALSE, // alphaToOneEnable
+        VK_FALSE // alphaToOneEnable
     }
 {}
 
@@ -24,7 +24,7 @@ constexpr MultisampleState::MultisampleState(const uint32_t sampleCount) noexcep
         0.f, // minSampleShading
         nullptr, // pSampleMask
         VK_FALSE, // alphaToCoverageEnable
-        VK_FALSE, // alphaToOneEnable
+        VK_FALSE // alphaToOneEnable
     }
 {
     switch (sampleCount)

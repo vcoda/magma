@@ -89,9 +89,9 @@ VkPhysicalDeviceProperties PhysicalDevice::getProperties() const noexcept
 
 std::vector<VkQueueFamilyProperties> PhysicalDevice::getQueueFamilyProperties() const
 {
-    std::vector<VkQueueFamilyProperties> queueFamilyProperties;
     uint32_t propertyCount = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(handle, &propertyCount, nullptr);
+    std::vector<VkQueueFamilyProperties> queueFamilyProperties;
     if (propertyCount > 0)
     {
         queueFamilyProperties.resize(propertyCount);
@@ -109,30 +109,30 @@ VkPhysicalDeviceMemoryProperties PhysicalDevice::getMemoryProperties() const noe
 
 std::vector<VkLayerProperties> PhysicalDevice::enumerateLayers() const
 {
-    std::vector<VkLayerProperties> layers;
     uint32_t propertyCount = 0;
     VkResult result = vkEnumerateDeviceLayerProperties(handle, &propertyCount, nullptr);
+    std::vector<VkLayerProperties> properties;
     if (propertyCount > 0)
     {
-        layers.resize(propertyCount);
-        result = vkEnumerateDeviceLayerProperties(handle, &propertyCount, layers.data());
+        properties.resize(propertyCount);
+        result = vkEnumerateDeviceLayerProperties(handle, &propertyCount, properties.data());
     }
-    MAGMA_THROW_FAILURE(result, "failed to enumerate layers of physical device");
-    return layers;
+    MAGMA_THROW_FAILURE(result, "failed to enumerate physical device layers");
+    return properties;
 }
 
 std::vector<VkExtensionProperties> PhysicalDevice::enumerateExtensions(const char *layerName /* nullptr */) const
 {
-    std::vector<VkExtensionProperties> extensions;
     uint32_t propertyCount = 0;
     VkResult result = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, nullptr);
+    std::vector<VkExtensionProperties> properties;
     if (propertyCount > 0)
     {
-        extensions.resize(propertyCount);
-        result = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, extensions.data());
+        properties.resize(propertyCount);
+        result = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, properties.data());
     }
-    MAGMA_THROW_FAILURE(result, "failed to enumerate extensions of physical device");
-    return extensions;
+    MAGMA_THROW_FAILURE(result, "failed to enumerate physical device extensions");
+    return properties;
 }
 
 #ifdef VK_KHR_surface
@@ -153,13 +153,13 @@ VkSurfaceCapabilitiesKHR PhysicalDevice::getSurfaceCapabilities(std::shared_ptr<
 
 std::vector<VkSurfaceFormatKHR> PhysicalDevice::getSurfaceFormats(std::shared_ptr<const Surface> surface) const
 {
+    uint32_t surfaceFormatCount = 0;
+    VkResult result = vkGetPhysicalDeviceSurfaceFormatsKHR(handle, *surface, &surfaceFormatCount, nullptr);
     std::vector<VkSurfaceFormatKHR> surfaceFormats;
-    uint32_t formatCount = 0;
-    VkResult result = vkGetPhysicalDeviceSurfaceFormatsKHR(handle, *surface, &formatCount, nullptr);
-    if (formatCount > 0)
+    if (surfaceFormatCount > 0)
     {
-        surfaceFormats.resize(formatCount);
-        result = vkGetPhysicalDeviceSurfaceFormatsKHR(handle, *surface, &formatCount, surfaceFormats.data());
+        surfaceFormats.resize(surfaceFormatCount);
+        result = vkGetPhysicalDeviceSurfaceFormatsKHR(handle, *surface, &surfaceFormatCount, surfaceFormats.data());
     }
     MAGMA_THROW_FAILURE(result, "failed to get surface formats of physical device");
     return surfaceFormats;
@@ -167,9 +167,9 @@ std::vector<VkSurfaceFormatKHR> PhysicalDevice::getSurfaceFormats(std::shared_pt
 
 std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared_ptr<const Surface> surface) const
 {
-    std::vector<VkPresentModeKHR> presentModes;
     uint32_t presentModeCount = 0;
     VkResult result = vkGetPhysicalDeviceSurfacePresentModesKHR(handle, *surface, &presentModeCount, nullptr);
+    std::vector<VkPresentModeKHR> presentModes;
     if (presentModeCount > 0)
     {
         presentModes.resize(presentModeCount);

@@ -210,7 +210,7 @@ bool Device::waitForFences(std::vector<std::shared_ptr<Fence>>& fences, bool wai
 #ifdef VK_KHR_device_group
 VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupSurfacePresentModes(std::shared_ptr<const Surface> surface) const
 {
-    VkDeviceGroupPresentModeFlagsKHR presentModes;
+    VkDeviceGroupPresentModeFlagsKHR presentModes = 0;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDeviceGroupSurfacePresentModesKHR, VK_KHR_DEVICE_GROUP_EXTENSION_NAME);
     const VkResult result = vkGetDeviceGroupSurfacePresentModesKHR(handle, *surface, &presentModes);
     MAGMA_THROW_FAILURE(result, "failed to get surface present modes for a device group");

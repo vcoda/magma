@@ -1,12 +1,12 @@
 namespace magma
 {
-template<typename Type>
+template<class Type>
 inline void Object::setDebugTag(uint64_t tagName, const Type& tag)
 {
     setDebugTag(tagName, sizeof(Type), &tag);
 }
 
-template<typename Type>
+template<class Type>
 inline ObjectT<Type>::ObjectT(VkObjectType objectType, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> hostAllocator) noexcept:
     Object(std::move(device), std::move(hostAllocator))
 #if !defined(MAGMA_X64)
@@ -20,7 +20,7 @@ inline ObjectT<Type>::ObjectT(VkObjectType objectType, std::shared_ptr<Device> d
     MAGMA_UNUSED(objectType);
 }
 
-template<typename Type>
+template<class Type>
 inline VkObjectType ObjectT<Type>::getObjectType() const noexcept
 {
 #ifdef MAGMA_X64
