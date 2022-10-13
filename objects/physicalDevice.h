@@ -61,6 +61,9 @@ namespace magma
         std::vector<VkSurfaceFormatKHR> getSurfaceFormats(std::shared_ptr<const Surface> surface) const;
         std::vector<VkPresentModeKHR> getSurfacePresentModes(std::shared_ptr<const Surface> surface) const;
     #endif // VK_KHR_surface
+    #ifdef VK_AMD_display_native_hdr
+        bool getSurfaceLocalDimmingSupport(std::shared_ptr<const Surface> surface) const;
+    #endif
 #ifdef VK_EXT_full_screen_exclusive
         std::vector<VkPresentModeKHR> getSurfaceFullScreenExclusivePresentModes(std::shared_ptr<const Surface> surface,
             VkFullScreenExclusiveEXT fullScreenExclusive,

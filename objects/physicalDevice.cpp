@@ -180,6 +180,18 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared
 }
 #endif // VK_KHR_surface
 
+#ifdef VK_AMD_display_native_hdr
+bool PhysicalDevice::getSurfaceLocalDimmingSupport(std::shared_ptr<const Surface> surface) const
+{
+    VkDisplayNativeHdrSurfaceCapabilitiesAMD nativeHdrSurfaceCaps = {};
+    nativeHdrSurfaceCaps.sType = VK_STRUCTURE_TYPE_DISPLAY_NATIVE_HDR_SURFACE_CAPABILITIES_AMD;
+#ifdef VK_KHR_get_surface_capabilities2
+    getSurfaceCapabilities2(std::move(surface), &nativeHdrSurfaceCaps);
+#endif
+    return (VK_TRUE == nativeHdrSurfaceCaps.localDimmingSupport);
+}
+#endif //  VK_AMD_display_native_hdr
+
 #ifdef VK_EXT_full_screen_exclusive
 std::vector<VkPresentModeKHR> PhysicalDevice::getSurfaceFullScreenExclusivePresentModes(std::shared_ptr<const Surface> surface,
     VkFullScreenExclusiveEXT fullScreenExclusive, void *hMonitor /* nullptr */) const
