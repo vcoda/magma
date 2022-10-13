@@ -133,17 +133,17 @@ Instance::~Instance()
 #endif
 }
 
-uint32_t Instance::countPhysicalDevices() const
+uint32_t Instance::enumeratePhysicalDevices() const
 {
     uint32_t physicalDeviceCount = 0;
     const VkResult result = vkEnumeratePhysicalDevices(handle, &physicalDeviceCount, nullptr);
-    MAGMA_THROW_FAILURE(result, "failed to count physical devices");
+    MAGMA_THROW_FAILURE(result, "failed to enumerate physical devices");
     return physicalDeviceCount;
 }
 
 std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId) const
 {
-    uint32_t physicalDeviceCount = countPhysicalDevices();
+    uint32_t physicalDeviceCount = enumeratePhysicalDevices();
     if (deviceId >= physicalDeviceCount)
         MAGMA_THROW("invalid parameter <deviceId>");
     MAGMA_STACK_ARRAY(VkPhysicalDevice, physicalDevices, physicalDeviceCount);
