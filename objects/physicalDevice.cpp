@@ -241,6 +241,18 @@ bool PhysicalDevice::getSurfaceFullScreenExclusiveSupport(std::shared_ptr<const 
 }
 #endif // VK_EXT_full_screen_exclusive
 
+#ifdef VK_KHR_shared_presentable_image
+VkImageUsageFlags PhysicalDevice::getSurfaceSharedPresentFlags(std::shared_ptr<const Surface> surface) const
+{
+    VkSharedPresentSurfaceCapabilitiesKHR sharedPresentSurfaceCaps = {};
+    sharedPresentSurfaceCaps.sType = VK_STRUCTURE_TYPE_SHARED_PRESENT_SURFACE_CAPABILITIES_KHR;
+#ifdef VK_KHR_get_surface_capabilities2
+    getSurfaceCapabilities2(std::move(surface), &sharedPresentSurfaceCaps);
+#endif
+    return sharedPresentSurfaceCaps.sharedPresentSupportedUsageFlags;
+}
+#endif // VK_KHR_shared_presentable_image
+
 bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex,
     void *display /* nullptr */,
     const void *visualID /* nullptr */) const noexcept

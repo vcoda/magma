@@ -70,6 +70,9 @@ namespace magma
             void *hMonitor = nullptr) const;
         bool getSurfaceFullScreenExclusiveSupport(std::shared_ptr<const Surface> surface) const;
 #endif // VK_EXT_full_screen_exclusive
+    #ifdef VK_KHR_shared_presentable_image
+        VkImageUsageFlags getSurfaceSharedPresentFlags(std::shared_ptr<const Surface> surface) const;
+    #endif
         // VK_KHR_xxx_surface
         bool getPresentationSupport(uint32_t queueFamilyIndex,
             void *display = nullptr,
