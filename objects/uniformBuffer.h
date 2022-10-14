@@ -93,7 +93,7 @@ namespace magma
             bool pinnedMemory = false,
             const Buffer::Descriptor& optional = Buffer::Descriptor(),
             const Sharing& sharing = Sharing()):
-            UniformBuffer<Type>(device, std::move(allocator), pinnedMemory, memoryPriority, alignedArraySize(device, arraySize), optional, sharing),
+            UniformBuffer<Type>(device, std::move(allocator), pinnedMemory, alignedArraySize(device, arraySize), optional, sharing),
             alignment(std::max(
                 minOffsetAlignment(device),
                 static_cast<VkDeviceSize>(elementSize)
