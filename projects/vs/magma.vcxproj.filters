@@ -687,9 +687,6 @@
     <ClInclude Include="..\..\misc\pipelineExecutable.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\extensions\physicalDeviceExtendedFeatures.h">
-      <Filter>Header Files\extensions</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\states\provokingVertexState.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
