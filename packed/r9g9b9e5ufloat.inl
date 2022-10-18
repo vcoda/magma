@@ -17,14 +17,7 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     constexpr int MAX_EXP = MAX_VALID_BIASED_EXP - EXP_BIAS;
     constexpr int MAX_MANTISSA = (1 << MANTISSA_BITS) - 1;
     constexpr float MAX_RGB9E5 = float(MAX_MANTISSA) / (1 << MANTISSA_BITS) * (1 << MAX_EXP);
-    // 1/(2^(exp - EXP_BIAS - MANTISSA_BITS))
-    constexpr float rcpExpPow2[MAX_VALID_BIASED_EXP + 1] = {
-        16777216.f, 8388608.f, 4194304.f, 2097152.f, 1048576.f, 524288.f,
-        262144.f, 131072.f, 65536.f, 32768.f, 16384.f, 8192.f,
-        4096.f, 2048.f, 1024.f, 512.f, 256.f, 128.f,
-        64.f, 32.f, 16.f, 8.f, 4.f, 2.f, 1.f,
-        0.5f, 0.25f, 0.125f, 0.0625f, 0.03125f, 0.015625f, 0.0078125f
-    };
+    #include "rcpExpPow2.h"
 #ifdef MAGMA_SSE
     __m128 v = _mm_set_ps(0.f, b, g, r);
     v = _mm_max_ps(v, _mm_setzero_ps());
@@ -79,14 +72,7 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
 inline void R9g9b9e5Ufloat::unpack(float v[3]) const noexcept
 {
     constexpr int MAX_VALID_BIASED_EXP = 31;
-    constexpr float expPow2[MAX_VALID_BIASED_EXP + 1] = {
-        5.96046448e-08f, 1.1920929e-07f, 2.38418579e-07f, 4.76837158e-07f,
-        9.53674316e-07f, 1.90734863e-06f, 3.81469727e-06f, 7.62939453e-06f,
-        1.52587891e-05f, 3.05175781e-05f, 6.10351563e-05f, 0.000122070313f,
-        0.000244140625f, 0.00048828125f, 0.0009765625f, 0.001953125f,
-        0.00390625f, 0.0078125f, 0.015625f, 0.03125f, 0.0625f, 0.125f, 0.25f, 0.5f,
-        1.f, 2.f, 4.f, 8.f, 16.f, 32.f, 64.f, 128.f
-    };
+    #include "expPow2.h"
     MAGMA_ASSERT(e <= MAX_VALID_BIASED_EXP);
     float scale = expPow2[e];
     v[0] = rm * scale;
