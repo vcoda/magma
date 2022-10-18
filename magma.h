@@ -158,7 +158,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "extensions/instanceExtensions.h"
 #include "extensions/instanceLayers.h"
-#include "extensions/physicalDeviceExtendedFeatures.h"
 #include "extensions/physicalDeviceExtensions.h"
 
 #include "auxiliary/accumulationBuffer.h"
