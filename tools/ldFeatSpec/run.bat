@@ -1,0 +1,1 @@
+ldFeatSpec ../../objects/device.inl

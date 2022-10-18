@@ -1,55 +1,55 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <map>
 #include <iostream>
-#include <cstdlib>
-
 #include "../common.h"
 
-std::string buildGetterMethodName(const std::string& name)
+std::string getMethodName(const std::string& name)
 {
-    std::size_t prefixLen = strlen("VkPhysicalDevice");
-    std::size_t suffixPos;
-    for (const auto& ext: vendors)
-    {
-        suffixPos = name.find(ext);
-        if (suffixPos != std::string::npos)
-            break;
-    }
-    std::string getterName = name.substr(prefixLen, suffixPos - prefixLen);
-    return "get" + getterName;
+    const std::size_t prefixLen = strlen("VkPhysicalDevice");
+    const std::size_t suffixPos = findExtensionSuffix(name);
+    std::string methodName = name.substr(prefixLen, suffixPos - prefixLen);
+    return "get" + methodName;
 }
 
-std::string buildVariableName(const std::string& name)
+std::string getVariableName(const std::string& name)
 {
-    std::size_t prefixLen = strlen("VkPhysicalDevice");
-    std::size_t suffixPos;
-    for (const auto& ext: vendors)
-    {
-        suffixPos = name.find(ext);
-        if (suffixPos != std::string::npos)
-            break;
-    }
+    const std::size_t prefixLen = strlen("VkPhysicalDevice");
+    const std::size_t suffixPos = findExtensionSuffix(name);
     std::string varName = name.substr(prefixLen, suffixPos - prefixLen);
     char c = varName.at(0);
     if (isdigit(c))
         varName = "_" + varName;
     else
-        varName.at(0) = tolower(c);
+    {   // Convert to camel case any leading upper case chars
+        uint32_t i = 0;
+        for (char& c: varName)
+        {
+            if (islower(c))
+                break;
+            c = tolower(c);
+            ++i;
+        }
+        if (i > 1)
+        {   // Back last char to upper case
+            char& c = varName.at(--i);
+            c = toupper(c);
+        }
+    }
     return varName;
 }
 
-void writeGetterMethodDecl(std::ofstream& fs, const std::string& name)
+void writeMethodDecl(std::ofstream& fs, const std::string& name)
 {
-    std::string getterMethodName = buildGetterMethodName(name);
-    fs << "        " << name << " " << getterMethodName << "() const;" << std::endl;
+    const std::string methodName = getMethodName(name);
+    fs << "        " << name << " " << methodName << "() const;" << std::endl;
 }
 
-void writeGetterMethodImpl(std::ofstream& fs, const std::string& name, bool features)
+void writeMethodImpl(std::ofstream& fs, const std::string& name, bool features)
 {
-    const std::string methodName = buildGetterMethodName(name);
-    const std::string structureTypeName = convertStructureNameToStructureType(name);
-    const std::string variableName = buildVariableName(name);
     writeGeneratedByUtilityToolWarning(fs);
+    const std::string methodName = getMethodName(name);
+    const std::string structureTypeName = convertStructureNameToStructureType(name);
+    const std::string variableName = getVariableName(name);
     fs << name << " PhysicalDevice::" << methodName << "() const" << std::endl;
     fs << "{" << std::endl;
     fs << "    " << name << " " << variableName << " = {};" << std::endl;
@@ -88,43 +88,40 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    // Parse extended features and properties of PhysicalDevice
-    struct PhysicalDeviceFeaturePropertyNames
+    // Parse extended Vulkan features and properties
+    struct ExtensionStructures
     {
         std::string featuresName;
         std::string propertiesName;
     };
-    std::map<std::string, PhysicalDeviceFeaturePropertyNames> extensions;
+    std::map<std::string, ExtensionStructures> extensions;
     std::string lastFoundExtension;
     std::string line;
     while (std::getline(header, line))
     {
-        if (line.empty())
+        if (line.empty() ||
+            line.find("PFN") != std::string::npos) // Ignore entrypoint definitions
             continue;
         std::string result = parseExtensionDefine(line);
         if (!result.empty())
-            lastFoundExtension = std::move(result);
-        else
         {
-            if (line.find("PFN") != std::string::npos)
-                continue; // Ignore entrypoint definitions
-
-            bool isFeatures = isFeaturesStructure(line);
-            bool isProperties = isPropertiesStructure(line);
-            if (isFeatures || isProperties)
+            lastFoundExtension = std::move(result);
+            continue;
+        }
+        bool features = isFeaturesStructure(line);
+        bool properties = isPropertiesStructure(line);
+        if (features || properties)
+        {
+            result = parseStructureName(line);
+            if (!result.empty())
             {
-                result = parseFeaturePropertyStructureName(line);
-                if (!result.empty())
-                {
-                    if (lastFoundExtension == "VK_EXT_global_priority_query")
-                        continue; // Skip in favor of VK_KHR_global_priority
-                    if (lastFoundExtension == "VK_EXT_tooling_info")
-                        continue; // Has dedicated vkGetPhysicalDeviceToolPropertiesEXT() function
-                    if (isFeatures)
-                        extensions[lastFoundExtension].featuresName = std::move(result);
-                    else // isProperties
-                        extensions[lastFoundExtension].propertiesName = std::move(result);
-                }
+                if (lastFoundExtension == "VK_EXT_global_priority_query" || // Skip in favor of VK_KHR_global_priority
+                    lastFoundExtension == "VK_EXT_tooling_info") // Has dedicated vkGetPhysicalDeviceToolPropertiesEXT() function
+                    continue;
+                if (features)
+                    extensions[lastFoundExtension].featuresName = std::move(result);
+                else // properties
+                    extensions[lastFoundExtension].propertiesName = std::move(result);
             }
         }
     }
@@ -143,9 +140,9 @@ int main(int argc, char *argv[])
         decl << "    #ifdef " << it.first << std::endl;
         const auto& names = it.second;
         if (!names.featuresName.empty())
-            writeGetterMethodDecl(decl, names.featuresName);
+            writeMethodDecl(decl, names.featuresName);
         if (!names.propertiesName.empty())
-            writeGetterMethodDecl(decl, names.propertiesName);
+            writeMethodDecl(decl, names.propertiesName);
         decl << "    #endif" << std::endl;
     }
 
@@ -161,17 +158,17 @@ int main(int argc, char *argv[])
         impl << "#ifdef " << it.first << std::endl;
         const auto& names = it.second;
         if (!names.featuresName.empty())
-            writeGetterMethodImpl(impl, names.featuresName, true);
+            writeMethodImpl(impl, names.featuresName, true);
         if (!names.propertiesName.empty())
         {
             if (!names.featuresName.empty())
                 impl << std::endl; // Add spacing between methods
-            writeGetterMethodImpl(impl, names.propertiesName, false);
+            writeMethodImpl(impl, names.propertiesName, false);
         }
         impl << "#endif // " << it.first << std::endl;
         impl << std::endl;
     }
 
-    std::cout << "Output source generated successfully" << std::endl;
+    std::cout << "End of source generation" << std::endl;
     return 0;
 }

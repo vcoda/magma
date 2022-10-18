@@ -1,1 +1,0 @@
-featSpecGen ../../objects/device.inl
