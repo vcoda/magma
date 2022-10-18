@@ -92,6 +92,7 @@ MAGMA_OBJS= \
 	objects/event.o \
 	objects/fence.o \
 	objects/fragmentDensityMap.o \
+	objects/fragmentDensityMapView.o \
 	objects/fragmentShadingRateAttachment.o \
 	objects/framebuffer.o \
 	objects/fullScreenExclusiveSwapchain.o \

@@ -62,7 +62,7 @@ namespace magma
         VkExtent2D getExtent() const noexcept;
         VkDescriptorImageInfo getDescriptor(std::shared_ptr<const Sampler> sampler) const noexcept;
 
-    private:
+    protected:
         std::shared_ptr<Image> image;
         const VkImageViewCreateFlags flags;
         const uint32_t baseMipLevel;

@@ -93,6 +93,7 @@ namespace magma
 #endif
 #ifdef VK_EXT_fragment_density_map
     MAGMA_TYPEDEF_SHARED_PTR(FragmentDensityMap)
+    MAGMA_TYPEDEF_SHARED_PTR(FragmentDensityMapView)
 #endif
 #ifdef VK_EXT_full_screen_exclusive
     MAGMA_TYPEDEF_SHARED_PTR(FullScreenExclusiveSwapchain)

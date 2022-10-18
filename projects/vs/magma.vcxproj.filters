@@ -726,6 +726,9 @@
     <ClInclude Include="..\..\misc\framebufferAttachmentImage.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\fragmentDensityMapView.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1123,6 +1126,9 @@
     </ClCompile>
     <ClCompile Include="..\..\misc\framebufferAttachmentImage.cpp">
       <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\fragmentDensityMapView.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
