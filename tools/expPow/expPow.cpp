@@ -7,6 +7,18 @@ constexpr int MANTISSA_BITS = 9;
 constexpr int EXP_BIAS = 15;
 constexpr int MAX_VALID_BIASED_EXP = 31;
 
+void writeArrayValue(std::ofstream& fs, int index, double val)
+{
+    bool newln = !(index % 4);
+    if (newln)
+        fs << "    ";
+    fs << (float)val << (val < 1. ? "f" : ".f");
+    if ((index + 1) % 4)
+        fs << ", ";
+    else if (index < MAX_VALID_BIASED_EXP)
+        fs << "," << std::endl;
+}
+
 int main(int argc, char *argv[])
 {
     if (argc < 3)
@@ -33,15 +45,8 @@ int main(int argc, char *argv[])
     writeGeneratedByUtilityToolWarning(lutExpPow2);
     lutExpPow2 << "// 2^(exp - EXP_BIAS - MANTISSA_BITS)" << std::endl;
     lutExpPow2 << "constexpr float expPow2[MAX_VALID_BIASED_EXP + 1] = {" << std::endl;
-    lutExpPow2 << "    ";
     for (int i = 0; i <= MAX_VALID_BIASED_EXP; ++i)
-    {
-        lutExpPow2 << (float)expPow2[i] << (expPow2[i] < 1.0 ? "f" : ".f");
-        if (i && i % 4 == 0)
-            lutExpPow2 << "," << std::endl << "    ";
-        else if (i < MAX_VALID_BIASED_EXP)
-            lutExpPow2 << ", ";
-    }
+        writeArrayValue(lutExpPow2, i, expPow2[i]);
     lutExpPow2 << std::endl << "};" << std::endl;
 
     std::ofstream lutRcpExpPow2(argv[2]);
@@ -55,16 +60,8 @@ int main(int argc, char *argv[])
     writeGeneratedByUtilityToolWarning(lutRcpExpPow2);
     lutRcpExpPow2 << "// 1/(2^(exp - EXP_BIAS - MANTISSA_BITS))" << std::endl;
     lutRcpExpPow2 << "constexpr float rcpExpPow2[MAX_VALID_BIASED_EXP + 1] = {" << std::endl;
-    lutRcpExpPow2 << "    ";
     for (int i = 0; i <= MAX_VALID_BIASED_EXP; ++i)
-    {
-        double val = 1./expPow2[i];
-        lutRcpExpPow2 << (float)val << (val < 1.0 ? "f" : ".f");
-        if (i && i % 4 == 0)
-            lutRcpExpPow2 << "," << std::endl << "    ";
-        else if (i < MAX_VALID_BIASED_EXP)
-            lutRcpExpPow2 << ", ";
-    }
+        writeArrayValue(lutRcpExpPow2, i, 1./expPow2[i]);
     lutRcpExpPow2 << std::endl << "};" << std::endl;
 
     std::cout << "End of source generation" << std::endl;
