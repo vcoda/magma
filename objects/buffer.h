@@ -49,6 +49,9 @@ namespace magma
             const std::vector<uint32_t>& deviceIndices,
             VkDeviceSize offset = 0) override;
 #endif
+    #if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
+        VkDeviceAddress getDeviceAddress() const;
+    #endif
         virtual void onDefragment() override;
 
     protected:
