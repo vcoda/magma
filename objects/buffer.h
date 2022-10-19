@@ -42,6 +42,9 @@ namespace magma
         VkBufferUsageFlags getUsage() const noexcept { return usage; }
         VkMemoryRequirements getMemoryRequirements() const noexcept;
         VkDescriptorBufferInfo getDescriptor() const noexcept;
+    #if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
+        VkDeviceAddress getDeviceAddress() const;
+    #endif
         virtual void bindMemory(std::shared_ptr<DeviceMemory> memory,
             VkDeviceSize offset = 0) override;
 #ifdef VK_KHR_device_group
@@ -49,9 +52,6 @@ namespace magma
             const std::vector<uint32_t>& deviceIndices,
             VkDeviceSize offset = 0) override;
 #endif
-    #if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
-        VkDeviceAddress getDeviceAddress() const;
-    #endif
         virtual void onDefragment() override;
 
     protected:

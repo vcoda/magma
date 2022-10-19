@@ -102,6 +102,33 @@ VkDescriptorBufferInfo Buffer::getDescriptor() const noexcept
     return bufferDescriptorInfo;
 }
 
+#if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
+VkDeviceAddress Buffer::getDeviceAddress() const
+{
+#ifdef VK_KHR_buffer_device_address
+    MAGMA_DEVICE_EXTENSION(vkGetBufferDeviceAddressKHR);
+    if (vkGetBufferDeviceAddressKHR)
+    {
+        VkBufferDeviceAddressInfoKHR bufferDeviceAddressInfo;
+        bufferDeviceAddressInfo.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO_KHR;
+        bufferDeviceAddressInfo.pNext = nullptr;
+        bufferDeviceAddressInfo.buffer = handle;
+        return vkGetBufferDeviceAddressKHR(MAGMA_HANDLE(device), &bufferDeviceAddressInfo);
+    }
+#endif // VK_KHR_buffer_device_address
+#ifdef VK_EXT_buffer_device_address
+    VkBufferDeviceAddressInfoEXT bufferDeviceAddressInfo;
+    bufferDeviceAddressInfo.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO_EXT;
+    bufferDeviceAddressInfo.pNext = nullptr;
+    bufferDeviceAddressInfo.buffer = handle;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetBufferDeviceAddressEXT, VK_EXT_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME);
+    return vkGetBufferDeviceAddressEXT(MAGMA_HANDLE(device), &bufferDeviceAddressInfo);
+#else
+    return 0ull;
+#endif // VK_EXT_buffer_device_address
+}
+#endif // VK_KHR_buffer_device_address || VK_EXT_buffer_device_address
+
 void Buffer::bindMemory(std::shared_ptr<DeviceMemory> memory,
     VkDeviceSize offset /* 0 */)
 {
@@ -135,33 +162,6 @@ void Buffer::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     this->memory = std::move(memory);
 }
 #endif // VK_KHR_device_group
-
-#if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
-VkDeviceAddress Buffer::getDeviceAddress() const
-{
-#ifdef VK_KHR_buffer_device_address
-    MAGMA_DEVICE_EXTENSION(vkGetBufferDeviceAddressKHR);
-    if (vkGetBufferDeviceAddressKHR)
-    {
-        VkBufferDeviceAddressInfoKHR bufferDeviceAddressInfo;
-        bufferDeviceAddressInfo.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO_KHR;
-        bufferDeviceAddressInfo.pNext = nullptr;
-        bufferDeviceAddressInfo.buffer = handle;
-        return vkGetBufferDeviceAddressKHR(MAGMA_HANDLE(device), &bufferDeviceAddressInfo);
-    }
-#endif // VK_KHR_buffer_device_address
-#ifdef VK_EXT_buffer_device_address
-    VkBufferDeviceAddressInfoEXT bufferDeviceAddressInfo;
-    bufferDeviceAddressInfo.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO_EXT;
-    bufferDeviceAddressInfo.pNext = nullptr;
-    bufferDeviceAddressInfo.buffer = handle;
-    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetBufferDeviceAddressEXT, VK_EXT_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME);
-    return vkGetBufferDeviceAddressEXT(MAGMA_HANDLE(device), &bufferDeviceAddressInfo);
-#else
-    return 0ull;
-#endif // VK_EXT_buffer_device_address
-}
-#endif // VK_KHR_buffer_device_address || VK_EXT_buffer_device_address
 
 void Buffer::onDefragment()
 {
