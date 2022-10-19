@@ -81,16 +81,3 @@ inline void R9g9b9e5Ufloat::unpack(float v[3]) const noexcept
 }
 } // namespace packed
 } // namespace magma
-
-/* Lookup table generation code:
-
-constexpr int MANTISSA_BITS = 9;
-constexpr int EXP_BIAS = 15;
-constexpr int MAX_VALID_BIASED_EXP = 31;
-std::cout.precision(std::numeric_limits<float>::max_digits10);
-for (int exp = 0; exp <= MAX_VALID_BIASED_EXP; ++exp)
-{
-    double val = 1.0 / pow(2.0, (double)exp - EXP_BIAS - MANTISSA_BITS);
-    std::cout << (float)val << (val < 1.0 ? "f" : ".f") << "," << std::endl;
-}
-*/
