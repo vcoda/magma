@@ -323,7 +323,9 @@ namespace magma
             uint32_t queryIndex,
             uint32_t vertexStream) noexcept;
 #endif // VK_EXT_transform_feedback
-        void resetQueryPool(const std::shared_ptr<QueryPool>& queryPool) noexcept;
+        void resetQueryPool(const std::shared_ptr<QueryPool>& queryPool,
+            uint32_t firstQuery,
+            uint32_t queryCount) noexcept;
         void writeTimestamp(VkPipelineStageFlagBits pipelineStage,
             const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex) noexcept;

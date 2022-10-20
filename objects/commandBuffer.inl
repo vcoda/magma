@@ -411,9 +411,9 @@ inline void CommandBuffer::endQueryIndexed(const std::shared_ptr<QueryPool>& que
 }
 #endif // VK_EXT_transform_feedback
 
-inline void CommandBuffer::resetQueryPool(const std::shared_ptr<QueryPool>& queryPool) noexcept
+inline void CommandBuffer::resetQueryPool(const std::shared_ptr<QueryPool>& queryPool, uint32_t firstQuery, uint32_t queryCount) noexcept
 {
-    vkCmdResetQueryPool(handle, *queryPool, 0, queryPool->getQueryCount());
+    vkCmdResetQueryPool(handle, *queryPool, firstQuery, queryCount);
 }
 
 inline void CommandBuffer::writeTimestamp(VkPipelineStageFlagBits pipelineStage, const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex) noexcept
