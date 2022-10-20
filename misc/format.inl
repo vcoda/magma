@@ -309,6 +309,8 @@ inline std::size_t Format::size() const noexcept
         // 64-bit compressed texel block encodes an 8(4)x4 rectangle.
         return 64/8;
     }
+    if (ycbcr())
+        return videoCompressedSize();
     return nonCompressedSize();
 }
 } // namespace magma
