@@ -48,6 +48,9 @@ namespace magma
         VkQueryType getType() const noexcept { return queryType; }
         VkQueryControlFlags getControlFlags() const noexcept { return controlFlags; }
         uint32_t getQueryCount() const noexcept { return queryCount; }
+    #ifdef VK_EXT_host_query_reset
+        void reset(uint32_t firstQuery, uint32_t queryCount) noexcept;
+    #endif
 
     protected:
         explicit QueryPool(VkQueryType queryType,

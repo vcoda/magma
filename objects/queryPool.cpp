@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "queryPool.h"
 #include "device.h"
 #include "../allocator/allocator.h"
+#include "../misc/extProcAddress.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
@@ -48,6 +49,15 @@ QueryPool::~QueryPool()
 {
     vkDestroyQueryPool(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
+
+#ifdef VK_EXT_host_query_reset
+void QueryPool::reset(uint32_t firstQuery, uint32_t queryCount) noexcept
+{
+    MAGMA_DEVICE_EXTENSION(vkResetQueryPoolEXT);
+    if (vkResetQueryPoolEXT)
+        vkResetQueryPoolEXT(MAGMA_HANDLE(device), handle, firstQuery, queryCount);
+}
+#endif // VK_EXT_host_query_reset
 
 template<typename Type>
 inline std::vector<Type> QueryPool::getQueryResults(uint32_t firstQuery, uint32_t queryCount, VkQueryResultFlags flags) const noexcept
