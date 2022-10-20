@@ -169,40 +169,7 @@ constexpr bool Format::pvrtc() const noexcept
     }
 }
 
-constexpr bool Format::blockCompressed() const noexcept
-{
-    return bc() || etc2() || eac() || astc() || pvrtc();
-}
-
-constexpr bool Format::floatingPoint() const noexcept
-{
-    switch (format)
-    {
-    case VK_FORMAT_R16_SFLOAT:
-    case VK_FORMAT_R16G16_SFLOAT:
-    case VK_FORMAT_R16G16B16_SFLOAT:
-    case VK_FORMAT_R16G16B16A16_SFLOAT:
-    case VK_FORMAT_R32_SFLOAT:
-    case VK_FORMAT_R32G32_SFLOAT:
-    case VK_FORMAT_R32G32B32_SFLOAT:
-    case VK_FORMAT_R32G32B32A32_SFLOAT:
-    case VK_FORMAT_R64_SFLOAT:
-    case VK_FORMAT_R64G64_SFLOAT:
-    case VK_FORMAT_R64G64B64_SFLOAT:
-    case VK_FORMAT_R64G64B64A64_SFLOAT:
-    case VK_FORMAT_B10G11R11_UFLOAT_PACK32:
-    case VK_FORMAT_E5B9G9R9_UFLOAT_PACK32:
-    case VK_FORMAT_D32_SFLOAT:
-    case VK_FORMAT_D32_SFLOAT_S8_UINT:
-    case VK_FORMAT_BC6H_UFLOAT_BLOCK:
-    case VK_FORMAT_BC6H_SFLOAT_BLOCK:
-        return true;
-    default:
-        return false;
-    }
-}
-
-constexpr bool Format::sRGB() const noexcept
+constexpr bool Format::srgb() const noexcept
 {
     switch (format)
     {
@@ -247,7 +214,7 @@ constexpr bool Format::sRGB() const noexcept
     }
 }
 
-constexpr bool Format::yCbCr() const noexcept
+constexpr bool Format::ycbcr() const noexcept
 {
     switch (format)
     {
@@ -295,6 +262,39 @@ constexpr bool Format::yCbCr() const noexcept
     case VK_FORMAT_G16_B16R16_2PLANE_444_UNORM_EXT:
         return true;
 #endif // VK_EXT_ycbcr_2plane_444_formats
+    default:
+        return false;
+    }
+}
+
+constexpr bool Format::blockCompressed() const noexcept
+{
+    return bc() || etc2() || eac() || astc() || pvrtc();
+}
+
+constexpr bool Format::floatingPoint() const noexcept
+{
+    switch (format)
+    {
+    case VK_FORMAT_R16_SFLOAT:
+    case VK_FORMAT_R16G16_SFLOAT:
+    case VK_FORMAT_R16G16B16_SFLOAT:
+    case VK_FORMAT_R16G16B16A16_SFLOAT:
+    case VK_FORMAT_R32_SFLOAT:
+    case VK_FORMAT_R32G32_SFLOAT:
+    case VK_FORMAT_R32G32B32_SFLOAT:
+    case VK_FORMAT_R32G32B32A32_SFLOAT:
+    case VK_FORMAT_R64_SFLOAT:
+    case VK_FORMAT_R64G64_SFLOAT:
+    case VK_FORMAT_R64G64B64_SFLOAT:
+    case VK_FORMAT_R64G64B64A64_SFLOAT:
+    case VK_FORMAT_B10G11R11_UFLOAT_PACK32:
+    case VK_FORMAT_E5B9G9R9_UFLOAT_PACK32:
+    case VK_FORMAT_D32_SFLOAT:
+    case VK_FORMAT_D32_SFLOAT_S8_UINT:
+    case VK_FORMAT_BC6H_UFLOAT_BLOCK:
+    case VK_FORMAT_BC6H_SFLOAT_BLOCK:
+        return true;
     default:
         return false;
     }
