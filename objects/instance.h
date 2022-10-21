@@ -35,8 +35,8 @@ namespace magma
         explicit Instance(const char *applicationName,
             const char *engineName,
             uint32_t apiVersion,
-            const std::vector<const char *>& layerNames,
-            const std::vector<const char *>& extensionNames,
+            const std::vector<const char *>& enabledLayers,
+            const std::vector<const char *>& enabledExtensions,
             std::shared_ptr<IAllocator> allocator = nullptr,
 #if defined(VK_EXT_debug_utils)
             PFN_vkDebugUtilsMessengerCallbackEXT debugCallback = nullptr,
@@ -56,10 +56,14 @@ namespace magma
         static std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr);
         // Non-API
         uint32_t getApiVersion() const noexcept { return apiVersion; }
+        const std::vector<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
+        const std::vector<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
         bool checkExtensionSupport(const char *extensionName) const;
 
     private:
         const uint32_t apiVersion;
+        std::vector<std::string> enabledLayers;
+        std::vector<std::string> enabledExtensions;
         mutable std::set<std::string> extensions; // Cached implicit extensions
     };
 } // namespace magma

@@ -40,7 +40,7 @@ static magma::core::RefCountChecker _refCountChecker;
 namespace magma
 {
 Instance::Instance(const char *applicationName, const char *engineName, uint32_t apiVersion,
-    const std::vector<const char *>& layerNames, const std::vector<const char *>& extensionNames,
+    const std::vector<const char *>& enabledLayers, const std::vector<const char *>& enabledExtensions,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
 #if defined(VK_EXT_debug_utils)
     PFN_vkDebugUtilsMessengerCallbackEXT debugCallback /* nullptr */,
@@ -64,10 +64,10 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
     instanceInfo.pNext = nullptr;
     instanceInfo.flags = 0;
     instanceInfo.pApplicationInfo = &appInfo;
-    instanceInfo.enabledLayerCount = MAGMA_COUNT(layerNames);
-    instanceInfo.ppEnabledLayerNames = layerNames.data();
-    instanceInfo.enabledExtensionCount = MAGMA_COUNT(extensionNames);
-    instanceInfo.ppEnabledExtensionNames = extensionNames.data();
+    instanceInfo.enabledLayerCount = MAGMA_COUNT(enabledLayers);
+    instanceInfo.ppEnabledLayerNames = enabledLayers.data();
+    instanceInfo.enabledExtensionCount = MAGMA_COUNT(enabledExtensions);
+    instanceInfo.ppEnabledExtensionNames = enabledExtensions.data();
 #if defined(VK_EXT_debug_utils)
     VkDebugUtilsMessengerCreateInfoEXT debugUtilsMessengerInfo;
     if (debugCallback)
@@ -120,6 +120,11 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
         throw exception::IncompatibleDriver("failed to create instance");
     }
     MAGMA_THROW_FAILURE(result, "failed to create instance");
+    // Store enabled layers and extensions
+    for (const auto& layer: enabledLayers)
+        this->enabledLayers.emplace_back(layer);
+    for (const auto& extension: enabledExtensions)
+        this->enabledExtensions.emplace_back(extension);
 #ifdef MAGMA_DEBUG
     _refCountChecker.addRef();
 #endif
