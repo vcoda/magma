@@ -59,6 +59,7 @@ namespace magma
         const std::vector<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
         const std::vector<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
         bool checkExtensionSupport(const char *extensionName) const;
+        bool extensionEnabled(const char *extensionName) const;
 
     private:
         const uint32_t apiVersion;

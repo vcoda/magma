@@ -233,4 +233,16 @@ bool Instance::checkExtensionSupport(const char *extensionName) const
     }
     return extensions.find(extensionName) != extensions.end();
 }
+
+bool Instance::extensionEnabled(const char *extensionName) const
+{
+    if (!checkExtensionSupport(extensionName))
+        return false;
+    auto it = std::find_if(enabledExtensions.begin(), enabledExtensions.end(),
+        [extensionName](const std::string& name)
+        {
+            return name == extensionName;
+        });
+    return it != enabledExtensions.end();
+}
 } // namespace magma
