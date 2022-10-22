@@ -100,3 +100,5 @@ namespace magma
         };
     } // namespace aux
 } // namespace magma
+
+#include "scopedProfile.h"

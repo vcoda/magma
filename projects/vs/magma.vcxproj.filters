@@ -732,6 +732,9 @@
     <ClInclude Include="..\..\auxiliary\profiler.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\auxiliary\scopedProfile.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
