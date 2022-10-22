@@ -395,24 +395,40 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
 // inline void CommandBuffer::resetQueryPool
 // inline void CommandBuffer::writeTimestamp
 
-void CommandBuffer::copyQueryResults(const std::shared_ptr<QueryPool>& queryPool, const std::shared_ptr<Buffer>& buffer, bool wait,
+void CommandBuffer::copyQueryResults(const std::shared_ptr<QueryPool>& queryPool, const std::shared_ptr<Buffer>& dstBuffer, bool wait,
     uint32_t firstQuery /* 0 */, uint32_t queryCount /* std::numeric_limits<uint32_t>::max() */,
     VkDeviceSize dstOffset /* 0 */, bool write64Bit /* true */) noexcept
 {
     if (std::numeric_limits<uint32_t>::max() == queryCount)
         queryCount = queryPool->getQueryCount();
     MAGMA_ASSERT(firstQuery + queryCount <= queryPool->getQueryCount());
-    MAGMA_ASSERT(dstOffset < buffer->getSize());
+    MAGMA_ASSERT(dstOffset < dstBuffer->getSize());
     VkQueryResultFlags flags = 0;
     if (write64Bit)
         flags |= VK_QUERY_RESULT_64_BIT;
     if (wait)
         flags |= VK_QUERY_RESULT_WAIT_BIT;
-    else
-        flags |= VK_QUERY_RESULT_WITH_AVAILABILITY_BIT;
     // TODO: VK_QUERY_RESULT_PARTIAL_BIT
     const VkDeviceSize stride = write64Bit ? sizeof(uint64_t) : sizeof(uint32_t);
-    vkCmdCopyQueryPoolResults(handle, *queryPool, firstQuery, queryCount, *buffer, dstOffset, stride, flags);
+    vkCmdCopyQueryPoolResults(handle, *queryPool, firstQuery, queryCount, *dstBuffer, dstOffset, stride, flags);
+}
+
+void CommandBuffer::copyQueryResultsWithAvailability(const std::shared_ptr<QueryPool>& queryPool, const std::shared_ptr<Buffer>& dstBuffer,
+    uint32_t firstQuery /* 0 */, uint32_t queryCount /* std::numeric_limits<uint32_t>::max() */,
+    VkDeviceSize dstOffset /* 0 */, bool write64Bit /* true */) noexcept
+{
+    if (std::numeric_limits<uint32_t>::max() == queryCount)
+        queryCount = queryPool->getQueryCount();
+    MAGMA_ASSERT(firstQuery + queryCount <= queryPool->getQueryCount());
+    MAGMA_ASSERT(dstOffset < dstBuffer->getSize());
+    VkQueryResultFlags flags = VK_QUERY_RESULT_WITH_AVAILABILITY_BIT;
+    if (write64Bit)
+        flags |= VK_QUERY_RESULT_64_BIT;
+    // If VK_QUERY_RESULT_WITH_AVAILABILITY_BIT is set, results for all queries identified by
+    // firstQuery and queryCount are copied to dstBuffer, along with an extra availability value
+    // written directly after the results of each query and interpreted as an unsigned integer.
+    const VkDeviceSize stride = (write64Bit ? sizeof(uint64_t) : sizeof(uint32_t)) << 1;
+    vkCmdCopyQueryPoolResults(handle, *queryPool, firstQuery, queryCount, *dstBuffer, dstOffset, stride, flags);
 }
 
 // void CommandBuffer::pushConstants()

@@ -330,8 +330,14 @@ namespace magma
             const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex) noexcept;
         void copyQueryResults(const std::shared_ptr<QueryPool>& queryPool,
-            const std::shared_ptr<Buffer>& buffer,
+            const std::shared_ptr<Buffer>& dstBuffer,
             bool wait,
+            uint32_t firstQuery = 0,
+            uint32_t queryCount = std::numeric_limits<uint32_t>::max(),
+            VkDeviceSize dstOffset = 0,
+            bool write64Bit = true) noexcept;
+        void copyQueryResultsWithAvailability(const std::shared_ptr<QueryPool>& queryPool,
+            const std::shared_ptr<Buffer>& dstBuffer,
             uint32_t firstQuery = 0,
             uint32_t queryCount = std::numeric_limits<uint32_t>::max(),
             VkDeviceSize dstOffset = 0,
