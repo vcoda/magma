@@ -51,7 +51,7 @@ Profiler::Profiler(VkQueueFlags queueType, std::shared_ptr<Device> device, std::
             return (properties.queueFlags & queueType) == queueType;
         });
     if (queueFamilyProperties.end() == it)
-    {   // Find any queue that have corresponding flag
+    {   // Find any queue that has corresponding flag
         it = std::find_if(queueFamilyProperties.begin(), queueFamilyProperties.end(),
             [queueType](const VkQueueFamilyProperties& properties)
             {

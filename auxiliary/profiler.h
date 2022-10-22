@@ -89,7 +89,7 @@ namespace magma
                 Profiler(VK_QUEUE_GRAPHICS_BIT, std::move(device), std::move(allocator)) {}
         };
 
-        /* Performace profiler for compute queue. */
+        /* Performance profiler for compute queue. */
 
         class ComputeProfiler : public Profiler
         {
