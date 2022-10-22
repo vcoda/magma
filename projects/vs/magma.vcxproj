@@ -163,6 +163,7 @@
     <ClInclude Include="..\..\auxiliary\multiAttachmentFramebuffer.h" />
     <ClInclude Include="..\..\auxiliary\frameGrabber.h" />
     <ClInclude Include="..\..\auxiliary\base.h" />
+    <ClInclude Include="..\..\auxiliary\profiler.h" />
     <ClInclude Include="..\..\auxiliary\shaderCompiler.h" />
     <ClInclude Include="..\..\auxiliary\depthFramebuffer.h" />
     <ClInclude Include="..\..\auxiliary\sprite.h" />
@@ -374,6 +375,7 @@
     <ClCompile Include="..\..\auxiliary\generateMipmap.cpp" />
     <ClCompile Include="..\..\auxiliary\frameGrabber.cpp" />
     <ClCompile Include="..\..\auxiliary\multiAttachmentFramebuffer.cpp" />
+    <ClCompile Include="..\..\auxiliary\profiler.cpp" />
     <ClCompile Include="..\..\auxiliary\shaderCompiler.cpp" />
     <ClCompile Include="..\..\auxiliary\depthFramebuffer.cpp" />
     <ClCompile Include="..\..\auxiliary\sprite.cpp" />
