@@ -136,12 +136,9 @@ void Profiler::beginSection(const char *name, uint32_t color, std::shared_ptr<Co
             cmdBuffer->beginDebugMarker(name, color);
     #endif
     }
-    Section section;
-    section.name = std::move(name);
-    section.beginQuery = queryCount;
-    sections.push_back(section);
-    cmdBuffer->writeTimestamp(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, queryPool, section.beginQuery);
-    stack.push(section);
+    sections.emplace_back(name, queryCount);
+    stack.push(sections.back());
+    cmdBuffer->writeTimestamp(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, queryPool, stack.top().beginQuery);
     queryCount += 2;
 }
 
@@ -184,7 +181,7 @@ std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool dontBlockCpu)
                 const uint64_t start = beginTs.result & timestampMask;
                 const uint64_t end = endTs.result & timestampMask;
                 double time = double(end - start) * timestampPeriod; // In nanoseconds
-                executionTimings.push_back(Timing{section.name, time});
+                executionTimings.emplace_back(section.name, time);
             }
         }
     }
@@ -198,7 +195,7 @@ std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool dontBlockCpu)
             const uint64_t start = beginTs & timestampMask;
             const uint64_t end = endTs & timestampMask;
             double time = double(end - start) * timestampPeriod; // In nanoseconds
-            executionTimings.push_back(Timing{section.name, time});
+            executionTimings.emplace_back(section.name, time);
         }
     }
     return executionTimings;

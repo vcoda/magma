@@ -42,6 +42,8 @@ namespace magma
             {
                 const char *name;
                 double time;
+                Timing(const char *name, double time) noexcept:
+                    name(name), time(time) {}
             };
 
             VkQueueFlags getQueueType() const noexcept { return queueType; }
@@ -59,6 +61,8 @@ namespace magma
             {
                 const char *name;
                 uint32_t beginQuery;
+                Section(const char *name, uint32_t beginQuery) noexcept:
+                    name(name), beginQuery(beginQuery) {}
             };
 
             const VkQueueFlags queueType;
