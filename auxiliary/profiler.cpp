@@ -171,7 +171,7 @@ std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool dontBlockCpu)
     executionTimings.reserve(sections.size());
     if (dontBlockCpu)
     {   // Do not stall, return only available results
-        std::vector<QueryResult<uint64_t>> timestamps = queryPool->getResultsWithAvailability(0, queryCount);
+        const std::vector<QueryResult<uint64_t>> timestamps = queryPool->getResultsWithAvailability(0, queryCount);
         for (const auto& section: sections)
         {
             const auto& beginTs = timestamps[section.beginQuery];
