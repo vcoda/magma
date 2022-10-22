@@ -172,6 +172,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "auxiliary/graphicsPipelineCache.h"
 #include "auxiliary/immediateRender.h"
 #include "auxiliary/multiAttachmentFramebuffer.h"
+#include "auxiliary/profiler.h"
 #include "auxiliary/shaderCompiler.h"
 #include "auxiliary/sprite.h"
 #include "auxiliary/swapchainFramebuffer.h"
