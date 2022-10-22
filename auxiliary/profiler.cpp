@@ -89,14 +89,23 @@ bool Profiler::beginFrame()
         return false;
     if (queryCount > 0)
     {
-        if (!hostQueryReset)
-            resetQueries = true;
+        if (queryCount > queryPool->getQueryCount())
+        {   // Grow
+            queryPool = std::make_shared<magma::TimestampQuery>(queryPool->getDevice(),
+                queryCount, queryPool->getHostAllocator());
+            queryCount = 0;
+        }
         else
         {
-        #ifdef VK_EXT_host_query_reset
-            queryPool->reset(0, queryCount);
-        #endif
-            queryCount = 0;
+            if (!hostQueryReset)
+                resetQueries = true;
+            else
+            {   // Reset from host
+            #ifdef VK_EXT_host_query_reset
+                queryPool->reset(0, queryCount);
+            #endif
+                queryCount = 0;
+            }
         }
         sections.clear();
     }
@@ -118,7 +127,6 @@ void Profiler::beginSection(const char *name, uint32_t color, std::shared_ptr<Co
 {
     MAGMA_ASSERT(insideFrame);
     MAGMA_ASSERT(strlen(name) > 0);
-    MAGMA_ASSERT(queryCount + 1 < queryPool->getQueryCount() - 1);
     if (resetQueries)
     {   // VK_EXT_host_query_reset not supported, use vkCmdResetQueryPool()
         cmdBuffer->resetQueryPool(queryPool, 0, queryCount);
@@ -136,7 +144,8 @@ void Profiler::beginSection(const char *name, uint32_t color, std::shared_ptr<Co
             cmdBuffer->beginDebugMarker(name, color);
     #endif
     }
-    sections.emplace_back(name, queryCount);
+    const uint32_t beginQuery = queryCount % queryPool->getQueryCount();
+    sections.emplace_back(name, beginQuery);
     stack.push(sections.back());
     cmdBuffer->writeTimestamp(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, queryPool, stack.top().beginQuery);
     queryCount += 2;
@@ -169,9 +178,10 @@ std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool dontBlockCpu)
     MAGMA_ASSERT(!insideFrame);
     std::vector<Timing> executionTimings;
     executionTimings.reserve(sections.size());
+    const uint32_t count = std::min(queryCount, queryPool->getQueryCount());
     if (dontBlockCpu)
     {   // Do not stall, return only available results
-        const std::vector<QueryResult<uint64_t>> timestamps = queryPool->getResultsWithAvailability(0, queryCount);
+        const std::vector<QueryResult<uint64_t>> timestamps = queryPool->getResultsWithAvailability(0, count);
         for (const auto& section: sections)
         {
             const auto& beginTs = timestamps[section.beginQuery];
@@ -187,7 +197,8 @@ std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool dontBlockCpu)
     }
     else
     {   // Do block CPU until all query results will be ready
-        const std::vector<uint64_t> timestamps = queryPool->getResults(0, queryCount, true);
+        constexpr bool wait = true;
+        const std::vector<uint64_t> timestamps = queryPool->getResults(0, count, wait);
         for (const auto& section: sections)
         {
             const uint64_t beginTs = timestamps[section.beginQuery];
