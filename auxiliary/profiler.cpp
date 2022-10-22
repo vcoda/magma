@@ -66,9 +66,8 @@ Profiler::Profiler(VkQueueFlags queueType, std::shared_ptr<Device> device, std::
         timestampMask = (it->timestampValidBits < 64) ? (1ull << it->timestampValidBits) - 1 : std::numeric_limits<uint64_t>::max();
     else
         throw std::runtime_error("queue has no support for timestamps");
-    constexpr uint32_t timestampPoolSize = 1024;
-    queryPool = std::make_shared<magma::TimestampQuery>(device, timestampPoolSize, std::move(allocator));
-    queryCount = 0;
+    constexpr uint32_t poolSize = 256;
+    queryPool = std::make_shared<magma::TimestampQuery>(device, poolSize, std::move(allocator));
 #ifdef VK_EXT_host_query_reset
     hostQueryReset = device->extensionEnabled(VK_EXT_HOST_QUERY_RESET_EXTENSION_NAME);
 #endif
