@@ -85,7 +85,8 @@ Profiler::Profiler(VkQueueFlags queueType, std::shared_ptr<Device> device, std::
 bool Profiler::beginFrame()
 {
     MAGMA_ASSERT(!insideFrame);
-    if (insideFrame)
+    MAGMA_ASSERT(stack.empty());
+    if (insideFrame || !stack.empty())
         return false;
     if (queryCount > 0)
     {
@@ -108,7 +109,7 @@ bool Profiler::endFrame()
 {
     MAGMA_ASSERT(insideFrame);
     MAGMA_ASSERT(stack.empty());
-    if (!insideFrame)
+    if (!insideFrame || !stack.empty())
         return false;
     insideFrame = false;
     return true;
