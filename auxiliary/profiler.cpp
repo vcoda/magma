@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/physicalDevice.h"
 #include "../objects/commandBuffer.h"
 #include "../objects/queryPool.h"
+#include "../objects/buffer.h"
 #include "../allocator/allocator.h"
 
 namespace magma
@@ -210,6 +211,14 @@ std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool dontBlockCpu) c
         }
     }
     return executionTimings;
+}
+
+void Profiler::copyExecutionTimings(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Buffer> buffer,
+    VkDeviceSize bufferOffset /* 0 */) const noexcept
+{   // TODO: does vkCmdCopyQueryPoolResults() requires synchronizaition with earlier submitted timestamps commands?
+    constexpr bool wait = true;
+    const uint32_t count = std::min(queryCount, queryPool->getQueryCount());
+    cmdBuffer->copyQueryResults<uint64_t>(queryPool, buffer, wait, 0, count, bufferOffset);
 }
 } // namespace aux
 } // namespace magma

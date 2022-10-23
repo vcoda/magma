@@ -24,6 +24,7 @@ namespace magma
     class Device;
     class CommandBuffer;
     class TimestampQuery;
+    class Buffer;
     class IAllocator;
 
     namespace aux
@@ -55,6 +56,9 @@ namespace magma
                 std::shared_ptr<CommandBuffer> cmdBuffer);
             void endSection(std::shared_ptr<CommandBuffer> cmdBuffer);
             std::vector<Timing> getExecutionTimings(bool dontBlockCpu) const;
+            void copyExecutionTimings(std::shared_ptr<CommandBuffer> cmdBuffer,
+                std::shared_ptr<Buffer> buffer,
+                VkDeviceSize bufferOffset = 0) const noexcept;
 
         private:
             struct Section
