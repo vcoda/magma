@@ -189,15 +189,17 @@ bool Device::resetFences(std::vector<std::shared_ptr<Fence>>& fences) const noex
     return (VK_SUCCESS == result);
 }
 
-bool Device::waitForFences(std::vector<std::shared_ptr<Fence>>& fences, bool waitAll,
-    uint64_t timeout /* UINT64_MAX */) const noexcept
+bool Device::waitForFences(const std::vector<std::shared_ptr<Fence>>& fences, bool waitAll,
+    uint64_t timeout /* UINT64_MAX */) const
 {
     MAGMA_STACK_ARRAY(VkFence, dereferencedFences, fences.size());
     for (const auto& fence : fences)
         dereferencedFences.put(*fence);
     const VkResult result = vkWaitForFences(handle, dereferencedFences.size(), dereferencedFences,
         MAGMA_BOOLEAN(waitAll), timeout);
-    return (VK_SUCCESS == result) || (VK_TIMEOUT == result);
+    MAGMA_THROW_FAILURE(result, "failed to wait for fences");
+    // VK_SUCCESS or VK_TIMEOUT
+    return (result != VK_TIMEOUT);
 }
 
 #ifdef VK_KHR_device_group

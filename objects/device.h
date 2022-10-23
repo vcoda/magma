@@ -58,8 +58,9 @@ namespace magma
             const std::vector<VkCopyDescriptorSet>& descriptorCopies = {}) const noexcept;
         bool waitIdle() const;
         bool resetFences(std::vector<std::shared_ptr<Fence>>& fences) const noexcept;
-        bool waitForFences(std::vector<std::shared_ptr<Fence>>& fences,
-            bool waitAll, uint64_t timeout = UINT64_MAX) const noexcept;
+        bool waitForFences(const std::vector<std::shared_ptr<Fence>>& fences,
+            bool waitAll,
+            uint64_t timeout = UINT64_MAX) const;
 #ifdef VK_KHR_device_group
         VkDeviceGroupPresentModeFlagsKHR getDeviceGroupSurfacePresentModes(std::shared_ptr<const Surface> surface) const;
 #   ifdef VK_EXT_full_screen_exclusive
