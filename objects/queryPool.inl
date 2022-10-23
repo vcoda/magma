@@ -27,11 +27,14 @@ inline std::vector<Type> QueryPool::getQueryResults(uint32_t firstQuery, uint32_
 template<class Type, class Int>
 inline void QueryPool::fillDirty(std::vector<Type>& data) const noexcept
 {
-    Int *p = reinterpret_cast<Int *>(data.data());
     MAGMA_ASSERT((sizeof(Type) * data.size()) % sizeof(Int) == 0);
-    const std::size_t n = (sizeof(Type) * data.size()) / sizeof(Int);
-    for (std::size_t i = 0; i < n; ++i)
-        p[i] = BadQueryResult<Int>::value;
+    std::for_each(data.begin(), data.end(),
+        [](Type& value)
+        {
+            constexpr std::size_t n = sizeof(Type) / sizeof(Int);
+            for (std::size_t i = 0; i < n; ++i)
+                ((Int *)&value)[i] = BadQueryResult<Int>::value;
+        });
 }
 
 template<class Type>
