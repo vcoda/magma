@@ -101,7 +101,7 @@ PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<Device> device,
     // If VK_QUERY_RESULT_WITH_AVAILABILITY_BIT is used, the final element
     // of each query's result is an integer indicating whether the query's result
     // is available, with any non-zero value indicating that it is available.
-    data.resize(count + 1, MAGMA_INVALID_QUERY_RESULT);
+    data.resize(count + 1, BadQueryResult<uint64_t>::value);
 }
 
 PipelineStatisticsQuery::Result PipelineStatisticsQuery::getResults(bool wait) const noexcept

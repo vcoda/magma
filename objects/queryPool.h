@@ -18,12 +18,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "nondispatchable.h"
 
-#ifdef MAGMA_DEBUG
-#define MAGMA_INVALID_QUERY_RESULT 0xBAADC0DEBAADC0DE
-#else
-#define MAGMA_INVALID_QUERY_RESULT 0
-#endif
-
 namespace magma
 {
     /* If VK_QUERY_RESULT_WITH_AVAILABILITY_BIT is used, the final element
@@ -36,6 +30,22 @@ namespace magma
         Type result; // Depends on query type
         int64_t availability = 0;
     };
+
+    /* Invalid query result value. */
+
+    template<class Int>
+    struct BadQueryResult
+    {
+        static const Int value;
+    };
+
+#ifdef MAGMA_DEBUG
+    template<> struct BadQueryResult<uint32_t> { static const uint32_t value = 0xBAADC0DE; };
+    template<> struct BadQueryResult<uint64_t> { static const uint64_t value = 0xBAADC0DEBAADC0DE; };
+#else
+    template<> struct BadQueryResult<uint32_t> { static const uint32_t value = 0u; };
+    template<> struct BadQueryResult<uint64_t> { static const uint64_t value = 0ull; };
+#endif
 
     /* An object that contains a number of query entries
        and their associated state and results.
@@ -100,17 +110,17 @@ namespace magma
     public:
         struct Result
         {
-            uint64_t inputAssemblyVertices = MAGMA_INVALID_QUERY_RESULT;
-            uint64_t inputAssemblyPrimitives = MAGMA_INVALID_QUERY_RESULT;
-            uint64_t vertexShaderInvocations = MAGMA_INVALID_QUERY_RESULT;
-            uint64_t geometryShaderInvocations = MAGMA_INVALID_QUERY_RESULT;
-            uint64_t geometryShaderPrimitives = MAGMA_INVALID_QUERY_RESULT;
-            uint64_t clippingInvocations = MAGMA_INVALID_QUERY_RESULT;
-            uint64_t clippingPrimitives = MAGMA_INVALID_QUERY_RESULT;
-            uint64_t fragmentShaderInvocations = MAGMA_INVALID_QUERY_RESULT;
-            uint64_t tesselationControlShaderPatches = MAGMA_INVALID_QUERY_RESULT;
-            uint64_t tesselationEvaluationShaderInvocations = MAGMA_INVALID_QUERY_RESULT;
-            uint64_t computeShaderInvocations = MAGMA_INVALID_QUERY_RESULT;
+            uint64_t inputAssemblyVertices = BadQueryResult<uint64_t>::value;
+            uint64_t inputAssemblyPrimitives = BadQueryResult<uint64_t>::value;
+            uint64_t vertexShaderInvocations = BadQueryResult<uint64_t>::value;
+            uint64_t geometryShaderInvocations = BadQueryResult<uint64_t>::value;
+            uint64_t geometryShaderPrimitives = BadQueryResult<uint64_t>::value;
+            uint64_t clippingInvocations = BadQueryResult<uint64_t>::value;
+            uint64_t clippingPrimitives = BadQueryResult<uint64_t>::value;
+            uint64_t fragmentShaderInvocations = BadQueryResult<uint64_t>::value;
+            uint64_t tesselationControlShaderPatches = BadQueryResult<uint64_t>::value;
+            uint64_t tesselationEvaluationShaderInvocations = BadQueryResult<uint64_t>::value;
+            uint64_t computeShaderInvocations = BadQueryResult<uint64_t>::value;
         };
 
         explicit PipelineStatisticsQuery(std::shared_ptr<Device> device,
@@ -157,8 +167,8 @@ namespace magma
     public:
         struct Result
         {
-            uint64_t numPrimitivesWritten = MAGMA_INVALID_QUERY_RESULT;
-            uint64_t numPrimitivesNeeded = MAGMA_INVALID_QUERY_RESULT;
+            uint64_t numPrimitivesWritten = BadQueryResult<uint64_t>::value;
+            uint64_t numPrimitivesNeeded = BadQueryResult<uint64_t>::value;
         };
 
         explicit TransformFeedbackStreamQuery(std::shared_ptr<Device> device,
