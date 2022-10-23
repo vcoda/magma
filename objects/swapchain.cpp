@@ -161,7 +161,7 @@ Swapchain::~Swapchain()
 }
 
 uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore, std::shared_ptr<const Fence> fence,
-    uint64_t timeout /* UINT64_MAX */)
+    uint64_t timeout /* std::numeric_limits<uint64_t>::max() */)
 {
     uint32_t imageIndex = 0;
     const VkResult result = vkAcquireNextImageKHR(MAGMA_HANDLE(device), handle, timeout,

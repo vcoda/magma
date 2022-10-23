@@ -56,7 +56,7 @@ VkResult Fence::getStatus() const noexcept
     return vkGetFenceStatus(MAGMA_HANDLE(device), handle);
 }
 
-bool Fence::wait(uint64_t timeout /* UINT64_MAX */) const noexcept
+bool Fence::wait(uint64_t timeout /* std::numeric_limits<uint64_t>::max() */) const
 {
     constexpr VkBool32 waitAll = VK_TRUE;
     const VkResult result = vkWaitForFences(MAGMA_HANDLE(device), 1, &handle, waitAll, timeout);

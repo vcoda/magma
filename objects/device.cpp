@@ -191,7 +191,7 @@ bool Device::resetFences(std::vector<std::shared_ptr<Fence>>& fences) const noex
 }
 
 bool Device::waitForFences(const std::vector<std::shared_ptr<Fence>>& fences, bool waitAll,
-    uint64_t timeout /* UINT64_MAX */) const
+    uint64_t timeout /* std::numeric_limits<uint64_t>::max() */) const
 {
     MAGMA_STACK_ARRAY(VkFence, dereferencedFences, fences.size());
     for (const auto& fence : fences)

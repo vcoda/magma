@@ -63,7 +63,7 @@ namespace magma
         bool resetFences(std::vector<std::shared_ptr<Fence>>& fences) const noexcept;
         bool waitForFences(const std::vector<std::shared_ptr<Fence>>& fences,
             bool waitAll,
-            uint64_t timeout = UINT64_MAX) const;
+            uint64_t timeout = std::numeric_limits<uint64_t>::max()) const;
     #ifdef VK_KHR_timeline_semaphore
         bool waitSemaphores(const std::vector<std::shared_ptr<TimelineSemaphore>>& semaphores,
             const std::vector<uint64_t>& values,
