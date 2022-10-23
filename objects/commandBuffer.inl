@@ -426,7 +426,7 @@ void CommandBuffer::copyQueryResults(const std::shared_ptr<QueryPool>& /* queryP
     uint32_t /* firstQuery */, uint32_t /* queryCount */, VkDeviceSize /* dstOffset */) noexcept
 {
     static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
-        "CommandBuffer::copyQueryResults() is defined only for uint32_t and uint64_t types");
+        "CommandBuffer::copyQueryResults() specialized only for uint32_t and uint64_t types");
 }
 
 template<>
@@ -454,7 +454,7 @@ inline void CommandBuffer::copyQueryResultsWithAvailability(const std::shared_pt
     uint32_t /* firstQuery */, uint32_t /* queryCount */, VkDeviceSize /* dstOffset */) noexcept
 {
     static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
-        "CommandBuffer::copyQueryResultsWithAvailability() is defined only for uint32_t and uint64_t types");
+        "CommandBuffer::copyQueryResultsWithAvailability() specialized only for uint32_t and uint64_t types");
 }
 
 template<>

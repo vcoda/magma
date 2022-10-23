@@ -41,7 +41,7 @@ template<class Type>
 inline std::vector<Type> OcclusionQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
 {
     static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
-        "OcclusionQuery::getResults() defined only for uint32_t and uint64_t types");
+        "OcclusionQuery::getResults() specialized only for uint32_t and uint64_t types");
     return std::vector<Type>();
 }
 
@@ -61,7 +61,7 @@ template<class Type>
 inline std::vector<QueryResult<Type, Type>> OcclusionQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
 {
     static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
-        "OcclusionQuery::getResultsWithAvailability() defined only for uint32_t and uint64_t types");
+        "OcclusionQuery::getResultsWithAvailability() specialized only for uint32_t and uint64_t types");
     return std::vector<QueryResult<Type, Type>>();
 }
 
@@ -81,7 +81,7 @@ template<class Type>
 inline std::vector<Type> TimestampQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
 {
     static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
-        "TimestampQuery::getResults() defined only for uint32_t and uint64_t types");
+        "TimestampQuery::getResults() specialized only for uint32_t and uint64_t types");
     return std::vector<Type>();
 }
 
@@ -101,7 +101,7 @@ template<class Type>
 inline std::vector<QueryResult<Type, Type>> TimestampQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
 {
     static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
-        "TimestampQuery::getResultsWithAvailability() defined only for uint32_t and uint64_t types");
+        "TimestampQuery::getResultsWithAvailability() specialized only for uint32_t and uint64_t types");
     return std::vector<QueryResult<Type, Type>>();
 }
 
@@ -122,7 +122,7 @@ template<class Type>
 inline std::vector<Type> AccelerationStructureCompactedSizeQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
 {
     static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
-        "AccelerationStructureCompactedSizeQuery::getResults() defined only for uint32_t and uint64_t types");
+        "AccelerationStructureCompactedSizeQuery::getResults() specialized only for uint32_t and uint64_t types");
     return std::vector<Type>();
 }
 
@@ -142,7 +142,7 @@ template<class Type>
 inline std::vector<QueryResult<Type, Type>> AccelerationStructureCompactedSizeQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
 {
     static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
-        "AccelerationStructureCompactedSizeQuery::getResultsWithAvailability() defined only for uint32_t and uint64_t types");
+        "AccelerationStructureCompactedSizeQuery::getResultsWithAvailability() specialized only for uint32_t and uint64_t types");
     return std::vector<QueryResult<Type, Type>>();
 }
 
