@@ -60,13 +60,13 @@ Profiler::Profiler(VkQueueFlags queueType, std::shared_ptr<Device> device, std::
             });
     }
     if (queueFamilyProperties.end() == it)
-        throw std::runtime_error("queue not found");
+        MAGMA_THROW("queue not found");
     // timestampValidBits is the unsigned integer count of meaningful bits in the timestamps.
     // The valid range for the count is 36 to 64 bits, or a value of 0, indicating no support for timestamps.
     if (it->timestampValidBits)
         timestampMask = (it->timestampValidBits < 64) ? (1ull << it->timestampValidBits) - 1 : std::numeric_limits<uint64_t>::max();
     else
-        throw std::runtime_error("queue has no support for timestamps");
+        MAGMA_THROW("queue has no support for timestamps");
     constexpr uint32_t poolSize = 256;
     queryPool = std::make_shared<magma::TimestampQuery>(device, poolSize, std::move(allocator));
 #ifdef VK_EXT_host_query_reset
