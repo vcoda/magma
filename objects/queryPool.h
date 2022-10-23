@@ -24,11 +24,11 @@ namespace magma
        of each query's result is an integer indicating whether the query's result
        is available, with any non-zero value indicating that it is available. */
 
-    template<typename Type>
+    template<class Type, class Int>
     struct QueryResult
     {
         Type result; // Depends on query type
-        int64_t availability = 0;
+        Int availability = 0;
     };
 
     /* Invalid query result value. */
@@ -69,10 +69,14 @@ namespace magma
             VkQueryControlFlags controlFlags,
             VkQueryPipelineStatisticFlags pipelineStatistics,
             std::shared_ptr<IAllocator> allocator);
-        template<typename Type>
+        template<class Type>
         std::vector<Type> getQueryResults(uint32_t firstQuery,
             uint32_t queryCount,
             VkQueryResultFlags flags) const noexcept;
+
+    private:
+        template<class Type, class Int>
+        void fillDirty(std::vector<Type>& data) const noexcept;
 
     protected:
         const VkQueryType queryType;
@@ -93,10 +97,12 @@ namespace magma
             bool precise,
             std::shared_ptr<IAllocator> allocator = nullptr);
         bool precise() const noexcept { return controlFlags & VK_QUERY_CONTROL_PRECISE_BIT; }
-        std::vector<uint64_t> getResults(uint32_t firstQuery,
+        template<class Type>
+        std::vector<Type> getResults(uint32_t firstQuery,
             uint32_t queryCount,
             bool wait) const noexcept;
-        std::vector<QueryResult<uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
+        template<class Type>
+        std::vector<QueryResult<Type, Type>> getResultsWithAvailability(uint32_t firstQuery,
             uint32_t queryCount) const noexcept;
     };
 
@@ -128,7 +134,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
         VkQueryPipelineStatisticFlags getStatisticFlags() const noexcept { return flags; }
         Result getResults(bool wait) const noexcept;
-        QueryResult<Result> getResultsWithAvailability() const noexcept;
+        QueryResult<Result, uint64_t> getResultsWithAvailability() const noexcept;
 
     private:
         uint32_t spreadResults(const std::vector<uint64_t>& data,
@@ -148,10 +154,12 @@ namespace magma
         explicit TimestampQuery(std::shared_ptr<Device> device,
             uint32_t queryCount,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        std::vector<uint64_t> getResults(uint32_t firstQuery,
+        template<class Type>
+        std::vector<Type> getResults(uint32_t firstQuery,
             uint32_t queryCount,
             bool wait) const noexcept;
-        std::vector<QueryResult<uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
+        template<class Type>
+        std::vector<QueryResult<Type, Type>> getResultsWithAvailability(uint32_t firstQuery,
             uint32_t queryCount) const noexcept;
     };
 
@@ -177,7 +185,7 @@ namespace magma
         std::vector<Result> getResults(uint32_t firstQuery,
             uint32_t queryCount,
             bool wait) const noexcept;
-        std::vector<QueryResult<Result>> getResultsWithAvailability(uint32_t firstQuery,
+        std::vector<QueryResult<Result, uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
             uint32_t queryCount) const noexcept;
     };
 #endif // VK_EXT_transform_feedback
@@ -193,11 +201,15 @@ namespace magma
         explicit AccelerationStructureCompactedSizeQuery(std::shared_ptr<Device> device,
             uint32_t queryCount,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        std::vector<uint64_t> getResults(uint32_t firstQuery,
+        template<class Type>
+        std::vector<Type> getResults(uint32_t firstQuery,
             uint32_t queryCount,
             bool wait) const noexcept;
-        std::vector<QueryResult<uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
+        template<class Type>
+        std::vector<QueryResult<Type, Type>> getResultsWithAvailability(uint32_t firstQuery,
             uint32_t queryCount) const noexcept;
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma
+
+#include "queryPool.inl"

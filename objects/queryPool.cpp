@@ -59,37 +59,10 @@ void QueryPool::reset(uint32_t firstQuery, uint32_t queryCount) noexcept
 }
 #endif // VK_EXT_host_query_reset
 
-template<typename Type>
-inline std::vector<Type> QueryPool::getQueryResults(uint32_t firstQuery, uint32_t queryCount, VkQueryResultFlags flags) const noexcept
-{
-    std::vector<Type> data;
-    try {
-        data.resize(queryCount, {MAGMA_INVALID_QUERY_RESULT});
-    } catch (...) {
-        return {};
-    }
-    const VkResult result = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, firstQuery, queryCount,
-        sizeof(Type) * data.size(), data.data(), sizeof(Type), flags);
-    MAGMA_ASSERT((VK_SUCCESS == result) || (VK_NOT_READY == result));
-    return data;
-}
-
 OcclusionQuery::OcclusionQuery(std::shared_ptr<Device> device, uint32_t queryCount, bool precise,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     QueryPool(VK_QUERY_TYPE_OCCLUSION, std::move(device), queryCount, (precise ? VK_QUERY_CONTROL_PRECISE_BIT : 0), 0, std::move(allocator))
 {}
-
-std::vector<uint64_t> OcclusionQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
-{
-    return getQueryResults<uint64_t>(firstQuery, queryCount,
-        VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
-}
-
-std::vector<QueryResult<uint64_t>> OcclusionQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
-{
-    return getQueryResults<QueryResult<uint64_t>>(firstQuery, queryCount,
-        VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
-}
 
 PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<Device> device, VkQueryPipelineStatisticFlags flags,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
@@ -106,8 +79,9 @@ PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<Device> device,
 
 PipelineStatisticsQuery::Result PipelineStatisticsQuery::getResults(bool wait) const noexcept
 {
-    const VkResult result = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, 0, 1, sizeof(uint64_t) * data.size(), data.data(), sizeof(uint64_t),
-        VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
+    const size_t dataSize = sizeof(uint64_t) * data.size();
+    const VkQueryResultFlags flags = VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0);
+    const VkResult result = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, 0, 1, dataSize, data.data(), sizeof(uint64_t), flags);
     MAGMA_ASSERT((VK_SUCCESS == result) || (VK_NOT_READY == result));
     if (VK_SUCCESS == result)
     {
@@ -118,20 +92,21 @@ PipelineStatisticsQuery::Result PipelineStatisticsQuery::getResults(bool wait) c
     return {}; // VK_NOT_READY
 }
 
-QueryResult<PipelineStatisticsQuery::Result> PipelineStatisticsQuery::getResultsWithAvailability() const noexcept
+QueryResult<PipelineStatisticsQuery::Result, uint64_t> PipelineStatisticsQuery::getResultsWithAvailability() const noexcept
 {
-    const VkResult result = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, 0, 1, sizeof(uint64_t) * data.size(), data.data(), sizeof(uint64_t),
-        VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
+    const size_t dataSize = sizeof(uint64_t) * data.size();
+    const VkQueryResultFlags flags = VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT;
+    const VkResult result = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, 0, 1, dataSize, data.data(), sizeof(uint64_t), flags);
     MAGMA_ASSERT((VK_SUCCESS == result) || (VK_NOT_READY == result));
     if (VK_SUCCESS == result)
     {
         Result statistics;
         const uint32_t last = spreadResults(data, statistics);
-        const int64_t availability = static_cast<int64_t>(data[last]);
+        const uint64_t availability = static_cast<uint64_t>(data[last]);
         MAGMA_ASSERT(1 == availability); // Should always be 1 if result is VK_SUCCESS
-        return QueryResult<Result>{statistics, availability};
+        return QueryResult<Result, uint64_t>{statistics, availability};
     }
-    return {}; // VK_NOT_READY
+    return QueryResult<Result, uint64_t>(); // VK_NOT_READY
 }
 
 uint32_t PipelineStatisticsQuery::spreadResults(const std::vector<uint64_t>& data, Result& result) const noexcept
@@ -168,18 +143,6 @@ TimestampQuery::TimestampQuery(std::shared_ptr<Device> device, uint32_t queryCou
     QueryPool(VK_QUERY_TYPE_TIMESTAMP, std::move(device), queryCount, 0, 0, std::move(allocator))
 {}
 
-std::vector<uint64_t> TimestampQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
-{
-    return getQueryResults<uint64_t>(firstQuery, queryCount,
-        VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
-}
-
-std::vector<QueryResult<uint64_t>> TimestampQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
-{
-    return getQueryResults<QueryResult<uint64_t>>(firstQuery, queryCount,
-        VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
-}
-
 #ifdef VK_EXT_transform_feedback
 TransformFeedbackStreamQuery::TransformFeedbackStreamQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
@@ -188,14 +151,12 @@ TransformFeedbackStreamQuery::TransformFeedbackStreamQuery(std::shared_ptr<Devic
 
 std::vector<TransformFeedbackStreamQuery::Result> TransformFeedbackStreamQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
 {
-    return getQueryResults<Result>(firstQuery, queryCount,
-        VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
+    return getQueryResults<Result>(firstQuery, queryCount, VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
 }
 
-std::vector<QueryResult<TransformFeedbackStreamQuery::Result>> TransformFeedbackStreamQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
+std::vector<QueryResult<TransformFeedbackStreamQuery::Result, uint64_t>> TransformFeedbackStreamQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
 {
-    return getQueryResults<QueryResult<Result>>(firstQuery, queryCount,
-        VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
+    return getQueryResults<QueryResult<Result, uint64_t>>(firstQuery, queryCount, VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
 }
 #endif // VK_EXT_transform_feedback
 
@@ -204,17 +165,5 @@ AccelerationStructureCompactedSizeQuery::AccelerationStructureCompactedSizeQuery
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     QueryPool(VK_QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_NV, std::move(device), queryCount, 0, 0, std::move(allocator))
 {}
-
-std::vector<uint64_t> AccelerationStructureCompactedSizeQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
-{
-    return getQueryResults<uint64_t>(firstQuery, queryCount,
-        VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
-}
-
-std::vector<QueryResult<uint64_t>> AccelerationStructureCompactedSizeQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
-{
-    return getQueryResults<QueryResult<uint64_t>>(firstQuery, queryCount,
-        VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
-}
 #endif // VK_NV_ray_tracing
 } // namespace magma

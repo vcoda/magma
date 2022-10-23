@@ -1313,6 +1313,9 @@
     <None Include="..\..\states\multisampleCoverageReductionState.inl">
       <Filter>Header Files\states</Filter>
     </None>
+    <None Include="..\..\objects\queryPool.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">

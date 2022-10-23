@@ -182,7 +182,7 @@ std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool dontBlockCpu) c
     const uint32_t count = std::min(queryCount, queryPool->getQueryCount());
     if (dontBlockCpu)
     {   // Do not stall, return only available results
-        const std::vector<QueryResult<uint64_t>> timestamps = queryPool->getResultsWithAvailability(0, count);
+        const std::vector<QueryResult<uint64_t, uint64_t>> timestamps = queryPool->getResultsWithAvailability<uint64_t>(0, count);
         for (const auto& section: sections)
         {
             const auto& beginTs = timestamps[section.beginQuery];
@@ -199,7 +199,7 @@ std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool dontBlockCpu) c
     else
     {   // Do block CPU until all query results will be ready
         constexpr bool wait = true;
-        const std::vector<uint64_t> timestamps = queryPool->getResults(0, count, wait);
+        const std::vector<uint64_t> timestamps = queryPool->getResults<uint64_t>(0, count, wait);
         for (const auto& section: sections)
         {
             const uint64_t beginTs = timestamps[section.beginQuery];
