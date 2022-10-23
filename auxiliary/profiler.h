@@ -54,7 +54,7 @@ namespace magma
                 uint32_t color,
                 std::shared_ptr<CommandBuffer> cmdBuffer);
             void endSection(std::shared_ptr<CommandBuffer> cmdBuffer);
-            std::vector<Timing> getExecutionTimings(bool dontBlockCpu);
+            std::vector<Timing> getExecutionTimings(bool dontBlockCpu) const;
 
         private:
             struct Section

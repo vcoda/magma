@@ -173,7 +173,7 @@ void Profiler::endSection(std::shared_ptr<CommandBuffer> cmdBuffer)
     }
 }
 
-std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool dontBlockCpu)
+std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool dontBlockCpu) const
 {
     MAGMA_ASSERT(!insideFrame);
     std::vector<Timing> executionTimings;
