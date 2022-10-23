@@ -46,7 +46,7 @@ namespace magma
 } // namespace magma
 
 #ifdef MAGMA_DEBUG
-#define MAGMA_PROFILE(name, color, profiler, cmdBuffer) magma::aux::ScopedProfile name(MAGMA_STRINGIZE(name), color, profiler, cmdBuffer)
+#define MAGMA_PROFILE(name, color, profiler, cmdBuffer) magma::aux::ScopedProfile _magma_profile_##name(MAGMA_STRINGIZE(name), color, profiler, cmdBuffer)
 #else
 #define MAGMA_PROFILE(name, color, profiler, cmdBuffer)
 #endif
