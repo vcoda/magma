@@ -261,16 +261,14 @@ VkPeerMemoryFeatureFlags Device::getDeviceGroupPeerMemoryFeatures(uint32_t heapI
 
 bool Device::extensionEnabled(const char *extensionName) const
 {
-    MAGMA_ASSERT(extensionName);
-    if (physicalDevice->checkExtensionSupport(extensionName))
-    {
-        for (const auto& extension : enabledExtensions)
+    if (!physicalDevice->checkExtensionSupport(extensionName))
+        return false;
+    auto it = std::find_if(enabledExtensions.begin(), enabledExtensions.end(),
+        [extensionName](const std::string& name)
         {
-            if (extension == extensionName)
-                return true;
-        }
-    }
-    return false;
+            return name == extensionName;
+        });
+    return it != enabledExtensions.end();
 }
 
 bool Device::negativeViewportHeightEnabled(bool khronos) const noexcept
