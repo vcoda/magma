@@ -20,17 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* If VK_QUERY_RESULT_WITH_AVAILABILITY_BIT is used, the final element
-       of each query's result is an integer indicating whether the query's result
-       is available, with any non-zero value indicating that it is available. */
-
-    template<class Type, class Int>
-    struct QueryResult
-    {
-        Type result; // Depends on query type
-        Int availability = 0;
-    };
-
     /* Invalid query result value. */
 
     template<class Int>
@@ -46,6 +35,17 @@ namespace magma
     template<> struct BadQueryResult<uint32_t> { static const uint32_t value = 0u; };
     template<> struct BadQueryResult<uint64_t> { static const uint64_t value = 0ull; };
 #endif
+
+    /* If VK_QUERY_RESULT_WITH_AVAILABILITY_BIT is used, the final element
+       of each query's result is an integer indicating whether the query's result
+       is available, with any non-zero value indicating that it is available. */
+
+    template<class Type, class Int>
+    struct QueryResult
+    {
+        Type result = {BadQueryResult<Int>::value};
+        Int availability = BadQueryResult<Int>::value;
+    };
 
     /* An object that contains a number of query entries
        and their associated state and results.
@@ -73,10 +73,6 @@ namespace magma
         std::vector<Type> getQueryResults(uint32_t firstQuery,
             uint32_t queryCount,
             VkQueryResultFlags flags) const noexcept;
-
-    private:
-        template<class Int, class Type>
-        void fillDirty(std::vector<Type>& data) const noexcept;
 
     protected:
         const VkQueryType queryType;
