@@ -344,7 +344,7 @@ namespace magma
             VkDeviceSize dstOffset = 0) noexcept;
 
         template<typename Type>
-        inline void pushConstant(const std::shared_ptr<PipelineLayout>& layout,
+        void pushConstant(const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags,
             const Type& constant,
             uint32_t offset = 0) noexcept;
