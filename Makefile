@@ -138,6 +138,7 @@ MAGMA_OBJS= \
 	objects/surface.o \
 	objects/swapchain.o \
 	objects/swapchainImage.o \
+	objects/timelineSemaphore.o \
 	objects/transformFeedbackBuffer.o \
 	objects/uniformTexelBuffer.o \
 	objects/validationCache.o \

@@ -132,6 +132,9 @@ namespace magma
 #ifdef VK_KHR_sampler_ycbcr_conversion
     MAGMA_TYPEDEF_SHARED_PTR(SamplerYcbcrConversion)
 #endif
+#ifdef VK_KHR_timeline_semaphore
+    MAGMA_TYPEDEF_SHARED_PTR(TimelineSemaphore)
+#endif
 
 #ifdef VK_KHR_surface
     MAGMA_TYPEDEF_SHARED_PTR(Surface)

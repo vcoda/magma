@@ -735,6 +735,9 @@
     <ClInclude Include="..\..\auxiliary\scopedProfile.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\timelineSemaphore.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1138,6 +1141,9 @@
     </ClCompile>
     <ClCompile Include="..\..\auxiliary\profiler.cpp">
       <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\timelineSemaphore.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
