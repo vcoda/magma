@@ -30,7 +30,7 @@ namespace magma
         class CompileError : public Exception
         {
         public:
-            CompileError(shaderc_compilation_result_t result,
+            explicit CompileError(shaderc_compilation_result_t result,
                 const source_location& location):
                 Exception(shaderc_result_get_error_message(result), location),
                 status_(shaderc_result_get_compilation_status(result)),
