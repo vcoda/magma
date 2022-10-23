@@ -329,19 +329,19 @@ namespace magma
         void writeTimestamp(VkPipelineStageFlagBits pipelineStage,
             const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex) noexcept;
+        template<typename Type>
         void copyQueryResults(const std::shared_ptr<QueryPool>& queryPool,
             const std::shared_ptr<Buffer>& dstBuffer,
             bool wait,
             uint32_t firstQuery = 0,
             uint32_t queryCount = std::numeric_limits<uint32_t>::max(),
-            VkDeviceSize dstOffset = 0,
-            bool write64Bit = true) noexcept;
+            VkDeviceSize dstOffset = 0) noexcept;
+        template<typename Type>
         void copyQueryResultsWithAvailability(const std::shared_ptr<QueryPool>& queryPool,
             const std::shared_ptr<Buffer>& dstBuffer,
             uint32_t firstQuery = 0,
             uint32_t queryCount = std::numeric_limits<uint32_t>::max(),
-            VkDeviceSize dstOffset = 0,
-            bool write64Bit = true) noexcept;
+            VkDeviceSize dstOffset = 0) noexcept;
 
         template<typename Type>
         inline void pushConstant(const std::shared_ptr<PipelineLayout>& layout,

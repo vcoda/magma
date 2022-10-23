@@ -422,6 +422,62 @@ inline void CommandBuffer::writeTimestamp(VkPipelineStageFlagBits pipelineStage,
 }
 
 template<typename Type>
+void CommandBuffer::copyQueryResults(const std::shared_ptr<QueryPool>& /* queryPool */, const std::shared_ptr<Buffer>& /* dstBuffer */, bool /* wait */,
+    uint32_t /* firstQuery */, uint32_t /* queryCount */, VkDeviceSize /* dstOffset */) noexcept
+{
+    static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
+        "CommandBuffer::copyQueryResults() is defined only for uint32_t and uint64_t types");
+}
+
+template<>
+inline void CommandBuffer::copyQueryResults<uint32_t>(const std::shared_ptr<QueryPool>& queryPool, const std::shared_ptr<Buffer>& dstBuffer, bool wait,
+    uint32_t firstQuery /* 0 */, uint32_t queryCount /* std::numeric_limits<uint32_t>::max() */, VkDeviceSize dstOffset /* 0 */) noexcept
+{
+    if (std::numeric_limits<uint32_t>::max() == queryCount)
+        queryCount = queryPool->getQueryCount();
+    const VkQueryResultFlags flags = wait ? VK_QUERY_RESULT_WAIT_BIT : 0;
+    vkCmdCopyQueryPoolResults(handle, *queryPool, firstQuery, queryCount, *dstBuffer, dstOffset, sizeof(uint32_t), flags);
+}
+
+template<>
+inline void CommandBuffer::copyQueryResults<uint64_t>(const std::shared_ptr<QueryPool>& queryPool, const std::shared_ptr<Buffer>& dstBuffer, bool wait,
+    uint32_t firstQuery /* 0 */, uint32_t queryCount /* std::numeric_limits<uint32_t>::max() */, VkDeviceSize dstOffset /* 0 */) noexcept
+{
+    if (std::numeric_limits<uint32_t>::max() == queryCount)
+        queryCount = queryPool->getQueryCount();
+    const VkQueryResultFlags flags = VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0);
+    vkCmdCopyQueryPoolResults(handle, *queryPool, firstQuery, queryCount, *dstBuffer, dstOffset, sizeof(uint64_t), flags);
+}
+
+template<typename Type>
+inline void CommandBuffer::copyQueryResultsWithAvailability(const std::shared_ptr<QueryPool>& /* queryPool */, const std::shared_ptr<Buffer>& /* dstBuffer */,
+    uint32_t /* firstQuery */, uint32_t /* queryCount */, VkDeviceSize /* dstOffset */) noexcept
+{
+    static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
+        "CommandBuffer::copyQueryResultsWithAvailability() is defined only for uint32_t and uint64_t types");
+}
+
+template<>
+inline void CommandBuffer::copyQueryResultsWithAvailability<uint32_t>(const std::shared_ptr<QueryPool>& queryPool, const std::shared_ptr<Buffer>& dstBuffer,
+    uint32_t firstQuery /* 0 */, uint32_t queryCount /* std::numeric_limits<uint32_t>::max() */, VkDeviceSize dstOffset /* 0 */) noexcept
+{
+    if (std::numeric_limits<uint32_t>::max() == queryCount)
+        queryCount = queryPool->getQueryCount();
+    constexpr VkQueryResultFlags flags = VK_QUERY_RESULT_WITH_AVAILABILITY_BIT;
+    vkCmdCopyQueryPoolResults(handle, *queryPool, firstQuery, queryCount, *dstBuffer, dstOffset, sizeof(uint32_t) * 2, flags);
+}
+
+template<>
+inline void CommandBuffer::copyQueryResultsWithAvailability<uint64_t>(const std::shared_ptr<QueryPool>& queryPool, const std::shared_ptr<Buffer>& dstBuffer,
+    uint32_t firstQuery /* 0 */, uint32_t queryCount /* std::numeric_limits<uint32_t>::max() */, VkDeviceSize dstOffset /* 0 */) noexcept
+{
+    if (std::numeric_limits<uint32_t>::max() == queryCount)
+        queryCount = queryPool->getQueryCount();
+    constexpr VkQueryResultFlags flags = VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT;
+    vkCmdCopyQueryPoolResults(handle, *queryPool, firstQuery, queryCount, *dstBuffer, dstOffset, sizeof(uint64_t) * 2, flags);
+}
+
+template<typename Type>
 inline void CommandBuffer::pushConstant(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const Type& constant,
     uint32_t offset /* 0 */) noexcept
 {
