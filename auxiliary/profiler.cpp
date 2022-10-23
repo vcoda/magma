@@ -174,39 +174,36 @@ void Profiler::endSection(std::shared_ptr<CommandBuffer> cmdBuffer)
     }
 }
 
-std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool dontBlockCpu) const
+std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool wait) const
 {
     MAGMA_ASSERT(!insideFrame);
     std::vector<Timing> executionTimings;
     executionTimings.reserve(sections.size());
     const uint32_t count = std::min(queryCount, queryPool->getQueryCount());
-    if (dontBlockCpu)
+    if (wait)
+    {   // Block CPU until all query results will be ready
+        const std::vector<uint64_t> timestamps = queryPool->getResults<uint64_t>(0, count, wait);
+        for (const auto& section: sections)
+        {   // Bits outside the valid range are guaranteed to be zeros, but we use timestamp mask anyway
+            const uint64_t beginTs = timestamps[section.beginQuery];
+            const uint64_t endTs = timestamps[section.beginQuery + 1];
+            const uint64_t start = beginTs & timestampMask;
+            const uint64_t end = endTs & timestampMask;
+            double time = double(end - start) * timestampPeriod; // nanoseconds
+            executionTimings.emplace_back(section.name, time);
+        }
+    }  else
     {   // Do not stall, return only available results
         const std::vector<QueryResult<uint64_t, uint64_t>> timestamps = queryPool->getResultsWithAvailability<uint64_t>(0, count);
         for (const auto& section: sections)
         {
             const auto& beginTs = timestamps[section.beginQuery];
             const auto& endTs = timestamps[section.beginQuery + 1];
-            if (beginTs.availability && endTs.availability)
-            {   // Bits outside the valid range are guaranteed to be zeros, but we use timestamp mask anyway.
-                const uint64_t start = beginTs.result & timestampMask;
-                const uint64_t end = endTs.result & timestampMask;
-                double time = double(end - start) * timestampPeriod; // In nanoseconds
-                executionTimings.emplace_back(section.name, time);
-            }
-        }
-    }
-    else
-    {   // Do block CPU until all query results will be ready
-        constexpr bool wait = true;
-        const std::vector<uint64_t> timestamps = queryPool->getResults<uint64_t>(0, count, wait);
-        for (const auto& section: sections)
-        {
-            const uint64_t beginTs = timestamps[section.beginQuery];
-            const uint64_t endTs = timestamps[section.beginQuery + 1];
-            const uint64_t start = beginTs & timestampMask;
-            const uint64_t end = endTs & timestampMask;
-            double time = double(end - start) * timestampPeriod; // In nanoseconds
+            if (!beginTs.availability || !endTs.availability)
+                continue;
+            const uint64_t start = beginTs.result & timestampMask;
+            const uint64_t end = endTs.result & timestampMask;
+            double time = double(end - start) * timestampPeriod; // nanoseconds
             executionTimings.emplace_back(section.name, time);
         }
     }

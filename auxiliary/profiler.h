@@ -55,7 +55,7 @@ namespace magma
                 uint32_t color,
                 std::shared_ptr<CommandBuffer> cmdBuffer);
             void endSection(std::shared_ptr<CommandBuffer> cmdBuffer);
-            std::vector<Timing> getExecutionTimings(bool dontBlockCpu) const;
+            std::vector<Timing> getExecutionTimings(bool wait) const;
             void copyExecutionTimings(std::shared_ptr<CommandBuffer> cmdBuffer,
                 std::shared_ptr<Buffer> buffer,
                 VkDeviceSize bufferOffset = 0) const noexcept;
