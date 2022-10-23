@@ -87,13 +87,8 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     deviceInfo.ppEnabledExtensionNames = enabledExtensions.data();
     deviceInfo.pEnabledFeatures = extendedDeviceFeatures.empty() ? &deviceFeatures : nullptr;
     const VkResult result = vkCreateDevice(*(this->physicalDevice), &deviceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    switch (result)
-    {
-    case VK_ERROR_INITIALIZATION_FAILED:
-        throw exception::InitializationFailed("failed to create logical device");
-    case VK_ERROR_DEVICE_LOST:
-        throw exception::DeviceLost("failed to create logical device");
-    }
+    if (VK_ERROR_INITIALIZATION_FAILED == result)
+        throw exception::InitializationFailed("initialization of logical device failed");
     MAGMA_THROW_FAILURE(result, "failed to create logical device");
     queues.reserve(queueDescriptors.size());
     for (const auto& desc : queueDescriptors)
@@ -181,8 +176,6 @@ void Device::updateDescriptorSets(const std::vector<VkWriteDescriptorSet>& descr
 bool Device::waitIdle() const
 {
     const VkResult result = vkDeviceWaitIdle(handle);
-    if (VK_ERROR_DEVICE_LOST == result)
-        throw exception::DeviceLost("failed to wait for device become idle");
     MAGMA_THROW_FAILURE(result, "failed to wait for device become idle");
     return true;
 }

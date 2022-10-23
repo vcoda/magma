@@ -90,8 +90,6 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
         submitInfo.pSignalSemaphores = dereferencedSignalSemaphores;
     }
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, MAGMA_OPTIONAL_HANDLE(fence));
-    if (VK_ERROR_DEVICE_LOST == result)
-        throw exception::DeviceLost("queue submission command failed");
     MAGMA_THROW_FAILURE(result, "queue submission command failed");
     for (auto& cmdBuffer : cmdBuffers)
     {   // Change state of command buffer
@@ -196,8 +194,6 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
     const VkResult result = vkQueuePresentKHR(handle, &presentInfo);
     switch (result)
     {
-    case VK_ERROR_DEVICE_LOST:
-        throw exception::DeviceLost("queue present failed");
 #ifdef VK_KHR_swapchain
     case VK_ERROR_OUT_OF_DATE_KHR:
         throw exception::OutOfDate("queue present failed");

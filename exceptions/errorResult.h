@@ -81,8 +81,9 @@ namespace magma
         class DeviceLost : public ErrorResult
         {
         public:
-            explicit DeviceLost(const char *message) noexcept:
-                ErrorResult(VK_ERROR_DEVICE_LOST, message) {}
+            explicit DeviceLost(const char *message,
+                const source_location& location) noexcept:
+                ErrorResult(VK_ERROR_DEVICE_LOST, message, location) {}
         };
 
         /* Mapping of a memory object has failed. */
@@ -181,6 +182,8 @@ namespace magma
         throw magma::exception::OutOfHostMemory(message, MAGMA_SOURCE_LOCATION);\
     case VK_ERROR_OUT_OF_DEVICE_MEMORY:\
         throw magma::exception::OutOfDeviceMemory(message, MAGMA_SOURCE_LOCATION);\
+    case VK_ERROR_DEVICE_LOST:\
+        throw magma::exception::DeviceLost(message, MAGMA_SOURCE_LOCATION);\
     default:\
         throw magma::exception::ErrorResult(result, message,  MAGMA_SOURCE_LOCATION);\
     }

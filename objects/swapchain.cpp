@@ -276,7 +276,7 @@ void Swapchain::handleError(VkResult result, const char *message) const
     case VK_ERROR_INITIALIZATION_FAILED:
         throw exception::InitializationFailed(message);
     case VK_ERROR_DEVICE_LOST:
-        throw exception::DeviceLost(message);
+        throw exception::DeviceLost(message, MAGMA_SOURCE_LOCATION);
 #ifdef VK_KHR_surface
     case VK_ERROR_SURFACE_LOST_KHR:
         throw exception::SurfaceLost(message);
