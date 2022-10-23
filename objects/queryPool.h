@@ -75,7 +75,7 @@ namespace magma
             VkQueryResultFlags flags) const noexcept;
 
     private:
-        template<class Type, class Int>
+        template<class Int, class Type>
         void fillDirty(std::vector<Type>& data) const noexcept;
 
     protected:

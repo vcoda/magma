@@ -10,12 +10,11 @@ inline std::vector<Type> QueryPool::getQueryResults(uint32_t firstQuery, uint32_
         return {};
     }
 #ifdef MAGMA_DEBUG
-    // Initialize query results with dirty value to let application know that
-    // results are not yet available and that retrieved values are incorrect.
+    // Initialize query results with dirty value to let application know if something goes wrong
     if (flags & VK_QUERY_RESULT_64_BIT)
-        fillDirty<Type, uint64_t>(data);
+        fillDirty<uint64_t>(data);
     else
-        fillDirty<Type, uint32_t>(data);
+        fillDirty<uint32_t>(data);
 #endif // MAGMA_DEBUG
     constexpr VkDeviceSize stride = sizeof(Type);
     const size_t dataSize = sizeof(Type) * queryCount;
@@ -24,7 +23,7 @@ inline std::vector<Type> QueryPool::getQueryResults(uint32_t firstQuery, uint32_
     return data;
 }
 
-template<class Type, class Int>
+template<class Int, class Type>
 inline void QueryPool::fillDirty(std::vector<Type>& data) const noexcept
 {
     MAGMA_ASSERT((sizeof(Type) * data.size()) % sizeof(Int) == 0);
