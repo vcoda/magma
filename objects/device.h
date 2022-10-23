@@ -26,6 +26,9 @@ namespace magma
     class Surface;
     class Queue;
     class Fence;
+#ifdef VK_KHR_timeline_semaphore
+    class TimelineSemaphore;
+#endif
     class ResourcePool;
 
     /* Device objects represent logical connections to physical devices.
@@ -61,6 +64,12 @@ namespace magma
         bool waitForFences(const std::vector<std::shared_ptr<Fence>>& fences,
             bool waitAll,
             uint64_t timeout = UINT64_MAX) const;
+    #ifdef VK_KHR_timeline_semaphore
+        bool waitSemaphores(const std::vector<std::shared_ptr<TimelineSemaphore>>& semaphores,
+            const std::vector<uint64_t>& values,
+            bool waitAll,
+            uint64_t timeout = std::numeric_limits<uint64_t>::max()) const;
+    #endif // VK_KHR_timeline_semaphore
 #ifdef VK_KHR_device_group
         VkDeviceGroupPresentModeFlagsKHR getDeviceGroupSurfacePresentModes(std::shared_ptr<const Surface> surface) const;
 #   ifdef VK_EXT_full_screen_exclusive

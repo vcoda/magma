@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "surface.h"
 #include "queue.h"
 #include "fence.h"
+#include "timelineSemaphore.h"
 #include "resourcePool.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
@@ -201,6 +202,30 @@ bool Device::waitForFences(const std::vector<std::shared_ptr<Fence>>& fences, bo
     // VK_SUCCESS or VK_TIMEOUT
     return (result != VK_TIMEOUT);
 }
+
+#ifdef VK_KHR_timeline_semaphore
+bool Device::waitSemaphores(const std::vector<std::shared_ptr<TimelineSemaphore>>& semaphores,
+    const std::vector<uint64_t>& values, bool waitAll,
+    uint64_t timeout /* std::numeric_limits<uint64_t>::max() */) const
+{
+    MAGMA_STACK_ARRAY(VkSemaphore, dereferencedSemaphores, semaphores.size());
+    for (const auto& semaphore: semaphores)
+        dereferencedSemaphores.put(*semaphore);
+    VkSemaphoreWaitInfo waitInfo;
+    waitInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO_KHR;
+    waitInfo.pNext = nullptr;
+    waitInfo.flags = waitAll ? 0 : VK_SEMAPHORE_WAIT_ANY_BIT_KHR;
+    waitInfo.semaphoreCount = MAGMA_COUNT(dereferencedSemaphores);
+    waitInfo.pSemaphores = dereferencedSemaphores;
+    waitInfo.pValues = values.data();
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkWaitSemaphoresKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
+    vkWaitSemaphoresKHR(handle, &waitInfo, timeout);
+    const VkResult result = vkWaitSemaphoresKHR(MAGMA_HANDLE(device), &waitInfo, timeout);
+    MAGMA_THROW_FAILURE(result, "failed to wait timeline semaphores");
+    // VK_SUCCESS or VK_TIMEOUT
+    return (result != VK_TIMEOUT);
+}
+#endif // VK_KHR_timeline_semaphore
 
 #ifdef VK_KHR_device_group
 VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupSurfacePresentModes(std::shared_ptr<const Surface> surface) const
