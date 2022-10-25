@@ -64,6 +64,7 @@ namespace magma
 
         // ARM Limited
         const VkBool32 ARM_rasterization_order_attachment_access : 1;
+        const VkBool32 ARM_shader_core_builtins : 1;
 
         // FUCHSIA (Google LLC)
         const VkBool32 FUCHSIA_buffer_collection : 1;
@@ -83,16 +84,20 @@ namespace magma
         const VkBool32 EXT_conservative_rasterization : 1;
         const VkBool32 EXT_custom_border_color : 1;
         const VkBool32 EXT_debug_marker : 1;
+        const VkBool32 EXT_depth_clamp_zero_one : 1;
         const VkBool32 EXT_depth_clip_control : 1;
         const VkBool32 EXT_depth_clip_enable : 1;
         const VkBool32 EXT_depth_range_unrestricted : 1;
         const VkBool32 EXT_descriptor_indexing : 1;
+        const VkBool32 EXT_device_address_binding_report : 1;
+        const VkBool32 EXT_device_fault : 1;
         const VkBool32 EXT_device_memory_report : 1;
         const VkBool32 EXT_discard_rectangles : 1;
         const VkBool32 EXT_display_control : 1;
         const VkBool32 EXT_display_surface_counter : 1;
         const VkBool32 EXT_extended_dynamic_state : 1;
         const VkBool32 EXT_extended_dynamic_state2 : 1;
+        const VkBool32 EXT_extended_dynamic_state3 : 1;
         const VkBool32 EXT_external_memory_dma_buf : 1;
         const VkBool32 EXT_external_memory_host : 1;
         const VkBool32 EXT_filter_cubic : 1;
@@ -114,13 +119,16 @@ namespace magma
         const VkBool32 EXT_image_view_min_lod : 1;
         const VkBool32 EXT_index_type_uint8 : 1;
         const VkBool32 EXT_inline_uniform_block : 1;
+        const VkBool32 EXT_legacy_dithering : 1;
         const VkBool32 EXT_line_rasterization : 1;
         const VkBool32 EXT_load_store_op_none : 1;
         const VkBool32 EXT_memory_budget : 1;
         const VkBool32 EXT_memory_priority : 1;
+        const VkBool32 EXT_mesh_shader : 1;
         const VkBool32 EXT_metal_objects : 1;
         const VkBool32 EXT_multi_draw : 1;
         const VkBool32 EXT_multisampled_render_to_single_sampled : 1;
+        const VkBool32 EXT_mutable_descriptor_type : 1;
         const VkBool32 EXT_non_seamless_cube_map : 1;
         const VkBool32 EXT_pageable_device_local_memory : 1;
         const VkBool32 EXT_pci_bus_info : 1;
@@ -128,6 +136,7 @@ namespace magma
         const VkBool32 EXT_pipeline_creation_cache_control : 1;
         const VkBool32 EXT_pipeline_creation_feedback : 1;
         const VkBool32 EXT_pipeline_properties : 1;
+        const VkBool32 EXT_pipeline_protected_access : 1;
         const VkBool32 EXT_pipeline_robustness : 1;
         const VkBool32 EXT_post_depth_coverage : 1;
         const VkBool32 EXT_primitive_topology_list_restart : 1;
@@ -297,6 +306,8 @@ namespace magma
         const VkBool32 NV_inherited_viewport_scissor : 1;
         const VkBool32 NV_linear_color_attachment : 1;
         const VkBool32 NV_mesh_shader : 1;
+        const VkBool32 NV_optical_flow : 1;
+        const VkBool32 NV_present_barrier : 1;
         const VkBool32 NV_ray_tracing : 1;
         const VkBool32 NV_ray_tracing_motion_blur : 1;
         const VkBool32 NV_representative_fragment_test : 1;
