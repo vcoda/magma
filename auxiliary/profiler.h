@@ -48,6 +48,8 @@ namespace magma
             };
 
             VkQueueFlags getQueueType() const noexcept { return queueType; }
+            bool setLabelUsage(bool enable) noexcept { useLabels = enable; }
+            bool getLabelUsage() const noexcept { return useLabels; }
             uint32_t getQueryCount() const noexcept { return queryCount; }
             bool beginFrame();
             bool endFrame();
@@ -79,6 +81,7 @@ namespace magma
             bool hostQueryReset;
             bool debugUtils;
             bool debugMarker;
+            bool useLabels;
             bool resetQueries;
             bool insideFrame;
         };

@@ -37,6 +37,7 @@ Profiler::Profiler(VkQueueFlags queueType, std::shared_ptr<Device> device, std::
     hostQueryReset(false),
     debugUtils(false),
     debugMarker(false),
+    useLabels(false),
     resetQueries(false),
     insideFrame(false)
 {
@@ -134,16 +135,19 @@ void Profiler::beginSection(const char *name, uint32_t color, std::shared_ptr<Co
         queryCount = 0;
         resetQueries = false;
     }
-#ifdef VK_EXT_debug_utils
-    if (debugUtils)
-        cmdBuffer->beginDebugLabel(name, color);
-    else
-#endif
+    if (useLabels)
     {
-    #ifdef VK_EXT_debug_marker
-        if (debugMarker)
-            cmdBuffer->beginDebugMarker(name, color);
-    #endif
+    #ifdef VK_EXT_debug_utils
+        if (debugUtils)
+            cmdBuffer->beginDebugLabel(name, color);
+        else
+    #endif // VK_EXT_debug_utils
+        {
+        #ifdef VK_EXT_debug_marker
+            if (debugMarker)
+                cmdBuffer->beginDebugMarker(name, color);
+        #endif // VK_EXT_debug_utils
+        }
     }
     const uint32_t beginQuery = queryCount % queryPool->getQueryCount();
     sections.emplace_back(name, beginQuery);
@@ -161,16 +165,19 @@ void Profiler::endSection(std::shared_ptr<CommandBuffer> cmdBuffer)
         cmdBuffer->writeTimestamp(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, queryPool, stack.top().beginQuery + 1);
         stack.pop();
     }
-#ifdef VK_EXT_debug_utils
-    if (debugUtils)
-        cmdBuffer->endDebugLabel();
-    else
-#endif
+    if (useLabels)
     {
-    #ifdef VK_EXT_debug_marker
-        if (debugMarker)
-            cmdBuffer->endDebugMarker();
-    #endif
+    #ifdef VK_EXT_debug_utils
+        if (debugUtils)
+            cmdBuffer->endDebugLabel();
+        else
+    #endif // VK_EXT_debug_utils
+        {
+        #ifdef VK_EXT_debug_marker
+            if (debugMarker)
+                cmdBuffer->endDebugMarker();
+        #endif // VK_EXT_debug_marker
+        }
     }
 }
 
