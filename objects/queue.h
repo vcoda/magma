@@ -22,6 +22,9 @@ namespace magma
 {
     class CommandBuffer;
     class Semaphore;
+#ifdef VK_KHR_timeline_semaphore
+    class TimelineSemaphore;
+#endif
     class Fence;
     class Swapchain;
 
@@ -52,6 +55,11 @@ namespace magma
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
             std::shared_ptr<const Semaphore> signalSemaphore = nullptr,
             std::shared_ptr<const Fence> fence = nullptr);
+    #ifdef VK_KHR_timeline_semaphore
+        void submit(std::shared_ptr<TimelineSemaphore> semaphore,
+            uint64_t waitValue,
+            uint64_t signalValue);
+    #endif // VK_KHR_timeline_semaphore
 #ifdef VK_KHR_device_group
         void submitDeviceGroup(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
             const std::vector<uint32_t>& cmdBufferDeviceMasks = {},

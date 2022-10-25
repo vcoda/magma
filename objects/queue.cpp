@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "commandBuffer.h"
 #include "semaphore.h"
+#include "timelineSemaphore.h"
 #include "fence.h"
 #include "swapchain.h"
 #include "../helpers/stackArray.h"
@@ -115,6 +116,32 @@ void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
         signalSemaphores.push_back(signalSemaphore);
     return submit({cmdBuffer}, {waitStageMask}, waitSemaphores, signalSemaphores, std::move(fence));
 }
+
+#ifdef VK_KHR_timeline_semaphore
+void Queue::submit(std::shared_ptr<TimelineSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue)
+{   // https://www.khronos.org/blog/vulkan-timeline-semaphores
+    const VkSemaphore waitSignalSemaphore = *semaphore;
+    VkSubmitInfo submitInfo;
+    VkTimelineSemaphoreSubmitInfoKHR submitInfoTimelineSemaphore;
+    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.pNext = &submitInfoTimelineSemaphore;
+    submitInfo.waitSemaphoreCount = 1;
+    submitInfo.pWaitSemaphores = &waitSignalSemaphore;
+    submitInfo.pWaitDstStageMask = 0;
+    submitInfo.commandBufferCount = 0;
+    submitInfo.pCommandBuffers = nullptr;
+    submitInfo.signalSemaphoreCount = 1;
+    submitInfo.pSignalSemaphores = &waitSignalSemaphore;
+    submitInfoTimelineSemaphore.sType = VK_STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO_KHR;
+    submitInfoTimelineSemaphore.pNext = nullptr;
+    submitInfoTimelineSemaphore.waitSemaphoreValueCount = 1;
+    submitInfoTimelineSemaphore.pWaitSemaphoreValues = &waitValue;
+    submitInfoTimelineSemaphore.signalSemaphoreValueCount = 1;
+    submitInfoTimelineSemaphore.pSignalSemaphoreValues = &signalValue;
+    const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, VK_NULL_HANDLE);
+    MAGMA_THROW_FAILURE(result, "failed to submit queue");
+}
+#endif // #ifdef VK_KHR_timeline_semaphore
 
 #ifdef VK_KHR_device_group
 void Queue::submitDeviceGroup(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
