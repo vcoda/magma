@@ -225,6 +225,7 @@ void Profiler::copyExecutionTimings(std::shared_ptr<CommandBuffer> cmdBuffer, st
 {   // TODO: does vkCmdCopyQueryPoolResults() requires synchronizaition with earlier submitted timestamps commands?
     constexpr bool wait = true;
     const uint32_t count = std::min(queryCount, queryPool->getQueryCount());
+    // vkCmdCopyQueryPoolResults must only be called outside of a render pass instance!
     cmdBuffer->copyQueryResults<uint64_t>(queryPool, buffer, wait, 0, count, bufferOffset);
 }
 } // namespace aux
