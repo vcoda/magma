@@ -49,16 +49,18 @@ namespace magma
             const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores = {},
             const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores = {},
             std::shared_ptr<const Fence> fence = nullptr,
-            const void *extension = nullptr);
+            const StructureChain& extendedInfo = StructureChain());
         void submit(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkPipelineStageFlags waitStageMask = 0,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
             std::shared_ptr<const Semaphore> signalSemaphore = nullptr,
-            std::shared_ptr<const Fence> fence = nullptr);
+            std::shared_ptr<const Fence> fence = nullptr,
+            const StructureChain& extendedInfo = StructureChain());
     #ifdef VK_KHR_timeline_semaphore
         void submit(std::shared_ptr<TimelineSemaphore> semaphore,
             uint64_t waitValue,
-            uint64_t signalValue);
+            uint64_t signalValue,
+            const StructureChain& extendedInfo /* default */);
     #endif // VK_KHR_timeline_semaphore
 #ifdef VK_KHR_device_group
         void submitDeviceGroup(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
@@ -73,7 +75,8 @@ namespace magma
         bool waitIdle() noexcept;
         void present(std::shared_ptr<const Swapchain> swapchain,
             uint32_t imageIndex,
-            std::shared_ptr<const Semaphore> waitSemaphore = nullptr);
+            std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
+            const StructureChain& extendedInfo = StructureChain());
 #ifdef VK_KHR_display_swapchain
         void presentDisplay(std::shared_ptr<const Swapchain> swapchain,
             uint32_t imageIndex,
@@ -82,12 +85,6 @@ namespace magma
             bool persistent,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr);
 #endif // VK_KHR_display_swapchain
-
-    private:
-        void present(std::shared_ptr<const Swapchain> swapchain,
-            uint32_t imageIndex,
-            const VkDisplayPresentInfoKHR *displayPresentInfo,
-            std::shared_ptr<const Semaphore> waitSemaphore);
 
     private:
         const VkQueueFlagBits flags;

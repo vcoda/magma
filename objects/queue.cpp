@@ -44,7 +44,7 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
     const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores /* {} */,
     const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores /* {} */,
     std::shared_ptr<const Fence> fence /* nullptr */,
-    const void *extension /* nullptr */)
+    const StructureChain& extendedInfo /* default */)
 {
     MAGMA_ASSERT(!cmdBuffers.empty());
     if (cmdBuffers.empty())
@@ -55,7 +55,7 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
     // https://www.khronos.org/registry/vulkan/specs/1.0/man/html/VkSubmitInfo.html
     VkSubmitInfo submitInfo;
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.pNext = extension;
+    submitInfo.pNext = extendedInfo.getChainedNodes();
     if (waitSemaphores.empty())
     {
         submitInfo.waitSemaphoreCount = 0;
@@ -102,7 +102,8 @@ void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
     VkPipelineStageFlags waitStageMask /* 0 */,
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
     std::shared_ptr<const Semaphore> signalSemaphore /* nullptr */,
-    std::shared_ptr<const Fence> fence /* nullptr */)
+    std::shared_ptr<const Fence> fence /* nullptr */,
+    const StructureChain& extendedInfo /* default */)
 {
     MAGMA_ASSERT(cmdBuffer);
     MAGMA_ASSERT(cmdBuffer->primary());
@@ -114,11 +115,12 @@ void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
     std::vector<std::shared_ptr<const Semaphore>> signalSemaphores;
     if (signalSemaphore)
         signalSemaphores.push_back(signalSemaphore);
-    return submit({cmdBuffer}, {waitStageMask}, waitSemaphores, signalSemaphores, std::move(fence));
+    return submit({cmdBuffer}, {waitStageMask}, waitSemaphores, signalSemaphores, std::move(fence), extendedInfo);
 }
 
 #ifdef VK_KHR_timeline_semaphore
-void Queue::submit(std::shared_ptr<TimelineSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue)
+void Queue::submit(std::shared_ptr<TimelineSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue,
+    const StructureChain& extendedInfo /* default */)
 {   // https://www.khronos.org/blog/vulkan-timeline-semaphores
     const VkSemaphore waitSignalSemaphore = *semaphore;
     VkSubmitInfo submitInfo;
@@ -133,7 +135,7 @@ void Queue::submit(std::shared_ptr<TimelineSemaphore> semaphore, uint64_t waitVa
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = &waitSignalSemaphore;
     submitInfoTimelineSemaphore.sType = VK_STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO_KHR;
-    submitInfoTimelineSemaphore.pNext = nullptr;
+    submitInfoTimelineSemaphore.pNext = extendedInfo.getChainedNodes();
     submitInfoTimelineSemaphore.waitSemaphoreValueCount = 1;
     submitInfoTimelineSemaphore.pWaitSemaphoreValues = &waitValue;
     submitInfoTimelineSemaphore.signalSemaphoreValueCount = 1;
@@ -163,7 +165,9 @@ void Queue::submitDeviceGroup(const std::vector<std::shared_ptr<CommandBuffer>>&
     deviceGroupSubmitInfo.pCommandBufferDeviceMasks = cmdBufferDeviceMasks.data();
     deviceGroupSubmitInfo.signalSemaphoreCount = MAGMA_COUNT(signalSemaphoreDeviceIndices);
     deviceGroupSubmitInfo.pSignalSemaphoreDeviceIndices = signalSemaphoreDeviceIndices.data();
-    submit(cmdBuffers, waitStageMasks, waitSemaphores, signalSemaphores, std::move(fence), &deviceGroupSubmitInfo);
+    StructureChain extendedInfo;
+    extendedInfo.addNode(deviceGroupSubmitInfo);
+    submit(cmdBuffers, waitStageMasks, waitSemaphores, signalSemaphores, std::move(fence), extendedInfo);
 }
 #endif // VK_KHR_device_group
 
@@ -174,33 +178,11 @@ bool Queue::waitIdle() noexcept
 }
 
 void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
-    std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */)
-{
-    present(std::move(swapchain), imageIndex, nullptr, std::move(waitSemaphore));
-}
-
-#ifdef VK_KHR_display_swapchain
-void Queue::presentDisplay(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
-    const VkRect2D& srcRect, const VkRect2D& dstRect, bool persistent,
-    std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */)
-{
-    VkDisplayPresentInfoKHR displayPresentInfo;
-    displayPresentInfo.sType = VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR;
-    displayPresentInfo.pNext = nullptr;
-    displayPresentInfo.srcRect = srcRect;
-    displayPresentInfo.dstRect = dstRect;
-    displayPresentInfo.persistent = MAGMA_BOOLEAN(persistent);
-    present(std::move(swapchain), imageIndex, &displayPresentInfo, std::move(waitSemaphore));
-}
-#endif // VK_KHR_display_swapchain
-
-void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
-    const VkDisplayPresentInfoKHR *displayPresentInfo,
-    std::shared_ptr<const Semaphore> waitSemaphore)
+    std::shared_ptr<const Semaphore> waitSemaphore, const StructureChain& extendedInfo)
 {
     VkPresentInfoKHR presentInfo;
     presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-    presentInfo.pNext = displayPresentInfo;
+    presentInfo.pNext = extendedInfo.getChainedNodes();
     VkSemaphore dereferencedWaitSemaphore;
     if (waitSemaphore)
     {
@@ -236,4 +218,21 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
     }
     MAGMA_THROW_FAILURE(result, "queue present failed");
 }
+
+#ifdef VK_KHR_display_swapchain
+void Queue::presentDisplay(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
+    const VkRect2D& srcRect, const VkRect2D& dstRect, bool persistent,
+    std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */)
+{
+    VkDisplayPresentInfoKHR displayPresentInfo;
+    displayPresentInfo.sType = VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR;
+    displayPresentInfo.pNext = nullptr;
+    displayPresentInfo.srcRect = srcRect;
+    displayPresentInfo.dstRect = dstRect;
+    displayPresentInfo.persistent = MAGMA_BOOLEAN(persistent);
+    StructureChain extendedInfo;
+    extendedInfo.addNode(displayPresentInfo);
+    present(std::move(swapchain), imageIndex, std::move(waitSemaphore), extendedInfo);
+}
+#endif // VK_KHR_display_swapchain
 } // namespace magma
