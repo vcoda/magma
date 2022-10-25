@@ -35,11 +35,11 @@ namespace magma
         explicit TimelineSemaphore(std::shared_ptr<Device> device,
             uint64_t initialValue,
             std::shared_ptr<IAllocator> allocator = nullptr);
+        ~TimelineSemaphore();
         uint64_t getCounterValue() const;
         void signal(uint64_t counter);
         bool wait(uint64_t counter,
             uint64_t timeout = std::numeric_limits<uint64_t>::max()) const;
-        ~TimelineSemaphore();
     };
 #endif // VK_KHR_timeline_semaphore
 } // namespace magma
