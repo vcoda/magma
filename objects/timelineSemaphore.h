@@ -36,8 +36,8 @@ namespace magma
             uint64_t initialValue,
             std::shared_ptr<IAllocator> allocator = nullptr);
         uint64_t getCounterValue() const;
-        void signal(uint64_t value);
-        bool wait(uint64_t value,
+        void signal(uint64_t counter);
+        bool wait(uint64_t counter,
             uint64_t timeout = std::numeric_limits<uint64_t>::max()) const;
         ~TimelineSemaphore();
     };
