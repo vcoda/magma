@@ -152,6 +152,9 @@ void Profiler::beginSection(const char *name, uint32_t color, std::shared_ptr<Co
     const uint32_t beginQuery = queryCount % queryPool->getQueryCount();
     sections.emplace_back(name, beginQuery);
     stack.push(sections.back());
+    // When vkCmdWriteTimestamp is submitted to a queue, it defines an execution dependency on commands
+    // that were submitted before it. vkCmdWriteTimestamp latches the value of the timer when all
+    // previous commands have completed executing as far as the specified pipeline stage.
     cmdBuffer->writeTimestamp(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, queryPool, stack.top().beginQuery);
     queryCount += 2;
 }
