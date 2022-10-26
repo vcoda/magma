@@ -130,6 +130,7 @@ namespace magma
         const VkBool32 EXT_multisampled_render_to_single_sampled : 1;
         const VkBool32 EXT_mutable_descriptor_type : 1;
         const VkBool32 EXT_non_seamless_cube_map : 1;
+        const VkBool32 EXT_opacity_micromap : 1;
         const VkBool32 EXT_pageable_device_local_memory : 1;
         const VkBool32 EXT_pci_bus_info : 1;
         const VkBool32 EXT_physical_device_drm : 1;

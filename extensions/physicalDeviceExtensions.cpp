@@ -120,6 +120,7 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(EXT_multisampled_render_to_single_sampled),
     MAGMA_CHECK_EXTENSION(EXT_mutable_descriptor_type),
     MAGMA_CHECK_EXTENSION(EXT_non_seamless_cube_map),
+    MAGMA_CHECK_EXTENSION(EXT_opacity_micromap),
     MAGMA_CHECK_EXTENSION(EXT_pageable_device_local_memory),
     MAGMA_CHECK_EXTENSION(EXT_pci_bus_info),
     MAGMA_CHECK_EXTENSION(EXT_physical_device_drm),
