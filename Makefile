@@ -60,6 +60,7 @@ MAGMA_OBJS= \
 	helpers/executeDeferredOperation.o \
 	helpers/stringize.o \
 	\
+	misc/deviceFaultInfo.o \
 	misc/deviceQueueDescriptor.o \
 	misc/format.o \
 	misc/framebufferAttachmentImage.o \

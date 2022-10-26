@@ -738,6 +738,9 @@
     <ClInclude Include="..\..\objects\timelineSemaphore.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\misc\deviceFaultInfo.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1144,6 +1147,9 @@
     </ClCompile>
     <ClCompile Include="..\..\objects\timelineSemaphore.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\deviceFaultInfo.cpp">
+      <Filter>Source Files\misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

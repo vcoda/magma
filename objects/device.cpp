@@ -279,6 +279,28 @@ VkPeerMemoryFeatureFlags Device::getDeviceGroupPeerMemoryFeatures(uint32_t heapI
 }
 #endif // VK_KHR_device_group
 
+#ifdef VK_EXT_device_fault
+DeviceFaultInfo Device::getFaultInfo() const
+{
+    VkDeviceFaultCountsEXT deviceFaultCounts;
+    deviceFaultCounts.sType = VK_STRUCTURE_TYPE_DEVICE_FAULT_COUNTS_EXT;
+    deviceFaultCounts.pNext = nullptr;
+    deviceFaultCounts.addressInfoCount = 0;
+    deviceFaultCounts.vendorInfoCount = 0;
+    deviceFaultCounts.vendorBinarySize = 0ull;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDeviceFaultInfoEXT, VK_EXT_DEVICE_FAULT_EXTENSION_NAME);
+    VkResult result = vkGetDeviceFaultInfoEXT(handle, &deviceFaultCounts, nullptr);
+    if (VK_SUCCESS == result)
+    {   // Allocate memory for device fault information
+        DeviceFaultInfo deviceFaultInfo(deviceFaultCounts);
+        result = vkGetDeviceFaultInfoEXT(handle, &deviceFaultCounts, &deviceFaultInfo);
+        MAGMA_THROW_FAILURE(result, "failed to get device fault info");
+        return deviceFaultInfo;
+    }
+    return DeviceFaultInfo();
+}
+#endif // VK_EXT_device_fault
+
 bool Device::extensionEnabled(const char *extensionName) const
 {
     if (!physicalDevice->checkExtensionSupport(extensionName))

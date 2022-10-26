@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "dispatchable.h"
 #include "../misc/deviceQueueDescriptor.h"
+#include "../misc/deviceFaultInfo.h"
 #include "../helpers/stackArray.h"
 
 namespace magma
@@ -81,6 +82,9 @@ namespace magma
             uint32_t localDeviceIndex,
             uint32_t remoteDeviceIndex) const;
 #endif // VK_KHR_device_group
+    #ifdef VK_EXT_device_fault
+        DeviceFaultInfo getFaultInfo() const;
+    #endif
         std::shared_ptr<PhysicalDevice> getPhysicalDevice() noexcept { return physicalDevice; }
         std::shared_ptr<const PhysicalDevice> getPhysicalDevice() const noexcept { return physicalDevice; }
         std::shared_ptr<ResourcePool> getResourcePool() noexcept { return resourcePool; }
