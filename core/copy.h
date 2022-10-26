@@ -48,6 +48,14 @@ template<typename T> inline T *copy(T *const dst, const T *const src) noexcept
     return dst;
 }
 
+inline void *copyBinaryData(const void *const src, const VkDeviceSize size) noexcept
+{
+    void *dst = new(std::nothrow) uint8_t[static_cast<std::size_t>(size)];
+    if (dst)
+        memcpy(dst, src, static_cast<std::size_t>(size));
+    return dst;
+}
+
 template<typename T> inline T *copyArray(const void *const a, std::size_t n) noexcept
 {
     MAGMA_ASSERT(n);
