@@ -41,8 +41,8 @@ namespace magma
         constexpr bool ycbcr() const noexcept;
         constexpr bool blockCompressed() const noexcept;
         constexpr bool floatingPoint() const noexcept;
-        uint8_t components() const noexcept;
-        uint8_t planes() const noexcept;
+        uint8_t componentCount() const noexcept;
+        uint8_t planeCount() const noexcept;
         std::size_t size() const noexcept;
         std::size_t nonCompressedSize() const noexcept;
         std::size_t blockCompressedSize() const noexcept;

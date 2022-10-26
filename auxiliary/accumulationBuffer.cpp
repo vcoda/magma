@@ -85,7 +85,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
         FragmentShaderStage(fragmentShader, reflection->getEntryPointName(0))
     };
     // Create blending pipeline
-    const uint8_t components = Format(format).components();
+    const uint8_t componentCount = Format(format).componentCount();
     constexpr pushconstant::FragmentConstantRange<float> pushConstantRange;
     auto pipelineLayout = std::make_shared<PipelineLayout>(descriptorSet->getLayout(), pushConstantRange, hostAllocator);
     blendPipeline = std::make_shared<GraphicsPipeline>(std::move(device),
@@ -97,10 +97,10 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
         vertexShader->getRasterizationState(),
         renderstate::dontMultisample,
         renderstate::depthAlwaysDontWrite,
-        (1 == components) ? renderstate::blendNormalR :
-        (2 == components) ? renderstate::blendNormalRg :
-        (3 == components) ? renderstate::blendNormalRgb :
-        (4 == components) ? renderstate::blendNormalRgba :
+        (1 == componentCount) ? renderstate::blendNormalR :
+        (2 == componentCount) ? renderstate::blendNormalRg :
+        (3 == componentCount) ? renderstate::blendNormalRgb :
+        (4 == componentCount) ? renderstate::blendNormalRgba :
         renderstate::dontBlendRgba,
         std::vector<VkDynamicState>{},
         std::move(pipelineLayout),

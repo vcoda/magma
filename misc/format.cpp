@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-uint8_t Format::components() const noexcept
+uint8_t Format::componentCount() const noexcept
 {   // TODO: add all other formats in the future
     switch (format)
     {
@@ -128,7 +128,7 @@ uint8_t Format::components() const noexcept
     }
 }
 
-uint8_t Format::planes() const noexcept
+uint8_t Format::planeCount() const noexcept
 {
     switch (format)
     {
