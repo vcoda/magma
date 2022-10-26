@@ -133,16 +133,16 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
 }
 
 std::shared_ptr<Queue> Device::getQueueForFamily(uint32_t queueFamilyIndex) const
-{   // Look amongst non-expired instances
-    for (const auto& pair : queues)
-    {
-        if (pair.first.queueFamilyIndex == queueFamilyIndex)
+{
+    auto it = std::find_if(queues.begin(), queues.end(),
+        [queueFamilyIndex](const auto& pair)
         {
-            if (!pair.second.expired())
-                return pair.second.lock();
-        }
-    }
-    for (auto flag : {
+            return (pair.first.queueFamilyIndex == queueFamilyIndex) &&
+                !pair.second.expired();
+        });
+    if (it != queues.end())
+        return it->second.lock();
+    for (auto flag: {
         VK_QUEUE_GRAPHICS_BIT,
         VK_QUEUE_COMPUTE_BIT,
         VK_QUEUE_TRANSFER_BIT})
@@ -151,7 +151,8 @@ std::shared_ptr<Queue> Device::getQueueForFamily(uint32_t queueFamilyIndex) cons
             auto queue = device->getQueue(flag, 0);
             if (queue->getFamilyIndex() == queueFamilyIndex)
                 return queue;
-        } catch (...) {}
+        } catch (...) {
+        }
     }
     MAGMA_THROW("failed to get device queue");
 }
