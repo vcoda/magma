@@ -26,6 +26,8 @@ namespace magma
     name(hasLayer(core::hashString(MAGMA_LAYER_PREFIX #name)))
 #define MAGMA_CHECK_LAYER_NOPREFIX(name)\
     name(hasLayer(core::hashString(#name)))
+#define MAGMA_HAS_LAYER(name)\
+    hasLayer(core::hashString(name))
 
 InstanceLayers::InstanceLayers():
     Layers(Instance::enumerateLayers()),
@@ -47,10 +49,16 @@ InstanceLayers::InstanceLayers():
     MAGMA_CHECK_LAYER(DxtoryHookHelper),
     MAGMA_CHECK_LAYER(fossilize),
     MAGMA_CHECK_LAYER(fpsmon),
+    MAGMA_CHECK_LAYER(FPSMonitor),
+
+    MAGMA_CHECK_LAYER(Galaxy_Overlay),
+    MAGMA_CHECK_LAYER(Galaxy_Overlay_DEBUG),
+    MAGMA_CHECK_LAYER(Galaxy_Overlay_VERBOSE),
 
     MAGMA_CHECK_LAYER(GOOGLE_threading),
     MAGMA_CHECK_LAYER(GOOGLE_unique_objects),
 
+    MAGMA_CHECK_LAYER(KHRONOS_profiles),
     MAGMA_CHECK_LAYER(KHRONOS_synchronization2),
     MAGMA_CHECK_LAYER(KHRONOS_timeline_semaphore),
     MAGMA_CHECK_LAYER(KHRONOS_validation),
@@ -82,14 +90,25 @@ InstanceLayers::InstanceLayers():
 
     MAGMA_CHECK_LAYER(NV_nomad),
     MAGMA_CHECK_LAYER(NV_nsight),
-    NV_nsight_sys(hasLayer(core::hashString("VK_LAYER_NV_nsight-sys"))),
+    NV_nsight_sys(MAGMA_HAS_LAYER("VK_LAYER_NV_nsight-sys")),
     MAGMA_CHECK_LAYER(NV_optimus),
     MAGMA_CHECK_LAYER(NV_vgd),
+    MAGMA_CHECK_LAYER(Nvidia_Shader_Dump),
+
+    MAGMA_CHECK_LAYER(OBS_HOOK),
+    MAGMA_CHECK_LAYER(OBS_vkcapture_32),
+    MAGMA_CHECK_LAYER(OBS_vkcapture_64),
+    MAGMA_CHECK_LAYER(OW_OBS_HOOK),
+    MAGMA_CHECK_LAYER(OW_OVERLAY),
+
+    MAGMA_CHECK_LAYER(playclaw),
 
     MAGMA_CHECK_LAYER(PRIMUS_PrimusVK),
     MAGMA_CHECK_LAYER(RENDERDOC_Capture),
     MAGMA_CHECK_LAYER(reshade),
+    MAGMA_CHECK_LAYER(reshade32),
     MAGMA_CHECK_LAYER(RGA_pipeline_extraction),
+    MAGMA_CHECK_LAYER(ROCKSTAR_GAMES_social_club),
     MAGMA_CHECK_LAYER(RTSS),
 
     MAGMA_CHECK_LAYER(VALVE_steam_fossilize),
@@ -106,6 +125,10 @@ InstanceLayers::InstanceLayers():
     MAGMA_CHECK_LAYER(vkpipeline_db),
 
     MAGMA_CHECK_LAYER(XGCV4_64),
-    MAGMA_CHECK_LAYER(XSPLIT_64)
+    MAGMA_CHECK_LAYER(XSPLIT_64),
+
+    MAGMA_CHECK_LAYER_NOPREFIX(MIRILLIS_LAYER),
+
+    vkdto_x86_64(MAGMA_HAS_LAYER("vkdto x86_64"))
 {}
 } // namespace magma

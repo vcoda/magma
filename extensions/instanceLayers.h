@@ -43,11 +43,17 @@ namespace magma
         const VkBool32 DxtoryHookHelper : 1;
         const VkBool32 fossilize : 1;
         const VkBool32 fpsmon : 1;
+        const VkBool32 FPSMonitor : 1;
+
+        const VkBool32 Galaxy_Overlay : 1;
+        const VkBool32 Galaxy_Overlay_DEBUG : 1;
+        const VkBool32 Galaxy_Overlay_VERBOSE : 1;
 
         const VkBool32 GOOGLE_threading : 1;
         const VkBool32 GOOGLE_unique_objects : 1;
 
         // https://github.com/KhronosGroup/Vulkan-ExtensionLayer
+        const VkBool32 KHRONOS_profiles : 1;
         const VkBool32 KHRONOS_synchronization2 : 1;
         const VkBool32 KHRONOS_timeline_semaphore : 1;
         const VkBool32 KHRONOS_validation : 1;
@@ -82,11 +88,22 @@ namespace magma
         const VkBool32 NV_nsight_sys : 1;
         const VkBool32 NV_optimus : 1;
         const VkBool32 NV_vgd : 1;
+        const VkBool32 Nvidia_Shader_Dump : 1;
+
+        const VkBool32 OBS_HOOK : 1;
+        const VkBool32 OBS_vkcapture_32 : 1;
+        const VkBool32 OBS_vkcapture_64 : 1;
+        const VkBool32 OW_OBS_HOOK : 1;
+        const VkBool32 OW_OVERLAY : 1;
+
+        const VkBool32 playclaw : 1;
 
         const VkBool32 PRIMUS_PrimusVK : 1;
         const VkBool32 RENDERDOC_Capture : 1;
         const VkBool32 reshade : 1;
+        const VkBool32 reshade32 : 1;
         const VkBool32 RGA_pipeline_extraction : 1;
+        const VkBool32 ROCKSTAR_GAMES_social_club : 1;
         const VkBool32 RTSS : 1;
 
         const VkBool32 VALVE_steam_fossilize : 1;
@@ -104,6 +121,10 @@ namespace magma
 
         const VkBool32 XGCV4_64 : 1;
         const VkBool32 XSPLIT_64 : 1;
+
+        const VkBool32 MIRILLIS_LAYER : 1;
+
+        const VkBool32 vkdto_x86_64 : 1;
 
         InstanceLayers();
     };
