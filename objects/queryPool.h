@@ -42,18 +42,17 @@ namespace magma
 
     class QueryPool : public NonDispatchable<VkQueryPool>
     {
-	public:
-		template<class Type, class Int>
-		struct Result
-		{
-			Type result = {BadQueryResult<Int>::value};
-			// If VK_QUERY_RESULT_WITH_AVAILABILITY_BIT is used, the final element
-		    // of each query's result is an integer indicating whether the query's result
-		    // is available, with any non-zero value indicating that it is available.
-			Int availability = BadQueryResult<Int>::value;
-		};
-
     public:
+        template<class Type, class Int>
+        struct Result
+        {
+            Type result = {BadQueryResult<Int>::value};
+            // If VK_QUERY_RESULT_WITH_AVAILABILITY_BIT is used, the final element
+            // of each query's result is an integer indicating whether the query's result
+            // is available, with any non-zero value indicating that it is available.
+            Int availability = BadQueryResult<Int>::value;
+        };
+
         ~QueryPool();
         VkQueryType getType() const noexcept { return queryType; }
         VkQueryControlFlags getControlFlags() const noexcept { return controlFlags; }
