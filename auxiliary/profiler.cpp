@@ -192,7 +192,7 @@ std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool wait) const
     const uint32_t count = std::min(queryCount, queryPool->getQueryCount());
     if (wait)
     {   // Block CPU until all query results will be ready
-        const std::vector<uint64_t> timestamps = queryPool->getResults<uint64_t>(0, count, wait);
+        const auto timestamps = queryPool->getResults<uint64_t>(0, count, wait);
         for (const auto& section: sections)
         {   // Bits outside the valid range are guaranteed to be zeros, but we use timestamp mask anyway
             const uint64_t beginTs = timestamps[section.beginQuery];
@@ -204,7 +204,7 @@ std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool wait) const
         }
     }  else
     {   // Do not stall, return only available results
-        const std::vector<QueryResult<uint64_t, uint64_t>> timestamps = queryPool->getResultsWithAvailability<uint64_t>(0, count);
+        const auto timestamps = queryPool->getResultsWithAvailability<uint64_t>(0, count);
         for (const auto& section: sections)
         {
             const auto& beginTs = timestamps[section.beginQuery];

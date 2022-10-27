@@ -36,23 +36,23 @@ namespace magma
     template<> struct BadQueryResult<uint64_t> { static const uint64_t value = 0ull; };
 #endif
 
-    /* If VK_QUERY_RESULT_WITH_AVAILABILITY_BIT is used, the final element
-       of each query's result is an integer indicating whether the query's result
-       is available, with any non-zero value indicating that it is available. */
-
-    template<class Type, class Int>
-    struct QueryResult
-    {
-        Type result = {BadQueryResult<Int>::value};
-        Int availability = BadQueryResult<Int>::value;
-    };
-
     /* An object that contains a number of query entries
        and their associated state and results.
        Queries are managed using query pool objects. */
 
     class QueryPool : public NonDispatchable<VkQueryPool>
     {
+	public:
+		template<class Type, class Int>
+		struct Result
+		{
+			Type result = {BadQueryResult<Int>::value};
+			// If VK_QUERY_RESULT_WITH_AVAILABILITY_BIT is used, the final element
+		    // of each query's result is an integer indicating whether the query's result
+		    // is available, with any non-zero value indicating that it is available.
+			Int availability = BadQueryResult<Int>::value;
+		};
+
     public:
         ~QueryPool();
         VkQueryType getType() const noexcept { return queryType; }
@@ -98,7 +98,7 @@ namespace magma
             uint32_t queryCount,
             bool wait) const noexcept;
         template<class Type>
-        std::vector<QueryResult<Type, Type>> getResultsWithAvailability(uint32_t firstQuery,
+        std::vector<Result<Type, Type>> getResultsWithAvailability(uint32_t firstQuery,
             uint32_t queryCount) const noexcept;
     };
 
@@ -130,7 +130,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
         VkQueryPipelineStatisticFlags getStatisticFlags() const noexcept { return flags; }
         Result getResults(bool wait) const noexcept;
-        QueryResult<Result, uint64_t> getResultsWithAvailability() const noexcept;
+        QueryPool::Result<Result, uint64_t> getResultsWithAvailability() const noexcept;
 
     private:
         uint32_t spreadResults(const std::vector<uint64_t>& data,
@@ -155,7 +155,7 @@ namespace magma
             uint32_t queryCount,
             bool wait) const noexcept;
         template<class Type>
-        std::vector<QueryResult<Type, Type>> getResultsWithAvailability(uint32_t firstQuery,
+        std::vector<Result<Type, Type>> getResultsWithAvailability(uint32_t firstQuery,
             uint32_t queryCount) const noexcept;
     };
 
@@ -181,7 +181,7 @@ namespace magma
         std::vector<Result> getResults(uint32_t firstQuery,
             uint32_t queryCount,
             bool wait) const noexcept;
-        std::vector<QueryResult<Result, uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
+        std::vector<QueryPool::Result<Result, uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
             uint32_t queryCount) const noexcept;
     };
 #endif // VK_EXT_transform_feedback
@@ -202,7 +202,7 @@ namespace magma
             uint32_t queryCount,
             bool wait) const noexcept;
         template<class Type>
-        std::vector<QueryResult<Type, Type>> getResultsWithAvailability(uint32_t firstQuery,
+        std::vector<Result<Type, Type>> getResultsWithAvailability(uint32_t firstQuery,
             uint32_t queryCount) const noexcept;
     };
 #endif // VK_NV_ray_tracing

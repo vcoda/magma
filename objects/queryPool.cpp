@@ -93,7 +93,7 @@ PipelineStatisticsQuery::Result PipelineStatisticsQuery::getResults(bool wait) c
     return {}; // VK_NOT_READY
 }
 
-QueryResult<PipelineStatisticsQuery::Result, uint64_t> PipelineStatisticsQuery::getResultsWithAvailability() const noexcept
+QueryPool::Result<PipelineStatisticsQuery::Result, uint64_t> PipelineStatisticsQuery::getResultsWithAvailability() const noexcept
 {
     const size_t dataSize = sizeof(uint64_t) * data.size();
     const VkQueryResultFlags flags = VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT;
@@ -106,9 +106,9 @@ QueryResult<PipelineStatisticsQuery::Result, uint64_t> PipelineStatisticsQuery::
         const uint32_t last = spreadResults(data, statistics);
         const uint64_t availability = static_cast<uint64_t>(data[last]);
         MAGMA_ASSERT(1 == availability); // Should always be 1 if result is VK_SUCCESS
-        return QueryResult<Result, uint64_t>{statistics, availability};
+        return QueryPool::Result<Result, uint64_t>{statistics, availability};
     }
-    return QueryResult<Result, uint64_t>(); // VK_NOT_READY
+    return QueryPool::Result<Result, uint64_t>(); // VK_NOT_READY
 }
 
 uint32_t PipelineStatisticsQuery::spreadResults(const std::vector<uint64_t>& data, Result& result) const noexcept
@@ -156,9 +156,9 @@ std::vector<TransformFeedbackStreamQuery::Result> TransformFeedbackStreamQuery::
     return getQueryResults<Result>(firstQuery, queryCount, VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
 }
 
-std::vector<QueryResult<TransformFeedbackStreamQuery::Result, uint64_t>> TransformFeedbackStreamQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
+std::vector<QueryPool::Result<TransformFeedbackStreamQuery::Result, uint64_t>> TransformFeedbackStreamQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
 {
-    return getQueryResults<QueryResult<Result, uint64_t>>(firstQuery, queryCount, VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
+    return getQueryResults<QueryPool::Result<Result, uint64_t>>(firstQuery, queryCount, VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
 }
 #endif // VK_EXT_transform_feedback
 
