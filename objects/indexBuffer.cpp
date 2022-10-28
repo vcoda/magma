@@ -27,7 +27,11 @@ namespace magma
 BaseIndexBuffer::BaseIndexBuffer(std::shared_ptr<Device> device, VkDeviceSize size, VkIndexType indexType,
     VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags,
     const Descriptor& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
-    Buffer(std::move(device), size, usage, flags, memoryFlags, optional, sharing, std::move(allocator)),
+    Buffer(std::move(device), size,
+        0, // flags
+        usage,
+        memoryFlags,
+        optional, sharing, std::move(allocator)),
     indexType(indexType)
 {}
 
