@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "indexBuffer.h"
 #include "srcTransferBuffer.h"
-#include "device.h"
 #include "commandBuffer.h"
 
 namespace magma
