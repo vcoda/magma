@@ -40,7 +40,7 @@ namespace magma
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
 
-        VkIndexType indexType;
+        const VkIndexType indexType;
     };
 
     /* An array of vertex indices. */
