@@ -59,7 +59,7 @@ namespace magma
         uint32_t getMipLevelCount() const noexcept;
         uint32_t getBaseArrayLayer() const noexcept { return baseArrayLayer; }
         uint32_t getArrayLayerCount() const noexcept;
-        VkExtent2D getExtent() const noexcept;
+        VkExtent3D getExtent() const noexcept;
         VkDescriptorImageInfo getDescriptor(std::shared_ptr<const Sampler> sampler) const noexcept;
 
     protected:
