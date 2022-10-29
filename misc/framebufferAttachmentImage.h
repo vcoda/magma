@@ -36,6 +36,7 @@ namespace magma
         FramebufferAttachmentImage(FramebufferAttachmentImage&&) noexcept = default;
         ~FramebufferAttachmentImage() { delete[] pViewFormats; }
         FramebufferAttachmentImage& operator=(const FramebufferAttachmentImage&) noexcept;
+        VkExtent2D getExtent() const noexcept { return {width, height}; }
     };
 #endif // VK_KHR_imageless_framebuffer
 } // namespace magma

@@ -67,7 +67,7 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
 ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass, const FramebufferAttachmentImage& attachment,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const StructureChain& extendedInfo /* default */):
-    Framebuffer(std::move(renderPass), VkExtent2D{attachment.width, attachment.height}, attachment.layerCount, std::move(allocator))
+    Framebuffer(std::move(renderPass), attachment.getExtent(), attachment.layerCount, std::move(allocator))
 {
     VkFramebufferCreateInfo framebufferInfo;
     VkFramebufferAttachmentsCreateInfoKHR framebufferAttachmentsInfo;
@@ -91,9 +91,7 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
 ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass, const std::vector<FramebufferAttachmentImage>& attachments,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const StructureChain& extendedInfo /* default */):
-    Framebuffer(std::move(renderPass),
-        VkExtent2D{attachments.front().width, attachments.front().height},
-        attachments.front().layerCount, std::move(allocator))
+    Framebuffer(std::move(renderPass), attachments.front().getExtent(), attachments.front().layerCount, std::move(allocator))
 {
     VkFramebufferCreateInfo framebufferInfo;
     VkFramebufferAttachmentsCreateInfoKHR framebufferAttachmentsInfo;
