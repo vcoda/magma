@@ -51,7 +51,13 @@ namespace magma
         Framebuffer(std::shared_ptr<const RenderPass> renderPass,
             const VkExtent2D& extent,
             uint32_t layerCount,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator);
+        Framebuffer(std::shared_ptr<const RenderPass> renderPass,
+            const VkExtent3D& extent,
+            uint32_t layerCount,
+            std::shared_ptr<IAllocator> allocator): Framebuffer(
+                std::move(renderPass), VkExtent2D{extent.width, extent.height},
+                layerCount, std::move(allocator)) {}
 
         std::shared_ptr<const RenderPass> renderPass;
         std::vector<std::shared_ptr<ImageView>> attachments;
