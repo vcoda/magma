@@ -39,7 +39,7 @@ namespace magma
         SubpassDescription(const SubpassDescription&) noexcept;
         SubpassDescription& operator=(const SubpassDescription&) noexcept;
         ~SubpassDescription();
-        hash_t hash() const noexcept;
+        hash_t getHash() const noexcept;
 
     private:
         SubpassDescription(VkPipelineBindPoint pipelineBindPoint) noexcept;

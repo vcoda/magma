@@ -153,7 +153,7 @@ SubpassDescription::~SubpassDescription()
     delete pDepthStencilAttachment;
 }
 
-hash_t SubpassDescription::hash() const noexcept
+hash_t SubpassDescription::getHash() const noexcept
 {
     hash_t hash = core::hashArgs(
         flags,
