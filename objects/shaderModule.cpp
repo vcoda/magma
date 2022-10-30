@@ -62,7 +62,8 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
     hash = core::hashArgs(
         shaderModuleInfo.sType,
         shaderModuleInfo.flags,
-        shaderModuleInfo.codeSize);
+        shaderModuleInfo.codeSize,
+        extendedInfo.getHash());
 #ifdef VK_EXT_validation_cache
     if (validationCache)
     {
