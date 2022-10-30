@@ -43,8 +43,7 @@ namespace magma
 #elif defined(VK_EXT_debug_report)
             PFN_vkDebugReportCallbackEXT debugCallback = nullptr,
 #endif
-            void *userData = nullptr
-        );
+            void *userData = nullptr);
         ~Instance();
         uint32_t enumeratePhysicalDevices() const;
         std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId) const;

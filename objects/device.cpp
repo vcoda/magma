@@ -197,8 +197,7 @@ bool Device::waitForFences(const std::vector<std::shared_ptr<Fence>>& fences, bo
     MAGMA_STACK_ARRAY(VkFence, dereferencedFences, fences.size());
     for (const auto& fence : fences)
         dereferencedFences.put(*fence);
-    const VkResult result = vkWaitForFences(handle, dereferencedFences.size(), dereferencedFences,
-        MAGMA_BOOLEAN(waitAll), timeout);
+    const VkResult result = vkWaitForFences(handle, dereferencedFences.size(), dereferencedFences, MAGMA_BOOLEAN(waitAll), timeout);
     MAGMA_THROW_FAILURE(result, "failed to wait for fences");
     // VK_SUCCESS or VK_TIMEOUT
     return (result != VK_TIMEOUT);
@@ -216,7 +215,7 @@ bool Device::waitSemaphores(const std::vector<std::shared_ptr<TimelineSemaphore>
     waitInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO_KHR;
     waitInfo.pNext = nullptr;
     waitInfo.flags = waitAll ? 0 : VK_SEMAPHORE_WAIT_ANY_BIT_KHR;
-    waitInfo.semaphoreCount = MAGMA_COUNT(dereferencedSemaphores);
+    waitInfo.semaphoreCount = dereferencedSemaphores.size();
     waitInfo.pSemaphores = dereferencedSemaphores;
     waitInfo.pValues = values.data();
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkWaitSemaphoresKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);

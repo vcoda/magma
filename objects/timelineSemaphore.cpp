@@ -53,7 +53,7 @@ uint64_t TimelineSemaphore::getCounterValue() const
     uint64_t counter = 0ull;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetSemaphoreCounterValueKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
     const VkResult result = vkGetSemaphoreCounterValueKHR(MAGMA_HANDLE(device), handle, &counter);
-    MAGMA_THROW_FAILURE(result, "failed to get counter value of timeline semaphore");
+    MAGMA_THROW_FAILURE(result, "failed to get counter value of the timeline semaphore");
     return counter;
 }
 

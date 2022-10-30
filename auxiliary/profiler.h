@@ -33,11 +33,6 @@ namespace magma
 
         class Profiler : public Base
         {
-        protected:
-            explicit Profiler(VkQueueFlags queueType,
-                std::shared_ptr<Device> device,
-                std::shared_ptr<IAllocator> allocator);
-
         public:
             struct Timing
             {
@@ -61,6 +56,11 @@ namespace magma
             void copyExecutionTimings(std::shared_ptr<CommandBuffer> cmdBuffer,
                 std::shared_ptr<Buffer> buffer,
                 VkDeviceSize bufferOffset = 0) const noexcept;
+
+        protected:
+            explicit Profiler(VkQueueFlags queueType,
+                std::shared_ptr<Device> device,
+                std::shared_ptr<IAllocator> allocator);
 
         private:
             struct Section

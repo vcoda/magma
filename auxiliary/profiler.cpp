@@ -146,7 +146,7 @@ void Profiler::beginSection(const char *name, uint32_t color, std::shared_ptr<Co
         #ifdef VK_EXT_debug_marker
             if (debugMarker)
                 cmdBuffer->beginDebugMarker(name, color);
-        #endif // VK_EXT_debug_utils
+        #endif // VK_EXT_debug_marker
         }
     }
     const uint32_t beginQuery = queryCount % queryPool->getQueryCount();

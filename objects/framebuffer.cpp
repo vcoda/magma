@@ -28,8 +28,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const VkExtent2D& extent, uint32_t layerCount,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const VkExtent2D& extent,
+    uint32_t layerCount, std::shared_ptr<IAllocator> allocator):
     NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
     renderPass(std::move(renderPass)),
     extent(extent),
