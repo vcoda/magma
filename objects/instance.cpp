@@ -228,8 +228,8 @@ bool Instance::checkExtensionSupport(const char *extensionName) const
     if (extensions.empty())
     {   // Query once and cache
         const std::vector<VkExtensionProperties> extensionProperties = enumerateExtensions();
-        for (const auto property : extensionProperties)
-            extensions.emplace(property.extensionName);
+        for (const auto& properties: extensionProperties)
+            extensions.emplace(properties.extensionName);
     }
     return extensions.find(extensionName) != extensions.end();
 }
