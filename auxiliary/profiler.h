@@ -29,7 +29,11 @@ namespace magma
 
     namespace aux
     {
-        /* Auxiliary performance profiler. */
+        /* Auxiliary GPU performance profiler.
+           As GPU may perform out-of-order execution of commands, writing timestamps
+           may instroduce execution dependency on commands that were submitted inside
+           profiling scope. A preferred usage is to profile large blocks of render commands
+           rather than profiling a few render state changes and draw calls. */
 
         class Profiler : public Base
         {
