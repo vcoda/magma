@@ -149,7 +149,7 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
         }
         if (!reflectedBinding)
         {
-            std::cout << "warning: binding #" << binding->binding << " not found in the reflection";
+            std::cout << "warning: binding #" << binding->binding << " not found in the reflection" << std::endl;
             continue;
         }
         const VkDescriptorType reflectedDescriptorType = helpers::spirvToDescriptorType(reflectedBinding->descriptor_type);
