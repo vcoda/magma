@@ -374,7 +374,7 @@ void Image::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, postCopyBarrier);
 }
 
-VkSampleCountFlagBits Image::getSampleCountBit(uint32_t samples)
+VkSampleCountFlagBits Image::getSampleCountBit(uint32_t samples) noexcept
 {
     switch (samples)
     {
@@ -385,9 +385,8 @@ VkSampleCountFlagBits Image::getSampleCountBit(uint32_t samples)
     case 16: return VK_SAMPLE_COUNT_16_BIT;
     case 32: return VK_SAMPLE_COUNT_32_BIT;
     case 64: return VK_SAMPLE_COUNT_64_BIT;
-    default:
-        MAGMA_THROW("invalid <samples> parameter");
     }
+    return VK_SAMPLE_COUNT_1_BIT;
 }
 
 VkFormat Image::checkFormatFeature(std::shared_ptr<Device> device, VkFormat format, VkFormatFeatureFlags requiredFeature)
