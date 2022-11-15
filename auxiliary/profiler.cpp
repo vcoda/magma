@@ -34,6 +34,7 @@ Profiler::Profiler(VkQueueFlags queueType, std::shared_ptr<Device> device, std::
     timestampPeriod(0.f),
     timestampMask(0ull),
     queryCount(0),
+    frameIndex(0),
     hostQueryReset(false),
     debugUtils(false),
     debugMarker(false),
@@ -83,7 +84,7 @@ Profiler::Profiler(VkQueueFlags queueType, std::shared_ptr<Device> device, std::
 #endif
 }
 
-bool Profiler::beginFrame()
+bool Profiler::beginFrame(uint32_t frameIndex_)
 {
     MAGMA_ASSERT(!insideFrame);
     MAGMA_ASSERT(stack.empty());
@@ -111,6 +112,7 @@ bool Profiler::beginFrame()
         }
         sections.clear();
     }
+    frameIndex = frameIndex_;
     insideFrame = true;
     return true;
 }
@@ -150,7 +152,7 @@ void Profiler::beginSection(const char *name, uint32_t color, std::shared_ptr<Co
         }
     }
     const uint32_t beginQuery = queryCount % queryPool->getQueryCount();
-    sections.emplace_back(name, beginQuery);
+    sections.emplace_back(name, frameIndex, beginQuery);
     stack.push(sections.back());
     // When vkCmdWriteTimestamp is submitted to a queue, it defines an execution dependency on commands
     // that were submitted before it. vkCmdWriteTimestamp latches the value of the timer when all
@@ -200,7 +202,7 @@ std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool wait) const
             const uint64_t start = beginTs & timestampMask;
             const uint64_t end = endTs & timestampMask;
             double time = double(end - start) * timestampPeriod; // nanoseconds
-            executionTimings.emplace_back(section.name, time);
+            executionTimings.emplace_back(section.name, section.frameIndex, time);
         }
     }  else
     {   // Do not stall, return only available results
@@ -214,7 +216,7 @@ std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool wait) const
             const uint64_t start = beginTs.result & timestampMask;
             const uint64_t end = endTs.result & timestampMask;
             double time = double(end - start) * timestampPeriod; // nanoseconds
-            executionTimings.emplace_back(section.name, time);
+            executionTimings.emplace_back(section.name, section.frameIndex, time);
         }
     }
     return executionTimings;

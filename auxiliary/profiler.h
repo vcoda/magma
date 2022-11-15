@@ -41,16 +41,17 @@ namespace magma
             struct Timing
             {
                 const char *name;
-                double time;
-                Timing(const char *name, double time) noexcept:
-                    name(name), time(time) {}
+                const uint32_t frameIndex;
+                const double time;
+                Timing(const char *name, uint32_t frameIndex, double time) noexcept:
+                    name(name), frameIndex(frameIndex), time(time) {}
             };
 
             VkQueueFlags getQueueType() const noexcept { return queueType; }
             bool setLabelUsage(bool enable) noexcept { useLabels = enable; }
             bool getLabelUsage() const noexcept { return useLabels; }
             uint32_t getQueryCount() const noexcept { return queryCount; }
-            bool beginFrame();
+            bool beginFrame(uint32_t frameIndex);
             bool endFrame();
             void beginSection(const char *name,
                 uint32_t color,
@@ -70,9 +71,10 @@ namespace magma
             struct Section
             {
                 const char *name;
-                uint32_t beginQuery;
-                Section(const char *name, uint32_t beginQuery) noexcept:
-                    name(name), beginQuery(beginQuery) {}
+                const uint32_t frameIndex;
+                const uint32_t beginQuery;
+                Section(const char *name, uint32_t frameIndex, uint32_t beginQuery) noexcept:
+                    name(name), frameIndex(frameIndex), beginQuery(beginQuery) {}
             };
 
             const VkQueueFlags queueType;
@@ -80,6 +82,7 @@ namespace magma
             uint64_t timestampMask;
             std::shared_ptr<TimestampQuery> queryPool;
             uint32_t queryCount;
+            uint32_t frameIndex;
             std::vector<Section> sections;
             std::stack<Section> stack;
             bool hostQueryReset;
