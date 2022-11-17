@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "image2D.h"
 #include "srcTransferBuffer.h"
 #include "commandBuffer.h"
+#include "../misc/format.h"
 #include "../helpers/mapScoped.h"
 #include "../core/copyMemory.h"
 
@@ -151,6 +152,25 @@ StorageImage2D::StorageImage2D(std::shared_ptr<Device> device, VkFormat format, 
         samples,
         0, // flags
         VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+        VK_IMAGE_TILING_OPTIMAL,
+        optional,
+        sharing,
+        std::move(allocator))
+{}
+
+MutableImage2D::MutableImage2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent, uint32_t mipLevels,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Descriptor& optional /* default */,
+    const Sharing& sharing /* default */):
+    Image2D(std::move(device), format, extent, mipLevels,
+        1, // arrayLayers
+        1, // samples
+        VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT |
+            // Image with compressed format can be used to create an image view
+            // with an uncompressed format where each texel in the image view
+            // corresponds to a compressed texel block of the image.
+            (Format(format).blockCompressed() ? VK_IMAGE_CREATE_BLOCK_TEXEL_VIEW_COMPATIBLE_BIT : 0),
+        VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_TILING_OPTIMAL,
         optional,
         sharing,

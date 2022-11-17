@@ -98,4 +98,20 @@ namespace magma
             const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
     };
+
+    /* Mutable image can be used to create an image view
+       with a different format from the image. For multi-planar formats,
+       image view can be created of a plane of the image. */
+
+    class MutableImage2D : public Image2D
+    {
+    public:
+        explicit MutableImage2D(std::shared_ptr<Device> device,
+            VkFormat format,
+            const VkExtent2D& extent,
+            uint32_t mipLevels,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Descriptor& optional = Descriptor(),
+            const Sharing& sharing = Sharing());
+    };
 } // namespace magma
