@@ -63,8 +63,12 @@ ImageView::ImageView(std::shared_ptr<Image> resource,
         break;
     case VK_IMAGE_TYPE_2D:
         if (image->getFlags() & VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT)
-            imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_CUBE;
-        else
+        {
+            if (image->getArrayLayers() == 6)
+                imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_CUBE;
+            else
+                imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_CUBE_ARRAY;
+        } else
         {
             if (image->getArrayLayers() == 1)
                 imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
