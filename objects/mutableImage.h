@@ -26,6 +26,9 @@ namespace magma
 
     class MutableImage : public Image
     {
+    public:
+        bool blockTexelViewCompatible() const noexcept;
+
     protected:
         MutableImage(std::shared_ptr<Device> device,
             VkImageType imageType,
@@ -38,6 +41,5 @@ namespace magma
             const Descriptor& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
-        bool blockTexelViewCompatible() const noexcept;
     };
 } // namespace magma
