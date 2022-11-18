@@ -69,6 +69,9 @@ namespace magma
             uint32_t baseArrayLayer,
             uint32_t layerCount,
             VkImageViewCreateFlags flags);
+        static VkImageViewType imageToViewType(VkImageType imageType,
+            uint32_t arrayLayers,
+            bool cubeMap) noexcept;
 
         std::shared_ptr<Image> image;
         const VkImageViewCreateFlags flags;

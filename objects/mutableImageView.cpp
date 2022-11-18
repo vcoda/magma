@@ -42,35 +42,7 @@ MutableImageView::MutableImageView(std::shared_ptr<MutableImage> image, VkFormat
     imageViewInfo.pNext = nullptr;
     imageViewInfo.flags = 0;
     imageViewInfo.image = *image;
-    switch (image->getType())
-    {
-    case VK_IMAGE_TYPE_1D:
-        if (image->getArrayLayers() == 1)
-            imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_1D;
-        else
-            imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_1D_ARRAY;
-        break;
-    case VK_IMAGE_TYPE_2D:
-        if (image->getFlags() & VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT)
-        {
-            if (image->getArrayLayers() == 6)
-                imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_CUBE;
-            else
-                imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_CUBE_ARRAY;
-        } else
-        {
-            if (image->getArrayLayers() == 1)
-                imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-            else
-                imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
-        }
-        break;
-    case VK_IMAGE_TYPE_3D:
-        imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_3D;
-        break;
-    default:
-        throw std::runtime_error("invalid image type");
-    }
+    imageViewInfo.viewType = imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags() & VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT);
     imageViewInfo.format = mutableFormat;
     imageViewInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
     imageViewInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;

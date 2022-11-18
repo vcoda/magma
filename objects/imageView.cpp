@@ -53,35 +53,7 @@ ImageView::ImageView(std::shared_ptr<Image> resource,
     imageViewInfo.pNext = nullptr;
     imageViewInfo.flags = flags;
     imageViewInfo.image = *image;
-    switch (image->getType())
-    {
-    case VK_IMAGE_TYPE_1D:
-        if (image->getArrayLayers() == 1)
-            imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_1D;
-        else
-            imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_1D_ARRAY;
-        break;
-    case VK_IMAGE_TYPE_2D:
-        if (image->getFlags() & VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT)
-        {
-            if (image->getArrayLayers() == 6)
-                imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_CUBE;
-            else
-                imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_CUBE_ARRAY;
-        } else
-        {
-            if (image->getArrayLayers() == 1)
-                imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-            else
-                imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
-        }
-        break;
-    case VK_IMAGE_TYPE_3D:
-        imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_3D;
-        break;
-    default:
-        throw std::runtime_error("invalid image type");
-    }
+    imageViewInfo.viewType = imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags() & VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT);
     imageViewInfo.format = image->getFormat();
     const Format format(imageViewInfo.format);
     if (!(format.depth() || format.stencil() || format.depthStencil()))
@@ -153,5 +125,31 @@ VkDescriptorImageInfo ImageView::getDescriptor(std::shared_ptr<const Sampler> sa
     imageDescriptorInfo.imageView = handle;
     imageDescriptorInfo.imageLayout = image->getLayout();
     return imageDescriptorInfo;
+}
+
+VkImageViewType ImageView::imageToViewType(VkImageType imageType, uint32_t arrayLayers, bool cubeMap) noexcept
+{
+    switch (imageType)
+    {
+    case VK_IMAGE_TYPE_1D:
+        if (arrayLayers > 1)
+            return VK_IMAGE_VIEW_TYPE_1D_ARRAY;
+        return VK_IMAGE_VIEW_TYPE_1D;
+    case VK_IMAGE_TYPE_2D:
+        if (cubeMap)
+        {
+            if (arrayLayers > 6)
+                return VK_IMAGE_VIEW_TYPE_CUBE_ARRAY;
+            return VK_IMAGE_VIEW_TYPE_CUBE;
+        } else
+        {
+            if (arrayLayers > 1)
+                return VK_IMAGE_VIEW_TYPE_2D_ARRAY;
+            return VK_IMAGE_VIEW_TYPE_2D;
+        }
+    case VK_IMAGE_TYPE_3D:
+        return VK_IMAGE_VIEW_TYPE_3D;
+    }
+    return VK_IMAGE_VIEW_TYPE_MAX_ENUM;
 }
 } // namespace magma
