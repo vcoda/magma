@@ -162,16 +162,11 @@ MutableImage2D::MutableImage2D(std::shared_ptr<Device> device, VkFormat format, 
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Descriptor& optional /* default */,
     const Sharing& sharing /* default */):
-    Image2D(std::move(device), format, extent, mipLevels,
+    MutableImage(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
+        mipLevels,
         1, // arrayLayers
         1, // samples
-        VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT |
-            // Image with compressed format can be used to create an image view
-            // with an uncompressed format where each texel in the image view
-            // corresponds to a compressed texel block of the image.
-            (Format(format).blockCompressed() ? VK_IMAGE_CREATE_BLOCK_TEXEL_VIEW_COMPATIBLE_BIT : 0),
-        VK_IMAGE_USAGE_SAMPLED_BIT,
-        VK_IMAGE_TILING_OPTIMAL,
+        0, // flags
         optional,
         sharing,
         std::move(allocator))

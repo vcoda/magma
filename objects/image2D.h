@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "image.h"
+#include "mutableImage.h"
 
 namespace magma
 {
@@ -103,7 +104,7 @@ namespace magma
        with a different format from the image. For multi-planar formats,
        image view can be created of a plane of the image. */
 
-    class MutableImage2D : public Image2D
+    class MutableImage2D : public MutableImage
     {
     public:
         explicit MutableImage2D(std::shared_ptr<Device> device,

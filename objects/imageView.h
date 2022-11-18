@@ -63,6 +63,13 @@ namespace magma
         VkDescriptorImageInfo getDescriptor(std::shared_ptr<const Sampler> sampler) const noexcept;
 
     protected:
+        ImageView(std::shared_ptr<Image> image,
+            uint32_t baseMipLevel,
+            uint32_t levelCount,
+            uint32_t baseArrayLayer,
+            uint32_t layerCount,
+            VkImageViewCreateFlags flags);
+
         std::shared_ptr<Image> image;
         const VkImageViewCreateFlags flags;
         const uint32_t baseMipLevel;

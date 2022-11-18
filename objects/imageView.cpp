@@ -111,6 +111,17 @@ ImageView::ImageView(std::shared_ptr<Image> resource,
     MAGMA_THROW_FAILURE(result, "failed to create image view");
 }
 
+ImageView::ImageView(std::shared_ptr<Image> image, uint32_t baseMipLevel, uint32_t levelCount, uint32_t baseArrayLayer, uint32_t layerCount,
+    VkImageViewCreateFlags flags):
+    NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, image->getDevice(), image->getHostAllocator()),
+    image(std::move(image)),
+    flags(flags),
+    baseMipLevel(baseMipLevel),
+    levelCount(levelCount),
+    baseArrayLayer(baseArrayLayer),
+    layerCount(layerCount)
+{}
+
 ImageView::~ImageView()
 {
     vkDestroyImageView(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));

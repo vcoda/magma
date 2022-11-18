@@ -288,6 +288,8 @@
     <ClInclude Include="..\..\objects\indexBuffer.h" />
     <ClInclude Include="..\..\objects\indirectBuffer.h" />
     <ClInclude Include="..\..\objects\instance.h" />
+    <ClInclude Include="..\..\objects\mutableImage.h" />
+    <ClInclude Include="..\..\objects\mutableImageView.h" />
     <ClInclude Include="..\..\objects\nondispatchable.h" />
     <ClInclude Include="..\..\objects\object.h" />
     <ClInclude Include="..\..\objects\objectType.h" />
@@ -457,6 +459,8 @@
     <ClCompile Include="..\..\objects\indexBuffer.cpp" />
     <ClCompile Include="..\..\objects\indirectBuffer.cpp" />
     <ClCompile Include="..\..\objects\instance.cpp" />
+    <ClCompile Include="..\..\objects\mutableImage.cpp" />
+    <ClCompile Include="..\..\objects\mutableImageView.cpp" />
     <ClCompile Include="..\..\objects\object.cpp" />
     <ClCompile Include="..\..\objects\physicalDevice.cpp" />
     <ClCompile Include="..\..\objects\physicalDeviceGroup.cpp" />
