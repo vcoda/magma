@@ -35,6 +35,8 @@ FragmentDensityMapView::FragmentDensityMapView(std::shared_ptr<FragmentDensityMa
         | (fragmentDensityMapDeferred ? VK_IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DEFERRED_BIT_EXT : 0)
     #endif
         )
-{}
+{
+    MAGMA_UNUSED(fragmentDensityMapDeferred);
+}
 #endif // VK_EXT_fragment_density_map
 } // namespace magma
