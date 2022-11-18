@@ -42,7 +42,7 @@ MutableImageView::MutableImageView(std::shared_ptr<MutableImage> image, VkFormat
     imageViewInfo.pNext = nullptr;
     imageViewInfo.flags = 0;
     imageViewInfo.image = *image;
-    imageViewInfo.viewType = imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags() & VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT);
+    imageViewInfo.viewType = imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags());
     imageViewInfo.format = mutableFormat;
     imageViewInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
     imageViewInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;

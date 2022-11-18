@@ -53,7 +53,7 @@ ImageView::ImageView(std::shared_ptr<Image> resource,
     imageViewInfo.pNext = nullptr;
     imageViewInfo.flags = flags;
     imageViewInfo.image = *image;
-    imageViewInfo.viewType = imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags() & VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT);
+    imageViewInfo.viewType = imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags());
     imageViewInfo.format = image->getFormat();
     const Format format(imageViewInfo.format);
     if (!(format.depth() || format.stencil() || format.depthStencil()))
@@ -125,7 +125,7 @@ VkDescriptorImageInfo ImageView::getDescriptor(std::shared_ptr<const Sampler> sa
     return imageDescriptorInfo;
 }
 
-VkImageViewType ImageView::imageToViewType(VkImageType imageType, uint32_t arrayLayers, bool cubeMap) noexcept
+VkImageViewType ImageView::imageToViewType(VkImageType imageType, uint32_t arrayLayers, VkImageCreateFlags flags) noexcept
 {
     switch (imageType)
     {
@@ -134,7 +134,7 @@ VkImageViewType ImageView::imageToViewType(VkImageType imageType, uint32_t array
             return VK_IMAGE_VIEW_TYPE_1D_ARRAY;
         return VK_IMAGE_VIEW_TYPE_1D;
     case VK_IMAGE_TYPE_2D:
-        if (cubeMap)
+        if (flags & VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT)
         {
             if (arrayLayers > 6)
                 return VK_IMAGE_VIEW_TYPE_CUBE_ARRAY;
