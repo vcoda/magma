@@ -63,6 +63,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/indexBuffer.h"
 #include "objects/indirectBuffer.h"
 #include "objects/instance.h"
+#include "objects/mutableImage.h"
+#include "objects/mutableImageView.h"
 #include "objects/physicalDevice.h"
 #include "objects/pipeline.h"
 #include "objects/pipelineCache.h"
