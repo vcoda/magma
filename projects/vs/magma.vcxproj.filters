@@ -1324,7 +1324,6 @@
     <None Include="..\..\objects\device.inl">
       <Filter>Header Files\objects</Filter>
     </None>
-    </None>
     <None Include="..\..\barriers\subpassDependency2.inl">
       <Filter>Header Files\barriers</Filter>
     </None>
