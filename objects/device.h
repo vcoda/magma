@@ -48,7 +48,7 @@ namespace magma
             const std::vector<void *>& extendedDeviceFeatures,
             const StructureChain& extendedInfo,
             std::shared_ptr<IAllocator> allocator);
-        MAGMA_FRIEND_MAKE_SHARED(Device);
+        friend PhysicalDevice;
 
     public:
         ~Device();

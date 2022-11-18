@@ -71,12 +71,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_ALIGN(size) (((size) + 0xF) & ~(0xF))
 #define MAGMA_ALIGNED(p) (((uintptr_t)(const void *)(p)) % (MAGMA_ALIGNMENT) == 0)
 
-#ifdef _MSC_VER
-    #define MAGMA_FRIEND_MAKE_SHARED(Type) friend class std::_Ref_count_obj<Type>
-#else // TODO: check for GCC and other compilers
-    #define MAGMA_FRIEND_MAKE_SHARED(Type) friend void __gnu_cxx::new_allocator<Type>::construct<Type>(Type *)
-#endif
-
 // https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VkMemoryPriorityAllocateInfoEXT.html
 #define MAGMA_DEFAULT_MEMORY_PRIORITY 0.5f
 

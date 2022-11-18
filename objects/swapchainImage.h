@@ -59,7 +59,6 @@ namespace magma
             uint32_t chainIndex);
         void setChainIndex(uint32_t chainIndex) noexcept;
         friend Swapchain;
-        MAGMA_FRIEND_MAKE_SHARED(SwapchainImage);
 
         const bool implementationControlled;
         int32_t chainIndex;
