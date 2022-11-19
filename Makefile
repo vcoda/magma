@@ -33,6 +33,7 @@ MAGMA_OBJS= \
 	auxiliary/graphicsPipelineCache.o \
 	auxiliary/imageDescriptorSet.o \
 	auxiliary/immediateRender.o \
+	auxiliary/multiAttachmentFramebuffer.o \
 	auxiliary/profiler.o \
 	auxiliary/sprite.o \
 	auxiliary/swapchainFramebuffer.o \
