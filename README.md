@@ -105,3 +105,58 @@ Supported compilers:
 
 * MSC
 * GCC
+
+## Build tools and SDK
+
+### Ubuntu Linux
+
+Install Git and Make (if not available):
+```
+sudo apt update
+sudo apt install git
+sudo apt install make
+```
+For Xlib, install X11 headers and libraries:
+```
+sudo apt install libx11-dev
+```
+For XCB:
+```
+sudo apt install xcb
+sudo apt install libxcb-icccm4-dev
+```
+
+* [LunarG Vulkan SDK](https://www.lunarg.com/vulkan-sdk/)<br>
+
+Go to the directory where .run file was saved:
+```
+chmod ugo+x vulkansdk-linux-x86_64-<version>.run
+./vulkansdk-linux-x86_64-<version>.run
+cd VulkanSDK/<version>/
+source ./setup-env.sh
+```
+Check that Vulkan environment variables are present:
+```
+printenv | grep Vulkan
+```
+
+## Building
+
+### Linux
+
+There is a Makefile available. Go to root directory, type
+```
+make magma -j<N>
+```
+where N is the number of CPU threads you want to assign to compilation.
+By default, debug version of static library is builded. If you want to build a release one, add DEBUG=0.
+
+Vulkan supports different windowing system. By default, XCB is used. If you want to switch to Xlib, open Makefile and replace
+```
+PLATFORM=VK_USE_PLATFORM_XCB_KHR
+```
+with
+```
+PLATFORM=VK_USE_PLATFORM_XLIB_KHR
+```
+Other compositors like Wayland or XRANDR have not been tested.
