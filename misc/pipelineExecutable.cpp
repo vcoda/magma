@@ -77,7 +77,7 @@ std::vector<VkPipelineExecutableInternalRepresentationKHR> PipelineExecutable::g
         internalRepresentations.resize(internalRepresentationCount, pipelineExecutableInternalRepresentation);
         result = vkGetPipelineExecutableInternalRepresentationsKHR(MAGMA_HANDLE(device), &pipelineExecutableInfo,
             &internalRepresentationCount, internalRepresentations.data());
-        MAGMA_ASSERT(SUCCEEDED(result));
+        MAGMA_ASSERT(MAGMA_SUCCEEDED(result));
         if (data.empty())
         {   // Allocate memory for internal representation data to be written by Vulkan
             for (const auto& ir : internalRepresentations)
