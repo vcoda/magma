@@ -112,7 +112,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     if (result != VK_SUCCESS)
     {
         char errorStr[MAGMA_MAX_STRING];
-        sprintf_s(errorStr, MAGMA_MAX_STRING, "initialization of swapchain failed with the following parameters:\n"
+        snprintf(errorStr, MAGMA_MAX_STRING, "initialization of swapchain failed with the following parameters:\n"
             "minImageCount: %u\nimageFormat: %s\nimageColorSpace: %s\nimageExtent: {%u, %u}\nimageArrayLayers: %u\n"
             "imageUsage: %s\nimageSharingMode: %s\npreTransform: %s\ncompositeAlpha: %s\npresentMode: %s\nclipped: %s\n"
         #ifdef MAGMA_X64
