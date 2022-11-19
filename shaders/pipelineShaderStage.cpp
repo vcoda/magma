@@ -81,7 +81,7 @@ hash_t PipelineShaderStage::getHash() const noexcept
     hash = core::hashCombine(hash, shaderModule->getHash());
     hash = core::hashCombine(hash, core::hashString(std::string(pName)));
     if (specialization)
-        hash = core::hashCombine(hash, specialization->hash());
+        hash = core::hashCombine(hash, specialization->getHash());
     return hash;
 }
 } // namespace magma

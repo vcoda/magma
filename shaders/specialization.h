@@ -44,7 +44,7 @@ namespace magma
         Specialization(const Specialization&) noexcept;
         Specialization& operator=(const Specialization&) noexcept;
         ~Specialization();
-        hash_t hash() const noexcept;
+        hash_t getHash() const noexcept;
     };
 } // namespace magma
 

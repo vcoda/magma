@@ -49,17 +49,19 @@ Specialization::~Specialization()
     delete[] reinterpret_cast<const char *>(pData);
 }
 
-hash_t Specialization::hash() const noexcept
+hash_t Specialization::getHash() const noexcept
 {
     hash_t hash = 0;
     for (uint32_t i = 0; i < mapEntryCount; ++i)
     {
+        const VkSpecializationMapEntry& mapEntry = pMapEntries[i];
         hash = core::hashCombine(hash, core::hashArgs(
-            pMapEntries[i].constantID,
-            pMapEntries[i].offset,
-            pMapEntries[i].size));
+            mapEntry.constantID,
+            mapEntry.offset,
+            mapEntry.size));
     }
+    const uint8_t *byteData = reinterpret_cast<const uint8_t *>(pData);
     return core::hashCombine(hash, core::hashArray(
-        reinterpret_cast<const uint8_t *>(pData), dataSize));
+        byteData, dataSize));
 }
 } // namespace magma
