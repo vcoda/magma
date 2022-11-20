@@ -190,11 +190,11 @@ uint32_t VertexInputState::stride(uint32_t binding) const noexcept
     std::size_t stride = 0;
     for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
     {
-        const VkVertexInputAttributeDescription& attrib = pVertexAttributeDescriptions[i];
-        if (attrib.binding == binding)
+        const auto& vertexAttibDescription = pVertexAttributeDescriptions[i];
+        if (vertexAttibDescription.binding == binding)
         {   // TODO: alignment?
-            const std::size_t attribSize = Format(attrib.format).size();
-            stride += attribSize;
+            const std::size_t vertexAttribSize = Format(vertexAttibDescription.format).size();
+            stride += vertexAttribSize;
         }
     }
     return static_cast<uint32_t>(stride);

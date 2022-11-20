@@ -29,7 +29,7 @@ namespace magma
        which may be loaded into external tools for further diagnosis. */
 
 #ifdef VK_EXT_device_fault
-    class DeviceFaultInfo final: public VkDeviceFaultInfoEXT
+    class DeviceFaultInfo final : public VkDeviceFaultInfoEXT
     {
     public:
         DeviceFaultInfo() noexcept;
