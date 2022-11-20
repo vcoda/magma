@@ -142,7 +142,10 @@ VertexInputState::VertexInputState(const VertexInputState& other) noexcept
     vertexInputDivisorInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
     vertexInputDivisorInfo.pNext = nullptr;
     vertexInputDivisorInfo.vertexBindingDivisorCount = other.vertexInputDivisorInfo.vertexBindingDivisorCount;
-    vertexInputDivisorInfo.pVertexBindingDivisors = core::copyArray(other.vertexInputDivisorInfo.pVertexBindingDivisors, other.vertexInputDivisorInfo.vertexBindingDivisorCount);
+    if (vertexInputDivisorInfo.vertexBindingDivisorCount)
+        vertexInputDivisorInfo.pVertexBindingDivisors = core::copyArray(other.vertexInputDivisorInfo.pVertexBindingDivisors, other.vertexInputDivisorInfo.vertexBindingDivisorCount);
+    else
+        vertexInputDivisorInfo.pVertexBindingDivisors = nullptr;
 #endif // VK_EXT_vertex_attribute_divisor
 }
 
@@ -164,7 +167,10 @@ VertexInputState& VertexInputState::operator=(const VertexInputState& other) noe
         vertexInputDivisorInfo.pNext = nullptr;
         vertexInputDivisorInfo.vertexBindingDivisorCount = other.vertexInputDivisorInfo.vertexBindingDivisorCount;
         delete[] vertexInputDivisorInfo.pVertexBindingDivisors;
-        vertexInputDivisorInfo.pVertexBindingDivisors = core::copyArray(other.vertexInputDivisorInfo.pVertexBindingDivisors, other.vertexInputDivisorInfo.vertexBindingDivisorCount);
+        if (vertexInputDivisorInfo.vertexBindingDivisorCount)
+            vertexInputDivisorInfo.pVertexBindingDivisors = core::copyArray(other.vertexInputDivisorInfo.pVertexBindingDivisors, other.vertexInputDivisorInfo.vertexBindingDivisorCount);
+        else
+            vertexInputDivisorInfo.pVertexBindingDivisors = nullptr;
 #endif // VK_EXT_vertex_attribute_divisor
     }
     return *this;
