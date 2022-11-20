@@ -209,18 +209,20 @@ hash_t VertexInputState::hash() const noexcept
         vertexAttributeDescriptionCount);
     for (uint32_t i = 0; i < vertexBindingDescriptionCount; ++i)
     {
+        const auto& vertexBindingDescription = pVertexBindingDescriptions[i];
         hash = core::hashCombine(hash, core::hashArgs(
-            pVertexBindingDescriptions[i].binding,
-            pVertexBindingDescriptions[i].stride,
-            pVertexBindingDescriptions[i].inputRate));
+            vertexBindingDescription.binding,
+            vertexBindingDescription.stride,
+            vertexBindingDescription.inputRate));
     }
     for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
     {
+        const auto& vertexAttribDescription = pVertexAttributeDescriptions[i];
         hash = core::hashCombine(hash, core::hashArgs(
-            pVertexAttributeDescriptions[i].location,
-            pVertexAttributeDescriptions[i].binding,
-            pVertexAttributeDescriptions[i].format,
-            pVertexAttributeDescriptions[i].offset));
+            vertexAttribDescription.location,
+            vertexAttribDescription.binding,
+            vertexAttribDescription.format,
+            vertexAttribDescription.offset));
     }
 #ifdef VK_EXT_vertex_attribute_divisor
     hash = core::hashCombine(hash, core::hashArgs(
@@ -228,9 +230,10 @@ hash_t VertexInputState::hash() const noexcept
         vertexInputDivisorInfo.vertexBindingDivisorCount));
     for (uint32_t i = 0; i < vertexInputDivisorInfo.vertexBindingDivisorCount; ++i)
     {
+        const auto& vertexBindingDivisor = vertexInputDivisorInfo.pVertexBindingDivisors[i];
         hash = core::hashCombine(hash, core::hashArgs(
-            vertexInputDivisorInfo.pVertexBindingDivisors[i].binding,
-            vertexInputDivisorInfo.pVertexBindingDivisors[i].divisor));
+            vertexBindingDivisor.binding,
+            vertexBindingDivisor.divisor));
     }
 #endif // VK_EXT_vertex_attribute_divisor
     return hash;
