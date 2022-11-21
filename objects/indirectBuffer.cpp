@@ -191,8 +191,6 @@ uint32_t DrawMeshTasksIndirectBuffer::writeDrawMeshTaskCommand(uint32_t groupCou
             drawMeshTaskCmd->groupCountX = groupCountX;
             drawMeshTaskCmd->groupCountY = groupCountY;
             drawMeshTaskCmd->groupCountZ = groupCountZ;
-            if (!persistentlyMapped())
-                memory->unmap();
         }
     #endif // VK_EXT_mesh_shader
     }
@@ -207,11 +205,11 @@ uint32_t DrawMeshTasksIndirectBuffer::writeDrawMeshTaskCommand(uint32_t groupCou
             MAGMA_ASSERT(1 == groupCountZ);
             drawMeshTaskCmd->taskCount = groupCountX;
             drawMeshTaskCmd->firstTask = 0; // Not used as it isn't present in VK_EXT_mesh_shader
-            if (!persistentlyMapped())
-                memory->unmap();
         }
     #endif // VK_NV_mesh_shader
     }
+    if (memory->mapped() && !persistentlyMapped())
+        memory->unmap();
     return ++cmdCount;
 }
 
