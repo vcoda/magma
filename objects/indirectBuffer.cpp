@@ -167,4 +167,71 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(const VkDrawIndexedI
     }
     return ++cmdCount;
 }
+
+#if defined(VK_EXT_mesh_shader) || defined(VK_NV_mesh_shader)
+DrawMeshTasksIndirectBuffer::DrawMeshTasksIndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDrawMeshTasksCommands,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    bool persistentlyMapped /* false */,
+    const Descriptor& optional /* default */,
+    const Sharing& sharing /* Sharing() */):
+    IndirectBuffer(device, maxDrawMeshTasksCommands, extensionDependentStride(device),
+        persistentlyMapped, optional, sharing, std::move(allocator)),
+    mappedData(persistentlyMapped ? memory->map() : nullptr),
+    EXT_mesh_shader(false)
+{
+#ifdef VK_EXT_mesh_shader
+    EXT_mesh_shader = device->extensionEnabled(VK_EXT_MESH_SHADER_EXTENSION_NAME);
+#endif
+}
+
+uint32_t DrawMeshTasksIndirectBuffer::writeDrawMeshTaskCommand(uint32_t groupCountX,
+    uint32_t groupCountY /* 1 */,
+    uint32_t groupCountZ /* 1 */)
+{
+    MAGMA_ASSERT(cmdCount < maxDrawCommands);
+    if (EXT_mesh_shader)
+    {
+    #ifdef VK_EXT_mesh_shader
+        if (VkDrawMeshTasksIndirectCommandEXT *drawMeshTaskCmd = getDrawCommand<VkDrawMeshTasksIndirectCommandEXT>(mappedData))
+        {
+            drawMeshTaskCmd->groupCountX = groupCountX;
+            drawMeshTaskCmd->groupCountY = groupCountY;
+            drawMeshTaskCmd->groupCountZ = groupCountZ;
+            if (!persistentlyMapped())
+                memory->unmap();
+        }
+    #endif // VK_EXT_mesh_shader
+    }
+    else
+    {
+    #ifdef VK_NV_mesh_shader
+        if (VkDrawMeshTasksIndirectCommandNV *drawMeshTaskCmd = getDrawCommand<VkDrawMeshTasksIndirectCommandNV>(mappedData))
+        {
+            MAGMA_UNUSED(groupCountY);
+            MAGMA_UNUSED(groupCountZ);
+            MAGMA_ASSERT(1 == groupCountY);
+            MAGMA_ASSERT(1 == groupCountZ);
+            drawMeshTaskCmd->taskCount = groupCountX;
+            drawMeshTaskCmd->firstTask = 0; // Not used as it isn't present in VK_EXT_mesh_shader
+            if (!persistentlyMapped())
+                memory->unmap();
+        }
+    #endif // VK_NV_mesh_shader
+    }
+    return ++cmdCount;
+}
+
+std::size_t DrawMeshTasksIndirectBuffer::extensionDependentStride(std::shared_ptr<Device> device) noexcept
+{
+#ifdef VK_EXT_mesh_shader
+    if (device->extensionEnabled(VK_EXT_MESH_SHADER_EXTENSION_NAME))
+        return sizeof(VkDrawMeshTasksIndirectCommandEXT);
+#endif
+#ifdef VK_NV_mesh_shader
+    if (device->extensionEnabled(VK_NV_MESH_SHADER_EXTENSION_NAME))
+        return sizeof(VkDrawMeshTasksIndirectCommandNV);
+#endif
+    return 0;
+}
+#endif // VK_EXT_mesh_shader || VK_NV_mesh_shader
 } // namespace magma
