@@ -202,6 +202,17 @@ namespace magma
             uint32_t counterOffset,
             uint32_t vertexStride) const noexcept;
 #endif // VK_EXT_transform_feedback
+    #if defined(VK_EXT_mesh_shader) || defined(VK_NV_mesh_shader)
+        void drawMeshTasks(uint32_t groupCountX,
+            uint32_t groupCountY = 1,
+            uint32_t groupCountZ = 1) const noexcept;
+        void drawMeshTasksIndirect(const std::shared_ptr<DrawMeshTasksIndirectBuffer>& buffer,
+            VkDeviceSize offset = 0) const noexcept;
+        void drawMeshTasksIndirectCount(const std::shared_ptr<DrawMeshTasksIndirectBuffer>& buffer,
+            const std::shared_ptr<Buffer>& countBuffer,
+            VkDeviceSize offset = 0,
+            VkDeviceSize countBufferOffset = 0) const noexcept;
+    #endif // VK_EXT_mesh_shader || VK_NV_mesh_shader
         void dispatch(uint32_t groupCountX,
             uint32_t groupCountY,
             uint32_t groupCountZ) const noexcept;

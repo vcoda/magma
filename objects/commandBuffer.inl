@@ -258,6 +258,67 @@ inline void CommandBuffer::drawIndirectByteCount(uint32_t instanceCount, uint32_
 }
 #endif // VK_EXT_transform_feedback
 
+#if defined(VK_EXT_mesh_shader) || defined(VK_NV_mesh_shader)
+inline void CommandBuffer::drawMeshTasks(uint32_t groupCountX,
+    uint32_t groupCountY /* 1 */,
+    uint32_t groupCountZ /* 1 */) const noexcept
+{
+#ifdef VK_EXT_mesh_shader
+    MAGMA_DEVICE_EXTENSION(vkCmdDrawMeshTasksEXT);
+    if (vkCmdDrawMeshTasksEXT)
+        vkCmdDrawMeshTasksEXT(handle, groupCountX, groupCountY, groupCountZ);
+    else
+#endif // VK_EXT_mesh_shader
+    {
+    #ifdef VK_NV_mesh_shader
+        MAGMA_UNUSED(groupCountY);
+        MAGMA_UNUSED(groupCountZ);
+        constexpr uint32_t firstTask = 0;
+        MAGMA_DEVICE_EXTENSION(vkCmdDrawMeshTasksNV);
+        if (vkCmdDrawMeshTasksNV)
+            vkCmdDrawMeshTasksNV(handle, groupCountX, firstTask); // Y and Z dimension are implicitly set to 1
+    #endif // VK_NV_mesh_shader
+    }
+}
+
+inline void CommandBuffer::drawMeshTasksIndirect(const std::shared_ptr<DrawMeshTasksIndirectBuffer>& buffer,
+    VkDeviceSize offset /* 0 */) const noexcept
+{
+#ifdef VK_EXT_mesh_shader
+    MAGMA_DEVICE_EXTENSION(vkCmdDrawMeshTasksIndirectEXT);
+    if (vkCmdDrawMeshTasksIndirectEXT)
+        vkCmdDrawMeshTasksIndirectEXT(handle, *buffer, offset, buffer->getDrawCommandCount(), buffer->getStride());
+    else
+#endif // VK_EXT_mesh_shader
+    {
+    #ifdef VK_NV_mesh_shader
+        MAGMA_DEVICE_EXTENSION(vkCmdDrawMeshTasksIndirectNV);
+        if (vkCmdDrawMeshTasksIndirectNV)
+            vkCmdDrawMeshTasksIndirectNV(handle, *buffer, offset, buffer->getDrawCommandCount(), buffer->getStride());
+    #endif // VK_NV_mesh_shader
+    }
+}
+
+inline void CommandBuffer::drawMeshTasksIndirectCount(const std::shared_ptr<DrawMeshTasksIndirectBuffer>& buffer, const std::shared_ptr<Buffer>& countBuffer,
+    VkDeviceSize offset /* 0 */,
+    VkDeviceSize countBufferOffset /* 0 */) const noexcept
+{
+#ifdef VK_EXT_mesh_shader
+    MAGMA_DEVICE_EXTENSION(vkCmdDrawMeshTasksIndirectCountEXT);
+    if (vkCmdDrawMeshTasksIndirectCountEXT)
+        vkCmdDrawMeshTasksIndirectCountEXT(handle, *buffer, offset, *countBuffer, countBufferOffset, buffer->getDrawCommandCount(), buffer->getStride());
+    else
+#endif // VK_EXT_mesh_shader
+    {
+    #ifdef VK_NV_mesh_shader
+        MAGMA_DEVICE_EXTENSION(vkCmdDrawMeshTasksIndirectCountNV);
+        if (vkCmdDrawMeshTasksIndirectCountNV)
+            vkCmdDrawMeshTasksIndirectCountNV(handle, *buffer, offset, *countBuffer, countBufferOffset, buffer->getDrawCommandCount(), buffer->getStride());
+    #endif // VK_NV_mesh_shader
+    }
+}
+#endif // VK_EXT_mesh_shader || VK_NV_mesh_shader
+
 inline void CommandBuffer::dispatch(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) const noexcept
 {
     vkCmdDispatch(handle, groupCountX, groupCountY, groupCountZ);
