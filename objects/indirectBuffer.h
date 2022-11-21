@@ -40,6 +40,8 @@ namespace magma
             const Descriptor& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
+        template<typename DrawCommand>
+        DrawCommand *getDrawCommand(void *mappedData) const noexcept;
 
         const uint32_t maxDrawCommands;
         const uint32_t stride;
