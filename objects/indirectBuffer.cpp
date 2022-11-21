@@ -47,6 +47,7 @@ IndirectBuffer::~IndirectBuffer()
 template<typename DrawCommand>
 inline DrawCommand *IndirectBuffer::getDrawCommand(void *mappedData) const noexcept
 {
+    MAGMA_ASSERT(cmdCount < maxDrawCommands);
     DrawCommand *drawCmd = persistent
         ? reinterpret_cast<DrawCommand *>(mappedData) + cmdCount
         : memory->map<DrawCommand>(sizeof(DrawCommand) * cmdCount, sizeof(DrawCommand));
@@ -67,7 +68,6 @@ DrawIndirectBuffer::DrawIndirectBuffer(std::shared_ptr<Device> device, uint32_t 
 uint32_t DrawIndirectBuffer::writeDrawCommand(uint32_t vertexCount,
     uint32_t firstVertex /* 0 */) noexcept
 {
-    MAGMA_ASSERT(cmdCount < maxDrawCommands);
     if (VkDrawIndirectCommand *drawCmd = getDrawCommand<VkDrawIndirectCommand>(mappedData))
     {
         drawCmd->vertexCount = vertexCount;
@@ -84,7 +84,6 @@ uint32_t DrawIndirectBuffer::writeDrawInstancedCommand(uint32_t vertexCount, uin
     uint32_t firstVertex /* 0 */,
     uint32_t firstInstance /* 0 */) noexcept
 {
-    MAGMA_ASSERT(cmdCount < maxDrawCommands);
     if (VkDrawIndirectCommand *drawCmd = getDrawCommand<VkDrawIndirectCommand>(mappedData))
     {
         drawCmd->vertexCount = vertexCount;
@@ -99,7 +98,6 @@ uint32_t DrawIndirectBuffer::writeDrawInstancedCommand(uint32_t vertexCount, uin
 
 uint32_t DrawIndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawCmd) noexcept
 {
-    MAGMA_ASSERT(cmdCount < maxDrawCommands);
     if (VkDrawIndirectCommand *cmd = getDrawCommand<VkDrawIndirectCommand>(mappedData))
     {
         *cmd = drawCmd;
@@ -123,7 +121,6 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(uint32_t indexCount,
     uint32_t firstIndex /* 0 */,
     uint32_t vertexOffset /* 0 */) noexcept
 {
-    MAGMA_ASSERT(cmdCount < maxDrawCommands);
     if (VkDrawIndexedIndirectCommand *drawIndexedCmd = getDrawCommand<VkDrawIndexedIndirectCommand>(mappedData))
     {
         drawIndexedCmd->indexCount = indexCount;
@@ -142,7 +139,6 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedInstancedCommand(uint32_t in
     uint32_t vertexOffset /* 0 */,
     uint32_t firstInstance /* 0 */) noexcept
 {
-    MAGMA_ASSERT(cmdCount < maxDrawCommands);
     if (VkDrawIndexedIndirectCommand *drawIndexedCmd = getDrawCommand<VkDrawIndexedIndirectCommand>(mappedData))
     {
         drawIndexedCmd->indexCount = indexCount;
@@ -158,7 +154,6 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedInstancedCommand(uint32_t in
 
 uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(const VkDrawIndexedIndirectCommand& drawIndexedCmd) noexcept
 {
-    MAGMA_ASSERT(cmdCount < maxDrawCommands);
     if (VkDrawIndexedIndirectCommand *cmd = getDrawCommand<VkDrawIndexedIndirectCommand>(mappedData))
     {
         *cmd = drawIndexedCmd;
@@ -188,7 +183,6 @@ uint32_t DrawMeshTasksIndirectBuffer::writeDrawMeshTaskCommand(uint32_t groupCou
     uint32_t groupCountY /* 1 */,
     uint32_t groupCountZ /* 1 */)
 {
-    MAGMA_ASSERT(cmdCount < maxDrawCommands);
     if (EXT_mesh_shader)
     {
     #ifdef VK_EXT_mesh_shader
