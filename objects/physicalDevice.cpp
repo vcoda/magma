@@ -36,6 +36,8 @@ PhysicalDevice::PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDev
     instance(std::move(instance))
 {
     this->handle = handle;
+    for (const auto& properties: enumerateExtensions())
+        extensions.emplace(properties.extensionName);
 }
 
 std::shared_ptr<Device> PhysicalDevice::createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
@@ -2042,17 +2044,12 @@ std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
     return createDevice(queueDescriptors, noLayers, swapchainExtension, noDeviceFeatures, noExtendedDeviceFeatures);
 }
 
-bool PhysicalDevice::checkExtensionSupport(const char *extensionName) const
+bool PhysicalDevice::checkExtensionSupport(const char *extensionName) const noexcept
 {
     MAGMA_ASSERT(extensionName);
+    MAGMA_ASSERT(strlen(extensionName));
     if (!extensionName || !strlen(extensionName))
         return false;
-    if (extensions.empty())
-    {   // Query once and cache
-        const std::vector<VkExtensionProperties> extensionProperties = enumerateExtensions();
-        for (const auto& properties: extensionProperties)
-            extensions.emplace(properties.extensionName);
-    }
     return extensions.find(extensionName) != extensions.end();
 }
 
