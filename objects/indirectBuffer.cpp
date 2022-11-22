@@ -44,17 +44,6 @@ IndirectBuffer::~IndirectBuffer()
         memory->unmap();
 }
 
-template<typename DrawCommand>
-inline DrawCommand *IndirectBuffer::getDrawCommand(void *mappedData) const noexcept
-{
-    MAGMA_ASSERT(cmdCount < maxDrawCommands);
-    DrawCommand *drawCmd = persistent
-        ? reinterpret_cast<DrawCommand *>(mappedData) + cmdCount
-        : memory->map<DrawCommand>(sizeof(DrawCommand) * cmdCount, sizeof(DrawCommand));
-    MAGMA_ASSERT(drawCmd);
-    return drawCmd;
-}
-
 DrawIndirectBuffer::DrawIndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDrawCommands,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     bool persistentlyMapped /* false */,
@@ -68,14 +57,13 @@ DrawIndirectBuffer::DrawIndirectBuffer(std::shared_ptr<Device> device, uint32_t 
 uint32_t DrawIndirectBuffer::writeDrawCommand(uint32_t vertexCount,
     uint32_t firstVertex /* 0 */) noexcept
 {
-    if (VkDrawIndirectCommand *drawCmd = getDrawCommand<VkDrawIndirectCommand>(mappedData))
+    DrawIndirectCommand<VkDrawIndirectCommand> drawCmd(this, mappedData);
+    if (drawCmd)
     {
         drawCmd->vertexCount = vertexCount;
         drawCmd->instanceCount = 1;
         drawCmd->firstVertex = firstVertex;
         drawCmd->firstInstance = 0;
-        if (!persistentlyMapped())
-            memory->unmap();
     }
     return ++cmdCount;
 }
@@ -84,26 +72,22 @@ uint32_t DrawIndirectBuffer::writeDrawInstancedCommand(uint32_t vertexCount, uin
     uint32_t firstVertex /* 0 */,
     uint32_t firstInstance /* 0 */) noexcept
 {
-    if (VkDrawIndirectCommand *drawCmd = getDrawCommand<VkDrawIndirectCommand>(mappedData))
+    DrawIndirectCommand<VkDrawIndirectCommand> drawCmd(this, mappedData);
+    if (drawCmd)
     {
         drawCmd->vertexCount = vertexCount;
         drawCmd->instanceCount = instanceCount;
         drawCmd->firstVertex = firstVertex;
         drawCmd->firstInstance = firstInstance;
-        if (!persistentlyMapped())
-            memory->unmap();
     }
     return ++cmdCount;
 }
 
-uint32_t DrawIndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawCmd) noexcept
+uint32_t DrawIndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawCmd_) noexcept
 {
-    if (VkDrawIndirectCommand *cmd = getDrawCommand<VkDrawIndirectCommand>(mappedData))
-    {
-        *cmd = drawCmd;
-        if (!persistentlyMapped())
-            memory->unmap();
-    }
+    DrawIndirectCommand<VkDrawIndirectCommand> drawCmd(this, mappedData);
+    if (drawCmd)
+        *drawCmd = drawCmd_;
     return ++cmdCount;
 }
 
@@ -121,15 +105,14 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(uint32_t indexCount,
     uint32_t firstIndex /* 0 */,
     uint32_t vertexOffset /* 0 */) noexcept
 {
-    if (VkDrawIndexedIndirectCommand *drawIndexedCmd = getDrawCommand<VkDrawIndexedIndirectCommand>(mappedData))
+    DrawIndirectCommand<VkDrawIndexedIndirectCommand> drawIndexedCmd(this, mappedData);
+    if (drawIndexedCmd)
     {
         drawIndexedCmd->indexCount = indexCount;
         drawIndexedCmd->instanceCount = 1;
         drawIndexedCmd->firstIndex = firstIndex;
         drawIndexedCmd->vertexOffset = vertexOffset;
         drawIndexedCmd->firstInstance = 0;
-        if (!persistentlyMapped())
-            memory->unmap();
     }
     return ++cmdCount;
 }
@@ -139,27 +122,23 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedInstancedCommand(uint32_t in
     uint32_t vertexOffset /* 0 */,
     uint32_t firstInstance /* 0 */) noexcept
 {
-    if (VkDrawIndexedIndirectCommand *drawIndexedCmd = getDrawCommand<VkDrawIndexedIndirectCommand>(mappedData))
+    DrawIndirectCommand<VkDrawIndexedIndirectCommand> drawIndexedCmd(this, mappedData);
+    if (drawIndexedCmd)
     {
         drawIndexedCmd->indexCount = indexCount;
         drawIndexedCmd->instanceCount = instanceCount;
         drawIndexedCmd->firstIndex = firstIndex;
         drawIndexedCmd->vertexOffset = vertexOffset;
         drawIndexedCmd->firstInstance = firstInstance;
-        if (!persistentlyMapped())
-            memory->unmap();
     }
     return ++cmdCount;
 }
 
-uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(const VkDrawIndexedIndirectCommand& drawIndexedCmd) noexcept
+uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(const VkDrawIndexedIndirectCommand& drawIndexedCmd_) noexcept
 {
-    if (VkDrawIndexedIndirectCommand *cmd = getDrawCommand<VkDrawIndexedIndirectCommand>(mappedData))
-    {
-        *cmd = drawIndexedCmd;
-        if (!persistentlyMapped())
-            memory->unmap();
-    }
+    DrawIndirectCommand<VkDrawIndexedIndirectCommand> drawIndexedCmd(this, mappedData);
+    if (drawIndexedCmd)
+        *drawIndexedCmd = drawIndexedCmd_;
     return ++cmdCount;
 }
 
@@ -186,7 +165,8 @@ uint32_t DrawMeshTasksIndirectBuffer::writeDrawMeshTaskCommand(uint32_t groupCou
     if (EXT_mesh_shader)
     {
     #ifdef VK_EXT_mesh_shader
-        if (VkDrawMeshTasksIndirectCommandEXT *drawMeshTaskCmd = getDrawCommand<VkDrawMeshTasksIndirectCommandEXT>(mappedData))
+        DrawIndirectCommand<VkDrawMeshTasksIndirectCommandEXT> drawMeshTaskCmd(this, mappedData);
+        if (drawMeshTaskCmd)
         {
             drawMeshTaskCmd->groupCountX = groupCountX;
             drawMeshTaskCmd->groupCountY = groupCountY;
@@ -197,7 +177,8 @@ uint32_t DrawMeshTasksIndirectBuffer::writeDrawMeshTaskCommand(uint32_t groupCou
     else
     {
     #ifdef VK_NV_mesh_shader
-        if (VkDrawMeshTasksIndirectCommandNV *drawMeshTaskCmd = getDrawCommand<VkDrawMeshTasksIndirectCommandNV>(mappedData))
+        DrawIndirectCommand<VkDrawMeshTasksIndirectCommandNV> drawMeshTaskCmd(this, mappedData);
+        if (drawMeshTaskCmd)
         {
             MAGMA_UNUSED(groupCountY);
             MAGMA_UNUSED(groupCountZ);
@@ -208,8 +189,6 @@ uint32_t DrawMeshTasksIndirectBuffer::writeDrawMeshTaskCommand(uint32_t groupCou
         }
     #endif // VK_NV_mesh_shader
     }
-    if (memory->mapped() && !persistentlyMapped())
-        memory->unmap();
     return ++cmdCount;
 }
 

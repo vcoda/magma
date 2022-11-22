@@ -40,8 +40,6 @@ namespace magma
             const Descriptor& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
-        template<typename DrawCommand>
-        DrawCommand *getDrawCommand(void *mappedData) const noexcept;
 
         const uint32_t maxDrawCommands;
         const uint32_t stride;
@@ -121,3 +119,5 @@ namespace magma
     };
 #endif // VK_EXT_mesh_shader || VK_NV_mesh_shader
 } // namespace magma
+
+#include "indirectBuffer.inl"
