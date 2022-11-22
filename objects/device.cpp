@@ -298,7 +298,7 @@ DeviceFaultInfo Device::getFaultInfo() const
 }
 #endif // VK_EXT_device_fault
 
-bool Device::extensionEnabled(const char *extensionName) const
+bool Device::extensionEnabled(const char *extensionName) const noexcept
 {
     if (!physicalDevice->checkExtensionSupport(extensionName))
         return false;

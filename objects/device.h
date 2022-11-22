@@ -95,7 +95,7 @@ namespace magma
         template<typename PhysicalDeviceFeatures>
         const PhysicalDeviceFeatures *getEnabledExtendedFeatures() const noexcept;
         // Utility methods
-        bool extensionEnabled(const char *extensionName) const;
+        bool extensionEnabled(const char *extensionName) const noexcept;
         bool negativeViewportHeightEnabled(bool khronos) const noexcept;
         bool separateDepthStencilLayoutsEnabled() const noexcept;
         bool stippledLinesEnabled() const noexcept;
