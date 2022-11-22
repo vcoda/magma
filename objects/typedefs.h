@@ -101,6 +101,9 @@ namespace magma
 #ifdef VK_EXT_full_screen_exclusive
     MAGMA_TYPEDEF_SHARED_PTR(FullScreenExclusiveSwapchain)
 #endif
+#if defined(VK_EXT_mesh_shader) || defined(VK_NV_mesh_shader)
+    MAGMA_TYPEDEF_SHARED_PTR(DrawMeshTasksIndirectBuffer)
+#endif
 #ifdef VK_EXT_transform_feedback
     MAGMA_TYPEDEF_SHARED_PTR(TransformFeedbackBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(TransformFeedbackCounterBuffer)
