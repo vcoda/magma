@@ -180,10 +180,10 @@ uint32_t DrawMeshTasksIndirectBuffer::writeDrawMeshTaskCommand(uint32_t groupCou
         DrawIndirectCommand<VkDrawMeshTasksIndirectCommandNV> drawMeshTaskCmd(this, mappedData);
         if (drawMeshTaskCmd)
         {
-            MAGMA_UNUSED(groupCountY);
-            MAGMA_UNUSED(groupCountZ);
             MAGMA_ASSERT(1 == groupCountY);
             MAGMA_ASSERT(1 == groupCountZ);
+            MAGMA_UNUSED(groupCountY);
+            MAGMA_UNUSED(groupCountZ);
             drawMeshTaskCmd->taskCount = groupCountX;
             drawMeshTaskCmd->firstTask = 0; // Not used as it isn't present in VK_EXT_mesh_shader
         }

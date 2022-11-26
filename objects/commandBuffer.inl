@@ -271,12 +271,14 @@ inline void CommandBuffer::drawMeshTasks(uint32_t groupCountX,
 #endif // VK_EXT_mesh_shader
     {
     #ifdef VK_NV_mesh_shader
+        // Y and Z dimension are implicitly set to 1
+        MAGMA_ASSERT(1 == groupCountY);
+        MAGMA_ASSERT(1 == groupCountZ);
         MAGMA_UNUSED(groupCountY);
         MAGMA_UNUSED(groupCountZ);
-        constexpr uint32_t firstTask = 0;
         MAGMA_DEVICE_EXTENSION(vkCmdDrawMeshTasksNV);
         if (vkCmdDrawMeshTasksNV)
-            vkCmdDrawMeshTasksNV(handle, groupCountX, firstTask); // Y and Z dimension are implicitly set to 1
+            vkCmdDrawMeshTasksNV(handle, groupCountX, 0 /* firstTask */);
     #endif // VK_NV_mesh_shader
     }
 }
