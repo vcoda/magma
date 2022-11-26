@@ -47,14 +47,15 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     queryFlags(0),
     pipelineStatistics(0)
 {
-    VkCommandBufferAllocateInfo allocInfo;
-    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    allocInfo.pNext = nullptr;
-    allocInfo.commandPool = MAGMA_HANDLE(cmdPool);
-    allocInfo.level = level;
-    allocInfo.commandBufferCount = 1;
-    const VkResult result = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &allocInfo, &handle);
-    MAGMA_THROW_FAILURE(result, "failed to allocate primary command buffer");
+    VkCommandBufferAllocateInfo cmdBufferAllocateInfo;
+    cmdBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    cmdBufferAllocateInfo.pNext = nullptr;
+    cmdBufferAllocateInfo.commandPool = MAGMA_HANDLE(cmdPool);
+    cmdBufferAllocateInfo.level = level;
+    cmdBufferAllocateInfo.commandBufferCount = 1;
+    const VkResult result = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &cmdBufferAllocateInfo, &handle);
+    MAGMA_THROW_FAILURE(result, VK_COMMAND_BUFFER_LEVEL_PRIMARY == level ?
+        "failed to allocate primary command buffer" : "failed to allocate secondary command buffer");
 }
 
 CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle, std::shared_ptr<CommandPool> cmdPool_):

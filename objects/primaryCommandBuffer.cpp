@@ -21,6 +21,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+PrimaryCommandBuffer::PrimaryCommandBuffer(std::shared_ptr<CommandPool> cmdPool):
+    CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, std::move(cmdPool))
+{}
+
+PrimaryCommandBuffer::PrimaryCommandBuffer(VkCommandBuffer handle, std::shared_ptr<CommandPool> cmdPool):
+    CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, handle, std::move(cmdPool))
+{}
+
 void PrimaryCommandBuffer::executeCommands(const std::shared_ptr<CommandBuffer>& cmdBuffer) noexcept
 {
     MAGMA_ASSERT(cmdBuffer->secondary());
