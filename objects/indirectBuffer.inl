@@ -7,13 +7,13 @@ namespace magma
         explicit DrawIndirectCommand(IndirectBuffer *buffer, void *mappedData) noexcept:
             buffer(buffer)
         {
-            MAGMA_ASSERT(buffer->getDrawCommandCount() < buffer->getMaxDrawCommands());
+            MAGMA_ASSERT(buffer->getDrawCount() < buffer->getMaxDrawCount());
             if (buffer->persistentlyMapped())
-                drawCmd = reinterpret_cast<DrawCommandType *>(mappedData) + buffer->getDrawCommandCount();
+                drawCmd = reinterpret_cast<DrawCommandType *>(mappedData) + buffer->getDrawCount();
             else
             {
                 drawCmd = buffer->getMemory()->map<DrawCommandType>(
-                    sizeof(DrawCommandType) * buffer->getDrawCommandCount(),
+                    sizeof(DrawCommandType) * buffer->getDrawCount(),
                     sizeof(DrawCommandType));
                 MAGMA_ASSERT(drawCmd);
             }

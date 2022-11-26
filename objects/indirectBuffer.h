@@ -26,25 +26,25 @@ namespace magma
     {
     public:
         ~IndirectBuffer();
-        uint32_t getMaxDrawCommands() const noexcept { return maxDrawCommands; }
-        uint32_t getDrawCommandCount() const noexcept { return cmdCount; }
+        uint32_t getMaxDrawCount() const noexcept { return maxDrawCount; }
+        uint32_t getDrawCount() const noexcept { return drawCount; }
         uint32_t getStride() const noexcept { return stride; }
         bool persistentlyMapped() const noexcept { return persistent; }
-        void reset() noexcept { cmdCount = 0; }
+        void reset() noexcept { drawCount = 0; }
 
     protected:
-        explicit IndirectBuffer(std::shared_ptr<Device> device,
-            uint32_t maxDrawCommands,
+        IndirectBuffer(std::shared_ptr<Device> device,
+            uint32_t maxDrawCount,
             std::size_t stride,
             bool persistentlyMapped,
             const Descriptor& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
 
-        const uint32_t maxDrawCommands;
+        const uint32_t maxDrawCount;
         const uint32_t stride;
         const bool persistent;
-        uint32_t cmdCount;
+        uint32_t drawCount;
     };
 
     /* An array of VkDrawIndirectCommand structures. */

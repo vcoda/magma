@@ -24,18 +24,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 IndirectBuffer::IndirectBuffer(std::shared_ptr<Device> device,
-    uint32_t maxDrawCommands, std::size_t stride, bool persistentlyMapped,
+    uint32_t maxDrawCount, std::size_t stride, bool persistentlyMapped,
     const Descriptor& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     Buffer(std::move(device),
-        static_cast<VkDeviceSize>(maxDrawCommands * stride),
+        static_cast<VkDeviceSize>(maxDrawCount * stride),
         0, // flags
         VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT,
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
         optional, sharing, std::move(allocator)),
-    maxDrawCommands(maxDrawCommands),
+    maxDrawCount(maxDrawCount),
     stride(static_cast<uint32_t>(stride)),
     persistent(persistentlyMapped),
-    cmdCount(0)
+    drawCount(0)
 {}
 
 IndirectBuffer::~IndirectBuffer()
@@ -44,12 +44,12 @@ IndirectBuffer::~IndirectBuffer()
         memory->unmap();
 }
 
-DrawIndirectBuffer::DrawIndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDrawCommands,
+DrawIndirectBuffer::DrawIndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDrawCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     bool persistentlyMapped /* false */,
     const Descriptor& optional /* default */,
     const Sharing& sharing /* Sharing() */):
-    IndirectBuffer(std::move(device), maxDrawCommands, sizeof(VkDrawIndirectCommand),
+    IndirectBuffer(std::move(device), maxDrawCount, sizeof(VkDrawIndirectCommand),
         persistentlyMapped, optional, sharing, std::move(allocator)),
     mappedData(persistentlyMapped ? memory->map<VkDrawIndirectCommand>() : nullptr)
 {}
@@ -65,7 +65,7 @@ uint32_t DrawIndirectBuffer::writeDrawCommand(uint32_t vertexCount,
         drawCmd->firstVertex = firstVertex;
         drawCmd->firstInstance = 0;
     }
-    return ++cmdCount;
+    return ++drawCount;
 }
 
 uint32_t DrawIndirectBuffer::writeDrawInstancedCommand(uint32_t vertexCount, uint32_t instanceCount,
@@ -80,7 +80,7 @@ uint32_t DrawIndirectBuffer::writeDrawInstancedCommand(uint32_t vertexCount, uin
         drawCmd->firstVertex = firstVertex;
         drawCmd->firstInstance = firstInstance;
     }
-    return ++cmdCount;
+    return ++drawCount;
 }
 
 uint32_t DrawIndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawCmd_) noexcept
@@ -88,15 +88,15 @@ uint32_t DrawIndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawC
     DrawIndirectCommand<VkDrawIndirectCommand> drawCmd(this, mappedData);
     if (drawCmd)
         *drawCmd = drawCmd_;
-    return ++cmdCount;
+    return ++drawCount;
 }
 
-DrawIndexedIndirectBuffer::DrawIndexedIndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDrawIndexedCommands,
+DrawIndexedIndirectBuffer::DrawIndexedIndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDrawIndexedCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     bool persistentlyMapped /* false */,
     const Descriptor& optional /* default */,
     const Sharing& sharing /* Sharing() */):
-    IndirectBuffer(std::move(device), maxDrawIndexedCommands, sizeof(VkDrawIndexedIndirectCommand),
+    IndirectBuffer(std::move(device), maxDrawIndexedCount, sizeof(VkDrawIndexedIndirectCommand),
         persistentlyMapped, optional, sharing, std::move(allocator)),
     mappedData(persistentlyMapped ? memory->map<VkDrawIndexedIndirectCommand>() : nullptr)
 {}
@@ -114,7 +114,7 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(uint32_t indexCount,
         drawIndexedCmd->vertexOffset = vertexOffset;
         drawIndexedCmd->firstInstance = 0;
     }
-    return ++cmdCount;
+    return ++drawCount;
 }
 
 uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedInstancedCommand(uint32_t indexCount, uint32_t instanceCount,
@@ -131,7 +131,7 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedInstancedCommand(uint32_t in
         drawIndexedCmd->vertexOffset = vertexOffset;
         drawIndexedCmd->firstInstance = firstInstance;
     }
-    return ++cmdCount;
+    return ++drawCount;
 }
 
 uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(const VkDrawIndexedIndirectCommand& drawIndexedCmd_) noexcept
@@ -139,16 +139,16 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(const VkDrawIndexedI
     DrawIndirectCommand<VkDrawIndexedIndirectCommand> drawIndexedCmd(this, mappedData);
     if (drawIndexedCmd)
         *drawIndexedCmd = drawIndexedCmd_;
-    return ++cmdCount;
+    return ++drawCount;
 }
 
 #if defined(VK_EXT_mesh_shader) || defined(VK_NV_mesh_shader)
-DrawMeshTasksIndirectBuffer::DrawMeshTasksIndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDrawMeshTasksCommands,
+DrawMeshTasksIndirectBuffer::DrawMeshTasksIndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDrawMeshTasksCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     bool persistentlyMapped /* false */,
     const Descriptor& optional /* default */,
     const Sharing& sharing /* Sharing() */):
-    IndirectBuffer(device, maxDrawMeshTasksCommands, extensionDependentStride(device),
+    IndirectBuffer(device, maxDrawMeshTasksCount, extensionDependentStride(device),
         persistentlyMapped, optional, sharing, std::move(allocator)),
     mappedData(persistentlyMapped ? memory->map() : nullptr),
     EXT_mesh_shader(false)
@@ -189,7 +189,7 @@ uint32_t DrawMeshTasksIndirectBuffer::writeDrawMeshTaskCommand(uint32_t groupCou
         }
     #endif // VK_NV_mesh_shader
     }
-    return ++cmdCount;
+    return ++drawCount;
 }
 
 std::size_t DrawMeshTasksIndirectBuffer::extensionDependentStride(std::shared_ptr<Device> device) noexcept
