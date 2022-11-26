@@ -27,21 +27,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ImageView::ImageView(std::shared_ptr<Image> resource,
+ImageView::ImageView(std::shared_ptr<Image> image,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     VkImageViewCreateFlags flags /* 0 */):
-    ImageView(std::move(resource), 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS, swizzle, flags)
+    ImageView(std::move(image), 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS, swizzle, flags)
 {}
 
-ImageView::ImageView(std::shared_ptr<Image> resource,
+ImageView::ImageView(std::shared_ptr<Image> image_,
     uint32_t baseMipLevel,
     uint32_t levelCount /* VK_REMAINING_MIP_LEVELS */,
     uint32_t baseArrayLayer /* 0 */,
     uint32_t layerCount /* VK_REMAINING_ARRAY_LAYERS */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     VkImageViewCreateFlags flags /* 0 */):
-    NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, resource->getDevice(), resource->getHostAllocator()),
-    image(std::move(resource)),
+    NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, image_->getDevice(), image_->getHostAllocator()),
+    image(std::move(image_)),
     flags(flags),
     baseMipLevel(baseMipLevel),
     levelCount(levelCount),

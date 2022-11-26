@@ -32,7 +32,7 @@ namespace magma
     class ImageView : public NonDispatchable<VkImageView>
     {
     public:
-        explicit ImageView(std::shared_ptr<Image> resource,
+        explicit ImageView(std::shared_ptr<Image> image,
             const VkComponentMapping& swizzle = {
                 // https://github.com/SaschaWillems/Vulkan/issues/160
                 VK_COMPONENT_SWIZZLE_IDENTITY,
@@ -40,7 +40,7 @@ namespace magma
                 VK_COMPONENT_SWIZZLE_IDENTITY,
                 VK_COMPONENT_SWIZZLE_IDENTITY},
             VkImageViewCreateFlags flags = 0);
-        explicit ImageView(std::shared_ptr<Image> resource,
+        explicit ImageView(std::shared_ptr<Image> image,
             uint32_t baseMipLevel,
             uint32_t levelCount = VK_REMAINING_MIP_LEVELS,
             uint32_t baseArrayLayer = 0,

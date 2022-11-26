@@ -29,12 +29,12 @@ MutableImageView::MutableImageView(std::shared_ptr<MutableImage> image, VkFormat
     MutableImageView(std::move(image), mutableFormat, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS)
 {}
 
-MutableImageView::MutableImageView(std::shared_ptr<MutableImage> image, VkFormat mutableFormat,
+MutableImageView::MutableImageView(std::shared_ptr<MutableImage> image_, VkFormat mutableFormat,
     uint32_t baseMipLevel,
     uint32_t levelCount /* VK_REMAINING_MIP_LEVELS */,
     uint32_t baseArrayLayer /* 0 */,
     uint32_t layerCount /* VK_REMAINING_ARRAY_LAYERS */):
-    ImageView(image, baseMipLevel, levelCount, baseArrayLayer, layerCount, 0),
+    ImageView(std::move(image_), baseMipLevel, levelCount, baseArrayLayer, layerCount, 0),
     mutableFormat(mutableFormat)
 {
     VkImageViewCreateInfo imageViewInfo;
