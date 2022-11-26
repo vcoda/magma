@@ -198,11 +198,7 @@ std::size_t DrawMeshTasksIndirectBuffer::extensionDependentStride(std::shared_pt
     if (device->extensionEnabled(VK_EXT_MESH_SHADER_EXTENSION_NAME))
         return sizeof(VkDrawMeshTasksIndirectCommandEXT);
 #endif
-#ifdef VK_NV_mesh_shader
-    if (device->extensionEnabled(VK_NV_MESH_SHADER_EXTENSION_NAME))
-        return sizeof(VkDrawMeshTasksIndirectCommandNV);
-#endif
-    return 0;
+    return sizeof(VkDrawMeshTasksIndirectCommandNV);
 }
 #endif // VK_EXT_mesh_shader || VK_NV_mesh_shader
 } // namespace magma
