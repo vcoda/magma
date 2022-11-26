@@ -89,13 +89,13 @@ namespace magma
         std::shared_ptr<const PhysicalDevice> getPhysicalDevice() const noexcept { return physicalDevice; }
         std::shared_ptr<ResourcePool> getResourcePool() noexcept { return resourcePool; }
         std::shared_ptr<const ResourcePool> getResourcePool() const noexcept { return resourcePool; }
-        const std::vector<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
-        const std::vector<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
+        const std::set<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
+        const std::set<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
         const VkPhysicalDeviceFeatures& getEnabledFeatures() const noexcept { return enabledFeatures; }
         template<typename PhysicalDeviceFeatures>
         const PhysicalDeviceFeatures *getEnabledExtendedFeatures() const noexcept;
-        // Utility methods
         bool extensionEnabled(const char *extensionName) const noexcept;
+        // TODO: move this to DeviceFeatures class?
         bool negativeViewportHeightEnabled(bool khronos) const noexcept;
         bool separateDepthStencilLayoutsEnabled() const noexcept;
         bool stippledLinesEnabled() const noexcept;
@@ -106,8 +106,8 @@ namespace magma
         std::shared_ptr<PhysicalDevice> physicalDevice;
         mutable std::vector<std::pair<DeviceQueueDescriptor, std::weak_ptr<Queue>>> queues;
         std::shared_ptr<ResourcePool> resourcePool;
-        std::vector<std::string> enabledLayers;
-        std::vector<std::string> enabledExtensions;
+        std::set<std::string> enabledLayers;
+        std::set<std::string> enabledExtensions;
         VkPhysicalDeviceFeatures enabledFeatures;
         std::vector<const VkBaseInStructure *> enabledExtendedFeatures;
     };

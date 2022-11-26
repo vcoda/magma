@@ -2044,13 +2044,14 @@ std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
     return createDevice(queueDescriptors, noLayers, swapchainExtension, noDeviceFeatures, noExtendedDeviceFeatures);
 }
 
-bool PhysicalDevice::checkExtensionSupport(const char *extensionName) const noexcept
+bool PhysicalDevice::extensionSupported(const char *extensionName) const noexcept
 {
     MAGMA_ASSERT(extensionName);
     MAGMA_ASSERT(strlen(extensionName));
     if (!extensionName || !strlen(extensionName))
         return false;
-    return extensions.find(extensionName) != extensions.end();
+    const auto it = extensions.find(extensionName);
+    return it != extensions.end();
 }
 
 bool PhysicalDevice::checkPinnedMemorySupport() const noexcept

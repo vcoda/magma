@@ -120,11 +120,13 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
         throw exception::IncompatibleDriver("failed to create instance");
     }
     MAGMA_THROW_FAILURE(result, "failed to create instance");
+    for (const auto& properties: enumerateExtensions())
+        extensions.emplace(properties.extensionName);
     // Store enabled layers and extensions
     for (const auto& layer: enabledLayers)
-        this->enabledLayers.emplace_back(layer);
+        this->enabledLayers.emplace(layer);
     for (const auto& extension: enabledExtensions)
-        this->enabledExtensions.emplace_back(extension);
+        this->enabledExtensions.emplace(extension);
 #ifdef MAGMA_DEBUG
     _refCountChecker.addRef();
 #endif
@@ -220,29 +222,21 @@ std::vector<VkExtensionProperties> Instance::enumerateExtensions(const char *lay
     return properties;
 }
 
-bool Instance::checkExtensionSupport(const char *extensionName) const
+bool Instance::extensionSupported(const char *extensionName) const noexcept
 {
     MAGMA_ASSERT(extensionName);
+    MAGMA_ASSERT(strlen(extensionName));
     if (!extensionName || !strlen(extensionName))
         return false;
-    if (extensions.empty())
-    {   // Query once and cache
-        const std::vector<VkExtensionProperties> extensionProperties = enumerateExtensions();
-        for (const auto& properties: extensionProperties)
-            extensions.emplace(properties.extensionName);
-    }
-    return extensions.find(extensionName) != extensions.end();
+    const auto it = extensions.find(extensionName);
+    return it != extensions.end();
 }
 
-bool Instance::extensionEnabled(const char *extensionName) const
+bool Instance::extensionEnabled(const char *extensionName) const noexcept
 {
-    if (!checkExtensionSupport(extensionName))
+    if (!extensionSupported(extensionName))
         return false;
-    auto it = std::find_if(enabledExtensions.begin(), enabledExtensions.end(),
-        [extensionName](const std::string& name)
-        {
-            return name == extensionName;
-        });
+    const auto it = enabledExtensions.find(extensionName);
     return it != enabledExtensions.end();
 }
 } // namespace magma

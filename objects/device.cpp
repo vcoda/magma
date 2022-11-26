@@ -95,10 +95,10 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     for (const auto& desc : queueDescriptors)
         queues.emplace_back(desc, std::weak_ptr<Queue>());
     // Store enabled layers and extensions
-    for (const auto& layer : enabledLayers)
-        this->enabledLayers.emplace_back(layer);
-    for (const auto& extension : enabledExtensions)
-        this->enabledExtensions.emplace_back(extension);
+    for (const auto& layer: enabledLayers)
+        this->enabledLayers.emplace(layer);
+    for (const auto& extension: enabledExtensions)
+        this->enabledExtensions.emplace(extension);
 }
 
 Device::~Device()
@@ -300,13 +300,9 @@ DeviceFaultInfo Device::getFaultInfo() const
 
 bool Device::extensionEnabled(const char *extensionName) const noexcept
 {
-    if (!physicalDevice->checkExtensionSupport(extensionName))
+    if (!physicalDevice->extensionSupported(extensionName))
         return false;
-    auto it = std::find_if(enabledExtensions.begin(), enabledExtensions.end(),
-        [extensionName](const std::string& name)
-        {
-            return name == extensionName;
-        });
+    const auto it = enabledExtensions.find(extensionName);
     return it != enabledExtensions.end();
 }
 

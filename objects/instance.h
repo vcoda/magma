@@ -55,15 +55,15 @@ namespace magma
         static std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr);
         // Non-API
         uint32_t getApiVersion() const noexcept { return apiVersion; }
-        const std::vector<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
-        const std::vector<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
-        bool checkExtensionSupport(const char *extensionName) const;
-        bool extensionEnabled(const char *extensionName) const;
+        const std::set<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
+        const std::set<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
+        bool extensionSupported(const char *extensionName) const noexcept;
+        bool extensionEnabled(const char *extensionName) const noexcept;
 
     private:
         const uint32_t apiVersion;
-        std::vector<std::string> enabledLayers;
-        std::vector<std::string> enabledExtensions;
-        mutable std::set<std::string> extensions; // Cached implicit extensions
+        std::set<std::string> extensions;
+        std::set<std::string> enabledLayers;
+        std::set<std::string> enabledExtensions;
     };
 } // namespace magma
