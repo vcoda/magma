@@ -168,21 +168,21 @@ namespace magma
             uint32_t firstIndex,
             int32_t vertexOffset,
             uint32_t firstInstance) const noexcept;
-        void drawIndirect(const std::shared_ptr<DrawIndirectBuffer>& buffer) const noexcept;
-        void drawIndexedIndirect(const std::shared_ptr<DrawIndexedIndirectBuffer>& buffer) const noexcept;
+        void drawIndirect(const std::shared_ptr<DrawIndirectBuffer>& buffer,
+            VkDeviceSize offset = 0) const noexcept;
+        void drawIndexedIndirect(const std::shared_ptr<DrawIndexedIndirectBuffer>& buffer,
+            VkDeviceSize offset = 0) const noexcept;
     #if defined(VK_KHR_draw_indirect_count) || defined(VK_AMD_draw_indirect_count)
-        void drawIndirectCount(const std::shared_ptr<Buffer>& buffer,
-            VkDeviceSize offset,
+        void drawIndirectCount(const std::shared_ptr<DrawIndirectBuffer>& buffer,
             const std::shared_ptr<Buffer>& countBuffer,
-            VkDeviceSize countBufferOffset,
-            uint32_t maxDrawCount) const noexcept;
-    void drawIndexedIndirectCount(const std::shared_ptr<Buffer>& buffer,
-            VkDeviceSize offset,
+            VkDeviceSize offset = 0,
+            VkDeviceSize countBufferOffset = 0) const noexcept;
+        void drawIndexedIndirectCount(const std::shared_ptr<DrawIndexedIndirectBuffer>& buffer,
             const std::shared_ptr<Buffer>& countBuffer,
-            VkDeviceSize countBufferOffset,
-            uint32_t maxDrawCount) const noexcept;
+            VkDeviceSize offset = 0,
+            VkDeviceSize countBufferOffset = 0) const noexcept;
     #endif // VK_KHR_draw_indirect_count || VK_AMD_draw_indirect_count
-#ifdef VK_EXT_multi_draw
+    #ifdef VK_EXT_multi_draw
         void drawMulti(const std::vector<VkMultiDrawInfoEXT>& vertexInfo) const noexcept;
         void drawMultiInstanced(const std::vector<VkMultiDrawInfoEXT>& vertexInfo,
             uint32_t instanceCount,
@@ -193,15 +193,15 @@ namespace magma
             uint32_t instanceCount,
             uint32_t firstInstance,
             const std::vector<int32_t>& vertexOffsets = {}) const noexcept;
-#endif // VK_EXT_multi_draw
-#ifdef VK_EXT_transform_feedback
+    #endif // VK_EXT_multi_draw
+    #ifdef VK_EXT_transform_feedback
         void drawIndirectByteCount(uint32_t instanceCount,
             uint32_t firstInstance,
             const std::shared_ptr<TransformFeedbackCounterBuffer>& counterBuffer,
             VkDeviceSize counterBufferOffset,
             uint32_t counterOffset,
             uint32_t vertexStride) const noexcept;
-#endif // VK_EXT_transform_feedback
+    #endif // VK_EXT_transform_feedback
     #if defined(VK_EXT_mesh_shader) || defined(VK_NV_mesh_shader)
         void drawMeshTasks(uint32_t groupCountX,
             uint32_t groupCountY = 1,
@@ -217,7 +217,7 @@ namespace magma
             uint32_t groupCountY,
             uint32_t groupCountZ) const noexcept;
         void dispatchIndirect(const std::shared_ptr<Buffer>& buffer,
-            VkDeviceSize offset) const noexcept;
+            VkDeviceSize offset = 0) const noexcept;
 
         void copyBuffer(const std::shared_ptr<const Buffer>& srcBuffer,
             const std::shared_ptr<Buffer>& dstBuffer,

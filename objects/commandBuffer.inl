@@ -166,52 +166,54 @@ inline void CommandBuffer::drawIndexedInstanced(uint32_t indexCount, uint32_t in
     vkCmdDrawIndexed(handle, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
 }
 
-inline void CommandBuffer::drawIndirect(const std::shared_ptr<DrawIndirectBuffer>& buffer) const noexcept
+inline void CommandBuffer::drawIndirect(const std::shared_ptr<DrawIndirectBuffer>& buffer,
+    VkDeviceSize offset /* 0 */) const noexcept
 {
-    vkCmdDrawIndirect(handle, *buffer, 0, buffer->getDrawCount(), buffer->getStride());
+    vkCmdDrawIndirect(handle, *buffer, offset, buffer->getDrawCount(), buffer->getStride());
 }
 
-inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<DrawIndexedIndirectBuffer>& buffer) const noexcept
+inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<DrawIndexedIndirectBuffer>& buffer,
+    VkDeviceSize offset /* 0 */) const noexcept
 {
-    vkCmdDrawIndexedIndirect(handle, *buffer, 0, buffer->getDrawCount(), buffer->getStride());
+    vkCmdDrawIndexedIndirect(handle, *buffer, offset, buffer->getDrawCount(), buffer->getStride());
 }
 
 #if defined(VK_KHR_draw_indirect_count) || defined(VK_AMD_draw_indirect_count)
-inline void CommandBuffer::drawIndirectCount(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset,
-    const std::shared_ptr<Buffer>& countBuffer, VkDeviceSize countBufferOffset, uint32_t maxDrawCount) const noexcept
+inline void CommandBuffer::drawIndirectCount(const std::shared_ptr<DrawIndirectBuffer>& buffer, const std::shared_ptr<Buffer>& countBuffer,
+    VkDeviceSize offset /* 0 */,
+    VkDeviceSize countBufferOffset /* 0 */) const noexcept
 {
-    constexpr uint32_t stride = sizeof(VkDrawIndirectCommand);
 #ifdef VK_KHR_draw_indirect_count
     MAGMA_DEVICE_EXTENSION(vkCmdDrawIndirectCountKHR);
     if (vkCmdDrawIndirectCountKHR)
-        vkCmdDrawIndirectCountKHR(handle, *buffer, offset, *countBuffer, countBufferOffset, maxDrawCount, stride);
+        vkCmdDrawIndirectCountKHR(handle, *buffer, offset, *countBuffer, countBufferOffset, buffer->getDrawCount(), buffer->getStride());
     else
 #endif // VK_KHR_draw_indirect_count
     {
-#ifdef VK_AMD_draw_indirect_count
+    #ifdef VK_AMD_draw_indirect_count
         MAGMA_DEVICE_EXTENSION(vkCmdDrawIndirectCountAMD);
         if (vkCmdDrawIndirectCountAMD)
-            vkCmdDrawIndirectCountAMD(handle, *buffer, offset, *countBuffer, countBufferOffset, maxDrawCount, stride);
-#endif // VK_AMD_draw_indirect_count
+            vkCmdDrawIndirectCountAMD(handle, *buffer, offset, *countBuffer, countBufferOffset, buffer->getDrawCount(), buffer->getStride());
+    #endif // VK_AMD_draw_indirect_count
     }
 }
 
-inline void CommandBuffer::drawIndexedIndirectCount(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset,
-    const std::shared_ptr<Buffer>& countBuffer, VkDeviceSize countBufferOffset, uint32_t maxDrawCount) const noexcept
+inline void CommandBuffer::drawIndexedIndirectCount(const std::shared_ptr<DrawIndexedIndirectBuffer>& buffer, const std::shared_ptr<Buffer>& countBuffer,
+    VkDeviceSize offset /* 0 */,
+    VkDeviceSize countBufferOffset /* 0 */) const noexcept
 {
-    constexpr uint32_t stride = sizeof(VkDrawIndexedIndirectCommand);
 #ifdef VK_KHR_draw_indirect_count
     MAGMA_DEVICE_EXTENSION(vkCmdDrawIndexedIndirectCountKHR);
     if (vkCmdDrawIndexedIndirectCountKHR)
-        vkCmdDrawIndexedIndirectCountKHR(handle, *buffer, offset, *countBuffer, countBufferOffset, maxDrawCount, stride);
+        vkCmdDrawIndexedIndirectCountKHR(handle, *buffer, offset, *countBuffer, countBufferOffset, buffer->getDrawCount(), buffer->getStride());
     else
 #endif // VK_KHR_draw_indirect_count
     {
-#ifdef VK_AMD_draw_indirect_count
+    #ifdef VK_AMD_draw_indirect_count
         MAGMA_DEVICE_EXTENSION(vkCmdDrawIndexedIndirectCountAMD);
         if (vkCmdDrawIndexedIndirectCountAMD)
-            vkCmdDrawIndexedIndirectCountAMD(handle, *buffer, offset, *countBuffer, countBufferOffset, maxDrawCount, stride);
-#endif // VK_AMD_draw_indirect_count
+            vkCmdDrawIndexedIndirectCountAMD(handle, *buffer, offset, *countBuffer, countBufferOffset, buffer->getDrawCount(), buffer->getStride());
+    #endif // VK_AMD_draw_indirect_count
     }
 }
 #endif // VK_KHR_draw_indirect_count || VK_AMD_draw_indirect_count
@@ -326,7 +328,8 @@ inline void CommandBuffer::dispatch(uint32_t groupCountX, uint32_t groupCountY, 
     vkCmdDispatch(handle, groupCountX, groupCountY, groupCountZ);
 }
 
-inline void CommandBuffer::dispatchIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset) const noexcept
+inline void CommandBuffer::dispatchIndirect(const std::shared_ptr<Buffer>& buffer,
+    VkDeviceSize offset /* 0 */) const noexcept
 {
     vkCmdDispatchIndirect(handle, *buffer, offset);
 }
