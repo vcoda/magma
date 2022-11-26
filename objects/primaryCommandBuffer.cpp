@@ -21,6 +21,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+void PrimaryCommandBuffer::executeCommands(const std::shared_ptr<CommandBuffer>& cmdBuffer) noexcept
+{
+    MAGMA_ASSERT(cmdBuffer->secondary());
+    const VkCommandBuffer dereferencedCmdBuffers[1] = {*cmdBuffer};
+    vkCmdExecuteCommands(handle, 1, dereferencedCmdBuffers);
+}
+
 void PrimaryCommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept
 {
     MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCmdBuffers, cmdBuffers.size());
