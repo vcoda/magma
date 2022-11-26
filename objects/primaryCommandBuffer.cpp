@@ -38,12 +38,10 @@ void PrimaryCommandBuffer::executeCommands(const std::shared_ptr<CommandBuffer>&
 
 void PrimaryCommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept
 {
+    MAGMA_ASSERT_FOR_EACH(cmdBuffers, cmdBuffer, cmdBuffer->secondary());
     MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCmdBuffers, cmdBuffers.size());
-    for (const auto& cmdBuffer : cmdBuffers)
-    {
-        MAGMA_ASSERT(cmdBuffer->secondary());
+    for (const auto& cmdBuffer: cmdBuffers)
         dereferencedCmdBuffers.put(*cmdBuffer);
-    }
     vkCmdExecuteCommands(handle, dereferencedCmdBuffers.size(), dereferencedCmdBuffers);
 }
 } // namespace magma
