@@ -142,6 +142,28 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(const VkDrawIndexedI
     return ++drawCount;
 }
 
+DispatchIndirectBuffer::DispatchIndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDispatchCommands,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    bool persistentlyMapped /* false */,
+    const Descriptor& optional /* default */,
+    const Sharing& sharing /* Sharing() */):
+    IndirectBuffer(std::move(device), maxDispatchCommands, sizeof(VkDispatchIndirectCommand),
+        persistentlyMapped, optional, sharing, std::move(allocator)),
+    mappedData(persistentlyMapped ? memory->map<VkDispatchIndirectCommand>() : nullptr)
+{}
+
+uint32_t DispatchIndirectBuffer::writeDispatchCommand(uint32_t x, uint32_t y, uint32_t z) noexcept
+{
+    DrawIndirectCommand<VkDispatchIndirectCommand> dispatchCmd(this, mappedData);
+    if (dispatchCmd)
+    {
+        dispatchCmd->x = x;
+        dispatchCmd->y = y;
+        dispatchCmd->z = z;
+    }
+    return ++drawCount;
+}
+
 #if defined(VK_EXT_mesh_shader) || defined(VK_NV_mesh_shader)
 DrawMeshTasksIndirectBuffer::DrawMeshTasksIndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDrawMeshTasksCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,

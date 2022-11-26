@@ -95,6 +95,23 @@ namespace magma
         VkDrawIndexedIndirectCommand *const mappedData;
     };
 
+    /* An array of VkDispatchIndirectCommand structures. */
+
+    class DispatchIndirectBuffer : public IndirectBuffer
+    {
+    public:
+        explicit DispatchIndirectBuffer(std::shared_ptr<Device> device,
+            uint32_t maxDispatchCommands,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            bool persistentlyMapped = false,
+            const Descriptor& optional = Descriptor(),
+            const Sharing& sharing = Sharing());
+        uint32_t writeDispatchCommand(uint32_t x, uint32_t y, uint32_t z) noexcept;
+
+    private:
+        VkDispatchIndirectCommand *const mappedData;
+    };
+
     /* An array of VkDrawMeshTasksIndirectCommand structures. */
 
 #if defined(VK_EXT_mesh_shader) || defined(VK_NV_mesh_shader)
