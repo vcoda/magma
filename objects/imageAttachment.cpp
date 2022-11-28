@@ -17,18 +17,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "image2DAttachment.h"
+#include "imageAttachment.h"
 
 namespace magma
 {
 ColorAttachment::ColorAttachment(std::shared_ptr<Device> device,
-    VkFormat colorFormat,
-    const VkExtent2D& extent,
-    uint32_t mipLevels,
-    uint32_t samples,
+    VkFormat colorFormat, const VkExtent2D& extent, uint32_t mipLevels, uint32_t samples,
+    bool sampled,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
-    bool sampled /* true */):
+    const Descriptor& optional /* default */):
     Image2D(std::move(device), colorFormat, extent, mipLevels,
         1, // arrayLayers,
         samples,
@@ -39,13 +36,10 @@ ColorAttachment::ColorAttachment(std::shared_ptr<Device> device,
 {}
 
 DepthStencilAttachment::DepthStencilAttachment(std::shared_ptr<Device> device,
-    VkFormat depthStencilFormat,
-    const VkExtent2D& extent,
-    uint32_t mipLevels,
-    uint32_t samples,
+    VkFormat depthStencilFormat, const VkExtent2D& extent, uint32_t mipLevels, uint32_t samples,
+    bool sampled,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
-    bool sampled /* false */):
+    const Descriptor& optional /* default */):
     Image2D(std::move(device), depthStencilFormat, extent, mipLevels,
         1, // arrayLayers,
         samples,

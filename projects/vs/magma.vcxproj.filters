@@ -414,9 +414,6 @@
     <ClInclude Include="..\..\auxiliary\graphicsPipelineCache.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\image2DAttachment.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\helpers\checkFeatureSupport.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
@@ -747,6 +744,9 @@
     <ClInclude Include="..\..\objects\mutableImage.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\imageAttachment.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -995,9 +995,6 @@
     <ClCompile Include="..\..\auxiliary\graphicsPipelineCache.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\objects\image2DAttachment.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\helpers\checkFeatureSupport.cpp">
       <Filter>Source Files\helpers</Filter>
     </ClCompile>
@@ -1161,6 +1158,9 @@
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\objects\mutableImage.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\imageAttachment.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>

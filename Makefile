@@ -106,8 +106,8 @@ MAGMA_OBJS= \
 	objects/image1DArray.o \
 	objects/image2D.o \
 	objects/image2DArray.o \
-	objects/image2DAttachment.o \
 	objects/image3D.o \
+	objects/imageAttachment.o \
 	objects/imageCube.o \
 	objects/imagelessFramebuffer.o \
 	objects/imageView.o \

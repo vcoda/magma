@@ -55,7 +55,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/image1DArray.h"
 #include "objects/image2D.h"
 #include "objects/image2DArray.h"
-#include "objects/image2DAttachment.h"
+#include "objects/imageAttachment.h"
 #include "objects/image3D.h"
 #include "objects/imageCube.h"
 #include "objects/imagelessFramebuffer.h"

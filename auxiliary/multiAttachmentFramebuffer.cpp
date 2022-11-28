@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "multiAttachmentFramebuffer.h"
 #include "../objects/device.h"
-#include "../objects/image2DAttachment.h"
+#include "../objects/imageAttachment.h"
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
 #include "../objects/framebuffer.h"
@@ -46,8 +46,9 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     for (const VkFormat colorFormat : colorAttachmentFormats)
     {   // Create color attachment
         imageFormatList.viewFormats.back() = colorFormat;
-        attachments.emplace_back(std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1,
-            allocator, imageFormatList, true));
+        constexpr bool colorSampled = true;
+        attachments.emplace_back(std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, colorSampled,
+            allocator, imageFormatList));
         // Create color view
         constexpr VkComponentMapping dontSwizzle = {
             VK_COMPONENT_SWIZZLE_IDENTITY,
@@ -60,8 +61,8 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil attachment
         imageFormatList.viewFormats.back() = depthStencilFormat;
-        attachments.emplace_back(std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, 1,
-            allocator, imageFormatList, depthSampled));
+        attachments.emplace_back(std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, 1, depthSampled,
+            allocator, imageFormatList));
         // Create depth/stencil view
         attachmentViews.push_back(std::make_shared<ImageView>(attachments.back()));
     }

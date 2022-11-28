@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Two-dimensional image that can be used as color attachment to framebuffer. */
+    /* Image that can be used as color attachment of the framebuffer. */
 
     class ColorAttachment : public Image2D
     {
@@ -30,12 +30,12 @@ namespace magma
             const VkExtent2D& extent,
             uint32_t mipLevels,
             uint32_t samples,
+            bool sampled,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
-            bool sampled = true);
+            const Descriptor& optional = Descriptor());
     };
 
-    /* Two-dimensional image that can be used as depth/stencil attachment to framebuffer. */
+    /* Image that can be used as depth/stencil attachment of the framebuffer. */
 
     class DepthStencilAttachment : public Image2D
     {
@@ -45,8 +45,8 @@ namespace magma
             const VkExtent2D& extent,
             uint32_t mipLevels,
             uint32_t samples,
+            bool sampled,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
-            bool sampled = false);
+            const Descriptor& optional = Descriptor());
     };
 } // namespace magma

@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "depthFramebuffer.h"
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
-#include "../objects/image2DAttachment.h"
+#include "../objects/imageAttachment.h"
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
 #include "../objects/framebuffer.h"
@@ -37,12 +37,9 @@ DepthFramebuffer::DepthFramebuffer(std::shared_ptr<Device> device, const VkForma
     Image::Descriptor imageFormatList;
     imageFormatList.viewFormats.push_back(depthFormat);
     // Create depth attachment
-    depth = std::make_shared<DepthStencilAttachment>(device, depthFormat, extent,
-         1, // mipLevels
-         1, // samples
-         allocator,
-         imageFormatList,
-         true); // VK_IMAGE_USAGE_SAMPLED_BIT
+    constexpr bool sampled = true;
+    depth = std::make_shared<DepthStencilAttachment>(device, depthFormat, extent, 1, 1, sampled,
+        allocator, imageFormatList);
     // Create depth view
     depthView = std::make_shared<ImageView>(depth);
     // We should be able to read depth in the shader when a render pass instance ends

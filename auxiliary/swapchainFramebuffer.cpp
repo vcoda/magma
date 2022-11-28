@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "swapchainFramebuffer.h"
 #include "../objects/device.h"
 #include "../objects/swapchainImage.h"
-#include "../objects/image2DAttachment.h"
+#include "../objects/imageAttachment.h"
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
 #include "../objects/framebuffer.h"
@@ -45,8 +45,9 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainImage> color
         imageFormatList.viewFormats.push_back(colorFormat);
         // Create depth/stencil attachment
         const VkExtent2D extent{color->getMipExtent(0).width, color->getMipExtent(0).height};
-        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, color->getSamples(),
-            allocator, imageFormatList, false);
+        constexpr bool sampled = false;
+        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, color->getSamples(), sampled,
+            allocator, imageFormatList);
         depthStencilView = std::make_shared<ImageView>(depthStencil);
     }
     const AttachmentDescription colorAttachment(color->getFormat(), 1,

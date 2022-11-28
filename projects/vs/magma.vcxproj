@@ -279,7 +279,7 @@
     <ClInclude Include="..\..\objects\image1DArray.h" />
     <ClInclude Include="..\..\objects\image2D.h" />
     <ClInclude Include="..\..\objects\image2DArray.h" />
-    <ClInclude Include="..\..\objects\image2DAttachment.h" />
+    <ClInclude Include="..\..\objects\imageAttachment.h" />
     <ClInclude Include="..\..\objects\image3D.h" />
     <ClInclude Include="..\..\objects\imageCube.h" />
     <ClInclude Include="..\..\objects\fragmentDensityMap.h" />
@@ -450,7 +450,7 @@
     <ClCompile Include="..\..\objects\image1DArray.cpp" />
     <ClCompile Include="..\..\objects\image2D.cpp" />
     <ClCompile Include="..\..\objects\image2DArray.cpp" />
-    <ClCompile Include="..\..\objects\image2DAttachment.cpp" />
+    <ClCompile Include="..\..\objects\imageAttachment.cpp" />
     <ClCompile Include="..\..\objects\image3D.cpp" />
     <ClCompile Include="..\..\objects\imageCube.cpp" />
     <ClCompile Include="..\..\objects\fragmentDensityMap.cpp" />

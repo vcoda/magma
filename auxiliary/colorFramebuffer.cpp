@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "colorFramebuffer.h"
 #include "../objects/device.h"
-#include "../objects/image2DAttachment.h"
+#include "../objects/imageAttachment.h"
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
 #include "../objects/framebuffer.h"
@@ -49,13 +49,14 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
     Image::Descriptor imageFormatList;
     imageFormatList.viewFormats.push_back(colorFormat);
     // Create color attachment
-    color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1,
-        allocator, imageFormatList, true);
+    constexpr bool colorSampled = true;
+    color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, colorSampled,
+        allocator, imageFormatList);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil attachment
         imageFormatList.viewFormats.back() = depthStencilFormat;
-        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, 1,
-            allocator, imageFormatList, depthSampled);
+        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, 1, depthSampled,
+            allocator, imageFormatList);
     }
     // Create color view
     colorView = std::make_shared<ImageView>(color, swizzle);

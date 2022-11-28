@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "colorMultisampleFramebuffer.h"
 #include "../objects/device.h"
-#include "../objects/image2DAttachment.h"
+#include "../objects/imageAttachment.h"
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
 #include "../objects/framebuffer.h"
@@ -56,16 +56,17 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
     Image::Descriptor imageFormatList;
     imageFormatList.viewFormats.push_back(colorFormat);
     // Create multisample color attachment
-    msaaColor = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, sampleCount,
-        allocator, imageFormatList, msaaColorSampled); // TODO: should be true?
+    msaaColor = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, sampleCount, msaaColorSampled, // TODO: recheck it
+        allocator, imageFormatList);
     // Create color resolve attachment
-    resolve = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1,
-        allocator, imageFormatList, true);
+    constexpr bool colorSampled = true;
+    resolve = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, colorSampled,
+        allocator, imageFormatList);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create multisample depth attachment
         imageFormatList.viewFormats.back() = depthStencilFormat;
         msaaDepthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, sampleCount,
-            allocator, imageFormatList, msaaDepthSampled || msaaStencilSampled);
+            msaaDepthSampled || msaaStencilSampled, allocator, imageFormatList);
     }
     // Create color and resolve views
     msaaColorView = std::make_shared<ImageView>(msaaColor, swizzle);

@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
 #include "../objects/framebuffer.h"
-#include "../objects/image2DAttachment.h"
+#include "../objects/imageAttachment.h"
 #include "../objects/imageView.h"
 #include "../objects/renderPass.h"
 #include "../objects/shaderModule.h"
@@ -72,7 +72,8 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     Image::Descriptor imageFormatList;
     imageFormatList.viewFormats.push_back(format);
     // Create high-precision color buffer
-    accumBuffer = std::make_shared<ColorAttachment>(device, format, extent, 1, 1, allocator, imageFormatList);
+    constexpr bool sampled = true;
+    accumBuffer = std::make_shared<ColorAttachment>(device, format, extent, 1, 1, sampled, allocator, imageFormatList);
     bufferView = std::make_shared<ImageView>(accumBuffer);
     framebuffer = std::make_shared<Framebuffer>(renderPass, bufferView, hostAllocator, 0);
     // Create descriptor set for fragment shader
