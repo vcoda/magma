@@ -40,7 +40,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shar
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkFramebufferCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Framebuffer(std::move(renderPass), attachment->getExtent(), layerCount, std::move(allocator))
+    Framebuffer(std::move(renderPass), attachment->getExtent(), attachment->getArrayLayerCount(), std::move(allocator))
 {
     const VkImageView imageView = *attachment;
     VkFramebufferCreateInfo framebufferInfo;
