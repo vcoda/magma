@@ -34,11 +34,7 @@ Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, cons
         mipLevels,
         arrayLayers,
         1, // samples
-    #ifdef VK_KHR_maintenance1
-        VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT_KHR,
-    #else
-        0,
-    #endif
+        0, // flags
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_TILING_OPTIMAL,
         optional,
@@ -56,11 +52,7 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
         MAGMA_COUNT(mipOffsets) / arrayLayers, // mipLevels
         arrayLayers,
         1, // samples
-    #ifdef VK_KHR_maintenance1
-        VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT_KHR,
-    #else
-        0,
-    #endif
+        0, // flags
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_TILING_OPTIMAL,
         optional,
@@ -83,11 +75,7 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
         MAGMA_COUNT(mipSizes), // mipLevels
         MAGMA_COUNT(mipData), // arrayLayers
         1, // samples
-    #ifdef VK_KHR_maintenance1
-        VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT_KHR,
-    #else
-        0,
-    #endif
+        0, // flags
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_TILING_OPTIMAL,
         optional,
