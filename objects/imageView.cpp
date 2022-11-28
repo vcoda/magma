@@ -146,6 +146,10 @@ VkImageViewType ImageView::imageToViewType(VkImageType imageType, uint32_t array
             return VK_IMAGE_VIEW_TYPE_2D;
         }
     case VK_IMAGE_TYPE_3D:
+    #ifdef VK_KHR_maintenance1
+        if (flags & VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT_KHR)
+            return VK_IMAGE_VIEW_TYPE_2D_ARRAY;
+    #endif
         return VK_IMAGE_VIEW_TYPE_3D;
     }
     return VK_IMAGE_VIEW_TYPE_MAX_ENUM;

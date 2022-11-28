@@ -50,4 +50,18 @@ DepthStencilAttachment::DepthStencilAttachment(std::shared_ptr<Device> device,
         VK_IMAGE_TILING_OPTIMAL,
         optional, sharing, std::move(allocator))
 {}
+
+#ifdef VK_KHR_maintenance1
+VolumeAttachment::VolumeAttachment(std::shared_ptr<Device> device,
+    VkFormat format, const VkExtent3D& extent, bool sampled,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Descriptor& optional /* default */,
+    const Sharing& sharing /* default */):
+    Image3D(std::move(device), format, extent,
+        VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT_KHR,
+        VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | (sampled ? VK_IMAGE_USAGE_SAMPLED_BIT : 0),
+        VK_IMAGE_TILING_OPTIMAL,
+        optional, sharing, std::move(allocator))
+{}
+#endif // VK_KHR_maintenance1
 } // namespace magma

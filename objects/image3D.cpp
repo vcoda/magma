@@ -68,4 +68,14 @@ Image3D::Image3D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), {region},
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
+
+Image3D::Image3D(std::shared_ptr<Device> device, VkFormat format, const VkExtent3D& extent,
+    VkImageCreateFlags flags, VkImageUsageFlags usage, VkImageTiling tiling,
+    const Descriptor& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
+    Image(std::move(device), VK_IMAGE_TYPE_3D, format, extent,
+        1, // mipLevels,
+        1, // arrayLayers
+        1, // samples
+        flags, usage, tiling, optional, sharing, std::move(allocator))
+{}
 } // namespace magma

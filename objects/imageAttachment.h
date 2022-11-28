@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "image2D.h"
+#include "image3D.h"
 
 namespace magma
 {
@@ -51,4 +52,20 @@ namespace magma
             const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
     };
+
+    /* 3D image that comprises of a number of 2D slices which can be attached to the framebuffer. */
+
+#ifdef VK_KHR_maintenance1
+    class VolumeAttachment : public Image3D
+    {
+    public:
+        explicit VolumeAttachment(std::shared_ptr<Device> device,
+            VkFormat format,
+            const VkExtent3D& extent,
+            bool sampled,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Descriptor& optional = Descriptor(),
+            const Sharing& sharing = Sharing());
+    };
+#endif // VK_KHR_maintenance1
 } // namespace magma

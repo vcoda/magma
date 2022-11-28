@@ -39,5 +39,16 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
+
+    protected:
+        Image3D(std::shared_ptr<Device> device,
+            VkFormat format,
+            const VkExtent3D& extent,
+            VkImageCreateFlags flags,
+            VkImageUsageFlags usage,
+            VkImageTiling tiling,
+            const Descriptor& optional,
+            const Sharing& sharing,
+            std::shared_ptr<Allocator> allocator);
     };
 } // namespace magma
