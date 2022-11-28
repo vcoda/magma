@@ -32,7 +32,8 @@ namespace magma
             uint32_t samples,
             bool sampled,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor());
+            const Descriptor& optional = Descriptor(),
+            const Sharing& sharing = Sharing());
     };
 
     /* Image that can be used as depth/stencil attachment of the framebuffer. */
@@ -47,6 +48,7 @@ namespace magma
             uint32_t samples,
             bool sampled,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor());
+            const Descriptor& optional = Descriptor(),
+            const Sharing& sharing = Sharing());
     };
 } // namespace magma
