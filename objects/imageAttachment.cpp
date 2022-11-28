@@ -51,6 +51,36 @@ DepthStencilAttachment::DepthStencilAttachment(std::shared_ptr<Device> device,
         optional, sharing, std::move(allocator))
 {}
 
+#ifdef VK_EXT_attachment_feedback_loop_layout
+FeedbackColorAttachment::FeedbackColorAttachment(std::shared_ptr<Device> device,
+    VkFormat colorFormat, const VkExtent2D& extent, uint32_t mipLevels, uint32_t samples,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Descriptor& optional /* default */,
+    const Sharing& sharing /* default */):
+    Image2D(std::move(device), colorFormat, extent, mipLevels,
+        1, // arrayLayers,
+        samples,
+        0, // flags
+        VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_ATTACHMENT_FEEDBACK_LOOP_BIT_EXT | VK_IMAGE_USAGE_SAMPLED_BIT,
+        VK_IMAGE_TILING_OPTIMAL,
+        optional, sharing, std::move(allocator))
+{}
+
+FeedbackDepthStencilAttachment::FeedbackDepthStencilAttachment(std::shared_ptr<Device> device,
+    VkFormat depthStencilFormat, const VkExtent2D& extent, uint32_t mipLevels, uint32_t samples,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Descriptor& optional /* default */,
+    const Sharing& sharing /* default */):
+    Image2D(std::move(device), depthStencilFormat, extent, mipLevels,
+        1, // arrayLayers,
+        samples,
+        0, // flags
+        VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_ATTACHMENT_FEEDBACK_LOOP_BIT_EXT | VK_IMAGE_USAGE_SAMPLED_BIT,
+        VK_IMAGE_TILING_OPTIMAL,
+        optional, sharing, std::move(allocator))
+{}
+#endif // VK_EXT_attachment_feedback_loop_layout
+
 #ifdef VK_KHR_maintenance1
 VolumeAttachment::VolumeAttachment(std::shared_ptr<Device> device,
     VkFormat format, const VkExtent3D& extent, bool sampled,

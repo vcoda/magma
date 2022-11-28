@@ -86,6 +86,10 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(UnnormalizedSampler)
     MAGMA_TYPEDEF_SHARED_PTR(VertexBuffer)
 
+#ifdef VK_EXT_attachment_feedback_loop_layout
+    MAGMA_TYPEDEF_SHARED_PTR(FeedbackColorAttachment)
+    MAGMA_TYPEDEF_SHARED_PTR(FeedbackDepthStencilAttachment)
+#endif
 #ifdef VK_EXT_conditional_rendering
     MAGMA_TYPEDEF_SHARED_PTR(ConditionalRenderingBuffer)
 #endif
@@ -129,6 +133,9 @@ namespace magma
 #endif
 #ifdef VK_KHR_imageless_framebuffer
     MAGMA_TYPEDEF_SHARED_PTR(ImagelessFramebuffer)
+#endif
+#ifdef VK_KHR_maintenance1
+    MAGMA_TYPEDEF_SHARED_PTR(VolumeAttachment)
 #endif
 #ifdef VK_KHR_multiview
     MAGMA_TYPEDEF_SHARED_PTR(MultiviewRenderPass)

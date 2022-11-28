@@ -53,6 +53,37 @@ namespace magma
             const Sharing& sharing = Sharing());
     };
 
+    /* Framebuffer attachment that is capable to both render to and sample/fetch from
+       the same subresource of an image in a given render pass. */
+
+#ifdef VK_EXT_attachment_feedback_loop_layout
+    class FeedbackColorAttachment : public Image2D
+    {
+    public:
+        explicit FeedbackColorAttachment(std::shared_ptr<Device> device,
+            VkFormat colorFormat,
+            const VkExtent2D& extent,
+            uint32_t mipLevels,
+            uint32_t samples,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Descriptor& optional = Descriptor(),
+            const Sharing& sharing = Sharing());
+    };
+
+    class FeedbackDepthStencilAttachment : public Image2D
+    {
+    public:
+        explicit FeedbackDepthStencilAttachment(std::shared_ptr<Device> device,
+            VkFormat depthStencilFormat,
+            const VkExtent2D& extent,
+            uint32_t mipLevels,
+            uint32_t samples,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Descriptor& optional = Descriptor(),
+            const Sharing& sharing = Sharing());
+    };
+#endif // VK_EXT_attachment_feedback_loop_layout
+
     /* 3D image that comprises of a number of 2D slices which can be attached to the framebuffer. */
 
 #ifdef VK_KHR_maintenance1
