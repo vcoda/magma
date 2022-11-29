@@ -101,23 +101,24 @@ namespace magma
         bool stippledLinesEnabled() const noexcept;
 
     private:
-        const VkBaseInStructure *findEnabledExtendedFeatures(VkStructureType sType) const noexcept;
-
         std::shared_ptr<PhysicalDevice> physicalDevice;
         mutable std::vector<std::pair<DeviceQueueDescriptor, std::weak_ptr<Queue>>> queues;
         std::shared_ptr<ResourcePool> resourcePool;
         std::set<std::string> enabledLayers;
         std::set<std::string> enabledExtensions;
         VkPhysicalDeviceFeatures enabledFeatures;
-        std::vector<const VkBaseInStructure *> enabledExtendedFeatures;
+        std::map<VkStructureType, const VkBaseInStructure *> enabledExtendedFeatures;
     };
 } // namespace magma
 
-#define MAGMA_SPECIALIZE_PHYSICAL_DEVICE_FEATURES(DeviceFeatures, StructureType)\
+#define MAGMA_SPECIALIZE_PHYSICAL_DEVICE_FEATURES(PhysicalDeviceFeatures, structureType)\
 template<>\
-inline const DeviceFeatures *magma::Device::getEnabledExtendedFeatures<DeviceFeatures>() const noexcept\
+inline const PhysicalDeviceFeatures *magma::Device::getEnabledExtendedFeatures<PhysicalDeviceFeatures>() const noexcept\
 {\
-    return reinterpret_cast<const DeviceFeatures *>(findEnabledExtendedFeatures(StructureType));\
+    auto it = enabledExtendedFeatures.find(structureType);\
+    if (it != enabledExtendedFeatures.end())\
+        return reinterpret_cast<const PhysicalDeviceFeatures *>(it->second);\
+    return nullptr;\
 }
 
 #include "device.inl"

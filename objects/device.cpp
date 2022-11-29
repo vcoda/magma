@@ -66,7 +66,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
             VkBaseInStructure *nextNode = reinterpret_cast<VkBaseInStructure *>(*next);
             currNode->pNext = nextNode;
             ++curr; ++next;
-            enabledExtendedFeatures.push_back(currNode);
+            enabledExtendedFeatures[currNode->sType] = currNode;
         }
         VkBaseInStructure *lastNode = reinterpret_cast<VkBaseInStructure *>(*curr);
         lastNode->pNext = reinterpret_cast<const VkBaseInStructure *>(extendedInfo.getChainedNodes());
@@ -340,15 +340,5 @@ bool Device::stippledLinesEnabled() const noexcept
     }
 #endif // VK_EXT_line_rasterization
     return false;
-}
-
-const VkBaseInStructure *Device::findEnabledExtendedFeatures(VkStructureType sType) const noexcept
-{
-    for (auto features : enabledExtendedFeatures)
-    {
-        if (features->sType == sType)
-            return features;
-    }
-    return nullptr;
 }
 } // namespace magma
