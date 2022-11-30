@@ -52,6 +52,13 @@ namespace magma
 
     public:
         ~Device();
+        std::shared_ptr<PhysicalDevice> getPhysicalDevice() noexcept { return physicalDevice; }
+        std::shared_ptr<const PhysicalDevice> getPhysicalDevice() const noexcept { return physicalDevice; }
+        std::shared_ptr<ResourcePool> getResourcePool() noexcept { return resourcePool; }
+        std::shared_ptr<const ResourcePool> getResourcePool() const noexcept { return resourcePool; }
+        const std::set<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
+        const std::set<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
+        const VkPhysicalDeviceFeatures& getEnabledFeatures() const noexcept { return enabledFeatures; }
         std::shared_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
         std::shared_ptr<Queue> getQueueForFamily(uint32_t queueFamilyIndex) const;
         void updateDescriptorWrites(const VkWriteDescriptorSet *descriptorWrites,
@@ -85,13 +92,6 @@ namespace magma
     #ifdef VK_EXT_device_fault
         DeviceFaultInfo getFaultInfo() const;
     #endif
-        std::shared_ptr<PhysicalDevice> getPhysicalDevice() noexcept { return physicalDevice; }
-        std::shared_ptr<const PhysicalDevice> getPhysicalDevice() const noexcept { return physicalDevice; }
-        std::shared_ptr<ResourcePool> getResourcePool() noexcept { return resourcePool; }
-        std::shared_ptr<const ResourcePool> getResourcePool() const noexcept { return resourcePool; }
-        const std::set<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
-        const std::set<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
-        const VkPhysicalDeviceFeatures& getEnabledFeatures() const noexcept { return enabledFeatures; }
         template<typename PhysicalDeviceFeatures>
         const PhysicalDeviceFeatures *getEnabledExtendedFeatures() const noexcept;
         bool extensionEnabled(const char *extensionName) const noexcept;
