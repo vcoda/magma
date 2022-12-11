@@ -165,6 +165,21 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
     };
 
+    /* The mesh-primitives-generated count is incremented every time a primitive
+       emitted from the mesh shader stage reaches the fragment shader stage.
+       When a generated mesh primitives query begins, the mesh-primitives-generated
+       count starts from zero. */
+
+#ifdef VK_EXT_mesh_shader
+    class MeshPrimitivesQuery : public IntegerQueryPool
+    {
+    public:
+        explicit MeshPrimitivesQuery(std::shared_ptr<Device> device,
+            uint32_t queryCount,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+    };
+#endif // VK_EXT_mesh_shader
+
     /* Transform feedback queries track the number of primitives attempted to be written and
        actually written, by the vertex stream being captured, to a transform feedback buffer.
        This query is updated during drawing commands while transform feedback is active.

@@ -150,6 +150,13 @@ TimestampQuery::TimestampQuery(std::shared_ptr<Device> device, uint32_t queryCou
     IntegerQueryPool(VK_QUERY_TYPE_TIMESTAMP, std::move(device), queryCount, 0, std::move(allocator))
 {}
 
+#ifdef VK_EXT_mesh_shader
+MeshPrimitivesQuery::MeshPrimitivesQuery(std::shared_ptr<Device> device, uint32_t queryCount,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    IntegerQueryPool(VK_QUERY_TYPE_MESH_PRIMITIVES_GENERATED_EXT, std::move(device), queryCount, 0, std::move(allocator))
+{}
+#endif // VK_EXT_mesh_shader
+
 #ifdef VK_EXT_transform_feedback
 TransformFeedbackStreamQuery::TransformFeedbackStreamQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
