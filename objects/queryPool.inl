@@ -17,124 +17,42 @@ inline std::vector<Type> QueryPool::getQueryResults(uint32_t firstQuery, uint32_
 }
 
 template<class Type>
-inline std::vector<Type> OcclusionQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
+inline std::vector<Type> IntegerQueryPool::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
 {
     static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
-        "OcclusionQuery::getResults() specialized only for uint32_t and uint64_t types");
+        "IntegerQueryPool::getResults() specialized only for uint32_t and uint64_t types");
     return std::vector<Type>();
 }
 
 template<>
-inline std::vector<uint32_t> OcclusionQuery::getResults<uint32_t>(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
+inline std::vector<uint32_t> IntegerQueryPool::getResults<uint32_t>(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
 {
     return getQueryResults<uint32_t>(firstQuery, queryCount, wait ? VK_QUERY_RESULT_WAIT_BIT : 0);
 }
 
 template<>
-inline std::vector<uint64_t> OcclusionQuery::getResults<uint64_t>(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
+inline std::vector<uint64_t> IntegerQueryPool::getResults<uint64_t>(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
 {
     return getQueryResults<uint64_t>(firstQuery, queryCount, VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
 }
 
 template<class Type>
-inline std::vector<QueryPool::Result<Type, Type>> OcclusionQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
+inline std::vector<QueryPool::Result<Type, Type>> IntegerQueryPool::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
 {
     static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
-        "OcclusionQuery::getResultsWithAvailability() specialized only for uint32_t and uint64_t types");
+        "IntegerQueryPool::getResultsWithAvailability() specialized only for uint32_t and uint64_t types");
     return std::vector<Result<Type, Type>>();
 }
 
 template<>
-inline std::vector<QueryPool::Result<uint32_t, uint32_t>> OcclusionQuery::getResultsWithAvailability<uint32_t>(uint32_t firstQuery, uint32_t queryCount) const noexcept
+inline std::vector<QueryPool::Result<uint32_t, uint32_t>> IntegerQueryPool::getResultsWithAvailability<uint32_t>(uint32_t firstQuery, uint32_t queryCount) const noexcept
 {
     return getQueryResults<Result<uint32_t, uint32_t>>(firstQuery, queryCount, VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
 }
 
 template<>
-inline std::vector<QueryPool::Result<uint64_t, uint64_t>> OcclusionQuery::getResultsWithAvailability<uint64_t>(uint32_t firstQuery, uint32_t queryCount) const noexcept
+inline std::vector<QueryPool::Result<uint64_t, uint64_t>> IntegerQueryPool::getResultsWithAvailability<uint64_t>(uint32_t firstQuery, uint32_t queryCount) const noexcept
 {
     return getQueryResults<Result<uint64_t, uint64_t>>(firstQuery, queryCount, VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
 }
-
-template<class Type>
-inline std::vector<Type> TimestampQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
-{
-    static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
-        "TimestampQuery::getResults() specialized only for uint32_t and uint64_t types");
-    return std::vector<Type>();
-}
-
-template<>
-inline std::vector<uint32_t> TimestampQuery::getResults<uint32_t>(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
-{
-    return getQueryResults<uint32_t>(firstQuery, queryCount, wait ? VK_QUERY_RESULT_WAIT_BIT : 0);
-}
-
-template<>
-inline std::vector<uint64_t> TimestampQuery::getResults<uint64_t>(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
-{
-    return getQueryResults<uint64_t>(firstQuery, queryCount, VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
-}
-
-template<class Type>
-inline std::vector<QueryPool::Result<Type, Type>> TimestampQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
-{
-    static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
-        "TimestampQuery::getResultsWithAvailability() specialized only for uint32_t and uint64_t types");
-    return std::vector<Result<Type, Type>>();
-}
-
-template<>
-inline std::vector<QueryPool::Result<uint32_t, uint32_t>> TimestampQuery::getResultsWithAvailability<uint32_t>(uint32_t firstQuery, uint32_t queryCount) const noexcept
-{
-    return getQueryResults<Result<uint32_t, uint32_t>>(firstQuery, queryCount, VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
-}
-
-template<>
-inline std::vector<QueryPool::Result<uint64_t, uint64_t>> TimestampQuery::getResultsWithAvailability<uint64_t>(uint32_t firstQuery, uint32_t queryCount) const noexcept
-{
-    return getQueryResults<Result<uint64_t, uint64_t>>(firstQuery, queryCount, VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
-}
-
-#ifdef VK_NV_ray_tracing
-template<class Type>
-inline std::vector<Type> AccelerationStructureCompactedSizeQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
-{
-    static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
-        "AccelerationStructureCompactedSizeQuery::getResults() specialized only for uint32_t and uint64_t types");
-    return std::vector<Type>();
-}
-
-template<>
-inline std::vector<uint32_t> AccelerationStructureCompactedSizeQuery::getResults<uint32_t>(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
-{
-    return getQueryResults<uint32_t>(firstQuery, queryCount, wait ? VK_QUERY_RESULT_WAIT_BIT : 0);
-}
-
-template<>
-inline std::vector<uint64_t> AccelerationStructureCompactedSizeQuery::getResults<uint64_t>(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
-{
-    return getQueryResults<uint64_t>(firstQuery, queryCount, VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
-}
-
-template<class Type>
-inline std::vector<QueryPool::Result<Type, Type>> AccelerationStructureCompactedSizeQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
-{
-    static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
-        "AccelerationStructureCompactedSizeQuery::getResultsWithAvailability() specialized only for uint32_t and uint64_t types");
-    return std::vector<Result<Type, Type>>();
-}
-
-template<>
-inline std::vector<QueryPool::Result<uint32_t, uint32_t>> AccelerationStructureCompactedSizeQuery::getResultsWithAvailability<uint32_t>(uint32_t firstQuery, uint32_t queryCount) const noexcept
-{
-    return getQueryResults<Result<uint32_t, uint32_t>>(firstQuery, queryCount, VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
-}
-
-template<>
-inline std::vector<QueryPool::Result<uint64_t, uint64_t>> AccelerationStructureCompactedSizeQuery::getResultsWithAvailability<uint64_t>(uint32_t firstQuery, uint32_t queryCount) const noexcept
-{
-    return getQueryResults<Result<uint64_t, uint64_t>>(firstQuery, queryCount, VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
-}
-#endif // VK_NV_ray_tracing
 } // namespace magma

@@ -59,9 +59,14 @@ void QueryPool::reset(uint32_t firstQuery, uint32_t queryCount) noexcept
 }
 #endif // VK_EXT_host_query_reset
 
+IntegerQueryPool::IntegerQueryPool(VkQueryType queryType, std::shared_ptr<Device> device, uint32_t queryCount,
+    VkQueryControlFlags controlFlags, std::shared_ptr<IAllocator> allocator):
+    QueryPool(queryType, std::move(device), queryCount, controlFlags, 0, std::move(allocator))
+{}
+
 OcclusionQuery::OcclusionQuery(std::shared_ptr<Device> device, uint32_t queryCount, bool precise,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    QueryPool(VK_QUERY_TYPE_OCCLUSION, std::move(device), queryCount, (precise ? VK_QUERY_CONTROL_PRECISE_BIT : 0), 0, std::move(allocator))
+    IntegerQueryPool(VK_QUERY_TYPE_OCCLUSION, std::move(device), queryCount, precise ? VK_QUERY_CONTROL_PRECISE_BIT : 0, std::move(allocator))
 {}
 
 PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<Device> device, VkQueryPipelineStatisticFlags flags,
@@ -142,7 +147,7 @@ uint32_t PipelineStatisticsQuery::spreadResults(const std::vector<uint64_t>& dat
 
 TimestampQuery::TimestampQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    QueryPool(VK_QUERY_TYPE_TIMESTAMP, std::move(device), queryCount, 0, 0, std::move(allocator))
+    IntegerQueryPool(VK_QUERY_TYPE_TIMESTAMP, std::move(device), queryCount, 0, std::move(allocator))
 {}
 
 #ifdef VK_EXT_transform_feedback
@@ -165,7 +170,7 @@ std::vector<QueryPool::Result<TransformFeedbackStreamQuery::Result, uint64_t>> T
 #ifdef VK_NV_ray_tracing
 AccelerationStructureCompactedSizeQuery::AccelerationStructureCompactedSizeQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    QueryPool(VK_QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_NV, std::move(device), queryCount, 0, 0, std::move(allocator))
+    IntegerQueryPool(VK_QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_NV, std::move(device), queryCount, 0, std::move(allocator))
 {}
 #endif // VK_NV_ray_tracing
 } // namespace magma
