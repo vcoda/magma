@@ -114,5 +114,35 @@ namespace magma
             constexpr VertexFragmentConstantRange(const uint32_t offset = 0) noexcept:
                 PushConstantRange<Type>(VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, offset) {}
         };
+
+    #ifdef VK_EXT_mesh_shader
+        template<typename Type>
+        struct TaskConstantRange : PushConstantRange<Type>
+        {
+            constexpr TaskConstantRange(const uint32_t offset = 0) noexcept:
+                PushConstantRange<Type>(VK_SHADER_STAGE_TASK_BIT_EXT, offset) {}
+        };
+
+        template<typename Type>
+        struct MeshConstantRange : PushConstantRange<Type>
+        {
+            constexpr MeshConstantRange(const uint32_t offset = 0) noexcept:
+                PushConstantRange<Type>(VK_SHADER_STAGE_MESH_BIT_EXT, offset) {}
+        };
+
+        template<typename Type>
+        struct TaskMeshConstantRange : PushConstantRange<Type>
+        {
+            constexpr TaskMeshConstantRange(const uint32_t offset = 0) noexcept:
+                PushConstantRange<Type>(VK_SHADER_STAGE_TASK_BIT_EXT | VK_SHADER_STAGE_MESH_BIT_EXT, offset) {}
+        };
+
+        template<typename Type>
+        struct TaskMeshFragmentConstantRange : PushConstantRange<Type>
+        {
+            constexpr TaskMeshFragmentConstantRange(const uint32_t offset = 0) noexcept:
+                PushConstantRange<Type>(VK_SHADER_STAGE_TASK_BIT_EXT | VK_SHADER_STAGE_MESH_BIT_EXT | VK_SHADER_STAGE_FRAGMENT_BIT, offset) {}
+        };
+    #endif // VK_EXT_mesh_shader
     } // namespace pushconstant
 } // namespace magma
