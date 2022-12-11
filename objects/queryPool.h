@@ -187,7 +187,7 @@ namespace magma
        if the bound transform feedback buffer size was too small for the number of primitives actually drawn. */
 
 #ifdef VK_EXT_transform_feedback
-    class TransformFeedbackStreamQuery : public QueryPool
+    class TransformFeedbackQuery : public QueryPool
     {
     public:
         struct Result
@@ -196,7 +196,7 @@ namespace magma
             uint64_t numPrimitivesNeeded = BadQueryResult<uint64_t>::value;
         };
 
-        explicit TransformFeedbackStreamQuery(std::shared_ptr<Device> device,
+        explicit TransformFeedbackQuery(std::shared_ptr<Device> device,
             uint32_t queryCount,
             std::shared_ptr<IAllocator> allocator = nullptr);
         std::vector<Result> getResults(uint32_t firstQuery,

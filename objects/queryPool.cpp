@@ -158,17 +158,17 @@ MeshPrimitivesQuery::MeshPrimitivesQuery(std::shared_ptr<Device> device, uint32_
 #endif // VK_EXT_mesh_shader
 
 #ifdef VK_EXT_transform_feedback
-TransformFeedbackStreamQuery::TransformFeedbackStreamQuery(std::shared_ptr<Device> device, uint32_t queryCount,
+TransformFeedbackQuery::TransformFeedbackQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     QueryPool(VK_QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT, std::move(device), queryCount, 0, 0, std::move(allocator))
 {}
 
-std::vector<TransformFeedbackStreamQuery::Result> TransformFeedbackStreamQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
+std::vector<TransformFeedbackQuery::Result> TransformFeedbackQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
 {
     return getQueryResults<Result>(firstQuery, queryCount, VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
 }
 
-std::vector<QueryPool::Result<TransformFeedbackStreamQuery::Result, uint64_t>> TransformFeedbackStreamQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
+std::vector<QueryPool::Result<TransformFeedbackQuery::Result, uint64_t>> TransformFeedbackQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
 {
     return getQueryResults<QueryPool::Result<Result, uint64_t>>(firstQuery, queryCount, VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
 }
