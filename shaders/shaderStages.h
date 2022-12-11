@@ -68,6 +68,24 @@ namespace magma
             PipelineShaderStage(VK_SHADER_STAGE_COMPUTE_BIT, std::move(module), entrypoint, std::move(specialization), flags) {}
     };
 
+#ifdef VK_EXT_mesh_shader
+    class TaskShaderStage : public PipelineShaderStage
+    {
+    public:
+        explicit TaskShaderStage(std::shared_ptr<ShaderModule> module, const char *const entrypoint,
+            std::shared_ptr<Specialization> specialization = nullptr, VkPipelineShaderStageCreateFlags flags = 0) noexcept:
+            PipelineShaderStage(VK_SHADER_STAGE_TASK_BIT_EXT, std::move(module), entrypoint, std::move(specialization), flags) {}
+    };
+
+    class MeshShaderStage : public PipelineShaderStage
+    {
+    public:
+        explicit MeshShaderStage(std::shared_ptr<ShaderModule> module, const char *const entrypoint,
+            std::shared_ptr<Specialization> specialization = nullptr, VkPipelineShaderStageCreateFlags flags = 0) noexcept:
+            PipelineShaderStage(VK_SHADER_STAGE_MESH_BIT_EXT, std::move(module), entrypoint, std::move(specialization), flags) {}
+    };
+#endif // VK_EXT_mesh_shader
+
 #ifdef VK_NV_ray_tracing
     class RaygenShaderStage : public PipelineShaderStage
     {
@@ -117,22 +135,4 @@ namespace magma
             PipelineShaderStage(VK_SHADER_STAGE_CALLABLE_BIT_NV, std::move(module), entrypoint, std::move(specialization), flags) {}
     };
 #endif // VK_NV_ray_tracing
-
-#ifdef VK_NV_mesh_shader
-    class TaskShaderStage : public PipelineShaderStage
-    {
-    public:
-        explicit TaskShaderStage(std::shared_ptr<ShaderModule> module, const char *const entrypoint,
-            std::shared_ptr<Specialization> specialization = nullptr, VkPipelineShaderStageCreateFlags flags = 0) noexcept:
-            PipelineShaderStage(VK_SHADER_STAGE_TASK_BIT_NV, std::move(module), entrypoint, std::move(specialization), flags) {}
-    };
-
-    class MeshShaderStage : public PipelineShaderStage
-    {
-    public:
-        explicit MeshShaderStage(std::shared_ptr<ShaderModule> module, const char *const entrypoint,
-            std::shared_ptr<Specialization> specialization = nullptr, VkPipelineShaderStageCreateFlags flags = 0) noexcept:
-            PipelineShaderStage(VK_SHADER_STAGE_MESH_BIT_NV, std::move(module), entrypoint, std::move(specialization), flags) {}
-    };
-#endif // VK_NV_mesh_shader
 } // namespace magma
