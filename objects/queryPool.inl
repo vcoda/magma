@@ -3,17 +3,18 @@ namespace magma
 template<class Type>
 inline std::vector<Type> QueryPool::getQueryResults(uint32_t firstQuery, uint32_t queryCount, VkQueryResultFlags flags) const noexcept
 {
-    std::vector<Type> data;
-    try {
-        data.resize(queryCount);
-    } catch (...) {
-        return {};
-    }
     constexpr VkDeviceSize stride = sizeof(Type);
-    const size_t dataSize = sizeof(Type) * queryCount;
-    const VkResult result = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, firstQuery, queryCount, dataSize, data.data(), stride, flags);
-    MAGMA_ASSERT((VK_SUCCESS == result) || (VK_NOT_READY == result));
-    return data;
+    try
+    {
+        std::vector<Type> data(queryCount);
+        const VkResult result = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, firstQuery, queryCount,
+            sizeof(Type) * queryCount, data.data(), stride, flags);
+        MAGMA_ASSERT((VK_SUCCESS == result) || (VK_NOT_READY == result));
+        return data;
+    } catch (...)
+    {
+        return std::vector<Type>();
+    }
 }
 
 template<class Type>
