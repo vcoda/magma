@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Base of push constant ranges, computes hash of the structure. */
+    /* Push constant range that is used by pipeline layout. */
 
     struct PushConstantRange : VkPushConstantRange
     {
@@ -36,7 +36,9 @@ namespace magma
 {
     namespace pushconstant
     {
-        /* Defines a set of push constant ranges for use in a single pipeline layout. */
+        /* Defines stage flags describing the shader stages that will access a range of push constants.
+           If a particular stage is not included in the range, then accessing members of that range of
+           push constants from the corresponding shader stage will return undefined values. */
 
         template<typename Type>
         struct PushConstantRange : magma::PushConstantRange
