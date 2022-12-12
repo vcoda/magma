@@ -96,6 +96,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif
 
 #define MAGMA_MAX_STRING 4096
+#define MAGMA_BAD_CODE 0xBAADC0DE
 #define MAGMA_EXTENSION_PREFIX "VK_"
 #define MAGMA_LAYER_PREFIX "VK_LAYER_"
 

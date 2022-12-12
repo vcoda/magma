@@ -25,15 +25,15 @@ namespace magma
     template<class Int>
     struct BadQueryResult
     {
-        static const Int value;
+        static constexpr Int value;
     };
 
 #ifdef MAGMA_DEBUG
-    template<> struct BadQueryResult<uint32_t> { static const uint32_t value = 0xBAADC0DE; };
-    template<> struct BadQueryResult<uint64_t> { static const uint64_t value = 0xBAADC0DEBAADC0DE; };
+    template<> struct BadQueryResult<uint32_t> { static constexpr uint32_t value = MAGMA_BAD_CODE; };
+    template<> struct BadQueryResult<uint64_t> { static constexpr uint64_t value = MAGMA_BAD_CODE | uint64_t(MAGMA_BAD_CODE) << 32; };
 #else
-    template<> struct BadQueryResult<uint32_t> { static const uint32_t value = 0u; };
-    template<> struct BadQueryResult<uint64_t> { static const uint64_t value = 0ull; };
+    template<> struct BadQueryResult<uint32_t> { static constexpr uint32_t value = 0u; };
+    template<> struct BadQueryResult<uint64_t> { static constexpr uint64_t value = 0ull; };
 #endif
 
     /* An object that contains a number of query entries
