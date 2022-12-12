@@ -82,7 +82,7 @@ PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<Device> device,
     data.resize(count + 1, BadQueryResult<uint64_t>::value);
 }
 
-PipelineStatisticsQuery::Result PipelineStatisticsQuery::getResults(bool wait) const noexcept
+PipelineStatisticsQuery::Result PipelineStatisticsQuery::getResults(bool wait) const
 {
     const size_t dataSize = sizeof(uint64_t) * data.size();
     const VkQueryResultFlags flags = VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0);
@@ -98,7 +98,7 @@ PipelineStatisticsQuery::Result PipelineStatisticsQuery::getResults(bool wait) c
     return {}; // VK_NOT_READY
 }
 
-QueryPool::Result<PipelineStatisticsQuery::Result, uint64_t> PipelineStatisticsQuery::getResultsWithAvailability() const noexcept
+QueryPool::Result<PipelineStatisticsQuery::Result, uint64_t> PipelineStatisticsQuery::getResultsWithAvailability() const
 {
     const size_t dataSize = sizeof(uint64_t) * data.size();
     const VkQueryResultFlags flags = VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT;
@@ -163,12 +163,12 @@ TransformFeedbackQuery::TransformFeedbackQuery(std::shared_ptr<Device> device, u
     QueryPool(VK_QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT, std::move(device), queryCount, 0, 0, std::move(allocator))
 {}
 
-std::vector<TransformFeedbackQuery::Result> TransformFeedbackQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const noexcept
+std::vector<TransformFeedbackQuery::Result> TransformFeedbackQuery::getResults(uint32_t firstQuery, uint32_t queryCount, bool wait) const
 {
     return getQueryResults<Result>(firstQuery, queryCount, VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0));
 }
 
-std::vector<QueryPool::Result<TransformFeedbackQuery::Result, uint64_t>> TransformFeedbackQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const noexcept
+std::vector<QueryPool::Result<TransformFeedbackQuery::Result, uint64_t>> TransformFeedbackQuery::getResultsWithAvailability(uint32_t firstQuery, uint32_t queryCount) const
 {
     return getQueryResults<QueryPool::Result<Result, uint64_t>>(firstQuery, queryCount, VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
 }

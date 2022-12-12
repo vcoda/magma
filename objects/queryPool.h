@@ -73,7 +73,7 @@ namespace magma
         template<class Type>
         std::vector<Type> getQueryResults(uint32_t firstQuery,
             uint32_t queryCount,
-            VkQueryResultFlags flags) const noexcept;
+            VkQueryResultFlags flags) const;
 
     protected:
         const VkQueryType queryType;
@@ -89,10 +89,10 @@ namespace magma
         template<class Type>
         std::vector<Type> getResults(uint32_t firstQuery,
             uint32_t queryCount,
-            bool wait) const noexcept;
+            bool wait) const;
         template<class Type>
         std::vector<Result<Type, Type>> getResultsWithAvailability(uint32_t firstQuery,
-            uint32_t queryCount) const noexcept;
+            uint32_t queryCount) const;
 
     protected:
         IntegerQueryPool(VkQueryType queryType,
@@ -144,8 +144,8 @@ namespace magma
             VkQueryPipelineStatisticFlags pipelineStatistics,
             std::shared_ptr<IAllocator> allocator = nullptr);
         VkQueryPipelineStatisticFlags getStatisticFlags() const noexcept { return flags; }
-        Result getResults(bool wait) const noexcept;
-        QueryPool::Result<Result, uint64_t> getResultsWithAvailability() const noexcept;
+        Result getResults(bool wait) const;
+        QueryPool::Result<Result, uint64_t> getResultsWithAvailability() const;
 
     private:
         uint32_t spreadResults(const std::vector<uint64_t>& data,
@@ -203,9 +203,9 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
         std::vector<Result> getResults(uint32_t firstQuery,
             uint32_t queryCount,
-            bool wait) const noexcept;
+            bool wait) const;
         std::vector<QueryPool::Result<Result, uint64_t>> getResultsWithAvailability(uint32_t firstQuery,
-            uint32_t queryCount) const noexcept;
+            uint32_t queryCount) const;
     };
 #endif // VK_EXT_transform_feedback
 
