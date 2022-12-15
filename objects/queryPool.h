@@ -25,7 +25,7 @@ namespace magma
     template<class Int>
     struct BadQueryResult
     {
-        static constexpr Int value;
+        static constexpr Int value = 0;
     };
 
 #ifdef MAGMA_DEBUG
