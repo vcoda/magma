@@ -98,7 +98,7 @@ inline void CommandBuffer::setStencilReference(bool frontFace, bool backFace, ui
 inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pipeline, uint32_t setIndex, const std::shared_ptr<DescriptorSet>& descriptorSet,
     uint32_t dynamicOffset /* -1 */) noexcept
 {
-    MAGMA_ASSERT(pipeline->getLayout()->hasSetLayout(descriptorSet->getLayout()));
+    MAGMA_ASSERT(pipeline->getLayout()->hasLayout(descriptorSet->getLayout()));
     const VkDescriptorSet dereferencedDescriptorSet[1] = {*descriptorSet};
     if (descriptorSet->dirty())
         descriptorSet->update();
@@ -110,7 +110,7 @@ inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pi
 inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pipeline, uint32_t setIndex, const std::shared_ptr<DescriptorSet>& descriptorSet,
     const std::initializer_list<uint32_t>& dynamicOffsets) noexcept
 {
-    MAGMA_ASSERT(pipeline->getLayout()->hasSetLayout(descriptorSet->getLayout()));
+    MAGMA_ASSERT(pipeline->getLayout()->hasLayout(descriptorSet->getLayout()));
     const VkDescriptorSet dereferencedDescriptorSet[1] = {*descriptorSet};
     if (descriptorSet->dirty())
         descriptorSet->update();

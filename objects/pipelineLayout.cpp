@@ -18,79 +18,97 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "pipelineLayout.h"
-#include "device.h"
 #include "descriptorSetLayout.h"
+#include "device.h"
 #include "../allocator/allocator.h"
 #include "../helpers/stackArray.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
 {
-PipelineLayout::PipelineLayout(std::shared_ptr<Device> device, const PushConstantRange& pushConstantRange,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    PipelineLayout(std::move(device), std::move(allocator), {pushConstantRange})
-{}
-
 PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
+    const std::initializer_list<PushConstantRange>& pushConstantRanges,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */):
+    VkPipelineLayoutCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, std::move(device), std::move(allocator))
 {
-    VkPipelineLayoutCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = 0;
-    info.setLayoutCount = 0;
-    info.pSetLayouts = nullptr;
-    info.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
-    info.pPushConstantRanges = pushConstantRanges.begin();
-    const VkResult result = vkCreatePipelineLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    VkPipelineLayoutCreateInfo pipelineLayoutInfo;
+    pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    pipelineLayoutInfo.pNext = nullptr;
+    pipelineLayoutInfo.flags = flags;
+    pipelineLayoutInfo.setLayoutCount = 0;
+    pipelineLayoutInfo.pSetLayouts = nullptr;
+    pipelineLayoutInfo.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
+    pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.begin();
+    const VkResult result = vkCreatePipelineLayout(MAGMA_HANDLE(device), &pipelineLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create pipeline layout");
     hash = core::hashArgs(
-        info.sType,
-        info.flags,
-        info.setLayoutCount,
-        info.pushConstantRangeCount);
-    for (const auto& pushConstantRange : pushConstantRanges)
+        pipelineLayoutInfo.sType,
+        pipelineLayoutInfo.flags,
+        pipelineLayoutInfo.setLayoutCount,
+        pipelineLayoutInfo.pushConstantRangeCount);
+    for (const PushConstantRange& pushConstantRange: pushConstantRanges)
         hash = core::hashCombine(hash, pushConstantRange.hash());
 }
 
-PipelineLayout::PipelineLayout(std::shared_ptr<DescriptorSetLayout> setLayout, const PushConstantRange& pushConstantRange,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    PipelineLayout(std::move(setLayout), std::move(allocator), {pushConstantRange})
-{}
-
-PipelineLayout::PipelineLayout(std::shared_ptr<DescriptorSetLayout> setLayout,
+PipelineLayout::PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLayout,
+    const std::initializer_list<PushConstantRange>& pushConstantRanges,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */):
-    PipelineLayout(std::vector<std::shared_ptr<DescriptorSetLayout>>{setLayout}, std::move(allocator), std::move(pushConstantRanges))
-{}
-
-PipelineLayout::PipelineLayout(const std::vector<std::shared_ptr<DescriptorSetLayout>>& setLayouts,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const std::initializer_list<PushConstantRange>& pushConstantRanges /* {} */):
-    NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, std::move(setLayouts[0]->getDevice()), std::move(allocator)),
-    setLayouts(setLayouts)
+    VkPipelineLayoutCreateFlags flags /* 0 */):
+    NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, setLayout->getDevice(), std::move(allocator))
 {
-    VkPipelineLayoutCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    info.pNext = nullptr;
-    info.flags = 0;
-    MAGMA_STACK_ARRAY(VkDescriptorSetLayout, dereferencedSetLayouts, setLayouts.size());
-    for (const auto& layout : setLayouts)
-        dereferencedSetLayouts.put(*layout);
-    info.setLayoutCount = MAGMA_COUNT(dereferencedSetLayouts);
-    info.pSetLayouts = dereferencedSetLayouts;
-    info.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
-    info.pPushConstantRanges = pushConstantRanges.begin();
-    const VkResult result = vkCreatePipelineLayout(MAGMA_HANDLE(device), &info, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkDescriptorSetLayout dereferencedSetLayout[1] = {*setLayout};
+    VkPipelineLayoutCreateInfo pipelineLayoutInfo;
+    pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    pipelineLayoutInfo.pNext = nullptr;
+    pipelineLayoutInfo.flags = flags;
+    pipelineLayoutInfo.setLayoutCount = 1;
+    pipelineLayoutInfo.pSetLayouts = dereferencedSetLayout;
+    pipelineLayoutInfo.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
+    pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.begin();
+    const VkResult result = vkCreatePipelineLayout(MAGMA_HANDLE(device), &pipelineLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create pipeline layout");
     hash = core::hashArgs(
-        info.sType,
-        info.flags,
-        info.setLayoutCount,
-        info.pushConstantRangeCount);
-    for (const auto& pushConstantRange : pushConstantRanges)
+        pipelineLayoutInfo.sType,
+        pipelineLayoutInfo.flags,
+        pipelineLayoutInfo.setLayoutCount,
+        pipelineLayoutInfo.pushConstantRangeCount);
+    hash = core::hashCombine(hash, setLayout->getHash());
+    for (const PushConstantRange& pushConstantRange: pushConstantRanges)
+        hash = core::hashCombine(hash, pushConstantRange.hash());
+    descriptorSetLayouts.emplace(*setLayout, setLayout->getHash());
+}
+
+PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const DescriptorSetLayout>>& setLayouts,
+    const std::initializer_list<PushConstantRange>& pushConstantRanges,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkPipelineLayoutCreateFlags flags /* 0 */):
+    NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, (*setLayouts.begin())->getDevice(), std::move(allocator))
+{
+    MAGMA_STACK_ARRAY(VkDescriptorSetLayout, dereferencedSetLayouts, setLayouts.size());
+    for (const auto& setLayout: setLayouts)
+    {
+        dereferencedSetLayouts.put(*setLayout);
+        descriptorSetLayouts.emplace(*setLayout, setLayout->getHash());
+    }
+    VkPipelineLayoutCreateInfo pipelineLayoutInfo;
+    pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    pipelineLayoutInfo.pNext = nullptr;
+    pipelineLayoutInfo.flags = flags;
+    pipelineLayoutInfo.setLayoutCount = MAGMA_COUNT(dereferencedSetLayouts);
+    pipelineLayoutInfo.pSetLayouts = dereferencedSetLayouts;
+    pipelineLayoutInfo.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
+    pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.begin();
+    const VkResult result = vkCreatePipelineLayout(MAGMA_HANDLE(device), &pipelineLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create pipeline layout");
+    hash = core::hashArgs(
+        pipelineLayoutInfo.sType,
+        pipelineLayoutInfo.flags,
+        pipelineLayoutInfo.setLayoutCount,
+        pipelineLayoutInfo.pushConstantRangeCount);
+    for (const auto& layout: descriptorSetLayouts)
+        hash = core::hashCombine(hash, layout.second);
+    for (const PushConstantRange& pushConstantRange: pushConstantRanges)
         hash = core::hashCombine(hash, pushConstantRange.hash());
 }
 
@@ -99,24 +117,21 @@ PipelineLayout::~PipelineLayout()
     vkDestroyPipelineLayout(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-bool PipelineLayout::hasSetLayout(std::shared_ptr<DescriptorSetLayout> setLayout) const noexcept
+bool PipelineLayout::hasLayout(std::shared_ptr<const DescriptorSetLayout> setLayout) const noexcept
 {
-    for (auto& layout : setLayouts)
+    for (const auto it: descriptorSetLayouts)
     {
-        if (layout->getHandle() == setLayout->getHandle() ||
-            layout->getHash() == setLayout->getHash())
-        {
+        if ((it.first == *setLayout) || (it.second == setLayout->getHash()))
             return true;
-        }
     }
     return false;
 }
 
 hash_t PipelineLayout::getHash() const noexcept
-{   // Compute complex hash on demand
+{
     hash_t hash = this->hash;
-    for (const std::shared_ptr<DescriptorSetLayout>& layout : setLayouts)
-        hash = core::hashCombine(hash, layout->getHash());
+    for (auto& layout: descriptorSetLayouts)
+        hash = core::hashCombine(hash, layout.second);
     return hash;
 }
 } // namespace magma

@@ -190,7 +190,7 @@ void CommandBuffer::setViewport(float x, float y, float width, float height,
 void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline, uint32_t firstSet, const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
     const std::initializer_list<uint32_t>& dynamicOffsets /* {} */) noexcept
 {
-    MAGMA_ASSERT_FOR_EACH(descriptorSets, descriptorSet, pipeline->getLayout()->hasSetLayout(descriptorSet->getLayout()));
+    MAGMA_ASSERT_FOR_EACH(descriptorSets, descriptorSet, pipeline->getLayout()->hasLayout(descriptorSet->getLayout()));
     MAGMA_STACK_ARRAY(VkDescriptorSet, dereferencedDescriptorSets, descriptorSets.size());
     for (const auto& descriptorSet : descriptorSets)
         dereferencedDescriptorSets.put(*descriptorSet);
