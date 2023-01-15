@@ -18,15 +18,24 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "bindingArray.h"
-#include "../objects/storageBuffer.h"
 
 namespace magma
 {
 namespace binding
 {
-DescriptorSetLayoutBindingArray::DescriptorSetLayoutBindingArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-    DescriptorSetLayoutBinding(descriptorType, /* TBD */ 0, binding)
-{}
+SamplerArray::DescriptorImageInfo& SamplerArray::operator[](uint32_t index)
+{
+    if (index >= descriptorCount)
+    {
+        descriptorCount = std::max(descriptorCount, index + 1);
+        if (descriptorCount > imageDescriptors.size())
+            imageDescriptors.resize(descriptorCount);
+        descriptorWrite.descriptorCount = descriptorCount;
+        descriptorWrite.pImageInfo = imageDescriptors.data();
+    }
+    changed = true;
+    return imageDescriptors[index];
+}
 
 CombinedImageSamplerArray::DescriptorImageInfo& CombinedImageSamplerArray::operator[](uint32_t index)
 {

@@ -17,38 +17,44 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "binding.h"
+#include "../objects/sampler.h"
 
 namespace magma
 {
     namespace binding
     {
-        /* Object specifying a descriptor set layout binding array. */
+        /* A sampler descriptor is a descriptor type associated with a sampler object,
+           used to control the behavior of sampling operations performed on a sampled image. */
 
-        class DescriptorSetLayoutBindingArray : public DescriptorSetLayoutBinding
+        class SamplerArray : public DescriptorSetLayoutBinding
         {
-        protected:
-            DescriptorSetLayoutBindingArray(VkDescriptorType descriptorType,
-                uint32_t binding) noexcept;
+        public:
+            struct DescriptorImageInfo : VkDescriptorImageInfo
+            {
+                void operator=(std::shared_ptr<const magma::Sampler>) noexcept;
+            };
+
+            SamplerArray(uint32_t binding) noexcept:
+                DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_SAMPLER, /* TBD */ 0, binding) {}
+            DescriptorImageInfo& operator[](uint32_t index);
+
+        private:
+            std::vector<DescriptorImageInfo> imageDescriptors;
         };
 
         /* A combined image sampler is a single descriptor type associated with both a sampler and an image resource,
            combining both a sampler and sampled image descriptor into a single descriptor. */
 
-        class CombinedImageSamplerArray : public DescriptorSetLayoutBindingArray
+        class CombinedImageSamplerArray : public DescriptorSetLayoutBinding
         {
         public:
             struct DescriptorImageInfo : VkDescriptorImageInfo
             {
-                void operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler) noexcept
-                {
-                    const VkDescriptorImageInfo imageDescriptor = combinedImageSampler.first->getDescriptor(combinedImageSampler.second);
-                    memcpy(this, &imageDescriptor, sizeof(VkDescriptorImageInfo));
-                }
+                void operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>&) noexcept;
             };
 
-        public:
             CombinedImageSamplerArray(uint32_t binding) noexcept:
-                DescriptorSetLayoutBindingArray(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
+                DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, /* TBD */ 0, binding) {}
             DescriptorImageInfo& operator[](uint32_t index);
 
         private:
@@ -59,22 +65,16 @@ namespace magma
            described in a shader as a structure with various members that load, store,
            and atomic operations can be performed on. */
 
-        class StorageBufferArray : public DescriptorSetLayoutBindingArray
+        class StorageBufferArray : public DescriptorSetLayoutBinding
         {
         public:
             struct DescriptorBufferInfo : VkDescriptorBufferInfo
             {
-                void operator=(std::shared_ptr<const magma::Buffer> buffer) noexcept
-                {
-                    MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-                    const VkDescriptorBufferInfo bufferDescriptor = buffer->getDescriptor();
-                    memcpy(this, &bufferDescriptor, sizeof(VkDescriptorBufferInfo));
-                }
+                void operator=(std::shared_ptr<const magma::Buffer>) noexcept;
             };
 
-        public:
             StorageBufferArray(uint32_t binding) noexcept:
-                DescriptorSetLayoutBindingArray(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, binding) {}
+                DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, /* TBD */ 0, binding) {}
             DescriptorBufferInfo& operator[](uint32_t index);
 
         private:
@@ -82,3 +82,5 @@ namespace magma
         };
     } // namespace binding
 } // namespace magma
+
+#include "bindingArray.inl"
