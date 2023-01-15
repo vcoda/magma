@@ -92,9 +92,7 @@ namespace magma
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, binding) {}
             CombinedImageSampler& operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler) noexcept
             {
-                std::shared_ptr<const ImageView> imageView = combinedImageSampler.first;
-                std::shared_ptr<const magma::Sampler> sampler = combinedImageSampler.second;
-                writeDescriptor(imageView->getDescriptor(sampler));
+                writeDescriptor(combinedImageSampler.first->getDescriptor(combinedImageSampler.second));
                 return *this;
             }
         };
