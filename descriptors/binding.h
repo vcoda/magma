@@ -25,11 +25,6 @@ namespace magma
 {
     class DescriptorSet;
     class Sampler;
-    class ImageView;
-    class Buffer;
-    class BufferView;
-    class UniformTexelBuffer;
-    class StorageTexelBuffer;
 #ifdef VK_NV_ray_tracing
     class AccelerationStructure;
 #endif
