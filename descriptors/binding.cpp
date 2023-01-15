@@ -89,6 +89,37 @@ Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler) noexc
     return *this;
 }
 
+ImmutableSampler& ImmutableSampler::operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept
+{
+    MAGMA_ASSERT(!pImmutableSamplers);
+    if (!pImmutableSamplers)
+    {
+        VkDescriptorImageInfo imageDescriptor;
+        imageDescriptor.sampler = VK_NULL_HANDLE;
+        imageDescriptor.imageView = VK_NULL_HANDLE;
+        imageDescriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        writeDescriptor(imageDescriptor);
+        // If pImmutableSamplers is not NULL, then it is a pointer to an array of sampler handles
+        // that will be copied into the set layout and used for the corresponding binding.
+        pImmutableSamplers = sampler->getImmutableSampler();
+    }
+    return *this;
+}
+
+CombinedImageImmutableSampler& CombinedImageImmutableSampler::operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler) noexcept
+{
+    std::shared_ptr<const ImageView> imageView = combinedImageSampler.first;
+    writeDescriptor(imageView->getDescriptor(nullptr));
+    if (!pImmutableSamplers)
+    {
+        std::shared_ptr<const magma::Sampler> sampler = combinedImageSampler.second;
+        // If pImmutableSamplers is not NULL, then it is a pointer to an array of sampler handles
+        // that will be copied into the set layout and used for the corresponding binding.
+        pImmutableSamplers = sampler->getImmutableSampler();
+    }
+    return *this;
+}
+
 #ifdef VK_NV_ray_tracing
 AccelerationStructure& AccelerationStructure::operator=(std::shared_ptr<const magma::AccelerationStructure> accelerationStructure) noexcept
 {

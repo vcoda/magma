@@ -77,6 +77,16 @@ namespace magma
             Sampler& operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept;
         };
 
+        /* Immutable samplers are permanently bound into the set layout and must not be changed. */
+
+        class ImmutableSampler : public DescriptorSetLayoutBinding
+        {
+        public:
+            ImmutableSampler(uint32_t binding) noexcept:
+                DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_SAMPLER, 1, binding) {}
+            ImmutableSampler& operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept;
+        };
+
         /* A combined image sampler is a single descriptor type associated with both a sampler and an image resource,
            combining both a sampler and sampled image descriptor into a single descriptor. */
 
@@ -87,7 +97,25 @@ namespace magma
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, binding) {}
             CombinedImageSampler& operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler) noexcept
             {
-                writeDescriptor(combinedImageSampler.first->getDescriptor(combinedImageSampler.second));
+                std::shared_ptr<const ImageView> imageView = combinedImageSampler.first;
+                std::shared_ptr<const magma::Sampler> sampler = combinedImageSampler.second;
+                writeDescriptor(imageView->getDescriptor(sampler));
+                return *this;
+            }
+        };
+
+        /* Updates to a VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER descriptor with immutable samplers
+           does not modify the samplers (the image views are updated, but the sampler updates are ignored) */
+
+        class CombinedImageImmutableSampler : public DescriptorSetLayoutBinding
+        {
+        public:
+            CombinedImageImmutableSampler(uint32_t binding) noexcept:
+                DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, binding) {}
+            CombinedImageImmutableSampler& operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler) noexcept;
+            CombinedImageImmutableSampler& operator=(std::shared_ptr<const ImageView> imageView) noexcept
+            {
+                writeDescriptor(imageView->getDescriptor(nullptr));
                 return *this;
             }
         };

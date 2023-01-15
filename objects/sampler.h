@@ -34,6 +34,7 @@ namespace magma
             const SamplerState& state,
             std::shared_ptr<IAllocator> allocator = nullptr,
             const BorderColor& borderColor = border::opaqueBlackFloat);
+        const VkSampler *getImmutableSampler() const noexcept { return &handle; }
         ~Sampler();
 
     protected:
