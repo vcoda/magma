@@ -27,9 +27,21 @@ namespace binding
 {
 DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding) noexcept:
     VkDescriptorSetLayoutBinding{binding, descriptorType, descriptorCount, 0, nullptr},
+    imageDescriptor{},
     descriptorWrite{},
     changed(false)
-{}
+{
+    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    descriptorWrite.pNext = nullptr;
+    descriptorWrite.dstSet = VK_NULL_HANDLE;
+    descriptorWrite.dstBinding = binding;
+    descriptorWrite.dstArrayElement = 0;
+    descriptorWrite.descriptorCount = descriptorCount;
+    descriptorWrite.descriptorType = descriptorType;
+    descriptorWrite.pImageInfo = nullptr;
+    descriptorWrite.pBufferInfo = nullptr;
+    descriptorWrite.pTexelBufferView = nullptr;
+}
 
 void DescriptorSetLayoutBinding::writeDescriptor(const VkDescriptorImageInfo& info) noexcept
 {
