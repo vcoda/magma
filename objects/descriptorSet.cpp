@@ -102,12 +102,7 @@ void DescriptorSet::update()
         for (auto binding : descriptorBindings)
         {
             if (binding->dirty())
-            {
-                VkWriteDescriptorSet writeDescriptor = binding->getWriteDescriptor();
-                writeDescriptor.dstSet = handle;
-                descriptorWrites.put(writeDescriptor);
-                binding->changed = false;
-            }
+                descriptorWrites.put(binding->getWriteDescriptorSet(handle));
         }
         device->updateDescriptorWrites(descriptorWrites, descriptorWriteCount);
     }
@@ -120,12 +115,7 @@ void DescriptorSet::gatherDirtyDescriptorWrites(std::vector<VkWriteDescriptorSet
     for (auto binding : descriptorBindings)
     {
         if (binding->dirty())
-        {
-            VkWriteDescriptorSet writeDescriptor = binding->getWriteDescriptor();
-            writeDescriptor.dstSet = handle;
-            descriptorWrites.push_back(writeDescriptor);
-            binding->changed = false;
-        }
+            descriptorWrites.push_back(binding->getWriteDescriptorSet(handle));
     }
 }
 

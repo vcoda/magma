@@ -20,11 +20,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/imageView.h"
 #include "../objects/buffer.h"
 #include "../objects/bufferView.h"
+#include "../objects/sampler.h"
 
 namespace magma
 {
     class DescriptorSet;
-    class Sampler;
 #ifdef VK_NV_ray_tracing
     class AccelerationStructure;
 #endif
@@ -40,15 +40,12 @@ namespace magma
         {
         public:
             virtual ~DescriptorSetLayoutBinding() = default;
-            const VkWriteDescriptorSet& getWriteDescriptor() const noexcept { return descriptorWrite; }
-            bool dirty() const noexcept { return changed; }
+			virtual VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept;
+            bool dirty() const noexcept { return updated; }
 
         protected:
             explicit DescriptorSetLayoutBinding(VkDescriptorType descriptorType,
                 uint32_t descriptorCount, uint32_t binding) noexcept;
-            void writeDescriptor(const VkDescriptorImageInfo& imageDescriptor) noexcept;
-            void writeDescriptor(std::shared_ptr<const Buffer> buffer) noexcept;
-            void writeDescriptor(std::shared_ptr<const BufferView> bufferView) noexcept;
 
             union
             {
@@ -56,9 +53,7 @@ namespace magma
                 VkDescriptorBufferInfo bufferDescriptor;
                 VkBufferView texelBufferView;
             };
-            VkWriteDescriptorSet descriptorWrite;
-            bool changed;
-            friend DescriptorSet;
+            mutable bool updated;
         };
 
         /* A sampler descriptor is a descriptor type associated with a sampler object,
@@ -69,17 +64,19 @@ namespace magma
         public:
             Sampler(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_SAMPLER, 1, binding) {}
-            Sampler& operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept;
+            Sampler& operator=(std::shared_ptr<const magma::Sampler>) noexcept;
         };
 
-        /* Immutable samplers are permanently bound into the set layout and must not be changed. */
+        /* Immutable samplers are permanently bound into the set layout;
+		   later binding a sampler into an immutable sampler slot
+		   in a descriptor set is not allowed. */
 
         class ImmutableSampler : public DescriptorSetLayoutBinding
         {
         public:
             ImmutableSampler(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_SAMPLER, 1, binding) {}
-            ImmutableSampler& operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept;
+            ImmutableSampler& operator=(std::shared_ptr<const magma::Sampler>) noexcept;
         };
 
         /* A combined image sampler is a single descriptor type associated with both a sampler and an image resource,
@@ -90,27 +87,19 @@ namespace magma
         public:
             CombinedImageSampler(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, binding) {}
-            CombinedImageSampler& operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler) noexcept
-            {
-                writeDescriptor(combinedImageSampler.first->getDescriptor(combinedImageSampler.second));
-                return *this;
-            }
+            CombinedImageSampler& operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>&) noexcept;
         };
 
         /* Updates to a VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER descriptor with immutable samplers
-           does not modify the samplers (the image views are updated, but the sampler updates are ignored) */
+           does not modify the samplers (the image views are updated, but the sampler updates are ignored). */
 
         class CombinedImageImmutableSampler : public DescriptorSetLayoutBinding
         {
         public:
             CombinedImageImmutableSampler(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, binding) {}
-            CombinedImageImmutableSampler& operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler) noexcept;
-            CombinedImageImmutableSampler& operator=(std::shared_ptr<const ImageView> imageView) noexcept
-            {
-                writeDescriptor(imageView->getDescriptor(nullptr));
-                return *this;
-            }
+            CombinedImageImmutableSampler& operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>&) noexcept;
+            CombinedImageImmutableSampler& operator=(std::shared_ptr<const ImageView>) noexcept;
         };
 
         /* A sampled image is a descriptor type associated with an image resource
@@ -121,11 +110,7 @@ namespace magma
         public:
             SampledImage(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1, binding) {}
-            SampledImage& operator=(std::shared_ptr<const ImageView> imageView) noexcept
-            {
-                writeDescriptor(imageView->getDescriptor(nullptr));
-                return *this;
-            }
+            SampledImage& operator=(std::shared_ptr<const ImageView>) noexcept;
         };
 
         /* A storage image is a descriptor type associated with an image resource
@@ -136,12 +121,7 @@ namespace magma
         public:
             StorageImage(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1, binding) {}
-            StorageImage& operator=(std::shared_ptr<const ImageView> imageView) noexcept
-            {
-                MAGMA_ASSERT(imageView->getImage()->getUsage() & VK_IMAGE_USAGE_STORAGE_BIT);
-                writeDescriptor(imageView->getDescriptor(nullptr));
-                return *this;
-            }
+            StorageImage& operator=(std::shared_ptr<const ImageView>) noexcept;
         };
 
         /* A uniform texel buffer is a descriptor type associated with a buffer resource
@@ -152,12 +132,7 @@ namespace magma
         public:
             UniformTexelBuffer(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1, binding) {}
-            UniformTexelBuffer& operator=(std::shared_ptr<const BufferView> bufferView) noexcept
-            {
-                MAGMA_ASSERT(bufferView->getBuffer()->getUsage() & VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT);
-                writeDescriptor(std::move(bufferView));
-                return *this;
-            }
+            UniformTexelBuffer& operator=(std::shared_ptr<const BufferView>) noexcept;
         };
 
         /* A storage texel buffer is a descriptor type associated with a buffer resource
@@ -168,12 +143,7 @@ namespace magma
         public:
             StorageTexelBuffer(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1, binding) {}
-            StorageTexelBuffer& operator=(std::shared_ptr<const BufferView> bufferView) noexcept
-            {
-                MAGMA_ASSERT(bufferView->getBuffer()->getUsage() & VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT);
-                writeDescriptor(std::move(bufferView));
-                return *this;
-            }
+            StorageTexelBuffer& operator=(std::shared_ptr<const BufferView>) noexcept;
         };
 
         /* A uniform buffer is a descriptor type associated with a buffer resource directly,
@@ -184,12 +154,7 @@ namespace magma
         public:
             UniformBuffer(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, binding) {}
-            UniformBuffer& operator=(std::shared_ptr<const Buffer> buffer) noexcept
-            {
-                MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
-                writeDescriptor(std::move(buffer));
-                return *this;
-            }
+            UniformBuffer& operator=(std::shared_ptr<const Buffer>) noexcept;
         };
 
         /* A storage buffer is a descriptor type associated with a buffer resource directly,
@@ -201,12 +166,7 @@ namespace magma
         public:
             StorageBuffer(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, binding) {}
-            StorageBuffer& operator=(std::shared_ptr<const Buffer> buffer) noexcept
-            {
-                MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-                writeDescriptor(std::move(buffer));
-                return *this;
-            }
+            StorageBuffer& operator=(std::shared_ptr<const Buffer>) noexcept;
         };
 
         /* A dynamic uniform buffer is almost identical to a uniform buffer,
@@ -220,12 +180,7 @@ namespace magma
         public:
             DynamicUniformBuffer(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1, binding) {}
-            DynamicUniformBuffer& operator=(std::shared_ptr<const Buffer> buffer) noexcept
-            {
-                MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
-                writeDescriptor(std::move(buffer));
-                return *this;
-            }
+            DynamicUniformBuffer& operator=(std::shared_ptr<const Buffer>) noexcept;
         };
 
         /* A dynamic storage buffer is almost identical to a storage buffer,
@@ -239,12 +194,7 @@ namespace magma
         public:
             DynamicStorageBuffer(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1, binding) {}
-            DynamicStorageBuffer& operator=(std::shared_ptr<const Buffer> buffer) noexcept
-            {
-                MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-                writeDescriptor(std::move(buffer));
-                return *this;
-            }
+            DynamicStorageBuffer& operator=(std::shared_ptr<const Buffer>) noexcept;
         };
 
         /* An input attachment is a descriptor type associated with an image resource
@@ -255,12 +205,7 @@ namespace magma
         public:
             InputAttachment(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1, binding) {}
-            InputAttachment& operator=(std::shared_ptr<const ImageView> imageView) noexcept
-            {
-                MAGMA_ASSERT(imageView->getImage()->getUsage() & VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
-                writeDescriptor(imageView->getDescriptor(nullptr));
-                return *this;
-            }
+            InputAttachment& operator=(std::shared_ptr<const ImageView>) noexcept;
         };
 
         /* An inline uniform block is almost identical to a uniform buffer,
@@ -272,19 +217,20 @@ namespace magma
            Compared to push constants, they allow reusing the same set of constant data
            across multiple disjoint sets of drawing and dispatching commands. */
 
-#ifdef VK_EXT_inline_uniform_block
+	#ifdef VK_EXT_inline_uniform_block
         template<typename UniformBlockType>
         class InlineUniformBlock : public DescriptorSetLayoutBinding
         {
         public:
             InlineUniformBlock(uint32_t binding) noexcept;
             ~InlineUniformBlock();
-            InlineUniformBlock& operator=(const UniformBlockType& inlineUniformBlock) noexcept;
+			VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
+            InlineUniformBlock& operator=(const UniformBlockType&) noexcept;
 
         private:
-            VkWriteDescriptorSetInlineUniformBlockEXT inlineUniformBlockDescriptorWrite;
+            VkWriteDescriptorSetInlineUniformBlockEXT writeDescriptorSetInlineUniformBlock = {};
         };
-#endif // VK_EXT_inline_uniform_block
+	#endif // VK_EXT_inline_uniform_block
 
         /* An acceleration structure is a descriptor type that is used to retrieve
            scene geometry from within shaders that are used for ray traversal.
@@ -296,11 +242,12 @@ namespace magma
         public:
             AccelerationStructure(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV, 1, binding) {}
-            AccelerationStructure& operator=(std::shared_ptr<const magma::AccelerationStructure> accelerationStructure) noexcept;
+			VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
+            AccelerationStructure& operator=(std::shared_ptr<const magma::AccelerationStructure>) noexcept;
 
         private:
             VkAccelerationStructureNV accelerationStructure = {};
-            VkWriteDescriptorSetAccelerationStructureNV accelerationStructureDescriptorWrite = {};
+            VkWriteDescriptorSetAccelerationStructureNV writeDescriptorSetAccelerationStructure = {};
         };
 #endif // VK_NV_ray_tracing
     } // namespace binding

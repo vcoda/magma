@@ -23,46 +23,55 @@ namespace magma
 {
 namespace binding
 {
-SamplerArray::DescriptorImageInfo& SamplerArray::operator[](uint32_t index)
+VkWriteDescriptorSet SamplerArray::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
 {
-    if (index >= descriptorCount)
-    {
-        descriptorCount = std::max(descriptorCount, index + 1);
-        if (descriptorCount > imageDescriptors.size())
-            imageDescriptors.resize(descriptorCount);
-        descriptorWrite.descriptorCount = descriptorCount;
-        descriptorWrite.pImageInfo = imageDescriptors.data();
-    }
-    changed = true;
-    return imageDescriptors[index];
+	VkWriteDescriptorSet writeDescriptorSet;
+    writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeDescriptorSet.pNext = nullptr;
+    writeDescriptorSet.dstSet = dstSet;
+    writeDescriptorSet.dstBinding = binding;
+    writeDescriptorSet.dstArrayElement = 0;
+    writeDescriptorSet.descriptorCount = descriptorCount;
+    writeDescriptorSet.descriptorType = descriptorType;
+	writeDescriptorSet.pImageInfo = imageDescriptors.data();
+    writeDescriptorSet.pBufferInfo = nullptr;
+    writeDescriptorSet.pTexelBufferView = nullptr;
+	updated = false;
+	return writeDescriptorSet;
 }
 
-CombinedImageSamplerArray::DescriptorImageInfo& CombinedImageSamplerArray::operator[](uint32_t index)
+VkWriteDescriptorSet CombinedImageSamplerArray::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
 {
-    if (index >= descriptorCount)
-    {
-        descriptorCount = std::max(descriptorCount, index + 1);
-        if (descriptorCount > imageDescriptors.size())
-            imageDescriptors.resize(descriptorCount);
-        descriptorWrite.descriptorCount = descriptorCount;
-        descriptorWrite.pImageInfo = imageDescriptors.data();
-    }
-    changed = true;
-    return imageDescriptors[index];
+	VkWriteDescriptorSet writeDescriptorSet;
+    writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeDescriptorSet.pNext = nullptr;
+    writeDescriptorSet.dstSet = dstSet;
+    writeDescriptorSet.dstBinding = binding;
+    writeDescriptorSet.dstArrayElement = 0;
+    writeDescriptorSet.descriptorCount = descriptorCount;
+    writeDescriptorSet.descriptorType = descriptorType;
+	writeDescriptorSet.pImageInfo = imageDescriptors.data();
+    writeDescriptorSet.pBufferInfo = nullptr;
+    writeDescriptorSet.pTexelBufferView = nullptr;
+	updated = false;
+	return writeDescriptorSet;
 }
 
-StorageBufferArray::DescriptorBufferInfo& StorageBufferArray::operator[](uint32_t index)
+VkWriteDescriptorSet StorageBufferArray::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
 {
-    if (index >= descriptorCount)
-    {
-        descriptorCount = std::max(descriptorCount, index + 1);
-        if (descriptorCount > bufferDescriptors.size())
-            bufferDescriptors.resize(descriptorCount);
-        descriptorWrite.descriptorCount = descriptorCount;
-        descriptorWrite.pBufferInfo = bufferDescriptors.data();
-    }
-    changed = true;
-    return bufferDescriptors[index];
+	VkWriteDescriptorSet writeDescriptorSet;
+    writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeDescriptorSet.pNext = nullptr;
+    writeDescriptorSet.dstSet = dstSet;
+    writeDescriptorSet.dstBinding = binding;
+    writeDescriptorSet.dstArrayElement = 0;
+    writeDescriptorSet.descriptorCount = descriptorCount;
+    writeDescriptorSet.descriptorType = descriptorType;
+	writeDescriptorSet.pImageInfo = nullptr;
+    writeDescriptorSet.pBufferInfo = bufferDescriptors.data();
+    writeDescriptorSet.pTexelBufferView = nullptr;
+	updated = false;
+	return writeDescriptorSet;
 }
 } // namespace binding
 } // namespace magma

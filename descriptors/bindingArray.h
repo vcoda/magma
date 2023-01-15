@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "binding.h"
-#include "../objects/sampler.h"
 
 namespace magma
 {
@@ -36,6 +35,7 @@ namespace magma
 
             SamplerArray(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_SAMPLER, /* TBD */ 0, binding) {}
+			VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
             DescriptorImageInfo& operator[](uint32_t index);
 
         private:
@@ -55,6 +55,7 @@ namespace magma
 
             CombinedImageSamplerArray(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, /* TBD */ 0, binding) {}
+			VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
             DescriptorImageInfo& operator[](uint32_t index);
 
         private:
@@ -75,6 +76,7 @@ namespace magma
 
             StorageBufferArray(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, /* TBD */ 0, binding) {}
+			VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
             DescriptorBufferInfo& operator[](uint32_t index);
 
         private:
