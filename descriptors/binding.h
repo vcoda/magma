@@ -40,7 +40,7 @@ namespace magma
         {
         public:
             virtual ~DescriptorSetLayoutBinding() = default;
-			virtual VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept;
+            virtual VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept;
             bool dirty() const noexcept { return updated; }
 
         protected:
@@ -68,8 +68,8 @@ namespace magma
         };
 
         /* Immutable samplers are permanently bound into the set layout;
-		   later binding a sampler into an immutable sampler slot
-		   in a descriptor set is not allowed. */
+           later binding a sampler into an immutable sampler slot
+           in a descriptor set is not allowed. */
 
         class ImmutableSampler : public DescriptorSetLayoutBinding
         {
@@ -217,20 +217,20 @@ namespace magma
            Compared to push constants, they allow reusing the same set of constant data
            across multiple disjoint sets of drawing and dispatching commands. */
 
-	#ifdef VK_EXT_inline_uniform_block
+    #ifdef VK_EXT_inline_uniform_block
         template<typename UniformBlockType>
         class InlineUniformBlock : public DescriptorSetLayoutBinding
         {
         public:
             InlineUniformBlock(uint32_t binding) noexcept;
             ~InlineUniformBlock();
-			VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
+            VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
             InlineUniformBlock& operator=(const UniformBlockType&) noexcept;
 
         private:
             VkWriteDescriptorSetInlineUniformBlockEXT writeDescriptorSetInlineUniformBlock = {};
         };
-	#endif // VK_EXT_inline_uniform_block
+    #endif // VK_EXT_inline_uniform_block
 
         /* An acceleration structure is a descriptor type that is used to retrieve
            scene geometry from within shaders that are used for ray traversal.
@@ -242,7 +242,7 @@ namespace magma
         public:
             AccelerationStructure(uint32_t binding) noexcept:
                 DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV, 1, binding) {}
-			VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
+            VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
             AccelerationStructure& operator=(std::shared_ptr<const magma::AccelerationStructure>) noexcept;
 
         private:

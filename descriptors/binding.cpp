@@ -33,7 +33,7 @@ DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(VkDescriptorType descript
 
 VkWriteDescriptorSet DescriptorSetLayoutBinding::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
 {
-	VkWriteDescriptorSet writeDescriptorSet;
+    VkWriteDescriptorSet writeDescriptorSet;
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;
@@ -41,23 +41,23 @@ VkWriteDescriptorSet DescriptorSetLayoutBinding::getWriteDescriptorSet(VkDescrip
     writeDescriptorSet.dstArrayElement = 0;
     writeDescriptorSet.descriptorCount = descriptorCount;
     writeDescriptorSet.descriptorType = descriptorType;
-	switch (descriptorType)
-	{
+    switch (descriptorType)
+    {
     case VK_DESCRIPTOR_TYPE_SAMPLER:
     case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
     case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
     case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
-	case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
-		writeDescriptorSet.pImageInfo = &imageDescriptor;
+    case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
+        writeDescriptorSet.pImageInfo = &imageDescriptor;
         writeDescriptorSet.pBufferInfo = nullptr;
         writeDescriptorSet.pTexelBufferView = nullptr;
-		break;
+        break;
     case VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER:
     case VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER:
-		writeDescriptorSet.pImageInfo = nullptr;
+        writeDescriptorSet.pImageInfo = nullptr;
         writeDescriptorSet.pBufferInfo = nullptr;
         writeDescriptorSet.pTexelBufferView = &texelBufferView;
-		break;
+        break;
     case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER:
     case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER:
     case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC:
@@ -65,21 +65,21 @@ VkWriteDescriptorSet DescriptorSetLayoutBinding::getWriteDescriptorSet(VkDescrip
         writeDescriptorSet.pImageInfo = nullptr;
         writeDescriptorSet.pBufferInfo = &bufferDescriptor;
         writeDescriptorSet.pTexelBufferView = nullptr;
-		break;
-	default:
-		writeDescriptorSet.pImageInfo = nullptr;
+        break;
+    default:
+        writeDescriptorSet.pImageInfo = nullptr;
         writeDescriptorSet.pBufferInfo = nullptr;
         writeDescriptorSet.pTexelBufferView = nullptr;
-		MAGMA_ASSERT(false);
-	}
-	updated = false;
-	return writeDescriptorSet;
+        MAGMA_ASSERT(false);
+    }
+    updated = false;
+    return writeDescriptorSet;
 }
 
 #ifdef VK_NV_ray_tracing
-inline VkWriteDescriptorSet AccelerationStructure::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
+VkWriteDescriptorSet AccelerationStructure::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
 {
-	VkWriteDescriptorSet writeDescriptorSet;
+    VkWriteDescriptorSet writeDescriptorSet;
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = &writeDescriptorSetAccelerationStructure;
     writeDescriptorSet.dstSet = dstSet;
@@ -87,11 +87,11 @@ inline VkWriteDescriptorSet AccelerationStructure::getWriteDescriptorSet(VkDescr
     writeDescriptorSet.dstArrayElement = 0;
     writeDescriptorSet.descriptorCount = descriptorCount;
     writeDescriptorSet.descriptorType = descriptorType;
-	writeDescriptorSet.pImageInfo = nullptr;
-	writeDescriptorSet.pBufferInfo = nullptr;
-	writeDescriptorSet.pTexelBufferView = nullptr;
-	updated = false;
-	return writeDescriptorSet;
+    writeDescriptorSet.pImageInfo = nullptr;
+    writeDescriptorSet.pBufferInfo = nullptr;
+    writeDescriptorSet.pTexelBufferView = nullptr;
+    updated = false;
+    return writeDescriptorSet;
 }
 
 AccelerationStructure& AccelerationStructure::operator=(std::shared_ptr<const magma::AccelerationStructure> accelerationStructure_) noexcept

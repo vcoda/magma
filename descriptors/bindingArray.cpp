@@ -25,7 +25,7 @@ namespace binding
 {
 VkWriteDescriptorSet SamplerArray::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
 {
-	VkWriteDescriptorSet writeDescriptorSet;
+    VkWriteDescriptorSet writeDescriptorSet;
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;
@@ -33,16 +33,16 @@ VkWriteDescriptorSet SamplerArray::getWriteDescriptorSet(VkDescriptorSet dstSet)
     writeDescriptorSet.dstArrayElement = 0;
     writeDescriptorSet.descriptorCount = descriptorCount;
     writeDescriptorSet.descriptorType = descriptorType;
-	writeDescriptorSet.pImageInfo = imageDescriptors.data();
+    writeDescriptorSet.pImageInfo = imageDescriptors.data();
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = nullptr;
-	updated = false;
-	return writeDescriptorSet;
+    updated = false;
+    return writeDescriptorSet;
 }
 
 VkWriteDescriptorSet CombinedImageSamplerArray::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
 {
-	VkWriteDescriptorSet writeDescriptorSet;
+    VkWriteDescriptorSet writeDescriptorSet;
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;
@@ -50,16 +50,16 @@ VkWriteDescriptorSet CombinedImageSamplerArray::getWriteDescriptorSet(VkDescript
     writeDescriptorSet.dstArrayElement = 0;
     writeDescriptorSet.descriptorCount = descriptorCount;
     writeDescriptorSet.descriptorType = descriptorType;
-	writeDescriptorSet.pImageInfo = imageDescriptors.data();
+    writeDescriptorSet.pImageInfo = imageDescriptors.data();
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = nullptr;
-	updated = false;
-	return writeDescriptorSet;
+    updated = false;
+    return writeDescriptorSet;
 }
 
 VkWriteDescriptorSet StorageBufferArray::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
 {
-	VkWriteDescriptorSet writeDescriptorSet;
+    VkWriteDescriptorSet writeDescriptorSet;
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;
@@ -67,11 +67,11 @@ VkWriteDescriptorSet StorageBufferArray::getWriteDescriptorSet(VkDescriptorSet d
     writeDescriptorSet.dstArrayElement = 0;
     writeDescriptorSet.descriptorCount = descriptorCount;
     writeDescriptorSet.descriptorType = descriptorType;
-	writeDescriptorSet.pImageInfo = nullptr;
+    writeDescriptorSet.pImageInfo = nullptr;
     writeDescriptorSet.pBufferInfo = bufferDescriptors.data();
     writeDescriptorSet.pTexelBufferView = nullptr;
-	updated = false;
-	return writeDescriptorSet;
+    updated = false;
+    return writeDescriptorSet;
 }
 } // namespace binding
 } // namespace magma
