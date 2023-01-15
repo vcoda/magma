@@ -25,52 +25,35 @@ namespace magma
 namespace binding
 {
 DescriptorSetLayoutBindingArray::DescriptorSetLayoutBindingArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-    DescriptorSetLayoutBinding(descriptorType, 0, binding)
+    DescriptorSetLayoutBinding(descriptorType, /* TBD */ 0, binding)
 {}
 
-DescriptorSetLayoutBindingArray::~DescriptorSetLayoutBindingArray()
+CombinedImageSamplerArray::DescriptorImageInfo& CombinedImageSamplerArray::operator[](uint32_t index)
 {
-    if (descriptorWrite.pImageInfo)
-        delete[] descriptorWrite.pImageInfo;
-    else if (descriptorWrite.pBufferInfo)
-        delete[] descriptorWrite.pBufferInfo;
-    else if (descriptorWrite.pTexelBufferView)
-        delete[] descriptorWrite.pTexelBufferView;
+    if (index >= descriptorCount)
+    {
+        descriptorCount = std::max(descriptorCount, index + 1);
+        if (descriptorCount > imageDescriptors.size())
+            imageDescriptors.resize(descriptorCount);
+        descriptorWrite.descriptorCount = descriptorCount;
+        descriptorWrite.pImageInfo = imageDescriptors.data();
+    }
+    changed = true;
+    return imageDescriptors[index];
 }
 
-StorageBufferArray& StorageBufferArray::operator=(std::initializer_list<std::shared_ptr<const magma::StorageBuffer>> bufferArray) noexcept
+StorageBufferArray::DescriptorBufferInfo& StorageBufferArray::operator[](uint32_t index)
 {
-    VkDescriptorBufferInfo *bufferInfo;
-    if (!descriptorWrite.pBufferInfo)
-        bufferInfo = new(std::nothrow) VkDescriptorBufferInfo[bufferArray.size()];
-    else
+    if (index >= descriptorCount)
     {
-        if (bufferArray.size() <= descriptorCount)
-            bufferInfo = const_cast<VkDescriptorBufferInfo *>(descriptorWrite.pBufferInfo);
-        else
-        {   // Reallocate
-            delete[] descriptorWrite.pBufferInfo;
-            bufferInfo = new(std::nothrow) VkDescriptorBufferInfo[bufferArray.size()];
-        }
+        descriptorCount = std::max(descriptorCount, index + 1);
+        if (descriptorCount > bufferDescriptors.size())
+            bufferDescriptors.resize(descriptorCount);
+        descriptorWrite.descriptorCount = descriptorCount;
+        descriptorWrite.pBufferInfo = bufferDescriptors.data();
     }
-    descriptorCount = 0;
-    if (bufferInfo)
-    {
-        for (auto& buffer : bufferArray)
-            bufferInfo[descriptorCount++] = buffer->getDescriptor();
-    }
-    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.pNext = nullptr;
-    descriptorWrite.dstSet = VK_NULL_HANDLE;
-    descriptorWrite.dstBinding = binding;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = descriptorCount;
-    descriptorWrite.descriptorType = descriptorType;
-    descriptorWrite.pImageInfo = nullptr;
-    descriptorWrite.pBufferInfo = bufferInfo;
-    descriptorWrite.pTexelBufferView = nullptr;
     changed = true;
-    return *this;
+    return bufferDescriptors[index];
 }
 } // namespace binding
 } // namespace magma
