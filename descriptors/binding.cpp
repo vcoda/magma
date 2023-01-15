@@ -46,47 +46,20 @@ DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(VkDescriptorType descript
 void DescriptorSetLayoutBinding::writeDescriptor(const VkDescriptorImageInfo& info) noexcept
 {
     imageDescriptor = info;
-    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.pNext = nullptr;
-    descriptorWrite.dstSet = VK_NULL_HANDLE;
-    descriptorWrite.dstBinding = binding;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = descriptorCount;
-    descriptorWrite.descriptorType = descriptorType;
     descriptorWrite.pImageInfo = &imageDescriptor;
-    descriptorWrite.pBufferInfo = nullptr;
-    descriptorWrite.pTexelBufferView = nullptr;
     changed = true;
 }
 
 void DescriptorSetLayoutBinding::writeDescriptor(std::shared_ptr<const Buffer> buffer) noexcept
 {
     bufferDescriptor = buffer->getDescriptor();
-    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.pNext = nullptr;
-    descriptorWrite.dstSet = VK_NULL_HANDLE;
-    descriptorWrite.dstBinding = binding;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = descriptorCount;
-    descriptorWrite.descriptorType = descriptorType;
-    descriptorWrite.pImageInfo = nullptr;
     descriptorWrite.pBufferInfo = &bufferDescriptor;
-    descriptorWrite.pTexelBufferView = nullptr;
     changed = true;
 }
 
 void DescriptorSetLayoutBinding::writeDescriptor(std::shared_ptr<const BufferView> bufferView) noexcept
 {
     texelBufferView = *bufferView;
-    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.pNext = nullptr;
-    descriptorWrite.dstSet = VK_NULL_HANDLE;
-    descriptorWrite.dstBinding = binding;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorCount = descriptorCount;
-    descriptorWrite.descriptorType = descriptorType;
-    descriptorWrite.pImageInfo = nullptr;
-    descriptorWrite.pBufferInfo = nullptr;
     descriptorWrite.pTexelBufferView = &texelBufferView;
     changed = true;
 }
