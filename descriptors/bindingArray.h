@@ -23,7 +23,7 @@ namespace magma
     namespace binding
     {
         /* An array of descriptors in the binding. */
- 
+
         class DescriptorArraySetLayoutBinding : public DescriptorSetLayoutBinding
         {
         public:
@@ -93,7 +93,7 @@ namespace magma
         /* A combined image sampler is a single descriptor type associated with both a sampler and an image resource,
            combining both a sampler and sampled image descriptor into a single descriptor. */
 
-		template<uint32_t Size>
+        template<uint32_t Size>
         class CombinedImageSamplerArray : public DescriptorArraySetLayoutBinding
         {
         public:
@@ -142,7 +142,7 @@ namespace magma
            described in a shader as a structure with various members that load, store,
            and atomic operations can be performed on. */
 
-		template<uint32_t Size>
+        template<uint32_t Size>
         class StorageBufferArray : public DescriptorArraySetLayoutBinding
         {
         public:
