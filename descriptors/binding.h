@@ -44,7 +44,7 @@ namespace magma
             bool dirty() const noexcept { return updated; }
 
         protected:
-            explicit DescriptorSetLayoutBinding(VkDescriptorType descriptorType,
+            DescriptorSetLayoutBinding(VkDescriptorType descriptorType,
                 uint32_t descriptorCount, uint32_t binding) noexcept;
 
             union
