@@ -106,7 +106,7 @@ namespace magma
             };
 
             CombinedImageSamplerArray(uint32_t binding) noexcept:
-                DescriptorArraySetLayoutBinding(VK_DESCRIPTOR_TYPE_SAMPLER, Size, binding) {}
+                DescriptorArraySetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, Size, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
         };
 
