@@ -62,6 +62,34 @@ namespace magma
             Descriptor operator[](uint32_t index) noexcept;
         };
 
+        /* Immutable samplers are permanently bound into the set layout;
+           later binding a sampler into an immutable sampler slot
+           in a descriptor set is not allowed. */
+
+        template<uint32_t Size>
+        class ImmutableSamplerArray : public DescriptorArraySetLayoutBinding
+        {
+        public:
+            struct Descriptor
+            {
+                Descriptor(VkDescriptorImageInfo& imageDescriptor, VkSampler& immutableSampler) noexcept:
+                    imageDescriptor(imageDescriptor), immutableSampler(immutableSampler) {}
+                void operator=(std::shared_ptr<const magma::Sampler>) noexcept;
+                VkDescriptorImageInfo& imageDescriptor;
+                VkSampler& immutableSampler;
+            };
+
+            ImmutableSamplerArray(uint32_t binding) noexcept:
+                DescriptorArraySetLayoutBinding(VK_DESCRIPTOR_TYPE_SAMPLER, Size, binding)
+            {
+                VkDescriptorSetLayoutBinding::pImmutableSamplers = immutableSamplers;
+            }
+            Descriptor operator[](uint32_t index) noexcept;
+
+        private:
+            VkSampler immutableSamplers[Size] = {};
+        };
+
         /* A combined image sampler is a single descriptor type associated with both a sampler and an image resource,
            combining both a sampler and sampled image descriptor into a single descriptor. */
 
@@ -80,6 +108,34 @@ namespace magma
             CombinedImageSamplerArray(uint32_t binding) noexcept:
                 DescriptorArraySetLayoutBinding(VK_DESCRIPTOR_TYPE_SAMPLER, Size, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
+        };
+
+        /* Updates to a VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER descriptor with immutable samplers
+           does not modify the samplers (the image views are updated, but the sampler updates are ignored). */
+
+        template<uint32_t Size>
+        class CombinedImageImmutableSamplerArray : public DescriptorArraySetLayoutBinding
+        {
+        public:
+            struct Descriptor
+            {
+                Descriptor(VkDescriptorImageInfo& imageDescriptor, VkSampler& immutableSampler) noexcept:
+                    imageDescriptor(imageDescriptor), immutableSampler(immutableSampler) {}
+                void operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>&) noexcept;
+                void operator=(std::shared_ptr<const ImageView>) noexcept;
+                VkDescriptorImageInfo& imageDescriptor;
+                VkSampler& immutableSampler;
+            };
+
+            CombinedImageImmutableSamplerArray(uint32_t binding) noexcept:
+                DescriptorArraySetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, Size, binding)
+            {
+                VkDescriptorSetLayoutBinding::pImmutableSamplers = immutableSamplers;
+            }
+            Descriptor operator[](uint32_t index) noexcept;
+
+        private:
+            VkSampler immutableSamplers[Size] = {};
         };
 
         /* A storage buffer is a descriptor type associated with a buffer resource directly,
