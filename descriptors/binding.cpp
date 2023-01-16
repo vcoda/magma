@@ -27,7 +27,6 @@ namespace binding
 {
 DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding) noexcept:
     VkDescriptorSetLayoutBinding{binding, descriptorType, descriptorCount, 0, nullptr},
-    imageDescriptor{},
     updated(false)
 {}
 

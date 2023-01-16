@@ -49,7 +49,7 @@ namespace magma
 
             union
             {
-                VkDescriptorImageInfo imageDescriptor;
+                VkDescriptorImageInfo imageDescriptor = {};
                 VkDescriptorBufferInfo bufferDescriptor;
                 VkBufferView texelBufferView;
             };
