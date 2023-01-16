@@ -23,7 +23,60 @@ namespace magma
 {
 namespace binding
 {
-VkWriteDescriptorSet DescriptorSetLayoutBindingArray::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
+DescriptorArraySetLayoutBinding::DescriptorArraySetLayoutBinding(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding) noexcept:
+    DescriptorSetLayoutBinding(descriptorType, descriptorCount, binding)
+{
+    switch (descriptorType)
+    {
+    case VK_DESCRIPTOR_TYPE_SAMPLER:
+    case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
+    case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
+    case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
+    case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
+        imageDescriptors = new VkDescriptorImageInfo[descriptorCount];
+        break;
+    case VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER:
+    case VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER:
+        texelBufferViews = new VkBufferView[descriptorCount];
+        break;
+    case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER:
+    case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER:
+    case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC:
+    case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC:
+        bufferDescriptors = new VkDescriptorBufferInfo[descriptorCount];
+        break;
+    default:
+        MAGMA_ASSERT(false);
+    }
+}
+
+DescriptorArraySetLayoutBinding::~DescriptorArraySetLayoutBinding()
+{
+    switch (descriptorType)
+    {
+    case VK_DESCRIPTOR_TYPE_SAMPLER:
+    case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
+    case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
+    case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
+    case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
+        delete[] imageDescriptors;
+        break;
+    case VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER:
+    case VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER:
+        delete[] texelBufferViews;
+        break;
+    case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER:
+    case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER:
+    case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC:
+    case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC:
+        delete[] bufferDescriptors;
+        break;
+    default:
+        MAGMA_ASSERT(false);
+    }
+}
+
+VkWriteDescriptorSet DescriptorArraySetLayoutBinding::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
 {
     VkWriteDescriptorSet writeDescriptorSet;
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -40,7 +93,7 @@ VkWriteDescriptorSet DescriptorSetLayoutBindingArray::getWriteDescriptorSet(VkDe
     case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
     case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
     case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
-        writeDescriptorSet.pImageInfo = reinterpret_cast<const VkDescriptorImageInfo*>(getDescriptorArray());
+        writeDescriptorSet.pImageInfo = imageDescriptors;
         writeDescriptorSet.pBufferInfo = nullptr;
         writeDescriptorSet.pTexelBufferView = nullptr;
         break;
@@ -48,14 +101,14 @@ VkWriteDescriptorSet DescriptorSetLayoutBindingArray::getWriteDescriptorSet(VkDe
     case VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER:
         writeDescriptorSet.pImageInfo = nullptr;
         writeDescriptorSet.pBufferInfo = nullptr;
-        writeDescriptorSet.pTexelBufferView = reinterpret_cast<const VkBufferView*>(getDescriptorArray());
+        writeDescriptorSet.pTexelBufferView = texelBufferViews;
         break;
     case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER:
     case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER:
     case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC:
     case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC:
         writeDescriptorSet.pImageInfo = nullptr;
-        writeDescriptorSet.pBufferInfo = reinterpret_cast<const VkDescriptorBufferInfo*>(getDescriptorArray());
+        writeDescriptorSet.pBufferInfo = bufferDescriptors;
         writeDescriptorSet.pTexelBufferView = nullptr;
         break;
     default:
