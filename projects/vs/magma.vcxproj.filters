@@ -1348,6 +1348,9 @@
     <None Include="..\..\descriptors\bindingArray.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
+    <None Include="..\..\descriptors\inlineUniformBlockBinding.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">
