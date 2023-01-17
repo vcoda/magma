@@ -3,6 +3,42 @@ namespace magma
 namespace binding
 {
 template<uint32_t Size>
+inline VkWriteDescriptorSet BaseSamplerArray<Size>::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
+{
+    VkWriteDescriptorSet writeDescriptorSet;
+    writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeDescriptorSet.pNext = nullptr;
+    writeDescriptorSet.dstSet = dstSet;
+    writeDescriptorSet.dstBinding = binding;
+    writeDescriptorSet.dstArrayElement = 0;
+    writeDescriptorSet.descriptorCount = Size;
+    writeDescriptorSet.descriptorType = descriptorType;
+    writeDescriptorSet.pImageInfo = imageDescriptors;
+    writeDescriptorSet.pBufferInfo = nullptr;
+    writeDescriptorSet.pTexelBufferView = nullptr;
+    updated = false;
+    return writeDescriptorSet;
+}
+
+template<uint32_t Size>
+inline VkWriteDescriptorSet BaseBufferArray<Size>::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
+{
+    VkWriteDescriptorSet writeDescriptorSet;
+    writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeDescriptorSet.pNext = nullptr;
+    writeDescriptorSet.dstSet = dstSet;
+    writeDescriptorSet.dstBinding = binding;
+    writeDescriptorSet.dstArrayElement = 0;
+    writeDescriptorSet.descriptorCount = Size;
+    writeDescriptorSet.descriptorType = descriptorType;
+    writeDescriptorSet.pImageInfo = nullptr;
+    writeDescriptorSet.pBufferInfo = bufferDescriptors;
+    writeDescriptorSet.pTexelBufferView = nullptr;
+    updated = false;
+    return writeDescriptorSet;
+}
+
+template<uint32_t Size>
 inline void SamplerArray<Size>::Descriptor::operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept
 {
     MAGMA_ASSERT(sampler);

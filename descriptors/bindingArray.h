@@ -22,31 +22,24 @@ namespace magma
 {
     namespace binding
     {
-        /* An array of descriptors in the binding. */
+        /* Base class of array of sampler descriptors. */
 
-        class DescriptorArraySetLayoutBinding : public DescriptorSetLayoutBinding
+        template<uint32_t Size>
+        struct BaseSamplerArray : public DescriptorSetLayoutBinding
         {
-        public:
-            VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
-            ~DescriptorArraySetLayoutBinding();
-
         protected:
-            DescriptorArraySetLayoutBinding(VkDescriptorType descriptorType,
-                uint32_t descriptorCount, uint32_t binding) noexcept;
+            BaseSamplerArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+                DescriptorSetLayoutBinding(descriptorType, Size, binding) {}
+            VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
 
-            union
-            {	// Non-POD types (like std::vector) cannot be placed in the union
-                VkDescriptorImageInfo *imageDescriptors = nullptr;
-                VkDescriptorBufferInfo *bufferDescriptors;
-                VkBufferView *texelBufferViews;
-            };
+            VkDescriptorImageInfo imageDescriptors[Size];
         };
 
         /* A sampler descriptor is a descriptor type associated with a sampler object,
            used to control the behavior of sampling operations performed on a sampled image. */
 
         template<uint32_t Size>
-        class SamplerArray : public DescriptorArraySetLayoutBinding
+        class SamplerArray : public BaseSamplerArray<Size>
         {
         public:
             struct Descriptor
@@ -57,8 +50,8 @@ namespace magma
                 VkDescriptorImageInfo& imageDescriptor;
             };
 
-            SamplerArray(uint32_t binding) noexcept:
-                DescriptorArraySetLayoutBinding(VK_DESCRIPTOR_TYPE_SAMPLER, Size, binding) {}
+            SamplerArray(uint32_t binding): noexcept:
+                BaseSamplerArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
         };
 
@@ -67,7 +60,7 @@ namespace magma
            in a descriptor set is not allowed. */
 
         template<uint32_t Size>
-        class ImmutableSamplerArray : public DescriptorArraySetLayoutBinding
+        class ImmutableSamplerArray : public BaseSamplerArray<Size>
         {
         public:
             struct Descriptor
@@ -80,7 +73,7 @@ namespace magma
             };
 
             ImmutableSamplerArray(uint32_t binding) noexcept:
-                DescriptorArraySetLayoutBinding(VK_DESCRIPTOR_TYPE_SAMPLER, Size, binding)
+                BaseSamplerArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding)
             {
                 VkDescriptorSetLayoutBinding::pImmutableSamplers = immutableSamplers;
             }
@@ -94,7 +87,7 @@ namespace magma
            combining both a sampler and sampled image descriptor into a single descriptor. */
 
         template<uint32_t Size>
-        class CombinedImageSamplerArray : public DescriptorArraySetLayoutBinding
+        class CombinedImageSamplerArray : public BaseSamplerArray<Size>
         {
         public:
             struct Descriptor
@@ -106,7 +99,7 @@ namespace magma
             };
 
             CombinedImageSamplerArray(uint32_t binding) noexcept:
-                DescriptorArraySetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, Size, binding) {}
+                BaseSamplerArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
         };
 
@@ -114,7 +107,7 @@ namespace magma
            does not modify the samplers (the image views are updated, but the sampler updates are ignored). */
 
         template<uint32_t Size>
-        class CombinedImageImmutableSamplerArray : public DescriptorArraySetLayoutBinding
+        class CombinedImageImmutableSamplerArray : public BaseSamplerArray<Size>
         {
         public:
             struct Descriptor
@@ -128,7 +121,7 @@ namespace magma
             };
 
             CombinedImageImmutableSamplerArray(uint32_t binding) noexcept:
-                DescriptorArraySetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, Size, binding)
+                BaseSamplerArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding)
             {
                 VkDescriptorSetLayoutBinding::pImmutableSamplers = immutableSamplers;
             }
@@ -138,12 +131,25 @@ namespace magma
             VkSampler immutableSamplers[Size] = {};
         };
 
+        /* Base class of array of buffer descriptors. */
+
+        template<uint32_t Size>
+        struct BaseBufferArray : public DescriptorSetLayoutBinding
+        {
+        protected:
+            BaseBufferArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+                DescriptorSetLayoutBinding(descriptorType, Size, binding) {}
+            VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
+
+            VkDescriptorBufferInfo bufferDescriptors[Size];
+        };
+
         /* A storage buffer is a descriptor type associated with a buffer resource directly,
            described in a shader as a structure with various members that load, store,
            and atomic operations can be performed on. */
 
         template<uint32_t Size>
-        class StorageBufferArray : public DescriptorArraySetLayoutBinding
+        class StorageBufferArray : public BaseBufferArray<Size>
         {
         public:
             struct Descriptor
@@ -155,7 +161,7 @@ namespace magma
             };
 
             StorageBufferArray(uint32_t binding) noexcept:
-                DescriptorArraySetLayoutBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, Size, binding) {}
+                BaseBufferArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
         };
     } // namespace binding
