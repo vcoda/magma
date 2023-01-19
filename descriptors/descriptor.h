@@ -220,19 +220,16 @@ namespace magma
            across multiple disjoint sets of drawing and dispatching commands. */
 
     #ifdef VK_EXT_inline_uniform_block
-        template<typename UniformBlockType>
+        template<class UniformBlockType>
         class InlineUniformBlock : public Descriptor
         {
         public:
             InlineUniformBlock(uint32_t binding) noexcept;
-            InlineUniformBlock(const InlineUniformBlock<UniformBlockType>&) noexcept;
-            ~InlineUniformBlock();
             VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
-            InlineUniformBlock<UniformBlockType>& operator=(const InlineUniformBlock<UniformBlockType>&) noexcept;
             InlineUniformBlock<UniformBlockType>& operator=(const UniformBlockType&) noexcept;
 
         private:
-            VkWriteDescriptorSetInlineUniformBlockEXT writeDescriptorSetInlineUniformBlock = {};
+            const UniformBlockType *inlineUniformBlock = nullptr;
         };
     #endif // VK_EXT_inline_uniform_block
 
