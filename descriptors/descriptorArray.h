@@ -73,7 +73,7 @@ namespace magma
                 VkDescriptorImageInfo& imageDescriptor;
             };
 
-            SamplerArray(uint32_t binding): noexcept:
+            SamplerArray(uint32_t binding) noexcept:
                 DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
         };
@@ -97,8 +97,10 @@ namespace magma
 
             ImmutableSamplerArray(uint32_t binding) noexcept:
                 DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding)
-            {
-                DescriptorArray<Size>::binding.pImmutableSamplers = immutableSamplers;
+            {   // If pImmutableSamplers is not NULL, then it is a pointer
+                // to an array of sampler handles that will be copied
+                // into the set layout and used for the corresponding binding.
+                this->binding.pImmutableSamplers = immutableSamplers;
             }
             Descriptor operator[](uint32_t index) noexcept;
 
@@ -145,8 +147,10 @@ namespace magma
 
             CombinedImageImmutableSamplerArray(uint32_t binding) noexcept:
                 DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding)
-            {
-                DescriptorArray<Size>::binding.pImmutableSamplers = immutableSamplers;
+            {   // If pImmutableSamplers is not NULL, then it is a pointer
+                // to an array of sampler handles that will be copied
+                // into the set layout and used for the corresponding binding.
+                this->binding.pImmutableSamplers = immutableSamplers;
             }
             Descriptor operator[](uint32_t index) noexcept;
 
