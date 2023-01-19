@@ -40,7 +40,8 @@ namespace magma
 {
     namespace descriptor
     {
-        /* Base class of array of sampler descriptors. */
+        /* Base class of descriptor array. Provided template parameter
+           to define the array size in compile-time. */
 
         template<uint32_t Size>
         struct DescriptorArray : public Descriptor
