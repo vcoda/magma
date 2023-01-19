@@ -134,6 +134,88 @@ inline typename CombinedImageImmutableSamplerArray<Size>::Descriptor CombinedIma
 }
 
 template<uint32_t Size>
+inline void SampledImageArray<Size>::Descriptor::operator=(std::shared_ptr<const ImageView> imageView) noexcept
+{
+    MAGMA_ASSERT(imageView);
+    MAGMA_ASSERT(imageView->getImage()->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
+    imageDescriptor = imageView->getDescriptor(nullptr);
+    return *this;
+}
+
+template<uint32_t Size>
+inline typename SampledImageArray<Size>::Descriptor SampledImageArray<Size>::operator[](uint32_t index) noexcept
+{
+    MAGMA_ASSERT(index < Size);
+    updated = true;
+    return Descriptor(imageDescriptors[index]);
+}
+
+template<uint32_t Size>
+inline void StorageImageArray<Size>::Descriptor::operator=(std::shared_ptr<const ImageView> imageView) noexcept
+{
+    MAGMA_ASSERT(imageView);
+    MAGMA_ASSERT(imageView->getImage()->getUsage() & VK_IMAGE_USAGE_STORAGE_BIT);
+    imageDescriptor = imageView->getDescriptor(nullptr);
+    return *this;
+}
+
+template<uint32_t Size>
+inline typename StorageImageArray<Size>::Descriptor StorageImageArray<Size>::operator[](uint32_t index) noexcept
+{
+    MAGMA_ASSERT(index < Size);
+    updated = true;
+    return Descriptor(imageDescriptors[index]);
+}
+
+template<uint32_t Size>
+inline void UniformTexelBufferArray<Size>::Descriptor::operator=(std::shared_ptr<const Buffer> buffer) noexcept
+{
+    MAGMA_ASSERT(buffer);
+    MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT);
+    bufferDescriptor = buffer->getDescriptor();
+}
+
+template<uint32_t Size>
+inline typename UniformTexelBufferArray<Size>::Descriptor UniformTexelBufferArray<Size>::operator[](uint32_t index) noexcept
+{
+    MAGMA_ASSERT(index < Size);
+    updated = true;
+    return Descriptor(bufferDescriptors[index]);
+}
+
+template<uint32_t Size>
+inline void StorageTexelBufferArray<Size>::Descriptor::operator=(std::shared_ptr<const Buffer> buffer) noexcept
+{
+    MAGMA_ASSERT(buffer);
+    MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT);
+    bufferDescriptor = buffer->getDescriptor();
+}
+
+template<uint32_t Size>
+inline typename StorageTexelBufferArray<Size>::Descriptor StorageTexelBufferArray<Size>::operator[](uint32_t index) noexcept
+{
+    MAGMA_ASSERT(index < Size);
+    updated = true;
+    return Descriptor(bufferDescriptors[index]);
+}
+
+template<uint32_t Size>
+inline void UniformBufferArray<Size>::Descriptor::operator=(std::shared_ptr<const Buffer> buffer) noexcept
+{
+    MAGMA_ASSERT(buffer);
+    MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
+    bufferDescriptor = buffer->getDescriptor();
+}
+
+template<uint32_t Size>
+inline typename UniformBufferArray<Size>::Descriptor UniformBufferArray<Size>::operator[](uint32_t index) noexcept
+{
+    MAGMA_ASSERT(index < Size);
+    updated = true;
+    return Descriptor(bufferDescriptors[index]);
+}
+
+template<uint32_t Size>
 inline void StorageBufferArray<Size>::Descriptor::operator=(std::shared_ptr<const Buffer> buffer) noexcept
 {
     MAGMA_ASSERT(buffer);
@@ -147,6 +229,55 @@ inline typename StorageBufferArray<Size>::Descriptor StorageBufferArray<Size>::o
     MAGMA_ASSERT(index < Size);
     updated = true;
     return Descriptor(bufferDescriptors[index]);
+}
+
+template<uint32_t Size>
+inline void DynamicUniformBufferArray<Size>::Descriptor::operator=(std::shared_ptr<const Buffer> buffer) noexcept
+{
+    MAGMA_ASSERT(buffer);
+    MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
+    bufferDescriptor = buffer->getDescriptor();
+}
+
+template<uint32_t Size>
+inline typename DynamicUniformBufferArray<Size>::Descriptor DynamicUniformBufferArray<Size>::operator[](uint32_t index) noexcept
+{
+    MAGMA_ASSERT(index < Size);
+    updated = true;
+    return Descriptor(bufferDescriptors[index]);
+}
+
+template<uint32_t Size>
+inline void DynamicStorageBufferArray<Size>::Descriptor::operator=(std::shared_ptr<const Buffer> buffer) noexcept
+{
+    MAGMA_ASSERT(buffer);
+    MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+    bufferDescriptor = buffer->getDescriptor();
+}
+
+template<uint32_t Size>
+inline typename DynamicStorageBufferArray<Size>::Descriptor DynamicStorageBufferArray<Size>::operator[](uint32_t index) noexcept
+{
+    MAGMA_ASSERT(index < Size);
+    updated = true;
+    return Descriptor(bufferDescriptors[index]);
+}
+
+template<uint32_t Size>
+inline void InputAttachmentArray<Size>::Descriptor::operator=(std::shared_ptr<const ImageView> imageView) noexcept
+{
+    MAGMA_ASSERT(imageView);
+    MAGMA_ASSERT(imageView->getImage()->getUsage() & VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
+    imageDescriptor = imageView->getDescriptor(nullptr);
+    return *this;
+}
+
+template<uint32_t Size>
+inline typename InputAttachmentArray<Size>::Descriptor InputAttachmentArray<Size>::operator[](uint32_t index) noexcept
+{
+    MAGMA_ASSERT(index < Size);
+    updated = true;
+    return Descriptor(imageDescriptors[index]);
 }
 } // namespace descriptor
 } // namespace magma

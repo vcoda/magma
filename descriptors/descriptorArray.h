@@ -136,6 +136,106 @@ namespace magma
             VkSampler immutableSamplers[Size] = {};
         };
 
+        /* A sampled image is a descriptor type associated with an image resource
+           via an image view that sampling operations can be performed on. */
+
+        template<uint32_t Size>
+        class SampledImageArray : public DescriptorArray<Size>
+        {
+        public:
+            struct Descriptor
+            {
+                Descriptor(VkDescriptorImageInfo& imageDescriptor) noexcept:
+                    imageDescriptor(imageDescriptor) {}
+                void operator=(std::shared_ptr<const ImageView>) noexcept;
+                VkDescriptorImageInfo& imageDescriptor;
+            };
+
+            SampledImageArray(uint32_t binding) noexcept:
+                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding) {}
+            Descriptor operator[](uint32_t index) noexcept;
+        };
+
+        /* A storage image is a descriptor type associated with an image resource
+           via an image view that load, store, and atomic operations can be performed on. */
+
+        template<uint32_t Size>
+        class StorageImageArray : public DescriptorArray<Size>
+        {
+        public:
+            struct Descriptor
+            {
+                Descriptor(VkDescriptorImageInfo& imageDescriptor) noexcept:
+                    imageDescriptor(imageDescriptor) {}
+                void operator=(std::shared_ptr<const ImageView>) noexcept;
+                VkDescriptorImageInfo& imageDescriptor;
+            };
+
+            StorageImageArray(uint32_t binding) noexcept:
+                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, binding) {}
+            Descriptor operator[](uint32_t index) noexcept;
+        };
+
+        /* A uniform texel buffer is a descriptor type associated with a buffer resource
+           via a buffer view that formatted load operations can be performed on. */
+
+        template<uint32_t Size>
+        class UniformTexelBufferArray : public DescriptorArray<Size>
+        {
+        public:
+            struct Descriptor
+            {
+                Descriptor(VkDescriptorBufferInfo& bufferDescriptor) noexcept:
+                    bufferDescriptor(bufferDescriptor) {}
+                void operator=(std::shared_ptr<const Buffer>) noexcept;
+                VkDescriptorBufferInfo& bufferDescriptor;
+            };
+
+            UniformTexelBufferArray(uint32_t binding) noexcept:
+                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, binding) {}
+            Descriptor operator[](uint32_t index) noexcept;
+        };
+
+        /* A storage texel buffer is a descriptor type associated with a buffer resource
+           via a buffer view that formatted load, store, and atomic operations can be performed on. */
+
+        template<uint32_t Size>
+        class StorageTexelBufferArray : public DescriptorArray<Size>
+        {
+        public:
+            struct Descriptor
+            {
+                Descriptor(VkDescriptorBufferInfo& bufferDescriptor) noexcept:
+                    bufferDescriptor(bufferDescriptor) {}
+                void operator=(std::shared_ptr<const Buffer>) noexcept;
+                VkDescriptorBufferInfo& bufferDescriptor;
+            };
+
+            StorageTexelBufferArray(uint32_t binding) noexcept:
+                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, binding) {}
+            Descriptor operator[](uint32_t index) noexcept;
+        };
+
+        /* A uniform buffer is a descriptor type associated with a buffer resource directly,
+           described in a shader as a structure with various members that load operations can be performed on. */
+
+        template<uint32_t Size>
+        class UniformBufferArray : public DescriptorArray<Size>
+        {
+        public:
+            struct Descriptor
+            {
+                Descriptor(VkDescriptorBufferInfo& bufferDescriptor) noexcept:
+                    bufferDescriptor(bufferDescriptor) {}
+                void operator=(std::shared_ptr<const Buffer>) noexcept;
+                VkDescriptorBufferInfo& bufferDescriptor;
+            };
+
+            UniformBufferArray(uint32_t binding) noexcept:
+                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, binding) {}
+            Descriptor operator[](uint32_t index) noexcept;
+        };
+
         /* A storage buffer is a descriptor type associated with a buffer resource directly,
            described in a shader as a structure with various members that load, store,
            and atomic operations can be performed on. */
@@ -154,6 +254,72 @@ namespace magma
 
             StorageBufferArray(uint32_t binding) noexcept:
                 DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, binding) {}
+            Descriptor operator[](uint32_t index) noexcept;
+        };
+
+        /* A dynamic uniform buffer is almost identical to a uniform buffer,
+           and differs only in how the offset into the buffer is specified.
+           The base offset calculated by the VkDescriptorBufferInfo when
+           initially updating the descriptor set is added to a dynamic offset
+           when binding the descriptor set. */
+
+        template<uint32_t Size>
+        class DynamicUniformBufferArray : public DescriptorArray<Size>
+        {
+        public:
+            struct Descriptor
+            {
+                Descriptor(VkDescriptorBufferInfo& bufferDescriptor) noexcept:
+                    bufferDescriptor(bufferDescriptor) {}
+                void operator=(std::shared_ptr<const Buffer>) noexcept;
+                VkDescriptorBufferInfo& bufferDescriptor;
+            };
+
+            DynamicUniformBufferArray(uint32_t binding) noexcept:
+                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, binding) {}
+            Descriptor operator[](uint32_t index) noexcept;
+        };
+
+        /* A dynamic storage buffer is almost identical to a storage buffer,
+           and differs only in how the offset into the buffer is specified.
+           The base offset calculated by the VkDescriptorBufferInfo when
+           initially updating the descriptor set is added to a dynamic offset
+           when binding the descriptor set. */
+
+        template<uint32_t Size>
+        class DynamicStorageBufferArray : public DescriptorArray<Size>
+        {
+        public:
+            struct Descriptor
+            {
+                Descriptor(VkDescriptorBufferInfo& bufferDescriptor) noexcept:
+                    bufferDescriptor(bufferDescriptor) {}
+                void operator=(std::shared_ptr<const Buffer>) noexcept;
+                VkDescriptorBufferInfo& bufferDescriptor;
+            };
+
+            DynamicStorageBufferArray(uint32_t binding) noexcept:
+                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, binding) {}
+            Descriptor operator[](uint32_t index) noexcept;
+        };
+
+        /* An input attachment is a descriptor type associated with an image resource
+           via an image view that can be used for framebuffer local load operations in fragment shaders. */
+
+        template<uint32_t Size>
+        class InputAttachmentArray : public DescriptorArray<Size>
+        {
+        public:
+            struct Descriptor
+            {
+                Descriptor(VkDescriptorImageInfo& imageDescriptor) noexcept:
+                    imageDescriptor(imageDescriptor) {}
+                void operator=(std::shared_ptr<const ImageView>) noexcept;
+                VkDescriptorImageInfo& imageDescriptor;
+            };
+
+            InputAttachmentArray(uint32_t binding) noexcept:
+                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
         };
     } // namespace descriptor
