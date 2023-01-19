@@ -17,13 +17,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "base.h"
-#include "../descriptors/binding.h"
 #include "../objects/descriptorSetLayout.h"
 
 namespace magma
 {
     class Device;
     class DescriptorPool;
+    class DescriptorSet;
     class DescriptorSetLayout;
     class ShaderReflection;
     class ImageView;

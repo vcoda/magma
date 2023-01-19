@@ -1,39 +1,49 @@
 namespace magma
 {
-namespace binding
+namespace descriptor
 {
 template<uint32_t Size>
-inline VkWriteDescriptorSet BaseSamplerArray<Size>::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
+inline VkWriteDescriptorSet DescriptorArray<Size>::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
 {
     VkWriteDescriptorSet writeDescriptorSet;
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;
-    writeDescriptorSet.dstBinding = binding;
+    writeDescriptorSet.dstBinding = binding.binding;
     writeDescriptorSet.dstArrayElement = 0;
-    writeDescriptorSet.descriptorCount = Size;
-    writeDescriptorSet.descriptorType = descriptorType;
-    writeDescriptorSet.pImageInfo = imageDescriptors;
-    writeDescriptorSet.pBufferInfo = nullptr;
-    writeDescriptorSet.pTexelBufferView = nullptr;
-    updated = false;
-    return writeDescriptorSet;
-}
-
-template<uint32_t Size>
-inline VkWriteDescriptorSet BaseBufferArray<Size>::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
-{
-    VkWriteDescriptorSet writeDescriptorSet;
-    writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeDescriptorSet.pNext = nullptr;
-    writeDescriptorSet.dstSet = dstSet;
-    writeDescriptorSet.dstBinding = binding;
-    writeDescriptorSet.dstArrayElement = 0;
-    writeDescriptorSet.descriptorCount = Size;
-    writeDescriptorSet.descriptorType = descriptorType;
-    writeDescriptorSet.pImageInfo = nullptr;
-    writeDescriptorSet.pBufferInfo = bufferDescriptors;
-    writeDescriptorSet.pTexelBufferView = nullptr;
+    writeDescriptorSet.descriptorCount = binding.descriptorCount;
+    writeDescriptorSet.descriptorType = binding.descriptorType;
+    switch (binding.descriptorType)
+    {
+    case VK_DESCRIPTOR_TYPE_SAMPLER:
+    case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
+    case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
+    case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
+    case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
+        writeDescriptorSet.pImageInfo = imageDescriptors;
+        writeDescriptorSet.pBufferInfo = nullptr;
+        writeDescriptorSet.pTexelBufferView = nullptr;
+        break;
+    case VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER:
+    case VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER:
+        writeDescriptorSet.pImageInfo = nullptr;
+        writeDescriptorSet.pBufferInfo = nullptr;
+        writeDescriptorSet.pTexelBufferView = texelBufferViews;
+        break;
+    case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER:
+    case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER:
+    case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC:
+    case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC:
+        writeDescriptorSet.pImageInfo = nullptr;
+        writeDescriptorSet.pBufferInfo = bufferDescriptors;
+        writeDescriptorSet.pTexelBufferView = nullptr;
+        break;
+    default:
+        writeDescriptorSet.pImageInfo = nullptr;
+        writeDescriptorSet.pBufferInfo = nullptr;
+        writeDescriptorSet.pTexelBufferView = nullptr;
+        MAGMA_ASSERT(false);
+    }
     updated = false;
     return writeDescriptorSet;
 }
@@ -135,5 +145,5 @@ inline typename StorageBufferArray<Size>::Descriptor StorageBufferArray<Size>::o
     updated = true;
     return Descriptor(bufferDescriptors[index]);
 }
-} // namespace binding
+} // namespace descriptor
 } // namespace magma

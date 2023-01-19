@@ -33,6 +33,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../shaders/shaderStages.h"
 #include "../shaders/shaderReflection.h"
 #include "../shaders/specialization.h"
+#include "../descriptors/descriptor.h"
 #include "../descriptors/descriptorSetLayoutReflection.h"
 #include "../states/vertexInputStructure.h"
 #include "../states/inputAssemblyState.h"
@@ -51,7 +52,7 @@ constexpr
 
 struct BlitRectangle::SetLayout : DescriptorSetLayoutReflection
 {
-    binding::CombinedImageSampler image = 0;
+    descriptor::CombinedImageSampler image = 0;
     MAGMA_REFLECT(&image)
 };
 
@@ -75,7 +76,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
     constexpr uint32_t maxDescriptorSets = 10;
     descriptorPool = std::make_shared<DescriptorPool>(device, maxDescriptorSets,
-        descriptor::CombinedImageSampler(maxDescriptorSets), allocator);
+        descriptor::CombinedImageSamplerPool(maxDescriptorSets), allocator);
     static SetLayout setLayout;
     std::shared_ptr<DescriptorSet> descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, setLayout, VK_SHADER_STAGE_FRAGMENT_BIT, allocator);
     // Create texture samplers

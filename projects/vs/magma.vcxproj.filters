@@ -120,9 +120,6 @@
     <ClInclude Include="..\..\descriptors\attachment.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\binding.h">
-      <Filter>Header Files\descriptors</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\descriptors\subpass.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
@@ -564,12 +561,6 @@
     <ClInclude Include="..\..\helpers\spirvReflectionTypeCast.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\descriptor.h">
-      <Filter>Header Files\descriptors</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\descriptors\bindingArray.h">
-      <Filter>Header Files\descriptors</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\shaders\shaderReflectionFactory.h">
       <Filter>Header Files\shaders</Filter>
     </ClInclude>
@@ -746,6 +737,15 @@
     </ClInclude>
     <ClInclude Include="..\..\objects\imageAttachment.h">
       <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\descriptors\descriptorPool.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\descriptors\descriptor.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\descriptors\descriptorArray.h">
+      <Filter>Header Files\descriptors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1064,12 +1064,6 @@
     <ClCompile Include="..\..\auxiliary\imageDescriptorSet.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\descriptors\binding.cpp">
-      <Filter>Source Files\descriptors</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\descriptors\bindingArray.cpp">
-      <Filter>Source Files\descriptors</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\objects\renderPassMultiview.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
@@ -1163,6 +1157,9 @@
     <ClCompile Include="..\..\objects\imageAttachment.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\descriptors\descriptor.cpp">
+      <Filter>Source Files\descriptors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\auxiliary\immediateRender.inl">
@@ -1255,9 +1252,6 @@
     <None Include="..\..\shaders\specialization.inl">
       <Filter>Header Files\shaders</Filter>
     </None>
-    <None Include="..\..\descriptors\binding.inl">
-      <Filter>Header Files\descriptors</Filter>
-    </None>
     <None Include="..\..\objects\pipeline.inl">
       <Filter>Header Files\objects</Filter>
     </None>
@@ -1345,10 +1339,13 @@
     <None Include="..\..\objects\pipelineLayout.inl">
       <Filter>Header Files\objects</Filter>
     </None>
-    <None Include="..\..\descriptors\bindingArray.inl">
+    <None Include="..\..\descriptors\descriptor.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
-    <None Include="..\..\descriptors\inlineUniformBlockBinding.inl">
+    <None Include="..\..\descriptors\descriptorArray.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\descriptors\inlineUniformBlockDescriptor.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
   </ItemGroup>

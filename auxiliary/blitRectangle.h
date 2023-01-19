@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "base.h"
-#include "../descriptors/binding.h"
 #include "../objects/descriptorSetLayout.h"
 #include "../misc/clearValue.h"
 

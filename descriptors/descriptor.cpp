@@ -17,30 +17,25 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "binding.h"
+#include "descriptor.h"
 #include "../objects/sampler.h"
 #include "../objects/accelerationStructure.h"
 
 namespace magma
 {
-namespace binding
+namespace descriptor
 {
-DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding) noexcept:
-    VkDescriptorSetLayoutBinding{binding, descriptorType, descriptorCount, 0, nullptr},
-    updated(false)
-{}
-
-VkWriteDescriptorSet DescriptorSetLayoutBinding::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
+VkWriteDescriptorSet Descriptor::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
 {
     VkWriteDescriptorSet writeDescriptorSet;
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;
-    writeDescriptorSet.dstBinding = binding;
+    writeDescriptorSet.dstBinding = binding.binding;
     writeDescriptorSet.dstArrayElement = 0;
-    writeDescriptorSet.descriptorCount = descriptorCount;
-    writeDescriptorSet.descriptorType = descriptorType;
-    switch (descriptorType)
+    writeDescriptorSet.descriptorCount = binding.descriptorCount;
+    writeDescriptorSet.descriptorType = binding.descriptorType;
+    switch (binding.descriptorType)
     {
     case VK_DESCRIPTOR_TYPE_SAMPLER:
     case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
@@ -82,10 +77,10 @@ VkWriteDescriptorSet AccelerationStructure::getWriteDescriptorSet(VkDescriptorSe
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = &writeDescriptorSetAccelerationStructure;
     writeDescriptorSet.dstSet = dstSet;
-    writeDescriptorSet.dstBinding = binding;
+    writeDescriptorSet.dstBinding = binding.binding;
     writeDescriptorSet.dstArrayElement = 0;
-    writeDescriptorSet.descriptorCount = descriptorCount;
-    writeDescriptorSet.descriptorType = descriptorType;
+    writeDescriptorSet.descriptorCount = 1;
+    writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV;
     writeDescriptorSet.pImageInfo = nullptr;
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = nullptr;
@@ -104,5 +99,5 @@ AccelerationStructure& AccelerationStructure::operator=(std::shared_ptr<const ma
     return *this;
 }
 #endif // VK_NV_ray_tracing
-} // namespace binding
+} // namespace descriptor
 } // namespace magma

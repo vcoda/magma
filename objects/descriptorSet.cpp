@@ -43,26 +43,27 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, descriptorPool->getDevice(), std::move(allocator)),
     layoutReflection(layoutReflection),
     descriptorPool(std::move(descriptorPool))
-{   // Check that all bindings have unique locations
-    const std::vector<binding::DescriptorSetLayoutBinding *>& descriptorBindings = layoutReflection.getDescriptorBindings();
+{   // Check that all descriptors have unique layout bindings
+    const std::vector<descriptor::Descriptor*>& descriptors = layoutReflection.getBindingDescriptors();
     std::vector<uint32_t> locations;
-    for (const auto binding : descriptorBindings)
-        locations.push_back(binding->binding);
+    for (const auto descriptor: descriptors)
+        locations.push_back(descriptor->getLayoutBinding().binding);
     if (std::unique(locations.begin(), locations.end()) != locations.end())
         MAGMA_THROW("elements of descriptor set layout should have unique binding locations");
-    // Validate descriptor bindings through shader reflection
+    // Validate descriptors through shader reflection
     if (shaderReflectionFactory && !shaderFileName.empty())
         validateReflection(shaderReflectionFactory->getReflection(shaderFileName), setIndex);
     // Prepare list of native bindings
-    std::vector<VkDescriptorSetLayoutBinding> bindings;
-    for (auto binding : descriptorBindings)
-    {   // Set global stage flags if they have not been assigned for binding
-        if (!binding->stageFlags)
-            binding->stageFlags = stageFlags;
-        bindings.push_back(*binding);
+    std::vector<VkDescriptorSetLayoutBinding> layoutBindings;
+    for (const auto descriptor: descriptors)
+    {
+        layoutBindings.push_back(descriptor->getLayoutBinding());
+        // Set global stage flags if they have not been assigned for descriptor binding
+        if (!layoutBindings.back().stageFlags)
+            layoutBindings.back().stageFlags = stageFlags;
     }
     // Create descriptor set layout
-    setLayout = std::make_shared<DescriptorSetLayout>(device, bindings, hostAllocator, 0);
+    setLayout = std::make_shared<DescriptorSetLayout>(device, layoutBindings, hostAllocator, 0);
     // Allocate descriptor set
     const VkDescriptorSetLayout dereferencedSetLayouts[1] = {*setLayout};
     VkDescriptorSetAllocateInfo descriptorSetAllocateInfo;
@@ -90,19 +91,19 @@ void DescriptorSet::update()
 {
     MAGMA_ASSERT(dirty());
     uint32_t descriptorWriteCount = 0;
-    const std::vector<binding::DescriptorSetLayoutBinding *>& descriptorBindings = layoutReflection.getDescriptorBindings();
-    for (const auto binding : descriptorBindings)
+    const std::vector<descriptor::Descriptor*>& descriptors = layoutReflection.getBindingDescriptors();
+    for (const auto descriptor: descriptors)
     {
-        if (binding->dirty())
+        if (descriptor->dirty())
             ++descriptorWriteCount;
     }
     if (descriptorWriteCount > 0)
     {
         MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, descriptorWriteCount);
-        for (auto binding : descriptorBindings)
+        for (const auto descriptor: descriptors)
         {
-            if (binding->dirty())
-                descriptorWrites.put(binding->getWriteDescriptorSet(handle));
+            if (descriptor->dirty())
+                descriptorWrites.put(descriptor->getWriteDescriptorSet(handle));
         }
         device->updateDescriptorWrites(descriptorWrites, descriptorWriteCount);
     }
@@ -111,11 +112,11 @@ void DescriptorSet::update()
 void DescriptorSet::gatherDirtyDescriptorWrites(std::vector<VkWriteDescriptorSet>& descriptorWrites) const
 {
     MAGMA_ASSERT(dirty());
-    const std::vector<binding::DescriptorSetLayoutBinding *>& descriptorBindings = layoutReflection.getDescriptorBindings();
-    for (auto binding : descriptorBindings)
+    const std::vector<descriptor::Descriptor*>& descriptors = layoutReflection.getBindingDescriptors();
+    for (const auto descriptor: descriptors)
     {
-        if (binding->dirty())
-            descriptorWrites.push_back(binding->getWriteDescriptorSet(handle));
+        if (descriptor->dirty())
+            descriptorWrites.push_back(descriptor->getWriteDescriptorSet(handle));
     }
 }
 
@@ -125,13 +126,14 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
     if (setIndex >= descriptorSets.size())
         MAGMA_THROW("set index exceeds number of reflected descriptor sets");
     const SpvReflectDescriptorSet *descriptorSet = descriptorSets[setIndex];
-    const std::vector<binding::DescriptorSetLayoutBinding *>& descriptorBindings = layoutReflection.getDescriptorBindings();
-    for (const auto binding : descriptorBindings)
+    const std::vector<descriptor::Descriptor *>& descriptors = layoutReflection.getBindingDescriptors();
+    for (const auto descriptor: descriptors)
     {
+        const VkDescriptorSetLayoutBinding& binding = descriptor->getLayoutBinding();
         const SpvReflectDescriptorBinding *reflectedBinding = nullptr;
         for (uint32_t i = 0; i < descriptorSet->binding_count; ++i)
         {
-            if (binding->binding == descriptorSet->bindings[i]->binding)
+            if (binding.binding == descriptorSet->bindings[i]->binding)
             {
                 reflectedBinding = descriptorSet->bindings[i];
                 break;
@@ -139,29 +141,29 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
         }
         if (!reflectedBinding)
         {
-            std::cout << "warning: binding #" << binding->binding << " not found in the reflection" << std::endl;
+            std::cout << "warning: binding #" << binding.binding << " not found in the reflection" << std::endl;
             continue;
         }
         const VkDescriptorType reflectedDescriptorType = helpers::spirvToDescriptorType(reflectedBinding->descriptor_type);
-        if (binding->descriptorType != reflectedDescriptorType)
+        if (binding.descriptorType != reflectedDescriptorType)
         {
-            if ((VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC == binding->descriptorType) &&
+            if ((VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC == binding.descriptorType) &&
                 (SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_BUFFER != reflectedBinding->descriptor_type))
             {
                 std::ostringstream oss;
                 oss << "descriptor type mismatch:" << std::endl
-                    << "binding #" << binding->binding << std::endl
+                    << "binding #" << binding.binding << std::endl
                     << "expected: " << helpers::stringize(reflectedDescriptorType) << std::endl
-                    << "defined: " << helpers::stringize(binding->descriptorType);
+                    << "defined: " << helpers::stringize(binding.descriptorType);
                 MAGMA_THROW(oss.str());
             }
         }
-        if (binding->descriptorCount != reflectedBinding->count)
+        if (binding.descriptorCount != reflectedBinding->count)
         {
             std::ostringstream oss;
             oss << "descriptor count mismatch:" << std::endl
-                << "binding #" << binding->binding << std::endl
-                << "expected: " << reflectedBinding->count << ", defined: " << binding->descriptorCount;
+                << "binding #" << binding.binding << std::endl
+                << "expected: " << reflectedBinding->count << ", defined: " << binding.descriptorCount;
             MAGMA_THROW(oss.str());
         }
     }

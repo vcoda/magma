@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "binding.h"
+#include "descriptor.h"
 
 namespace magma
 {
@@ -27,17 +27,17 @@ namespace magma
     class DescriptorSetLayoutReflection : core::NonCopyable
     {
     public:
-        virtual const std::vector<binding::DescriptorSetLayoutBinding *>& getDescriptorBindings() = 0;
+        virtual const std::vector<descriptor::Descriptor*>& getBindingDescriptors() = 0;
         bool dirty();
 
     protected:
-        template<class... DescriptorSetLayoutBinding>
-        void setReflection(DescriptorSetLayoutBinding&&... args);
-        const std::vector<binding::DescriptorSetLayoutBinding *>& getReflection() const noexcept;
+        template<class... Descriptor>
+        void setReflection(Descriptor&&... args);
+        const std::vector<descriptor::Descriptor*>& getReflection() const noexcept;
         bool hasReflection() const noexcept { return !reflection.empty(); }
 
     private:
-        std::vector<binding::DescriptorSetLayoutBinding *> reflection;
+        std::vector<descriptor::Descriptor*> reflection;
     };
 } // namespace magma
 

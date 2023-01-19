@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
-#include "../descriptors/descriptor.h"
+#include "../descriptors/descriptorPool.h"
 
 namespace magma
 {
@@ -34,14 +34,14 @@ namespace magma
     public:
         explicit DescriptorPool(std::shared_ptr<Device> device,
             uint32_t maxSets,
-            const Descriptor& descriptor,
+            const descriptor::DescriptorPool& descriptorPool,
             std::shared_ptr<IAllocator> allocator = nullptr,
             bool freeDescriptorSet = false,
             bool updateAfterBind = false,
             uint32_t maxInlineUniformBlockBindings = 0);
         explicit DescriptorPool(std::shared_ptr<Device> device,
             uint32_t maxSets,
-            const std::vector<Descriptor>& descriptors,
+            const std::vector<descriptor::DescriptorPool>& descriptorPools,
             std::shared_ptr<IAllocator> allocator = nullptr,
             bool freeDescriptorSet = false,
             bool updateAfterBind = false,

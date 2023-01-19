@@ -30,6 +30,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/graphicsPipeline.h"
 #include "../shaders/shaderStages.h"
 #include "../shaders/shaderReflection.h"
+#include "../descriptors/descriptor.h"
 #include "../descriptors/descriptorSetLayoutReflection.h"
 #include "../states/vertexInputStructure.h"
 #include "../states/inputAssemblyState.h"
@@ -56,7 +57,7 @@ struct alignas(16) TextShader::String
     float x, y;
     uint32_t first;
     uint32_t last;
-    float color[4];
+    float r, g, b, a;
 };
 
 struct alignas(16) TextShader::Glyph
@@ -66,9 +67,9 @@ struct alignas(16) TextShader::Glyph
 
 struct TextShader::SetLayout : DescriptorSetLayoutReflection
 {
-    binding::UniformBuffer uniforms = 0;
-    binding::StorageBuffer stringBuffer = 1;
-    binding::StorageBuffer glyphBuffer = 2;
+    descriptor::UniformBuffer uniforms = 0;
+    descriptor::StorageBuffer stringBuffer = 1;
+    descriptor::StorageBuffer glyphBuffer = 2;
     MAGMA_REFLECT(&uniforms, &stringBuffer, &glyphBuffer)
 };
 
@@ -90,9 +91,9 @@ TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
     setLayout->glyphBuffer = glyphBuffer;
     // Create descriptor set
     descriptorPool = std::make_shared<DescriptorPool>(device, 1,
-        std::vector<Descriptor>{
-            descriptor::UniformBuffer(1),
-            descriptor::StorageBuffer(2)
+        std::vector<descriptor::DescriptorPool>{
+            descriptor::UniformBufferPool(1),
+            descriptor::StorageBufferPool(2)
         },
         hostAllocator);
     descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, *setLayout, VK_SHADER_STAGE_FRAGMENT_BIT, hostAllocator);
@@ -198,10 +199,10 @@ void TextShader::print(uint32_t x, uint32_t y, uint32_t color, const char *forma
     str.y = (float)y;
     str.first = offset;
     str.last = offset + length - 1;
-    str.color[0] = ((color >> 24) & 0xFF) / 255.f; // R
-    str.color[1] = ((color >> 16) & 0xFF) / 255.f; // G
-    str.color[2] = ((color >> 8) & 0xFF) / 255.f; // B
-    str.color[3] = (color & 0xFF) / 255.f; // A
+    str.r = ((color >> 24) & 0xFF) / 255.f; // R
+    str.g = ((color >> 16) & 0xFF) / 255.f; // G
+    str.b = ((color >> 8) & 0xFF) / 255.f; // B
+    str.a = (color & 0xFF) / 255.f; // A
     strings.push_back(str);
     for (uint32_t i = 0; i < length; ++i)
         chars.push_back(glyphs[sz[i]]);

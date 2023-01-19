@@ -130,9 +130,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "states/viewportState.h"
 
 #include "descriptors/attachment.h"
-#include "descriptors/binding.h"
-#include "descriptors/bindingArray.h"
 #include "descriptors/descriptor.h"
+#include "descriptors/descriptorArray.h"
+#include "descriptors/descriptorPool.h"
 #include "descriptors/descriptorSetLayoutReflection.h"
 #include "descriptors/subpass.h"
 

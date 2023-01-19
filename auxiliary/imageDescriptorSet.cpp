@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/descriptorPool.h"
 #include "../objects/descriptorSet.h"
 #include "../shaders/shaderReflection.h"
+#include "../descriptors/descriptor.h"
 #include "../descriptors/descriptorSetLayoutReflection.h"
 #include "../exceptions/exception.h"
 
@@ -32,13 +33,13 @@ namespace aux
 {
 struct ImageDescriptorSet::ImageSetLayout : DescriptorSetLayoutReflection
 {
-    binding::CombinedImageSampler image = 0;
+    descriptor::CombinedImageSampler image = 0;
     MAGMA_REFLECT(&image)
 };
 
 struct ImageDescriptorSet::StorageImageSetLayout : DescriptorSetLayoutReflection
 {
-    binding::StorageImage image = 0;
+    descriptor::StorageImage image = 0;
     MAGMA_REFLECT(&image)
 };
 
@@ -54,11 +55,11 @@ ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
     {
         if (SPV_REFLECT_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER == binding->descriptor_type)
         {
-            descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::CombinedImageSampler(1), allocator, false);
+            descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::CombinedImageSamplerPool(1), allocator, false);
             descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, *imageSetLayout, VK_SHADER_STAGE_FRAGMENT_BIT, std::move(allocator));
         } else if (SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_IMAGE == binding->descriptor_type)
         {
-            descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::StorageImage(1), allocator, false);
+            descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::StorageImagePool(1), allocator, false);
             descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, *storageImageSetLayout, VK_SHADER_STAGE_FRAGMENT_BIT, std::move(allocator));
         }
         if (descriptorSet)

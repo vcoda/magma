@@ -44,8 +44,7 @@ MAGMA_OBJS= \
 	\
 	core/pch.o \
 	\
-	descriptors/binding.o \
-	descriptors/bindingArray.o \
+	descriptors/descriptor.o \
 	descriptors/subpass.o \
 	\
 	exceptions/exception.o \

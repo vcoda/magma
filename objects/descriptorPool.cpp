@@ -27,16 +27,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const Descriptor& descriptor,
+DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const descriptor::DescriptorPool& descriptorPool,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool freeDescriptorSet /* false */,
     bool updateAfterBind /* false */,
     uint32_t maxInlineUniformBlockBindings /* 0 */):
-    DescriptorPool(std::move(device), maxSets, std::vector<Descriptor>{descriptor}, std::move(allocator),
+    DescriptorPool(std::move(device), maxSets, std::vector<descriptor::DescriptorPool>{descriptorPool}, std::move(allocator),
         freeDescriptorSet, updateAfterBind, maxInlineUniformBlockBindings)
 {}
 
-DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const std::vector<Descriptor>& descriptors,
+DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const std::vector<descriptor::DescriptorPool>& descriptorPools,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool freeDescriptorSet /* false */,
     bool updateAfterBind /* false */,
@@ -57,8 +57,8 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets,
         descriptorPoolInfo.flags |= VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT;
 #endif
     descriptorPoolInfo.maxSets = maxSets;
-    descriptorPoolInfo.poolSizeCount = MAGMA_COUNT(descriptors);
-    descriptorPoolInfo.pPoolSizes = descriptors.data();
+    descriptorPoolInfo.poolSizeCount = MAGMA_COUNT(descriptorPools);
+    descriptorPoolInfo.pPoolSizes = descriptorPools.data();
 #ifdef VK_EXT_inline_uniform_block
     VkDescriptorPoolInlineUniformBlockCreateInfoEXT descriptorPoolInlineUniformBlockInfo;
     if ((maxInlineUniformBlockBindings > 0) && getDevice()->extensionEnabled(VK_EXT_INLINE_UNIFORM_BLOCK_EXTENSION_NAME))

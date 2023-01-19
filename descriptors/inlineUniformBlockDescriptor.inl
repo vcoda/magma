@@ -1,11 +1,11 @@
 namespace magma
 {
-namespace binding
+namespace descriptor
 {
 #ifdef VK_EXT_inline_uniform_block
 template<typename UniformBlockType>
 inline InlineUniformBlock<UniformBlockType>::InlineUniformBlock(uint32_t binding) noexcept:
-    DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT, sizeof(UniformBlockType), binding)
+    BaseDescriptor(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT, sizeof(UniformBlockType), binding)
 {}
 
 template<typename UniformBlockType>
@@ -85,5 +85,5 @@ inline InlineUniformBlock<UniformBlockType>& InlineUniformBlock<UniformBlockType
     return *this;
 }
 #endif // VK_EXT_inline_uniform_block
-} // namespace binding
+} // namespace descriptor
 } // namespace magma

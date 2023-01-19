@@ -1,7 +1,17 @@
 namespace magma
 {
-namespace binding
+namespace descriptor
 {
+inline Descriptor::Descriptor(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding_) noexcept:
+    updated(false)
+{
+    binding.binding = binding_;
+    binding.descriptorType = descriptorType;
+    binding.descriptorCount = descriptorCount;
+    binding.stageFlags = 0;
+    binding.pImmutableSamplers = nullptr;
+}
+
 inline Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept
 {
     MAGMA_ASSERT(sampler);
@@ -15,16 +25,16 @@ inline Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler
 inline ImmutableSampler& ImmutableSampler::operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept
 {
     MAGMA_ASSERT(sampler);
-    MAGMA_ASSERT(!pImmutableSamplers);
+    MAGMA_ASSERT(!binding.pImmutableSamplers);
     // Immutable sampler must be updated only once
-    if (!pImmutableSamplers)
+    if (!binding.pImmutableSamplers)
     {
         imageDescriptor.sampler = VK_NULL_HANDLE;
         imageDescriptor.imageView = VK_NULL_HANDLE;
         imageDescriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         // If pImmutableSamplers is not NULL, then it is a pointer to an array of sampler handles
         // that will be copied into the set layout and used for the corresponding binding.
-        pImmutableSamplers = sampler->getImmutableSampler();
+        binding.pImmutableSamplers = sampler->getImmutableSampler();
         updated = true;
     }
     return *this;
@@ -45,10 +55,10 @@ inline CombinedImageImmutableSampler& CombinedImageImmutableSampler::operator=(c
     MAGMA_ASSERT(combinedImageSampler.second);
     imageDescriptor = combinedImageSampler.first->getDescriptor(nullptr);
     // Immutable sampler must be updated only once
-    if (!pImmutableSamplers)
-    {    // If pImmutableSamplers is not NULL, then it is a pointer to an array of sampler handles
+    if (!binding.pImmutableSamplers)
+    {   // If pImmutableSamplers is not NULL, then it is a pointer to an array of sampler handles
         // that will be copied into the set layout and used for the corresponding binding.
-        pImmutableSamplers = combinedImageSampler.second->getImmutableSampler();
+        binding.pImmutableSamplers = combinedImageSampler.second->getImmutableSampler();
     }
     updated = true;
     return *this;
@@ -57,7 +67,7 @@ inline CombinedImageImmutableSampler& CombinedImageImmutableSampler::operator=(c
 inline CombinedImageImmutableSampler& CombinedImageImmutableSampler::operator=(std::shared_ptr<const ImageView> imageView) noexcept
 {
     MAGMA_ASSERT(imageView);
-    MAGMA_ASSERT(pImmutableSamplers); // Check that sampler is already set and stop carrying around it
+    MAGMA_ASSERT(binding.pImmutableSamplers); // Check that sampler is already set and stop carrying around it
     imageDescriptor = imageView->getDescriptor(nullptr);
     updated = true;
     return *this;
@@ -143,5 +153,5 @@ inline InputAttachment& InputAttachment::operator=(std::shared_ptr<const ImageVi
     updated = true;
     return *this;
 }
-} // namespace binding
+} // namespace descriptor
 } // namespace magma

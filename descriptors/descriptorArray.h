@@ -16,30 +16,35 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "binding.h"
+#include "descriptor.h"
 
 namespace magma
 {
-    namespace binding
+    namespace descriptor
     {
         /* Base class of array of sampler descriptors. */
 
         template<uint32_t Size>
-        struct BaseSamplerArray : public DescriptorSetLayoutBinding
+        struct DescriptorArray : public Descriptor
         {
         protected:
-            BaseSamplerArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-                DescriptorSetLayoutBinding(descriptorType, Size, binding) {}
+            DescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+                Descriptor(descriptorType, Size, binding) {}
             VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
 
-            VkDescriptorImageInfo imageDescriptors[Size];
+            union
+            {
+                VkDescriptorImageInfo imageDescriptors[Size] = {};
+                VkDescriptorBufferInfo bufferDescriptors[Size];
+                VkBufferView texelBufferViews[Size];
+            };
         };
 
         /* A sampler descriptor is a descriptor type associated with a sampler object,
            used to control the behavior of sampling operations performed on a sampled image. */
 
         template<uint32_t Size>
-        class SamplerArray : public BaseSamplerArray<Size>
+        class SamplerArray : public DescriptorArray<Size>
         {
         public:
             struct Descriptor
@@ -51,7 +56,7 @@ namespace magma
             };
 
             SamplerArray(uint32_t binding): noexcept:
-                BaseSamplerArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding) {}
+                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
         };
 
@@ -60,7 +65,7 @@ namespace magma
            in a descriptor set is not allowed. */
 
         template<uint32_t Size>
-        class ImmutableSamplerArray : public BaseSamplerArray<Size>
+        class ImmutableSamplerArray : public DescriptorArray<Size>
         {
         public:
             struct Descriptor
@@ -73,9 +78,9 @@ namespace magma
             };
 
             ImmutableSamplerArray(uint32_t binding) noexcept:
-                BaseSamplerArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding)
+                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding)
             {
-                VkDescriptorSetLayoutBinding::pImmutableSamplers = immutableSamplers;
+                DescriptorArray<Size>::binding.pImmutableSamplers = immutableSamplers;
             }
             Descriptor operator[](uint32_t index) noexcept;
 
@@ -87,7 +92,7 @@ namespace magma
            combining both a sampler and sampled image descriptor into a single descriptor. */
 
         template<uint32_t Size>
-        class CombinedImageSamplerArray : public BaseSamplerArray<Size>
+        class CombinedImageSamplerArray : public DescriptorArray<Size>
         {
         public:
             struct Descriptor
@@ -99,7 +104,7 @@ namespace magma
             };
 
             CombinedImageSamplerArray(uint32_t binding) noexcept:
-                BaseSamplerArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
+                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
         };
 
@@ -107,7 +112,7 @@ namespace magma
            does not modify the samplers (the image views are updated, but the sampler updates are ignored). */
 
         template<uint32_t Size>
-        class CombinedImageImmutableSamplerArray : public BaseSamplerArray<Size>
+        class CombinedImageImmutableSamplerArray : public DescriptorArray<Size>
         {
         public:
             struct Descriptor
@@ -121,9 +126,9 @@ namespace magma
             };
 
             CombinedImageImmutableSamplerArray(uint32_t binding) noexcept:
-                BaseSamplerArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding)
+                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding)
             {
-                VkDescriptorSetLayoutBinding::pImmutableSamplers = immutableSamplers;
+                DescriptorArray<Size>::binding.pImmutableSamplers = immutableSamplers;
             }
             Descriptor operator[](uint32_t index) noexcept;
 
@@ -131,25 +136,12 @@ namespace magma
             VkSampler immutableSamplers[Size] = {};
         };
 
-        /* Base class of array of buffer descriptors. */
-
-        template<uint32_t Size>
-        struct BaseBufferArray : public DescriptorSetLayoutBinding
-        {
-        protected:
-            BaseBufferArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-                DescriptorSetLayoutBinding(descriptorType, Size, binding) {}
-            VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
-
-            VkDescriptorBufferInfo bufferDescriptors[Size];
-        };
-
         /* A storage buffer is a descriptor type associated with a buffer resource directly,
            described in a shader as a structure with various members that load, store,
            and atomic operations can be performed on. */
 
         template<uint32_t Size>
-        class StorageBufferArray : public BaseBufferArray<Size>
+        class StorageBufferArray : public DescriptorArray<Size>
         {
         public:
             struct Descriptor
@@ -161,10 +153,10 @@ namespace magma
             };
 
             StorageBufferArray(uint32_t binding) noexcept:
-                BaseBufferArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, binding) {}
+                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
         };
-    } // namespace binding
+    } // namespace descriptor
 } // namespace magma
 
-#include "bindingArray.inl"
+#include "descriptorArray.inl"
