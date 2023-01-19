@@ -91,6 +91,7 @@ inline void CombinedImageSamplerArray<Size>::Descriptor::operator=(const std::pa
 {
     MAGMA_ASSERT(combinedImageSampler.first);
     MAGMA_ASSERT(combinedImageSampler.second);
+    MAGMA_ASSERT(combinedImageSampler.first->getImage()->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
     imageDescriptor = combinedImageSampler.first->getDescriptor(combinedImageSampler.second);
 }
 
@@ -107,6 +108,7 @@ inline void CombinedImageImmutableSamplerArray<Size>::Descriptor::operator=(cons
 {
     MAGMA_ASSERT(combinedImageSampler.first);
     MAGMA_ASSERT(combinedImageSampler.second);
+    MAGMA_ASSERT(combinedImageSampler.first->getImage()->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
     MAGMA_ASSERT(VK_NULL_HANDLE == immutableSampler);
     imageDescriptor = combinedImageSampler.first->getDescriptor(nullptr);
     if (VK_NULL_HANDLE == immutableSampler) // Immutable sampler must be updated only once
@@ -117,6 +119,7 @@ template<uint32_t Size>
 inline void CombinedImageImmutableSamplerArray<Size>::Descriptor::operator=(std::shared_ptr<const ImageView> imageView) noexcept
 {
     MAGMA_ASSERT(imageView);
+    MAGMA_ASSERT(imageView->getImage()->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
     MAGMA_ASSERT(immutableSampler != VK_NULL_HANDLE); // Check that sampler is already set and stop carrying around it
     imageDescriptor = imageView->getDescriptor(nullptr);
     return *this;
