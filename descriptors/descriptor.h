@@ -237,19 +237,22 @@ namespace magma
            scene geometry from within shaders that are used for ray traversal.
            Shaders have read-only access to the memory. */
 
-    #ifdef VK_NV_ray_tracing
+    #if defined(VK_KHR_acceleration_structure) || defined(VK_NV_ray_tracing)
         class AccelerationStructure : public Descriptor
         {
         public:
-            AccelerationStructure(uint32_t binding) noexcept:
-                Descriptor(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV, 1, binding) {}
+            AccelerationStructure(uint32_t binding) noexcept;
             VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
             AccelerationStructure& operator=(std::shared_ptr<const magma::AccelerationStructure>) noexcept;
 
         private:
+        #ifdef VK_KHR_acceleration_structure
+            VkAccelerationStructureKHR handle = VK_NULL_HANDLE;
+        #else
             VkAccelerationStructureNV handle = VK_NULL_HANDLE;
+        #endif
         };
-    #endif // VK_NV_ray_tracing
+    #endif // VK_KHR_acceleration_structure || VK_NV_ray_tracing
     } // namespace descriptor
 } // namespace magma
 

@@ -70,22 +70,35 @@ VkWriteDescriptorSet Descriptor::getWriteDescriptorSet(VkDescriptorSet dstSet) c
     return writeDescriptorSet;
 }
 
-#ifdef VK_NV_ray_tracing
+#if defined(VK_KHR_acceleration_structure) || defined(VK_NV_ray_tracing)
+AccelerationStructure::AccelerationStructure(uint32_t binding) noexcept:
+#ifdef VK_KHR_acceleration_structure
+    Descriptor(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, 1, binding)
+#else
+    Descriptor(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV, 1, binding)
+#endif
+{}
+
 VkWriteDescriptorSet AccelerationStructure::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
 {
-    VkWriteDescriptorSet writeDescriptorSet;
+#ifdef VK_KHR_acceleration_structure
+    VkWriteDescriptorSetAccelerationStructureKHR writeDescriptorSetAccelerationStructure;
+    writeDescriptorSetAccelerationStructure.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR;
+#else
     VkWriteDescriptorSetAccelerationStructureNV writeDescriptorSetAccelerationStructure;
+    writeDescriptorSetAccelerationStructure.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_NV;
+#endif
+    VkWriteDescriptorSet writeDescriptorSet;
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = &writeDescriptorSetAccelerationStructure;
     writeDescriptorSet.dstSet = dstSet;
     writeDescriptorSet.dstBinding = binding.binding;
     writeDescriptorSet.dstArrayElement = 0;
-    writeDescriptorSet.descriptorCount = 1;
-    writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV;
+    writeDescriptorSet.descriptorCount = binding.descriptorCount;
+    writeDescriptorSet.descriptorType = binding.descriptorType;
     writeDescriptorSet.pImageInfo = nullptr;
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = nullptr;
-    writeDescriptorSetAccelerationStructure.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_NV;
     writeDescriptorSetAccelerationStructure.pNext = nullptr;
     writeDescriptorSetAccelerationStructure.accelerationStructureCount = 1;
     writeDescriptorSetAccelerationStructure.pAccelerationStructures = &handle;
@@ -95,10 +108,20 @@ VkWriteDescriptorSet AccelerationStructure::getWriteDescriptorSet(VkDescriptorSe
 
 AccelerationStructure& AccelerationStructure::operator=(std::shared_ptr<const magma::AccelerationStructure> accelerationStructure) noexcept
 {
-    handle = *accelerationStructure;
+    VkAccelerationStructureNV asHandle = *accelerationStructure;
+#ifdef VK_KHR_acceleration_structure
+    // TODO: native extension 
+#ifdef MAGMA_X64
+    handle = reinterpret_cast<VkAccelerationStructureKHR>(asHandle);
+#else
+    handle = asHandle;
+#endif
+#else
+    handle = asHandle;
+#endif
     updated = true;
     return *this;
 }
-#endif // VK_NV_ray_tracing
+#endif // VK_KHR_acceleration_structure || VK_NV_ray_tracing
 } // namespace descriptor
 } // namespace magma
