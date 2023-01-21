@@ -32,7 +32,7 @@ struct Descriptor\
 {\
     Descriptor(VkDescriptorBufferInfo& bufferDescriptor) noexcept:\
         bufferDescriptor(bufferDescriptor) {}\
-    void operator=(std::shared_ptr<const magma::Buffer>) noexcept;\
+    void operator=(std::shared_ptr<const Buffer>) noexcept;\
     VkDescriptorBufferInfo& bufferDescriptor;\
 };
 
