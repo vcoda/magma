@@ -74,6 +74,7 @@ VkWriteDescriptorSet Descriptor::getWriteDescriptorSet(VkDescriptorSet dstSet) c
 VkWriteDescriptorSet AccelerationStructure::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
 {
     VkWriteDescriptorSet writeDescriptorSet;
+    VkWriteDescriptorSetAccelerationStructureNV writeDescriptorSetAccelerationStructure;
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = &writeDescriptorSetAccelerationStructure;
     writeDescriptorSet.dstSet = dstSet;
@@ -84,17 +85,17 @@ VkWriteDescriptorSet AccelerationStructure::getWriteDescriptorSet(VkDescriptorSe
     writeDescriptorSet.pImageInfo = nullptr;
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = nullptr;
+    writeDescriptorSetAccelerationStructure.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_NV;
+    writeDescriptorSetAccelerationStructure.pNext = nullptr;
+    writeDescriptorSetAccelerationStructure.accelerationStructureCount = 1;
+    writeDescriptorSetAccelerationStructure.pAccelerationStructures = &handle;
     updated = false;
     return writeDescriptorSet;
 }
 
-AccelerationStructure& AccelerationStructure::operator=(std::shared_ptr<const magma::AccelerationStructure> accelerationStructure_) noexcept
+AccelerationStructure& AccelerationStructure::operator=(std::shared_ptr<const magma::AccelerationStructure> accelerationStructure) noexcept
 {
-    accelerationStructure = *accelerationStructure_;
-    writeDescriptorSetAccelerationStructure.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_NV;
-    writeDescriptorSetAccelerationStructure.pNext = nullptr;
-    writeDescriptorSetAccelerationStructure.accelerationStructureCount = 1;
-    writeDescriptorSetAccelerationStructure.pAccelerationStructures = &accelerationStructure;
+    handle = *accelerationStructure;
     updated = true;
     return *this;
 }
