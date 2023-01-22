@@ -52,7 +52,6 @@ namespace magma
         std::shared_ptr<const DescriptorSetLayout> getLayout() const noexcept { return setLayout; }
         bool dirty() const;
         void update();
-        void gatherDirtyDescriptorWrites(std::vector<VkWriteDescriptorSet>& writeDescriptors) const;
 
     private:
         void validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection,

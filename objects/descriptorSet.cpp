@@ -44,7 +44,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     layoutReflection(layoutReflection),
     descriptorPool(std::move(descriptorPool))
 {   // Check that all descriptors have unique layout bindings
-    const std::vector<descriptor::Descriptor*>& descriptors = layoutReflection.getBindingDescriptors();
+    const std::vector<descriptor::Descriptor *>& descriptors = layoutReflection.getBindingDescriptors();
     std::vector<uint32_t> locations;
     for (const auto descriptor: descriptors)
         locations.push_back(descriptor->getLayoutBinding().binding);
@@ -74,6 +74,12 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     descriptorSetAllocateInfo.pSetLayouts = dereferencedSetLayouts;
     const VkResult result = vkAllocateDescriptorSets(MAGMA_HANDLE(device), &descriptorSetAllocateInfo, &handle);
     MAGMA_THROW_FAILURE(result, "failed to allocate descriptor set");
+    // Once allocated, descriptor set can be updated
+    MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, descriptors.size());
+    uint32_t descriptorWriteCount = 0;
+    for (const auto descriptor: descriptors)
+        descriptor->getWriteDescriptor(handle, descriptorWrites[descriptorWriteCount++]);
+    device->updateDescriptorWrites(descriptorWrites, descriptorWriteCount);
 }
 
 DescriptorSet::~DescriptorSet()
@@ -90,34 +96,16 @@ bool DescriptorSet::dirty() const
 void DescriptorSet::update()
 {
     MAGMA_ASSERT(dirty());
+    const std::vector<descriptor::Descriptor *>& descriptors = layoutReflection.getBindingDescriptors();
+    MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, descriptors.size());
     uint32_t descriptorWriteCount = 0;
-    const std::vector<descriptor::Descriptor*>& descriptors = layoutReflection.getBindingDescriptors();
     for (const auto descriptor: descriptors)
     {
         if (descriptor->dirty())
-            ++descriptorWriteCount;
+            descriptor->getWriteDescriptor(handle, descriptorWrites[descriptorWriteCount++]);
     }
-    if (descriptorWriteCount > 0)
-    {
-        MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, descriptorWriteCount);
-        for (const auto descriptor: descriptors)
-        {
-            if (descriptor->dirty())
-                descriptorWrites.put(descriptor->getWriteDescriptorSet(handle));
-        }
+    if (descriptorWriteCount)
         device->updateDescriptorWrites(descriptorWrites, descriptorWriteCount);
-    }
-}
-
-void DescriptorSet::gatherDirtyDescriptorWrites(std::vector<VkWriteDescriptorSet>& descriptorWrites) const
-{
-    MAGMA_ASSERT(dirty());
-    const std::vector<descriptor::Descriptor*>& descriptors = layoutReflection.getBindingDescriptors();
-    for (const auto descriptor: descriptors)
-    {
-        if (descriptor->dirty())
-            descriptorWrites.push_back(descriptor->getWriteDescriptorSet(handle));
-    }
 }
 
 void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection, uint32_t setIndex) const

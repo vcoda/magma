@@ -3,9 +3,9 @@ namespace magma
 namespace descriptor
 {
 template<uint32_t Size>
-inline VkWriteDescriptorSet DescriptorArray<Size>::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
+inline void DescriptorArray<Size>::getWriteDescriptor(VkDescriptorSet dstSet,
+    VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
-    VkWriteDescriptorSet writeDescriptorSet;
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;
@@ -45,7 +45,6 @@ inline VkWriteDescriptorSet DescriptorArray<Size>::getWriteDescriptorSet(VkDescr
         MAGMA_ASSERT(false);
     }
     updated = false;
-    return writeDescriptorSet;
 }
 
 template<uint32_t Size>

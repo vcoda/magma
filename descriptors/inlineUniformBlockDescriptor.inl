@@ -6,13 +6,17 @@ namespace descriptor
 template<class UniformBlockType>
 inline InlineUniformBlock<UniformBlockType>::InlineUniformBlock(uint32_t binding) noexcept:
     Descriptor(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT, sizeof(UniformBlockType), binding)
-{}
+{
+    writeDescriptorSetInlineUniformBlock.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_INLINE_UNIFORM_BLOCK_EXT;
+    writeDescriptorSetInlineUniformBlock.pNext = nullptr;
+    writeDescriptorSetInlineUniformBlock.dataSize = sizeof(UniformBlockType);
+    writeDescriptorSetInlineUniformBlock.pData = nullptr;
+}
 
 template<class UniformBlockType>
-inline VkWriteDescriptorSet InlineUniformBlock<UniformBlockType>::getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept
+inline void InlineUniformBlock<UniformBlockType>::getWriteDescriptor(VkDescriptorSet dstSet,
+    VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
-    VkWriteDescriptorSet writeDescriptorSet;
-    VkWriteDescriptorSetInlineUniformBlockEXT writeDescriptorSetInlineUniformBlock;
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = &writeDescriptorSetInlineUniformBlock;
     writeDescriptorSet.dstSet = dstSet;
@@ -23,18 +27,13 @@ inline VkWriteDescriptorSet InlineUniformBlock<UniformBlockType>::getWriteDescri
     writeDescriptorSet.pImageInfo = nullptr;
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = nullptr;
-    writeDescriptorSetInlineUniformBlock.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_INLINE_UNIFORM_BLOCK_EXT;
-    writeDescriptorSetInlineUniformBlock.pNext = nullptr;
-    writeDescriptorSetInlineUniformBlock.dataSize = sizeof(UniformBlockType);
-    writeDescriptorSetInlineUniformBlock.pData = inlineUniformBlock;
     updated = false;
-    return writeDescriptorSet;
 }
 
 template<class UniformBlockType>
-inline InlineUniformBlock<UniformBlockType>& InlineUniformBlock<UniformBlockType>::operator=(const UniformBlockType& inlineUniformBlock_) noexcept
+inline InlineUniformBlock<UniformBlockType>& InlineUniformBlock<UniformBlockType>::operator=(const UniformBlockType& inlineUniformBlock) noexcept
 {
-    inlineUniformBlock = &inlineUniformBlock_;
+    writeDescriptorSetInlineUniformBlock.pData = &inlineUniformBlock;
     updated = true;
     return *this;
 }

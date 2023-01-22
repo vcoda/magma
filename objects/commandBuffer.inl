@@ -99,9 +99,8 @@ inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pi
     uint32_t dynamicOffset /* -1 */) noexcept
 {
     MAGMA_ASSERT(pipeline->getLayout()->hasLayout(descriptorSet->getLayout()));
+    MAGMA_ASSERT(!descriptorSet->dirty());
     const VkDescriptorSet dereferencedDescriptorSet[1] = {*descriptorSet};
-    if (descriptorSet->dirty())
-        descriptorSet->update();
     vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), setIndex, 1, dereferencedDescriptorSet,
         (0xFFFFFFFF == dynamicOffset) ? 0 : 1,
         (0xFFFFFFFF == dynamicOffset) ? nullptr : &dynamicOffset);
@@ -111,9 +110,8 @@ inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pi
     const std::initializer_list<uint32_t>& dynamicOffsets) noexcept
 {
     MAGMA_ASSERT(pipeline->getLayout()->hasLayout(descriptorSet->getLayout()));
+    MAGMA_ASSERT(!descriptorSet->dirty());
     const VkDescriptorSet dereferencedDescriptorSet[1] = {*descriptorSet};
-    if (descriptorSet->dirty())
-        descriptorSet->update();
     vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), setIndex, 1, dereferencedDescriptorSet, MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
 }
 

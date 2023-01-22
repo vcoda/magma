@@ -2,8 +2,7 @@ namespace magma
 {
 inline bool DescriptorSetLayoutReflection::dirty()
 {
-    const std::vector<descriptor::Descriptor*>& descriptors = getBindingDescriptors();
-    for (const auto descriptor: descriptors)
+    for (const auto descriptor: getBindingDescriptors())
     {
         if (descriptor->dirty())
             return true;

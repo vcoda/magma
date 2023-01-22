@@ -46,10 +46,13 @@ namespace magma
         template<uint32_t Size>
         struct DescriptorArray : public Descriptor
         {
+        public:
+            void getWriteDescriptor(VkDescriptorSet dstSet,
+                VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
+
         protected:
             DescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
                 Descriptor(descriptorType, Size, binding) {}
-            VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
 
             union
             {

@@ -39,7 +39,8 @@ namespace magma
         {
         public:
             virtual ~Descriptor() = default;
-            virtual VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept;
+            virtual void getWriteDescriptor(VkDescriptorSet dstSet,
+                VkWriteDescriptorSet& writeDescriptorSet) const noexcept;
             const VkDescriptorSetLayoutBinding& getLayoutBinding() const noexcept { return binding; }
             bool dirty() const noexcept { return updated; }
 
@@ -225,11 +226,12 @@ namespace magma
         {
         public:
             InlineUniformBlock(uint32_t binding) noexcept;
-            VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
+            void getWriteDescriptor(VkDescriptorSet dstSet,
+                VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
             InlineUniformBlock<UniformBlockType>& operator=(const UniformBlockType&) noexcept;
 
         private:
-            const UniformBlockType *inlineUniformBlock = nullptr;
+            VkWriteDescriptorSetInlineUniformBlockEXT writeDescriptorSetInlineUniformBlock;
         };
     #endif // VK_EXT_inline_uniform_block
 
@@ -242,14 +244,15 @@ namespace magma
         {
         public:
             AccelerationStructure(uint32_t binding) noexcept;
-            VkWriteDescriptorSet getWriteDescriptorSet(VkDescriptorSet dstSet) const noexcept override;
+            void getWriteDescriptor(VkDescriptorSet dstSet,
+                VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
             AccelerationStructure& operator=(std::shared_ptr<const magma::AccelerationStructure>) noexcept;
 
         private:
         #ifdef VK_KHR_acceleration_structure
-            VkAccelerationStructureKHR handle = VK_NULL_HANDLE;
+            VkWriteDescriptorSetAccelerationStructureKHR writeDescriptorSetAccelerationStructure;
         #else
-            VkAccelerationStructureNV handle = VK_NULL_HANDLE;
+            VkWriteDescriptorSetAccelerationStructureNV writeDescriptorSetAccelerationStructure;
         #endif
         };
     #endif // VK_KHR_acceleration_structure || VK_NV_ray_tracing
