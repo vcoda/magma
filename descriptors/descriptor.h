@@ -39,10 +39,12 @@ namespace magma
         {
         public:
             virtual ~Descriptor() = default;
-            virtual void getWriteDescriptor(VkDescriptorSet dstSet,
-                VkWriteDescriptorSet& writeDescriptorSet) const noexcept;
+            void setStageFlags(VkShaderStageFlags stageFlags) noexcept { binding.stageFlags = stageFlags; }
+            VkShaderStageFlags getStageFlags() const noexcept { return binding.stageFlags; }
             const VkDescriptorSetLayoutBinding& getLayoutBinding() const noexcept { return binding; }
             bool dirty() const noexcept { return updated; }
+            virtual void getWriteDescriptor(VkDescriptorSet dstSet,
+                VkWriteDescriptorSet& writeDescriptorSet) const noexcept;
 
         protected:
             Descriptor(VkDescriptorType descriptorType,
