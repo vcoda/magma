@@ -253,8 +253,10 @@ namespace magma
         private:
         #ifdef VK_KHR_acceleration_structure
             VkWriteDescriptorSetAccelerationStructureKHR writeDescriptorSetAccelerationStructure;
+            VkAccelerationStructureKHR handle;
         #else
             VkWriteDescriptorSetAccelerationStructureNV writeDescriptorSetAccelerationStructure;
+            VkAccelerationStructureNV handle;
         #endif
         };
     #endif // VK_KHR_acceleration_structure || VK_NV_ray_tracing

@@ -44,6 +44,7 @@ MAGMA_OBJS= \
 	\
 	core/pch.o \
 	\
+	descriptors/accelerationStructureDescriptor.o \
 	descriptors/descriptor.o \
 	descriptors/subpass.o \
 	\
