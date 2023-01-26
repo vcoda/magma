@@ -33,8 +33,11 @@ inline void InlineUniformBlock<UniformBlockType>::getWriteDescriptor(VkDescripto
 template<class UniformBlockType>
 inline InlineUniformBlock<UniformBlockType>& InlineUniformBlock<UniformBlockType>::operator=(const UniformBlockType& inlineUniformBlock) noexcept
 {
-    writeDescriptorSetInlineUniformBlock.pData = &inlineUniformBlock;
-    updated = true;
+    if (writeDescriptorSetInlineUniformBlock.pData != &inlineUniformBlock)
+    {
+        writeDescriptorSetInlineUniformBlock.pData = &inlineUniformBlock;
+        updated = true;
+    }
     return *this;
 }
 #endif // VK_EXT_inline_uniform_block
