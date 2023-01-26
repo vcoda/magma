@@ -76,10 +76,9 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     MAGMA_THROW_FAILURE(result, "failed to allocate descriptor set");
     // Once allocated, descriptor set can be updated
     MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, descriptors.size());
-    uint32_t descriptorWriteCount = 0;
-    for (const auto descriptor: descriptors)
-        descriptor->getWriteDescriptor(handle, descriptorWrites[descriptorWriteCount++]);
-    device->updateDescriptorWrites(descriptorWrites, descriptorWriteCount);
+    for (uint32_t i = 0; i < descriptorWrites.size(); ++i)
+        descriptors[i]->getWriteDescriptor(handle, descriptorWrites[i]);
+    device->updateDescriptorWrites(descriptorWrites, descriptorWrites.size());
 }
 
 DescriptorSet::~DescriptorSet()
