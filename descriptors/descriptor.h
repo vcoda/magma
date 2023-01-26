@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-#ifdef VK_NV_ray_tracing
+#if defined(VK_KHR_acceleration_structure) || defined(VK_NV_ray_tracing)
     class AccelerationStructure;
 #endif
 
