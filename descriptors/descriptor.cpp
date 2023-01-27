@@ -37,15 +37,18 @@ void Descriptor::getWriteDescriptor(VkDescriptorSet dstSet,
     {
     case VK_DESCRIPTOR_TYPE_SAMPLER:
     case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
+        MAGMA_ASSERT(imageDescriptor.sampler || binding.pImmutableSamplers);
     case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
     case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
     case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
+        MAGMA_ASSERT(imageDescriptor.imageView != VK_NULL_HANDLE);
         writeDescriptorSet.pImageInfo = &imageDescriptor;
         writeDescriptorSet.pBufferInfo = nullptr;
         writeDescriptorSet.pTexelBufferView = nullptr;
         break;
     case VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER:
     case VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER:
+        MAGMA_ASSERT(texelBufferView != VK_NULL_HANDLE);
         writeDescriptorSet.pImageInfo = nullptr;
         writeDescriptorSet.pBufferInfo = nullptr;
         writeDescriptorSet.pTexelBufferView = &texelBufferView;
@@ -54,6 +57,7 @@ void Descriptor::getWriteDescriptor(VkDescriptorSet dstSet,
     case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER:
     case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC:
     case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC:
+        MAGMA_ASSERT(bufferDescriptor.buffer != VK_NULL_HANDLE);
         writeDescriptorSet.pImageInfo = nullptr;
         writeDescriptorSet.pBufferInfo = &bufferDescriptor;
         writeDescriptorSet.pTexelBufferView = nullptr;
