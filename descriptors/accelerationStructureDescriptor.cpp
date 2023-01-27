@@ -27,10 +27,11 @@ namespace descriptor
 #if defined(VK_KHR_acceleration_structure) || defined(VK_NV_ray_tracing)
 AccelerationStructure::AccelerationStructure(uint32_t binding) noexcept:
 #ifdef VK_KHR_acceleration_structure
-    Descriptor(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, 1, binding)
+    Descriptor(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, 1, binding),
 #else
-    Descriptor(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV, 1, binding)
+    Descriptor(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV, 1, binding),
 #endif
+    handle(VK_NULL_HANDLE)
 {
 #ifdef VK_KHR_acceleration_structure
     writeDescriptorSetAccelerationStructure.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR;
@@ -39,7 +40,7 @@ AccelerationStructure::AccelerationStructure(uint32_t binding) noexcept:
 #endif
     writeDescriptorSetAccelerationStructure.pNext = nullptr;
     writeDescriptorSetAccelerationStructure.accelerationStructureCount = 1;
-    writeDescriptorSetAccelerationStructure.pAccelerationStructures = VK_NULL_HANDLE;
+    writeDescriptorSetAccelerationStructure.pAccelerationStructures = &handle;
 }
 
 void AccelerationStructure::getWriteDescriptor(VkDescriptorSet dstSet,
@@ -61,21 +62,25 @@ void AccelerationStructure::getWriteDescriptor(VkDescriptorSet dstSet,
 AccelerationStructure& AccelerationStructure::operator=(std::shared_ptr<const magma::AccelerationStructure> accelerationStructure) noexcept
 {
 #ifdef VK_KHR_acceleration_structure
-    // TODO:
+    // TODO: refactor this when VK_KHR_acceleration_structure support will be implemented!
+    VkAccelerationStructureKHR handleKHR;
     #ifdef MAGMA_X64
-    handle = reinterpret_cast<VkAccelerationStructureKHR>((VkAccelerationStructureNV)*accelerationStructure);
+    handleKHR = reinterpret_cast<VkAccelerationStructureKHR>((VkAccelerationStructureNV)*accelerationStructure);
     #else
-    handle = static_cast<VkAccelerationStructureKHR>((VkAccelerationStructureNV)*accelerationStructure);
+    handleKHR = static_cast<VkAccelerationStructureKHR>((VkAccelerationStructureNV)*accelerationStructure);
     #endif
-#else
-    handle = *accelerationStructure;
-#endif
-    if (!writeDescriptorSetAccelerationStructure.pAccelerationStructures ||
-        *writeDescriptorSetAccelerationStructure.pAccelerationStructures != handle)
+    if (handleKHR != handle)
     {
-        writeDescriptorSetAccelerationStructure.pAccelerationStructures = &handle;
+        handle = handleKHR;
         updated = true;
     }
+#else
+    if (handle != *accelerationStructure)
+    {
+        handle = *accelerationStructure;
+        updated = true;
+    }
+#endif
     return *this;
 }
 #endif // VK_KHR_acceleration_structure || VK_NV_ray_tracing
