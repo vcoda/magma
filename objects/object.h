@@ -40,17 +40,29 @@ namespace magma
         virtual uint64_t getHandle() const noexcept = 0;
         std::shared_ptr<Device> getDevice() const noexcept { return device; }
         std::shared_ptr<IAllocator> getHostAllocator() const noexcept { return hostAllocator; }
-        void setDebugName(const char *name);
-        void setDebugTag(uint64_t tagName,
-            std::size_t tagSize,
-            const void *tag);
+    #ifdef MAGMA_DEBUG
+        void setDebugName(const std::string& name);
+        const std::string& getDebugName() const noexcept { return name; }
+        void setDebugTag(uint64_t tagName, std::size_t tagSize, const void *tag);
         template<class Type>
-        void setDebugTag(uint64_t tagName,
-            const Type& tag);
+        void setDebugTag(uint64_t tagName, const Type& tag);
+        uint64_t getDebugTag() const noexcept { return tagName; }
+    #else // No-op in release build
+        void setDebugName(const std::string&) const noexcept {}
+        std::string getDebugName() const noexcept { return std::string(); }
+        void setDebugTag(uint64_t, std::size_t, const void *) const noexcept {}
+        template<class Type>
+        void setDebugTag(uint64_t, const Type&) const noexcept {}
+        uint64_t getDebugTag() const noexcept { return 0; }
+    #endif // MAGMA_DEBUG
 
     protected:
         std::shared_ptr<Device> device;
         std::shared_ptr<IAllocator> hostAllocator;
+    #ifdef MAGMA_DEBUG
+        std::string name;
+        uint64_t tagName = 0;
+    #endif
     };
 
     /* Template object that provides getObjectType() getter. */

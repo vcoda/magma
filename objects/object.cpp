@@ -30,12 +30,11 @@ Object::Object(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> hostA
     hostAllocator(std::move(hostAllocator))
 {}
 
-void Object::setDebugName(const char *name)
-{
-    MAGMA_UNUSED(name);
-    MAGMA_ASSERT(name);
-    MAGMA_ASSERT(strlen(name) > 0);
 #ifdef MAGMA_DEBUG
+void Object::setDebugName(const std::string& name_)
+{
+    MAGMA_ASSERT(!name_.empty());
+    name = name_;
     VkResult result = VK_SUCCESS;
     if (device)
     {
@@ -48,7 +47,7 @@ void Object::setDebugName(const char *name)
             objectNameInfo.pNext = nullptr;
             objectNameInfo.objectType = getObjectType();
             objectNameInfo.objectHandle = getHandle();
-            objectNameInfo.pObjectName = name;
+            objectNameInfo.pObjectName = name.c_str();
             result = vkSetDebugUtilsObjectNameEXT(MAGMA_HANDLE(device), &objectNameInfo);
         } else
         {   // VK_EXT_debug_marker had been deprecated, but let's try
@@ -63,7 +62,7 @@ void Object::setDebugName(const char *name)
                 objectNameInfo.pNext = nullptr;
                 objectNameInfo.objectType = helpers::objectToDebugReportType(getObjectType());
                 objectNameInfo.object = getHandle();
-                objectNameInfo.pObjectName = name;
+                objectNameInfo.pObjectName = name.c_str();
                 result = vkDebugMarkerSetObjectNameEXT(MAGMA_HANDLE(device), &objectNameInfo);
             }
         #endif // VK_EXT_debug_marker
@@ -71,19 +70,15 @@ void Object::setDebugName(const char *name)
         }
     #endif
     }
-    MAGMA_THROW_FAILURE(result, "failed to set debug object name");
-#endif // MAGMA_DEBUG
+    MAGMA_THROW_FAILURE(result, "failed to set object name");
 }
 
-void Object::setDebugTag(uint64_t tagName, std::size_t tagSize, const void *tag)
+void Object::setDebugTag(uint64_t tagName_, std::size_t tagSize, const void *tag)
 {
-    MAGMA_UNUSED(tagName);
-    MAGMA_UNUSED(tagSize);
-    MAGMA_UNUSED(tag);
-    MAGMA_ASSERT(tagName);
+    MAGMA_ASSERT(tagName_);
     MAGMA_ASSERT(tagSize > 0);
     MAGMA_ASSERT(tag);
-#ifdef MAGMA_DEBUG
+    tagName = tagName_;
     VkResult result = VK_SUCCESS;
     if (device)
     {
@@ -124,6 +119,6 @@ void Object::setDebugTag(uint64_t tagName, std::size_t tagSize, const void *tag)
     #endif
     }
     MAGMA_THROW_FAILURE(result, "failed to set object tag");
-#endif // MAGMA_DEBUG
 }
+#endif // MAGMA_DEBUG
 } // namespace magma
