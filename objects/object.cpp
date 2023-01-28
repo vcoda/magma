@@ -39,37 +39,37 @@ void Object::setDebugName(const char *name)
     VkResult result = VK_SUCCESS;
     if (device)
     {
-#ifdef VK_EXT_debug_marker
-        MAGMA_DEVICE_EXTENSION(vkDebugMarkerSetObjectNameEXT);
-        if (vkDebugMarkerSetObjectNameEXT)
+    #ifdef VK_EXT_debug_utils
+        MAGMA_DEVICE_EXTENSION(vkSetDebugUtilsObjectNameEXT);
+        if (vkSetDebugUtilsObjectNameEXT)
         {
-            VkDebugMarkerObjectNameInfoEXT objectNameInfo;
-            objectNameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT;
+            VkDebugUtilsObjectNameInfoEXT objectNameInfo;
+            objectNameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
             objectNameInfo.pNext = nullptr;
-            objectNameInfo.objectType = helpers::objectToDebugReportType(getObjectType());
-            objectNameInfo.object = getHandle();
+            objectNameInfo.objectType = getObjectType();
+            objectNameInfo.objectHandle = getHandle();
             objectNameInfo.pObjectName = name;
-            result = vkDebugMarkerSetObjectNameEXT(MAGMA_HANDLE(device), &objectNameInfo);
-        }
-        else
-        {
-#endif // VK_EXT_debug_marker
-#ifdef VK_EXT_debug_utils
-            MAGMA_DEVICE_EXTENSION(vkSetDebugUtilsObjectNameEXT);
-            if (vkSetDebugUtilsObjectNameEXT)
+            result = vkSetDebugUtilsObjectNameEXT(MAGMA_HANDLE(device), &objectNameInfo);
+        } else
+        {   // VK_EXT_debug_marker had been deprecated, but let's try
+            // to fallback to it in the case of old drivers/SDK.
+    #endif // VK_EXT_debug_utils
+        #ifdef VK_EXT_debug_marker
+            MAGMA_DEVICE_EXTENSION(vkDebugMarkerSetObjectNameEXT);
+            if (vkDebugMarkerSetObjectNameEXT)
             {
-                VkDebugUtilsObjectNameInfoEXT objectNameInfo;
-                objectNameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
+                VkDebugMarkerObjectNameInfoEXT objectNameInfo;
+                objectNameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT;
                 objectNameInfo.pNext = nullptr;
-                objectNameInfo.objectType = getObjectType();
-                objectNameInfo.objectHandle = getHandle();
+                objectNameInfo.objectType = helpers::objectToDebugReportType(getObjectType());
+                objectNameInfo.object = getHandle();
                 objectNameInfo.pObjectName = name;
-                result = vkSetDebugUtilsObjectNameEXT(MAGMA_HANDLE(device), &objectNameInfo);
+                result = vkDebugMarkerSetObjectNameEXT(MAGMA_HANDLE(device), &objectNameInfo);
             }
-#endif // VK_EXT_debug_utils
-#ifdef VK_EXT_debug_marker
+        #endif // VK_EXT_debug_marker
+    #ifdef VK_EXT_debug_utils
         }
-#endif
+    #endif
     }
     MAGMA_THROW_FAILURE(result, "failed to set debug object name");
 #endif // MAGMA_DEBUG
@@ -87,41 +87,41 @@ void Object::setDebugTag(uint64_t tagName, std::size_t tagSize, const void *tag)
     VkResult result = VK_SUCCESS;
     if (device)
     {
-#ifdef VK_EXT_debug_marker
-        MAGMA_DEVICE_EXTENSION(vkDebugMarkerSetObjectTagEXT);
-        if (vkDebugMarkerSetObjectTagEXT)
+    #ifdef VK_EXT_debug_utils
+        MAGMA_DEVICE_EXTENSION(vkSetDebugUtilsObjectTagEXT);
+        if (vkSetDebugUtilsObjectTagEXT)
         {
-            VkDebugMarkerObjectTagInfoEXT objectTagInfo;
-            objectTagInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT;
+            VkDebugUtilsObjectTagInfoEXT objectTagInfo;
+            objectTagInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_TAG_INFO_EXT;
             objectTagInfo.pNext = nullptr;
-            objectTagInfo.objectType = helpers::objectToDebugReportType(getObjectType());
-            objectTagInfo.object = getHandle();
+            objectTagInfo.objectType = getObjectType();
+            objectTagInfo.objectHandle = getHandle();
             objectTagInfo.tagName = tagName;
             objectTagInfo.tagSize = tagSize;
             objectTagInfo.pTag = tag;
-            result = vkDebugMarkerSetObjectTagEXT(MAGMA_HANDLE(device), &objectTagInfo);
-        }
-        else
-        {
-#endif // VK_EXT_debug_marker
-#ifdef VK_EXT_debug_utils
-            MAGMA_DEVICE_EXTENSION(vkSetDebugUtilsObjectTagEXT);
-            if (vkSetDebugUtilsObjectTagEXT)
+            result = vkSetDebugUtilsObjectTagEXT(MAGMA_HANDLE(device), &objectTagInfo);
+        } else
+        {   // VK_EXT_debug_marker had been deprecated, but let's try
+            // to fallback to it in the case of old drivers/SDK.
+    #endif // VK_EXT_debug_utils
+        #ifdef VK_EXT_debug_marker
+            MAGMA_DEVICE_EXTENSION(vkDebugMarkerSetObjectTagEXT);
+            if (vkDebugMarkerSetObjectTagEXT)
             {
-                VkDebugUtilsObjectTagInfoEXT objectTagInfo;
-                objectTagInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_TAG_INFO_EXT;
+                VkDebugMarkerObjectTagInfoEXT objectTagInfo;
+                objectTagInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT;
                 objectTagInfo.pNext = nullptr;
-                objectTagInfo.objectType = getObjectType();
-                objectTagInfo.objectHandle = getHandle();
+                objectTagInfo.objectType = helpers::objectToDebugReportType(getObjectType());
+                objectTagInfo.object = getHandle();
                 objectTagInfo.tagName = tagName;
                 objectTagInfo.tagSize = tagSize;
                 objectTagInfo.pTag = tag;
-                result = vkSetDebugUtilsObjectTagEXT(MAGMA_HANDLE(device), &objectTagInfo);
+                result = vkDebugMarkerSetObjectTagEXT(MAGMA_HANDLE(device), &objectTagInfo);
             }
-#endif // VK_EXT_debug_utils
-#ifdef VK_EXT_debug_marker
+        #endif // VK_EXT_debug_marker
+    #ifdef VK_EXT_debug_utils
         }
-#endif
+    #endif
     }
     MAGMA_THROW_FAILURE(result, "failed to set object tag");
 #endif // MAGMA_DEBUG
