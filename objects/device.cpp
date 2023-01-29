@@ -157,22 +157,16 @@ std::shared_ptr<Queue> Device::getQueueForFamily(uint32_t queueFamilyIndex) cons
     MAGMA_THROW("failed to get device queue");
 }
 
-void Device::updateDescriptorWrites(const VkWriteDescriptorSet *descriptorWrites, uint32_t descriptorWriteCount) const noexcept
+void Device::updateDescriptorSets(uint32_t descriptorWriteCount, const VkWriteDescriptorSet *descriptorWrites,
+    uint32_t descriptorCopyCount, const VkCopyDescriptorSet *descriptorCopies) const noexcept
 {
-    vkUpdateDescriptorSets(handle, descriptorWriteCount, descriptorWrites, 0, nullptr);
-}
-
-void Device::updateDescriptorCopies(const VkCopyDescriptorSet *descriptorCopies, uint32_t descriptorCopyCount) const noexcept
-{
-    vkUpdateDescriptorSets(handle, 0, nullptr, descriptorCopyCount, descriptorCopies);
+    vkUpdateDescriptorSets(handle, descriptorWriteCount, descriptorWrites, descriptorCopyCount, descriptorCopies);
 }
 
 void Device::updateDescriptorSets(const std::vector<VkWriteDescriptorSet>& descriptorWrites,
     const std::vector<VkCopyDescriptorSet>& descriptorCopies /* {} */) const noexcept
 {
-    vkUpdateDescriptorSets(handle,
-        MAGMA_COUNT(descriptorWrites), descriptorWrites.data(),
-        MAGMA_COUNT(descriptorCopies), descriptorCopies.data());
+    updateDescriptorSets(MAGMA_COUNT(descriptorWrites), descriptorWrites.data(), MAGMA_COUNT(descriptorCopies), descriptorCopies.data());
 }
 
 bool Device::waitIdle() const

@@ -78,7 +78,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, descriptors.size());
     for (uint32_t i = 0; i < descriptorWrites.size(); ++i)
         descriptors[i]->getWriteDescriptor(handle, descriptorWrites[i]);
-    device->updateDescriptorWrites(descriptorWrites, descriptorWrites.size());
+    device->updateDescriptorSets(descriptorWrites.size(), descriptorWrites, 0, nullptr);
 }
 
 DescriptorSet::~DescriptorSet()
@@ -104,7 +104,7 @@ void DescriptorSet::update()
             descriptor->getWriteDescriptor(handle, descriptorWrites[descriptorWriteCount++]);
     }
     if (descriptorWriteCount)
-        device->updateDescriptorWrites(descriptorWrites, descriptorWriteCount);
+        device->updateDescriptorSets(descriptorWriteCount, descriptorWrites, 0, nullptr);
 }
 
 void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection, uint32_t setIndex) const

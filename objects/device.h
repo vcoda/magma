@@ -61,10 +61,10 @@ namespace magma
         const VkPhysicalDeviceFeatures& getEnabledFeatures() const noexcept { return enabledFeatures; }
         std::shared_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
         std::shared_ptr<Queue> getQueueForFamily(uint32_t queueFamilyIndex) const;
-        void updateDescriptorWrites(const VkWriteDescriptorSet *descriptorWrites,
-            uint32_t descriptorWriteCount) const noexcept;
-        void updateDescriptorCopies(const VkCopyDescriptorSet *descriptorCopies,
-            uint32_t descriptorCopyCount) const noexcept;
+        void updateDescriptorSets(uint32_t descriptorWriteCount,
+            const VkWriteDescriptorSet *descriptorWrites,
+            uint32_t descriptorCopyCount,
+            const VkCopyDescriptorSet *descriptorCopies) const noexcept;
         void updateDescriptorSets(const std::vector<VkWriteDescriptorSet>& descriptorWrites,
             const std::vector<VkCopyDescriptorSet>& descriptorCopies = {}) const noexcept;
         bool waitIdle() const;
