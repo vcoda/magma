@@ -74,14 +74,12 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device_, const 
     descriptorSetLayoutSupport.pNext = nullptr;
     descriptorSetLayoutSupport.supported = VK_FALSE;
 #ifdef VK_EXT_descriptor_indexing
-    VkDescriptorSetVariableDescriptorCountLayoutSupportEXT descriptorSetVariableDescriptorCountLayoutSupport = {};
+    VkDescriptorSetVariableDescriptorCountLayoutSupportEXT descriptorSetVariableDescriptorCountLayoutSupport;
+    descriptorSetVariableDescriptorCountLayoutSupport.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_LAYOUT_SUPPORT_EXT;
+    descriptorSetVariableDescriptorCountLayoutSupport.pNext = nullptr;
+    descriptorSetVariableDescriptorCountLayoutSupport.maxVariableDescriptorCount = 0;
     if (device->extensionEnabled(VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME))
-    {
         descriptorSetLayoutSupport.pNext = &descriptorSetVariableDescriptorCountLayoutSupport;
-        descriptorSetVariableDescriptorCountLayoutSupport.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_LAYOUT_SUPPORT_EXT;
-        descriptorSetVariableDescriptorCountLayoutSupport.pNext = nullptr;
-        descriptorSetVariableDescriptorCountLayoutSupport.maxVariableDescriptorCount = 0;
-    }
 #endif // VK_EXT_descriptor_indexing
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDescriptorSetLayoutSupportKHR, VK_KHR_MAINTENANCE_3_EXTENSION_NAME);
     vkGetDescriptorSetLayoutSupportKHR(MAGMA_HANDLE(device), &descriptorSetLayoutInfo, &descriptorSetLayoutSupport);
