@@ -26,31 +26,20 @@ namespace magma
        and thus each API command takes a dispatchable type as its first parameter.
        Each object of a dispatchable type must have a unique handle value during its lifetime. */
 
-    template<typename Type>
+    template<class Type>
     class Dispatchable : public ObjectT<Type>
     {
-    public:
-        typedef Type NativeHandle;
-        // VK_EXT_debug_utils/VK_EXT_debug_marker requires uint64_t type
-        virtual uint64_t getHandle() const noexcept override
-            { return reinterpret_cast<uint64_t>(handle); }
-        const NativeHandle *getHandleAddress() const noexcept { return &handle; }
-        operator NativeHandle() const noexcept { return handle; }
-
     protected:
         explicit Dispatchable(VkObjectType objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> hostAllocator) noexcept:
-            ObjectT<Type>(objectType, std::move(device), std::move(hostAllocator)),
-            handle(nullptr) {}
+            ObjectT<Type>(objectType, std::move(device), std::move(hostAllocator)) {}
         explicit Dispatchable(VkObjectType objectType,
-            NativeHandle handle,
+            Type handle,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> hostAllocator) noexcept:
-            ObjectT<Type>(objectType, std::move(device), std::move(hostAllocator)),
-            handle(handle) {}
-
-    protected:
-        NativeHandle handle;
+            ObjectT<Type>(objectType, handle, std::move(device), std::move(hostAllocator)) {}
+        uint64_t getHandle() const noexcept override
+            { return reinterpret_cast<uint64_t>(ObjectT<Type>::handle); }
     };
 } // namespace magma

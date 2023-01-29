@@ -69,23 +69,31 @@ namespace magma
 
     template<class Type>
     class ObjectT : public Object
-#ifdef MAGMA_X64
+    #ifdef MAGMA_X64
         ,public ObjectType<Type> // Use custom template specialization
-#endif
+    #endif
     {
     public:
+        typedef Type NativeHandle;
         explicit ObjectT(VkObjectType objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> hostAllocator) noexcept;
+        explicit ObjectT(VkObjectType objectType,
+            Type handle,
+            std::shared_ptr<Device> device,
+            std::shared_ptr<IAllocator> hostAllocator) noexcept;
         VkObjectType getObjectType() const noexcept override;
+        const NativeHandle *getHandleAddress() const noexcept { return &handle; }
+        operator NativeHandle() const noexcept { return handle; }
 
     protected:
-#if !defined(MAGMA_X64)
+    #if !defined(MAGMA_X64)
         // Additional storage is required under x86 target
         // as Vulkan non-dispatchable handles are defined as uint64_t
         // and thus cannot be used in custom template specialization.
         const VkObjectType objectType;
-#endif
+    #endif
+        NativeHandle handle;
     };
 } // namespace magma
 
