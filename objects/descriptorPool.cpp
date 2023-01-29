@@ -51,11 +51,17 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets,
     descriptorPoolInfo.pNext = nullptr;
     descriptorPoolInfo.flags = 0;
     if (freeDescriptorSet)
+    {   // Mobile implementations may use a simpler allocator if that flag is not set,
+        // relying on the fact that pool memory will only be recycled in block.
         descriptorPoolInfo.flags |= VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+    }
 #ifdef VK_EXT_descriptor_indexing
     if (updateAfterBind)
+    {   // Specifies that descriptor sets allocated from this pool can include bindings
+        // with the VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT_EXT bit set.
         descriptorPoolInfo.flags |= VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT;
-#endif
+    }
+#endif // VK_EXT_descriptor_indexing
     descriptorPoolInfo.maxSets = maxSets;
     descriptorPoolInfo.poolSizeCount = MAGMA_COUNT(descriptorPools);
     descriptorPoolInfo.pPoolSizes = descriptorPools.data();
