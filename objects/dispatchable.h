@@ -31,12 +31,11 @@ namespace magma
     {
     public:
         typedef Type NativeHandle;
-
-    public:
+        // VK_EXT_debug_utils/VK_EXT_debug_marker requires uint64_t type
         virtual uint64_t getHandle() const noexcept override
             { return reinterpret_cast<uint64_t>(handle); }
-        operator Type() const noexcept
-            { return handle; }
+        const NativeHandle *getHandleAddress() const noexcept { return &handle; }
+        operator NativeHandle() const noexcept { return handle; }
 
     protected:
         explicit Dispatchable(VkObjectType objectType,
