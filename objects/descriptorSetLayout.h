@@ -28,25 +28,13 @@ namespace magma
     class DescriptorSetLayout : public NonDispatchable<VkDescriptorSetLayout>
     {
     public:
+        struct Support;
         explicit DescriptorSetLayout(std::shared_ptr<Device> device,
             const std::vector<VkDescriptorSetLayoutBinding>& bindings,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkDescriptorSetLayoutCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
-
-        /* If the descriptor set layout exceeds the
-           VkPhysicalDeviceMaintenance3Properties::maxPerSetDescriptors limit,
-           whether the descriptor set layout is supported is implementation-dependent
-           and may depend on whether the descriptor sizes and alignments
-           cause the layout to exceed an internal limit. */
-
     #ifdef VK_KHR_maintenance3
-        struct Support
-        {
-            bool supported = false;
-            uint32_t maxVariableDescriptorCount = 0;
-        };
-
         explicit DescriptorSetLayout(std::shared_ptr<Device> device,
             const std::vector<VkDescriptorSetLayoutBinding>& bindings,
             Support& supportResult,
@@ -59,5 +47,17 @@ namespace magma
 
     private:
         hash_t hash;
+    };
+
+    /* If the descriptor set layout exceeds the
+       VkPhysicalDeviceMaintenance3Properties::maxPerSetDescriptors limit,
+       whether the descriptor set layout is supported is implementation-dependent
+       and may depend on whether the descriptor sizes and alignments
+       cause the layout to exceed an internal limit. */
+
+    struct DescriptorSetLayout::Support
+    {
+        bool supported = false;
+        uint32_t maxVariableDescriptorCount = 0;
     };
 } // namespace magma
