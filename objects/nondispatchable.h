@@ -42,6 +42,7 @@ namespace magma
             return handle;
 #       endif
         }
+        const Type *getHandleAddress() const noexcept { return &handle; }
         operator Type() const noexcept { return handle; }
 
     protected:

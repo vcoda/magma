@@ -34,7 +34,7 @@ inline ImmutableSampler& ImmutableSampler::operator=(std::shared_ptr<const magma
         imageDescriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         // If pImmutableSamplers is not NULL, then it is a pointer to an array of sampler handles
         // that will be copied into the set layout and used for the corresponding binding.
-        binding.pImmutableSamplers = sampler->getImmutableSampler();
+        binding.pImmutableSamplers = sampler->getHandleAddress();
         updated = true;
     }
     return *this;
@@ -60,7 +60,7 @@ inline CombinedImageImmutableSampler& CombinedImageImmutableSampler::operator=(c
     if (!binding.pImmutableSamplers)
     {   // If pImmutableSamplers is not NULL, then it is a pointer to an array of sampler handles
         // that will be copied into the set layout and used for the corresponding binding.
-        binding.pImmutableSamplers = combinedImageSampler.second->getImmutableSampler();
+        binding.pImmutableSamplers = combinedImageSampler.second->getHandleAddress();
     }
     updated = true;
     return *this;

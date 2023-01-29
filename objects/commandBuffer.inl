@@ -123,8 +123,7 @@ inline void CommandBuffer::bindIndexBuffer(const std::shared_ptr<BaseIndexBuffer
 inline void CommandBuffer::bindVertexBuffer(uint32_t firstBinding, const std::shared_ptr<Buffer>& vertexBuffer,
     VkDeviceSize offset /* 0 */) noexcept
 {
-    const VkBuffer dereferencedBuffers[1] = {*vertexBuffer};
-    vkCmdBindVertexBuffers(handle, firstBinding, 1, dereferencedBuffers, &offset);
+    vkCmdBindVertexBuffers(handle, firstBinding, 1, vertexBuffer->getHandleAddress(), &offset);
 }
 
 inline void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::vector<std::shared_ptr<Buffer>>& vertexBuffers,

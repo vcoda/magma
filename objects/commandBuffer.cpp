@@ -208,10 +208,7 @@ void CommandBuffer::bindTransformFeedbackBuffer(uint32_t firstBinding, const std
 {
     MAGMA_DEVICE_EXTENSION(vkCmdBindTransformFeedbackBuffersEXT);
     if (vkCmdBindTransformFeedbackBuffersEXT)
-    {
-        const VkBuffer dereferencedBuffers[1] = {*transformFeedbackBuffer};
-        vkCmdBindTransformFeedbackBuffersEXT(handle, firstBinding, 1, dereferencedBuffers, &offset, &size);
-    }
+        vkCmdBindTransformFeedbackBuffersEXT(handle, firstBinding, 1, transformFeedbackBuffer->getHandleAddress(), &offset, &size);
 }
 
 void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const std::initializer_list<std::shared_ptr<TransformFeedbackBuffer>>& transformFeedbackBuffers,
@@ -326,11 +323,10 @@ void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineSta
 {
     MAGMA_ASSERT(srcStageMask);
     MAGMA_ASSERT(dstStageMask);
-    const VkEvent dereferencedEvents[1] = {*event};
     MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedImageMemoryBarriers, imageMemoryBarriers.size());
     for (const auto& barrier : imageMemoryBarriers)
         dereferencedImageMemoryBarriers.put(barrier);
-    vkCmdWaitEvents(handle, 1, dereferencedEvents, srcStageMask, dstStageMask,
+    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask,
         MAGMA_COUNT(memoryBarriers),
         memoryBarriers.data(),
         MAGMA_COUNT(bufferMemoryBarriers),
@@ -637,10 +633,7 @@ void CommandBuffer::copyAccelerationStructure(const std::shared_ptr<Acceleration
 {
     MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureNV);
     if (vkCmdCopyAccelerationStructureNV)
-    {
-        const VkCopyAccelerationStructureModeNV mode = clone ? VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_NV : VK_COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_NV;
-        vkCmdCopyAccelerationStructureNV(handle, *dst, *src, mode);
-    }
+        vkCmdCopyAccelerationStructureNV(handle, *dst, *src, clone ? VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_NV : VK_COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_NV);
 }
 
 void CommandBuffer::writeAccelerationStructureProperties(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
@@ -649,10 +642,7 @@ void CommandBuffer::writeAccelerationStructureProperties(const std::shared_ptr<A
     MAGMA_ASSERT(firstQuery < queryPool->getQueryCount());
     MAGMA_DEVICE_EXTENSION(vkCmdWriteAccelerationStructuresPropertiesNV);
     if (vkCmdWriteAccelerationStructuresPropertiesNV)
-    {
-        const VkAccelerationStructureNV dereferencedAccelerationStructure = *accelerationStructure;
-        vkCmdWriteAccelerationStructuresPropertiesNV(handle, 1, &dereferencedAccelerationStructure, queryPool->getType(), *queryPool, firstQuery);
-    }
+        vkCmdWriteAccelerationStructuresPropertiesNV(handle, 1, accelerationStructure->getHandleAddress(), queryPool->getType(), *queryPool, firstQuery);
 }
 
 void CommandBuffer::traceRays(const std::shared_ptr<Buffer>& raygenShaderBindingTableBuffer, VkDeviceSize raygenShaderBindingOffset,
