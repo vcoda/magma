@@ -78,6 +78,16 @@ namespace magma
             bool waitAll,
             uint64_t timeout = std::numeric_limits<uint64_t>::max()) const;
     #endif // VK_KHR_timeline_semaphore
+    #ifdef VK_KHR_maintenance3
+        bool getDescriptorSetLayoutSupport(const std::vector<VkDescriptorSetLayoutBinding>& bindings,
+            VkDescriptorSetLayoutCreateFlags flags = 0,
+            const StructureChain& extendedInfo = StructureChain()) const;
+    #ifdef VK_EXT_descriptor_indexing
+        uint32_t getVariableDescriptorCountLayoutSupport(const std::vector<VkDescriptorSetLayoutBinding>& bindings,
+            VkDescriptorSetLayoutCreateFlags flags = 0,
+            const StructureChain& extendedInfo = StructureChain()) const;
+    #endif // VK_EXT_descriptor_indexing
+    #endif // VK_KHR_maintenance3
 #ifdef VK_KHR_device_group
         VkDeviceGroupPresentModeFlagsKHR getDeviceGroupSurfacePresentModes(std::shared_ptr<const Surface> surface) const;
 #   ifdef VK_EXT_full_screen_exclusive

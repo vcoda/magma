@@ -221,6 +221,54 @@ bool Device::waitSemaphores(const std::vector<std::shared_ptr<TimelineSemaphore>
 }
 #endif // VK_KHR_timeline_semaphore
 
+#ifdef VK_KHR_maintenance3
+bool Device::getDescriptorSetLayoutSupport(const std::vector<VkDescriptorSetLayoutBinding>& bindings,
+    VkDescriptorSetLayoutCreateFlags flags /* 0 */,
+    const StructureChain& extendedInfo /* default */) const
+{
+    VkDescriptorSetLayoutCreateInfo descriptorSetLayoutInfo;
+    VkDescriptorSetLayoutSupportKHR descriptorSetLayoutSupport;
+    descriptorSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+    descriptorSetLayoutInfo.pNext = extendedInfo.getChainedNodes();
+    descriptorSetLayoutInfo.flags = flags;
+    descriptorSetLayoutInfo.bindingCount = MAGMA_COUNT(bindings);
+    descriptorSetLayoutInfo.pBindings = bindings.data();
+    descriptorSetLayoutSupport.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_SUPPORT_KHR;
+    descriptorSetLayoutSupport.pNext = nullptr;
+    descriptorSetLayoutSupport.supported = VK_FALSE;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDescriptorSetLayoutSupportKHR, VK_KHR_MAINTENANCE_3_EXTENSION_NAME);
+    vkGetDescriptorSetLayoutSupportKHR(MAGMA_HANDLE(device), &descriptorSetLayoutInfo, &descriptorSetLayoutSupport);
+    return descriptorSetLayoutSupport.supported;
+}
+
+#ifdef VK_EXT_descriptor_indexing
+uint32_t Device::getVariableDescriptorCountLayoutSupport(const std::vector<VkDescriptorSetLayoutBinding>& bindings,
+    VkDescriptorSetLayoutCreateFlags flags /* 0 */,
+    const StructureChain& extendedInfo /* default */) const
+{
+    if (!extensionEnabled(VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME))
+        return 0;
+    VkDescriptorSetLayoutCreateInfo descriptorSetLayoutInfo;
+    VkDescriptorSetLayoutSupportKHR descriptorSetLayoutSupport;
+    VkDescriptorSetVariableDescriptorCountLayoutSupportEXT descriptorSetVariableDescriptorCountLayoutSupport;
+    descriptorSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+    descriptorSetLayoutInfo.pNext = extendedInfo.getChainedNodes();
+    descriptorSetLayoutInfo.flags = flags;
+    descriptorSetLayoutInfo.bindingCount = MAGMA_COUNT(bindings);
+    descriptorSetLayoutInfo.pBindings = bindings.data();
+    descriptorSetLayoutSupport.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_SUPPORT_KHR;
+    descriptorSetLayoutSupport.pNext = &descriptorSetVariableDescriptorCountLayoutSupport;
+    descriptorSetLayoutSupport.supported = VK_FALSE;
+    descriptorSetVariableDescriptorCountLayoutSupport.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_LAYOUT_SUPPORT_EXT;
+    descriptorSetVariableDescriptorCountLayoutSupport.pNext = nullptr;
+    descriptorSetVariableDescriptorCountLayoutSupport.maxVariableDescriptorCount = 0;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDescriptorSetLayoutSupportKHR, VK_KHR_MAINTENANCE_3_EXTENSION_NAME);
+    vkGetDescriptorSetLayoutSupportKHR(MAGMA_HANDLE(device), &descriptorSetLayoutInfo, &descriptorSetLayoutSupport);
+    return descriptorSetVariableDescriptorCountLayoutSupport.maxVariableDescriptorCount;
+}
+#endif // VK_EXT_descriptor_indexing
+#endif // VK_KHR_maintenance3
+
 #ifdef VK_KHR_device_group
 VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupSurfacePresentModes(std::shared_ptr<const Surface> surface) const
 {
