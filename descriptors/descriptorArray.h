@@ -18,22 +18,46 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "descriptor.h"
 
-#define MAGMA_DECLARE_IMAGE_ARRAY_DESCRIPTOR \
-struct Descriptor\
+#define MAGMA_DECLARE_IMAGE_ARRAY_DESCRIPTOR(requiredUsage)\
+class Descriptor\
 {\
-    Descriptor(VkDescriptorImageInfo& imageDescriptor) noexcept:\
-        imageDescriptor(imageDescriptor) {}\
-    void operator=(std::shared_ptr<const ImageView>) noexcept;\
     VkDescriptorImageInfo& imageDescriptor;\
+    bool& updated;\
+\
+public:\
+    Descriptor(VkDescriptorImageInfo& imageDescriptor, bool& updated) noexcept:\
+        imageDescriptor(imageDescriptor), updated(updated) {}\
+    void operator=(std::shared_ptr<const ImageView> imageView) noexcept\
+    {\
+        MAGMA_ASSERT(imageView);\
+        MAGMA_ASSERT(imageView->getImage()->getUsage() & requiredUsage);\
+        if (imageDescriptor.imageView != *imageView)\
+        {\
+            imageDescriptor = imageView->getDescriptor(nullptr);\
+            updated = true;\
+        }\
+    }\
 };
 
-#define MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR \
-struct Descriptor\
+#define MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR(requiredUsage)\
+class Descriptor\
 {\
-    Descriptor(VkDescriptorBufferInfo& bufferDescriptor) noexcept:\
-        bufferDescriptor(bufferDescriptor) {}\
-    void operator=(std::shared_ptr<const Buffer>) noexcept;\
     VkDescriptorBufferInfo& bufferDescriptor;\
+    bool& updated;\
+\
+public:\
+    Descriptor(VkDescriptorBufferInfo& bufferDescriptor, bool& updated) noexcept:\
+        bufferDescriptor(bufferDescriptor), updated(updated) {}\
+    void operator=(std::shared_ptr<const Buffer> bufferView) noexcept\
+    {\
+        MAGMA_ASSERT(buffer);\
+        MAGMA_ASSERT(buffer->getUsage() & requiredUsage);\
+        if (bufferDescriptor.buffer != *buffer)\
+        {\
+            bufferDescriptor = buffer->getDescriptor();\
+            updated = true;\
+        }\
+    }\
 };
 
 namespace magma
@@ -169,7 +193,7 @@ namespace magma
         class SampledImageArray : public DescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_IMAGE_ARRAY_DESCRIPTOR
+            MAGMA_DECLARE_IMAGE_ARRAY_DESCRIPTOR(VK_IMAGE_USAGE_SAMPLED_BIT)
             SampledImageArray(uint32_t binding) noexcept:
                 DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
@@ -182,7 +206,7 @@ namespace magma
         class StorageImageArray : public DescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_IMAGE_ARRAY_DESCRIPTOR
+            MAGMA_DECLARE_IMAGE_ARRAY_DESCRIPTOR(VK_IMAGE_USAGE_STORAGE_BIT)
             StorageImageArray(uint32_t binding) noexcept:
                 DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
@@ -195,7 +219,7 @@ namespace magma
         class UniformTexelBufferArray : public DescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR
+            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR(VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT)
             UniformTexelBufferArray(uint32_t binding) noexcept:
                 DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
@@ -208,7 +232,7 @@ namespace magma
         class StorageTexelBufferArray : public DescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR
+            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR(VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT)
             StorageTexelBufferArray(uint32_t binding) noexcept:
                 DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
@@ -221,7 +245,7 @@ namespace magma
         class UniformBufferArray : public DescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR
+            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR(VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT)
             UniformBufferArray(uint32_t binding) noexcept:
                 DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
@@ -235,7 +259,7 @@ namespace magma
         class StorageBufferArray : public DescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR
+            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR(VK_BUFFER_USAGE_STORAGE_BUFFER_BIT)
             StorageBufferArray(uint32_t binding) noexcept:
                 DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
@@ -251,7 +275,7 @@ namespace magma
         class DynamicUniformBufferArray : public DescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR
+            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR(VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT)
             DynamicUniformBufferArray(uint32_t binding) noexcept:
                 DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
@@ -267,7 +291,7 @@ namespace magma
         class DynamicStorageBufferArray : public DescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR
+            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR(VK_BUFFER_USAGE_STORAGE_BUFFER_BIT)
             DynamicStorageBufferArray(uint32_t binding) noexcept:
                 DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
@@ -280,7 +304,7 @@ namespace magma
         class InputAttachmentArray : public DescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_IMAGE_ARRAY_DESCRIPTOR
+            MAGMA_DECLARE_IMAGE_ARRAY_DESCRIPTOR(VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT)
             InputAttachmentArray(uint32_t binding) noexcept:
                 DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
