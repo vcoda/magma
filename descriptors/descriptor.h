@@ -49,6 +49,13 @@ namespace magma
         protected:
             Descriptor(VkDescriptorType descriptorType,
                 uint32_t descriptorCount, uint32_t binding) noexcept;
+            void updateSampler(std::shared_ptr<const magma::Sampler> sampler) noexcept;
+            void updateImageView(std::shared_ptr<const ImageView> imageView,
+                VkImageUsageFlags requiredUsage) noexcept;
+            void updateBufferView(std::shared_ptr<const BufferView> bufferView,
+                VkBufferUsageFlags requiredUsage) noexcept;
+            void updateBuffer(std::shared_ptr<const Buffer> buffer,
+                VkBufferUsageFlags requiredUsage) noexcept;
 
             union
             {
