@@ -22,8 +22,7 @@ namespace magma
 {
     namespace descriptor
     {
-        /* Base class of descriptor array.
-           Provides access to buffer and image array elements. */
+        /* Base class of descriptor array. */
 
         class DescriptorArray : public Descriptor
         {
@@ -38,7 +37,8 @@ namespace magma
                 uint32_t binding) noexcept;
         };
 
-        /* Descriptor array. Provided template parameter to define an array size in compile-time. */
+        /* Provides access to buffer and image array elements.
+           Template parameter is used to define the array size in compile-time. */
 
         template<uint32_t Size>
         class TDescriptorArray : public DescriptorArray
