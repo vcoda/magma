@@ -7,7 +7,7 @@ inline void Object::setDebugTag(uint64_t tagName, const Type& tag)
 }
 
 template<class Type>
-inline ObjectT<Type>::ObjectT(VkObjectType objectType, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> hostAllocator) noexcept:
+inline TObject<Type>::TObject(VkObjectType objectType, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> hostAllocator) noexcept:
     Object(std::move(device), std::move(hostAllocator)),
 #if !defined(MAGMA_X64)
     objectType(objectType),
@@ -18,7 +18,7 @@ inline ObjectT<Type>::ObjectT(VkObjectType objectType, std::shared_ptr<Device> d
 }
 
 template<class Type>
-inline ObjectT<Type>::ObjectT(VkObjectType objectType, Type handle, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> hostAllocator) noexcept:
+inline TObject<Type>::TObject(VkObjectType objectType, Type handle, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> hostAllocator) noexcept:
     Object(std::move(device), std::move(hostAllocator)),
 #if !defined(MAGMA_X64)
     objectType(objectType),
@@ -29,7 +29,7 @@ inline ObjectT<Type>::ObjectT(VkObjectType objectType, Type handle, std::shared_
 }
 
 template<class Type>
-inline VkObjectType ObjectT<Type>::getObjectType() const noexcept
+inline VkObjectType TObject<Type>::getObjectType() const noexcept
 {
 #ifdef MAGMA_X64
     return ObjectType<Type>::getObjectType();

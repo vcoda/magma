@@ -27,19 +27,19 @@ namespace magma
        Each object of a dispatchable type must have a unique handle value during its lifetime. */
 
     template<class Type>
-    class Dispatchable : public ObjectT<Type>
+    class Dispatchable : public TObject<Type>
     {
     protected:
         explicit Dispatchable(VkObjectType objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> hostAllocator) noexcept:
-            ObjectT<Type>(objectType, std::move(device), std::move(hostAllocator)) {}
+            TObject<Type>(objectType, std::move(device), std::move(hostAllocator)) {}
         explicit Dispatchable(VkObjectType objectType,
             Type handle,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> hostAllocator) noexcept:
-            ObjectT<Type>(objectType, handle, std::move(device), std::move(hostAllocator)) {}
+            TObject<Type>(objectType, handle, std::move(device), std::move(hostAllocator)) {}
         uint64_t getHandle() const noexcept override
-            { return reinterpret_cast<uint64_t>(ObjectT<Type>::handle); }
+            { return reinterpret_cast<uint64_t>(TObject<Type>::handle); }
     };
 } // namespace magma

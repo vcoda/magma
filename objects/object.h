@@ -68,17 +68,17 @@ namespace magma
     /* Template object that provides getObjectType() getter. */
 
     template<class Type>
-    class ObjectT : public Object
+    class TObject : public Object
     #ifdef MAGMA_X64
         ,public ObjectType<Type> // Use custom template specialization
     #endif
     {
     public:
         typedef Type NativeHandle;
-        explicit ObjectT(VkObjectType objectType,
+        explicit TObject(VkObjectType objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> hostAllocator) noexcept;
-        explicit ObjectT(VkObjectType objectType,
+        explicit TObject(VkObjectType objectType,
             Type handle,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> hostAllocator) noexcept;
