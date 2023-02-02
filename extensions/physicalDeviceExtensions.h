@@ -162,6 +162,7 @@ namespace magma
         const VkBool32 EXT_shader_subgroup_vote : 1;
         const VkBool32 EXT_shader_viewport_index_layer : 1;
         const VkBool32 EXT_subgroup_size_control : 1;
+        const VkBool32 EXT_swapchain_maintenance1 : 1;
         const VkBool32 EXT_texel_buffer_alignment : 1;
         const VkBool32 EXT_texture_compression_astc_hdr : 1;
         const VkBool32 EXT_tooling_info : 1;
@@ -188,6 +189,7 @@ namespace magma
         const VkBool32 GOOGLE_user_type : 1;
 
         // Huawei Technologies Co. Ltd.
+        const VkBool32 HUAWEI_cluster_culling_shader : 1;
         const VkBool32 HUAWEI_subpass_shading : 1;
         const VkBool32 HUAWEI_invocation_mask : 1;
 
@@ -242,6 +244,7 @@ namespace magma
         const VkBool32 KHR_performance_query : 1;
         const VkBool32 KHR_pipeline_executable_properties : 1;
         const VkBool32 KHR_pipeline_library : 1;
+        const VkBool32 KHR_portability_enumeration : 1;
         const VkBool32 KHR_portability_subset : 1;
         const VkBool32 KHR_present_id : 1;
         const VkBool32 KHR_present_wait : 1;
@@ -272,6 +275,8 @@ namespace magma
         const VkBool32 KHR_timeline_semaphore : 1;
         const VkBool32 KHR_uniform_buffer_standard_layout : 1;
         const VkBool32 KHR_variable_pointers : 1;
+        const VkBool32 KHR_video_decode_h264 : 1;
+        const VkBool32 KHR_video_decode_h265 : 1;
         const VkBool32 KHR_video_decode_queue : 1;
         const VkBool32 KHR_video_encode_queue : 1;
         const VkBool32 KHR_video_queue : 1;
@@ -285,6 +290,7 @@ namespace magma
         const VkBool32 NV_clip_space_w_scaling : 1;
         const VkBool32 NV_compute_shader_derivatives : 1;
         const VkBool32 NV_cooperative_matrix : 1;
+        const VkBool32 NV_copy_memory_indirect : 1;
         const VkBool32 NV_corner_sampled_image : 1;
         const VkBool32 NV_coverage_reduction_mode : 1;
         const VkBool32 NV_cuda_kernel_launch : 1;
@@ -306,10 +312,12 @@ namespace magma
         const VkBool32 NV_glsl_shader : 1;
         const VkBool32 NV_inherited_viewport_scissor : 1;
         const VkBool32 NV_linear_color_attachment : 1;
+        const VkBool32 NV_memory_decompression : 1;
         const VkBool32 NV_mesh_shader : 1;
         const VkBool32 NV_optical_flow : 1;
         const VkBool32 NV_present_barrier : 1;
         const VkBool32 NV_ray_tracing : 1;
+        const VkBool32 NV_ray_tracing_invocation_reorder : 1;
         const VkBool32 NV_ray_tracing_motion_blur : 1;
         const VkBool32 NV_representative_fragment_test : 1;
         const VkBool32 NV_sample_mask_override_coverage : 1;
