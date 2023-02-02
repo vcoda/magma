@@ -49,6 +49,10 @@ namespace magma
         protected:
             TDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
                 DescriptorArray(descriptorType, Size, binding) {}
+            ImageDescriptor getImageElement(uint32_t index,
+                VkImageUsageFlags requiredUsage) noexcept;
+            BufferDescriptor getBufferElement(uint32_t index,
+                VkBufferUsageFlags requiredUsage) noexcept;
 
             union
             {
@@ -107,17 +111,9 @@ namespace magma
         class CombinedImageSamplerArray : public TDescriptorArray<Size>
         {
         public:
-            struct Descriptor
-            {
-                Descriptor(VkDescriptorImageInfo& imageDescriptor) noexcept:
-                    imageDescriptor(imageDescriptor) {}
-                void operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>&) noexcept;
-                VkDescriptorImageInfo& imageDescriptor;
-            };
-
             CombinedImageSamplerArray(uint32_t binding) noexcept:
                 TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
-            Descriptor operator[](uint32_t index) noexcept;
+            DescriptorArray::ImageDescriptor operator[](uint32_t index) noexcept;
         };
 
         /* Updates to a VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER descriptor with immutable samplers

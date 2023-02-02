@@ -1,13 +1,13 @@
 class BufferDescriptor
 {
-    const VkBufferUsageFlags requiredUsage;
     VkDescriptorBufferInfo& bufferDescriptor;
+    const VkBufferUsageFlags requiredUsage;
     bool& updated;
 
 public:
-    explicit BufferDescriptor(VkBufferUsageFlags requiredUsage, VkDescriptorBufferInfo& bufferDescriptor, bool& updated) noexcept:
-        requiredUsage(requiredUsage),
+    explicit BufferDescriptor(VkDescriptorBufferInfo& bufferDescriptor, VkBufferUsageFlags requiredUsage, bool& updated) noexcept:
         bufferDescriptor(bufferDescriptor),
+        requiredUsage(requiredUsage),
         updated(updated)
     {}
 

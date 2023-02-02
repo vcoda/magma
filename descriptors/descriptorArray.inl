@@ -52,10 +52,23 @@ inline void TDescriptorArray<Size>::getWriteDescriptor(VkDescriptorSet dstSet,
 }
 
 template<uint32_t Size>
-inline DescriptorArray::ImageDescriptor SamplerArray<Size>::operator[](uint32_t index) noexcept
+inline DescriptorArray::ImageDescriptor TDescriptorArray<Size>::getImageElement(uint32_t index, VkImageUsageFlags requiredUsage) noexcept
 {
     MAGMA_ASSERT(index < Size);
-    return DescriptorArray::ImageDescriptor(0, TDescriptorArray<Size>::imageDescriptors[index], Descriptor::updated);
+    return ImageDescriptor(imageDescriptors[index], requiredUsage, updated);
+}
+
+template<uint32_t Size>
+inline DescriptorArray::BufferDescriptor TDescriptorArray<Size>::getBufferElement(uint32_t index, VkBufferUsageFlags requiredUsage) noexcept
+{
+    MAGMA_ASSERT(index < Size);
+    return BufferDescriptor(bufferDescriptors[index], requiredUsage, updated);
+}
+
+template<uint32_t Size>
+inline DescriptorArray::ImageDescriptor SamplerArray<Size>::operator[](uint32_t index) noexcept
+{
+    return TDescriptorArray<Size>::getImageElement(index, 0);
 }
 
 template<uint32_t Size>
@@ -80,20 +93,9 @@ inline typename ImmutableSamplerArray<Size>::Descriptor ImmutableSamplerArray<Si
 }
 
 template<uint32_t Size>
-inline void CombinedImageSamplerArray<Size>::Descriptor::operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler) noexcept
+inline DescriptorArray::ImageDescriptor CombinedImageSamplerArray<Size>::operator[](uint32_t index) noexcept
 {
-    MAGMA_ASSERT(combinedImageSampler.first);
-    MAGMA_ASSERT(combinedImageSampler.second);
-    MAGMA_ASSERT(combinedImageSampler.first->getImage()->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
-    imageDescriptor = combinedImageSampler.first->getDescriptor(combinedImageSampler.second);
-}
-
-template<uint32_t Size>
-inline typename CombinedImageSamplerArray<Size>::Descriptor CombinedImageSamplerArray<Size>::operator[](uint32_t index) noexcept
-{
-    MAGMA_ASSERT(index < Size);
-    updated = true;
-    return Descriptor(imageDescriptors[index]);
+    return TDescriptorArray<Size>::getImageElement(index, VK_IMAGE_USAGE_SAMPLED_BIT);
 }
 
 template<uint32_t Size>
@@ -128,64 +130,55 @@ inline typename CombinedImageImmutableSamplerArray<Size>::Descriptor CombinedIma
 template<uint32_t Size>
 inline DescriptorArray::ImageDescriptor SampledImageArray<Size>::operator[](uint32_t index) noexcept
 {
-    MAGMA_ASSERT(index < Size);
-    return DescriptorArray::ImageDescriptor(VK_IMAGE_USAGE_SAMPLED_BIT, TDescriptorArray<Size>::imageDescriptors[index], Descriptor::updated);
+    return TDescriptorArray<Size>::getImageElement(index, VK_IMAGE_USAGE_SAMPLED_BIT);
 }
 
 template<uint32_t Size>
 inline DescriptorArray::ImageDescriptor StorageImageArray<Size>::operator[](uint32_t index) noexcept
 {
-    MAGMA_ASSERT(index < Size);
-    return DescriptorArray::ImageDescriptor(VK_IMAGE_USAGE_STORAGE_BIT, TDescriptorArray<Size>::imageDescriptors[index], Descriptor::updated);
+    return TDescriptorArray<Size>::getImageElement(index, VK_IMAGE_USAGE_STORAGE_BIT);
 }
 
 template<uint32_t Size>
 inline DescriptorArray::BufferDescriptor UniformTexelBufferArray<Size>::operator[](uint32_t index) noexcept
 {
-    MAGMA_ASSERT(index < Size);
-    return DescriptorArray::BufferDescriptor(VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT, TDescriptorArray<Size>::bufferDescriptors[index], Descriptor::updated);
+    return TDescriptorArray<Size>::getBufferElement(index, VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT);
 }
 
 template<uint32_t Size>
 inline DescriptorArray::BufferDescriptor StorageTexelBufferArray<Size>::operator[](uint32_t index) noexcept
 {
-    MAGMA_ASSERT(index < Size);
-    return DescriptorArray::BufferDescriptor(VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT, TDescriptorArray<Size>::bufferDescriptors[index], Descriptor::updated);
+    return TDescriptorArray<Size>::getBufferElement(index, VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT);
 }
 
 template<uint32_t Size>
 inline DescriptorArray::BufferDescriptor UniformBufferArray<Size>::operator[](uint32_t index) noexcept
 {
-    MAGMA_ASSERT(index < Size);
-    return DescriptorArray::BufferDescriptor(VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, TDescriptorArray<Size>::bufferDescriptors[index], Descriptor::updated);
+    return TDescriptorArray<Size>::getBufferElement(index, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
 }
 
 template<uint32_t Size>
 inline DescriptorArray::BufferDescriptor StorageBufferArray<Size>::operator[](uint32_t index) noexcept
 {
-    MAGMA_ASSERT(index < Size);
-    return DescriptorArray::BufferDescriptor(VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, TDescriptorArray<Size>::bufferDescriptors[index], Descriptor::updated);
+    return TDescriptorArray<Size>::getBufferElement(index, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
 }
 
 template<uint32_t Size>
 inline DescriptorArray::BufferDescriptor DynamicUniformBufferArray<Size>::operator[](uint32_t index) noexcept
 {
-    MAGMA_ASSERT(index < Size);
-    return DescriptorArray::BufferDescriptor(VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, TDescriptorArray<Size>::bufferDescriptors[index], Descriptor::updated);
+    return TDescriptorArray<Size>::getBufferElement(index, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
 }
 
 template<uint32_t Size>
 inline DescriptorArray::BufferDescriptor DynamicStorageBufferArray<Size>::operator[](uint32_t index) noexcept
 {
-    MAGMA_ASSERT(index < Size);
-    return DescriptorArray::BufferDescriptor(VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, TDescriptorArray<Size>::bufferDescriptors[index], Descriptor::updated);
+    return TDescriptorArray<Size>::getBufferElement(index, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
 }
 
 template<uint32_t Size>
 inline DescriptorArray::ImageDescriptor InputAttachmentArray<Size>::operator[](uint32_t index) noexcept
 {
-    MAGMA_ASSERT(index < Size);
-    return DescriptorArray::ImageDescriptor(VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT, TDescriptorArray<Size>::imageDescriptors[index], Descriptor::updated);
+    return TDescriptorArray<Size>::getImageElement(index, VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
 }
 } // namespace descriptor
 } // namespace magma

@@ -1,13 +1,13 @@
 class ImageDescriptor
 {
-    const VkImageUsageFlags requiredUsage;
     VkDescriptorImageInfo& imageDescriptor;
+    const VkImageUsageFlags requiredUsage;
     bool& updated;
 
 public:
-    explicit ImageDescriptor(VkImageUsageFlags requiredUsage, VkDescriptorImageInfo& imageDescriptor, bool& updated) noexcept:
-        requiredUsage(requiredUsage),
+    explicit ImageDescriptor(VkDescriptorImageInfo& imageDescriptor, VkImageUsageFlags requiredUsage, bool& updated) noexcept:
         imageDescriptor(imageDescriptor),
+        requiredUsage(requiredUsage),
         updated(updated)
     {}
 
@@ -30,6 +30,19 @@ public:
         if (imageDescriptor.imageView != *imageView)
         {
             imageDescriptor = imageView->getDescriptor(nullptr);
+            updated = true;
+        }
+    }
+
+    void operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler) noexcept
+    {
+        MAGMA_ASSERT(combinedImageSampler.first);
+        MAGMA_ASSERT(combinedImageSampler.second);
+        MAGMA_ASSERT(combinedImageSampler.first->getImage()->getUsage() & requiredUsage);
+        if ((imageDescriptor.imageView != *combinedImageSampler.first) ||
+            (imageDescriptor.sampler != *combinedImageSampler.second))
+        {
+            imageDescriptor = combinedImageSampler.first->getDescriptor(combinedImageSampler.second);
             updated = true;
         }
     }
