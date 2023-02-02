@@ -18,65 +18,57 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "descriptor.h"
 
-#define MAGMA_DECLARE_IMAGE_ARRAY_DESCRIPTOR(requiredUsage)\
-class Descriptor\
-{\
-    VkDescriptorImageInfo& imageDescriptor;\
-    bool& updated;\
-\
-public:\
-    Descriptor(VkDescriptorImageInfo& imageDescriptor, bool& updated) noexcept:\
-        imageDescriptor(imageDescriptor), updated(updated) {}\
-    void operator=(std::shared_ptr<const ImageView> imageView) noexcept\
-    {\
-        MAGMA_ASSERT(imageView);\
-        MAGMA_ASSERT(imageView->getImage()->getUsage() & requiredUsage);\
-        if (imageDescriptor.imageView != *imageView)\
-        {\
-            imageDescriptor = imageView->getDescriptor(nullptr);\
-            updated = true;\
-        }\
-    }\
-};
-
-#define MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR(requiredUsage)\
-class Descriptor\
-{\
-    VkDescriptorBufferInfo& bufferDescriptor;\
-    bool& updated;\
-\
-public:\
-    Descriptor(VkDescriptorBufferInfo& bufferDescriptor, bool& updated) noexcept:\
-        bufferDescriptor(bufferDescriptor), updated(updated) {}\
-    void operator=(std::shared_ptr<const Buffer> bufferView) noexcept\
-    {\
-        MAGMA_ASSERT(buffer);\
-        MAGMA_ASSERT(buffer->getUsage() & requiredUsage);\
-        if (bufferDescriptor.buffer != *buffer)\
-        {\
-            bufferDescriptor = buffer->getDescriptor();\
-            updated = true;\
-        }\
-    }\
-};
-
 namespace magma
 {
     namespace descriptor
     {
-        /* Base class of descriptor array. Provided template parameter
-           to define the array size in compile-time. */
+        /* Base class of descriptor array.
+           Provides access to buffer and image array elements. */
+
+        class DescriptorArray : public Descriptor
+        {
+        public:
+            class ImageElement
+            {
+                const VkImageUsageFlags usage;
+                VkDescriptorImageInfo& imageDescriptor;
+                bool& updated;
+
+            public:
+                explicit ImageElement(VkImageUsageFlags, VkDescriptorImageInfo&, bool&) noexcept;
+                void operator=(std::shared_ptr<const magma::Sampler>) noexcept;
+                void operator=(std::shared_ptr<const ImageView>) noexcept;
+            };
+
+            class BufferElement
+            {
+                const VkBufferUsageFlags usage;
+                VkDescriptorBufferInfo& bufferDescriptor;
+                bool& updated;
+
+            public:
+                explicit BufferElement(VkBufferUsageFlags, VkDescriptorBufferInfo&, bool&) noexcept;
+                void operator=(std::shared_ptr<const Buffer>) noexcept;
+            };
+
+        protected:
+            DescriptorArray(VkDescriptorType descriptorType,
+                uint32_t descriptorCount,
+                uint32_t binding) noexcept;
+        };
+
+        /* Descriptor array. Provided template parameter to define an array size in compile-time. */
 
         template<uint32_t Size>
-        struct DescriptorArray : public Descriptor
+        class TDescriptorArray : public DescriptorArray
         {
         public:
             void getWriteDescriptor(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
 
         protected:
-            DescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-                Descriptor(descriptorType, Size, binding) {}
+            TDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+                DescriptorArray(descriptorType, Size, binding) {}
 
             union
             {
@@ -90,20 +82,12 @@ namespace magma
            used to control the behavior of sampling operations performed on a sampled image. */
 
         template<uint32_t Size>
-        class SamplerArray : public DescriptorArray<Size>
+        class SamplerArray : public TDescriptorArray<Size>
         {
         public:
-            struct Descriptor
-            {
-                Descriptor(VkDescriptorImageInfo& imageDescriptor) noexcept:
-                    imageDescriptor(imageDescriptor) {}
-                void operator=(std::shared_ptr<const magma::Sampler>) noexcept;
-                VkDescriptorImageInfo& imageDescriptor;
-            };
-
             SamplerArray(uint32_t binding) noexcept:
-                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding) {}
-            Descriptor operator[](uint32_t index) noexcept;
+                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding) {}
+            DescriptorArray::ImageElement operator[](uint32_t index) noexcept;
         };
 
         /* Immutable samplers are permanently bound into the set layout;
@@ -111,7 +95,7 @@ namespace magma
            in a descriptor set is not allowed. */
 
         template<uint32_t Size>
-        class ImmutableSamplerArray : public DescriptorArray<Size>
+        class ImmutableSamplerArray : public TDescriptorArray<Size>
         {
         public:
             struct Descriptor
@@ -124,7 +108,7 @@ namespace magma
             };
 
             ImmutableSamplerArray(uint32_t binding) noexcept:
-                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding)
+                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding)
             {   // If pImmutableSamplers is not NULL, then it is a pointer
                 // to an array of sampler handles that will be copied
                 // into the set layout and used for the corresponding binding.
@@ -140,7 +124,7 @@ namespace magma
            combining both a sampler and sampled image descriptor into a single descriptor. */
 
         template<uint32_t Size>
-        class CombinedImageSamplerArray : public DescriptorArray<Size>
+        class CombinedImageSamplerArray : public TDescriptorArray<Size>
         {
         public:
             struct Descriptor
@@ -152,7 +136,7 @@ namespace magma
             };
 
             CombinedImageSamplerArray(uint32_t binding) noexcept:
-                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
+                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
             Descriptor operator[](uint32_t index) noexcept;
         };
 
@@ -160,7 +144,7 @@ namespace magma
            does not modify the samplers (the image views are updated, but the sampler updates are ignored). */
 
         template<uint32_t Size>
-        class CombinedImageImmutableSamplerArray : public DescriptorArray<Size>
+        class CombinedImageImmutableSamplerArray : public TDescriptorArray<Size>
         {
         public:
             struct Descriptor
@@ -174,7 +158,7 @@ namespace magma
             };
 
             CombinedImageImmutableSamplerArray(uint32_t binding) noexcept:
-                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding)
+                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding)
             {   // If pImmutableSamplers is not NULL, then it is a pointer
                 // to an array of sampler handles that will be copied
                 // into the set layout and used for the corresponding binding.
@@ -190,65 +174,60 @@ namespace magma
            via an image view that sampling operations can be performed on. */
 
         template<uint32_t Size>
-        class SampledImageArray : public DescriptorArray<Size>
+        class SampledImageArray : public TDescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_IMAGE_ARRAY_DESCRIPTOR(VK_IMAGE_USAGE_SAMPLED_BIT)
             SampledImageArray(uint32_t binding) noexcept:
-                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding) {}
-            Descriptor operator[](uint32_t index) noexcept;
+                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding) {}
+            DescriptorArray::ImageElement operator[](uint32_t index) noexcept;
         };
 
         /* A storage image is a descriptor type associated with an image resource
            via an image view that load, store, and atomic operations can be performed on. */
 
         template<uint32_t Size>
-        class StorageImageArray : public DescriptorArray<Size>
+        class StorageImageArray : public TDescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_IMAGE_ARRAY_DESCRIPTOR(VK_IMAGE_USAGE_STORAGE_BIT)
             StorageImageArray(uint32_t binding) noexcept:
-                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, binding) {}
-            Descriptor operator[](uint32_t index) noexcept;
+                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, binding) {}
+            DescriptorArray::ImageElement operator[](uint32_t index) noexcept;
         };
 
         /* A uniform texel buffer is a descriptor type associated with a buffer resource
            via a buffer view that formatted load operations can be performed on. */
 
         template<uint32_t Size>
-        class UniformTexelBufferArray : public DescriptorArray<Size>
+        class UniformTexelBufferArray : public TDescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR(VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT)
             UniformTexelBufferArray(uint32_t binding) noexcept:
-                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, binding) {}
-            Descriptor operator[](uint32_t index) noexcept;
+                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, binding) {}
+            DescriptorArray::BufferElement operator[](uint32_t index) noexcept;
         };
 
         /* A storage texel buffer is a descriptor type associated with a buffer resource
            via a buffer view that formatted load, store, and atomic operations can be performed on. */
 
         template<uint32_t Size>
-        class StorageTexelBufferArray : public DescriptorArray<Size>
+        class StorageTexelBufferArray : public TDescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR(VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT)
             StorageTexelBufferArray(uint32_t binding) noexcept:
-                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, binding) {}
-            Descriptor operator[](uint32_t index) noexcept;
+                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, binding) {}
+            DescriptorArray::BufferElement operator[](uint32_t index) noexcept;
         };
 
         /* A uniform buffer is a descriptor type associated with a buffer resource directly,
            described in a shader as a structure with various members that load operations can be performed on. */
 
         template<uint32_t Size>
-        class UniformBufferArray : public DescriptorArray<Size>
+        class UniformBufferArray : public TDescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR(VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT)
             UniformBufferArray(uint32_t binding) noexcept:
-                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, binding) {}
-            Descriptor operator[](uint32_t index) noexcept;
+                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, binding) {}
+            DescriptorArray::BufferElement operator[](uint32_t index) noexcept;
         };
 
         /* A storage buffer is a descriptor type associated with a buffer resource directly,
@@ -256,13 +235,12 @@ namespace magma
            and atomic operations can be performed on. */
 
         template<uint32_t Size>
-        class StorageBufferArray : public DescriptorArray<Size>
+        class StorageBufferArray : public TDescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR(VK_BUFFER_USAGE_STORAGE_BUFFER_BIT)
             StorageBufferArray(uint32_t binding) noexcept:
-                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, binding) {}
-            Descriptor operator[](uint32_t index) noexcept;
+                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, binding) {}
+            DescriptorArray::BufferElement operator[](uint32_t index) noexcept;
         };
 
         /* A dynamic uniform buffer is almost identical to a uniform buffer,
@@ -272,13 +250,12 @@ namespace magma
            when binding the descriptor set. */
 
         template<uint32_t Size>
-        class DynamicUniformBufferArray : public DescriptorArray<Size>
+        class DynamicUniformBufferArray : public TDescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR(VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT)
             DynamicUniformBufferArray(uint32_t binding) noexcept:
-                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, binding) {}
-            Descriptor operator[](uint32_t index) noexcept;
+                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, binding) {}
+            DescriptorArray::BufferElement operator[](uint32_t index) noexcept;
         };
 
         /* A dynamic storage buffer is almost identical to a storage buffer,
@@ -288,26 +265,24 @@ namespace magma
            when binding the descriptor set. */
 
         template<uint32_t Size>
-        class DynamicStorageBufferArray : public DescriptorArray<Size>
+        class DynamicStorageBufferArray : public TDescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_BUFFER_ARRAY_DESCRIPTOR(VK_BUFFER_USAGE_STORAGE_BUFFER_BIT)
             DynamicStorageBufferArray(uint32_t binding) noexcept:
-                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, binding) {}
-            Descriptor operator[](uint32_t index) noexcept;
+                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, binding) {}
+            DescriptorArray::BufferElement operator[](uint32_t index) noexcept;
         };
 
         /* An input attachment is a descriptor type associated with an image resource
            via an image view that can be used for framebuffer local load operations in fragment shaders. */
 
         template<uint32_t Size>
-        class InputAttachmentArray : public DescriptorArray<Size>
+        class InputAttachmentArray : public TDescriptorArray<Size>
         {
         public:
-            MAGMA_DECLARE_IMAGE_ARRAY_DESCRIPTOR(VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT)
             InputAttachmentArray(uint32_t binding) noexcept:
-                DescriptorArray<Size>(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, binding) {}
-            Descriptor operator[](uint32_t index) noexcept;
+                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, binding) {}
+            DescriptorArray::ImageElement operator[](uint32_t index) noexcept;
         };
     } // namespace descriptor
 } // namespace magma
