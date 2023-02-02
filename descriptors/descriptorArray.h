@@ -29,6 +29,7 @@ namespace magma
         {
         public:
             #include "descriptorArrayImageDescriptor.inl"
+            #include "descriptorArrayImageSamplerDescriptor.inl"
             #include "descriptorArrayBufferDescriptor.inl"
 
         protected:
@@ -82,15 +83,6 @@ namespace magma
         class ImmutableSamplerArray : public TDescriptorArray<Size>
         {
         public:
-            struct Descriptor
-            {
-                Descriptor(VkDescriptorImageInfo& imageDescriptor, VkSampler& immutableSampler) noexcept:
-                    imageDescriptor(imageDescriptor), immutableSampler(immutableSampler) {}
-                void operator=(std::shared_ptr<const magma::Sampler>) noexcept;
-                VkDescriptorImageInfo& imageDescriptor;
-                VkSampler& immutableSampler;
-            };
-
             ImmutableSamplerArray(uint32_t binding) noexcept:
                 TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding)
             {   // If pImmutableSamplers is not NULL, then it is a pointer
@@ -98,7 +90,7 @@ namespace magma
                 // into the set layout and used for the corresponding binding.
                 this->binding.pImmutableSamplers = immutableSamplers;
             }
-            Descriptor operator[](uint32_t index) noexcept;
+            DescriptorArray::ImmutableSamplerDescriptor operator[](uint32_t index) noexcept;
 
         private:
             VkSampler immutableSamplers[Size] = {};
@@ -123,16 +115,6 @@ namespace magma
         class CombinedImageImmutableSamplerArray : public TDescriptorArray<Size>
         {
         public:
-            struct Descriptor
-            {
-                Descriptor(VkDescriptorImageInfo& imageDescriptor, VkSampler& immutableSampler) noexcept:
-                    imageDescriptor(imageDescriptor), immutableSampler(immutableSampler) {}
-                void operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>&) noexcept;
-                void operator=(std::shared_ptr<const ImageView>) noexcept;
-                VkDescriptorImageInfo& imageDescriptor;
-                VkSampler& immutableSampler;
-            };
-
             CombinedImageImmutableSamplerArray(uint32_t binding) noexcept:
                 TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding)
             {   // If pImmutableSamplers is not NULL, then it is a pointer
@@ -140,7 +122,7 @@ namespace magma
                 // into the set layout and used for the corresponding binding.
                 this->binding.pImmutableSamplers = immutableSamplers;
             }
-            Descriptor operator[](uint32_t index) noexcept;
+            DescriptorArray::ImageImmutableSamplerDescriptor operator[](uint32_t index) noexcept;
 
         private:
             VkSampler immutableSamplers[Size] = {};
