@@ -44,6 +44,7 @@ namespace magma
         class TDescriptorArray : public DescriptorArray
         {
         public:
+            constexpr uint32_t getArraySize() const { return Size; }
             void getWriteDescriptor(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
 
