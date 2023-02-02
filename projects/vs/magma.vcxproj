@@ -606,6 +606,8 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\descriptors\attachment.inl" />
     <None Include="..\..\descriptors\descriptor.inl" />
     <None Include="..\..\descriptors\descriptorArray.inl" />
+    <None Include="..\..\descriptors\descriptorArrayBufferDescriptor.inl" />
+    <None Include="..\..\descriptors\descriptorArrayImageDescriptor.inl" />
     <None Include="..\..\descriptors\descriptorSetLayoutReflection.inl" />
     <None Include="..\..\descriptors\inlineUniformBlockDescriptor.inl" />
     <None Include="..\..\helpers\alignedUniformArrayIterator.inl" />

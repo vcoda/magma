@@ -1351,6 +1351,12 @@
     <None Include="..\..\descriptors\inlineUniformBlockDescriptor.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
+    <None Include="..\..\descriptors\descriptorArrayBufferDescriptor.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\descriptors\descriptorArrayImageDescriptor.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">

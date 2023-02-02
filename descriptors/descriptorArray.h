@@ -28,28 +28,8 @@ namespace magma
         class DescriptorArray : public Descriptor
         {
         public:
-            class ImageElement
-            {
-                const VkImageUsageFlags usage;
-                VkDescriptorImageInfo& imageDescriptor;
-                bool& updated;
-
-            public:
-                explicit ImageElement(VkImageUsageFlags, VkDescriptorImageInfo&, bool&) noexcept;
-                void operator=(std::shared_ptr<const magma::Sampler>) noexcept;
-                void operator=(std::shared_ptr<const ImageView>) noexcept;
-            };
-
-            class BufferElement
-            {
-                const VkBufferUsageFlags usage;
-                VkDescriptorBufferInfo& bufferDescriptor;
-                bool& updated;
-
-            public:
-                explicit BufferElement(VkBufferUsageFlags, VkDescriptorBufferInfo&, bool&) noexcept;
-                void operator=(std::shared_ptr<const Buffer>) noexcept;
-            };
+            #include "descriptorArrayImageDescriptor.inl"
+            #include "descriptorArrayBufferDescriptor.inl"
 
         protected:
             DescriptorArray(VkDescriptorType descriptorType,
@@ -87,7 +67,7 @@ namespace magma
         public:
             SamplerArray(uint32_t binding) noexcept:
                 TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding) {}
-            DescriptorArray::ImageElement operator[](uint32_t index) noexcept;
+            DescriptorArray::ImageDescriptor operator[](uint32_t index) noexcept;
         };
 
         /* Immutable samplers are permanently bound into the set layout;
@@ -179,7 +159,7 @@ namespace magma
         public:
             SampledImageArray(uint32_t binding) noexcept:
                 TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding) {}
-            DescriptorArray::ImageElement operator[](uint32_t index) noexcept;
+            DescriptorArray::ImageDescriptor operator[](uint32_t index) noexcept;
         };
 
         /* A storage image is a descriptor type associated with an image resource
@@ -191,7 +171,7 @@ namespace magma
         public:
             StorageImageArray(uint32_t binding) noexcept:
                 TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, binding) {}
-            DescriptorArray::ImageElement operator[](uint32_t index) noexcept;
+            DescriptorArray::ImageDescriptor operator[](uint32_t index) noexcept;
         };
 
         /* A uniform texel buffer is a descriptor type associated with a buffer resource
@@ -203,7 +183,7 @@ namespace magma
         public:
             UniformTexelBufferArray(uint32_t binding) noexcept:
                 TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, binding) {}
-            DescriptorArray::BufferElement operator[](uint32_t index) noexcept;
+            DescriptorArray::BufferDescriptor operator[](uint32_t index) noexcept;
         };
 
         /* A storage texel buffer is a descriptor type associated with a buffer resource
@@ -215,7 +195,7 @@ namespace magma
         public:
             StorageTexelBufferArray(uint32_t binding) noexcept:
                 TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, binding) {}
-            DescriptorArray::BufferElement operator[](uint32_t index) noexcept;
+            DescriptorArray::BufferDescriptor operator[](uint32_t index) noexcept;
         };
 
         /* A uniform buffer is a descriptor type associated with a buffer resource directly,
@@ -227,7 +207,7 @@ namespace magma
         public:
             UniformBufferArray(uint32_t binding) noexcept:
                 TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, binding) {}
-            DescriptorArray::BufferElement operator[](uint32_t index) noexcept;
+            DescriptorArray::BufferDescriptor operator[](uint32_t index) noexcept;
         };
 
         /* A storage buffer is a descriptor type associated with a buffer resource directly,
@@ -240,7 +220,7 @@ namespace magma
         public:
             StorageBufferArray(uint32_t binding) noexcept:
                 TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, binding) {}
-            DescriptorArray::BufferElement operator[](uint32_t index) noexcept;
+            DescriptorArray::BufferDescriptor operator[](uint32_t index) noexcept;
         };
 
         /* A dynamic uniform buffer is almost identical to a uniform buffer,
@@ -255,7 +235,7 @@ namespace magma
         public:
             DynamicUniformBufferArray(uint32_t binding) noexcept:
                 TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, binding) {}
-            DescriptorArray::BufferElement operator[](uint32_t index) noexcept;
+            DescriptorArray::BufferDescriptor operator[](uint32_t index) noexcept;
         };
 
         /* A dynamic storage buffer is almost identical to a storage buffer,
@@ -270,7 +250,7 @@ namespace magma
         public:
             DynamicStorageBufferArray(uint32_t binding) noexcept:
                 TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, binding) {}
-            DescriptorArray::BufferElement operator[](uint32_t index) noexcept;
+            DescriptorArray::BufferDescriptor operator[](uint32_t index) noexcept;
         };
 
         /* An input attachment is a descriptor type associated with an image resource
@@ -282,7 +262,7 @@ namespace magma
         public:
             InputAttachmentArray(uint32_t binding) noexcept:
                 TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, binding) {}
-            DescriptorArray::ImageElement operator[](uint32_t index) noexcept;
+            DescriptorArray::ImageDescriptor operator[](uint32_t index) noexcept;
         };
     } // namespace descriptor
 } // namespace magma
