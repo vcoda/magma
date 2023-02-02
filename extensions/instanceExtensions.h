@@ -39,6 +39,7 @@ namespace magma
         const VkBool32 EXT_directfb_surface : 1;
         const VkBool32 EXT_display_surface_counter : 1;
         const VkBool32 EXT_metal_surface : 1;
+        const VkBool32 EXT_surface_maintenance1 : 1;
         const VkBool32 EXT_swapchain_colorspace : 1;
 
         // FUCHSIA (Google LLC)
@@ -66,6 +67,9 @@ namespace magma
         const VkBool32 KHR_win32_surface : 1;
         const VkBool32 KHR_xcb_surface : 1;
         const VkBool32 KHR_xlib_surface : 1;
+
+        // LunarG
+        const VkBool32 LUNARG_direct_driver_loading : 1;
 
         // MoltenVK
         const VkBool32 MVK_ios_surface : 1;

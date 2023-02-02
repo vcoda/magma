@@ -35,6 +35,7 @@ InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
     MAGMA_CHECK_EXTENSION(EXT_directfb_surface),
     MAGMA_CHECK_EXTENSION(EXT_display_surface_counter),
     MAGMA_CHECK_EXTENSION(EXT_metal_surface),
+    MAGMA_CHECK_EXTENSION(EXT_surface_maintenance1),
     MAGMA_CHECK_EXTENSION(EXT_swapchain_colorspace),
 
     MAGMA_CHECK_EXTENSION(FUCHSIA_imagepipe_surface),
@@ -59,6 +60,8 @@ InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
     MAGMA_CHECK_EXTENSION(KHR_win32_surface),
     MAGMA_CHECK_EXTENSION(KHR_xcb_surface),
     MAGMA_CHECK_EXTENSION(KHR_xlib_surface),
+
+    MAGMA_CHECK_EXTENSION(LUNARG_direct_driver_loading),
 
     MAGMA_CHECK_EXTENSION(MVK_ios_surface),
     MAGMA_CHECK_EXTENSION(MVK_macos_surface),
