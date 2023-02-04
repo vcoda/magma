@@ -29,8 +29,9 @@ namespace magma
 {
 ImageView::ImageView(std::shared_ptr<Image> image,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
-    VkImageViewCreateFlags flags /* 0 */):
-    ImageView(std::move(image), 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS, swizzle, flags)
+    VkImageViewCreateFlags flags /* 0 */,
+    VkImageUsageFlags usage /* 0 */):
+    ImageView(std::move(image), 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS, swizzle, flags, usage)
 {}
 
 ImageView::ImageView(std::shared_ptr<Image> image_,
@@ -39,15 +40,20 @@ ImageView::ImageView(std::shared_ptr<Image> image_,
     uint32_t baseArrayLayer /* 0 */,
     uint32_t layerCount /* VK_REMAINING_ARRAY_LAYERS */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
-    VkImageViewCreateFlags flags /* 0 */):
+    VkImageViewCreateFlags flags /* 0 */,
+    VkImageUsageFlags usage /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, image_->getDevice(), image_->getHostAllocator()),
     image(std::move(image_)),
     flags(flags),
+#ifdef VK_KHR_maintenance2
+    usage(usage),
+#endif
     baseMipLevel(baseMipLevel),
     levelCount(levelCount),
     baseArrayLayer(baseArrayLayer),
     layerCount(layerCount)
 {
+    MAGMA_UNUSED(usage);
     VkImageViewCreateInfo imageViewInfo;
     imageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
     imageViewInfo.pNext = nullptr;
@@ -77,6 +83,16 @@ ImageView::ImageView(std::shared_ptr<Image> image_,
     imageViewInfo.subresourceRange.levelCount = levelCount;
     imageViewInfo.subresourceRange.baseArrayLayer = baseArrayLayer;
     imageViewInfo.subresourceRange.layerCount = layerCount;
+#ifdef VK_KHR_maintenance2
+    VkImageViewUsageCreateInfoKHR imageViewUsageInfo;
+    if (usage != 0)
+    {   // Usage of image view can be restricted compared to the parent image's usage flags
+        imageViewInfo.pNext = &imageViewUsageInfo;
+        imageViewUsageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO_KHR;
+        imageViewUsageInfo.pNext = nullptr;
+        imageViewUsageInfo.usage = usage;
+    }
+#endif // VK_KHR_maintenance2
     const VkResult result = vkCreateImageView(MAGMA_HANDLE(device), &imageViewInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create image view");
 }
@@ -86,6 +102,9 @@ ImageView::ImageView(std::shared_ptr<Image> image, uint32_t baseMipLevel, uint32
     NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, image->getDevice(), image->getHostAllocator()),
     image(std::move(image)),
     flags(flags),
+#ifdef VK_KHR_maintenance2
+    usage(0),
+#endif
     baseMipLevel(baseMipLevel),
     levelCount(levelCount),
     baseArrayLayer(baseArrayLayer),

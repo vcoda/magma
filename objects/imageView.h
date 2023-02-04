@@ -39,7 +39,8 @@ namespace magma
                 VK_COMPONENT_SWIZZLE_IDENTITY,
                 VK_COMPONENT_SWIZZLE_IDENTITY,
                 VK_COMPONENT_SWIZZLE_IDENTITY},
-            VkImageViewCreateFlags flags = 0);
+            VkImageViewCreateFlags flags = 0,
+            VkImageUsageFlags usage = 0);
         explicit ImageView(std::shared_ptr<Image> image,
             uint32_t baseMipLevel,
             uint32_t levelCount = VK_REMAINING_MIP_LEVELS,
@@ -50,11 +51,15 @@ namespace magma
                 VK_COMPONENT_SWIZZLE_IDENTITY,
                 VK_COMPONENT_SWIZZLE_IDENTITY,
                 VK_COMPONENT_SWIZZLE_IDENTITY},
-            VkImageViewCreateFlags flags = 0);
+            VkImageViewCreateFlags flags = 0,
+            VkImageUsageFlags usage = 0);
         ~ImageView();
         std::shared_ptr<Image> getImage() noexcept { return image; }
         std::shared_ptr<const Image> getImage() const noexcept { return image; }
         VkImageViewCreateFlags getFlags() const noexcept { return flags; }
+    #ifdef VK_KHR_maintenance2
+        VkImageUsageFlags getUsage() const noexcept { return usage; }
+    #endif
         uint32_t getBaseMipLevel() const noexcept { return baseMipLevel; }
         uint32_t getMipLevelCount() const noexcept;
         uint32_t getBaseArrayLayer() const noexcept { return baseArrayLayer; }
@@ -75,6 +80,9 @@ namespace magma
 
         std::shared_ptr<Image> image;
         const VkImageViewCreateFlags flags;
+    #ifdef VK_KHR_maintenance2
+        const VkImageUsageFlags usage;
+    #endif
         const uint32_t baseMipLevel;
         const uint32_t levelCount;
         const uint32_t baseArrayLayer;
