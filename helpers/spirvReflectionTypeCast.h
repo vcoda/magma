@@ -56,5 +56,20 @@ constexpr VkDescriptorType spirvToDescriptorType(const SpvReflectDescriptorType 
         return VK_DESCRIPTOR_TYPE_MAX_ENUM;
     }
 }
+
+constexpr VkImageType spirvDimToImageType(SpvDim dim) noexcept
+{
+    switch (dim)
+    {
+    case SpvDim1D:
+        return VK_IMAGE_TYPE_1D;
+    case SpvDim2D:
+    case SpvDimCube:
+        return VK_IMAGE_TYPE_2D;
+    case SpvDim3D:
+        return VK_IMAGE_TYPE_3D;
+    }
+    return VK_IMAGE_TYPE_MAX_ENUM;
+}
 } // namespace helpers
 } // namespace magma
