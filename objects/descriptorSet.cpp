@@ -50,9 +50,11 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
         locations.push_back(descriptor->getLayoutBinding().binding);
     if (std::unique(locations.begin(), locations.end()) != locations.end())
         MAGMA_THROW("elements of descriptor set layout should have unique binding locations");
-    // Validate descriptors through shader reflection
     if (shaderReflectionFactory && !shaderFileName.empty())
-        validateReflection(shaderReflectionFactory->getReflection(shaderFileName), setIndex);
+    {   // Validate descriptors through shader reflection
+        std::shared_ptr<const ShaderReflection> shaderReflection = shaderReflectionFactory->getReflection(shaderFileName);
+        validateReflection(std::move(shaderReflection), setIndex);
+    }
     // Prepare list of native bindings
     std::vector<VkDescriptorSetLayoutBinding> layoutBindings;
     for (const auto descriptor: descriptors)

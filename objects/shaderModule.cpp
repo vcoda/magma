@@ -36,7 +36,6 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
 #endif
     const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_SHADER_MODULE, std::move(device), std::move(allocator)),
-    reflection(reflect ? std::make_shared<ShaderReflection>(bytecode, bytecodeSize) : nullptr),
     hash(0),
     bytecodeHash(bytecodeHash)
 {
@@ -59,6 +58,8 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
 #endif // VK_EXT_validation_cache
     const VkResult result = vkCreateShaderModule(MAGMA_HANDLE(device), &shaderModuleInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create shader module");
+    if (reflect)
+        reflection = std::make_shared<ShaderReflection>(shaderModuleInfo.pCode, shaderModuleInfo.codeSize);
     hash = core::hashArgs(
         shaderModuleInfo.sType,
         shaderModuleInfo.flags,
