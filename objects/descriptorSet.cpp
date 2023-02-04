@@ -128,31 +128,50 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
         }
         if (!reflectedBinding)
         {
-            std::cout << "warning: binding #" << binding.binding << " not found in the reflection" << std::endl;
+            std::cout << "warning: binding #" << binding.binding << " not found in the descriptor set # " << setIndex << std::endl;
             continue;
         }
+        std::ostringstream oss;
         const VkDescriptorType reflectedDescriptorType = helpers::spirvToDescriptorType(reflectedBinding->descriptor_type);
         if (binding.descriptorType != reflectedDescriptorType)
         {
             if ((VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC == binding.descriptorType) &&
                 (SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_BUFFER != reflectedBinding->descriptor_type))
             {
-                std::ostringstream oss;
                 oss << "descriptor type mismatch:" << std::endl
                     << "binding #" << binding.binding << std::endl
                     << "expected: " << helpers::stringize(reflectedDescriptorType) << std::endl
                     << "defined: " << helpers::stringize(binding.descriptorType);
-                MAGMA_THROW(oss.str());
             }
         }
         if (binding.descriptorCount != reflectedBinding->count)
         {
-            std::ostringstream oss;
             oss << "descriptor count mismatch:" << std::endl
                 << "binding #" << binding.binding << std::endl
                 << "expected: " << reflectedBinding->count << ", defined: " << binding.descriptorCount;
-            MAGMA_THROW(oss.str());
         }
+        switch (binding.descriptorType)
+        {
+        case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
+        case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
+        case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
+        case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
+            {
+                const SpvReflectImageTraits& imageTraits = reflectedBinding->image;
+                const VkImageType imageType = helpers::spirvDimToImageType(imageTraits.dim);
+                if (descriptor->getImageType() != VK_IMAGE_TYPE_MAX_ENUM &&
+                    descriptor->getImageType() != imageType)
+                {
+                    oss << "descriptor image type mismatch:" << std::endl
+                        << "binding #" << binding.binding << std::endl
+                        << "expected: " << helpers::stringize(imageType) << std::endl
+                        << "assigned: " << helpers::stringize(descriptor->getImageType());
+                }
+            }
+        }
+        const std::string error = oss.str();
+        if (!error.empty())
+            MAGMA_THROW(error);
     }
 }
 } // namespace magma
