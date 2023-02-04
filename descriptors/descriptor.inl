@@ -3,6 +3,7 @@ namespace magma
 namespace descriptor
 {
 inline Descriptor::Descriptor(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding_) noexcept:
+    imageType(VK_IMAGE_TYPE_MAX_ENUM),
     updated(false)
 {
     binding.binding = binding_;
@@ -31,6 +32,7 @@ inline void Descriptor::updateImageView(std::shared_ptr<const ImageView> imageVi
     if (imageDescriptor.imageView != *imageView)
     {
         imageDescriptor = imageView->getDescriptor(nullptr);
+        imageType = imageView->getImage()->getType();
         updated = true;
     }
 }

@@ -1,12 +1,14 @@
 class ImageDescriptor
 {
     VkDescriptorImageInfo& imageDescriptor;
+    VkImageType& imageType;
     const VkImageUsageFlags requiredUsage;
     bool& updated;
 
 public:
-    explicit ImageDescriptor(VkDescriptorImageInfo& imageDescriptor, VkImageUsageFlags requiredUsage, bool& updated) noexcept:
+    explicit ImageDescriptor(VkDescriptorImageInfo& imageDescriptor, VkImageType& imageType, VkImageUsageFlags requiredUsage, bool& updated) noexcept:
         imageDescriptor(imageDescriptor),
+        imageType(imageType),
         requiredUsage(requiredUsage),
         updated(updated)
     {}
@@ -26,10 +28,14 @@ public:
     void operator=(std::shared_ptr<const ImageView> imageView) noexcept
     {
         MAGMA_ASSERT(imageView);
-        MAGMA_ASSERT(imageView->getImage()->getUsage() & requiredUsage);
+        std::shared_ptr<const Image> image = imageView->getImage();
+        MAGMA_ASSERT(image->getUsage() & requiredUsage);
         if (imageDescriptor.imageView != *imageView)
         {
             imageDescriptor = imageView->getDescriptor(nullptr);
+            if (imageType != VK_IMAGE_TYPE_MAX_ENUM)
+                MAGMA_ASSERT(image->getType() == imageType);
+            imageType = image->getType();
             updated = true;
         }
     }
@@ -38,11 +44,15 @@ public:
     {
         MAGMA_ASSERT(combinedImageSampler.first);
         MAGMA_ASSERT(combinedImageSampler.second);
-        MAGMA_ASSERT(combinedImageSampler.first->getImage()->getUsage() & requiredUsage);
+        std::shared_ptr<const Image> image = combinedImageSampler.first->getImage();
+        MAGMA_ASSERT(image->getUsage() & requiredUsage);
         if ((imageDescriptor.imageView != *combinedImageSampler.first) ||
             (imageDescriptor.sampler != *combinedImageSampler.second))
         {
             imageDescriptor = combinedImageSampler.first->getDescriptor(combinedImageSampler.second);
+            if (imageType != VK_IMAGE_TYPE_MAX_ENUM)
+                MAGMA_ASSERT(image->getType() == imageType);
+            imageType = image->getType();
             updated = true;
         }
     }

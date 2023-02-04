@@ -55,7 +55,7 @@ template<uint32_t Size>
 inline DescriptorArray::ImageDescriptor TDescriptorArray<Size>::getImageElement(uint32_t index, VkImageUsageFlags requiredUsage) noexcept
 {
     MAGMA_ASSERT(index < Size);
-    return ImageDescriptor(imageDescriptors[index], requiredUsage, updated);
+    return ImageDescriptor(imageDescriptors[index], imageType, requiredUsage, updated);
 }
 
 template<uint32_t Size>
@@ -88,7 +88,7 @@ template<uint32_t Size>
 inline DescriptorArray::ImageImmutableSamplerDescriptor CombinedImageImmutableSamplerArray<Size>::operator[](uint32_t index) noexcept
 {
     MAGMA_ASSERT(index < Size);
-    return ImageImmutableSamplerDescriptor(imageDescriptors[index], immutableSamplers[index], updated);
+    return ImageImmutableSamplerDescriptor(imageDescriptors[index], immutableSamplers[index], imageType, updated);
 }
 
 template<uint32_t Size>
