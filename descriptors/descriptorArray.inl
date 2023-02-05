@@ -24,7 +24,7 @@ inline void TDescriptorArray<Size>::getWriteDescriptor(VkDescriptorSet dstSet,
     case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
     case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
     case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
-        writeDescriptorSet.pImageInfo = imageDescriptors;
+        writeDescriptorSet.pImageInfo = imageDescriptors.data();
         writeDescriptorSet.pBufferInfo = nullptr;
         writeDescriptorSet.pTexelBufferView = nullptr;
         break;
@@ -32,14 +32,14 @@ inline void TDescriptorArray<Size>::getWriteDescriptor(VkDescriptorSet dstSet,
     case VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER:
         writeDescriptorSet.pImageInfo = nullptr;
         writeDescriptorSet.pBufferInfo = nullptr;
-        writeDescriptorSet.pTexelBufferView = texelBufferViews;
+        writeDescriptorSet.pTexelBufferView = texelBufferViews.data();
         break;
     case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER:
     case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER:
     case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC:
     case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC:
         writeDescriptorSet.pImageInfo = nullptr;
-        writeDescriptorSet.pBufferInfo = bufferDescriptors;
+        writeDescriptorSet.pBufferInfo = bufferDescriptors.data();
         writeDescriptorSet.pTexelBufferView = nullptr;
         break;
     default:
@@ -54,14 +54,12 @@ inline void TDescriptorArray<Size>::getWriteDescriptor(VkDescriptorSet dstSet,
 template<uint32_t Size>
 inline DescriptorArray::ImageDescriptor TDescriptorArray<Size>::getImageElement(uint32_t index, VkImageUsageFlags requiredUsage) noexcept
 {
-    MAGMA_ASSERT(index < Size);
     return ImageDescriptor(imageDescriptors[index], imageType, requiredUsage, updated);
 }
 
 template<uint32_t Size>
 inline DescriptorArray::BufferDescriptor TDescriptorArray<Size>::getBufferElement(uint32_t index, VkBufferUsageFlags requiredUsage) noexcept
 {
-    MAGMA_ASSERT(index < Size);
     return BufferDescriptor(bufferDescriptors[index], requiredUsage, updated);
 }
 
@@ -74,7 +72,6 @@ inline DescriptorArray::ImageDescriptor SamplerArray<Size>::operator[](uint32_t 
 template<uint32_t Size>
 inline DescriptorArray::ImmutableSamplerDescriptor ImmutableSamplerArray<Size>::operator[](uint32_t index) noexcept
 {
-    MAGMA_ASSERT(index < Size);
     return ImmutableSamplerDescriptor(immutableSamplers[index], updated);
 }
 
@@ -87,7 +84,6 @@ inline DescriptorArray::ImageDescriptor CombinedImageSamplerArray<Size>::operato
 template<uint32_t Size>
 inline DescriptorArray::ImageImmutableSamplerDescriptor CombinedImageImmutableSamplerArray<Size>::operator[](uint32_t index) noexcept
 {
-    MAGMA_ASSERT(index < Size);
     return ImageImmutableSamplerDescriptor(imageDescriptors[index], immutableSamplers[index], imageType, updated);
 }
 

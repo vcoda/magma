@@ -58,9 +58,9 @@ namespace magma
 
             union
             {
-                VkDescriptorImageInfo imageDescriptors[Size] = {};
-                VkDescriptorBufferInfo bufferDescriptors[Size];
-                VkBufferView texelBufferViews[Size];
+                std::array<VkDescriptorImageInfo, Size> imageDescriptors = {};
+                std::array<VkDescriptorBufferInfo, Size> bufferDescriptors;
+                std::array<VkBufferView, Size> texelBufferViews;
             };
         };
 
