@@ -59,7 +59,7 @@ namespace magma
                 bool negativeViewportHeight = false) const noexcept;
 
         private:
-            struct SetLayout;
+            struct DescriptorSetTable;
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<DescriptorPool> descriptorPool;
             std::shared_ptr<Sampler> nearestSampler;
@@ -67,7 +67,7 @@ namespace magma
             std::shared_ptr<Sampler> cubicSampler;
             std::shared_ptr<GraphicsPipeline> pipeline;
             std::vector<ClearValue> clearValues;
-            mutable std::list<SetLayout> setLayouts;
+            mutable std::list<DescriptorSetTable> setTables;
             mutable std::map<std::shared_ptr<const ImageView>, std::shared_ptr<DescriptorSet>> descriptorSets;
         };
     } // namespace aux

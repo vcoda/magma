@@ -21,10 +21,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     /* Provides a reflection mechanism making it possible to investigate members of
-       descriptor set layout. It contains a list of bindings to allow update their
-       descriptors writes, validating for unique locations, check for dirty state etc. */
+       descriptor set layout. Table contains an array of its descriptors to allow update their
+       descriptors writes, perform validation, check for updates etc.
 
-    class DescriptorSetLayoutReflection : core::NonCopyable
+       Usage example:
+
+       struct DescriptorTable : magma::DescriptorSetTable
+       {
+            magma::descriptor::CombinedImageSampler albedo = 0;
+            magma::descriptor::CombinedImageSampler normal = 1;
+            MAGMA_REFLECT(&albedo, &normal)
+       };
+       */
+
+    class DescriptorSetTable : core::NonCopyable
     {
     public:
         virtual const std::vector<descriptor::Descriptor*>& getBindingDescriptors() = 0;
@@ -41,4 +51,4 @@ namespace magma
     };
 } // namespace magma
 
-#include "descriptorSetLayoutReflection.inl"
+#include "descriptorSetTable.inl"

@@ -53,7 +53,7 @@ namespace magma
             struct Uniforms;
             struct String;
             struct Glyph;
-            struct SetLayout;
+            struct DescriptorSetTable;
             std::shared_ptr<Allocator> allocator;
             std::shared_ptr<Buffer> uniforms;
             std::shared_ptr<Buffer> stringBuffer;
@@ -62,7 +62,7 @@ namespace magma
             std::shared_ptr<DescriptorSetLayout> descriptorSetLayout;
             std::shared_ptr<DescriptorSet> descriptorSet;
             std::shared_ptr<GraphicsPipeline> pipeline;
-            std::unique_ptr<SetLayout> setLayout;
+            std::unique_ptr<DescriptorSetTable> setTable;
             uint32_t width = 0;
             uint32_t height = 0;
             std::list<String> strings;

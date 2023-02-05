@@ -34,7 +34,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../shaders/shaderReflection.h"
 #include "../shaders/specialization.h"
 #include "../descriptors/descriptor.h"
-#include "../descriptors/descriptorSetLayoutReflection.h"
+#include "../descriptors/descriptorSetTable.h"
 #include "../states/vertexInputStructure.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/rasterizationState.h"
@@ -50,7 +50,7 @@ namespace aux
 constexpr
 #include "spirv/output/blitf"
 
-struct BlitRectangle::SetLayout : DescriptorSetLayoutReflection
+struct BlitRectangle::DescriptorSetTable : magma::DescriptorSetTable
 {
     descriptor::CombinedImageSampler image = 0;
     MAGMA_REFLECT(&image)
@@ -77,8 +77,8 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     constexpr uint32_t maxDescriptorSets = 10;
     descriptorPool = std::make_shared<DescriptorPool>(device, maxDescriptorSets,
         descriptor::CombinedImageSamplerPool(maxDescriptorSets), allocator);
-    static SetLayout setLayout;
-    std::shared_ptr<DescriptorSet> descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, setLayout, VK_SHADER_STAGE_FRAGMENT_BIT, allocator);
+    static DescriptorSetTable setTable;
+    std::shared_ptr<DescriptorSet> descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, setTable, VK_SHADER_STAGE_FRAGMENT_BIT, allocator);
     // Create texture samplers
     nearestSampler = std::make_shared<Sampler>(device, sampler::magMinMipNearestClampToEdge, allocator);
     bilinearSampler = std::make_shared<Sampler>(device, sampler::magMinLinearMipNearestClampToEdge, allocator);
@@ -146,10 +146,10 @@ void BlitRectangle::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
     {
         std::shared_ptr<Sampler> sampler = (VK_FILTER_NEAREST == filter) ? nearestSampler :
             ((VK_FILTER_LINEAR == filter) ? bilinearSampler : cubicSampler);
-        setLayouts.emplace_back();
-        setLayouts.back().image = {imageView, sampler};
-        // Allocate descriptor set per image
-        imageDescriptorSet = std::make_shared<DescriptorSet>(descriptorPool, setLayouts.back(), VK_SHADER_STAGE_FRAGMENT_BIT, descriptorPool->getHostAllocator());
+        setTables.emplace_back();
+        setTables.back().image = {imageView, sampler};
+        // Allocate each descriptor set per unique image
+        imageDescriptorSet = std::make_shared<DescriptorSet>(descriptorPool, setTables.back(), VK_SHADER_STAGE_FRAGMENT_BIT, descriptorPool->getHostAllocator());
         descriptorSets[imageView] = imageDescriptorSet;
     }
     int32_t height = static_cast<int32_t>(rc.extent.height);

@@ -615,9 +615,6 @@
     <ClInclude Include="..\..\auxiliary\sprite.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\descriptorSetLayoutReflection.h">
-      <Filter>Header Files\descriptors</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\auxiliary\generateMipmap.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
@@ -745,6 +742,9 @@
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\descriptors\descriptorArray.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\descriptors\descriptorSetTable.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1288,9 +1288,6 @@
     <None Include="..\..\packed\r9g9b9e5ufloat.inl">
       <Filter>Header Files\packed</Filter>
     </None>
-    <None Include="..\..\descriptors\descriptorSetLayoutReflection.inl">
-      <Filter>Header Files\descriptors</Filter>
-    </None>
     <None Include="..\..\objects\resource.inl">
       <Filter>Header Files\objects</Filter>
     </None>
@@ -1358,6 +1355,9 @@
       <Filter>Header Files\descriptors</Filter>
     </None>
     <None Include="..\..\descriptors\descriptorArrayImageSamplerDescriptor.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\descriptors\descriptorSetTable.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
   </ItemGroup>

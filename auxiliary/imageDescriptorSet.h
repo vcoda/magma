@@ -47,13 +47,13 @@ namespace magma
                 std::shared_ptr<Sampler> sampler);
 
         private:
-            struct ImageSetLayout;
-            struct StorageImageSetLayout;
+            struct ImageTable;
+            struct StorageImageTable;
             std::shared_ptr<DescriptorPool> descriptorPool;
             std::shared_ptr<DescriptorSetLayout> descriptorSetLayout;
             std::shared_ptr<DescriptorSet> descriptorSet;
-            std::unique_ptr<ImageSetLayout> imageSetLayout;
-            std::unique_ptr<StorageImageSetLayout> storageImageSetLayout;
+            std::unique_ptr<ImageTable> imageTable;
+            std::unique_ptr<StorageImageTable> storageImageTable;
             uint32_t binding;
         };
     } // namespace aux

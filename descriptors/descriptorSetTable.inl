@@ -1,6 +1,6 @@
 namespace magma
 {
-inline bool DescriptorSetLayoutReflection::dirty()
+inline bool DescriptorSetTable::dirty()
 {
     for (const auto descriptor: getBindingDescriptors())
     {
@@ -11,7 +11,7 @@ inline bool DescriptorSetLayoutReflection::dirty()
 }
 
 template<class... Descriptor>
-inline void DescriptorSetLayoutReflection::setReflection(Descriptor&&... args)
+inline void DescriptorSetTable::setReflection(Descriptor&&... args)
 {   // Use "temporary array" idiom
     // https://stackoverflow.com/questions/28866559/writing-variadic-template-constructor
     std::initializer_list<int>{
@@ -19,7 +19,7 @@ inline void DescriptorSetLayoutReflection::setReflection(Descriptor&&... args)
     };
 }
 
-inline const std::vector<descriptor::Descriptor*>& DescriptorSetLayoutReflection::getReflection() const noexcept
+inline const std::vector<descriptor::Descriptor*>& DescriptorSetTable::getReflection() const noexcept
 {
     return reflection;
 }

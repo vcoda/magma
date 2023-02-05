@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptorSetLayout.h"
 #include "descriptorPool.h"
 #include "device.h"
-#include "../descriptors/descriptorSetLayoutReflection.h"
+#include "../descriptors/descriptorSetTable.h"
 #include "../shaders/shaderReflection.h"
 #include "../shaders/shaderReflectionFactory.h"
 #include "../helpers/spirvReflectionTypeCast.h"
@@ -34,17 +34,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
-    DescriptorSetLayoutReflection& layoutReflection, uint32_t stageFlags,
+    DescriptorSetTable& setTable, uint32_t stageFlags,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
     const std::string& shaderFileName /* default */,
     uint32_t setIndex /* 0 */,
     const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, descriptorPool->getDevice(), std::move(allocator)),
-    layoutReflection(layoutReflection),
+    setTable(setTable),
     descriptorPool(std::move(descriptorPool))
 {   // Check that all descriptors have unique layout bindings
-    const std::vector<descriptor::Descriptor *>& descriptors = layoutReflection.getBindingDescriptors();
+    const std::vector<descriptor::Descriptor *>& descriptors = setTable.getBindingDescriptors();
     std::vector<uint32_t> locations;
     for (const auto descriptor: descriptors)
         locations.push_back(descriptor->getLayoutBinding().binding);
@@ -91,13 +91,13 @@ DescriptorSet::~DescriptorSet()
 
 bool DescriptorSet::dirty() const
 {
-    return layoutReflection.dirty();
+    return setTable.dirty();
 }
 
 void DescriptorSet::update()
 {
     MAGMA_ASSERT(dirty());
-    const std::vector<descriptor::Descriptor *>& descriptors = layoutReflection.getBindingDescriptors();
+    const std::vector<descriptor::Descriptor*>& descriptors = setTable.getBindingDescriptors();
     MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, descriptors.size());
     uint32_t descriptorWriteCount = 0;
     for (const auto descriptor: descriptors)
@@ -115,7 +115,7 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
     if (setIndex >= descriptorSets.size())
         MAGMA_THROW("set index exceeds number of reflected descriptor sets");
     const SpvReflectDescriptorSet *descriptorSet = descriptorSets[setIndex];
-    const std::vector<descriptor::Descriptor *>& descriptors = layoutReflection.getBindingDescriptors();
+    const std::vector<descriptor::Descriptor*>& descriptors = setTable.getBindingDescriptors();
     for (const auto descriptor: descriptors)
     {
         const VkDescriptorSetLayoutBinding& binding = descriptor->getLayoutBinding();
@@ -139,7 +139,7 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
         {
             if ((VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC == binding.descriptorType) &&
                 (SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_BUFFER != reflectedBinding->descriptor_type))
-            {
+            {   // Descriptor type is different
                 oss << "descriptor type mismatch:" << std::endl
                     << "binding #" << binding.binding << std::endl
                     << "expected: " << helpers::stringize(reflectedDescriptorType) << std::endl
@@ -147,7 +147,7 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
             }
         }
         if (binding.descriptorCount != reflectedBinding->count)
-        {
+        {   // Array size (or number of bytes) is different
             oss << "descriptor count mismatch:" << std::endl
                 << "binding #" << binding.binding << std::endl
                 << "expected: " << reflectedBinding->count << ", defined: " << binding.descriptorCount;
@@ -163,7 +163,7 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
                 const VkImageType imageType = helpers::spirvDimToImageType(imageTraits.dim);
                 if (descriptor->getImageType() != VK_IMAGE_TYPE_MAX_ENUM &&
                     descriptor->getImageType() != imageType)
-                {
+                {   // Type of assigned image is different
                     oss << "descriptor image type mismatch:" << std::endl
                         << "binding #" << binding.binding << std::endl
                         << "expected: " << helpers::stringize(imageType) << std::endl

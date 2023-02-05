@@ -31,7 +31,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../shaders/shaderStages.h"
 #include "../shaders/shaderReflection.h"
 #include "../descriptors/descriptor.h"
-#include "../descriptors/descriptorSetLayoutReflection.h"
+#include "../descriptors/descriptorSetTable.h"
 #include "../states/vertexInputStructure.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/rasterizationState.h"
@@ -65,7 +65,7 @@ struct alignas(16) TextShader::Glyph
     uint32_t data[4];
 };
 
-struct TextShader::SetLayout : DescriptorSetLayoutReflection
+struct TextShader::DescriptorSetTable : magma::DescriptorSetTable
 {
     descriptor::UniformBuffer uniforms = 0;
     descriptor::StorageBuffer stringBuffer = 1;
@@ -85,10 +85,10 @@ TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
     stringBuffer = std::make_shared<DynamicStorageBuffer>(device, 8 * sizeof(String), false, this->allocator);
     glyphBuffer = std::make_shared<DynamicStorageBuffer>(device, 256 * sizeof(Glyph), false, this->allocator); // 4Kb
     // Define descriptor set layout
-    setLayout = std::make_unique<SetLayout>();
-    setLayout->uniforms = uniforms;
-    setLayout->stringBuffer = stringBuffer;
-    setLayout->glyphBuffer = glyphBuffer;
+    setTable = std::make_unique<DescriptorSetTable>();
+    setTable->uniforms = uniforms;
+    setTable->stringBuffer = stringBuffer;
+    setTable->glyphBuffer = glyphBuffer;
     // Create descriptor set
     descriptorPool = std::make_shared<DescriptorPool>(device, 1,
         std::vector<descriptor::DescriptorPool>{
@@ -96,7 +96,7 @@ TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
             descriptor::StorageBufferPool(2)
         },
         hostAllocator);
-    descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, *setLayout, VK_SHADER_STAGE_FRAGMENT_BIT, hostAllocator);
+    descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, *setTable, VK_SHADER_STAGE_FRAGMENT_BIT, hostAllocator);
     // Load fullscreen vertex shader
     auto vertexShader = std::make_unique<FillRectangleVertexShader>(device, hostAllocator);
 constexpr
@@ -153,7 +153,7 @@ void TextShader::end()
         if (maxStrings < strings.size())
         {   // Reallocate if not enough memory
             stringBuffer->realloc(strings.size() * sizeof(String), allocator);
-            setLayout->stringBuffer = stringBuffer;
+            setTable->stringBuffer = stringBuffer;
         }
         helpers::mapScoped<String>(stringBuffer,
             [this](auto *data)
@@ -168,7 +168,7 @@ void TextShader::end()
         if (maxChars < chars.size())
         {   // Reallocate if not enough memory
             glyphBuffer->realloc(chars.size() * sizeof(Glyph), allocator);
-            setLayout->glyphBuffer = glyphBuffer;
+            setTable->glyphBuffer = glyphBuffer;
         }
         helpers::mapScoped<Glyph>(glyphBuffer,
             [this](auto *data)
@@ -176,6 +176,8 @@ void TextShader::end()
                 core::copyMemory(data, chars.data(), chars.size() * sizeof(Glyph));
             });
     }
+    if (descriptorSet->dirty())
+        descriptorSet->update();
 }
 
 void TextShader::print(uint32_t x, uint32_t y, uint32_t color, const char *format, ...)

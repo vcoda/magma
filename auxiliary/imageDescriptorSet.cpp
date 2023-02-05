@@ -24,20 +24,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/descriptorSet.h"
 #include "../shaders/shaderReflection.h"
 #include "../descriptors/descriptor.h"
-#include "../descriptors/descriptorSetLayoutReflection.h"
+#include "../descriptors/descriptorSetTable.h"
 #include "../exceptions/exception.h"
 
 namespace magma
 {
 namespace aux
 {
-struct ImageDescriptorSet::ImageSetLayout : DescriptorSetLayoutReflection
+struct ImageDescriptorSet::ImageTable : DescriptorSetTable
 {
     descriptor::CombinedImageSampler image = 0;
     MAGMA_REFLECT(&image)
 };
 
-struct ImageDescriptorSet::StorageImageSetLayout : DescriptorSetLayoutReflection
+struct ImageDescriptorSet::StorageImageTable : DescriptorSetTable
 {
     descriptor::StorageImage image = 0;
     MAGMA_REFLECT(&image)
@@ -46,8 +46,8 @@ struct ImageDescriptorSet::StorageImageSetLayout : DescriptorSetLayoutReflection
 ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
     std::shared_ptr<const ShaderReflection> reflection,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    imageSetLayout(std::make_unique<ImageSetLayout>()),
-    storageImageSetLayout(std::make_unique<StorageImageSetLayout>()),
+    imageTable(std::make_unique<ImageTable>()),
+    storageImageTable(std::make_unique<StorageImageTable>()),
     binding(0)
 {
     const char *entrypoint = reflection->getEntryPointName(0);
@@ -56,11 +56,11 @@ ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
         if (SPV_REFLECT_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER == binding->descriptor_type)
         {
             descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::CombinedImageSamplerPool(1), allocator, false);
-            descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, *imageSetLayout, VK_SHADER_STAGE_FRAGMENT_BIT, std::move(allocator));
+            descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, *imageTable, VK_SHADER_STAGE_FRAGMENT_BIT, std::move(allocator));
         } else if (SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_IMAGE == binding->descriptor_type)
         {
             descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::StorageImagePool(1), allocator, false);
-            descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, *storageImageSetLayout, VK_SHADER_STAGE_FRAGMENT_BIT, std::move(allocator));
+            descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, *storageImageTable, VK_SHADER_STAGE_FRAGMENT_BIT, std::move(allocator));
         }
         if (descriptorSet)
         {
@@ -78,9 +78,9 @@ ImageDescriptorSet::~ImageDescriptorSet()
 void ImageDescriptorSet::writeDescriptor(std::shared_ptr<const ImageView> imageView, std::shared_ptr<Sampler> sampler)
 {
     if (imageView->getImage()->getUsage() & VK_IMAGE_USAGE_STORAGE_BIT)
-        storageImageSetLayout->image = imageView;
+        storageImageTable->image = imageView;
     else
-        imageSetLayout->image = {imageView, sampler};
+        imageTable->image = {imageView, sampler};
 }
 } // namespace aux
 } // namespace magma

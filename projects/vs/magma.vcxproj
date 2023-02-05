@@ -201,7 +201,7 @@
     <ClInclude Include="..\..\descriptors\descriptorArray.h" />
     <ClInclude Include="..\..\descriptors\descriptorPool.h" />
     <ClInclude Include="..\..\descriptors\descriptor.h" />
-    <ClInclude Include="..\..\descriptors\descriptorSetLayoutReflection.h" />
+    <ClInclude Include="..\..\descriptors\descriptorSetTable.h" />
     <ClInclude Include="..\..\descriptors\loadStoreOp.h" />
     <ClInclude Include="..\..\descriptors\subpass.h" />
     <ClInclude Include="..\..\exceptions\compileError.h" />
@@ -609,7 +609,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\descriptors\descriptorArrayBufferDescriptor.inl" />
     <None Include="..\..\descriptors\descriptorArrayImageDescriptor.inl" />
     <None Include="..\..\descriptors\descriptorArrayImageSamplerDescriptor.inl" />
-    <None Include="..\..\descriptors\descriptorSetLayoutReflection.inl" />
+    <None Include="..\..\descriptors\descriptorSetTable.inl" />
     <None Include="..\..\descriptors\inlineUniformBlockDescriptor.inl" />
     <None Include="..\..\helpers\alignedUniformArrayIterator.inl" />
     <None Include="..\..\misc\borderColor.inl" />

@@ -133,7 +133,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptors/descriptor.h"
 #include "descriptors/descriptorArray.h"
 #include "descriptors/descriptorPool.h"
-#include "descriptors/descriptorSetLayoutReflection.h"
+#include "descriptors/descriptorSetTable.h"
 #include "descriptors/loadStoreOp.h"
 #include "descriptors/subpass.h"
 
