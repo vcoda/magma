@@ -67,13 +67,12 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     // Create descriptor set layout
     setLayout = std::make_shared<DescriptorSetLayout>(device, layoutBindings, hostAllocator, 0);
     // Allocate descriptor set
-    const VkDescriptorSetLayout dereferencedSetLayouts[1] = {*setLayout};
     VkDescriptorSetAllocateInfo descriptorSetAllocateInfo;
     descriptorSetAllocateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     descriptorSetAllocateInfo.pNext = extendedInfo.getChainedNodes();
     descriptorSetAllocateInfo.descriptorPool = MAGMA_HANDLE(descriptorPool);
     descriptorSetAllocateInfo.descriptorSetCount = 1;
-    descriptorSetAllocateInfo.pSetLayouts = dereferencedSetLayouts;
+    descriptorSetAllocateInfo.pSetLayouts = setLayout->getHandleAddress();
     const VkResult result = vkAllocateDescriptorSets(MAGMA_HANDLE(device), &descriptorSetAllocateInfo, &handle);
     MAGMA_THROW_FAILURE(result, "failed to allocate descriptor set");
     // Once allocated, descriptor set can be updated

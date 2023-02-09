@@ -42,14 +42,13 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shar
     const StructureChain& extendedInfo /* default */):
     Framebuffer(std::move(renderPass), attachment->getExtent(), attachment->getArrayLayerCount(), std::move(allocator))
 {
-    const VkImageView imageView = *attachment;
     VkFramebufferCreateInfo framebufferInfo;
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
     framebufferInfo.pNext = extendedInfo.getChainedNodes();
     framebufferInfo.flags = flags;
     framebufferInfo.renderPass = MAGMA_HANDLE(renderPass);
     framebufferInfo.attachmentCount = 1;
-    framebufferInfo.pAttachments = &imageView;
+    framebufferInfo.pAttachments = attachment->getHandleAddress();
     framebufferInfo.width = extent.width;
     framebufferInfo.height = extent.height;
     framebufferInfo.layers = layerCount;

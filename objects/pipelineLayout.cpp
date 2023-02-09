@@ -57,13 +57,12 @@ PipelineLayout::PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLay
     VkPipelineLayoutCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, setLayout->getDevice(), std::move(allocator))
 {
-    const VkDescriptorSetLayout dereferencedSetLayout[1] = {*setLayout};
     VkPipelineLayoutCreateInfo pipelineLayoutInfo;
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     pipelineLayoutInfo.pNext = nullptr;
     pipelineLayoutInfo.flags = flags;
     pipelineLayoutInfo.setLayoutCount = 1;
-    pipelineLayoutInfo.pSetLayouts = dereferencedSetLayout;
+    pipelineLayoutInfo.pSetLayouts = setLayout->getHandleAddress();
     pipelineLayoutInfo.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
     pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.begin();
     const VkResult result = vkCreatePipelineLayout(MAGMA_HANDLE(device), &pipelineLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);

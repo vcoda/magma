@@ -32,8 +32,7 @@ PrimaryCommandBuffer::PrimaryCommandBuffer(VkCommandBuffer handle, std::shared_p
 void PrimaryCommandBuffer::executeCommands(const std::shared_ptr<CommandBuffer>& cmdBuffer) noexcept
 {
     MAGMA_ASSERT(cmdBuffer->secondary());
-    const VkCommandBuffer dereferencedCmdBuffers[1] = {*cmdBuffer};
-    vkCmdExecuteCommands(handle, 1, dereferencedCmdBuffers);
+    vkCmdExecuteCommands(handle, 1, cmdBuffer->getHandleAddress());
 }
 
 void PrimaryCommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept
