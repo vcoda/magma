@@ -223,12 +223,19 @@ std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool wait) const
 }
 
 void Profiler::copyExecutionTimings(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Buffer> buffer,
-    VkDeviceSize bufferOffset /* 0 */) const noexcept
-{   // TODO: does vkCmdCopyQueryPoolResults() requires synchronizaition with earlier submitted timestamps commands?
+    VkDeviceSize bufferOffset /* 0 */,
+    bool hostRead /* true */) const noexcept
+{
     constexpr bool wait = true;
     const uint32_t count = std::min(queryCount, queryPool->getQueryCount());
     // vkCmdCopyQueryPoolResults must only be called outside of a render pass instance!
     cmdBuffer->copyQueryResults<uint64_t>(queryPool, buffer, wait, 0, count, bufferOffset);
+    if (hostRead)
+    {   // vkCmdCopyQueryPoolResults is considered to be a transfer operation, and its writes to buffer memory
+        // must be synchronized using VK_PIPELINE_STAGE_TRANSFER_BIT and VK_ACCESS_TRANSFER_WRITE_BIT before using the results.
+        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_HOST_BIT,
+            BufferMemoryBarrier(std::move(buffer), barrier::transferWriteHostRead));
+    }
 }
 } // namespace aux
 } // namespace magma

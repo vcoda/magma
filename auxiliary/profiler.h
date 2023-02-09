@@ -61,7 +61,8 @@ namespace magma
             std::vector<Timing> getExecutionTimings(bool wait) const;
             void copyExecutionTimings(std::shared_ptr<CommandBuffer> cmdBuffer,
                 std::shared_ptr<Buffer> buffer,
-                VkDeviceSize bufferOffset = 0) const noexcept;
+                VkDeviceSize bufferOffset = 0,
+                bool hostRead = true) const noexcept;
 
         protected:
             explicit Profiler(VkQueueFlags queueType,
