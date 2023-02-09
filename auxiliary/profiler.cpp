@@ -229,6 +229,7 @@ void Profiler::copyExecutionTimings(std::shared_ptr<CommandBuffer> cmdBuffer, st
     constexpr bool wait = true;
     const uint32_t count = std::min(queryCount, queryPool->getQueryCount());
     // vkCmdCopyQueryPoolResults must only be called outside of a render pass instance!
+    MAGMA_ASSERT(!cmdBuffer->insideRenderPass());
     cmdBuffer->copyQueryResults<uint64_t>(queryPool, buffer, wait, 0, count, bufferOffset);
     if (hostRead)
     {   // vkCmdCopyQueryPoolResults is considered to be a transfer operation, and its writes to buffer memory
