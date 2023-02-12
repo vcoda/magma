@@ -22,23 +22,31 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-BufferMemoryBarrier::BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
-    VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask) noexcept
+BufferMemoryBarrier::BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer_,
+    VkAccessFlags srcAccessMask_, VkAccessFlags dstAccessMask_) noexcept
 {
     sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
     pNext = nullptr;
-    this->srcAccessMask = srcAccessMask;
-    this->dstAccessMask = dstAccessMask;
+    srcAccessMask = srcAccessMask_;
+    dstAccessMask = dstAccessMask_;
     srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
     dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-    this->buffer = MAGMA_OPTIONAL_HANDLE(buffer);
+    buffer = *buffer_;
     offset = 0;
     size = VK_WHOLE_SIZE;
 }
 
-BufferMemoryBarrier::BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer, const BufferMemoryBarrier& predefined) noexcept
+BufferMemoryBarrier::BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer_,
+    const BufferMemoryBarrier& barrier) noexcept
 {
-    *this = predefined;
-    this->buffer = *buffer;
+    sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+    pNext = barrier.pNext;
+    srcAccessMask = barrier.srcAccessMask;
+    dstAccessMask = barrier.dstAccessMask;
+    srcQueueFamilyIndex = barrier.srcQueueFamilyIndex;
+    dstQueueFamilyIndex = barrier.dstQueueFamilyIndex;
+    buffer = *buffer_;
+    offset = barrier.offset;
+    size = barrier.size;
 }
 } // namespace magma

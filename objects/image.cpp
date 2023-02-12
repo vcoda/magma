@@ -67,7 +67,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
 #ifdef VK_KHR_image_format_list
     VkImageFormatListCreateInfoKHR imageFormatListInfo;
     viewFormats = optional.viewFormats;
-    bool imageFormatList = device->extensionEnabled(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME);
+    const bool imageFormatList = device->extensionEnabled(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME);
     if (imageFormatList && !viewFormats.empty())
     {
         imageInfo.pNext = &imageFormatListInfo;

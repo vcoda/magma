@@ -251,26 +251,23 @@ void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const st
 void CommandBuffer::copyBuffer(const std::shared_ptr<const Buffer>& srcBuffer, const std::shared_ptr<Buffer>& dstBuffer,
     VkDeviceSize srcOffset /* 0 */, VkDeviceSize dstOffset /* 0 */, VkDeviceSize size /* VK_WHOLE_SIZE */) const noexcept
 {
-    VkBufferCopy region;
-    region.srcOffset = srcOffset;
-    region.dstOffset = dstOffset;
-    if (VK_WHOLE_SIZE == size)
-        region.size = dstBuffer->getSize();
-    else
-        region.size = size;
-    vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, 1, &region);
+    VkBufferCopy bufferCopy;
+    bufferCopy.srcOffset = srcOffset;
+    bufferCopy.dstOffset = dstOffset;
+    bufferCopy.size = (VK_WHOLE_SIZE == size) ? dstBuffer->getSize() : size;
+    vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, 1, &bufferCopy);
 }
 
 void CommandBuffer::copyImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage,
     uint32_t mipLevel /* 0 */, const VkOffset3D& srcOffset /* 0, 0, 0 */, const VkOffset3D& dstOffset /* 0, 0, 0 */) const noexcept
 {
-    VkImageCopy region;
-    region.srcSubresource = srcImage->getSubresourceLayers(mipLevel);
-    region.srcOffset = srcOffset;
-    region.dstSubresource = dstImage->getSubresourceLayers(mipLevel);
-    region.dstOffset = dstOffset;
-    region.extent = dstImage->getMipExtent(mipLevel);
-    vkCmdCopyImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &region);
+    VkImageCopy imageCopy;
+    imageCopy.srcSubresource = srcImage->getSubresourceLayers(mipLevel);
+    imageCopy.srcOffset = srcOffset;
+    imageCopy.dstSubresource = dstImage->getSubresourceLayers(mipLevel);
+    imageCopy.dstOffset = dstOffset;
+    imageCopy.extent = dstImage->getMipExtent(mipLevel);
+    vkCmdCopyImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &imageCopy);
 }
 
 void CommandBuffer::blitImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage, VkFilter filter,
@@ -278,20 +275,18 @@ void CommandBuffer::blitImage(const std::shared_ptr<const Image>& srcImage, cons
 {
     const VkExtent3D srcExtent = srcImage->getMipExtent(mipLevel);
     const VkExtent3D dstExtent = dstImage->getMipExtent(mipLevel);
-    VkImageBlit region;
-    region.srcSubresource = srcImage->getSubresourceLayers(mipLevel);
-    region.srcOffsets[0] = srcOffset;
-    region.srcOffsets[1] = VkOffset3D{
-        static_cast<int32_t>(srcExtent.width),
-        static_cast<int32_t>(srcExtent.height),
-        1};
-    region.dstSubresource = dstImage->getSubresourceLayers(mipLevel);
-    region.dstOffsets[0] = dstOffset;
-    region.dstOffsets[1] = VkOffset3D{
-        static_cast<int32_t>(dstExtent.width),
-        static_cast<int32_t>(dstExtent.height),
-        1};
-    vkCmdBlitImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &region, filter);
+    VkImageBlit imageBlit;
+    imageBlit.srcSubresource = srcImage->getSubresourceLayers(mipLevel);
+    imageBlit.srcOffsets[0] = srcOffset;
+    imageBlit.srcOffsets[1].x = srcExtent.width;
+    imageBlit.srcOffsets[1].y = srcExtent.height,
+    imageBlit.srcOffsets[1].z = 1;
+    imageBlit.dstSubresource = dstImage->getSubresourceLayers(mipLevel);
+    imageBlit.dstOffsets[0] = dstOffset;
+    imageBlit.dstOffsets[1].x = dstExtent.width;
+    imageBlit.dstOffsets[1].y = dstExtent.height,
+    imageBlit.dstOffsets[1].z = 1;
+    vkCmdBlitImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &imageBlit, filter);
 }
 
 // inline void CommandBuffer::copyImage
