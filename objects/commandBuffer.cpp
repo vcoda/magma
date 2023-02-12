@@ -301,11 +301,9 @@ void CommandBuffer::blitImage(const std::shared_ptr<const Image>& srcImage, cons
 // inline void CommandBuffer::updateBuffer
 
 void CommandBuffer::fillBuffer(const std::shared_ptr<Buffer>& buffer, uint32_t value,
-    VkDeviceSize size /* 0 */,
+    VkDeviceSize size /* VK_WHOLE_SIZE */,
     VkDeviceSize offset /* 0 */) const noexcept
 {
-    if (0 == size)
-        size = buffer->getSize();
     vkCmdFillBuffer(handle, *buffer, offset, size, value);
 }
 

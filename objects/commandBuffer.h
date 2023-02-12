@@ -281,7 +281,7 @@ namespace magma
             VkDeviceSize offset = 0) const noexcept;
         void fillBuffer(const std::shared_ptr<Buffer>& buffer,
             uint32_t value,
-            VkDeviceSize size = 0,
+            VkDeviceSize size = VK_WHOLE_SIZE,
             VkDeviceSize offset = 0) const noexcept;
 
         void clearColorImage(const std::shared_ptr<Image>& image,
