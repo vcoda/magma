@@ -67,6 +67,7 @@ void DebugUtilsMessenger::message(VkDebugUtilsMessageSeverityFlagBitsEXT message
     MAGMA_INSTANCE_EXTENSION(vkSubmitDebugUtilsMessageEXT);
     if (vkSubmitDebugUtilsMessageEXT)
     {
+        MAGMA_ASSERT(strlen(format) < MAGMA_MAX_STRING);
         char message[MAGMA_MAX_STRING];
         va_list args;
         va_start(args, format);
