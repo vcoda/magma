@@ -66,7 +66,7 @@ inline DescriptorArray::BufferDescriptor TDescriptorArray<Size>::getBufferElemen
 template<uint32_t Size>
 inline DescriptorArray::ImageDescriptor SamplerArray<Size>::operator[](uint32_t index) noexcept
 {
-    return TDescriptorArray<Size>::getImageElement(index, 0);
+    return this->getImageElement(index, 0);
 }
 
 template<uint32_t Size>
@@ -78,7 +78,7 @@ inline DescriptorArray::ImmutableSamplerDescriptor ImmutableSamplerArray<Size>::
 template<uint32_t Size>
 inline DescriptorArray::ImageDescriptor CombinedImageSamplerArray<Size>::operator[](uint32_t index) noexcept
 {
-    return TDescriptorArray<Size>::getImageElement(index, VK_IMAGE_USAGE_SAMPLED_BIT);
+    return this->getImageElement(index, VK_IMAGE_USAGE_SAMPLED_BIT);
 }
 
 template<uint32_t Size>
@@ -90,55 +90,55 @@ inline DescriptorArray::ImageImmutableSamplerDescriptor CombinedImageImmutableSa
 template<uint32_t Size>
 inline DescriptorArray::ImageDescriptor SampledImageArray<Size>::operator[](uint32_t index) noexcept
 {
-    return TDescriptorArray<Size>::getImageElement(index, VK_IMAGE_USAGE_SAMPLED_BIT);
+    return this->getImageElement(index, VK_IMAGE_USAGE_SAMPLED_BIT);
 }
 
 template<uint32_t Size>
 inline DescriptorArray::ImageDescriptor StorageImageArray<Size>::operator[](uint32_t index) noexcept
 {
-    return TDescriptorArray<Size>::getImageElement(index, VK_IMAGE_USAGE_STORAGE_BIT);
+    return this->getImageElement(index, VK_IMAGE_USAGE_STORAGE_BIT);
 }
 
 template<uint32_t Size>
 inline DescriptorArray::BufferDescriptor UniformTexelBufferArray<Size>::operator[](uint32_t index) noexcept
 {
-    return TDescriptorArray<Size>::getBufferElement(index, VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT);
+    return this->getBufferElement(index, VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT);
 }
 
 template<uint32_t Size>
 inline DescriptorArray::BufferDescriptor StorageTexelBufferArray<Size>::operator[](uint32_t index) noexcept
 {
-    return TDescriptorArray<Size>::getBufferElement(index, VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT);
+    return this->getBufferElement(index, VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT);
 }
 
 template<uint32_t Size>
 inline DescriptorArray::BufferDescriptor UniformBufferArray<Size>::operator[](uint32_t index) noexcept
 {
-    return TDescriptorArray<Size>::getBufferElement(index, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
+    return this->getBufferElement(index, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
 }
 
 template<uint32_t Size>
 inline DescriptorArray::BufferDescriptor StorageBufferArray<Size>::operator[](uint32_t index) noexcept
 {
-    return TDescriptorArray<Size>::getBufferElement(index, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+    return this->getBufferElement(index, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
 }
 
 template<uint32_t Size>
 inline DescriptorArray::BufferDescriptor DynamicUniformBufferArray<Size>::operator[](uint32_t index) noexcept
 {
-    return TDescriptorArray<Size>::getBufferElement(index, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
+    return this->getBufferElement(index, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
 }
 
 template<uint32_t Size>
 inline DescriptorArray::BufferDescriptor DynamicStorageBufferArray<Size>::operator[](uint32_t index) noexcept
 {
-    return TDescriptorArray<Size>::getBufferElement(index, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+    return this->getBufferElement(index, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
 }
 
 template<uint32_t Size>
 inline DescriptorArray::ImageDescriptor InputAttachmentArray<Size>::operator[](uint32_t index) noexcept
 {
-    return TDescriptorArray<Size>::getImageElement(index, VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
+    return this->getImageElement(index, VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
 }
 } // namespace descriptor
 } // namespace magma
