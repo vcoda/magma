@@ -2,7 +2,7 @@ namespace magma
 {
 inline bool DescriptorSetTable::dirty()
 {
-    for (const auto descriptor: getBindingDescriptors())
+    for (const auto descriptor: reflection)
     {
         if (descriptor->dirty())
             return true;
@@ -18,11 +18,6 @@ inline void DescriptorSetTable::setReflection(Descriptor&&... args)
         (reflection.push_back(std::forward<Descriptor>(args)), void(), 0)...
     };
 }
-
-inline const std::vector<descriptor::Descriptor*>& DescriptorSetTable::getReflection() const noexcept
-{
-    return reflection;
-}
 } // namespace magma
 
 /* Variadic macro used to simplify reflection of layout structure members.
@@ -30,9 +25,9 @@ inline const std::vector<descriptor::Descriptor*>& DescriptorSetTable::getReflec
    variadic template method to populate the list of descriptor set bindings. */
 
 #define MAGMA_REFLECT(...)\
-const std::vector<magma::descriptor::Descriptor*>& getBindingDescriptors() override\
+const std::vector<magma::descriptor::Descriptor*>& getReflection() override\
 {\
     if (!hasReflection())\
         setReflection(__VA_ARGS__);\
-    return getReflection();\
+    return reflection;\
 }

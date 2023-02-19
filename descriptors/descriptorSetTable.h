@@ -22,31 +22,26 @@ namespace magma
 {
     /* Provides a reflection mechanism making it possible to investigate members of
        descriptor set layout. Table contains an array of its descriptors to allow update their
-       descriptors writes, perform validation, check for updates etc.
-
-       Usage example:
+       descriptors writes, perform validation, check for updates etc. Usage example:
 
        struct DescriptorTable : magma::DescriptorSetTable
        {
             magma::descriptor::CombinedImageSampler albedo = 0;
             magma::descriptor::CombinedImageSampler normal = 1;
             MAGMA_REFLECT(&albedo, &normal)
-       };
-       */
+       }; */
 
     class DescriptorSetTable : core::NonCopyable
     {
     public:
-        virtual const std::vector<descriptor::Descriptor*>& getBindingDescriptors() = 0;
+        virtual const std::vector<descriptor::Descriptor*>& getReflection() = 0;
         bool dirty();
 
     protected:
         template<class... Descriptor>
         void setReflection(Descriptor&&... args);
-        const std::vector<descriptor::Descriptor*>& getReflection() const noexcept;
         bool hasReflection() const noexcept { return !reflection.empty(); }
 
-    private:
         std::vector<descriptor::Descriptor*> reflection;
     };
 } // namespace magma

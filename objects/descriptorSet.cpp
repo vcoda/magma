@@ -44,7 +44,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     setTable(setTable),
     descriptorPool(std::move(descriptorPool))
 {   // Check that all descriptors have unique layout bindings
-    const std::vector<descriptor::Descriptor *>& descriptors = setTable.getBindingDescriptors();
+    const std::vector<descriptor::Descriptor *>& descriptors = setTable.getReflection();
     std::vector<uint32_t> locations;
     for (const auto descriptor: descriptors)
         locations.push_back(descriptor->getLayoutBinding().binding);
@@ -96,7 +96,7 @@ bool DescriptorSet::dirty() const
 void DescriptorSet::update()
 {
     MAGMA_ASSERT(dirty());
-    const std::vector<descriptor::Descriptor*>& descriptors = setTable.getBindingDescriptors();
+    const std::vector<descriptor::Descriptor*>& descriptors = setTable.getReflection();
     MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, descriptors.size());
     uint32_t descriptorWriteCount = 0;
     for (const auto descriptor: descriptors)
@@ -114,7 +114,7 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
     if (setIndex >= descriptorSets.size())
         MAGMA_THROW("set index exceeds number of reflected descriptor sets");
     const SpvReflectDescriptorSet *descriptorSet = descriptorSets[setIndex];
-    const std::vector<descriptor::Descriptor*>& descriptors = setTable.getBindingDescriptors();
+    const std::vector<descriptor::Descriptor*>& descriptors = setTable.getReflection();
     for (const auto descriptor: descriptors)
     {
         const VkDescriptorSetLayoutBinding& binding = descriptor->getLayoutBinding();
