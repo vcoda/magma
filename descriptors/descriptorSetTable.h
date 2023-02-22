@@ -21,29 +21,56 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     /* Provides a reflection mechanism making it possible to investigate members of
-       descriptor set layout. Table contains an array of its descriptors to allow update their
-       descriptors writes, perform validation, check for updates etc. Usage example:
+       descriptor set layout. Table contains an array of its descriptors to perform validation,
+       check dirty states, update their descriptors writes etc.
 
-       struct DescriptorTable : magma::DescriptorSetTable
+       Usage example:
+
+       struct MyDescriptorTable : magma::DescriptorSetTable
        {
-            magma::descriptor::CombinedImageSampler albedo = 0;
-            magma::descriptor::CombinedImageSampler normal = 1;
-            MAGMA_REFLECT(&albedo, &normal)
+            magma::descriptor::UniformBuffer worldViewProj = 0;
+            magma::descriptor::CombinedImageSampler albedo = 1;
+            magma::descriptor::CombinedImageSampler normal = 2;
+            MAGMA_REFLECT(&worldViewProj, &albedo, &normal)
        }; */
 
     class DescriptorSetTable : core::NonCopyable
     {
     public:
         virtual const std::vector<descriptor::Descriptor*>& getReflection() = 0;
-        bool dirty();
+
+        bool dirty()
+        {
+            for (auto descriptor: reflection)
+            {
+                if (descriptor->dirty())
+                    return true;
+            }
+            return false;
+        }
 
     protected:
         template<class... Descriptor>
-        void setReflection(Descriptor&&... args);
-        bool hasReflection() const noexcept { return !reflection.empty(); }
+        inline void setReflection(Descriptor&&... args)
+        {   // Use "temporary array" idiom
+            // https://stackoverflow.com/questions/28866559/writing-variadic-template-constructor
+            std::initializer_list<int>{
+                (reflection.push_back(std::forward<Descriptor>(args)), void(), 0)...
+            };
+        }
 
         std::vector<descriptor::Descriptor*> reflection;
     };
 } // namespace magma
 
-#include "descriptorSetTable.inl"
+/* Variadic macro used to simplify reflection of layout structure members.
+   It takes a variable number of arguments through __VA_ARGS__ and uses
+   variadic template method to populate the list of descriptor set bindings. */
+
+#define MAGMA_REFLECT(...)\
+const std::vector<magma::descriptor::Descriptor*>& getReflection() override\
+{\
+    if (reflection.empty())\
+        setReflection(__VA_ARGS__);\
+    return reflection;\
+}

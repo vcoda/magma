@@ -1357,9 +1357,6 @@
     <None Include="..\..\descriptors\descriptorArrayImageSamplerDescriptor.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
-    <None Include="..\..\descriptors\descriptorSetTable.inl">
-      <Filter>Header Files\descriptors</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">
