@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "descriptorSetLayout.h"
 #include "device.h"
-#include "../misc/extProcAddress.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 

@@ -26,7 +26,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "fence.h"
 #include "commandBuffer.h"
 #include "../barriers/imageMemoryBarrier.h"
-#include "../misc/extProcAddress.h"
 #include "../misc/format.h"
 #include "../exceptions/errorResult.h"
 
