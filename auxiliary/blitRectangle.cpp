@@ -53,7 +53,7 @@ constexpr
 struct BlitRectangle::DescriptorSetTable : magma::DescriptorSetTable
 {
     descriptor::CombinedImageSampler image = 0;
-    MAGMA_REFLECT(&image)
+    MAGMA_REFLECT(image)
 };
 
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,

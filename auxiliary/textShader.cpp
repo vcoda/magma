@@ -70,7 +70,7 @@ struct TextShader::DescriptorSetTable : magma::DescriptorSetTable
     descriptor::UniformBuffer uniforms = 0;
     descriptor::StorageBuffer stringBuffer = 1;
     descriptor::StorageBuffer glyphBuffer = 2;
-    MAGMA_REFLECT(&uniforms, &stringBuffer, &glyphBuffer)
+    MAGMA_REFLECT(uniforms, stringBuffer, glyphBuffer)
 };
 
 TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,

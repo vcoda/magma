@@ -34,13 +34,13 @@ namespace aux
 struct ImageDescriptorSet::ImageTable : DescriptorSetTable
 {
     descriptor::CombinedImageSampler image = 0;
-    MAGMA_REFLECT(&image)
+    MAGMA_REFLECT(image)
 };
 
 struct ImageDescriptorSet::StorageImageTable : DescriptorSetTable
 {
     descriptor::StorageImage image = 0;
-    MAGMA_REFLECT(&image)
+    MAGMA_REFLECT(image)
 };
 
 ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,

@@ -20,6 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    typedef std::vector<std::reference_wrapper<descriptor::Descriptor>> DescriptorList;
+
     /* Provides a reflection mechanism making it possible to investigate members of
        descriptor set layout. Table contains an array of its descriptors to perform validation,
        check dirty states, update their descriptors writes etc.
@@ -31,19 +33,19 @@ namespace magma
             magma::descriptor::UniformBuffer worldViewProj = 0;
             magma::descriptor::CombinedImageSampler albedo = 1;
             magma::descriptor::CombinedImageSampler normal = 2;
-            MAGMA_REFLECT(&worldViewProj, &albedo, &normal)
+            MAGMA_REFLECT(worldViewProj, albedo, normal)
        }; */
 
     class DescriptorSetTable : core::NonCopyable
     {
     public:
-        virtual const std::vector<descriptor::Descriptor*>& getReflection() = 0;
+        virtual const DescriptorList& getReflection() = 0;
 
         bool dirty()
         {
             for (auto descriptor: reflection)
             {
-                if (descriptor->dirty())
+                if (descriptor.get().dirty())
                     return true;
             }
             return false;
@@ -55,11 +57,11 @@ namespace magma
         {   // Use "temporary array" idiom
             // https://stackoverflow.com/questions/28866559/writing-variadic-template-constructor
             std::initializer_list<int>{
-                (reflection.push_back(std::forward<Descriptor>(args)), void(), 0)...
+                (reflection.push_back(std::forward<Descriptor&>(args)), void(), 0)...
             };
         }
 
-        std::vector<descriptor::Descriptor*> reflection;
+        std::vector<std::reference_wrapper<descriptor::Descriptor>> reflection;
     };
 } // namespace magma
 
@@ -68,7 +70,7 @@ namespace magma
    variadic template method to populate the list of descriptor set bindings. */
 
 #define MAGMA_REFLECT(...)\
-const std::vector<magma::descriptor::Descriptor*>& getReflection() override\
+const magma::DescriptorList& getReflection() override\
 {\
     if (reflection.empty())\
         setReflection(__VA_ARGS__);\
