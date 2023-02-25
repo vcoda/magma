@@ -577,8 +577,7 @@ namespace magma
         State state;
         VkBool32 occlusionQueryEnable : 1;
         VkBool32 conditionalRenderingEnable : 1;
-        VkBool32 maintenance1 : 1;
-        VkBool32 negativeViewportHeight : 1;
+        VkBool32 negativeViewportHeightEnabled : 1;
         VkBool32 withinRenderPass : 1;
         VkBool32 withinConditionalRendering : 1;
         VkBool32 withinTransformFeedback : 1;

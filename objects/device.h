@@ -30,6 +30,7 @@ namespace magma
 #ifdef VK_KHR_timeline_semaphore
     class TimelineSemaphore;
 #endif
+    class DeviceFeatures;
     class ResourcePool;
 
     /* Device objects represent logical connections to physical devices.
@@ -59,6 +60,7 @@ namespace magma
         const std::set<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
         const std::set<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
         const VkPhysicalDeviceFeatures& getEnabledFeatures() const noexcept { return enabledFeatures; }
+        std::shared_ptr<DeviceFeatures> getDeviceFeatures() const noexcept;
         std::shared_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
         std::shared_ptr<Queue> getQueueForFamily(uint32_t queueFamilyIndex) const;
         void updateDescriptorSets(uint32_t descriptorWriteCount,
@@ -105,13 +107,10 @@ namespace magma
         template<typename PhysicalDeviceFeatures>
         const PhysicalDeviceFeatures *getEnabledExtendedFeatures() const noexcept;
         bool extensionEnabled(const char *extensionName) const noexcept;
-        // TODO: move this to DeviceFeatures class?
-        bool negativeViewportHeightEnabled(bool khronos) const noexcept;
-        bool separateDepthStencilLayoutsEnabled() const noexcept;
-        bool stippledLinesEnabled() const noexcept;
 
     private:
         std::shared_ptr<PhysicalDevice> physicalDevice;
+        mutable std::shared_ptr<DeviceFeatures> features;
         mutable std::vector<std::pair<DeviceQueueDescriptor, std::weak_ptr<Queue>>> queues;
         std::shared_ptr<ResourcePool> resourcePool;
         std::set<std::string> enabledLayers;

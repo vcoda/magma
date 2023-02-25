@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "physicalDevice.h"
 #include "../allocator/allocator.h"
 #include "../helpers/stackArray.h"
+#include "../misc/deviceFeatures.h"
 #include "../misc/format.h"
 #include "../exceptions/errorResult.h"
 
@@ -192,8 +193,7 @@ bool RenderPass::hasClearOp() const noexcept
 VkImageLayout RenderPass::optimalDepthStencilLayout(const Format& format) const
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts
-    if (device->getPhysicalDevice()->extensionSupported(VK_KHR_SEPARATE_DEPTH_STENCIL_LAYOUTS_EXTENSION_NAME) &&
-        device->separateDepthStencilLayoutsEnabled())
+    if (device->getDeviceFeatures()->separateDepthStencilLayoutsEnabled())
     {
         if (format.depth())
             return VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL_KHR;

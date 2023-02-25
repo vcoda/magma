@@ -62,6 +62,7 @@ MAGMA_OBJS= \
 	helpers/stringize.o \
 	\
 	misc/deviceFaultInfo.o \
+	misc/deviceFeatures.o \
 	misc/deviceQueueDescriptor.o \
 	misc/format.o \
 	misc/framebufferAttachmentImage.o \

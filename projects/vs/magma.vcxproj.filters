@@ -747,6 +747,9 @@
     <ClInclude Include="..\..\descriptors\descriptorSetTable.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\misc\deviceFeatures.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1162,6 +1165,9 @@
     </ClCompile>
     <ClCompile Include="..\..\descriptors\accelerationStructureDescriptor.cpp">
       <Filter>Source Files\descriptors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\deviceFeatures.cpp">
+      <Filter>Source Files\misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

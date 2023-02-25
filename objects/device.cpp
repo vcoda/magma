@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "fence.h"
 #include "timelineSemaphore.h"
 #include "resourcePool.h"
+#include "../misc/deviceFeatures.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/stackArray.h"
@@ -105,6 +106,13 @@ Device::~Device()
 {
     MAGMA_ASSERT(resourcePool->hasAnyDeviceResource() == false);
     vkDestroyDevice(handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+}
+
+std::shared_ptr<DeviceFeatures> Device::getDeviceFeatures() const noexcept
+{
+    if (!features)
+        features = std::shared_ptr<DeviceFeatures>(new DeviceFeatures(shared_from_this()));
+    return features;
 }
 
 std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const
@@ -346,41 +354,5 @@ bool Device::extensionEnabled(const char *extensionName) const noexcept
         return false;
     const auto it = enabledExtensions.find(extensionName);
     return it != enabledExtensions.end();
-}
-
-bool Device::negativeViewportHeightEnabled(bool khronos) const noexcept
-{
-#if defined(VK_KHR_maintenance1) && defined(VK_AMD_negative_viewport_height)
-    return extensionEnabled(khronos ?
-        VK_KHR_MAINTENANCE1_EXTENSION_NAME :
-        VK_AMD_NEGATIVE_VIEWPORT_HEIGHT_EXTENSION_NAME);
-#else
-    MAGMA_UNUSED(khronos);
-    return false;
-#endif
-}
-
-bool Device::separateDepthStencilLayoutsEnabled() const noexcept
-{
-#ifdef VK_KHR_separate_depth_stencil_layouts
-    auto separateDepthStencilFeatures = getEnabledExtendedFeatures<VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR>();
-    if (separateDepthStencilFeatures)
-        return (VK_TRUE == separateDepthStencilFeatures->separateDepthStencilLayouts);
-#endif
-    return false;
-}
-
-bool Device::stippledLinesEnabled() const noexcept
-{
-#ifdef VK_EXT_line_rasterization
-    auto lineRasterizationFeatures = getEnabledExtendedFeatures<VkPhysicalDeviceLineRasterizationFeaturesEXT>();
-    if (lineRasterizationFeatures)
-    {
-        return lineRasterizationFeatures->stippledRectangularLines ||
-            lineRasterizationFeatures->stippledBresenhamLines ||
-            lineRasterizationFeatures->stippledSmoothLines;
-    }
-#endif // VK_EXT_line_rasterization
-    return false;
 }
 } // namespace magma

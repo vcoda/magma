@@ -28,6 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/inputAssemblyState.h"
 #include "../states/viewportState.h"
 #include "../states/tesselationState.h"
+#include "../misc/deviceFeatures.h"
 #include "../misc/pushConstantRange.h"
 
 namespace magma
@@ -39,7 +40,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
     std::shared_ptr<Allocator> allocator /* nullptr */):
     maxVertexCount(maxVertexCount),
     wideLinesEnabled(renderPass->getDevice()->getEnabledFeatures().wideLines),
-    stippledLinesEnabled(renderPass->getDevice()->stippledLinesEnabled()),
+    stippledLinesEnabled(renderPass->getDevice()->getDeviceFeatures()->stippledLinesEnabled()),
     device(renderPass->getDevice()),
     renderPass(std::move(renderPass)),
     layout(std::move(layout)),
