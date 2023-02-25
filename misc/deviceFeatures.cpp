@@ -102,13 +102,16 @@ bool DeviceFeatures::stippledLinesEnabled() const noexcept
 #ifdef VK_EXT_line_rasterization
     if (std::shared_ptr<const Device> device = parent.lock())
     {
-        const VkPhysicalDeviceLineRasterizationFeaturesEXT *lineRasterizationFeatures =
-            device->getEnabledExtendedFeatures<VkPhysicalDeviceLineRasterizationFeaturesEXT>();
-        if (lineRasterizationFeatures)
+        if (device->extensionEnabled(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME))
         {
-            return lineRasterizationFeatures->stippledRectangularLines ||
-                lineRasterizationFeatures->stippledBresenhamLines ||
-                lineRasterizationFeatures->stippledSmoothLines;
+            const VkPhysicalDeviceLineRasterizationFeaturesEXT *lineRasterizationFeatures =
+                device->getEnabledExtendedFeatures<VkPhysicalDeviceLineRasterizationFeaturesEXT>();
+            if (lineRasterizationFeatures)
+            {
+                return lineRasterizationFeatures->stippledRectangularLines ||
+                    lineRasterizationFeatures->stippledBresenhamLines ||
+                    lineRasterizationFeatures->stippledSmoothLines;
+            }
         }
     }
 #endif // VK_EXT_line_rasterization
