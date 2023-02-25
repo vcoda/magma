@@ -45,6 +45,9 @@ namespace magma
 #endif
             void *userData = nullptr);
         ~Instance();
+        uint32_t getApiVersion() const noexcept { return apiVersion; }
+        const std::set<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
+        const std::set<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
         uint32_t enumeratePhysicalDevices() const;
         std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId) const;
 #ifdef VK_KHR_device_group
@@ -53,10 +56,6 @@ namespace magma
 #endif
         static std::vector<VkLayerProperties> enumerateLayers();
         static std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr);
-        // Non-API
-        uint32_t getApiVersion() const noexcept { return apiVersion; }
-        const std::set<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
-        const std::set<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
         bool extensionSupported(const char *extensionName) const noexcept;
         bool extensionEnabled(const char *extensionName) const noexcept;
 
