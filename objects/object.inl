@@ -1,10 +1,12 @@
 namespace magma
 {
+#ifdef MAGMA_DEBUG
 template<class Type>
 inline void Object::setDebugTag(uint64_t tagName, const Type& tag)
 {
     setDebugTag(tagName, sizeof(Type), &tag);
 }
+#endif // MAGMA_DEBUG
 
 template<class Type>
 inline TObject<Type>::TObject(VkObjectType objectType, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> hostAllocator) noexcept:
