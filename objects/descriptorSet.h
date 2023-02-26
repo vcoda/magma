@@ -50,7 +50,7 @@ namespace magma
         std::shared_ptr<const DescriptorPool> getPool() const noexcept { return descriptorPool; }
         std::shared_ptr<DescriptorSetLayout> getLayout() noexcept { return setLayout; }
         std::shared_ptr<const DescriptorSetLayout> getLayout() const noexcept { return setLayout; }
-        bool dirty() const;
+        bool dirty() const noexcept;
         void update();
 
     private:

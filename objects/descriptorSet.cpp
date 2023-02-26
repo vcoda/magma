@@ -88,7 +88,7 @@ DescriptorSet::~DescriptorSet()
         vkFreeDescriptorSets(MAGMA_HANDLE(device), *descriptorPool, 1, &handle);
 }
 
-bool DescriptorSet::dirty() const
+bool DescriptorSet::dirty() const noexcept
 {
     return setTable.dirty();
 }

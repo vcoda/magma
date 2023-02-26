@@ -41,7 +41,7 @@ namespace magma
     public:
         virtual const DescriptorList& getReflection() = 0;
 
-        bool dirty()
+        bool dirty() const noexcept
         {
             for (auto descriptor: reflection)
             {
