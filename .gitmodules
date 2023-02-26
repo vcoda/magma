@@ -3,5 +3,5 @@
 	url = https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator.git
 [submodule "third-party/SPIRV-Reflect"]
 	path = third-party/SPIRV-Reflect
-	url = https://github.com/chaoticbob/SPIRV-Reflect.git
+	url = https://github.com/KhronosGroup/SPIRV-Reflect.git
 	branch = master
