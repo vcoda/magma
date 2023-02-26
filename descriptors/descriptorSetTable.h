@@ -61,7 +61,7 @@ namespace magma
             };
         }
 
-        std::vector<std::reference_wrapper<descriptor::Descriptor>> reflection;
+        DescriptorList reflection;
     };
 } // namespace magma
 
