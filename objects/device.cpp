@@ -244,7 +244,7 @@ bool Device::getDescriptorSetLayoutSupport(const std::vector<VkDescriptorSetLayo
     descriptorSetLayoutSupport.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_SUPPORT_KHR;
     descriptorSetLayoutSupport.pNext = nullptr;
     descriptorSetLayoutSupport.supported = VK_FALSE;
-    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDescriptorSetLayoutSupportKHR, VK_KHR_MAINTENANCE_3_EXTENSION_NAME);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDescriptorSetLayoutSupportKHR, VK_KHR_MAINTENANCE3_EXTENSION_NAME);
     vkGetDescriptorSetLayoutSupportKHR(MAGMA_HANDLE(device), &descriptorSetLayoutInfo, &descriptorSetLayoutSupport);
     return descriptorSetLayoutSupport.supported;
 }
@@ -270,7 +270,7 @@ uint32_t Device::getVariableDescriptorCountLayoutSupport(const std::vector<VkDes
     descriptorSetVariableDescriptorCountLayoutSupport.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_LAYOUT_SUPPORT_EXT;
     descriptorSetVariableDescriptorCountLayoutSupport.pNext = nullptr;
     descriptorSetVariableDescriptorCountLayoutSupport.maxVariableDescriptorCount = 0;
-    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDescriptorSetLayoutSupportKHR, VK_KHR_MAINTENANCE_3_EXTENSION_NAME);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDescriptorSetLayoutSupportKHR, VK_KHR_MAINTENANCE3_EXTENSION_NAME);
     vkGetDescriptorSetLayoutSupportKHR(MAGMA_HANDLE(device), &descriptorSetLayoutInfo, &descriptorSetLayoutSupport);
     return descriptorSetVariableDescriptorCountLayoutSupport.maxVariableDescriptorCount;
 }
