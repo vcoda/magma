@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/commandBuffer.h"
 #include "../objects/queue.h"
 #include "../objects/fence.h"
+#include "../misc/deviceFeatures.h"
 #include "../barriers/imageMemoryBarrier.h"
 #include "../helpers/mapScoped.h"
 
@@ -42,7 +43,9 @@ void FrameGrabber::captureFrame(std::shared_ptr<SwapchainImage> srcImage, std::s
 {   // Allocate linear tiled image to copy pixels to
     dstImage = std::make_shared<LinearTiledImage2D>(device, VK_FORMAT_R8G8B8A8_UNORM,
         srcImage->getExtent(), allocator);
-    const bool canBlitTiled = checkBlitSupport(srcImage->getFormat(), dstImage->getFormat());
+    std::shared_ptr<DeviceFeatures> deviceFeatures = device->getDeviceFeatures();
+    const bool srcBlit = deviceFeatures->checkFormatFeaturesSupport(srcImage->getFormat(), VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal;
+    const bool dstBlit = deviceFeatures->checkFormatFeaturesSupport(dstImage->getFormat(), VK_FORMAT_FEATURE_BLIT_DST_BIT).linear;
     cmdBuffer->begin();
     {
         const VkImageLayout oldLayout = srcImage->getLayout();
@@ -52,7 +55,7 @@ void FrameGrabber::captureFrame(std::shared_ptr<SwapchainImage> srcImage, std::s
         // Transition of swapchain image to transfer source optimal layout
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
             ImageMemoryBarrier(srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL));
-        if (canBlitTiled)
+        if (srcBlit && dstBlit)
         {   // Use image blitting, format swizzle will be performed automatically
             VkOffset3D blitSize;
             blitSize.x = static_cast<int32_t>(srcImage->getExtent().width);
@@ -103,7 +106,7 @@ void FrameGrabber::captureFrame(std::shared_ptr<SwapchainImage> srcImage, std::s
     fence->wait();
     // Do we need to handle swizzling?
     swizzleBgra = false;
-    if (!canBlitTiled)
+    if (!srcBlit || !dstBlit)
     {
         const VkFormat format = srcImage->getFormat();
         if ((VK_FORMAT_B8G8R8A8_UNORM == format) || (VK_FORMAT_B8G8R8A8_SRGB == format))
@@ -180,16 +183,6 @@ VkExtent2D FrameGrabber::getImageExtent() const
         return VkExtent2D{extent.width, extent.height};
     }
     return VkExtent2D{0, 0};
-}
-
-bool FrameGrabber::checkBlitSupport(VkFormat srcFormat, VkFormat dstFormat) const noexcept
-{
-    std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-    const VkFormatProperties srcProperties = physicalDevice->getFormatProperties(srcFormat);
-    const VkFormatProperties dstProperties = physicalDevice->getFormatProperties(dstFormat);
-    const bool optimalSrcBlit = (srcProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT);
-    const bool linearDstBlit = (dstProperties.linearTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT);
-    return optimalSrcBlit && linearDstBlit;
 }
 } // namespace aux
 } // namespace magma

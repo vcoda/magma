@@ -27,6 +27,23 @@ DeviceFeatures::DeviceFeatures(std::shared_ptr<const Device> device) noexcept:
     parent(std::move(device))
 {}
 
+DeviceFeatures::FormatFeaturesSupport DeviceFeatures::checkFormatFeaturesSupport(VkFormat format, const VkFormatFeatureFlags flags) const noexcept
+{
+    FormatFeaturesSupport result = {};
+    if (std::shared_ptr<const Device> device = parent.lock())
+    {
+        std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+        const VkFormatProperties properties = physicalDevice->getFormatProperties(format);
+        const VkFormatFeatureFlags linearTilingFlags = (properties.linearTilingFeatures & flags);
+        const VkFormatFeatureFlags optimalTilingFlags = (properties.optimalTilingFeatures & flags);
+        const VkFormatFeatureFlags bufferFlags = (properties.bufferFeatures & flags);
+        result.linear = (linearTilingFlags == flags);
+        result.optimal = (optimalTilingFlags == flags);
+        result.buffer = (bufferFlags == flags);
+    }
+    return result;
+}
+
 bool DeviceFeatures::maintenanceEnabled(uint8_t index) const noexcept
 {
     MAGMA_ASSERT((index > 0) && (index < 10));

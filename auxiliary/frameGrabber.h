@@ -46,9 +46,6 @@ namespace magma
             VkExtent2D getImageExtent() const;
 
         private:
-            bool checkBlitSupport(VkFormat srcFormat,
-                VkFormat dstFormat) const noexcept;
-
             std::shared_ptr<Device> device;
             std::shared_ptr<Queue> queue;
             std::shared_ptr<Allocator> allocator;

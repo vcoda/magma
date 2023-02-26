@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/commandBuffer.h"
 #include "../objects/image.h"
 #include "../barriers/imageMemoryBarrier.h"
+#include "../misc/deviceFeatures.h"
 #include "../misc/imageSubresourceRange.h"
 
 namespace magma
@@ -35,12 +36,8 @@ bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseLevel, VkFilter f
     MAGMA_ASSERT(cmdBuffer);
     if (!image || !cmdBuffer)
         return false;
-    std::shared_ptr<Device> device = image->getDevice();
-    std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-    const VkFormatProperties properties = physicalDevice->getFormatProperties(image->getFormat());
-    const bool srcBlit = (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT);
-    const bool dstBlit = (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT);
-    if (!srcBlit || !dstBlit)
+    std::shared_ptr<DeviceFeatures> deviceFeatures = image->getDevice()->getDeviceFeatures();
+    if (!deviceFeatures->checkFormatFeaturesSupport(image->getFormat(), VK_FORMAT_FEATURE_BLIT_SRC_BIT | VK_FORMAT_FEATURE_BLIT_DST_BIT).optimal)
         return false;
     VkExtent3D prevMipExtent = image->getMipExtent(baseLevel);
     for (uint32_t level = baseLevel + 1; level < image->getMipLevels(); ++level)

@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "sprite.h"
 #include "../objects/srcTransferBuffer.h"
 #include "../objects/commandBuffer.h"
+#include "../misc/deviceFeatures.h"
 #include "../misc/format.h"
 #include "../core/copyMemory.h"
 #include "../helpers/mapScoped.h"
@@ -48,7 +49,9 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
     topLeft{0, 0, 0},
     bottomRight{static_cast<int32_t>(width), static_cast<int32_t>(height), 1}
 {
-    checkBlitSupport();
+    std::shared_ptr<DeviceFeatures> deviceFeatures = device->getDeviceFeatures();
+    if (!deviceFeatures->checkFormatFeaturesSupport(format, VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal)
+        MAGMA_THROW("image format doesn't support source blit operations");
     const Format imageFormat(format);
     if (imageFormat.blockCompressed())
     {
@@ -84,7 +87,9 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
     topLeft{0, 0},
     bottomRight{static_cast<int32_t>(width), static_cast<int32_t>(height)}
 {
-    checkBlitSupport();
+    std::shared_ptr<DeviceFeatures> deviceFeatures = device->getDeviceFeatures();
+    if (!deviceFeatures->checkFormatFeaturesSupport(format, VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal)
+        MAGMA_THROW("image format doesn't support source blit operations");
     const Format imageFormat(format);
     if (imageFormat.blockCompressed())
     {
@@ -141,15 +146,6 @@ void Sprite::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Imag
         }
         cmdBuffer->blitImage(shared_from_this(), dstImage, blitRegion, filter);
     }
-}
-
-void Sprite::checkBlitSupport() const
-{
-    std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-    const VkFormatProperties properties = physicalDevice->getFormatProperties(format);
-    const bool srcBlit = (properties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT);
-    if (!srcBlit)
-        MAGMA_THROW("image format doesn't support source blit operation");
 }
 
 bool Sprite::inBounds(const VkExtent3D& extent) const noexcept

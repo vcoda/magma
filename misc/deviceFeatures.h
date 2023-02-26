@@ -32,6 +32,15 @@ namespace magma
         friend Device;
 
     public:
+        struct FormatFeaturesSupport
+        {
+            VkBool32 linear: 1;
+            VkBool32 optimal: 1;
+            VkBool32 buffer: 1;
+        };
+
+        FormatFeaturesSupport checkFormatFeaturesSupport(VkFormat format,
+            VkFormatFeatureFlags flags) const noexcept;
         bool maintenanceEnabled(uint8_t index) const noexcept;
         bool negativeViewportHeightEnabled() const noexcept;
         bool separateDepthStencilLayoutsEnabled() const noexcept;
