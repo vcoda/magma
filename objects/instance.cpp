@@ -150,11 +150,15 @@ uint32_t Instance::enumeratePhysicalDevices() const
 
 std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId) const
 {
-    uint32_t physicalDeviceCount = enumeratePhysicalDevices();
+    uint32_t physicalDeviceCount = 0;
+    VkResult result = vkEnumeratePhysicalDevices(handle, &physicalDeviceCount, nullptr);
+    if (!MAGMA_SUCCEEDED(result))
+        return nullptr;
+    MAGMA_ASSERT(deviceId < physicalDeviceCount);
     if (deviceId >= physicalDeviceCount)
-        MAGMA_THROW("parameter <deviceId> is greater than number of physical devices");
+        return nullptr;
     MAGMA_STACK_ARRAY(VkPhysicalDevice, physicalDevices, physicalDeviceCount);
-    const VkResult result = vkEnumeratePhysicalDevices(handle, &physicalDeviceCount, physicalDevices);
+    result = vkEnumeratePhysicalDevices(handle, &physicalDeviceCount, physicalDevices);
     MAGMA_THROW_FAILURE(result, "failed to enumerate physical devices");
     VkPhysicalDevice physicalDevice = physicalDevices[deviceId];
     std::shared_ptr<Instance> instance = std::const_pointer_cast<Instance>(shared_from_this());
@@ -180,8 +184,9 @@ std::vector<VkPhysicalDeviceGroupPropertiesKHR> Instance::enumeratePhysicalDevic
 std::shared_ptr<PhysicalDeviceGroup> Instance::getPhysicalDeviceGroup(uint32_t groupId) const
 {
     const std::vector<VkPhysicalDeviceGroupPropertiesKHR>& deviceGroups = enumeratePhysicalDeviceGroups();
+    MAGMA_ASSERT(groupId < deviceGroups.size());
     if (groupId >= MAGMA_COUNT(deviceGroups))
-        MAGMA_THROW("parameter <groupId> is greater than number of physical device groups");
+        return nullptr;
     std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices;
     const VkPhysicalDeviceGroupProperties& deviceGroupProperties = deviceGroups[groupId];
     std::shared_ptr<Instance> instance = std::const_pointer_cast<Instance>(shared_from_this());
