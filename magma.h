@@ -145,6 +145,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "misc/clearAttachment.h"
 #include "misc/clearValue.h"
+#include "misc/deviceFaultInfo.h"
+#include "misc/deviceFeatures.h"
 #include "misc/deviceQueueDescriptor.h"
 #include "misc/extProcAddress.h"
 #include "misc/format.h"
