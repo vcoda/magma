@@ -28,11 +28,11 @@ namespace magma
 
     class DeviceFeatures : core::NonCopyable
     {
-        DeviceFeatures(std::shared_ptr<const Device> device);
+        DeviceFeatures(std::shared_ptr<const Device> device) noexcept;
         friend Device;
 
     public:
-        bool maintenanceEnabled(uint32_t index) const noexcept;
+        bool maintenanceEnabled(uint8_t index) const noexcept;
         bool negativeViewportHeightEnabled() const noexcept;
         bool separateDepthStencilLayoutsEnabled() const noexcept;
         bool extendedLinesEnabled() const noexcept;
@@ -40,6 +40,5 @@ namespace magma
 
     private:
         std::weak_ptr<const Device> parent;
-        std::vector<bool> maintenance;
     };
 } // namespace magma

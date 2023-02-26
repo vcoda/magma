@@ -23,23 +23,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DeviceFeatures::DeviceFeatures(std::shared_ptr<const Device> device):
-    parent(device)
-{
-    char extensionName[] = "VK_KHR_maintenance0";
-    for (char index = 1; index <= 4 /* VK_KHR_maintenance4 */; ++index)
-    {
-        extensionName[18] = '0' + index;
-        maintenance.push_back(device->extensionEnabled(extensionName));
-    }
-}
+DeviceFeatures::DeviceFeatures(std::shared_ptr<const Device> device) noexcept:
+    parent(std::move(device))
+{}
 
-bool DeviceFeatures::maintenanceEnabled(uint32_t index) const noexcept
+bool DeviceFeatures::maintenanceEnabled(uint8_t index) const noexcept
 {
-    MAGMA_ASSERT(index < maintenance.size());
-    if (index < maintenance.size())
-        return maintenance[index];
-    return false;
+    MAGMA_ASSERT((index > 0) && (index < 10));
+    if ((index < 1) || (index > 9) || parent.expired())
+        return false;
+    const char extensionName[20] = {
+        'V','K','_','K','H','R','_','m','a','i','n','t','e','n','a','n','c','e',
+        '0' + index, '\0'};
+    std::shared_ptr<const Device> device = parent.lock();
+    return device->extensionEnabled(extensionName);
 }
 
 bool DeviceFeatures::negativeViewportHeightEnabled() const noexcept
