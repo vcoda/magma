@@ -221,8 +221,7 @@ bool Device::waitSemaphores(const std::vector<std::shared_ptr<TimelineSemaphore>
     waitInfo.pSemaphores = dereferencedSemaphores;
     waitInfo.pValues = values.data();
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkWaitSemaphoresKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
-    vkWaitSemaphoresKHR(handle, &waitInfo, timeout);
-    const VkResult result = vkWaitSemaphoresKHR(MAGMA_HANDLE(device), &waitInfo, timeout);
+    const VkResult result = vkWaitSemaphoresKHR(handle, &waitInfo, timeout);
     MAGMA_THROW_FAILURE(result, "failed to wait timeline semaphores");
     // VK_SUCCESS or VK_TIMEOUT
     return (result != VK_TIMEOUT);
