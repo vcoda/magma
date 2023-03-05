@@ -140,16 +140,41 @@ Check that Vulkan environment variables are present:
 printenv | grep Vulkan
 ```
 
-## Building
+## Build instructions
+
+### Windows
+
+Visual Studio solution is located in the `magma/projects/vs` directory.
+If you are using Visual Studio older or newer than 2017 version, open project property page `Configuration Properties/General` 
+and configure `Platform Toolset` property. It may be neccessary to adjust `Windows SDK Version` property too in the case if you get an error like this:
+```
+error MSB8036: The Windows SDK version 10.0 was not found. Install the required version of Windows SDK or change the SDK version in the project property pages or by right-clicking the solution and selecting "Retarget solution".
+```
+
+Also there is a command-line build option is available:
+
+* Run **x64 Native Tools Command Prompt** (e.g. through Taskbar's Search box).
+* Go to the magma root directory.
+* Set DEBUG variable to choose between Debug or Release build, run build script.
+```
+set DEBUG=1
+build
+```
+By default, debug version of static library is builded. If you want to build a release one, set DEBUG=0.
+Build files are located in the `magma/projects/vs/x64/Debug(Release)` directory
 
 ### Linux
 
-There is a Makefile available. Go to root directory, type
+For building library under Linux systems, **GNU Make** is used:
+
+* Run terminal.
+* Go to the magma root directory.
+* Run **make**.
 ```
-make magma -j<N>
+make magma DEBUG=1 -j<N>
 ```
 where N is the number of CPU threads you want to assign to compilation.
-By default, debug version of static library is builded. If you want to build a release one, add DEBUG=0.
+By default, debug version of static library is builded. If you want to build a release one, use DEBUG=0.
 
 Vulkan supports different windowing system. By default, XCB is used. If you want to switch to Xlib, open Makefile and replace
 ```
