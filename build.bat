@@ -52,10 +52,10 @@ if %DEBUG%==1 (
 
 set BASE_LDFLAGS=/machine:X64 /libpath:%BUILD_DIR% /out:%BUILD_DIR%\%TARGET% /nologo
 
-if %DEBUG%==0 (
-  set LDFLAGS=%BASE_LDFLAGS% /LTCG
-) else (
+if %DEBUG%==1 (
   set LDFLAGS=%BASE_LDFLAGS%
+) else (
+  set LDFLAGS=%BASE_LDFLAGS% /LTCG
 )
 
 set glslc=%VK_SDK_PATH%\Bin\glslangValidator
