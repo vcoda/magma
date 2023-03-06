@@ -40,11 +40,11 @@ namespace magma
         constexpr bool pvrtc() const noexcept;
         constexpr bool srgb() const noexcept;
         constexpr bool ycbcr() const noexcept;
-        constexpr bool blockCompressed() const noexcept;
         constexpr bool floatingPoint() const noexcept;
         constexpr bool unsignedFloat() const noexcept;
         constexpr bool signedNorm() const noexcept;
         bool unsignedNorm() const noexcept;
+        bool blockCompressed() const noexcept;
         uint8_t componentCount() const noexcept;
         uint8_t planeCount() const noexcept;
         std::size_t size() const noexcept;

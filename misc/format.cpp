@@ -83,6 +83,11 @@ bool Format::unsignedNorm() const noexcept
     }
 }
 
+bool Format::blockCompressed() const noexcept
+{
+    return bc() || etc2() || eac() || astc() || astcHdr() || pvrtc();
+}
+
 uint8_t Format::componentCount() const noexcept
 {   // TODO: add all other formats in the future
     switch (format)
@@ -228,6 +233,20 @@ uint8_t Format::planeCount() const noexcept
     default:
         return 0;
     }
+}
+
+std::size_t Format::size() const noexcept
+{
+    if (bc())
+        return blockCompressedSize();
+    if (pvrtc())
+    {   // Specifies a four-component, PVRTC compressed format where each
+        // 64-bit compressed texel block encodes an 8(4)x4 rectangle.
+        return 64/8;
+    }
+    if (ycbcr())
+        return videoCompressedSize();
+    return nonCompressedSize();
 }
 
 std::size_t Format::nonCompressedSize() const noexcept

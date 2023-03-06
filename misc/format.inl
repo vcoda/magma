@@ -293,11 +293,6 @@ constexpr bool Format::ycbcr() const noexcept
     }
 }
 
-constexpr bool Format::blockCompressed() const noexcept
-{
-    return bc() || etc2() || eac() || astc() || pvrtc();
-}
-
 constexpr bool Format::floatingPoint() const noexcept
 {
     switch (format)
@@ -364,19 +359,5 @@ constexpr bool Format::signedNorm() const noexcept
     default:
         return false;
     }
-}
-
-inline std::size_t Format::size() const noexcept
-{
-    if (bc())
-        return blockCompressedSize();
-    if (pvrtc())
-    {   // Specifies a four-component, PVRTC compressed format where each
-        // 64-bit compressed texel block encodes an 8(4)x4 rectangle.
-        return 64/8;
-    }
-    if (ycbcr())
-        return videoCompressedSize();
-    return nonCompressedSize();
 }
 } // namespace magma
