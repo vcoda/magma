@@ -32,6 +32,7 @@ namespace magma
         constexpr bool depth() const noexcept;
         constexpr bool stencil() const noexcept;
         constexpr bool depthStencil() const noexcept;
+        constexpr bool alpha() const noexcept;
         constexpr bool bc() const noexcept;
         constexpr bool etc2() const noexcept;
         constexpr bool eac() const noexcept;
