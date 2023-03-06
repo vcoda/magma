@@ -27,6 +27,7 @@ inline void Descriptor::updateSampler(std::shared_ptr<const magma::Sampler> samp
 
 inline void Descriptor::updateImageView(std::shared_ptr<const ImageView> imageView, VkImageUsageFlags requiredUsage) noexcept
 {
+    MAGMA_UNUSED(requiredUsage);
     MAGMA_ASSERT(imageView);
     MAGMA_ASSERT(imageView->getImage()->getUsage() & requiredUsage);
     if (imageDescriptor.imageView != *imageView)
@@ -39,6 +40,7 @@ inline void Descriptor::updateImageView(std::shared_ptr<const ImageView> imageVi
 
 inline void Descriptor::updateBufferView(std::shared_ptr<const BufferView> bufferView, VkBufferUsageFlags requiredUsage) noexcept
 {
+    MAGMA_UNUSED(requiredUsage);
     MAGMA_ASSERT(bufferView);
     MAGMA_ASSERT(bufferView->getBuffer()->getUsage() & requiredUsage);
     if (texelBufferView != *bufferView)
@@ -50,6 +52,7 @@ inline void Descriptor::updateBufferView(std::shared_ptr<const BufferView> buffe
 
 inline void Descriptor::updateBuffer(std::shared_ptr<const Buffer> buffer, VkBufferUsageFlags requiredUsage) noexcept
 {
+    MAGMA_UNUSED(requiredUsage);
     MAGMA_ASSERT(buffer);
     MAGMA_ASSERT(buffer->getUsage() & requiredUsage);
     if (bufferDescriptor.buffer != *buffer)
