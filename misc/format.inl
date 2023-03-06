@@ -300,6 +300,33 @@ constexpr bool Format::floatingPoint() const noexcept
     }
 }
 
+constexpr bool Format::signedNorm() const noexcept
+{
+    switch (format)
+    {
+    case VK_FORMAT_R8_SNORM:
+    case VK_FORMAT_R8G8_SNORM:
+    case VK_FORMAT_R8G8B8_SNORM:
+    case VK_FORMAT_B8G8R8_SNORM:
+    case VK_FORMAT_R8G8B8A8_SNORM:
+    case VK_FORMAT_B8G8R8A8_SNORM:
+    case VK_FORMAT_A8B8G8R8_SNORM_PACK32:
+    case VK_FORMAT_A2R10G10B10_SNORM_PACK32:
+    case VK_FORMAT_A2B10G10R10_SNORM_PACK32:
+    case VK_FORMAT_R16_SNORM:
+    case VK_FORMAT_R16G16_SNORM:
+    case VK_FORMAT_R16G16B16_SNORM:
+    case VK_FORMAT_R16G16B16A16_SNORM:
+    case VK_FORMAT_BC4_SNORM_BLOCK:
+    case VK_FORMAT_BC5_SNORM_BLOCK:
+    case VK_FORMAT_EAC_R11_SNORM_BLOCK:
+    case VK_FORMAT_EAC_R11G11_SNORM_BLOCK:
+        return true;
+    default:
+        return false;
+    }
+}
+
 inline std::size_t Format::size() const noexcept
 {
     if (bc())
