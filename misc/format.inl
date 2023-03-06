@@ -326,6 +326,19 @@ constexpr bool Format::floatingPoint() const noexcept
     }
 }
 
+constexpr bool Format::unsignedFloat() const noexcept
+{
+    switch (format)
+    {
+    case VK_FORMAT_B10G11R11_UFLOAT_PACK32:
+    case VK_FORMAT_E5B9G9R9_UFLOAT_PACK32:
+    case VK_FORMAT_BC6H_UFLOAT_BLOCK:
+        return true;
+    default:
+        return false;
+    }
+}
+
 constexpr bool Format::signedNorm() const noexcept
 {
     switch (format)

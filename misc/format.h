@@ -42,6 +42,7 @@ namespace magma
         constexpr bool ycbcr() const noexcept;
         constexpr bool blockCompressed() const noexcept;
         constexpr bool floatingPoint() const noexcept;
+        constexpr bool unsignedFloat() const noexcept;
         constexpr bool signedNorm() const noexcept;
         bool unsignedNorm() const noexcept;
         uint8_t componentCount() const noexcept;
