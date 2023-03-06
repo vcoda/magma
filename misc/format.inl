@@ -119,7 +119,7 @@ constexpr bool Format::alpha() const noexcept
 #ifdef VK_EXT_4444_formats
     case VK_FORMAT_A4R4G4B4_UNORM_PACK16:
     case VK_FORMAT_A4B4G4R4_UNORM_PACK16:
-#endif
+#endif // VK_EXT_4444_formats
         return true;
     default:
         return false;
@@ -350,15 +350,14 @@ constexpr bool Format::ycbcr() const noexcept
     case VK_FORMAT_R12X4G12X4B12X4A12X4_UNORM_4PACK16_KHR:
     case VK_FORMAT_R12X4G12X4_UNORM_2PACK16_KHR:
     case VK_FORMAT_R12X4_UNORM_PACK16_KHR:
-        return true;
 #endif // VK_KHR_sampler_ycbcr_conversion
 #ifdef VK_EXT_ycbcr_2plane_444_formats
     case VK_FORMAT_G8_B8R8_2PLANE_444_UNORM_EXT:
     case VK_FORMAT_G10X6_B10X6R10X6_2PLANE_444_UNORM_3PACK16_EXT:
     case VK_FORMAT_G12X4_B12X4R12X4_2PLANE_444_UNORM_3PACK16_EXT:
     case VK_FORMAT_G16_B16R16_2PLANE_444_UNORM_EXT:
-        return true;
 #endif // VK_EXT_ycbcr_2plane_444_formats
+        return true;
     default:
         return false;
     }
