@@ -149,6 +149,32 @@ constexpr bool Format::astc() const noexcept
     };
 }
 
+constexpr bool Format::astcHdr() const noexcept
+{
+    switch (format)
+    {
+#ifdef VK_EXT_texture_compression_astc_hdr
+    case VK_FORMAT_ASTC_10x10_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_10x5_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_10x6_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_10x8_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_12x10_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_12x12_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_4x4_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_5x4_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_5x5_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_6x5_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_6x6_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_8x5_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_8x6_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_8x8_SFLOAT_BLOCK_EXT:
+        return true;
+#endif // VK_EXT_texture_compression_astc_hdr
+    default:
+        return false;
+    };
+}
+
 constexpr bool Format::pvrtc() const noexcept
 {
     switch (format)
