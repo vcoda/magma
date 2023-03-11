@@ -65,6 +65,7 @@ allocator\alignedAllocator.cpp ^
 allocator\allocationCallbacks.cpp ^
 allocator\cxxAllocator.cpp ^
 allocator\deviceMemoryAllocator.cpp ^
+allocator\vmaImplementation.cpp ^
 auxiliary\accumulationBuffer.cpp ^
 auxiliary\baseFramebuffer.cpp ^
 auxiliary\blitRectangle.cpp ^
@@ -222,6 +223,7 @@ alignedAllocator.obj ^
 allocationCallbacks.obj ^
 cxxAllocator.obj ^
 deviceMemoryAllocator.obj ^
+vmaImplementation.obj ^
 accumulationBuffer.obj ^
 baseFramebuffer.obj ^
 blitRectangle.obj ^

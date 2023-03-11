@@ -24,13 +24,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/instance.h"
 #include "../objects/commandBuffer.h"
 #include "../exceptions/errorResult.h"
-
-#ifdef _MSC_VER
-// warning C4100: unreferenced formal parameter
-// warning C4127: conditional expression is constant
-#pragma warning(disable : 4100 4127)
-#endif
-#define VMA_IMPLEMENTATION
 #include "../third-party/VulkanMemoryAllocator/include/vk_mem_alloc.h"
 
 static_assert(sizeof(magma::MemoryBudget) == sizeof(VmaBudget),
@@ -158,7 +151,7 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
     return memoryPages;
 }
 
-DeviceMemoryBlock DeviceMemoryAllocator::realloc(DeviceMemoryBlock memory, VkDeviceSize size)
+DeviceMemoryBlock DeviceMemoryAllocator::realloc(DeviceMemoryBlock /* memory */, VkDeviceSize /* size */)
 {
     MAGMA_THROW_FAILURE(VK_ERROR_FEATURE_NOT_PRESENT, "vmaResizeAllocation() deprecated");
     return nullptr;

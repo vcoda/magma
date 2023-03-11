@@ -36,6 +36,7 @@ MAGMA_OBJS= \
 	allocator/allocationCallbacks.o \
 	allocator/cxxAllocator.o \
 	allocator/deviceMemoryAllocator.o \
+	allocator/vmaImplementation.o \
 	\
 	auxiliary/accumulationBuffer.o \
 	auxiliary/baseFramebuffer.o \

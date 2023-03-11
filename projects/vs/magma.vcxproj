@@ -369,6 +369,7 @@
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp" />
     <ClCompile Include="..\..\allocator\deviceMemoryAllocator.cpp" />
     <ClCompile Include="..\..\allocator\cxxAllocator.cpp" />
+    <ClCompile Include="..\..\allocator\vmaImplementation.cpp" />
     <ClCompile Include="..\..\auxiliary\accumulationBuffer.cpp" />
     <ClCompile Include="..\..\auxiliary\baseFramebuffer.cpp" />
     <ClCompile Include="..\..\auxiliary\blitRectangle.cpp" />
