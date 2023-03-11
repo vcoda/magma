@@ -33,9 +33,10 @@ if %DEBUG%==1 (
 set GLSL_DIR=auxiliary\spirv
 set SPIRV_DIR=%GLSL_DIR%\output
 
-set PCH_FILE=%BUILD_DIR%\magma.pch
-set PDB_FILE=%BUILD_DIR%\magma.pdb
-set TARGET=magma.lib
+set LIBRARY=magma
+set PCH_FILE=%BUILD_DIR%\%LIBRARY%.pch
+set PDB_FILE=%BUILD_DIR%\%LIBRARY%.pdb
+set TARGET=%LIBRARY%.lib
 
 set BASE_CFLAGS=/c /std:c++14 /EHsc /GS /Gd /permissive- /MP /nologo ^
   /W4 /WX /wd"4307" /wd"4324" /wd"4458" ^
