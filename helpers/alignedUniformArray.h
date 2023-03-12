@@ -21,33 +21,22 @@ namespace magma
 {
     namespace helpers
     {
+        /* Helper class that allows to iterate and access the elements of DynamicUniformBuffer object.
+           Takes into account an alignment of elements which is determined by hardware requirements. */
+
         template<typename Type>
-        class AlignedUniformArray : core::NonCopyable
+        class AlignedUniformArray
         {
         public:
             class Iterator;
-            explicit AlignedUniformArray(void *buffer,
-                const uint32_t arraySize,
-                const VkDeviceSize alignment) noexcept:
-                buffer(reinterpret_cast<char *>(buffer)),
-                arraySize(arraySize),
-                alignment(alignment)
-            {
-                MAGMA_ASSERT(buffer);
-                MAGMA_ASSERT(arraySize > 0);
-                MAGMA_ASSERT(alignment > 0);
-            }
+            explicit AlignedUniformArray(void *const buffer, const uint32_t arraySize,
+                const VkDeviceSize alignment) noexcept;
             uint32_t getArraySize() const noexcept { return arraySize; }
             constexpr std::size_t getElementSize() const noexcept { return sizeof(Type); }
             VkDeviceSize getElementAlignment() const noexcept { return alignment; }
             Iterator begin() const noexcept { return Iterator(buffer, alignment); }
             Iterator end() const noexcept { return Iterator(buffer + arraySize * alignment, alignment); }
-            Type& operator[](uint32_t index) noexcept
-            {
-                MAGMA_ASSERT(index < arraySize);
-                char *const elem = buffer + index * alignment;
-                return *reinterpret_cast<Type *>(elem);
-            }
+            Type& operator[](uint32_t index) noexcept;
 
         private:
             char *const buffer;
@@ -57,4 +46,4 @@ namespace magma
     } // namespace helpers
 } // namespace magma
 
-#include "alignedUniformArrayIterator.inl"
+#include "alignedUniformArray.inl"

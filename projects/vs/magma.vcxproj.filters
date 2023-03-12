@@ -420,9 +420,6 @@
     <ClInclude Include="..\..\barriers\memoryBarrier.h">
       <Filter>Header Files\barriers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\helpers\uniformArrayIterator.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\auxiliary\typedefs.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
@@ -1243,9 +1240,6 @@
     <None Include="..\..\objects\deviceMemory.inl">
       <Filter>Header Files\objects</Filter>
     </None>
-    <None Include="..\..\helpers\alignedUniformArrayIterator.inl">
-      <Filter>Header Files\helpers</Filter>
-    </None>
     <None Include="..\..\auxiliary\shaderCompiler.inl">
       <Filter>Header Files\auxiliary</Filter>
     </None>
@@ -1365,6 +1359,12 @@
     </None>
     <None Include="..\..\descriptors\descriptorArrayImageSamplerDescriptor.inl">
       <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\helpers\uniformArray.inl">
+      <Filter>Header Files\helpers</Filter>
+    </None>
+    <None Include="..\..\helpers\alignedUniformArray.inl">
+      <Filter>Header Files\helpers</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

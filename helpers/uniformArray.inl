@@ -3,37 +3,52 @@ namespace magma
 namespace helpers
 {
 template<typename Type>
-class AlignedUniformArray<Type>::Iterator
+inline UniformArray<Type>::UniformArray(Type *const buffer, const uint32_t arraySize) noexcept:
+    buffer(buffer),
+    arraySize(arraySize)
+{
+    MAGMA_ASSERT(buffer);
+    MAGMA_ASSERT(arraySize > 0);
+}
+
+template<typename Type>
+inline Type& UniformArray<Type>::operator[](const uint32_t index) noexcept
+{
+    MAGMA_ASSERT(index < arraySize);
+    return *buffer[index];
+}
+
+template<typename Type>
+class UniformArray<Type>::Iterator
 {
 public:
-    explicit Iterator(char *ptr, const VkDeviceSize alignment) noexcept:
-        ptr(ptr),
-        alignment(alignment)
+    explicit Iterator(Type *ptr) noexcept:
+        ptr(ptr)
     {}
 
     Iterator& operator++() noexcept
     {
-        ptr += alignment;
+        ++ptr;
         return *this;
     }
 
     Iterator operator++(int) noexcept
     {
         Iterator temp = *this;
-        ptr += alignment;
+        ++ptr;
         return temp;
     }
 
     Iterator& operator--() noexcept
     {
-        ptr -= alignment;
+        --ptr;
         return *this;
     }
 
     Iterator operator--(int) noexcept
     {
         Iterator temp = *this;
-        ptr -= alignment;
+        --ptr;
         return temp;
     }
 
@@ -44,12 +59,11 @@ public:
 
     Type& operator*() noexcept
     {
-        return *reinterpret_cast<Type *>(ptr);
+        return *ptr;
     }
 
 private:
-    char *ptr;
-    const VkDeviceSize alignment;
+    Type *ptr;
 };
 } // namespace helpers
 } // namespace magma

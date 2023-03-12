@@ -226,7 +226,6 @@
     <ClInclude Include="..\..\helpers\stackArray.h" />
     <ClInclude Include="..\..\helpers\stringize.h" />
     <ClInclude Include="..\..\helpers\uniformArray.h" />
-    <ClInclude Include="..\..\helpers\uniformArrayIterator.h" />
     <ClInclude Include="..\..\magma.h" />
     <ClInclude Include="..\..\misc\borderColor.h" />
     <ClInclude Include="..\..\misc\deviceFaultInfo.h" />
@@ -613,7 +612,8 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\descriptors\descriptorArrayImageDescriptor.inl" />
     <None Include="..\..\descriptors\descriptorArrayImageSamplerDescriptor.inl" />
     <None Include="..\..\descriptors\inlineUniformBlockDescriptor.inl" />
-    <None Include="..\..\helpers\alignedUniformArrayIterator.inl" />
+    <None Include="..\..\helpers\alignedUniformArray.inl" />
+    <None Include="..\..\helpers\uniformArray.inl" />
     <None Include="..\..\misc\borderColor.inl" />
     <None Include="..\..\misc\clearAttachment.inl" />
     <None Include="..\..\misc\clearValue.inl" />

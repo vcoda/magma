@@ -21,28 +21,19 @@ namespace magma
 {
     namespace helpers
     {
+        /* Helper class that allows to iterate and access the elements of UniformBuffer object. */
+
         template<typename Type>
-        class UniformArray : core::NonCopyable
+        class UniformArray
         {
         public:
             class Iterator;
-            explicit UniformArray(Type *const buffer,
-                const uint32_t arraySize) noexcept:
-                buffer(buffer),
-                arraySize(arraySize)
-            {
-                MAGMA_ASSERT(buffer);
-                MAGMA_ASSERT(arraySize > 0);
-            }
+            explicit UniformArray(Type *const buffer, uint32_t arraySize) noexcept;
             uint32_t getArraySize() const noexcept { return arraySize; }
             constexpr std::size_t getElementSize() const noexcept { return sizeof(Type); }
             Iterator begin() const noexcept { return Iterator(buffer); }
             Iterator end() const noexcept { return Iterator(buffer + arraySize); }
-            Type& operator[](uint32_t index) noexcept
-            {
-                MAGMA_ASSERT(index < arraySize);
-                return *buffer[index];
-            }
+            Type& operator[](uint32_t index) noexcept;
 
         private:
             Type *const buffer;
@@ -51,4 +42,4 @@ namespace magma
     } // namespace helpers
 } // namespace magma
 
-#include "uniformArrayIterator.h"
+#include "uniformArray.inl"
