@@ -38,16 +38,24 @@ InstanceLayers::InstanceLayers():
 
     MAGMA_CHECK_LAYER_NOPREFIX(GraphicsSpy),
     MAGMA_CHECK_LAYER_NOPREFIX(libVK_LAYER_RGA_pipeline_extraction),
+    MAGMA_CHECK_LAYER_NOPREFIX(MangoHud),
     MAGMA_CHECK_LAYER_NOPREFIX(MoltenVK),
     MAGMA_CHECK_LAYER_NOPREFIX(VirtualSwapchain),
+
+    MAGMA_CHECK_LAYER_NOPREFIX(AEJS_DeviceChooserLayer),
 
     MAGMA_CHECK_LAYER(AMD_switchable_graphics),
     MAGMA_CHECK_LAYER(AMD_switchable_graphics_32),
     MAGMA_CHECK_LAYER(AMD_switchable_graphics_64),
 
     MAGMA_CHECK_LAYER(bandicam_helper),
+    MAGMA_CHECK_LAYER(com_xsplit_www_xbc_64_1),
     MAGMA_CHECK_LAYER(DxtoryHookHelper),
+    MAGMA_CHECK_LAYER(EOS_Overlay),
+    MAGMA_CHECK_LAYER(FCAT_DT_overlay64),
+    MAGMA_CHECK_LAYER(FLIMES),
     MAGMA_CHECK_LAYER(fossilize),
+    MAGMA_CHECK_LAYER(force_priority),
     MAGMA_CHECK_LAYER(fpsmon),
     MAGMA_CHECK_LAYER(FPSMonitor),
 
@@ -57,6 +65,11 @@ InstanceLayers::InstanceLayers():
 
     MAGMA_CHECK_LAYER(GOOGLE_threading),
     MAGMA_CHECK_LAYER(GOOGLE_unique_objects),
+
+    MAGMA_CHECK_LAYER(gshade),
+
+    MAGMA_CHECK_LAYER(INTEL_nullhw),
+    MAGMA_CHECK_LAYER(INTEL_state_tracker),
 
     MAGMA_CHECK_LAYER(KHRONOS_profiles),
     MAGMA_CHECK_LAYER(KHRONOS_synchronization2),
@@ -84,6 +97,10 @@ InstanceLayers::InstanceLayers():
     MAGMA_CHECK_LAYER(LUNARG_VkGHL32),
     MAGMA_CHECK_LAYER(LUNARG_VkGHL64),
     MAGMA_CHECK_LAYER(LUNARG_vktrace),
+
+    MAGMA_CHECK_LAYER(MANGOAPP_overlay),
+    MAGMA_CHECK_LAYER(MANGOHUD32_overlay),
+    MAGMA_CHECK_LAYER(MANGOHUD_overlay),
 
     MAGMA_CHECK_LAYER(MESA_device_select),
     MAGMA_CHECK_LAYER(MESA_overlay),
@@ -123,10 +140,9 @@ InstanceLayers::InstanceLayers():
     MAGMA_CHECK_LAYER(VKBASALT_PostProcess64),
 
     MAGMA_CHECK_LAYER(vkpipeline_db),
-
+    MAGMA_CHECK_LAYER(window_system_integration),
     MAGMA_CHECK_LAYER(XGCV4_64),
     MAGMA_CHECK_LAYER(XSPLIT_64),
-
     MAGMA_CHECK_LAYER_NOPREFIX(MIRILLIS_LAYER),
 
     vkdto_x86_64(MAGMA_HAS_LAYER("vkdto x86_64"))

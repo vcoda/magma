@@ -32,15 +32,23 @@ namespace magma
 
         const VkBool32 GraphicsSpy : 1;
         const VkBool32 libVK_LAYER_RGA_pipeline_extraction : 1;
+        const VkBool32 MangoHud : 1;
         const VkBool32 MoltenVK : 1;
         const VkBool32 VirtualSwapchain : 1;
+
+        const VkBool32 AEJS_DeviceChooserLayer : 1;
 
         const VkBool32 AMD_switchable_graphics : 1;
         const VkBool32 AMD_switchable_graphics_32 : 1;
         const VkBool32 AMD_switchable_graphics_64 : 1;
 
         const VkBool32 bandicam_helper : 1;
+        const VkBool32 com_xsplit_www_xbc_64_1 : 1;
         const VkBool32 DxtoryHookHelper : 1;
+        const VkBool32 EOS_Overlay : 1;
+        const VkBool32 FCAT_DT_overlay64 : 1;
+        const VkBool32 FLIMES : 1;
+        const VkBool32 force_priority : 1;
         const VkBool32 fossilize : 1;
         const VkBool32 fpsmon : 1;
         const VkBool32 FPSMonitor : 1;
@@ -51,6 +59,11 @@ namespace magma
 
         const VkBool32 GOOGLE_threading : 1;
         const VkBool32 GOOGLE_unique_objects : 1;
+
+        const VkBool32 gshade : 1;
+
+        const VkBool32 INTEL_nullhw	: 1;
+        const VkBool32 INTEL_state_tracker : 1;
 
         // https://github.com/KhronosGroup/Vulkan-ExtensionLayer
         const VkBool32 KHRONOS_profiles : 1;
@@ -79,6 +92,10 @@ namespace magma
         const VkBool32 LUNARG_VkGHL32 : 1;
         const VkBool32 LUNARG_VkGHL64 : 1;
         const VkBool32 LUNARG_vktrace : 1;
+
+        const VkBool32 MANGOAPP_overlay	: 1;
+        const VkBool32 MANGOHUD32_overlay : 1;
+        const VkBool32 MANGOHUD_overlay : 1;
 
         const VkBool32 MESA_device_select : 1;
         const VkBool32 MESA_overlay : 1;
@@ -118,10 +135,9 @@ namespace magma
         const VkBool32 VKBASALT_PostProcess64 : 1;
 
         const VkBool32 vkpipeline_db : 1;
-
+        const VkBool32 window_system_integration : 1;
         const VkBool32 XGCV4_64 : 1;
         const VkBool32 XSPLIT_64 : 1;
-
         const VkBool32 MIRILLIS_LAYER : 1;
 
         const VkBool32 vkdto_x86_64 : 1;
