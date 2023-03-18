@@ -39,7 +39,7 @@ namespace magma
             const VkDescriptorSetLayoutBinding& getLayoutBinding() const noexcept { return binding; }
             VkImageType getImageType() const noexcept { return imageType; }
             bool dirty() const noexcept { return updated; }
-            virtual void getWriteDescriptor(VkDescriptorSet dstSet,
+            virtual void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept;
 
         protected:

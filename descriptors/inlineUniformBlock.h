@@ -37,7 +37,7 @@ namespace magma
         {
         public:
             InlineUniformBlock(uint32_t binding) noexcept;
-            void getWriteDescriptor(VkDescriptorSet dstSet,
+            void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
             InlineUniformBlock<UniformBlockType>& operator=(const UniformBlockType&) noexcept;
 

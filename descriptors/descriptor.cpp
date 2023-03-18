@@ -38,8 +38,7 @@ Descriptor::Descriptor(VkDescriptorType descriptorType, uint32_t descriptorCount
     binding.pImmutableSamplers = nullptr;
 }
 
-void Descriptor::getWriteDescriptor(VkDescriptorSet dstSet,
-    VkWriteDescriptorSet& writeDescriptorSet) const noexcept
+void Descriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;

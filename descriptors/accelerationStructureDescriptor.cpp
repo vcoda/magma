@@ -43,8 +43,7 @@ AccelerationStructure::AccelerationStructure(uint32_t binding) noexcept:
     writeDescriptorSetAccelerationStructure.pAccelerationStructures = &handle;
 }
 
-void AccelerationStructure::getWriteDescriptor(VkDescriptorSet dstSet,
-    VkWriteDescriptorSet& writeDescriptorSet) const noexcept
+void AccelerationStructure::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
     MAGMA_ASSERT(handle != VK_NULL_HANDLE);
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;

@@ -50,7 +50,7 @@ namespace magma
         {
         public:
             constexpr uint32_t getArraySize() const { return Size; }
-            void getWriteDescriptor(VkDescriptorSet dstSet,
+            void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
 
         protected:

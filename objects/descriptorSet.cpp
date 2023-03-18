@@ -78,7 +78,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     // Once allocated, descriptor set can be updated
     MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, descriptors.size());
     for (uint32_t i = 0; i < descriptorWrites.size(); ++i)
-        descriptors[i].get().getWriteDescriptor(handle, descriptorWrites[i]);
+        descriptors[i].get().write(handle, descriptorWrites[i]);
     device->updateDescriptorSets(descriptorWrites.size(), descriptorWrites, 0, nullptr);
 }
 
@@ -103,7 +103,7 @@ void DescriptorSet::update()
     {
         const descriptor::Descriptor& descriptor = ref.get();
         if (descriptor.dirty())
-            descriptor.getWriteDescriptor(handle, descriptorWrites[descriptorWriteCount++]);
+            descriptor.write(handle, descriptorWrites[descriptorWriteCount++]);
     }
     if (descriptorWriteCount)
         device->updateDescriptorSets(descriptorWriteCount, descriptorWrites, 0, nullptr);
