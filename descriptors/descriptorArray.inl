@@ -1,11 +1,10 @@
+#include "elements/imageArrayDescriptor.inl"
+#include "elements/bufferArrayDescriptor.inl"
+
 namespace magma
 {
 namespace descriptor
 {
-inline DescriptorArray::DescriptorArray(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding) noexcept:
-    Descriptor(descriptorType, descriptorCount, binding)
-{}
-
 template<uint32_t Size>
 inline void TDescriptorArray<Size>::getWriteDescriptor(VkDescriptorSet dstSet,
     VkWriteDescriptorSet& writeDescriptorSet) const noexcept
@@ -52,93 +51,15 @@ inline void TDescriptorArray<Size>::getWriteDescriptor(VkDescriptorSet dstSet,
 }
 
 template<uint32_t Size>
-inline DescriptorArray::ImageDescriptor TDescriptorArray<Size>::getImageElement(uint32_t index, VkImageUsageFlags requiredUsage) noexcept
+inline DescriptorArray::ImageDescriptor TDescriptorArray<Size>::getImageArrayElement(uint32_t index, VkImageUsageFlags requiredUsage) noexcept
 {
     return ImageDescriptor(imageDescriptors[index], imageType, requiredUsage, updated);
 }
 
 template<uint32_t Size>
-inline DescriptorArray::BufferDescriptor TDescriptorArray<Size>::getBufferElement(uint32_t index, VkBufferUsageFlags requiredUsage) noexcept
+inline DescriptorArray::BufferDescriptor TDescriptorArray<Size>::getBufferArrayElement(uint32_t index, VkBufferUsageFlags requiredUsage) noexcept
 {
     return BufferDescriptor(bufferDescriptors[index], requiredUsage, updated);
-}
-
-template<uint32_t Size>
-inline DescriptorArray::ImageDescriptor SamplerArray<Size>::operator[](uint32_t index) noexcept
-{
-    return this->getImageElement(index, 0);
-}
-
-template<uint32_t Size>
-inline DescriptorArray::ImmutableSamplerDescriptor ImmutableSamplerArray<Size>::operator[](uint32_t index) noexcept
-{
-    return ImmutableSamplerDescriptor(immutableSamplers[index], updated);
-}
-
-template<uint32_t Size>
-inline DescriptorArray::ImageDescriptor CombinedImageSamplerArray<Size>::operator[](uint32_t index) noexcept
-{
-    return this->getImageElement(index, VK_IMAGE_USAGE_SAMPLED_BIT);
-}
-
-template<uint32_t Size>
-inline DescriptorArray::ImageImmutableSamplerDescriptor CombinedImageImmutableSamplerArray<Size>::operator[](uint32_t index) noexcept
-{
-    return ImageImmutableSamplerDescriptor(imageDescriptors[index], immutableSamplers[index], imageType, updated);
-}
-
-template<uint32_t Size>
-inline DescriptorArray::ImageDescriptor SampledImageArray<Size>::operator[](uint32_t index) noexcept
-{
-    return this->getImageElement(index, VK_IMAGE_USAGE_SAMPLED_BIT);
-}
-
-template<uint32_t Size>
-inline DescriptorArray::ImageDescriptor StorageImageArray<Size>::operator[](uint32_t index) noexcept
-{
-    return this->getImageElement(index, VK_IMAGE_USAGE_STORAGE_BIT);
-}
-
-template<uint32_t Size>
-inline DescriptorArray::BufferDescriptor UniformTexelBufferArray<Size>::operator[](uint32_t index) noexcept
-{
-    return this->getBufferElement(index, VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT);
-}
-
-template<uint32_t Size>
-inline DescriptorArray::BufferDescriptor StorageTexelBufferArray<Size>::operator[](uint32_t index) noexcept
-{
-    return this->getBufferElement(index, VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT);
-}
-
-template<uint32_t Size>
-inline DescriptorArray::BufferDescriptor UniformBufferArray<Size>::operator[](uint32_t index) noexcept
-{
-    return this->getBufferElement(index, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
-}
-
-template<uint32_t Size>
-inline DescriptorArray::BufferDescriptor StorageBufferArray<Size>::operator[](uint32_t index) noexcept
-{
-    return this->getBufferElement(index, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-}
-
-template<uint32_t Size>
-inline DescriptorArray::BufferDescriptor DynamicUniformBufferArray<Size>::operator[](uint32_t index) noexcept
-{
-    return this->getBufferElement(index, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
-}
-
-template<uint32_t Size>
-inline DescriptorArray::BufferDescriptor DynamicStorageBufferArray<Size>::operator[](uint32_t index) noexcept
-{
-    return this->getBufferElement(index, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-}
-
-template<uint32_t Size>
-inline DescriptorArray::ImageDescriptor InputAttachmentArray<Size>::operator[](uint32_t index) noexcept
-{
-    return this->getImageElement(index, VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
 }
 } // namespace descriptor
 } // namespace magma

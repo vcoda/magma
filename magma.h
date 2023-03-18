@@ -129,11 +129,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "states/vertexInputStructure.h"
 #include "states/viewportState.h"
 
+#include "descriptors/accelerationStructure.h"
 #include "descriptors/attachment.h"
+#include "descriptors/bufferDescriptor.h"
+#include "descriptors/bufferDescriptorArray.h"
 #include "descriptors/descriptor.h"
 #include "descriptors/descriptorArray.h"
 #include "descriptors/descriptorPool.h"
 #include "descriptors/descriptorSetTable.h"
+#include "descriptors/imageDescriptor.h"
+#include "descriptors/imageDescriptorArray.h"
+#include "descriptors/inlineUniformBlock.h"
 #include "descriptors/loadStoreOp.h"
 #include "descriptors/subpass.h"
 

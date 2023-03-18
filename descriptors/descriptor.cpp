@@ -1,6 +1,6 @@
 /*
-Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2022 Victor Coda.
+Magma - Abstraction layer over Khronos Vulkan API.
+Copyright (C) 2018-2023 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,11 +18,26 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "descriptor.h"
+#include "../objects/buffer.h"
+#include "../objects/bufferView.h"
+#include "../objects/image.h"
+#include "../objects/imageView.h"
 
 namespace magma
 {
 namespace descriptor
 {
+Descriptor::Descriptor(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding_) noexcept:
+    imageType(VK_IMAGE_TYPE_MAX_ENUM),
+    updated(false)
+{
+    binding.binding = binding_;
+    binding.descriptorType = descriptorType;
+    binding.descriptorCount = descriptorCount;
+    binding.stageFlags = 0;
+    binding.pImmutableSamplers = nullptr;
+}
+
 void Descriptor::getWriteDescriptor(VkDescriptorSet dstSet,
     VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
@@ -69,6 +84,43 @@ void Descriptor::getWriteDescriptor(VkDescriptorSet dstSet,
         MAGMA_ASSERT(false);
     }
     updated = false;
+}
+
+void Descriptor::updateImageView(std::shared_ptr<const ImageView> imageView, VkImageUsageFlags requiredUsage) noexcept
+{
+    MAGMA_UNUSED(requiredUsage);
+    MAGMA_ASSERT(imageView);
+    MAGMA_ASSERT(imageView->getImage()->getUsage() & requiredUsage);
+    if (imageDescriptor.imageView != *imageView)
+    {
+        imageDescriptor = imageView->getDescriptor(nullptr);
+        imageType = imageView->getImage()->getType();
+        updated = true;
+    }
+}
+
+void Descriptor::updateBufferView(std::shared_ptr<const BufferView> bufferView, VkBufferUsageFlags requiredUsage) noexcept
+{
+    MAGMA_UNUSED(requiredUsage);
+    MAGMA_ASSERT(bufferView);
+    MAGMA_ASSERT(bufferView->getBuffer()->getUsage() & requiredUsage);
+    if (texelBufferView != *bufferView)
+    {
+        texelBufferView = *bufferView;
+        updated = true;
+    }
+}
+
+void Descriptor::updateBuffer(std::shared_ptr<const Buffer> buffer, VkBufferUsageFlags requiredUsage) noexcept
+{
+    MAGMA_UNUSED(requiredUsage);
+    MAGMA_ASSERT(buffer);
+    MAGMA_ASSERT(buffer->getUsage() & requiredUsage);
+    if (bufferDescriptor.buffer != *buffer)
+    {   // TODO: offset, range?
+        bufferDescriptor = buffer->getDescriptor();
+        updated = true;
+    }
 }
 } // namespace descriptor
 } // namespace magma

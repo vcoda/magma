@@ -1,4 +1,8 @@
-class ImmutableSamplerDescriptor
+namespace magma
+{
+namespace descriptor
+{
+class DescriptorArray::ImmutableSamplerDescriptor
 {
 public:
     explicit ImmutableSamplerDescriptor(VkSampler& immutableSampler, bool& updated) noexcept:
@@ -22,11 +26,8 @@ protected:
     bool& updated;
 };
 
-class ImageImmutableSamplerDescriptor : public ImmutableSamplerDescriptor
+class DescriptorArray::ImageImmutableSamplerDescriptor : public DescriptorArray::ImmutableSamplerDescriptor
 {
-    VkDescriptorImageInfo& imageDescriptor;
-    VkImageType& imageType;
-
 public:
     explicit ImageImmutableSamplerDescriptor(VkDescriptorImageInfo& imageDescriptor, VkSampler& immutableSampler, VkImageType& imageType, bool& updated) noexcept:
         ImmutableSamplerDescriptor(immutableSampler, updated),
@@ -66,4 +67,10 @@ public:
             updated = true;
         }
     }
+
+private:
+    VkDescriptorImageInfo& imageDescriptor;
+    VkImageType& imageType;
 };
+} // namespace descriptor
+} // namespace magma

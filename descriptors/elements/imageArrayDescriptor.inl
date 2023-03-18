@@ -1,10 +1,9 @@
-class ImageDescriptor
+namespace magma
 {
-    VkDescriptorImageInfo& imageDescriptor;
-    VkImageType& imageType;
-    const VkImageUsageFlags requiredUsage;
-    bool& updated;
-
+namespace descriptor
+{
+class DescriptorArray::ImageDescriptor
+{
 public:
     explicit ImageDescriptor(VkDescriptorImageInfo& imageDescriptor, VkImageType& imageType, VkImageUsageFlags requiredUsage, bool& updated) noexcept:
         imageDescriptor(imageDescriptor),
@@ -56,4 +55,12 @@ public:
             updated = true;
         }
     }
+
+private:
+    VkDescriptorImageInfo& imageDescriptor;
+    VkImageType& imageType;
+    const VkImageUsageFlags requiredUsage;
+    bool& updated;
 };
+} // namespace descriptor
+} // namespace magma

@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "descriptor.h"
+#include "accelerationStructure.h"
 #include "../objects/accelerationStructure.h"
 
 namespace magma

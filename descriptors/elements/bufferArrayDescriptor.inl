@@ -1,9 +1,9 @@
-class BufferDescriptor
+namespace magma
 {
-    VkDescriptorBufferInfo& bufferDescriptor;
-    const VkBufferUsageFlags requiredUsage;
-    bool& updated;
-
+namespace descriptor
+{
+class DescriptorArray::BufferDescriptor
+{
 public:
     explicit BufferDescriptor(VkDescriptorBufferInfo& bufferDescriptor, VkBufferUsageFlags requiredUsage, bool& updated) noexcept:
         bufferDescriptor(bufferDescriptor),
@@ -21,4 +21,11 @@ public:
             updated = true;
         }
     }
+
+private:
+    VkDescriptorBufferInfo& bufferDescriptor;
+    const VkBufferUsageFlags requiredUsage;
+    bool& updated;
 };
+} // namespace descriptor
+} // namespace magma

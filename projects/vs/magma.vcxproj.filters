@@ -94,6 +94,9 @@
     <Filter Include="Header Files\packed">
       <UniqueIdentifier>{7bcab66d-191b-4e8f-bf84-bd67a00c41d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\descriptors\elements">
+      <UniqueIdentifier>{7e5c392a-42d2-4923-ac05-5370e90a08f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\allocator\allocator.h">
@@ -747,6 +750,30 @@
     <ClInclude Include="..\..\misc\deviceFeatures.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\descriptors\imageDescriptor.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\descriptors\bufferDescriptor.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\descriptors\inlineUniformBlock.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\descriptors\accelerationStructure.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\descriptors\imageDescriptorArray.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\descriptors\bufferDescriptorArray.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\descriptors\elements\bufferArrayDescriptor.inl">
+      <Filter>Header Files\descriptors\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\descriptors\elements\imageArrayDescriptor.inl">
+      <Filter>Header Files\descriptors\elements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1342,22 +1369,7 @@
     <None Include="..\..\objects\pipelineLayout.inl">
       <Filter>Header Files\objects</Filter>
     </None>
-    <None Include="..\..\descriptors\descriptor.inl">
-      <Filter>Header Files\descriptors</Filter>
-    </None>
     <None Include="..\..\descriptors\descriptorArray.inl">
-      <Filter>Header Files\descriptors</Filter>
-    </None>
-    <None Include="..\..\descriptors\inlineUniformBlockDescriptor.inl">
-      <Filter>Header Files\descriptors</Filter>
-    </None>
-    <None Include="..\..\descriptors\descriptorArrayBufferDescriptor.inl">
-      <Filter>Header Files\descriptors</Filter>
-    </None>
-    <None Include="..\..\descriptors\descriptorArrayImageDescriptor.inl">
-      <Filter>Header Files\descriptors</Filter>
-    </None>
-    <None Include="..\..\descriptors\descriptorArrayImageSamplerDescriptor.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
     <None Include="..\..\helpers\uniformArray.inl">
@@ -1365,6 +1377,24 @@
     </None>
     <None Include="..\..\helpers\alignedUniformArray.inl">
       <Filter>Header Files\helpers</Filter>
+    </None>
+    <None Include="..\..\descriptors\inlineUniformBlock.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\descriptors\imageDescriptor.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\descriptors\bufferDescriptor.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\descriptors\imageDescriptorArray.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\descriptors\bufferDescriptorArray.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\descriptors\elements\samplerArrayDescriptor.inl">
+      <Filter>Header Files\descriptors\elements</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

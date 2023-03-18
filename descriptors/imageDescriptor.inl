@@ -5,17 +5,22 @@ namespace descriptor
 inline Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept
 {
     MAGMA_ASSERT(sampler);
-    updateSampler(std::move(sampler));
+    imageDescriptor.sampler = *sampler;
+    imageDescriptor.imageView = VK_NULL_HANDLE;
+    imageDescriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    updated = true;
     return *this;
 }
 
 inline ImmutableSampler& ImmutableSampler::operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept
 {   // Immutable sampler must be updated only once
     MAGMA_ASSERT(!binding.pImmutableSamplers);
+    MAGMA_ASSERT(sampler);
+    imageDescriptor.sampler = VK_NULL_HANDLE;
+    imageDescriptor.imageView = VK_NULL_HANDLE;
+    imageDescriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     if (!binding.pImmutableSamplers)
-    {
-        updateSampler(nullptr);
-        // If pImmutableSamplers is not NULL, then it is a pointer to an array of sampler handles
+    {   // If pImmutableSamplers is not NULL, then it is a pointer to an array of sampler handles
         // that will be copied into the set layout and used for the corresponding binding.
         MAGMA_ASSERT(sampler);
         binding.pImmutableSamplers = sampler->getHandleAddress();
@@ -28,7 +33,7 @@ inline CombinedImageSampler& CombinedImageSampler::operator=(const std::pair<std
 {
     MAGMA_ASSERT(combinedImageSampler.first);
     MAGMA_ASSERT(combinedImageSampler.second);
-    MAGMA_ASSERT(combinedImageSampler.first->getImage()->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
+    //MAGMA_ASSERT(combinedImageSampler.first->getImage()->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
     if ((imageDescriptor.imageView != *combinedImageSampler.first) ||
         (imageDescriptor.sampler != *combinedImageSampler.second))
     {
@@ -71,42 +76,10 @@ inline StorageImage& StorageImage::operator=(std::shared_ptr<const ImageView> im
     return *this;
 }
 
-inline UniformTexelBuffer& UniformTexelBuffer::operator=(std::shared_ptr<const BufferView> bufferView) noexcept
+inline InputAttachment& InputAttachment::operator=(std::shared_ptr<const ImageView> imageView) noexcept
 {
-    updateBufferView(std::move(bufferView), VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT);
+    updateImageView(std::move(imageView), VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
     return *this;
 }
-
-inline StorageTexelBuffer& StorageTexelBuffer::operator=(std::shared_ptr<const BufferView> bufferView) noexcept
-{
-    updateBufferView(std::move(bufferView), VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT);
-    return *this;
-}
-
-inline UniformBuffer& UniformBuffer::operator=(std::shared_ptr<const Buffer> buffer) noexcept
-{
-    updateBuffer(std::move(buffer), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
-    return *this;
-}
-
-inline StorageBuffer& StorageBuffer::operator=(std::shared_ptr<const Buffer> buffer) noexcept
-{
-    updateBuffer(std::move(buffer), VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-    return *this;
-}
-
-inline DynamicUniformBuffer& DynamicUniformBuffer::operator=(std::shared_ptr<const Buffer> buffer) noexcept
-{
-    updateBuffer(std::move(buffer), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
-    return *this;
-}
-
-inline DynamicStorageBuffer& DynamicStorageBuffer::operator=(std::shared_ptr<const Buffer> buffer) noexcept
-{
-    updateBuffer(std::move(buffer), VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-    return *this;
-}
-
-
 } // namespace descriptor
 } // namespace magma
