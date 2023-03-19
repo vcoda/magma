@@ -134,7 +134,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptors/bufferDescriptor.h"
 #include "descriptors/bufferDescriptorArray.h"
 #include "descriptors/descriptor.h"
-#include "descriptors/descriptorArray.h"
 #include "descriptors/descriptorPool.h"
 #include "descriptors/descriptorSetTable.h"
 #include "descriptors/imageDescriptor.h"

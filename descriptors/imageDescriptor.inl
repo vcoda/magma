@@ -2,12 +2,52 @@ namespace magma
 {
 namespace descriptor
 {
+inline void ImageDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
+{
+    switch (binding.descriptorType)
+    {
+    case VK_DESCRIPTOR_TYPE_SAMPLER:
+    case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
+        MAGMA_ASSERT(descriptor.sampler || binding.pImmutableSamplers);
+        break;
+    case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
+    case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
+    case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
+        MAGMA_ASSERT(descriptor.imageView != VK_NULL_HANDLE);
+        break;
+    }
+    writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeDescriptorSet.pNext = nullptr;
+    writeDescriptorSet.dstSet = dstSet;
+    writeDescriptorSet.dstBinding = binding.binding;
+    writeDescriptorSet.dstArrayElement = 0;
+    writeDescriptorSet.descriptorCount = binding.descriptorCount;
+    writeDescriptorSet.descriptorType = binding.descriptorType;
+    writeDescriptorSet.pImageInfo = &descriptor;
+    writeDescriptorSet.pBufferInfo = nullptr;
+    writeDescriptorSet.pTexelBufferView = nullptr;
+    updated = false;
+}
+
+inline void ImageDescriptor::updateImageView(std::shared_ptr<const ImageView> imageView, VkImageUsageFlags requiredUsage) noexcept
+{
+    MAGMA_UNUSED(requiredUsage);
+    MAGMA_ASSERT(imageView);
+    MAGMA_ASSERT(imageView->getImage()->getUsage() & requiredUsage);
+    if (descriptor.imageView != *imageView)
+    {
+        descriptor = imageView->getDescriptor(nullptr);
+        imageType = imageView->getImage()->getType();
+        updated = true;
+    }
+}
+
 inline Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept
 {
     MAGMA_ASSERT(sampler);
-    imageDescriptor.sampler = *sampler;
-    imageDescriptor.imageView = VK_NULL_HANDLE;
-    imageDescriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    descriptor.sampler = *sampler;
+    descriptor.imageView = VK_NULL_HANDLE;
+    descriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     updated = true;
     return *this;
 }
@@ -16,9 +56,9 @@ inline ImmutableSampler& ImmutableSampler::operator=(std::shared_ptr<const magma
 {   // Immutable sampler must be updated only once
     MAGMA_ASSERT(!binding.pImmutableSamplers);
     MAGMA_ASSERT(sampler);
-    imageDescriptor.sampler = VK_NULL_HANDLE;
-    imageDescriptor.imageView = VK_NULL_HANDLE;
-    imageDescriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    descriptor.sampler = VK_NULL_HANDLE;
+    descriptor.imageView = VK_NULL_HANDLE;
+    descriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     if (!binding.pImmutableSamplers)
     {   // If pImmutableSamplers is not NULL, then it is a pointer to an array of sampler handles
         // that will be copied into the set layout and used for the corresponding binding.
@@ -34,10 +74,10 @@ inline CombinedImageSampler& CombinedImageSampler::operator=(const std::pair<std
     MAGMA_ASSERT(combinedImageSampler.first);
     MAGMA_ASSERT(combinedImageSampler.second);
     //MAGMA_ASSERT(combinedImageSampler.first->getImage()->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
-    if ((imageDescriptor.imageView != *combinedImageSampler.first) ||
-        (imageDescriptor.sampler != *combinedImageSampler.second))
+    if ((descriptor.imageView != *combinedImageSampler.first) ||
+        (descriptor.sampler != *combinedImageSampler.second))
     {
-        imageDescriptor = combinedImageSampler.first->getDescriptor(combinedImageSampler.second);
+        descriptor = combinedImageSampler.first->getDescriptor(combinedImageSampler.second);
         updated = true;
     }
     return *this;

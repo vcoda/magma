@@ -22,36 +22,68 @@ namespace magma
 {
     namespace descriptor
     {
+        /* Base class of buffer descriptor. */
+
+        class BufferDescriptor : public Descriptor
+        {
+        protected:
+            BufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+                Descriptor(descriptorType, 1, binding) {}
+            void write(VkDescriptorSet dstSet,
+                VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
+            void updateBuffer(std::shared_ptr<const Buffer> buffer,
+                VkBufferUsageFlags requiredUsage) noexcept;
+
+        private:
+            VkDescriptorBufferInfo descriptor = {};
+        };
+
+        /* Base class of texel buffer descriptor. */
+
+        class TexelBufferDescriptor : public Descriptor
+        {
+        protected:
+            TexelBufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+                Descriptor(descriptorType, 1, binding) {}
+            void write(VkDescriptorSet dstSet,
+                VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
+            void updateBufferView(std::shared_ptr<const BufferView> bufferView,
+                VkBufferUsageFlags requiredUsage) noexcept;
+
+        private:
+            VkBufferView view = VK_NULL_HANDLE;
+        };
+
         /* A uniform texel buffer is a descriptor type associated with a buffer resource
            via a buffer view that formatted load operations can be performed on. */
 
-        class UniformTexelBuffer : public Descriptor
+        class UniformTexelBuffer : public TexelBufferDescriptor
         {
         public:
             UniformTexelBuffer(uint32_t binding) noexcept:
-                Descriptor(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1, binding) {}
+                TexelBufferDescriptor(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, binding) {}
             UniformTexelBuffer& operator=(std::shared_ptr<const BufferView>) noexcept;
         };
 
         /* A storage texel buffer is a descriptor type associated with a buffer resource
            via a buffer view that formatted load, store, and atomic operations can be performed on. */
 
-        class StorageTexelBuffer : public Descriptor
+        class StorageTexelBuffer : public TexelBufferDescriptor
         {
         public:
             StorageTexelBuffer(uint32_t binding) noexcept:
-                Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1, binding) {}
+                TexelBufferDescriptor(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, binding) {}
             StorageTexelBuffer& operator=(std::shared_ptr<const BufferView>) noexcept;
         };
 
         /* A uniform buffer is a descriptor type associated with a buffer resource directly,
            described in a shader as a structure with various members that load operations can be performed on. */
 
-        class UniformBuffer : public Descriptor
+        class UniformBuffer : public BufferDescriptor
         {
         public:
             UniformBuffer(uint32_t binding) noexcept:
-                Descriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, binding) {}
+                BufferDescriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, binding) {}
             UniformBuffer& operator=(std::shared_ptr<const Buffer>) noexcept;
         };
 
@@ -59,11 +91,11 @@ namespace magma
            described in a shader as a structure with various members that load, store,
            and atomic operations can be performed on. */
 
-        class StorageBuffer : public Descriptor
+        class StorageBuffer : public BufferDescriptor
         {
         public:
             StorageBuffer(uint32_t binding) noexcept:
-                Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, binding) {}
+                BufferDescriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, binding) {}
             StorageBuffer& operator=(std::shared_ptr<const Buffer>) noexcept;
         };
 
@@ -73,11 +105,11 @@ namespace magma
            initially updating the descriptor set is added to a dynamic offset
            when binding the descriptor set. */
 
-        class DynamicUniformBuffer : public Descriptor
+        class DynamicUniformBuffer : public BufferDescriptor
         {
         public:
             DynamicUniformBuffer(uint32_t binding) noexcept:
-                Descriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1, binding) {}
+                BufferDescriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, binding) {}
             DynamicUniformBuffer& operator=(std::shared_ptr<const Buffer>) noexcept;
         };
 
@@ -87,11 +119,11 @@ namespace magma
            initially updating the descriptor set is added to a dynamic offset
            when binding the descriptor set. */
 
-        class DynamicStorageBuffer : public Descriptor
+        class DynamicStorageBuffer : public BufferDescriptor
         {
         public:
             DynamicStorageBuffer(uint32_t binding) noexcept:
-                Descriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1, binding) {}
+                BufferDescriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, binding) {}
             DynamicStorageBuffer& operator=(std::shared_ptr<const Buffer>) noexcept;
         };
     } // namespace descriptor

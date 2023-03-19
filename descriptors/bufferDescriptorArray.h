@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "descriptorArray.h"
+#include "descriptor.h"
 
 namespace magma
 {
@@ -135,4 +135,5 @@ namespace magma
     } // namespace descriptor
 } // namespace magma
 
+#include "elements/bufferArrayDescriptor.inl"
 #include "bufferDescriptorArray.inl"

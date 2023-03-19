@@ -741,9 +741,6 @@
     <ClInclude Include="..\..\descriptors\descriptor.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\descriptorArray.h">
-      <Filter>Header Files\descriptors</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\descriptors\descriptorSetTable.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>

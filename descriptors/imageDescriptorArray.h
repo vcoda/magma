@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "descriptorArray.h"
+#include "descriptor.h"
 
 namespace magma
 {
@@ -35,6 +35,7 @@ namespace magma
             DescriptorArray::ImageDescriptor getArrayElement(uint32_t index,
                 VkImageUsageFlags requiredUsage) noexcept;
 
+        private:
             std::array<VkDescriptorImageInfo, Size> descriptors = {};
         };
 
@@ -141,5 +142,6 @@ namespace magma
     } // namespace descriptor
 } // namespace magma
 
+#include "elements/imageArrayDescriptor.inl"
 #include "elements/samplerArrayDescriptor.inl"
 #include "imageDescriptorArray.inl"

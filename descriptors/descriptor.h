@@ -40,27 +40,33 @@ namespace magma
             VkImageType getImageType() const noexcept { return imageType; }
             bool dirty() const noexcept { return updated; }
             virtual void write(VkDescriptorSet dstSet,
-                VkWriteDescriptorSet& writeDescriptorSet) const noexcept;
+                VkWriteDescriptorSet& writeDescriptorSet) const noexcept = 0;
 
         protected:
             Descriptor(VkDescriptorType descriptorType,
                 uint32_t descriptorCount, uint32_t binding) noexcept;
-            void updateImageView(std::shared_ptr<const ImageView> imageView,
-                VkImageUsageFlags requiredUsage) noexcept;
-            void updateBufferView(std::shared_ptr<const BufferView> bufferView,
-                VkBufferUsageFlags requiredUsage) noexcept;
-            void updateBuffer(std::shared_ptr<const Buffer> buffer,
-                VkBufferUsageFlags requiredUsage) noexcept;
 
-            union
-            {
-                VkDescriptorImageInfo imageDescriptor = {};
-                VkDescriptorBufferInfo bufferDescriptor;
-                VkBufferView texelBufferView;
-            };
             VkDescriptorSetLayoutBinding binding;
-            VkImageType imageType;
-            mutable bool updated;
+            VkImageType imageType = VK_IMAGE_TYPE_MAX_ENUM;
+            mutable bool updated = false;
         };
+
+        /* Base class of descriptor array. */
+
+        class DescriptorArray : public Descriptor
+        {
+        public:
+            class ImageDescriptor;
+            class ImmutableSamplerDescriptor;
+            class ImageImmutableSamplerDescriptor;
+            class BufferDescriptor;
+            class TexelBufferDescriptor;
+            uint32_t getArraySize() const { return binding.descriptorCount; }
+
+        protected:
+            DescriptorArray(VkDescriptorType descriptorType,
+                uint32_t descriptorCount, uint32_t binding) noexcept;
+        };
+
     } // namespace descriptor
 } // namespace magma
