@@ -19,10 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Buffer;
-    class BufferView;
-    class ImageView;
-
     namespace descriptor
     {
         /* Each individual descriptor binding is specified by a descriptor type,
@@ -67,6 +63,5 @@ namespace magma
             DescriptorArray(VkDescriptorType descriptorType,
                 uint32_t descriptorCount, uint32_t binding) noexcept;
         };
-
     } // namespace descriptor
 } // namespace magma
