@@ -47,7 +47,8 @@ namespace magma
             mutable bool updated = false;
         };
 
-        /* Base class of descriptor array. */
+        /* Base class of descriptor array.
+           Member VkDescriptorSetLayoutBinding::descriptorCount defines size of array. */
 
         class DescriptorArray : public Descriptor
         {
