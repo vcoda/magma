@@ -35,6 +35,7 @@ namespace magma
             DescriptorArray::BufferDescriptor getArrayElement(uint32_t index,
                 VkBufferUsageFlags requiredUsage) noexcept;
 
+        private:
             std::array<VkDescriptorBufferInfo, Size> descriptors = {};
         };
 
@@ -51,6 +52,7 @@ namespace magma
             DescriptorArray::TexelBufferDescriptor getArrayElement(uint32_t index,
                 VkBufferUsageFlags requiredUsage) noexcept;
 
+        private:
             std::array<VkBufferView, Size> views = {};
         };
 

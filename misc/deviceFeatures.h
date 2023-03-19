@@ -28,9 +28,6 @@ namespace magma
 
     class DeviceFeatures : core::NonCopyable
     {
-        DeviceFeatures(std::shared_ptr<const Device> device) noexcept;
-        friend Device;
-
     public:
         struct FormatFeaturesSupport
         {
@@ -48,6 +45,9 @@ namespace magma
         bool stippledLinesEnabled() const noexcept;
 
     private:
+        DeviceFeatures(std::shared_ptr<const Device> device) noexcept;
+        friend Device;
+
         std::weak_ptr<const Device> parent;
     };
 } // namespace magma
