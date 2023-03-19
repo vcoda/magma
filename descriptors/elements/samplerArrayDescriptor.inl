@@ -4,6 +4,10 @@ namespace descriptor
 {
 class DescriptorArray::ImmutableSamplerDescriptor
 {
+protected:
+    VkSampler& immutableSampler;
+    bool& updated;
+
 public:
     explicit ImmutableSamplerDescriptor(VkSampler& immutableSampler, bool& updated) noexcept:
         immutableSampler(immutableSampler),
@@ -20,18 +24,18 @@ public:
             updated = true;
         }
     }
-
-protected:
-    VkSampler& immutableSampler;
-    bool& updated;
 };
 
-class DescriptorArray::ImageImmutableSamplerDescriptor : public DescriptorArray::ImmutableSamplerDescriptor
+class DescriptorArray::ImageImmutableSamplerDescriptor :
+    public DescriptorArray::ImmutableSamplerDescriptor
 {
+    VkDescriptorImageInfo& descriptor;
+    VkImageType& imageType;
+
 public:
-    explicit ImageImmutableSamplerDescriptor(VkDescriptorImageInfo& imageDescriptor, VkSampler& immutableSampler, VkImageType& imageType, bool& updated) noexcept:
+    explicit ImageImmutableSamplerDescriptor(VkDescriptorImageInfo& descriptor, VkSampler& immutableSampler, VkImageType& imageType, bool& updated) noexcept:
         ImmutableSamplerDescriptor(immutableSampler, updated),
-        imageDescriptor(imageDescriptor),
+        descriptor(descriptor),
         imageType(imageType)
     {}
 
@@ -41,9 +45,9 @@ public:
         MAGMA_ASSERT(combinedImageSampler.second);
         std::shared_ptr<const Image> image = combinedImageSampler.first->getImage();
         MAGMA_ASSERT(image->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
-        if (imageDescriptor.imageView != *combinedImageSampler.first)
+        if (descriptor.imageView != *combinedImageSampler.first)
         {
-            imageDescriptor = combinedImageSampler.first->getDescriptor(nullptr);
+            descriptor = combinedImageSampler.first->getDescriptor(nullptr);
             if (imageType != VK_IMAGE_TYPE_MAX_ENUM)
                 MAGMA_ASSERT(image->getType() == imageType);
             imageType = image->getType();
@@ -58,19 +62,15 @@ public:
         std::shared_ptr<const Image> image = imageView->getImage();
         MAGMA_ASSERT(image->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
         MAGMA_ASSERT(immutableSampler != VK_NULL_HANDLE); // Check that sampler is already set and stop carrying around it
-        if (imageDescriptor.imageView != *imageView)
+        if (descriptor.imageView != *imageView)
         {
-            imageDescriptor = imageView->getDescriptor(nullptr);
+            descriptor = imageView->getDescriptor(nullptr);
             if (imageType != VK_IMAGE_TYPE_MAX_ENUM)
                 MAGMA_ASSERT(image->getType() == imageType);
             imageType = image->getType();
             updated = true;
         }
     }
-
-private:
-    VkDescriptorImageInfo& imageDescriptor;
-    VkImageType& imageType;
 };
 } // namespace descriptor
 } // namespace magma

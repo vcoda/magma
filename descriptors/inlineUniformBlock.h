@@ -49,4 +49,3 @@ namespace magma
 } // namespace magma
 
 #include "inlineUniformBlock.inl"
-

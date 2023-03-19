@@ -22,15 +22,31 @@ namespace magma
 {
     namespace descriptor
     {
+        /* Base class of image/sampler descriptor array. */
+
+        template<uint32_t Size>
+        class ImageDescriptorArray : public DescriptorArray
+        {
+        protected:
+            ImageDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+                DescriptorArray(descriptorType, Size, binding) {}
+            void write(VkDescriptorSet dstSet,
+                VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
+            DescriptorArray::ImageDescriptor getArrayElement(uint32_t index,
+                VkImageUsageFlags requiredUsage) noexcept;
+
+            std::array<VkDescriptorImageInfo, Size> descriptors = {};
+        };
+
         /* A sampler descriptor is a descriptor type associated with a sampler object,
            used to control the behavior of sampling operations performed on a sampled image. */
 
         template<uint32_t Size>
-        class SamplerArray : public TDescriptorArray<Size>
+        class SamplerArray : public ImageDescriptorArray<Size>
         {
         public:
             SamplerArray(uint32_t binding) noexcept:
-                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding) {}
+                ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding) {}
             DescriptorArray::ImageDescriptor operator[](uint32_t index) noexcept;
         };
 
@@ -39,11 +55,11 @@ namespace magma
            in a descriptor set is not allowed. */
 
         template<uint32_t Size>
-        class ImmutableSamplerArray : public TDescriptorArray<Size>
+        class ImmutableSamplerArray : public ImageDescriptorArray<Size>
         {
         public:
             ImmutableSamplerArray(uint32_t binding) noexcept:
-                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding)
+                ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding)
             {   // If pImmutableSamplers is not NULL, then it is a pointer
                 // to an array of sampler handles that will be copied
                 // into the set layout and used for the corresponding binding.
@@ -59,11 +75,11 @@ namespace magma
            combining both a sampler and sampled image descriptor into a single descriptor. */
 
         template<uint32_t Size>
-        class CombinedImageSamplerArray : public TDescriptorArray<Size>
+        class CombinedImageSamplerArray : public ImageDescriptorArray<Size>
         {
         public:
             CombinedImageSamplerArray(uint32_t binding) noexcept:
-                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
+                ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
             DescriptorArray::ImageDescriptor operator[](uint32_t index) noexcept;
         };
 
@@ -71,11 +87,11 @@ namespace magma
            does not modify the samplers (the image views are updated, but the sampler updates are ignored). */
 
         template<uint32_t Size>
-        class CombinedImageImmutableSamplerArray : public TDescriptorArray<Size>
+        class CombinedImageImmutableSamplerArray : public ImageDescriptorArray<Size>
         {
         public:
             CombinedImageImmutableSamplerArray(uint32_t binding) noexcept:
-                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding)
+                ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding)
             {   // If pImmutableSamplers is not NULL, then it is a pointer
                 // to an array of sampler handles that will be copied
                 // into the set layout and used for the corresponding binding.
@@ -91,11 +107,11 @@ namespace magma
            via an image view that sampling operations can be performed on. */
 
         template<uint32_t Size>
-        class SampledImageArray : public TDescriptorArray<Size>
+        class SampledImageArray : public ImageDescriptorArray<Size>
         {
         public:
             SampledImageArray(uint32_t binding) noexcept:
-                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding) {}
+                ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding) {}
             DescriptorArray::ImageDescriptor operator[](uint32_t index) noexcept;
         };
 
@@ -103,11 +119,11 @@ namespace magma
            via an image view that load, store, and atomic operations can be performed on. */
 
         template<uint32_t Size>
-        class StorageImageArray : public TDescriptorArray<Size>
+        class StorageImageArray : public ImageDescriptorArray<Size>
         {
         public:
             StorageImageArray(uint32_t binding) noexcept:
-                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, binding) {}
+                ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, binding) {}
             DescriptorArray::ImageDescriptor operator[](uint32_t index) noexcept;
         };
 
@@ -115,14 +131,15 @@ namespace magma
            via an image view that can be used for framebuffer local load operations in fragment shaders. */
 
         template<uint32_t Size>
-        class InputAttachmentArray : public TDescriptorArray<Size>
+        class InputAttachmentArray : public ImageDescriptorArray<Size>
         {
         public:
             InputAttachmentArray(uint32_t binding) noexcept:
-                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, binding) {}
+                ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, binding) {}
             DescriptorArray::ImageDescriptor operator[](uint32_t index) noexcept;
         };
     } // namespace descriptor
 } // namespace magma
 
+#include "elements/samplerArrayDescriptor.inl"
 #include "imageDescriptorArray.inl"

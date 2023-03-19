@@ -22,39 +22,71 @@ namespace magma
 {
     namespace descriptor
     {
+        /* Base class of buffer descriptor array. */
+
+        template<uint32_t Size>
+        class BufferDescriptorArray : public DescriptorArray
+        {
+        protected:
+            BufferDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+                DescriptorArray(descriptorType, Size, binding) {}
+            void write(VkDescriptorSet dstSet,
+                VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
+            DescriptorArray::BufferDescriptor getArrayElement(uint32_t index,
+                VkBufferUsageFlags requiredUsage) noexcept;
+
+            std::array<VkDescriptorBufferInfo, Size> descriptors = {};
+        };
+
+        /* Base class of texel buffer descriptor array. */
+
+        template<uint32_t Size>
+        class TexelBufferDescriptorArray : public DescriptorArray
+        {
+        protected:
+            TexelBufferDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+                DescriptorArray(descriptorType, Size, binding) {}
+            void write(VkDescriptorSet dstSet,
+                VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
+            DescriptorArray::TexelBufferDescriptor getArrayElement(uint32_t index,
+                VkBufferUsageFlags requiredUsage) noexcept;
+
+            std::array<VkBufferView, Size> views = {};
+        };
+
         /* A uniform texel buffer is a descriptor type associated with a buffer resource
            via a buffer view that formatted load operations can be performed on. */
 
         template<uint32_t Size>
-        class UniformTexelBufferArray : public TDescriptorArray<Size>
+        class UniformTexelBufferArray : public TexelBufferDescriptorArray<Size>
         {
         public:
             UniformTexelBufferArray(uint32_t binding) noexcept:
-                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, binding) {}
-            DescriptorArray::BufferDescriptor operator[](uint32_t index) noexcept;
+                TexelBufferDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, binding) {}
+            DescriptorArray::TexelBufferDescriptor operator[](uint32_t index) noexcept;
         };
 
         /* A storage texel buffer is a descriptor type associated with a buffer resource
            via a buffer view that formatted load, store, and atomic operations can be performed on. */
 
         template<uint32_t Size>
-        class StorageTexelBufferArray : public TDescriptorArray<Size>
+        class StorageTexelBufferArray : public TexelBufferDescriptorArray<Size>
         {
         public:
             StorageTexelBufferArray(uint32_t binding) noexcept:
-                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, binding) {}
-            DescriptorArray::BufferDescriptor operator[](uint32_t index) noexcept;
+                TexelBufferDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, binding) {}
+            DescriptorArray::TexelBufferDescriptor operator[](uint32_t index) noexcept;
         };
 
         /* A uniform buffer is a descriptor type associated with a buffer resource directly,
            described in a shader as a structure with various members that load operations can be performed on. */
 
         template<uint32_t Size>
-        class UniformBufferArray : public TDescriptorArray<Size>
+        class UniformBufferArray : public BufferDescriptorArray<Size>
         {
         public:
             UniformBufferArray(uint32_t binding) noexcept:
-                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, binding) {}
+                BufferDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, binding) {}
             DescriptorArray::BufferDescriptor operator[](uint32_t index) noexcept;
         };
 
@@ -63,11 +95,11 @@ namespace magma
            and atomic operations can be performed on. */
 
         template<uint32_t Size>
-        class StorageBufferArray : public TDescriptorArray<Size>
+        class StorageBufferArray : public BufferDescriptorArray<Size>
         {
         public:
             StorageBufferArray(uint32_t binding) noexcept:
-                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, binding) {}
+                BufferDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, binding) {}
             DescriptorArray::BufferDescriptor operator[](uint32_t index) noexcept;
         };
 
@@ -78,11 +110,11 @@ namespace magma
            when binding the descriptor set. */
 
         template<uint32_t Size>
-        class DynamicUniformBufferArray : public TDescriptorArray<Size>
+        class DynamicUniformBufferArray : public BufferDescriptorArray<Size>
         {
         public:
             DynamicUniformBufferArray(uint32_t binding) noexcept:
-                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, binding) {}
+                BufferDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, binding) {}
             DescriptorArray::BufferDescriptor operator[](uint32_t index) noexcept;
         };
 
@@ -93,11 +125,11 @@ namespace magma
            when binding the descriptor set. */
 
         template<uint32_t Size>
-        class DynamicStorageBufferArray : public TDescriptorArray<Size>
+        class DynamicStorageBufferArray : public BufferDescriptorArray<Size>
         {
         public:
             DynamicStorageBufferArray(uint32_t binding) noexcept:
-                TDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, binding) {}
+                BufferDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, binding) {}
             DescriptorArray::BufferDescriptor operator[](uint32_t index) noexcept;
         };
     } // namespace descriptor

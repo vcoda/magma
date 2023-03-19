@@ -34,6 +34,9 @@ namespace magma
             class ImmutableSamplerDescriptor;
             class ImageImmutableSamplerDescriptor;
             class BufferDescriptor;
+            class TexelBufferDescriptor;
+
+            uint32_t getArraySize() const { return binding.descriptorCount; }
 
         protected:
             DescriptorArray(VkDescriptorType descriptorType,
@@ -41,34 +44,8 @@ namespace magma
                 uint32_t binding) noexcept
             : Descriptor(descriptorType, descriptorCount, binding) {}
         };
-
-        /* Provides access to buffer or image array elements.
-           Template parameter defines compile-time array size. */
-
-        template<uint32_t Size>
-        class TDescriptorArray : public DescriptorArray
-        {
-        public:
-            constexpr uint32_t getArraySize() const { return Size; }
-            void write(VkDescriptorSet dstSet,
-                VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
-
-        protected:
-            TDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-                DescriptorArray(descriptorType, Size, binding) {}
-            ImageDescriptor getImageArrayElement(uint32_t index,
-                VkImageUsageFlags requiredUsage) noexcept;
-            BufferDescriptor getBufferArrayElement(uint32_t index,
-                VkBufferUsageFlags requiredUsage) noexcept;
-
-            union
-            {
-                std::array<VkDescriptorImageInfo, Size> imageDescriptors = {};
-                std::array<VkDescriptorBufferInfo, Size> bufferDescriptors;
-                std::array<VkBufferView, Size> texelBufferViews;
-            };
-        };
     } // namespace descriptor
 } // namespace magma
 
-#include "descriptorArray.inl"
+#include "elements/imageArrayDescriptor.inl"
+#include "elements/bufferArrayDescriptor.inl"

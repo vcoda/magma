@@ -1369,9 +1369,6 @@
     <None Include="..\..\objects\pipelineLayout.inl">
       <Filter>Header Files\objects</Filter>
     </None>
-    <None Include="..\..\descriptors\descriptorArray.inl">
-      <Filter>Header Files\descriptors</Filter>
-    </None>
     <None Include="..\..\helpers\uniformArray.inl">
       <Filter>Header Files\helpers</Filter>
     </None>

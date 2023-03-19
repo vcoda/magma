@@ -35,7 +35,7 @@ namespace magma
         {
         public:
             AccelerationStructure(uint32_t binding) noexcept;
-            void getWriteDescriptor(VkDescriptorSet dstSet,
+            void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
             AccelerationStructure& operator=(std::shared_ptr<const magma::AccelerationStructure>) noexcept;
 
