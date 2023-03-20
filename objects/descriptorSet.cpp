@@ -75,11 +75,10 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     descriptorSetAllocateInfo.pSetLayouts = setLayout->getHandleAddress();
     const VkResult result = vkAllocateDescriptorSets(MAGMA_HANDLE(device), &descriptorSetAllocateInfo, &handle);
     MAGMA_THROW_FAILURE(result, "failed to allocate descriptor set");
-    // Once allocated, descriptor set can be updated
-    MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, descriptors.size());
-    for (uint32_t i = 0; i < descriptorWrites.size(); ++i)
-        descriptors[i].get().write(handle, descriptorWrites[i]);
-    device->updateDescriptorSets(descriptorWrites.size(), descriptorWrites, 0, nullptr);
+    if (dirty())
+    {   // Once allocated, descriptor set can be updated
+        update();
+    }
 }
 
 DescriptorSet::~DescriptorSet()
@@ -88,7 +87,7 @@ DescriptorSet::~DescriptorSet()
         vkFreeDescriptorSets(MAGMA_HANDLE(device), *descriptorPool, 1, &handle);
 }
 
-bool DescriptorSet::dirty() const noexcept
+bool DescriptorSet::dirty() const
 {
     return setTable.dirty();
 }
@@ -96,17 +95,16 @@ bool DescriptorSet::dirty() const noexcept
 void DescriptorSet::update()
 {
     MAGMA_ASSERT(dirty());
-    const DescriptorList& descriptors = setTable.getReflection();
-    MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, descriptors.size());
-    uint32_t descriptorWriteCount = 0;
-    for (const auto& ref: descriptors)
-    {
-        const descriptor::Descriptor& descriptor = ref.get();
+    MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, setTable.getSize());
+    uint32_t writeCount = 0;
+    for (const auto& it: setTable.getReflection())
+    {   // Get dirty descriptor writes
+        const descriptor::Descriptor& descriptor = it.get();
         if (descriptor.dirty())
-            descriptor.write(handle, descriptorWrites[descriptorWriteCount++]);
+            descriptor.write(handle, descriptorWrites[writeCount++]);
     }
-    if (descriptorWriteCount)
-        device->updateDescriptorSets(descriptorWriteCount, descriptorWrites, 0, nullptr);
+    if (writeCount)
+        device->updateDescriptorSets(writeCount, descriptorWrites, 0, nullptr);
 }
 
 void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection, uint32_t setIndex) const
