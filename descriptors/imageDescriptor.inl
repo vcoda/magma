@@ -73,6 +73,7 @@ inline CombinedImageSampler& CombinedImageSampler::operator=(const std::pair<std
 
 inline CombinedImageImmutableSampler& CombinedImageImmutableSampler::operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler) noexcept
 {
+    MAGMA_ASSERT(!binding.pImmutableSamplers);
     updateImageView(combinedImageSampler.first, VK_IMAGE_USAGE_SAMPLED_BIT);
     // Immutable sampler must be updated only once
     if (!binding.pImmutableSamplers)
