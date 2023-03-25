@@ -61,8 +61,8 @@ namespace magma
             CombinedImageSampler& operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>&) noexcept;
         };
 
-        /* Updates to a VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER descriptor with immutable samplers
-           does not modify the samplers (the image views are updated, but the sampler updates are ignored). */
+        /* Immutable samplers are permanently bound into the set layout; later binding a sampler
+           into an immutable sampler slot in a descriptor set is not allowed. */
 
         class CombinedImageImmutableSampler : public ImageDescriptor
         {
