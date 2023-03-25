@@ -50,18 +50,6 @@ namespace magma
             Sampler& operator=(std::shared_ptr<const magma::Sampler>) noexcept;
         };
 
-        /* Immutable samplers are permanently bound into the set layout;
-           later binding a sampler into an immutable sampler slot
-           in a descriptor set is not allowed. */
-
-        class ImmutableSampler : public ImageDescriptor
-        {
-        public:
-            ImmutableSampler(uint32_t binding) noexcept:
-                ImageDescriptor(VK_DESCRIPTOR_TYPE_SAMPLER, binding) {}
-            ImmutableSampler& operator=(std::shared_ptr<const magma::Sampler>) noexcept;
-        };
-
         /* A combined image sampler is a single descriptor type associated with both a sampler and an image resource,
            combining both a sampler and sampled image descriptor into a single descriptor. */
 

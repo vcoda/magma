@@ -4,10 +4,14 @@ namespace descriptor
 {
 inline void ImageDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
+#ifdef MAGMA_DEBUG
     switch (binding.descriptorType)
     {
     case VK_DESCRIPTOR_TYPE_SAMPLER:
+        MAGMA_ASSERT(descriptor.sampler);
+        break;
     case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
+        MAGMA_ASSERT(descriptor.imageView != VK_NULL_HANDLE);
         MAGMA_ASSERT(descriptor.sampler || binding.pImmutableSamplers);
         break;
     case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
@@ -16,6 +20,7 @@ inline void ImageDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet&
         MAGMA_ASSERT(descriptor.imageView != VK_NULL_HANDLE);
         break;
     }
+#endif // MAGMA_DEBUG
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;
@@ -49,23 +54,6 @@ inline Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler
     descriptor.imageView = VK_NULL_HANDLE;
     descriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     updated = true;
-    return *this;
-}
-
-inline ImmutableSampler& ImmutableSampler::operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept
-{   // Immutable sampler must be updated only once
-    MAGMA_ASSERT(!binding.pImmutableSamplers);
-    MAGMA_ASSERT(sampler);
-    descriptor.sampler = VK_NULL_HANDLE;
-    descriptor.imageView = VK_NULL_HANDLE;
-    descriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    if (!binding.pImmutableSamplers)
-    {   // If pImmutableSamplers is not NULL, then it is a pointer to an array of sampler handles
-        // that will be copied into the set layout and used for the corresponding binding.
-        MAGMA_ASSERT(sampler);
-        binding.pImmutableSamplers = sampler->getHandleAddress();
-        updated = true;
-    }
     return *this;
 }
 
