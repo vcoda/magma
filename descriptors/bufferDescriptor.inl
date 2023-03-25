@@ -2,6 +2,10 @@ namespace magma
 {
 namespace descriptor
 {
+inline BufferDescriptor::BufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+    Descriptor(descriptorType, 1, binding)
+{}
+
 inline void BufferDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
     MAGMA_ASSERT(descriptor.buffer != VK_NULL_HANDLE);
@@ -29,6 +33,10 @@ inline void BufferDescriptor::updateBuffer(std::shared_ptr<const Buffer> buffer,
         updated = true;
     }
 }
+
+inline TexelBufferDescriptor::TexelBufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+    Descriptor(descriptorType, 1, binding)
+{}
 
 inline void TexelBufferDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {

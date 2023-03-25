@@ -29,8 +29,7 @@ namespace magma
         class BufferDescriptor : public Descriptor
         {
         protected:
-            BufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-                Descriptor(descriptorType, 1, binding) {}
+            BufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
             void updateBuffer(std::shared_ptr<const Buffer> buffer,
@@ -45,8 +44,7 @@ namespace magma
         class TexelBufferDescriptor : public Descriptor
         {
         protected:
-            TexelBufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-                Descriptor(descriptorType, 1, binding) {}
+            TexelBufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
             void updateBufferView(std::shared_ptr<const BufferView> bufferView,
