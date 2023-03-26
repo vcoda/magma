@@ -205,8 +205,6 @@
     <ClInclude Include="..\..\descriptors\descriptorPool.h" />
     <ClInclude Include="..\..\descriptors\descriptor.h" />
     <ClInclude Include="..\..\descriptors\descriptorSetTable.h" />
-    <ClInclude Include="..\..\descriptors\elements\bufferArrayDescriptor.inl" />
-    <ClInclude Include="..\..\descriptors\elements\imageArrayDescriptor.inl" />
     <ClInclude Include="..\..\descriptors\imageDescriptor.h" />
     <ClInclude Include="..\..\descriptors\imageDescriptorArray.h" />
     <ClInclude Include="..\..\descriptors\inlineUniformBlock.h" />
@@ -622,7 +620,6 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\descriptors\bufferDescriptor.inl" />
     <None Include="..\..\descriptors\bufferDescriptorArray.inl" />
     <None Include="..\..\descriptors\descriptorSetTable.inl" />
-    <None Include="..\..\descriptors\elements\samplerArrayDescriptor.inl" />
     <None Include="..\..\descriptors\imageDescriptor.inl" />
     <None Include="..\..\descriptors\imageDescriptorArray.inl" />
     <None Include="..\..\descriptors\inlineUniformBlock.inl" />
