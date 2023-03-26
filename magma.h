@@ -150,6 +150,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "barriers/subpassDependency.h"
 #include "barriers/subpassDependency2.h"
 
+#include "misc/borderColor.h"
 #include "misc/clearAttachment.h"
 #include "misc/clearValue.h"
 #include "misc/deviceFaultInfo.h"
