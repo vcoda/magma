@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "descriptor.h"
+#include "descriptorArray.h"
+#include "array/imageDescriptor.h"
 
 namespace magma
 {
@@ -25,18 +26,14 @@ namespace magma
         /* Base class of image/sampler descriptor array. */
 
         template<uint32_t Size>
-        class ImageDescriptorArray : public DescriptorArray
+        class ImageDescriptorArray : public DescriptorArray<VkDescriptorImageInfo, Size>
         {
         protected:
-            ImageDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-                DescriptorArray(descriptorType, Size, binding) {}
+            ImageDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
-            DescriptorArray::ImageDescriptor getArrayElement(uint32_t index,
+            array::ImageDescriptor getArrayElement(uint32_t index,
                 VkImageUsageFlags requiredUsage) noexcept;
-
-        private:
-            std::array<VkDescriptorImageInfo, Size> descriptors = {};
         };
 
         /* A sampler descriptor is a descriptor type associated with a sampler object,
@@ -48,28 +45,7 @@ namespace magma
         public:
             SamplerArray(uint32_t binding) noexcept:
                 ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding) {}
-            DescriptorArray::ImageDescriptor operator[](uint32_t index) noexcept;
-        };
-
-        /* Immutable samplers are permanently bound into the set layout;
-           later binding a sampler into an immutable sampler slot
-           in a descriptor set is not allowed. */
-
-        template<uint32_t Size>
-        class ImmutableSamplerArray : public ImageDescriptorArray<Size>
-        {
-        public:
-            ImmutableSamplerArray(uint32_t binding) noexcept:
-                ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding)
-            {   // If pImmutableSamplers is not NULL, then it is a pointer
-                // to an array of sampler handles that will be copied
-                // into the set layout and used for the corresponding binding.
-                this->binding.pImmutableSamplers = immutableSamplers;
-            }
-            DescriptorArray::ImmutableSamplerDescriptor operator[](uint32_t index) noexcept;
-
-        private:
-            VkSampler immutableSamplers[Size] = {};
+            array::SamplerDescriptor operator[](uint32_t index) noexcept;
         };
 
         /* A combined image sampler is a single descriptor type associated with both a sampler and an image resource,
@@ -81,11 +57,11 @@ namespace magma
         public:
             CombinedImageSamplerArray(uint32_t binding) noexcept:
                 ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
-            DescriptorArray::ImageDescriptor operator[](uint32_t index) noexcept;
+            array::ImageSamplerDescriptor operator[](uint32_t index) noexcept;
         };
 
-        /* Updates to a VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER descriptor with immutable samplers
-           does not modify the samplers (the image views are updated, but the sampler updates are ignored). */
+        /* Immutable samplers are permanently bound into the set layout; later binding a sampler
+           into an immutable sampler slot in a descriptor set is not allowed. */
 
         template<uint32_t Size>
         class CombinedImageImmutableSamplerArray : public ImageDescriptorArray<Size>
@@ -96,12 +72,12 @@ namespace magma
             {   // If pImmutableSamplers is not NULL, then it is a pointer
                 // to an array of sampler handles that will be copied
                 // into the set layout and used for the corresponding binding.
-                this->binding.pImmutableSamplers = immutableSamplers;
+                Descriptor::binding.pImmutableSamplers = immutableSamplers.data();
             }
-            DescriptorArray::ImageImmutableSamplerDescriptor operator[](uint32_t index) noexcept;
+            array::ImageImmutableSamplerDescriptor operator[](uint32_t index) noexcept;
 
         private:
-            VkSampler immutableSamplers[Size] = {};
+            std::array<VkSampler, Size> immutableSamplers = {};
         };
 
         /* A sampled image is a descriptor type associated with an image resource
@@ -113,7 +89,7 @@ namespace magma
         public:
             SampledImageArray(uint32_t binding) noexcept:
                 ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding) {}
-            DescriptorArray::ImageDescriptor operator[](uint32_t index) noexcept;
+            array::ImageDescriptor operator[](uint32_t index) noexcept;
         };
 
         /* A storage image is a descriptor type associated with an image resource
@@ -125,7 +101,7 @@ namespace magma
         public:
             StorageImageArray(uint32_t binding) noexcept:
                 ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, binding) {}
-            DescriptorArray::ImageDescriptor operator[](uint32_t index) noexcept;
+            array::ImageDescriptor operator[](uint32_t index) noexcept;
         };
 
         /* An input attachment is a descriptor type associated with an image resource
@@ -137,11 +113,9 @@ namespace magma
         public:
             InputAttachmentArray(uint32_t binding) noexcept:
                 ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, binding) {}
-            DescriptorArray::ImageDescriptor operator[](uint32_t index) noexcept;
+            array::ImageDescriptor operator[](uint32_t index) noexcept;
         };
     } // namespace descriptor
 } // namespace magma
 
-#include "elements/imageArrayDescriptor.inl"
-#include "elements/samplerArrayDescriptor.inl"
 #include "imageDescriptorArray.inl"

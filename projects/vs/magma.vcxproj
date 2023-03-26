@@ -198,9 +198,12 @@
     <ClInclude Include="..\..\core\vectors.h" />
     <ClInclude Include="..\..\core\zeroMemory.h" />
     <ClInclude Include="..\..\descriptors\accelerationStructure.h" />
+    <ClInclude Include="..\..\descriptors\array\descriptor.h" />
+    <ClInclude Include="..\..\descriptors\array\imageDescriptor.h" />
     <ClInclude Include="..\..\descriptors\attachment.h" />
     <ClInclude Include="..\..\descriptors\bufferDescriptor.h" />
     <ClInclude Include="..\..\descriptors\bufferDescriptorArray.h" />
+    <ClInclude Include="..\..\descriptors\descriptorArray.h" />
     <ClInclude Include="..\..\descriptors\descriptorPool.h" />
     <ClInclude Include="..\..\descriptors\descriptor.h" />
     <ClInclude Include="..\..\descriptors\descriptorSetTable.h" />
@@ -612,6 +615,10 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\barriers\bufferMemoryBarrier.inl" />
     <None Include="..\..\barriers\subpassDependency.inl" />
     <None Include="..\..\barriers\subpassDependency2.inl" />
+    <None Include="..\..\descriptors\array\bufferDescriptor.h" />
+    <None Include="..\..\descriptors\array\bufferDescriptor.inl" />
+    <None Include="..\..\descriptors\array\descriptor.inl" />
+    <None Include="..\..\descriptors\array\imageDescriptor.inl" />
     <None Include="..\..\descriptors\attachment.inl" />
     <None Include="..\..\descriptors\bufferDescriptor.inl" />
     <None Include="..\..\descriptors\bufferDescriptorArray.inl" />

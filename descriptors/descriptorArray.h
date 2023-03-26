@@ -15,30 +15,25 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include "pch.h"
-#pragma hdrstop
-#include "descriptor.h"
+#pragma once
 
 namespace magma
 {
-namespace descriptor
-{
-Descriptor::Descriptor(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding_) noexcept
-{
-    binding.binding = binding_;
-    binding.descriptorType = descriptorType;
-    binding.descriptorCount = descriptorCount;
-    binding.stageFlags = 0;
-    binding.pImmutableSamplers = nullptr;
-}
+    namespace descriptor
+    {
+        /* Base template class of descriptor array. */
 
-void Descriptor::setImageType(VkImageType imageType_) noexcept
-{
-    if (imageType != VK_IMAGE_TYPE_MAX_ENUM)
-    {   // Descriptor should have the same image type
-        MAGMA_ASSERT(imageType_ == imageType);
-    }
-    imageType = imageType_;
-}
-} // namespace descriptor
+        template<class Type, uint32_t Size>
+        class DescriptorArray : public Descriptor
+        {
+        public:
+            constexpr uint32_t getArraySize() const noexcept { return Size; }
+
+        protected:
+            DescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+                Descriptor(descriptorType, Size, binding) {}
+
+            std::array<Type, Size> descriptors = {};
+        };
+    } // namespace descriptor
 } // namespace magma

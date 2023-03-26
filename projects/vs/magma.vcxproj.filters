@@ -97,6 +97,9 @@
     <Filter Include="Header Files\descriptors\elements">
       <UniqueIdentifier>{7e5c392a-42d2-4923-ac05-5370e90a08f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\descriptors\array">
+      <UniqueIdentifier>{803c1669-9455-475a-8a9e-a4f8596b2a11}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\allocator\allocator.h">
@@ -771,6 +774,15 @@
     <ClInclude Include="..\..\descriptors\elements\imageArrayDescriptor.inl">
       <Filter>Header Files\descriptors\elements</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\descriptors\array\descriptor.h">
+      <Filter>Header Files\descriptors\array</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\descriptors\array\imageDescriptor.h">
+      <Filter>Header Files\descriptors\array</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\descriptors\descriptorArray.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1392,6 +1404,18 @@
     </None>
     <None Include="..\..\descriptors\descriptorSetTable.inl">
       <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\descriptors\array\bufferDescriptor.h">
+      <Filter>Header Files\descriptors\array</Filter>
+    </None>
+    <None Include="..\..\descriptors\array\bufferDescriptor.inl">
+      <Filter>Header Files\descriptors\array</Filter>
+    </None>
+    <None Include="..\..\descriptors\array\imageDescriptor.inl">
+      <Filter>Header Files\descriptors\array</Filter>
+    </None>
+    <None Include="..\..\descriptors\array\descriptor.inl">
+      <Filter>Header Files\descriptors\array</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

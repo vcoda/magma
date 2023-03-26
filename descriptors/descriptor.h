@@ -47,23 +47,5 @@ namespace magma
             VkImageType imageType = VK_IMAGE_TYPE_MAX_ENUM;
             mutable bool updated = false;
         };
-
-        /* Base class of descriptor array.
-           Member VkDescriptorSetLayoutBinding::descriptorCount defines size of array. */
-
-        class DescriptorArray : public Descriptor
-        {
-        public:
-            class ImageDescriptor;
-            class ImmutableSamplerDescriptor;
-            class ImageImmutableSamplerDescriptor;
-            class BufferDescriptor;
-            class TexelBufferDescriptor;
-            uint32_t getArraySize() const { return binding.descriptorCount; }
-
-        protected:
-            DescriptorArray(VkDescriptorType descriptorType,
-                uint32_t descriptorCount, uint32_t binding) noexcept;
-        };
     } // namespace descriptor
 } // namespace magma
