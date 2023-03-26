@@ -41,8 +41,8 @@ inline void ImageDescriptor::updateImageView(std::shared_ptr<const ImageView> im
     MAGMA_ASSERT(imageView->getImage()->getUsage() & requiredUsage);
     if (descriptor.imageView != *imageView)
     {
+        setImageType(imageView->getImage()->getType());
         descriptor = imageView->getDescriptor(nullptr);
-        imageType = imageView->getImage()->getType();
         updated = true;
     }
 }
@@ -61,10 +61,11 @@ inline CombinedImageSampler& CombinedImageSampler::operator=(const std::pair<std
 {
     MAGMA_ASSERT(combinedImageSampler.first);
     MAGMA_ASSERT(combinedImageSampler.second);
-    //MAGMA_ASSERT(combinedImageSampler.first->getImage()->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
+    MAGMA_ASSERT(combinedImageSampler.first->getImage()->getUsage() & VK_IMAGE_USAGE_SAMPLED_BIT);
     if ((descriptor.imageView != *combinedImageSampler.first) ||
         (descriptor.sampler != *combinedImageSampler.second))
     {
+        setImageType(combinedImageSampler.first->getImage()->getType());
         descriptor = combinedImageSampler.first->getDescriptor(combinedImageSampler.second);
         updated = true;
     }

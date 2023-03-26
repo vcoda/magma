@@ -41,6 +41,7 @@ namespace magma
         protected:
             Descriptor(VkDescriptorType descriptorType,
                 uint32_t descriptorCount, uint32_t binding) noexcept;
+            void setImageType(VkImageType imageType) noexcept;
 
             VkDescriptorSetLayoutBinding binding;
             VkImageType imageType = VK_IMAGE_TYPE_MAX_ENUM;
