@@ -26,7 +26,7 @@ namespace magma
     {
         /* Base class of buffer descriptor. */
 
-        class BufferDescriptor : public Descriptor
+        class BufferDescriptor : public Descriptor<VkDescriptorBufferInfo>
         {
         protected:
             BufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept;
@@ -34,14 +34,11 @@ namespace magma
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
             void updateBuffer(std::shared_ptr<const Buffer> buffer,
                 VkBufferUsageFlags requiredUsage) noexcept;
-
-        private:
-            VkDescriptorBufferInfo descriptor = {};
         };
 
         /* Base class of texel buffer descriptor. */
 
-        class TexelBufferDescriptor : public Descriptor
+        class TexelBufferDescriptor : public Descriptor<VkBufferView>
         {
         protected:
             TexelBufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept;
@@ -49,9 +46,6 @@ namespace magma
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
             void updateBufferView(std::shared_ptr<const BufferView> bufferView,
                 VkBufferUsageFlags requiredUsage) noexcept;
-
-        private:
-            VkBufferView view = VK_NULL_HANDLE;
         };
 
         /* A uniform texel buffer is a descriptor type associated with a buffer resource

@@ -16,11 +16,11 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "descriptor.h"
+#include "binding.h"
 
 namespace magma
 {
-    typedef std::vector<std::reference_wrapper<descriptor::Descriptor>> DescriptorList;
+    typedef std::vector<std::reference_wrapper<descriptor::Binding>> DescriptorList;
 
     /* Provides a reflection mechanism making it possible to investigate members of
        descriptor set layout. Table contains an array of its descriptors to perform validation,

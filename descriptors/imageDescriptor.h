@@ -24,19 +24,16 @@ namespace magma
 {
     namespace descriptor
     {
-        /* Base class of image/sampler descriptor array. */
+        /* Base class of image/sampler descriptor. */
 
-        class ImageDescriptor : public Descriptor
+        class ImageDescriptor : public Descriptor<VkDescriptorImageInfo>
         {
         protected:
-            ImageDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-                Descriptor(descriptorType, 1, binding) {}
+            ImageDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
             void updateImageView(std::shared_ptr<const ImageView> imageView,
                 VkImageUsageFlags requiredUsage) noexcept;
-
-            VkDescriptorImageInfo descriptor = {};
         };
 
         /* A sampler descriptor is a descriptor type associated with a sampler object,

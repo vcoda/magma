@@ -2,6 +2,10 @@ namespace magma
 {
 namespace descriptor
 {
+inline ImageDescriptor::ImageDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+    Descriptor(descriptorType, binding)
+{}
+
 inline void ImageDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
 #ifdef MAGMA_DEBUG

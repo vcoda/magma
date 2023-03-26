@@ -87,7 +87,7 @@ auxiliary\textShader.cpp ^
 barriers\bufferMemoryBarrier.cpp ^
 barriers\imageMemoryBarrier.cpp ^
 descriptors\accelerationStructureDescriptor.cpp ^
-descriptors\descriptor.cpp ^
+descriptors\binding.cpp ^
 descriptors\subpass.cpp ^
 exceptions\exception.cpp ^
 extensions\extensions.cpp ^

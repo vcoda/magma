@@ -203,7 +203,6 @@
     <ClInclude Include="..\..\descriptors\attachment.h" />
     <ClInclude Include="..\..\descriptors\bufferDescriptor.h" />
     <ClInclude Include="..\..\descriptors\bufferDescriptorArray.h" />
-    <ClInclude Include="..\..\descriptors\descriptorArray.h" />
     <ClInclude Include="..\..\descriptors\descriptorPool.h" />
     <ClInclude Include="..\..\descriptors\descriptor.h" />
     <ClInclude Include="..\..\descriptors\descriptorSetTable.h" />
@@ -212,6 +211,7 @@
     <ClInclude Include="..\..\descriptors\imageDescriptor.h" />
     <ClInclude Include="..\..\descriptors\imageDescriptorArray.h" />
     <ClInclude Include="..\..\descriptors\inlineUniformBlock.h" />
+    <ClInclude Include="..\..\descriptors\binding.h" />
     <ClInclude Include="..\..\descriptors\loadStoreOp.h" />
     <ClInclude Include="..\..\descriptors\subpass.h" />
     <ClInclude Include="..\..\exceptions\compileError.h" />
@@ -408,7 +408,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\descriptors\descriptor.cpp" />
+    <ClCompile Include="..\..\descriptors\binding.cpp" />
     <ClCompile Include="..\..\descriptors\subpass.cpp" />
     <ClCompile Include="..\..\exceptions\exception.cpp" />
     <ClCompile Include="..\..\extensions\instanceExtensions.cpp" />

@@ -27,27 +27,26 @@ namespace descriptor
 #if defined(VK_KHR_acceleration_structure) || defined(VK_NV_ray_tracing)
 AccelerationStructure::AccelerationStructure(uint32_t binding) noexcept:
 #ifdef VK_KHR_acceleration_structure
-    Descriptor(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, 1, binding),
+    Descriptor<VkWriteDescriptorSetAccelerationStructureKHR>(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, binding)
 #else
-    Descriptor(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV, 1, binding),
+    Descriptor<VkWriteDescriptorSetAccelerationStructureNV>(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV, binding)
 #endif
-    handle(VK_NULL_HANDLE)
 {
 #ifdef VK_KHR_acceleration_structure
-    writeDescriptorSetAccelerationStructure.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR;
+    descriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR;
 #else
-    writeDescriptorSetAccelerationStructure.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_NV;
+    descriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_NV;
 #endif
-    writeDescriptorSetAccelerationStructure.pNext = nullptr;
-    writeDescriptorSetAccelerationStructure.accelerationStructureCount = 1;
-    writeDescriptorSetAccelerationStructure.pAccelerationStructures = &handle;
+    descriptor.pNext = nullptr;
+    descriptor.accelerationStructureCount = 1;
+    descriptor.pAccelerationStructures = &handle;
 }
 
 void AccelerationStructure::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
     MAGMA_ASSERT(handle != VK_NULL_HANDLE);
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeDescriptorSet.pNext = &writeDescriptorSetAccelerationStructure;
+    writeDescriptorSet.pNext = &descriptor;
     writeDescriptorSet.dstSet = dstSet;
     writeDescriptorSet.dstBinding = binding.binding;
     writeDescriptorSet.dstArrayElement = 0;

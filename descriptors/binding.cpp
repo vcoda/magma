@@ -17,13 +17,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "descriptor.h"
+#include "binding.h"
 
 namespace magma
 {
 namespace descriptor
 {
-Descriptor::Descriptor(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding_) noexcept
+Binding::Binding(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding_) noexcept
 {
     binding.binding = binding_;
     binding.descriptorType = descriptorType;
@@ -32,7 +32,7 @@ Descriptor::Descriptor(VkDescriptorType descriptorType, uint32_t descriptorCount
     binding.pImmutableSamplers = nullptr;
 }
 
-void Descriptor::setImageType(VkImageType imageType_) noexcept
+void Binding::setImageType(VkImageType imageType_) noexcept
 {
     if (imageType != VK_IMAGE_TYPE_MAX_ENUM)
     {   // Descriptor should have the same image type

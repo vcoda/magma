@@ -131,6 +131,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "descriptors/accelerationStructure.h"
 #include "descriptors/attachment.h"
+#include "descriptors/binding.h"
 #include "descriptors/bufferDescriptor.h"
 #include "descriptors/bufferDescriptorArray.h"
 #include "descriptors/descriptor.h"

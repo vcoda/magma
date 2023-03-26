@@ -16,36 +16,40 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "binding.h"
 
 namespace magma
 {
     namespace descriptor
     {
-        /* Each individual descriptor binding is specified by a descriptor type,
-           a count (array size) of the number of descriptors in the binding,
-           a set of shader stages that can access the binding, and (if using immutable samplers)
-           an array of sampler descriptors. */
+        /* Descriptor is coupled with VkDescriptorSetLayoutBinding structure.
+           While layout binding stores binding index and properties of binded descriptor,
+           descriptor itself manages descriptor structure of type <Type> to store
+           properties of underlying objects like buffers, images. samplers etc. */
 
-        class Descriptor
+        template<class Type>
+        class Descriptor : public Binding
+        {
+        protected:
+            Descriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+                Binding(descriptorType, 1, binding) {}
+
+            Type descriptor = {};
+        };
+
+        /* Base template class of descriptor array. */
+
+        template<class Type, uint32_t Size>
+        class DescriptorArray : public Binding
         {
         public:
-            virtual ~Descriptor() = default;
-            void setStageFlags(VkShaderStageFlags stageFlags) noexcept { binding.stageFlags = stageFlags; }
-            VkShaderStageFlags getStageFlags() const noexcept { return binding.stageFlags; }
-            const VkDescriptorSetLayoutBinding& getLayoutBinding() const noexcept { return binding; }
-            VkImageType getImageType() const noexcept { return imageType; }
-            bool dirty() const noexcept { return updated; }
-            virtual void write(VkDescriptorSet dstSet,
-                VkWriteDescriptorSet& writeDescriptorSet) const noexcept = 0;
+            constexpr uint32_t getArraySize() const noexcept { return Size; }
 
         protected:
-            Descriptor(VkDescriptorType descriptorType,
-                uint32_t descriptorCount, uint32_t binding) noexcept;
-            void setImageType(VkImageType imageType) noexcept;
+            DescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+                Binding(descriptorType, Size, binding) {}
 
-            VkDescriptorSetLayoutBinding binding;
-            VkImageType imageType = VK_IMAGE_TYPE_MAX_ENUM;
-            mutable bool updated = false;
+            std::array<Type, Size> descriptors = {};
         };
     } // namespace descriptor
 } // namespace magma

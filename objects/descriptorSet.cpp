@@ -99,7 +99,7 @@ void DescriptorSet::update()
     uint32_t writeCount = 0;
     for (const auto& it: setTable.getReflection())
     {   // Get dirty descriptor writes
-        const descriptor::Descriptor& descriptor = it.get();
+        const auto& descriptor = it.get();
         if (descriptor.dirty())
             descriptor.write(handle, descriptorWrites[writeCount++]);
     }
@@ -116,7 +116,7 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
     const DescriptorList& descriptors = setTable.getReflection();
     for (const auto& ref: descriptors)
     {
-        const descriptor::Descriptor& descriptor = ref.get();
+        const auto& descriptor = ref.get();
         const VkDescriptorSetLayoutBinding& binding = descriptor.getLayoutBinding();
         const SpvReflectDescriptorBinding *reflectedBinding = nullptr;
         for (uint32_t i = 0; i < descriptorSet->binding_count; ++i)

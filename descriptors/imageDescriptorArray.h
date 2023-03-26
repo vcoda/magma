@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "descriptorArray.h"
+#include "descriptor.h"
 #include "array/imageDescriptor.h"
 
 namespace magma
@@ -72,7 +72,7 @@ namespace magma
             {   // If pImmutableSamplers is not NULL, then it is a pointer
                 // to an array of sampler handles that will be copied
                 // into the set layout and used for the corresponding binding.
-                Descriptor::binding.pImmutableSamplers = immutableSamplers.data();
+                Binding::binding.pImmutableSamplers = immutableSamplers.data();
             }
             array::ImageImmutableSamplerDescriptor operator[](uint32_t index) noexcept;
 

@@ -3,7 +3,7 @@ namespace magma
 namespace descriptor
 {
 inline BufferDescriptor::BufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-    Descriptor(descriptorType, 1, binding)
+    Descriptor<VkDescriptorBufferInfo>(descriptorType, binding)
 {}
 
 inline void BufferDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
@@ -35,12 +35,12 @@ inline void BufferDescriptor::updateBuffer(std::shared_ptr<const Buffer> buffer,
 }
 
 inline TexelBufferDescriptor::TexelBufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-    Descriptor(descriptorType, 1, binding)
+    Descriptor<VkBufferView>(descriptorType, binding)
 {}
 
 inline void TexelBufferDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
-    MAGMA_ASSERT(view != VK_NULL_HANDLE);
+    MAGMA_ASSERT(descriptor != VK_NULL_HANDLE);
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;
@@ -50,7 +50,7 @@ inline void TexelBufferDescriptor::write(VkDescriptorSet dstSet, VkWriteDescript
     writeDescriptorSet.descriptorType = binding.descriptorType;
     writeDescriptorSet.pImageInfo = nullptr;
     writeDescriptorSet.pBufferInfo = nullptr;
-    writeDescriptorSet.pTexelBufferView = &view;
+    writeDescriptorSet.pTexelBufferView = &descriptor;
     updated = false;
 }
 
@@ -59,9 +59,9 @@ inline void TexelBufferDescriptor::updateBufferView(std::shared_ptr<const Buffer
     MAGMA_UNUSED(requiredUsage);
     MAGMA_ASSERT(bufferView);
     MAGMA_ASSERT(bufferView->getBuffer()->getUsage() & requiredUsage);
-    if (view != *bufferView)
+    if (descriptor != *bufferView)
     {
-        view = *bufferView;
+        descriptor = *bufferView;
         updated = true;
     }
 }

@@ -7,10 +7,10 @@ template<class UniformBlockType>
 inline InlineUniformBlock<UniformBlockType>::InlineUniformBlock(uint32_t binding) noexcept:
     Descriptor(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT, sizeof(UniformBlockType), binding)
 {
-    writeDescriptorSetInlineUniformBlock.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_INLINE_UNIFORM_BLOCK_EXT;
-    writeDescriptorSetInlineUniformBlock.pNext = nullptr;
-    writeDescriptorSetInlineUniformBlock.dataSize = sizeof(UniformBlockType);
-    writeDescriptorSetInlineUniformBlock.pData = nullptr;
+    descriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_INLINE_UNIFORM_BLOCK_EXT;
+    descriptor.pNext = nullptr;
+    descriptor.dataSize = sizeof(UniformBlockType);
+    descriptor.pData = nullptr;
 }
 
 template<class UniformBlockType>
@@ -18,7 +18,7 @@ inline void InlineUniformBlock<UniformBlockType>::write(VkDescriptorSet dstSet, 
 {
     MAGMA_ASSERT(writeDescriptorSetInlineUniformBlock.pData);
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeDescriptorSet.pNext = &writeDescriptorSetInlineUniformBlock;
+    writeDescriptorSet.pNext = &descriptor;
     writeDescriptorSet.dstSet = dstSet;
     writeDescriptorSet.dstBinding = binding.binding;
     writeDescriptorSet.dstArrayElement = 0;
@@ -33,9 +33,9 @@ inline void InlineUniformBlock<UniformBlockType>::write(VkDescriptorSet dstSet, 
 template<class UniformBlockType>
 inline InlineUniformBlock<UniformBlockType>& InlineUniformBlock<UniformBlockType>::operator=(const UniformBlockType& inlineUniformBlock) noexcept
 {
-    if (writeDescriptorSetInlineUniformBlock.pData != &inlineUniformBlock)
+    if (descriptor.pData != &inlineUniformBlock)
     {
-        writeDescriptorSetInlineUniformBlock.pData = &inlineUniformBlock;
+        descriptor.pData = &inlineUniformBlock;
         updated = true;
     }
     return *this;

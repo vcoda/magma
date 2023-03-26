@@ -33,16 +33,13 @@ namespace magma
 
     #ifdef VK_EXT_inline_uniform_block
         template<class UniformBlockType>
-        class InlineUniformBlock : public Descriptor
+        class InlineUniformBlock : public Descriptor<VkWriteDescriptorSetInlineUniformBlockEXT>
         {
         public:
             InlineUniformBlock(uint32_t binding) noexcept;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
             InlineUniformBlock<UniformBlockType>& operator=(const UniformBlockType&) noexcept;
-
-        private:
-            VkWriteDescriptorSetInlineUniformBlockEXT writeDescriptorSetInlineUniformBlock;
         };
     #endif // VK_EXT_inline_uniform_block
     } // namespace descriptor

@@ -31,7 +31,13 @@ namespace magma
            Shaders have read-only access to the memory. */
 
     #if defined(VK_KHR_acceleration_structure) || defined(VK_NV_ray_tracing)
-        class AccelerationStructure : public Descriptor
+
+        class AccelerationStructure : public
+        #ifdef VK_KHR_acceleration_structure
+            Descriptor<VkWriteDescriptorSetAccelerationStructureKHR>
+        #else
+            Descriptor<VkWriteDescriptorSetAccelerationStructureNV>
+        #endif
         {
         public:
             AccelerationStructure(uint32_t binding) noexcept;
@@ -41,11 +47,9 @@ namespace magma
 
         private:
         #ifdef VK_KHR_acceleration_structure
-            VkAccelerationStructureKHR handle;
-            VkWriteDescriptorSetAccelerationStructureKHR writeDescriptorSetAccelerationStructure;
+            VkAccelerationStructureKHR handle = VK_NULL_HANDLE;
         #else
-            VkAccelerationStructureNV handle;
-            VkWriteDescriptorSetAccelerationStructureNV writeDescriptorSetAccelerationStructure;
+            VkAccelerationStructureNV handle = VK_NULL_HANDLE;
         #endif
         };
     #endif // VK_KHR_acceleration_structure || VK_NV_ray_tracing

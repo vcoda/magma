@@ -62,7 +62,7 @@ MAGMA_OBJS= \
 	core/pch.o \
 	\
 	descriptors/accelerationStructureDescriptor.o \
-	descriptors/descriptor.o \
+	descriptors/binding.o \
 	descriptors/subpass.o \
 	\
 	exceptions/exception.o \
