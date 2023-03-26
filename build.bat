@@ -246,7 +246,7 @@ bufferMemoryBarrier.obj ^
 imageMemoryBarrier.obj ^
 pch.obj ^
 accelerationStructureDescriptor.obj ^
-descriptor.obj ^
+binding.obj ^
 subpass.obj ^
 exception.obj ^
 extensions.obj ^
