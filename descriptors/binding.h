@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/destructible.h"
 
 namespace magma
 {
@@ -27,7 +26,7 @@ namespace magma
            a set of shader stages that can access the binding, and (if using immutable samplers)
            an array of sampler descriptors. */
 
-        class Binding : public core::IDestructible
+        class Binding
         {
         public:
             void setStageFlags(VkShaderStageFlags stageFlags) noexcept { binding.stageFlags = stageFlags; }
