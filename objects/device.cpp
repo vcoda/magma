@@ -47,7 +47,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     const std::vector<void *>& extendedDeviceFeatures,
     const StructureChain& extendedInfo /* default */,
     std::shared_ptr<IAllocator> allocator):
-    Dispatchable<VkDevice>(VK_OBJECT_TYPE_DEVICE, nullptr, std::move(allocator)),
+    Dispatchable<VkDevice>(VK_OBJECT_TYPE_DEVICE, std::move(allocator)),
     physicalDevice(std::move(physicalDevice)),
     resourcePool(std::make_shared<ResourcePool>()),
     enabledFeatures(deviceFeatures)

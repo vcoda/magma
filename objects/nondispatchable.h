@@ -37,17 +37,25 @@ namespace magma
             return reinterpret_cast<uint64_t>(TObject<Type>::handle);
         }
     #else
-        uint64_t getHandle() const noexcept override { return TObject<Type>::handle; }
-    #endif
+        uint64_t getHandle() const noexcept override
+        {
+            return TObject<Type>::handle;
+        }
+    #endif // MAGMA_X64
 
     protected:
         explicit NonDispatchable(VkObjectType objectType,
-            std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> hostAllocator) noexcept:
+            TObject<Type>(objectType, std::move(hostAllocator))
+        {}
+
+        explicit NonDispatchable(VkObjectType objectType,
+            std::shared_ptr<Device> device,
+            std::shared_ptr<IAllocator> hostAllocator):
             TObject<Type>(objectType, std::move(device), std::move(hostAllocator))
         {
 #       ifdef MAGMA_X64
-            std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(TObject<Type>::getDevice());
+            std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(this->device);
             if (pool) // Put resource in pool
                 pool->getPool<NonDispatchable<Type>>().insert(this);
 #       endif // MAGMA_X64
@@ -56,7 +64,7 @@ namespace magma
         ~NonDispatchable()
         {
 #       ifdef MAGMA_X64
-            std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(TObject<Type>::getDevice());
+            std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(this->device);
             if (pool) // Remove resource from pool
                 pool->getPool<NonDispatchable<Type>>().erase(this);
 #       endif // MAGMA_X64

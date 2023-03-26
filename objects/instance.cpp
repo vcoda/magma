@@ -48,7 +48,7 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
     PFN_vkDebugReportCallbackEXT debugCallback /* nullptr */,
 #endif
     void *userData /* nullptr */):
-    Dispatchable<VkInstance>(VK_OBJECT_TYPE_INSTANCE, nullptr, std::move(allocator)),
+    Dispatchable<VkInstance>(VK_OBJECT_TYPE_INSTANCE, std::move(allocator)),
     apiVersion(apiVersion)
 {
     VkApplicationInfo appInfo;

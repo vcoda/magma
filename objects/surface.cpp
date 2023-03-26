@@ -30,7 +30,7 @@ namespace magma
 {
 #ifdef VK_KHR_surface
 Surface::Surface(std::shared_ptr<const Instance> instance, std::shared_ptr<IAllocator> allocator):
-    NonDispatchable(VK_OBJECT_TYPE_SURFACE_KHR, nullptr, std::move(allocator)),
+    NonDispatchable(VK_OBJECT_TYPE_SURFACE_KHR, std::move(allocator)),
     instance(std::move(instance))
 {}
 

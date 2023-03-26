@@ -33,7 +33,7 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkDebugReportFlagsEXT flags /* INFORMATION_BIT | WARNING_BIT_EXT | PERFORMANCE_WARNING_BIT_EXT | ERROR_BIT DEBUG_BIT */,
     void *userData /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT, nullptr, std::move(allocator)),
+    NonDispatchable(VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT, std::move(allocator)),
     instance(std::move(instance))
 {
     MAGMA_ASSERT(userCallback);

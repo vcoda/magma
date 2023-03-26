@@ -33,7 +33,7 @@ DebugUtilsMessenger::DebugUtilsMessenger(std::shared_ptr<const Instance> instanc
     VkDebugUtilsMessageSeverityFlagsEXT messageSeverity /* VERBOSE_BIT | INFO_BIT | WARNING_BIT ERROR_BIT */,
     VkDebugUtilsMessageTypeFlagsEXT messageType /* GENERAL_BIT | VALIDATION_BIT | PERFORMANCE_BIT */,
     void *userData /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT, nullptr, std::move(allocator)),
+    NonDispatchable(VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT, std::move(allocator)),
     instance(std::move(instance))
 {
     MAGMA_ASSERT(userCallback);

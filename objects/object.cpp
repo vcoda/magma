@@ -25,11 +25,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Object::Object(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> hostAllocator) noexcept:
-    device(std::move(device)),
-    hostAllocator(std::move(hostAllocator))
-{}
-
 #ifdef MAGMA_DEBUG
 void Object::setDebugName(const std::string& name_)
 {
