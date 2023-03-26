@@ -88,7 +88,6 @@ barriers\bufferMemoryBarrier.cpp ^
 barriers\imageMemoryBarrier.cpp ^
 descriptors\accelerationStructureDescriptor.cpp ^
 descriptors\binding.cpp ^
-descriptors\subpass.cpp ^
 exceptions\exception.cpp ^
 extensions\extensions.cpp ^
 extensions\instanceExtensions.cpp ^
@@ -185,6 +184,7 @@ objects\transformFeedbackBuffer.cpp ^
 objects\uniformTexelBuffer.cpp ^
 objects\validationCache.cpp ^
 objects\vertexBuffer.cpp ^
+renderpass\subpass.cpp ^
 shaders\pipelineShaderStage.cpp ^
 shaders\rayTracingShaderGroup.cpp ^
 shaders\shaderBindingTable.cpp ^
@@ -344,6 +344,7 @@ transformFeedbackBuffer.obj ^
 uniformTexelBuffer.obj ^
 validationCache.obj ^
 vertexBuffer.obj ^
+subpass.obj ^
 pipelineShaderStage.obj ^
 rayTracingShaderGroup.obj ^
 shaderBindingTable.obj ^

@@ -17,8 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
-#include "../descriptors/attachment.h"
-#include "../descriptors/subpass.h"
+#include "../renderpass/attachment.h"
+#include "../renderpass/subpass.h"
 #include "../barriers/subpassDependency.h"
 
 namespace magma

@@ -200,7 +200,6 @@
     <ClInclude Include="..\..\descriptors\accelerationStructure.h" />
     <ClInclude Include="..\..\descriptors\array\descriptor.h" />
     <ClInclude Include="..\..\descriptors\array\imageDescriptor.h" />
-    <ClInclude Include="..\..\descriptors\attachment.h" />
     <ClInclude Include="..\..\descriptors\bufferDescriptor.h" />
     <ClInclude Include="..\..\descriptors\bufferDescriptorArray.h" />
     <ClInclude Include="..\..\descriptors\descriptorPool.h" />
@@ -212,8 +211,6 @@
     <ClInclude Include="..\..\descriptors\imageDescriptorArray.h" />
     <ClInclude Include="..\..\descriptors\inlineUniformBlock.h" />
     <ClInclude Include="..\..\descriptors\binding.h" />
-    <ClInclude Include="..\..\descriptors\loadStoreOp.h" />
-    <ClInclude Include="..\..\descriptors\subpass.h" />
     <ClInclude Include="..\..\exceptions\compileError.h" />
     <ClInclude Include="..\..\exceptions\errorResult.h" />
     <ClInclude Include="..\..\exceptions\exception.h" />
@@ -340,6 +337,9 @@
     <ClInclude Include="..\..\packed\color.h" />
     <ClInclude Include="..\..\packed\ieee754.h" />
     <ClInclude Include="..\..\packed\vector.h" />
+    <ClInclude Include="..\..\renderpass\attachment.h" />
+    <ClInclude Include="..\..\renderpass\loadStoreOp.h" />
+    <ClInclude Include="..\..\renderpass\subpass.h" />
     <ClInclude Include="..\..\shaders\pipelineShaderStage.h" />
     <ClInclude Include="..\..\shaders\rayTracingShaderGroup.h" />
     <ClInclude Include="..\..\shaders\shaderBindingTable.h" />
@@ -409,7 +409,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\descriptors\binding.cpp" />
-    <ClCompile Include="..\..\descriptors\subpass.cpp" />
     <ClCompile Include="..\..\exceptions\exception.cpp" />
     <ClCompile Include="..\..\extensions\instanceExtensions.cpp" />
     <ClCompile Include="..\..\extensions\instanceLayers.cpp" />
@@ -505,6 +504,7 @@
     <ClCompile Include="..\..\objects\uniformTexelBuffer.cpp" />
     <ClCompile Include="..\..\objects\validationCache.cpp" />
     <ClCompile Include="..\..\objects\vertexBuffer.cpp" />
+    <ClCompile Include="..\..\renderpass\subpass.cpp" />
     <ClCompile Include="..\..\shaders\pipelineShaderStage.cpp" />
     <ClCompile Include="..\..\shaders\rayTracingShaderGroup.cpp" />
     <ClCompile Include="..\..\shaders\shaderBindingTable.cpp" />
@@ -619,7 +619,6 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\descriptors\array\bufferDescriptor.inl" />
     <None Include="..\..\descriptors\array\descriptor.inl" />
     <None Include="..\..\descriptors\array\imageDescriptor.inl" />
-    <None Include="..\..\descriptors\attachment.inl" />
     <None Include="..\..\descriptors\bufferDescriptor.inl" />
     <None Include="..\..\descriptors\bufferDescriptorArray.inl" />
     <None Include="..\..\descriptors\descriptorSetTable.inl" />
@@ -661,6 +660,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\packed\x10y10z10w2unorm.inl" />
     <None Include="..\..\packed\x11y11z10ufloat.inl" />
     <None Include="..\..\packed\r5g6b5unorm.inl" />
+    <None Include="..\..\renderpass\attachment.inl" />
     <None Include="..\..\shaders\specialization.inl" />
     <None Include="..\..\states\colorBlendAttachmentState.inl" />
     <None Include="..\..\states\colorBlendState.inl" />

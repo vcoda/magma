@@ -1,6 +1,6 @@
 /*
-Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2022 Victor Coda.
+Magma - Abstraction layer over Khronos Vulkan API.
+Copyright (C) 2018-2023 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -56,14 +56,14 @@ namespace magma
         extern const SubpassDescription depthStencilAttachment;
         extern const SubpassDescription depthStencilReadOnly;
 
-#ifdef VK_KHR_maintenance2
+    #ifdef VK_KHR_maintenance2
         extern const SubpassDescription colorStencilAttachmentDepthReadOnly;
         extern const SubpassDescription colorDepthAttachmentStencilReadOnly;
         extern const SubpassDescription depthReadOnlyStencilAttachment;
         extern const SubpassDescription depthAttachmentStencilReadOnly;
-#endif // VK_KHR_maintenance2
+    #endif // VK_KHR_maintenance2
 
-#ifdef VK_KHR_separate_depth_stencil_layouts
+    #ifdef VK_KHR_separate_depth_stencil_layouts
         extern const SubpassDescription colorDepthAttachment;
         extern const SubpassDescription colorStencilAttachment;
         extern const SubpassDescription colorAttachmentDepthReadOnly;
@@ -72,7 +72,6 @@ namespace magma
         extern const SubpassDescription stencilAttachment;
         extern const SubpassDescription depthReadOnly;
         extern const SubpassDescription stencilReadOnly;
-#endif // VK_KHR_separate_depth_stencil_layouts
+    #endif // VK_KHR_separate_depth_stencil_layouts
     } // namespace subpass
 } // namespace magma
-

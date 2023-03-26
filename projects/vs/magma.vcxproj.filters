@@ -100,6 +100,12 @@
     <Filter Include="Header Files\descriptors\array">
       <UniqueIdentifier>{803c1669-9455-475a-8a9e-a4f8596b2a11}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\renderpass">
+      <UniqueIdentifier>{26845abb-c533-45d1-9e7b-a7af13b51e3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\renderpass">
+      <UniqueIdentifier>{03eea6f5-e16d-427a-ac84-2b5bd732cc35}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\allocator\allocator.h">
@@ -122,12 +128,6 @@
     </ClInclude>
     <ClInclude Include="..\..\barriers\imageMemoryBarrier.h">
       <Filter>Header Files\barriers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\descriptors\attachment.h">
-      <Filter>Header Files\descriptors</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\descriptors\subpass.h">
-      <Filter>Header Files\descriptors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\helpers\alignedUniformArray.h">
       <Filter>Header Files\helpers</Filter>
@@ -690,9 +690,6 @@
     <ClInclude Include="..\..\barriers\subpassDependency2.h">
       <Filter>Header Files\barriers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\loadStoreOp.h">
-      <Filter>Header Files\descriptors</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\barriers\subpassDependency.h">
       <Filter>Header Files\barriers</Filter>
     </ClInclude>
@@ -783,6 +780,15 @@
     <ClInclude Include="..\..\descriptors\binding.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\renderpass\attachment.h">
+      <Filter>Header Files\renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\renderpass\loadStoreOp.h">
+      <Filter>Header Files\renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\renderpass\subpass.h">
+      <Filter>Header Files\renderpass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -802,9 +808,6 @@
     </ClCompile>
     <ClCompile Include="..\..\barriers\imageMemoryBarrier.cpp">
       <Filter>Source Files\barriers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\descriptors\subpass.cpp">
-      <Filter>Source Files\descriptors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\helpers\stringize.cpp">
       <Filter>Source Files\helpers</Filter>
@@ -1205,6 +1208,9 @@
     <ClCompile Include="..\..\descriptors\binding.cpp">
       <Filter>Source Files\descriptors</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\renderpass\subpass.cpp">
+      <Filter>Source Files\renderpass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\auxiliary\immediateRender.inl">
@@ -1254,9 +1260,6 @@
     </None>
     <None Include="..\..\states\colorBlendState.inl">
       <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\descriptors\attachment.inl">
-      <Filter>Header Files\descriptors</Filter>
     </None>
     <None Include="..\..\misc\format.inl">
       <Filter>Header Files\misc</Filter>
@@ -1416,6 +1419,9 @@
     </None>
     <None Include="..\..\descriptors\array\descriptor.inl">
       <Filter>Header Files\descriptors\array</Filter>
+    </None>
+    <None Include="..\..\renderpass\attachment.inl">
+      <Filter>Header Files\renderpass</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

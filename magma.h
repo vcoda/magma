@@ -104,6 +104,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "shaders/shaderStages.h"
 #include "shaders/specialization.h"
 
+#include "renderpass/attachment.h"
+#include "renderpass/loadStoreOp.h"
+#include "renderpass/subpass.h"
+
 #include "states/colorBlendAttachmentState.h"
 #include "states/colorBlendState.h"
 #include "states/colorBlendStateAdvanced.h"
@@ -130,7 +134,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "states/viewportState.h"
 
 #include "descriptors/accelerationStructure.h"
-#include "descriptors/attachment.h"
 #include "descriptors/binding.h"
 #include "descriptors/bufferDescriptor.h"
 #include "descriptors/bufferDescriptorArray.h"
@@ -140,8 +143,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptors/imageDescriptor.h"
 #include "descriptors/imageDescriptorArray.h"
 #include "descriptors/inlineUniformBlock.h"
-#include "descriptors/loadStoreOp.h"
-#include "descriptors/subpass.h"
 
 #include "barriers/bufferMemoryBarrier.h"
 #include "barriers/imageMemoryBarrier.h"

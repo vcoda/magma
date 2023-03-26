@@ -63,7 +63,6 @@ MAGMA_OBJS= \
 	\
 	descriptors/accelerationStructureDescriptor.o \
 	descriptors/binding.o \
-	descriptors/subpass.o \
 	\
 	exceptions/exception.o \
 	\
@@ -165,6 +164,8 @@ MAGMA_OBJS= \
 	objects/uniformTexelBuffer.o \
 	objects/validationCache.o \
 	objects/vertexBuffer.o \
+	\
+	renderpass/subpass.o \
 	\
 	shaders/pipelineShaderStage.o \
 	shaders/rayTracingShaderGroup.o \
