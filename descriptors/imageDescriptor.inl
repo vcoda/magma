@@ -6,25 +6,26 @@ inline ImageDescriptor::ImageDescriptor(VkDescriptorType descriptorType, uint32_
     Descriptor(descriptorType, binding)
 {}
 
-inline void ImageDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
+inline bool ImageDescriptor::associatedWithResource() const noexcept
 {
-#ifdef MAGMA_DEBUG
     switch (binding.descriptorType)
     {
     case VK_DESCRIPTOR_TYPE_SAMPLER:
-        MAGMA_ASSERT(descriptor.sampler);
-        break;
-    case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
-        MAGMA_ASSERT(descriptor.imageView != VK_NULL_HANDLE);
-        MAGMA_ASSERT(descriptor.sampler || binding.pImmutableSamplers);
-        break;
+        return (descriptor.sampler != VK_NULL_HANDLE);
     case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
     case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
     case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
-        MAGMA_ASSERT(descriptor.imageView != VK_NULL_HANDLE);
-        break;
+        return (descriptor.imageView != VK_NULL_HANDLE);
+    case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
+        return (descriptor.imageView != VK_NULL_HANDLE) && ((descriptor.sampler != VK_NULL_HANDLE) || (binding.pImmutableSamplers != nullptr));
+    default:
+        return false;
     }
-#endif // MAGMA_DEBUG
+}
+
+inline void ImageDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
+{
+    MAGMA_ASSERT(associatedWithResource());
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;

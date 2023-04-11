@@ -42,6 +42,11 @@ AccelerationStructure::AccelerationStructure(uint32_t binding) noexcept:
     descriptor.pAccelerationStructures = &handle;
 }
 
+bool AccelerationStructure::associatedWithResource() const noexcept
+{
+    return (handle != VK_NULL_HANDLE);
+}
+
 void AccelerationStructure::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
     MAGMA_ASSERT(handle != VK_NULL_HANDLE);

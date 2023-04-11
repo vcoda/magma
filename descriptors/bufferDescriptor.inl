@@ -6,9 +6,14 @@ inline BufferDescriptor::BufferDescriptor(VkDescriptorType descriptorType, uint3
     Descriptor<VkDescriptorBufferInfo>(descriptorType, binding)
 {}
 
+inline bool BufferDescriptor::associatedWithResource() const noexcept
+{
+    return (descriptor.buffer != VK_NULL_HANDLE);
+}
+
 inline void BufferDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
-    MAGMA_ASSERT(descriptor.buffer != VK_NULL_HANDLE);
+    MAGMA_ASSERT(associatedWithResource());
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;
@@ -38,9 +43,14 @@ inline TexelBufferDescriptor::TexelBufferDescriptor(VkDescriptorType descriptorT
     Descriptor<VkBufferView>(descriptorType, binding)
 {}
 
+inline bool TexelBufferDescriptor::associatedWithResource() const noexcept
+{
+    return (descriptor != VK_NULL_HANDLE);
+}
+
 inline void TexelBufferDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
-    MAGMA_ASSERT(descriptor != VK_NULL_HANDLE);
+    MAGMA_ASSERT(associatedWithResource());
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;

@@ -14,9 +14,15 @@ inline InlineUniformBlock<UniformBlockType>::InlineUniformBlock(uint32_t binding
 }
 
 template<class UniformBlockType>
+inline bool InlineUniformBlock<UniformBlockType>::associatedWithResource() const noexcept
+{
+    return (descriptor.pData != nullptr);
+}
+
+template<class UniformBlockType>
 inline void InlineUniformBlock<UniformBlockType>::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
-    MAGMA_ASSERT(writeDescriptorSetInlineUniformBlock.pData);
+    MAGMA_ASSERT(associatedWithResource());
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = &descriptor;
     writeDescriptorSet.dstSet = dstSet;

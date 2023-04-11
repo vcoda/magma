@@ -8,13 +8,19 @@ inline BufferDescriptorArray<Size>::BufferDescriptorArray(VkDescriptorType descr
 {}
 
 template<uint32_t Size>
-inline void BufferDescriptorArray<Size>::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
+inline bool BufferDescriptorArray<Size>::associatedWithResource() const noexcept
 {
-    MAGMA_ASSERT(std::any_of(descriptors.begin(), descriptors.end(),
+    return std::all_of(descriptors.begin(), descriptors.end(),
         [](const auto& it)
         {
-            return it.buffer != VK_NULL_HANDLE;
-        }));
+            return (it.buffer != VK_NULL_HANDLE);
+        });
+}
+
+template<uint32_t Size>
+inline void BufferDescriptorArray<Size>::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
+{
+    MAGMA_ASSERT(associatedWithResource());
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;
@@ -40,13 +46,19 @@ inline TexelBufferDescriptorArray<Size>::TexelBufferDescriptorArray(VkDescriptor
 {}
 
 template<uint32_t Size>
+inline bool TexelBufferDescriptorArray<Size>::associatedWithResource() const noexcept
+{
+    return std::all_of(descriptors.begin(), descriptors.end(),
+        [](auto view)
+        {
+            return (view != VK_NULL_HANDLE);
+        });
+}
+
+template<uint32_t Size>
 inline void TexelBufferDescriptorArray<Size>::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
-    MAGMA_ASSERT(std::any_of(descriptors.begin(), descriptors.end(),
-        [](const auto& it)
-        {
-            return it.buffer != VK_NULL_HANDLE;
-        }));
+    MAGMA_ASSERT(associatedWithResource());
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;

@@ -28,6 +28,9 @@ namespace magma
         template<uint32_t Size>
         class BufferDescriptorArray : public DescriptorArray<VkDescriptorBufferInfo, Size>
         {
+        public:
+            bool associatedWithResource() const noexcept override;
+
         protected:
             BufferDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept;
             void write(VkDescriptorSet dstSet,
@@ -41,6 +44,9 @@ namespace magma
         template<uint32_t Size>
         class TexelBufferDescriptorArray : public DescriptorArray<VkBufferView, Size>
         {
+        public:
+            bool associatedWithResource() const noexcept override;
+
         protected:
             TexelBufferDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept;
             void write(VkDescriptorSet dstSet,

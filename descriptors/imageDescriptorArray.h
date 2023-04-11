@@ -28,6 +28,9 @@ namespace magma
         template<uint32_t Size>
         class ImageDescriptorArray : public DescriptorArray<VkDescriptorImageInfo, Size>
         {
+        public:
+            bool associatedWithResource() const noexcept override;
+
         protected:
             ImageDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept;
             void write(VkDescriptorSet dstSet,
@@ -74,6 +77,7 @@ namespace magma
                 // into the set layout and used for the corresponding binding.
                 Binding::binding.pImmutableSamplers = immutableSamplers.data();
             }
+            bool associatedWithResource() const noexcept override;
             array::ImageImmutableSamplerDescriptor operator[](uint32_t index) noexcept;
 
         private:

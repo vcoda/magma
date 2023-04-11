@@ -8,30 +8,33 @@ inline ImageDescriptorArray<Size>::ImageDescriptorArray(VkDescriptorType descrip
 {}
 
 template<uint32_t Size>
-inline void ImageDescriptorArray<Size>::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
+inline bool ImageDescriptorArray<Size>::associatedWithResource() const noexcept
 {
-#ifdef MAGMA_DEBUG
     switch (binding.descriptorType)
     {
     case VK_DESCRIPTOR_TYPE_SAMPLER:
-        MAGMA_ASSERT(std::any_of(descriptors.begin(), descriptors.end(),
+        return std::all_of(descriptors.begin(), descriptors.end(),
             [](const auto& it)
             {
-                return it.sampler != VK_NULL_HANDLE;
-            }));
-        break;
-    case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
+                return (it.sampler != VK_NULL_HANDLE);
+            });
     case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
     case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
     case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
-        MAGMA_ASSERT(std::any_of(descriptors.begin(), descriptors.end(),
+        return std::all_of(descriptors.begin(), descriptors.end(),
             [](const auto& it)
             {
-                return it.imageView != VK_NULL_HANDLE;
-            }));
-        break;
+                return (it.imageView != VK_NULL_HANDLE);
+            });
+    default:
+        return false;
     }
-#endif // MAGMA_DEBUG
+}
+
+template<uint32_t Size>
+inline void ImageDescriptorArray<Size>::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
+{
+    MAGMA_ASSERT(associatedWithResource());
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;
@@ -61,6 +64,25 @@ template<uint32_t Size>
 inline array::ImageSamplerDescriptor CombinedImageSamplerArray<Size>::operator[](uint32_t index) noexcept
 {
     return array::ImageSamplerDescriptor(descriptors[index], imageType, VK_IMAGE_USAGE_SAMPLED_BIT, updated);
+}
+
+template<uint32_t Size>
+inline bool CombinedImageImmutableSamplerArray<Size>::associatedWithResource() const noexcept
+{
+    const bool associatedWithSamplers = std::all_of(descriptors.begin(), descriptors.end(),
+        [](const auto& it)
+        {
+            return (it.sampler != VK_NULL_HANDLE);
+        }) || std::all_of(immutableSamplers.begin(), immutableSamplers.end(),
+        [](VkSampler it)
+        {
+            return (it != VK_NULL_HANDLE);
+        });
+    return std::all_of(descriptors.begin(), descriptors.end(),
+        [](const auto& it)
+        {
+            return (it.imageView != VK_NULL_HANDLE);
+        }) && associatedWithSamplers;
 }
 
 template<uint32_t Size>

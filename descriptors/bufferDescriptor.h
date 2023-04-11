@@ -28,6 +28,9 @@ namespace magma
 
         class BufferDescriptor : public Descriptor<VkDescriptorBufferInfo>
         {
+        public:
+            bool associatedWithResource() const noexcept override;
+
         protected:
             BufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept;
             void write(VkDescriptorSet dstSet,
@@ -40,6 +43,9 @@ namespace magma
 
         class TexelBufferDescriptor : public Descriptor<VkBufferView>
         {
+        public:
+            bool associatedWithResource() const noexcept override;
+
         protected:
             TexelBufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept;
             void write(VkDescriptorSet dstSet,

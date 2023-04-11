@@ -28,6 +28,9 @@ namespace magma
 
         class ImageDescriptor : public Descriptor<VkDescriptorImageInfo>
         {
+        public:
+            bool associatedWithResource() const noexcept override;
+
         protected:
             ImageDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept;
             void write(VkDescriptorSet dstSet,
