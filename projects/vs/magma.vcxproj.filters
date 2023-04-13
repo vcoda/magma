@@ -1411,6 +1411,9 @@
     <None Include="..\..\renderpass\attachment.inl">
       <Filter>Header Files\renderpass</Filter>
     </None>
+    <None Include="..\..\misc\structureChainNode.inl">
+      <Filter>Header Files\misc</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">

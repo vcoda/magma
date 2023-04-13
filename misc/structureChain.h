@@ -55,3 +55,5 @@ inline StructureType *magma::StructureChain::findNode<StructureType>() const noe
 }
 
 #include "structureChain.inl"
+#include "structureChainNode.inl"
+
