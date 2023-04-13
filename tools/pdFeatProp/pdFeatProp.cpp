@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
         bool properties = isPropertiesStructure(line);
         if (features || properties)
         {
-            result = parseStructureName(line);
+            result = parseStructureName("VkPhysicalDevice", line);
             if (!result.empty())
             {
                 if (lastFoundExtension == "VK_EXT_global_priority_query" || // Skip in favor of VK_KHR_global_priority

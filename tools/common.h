@@ -60,10 +60,10 @@ std::string parseExtensionDefine(const std::string& line)
     return std::string();
 }
 
-std::string parseStructureName(const std::string& line)
+std::string parseStructureName(const std::string& family, const std::string& line)
 {
-    auto pos = line.find("VkPhysicalDevice");
-    auto nextPos = line.find("VkPhysicalDevice", pos + 1);
+    auto pos = line.find(family);
+    auto nextPos = line.find(family, pos + 1);
     if ((nextPos > pos) && (nextPos < std::string::npos))
         pos = nextPos; // Go to extension typedef
     std::string name;

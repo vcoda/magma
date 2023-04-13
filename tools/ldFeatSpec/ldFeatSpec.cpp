@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
         }
         if (isFeaturesStructure(line))
         {
-            result = parseStructureName(line);
+            result = parseStructureName("VkPhysicalDevice", line);
             if (!result.empty())
             {
                 if (lastFoundExtension == "VK_EXT_global_priority_query")
