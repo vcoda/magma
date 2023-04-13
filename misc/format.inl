@@ -117,8 +117,8 @@ constexpr bool Format::alpha() const noexcept
     case VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK:
     case VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK:
 #ifdef VK_EXT_4444_formats
-    case VK_FORMAT_A4R4G4B4_UNORM_PACK16:
-    case VK_FORMAT_A4B4G4R4_UNORM_PACK16:
+    case VK_FORMAT_A4R4G4B4_UNORM_PACK16_EXT:
+    case VK_FORMAT_A4B4G4R4_UNORM_PACK16_EXT:
 #endif // VK_EXT_4444_formats
         return true;
     default:
