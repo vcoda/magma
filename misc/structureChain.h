@@ -27,6 +27,8 @@ namespace magma
     public:
         template<class Structure>
         void addNode(const Structure& node);
+        template<class StructureType>
+        StructureType *findNode() const noexcept;
         uint32_t getNumNodes() const noexcept { return MAGMA_COUNT(chain); }
         bool isEmpty() const noexcept { return chain.empty(); }
         const void *getChainedNodes() const noexcept;
@@ -37,5 +39,19 @@ namespace magma
         mutable std::list<Node> chain;
     };
 } // namespace magma
+
+#define MAGMA_SPECIALIZE_STRUCTURE_CHAIN_NODE(StructureType, structureType)\
+template<>\
+inline StructureType *magma::StructureChain::findNode<StructureType>() const noexcept\
+{\
+    auto it = std::find_if(chain.begin(), chain.end(),\
+        [](auto& it)\
+        {\
+           return (it.getNode()->sType == structureType);\
+        });\
+    if (it != chain.end())\
+        return reinterpret_cast<StructureType *>(it->getNode());\
+    return nullptr;\
+}
 
 #include "structureChain.inl"
