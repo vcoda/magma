@@ -1,0 +1,1 @@
+scNodeSpec ../../misc/structureChainNode.inl
