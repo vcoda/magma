@@ -51,7 +51,7 @@ bool DeviceFeatures::maintenanceEnabled(uint8_t index) const noexcept
         return false;
     const char extensionName[20] = {
         'V','K','_','K','H','R','_','m','a','i','n','t','e','n','a','n','c','e',
-        '0' + index, '\0'};
+        char('0' + index), '\0'};
     std::shared_ptr<const Device> device = parent.lock();
     return device->extensionEnabled(extensionName);
 }
