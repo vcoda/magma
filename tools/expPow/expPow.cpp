@@ -1,6 +1,5 @@
 #include <fstream>
 #include <iostream>
-#include <map>
 #include "../common.h"
 
 constexpr int MANTISSA_BITS = 9;
