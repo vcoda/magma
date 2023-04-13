@@ -25,8 +25,8 @@ namespace magma
     class StructureChain
     {
     public:
-        template<class Structure>
-        void addNode(const Structure& node);
+        template<class StructureType>
+        void addNode(const StructureType& node);
         template<class StructureType>
         StructureType *findNode() const noexcept;
         uint32_t getNumNodes() const noexcept { return MAGMA_COUNT(chain); }
