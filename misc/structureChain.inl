@@ -29,3 +29,17 @@ inline void StructureChain::addNode(const StructureType& node)
     chain.emplace_back(node);
 }
 } // namespace magma
+
+#define MAGMA_SPECIALIZE_STRUCTURE_CHAIN_NODE(StructureType, structureType)\
+template<>\
+inline StructureType *magma::StructureChain::findNode<StructureType>() const noexcept\
+{\
+    auto it = std::find_if(chain.begin(), chain.end(),\
+        [](auto& it)\
+        {\
+           return (it.getNode()->sType == structureType);\
+        });\
+    if (it != chain.end())\
+        return reinterpret_cast<StructureType *>(it->getNode());\
+    return nullptr;\
+}
