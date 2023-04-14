@@ -29,8 +29,8 @@ namespace magma
         void addNode(const StructureType& node);
         template<class StructureType>
         StructureType *findNode() const noexcept;
-        uint32_t getNumNodes() const noexcept { return MAGMA_COUNT(chain); }
-        bool isEmpty() const noexcept { return chain.empty(); }
+        uint32_t getSize() const noexcept { return MAGMA_COUNT(chain); }
+        bool empty() const noexcept { return chain.empty(); }
         const void *getChainedNodes() const noexcept;
         hash_t getHash() const noexcept;
 
