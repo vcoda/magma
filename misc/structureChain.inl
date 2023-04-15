@@ -3,11 +3,11 @@ namespace magma
 struct StructureChain::Node
 {
     template<class StructureType>
-    Node(const StructureType& node):
-        data(new uint8_t[sizeof(StructureType)]),
-        hash(core::hashArray(reinterpret_cast<const uint8_t *>(&node), sizeof(StructureType)))
+    Node(const StructureType& node)
     {
+        data = new uint8_t[sizeof(StructureType)];
         memcpy(data, &node, sizeof(StructureType));
+        hash = core::hashArray(data, sizeof(StructureType));
     }
 
     ~Node()
@@ -21,7 +21,7 @@ struct StructureChain::Node
     }
 
     uint8_t *data;
-    const hash_t hash;
+    hash_t hash;
 };
 
 template<class StructureType>
