@@ -42,10 +42,11 @@ namespace magma
 Instance::Instance(const char *applicationName, const char *engineName, uint32_t apiVersion,
     const std::vector<const char *>& enabledLayers, const std::vector<const char *>& enabledExtensions,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-#if defined(VK_EXT_debug_utils)
-    PFN_vkDebugUtilsMessengerCallbackEXT debugCallback /* nullptr */,
-#elif defined(VK_EXT_debug_report)
-    PFN_vkDebugReportCallbackEXT debugCallback /* nullptr */,
+#ifdef VK_EXT_debug_utils
+    PFN_vkDebugUtilsMessengerCallbackEXT debugUtilsCallback /* nullptr */,
+#endif
+#ifdef VK_EXT_debug_report
+    PFN_vkDebugReportCallbackEXT debugReportCallback /* nullptr */,
 #endif
     void *userData /* nullptr */):
     Dispatchable<VkInstance>(VK_OBJECT_TYPE_INSTANCE, std::move(allocator)),
@@ -68,9 +69,9 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
     instanceInfo.ppEnabledLayerNames = enabledLayers.data();
     instanceInfo.enabledExtensionCount = MAGMA_COUNT(enabledExtensions);
     instanceInfo.ppEnabledExtensionNames = enabledExtensions.data();
-#if defined(VK_EXT_debug_utils)
+#ifdef VK_EXT_debug_utils
     VkDebugUtilsMessengerCreateInfoEXT debugUtilsMessengerInfo;
-    if (debugCallback)
+    if (debugUtilsCallback)
     {   // To capture events that occur while creating or destroying an instance
         // an application can link a VkDebugUtilsMessengerCreateInfoEXT structure
         // to the pNext element of the VkInstanceCreateInfo structure.
@@ -87,12 +88,13 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
             VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
             VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
             VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
-        debugUtilsMessengerInfo.pfnUserCallback = debugCallback;
+        debugUtilsMessengerInfo.pfnUserCallback = debugUtilsCallback;
         debugUtilsMessengerInfo.pUserData = userData;
     }
-#elif defined(VK_EXT_debug_report)
+#endif // VK_EXT_debug_utils
+#ifdef VK_EXT_debug_report
     VkDebugReportCallbackCreateInfoEXT debugReportCallbackInfo;
-    if (debugCallback)
+    if (debugReportCallback && !instanceInfo.pNext)
     {
         instanceInfo.pNext = &debugReportCallbackInfo;
     #ifdef VK_HEADER_VERSION
@@ -107,7 +109,7 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
             VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT |
             VK_DEBUG_REPORT_ERROR_BIT_EXT |
             VK_DEBUG_REPORT_DEBUG_BIT_EXT;
-        debugReportCallbackInfo.pfnCallback = debugCallback;
+        debugReportCallbackInfo.pfnCallback = debugReportCallback;
         debugReportCallbackInfo.pUserData = userData;
     }
 #endif // VK_EXT_debug_report

@@ -38,11 +38,12 @@ namespace magma
             const std::vector<const char *>& enabledLayers,
             const std::vector<const char *>& enabledExtensions,
             std::shared_ptr<IAllocator> allocator = nullptr,
-#if defined(VK_EXT_debug_utils)
-            PFN_vkDebugUtilsMessengerCallbackEXT debugCallback = nullptr,
-#elif defined(VK_EXT_debug_report)
-            PFN_vkDebugReportCallbackEXT debugCallback = nullptr,
-#endif
+        #ifdef VK_EXT_debug_utils
+            PFN_vkDebugUtilsMessengerCallbackEXT debugUtilsCallback = nullptr,
+        #endif
+        #ifdef VK_EXT_debug_report
+            PFN_vkDebugReportCallbackEXT debugReportCallback = nullptr,
+        #endif
             void *userData = nullptr);
         ~Instance();
         uint32_t getApiVersion() const noexcept { return apiVersion; }
