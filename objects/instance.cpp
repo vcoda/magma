@@ -50,7 +50,7 @@ Instance::Instance(const std::vector<const char *>& enabledLayers, const std::ve
 #endif
     void *userData /* nullptr */):
     Dispatchable<VkInstance>(VK_OBJECT_TYPE_INSTANCE, std::move(allocator)),
-    apiVersion(apiVersion)
+    apiVersion(applicationInfo ? applicationInfo->apiVersion : VK_API_VERSION_1_0)
 {
     VkInstanceCreateInfo instanceInfo;
     instanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
