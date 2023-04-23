@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "instance.h"
 #include "physicalDevice.h"
 #include "physicalDeviceGroup.h"
+#include "../misc/application.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/stackArray.h"
@@ -39,9 +40,8 @@ static magma::core::RefCountChecker _refCountChecker;
 
 namespace magma
 {
-Instance::Instance(const char *applicationName, const char *engineName, uint32_t apiVersion,
-    const std::vector<const char *>& enabledLayers, const std::vector<const char *>& enabledExtensions,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
+Instance::Instance(const std::vector<const char *>& enabledLayers, const std::vector<const char *>& enabledExtensions,
+    std::shared_ptr<IAllocator> allocator /* nullptr */, const Application *applicationInfo /* nullptr */,
 #ifdef VK_EXT_debug_utils
     PFN_vkDebugUtilsMessengerCallbackEXT debugUtilsCallback /* nullptr */,
 #endif
@@ -52,19 +52,11 @@ Instance::Instance(const char *applicationName, const char *engineName, uint32_t
     Dispatchable<VkInstance>(VK_OBJECT_TYPE_INSTANCE, std::move(allocator)),
     apiVersion(apiVersion)
 {
-    VkApplicationInfo appInfo;
     VkInstanceCreateInfo instanceInfo;
-    appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    appInfo.pNext = nullptr;
-    appInfo.pApplicationName = applicationName;
-    appInfo.applicationVersion = 1;
-    appInfo.pEngineName = engineName;
-    appInfo.engineVersion = 1;
-    appInfo.apiVersion = apiVersion;
     instanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     instanceInfo.pNext = nullptr;
     instanceInfo.flags = 0;
-    instanceInfo.pApplicationInfo = &appInfo;
+    instanceInfo.pApplicationInfo = applicationInfo;
     instanceInfo.enabledLayerCount = MAGMA_COUNT(enabledLayers);
     instanceInfo.ppEnabledLayerNames = enabledLayers.data();
     instanceInfo.enabledExtensionCount = MAGMA_COUNT(enabledExtensions);

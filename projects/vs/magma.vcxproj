@@ -232,6 +232,7 @@
     <ClInclude Include="..\..\helpers\stringize.h" />
     <ClInclude Include="..\..\helpers\uniformArray.h" />
     <ClInclude Include="..\..\magma.h" />
+    <ClInclude Include="..\..\misc\application.h" />
     <ClInclude Include="..\..\misc\borderColor.h" />
     <ClInclude Include="..\..\misc\deviceFaultInfo.h" />
     <ClInclude Include="..\..\misc\deviceFeatures.h" />
@@ -416,6 +417,7 @@
     <ClCompile Include="..\..\helpers\checkFeatureSupport.cpp" />
     <ClCompile Include="..\..\helpers\executeCommandBuffer.cpp" />
     <ClCompile Include="..\..\helpers\stringize.cpp" />
+    <ClCompile Include="..\..\misc\application.cpp" />
     <ClCompile Include="..\..\misc\deviceFaultInfo.cpp" />
     <ClCompile Include="..\..\misc\deviceFeatures.cpp" />
     <ClCompile Include="..\..\misc\framebufferAttachmentImage.cpp" />

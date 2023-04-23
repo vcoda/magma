@@ -98,6 +98,7 @@ helpers\checkFeatureSupport.cpp ^
 helpers\executeCommandBuffer.cpp ^
 helpers\executeDeferredOperation.cpp ^
 helpers\stringize.cpp ^
+misc\application.cpp ^
 misc\deviceFaultInfo.cpp ^
 misc\deviceFeatures.cpp ^
 misc\deviceQueueDescriptor.cpp ^
@@ -258,6 +259,7 @@ checkFeatureSupport.obj ^
 executeCommandBuffer.obj ^
 executeDeferredOperation.obj ^
 stringize.obj ^
+application.obj ^
 deviceFaultInfo.obj ^
 deviceFeatures.obj ^
 deviceQueueDescriptor.obj ^

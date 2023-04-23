@@ -77,6 +77,7 @@ MAGMA_OBJS= \
 	helpers/executeDeferredOperation.o \
 	helpers/stringize.o \
 	\
+	misc/application.o \
 	misc/deviceFaultInfo.o \
 	misc/deviceFeatures.o \
 	misc/deviceQueueDescriptor.o \

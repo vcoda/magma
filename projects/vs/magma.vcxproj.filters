@@ -780,6 +780,9 @@
     <ClInclude Include="..\..\renderpass\subpass.h">
       <Filter>Header Files\renderpass</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\misc\application.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1201,6 +1204,9 @@
     </ClCompile>
     <ClCompile Include="..\..\renderpass\subpass.cpp">
       <Filter>Source Files\renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\application.cpp">
+      <Filter>Source Files\misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
