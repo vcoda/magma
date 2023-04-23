@@ -193,6 +193,22 @@ std::shared_ptr<PhysicalDeviceGroup> Instance::getPhysicalDeviceGroup(uint32_t g
 }
 #endif // VK_KHR_device_group
 
+uint32_t Instance::enumerateVersion() noexcept
+{
+#if !defined(VK_VERSION_1_1)
+    typedef VkResult (VKAPI_PTR *PFN_vkEnumerateInstanceVersion)(uint32_t* pApiVersion);
+#endif
+    PFN_vkEnumerateInstanceVersion vkEnumerateInstanceVersion =
+        (PFN_vkEnumerateInstanceVersion)vkGetInstanceProcAddr(VK_NULL_HANDLE, "vkEnumerateInstanceVersion");
+    if (!vkEnumerateInstanceVersion)
+        return VK_API_VERSION_1_0;
+    uint32_t apiVersion = 0;
+    const VkResult result = vkEnumerateInstanceVersion(&apiVersion);
+    if (VK_ERROR_OUT_OF_HOST_MEMORY == result)
+        return VK_API_VERSION_1_0;
+    return apiVersion;
+}
+
 std::vector<VkLayerProperties> Instance::enumerateLayers()
 {
     uint32_t propertyCount = 0;
