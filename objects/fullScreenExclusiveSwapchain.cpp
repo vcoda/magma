@@ -94,9 +94,12 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     {
         MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateSharedSwapchainsKHR, VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME);
         result = vkCreateSharedSwapchainsKHR(MAGMA_HANDLE(device), 1, &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    } else
+    }
+    else
 #endif // VK_KHR_display_swapchain && VK_KHR_display_surface
-    result = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    {
+        result = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    }
     if (oldSwapchain)
         oldSwapchain->retired = true; // oldSwapchain is retired even if creation of the new swapchain fails
 #if defined(VK_EXT_debug_report) || defined(VK_EXT_debug_utils)
