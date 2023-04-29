@@ -66,7 +66,7 @@ namespace magma
             const Sharing& sharing = Sharing(),
             const StructureChain& extendedInfo = StructureChain());
         ~Swapchain();
-        VkSurfaceFormatKHR getSurfaceFormat() const noexcept { return surfaceFormat; }
+        const VkSurfaceFormatKHR& getSurfaceFormat() const noexcept { return surfaceFormat; }
         const VkExtent2D& getExtent() const noexcept { return extent; }
         uint32_t getArrayLayers() const noexcept { return arrayLayers; }
         VkImageUsageFlags getImageUsage() const noexcept { return imageUsage; }
