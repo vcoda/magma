@@ -90,7 +90,7 @@ bool Profiler::beginFrame(uint32_t frameIndex_)
     MAGMA_ASSERT(stack.empty());
     if (insideFrame || !stack.empty())
         return false;
-    if (queryCount > 0)
+    if ((queryCount > 0) || (0 == frameIndex_))
     {
         if (queryCount > queryPool->getQueryCount())
         {   // Grow
@@ -98,17 +98,14 @@ bool Profiler::beginFrame(uint32_t frameIndex_)
                 queryCount, queryPool->getHostAllocator());
             queryCount = 0;
         }
+        if (!hostQueryReset)
+            resetQueries = true;
         else
-        {
-            if (!hostQueryReset)
-                resetQueries = true;
-            else
-            {   // Reset from host
-            #ifdef VK_EXT_host_query_reset
-                queryPool->reset(0, queryCount);
-            #endif
-                queryCount = 0;
-            }
+        {   // Reset from host
+        #ifdef VK_EXT_host_query_reset
+            queryPool->reset(0, queryCount ? queryCount : queryPool->getQueryCount());
+        #endif
+            queryCount = 0;
         }
         sections.clear();
     }
@@ -133,7 +130,7 @@ void Profiler::beginSection(const char *name, uint32_t color, std::shared_ptr<Co
     MAGMA_ASSERT(strlen(name) > 0);
     if (resetQueries)
     {   // VK_EXT_host_query_reset not supported, use vkCmdResetQueryPool()
-        cmdBuffer->resetQueryPool(queryPool, 0, queryCount);
+        cmdBuffer->resetQueryPool(queryPool, 0, queryCount ? queryCount : queryPool->getQueryCount());
         queryCount = 0;
         resetQueries = false;
     }
