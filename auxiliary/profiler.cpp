@@ -32,17 +32,7 @@ namespace magma
 namespace aux
 {
 Profiler::Profiler(VkQueueFlags queueType, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator):
-    queueType(queueType),
-    timestampPeriod(0.f),
-    timestampMask(0ull),
-    queryCount(0),
-    frameIndex(0),
-    hostQueryReset(false),
-    debugUtils(false),
-    debugMarker(false),
-    useLabels(false),
-    resetQueries(false),
-    insideFrame(false)
+    queueType(queueType)
 {
     std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
     const VkPhysicalDeviceProperties properties = physicalDevice->getProperties();
@@ -113,8 +103,8 @@ bool Profiler::beginFrame(uint32_t frameIndex_)
         {   // Reset from host
         #ifdef VK_EXT_host_query_reset
             queryPool->reset(0, queryCount ? queryCount : queryPool->getQueryCount());
-        #endif
             queryCount = 0;
+        #endif
         }
         sections.clear();
     }

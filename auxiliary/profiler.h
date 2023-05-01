@@ -88,19 +88,19 @@ namespace magma
 
             static Profiler *profilers[2];
             const VkQueueFlags queueType;
-            float timestampPeriod;
-            uint64_t timestampMask;
+            float timestampPeriod = 0.f;
+            uint64_t timestampMask = 0ull;
             std::shared_ptr<TimestampQuery> queryPool;
-            uint32_t queryCount;
-            uint32_t frameIndex;
+            uint32_t queryCount = 0;
+            uint32_t frameIndex = 0;
             std::vector<Section> sections;
             std::stack<Section> stack;
-            bool hostQueryReset;
-            bool debugUtils;
-            bool debugMarker;
-            bool useLabels;
-            bool resetQueries;
-            bool insideFrame;
+            bool hostQueryReset = false;
+            bool debugUtils = false;
+            bool debugMarker = false;
+            bool useLabels = false;
+            bool resetQueries = false;
+            bool insideFrame = false;
         };
 
         /* Performance profiler for graphics queue. */
