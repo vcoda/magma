@@ -74,15 +74,23 @@ Profiler::Profiler(VkQueueFlags queueType, std::shared_ptr<Device> device, std::
     queryPool = std::make_shared<magma::TimestampQuery>(device, MAGMA_PROFILER_MAX_TIMESTAMP_QUERIES, std::move(allocator));
 #ifdef VK_EXT_host_query_reset
     hostQueryReset = device->extensionEnabled(VK_EXT_HOST_QUERY_RESET_EXTENSION_NAME);
-#endif
+#endif // VK_EXT_host_query_reset
 #ifdef VK_EXT_debug_utils
     std::shared_ptr<const Instance> instance = physicalDevice->getInstance();
     debugUtils = instance->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-#endif
+#endif // VK_EXT_debug_utils
 #ifdef VK_EXT_debug_marker
     if (!debugUtils)
         debugMarker = device->extensionEnabled(VK_EXT_DEBUG_MARKER_EXTENSION_NAME);
-#endif
+#endif // VK_EXT_debug_marker
+}
+
+void Profiler::set(Profiler *profiler) noexcept
+{
+    if (VK_QUEUE_GRAPHICS_BIT == profiler->getQueueType())
+        profilers[Graphics] = profiler;
+    else // VK_QUEUE_COMPUTE_BIT
+        profilers[Compute] = profiler;
 }
 
 bool Profiler::beginFrame(uint32_t frameIndex_)
@@ -236,5 +244,7 @@ void Profiler::copyExecutionTimings(std::shared_ptr<CommandBuffer> cmdBuffer, st
             BufferMemoryBarrier(std::move(buffer), barrier::transferWriteHostRead));
     }
 }
+
+Profiler *Profiler::profilers[2];
 } // namespace aux
 } // namespace magma

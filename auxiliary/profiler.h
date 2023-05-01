@@ -39,6 +39,11 @@ namespace magma
         class Profiler : public Base
         {
         public:
+            enum Queue
+            {
+                Graphics, Compute
+            };
+
             struct Timing
             {
                 const char *name;
@@ -48,6 +53,8 @@ namespace magma
                     name(name), frameIndex(frameIndex), time(time) {}
             };
 
+            static void set(Profiler *profiler) noexcept;
+            static Profiler *get(Queue queue) noexcept { return profilers[queue]; }
             VkQueueFlags getQueueType() const noexcept { return queueType; }
             bool setLabelUsage(bool enable) noexcept { useLabels = enable; }
             bool getLabelUsage() const noexcept { return useLabels; }
@@ -79,6 +86,7 @@ namespace magma
                     name(name), frameIndex(frameIndex), beginQuery(beginQuery) {}
             };
 
+            static Profiler *profilers[2];
             const VkQueueFlags queueType;
             float timestampPeriod;
             uint64_t timestampMask;
