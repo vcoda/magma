@@ -21,32 +21,38 @@ namespace magma
 {
     namespace aux
     {
-        /* Helper class to call begin/end within scope. */
+        /* GPU profiling block. */
 
         class ScopedProfile final : core::NonCopyable
         {
         public:
-            explicit ScopedProfile(const char *name, uint32_t color, std::shared_ptr<Profiler> profiler_, std::shared_ptr<CommandBuffer> cmdBuffer_):
-                profiler(std::move(profiler_)),
+            explicit ScopedProfile(const char *name, std::shared_ptr<CommandBuffer> cmdBuffer_,
+                uint32_t color = 0xFFFFFFFF):
                 cmdBuffer(std::move(cmdBuffer_))
             {
-                profiler->beginSection(name, color, cmdBuffer);
+                if (auto profiler = Profiler::get(Profiler::Graphics))
+                    profiler->beginSection(name, color, cmdBuffer);
             }
 
             ~ScopedProfile()
             {
-                profiler->endSection(std::move(cmdBuffer));
+                if (auto profiler = Profiler::get(Profiler::Graphics))
+                    profiler->endSection(std::move(cmdBuffer));
             }
 
         private:
-            std::shared_ptr<Profiler> profiler;
             std::shared_ptr<CommandBuffer> cmdBuffer;
         };
     } // namespace aux
 } // namespace magma
 
 #ifdef MAGMA_DEBUG
-#define MAGMA_PROFILE(name, color, profiler, cmdBuffer) magma::aux::ScopedProfile _magma_profile_##name(MAGMA_STRINGIZE(name), color, profiler, cmdBuffer)
+    #define MAGMA_SCOPED_PROFILE(name, cmdBuffer, line) magma::aux::ScopedProfile _magma_profile_line##line(name, cmdBuffer, __LINE__);
+    #define MAGMA_PROFILE_INDIRECT(name, cmdBuffer, line) MAGMA_SCOPED_PROFILE(name, cmdBuffer, line)
+
+    #define MAGMA_PROFILE(cmdBuffer) MAGMA_PROFILE_INDIRECT(__FUNCTION__, cmdBuffer, __LINE__)
+    #define MAGMA_PROFILE_NAME(label, cmdBuffer) MAGMA_PROFILE_INDIRECT(label, cmdBuffer, __LINE__)
 #else
-#define MAGMA_PROFILE(name, color, profiler, cmdBuffer)
+    #define MAGMA_PROFILE(cmdBuffer)
+    #define MAGMA_PROFILE_NAME(label, cmdBuffer)
 #endif
