@@ -61,14 +61,11 @@ namespace magma
             uint32_t getQueryCount() const noexcept { return queryCount; }
             bool beginFrame(uint32_t frameIndex);
             bool endFrame();
-            void beginSection(const char *name,
-                uint32_t color,
-                std::shared_ptr<CommandBuffer> cmdBuffer);
+            void beginSection(const char *name, uint32_t color, std::shared_ptr<CommandBuffer> cmdBuffer);
             void endSection(std::shared_ptr<CommandBuffer> cmdBuffer);
             std::vector<Timing> getExecutionTimings(bool wait) const;
             void copyExecutionTimings(std::shared_ptr<CommandBuffer> cmdBuffer,
-                std::shared_ptr<Buffer> buffer,
-                VkDeviceSize bufferOffset = 0,
+                std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset = 0,
                 bool hostRead = true) const noexcept;
 
         protected:
