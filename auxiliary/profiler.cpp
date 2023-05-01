@@ -102,7 +102,7 @@ bool Profiler::beginFrame(uint32_t frameIndex_)
     if ((queryCount > 0) || (0 == frameIndex_))
     {
         if (queryCount > queryPool->getQueryCount())
-        {   // Grow
+        {   // Growable pool
             queryPool = std::make_shared<magma::TimestampQuery>(queryPool->getDevice(),
                 queryCount, queryPool->getHostAllocator());
             queryCount = 0;
@@ -210,7 +210,8 @@ std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool wait) const
             double time = double(end - start) * timestampPeriod; // nanoseconds
             executionTimings.emplace_back(section.name, section.frameIndex, time);
         }
-    }  else
+    }
+    else
     {   // Do not stall, return only available results
         const auto timestamps = queryPool->getResultsWithAvailability<uint64_t>(0, count);
         for (const auto& section: sections)
