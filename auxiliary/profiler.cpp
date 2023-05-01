@@ -25,6 +25,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/buffer.h"
 #include "../allocator/allocator.h"
 
+constexpr uint32_t MAGMA_PROFILER_MAX_TIMESTAMP_QUERIES = 256;
+
 namespace magma
 {
 namespace aux
@@ -69,8 +71,7 @@ Profiler::Profiler(VkQueueFlags queueType, std::shared_ptr<Device> device, std::
         timestampMask = (it->timestampValidBits < 64) ? (1ull << it->timestampValidBits) - 1 : std::numeric_limits<uint64_t>::max();
     else
         MAGMA_THROW("queue has no support for timestamps");
-    constexpr uint32_t poolSize = 256;
-    queryPool = std::make_shared<magma::TimestampQuery>(device, poolSize, std::move(allocator));
+    queryPool = std::make_shared<magma::TimestampQuery>(device, MAGMA_PROFILER_MAX_TIMESTAMP_QUERIES, std::move(allocator));
 #ifdef VK_EXT_host_query_reset
     hostQueryReset = device->extensionEnabled(VK_EXT_HOST_QUERY_RESET_EXTENSION_NAME);
 #endif
