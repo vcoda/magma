@@ -72,6 +72,7 @@ namespace magma
             explicit Profiler(VkQueueFlags queueType,
                 std::shared_ptr<Device> device,
                 std::shared_ptr<IAllocator> allocator);
+            uint32_t getResetQueryCount() const noexcept;
 
         private:
             struct Section

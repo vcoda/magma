@@ -102,7 +102,7 @@ bool Profiler::beginFrame(uint32_t frameIndex_)
         else
         {   // Reset from host
         #ifdef VK_EXT_host_query_reset
-            queryPool->reset(0, queryCount ? queryCount : queryPool->getQueryCount());
+            queryPool->reset(0, getResetQueryCount());
             queryCount = 0;
         #endif
         }
@@ -129,7 +129,7 @@ void Profiler::beginSection(const char *name, uint32_t color, std::shared_ptr<Co
     MAGMA_ASSERT(strlen(name) > 0);
     if (resetQueries)
     {   // VK_EXT_host_query_reset not supported, use vkCmdResetQueryPool()
-        cmdBuffer->resetQueryPool(queryPool, 0, queryCount ? queryCount : queryPool->getQueryCount());
+        cmdBuffer->resetQueryPool(queryPool, 0, getResetQueryCount());
         queryCount = 0;
         resetQueries = false;
     }
@@ -234,6 +234,14 @@ void Profiler::copyExecutionTimings(std::shared_ptr<CommandBuffer> cmdBuffer, st
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_HOST_BIT,
             BufferMemoryBarrier(std::move(buffer), barrier::transferWriteHostRead));
     }
+}
+
+uint32_t Profiler::getResetQueryCount() const noexcept
+{
+    if (queryCount > 0)
+        return queryCount; // Reset only those queries that have been used in the previos frame
+    // Reset all queries before first use
+    return queryPool->getQueryCount();
 }
 
 Profiler *Profiler::profilers[2];
