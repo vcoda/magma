@@ -111,7 +111,7 @@ Instance::Instance(const std::vector<const char *>& enabledLayers, const std::ve
     case VK_ERROR_INITIALIZATION_FAILED:
         throw exception::InitializationFailed("failed to create instance");
     case VK_ERROR_INCOMPATIBLE_DRIVER:
-        throw exception::IncompatibleDriver("cannot find a compatible Vulkan ICD");
+        throw exception::IncompatibleDriver("could not find a compatible Vulkan ICD");
     }
     MAGMA_THROW_FAILURE(result, "failed to create instance");
     for (const auto& properties: enumerateExtensions())
