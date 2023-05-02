@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-const void *StructureChain::getChainedNodes() const noexcept
+VkBaseOutStructure *StructureChain::getChainedNodes() noexcept
 {
     if (chain.empty())
         return nullptr;
@@ -36,6 +36,23 @@ const void *StructureChain::getChainedNodes() const noexcept
     VkBaseOutStructure *last = curr->getNode();
     last->pNext = nullptr;
     return head->getNode();
+}
+
+const VkBaseInStructure *StructureChain::getChainedNodes() const noexcept
+{
+    if (chain.empty())
+        return nullptr;
+    auto head = chain.begin();
+    auto curr = head, next = head;
+    while (++next != chain.end())
+    {
+        VkBaseOutStructure *node = curr->getNode();
+        node->pNext = next->getNode();
+        curr = next;
+    }
+    VkBaseOutStructure *last = curr->getNode();
+    last->pNext = nullptr;
+    return reinterpret_cast<const VkBaseInStructure *>(head->getNode());
 }
 
 hash_t StructureChain::getHash() const noexcept

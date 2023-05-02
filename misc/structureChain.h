@@ -31,7 +31,8 @@ namespace magma
         StructureType *findNode() const noexcept;
         uint32_t getSize() const noexcept { return MAGMA_COUNT(chain); }
         bool empty() const noexcept { return chain.empty(); }
-        const void *getChainedNodes() const noexcept;
+        VkBaseOutStructure *getChainedNodes() noexcept;
+        const VkBaseInStructure *getChainedNodes() const noexcept;
         hash_t getHash() const noexcept;
 
     private:
