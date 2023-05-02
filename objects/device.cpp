@@ -44,7 +44,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     const std::vector<const char *>& enabledLayers,
     const std::vector<const char *>& enabledExtensions,
     const VkPhysicalDeviceFeatures& deviceFeatures,
-    const std::vector<void *>& extendedDeviceFeatures,
+    const std::vector<void *>& deviceExtendedFeatures,
     const StructureChain& extendedInfo /* default */,
     std::shared_ptr<IAllocator> allocator):
     Dispatchable<VkDevice>(VK_OBJECT_TYPE_DEVICE, std::move(allocator)),
@@ -52,16 +52,21 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     resourcePool(std::make_shared<ResourcePool>()),
     enabledFeatures(deviceFeatures)
 {
+    VkDeviceCreateInfo deviceInfo;
+    deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 #ifdef VK_KHR_get_physical_device_properties2
-    VkPhysicalDeviceFeatures2KHR features;
-    if (!extendedDeviceFeatures.empty())
+    VkPhysicalDeviceFeatures2KHR deviceFeatures2;
+    if (deviceExtendedFeatures.empty())
+        deviceInfo.pNext = extendedInfo.getChainedNodes();
+    else
     {
-        features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR;
-        features.features = deviceFeatures;
-        features.pNext = extendedDeviceFeatures.front();
-        auto curr = extendedDeviceFeatures.begin();
+        deviceInfo.pNext = &deviceFeatures2;
+        deviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR;
+        deviceFeatures2.features = deviceFeatures;
+        deviceFeatures2.pNext = deviceExtendedFeatures.front();
+        auto curr = deviceExtendedFeatures.begin();
         auto next = curr; ++next;
-        while (next != extendedDeviceFeatures.end())
+        while (next != deviceExtendedFeatures.end())
         {   // Make linked list
             VkBaseInStructure *currNode = reinterpret_cast<VkBaseInStructure *>(*curr);
             VkBaseInStructure *nextNode = reinterpret_cast<VkBaseInStructure *>(*next);
@@ -70,16 +75,11 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
             enabledExtendedFeatures[currNode->sType] = currNode;
         }
         VkBaseInStructure *lastNode = reinterpret_cast<VkBaseInStructure *>(*curr);
-        lastNode->pNext = reinterpret_cast<const VkBaseInStructure *>(extendedInfo.getChainedNodes());
+        lastNode->pNext = extendedInfo.getChainedNodes();
     }
-#endif // VK_KHR_get_physical_device_properties2
-    VkDeviceCreateInfo deviceInfo;
-    deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-#ifdef VK_KHR_get_physical_device_properties2
-    deviceInfo.pNext = extendedDeviceFeatures.empty() ? extendedInfo.getChainedNodes() : &features;
 #else
     deviceInfo.pNext = extendedInfo.getChainedNodes();
-#endif
+#endif // VK_KHR_get_physical_device_properties2
     deviceInfo.flags = 0;
     deviceInfo.queueCreateInfoCount = MAGMA_COUNT(queueDescriptors);
     deviceInfo.pQueueCreateInfos = queueDescriptors.data();
@@ -87,7 +87,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     deviceInfo.ppEnabledLayerNames = enabledLayers.data();
     deviceInfo.enabledExtensionCount = MAGMA_COUNT(enabledExtensions);
     deviceInfo.ppEnabledExtensionNames = enabledExtensions.data();
-    deviceInfo.pEnabledFeatures = extendedDeviceFeatures.empty() ? &deviceFeatures : nullptr;
+    deviceInfo.pEnabledFeatures = deviceExtendedFeatures.empty() ? &deviceFeatures : nullptr;
     const VkResult result = vkCreateDevice(*(this->physicalDevice), &deviceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     if (VK_ERROR_INITIALIZATION_FAILED == result)
         throw exception::InitializationFailed("initialization of logical device failed");

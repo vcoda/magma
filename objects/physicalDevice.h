@@ -41,7 +41,7 @@ namespace magma
             const std::vector<const char *>& enabledLayers,
             const std::vector<const char *>& enabledExtensions,
             const VkPhysicalDeviceFeatures& deviceFeatures,
-            const std::vector<void *>& extendedDeviceFeatures = {},
+            const std::vector<void *>& deviceExtendedFeatures = {},
             const StructureChain& extendedInfo = StructureChain()) const;
         std::shared_ptr<Instance> getInstance() const noexcept { return instance; }
         VkPhysicalDeviceFeatures getFeatures() const noexcept;
