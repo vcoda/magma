@@ -182,11 +182,11 @@ void Profiler::endSection(std::shared_ptr<CommandBuffer> cmdBuffer)
     }
 }
 
-std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool wait) const
+std::vector<Profiler::Sample> Profiler::collectSamples(bool wait) const
 {
     MAGMA_ASSERT(!insideFrame);
-    std::vector<Timing> executionTimings;
-    executionTimings.reserve(sections.size());
+    std::vector<Sample> samples;
+    samples.reserve(sections.size());
     const uint32_t count = std::min(queryCount, queryPool->getQueryCount());
     if (wait)
     {   // Block CPU until all query results will be ready
@@ -198,7 +198,7 @@ std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool wait) const
             const uint64_t start = beginTs & timestampMask;
             const uint64_t end = endTs & timestampMask;
             double time = double(end - start) * timestampPeriod; // nanoseconds
-            executionTimings.emplace_back(section.name, section.frameIndex, time);
+            samples.emplace_back(section.name, section.frameIndex, time);
         }
     }
     else
@@ -213,15 +213,14 @@ std::vector<Profiler::Timing> Profiler::getExecutionTimings(bool wait) const
             const uint64_t start = beginTs.result & timestampMask;
             const uint64_t end = endTs.result & timestampMask;
             double time = double(end - start) * timestampPeriod; // nanoseconds
-            executionTimings.emplace_back(section.name, section.frameIndex, time);
+            samples.emplace_back(section.name, section.frameIndex, time);
         }
     }
-    return executionTimings;
+    return samples;
 }
 
-void Profiler::copyExecutionTimings(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Buffer> buffer,
-    VkDeviceSize bufferOffset /* 0 */,
-    bool hostRead /* true */) const noexcept
+void Profiler::copyTimestamps(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Buffer> buffer,
+    VkDeviceSize bufferOffset /* 0 */, bool hostRead /* true */) const noexcept
 {
     constexpr bool wait = true;
     const uint32_t count = std::min(queryCount, queryPool->getQueryCount());

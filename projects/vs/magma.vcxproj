@@ -611,6 +611,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling fragment shader</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/output/fontf</Outputs>
     </CustomBuild>
+    <None Include="..\..\auxiliary\profiler.inl" />
     <None Include="..\..\auxiliary\shaderCompiler.inl" />
     <None Include="..\..\barriers\bufferMemoryBarrier.inl" />
     <None Include="..\..\barriers\subpassDependency.inl" />

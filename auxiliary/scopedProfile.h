@@ -28,20 +28,22 @@ namespace magma
         public:
             explicit ScopedProfile(const char *name, std::shared_ptr<CommandBuffer> cmdBuffer_,
                 uint32_t color = 0xFFFFFFFF):
-                cmdBuffer(std::move(cmdBuffer_))
+                cmdBuffer(std::move(cmdBuffer_)),
+                profiler(Profiler::get(Profiler::Graphics))
             {
-                if (auto profiler = Profiler::get(Profiler::Graphics))
+                if (profiler)
                     profiler->beginSection(name, color, cmdBuffer);
             }
 
             ~ScopedProfile()
             {
-                if (auto profiler = Profiler::get(Profiler::Graphics))
+                if (profiler)
                     profiler->endSection(std::move(cmdBuffer));
             }
 
         private:
             std::shared_ptr<CommandBuffer> cmdBuffer;
+            Profiler *profiler;
         };
     } // namespace aux
 } // namespace magma

@@ -1420,6 +1420,9 @@
     <None Include="..\..\misc\structureChainNode.inl">
       <Filter>Header Files\misc</Filter>
     </None>
+    <None Include="..\..\auxiliary\profiler.inl">
+      <Filter>Header Files\auxiliary</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">

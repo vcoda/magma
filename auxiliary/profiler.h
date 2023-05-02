@@ -38,19 +38,30 @@ namespace magma
 
         class Profiler : public Base
         {
+            struct Section
+            {
+                const char *name;
+                uint32_t frameIndex;
+                uint32_t beginQuery;
+                Section(const char *name,
+                    uint32_t frameIndex,
+                    uint32_t beginQuery);
+            };
+
         public:
             enum Queue
             {
                 Graphics, Compute
             };
 
-            struct Timing
+            struct Sample
             {
                 const char *name;
-                const uint32_t frameIndex;
-                const double time;
-                Timing(const char *name, uint32_t frameIndex, double time) noexcept:
-                    name(name), frameIndex(frameIndex), time(time) {}
+                uint32_t frameIndex;
+                double time; // In nanoseconds
+                Sample(const char *name,
+                    uint32_t frameIndex,
+                    double time);
             };
 
             static void set(Profiler *profiler) noexcept;
@@ -63,8 +74,8 @@ namespace magma
             bool endFrame();
             void beginSection(const char *name, uint32_t color, std::shared_ptr<CommandBuffer> cmdBuffer);
             void endSection(std::shared_ptr<CommandBuffer> cmdBuffer);
-            std::vector<Timing> getExecutionTimings(bool wait) const;
-            void copyExecutionTimings(std::shared_ptr<CommandBuffer> cmdBuffer,
+            std::vector<Sample> collectSamples(bool wait) const;
+            void copyTimestamps(std::shared_ptr<CommandBuffer> cmdBuffer,
                 std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset = 0,
                 bool hostRead = true) const noexcept;
 
@@ -75,15 +86,6 @@ namespace magma
             uint32_t getResetQueryCount() const noexcept;
 
         private:
-            struct Section
-            {
-                const char *name;
-                const uint32_t frameIndex;
-                const uint32_t beginQuery;
-                Section(const char *name, uint32_t frameIndex, uint32_t beginQuery) noexcept:
-                    name(name), frameIndex(frameIndex), beginQuery(beginQuery) {}
-            };
-
             static Profiler *profilers[2];
             const VkQueueFlags queueType;
             float timestampPeriod = 0.f;
@@ -123,4 +125,5 @@ namespace magma
     } // namespace aux
 } // namespace magma
 
+#include "profiler.inl"
 #include "scopedProfile.h"
