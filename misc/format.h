@@ -49,7 +49,7 @@ namespace magma
         uint8_t componentCount() const noexcept;
         uint8_t planeCount() const noexcept;
         std::size_t size() const noexcept;
-        std::size_t nonCompressedSize() const noexcept;
+        std::size_t uncompressedSize() const noexcept;
         std::size_t blockCompressedSize() const noexcept;
         std::size_t videoCompressedSize() const noexcept;
         std::pair<int, int> blockFootprint() const noexcept;
