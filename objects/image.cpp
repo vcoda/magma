@@ -373,17 +373,17 @@ std::vector<VkBufferImageCopy> Image::setupCopyRegions(const MipmapLayout& mipOf
         region.imageOffset = {0, 0, 0};
         region.imageExtent = mipExtent;
         copyRegions.push_back(region);
-        // Calculate extents of next mip level
+        // Calculate extents of the next mip level
         if (mipExtent.width > 1)
-            mipExtent.width = mipExtent.width >> 1;
+            mipExtent.width >>= 1;
         if (imageType > VK_IMAGE_TYPE_1D)
         {
             if (mipExtent.height > 1)
-                mipExtent.height = mipExtent.height >> 1;
+                mipExtent.height >>= 1;
             if (imageType > VK_IMAGE_TYPE_2D)
             {
                 if (mipExtent.depth > 1)
-                    mipExtent.depth = mipExtent.depth >> 1;
+                    mipExtent.depth >>= 1;
             }
         }
         if (blockCompressed)
