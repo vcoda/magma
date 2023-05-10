@@ -193,6 +193,7 @@
     <ClInclude Include="..\..\core\hash.h" />
     <ClInclude Include="..\..\core\noncopyable.h" />
     <ClInclude Include="..\..\core\pch.h" />
+    <ClInclude Include="..\..\core\round.h" />
     <ClInclude Include="..\..\core\threadSafeUnorderedSet.h" />
     <ClInclude Include="..\..\core\refCountChecker.h" />
     <ClInclude Include="..\..\core\vectors.h" />
