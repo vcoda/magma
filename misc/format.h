@@ -52,7 +52,7 @@ namespace magma
         std::size_t uncompressedSize() const noexcept;
         std::size_t blockCompressedSize() const noexcept;
         std::size_t videoCompressedSize() const noexcept;
-        std::pair<int, int> blockFootprint() const noexcept;
+        std::pair<uint32_t, uint32_t> blockFootprint() const noexcept;
         VkFormat unormToSrgb() const noexcept;
         VkFormat srgbToUnorm() const noexcept;
 

@@ -499,7 +499,7 @@ std::size_t Format::videoCompressedSize() const noexcept
     return 0;
 }
 
-std::pair<int, int> Format::blockFootprint() const noexcept
+std::pair<uint32_t, uint32_t> Format::blockFootprint() const noexcept
 {
     switch (format)
     {
