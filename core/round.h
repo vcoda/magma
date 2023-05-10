@@ -25,6 +25,8 @@ namespace magma
         {
             if (0 == multiple)
                 return 0;
+            if (1 == multiple)
+                return value;
             return ((value + multiple - 1) / multiple) * multiple;
         }
     } // core
