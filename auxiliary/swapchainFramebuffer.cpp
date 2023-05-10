@@ -44,7 +44,7 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainImage> color
         Image::Descriptor imageFormatList;
         imageFormatList.viewFormats.push_back(colorFormat);
         // Create depth/stencil attachment
-        const VkExtent2D extent{color->getMipExtent(0).width, color->getMipExtent(0).height};
+        const VkExtent2D extent{color->getWidth(), color->getHeight()};
         constexpr bool sampled = false;
         depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, color->getSamples(), sampled,
             allocator, imageFormatList);

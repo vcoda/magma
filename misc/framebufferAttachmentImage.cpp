@@ -49,8 +49,8 @@ FramebufferAttachmentImage::FramebufferAttachmentImage(std::shared_ptr<const Ima
     pNext = nullptr;
     flags = image->getFlags();
     usage = image->getUsage();
-    width = image->getMipExtent(0).width;
-    height = image->getMipExtent(0).height;
+    width = image->getWidth();
+    height = image->getHeight();
     layerCount = image->getArrayLayers();
     viewFormatCount = MAGMA_COUNT(image->getViewFormats());
     pViewFormats = core::copyVector(image->getViewFormats());

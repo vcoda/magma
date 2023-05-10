@@ -46,11 +46,14 @@ namespace magma
         VkFormat getFormat() const noexcept { return format; }
         VkImageLayout getLayout() const noexcept { return layout; }
         void setLayout(VkImageLayout layout) noexcept { this->layout = layout; }
-        VkExtent3D getMipExtent(uint32_t level) const noexcept;
+        uint32_t getWidth() const noexcept { return extent.width; }
+        uint32_t getHeight() const noexcept { return extent.height; }
+        uint32_t getDepth() const noexcept { return extent.depth; }
         uint32_t getMipLevels() const noexcept { return mipLevels; }
         uint32_t getArrayLayers() const noexcept { return arrayLayers; }
         uint32_t getSamples() const noexcept { return samples; }
         VkImageUsageFlags getUsage() const noexcept { return usage; }
+        VkExtent3D calculateMipExtent(uint32_t level) const noexcept;
         const std::vector<VkFormat>& getViewFormats() const noexcept { return viewFormats; }
         VkSubresourceLayout getSubresourceLayout(uint32_t mipLevel,
             uint32_t arrayLayer = 0) const noexcept;

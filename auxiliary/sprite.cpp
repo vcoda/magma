@@ -120,7 +120,7 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
 void Sprite::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Image> dstImage,
     VkFilter filter /* VK_FILTER_NEAREST */) const noexcept
 {
-    const VkExtent3D dstExtent = dstImage->getMipExtent(0);
+    const VkExtent3D dstExtent = dstImage->calculateMipExtent(0);
     if (inBounds(dstExtent))
     {
         VkImageBlit blitRegion;

@@ -265,15 +265,15 @@ void CommandBuffer::copyImage(const std::shared_ptr<const Image>& srcImage, cons
     imageCopy.srcOffset = srcOffset;
     imageCopy.dstSubresource = dstImage->getSubresourceLayers(mipLevel);
     imageCopy.dstOffset = dstOffset;
-    imageCopy.extent = dstImage->getMipExtent(mipLevel);
+    imageCopy.extent = dstImage->calculateMipExtent(mipLevel);
     vkCmdCopyImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &imageCopy);
 }
 
 void CommandBuffer::blitImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage, VkFilter filter,
     uint32_t mipLevel /* 0 */, const VkOffset3D& srcOffset /* 0, 0, 0 */, const VkOffset3D& dstOffset /* 0, 0, 0 */) const noexcept
 {
-    const VkExtent3D srcExtent = srcImage->getMipExtent(mipLevel);
-    const VkExtent3D dstExtent = dstImage->getMipExtent(mipLevel);
+    const VkExtent3D srcExtent = srcImage->calculateMipExtent(mipLevel);
+    const VkExtent3D dstExtent = dstImage->calculateMipExtent(mipLevel);
     VkImageBlit imageBlit;
     imageBlit.srcSubresource = srcImage->getSubresourceLayers(mipLevel);
     imageBlit.srcOffsets[0] = srcOffset;

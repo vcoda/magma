@@ -28,6 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../barriers/imageMemoryBarrier.h"
 #include "../misc/format.h"
 #include "../exceptions/errorResult.h"
+#include "../core/round.h"
 
 namespace magma
 {
@@ -109,22 +110,23 @@ Image::~Image()
     vkDestroyImage(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-VkExtent3D Image::getMipExtent(uint32_t level) const noexcept
+VkExtent3D Image::calculateMipExtent(uint32_t level) const noexcept
 {
     MAGMA_ASSERT(level < mipLevels);
     if (0 == level)
         return extent;
     if (level >= mipLevels)
         return VkExtent3D{0, 0, 0};
+    const uint32_t texelBlockSize = Format(format).blockCompressed() ? 4 : 1;
     VkExtent3D mipExtent = extent;
     for (uint32_t i = 0; i < level; ++i)
     {
         if (mipExtent.width > 1)
-            mipExtent.width >>= 1;
+            mipExtent.width = core::roundUp(mipExtent.width >> 1, texelBlockSize);
         if (mipExtent.height > 1)
-            mipExtent.height >>= 1;
+            mipExtent.height = core::roundUp(mipExtent.height >> 1, texelBlockSize);
         if (mipExtent.depth > 1)
-            mipExtent.depth >>= 1;
+            mipExtent.depth = core::roundUp(mipExtent.depth >> 1, texelBlockSize);
     }
     return mipExtent;
 }
@@ -294,7 +296,7 @@ void Image::copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t leve
     region.imageSubresource.baseArrayLayer = arrayLayer;
     region.imageSubresource.layerCount = subresourceRange.layerCount;
     region.imageOffset = imageOffset;
-    region.imageExtent = getMipExtent(level);
+    region.imageExtent = calculateMipExtent(level);
     cmdBuffer->copyBufferToImage(std::move(buffer), weakThis, region);
     // Image layout transition from transfer dest to specified layout
     const ImageMemoryBarrier postCopyBarrier(weakThis, dstLayout, subresourceRange);
@@ -346,7 +348,7 @@ std::vector<VkBufferImageCopy> Image::setupCopyRegions(const MipmapLayout& mipOf
         region.imageSubresource.baseArrayLayer = i / mipLevels;
         region.imageSubresource.layerCount = 1;
         region.imageOffset = {0, 0, 0};
-        region.imageExtent = getMipExtent(region.imageSubresource.mipLevel);
+        region.imageExtent = calculateMipExtent(region.imageSubresource.mipLevel);
         copyRegions.push_back(region);
     }
     return copyRegions;

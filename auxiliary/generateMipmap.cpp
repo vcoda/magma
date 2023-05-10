@@ -39,10 +39,10 @@ bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseLevel, VkFilter f
     std::shared_ptr<DeviceFeatures> deviceFeatures = image->getDevice()->getDeviceFeatures();
     if (!deviceFeatures->checkFormatFeaturesSupport(image->getFormat(), VK_FORMAT_FEATURE_BLIT_SRC_BIT | VK_FORMAT_FEATURE_BLIT_DST_BIT).optimal)
         return false;
-    VkExtent3D prevMipExtent = image->getMipExtent(baseLevel);
+    VkExtent3D prevMipExtent = image->calculateMipExtent(baseLevel);
     for (uint32_t level = baseLevel + 1; level < image->getMipLevels(); ++level)
     {
-        const VkExtent3D nextMipExtent = image->getMipExtent(level);
+        const VkExtent3D nextMipExtent = image->calculateMipExtent(level);
         VkImageBlit blitRegion;
         blitRegion.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
         blitRegion.srcSubresource.mipLevel = level - 1;
