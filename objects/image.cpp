@@ -117,16 +117,29 @@ VkExtent3D Image::calculateMipExtent(uint32_t level) const noexcept
         return extent;
     if (level >= mipLevels)
         return VkExtent3D{0, 0, 0};
-    const uint32_t texelBlockSize = Format(format).blockCompressed() ? 4 : 1;
+    const Format imageFormat(format);
+    const auto blockSize = imageFormat.blockFootprint();
     VkExtent3D mipExtent = extent;
     for (uint32_t i = 0; i < level; ++i)
     {
         if (mipExtent.width > 1)
-            mipExtent.width = core::roundUp(mipExtent.width >> 1, texelBlockSize);
-        if (mipExtent.height > 1)
-            mipExtent.height = core::roundUp(mipExtent.height >> 1, texelBlockSize);
-        if (mipExtent.depth > 1)
-            mipExtent.depth = core::roundUp(mipExtent.depth >> 1, texelBlockSize);
+        {
+            mipExtent.width >>= 1;
+            mipExtent.width = core::roundUp(mipExtent.width, blockSize.first);
+        }
+        if (imageType > VK_IMAGE_TYPE_1D)
+        {
+            if (mipExtent.height > 1)
+            {
+                mipExtent.height >>= 1;
+                mipExtent.height = core::roundUp(mipExtent.height, blockSize.second);
+            }
+            if (imageType > VK_IMAGE_TYPE_2D)
+            {
+                mipExtent.depth >>= 1;
+                mipExtent.depth = core::roundUp(mipExtent.depth, blockSize.second); // ?
+            }
+        }
     }
     return mipExtent;
 }
