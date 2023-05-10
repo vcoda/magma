@@ -117,29 +117,22 @@ VkExtent3D Image::calculateMipExtent(uint32_t level) const noexcept
         return extent;
     if (level >= mipLevels)
         return VkExtent3D{0, 0, 0};
-    const Format imageFormat(format);
-    const auto blockSize = imageFormat.blockFootprint();
     VkExtent3D mipExtent = extent;
     for (uint32_t i = 0; i < level; ++i)
     {
         if (mipExtent.width > 1)
-        {
             mipExtent.width >>= 1;
-            mipExtent.width = core::roundUp(mipExtent.width, blockSize.first);
-        }
         if (imageType > VK_IMAGE_TYPE_1D)
         {
             if (mipExtent.height > 1)
-            {
                 mipExtent.height >>= 1;
-                mipExtent.height = core::roundUp(mipExtent.height, blockSize.second);
-            }
             if (imageType > VK_IMAGE_TYPE_2D)
             {
-                mipExtent.depth >>= 1;
-                mipExtent.depth = core::roundUp(mipExtent.depth, blockSize.second); // ?
+                if (mipExtent.depth > 1)
+                    mipExtent.depth >>= 1;
             }
         }
+        mipExtent = roundUp(mipExtent);
     }
     return mipExtent;
 }
@@ -351,8 +344,6 @@ Image::MipmapLayout Image::setupMipOffsets(const MipmapLayout& mipSizes, VkDevic
 std::vector<VkBufferImageCopy> Image::setupCopyRegions(const MipmapLayout& mipOffsets, const CopyLayout& bufferLayout) const noexcept
 {
     const uint32_t mipCount = MAGMA_COUNT(mipOffsets);
-    const Format imageFormat(format);
-    const bool blockCompressed = imageFormat.blockCompressed();
     MAGMA_ASSERT(mipCount > 0);
     MAGMA_ASSERT(mipCount <= mipLevels * arrayLayers);
     std::vector<VkBufferImageCopy> copyRegions;
@@ -386,19 +377,9 @@ std::vector<VkBufferImageCopy> Image::setupCopyRegions(const MipmapLayout& mipOf
                     mipExtent.depth >>= 1;
             }
         }
-        if (blockCompressed)
-        {   // Take into account block size for block compressed formats
     #if MAGMA_COPY_BUFFER_TO_IMAGE_WITH_PHYSICAL_EXTENTS
-            const auto blockSize = imageFormat.blockFootprint();
-            mipExtent.width = core::roundUp(mipExtent.width, blockSize.first);
-            if (imageType > VK_IMAGE_TYPE_1D)
-            {
-                mipExtent.height = core::roundUp(mipExtent.height, blockSize.second);
-                if (imageType > VK_IMAGE_TYPE_2D)
-                    mipExtent.depth = core::roundUp(mipExtent.depth, blockSize.second); // ?
-            }
-    #endif // MAGMA_COPY_BUFFER_TO_IMAGE_WITH_PHYSICAL_EXTENTS
-        }
+        mipExtent = roundUp(mipExtent);
+    #endif
     }
     return copyRegions;
 }
@@ -437,6 +418,26 @@ VkSampleCountFlagBits Image::getSampleCountBit(uint32_t samples) noexcept
     case 64: return VK_SAMPLE_COUNT_64_BIT;
     }
     return VK_SAMPLE_COUNT_1_BIT;
+}
+
+VkExtent3D Image::roundUp(const VkExtent3D& extent) const noexcept
+{
+    const Format imageFormat(format);
+    const bool blockCompressed = imageFormat.blockCompressed();
+    if (blockCompressed)
+    {
+        const auto blockSize = imageFormat.blockFootprint();
+        VkExtent3D roundedExtent = extent;
+        roundedExtent.width = core::roundUp(extent.width, blockSize.first);
+        if (imageType > VK_IMAGE_TYPE_1D)
+        {
+            roundedExtent.height = core::roundUp(extent.height, blockSize.second);
+            if (imageType > VK_IMAGE_TYPE_2D)
+                roundedExtent.depth = core::roundUp(extent.depth, blockSize.second); // ?
+        }
+        return roundedExtent;
+    }
+    return extent;
 }
 
 VkFormat Image::checkFormatFeature(std::shared_ptr<Device> device, VkFormat format, VkFormatFeatureFlags requiredFeature)

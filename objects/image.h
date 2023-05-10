@@ -109,6 +109,7 @@ namespace magma
             std::shared_ptr<const Buffer> buffer,
             const std::vector<VkBufferImageCopy>& copyRegions,
             VkImageLayout dstLayout);
+        VkExtent3D roundUp(const VkExtent3D& extent) const noexcept;
         static VkSampleCountFlagBits getSampleCountBit(uint32_t samples) noexcept;
         static VkFormat checkFormatFeature(std::shared_ptr<Device> device,
             VkFormat format,
