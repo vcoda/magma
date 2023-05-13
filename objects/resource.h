@@ -42,7 +42,6 @@ namespace magma
         class Payload final : core::NonCopyable
         {
         public:
-            Payload() noexcept;
             ~Payload();
             template<typename Type>
             void setData(const Type& payload) noexcept;
@@ -53,8 +52,8 @@ namespace magma
             bool hasData() const noexcept { return data != nullptr; }
 
         private:
-            void *data;
-            size_t size;
+            void *data = nullptr;
+            size_t size = 0;
         };
 
     public:

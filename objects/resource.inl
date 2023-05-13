@@ -1,10 +1,5 @@
 namespace magma
 {
-inline Resource::Payload::Payload() noexcept:
-    data(nullptr),
-    size(0)
-{}
-
 inline Resource::Payload::~Payload()
 {
     free(data);
