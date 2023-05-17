@@ -32,8 +32,8 @@ namespace magma
 
     protected:
         explicit BaseIndexBuffer(std::shared_ptr<Device> device,
-            VkDeviceSize size,
             VkIndexType indexType,
+            VkDeviceSize size,
             VkBufferUsageFlags usage,
             VkMemoryPropertyFlags memoryFlags,
             const Descriptor& optional,
@@ -49,16 +49,16 @@ namespace magma
     {
     public:
         explicit IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
+            VkIndexType indexType,
             VkDeviceSize size,
             const void *data,
-            VkIndexType indexType,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
         explicit IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             VkIndexType indexType,
+            std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,
@@ -73,8 +73,8 @@ namespace magma
     {
     public:
         explicit DynamicIndexBuffer(std::shared_ptr<Device> device,
-            VkDeviceSize size,
             VkIndexType indexType,
+            VkDeviceSize size,
             bool pinnedMemory,
             std::shared_ptr<Allocator> allocator = nullptr,
             const void *initialData = nullptr,
@@ -88,16 +88,16 @@ namespace magma
     {
     public:
         explicit AccelerationStructureIndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            VkDeviceSize size,
-            const void *data,
             VkIndexType indexType,
+            VkDeviceSize size,
+            const void *data = nullptr,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
         explicit AccelerationStructureIndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             VkIndexType indexType,
+            std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,

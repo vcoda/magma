@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-BaseIndexBuffer::BaseIndexBuffer(std::shared_ptr<Device> device, VkDeviceSize size, VkIndexType indexType,
+BaseIndexBuffer::BaseIndexBuffer(std::shared_ptr<Device> device, VkIndexType indexType, VkDeviceSize size,
     VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags,
     const Descriptor& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     Buffer(std::move(device), size,
@@ -57,12 +57,12 @@ uint32_t BaseIndexBuffer::getIndexCount() const noexcept
     return static_cast<uint32_t>(size/indexSize);
 }
 
-IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data, VkIndexType indexType,
+IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType indexType, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Descriptor& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
-    BaseIndexBuffer(cmdBuffer->getDevice(), size, indexType,
+    BaseIndexBuffer(cmdBuffer->getDevice(), indexType, size,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, allocator)
@@ -75,14 +75,14 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize 
     commitAndWait(std::move(cmdBuffer));
 }
 
-IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer, VkIndexType indexType,
+IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType indexType, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
     const Descriptor& optional /* default */,
     const Sharing& sharing /* default */):
-    BaseIndexBuffer(srcBuffer->getDevice(),
-        size > 0 ? size : srcBuffer->getSize(), indexType,
+    BaseIndexBuffer(srcBuffer->getDevice(), indexType,
+        size > 0 ? size : srcBuffer->getSize(),
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, std::move(allocator))
@@ -90,13 +90,13 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), size, srcOffset);
 }
 
-DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkDeviceSize size, VkIndexType indexType, bool pinnedMemory,
+DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkIndexType indexType, VkDeviceSize size, bool pinnedMemory,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const void *initialData /* nullptr */,
     const Descriptor& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
-    BaseIndexBuffer(std::move(device), size, indexType,
+    BaseIndexBuffer(std::move(device), indexType, size,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
         (pinnedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0) | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
         optional, sharing, std::move(allocator))
@@ -106,17 +106,18 @@ DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkDeviceS
 }
 
 #ifdef VK_NV_ray_tracing
-AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data, VkIndexType indexType,
+AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType indexType, VkDeviceSize size,
+    const void *data /* nullptr */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Descriptor& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
-    BaseIndexBuffer(cmdBuffer->getDevice(), size, indexType,
+    BaseIndexBuffer(cmdBuffer->getDevice(), indexType, size,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
-#ifdef VK_KHR_acceleration_structure
+    #ifdef VK_KHR_acceleration_structure
         (device->extensionEnabled(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME) ?
             VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR : 0) |
-#endif
+    #endif // VK_KHR_acceleration_structure
         VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, allocator)
@@ -129,19 +130,20 @@ AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_p
     commitAndWait(std::move(cmdBuffer));
 }
 
-AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer, VkIndexType indexType,
+AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType indexType,
+    std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
     const Descriptor& optional /* default */,
     const Sharing& sharing /* default */):
-    BaseIndexBuffer(srcBuffer->getDevice(),
-        size > 0 ? size : srcBuffer->getSize(), indexType,
+    BaseIndexBuffer(srcBuffer->getDevice(), indexType,
+        size > 0 ? size : srcBuffer->getSize(),
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
-#ifdef VK_KHR_acceleration_structure
+    #ifdef VK_KHR_acceleration_structure
         (device->extensionEnabled(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME) ?
             VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR : 0) |
-#endif
+    #endif // VK_KHR_acceleration_structure
         VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, std::move(allocator))
