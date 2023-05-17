@@ -54,7 +54,7 @@ FragmentDensityMap::FragmentDensityMap(std::shared_ptr<CommandBuffer> cmdBuffer,
             constexpr VkOffset3D imageOffset = {0, 0, 0};
             copyMipLevel(cmdBuffer, 0, arrayLayer, srcBuffer, bufferLayout, imageOffset,
                 VK_IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT,
-                VK_PIPELINE_STAGE_TRANSFER_BIT);
+                VK_PIPELINE_STAGE_FRAGMENT_DENSITY_PROCESS_BIT_EXT);
         }
     }
     cmdBuffer->end();
@@ -84,7 +84,7 @@ FragmentDensityMap::FragmentDensityMap(std::shared_ptr<CommandBuffer> cmdBuffer,
         constexpr VkOffset3D imageOffset = {0, 0, 0};
         copyMipLevel(cmdBuffer, 0, arrayLayer, srcBuffer, bufferLayout, imageOffset,
             VK_IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT,
-            VK_PIPELINE_STAGE_TRANSFER_BIT);
+            VK_PIPELINE_STAGE_FRAGMENT_DENSITY_PROCESS_BIT_EXT);
     }
 }
 #endif // VK_EXT_fragment_density_map
