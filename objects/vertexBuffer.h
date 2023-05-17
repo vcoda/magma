@@ -47,6 +47,11 @@ namespace magma
     class VertexBuffer : public BaseVertexBuffer
     {
     public:
+        explicit VertexBuffer(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Descriptor& optional = Descriptor(),
+            const Sharing& sharing = Sharing());
         explicit VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkDeviceSize size,
             const void *data,

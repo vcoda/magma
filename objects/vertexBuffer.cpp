@@ -34,6 +34,16 @@ BaseVertexBuffer::BaseVertexBuffer(std::shared_ptr<Device> device, VkDeviceSize 
     vertexCount(0)
 {}
 
+VertexBuffer::VertexBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Descriptor& optional /* default */,
+    const Sharing& sharing /* default */):
+    BaseVertexBuffer(std::move(device), size,
+        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        optional, sharing, allocator)
+{}
+
 VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Descriptor& optional /* default */,
