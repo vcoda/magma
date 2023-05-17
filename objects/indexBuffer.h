@@ -48,6 +48,12 @@ namespace magma
     class IndexBuffer : public BaseIndexBuffer
     {
     public:
+        explicit IndexBuffer(std::shared_ptr<Device> device,
+            VkIndexType indexType,
+            VkDeviceSize size,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Descriptor& optional = Descriptor(),
+            const Sharing& sharing = Sharing());
         explicit IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkIndexType indexType,
             VkDeviceSize size,

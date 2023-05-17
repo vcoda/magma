@@ -57,6 +57,16 @@ uint32_t BaseIndexBuffer::getIndexCount() const noexcept
     return static_cast<uint32_t>(size/indexSize);
 }
 
+IndexBuffer::IndexBuffer(std::shared_ptr<Device> device, VkIndexType indexType, VkDeviceSize size,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Descriptor& optional /* default */,
+    const Sharing& sharing /* default */):
+    BaseIndexBuffer(std::move(device), indexType, size,
+        VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        optional, sharing, allocator)
+{}
+
 IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType indexType, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Descriptor& optional /* default */,
