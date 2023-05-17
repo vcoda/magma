@@ -34,27 +34,28 @@ BaseIndexBuffer::BaseIndexBuffer(std::shared_ptr<Device> device, VkIndexType ind
     indexType(indexType)
 {}
 
-uint32_t BaseIndexBuffer::getIndexCount() const noexcept
+std::size_t BaseIndexBuffer::getIndexSize() const noexcept
 {
-    std::size_t indexSize;
     switch (indexType)
     {
     case VK_INDEX_TYPE_UINT16:
-        indexSize = sizeof(uint16_t);
-        break;
+        return sizeof(uint16_t);
     case VK_INDEX_TYPE_UINT32:
-        indexSize = sizeof(uint32_t);
-        break;
+        return sizeof(uint32_t);
 #ifdef VK_EXT_index_type_uint8
     case VK_INDEX_TYPE_UINT8_EXT:
-        indexSize = sizeof(uint8_t);
-        break;
-#endif
-    default:
-        MAGMA_ASSERT(false);
-        indexSize = 1;
+        return sizeof(uint8_t);
     }
-    return static_cast<uint32_t>(size/indexSize);
+#endif
+    MAGMA_ASSERT(false);
+    return 0;
+}
+
+uint32_t BaseIndexBuffer::getIndexCount() const noexcept
+{
+    const std::size_t indexSize = getIndexSize();
+    MAGMA_ASSERT(size % indexSize == 0);
+    return static_cast<uint32_t>(size / indexSize);
 }
 
 IndexBuffer::IndexBuffer(std::shared_ptr<Device> device, VkIndexType indexType, VkDeviceSize size,

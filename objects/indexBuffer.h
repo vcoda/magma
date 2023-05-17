@@ -28,6 +28,7 @@ namespace magma
     {
     public:
         VkIndexType getIndexType() const noexcept { return indexType; }
+        std::size_t getIndexSize() const noexcept;
         uint32_t getIndexCount() const noexcept;
 
     protected:
