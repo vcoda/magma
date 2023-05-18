@@ -69,7 +69,7 @@ namespace magma
         friend Queue;
 
     public:
-        enum class State
+        enum class State : uint32_t
         {
             Initial, Recording, Executable, Pending, Invalid
         };
@@ -574,7 +574,7 @@ namespace magma
         std::shared_ptr<Fence> fence;
         const VkCommandBufferLevel level;
         VkCommandBufferUsageFlags usageFlags;
-        State state;
+        std::atomic<State> state;
         VkBool32 occlusionQueryEnable : 1;
         VkBool32 conditionalRenderingEnable : 1;
         VkBool32 negativeViewportHeightEnabled : 1;
