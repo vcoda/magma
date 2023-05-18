@@ -73,6 +73,6 @@ DynamicStorageBuffer::DynamicStorageBuffer(std::shared_ptr<Device> device, VkDev
         optional, sharing, std::move(allocator))
 {
     if (initialData)
-        copyHost(initialData, std::move(copyFn));
+        copyHost(initialData, 0, 0, VK_WHOLE_SIZE, std::move(copyFn));
 }
 } // namespace magma

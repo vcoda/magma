@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class SrcTransferBuffer;
     class CommandBuffer;
     class IDeviceMemoryAllocator;
 
@@ -53,6 +54,16 @@ namespace magma
             VkDeviceSize offset = 0) override;
 #endif
         virtual void onDefragment() override;
+        void copyHost(const void *srcBuffer,
+            VkDeviceSize srcOffset = 0,
+            VkDeviceSize dstOffset = 0,
+            VkDeviceSize size = VK_WHOLE_SIZE,
+            CopyMemoryFunction copyFn = nullptr) noexcept;
+        void copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer,
+            std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+            VkDeviceSize srcOffset = 0,
+            VkDeviceSize dstOffset = 0,
+            VkDeviceSize size = VK_WHOLE_SIZE);
 
     protected:
         explicit Buffer(std::shared_ptr<Device> device,
@@ -63,13 +74,6 @@ namespace magma
             const Descriptor& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
-        void copyHost(const void *data,
-            CopyMemoryFunction copyFn) noexcept;
-        void copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<const Buffer> srcBuffer,
-            VkDeviceSize size = 0,
-            VkDeviceSize srcOffset = 0,
-            VkDeviceSize dstOffset = 0);
 
         const VkBufferCreateFlags flags;
         const VkBufferUsageFlags usage;

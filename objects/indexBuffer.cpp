@@ -113,7 +113,7 @@ DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkIndexTy
         optional, sharing, std::move(allocator))
 {
     if (initialData)
-        copyHost(initialData, std::move(copyFn));
+        copyHost(initialData, 0, 0, VK_WHOLE_SIZE, std::move(copyFn));
 }
 
 #ifdef VK_NV_ray_tracing

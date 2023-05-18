@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "buffer.h"
+#include "srcTransferBuffer.h"
 #include "device.h"
 #include "deviceMemory.h"
 #include "queue.h"
@@ -180,30 +181,38 @@ void Buffer::onDefragment()
     bindMemory(std::move(memory), offset);
 }
 
-void Buffer::copyHost(const void *data, CopyMemoryFunction copyFn) noexcept
+void Buffer::copyHost(const void *srcBuffer,
+    VkDeviceSize srcOffset /* 0 */,
+    VkDeviceSize dstOffset /* 0 */,
+    VkDeviceSize size /* VK_WHOLE_SIZE */,
+    CopyMemoryFunction copyFn /* nullptr */) noexcept
 {
-    if (void *buffer = memory->map())
+    void *dstBuffer = memory->map(dstOffset, size);
+    if (dstBuffer)
     {
         if (!copyFn)
             copyFn = core::copyMemory;
-        copyFn(buffer, data, static_cast<std::size_t>(size));
+        if (VK_WHOLE_SIZE == size)
+        {
+            MAGMA_ASSERT(0 == dstOffset);
+            size = getSize();
+        }
+        copyFn(dstBuffer, (uint8_t *)srcBuffer + srcOffset, static_cast<std::size_t>(size));
         memory->unmap();
     }
 }
 
-void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const Buffer> srcBuffer,
-    VkDeviceSize size /* 0 */,
+void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     VkDeviceSize srcOffset /* 0 */,
-    VkDeviceSize dstOffset /* 0 */)
+    VkDeviceSize dstOffset /* 0 */,
+    VkDeviceSize size /* VK_WHOLE_SIZE */)
 {
     VkBufferCopy region;
     region.srcOffset = srcOffset;
     region.dstOffset = dstOffset;
-    if (!size)
-        size = srcBuffer->getSize() - srcOffset;
-    region.size = std::min(this->getSize(), size);
+    region.size = (VK_WHOLE_SIZE == size) ? getSize() : size;
     // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
-    const auto weakThis = std::shared_ptr<Buffer>(this, [](Buffer *) {});
-    cmdBuffer->copyBuffer(srcBuffer, weakThis, region);
+    std::shared_ptr<Buffer> self = std::shared_ptr<Buffer>(this, [](Buffer *) {});
+    cmdBuffer->copyBuffer(srcBuffer, self, region);
 }
 } // namespace magma
