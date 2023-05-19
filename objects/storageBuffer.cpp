@@ -38,7 +38,7 @@ StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceS
     {   // Data is optional for storage buffer, copy if provided
         auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Descriptor(), sharing, std::move(copyFn));
         cmdBuffer->begin();
-        copyTransfer(cmdBuffer, srcBuffer, size);
+        copyTransfer(cmdBuffer, srcBuffer);
         cmdBuffer->end();
         commitAndWait(std::move(cmdBuffer));
     }
@@ -57,7 +57,7 @@ StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shar
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), size, srcOffset);
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }
 
 DynamicStorageBuffer::DynamicStorageBuffer(std::shared_ptr<Device> device, VkDeviceSize size, bool pinnedMemory,

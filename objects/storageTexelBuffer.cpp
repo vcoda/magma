@@ -37,7 +37,7 @@ StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
     MAGMA_ASSERT(data);
     auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Descriptor(), sharing, std::move(copyFn));
     cmdBuffer->begin();
-    copyTransfer(cmdBuffer, srcBuffer, size);
+    copyTransfer(cmdBuffer, srcBuffer);
     cmdBuffer->end();
     commitAndWait(std::move(cmdBuffer));
 }
@@ -55,7 +55,7 @@ StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), size, srcOffset);
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }
 
 DynamicStorageTexelBuffer::DynamicStorageTexelBuffer(std::shared_ptr<Device> device, VkDeviceSize size, bool pinnedMemory,

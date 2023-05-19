@@ -49,7 +49,7 @@ RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkD
     MAGMA_ASSERT(data);
     auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Descriptor(), sharing, std::move(copyFn));
     cmdBuffer->begin();
-    copyTransfer(cmdBuffer, srcBuffer, size);
+    copyTransfer(cmdBuffer, srcBuffer);
     cmdBuffer->end();
     commitAndWait(std::move(cmdBuffer));
 }
@@ -67,7 +67,7 @@ RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), size, srcOffset);
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }
 #endif // VK_NV_ray_tracing
 } // namespace magma
