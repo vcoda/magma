@@ -28,17 +28,25 @@ namespace magma
         explicit Image3D(std::shared_ptr<Device> device,
             VkFormat format,
             const VkExtent3D& extent,
+            uint32_t mipLevels,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
         explicit Image3D(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
-            const VkExtent3D& extent,
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+            const std::vector<Mip>& mipMaps,
             const CopyLayout& bufferLayout = {0, 0, 0},
             std::shared_ptr<Allocator> allocator = nullptr,
             const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
+        explicit Image3D(std::shared_ptr<CommandBuffer> cmdBuffer,
+            VkFormat format,
+            const std::vector<MipData>& mipMaps,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Descriptor& optional = Descriptor(),
+            const Sharing& sharing = Sharing(),
+            CopyMemoryFunction copyFn = nullptr);
 
     protected:
         Image3D(std::shared_ptr<Device> device,

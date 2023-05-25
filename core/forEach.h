@@ -19,38 +19,40 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    namespace core
+namespace core
+{
+/* Iterates two containers simultaneously. */
+
+template<class First, class Second>
+inline void forEach(First& a, Second& b,
+    std::function<void(typename First::iterator&,
+                       typename Second::iterator&)> eachFn)
+{
+    typename First::iterator i;
+    typename Second::iterator j;
+    for (i = a.begin(), j = b.begin();
+        (i != a.end()) && (j != b.end());
+        ++i, ++j)
     {
-        /* Iterates two containers simultaneously. */
+        eachFn(i, j);
+    }
+}
 
-        template<class First, class Second>
-        inline void forEach(First& a, Second& b,
-            std::function<void(typename First::iterator&, typename Second::iterator&)> eachFn)
-        {
-            typename First::iterator i;
-            typename Second::iterator j;
-            for (i = a.begin(), j = b.begin();
-                (i != a.end()) && (j != b.end());
-                ++i, ++j)
-            {
-                eachFn(i, j);
-            }
-        }
+/* Iterates two immutable containers simultaneously. */
 
-        /* Iterates two immutable containers simultaneously. */
-
-        template<class First, class Second>
-        inline void forConstEach(const First& a, const Second& b,
-            std::function<void(typename First::const_iterator&, typename Second::const_iterator&)> eachFn)
-        {
-            typename First::const_iterator i;
-            typename Second::const_iterator j;
-            for (i = a.cbegin(), j = b.cbegin();
-                (i != a.cend()) && (j != b.cend());
-                ++i, ++j)
-            {
-                eachFn(i, j);
-            }
-        }
-    } // namespace core
+template<class First, class Second>
+inline void forConstEach(const First& a, const Second& b,
+    std::function<void(typename First::const_iterator&,
+                       typename Second::const_iterator&)> eachFn)
+{
+    typename First::const_iterator i;
+    typename Second::const_iterator j;
+    for (i = a.cbegin(), j = b.cbegin();
+        (i != a.cend()) && (j != b.cend());
+        ++i, ++j)
+    {
+        eachFn(i, j);
+    }
+}
+} // namespace core
 } // namespace magma

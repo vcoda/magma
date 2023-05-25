@@ -33,11 +33,10 @@ namespace magma
     class Image : public NonDispatchableResource<Image, VkImage>
     {
     public:
+        struct Mip;
+        struct MipData;
         struct Descriptor;
         struct CopyLayout;
-        typedef std::vector<VkDeviceSize> MipmapLayout;
-        typedef std::vector<const void *> MipmapData;
-        typedef std::vector<MipmapData> ArrayMipmapData;
 
     public:
         ~Image();
@@ -73,17 +72,19 @@ namespace magma
             VkDeviceSize offset = 0);
 #endif
         virtual void onDefragment() override;
-        void copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer,
-            uint32_t level,
+        VkImageLayout layoutTransition(VkImageLayout newLayout,
+            std::shared_ptr<CommandBuffer> cmdBuffer);
+        void copyMip(std::shared_ptr<CommandBuffer> cmdBuffer,
+            uint32_t mipLevel,
             uint32_t arrayLayer,
-            std::shared_ptr<const Buffer> srcBuffer,
+            std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             const CopyLayout& bufferLayout,
             const VkOffset3D& imageOffset,
             VkImageLayout dstLayout,
-            VkPipelineStageFlags barrierDstStageMask = VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT);
+            VkPipelineStageFlags dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 
     protected:
-        explicit Image(std::shared_ptr<Device> device,
+        Image(std::shared_ptr<Device> device,
             VkImageType imageType,
             VkFormat format,
             const VkExtent3D& extent,
@@ -96,20 +97,18 @@ namespace magma
             const Descriptor& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
-        explicit Image(std::shared_ptr<Device> device,
+        Image(std::shared_ptr<Device> device,
             VkImage handle,
             VkImageType imageType,
             VkFormat format,
             const VkExtent3D& extent);
-        MipmapLayout setupMipOffsets(const MipmapLayout& mipSizes,
-            VkDeviceSize& bufferSize) const noexcept;
-        std::vector<VkBufferImageCopy> setupCopyRegions(const MipmapLayout& mipOffsets,
-            const CopyLayout& bufferLayout) const noexcept;
-        void copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<const Buffer> buffer,
-            const std::vector<VkBufferImageCopy>& copyRegions,
-            VkImageLayout dstLayout);
-        VkExtent3D roundUp(const VkExtent3D& extent) const noexcept;
+        VkDeviceSize setupMipMaps(std::vector<Mip>& dstMips,
+            const std::vector<MipData>& srcMips) const;
+        void copyMipMaps(std::shared_ptr<CommandBuffer> cmdBuffer,
+            std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+            const std::vector<Mip>& mipMaps,
+            const CopyLayout& bufferLayout);
+        VkExtent3D virtualMipExtent(uint32_t mipLevel) const noexcept;
         static VkSampleCountFlagBits getSampleCountBit(uint32_t samples) noexcept;
         static VkFormat checkFormatFeature(std::shared_ptr<Device> device,
             VkFormat format,
@@ -127,6 +126,19 @@ namespace magma
         const VkImageTiling tiling;
         const VkImageUsageFlags usage;
         std::vector<VkFormat> viewFormats;
+    };
+
+    struct Image::Mip
+    {
+        VkExtent3D extent = {0, 0, 0};
+        VkDeviceSize bufferOffset = 0ull;
+    };
+
+    struct Image::MipData
+    {
+        VkExtent3D extent = {0, 0, 0};
+        VkDeviceSize size = 0ull;
+        void *texels = nullptr;
     };
 
     struct Image::Descriptor

@@ -20,88 +20,66 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "image2D.h"
 #include "srcTransferBuffer.h"
 #include "commandBuffer.h"
-#include "../misc/format.h"
 #include "../helpers/mapScoped.h"
 #include "../core/copyMemory.h"
+#include "../core/forEach.h"
 
 namespace magma
 {
-Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent, uint32_t mipLevels,
+Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent3D& extent, uint32_t mipLevels,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Descriptor& optional /* default */,
     const Sharing& sharing /* default */):
-    Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
+    Image(std::move(device), VK_IMAGE_TYPE_2D, format, extent,
         mipLevels,
         1, // arrayLayers
         1, // samples
         0, // flags
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_TILING_OPTIMAL,
-        optional,
-        sharing,
-        std::move(allocator))
+        optional, sharing, std::move(allocator))
 {}
 
-Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
-    std::shared_ptr<const SrcTransferBuffer> srcBuffer, const MipmapLayout& mipOffsets,
+Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format,
+    std::shared_ptr<const SrcTransferBuffer> srcBuffer, const std::vector<Mip>& mipMaps,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Descriptor& optional /* default */,
     const Sharing& sharing /* default */):
-    Image(srcBuffer->getDevice(), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
-        MAGMA_COUNT(mipOffsets), // mipLevels
-        1, // arrayLayers
-        1, // samples
-        0, // flags
-        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-        VK_IMAGE_TILING_OPTIMAL,
-        optional,
-        sharing,
-        std::move(allocator))
+    Image2D(cmdBuffer->getDevice(), format, mipMaps.front().extent, MAGMA_COUNT(mipMaps),
+        std::move(allocator), optional, sharing)
 {
-    const auto copyRegions = setupCopyRegions(mipOffsets, bufferLayout);
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), copyRegions,
-        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    copyMipMaps(std::move(cmdBuffer), std::move(srcBuffer), mipMaps, bufferLayout);
 }
 
-Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
-    const MipmapData& mipData, const MipmapLayout& mipSizes,
+Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const std::vector<MipData>& mipMaps,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Descriptor& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Image(cmdBuffer->getDevice(), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
-        MAGMA_COUNT(mipSizes), // mipLevels
-        1, // arrayLayers
-        1, // samples
-        0, // flags
-        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-        VK_IMAGE_TILING_OPTIMAL,
-        optional,
-        sharing,
-        allocator)
-{   // Calculate aligned size and mip offsets
-    VkDeviceSize bufferSize = 0;
-    const auto mipOffsets = setupMipOffsets(mipSizes, bufferSize);
-    const auto copyRegions = setupCopyRegions(mipOffsets, {0, 0, 0});
-    // Copy mip levels to host visible buffer
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, bufferSize, nullptr, std::move(allocator), Buffer::Descriptor(), sharing);
-    helpers::mapScoped<uint8_t>(srcBuffer,
-        [&](uint8_t *data)
+    Image2D(cmdBuffer->getDevice(), format, mipMaps.front().extent, MAGMA_COUNT(mipMaps),
+        allocator, optional, sharing)
+{
+    // Setup memory layout of mip maps in the buffer
+    std::vector<Mip> mipChain;
+    const VkDeviceSize bufferSize = setupMipMaps(mipChain, mipMaps);
+    // Allocate temporary transfer buffer
+    std::shared_ptr<SrcTransferBuffer> srcBuffer = std::make_shared<SrcTransferBuffer>(device,
+        bufferSize, nullptr, std::move(allocator), Buffer::Descriptor(), sharing);
+    util::mapScoped<uint8_t>(srcBuffer,
+        [&](uint8_t *buffer)
         {
             if (!copyFn)
                 copyFn = core::copyMemory;
-            for (uint32_t level = 0; level < mipLevels; ++level)
-            {
-                const VkDeviceSize bufferOffset = copyRegions[level].bufferOffset;
-                void *mipLevel = data + bufferOffset;
-                copyFn(mipLevel, mipData[level], static_cast<std::size_t>(mipSizes[level]));
-            }
+            core::forConstEach(mipChain, mipMaps,
+                [buffer, copyFn](auto dstMip, auto srcMip)
+                {   // Copy mip texels to buffer
+                    copyFn(buffer + dstMip->bufferOffset, srcMip->texels, srcMip->size);
+                });
         });
     // Copy buffer to image
     cmdBuffer->begin();
-    copyTransfer(cmdBuffer, srcBuffer, copyRegions,
-        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    copyMipMaps(cmdBuffer, srcBuffer, mipChain, CopyLayout{0, 0, 0});
     cmdBuffer->end();
     commitAndWait(std::move(cmdBuffer));
 }
@@ -137,9 +115,7 @@ LinearTiledImage2D::LinearTiledImage2D(std::shared_ptr<Device> device, VkFormat 
         0, // flags
         VK_IMAGE_USAGE_TRANSFER_DST_BIT,
         VK_IMAGE_TILING_LINEAR,
-        optional,
-        sharing,
-        std::move(allocator))
+        optional, sharing, std::move(allocator))
 {}
 
 StorageImage2D::StorageImage2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent, uint32_t mipLevels, uint32_t samples,
@@ -153,9 +129,7 @@ StorageImage2D::StorageImage2D(std::shared_ptr<Device> device, VkFormat format, 
         0, // flags
         VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
         VK_IMAGE_TILING_OPTIMAL,
-        optional,
-        sharing,
-        std::move(allocator))
+        optional, sharing, std::move(allocator))
 {}
 
 MutableImage2D::MutableImage2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent, uint32_t mipLevels,
@@ -167,8 +141,6 @@ MutableImage2D::MutableImage2D(std::shared_ptr<Device> device, VkFormat format, 
         1, // arrayLayers
         1, // samples
         0, // flags
-        optional,
-        sharing,
-        std::move(allocator))
+        optional, sharing, std::move(allocator))
 {}
 } // namespace magma

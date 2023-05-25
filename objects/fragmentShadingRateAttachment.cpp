@@ -52,7 +52,7 @@ FragmentShadingRateAttachment::FragmentShadingRateAttachment(std::shared_ptr<Com
         {
             constexpr CopyLayout bufferLayout = {0, 0, 0};
             constexpr VkOffset3D imageOffset = {0, 0, 0};
-            copyMipLevel(cmdBuffer, 0, arrayLayer, srcBuffer, bufferLayout, imageOffset,
+            copyMip(cmdBuffer, 0, arrayLayer, srcBuffer, bufferLayout, imageOffset,
                 VK_IMAGE_LAYOUT_FRAGMENT_SHADING_RATE_ATTACHMENT_OPTIMAL_KHR,
                 VK_PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR);
         }
@@ -82,7 +82,7 @@ FragmentShadingRateAttachment::FragmentShadingRateAttachment(std::shared_ptr<Com
     for (uint32_t arrayLayer = 0; arrayLayer < arrayLayers; ++arrayLayer)
     {
         constexpr VkOffset3D imageOffset = {0, 0, 0};
-        copyMipLevel(cmdBuffer, 0, arrayLayer, srcBuffer, bufferLayout, imageOffset,
+        copyMip(cmdBuffer, 0, arrayLayer, srcBuffer, bufferLayout, imageOffset,
             VK_IMAGE_LAYOUT_FRAGMENT_SHADING_RATE_ATTACHMENT_OPTIMAL_KHR,
             VK_PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR);
     }

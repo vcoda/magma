@@ -20,7 +20,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Cube map image. */
+    /* Cube map image is an image where each mipmap level consists of six 2D
+       images which must be square. The 6 images represent the faces of a cube.
+       The texture coordinate used to access a cube map is a 3D direction vector. */
 
     class ImageCube : public Image
     {
@@ -34,19 +36,15 @@ namespace magma
             const Sharing& sharing = Sharing());
         explicit ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
-            uint32_t dimension,
-            uint32_t mipLevels,
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
-            const MipmapLayout& mipOffsets,
+            const std::vector<Mip>& mipMaps,
             const CopyLayout& bufferLayout = {0, 0, 0},
             std::shared_ptr<Allocator> allocator = nullptr,
             const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
         explicit ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
-            uint32_t dimension,
-            const MipmapData mipData[6],
-            const MipmapLayout& mipSizes,
+            const std::vector<MipData>& mipMaps,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing(),

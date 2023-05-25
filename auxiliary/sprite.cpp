@@ -61,9 +61,8 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
     }
     const CopyLayout bufferLayout = {offset, 0, 0};
     constexpr VkOffset3D imageOffset{0, 0, 0};
-    copyMipLevel(std::move(cmdBuffer), 0, 0, std::move(srcBuffer), bufferLayout, imageOffset,
-        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-        VK_PIPELINE_STAGE_TRANSFER_BIT);
+    copyMip(std::move(cmdBuffer), 0, 0, std::move(srcBuffer), bufferLayout, imageOffset,
+        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT);
 }
 
 Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
@@ -110,9 +109,8 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
     constexpr VkOffset3D imageOffset{0, 0, 0};
     // Copy buffer to image
     cmdBuffer->begin();
-    copyMipLevel(cmdBuffer, 0, 0, srcBuffer, bufferLayout, imageOffset,
-        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-        VK_PIPELINE_STAGE_TRANSFER_BIT);
+    copyMip(cmdBuffer, 0, 0, srcBuffer, bufferLayout, imageOffset,
+        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT);
     cmdBuffer->end();
     commitAndWait(std::move(cmdBuffer));
 }

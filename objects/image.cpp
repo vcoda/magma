@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "image.h"
-#include "buffer.h"
+#include "srcTransferBuffer.h"
 #include "device.h"
 #include "physicalDevice.h"
 #include "deviceMemory.h"
@@ -29,6 +29,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/format.h"
 #include "../exceptions/errorResult.h"
 #include "../core/round.h"
+
+// Vulkan validation layers may complain about image regions for block-compressed formats. See:
+// https://vulkan.lunarg.com/doc/view/1.3.224.1/windows/1.3-extensions/vkspec.html#VUID-vkCmdCopyBufferToImage-pRegions-06218
+// "For each element of pRegions, imageOffset.x and (imageExtent.width + imageOffset.x) must both be
+// greater than or equal to 0 and less than or equal to the width of the specified imageSubresource of dstImage".
+#define MAGMA_VIRTUAL_MIP_EXTENT 1
 
 namespace magma
 {
@@ -118,21 +124,20 @@ VkExtent3D Image::calculateMipExtent(uint32_t level) const noexcept
     if (level >= mipLevels)
         return VkExtent3D{0, 0, 0};
     VkExtent3D mipExtent = extent;
-    for (uint32_t i = 0; i < level; ++i)
-    {
-        if (mipExtent.width > 1)
-            mipExtent.width >>= 1;
+    mipExtent.width = std::max(1u, extent.width >> level);
+    mipExtent.height = std::max(1u, extent.height >> level);
+    mipExtent.depth = std::max(1u, extent.depth >> level);
+    const Format imageFormat(format);
+    if (imageFormat.blockCompressed())
+    {   // Extents must be a multiple of the compressed texel block footprint
+        const auto blockSize = imageFormat.blockFootprint();
+        mipExtent.width = core::roundUp(mipExtent.width, blockSize.first);
         if (imageType > VK_IMAGE_TYPE_1D)
         {
-            if (mipExtent.height > 1)
-                mipExtent.height >>= 1;
+            mipExtent.height = core::roundUp(mipExtent.height, blockSize.second);
             if (imageType > VK_IMAGE_TYPE_2D)
-            {
-                if (mipExtent.depth > 1)
-                    mipExtent.depth >>= 1;
-            }
+                mipExtent.depth = core::roundUp(mipExtent.depth, blockSize.second); // ?
         }
-        mipExtent = roundUp(mipExtent);
     }
     return mipExtent;
 }
@@ -277,116 +282,104 @@ void Image::onDefragment()
     bindMemory(std::move(memory), offset);
 }
 
-void Image::copyMipLevel(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t level, uint32_t arrayLayer,
-    std::shared_ptr<const Buffer> buffer, const CopyLayout& bufferLayout, const VkOffset3D& imageOffset,
-    VkImageLayout dstLayout, VkPipelineStageFlags barrierDstStageMask /* VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT */)
+VkImageLayout Image::layoutTransition(VkImageLayout newLayout, std::shared_ptr<CommandBuffer> cmdBuffer)
 {
     VkImageSubresourceRange subresourceRange;
     subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-    subresourceRange.baseMipLevel = level;
-    subresourceRange.levelCount = 1;
-    subresourceRange.baseArrayLayer = arrayLayer;
-    subresourceRange.layerCount = 1;
-    // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
-    const auto weakThis = std::shared_ptr<Image>(this, [](Image *) {});
-    // Image layout transition to transfer dest optimal
-    const ImageMemoryBarrier preCopyBarrier(weakThis, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
-    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_TRANSFER_WRITE_BIT, preCopyBarrier);
-    // Copy image
+    subresourceRange.baseMipLevel = 0;
+    subresourceRange.levelCount = mipLevels;
+    subresourceRange.baseArrayLayer = 0;
+    subresourceRange.layerCount = arrayLayers;
+    const VkImageLayout oldLayout = layout;
+    layout = VK_IMAGE_LAYOUT_UNDEFINED; // Hack to assing 0 to srcAccessMask inside ImageMemoryBarrier
+    const ImageMemoryBarrier memoryBarrier(shared_from_this(), newLayout, subresourceRange);
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, memoryBarrier);
+    return oldLayout;
+}
+
+void Image::copyMip(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t mipLevel, uint32_t arrayLayer,
+    std::shared_ptr<const SrcTransferBuffer> srcBuffer, const CopyLayout& bufferLayout, const VkOffset3D& imageOffset,
+    VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */)
+{
     VkBufferImageCopy region;
     region.bufferOffset = bufferLayout.offset;
     region.bufferRowLength = bufferLayout.rowLength;
     region.bufferImageHeight = bufferLayout.imageHeight;
     region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-    region.imageSubresource.mipLevel = level;
+    region.imageSubresource.mipLevel = mipLevel;
     region.imageSubresource.baseArrayLayer = arrayLayer;
-    region.imageSubresource.layerCount = subresourceRange.layerCount;
+    region.imageSubresource.layerCount = 1;
     region.imageOffset = imageOffset;
-    region.imageExtent = calculateMipExtent(level);
-    cmdBuffer->copyBufferToImage(std::move(buffer), weakThis, region);
-    // Image layout transition from transfer dest to specified layout
-    const ImageMemoryBarrier postCopyBarrier(weakThis, dstLayout, subresourceRange);
-    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, barrierDstStageMask, postCopyBarrier);
-}
-
-Image::MipmapLayout Image::setupMipOffsets(const MipmapLayout& mipSizes, VkDeviceSize& bufferSize) const noexcept
-{
-    const uint32_t mipCount = MAGMA_COUNT(mipSizes);
-    MAGMA_ASSERT(mipCount > 0);
-    MAGMA_ASSERT(mipCount <= mipLevels * arrayLayers);
-    MipmapLayout mipOffsets;
-    mipOffsets.reserve(mipLevels * arrayLayers);
-    mipOffsets.push_back(0);
-    for (uint32_t layer = 0; layer < arrayLayers; ++layer)
-    {   // Do not compute last mip offset for last array layer
-        const uint32_t count = (layer < arrayLayers - 1) ? mipCount : mipCount - 1;
-        for (uint32_t level = 1; level <= count; ++level)
-        {   // By default memory copies are aligned
-            const VkDeviceSize alignedMipSize = MAGMA_ALIGN(mipSizes[level - 1]);
-            mipOffsets.push_back(alignedMipSize);
-        }
-    }
-    // Compute buffer size
-    bufferSize = 0;
-    for (uint32_t level = 0; level < mipCount; ++level)
-        bufferSize += MAGMA_ALIGN(mipSizes[level]);
-    bufferSize *= arrayLayers;
-    return mipOffsets;
-}
-
-// Vulkan validation layers may complain about image regions for block-compressed formats. See:
-// https://vulkan.lunarg.com/doc/view/1.3.224.1/windows/1.3-extensions/vkspec.html#VUID-vkCmdCopyBufferToImage-pRegions-06218
-// "For each element of pRegions, imageOffset.x and (imageExtent.width + imageOffset.x) must both be
-// greater than or equal to 0 and less than or equal to the width of the specified imageSubresource of dstImage".
-// https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/1908
-#define MAGMA_COPY_BUFFER_TO_IMAGE_WITH_PHYSICAL_EXTENTS 0
-
-std::vector<VkBufferImageCopy> Image::setupCopyRegions(const MipmapLayout& mipOffsets, const CopyLayout& bufferLayout) const noexcept
-{
-    const uint32_t mipCount = MAGMA_COUNT(mipOffsets);
-    MAGMA_ASSERT(mipCount > 0);
-    MAGMA_ASSERT(mipCount <= mipLevels * arrayLayers);
-    std::vector<VkBufferImageCopy> copyRegions;
-    copyRegions.reserve(mipCount);
-    VkDeviceSize bufferOffset = bufferLayout.offset;
-    VkExtent3D mipExtent = extent;
-    for (uint32_t i = 0; i < mipCount; ++i)
+    // Note: Vulkan validation layer expects virtual mip extent for block-compressed formats
+    region.imageExtent = virtualMipExtent(mipLevel);
+    VkImageSubresourceRange subresourceRange;
+    subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    subresourceRange.baseMipLevel = mipLevel;
+    subresourceRange.levelCount = 1;
+    subresourceRange.baseArrayLayer = arrayLayer;
+    subresourceRange.layerCount = 1;
+    // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
+    const std::shared_ptr<Image> self = std::shared_ptr<Image>(this, [](Image *) {});
+    // Transition image layout as a destination of a transfer command
+    if (VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL == layout)
+        layout = VK_IMAGE_LAYOUT_UNDEFINED; // Hack to select proper srcAccessMask inside ImageMemoryBarrier
+    const ImageMemoryBarrier transferDst(shared_from_this(),
+        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+        subresourceRange);
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDst);
     {
-        bufferOffset += mipOffsets[i];
+        cmdBuffer->copyBufferToImage(std::move(srcBuffer), self, region);
+    }
+    // Transition image layout to read-only access in a shader as a sampled image
+    const ImageMemoryBarrier shaderRead(self,
+        dstLayout,
+        subresourceRange);
+    // Insert memory dependency between transfer and fragment shader stages
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
+}
+
+VkDeviceSize Image::setupMipMaps(std::vector<Mip>& dstMips, const std::vector<MipData>& srcMips) const
+{
+    VkDeviceSize bufferOffset = 0;
+    Mip mip;
+    mip.bufferOffset = bufferOffset;
+    mip.extent = srcMips[0].extent;
+    dstMips.reserve(srcMips.size());
+    dstMips.push_back(mip);
+    bufferOffset += MAGMA_ALIGN(srcMips[0].size); // By default memory copies are aligned
+    for (std::size_t mipIndex = 1, mipCount = srcMips.size(); mipIndex < mipCount; ++mipIndex)
+    {
+        mip.bufferOffset = bufferOffset;
+        mip.extent = srcMips[mipIndex].extent;
+        dstMips.push_back(mip);
+        bufferOffset += MAGMA_ALIGN(srcMips[mipIndex].size);
+    }
+    return bufferOffset;
+}
+
+void Image::copyMipMaps(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+    const std::vector<Mip>& mipMaps, const CopyLayout& bufferLayout)
+{
+    std::vector<VkBufferImageCopy> regions;
+    regions.reserve(mipMaps.size());
+    uint32_t mipIndex = 0;
+    for (const Mip& mip: mipMaps)
+    {   // Define buffer -> image copy region
         VkBufferImageCopy region;
-        region.bufferOffset = bufferOffset;
+        region.bufferOffset = bufferLayout.offset + mip.bufferOffset;
         region.bufferRowLength = bufferLayout.rowLength;
         region.bufferImageHeight = bufferLayout.imageHeight;
         region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        region.imageSubresource.mipLevel = i % mipLevels;
-        region.imageSubresource.baseArrayLayer = i / mipLevels;
+        region.imageSubresource.mipLevel = mipIndex % mipLevels;
+        region.imageSubresource.baseArrayLayer = mipIndex / mipLevels;
         region.imageSubresource.layerCount = 1;
         region.imageOffset = {0, 0, 0};
-        region.imageExtent = mipExtent;
-        copyRegions.push_back(region);
-        // Calculate extents of the next mip level
-        if (mipExtent.width > 1)
-            mipExtent.width >>= 1;
-        if (imageType > VK_IMAGE_TYPE_1D)
-        {
-            if (mipExtent.height > 1)
-                mipExtent.height >>= 1;
-            if (imageType > VK_IMAGE_TYPE_2D)
-            {
-                if (mipExtent.depth > 1)
-                    mipExtent.depth >>= 1;
-            }
-        }
-    #if MAGMA_COPY_BUFFER_TO_IMAGE_WITH_PHYSICAL_EXTENTS
-        mipExtent = roundUp(mipExtent);
-    #endif
+        // Note: Vulkan validation layer expects virtual mip extent for block-compressed formats
+        region.imageExtent = virtualMipExtent(region.imageSubresource.mipLevel);
+        regions.push_back(region);
+        ++mipIndex;
     }
-    return copyRegions;
-}
-
-void Image::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const Buffer> srcBuffer,
-    const std::vector<VkBufferImageCopy>& copyRegions, VkImageLayout dstLayout)
-{   // Define array layers to copy
+    // Define resource range
     VkImageSubresourceRange subresourceRange;
     subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
     subresourceRange.baseMipLevel = 0;
@@ -394,15 +387,38 @@ void Image::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
     subresourceRange.baseArrayLayer = 0;
     subresourceRange.layerCount = arrayLayers;
     // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
-    const auto weakThis = std::shared_ptr<Image>(this, [](Image *) {});
-    // Change image layout to transfer dest optimal
-    const ImageMemoryBarrier preCopyBarrier(weakThis, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
-    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_TRANSFER_WRITE_BIT, preCopyBarrier);
-    // Copy image data
-    cmdBuffer->copyBufferToImage(std::move(srcBuffer), weakThis, copyRegions);
-    // Change image layout from transfer dest optimal to shader read only
-    const ImageMemoryBarrier postCopyBarrier(weakThis, dstLayout, subresourceRange);
-    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, postCopyBarrier);
+    const std::shared_ptr<Image> self = std::shared_ptr<Image>(this, [](Image *) {});
+    // Transition image layout as a destination of a transfer command
+    const ImageMemoryBarrier transferDst(self,
+        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+        subresourceRange);
+    // Insert memory dependency between host and transfer stages
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDst);
+    {
+        cmdBuffer->copyBufferToImage(srcBuffer, self, regions);
+    }
+    // Transition image layout to read-only access in a shader as a sampled image
+    const ImageMemoryBarrier shaderRead(self,
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+        subresourceRange);
+    // Insert memory dependency between transfer and fragment shader stages
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, shaderRead);
+}
+
+VkExtent3D Image::virtualMipExtent(uint32_t level) const noexcept
+{
+    MAGMA_ASSERT(level < mipLevels);
+    if (!level)
+        return extent;
+#if MAGMA_VIRTUAL_MIP_EXTENT
+    return VkExtent3D{
+        std::max(1u, extent.width >> level),
+        std::max(1u, extent.height >> level),
+        std::max(1u, extent.depth >> level)
+    };
+#else
+    return calculateMipExtent(level); // Real extent
+#endif // MAGMA_VIRTUAL_MIP_EXTENT
 }
 
 VkSampleCountFlagBits Image::getSampleCountBit(uint32_t samples) noexcept
@@ -418,26 +434,6 @@ VkSampleCountFlagBits Image::getSampleCountBit(uint32_t samples) noexcept
     case 64: return VK_SAMPLE_COUNT_64_BIT;
     }
     return VK_SAMPLE_COUNT_1_BIT;
-}
-
-VkExtent3D Image::roundUp(const VkExtent3D& extent) const noexcept
-{
-    const Format imageFormat(format);
-    const bool blockCompressed = imageFormat.blockCompressed();
-    if (blockCompressed)
-    {
-        const auto blockSize = imageFormat.blockFootprint();
-        VkExtent3D roundedExtent = extent;
-        roundedExtent.width = core::roundUp(extent.width, blockSize.first);
-        if (imageType > VK_IMAGE_TYPE_1D)
-        {
-            roundedExtent.height = core::roundUp(extent.height, blockSize.second);
-            if (imageType > VK_IMAGE_TYPE_2D)
-                roundedExtent.depth = core::roundUp(extent.depth, blockSize.second); // ?
-        }
-        return roundedExtent;
-    }
-    return extent;
 }
 
 VkFormat Image::checkFormatFeature(std::shared_ptr<Device> device, VkFormat format, VkFormatFeatureFlags requiredFeature)
