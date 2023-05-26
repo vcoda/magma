@@ -63,28 +63,46 @@ Sampler::~Sampler()
     vkDestroySampler(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-LodSampler::LodSampler(std::shared_ptr<Device> device, const SamplerState& state,
+LodSampler::LodSampler(std::shared_ptr<Device> device_, const SamplerState& state,
     float mipLodBias, float minLod, float maxLod,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const BorderColor& borderColor /* opaqueBlackFloat */):
-    Sampler(std::move(device), std::move(allocator))
+    Sampler(std::move(device_), std::move(allocator))
 {
-    VkSamplerCreateInfo samplerInfo = state;
+    VkSamplerCreateInfo samplerInfo;
+    samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+    samplerInfo.pNext = state.pNext;
+    samplerInfo.flags = state.flags;
+    samplerInfo.magFilter = state.magFilter;
+    samplerInfo.minFilter = state.minFilter;
+    samplerInfo.mipmapMode = state.mipmapMode;
+    samplerInfo.addressModeU = state.addressModeU;
+    samplerInfo.addressModeV = state.addressModeV;
+    samplerInfo.addressModeW = state.addressModeW;
     samplerInfo.mipLodBias = mipLodBias;
-    samplerInfo.anisotropyEnable = VK_FALSE;
-    samplerInfo.maxAnisotropy = 1.f;
+    samplerInfo.anisotropyEnable = state.anisotropyEnable && (maxLod - minLod > 1.f);
+    samplerInfo.maxAnisotropy = state.maxAnisotropy;
+    samplerInfo.compareEnable = state.compareEnable;
+    samplerInfo.compareOp = state.compareOp;
     samplerInfo.minLod = minLod;
     samplerInfo.maxLod = maxLod;
     samplerInfo.borderColor = borderColor.getColor();
+    samplerInfo.unnormalizedCoordinates = VK_FALSE;
+    if (samplerInfo.anisotropyEnable)
+    {   // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive
+        const VkPhysicalDeviceProperties properties = device->getPhysicalDevice()->getProperties();
+        const VkPhysicalDeviceLimits& limits = properties.limits;
+        samplerInfo.maxAnisotropy = std::max(1.f, std::min(state.maxAnisotropy, limits.maxSamplerAnisotropy));
+    }
 #ifdef VK_EXT_custom_border_color
     VkSamplerCustomBorderColorCreateInfoEXT samplerCustomBorderInfo;
     if (borderColor.custom())
     {
-        samplerInfo.pNext = &samplerCustomBorderInfo;
         samplerCustomBorderInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CUSTOM_BORDER_COLOR_CREATE_INFO_EXT;
-        samplerCustomBorderInfo.pNext = nullptr;
+        samplerCustomBorderInfo.pNext = samplerInfo.pNext;
         samplerCustomBorderInfo.customBorderColor = borderColor.getCustomColor();
         samplerCustomBorderInfo.format = borderColor.getFormat();
+        samplerInfo.pNext = &samplerCustomBorderInfo;
     }
 #endif // VK_EXT_custom_border_color
     const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
