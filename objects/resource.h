@@ -43,9 +43,9 @@ namespace magma
         {
         public:
             ~Payload();
-            template<typename Type>
+            template<class Type>
             void setData(const Type& payload) noexcept;
-            template<typename Type>
+            template<class Type>
             Type& getData();
             size_t getDataSize() const noexcept { return size; }
             void freeData() noexcept;
@@ -91,11 +91,11 @@ namespace magma
     /* Non-dispatchable resource object (buffer, image, acceleration structure etc.)
        that has template declaration to handle different resource types. */
 
-    template<typename This, typename Type>
+    template<class Self, class Type>
     class NonDispatchableResource :
         public NonDispatchable<Type>,
         public Resource,
-        public std::enable_shared_from_this<This>
+        public std::enable_shared_from_this<Self>
     {
     protected:
         explicit NonDispatchableResource(VkObjectType objectType,
