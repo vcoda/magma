@@ -137,6 +137,6 @@ constexpr AnisotropicSamplerState::AnisotropicSamplerState(const VkSamplerAddres
     anisotropyEnable = VK_TRUE;
     // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between
     // 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive.
-    maxAnisotropy = std::min(1.f, maxAnisotropy_);
+    maxAnisotropy = std::max(1.f, maxAnisotropy_);
 }
 } // namespace magma
