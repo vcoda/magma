@@ -26,6 +26,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+std::unordered_map<PhysicalDevice*, float> Sampler::maxAnisotropies;
+
 Sampler::Sampler(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator):
     NonDispatchable(VK_OBJECT_TYPE_SAMPLER, std::move(device), std::move(allocator))
 {}
@@ -38,9 +40,7 @@ Sampler::Sampler(std::shared_ptr<Device> device_, const SamplerState& state,
     VkSamplerCreateInfo samplerInfo = state;
     if (samplerInfo.anisotropyEnable)
     {   // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive
-        const VkPhysicalDeviceProperties properties = device->getPhysicalDevice()->getProperties();
-        const VkPhysicalDeviceLimits& limits = properties.limits;
-        samplerInfo.maxAnisotropy = std::max(1.f, std::min(state.maxAnisotropy, limits.maxSamplerAnisotropy));
+        samplerInfo.maxAnisotropy = std::max(1.f, std::min(state.maxAnisotropy, getMaxAnisotropy()));
     }
     samplerInfo.borderColor = borderColor.getColor();
 #ifdef VK_EXT_custom_border_color
@@ -61,6 +61,18 @@ Sampler::Sampler(std::shared_ptr<Device> device_, const SamplerState& state,
 Sampler::~Sampler()
 {
     vkDestroySampler(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+}
+
+float Sampler::getMaxAnisotropy() const noexcept
+{
+    PhysicalDevice *physicalDevice = device->getPhysicalDevice().get();
+    if (maxAnisotropies.find(physicalDevice) == maxAnisotropies.end())
+    {
+        const VkPhysicalDeviceProperties properties = physicalDevice->getProperties();
+        const VkPhysicalDeviceLimits& limits = properties.limits;
+        maxAnisotropies[physicalDevice] = limits.maxSamplerAnisotropy;
+    }
+    return maxAnisotropies[physicalDevice];
 }
 
 LodSampler::LodSampler(std::shared_ptr<Device> device_, const SamplerState& state,
@@ -90,9 +102,7 @@ LodSampler::LodSampler(std::shared_ptr<Device> device_, const SamplerState& stat
     samplerInfo.unnormalizedCoordinates = VK_FALSE;
     if (samplerInfo.anisotropyEnable)
     {   // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive
-        const VkPhysicalDeviceProperties properties = device->getPhysicalDevice()->getProperties();
-        const VkPhysicalDeviceLimits& limits = properties.limits;
-        samplerInfo.maxAnisotropy = std::max(1.f, std::min(state.maxAnisotropy, limits.maxSamplerAnisotropy));
+        samplerInfo.maxAnisotropy = std::max(1.f, std::min(state.maxAnisotropy, getMaxAnisotropy()));
     }
 #ifdef VK_EXT_custom_border_color
     VkSamplerCustomBorderColorCreateInfoEXT samplerCustomBorderInfo;

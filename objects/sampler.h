@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     struct SamplerState;
+    class PhysicalDevice;
 
     /* Sampler objects represent the state of an image sampler
        which is used by the implementation to read image data
@@ -35,10 +36,13 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             const BorderColor& borderColor = border::opaqueBlackFloat);
         ~Sampler();
+        float getMaxAnisotropy() const noexcept;
 
     protected:
         Sampler(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator);
+
+        static std::unordered_map<PhysicalDevice*, float> maxAnisotropies;
     };
 
     /* Sampler with level of detail control. */
