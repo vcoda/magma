@@ -30,15 +30,15 @@ Sampler::Sampler(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> all
     NonDispatchable(VK_OBJECT_TYPE_SAMPLER, std::move(device), std::move(allocator))
 {}
 
-Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
+Sampler::Sampler(std::shared_ptr<Device> device_, const SamplerState& state,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const BorderColor& borderColor /* opaqueBlackFloat */):
-    Sampler(std::move(device), std::move(allocator))
+    Sampler(std::move(device_), std::move(allocator))
 {
     VkSamplerCreateInfo samplerInfo = state;
     if (samplerInfo.anisotropyEnable)
     {   // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive
-        const VkPhysicalDeviceProperties properties = this->device->getPhysicalDevice()->getProperties();
+        const VkPhysicalDeviceProperties properties = device->getPhysicalDevice()->getProperties();
         const VkPhysicalDeviceLimits& limits = properties.limits;
         samplerInfo.maxAnisotropy = std::max(1.f, std::min(state.maxAnisotropy, limits.maxSamplerAnisotropy));
     }
