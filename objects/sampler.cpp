@@ -47,11 +47,11 @@ Sampler::Sampler(std::shared_ptr<Device> device, const SamplerState& state,
     VkSamplerCustomBorderColorCreateInfoEXT samplerCustomBorderInfo;
     if (borderColor.custom())
     {
-        samplerInfo.pNext = &samplerCustomBorderInfo;
         samplerCustomBorderInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CUSTOM_BORDER_COLOR_CREATE_INFO_EXT;
-        samplerCustomBorderInfo.pNext = nullptr;
+        samplerCustomBorderInfo.pNext = samplerInfo.pNext;
         samplerCustomBorderInfo.customBorderColor = borderColor.getCustomColor();
         samplerCustomBorderInfo.format = borderColor.getFormat();
+        samplerInfo.pNext = &samplerCustomBorderInfo;
     }
 #endif // VK_EXT_custom_border_color
     const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
