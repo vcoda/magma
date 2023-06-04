@@ -153,9 +153,9 @@ error MSB8036: The Windows SDK version 10.0 was not found. Install the required 
 
 Also there is a command-line build option is available:
 
-* Run **x64 Native Tools Command Prompt** (e.g. through Taskbar's Search box).
-* Go to the magma root directory.
-* Set DEBUG variable to choose between Debug or Release build, run build script.
+* Open **x64 Native Tools Command Prompt** (e.g. through Taskbar's Search box).
+* cd magma directory.
+* Set DEBUG variable to choose between Debug or Release build, run **build** script.
 ```
 set DEBUG=1
 build
@@ -167,8 +167,8 @@ Build files are located in the `magma/projects/vs/x64/Debug(Release)` directory
 
 For building library under Linux systems, **GNU Make** is used:
 
-* Run terminal.
-* Go to the magma root directory.
+* Open terminal.
+* cd magma directory.
 * Run **make**.
 ```
 make magma DEBUG=1 -j<N>
