@@ -73,7 +73,7 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
             core::forConstEach(mipChain, mipMaps,
                 [buffer, copyFn](auto dstMip, auto srcMip)
                 {   // Copy mip texels to buffer
-                    copyFn(buffer + dstMip->bufferOffset, srcMip->texels, srcMip->size);
+                    copyFn(buffer + dstMip->bufferOffset, srcMip->texels, (std::size_t)srcMip->size);
                 });
         });
     // Copy buffer to image

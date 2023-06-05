@@ -80,7 +80,7 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
             core::forConstEach(mipChain, mipMaps,
                 [buffer, copyFn](auto dstMip, auto srcMip)
                 {   // Copy mip texels to buffer
-                    copyFn(buffer + dstMip->bufferOffset, srcMip->texels, srcMip->size);
+                    copyFn(buffer + dstMip->bufferOffset, srcMip->texels, (std::size_t)srcMip->size);
                 });
         });
     // Copy buffer to image
