@@ -22,6 +22,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    struct AllocationStatistic
+    {
+        uint32_t aliveCommandAllocations = 0;
+        uint32_t aliveObjectAllocations = 0;
+        uint32_t aliveCacheAllocations = 0;
+        uint32_t aliveDeviceAllocations = 0;
+        uint32_t aliveInstanceAllocations = 0;
+        std::size_t allocatedSize = 0ull;
+        std::size_t internalAllocatedSize = 0ull;
+    };
+
     struct AllocationCallbacks : VkAllocationCallbacks
     {
         AllocationCallbacks() noexcept;
@@ -44,13 +55,14 @@ namespace magma
             std::size_t size,
             std::size_t alignment,
             VkSystemAllocationScope allocationScope) = 0;
-        virtual void free(void *memory) noexcept = 0;
+        virtual void free(void *ptr) noexcept = 0;
         virtual void internalAllocationNotification(std::size_t size,
             VkInternalAllocationType allocationType,
             VkSystemAllocationScope allocationScope) noexcept = 0;
         virtual void internalFreeNotification(std::size_t size,
             VkInternalAllocationType allocationType,
             VkSystemAllocationScope allocationScope) noexcept = 0;
+        virtual AllocationStatistic getAllocationStatistic() const noexcept = 0;
     };
 
     struct MemoryBlockInfo

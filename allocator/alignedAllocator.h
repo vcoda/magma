@@ -25,6 +25,8 @@ namespace magma
     class AlignedAllocator : public IAllocator
     {
     public:
+        AlignedAllocator();
+        ~AlignedAllocator();
         virtual void *alloc(std::size_t size,
             std::size_t alignment,
             VkSystemAllocationScope allocationScope) override;
@@ -32,12 +34,23 @@ namespace magma
             std::size_t size,
             std::size_t alignment,
             VkSystemAllocationScope allocationScope) override;
-        virtual void free(void *memory) noexcept override;
+        virtual void free(void *ptr) noexcept override;
         virtual void internalAllocationNotification(std::size_t,
-            VkInternalAllocationType,
-            VkSystemAllocationScope) noexcept override {}
-        virtual void internalFreeNotification(std::size_t,
-            VkInternalAllocationType,
-            VkSystemAllocationScope) noexcept override {}
+            VkInternalAllocationType allocationType,
+            VkSystemAllocationScope allocationScope) noexcept override;
+        virtual void internalFreeNotification(std::size_t size,
+            VkInternalAllocationType allocationType,
+            VkSystemAllocationScope allocationScope) noexcept override;
+        virtual AllocationStatistic getAllocationStatistic() const noexcept override;
+
+    private:
+    #ifdef MAGMA_DEBUG
+        std::unordered_map<void*, std::pair<std::size_t, VkSystemAllocationScope>> allocations;
+        std::array<uint32_t, VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE + 1>
+            numAllocations, numReallocations, numFrees;
+        std::size_t allocatedSize;
+        std::size_t internalAllocatedSize;
+        mutable std::mutex mtx;
+    #endif // MAGMA_DEBUG
     };
 } // namespace magma
