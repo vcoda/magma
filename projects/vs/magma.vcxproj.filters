@@ -786,6 +786,9 @@
     <ClInclude Include="..\..\core\round.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\allocator\debugAlignedAllocator.h">
+      <Filter>Header Files\allocator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1210,6 +1213,9 @@
     </ClCompile>
     <ClCompile Include="..\..\misc\application.cpp">
       <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\allocator\debugAlignedAllocator.cpp">
+      <Filter>Source Files\allocator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

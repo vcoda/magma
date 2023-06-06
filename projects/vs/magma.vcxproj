@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\allocator\alignedAllocator.h" />
     <ClInclude Include="..\..\allocator\allocator.h" />
+    <ClInclude Include="..\..\allocator\debugAlignedAllocator.h" />
     <ClInclude Include="..\..\allocator\deviceMemoryAllocator.h" />
     <ClInclude Include="..\..\allocator\linearPlacementPool.h" />
     <ClInclude Include="..\..\allocator\cxxAllocator.h" />
@@ -376,6 +377,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\allocator\alignedAllocator.cpp" />
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp" />
+    <ClCompile Include="..\..\allocator\debugAlignedAllocator.cpp" />
     <ClCompile Include="..\..\allocator\deviceMemoryAllocator.cpp" />
     <ClCompile Include="..\..\allocator\cxxAllocator.cpp" />
     <ClCompile Include="..\..\allocator\vmaImplementation.cpp" />

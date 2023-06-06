@@ -1,6 +1,6 @@
 /*
-Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2021 Victor Coda.
+Magma - Abstraction layer over Khronos Vulkan API.
+Copyright (C) 2018-2023 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,11 +20,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Trivial aligned allocator for system memory. */
+    /* Debug allocator for system memory that tracks allocation statistics. */
 
-    class AlignedAllocator : public IAllocator
+    class DebugAlignedAllocator : public IAllocator
     {
     public:
+        DebugAlignedAllocator();
+        ~DebugAlignedAllocator();
         void *alloc(std::size_t size,
             std::size_t alignment,
             VkSystemAllocationScope allocationScope) override;
@@ -34,11 +36,20 @@ namespace magma
             VkSystemAllocationScope allocationScope) override;
         void free(void *ptr) noexcept override;
         void internalAllocationNotification(std::size_t,
-            VkInternalAllocationType,
-            VkSystemAllocationScope) noexcept override {}
-        void internalFreeNotification(std::size_t,
-            VkInternalAllocationType,
-            VkSystemAllocationScope) noexcept override {}
+            VkInternalAllocationType allocationType,
+            VkSystemAllocationScope allocationScope) noexcept override;
+        void internalFreeNotification(std::size_t size,
+            VkInternalAllocationType allocationType,
+            VkSystemAllocationScope allocationScope) noexcept override;
         AllocationStatistics getAllocationStatistics() const noexcept override;
+
+    private:
+        std::unordered_map<void*, std::pair<std::size_t, VkSystemAllocationScope>> allocations;
+        std::array<uint32_t, VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE + 1>
+            numAllocations, numReallocations, numFrees,
+            numInternalAllocations, numInternalFrees;
+        std::size_t allocatedMemorySize;
+        std::size_t internalAllocatedMemorySize;
+        mutable std::mutex mtx;
     };
 } // namespace magma

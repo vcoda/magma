@@ -65,6 +65,7 @@ set MAGMA_SRC= ^
 allocator\alignedAllocator.cpp ^
 allocator\allocationCallbacks.cpp ^
 allocator\cxxAllocator.cpp ^
+allocator\debugAlignedAllocator.cpp ^
 allocator\deviceMemoryAllocator.cpp ^
 allocator\vmaImplementation.cpp ^
 auxiliary\accumulationBuffer.cpp ^
@@ -224,6 +225,7 @@ set MAGMA_OBJS= ^
 alignedAllocator.obj ^
 allocationCallbacks.obj ^
 cxxAllocator.obj ^
+debugAlignedAllocator.obj ^
 deviceMemoryAllocator.obj ^
 vmaImplementation.obj ^
 accumulationBuffer.obj ^

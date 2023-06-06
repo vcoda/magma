@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "allocator/alignedAllocator.h"
 #include "allocator/cxxAllocator.h"
+#include "allocator/debugAlignedAllocator.h"
 #include "allocator/deviceMemoryAllocator.h"
 
 #include "objects/accelerationStructure.h"
