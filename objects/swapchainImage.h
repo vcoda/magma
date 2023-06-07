@@ -39,13 +39,13 @@ namespace magma
         VkExtent2D getExtent() const noexcept { return {extent.width, extent.height}; }
         int32_t getChainIndex() const noexcept { return chainIndex; }
         bool isChained() const noexcept { return chainIndex >= 0; }
-        void bindMemory(std::shared_ptr<DeviceMemory> memory,
+        void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) override;
     #ifdef VK_KHR_device_group
-        void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+        void bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
             VkDeviceSize offset = 0) override;
-        void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+        void bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
             const std::vector<VkRect2D>& splitInstanceBindRegions,
             VkDeviceSize offset = 0) override;

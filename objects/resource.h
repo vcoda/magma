@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class DeviceMemory;
+    class IDeviceMemory;
     class PhysicalDevice;
     class CommandBuffer;
     class Queue;
@@ -60,14 +60,14 @@ namespace magma
         VkDeviceSize getSize() const noexcept { return size; }
         VkDeviceSize getOffset() const noexcept { return offset; }
         const Sharing& getSharing() const noexcept { return sharing; }
-        std::shared_ptr<DeviceMemory> getMemory() noexcept { return memory; }
-        std::shared_ptr<const DeviceMemory> getMemory() const noexcept { return memory; }
+        std::shared_ptr<IDeviceMemory> getMemory() noexcept { return memory; }
+        std::shared_ptr<const IDeviceMemory> getMemory() const noexcept { return memory; }
         std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return deviceAllocator; }
         Payload& getPayload() noexcept { return payload; }
-        virtual void bindMemory(std::shared_ptr<DeviceMemory> memory,
+        virtual void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) = 0;
 #ifdef VK_KHR_device_group
-        virtual void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+        virtual void bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
             VkDeviceSize offset = 0) = 0;
 #endif
@@ -81,7 +81,7 @@ namespace magma
         VkDeviceSize size;
         VkDeviceSize offset;
         const Sharing sharing;
-        std::shared_ptr<DeviceMemory> memory;
+        std::shared_ptr<IDeviceMemory> memory;
         std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
 
     private:

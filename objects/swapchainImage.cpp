@@ -87,32 +87,21 @@ SwapchainImage::~SwapchainImage()
     }
 }
 
-void SwapchainImage::bindMemory(std::shared_ptr<DeviceMemory> memory,
-    VkDeviceSize offset /* 0 */)
+void SwapchainImage::bindMemory(std::shared_ptr<IDeviceMemory> /* memory */, VkDeviceSize /* offset */)
 {
-    MAGMA_UNUSED(memory);
-    MAGMA_UNUSED(offset);
 }
 
 #ifdef VK_KHR_device_group
-void SwapchainImage::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
-    const std::vector<uint32_t>& deviceIndices,
-    VkDeviceSize offset /* 0 */)
+void SwapchainImage::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> /* memory */,
+    const std::vector<uint32_t>& /* deviceIndices */, VkDeviceSize /* offset */)
 {
-    MAGMA_UNUSED(memory);
-    MAGMA_UNUSED(deviceIndices);
-    MAGMA_UNUSED(offset);
 }
 
-void SwapchainImage::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
-    const std::vector<uint32_t>& deviceIndices,
-    const std::vector<VkRect2D>& splitInstanceBindRegions,
-    VkDeviceSize offset /* 0 */)
+void SwapchainImage::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> /* memory */,
+    const std::vector<uint32_t>& /* deviceIndices */,
+    const std::vector<VkRect2D>& /* splitInstanceBindRegions */,
+    VkDeviceSize /* offset */)
 {
-    MAGMA_UNUSED(memory);
-    MAGMA_UNUSED(deviceIndices);
-    MAGMA_UNUSED(splitInstanceBindRegions);
-    MAGMA_UNUSED(offset);
 }
 #endif // VK_KHR_device_group
 

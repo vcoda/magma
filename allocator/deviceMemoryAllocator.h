@@ -41,7 +41,7 @@ namespace magma
         virtual DeviceMemoryBlock alloc(const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
             float priority,
-            const void *handle,
+            NonDispatchableHandle object,
             VkObjectType objectType) override;
         virtual std::vector<DeviceMemoryBlock> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
             const std::vector<VkMemoryPropertyFlags>& flags,
@@ -52,7 +52,7 @@ namespace magma
         virtual void freePages(std::vector<DeviceMemoryBlock>& memoryPages) noexcept override;
         virtual VkResult bindMemory(DeviceMemoryBlock memory,
             VkDeviceSize offset,
-            const void *handle,
+            NonDispatchableHandle object,
             VkObjectType objectType) const noexcept override;
         virtual MemoryBlockInfo getMemoryBlockInfo(DeviceMemoryBlock memory) const noexcept override;
         virtual std::vector<MemoryBudget> getBudget() const noexcept override;

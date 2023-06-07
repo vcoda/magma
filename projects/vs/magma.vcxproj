@@ -282,6 +282,7 @@
     <ClInclude Include="..\..\objects\framebuffer.h" />
     <ClInclude Include="..\..\objects\graphicsPipeline.h" />
     <ClInclude Include="..\..\objects\graphicsPipelines.h" />
+    <ClInclude Include="..\..\objects\ideviceMemory.h" />
     <ClInclude Include="..\..\objects\image.h" />
     <ClInclude Include="..\..\objects\image1D.h" />
     <ClInclude Include="..\..\objects\image1DArray.h" />
@@ -296,6 +297,7 @@
     <ClInclude Include="..\..\objects\indexBuffer.h" />
     <ClInclude Include="..\..\objects\indirectBuffer.h" />
     <ClInclude Include="..\..\objects\instance.h" />
+    <ClInclude Include="..\..\objects\managedDeviceMemory.h" />
     <ClInclude Include="..\..\objects\mutableImage.h" />
     <ClInclude Include="..\..\objects\mutableImageView.h" />
     <ClInclude Include="..\..\objects\nondispatchable.h" />
@@ -473,6 +475,7 @@
     <ClCompile Include="..\..\objects\indexBuffer.cpp" />
     <ClCompile Include="..\..\objects\indirectBuffer.cpp" />
     <ClCompile Include="..\..\objects\instance.cpp" />
+    <ClCompile Include="..\..\objects\managedDeviceMemory.cpp" />
     <ClCompile Include="..\..\objects\mutableImage.cpp" />
     <ClCompile Include="..\..\objects\mutableImageView.cpp" />
     <ClCompile Include="..\..\objects\object.cpp" />

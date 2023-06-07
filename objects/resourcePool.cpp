@@ -149,7 +149,7 @@ VkDeviceSize ResourcePool::countAllocatedBufferMemory() const
     buffers.forEach<Buffer>(
         [&bufferAllocatedSize](const Buffer *buffer)
         {
-            std::shared_ptr<const DeviceMemory> memory = buffer->getMemory();
+            const IDeviceMemory *memory = buffer->getMemory().get();
             if (memory)
                 bufferAllocatedSize += memory->getSize();
         });
@@ -163,7 +163,7 @@ VkDeviceSize ResourcePool::countAllocatedImageMemory() const
     images.forEach<Image>(
         [&imageAllocatedSize](const Image *image)
         {
-            std::shared_ptr<const DeviceMemory> memory = image->getMemory();
+            const IDeviceMemory *memory = image->getMemory().get();
             if (memory)
                 imageAllocatedSize += memory->getSize();
         });
@@ -178,7 +178,7 @@ VkDeviceSize ResourcePool::countAllocatedAccelerationStructureMemory() const
     images.forEach<AccelerationStructure>(
         [&accelerationStructureAllocatedSize](const AccelerationStructure *accelerationStructure)
         {
-            std::shared_ptr<const DeviceMemory> memory = accelerationStructure->getMemory();
+            const IDeviceMemory *memory = accelerationStructure->getMemory().get();
             if (memory)
                 accelerationStructureAllocatedSize += memory->getSize();
         });

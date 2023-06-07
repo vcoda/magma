@@ -36,13 +36,11 @@ inline void mapRangeScoped(std::shared_ptr<Buffer> buffer,
     MAGMA_ASSERT(buffer);
     MAGMA_ASSERT(mapFn);
     MAGMA_ASSERT(offset + (VK_WHOLE_SIZE == size ? 0 : size) <= buffer->getSize());
-    std::shared_ptr<DeviceMemory> bufferMemory(buffer->getMemory());
+    IDeviceMemory *bufferMemory = buffer->getMemory().get();
     if (bufferMemory)
     {
         if (void *const data = bufferMemory->map(offset, size))
-        {   // Mapping function may optionally throw an exception.
-            // We should catch it and unmap the memory ahead of exeption handler,
-            // otherwise DeviceMemory's destructor may complain about mapped state.
+        {
             try
             {
                 mapFn(static_cast<Type *>(data));
@@ -140,7 +138,7 @@ inline void mapRangeScoped(std::shared_ptr<Image> image,
     MAGMA_ASSERT(image);
     MAGMA_ASSERT(mapFn);
     MAGMA_ASSERT(offset + (VK_WHOLE_SIZE == size ? 0 : size) <= image->getSize());
-    std::shared_ptr<DeviceMemory> imageMemory(image->getMemory());
+    IDeviceMemory *imageMemory = image->getMemory().get();
     if (imageMemory)
     {
         if (void *const data = imageMemory->map(offset, size))

@@ -38,7 +38,7 @@ ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const voi
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
         optional, sharing, std::move(allocator))
 {
-    uint8_t *shaderBindingData = getMemory()->map<uint8_t>();
+    uint8_t *shaderBindingData = (uint8_t *)getMemory()->map();
     if (shaderBindingData)
     {
         const VkPhysicalDeviceRayTracingPropertiesNV& rayTracingProperties = device->getPhysicalDevice()->getRayTracingProperties();

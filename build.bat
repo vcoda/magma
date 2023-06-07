@@ -153,6 +153,7 @@ objects\imageView.cpp ^
 objects\indexBuffer.cpp ^
 objects\indirectBuffer.cpp ^
 objects\instance.cpp ^
+objects\managedDeviceMemory.cpp ^
 objects\mutableImage.cpp ^
 objects\mutableImageView.cpp ^
 objects\object.cpp ^
@@ -250,7 +251,6 @@ imageMemoryBarrier.obj ^
 pch.obj ^
 accelerationStructureDescriptor.obj ^
 binding.obj ^
-subpass.obj ^
 exception.obj ^
 extensions.obj ^
 instanceExtensions.obj ^
@@ -315,6 +315,7 @@ imageView.obj ^
 indexBuffer.obj ^
 indirectBuffer.obj ^
 instance.obj ^
+managedDeviceMemory.obj ^
 mutableImage.obj ^
 mutableImageView.obj ^
 object.obj ^

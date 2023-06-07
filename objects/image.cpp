@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "physicalDevice.h"
 #include "deviceMemory.h"
+#include "managedDeviceMemory.h"
 #include "queue.h"
 #include "fence.h"
 #include "commandBuffer.h"
@@ -89,9 +90,23 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     VkMemoryPropertyFlags memoryFlags = (VK_IMAGE_TILING_LINEAR == tiling)
         ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
         : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT | (optional.lazy ? VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT : 0);
-    std::shared_ptr<DeviceMemory> memory = std::make_shared<DeviceMemory>(
-        std::move(device), memoryRequirements, memoryFlags, optional.memoryPriority,
-        &handle, VK_OBJECT_TYPE_IMAGE, std::move(allocator));
+    std::shared_ptr<IDeviceMemory> memory;
+    if (MAGMA_DEVICE_ALLOCATOR(allocator))
+    {
+        memory = std::make_shared<ManagedDeviceMemory>(
+            std::move(device),
+            memoryRequirements, memoryFlags, optional.memoryPriority,
+            handle, VK_OBJECT_TYPE_IMAGE,
+            MAGMA_HOST_ALLOCATOR(allocator),
+            MAGMA_DEVICE_ALLOCATOR(allocator));
+    }
+    else
+    {
+        memory = std::make_shared<DeviceMemory>(
+            std::move(device),
+            memoryRequirements, memoryFlags, optional.memoryPriority,
+            MAGMA_HOST_ALLOCATOR(allocator));
+    }
     bindMemory(std::move(memory));
 }
 
@@ -196,27 +211,27 @@ std::vector<VkSparseImageMemoryRequirements> Image::getSparseMemoryRequirements(
     return sparseMemoryRequirements;
 }
 
-void Image::bindMemory(std::shared_ptr<DeviceMemory> memory,
+void Image::bindMemory(std::shared_ptr<IDeviceMemory> memory,
     VkDeviceSize offset /* 0 */)
 {
-    memory->bind(&handle, VK_OBJECT_TYPE_IMAGE, offset);
+    memory->bind(handle, VK_OBJECT_TYPE_IMAGE, offset);
     this->size = memory->getSize();
     this->offset = offset;
     this->memory = std::move(memory);
 }
 
 #ifdef VK_KHR_device_group
-void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+void Image::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory_,
     const std::vector<uint32_t>& deviceIndices,
-    VkDeviceSize offset /* 0 */)
+    VkDeviceSize offset_ /* 0 */)
 {
     VkBindImageMemoryInfoKHR bindMemoryInfo;
     VkBindImageMemoryDeviceGroupInfoKHR bindMemoryDeviceGroupInfo;
     bindMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR;
     bindMemoryInfo.pNext = &bindMemoryDeviceGroupInfo;
     bindMemoryInfo.image = handle;
-    bindMemoryInfo.memory = *memory;
-    bindMemoryInfo.memoryOffset = memory->getOffset() + offset;
+    bindMemoryInfo.memory = memory_->getNativeHandle();
+    bindMemoryInfo.memoryOffset = memory_->getSuballocationOffset() + offset_;
     bindMemoryDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO_KHR;
     bindMemoryDeviceGroupInfo.pNext = nullptr;
     bindMemoryDeviceGroupInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
@@ -226,23 +241,23 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
     const VkResult result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindMemoryInfo);
     MAGMA_THROW_FAILURE(result, "failed to bind image memory within device group");
-    this->size = memory->getSize();
-    this->offset = offset;
-    this->memory = std::move(memory);
+    memory = std::move(memory_);
+    offset = offset_;
+    size = memory->getSize();
 }
 
-void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+void Image::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory_,
     const std::vector<uint32_t>& deviceIndices,
     const std::vector<VkRect2D>& splitInstanceBindRegions,
-    VkDeviceSize offset /* 0 */)
+    VkDeviceSize offset_ /* 0 */)
 {
     VkBindImageMemoryInfoKHR bindMemoryInfo;
     VkBindImageMemoryDeviceGroupInfoKHR bindMemoryDeviceGroupInfo;
     bindMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR;
     bindMemoryInfo.pNext = &bindMemoryDeviceGroupInfo;
     bindMemoryInfo.image = handle;
-    bindMemoryInfo.memory = *memory;
-    bindMemoryInfo.memoryOffset = memory->getOffset() + offset;
+    bindMemoryInfo.memory = memory_->getNativeHandle();
+    bindMemoryInfo.memoryOffset = memory_->getSuballocationOffset() + offset_;
     bindMemoryDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO_KHR;
     bindMemoryDeviceGroupInfo.pNext = nullptr;
     bindMemoryDeviceGroupInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
@@ -252,9 +267,9 @@ void Image::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
     const VkResult result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindMemoryInfo);
     MAGMA_THROW_FAILURE(result, "failed to bind image memory within device group");
-    this->size = memory->getSize();
-    this->offset = offset;
-    this->memory = std::move(memory);
+    memory = std::move(memory_);
+    offset = offset_;
+    size = memory->getSize();
 }
 #endif // VK_KHR_device_group
 

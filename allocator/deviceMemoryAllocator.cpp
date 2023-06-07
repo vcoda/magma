@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "deviceMemoryAllocator.h"
-#include "../objects/deviceMemory.h"
+#include "../objects/managedDeviceMemory.h"
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
 #include "../objects/instance.h"
@@ -33,22 +33,24 @@ static_assert(sizeof(magma::DefragmentationStats) == sizeof(VmaDefragmentationSt
 
 namespace magma
 {
-DeviceMemoryAllocator::DeviceMemoryAllocator(std::shared_ptr<Device> device,
-    std::shared_ptr<IAllocator> hostAllocator /* nullptr */):
-    device(std::move(device)),
-    hostAllocator(std::move(hostAllocator)),
+DeviceMemoryAllocator::DeviceMemoryAllocator(std::shared_ptr<Device> device_,
+    std::shared_ptr<IAllocator> hostAllocator_ /* nullptr */):
+    device(std::move(device_)),
+    hostAllocator(std::move(hostAllocator_)),
     allocator(VK_NULL_HANDLE),
     defragmentationContext(VK_NULL_HANDLE)
 {
-    std::shared_ptr<PhysicalDevice> physicalDevice = this->device->getPhysicalDevice();
-    VmaAllocatorCreateInfo allocatorInfo;
+    std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+    VmaAllocatorCreateInfo allocatorInfo = {};
     allocatorInfo.flags = 0;
+#ifdef VK_EXT_memory_priority
     if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
         allocatorInfo.flags |= VMA_ALLOCATOR_CREATE_EXT_MEMORY_PRIORITY_BIT;
+#endif // VK_EXT_memory_priority
     allocatorInfo.physicalDevice = *physicalDevice;
-    allocatorInfo.device = *this->device;
+    allocatorInfo.device = *device;
     allocatorInfo.preferredLargeHeapBlockSize = 0;
-    allocatorInfo.pAllocationCallbacks = this->hostAllocator.get();
+    allocatorInfo.pAllocationCallbacks = hostAllocator.get();
     allocatorInfo.pDeviceMemoryCallbacks = nullptr;
     allocatorInfo.frameInUseCount = 0;
     allocatorInfo.pHeapSizeLimit = nullptr;
@@ -56,6 +58,7 @@ DeviceMemoryAllocator::DeviceMemoryAllocator(std::shared_ptr<Device> device,
     allocatorInfo.pRecordSettings = nullptr;
     allocatorInfo.instance = *physicalDevice->getInstance();
     allocatorInfo.vulkanApiVersion = physicalDevice->getInstance()->getApiVersion();
+    allocatorInfo.pTypeExternalMemoryHandleTypes = nullptr;
     const VkResult result = vmaCreateAllocator(&allocatorInfo, &allocator);
     MAGMA_THROW_FAILURE(result, "failed to create VMA allocator");
 }
@@ -66,10 +69,9 @@ DeviceMemoryAllocator::~DeviceMemoryAllocator()
 }
 
 DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memoryRequirements,
-    VkMemoryPropertyFlags flags, float priority, const void *handle, VkObjectType objectType)
+    VkMemoryPropertyFlags flags, float priority, NonDispatchableHandle object, VkObjectType objectType)
 {
     MAGMA_ASSERT((priority >= 0.f) && (priority <= 1.f));
-    MAGMA_ASSERT(handle);
     VmaAllocationCreateInfo allocInfo;
     allocInfo.flags = VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT;
     allocInfo.usage = (VmaMemoryUsage)chooseMemoryUsage(flags);
@@ -92,10 +94,10 @@ DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memor
     switch (objectType)
     {
     case VK_OBJECT_TYPE_BUFFER:
-        result = vmaAllocateMemoryForBuffer(allocator, MAGMA_BUFFER_HANDLE(handle), &allocInfo, &allocation, nullptr);
+        result = vmaAllocateMemoryForBuffer(allocator, core::reinterpret<VkBuffer>(object), &allocInfo, &allocation, nullptr);
         break;
     case VK_OBJECT_TYPE_IMAGE:
-        result = vmaAllocateMemoryForImage(allocator, MAGMA_IMAGE_HANDLE(handle), &allocInfo, &allocation, nullptr);
+        result = vmaAllocateMemoryForImage(allocator, core::reinterpret<VkImage>(object), &allocInfo, &allocation, nullptr);
         break;
     default:
         result = vmaAllocateMemory(allocator, &memoryRequirements, &allocInfo, &allocation, nullptr);
@@ -173,15 +175,15 @@ void DeviceMemoryAllocator::freePages(std::vector<DeviceMemoryBlock>& allocation
 }
 
 VkResult DeviceMemoryAllocator::bindMemory(DeviceMemoryBlock memory, VkDeviceSize offset,
-    const void *handle, VkObjectType objectType) const noexcept
+    NonDispatchableHandle object, VkObjectType objectType) const noexcept
 {
     VmaAllocation allocation = reinterpret_cast<VmaAllocation>(memory);
     switch (objectType)
     {
     case VK_OBJECT_TYPE_BUFFER:
-        return vmaBindBufferMemory2(allocator, allocation, offset, MAGMA_BUFFER_HANDLE(handle), nullptr);
+        return vmaBindBufferMemory2(allocator, allocation, offset, core::reinterpret<VkBuffer>(object), nullptr);
     case VK_OBJECT_TYPE_IMAGE:
-        return vmaBindImageMemory2(allocator, allocation, offset, MAGMA_IMAGE_HANDLE(handle), nullptr);
+        return vmaBindImageMemory2(allocator, allocation, offset, core::reinterpret<VkImage>(object), nullptr);
     default:
         return VK_ERROR_FORMAT_NOT_SUPPORTED;
     }
@@ -309,14 +311,18 @@ std::vector<VmaAllocation> DeviceMemoryAllocator::gatherSuballocations(const std
     defragmentationResources.reserve(objects.size());
     for (auto& resource : objects)
     {
-        std::shared_ptr<DeviceMemory> deviceMemory = resource->getMemory();
+        std::shared_ptr<IDeviceMemory> deviceMemory = resource->getMemory();
         if (deviceMemory)
         {
-            DeviceMemoryBlock suballocation = deviceMemory->getAllocation();
-            if (suballocation)
+            std::shared_ptr<ManagedDeviceMemory> managedDeviceMemory = std::dynamic_pointer_cast<ManagedDeviceMemory>(deviceMemory);
+            if (managedDeviceMemory)
             {
-                allocations.push_back(reinterpret_cast<VmaAllocation>(suballocation));
-                defragmentationResources.push_back(resource);
+                DeviceMemoryBlock suballocation = managedDeviceMemory->getAllocation();
+                if (suballocation)
+                {
+                    allocations.push_back(reinterpret_cast<VmaAllocation>(suballocation));
+                    defragmentationResources.push_back(resource);
+                }
             }
         }
     }

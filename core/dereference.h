@@ -19,12 +19,19 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#if (VK_USE_64_BIT_PTR_DEFINES == 1)
+typedef void *NonDispatchableHandle;
+#else
+typedef uint64_t NonDispatchableHandle;
+#endif // VK_USE_64_BIT_PTR_DEFINES == 1
+
 namespace core
 {
-template<typename Type>
-inline typename Type::NativeHandle dereference(const std::shared_ptr<Type>& p)
+template<class Type>
+inline typename Type::NativeHandle dereference(const std::shared_ptr<Type>& ptr) noexcept
 {
-    if (p) return *p;
+    if (ptr)
+        return *ptr;
 #ifdef VK_NULL_HANDLE
     return VK_NULL_HANDLE;
 #else
@@ -32,10 +39,17 @@ inline typename Type::NativeHandle dereference(const std::shared_ptr<Type>& p)
 #endif
 }
 
-template<typename NativeHandle>
-inline NativeHandle reinterpret(const void *p)
+template<class NativeHandle>
+inline NativeHandle reinterpret(NonDispatchableHandle handle) noexcept
 {
-    if (p) return *reinterpret_cast<const NativeHandle *>(p);
+    if (handle)
+    {
+    #if (VK_USE_64_BIT_PTR_DEFINES == 1)
+        return reinterpret_cast<NativeHandle>(handle);
+    #else
+        return static_cast<NativeHandle>(handle);
+    #endif // VK_USE_64_BIT_PTR_DEFINES == 1
+    }
 #ifdef VK_NULL_HANDLE
     return VK_NULL_HANDLE;
 #else

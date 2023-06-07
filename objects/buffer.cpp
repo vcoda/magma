@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "srcTransferBuffer.h"
 #include "device.h"
 #include "deviceMemory.h"
+#include "managedDeviceMemory.h"
 #include "queue.h"
 #include "fence.h"
 #include "commandBuffer.h"
@@ -51,11 +52,23 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     const VkMemoryRequirements memoryRequirements = getMemoryRequirements();
     if (optional.lazy && !(memoryFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT))
         memoryFlags |= VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
-    std::shared_ptr<DeviceMemory> memory = std::make_shared<DeviceMemory>(
-        std::move(device),
-        memoryRequirements, memoryFlags, optional.memoryPriority,
-        &handle, VK_OBJECT_TYPE_BUFFER,
-        std::move(allocator));
+    std::shared_ptr<IDeviceMemory> memory;
+    if (MAGMA_DEVICE_ALLOCATOR(allocator))
+    {
+        memory = std::make_shared<ManagedDeviceMemory>(
+            std::move(device),
+            memoryRequirements, memoryFlags, optional.memoryPriority,
+            handle, VK_OBJECT_TYPE_BUFFER,
+            MAGMA_HOST_ALLOCATOR(allocator),
+            MAGMA_DEVICE_ALLOCATOR(allocator));
+    }
+    else
+    {
+        memory = std::make_shared<DeviceMemory>(
+            std::move(device),
+            memoryRequirements, memoryFlags, optional.memoryPriority,
+            MAGMA_HOST_ALLOCATOR(allocator));
+    }
     bindMemory(std::move(memory));
 }
 
@@ -64,8 +77,7 @@ Buffer::~Buffer()
     vkDestroyBuffer(*device, handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-void Buffer::realloc(VkDeviceSize newSize,
-    std::shared_ptr<Allocator> allocator /* nullptr */)
+void Buffer::realloc(VkDeviceSize newSize)
 {
     if (getSize() == newSize)
         return;
@@ -79,11 +91,9 @@ void Buffer::realloc(VkDeviceSize newSize,
     bufferInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
     bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     vkDestroyBuffer(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
-    hostAllocator = MAGMA_HOST_ALLOCATOR(allocator);
-    deviceAllocator = MAGMA_DEVICE_ALLOCATOR(allocator);
     const VkResult result = vkCreateBuffer(MAGMA_HANDLE(device), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to reallocate buffer");
-    memory->realloc(newSize, memory->getPriority(), &handle, VK_OBJECT_TYPE_BUFFER, std::move(allocator));
+    memory->realloc(newSize, memory->getPriority(), handle, VK_OBJECT_TYPE_BUFFER);
     bindMemory(std::move(memory), offset);
 }
 
@@ -130,27 +140,27 @@ VkDeviceAddress Buffer::getDeviceAddress() const
 }
 #endif // VK_KHR_buffer_device_address || VK_EXT_buffer_device_address
 
-void Buffer::bindMemory(std::shared_ptr<DeviceMemory> memory,
-    VkDeviceSize offset /* 0 */)
+void Buffer::bindMemory(std::shared_ptr<IDeviceMemory> memory_,
+    VkDeviceSize offset_ /* 0 */)
 {
-    memory->bind(&handle, VK_OBJECT_TYPE_BUFFER, offset);
-    this->size = memory->getSize();
-    this->offset = offset;
-    this->memory = std::move(memory);
+    memory_->bind(handle, VK_OBJECT_TYPE_BUFFER, offset_);
+    memory = std::move(memory_);
+    offset = offset_;
+    size = memory->getSize();
 }
 
 #ifdef VK_KHR_device_group
-void Buffer::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+void Buffer::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory_,
     const std::vector<uint32_t>& deviceIndices,
-    VkDeviceSize offset /* 0 */)
+    VkDeviceSize offset_ /* 0 */)
 {
     VkBindBufferMemoryInfoKHR bindMemoryInfo;
     VkBindBufferMemoryDeviceGroupInfoKHR bindMemoryDeviceGroupInfo;
     bindMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO_KHR;
     bindMemoryInfo.pNext = &bindMemoryDeviceGroupInfo;
     bindMemoryInfo.buffer = handle;
-    bindMemoryInfo.memory = *memory;
-    bindMemoryInfo.memoryOffset = memory->getOffset() + offset;
+    bindMemoryInfo.memory = memory_->getNativeHandle();
+    bindMemoryInfo.memoryOffset = memory_->getSuballocationOffset() + offset_;
     bindMemoryDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_DEVICE_GROUP_INFO_KHR;
     bindMemoryDeviceGroupInfo.pNext = nullptr;
     bindMemoryDeviceGroupInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
@@ -158,9 +168,9 @@ void Buffer::bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindBufferMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
     const VkResult result = vkBindBufferMemory2KHR(MAGMA_HANDLE(device), 1, &bindMemoryInfo);
     MAGMA_THROW_FAILURE(result, "failed to bind buffer memory within device group");
-    this->size = memory->getSize();
-    this->offset = offset;
-    this->memory = std::move(memory);
+    memory = std::move(memory_);
+    offset = offset_;
+    size = memory->getSize();
 }
 #endif // VK_KHR_device_group
 

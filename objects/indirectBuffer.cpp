@@ -51,7 +51,7 @@ DrawIndirectBuffer::DrawIndirectBuffer(std::shared_ptr<Device> device, uint32_t 
     const Sharing& sharing /* Sharing() */):
     IndirectBuffer(std::move(device), maxDrawCount, sizeof(VkDrawIndirectCommand),
         persistentlyMapped, optional, sharing, std::move(allocator)),
-    mappedData(persistentlyMapped ? memory->map<VkDrawIndirectCommand>() : nullptr)
+    mappedData(persistentlyMapped ? (VkDrawIndirectCommand *)memory->map() : nullptr)
 {}
 
 uint32_t DrawIndirectBuffer::writeDrawCommand(uint32_t vertexCount,
@@ -98,7 +98,7 @@ DrawIndexedIndirectBuffer::DrawIndexedIndirectBuffer(std::shared_ptr<Device> dev
     const Sharing& sharing /* Sharing() */):
     IndirectBuffer(std::move(device), maxDrawIndexedCount, sizeof(VkDrawIndexedIndirectCommand),
         persistentlyMapped, optional, sharing, std::move(allocator)),
-    mappedData(persistentlyMapped ? memory->map<VkDrawIndexedIndirectCommand>() : nullptr)
+    mappedData(persistentlyMapped ? (VkDrawIndexedIndirectCommand *)memory->map() : nullptr)
 {}
 
 uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(uint32_t indexCount,
@@ -149,7 +149,7 @@ DispatchIndirectBuffer::DispatchIndirectBuffer(std::shared_ptr<Device> device, u
     const Sharing& sharing /* Sharing() */):
     IndirectBuffer(std::move(device), maxDispatchCommands, sizeof(VkDispatchIndirectCommand),
         persistentlyMapped, optional, sharing, std::move(allocator)),
-    mappedData(persistentlyMapped ? memory->map<VkDispatchIndirectCommand>() : nullptr)
+    mappedData(persistentlyMapped ? (VkDispatchIndirectCommand *)memory->map() : nullptr)
 {}
 
 uint32_t DispatchIndirectBuffer::writeDispatchCommand(uint32_t x, uint32_t y, uint32_t z) noexcept

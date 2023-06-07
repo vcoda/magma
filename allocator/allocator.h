@@ -94,6 +94,7 @@ namespace magma
     };
 
     class Device;
+    class ManagedDeviceMemory;
     class CommandBuffer;
     class Resource;
 
@@ -118,7 +119,7 @@ namespace magma
         virtual DeviceMemoryBlock alloc(const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
             float priority,
-            const void *handle,
+            NonDispatchableHandle object,
             VkObjectType objectType) = 0;
         virtual std::vector<DeviceMemoryBlock> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
             const std::vector<VkMemoryPropertyFlags>& flags,
@@ -129,7 +130,7 @@ namespace magma
         virtual void freePages(std::vector<DeviceMemoryBlock>& memoryPages) noexcept = 0;
         virtual VkResult bindMemory(DeviceMemoryBlock memory,
             VkDeviceSize offset,
-            const void *handle,
+            NonDispatchableHandle object,
             VkObjectType objectType) const noexcept = 0;
         virtual MemoryBlockInfo getMemoryBlockInfo(DeviceMemoryBlock memory) const noexcept = 0;
         virtual std::vector<MemoryBudget> getBudget() const noexcept = 0;
@@ -154,7 +155,7 @@ namespace magma
         virtual VkResult invalidateMappedRange(DeviceMemoryBlock memory,
             VkDeviceSize offset,
             VkDeviceSize size) noexcept = 0;
-        friend class DeviceMemory;
+        friend ManagedDeviceMemory;
     };
 
     /* Aggregates host and device memory allocators. */

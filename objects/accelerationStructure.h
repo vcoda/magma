@@ -35,19 +35,19 @@ namespace magma
         bool topLevel() const noexcept { return VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NV == accelerationStructureInfo.type; }
         bool bottomLevel() const noexcept { return VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NV == accelerationStructureInfo.type; }
         const VkAccelerationStructureInfoNV& getInfo() const noexcept { return accelerationStructureInfo; }
-        std::shared_ptr<DeviceMemory> getMemory() const noexcept { return memory; }
+        //std::shared_ptr<IDeviceMemory> getMemory() const noexcept { return memory; }
         VkMemoryRequirements getObjectMemoryRequirements() const;
         VkMemoryRequirements getBuildScratchMemoryRequirements() const;
         VkMemoryRequirements getUpdateScratchMemoryRequirements() const;
         uint64_t getReferenceHandle() const;
-        virtual void bindMemory(std::shared_ptr<DeviceMemory> memory,
+        void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) override;
-#ifdef VK_KHR_device_group
-        virtual void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+    #ifdef VK_KHR_device_group
+        void bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
             VkDeviceSize offset = 0) override;
-#endif
-        virtual void onDefragment() override;
+    #endif // VK_KHR_device_group
+        void onDefragment() override;
 
     protected:
         explicit AccelerationStructure(std::shared_ptr<Device> device,

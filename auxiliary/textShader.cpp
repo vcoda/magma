@@ -152,7 +152,7 @@ void TextShader::end()
         const VkDeviceSize maxStrings = stringBuffer->getSize()/sizeof(String);
         if (maxStrings < strings.size())
         {   // Reallocate if not enough memory
-            stringBuffer->realloc(strings.size() * sizeof(String), allocator);
+            stringBuffer->realloc(strings.size() * sizeof(String));
             setTable->stringBuffer = stringBuffer;
         }
         helpers::mapScoped<String>(stringBuffer,
@@ -167,7 +167,7 @@ void TextShader::end()
         const VkDeviceSize maxChars = glyphBuffer->getSize()/sizeof(Glyph);
         if (maxChars < chars.size())
         {   // Reallocate if not enough memory
-            glyphBuffer->realloc(chars.size() * sizeof(Glyph), allocator);
+            glyphBuffer->realloc(chars.size() * sizeof(Glyph));
             setTable->glyphBuffer = glyphBuffer;
         }
         helpers::mapScoped<Glyph>(glyphBuffer,

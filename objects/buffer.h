@@ -23,7 +23,6 @@ namespace magma
 {
     class SrcTransferBuffer;
     class CommandBuffer;
-    class IDeviceMemoryAllocator;
 
     /* Buffers represent linear arrays of data which are used
        for various purposes by binding them to a graphics or compute
@@ -37,8 +36,7 @@ namespace magma
 
     public:
         ~Buffer();
-        void realloc(VkDeviceSize newSize,
-            std::shared_ptr<Allocator> allocator = nullptr);
+        void realloc(VkDeviceSize newSize);
         VkBufferCreateFlags getFlags() const noexcept { return flags; }
         VkBufferUsageFlags getUsage() const noexcept { return usage; }
         VkMemoryRequirements getMemoryRequirements() const noexcept;
@@ -46,14 +44,14 @@ namespace magma
     #if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
         VkDeviceAddress getDeviceAddress() const;
     #endif
-        virtual void bindMemory(std::shared_ptr<DeviceMemory> memory,
+        void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) override;
-#ifdef VK_KHR_device_group
-        virtual void bindMemoryDeviceGroup(std::shared_ptr<DeviceMemory> memory,
+    #ifdef VK_KHR_device_group
+        void bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
             VkDeviceSize offset = 0) override;
-#endif
-        virtual void onDefragment() override;
+    #endif // VK_KHR_device_group
+        void onDefragment() override;
         void copyHost(const void *srcBuffer,
             VkDeviceSize srcOffset = 0,
             VkDeviceSize dstOffset = 0,

@@ -1,18 +1,29 @@
 namespace magma
 {
-inline bool DeviceMemory::local() const noexcept
+inline BaseDeviceMemory::BaseDeviceMemory(std::shared_ptr<Device> device, const VkMemoryRequirements& memoryRequirements,
+    VkMemoryPropertyFlags flags, float priority, uint32_t deviceMask, std::shared_ptr<IAllocator> allocator):
+    NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), std::move(allocator)),
+    memoryRequirements(memoryRequirements),
+    flags(flags),
+    deviceMask(deviceMask)
+{
+    updatePriority(priority);
+}
+
+inline bool BaseDeviceMemory::local() const noexcept
 {
     return flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 }
 
-inline bool DeviceMemory::pinned() const noexcept
-{   // Pinned memory is virtual memory pages that are specially marked so that they cannot be paged out.
-    // Higher bandwidth is possible between the host and the device when using page-locked (or "pinned") memory.
-    // On discrete AMD GPU there is around 256 MiB of DEVICE_LOCAL + HOST_VISIBLE memory pool.
+// Pinned memory is virtual memory pages that are specially marked so that they cannot be paged out.
+// Higher bandwidth is possible between the host and the device when using page-locked (or "pinned") memory.
+// On discrete AMD GPU there is around 256 MiB of DEVICE_LOCAL + HOST_VISIBLE memory pool.
+inline bool BaseDeviceMemory::pinned() const noexcept
+{
     return local() && hostVisible();
 }
 
-inline bool DeviceMemory::hostVisible() const noexcept
+inline bool BaseDeviceMemory::hostVisible() const noexcept
 {
     constexpr VkMemoryPropertyFlags hostVisibleFlags =
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
@@ -20,27 +31,18 @@ inline bool DeviceMemory::hostVisible() const noexcept
     return (flags & hostVisibleFlags) == hostVisibleFlags;
 }
 
-inline bool DeviceMemory::hostCached() const noexcept
+inline bool BaseDeviceMemory::hostCached() const noexcept
 {
     return hostVisible() && (flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
 }
 
-inline bool DeviceMemory::mapped() const noexcept
+inline bool BaseDeviceMemory::mapped() const noexcept
 {
-    return mappedRange != nullptr;
+    return mapPointer != nullptr;
 }
 
-template<typename Type>
-inline Type *DeviceMemory::map(VkDeviceSize offset /* 0 */,
-    VkDeviceSize size /* VK_WHOLE_SIZE */,
-    VkMemoryMapFlags flags /* 0 */) noexcept
+inline float BaseDeviceMemory::updatePriority(float value) noexcept
 {
-    MAGMA_ASSERT(sizeof(Type) <= memoryRequirements.size);
-    if (sizeof(Type) > memoryRequirements.size)
-        return nullptr;
-    if ((size != VK_WHOLE_SIZE) && (sizeof(Type) > size))
-        return nullptr;
-    void *data = map(offset, size, flags);
-    return reinterpret_cast<Type *>(data);
+    return priority = std::max(0.f, std::min(value, 1.f));
 }
 } // namespace magma

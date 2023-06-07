@@ -12,7 +12,7 @@ namespace magma
                 drawCmd = reinterpret_cast<DrawCommandType *>(mappedData) + buffer->getDrawCount();
             else
             {
-                drawCmd = buffer->getMemory()->map<DrawCommandType>(
+                drawCmd = (DrawCommandType *)buffer->getMemory()->map(
                     sizeof(DrawCommandType) * buffer->getDrawCount(),
                     sizeof(DrawCommandType));
                 MAGMA_ASSERT(drawCmd);
