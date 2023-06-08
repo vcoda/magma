@@ -100,7 +100,7 @@ void DeviceMemory::setPriority(float priority) noexcept
 #ifdef VK_EXT_pageable_device_local_memory
     MAGMA_DEVICE_EXTENSION(vkSetDeviceMemoryPriorityEXT);
     if (vkSetDeviceMemoryPriorityEXT)
-        vkSetDeviceMemoryPriorityEXT(MAGMA_HANDLE(device), handle, updatePriority(priority));
+        vkSetDeviceMemoryPriorityEXT(MAGMA_HANDLE(device), handle, clampPriority(priority));
 #endif // VK_EXT_pageable_device_local_memory
 }
 
@@ -144,7 +144,7 @@ void DeviceMemory::realloc(VkDeviceSize newSize, float priority,
             memoryAllocateInfo.pNext = &memoryPriorityAllocateInfo;
         memoryPriorityAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;
         memoryPriorityAllocateInfo.pNext = nullptr;
-        memoryPriorityAllocateInfo.priority = updatePriority(priority);
+        memoryPriorityAllocateInfo.priority = clampPriority(priority);
     }
 #endif // VK_EXT_memory_priority
     const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &memoryAllocateInfo,

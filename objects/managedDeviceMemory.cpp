@@ -52,7 +52,7 @@ void ManagedDeviceMemory::realloc(VkDeviceSize newSize, float priority,
     allocation = nullptr;
     handle = VK_NULL_HANDLE;
     memoryRequirements.size = newSize;
-    allocation = deviceAllocator->alloc(memoryRequirements, flags, updatePriority(priority), object, objectType);
+    allocation = deviceAllocator->alloc(memoryRequirements, flags, clampPriority(priority), object, objectType);
     onDefragment();
 }
 

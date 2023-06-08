@@ -7,7 +7,7 @@ inline BaseDeviceMemory::BaseDeviceMemory(std::shared_ptr<Device> device, const 
     flags(flags),
     deviceMask(deviceMask)
 {
-    updatePriority(priority);
+    clampPriority(priority);
 }
 
 inline bool BaseDeviceMemory::local() const noexcept
@@ -41,8 +41,8 @@ inline bool BaseDeviceMemory::mapped() const noexcept
     return mapPointer != nullptr;
 }
 
-inline float BaseDeviceMemory::updatePriority(float value) noexcept
+inline float BaseDeviceMemory::clampPriority(float value) noexcept
 {
-    return priority = std::max(0.f, std::min(value, 1.f));
+    return (priority = std::max(0.f, std::min(value, 1.f)));
 }
 } // namespace magma

@@ -47,7 +47,7 @@ namespace magma
             uint32_t deviceMask,
             std::shared_ptr<IAllocator> allocator);
         uint32_t findTypeIndex(VkMemoryPropertyFlags flags) const;
-        float updatePriority(float value) noexcept;
+        float clampPriority(float value) noexcept;
 
         VkMemoryRequirements memoryRequirements;
         const VkMemoryPropertyFlags flags;
