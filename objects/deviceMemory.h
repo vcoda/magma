@@ -56,9 +56,10 @@ namespace magma
         void *mapPointer = nullptr;
     };
 
-    /* Device memory is memory that is visible to the device -
-       for example the contents of the image or buffer objects,
-       which can be natively used by the device. */
+    /* The maximum number of valid memory allocations that can exist simultaneously
+       within a VkDevice may be restricted by implementation- or platform-dependent limits.
+       The maxMemoryAllocationCount feature describes the number of allocations that can
+       exist simultaneously before encountering these internal limits. */
 
     class DeviceMemory : public BaseDeviceMemory
     {
