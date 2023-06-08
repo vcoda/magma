@@ -65,7 +65,7 @@ Image3D::Image3D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
     const VkDeviceSize bufferSize = setupMipMaps(mipChain, mipMaps);
     std::shared_ptr<SrcTransferBuffer> srcBuffer = std::make_shared<SrcTransferBuffer>(device, bufferSize, nullptr,
         std::move(allocator), Buffer::Descriptor(), sharing);
-    util::mapScoped<uint8_t>(srcBuffer,
+    helpers::mapScoped<uint8_t>(srcBuffer,
         [&](uint8_t *buffer)
         {
             if (!copyFn)

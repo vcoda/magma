@@ -70,7 +70,7 @@ Image1DArray::Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
     const VkDeviceSize bufferSize = setupMipMaps(mipChain, mipMaps);
     std::shared_ptr<SrcTransferBuffer> srcBuffer = std::make_shared<SrcTransferBuffer>(device, bufferSize, nullptr,
         std::move(allocator), Buffer::Descriptor(), sharing);
-    util::mapScoped<uint8_t>(srcBuffer,
+    helpers::mapScoped<uint8_t>(srcBuffer,
         [&](uint8_t *buffer)
         {
             if (!copyFn)
