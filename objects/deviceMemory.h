@@ -77,6 +77,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
     #endif // VK_KHR_device_group
         ~DeviceMemory();
+        static uint32_t getAllocationCount() noexcept { return allocationCount; }
         VkDeviceSize getSuballocationOffset() const noexcept override { return 0ull; }
         float getPriority() const noexcept override { return priority; }
         void setPriority(float priority) noexcept override;
@@ -97,6 +98,9 @@ namespace magma
         bool invalidateMappedRange(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept override;
         void onDefragment() noexcept override;
+
+    private:
+        static std::atomic<uint32_t> allocationCount;
     };
 } // namespace magma
 

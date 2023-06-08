@@ -27,6 +27,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+std::atomic<uint32_t> DeviceMemory::allocationCount;
+
 DeviceMemory::DeviceMemory(std::shared_ptr<Device> device_,
     const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags, float priority_,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
@@ -50,6 +52,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device_,
     const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &memoryAllocateInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to allocate device memory");
+    ++allocationCount;
 }
 
 #ifdef VK_KHR_device_group
@@ -81,6 +84,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device_, uint32_t deviceMask,
     const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &memoryAllocateInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to allocate device memory within device group");
+    ++allocationCount;
 }
 #endif // VK_KHR_device_group
 
@@ -109,6 +113,7 @@ void DeviceMemory::realloc(VkDeviceSize newSize, float priority,
         unmap();
     vkFreeMemory(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
     handle = VK_NULL_HANDLE;
+    --allocationCount;
     // Fill new allocation description
     VkMemoryAllocateInfo memoryAllocateInfo;
     memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -146,6 +151,7 @@ void DeviceMemory::realloc(VkDeviceSize newSize, float priority,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to reallocate device memory");
     memoryRequirements.size = newSize;
+    ++allocationCount;
 }
 
 void DeviceMemory::bind(NonDispatchableHandle object, VkObjectType objectType,
