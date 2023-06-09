@@ -2,6 +2,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 #include <iostream>
+#include <set>
 #include "../common.h"
 
 int main(int argc, char *argv[])
@@ -30,7 +31,8 @@ int main(int argc, char *argv[])
     }
 
     // Parse extended CreateInfo structures
-    std::map<std::string, std::string> chainNodes;
+    std::multimap<std::string, std::string> chainNodes;
+    std::set<std::string> nodeExtensions;
     std::string lastFoundExtension;
     std::string line;
     while (std::getline(header, line))
@@ -43,15 +45,21 @@ int main(int argc, char *argv[])
             lastFoundExtension = std::move(result);
             continue;
         }
-        if (isCreateInfoStructure(line))
+        if (isCreateInfoStructure(line) || isMemoryAllocateStructure(line))
         {
             result = parseStructureName("Vk", line);
             if (!result.empty())
             {
+                if (result == "VkQueryPoolCreateInfoINTEL")
+                    continue; // Avoid double definition error in specialization
                 if (lastFoundExtension == "VK_EXT_global_priority")
                     continue; // Skip in favor of VK_KHR_global_priority
-                std::cout << "Found " << result << std::endl;
-                chainNodes[lastFoundExtension] = std::move(result);
+                if (!lastFoundExtension.empty())
+                {
+                    std::cout << "Found " << result << std::endl;
+                    chainNodes.emplace(lastFoundExtension, result);
+                    nodeExtensions.insert(lastFoundExtension);
+                }
             }
         }
     }
@@ -65,12 +73,16 @@ int main(int argc, char *argv[])
     }
     writeGeneratedByUtilityToolWarning(source);
     source << "namespace magma" << std::endl << "{" << std::endl;
-    for (const auto& it: chainNodes)
+    for (const std::string& name: nodeExtensions)
     {
-        std::string structureTypeName = convertStructureNameToStructureType(it.second);
-        source << "#ifdef " << it.first << std::endl
-            << "MAGMA_SPECIALIZE_STRUCTURE_CHAIN_NODE(" << it.second << ", " << structureTypeName << ")" << std::endl
-            << "#endif" << std::endl;
+        source << "#ifdef " << name << std::endl;
+        const auto range = chainNodes.equal_range(name);
+        for (auto it = range.first; it != range.second; ++it)
+        {
+            std::string structureTypeName = convertStructureNameToStructureType(it->second);
+            source << "MAGMA_SPECIALIZE_STRUCTURE_CHAIN_NODE(" << it->second << ", " << structureTypeName << ")" << std::endl;
+        }
+        source << "#endif" << std::endl;
     }
     source << "} // namespace magma" << std::endl;
 

@@ -118,6 +118,20 @@ bool isCreateInfoStructure(const std::string& line) noexcept
     return false;
 }
 
+bool isMemoryAllocateStructure(const std::string& line) noexcept
+{
+    if (line.find_first_of("()*,") != std::string::npos)
+        return false;
+    if ((line.find("typedef Vk") == std::string::npos) &&
+        (line.find("typedef struct Vk") == std::string::npos))
+        return false;
+    if ((line.find("Memory") != std::string::npos) &&
+        (line.find("Allocate") != std::string::npos) &&
+        (line.find("Info") != std::string::npos))
+        return true;
+    return false;
+}
+
 std::string fixupStructureTypeName(const std::string& name)
 {
     const std::map<std::string, std::string> mapping = {
