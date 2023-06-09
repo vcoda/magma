@@ -203,13 +203,60 @@ VkMemoryRequirements Image::getMemoryRequirements() const noexcept
 
 std::vector<VkSparseImageMemoryRequirements> Image::getSparseMemoryRequirements() const
 {
-    uint32_t sparseMemoryRequirementCount;
+    uint32_t sparseMemoryRequirementCount = 0;
     vkGetImageSparseMemoryRequirements(MAGMA_HANDLE(device), handle, &sparseMemoryRequirementCount, nullptr);
-    std::vector<VkSparseImageMemoryRequirements> sparseMemoryRequirements(sparseMemoryRequirementCount);
     if (sparseMemoryRequirementCount > 0)
+    {
+        std::vector<VkSparseImageMemoryRequirements> sparseMemoryRequirements(sparseMemoryRequirementCount);
         vkGetImageSparseMemoryRequirements(MAGMA_HANDLE(device), handle, &sparseMemoryRequirementCount, sparseMemoryRequirements.data());
-    return sparseMemoryRequirements;
+        return sparseMemoryRequirements;
+    }
+    return {};
 }
+
+#ifdef VK_KHR_get_memory_requirements2
+VkMemoryRequirements Image::getMemoryRequirements2(void *memoryRequirements) const
+{
+    VkImageMemoryRequirementsInfo2KHR imageMemoryRequirementsInfo2;
+    imageMemoryRequirementsInfo2.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_REQUIREMENTS_INFO_2_KHR;
+    imageMemoryRequirementsInfo2.pNext = nullptr;
+    imageMemoryRequirementsInfo2.image = handle;
+    VkMemoryRequirements2KHR memoryRequirements2;
+    memoryRequirements2.sType = VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2_KHR;
+    memoryRequirements2.pNext = memoryRequirements;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetImageMemoryRequirements2KHR, VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME);
+    vkGetImageMemoryRequirements2KHR(MAGMA_HANDLE(device), &imageMemoryRequirementsInfo2, &memoryRequirements2);
+    return memoryRequirements2.memoryRequirements;
+}
+
+std::vector<VkSparseImageMemoryRequirements2KHR> Image::getSparseMemoryRequirements2(void *memoryRequirements) const
+{
+    VkImageSparseMemoryRequirementsInfo2KHR imageSparseMemoryRequirementsInfo2;
+    imageSparseMemoryRequirementsInfo2.sType = VK_STRUCTURE_TYPE_IMAGE_SPARSE_MEMORY_REQUIREMENTS_INFO_2_KHR;
+    imageSparseMemoryRequirementsInfo2.pNext = nullptr;
+    imageSparseMemoryRequirementsInfo2.image = handle;
+    uint32_t sparseMemoryRequirementCount = 0;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetImageSparseMemoryRequirements2KHR, VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME);
+    vkGetImageSparseMemoryRequirements2KHR(MAGMA_HANDLE(device), &imageSparseMemoryRequirementsInfo2,
+        &sparseMemoryRequirementCount, nullptr);
+    if (sparseMemoryRequirementCount > 0)
+    {
+        std::vector<VkSparseImageMemoryRequirements2KHR> sparseMemoryRequirements2;
+        for (uint32_t i = 0; i < sparseMemoryRequirementCount; ++i)
+        {
+            VkSparseImageMemoryRequirements2KHR sparseImageMemoryRequirements2;
+            sparseImageMemoryRequirements2.sType = VK_STRUCTURE_TYPE_SPARSE_IMAGE_MEMORY_REQUIREMENTS_2_KHR;
+            sparseImageMemoryRequirements2.pNext = memoryRequirements; // TODO: unique requirements per element?
+            sparseImageMemoryRequirements2.memoryRequirements = {};
+            sparseMemoryRequirements2.push_back(sparseImageMemoryRequirements2);
+        }
+        vkGetImageSparseMemoryRequirements2KHR(MAGMA_HANDLE(device), &imageSparseMemoryRequirementsInfo2,
+            &sparseMemoryRequirementCount, sparseMemoryRequirements2.data());
+        return sparseMemoryRequirements2;
+    }
+    return {};
+}
+#endif // VK_KHR_get_memory_requirements2
 
 void Image::bindMemory(std::shared_ptr<IDeviceMemory> memory,
     VkDeviceSize offset /* 0 */)
