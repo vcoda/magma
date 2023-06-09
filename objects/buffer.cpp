@@ -104,6 +104,22 @@ VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
     return memoryRequirements;
 }
 
+#ifdef VK_KHR_get_memory_requirements2
+VkMemoryRequirements Buffer::getMemoryRequirements2(void *memoryRequirements) const
+{
+    VkBufferMemoryRequirementsInfo2KHR bufferMemoryRequirementsInfo2;
+    bufferMemoryRequirementsInfo2.sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_REQUIREMENTS_INFO_2_KHR;
+    bufferMemoryRequirementsInfo2.pNext = nullptr;
+    bufferMemoryRequirementsInfo2.buffer = handle;
+    VkMemoryRequirements2KHR memoryRequirements2;
+    memoryRequirements2.sType = VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2_KHR;
+    memoryRequirements2.pNext = memoryRequirements;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetBufferMemoryRequirements2KHR, VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME);
+    vkGetBufferMemoryRequirements2KHR(MAGMA_HANDLE(device), &bufferMemoryRequirementsInfo2, &memoryRequirements2);
+    return memoryRequirements2.memoryRequirements;
+}
+#endif // VK_KHR_get_memory_requirements2
+
 VkDescriptorBufferInfo Buffer::getDescriptor() const noexcept
 {
     VkDescriptorBufferInfo bufferDescriptorInfo;
