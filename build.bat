@@ -112,6 +112,7 @@ misc\sharing.cpp ^
 misc\structureChain.cpp ^
 objects\accelerationStructure.cpp ^
 objects\accelerationStructureInstanceBuffer.cpp ^
+objects\baseDeviceMemory.cpp ^
 objects\buffer.cpp ^
 objects\bufferView.cpp ^
 objects\commandBuffer.cpp ^
@@ -274,6 +275,7 @@ sharing.obj ^
 structureChain.obj ^
 accelerationStructure.obj ^
 accelerationStructureInstanceBuffer.obj ^
+baseDeviceMemory.obj ^
 buffer.obj ^
 bufferView.obj ^
 commandBuffer.obj ^

@@ -92,6 +92,7 @@ MAGMA_OBJS= \
 	\
 	objects/accelerationStructure.o \
 	objects/accelerationStructureInstanceBuffer.o \
+	objects/baseDeviceMemory.o \
 	objects/buffer.o \
 	objects/bufferView.o \
 	objects/commandBuffer.o \
