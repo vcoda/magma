@@ -56,11 +56,18 @@ void ManagedDeviceMemory::realloc(NonDispatchableHandle object, VkDeviceSize new
     handle = VK_NULL_HANDLE;
     subOffset = 0ull;
     memoryRequirements.size = newSize;
-
-    newPriority;
-    object;
-    //allocation = deviceAllocator->allocate(memoryRequirements, flags, clampPriority(priority), object, objectType);
-
+    StructureChain extendedInfo;
+#ifdef VK_EXT_memory_priority
+    if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
+    {
+        VkMemoryPriorityAllocateInfoEXT memoryPriorityAllocateInfo;
+        memoryPriorityAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;
+        memoryPriorityAllocateInfo.pNext = nullptr;
+        memoryPriorityAllocateInfo.priority = clampPriority(newPriority);
+        extendedInfo.addNode(memoryPriorityAllocateInfo);
+    }
+#endif // VK_EXT_memory_priority
+    allocation = deviceAllocator->allocate(objectType, object, memoryRequirements, flags, extendedInfo);
     onDefragment();
 }
 
