@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/instance.h"
 #include "../objects/commandBuffer.h"
 #include "../exceptions/errorResult.h"
+#include "../core/forEach.h"
 #include "../third-party/VulkanMemoryAllocator/include/vk_mem_alloc.h"
 
 static_assert(sizeof(magma::MemoryBudget) == sizeof(VmaBudget),
@@ -126,37 +127,32 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
 {
     std::vector<VmaAllocationCreateInfo> allocInfos;
     allocInfos.reserve(memoryFlags.size());
-    auto flags = memoryFlags.cbegin();
-    auto priority = priorities.cbegin();
-    while (flags != memoryFlags.cend())
-    {
-        VmaAllocationCreateInfo allocInfo;
-        allocInfo.flags = VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT;
-        allocInfo.usage = (VmaMemoryUsage)chooseMemoryUsage(*flags);
-        if (*flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
-            allocInfo.requiredFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-        else if (*flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
-            allocInfo.requiredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
-        else
-            allocInfo.requiredFlags = 0;
-        if (VMA_MEMORY_USAGE_CPU_TO_GPU == allocInfo.usage) // PCI "pinned" memory
-            allocInfo.preferredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
-        else
-            allocInfo.preferredFlags = 0;
-        allocInfo.memoryTypeBits = 0;
-        allocInfo.pool = VK_NULL_HANDLE;
-        allocInfo.pUserData = nullptr;
-        if (priority == priorities.cend())
-            allocInfo.priority = MAGMA_DEFAULT_MEMORY_PRIORITY;
-        else
+    std::vector<float> defaultPriorities;
+    if (priorities.empty())
+        defaultPriorities.resize(memoryFlags.size(), MAGMA_DEFAULT_MEMORY_PRIORITY);
+    core::forConstEach(memoryFlags, priorities.empty() ? defaultPriorities : priorities,
+        [&allocInfos](auto& flags, auto& priority)
         {
+            VmaAllocationCreateInfo allocInfo;
+            allocInfo.flags = VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT;
+            allocInfo.usage = (VmaMemoryUsage)chooseMemoryUsage(*flags);
+            if (*flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+                allocInfo.requiredFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+            else if (*flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
+                allocInfo.requiredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+            else
+                allocInfo.requiredFlags = 0;
+            if (VMA_MEMORY_USAGE_CPU_TO_GPU == allocInfo.usage) // PCI "pinned" memory
+                allocInfo.preferredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+            else
+                allocInfo.preferredFlags = 0;
+            allocInfo.memoryTypeBits = 0;
+            allocInfo.pool = VK_NULL_HANDLE;
+            allocInfo.pUserData = nullptr;
             MAGMA_ASSERT((*priority >= 0.f) && (*priority <= 1.f));
             allocInfo.priority = *priority;
-            ++priority;
-        }
-        allocInfos.push_back(allocInfo);
-        ++flags;
-    }
+            allocInfos.push_back(allocInfo);
+        });
     std::vector<VmaAllocation> allocations(MAGMA_COUNT(allocInfos));
     const VkResult result = vmaAllocateMemoryPages(allocator, memoryRequirements.data(), allocInfos.data(),
         allocations.size(), allocations.data(), nullptr);
@@ -272,15 +268,15 @@ VkResult DeviceMemoryAllocator::beginGpuDefragmentation(std::shared_ptr<CommandB
 VkResult DeviceMemoryAllocator::endDefragmentation()
 {   // https://gpuopen-librariesandsdks.github.io/VulkanMemoryAllocator/html/defragmentation.html
     const VkResult result = vmaDefragmentationEnd(allocator, defragmentationContext);
-    for (std::size_t i = 0, count = allocationsChanged.size(); i < count; ++i)
-    {
-        if (allocationsChanged[i])
+    core::forEach(allocationsChanged, defragmentationResources,
+        [](auto& changed, auto& defragmentedResource)
         {
-            std::shared_ptr<Resource>& resource = defragmentationResources[i];
-            resource->getMemory()->onDefragment();
-            resource->onDefragment();
-        }
-    }
+            if (*changed)
+            {
+                (*defragmentedResource)->getMemory()->onDefragment();
+                (*defragmentedResource)->onDefragment();
+            }
+        });
     allocationsChanged.clear();
     allocationsChanged.shrink_to_fit();
     defragmentationResources.clear();
