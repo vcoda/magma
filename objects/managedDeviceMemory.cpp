@@ -47,6 +47,7 @@ ManagedDeviceMemory::~ManagedDeviceMemory()
 
 void ManagedDeviceMemory::realloc(NonDispatchableHandle object, VkDeviceSize newSize, float newPriority)
 {
+    MAGMA_UNUSED(newPriority);
     MAGMA_ASSERT(!mapped());
     if (mapped())
         unmap();

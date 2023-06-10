@@ -34,6 +34,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device_, Vk
     VkDeviceSize compactedSize, float memoryPriority, std::shared_ptr<Allocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, std::move(device), Sharing(), allocator)
 {
+    MAGMA_UNUSED(memoryPriority);
     VkAccelerationStructureCreateInfoNV accelerationStructureInfo;
     accelerationStructureInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_NV;
     accelerationStructureInfo.pNext = nullptr;

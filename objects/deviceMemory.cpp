@@ -65,6 +65,7 @@ void DeviceMemory::setPriority(float priority) noexcept
 
 void DeviceMemory::realloc(NonDispatchableHandle /* unused */, VkDeviceSize newSize, float newPriority)
 {
+    MAGMA_UNUSED(newPriority);
     MAGMA_ASSERT(!mapped());
     if (mapped())
         unmap();

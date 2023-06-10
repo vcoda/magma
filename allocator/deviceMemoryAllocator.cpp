@@ -80,6 +80,7 @@ DeviceMemoryBlock DeviceMemoryAllocator::allocate(VkObjectType objectType, NonDi
     const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
     const StructureChain& extendedInfo)
 {
+    MAGMA_UNUSED(extendedInfo);
     VmaAllocationCreateInfo allocInfo;
     allocInfo.flags = VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT;
     allocInfo.usage = (VmaMemoryUsage)chooseMemoryUsage(flags);
