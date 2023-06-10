@@ -156,7 +156,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     bindMemory(std::move(memory));
 }
 
-Image::Image(std::shared_ptr<Device> device, VkImage handle, VkImageType imageType, VkFormat format, const VkExtent3D& extent):
+Image::Image(std::shared_ptr<Device> device, VkImage handle_, VkImageType imageType, VkFormat format, const VkExtent3D& extent):
     NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, std::move(device), Sharing(), std::shared_ptr<Allocator>() /* FIX IT */),
     flags(0),
     imageType(imageType),
@@ -169,7 +169,7 @@ Image::Image(std::shared_ptr<Device> device, VkImage handle, VkImageType imageTy
     tiling(VK_IMAGE_TILING_OPTIMAL),
     usage(0)
 {
-    this->handle = handle;
+    handle = handle_;
 }
 
 Image::~Image()
@@ -435,9 +435,7 @@ void Image::copyMip(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t mipLevel,
         VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
         subresourceRange);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDst);
-    {
-        cmdBuffer->copyBufferToImage(std::move(srcBuffer), self, region);
-    }
+    cmdBuffer->copyBufferToImage(std::move(srcBuffer), self, region);
     // Transition image layout to read-only access in a shader as a sampled image
     const ImageMemoryBarrier shaderRead(self,
         dstLayout,
@@ -502,9 +500,7 @@ void Image::copyMipMaps(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_pt
         subresourceRange);
     // Insert memory dependency between host and transfer stages
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDst);
-    {
-        cmdBuffer->copyBufferToImage(srcBuffer, self, regions);
-    }
+    cmdBuffer->copyBufferToImage(srcBuffer, self, regions);
     // Transition image layout to read-only access in a shader as a sampled image
     const ImageMemoryBarrier shaderRead(self,
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,

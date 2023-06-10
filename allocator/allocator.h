@@ -32,8 +32,9 @@ namespace magma
             uint32_t aliveDeviceAllocations = 0;
             uint32_t aliveInstanceAllocations = 0;
         };
-        std::size_t allocatedMemorySize = 0ull;
-        std::size_t internalAllocatedMemorySize = 0ull;
+
+        std::size_t allocatedMemorySize = 0;
+        std::size_t internalAllocatedMemorySize = 0;
         AllocationScopes allocations;
         AllocationScopes internalAllocations;
     };
