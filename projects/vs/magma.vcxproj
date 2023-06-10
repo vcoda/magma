@@ -271,6 +271,7 @@
     <ClInclude Include="..\..\objects\descriptorSetLayout.h" />
     <ClInclude Include="..\..\objects\device.h" />
     <ClInclude Include="..\..\objects\deviceMemory.h" />
+    <ClInclude Include="..\..\objects\baseDeviceMemory.h" />
     <ClInclude Include="..\..\objects\dispatchable.h" />
     <ClInclude Include="..\..\objects\display.h" />
     <ClInclude Include="..\..\objects\displayMode.h" />
@@ -451,6 +452,7 @@
     <ClCompile Include="..\..\objects\descriptorSetLayout.cpp" />
     <ClCompile Include="..\..\objects\device.cpp" />
     <ClCompile Include="..\..\objects\deviceMemory.cpp" />
+    <ClCompile Include="..\..\objects\baseDeviceMemory.cpp" />
     <ClCompile Include="..\..\objects\display.cpp" />
     <ClCompile Include="..\..\objects\displayMode.cpp" />
     <ClCompile Include="..\..\objects\dstTransferBuffer.cpp" />
@@ -646,7 +648,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\misc\viewport.inl" />
     <None Include="..\..\objects\commandBuffer.inl" />
     <None Include="..\..\objects\device.inl" />
-    <None Include="..\..\objects\deviceMemory.inl" />
+    <None Include="..\..\objects\baseDeviceMemory.inl" />
     <None Include="..\..\objects\indirectBuffer.inl" />
     <None Include="..\..\objects\object.inl" />
     <None Include="..\..\objects\pipeline.inl" />

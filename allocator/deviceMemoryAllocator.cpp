@@ -43,6 +43,13 @@ DeviceMemoryAllocator::DeviceMemoryAllocator(std::shared_ptr<Device> device_,
     std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
     VmaAllocatorCreateInfo allocatorInfo = {};
     allocatorInfo.flags = 0;
+#if defined(VK_KHR_get_memory_requirements2) && defined(VK_KHR_dedicated_allocation)
+    if (device->extensionEnabled(VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME) &&
+        device->extensionEnabled(VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME))
+    {
+        allocatorInfo.flags |= VMA_ALLOCATOR_CREATE_KHR_DEDICATED_ALLOCATION_BIT;
+    }
+#endif // VK_KHR_get_memory_requirements2 && VK_KHR_dedicated_allocation
 #ifdef VK_EXT_memory_priority
     if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
         allocatorInfo.flags |= VMA_ALLOCATOR_CREATE_EXT_MEMORY_PRIORITY_BIT;
@@ -68,10 +75,10 @@ DeviceMemoryAllocator::~DeviceMemoryAllocator()
     vmaDestroyAllocator(allocator);
 }
 
-DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memoryRequirements,
-    VkMemoryPropertyFlags flags, float priority, NonDispatchableHandle object, VkObjectType objectType)
+DeviceMemoryBlock DeviceMemoryAllocator::allocate(VkObjectType objectType, NonDispatchableHandle object,
+    const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
+    const StructureChain& extendedInfo)
 {
-    MAGMA_ASSERT((priority >= 0.f) && (priority <= 1.f));
     VmaAllocationCreateInfo allocInfo;
     allocInfo.flags = VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT;
     allocInfo.usage = (VmaMemoryUsage)chooseMemoryUsage(flags);
@@ -88,7 +95,15 @@ DeviceMemoryBlock DeviceMemoryAllocator::alloc(const VkMemoryRequirements& memor
     allocInfo.memoryTypeBits = 0;
     allocInfo.pool = VK_NULL_HANDLE;
     allocInfo.pUserData = nullptr;
-    allocInfo.priority = priority;
+    allocInfo.priority = MAGMA_DEFAULT_MEMORY_PRIORITY;
+#ifdef VK_EXT_memory_priority
+    if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
+    {
+        VkMemoryPriorityAllocateInfoEXT *memoryPriorityAllocateInfo = extendedInfo.findNode<VkMemoryPriorityAllocateInfoEXT>();
+        if (memoryPriorityAllocateInfo)
+            allocInfo.priority = std::max(0.f, std::min(memoryPriorityAllocateInfo->priority, 1.f));
+    }
+#endif // VK_EXT_memory_priority
     VmaAllocation allocation;
     VkResult result;
     switch (objectType)

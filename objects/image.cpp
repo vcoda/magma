@@ -28,6 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandBuffer.h"
 #include "../barriers/imageMemoryBarrier.h"
 #include "../misc/format.h"
+#include "../misc/structureChain.h"
 #include "../exceptions/errorResult.h"
 #include "../core/round.h"
 
@@ -74,8 +75,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
 #ifdef VK_KHR_image_format_list
     VkImageFormatListCreateInfoKHR imageFormatListInfo;
     viewFormats = optional.viewFormats;
-    const bool imageFormatList = device->extensionEnabled(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME);
-    if (imageFormatList && !viewFormats.empty())
+    if (device->extensionEnabled(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME) && !viewFormats.empty())
     {
         imageInfo.pNext = &imageFormatListInfo;
         imageFormatListInfo.sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR;
@@ -86,26 +86,72 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
 #endif // VK_KHR_image_format_list
     const VkResult result = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create image");
-    const VkMemoryRequirements memoryRequirements = getMemoryRequirements();
-    VkMemoryPropertyFlags memoryFlags = (VK_IMAGE_TILING_LINEAR == tiling)
+    // Allocate image memory
+    StructureChain extendedMemoryInfo;
+    VkMemoryRequirements memoryRequirements;
+#if defined(VK_KHR_get_memory_requirements2) && defined(VK_KHR_dedicated_allocation)
+    if (device->extensionEnabled(VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME) &&
+        device->extensionEnabled(VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME))
+    {
+        VkMemoryDedicatedRequirementsKHR dedicatedRequirements = {};
+        dedicatedRequirements.sType = VK_STRUCTURE_TYPE_MEMORY_DEDICATED_REQUIREMENTS_KHR;
+        memoryRequirements = getMemoryRequirements2(&dedicatedRequirements);
+        if (dedicatedRequirements.prefersDedicatedAllocation ||
+            dedicatedRequirements.requiresDedicatedAllocation)
+        {   // https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_dedicated_allocation.html
+            VkMemoryDedicatedAllocateInfoKHR dedicatedAllocateInfo;
+            dedicatedAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_DEDICATED_ALLOCATE_INFO_KHR;
+            dedicatedAllocateInfo.pNext = nullptr;
+            dedicatedAllocateInfo.image = handle;
+            dedicatedAllocateInfo.buffer = VK_NULL_HANDLE;
+            extendedMemoryInfo.addNode(dedicatedAllocateInfo);
+        }
+    }
+    else
+#endif // VK_KHR_get_memory_requirements2 && VK_KHR_dedicated_allocation
+    {
+        memoryRequirements = getMemoryRequirements();
+    }
+#ifdef VK_KHR_device_group
+    if (device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
+    {
+        VkMemoryAllocateFlagsInfoKHR memoryAllocateFlagsInfo;
+        memoryAllocateFlagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
+        memoryAllocateFlagsInfo.pNext = nullptr;
+        memoryAllocateFlagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHR;
+        memoryAllocateFlagsInfo.deviceMask = optional.deviceMask;
+        extendedMemoryInfo.addNode(memoryAllocateFlagsInfo);
+    }
+#endif // VK_KHR_device_group
+#ifdef VK_EXT_memory_priority
+    if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
+    {
+        VkMemoryPriorityAllocateInfoEXT memoryPriorityAllocateInfo;
+        memoryPriorityAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;
+        memoryPriorityAllocateInfo.pNext = nullptr;
+        memoryPriorityAllocateInfo.priority = optional.memoryPriority;
+        extendedMemoryInfo.addNode(memoryPriorityAllocateInfo);
+    }
+#endif // VK_EXT_memory_priority
+    const VkMemoryPropertyFlags memoryFlags = (VK_IMAGE_TILING_LINEAR == tiling)
         ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
         : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT | (optional.lazy ? VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT : 0);
     std::shared_ptr<IDeviceMemory> memory;
     if (MAGMA_DEVICE_ALLOCATOR(allocator))
     {
-        memory = std::make_shared<ManagedDeviceMemory>(
-            std::move(device),
-            memoryRequirements, memoryFlags, optional.memoryPriority,
-            handle, VK_OBJECT_TYPE_IMAGE,
+        memory = std::make_shared<ManagedDeviceMemory>(device,
+            VK_OBJECT_TYPE_IMAGE, handle,
+            memoryRequirements, memoryFlags,
             MAGMA_HOST_ALLOCATOR(allocator),
-            MAGMA_DEVICE_ALLOCATOR(allocator));
+            MAGMA_DEVICE_ALLOCATOR(allocator),
+            extendedMemoryInfo);
     }
     else
     {
-        memory = std::make_shared<DeviceMemory>(
-            std::move(device),
-            memoryRequirements, memoryFlags, optional.memoryPriority,
-            MAGMA_HOST_ALLOCATOR(allocator));
+        memory = std::make_shared<DeviceMemory>(device,
+            memoryRequirements, memoryFlags,
+            MAGMA_HOST_ALLOCATOR(allocator),
+            extendedMemoryInfo);
     }
     bindMemory(std::move(memory));
 }

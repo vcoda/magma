@@ -38,11 +38,11 @@ namespace magma
         VmaAllocator getHandle() const noexcept { return allocator; }
         virtual std::shared_ptr<Device> getDevice() const noexcept override { return device; }
         virtual std::shared_ptr<IAllocator> getHostAllocator() const noexcept override { return hostAllocator; }
-        virtual DeviceMemoryBlock alloc(const VkMemoryRequirements& memoryRequirements,
-            VkMemoryPropertyFlags flags,
-            float priority,
+        virtual DeviceMemoryBlock allocate(VkObjectType objectType,
             NonDispatchableHandle object,
-            VkObjectType objectType) override;
+            const VkMemoryRequirements& memoryRequirements,
+            VkMemoryPropertyFlags flags,
+            const StructureChain& extendedInfo) override;
         virtual std::vector<DeviceMemoryBlock> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
             const std::vector<VkMemoryPropertyFlags>& flags,
             const std::vector<float>& priorities) override;

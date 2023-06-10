@@ -41,10 +41,9 @@ namespace magma
         virtual bool hostVisible() const noexcept = 0;
         virtual bool hostCached() const noexcept = 0;
         virtual bool mapped() const noexcept = 0;
-        virtual void realloc(VkDeviceSize newSize,
-            float priority,
-            NonDispatchableHandle object,
-            VkObjectType objectType) = 0;
+        virtual void realloc(NonDispatchableHandle object,
+            VkDeviceSize newSize,
+            float newPriority) = 0;
         virtual void bind(NonDispatchableHandle object,
             VkObjectType objectType,
             VkDeviceSize offset = 0) = 0;

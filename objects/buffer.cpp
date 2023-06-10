@@ -31,10 +31,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
+Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
     VkBufferCreateFlags flags, VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags,
     const Descriptor& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
-    NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, device, sharing, allocator),
+    NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, std::move(device_), sharing, allocator),
     flags(flags),
     usage(usage)
 {
@@ -49,25 +49,71 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     const VkResult result = vkCreateBuffer(MAGMA_HANDLE(device), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create buffer");
-    const VkMemoryRequirements memoryRequirements = getMemoryRequirements();
+    // Allocate buffer memory
+    StructureChain extendedMemoryInfo;
+    VkMemoryRequirements memoryRequirements;
+#if defined(VK_KHR_get_memory_requirements2) && defined(VK_KHR_dedicated_allocation)
+    if (device->extensionEnabled(VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME) &&
+        device->extensionEnabled(VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME))
+    {
+        VkMemoryDedicatedRequirementsKHR dedicatedRequirements = {};
+        dedicatedRequirements.sType = VK_STRUCTURE_TYPE_MEMORY_DEDICATED_REQUIREMENTS_KHR;
+        memoryRequirements = getMemoryRequirements2(&dedicatedRequirements);
+        if (dedicatedRequirements.prefersDedicatedAllocation ||
+            dedicatedRequirements.requiresDedicatedAllocation)
+        {   // https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_dedicated_allocation.html
+            VkMemoryDedicatedAllocateInfoKHR dedicatedAllocateInfo;
+            dedicatedAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_DEDICATED_ALLOCATE_INFO_KHR;
+            dedicatedAllocateInfo.pNext = nullptr;
+            dedicatedAllocateInfo.image = VK_NULL_HANDLE;
+            dedicatedAllocateInfo.buffer = handle;
+            extendedMemoryInfo.addNode(dedicatedAllocateInfo);
+        }
+    }
+    else
+#endif // VK_KHR_get_memory_requirements2 && VK_KHR_dedicated_allocation
+    {
+        memoryRequirements = getMemoryRequirements();
+    }
+#ifdef VK_KHR_device_group
+    if (device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
+    {
+        VkMemoryAllocateFlagsInfoKHR memoryAllocateFlagsInfo;
+        memoryAllocateFlagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
+        memoryAllocateFlagsInfo.pNext = nullptr;
+        memoryAllocateFlagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHR;
+        memoryAllocateFlagsInfo.deviceMask = optional.deviceMask;
+        extendedMemoryInfo.addNode(memoryAllocateFlagsInfo);
+    }
+#endif // VK_KHR_device_group
+#ifdef VK_EXT_memory_priority
+    if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
+    {
+        VkMemoryPriorityAllocateInfoEXT memoryPriorityAllocateInfo;
+        memoryPriorityAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;
+        memoryPriorityAllocateInfo.pNext = nullptr;
+        memoryPriorityAllocateInfo.priority = optional.memoryPriority;
+        extendedMemoryInfo.addNode(memoryPriorityAllocateInfo);
+    }
+#endif // VK_EXT_memory_priority
     if (optional.lazy && !(memoryFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT))
         memoryFlags |= VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
     std::shared_ptr<IDeviceMemory> memory;
     if (MAGMA_DEVICE_ALLOCATOR(allocator))
     {
-        memory = std::make_shared<ManagedDeviceMemory>(
-            std::move(device),
-            memoryRequirements, memoryFlags, optional.memoryPriority,
-            handle, VK_OBJECT_TYPE_BUFFER,
+        memory = std::make_shared<ManagedDeviceMemory>(device,
+            VK_OBJECT_TYPE_BUFFER, handle,
+            memoryRequirements, memoryFlags,
             MAGMA_HOST_ALLOCATOR(allocator),
-            MAGMA_DEVICE_ALLOCATOR(allocator));
+            MAGMA_DEVICE_ALLOCATOR(allocator),
+            extendedMemoryInfo);
     }
     else
     {
-        memory = std::make_shared<DeviceMemory>(
-            std::move(device),
-            memoryRequirements, memoryFlags, optional.memoryPriority,
-            MAGMA_HOST_ALLOCATOR(allocator));
+        memory = std::make_shared<DeviceMemory>(device,
+            memoryRequirements, memoryFlags,
+            MAGMA_HOST_ALLOCATOR(allocator),
+            extendedMemoryInfo);
     }
     bindMemory(std::move(memory));
 }
@@ -93,7 +139,7 @@ void Buffer::realloc(VkDeviceSize newSize)
     vkDestroyBuffer(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
     const VkResult result = vkCreateBuffer(MAGMA_HANDLE(device), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to reallocate buffer");
-    memory->realloc(newSize, memory->getPriority(), handle, VK_OBJECT_TYPE_BUFFER);
+    memory->realloc(handle, newSize, memory->getPriority());
     bindMemory(std::move(memory), offset);
 }
 
@@ -114,6 +160,7 @@ VkMemoryRequirements Buffer::getMemoryRequirements2(void *memoryRequirements) co
     VkMemoryRequirements2KHR memoryRequirements2;
     memoryRequirements2.sType = VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2_KHR;
     memoryRequirements2.pNext = memoryRequirements;
+    memoryRequirements2.memoryRequirements = {};
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetBufferMemoryRequirements2KHR, VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME);
     vkGetBufferMemoryRequirements2KHR(MAGMA_HANDLE(device), &bufferMemoryRequirementsInfo2, &memoryRequirements2);
     return memoryRequirements2.memoryRequirements;

@@ -795,6 +795,9 @@
     <ClInclude Include="..\..\allocator\debugAlignedAllocator.h">
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\baseDeviceMemory.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1226,6 +1229,9 @@
     <ClCompile Include="..\..\objects\managedDeviceMemory.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\objects\baseDeviceMemory.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\auxiliary\immediateRender.inl">
@@ -1290,9 +1296,6 @@
     </None>
     <None Include="..\..\states\vertexInputState.inl">
       <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\objects\deviceMemory.inl">
-      <Filter>Header Files\objects</Filter>
     </None>
     <None Include="..\..\auxiliary\shaderCompiler.inl">
       <Filter>Header Files\auxiliary</Filter>
@@ -1440,6 +1443,9 @@
     </None>
     <None Include="..\..\auxiliary\profiler.inl">
       <Filter>Header Files\auxiliary</Filter>
+    </None>
+    <None Include="..\..\objects\baseDeviceMemory.inl">
+      <Filter>Header Files\objects</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

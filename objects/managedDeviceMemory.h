@@ -16,8 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "deviceMemory.h"
-#include "nondispatchable.h"
+#include "baseDeviceMemory.h"
 
 namespace magma
 {
@@ -33,13 +32,13 @@ namespace magma
     {
     public:
         explicit ManagedDeviceMemory(std::shared_ptr<Device> device,
+            VkObjectType objectType,
+            NonDispatchableHandle object,
             const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
-            float priority,
-            NonDispatchableHandle object,
-            VkObjectType objectType,
             std::shared_ptr<IAllocator> hostAllocator,
-            std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator);
+            std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator,
+            const StructureChain& extendedInfo = StructureChain());
         ~ManagedDeviceMemory();
         std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return deviceAllocator; }
         DeviceMemoryBlock getAllocation() const noexcept { return allocation; }
@@ -47,10 +46,9 @@ namespace magma
         float getPriority() const noexcept override { return priority; }
         void setPriority(float) noexcept override {}
         bool managed() const noexcept override { return true; }
-        void realloc(VkDeviceSize newSize,
-            float priority,
-            NonDispatchableHandle object,
-            VkObjectType objectType) override;
+        void realloc(NonDispatchableHandle object,
+            VkDeviceSize newSize,
+            float newPriority) override;
         void bind(NonDispatchableHandle object,
             VkObjectType objectType,
             VkDeviceSize offset = 0) override;
@@ -65,6 +63,7 @@ namespace magma
         void onDefragment() noexcept override;
 
     private:
+        const VkObjectType objectType;
         std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
         DeviceMemoryBlock allocation;
         VkDeviceSize subOffset = 0ull;

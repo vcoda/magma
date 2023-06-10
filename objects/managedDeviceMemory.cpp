@@ -27,13 +27,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ManagedDeviceMemory::ManagedDeviceMemory(std::shared_ptr<Device> device, const VkMemoryRequirements& memoryRequirements,
-    VkMemoryPropertyFlags flags, float priority_, NonDispatchableHandle object, VkObjectType objectType,
-    std::shared_ptr<IAllocator> hostAllocator, std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator_):
-    BaseDeviceMemory(std::move(device), memoryRequirements, flags, priority_, 0, std::move(hostAllocator)),
-    deviceAllocator(std::move(deviceAllocator_)),
-    allocation(deviceAllocator->alloc(memoryRequirements, flags, priority, object, objectType))
+ManagedDeviceMemory::ManagedDeviceMemory(std::shared_ptr<Device> device,
+    VkObjectType objectType, NonDispatchableHandle object,
+    const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
+    std::shared_ptr<IAllocator> hostAllocator, std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator_,
+    const StructureChain& extendedInfo):
+    BaseDeviceMemory(std::move(device), memoryRequirements, flags, std::move(hostAllocator), extendedInfo),
+    objectType(objectType),
+    deviceAllocator(std::move(deviceAllocator_))
 {
+    allocation = deviceAllocator->allocate(objectType, object, memoryRequirements, flags, extendedInfo);
     onDefragment();
 }
 
@@ -42,8 +45,7 @@ ManagedDeviceMemory::~ManagedDeviceMemory()
     deviceAllocator->free(allocation);
 }
 
-void ManagedDeviceMemory::realloc(VkDeviceSize newSize, float priority,
-    NonDispatchableHandle object, VkObjectType objectType)
+void ManagedDeviceMemory::realloc(NonDispatchableHandle object, VkDeviceSize newSize, float newPriority)
 {
     MAGMA_ASSERT(!mapped());
     if (mapped())
@@ -51,8 +53,13 @@ void ManagedDeviceMemory::realloc(VkDeviceSize newSize, float priority,
     deviceAllocator->free(allocation);
     allocation = nullptr;
     handle = VK_NULL_HANDLE;
+    subOffset = 0ull;
     memoryRequirements.size = newSize;
-    allocation = deviceAllocator->alloc(memoryRequirements, flags, clampPriority(priority), object, objectType);
+
+    newPriority;
+    object;
+    //allocation = deviceAllocator->allocate(memoryRequirements, flags, clampPriority(priority), object, objectType);
+
     onDefragment();
 }
 

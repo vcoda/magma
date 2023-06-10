@@ -151,6 +151,8 @@ namespace magma
         bool lazy = false;
         // VK_KHR_image_format_list
         std::vector<VkFormat> viewFormats;
+        // VK_KHR_device_group
+        uint32_t deviceMask = 0;
         // VK_EXT_memory_priority
         float memoryPriority = MAGMA_DEFAULT_MEMORY_PRIORITY;
     };

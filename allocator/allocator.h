@@ -97,6 +97,7 @@ namespace magma
     class ManagedDeviceMemory;
     class CommandBuffer;
     class Resource;
+    class StructureChain;
 
     /* Opaque handle to memory sub-allocation.
        Each device memory allocator hides the implementation details under it. */
@@ -116,11 +117,11 @@ namespace magma
     public:
         virtual std::shared_ptr<Device> getDevice() const noexcept = 0;
         virtual std::shared_ptr<IAllocator> getHostAllocator() const noexcept = 0;
-        virtual DeviceMemoryBlock alloc(const VkMemoryRequirements& memoryRequirements,
-            VkMemoryPropertyFlags flags,
-            float priority,
+        virtual DeviceMemoryBlock allocate(VkObjectType objectType,
             NonDispatchableHandle object,
-            VkObjectType objectType) = 0;
+            const VkMemoryRequirements& memoryRequirements,
+            VkMemoryPropertyFlags flags,
+            const StructureChain& extendedInfo) = 0;
         virtual std::vector<DeviceMemoryBlock> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
             const std::vector<VkMemoryPropertyFlags>& flags,
             const std::vector<float>& priorities) = 0;

@@ -29,10 +29,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_NV_ray_tracing
-AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkAccelerationStructureTypeNV type,
+AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device_, VkAccelerationStructureTypeNV type,
     uint32_t instanceCount, const std::list<Geometry>& geometries, VkBuildAccelerationStructureFlagsNV flags,
     VkDeviceSize compactedSize, float memoryPriority, std::shared_ptr<Allocator> allocator):
-    NonDispatchableResource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, device, Sharing(), allocator)
+    NonDispatchableResource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, std::move(device), Sharing(), allocator)
 {
     VkAccelerationStructureCreateInfoNV accelerationStructureInfo;
     accelerationStructureInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_NV;
@@ -56,23 +56,35 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateAccelerationStructureNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult result = vkCreateAccelerationStructureNV(MAGMA_HANDLE(device), &accelerationStructureInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create acceleration structure");
+    // Allocate acceleration structure memory
+    StructureChain extendedMemoryInfo;
     const VkMemoryRequirements memoryRequirements = getObjectMemoryRequirements();
+#ifdef VK_EXT_memory_priority
+    if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
+    {
+        VkMemoryPriorityAllocateInfoEXT memoryPriorityAllocateInfo;
+        memoryPriorityAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;
+        memoryPriorityAllocateInfo.pNext = nullptr;
+        memoryPriorityAllocateInfo.priority = memoryPriority;
+        extendedMemoryInfo.addNode(memoryPriorityAllocateInfo);
+    }
+#endif // VK_EXT_memory_priority
     std::shared_ptr<IDeviceMemory> memory;
     if (MAGMA_DEVICE_ALLOCATOR(allocator))
     {
-        memory = std::make_shared<ManagedDeviceMemory>(
-            std::move(device),
-            memoryRequirements, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memoryPriority,
-            handle, VK_OBJECT_TYPE_BUFFER,
+        memory = std::make_shared<ManagedDeviceMemory>(device,
+            VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, handle,
+            memoryRequirements, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
             MAGMA_HOST_ALLOCATOR(allocator),
-            MAGMA_DEVICE_ALLOCATOR(allocator));
+            MAGMA_DEVICE_ALLOCATOR(allocator),
+            extendedMemoryInfo);
     }
     else
     {
-        memory = std::make_shared<DeviceMemory>(
-            std::move(device),
-            memoryRequirements, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memoryPriority,
-            MAGMA_HOST_ALLOCATOR(allocator));
+        memory = std::make_shared<DeviceMemory>(device,
+            memoryRequirements, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+            MAGMA_HOST_ALLOCATOR(allocator),
+            extendedMemoryInfo);
     }
     bindMemory(std::move(memory));
     this->accelerationStructureInfo = accelerationStructureInfo.info;

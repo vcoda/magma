@@ -1,15 +1,5 @@
 namespace magma
 {
-inline BaseDeviceMemory::BaseDeviceMemory(std::shared_ptr<Device> device, const VkMemoryRequirements& memoryRequirements,
-    VkMemoryPropertyFlags flags, float priority, uint32_t deviceMask, std::shared_ptr<IAllocator> allocator):
-    NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), std::move(allocator)),
-    memoryRequirements(memoryRequirements),
-    flags(flags),
-    deviceMask(deviceMask)
-{
-    clampPriority(priority);
-}
-
 inline bool BaseDeviceMemory::local() const noexcept
 {
     return flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
