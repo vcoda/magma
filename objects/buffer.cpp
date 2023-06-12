@@ -123,26 +123,6 @@ Buffer::~Buffer()
     vkDestroyBuffer(*device, handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-void Buffer::realloc(VkDeviceSize newSize)
-{
-    if (getSize() == newSize)
-        return;
-    VkBufferCreateInfo bufferInfo;
-    bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    bufferInfo.pNext = nullptr;
-    bufferInfo.flags = flags;
-    bufferInfo.size = newSize;
-    bufferInfo.usage = usage;
-    bufferInfo.sharingMode = sharing.getMode();
-    bufferInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
-    bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
-    vkDestroyBuffer(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
-    const VkResult result = vkCreateBuffer(MAGMA_HANDLE(device), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to reallocate buffer");
-    memory->realloc(handle, newSize, memory->getPriority());
-    bindMemory(std::move(memory), offset);
-}
-
 VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
 {
     VkMemoryRequirements memoryRequirements = {};
@@ -202,6 +182,73 @@ VkDeviceAddress Buffer::getDeviceAddress() const
 #endif // VK_EXT_buffer_device_address
 }
 #endif // VK_KHR_buffer_device_address || VK_EXT_buffer_device_address
+
+void Buffer::realloc(VkDeviceSize newSize)
+{
+    if (getSize() == newSize)
+        return;
+    VkBufferCreateInfo bufferInfo;
+    bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bufferInfo.pNext = nullptr;
+    bufferInfo.flags = flags;
+    bufferInfo.size = newSize;
+    bufferInfo.usage = usage;
+    bufferInfo.sharingMode = sharing.getMode();
+    bufferInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
+    bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
+    vkDestroyBuffer(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    const VkResult result = vkCreateBuffer(MAGMA_HANDLE(device), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to reallocate buffer");
+    // Reallocate buffer memory
+    StructureChain extendedMemoryInfo;
+    VkMemoryRequirements memoryRequirements;
+#if defined(VK_KHR_get_memory_requirements2) && defined(VK_KHR_dedicated_allocation)
+    if (device->extensionEnabled(VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME) &&
+        device->extensionEnabled(VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME))
+    {
+        VkMemoryDedicatedRequirementsKHR dedicatedRequirements = {};
+        dedicatedRequirements.sType = VK_STRUCTURE_TYPE_MEMORY_DEDICATED_REQUIREMENTS_KHR;
+        memoryRequirements = getMemoryRequirements2(&dedicatedRequirements);
+        if (dedicatedRequirements.prefersDedicatedAllocation ||
+            dedicatedRequirements.requiresDedicatedAllocation)
+        {
+            VkMemoryDedicatedAllocateInfoKHR dedicatedAllocateInfo;
+            dedicatedAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_DEDICATED_ALLOCATE_INFO_KHR;
+            dedicatedAllocateInfo.pNext = nullptr;
+            dedicatedAllocateInfo.image = VK_NULL_HANDLE;
+            dedicatedAllocateInfo.buffer = handle;
+            extendedMemoryInfo.addNode(dedicatedAllocateInfo);
+        }
+    }
+    else
+#endif // VK_KHR_get_memory_requirements2 && VK_KHR_dedicated_allocation
+    {
+        memoryRequirements = getMemoryRequirements();
+    }
+#ifdef VK_KHR_device_group
+    if (device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
+    {
+        VkMemoryAllocateFlagsInfoKHR memoryAllocateFlagsInfo;
+        memoryAllocateFlagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
+        memoryAllocateFlagsInfo.pNext = nullptr;
+        memoryAllocateFlagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHR;
+        memoryAllocateFlagsInfo.deviceMask = memory->getDeviceMask();
+        extendedMemoryInfo.addNode(memoryAllocateFlagsInfo);
+    }
+#endif // VK_KHR_device_group
+#ifdef VK_EXT_memory_priority
+    if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
+    {
+        VkMemoryPriorityAllocateInfoEXT memoryPriorityAllocateInfo;
+        memoryPriorityAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;
+        memoryPriorityAllocateInfo.pNext = nullptr;
+        memoryPriorityAllocateInfo.priority = memory->getPriority();
+        extendedMemoryInfo.addNode(memoryPriorityAllocateInfo);
+    }
+#endif // VK_EXT_memory_priority
+    memory->realloc(handle, memoryRequirements, extendedMemoryInfo);
+    bindMemory(std::move(memory), offset);
+}
 
 void Buffer::bindMemory(std::shared_ptr<IDeviceMemory> memory_,
     VkDeviceSize offset_ /* 0 */)

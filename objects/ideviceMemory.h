@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "../misc/structureChain.h"
 
 namespace magma
 {
@@ -42,8 +43,8 @@ namespace magma
         virtual bool hostCached() const noexcept = 0;
         virtual bool mapped() const noexcept = 0;
         virtual void realloc(NonDispatchableHandle object,
-            VkDeviceSize newSize,
-            float newPriority) = 0;
+            const VkMemoryRequirements& memoryRequirements,
+            const StructureChain& extendedInfo = StructureChain()) = 0;
         virtual void bind(NonDispatchableHandle object,
             VkObjectType objectType,
             VkDeviceSize offset = 0) = 0;

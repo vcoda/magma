@@ -45,9 +45,10 @@ ManagedDeviceMemory::~ManagedDeviceMemory()
     deviceAllocator->free(allocation);
 }
 
-void ManagedDeviceMemory::realloc(NonDispatchableHandle object, VkDeviceSize newSize, float newPriority)
+void ManagedDeviceMemory::realloc(NonDispatchableHandle object,
+    const VkMemoryRequirements& memoryRequirements_,
+    const StructureChain& extendedInfo /* default */)
 {
-    MAGMA_UNUSED(newPriority);
     MAGMA_ASSERT(!mapped());
     if (mapped())
         unmap();
@@ -55,18 +56,7 @@ void ManagedDeviceMemory::realloc(NonDispatchableHandle object, VkDeviceSize new
     allocation = nullptr;
     handle = VK_NULL_HANDLE;
     subOffset = 0ull;
-    memoryRequirements.size = newSize;
-    StructureChain extendedInfo;
-#ifdef VK_EXT_memory_priority
-    if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
-    {
-        VkMemoryPriorityAllocateInfoEXT memoryPriorityAllocateInfo;
-        memoryPriorityAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;
-        memoryPriorityAllocateInfo.pNext = nullptr;
-        memoryPriorityAllocateInfo.priority = clampPriority(newPriority);
-        extendedInfo.addNode(memoryPriorityAllocateInfo);
-    }
-#endif // VK_EXT_memory_priority
+    memoryRequirements = memoryRequirements_;
     allocation = deviceAllocator->allocate(objectType, object, memoryRequirements, flags, extendedInfo);
     onDefragment();
 }

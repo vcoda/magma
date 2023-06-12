@@ -47,8 +47,8 @@ namespace magma
         void setPriority(float) noexcept override {}
         bool managed() const noexcept override { return true; }
         void realloc(NonDispatchableHandle object,
-            VkDeviceSize newSize,
-            float newPriority) override;
+            const VkMemoryRequirements& memoryRequirements,
+            const StructureChain& extendedInfo = StructureChain()) override;
         void bind(NonDispatchableHandle object,
             VkObjectType objectType,
             VkDeviceSize offset = 0) override;

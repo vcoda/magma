@@ -36,7 +36,6 @@ namespace magma
 
     public:
         ~Buffer();
-        void realloc(VkDeviceSize newSize);
         VkBufferCreateFlags getFlags() const noexcept { return flags; }
         VkBufferUsageFlags getUsage() const noexcept { return usage; }
         VkMemoryRequirements getMemoryRequirements() const noexcept;
@@ -47,6 +46,7 @@ namespace magma
     #if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
         VkDeviceAddress getDeviceAddress() const;
     #endif
+        void realloc(VkDeviceSize newSize);
         void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) override;
     #ifdef VK_KHR_device_group
