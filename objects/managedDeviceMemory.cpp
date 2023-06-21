@@ -91,6 +91,8 @@ void ManagedDeviceMemory::bind(NonDispatchableHandle object, VkObjectType object
         MAGMA_THROW_NOT_IMPLEMENTED;
     }
     MAGMA_THROW_FAILURE(result, "failed to bind device memory");
+    if (VK_SUCCESS == result)
+        binding = object;
 }
 
 void *ManagedDeviceMemory::map(

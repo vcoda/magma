@@ -32,6 +32,7 @@ BaseDeviceMemory::BaseDeviceMemory(std::shared_ptr<Device> device,
     flags(flags),
     deviceMask(0),
     priority(MAGMA_DEFAULT_MEMORY_PRIORITY),
+    binding(VK_NULL_HANDLE),
     mapPointer(nullptr)
 {
     if (!extendedInfo.empty())

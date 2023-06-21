@@ -37,6 +37,7 @@ namespace magma
         bool pinned() const noexcept override;
         bool hostVisible() const noexcept override;
         bool hostCached() const noexcept override;
+        bool binded() const noexcept override;
         bool mapped() const noexcept override;
 
     protected:
@@ -52,6 +53,7 @@ namespace magma
         const VkMemoryPropertyFlags flags;
         uint32_t deviceMask;
         float priority;
+        NonDispatchableHandle binding;
         void *mapPointer;
     };
 } // namespace magma

@@ -41,6 +41,7 @@ namespace magma
         virtual bool pinned() const noexcept = 0;
         virtual bool hostVisible() const noexcept = 0;
         virtual bool hostCached() const noexcept = 0;
+        virtual bool binded() const noexcept = 0;
         virtual bool mapped() const noexcept = 0;
         virtual void realloc(NonDispatchableHandle object,
             const VkMemoryRequirements& memoryRequirements,

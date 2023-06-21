@@ -26,6 +26,11 @@ inline bool BaseDeviceMemory::hostCached() const noexcept
     return hostVisible() && (flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
 }
 
+inline bool BaseDeviceMemory::binded() const noexcept
+{
+    return binding != VK_NULL_HANDLE;
+}
+
 inline bool BaseDeviceMemory::mapped() const noexcept
 {
     return mapPointer != nullptr;
