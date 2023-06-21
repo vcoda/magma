@@ -77,7 +77,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator);
 
         const VkBufferCreateFlags flags;
-        const VkBufferUsageFlags usage;
+        VkBufferUsageFlags usage;
     };
 
     struct Buffer::Descriptor
@@ -86,6 +86,9 @@ namespace magma
         bool lazy = false;
         // VK_KHR_device_group
         uint32_t deviceMask = 0;
+        // VK_KHR/EXT_buffer_device_address
+        bool deviceAddress = false;
+        bool deviceAddressCaptureReplay = false;
         // VK_EXT_memory_priority
         float memoryPriority = MAGMA_DEFAULT_MEMORY_PRIORITY;
     };

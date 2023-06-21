@@ -32,16 +32,24 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
-    VkBufferCreateFlags flags, VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags,
+    VkBufferCreateFlags flags_, VkBufferUsageFlags usage_, VkMemoryPropertyFlags memoryFlags,
     const Descriptor& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, std::move(device_), sharing, allocator),
-    flags(flags),
-    usage(usage)
+    flags(flags_ | optional.flags),
+    usage(usage_)
 {
+    if (optional.deviceAddress)
+    {
+    #ifdef VK_KHR_buffer_device_address
+        usage |= VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR;
+    #elif defined(VK_EXT_buffer_device_address)
+        usage |= VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_EXT;
+    #endif
+    }
     VkBufferCreateInfo bufferInfo;
     bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
     bufferInfo.pNext = nullptr;
-    bufferInfo.flags = flags | optional.flags;
+    bufferInfo.flags = flags;
     bufferInfo.size = size;
     bufferInfo.usage = usage;
     bufferInfo.sharingMode = sharing.getMode();
@@ -76,15 +84,26 @@ Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
         memoryRequirements = getMemoryRequirements();
     }
 #ifdef VK_KHR_device_group
+    VkMemoryAllocateFlagsInfoKHR memoryAllocateFlagsInfo = {};
+    memoryAllocateFlagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
     if (device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
     {
-        VkMemoryAllocateFlagsInfoKHR memoryAllocateFlagsInfo;
-        memoryAllocateFlagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
-        memoryAllocateFlagsInfo.pNext = nullptr;
-        memoryAllocateFlagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHR;
+        memoryAllocateFlagsInfo.flags |= VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHR;
         memoryAllocateFlagsInfo.deviceMask = optional.deviceMask;
-        extendedMemoryInfo.addNode(memoryAllocateFlagsInfo);
     }
+#endif // VK_KHR_device_group
+#ifdef VK_KHR_buffer_device_address
+    if (device->extensionEnabled(VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME))
+    {
+        if (optional.deviceAddress)
+            memoryAllocateFlagsInfo.flags |= VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT_KHR;
+        if (optional.deviceAddressCaptureReplay)
+            memoryAllocateFlagsInfo.flags |= VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT_KHR;
+    }
+#endif // VK_KHR_buffer_device_address
+#ifdef VK_KHR_device_group
+    if (memoryAllocateFlagsInfo.flags)
+        extendedMemoryInfo.addNode(memoryAllocateFlagsInfo);
 #endif // VK_KHR_device_group
 #ifdef VK_EXT_memory_priority
     if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
