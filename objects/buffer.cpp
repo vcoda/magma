@@ -95,7 +95,7 @@ Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
 #ifdef VK_KHR_buffer_device_address
     if (device->extensionEnabled(VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME))
     {
-        if (optional.deviceAddress)
+        if (usage & VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR)
             memoryAllocateFlagsInfo.flags |= VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT_KHR;
         if (optional.deviceAddressCaptureReplay)
             memoryAllocateFlagsInfo.flags |= VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT_KHR;

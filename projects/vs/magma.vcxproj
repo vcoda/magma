@@ -255,6 +255,7 @@
     <ClInclude Include="..\..\misc\scopedDebugMarker.h" />
     <ClInclude Include="..\..\misc\viewport.h" />
     <ClInclude Include="..\..\objects\accelerationStructure.h" />
+    <ClInclude Include="..\..\objects\accelerationStructureStorageBuffer.h" />
     <ClInclude Include="..\..\objects\accelerationStructureInstanceBuffer.h" />
     <ClInclude Include="..\..\objects\buffer.h" />
     <ClInclude Include="..\..\objects\bufferView.h" />
@@ -435,6 +436,7 @@
     <ClCompile Include="..\..\misc\pipelineExecutable.cpp" />
     <ClCompile Include="..\..\misc\scopedDebugMarker.cpp" />
     <ClCompile Include="..\..\objects\accelerationStructure.cpp" />
+    <ClCompile Include="..\..\objects\accelerationStructureStorageBuffer.cpp" />
     <ClCompile Include="..\..\objects\accelerationStructureInstanceBuffer.cpp" />
     <ClCompile Include="..\..\objects\buffer.cpp" />
     <ClCompile Include="..\..\objects\bufferView.cpp" />
