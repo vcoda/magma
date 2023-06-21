@@ -190,15 +190,17 @@ VkDeviceAddress Buffer::getDeviceAddress() const
     }
 #endif // VK_KHR_buffer_device_address
 #ifdef VK_EXT_buffer_device_address
-    VkBufferDeviceAddressInfoEXT bufferDeviceAddressInfo;
-    bufferDeviceAddressInfo.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO_EXT;
-    bufferDeviceAddressInfo.pNext = nullptr;
-    bufferDeviceAddressInfo.buffer = handle;
-    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetBufferDeviceAddressEXT, VK_EXT_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME);
-    return vkGetBufferDeviceAddressEXT(MAGMA_HANDLE(device), &bufferDeviceAddressInfo);
-#else
-    return 0ull;
+    MAGMA_DEVICE_EXTENSION(vkGetBufferDeviceAddressEXT);
+    if (vkGetBufferDeviceAddressEXT)
+    {
+        VkBufferDeviceAddressInfoEXT bufferDeviceAddressInfo;
+        bufferDeviceAddressInfo.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO_EXT;
+        bufferDeviceAddressInfo.pNext = nullptr;
+        bufferDeviceAddressInfo.buffer = handle;
+        return vkGetBufferDeviceAddressEXT(MAGMA_HANDLE(device), &bufferDeviceAddressInfo);
+    }
 #endif // VK_EXT_buffer_device_address
+    return 0ull;
 }
 #endif // VK_KHR_buffer_device_address || VK_EXT_buffer_device_address
 
