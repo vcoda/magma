@@ -95,6 +95,21 @@ void ManagedDeviceMemory::bind(NonDispatchableHandle object, VkObjectType object
         binding = object;
 }
 
+#ifdef VK_KHR_device_group
+void ManagedDeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObjectType objectType,
+    const std::vector<uint32_t>& deviceIndices,
+    const std::vector<VkRect2D>& splitInstanceBindRegions /* empty */,
+    VkDeviceSize offset /* 0 */)
+{
+    MAGMA_UNUSED(object);
+    MAGMA_UNUSED(objectType);
+    MAGMA_UNUSED(deviceIndices);
+    MAGMA_UNUSED(splitInstanceBindRegions);
+    MAGMA_UNUSED(offset);
+    MAGMA_THROW_NOT_IMPLEMENTED;
+}
+#endif // VK_KHR_device_group
+
 void *ManagedDeviceMemory::map(
     VkDeviceSize offset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */,

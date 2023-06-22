@@ -126,6 +126,72 @@ void DeviceMemory::bind(NonDispatchableHandle object, VkObjectType objectType,
         binding = object;
 }
 
+#ifdef VK_KHR_device_group
+void DeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObjectType objectType,
+    const std::vector<uint32_t>& deviceIndices,
+    const std::vector<VkRect2D>& splitInstanceBindRegions /* empty */,
+    VkDeviceSize offset /* 0 */)
+{
+    VkResult result;
+    if (VK_OBJECT_TYPE_BUFFER == objectType)
+    {
+        VkBindBufferMemoryInfoKHR bindBufferMemoryInfo;
+        VkBindBufferMemoryDeviceGroupInfoKHR bindBufferMemoryDeviceGroupInfo;
+        bindBufferMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO_KHR;
+        bindBufferMemoryInfo.pNext = &bindBufferMemoryDeviceGroupInfo;
+        bindBufferMemoryInfo.buffer = core::reinterpret<VkBuffer>(object);
+        bindBufferMemoryInfo.memory = handle;
+        bindBufferMemoryInfo.memoryOffset = offset;
+        bindBufferMemoryDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_DEVICE_GROUP_INFO_KHR;
+        bindBufferMemoryDeviceGroupInfo.pNext = nullptr;
+        bindBufferMemoryDeviceGroupInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
+        bindBufferMemoryDeviceGroupInfo.pDeviceIndices = deviceIndices.data();
+        MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindBufferMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
+        result = vkBindBufferMemory2KHR(MAGMA_HANDLE(device), 1, &bindBufferMemoryInfo);
+    }
+    else if (VK_OBJECT_TYPE_IMAGE == objectType)
+    {
+        VkBindImageMemoryInfoKHR bindImageMemoryInfo;
+        VkBindImageMemoryDeviceGroupInfoKHR bindImageMemoryDeviceGroupInfo;
+        bindImageMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR;
+        bindImageMemoryInfo.pNext = &bindImageMemoryDeviceGroupInfo;
+        bindImageMemoryInfo.image = core::reinterpret<VkImage>(object);
+        bindImageMemoryInfo.memory = handle;
+        bindImageMemoryInfo.memoryOffset = offset;
+        bindImageMemoryDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO_KHR;
+        bindImageMemoryDeviceGroupInfo.pNext = nullptr;
+        bindImageMemoryDeviceGroupInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
+        bindImageMemoryDeviceGroupInfo.pDeviceIndices = deviceIndices.data();
+        bindImageMemoryDeviceGroupInfo.splitInstanceBindRegionCount = MAGMA_COUNT(splitInstanceBindRegions);
+        bindImageMemoryDeviceGroupInfo.pSplitInstanceBindRegions = splitInstanceBindRegions.data();
+        MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
+        result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindImageMemoryInfo);
+    }
+#ifdef VK_NV_ray_tracing
+    else if (VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV == objectType)
+    {
+        VkBindAccelerationStructureMemoryInfoNV bindAccelerationStructureMemoryInfo;
+        bindAccelerationStructureMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_ACCELERATION_STRUCTURE_MEMORY_INFO_NV;
+        bindAccelerationStructureMemoryInfo.pNext = nullptr;
+        bindAccelerationStructureMemoryInfo.accelerationStructure = core::reinterpret<VkAccelerationStructureNV>(object);
+        bindAccelerationStructureMemoryInfo.memory = handle;
+        bindAccelerationStructureMemoryInfo.memoryOffset = offset;
+        bindAccelerationStructureMemoryInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
+        bindAccelerationStructureMemoryInfo.pDeviceIndices = deviceIndices.data();
+        MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
+        result = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &bindAccelerationStructureMemoryInfo);
+    }
+#endif // VK_NV_ray_tracing
+    else
+    {
+        MAGMA_THROW_NOT_IMPLEMENTED;
+    }
+    MAGMA_THROW_FAILURE(result, "failed to bind device memory within device group");
+    if (VK_SUCCESS == result)
+        binding = object;
+}
+#endif // VK_KHR_device_group
+
 void *DeviceMemory::map(
     VkDeviceSize offset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */,

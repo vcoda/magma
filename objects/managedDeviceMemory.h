@@ -52,6 +52,13 @@ namespace magma
         void bind(NonDispatchableHandle object,
             VkObjectType objectType,
             VkDeviceSize offset = 0) override;
+    #ifdef VK_KHR_device_group
+        void bindDeviceGroup(NonDispatchableHandle object,
+            VkObjectType objectType,
+            const std::vector<uint32_t>& deviceIndices,
+            const std::vector<VkRect2D>& splitInstanceBindRegions = {},
+            VkDeviceSize offset = 0) override;
+    #endif // VK_KHR_device_group
         void *map(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE,
             VkMemoryMapFlags flags = 0) noexcept override;
