@@ -89,19 +89,16 @@ SwapchainImage::~SwapchainImage()
 
 void SwapchainImage::bindMemory(std::shared_ptr<IDeviceMemory> /* memory */, VkDeviceSize /* offset */)
 {
+    // Memory is owned by the presentation engine
 }
 
 #ifdef VK_KHR_device_group
-void SwapchainImage::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> /* memory */,
-    const std::vector<uint32_t>& /* deviceIndices */, VkDeviceSize /* offset */)
-{
-}
-
 void SwapchainImage::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> /* memory */,
     const std::vector<uint32_t>& /* deviceIndices */,
     const std::vector<VkRect2D>& /* splitInstanceBindRegions */,
     VkDeviceSize /* offset */)
 {
+    // Memory is owned by the presentation engine
 }
 #endif // VK_KHR_device_group
 

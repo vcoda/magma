@@ -52,6 +52,7 @@ namespace magma
     #ifdef VK_KHR_device_group
         void bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
+            const std::vector<VkRect2D>& splitInstanceBindRegions = {},
             VkDeviceSize offset = 0) override;
     #endif // VK_KHR_device_group
         void onDefragment() override;

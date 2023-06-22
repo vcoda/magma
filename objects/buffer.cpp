@@ -283,22 +283,10 @@ void Buffer::bindMemory(std::shared_ptr<IDeviceMemory> memory_,
 #ifdef VK_KHR_device_group
 void Buffer::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory_,
     const std::vector<uint32_t>& deviceIndices,
+    const std::vector<VkRect2D>& /* splitInstanceBindRegions */,
     VkDeviceSize offset_ /* 0 */)
 {
-    VkBindBufferMemoryInfoKHR bindMemoryInfo;
-    VkBindBufferMemoryDeviceGroupInfoKHR bindMemoryDeviceGroupInfo;
-    bindMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO_KHR;
-    bindMemoryInfo.pNext = &bindMemoryDeviceGroupInfo;
-    bindMemoryInfo.buffer = handle;
-    bindMemoryInfo.memory = memory_->getNativeHandle();
-    bindMemoryInfo.memoryOffset = memory_->getSuballocationOffset() + offset_;
-    bindMemoryDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_DEVICE_GROUP_INFO_KHR;
-    bindMemoryDeviceGroupInfo.pNext = nullptr;
-    bindMemoryDeviceGroupInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
-    bindMemoryDeviceGroupInfo.pDeviceIndices = deviceIndices.data();
-    MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindBufferMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
-    const VkResult result = vkBindBufferMemory2KHR(MAGMA_HANDLE(device), 1, &bindMemoryInfo);
-    MAGMA_THROW_FAILURE(result, "failed to bind buffer memory within device group");
+    memory_->bindDeviceGroup(handle, VK_OBJECT_TYPE_BUFFER, deviceIndices, {/* unused */}, offset_);
     memory = std::move(memory_);
     offset = offset_;
     size = memory->getSize();

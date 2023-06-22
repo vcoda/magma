@@ -110,19 +110,10 @@ void AccelerationStructure::bindMemory(std::shared_ptr<IDeviceMemory> memory_,
 #ifdef VK_KHR_device_group
 void AccelerationStructure::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory_,
     const std::vector<uint32_t>& deviceIndices /* {} */,
+    const std::vector<VkRect2D>& /* splitInstanceBindRegions */,
     VkDeviceSize offset_ /* 0 */)
 {
-    VkBindAccelerationStructureMemoryInfoNV bindAccelerationStructureMemoryInfo;
-    bindAccelerationStructureMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_ACCELERATION_STRUCTURE_MEMORY_INFO_NV;
-    bindAccelerationStructureMemoryInfo.pNext = nullptr;
-    bindAccelerationStructureMemoryInfo.accelerationStructure = handle;
-    bindAccelerationStructureMemoryInfo.memory = memory_->getNativeHandle();
-    bindAccelerationStructureMemoryInfo.memoryOffset = memory_->getSuballocationOffset() + offset_;
-    bindAccelerationStructureMemoryInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
-    bindAccelerationStructureMemoryInfo.pDeviceIndices = deviceIndices.data();
-    MAGMA_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV);
-    const VkResult result = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &bindAccelerationStructureMemoryInfo);
-    MAGMA_THROW_FAILURE(result, "failed to bind acceleration structure memory within device group");
+    memory_->bindDeviceGroup(handle, VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, deviceIndices, {/* unused */}, offset_);
     memory = std::move(memory_);
     offset = offset_;
     size = memory->getSize();

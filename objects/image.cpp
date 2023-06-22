@@ -304,62 +304,22 @@ std::vector<VkSparseImageMemoryRequirements2KHR> Image::getSparseMemoryRequireme
 }
 #endif // VK_KHR_get_memory_requirements2
 
-void Image::bindMemory(std::shared_ptr<IDeviceMemory> memory,
-    VkDeviceSize offset /* 0 */)
-{
-    memory->bind(handle, VK_OBJECT_TYPE_IMAGE, offset);
-    this->size = memory->getSize();
-    this->offset = offset;
-    this->memory = std::move(memory);
-}
-
-#ifdef VK_KHR_device_group
-void Image::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory_,
-    const std::vector<uint32_t>& deviceIndices,
+void Image::bindMemory(std::shared_ptr<IDeviceMemory> memory_,
     VkDeviceSize offset_ /* 0 */)
 {
-    VkBindImageMemoryInfoKHR bindMemoryInfo;
-    VkBindImageMemoryDeviceGroupInfoKHR bindMemoryDeviceGroupInfo;
-    bindMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR;
-    bindMemoryInfo.pNext = &bindMemoryDeviceGroupInfo;
-    bindMemoryInfo.image = handle;
-    bindMemoryInfo.memory = memory_->getNativeHandle();
-    bindMemoryInfo.memoryOffset = memory_->getSuballocationOffset() + offset_;
-    bindMemoryDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO_KHR;
-    bindMemoryDeviceGroupInfo.pNext = nullptr;
-    bindMemoryDeviceGroupInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
-    bindMemoryDeviceGroupInfo.pDeviceIndices = deviceIndices.data();
-    bindMemoryDeviceGroupInfo.splitInstanceBindRegionCount = 0;
-    bindMemoryDeviceGroupInfo.pSplitInstanceBindRegions = nullptr;
-    MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
-    const VkResult result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindMemoryInfo);
-    MAGMA_THROW_FAILURE(result, "failed to bind image memory within device group");
+    memory_->bind(handle, VK_OBJECT_TYPE_IMAGE, offset_);
     memory = std::move(memory_);
     offset = offset_;
     size = memory->getSize();
 }
 
+#ifdef VK_KHR_device_group
 void Image::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory_,
     const std::vector<uint32_t>& deviceIndices,
-    const std::vector<VkRect2D>& splitInstanceBindRegions,
+    const std::vector<VkRect2D>& splitInstanceBindRegions /* empty */,
     VkDeviceSize offset_ /* 0 */)
 {
-    VkBindImageMemoryInfoKHR bindMemoryInfo;
-    VkBindImageMemoryDeviceGroupInfoKHR bindMemoryDeviceGroupInfo;
-    bindMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR;
-    bindMemoryInfo.pNext = &bindMemoryDeviceGroupInfo;
-    bindMemoryInfo.image = handle;
-    bindMemoryInfo.memory = memory_->getNativeHandle();
-    bindMemoryInfo.memoryOffset = memory_->getSuballocationOffset() + offset_;
-    bindMemoryDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO_KHR;
-    bindMemoryDeviceGroupInfo.pNext = nullptr;
-    bindMemoryDeviceGroupInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
-    bindMemoryDeviceGroupInfo.pDeviceIndices = deviceIndices.data();
-    bindMemoryDeviceGroupInfo.splitInstanceBindRegionCount = MAGMA_COUNT(splitInstanceBindRegions);
-    bindMemoryDeviceGroupInfo.pSplitInstanceBindRegions = splitInstanceBindRegions.data();
-    MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
-    const VkResult result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindMemoryInfo);
-    MAGMA_THROW_FAILURE(result, "failed to bind image memory within device group");
+    memory_->bindDeviceGroup(handle, VK_OBJECT_TYPE_IMAGE, deviceIndices, splitInstanceBindRegions, offset_);
     memory = std::move(memory_);
     offset = offset_;
     size = memory->getSize();

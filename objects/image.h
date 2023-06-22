@@ -64,16 +64,13 @@ namespace magma
         VkMemoryRequirements getMemoryRequirements2(void *memoryRequirements) const;
         std::vector<VkSparseImageMemoryRequirements2KHR> getSparseMemoryRequirements2(void *memoryRequirements) const;
     #endif // VK_KHR_get_memory_requirements2
-        virtual void bindMemory(std::shared_ptr<IDeviceMemory> memory,
+        void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) override;
     #ifdef VK_KHR_device_group
-        virtual void bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory,
+        void bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
+            const std::vector<VkRect2D>& splitInstanceBindRegions = {},
             VkDeviceSize offset = 0) override;
-        virtual void bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory,
-            const std::vector<uint32_t>& deviceIndices,
-            const std::vector<VkRect2D>& splitInstanceBindRegions,
-            VkDeviceSize offset = 0);
     #endif // VK_KHR_device_group
         virtual void onDefragment() override;
         VkImageLayout layoutTransition(VkImageLayout newLayout,

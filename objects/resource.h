@@ -66,11 +66,12 @@ namespace magma
         Payload& getPayload() noexcept { return payload; }
         virtual void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) = 0;
-#ifdef VK_KHR_device_group
+    #ifdef VK_KHR_device_group
         virtual void bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
+            const std::vector<VkRect2D>& splitInstanceBindRegions = {},
             VkDeviceSize offset = 0) = 0;
-#endif
+    #endif // VK_KHR_device_group
         virtual void onDefragment() = 0;
 
     protected:
