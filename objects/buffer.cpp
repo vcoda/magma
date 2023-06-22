@@ -176,7 +176,7 @@ VkDescriptorBufferInfo Buffer::getDescriptor() const noexcept
 }
 
 #if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
-VkDeviceAddress Buffer::getDeviceAddress() const
+VkDeviceAddress Buffer::getDeviceAddress() const noexcept
 {
 #ifdef VK_KHR_buffer_device_address
     MAGMA_DEVICE_EXTENSION(vkGetBufferDeviceAddressKHR);

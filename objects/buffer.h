@@ -44,7 +44,7 @@ namespace magma
     #endif
         VkDescriptorBufferInfo getDescriptor() const noexcept;
     #if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
-        VkDeviceAddress getDeviceAddress() const;
+        VkDeviceAddress getDeviceAddress() const noexcept;
     #endif
         void realloc(VkDeviceSize newSize);
         void bindMemory(std::shared_ptr<IDeviceMemory> memory,
