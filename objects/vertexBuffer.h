@@ -72,15 +72,18 @@ namespace magma
             const Sharing& sharing = Sharing());
     };
 
-    /* Dynamic vertex buffer for fast data transfer from host to device
-       when using page-locked (or "pinned") memory. */
+    /* Major GPU vendors expose a 256MiB-ish staging buffer with the
+       DEVICE_LOCAL | HOST_VISIBLE | HOST_COHERENT flags where the GPU and CPU
+       can both write into shared memory visible to each other. This 256MiB limit
+       correlates with the 256MiB PCIE-specified BAR-size limit that defines
+       the size of the 256MiB aperture/window of VRAM that the host can access. */
 
     class DynamicVertexBuffer : public BaseVertexBuffer
     {
     public:
         explicit DynamicVertexBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
-            bool pinnedMemory,
+            bool pcieBarLimitedVramWindow,
             std::shared_ptr<Allocator> allocator = nullptr,
             const void *initialData = nullptr,
             const Descriptor& optional = Descriptor(),
