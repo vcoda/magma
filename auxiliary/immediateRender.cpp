@@ -183,7 +183,7 @@ bool ImmediateRender::reset() noexcept
 
 bool ImmediateRender::fitBarLimitedHeap(VkDeviceSize size) const noexcept
 {
-    std::shared_ptr<magma::PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+    std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
     const VkPhysicalDeviceMemoryProperties memoryProperties = physicalDevice->getMemoryProperties();
     for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
     {

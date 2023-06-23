@@ -123,12 +123,12 @@ namespace magma
             uint32_t reference) noexcept;
 
         void bindDescriptorSet(VkPipelineBindPoint bindPoint,
-            const std::shared_ptr<magma::PipelineLayout>& layout,
+            const std::shared_ptr<PipelineLayout>& layout,
             uint32_t setIndex,
             const std::shared_ptr<DescriptorSet>& descriptorSet,
             uint32_t dynamicOffset = std::numeric_limits<uint32_t>::max()) noexcept;
         void bindDescriptorSet(VkPipelineBindPoint bindPoint,
-            const std::shared_ptr<magma::PipelineLayout>& layout,
+            const std::shared_ptr<PipelineLayout>& layout,
             uint32_t setIndex,
             const std::shared_ptr<DescriptorSet>& descriptorSet,
             const std::initializer_list<uint32_t>& dynamicOffsets) noexcept;

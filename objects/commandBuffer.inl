@@ -95,7 +95,7 @@ inline void CommandBuffer::setStencilReference(bool frontFace, bool backFace, ui
     vkCmdSetStencilReference(handle, MAGMA_STENCIL_FACE_MASK(frontFace, backFace), reference);
 }
 
-inline void CommandBuffer::bindDescriptorSet(VkPipelineBindPoint bindPoint, const std::shared_ptr<magma::PipelineLayout>& layout, uint32_t setIndex,
+inline void CommandBuffer::bindDescriptorSet(VkPipelineBindPoint bindPoint, const std::shared_ptr<PipelineLayout>& layout, uint32_t setIndex,
     const std::shared_ptr<DescriptorSet>& descriptorSet, uint32_t dynamicOffset /* std::numeric_limits<uint32_t>::max() */) noexcept
 {
     MAGMA_ASSERT(layout->hasLayout(descriptorSet->getLayout()));
@@ -104,7 +104,7 @@ inline void CommandBuffer::bindDescriptorSet(VkPipelineBindPoint bindPoint, cons
     vkCmdBindDescriptorSets(handle, bindPoint, *layout, setIndex, 1, descriptorSet->getHandleAddress(), dynamicOffsetCount, dynamicOffsetCount ? &dynamicOffset : nullptr);
 }
 
-inline void CommandBuffer::bindDescriptorSet(VkPipelineBindPoint bindPoint, const std::shared_ptr<magma::PipelineLayout>& layout, uint32_t setIndex,
+inline void CommandBuffer::bindDescriptorSet(VkPipelineBindPoint bindPoint, const std::shared_ptr<PipelineLayout>& layout, uint32_t setIndex,
     const std::shared_ptr<DescriptorSet>& descriptorSet, const std::initializer_list<uint32_t>& dynamicOffsets) noexcept
 {
     MAGMA_ASSERT(layout->hasLayout(descriptorSet->getLayout()));

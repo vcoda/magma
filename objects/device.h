@@ -122,7 +122,7 @@ namespace magma
 
 #define MAGMA_SPECIALIZE_PHYSICAL_DEVICE_FEATURES(PhysicalDeviceFeatures, structureType)\
 template<>\
-inline const PhysicalDeviceFeatures *magma::Device::getEnabledExtendedFeatures<PhysicalDeviceFeatures>() const noexcept\
+inline const PhysicalDeviceFeatures *Device::getEnabledExtendedFeatures<PhysicalDeviceFeatures>() const noexcept\
 {\
     auto it = enabledExtendedFeatures.find(structureType);\
     if (it != enabledExtendedFeatures.end())\
