@@ -85,7 +85,7 @@ namespace magma
         explicit DynamicIndexBuffer(std::shared_ptr<Device> device,
             VkIndexType indexType,
             VkDeviceSize size,
-            bool pcieBarLimitedVramWindow,
+            bool pcieBarLimitedHeap,
             std::shared_ptr<Allocator> allocator = nullptr,
             const void *initialData = nullptr,
             const Descriptor& optional = Descriptor(),

@@ -101,7 +101,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType i
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }
 
-DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkIndexType indexType, VkDeviceSize size, bool pcieBarLimitedVramWindow,
+DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkIndexType indexType, VkDeviceSize size, bool pcieBarLimitedHeap,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const void *initialData /* nullptr */,
     const Descriptor& optional /* default */,
@@ -109,7 +109,7 @@ DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkIndexTy
     CopyMemoryFunction copyFn /* nullptr */):
     BaseIndexBuffer(std::move(device), indexType, size,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
-        (pcieBarLimitedVramWindow ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0) | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+        (pcieBarLimitedHeap ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0) | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
         optional, sharing, std::move(allocator))
 {
     if (initialData)
