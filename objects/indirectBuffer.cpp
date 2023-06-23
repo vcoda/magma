@@ -48,7 +48,7 @@ DrawIndirectBuffer::DrawIndirectBuffer(std::shared_ptr<Device> device, uint32_t 
     std::shared_ptr<Allocator> allocator /* nullptr */,
     bool persistentlyMapped /* false */,
     const Descriptor& optional /* default */,
-    const Sharing& sharing /* Sharing() */):
+    const Sharing& sharing /* default */):
     IndirectBuffer(std::move(device), maxDrawCount, sizeof(VkDrawIndirectCommand),
         persistentlyMapped, optional, sharing, std::move(allocator)),
     mappedData(persistentlyMapped ? (VkDrawIndirectCommand *)memory->map() : nullptr)
@@ -95,7 +95,7 @@ DrawIndexedIndirectBuffer::DrawIndexedIndirectBuffer(std::shared_ptr<Device> dev
     std::shared_ptr<Allocator> allocator /* nullptr */,
     bool persistentlyMapped /* false */,
     const Descriptor& optional /* default */,
-    const Sharing& sharing /* Sharing() */):
+    const Sharing& sharing /* default */):
     IndirectBuffer(std::move(device), maxDrawIndexedCount, sizeof(VkDrawIndexedIndirectCommand),
         persistentlyMapped, optional, sharing, std::move(allocator)),
     mappedData(persistentlyMapped ? (VkDrawIndexedIndirectCommand *)memory->map() : nullptr)
@@ -146,7 +146,7 @@ DispatchIndirectBuffer::DispatchIndirectBuffer(std::shared_ptr<Device> device, u
     std::shared_ptr<Allocator> allocator /* nullptr */,
     bool persistentlyMapped /* false */,
     const Descriptor& optional /* default */,
-    const Sharing& sharing /* Sharing() */):
+    const Sharing& sharing /* default */):
     IndirectBuffer(std::move(device), maxDispatchCommands, sizeof(VkDispatchIndirectCommand),
         persistentlyMapped, optional, sharing, std::move(allocator)),
     mappedData(persistentlyMapped ? (VkDispatchIndirectCommand *)memory->map() : nullptr)
@@ -173,18 +173,21 @@ DrawMeshTasksIndirectBuffer::DrawMeshTasksIndirectBuffer(std::shared_ptr<Device>
     IndirectBuffer(device, maxDrawMeshTasksCount, extensionDependentStride(device),
         persistentlyMapped, optional, sharing, std::move(allocator)),
     mappedData(persistentlyMapped ? memory->map() : nullptr),
-    EXT_mesh_shader(false)
-{
 #ifdef VK_EXT_mesh_shader
-    EXT_mesh_shader = device->extensionEnabled(VK_EXT_MESH_SHADER_EXTENSION_NAME);
+    extMeshShader(device->extensionEnabled(VK_EXT_MESH_SHADER_EXTENSION_NAME))
+#else
+    extMeshShader(false)
 #endif
-}
+{}
 
 uint32_t DrawMeshTasksIndirectBuffer::writeDrawMeshTaskCommand(uint32_t groupCountX,
     uint32_t groupCountY /* 1 */,
     uint32_t groupCountZ /* 1 */)
 {
-    if (EXT_mesh_shader)
+    MAGMA_UNUSED(groupCountX);
+    MAGMA_UNUSED(groupCountY);
+    MAGMA_UNUSED(groupCountZ);
+    if (extMeshShader)
     {
     #ifdef VK_EXT_mesh_shader
         DrawIndirectCommand<VkDrawMeshTasksIndirectCommandEXT> drawMeshTaskCmd(this, mappedData);
@@ -204,8 +207,6 @@ uint32_t DrawMeshTasksIndirectBuffer::writeDrawMeshTaskCommand(uint32_t groupCou
         {
             MAGMA_ASSERT(1 == groupCountY);
             MAGMA_ASSERT(1 == groupCountZ);
-            MAGMA_UNUSED(groupCountY);
-            MAGMA_UNUSED(groupCountZ);
             drawMeshTaskCmd->taskCount = groupCountX;
             drawMeshTaskCmd->firstTask = 0; // Not used as it isn't present in VK_EXT_mesh_shader
         }

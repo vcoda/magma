@@ -133,7 +133,7 @@ namespace magma
         static std::size_t extensionDependentStride(std::shared_ptr<Device> device) noexcept;
 
         void *const mappedData;
-        bool EXT_mesh_shader;
+        const bool extMeshShader;
     };
 #endif // VK_EXT_mesh_shader || VK_NV_mesh_shader
 } // namespace magma
