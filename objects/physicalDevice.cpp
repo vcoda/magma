@@ -2054,22 +2054,6 @@ bool PhysicalDevice::extensionSupported(const char *extensionName) const noexcep
     return it != extensions.end();
 }
 
-bool PhysicalDevice::checkPinnedMemorySupport() const noexcept
-{
-    const VkPhysicalDeviceMemoryProperties memoryProperties = getMemoryProperties();
-    for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
-    {
-        constexpr VkMemoryPropertyFlags pinnedMemoryFlags =
-            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
-            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-        const VkMemoryType& memoryType = memoryProperties.memoryTypes[i];
-        if ((memoryType.propertyFlags & pinnedMemoryFlags) == pinnedMemoryFlags)
-            return true;
-    }
-    return false;
-}
-
 bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept
 {
     MAGMA_ASSERT(cacheData);
