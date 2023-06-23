@@ -19,6 +19,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "immediateRender.h"
 #include "graphicsPipelineCache.h"
+#include "../objects/physicalDevice.h"
+#include "../objects/device.h"
 #include "../objects/deviceMemory.h"
 #include "../objects/commandBuffer.h"
 #include "../objects/graphicsPipeline.h"
@@ -45,12 +47,14 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
     renderPass(std::move(renderPass)),
     layout(std::move(layout)),
     pipelineCache(std::make_shared<GraphicsPipelineCache>(device, std::move(pipelineCache), MAGMA_HOST_ALLOCATOR(allocator))),
-    vertexBuffer(std::make_shared<DynamicVertexBuffer>(device, sizeof(Vertex) * maxVertexCount, false, allocator, nullptr, Buffer::Descriptor(), Sharing())),
     rasterizationState(renderstate::fillCullBackCCw),
     multisampleState(renderstate::dontMultisample),
     depthStencilState(renderstate::depthAlwaysDontWrite),
     colorBlendState(renderstate::dontBlendRgba)
 {
+    const VkDeviceSize vertexBufferSize = sizeof(Vertex) * maxVertexCount;
+    const bool pcieBarLimitedHeap = fitBarLimitedHeap(vertexBufferSize);
+    vertexBuffer = std::make_shared<DynamicVertexBuffer>(device, vertexBufferSize, pcieBarLimitedHeap, allocator);
     setIdentity();
     if (!this->layout)
     {   // If layout not specified, create default one
@@ -175,6 +179,27 @@ bool ImmediateRender::reset() noexcept
     primitives.clear();
     vertexCount = 0;
     return true;
+}
+
+bool ImmediateRender::fitBarLimitedHeap(VkDeviceSize size) const noexcept
+{
+    std::shared_ptr<magma::PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+    const VkPhysicalDeviceMemoryProperties memoryProperties = physicalDevice->getMemoryProperties();
+    for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
+    {
+        const VkMemoryType& memoryType = memoryProperties.memoryTypes[i];
+        const VkMemoryPropertyFlags pcieBarHeapFlags =
+            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+        if ((memoryType.propertyFlags & pcieBarHeapFlags) == pcieBarHeapFlags)
+        {
+            const VkMemoryHeap& pcieBarMemoryHeap = memoryProperties.memoryHeaps[memoryType.heapIndex];
+            if (pcieBarMemoryHeap.size >= size)
+                return true;
+        }
+    }
+    return false;
 }
 
 std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTopology topology, bool wideLineState, bool stippledLineState)

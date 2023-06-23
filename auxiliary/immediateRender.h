@@ -92,6 +92,7 @@ namespace magma
             void vertex(const float v[4]) noexcept;
 
         private:
+            bool fitBarLimitedHeap(VkDeviceSize size) const noexcept;
             std::shared_ptr<GraphicsPipeline> lookupPipeline(VkPrimitiveTopology,
                 bool wideLineState, bool stippledLineState);
 
