@@ -81,7 +81,7 @@ TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<Device> device = renderPass->getDevice();
     std::shared_ptr<IAllocator> hostAllocator = MAGMA_HOST_ALLOCATOR(this->allocator);
     // Create uniform and storage buffers
-    uniforms = std::make_shared<UniformBuffer<Uniforms>>(device, this->allocator);
+    uniforms = std::make_shared<UniformBuffer<Uniforms>>(device, true, this->allocator);
     stringBuffer = std::make_shared<DynamicStorageBuffer>(device, 8 * sizeof(String), false, this->allocator);
     glyphBuffer = std::make_shared<DynamicStorageBuffer>(device, 256 * sizeof(Glyph), false, this->allocator); // 4Kb
     // Define descriptor set layout

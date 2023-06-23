@@ -33,15 +33,15 @@ namespace magma
         typedef Type UniformType;
 
         explicit UniformBuffer(std::shared_ptr<Device> device,
+            bool pcieBarLimitedHeap,
             std::shared_ptr<Allocator> allocator = nullptr,
-            bool pinnedMemory = false,
             uint32_t arraySize = 1,
             const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing()):
             Buffer(std::move(device), sizeof(Type) * arraySize,
                 0, // flags
                 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-                (pinnedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0) | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                (pcieBarLimitedHeap ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0) | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                 optional, sharing, std::move(allocator)),
             arraySize(arraySize)
         {
@@ -89,11 +89,11 @@ namespace magma
 
         explicit DynamicUniformBuffer(std::shared_ptr<Device> device,
             uint32_t arraySize,
+            bool pcieBarLimitedHeap,
             std::shared_ptr<Allocator> allocator = nullptr,
-            bool pinnedMemory = false,
             const Buffer::Descriptor& optional = Buffer::Descriptor(),
             const Sharing& sharing = Sharing()):
-            UniformBuffer<Type>(device, std::move(allocator), pinnedMemory, alignedArraySize(device, arraySize), optional, sharing),
+            UniformBuffer<Type>(device, pcieBarLimitedHeap, std::move(allocator), alignedArraySize(device, arraySize), optional, sharing),
             alignment(std::max(
                 minOffsetAlignment(device),
                 static_cast<VkDeviceSize>(elementSize)
@@ -121,7 +121,7 @@ namespace magma
     private:
         static VkDeviceSize minOffsetAlignment(std::shared_ptr<Device> device) noexcept
         {   // Check hardware requirements
-            std::shared_ptr<const PhysicalDevice> physicalDevice = std::move(device->getPhysicalDevice());
+            std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
             const VkPhysicalDeviceProperties& properties = physicalDevice->getProperties();
             const VkPhysicalDeviceLimits& limits = properties.limits;
             return limits.minUniformBufferOffsetAlignment;
