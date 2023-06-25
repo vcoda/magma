@@ -38,7 +38,7 @@ namespace magma
         virtual void setPriority(float priority) noexcept = 0;
         virtual bool managed() const noexcept = 0;
         virtual bool local() const noexcept = 0;
-        virtual bool pinned() const noexcept = 0;
+        virtual bool staged() const noexcept = 0;
         virtual bool hostVisible() const noexcept = 0;
         virtual bool hostCached() const noexcept = 0;
         virtual bool binded() const noexcept = 0;

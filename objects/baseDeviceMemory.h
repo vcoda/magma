@@ -34,7 +34,7 @@ namespace magma
         uint32_t getDeviceMask() const noexcept { return deviceMask; }
         void *getMapPointer() const noexcept { return mapPointer; }
         bool local() const noexcept override;
-        bool pinned() const noexcept override;
+        bool staged() const noexcept override;
         bool hostVisible() const noexcept override;
         bool hostCached() const noexcept override;
         bool binded() const noexcept override;

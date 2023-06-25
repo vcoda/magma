@@ -5,11 +5,10 @@ inline bool BaseDeviceMemory::local() const noexcept
     return flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 }
 
-// Pinned memory is virtual memory pages that are specially marked so that they cannot be paged out.
-// Higher bandwidth is possible between the host and the device when using page-locked (or "pinned") memory.
-// On discrete AMD GPU there is around 256 MiB of DEVICE_LOCAL + HOST_VISIBLE memory pool.
-inline bool BaseDeviceMemory::pinned() const noexcept
-{
+inline bool BaseDeviceMemory::staged() const noexcept
+{   // On discrete NVIDIA and AMD GPUs there are around 256 MiB of DEVICE_LOCAL + HOST_VISIBLE
+    // memory pool. This 256MiB limit correlates with the 256MiB PCIE-specified BAR-size limit
+    // that defines the size of the 256MiB aperture/window of VRAM that the host can access.
     return local() && hostVisible();
 }
 
