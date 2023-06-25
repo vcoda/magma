@@ -41,6 +41,9 @@ namespace magma
         virtual bool staged() const noexcept = 0;
         virtual bool hostVisible() const noexcept = 0;
         virtual bool hostCached() const noexcept = 0;
+    #ifdef VK_AMD_device_coherent_memory
+        virtual bool deviceHostCoherent() const noexcept = 0;
+    #endif
         virtual bool binded() const noexcept = 0;
         virtual bool mapped() const noexcept = 0;
         virtual void realloc(NonDispatchableHandle object,

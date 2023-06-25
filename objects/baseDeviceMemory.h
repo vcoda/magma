@@ -37,6 +37,9 @@ namespace magma
         bool staged() const noexcept override;
         bool hostVisible() const noexcept override;
         bool hostCached() const noexcept override;
+    #ifdef VK_AMD_device_coherent_memory
+        bool deviceHostCoherent() const noexcept override;
+    #endif
         bool binded() const noexcept override;
         bool mapped() const noexcept override;
 

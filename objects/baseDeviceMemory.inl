@@ -25,6 +25,19 @@ inline bool BaseDeviceMemory::hostCached() const noexcept
     return hostVisible() && (flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
 }
 
+#ifdef VK_AMD_device_coherent_memory
+inline bool BaseDeviceMemory::deviceHostCoherent() const noexcept
+{
+    constexpr VkMemoryPropertyFlags coherentFlags =
+        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
+        VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD;
+    // For any memory allocated with both the HOST_COHERENT and the DEVICE_COHERENT flags,
+    // host or device accesses also perform automatic memory domain transfer operations, such that
+    // writes are always automatically available and visible to both host and device memory domains.
+    return (flags & coherentFlags) == coherentFlags;
+}
+#endif // VK_AMD_device_coherent_memory
+
 inline bool BaseDeviceMemory::binded() const noexcept
 {
     return binding != VK_NULL_HANDLE;
