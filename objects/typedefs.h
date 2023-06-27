@@ -148,6 +148,7 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(SamplerYcbcrConversion)
 #endif
 #ifdef VK_KHR_timeline_semaphore
+    MAGMA_TYPEDEF_SHARED_PTR(BinarySemaphore)
     MAGMA_TYPEDEF_SHARED_PTR(TimelineSemaphore)
 #endif
 

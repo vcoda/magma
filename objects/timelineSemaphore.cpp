@@ -26,6 +26,40 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_timeline_semaphore
+BinarySemaphore::BinarySemaphore(std::shared_ptr<Device> device,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    NonDispatchable(VK_OBJECT_TYPE_SEMAPHORE, std::move(device), std::move(allocator))
+{
+    VkSemaphoreCreateInfo semaphoreInfo;
+    VkSemaphoreTypeCreateInfoKHR semaphoreTypeInfo;
+    semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+    semaphoreInfo.pNext = &semaphoreTypeInfo;
+    semaphoreInfo.flags = 0;
+    semaphoreTypeInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO_KHR;
+    semaphoreTypeInfo.pNext = nullptr;
+    semaphoreTypeInfo.semaphoreType = VK_SEMAPHORE_TYPE_BINARY_KHR;
+    semaphoreTypeInfo.initialValue = VK_FALSE; // When created, the semaphore is in the unsignaled state
+    const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_THROW_FAILURE(result, "failed to create binary semaphore");
+}
+
+BinarySemaphore::~BinarySemaphore()
+{
+    vkDestroySemaphore(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+}
+
+void BinarySemaphore::signal(bool value)
+{
+    VkSemaphoreSignalInfoKHR signalInfo;
+    signalInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_SIGNAL_INFO_KHR;
+    signalInfo.pNext = nullptr;
+    signalInfo.semaphore = handle;
+    signalInfo.value = MAGMA_BOOLEAN(value);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkSignalSemaphoreKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
+    const VkResult result = vkSignalSemaphoreKHR(MAGMA_HANDLE(device), &signalInfo);
+    MAGMA_THROW_FAILURE(result, "failed to signal binary semaphore from a host");
+}
+
 TimelineSemaphore::TimelineSemaphore(std::shared_ptr<Device> device, uint64_t initialValue,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     NonDispatchable(VK_OBJECT_TYPE_SEMAPHORE, std::move(device), std::move(allocator))
