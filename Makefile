@@ -145,6 +145,7 @@ MAGMA_OBJS= \
 	objects/pipelineCache.o \
 	objects/pipelineLayout.o \
 	objects/primaryCommandBuffer.o \
+	objects/privateDataSlot.o \
 	objects/queryPool.o \
 	objects/queue.o \
 	objects/rayTracingBuffer.o \

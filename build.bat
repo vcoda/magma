@@ -165,6 +165,7 @@ objects\pipeline.cpp ^
 objects\pipelineCache.cpp ^
 objects\pipelineLayout.cpp ^
 objects\primaryCommandBuffer.cpp ^
+objects\privateDataSlot.cpp ^
 objects\queryPool.cpp ^
 objects\queue.cpp ^
 objects\rayTracingBuffer.cpp ^
@@ -329,6 +330,7 @@ pipeline.obj ^
 pipelineCache.obj ^
 pipelineLayout.obj ^
 primaryCommandBuffer.obj ^
+privateDataSlot.obj ^
 queryPool.obj ^
 queue.obj ^
 rayTracingBuffer.obj ^

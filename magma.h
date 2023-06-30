@@ -71,6 +71,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/pipelineCache.h"
 #include "objects/pipelineLayout.h"
 #include "objects/primaryCommandBuffer.h"
+#include "objects/privateDataSlot.h"
 #include "objects/queryPool.h"
 #include "objects/queue.h"
 #include "objects/rayTracingBuffer.h"
