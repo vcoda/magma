@@ -140,6 +140,7 @@ MAGMA_OBJS= \
 	objects/mutableImageView.o \
 	objects/object.o \
 	objects/physicalDevice.o \
+	objects/physicalDeviceFeatures.o \
 	objects/physicalDeviceGroup.o \
 	objects/pipeline.o \
 	objects/pipelineCache.o \

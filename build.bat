@@ -160,6 +160,7 @@ objects\mutableImage.cpp ^
 objects\mutableImageView.cpp ^
 objects\object.cpp ^
 objects\physicalDevice.cpp ^
+objects\physicalDeviceFeatures.cpp ^
 objects\physicalDeviceGroup.cpp ^
 objects\pipeline.cpp ^
 objects\pipelineCache.cpp ^
@@ -325,6 +326,7 @@ mutableImage.obj ^
 mutableImageView.obj ^
 object.obj ^
 physicalDevice.obj ^
+physicalDeviceFeatures.obj ^
 physicalDeviceGroup.obj ^
 pipeline.obj ^
 pipelineCache.obj ^

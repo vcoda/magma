@@ -1244,6 +1244,9 @@
     <ClCompile Include="..\..\objects\privateDataSlot.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\objects\physicalDeviceFeatures.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\auxiliary\immediateRender.inl">

@@ -92,6 +92,12 @@ namespace magma
     #ifdef VK_AMD_shader_core_properties
         VkPhysicalDeviceShaderCorePropertiesAMD getShaderCoreProperties() const;
     #endif
+    #ifdef VK_AMD_shader_core_properties2
+        VkPhysicalDeviceShaderCoreProperties2AMD getShaderCoreProperties2() const;
+    #endif
+    #ifdef VK_AMD_shader_early_and_late_fragment_tests
+        VkPhysicalDeviceShaderEarlyAndLateFragmentTestsFeaturesAMD getShaderEarlyAndLateFragmentTestsFeatures() const;
+    #endif
     #ifdef VK_ARM_rasterization_order_attachment_access
         VkPhysicalDeviceRasterizationOrderAttachmentAccessFeaturesARM getRasterizationOrderAttachmentAccessFeatures() const;
     #endif
@@ -100,6 +106,9 @@ namespace magma
     #endif
     #ifdef VK_EXT_astc_decode_mode
         VkPhysicalDeviceASTCDecodeFeaturesEXT getASTCDecodeFeatures() const;
+    #endif
+    #ifdef VK_EXT_attachment_feedback_loop_layout
+        VkPhysicalDeviceAttachmentFeedbackLoopLayoutFeaturesEXT getAttachmentFeedbackLoopLayoutFeatures() const;
     #endif
     #ifdef VK_EXT_blend_operation_advanced
         VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT getBlendOperationAdvancedFeatures() const;
@@ -170,6 +179,12 @@ namespace magma
     #ifdef VK_EXT_image_2d_view_of_3d
         VkPhysicalDeviceImage2DViewOf3DFeaturesEXT getImage2DViewOf3DFeatures() const;
     #endif
+    #ifdef VK_EXT_image_compression_control
+        VkPhysicalDeviceImageCompressionControlFeaturesEXT getImageCompressionControlFeatures() const;
+    #endif
+    #ifdef VK_EXT_image_compression_control_swapchain
+        VkPhysicalDeviceImageCompressionControlSwapchainFeaturesEXT getImageCompressionControlSwapchainFeatures() const;
+    #endif
     #ifdef VK_EXT_image_robustness
         VkPhysicalDeviceImageRobustnessFeaturesEXT getImageRobustnessFeatures() const;
     #endif
@@ -197,6 +212,12 @@ namespace magma
         VkPhysicalDeviceMultiDrawFeaturesEXT getMultiDrawFeatures() const;
         VkPhysicalDeviceMultiDrawPropertiesEXT getMultiDrawProperties() const;
     #endif
+    #ifdef VK_EXT_multisampled_render_to_single_sampled
+        VkPhysicalDeviceMultisampledRenderToSingleSampledFeaturesEXT getMultisampledRenderToSingleSampledFeatures() const;
+    #endif
+    #ifdef VK_EXT_non_seamless_cube_map
+        VkPhysicalDeviceNonSeamlessCubeMapFeaturesEXT getNonSeamlessCubeMapFeatures() const;
+    #endif
     #ifdef VK_EXT_pageable_device_local_memory
         VkPhysicalDevicePageableDeviceLocalMemoryFeaturesEXT getPageableDeviceLocalMemoryFeatures() const;
     #endif
@@ -208,6 +229,13 @@ namespace magma
     #endif
     #ifdef VK_EXT_pipeline_creation_cache_control
         VkPhysicalDevicePipelineCreationCacheControlFeaturesEXT getPipelineCreationCacheControlFeatures() const;
+    #endif
+    #ifdef VK_EXT_pipeline_properties
+        VkPhysicalDevicePipelinePropertiesFeaturesEXT getPipelinePropertiesFeatures() const;
+    #endif
+    #ifdef VK_EXT_pipeline_robustness
+        VkPhysicalDevicePipelineRobustnessFeaturesEXT getPipelineRobustnessFeatures() const;
+        VkPhysicalDevicePipelineRobustnessPropertiesEXT getPipelineRobustnessProperties() const;
     #endif
     #ifdef VK_EXT_primitive_topology_list_restart
         VkPhysicalDevicePrimitiveTopologyListRestartFeaturesEXT getPrimitiveTopologyListRestartFeatures() const;
@@ -250,9 +278,16 @@ namespace magma
     #ifdef VK_EXT_shader_image_atomic_int64
         VkPhysicalDeviceShaderImageAtomicInt64FeaturesEXT getShaderImageAtomicInt64Features() const;
     #endif
+    #ifdef VK_EXT_shader_module_identifier
+        VkPhysicalDeviceShaderModuleIdentifierFeaturesEXT getShaderModuleIdentifierFeatures() const;
+        VkPhysicalDeviceShaderModuleIdentifierPropertiesEXT getShaderModuleIdentifierProperties() const;
+    #endif
     #ifdef VK_EXT_subgroup_size_control
         VkPhysicalDeviceSubgroupSizeControlFeaturesEXT getSubgroupSizeControlFeatures() const;
         VkPhysicalDeviceSubgroupSizeControlPropertiesEXT getSubgroupSizeControlProperties() const;
+    #endif
+    #ifdef VK_EXT_subpass_merge_feedback
+        VkPhysicalDeviceSubpassMergeFeedbackFeaturesEXT getSubpassMergeFeedbackFeatures() const;
     #endif
     #ifdef VK_EXT_texel_buffer_alignment
         VkPhysicalDeviceTexelBufferAlignmentFeaturesEXT getTexelBufferAlignmentFeatures() const;
@@ -316,6 +351,10 @@ namespace magma
     #ifdef VK_KHR_external_memory_capabilities
         VkPhysicalDeviceIDPropertiesKHR getIDProperties() const;
     #endif
+    #ifdef VK_KHR_fragment_shader_barycentric
+        VkPhysicalDeviceFragmentShaderBarycentricFeaturesKHR getFragmentShaderBarycentricFeatures() const;
+        VkPhysicalDeviceFragmentShaderBarycentricPropertiesKHR getFragmentShaderBarycentricProperties() const;
+    #endif
     #ifdef VK_KHR_fragment_shading_rate
         VkPhysicalDeviceFragmentShadingRateFeaturesKHR getFragmentShadingRateFeatures() const;
         VkPhysicalDeviceFragmentShadingRatePropertiesKHR getFragmentShadingRateProperties() const;
@@ -358,6 +397,9 @@ namespace magma
     #endif
     #ifdef VK_KHR_ray_query
         VkPhysicalDeviceRayQueryFeaturesKHR getRayQueryFeatures() const;
+    #endif
+    #ifdef VK_KHR_ray_tracing_maintenance1
+        VkPhysicalDeviceRayTracingMaintenance1FeaturesKHR getRayTracingMaintenance1Features() const;
     #endif
     #ifdef VK_KHR_ray_tracing_pipeline
         VkPhysicalDeviceRayTracingPipelineFeaturesKHR getRayTracingPipelineFeatures() const;
@@ -445,9 +487,6 @@ namespace magma
     #ifdef VK_NV_external_memory_rdma
         VkPhysicalDeviceExternalMemoryRDMAFeaturesNV getExternalMemoryRDMAFeatures() const;
     #endif
-    #ifdef VK_NV_fragment_shader_barycentric
-        VkPhysicalDeviceFragmentShaderBarycentricFeaturesNV getFragmentShaderBarycentricFeatures() const;
-    #endif
     #ifdef VK_NV_fragment_shading_rate_enums
         VkPhysicalDeviceFragmentShadingRateEnumsFeaturesNV getFragmentShadingRateEnumsFeatures() const;
         VkPhysicalDeviceFragmentShadingRateEnumsPropertiesNV getFragmentShadingRateEnumsProperties() const;
@@ -488,6 +527,16 @@ namespace magma
     #ifdef VK_QCOM_fragment_density_map_offset
         VkPhysicalDeviceFragmentDensityMapOffsetFeaturesQCOM getFragmentDensityMapOffsetFeatures() const;
         VkPhysicalDeviceFragmentDensityMapOffsetPropertiesQCOM getFragmentDensityMapOffsetProperties() const;
+    #endif
+    #ifdef VK_QCOM_image_processing
+        VkPhysicalDeviceImageProcessingFeaturesQCOM getImageProcessingFeatures() const;
+        VkPhysicalDeviceImageProcessingPropertiesQCOM getImageProcessingProperties() const;
+    #endif
+    #ifdef VK_QCOM_tile_properties
+        VkPhysicalDeviceTilePropertiesFeaturesQCOM getTilePropertiesFeatures() const;
+    #endif
+    #ifdef VK_SEC_amigo_profiling
+        VkPhysicalDeviceAmigoProfilingFeaturesSEC getAmigoProfilingFeatures() const;
     #endif
     #ifdef VK_VALVE_descriptor_set_host_mapping
         VkPhysicalDeviceDescriptorSetHostMappingFeaturesVALVE getDescriptorSetHostMappingFeatures() const;
