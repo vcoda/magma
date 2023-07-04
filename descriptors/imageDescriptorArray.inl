@@ -10,10 +10,10 @@ inline ImageDescriptorArray<Size>::ImageDescriptorArray(VkDescriptorType descrip
 template<uint32_t Size>
 inline bool ImageDescriptorArray<Size>::associatedWithResource() const noexcept
 {
-    switch (binding.descriptorType)
+    switch (Super::binding.descriptorType)
     {
     case VK_DESCRIPTOR_TYPE_SAMPLER:
-        return std::all_of(descriptors.begin(), descriptors.end(),
+        return std::all_of(Super::descriptors.begin(), Super::descriptors.end(),
             [](const auto& it)
             {
                 return (it.sampler != VK_NULL_HANDLE);
@@ -21,7 +21,7 @@ inline bool ImageDescriptorArray<Size>::associatedWithResource() const noexcept
     case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
     case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
     case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
-        return std::all_of(descriptors.begin(), descriptors.end(),
+        return std::all_of(Super::descriptors.begin(), Super::descriptors.end(),
             [](const auto& it)
             {
                 return (it.imageView != VK_NULL_HANDLE);
@@ -38,38 +38,38 @@ inline void ImageDescriptorArray<Size>::write(VkDescriptorSet dstSet, VkWriteDes
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;
-    writeDescriptorSet.dstBinding = binding.binding;
+    writeDescriptorSet.dstBinding = Super::binding.binding;
     writeDescriptorSet.dstArrayElement = 0;
-    writeDescriptorSet.descriptorCount = binding.descriptorCount;
-    writeDescriptorSet.descriptorType = binding.descriptorType;
-    writeDescriptorSet.pImageInfo = descriptors.data();
+    writeDescriptorSet.descriptorCount = Super::binding.descriptorCount;
+    writeDescriptorSet.descriptorType = Super::binding.descriptorType;
+    writeDescriptorSet.pImageInfo = Super::descriptors.data();
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = nullptr;
-    updated = false;
+    Super::updated = false;
 }
 
 template<uint32_t Size>
 inline array::ImageDescriptor ImageDescriptorArray<Size>::getArrayElement(uint32_t index, VkImageUsageFlags requiredUsage) noexcept
 {
-    return array::ImageDescriptor(descriptors[index], imageType, requiredUsage, updated);
+    return array::ImageDescriptor(Super::descriptors[index], Super::imageType, requiredUsage, Super::updated);
 }
 
 template<uint32_t Size>
 inline array::SamplerDescriptor SamplerArray<Size>::operator[](uint32_t index) noexcept
 {
-    return array::SamplerDescriptor(descriptors[index], updated);
+    return array::SamplerDescriptor(DescriptorArray<VkDescriptorImageInfo, Size>::descriptors[index], Binding::updated);
 }
 
 template<uint32_t Size>
 inline array::ImageSamplerDescriptor CombinedImageSamplerArray<Size>::operator[](uint32_t index) noexcept
 {
-    return array::ImageSamplerDescriptor(descriptors[index], imageType, VK_IMAGE_USAGE_SAMPLED_BIT, updated);
+    return array::ImageSamplerDescriptor(DescriptorArray<VkDescriptorImageInfo, Size>::descriptors[index], Binding::imageType, VK_IMAGE_USAGE_SAMPLED_BIT, Binding::updated);
 }
 
 template<uint32_t Size>
 inline bool CombinedImageImmutableSamplerArray<Size>::associatedWithResource() const noexcept
 {
-    const bool associatedWithSamplers = std::all_of(descriptors.begin(), descriptors.end(),
+    const bool associatedWithSamplers = std::all_of(Super::descriptors.begin(), Super::descriptors.end(),
         [](const auto& it)
         {
             return (it.sampler != VK_NULL_HANDLE);
@@ -78,7 +78,7 @@ inline bool CombinedImageImmutableSamplerArray<Size>::associatedWithResource() c
         {
             return (it != VK_NULL_HANDLE);
         });
-    return std::all_of(descriptors.begin(), descriptors.end(),
+    return std::all_of(Super::descriptors.begin(), Super::descriptors.end(),
         [](const auto& it)
         {
             return (it.imageView != VK_NULL_HANDLE);
@@ -88,25 +88,25 @@ inline bool CombinedImageImmutableSamplerArray<Size>::associatedWithResource() c
 template<uint32_t Size>
 inline array::ImageImmutableSamplerDescriptor CombinedImageImmutableSamplerArray<Size>::operator[](uint32_t index) noexcept
 {
-    return array::ImageImmutableSamplerDescriptor(descriptors[index], immutableSamplers[index], imageType, VK_IMAGE_USAGE_SAMPLED_BIT, updated);
+    return array::ImageImmutableSamplerDescriptor(Super::descriptors[index], immutableSamplers[index], Binding::imageType, VK_IMAGE_USAGE_SAMPLED_BIT, Binding::updated);
 }
 
 template<uint32_t Size>
 inline array::ImageDescriptor SampledImageArray<Size>::operator[](uint32_t index) noexcept
 {
-    return this->getArrayElement(index, VK_IMAGE_USAGE_SAMPLED_BIT);
+    return ImageDescriptorArray<Size>::getArrayElement(index, VK_IMAGE_USAGE_SAMPLED_BIT);
 }
 
 template<uint32_t Size>
 inline array::ImageDescriptor StorageImageArray<Size>::operator[](uint32_t index) noexcept
 {
-    return this->getArrayElement(index, VK_IMAGE_USAGE_STORAGE_BIT);
+    return ImageDescriptorArray<Size>::getArrayElement(index, VK_IMAGE_USAGE_STORAGE_BIT);
 }
 
 template<uint32_t Size>
 inline array::ImageDescriptor InputAttachmentArray<Size>::operator[](uint32_t index) noexcept
 {
-    return this->getArrayElement(index, VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
+    return ImageDescriptorArray<Size>::getArrayElement(index, VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
 }
 } // namespace descriptor
 } // namespace magma

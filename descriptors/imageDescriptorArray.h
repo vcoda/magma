@@ -32,6 +32,7 @@ namespace magma
             bool associatedWithResource() const noexcept override;
 
         protected:
+            typedef DescriptorArray<VkDescriptorImageInfo, Size> Super;
             ImageDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
@@ -81,6 +82,7 @@ namespace magma
             array::ImageImmutableSamplerDescriptor operator[](uint32_t index) noexcept;
 
         private:
+            typedef ImageDescriptorArray<Size> Super;
             std::array<VkSampler, Size> immutableSamplers = {};
         };
 

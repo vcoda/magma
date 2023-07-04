@@ -32,6 +32,7 @@ namespace magma
             bool associatedWithResource() const noexcept override;
 
         protected:
+            typedef DescriptorArray<VkDescriptorBufferInfo, Size> Super;
             BufferDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
@@ -48,6 +49,7 @@ namespace magma
             bool associatedWithResource() const noexcept override;
 
         protected:
+            typedef DescriptorArray<VkBufferView, Size> Super;
             TexelBufferDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
