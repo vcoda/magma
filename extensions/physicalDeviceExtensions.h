@@ -1,6 +1,6 @@
 /*
-Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
-Copyright (C) 2018-2022 Victor Coda.
+Magma - Abstraction layer over Khronos Vulkan API.
+Copyright (C) 2018-2023 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ namespace magma
 
     /* Functionality that is restricted to the device-level must be implemented
        as a device extension. For the list of extensions see:
-       https://www.khronos.org/registry/vulkan/
+       https://registry.khronos.org/vulkan/
        Keep extensions list in alphabetical order. */
 
     class PhysicalDeviceExtensions : public Extensions
@@ -66,11 +66,6 @@ namespace magma
         const VkBool32 ARM_rasterization_order_attachment_access : 1;
         const VkBool32 ARM_shader_core_builtins : 1;
 
-        // FUCHSIA (Google LLC)
-        const VkBool32 FUCHSIA_buffer_collection : 1;
-        const VkBool32 FUCHSIA_external_memory : 1;
-        const VkBool32 FUCHSIA_external_semaphore : 1;
-
         // Multivendor
         const VkBool32 EXT_4444_formats : 1;
         const VkBool32 EXT_astc_decode_mode : 1;
@@ -84,6 +79,7 @@ namespace magma
         const VkBool32 EXT_conservative_rasterization : 1;
         const VkBool32 EXT_custom_border_color : 1;
         const VkBool32 EXT_debug_marker : 1;
+        const VkBool32 EXT_depth_bias_control : 1;
         const VkBool32 EXT_depth_clamp_zero_one : 1;
         const VkBool32 EXT_depth_clip_control : 1;
         const VkBool32 EXT_depth_clip_enable : 1;
@@ -95,6 +91,7 @@ namespace magma
         const VkBool32 EXT_discard_rectangles : 1;
         const VkBool32 EXT_display_control : 1;
         const VkBool32 EXT_display_surface_counter : 1;
+        const VkBool32 EXT_dynamic_rendering_unused_attachments : 1;
         const VkBool32 EXT_extended_dynamic_state : 1;
         const VkBool32 EXT_extended_dynamic_state2 : 1;
         const VkBool32 EXT_extended_dynamic_state3 : 1;
@@ -157,11 +154,14 @@ namespace magma
         const VkBool32 EXT_shader_demote_to_helper_invocation : 1;
         const VkBool32 EXT_shader_image_atomic_int64 : 1;
         const VkBool32 EXT_shader_module_identifier : 1;
+        const VkBool32 EXT_shader_object : 1;
         const VkBool32 EXT_shader_stencil_export : 1;
         const VkBool32 EXT_shader_subgroup_ballot : 1;
         const VkBool32 EXT_shader_subgroup_vote : 1;
+        const VkBool32 EXT_shader_tile_image : 1;
         const VkBool32 EXT_shader_viewport_index_layer : 1;
         const VkBool32 EXT_subgroup_size_control : 1;
+        const VkBool32 EXT_subpass_merge_feedback : 1;
         const VkBool32 EXT_swapchain_maintenance1 : 1;
         const VkBool32 EXT_texel_buffer_alignment : 1;
         const VkBool32 EXT_texture_compression_astc_hdr : 1;
@@ -178,6 +178,11 @@ namespace magma
         const VkBool32 EXT_video_encode_h265 : 1;
         const VkBool32 EXT_ycbcr_2plane_444_formats : 1;
         const VkBool32 EXT_ycbcr_image_arrays : 1;
+
+        // FUCHSIA (Google LLC)
+        const VkBool32 FUCHSIA_buffer_collection : 1;
+        const VkBool32 FUCHSIA_external_memory : 1;
+        const VkBool32 FUCHSIA_external_semaphore : 1;
 
         // GGP (Google, LLC)
         const VkBool32 GGP_frame_token : 1;
@@ -207,6 +212,7 @@ namespace magma
         const VkBool32 KHR_acceleration_structure : 1;
         const VkBool32 KHR_bind_memory2 : 1;
         const VkBool32 KHR_buffer_device_address : 1;
+        const VkBool32 KHR_cooperative_matrix : 1;
         const VkBool32 KHR_copy_commands2 : 1;
         const VkBool32 KHR_create_renderpass2 : 1;
         const VkBool32 KHR_dedicated_allocation : 1;
@@ -240,6 +246,7 @@ namespace magma
         const VkBool32 KHR_maintenance2 : 1;
         const VkBool32 KHR_maintenance3 : 1;
         const VkBool32 KHR_maintenance4 : 1;
+        const VkBool32 KHR_map_memory2 : 1;
         const VkBool32 KHR_multiview : 1;
         const VkBool32 KHR_performance_query : 1;
         const VkBool32 KHR_pipeline_executable_properties : 1;
@@ -252,6 +259,7 @@ namespace magma
         const VkBool32 KHR_ray_query : 1;
         const VkBool32 KHR_ray_tracing_maintenance1 : 1;
         const VkBool32 KHR_ray_tracing_pipeline : 1;
+        const VkBool32 KHR_ray_tracing_position_fetch : 1;
         const VkBool32 KHR_relaxed_block_layout : 1;
         const VkBool32 KHR_sampler_mirror_clamp_to_edge : 1;
         const VkBool32 KHR_sampler_ycbcr_conversion : 1;
@@ -284,6 +292,9 @@ namespace magma
         const VkBool32 KHR_win32_keyed_mutex : 1;
         const VkBool32 KHR_workgroup_memory_explicit_layout : 1;
         const VkBool32 KHR_zero_initialize_workgroup_memory : 1;
+
+        // Samsung Electronics Co., Ltd.
+        const VkBool32 SEC_amigo_profiling : 1;
 
         // NVIDIA Corporation
         const VkBool32 NV_acquire_winrt_display : 1;
@@ -342,11 +353,16 @@ namespace magma
         // Qualcomm Technologies, Inc.
         const VkBool32 QCOM_fragment_density_map_offset : 1;
         const VkBool32 QCOM_image_processing : 1;
+        const VkBool32 QCOM_multiview_per_view_render_areas : 1;
+        const VkBool32 QCOM_multiview_per_view_viewports : 1;
         const VkBool32 QCOM_render_pass_shader_resolve : 1;
         const VkBool32 QCOM_render_pass_store_ops : 1;
         const VkBool32 QCOM_render_pass_transform : 1;
         const VkBool32 QCOM_rotated_copy_commands : 1;
         const VkBool32 QCOM_tile_properties : 1;
+
+        // BlackBerry Limited
+        const VkBool32 QNX_external_memory_screen_buffer : 1;
 
         // Valve Corporation
         const VkBool32 VALVE_descriptor_set_host_mapping : 1;
