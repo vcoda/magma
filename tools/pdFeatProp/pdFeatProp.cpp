@@ -47,7 +47,6 @@ void writeMethodDecl(std::ofstream& fs, const std::string& name)
 
 void writeMethodImpl(std::ofstream& fs, const std::string& name, bool features)
 {
-    writeGeneratedByUtilityToolWarning(fs);
     const std::string methodName = getMethodName(name);
     const std::string structureTypeName = convertStructureNameToStructureType(name);
     const std::string variableName = getVariableName(name);
@@ -116,8 +115,10 @@ int main(int argc, char *argv[])
             result = parseStructureName("VkPhysicalDevice", line);
             if (!result.empty())
             {
-                if (lastFoundExtension == "VK_EXT_global_priority_query" || // Skip in favor of VK_KHR_global_priority
-                    lastFoundExtension == "VK_EXT_tooling_info") // Has dedicated vkGetPhysicalDeviceToolPropertiesEXT() function
+                if (lastFoundExtension == "VK_KHR_get_physical_device_properties2" || // Entry point for properties query
+                    lastFoundExtension == "VK_EXT_global_priority_query" || // Skip in favor of VK_KHR_global_priority
+                    lastFoundExtension == "VK_EXT_tooling_info" || // Has dedicated vkGetPhysicalDeviceToolPropertiesEXT() function
+                    lastFoundExtension == "VK_NV_fragment_shader_barycentric") // Skip in favor of VK_KHR_fragment_shader_barycentric
                     continue;
                 if (features)
                     extensions[lastFoundExtension].featuresName = std::move(result);
@@ -154,9 +155,14 @@ int main(int argc, char *argv[])
         std::cout << "Couldn't write to file " << argv[2] << "." << std::endl;
         return -1;
     }
+    writeGeneratedByUtilityToolWarning(impl);
+    impl << "#include \"pch.h\"" << std::endl;
+    impl << "#pragma hdrstop" << std::endl;
+    impl << "#include \"physicalDevice.h\"" << std::endl;
+    impl << std::endl << "namespace magma" << std::endl << "{";
     for (const auto& it: extensions)
     {
-        impl << "#ifdef " << it.first << std::endl;
+        impl << std::endl << "#ifdef " << it.first << std::endl;
         const auto& names = it.second;
         if (!names.featuresName.empty())
             writeMethodImpl(impl, names.featuresName, true);
@@ -167,8 +173,8 @@ int main(int argc, char *argv[])
             writeMethodImpl(impl, names.propertiesName, false);
         }
         impl << "#endif // " << it.first << std::endl;
-        impl << std::endl;
     }
+    impl << "} // namespace magma" << std::endl;
 
     std::cout << "End of source generation" << std::endl;
     return 0;

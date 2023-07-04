@@ -79,26 +79,41 @@ std::string parseStructureName(const std::string& family, const std::string& lin
     return name;
 }
 
-bool isFeaturesStructure(const std::string& line) noexcept
+std::string extensionVersionStr(int version, const std::string& vendor)
+{
+    if (1 == version)
+        return vendor;
+    return std::to_string(version) + vendor;
+}
+
+bool isFeaturesStructure(const std::string& line)
 {
     if (line.find("VkPhysicalDevice") == std::string::npos)
         return false;
-    for (const auto& ext: vendors)
-    {
-        if (line.find("Features" + ext) != std::string::npos)
-            return true;
+    for (const auto& vendor: vendors)
+    {   // Handle all extension versions
+        for (int ver = 1; ver < 9; ++ver)
+        {
+            auto pos = line.find("Features" + extensionVersionStr(ver, vendor));
+            if (pos != std::string::npos)
+                return true;
+        }
     }
     return false;
 }
 
-bool isPropertiesStructure(const std::string& line) noexcept
+bool isPropertiesStructure(const std::string& line)
 {
     if (line.find("VkPhysicalDevice") == std::string::npos)
         return false;
-    for (const auto& ext: vendors)
-    {
-        if (line.find("Properties" + ext) != std::string::npos)
-            return true;
+    for (const auto& vendor: vendors)
+    {   // Handle all extension versions
+        for (int ver = 1; ver < 9; ++ver)
+        {
+            auto pos = line.find("Properties" + extensionVersionStr(ver, vendor));
+            if (pos != std::string::npos)
+                return true;
+        }
     }
     return false;
 }
@@ -151,6 +166,8 @@ std::string fixupStructureTypeName(const std::string& name)
          "VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_IMAGE_ATOMIC_INT64_FEATURES_EXT"},
         {"VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TEXTURE_COMPRESSION_ASTCHDR_FEATURES_EXT",
          "VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TEXTURE_COMPRESSION_ASTC_HDR_FEATURES_EXT"},
+        {"VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_2AMD",
+         "VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_2_AMD"}
     };
     // Vulkan naming convention doesn't follow strict rules about
     // underscores with digits and also has another issues,
