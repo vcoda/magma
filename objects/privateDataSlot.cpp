@@ -27,10 +27,10 @@ namespace magma
 #ifdef VK_EXT_private_data
 PrivateDataSlot::PrivateDataSlot(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    VkPrivateDataSlotCreateFlags flags /* 0 */):
+    VkPrivateDataSlotCreateFlagsEXT flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_PRIVATE_DATA_SLOT_EXT, std::move(device), std::move(allocator))
 {
-    VkPrivateDataSlotCreateInfo privateDataSlotInfo;
+    VkPrivateDataSlotCreateInfoEXT privateDataSlotInfo;
     privateDataSlotInfo.sType = VK_STRUCTURE_TYPE_PRIVATE_DATA_SLOT_CREATE_INFO_EXT;
     privateDataSlotInfo.pNext = nullptr;
     privateDataSlotInfo.flags = flags;
