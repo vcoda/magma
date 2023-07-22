@@ -48,6 +48,9 @@ MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(VkDebugReportCallbackEXT, debugReportCall
 #ifdef VK_EXT_debug_utils
 MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(VkDebugUtilsMessengerEXT, debugUtilsMessengers)
 #endif
+#ifdef VK_EXT_private_data
+MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(VkPrivateDataSlotEXT, privateDataSlots)
+#endif
 #ifdef VK_NV_ray_tracing
 MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(VkAccelerationStructureNV, accelerationStructures)
 #endif

@@ -92,6 +92,9 @@ namespace magma
 #ifdef VK_EXT_debug_utils
         core::ThreadSafeUnorderedSet<NonDispatchable<VkDebugUtilsMessengerEXT>> debugUtilsMessengers;
 #endif
+#ifdef VK_EXT_private_data
+        core::ThreadSafeUnorderedSet<NonDispatchable<VkPrivateDataSlotEXT>> privateDataSlots;
+#endif
 #ifdef VK_NV_ray_tracing
         core::ThreadSafeUnorderedSet<NonDispatchable<VkAccelerationStructureNV>> accelerationStructures;
 #endif
@@ -131,6 +134,7 @@ namespace magma
         uint32_t commandPoolCount = 0;
         uint32_t deferredOperationCount = 0;
         uint32_t swapchainCount = 0;
+        uint32_t privateDataSlotCount = 0;
         uint32_t accelerationStructureCount = 0;
     };
 

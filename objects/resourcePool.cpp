@@ -99,6 +99,9 @@ ResourcePool::DeviceResources ResourcePool::countDeviceResources() const
 #ifdef VK_KHR_swapchain
     statistics.swapchainCount = swapchains.count();
 #endif
+#ifdef VK_EXT_private_data
+    statistics.privateDataSlotCount = privateDataSlots.count();
+#endif
 #ifdef VK_NV_ray_tracing
     statistics.accelerationStructureCount = accelerationStructures.count();
 #endif
@@ -214,6 +217,9 @@ bool ResourcePool::hasAnyDeviceResource() const
 #endif
 #ifdef VK_KHR_swapchain
         swapchains.count() > 0 ||
+#endif
+#ifdef VK_EXT_private_data
+        privateDataSlots.count() > 0 ||
 #endif
 #ifdef VK_NV_ray_tracing
         accelerationStructures.count() > 0 ||
