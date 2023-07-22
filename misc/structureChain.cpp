@@ -21,12 +21,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-VkBaseOutStructure *StructureChain::getChainedNodes() noexcept
+VkBaseOutStructure *StructureChain::chainNodes() noexcept
 {
     if (chain.empty())
         return nullptr;
-    auto head = chain.begin();
-    auto curr = head, next = head;
+    auto head = chain.begin(), curr = head, next = head;
     while (++next != chain.end())
     {
         VkBaseOutStructure *node = curr->getNode();
@@ -38,12 +37,11 @@ VkBaseOutStructure *StructureChain::getChainedNodes() noexcept
     return head->getNode();
 }
 
-const VkBaseInStructure *StructureChain::getChainedNodes() const noexcept
+const VkBaseInStructure *StructureChain::chainNodes() const noexcept
 {
     if (chain.empty())
         return nullptr;
-    auto head = chain.begin();
-    auto curr = head, next = head;
+    auto head = chain.begin(), curr = head, next = head;
     while (++next != chain.end())
     {
         VkBaseOutStructure *node = curr->getNode();

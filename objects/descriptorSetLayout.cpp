@@ -32,7 +32,7 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const s
 {
     VkDescriptorSetLayoutCreateInfo descriptorSetLayoutInfo;
     descriptorSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    descriptorSetLayoutInfo.pNext = extendedInfo.getChainedNodes();
+    descriptorSetLayoutInfo.pNext = extendedInfo.chainNodes();
     descriptorSetLayoutInfo.flags = flags;
     descriptorSetLayoutInfo.bindingCount = MAGMA_COUNT(bindings);
     descriptorSetLayoutInfo.pBindings = bindings.data();

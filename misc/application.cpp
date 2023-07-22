@@ -30,7 +30,7 @@ Application::Application(const char *applicationName, uint32_t applicationVersio
     MAGMA_ASSERT(engineName);
     MAGMA_ASSERT(strlen(engineName) > 0);
     sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    pNext = extendedInfo.getChainedNodes();
+    pNext = extendedInfo.chainNodes();
     pApplicationName = applicationName;
     applicationVersion = applicationVersion_;
     pEngineName = engineName;

@@ -55,7 +55,7 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
     // https://www.khronos.org/registry/vulkan/specs/1.0/man/html/VkSubmitInfo.html
     VkSubmitInfo submitInfo;
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.pNext = extendedInfo.getChainedNodes();
+    submitInfo.pNext = extendedInfo.chainNodes();
     if (waitSemaphores.empty())
     {
         submitInfo.waitSemaphoreCount = 0;
@@ -135,7 +135,7 @@ void Queue::submit(std::shared_ptr<TimelineSemaphore> semaphore, uint64_t waitVa
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = &waitSignalSemaphore;
     submitInfoTimelineSemaphore.sType = VK_STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO_KHR;
-    submitInfoTimelineSemaphore.pNext = extendedInfo.getChainedNodes();
+    submitInfoTimelineSemaphore.pNext = extendedInfo.chainNodes();
     submitInfoTimelineSemaphore.waitSemaphoreValueCount = 1;
     submitInfoTimelineSemaphore.pWaitSemaphoreValues = &waitValue;
     submitInfoTimelineSemaphore.signalSemaphoreValueCount = 1;
@@ -182,7 +182,7 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
 {
     VkPresentInfoKHR presentInfo;
     presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-    presentInfo.pNext = extendedInfo.getChainedNodes();
+    presentInfo.pNext = extendedInfo.chainNodes();
     if (waitSemaphore)
     {
         presentInfo.waitSemaphoreCount = 1;

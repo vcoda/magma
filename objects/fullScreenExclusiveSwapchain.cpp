@@ -75,7 +75,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     swapchainInfo.clipped = (imageUsage & VK_IMAGE_USAGE_TRANSFER_SRC_BIT); // Is pixels readback required?
     swapchainInfo.oldSwapchain = MAGMA_OPTIONAL_HANDLE(oldSwapchain);
     fullScreenExclusiveInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT,
-    fullScreenExclusiveInfo.pNext = (void *)extendedInfo.getChainedNodes();
+    fullScreenExclusiveInfo.pNext = (void *)extendedInfo.chainNodes();
     fullScreenExclusiveInfo.fullScreenExclusive = fullScreenExclusive;
 #ifdef VK_KHR_win32_surface
     VkSurfaceFullScreenExclusiveWin32InfoEXT fullScreenExclusiveWin32Info;
@@ -83,7 +83,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     {
         fullScreenExclusiveInfo.pNext = &fullScreenExclusiveWin32Info;
         fullScreenExclusiveWin32Info.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT,
-        fullScreenExclusiveWin32Info.pNext = (void *)extendedInfo.getChainedNodes();
+        fullScreenExclusiveWin32Info.pNext = (void *)extendedInfo.chainNodes();
         fullScreenExclusiveWin32Info.hmonitor = hMonitor;
     }
 #endif // VK_KHR_win32_surface

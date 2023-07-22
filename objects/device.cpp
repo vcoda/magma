@@ -58,7 +58,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
 #ifdef VK_KHR_get_physical_device_properties2
     VkPhysicalDeviceFeatures2KHR deviceFeatures2;
     if (deviceExtendedFeatures.empty())
-        deviceInfo.pNext = extendedInfo.getChainedNodes();
+        deviceInfo.pNext = extendedInfo.chainNodes();
     else
     {
         deviceInfo.pNext = &deviceFeatures2;
@@ -76,10 +76,10 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
             enabledExtendedFeatures[currNode->sType] = currNode;
         }
         VkBaseInStructure *lastNode = reinterpret_cast<VkBaseInStructure *>(*curr);
-        lastNode->pNext = extendedInfo.getChainedNodes();
+        lastNode->pNext = extendedInfo.chainNodes();
     }
 #else
-    deviceInfo.pNext = extendedInfo.getChainedNodes();
+    deviceInfo.pNext = extendedInfo.chainNodes();
 #endif // VK_KHR_get_physical_device_properties2
     deviceInfo.flags = 0;
     deviceInfo.queueCreateInfoCount = MAGMA_COUNT(queueDescriptors);
@@ -237,7 +237,7 @@ bool Device::getDescriptorSetLayoutSupport(const std::vector<VkDescriptorSetLayo
     VkDescriptorSetLayoutCreateInfo descriptorSetLayoutInfo;
     VkDescriptorSetLayoutSupportKHR descriptorSetLayoutSupport;
     descriptorSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    descriptorSetLayoutInfo.pNext = extendedInfo.getChainedNodes();
+    descriptorSetLayoutInfo.pNext = extendedInfo.chainNodes();
     descriptorSetLayoutInfo.flags = flags;
     descriptorSetLayoutInfo.bindingCount = MAGMA_COUNT(bindings);
     descriptorSetLayoutInfo.pBindings = bindings.data();
@@ -260,7 +260,7 @@ uint32_t Device::getVariableDescriptorCountLayoutSupport(const std::vector<VkDes
     VkDescriptorSetLayoutSupportKHR descriptorSetLayoutSupport;
     VkDescriptorSetVariableDescriptorCountLayoutSupportEXT descriptorSetVariableDescriptorCountLayoutSupport;
     descriptorSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    descriptorSetLayoutInfo.pNext = extendedInfo.getChainedNodes();
+    descriptorSetLayoutInfo.pNext = extendedInfo.chainNodes();
     descriptorSetLayoutInfo.flags = flags;
     descriptorSetLayoutInfo.bindingCount = MAGMA_COUNT(bindings);
     descriptorSetLayoutInfo.pBindings = bindings.data();

@@ -44,7 +44,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shar
 {
     VkFramebufferCreateInfo framebufferInfo;
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    framebufferInfo.pNext = extendedInfo.getChainedNodes();
+    framebufferInfo.pNext = extendedInfo.chainNodes();
     framebufferInfo.flags = flags;
     framebufferInfo.renderPass = MAGMA_HANDLE(renderPass);
     framebufferInfo.attachmentCount = 1;
@@ -68,7 +68,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std
         dereferencedAttachments.put(*attachment);
     VkFramebufferCreateInfo framebufferInfo;
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    framebufferInfo.pNext = extendedInfo.getChainedNodes();
+    framebufferInfo.pNext = extendedInfo.chainNodes();
     framebufferInfo.flags = flags;
     framebufferInfo.renderPass = MAGMA_HANDLE(renderPass);
     framebufferInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);

@@ -37,7 +37,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
 {
     VkMemoryAllocateInfo memoryAllocateInfo;
     memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    memoryAllocateInfo.pNext = extendedInfo.getChainedNodes();
+    memoryAllocateInfo.pNext = extendedInfo.chainNodes();
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
     memoryAllocateInfo.memoryTypeIndex = findTypeIndex(flags);
     const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &memoryAllocateInfo,
@@ -81,7 +81,7 @@ void DeviceMemory::realloc(NonDispatchableHandle /* unused */,
     memoryRequirements = memoryRequirements_;
     VkMemoryAllocateInfo memoryAllocateInfo;
     memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    memoryAllocateInfo.pNext = extendedInfo.getChainedNodes();
+    memoryAllocateInfo.pNext = extendedInfo.chainNodes();
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
     memoryAllocateInfo.memoryTypeIndex = findTypeIndex(flags);
     const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &memoryAllocateInfo,
