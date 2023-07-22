@@ -36,34 +36,12 @@ namespace magma
     class Resource : core::NonCopyable
     {
     public:
-        /* User-defined data associated with the resource.
-           It's an analogue of ID3D11DeviceChild::SetPrivateData(). */
-
-        class Payload final : core::NonCopyable
-        {
-        public:
-            ~Payload();
-            template<class Type>
-            void setData(const Type& payload) noexcept;
-            template<class Type>
-            Type& getData();
-            size_t getDataSize() const noexcept { return size; }
-            void freeData() noexcept;
-            bool hasData() const noexcept { return data != nullptr; }
-
-        private:
-            void *data = nullptr;
-            size_t size = 0;
-        };
-
-    public:
         VkDeviceSize getSize() const noexcept { return size; }
         VkDeviceSize getOffset() const noexcept { return offset; }
         const Sharing& getSharing() const noexcept { return sharing; }
         std::shared_ptr<IDeviceMemory> getMemory() noexcept { return memory; }
         std::shared_ptr<const IDeviceMemory> getMemory() const noexcept { return memory; }
         std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return deviceAllocator; }
-        Payload& getPayload() noexcept { return payload; }
         virtual void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) = 0;
     #ifdef VK_KHR_device_group
@@ -84,9 +62,6 @@ namespace magma
         const Sharing sharing;
         std::shared_ptr<IDeviceMemory> memory;
         std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
-
-    private:
-        Payload payload;
     };
 
     /* Non-dispatchable resource object (buffer, image, acceleration structure etc.)
@@ -108,5 +83,3 @@ namespace magma
         {}
     };
 } // namespace magma
-
-#include "resource.inl"
