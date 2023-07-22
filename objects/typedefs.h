@@ -110,6 +110,9 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(DrawMeshTasksIndirectBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(MeshPrimitivesQuery)
 #endif
+#ifdef VK_EXT_private_data
+    MAGMA_TYPEDEF_SHARED_PTR(PrivateDataSlot)
+#endif
 #ifdef VK_EXT_transform_feedback
     MAGMA_TYPEDEF_SHARED_PTR(TransformFeedbackBuffer)
     MAGMA_TYPEDEF_SHARED_PTR(TransformFeedbackCounterBuffer)
