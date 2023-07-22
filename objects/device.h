@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "dispatchable.h"
 #include "../misc/deviceQueueDescriptor.h"
 #include "../misc/deviceFaultInfo.h"
-#include "../helpers/stackArray.h"
 
 namespace magma
 {
