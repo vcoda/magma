@@ -28,7 +28,8 @@ namespace magma
     public:
         explicit PrivateDataSlot(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            VkPrivateDataSlotCreateFlagsEXT flags = 0);
+            VkPrivateDataSlotCreateFlagsEXT flags = 0,
+            const StructureChain& extendedInfo = StructureChain());
         ~PrivateDataSlot();
     };
 #endif // VK_EXT_private_data

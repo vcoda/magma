@@ -34,21 +34,24 @@ SamplerYcbcrConversion::SamplerYcbcrConversion(std::shared_ptr<Device> device,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     VkChromaLocationKHR xChromaOffset /* VK_CHROMA_LOCATION_MIDPOINT_KHR */,
     VkChromaLocationKHR yChromaOffset /* VK_CHROMA_LOCATION_MIDPOINT_KHR */,
-    bool forceExplicitReconstruction /* false */):
+    bool forceExplicitReconstruction /* false */,
+    const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_KHR, std::move(device), std::move(allocator))
 {
-    VkSamplerYcbcrConversionCreateInfoKHR samplerInfo;
-    samplerInfo.sType = state.sType;
-    samplerInfo.format = format;
-    samplerInfo.ycbcrModel = state.ycbcrModel;
-    samplerInfo.ycbcrRange = state.ycbcrRange;
-    samplerInfo.components = swizzle;
-    samplerInfo.xChromaOffset = xChromaOffset;
-    samplerInfo.yChromaOffset = yChromaOffset;
-    samplerInfo.chromaFilter = state.chromaFilter;
-    samplerInfo.forceExplicitReconstruction = MAGMA_BOOLEAN(forceExplicitReconstruction);
+    VkSamplerYcbcrConversionCreateInfoKHR samplerYcbcrConversionInfo;
+    samplerYcbcrConversionInfo.sType = state.sType;
+    samplerYcbcrConversionInfo.pNext = extendedInfo.chainNodes();
+    samplerYcbcrConversionInfo.format = format;
+    samplerYcbcrConversionInfo.ycbcrModel = state.ycbcrModel;
+    samplerYcbcrConversionInfo.ycbcrRange = state.ycbcrRange;
+    samplerYcbcrConversionInfo.components = swizzle;
+    samplerYcbcrConversionInfo.xChromaOffset = xChromaOffset;
+    samplerYcbcrConversionInfo.yChromaOffset = yChromaOffset;
+    samplerYcbcrConversionInfo.chromaFilter = state.chromaFilter;
+    samplerYcbcrConversionInfo.forceExplicitReconstruction = MAGMA_BOOLEAN(forceExplicitReconstruction);
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateSamplerYcbcrConversionKHR, VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME);
-    const VkResult result = vkCreateSamplerYcbcrConversionKHR(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateSamplerYcbcrConversionKHR(MAGMA_HANDLE(device), &samplerYcbcrConversionInfo,
+        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create Ycbcr sampler");
 }
 

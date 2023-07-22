@@ -28,18 +28,20 @@ namespace magma
 {
 #ifdef VK_EXT_validation_cache
 ValidationCache::ValidationCache(std::shared_ptr<Device> device,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    ValidationCache(std::move(device), 0, nullptr, std::move(allocator))
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const StructureChain& extendedInfo /* default */):
+    ValidationCache(std::move(device), 0, nullptr, std::move(allocator), extendedInfo)
 {}
 
 ValidationCache::ValidationCache(std::shared_ptr<Device> device,
     std::size_t dataSize, const void *cacheData,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_VALIDATION_CACHE_EXT, std::move(device), std::move(allocator))
 {
     VkValidationCacheCreateInfoEXT validationCacheInfo;
     validationCacheInfo.sType = VK_STRUCTURE_TYPE_VALIDATION_CACHE_CREATE_INFO_EXT;
-    validationCacheInfo.pNext = nullptr;
+    validationCacheInfo.pNext = extendedInfo.chainNodes();
     validationCacheInfo.flags = 0;
     validationCacheInfo.initialDataSize = dataSize;
     validationCacheInfo.pInitialData = cacheData;

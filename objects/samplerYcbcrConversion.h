@@ -40,7 +40,8 @@ namespace magma
                 VK_COMPONENT_SWIZZLE_IDENTITY},
             VkChromaLocationKHR xChromaOffset = VK_CHROMA_LOCATION_MIDPOINT_KHR,
             VkChromaLocationKHR yChromaOffset = VK_CHROMA_LOCATION_MIDPOINT_KHR,
-            bool forceExplicitReconstruction = false);
+            bool forceExplicitReconstruction = false,
+            const StructureChain& extendedInfo = StructureChain());
         ~SamplerYcbcrConversion();
     };
 #endif // VK_KHR_sampler_ycbcr_conversion

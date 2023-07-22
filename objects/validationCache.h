@@ -39,17 +39,20 @@ namespace magma
     public:
         struct Header;
         explicit ValidationCache(std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const StructureChain& extendedInfo = StructureChain());
         explicit ValidationCache(std::shared_ptr<Device> device,
             std::size_t dataSize,
             const void *cacheData,
-            std::shared_ptr<IAllocator> allocator = nullptr);
-        template<typename Type>
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const StructureChain& extendedInfo = StructureChain());
+        template<class Type>
         explicit ValidationCache(std::shared_ptr<Device> device,
             const std::vector<Type>& cacheData,
-            std::shared_ptr<IAllocator> allocator = nullptr):
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const StructureChain& extendedInfo = StructureChain()):
             ValidationCache(std::move(device), cacheData.size() * sizeof(Type),
-                cacheData.data(), std::move(allocator)) {}
+                cacheData.data(), std::move(allocator), extendedInfo) {}
         ~ValidationCache();
         std::vector<uint8_t> getData() const;
         void mergeCaches(const std::vector<std::shared_ptr<const ValidationCache>>& caches);

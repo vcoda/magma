@@ -39,7 +39,8 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<RayTracingPipeline> basePipeline /* nullptr */,
-    VkPipelineCreateFlags flags /* 0 */):
+    VkPipelineCreateFlags flags /* 0 */,
+    const StructureChain& extendedInfo /* default */):
     Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator)),
     shaderGroupCount(MAGMA_COUNT(shaderGroups)),
     maxRecursionDepth(maxRecursionDepth)
@@ -50,7 +51,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
         MAGMA_THROW("shader groups are empty");
     VkRayTracingPipelineCreateInfoNV pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_NV;
-    pipelineInfo.pNext = nullptr;
+    pipelineInfo.pNext = extendedInfo.chainNodes();
     pipelineInfo.flags = flags;
     if (this->basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
@@ -72,7 +73,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
     {
         pipelineInfo.pNext = &pipelineCreationFeedbackInfo;
         pipelineCreationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
-        pipelineCreationFeedbackInfo.pNext = nullptr;
+        pipelineCreationFeedbackInfo.pNext = extendedInfo.chainNodes();
         pipelineCreationFeedbackInfo.pPipelineCreationFeedback = &creationFeedback;
         pipelineCreationFeedbackInfo.pipelineStageCreationFeedbackCount = pipelineInfo.stageCount;
         pipelineCreationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks;

@@ -29,16 +29,17 @@ namespace magma
 {
 #ifdef VK_KHR_display
 DisplayMode::DisplayMode(std::shared_ptr<const Display> display, const VkExtent2D& visibleRegion, uint32_t refreshRate,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
-    NonDispatchable(VK_OBJECT_TYPE_DISPLAY_MODE_KHR, std::move(display->getDevice()), std::move(allocator)),
-    instance(std::move(display->getPhysicalDevice()->getInstance())),
-    physicalDevice(std::move(display->getPhysicalDevice())),
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const StructureChain& extendedInfo /* default */):
+    NonDispatchable(VK_OBJECT_TYPE_DISPLAY_MODE_KHR, display->getDevice(), std::move(allocator)),
+    instance(display->getPhysicalDevice()->getInstance()),
+    physicalDevice(display->getPhysicalDevice()),
     visibleRegion(visibleRegion),
     refreshRate(refreshRate)
 {
     VkDisplayModeCreateInfoKHR displayModeInfo;
     displayModeInfo.sType = VK_STRUCTURE_TYPE_DISPLAY_MODE_CREATE_INFO_KHR;
-    displayModeInfo.pNext = nullptr;
+    displayModeInfo.pNext = extendedInfo.chainNodes();
     displayModeInfo.flags = 0;
     displayModeInfo.parameters.visibleRegion = visibleRegion;
     displayModeInfo.parameters.refreshRate = refreshRate;

@@ -40,7 +40,8 @@ namespace magma
                 VK_COMPONENT_SWIZZLE_IDENTITY,
                 VK_COMPONENT_SWIZZLE_IDENTITY},
             VkImageViewCreateFlags flags = 0,
-            VkImageUsageFlags usage = 0);
+            VkImageUsageFlags usage = 0,
+            const StructureChain& extendedInfo = StructureChain());
         explicit ImageView(std::shared_ptr<Image> image,
             uint32_t baseMipLevel,
             uint32_t levelCount = VK_REMAINING_MIP_LEVELS,
@@ -52,7 +53,8 @@ namespace magma
                 VK_COMPONENT_SWIZZLE_IDENTITY,
                 VK_COMPONENT_SWIZZLE_IDENTITY},
             VkImageViewCreateFlags flags = 0,
-            VkImageUsageFlags usage = 0);
+            VkImageUsageFlags usage = 0,
+            const StructureChain& extendedInfo = StructureChain());
         ~ImageView();
         std::shared_ptr<Image> getImage() noexcept { return image; }
         std::shared_ptr<const Image> getImage() const noexcept { return image; }

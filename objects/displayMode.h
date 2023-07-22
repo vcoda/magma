@@ -33,7 +33,8 @@ namespace magma
         explicit DisplayMode(std::shared_ptr<const Display> display,
             const VkExtent2D& visibleRegion,
             uint32_t refreshRate,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const StructureChain& extendedInfo = StructureChain());
         const VkDisplayPlaneCapabilitiesKHR& getPlaneCapabilities(uint32_t planeIndex) const;
         const VkExtent2D& getVisibleRegion() const noexcept { return visibleRegion; }
         uint32_t getRefreshRate() const noexcept { return refreshRate; }

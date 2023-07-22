@@ -43,12 +43,14 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             bool transient = false,
             bool resetCommandBuffer = true,
-            uint32_t poolCommandBufferCount = 256);
+            uint32_t poolCommandBufferCount = 256,
+            const StructureChain& extendedInfo = StructureChain());
         ~CommandPool();
         uint32_t getQueueFamilyIndex() const noexcept { return queueFamilyIndex; }
         bool reset(bool releaseResources) noexcept;
         std::vector<std::shared_ptr<CommandBuffer>> allocateCommandBuffers(uint32_t commandBufferCount,
-            bool primaryLevel);
+            bool primaryLevel,
+            const StructureChain& extendedInfo = StructureChain());
         void freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept;
 #ifdef VK_KHR_maintenance1
         void trim(VkCommandPoolTrimFlagsKHR flags = 0);

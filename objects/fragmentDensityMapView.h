@@ -44,7 +44,9 @@ namespace magma
     public:
         explicit FragmentDensityMapView(std::shared_ptr<FragmentDensityMap> fragmentDensityMap,
             bool fragmentDensityMapDynamic,
-            bool fragmentDensityMapDeferred);
+            bool fragmentDensityMapDeferred,
+            VkImageUsageFlags usage = 0,
+            const StructureChain& extendedInfo = StructureChain());
         bool dynamic() const noexcept { return flags & VK_IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DYNAMIC_BIT_EXT; }
     #ifdef VK_EXT_fragment_density_map2
         bool deferred() const noexcept { return flags & VK_IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DEFERRED_BIT_EXT; }

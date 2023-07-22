@@ -33,12 +33,13 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<ComputePipeline> basePipeline /* nullptr */,
-    VkPipelineCreateFlags flags /* 0 */):
+    VkPipelineCreateFlags flags /* 0 */,
+    const StructureChain& extendedInfo /* default */):
     Pipeline(VK_PIPELINE_BIND_POINT_COMPUTE, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator))
 {
     VkComputePipelineCreateInfo pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
-    pipelineInfo.pNext = nullptr;
+    pipelineInfo.pNext = extendedInfo.chainNodes();
     pipelineInfo.flags = flags;
     if (this->basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
@@ -53,7 +54,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device,
     {
         pipelineInfo.pNext = &pipelineCreationFeedbackInfo;
         pipelineCreationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
-        pipelineCreationFeedbackInfo.pNext = nullptr;
+        pipelineCreationFeedbackInfo.pNext = extendedInfo.chainNodes();
         pipelineCreationFeedbackInfo.pPipelineCreationFeedback = &creationFeedback;
         pipelineCreationFeedbackInfo.pipelineStageCreationFeedbackCount = 1;
         pipelineCreationFeedbackInfo.pPipelineStageCreationFeedbacks = &stageCreationFeedback;

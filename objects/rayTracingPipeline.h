@@ -38,7 +38,8 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
             std::shared_ptr<RayTracingPipeline> basePipeline = nullptr,
-            VkPipelineCreateFlags flags = 0);
+            VkPipelineCreateFlags flags = 0,
+            const StructureChain& extendedInfo = StructureChain());
         uint32_t getShaderGroupCount() const noexcept { return shaderGroupCount; }
         uint32_t getMaxRecursionDepth() const noexcept { return maxRecursionDepth; }
         std::vector<uint8_t> getShaderGroupHandles() const;

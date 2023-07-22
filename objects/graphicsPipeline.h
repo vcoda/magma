@@ -53,7 +53,8 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
             std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
-            VkPipelineCreateFlags flags = 0);
+            VkPipelineCreateFlags flags = 0,
+            const StructureChain& extendedInfo = StructureChain());
         explicit GraphicsPipeline(std::shared_ptr<Device> device,
             const std::vector<PipelineShaderStage>& shaderStages,
             const VertexInputState& vertexInputState,
@@ -71,7 +72,8 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
             std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
-            VkPipelineCreateFlags flags = 0);
+            VkPipelineCreateFlags flags = 0,
+            const StructureChain& extendedInfo = StructureChain());
 
     private:
         explicit GraphicsPipeline(VkPipeline pipeline,

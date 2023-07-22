@@ -32,7 +32,8 @@ DebugUtilsMessenger::DebugUtilsMessenger(std::shared_ptr<const Instance> instanc
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkDebugUtilsMessageSeverityFlagsEXT messageSeverity /* VERBOSE_BIT | INFO_BIT | WARNING_BIT ERROR_BIT */,
     VkDebugUtilsMessageTypeFlagsEXT messageType /* GENERAL_BIT | VALIDATION_BIT | PERFORMANCE_BIT */,
-    void *userData /* nullptr */):
+    void *userData /* nullptr */,
+    const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT, std::move(allocator)),
     instance(std::move(instance))
 {
@@ -42,7 +43,7 @@ DebugUtilsMessenger::DebugUtilsMessenger(std::shared_ptr<const Instance> instanc
     {
         VkDebugUtilsMessengerCreateInfoEXT debugUtilsMessengerInfo;
         debugUtilsMessengerInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-        debugUtilsMessengerInfo.pNext = nullptr;
+        debugUtilsMessengerInfo.pNext = extendedInfo.chainNodes();
         debugUtilsMessengerInfo.flags = 0;
         debugUtilsMessengerInfo.messageSeverity = messageSeverity;
         debugUtilsMessengerInfo.messageType = messageType;

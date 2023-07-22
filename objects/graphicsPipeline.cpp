@@ -52,14 +52,15 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
-    VkPipelineCreateFlags flags /* 0 */):
+    VkPipelineCreateFlags flags /* 0 */,
+    const StructureChain& extendedInfo /* default */):
     GraphicsPipeline(std::move(device), shaderStages, vertexInputState, inputAssemblyState,
         TesselationState(), // No tesselation state
         ViewportState(), // No viewport state (supposed to be dynamic)
         rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
         std::move(layout), std::move(renderPass), subpass,
         std::move(allocator), std::move(pipelineCache), std::move(basePipeline),
-        flags)
+        flags, extendedInfo)
 {}
 
 GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
@@ -79,7 +80,8 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
-    VkPipelineCreateFlags flags /* 0 */):
+    VkPipelineCreateFlags flags /* 0 */,
+    const StructureChain& extendedInfo /* default */):
     Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator))
 {
     MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
@@ -88,7 +90,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     VkGraphicsPipelineCreateInfo pipelineInfo;
     VkPipelineDynamicStateCreateInfo pipelineDynamicStateInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    pipelineInfo.pNext = nullptr;
+    pipelineInfo.pNext = extendedInfo.chainNodes();
     pipelineInfo.flags = flags | (this->basePipeline ? VK_PIPELINE_CREATE_DERIVATIVE_BIT : 0);
     pipelineInfo.stageCount = MAGMA_COUNT(dereferencedStages);
     pipelineInfo.pStages = dereferencedStages;
@@ -118,7 +120,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     {
         pipelineInfo.pNext = &pipelineCreationFeedbackInfo;
         pipelineCreationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
-        pipelineCreationFeedbackInfo.pNext = nullptr;
+        pipelineCreationFeedbackInfo.pNext = extendedInfo.chainNodes();
         pipelineCreationFeedbackInfo.pPipelineCreationFeedback = &creationFeedback;
         pipelineCreationFeedbackInfo.pipelineStageCreationFeedbackCount = pipelineInfo.stageCount;
         pipelineCreationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks;

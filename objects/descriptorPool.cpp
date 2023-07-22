@@ -31,24 +31,26 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool freeDescriptorSet /* false */,
     bool updateAfterBind /* false */,
-    uint32_t maxInlineUniformBlockBindings /* 0 */):
+    uint32_t maxInlineUniformBlockBindings /* 0 */,
+    const StructureChain& extendedInfo /* default */):
     DescriptorPool(std::move(device), maxSets, std::vector<descriptor::DescriptorPool>{descriptorPool}, std::move(allocator),
-        freeDescriptorSet, updateAfterBind, maxInlineUniformBlockBindings)
+        freeDescriptorSet, updateAfterBind, maxInlineUniformBlockBindings, extendedInfo)
 {}
 
-DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const std::vector<descriptor::DescriptorPool>& descriptorPools,
+DescriptorPool::DescriptorPool(std::shared_ptr<Device> device_, uint32_t maxSets, const std::vector<descriptor::DescriptorPool>& descriptorPools,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool freeDescriptorSet /* false */,
     bool updateAfterBind /* false */,
-    uint32_t maxInlineUniformBlockBindings /* 0 */):
-    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_POOL, std::move(device), std::move(allocator)),
+    uint32_t maxInlineUniformBlockBindings /* 0 */,
+    const StructureChain& extendedInfo /* default */):
+    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_POOL, std::move(device_), std::move(allocator)),
     freeDescriptorSet(freeDescriptorSet)
 {
     MAGMA_UNUSED(updateAfterBind);
     MAGMA_UNUSED(maxInlineUniformBlockBindings);
     VkDescriptorPoolCreateInfo descriptorPoolInfo;
     descriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-    descriptorPoolInfo.pNext = nullptr;
+    descriptorPoolInfo.pNext = extendedInfo.chainNodes();
     descriptorPoolInfo.flags = 0;
     if (freeDescriptorSet)
     {   // Mobile implementations may use a simpler allocator if that flag is not set,
@@ -67,11 +69,11 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets,
     descriptorPoolInfo.pPoolSizes = descriptorPools.data();
 #ifdef VK_EXT_inline_uniform_block
     VkDescriptorPoolInlineUniformBlockCreateInfoEXT descriptorPoolInlineUniformBlockInfo;
-    if ((maxInlineUniformBlockBindings > 0) && getDevice()->extensionEnabled(VK_EXT_INLINE_UNIFORM_BLOCK_EXTENSION_NAME))
+    if ((maxInlineUniformBlockBindings > 0) && device->extensionEnabled(VK_EXT_INLINE_UNIFORM_BLOCK_EXTENSION_NAME))
     {
         descriptorPoolInfo.pNext = &descriptorPoolInlineUniformBlockInfo;
         descriptorPoolInlineUniformBlockInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_INLINE_UNIFORM_BLOCK_CREATE_INFO_EXT;
-        descriptorPoolInlineUniformBlockInfo.pNext = nullptr;
+        descriptorPoolInlineUniformBlockInfo.pNext = extendedInfo.chainNodes();
         descriptorPoolInlineUniformBlockInfo.maxInlineUniformBlockBindings = maxInlineUniformBlockBindings;
     }
 #endif // VK_EXT_inline_uniform_block

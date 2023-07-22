@@ -30,8 +30,9 @@ namespace magma
 ImageView::ImageView(std::shared_ptr<Image> image,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     VkImageViewCreateFlags flags /* 0 */,
-    VkImageUsageFlags usage /* 0 */):
-    ImageView(std::move(image), 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS, swizzle, flags, usage)
+    VkImageUsageFlags usage /* 0 */,
+    const StructureChain& extendedInfo /* default */):
+    ImageView(std::move(image), 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS, swizzle, flags, usage, extendedInfo)
 {}
 
 ImageView::ImageView(std::shared_ptr<Image> image_,
@@ -41,7 +42,8 @@ ImageView::ImageView(std::shared_ptr<Image> image_,
     uint32_t layerCount /* VK_REMAINING_ARRAY_LAYERS */,
     const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     VkImageViewCreateFlags flags /* 0 */,
-    VkImageUsageFlags usage /* 0 */):
+    VkImageUsageFlags usage /* 0 */,
+    const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, image_->getDevice(), image_->getHostAllocator()),
     image(std::move(image_)),
     flags(flags),
@@ -56,7 +58,7 @@ ImageView::ImageView(std::shared_ptr<Image> image_,
     MAGMA_UNUSED(usage);
     VkImageViewCreateInfo imageViewInfo;
     imageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-    imageViewInfo.pNext = nullptr;
+    imageViewInfo.pNext = extendedInfo.chainNodes();
     imageViewInfo.flags = flags;
     imageViewInfo.image = *image;
     imageViewInfo.viewType = imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags());
@@ -85,11 +87,11 @@ ImageView::ImageView(std::shared_ptr<Image> image_,
     imageViewInfo.subresourceRange.layerCount = layerCount;
 #ifdef VK_KHR_maintenance2
     VkImageViewUsageCreateInfoKHR imageViewUsageInfo;
-    if (usage != 0)
+    if (usage)
     {   // Usage of image view can be restricted compared to the parent image's usage flags
         imageViewInfo.pNext = &imageViewUsageInfo;
         imageViewUsageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO_KHR;
-        imageViewUsageInfo.pNext = nullptr;
+        imageViewUsageInfo.pNext = extendedInfo.chainNodes();
         imageViewUsageInfo.usage = usage;
     }
 #endif // VK_KHR_maintenance2

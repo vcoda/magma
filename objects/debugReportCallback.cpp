@@ -32,7 +32,8 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
     PFN_vkDebugReportCallbackEXT userCallback,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkDebugReportFlagsEXT flags /* INFORMATION_BIT | WARNING_BIT_EXT | PERFORMANCE_WARNING_BIT_EXT | ERROR_BIT DEBUG_BIT */,
-    void *userData /* nullptr */):
+    void *userData /* nullptr */,
+    const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT, std::move(allocator)),
     instance(std::move(instance))
 {
@@ -46,7 +47,7 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
     #else   // Compatibility with old SDK
         debugReportCallbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
     #endif
-        debugReportCallbackInfo.pNext = nullptr;
+        debugReportCallbackInfo.pNext = extendedInfo.chainNodes();
         debugReportCallbackInfo.flags = flags;
         debugReportCallbackInfo.pfnCallback = userCallback;
         debugReportCallbackInfo.pUserData = userData;

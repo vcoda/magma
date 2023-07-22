@@ -41,7 +41,8 @@ namespace magma
                 VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT |
                 VK_DEBUG_REPORT_ERROR_BIT_EXT |
                 VK_DEBUG_REPORT_DEBUG_BIT_EXT,
-            void *userData = nullptr);
+            void *userData = nullptr,
+            const StructureChain& extendedInfo = StructureChain());
         ~DebugReportCallback();
         void message(VkDebugReportFlagsEXT flags,
             VkObjectType objectType,

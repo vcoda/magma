@@ -28,13 +28,15 @@ namespace magma
     {
     public:
         explicit MutableImageView(std::shared_ptr<MutableImage> image,
-            VkFormat mutableFormat);
+            VkFormat mutableFormat,
+            const StructureChain& extendedInfo = StructureChain());
         explicit MutableImageView(std::shared_ptr<MutableImage> image,
             VkFormat mutableFormat,
             uint32_t baseMipLevel,
             uint32_t levelCount = VK_REMAINING_MIP_LEVELS,
             uint32_t baseArrayLayer = 0,
-            uint32_t layerCount = VK_REMAINING_ARRAY_LAYERS);
+            uint32_t layerCount = VK_REMAINING_ARRAY_LAYERS,
+            const StructureChain& extendedInfo = StructureChain());
         VkFormat getMutableFormat() noexcept { return mutableFormat; }
 
     private:

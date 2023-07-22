@@ -25,21 +25,23 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-MutableImageView::MutableImageView(std::shared_ptr<MutableImage> image, VkFormat mutableFormat):
-    MutableImageView(std::move(image), mutableFormat, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS)
+MutableImageView::MutableImageView(std::shared_ptr<MutableImage> image, VkFormat mutableFormat,
+    const StructureChain& extendedInfo /* default */):
+    MutableImageView(std::move(image), mutableFormat, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS, extendedInfo)
 {}
 
 MutableImageView::MutableImageView(std::shared_ptr<MutableImage> image_, VkFormat mutableFormat,
     uint32_t baseMipLevel,
     uint32_t levelCount /* VK_REMAINING_MIP_LEVELS */,
     uint32_t baseArrayLayer /* 0 */,
-    uint32_t layerCount /* VK_REMAINING_ARRAY_LAYERS */):
+    uint32_t layerCount /* VK_REMAINING_ARRAY_LAYERS */,
+    const StructureChain& extendedInfo /* default */):
     ImageView(std::move(image_), baseMipLevel, levelCount, baseArrayLayer, layerCount, 0),
     mutableFormat(mutableFormat)
 {
     VkImageViewCreateInfo imageViewInfo;
     imageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-    imageViewInfo.pNext = nullptr;
+    imageViewInfo.pNext = extendedInfo.chainNodes();
     imageViewInfo.flags = 0;
     imageViewInfo.image = *image;
     imageViewInfo.viewType = imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags());
