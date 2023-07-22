@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "surface.h"
 #include "queue.h"
 #include "fence.h"
+#include "privateDataSlot.h"
 #include "timelineSemaphore.h"
 #include "resourcePool.h"
 #include "../misc/deviceFeatures.h"

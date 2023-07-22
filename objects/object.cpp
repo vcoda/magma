@@ -19,12 +19,55 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "object.h"
 #include "device.h"
+#include "privateDataSlot.h"
 #include "../misc/extProcAddress.h"
 #include "../helpers/castToDebugReport.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
 {
+std::mutex Object::mtx;
+
+void Object::setPrivateData(uint64_t data)
+{
+    const uint64_t handle = getHandle();
+#ifdef VK_EXT_private_data
+    std::shared_ptr<PrivateDataSlot> privateDataSlot = device->getPrivateDataSlot();
+    if (privateDataSlot)
+    {
+        MAGMA_REQUIRED_DEVICE_EXTENSION(vkSetPrivateDataEXT, VK_EXT_PRIVATE_DATA_EXTENSION_NAME);
+        const VkResult result = vkSetPrivateDataEXT(MAGMA_HANDLE(device), getObjectType(), handle, *privateDataSlot, data);
+        MAGMA_THROW_FAILURE(result, "failed to set private data");
+    }
+#endif // VK_EXT_private_data
+    // Fallback if extension not present
+    std::lock_guard<std::mutex> lock(mtx);
+    std::unordered_map<uint64_t, uint64_t> privateData = device->getPrivateDataMap();
+    privateData[handle] = data;
+}
+        
+uint64_t Object::getPrivateData() const
+{
+    const uint64_t handle = getHandle();
+#ifdef VK_EXT_private_data
+    std::shared_ptr<PrivateDataSlot> privateDataSlot = device->getPrivateDataSlot();
+    if (privateDataSlot)
+    {
+        MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetPrivateDataEXT, VK_EXT_PRIVATE_DATA_EXTENSION_NAME);
+        uint64_t data = 0;
+        vkGetPrivateDataEXT(MAGMA_HANDLE(device), getObjectType(), handle, *privateDataSlot, &data);
+        return data;
+    }
+#endif // VK_EXT_private_data
+    // Fallback if extension not present
+    std::lock_guard<std::mutex> lock(mtx);
+    std::unordered_map<uint64_t, uint64_t> privateData = device->getPrivateDataMap();
+    auto it = privateData.find(handle);
+    if (it != privateData.end())
+        return it->second;
+    return 0;
+}
+
 #ifdef MAGMA_DEBUG
 void Object::setDebugName(const std::string& name_)
 {

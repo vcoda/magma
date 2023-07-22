@@ -40,6 +40,8 @@ namespace magma
         virtual uint64_t getHandle() const noexcept = 0;
         std::shared_ptr<Device> getDevice() const noexcept { return device; }
         std::shared_ptr<IAllocator> getHostAllocator() const noexcept { return hostAllocator; }
+        void setPrivateData(uint64_t data);
+        uint64_t getPrivateData() const;
     #ifdef MAGMA_DEBUG
         void setDebugName(const std::string& name);
         const std::string& getDebugName() const noexcept { return name; }
@@ -59,6 +61,7 @@ namespace magma
     protected:
         std::shared_ptr<Device> device;
         std::shared_ptr<IAllocator> hostAllocator;
+        static std::mutex mtx;
     #ifdef MAGMA_DEBUG
         std::string name;
         uint64_t tagName = 0;

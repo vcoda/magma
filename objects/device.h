@@ -27,6 +27,9 @@ namespace magma
     class Surface;
     class Queue;
     class Fence;
+#ifdef VK_EXT_private_data
+    class PrivateDataSlot;
+#endif
 #ifdef VK_KHR_timeline_semaphore
     class TimelineSemaphore;
 #endif
@@ -104,6 +107,11 @@ namespace magma
     #ifdef VK_EXT_device_fault
         DeviceFaultInfo getFaultInfo() const;
     #endif
+        std::unordered_map<uint64_t, uint64_t>& getPrivateDataMap() noexcept { return privateData; }
+    #ifdef VK_EXT_private_data
+        void setPrivateDataSlot(std::shared_ptr<PrivateDataSlot> privateDataSlot_) noexcept { privateDataSlot = privateDataSlot_; }
+        std::shared_ptr<PrivateDataSlot> getPrivateDataSlot() const noexcept { return privateDataSlot.lock(); }
+    #endif // VK_EXT_private_data
         template<typename PhysicalDeviceFeatures>
         const PhysicalDeviceFeatures *getEnabledExtendedFeatures() const noexcept;
         bool extensionEnabled(const char *extensionName) const noexcept;
@@ -117,6 +125,10 @@ namespace magma
         std::set<std::string> enabledExtensions;
         VkPhysicalDeviceFeatures enabledFeatures;
         std::map<VkStructureType, const VkBaseInStructure *> enabledExtendedFeatures;
+        std::unordered_map<uint64_t, uint64_t> privateData;
+    #ifdef VK_EXT_private_data
+        std::weak_ptr<magma::PrivateDataSlot> privateDataSlot;
+    #endif
     };
 } // namespace magma
 
