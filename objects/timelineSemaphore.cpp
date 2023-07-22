@@ -27,7 +27,8 @@ namespace magma
 {
 #ifdef VK_KHR_timeline_semaphore
 BinarySemaphore::BinarySemaphore(std::shared_ptr<Device> device,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_SEMAPHORE, std::move(device), std::move(allocator))
 {
     VkSemaphoreCreateInfo semaphoreInfo;
@@ -36,7 +37,7 @@ BinarySemaphore::BinarySemaphore(std::shared_ptr<Device> device,
     semaphoreInfo.pNext = &semaphoreTypeInfo;
     semaphoreInfo.flags = 0;
     semaphoreTypeInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO_KHR;
-    semaphoreTypeInfo.pNext = nullptr;
+    semaphoreTypeInfo.pNext = extendedInfo.chainNodes();
     semaphoreTypeInfo.semaphoreType = VK_SEMAPHORE_TYPE_BINARY_KHR;
     semaphoreTypeInfo.initialValue = VK_FALSE; // When created, the semaphore is in the unsignaled state
     const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
@@ -61,7 +62,8 @@ void BinarySemaphore::signal(bool value)
 }
 
 TimelineSemaphore::TimelineSemaphore(std::shared_ptr<Device> device, uint64_t initialValue,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_SEMAPHORE, std::move(device), std::move(allocator))
 {
     VkSemaphoreCreateInfo semaphoreInfo;
@@ -70,11 +72,11 @@ TimelineSemaphore::TimelineSemaphore(std::shared_ptr<Device> device, uint64_t in
     semaphoreInfo.pNext = &semaphoreTypeInfo;
     semaphoreInfo.flags = 0;
     semaphoreTypeInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO_KHR;
-    semaphoreTypeInfo.pNext = nullptr;
+    semaphoreTypeInfo.pNext = extendedInfo.chainNodes();
     semaphoreTypeInfo.semaphoreType = VK_SEMAPHORE_TYPE_TIMELINE_KHR;
     semaphoreTypeInfo.initialValue = initialValue;
     const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create semaphore");
+    MAGMA_THROW_FAILURE(result, "failed to create timeline semaphore");
 }
 
 TimelineSemaphore::~TimelineSemaphore()

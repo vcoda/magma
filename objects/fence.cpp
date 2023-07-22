@@ -26,12 +26,13 @@ namespace magma
 {
 Fence::Fence(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const bool signaled /* false */):
+    bool signaled /* false */,
+    const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_FENCE, std::move(device), std::move(allocator))
 {
     VkFenceCreateInfo fenceInfo;
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-    fenceInfo.pNext = nullptr;
+    fenceInfo.pNext = extendedInfo.chainNodes();
     fenceInfo.flags = 0;
     if (signaled)
         fenceInfo.flags |= VK_FENCE_CREATE_SIGNALED_BIT;

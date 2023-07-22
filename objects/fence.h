@@ -30,7 +30,8 @@ namespace magma
     public:
         explicit Fence(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            bool signaled = false);
+            bool signaled = false,
+            const StructureChain& extendedInfo = StructureChain());
         ~Fence();
         bool reset() noexcept;
         VkResult getStatus() const noexcept;

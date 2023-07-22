@@ -32,7 +32,8 @@ namespace magma
     {
     public:
         explicit Event(std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> allocator = nullptr);
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const StructureChain& extendedInfo = StructureChain());
         ~Event();
         VkResult getStatus() const noexcept;
         bool set() noexcept;

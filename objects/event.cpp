@@ -25,12 +25,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Event::Event(std::shared_ptr<Device> device,
-    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_EVENT, std::move(device), std::move(allocator))
 {
     VkEventCreateInfo eventInfo;
     eventInfo.sType = VK_STRUCTURE_TYPE_EVENT_CREATE_INFO;
-    eventInfo.pNext = nullptr;
+    eventInfo.pNext = extendedInfo.chainNodes();
     eventInfo.flags = 0;
     const VkResult result = vkCreateEvent(MAGMA_HANDLE(device), &eventInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_THROW_FAILURE(result, "failed to create event");
