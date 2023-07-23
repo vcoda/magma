@@ -21,14 +21,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef MAGMA_X64
-    template<typename Type>
+    template<class Type>
     struct ObjectType
     {
         static constexpr VkObjectType getObjectType() { return VK_OBJECT_TYPE_UNKNOWN; }
     };
 
 #define MAGMA_SPECIALIZE_OBJECT_TYPE(Type, objectType)\
-    template<> struct ObjectType<Type>\
+    template<>\
+    struct ObjectType<Type>\
     {\
         static constexpr VkObjectType getObjectType() { return objectType; }\
     };

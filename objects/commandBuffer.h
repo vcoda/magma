@@ -69,11 +69,7 @@ namespace magma
         friend Queue;
 
     public:
-        enum class State : uint32_t
-        {
-            Initial, Recording, Executable, Pending, Invalid
-        };
-
+        enum class State : uint32_t;
         ~CommandBuffer();
         bool begin(VkCommandBufferUsageFlags flags = 0) noexcept;
         bool beginInherited(const std::shared_ptr<RenderPass>& renderPass,
@@ -583,6 +579,11 @@ namespace magma
         VkBool32 withinTransformFeedback : 1;
         VkQueryControlFlags queryFlags;
         VkQueryPipelineStatisticFlags pipelineStatistics;
+    };
+
+    enum class CommandBuffer::State : uint32_t
+    {
+        Initial, Recording, Executable, Pending, Invalid
     };
 } // namespace magma
 

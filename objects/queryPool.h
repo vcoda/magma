@@ -34,7 +34,7 @@ namespace magma
 #else
     template<> struct BadQueryResult<uint32_t> { static constexpr uint32_t value = 0u; };
     template<> struct BadQueryResult<uint64_t> { static constexpr uint64_t value = 0ull; };
-#endif
+#endif // MAGMA_DEBUG
 
     /* An object that contains a number of query entries
        and their associated state and results.
