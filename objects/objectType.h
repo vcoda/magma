@@ -76,11 +76,14 @@ namespace magma
 #ifdef VK_EXT_debug_utils
     MAGMA_SPECIALIZE_OBJECT_TYPE(VkDebugUtilsMessengerEXT, VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT)
 #endif
-#ifdef VK_NV_ray_tracing
-    MAGMA_SPECIALIZE_OBJECT_TYPE(VkAccelerationStructureNV, VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV)
+#ifdef VK_EXT_private_data
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkPrivateDataSlotEXT, VK_OBJECT_TYPE_PRIVATE_DATA_SLOT_EXT)
 #endif
 #ifdef VK_EXT_validation_cache
     MAGMA_SPECIALIZE_OBJECT_TYPE(VkValidationCacheEXT, VK_OBJECT_TYPE_VALIDATION_CACHE_EXT)
+#endif
+#ifdef VK_NV_ray_tracing
+    MAGMA_SPECIALIZE_OBJECT_TYPE(VkAccelerationStructureNV, VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV)
 #endif
 #endif // MAGMA_X64
 } // namespace magma
