@@ -77,6 +77,11 @@ constexpr VkDebugReportObjectTypeEXT VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_MODE_KH
 #endif // VK_EXT_debug_report && VK_KHR_display
 #endif
 
+typedef struct VkNode {
+    VkStructureType sType;
+    void*           pNext;
+} VkNode;
+
 #if VK_HEADER_VERSION < 75
 typedef struct VkBaseOutStructure {
     VkStructureType               sType;

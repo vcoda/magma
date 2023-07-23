@@ -34,8 +34,8 @@ namespace magma
             const std::vector<const char *>& enabledLayers,
             const std::vector<const char *>& enabledExtensions,
             const VkPhysicalDeviceFeatures& deviceFeatures,
-            const std::vector<void *>& extendedDeviceFeatures = {},
-            const StructureChain& extendedInfo = StructureChain()) const;
+            const StructureChain& extendedDeviceFeatures = StructureChain(),
+            const StructureChain& extendedCreateInfo = StructureChain()) const;
         uint32_t getGroupId() const { return groupId; }
         uint32_t getPhysicalDeviceCount() const { return MAGMA_COUNT(physicalDevices); }
         std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId) const { return physicalDevices[deviceId]; }

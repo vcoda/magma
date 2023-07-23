@@ -31,8 +31,9 @@ PhysicalDeviceGroup::PhysicalDeviceGroup(const std::vector<std::shared_ptr<Physi
 
 std::shared_ptr<Device> PhysicalDeviceGroup::createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
     const std::vector<const char *>& enabledLayers, const std::vector<const char *>& enabledExtensions,
-    const VkPhysicalDeviceFeatures& deviceFeatures, const std::vector<void *>& extendedDeviceFeatures /* empty */,
-    const StructureChain& extendedInfo /* default */) const
+    const VkPhysicalDeviceFeatures& deviceFeatures,
+    const StructureChain& extendedDeviceFeatures /* default */,
+    const StructureChain& extendedCreateInfo /* default */) const
 {
     MAGMA_STACK_ARRAY(VkPhysicalDevice, dereferencedPhysicalDevices, getPhysicalDeviceCount());
     for (const auto& device : physicalDevices)
@@ -42,15 +43,10 @@ std::shared_ptr<Device> PhysicalDeviceGroup::createDevice(const std::vector<Devi
     deviceGroupDeviceInfo.pNext = nullptr;
     deviceGroupDeviceInfo.physicalDeviceCount = getPhysicalDeviceCount();
     deviceGroupDeviceInfo.pPhysicalDevices = dereferencedPhysicalDevices;
-    StructureChain deviceGroupExtendedInfo(extendedInfo);
-    deviceGroupExtendedInfo.addNode(deviceGroupDeviceInfo);
-    return physicalDevices.front()->createDevice(
-        queueDescriptors,
-        enabledLayers,
-        enabledExtensions,
-        deviceFeatures,
-        extendedDeviceFeatures,
-        deviceGroupExtendedInfo);
+    StructureChain extendedDeviceGroupCreateInfo(extendedCreateInfo);
+    extendedDeviceGroupCreateInfo.addNode(deviceGroupDeviceInfo);
+    return physicalDevices.front()->createDevice(queueDescriptors, enabledLayers, enabledExtensions,
+        deviceFeatures, extendedDeviceFeatures, extendedDeviceGroupCreateInfo);
 }
 #endif // VK_KHR_device_group
 } // namespace magma

@@ -30,20 +30,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-PhysicalDevice::PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDevice handle,
+PhysicalDevice::PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDevice handle_,
     std::shared_ptr<IAllocator> allocator) noexcept:
     Dispatchable<VkPhysicalDevice>(VK_OBJECT_TYPE_PHYSICAL_DEVICE, std::move(allocator)),
     instance(std::move(instance))
 {
-    this->handle = handle;
+    handle = handle_;
     for (const auto& properties: enumerateExtensions())
         extensions.emplace(properties.extensionName);
 }
 
 std::shared_ptr<Device> PhysicalDevice::createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
     const std::vector<const char *>& enabledLayers, const std::vector<const char *>& enabledExtensions,
-    const VkPhysicalDeviceFeatures& deviceFeatures, const std::vector<void *>& deviceExtendedFeatures /* empty */,
-    const StructureChain& extendedInfo /* default */) const
+    const VkPhysicalDeviceFeatures& deviceFeatures,
+    const StructureChain& extendedDeviceFeatures /* default */,
+    const StructureChain& extendedCreateInfo /* default */) const
 {
     return std::shared_ptr<Device>(new Device(
         std::const_pointer_cast<PhysicalDevice>(shared_from_this()),
@@ -51,8 +52,8 @@ std::shared_ptr<Device> PhysicalDevice::createDevice(const std::vector<DeviceQue
         enabledLayers,
         enabledExtensions,
         deviceFeatures,
-        deviceExtendedFeatures,
-        extendedInfo,
+        extendedDeviceFeatures,
+        extendedCreateInfo,
         hostAllocator));
 }
 
@@ -375,8 +376,8 @@ std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
         VK_KHR_SWAPCHAIN_EXTENSION_NAME
     };
     const VkPhysicalDeviceFeatures noDeviceFeatures = {};
-    const std::vector<void *> noExtendedDeviceFeatures;
-    return createDevice(queueDescriptors, noLayers, swapchainExtension, noDeviceFeatures, noExtendedDeviceFeatures);
+    StructureChain emptyStructureChain;
+    return createDevice(queueDescriptors, noLayers, swapchainExtension, noDeviceFeatures, emptyStructureChain, emptyStructureChain);
 }
 
 bool PhysicalDevice::extensionSupported(const char *extensionName) const noexcept
