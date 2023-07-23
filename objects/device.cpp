@@ -92,6 +92,13 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
         this->enabledLayers.emplace(layer);
     for (const auto& extension: enabledExtensions)
         this->enabledExtensions.emplace(extension);
+    // Store feature nodes for fast search in getEnabledExtendedFeatures()
+    const VkBaseInStructure *featureNode = extendedDeviceFeatures.firstNode();
+    while (featureNode)
+    {
+        enabledExtendedFeatures[featureNode->sType] = featureNode;
+        featureNode = featureNode->pNext;
+    }
 }
 
 Device::~Device()
