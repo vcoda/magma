@@ -49,16 +49,16 @@ namespace magma
     #endif // VK_KHR_device_group
 
     private:
-        explicit SwapchainImage(std::shared_ptr<Device> device,
+        SwapchainImage(std::shared_ptr<Device> device,
             VkImage handle,
             VkFormat format,
             const VkExtent2D& extent,
             uint32_t chainIndex);
         void setChainIndex(uint32_t chainIndex) noexcept;
-        friend Swapchain;
 
         const bool implementationControlled;
         int32_t chainIndex;
+        friend Swapchain;
     };
 #endif // VK_KHR_swapchain
 } // namespace magma

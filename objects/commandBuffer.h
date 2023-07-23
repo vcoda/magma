@@ -563,9 +563,9 @@ namespace magma
 #endif // VK_KHR_device_group
 
     protected:
-        explicit CommandBuffer(VkCommandBufferLevel level,
+        CommandBuffer(VkCommandBufferLevel level,
             std::shared_ptr<CommandPool> cmdPool);
-        explicit CommandBuffer(VkCommandBufferLevel level,
+        CommandBuffer(VkCommandBufferLevel level,
             VkCommandBuffer handle,
             std::shared_ptr<CommandPool> cmdPool);
         void onSubmit() noexcept;

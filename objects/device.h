@@ -43,16 +43,6 @@ namespace magma
     class Device : public Dispatchable<VkDevice>,
         public std::enable_shared_from_this<Device>
     {
-        explicit Device(std::shared_ptr<PhysicalDevice> physicalDevice,
-            const std::vector<DeviceQueueDescriptor>& queueDescriptors,
-            const std::vector<const char *>& enabledLayers,
-            const std::vector<const char *>& enabledExtensions,
-            const VkPhysicalDeviceFeatures& deviceFeatures,
-            const std::vector<void *>& deviceExtendedFeatures,
-            const StructureChain& extendedInfo,
-            std::shared_ptr<IAllocator> allocator);
-        friend PhysicalDevice;
-
     public:
         ~Device();
         std::shared_ptr<PhysicalDevice> getPhysicalDevice() noexcept { return physicalDevice; }
@@ -116,6 +106,15 @@ namespace magma
         bool extensionEnabled(const char *extensionName) const noexcept;
 
     private:
+        Device(std::shared_ptr<PhysicalDevice> physicalDevice,
+            const std::vector<DeviceQueueDescriptor>& queueDescriptors,
+            const std::vector<const char *>& enabledLayers,
+            const std::vector<const char *>& enabledExtensions,
+            const VkPhysicalDeviceFeatures& deviceFeatures,
+            const std::vector<void *>& deviceExtendedFeatures,
+            const StructureChain& extendedInfo,
+            std::shared_ptr<IAllocator> allocator);
+
         std::shared_ptr<PhysicalDevice> physicalDevice;
         mutable std::shared_ptr<DeviceFeatures> features;
         mutable std::vector<std::pair<DeviceQueueDescriptor, std::weak_ptr<Queue>>> queues;
@@ -128,6 +127,7 @@ namespace magma
     #ifdef VK_EXT_private_data
         std::weak_ptr<magma::PrivateDataSlot> privateDataSlot;
     #endif
+        friend PhysicalDevice;
     };
 } // namespace magma
 

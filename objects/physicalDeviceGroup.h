@@ -29,10 +29,6 @@ namespace magma
 #ifdef VK_KHR_device_group
     class PhysicalDeviceGroup
     {
-        explicit PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices,
-            uint32_t groupId) noexcept;
-        friend class Instance;
-
     public:
         std::shared_ptr<Device> createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
             const std::vector<const char *>& enabledLayers,
@@ -45,8 +41,12 @@ namespace magma
         std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId) const { return physicalDevices[deviceId]; }
 
     private:
+        PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices,
+            uint32_t groupId) noexcept;
+
         std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices;
         const uint32_t groupId;
+        friend class Instance;
     };
 #endif // VK_KHR_device_group
 } // namespace magma

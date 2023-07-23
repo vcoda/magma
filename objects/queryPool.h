@@ -64,7 +64,7 @@ namespace magma
     #endif
 
     protected:
-        explicit QueryPool(VkQueryType queryType,
+        QueryPool(VkQueryType queryType,
             std::shared_ptr<Device> device,
             uint32_t queryCount,
             VkQueryControlFlags controlFlags,

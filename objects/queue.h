@@ -36,10 +36,6 @@ namespace magma
 
     class Queue : public Dispatchable<VkQueue>
     {
-        explicit Queue(VkQueue handle, std::shared_ptr<Device> device,
-            VkQueueFlagBits flags, uint32_t familyIndex, uint32_t index);
-        friend Device;
-
     public:
         VkQueueFlagBits getFlags() const noexcept { return flags; }
         uint32_t getFamilyIndex() const noexcept { return familyIndex; }
@@ -87,8 +83,12 @@ namespace magma
 #endif // VK_KHR_display_swapchain
 
     private:
+        Queue(VkQueue handle, std::shared_ptr<Device> device,
+            VkQueueFlagBits flags, uint32_t familyIndex, uint32_t index);
+
         const VkQueueFlagBits flags;
         const uint32_t familyIndex;
         const uint32_t index;
+        friend Device;
     };
 } // namespace magma

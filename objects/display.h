@@ -31,20 +31,20 @@ namespace magma
 #ifdef VK_KHR_display
     class Display : public NonDispatchable<VkDisplayKHR>
     {
-        explicit Display(std::shared_ptr<const PhysicalDevice> physicalDevice,
-            VkDisplayKHR handle,
-            uint32_t planeIndex) noexcept;
-        friend PhysicalDevice;
-
     public:
         std::shared_ptr<const PhysicalDevice> getPhysicalDevice() const noexcept { return physicalDevice; }
         uint32_t getPlaneIndex() const noexcept { return planeIndex; }
         std::vector<VkDisplayModePropertiesKHR> getModeProperties() const;
 
     private:
+        Display(std::shared_ptr<const PhysicalDevice> physicalDevice,
+            VkDisplayKHR handle,
+            uint32_t planeIndex) noexcept;
+
         std::shared_ptr<const Instance> instance;
         std::shared_ptr<const PhysicalDevice> physicalDevice;
         const uint32_t planeIndex;
+        friend PhysicalDevice;
     };
 #endif // VK_KHR_display
 } // namespace magma

@@ -32,10 +32,6 @@ namespace magma
     class PhysicalDevice : public Dispatchable<VkPhysicalDevice>,
         public std::enable_shared_from_this<PhysicalDevice>
     {
-        explicit PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDevice handle,
-            std::shared_ptr<IAllocator> allocator) noexcept;
-        friend class Instance;
-
     public:
         std::shared_ptr<Device> createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
             const std::vector<const char *>& enabledLayers,
@@ -550,6 +546,8 @@ namespace magma
         bool checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept;
 
     private:
+        PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDevice handle,
+            std::shared_ptr<IAllocator> allocator) noexcept;
         void getFeatures2(void *physicalDeviceFeatures) const;
         void getProperties2(void *physicalDeviceProperties) const;
         void getSurfaceCapabilities2(std::shared_ptr<const Surface> surface,
@@ -557,5 +555,6 @@ namespace magma
 
         std::shared_ptr<Instance> instance;
         std::set<std::string> extensions;
+        friend class Instance;
     };
 } // namespace magma
