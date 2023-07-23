@@ -58,12 +58,12 @@ namespace magma
         hash_t getHash() const noexcept { return hash; }
 
     protected:
-        explicit RenderPass(std::shared_ptr<Device> device,
+        RenderPass(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator,
             const std::vector<AttachmentDescription>& attachments);
 
         VkImageLayout optimalDepthStencilLayout(const Format& format) const;
-        SubpassDependency subpassStartDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept;
+        SubpassDependency subpassBeginDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept;
         SubpassDependency subpassEndDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept;
 
         std::vector<AttachmentDescription> attachments;

@@ -98,7 +98,7 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
     subpassDescription.pPreserveAttachments = nullptr;
     SubpassDependency dependencies[] = {
         // Dependency at the beginning of the render pass
-        subpassStartDependency(colorAttachmentCount > 0, hasDepthStencilAttachment),
+        subpassBeginDependency(colorAttachmentCount > 0, hasDepthStencilAttachment),
         // Dependency at the end of the render pass
         subpassEndDependency(colorAttachmentCount > 0, hasDepthStencilAttachment)
     };

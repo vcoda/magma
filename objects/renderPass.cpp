@@ -99,7 +99,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
     subpassDescription.pPreserveAttachments = nullptr;
     SubpassDependency dependencies[] = {
         // Dependency at the beginning of the render pass
-        subpassStartDependency(colorAttachmentCount > 0, hasDepthStencilAttachment),
+        subpassBeginDependency(colorAttachmentCount > 0, hasDepthStencilAttachment),
         // Dependency at the end of the render pass
         subpassEndDependency(colorAttachmentCount > 0, hasDepthStencilAttachment)
     };
@@ -206,7 +206,7 @@ VkImageLayout RenderPass::optimalDepthStencilLayout(const Format& format) const
     return VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 }
 
-SubpassDependency RenderPass::subpassStartDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept
+SubpassDependency RenderPass::subpassBeginDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept
 {
     SubpassDependency subpassDependency;
     subpassDependency.srcSubpass = VK_SUBPASS_EXTERNAL;
