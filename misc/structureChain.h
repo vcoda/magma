@@ -29,6 +29,10 @@ namespace magma
         void addNode(const StructureType& node);
         template<class StructureType>
         StructureType *findNode() const noexcept;
+        VkBaseOutStructure *firstNode() noexcept;
+        const VkBaseInStructure *firstNode() const noexcept;
+        VkBaseOutStructure *lastNode() noexcept;
+        const VkBaseInStructure *lastNode() const noexcept;
         uint32_t getSize() const noexcept { return MAGMA_COUNT(chain); }
         bool empty() const noexcept { return chain.empty(); }
         VkBaseOutStructure *chainNodes() noexcept;

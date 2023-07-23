@@ -50,7 +50,7 @@ const VkBaseInStructure *StructureChain::chainNodes() const noexcept
     }
     VkBaseOutStructure *last = curr->getNode();
     last->pNext = nullptr;
-    return reinterpret_cast<const VkBaseInStructure *>(head->getNode());
+    return (const VkBaseInStructure *)head->getNode();
 }
 
 hash_t StructureChain::getHash() const noexcept
