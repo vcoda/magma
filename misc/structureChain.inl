@@ -1,40 +1,50 @@
 namespace magma
 {
-struct StructureChain::Node
+template<class StructureType>
+inline StructureChain::Node::Node(const StructureType& node):
+    size(sizeof(StructureType))
 {
-    template<class StructureType>
-    Node(const StructureType& node)
-    {
-        static_assert(std::is_trivially_copyable<StructureType>::value,
-            "chain structure required to be trivially copyable");
-        data = new uint8_t[sizeof(StructureType)];
-        memcpy(data, &node, sizeof(StructureType));
-        hash = core::hashArray(data, sizeof(StructureType));
-    }
+    static_assert(sizeof(StructureType) > sizeof(VkBaseInStructure),
+        "chain structure size is too little");
+    static_assert(std::is_trivially_copyable<StructureType>::value,
+        "chain structure required to be trivially copyable");
+    data = new uint8_t[size];
+    memcpy(data, &node, size);
+}
 
-    ~Node()
-    {
-        delete[] data;
-    }
+inline StructureChain::Node::Node(const Node& node):
+    size(node.size)
+{
+    data = new uint8_t[size];
+    memcpy(data, node.data, size);
+}
 
-    VkBaseOutStructure *getNode() noexcept
-    {
-        return reinterpret_cast<VkBaseOutStructure *>(data);
-    }
+inline StructureChain::Node::Node(Node&& node) noexcept:
+    size(node.size),
+    data(node.data)
+{
+    node.size = 0;
+    node.data = nullptr;
+}
 
-    const VkBaseInStructure *getCNode() const noexcept
-    {
-        return reinterpret_cast<const VkBaseInStructure *>(data);
-    }
+inline StructureChain::Node::~Node()
+{
+    delete[] data;
+}
 
-    uint8_t *data;
-    hash_t hash;
-};
+inline VkBaseOutStructure *StructureChain::Node::getNode() noexcept
+{
+    return reinterpret_cast<VkBaseOutStructure *>(data);
+}
+
+inline const VkBaseInStructure *StructureChain::Node::getNode() const noexcept
+{
+    return reinterpret_cast<const VkBaseInStructure *>(data);
+}
 
 template<class StructureType>
 inline void StructureChain::addNode(const StructureType& node)
 {
-    static_assert(sizeof(StructureType) > sizeof(VkBaseInStructure), "structure size is too little");
     chain.emplace_back(node);
 }
 
@@ -45,7 +55,7 @@ inline VkBaseOutStructure *StructureChain::firstNode() noexcept
 
 inline const VkBaseInStructure *StructureChain::firstNode() const noexcept
 {
-    return chain.empty() ? nullptr : chain.begin()->getCNode();
+    return chain.empty() ? nullptr : chain.cbegin()->getNode();
 }
 
 inline VkBaseOutStructure *StructureChain::lastNode() noexcept
@@ -55,7 +65,7 @@ inline VkBaseOutStructure *StructureChain::lastNode() noexcept
 
 inline const VkBaseInStructure *StructureChain::lastNode() const noexcept
 {
-    return chain.empty() ? nullptr : chain.rbegin()->getCNode();
+    return chain.empty() ? nullptr : chain.crbegin()->getNode();
 }
 } // namespace magma
 

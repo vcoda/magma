@@ -40,8 +40,27 @@ namespace magma
         hash_t getHash() const noexcept;
 
     private:
-        struct Node;
+        class Node;
         mutable std::list<Node> chain;
+    };
+
+    /* Binary blob of Vulkan structure that has at least sType and pNext members. */
+
+    class StructureChain::Node
+    {
+    public:
+        template<class StructureType>
+        Node(const StructureType& node);
+        Node(const Node& node);
+        Node(Node&& node) noexcept;
+        ~Node();
+        VkBaseOutStructure *getNode() noexcept;
+        const VkBaseInStructure *getNode() const noexcept;
+        size_t getSize() const noexcept { return size; }
+
+    private:
+        size_t size;
+        uint8_t *data;
     };
 } // namespace magma
 

@@ -57,10 +57,13 @@ hash_t StructureChain::getHash() const noexcept
 {
     if (chain.empty())
         return 0ull;
-    auto curr = chain.begin();
-    hash_t hash = curr->hash;
-    while (++curr != chain.end())
-        hash = core::hashCombine(hash, curr->hash);
+    auto node = chain.cbegin();
+    hash_t hash = core::hashArray((const uint8_t *)node->getNode(), node->getSize());
+    while (++node != chain.cend())
+    {
+        hash_t nodeHash = core::hashArray((const uint8_t *)node->getNode(), node->getSize());
+        hash = core::hashCombine(hash, nodeHash);
+    }
     return hash;
 }
 } // namespace magma
