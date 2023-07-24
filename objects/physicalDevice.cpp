@@ -48,12 +48,8 @@ std::shared_ptr<Device> PhysicalDevice::createDevice(const std::vector<DeviceQue
 {
     return std::shared_ptr<Device>(new Device(
         std::const_pointer_cast<PhysicalDevice>(shared_from_this()),
-        queueDescriptors,
-        enabledLayers,
-        enabledExtensions,
-        enabledFeatures,
-        enabledExtendedFeatures,
-        extendedInfo,
+        queueDescriptors, enabledLayers, enabledExtensions,
+        enabledFeatures, enabledExtendedFeatures, extendedInfo,
         hostAllocator));
 }
 
