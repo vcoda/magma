@@ -36,9 +36,9 @@ namespace magma
         std::shared_ptr<Device> createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
             const std::vector<const char *>& enabledLayers,
             const std::vector<const char *>& enabledExtensions,
-            const VkPhysicalDeviceFeatures& deviceFeatures,
-            const StructureChain& extendedDeviceFeatures = StructureChain(),
-            const StructureChain& extendedCreateInfo = StructureChain()) const;
+            const VkPhysicalDeviceFeatures& enabledFeatures,
+            const StructureChain& enabledExtendedFeatures = StructureChain(),
+            const StructureChain& extendedInfo = StructureChain()) const;
         std::shared_ptr<Instance> getInstance() const noexcept { return instance; }
         VkPhysicalDeviceFeatures getFeatures() const noexcept;
         VkFormatProperties getFormatProperties(VkFormat format) const noexcept;

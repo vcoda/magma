@@ -42,40 +42,41 @@ namespace magma
 {
 Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     const std::vector<DeviceQueueDescriptor>& queueDescriptors,
-    const std::vector<const char *>& enabledLayers,
-    const std::vector<const char *>& enabledExtensions,
-    const VkPhysicalDeviceFeatures& deviceFeatures,
-    const StructureChain& extendedDeviceFeatures,
-    const StructureChain& extendedCreateInfo,
+    const std::vector<const char *>& enabledLayers_,
+    const std::vector<const char *>& enabledExtensions_,
+    const VkPhysicalDeviceFeatures& enabledFeatures_,
+    const StructureChain& enabledExtendedFeatures_,
+    const StructureChain& extendedInfo,
     std::shared_ptr<IAllocator> allocator):
     Dispatchable<VkDevice>(VK_OBJECT_TYPE_DEVICE, std::move(allocator)),
     physicalDevice(std::move(physicalDevice)),
     resourcePool(std::make_shared<ResourcePool>()),
-    enabledFeatures(deviceFeatures)
+    enabledFeatures(enabledFeatures_),
+    enabledExtendedFeatures(enabledExtendedFeatures_)
 {
     VkDeviceCreateInfo deviceInfo;
     deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-    deviceInfo.pNext = extendedCreateInfo.chainNodes();
+    deviceInfo.pNext = extendedInfo.chainNodes();
     deviceInfo.flags = 0;
     deviceInfo.queueCreateInfoCount = MAGMA_COUNT(queueDescriptors);
     deviceInfo.pQueueCreateInfos = queueDescriptors.data();
-    deviceInfo.enabledLayerCount = MAGMA_COUNT(enabledLayers);
-    deviceInfo.ppEnabledLayerNames = enabledLayers.data();
-    deviceInfo.enabledExtensionCount = MAGMA_COUNT(enabledExtensions);
-    deviceInfo.ppEnabledExtensionNames = enabledExtensions.data();
-    deviceInfo.pEnabledFeatures = extendedDeviceFeatures.empty() ? &deviceFeatures : nullptr;
+    deviceInfo.enabledLayerCount = MAGMA_COUNT(enabledLayers_);
+    deviceInfo.ppEnabledLayerNames = enabledLayers_.data();
+    deviceInfo.enabledExtensionCount = MAGMA_COUNT(enabledExtensions_);
+    deviceInfo.ppEnabledExtensionNames = enabledExtensions_.data();
+    deviceInfo.pEnabledFeatures = enabledExtendedFeatures.empty() ? &enabledFeatures : nullptr;
 #ifdef VK_KHR_get_physical_device_properties2
     VkPhysicalDeviceFeatures2KHR deviceFeatures2;
-    if (!extendedDeviceFeatures.empty())
+    if (!enabledExtendedFeatures.empty())
     {
         deviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR;
-        deviceFeatures2.features = deviceFeatures;
-        deviceFeatures2.pNext = (void *)extendedDeviceFeatures.chainNodes();
+        deviceFeatures2.features = enabledFeatures;
+        deviceFeatures2.pNext = (void *)enabledExtendedFeatures.chainNodes();
         if (!deviceInfo.pNext)
             deviceInfo.pNext = &deviceFeatures2;
         else
-        {   // Link features as last node
-            VkNode *lastNode = (VkNode *)extendedCreateInfo.lastNode();
+        {   // Link extended features as last node
+            VkNode *lastNode = (VkNode *)extendedInfo.lastNode();
             lastNode->pNext = &deviceFeatures2;
         }
     }
@@ -88,15 +89,15 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     for (const auto& desc : queueDescriptors)
         queues.emplace_back(desc, std::weak_ptr<Queue>());
     // Store enabled layers and extensions
-    for (const auto& layer: enabledLayers)
-        this->enabledLayers.emplace(layer);
-    for (const auto& extension: enabledExtensions)
-        this->enabledExtensions.emplace(extension);
+    for (const auto& layer: enabledLayers_)
+        enabledLayers.emplace(layer);
+    for (const auto& extension: enabledExtensions_)
+        enabledExtensions.emplace(extension);
     // Store feature nodes for fast search in getEnabledExtendedFeatures()
-    const VkBaseInStructure *featureNode = extendedDeviceFeatures.firstNode();
+    const VkBaseInStructure *featureNode = enabledExtendedFeatures.firstNode();
     while (featureNode)
     {
-        enabledExtendedFeatures[featureNode->sType] = featureNode;
+        extendedFeatures[featureNode->sType] = featureNode;
         featureNode = featureNode->pNext;
     }
 }

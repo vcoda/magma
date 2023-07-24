@@ -110,9 +110,9 @@ namespace magma
             const std::vector<DeviceQueueDescriptor>& queueDescriptors,
             const std::vector<const char *>& enabledLayers,
             const std::vector<const char *>& enabledExtensions,
-            const VkPhysicalDeviceFeatures& deviceFeatures,
-            const StructureChain& extendedDeviceFeatures,
-            const StructureChain& extendedCreateInfo,
+            const VkPhysicalDeviceFeatures& enabledFeatures,
+            const StructureChain& enabledExtendedFeatures,
+            const StructureChain& extendedInfo,
             std::shared_ptr<IAllocator> allocator);
 
         std::shared_ptr<PhysicalDevice> physicalDevice;
@@ -121,8 +121,9 @@ namespace magma
         std::shared_ptr<ResourcePool> resourcePool;
         std::set<std::string> enabledLayers;
         std::set<std::string> enabledExtensions;
-        VkPhysicalDeviceFeatures enabledFeatures;
-        std::map<VkStructureType, const VkBaseInStructure *> enabledExtendedFeatures;
+        const VkPhysicalDeviceFeatures enabledFeatures;
+        const StructureChain enabledExtendedFeatures;
+        std::map<VkStructureType, const VkBaseInStructure *> extendedFeatures;
         std::unordered_map<uint64_t, uint64_t> privateData;
     #ifdef VK_EXT_private_data
         std::weak_ptr<magma::PrivateDataSlot> privateDataSlot;
@@ -135,8 +136,8 @@ namespace magma
 template<>\
 inline const PhysicalDeviceFeatures *Device::getEnabledExtendedFeatures<PhysicalDeviceFeatures>() const noexcept\
 {\
-    auto it = enabledExtendedFeatures.find(structureType);\
-    if (it != enabledExtendedFeatures.end())\
+    auto it = extendedFeatures.find(structureType);\
+    if (it != extendedFeatures.end())\
         return reinterpret_cast<const PhysicalDeviceFeatures *>(it->second);\
     return nullptr;\
 }

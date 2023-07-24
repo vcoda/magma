@@ -42,18 +42,18 @@ PhysicalDevice::PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDev
 
 std::shared_ptr<Device> PhysicalDevice::createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
     const std::vector<const char *>& enabledLayers, const std::vector<const char *>& enabledExtensions,
-    const VkPhysicalDeviceFeatures& deviceFeatures,
-    const StructureChain& extendedDeviceFeatures /* default */,
-    const StructureChain& extendedCreateInfo /* default */) const
+    const VkPhysicalDeviceFeatures& enabledFeatures,
+    const StructureChain& enabledExtendedFeatures /* default */,
+    const StructureChain& extendedInfo /* default */) const
 {
     return std::shared_ptr<Device>(new Device(
         std::const_pointer_cast<PhysicalDevice>(shared_from_this()),
         queueDescriptors,
         enabledLayers,
         enabledExtensions,
-        deviceFeatures,
-        extendedDeviceFeatures,
-        extendedCreateInfo,
+        enabledFeatures,
+        enabledExtendedFeatures,
+        extendedInfo,
         hostAllocator));
 }
 
