@@ -83,7 +83,7 @@ namespace magma
     public:
         explicit DynamicVertexBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
-            bool pcieBarLimitedHeap,
+            bool barStagedMemory,
             std::shared_ptr<Allocator> allocator = nullptr,
             const void *initialData = nullptr,
             const Descriptor& optional = Descriptor(),

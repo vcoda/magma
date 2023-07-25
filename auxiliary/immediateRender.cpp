@@ -53,8 +53,8 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
     colorBlendState(renderstate::dontBlendRgba)
 {
     const VkDeviceSize vertexBufferSize = sizeof(Vertex) * maxVertexCount;
-    const bool pcieBarLimitedHeap = fitBarLimitedHeap(vertexBufferSize);
-    vertexBuffer = std::make_shared<DynamicVertexBuffer>(device, vertexBufferSize, pcieBarLimitedHeap, allocator);
+    const bool barStagedMemory = fitBarMemoryHeap(vertexBufferSize);
+    vertexBuffer = std::make_shared<DynamicVertexBuffer>(device, vertexBufferSize, barStagedMemory, allocator);
     setIdentity();
     if (!this->layout)
     {   // If layout not specified, create default one
@@ -181,21 +181,21 @@ bool ImmediateRender::reset() noexcept
     return true;
 }
 
-bool ImmediateRender::fitBarLimitedHeap(VkDeviceSize size) const noexcept
+bool ImmediateRender::fitBarMemoryHeap(VkDeviceSize size) const noexcept
 {
     std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
     const VkPhysicalDeviceMemoryProperties memoryProperties = physicalDevice->getMemoryProperties();
     for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
     {
         const VkMemoryType& memoryType = memoryProperties.memoryTypes[i];
-        const VkMemoryPropertyFlags pcieBarHeapFlags =
+        const VkMemoryPropertyFlags barHeapFlags =
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
             VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
             VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-        if ((memoryType.propertyFlags & pcieBarHeapFlags) == pcieBarHeapFlags)
+        if ((memoryType.propertyFlags & barHeapFlags) == barHeapFlags)
         {
-            const VkMemoryHeap& pcieBarMemoryHeap = memoryProperties.memoryHeaps[memoryType.heapIndex];
-            if (pcieBarMemoryHeap.size >= size)
+            const VkMemoryHeap& barMemoryHeap = memoryProperties.memoryHeaps[memoryType.heapIndex];
+            if (barMemoryHeap.size >= size)
                 return true;
         }
     }

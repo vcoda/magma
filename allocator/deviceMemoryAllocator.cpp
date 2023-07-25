@@ -90,7 +90,7 @@ DeviceMemoryBlock DeviceMemoryAllocator::allocate(VkObjectType objectType, NonDi
         allocInfo.requiredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
     else
         allocInfo.requiredFlags = 0;
-    if (VMA_MEMORY_USAGE_CPU_TO_GPU == allocInfo.usage) // PCI "pinned" memory
+    if (VMA_MEMORY_USAGE_CPU_TO_GPU == allocInfo.usage) // Memory that is both mappable on host and preferably fast to access by GPU
         allocInfo.preferredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
     else
         allocInfo.preferredFlags = 0;
@@ -143,7 +143,7 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
                 allocInfo.requiredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
             else
                 allocInfo.requiredFlags = 0;
-            if (VMA_MEMORY_USAGE_CPU_TO_GPU == allocInfo.usage) // PCI "pinned" memory
+            if (VMA_MEMORY_USAGE_CPU_TO_GPU == allocInfo.usage) // Memory that is both mappable on host and preferably fast to access by GPU
                 allocInfo.preferredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
             else
                 allocInfo.preferredFlags = 0;

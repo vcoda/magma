@@ -60,7 +60,7 @@ StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shar
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }
 
-DynamicStorageBuffer::DynamicStorageBuffer(std::shared_ptr<Device> device, VkDeviceSize size, bool pinnedMemory,
+DynamicStorageBuffer::DynamicStorageBuffer(std::shared_ptr<Device> device, VkDeviceSize size, bool barStagedMemory,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const void *initialData /* nullptr */,
     const Descriptor& optional /* default */,
@@ -69,7 +69,7 @@ DynamicStorageBuffer::DynamicStorageBuffer(std::shared_ptr<Device> device, VkDev
     Buffer(std::move(device), size,
         0, // flags
         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
-        (pinnedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0) | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+        (barStagedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0) | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
         optional, sharing, std::move(allocator))
 {
     if (initialData)
