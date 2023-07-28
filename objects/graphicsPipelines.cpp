@@ -186,7 +186,7 @@ void GraphicsPipelines::buildPipelines(std::shared_ptr<Device> device, std::shar
                 *basePipeline++,
                 allocator,
             #ifdef VK_EXT_pipeline_creation_feedback
-                *creationFeedback++,
+                creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,
             #endif
                 *hash++));
         }
