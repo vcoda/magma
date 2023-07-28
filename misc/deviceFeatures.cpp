@@ -131,4 +131,24 @@ bool DeviceFeatures::stippledLinesEnabled() const noexcept
 #endif // VK_EXT_line_rasterization
     return false;
 }
+
+bool DeviceFeatures::hasLocalHostVisibleMemory() const noexcept
+{
+    if (std::shared_ptr<const Device> device = parent.lock())
+    {
+        std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+        const VkPhysicalDeviceMemoryProperties memoryProperties = physicalDevice->getMemoryProperties();
+        for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
+        {
+            const VkMemoryType& memoryType = memoryProperties.memoryTypes[i];
+            const VkMemoryPropertyFlags deviceLocalHostVisibleFlags =
+                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
+                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+            if ((memoryType.propertyFlags & deviceLocalHostVisibleFlags) == deviceLocalHostVisibleFlags)
+                return true;
+        }
+    }
+    return false;
+}
 } // namespace magma

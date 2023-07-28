@@ -53,7 +53,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
     colorBlendState(renderstate::dontBlendRgba)
 {
     const VkDeviceSize vertexBufferSize = sizeof(Vertex) * maxVertexCount;
-    const bool barStagedMemory = fitBarMemoryHeap(vertexBufferSize);
+    const bool barStagedMemory = device->getDeviceFeatures()->hasLocalHostVisibleMemory();
     vertexBuffer = std::make_shared<DynamicVertexBuffer>(device, vertexBufferSize, barStagedMemory, allocator);
     setIdentity();
     if (!this->layout)
@@ -179,27 +179,6 @@ bool ImmediateRender::reset() noexcept
     primitives.clear();
     vertexCount = 0;
     return true;
-}
-
-bool ImmediateRender::fitBarMemoryHeap(VkDeviceSize size) const noexcept
-{
-    std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-    const VkPhysicalDeviceMemoryProperties memoryProperties = physicalDevice->getMemoryProperties();
-    for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
-    {
-        const VkMemoryType& memoryType = memoryProperties.memoryTypes[i];
-        const VkMemoryPropertyFlags barHeapFlags =
-            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
-            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-        if ((memoryType.propertyFlags & barHeapFlags) == barHeapFlags)
-        {
-            const VkMemoryHeap& barMemoryHeap = memoryProperties.memoryHeaps[memoryType.heapIndex];
-            if (barMemoryHeap.size >= size)
-                return true;
-        }
-    }
-    return false;
 }
 
 std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTopology topology, bool wideLineState, bool stippledLineState)

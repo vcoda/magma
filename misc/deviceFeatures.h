@@ -43,6 +43,7 @@ namespace magma
         bool separateDepthStencilLayoutsEnabled() const noexcept;
         bool extendedLinesEnabled() const noexcept;
         bool stippledLinesEnabled() const noexcept;
+        bool hasLocalHostVisibleMemory() const noexcept;
 
     private:
         DeviceFeatures(std::shared_ptr<const Device> device) noexcept;
