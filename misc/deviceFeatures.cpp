@@ -49,9 +49,10 @@ bool DeviceFeatures::maintenanceEnabled(uint8_t index) const noexcept
     MAGMA_ASSERT((index > 0) && (index < 10));
     if ((index < 1) || (index > 9) || parent.expired())
         return false;
-    const char extensionName[20] = {
+    const char extensionName[] = {
         'V','K','_','K','H','R','_','m','a','i','n','t','e','n','a','n','c','e',
-        char('0' + index), '\0'};
+        char('0' + index), '\0'
+    };
     std::shared_ptr<const Device> device = parent.lock();
     return device->extensionEnabled(extensionName);
 }
