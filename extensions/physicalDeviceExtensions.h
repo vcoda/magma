@@ -58,6 +58,9 @@ namespace magma
         const VkBool32 AMD_texture_gather_bias_lod : 1;
         const VkBool32 AMD_wave_limits : 1;
 
+        // AMD experimental extensions
+        const VkBool32 AMDX_shader_enqueue : 1;
+
         // ANDROID (Google LLC)
         const VkBool32 ANDROID_external_memory_android_hardware_buffer : 1;
         const VkBool32 ANDROID_native_buffer : 1;
@@ -341,7 +344,7 @@ namespace magma
         const VkBool32 NV_viewport_swizzle : 1;
         const VkBool32 NV_win32_keyed_mutex : 1;
 
-        // NVX (experimental) extensions
+        // NVIDIA experimental extensions
         const VkBool32 NVX_binary_import : 1;
         const VkBool32 NVX_device_generated_commands : 1;
         const VkBool32 NVX_display_timing : 1;
