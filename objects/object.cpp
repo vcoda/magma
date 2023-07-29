@@ -42,7 +42,7 @@ void Object::setPrivateData(uint64_t data)
 #endif // VK_EXT_private_data
     // Fallback if extension not present
     std::lock_guard<std::mutex> lock(mtx);
-    std::unordered_map<uint64_t, uint64_t> privateData = device->getPrivateDataMap();
+    std::unordered_map<uint64_t, uint64_t>& privateData = device->getPrivateDataMap();
     privateData[handle] = data;
 }
         
@@ -61,7 +61,7 @@ uint64_t Object::getPrivateData() const
 #endif // VK_EXT_private_data
     // Fallback if extension not present
     std::lock_guard<std::mutex> lock(mtx);
-    std::unordered_map<uint64_t, uint64_t> privateData = device->getPrivateDataMap();
+    std::unordered_map<uint64_t, uint64_t>& privateData = device->getPrivateDataMap();
     auto it = privateData.find(handle);
     if (it != privateData.end())
         return it->second;
