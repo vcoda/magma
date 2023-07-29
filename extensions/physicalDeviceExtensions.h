@@ -249,6 +249,7 @@ namespace magma
         const VkBool32 KHR_maintenance2 : 1;
         const VkBool32 KHR_maintenance3 : 1;
         const VkBool32 KHR_maintenance4 : 1;
+        const VkBool32 KHR_maintenance5 : 1;
         const VkBool32 KHR_map_memory2 : 1;
         const VkBool32 KHR_multiview : 1;
         const VkBool32 KHR_performance_query : 1;

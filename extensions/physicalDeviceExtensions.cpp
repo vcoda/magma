@@ -232,6 +232,7 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(KHR_maintenance2),
     MAGMA_CHECK_EXTENSION(KHR_maintenance3),
     MAGMA_CHECK_EXTENSION(KHR_maintenance4),
+    MAGMA_CHECK_EXTENSION(KHR_maintenance5),
     MAGMA_CHECK_EXTENSION(KHR_map_memory2),
     MAGMA_CHECK_EXTENSION(KHR_multiview),
     MAGMA_CHECK_EXTENSION(KHR_performance_query),
