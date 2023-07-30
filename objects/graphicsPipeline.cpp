@@ -156,7 +156,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     }
 }
 
-GraphicsPipeline::GraphicsPipeline(VkPipeline pipeline,
+GraphicsPipeline::GraphicsPipeline(VkPipeline handle_,
     std::shared_ptr<Device> device,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<Pipeline> basePipeline,
@@ -171,6 +171,6 @@ GraphicsPipeline::GraphicsPipeline(VkPipeline pipeline,
     #endif
         hash)
 {
-    handle = pipeline;
+    handle = handle_;
 }
 } // namespace magma

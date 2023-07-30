@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class RenderPass;
+    class PipelineShaderStage;
     class PipelineCache;
 
     class VertexInputState;
@@ -76,7 +77,7 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
 
     private:
-        explicit GraphicsPipeline(VkPipeline pipeline,
+        explicit GraphicsPipeline(VkPipeline handle,
             std::shared_ptr<Device> device,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
@@ -85,6 +86,6 @@ namespace magma
             VkPipelineCreationFeedbackEXT creationFeedback,
         #endif
             hash_t hash);
-        friend class GraphicsPipelines;
+        friend class GraphicsPipelineBatch;
     };
 } // namespace magma

@@ -122,36 +122,4 @@ std::string Pipeline::getShaderDisassembly(VkShaderStageFlagBits stage) const
     return std::string();
 }
 #endif // VK_AMD_shader_info
-
-void Pipelines::postCreateCleanup()
-{
-    stages.clear();
-#ifdef VK_EXT_pipeline_creation_feedback
-    creationFeedbackInfos.clear();
-#endif
-}
-
-void Pipelines::postBuildCleanup()
-{
-    layouts.clear();
-    basePipelines.clear();
-#ifdef VK_EXT_pipeline_creation_feedback
-    creationFeedbacks.clear();
-#endif
-    hashes.clear();
-}
-
-void Pipelines::gatherShaderStageInfos() const
-{
-    std::size_t stageCount = 0;
-    for (const auto& shaderStages : stages)
-        stageCount += shaderStages.size();
-    shaderStageInfos.clear();
-    shaderStageInfos.reserve(stageCount);
-    for (const auto& shaderStages : stages)
-    {   // Copy to array of Vulkan structures due to alignment
-        for (const auto& stage : shaderStages)
-            shaderStageInfos.push_back(stage);
-    }
-}
 } // namespace magma

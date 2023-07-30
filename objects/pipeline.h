@@ -74,35 +74,6 @@ namespace magma
     #endif
         hash_t hash;
     };
-
-    class PipelineShaderStage;
-
-    /* Vulkan has an ability to create multiple pipeline objects in a single call.
-       This is a base class for such implementation. */
-
-    class Pipelines : public core::IDestructible,
-        /* private */ core::NonCopyable
-    {
-    protected:
-        template<typename Type>
-        void fixup(std::vector<Type>& pipelineInfos) const;
-        void postCreateCleanup();
-        void postBuildCleanup();
-
-        std::list<std::vector<PipelineShaderStage>> stages;
-        std::list<std::shared_ptr<PipelineLayout>> layouts;
-        std::list<std::shared_ptr<Pipeline>> basePipelines;
-    #ifdef VK_EXT_pipeline_creation_feedback
-        std::list<VkPipelineCreationFeedbackEXT> creationFeedbacks;
-        std::list<VkPipelineCreationFeedbackCreateInfoEXT> creationFeedbackInfos;
-    #endif
-        std::list<hash_t> hashes;
-
-    private:
-        void gatherShaderStageInfos() const;
-
-        mutable std::vector<VkPipelineShaderStageCreateInfo> shaderStageInfos;
-    };
 } // namespace magma
 
 #include "pipeline.inl"

@@ -573,15 +573,6 @@
     <ClInclude Include="..\..\misc\compatibility.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\graphicsPipelines.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\computePipelines.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\rayTracingPipelines.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\objects\transformFeedbackBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -802,6 +793,18 @@
       <Filter>Header Files\objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\objects\privateDataSlot.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\objects\pipelineBatch.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\objects\graphicsPipelineBatch.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\objects\computePipelineBatch.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\objects\rayTracingPipelineBatch.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1124,15 +1127,6 @@
     <ClCompile Include="..\..\objects\imagelessFramebuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\objects\rayTracingPipelines.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\computePipelines.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\graphicsPipelines.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\objects\object.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
@@ -1245,6 +1239,18 @@
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\objects\physicalDeviceFeatures.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\pipelineBatch.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\graphicsPipelineBatch.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\computePipelineBatch.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\rayTracingPipelineBatch.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1457,6 +1463,9 @@
       <Filter>Header Files\auxiliary</Filter>
     </None>
     <None Include="..\..\objects\baseDeviceMemory.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\objects\pipelineBatch.inl">
       <Filter>Header Files\objects</Filter>
     </None>
   </ItemGroup>

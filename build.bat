@@ -120,7 +120,7 @@ objects\commandBuffer.cpp ^
 objects\commandBufferDebug.cpp ^
 objects\commandPool.cpp ^
 objects\computePipeline.cpp ^
-objects\computePipelines.cpp ^
+objects\computePipelineBatch.cpp ^
 objects\conditionalRenderingBuffer.cpp ^
 objects\debugReportCallback.cpp ^
 objects\debugUtilsMessenger.cpp ^
@@ -141,7 +141,7 @@ objects\fragmentShadingRateAttachment.cpp ^
 objects\framebuffer.cpp ^
 objects\fullScreenExclusiveSwapchain.cpp ^
 objects\graphicsPipeline.cpp ^
-objects\graphicsPipelines.cpp ^
+objects\graphicsPipelineBatch.cpp ^
 objects\image.cpp ^
 objects\image1D.cpp ^
 objects\image1DArray.cpp ^
@@ -171,7 +171,7 @@ objects\queryPool.cpp ^
 objects\queue.cpp ^
 objects\rayTracingBuffer.cpp ^
 objects\rayTracingPipeline.cpp ^
-objects\rayTracingPipelines.cpp ^
+objects\rayTracingPipelineBatch.cpp ^
 objects\renderPass.cpp ^
 objects\renderPassMultiview.cpp ^
 objects\resource.cpp ^
@@ -286,7 +286,7 @@ commandBuffer.obj ^
 commandBufferDebug.obj ^
 commandPool.obj ^
 computePipeline.obj ^
-computePipelines.obj ^
+computePipelineBatch.obj ^
 conditionalRenderingBuffer.obj ^
 debugReportCallback.obj ^
 debugUtilsMessenger.obj ^
@@ -307,7 +307,7 @@ fragmentShadingRateAttachment.obj ^
 framebuffer.obj ^
 fullScreenExclusiveSwapchain.obj ^
 graphicsPipeline.obj ^
-graphicsPipelines.obj ^
+graphicsPipelineBatch.obj ^
 image.obj ^
 image1D.obj ^
 image1DArray.obj ^
@@ -337,7 +337,7 @@ queryPool.obj ^
 queue.obj ^
 rayTracingBuffer.obj ^
 rayTracingPipeline.obj ^
-rayTracingPipelines.obj ^
+rayTracingPipelineBatch.obj ^
 renderPass.obj ^
 renderPassMultiview.obj ^
 resource.obj ^

@@ -262,7 +262,7 @@
     <ClInclude Include="..\..\objects\commandBuffer.h" />
     <ClInclude Include="..\..\objects\commandPool.h" />
     <ClInclude Include="..\..\objects\computePipeline.h" />
-    <ClInclude Include="..\..\objects\computePipelines.h" />
+    <ClInclude Include="..\..\objects\computePipelineBatch.h" />
     <ClInclude Include="..\..\objects\conditionalRenderingBuffer.h" />
     <ClInclude Include="..\..\objects\debugReportCallback.h" />
     <ClInclude Include="..\..\objects\debugUtilsMessenger.h" />
@@ -283,7 +283,7 @@
     <ClInclude Include="..\..\objects\fragmentShadingRateAttachment.h" />
     <ClInclude Include="..\..\objects\framebuffer.h" />
     <ClInclude Include="..\..\objects\graphicsPipeline.h" />
-    <ClInclude Include="..\..\objects\graphicsPipelines.h" />
+    <ClInclude Include="..\..\objects\graphicsPipelineBatch.h" />
     <ClInclude Include="..\..\objects\ideviceMemory.h" />
     <ClInclude Include="..\..\objects\image.h" />
     <ClInclude Include="..\..\objects\image1D.h" />
@@ -308,6 +308,7 @@
     <ClInclude Include="..\..\objects\physicalDevice.h" />
     <ClInclude Include="..\..\objects\physicalDeviceGroup.h" />
     <ClInclude Include="..\..\objects\pipeline.h" />
+    <ClInclude Include="..\..\objects\pipelineBatch.h" />
     <ClInclude Include="..\..\objects\pipelineCache.h" />
     <ClInclude Include="..\..\objects\pipelineLayout.h" />
     <ClInclude Include="..\..\objects\primaryCommandBuffer.h" />
@@ -316,7 +317,7 @@
     <ClInclude Include="..\..\objects\queue.h" />
     <ClInclude Include="..\..\objects\rayTracingBuffer.h" />
     <ClInclude Include="..\..\objects\rayTracingPipeline.h" />
-    <ClInclude Include="..\..\objects\rayTracingPipelines.h" />
+    <ClInclude Include="..\..\objects\rayTracingPipelineBatch.h" />
     <ClInclude Include="..\..\objects\renderPass.h" />
     <ClInclude Include="..\..\objects\renderPassMultiview.h" />
     <ClInclude Include="..\..\objects\resource.h" />
@@ -445,7 +446,7 @@
     <ClCompile Include="..\..\objects\commandBufferDebug.cpp" />
     <ClCompile Include="..\..\objects\commandPool.cpp" />
     <ClCompile Include="..\..\objects\computePipeline.cpp" />
-    <ClCompile Include="..\..\objects\computePipelines.cpp" />
+    <ClCompile Include="..\..\objects\computePipelineBatch.cpp" />
     <ClCompile Include="..\..\objects\conditionalRenderingBuffer.cpp" />
     <ClCompile Include="..\..\objects\debugReportCallback.cpp" />
     <ClCompile Include="..\..\objects\debugUtilsMessenger.cpp" />
@@ -465,7 +466,7 @@
     <ClCompile Include="..\..\objects\fragmentShadingRateAttachment.cpp" />
     <ClCompile Include="..\..\objects\framebuffer.cpp" />
     <ClCompile Include="..\..\objects\graphicsPipeline.cpp" />
-    <ClCompile Include="..\..\objects\graphicsPipelines.cpp" />
+    <ClCompile Include="..\..\objects\graphicsPipelineBatch.cpp" />
     <ClCompile Include="..\..\objects\image.cpp" />
     <ClCompile Include="..\..\objects\image1D.cpp" />
     <ClCompile Include="..\..\objects\image1DArray.cpp" />
@@ -488,6 +489,7 @@
     <ClCompile Include="..\..\objects\physicalDeviceGroup.cpp" />
     <ClCompile Include="..\..\objects\physicalDeviceFeatures.cpp" />
     <ClCompile Include="..\..\objects\pipeline.cpp" />
+    <ClCompile Include="..\..\objects\pipelineBatch.cpp" />
     <ClCompile Include="..\..\objects\pipelineCache.cpp" />
     <ClCompile Include="..\..\objects\pipelineLayout.cpp" />
     <ClCompile Include="..\..\objects\primaryCommandBuffer.cpp" />
@@ -496,7 +498,7 @@
     <ClCompile Include="..\..\objects\queue.cpp" />
     <ClCompile Include="..\..\objects\rayTracingBuffer.cpp" />
     <ClCompile Include="..\..\objects\rayTracingPipeline.cpp" />
-    <ClCompile Include="..\..\objects\rayTracingPipelines.cpp" />
+    <ClCompile Include="..\..\objects\rayTracingPipelineBatch.cpp" />
     <ClCompile Include="..\..\objects\renderPass.cpp" />
     <ClCompile Include="..\..\objects\renderPassMultiview.cpp" />
     <ClCompile Include="..\..\objects\resource.cpp" />
@@ -657,6 +659,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\objects\indirectBuffer.inl" />
     <None Include="..\..\objects\object.inl" />
     <None Include="..\..\objects\pipeline.inl" />
+    <None Include="..\..\objects\pipelineBatch.inl" />
     <None Include="..\..\objects\pipelineLayout.inl" />
     <None Include="..\..\objects\queryPool.inl" />
     <None Include="..\..\objects\resourcePool.inl" />

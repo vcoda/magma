@@ -69,7 +69,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device,
     hash = core::hashCombine(hash, this->layout->getHash());
 }
 
-ComputePipeline::ComputePipeline(VkPipeline pipeline,
+ComputePipeline::ComputePipeline(VkPipeline handle_,
     std::shared_ptr<Device> device,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<Pipeline> basePipeline,
@@ -84,6 +84,6 @@ ComputePipeline::ComputePipeline(VkPipeline pipeline,
     #endif
         hash)
 {
-    handle = pipeline;
+    handle = handle_;
 }
 } // namespace magma

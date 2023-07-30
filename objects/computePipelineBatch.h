@@ -16,35 +16,31 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "pipeline.h"
-#include "../shaders/pipelineShaderStage.h"
+#include "pipelineBatch.h"
 
 namespace magma
 {
+    class ComputePipeline;
     class PipelineCache;
 
-    class ComputePipeline : public Pipeline
+    /* Exposes Vulkan's ability to create multiple compute pipeline objects in a single call. */
+
+    class ComputePipelineBatch : public PipelineBatch
     {
     public:
-        explicit ComputePipeline(std::shared_ptr<Device> device,
-            const PipelineShaderStage& shaderStage,
+        explicit ComputePipelineBatch(std::size_t capacity = 32);
+        uint32_t batchPipeline(const PipelineShaderStage& shaderStage,
             std::shared_ptr<PipelineLayout> layout,
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            std::shared_ptr<PipelineCache> pipelineCache = nullptr,
             std::shared_ptr<ComputePipeline> basePipeline = nullptr,
-            VkPipelineCreateFlags flags = 0,
-            const StructureChain& extendedInfo = StructureChain());
+            VkPipelineCreateFlags flags = 0);
+        std::future<VkResult> buildPipelines(std::shared_ptr<Device> device,
+            std::shared_ptr<PipelineCache> pipelineCache,
+            std::shared_ptr<IAllocator> allocator = nullptr) noexcept override;
+        uint32_t getPipelineCount() const noexcept { return MAGMA_COUNT(computePipelines); }
+        std::shared_ptr<ComputePipeline> getPipeline(uint32_t index) const noexcept { return computePipelines[index]; }
 
     private:
-        explicit ComputePipeline(VkPipeline handle,
-            std::shared_ptr<Device> device,
-            std::shared_ptr<PipelineLayout> layout,
-            std::shared_ptr<Pipeline> basePipeline,
-            std::shared_ptr<IAllocator> allocator,
-        #ifdef VK_EXT_pipeline_creation_feedback
-            VkPipelineCreationFeedbackEXT creationFeedback,
-        #endif
-            hash_t hash);
-        friend class ComputePipelineBatch;
+        std::vector<VkComputePipelineCreateInfo> pipelineInfos;
+        std::vector<std::shared_ptr<ComputePipeline>> computePipelines;
     };
 } // namespace magma

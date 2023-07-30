@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class PipelineShaderStage;
     class PipelineCache;
 
     /* Raytracing pipelines consist of multiple shader stages,
@@ -57,10 +58,10 @@ namespace magma
             VkPipelineCreationFeedbackEXT creationFeedback,
         #endif
             hash_t hash);
-        friend class RayTracingPipelines;
 
         const uint32_t shaderGroupCount;
         const uint32_t maxRecursionDepth;
+        friend class RayTracingPipelineBatch;
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma

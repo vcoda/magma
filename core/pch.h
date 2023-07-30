@@ -33,6 +33,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <functional>
 #include <algorithm>
 #include <limits>
+#include <future>
 
 #include <atomic>
 #include <mutex>
