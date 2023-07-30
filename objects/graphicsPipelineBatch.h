@@ -37,7 +37,7 @@ namespace magma
        As there may be thousands of graphics pipelines in the complicated rendering engine,
        it may be more efficient for graphics driver to create them at once. */
 
-    class GraphicsPipelineBatch : public PipelineBatch
+    class GraphicsPipelineBatch : public PipelineBatch<GraphicsPipeline>
     {
     public:
         explicit GraphicsPipelineBatch(std::size_t capacity = 256);
@@ -59,8 +59,6 @@ namespace magma
         std::future<VkResult> buildPipelines(std::shared_ptr<Device> device,
             std::shared_ptr<PipelineCache> pipelineCache,
             std::shared_ptr<IAllocator> allocator = nullptr) noexcept override;
-        uint32_t getPipelineCount() const noexcept { return MAGMA_COUNT(graphicsPipelines); }
-        std::shared_ptr<GraphicsPipeline> getPipeline(uint32_t index) const noexcept { return graphicsPipelines[index]; }
 
     private:
         std::list<VertexInputState> vertexInputStates;
@@ -75,6 +73,5 @@ namespace magma
         std::list<VkPipelineDynamicStateCreateInfo> dynamicStateInfos;
         std::list<std::shared_ptr<RenderPass>> renderPasses;
         std::vector<VkGraphicsPipelineCreateInfo> pipelineInfos;
-        std::vector<std::shared_ptr<GraphicsPipeline>> graphicsPipelines;
     };
 } // namespace magma

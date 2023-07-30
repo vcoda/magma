@@ -31,6 +31,7 @@ namespace magma
     /* Vulkan has an ability to create multiple pipeline objects in a single API call.
        This is base class for objects that constructs Vulkan pipelines in a batch. */
 
+    template<class PipelineType>
     class PipelineBatch : public core::IDestructible,
         /* private */ core::NonCopyable
     {
@@ -38,13 +39,16 @@ namespace magma
         virtual std::future<VkResult> buildPipelines(std::shared_ptr<Device> device,
             std::shared_ptr<PipelineCache> pipelineCache,
             std::shared_ptr<IAllocator> allocator = nullptr) noexcept = 0;
+        uint32_t getPipelineCount() const noexcept { return MAGMA_COUNT(pipelines); }
+        std::shared_ptr<PipelineType> getPipeline(uint32_t index) const noexcept { return pipelines[index]; }
 
     protected:
-        template<class Type>
-        void fixup(std::vector<Type>& pipelineInfos) const;
+        template<class PipelineInfoType>
+        void fixup(std::vector<PipelineInfoType>& pipelineInfos) const noexcept;
         void postCreate();
         void postBuild();
 
+        std::vector<std::shared_ptr<PipelineType>> pipelines;
         std::list<std::vector<PipelineShaderStage>> stages;
         std::list<std::shared_ptr<PipelineLayout>> layouts;
         std::list<std::shared_ptr<Pipeline>> basePipelines;

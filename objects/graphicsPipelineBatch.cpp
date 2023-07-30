@@ -38,8 +38,8 @@ namespace magma
 {
 GraphicsPipelineBatch::GraphicsPipelineBatch(std::size_t capacity /* 256 */)
 {
+    pipelines.reserve(capacity);
     pipelineInfos.reserve(capacity);
-    graphicsPipelines.reserve(capacity);
 }
 
 uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderStage>& shaderStages,
@@ -152,9 +152,9 @@ std::future<VkResult> GraphicsPipelineBatch::buildPipelines(std::shared_ptr<Devi
         [this, device, pipelineCache, allocator]() -> VkResult
         {
             fixup(pipelineInfos);
-            std::vector<VkPipeline> pipelines(pipelineInfos.size(), VK_NULL_HANDLE);
+            std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
             const VkResult result = vkCreateGraphicsPipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache),
-                MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), pipelines.data());
+                MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
             // Free storage that had to be preserved until API call
             postCreate();
             vertexInputStates.clear();
@@ -171,17 +171,16 @@ std::future<VkResult> GraphicsPipelineBatch::buildPipelines(std::shared_ptr<Devi
             pipelineInfos.clear();
             if (VK_SUCCESS == result)
             {
-                auto handle = pipelines.cbegin();
+                auto handle = handles.cbegin();
                 auto layout = layouts.cbegin();
                 auto basePipeline = basePipelines.cbegin();
             #ifdef VK_EXT_pipeline_creation_feedback
                 auto creationFeedback = creationFeedbacks.cbegin();
             #endif
                 auto hash = hashes.cbegin();
-                graphicsPipelines.clear();
-                while (handle != pipelines.cend())
+                while (handle != handles.cend())
                 {
-                    graphicsPipelines.emplace_back(new GraphicsPipeline(
+                    pipelines.emplace_back(new GraphicsPipeline(
                         *handle++,
                         device,
                         *layout++,

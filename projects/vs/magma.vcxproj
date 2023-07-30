@@ -489,7 +489,6 @@
     <ClCompile Include="..\..\objects\physicalDeviceGroup.cpp" />
     <ClCompile Include="..\..\objects\physicalDeviceFeatures.cpp" />
     <ClCompile Include="..\..\objects\pipeline.cpp" />
-    <ClCompile Include="..\..\objects\pipelineBatch.cpp" />
     <ClCompile Include="..\..\objects\pipelineCache.cpp" />
     <ClCompile Include="..\..\objects\pipelineLayout.cpp" />
     <ClCompile Include="..\..\objects\primaryCommandBuffer.cpp" />

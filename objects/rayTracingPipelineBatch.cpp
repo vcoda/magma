@@ -31,8 +31,8 @@ namespace magma
 #ifdef VK_NV_ray_tracing
 RayTracingPipelineBatch::RayTracingPipelineBatch(std::size_t capacity /* 32 */)
 {
+    pipelines.reserve(capacity);
     pipelineInfos.reserve(capacity);
-    rayTracingPipelines.reserve(capacity);
 }
 
 uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShaderStage>& shaderStages,
@@ -94,15 +94,15 @@ std::future<VkResult> RayTracingPipelineBatch::buildPipelines(std::shared_ptr<De
         [this, pipelineCache, allocator]() -> VkResult
         {
             fixup(pipelineInfos);
-            std::vector<VkPipeline> pipelines(pipelineInfos.size(), VK_NULL_HANDLE);
+            std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
             MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
             const VkResult result = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),
-                MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), pipelines.data());
+                MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
             postCreate();
             groups.clear();
             if (VK_SUCCESS == result)
             {
-                auto handle = pipelines.cbegin();
+                auto handle = handles.cbegin();
                 auto layout = layouts.cbegin();
                 auto basePipeline = basePipelines.cbegin();
                 auto hash = hashes.cbegin();
@@ -110,10 +110,9 @@ std::future<VkResult> RayTracingPipelineBatch::buildPipelines(std::shared_ptr<De
                 auto creationFeedback = creationFeedbacks.cbegin();
             #endif
                 auto info = pipelineInfos.cbegin();
-                rayTracingPipelines.clear();
-                while (handle != pipelines.cend())
+                while (handle != handles.cend())
                 {
-                    rayTracingPipelines.emplace_back(new RayTracingPipeline(
+                    pipelines.emplace_back(new RayTracingPipeline(
                         *handle++,
                         device,
                         *layout++,

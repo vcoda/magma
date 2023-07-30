@@ -29,8 +29,8 @@ namespace magma
 {
 ComputePipelineBatch::ComputePipelineBatch(std::size_t capacity /* 32 */)
 {
+    pipelines.reserve(capacity);
     pipelineInfos.reserve(capacity);
-    computePipelines.reserve(capacity);
 }
 
 uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderStage, std::shared_ptr<PipelineLayout> layout,
@@ -80,24 +80,23 @@ std::future<VkResult> ComputePipelineBatch::buildPipelines(std::shared_ptr<Devic
     return std::async(std::launch::async,
         [this, device, pipelineCache, allocator]() -> VkResult
         {
-            std::vector<VkPipeline> pipelines(pipelineInfos.size(), VK_NULL_HANDLE);
+            std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
             const VkResult result = vkCreateComputePipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache),
-                MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), pipelines.data());
+                MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
             postCreate();
             pipelineInfos.clear();
             if (VK_SUCCESS == result)
             {
-                auto handle = pipelines.cbegin();
+                auto handle = handles.cbegin();
                 auto layout = layouts.cbegin();
                 auto basePipeline = basePipelines.cbegin();
             #ifdef VK_EXT_pipeline_creation_feedback
                 auto creationFeedback = creationFeedbacks.cbegin();
             #endif
                 auto hash = hashes.cbegin();
-                computePipelines.clear();
-                while (handle != pipelines.cend())
+                while (handle != handles.cend())
                 {
-                    computePipelines.emplace_back(new ComputePipeline(
+                    pipelines.emplace_back(new ComputePipeline(
                         *handle++,
                         device,
                         *layout++,

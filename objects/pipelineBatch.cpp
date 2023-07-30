@@ -18,39 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "pipelineBatch.h"
-#include "../shaders/pipelineShaderStage.h"
 
-namespace magma
-{
-void PipelineBatch::postCreate()
-{   // Free storage that had to be preserved until vkCreate*Pipelines() call
-    stages.clear();
-#ifdef VK_EXT_pipeline_creation_feedback
-    creationFeedbackInfos.clear();
-#endif
-}
 
-void PipelineBatch::postBuild()
-{   // Free storage that had to be preserved until objects are constructed
-    layouts.clear();
-    basePipelines.clear();
-#ifdef VK_EXT_pipeline_creation_feedback
-    creationFeedbacks.clear();
-#endif
-    hashes.clear();
-}
 
-void PipelineBatch::collectShaderStageInfos() const
-{
-    std::size_t stageCount = 0;
-    for (const auto& shaderStages: stages)
-        stageCount += shaderStages.size();
-    shaderStageInfos.clear();
-    shaderStageInfos.reserve(stageCount);
-    for (const auto& shaderStages: stages)
-    {   // Copy to array of Vulkan structures due to alignment
-        for (const auto& stage: shaderStages)
-            shaderStageInfos.push_back(stage);
-    }
-}
 } // namespace magma

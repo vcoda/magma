@@ -1241,9 +1241,6 @@
     <ClCompile Include="..\..\objects\physicalDeviceFeatures.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\objects\pipelineBatch.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\objects\graphicsPipelineBatch.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>

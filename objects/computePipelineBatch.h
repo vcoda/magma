@@ -25,7 +25,7 @@ namespace magma
 
     /* Exposes Vulkan's ability to create multiple compute pipeline objects in a single call. */
 
-    class ComputePipelineBatch : public PipelineBatch
+    class ComputePipelineBatch : public PipelineBatch<ComputePipeline>
     {
     public:
         explicit ComputePipelineBatch(std::size_t capacity = 32);
@@ -36,11 +36,8 @@ namespace magma
         std::future<VkResult> buildPipelines(std::shared_ptr<Device> device,
             std::shared_ptr<PipelineCache> pipelineCache,
             std::shared_ptr<IAllocator> allocator = nullptr) noexcept override;
-        uint32_t getPipelineCount() const noexcept { return MAGMA_COUNT(computePipelines); }
-        std::shared_ptr<ComputePipeline> getPipeline(uint32_t index) const noexcept { return computePipelines[index]; }
 
     private:
         std::vector<VkComputePipelineCreateInfo> pipelineInfos;
-        std::vector<std::shared_ptr<ComputePipeline>> computePipelines;
     };
 } // namespace magma

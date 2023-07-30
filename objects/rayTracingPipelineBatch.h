@@ -29,7 +29,7 @@ namespace magma
     class RayTracingPipeline;
     class PipelineCache;
 
-    class RayTracingPipelineBatch : public PipelineBatch
+    class RayTracingPipelineBatch : public PipelineBatch<RayTracingPipeline>
     {
     public:
         explicit RayTracingPipelineBatch(std::size_t capacity = 32);
@@ -42,14 +42,11 @@ namespace magma
         std::future<VkResult> buildPipelines(std::shared_ptr<Device> device,
             std::shared_ptr<PipelineCache> pipelineCache,
             std::shared_ptr<IAllocator> allocator = nullptr) noexcept override;
-        uint32_t getPipelineCount() const noexcept { return MAGMA_COUNT(rayTracingPipelines); }
-        std::shared_ptr<RayTracingPipeline> getPipeline(uint32_t index) const noexcept { return rayTracingPipelines[index]; }
 
     private:
         std::shared_ptr<Device> device;
         std::list<std::vector<RayTracingShaderGroup>> groups;
         std::vector<VkRayTracingPipelineCreateInfoNV> pipelineInfos;
-        std::vector<std::shared_ptr<RayTracingPipeline>> rayTracingPipelines;
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma
