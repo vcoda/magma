@@ -52,12 +52,12 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device,
     VkPipelineCreationFeedbackEXT stageCreationFeedback;
     if (getDevice()->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
     {
-        pipelineInfo.pNext = &pipelineCreationFeedbackInfo;
         pipelineCreationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
-        pipelineCreationFeedbackInfo.pNext = extendedInfo.chainNodes();
+        pipelineCreationFeedbackInfo.pNext = pipelineInfo.pNext;
         pipelineCreationFeedbackInfo.pPipelineCreationFeedback = &creationFeedback;
         pipelineCreationFeedbackInfo.pipelineStageCreationFeedbackCount = 1;
         pipelineCreationFeedbackInfo.pPipelineStageCreationFeedbacks = &stageCreationFeedback;
+        pipelineInfo.pNext = &pipelineCreationFeedbackInfo;
     }
 #endif // VK_EXT_pipeline_creation_feedback
     const VkResult result = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache), 1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
