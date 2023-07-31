@@ -31,17 +31,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_NV_ray_tracing
-RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
+RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_,
     const std::vector<PipelineShaderStage>& shaderStages,
     const std::vector<RayTracingShaderGroup>& shaderGroups,
     uint32_t maxRecursionDepth,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
-    std::shared_ptr<RayTracingPipeline> basePipeline /* nullptr */,
+    std::shared_ptr<RayTracingPipeline> basePipeline_ /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator)),
+    Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, std::move(device_), std::move(layout), std::move(basePipeline_), std::move(allocator)),
     shaderGroupCount(MAGMA_COUNT(shaderGroups)),
     maxRecursionDepth(maxRecursionDepth)
 {
@@ -53,7 +53,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
     pipelineInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_NV;
     pipelineInfo.pNext = extendedInfo.chainNodes();
     pipelineInfo.flags = flags;
-    if (this->basePipeline)
+    if (basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
     for (auto& stage : shaderStages)
@@ -64,12 +64,12 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device,
     pipelineInfo.pGroups = shaderGroups.data();
     pipelineInfo.maxRecursionDepth = maxRecursionDepth;
     pipelineInfo.layout = MAGMA_HANDLE(layout);
-    pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
+    pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipeline);
     pipelineInfo.basePipelineIndex = -1;
 #ifdef VK_EXT_pipeline_creation_feedback
     VkPipelineCreationFeedbackCreateInfoEXT pipelineCreationFeedbackInfo;
     MAGMA_STACK_ARRAY(VkPipelineCreationFeedbackEXT, stageCreationFeedbacks, shaderStages.size());
-    if (getDevice()->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
+    if (device->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
     {
         pipelineCreationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
         pipelineCreationFeedbackInfo.pNext = pipelineInfo.pNext;

@@ -27,30 +27,30 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ComputePipeline::ComputePipeline(std::shared_ptr<Device> device,
+ComputePipeline::ComputePipeline(std::shared_ptr<Device> device_,
     const PipelineShaderStage& shaderStage,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
-    std::shared_ptr<ComputePipeline> basePipeline /* nullptr */,
+    std::shared_ptr<ComputePipeline> basePipeline_ /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Pipeline(VK_PIPELINE_BIND_POINT_COMPUTE, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator))
+    Pipeline(VK_PIPELINE_BIND_POINT_COMPUTE, std::move(device_), std::move(layout), std::move(basePipeline_), std::move(allocator))
 {
     VkComputePipelineCreateInfo pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
     pipelineInfo.pNext = extendedInfo.chainNodes();
     pipelineInfo.flags = flags;
-    if (this->basePipeline)
+    if (basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     pipelineInfo.stage = shaderStage;
     pipelineInfo.layout = MAGMA_HANDLE(layout);
-    pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(this->basePipeline);
+    pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipeline);
     pipelineInfo.basePipelineIndex = -1;
 #ifdef VK_EXT_pipeline_creation_feedback
     VkPipelineCreationFeedbackCreateInfoEXT pipelineCreationFeedbackInfo;
     VkPipelineCreationFeedbackEXT stageCreationFeedback;
-    if (getDevice()->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
+    if (device->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
     {
         pipelineCreationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
         pipelineCreationFeedbackInfo.pNext = pipelineInfo.pNext;
