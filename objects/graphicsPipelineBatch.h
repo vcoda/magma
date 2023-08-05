@@ -40,7 +40,7 @@ namespace magma
     class GraphicsPipelineBatch : public PipelineBatch<GraphicsPipeline>
     {
     public:
-        explicit GraphicsPipelineBatch(std::size_t capacity = 256);
+        explicit GraphicsPipelineBatch(uint32_t capacity = 256);
         uint32_t batchPipeline(const std::vector<PipelineShaderStage>& shaderStages,
             const VertexInputState& vertexInputState,
             const InputAssemblyState& inputAssemblyState,

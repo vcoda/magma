@@ -30,7 +30,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_NV_ray_tracing
-RayTracingPipelineBatch::RayTracingPipelineBatch(std::size_t capacity /* 32 */)
+RayTracingPipelineBatch::RayTracingPipelineBatch(uint32_t capacity /* 32 */)
 {
     pipelines.reserve(capacity);
     pipelineInfos.reserve(capacity);

@@ -28,7 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ComputePipelineBatch::ComputePipelineBatch(std::size_t capacity /* 32 */)
+ComputePipelineBatch::ComputePipelineBatch(uint32_t capacity /* 32 */)
 {
     pipelines.reserve(capacity);
     pipelineInfos.reserve(capacity);

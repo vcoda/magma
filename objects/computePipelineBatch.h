@@ -28,7 +28,7 @@ namespace magma
     class ComputePipelineBatch : public PipelineBatch<ComputePipeline>
     {
     public:
-        explicit ComputePipelineBatch(std::size_t capacity = 32);
+        explicit ComputePipelineBatch(uint32_t capacity = 32);
         uint32_t batchPipeline(const PipelineShaderStage& shaderStage,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<ComputePipeline> basePipeline = nullptr,

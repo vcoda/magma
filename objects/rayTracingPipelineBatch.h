@@ -32,7 +32,7 @@ namespace magma
     class RayTracingPipelineBatch : public PipelineBatch<RayTracingPipeline>
     {
     public:
-        explicit RayTracingPipelineBatch(std::size_t capacity = 32);
+        explicit RayTracingPipelineBatch(uint32_t capacity = 32);
         uint32_t batchPipeline(const std::vector<PipelineShaderStage>& shaderStages,
             const std::vector<RayTracingShaderGroup>& shaderGroups,
             uint32_t maxRecursionDepth,
