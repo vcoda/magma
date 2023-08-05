@@ -23,7 +23,10 @@ namespace magma
     class ComputePipeline;
     class PipelineCache;
 
-    /* Exposes Vulkan's ability to create multiple compute pipeline objects in a single call. */
+    /* Exposes Vulkan's ability to create multiple compute pipelines
+       in a single API call. As there are may be hundreds of such pipelines
+       in the sophisticated computing program, it may be more efficient
+       for graphics driver to create all of them at once. */
 
     class ComputePipelineBatch : public PipelineBatch<ComputePipeline>
     {

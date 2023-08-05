@@ -28,8 +28,9 @@ namespace magma
     class PipelineShaderStage;
     class IAllocator;
 
-    /* Vulkan has an ability to create multiple pipeline objects in a single API call.
-       This is base class for objects that constructs Vulkan pipelines in a batch. */
+    /* Base class for batching pipeline construction. The preferred way
+       is to build pipelines asynchronously in a separate thread (which
+       might be a part of a thread pool) and wait for completion using std::future. */
 
     template<class PipelineType>
     class PipelineBatch : public core::IDestructible,

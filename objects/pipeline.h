@@ -25,10 +25,13 @@ namespace magma
     class PipelineExecutable;
     class IAllocator;
 
-    /* Some Vulkan commands specify geometric objects to be drawn or computational work to be performed,
-       while others specify state controlling how objects are handled by the various pipeline stages,
-       or control data transfer between memory organized as images and buffers. Commands are effectively sent
-       through a processing pipeline, either a graphics pipeline or a compute pipeline. */
+    /* Commands are effectively sent through a processing pipeline,
+       either a graphics pipeline, or a compute pipeline. Each pipeline
+       is controlled by a monolithic object created from a description
+       of all of the shader stages and any relevant fixed-function stages.
+       Linking the whole pipeline together allows the optimization
+       of shaders based on their input/outputs and eliminates expensive
+       draw time state validation. */
 
     class Pipeline : public NonDispatchable<VkPipeline>,
         public std::enable_shared_from_this<Pipeline>

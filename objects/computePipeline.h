@@ -23,6 +23,11 @@ namespace magma
 {
     class PipelineCache;
 
+    /* The compute pipeline is a separate pipeline from the
+       graphics pipeline, which operates on one-, two-, or
+       three-dimensional workgroups which can read from
+       and write to buffer and image memory. */
+
     class ComputePipeline : public Pipeline
     {
     public:
