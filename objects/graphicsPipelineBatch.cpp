@@ -147,7 +147,8 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     return MAGMA_COUNT(pipelineInfos) - 1;
 }
 
-void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
+void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<Device> device,
+    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
     fixup(pipelineInfos);

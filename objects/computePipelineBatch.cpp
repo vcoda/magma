@@ -76,7 +76,8 @@ uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderSt
     return MAGMA_COUNT(pipelineInfos) - 1;
 }
 
-void ComputePipelineBatch::buildPipelines(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
+void ComputePipelineBatch::buildPipelines(std::shared_ptr<Device> device,
+    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
     std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);

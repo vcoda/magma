@@ -37,7 +37,7 @@ namespace magma
     {
     public:
         virtual void buildPipelines(std::shared_ptr<Device> device,
-            std::shared_ptr<PipelineCache> pipelineCache,
+            std::shared_ptr<PipelineCache> pipelineCache = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr) = 0;
         std::future<void> buildPipelinesAsync(std::shared_ptr<Device> device,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,

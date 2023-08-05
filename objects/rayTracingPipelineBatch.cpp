@@ -88,7 +88,8 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
     return MAGMA_COUNT(pipelineInfos) - 1;
 }
 
-void RayTracingPipelineBatch::buildPipelines(std::shared_ptr<Device> device_, std::shared_ptr<PipelineCache> pipelineCache,
+void RayTracingPipelineBatch::buildPipelines(std::shared_ptr<Device> device_,
+    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
     device = std::move(device_);
