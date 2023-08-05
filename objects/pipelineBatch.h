@@ -39,9 +39,9 @@ namespace magma
         virtual void buildPipelines(std::shared_ptr<Device> device,
             std::shared_ptr<PipelineCache> pipelineCache,
             std::shared_ptr<IAllocator> allocator = nullptr) = 0;
-        virtual std::future<void> buildPipelinesAsync(std::shared_ptr<Device> device,
-            std::shared_ptr<PipelineCache> pipelineCache,
-            std::shared_ptr<IAllocator> allocator = nullptr) = 0;
+        std::future<void> buildPipelinesAsync(std::shared_ptr<Device> device,
+            std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+            std::shared_ptr<IAllocator> allocator = nullptr);
         uint32_t getPipelineCount() const noexcept { return MAGMA_COUNT(pipelines); }
         std::shared_ptr<PipelineType> getPipeline(uint32_t index) const noexcept { return pipelines[index]; }
 

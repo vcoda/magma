@@ -108,14 +108,4 @@ void ComputePipelineBatch::buildPipelines(std::shared_ptr<Device> device, std::s
     postBuild();
     MAGMA_THROW_FAILURE(result, "failed to create multiple compute pipelines");
 }
-
-std::future<void> ComputePipelineBatch::buildPipelinesAsync(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
-    std::shared_ptr<IAllocator> allocator /* nullptr */)
-{
-    return std::async(std::launch::async,
-        [this, &device, &pipelineCache, &allocator]()
-        {
-            buildPipelines(std::move(device), std::move(pipelineCache), std::move(allocator));
-        });
-}
 } // namespace magma

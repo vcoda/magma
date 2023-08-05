@@ -1,6 +1,18 @@
 namespace magma
 {
 template<class PipelineType>
+inline std::future<void> PipelineBatch<PipelineType>::buildPipelinesAsync(std::shared_ptr<Device> device,
+    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */)
+{
+    return std::async(std::launch::async,
+        [this, &device, &pipelineCache, &allocator]()
+        {
+            buildPipelines(std::move(device), std::move(pipelineCache), std::move(allocator));
+        });
+}
+
+template<class PipelineType>
 template<class PipelineInfoType>
 inline void PipelineBatch<PipelineType>::fixup(std::vector<PipelineInfoType>& pipelineInfos) const noexcept
 {

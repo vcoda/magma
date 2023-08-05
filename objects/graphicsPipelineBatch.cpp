@@ -194,14 +194,4 @@ void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<Device> device, std::
     postBuild();
     MAGMA_THROW_FAILURE(result, "failed to create multiple graphics pipelines");
 }
-
-std::future<void> GraphicsPipelineBatch::buildPipelinesAsync(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
-    std::shared_ptr<IAllocator> allocator /* nullptr */)
-{
-    return std::async(std::launch::async,
-        [this, &device, &pipelineCache, &allocator]()
-        {
-            buildPipelines(std::move(device), std::move(pipelineCache), std::move(allocator));
-        });
-}
 } // namespace magma

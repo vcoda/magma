@@ -130,15 +130,5 @@ void RayTracingPipelineBatch::buildPipelines(std::shared_ptr<Device> device_, st
     postBuild();
     MAGMA_THROW_FAILURE(result, "failed to create multiple ray tracing pipelines");
 }
-
-std::future<void> RayTracingPipelineBatch::buildPipelinesAsync(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
-    std::shared_ptr<IAllocator> allocator /* nullptr */)
-{
-    return std::async(std::launch::async,
-        [this, &device, &pipelineCache, &allocator]()
-        {
-            buildPipelines(std::move(device), std::move(pipelineCache), std::move(allocator));
-        });
-}
 #endif // VK_NV_ray_tracing
 } // namespace magma
