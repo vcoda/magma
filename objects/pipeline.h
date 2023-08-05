@@ -36,6 +36,7 @@ namespace magma
     public:
         ~Pipeline();
         VkPipelineBindPoint getBindPoint() const noexcept { return bindPoint; }
+        uint32_t getStageCount() const noexcept { return stageCount; }
         std::shared_ptr<PipelineLayout> getLayout() noexcept { return layout; }
         std::shared_ptr<const PipelineLayout> getLayout() const noexcept { return layout; }
         std::shared_ptr<Pipeline> getBasePipeline() noexcept { return basePipeline; }
@@ -53,25 +54,30 @@ namespace magma
         bool hitPipelineCache() const noexcept;
         bool usedBasePipeline() const noexcept;
         uint64_t getCreationDuration() const noexcept;
+        uint64_t getStageCreationDuration(uint32_t stageIndex) const noexcept;
     #endif // VK_EXT_pipeline_creation_feedback
 
     protected:
-        explicit Pipeline(VkPipelineBindPoint bindPoint,
+        Pipeline(VkPipelineBindPoint bindPoint,
             std::shared_ptr<Device> device,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator,
+            uint32_t stageCount,
         #ifdef VK_EXT_pipeline_creation_feedback
-            VkPipelineCreationFeedbackEXT creationFeedback = {0, 0ull},
+            VkPipelineCreationFeedbackEXT creationFeedback = {},
+            const std::vector<VkPipelineCreationFeedbackEXT>& stageCreationFeedbacks = {},
         #endif
             hash_t hash = 0ull);
 
         const VkPipelineBindPoint bindPoint;
+        const uint32_t stageCount;
         std::shared_ptr<PipelineLayout> layout;
         std::shared_ptr<Pipeline> basePipeline;
     #ifdef VK_EXT_pipeline_creation_feedback
         VkPipelineCreationFeedbackEXT creationFeedback;
-    #endif
+        std::vector<VkPipelineCreationFeedbackEXT> stageCreationFeedbacks;
+    #endif // VK_EXT_pipeline_creation_feedback
         hash_t hash;
     };
 } // namespace magma

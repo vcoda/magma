@@ -18,7 +18,6 @@ template<class PipelineType>
 inline void PipelineBatch<PipelineType>::postCreate()
 {   // Free storage that had to be preserved until vkCreate*Pipelines() call
     pipelines.clear();
-    stages.clear();
 #ifdef VK_EXT_pipeline_creation_feedback
     creationFeedbackInfos.clear();
 #endif
@@ -27,6 +26,7 @@ inline void PipelineBatch<PipelineType>::postCreate()
 template<class PipelineType>
 inline void PipelineBatch<PipelineType>::postBuild()
 {   // Free storage that had to be preserved until objects are constructed
+    stages.clear();
     layouts.clear();
     basePipelines.clear();
 #ifdef VK_EXT_pipeline_creation_feedback

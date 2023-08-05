@@ -37,7 +37,7 @@ uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderSt
     std::shared_ptr<ComputePipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */)
 {
-    stages.push_back(std::vector<PipelineShaderStage>{shaderStage});
+    stages.emplace_back(1, shaderStage);
     layouts.push_back(layout);
     basePipelines.push_back(basePipeline);
     VkComputePipelineCreateInfo pipelineInfo;
@@ -54,12 +54,13 @@ uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderSt
     if (layout->getDevice()->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
     {
         creationFeedbacks.push_back(VkPipelineCreationFeedbackEXT());
+        stageCreationFeedbacks.emplace_back(1);
         VkPipelineCreationFeedbackCreateInfoEXT creationFeedbackInfo;
         creationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
         creationFeedbackInfo.pNext = nullptr;
         creationFeedbackInfo.pPipelineCreationFeedback = &creationFeedbacks.back();
-        creationFeedbackInfo.pipelineStageCreationFeedbackCount = 0;
-        creationFeedbackInfo.pPipelineStageCreationFeedbacks = nullptr;
+        creationFeedbackInfo.pipelineStageCreationFeedbackCount = 1;
+        creationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks.back().data();
         creationFeedbackInfos.push_back(creationFeedbackInfo);
         pipelineInfo.pNext = &creationFeedbackInfos.back();
     }
@@ -92,19 +93,17 @@ std::future<VkResult> ComputePipelineBatch::buildPipelines(std::shared_ptr<Devic
                 auto basePipeline = basePipelines.cbegin();
             #ifdef VK_EXT_pipeline_creation_feedback
                 auto creationFeedback = creationFeedbacks.cbegin();
-            #endif
+                auto stageFeedbacks = stageCreationFeedbacks.cbegin();
+            #endif // VK_EXT_pipeline_creation_feedback
                 auto hash = hashes.cbegin();
                 while (handle != handles.cend())
                 {
                     pipelines.emplace_back(new ComputePipeline(
-                        *handle++,
-                        device,
-                        *layout++,
-                        *basePipeline++,
-                        allocator,
-                   #ifdef VK_EXT_pipeline_creation_feedback
+                        *handle++, device, *layout++, *basePipeline++, allocator,
+                    #ifdef VK_EXT_pipeline_creation_feedback
                         creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,
-                    #endif
+                        stageCreationFeedbacks.empty() ? std::vector<VkPipelineCreationFeedbackEXT>{} : *stageFeedbacks++,
+                    #endif // VK_EXT_pipeline_creation_feedback
                         *hash++));
                 }
             }

@@ -47,16 +47,18 @@ namespace magma
         void compileDeferred(uint32_t shaderIndex);
 
     private:
-        explicit RayTracingPipeline(VkPipeline pipeline,
+        RayTracingPipeline(VkPipeline pipeline,
             std::shared_ptr<Device> device,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator,
+            uint32_t stageCount,
             uint32_t shaderGroupCount,
             uint32_t maxRecursionDepth,
         #ifdef VK_EXT_pipeline_creation_feedback
             VkPipelineCreationFeedbackEXT creationFeedback,
-        #endif
+            const std::vector<VkPipelineCreationFeedbackEXT>& stageCreationFeedbacks,
+        #endif // VK_EXT_pipeline_creation_feedback
             hash_t hash);
 
         const uint32_t shaderGroupCount;

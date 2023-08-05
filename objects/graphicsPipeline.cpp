@@ -82,7 +82,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     std::shared_ptr<GraphicsPipeline> basePipeline_ /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device_), std::move(layout), std::move(basePipeline_), std::move(allocator))
+    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device_), std::move(layout), std::move(basePipeline_), std::move(allocator), MAGMA_COUNT(shaderStages))
 {
     MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
     for (auto& stage : shaderStages)
@@ -117,14 +117,14 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     pipelineDynamicStateInfo.pDynamicStates = dynamicStates.data();
 #ifdef VK_EXT_pipeline_creation_feedback
     VkPipelineCreationFeedbackCreateInfoEXT pipelineCreationFeedbackInfo;
-    MAGMA_STACK_ARRAY(VkPipelineCreationFeedbackEXT, stageCreationFeedbacks, shaderStages.size());
     if (device->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
     {
+        stageCreationFeedbacks.resize(pipelineInfo.stageCount);
         pipelineCreationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
         pipelineCreationFeedbackInfo.pNext = pipelineInfo.pNext;
         pipelineCreationFeedbackInfo.pPipelineCreationFeedback = &creationFeedback;
         pipelineCreationFeedbackInfo.pipelineStageCreationFeedbackCount = pipelineInfo.stageCount;
-        pipelineCreationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks;
+        pipelineCreationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks.data();
         pipelineInfo.pNext = &pipelineCreationFeedbackInfo;
     }
 #endif // VK_EXT_pipeline_creation_feedback
@@ -163,13 +163,16 @@ GraphicsPipeline::GraphicsPipeline(VkPipeline handle_,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<Pipeline> basePipeline,
     std::shared_ptr<IAllocator> allocator,
+    uint32_t stageCount,
 #ifdef VK_EXT_pipeline_creation_feedback
     VkPipelineCreationFeedbackEXT creationFeedback,
-#endif
+    const std::vector<VkPipelineCreationFeedbackEXT>& stageCreationFeedbacks,
+#endif // VK_EXT_pipeline_creation_feedback
     hash_t hash):
     Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator),
+        stageCount,
     #ifdef VK_EXT_pipeline_creation_feedback
-        creationFeedback,
+        creationFeedback, stageCreationFeedbacks,
     #endif
         hash)
 {

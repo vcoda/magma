@@ -54,6 +54,7 @@ namespace magma
         std::list<std::shared_ptr<Pipeline>> basePipelines;
     #ifdef VK_EXT_pipeline_creation_feedback
         std::list<VkPipelineCreationFeedbackEXT> creationFeedbacks;
+        std::list<std::vector<VkPipelineCreationFeedbackEXT>> stageCreationFeedbacks;
         std::list<VkPipelineCreationFeedbackCreateInfoEXT> creationFeedbackInfos;
     #endif // VK_EXT_pipeline_creation_feedback
         std::list<hash_t> hashes;

@@ -60,12 +60,13 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
     if (layout->getDevice()->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
     {
         creationFeedbacks.push_back(VkPipelineCreationFeedbackEXT());
+        stageCreationFeedbacks.emplace_back(pipelineInfo.stageCount);
         VkPipelineCreationFeedbackCreateInfoEXT creationFeedbackInfo;
         creationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
         creationFeedbackInfo.pNext = nullptr;
         creationFeedbackInfo.pPipelineCreationFeedback = &creationFeedbacks.back();
-        creationFeedbackInfo.pipelineStageCreationFeedbackCount = 0;
-        creationFeedbackInfo.pPipelineStageCreationFeedbacks = nullptr;
+        creationFeedbackInfo.pipelineStageCreationFeedbackCount = pipelineInfo.stageCount;
+        creationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks.back().data();
         creationFeedbackInfos.push_back(creationFeedbackInfo);
         pipelineInfo.pNext = &creationFeedbackInfos.back();
     }
@@ -105,23 +106,23 @@ std::future<VkResult> RayTracingPipelineBatch::buildPipelines(std::shared_ptr<De
                 auto handle = handles.cbegin();
                 auto layout = layouts.cbegin();
                 auto basePipeline = basePipelines.cbegin();
-                auto hash = hashes.cbegin();
+                auto info = pipelineInfos.cbegin();
+                auto shaderStages = stages.cbegin();
             #ifdef VK_EXT_pipeline_creation_feedback
                 auto creationFeedback = creationFeedbacks.cbegin();
-            #endif
-                auto info = pipelineInfos.cbegin();
+                auto stageFeedbacks = stageCreationFeedbacks.cbegin();
+            #endif // VK_EXT_pipeline_creation_feedback
+                auto hash = hashes.cbegin();
                 while (handle != handles.cend())
                 {
                     pipelines.emplace_back(new RayTracingPipeline(
-                        *handle++,
-                        device,
-                        *layout++,
-                        *basePipeline++,
-                        allocator,
+                        *handle++, device, *layout++, *basePipeline++, allocator,
                         info->groupCount, info->maxRecursionDepth,
-                   #ifdef VK_EXT_pipeline_creation_feedback
+                        MAGMA_COUNT(*shaderStages++),
+                    #ifdef VK_EXT_pipeline_creation_feedback
                         creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,
-                    #endif
+                        stageCreationFeedbacks.empty() ? std::vector<VkPipelineCreationFeedbackEXT>{} : *stageFeedbacks++,
+                    #endif // VK_EXT_pipeline_creation_feedback
                         *hash++));
                     ++info;
                 }

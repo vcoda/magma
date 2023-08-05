@@ -77,14 +77,16 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
 
     private:
-        explicit GraphicsPipeline(VkPipeline handle,
+        GraphicsPipeline(VkPipeline handle,
             std::shared_ptr<Device> device,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator,
+            uint32_t stageCount,
         #ifdef VK_EXT_pipeline_creation_feedback
             VkPipelineCreationFeedbackEXT creationFeedback,
-        #endif
+            const std::vector<VkPipelineCreationFeedbackEXT>& stageCreationFeedbacks,
+        #endif // VK_EXT_pipeline_creation_feedback
             hash_t hash);
         friend class GraphicsPipelineBatch;
     };
