@@ -39,9 +39,12 @@ namespace magma
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<RayTracingPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0);
-        std::future<VkResult> buildPipelines(std::shared_ptr<Device> device,
+        void buildPipelines(std::shared_ptr<Device> device,
             std::shared_ptr<PipelineCache> pipelineCache,
-            std::shared_ptr<IAllocator> allocator = nullptr) noexcept override;
+            std::shared_ptr<IAllocator> allocator = nullptr) override;
+        std::future<void> buildPipelinesAsync(std::shared_ptr<Device> device,
+            std::shared_ptr<PipelineCache> pipelineCache,
+            std::shared_ptr<IAllocator> allocator = nullptr) override;
 
     private:
         std::shared_ptr<Device> device;

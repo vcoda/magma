@@ -33,6 +33,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/depthStencilState.h"
 #include "../states/colorBlendState.h"
 #include "../allocator/allocator.h"
+#include "../exceptions/errorResult.h"
 
 namespace magma
 {
@@ -146,55 +147,61 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     return MAGMA_COUNT(pipelineInfos) - 1;
 }
 
-std::future<VkResult> GraphicsPipelineBatch::buildPipelines(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
-    std::shared_ptr<IAllocator> allocator /* nullptr */) noexcept
+void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
+    std::shared_ptr<IAllocator> allocator /* nullptr */)
+{
+    fixup(pipelineInfos);
+    std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
+    const VkResult result = vkCreateGraphicsPipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache),
+        MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
+    // Free storage that had to be preserved until API call
+    postCreate();
+    vertexInputStates.clear();
+    inputAssemblyStates.clear();
+    tesselationStates.clear();
+    viewportStates.clear();
+    rasterizationStates.clear();
+    multisampleStates.clear();
+    depthStencilStates.clear();
+    colorBlendStates.clear();
+    dynamicStates.clear();
+    dynamicStateInfos.clear();
+    renderPasses.clear();
+    pipelineInfos.clear();
+    if (VK_SUCCESS == result)
+    {
+        auto handle = handles.cbegin();
+        auto layout = layouts.cbegin();
+        auto basePipeline = basePipelines.cbegin();
+        auto shaderStages = stages.cbegin();
+    #ifdef VK_EXT_pipeline_creation_feedback
+        auto creationFeedback = creationFeedbacks.cbegin();
+        auto stageFeedbacks = stageCreationFeedbacks.cbegin();
+    #endif // VK_EXT_pipeline_creation_feedback
+        auto hash = hashes.cbegin();
+        while (handle != handles.cend())
+        {
+            pipelines.emplace_back(new GraphicsPipeline(
+                *handle++, device, *layout++, *basePipeline++, allocator,
+                MAGMA_COUNT(*shaderStages++),
+            #ifdef VK_EXT_pipeline_creation_feedback
+                creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,
+                stageCreationFeedbacks.empty() ? std::vector<VkPipelineCreationFeedbackEXT>{} : *stageFeedbacks++,
+            #endif // VK_EXT_pipeline_creation_feedback
+                *hash++));
+        }
+    }
+    postBuild();
+    MAGMA_THROW_FAILURE(result, "failed to create multiple graphics pipelines");
+}
+
+std::future<void> GraphicsPipelineBatch::buildPipelinesAsync(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
+    std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
     return std::async(std::launch::async,
-        [this, device, pipelineCache, allocator]() -> VkResult
+        [this, &device, &pipelineCache, &allocator]()
         {
-            fixup(pipelineInfos);
-            std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
-            const VkResult result = vkCreateGraphicsPipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache),
-                MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
-            // Free storage that had to be preserved until API call
-            postCreate();
-            vertexInputStates.clear();
-            inputAssemblyStates.clear();
-            tesselationStates.clear();
-            viewportStates.clear();
-            rasterizationStates.clear();
-            multisampleStates.clear();
-            depthStencilStates.clear();
-            colorBlendStates.clear();
-            dynamicStates.clear();
-            dynamicStateInfos.clear();
-            renderPasses.clear();
-            pipelineInfos.clear();
-            if (VK_SUCCESS == result)
-            {
-                auto handle = handles.cbegin();
-                auto layout = layouts.cbegin();
-                auto basePipeline = basePipelines.cbegin();
-                auto shaderStages = stages.cbegin();
-            #ifdef VK_EXT_pipeline_creation_feedback
-                auto creationFeedback = creationFeedbacks.cbegin();
-                auto stageFeedbacks = stageCreationFeedbacks.cbegin();
-            #endif // VK_EXT_pipeline_creation_feedback
-                auto hash = hashes.cbegin();
-                while (handle != handles.cend())
-                {
-                    pipelines.emplace_back(new GraphicsPipeline(
-                        *handle++, device, *layout++, *basePipeline++, allocator,
-                        MAGMA_COUNT(*shaderStages++),
-                    #ifdef VK_EXT_pipeline_creation_feedback
-                        creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,
-                        stageCreationFeedbacks.empty() ? std::vector<VkPipelineCreationFeedbackEXT>{} : *stageFeedbacks++,
-                    #endif // VK_EXT_pipeline_creation_feedback
-                        *hash++));
-                }
-            }
-            postBuild();
-            return result;
+            buildPipelines(std::move(device), std::move(pipelineCache), std::move(allocator));
         });
 }
 } // namespace magma

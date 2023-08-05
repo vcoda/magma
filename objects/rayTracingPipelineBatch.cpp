@@ -25,6 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../shaders/pipelineShaderStage.h"
 #include "../allocator/allocator.h"
 #include "../misc/extProcAddress.h"
+#include "../exceptions/errorResult.h"
 
 namespace magma
 {
@@ -87,49 +88,56 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
     return MAGMA_COUNT(pipelineInfos) - 1;
 }
 
-std::future<VkResult> RayTracingPipelineBatch::buildPipelines(std::shared_ptr<Device> device_, std::shared_ptr<PipelineCache> pipelineCache,
-    std::shared_ptr<IAllocator> allocator /* nullptr */) noexcept
+void RayTracingPipelineBatch::buildPipelines(std::shared_ptr<Device> device_, std::shared_ptr<PipelineCache> pipelineCache,
+    std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
     device = std::move(device_);
-    return std::async(std::launch::async,
-        [this, pipelineCache, allocator]() -> VkResult
+    fixup(pipelineInfos);
+    std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
+    const VkResult result = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),
+        MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
+    postCreate();
+    groups.clear();
+    if (VK_SUCCESS == result)
+    {
+        auto handle = handles.cbegin();
+        auto layout = layouts.cbegin();
+        auto basePipeline = basePipelines.cbegin();
+        auto info = pipelineInfos.cbegin();
+        auto shaderStages = stages.cbegin();
+    #ifdef VK_EXT_pipeline_creation_feedback
+        auto creationFeedback = creationFeedbacks.cbegin();
+        auto stageFeedbacks = stageCreationFeedbacks.cbegin();
+    #endif // VK_EXT_pipeline_creation_feedback
+        auto hash = hashes.cbegin();
+        while (handle != handles.cend())
         {
-            fixup(pipelineInfos);
-            std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
-            MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-            const VkResult result = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),
-                MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
-            postCreate();
-            groups.clear();
-            if (VK_SUCCESS == result)
-            {
-                auto handle = handles.cbegin();
-                auto layout = layouts.cbegin();
-                auto basePipeline = basePipelines.cbegin();
-                auto info = pipelineInfos.cbegin();
-                auto shaderStages = stages.cbegin();
+            pipelines.emplace_back(new RayTracingPipeline(
+                *handle++, device, *layout++, *basePipeline++, allocator,
+                info->groupCount, info->maxRecursionDepth,
+                MAGMA_COUNT(*shaderStages++),
             #ifdef VK_EXT_pipeline_creation_feedback
-                auto creationFeedback = creationFeedbacks.cbegin();
-                auto stageFeedbacks = stageCreationFeedbacks.cbegin();
+                creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,
+                stageCreationFeedbacks.empty() ? std::vector<VkPipelineCreationFeedbackEXT>{} : *stageFeedbacks++,
             #endif // VK_EXT_pipeline_creation_feedback
-                auto hash = hashes.cbegin();
-                while (handle != handles.cend())
-                {
-                    pipelines.emplace_back(new RayTracingPipeline(
-                        *handle++, device, *layout++, *basePipeline++, allocator,
-                        info->groupCount, info->maxRecursionDepth,
-                        MAGMA_COUNT(*shaderStages++),
-                    #ifdef VK_EXT_pipeline_creation_feedback
-                        creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,
-                        stageCreationFeedbacks.empty() ? std::vector<VkPipelineCreationFeedbackEXT>{} : *stageFeedbacks++,
-                    #endif // VK_EXT_pipeline_creation_feedback
-                        *hash++));
-                    ++info;
-                }
-            }
-            postBuild();
-            pipelineInfos.clear();
-            return result;
+                *hash++));
+            ++info;
+        }
+    }
+    postBuild();
+    pipelineInfos.clear();
+    postBuild();
+    MAGMA_THROW_FAILURE(result, "failed to create multiple ray tracing pipelines");
+}
+
+std::future<void> RayTracingPipelineBatch::buildPipelinesAsync(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
+    std::shared_ptr<IAllocator> allocator /* nullptr */)
+{
+    return std::async(std::launch::async,
+        [this, &device, &pipelineCache, &allocator]()
+        {
+            buildPipelines(std::move(device), std::move(pipelineCache), std::move(allocator));
         });
 }
 #endif // VK_NV_ray_tracing

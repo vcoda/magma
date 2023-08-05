@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "../shaders/pipelineShaderStage.h"
 #include "../allocator/allocator.h"
+#include "../exceptions/errorResult.h"
 
 namespace magma
 {
@@ -75,40 +76,46 @@ uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderSt
     return MAGMA_COUNT(pipelineInfos) - 1;
 }
 
-std::future<VkResult> ComputePipelineBatch::buildPipelines(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
-    std::shared_ptr<IAllocator> allocator /* nullptr */) noexcept
+void ComputePipelineBatch::buildPipelines(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
+    std::shared_ptr<IAllocator> allocator /* nullptr */)
+{
+    std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
+    const VkResult result = vkCreateComputePipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache),
+        MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
+    postCreate();
+    pipelineInfos.clear();
+    if (VK_SUCCESS == result)
+    {
+        auto handle = handles.cbegin();
+        auto layout = layouts.cbegin();
+        auto basePipeline = basePipelines.cbegin();
+    #ifdef VK_EXT_pipeline_creation_feedback
+        auto creationFeedback = creationFeedbacks.cbegin();
+        auto stageFeedbacks = stageCreationFeedbacks.cbegin();
+    #endif // VK_EXT_pipeline_creation_feedback
+        auto hash = hashes.cbegin();
+        while (handle != handles.cend())
+        {
+            pipelines.emplace_back(new ComputePipeline(
+                *handle++, device, *layout++, *basePipeline++, allocator,
+            #ifdef VK_EXT_pipeline_creation_feedback
+                creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,
+                stageCreationFeedbacks.empty() ? std::vector<VkPipelineCreationFeedbackEXT>{} : *stageFeedbacks++,
+            #endif // VK_EXT_pipeline_creation_feedback
+                *hash++));
+        }
+    }
+    postBuild();
+    MAGMA_THROW_FAILURE(result, "failed to create multiple compute pipelines");
+}
+
+std::future<void> ComputePipelineBatch::buildPipelinesAsync(std::shared_ptr<Device> device, std::shared_ptr<PipelineCache> pipelineCache,
+    std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
     return std::async(std::launch::async,
-        [this, device, pipelineCache, allocator]() -> VkResult
+        [this, &device, &pipelineCache, &allocator]()
         {
-            std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
-            const VkResult result = vkCreateComputePipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache),
-                MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
-            postCreate();
-            pipelineInfos.clear();
-            if (VK_SUCCESS == result)
-            {
-                auto handle = handles.cbegin();
-                auto layout = layouts.cbegin();
-                auto basePipeline = basePipelines.cbegin();
-            #ifdef VK_EXT_pipeline_creation_feedback
-                auto creationFeedback = creationFeedbacks.cbegin();
-                auto stageFeedbacks = stageCreationFeedbacks.cbegin();
-            #endif // VK_EXT_pipeline_creation_feedback
-                auto hash = hashes.cbegin();
-                while (handle != handles.cend())
-                {
-                    pipelines.emplace_back(new ComputePipeline(
-                        *handle++, device, *layout++, *basePipeline++, allocator,
-                    #ifdef VK_EXT_pipeline_creation_feedback
-                        creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,
-                        stageCreationFeedbacks.empty() ? std::vector<VkPipelineCreationFeedbackEXT>{} : *stageFeedbacks++,
-                    #endif // VK_EXT_pipeline_creation_feedback
-                        *hash++));
-                }
-            }
-            postBuild();
-            return result;
+            buildPipelines(std::move(device), std::move(pipelineCache), std::move(allocator));
         });
 }
 } // namespace magma

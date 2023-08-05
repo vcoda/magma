@@ -36,9 +36,12 @@ namespace magma
         /* private */ core::NonCopyable
     {
     public:
-        virtual std::future<VkResult> buildPipelines(std::shared_ptr<Device> device,
+        virtual void buildPipelines(std::shared_ptr<Device> device,
             std::shared_ptr<PipelineCache> pipelineCache,
-            std::shared_ptr<IAllocator> allocator = nullptr) noexcept = 0;
+            std::shared_ptr<IAllocator> allocator = nullptr) = 0;
+        virtual std::future<void> buildPipelinesAsync(std::shared_ptr<Device> device,
+            std::shared_ptr<PipelineCache> pipelineCache,
+            std::shared_ptr<IAllocator> allocator = nullptr) = 0;
         uint32_t getPipelineCount() const noexcept { return MAGMA_COUNT(pipelines); }
         std::shared_ptr<PipelineType> getPipeline(uint32_t index) const noexcept { return pipelines[index]; }
 
