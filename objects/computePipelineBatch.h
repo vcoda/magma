@@ -37,7 +37,7 @@ namespace magma
             std::shared_ptr<ComputePipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0);
         void buildPipelines(std::shared_ptr<Device> device,
-            std::shared_ptr<PipelineCache> pipelineCache,
+            std::shared_ptr<PipelineCache> pipelineCache = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr) override;
 
     private:
