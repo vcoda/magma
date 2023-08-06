@@ -20,7 +20,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Opaque handle to a private data slot object. */
+    /* Enables attaching arbitrary payloads to Vulkan objects.
+       It introduces the idea of private data slots as a means
+       of storing a 64-bit unsigned integer of application
+       defined data. Private data slots can be created or
+       destroyed any time an associated device is available.
+       Private data slots can be reserved at device creation time,
+       and limiting use to the amount reserved will allow the
+       extension to exhibit better performance characteristics. */
 
 #ifdef VK_EXT_private_data
     class PrivateDataSlot : public NonDispatchable<VkPrivateDataSlotEXT>
