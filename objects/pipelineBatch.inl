@@ -6,7 +6,7 @@ inline std::future<void> PipelineBatch<PipelineType>::buildPipelinesAsync(std::s
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
     return std::async(std::launch::async,
-        [this, &device, &pipelineCache, &allocator]()
+        [this, device, pipelineCache, allocator]()
         {
             buildPipelines(std::move(device), std::move(pipelineCache), std::move(allocator));
         });
