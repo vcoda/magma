@@ -40,7 +40,7 @@ namespace magma
             std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator,
             const StructureChain& extendedInfo = StructureChain());
         ~ManagedDeviceMemory();
-        std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return deviceAllocator; }
+        const std::shared_ptr<IDeviceMemoryAllocator>& getDeviceAllocator() const noexcept { return deviceAllocator; }
         DeviceMemoryBlock getAllocation() const noexcept { return allocation; }
         VkDeviceSize getSuballocationOffset() const noexcept override { return subOffset; }
         float getPriority() const noexcept override { return priority; }

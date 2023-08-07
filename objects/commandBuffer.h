@@ -489,8 +489,8 @@ namespace magma
             uint32_t color) noexcept;
 #endif // VK_EXT_debug_utils
 
-        std::shared_ptr<CommandPool> getCommandPool() const noexcept { return cmdPool; }
-        std::shared_ptr<Fence> getFence() const noexcept { return fence; }
+        const std::shared_ptr<CommandPool>& getCommandPool() const noexcept { return cmdPool; }
+        const std::shared_ptr<Fence>& getFence() const noexcept { return fence; }
         bool primary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_PRIMARY == level; }
         bool secondary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_SECONDARY == level; }
         State getState() const noexcept { return state; }

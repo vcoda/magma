@@ -44,7 +44,7 @@ namespace magma
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr);
         uint32_t getPipelineCount() const noexcept { return MAGMA_COUNT(pipelines); }
-        std::shared_ptr<PipelineType> getPipeline(uint32_t index) const noexcept { return pipelines[index]; }
+        const std::shared_ptr<PipelineType>& getPipeline(uint32_t index) const noexcept { return pipelines[index]; }
 
     protected:
         template<class PipelineInfoType>

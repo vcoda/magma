@@ -70,7 +70,7 @@ namespace magma
         #endif
             const StructureChain& extendedInfo = StructureChain());
         ~ShaderModule();
-        std::shared_ptr<const ShaderReflection> getReflection() const noexcept { return reflection; }
+        const std::shared_ptr<ShaderReflection>& getReflection() const noexcept { return reflection; }
         hash_t getHash() const noexcept;
 
     private:

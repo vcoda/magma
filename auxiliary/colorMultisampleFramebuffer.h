@@ -61,12 +61,9 @@ namespace magma
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY});
-            std::shared_ptr<ImageView> getColorView() noexcept { return resolveView; }
-            std::shared_ptr<const ImageView> getColorView() const noexcept { return resolveView; }
-            std::shared_ptr<ImageView> getMultisampleColorView() noexcept { return msaaColorView; }
-            std::shared_ptr<const ImageView> getMultisampleColorView() const noexcept { return msaaColorView; }
-            std::shared_ptr<ImageView> getMultisampleDepthStencilView() noexcept { return msaaDepthStencilView; }
-            std::shared_ptr<const ImageView> getMultisampleDepthStencilView() const noexcept { return msaaDepthStencilView; }
+            const std::shared_ptr<ImageView>& getColorView() const noexcept { return resolveView; }
+            const std::shared_ptr<ImageView>& getMultisampleColorView() const noexcept { return msaaColorView; }
+            const std::shared_ptr<ImageView>& getMultisampleDepthStencilView() const noexcept { return msaaDepthStencilView; }
             bool hasColorClear() const noexcept { return colorClearOp; }
 
         private:

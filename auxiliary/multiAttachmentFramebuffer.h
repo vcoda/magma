@@ -43,19 +43,15 @@ namespace magma
                 bool colorClearOp = true,
                 bool depthStencilClearOp = true, // Set to false in case of separate depth pass
                 const std::vector<VkComponentMapping>& swizzles = {});
-            std::shared_ptr<ImageView> getAttachmentView(uint32_t index) noexcept { return attachmentViews[index]; }
-            std::shared_ptr<const ImageView> getAttachmentView(uint32_t index) const noexcept { return attachmentViews[index]; }
-            std::shared_ptr<ImageView> getDepthStencilView() noexcept { return attachmentViews.back(); }
-            std::shared_ptr<const ImageView> getDepthStencilView() const noexcept { return attachmentViews.back(); }
-            std::shared_ptr<RenderPass> getDepthRenderPass() { return lazyDepthRenderPass(); }
-            std::shared_ptr<const RenderPass> getDepthRenderPass() const { return lazyDepthRenderPass(); }
-            std::shared_ptr<magma::Framebuffer> getDepthFramebuffer();
-            std::shared_ptr<const magma::Framebuffer> getDepthFramebuffer() const;
+            const std::shared_ptr<ImageView>& getAttachmentView(uint32_t index) const noexcept { return attachmentViews[index]; }
+            const std::shared_ptr<ImageView>& getDepthStencilView() const noexcept { return attachmentViews.back(); }
+            const std::shared_ptr<RenderPass>& getDepthRenderPass() const { return lazyDepthRenderPass(); }
+            const std::shared_ptr<magma::Framebuffer>& getDepthFramebuffer();
             bool hasColorClear() const noexcept { return colorClearOp; }
             bool hasDepthStencilClear() const noexcept { return depthStencilClearOp; }
 
         private:
-            std::shared_ptr<RenderPass> lazyDepthRenderPass() const;
+            const std::shared_ptr<RenderPass>& lazyDepthRenderPass() const;
 
             const bool colorClearOp;
             const bool depthStencilClearOp;

@@ -38,7 +38,7 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain()) const;
         uint32_t getGroupId() const { return groupId; }
         uint32_t getPhysicalDeviceCount() const { return MAGMA_COUNT(physicalDevices); }
-        std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId) const { return physicalDevices[deviceId]; }
+        const std::shared_ptr<PhysicalDevice>& getPhysicalDevice(uint32_t deviceId) const noexcept { return physicalDevices[deviceId]; }
 
     private:
         PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices,

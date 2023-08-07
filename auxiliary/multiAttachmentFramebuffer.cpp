@@ -91,19 +91,13 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     framebuffer = std::make_shared<magma::Framebuffer>(renderPass, attachmentViews, MAGMA_HOST_ALLOCATOR(allocator), 0);
 }
 
-std::shared_ptr<magma::Framebuffer> MultiAttachmentFramebuffer::getDepthFramebuffer()
+const std::shared_ptr<magma::Framebuffer>& MultiAttachmentFramebuffer::getDepthFramebuffer()
 {
     lazyDepthRenderPass();
     return depthFramebuffer;
 }
 
-std::shared_ptr<const magma::Framebuffer> MultiAttachmentFramebuffer::getDepthFramebuffer() const
-{
-    lazyDepthRenderPass();
-    return depthFramebuffer;
-}
-
-std::shared_ptr<RenderPass> MultiAttachmentFramebuffer::lazyDepthRenderPass() const
+const std::shared_ptr<RenderPass>& MultiAttachmentFramebuffer::lazyDepthRenderPass() const
 {
     if (!depthRenderPass && (depthStencilFormat != VK_FORMAT_UNDEFINED))
     {   // Lazy initialization of depth-only render pass

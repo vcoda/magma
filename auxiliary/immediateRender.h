@@ -54,7 +54,7 @@ namespace magma
                 std::shared_ptr<PipelineLayout> layout,
                 std::shared_ptr<PipelineCache> pipelineCache,
                 std::shared_ptr<Allocator> allocator = nullptr);
-            std::shared_ptr<Device> getDevice() const noexcept { return device; }
+            const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
             uint32_t getMaxVertexCount() const noexcept { return maxVertexCount; }
             uint32_t getVertexCount() const noexcept { return vertexCount; }
             uint32_t getPrimitiveCount() const noexcept { return MAGMA_COUNT(primitives); }

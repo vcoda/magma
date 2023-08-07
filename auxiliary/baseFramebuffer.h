@@ -42,10 +42,8 @@ namespace magma
             const VkExtent2D& getExtent() const noexcept;
             uint32_t getSampleCount() const noexcept { return sampleCount; }
             const MultisampleState& getMultisampleState() const noexcept;
-            std::shared_ptr<RenderPass> getRenderPass() noexcept { return renderPass; }
-            std::shared_ptr<const RenderPass> getRenderPass() const noexcept { return renderPass; }
-            std::shared_ptr<magma::Framebuffer> getFramebuffer() noexcept { return framebuffer; }
-            std::shared_ptr<const magma::Framebuffer> getFramebuffer() const noexcept { return framebuffer; }
+            const std::shared_ptr<RenderPass>& getRenderPass() const noexcept { return renderPass; }
+            const std::shared_ptr<magma::Framebuffer>& getFramebuffer() const noexcept { return framebuffer; }
 
         protected:
             explicit Framebuffer(VkFormat colorFormat,

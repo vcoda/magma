@@ -32,7 +32,7 @@ namespace magma
     class Display : public NonDispatchable<VkDisplayKHR>
     {
     public:
-        std::shared_ptr<const PhysicalDevice> getPhysicalDevice() const noexcept { return physicalDevice; }
+        const std::shared_ptr<const PhysicalDevice>& getPhysicalDevice() const noexcept { return physicalDevice; }
         uint32_t getPlaneIndex() const noexcept { return planeIndex; }
         std::vector<VkDisplayModePropertiesKHR> getModeProperties() const;
 

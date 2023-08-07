@@ -40,10 +40,8 @@ namespace magma
         ~Pipeline();
         VkPipelineBindPoint getBindPoint() const noexcept { return bindPoint; }
         uint32_t getStageCount() const noexcept { return stageCount; }
-        std::shared_ptr<PipelineLayout> getLayout() noexcept { return layout; }
-        std::shared_ptr<const PipelineLayout> getLayout() const noexcept { return layout; }
-        std::shared_ptr<Pipeline> getBasePipeline() noexcept { return basePipeline; }
-        std::shared_ptr<const Pipeline> getBasePipeline() const noexcept { return basePipeline; }
+        const std::shared_ptr<PipelineLayout>& getLayout() const noexcept { return layout; }
+        const std::shared_ptr<Pipeline>& getBasePipeline() const noexcept { return basePipeline; }
         hash_t getHash() const noexcept { return hash; }
     #ifdef VK_KHR_pipeline_executable_properties
         std::vector<std::shared_ptr<PipelineExecutable>> getExecutables() const;

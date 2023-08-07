@@ -41,8 +41,8 @@ namespace magma
                 std::shared_ptr<const ShaderReflection> reflection,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             ~ImageDescriptorSet();
-            std::shared_ptr<DescriptorSetLayout> getLayout() const noexcept { return descriptorSetLayout; }
-            std::shared_ptr<DescriptorSet> getSet() const noexcept { return descriptorSet; }
+            const std::shared_ptr<DescriptorSetLayout>& getLayout() const noexcept { return descriptorSetLayout; }
+            const std::shared_ptr<DescriptorSet>& getSet() const noexcept { return descriptorSet; }
             void writeDescriptor(std::shared_ptr<const ImageView> imageView,
                 std::shared_ptr<Sampler> sampler);
 

@@ -36,8 +36,7 @@ namespace magma
                 const VkFormat depthFormat,
                 const VkExtent2D& extent,
                 std::shared_ptr<Allocator> allocator = nullptr);
-            std::shared_ptr<ImageView> getDepthView() noexcept { return depthView; }
-            std::shared_ptr<const ImageView> getDepthView() const noexcept { return depthView; }
+            const std::shared_ptr<ImageView>& getDepthView() const noexcept { return depthView; }
 
         private:
             std::shared_ptr<Image2D> depth;

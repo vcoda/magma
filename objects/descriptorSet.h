@@ -46,10 +46,8 @@ namespace magma
             uint32_t setIndex = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~DescriptorSet();
-        std::shared_ptr<DescriptorPool> getPool() noexcept { return descriptorPool; }
-        std::shared_ptr<const DescriptorPool> getPool() const noexcept { return descriptorPool; }
-        std::shared_ptr<DescriptorSetLayout> getLayout() noexcept { return setLayout; }
-        std::shared_ptr<const DescriptorSetLayout> getLayout() const noexcept { return setLayout; }
+        const std::shared_ptr<DescriptorPool>& getPool() const noexcept { return descriptorPool; }
+        const std::shared_ptr<DescriptorSetLayout>& getLayout() const noexcept { return setLayout; }
         bool dirty() const;
         void update();
 

@@ -39,9 +39,8 @@ namespace magma
         VkDeviceSize getSize() const noexcept { return size; }
         VkDeviceSize getOffset() const noexcept { return offset; }
         const Sharing& getSharing() const noexcept { return sharing; }
-        std::shared_ptr<IDeviceMemory> getMemory() noexcept { return memory; }
-        std::shared_ptr<const IDeviceMemory> getMemory() const noexcept { return memory; }
-        std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return deviceAllocator; }
+        const std::shared_ptr<IDeviceMemory>& getMemory() const noexcept { return memory; }
+        const std::shared_ptr<IDeviceMemoryAllocator>& getDeviceAllocator() const noexcept { return deviceAllocator; }
         virtual void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) = 0;
     #ifdef VK_KHR_device_group

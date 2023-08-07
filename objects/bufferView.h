@@ -35,8 +35,7 @@ namespace magma
             VkDeviceSize range = VK_WHOLE_SIZE,
             const StructureChain& extendedInfo = StructureChain());
         ~BufferView();
-        std::shared_ptr<Buffer> getBuffer() noexcept { return buffer; }
-        std::shared_ptr<const Buffer> getBuffer() const noexcept { return buffer; }
+        const std::shared_ptr<Buffer>& getBuffer() const noexcept { return buffer; }
         VkFormat getFormat() const noexcept { return format; }
         VkDeviceSize getOffset() const noexcept { return offset; }
         VkDeviceSize getRange() const noexcept { return range; }

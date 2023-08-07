@@ -37,7 +37,7 @@ namespace magma
         public:
             explicit FillRectangleVertexShader(std::shared_ptr<Device> device,
                 std::shared_ptr<IAllocator> allocator = nullptr);
-            std::shared_ptr<ShaderModule> getShader() const noexcept { return shader; }
+            const std::shared_ptr<ShaderModule>& getShader() const noexcept { return shader; }
             const char *getEntryPointName() const noexcept;
             const RasterizationState& getRasterizationState() const noexcept;
 

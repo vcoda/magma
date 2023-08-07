@@ -42,7 +42,7 @@ namespace magma
             VkFramebufferCreateFlags = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~Framebuffer();
-        std::shared_ptr<const RenderPass> getRenderPass() const noexcept { return renderPass; }
+        const std::shared_ptr<const RenderPass>& getRenderPass() const noexcept { return renderPass; }
         const std::vector<std::shared_ptr<ImageView>>& getAttachments() const noexcept { return attachments; }
         const VkExtent2D& getExtent() const noexcept { return extent; }
         uint32_t getLayerCount() const noexcept { return layerCount; }

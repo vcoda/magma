@@ -27,7 +27,7 @@ namespace magma
 #ifdef VK_KHR_display
 Display::Display(std::shared_ptr<const PhysicalDevice> physicalDevice, VkDisplayKHR handle, uint32_t planeIndex) noexcept:
     NonDispatchable(VK_OBJECT_TYPE_DISPLAY_KHR, nullptr, nullptr),
-    instance(std::move(physicalDevice->getInstance())),
+    instance(physicalDevice->getInstance()),
     physicalDevice(std::move(physicalDevice)),
     planeIndex(planeIndex)
 {

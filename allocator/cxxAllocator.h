@@ -47,7 +47,7 @@ namespace magma
         void operator delete(void *, void *) {}
 
         static void overrideDefaultAllocator(std::shared_ptr<ICxxAllocator> allocator);
-        static std::shared_ptr<ICxxAllocator> getOverridenAllocator() noexcept;
+        static const std::shared_ptr<ICxxAllocator>& getOverridenAllocator() noexcept;
 
     private:
         static std::shared_ptr<ICxxAllocator> allocator;

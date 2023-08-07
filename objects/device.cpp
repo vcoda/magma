@@ -108,7 +108,7 @@ Device::~Device()
     vkDestroyDevice(handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-std::shared_ptr<DeviceFeatures> Device::getDeviceFeatures() const noexcept
+const std::shared_ptr<DeviceFeatures>& Device::getDeviceFeatures() const noexcept
 {
     if (!features)
         features = std::shared_ptr<DeviceFeatures>(new DeviceFeatures(shared_from_this()));

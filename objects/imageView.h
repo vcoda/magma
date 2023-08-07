@@ -56,8 +56,7 @@ namespace magma
             VkImageUsageFlags usage = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~ImageView();
-        std::shared_ptr<Image> getImage() noexcept { return image; }
-        std::shared_ptr<const Image> getImage() const noexcept { return image; }
+        const std::shared_ptr<Image>& getImage() const noexcept { return image; }
         VkImageViewCreateFlags getFlags() const noexcept { return flags; }
     #ifdef VK_KHR_maintenance2
         VkImageUsageFlags getUsage() const noexcept { return usage; }

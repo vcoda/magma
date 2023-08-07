@@ -38,8 +38,8 @@ namespace magma
             std::shared_ptr<IAllocator> hostAllocator) noexcept;
         virtual VkObjectType getObjectType() const noexcept = 0;
         virtual uint64_t getHandle() const noexcept = 0;
-        std::shared_ptr<Device> getDevice() const noexcept { return device; }
-        std::shared_ptr<IAllocator> getHostAllocator() const noexcept { return hostAllocator; }
+        const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
+        const std::shared_ptr<IAllocator>& getHostAllocator() const noexcept { return hostAllocator; }
         void setPrivateData(uint64_t data);
         uint64_t getPrivateData() const;
     #ifdef MAGMA_DEBUG

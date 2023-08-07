@@ -36,7 +36,7 @@ void CxxAllocator::overrideDefaultAllocator(std::shared_ptr<ICxxAllocator> alloc
     CxxAllocator::allocator = std::move(allocator);
 }
 
-std::shared_ptr<ICxxAllocator> CxxAllocator::getOverridenAllocator() noexcept
+const std::shared_ptr<ICxxAllocator>& CxxAllocator::getOverridenAllocator() noexcept
 {
     return allocator;
 }

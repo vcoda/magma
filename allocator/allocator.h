@@ -116,8 +116,8 @@ namespace magma
     class IDeviceMemoryAllocator : public core::IDestructible
     {
     public:
-        virtual std::shared_ptr<Device> getDevice() const noexcept = 0;
-        virtual std::shared_ptr<IAllocator> getHostAllocator() const noexcept = 0;
+        virtual const std::shared_ptr<Device>& getDevice() const noexcept = 0;
+        virtual const std::shared_ptr<IAllocator>& getHostAllocator() const noexcept = 0;
         virtual DeviceMemoryBlock allocate(VkObjectType objectType,
             NonDispatchableHandle object,
             const VkMemoryRequirements& memoryRequirements,
@@ -168,8 +168,8 @@ namespace magma
         explicit Allocator(std::shared_ptr<IAllocator> hostAllocator,
             std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator) noexcept:
             hostAllocator(std::move(hostAllocator)), deviceAllocator(std::move(deviceAllocator)) {}
-        std::shared_ptr<IAllocator> getHostAllocator() const noexcept { return hostAllocator; }
-        std::shared_ptr<IDeviceMemoryAllocator> getDeviceAllocator() const noexcept { return deviceAllocator; }
+        const std::shared_ptr<IAllocator>& getHostAllocator() const noexcept { return hostAllocator; }
+        const std::shared_ptr<IDeviceMemoryAllocator>& getDeviceAllocator() const noexcept { return deviceAllocator; }
 
     private:
         std::shared_ptr<IAllocator> hostAllocator;
