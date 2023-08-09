@@ -22,9 +22,10 @@ namespace magma
 {
     namespace packed
     {
-        /* Specifies a four-component, 16-bit packed unsigned normalized format that has
-           a 4-bit R component in bits 12..15, a 4-bit G component in bits 8..11,
-           a 4-bit B component in bits 4..7, and a 4-bit A component in bits 0..3. */
+        /* Specifies a four-component, 16-bit packed unsigned normalized
+           format that has a 4-bit R component in bits 12..15, a 4-bit
+           G component in bits 8..11, a 4-bit B component in bits 4..7,
+           and a 4-bit A component in bits 0..3. */
 
         struct R4g4b4a4Unorm
         {
@@ -50,9 +51,10 @@ namespace magma
             static constexpr auto format = VK_FORMAT_R4G4B4A4_UNORM_PACK16;
         };
 
-        /*  Specifies a four-component, 16-bit packed unsigned normalized format that has
-            a 4-bit B component in bits 12..15, a 4-bit G component in bits 8..11,
-            a 4-bit R component in bits 4..7, and a 4-bit A component in bits 0..3. */
+        /*  Specifies a four-component, 16-bit packed unsigned normalized
+            format that has a 4-bit B component in bits 12..15, a 4-bit
+            G component in bits 8..11, a 4-bit R component in bits 4..7,
+            and a 4-bit A component in bits 0..3. */
 
         struct B4g4r4a4Unorm
         {
@@ -78,9 +80,9 @@ namespace magma
             static constexpr auto format = VK_FORMAT_B4G4R4A4_UNORM_PACK16;
         };
 
-        /* Specifies a three-component, 16-bit packed unsigned normalized format that has
-           a 5-bit R component in bits 11..15, a 6-bit G component in bits 5..10,
-           and a 5-bit B component in bits 0..4. */
+        /* Specifies a three-component, 16-bit packed unsigned normalized
+           format that has a 5-bit R component in bits 11..15, a 6-bit
+           G component in bits 5..10, and a 5-bit B component in bits 0..4. */
 
         struct R5g6b5Unorm
         {
@@ -105,9 +107,9 @@ namespace magma
             static constexpr auto format = VK_FORMAT_R5G6B5_UNORM_PACK16;
         };
 
-        /* Specifies a three-component, 16-bit packed unsigned normalized format that has
-           a 5-bit B component in bits 11..15, a 6-bit G component in bits 5..10,
-           and a 5-bit R component in bits 0..4. */
+        /* Specifies a three-component, 16-bit packed unsigned normalized
+           format that has a 5-bit B component in bits 11..15, a 6-bit
+           G component in bits 5..10, and a 5-bit R component in bits 0..4. */
 
         struct B5g6r5Unorm
         {
@@ -132,9 +134,10 @@ namespace magma
             static constexpr auto format = VK_FORMAT_B5G6R5_UNORM_PACK16;
         };
 
-        /* Specifies a four-component, 16-bit packed unsigned normalized format that has
-           a 5-bit R component in bits 11..15, a 5-bit G component in bits 6..10,
-           a 5-bit B component in bits 1..5, and a 1-bit A component in bit 0. */
+        /* Specifies a four-component, 16-bit packed unsigned normalized
+           format that has a 5-bit R component in bits 11..15, a 5-bit
+           G component in bits 6..10, a 5-bit B component in bits 1..5,
+           and a 1-bit A component in bit 0. */
 
         struct R5g5b5a1Unorm
         {
@@ -160,9 +163,10 @@ namespace magma
             static constexpr auto format = VK_FORMAT_R5G5B5A1_UNORM_PACK16;
         };
 
-        /* Specifies a four-component, 16-bit packed unsigned normalized format that has
-           a 5-bit B component in bits 11..15, a 5-bit G component in bits 6..10,
-           a 5-bit R component in bits 1..5, and a 1-bit A component in bit 0. */
+        /* Specifies a four-component, 16-bit packed unsigned normalized
+           format that has a 5-bit B component in bits 11..15, a 5-bit
+           G component in bits 6..10, a 5-bit R component in bits 1..5,
+           and a 1-bit A component in bit 0. */
 
         struct B5g5r5a1Unorm
         {
@@ -188,9 +192,10 @@ namespace magma
             static constexpr auto format = VK_FORMAT_B5G5R5A1_UNORM_PACK16;
         };
 
-        /* Specifies a three-component, 32-bit packed unsigned floating-point format that has
-           a 5-bit shared exponent in bits 27..31, a 9-bit B component mantissa in bits 18..26,
-           a 9-bit G component mantissa in bits 9..17, and a 9-bit R component mantissa in bits 0..8.
+        /* Specifies a three-component, 32-bit packed unsigned floating-
+           point format that has a 5-bit shared exponent in bits 27..31,
+           a 9-bit B component mantissa in bits 18..26, a 9-bit G component
+           mantissa in bits 9..17, and a 9-bit R component mantissa in bits 0..8.
            https://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_texture_shared_exponent.txt */
 
         struct R9g9b9e5Ufloat

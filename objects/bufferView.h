@@ -22,9 +22,10 @@ namespace magma
 {
     class Buffer;
 
-    /* A buffer view represents a contiguous range of a buffer and a specific format
-       to be used to interpret the data. Buffer views are used to enable shaders
-       to access buffer contents interpreted as formatted data. */
+    /* A buffer view represents a contiguous range of a buffer
+       and a specific format to be used to interpret the data.
+       Buffer views are used to enable shaders to access buffer
+       contents interpreted as formatted data. */
 
     class BufferView : public NonDispatchable<VkBufferView>
     {

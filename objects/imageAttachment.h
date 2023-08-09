@@ -37,7 +37,8 @@ namespace magma
             const Sharing& sharing = Sharing());
     };
 
-    /* Image that can be used as depth/stencil attachment of the framebuffer. */
+    /* Image that can be used as depth and/or stencil attachment
+       of the framebuffer. */
 
     class DepthStencilAttachment : public Image2D
     {
@@ -53,8 +54,9 @@ namespace magma
             const Sharing& sharing = Sharing());
     };
 
-    /* Framebuffer attachment that is capable to both render to and sample/fetch from
-       the same subresource of an image in a given render pass. */
+    /* Framebuffer attachment that is capable to both render to
+       and sample/fetch from the same subresource of an image
+       in a given render pass. */
 
 #ifdef VK_EXT_attachment_feedback_loop_layout
     class FeedbackColorAttachment : public Image2D
@@ -84,7 +86,8 @@ namespace magma
     };
 #endif // VK_EXT_attachment_feedback_loop_layout
 
-    /* 3D image that comprises of a number of 2D slices which can be attached to the framebuffer. */
+    /* 3D image that comprises of a number of 2D slices which
+       can be attached to the framebuffer. */
 
 #ifdef VK_KHR_maintenance1
     class VolumeAttachment : public Image3D

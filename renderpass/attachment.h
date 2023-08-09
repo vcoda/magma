@@ -20,9 +20,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* An attachment description describes the properties of an attachment
-       including its format, sample count, and how its contents are treated
-       at the beginning and end of each render pass instance. */
+    /* An attachment description describes the properties
+       of an attachment including its format, sample count,
+       and how its contents are treated at the beginning
+       and end of each render pass instance. */
 
     struct AttachmentDescription : VkAttachmentDescription
     {

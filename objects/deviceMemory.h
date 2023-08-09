@@ -20,11 +20,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* The maximum number of valid memory allocations that can exist
-       simultaneously within a VkDevice may be restricted by implementation-
-       or platform-dependent limits. The maxMemoryAllocationCount feature
-       describes the number of allocations that can exist simultaneously
-       before encountering these internal limits. */
+    /* The maximum number of valid memory allocations that can
+       exist simultaneously within a VkDevice may be restricted
+       by implementation- or platform-dependent limits.
+       The maxMemoryAllocationCount feature describes the number
+       of allocations that can exist simultaneously before
+       encountering these internal limits. */
 
     class DeviceMemory : public BaseDeviceMemory
     {

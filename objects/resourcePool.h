@@ -25,9 +25,10 @@ namespace magma
     class NonDispatchable;
     class Device;
 
-    /* Resource pool stores pointers to different Vulkan objects that were created by device.
-       Pool allows to keep statistics about resource usage, memory allocations etc.
-       This may be used for application profiling, memory usage optimization and so on.
+    /* Resource pool stores pointers to different Vulkan objects
+       that were created by device. Pool allows to keep statistics
+       about resource usage, memory allocations etc. This may be used
+       for application profiling, memory usage optimization and so on.
        Each logical device has it's own resource pool. */
 
     class ResourcePool final : core::NonCopyable

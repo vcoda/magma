@@ -35,10 +35,12 @@ namespace magma
     class DeviceFeatures;
     class ResourcePool;
 
-    /* Device objects represent logical connections to physical devices.
-       Each device exposes a number of queue families each having one or more queues.
-       An application must create a separate logical device for each physical device it will use.
-       The created logical device is then the primary interface to the physical device. */
+    /* Device objects represent logical connections to physical
+       devices. Each device exposes a number of queue families
+       each having one or more queues. An application must create
+       a separate logical device for each physical device it will
+       use. The created logical device is then the primary interface
+       to the physical device. */
 
     class Device : public Dispatchable<VkDevice>,
         public std::enable_shared_from_this<Device>

@@ -26,12 +26,12 @@ namespace magma
     class IAllocator;
 
     /* Commands are effectively sent through a processing pipeline,
-       either a graphics pipeline, or a compute pipeline. Each pipeline
-       is controlled by a monolithic object created from a description
-       of all of the shader stages and any relevant fixed-function stages.
-       Linking the whole pipeline together allows the optimization
-       of shaders based on their input/outputs and eliminates expensive
-       draw time state validation. */
+       either a graphics pipeline, or a compute pipeline. Each
+       pipeline is controlled by a monolithic object created from
+       a description of all of the shader stages and any relevant
+       fixed-function stages. Linking the whole pipeline together
+       allows the optimization of shaders based on their input/outputs
+       and eliminates expensive draw time state validation. */
 
     class Pipeline : public NonDispatchable<VkPipeline>,
         public std::enable_shared_from_this<Pipeline>

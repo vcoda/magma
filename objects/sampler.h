@@ -59,9 +59,10 @@ namespace magma
             const BorderColor& borderColor = border::opaqueBlackFloat);
     };
 
-    /* Unnormalized sampler specifies the usage of unnormalized texel coordinates
-       to address texels of the image. The range of the image coordinates used to
-       lookup the texel is in the range of zero to the image dimensions for x, y and z. */
+    /* Unnormalized sampler specifies the usage of unnormalized
+       texel coordinates to address texels of the image.
+       The range of the image coordinates used to lookup the texel
+       is in the range of zero to the image dimensions for x, y and z. */
 
     class UnnormalizedSampler : public Sampler
     {

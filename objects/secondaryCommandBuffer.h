@@ -25,8 +25,11 @@ namespace magma
         class LinearPlacementPool;
     }
 
-    /* Secondary command buffer, which can be executed by primary command buffers,
-       and which is not directly submitted to the queue. */
+    /* Secondary command buffer can be recorded to a primary
+       command buffer via vkCmdExecuteCommands (and not directly
+       submitted to the queue). There is no inheritance of state
+       across primary and secondary command buffers, or between
+       secondary command buffers. */
 
     class SecondaryCommandBuffer : public CommandBuffer
     {

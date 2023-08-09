@@ -26,8 +26,9 @@ namespace magma
     class Device;
     class IAllocator;
 
-    /* Base non-copyable class for dispatchable and non-dispatchable objects.
-       Allows to give a user-friendly name and to attach arbitrary data to an object. */
+    /* Base non-copyable class for dispatchable and non-
+       dispatchable objects. Allows to give a user-friendly
+       name and to attach arbitrary data to an object. */
 
     class Object : public CxxAllocator,
         public core::IDestructible,

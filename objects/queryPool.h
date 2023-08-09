@@ -172,10 +172,10 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
     };
 
-    /* The mesh-primitives-generated count is incremented every time a primitive
-       emitted from the mesh shader stage reaches the fragment shader stage.
-       When a generated mesh primitives query begins, the mesh-primitives-generated
-       count starts from zero. */
+    /* The mesh-primitives-generated count is incremented every time
+       a primitive emitted from the mesh shader stage reaches the
+       fragment shader stage. When a generated mesh primitives query
+       begins, the mesh-primitives-generated count starts from zero. */
 
 #ifdef VK_EXT_mesh_shader
     class MeshPrimitivesQuery : public IntegerQueryPool
@@ -188,11 +188,14 @@ namespace magma
     };
 #endif // VK_EXT_mesh_shader
 
-    /* Transform feedback queries track the number of primitives attempted to be written and
-       actually written, by the vertex stream being captured, to a transform feedback buffer.
-       This query is updated during drawing commands while transform feedback is active.
-       The number of primitives actually written will be less than the number attempted to be written
-       if the bound transform feedback buffer size was too small for the number of primitives actually drawn. */
+    /* Transform feedback queries track the number of primitives
+       attempted to be written and actually written, by the vertex
+       stream being captured, to a transform feedback buffer.
+       This query is updated during drawing commands while transform
+       feedback is active. The number of primitives actually written
+       will be less than the number attempted to be written
+       if the bound transform feedback buffer size was too small
+       for the number of primitives actually drawn. */
 
 #ifdef VK_EXT_transform_feedback
     class TransformFeedbackQuery : public QueryPool
@@ -216,9 +219,9 @@ namespace magma
     };
 #endif // VK_EXT_transform_feedback
 
-    /* The acceleration structure object may be compacted
-       in order to improve performance. Before copying, an application
-       must query the size of the resulting acceleration structure. */
+    /* The acceleration structure object may be compacted in order
+       to improve performance. Before copying, an application must
+       query the size of the resulting acceleration structure. */
 
 #ifdef VK_NV_ray_tracing
     class AccelerationStructureCompactedSizeQuery : public IntegerQueryPool

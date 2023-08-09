@@ -22,8 +22,9 @@ namespace magma
 {
     class SrcTransferBuffer;
 
-    /* A storage buffer described in a shader as a structure with various members
-       that load, store, and atomic operations can be performed on. */
+    /* A storage buffer described in a shader as a structure with
+       various members that load, store, and atomic operations can
+       be performed on. */
 
     class StorageBuffer : public Buffer
     {
@@ -45,11 +46,13 @@ namespace magma
             CopyMemoryFunction copyFn = nullptr);
     };
 
-    /* Major GPU vendors expose a 256MiB-ish staging buffer with the
-       DEVICE_LOCAL | HOST_VISIBLE | HOST_COHERENT flags where the GPU and CPU
-       can both write into shared memory visible to each other. This 256MiB limit
-       correlates with the 256MiB PCIE-specified BAR-size limit that defines
-       the size of the 256MiB aperture/window of VRAM that the host can access. */
+    /* Major GPU vendors expose a 256MiB-ish staging buffer
+       with the DEVICE_LOCAL | HOST_VISIBLE | HOST_COHERENT
+       flags where the GPU and CPU can both write into shared
+       memory visible to each other. This 256MiB limit
+       correlates with the 256MiB PCIE-specified BAR-size limit
+       that defines the size of the 256MiB aperture/window of
+       VRAM that the host can access. */
 
     class DynamicStorageBuffer : public Buffer
     {

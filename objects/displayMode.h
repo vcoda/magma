@@ -24,7 +24,8 @@ namespace magma
     class PhysicalDevice;
     class Display;
 
-    /* Each display has one or more supported modes associated with it by default. */
+    /* Each display has one or more supported modes associated
+       with it by default. */
 
 #ifdef VK_KHR_display
     class DisplayMode : public NonDispatchable<VkDisplayModeKHR>

@@ -33,10 +33,11 @@ namespace magma
     struct ColorBlendState;
     class ViewportState;
 
-    /* Exposes Vulkan's ability to create multiple graphics pipelines
-       in a single API call. As there are may be thousands of such pipelines
-       in the sophisticated rendering program, it may be more efficient
-       for graphics driver to create all of them at once. */
+    /* With Vulkan it is possible to create multiple graphics
+       pipelines in a single API call. As there are may be
+       thousands of such pipelines in the sophisticated rendering
+       program, it may be more efficient for graphics driver
+       to create all of them at once. */
 
     class GraphicsPipelineBatch : public PipelineBatch<GraphicsPipeline>
     {

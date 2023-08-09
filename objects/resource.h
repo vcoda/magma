@@ -29,8 +29,8 @@ namespace magma
     class Queue;
 
     /* Vulkan supports two primary resource types: buffers and images.
-       Resources are views of memory with associated formatting and dimensionality.
-       Buffers and images are created with a sharing mode
+       Resources are views of memory with associated formatting and
+       dimensionality. Buffers and images are created with a sharing mode
        controlling how they can be accessed from queues. */
 
     class Resource : core::NonCopyable
@@ -63,8 +63,9 @@ namespace magma
         std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
     };
 
-    /* Non-dispatchable resource object (buffer, image, acceleration structure etc.)
-       that has template declaration to handle different resource types. */
+    /* Non-dispatchable resource object (buffer, image,
+       acceleration structure etc.) that has template
+       declaration to handle different resource types. */
 
     template<class Self, class Type>
     class NonDispatchableResource :

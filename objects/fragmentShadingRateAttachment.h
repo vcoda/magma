@@ -20,11 +20,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Adds the ability to change the rate at which fragments are shaded.
-       Rather than the usual single fragment invocation for each pixel covered
-       by a primitive, multiple pixels can be shaded by a single fragment shader invocation.
-       Each pixel in the framebuffer is assigned fragment shading rate
-       by the corresponding texel in the fragment shading rate attachment. */
+    /* Adds the ability to change the rate at which fragments
+       are shaded. Rather than the usual single fragment invocation
+       for each pixel covered by a primitive, multiple pixels
+       can be shaded by a single fragment shader invocation.
+       Each pixel in the framebuffer is assigned fragment shading
+       rate by the corresponding texel in the fragment shading
+       rate attachment. */
 
 #ifdef VK_KHR_fragment_shading_rate
     class FragmentShadingRateAttachment : public Image2D

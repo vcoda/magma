@@ -23,15 +23,19 @@ namespace magma
     class Device;
     class IAllocator;
 
-    /* Validation cache objects allow the result of internal validation to be reused,
-       both within a single application run and between multiple runs. Reuse within
-       a single run is achieved by passing the same validation cache object when creating
-       supported Vulkan objects. Reuse across runs of an application is achieved by
-       retrieving validation cache contents in one run of an application, saving the
-       contents, and using them to preinitialize a validation cache on a subsequent run.
-       The contents of the validation cache objects are managed by the validation layers.
-       Applications can manage the host memory consumed by a validation cache object and
-       control the amount of data retrieved from a validation cache object. */
+    /* Validation cache objects allow the result of internal
+       validation to be reused, both within a single application
+       run and between multiple runs. Reuse within a single run
+       is achieved by passing the same validation cache object
+       when creating supported Vulkan objects. Reuse across runs
+       of an application is achieved by retrieving validation cache
+       contents in one run of an application, saving the contents,
+       and using them to preinitialize a validation cache on a
+       subsequent run. The contents of the validation cache objects
+       are managed by the validation layers. Applications can
+       manage the host memory consumed by a validation cache object
+       and control the amount of data retrieved from a validation
+       cache object. */
 
 #ifdef VK_EXT_validation_cache
     class ValidationCache : public NonDispatchable<VkValidationCacheEXT>

@@ -26,7 +26,7 @@ namespace magma
        Each device memory allocator hides the implementation details under it. */
     typedef void *DeviceMemoryBlock;
 
-    /* Device memory managed by Vulkan Memory Allocator or similar system. */
+    /* Device memory managed by VMA or any other allocator. */
 
     class ManagedDeviceMemory : public BaseDeviceMemory
     {

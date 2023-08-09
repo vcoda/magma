@@ -22,8 +22,9 @@ namespace magma
 {
     struct SamplerYcbcrConversionState;
 
-    /* Provides the ability to perform specified color space conversions
-       during texture sampling operations for the YCbCr color space natively. */
+    /* Provides the ability to perform specified color space
+       conversions during texture sampling operations for the
+       YCbCr color space natively. */
 
 #ifdef VK_KHR_sampler_ycbcr_conversion
     class SamplerYcbcrConversion : public NonDispatchable<VkSamplerYcbcrConversionKHR>

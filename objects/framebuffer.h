@@ -23,10 +23,11 @@ namespace magma
     class RenderPass;
     class ImageView;
 
-    /* Framebuffers represent a collection of specific memory attachments
-       that a render pass instance uses. Render pass and a framebuffer define
-       the complete render target state for one or more subpasses as well as
-       the algorithmic dependencies between the subpasses.*/
+    /* Framebuffers represent a collection of specific memory
+       attachments that a render pass instance uses. Render pass
+       and a framebuffer define the complete render target state
+       for one or more subpasses as well as the algorithmic
+       dependencies between the subpasses.*/
 
     class Framebuffer : public NonDispatchable<VkFramebuffer>
     {

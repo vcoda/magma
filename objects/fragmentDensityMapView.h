@@ -22,19 +22,20 @@ namespace magma
 {
     /* By default, the fragment density map is locked by the host
        for reading between vkCmdBeginRenderPass during recording and
-       VK_PIPELINE_STAGE_FRAGMENT_DENSITY_PROCESS_BIT_EXT during draw execution.
-       This can introduce large latency for certain use cases between recording
-       the frame and displaying the frame. Apps may wish to modify
-       the fragment density map just before draw execution.
+       VK_PIPELINE_STAGE_FRAGMENT_DENSITY_PROCESS_BIT_EXT during draw
+       execution. This can introduce large latency for certain use
+       cases between recording the frame and displaying the frame.
+       Apps may wish to modify the fragment density map just before
+       draw execution.
 
-       If VK_IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DYNAMIC_BIT_EXT is used,
-       then the application can modify the image until the device reads it
-       during VK_PIPELINE_STAGE_FRAGMENT_DENSITY_PROCESS_BIT_EXT.
+       If VK_IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DYNAMIC_BIT_EXT
+       is used, then the application can modify the image until the
+       device reads it during VK_PIPELINE_STAGE_FRAGMENT_DENSITY_PROCESS_BIT_EXT.
 
-       VK_IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DEFERRED_BIT_EXT is intended
-       to help address this for implementations that do not support the
-       fragmentDensityMapDynamic feature by deferring the start of the
-       locked range to vkEndCommandBuffer. */
+       VK_IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DEFERRED_BIT_EXT is
+       intended to help address this for implementations that do not
+       support the fragmentDensityMapDynamic feature by deferring
+       the start of the locked range to vkEndCommandBuffer. */
 
 #ifdef VK_EXT_fragment_density_map
     class FragmentDensityMap;

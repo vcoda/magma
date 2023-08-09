@@ -60,8 +60,20 @@ namespace magma
     struct BufferMemoryBarrier;
     class ImageMemoryBarrier;
 
-    /* Command buffers are objects used to record commands which can be subsequently
-       submitted to a device queue for execution. */
+    /* Command buffers are objects used to record commands which
+       can be subsequently submitted to a device queue for execution.
+       Recorded commands include the following:
+
+        * Bind pipelines and descriptor sets to the command buffer.
+        * Modify dynamic state.
+        * Draw (for graphics rendering), dispatch (for compute).
+        * Execute secondary command buffers (for primary command buffers only).
+        * Copy buffers and images.
+
+       Unless otherwise specified, and without explicit synchronization,
+       the various commands submitted to a queue via command buffers
+       may execute in arbitrary order relative to each other, and/or
+       concurrently. */
 
     class CommandBuffer : public Dispatchable<VkCommandBuffer>
     {
@@ -580,6 +592,9 @@ namespace magma
         VkQueryControlFlags queryFlags;
         VkQueryPipelineStatisticFlags pipelineStatistics;
     };
+
+    /* See 6.1. Command Buffer Lifecycle
+       Each command buffer is always in one of the following states: */
 
     enum class CommandBuffer::State : uint32_t
     {

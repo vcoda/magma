@@ -22,7 +22,8 @@ namespace magma
 {
     class SrcTransferBuffer;
 
-    /* Uniform texel buffer that is accessed from the shader stage through buffer view. */
+    /* Uniform texel buffer that is accessed from the shader
+       stage through buffer view. */
 
     class UniformTexelBuffer : public Buffer
     {

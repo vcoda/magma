@@ -21,9 +21,10 @@ namespace magma
 {
     namespace packed
     {
-        /* Specifies a four-component, 32-bit packed unsigned normalized format that has
-           a 2-bit W component in bits 30..31, a 10-bit Z component in bits 20..29,
-           a 10-bit Y component in bits 10..19, and a 10-bit X component in bits 0..9. */
+        /* Specifies a four-component, 32-bit packed unsigned normalized
+           format that has a 2-bit W component in bits 30..31, a 10-bit
+           Z component in bits 20..29, a 10-bit Y component in bits 10..19,
+           and a 10-bit X component in bits 0..9. */
 
         struct X10y10z10w2Unorm
         {
@@ -48,9 +49,10 @@ namespace magma
             static constexpr auto format = VK_FORMAT_A2B10G10R10_UNORM_PACK32;
         };
 
-        /* Specifies a four-component, 32-bit packed signed normalized format that has
-           a 2-bit W component in bits 30..31, a 10-bit Z component in bits 20..29,
-           a 10-bit Y component in bits 10..19, and a 10-bit X component in bits 0..9. */
+        /* Specifies a four-component, 32-bit packed signed normalized
+           format that has a 2-bit W component in bits 30..31, a 10-bit
+           Z component in bits 20..29, a 10-bit Y component in bits 10..19,
+           and a 10-bit X component in bits 0..9. */
 
         struct X10y10z10w2Snorm
         {
@@ -75,11 +77,14 @@ namespace magma
             static constexpr auto format = VK_FORMAT_A2B10G10R10_SNORM_PACK32;
         };
 
-        /* Specifies a three-component, 32-bit packed unsigned floating-point format that has
-           a 10-bit Z component in bits 22..31, an 11-bit Y component in bits 11..21, an 11-bit X component in bits 0..10.
-           An unsigned 11-bit floating-point number has no sign bit, a 5-bit exponent, and a 6-bit mantissa.
-           An unsigned 10-bit floating-point number has no sign bit, a 5-bit exponent, and a 5-bit mantissa.
-           Unsigned 10- and 11-bit floating point numbers are defined here:
+        /* Specifies a three-component, 32-bit packed unsigned floating-
+           point format that has a 10-bit Z component in bits 22..31,
+           an 11-bit Y component in bits 11..21, an 11-bit X component
+           in bits 0..10. An unsigned 11-bit floating-point number has
+           no sign bit, a 5-bit exponent, and a 6-bit mantissa. An unsigned
+           10-bit floating-point number has no sign bit, a 5-bit exponent,
+           and a 5-bit mantissa. Unsigned 10- and 11-bit floating-point
+           numbers are defined here:
            https://www.khronos.org/registry/DataFormat/specs/1.3/dataformat.1.3.html#11bitfp
            https://www.khronos.org/registry/DataFormat/specs/1.3/dataformat.1.3.html#10bitfp */
 

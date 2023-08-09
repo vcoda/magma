@@ -22,9 +22,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Non-dispatchable handle types are a 64-bit integer type whose meaning is
-       implementation-dependent, and may encode object information directly
-       in the handle rather than acting as a reference to an underlying object. */
+    /* Non-dispatchable handle types are a 64-bit integer type
+       whose meaning is implementation-dependent, and may encode
+       object information directly in the handle rather than acting
+       as a reference to an underlying object. */
 
     template<class Type>
     class NonDispatchable : public TObject<Type>,

@@ -47,7 +47,8 @@ namespace magma
 #ifdef VK_NV_ray_tracing
     typedef VkTransformMatrixNV TransformMatrix;
 
-    /* Single acceleration structure instance for building into an acceleration structure geometry. */
+    /* Single acceleration structure instance for building
+       into an acceleration structure geometry. */
 
     class AccelerationStructureInstance : public VkAccelerationStructureInstanceNV
     {
@@ -71,8 +72,8 @@ namespace magma
         void setFlag(VkGeometryInstanceFlagBitsKHR bit, bool set) noexcept { if (set) flags |= bit; else flags &= ~bit; }
     };
 
-    /* Buffer containing an array of VkAccelerationStructureInstanceKHR structures
-       defining acceleration structures. */
+    /* Buffer containing an array of VkAccelerationStructureInstanceKHR
+       structures defining acceleration structures. */
 
     class AccelerationStructureInstanceBuffer : public RayTracingBuffer
     {

@@ -19,8 +19,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Load/store ops specifies how contents of an attachment are treated
-       at the beginning and at the end of a subpass. */
+    /* Load/store ops specifies how contents of an attachment
+       are treated at the beginning and at the end of a subpass. */
 
     struct LoadStoreOp
     {
@@ -38,10 +38,11 @@ namespace magma
         constexpr LoadStoreOp clearStore{VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE};
         constexpr LoadStoreOp dontCare{VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE};
 
-        /* Renderpass attachments can be read-only for the duration of a render pass.
-           Examples include input attachments and depth attachments where depth tests are
-           enabled but depth writes are not enabled. In such cases, there can be no contents
-           generated for an attachment within the render area. */
+        /* Renderpass attachments can be read-only for the duration
+           of a render pass. Examples include input attachments and
+           depth attachments where depth tests are enabled but depth
+           writes are not enabled. In such cases, there can be no
+           contents generated for an attachment within the render area. */
 
     #ifdef VK_QCOM_render_pass_store_ops
         constexpr LoadStoreOp loadNone{VK_ATTACHMENT_LOAD_OP_LOAD, VK_ATTACHMENT_STORE_OP_NONE_QCOM};
@@ -49,9 +50,10 @@ namespace magma
         constexpr LoadStoreOp dontCareNone{VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_NONE_QCOM};
     #endif
 
-        /* Useful as an alternative to preserve attachments in applications
-           that cannot decide if an attachment will be used in a render pass
-           until after the necessary pipelines have been created. */
+        /* Useful as an alternative to preserve attachments in
+           applications that cannot decide if an attachment will be
+           used in a render pass until after the necessary pipelines
+           have been created. */
 
     #ifdef VK_EXT_load_store_op_none
         constexpr LoadStoreOp none{VK_ATTACHMENT_LOAD_OP_NONE_EXT, VK_ATTACHMENT_STORE_OP_NONE_EXT};

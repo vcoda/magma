@@ -22,7 +22,8 @@ namespace magma
 {
     class MutableImage;
 
-    /* Mutable image view allows to create a view with a different format from the image. */
+    /* Mutable image view allows to create a view with
+       a different format from the image. */
 
     class MutableImageView : public ImageView
     {

@@ -24,9 +24,11 @@ namespace magma
     class DescriptorSet;
     class DescriptorSetLayout;
 
-    /* A descriptor pool maintains a pool of descriptors, from which descriptor sets are allocated.
-       Descriptor pools are externally synchronized, meaning that the application must not allocate
-       and/or free descriptor sets from the same pool in multiple threads simultaneously. */
+    /* A descriptor pool maintains a pool of descriptors, from
+       which descriptor sets are allocated. Descriptor pools
+       are externally synchronized, meaning that the application
+       must not allocate and/or free descriptor sets from
+       the same pool in multiple threads simultaneously. */
 
     class DescriptorPool : public NonDispatchable<VkDescriptorPool>,
         public std::enable_shared_from_this<DescriptorPool>

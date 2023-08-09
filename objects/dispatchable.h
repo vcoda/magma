@@ -22,9 +22,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     /* Dispatchable handle types are a pointer to an opaque type.
-       This pointer may be used by layers as part of intercepting API commands,
-       and thus each API command takes a dispatchable type as its first parameter.
-       Each object of a dispatchable type must have a unique handle value during its lifetime. */
+       This pointer may be used by layers as part of intercepting
+       API commands, and thus each API command takes a dispatchable
+       type as its first parameter. Each object of a dispatchable
+       type must have a unique handle value during its lifetime. */
 
     template<class Type>
     class Dispatchable : public TObject<Type>

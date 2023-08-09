@@ -27,12 +27,14 @@ namespace magma
     class IShaderReflectionFactory;
     class IAllocator;
 
-    /*  A descriptor set object is an opaque object that contains storage for a set of descriptors,
-        where the types and number of descriptors is defined by a descriptor set layout.
-        The layout object may be used to define the association of each descriptor binding
-        with memory or other implementation resources. The layout is used both for determining
-        the resources that need to be associated with the descriptor set, and determining
-        the interface between shader stages and shader resources. */
+    /* A descriptor set object is an opaque object that contains
+       storage for a set of descriptors, where the types and number
+       of descriptors is defined by a descriptor set layout. The
+       layout object may be used to define the association of each
+       descriptor binding with memory or other implementation resources.
+       The layout is used both for determining the resources that need
+       to be associated with the descriptor set, and determining
+       the interface between shader stages and shader resources. */
 
     class DescriptorSet : public NonDispatchable<VkDescriptorSet>
     {

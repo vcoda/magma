@@ -25,9 +25,9 @@ namespace magma
     class Surface;
     class Display;
 
-    /* A physical device usually represents a single complete implementation of Vulkan
-       (excluding instance-level functionality) available to the host,
-       of which there are a finite number. */
+    /* A physical device usually represents a single complete
+       implementation of Vulkan (excluding instance-level functionality)
+       available to the host, of which there are a finite number. */
 
     class PhysicalDevice : public Dispatchable<VkPhysicalDevice>,
         public std::enable_shared_from_this<PhysicalDevice>

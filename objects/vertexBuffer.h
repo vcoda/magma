@@ -46,7 +46,8 @@ namespace magma
         uint32_t vertexCount;
     };
 
-    /* An array of vertex buffer attributes like position, normal, texture coordinates etc. */
+    /* An array of vertex buffer attributes like positions, normals,
+       colors, texture coordinates etc. */
 
     class VertexBuffer : public BaseVertexBuffer
     {
@@ -72,11 +73,13 @@ namespace magma
             const Sharing& sharing = Sharing());
     };
 
-    /* Major GPU vendors expose a 256MiB-ish staging buffer with the
-       DEVICE_LOCAL | HOST_VISIBLE | HOST_COHERENT flags where the GPU and CPU
-       can both write into shared memory visible to each other. This 256MiB limit
-       correlates with the 256MiB PCIE-specified BAR-size limit that defines
-       the size of the 256MiB aperture/window of VRAM that the host can access. */
+    /* Major GPU vendors expose a 256MiB-ish staging buffer
+       with the DEVICE_LOCAL | HOST_VISIBLE | HOST_COHERENT
+       flags where the GPU and CPU can both write into shared
+       memory visible to each other. This 256MiB limit
+       correlates with the 256MiB PCIE-specified BAR-size limit
+       that defines the size of the 256MiB aperture/window of
+       VRAM that the host can access. */
 
     class DynamicVertexBuffer : public BaseVertexBuffer
     {

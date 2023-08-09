@@ -25,8 +25,8 @@ namespace magma
         class LinearPlacementPool;
     }
 
-    /* Primary command buffer, which can execute secondary command buffers,
-       and which is submitted to the queue. */
+    /* Primary command buffer, which can execute secondary
+       command buffers, and which is submitted to the queue. */
 
     class PrimaryCommandBuffer : public CommandBuffer
     {

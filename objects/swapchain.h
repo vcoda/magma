@@ -34,13 +34,14 @@ namespace magma
     class DebugUtilsMessenger;
 #endif
 
-    /* Swapchain provides the ability to present rendering results
-       to a surface. It is an abstraction for an array of presentable
-       images that are associated with a surface. One image (which can be
-       an array image for multiview/stereoscopic-3D surfaces) is displayed
-       at a time, but multiple images can be queued for presentation.
-       An application renders to the image, and then queues the image
-       for presentation to the surface. */
+    /* Swapchain provides the ability to present rendering
+       results to a surface. It is an abstraction for an array
+       of presentable images that are associated with a surface.
+       One image (which can be an array image for multiview or
+       stereoscopic 3D surfaces) is displayed at a time, but
+       multiple images can be queued for presentation. An
+       application renders to the image, and then queues the
+       image for presentation to the surface. */
 
 #ifdef VK_KHR_swapchain
     class Swapchain : public NonDispatchable<VkSwapchainKHR>

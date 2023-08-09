@@ -21,9 +21,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_EXT_transform_feedback
-    /* Transform feedback buffer to capture the primitives emitted by the graphics pipeline
-       from SPIR-V outputs decorated for transform feedback. The captured data can be drawn again
-       where the vertex count is derived from the byte counter without CPU intervention. */
+    /* Transform feedback buffer to capture the primitives
+       emitted by the graphics pipeline from SPIR-V outputs
+       decorated for transform feedback. The captured data
+       can be drawn again where the vertex count is derived
+       from the byte counter without CPU intervention. */
 
     class TransformFeedbackBuffer : public Buffer
     {
@@ -35,10 +37,11 @@ namespace magma
             const Sharing& sharing = Sharing());
     };
 
-    /* Counter buffer is used for storing and retrieving a byte counter with the following methods:
-       1. CommandBuffer::beginTransformFeedback()
-       2. CommandBuffer::endTransformFeedback()
-       3. CommandBuffer::drawIndirectByteCount() */
+    /* Counter buffer is used for storing and retrieving
+       a byte counter with the following methods:
+        1. CommandBuffer::beginTransformFeedback()
+        2. CommandBuffer::endTransformFeedback()
+        3. CommandBuffer::drawIndirectByteCount() */
 
     class TransformFeedbackCounterBuffer : public Buffer
     {

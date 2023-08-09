@@ -21,7 +21,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Indirect buffer allows to source the draw command's parameters indirectly from memory. */
+    /* Indirect buffer allows to source the draw command's
+       parameters indirectly from memory. */
 
     class IndirectBuffer : public Buffer
     {

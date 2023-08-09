@@ -24,7 +24,11 @@ namespace magma
     class Device;
     class PhysicalDevice;
 
-    /* A logical device can be created that connects to one or more physical devices. */
+    /* A device group can allocate memory across the subdevices,
+       bind memory from one subdevice to a resource on another
+       subdevice, record command buffers where some work executes
+       on an arbitrary subset of the subdevices, and potentially
+       present a swapchain image from one or more subdevices. */
 
 #ifdef VK_KHR_device_group
     class PhysicalDeviceGroup

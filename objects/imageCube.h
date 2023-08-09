@@ -20,9 +20,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Cube map image is an image where each mipmap level consists of six 2D
-       images which must be square. The 6 images represent the faces of a cube.
-       The texture coordinate used to access a cube map is a 3D direction vector. */
+    /* Cube map image is an image where each mipmap level consists
+       of six 2D images which must be square. The 6 images represent
+       the faces of a cube. The texture coordinate used to access
+       a cube map is a 3D direction vector. */
 
     class ImageCube : public Image
     {

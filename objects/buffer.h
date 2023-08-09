@@ -25,9 +25,10 @@ namespace magma
     class CommandBuffer;
 
     /* Buffers represent linear arrays of data which are used
-       for various purposes by binding them to a graphics or compute
-       pipeline via descriptor sets or via certain commands,
-       or by directly specifying them as parameters to certain commands. */
+       for various purposes by binding them to a graphics or
+       compute pipeline via descriptor sets or via certain
+       commands, or by directly specifying them as parameters
+       to certain commands. */
 
     class Buffer : public NonDispatchableResource<Buffer, VkBuffer>
     {

@@ -29,10 +29,12 @@ namespace magma
        2.3 Physical Layout of a SPIR-V Module and Instruction */
     typedef uint32_t SpirvWord;
 
-    /* Shader modules contain shader code and one or more entry points.
-       Shaders are selected from a shader module by specifying an entry point.
-       The stages of a pipeline can use shaders that come from different modules.
-       The shader code defining a shader module must be in the SPIR-V format. */
+    /* Shader modules contain shader code and one or more
+       entry points. Shaders are selected from a shader module
+       by specifying an entry point. The stages of a pipeline
+       can use shaders that come from different modules. The
+       shader code defining a shader module must be in the
+       SPIR-V format. */
 
     class ShaderModule : public NonDispatchable<VkShaderModule>
     {

@@ -20,13 +20,19 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Introduces a new type of semaphore that has an integer payload identifying a point in a timeline.
+    /* Introduces a new type of semaphore that has an integer
+       payload identifying a point in a timeline.
        Such timeline semaphores support the following operations:
-        * Host query - A host operation that allows querying the payload of the timeline semaphore.
-        * Host wait - A host operation that allows a blocking wait for a timeline semaphore to reach a specified value.
-        * Host signal - A host operation that allows advancing the timeline semaphore to a specified value.
-        * Device wait - A device operation that allows waiting for a timeline semaphore to reach a specified value.
-        * Device signal - A device operation that allows advancing the timeline semaphore to a specified value. */
+        * Host query - A host operation that allows querying
+          the payload of the timeline semaphore.
+        * Host wait - A host operation that allows a blocking
+          wait for a timeline semaphore to reach a specified value.
+        * Host signal - A host operation that allows advancing
+          the timeline semaphore to a specified value.
+        * Device wait - A device operation that allows waiting
+          for a timeline semaphore to reach a specified value.
+        * Device signal - A device operation that allows advancing
+          the timeline semaphore to a specified value. */
 
 #ifdef VK_KHR_timeline_semaphore
     class BinarySemaphore : public NonDispatchable<VkSemaphore>

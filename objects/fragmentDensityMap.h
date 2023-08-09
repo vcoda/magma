@@ -20,11 +20,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* An image can be bound as a fragment density map attachment to a render pass.
-       This image contains normalized (x, y) float component fragment density values
-       for regions of the framebuffer that will be used in rasterization for every subpass.
-       A float component ranges from 0.0 to 1.0 where 1.0 means full density along that axis.
-       Implementations use these values as hints to optimize rendering in areas of low density. */
+    /* An image can be bound as a fragment density map attachment
+       to a render pass. This image contains normalized (x, y)
+       float component fragment density values for regions of the
+       framebuffer that will be used in rasterization for every
+       subpass. A float component ranges from 0.0 to 1.0 where 1.0
+       means full density along that axis. Implementations use
+       these values as hints to optimize rendering in areas of
+       low density. */
 
 #ifdef VK_EXT_fragment_density_map
     class FragmentDensityMap : public Image2D

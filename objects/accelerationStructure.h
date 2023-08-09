@@ -21,11 +21,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Acceleration structures are an opaque structure that can be built by the implementation
-       to more efficiently perform spatial queries on the provided geometric data.
-       Acceleration structure is either a top-level acceleration structure containing
-       a set of bottom-level acceleration structures or a bottom-level acceleration structure
-       containing either a set of axis-aligned bounding boxes for custom geometry or a set of triangles. */
+    /* Acceleration structures are an opaque structure that can
+       be built by the implementation to more efficiently perform
+       spatial queries on the provided geometric data. Acceleration
+       structure is either a top-level acceleration structure
+       containing a set of bottom-level acceleration structures or
+       a bottom-level acceleration structure containing either
+       a set of axis-aligned bounding boxes for custom geometry or
+       a set of triangles. */
 
 #ifdef VK_NV_ray_tracing
     class AccelerationStructure : public NonDispatchableResource<AccelerationStructure, VkAccelerationStructureNV>

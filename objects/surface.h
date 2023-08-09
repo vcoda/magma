@@ -22,9 +22,10 @@ namespace magma
 {
     class Instance;
 
-    /* A surface object abstracts a native platform surface or window object for use with Vulkan.
-       Separate platform-specific extensions each provide a function for creating a surface object
-       for the respective platform. */
+    /* A surface object abstracts a native platform surface or
+       window object for use with Vulkan. Separate platform-specific
+       extensions each provide a function for creating a surface
+       object for the respective platform. */
 
 #ifdef VK_KHR_surface
     class Surface : public NonDispatchable<VkSurfaceKHR>,
@@ -43,7 +44,8 @@ namespace magma
     };
 #endif // VK_KHR_surface
 
-    /*  Provides a mechanism to create a surface object that refers to a Win32 HWND. */
+    /*  Provides a mechanism to create a surface object that
+        refers to a Win32 HWND. */
 
 #ifdef VK_KHR_win32_surface
     class Win32Surface : public Surface
@@ -54,7 +56,7 @@ namespace magma
             HWND hWnd,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkWin32SurfaceCreateFlagsKHR flags = 0);
-        HINSTANCE getInstance() const noexcept { return hInstance; }
+        HINSTANCE getHInstance() const noexcept { return hInstance; }
         HWND getWindow() const noexcept { return hWnd; }
 
     private:
@@ -63,8 +65,8 @@ namespace magma
     };
 #endif // VK_KHR_win32_surface
 
-    /* Provides a mechanism to create a surface object that refers to an X11 Window,
-       using the Xlib client-side library. */
+    /* Provides a mechanism to create a surface object that
+       refers to an X11 Window, using the Xlib client-side library. */
 
 #ifdef VK_KHR_xlib_surface
     class XlibSurface : public Surface
@@ -84,8 +86,8 @@ namespace magma
     };
 #endif // VK_KHR_xlib_surface
 
-    /* Provides a mechanism to create a surface object that refers to an X11 Window,
-       using the XCB client-side library. */
+    /* Provides a mechanism to create a surface object that
+       refers to an X11 Window, using the XCB client-side library. */
 
 #ifdef VK_KHR_xcb_surface
     class XcbSurface : public Surface
@@ -105,7 +107,8 @@ namespace magma
     };
 #endif // VK_KHR_xcb_surface
 
-    /* Provides a mechanism to create a surface object that refers to a Wayland wl_surface. */
+    /* Provides a mechanism to create a surface object that
+       refers to a Wayland wl_surface. */
 
 #ifdef VK_KHR_wayland_surface
     class WaylandSurface : public Surface
@@ -125,7 +128,8 @@ namespace magma
     };
 #endif // VK_KHR_wayland_surface
 
-    /* Provides a mechanism to create a surface object that refers to a QNX Screen window. */
+    /* Provides a mechanism to create a surface object that
+       refers to a QNX Screen window. */
 
 #ifdef VK_QNX_screen_surface
     class QnxSurface : public Surface
@@ -145,8 +149,8 @@ namespace magma
     };
 #endif // VK_QNX_screen_surface
 
-    /* Provides a mechanism to create a surface object that refers to an ANativeWindow,
-       Android's native surface type. */
+    /* Provides a mechanism to create a surface object that
+       refers to an ANativeWindow, Android's native surface type. */
 
 #ifdef VK_KHR_android_surface
     class AndroidSurface : public Surface
@@ -178,9 +182,10 @@ namespace magma
     };
 #endif // VK_FUCHSIA_imagepipe_surface
 
-    /* Provides a mechanism to create a surface object based on a UIView,
-       the native surface type of iOS, which is underpinned by a CAMetalLayer,
-       to support rendering to the surface using Apple's Metal framework. */
+    /* Provides a mechanism to create a surface object
+       based on a UIView, the native surface type of iOS,
+       which is underpinned by a CAMetalLayer, to support
+       rendering to the surface using Apple's Metal framework. */
 
 #ifdef VK_MVK_ios_surface
     class iOSSurface : public Surface
@@ -197,9 +202,10 @@ namespace magma
     };
 #endif // VK_MVK_ios_surface
 
-    /* Provides a mechanism to create a surface object based on an NSView,
-       the native surface type of macOS, which is underpinned by a CAMetalLayer,
-       to support rendering to the surface using Apple's Metal framework. */
+    /* Provides a mechanism to create a surface object
+       based on an NSView, the native surface type of macOS,
+       which is underpinned by a CAMetalLayer, to support
+       rendering to the surface using Apple's Metal framework. */
 
 #ifdef VK_MVK_macos_surface
     class MacOSSurface : public Surface
@@ -216,8 +222,9 @@ namespace magma
     };
 #endif // VK_MVK_macos_surface
 
-    /* Provides a mechanism to create a surface object from CAMetalLayer,
-       which is the native rendering surface of Apple's Metal framework. */
+    /* Provides a mechanism to create a surface object from
+       CAMetalLayer, which is the native rendering surface
+       of Apple's Metal framework. */
 
 #ifdef VK_EXT_metal_surface
     class MetalSurface : public Surface
@@ -234,7 +241,8 @@ namespace magma
     };
 #endif // VK_EXT_metal_surface
 
-    /* Provides a mechanism to create a surface object associated with an nn::vi::Layer. */
+    /* Provides a mechanism to create a surface object
+       associated with an nn::vi::Layer. */
 
 #ifdef VK_NN_vi_surface
     class ViSurface : public Surface
@@ -251,8 +259,8 @@ namespace magma
     };
 #endif // VK_NN_vi_surface
 
-    /* Provides a mechanism to create a surface object that refers to a
-       Google Games Platform GgpStreamDescriptor */
+    /* Provides a mechanism to create a surface object that
+       refers to a Google Games Platform GgpStreamDescriptor */
 
 #ifdef VK_GGP_stream_descriptor_surface
     class GgpStreamDescriptorSurface : public Surface
@@ -269,8 +277,8 @@ namespace magma
     };
 #endif // VK_GGP_stream_descriptor_surface
 
-    /* Display surface describes the configuration of a single plane
-       within a complete display configuration. */
+    /* Display surface describes the configuration of a single
+       plane within a complete display configuration. */
 
 #ifdef VK_KHR_display
     class DisplayMode;
@@ -299,10 +307,11 @@ namespace magma
     };
 #endif // VK_KHR_display
 
-    /* Provides a mechanism to create surface objects independently of
-       any window system or display device. The presentation operation
-       for a swapchain created from a headless surface is by default a no-op,
-       resulting in no externally-visible result. */
+    /* Provides a mechanism to create surface objects
+       independently of any window system or display device.
+       The presentation operation for a swapchain created
+       from a headless surface is by default a no-op, resulting
+       in no externally-visible result. */
 
 #ifdef VK_EXT_headless_surface
     class HeadlessSurface : public Surface

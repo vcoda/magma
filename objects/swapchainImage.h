@@ -23,13 +23,16 @@ namespace magma
 #ifdef VK_KHR_swapchain
     class Swapchain;
 
-    /* The presentable image of a swapchain that is owned by the presentation engine.
-       Presentable images can also be created by user and bound to swapchain memory.
-       These images can be used anywhere swapchain images are used, and are useful in logical
-       devices with multiple physical devices to create peer memory bindings of swapchain memory.
-       All presentable images are initially in the VK_IMAGE_LAYOUT_UNDEFINED layout,
-       thus before using presentable images, the application must transition them
-       to a valid layout for the intended use. */
+    /* The presentable image of a swapchain that is owned
+       by the presentation engine. Presentable images can
+       also be created by user and bound to swapchain memory.
+       These images can be used anywhere swapchain images
+       are used, and are useful in logical devices with
+       multiple physical devices to create peer memory
+       bindings of swapchain memory. All presentable images
+       are initially in the VK_IMAGE_LAYOUT_UNDEFINED layout,
+       thus before using presentable images, the application
+       must transition them to a valid layout for the intended use. */
 
     class SwapchainImage : public Image2D
     {

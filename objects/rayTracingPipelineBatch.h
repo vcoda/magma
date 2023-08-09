@@ -21,14 +21,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Exposes Vulkan's ability to create multiple ray-tracing pipelines
-       in a single API call. As there are may be thousands of such pipelines
-       in the sophisticated rendering program, it may be more efficient
-       for graphics driver to create all of them at once. */
-
 #ifdef VK_NV_ray_tracing
     class RayTracingPipeline;
     class PipelineCache;
+
+    /* With Vulkan it is possible to create multiple ray-tracing
+       pipelines in a single API call. As there are may be
+       thousands of such pipelines in the sophisticated rendering
+       program, it may be more efficient for graphics driver
+       to create all of them at once. */
 
     class RayTracingPipelineBatch : public PipelineBatch<RayTracingPipeline>
     {

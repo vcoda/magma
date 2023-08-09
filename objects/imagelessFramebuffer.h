@@ -22,9 +22,10 @@ namespace magma
 {
     struct FramebufferAttachmentImage;
 
-    /* Allows framebuffer to be created without the need for creating images first,
-       allowing more flexibility in how they are used, and avoiding the need
-       for many of the confusing compatibility rules. */
+    /* Allows framebuffer to be created without the need for
+       creating images first, allowing more flexibility in how
+       they are used, and avoiding the need for many of the
+       confusing compatibility rules. */
 
 #ifdef VK_KHR_imageless_framebuffer
     class ImagelessFramebuffer : public Framebuffer

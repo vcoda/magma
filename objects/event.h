@@ -20,13 +20,19 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Events are a synchronization primitive that can be used to insert a fine-grained
-       dependency between commands submitted to the same queue, or between the host and a queue.
-       Events must not be used to insert a dependency between commands submitted to different queues.
-       Events have two states - signaled and unsignaled. An application can signal an event,
-       or unsignal it, on either the host or the device. A device can wait for an event
-       to become signaled before executing further operations. No command exists to wait for an event
-       to become signaled on the host, but the current state of an event can be queried. */
+    /* Events are a synchronization primitive that can be
+       used to insert a fine-grained dependency between
+       commands submitted to the same queue, or between
+       the host and a queue. Events must not be used to insert
+       a dependency between commands submitted to different queues.
+
+       Events have two states - signaled and unsignaled.
+       An application can signal an event, or unsignal it,
+       on either the host or the device. A device can wait
+       for an event to become signaled before executing further
+       operations. No command exists to wait for an event to
+       become signaled on the host, but the current state of
+       an event can be queried. */
 
     class Event : public NonDispatchable<VkEvent>
     {

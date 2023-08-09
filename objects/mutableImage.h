@@ -20,8 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Mutable image can be used to create an image view
-       with a different format from the image. For multi-planar formats,
+    /* Mutable image can be used to create an image view with
+       a different format from the image. For multi-planar formats,
        image view can be created of a plane of the image. */
 
     class MutableImage : public Image

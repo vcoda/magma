@@ -20,9 +20,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Deferred host operations enables driver operations, including ray tracing
-       pipeline compilation or CPU-based acceleration structure construction,
-       to be offloaded to application-managed CPU thread pools. */
+    /* Deferred host operations enables driver operations,
+       including ray tracing pipeline compilation or CPU-based
+       acceleration structure construction, to be offloaded
+       to application-managed CPU thread pools. */
 
 #ifdef VK_KHR_deferred_host_operations
     class DeferredOperation : public NonDispatchable<VkDeferredOperationKHR>

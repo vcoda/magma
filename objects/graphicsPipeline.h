@@ -34,10 +34,11 @@ namespace magma
     class ViewportState;
 
     /* Graphics pipelines consist of multiple shader stages,
-       multiple fixed-function pipeline stages, and a pipeline layout.
-       Any pipeline object state that is specified as dynamic is not
-       applied to the current state when the pipeline object is bound,
-       but is instead set by dynamic state setting commands. */
+       multiple fixed-function pipeline stages, and a pipeline
+       layout. Any pipeline object state that is specified as
+       dynamic is not applied to the current state when the
+       pipeline object is bound, but is instead set by dynamic
+       state setting commands. */
 
     class GraphicsPipeline : public Pipeline
     {
