@@ -50,10 +50,10 @@ namespace magma
         const std::set<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
         uint32_t enumeratePhysicalDevices() const;
         std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId) const;
-#ifdef VK_KHR_device_group
+    #ifdef VK_KHR_device_group
         std::vector<VkPhysicalDeviceGroupPropertiesKHR> enumeratePhysicalDeviceGroups() const;
         std::shared_ptr<PhysicalDeviceGroup> getPhysicalDeviceGroup(uint32_t groupId) const;
-#endif
+    #endif // VK_KHR_device_group
         static uint32_t enumerateVersion() noexcept;
         static std::vector<VkLayerProperties> enumerateLayers();
         static std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr);

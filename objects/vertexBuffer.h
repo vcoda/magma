@@ -35,7 +35,7 @@ namespace magma
         }
 
     protected:
-        explicit BaseVertexBuffer(std::shared_ptr<Device> device,
+        BaseVertexBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkBufferUsageFlags usage,
             VkMemoryPropertyFlags memoryFlags,

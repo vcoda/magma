@@ -41,7 +41,6 @@ namespace magma
         explicit SecondaryCommandBuffer(VkCommandBuffer handle,
             std::shared_ptr<CommandPool> cmdPool):
             CommandBuffer(VK_COMMAND_BUFFER_LEVEL_SECONDARY, handle, std::move(cmdPool)) {}
-
         friend CommandPool;
         friend memory::LinearPlacementPool;
     };

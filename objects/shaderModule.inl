@@ -10,7 +10,8 @@ inline ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWor
     std::shared_ptr<ValidationCache> validationCache /* nullptr */,
 #endif
     const StructureChain& extendedInfo /* default */):
-    ShaderModule(std::move(device), bytecode, SpirvWordCount * sizeof(SpirvWord), bytecodeHash, std::move(allocator), reflect, flags,
+    ShaderModule(std::move(device), bytecode, SpirvWordCount * sizeof(SpirvWord), bytecodeHash,
+        std::move(allocator), reflect, flags,
     #ifdef VK_EXT_validation_cache
         std::move(validationCache),
     #endif

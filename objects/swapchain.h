@@ -94,12 +94,12 @@ namespace magma
     #ifdef VK_KHR_bind_memory2
         void bindImage(std::shared_ptr<SwapchainImage> image,
             uint32_t imageIndex);
-    #ifdef VK_KHR_device_group
+        #ifdef VK_KHR_device_group
         void bindImage(std::shared_ptr<SwapchainImage> image,
             uint32_t imageIndex,
             const std::vector<uint32_t>& deviceIndices,
             const std::vector<VkRect2D>& splitInstanceBindRegions = {});
-    #endif // VK_KHR_device_group
+        #endif // VK_KHR_device_group
     #endif // VK_KHR_bind_memory2
     #ifdef VK_AMD_display_native_hdr
         void setLocalDimming(bool enable) noexcept;

@@ -38,7 +38,6 @@ namespace magma
     private:
         PrimaryCommandBuffer(VkCommandBuffer handle,
             std::shared_ptr<CommandPool> cmdPool);
-
         friend CommandPool;
         friend memory::LinearPlacementPool;
     };

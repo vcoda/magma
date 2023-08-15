@@ -40,7 +40,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
+Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     const std::vector<DeviceQueueDescriptor>& queueDescriptors,
     const std::vector<const char *>& enabledLayers_,
     const std::vector<const char *>& enabledExtensions_,
@@ -49,7 +49,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
     const StructureChain& extendedInfo,
     std::shared_ptr<IAllocator> allocator):
     Dispatchable<VkDevice>(VK_OBJECT_TYPE_DEVICE, std::move(allocator)),
-    physicalDevice(std::move(physicalDevice)),
+    physicalDevice(std::move(physicalDevice_)),
     resourcePool(std::make_shared<ResourcePool>()),
     enabledFeatures(enabledFeatures_),
     enabledExtendedFeatures(enabledExtendedFeatures_)
@@ -81,7 +81,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice,
         }
     }
 #endif // VK_KHR_get_physical_device_properties2
-    const VkResult result = vkCreateDevice(*(this->physicalDevice), &deviceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateDevice(*physicalDevice, &deviceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     if (VK_ERROR_INITIALIZATION_FAILED == result)
         throw exception::InitializationFailed("initialization of logical device failed");
     MAGMA_THROW_FAILURE(result, "failed to create logical device");
@@ -155,12 +155,12 @@ std::shared_ptr<Queue> Device::getQueueForFamily(uint32_t queueFamilyIndex) cons
         VK_QUEUE_COMPUTE_BIT,
         VK_QUEUE_TRANSFER_BIT})
     {   // Try to get new instance
-        try {
+        try
+        {
             auto queue = device->getQueue(flag, 0);
             if (queue->getFamilyIndex() == queueFamilyIndex)
                 return queue;
-        } catch (...) {
-        }
+        } catch (...) {}
     }
     MAGMA_THROW("failed to get device queue");
 }
@@ -244,7 +244,7 @@ bool Device::getDescriptorSetLayoutSupport(const std::vector<VkDescriptorSetLayo
     descriptorSetLayoutSupport.pNext = nullptr;
     descriptorSetLayoutSupport.supported = VK_FALSE;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDescriptorSetLayoutSupportKHR, VK_KHR_MAINTENANCE3_EXTENSION_NAME);
-    vkGetDescriptorSetLayoutSupportKHR(MAGMA_HANDLE(device), &descriptorSetLayoutInfo, &descriptorSetLayoutSupport);
+    vkGetDescriptorSetLayoutSupportKHR(handle, &descriptorSetLayoutInfo, &descriptorSetLayoutSupport);
     return descriptorSetLayoutSupport.supported;
 }
 
@@ -253,8 +253,6 @@ uint32_t Device::getVariableDescriptorCountLayoutSupport(const std::vector<VkDes
     VkDescriptorSetLayoutCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */) const
 {
-    if (!extensionEnabled(VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME))
-        return 0;
     VkDescriptorSetLayoutCreateInfo descriptorSetLayoutInfo;
     VkDescriptorSetLayoutSupportKHR descriptorSetLayoutSupport;
     VkDescriptorSetVariableDescriptorCountLayoutSupportEXT descriptorSetVariableDescriptorCountLayoutSupport;
@@ -270,7 +268,7 @@ uint32_t Device::getVariableDescriptorCountLayoutSupport(const std::vector<VkDes
     descriptorSetVariableDescriptorCountLayoutSupport.pNext = nullptr;
     descriptorSetVariableDescriptorCountLayoutSupport.maxVariableDescriptorCount = 0;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDescriptorSetLayoutSupportKHR, VK_KHR_MAINTENANCE3_EXTENSION_NAME);
-    vkGetDescriptorSetLayoutSupportKHR(MAGMA_HANDLE(device), &descriptorSetLayoutInfo, &descriptorSetLayoutSupport);
+    vkGetDescriptorSetLayoutSupportKHR(handle, &descriptorSetLayoutInfo, &descriptorSetLayoutSupport);
     return descriptorSetVariableDescriptorCountLayoutSupport.maxVariableDescriptorCount;
 }
 #endif // VK_EXT_descriptor_indexing
