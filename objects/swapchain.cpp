@@ -161,18 +161,6 @@ Swapchain::~Swapchain()
     vkDestroySwapchainKHR(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore, std::shared_ptr<const Fence> fence,
-    uint64_t timeout /* std::numeric_limits<uint64_t>::max() */)
-{
-    uint32_t imageIndex = 0;
-    const VkResult result = vkAcquireNextImageKHR(MAGMA_HANDLE(device), handle, timeout,
-        MAGMA_OPTIONAL_HANDLE(semaphore),
-        MAGMA_OPTIONAL_HANDLE(fence),
-        &imageIndex);
-    handleError(result, "failed to acquire next image");
-    return imageIndex;
-}
-
 uint32_t Swapchain::getImageCount() const
 {
     uint32_t imageCount;
@@ -200,6 +188,39 @@ const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages()
     }
     return bindedImages;
 }
+
+uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore, std::shared_ptr<const Fence> fence,
+    uint64_t timeout /* std::numeric_limits<uint64_t>::max() */)
+{
+    uint32_t imageIndex = 0;
+    const VkResult result = vkAcquireNextImageKHR(MAGMA_HANDLE(device), handle, timeout,
+        MAGMA_OPTIONAL_HANDLE(semaphore),
+        MAGMA_OPTIONAL_HANDLE(fence),
+        &imageIndex);
+    handleError(result, "failed to acquire next image");
+    return imageIndex;
+}
+
+#ifdef VK_KHR_device_group
+uint32_t Swapchain::acquireNextImageForDeviceGroup(uint32_t deviceMask,
+    std::shared_ptr<const Semaphore> semaphore, std::shared_ptr<const Fence> fence,
+    uint64_t timeout /* std::numeric_limits<uint64_t>::max() */)
+{
+    VkAcquireNextImageInfoKHR aquireNextImageInfo;
+    aquireNextImageInfo.sType = VK_STRUCTURE_TYPE_ACQUIRE_NEXT_IMAGE_INFO_KHR;
+    aquireNextImageInfo.pNext = nullptr;
+    aquireNextImageInfo.swapchain = handle;
+    aquireNextImageInfo.timeout = timeout;
+    aquireNextImageInfo.semaphore = MAGMA_OPTIONAL_HANDLE(semaphore);
+    aquireNextImageInfo.fence = MAGMA_OPTIONAL_HANDLE(fence);
+    aquireNextImageInfo.deviceMask = deviceMask;
+    uint32_t imageIndex = 0;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkAcquireNextImage2KHR, VK_KHR_DEVICE_GROUP_EXTENSION_NAME);
+    const VkResult result = vkAcquireNextImage2KHR(MAGMA_HANDLE(device), &aquireNextImageInfo, &imageIndex);
+    handleError(result, "failed to acquire next image for a device group");
+    return imageIndex;
+}
+#endif // VK_KHR_device_group
 
 #ifdef VK_KHR_bind_memory2
 void Swapchain::bindImage(std::shared_ptr<SwapchainImage> image, uint32_t imageIndex)
