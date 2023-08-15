@@ -67,5 +67,3 @@ namespace magma
             CopyMemoryFunction copyFn = nullptr);
     };
 } // namespace magma
-
-#include "storageBuffer.inl"

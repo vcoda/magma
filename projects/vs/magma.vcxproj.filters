@@ -1273,12 +1273,6 @@
     <None Include="..\..\objects\commandBuffer.inl">
       <Filter>Header Files\objects</Filter>
     </None>
-    <None Include="..\..\objects\srcTransferBuffer.inl">
-      <Filter>Header Files\objects</Filter>
-    </None>
-    <None Include="..\..\objects\storageBuffer.inl">
-      <Filter>Header Files\objects</Filter>
-    </None>
     <None Include="..\..\states\rasterizationState.inl">
       <Filter>Header Files\states</Filter>
     </None>
