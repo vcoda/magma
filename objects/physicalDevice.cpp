@@ -252,6 +252,23 @@ VkImageUsageFlags PhysicalDevice::getSurfaceSharedPresentFlags(std::shared_ptr<c
 }
 #endif // VK_KHR_shared_presentable_image
 
+#ifdef VK_KHR_device_group
+std::vector<VkRect2D> PhysicalDevice::getPresentRectangles(std::shared_ptr<const Surface> surface) const
+{
+    uint32_t rectCount = 0;
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDevicePresentRectanglesKHR, VK_KHR_DEVICE_GROUP_EXTENSION_NAME);
+    VkResult result = vkGetPhysicalDevicePresentRectanglesKHR(handle, *surface, &rectCount, nullptr);
+    std::vector<VkRect2D> presentRects;
+    if (rectCount)
+    {
+        presentRects.resize(rectCount);
+        result = vkGetPhysicalDevicePresentRectanglesKHR(handle, *surface, &rectCount, presentRects.data());
+    }
+    MAGMA_THROW_FAILURE(result, "failed to query present rectangles for a surface");
+    return presentRects;
+}
+#endif // VK_KHR_device_group
+
 bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex,
     void *display /* nullptr */,
     const void *visualID /* nullptr */) const noexcept
