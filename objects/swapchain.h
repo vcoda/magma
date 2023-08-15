@@ -57,6 +57,9 @@ namespace magma
             VkSurfaceTransformFlagBitsKHR preTransform,
             VkCompositeAlphaFlagBitsKHR compositeAlpha,
             VkPresentModeKHR presentMode,
+        #ifdef VK_KHR_device_group
+            VkDeviceGroupPresentModeFlagsKHR deviceGroupPresentModes = 0,
+        #endif
             VkSwapchainCreateFlagsKHR flags = 0,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<Swapchain> oldSwapchain = nullptr,

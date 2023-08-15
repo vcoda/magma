@@ -54,10 +54,14 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, VkSurfaceFormatKHR surfaceF
         throw exception::OutOfDate("old swapchain must be a non-retired");
 }
 
-Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surface> surface,
+Swapchain::Swapchain(std::shared_ptr<Device> device_, std::shared_ptr<const Surface> surface,
     uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent, uint32_t arrayLayers,
     VkImageUsageFlags imageUsage, VkSurfaceTransformFlagBitsKHR preTransform, VkCompositeAlphaFlagBitsKHR compositeAlpha,
-    VkPresentModeKHR presentMode, VkSwapchainCreateFlagsKHR flags /* 0 */,
+    VkPresentModeKHR presentMode,
+#ifdef VK_KHR_device_group
+    VkDeviceGroupPresentModeFlagsKHR deviceGroupPresentModes /* 0 */,
+#endif
+    VkSwapchainCreateFlagsKHR flags /* 0 */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<Swapchain> oldSwapchain /* nullptr */,
 #ifdef VK_EXT_debug_report
@@ -68,7 +72,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
 #endif
     const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
-    Swapchain(std::move(device), surfaceFormat, extent, arrayLayers, imageUsage, flags, sharing, oldSwapchain, std::move(allocator))
+    Swapchain(std::move(device_), surfaceFormat, extent, arrayLayers, imageUsage, flags, sharing, oldSwapchain, std::move(allocator))
 {
     VkSwapchainCreateInfoKHR swapchainInfo;
     swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
@@ -92,6 +96,16 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surfa
     else
         swapchainInfo.clipped = VK_TRUE; // Fragment shaders may not execute for obscured pixels
     swapchainInfo.oldSwapchain = MAGMA_OPTIONAL_HANDLE(oldSwapchain);
+#ifdef VK_KHR_device_group
+    VkDeviceGroupSwapchainCreateInfoKHR swapchainDeviceGroupInfo;
+    if (deviceGroupPresentModes && device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
+    {
+        swapchainDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_SWAPCHAIN_CREATE_INFO_KHR;
+        swapchainDeviceGroupInfo.pNext = swapchainInfo.pNext;
+        swapchainDeviceGroupInfo.modes = deviceGroupPresentModes;
+        swapchainInfo.pNext = &swapchainDeviceGroupInfo;
+    }
+#endif // VK_KHR_device_group
     helpers::checkImageUsageSupport(surface, swapchainInfo.imageUsage, this->device->getPhysicalDevice());
     VkResult result;
 #if defined(VK_KHR_display_swapchain) && defined(VK_KHR_display_surface)
