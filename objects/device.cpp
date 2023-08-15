@@ -335,6 +335,28 @@ VkPeerMemoryFeatureFlags Device::getDeviceGroupPeerMemoryFeatures(uint32_t heapI
 }
 #endif // VK_KHR_device_group
 
+#ifdef VK_EXT_calibrated_timestamps
+std::vector<uint64_t> Device::getCalibratedTimestamps(const std::vector<VkTimeDomainEXT>& timeDomains,
+    uint64_t *maxDeviation /* nullptr */) const
+{
+    MAGMA_STACK_ARRAY(VkCalibratedTimestampInfoEXT, calibratedTimestampInfos, timeDomains.size());
+    VkCalibratedTimestampInfoEXT calibratedTimestampInfo;
+    calibratedTimestampInfo.sType = VK_STRUCTURE_TYPE_CALIBRATED_TIMESTAMP_INFO_EXT;
+    calibratedTimestampInfo.pNext = nullptr;
+    for (VkTimeDomainEXT timeDomain: timeDomains)
+    {
+        calibratedTimestampInfo.timeDomain = timeDomain;
+        calibratedTimestampInfos.put(calibratedTimestampInfo);
+    }
+    std::vector<uint64_t> timestamps(timeDomains.size(), 0ull);
+    uint64_t deviation = 0ull;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetCalibratedTimestampsEXT, VK_EXT_CALIBRATED_TIMESTAMPS_EXTENSION_NAME);
+    vkGetCalibratedTimestampsEXT(handle, MAGMA_COUNT(calibratedTimestampInfos), calibratedTimestampInfos, timestamps.data(),
+        maxDeviation ? maxDeviation : &deviation);
+    return timestamps;
+}
+#endif // VK_EXT_calibrated_timestamps
+
 #ifdef VK_EXT_device_fault
 DeviceFaultInfo Device::getFaultInfo() const
 {

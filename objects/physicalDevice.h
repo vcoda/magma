@@ -76,6 +76,9 @@ namespace magma
         bool getPresentationSupport(uint32_t queueFamilyIndex,
             void *display = nullptr,
             const void *visualID = nullptr) const noexcept;
+    #ifdef VK_EXT_calibrated_timestamps
+        std::vector<VkTimeDomainEXT> getCalibrateableTimeDomains() const;
+    #endif
     #ifdef VK_EXT_tooling_info
         std::vector<VkPhysicalDeviceToolPropertiesEXT> getToolProperties() const;
     #endif

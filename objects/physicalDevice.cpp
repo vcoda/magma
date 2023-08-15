@@ -309,6 +309,23 @@ bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex,
     return (VK_TRUE == result);
 }
 
+#ifdef VK_EXT_calibrated_timestamps
+std::vector<VkTimeDomainEXT> PhysicalDevice::getCalibrateableTimeDomains() const
+{
+    uint32_t timeDomainCount = 0;
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceCalibrateableTimeDomainsEXT, VK_EXT_CALIBRATED_TIMESTAMPS_EXTENSION_NAME);
+    VkResult result = vkGetPhysicalDeviceCalibrateableTimeDomainsEXT(handle, &timeDomainCount, nullptr);
+    std::vector<VkTimeDomainEXT> timeDomains;
+    if (timeDomainCount)
+    {
+        timeDomains.resize(timeDomainCount);
+        result = vkGetPhysicalDeviceCalibrateableTimeDomainsEXT(handle, &timeDomainCount, timeDomains.data());
+    }
+    MAGMA_THROW_FAILURE(result, "failed to get calibrateable time domains");
+    return timeDomains;
+}
+#endif // VK_EXT_calibrated_timestamps
+
 #ifdef VK_EXT_tooling_info
 std::vector<VkPhysicalDeviceToolPropertiesEXT> PhysicalDevice::getToolProperties() const
 {

@@ -94,6 +94,10 @@ namespace magma
             uint32_t localDeviceIndex,
             uint32_t remoteDeviceIndex) const;
 #endif // VK_KHR_device_group
+    #ifdef VK_EXT_calibrated_timestamps
+        std::vector<uint64_t> getCalibratedTimestamps(const std::vector<VkTimeDomainEXT>& timeDomains,
+            uint64_t *maxDeviation = nullptr) const;
+    #endif
     #ifdef VK_EXT_device_fault
         DeviceFaultInfo getFaultInfo() const;
     #endif
