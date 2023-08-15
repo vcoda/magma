@@ -277,6 +277,15 @@ uint32_t Device::getVariableDescriptorCountLayoutSupport(const std::vector<VkDes
 #endif // VK_KHR_maintenance3
 
 #ifdef VK_KHR_device_group
+VkDeviceGroupPresentCapabilitiesKHR Device::getDeviceGroupPresentCapabilitiesKHR() const
+{
+    VkDeviceGroupPresentCapabilitiesKHR presentCapabitilies = {};
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDeviceGroupPresentCapabilitiesKHR, VK_KHR_DEVICE_GROUP_EXTENSION_NAME);
+    const VkResult result = vkGetDeviceGroupPresentCapabilitiesKHR(handle, &presentCapabitilies);
+    MAGMA_THROW_FAILURE(result, "failed to get device present capabilities for a device group");
+    return presentCapabitilies;
+}
+
 VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupSurfacePresentModes(std::shared_ptr<const Surface> surface) const
 {
     VkDeviceGroupPresentModeFlagsKHR presentModes = 0;
