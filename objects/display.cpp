@@ -40,7 +40,7 @@ std::vector<VkDisplayModePropertiesKHR> Display::getModeProperties() const
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetDisplayModePropertiesKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
     VkResult result = vkGetDisplayModePropertiesKHR(MAGMA_HANDLE(physicalDevice), handle, &propertyCount, nullptr);
     std::vector<VkDisplayModePropertiesKHR> displayModeProperties;
-    if (propertyCount > 0)
+    if (propertyCount)
     {
         displayModeProperties.resize(propertyCount);
         result = vkGetDisplayModePropertiesKHR(MAGMA_HANDLE(physicalDevice), handle, &propertyCount, displayModeProperties.data());

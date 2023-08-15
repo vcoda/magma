@@ -68,7 +68,7 @@ std::vector<std::shared_ptr<PipelineExecutable>> Pipeline::getExecutables() cons
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetPipelineExecutablePropertiesKHR, VK_KHR_PIPELINE_EXECUTABLE_PROPERTIES_EXTENSION_NAME);
     VkResult result = vkGetPipelineExecutablePropertiesKHR(MAGMA_HANDLE(device), &pipelineInfo, &executableCount, nullptr);
     std::vector<VkPipelineExecutablePropertiesKHR> executableProperties;
-    if (executableCount > 0)
+    if (executableCount)
     {
         VkPipelineExecutablePropertiesKHR properties = {};
         properties.sType = VK_STRUCTURE_TYPE_PIPELINE_EXECUTABLE_PROPERTIES_KHR;

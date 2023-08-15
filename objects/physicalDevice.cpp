@@ -91,7 +91,7 @@ std::vector<VkQueueFamilyProperties> PhysicalDevice::getQueueFamilyProperties() 
     uint32_t propertyCount = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(handle, &propertyCount, nullptr);
     std::vector<VkQueueFamilyProperties> queueFamilyProperties;
-    if (propertyCount > 0)
+    if (propertyCount)
     {
         queueFamilyProperties.resize(propertyCount);
         vkGetPhysicalDeviceQueueFamilyProperties(handle, &propertyCount, queueFamilyProperties.data());
@@ -111,7 +111,7 @@ std::vector<VkLayerProperties> PhysicalDevice::enumerateLayers() const
     uint32_t propertyCount = 0;
     VkResult result = vkEnumerateDeviceLayerProperties(handle, &propertyCount, nullptr);
     std::vector<VkLayerProperties> properties;
-    if (propertyCount > 0)
+    if (propertyCount)
     {
         properties.resize(propertyCount);
         result = vkEnumerateDeviceLayerProperties(handle, &propertyCount, properties.data());
@@ -125,7 +125,7 @@ std::vector<VkExtensionProperties> PhysicalDevice::enumerateExtensions(const cha
     uint32_t propertyCount = 0;
     VkResult result = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, nullptr);
     std::vector<VkExtensionProperties> properties;
-    if (propertyCount > 0)
+    if (propertyCount)
     {
         properties.resize(propertyCount);
         result = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, properties.data());
@@ -155,7 +155,7 @@ std::vector<VkSurfaceFormatKHR> PhysicalDevice::getSurfaceFormats(std::shared_pt
     uint32_t surfaceFormatCount = 0;
     VkResult result = vkGetPhysicalDeviceSurfaceFormatsKHR(handle, *surface, &surfaceFormatCount, nullptr);
     std::vector<VkSurfaceFormatKHR> surfaceFormats;
-    if (surfaceFormatCount > 0)
+    if (surfaceFormatCount)
     {
         surfaceFormats.resize(surfaceFormatCount);
         result = vkGetPhysicalDeviceSurfaceFormatsKHR(handle, *surface, &surfaceFormatCount, surfaceFormats.data());
@@ -169,7 +169,7 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared
     uint32_t presentModeCount = 0;
     VkResult result = vkGetPhysicalDeviceSurfacePresentModesKHR(handle, *surface, &presentModeCount, nullptr);
     std::vector<VkPresentModeKHR> presentModes;
-    if (presentModeCount > 0)
+    if (presentModeCount)
     {
         presentModes.resize(presentModeCount);
         result = vkGetPhysicalDeviceSurfacePresentModesKHR(handle, *surface, &presentModeCount, presentModes.data());
@@ -195,7 +195,6 @@ bool PhysicalDevice::getSurfaceLocalDimmingSupport(std::shared_ptr<const Surface
 std::vector<VkPresentModeKHR> PhysicalDevice::getSurfaceFullScreenExclusivePresentModes(std::shared_ptr<const Surface> surface,
     VkFullScreenExclusiveEXT fullScreenExclusive, void *hMonitor /* nullptr */) const
 {
-    std::vector<VkPresentModeKHR> presentModes;
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     VkSurfaceFullScreenExclusiveWin32InfoEXT fullScreenExclusiveWin32SurfaceInfo;
     fullScreenExclusiveWin32SurfaceInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT;
@@ -219,7 +218,8 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfaceFullScreenExclusivePrese
     uint32_t presentModeCount = 0;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceSurfacePresentModes2EXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
     VkResult result = vkGetPhysicalDeviceSurfacePresentModes2EXT(handle, &surfaceInfo, &presentModeCount, nullptr);
-    if (presentModeCount > 0)
+    std::vector<VkPresentModeKHR> presentModes;
+    if (presentModeCount)
     {
         presentModes.resize(presentModeCount);
         result = vkGetPhysicalDeviceSurfacePresentModes2EXT(handle, &surfaceInfo, &presentModeCount, presentModes.data());
@@ -329,11 +329,11 @@ std::vector<VkTimeDomainEXT> PhysicalDevice::getCalibrateableTimeDomains() const
 #ifdef VK_EXT_tooling_info
 std::vector<VkPhysicalDeviceToolPropertiesEXT> PhysicalDevice::getToolProperties() const
 {
-    std::vector<VkPhysicalDeviceToolPropertiesEXT> toolProperties;
     uint32_t toolCount = 0;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceToolPropertiesEXT, VK_EXT_TOOLING_INFO_EXTENSION_NAME);
     VkResult result = vkGetPhysicalDeviceToolPropertiesEXT(handle, &toolCount, nullptr);
-    if (toolCount > 0)
+    std::vector<VkPhysicalDeviceToolPropertiesEXT> toolProperties;
+    if (toolCount)
     {
         toolProperties.resize(toolCount);
         result = vkGetPhysicalDeviceToolPropertiesEXT(handle, &toolCount, toolProperties.data());
@@ -346,11 +346,11 @@ std::vector<VkPhysicalDeviceToolPropertiesEXT> PhysicalDevice::getToolProperties
 #ifdef VK_KHR_display
 std::vector<VkDisplayPropertiesKHR> PhysicalDevice::getDisplayProperties() const
 {
-    std::vector<VkDisplayPropertiesKHR> displayProperties;
     uint32_t propertyCount = 0;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceDisplayPropertiesKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
     VkResult result = vkGetPhysicalDeviceDisplayPropertiesKHR(handle, &propertyCount, nullptr);
-    if (propertyCount > 0)
+    std::vector<VkDisplayPropertiesKHR> displayProperties;
+    if (propertyCount)
     {
         displayProperties.resize(propertyCount);
         result = vkGetPhysicalDeviceDisplayPropertiesKHR(handle, &propertyCount, displayProperties.data());
@@ -361,11 +361,11 @@ std::vector<VkDisplayPropertiesKHR> PhysicalDevice::getDisplayProperties() const
 
 std::vector<VkDisplayPlanePropertiesKHR> PhysicalDevice::getDisplayPlaneProperties() const
 {
-    std::vector<VkDisplayPlanePropertiesKHR> displayPlaneProperties;
     uint32_t propertyCount = 0;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceDisplayPropertiesKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
     VkResult result = vkGetPhysicalDeviceDisplayPlanePropertiesKHR(handle, &propertyCount, nullptr);
-    if (propertyCount > 0)
+    std::vector<VkDisplayPlanePropertiesKHR> displayPlaneProperties;
+    if (propertyCount)
     {
         displayPlaneProperties.resize(propertyCount);
         result = vkGetPhysicalDeviceDisplayPlanePropertiesKHR(handle, &propertyCount, displayPlaneProperties.data());
@@ -376,11 +376,11 @@ std::vector<VkDisplayPlanePropertiesKHR> PhysicalDevice::getDisplayPlaneProperti
 
 std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint32_t planeIndex) const
 {
-    std::vector<std::shared_ptr<Display>> supportedDisplays;
     uint32_t displayCount = 0;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetDisplayPlaneSupportedDisplaysKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
     VkResult result = vkGetDisplayPlaneSupportedDisplaysKHR(handle, planeIndex, &displayCount, nullptr);
-    if (displayCount > 0)
+    std::vector<std::shared_ptr<Display>> supportedDisplays;
+    if (displayCount)
     {
         MAGMA_STACK_ARRAY(VkDisplayKHR, displays, displayCount);
         result = vkGetDisplayPlaneSupportedDisplaysKHR(handle, planeIndex, &displayCount, displays);

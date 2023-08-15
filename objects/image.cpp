@@ -251,13 +251,13 @@ std::vector<VkSparseImageMemoryRequirements> Image::getSparseMemoryRequirements(
 {
     uint32_t sparseMemoryRequirementCount = 0;
     vkGetImageSparseMemoryRequirements(MAGMA_HANDLE(device), handle, &sparseMemoryRequirementCount, nullptr);
-    if (sparseMemoryRequirementCount > 0)
+    std::vector<VkSparseImageMemoryRequirements> sparseMemoryRequirements;
+    if (sparseMemoryRequirementCount)
     {
-        std::vector<VkSparseImageMemoryRequirements> sparseMemoryRequirements(sparseMemoryRequirementCount);
+        sparseMemoryRequirements.resize(sparseMemoryRequirementCount);
         vkGetImageSparseMemoryRequirements(MAGMA_HANDLE(device), handle, &sparseMemoryRequirementCount, sparseMemoryRequirements.data());
-        return sparseMemoryRequirements;
     }
-    return {};
+    return sparseMemoryRequirements;
 }
 
 #ifdef VK_KHR_get_memory_requirements2
@@ -285,9 +285,9 @@ std::vector<VkSparseImageMemoryRequirements2KHR> Image::getSparseMemoryRequireme
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetImageSparseMemoryRequirements2KHR, VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME);
     vkGetImageSparseMemoryRequirements2KHR(MAGMA_HANDLE(device), &imageSparseMemoryRequirementsInfo2,
         &sparseMemoryRequirementCount, nullptr);
-    if (sparseMemoryRequirementCount > 0)
+    std::vector<VkSparseImageMemoryRequirements2KHR> sparseMemoryRequirements2;
+    if (sparseMemoryRequirementCount)
     {
-        std::vector<VkSparseImageMemoryRequirements2KHR> sparseMemoryRequirements2;
         for (uint32_t i = 0; i < sparseMemoryRequirementCount; ++i)
         {
             VkSparseImageMemoryRequirements2KHR sparseImageMemoryRequirements2;
@@ -298,9 +298,8 @@ std::vector<VkSparseImageMemoryRequirements2KHR> Image::getSparseMemoryRequireme
         }
         vkGetImageSparseMemoryRequirements2KHR(MAGMA_HANDLE(device), &imageSparseMemoryRequirementsInfo2,
             &sparseMemoryRequirementCount, sparseMemoryRequirements2.data());
-        return sparseMemoryRequirements2;
     }
-    return {};
+    return sparseMemoryRequirements2;
 }
 #endif // VK_KHR_get_memory_requirements2
 

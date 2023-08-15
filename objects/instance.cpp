@@ -166,7 +166,7 @@ std::vector<VkPhysicalDeviceGroupPropertiesKHR> Instance::enumeratePhysicalDevic
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkEnumeratePhysicalDeviceGroupsKHR, VK_KHR_DEVICE_GROUP_CREATION_EXTENSION_NAME);
     VkResult result = vkEnumeratePhysicalDeviceGroupsKHR(handle, &physicalDeviceGroupCount, nullptr);
     std::vector<VkPhysicalDeviceGroupPropertiesKHR> physicalDeviceGroups;
-    if (physicalDeviceGroupCount > 0)
+    if (physicalDeviceGroupCount)
     {
         physicalDeviceGroups.resize(physicalDeviceGroupCount);
         result = vkEnumeratePhysicalDeviceGroupsKHR(handle, &physicalDeviceGroupCount, physicalDeviceGroups.data());
@@ -214,7 +214,7 @@ std::vector<VkLayerProperties> Instance::enumerateLayers()
     uint32_t propertyCount = 0;
     VkResult result = vkEnumerateInstanceLayerProperties(&propertyCount, nullptr);
     std::vector<VkLayerProperties> properties;
-    if (propertyCount > 0)
+    if (propertyCount)
     {
         properties.resize(propertyCount);
         result = vkEnumerateInstanceLayerProperties(&propertyCount, properties.data());
@@ -228,7 +228,7 @@ std::vector<VkExtensionProperties> Instance::enumerateExtensions(const char *lay
     uint32_t propertyCount = 0;
     VkResult result = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, nullptr);
     std::vector<VkExtensionProperties> properties;
-    if (propertyCount > 0)
+    if (propertyCount)
     {
         properties.resize(propertyCount);
         result = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, properties.data());

@@ -58,11 +58,11 @@ ValidationCache::~ValidationCache()
 
 std::vector<uint8_t> ValidationCache::getData() const
 {
-    std::vector<uint8_t> cacheData;
     std::size_t dataSize = 0;
     MAGMA_DEVICE_EXTENSION(vkGetValidationCacheDataEXT);
     VkResult result = vkGetValidationCacheDataEXT(MAGMA_HANDLE(device), handle, &dataSize, nullptr);
-    if (dataSize > 0)
+    std::vector<uint8_t> cacheData;
+    if (dataSize)
     {
         cacheData.resize(dataSize);
         result = vkGetValidationCacheDataEXT(MAGMA_HANDLE(device), handle, &dataSize, cacheData.data());
