@@ -69,7 +69,7 @@ namespace magma
             VkDeviceSize size = VK_WHOLE_SIZE);
 
     protected:
-        explicit Buffer(std::shared_ptr<Device> device,
+        Buffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             VkBufferCreateFlags flags,
             VkBufferUsageFlags usage,
