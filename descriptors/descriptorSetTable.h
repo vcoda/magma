@@ -42,6 +42,7 @@ namespace magma
     public:
         virtual const DescriptorList& getReflection() = 0;
         std::size_t getSize() { return getReflection().size(); }
+        bool valid();
         bool dirty();
 
     protected:

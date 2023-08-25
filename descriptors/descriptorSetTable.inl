@@ -1,5 +1,15 @@
 namespace magma
 {
+inline bool DescriptorSetTable::valid()
+{
+    const auto& list = getReflection();
+    return std::all_of(list.begin(), list.end(),
+        [](auto const& it)
+        {
+            return it.get().associatedWithResource();
+        });
+}
+
 inline bool DescriptorSetTable::dirty()
 {
     const auto& list = getReflection();
