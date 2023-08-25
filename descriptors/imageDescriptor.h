@@ -24,6 +24,9 @@ namespace magma
 {
     namespace descriptor
     {
+        typedef std::pair<std::shared_ptr<const ImageView>,
+            std::shared_ptr<const magma::Sampler>> ImageSamplerPair;
+
         /* Base class of image/sampler descriptor. */
 
         class ImageDescriptor : public Descriptor<VkDescriptorImageInfo>
@@ -58,7 +61,7 @@ namespace magma
         public:
             CombinedImageSampler(uint32_t binding) noexcept:
                 ImageDescriptor(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
-            CombinedImageSampler& operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>&) noexcept;
+            CombinedImageSampler& operator=(const ImageSamplerPair&) noexcept;
         };
 
         /* Immutable samplers are permanently bound into the set layout; later binding a sampler
@@ -69,7 +72,7 @@ namespace magma
         public:
             CombinedImageImmutableSampler(uint32_t binding) noexcept:
                 ImageDescriptor(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
-            CombinedImageImmutableSampler& operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>&) noexcept;
+            CombinedImageImmutableSampler& operator=(const ImageSamplerPair&) noexcept;
             CombinedImageImmutableSampler& operator=(std::shared_ptr<const ImageView>) noexcept;
         };
 

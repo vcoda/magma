@@ -62,7 +62,7 @@ inline Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler
     return *this;
 }
 
-inline CombinedImageSampler& CombinedImageSampler::operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler) noexcept
+inline CombinedImageSampler& CombinedImageSampler::operator=(const ImageSamplerPair& combinedImageSampler) noexcept
 {
     MAGMA_ASSERT(combinedImageSampler.first);
     MAGMA_ASSERT(combinedImageSampler.second);
@@ -77,7 +77,7 @@ inline CombinedImageSampler& CombinedImageSampler::operator=(const std::pair<std
     return *this;
 }
 
-inline CombinedImageImmutableSampler& CombinedImageImmutableSampler::operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler) noexcept
+inline CombinedImageImmutableSampler& CombinedImageImmutableSampler::operator=(const ImageSamplerPair& combinedImageSampler) noexcept
 {
     MAGMA_ASSERT(!binding.pImmutableSamplers);
     updateImageView(combinedImageSampler.first, VK_IMAGE_USAGE_SAMPLED_BIT);

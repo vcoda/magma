@@ -37,7 +37,7 @@ inline ImageSamplerDescriptor::ImageSamplerDescriptor(VkDescriptorImageInfo& des
     BaseImageDescriptor(descriptor, imageType, requiredUsage, updated)
 {}
 
-inline void ImageSamplerDescriptor::operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler) noexcept
+inline void ImageSamplerDescriptor::operator=(const ImageSamplerPair& combinedImageSampler) noexcept
 {
     MAGMA_ASSERT(combinedImageSampler.first);
     MAGMA_ASSERT(combinedImageSampler.second);
@@ -56,7 +56,7 @@ inline ImageImmutableSamplerDescriptor::ImageImmutableSamplerDescriptor(VkDescri
     immutableSampler(immutableSampler)
 {}
 
-inline void ImageImmutableSamplerDescriptor::operator=(const std::pair<std::shared_ptr<const ImageView>, std::shared_ptr<const magma::Sampler>>& combinedImageSampler) noexcept
+inline void ImageImmutableSamplerDescriptor::operator=(const ImageSamplerPair& combinedImageSampler) noexcept
 {
     MAGMA_ASSERT(VK_NULL_HANDLE == immutableSampler);
     MAGMA_ASSERT(combinedImageSampler.second);
