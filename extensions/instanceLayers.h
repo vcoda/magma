@@ -66,7 +66,9 @@ namespace magma
         const VkBool32 INTEL_state_tracker : 1;
 
         // https://github.com/KhronosGroup/Vulkan-ExtensionLayer
+        const VkBool32 KHRONOS_memory_decompression : 1;
         const VkBool32 KHRONOS_profiles : 1;
+        const VkBool32 KHRONOS_shader_object : 1;
         const VkBool32 KHRONOS_synchronization2 : 1;
         const VkBool32 KHRONOS_timeline_semaphore : 1;
         const VkBool32 KHRONOS_validation : 1;

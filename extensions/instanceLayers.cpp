@@ -71,7 +71,9 @@ InstanceLayers::InstanceLayers():
     MAGMA_CHECK_LAYER(INTEL_nullhw),
     MAGMA_CHECK_LAYER(INTEL_state_tracker),
 
+    MAGMA_CHECK_LAYER(KHRONOS_memory_decompression),
     MAGMA_CHECK_LAYER(KHRONOS_profiles),
+    MAGMA_CHECK_LAYER(KHRONOS_shader_object),
     MAGMA_CHECK_LAYER(KHRONOS_synchronization2),
     MAGMA_CHECK_LAYER(KHRONOS_timeline_semaphore),
     MAGMA_CHECK_LAYER(KHRONOS_validation),
