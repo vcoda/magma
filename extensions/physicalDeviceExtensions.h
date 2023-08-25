@@ -98,6 +98,7 @@ namespace magma
         const VkBool32 EXT_extended_dynamic_state : 1;
         const VkBool32 EXT_extended_dynamic_state2 : 1;
         const VkBool32 EXT_extended_dynamic_state3 : 1;
+        const VkBool32 EXT_external_memory_acquire_unmodified : 1;
         const VkBool32 EXT_external_memory_dma_buf : 1;
         const VkBool32 EXT_external_memory_host : 1;
         const VkBool32 EXT_filter_cubic : 1;
@@ -110,6 +111,7 @@ namespace magma
         const VkBool32 EXT_graphics_pipeline_library : 1;
         const VkBool32 EXT_hdr_metadata : 1;
         const VkBool32 EXT_headless_surface : 1;
+        const VkBool32 EXT_host_image_copy : 1;
         const VkBool32 EXT_host_query_reset : 1;
         const VkBool32 EXT_image_2d_view_of_3d : 1;
         const VkBool32 EXT_image_compression_control : 1;
