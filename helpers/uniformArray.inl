@@ -2,7 +2,7 @@ namespace magma
 {
 namespace helpers
 {
-template<typename Type>
+template<class Type>
 inline UniformArray<Type>::UniformArray(Type *const buffer, const uint32_t arraySize) noexcept:
     buffer(buffer),
     arraySize(arraySize)
@@ -11,14 +11,14 @@ inline UniformArray<Type>::UniformArray(Type *const buffer, const uint32_t array
     MAGMA_ASSERT(arraySize > 0);
 }
 
-template<typename Type>
+template<class Type>
 inline Type& UniformArray<Type>::operator[](const uint32_t index) noexcept
 {
     MAGMA_ASSERT(index < arraySize);
     return *buffer[index];
 }
 
-template<typename Type>
+template<class Type>
 class UniformArray<Type>::Iterator
 {
 public:

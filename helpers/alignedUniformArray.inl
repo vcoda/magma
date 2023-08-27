@@ -2,7 +2,7 @@ namespace magma
 {
 namespace helpers
 {
-template<typename Type>
+template<class Type>
 inline AlignedUniformArray<Type>::AlignedUniformArray(void *const buffer, const uint32_t arraySize, const VkDeviceSize alignment) noexcept:
     buffer(reinterpret_cast<char *const>(buffer)),
     arraySize(arraySize),
@@ -13,7 +13,7 @@ inline AlignedUniformArray<Type>::AlignedUniformArray(void *const buffer, const 
     MAGMA_ASSERT(alignment > 0);
 }
 
-template<typename Type>
+template<class Type>
 inline Type& AlignedUniformArray<Type>::operator[](const uint32_t index) noexcept
 {
     MAGMA_ASSERT(index < arraySize);
@@ -21,7 +21,7 @@ inline Type& AlignedUniformArray<Type>::operator[](const uint32_t index) noexcep
     return *reinterpret_cast<Type *>(elem);
 }
 
-template<typename Type>
+template<class Type>
 class AlignedUniformArray<Type>::Iterator
 {
 public:

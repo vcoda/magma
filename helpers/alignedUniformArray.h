@@ -24,7 +24,7 @@ namespace magma
         /* Helper class that allows to iterate and access the elements of DynamicUniformBuffer object.
            Takes into account an alignment of elements which is determined by hardware requirements. */
 
-        template<typename Type>
+        template<class Type>
         class AlignedUniformArray
         {
         public:
