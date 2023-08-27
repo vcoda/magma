@@ -23,40 +23,68 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_EXT_device_fault
-DeviceFaultInfo::DeviceFaultInfo() noexcept
-{
-    sType = VK_STRUCTURE_TYPE_DEVICE_FAULT_INFO_EXT;
-    pNext = nullptr;
-    description[0] = '\0';
-    pAddressInfos = nullptr;
-    pVendorInfos = nullptr;
-    pVendorBinaryData = nullptr;
-}
+DeviceFaultInfo::DeviceFaultInfo() noexcept:
+    VkDeviceFaultInfoEXT{
+        VK_STRUCTURE_TYPE_DEVICE_FAULT_INFO_EXT,
+        nullptr,
+        "",
+        nullptr,
+        nullptr,
+        nullptr
+    }
+{}
 
 DeviceFaultInfo::DeviceFaultInfo(const VkDeviceFaultCountsEXT& faultCounts):
+    VkDeviceFaultInfoEXT{
+        VK_STRUCTURE_TYPE_DEVICE_FAULT_INFO_EXT,
+        nullptr,
+        "",
+        new VkDeviceFaultAddressInfoEXT[faultCounts.addressInfoCount],
+        new VkDeviceFaultVendorInfoEXT[faultCounts.vendorInfoCount],
+        new uint8_t[static_cast<std::size_t>(faultCounts.vendorBinarySize)]
+    },
     addressInfoCount(faultCounts.addressInfoCount),
     vendorInfoCount(faultCounts.vendorInfoCount),
     vendorBinarySize(faultCounts.vendorBinarySize)
-{
-    sType = VK_STRUCTURE_TYPE_DEVICE_FAULT_INFO_EXT;
-    pNext = nullptr;
-    description[0] = '\0';
-    pAddressInfos = new VkDeviceFaultAddressInfoEXT[addressInfoCount];
-    pVendorInfos = new VkDeviceFaultVendorInfoEXT[vendorInfoCount];
-    pVendorBinaryData = new uint8_t[static_cast<std::size_t>(vendorBinarySize)];
-}
+{}
 
 DeviceFaultInfo::DeviceFaultInfo(const DeviceFaultInfo& other):
+    VkDeviceFaultInfoEXT{
+        other.sType,
+        other.pNext,
+        "",
+        core::copyArray(other.pAddressInfos, other.addressInfoCount),
+        core::copyArray(other.pVendorInfos, other.vendorInfoCount),
+        core::copyBinaryData(other.pVendorBinaryData, other.vendorBinarySize)
+    },
     addressInfoCount(other.addressInfoCount),
     vendorInfoCount(other.vendorInfoCount),
     vendorBinarySize(other.vendorBinarySize)
 {
-    sType = VK_STRUCTURE_TYPE_DEVICE_FAULT_INFO_EXT;
-    pNext = other.pNext;
     strcpy_s(description, VK_MAX_DESCRIPTION_SIZE, other.description);
-    pAddressInfos = core::copyArray(other.pAddressInfos, other.addressInfoCount);
-    pVendorInfos = core::copyArray(other.pVendorInfos, other.vendorInfoCount);
-    pVendorBinaryData = core::copyBinaryData(other.pVendorBinaryData, other.vendorBinarySize);
+}
+
+DeviceFaultInfo::DeviceFaultInfo(DeviceFaultInfo&& other) noexcept:
+    VkDeviceFaultInfoEXT{
+        other.sType,
+        other.pNext,
+        "",
+        other.pAddressInfos,
+        other.pVendorInfos,
+        other.pVendorBinaryData,
+    },
+    addressInfoCount(other.addressInfoCount),
+    vendorInfoCount(other.vendorInfoCount),
+    vendorBinarySize(other.vendorBinarySize)
+{
+    strcpy_s(description, VK_MAX_DESCRIPTION_SIZE, other.description);
+    other.pNext = nullptr;
+    other.pAddressInfos = nullptr;
+    other.pVendorInfos = nullptr;
+    other.pVendorBinaryData = nullptr;
+    other.addressInfoCount = 0;
+    other.vendorInfoCount = 0;
+    other.vendorBinarySize = 0;
 }
 
 DeviceFaultInfo& DeviceFaultInfo::operator=(const DeviceFaultInfo& other)
@@ -67,12 +95,12 @@ DeviceFaultInfo& DeviceFaultInfo::operator=(const DeviceFaultInfo& other)
         strcpy_s(description, VK_MAX_DESCRIPTION_SIZE, other.description);
         delete[] pAddressInfos;
         pAddressInfos = core::copyArray(other.pAddressInfos, other.addressInfoCount);
-        addressInfoCount = other.addressInfoCount;
         delete[] pVendorInfos;
         pVendorInfos = core::copyArray(other.pVendorInfos, other.vendorInfoCount);
-        vendorInfoCount = other.vendorInfoCount;
         delete[] pVendorBinaryData;
         pVendorBinaryData = core::copyBinaryData(other.pVendorBinaryData, other.vendorBinarySize);
+        addressInfoCount = other.addressInfoCount;
+        vendorInfoCount = other.vendorInfoCount;
         vendorBinarySize = other.vendorBinarySize;
     }
     return *this;
