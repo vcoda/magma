@@ -22,7 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineLayout.h"
 #include "pipelineCache.h"
 #include "device.h"
-#include "../shaders/pipelineShaderStage.h"
 #include "../allocator/allocator.h"
 #include "../misc/extProcAddress.h"
 #include "../exceptions/errorResult.h"

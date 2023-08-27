@@ -23,7 +23,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineCache.h"
 #include "device.h"
 #include "renderPass.h"
-#include "../shaders/pipelineShaderStage.h"
 #include "../states/vertexInputState.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/tesselationState.h"

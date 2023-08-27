@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "../core/destructible.h"
 #include "../core/noncopyable.h"
+#include "../shaders/pipelineShaderStage.h"
 
 namespace magma
 {
@@ -25,7 +26,6 @@ namespace magma
     class Pipeline;
     class PipelineLayout;
     class PipelineCache;
-    class PipelineShaderStage;
     class IAllocator;
 
     /* Base class for batching pipeline construction. The preferred
