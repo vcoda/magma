@@ -26,6 +26,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+// Static inline variables are introduced since C++17 only:
+// https://en.cppreference.com/w/cpp/language/static#Static_data_members
+template<class Int>
+constexpr Int BadQueryResult<Int>::value;
+
 QueryPool::QueryPool(VkQueryType queryType, std::shared_ptr<Device> device, uint32_t queryCount,
     VkQueryControlFlags controlFlags, VkQueryPipelineStatisticFlags pipelineStatistics,
     std::shared_ptr<IAllocator> allocator,
