@@ -40,7 +40,8 @@ namespace magma
 
         protected:
             Binding(VkDescriptorType descriptorType,
-                uint32_t descriptorCount, uint32_t binding) noexcept;
+                uint32_t descriptorCount,
+                uint32_t binding) noexcept;
             void setImageType(VkImageType imageType) noexcept;
 
             VkDescriptorSetLayoutBinding binding;

@@ -24,8 +24,8 @@ namespace magma
 
     struct LoadStoreOp
     {
-        const VkAttachmentLoadOp load;
-        const VkAttachmentStoreOp store;
+        VkAttachmentLoadOp load;
+        VkAttachmentStoreOp store;
     };
 
     namespace op
@@ -48,7 +48,7 @@ namespace magma
         constexpr LoadStoreOp loadNone{VK_ATTACHMENT_LOAD_OP_LOAD, VK_ATTACHMENT_STORE_OP_NONE_QCOM};
         constexpr LoadStoreOp clearNone{VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_NONE_QCOM};
         constexpr LoadStoreOp dontCareNone{VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_NONE_QCOM};
-    #endif
+    #endif // VK_QCOM_render_pass_store_ops
 
         /* Useful as an alternative to preserve attachments in
            applications that cannot decide if an attachment will be
@@ -57,6 +57,6 @@ namespace magma
 
     #ifdef VK_EXT_load_store_op_none
         constexpr LoadStoreOp none{VK_ATTACHMENT_LOAD_OP_NONE_EXT, VK_ATTACHMENT_STORE_OP_NONE_EXT};
-    #endif // VK_QCOM_render_pass_store_ops
+    #endif // VK_EXT_load_store_op_none
     } // namespace op
 } // namespace magma
