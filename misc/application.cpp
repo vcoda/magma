@@ -21,20 +21,22 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Application::Application(const char *applicationName, uint32_t applicationVersion_,
-    const char *engineName, uint32_t engineVersion_, uint32_t apiVersion_,
-    const StructureChain& extendedInfo /* default */) noexcept
+Application::Application(const char *applicationName, uint32_t applicationVersion,
+    const char *engineName, uint32_t engineVersion, uint32_t apiVersion,
+    const StructureChain& extendedInfo /* default */) noexcept:
+    VkApplicationInfo{
+        VK_STRUCTURE_TYPE_APPLICATION_INFO,
+        extendedInfo.chainNodes(),
+        applicationName,
+        applicationVersion,
+        engineName,
+        engineVersion,
+        apiVersion
+    }
 {
     MAGMA_ASSERT(applicationName);
     MAGMA_ASSERT(strlen(applicationName) > 0);
     MAGMA_ASSERT(engineName);
     MAGMA_ASSERT(strlen(engineName) > 0);
-    sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    pNext = extendedInfo.chainNodes();
-    pApplicationName = applicationName;
-    applicationVersion = applicationVersion_;
-    pEngineName = engineName;
-    engineVersion = engineVersion_;
-    apiVersion = apiVersion_;
 }
 } // namespace magma
