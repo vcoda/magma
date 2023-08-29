@@ -19,8 +19,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Vulkan structures that are chained into linked list with head node
-       assigned to the pNext member of Vk*CreateInfo structure. */
+    /* Vulkan structures that are chained into linked list with head
+       node assigned to the pNext member of Vk*CreateInfo structure. */
 
     class StructureChain
     {
@@ -44,7 +44,8 @@ namespace magma
         mutable std::list<Node> chain;
     };
 
-    /* Binary blob of Vulkan structure that has at least sType and pNext members. */
+    /* Binary blob of Vulkan structure that has at least
+       sType and pNext members. */
 
     class StructureChain::Node
     {

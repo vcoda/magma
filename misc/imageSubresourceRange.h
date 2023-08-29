@@ -23,7 +23,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Describes the image subresource range within image that is affected by image barrier. */
+    /* Describes the image subresource range within image
+       that is affected by image barrier. */
 
     struct ImageSubresourceRange : VkImageSubresourceRange
     {

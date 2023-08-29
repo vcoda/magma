@@ -22,8 +22,9 @@ namespace magma
 {
     namespace exception
     {
-        /* Run time error codes are returned when a command needs to communicate
-           a failure that could only be detected at runtime. */
+        /* Run time error codes are returned when a command
+           needs to communicate a failure that could only be
+           detected at runtime. */
 
         class ErrorResult : public Exception
         {
@@ -95,8 +96,9 @@ namespace magma
                 ErrorResult(VK_ERROR_MEMORY_MAP_FAILED, message) {}
         };
 
-        /* The requested version of Vulkan is not supported by the driver
-           or is otherwise incompatible for implementation-specific reasons. */
+        /* The requested version of Vulkan is not supported
+           by the driver or is otherwise incompatible for
+           implementation-specific reasons. */
 
         class IncompatibleDriver : public ErrorResult
         {
@@ -125,9 +127,11 @@ namespace magma
         };
 #endif // VK_KHR_surface
 
-        /* A surface has changed in such a way that it is no longer compatible with the swapchain,
-           and further presentation requests using the swapchain will fail. Applications must query
-           the new surface properties and recreate their swapchain if they wish to continue presenting to the surface. */
+        /* A surface has changed in such a way that it is no longer
+           compatible with the swapchain, and further presentation
+           requests using the swapchain will fail. Applications must
+           query the new surface properties and recreate their swapchain
+           if they wish to continue presenting to the surface. */
 
 #ifdef VK_KHR_swapchain
         class OutOfDate : public ErrorResult
@@ -138,8 +142,9 @@ namespace magma
         };
 #endif // VK_KHR_swapchain
 
-        /* The display used by a swapchain does not use the same presentable image layout,
-           or is incompatible in a way that prevents sharing an image. */
+        /* The display used by a swapchain does not use the same
+           presentable image layout, or is incompatible in a way
+           that prevents sharing an image. */
 
 #ifdef VK_KHR_display_swapchain
         class IncompatibleDisplay : public ErrorResult
@@ -150,9 +155,11 @@ namespace magma
         };
 #endif // VK_KHR_display_swapchain
 
-        /* An operation on a swapchain created with VK_FULL_SCREEN_EXCLUSIVE_APPLICATION_CONTROLLED_EXT
-           failed as it did not have exlusive full-screen access. This may occur due to
-           implementation-dependent reasons, outside of the application’s control. */
+        /* An operation on a swapchain created with
+           VK_FULL_SCREEN_EXCLUSIVE_APPLICATION_CONTROLLED_EXT
+           failed as it did not have exlusive full-screen access.
+           This may occur due to implementation-dependent reasons,
+           outside of the application's control. */
 
 #ifdef VK_EXT_full_screen_exclusive
         class FullScreenExclusiveModeLost : public ErrorResult

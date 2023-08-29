@@ -22,8 +22,9 @@ namespace magma
 {
     typedef std::vector<std::reference_wrapper<descriptor::Binding>> DescriptorList;
 
-    /* Provides a reflection mechanism making it possible to investigate members of
-       descriptor set layout. Table contains an array of its descriptors to perform validation,
+    /* Provides a reflection mechanism making it possible to
+       investigate members of descriptor set layout. Table
+       contains an array of its descriptors to perform validation,
        check dirty states, update their descriptors writes etc.
 
        Usage example:

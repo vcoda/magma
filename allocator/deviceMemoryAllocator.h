@@ -24,9 +24,9 @@ VK_DEFINE_HANDLE(VmaDefragmentationContext)
 
 namespace magma
 {
-    /* The Vulkan Memory Allocator provides a simple and easy to integrate API
-       to help you allocate memory for Vulkan buffer and image storage.
-       https://gpuopen.com/vulkan-memory-allocator */
+    /* The Vulkan Memory Allocator provides a simple and easy way
+       to integrate API to help you allocate memory for Vulkan buffer
+       and image storage. See: https://gpuopen.com/vulkan-memory-allocator */
 
     class DeviceMemoryAllocator : public IDeviceMemoryAllocator,
         public std::enable_shared_from_this<DeviceMemoryAllocator>

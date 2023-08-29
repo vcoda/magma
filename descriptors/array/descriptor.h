@@ -38,7 +38,7 @@ namespace magma
                 bool& updated;
             };
 
-            /* Base class of image descriptor. */
+            /* Base class of image array descriptor. */
 
             class BaseImageDescriptor : public Descriptor<VkDescriptorImageInfo>
             {

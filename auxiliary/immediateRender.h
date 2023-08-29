@@ -42,9 +42,9 @@ namespace magma
         class GraphicsPipelineCache;
 
         /* Sometimes I miss immediate mode from OpenGL 1.x era.
-           This class serves as a replacement for it when you don't want
-           to mess around with vertex buffer mapping, data copy,
-           state changes etc. */
+           This class serves as a replacement for it when you don't
+           want to mess around with vertex buffer mapping, data copy,
+           render state changes etc. */
 
         class ImmediateRender : public Base
         {

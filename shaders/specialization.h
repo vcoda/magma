@@ -27,10 +27,11 @@ namespace magma
         SpecializationEntry(uint32_t index, Type Block::*member) noexcept;
     };
 
-    /* Specialization constants are a mechanism whereby constants in a SPIR-V module
-       can have their constant value specified at the time the pipeline is created.
-       This allows a SPIR-V module to have constants that can be modified while
-       executing an application that uses the Vulkan API. */
+    /* Specialization constants are a mechanism whereby constants
+       in a SPIR-V module can have their constant value specified
+       at the time the pipeline is created. This allows a SPIR-V
+       module to have constants that can be modified while executing
+       an application that uses the Vulkan API. */
 
     class Specialization final : public VkSpecializationInfo
     {

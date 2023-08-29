@@ -19,10 +19,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-#ifdef VK_NV_ray_tracing
-    /* Ray tracing pipelines can contain multiple shader groups that can be bound individually.
-       Each shader group behaves as if it was a pipeline using the shader group’s state. */
+    /* Ray tracing pipelines can contain multiple shader groups
+       that can be bound individually. Each shader group behaves
+       as if it was a pipeline using the shader group's state. */
 
+#ifdef VK_NV_ray_tracing
     class RayTracingShaderGroup : public VkRayTracingShaderGroupCreateInfoNV
     {
     protected:

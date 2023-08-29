@@ -31,11 +31,12 @@ namespace magma
         virtual std::size_t getBytesAllocated() const noexcept = 0;
     };
 
-    /* Provides overloaded new and delete operators for user-defined allocator.
-        Developers have to take the following into account:
-        std::make_shared uses ::new, so if any special behavior has been set up
-        using a class-specific operator new, it will differ from std::shared_ptr<T>(new T(args...)).
-        https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared */
+    /* Provides overloaded new and delete operators for user-
+       defined allocator. Developers have to take the following
+       into account: std::make_shared uses ::new, so if any special
+       behavior has been set up using a class-specific operator new,
+       it will differ from  std::shared_ptr<T>(new T(args...)).
+       https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared */
 
     class CxxAllocator
     {

@@ -19,8 +19,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Pool descriptor contains a descriptor type and number of descriptors
-       of that type to be allocated in the pool. */
+    /* Pool descriptor contains a descriptor type and number of
+       descriptors of that type to be allocated in the pool. */
 
     namespace descriptor
     {

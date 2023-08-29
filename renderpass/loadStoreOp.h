@@ -50,10 +50,9 @@ namespace magma
         constexpr LoadStoreOp dontCareNone{VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_NONE_QCOM};
     #endif // VK_QCOM_render_pass_store_ops
 
-        /* Useful as an alternative to preserve attachments in
-           applications that cannot decide if an attachment will be
-           used in a render pass until after the necessary pipelines
-           have been created. */
+        /* Useful as an alternative to preserve attachments in applications
+           that cannot decide if an attachment will be used in a render
+           pass until after the necessary pipelines have been created. */
 
     #ifdef VK_EXT_load_store_op_none
         constexpr LoadStoreOp none{VK_ATTACHMENT_LOAD_OP_NONE_EXT, VK_ATTACHMENT_STORE_OP_NONE_EXT};

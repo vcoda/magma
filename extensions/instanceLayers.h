@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     /* https://vulkan.gpuinfo.org/listinstancelayers.php
-       Keep layers list in alphabetical order. */
+       Keep list of layers in alphabetical order! */
 
     class InstanceLayers : public Layers
     {

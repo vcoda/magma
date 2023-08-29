@@ -19,14 +19,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Device loss can be triggered by a variety of issues, including
-       invalid API usage, implementation errors, or hardware failures.
+    /* Device loss can be triggered by a variety of issues,
+       including invalid API usage, implementation errors,
+       or hardware failures.
 
-       Method Device::getFaultInfo() may be called subsequent to a
-       VK_ERROR_DEVICE_LOST error code having been returned by the implementation.
-       This method allows developers to query for additional information on GPU
-       faults which may have caused device loss, and to generate binary crash dumps,
-       which may be loaded into external tools for further diagnosis. */
+       Method Device::getFaultInfo() may be called subsequent
+       to a VK_ERROR_DEVICE_LOST error code having been returned
+       by the implementation. This method allows developers
+       to query for additional information on GPU faults which
+       may have caused device loss, and to generate binary
+       crash dumps, which may be loaded into external tools
+       for further diagnosis. */
 
 #ifdef VK_EXT_device_fault
     class DeviceFaultInfo final : public VkDeviceFaultInfoEXT

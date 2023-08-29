@@ -39,10 +39,11 @@ namespace magma
     {
         class ImageDescriptorSet;
 
-        /* Accumulation buffer is dedicated for integrating multiple images.
-           In order to maintain accuracy over a number of blending operations,
-           the accumulation buffer should have a higher number of bits per component
-           than a typical color buffer, so use R16_UNORM or R16_SFLOAT format. */
+        /* Accumulation buffer is dedicated for integrating multiple
+           images. In order to maintain accuracy over a number of
+           blending operations, the accumulation buffer should have
+           a higher number of bits per component than a typical color
+           buffer, so use R16_UNORM or R16_SFLOAT format. */
 
         class AccumulationBuffer : public Base
         {

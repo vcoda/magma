@@ -21,11 +21,14 @@ namespace magma
 {
     class PhysicalDevice;
 
-    /* Buffer and image objects are created with a sharing mode controlling how they can be accessed from queues.
-        * VK_SHARING_MODE_EXCLUSIVE specifies that access to any range or image subresource of the object
-          will be exclusive to a single queue family at a time.
-        * VK_SHARING_MODE_CONCURRENT specifies that concurrent access to any range or image subresource
-          of the object from multiple queue families is supported. */
+    /* Buffer and image objects are created with a sharing mode
+       controlling how they can be accessed from queues.
+        * VK_SHARING_MODE_EXCLUSIVE specifies that access to any
+          range or image subresource of the object will be
+          exclusive to a single queue family at a time.
+        * VK_SHARING_MODE_CONCURRENT specifies that concurrent
+          access to any range or image subresource of the object
+          from multiple queue families is supported. */
 
     class Sharing
     {

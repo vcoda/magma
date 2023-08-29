@@ -44,12 +44,14 @@ namespace magma
         AllocationCallbacks() noexcept;
     };
 
-    /* Vulkan provides applications the opportunity to perform host memory allocations
-       on behalf of the Vulkan implementation. If this feature is not used,
-       the implementation will perform its own memory allocations. Since most memory
-       allocations are off the critical path, this is not meant as a performance feature.
-       Rather, this can be useful for certain embedded systems, for debugging purposes
-       (e.g. putting a guard page after all host allocations), or for memory allocation logging. */
+    /* Vulkan provides applications the opportunity to perform
+       host memory allocations on behalf of the Vulkan implementation.
+       If this feature is not used, the implementation will perform
+       its own memory allocations. Since most memory allocations are
+       off the critical path, this is not meant as a performance feature.
+       Rather, this can be useful for certain embedded systems, for
+       debugging purposes (e.g. putting a guard page after all host
+       allocations), or for memory allocation logging. */
 
     class IAllocator : public core::IDestructible, public AllocationCallbacks
     {
@@ -104,14 +106,18 @@ namespace magma
        Each device memory allocator hides the implementation details under it. */
     typedef void *DeviceMemoryBlock;
 
-    /* Previous generation APIs (OpenGL, DirectX 11) manage memory automatically.
-       In contrast, Vulkan requires explicit memory management that makes it possible to:
-           * Better manage memory
-           * Better optimize for specific platforms
-           * Alias (overlap) transient resources
-       Allocation of separate memory block per resource is inefficient and limited by OS.
-       This object provides an interface for memory allocator that can allocate a bigger
-       memory blocks in different heaps and then sub-allocate ranges for your resources. */
+    /* Previous generation APIs (OpenGL, DirectX 11) manage memory
+       automatically. In contrast, Vulkan requires explicit memory
+       management that makes it possible to:
+
+        * Better manage memory.
+        * Better optimize for specific platforms.
+        * Alias (overlap) transient resources.
+
+       Allocation of separate memory block per resource is inefficient
+       and limited by OS. This object provides an interface for memory
+       allocator that can allocate a bigger memory blocks in different
+       heaps and then sub-allocate ranges for your resources. */
 
     class IDeviceMemoryAllocator : public core::IDestructible
     {

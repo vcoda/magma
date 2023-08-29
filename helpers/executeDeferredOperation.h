@@ -25,9 +25,10 @@ namespace magma
     namespace helpers
     {
         /* Helper function to execute deferred operation concurrently.
-           Parameter <maxConcurrency> should be used only if application wants to reduce
-           the parallelism for this task. Otherwise, deferred operation will be scheduled
-           onto all available threads in the system. */
+           Parameter <maxConcurrency> should be used only if application
+           wants to reduce the parallelism for this task. Otherwise,
+           deferred operation will be scheduled onto all available
+           threads in the system. */
 
     #ifdef VK_KHR_deferred_host_operations
         VkResult executeDeferredOperation(std::shared_ptr<DeferredOperation> deferredOperation,

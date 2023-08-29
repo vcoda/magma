@@ -26,9 +26,10 @@ namespace magma
 
     namespace descriptor
     {
-        /* An acceleration structure is a descriptor type that is used to retrieve
-           scene geometry from within shaders that are used for ray traversal.
-           Shaders have read-only access to the memory. */
+        /* An acceleration structure is a descriptor type that is
+           used to retrieve scene geometry from within shaders that
+           are used for ray traversal. Shaders have read-only access
+           to the memory. */
 
     #if defined(VK_KHR_acceleration_structure) || defined(VK_NV_ray_tracing)
 

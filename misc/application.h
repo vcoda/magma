@@ -20,8 +20,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* IHVs (independent hardware vendors) can use information about application
-       to provide application-specific optimizations for any program. */
+    /* IHVs (independent hardware vendors) can use information
+       about application to provide application-specific
+       optimizations for any program. */
 
     class Application final : public VkApplicationInfo
     {

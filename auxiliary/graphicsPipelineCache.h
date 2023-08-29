@@ -39,9 +39,10 @@ namespace magma
 
     namespace aux
     {
-        /* Auxiliary cache used to speed up graphics pipeline construction in run-time.
-           Utilizes pipeline cache along with lookup of base pipeline and lookup of
-           existing pipeline by computing its hash. */
+        /* Auxiliary cache used to speed up graphics pipeline
+           construction in run-time. Utilizes pipeline cache along
+           with lookup of base pipeline and lookup of existing
+           pipeline by computing its hash. */
 
         class GraphicsPipelineCache : public Base
         {

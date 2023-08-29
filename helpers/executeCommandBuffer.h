@@ -25,7 +25,8 @@ namespace magma
     namespace helpers
     {
         /* Helper function to execute a number of calls to command buffer.
-           It allocates command buffer, calls begin/end() and submits it to the graphics queue. */
+           It allocates command buffer, calls begin/end() and submits it
+           to the graphics queue. */
 
         void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
             std::function<void(std::shared_ptr<CommandBuffer>)>& drawFn,

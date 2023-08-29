@@ -19,9 +19,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* For each layer name we calculate its hash in compile-time.
-       When layers are enumerated, their hashes added to hash map,
-       which allows fast lookup of layer in ctor-initializer. */
+    /* For each layer name we calculate its hash in compile-
+       time. When layers are enumerated, their hashes are
+       added to hash map, which allows a fast lookup of a layer. */
 
     class Layers
     {

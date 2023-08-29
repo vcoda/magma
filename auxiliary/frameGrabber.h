@@ -29,7 +29,7 @@ namespace magma
 
     namespace aux
     {
-        /* Auxiliary frame grabber to take screenshots. */
+        /* Auxiliary frame grabber with purpose of taking screenshots. */
 
         class FrameGrabber : public Base
         {

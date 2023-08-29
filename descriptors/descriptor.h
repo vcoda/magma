@@ -22,10 +22,11 @@ namespace magma
 {
     namespace descriptor
     {
-        /* Descriptor is coupled with VkDescriptorSetLayoutBinding structure.
-           While layout binding stores binding index and properties of binded descriptor,
-           descriptor itself manages descriptor structure of type <Type> to store
-           properties of underlying objects like buffers, images. samplers etc. */
+        /* Descriptor is coupled with VkDescriptorSetLayoutBinding
+           structure. While layout binding stores binding index and
+           properties of binded descriptor, descriptor itself manages
+           descriptor structure of type <Type> to store properties of
+           underlying objects like buffers, images. samplers etc. */
 
         template<class Type>
         class Descriptor : public Binding

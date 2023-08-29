@@ -23,13 +23,15 @@ namespace magma
     namespace descriptor
     {
         /* An inline uniform block is almost identical to a uniform buffer,
-           and differs only in taking its storage directly from the encompassing
-           descriptor set instead of being backed by buffer memory. It is typically
-           used to access a small set of constant data that does not require
-           the additional flexibility provided by the indirection enabled when using
-           a uniform buffer where the descriptor and the referenced buffer memory are decoupled.
-           Compared to push constants, they allow reusing the same set of constant data
-           across multiple disjoint sets of drawing and dispatching commands. */
+           and differs only in taking its storage directly from the
+           encompassing descriptor set instead of being backed by buffer
+           memory. It is typically used to access a small set of constant
+           data that does not require the additional flexibility provided
+           by the indirection enabled when using a uniform buffer where
+           the descriptor and the referenced buffer memory are decoupled.
+           Compared to push constants, they allow reusing the same set of
+           constant data across multiple disjoint sets of drawing and
+           dispatching commands. */
 
     #ifdef VK_EXT_inline_uniform_block
         template<class UniformBlockType>

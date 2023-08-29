@@ -25,8 +25,9 @@ namespace magma
 
     namespace aux
     {
-        /* Generates mip levels from base texture level using a series of image blit operations.
-           It's an analogue of glGenerateMipmap() function in OpenGL. */
+        /* Generates mip levels from base texture level using a
+           series of image blit operations. It's an analogue of
+           glGenerateMipmap() function in OpenGL. */
 
         bool generateMipmap(std::shared_ptr<Image> image,
             uint32_t baseLevel,

@@ -22,10 +22,10 @@ namespace magma
 {
     class PhysicalDevice;
 
-    /* Functionality that is restricted to the device-level must be implemented
-       as a device extension. For the list of extensions see:
-       https://registry.khronos.org/vulkan/
-       Keep extensions list in alphabetical order. */
+    /* Functionality that is restricted to the device-level
+       must be implemented as a device extension. For the list
+       of extensions see: https://registry.khronos.org/vulkan/
+       Keep list of extensions in alphabetical order! */
 
     class PhysicalDeviceExtensions : public Extensions
     {

@@ -21,7 +21,8 @@ namespace magma
 {
     class PhysicalDevice;
 
-    /* Describes the queue that is requested to be created along with the logical device. */
+    /* Describes the queue that is requested to be created
+       along with the logical device. */
 
     class DeviceQueueDescriptor final : public VkDeviceQueueCreateInfo
     {

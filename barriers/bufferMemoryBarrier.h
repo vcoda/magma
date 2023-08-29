@@ -21,10 +21,12 @@ namespace magma
 {
     class Buffer;
 
-    /* Buffer memory barriers only apply to memory accesses involving a specific buffer range.
-       That is, a memory dependency formed from an buffer memory barrier is scoped to access
-       via the specified buffer range. Buffer memory barriers can also be used to define
-       a queue family ownership transfer for the specified buffer range. */
+    /* Buffer memory barriers only apply to memory accesses
+       involving a specific buffer range. That is, a memory
+       dependency formed from an buffer memory barrier is scoped
+       to access via the specified buffer range. Buffer memory
+       barriers can also be used to define a queue family
+       ownership transfer for the specified buffer range. */
 
     struct BufferMemoryBarrier : VkBufferMemoryBarrier
     {

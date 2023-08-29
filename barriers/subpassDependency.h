@@ -35,10 +35,12 @@ namespace magma
         constexpr SubpassDependency operator~() const noexcept; // Swaps source and destination stages
     };
 
-    /* The first synchronization scope includes commands that occur earlier in submission order
-       than the vkCmdBeginRenderPass used to begin the render pass instance.
-       The second synchronization scope includes commands that occur later in submission order
-       than the vkCmdEndRenderPass used to end the render pass instance. */
+    /* The first synchronization scope includes commands that
+       occur earlier in submission order than the vkCmdBeginRenderPass
+       used to begin the render pass instance. The second
+       synchronization scope includes commands that occur later
+       in submission order than the vkCmdEndRenderPass used to
+       end the render pass instance. */
 
     struct SubpassExternalDependency : SubpassDependency
     {
@@ -49,10 +51,12 @@ namespace magma
             VkDependencyFlags dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT) noexcept;
     };
 
-    /* For a given subpass to allow a pipeline barrier, the render pass must declare
-       a self-dependency from that subpass to itself. That is, there must exist
-       a subpass dependency with srcSubpass and dstSubpass both equal to that subpass index.
-       More than one self-dependency can be declared for each subpass. */
+    /* For a given subpass to allow a pipeline barrier, the
+       render pass must declare a self-dependency from that
+       subpass to itself. That is, there must exist a subpass
+       dependency with srcSubpass and dstSubpass both equal to
+       that subpass index. More than one self-dependency can
+       be declared for each subpass. */
 
     struct SubpassSelfDependency : SubpassDependency
     {

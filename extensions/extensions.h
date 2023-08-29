@@ -19,9 +19,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* For each extensions name we calculate its hash in compile-time.
-       When instance or device extensions are enumerated, their hashes added to hash map,
-       which allows fast lookup of extensions in ctor-initializer. */
+    /* For each extensions name we calculate its hash
+       in compile-time. When instance or device extensions
+       are enumerated, their hashes are added to the hash
+       map, which allows a fast lookup of an extensions. */
 
     class Extensions
     {

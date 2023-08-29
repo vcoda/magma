@@ -22,9 +22,10 @@ namespace magma
 {
     namespace aux
     {
-        /* Sprite is a two-dimensional bitmap that is integrated into a background image.
-           Drawing is performed via image blitting with format conversion, scaling and filtering.
-           Color key and alpha blending aren't supported by image blit API. */
+        /* Sprite is a two-dimensional bitmap that is integrated
+           into a background image. Drawing is performed via image
+           blitting with format conversion, scaling and filtering.
+           Color key and alpha blending aren't supported by blit API. */
 
         class Sprite : public Image
         {

@@ -40,8 +40,9 @@ namespace magma
                 VkImageUsageFlags requiredUsage) noexcept;
         };
 
-        /* A sampler descriptor is a descriptor type associated with a sampler object,
-           used to control the behavior of sampling operations performed on a sampled image. */
+        /* A sampler descriptor is a descriptor type associated with
+           a sampler object, used to control the behavior of sampling
+           operations performed on a sampled image. */
 
         template<uint32_t Size>
         class SamplerArray : public ImageDescriptorArray<Size>
@@ -52,8 +53,9 @@ namespace magma
             array::SamplerDescriptor operator[](uint32_t index) noexcept;
         };
 
-        /* A combined image sampler is a single descriptor type associated with both a sampler and an image resource,
-           combining both a sampler and sampled image descriptor into a single descriptor. */
+        /* A combined image sampler is a single descriptor type associated
+           with both a sampler and an image resource, combining both a
+           sampler and sampled image descriptor into a single descriptor. */
 
         template<uint32_t Size>
         class CombinedImageSamplerArray : public ImageDescriptorArray<Size>
@@ -64,8 +66,9 @@ namespace magma
             array::ImageSamplerDescriptor operator[](uint32_t index) noexcept;
         };
 
-        /* Immutable samplers are permanently bound into the set layout; later binding a sampler
-           into an immutable sampler slot in a descriptor set is not allowed. */
+        /* Immutable samplers are permanently bound into the set layout;
+           later binding a sampler into an immutable sampler slot in a
+           descriptor set is not allowed. */
 
         template<uint32_t Size>
         class CombinedImageImmutableSamplerArray : public ImageDescriptorArray<Size>
@@ -86,8 +89,9 @@ namespace magma
             std::array<VkSampler, Size> immutableSamplers = {};
         };
 
-        /* A sampled image is a descriptor type associated with an image resource
-           via an image view that sampling operations can be performed on. */
+        /* A sampled image is a descriptor type associated with
+           an image resource via an image view that sampling
+           operations can be performed on. */
 
         template<uint32_t Size>
         class SampledImageArray : public ImageDescriptorArray<Size>
@@ -98,8 +102,9 @@ namespace magma
             array::ImageDescriptor operator[](uint32_t index) noexcept;
         };
 
-        /* A storage image is a descriptor type associated with an image resource
-           via an image view that load, store, and atomic operations can be performed on. */
+        /* A storage image is a descriptor type associated with
+           an image resource via an image view that load, store,
+           and atomic operations can be performed on. */
 
         template<uint32_t Size>
         class StorageImageArray : public ImageDescriptorArray<Size>
@@ -110,8 +115,9 @@ namespace magma
             array::ImageDescriptor operator[](uint32_t index) noexcept;
         };
 
-        /* An input attachment is a descriptor type associated with an image resource
-           via an image view that can be used for framebuffer local load operations in fragment shaders. */
+        /* An input attachment is a descriptor type associated with
+           an image resource via an image view that can be used for
+           framebuffer local load operations in fragment shaders. */
 
         template<uint32_t Size>
         class InputAttachmentArray : public ImageDescriptorArray<Size>

@@ -22,9 +22,8 @@ namespace magma
 {
     class Device;
 
-    /*  Helper class that allows to determine whether
-        some extended device features have been enabled or not.
-        Incapsulates boilerplate code that gets to the point. */
+    /*  Utility class that allows to determine whether some
+        extended device features have been enabled or not. */
 
     class DeviceFeatures : core::NonCopyable
     {

@@ -27,7 +27,8 @@ namespace magma
 
     namespace aux
     {
-        /* An abstract interface for mapping an #include request to an include result. */
+        /* An abstract interface for mapping an #include request
+           to a result source string. */
 
         class IShaderInclude : public core::IDestructible
         {

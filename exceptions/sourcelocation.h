@@ -21,12 +21,14 @@ namespace magma
 {
     namespace exception
     {
-        /* The source_location class represents certain information about the source code,
-           such as file names, line numbers, and function names. Previously, functions
-           that desire to obtain this information about the call site (for logging, testing,
-           or debugging purposes) must use macros so that predefined macros like
-           __LINE__ and __FILE__ are expanded in the context of the caller. The source_location
-           class provides a better alternative. */
+        /* The source_location class represents certain information
+           about the source code, such as file names, line numbers,
+           and function names. Previously, functions that desire to
+           obtain this information about the call site (for logging,
+           testing, or debugging purposes) must use macros so that
+           predefined macros like __LINE__ and __FILE__ are expanded
+           in the context of the caller. The source_location class
+           provides a better alternative. */
 
         struct source_location
         {

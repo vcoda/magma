@@ -32,9 +32,10 @@ namespace magma
 
     namespace aux
     {
-        /* Shader-based 8x12 glyph renderer. See https://www.shadertoy.com/view/Mt2GWD.
+        /* Shader-based 8x12 glyph renderer.
            Simple, but sub-optimal solution to draw text on the screen.
-           Supports only ASCII printable characters (32 - 127). */
+           Supports only ASCII printable characters (32 - 127).
+           See: https://www.shadertoy.com/view/Mt2GWD. */
 
         class TextShader : public Base
         {

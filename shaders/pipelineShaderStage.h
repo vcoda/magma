@@ -23,9 +23,10 @@ namespace magma
     class ShaderModule;
     class Specialization;
 
-    /* Presence of a shader stage in a pipeline is indicated by including a valid
-       shader stage info with module and an entry point from a shader module,
-       where that entry point is valid for the specified stage. */
+    /* Presence of a shader stage in a pipeline is indicated by
+       including a valid shader stage info with module and an
+       entry point from a shader module, where that entry point
+       is valid for the specified stage. */
 
     class PipelineShaderStage : public VkPipelineShaderStageCreateInfo
     {

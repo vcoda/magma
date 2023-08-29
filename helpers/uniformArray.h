@@ -21,7 +21,8 @@ namespace magma
 {
     namespace helpers
     {
-        /* Helper class that allows to iterate and access the elements of UniformBuffer object. */
+        /* Helper class that allows to iterate and access
+           the elements of UniformBuffer object. */
 
         template<class Type>
         class UniformArray

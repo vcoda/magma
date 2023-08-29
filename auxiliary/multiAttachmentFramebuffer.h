@@ -27,9 +27,10 @@ namespace magma
 
     namespace aux
     {
-        /* Auxiliary frame buffer that is responsible for management of
-           multiple color attachments and depth/stencil buffer. This allows
-           the rendering pipeline to draw to multiple render targets at once. */
+        /* Auxiliary frame buffer that is responsible for management
+           of multiple color attachments and depth/stencil buffer.
+           This allows the rendering pipeline to draw to multiple
+           render targets at once. */
 
         class MultiAttachmentFramebuffer : public Framebuffer
         {

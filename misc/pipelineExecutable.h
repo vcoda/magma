@@ -22,13 +22,17 @@ namespace magma
 {
     class Pipeline;
 
-    /* When a pipeline is created, its state and shaders are compiled into zero or more
-       device-specific executables, which are used when executing commands against that pipeline.
-       This extension adds a mechanism to query properties and statistics about the
-       different executables produced by the pipeline compilation process. This is intended
-       to be used by debugging and performance tools to allow them to provide more detailed
-       information to the user. Certain compile-time shader statistics provided through this extension
-       may be useful to developers for debugging or performance analysis. */
+    /* When a pipeline is created, its state and shaders are
+       compiled into zero or more device-specific executables,
+       which are used when executing commands against that pipeline.
+       This extension adds a mechanism to query properties and
+       statistics about the different executables produced by
+       the pipeline compilation process. This is intended to be
+       used by debugging and performance tools to allow them to
+       provide more detailed information to the user. Certain
+       compile-time shader statistics provided through this
+       extension may be useful to developers for debugging or
+       performance analysis. */
 
 #ifdef VK_KHR_pipeline_executable_properties
     class PipelineExecutable final : public core::NonCopyable

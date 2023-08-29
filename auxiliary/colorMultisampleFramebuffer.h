@@ -27,7 +27,7 @@ namespace magma
 
     namespace aux
     {
-        /* Auxiliary multi-sample color frame buffer with resolve attachment. */
+        /* Auxiliary multi-sample color framebuffer with resolve attachment. */
 
         class ColorMultisampleFramebuffer : public Framebuffer
         {

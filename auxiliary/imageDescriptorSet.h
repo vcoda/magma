@@ -32,7 +32,8 @@ namespace magma
 
     namespace aux
     {
-        /* Allocates descriptor set for the first image binding found in the shader reflection. */
+        /* Allocates descriptor set for the first image binding
+           found in the shader reflection. */
 
         class ImageDescriptorSet : public Base
         {

@@ -57,8 +57,9 @@ namespace magma
                 VkBufferUsageFlags requiredUsage) noexcept;
         };
 
-        /* A uniform texel buffer is a descriptor type associated with a buffer resource
-           via a buffer view that formatted load operations can be performed on. */
+        /* A uniform texel buffer is a descriptor type associated with
+           a buffer resource via a buffer view that formatted load
+           operations can be performed on. */
 
         template<uint32_t Size>
         class UniformTexelBufferArray : public TexelBufferDescriptorArray<Size>
@@ -69,8 +70,9 @@ namespace magma
             array::TexelBufferDescriptor operator[](uint32_t index) noexcept;
         };
 
-        /* A storage texel buffer is a descriptor type associated with a buffer resource
-           via a buffer view that formatted load, store, and atomic operations can be performed on. */
+        /* A storage texel buffer is a descriptor type associated with
+           a buffer resource via a buffer view that formatted load, store,
+           and atomic operations can be performed on. */
 
         template<uint32_t Size>
         class StorageTexelBufferArray : public TexelBufferDescriptorArray<Size>
@@ -81,8 +83,9 @@ namespace magma
             array::TexelBufferDescriptor operator[](uint32_t index) noexcept;
         };
 
-        /* A uniform buffer is a descriptor type associated with a buffer resource directly,
-           described in a shader as a structure with various members that load operations can be performed on. */
+        /* A uniform buffer is a descriptor type associated with a buffer
+           resource directly, described in a shader as a structure with
+           various members that load operations can be performed on. */
 
         template<uint32_t Size>
         class UniformBufferArray : public BufferDescriptorArray<Size>
@@ -93,9 +96,10 @@ namespace magma
             array::BufferDescriptor operator[](uint32_t index) noexcept;
         };
 
-        /* A storage buffer is a descriptor type associated with a buffer resource directly,
-           described in a shader as a structure with various members that load, store,
-           and atomic operations can be performed on. */
+        /* A storage buffer is a descriptor type associated with a buffer
+           resource directly, described in a shader as a structure with
+           various members that load, store, and atomic operations can be
+           performed on. */
 
         template<uint32_t Size>
         class StorageBufferArray : public BufferDescriptorArray<Size>

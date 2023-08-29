@@ -19,8 +19,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Utility wrapper over VkFormat enumeration.
-       Mostly used for internal purposes to get format properties. */
+    /* Utility class over VkFormat enumeration.
+       Mostly used for internal purposes to determine
+       format properties. */
 
     class Format
     {
