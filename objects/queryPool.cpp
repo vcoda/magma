@@ -17,7 +17,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
+#if defined(_M_IX86) || defined(_M_X64) || defined(__i386__) || defined(__x86_64__) || defined(_X86_) || defined(__amd64__)
 #include <nmmintrin.h>
+#else
+#include <arm_neon.h>
+#endif
 #include "queryPool.h"
 #include "device.h"
 #include "../allocator/allocator.h"
@@ -84,7 +88,17 @@ PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<Device> device,
     flags(flags)
 {   // Pipeline statistics queries write one integer value for each bit
     // that is enabled in the pipelineStatistics when the pool is created.
+#if defined(_M_IX86) || defined(_M_X64) || defined(__i386__) || defined(__x86_64__) || defined(_X86_) || defined(__amd64__)
     const int count = _mm_popcnt_u32(flags);
+#elif defined(__aarch64__)
+    #if __has_builtin(__builtin_popcount)
+    const int count = __builtin_popcount(flags);
+    #else
+    const int count = (int)vaddlv_u8(vcnt_u8(vcreate_u8((uint64_t)flags)));
+    #endif
+#else
+    #error Implement pop count
+#endif
     // If VK_QUERY_RESULT_WITH_AVAILABILITY_BIT is used, the final element
     // of each query's result is an integer indicating whether the query's result
     // is available, with any non-zero value indicating that it is available.
