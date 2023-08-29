@@ -23,7 +23,7 @@ namespace magma
     /* IHVs (independent hardware vendors) can use information about application
        to provide application-specific optimizations for any program. */
 
-    class Application : public VkApplicationInfo
+    class Application final : public VkApplicationInfo
     {
     public:
         explicit Application(const char *applicationName,
