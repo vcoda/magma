@@ -48,7 +48,7 @@ DeviceFaultInfo::DeviceFaultInfo(const VkDeviceFaultCountsEXT& faultCounts):
     vendorBinarySize(faultCounts.vendorBinarySize)
 {}
 
-DeviceFaultInfo::DeviceFaultInfo(const DeviceFaultInfo& other):
+DeviceFaultInfo::DeviceFaultInfo(const DeviceFaultInfo& other) noexcept:
     VkDeviceFaultInfoEXT{
         other.sType,
         other.pNext,
@@ -87,7 +87,7 @@ DeviceFaultInfo::DeviceFaultInfo(DeviceFaultInfo&& other) noexcept:
     other.vendorBinarySize = 0;
 }
 
-DeviceFaultInfo& DeviceFaultInfo::operator=(const DeviceFaultInfo& other)
+DeviceFaultInfo& DeviceFaultInfo::operator=(const DeviceFaultInfo& other) noexcept
 {
     if (this != &other)
     {

@@ -34,9 +34,9 @@ namespace magma
     public:
         DeviceFaultInfo() noexcept;
         explicit DeviceFaultInfo(const VkDeviceFaultCountsEXT& faultCounts);
-        DeviceFaultInfo(const DeviceFaultInfo&);
+        DeviceFaultInfo(const DeviceFaultInfo&) noexcept;
         DeviceFaultInfo(DeviceFaultInfo&&) noexcept;
-        DeviceFaultInfo& operator=(const DeviceFaultInfo&);
+        DeviceFaultInfo& operator=(const DeviceFaultInfo&) noexcept;
         ~DeviceFaultInfo();
 
     private:
