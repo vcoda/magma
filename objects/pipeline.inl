@@ -1,14 +1,15 @@
 namespace magma
 {
 #ifdef VK_EXT_pipeline_creation_feedback
-inline bool Pipeline::hitPipelineCache() const noexcept
+inline bool Pipeline::cacheHit() const noexcept
 {
-    return (creationFeedback.flags & VK_PIPELINE_CREATION_FEEDBACK_APPLICATION_PIPELINE_CACHE_HIT_BIT_EXT);
+    return creationFeedback.flags & VK_PIPELINE_CREATION_FEEDBACK_APPLICATION_PIPELINE_CACHE_HIT_BIT_EXT;
 }
 
-inline bool Pipeline::usedBasePipeline() const noexcept
-{
-    return (creationFeedback.flags & VK_PIPELINE_CREATION_FEEDBACK_BASE_PIPELINE_ACCELERATION_BIT_EXT);
+inline bool Pipeline::basePipelineAcceleration() const noexcept
+{   // An implementation should set the VK_PIPELINE_CREATION_FEEDBACK_BASE_PIPELINE_ACCELERATION_BIT bit
+    // if it was able to avoid a significant amount of work by using the base pipeline.
+    return creationFeedback.flags & VK_PIPELINE_CREATION_FEEDBACK_BASE_PIPELINE_ACCELERATION_BIT_EXT;
 }
 
 inline uint64_t Pipeline::getCreationDuration() const noexcept

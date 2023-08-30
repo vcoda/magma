@@ -52,8 +52,8 @@ namespace magma
         std::string getShaderDisassembly(VkShaderStageFlagBits stage) const;
     #endif // VK_AMD_shader_info
     #ifdef VK_EXT_pipeline_creation_feedback
-        bool hitPipelineCache() const noexcept;
-        bool usedBasePipeline() const noexcept;
+        bool cacheHit() const noexcept;
+        bool basePipelineAcceleration() const noexcept;
         uint64_t getCreationDuration() const noexcept;
         uint64_t getStageCreationDuration(uint32_t stageIndex) const noexcept;
     #endif // VK_EXT_pipeline_creation_feedback
