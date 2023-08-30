@@ -36,10 +36,10 @@ namespace magma
     class Specialization final : public VkSpecializationInfo
     {
     public:
-        template<typename Block>
+        template<class Block>
         explicit Specialization(const Block& data,
             const SpecializationEntry& entry) noexcept;
-        template<typename Block>
+        template<class Block>
         explicit Specialization(const Block& data,
             const std::initializer_list<SpecializationEntry>& mapEntries) noexcept;
         Specialization(const Specialization&) noexcept;

@@ -1459,6 +1459,9 @@
     <None Include="..\..\objects\pipelineBatch.inl">
       <Filter>Header Files\objects</Filter>
     </None>
+    <None Include="..\..\barriers\memoryBarrier.inl">
+      <Filter>Header Files\barriers</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">

@@ -28,21 +28,20 @@ namespace magma
 
     struct MemoryBarrier : VkMemoryBarrier
     {
-        constexpr MemoryBarrier(const VkAccessFlags srcAccessMask, const VkAccessFlags dstAccessMask) noexcept:
-            VkMemoryBarrier{
-                VK_STRUCTURE_TYPE_MEMORY_BARRIER,
-                nullptr, // pNext
-                srcAccessMask,
-                dstAccessMask
-            }
-        {}
+        constexpr MemoryBarrier(VkAccessFlags srcAccessMask,
+            VkAccessFlags dstAccessMask) noexcept;
     };
+} // namespace magma
 
+#include "memoryBarrier.inl"
+
+namespace magma
+{
     namespace barrier
     {
-#ifdef VK_NV_ray_tracing
+    #ifdef VK_NV_ray_tracing
         constexpr MemoryBarrier accelerationStructureReadWrite(VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_NV, VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_NV);
-#endif // VK_NV_ray_tracing
+    #endif // VK_NV_ray_tracing
     } // namespace barrier
 } // namespace magma
 

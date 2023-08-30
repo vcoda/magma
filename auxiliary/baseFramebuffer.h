@@ -46,7 +46,7 @@ namespace magma
             const std::shared_ptr<magma::Framebuffer>& getFramebuffer() const noexcept { return framebuffer; }
 
         protected:
-            explicit Framebuffer(VkFormat colorFormat,
+            Framebuffer(VkFormat colorFormat,
                 VkFormat depthStencilFormat,
                 uint32_t sampleCount) noexcept;
             VkImageLayout optimalDepthStencilLayout(std::shared_ptr<Device> device,

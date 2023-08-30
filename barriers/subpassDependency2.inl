@@ -1,8 +1,18 @@
 namespace magma
 {
 constexpr SubpassDependency2::SubpassDependency2() noexcept:
-    VkSubpassDependency2KHR{VK_STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2_KHR, nullptr,
-        0, 0, 0, 0, 0, 0, VK_DEPENDENCY_BY_REGION_BIT, 0}
+    VkSubpassDependency2KHR{
+        VK_STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2_KHR,
+        nullptr, // pNext
+        0, // srcSubpass
+        0, // dstSubpass
+        0, // srcStageMask
+        0, // dstStageMask
+        0, // srcAccessMask
+        0, // dstAccessMask
+        VK_DEPENDENCY_BY_REGION_BIT,
+        0  // viewOffset
+    }
 {}
 
 constexpr SubpassDependency2::SubpassDependency2(uint32_t srcSubpass, uint32_t dstSubpass,
@@ -11,7 +21,7 @@ constexpr SubpassDependency2::SubpassDependency2(uint32_t srcSubpass, uint32_t d
     VkDependencyFlags dependencyFlags, int32_t viewOffset) noexcept:
     VkSubpassDependency2KHR{
         VK_STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2_KHR,
-        nullptr,
+        nullptr, // pNext
         srcSubpass,
         dstSubpass,
         srcStageMask,
@@ -55,7 +65,8 @@ constexpr SubpassExternalDependency2::SubpassExternalDependency2(
     VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,
     VkDependencyFlags dependencyFlags /* VK_DEPENDENCY_BY_REGION_BIT */,
     int32_t viewOffset /* 0 */) noexcept:
-    SubpassDependency2(VK_SUBPASS_EXTERNAL, 0, srcStageMask, dstStageMask, srcAccessMask, dstAccessMask, dependencyFlags, viewOffset)
+    SubpassDependency2(VK_SUBPASS_EXTERNAL, 0, srcStageMask, dstStageMask,
+        srcAccessMask, dstAccessMask, dependencyFlags, viewOffset)
 {}
 
 constexpr SubpassSelfDependency2::SubpassSelfDependency2(uint32_t subpassIndex,
@@ -63,6 +74,7 @@ constexpr SubpassSelfDependency2::SubpassSelfDependency2(uint32_t subpassIndex,
     VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,
     VkDependencyFlags dependencyFlags /* VK_DEPENDENCY_BY_REGION_BIT */,
     int32_t viewOffset /* 0 */) noexcept:
-    SubpassDependency2(subpassIndex, subpassIndex, srcStageMask, dstStageMask, srcAccessMask, dstAccessMask, dependencyFlags, viewOffset)
+    SubpassDependency2(subpassIndex, subpassIndex, srcStageMask, dstStageMask,
+        srcAccessMask, dstAccessMask, dependencyFlags, viewOffset)
 {}
 } // namespace magma

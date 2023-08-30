@@ -1,6 +1,6 @@
 namespace magma
 {
-template<typename Block, typename Type>
+template<class Block, class Type>
 inline SpecializationEntry::SpecializationEntry(uint32_t index, Type Block::*member) noexcept
 {
     constantID = index;
@@ -9,7 +9,7 @@ inline SpecializationEntry::SpecializationEntry(uint32_t index, Type Block::*mem
     size = sizeof(Type);
 }
 
-template<typename Block>
+template<class Block>
 inline Specialization::Specialization(const Block& data, const SpecializationEntry& entry) noexcept
 {
     mapEntryCount = 1;
@@ -19,7 +19,7 @@ inline Specialization::Specialization(const Block& data, const SpecializationEnt
     pData = core::copyArray<char>(&data, dataSize);
 }
 
-template<typename Block>
+template<class Block>
 inline Specialization::Specialization(const Block& data, const std::initializer_list<SpecializationEntry>& mapEntries) noexcept
 {
     mapEntryCount = MAGMA_COUNT(mapEntries);

@@ -1,7 +1,15 @@
 namespace magma
 {
 constexpr SubpassDependency::SubpassDependency() noexcept:
-    VkSubpassDependency{0, 0, 0, 0, 0, 0, VK_DEPENDENCY_BY_REGION_BIT}
+    VkSubpassDependency{
+        0, // srcSubpass
+        0, // dstSubpass
+        0, // srcStageMask
+        0, // dstStageMask
+        0, // srcAccessMask
+        0, // dstAccessMask
+        VK_DEPENDENCY_BY_REGION_BIT
+    }
 {}
 
 constexpr SubpassDependency::SubpassDependency(uint32_t srcSubpass, uint32_t dstSubpass,
@@ -47,13 +55,15 @@ constexpr SubpassExternalDependency::SubpassExternalDependency(
     VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
     VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,
     VkDependencyFlags dependencyFlags /* VK_DEPENDENCY_BY_REGION_BIT */) noexcept:
-    SubpassDependency(VK_SUBPASS_EXTERNAL, 0, srcStageMask, dstStageMask, srcAccessMask, dstAccessMask, dependencyFlags)
+    SubpassDependency(VK_SUBPASS_EXTERNAL, 0, srcStageMask, dstStageMask,
+        srcAccessMask, dstAccessMask, dependencyFlags)
 {}
 
 constexpr SubpassSelfDependency::SubpassSelfDependency(uint32_t subpassIndex,
     VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
     VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,
     VkDependencyFlags dependencyFlags /* VK_DEPENDENCY_BY_REGION_BIT */) noexcept:
-    SubpassDependency(subpassIndex, subpassIndex, srcStageMask, dstStageMask, srcAccessMask, dstAccessMask, dependencyFlags)
+    SubpassDependency(subpassIndex, subpassIndex, srcStageMask, dstStageMask,
+        srcAccessMask, dstAccessMask, dependencyFlags)
 {}
 } // namespace magma
