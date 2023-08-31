@@ -88,7 +88,9 @@ PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<Device> device,
     flags(flags)
 {   // Pipeline statistics queries write one integer value for each bit
     // that is enabled in the pipelineStatistics when the pool is created.
-#if defined(_INCLUDED_NMM)
+#if defined(_INCLUDED_NMM) /* msc */ ||\
+    defined(_NMMINTRIN_H_INCLUDED) /* gcc */||\
+    defined(_NMMINTRIN_H) /* clang */
     const int count = _mm_popcnt_u32(flags);
 #elif defined(__aarch64__)
     #if __has_builtin(__builtin_popcount)
