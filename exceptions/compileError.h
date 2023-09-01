@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifdef _WIN32
 #pragma once
 #include <shaderc/shaderc.h>
 #include "exception.h"
@@ -52,4 +51,3 @@ namespace magma
     } // namespace exception
 } // namespace magma
 
-#endif // _WIN32

@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#ifdef _WIN32
 #include "shaderCompiler.h"
 #include "../objects/device.h"
 #include "../objects/shaderModule.h"
@@ -102,7 +101,8 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     const char *bytecode = shaderc_result_get_bytes(result);
     const std::size_t bytecodeSize = shaderc_result_get_length(result);
     std::shared_ptr<ShaderModule> shaderModule;
-    try {
+    try
+    {
         shaderModule = std::make_shared<ShaderModule>(device, reinterpret_cast<const uint32_t *>(bytecode), bytecodeSize, 0,
             device->getHostAllocator(), false);
         shaderc_result_release(result);
@@ -113,8 +113,5 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     }
     return shaderModule;
 }
-
-
 } // namespace aux
 } // namespace magma
-#endif // _WIN32

@@ -53,6 +53,7 @@ MAGMA_OBJS= \
 	auxiliary/immediateRender.o \
 	auxiliary/multiAttachmentFramebuffer.o \
 	auxiliary/profiler.o \
+	auxiliary/shaderCompiler.o \
 	auxiliary/sprite.o \
 	auxiliary/swapchainFramebuffer.o \
 	auxiliary/textShader.o \
