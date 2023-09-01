@@ -1,4 +1,4 @@
-# Abstraction layer to facilitate usage of Khronos Vulkan API
+# Abstraction layer over Khronos Vulkan API
 
 <p align="center">
     <img src="resources/vulkan.gif" width="94px" height="107px">
@@ -185,3 +185,10 @@ with
 PLATFORM=VK_USE_PLATFORM_XLIB_KHR
 ```
 Other compositors like Wayland or XRANDR have not been tested.
+
+## Examples
+
+To test that all components of library work as expected, I wrote a collection of simple C++ samples that use Magma.
+They are written in a cross-platform way (Windows/Linux/MacOS) to make sure that library is able to work on all platforms.
+
+You can find these samples here: [Basic C++ sample usages of Magma library and Vulkan graphics API](https://github.com/vcoda/basic-graphics-samples)
