@@ -29,6 +29,7 @@ else
 	TARGET=libmagma.a
 endif
 
+PCH_HEADER=core/pch.h
 MAGMA_OBJS= \
 	magma.o \
 	\
@@ -60,8 +61,6 @@ MAGMA_OBJS= \
 	\
 	barriers/bufferMemoryBarrier.o \
 	barriers/imageMemoryBarrier.o \
-	\
-	core/pch.o \
 	\
 	descriptors/accelerationStructureDescriptor.o \
 	descriptors/binding.o \
@@ -192,18 +191,23 @@ MAGMA_OBJS= \
 	\
 	third-party/SPIRV-Reflect/spirv_reflect.o
 
+PCH=$(PCH_HEADER).gch
 DEPS := $(MAGMA_OBJS:.o=.d)
 
 -include $(DEPS)
 
 %.o: %.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -include $(PCH_HEADER) -c $< -o $@
 
-magma: $(MAGMA_OBJS)
+magma: $(PCH) $(MAGMA_OBJS)
 	@echo "Make" $(TARGET)
 	@ar rcs $(TARGET) $(MAGMA_OBJS)
+
+$(PCH): $(PCH_HEADER)
+	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
 	@find . -name '*.o' -delete
 	@find . -name '*.a' -delete
+	@rm -rf $(PCH)
 	@rm -rf $(DEPS)
