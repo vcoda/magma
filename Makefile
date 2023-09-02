@@ -14,21 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-CC=g++
-PLATFORM=VK_USE_PLATFORM_XCB_KHR
-INCLUDE_DIR=-I$(VULKAN_SDK)/include -Icore
-CONSTEXPR_DEPTH_FLAGS=-ftemplate-depth=2048 -fconstexpr-depth=2048
-BASE_CFLAGS=-std=c++14 -m64 -msse4 -pthread $(CONSTEXPR_DEPTH_FLAGS) -Wno-enum-compare -Werror -D$(PLATFORM) $(INCLUDE_DIR)
-
-DEBUG ?= 1
-ifeq ($(DEBUG), 1)
-	CFLAGS=$(BASE_CFLAGS) -O0 -g -D_DEBUG
-	BUILD_TARGET=libmagmad.a
-else
-	CFLAGS=$(BASE_CFLAGS) -O3 -DNDEBUG
-	BUILD_TARGET=libmagma.a
-endif
-
 PCH_HEADER=core/pch.h
 SRC_OBJS= \
 	magma.o \
@@ -190,6 +175,21 @@ SRC_OBJS= \
 	states/viewportState.o \
 	\
 	third-party/SPIRV-Reflect/spirv_reflect.o
+
+CC=g++
+PLATFORM=VK_USE_PLATFORM_XCB_KHR
+INCLUDE_DIR=-I$(VULKAN_SDK)/include -Icore
+CONSTEXPR_DEPTH_FLAGS=-ftemplate-depth=2048 -fconstexpr-depth=2048
+BASE_CFLAGS=-std=c++14 -m64 -msse4 -pthread $(CONSTEXPR_DEPTH_FLAGS) -Wno-enum-compare -Werror -D$(PLATFORM) $(INCLUDE_DIR)
+
+DEBUG ?= 1
+ifeq ($(DEBUG), 1)
+	CFLAGS=$(BASE_CFLAGS) -O0 -g -D_DEBUG
+	BUILD_TARGET=libmagmad.a
+else
+	CFLAGS=$(BASE_CFLAGS) -O3 -DNDEBUG
+	BUILD_TARGET=libmagma.a
+endif
 
 PCH=$(PCH_HEADER).gch
 DEPS := $(SRC_OBJS:.o=.d)
