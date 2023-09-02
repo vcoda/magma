@@ -23,14 +23,14 @@ BASE_CFLAGS=-std=c++14 -m64 -msse4 -pthread $(CONSTEXPR_DEPTH_FLAGS) -Wno-enum-c
 DEBUG ?= 1
 ifeq ($(DEBUG), 1)
 	CFLAGS=$(BASE_CFLAGS) -O0 -g -D_DEBUG
-	TARGET=libmagmad.a
+	BUILD_TARGET=libmagmad.a
 else
 	CFLAGS=$(BASE_CFLAGS) -O3 -DNDEBUG
-	TARGET=libmagma.a
+	BUILD_TARGET=libmagma.a
 endif
 
 PCH_HEADER=core/pch.h
-MAGMA_OBJS= \
+SRC_OBJS= \
 	magma.o \
 	\
 	allocator/alignedAllocator.o \
@@ -192,22 +192,21 @@ MAGMA_OBJS= \
 	third-party/SPIRV-Reflect/spirv_reflect.o
 
 PCH=$(PCH_HEADER).gch
-DEPS := $(MAGMA_OBJS:.o=.d)
+DEPS := $(SRC_OBJS:.o=.d)
 
 -include $(DEPS)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -include $(PCH_HEADER) -c $< -o $@
 
-magma: $(PCH) $(MAGMA_OBJS)
-	@echo "Make" $(TARGET)
-	@ar rcs $(TARGET) $(MAGMA_OBJS)
+magma: $(PCH) $(SRC_OBJS)
+	@echo "Make" $(BUILD_TARGET)
+	@ar rcs $(BUILD_TARGET) $(SRC_OBJS)
 
 $(PCH): $(PCH_HEADER)
 	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
-	@find . -name '*.o' -delete
-	@find . -name '*.a' -delete
+	@find . -iregex '.*\.\(o\|a\)' -delete
 	@rm -rf $(PCH)
 	@rm -rf $(DEPS)
