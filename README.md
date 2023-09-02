@@ -171,10 +171,10 @@ For building library under Linux systems, **GNU Make** is used:
 * cd magma directory.
 * Run **make**.
 ```
-make magma DEBUG=1 -j<N>
+make DEBUG=1 -j<N>
 ```
 where N is the number of CPU threads you want to assign to compilation.
-By default, debug version of static library is builded. If you want to build a release one, use DEBUG=0.
+By default, debug version of static library is builded, so DEBUG flag can be omitted. If you want to build a release one, explicitly specify DEBUG=0.
 
 Vulkan supports different windowing system. By default, XCB is used. If you want to switch to Xlib, open Makefile and replace
 ```
