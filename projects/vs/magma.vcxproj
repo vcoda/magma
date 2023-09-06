@@ -408,6 +408,7 @@
     <ClCompile Include="..\..\barriers\bufferMemoryBarrier.cpp" />
     <ClCompile Include="..\..\barriers\imageMemoryBarrier.cpp" />
     <ClCompile Include="..\..\descriptors\accelerationStructureDescriptor.cpp" />
+    <ClCompile Include="..\..\exceptions\errorResult.cpp" />
     <ClCompile Include="..\..\helpers\executeDeferredOperation.cpp" />
     <ClCompile Include="..\..\magma.cpp" />
     <ClCompile Include="..\..\core\pch.cpp">

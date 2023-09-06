@@ -89,6 +89,7 @@ barriers\bufferMemoryBarrier.cpp ^
 barriers\imageMemoryBarrier.cpp ^
 descriptors\accelerationStructureDescriptor.cpp ^
 descriptors\binding.cpp ^
+exceptions\errorResult.cpp ^
 exceptions\exception.cpp ^
 extensions\extensions.cpp ^
 extensions\instanceExtensions.cpp ^
@@ -255,6 +256,7 @@ imageMemoryBarrier.obj ^
 pch.obj ^
 accelerationStructureDescriptor.obj ^
 binding.obj ^
+errorResult.obj ^
 exception.obj ^
 extensions.obj ^
 instanceExtensions.obj ^

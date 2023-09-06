@@ -16,9 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#pragma once
-#include <shaderc/shaderc.h>
 #include "exception.h"
+#ifndef MAGMA_NO_EXCEPTIONS
+#include <shaderc/shaderc.h>
 
 namespace magma
 {
@@ -50,4 +50,6 @@ namespace magma
         };
     } // namespace exception
 } // namespace magma
+
+#endif // !MAGMA_NO_EXCEPTIONS
 

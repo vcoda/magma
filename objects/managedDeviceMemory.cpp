@@ -64,7 +64,7 @@ void ManagedDeviceMemory::realloc(NonDispatchableHandle object,
 void ManagedDeviceMemory::bind(NonDispatchableHandle object, VkObjectType objectType,
     VkDeviceSize offset /* 0 */)
 {
-    VkResult result;
+    VkResult result = VK_SUCCESS;
     switch (objectType)
     {
     case VK_OBJECT_TYPE_BUFFER:

@@ -50,8 +50,10 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, VkSurfaceFormatKHR surfaceF
     retired(false),
     imageIndex(0)
 {
+#ifndef MAGMA_NO_EXCEPTIONS
     if (oldSwapchain && oldSwapchain->hadRetired())
         throw exception::OutOfDate("old swapchain must be a non-retired");
+#endif // !MAGMA_NO_EXCEPTIONS
 }
 
 Swapchain::Swapchain(std::shared_ptr<Device> device_, std::shared_ptr<const Surface> surface,
@@ -307,6 +309,7 @@ void Swapchain::addImage(std::shared_ptr<SwapchainImage> image, uint32_t imageIn
 
 void Swapchain::handleError(VkResult result, const char *message) const
 {
+#ifndef MAGMA_NO_EXCEPTIONS
     switch (result)
     {
     case VK_ERROR_INITIALIZATION_FAILED:
@@ -332,6 +335,7 @@ void Swapchain::handleError(VkResult result, const char *message) const
         throw exception::FullScreenExclusiveModeLost(message);
 #endif
     }
+#endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_THROW_FAILURE(result, message);
 }
 #endif // VK_KHR_swapchain

@@ -30,10 +30,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_REQUIRED_INSTANCE_EXTENSION(function, extensionName)\
     MAGMA_INSTANCE_EXTENSION(function);\
-    if (nullptr == function)\
-        throw magma::exception::UnsupportedExtension(extensionName, MAGMA_SOURCE_LOCATION);
+    if (!function) MAGMA_THROW_UNSUPPORTED(extensionName);
 
 #define MAGMA_REQUIRED_DEVICE_EXTENSION(function, extensionName)\
     MAGMA_DEVICE_EXTENSION(function);\
-    if (nullptr == function)\
-        throw magma::exception::UnsupportedExtension(extensionName, MAGMA_SOURCE_LOCATION);
+    if (!function) MAGMA_THROW_UNSUPPORTED(extensionName);

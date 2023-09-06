@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
+#ifndef MAGMA_NO_EXCEPTIONS
 #include "exception.h"
 
 namespace magma
@@ -91,3 +92,5 @@ const char* Exception::what() const noexcept
 }
 } // namespace exception
 } // namespace magma
+
+#endif // !MAGMA_NO_EXCEPTIONS

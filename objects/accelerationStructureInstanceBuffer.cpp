@@ -64,13 +64,16 @@ AccelerationStructureInstanceBuffer::AccelerationStructureInstanceBuffer(std::sh
     if (persistentlyMapped)
     {
         instances = (AccelerationStructureInstance *)stagingBuffer->getMemory()->map();
-        if (!instances)
-            throw exception::MemoryMapFailed("failed to map staging buffer of acceleration structure instances");
-        for (uint32_t instanceIndex = 0; instanceIndex < instanceCount; ++instanceIndex)
-        {   // Call constructor for each instance
-            new (&instances[instanceIndex]) AccelerationStructureInstance();
+        MAGMA_ASSERT(instances);
+        if (instances)
+        {
+            for (uint32_t instanceIndex = 0; instanceIndex < instanceCount; ++instanceIndex)
+            {   // Call constructor for each instance
+                new (&instances[instanceIndex]) AccelerationStructureInstance();
+            }
         }
-    } else
+    }
+    else
     {
         instanceArray.resize(instanceCount);
         instances = instanceArray.data();

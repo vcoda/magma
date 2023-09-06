@@ -82,8 +82,10 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     }
 #endif // VK_KHR_get_physical_device_properties2
     const VkResult result = vkCreateDevice(*physicalDevice, &deviceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+#ifndef MAGMA_NO_EXCEPTIONS
     if (VK_ERROR_INITIALIZATION_FAILED == result)
-        throw exception::InitializationFailed("initialization of logical device failed");
+        throw exception::InitializationFailed("failed to create logical device");
+#endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_THROW_FAILURE(result, "failed to create logical device");
     queues.reserve(queueDescriptors.size());
     for (const auto& desc : queueDescriptors)

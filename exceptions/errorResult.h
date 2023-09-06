@@ -26,6 +26,7 @@ namespace magma
            needs to communicate a failure that could only be
            detected at runtime. */
 
+    #ifndef MAGMA_NO_EXCEPTIONS
         class ErrorResult : public Exception
         {
         public:
@@ -107,9 +108,9 @@ namespace magma
                 ErrorResult(VK_ERROR_INCOMPATIBLE_DRIVER, message) {}
         };
 
-#ifdef VK_KHR_surface
         /* A surface is no longer available. */
 
+  #ifdef VK_KHR_surface
         class SurfaceLost : public ErrorResult
         {
         public:
@@ -125,7 +126,7 @@ namespace magma
             explicit NativeWindowInUse(const char *message) noexcept:
                 ErrorResult(VK_ERROR_NATIVE_WINDOW_IN_USE_KHR, message) {}
         };
-#endif // VK_KHR_surface
+    #endif // VK_KHR_surface
 
         /* A surface has changed in such a way that it is no longer
            compatible with the swapchain, and further presentation
@@ -133,27 +134,27 @@ namespace magma
            query the new surface properties and recreate their swapchain
            if they wish to continue presenting to the surface. */
 
-#ifdef VK_KHR_swapchain
+    #ifdef VK_KHR_swapchain
         class OutOfDate : public ErrorResult
         {
         public:
             explicit OutOfDate(const char *message) noexcept:
                 ErrorResult(VK_ERROR_OUT_OF_DATE_KHR, message) {}
         };
-#endif // VK_KHR_swapchain
+    #endif // VK_KHR_swapchain
 
         /* The display used by a swapchain does not use the same
            presentable image layout, or is incompatible in a way
            that prevents sharing an image. */
 
-#ifdef VK_KHR_display_swapchain
+    #ifdef VK_KHR_display_swapchain
         class IncompatibleDisplay : public ErrorResult
         {
         public:
             explicit IncompatibleDisplay(const char *message) noexcept:
                 ErrorResult(VK_ERROR_INCOMPATIBLE_DISPLAY_KHR, message) {}
         };
-#endif // VK_KHR_display_swapchain
+    #endif // VK_KHR_display_swapchain
 
         /* An operation on a swapchain created with
            VK_FULL_SCREEN_EXCLUSIVE_APPLICATION_CONTROLLED_EXT
@@ -161,47 +162,28 @@ namespace magma
            This may occur due to implementation-dependent reasons,
            outside of the application's control. */
 
-#ifdef VK_EXT_full_screen_exclusive
+    #ifdef VK_EXT_full_screen_exclusive
         class FullScreenExclusiveModeLost : public ErrorResult
         {
         public:
             explicit FullScreenExclusiveModeLost(const char *message) noexcept:
                 ErrorResult(VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT, message) {}
         };
-#endif // VK_EXT_full_screen_exclusive
+    #endif // VK_EXT_full_screen_exclusive
+    #endif // !MAGMA_NO_EXCEPTIONS
+
+    /* If C++ exceptions are not enabled, application has an
+       option to provide custom error handler which will be
+       called when a Vulkan error is encountered. */
+
+    #ifdef MAGMA_NO_EXCEPTIONS
+        typedef std::function<void(VkResult, const char *, const source_location&)> ErrorHandler;
+        void setErrorHandler(ErrorHandler errorHandler) noexcept;
+    #endif // MAGMA_NO_EXCEPTIONS
+
+        void handleResult(VkResult result, const char *message, const source_location& location);
     } // namespace exception
 } // namespace magma
 
-#define MAGMA_THROW_FAILURE(result, message)\
-    switch (result)\
-    {\
-    case VK_SUCCESS:\
-    case VK_NOT_READY:\
-    case VK_TIMEOUT:\
-    case VK_EVENT_SET:\
-    case VK_EVENT_RESET:\
-    case VK_INCOMPLETE:\
-/* #ifdef VK_KHR_swapchain */\
-    case VK_SUBOPTIMAL_KHR:\
-/* #endif */\
-        break;\
-    case VK_ERROR_OUT_OF_HOST_MEMORY:\
-        throw magma::exception::OutOfHostMemory(message, MAGMA_SOURCE_LOCATION);\
-    case VK_ERROR_OUT_OF_DEVICE_MEMORY:\
-        throw magma::exception::OutOfDeviceMemory(message, MAGMA_SOURCE_LOCATION);\
-    case VK_ERROR_DEVICE_LOST:\
-        throw magma::exception::DeviceLost(message, MAGMA_SOURCE_LOCATION);\
-    default:\
-        throw magma::exception::ErrorResult(result, message,  MAGMA_SOURCE_LOCATION);\
-    }
+#define MAGMA_THROW_FAILURE(result, message) magma::exception::handleResult(result, message, MAGMA_SOURCE_LOCATION)
 
-#define MAGMA_THROW_SURFACE_FAILURE(result, message)\
-    switch (result)\
-    {\
-    case VK_ERROR_OUT_OF_HOST_MEMORY:\
-        throw magma::exception::OutOfHostMemory(message, MAGMA_SOURCE_LOCATION);\
-    case VK_ERROR_OUT_OF_DEVICE_MEMORY:\
-        throw magma::exception::OutOfDeviceMemory(message, MAGMA_SOURCE_LOCATION);\
-    case VK_ERROR_NATIVE_WINDOW_IN_USE_KHR:\
-        throw exception::NativeWindowInUse(message);\
-    }

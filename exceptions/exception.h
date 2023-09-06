@@ -16,8 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include <exception>
 #include "sourcelocation.h"
+#ifndef MAGMA_NO_EXCEPTIONS
+#include <exception>
 
 namespace magma
 {
@@ -50,3 +51,7 @@ namespace magma
 } // namespace magma
 
 #define MAGMA_THROW(message) throw magma::exception::Exception(message, MAGMA_SOURCE_LOCATION)
+#else
+#define MAGMA_THROW(message) abort()
+#endif // !MAGMA_NO_EXCEPTIONS
+

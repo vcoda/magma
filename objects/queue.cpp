@@ -198,6 +198,7 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
     presentInfo.pImageIndices = &imageIndex;
     presentInfo.pResults = nullptr;
     const VkResult result = vkQueuePresentKHR(handle, &presentInfo);
+#ifndef MAGMA_NO_EXCEPTIONS
     switch (result)
     {
 #ifdef VK_KHR_swapchain
@@ -213,6 +214,7 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
         throw exception::FullScreenExclusiveModeLost("queue present failed");
 #endif
     }
+#endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_THROW_FAILURE(result, "queue present failed");
 }
 

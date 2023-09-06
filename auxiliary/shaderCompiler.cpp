@@ -96,21 +96,20 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     shaderc_compile_options_release(options);
     const shaderc_compilation_status status = shaderc_result_get_compilation_status(result);
     if (status != shaderc_compilation_status_success)
+    {
+    #ifndef MAGMA_NO_EXCEPTIONS
         throw exception::CompileError(result, MAGMA_SOURCE_LOCATION);
+    #else
+        MAGMA_ASSERT(shaderc_compilation_status_success == status);
+        return nullptr;
+    #endif // MAGMA_NO_EXCEPTIONS
+    }
     // Create shader module
     const char *bytecode = shaderc_result_get_bytes(result);
     const std::size_t bytecodeSize = shaderc_result_get_length(result);
-    std::shared_ptr<ShaderModule> shaderModule;
-    try
-    {
-        shaderModule = std::make_shared<ShaderModule>(device, reinterpret_cast<const uint32_t *>(bytecode), bytecodeSize, 0,
-            device->getHostAllocator(), false);
-        shaderc_result_release(result);
-    } catch (const exception::ErrorResult&)
-    {
-        shaderc_result_release(result);
-        throw;
-    }
+    std::shared_ptr<ShaderModule> shaderModule = std::make_shared<ShaderModule>(device,
+        reinterpret_cast<const uint32_t *>(bytecode), bytecodeSize, 0, device->getHostAllocator(), false);
+    shaderc_result_release(result);
     return shaderModule;
 }
 } // namespace aux

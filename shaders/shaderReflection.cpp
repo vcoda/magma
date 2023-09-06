@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "shaderReflection.h"
 #include "../exceptions/reflectionErrorResult.h"
 
+#ifndef MAGMA_NO_EXCEPTIONS
 #define MAGMA_THROW_REFLECTION_FAILURE(result, message)\
     switch (result)\
     {\
@@ -28,6 +29,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     default:\
         throw magma::exception::ReflectionErrorResult(result, message, MAGMA_SOURCE_LOCATION);\
     }
+#else
+#define MAGMA_THROW_REFLECTION_FAILURE(result, message)
+#endif // !MAGMA_NO_EXCEPTIONS
 
 namespace magma
 {

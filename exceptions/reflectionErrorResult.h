@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#ifndef MAGMA_NO_EXCEPTIONS
 #include "exception.h"
 #include "../third-party/SPIRV-Reflect/spirv_reflect.h"
 
@@ -39,3 +40,5 @@ namespace magma
         };
     } // namespace exception
 } // namespace magma
+
+#endif // !MAGMA_NO_EXCEPTIONS

@@ -93,7 +93,7 @@ void DeviceMemory::realloc(NonDispatchableHandle /* unused */,
 void DeviceMemory::bind(NonDispatchableHandle object, VkObjectType objectType,
     VkDeviceSize offset /* 0 */)
 {
-    VkResult result;
+    VkResult result = VK_SUCCESS;
     switch (objectType)
     {
     case VK_OBJECT_TYPE_BUFFER:
@@ -132,7 +132,7 @@ void DeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObjectType ob
     const std::vector<VkRect2D>& splitInstanceBindRegions /* empty */,
     VkDeviceSize offset /* 0 */)
 {
-    VkResult result;
+    VkResult result = VK_SUCCESS;
     if (VK_OBJECT_TYPE_BUFFER == objectType)
     {
         VkBindBufferMemoryInfoKHR bindBufferMemoryInfo;

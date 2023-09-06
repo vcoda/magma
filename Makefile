@@ -50,6 +50,7 @@ SRC_OBJS= \
 	descriptors/accelerationStructureDescriptor.o \
 	descriptors/binding.o \
 	\
+	exceptions/errorResult.o \
 	exceptions/exception.o \
 	\
 	extensions/extensions.o \

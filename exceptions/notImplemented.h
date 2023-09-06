@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#ifndef MAGMA_NO_EXCEPTIONS
 #include "exception.h"
 
 namespace magma
@@ -41,3 +42,9 @@ namespace magma
 #endif
 
 #define MAGMA_THROW_NOT_IMPLEMENTED throw magma::exception::NotImplemented(MAGMA_FUNCTION_SIGNATURE, MAGMA_SOURCE_LOCATION)
+
+#else
+
+#define MAGMA_THROW_NOT_IMPLEMENTED
+
+#endif // !MAGMA_NO_EXCEPTIONS

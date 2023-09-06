@@ -106,6 +106,7 @@ Instance::Instance(const std::vector<const char *>& enabledLayers, const std::ve
     }
 #endif // VK_EXT_debug_report
     const VkResult result = vkCreateInstance(&instanceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+#ifndef MAGMA_NO_EXCEPTIONS
     switch (result)
     {
     case VK_ERROR_INITIALIZATION_FAILED:
@@ -113,6 +114,7 @@ Instance::Instance(const std::vector<const char *>& enabledLayers, const std::ve
     case VK_ERROR_INCOMPATIBLE_DRIVER:
         throw exception::IncompatibleDriver("could not find a compatible Vulkan ICD");
     }
+#endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_THROW_FAILURE(result, "failed to create instance");
     for (const auto& properties: enumerateExtensions())
         extensions.emplace(properties.extensionName);
