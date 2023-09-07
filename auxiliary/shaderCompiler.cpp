@@ -33,7 +33,7 @@ ShaderCompiler::ShaderCompiler(std::shared_ptr<Device> device, std::shared_ptr<I
 {
     compiler = shaderc_compiler_initialize();
     if (!compiler)
-        MAGMA_THROW("failed to initialize shader compiler");
+        MAGMA_ERROR("failed to initialize shader compiler");
 }
 
 ShaderCompiler::~ShaderCompiler()

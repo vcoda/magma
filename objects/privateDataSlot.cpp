@@ -38,7 +38,7 @@ PrivateDataSlot::PrivateDataSlot(std::shared_ptr<Device> device,
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreatePrivateDataSlotEXT, VK_EXT_PRIVATE_DATA_EXTENSION_NAME);
     const VkResult result = vkCreatePrivateDataSlotEXT(MAGMA_HANDLE(device),
         &privateDataSlotInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create private data slot");
+    MAGMA_HANDLE_RESULT(result, "failed to create private data slot");
 }
 
 PrivateDataSlot::~PrivateDataSlot()

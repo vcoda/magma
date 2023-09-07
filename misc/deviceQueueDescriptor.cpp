@@ -95,6 +95,7 @@ uint32_t DeviceQueueDescriptor::chooseFamilyIndex(VkQueueFlagBits queueType,
             return queueFamilyIndex;
         ++queueFamilyIndex;
     }
-    MAGMA_THROW("could not find suitable queue family");
+    MAGMA_ERROR("could not find suitable queue family");
+    return 0;
 }
 } // namespace magma

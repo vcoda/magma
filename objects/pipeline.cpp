@@ -75,7 +75,7 @@ std::vector<std::shared_ptr<PipelineExecutable>> Pipeline::getExecutables() cons
         executableProperties.resize(executableCount, properties);
         result = vkGetPipelineExecutablePropertiesKHR(MAGMA_HANDLE(device), &pipelineInfo, &executableCount, executableProperties.data());
     }
-    MAGMA_THROW_FAILURE(result, "failed to get properties of pipeline executables");
+    MAGMA_HANDLE_RESULT(result, "failed to get properties of pipeline executables");
     std::vector<std::shared_ptr<PipelineExecutable>> executables;
     uint32_t index = 0;
     for (const auto& properties : executableProperties)
@@ -91,7 +91,7 @@ VkShaderStatisticsInfoAMD Pipeline::getShaderStatistics(VkShaderStageFlagBits st
     VkShaderStatisticsInfoAMD shaderStatisticInfo;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO_EXTENSION_NAME);
     const VkResult result = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_STATISTICS_AMD, &infoSize, &shaderStatisticInfo);
-    MAGMA_THROW_FAILURE(result, "failed to get shader statistics");
+    MAGMA_HANDLE_RESULT(result, "failed to get shader statistics");
     return shaderStatisticInfo;
 }
 

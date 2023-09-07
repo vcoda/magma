@@ -49,7 +49,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     for (const auto& descriptor: descriptors)
         locations.push_back(descriptor.get().getLayoutBinding().binding);
     if (std::unique(locations.begin(), locations.end()) != locations.end())
-        MAGMA_THROW("elements of descriptor set layout should have unique binding locations");
+        MAGMA_ERROR("elements of descriptor set layout should have unique binding locations");
     if (shaderReflectionFactory && !shaderFileName.empty())
     {   // Validate descriptors through shader reflection
         std::shared_ptr<const ShaderReflection> shaderReflection = shaderReflectionFactory->getReflection(shaderFileName);
@@ -74,7 +74,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     descriptorSetAllocateInfo.descriptorSetCount = 1;
     descriptorSetAllocateInfo.pSetLayouts = setLayout->getHandleAddress();
     const VkResult result = vkAllocateDescriptorSets(MAGMA_HANDLE(device), &descriptorSetAllocateInfo, &handle);
-    MAGMA_THROW_FAILURE(result, "failed to allocate descriptor set");
+    MAGMA_HANDLE_RESULT(result, "failed to allocate descriptor set");
     if (dirty())
     {   // Once allocated, descriptor set can be updated
         update();
@@ -111,7 +111,7 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
 {
     std::vector<const SpvReflectDescriptorSet *> descriptorSets = shaderReflection->enumerateDescriptorSets();
     if (setIndex >= descriptorSets.size())
-        MAGMA_THROW("set index exceeds number of reflected descriptor sets");
+        MAGMA_ERROR("set index exceeds number of reflected descriptor sets");
     const SpvReflectDescriptorSet *descriptorSet = descriptorSets[setIndex];
     const DescriptorList& descriptors = setTable.getReflection();
     for (const auto& ref: descriptors)
@@ -172,7 +172,7 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
         }
         const std::string error = oss.str();
         if (!error.empty())
-            MAGMA_THROW(error);
+            MAGMA_ERROR(error.c_str());
     }
 }
 } // namespace magma

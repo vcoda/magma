@@ -60,7 +60,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
 {
     std::shared_ptr<const ShaderReflection> reflection = fragmentShader->getReflection();
     if (!reflection)
-        MAGMA_THROW("shader reflection not found");
+        MAGMA_ERROR("shader reflection not found");
     std::shared_ptr<IAllocator> hostAllocator = MAGMA_HOST_ALLOCATOR(allocator);
     const AttachmentDescription attachment(format, 1,
         op::store,

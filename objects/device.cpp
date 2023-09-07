@@ -86,7 +86,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     if (VK_ERROR_INITIALIZATION_FAILED == result)
         throw exception::InitializationFailed("failed to create logical device");
 #endif // !MAGMA_NO_EXCEPTIONS
-    MAGMA_THROW_FAILURE(result, "failed to create logical device");
+    MAGMA_HANDLE_RESULT(result, "failed to create logical device");
     queues.reserve(queueDescriptors.size());
     for (const auto& desc : queueDescriptors)
         queues.emplace_back(desc, std::weak_ptr<Queue>());
@@ -130,7 +130,7 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
             VkQueue queueHandle = VK_NULL_HANDLE;
             vkGetDeviceQueue(handle, queueDesc.queueFamilyIndex, queueIndex, &queueHandle);
             if (VK_NULL_HANDLE == queueHandle)
-                MAGMA_THROW("failed to get device queue");
+                MAGMA_ERROR("failed to get device queue");
             auto queue = std::shared_ptr<Queue>(new Queue(queueHandle,
                 std::const_pointer_cast<Device>(shared_from_this()),
                 flags, queueDesc.queueFamilyIndex, queueIndex));
@@ -139,7 +139,8 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
             return queue;
         }
     }
-    MAGMA_THROW("failed to get device queue");
+    MAGMA_ERROR("failed to get device queue");
+    return 0;
 }
 
 std::shared_ptr<Queue> Device::getQueueForFamily(uint32_t queueFamilyIndex) const
@@ -164,7 +165,8 @@ std::shared_ptr<Queue> Device::getQueueForFamily(uint32_t queueFamilyIndex) cons
                 return queue;
         } catch (...) {}
     }
-    MAGMA_THROW("failed to get device queue");
+    MAGMA_ERROR("failed to get device queue");
+    return 0;
 }
 
 void Device::updateDescriptorSets(uint32_t descriptorWriteCount, const VkWriteDescriptorSet *descriptorWrites,
@@ -182,7 +184,7 @@ void Device::updateDescriptorSets(const std::vector<VkWriteDescriptorSet>& descr
 bool Device::waitIdle() const
 {
     const VkResult result = vkDeviceWaitIdle(handle);
-    MAGMA_THROW_FAILURE(result, "failed to wait for device become idle");
+    MAGMA_HANDLE_RESULT(result, "failed to wait for device become idle");
     return true;
 }
 
@@ -202,7 +204,7 @@ bool Device::waitForFences(const std::vector<std::shared_ptr<Fence>>& fences, bo
     for (const auto& fence : fences)
         dereferencedFences.put(*fence);
     const VkResult result = vkWaitForFences(handle, dereferencedFences.size(), dereferencedFences, MAGMA_BOOLEAN(waitAll), timeout);
-    MAGMA_THROW_FAILURE(result, "failed to wait for fences");
+    MAGMA_HANDLE_RESULT(result, "failed to wait for fences");
     // VK_SUCCESS or VK_TIMEOUT
     return (result != VK_TIMEOUT);
 }
@@ -224,7 +226,7 @@ bool Device::waitSemaphores(const std::vector<std::shared_ptr<TimelineSemaphore>
     waitInfo.pValues = values.data();
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkWaitSemaphoresKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
     const VkResult result = vkWaitSemaphoresKHR(handle, &waitInfo, timeout);
-    MAGMA_THROW_FAILURE(result, "failed to wait timeline semaphores");
+    MAGMA_HANDLE_RESULT(result, "failed to wait timeline semaphores");
     // VK_SUCCESS or VK_TIMEOUT
     return (result != VK_TIMEOUT);
 }
@@ -282,7 +284,7 @@ VkDeviceGroupPresentCapabilitiesKHR Device::getDeviceGroupPresentCapabilitiesKHR
     VkDeviceGroupPresentCapabilitiesKHR presentCapabitilies = {};
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDeviceGroupPresentCapabilitiesKHR, VK_KHR_DEVICE_GROUP_EXTENSION_NAME);
     const VkResult result = vkGetDeviceGroupPresentCapabilitiesKHR(handle, &presentCapabitilies);
-    MAGMA_THROW_FAILURE(result, "failed to get device present capabilities for a device group");
+    MAGMA_HANDLE_RESULT(result, "failed to get device present capabilities for a device group");
     return presentCapabitilies;
 }
 
@@ -291,7 +293,7 @@ VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupSurfacePresentModes(std::
     VkDeviceGroupPresentModeFlagsKHR presentModes = 0;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDeviceGroupSurfacePresentModesKHR, VK_KHR_DEVICE_GROUP_EXTENSION_NAME);
     const VkResult result = vkGetDeviceGroupSurfacePresentModesKHR(handle, *surface, &presentModes);
-    MAGMA_THROW_FAILURE(result, "failed to get surface present modes for a device group");
+    MAGMA_HANDLE_RESULT(result, "failed to get surface present modes for a device group");
     return presentModes;
 }
 
@@ -322,7 +324,7 @@ VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupSurfaceFullScreenExclusiv
     surfaceInfo.surface = *surface;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDeviceGroupSurfacePresentModes2EXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
     const VkResult result = vkGetDeviceGroupSurfacePresentModes2EXT(handle, &surfaceInfo, &presentModes);
-    MAGMA_THROW_FAILURE(result, "failed to get full-screen exclusive surface present modes for a device group");
+    MAGMA_HANDLE_RESULT(result, "failed to get full-screen exclusive surface present modes for a device group");
 #endif // VK_KHR_get_surface_capabilities2
     return presentModes;
 }
@@ -370,10 +372,10 @@ DeviceFaultInfo Device::getFaultInfo() const
     deviceFaultCounts.vendorBinarySize = 0ull;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDeviceFaultInfoEXT, VK_EXT_DEVICE_FAULT_EXTENSION_NAME);
     VkResult result = vkGetDeviceFaultInfoEXT(handle, &deviceFaultCounts, nullptr);
-    MAGMA_THROW_FAILURE(result, "failed to get device fault counts");
+    MAGMA_HANDLE_RESULT(result, "failed to get device fault counts");
     DeviceFaultInfo deviceFaultInfo(deviceFaultCounts);
     result = vkGetDeviceFaultInfoEXT(handle, &deviceFaultCounts, &deviceFaultInfo);
-    MAGMA_THROW_FAILURE(result, "failed to get device fault info");
+    MAGMA_HANDLE_RESULT(result, "failed to get device fault info");
     return deviceFaultInfo;
 }
 #endif // VK_EXT_device_fault

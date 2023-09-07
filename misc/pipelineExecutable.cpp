@@ -55,7 +55,7 @@ std::vector<VkPipelineExecutableStatisticKHR> PipelineExecutable::getStatistics(
         pipelineExecutableStatistics.resize(statisticCount, pipelineExecutableStatistic);
         result = vkGetPipelineExecutableStatisticsKHR(MAGMA_HANDLE(device), &pipelineExecutableInfo, &statisticCount, pipelineExecutableStatistics.data());
     }
-    MAGMA_THROW_FAILURE(result, "failed to get statistics of pipeline executable");
+    MAGMA_HANDLE_RESULT(result, "failed to get statistics of pipeline executable");
     return pipelineExecutableStatistics;
 }
 
@@ -91,7 +91,7 @@ std::vector<VkPipelineExecutableInternalRepresentationKHR> PipelineExecutable::g
         result = vkGetPipelineExecutableInternalRepresentationsKHR(MAGMA_HANDLE(device), &pipelineExecutableInfo,
             &internalRepresentationCount, internalRepresentations.data());
     }
-    MAGMA_THROW_FAILURE(result, "failed to get internal representations of pipeline executable");
+    MAGMA_HANDLE_RESULT(result, "failed to get internal representations of pipeline executable");
     return internalRepresentations;
 }
 #endif // VK_KHR_pipeline_executable_properties

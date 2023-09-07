@@ -68,7 +68,7 @@ DeviceMemoryAllocator::DeviceMemoryAllocator(std::shared_ptr<Device> device_,
     allocatorInfo.vulkanApiVersion = physicalDevice->getInstance()->getApiVersion();
     allocatorInfo.pTypeExternalMemoryHandleTypes = nullptr;
     const VkResult result = vmaCreateAllocator(&allocatorInfo, &allocator);
-    MAGMA_THROW_FAILURE(result, "failed to create VMA allocator");
+    MAGMA_HANDLE_RESULT(result, "failed to create VMA allocator");
 }
 
 DeviceMemoryAllocator::~DeviceMemoryAllocator()
@@ -119,7 +119,7 @@ DeviceMemoryBlock DeviceMemoryAllocator::allocate(VkObjectType objectType, NonDi
     default:
         result = vmaAllocateMemory(allocator, &memoryRequirements, &allocInfo, &allocation, nullptr);
     }
-    MAGMA_THROW_FAILURE(result, "failed to allocate memory");
+    MAGMA_HANDLE_RESULT(result, "failed to allocate memory");
     return reinterpret_cast<DeviceMemoryBlock>(allocation);
 }
 
@@ -157,7 +157,7 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
     std::vector<VmaAllocation> allocations(MAGMA_COUNT(allocInfos));
     const VkResult result = vmaAllocateMemoryPages(allocator, memoryRequirements.data(), allocInfos.data(),
         allocations.size(), allocations.data(), nullptr);
-    MAGMA_THROW_FAILURE(result, "failed to allocate memory pages");
+    MAGMA_HANDLE_RESULT(result, "failed to allocate memory pages");
     std::vector<DeviceMemoryBlock> memoryPages;
     memoryPages.reserve(allocations.size());
     for (auto& allocation : allocations)
@@ -167,7 +167,7 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
 
 DeviceMemoryBlock DeviceMemoryAllocator::realloc(DeviceMemoryBlock /* memory */, VkDeviceSize /* size */)
 {
-    MAGMA_THROW_FAILURE(VK_ERROR_FEATURE_NOT_PRESENT, "vmaResizeAllocation() deprecated");
+    MAGMA_HANDLE_RESULT(VK_ERROR_FEATURE_NOT_PRESENT, "vmaResizeAllocation() deprecated");
     return nullptr;
 }
 

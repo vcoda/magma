@@ -45,7 +45,7 @@ DisplayMode::DisplayMode(std::shared_ptr<const Display> display, const VkExtent2
     displayModeInfo.parameters.refreshRate = refreshRate;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkCreateDisplayModeKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
     const VkResult result = vkCreateDisplayModeKHR(MAGMA_HANDLE(physicalDevice), *display, &displayModeInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create display mode");
+    MAGMA_HANDLE_RESULT(result, "failed to create display mode");
 }
 
 const VkDisplayPlaneCapabilitiesKHR& DisplayMode::getPlaneCapabilities(uint32_t planeIndex) const
@@ -56,7 +56,7 @@ const VkDisplayPlaneCapabilitiesKHR& DisplayMode::getPlaneCapabilities(uint32_t 
         VkDisplayPlaneCapabilitiesKHR planeCaps;
         MAGMA_INSTANCE_EXTENSION(vkGetDisplayPlaneCapabilitiesKHR);
         const VkResult result = vkGetDisplayPlaneCapabilitiesKHR(MAGMA_HANDLE(physicalDevice), handle, planeIndex, &planeCaps);
-        MAGMA_THROW_FAILURE(result, "failed to get display plane capabilities");
+        MAGMA_HANDLE_RESULT(result, "failed to get display plane capabilities");
         capabilities[planeIndex] = planeCaps;
     }
     return capabilities[planeIndex];

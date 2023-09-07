@@ -172,9 +172,9 @@ namespace magma
     #endif // VK_EXT_full_screen_exclusive
     #endif // !MAGMA_NO_EXCEPTIONS
 
-    /* If C++ exceptions are not enabled, application has an
-       option to provide custom error handler which will be
-       called when a Vulkan error is encountered. */
+        /* If C++ exceptions are not enabled, application has an
+           option to provide custom error handler which will be
+           called when a Vulkan error is encountered. */
 
     #ifdef MAGMA_NO_EXCEPTIONS
         typedef std::function<void(VkResult, const char *, const source_location&)> ErrorHandler;
@@ -185,5 +185,5 @@ namespace magma
     } // namespace exception
 } // namespace magma
 
-#define MAGMA_THROW_FAILURE(result, message) magma::exception::handleResult(result, message, MAGMA_SOURCE_LOCATION)
+#define MAGMA_HANDLE_RESULT(result, message) magma::exception::handleResult(result, message, MAGMA_SOURCE_LOCATION)
 

@@ -41,7 +41,7 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
     pipelineLayoutInfo.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
     pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.begin();
     const VkResult result = vkCreatePipelineLayout(MAGMA_HANDLE(device), &pipelineLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create pipeline layout");
+    MAGMA_HANDLE_RESULT(result, "failed to create pipeline layout");
     hash = core::hashArgs(
         pipelineLayoutInfo.sType,
         pipelineLayoutInfo.flags,
@@ -66,7 +66,7 @@ PipelineLayout::PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLay
     pipelineLayoutInfo.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
     pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.begin();
     const VkResult result = vkCreatePipelineLayout(MAGMA_HANDLE(device), &pipelineLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create pipeline layout");
+    MAGMA_HANDLE_RESULT(result, "failed to create pipeline layout");
     hash = core::hashArgs(
         pipelineLayoutInfo.sType,
         pipelineLayoutInfo.flags,
@@ -99,7 +99,7 @@ PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const
     pipelineLayoutInfo.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
     pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.begin();
     const VkResult result = vkCreatePipelineLayout(MAGMA_HANDLE(device), &pipelineLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create pipeline layout");
+    MAGMA_HANDLE_RESULT(result, "failed to create pipeline layout");
     hash = core::hashArgs(
         pipelineLayoutInfo.sType,
         pipelineLayoutInfo.flags,

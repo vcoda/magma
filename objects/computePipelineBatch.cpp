@@ -106,6 +106,6 @@ void ComputePipelineBatch::buildPipelines(std::shared_ptr<Device> device,
         }
     }
     postBuild();
-    MAGMA_THROW_FAILURE(result, "failed to create multiple compute pipelines");
+    MAGMA_HANDLE_RESULT(result, "failed to create multiple compute pipelines");
 }
 } // namespace magma

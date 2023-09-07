@@ -115,7 +115,7 @@ Instance::Instance(const std::vector<const char *>& enabledLayers, const std::ve
         throw exception::IncompatibleDriver("could not find a compatible Vulkan ICD");
     }
 #endif // !MAGMA_NO_EXCEPTIONS
-    MAGMA_THROW_FAILURE(result, "failed to create instance");
+    MAGMA_HANDLE_RESULT(result, "failed to create instance");
     for (const auto& properties: enumerateExtensions())
         extensions.emplace(properties.extensionName);
     // Store enabled layers and extensions
@@ -140,7 +140,7 @@ uint32_t Instance::enumeratePhysicalDevices() const
 {
     uint32_t physicalDeviceCount = 0;
     const VkResult result = vkEnumeratePhysicalDevices(handle, &physicalDeviceCount, nullptr);
-    MAGMA_THROW_FAILURE(result, "failed to enumerate physical devices");
+    MAGMA_HANDLE_RESULT(result, "failed to enumerate physical devices");
     return physicalDeviceCount;
 }
 
@@ -155,7 +155,7 @@ std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId) c
         return nullptr;
     MAGMA_STACK_ARRAY(VkPhysicalDevice, physicalDevices, physicalDeviceCount);
     result = vkEnumeratePhysicalDevices(handle, &physicalDeviceCount, physicalDevices);
-    MAGMA_THROW_FAILURE(result, "failed to enumerate physical devices");
+    MAGMA_HANDLE_RESULT(result, "failed to enumerate physical devices");
     VkPhysicalDevice physicalDevice = physicalDevices[deviceId];
     std::shared_ptr<Instance> instance = std::const_pointer_cast<Instance>(shared_from_this());
     return std::shared_ptr<PhysicalDevice>(new PhysicalDevice(instance, physicalDevice, hostAllocator));
@@ -173,7 +173,7 @@ std::vector<VkPhysicalDeviceGroupPropertiesKHR> Instance::enumeratePhysicalDevic
         physicalDeviceGroups.resize(physicalDeviceGroupCount);
         result = vkEnumeratePhysicalDeviceGroupsKHR(handle, &physicalDeviceGroupCount, physicalDeviceGroups.data());
     }
-    MAGMA_THROW_FAILURE(result, "failed to enumerate physical device groups");
+    MAGMA_HANDLE_RESULT(result, "failed to enumerate physical device groups");
     return physicalDeviceGroups;
 }
 
@@ -221,7 +221,7 @@ std::vector<VkLayerProperties> Instance::enumerateLayers()
         properties.resize(propertyCount);
         result = vkEnumerateInstanceLayerProperties(&propertyCount, properties.data());
     }
-    MAGMA_THROW_FAILURE(result, "failed to enumerate instance layers");
+    MAGMA_HANDLE_RESULT(result, "failed to enumerate instance layers");
     return properties;
 }
 
@@ -235,7 +235,7 @@ std::vector<VkExtensionProperties> Instance::enumerateExtensions(const char *lay
         properties.resize(propertyCount);
         result = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, properties.data());
     }
-    MAGMA_THROW_FAILURE(result, "failed to enumerate instance extensions");
+    MAGMA_HANDLE_RESULT(result, "failed to enumerate instance extensions");
     return properties;
 }
 

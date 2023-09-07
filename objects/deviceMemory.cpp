@@ -42,7 +42,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     memoryAllocateInfo.memoryTypeIndex = findTypeIndex(flags);
     const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &memoryAllocateInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to allocate device memory");
+    MAGMA_HANDLE_RESULT(result, "failed to allocate device memory");
     ++allocationCount;
 }
 
@@ -86,7 +86,7 @@ void DeviceMemory::realloc(NonDispatchableHandle /* unused */,
     memoryAllocateInfo.memoryTypeIndex = findTypeIndex(flags);
     const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &memoryAllocateInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to reallocate device memory");
+    MAGMA_HANDLE_RESULT(result, "failed to reallocate device memory");
     ++allocationCount;
 }
 
@@ -121,7 +121,7 @@ void DeviceMemory::bind(NonDispatchableHandle object, VkObjectType objectType,
     default:
         MAGMA_THROW_NOT_IMPLEMENTED;
     };
-    MAGMA_THROW_FAILURE(result, "failed to bind device memory");
+    MAGMA_HANDLE_RESULT(result, "failed to bind device memory");
     if (VK_SUCCESS == result)
         binding = object;
 }
@@ -186,7 +186,7 @@ void DeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObjectType ob
     {
         MAGMA_THROW_NOT_IMPLEMENTED;
     }
-    MAGMA_THROW_FAILURE(result, "failed to bind device memory within device group");
+    MAGMA_HANDLE_RESULT(result, "failed to bind device memory within device group");
     if (VK_SUCCESS == result)
         binding = object;
 }

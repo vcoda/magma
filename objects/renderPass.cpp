@@ -115,7 +115,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
     renderPassInfo.dependencyCount = 2;
     renderPassInfo.pDependencies = dependencies;
     const VkResult result = vkCreateRenderPass(MAGMA_HANDLE(device), &renderPassInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create render pass");
+    MAGMA_HANDLE_RESULT(result, "failed to create render pass");
     hash = core::hashArgs(
         renderPassInfo.sType,
         renderPassInfo.flags,
@@ -159,7 +159,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
     renderPassInfo.dependencyCount = MAGMA_COUNT(dependencies);
     renderPassInfo.pDependencies = dependencies.data();
     const VkResult result = vkCreateRenderPass(MAGMA_HANDLE(device), &renderPassInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create render pass");
+    MAGMA_HANDLE_RESULT(result, "failed to create render pass");
     hash = core::hashArgs(
         renderPassInfo.sType,
         renderPassInfo.flags,

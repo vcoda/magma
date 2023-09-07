@@ -34,7 +34,7 @@ Semaphore::Semaphore(std::shared_ptr<Device> device,
     semaphoreInfo.pNext = extendedInfo.chainNodes();
     semaphoreInfo.flags = 0;
     const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create semaphore");
+    MAGMA_HANDLE_RESULT(result, "failed to create semaphore");
 }
 
 Semaphore::~Semaphore()

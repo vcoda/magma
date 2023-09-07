@@ -96,7 +96,7 @@ ImageView::ImageView(std::shared_ptr<Image> image_,
     }
 #endif // VK_KHR_maintenance2
     const VkResult result = vkCreateImageView(MAGMA_HANDLE(device), &imageViewInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create image view");
+    MAGMA_HANDLE_RESULT(result, "failed to create image view");
 }
 
 ImageView::ImageView(std::shared_ptr<Image> image, uint32_t baseMipLevel, uint32_t levelCount, uint32_t baseArrayLayer, uint32_t layerCount,

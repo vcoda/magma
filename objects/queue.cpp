@@ -91,7 +91,7 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
         submitInfo.pSignalSemaphores = dereferencedSignalSemaphores;
     }
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, MAGMA_OPTIONAL_HANDLE(fence));
-    MAGMA_THROW_FAILURE(result, "queue submission command failed");
+    MAGMA_HANDLE_RESULT(result, "queue submission command failed");
     for (auto& cmdBuffer : cmdBuffers)
     {   // Change state of command buffer
         cmdBuffer->onSubmit();
@@ -141,7 +141,7 @@ void Queue::submit(std::shared_ptr<TimelineSemaphore> semaphore, uint64_t waitVa
     submitInfoTimelineSemaphore.signalSemaphoreValueCount = 1;
     submitInfoTimelineSemaphore.pSignalSemaphoreValues = &signalValue;
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, VK_NULL_HANDLE);
-    MAGMA_THROW_FAILURE(result, "failed to submit queue");
+    MAGMA_HANDLE_RESULT(result, "failed to submit queue");
 }
 #endif // #ifdef VK_KHR_timeline_semaphore
 
@@ -215,7 +215,7 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
 #endif
     }
 #endif // !MAGMA_NO_EXCEPTIONS
-    MAGMA_THROW_FAILURE(result, "queue present failed");
+    MAGMA_HANDLE_RESULT(result, "queue present failed");
 }
 
 #ifdef VK_KHR_display_swapchain

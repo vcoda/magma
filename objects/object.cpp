@@ -37,7 +37,7 @@ void Object::setPrivateData(uint64_t data)
     {
         MAGMA_REQUIRED_DEVICE_EXTENSION(vkSetPrivateDataEXT, VK_EXT_PRIVATE_DATA_EXTENSION_NAME);
         const VkResult result = vkSetPrivateDataEXT(MAGMA_HANDLE(device), getObjectType(), handle, *privateDataSlot, data);
-        MAGMA_THROW_FAILURE(result, "failed to set private data");
+        MAGMA_HANDLE_RESULT(result, "failed to set private data");
     }
 #endif // VK_EXT_private_data
     // Fallback if extension not present
@@ -108,7 +108,7 @@ void Object::setDebugName(const std::string& name_)
         }
     #endif
     }
-    MAGMA_THROW_FAILURE(result, "failed to set object name");
+    MAGMA_HANDLE_RESULT(result, "failed to set object name");
 }
 
 void Object::setDebugTag(uint64_t tagName_, std::size_t tagSize, const void *tag)
@@ -156,7 +156,7 @@ void Object::setDebugTag(uint64_t tagName_, std::size_t tagSize, const void *tag
         }
     #endif
     }
-    MAGMA_THROW_FAILURE(result, "failed to set object tag");
+    MAGMA_HANDLE_RESULT(result, "failed to set object tag");
 }
 #endif // MAGMA_DEBUG
 } // namespace magma

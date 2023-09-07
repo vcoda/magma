@@ -69,7 +69,7 @@ ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
         }
     }
     if (!descriptorSet)
-        MAGMA_THROW("image binding not found");
+        MAGMA_ERROR("image binding not found");
 }
 
 ImageDescriptorSet::~ImageDescriptorSet()

@@ -85,7 +85,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     }
 #endif // VK_KHR_image_format_list
     const VkResult result = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create image");
+    MAGMA_HANDLE_RESULT(result, "failed to create image");
     // Allocate image memory
     StructureChain extendedMemoryInfo;
     VkMemoryRequirements memoryRequirements;
@@ -345,7 +345,7 @@ void Image::onDefragment()
     imageInfo.initialLayout = layout;
     vkDestroyImage(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
     const VkResult result = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to recreate defragmented image");
+    MAGMA_HANDLE_RESULT(result, "failed to recreate defragmented image");
     bindMemory(std::move(memory), offset);
 }
 
@@ -505,7 +505,7 @@ VkFormat Image::checkFormatFeature(std::shared_ptr<Device> device, VkFormat form
     const VkFormatProperties properties = physicalDevice->getFormatProperties(format);
     const bool hasFeature = (properties.optimalTilingFeatures & requiredFeature);
     if (!hasFeature)
-        MAGMA_THROW("format doesn't suport required feature");
+        MAGMA_ERROR("format doesn't suport required feature");
     return format;
 }
 } // namespace magma

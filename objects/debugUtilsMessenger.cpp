@@ -50,7 +50,7 @@ DebugUtilsMessenger::DebugUtilsMessenger(std::shared_ptr<const Instance> instanc
         debugUtilsMessengerInfo.pfnUserCallback = userCallback;
         debugUtilsMessengerInfo.pUserData = userData;
         const VkResult result = vkCreateDebugUtilsMessengerEXT(MAGMA_HANDLE(instance), &debugUtilsMessengerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-        MAGMA_THROW_FAILURE(result, "failed to create debug messenger");
+        MAGMA_HANDLE_RESULT(result, "failed to create debug messenger");
     }
 }
 

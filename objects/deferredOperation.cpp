@@ -31,7 +31,7 @@ DeferredOperation::DeferredOperation(std::shared_ptr<Device> device,
 {
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateDeferredOperationKHR, VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME);
     const VkResult result = vkCreateDeferredOperationKHR(MAGMA_HANDLE(device), MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create deferred operation");
+    MAGMA_HANDLE_RESULT(result, "failed to create deferred operation");
 }
 
 DeferredOperation::~DeferredOperation()

@@ -75,7 +75,7 @@ SwapchainImage::SwapchainImage(std::shared_ptr<Swapchain> swapchain):
     imageSwapchainInfo.pNext = nullptr;
     imageSwapchainInfo.swapchain = *swapchain;
     const VkResult result = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create swapchain image");
+    MAGMA_HANDLE_RESULT(result, "failed to create swapchain image");
 }
 
 SwapchainImage::~SwapchainImage()

@@ -49,7 +49,7 @@ CommandPool::CommandPool(std::shared_ptr<Device> device,
         cmdPoolInfo.flags |= VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     cmdPoolInfo.queueFamilyIndex = queueFamilyIndex;
     const VkResult result = vkCreateCommandPool(MAGMA_HANDLE(device), &cmdPoolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create command pool");
+    MAGMA_HANDLE_RESULT(result, "failed to create command pool");
 }
 
 CommandPool::~CommandPool()
@@ -78,7 +78,7 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     cmdBufferAllocateInfo.commandBufferCount = commandBufferCount;
     MAGMA_STACK_ARRAY(VkCommandBuffer, cmdBufferHandles, commandBufferCount);
     const VkResult result = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &cmdBufferAllocateInfo, cmdBufferHandles);
-    MAGMA_THROW_FAILURE(result, "failed to allocate command buffers");
+    MAGMA_HANDLE_RESULT(result, "failed to allocate command buffers");
     std::vector<std::shared_ptr<CommandBuffer>> cmdBuffers;
     for (const VkCommandBuffer handle : cmdBufferHandles)
     {

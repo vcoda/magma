@@ -68,6 +68,7 @@ uint32_t BaseDeviceMemory::findTypeIndex(VkMemoryPropertyFlags flags) const
         if ((memType.propertyFlags & flags) == flags)
             return memTypeIndex;
     }
-    MAGMA_THROW("failed to find suitable memory type");
+    MAGMA_ERROR("failed to find suitable memory type");
+    return 0;
 }
 } // namespace magma

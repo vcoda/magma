@@ -46,7 +46,7 @@ BufferView::BufferView(std::shared_ptr<Buffer> resource,
     bufferViewInfo.offset = offset;
     bufferViewInfo.range = range;
     const VkResult result = vkCreateBufferView(MAGMA_HANDLE(device), &bufferViewInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create buffer view");
+    MAGMA_HANDLE_RESULT(result, "failed to create buffer view");
 }
 
 BufferView::~BufferView()

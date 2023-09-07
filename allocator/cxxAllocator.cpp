@@ -31,7 +31,7 @@ void CxxAllocator::overrideDefaultAllocator(std::shared_ptr<ICxxAllocator> alloc
 {
 #ifdef MAGMA_DEBUG
     if (allocCount)
-        MAGMA_THROW("object allocator should be defined prior any allocations");
+        MAGMA_ERROR("object allocator should be defined prior any allocations");
 #endif
     CxxAllocator::allocator = std::move(allocator);
 }

@@ -52,7 +52,7 @@ SamplerYcbcrConversion::SamplerYcbcrConversion(std::shared_ptr<Device> device,
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateSamplerYcbcrConversionKHR, VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME);
     const VkResult result = vkCreateSamplerYcbcrConversionKHR(MAGMA_HANDLE(device), &samplerYcbcrConversionInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create Ycbcr sampler");
+    MAGMA_HANDLE_RESULT(result, "failed to create Ycbcr sampler");
 }
 
 SamplerYcbcrConversion::~SamplerYcbcrConversion()

@@ -56,7 +56,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device_, Vk
     }
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateAccelerationStructureNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult result = vkCreateAccelerationStructureNV(MAGMA_HANDLE(device), &accelerationStructureInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create acceleration structure");
+    MAGMA_HANDLE_RESULT(result, "failed to create acceleration structure");
     // Allocate acceleration structure memory
     StructureChain extendedMemoryInfo;
     const VkMemoryRequirements memoryRequirements = getObjectMemoryRequirements();
@@ -145,7 +145,7 @@ uint64_t AccelerationStructure::getReferenceHandle() const
     uint64_t refHandle;
     MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureHandleNV);
     const VkResult result = vkGetAccelerationStructureHandleNV(MAGMA_HANDLE(device), handle, sizeof(uint64_t), &refHandle);
-    MAGMA_THROW_FAILURE(result, "failed to get acceleration structure handle");
+    MAGMA_HANDLE_RESULT(result, "failed to get acceleration structure handle");
     return refHandle;
 }
 

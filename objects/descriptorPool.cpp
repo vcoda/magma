@@ -78,7 +78,7 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device_, uint32_t maxSets
     }
 #endif // VK_EXT_inline_uniform_block
     const VkResult result = vkCreateDescriptorPool(MAGMA_HANDLE(device), &descriptorPoolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create descriptor pool");
+    MAGMA_HANDLE_RESULT(result, "failed to create descriptor pool");
 }
 
 DescriptorPool::~DescriptorPool()
@@ -89,6 +89,6 @@ DescriptorPool::~DescriptorPool()
 void DescriptorPool::reset()
 {
     const VkResult result = vkResetDescriptorPool(MAGMA_HANDLE(device), handle, 0);
-    MAGMA_THROW_FAILURE(result, "failed to reset descriptor pool");
+    MAGMA_HANDLE_RESULT(result, "failed to reset descriptor pool");
 }
 } // namespace magma

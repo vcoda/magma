@@ -62,7 +62,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device_,
 #endif // VK_EXT_pipeline_creation_feedback
     const VkResult result = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),
         1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create compute pipeline");
+    MAGMA_HANDLE_RESULT(result, "failed to create compute pipeline");
     hash = core::hashArgs(
         pipelineInfo.sType,
         pipelineInfo.flags);

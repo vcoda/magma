@@ -54,7 +54,7 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     cmdBufferAllocateInfo.level = level;
     cmdBufferAllocateInfo.commandBufferCount = 1;
     const VkResult result = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &cmdBufferAllocateInfo, &handle);
-    MAGMA_THROW_FAILURE(result, VK_COMMAND_BUFFER_LEVEL_PRIMARY == level ?
+    MAGMA_HANDLE_RESULT(result, VK_COMMAND_BUFFER_LEVEL_PRIMARY == level ?
         "failed to allocate primary command buffer" : "failed to allocate secondary command buffer");
 }
 
@@ -145,7 +145,7 @@ void CommandBuffer::end()
            into command buffers (vkCmd*), run time errors are reported by vkEndCommandBuffer. */
         const VkResult result = vkEndCommandBuffer(handle);
         // This is the only place where command buffer may throw an exception.
-        MAGMA_THROW_FAILURE(result, "failed to record command buffer");
+        MAGMA_HANDLE_RESULT(result, "failed to record command buffer");
         state = State::Executable;
     }
 }

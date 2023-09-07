@@ -41,7 +41,7 @@ BinarySemaphore::BinarySemaphore(std::shared_ptr<Device> device,
     semaphoreTypeInfo.semaphoreType = VK_SEMAPHORE_TYPE_BINARY_KHR;
     semaphoreTypeInfo.initialValue = VK_FALSE; // When created, the semaphore is in the unsignaled state
     const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create binary semaphore");
+    MAGMA_HANDLE_RESULT(result, "failed to create binary semaphore");
 }
 
 BinarySemaphore::~BinarySemaphore()
@@ -58,7 +58,7 @@ void BinarySemaphore::signal(bool value)
     signalInfo.value = MAGMA_BOOLEAN(value);
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkSignalSemaphoreKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
     const VkResult result = vkSignalSemaphoreKHR(MAGMA_HANDLE(device), &signalInfo);
-    MAGMA_THROW_FAILURE(result, "failed to signal binary semaphore from a host");
+    MAGMA_HANDLE_RESULT(result, "failed to signal binary semaphore from a host");
 }
 
 TimelineSemaphore::TimelineSemaphore(std::shared_ptr<Device> device, uint64_t initialValue,
@@ -76,7 +76,7 @@ TimelineSemaphore::TimelineSemaphore(std::shared_ptr<Device> device, uint64_t in
     semaphoreTypeInfo.semaphoreType = VK_SEMAPHORE_TYPE_TIMELINE_KHR;
     semaphoreTypeInfo.initialValue = initialValue;
     const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create timeline semaphore");
+    MAGMA_HANDLE_RESULT(result, "failed to create timeline semaphore");
 }
 
 TimelineSemaphore::~TimelineSemaphore()
@@ -89,7 +89,7 @@ uint64_t TimelineSemaphore::getCounterValue() const
     uint64_t counter = 0ull;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetSemaphoreCounterValueKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
     const VkResult result = vkGetSemaphoreCounterValueKHR(MAGMA_HANDLE(device), handle, &counter);
-    MAGMA_THROW_FAILURE(result, "failed to get counter value of the timeline semaphore");
+    MAGMA_HANDLE_RESULT(result, "failed to get counter value of the timeline semaphore");
     return counter;
 }
 
@@ -102,7 +102,7 @@ void TimelineSemaphore::signal(uint64_t counter)
     signalInfo.value = counter;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkSignalSemaphoreKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
     const VkResult result = vkSignalSemaphoreKHR(MAGMA_HANDLE(device), &signalInfo);
-    MAGMA_THROW_FAILURE(result, "failed to signal timeline semaphore from a host");
+    MAGMA_HANDLE_RESULT(result, "failed to signal timeline semaphore from a host");
 }
 
 bool TimelineSemaphore::wait(uint64_t counter,
@@ -117,7 +117,7 @@ bool TimelineSemaphore::wait(uint64_t counter,
     waitInfo.pValues = &counter;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkWaitSemaphoresKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
     const VkResult result = vkWaitSemaphoresKHR(MAGMA_HANDLE(device), &waitInfo, timeout);
-    MAGMA_THROW_FAILURE(result, "failed to wait timeline semaphore from a host");
+    MAGMA_HANDLE_RESULT(result, "failed to wait timeline semaphore from a host");
     // VK_SUCCESS or VK_TIMEOUT
     return (result != VK_TIMEOUT);
 }

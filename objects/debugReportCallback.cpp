@@ -52,7 +52,7 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
         debugReportCallbackInfo.pfnCallback = userCallback;
         debugReportCallbackInfo.pUserData = userData;
         const VkResult result = vkCreateDebugReportCallbackEXT(MAGMA_HANDLE(instance), &debugReportCallbackInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-        MAGMA_THROW_FAILURE(result, "failed to create debug report callback");
+        MAGMA_HANDLE_RESULT(result, "failed to create debug report callback");
     }
 }
 

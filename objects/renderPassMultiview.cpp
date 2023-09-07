@@ -123,7 +123,7 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
     renderPassMultiviewInfo.correlationMaskCount = MAGMA_COUNT(this->correlationMasks);
     renderPassMultiviewInfo.pCorrelationMasks = this->correlationMasks.data();
     const VkResult result = vkCreateRenderPass(MAGMA_HANDLE(device), &renderPassInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_THROW_FAILURE(result, "failed to create multiview render pass");
+    MAGMA_HANDLE_RESULT(result, "failed to create multiview render pass");
     hash = core::hashArgs(
         renderPassInfo.sType,
         renderPassInfo.flags,
