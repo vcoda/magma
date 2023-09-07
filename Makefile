@@ -59,7 +59,6 @@ SRC_OBJS= \
 	extensions/layers.o \
 	extensions/physicalDeviceExtensions.o \
 	\
-	helpers/checkFeatureSupport.o \
 	helpers/executeCommandBuffer.o \
 	helpers/executeDeferredOperation.o \
 	helpers/stringize.o \

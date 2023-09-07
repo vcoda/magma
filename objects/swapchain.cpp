@@ -27,8 +27,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "debugReportCallback.h"
 #include "debugUtilsMessenger.h"
 #include "../allocator/allocator.h"
+#include "../misc/deviceFeatures.h"
 #include "../misc/extProcAddress.h"
-#include "../helpers/checkFeatureSupport.h"
 #include "../helpers/stackArray.h"
 #include "../helpers/stringize.h"
 #include "../exceptions/errorResult.h"
@@ -108,7 +108,8 @@ Swapchain::Swapchain(std::shared_ptr<Device> device_, std::shared_ptr<const Surf
         swapchainInfo.pNext = &swapchainDeviceGroupInfo;
     }
 #endif // VK_KHR_device_group
-    helpers::checkImageUsageSupport(surface, swapchainInfo.imageUsage, this->device->getPhysicalDevice());
+    if (!device->getDeviceFeatures()->checkImageUsageSupport(surface, swapchainInfo.imageUsage))
+        MAGMA_THROW("swapchain usage not supported by surface");
     VkResult result;
 #if defined(VK_KHR_display_swapchain) && defined(VK_KHR_display_surface)
     if (std::dynamic_pointer_cast<const DisplaySurface>(surface))

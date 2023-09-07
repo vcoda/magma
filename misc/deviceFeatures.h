@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
+    class Surface;
 
     /*  Utility class that allows to determine whether some
         extended device features have been enabled or not. */
@@ -37,6 +38,8 @@ namespace magma
 
         FormatFeaturesSupport checkFormatFeaturesSupport(VkFormat format,
             VkFormatFeatureFlags flags) const noexcept;
+        bool checkImageUsageSupport(std::shared_ptr<const Surface> surface,
+            VkImageUsageFlags flags);
         bool maintenanceEnabled(uint8_t index) const noexcept;
         bool negativeViewportHeightEnabled() const noexcept;
         bool separateDepthStencilLayoutsEnabled() const noexcept;

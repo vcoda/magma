@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "deviceFeatures.h"
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
+#include "../objects/surface.h"
 
 namespace magma
 {
@@ -42,6 +43,39 @@ DeviceFeatures::FormatFeaturesSupport DeviceFeatures::checkFormatFeaturesSupport
         result.buffer = (bufferFlags == flags);
     }
     return result;
+}
+
+bool DeviceFeatures::checkImageUsageSupport(std::shared_ptr<const Surface> surface, VkImageUsageFlags flags)
+{
+    if (std::shared_ptr<const Device> device = parent.lock())
+    {
+        std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+        const VkSurfaceCapabilitiesKHR surfaceCaps = physicalDevice->getSurfaceCapabilities(std::move(surface));
+        for (VkImageUsageFlagBits bit: {
+            VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
+            VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+            VK_IMAGE_USAGE_SAMPLED_BIT,
+            VK_IMAGE_USAGE_STORAGE_BIT,
+            VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+            VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+            VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT,
+            VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT,
+        #ifdef VK_NV_shading_rate_image
+            VK_IMAGE_USAGE_SHADING_RATE_IMAGE_BIT_NV,
+        #endif
+        #ifdef VK_EXT_fragment_density_map
+            VK_IMAGE_USAGE_FRAGMENT_DENSITY_MAP_BIT_EXT
+        #endif
+            })
+        {
+            if (flags & bit)
+            {
+                if (!(surfaceCaps.supportedUsageFlags & bit))
+                    return false;
+            }
+        }
+    }
+    return true;
 }
 
 bool DeviceFeatures::maintenanceEnabled(uint8_t index) const noexcept

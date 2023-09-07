@@ -96,7 +96,6 @@ extensions\instanceExtensions.cpp ^
 extensions\instanceLayers.cpp ^
 extensions\layers.cpp ^
 extensions\physicalDeviceExtensions.cpp ^
-helpers\checkFeatureSupport.cpp ^
 helpers\executeCommandBuffer.cpp ^
 helpers\executeDeferredOperation.cpp ^
 helpers\stringize.cpp ^
@@ -263,7 +262,6 @@ instanceExtensions.obj ^
 instanceLayers.obj ^
 layers.obj ^
 physicalDeviceExtensions.obj ^
-checkFeatureSupport.obj ^
 executeCommandBuffer.obj ^
 executeDeferredOperation.obj ^
 stringize.obj ^

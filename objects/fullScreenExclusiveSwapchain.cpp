@@ -23,8 +23,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "debugReportCallback.h"
 #include "debugUtilsMessenger.h"
 #include "../allocator/allocator.h"
+#include "../misc/deviceFeatures.h"
 #include "../misc/extProcAddress.h"
-#include "../helpers/checkFeatureSupport.h"
 #include "../helpers/stringize.h"
 #include "../exceptions/errorResult.h"
 
@@ -87,7 +87,8 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
         fullScreenExclusiveWin32Info.hmonitor = hMonitor;
     }
 #endif // VK_KHR_win32_surface
-    helpers::checkImageUsageSupport(surface, swapchainInfo.imageUsage, getDevice()->getPhysicalDevice());
+    if (!device->getDeviceFeatures()->checkImageUsageSupport(surface, swapchainInfo.imageUsage))
+        MAGMA_THROW("swapchain usage not supported by surface");
     VkResult result;
 #if defined(VK_KHR_display_swapchain) && defined(VK_KHR_display_surface)
     if (std::dynamic_pointer_cast<const DisplaySurface>(surface))
