@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "sourcelocation.h"
 #ifndef MAGMA_NO_EXCEPTIONS
 #include <exception>
+#endif
 
 namespace magma
 {
@@ -27,6 +28,7 @@ namespace magma
         /* Base exception class. Provides (optional) information as
            file name and line number where it was thrown. */
 
+    #ifndef MAGMA_NO_EXCEPTIONS
         class Exception : public std::exception
         {
         public:
@@ -47,11 +49,20 @@ namespace magma
             std::string message;
             source_location location_;
         };
+    #endif // !MAGMA_NO_EXCEPTIONS
+
+        /* If C++ exceptions are not enabled, application has an
+           option to provide custom exception handler which will be
+           called when library tries to throw an exception. */
+
+    #ifdef MAGMA_NO_EXCEPTIONS
+        typedef std::function<void(const char *, const source_location&)> ExceptionHandler;
+        void setExceptionHandler(ExceptionHandler exceptionHandler) noexcept;
+    #endif // MAGMA_NO_EXCEPTIONS
+
+        void handleException(const char *message, const source_location& location);
     } // namespace exception
 } // namespace magma
 
-#define MAGMA_THROW(message) throw magma::exception::Exception(message, MAGMA_SOURCE_LOCATION)
-#else
-#define MAGMA_THROW(message) abort()
-#endif // !MAGMA_NO_EXCEPTIONS
+#define MAGMA_THROW(message) magma::exception::handleException(message, MAGMA_SOURCE_LOCATION)
 

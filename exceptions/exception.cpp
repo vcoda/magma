@@ -17,13 +17,26 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#ifndef MAGMA_NO_EXCEPTIONS
 #include "exception.h"
 
 namespace magma
 {
 namespace exception
 {
+#ifdef MAGMA_NO_EXCEPTIONS
+static ExceptionHandler exceptionHandler =
+    [](const char *, const source_location&)
+    {   // If no exception handler is provided, simply call abort()
+        abort();
+    };
+
+void setExceptionHandler(ExceptionHandler exceptionHandler_) noexcept
+{
+    exceptionHandler = std::move(exceptionHandler_);
+}
+#endif // MAGMA_NO_EXCEPTIONS
+
+#ifndef MAGMA_NO_EXCEPTIONS
 Exception::Exception() noexcept:
     location_{}
 {}
@@ -90,7 +103,15 @@ const char* Exception::what() const noexcept
         return message.c_str();
     return "unknown";
 }
+#endif // !MAGMA_NO_EXCEPTIONS
+
+void handleException(const char *message, const source_location& location)
+{
+#ifndef MAGMA_NO_EXCEPTIONS
+    throw magma::exception::Exception(message, location);
+#else
+    exceptionHandler(message, location);
+#endif
+}
 } // namespace exception
 } // namespace magma
-
-#endif // !MAGMA_NO_EXCEPTIONS
