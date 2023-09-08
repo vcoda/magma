@@ -33,9 +33,12 @@ namespace magma
     class DeviceExtension final : public Extension<ExtProc, true>
     {
     public:
-        explicit DeviceExtension(VkDevice device, const char *name) noexcept:
+        explicit DeviceExtension(VkDevice device,
+            const char *name) noexcept:
             Extension<ExtProc, true>(vkGetDeviceProcAddr(device, name)) {}
-        explicit DeviceExtension(VkDevice device, const char *name, const char *extensionName):
+        explicit DeviceExtension(VkDevice device,
+            const char *name,
+            const char *extensionName):
             DeviceExtension(device, name)
         {
             Extension<ExtProc, true>::verify(extensionName);

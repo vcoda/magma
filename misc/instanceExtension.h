@@ -28,9 +28,12 @@ namespace magma
     class InstanceExtension final : public Extension<ExtProc, false>
     {
     public:
-        explicit InstanceExtension(VkInstance instance, const char *name) noexcept:
+        explicit InstanceExtension(VkInstance instance,
+            const char *name) noexcept:
             Extension<ExtProc, false>(vkGetInstanceProcAddr(instance, name)) {}
-        explicit InstanceExtension(VkInstance instance, const char *name, const char *extensionName):
+        explicit InstanceExtension(VkInstance instance,
+            const char *name,
+            const char *extensionName):
             InstanceExtension(instance, name)
         {
             Extension<ExtProc, false>::verify(extensionName);
