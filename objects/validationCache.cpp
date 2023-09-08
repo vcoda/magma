@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "validationCache.h"
 #include "device.h"
 #include "../allocator/allocator.h"
-#include "../misc/extProcAddress.h"
+#include "../misc/deviceExtension.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/stackArray.h"
 

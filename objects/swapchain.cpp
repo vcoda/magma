@@ -28,7 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "debugUtilsMessenger.h"
 #include "../allocator/allocator.h"
 #include "../misc/deviceFeatures.h"
-#include "../misc/extProcAddress.h"
+#include "../misc/deviceExtension.h"
 #include "../helpers/stackArray.h"
 #include "../helpers/stringize.h"
 #include "../exceptions/errorResult.h"

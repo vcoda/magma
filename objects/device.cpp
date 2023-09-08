@@ -36,7 +36,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #undef MAGMA_HANDLE
 #define MAGMA_HANDLE(p) handle
 #endif
-#include "../misc/extProcAddress.h"
+#include "../misc/deviceExtension.h"
 
 namespace magma
 {

@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "privateDataSlot.h"
 #include "../allocator/allocator.h"
-#include "../misc/extProcAddress.h"
+#include "../misc/deviceExtension.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma

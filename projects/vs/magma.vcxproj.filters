@@ -573,9 +573,6 @@
     <ClInclude Include="..\..\objects\transformFeedbackBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\misc\extProcAddress.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\core\compare.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
@@ -803,6 +800,15 @@
     </ClInclude>
     <ClInclude Include="..\..\objects\rayTracingPipelineBatch.h">
       <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\misc\instanceExtension.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\misc\deviceExtension.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\misc\extension.h">
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

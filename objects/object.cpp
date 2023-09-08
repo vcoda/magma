@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "object.h"
 #include "device.h"
 #include "privateDataSlot.h"
-#include "../misc/extProcAddress.h"
+#include "../misc/deviceExtension.h"
 #include "../helpers/castToDebugReport.h"
 #include "../exceptions/errorResult.h"
 

@@ -235,8 +235,11 @@
     <ClInclude Include="..\..\magma.h" />
     <ClInclude Include="..\..\misc\application.h" />
     <ClInclude Include="..\..\misc\borderColor.h" />
+    <ClInclude Include="..\..\misc\deviceExtension.h" />
     <ClInclude Include="..\..\misc\deviceFaultInfo.h" />
     <ClInclude Include="..\..\misc\deviceFeatures.h" />
+    <ClInclude Include="..\..\misc\extension.h" />
+    <ClInclude Include="..\..\misc\instanceExtension.h" />
     <ClInclude Include="..\..\misc\framebufferAttachmentImage.h" />
     <ClInclude Include="..\..\misc\sharing.h" />
     <ClInclude Include="..\..\misc\structureChain.h" />
@@ -244,7 +247,6 @@
     <ClInclude Include="..\..\misc\clearValue.h" />
     <ClInclude Include="..\..\misc\compatibility.h" />
     <ClInclude Include="..\..\misc\deviceQueueDescriptor.h" />
-    <ClInclude Include="..\..\misc\extProcAddress.h" />
     <ClInclude Include="..\..\misc\format.h" />
     <ClInclude Include="..\..\misc\geometry.h" />
     <ClInclude Include="..\..\misc\imageSubresourceRange.h" />

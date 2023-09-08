@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "debugUtilsMessenger.h"
 #include "instance.h"
 #include "../allocator/allocator.h"
-#include "../misc/extProcAddress.h"
+#include "../misc/instanceExtension.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma

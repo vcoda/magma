@@ -23,22 +23,15 @@ namespace magma
 {
     namespace exception
     {
-        /* Vulkan instance doesn't support requested extension. */
+        /* Vulkan driver doesn't support requested extension. */
 
         class UnsupportedExtension : public Exception
         {
         public:
-            explicit UnsupportedExtension(const char *extension,
-                const source_location& location) noexcept:
-                Exception(extension, location) {}
+            explicit UnsupportedExtension(const char *extension) noexcept:
+                Exception(extension) {}
         };
     } // namespace exception
 } // namespace magma
-
-#define MAGMA_THROW_UNSUPPORTED(extensionName) throw magma::exception::UnsupportedExtension(extensionName, MAGMA_SOURCE_LOCATION)
-
-#else
-
-#define MAGMA_THROW_UNSUPPORTED(extensionName) abort()
 
 #endif // !MAGMA_NO_EXCEPTIONS
