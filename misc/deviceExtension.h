@@ -29,19 +29,19 @@ namespace magma
        obtaining device-specific function pointers for any commands that
        use a device or device-child object as their dispatchable object. */
 
-    template<class ExtProc>
-    class DeviceExtension final : public Extension<ExtProc, true>
+    template<class Fn>
+    class DeviceExtension final : public Extension<Fn>
     {
     public:
         explicit DeviceExtension(VkDevice device,
             const char *name) noexcept:
-            Extension<ExtProc, true>(vkGetDeviceProcAddr(device, name)) {}
+            Extension<Fn>(vkGetDeviceProcAddr(device, name)) {}
         explicit DeviceExtension(VkDevice device,
             const char *name,
             const char *extensionName):
             DeviceExtension(device, name)
         {
-            Extension<ExtProc, true>::verify(extensionName);
+            Extension<Fn>::verify(extensionName, true);
         }
     };
 } // namespace magma

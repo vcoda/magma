@@ -28,8 +28,13 @@ namespace magma
         class UnsupportedExtension : public Exception
         {
         public:
-            explicit UnsupportedExtension(const char *extension) noexcept:
-                Exception(extension) {}
+            explicit UnsupportedExtension(const char *extension,
+                bool device) noexcept:
+                Exception(extension), device(device) {}
+            bool deviceExtension() const noexcept { return device; }
+
+        private:
+            const bool device;
         };
     } // namespace exception
 } // namespace magma

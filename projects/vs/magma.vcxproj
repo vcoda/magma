@@ -647,6 +647,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\misc\borderColor.inl" />
     <None Include="..\..\misc\clearAttachment.inl" />
     <None Include="..\..\misc\clearValue.inl" />
+    <None Include="..\..\misc\extension.inl" />
     <None Include="..\..\misc\format.inl" />
     <None Include="..\..\misc\imageSubresourceRange.inl" />
     <None Include="..\..\misc\pushConstantRange.inl" />

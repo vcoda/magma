@@ -26,33 +26,21 @@ namespace magma
 {
     /* Holds a pointer to the Vulkan ICD proc address. */
 
-    template<class ExtProc, bool device>
+    template<class Fn>
     class Extension
     {
     public:
-        operator ExtProc() const noexcept { return procAddr; }
+        operator Fn() const noexcept { return procAddr; }
         operator bool() { return procAddr != nullptr; }
 
     protected:
-        Extension(PFN_vkVoidFunction procAddr) noexcept:
-            procAddr(reinterpret_cast<ExtProc>(procAddr))
-        {}
-
-        void verify(const char *extensionName) const
-        {
-            if (!procAddr)
-            {
-            #ifndef MAGMA_NO_EXCEPTIONS
-                throw exception::UnsupportedExtension(extensionName);
-            #else
-                std::cout << "unsupported " << (device ? "device" : "instance") << " extension: "
-                    << extensionName << std::endl;
-                abort();
-            #endif // !MAGMA_NO_EXCEPTIONS
-            }
-        }
+        Extension(PFN_vkVoidFunction procAddr) noexcept;
+        void verify(const char *extensionName,
+            bool device) const;
 
     private:
-        const ExtProc procAddr;
+        const Fn procAddr;
     };
 } // namespace magma
+
+#include "extension.inl"

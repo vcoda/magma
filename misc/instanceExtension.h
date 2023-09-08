@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#pragma once
 #include "extension.h"
 #include "../objects/instance.h"
 
@@ -24,19 +23,19 @@ namespace magma
 {
     /* Represents enabled instance extension dispatchable command. */
 
-    template<class ExtProc>
-    class InstanceExtension final : public Extension<ExtProc, false>
+    template<class Fn>
+    class InstanceExtension final : public Extension<Fn>
     {
     public:
         explicit InstanceExtension(VkInstance instance,
             const char *name) noexcept:
-            Extension<ExtProc, false>(vkGetInstanceProcAddr(instance, name)) {}
+            Extension<Fn>(vkGetInstanceProcAddr(instance, name)) {}
         explicit InstanceExtension(VkInstance instance,
             const char *name,
             const char *extensionName):
             InstanceExtension(instance, name)
         {
-            Extension<ExtProc, false>::verify(extensionName);
+            Extension<Fn>::verify(extensionName, false);
         }
     };
 } // namespace magma

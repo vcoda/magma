@@ -1465,6 +1465,9 @@
     <None Include="..\..\barriers\memoryBarrier.inl">
       <Filter>Header Files\barriers</Filter>
     </None>
+    <None Include="..\..\misc\extension.inl">
+      <Filter>Header Files\misc</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">
