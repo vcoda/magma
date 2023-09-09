@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "queue.h"
 #include "fence.h"
 #include "commandBuffer.h"
-#include "../misc/deviceExtension.h"
+#include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
 #include "../core/copyMemory.h"
 

@@ -19,10 +19,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "displayMode.h"
 #include "display.h"
+#include "instance.h"
 #include "physicalDevice.h"
 #include "device.h"
 #include "../allocator/allocator.h"
-#include "../misc/instanceExtension.h"
+#include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma

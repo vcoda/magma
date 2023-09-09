@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineLayout.h"
 #include "../shaders/pipelineShaderStage.h"
 #include "../misc/pipelineExecutable.h"
-#include "../misc/deviceExtension.h"
+#include "../misc/extension.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 

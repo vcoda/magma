@@ -18,8 +18,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "display.h"
+#include "instance.h"
 #include "physicalDevice.h"
-#include "../misc/instanceExtension.h"
+#include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma

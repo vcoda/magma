@@ -32,7 +32,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #undef MAGMA_HANDLE
 #define MAGMA_HANDLE(p) handle
 #endif
-#include "../misc/instanceExtension.h"
+#include "../misc/extension.h"
 
 #ifdef MAGMA_DEBUG
 static magma::core::RefCountChecker _refCountChecker;

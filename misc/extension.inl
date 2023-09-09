@@ -6,7 +6,7 @@ inline Extension<Fn>::Extension(PFN_vkVoidFunction procAddr) noexcept:
 {}
 
 template<class Fn>
-inline void Extension<Fn>::verify(const char *extensionName, bool device) const
+inline void Extension<Fn>::requireProcAddress(const char *extensionName, bool device) const
 {
     if (!procAddr)
     {
@@ -15,8 +15,33 @@ inline void Extension<Fn>::verify(const char *extensionName, bool device) const
     #else
         std::cout << "unsupported " << (device ? "device" : "instance") << " extension: "
             << extensionName << std::endl;
+        MAGMA_ASSERT(procAddress);
         abort();
     #endif // !MAGMA_NO_EXCEPTIONS
     }
+}
+
+template<class Fn>
+inline InstanceExtension<Fn>::InstanceExtension(VkInstance instance, const char *name) noexcept:
+    Extension<Fn>(vkGetInstanceProcAddr(instance, name))
+{}
+
+template<class Fn>
+inline InstanceExtension<Fn>::InstanceExtension(VkInstance instance, const char *name, const char *extensionName):
+    InstanceExtension(instance, name)
+{
+    Extension<Fn>::requireProcAddress(extensionName, false);
+}
+
+template<class Fn>
+inline DeviceExtension<Fn>::DeviceExtension(VkDevice device, const char *name) noexcept:
+    Extension<Fn>(vkGetDeviceProcAddr(device, name))
+{}
+
+template<class Fn>
+inline DeviceExtension<Fn>::DeviceExtension(VkDevice device, const char *name, const char *extensionName):
+    DeviceExtension(device, name)
+{
+    Extension<Fn>::requireProcAddress(extensionName, true);
 }
 } // namespace magma

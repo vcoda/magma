@@ -35,12 +35,51 @@ namespace magma
 
     protected:
         Extension(PFN_vkVoidFunction procAddr) noexcept;
-        void verify(const char *extensionName,
+        void requireProcAddress(const char *extensionName,
             bool device) const;
 
     private:
         const Fn procAddr;
     };
+
+    /* Represents enabled instance extension dispatchable command. */
+
+    template<class Fn>
+    class InstanceExtension final : public Extension<Fn>
+    {
+    public:
+        explicit InstanceExtension(VkInstance instance,
+            const char *name) noexcept;
+        explicit InstanceExtension(VkInstance instance,
+            const char *name,
+            const char *extensionName);
+    };
+
+    /* In order to support systems with multiple Vulkan
+       implementations, the function pointers returned by
+       vkGetInstanceProcAddr may point to dispatch code
+       that calls a different real implementation for
+       different VkDevice objects or their child objects.
+       The overhead of the internal dispatch for VkDevice
+       objects can be avoided by obtaining device-specific
+       function pointers for any commands that use a device
+       or device-child object as their dispatchable object. */
+
+    template<class Fn>
+    class DeviceExtension final : public Extension<Fn>
+    {
+    public:
+        explicit DeviceExtension(VkDevice device,
+            const char *name) noexcept;
+        explicit DeviceExtension(VkDevice device,
+            const char *name,
+            const char *extensionName);
+    };
 } // namespace magma
+
+#define MAGMA_INSTANCE_EXTENSION(proc) static InstanceExtension<PFN_##proc> proc(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(proc))
+#define MAGMA_REQUIRED_INSTANCE_EXTENSION(proc, extensionName) static InstanceExtension<PFN_##proc> proc(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(proc), extensionName)
+#define MAGMA_DEVICE_EXTENSION(proc) static DeviceExtension<PFN_##proc> proc(MAGMA_HANDLE(device), MAGMA_STRINGIZE(proc))
+#define MAGMA_REQUIRED_DEVICE_EXTENSION(proc, extensionName) static DeviceExtension<PFN_##proc> proc(MAGMA_HANDLE(device), MAGMA_STRINGIZE(proc), extensionName)
 
 #include "extension.inl"
