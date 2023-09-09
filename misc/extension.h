@@ -77,9 +77,9 @@ namespace magma
     };
 } // namespace magma
 
-#define MAGMA_INSTANCE_EXTENSION(proc) static InstanceExtension<PFN_##proc> proc(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(proc))
-#define MAGMA_REQUIRED_INSTANCE_EXTENSION(proc, extensionName) static InstanceExtension<PFN_##proc> proc(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(proc), extensionName)
-#define MAGMA_DEVICE_EXTENSION(proc) static DeviceExtension<PFN_##proc> proc(MAGMA_HANDLE(device), MAGMA_STRINGIZE(proc))
-#define MAGMA_REQUIRED_DEVICE_EXTENSION(proc, extensionName) static DeviceExtension<PFN_##proc> proc(MAGMA_HANDLE(device), MAGMA_STRINGIZE(proc), extensionName)
+#define MAGMA_INSTANCE_EXTENSION(proc) static const InstanceExtension<PFN_##proc> proc(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(proc))
+#define MAGMA_REQUIRED_INSTANCE_EXTENSION(proc, extensionName) static const InstanceExtension<PFN_##proc> proc(MAGMA_HANDLE(instance), MAGMA_STRINGIZE(proc), extensionName)
+#define MAGMA_DEVICE_EXTENSION(proc) static const DeviceExtension<PFN_##proc> proc(MAGMA_HANDLE(device), MAGMA_STRINGIZE(proc))
+#define MAGMA_REQUIRED_DEVICE_EXTENSION(proc, extensionName) static const DeviceExtension<PFN_##proc> proc(MAGMA_HANDLE(device), MAGMA_STRINGIZE(proc), extensionName)
 
 #include "extension.inl"
