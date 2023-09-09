@@ -18,6 +18,8 @@ inline X10y10z10w2Snorm::X10y10z10w2Snorm(float x, float y, float z, uint32_t w 
     v = mm_permute_ps(v, _MM_SHUFFLE(0, 3, 2, 1));
     iv = _mm_or_si128(iv, _mm_castps_si128(v));
     this->v = ((w & 0x3) << 30) | _mm_cvtsi128_si32(iv);
+#elif defined(MAGMA_NEON)
+    // TODO:
 #else
     x = std::min(std::max(-1.f, x), 1.f);
     y = std::min(std::max(-1.f, y), 1.f);

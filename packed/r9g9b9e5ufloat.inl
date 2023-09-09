@@ -45,6 +45,8 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
         (((uint32_t)_mm_extract_epi32(iv, 2) & 0x1FF) << 18) |
         (((uint32_t)_mm_extract_epi32(iv, 1) & 0x1FF) << 9) |
         ((uint32_t)_mm_extract_epi32(iv, 0) & 0x1FF);
+#elif defined(MAGMA_NEON)
+    // TODO:
 #else
     r = std::min(std::max(0.f, r), MAX_RGB9E5);
     g = std::min(std::max(0.f, g), MAX_RGB9E5);

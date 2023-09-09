@@ -15,6 +15,8 @@ inline R5g5b5a1Unorm::R5g5b5a1Unorm(float r, float g, float b, float a) noexcept
         (((uint16_t)_mm_extract_epi16(iv, 4) & 0x1F) << 6) |
         (((uint16_t)_mm_extract_epi16(iv, 2) & 0x1F) << 1) |
         ((uint16_t)_mm_extract_epi16(iv, 0) & 0x1);
+#elif defined(MAGMA_NEON)
+    // TODO:
 #else
     r = std::min(std::max(0.f, r), 1.f);
     g = std::min(std::max(0.f, g), 1.f);
