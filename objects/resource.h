@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "iresource.h"
 #include "nondispatchable.h"
 #include "../allocator/allocator.h"
 #include "../misc/sharing.h"
@@ -33,26 +34,18 @@ namespace magma
        dimensionality. Buffers and images are created with a sharing mode
        controlling how they can be accessed from queues. */
 
-    class Resource : core::NonCopyable
+    class Resource : public IResource,
+        /* private */ core::NonCopyable
     {
     public:
         VkDeviceSize getSize() const noexcept { return size; }
         VkDeviceSize getOffset() const noexcept { return offset; }
         const Sharing& getSharing() const noexcept { return sharing; }
-        const std::shared_ptr<IDeviceMemory>& getMemory() const noexcept { return memory; }
+        const std::shared_ptr<IDeviceMemory>& getMemory() const noexcept override { return memory; }
         const std::shared_ptr<IDeviceMemoryAllocator>& getDeviceAllocator() const noexcept { return deviceAllocator; }
-        virtual void bindMemory(std::shared_ptr<IDeviceMemory> memory,
-            VkDeviceSize offset = 0) = 0;
-    #ifdef VK_KHR_device_group
-        virtual void bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory,
-            const std::vector<uint32_t>& deviceIndices,
-            const std::vector<VkRect2D>& splitInstanceBindRegions = {},
-            VkDeviceSize offset = 0) = 0;
-    #endif // VK_KHR_device_group
-        virtual void onDefragment() = 0;
 
     protected:
-        explicit Resource(const Sharing& sharing,
+        Resource(const Sharing& sharing,
             std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator) noexcept;
         void commitAndWait(std::shared_ptr<CommandBuffer> cmdBuffer);
 
