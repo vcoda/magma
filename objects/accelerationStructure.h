@@ -43,6 +43,7 @@ namespace magma
         VkMemoryRequirements getBuildScratchMemoryRequirements() const;
         VkMemoryRequirements getUpdateScratchMemoryRequirements() const;
         uint64_t getReferenceHandle() const;
+        ResourceType getResourceType() const noexcept override { return ResourceType::AccelerationStructure; }
         void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) override;
     #ifdef VK_KHR_device_group
