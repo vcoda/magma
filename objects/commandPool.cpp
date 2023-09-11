@@ -33,11 +33,11 @@ CommandPool::CommandPool(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool transient /* false */,
     bool resetCommandBuffer /* true */,
-    uint32_t poolCommandBufferCount /* 256 */,
+    uint32_t maxCommandBufferCoun /* 64 */,
     const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_COMMAND_POOL, std::move(device), std::move(allocator)),
     queueFamilyIndex(queueFamilyIndex),
-    pool(getOverridenAllocator() ? nullptr : std::make_unique<memory::LinearPlacementPool>(sizeof(CommandBuffer), poolCommandBufferCount))
+    pool(getOverridenAllocator() ? nullptr : std::make_unique<memory::LinearPlacementPool>(sizeof(CommandBuffer), maxCommandBufferCoun))
 {
     VkCommandPoolCreateInfo cmdPoolInfo;
     cmdPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;

@@ -46,7 +46,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             bool transient = false,
             bool resetCommandBuffer = true,
-            uint32_t poolCommandBufferCount = 256,
+            uint32_t maxCommandBufferCount = 64,
             const StructureChain& extendedInfo = StructureChain());
         ~CommandPool();
         uint32_t getQueueFamilyIndex() const noexcept { return queueFamilyIndex; }
