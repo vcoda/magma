@@ -21,27 +21,27 @@ namespace magma
 {
     namespace aux
     {
-        MAGMA_TYPEDEF_SHARED_PTR(AccumulationBuffer)
-        MAGMA_TYPEDEF_SHARED_PTR(Base)
-        MAGMA_TYPEDEF_SHARED_PTR(BaseFramebuffer)
-        MAGMA_TYPEDEF_SHARED_PTR(BlitRectangle)
-        MAGMA_TYPEDEF_SHARED_PTR(ColorFramebuffer)
-        MAGMA_TYPEDEF_SHARED_PTR(ColorMultisampleFramebuffer)
-        MAGMA_TYPEDEF_SHARED_PTR(ColorMultisampleReadFramebuffer)
-        MAGMA_TYPEDEF_SHARED_PTR(ComputeProfiler)
+        MAGMA_TYPEDEF_SHARED_PTR(AccumulationBuffer);
+        MAGMA_TYPEDEF_SHARED_PTR(Base);
+        MAGMA_TYPEDEF_SHARED_PTR(BaseFramebuffer);
+        MAGMA_TYPEDEF_SHARED_PTR(BlitRectangle);
+        MAGMA_TYPEDEF_SHARED_PTR(ColorFramebuffer);
+        MAGMA_TYPEDEF_SHARED_PTR(ColorMultisampleFramebuffer);
+        MAGMA_TYPEDEF_SHARED_PTR(ColorMultisampleReadFramebuffer);
+        MAGMA_TYPEDEF_SHARED_PTR(ComputeProfiler);
         MAGMA_TYPEDEF_SHARED_PTR(DepthFramebuffer);
-        MAGMA_TYPEDEF_SHARED_PTR(FillRectangleVertexShader)
-        MAGMA_TYPEDEF_SHARED_PTR(FrameGrabber)
-        MAGMA_TYPEDEF_SHARED_PTR(GraphicsPipelineCache)
-        MAGMA_TYPEDEF_SHARED_PTR(GraphicsProfiler)
-        MAGMA_TYPEDEF_SHARED_PTR(ImmediateRender)
-        MAGMA_TYPEDEF_SHARED_PTR(MultiAttachmentFramebuffer)
-        MAGMA_TYPEDEF_SHARED_PTR(Profiler)
-        MAGMA_TYPEDEF_SHARED_PTR(ShaderCompiler)
-        MAGMA_TYPEDEF_SHARED_PTR(Sprite)
-        MAGMA_TYPEDEF_SHARED_PTR(SwapchainFramebuffer)
-        MAGMA_TYPEDEF_SHARED_PTR(TextShader)
+        MAGMA_TYPEDEF_SHARED_PTR(FillRectangleVertexShader);
+        MAGMA_TYPEDEF_SHARED_PTR(FrameGrabber);
+        MAGMA_TYPEDEF_SHARED_PTR(GraphicsPipelineCache);
+        MAGMA_TYPEDEF_SHARED_PTR(GraphicsProfiler);
+        MAGMA_TYPEDEF_SHARED_PTR(ImmediateRender);
+        MAGMA_TYPEDEF_SHARED_PTR(MultiAttachmentFramebuffer);
+        MAGMA_TYPEDEF_SHARED_PTR(Profiler);
+        MAGMA_TYPEDEF_SHARED_PTR(ShaderCompiler);
+        MAGMA_TYPEDEF_SHARED_PTR(Sprite);
+        MAGMA_TYPEDEF_SHARED_PTR(SwapchainFramebuffer);
+        MAGMA_TYPEDEF_SHARED_PTR(TextShader);
 
-        MAGMA_TYPEDEF_INTERFACE_SHARED_PTR(ShaderIncludeHandler)
+        MAGMA_TYPEDEF_SHARED_PTR_INTERFACE(ShaderIncludeHandler);
     } // namespace aux
 } // namespace magma

@@ -33,5 +33,5 @@ namespace magma
         virtual std::shared_ptr<const ShaderReflection> getReflection(const std::string& shaderFileName) = 0;
     };
 
-    MAGMA_TYPEDEF_INTERFACE_SHARED_PTR(ShaderReflectionFactory)
+    MAGMA_TYPEDEF_SHARED_PTR_INTERFACE(ShaderReflectionFactory);
 } // namespace magma

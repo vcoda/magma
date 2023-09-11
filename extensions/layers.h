@@ -38,5 +38,5 @@ namespace magma
         std::unordered_set<hash_t> hashes;
     };
 
-    MAGMA_TYPEDEF_UNIQUE_PTR(Layers)
+    MAGMA_TYPEDEF_UNIQUE_PTR(Layers);
 } // namespace magma

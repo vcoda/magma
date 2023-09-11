@@ -40,9 +40,9 @@ namespace magma
                     for (Type *p = begin(); p != end(); ++p)
                         new(p) Type();
                 }
-#ifdef MAGMA_DEBUG
+            #ifdef MAGMA_DEBUG
                 bytesAllocated = sizeof(Type) * count;
-#endif // MAGMA_DEBUG
+            #endif
             }
             ~StackArray()
             {
@@ -51,7 +51,9 @@ namespace magma
                     for (Type *p = begin(); p != end(); ++p)
                         p->~Type();
                 }
-                MAGMA_FREEA(stack);
+            #ifdef _MSC_VER
+                _freea(stack);
+            #endif
             }
             // Support range-based loops
             Type *begin() noexcept { return stack; }
@@ -87,15 +89,21 @@ namespace magma
             Type *const stack;
             const uint32_t count;
             uint32_t pos;
-#ifdef MAGMA_DEBUG
+        #ifdef MAGMA_DEBUG
             std::size_t bytesAllocated;
-#endif // MAGMA_DEBUG
+        #endif
         };
     } // namespace helpers
 } // namespace magma
 
 // Only small arrays could be safely allocated on the stack
 #define MAGMA_MAX_STACK_ALLOC 1024
+
+#ifdef _MSC_VER
+    #define MAGMA_ALLOCA(size) _malloca(size)
+#else
+    #define MAGMA_ALLOCA(size) alloca(size)
+#endif // _MSC_VER
 
 // Macro to call alloca() in the stack frame of the variable declaration
 #define MAGMA_STACK_ARRAY(Type, var, count)\

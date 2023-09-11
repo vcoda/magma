@@ -186,6 +186,7 @@
     <ClInclude Include="..\..\core\destructible.h" />
     <ClInclude Include="..\..\core\hashing\constexpr.h" />
     <ClInclude Include="..\..\core\linearAllocator.h" />
+    <ClInclude Include="..\..\core\macros.h" />
     <ClInclude Include="..\..\core\memzero.h" />
     <ClInclude Include="..\..\core\copy.h" />
     <ClInclude Include="..\..\core\copyMemory.h" />
