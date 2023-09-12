@@ -43,7 +43,7 @@ namespace magma
             VkResult error() const noexcept { return result; }
 
         private:
-            VkResult result;
+            const VkResult result;
         };
 
         /* A host memory allocation has failed. */

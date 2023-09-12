@@ -74,7 +74,7 @@ namespace magma
             const std::vector<VkRect2D>& splitInstanceBindRegions = {},
             VkDeviceSize offset = 0) override;
     #endif // VK_KHR_device_group
-        virtual void onDefragment() override;
+        void onDefragment() override;
         VkImageLayout layoutTransition(VkImageLayout newLayout,
             std::shared_ptr<CommandBuffer> cmdBuffer);
         void copyMip(std::shared_ptr<CommandBuffer> cmdBuffer,

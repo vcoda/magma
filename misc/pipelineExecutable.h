@@ -44,7 +44,7 @@ namespace magma
         std::vector<VkPipelineExecutableInternalRepresentationKHR> getInternalRepresentations() const;
 
     private:
-        explicit PipelineExecutable(std::shared_ptr<const Pipeline> pipeline,
+        PipelineExecutable(std::shared_ptr<const Pipeline> pipeline,
             const VkPipelineExecutablePropertiesKHR& properties,
             uint32_t executableIndex) noexcept;
 

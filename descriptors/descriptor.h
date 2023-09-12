@@ -32,8 +32,9 @@ namespace magma
         class Descriptor : public Binding
         {
         protected:
-            Descriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-                Binding(descriptorType, 1, binding) {}
+            Descriptor(VkDescriptorType descriptorType,
+                uint32_t binding) noexcept
+            : Binding(descriptorType, 1, binding) {}
 
             Type descriptor = {};
         };
@@ -47,8 +48,9 @@ namespace magma
             constexpr uint32_t getArraySize() const noexcept { return Size; }
 
         protected:
-            DescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-                Binding(descriptorType, Size, binding) {}
+            DescriptorArray(VkDescriptorType descriptorType,
+                uint32_t binding) noexcept
+            : Binding(descriptorType, Size, binding) {}
 
             std::array<Type, Size> descriptors = {};
         };
