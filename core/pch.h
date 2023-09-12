@@ -16,50 +16,64 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #ifdef _MSC_VER
-#pragma once
+    #pragma once
 #endif
 
+// C lib
+#include <cassert>
 #include <cstring>
 #include <cstdarg>
+#ifdef _MSC_VER
+    #include <malloc.h>
+#else
+    #include <mm_malloc.h>
+#endif
 
-#include <memory>
+// Containers
 #include <vector>
-#include <array>
 #include <list>
 #include <map>
 #include <unordered_map>
 #include <set>
 #include <unordered_set>
+#include <array>
 #include <string>
-#include <initializer_list>
-#include <functional>
-#include <algorithm>
-#include <limits>
-#include <future>
 
-#ifndef MAGMA_NO_EXCEPTIONS
-#include <exception>
-#endif
+// Smart pointers
+#include <memory>
+
+// Threading
+#include <thread>
+#include <future>
 #include <atomic>
 #include <mutex>
 
+// Misc
+#include <algorithm>
+#include <functional>
+#include <initializer_list>
+#include <limits>
+
+// Input/output
+#include <iostream>
+#include <sstream>
+
+// Lean & mean windows.h
 #ifdef _WIN32
-  #ifndef WIN32_LEAN_AND_MEAN
     #define WIN32_LEAN_AND_MEAN
-  #endif
-  #ifndef NOMINMAX
+    #define VC_EXTRALEAN
     #define NOMINMAX
-  #endif
 #endif // _WIN32
 
-#ifndef VULKAN_H_
-  #include <vulkan/vulkan.h>
-#endif
+#include <vulkan/vulkan.h>
 
+// SIMD intrinsics
 #ifdef MAGMA_SSE
-  #include <xmmintrin.h>
-  #include <smmintrin.h>
+    #include <xmmintrin.h>
+    #include <smmintrin.h>
+#else
+    #include <cmath>
 #endif
 
+// Internal code
 #include "core.h"
-#include "hash.h"
