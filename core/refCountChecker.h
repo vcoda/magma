@@ -16,8 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifdef _DEBUG
-#include <iostream>
+#ifdef MAGMA_DEBUG
 
 namespace magma
 {
@@ -47,4 +46,4 @@ namespace magma
     } // namespace core
 } // namespace magma
 
-#endif // _DEBUG
+#endif // MAGMA_DEBUG
