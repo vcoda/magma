@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include <exception>
 #include "debugAlignedAllocator.h"
 
 namespace magma
@@ -51,14 +50,19 @@ void *DebugAlignedAllocator::alloc(std::size_t size,
 {
 #ifdef _MSC_VER
     void *ptr = _aligned_malloc(size, alignment);
+    if (!ptr)
 #else
     void *ptr = nullptr;
     const int result = posix_memalign(&ptr, alignment, size);
     if (result != 0)
-        throw std::bad_alloc();
 #endif // _MSC_VER
-    if (!ptr)
+    {
+    #ifndef MAGMA_NO_EXCEPTIONS
         throw std::bad_alloc();
+    #else
+        return nullptr;
+    #endif // MAGMA_NO_EXCEPTIONS
+    }
     std::lock_guard<std::mutex> lock(mtx);
     // Add allocation
     allocations[ptr] = {size, allocationScope};
@@ -78,7 +82,13 @@ void *DebugAlignedAllocator::realloc(void *original, std::size_t size, std::size
     // TODO: check alignment, use posix_memalign/memcpy if not aligned!
 #endif // _MSC_VER
     if (!ptr)
+    {
+    #ifndef MAGMA_NO_EXCEPTIONS
         throw std::bad_alloc();
+    #else
+        return nullptr;
+    #endif // MAGMA_NO_EXCEPTIONS
+    }
     std::lock_guard<std::mutex> lock(mtx);
     // Replace old allocation with a new one
     allocatedMemorySize -= allocations.at(original).first;

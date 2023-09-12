@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include <exception>
 #include "alignedAllocator.h"
 
 namespace magma
@@ -27,14 +26,19 @@ void *AlignedAllocator::alloc(std::size_t size, std::size_t alignment,
 {
 #ifdef _MSC_VER
     void *ptr = _aligned_malloc(size, alignment);
+    if (!ptr)
 #else
     void *ptr = nullptr;
     const int result = posix_memalign(&ptr, alignment, size);
     if (result != 0)
-        throw std::bad_alloc();
 #endif // _MSC_VER
-    if (!ptr)
+    {
+    #ifndef MAGMA_NO_EXCEPTIONS
         throw std::bad_alloc();
+    #else
+        return nullptr;
+    #endif // MAGMA_NO_EXCEPTIONS
+    }
     return ptr;
 }
 
@@ -48,8 +52,10 @@ void *AlignedAllocator::realloc(void *original, std::size_t size, std::size_t al
     void *ptr = ::realloc(original, size);
     // TODO: check alignment, use posix_memalign/memcpy if not aligned!
 #endif // _MSC_VER
+#ifndef MAGMA_NO_EXCEPTIONS
     if (!ptr)
         throw std::bad_alloc();
+#endif // MAGMA_NO_EXCEPTIONS
     return ptr;
 }
 

@@ -37,6 +37,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <limits>
 #include <future>
 
+#ifndef MAGMA_NO_EXCEPTIONS
+#include <exception>
+#endif
 #include <atomic>
 #include <mutex>
 
