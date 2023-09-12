@@ -26,7 +26,7 @@ Specialization::Specialization(const Specialization& other) noexcept
     mapEntryCount = other.mapEntryCount;
     pMapEntries = core::copyArray(other.pMapEntries, mapEntryCount);
     dataSize = other.dataSize;
-    pData = core::copyArray<char>(other.pData, dataSize);
+    pData = core::copyBinaryData(other.pData, dataSize);
 }
 
 Specialization& Specialization::operator=(const Specialization& other) noexcept
@@ -38,7 +38,7 @@ Specialization& Specialization::operator=(const Specialization& other) noexcept
         pMapEntries = core::copyArray(other.pMapEntries, mapEntryCount);
         dataSize = other.dataSize;
         delete[] reinterpret_cast<const char *>(pData);
-        pData = core::copyArray<char>(other.pData, dataSize);
+        pData = core::copyBinaryData(other.pData, dataSize);
     }
     return *this;
 }

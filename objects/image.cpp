@@ -30,7 +30,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/format.h"
 #include "../misc/structureChain.h"
 #include "../exceptions/errorResult.h"
-#include "../core/round.h"
 
 // Vulkan validation layers may complain about image regions for block-compressed formats. See:
 // https://vulkan.lunarg.com/doc/view/1.3.224.1/windows/1.3-extensions/vkspec.html#VUID-vkCmdCopyBufferToImage-pRegions-06218

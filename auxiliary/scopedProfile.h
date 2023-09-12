@@ -23,7 +23,7 @@ namespace magma
     {
         /* GPU profiling block. */
 
-        class ScopedProfile final : core::NonCopyable
+        class ScopedProfile final : NonCopyable
         {
         public:
             explicit ScopedProfile(const char *name, std::shared_ptr<CommandBuffer> cmdBuffer_,

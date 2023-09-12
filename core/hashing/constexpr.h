@@ -21,12 +21,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #pragma warning(disable : 4127) // conditional expression is constant
   #endif
 #endif
-#include "combine.h"
 
 namespace magma
 {
+    typedef uint64_t hash_t;
+
     namespace core
     {
+    #ifdef MAGMA_CXX17
+        [[nodiscard]]
+    #endif
+        constexpr hash_t hashCombine(const hash_t seed, const hash_t hash) noexcept
+        {   // https://www.boost.org/doc/libs/1_46_1/doc/html/hash/reference.html#boost.hash_combine
+            return seed ^ (hash + 0x9e3779b9 + (seed << 6) + (seed >> 2));
+        }
+
         template<class Int>
         struct ConstexprHash
         {

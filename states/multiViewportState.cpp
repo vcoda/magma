@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include <cmath>
 #include "multiViewportState.h"
-#include "../core/compare.h"
 
 namespace magma
 {

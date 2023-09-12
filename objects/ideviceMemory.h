@@ -24,10 +24,9 @@ namespace magma
        for example the contents of the image or buffer objects,
        which can be natively used by the device. */
 
-    class IDeviceMemory
+    class IDeviceMemory : public IDestructible
     {
     public:
-        virtual ~IDeviceMemory() = default;
         virtual VkDeviceMemory getNativeHandle() const noexcept = 0;
         virtual VkDeviceSize getSuballocationOffset() const noexcept = 0;
         virtual VkDeviceSize getSize() const noexcept = 0;

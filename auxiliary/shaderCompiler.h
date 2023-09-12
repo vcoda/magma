@@ -29,7 +29,7 @@ namespace magma
         /* An abstract interface for mapping an #include request
            to a result source string. */
 
-        class IShaderInclude : public core::IDestructible
+        class IShaderInclude : public IDestructible
         {
         public:
             virtual void *resolve(shaderc_include_type includeType,

@@ -18,7 +18,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "subpass.h"
-#include "../core/copy.h"
 
 namespace magma
 {

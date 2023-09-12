@@ -35,7 +35,7 @@ namespace magma
        controlling how they can be accessed from queues. */
 
     class Resource : public IResource,
-        /* private */ core::NonCopyable
+        /* private */ NonCopyable
     {
     public:
         VkDeviceSize getSize() const noexcept { return size; }

@@ -28,10 +28,9 @@ namespace magma
 
     /* Resource interface class. */
 
-    class IResource
+    class IResource : public IDestructible
     {
     public:
-        virtual ~IResource() = default;
         virtual ResourceType getResourceType() const noexcept = 0;
         virtual const std::shared_ptr<IDeviceMemory>& getMemory() const noexcept = 0;
         virtual void bindMemory(std::shared_ptr<IDeviceMemory> memory,

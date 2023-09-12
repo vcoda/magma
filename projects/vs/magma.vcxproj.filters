@@ -435,12 +435,6 @@
     <ClInclude Include="..\..\core\zeroMemory.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\core\dereference.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\noncopyable.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\core\refCountChecker.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
@@ -448,12 +442,6 @@
       <Filter>Header Files\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\core\core.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\hash.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\copy.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\allocator\linearPlacementPool.h">
@@ -467,9 +455,6 @@
     </ClInclude>
     <ClInclude Include="..\..\objects\resourcePool.h">
       <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\memzero.h">
-      <Filter>Header Files\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\core\hashing\fnv1.h">
       <Filter>Header Files\core\hashing</Filter>
@@ -534,9 +519,6 @@
     <ClInclude Include="..\..\allocator\alignedAllocator.h">
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\core\destructible.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\objects\physicalDeviceGroup.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -548,9 +530,6 @@
     </ClInclude>
     <ClInclude Include="..\..\auxiliary\imageDescriptorSet.h">
       <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\enumClassArray.h">
-      <Filter>Header Files\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\core\linearAllocator.h">
       <Filter>Header Files\core</Filter>
@@ -572,9 +551,6 @@
     </ClInclude>
     <ClInclude Include="..\..\objects\transformFeedbackBuffer.h">
       <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\compare.h">
-      <Filter>Header Files\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\packed\vector.h">
       <Filter>Header Files\packed</Filter>
@@ -650,9 +626,6 @@
     </ClInclude>
     <ClInclude Include="..\..\states\samplerYcbcrConversionState.h">
       <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\forEach.h">
-      <Filter>Header Files\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\misc\pipelineExecutable.h">
       <Filter>Header Files\misc</Filter>
@@ -768,9 +741,6 @@
     <ClInclude Include="..\..\misc\application.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\core\round.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\objects\managedDeviceMemory.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -808,6 +778,15 @@
       <Filter>Header Files\objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\core\macros.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\foreach.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\memory.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\hash.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>

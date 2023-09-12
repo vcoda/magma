@@ -19,8 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "vertexInputState.h"
 #include "../misc/format.h"
-#include "../core/copy.h"
-#include "../core/compare.h"
 
 namespace magma
 {

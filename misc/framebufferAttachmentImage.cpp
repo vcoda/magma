@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "framebufferAttachmentImage.h"
 #include "../objects/image.h"
-#include "../core/copy.h"
 
 namespace magma
 {

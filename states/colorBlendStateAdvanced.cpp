@@ -18,8 +18,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "colorBlendStateAdvanced.h"
-#include "../core/copy.h"
-#include "../core/compare.h"
 
 namespace magma
 {
@@ -69,7 +67,7 @@ AdvancedColorBlendState::AdvancedColorBlendState(const std::vector<AdvancedColor
 AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendState& other)
 {
     sType = other.sType;
-    pNext = core::copy<VkPipelineColorBlendAdvancedStateCreateInfoEXT>(other.pNext);
+    pNext = core::copy((VkPipelineColorBlendAdvancedStateCreateInfoEXT *)other.pNext);
     flags = other.flags;
     logicOpEnable = other.logicOpEnable;
     logicOp = other.logicOp;
@@ -88,7 +86,7 @@ AdvancedColorBlendState& AdvancedColorBlendState::operator=(const AdvancedColorB
         delete reinterpret_cast<const VkPipelineColorBlendAdvancedStateCreateInfoEXT *>(pNext);
         delete[] pAttachments;
         core::copy(this, &other);
-        pNext = core::copy<VkPipelineColorBlendAdvancedStateCreateInfoEXT>(other.pNext);
+        pNext = core::copy((VkPipelineColorBlendAdvancedStateCreateInfoEXT *)other.pNext);
         pAttachments = core::copyArray(other.pAttachments, attachmentCount);
     }
     return *this;

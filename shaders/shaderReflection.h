@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/noncopyable.h"
 #include "../third-party/SPIRV-Reflect/spirv_reflect.h"
 
 namespace magma
@@ -29,11 +28,11 @@ namespace magma
        a C/C++ reflection API for SPIR-V shader bytecode in
        Vulkan applications. See https://github.com/chaoticbob/SPIRV-Reflect */
 
-    class ShaderReflection : core::NonCopyable
+    class ShaderReflection
     {
     public:
         explicit ShaderReflection(const SpirvWord *bytecode, std::size_t bytecodeSize);
-        virtual ~ShaderReflection() noexcept;
+        virtual ~ShaderReflection();
         const SpirvWord *getBytecode() const noexcept;
         std::size_t getBytecodeSize() const noexcept;
         hash_t computeBytecodeHash() const noexcept;

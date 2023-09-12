@@ -18,8 +18,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "colorBlendState.h"
-#include "../core/copy.h"
-#include "../core/compare.h"
 
 namespace magma
 {

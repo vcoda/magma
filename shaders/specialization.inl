@@ -16,7 +16,7 @@ inline Specialization::Specialization(const Block& data, const SpecializationEnt
     pMapEntries = new(std::nothrow) SpecializationEntry[1];
     core::copy((VkSpecializationMapEntry *)pMapEntries, (VkSpecializationMapEntry *)&entry);
     dataSize = sizeof(Block);
-    pData = core::copyArray<char>(&data, dataSize);
+    pData = core::copyBinaryData(&data, sizeof(Block));
 }
 
 template<class Block>
@@ -25,6 +25,6 @@ inline Specialization::Specialization(const Block& data, const std::initializer_
     mapEntryCount = MAGMA_COUNT(mapEntries);
     pMapEntries = core::copyInitializerList(mapEntries);
     dataSize = sizeof(Block);
-    pData = core::copyArray<char>(&data, dataSize);
+    pData = core::copyBinaryData(&data, sizeof(Block));
 }
 } // namespace magma

@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/instance.h"
 #include "../objects/commandBuffer.h"
 #include "../exceptions/errorResult.h"
-#include "../core/forEach.h"
+#include "../core/foreach.h"
 #include "../third-party/VulkanMemoryAllocator/include/vk_mem_alloc.h"
 
 static_assert(sizeof(magma::MemoryBudget) == sizeof(VmaBudget),

@@ -16,8 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "dereference.h"
-#include "memzero.h"
 
 #if defined(__LP64__) ||\
     defined(_WIN64) ||\
@@ -75,7 +73,79 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
   #define mm_permute_ps(v, c) _mm_shuffle_ps((v), (v), c)
 #endif
 
+namespace magma
+{
+#if (VK_USE_64_BIT_PTR_DEFINES == 1)
+typedef void *NonDispatchableHandle;
+#else
+typedef uint64_t NonDispatchableHandle;
+#endif
+
+/* Base class with virtual destructor. */
+
+class IDestructible
+{
+public:
+    virtual ~IDestructible() = default;
+};
+
+/* Prevents objects of a class from being copy-
+   constructed or assigned to each other. */
+
+class NonCopyable
+{
+    NonCopyable(const NonCopyable&) = delete;
+    const NonCopyable& operator=(const NonCopyable&) = delete;
+
+protected:
+    NonCopyable() = default;
+    ~NonCopyable() = default;
+};
+
+namespace core
+{
+template<class Type>
+inline typename Type::NativeHandle dereference(const std::shared_ptr<Type>& ptr) noexcept
+{
+    if (ptr)
+        return *ptr;
+#ifdef VK_NULL_HANDLE
+    return VK_NULL_HANDLE;
+#else
+    return 0ull;
+#endif
+}
+
+template<class VkObject>
+inline VkObject reinterpret(NonDispatchableHandle handle) noexcept
+{
+    if (handle)
+    {
+    #if (VK_USE_64_BIT_PTR_DEFINES == 1)
+        return reinterpret_cast<VkObject>(handle);
+    #else
+        return static_cast<VkObject>(handle);
+    #endif
+    }
+#ifdef VK_NULL_HANDLE
+    return VK_NULL_HANDLE;
+#else
+    return 0ull;
+#endif
+}
+
+template<class Int>
+inline Int roundUp(Int value, Int multiple) noexcept
+{
+    if (Int(0) == multiple)
+        return Int(0);
+    if (Int(1) == multiple)
+        return value;
+    return ((value + multiple - Int(1)) / multiple) * multiple;
+}
+} // namespace core
+} // namespace magma
+
 #include "macros.h"
-
 #include "hash.h"
-
+#include "memory.h"

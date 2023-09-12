@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandBuffer.h"
 #include "../helpers/mapScoped.h"
 #include "../core/copyMemory.h"
-#include "../core/forEach.h"
+#include "../core/foreach.h"
 
 namespace magma
 {

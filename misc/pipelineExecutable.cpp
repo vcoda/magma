@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/device.h"
 #include "../objects/pipeline.h"
 #include "../exceptions/errorResult.h"
-#include "../core/forEach.h"
+#include "../core/foreach.h"
 
 #undef MAGMA_HANDLE
 #define MAGMA_HANDLE(p) *pipeline->getDevice()

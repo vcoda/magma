@@ -16,13 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/destructible.h"
 
 namespace magma
 {
     /* Provides allocation functions for new/delete overloads. */
 
-    class ICxxAllocator : public core::IDestructible
+    class ICxxAllocator : public IDestructible
     {
     public:
         virtual void *alloc(std::size_t size) = 0;

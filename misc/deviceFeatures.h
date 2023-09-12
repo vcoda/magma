@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/noncopyable.h"
 
 namespace magma
 {
@@ -26,7 +25,7 @@ namespace magma
     /*  Utility class that allows to determine whether some
         extended device features have been enabled or not. */
 
-    class DeviceFeatures : core::NonCopyable
+    class DeviceFeatures : NonCopyable
     {
     public:
         struct FormatFeaturesSupport

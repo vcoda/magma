@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/destructible.h"
 
 namespace magma
 {
@@ -27,7 +26,7 @@ namespace magma
        any filesystem I/O operations. Instead, user have to provide
        an implementation of his loading logic. */
 
-    class IShaderReflectionFactory : public core::IDestructible
+    class IShaderReflectionFactory : public IDestructible
     {
     public:
         virtual std::shared_ptr<const ShaderReflection> getReflection(const std::string& shaderFileName) = 0;

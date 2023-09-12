@@ -18,7 +18,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "deviceFaultInfo.h"
-#include "../core/copy.h"
 
 namespace magma
 {

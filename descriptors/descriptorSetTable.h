@@ -38,7 +38,7 @@ namespace magma
        };
     */
 
-    class DescriptorSetTable : core::NonCopyable
+    class DescriptorSetTable : NonCopyable
     {
     public:
         virtual const DescriptorList& getReflection() = 0;

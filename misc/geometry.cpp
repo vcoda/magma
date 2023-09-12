@@ -102,7 +102,7 @@ GeometryAABBs::GeometryAABBs(std::shared_ptr<const Buffer> aabbData, uint32_t nu
     geometry.aabbs.numAABBs = numAABBs;
     geometry.aabbs.stride = stride;
     geometry.aabbs.offset = offset;
-    core::memzero(geometry.triangles);
+    core::zeroMemory(geometry.triangles);
 }
 #endif // VK_NV_ray_tracing
 } // namespace magma

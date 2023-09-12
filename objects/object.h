@@ -17,8 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "objectType.h"
-#include "../core/destructible.h"
-#include "../core/noncopyable.h"
 #include "../allocator/cxxAllocator.h"
 
 namespace magma
@@ -31,8 +29,8 @@ namespace magma
        name and to attach arbitrary data to an object. */
 
     class Object : public CxxAllocator,
-        public core::IDestructible,
-        /* private */ core::NonCopyable
+        public IDestructible,
+        /* private */ NonCopyable
     {
     public:
         explicit Object(std::shared_ptr<Device> device,

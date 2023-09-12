@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/noncopyable.h"
 
 namespace magma
 {
@@ -35,7 +34,7 @@ namespace magma
        performance analysis. */
 
 #ifdef VK_KHR_pipeline_executable_properties
-    class PipelineExecutable final : public core::NonCopyable
+    class PipelineExecutable final : NonCopyable
     {
     public:
         const VkPipelineExecutablePropertiesKHR& getProperties() const noexcept { return properties; }

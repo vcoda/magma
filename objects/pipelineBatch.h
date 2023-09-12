@@ -16,8 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/destructible.h"
-#include "../core/noncopyable.h"
 #include "../shaders/pipelineShaderStage.h"
 
 namespace magma
@@ -34,8 +32,8 @@ namespace magma
        using std::future. */
 
     template<class PipelineType>
-    class PipelineBatch : public core::IDestructible,
-        /* private */ core::NonCopyable
+    class PipelineBatch : public IDestructible,
+        /* private */ NonCopyable
     {
     public:
         virtual void buildPipelines(std::shared_ptr<Device> device,

@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/noncopyable.h"
 #include "../core/threadSafeUnorderedSet.h"
 
 namespace magma
@@ -31,7 +30,7 @@ namespace magma
        for application profiling, memory usage optimization and so on.
        Each logical device has it's own resource pool. */
 
-    class ResourcePool final : core::NonCopyable
+    class ResourcePool final : NonCopyable
     {
     public:
         struct DeviceResources;
