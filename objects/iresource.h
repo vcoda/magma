@@ -21,17 +21,13 @@ namespace magma
 {
     class IDeviceMemory;
 
-    enum class ResourceType
-    {
-        Buffer, Image, AccelerationStructure
-    };
-
-    /* Resource interface class. */
+    /* Interface class of resource object. */
 
     class IResource : public IDestructible
     {
     public:
-        virtual ResourceType getResourceType() const noexcept = 0;
+        enum class Class : uint32_t;
+        virtual Class getResourceClass() const noexcept = 0;
         virtual const std::shared_ptr<IDeviceMemory>& getMemory() const noexcept = 0;
         virtual void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) = 0;
@@ -42,5 +38,12 @@ namespace magma
             VkDeviceSize offset = 0) = 0;
     #endif // VK_KHR_device_group
         virtual void onDefragment() = 0;
+    };
+
+    /* Types of resources that occupy device memory. */
+
+    enum class IResource::Class : uint32_t
+    {
+        Buffer, Image, AccelerationStructure
     };
 } // namespace magma

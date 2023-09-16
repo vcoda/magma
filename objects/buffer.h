@@ -48,7 +48,7 @@ namespace magma
         VkDeviceAddress getDeviceAddress() const noexcept;
     #endif
         void realloc(VkDeviceSize newSize);
-        ResourceType getResourceType() const noexcept override { return ResourceType::Buffer; }
+        Class getResourceClass() const noexcept override final { return Class::Buffer; }
         void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) override;
     #ifdef VK_KHR_device_group
