@@ -25,11 +25,7 @@ using namespace layout;
 
 namespace renderstate
 {
-/* No input vertex data. */
-
 const VertexInputStructure<int> nullVertexInput;
-
-/* Vertex position only. */
 
 const VertexInputStructure<Pos2h> pos2h(0,
     {0, 0, VK_FORMAT_R16G16_SFLOAT, 0});
@@ -50,8 +46,6 @@ const VertexInputStructure<Pos4f> pos4f(0,
 const VertexInputStructure<Pos4d> pos4d(0,
     {0, 0, VK_FORMAT_R64G64B64A64_SFLOAT, 0});
 
-/* Vertex position and color. */
-
 #define MAGMA_COLOR_VERTEX(Vertex, name)\
 const VertexInputStructure<Vertex> name(0,\
     {\
@@ -68,8 +62,6 @@ MAGMA_COLOR_VERTEX(Pos3dColor4ub, pos3dColor4ub)
 MAGMA_COLOR_VERTEX(Pos4hColor4ub, pos4hColor4ub)
 MAGMA_COLOR_VERTEX(Pos4fColor4ub, pos4fColor4ub)
 MAGMA_COLOR_VERTEX(Pos4dColor4ub, pos4dColor4ub)
-
-/* Vertex position and texture coordinates. */
 
 #define MAGMA_TEX_VERTEX(Vertex, name)\
 const VertexInputStructure<Vertex> name(0,\
@@ -90,8 +82,6 @@ MAGMA_TEX_VERTEX(Pos4hTex2h, pos4hTex2h)
 MAGMA_TEX_VERTEX(Pos4fTex2h, pos4fTex2h)
 MAGMA_TEX_VERTEX(Pos4fTex2f, pos4fTex2f)
 MAGMA_TEX_VERTEX(Pos4dTex2f, pos4dTex2f)
-
-/* Vertex position and normal. */
 
 #define MAGMA_LIT_VERTEX(Vertex, name)\
 const VertexInputStructure<Vertex> name(0,\
@@ -116,8 +106,6 @@ MAGMA_LIT_VERTEX(Pos4fNormal4ub, pos4fNormal4ub)
 MAGMA_LIT_VERTEX(Pos4dNormal3h, pos4dNormal3h)
 MAGMA_LIT_VERTEX(Pos4dNormal3f, pos4dNormal3f)
 MAGMA_LIT_VERTEX(Pos4dNormal4ub, pos4dNormal4ub)
-
-/* Vertex position, TBN matrix and texture coordinates. */
 
 #define MAGMA_BUMP_VERTEX(Vertex, name)\
 const VertexInputStructure<Vertex> name(0,\
