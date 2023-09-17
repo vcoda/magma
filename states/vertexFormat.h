@@ -16,13 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "vertexType.h"
+#include "vertexAttributeType.h"
 
 namespace magma
 {
-    namespace layout
+    namespace fvf
     {
-        /* Common vertex formats for basic vertex shading. */
+        /* Flexible vertex formats for basic vertex shading. */
 
         template<class Pos>
         struct Vertex
@@ -129,5 +129,5 @@ namespace magma
         typedef BumpVertex<Float4, UByteNorm4, Float2> Pos4fTBN4ubTex2f;
         typedef BumpVertex<Double4, UByteNorm4, Half2> Pos4dTBN4ubTex2h;
         typedef BumpVertex<Double4, UByteNorm4, Float2> Pos4dTBN4ubTex2f;
-    } // namespace layout
+    } // namespace fvf
 } // namespace magma

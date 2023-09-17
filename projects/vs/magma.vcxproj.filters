@@ -783,10 +783,10 @@
     <ClInclude Include="..\..\core\hash.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\states\vertexLayout.h">
+    <ClInclude Include="..\..\states\vertexFormat.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\states\vertexType.h">
+    <ClInclude Include="..\..\states\vertexAttributeType.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
   </ItemGroup>

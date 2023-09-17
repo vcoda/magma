@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "base.h"
 #include "../shaders/shaderStages.h"
-#include "../states/vertexLayout.h"
+#include "../states/vertexFormat.h"
 #include "../states/rasterizationState.h"
 #include "../states/multisampleState.h"
 #include "../states/depthStencilState.h"

@@ -16,9 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "vertexType.h"
+#include "vertexAttributeType.h"
+#include "vertexFormat.h"
 #include "vertexInputState.h"
-#include "vertexLayout.h"
 
 namespace magma
 {
@@ -148,74 +148,74 @@ namespace magma
 
         /* Vertex position only. */
 
-        extern const VertexInputStructure<layout::Pos2h> pos2h;
-        extern const VertexInputStructure<layout::Pos2f> pos2f;
-        extern const VertexInputStructure<layout::Pos2d> pos2d;
-        extern const VertexInputStructure<layout::Pos3h> pos3h;
-        extern const VertexInputStructure<layout::Pos3f> pos3f;
-        extern const VertexInputStructure<layout::Pos3d> pos3d;
-        extern const VertexInputStructure<layout::Pos4h> pos4h;
-        extern const VertexInputStructure<layout::Pos4f> pos4f;
-        extern const VertexInputStructure<layout::Pos4d> pos4d;
+        extern const VertexInputStructure<fvf::Pos2h> pos2h;
+        extern const VertexInputStructure<fvf::Pos2f> pos2f;
+        extern const VertexInputStructure<fvf::Pos2d> pos2d;
+        extern const VertexInputStructure<fvf::Pos3h> pos3h;
+        extern const VertexInputStructure<fvf::Pos3f> pos3f;
+        extern const VertexInputStructure<fvf::Pos3d> pos3d;
+        extern const VertexInputStructure<fvf::Pos4h> pos4h;
+        extern const VertexInputStructure<fvf::Pos4f> pos4f;
+        extern const VertexInputStructure<fvf::Pos4d> pos4d;
 
         /* Vertex position and color. */
 
-        extern const VertexInputStructure<layout::Pos2hColor4ub> pos2hColor4ub;
-        extern const VertexInputStructure<layout::Pos2fColor4ub> pos2fColor4ub;
-        extern const VertexInputStructure<layout::Pos2dColor4ub> pos2dColor4ub;
-        extern const VertexInputStructure<layout::Pos3hColor4ub> pos3hColor4ub;
-        extern const VertexInputStructure<layout::Pos3fColor4ub> pos3fColor4ub;
-        extern const VertexInputStructure<layout::Pos3dColor4ub> pos3dColor4ub;
-        extern const VertexInputStructure<layout::Pos4hColor4ub> pos4hColor4ub;
-        extern const VertexInputStructure<layout::Pos4fColor4ub> pos4fColor4ub;
-        extern const VertexInputStructure<layout::Pos4dColor4ub> pos4dColor4ub;
+        extern const VertexInputStructure<fvf::Pos2hColor4ub> pos2hColor4ub;
+        extern const VertexInputStructure<fvf::Pos2fColor4ub> pos2fColor4ub;
+        extern const VertexInputStructure<fvf::Pos2dColor4ub> pos2dColor4ub;
+        extern const VertexInputStructure<fvf::Pos3hColor4ub> pos3hColor4ub;
+        extern const VertexInputStructure<fvf::Pos3fColor4ub> pos3fColor4ub;
+        extern const VertexInputStructure<fvf::Pos3dColor4ub> pos3dColor4ub;
+        extern const VertexInputStructure<fvf::Pos4hColor4ub> pos4hColor4ub;
+        extern const VertexInputStructure<fvf::Pos4fColor4ub> pos4fColor4ub;
+        extern const VertexInputStructure<fvf::Pos4dColor4ub> pos4dColor4ub;
 
         /* Vertex position and texture coordinates. */
 
-        extern const VertexInputStructure<layout::Pos2hTex2h> pos2hTex2h;
-        extern const VertexInputStructure<layout::Pos2fTex2h> pos2fTex2h;
-        extern const VertexInputStructure<layout::Pos2fTex2f> pos2fTex2f;
-        extern const VertexInputStructure<layout::Pos2dTex2f> pos2dTex2f;
-        extern const VertexInputStructure<layout::Pos3hTex2h> pos3hTex2h;
-        extern const VertexInputStructure<layout::Pos3fTex2h> pos3fTex2h;
-        extern const VertexInputStructure<layout::Pos3fTex2f> pos3fTex2f;
-        extern const VertexInputStructure<layout::Pos3dTex2f> pos3dTex2f;
-        extern const VertexInputStructure<layout::Pos4hTex2h> pos4hTex2h;
-        extern const VertexInputStructure<layout::Pos4fTex2h> pos4fTex2h;
-        extern const VertexInputStructure<layout::Pos4fTex2f> pos4fTex2f;
-        extern const VertexInputStructure<layout::Pos4dTex2f> pos4dTex2f;
+        extern const VertexInputStructure<fvf::Pos2hTex2h> pos2hTex2h;
+        extern const VertexInputStructure<fvf::Pos2fTex2h> pos2fTex2h;
+        extern const VertexInputStructure<fvf::Pos2fTex2f> pos2fTex2f;
+        extern const VertexInputStructure<fvf::Pos2dTex2f> pos2dTex2f;
+        extern const VertexInputStructure<fvf::Pos3hTex2h> pos3hTex2h;
+        extern const VertexInputStructure<fvf::Pos3fTex2h> pos3fTex2h;
+        extern const VertexInputStructure<fvf::Pos3fTex2f> pos3fTex2f;
+        extern const VertexInputStructure<fvf::Pos3dTex2f> pos3dTex2f;
+        extern const VertexInputStructure<fvf::Pos4hTex2h> pos4hTex2h;
+        extern const VertexInputStructure<fvf::Pos4fTex2h> pos4fTex2h;
+        extern const VertexInputStructure<fvf::Pos4fTex2f> pos4fTex2f;
+        extern const VertexInputStructure<fvf::Pos4dTex2f> pos4dTex2f;
 
         /* Vertex position and normal. */
 
-        extern const VertexInputStructure<layout::Pos3hNormal3h> pos3hNormal3h;
-        extern const VertexInputStructure<layout::Pos3hNormal4ub> pos3hNormal4ub;
-        extern const VertexInputStructure<layout::Pos3fNormal3h> pos3fNormal3h;
-        extern const VertexInputStructure<layout::Pos3fNormal3f> pos3fNormal3f;
-        extern const VertexInputStructure<layout::Pos3fNormal4ub> pos3fNormal4ub;
-        extern const VertexInputStructure<layout::Pos3dNormal3h> pos3dNormal3h;
-        extern const VertexInputStructure<layout::Pos3dNormal3f> pos3dNormal3f;
-        extern const VertexInputStructure<layout::Pos3dNormal4ub> pos3dNormal4ub;
-        extern const VertexInputStructure<layout::Pos4hNormal3h> pos4hNormal3h;
-        extern const VertexInputStructure<layout::Pos4hNormal4ub> pos4hNormal4ub;
-        extern const VertexInputStructure<layout::Pos4fNormal3h> pos4fNormal3h;
-        extern const VertexInputStructure<layout::Pos4fNormal3f> pos4fNormal3f;
-        extern const VertexInputStructure<layout::Pos4fNormal4ub> pos4fNormal4ub;
-        extern const VertexInputStructure<layout::Pos4dNormal3h> pos4dNormal3h;
-        extern const VertexInputStructure<layout::Pos4dNormal3f> pos4dNormal3f;
-        extern const VertexInputStructure<layout::Pos4dNormal4ub> pos4dNormal4ub;
+        extern const VertexInputStructure<fvf::Pos3hNormal3h> pos3hNormal3h;
+        extern const VertexInputStructure<fvf::Pos3hNormal4ub> pos3hNormal4ub;
+        extern const VertexInputStructure<fvf::Pos3fNormal3h> pos3fNormal3h;
+        extern const VertexInputStructure<fvf::Pos3fNormal3f> pos3fNormal3f;
+        extern const VertexInputStructure<fvf::Pos3fNormal4ub> pos3fNormal4ub;
+        extern const VertexInputStructure<fvf::Pos3dNormal3h> pos3dNormal3h;
+        extern const VertexInputStructure<fvf::Pos3dNormal3f> pos3dNormal3f;
+        extern const VertexInputStructure<fvf::Pos3dNormal4ub> pos3dNormal4ub;
+        extern const VertexInputStructure<fvf::Pos4hNormal3h> pos4hNormal3h;
+        extern const VertexInputStructure<fvf::Pos4hNormal4ub> pos4hNormal4ub;
+        extern const VertexInputStructure<fvf::Pos4fNormal3h> pos4fNormal3h;
+        extern const VertexInputStructure<fvf::Pos4fNormal3f> pos4fNormal3f;
+        extern const VertexInputStructure<fvf::Pos4fNormal4ub> pos4fNormal4ub;
+        extern const VertexInputStructure<fvf::Pos4dNormal3h> pos4dNormal3h;
+        extern const VertexInputStructure<fvf::Pos4dNormal3f> pos4dNormal3f;
+        extern const VertexInputStructure<fvf::Pos4dNormal4ub> pos4dNormal4ub;
 
         /* Vertex position, TBN matrix and texture coordinates. */
 
-        extern const VertexInputStructure<layout::Pos3hTBN4ubTex2h> pos3hTBN4ubTex2h;
-        extern const VertexInputStructure<layout::Pos3fTBN4ubTex2h> pos3fTBN4ubTex2h;
-        extern const VertexInputStructure<layout::Pos3fTBN4ubTex2f> pos3fTBN4ubTex2f;
-        extern const VertexInputStructure<layout::Pos3dTBN4ubTex2h> pos3dTBN4ubTex2h;
-        extern const VertexInputStructure<layout::Pos3dTBN4ubTex2f> pos3dTBN4ubTex2f;
-        extern const VertexInputStructure<layout::Pos4hTBN4ubTex2h> pos4hTBN4ubTex2h;
-        extern const VertexInputStructure<layout::Pos4fTBN4ubTex2h> pos4fTBN4ubTex2h;
-        extern const VertexInputStructure<layout::Pos4fTBN4ubTex2f> pos4fTBN4ubTex2f;
-        extern const VertexInputStructure<layout::Pos4dTBN4ubTex2h> pos4dTBN4ubTex2h;
-        extern const VertexInputStructure<layout::Pos4dTBN4ubTex2f> pos4dTBN4ubTex2f;
+        extern const VertexInputStructure<fvf::Pos3hTBN4ubTex2h> pos3hTBN4ubTex2h;
+        extern const VertexInputStructure<fvf::Pos3fTBN4ubTex2h> pos3fTBN4ubTex2h;
+        extern const VertexInputStructure<fvf::Pos3fTBN4ubTex2f> pos3fTBN4ubTex2f;
+        extern const VertexInputStructure<fvf::Pos3dTBN4ubTex2h> pos3dTBN4ubTex2h;
+        extern const VertexInputStructure<fvf::Pos3dTBN4ubTex2f> pos3dTBN4ubTex2f;
+        extern const VertexInputStructure<fvf::Pos4hTBN4ubTex2h> pos4hTBN4ubTex2h;
+        extern const VertexInputStructure<fvf::Pos4fTBN4ubTex2h> pos4fTBN4ubTex2h;
+        extern const VertexInputStructure<fvf::Pos4fTBN4ubTex2f> pos4fTBN4ubTex2f;
+        extern const VertexInputStructure<fvf::Pos4dTBN4ubTex2h> pos4dTBN4ubTex2h;
+        extern const VertexInputStructure<fvf::Pos4dTBN4ubTex2f> pos4dTBN4ubTex2f;
     } // namespace renderstate
 } // namespace magma
 

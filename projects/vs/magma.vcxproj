@@ -365,10 +365,10 @@
     <ClInclude Include="..\..\states\samplerState.h" />
     <ClInclude Include="..\..\states\streamRasterizationState.h" />
     <ClInclude Include="..\..\states\tesselationState.h" />
-    <ClInclude Include="..\..\states\vertexType.h" />
+    <ClInclude Include="..\..\states\vertexAttributeType.h" />
     <ClInclude Include="..\..\states\vertexInputState.h" />
     <ClInclude Include="..\..\states\vertexInputStructure.h" />
-    <ClInclude Include="..\..\states\vertexLayout.h" />
+    <ClInclude Include="..\..\states\vertexFormat.h" />
     <ClInclude Include="..\..\states\multiViewportState.h" />
     <ClInclude Include="..\..\states\viewportState.h" />
     <ClInclude Include="..\..\states\colorMask.h" />
