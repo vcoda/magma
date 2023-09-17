@@ -132,6 +132,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "states/samplerYcbcrConversionState.h"
 #include "states/streamRasterizationState.h"
 #include "states/tesselationState.h"
+#include "states/vertexAttributeType.h"
+#include "states/vertexFormat.h"
 #include "states/vertexInputState.h"
 #include "states/vertexInputStructure.h"
 #include "states/viewportState.h"
