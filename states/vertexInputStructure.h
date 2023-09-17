@@ -16,14 +16,15 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "vertexType.h"
 #include "vertexInputState.h"
-#include "vertexLayouts.h"
+#include "vertexLayout.h"
 
 namespace magma
 {
     /* Template vertex input structure. */
 
-    template<typename Vertex>
+    template<class Vertex>
     class VertexInputStructure : public VertexInputState
     {
     public:
@@ -45,108 +46,176 @@ namespace magma
 
     namespace specialization
     {
-        /* This structure is used for attribute format deduction. */
-
-        template<VkFormat format>
-        struct AttributeFormat
-        {
-            constexpr VkFormat getFormat() const { return format; }
-        };
-
         /* User have to specialize this template for concrete type.
-           Optional normalization flag is used to distinct normalized integer formats
-           (that come into the shader in the range [0,1]) from plain integers. */
+           <Unsigned> and <Normalized> parameters are used to distinguish
+           Vulkan formats with UNORM, SNORM, UINT and SINT modificators. */
 
-        template<typename Type, bool normalized = false>
-        struct VertexAttribute : AttributeFormat<VK_FORMAT_UNDEFINED>
+        template<VkFormat Format, bool Unsigned, bool Normalized>
+        struct VertexAttributeTraits
         {
-            constexpr VertexAttribute();
-            constexpr hash_t getSize() const { return sizeof(Type); }
-            constexpr bool hasNormalization() const { return normalized; }
+            constexpr static VkFormat format() noexcept { return Format; }
+            constexpr static bool unsigned_() noexcept { return Unsigned; }
+            constexpr static bool normalized() noexcept { return Normalized; }
         };
 
-        /* Built-in specializations for basic machine types. */
+        template<class Type>
+        struct VertexAttribute : VertexAttributeTraits<VK_FORMAT_UNDEFINED, false, false>
+        {
+            constexpr VertexAttribute() noexcept;
+            constexpr static std::size_t size() noexcept { return sizeof(Type); }
+        };
 
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(uint8_t, true, VK_FORMAT_R8_UNORM);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(int8_t, true, VK_FORMAT_R8_SNORM);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(uint8_t, false, VK_FORMAT_R8_UINT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(int8_t, false, VK_FORMAT_R8_SINT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(uint16_t, true, VK_FORMAT_R16_UNORM);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(int16_t, true, VK_FORMAT_R16_SNORM);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(uint16_t, false, VK_FORMAT_R16_UINT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(int16_t, false, VK_FORMAT_R16_SINT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(half_t, false, VK_FORMAT_R16_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(uint32_t, false, VK_FORMAT_R32_UINT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(int32_t, false, VK_FORMAT_R32_SINT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(float, false, VK_FORMAT_R32_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(uint64_t, false, VK_FORMAT_R64_UINT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(int64_t, false, VK_FORMAT_R64_SINT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(double, false, VK_FORMAT_R64_SFLOAT);
+        #define MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Type, format) template<> struct VertexAttribute<Type> :\
+            VertexAttributeTraits<format, Type::unsigned_(), Type::normalized()> {}
 
-        /* Built-in specializations for our vector types. */
+        /* Built-in specializations for scalar vertex input types. */
 
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::ubyte4, true, VK_FORMAT_R8G8B8A8_UNORM);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::half2, false, VK_FORMAT_R16G16_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::half3, false, VK_FORMAT_R16G16B16_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::half4, false, VK_FORMAT_R16G16B16A16_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::float2, false, VK_FORMAT_R32G32_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::float3, false, VK_FORMAT_R32G32B32_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::float4, false, VK_FORMAT_R32G32B32A32_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::double2, false, VK_FORMAT_R64G64_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::double3, false, VK_FORMAT_R64G64B64_SFLOAT);
-        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(core::double4, false, VK_FORMAT_R64G64B64A64_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UByteNorm, VK_FORMAT_R8_UNORM);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(ByteNorm, VK_FORMAT_R8_SNORM);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UByte, VK_FORMAT_R8_UINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Byte, VK_FORMAT_R8_SINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UShortNorm, VK_FORMAT_R16_UNORM);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(ShortNorm, VK_FORMAT_R16_SNORM);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UShort, VK_FORMAT_R16_UINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Short, VK_FORMAT_R16_SINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Half, VK_FORMAT_R16_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UInt, VK_FORMAT_R32_UINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Int, VK_FORMAT_R32_SINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Float, VK_FORMAT_R32_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(LargeUInt, VK_FORMAT_R64_UINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(LargeInt, VK_FORMAT_R64_SINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Double, VK_FORMAT_R64_SFLOAT);
+
+        /* Built-in specializations for vectorized vertex input types. */
+
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UByteNorm2, VK_FORMAT_R8G8_UNORM);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(ByteNorm2, VK_FORMAT_R8G8_SNORM);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UByte2, VK_FORMAT_R8G8_UINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Byte2, VK_FORMAT_R8G8_SINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UByteNorm4, VK_FORMAT_R8G8B8A8_UNORM);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(ByteNorm4, VK_FORMAT_R8G8B8A8_SNORM);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UByte4, VK_FORMAT_R8G8B8A8_UINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Byte4, VK_FORMAT_R8G8B8A8_SINT);
+
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UShortNorm2, VK_FORMAT_R16G16_UNORM);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(ShortNorm2, VK_FORMAT_R16G16_SNORM);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UShort2, VK_FORMAT_R16G16_UINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Short2, VK_FORMAT_R16G16_SINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UShortNorm3, VK_FORMAT_R16G16B16_UNORM);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(ShortNorm3, VK_FORMAT_R16G16B16_SNORM);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UShort3, VK_FORMAT_R16G16B16_UINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Short3, VK_FORMAT_R16G16B16_SINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UShortNorm4, VK_FORMAT_R16G16B16A16_UNORM);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(ShortNorm4, VK_FORMAT_R16G16B16A16_SNORM);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UShort4, VK_FORMAT_R16G16B16A16_UINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Short4, VK_FORMAT_R16G16B16A16_SINT);
+
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UInt2, VK_FORMAT_R32G32_UINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Int2, VK_FORMAT_R32G32_SINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UInt3, VK_FORMAT_R32G32B32_UINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Int3, VK_FORMAT_R32G32B32_SINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(UInt4, VK_FORMAT_R32G32B32A32_UINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Int4, VK_FORMAT_R32G32B32A32_SINT);
+
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(LargeUInt2, VK_FORMAT_R64G64_UINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(LargeInt2, VK_FORMAT_R64G64_SINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(LargeUInt3, VK_FORMAT_R64G64B64_UINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(LargeInt3, VK_FORMAT_R64G64B64_SINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(LargeUInt4, VK_FORMAT_R64G64B64A64_UINT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(LargeInt4, VK_FORMAT_R64G64B64A64_SINT);
+
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Half2, VK_FORMAT_R16G16_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Half3, VK_FORMAT_R16G16B16_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Half4, VK_FORMAT_R16G16B16A16_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Float2, VK_FORMAT_R32G32_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Float3, VK_FORMAT_R32G32B32_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Float4, VK_FORMAT_R32G32B32A32_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Double2, VK_FORMAT_R64G64_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Double3, VK_FORMAT_R64G64B64_SFLOAT);
+        MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Double4, VK_FORMAT_R64G64B64A64_SFLOAT);
     } // namespace specialization
 } // namespace magma
 
 namespace magma
 {
+    /* Pre-defined vertex input structures. */
+
     namespace renderstate
     {
+        /* No input vertex data. */
+
         extern const VertexInputStructure<int> nullVertexInput;
 
-        /* Vertex input states with half float type. */
+        /* Vertex position only. */
 
-        extern const VertexInputStructure<core::half2> pos2h;
-        extern const VertexInputStructure<core::half3> pos3h;
-        extern const VertexInputStructure<core::half4> pos4h;
+        extern const VertexInputStructure<layout::Pos2h> pos2h;
+        extern const VertexInputStructure<layout::Pos2f> pos2f;
+        extern const VertexInputStructure<layout::Pos2d> pos2d;
+        extern const VertexInputStructure<layout::Pos3h> pos3h;
+        extern const VertexInputStructure<layout::Pos3f> pos3f;
+        extern const VertexInputStructure<layout::Pos3d> pos3d;
+        extern const VertexInputStructure<layout::Pos4h> pos4h;
+        extern const VertexInputStructure<layout::Pos4f> pos4f;
+        extern const VertexInputStructure<layout::Pos4d> pos4d;
 
-        extern const VertexInputStructure<vertexlayout::Pos2hTex2h> pos2hTex2h;
-        extern const VertexInputStructure<vertexlayout::Pos2hColor3h> pos2hColor3h;
-        extern const VertexInputStructure<vertexlayout::Pos2hColor4h> pos2hColor4h;
-        extern const VertexInputStructure<vertexlayout::Pos2hColor4b> pos2hColor4b;
+        /* Vertex position and color. */
 
-        extern const VertexInputStructure<vertexlayout::Pos3hTex2h> pos3hTex2h;
-        extern const VertexInputStructure<vertexlayout::Pos3hColor3h> pos3hColor3h;
-        extern const VertexInputStructure<vertexlayout::Pos3hColor4h> pos3hColor4h;
-        extern const VertexInputStructure<vertexlayout::Pos3hColor4b> pos3hColor4b;
-        extern const VertexInputStructure<vertexlayout::Pos3hNormal3h> pos3hNormal3h;
+        extern const VertexInputStructure<layout::Pos2hColor4ub> pos2hColor4ub;
+        extern const VertexInputStructure<layout::Pos2fColor4ub> pos2fColor4ub;
+        extern const VertexInputStructure<layout::Pos2dColor4ub> pos2dColor4ub;
+        extern const VertexInputStructure<layout::Pos3hColor4ub> pos3hColor4ub;
+        extern const VertexInputStructure<layout::Pos3fColor4ub> pos3fColor4ub;
+        extern const VertexInputStructure<layout::Pos3dColor4ub> pos3dColor4ub;
+        extern const VertexInputStructure<layout::Pos4hColor4ub> pos4hColor4ub;
+        extern const VertexInputStructure<layout::Pos4fColor4ub> pos4fColor4ub;
+        extern const VertexInputStructure<layout::Pos4dColor4ub> pos4dColor4ub;
 
-        extern const VertexInputStructure<vertexlayout::Pos3hNormal3hTex2h> pos3hNormal3hTex2h;
-        extern const VertexInputStructure<vertexlayout::Pos3hNormal3hColor3h> pos3hNormal3hColor3h;
-        extern const VertexInputStructure<vertexlayout::Pos3hNormal3hColor4h> pos3hNormal3hColor4h;
-        extern const VertexInputStructure<vertexlayout::Pos3hNormal3hColor4b> pos3hNormal3hColor4b;
+        /* Vertex position and texture coordinates. */
 
-        /* Vertex input states with float type. */
+        extern const VertexInputStructure<layout::Pos2hTex2h> pos2hTex2h;
+        extern const VertexInputStructure<layout::Pos2fTex2h> pos2fTex2h;
+        extern const VertexInputStructure<layout::Pos2fTex2f> pos2fTex2f;
+        extern const VertexInputStructure<layout::Pos2dTex2f> pos2dTex2f;
+        extern const VertexInputStructure<layout::Pos3hTex2h> pos3hTex2h;
+        extern const VertexInputStructure<layout::Pos3fTex2h> pos3fTex2h;
+        extern const VertexInputStructure<layout::Pos3fTex2f> pos3fTex2f;
+        extern const VertexInputStructure<layout::Pos3dTex2f> pos3dTex2f;
+        extern const VertexInputStructure<layout::Pos4hTex2h> pos4hTex2h;
+        extern const VertexInputStructure<layout::Pos4fTex2h> pos4fTex2h;
+        extern const VertexInputStructure<layout::Pos4fTex2f> pos4fTex2f;
+        extern const VertexInputStructure<layout::Pos4dTex2f> pos4dTex2f;
 
-        extern const VertexInputStructure<core::float2> pos2f;
-        extern const VertexInputStructure<core::float3> pos3f;
-        extern const VertexInputStructure<core::float4> pos4f;
+        /* Vertex position and normal. */
 
-        extern const VertexInputStructure<vertexlayout::Pos2fTex2f> pos2fTex2f;
-        extern const VertexInputStructure<vertexlayout::Pos2fColor3f> pos2fColor3f;
-        extern const VertexInputStructure<vertexlayout::Pos2fColor4f> pos2fColor4f;
-        extern const VertexInputStructure<vertexlayout::Pos2fColor4b> pos2fColor4b;
+        extern const VertexInputStructure<layout::Pos3hNormal3h> pos3hNormal3h;
+        extern const VertexInputStructure<layout::Pos3hNormal4ub> pos3hNormal4ub;
+        extern const VertexInputStructure<layout::Pos3fNormal3h> pos3fNormal3h;
+        extern const VertexInputStructure<layout::Pos3fNormal3f> pos3fNormal3f;
+        extern const VertexInputStructure<layout::Pos3fNormal4ub> pos3fNormal4ub;
+        extern const VertexInputStructure<layout::Pos3dNormal3h> pos3dNormal3h;
+        extern const VertexInputStructure<layout::Pos3dNormal3f> pos3dNormal3f;
+        extern const VertexInputStructure<layout::Pos3dNormal4ub> pos3dNormal4ub;
+        extern const VertexInputStructure<layout::Pos4hNormal3h> pos4hNormal3h;
+        extern const VertexInputStructure<layout::Pos4hNormal4ub> pos4hNormal4ub;
+        extern const VertexInputStructure<layout::Pos4fNormal3h> pos4fNormal3h;
+        extern const VertexInputStructure<layout::Pos4fNormal3f> pos4fNormal3f;
+        extern const VertexInputStructure<layout::Pos4fNormal4ub> pos4fNormal4ub;
+        extern const VertexInputStructure<layout::Pos4dNormal3h> pos4dNormal3h;
+        extern const VertexInputStructure<layout::Pos4dNormal3f> pos4dNormal3f;
+        extern const VertexInputStructure<layout::Pos4dNormal4ub> pos4dNormal4ub;
 
-        extern const VertexInputStructure<vertexlayout::Pos3fTex2f> pos3fTex2f;
-        extern const VertexInputStructure<vertexlayout::Pos3fColor3f> pos3fColor3f;
-        extern const VertexInputStructure<vertexlayout::Pos3fColor4f> pos3fColor4f;
-        extern const VertexInputStructure<vertexlayout::Pos3fColor4b> pos3fColor4b;
-        extern const VertexInputStructure<vertexlayout::Pos3fNormal3f> pos3fNormal3f;
+        /* Vertex position, TBN matrix and texture coordinates. */
 
-        extern const VertexInputStructure<vertexlayout::Pos3fNormal3fTex2f> pos3fNormal3fTex2f;
-        extern const VertexInputStructure<vertexlayout::Pos3fNormal3fColor3f> pos3fNormal3fColor3f;
-        extern const VertexInputStructure<vertexlayout::Pos3fNormal3fColor4f> pos3fNormal3fColor4f;
-        extern const VertexInputStructure<vertexlayout::Pos3fNormal3fColor4b> pos3fNormal3fColor4b;
+        extern const VertexInputStructure<layout::Pos3hTBN4ubTex2h> pos3hTBN4ubTex2h;
+        extern const VertexInputStructure<layout::Pos3fTBN4ubTex2h> pos3fTBN4ubTex2h;
+        extern const VertexInputStructure<layout::Pos3fTBN4ubTex2f> pos3fTBN4ubTex2f;
+        extern const VertexInputStructure<layout::Pos3dTBN4ubTex2h> pos3dTBN4ubTex2h;
+        extern const VertexInputStructure<layout::Pos3dTBN4ubTex2f> pos3dTBN4ubTex2f;
+        extern const VertexInputStructure<layout::Pos4hTBN4ubTex2h> pos4hTBN4ubTex2h;
+        extern const VertexInputStructure<layout::Pos4fTBN4ubTex2h> pos4fTBN4ubTex2h;
+        extern const VertexInputStructure<layout::Pos4fTBN4ubTex2f> pos4fTBN4ubTex2f;
+        extern const VertexInputStructure<layout::Pos4dTBN4ubTex2h> pos4dTBN4ubTex2h;
+        extern const VertexInputStructure<layout::Pos4dTBN4ubTex2f> pos4dTBN4ubTex2f;
     } // namespace renderstate
 } // namespace magma
 

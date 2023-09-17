@@ -399,9 +399,6 @@
     <ClInclude Include="..\..\states\vertexInputStructure.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\states\vertexLayouts.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\extensions\layers.h">
       <Filter>Header Files\extensions</Filter>
     </ClInclude>
@@ -446,9 +443,6 @@
     </ClInclude>
     <ClInclude Include="..\..\allocator\linearPlacementPool.h">
       <Filter>Header Files\allocator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\vectors.h">
-      <Filter>Header Files\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\objects\objectType.h">
       <Filter>Header Files\objects</Filter>
@@ -788,6 +782,12 @@
     </ClInclude>
     <ClInclude Include="..\..\core\hash.h">
       <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\states\vertexLayout.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\states\vertexType.h">
+      <Filter>Header Files\states</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

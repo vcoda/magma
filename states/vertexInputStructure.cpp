@@ -21,118 +21,123 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-using namespace vertexlayout;
+using namespace layout;
 
 namespace renderstate
 {
-static constexpr VertexInputAttribute::Normalized<true> normalized;
+/* No input vertex data. */
 
 const VertexInputStructure<int> nullVertexInput;
 
-const VertexInputStructure<core::half2> pos2h(0,
+/* Vertex position only. */
+
+const VertexInputStructure<Pos2h> pos2h(0,
     {0, 0, VK_FORMAT_R16G16_SFLOAT, 0});
-const VertexInputStructure<core::half3> pos3h(0,
-    {0, 0, VK_FORMAT_R16G16B16_SFLOAT, 0});
-const VertexInputStructure<core::half4> pos4h(0,
-    {0, 0, VK_FORMAT_R16G16B16A16_SFLOAT, 0});
-
-const VertexInputStructure<Pos2hTex2h> pos2hTex2h(0, {
-    {0, &Pos2hTex2h::position},
-    {1, &Pos2hTex2h::attrib}});
-const VertexInputStructure<Pos2hColor3h> pos2hColor3h(0, {
-    {0, &Pos2hColor3h::position},
-    {1, &Pos2hColor3h::attrib}});
-const VertexInputStructure<Pos2hColor4h> pos2hColor4h(0, {
-    {0, &Pos2hColor4h::position},
-    {1, &Pos2hColor4h::attrib}});
-const VertexInputStructure<Pos2hColor4b> pos2hColor4b(0, {
-    {0, &Pos2hColor4b::position},
-    {1, &Pos2hColor4b::attrib, normalized}});
-
-const VertexInputStructure<Pos3hTex2h> pos3hTex2h(0, {
-    {0, &Pos3hTex2h::position},
-    {1, &Pos3hTex2h::attrib}});
-const VertexInputStructure<Pos3hColor3h> pos3hColor3h(0, {
-    {0, &Pos3hColor3h::position},
-    {1, &Pos3hColor3h::attrib}});
-const VertexInputStructure<Pos3hColor4h> pos3hColor4h(0, {
-    {0, &Pos3hColor4h::position},
-    {1, &Pos3hColor4h::attrib}});
-const VertexInputStructure<Pos3hColor4b> pos3hColor4b(0, {
-    {0, &Pos3hColor4b::position},
-    {1, &Pos3hColor4b::attrib, normalized}});
-const VertexInputStructure<Pos3hNormal3h> pos3hNormal3h(0, {
-    {0, &Pos3hNormal3h::position},
-    {1, &Pos3hNormal3h::attrib}});
-
-const VertexInputStructure<Pos3hNormal3hTex2h> pos3hNormal3hTex2(0, {
-    {0, &Pos3hNormal3hTex2h::position},
-    {1, &Pos3hNormal3hTex2h::normal},
-    {2, &Pos3hNormal3hTex2h::attrib}});
-const VertexInputStructure<Pos3hNormal3hColor3h> pos3hNormal3hColor3h(0, {
-    {0, &Pos3hNormal3hColor3h::position},
-    {1, &Pos3hNormal3hColor3h::normal},
-    {2, &Pos3hNormal3hColor3h::attrib}});
-const VertexInputStructure<Pos3hNormal3hColor4h> pos3hNormal3hColor4h(0, {
-    {0, &Pos3hNormal3hColor4h::position},
-    {1, &Pos3hNormal3hColor4h::normal},
-    {2, &Pos3hNormal3hColor4h::attrib}});
-const VertexInputStructure<Pos3hNormal3hColor4b> pos3hNormal3hColor4b(0, {
-    {0, &Pos3hNormal3hColor4b::position},
-    {1, &Pos3hNormal3hColor4b::normal},
-    {2, &Pos3hNormal3hColor4b::attrib, normalized}});
-
-const VertexInputStructure<core::float2> pos2f(0,
+const VertexInputStructure<Pos2f> pos2f(0,
     {0, 0, VK_FORMAT_R32G32_SFLOAT, 0});
-const VertexInputStructure<core::float3> pos3f(0,
+const VertexInputStructure<Pos2d> pos2d(0,
+    {0, 0, VK_FORMAT_R64G64_SFLOAT, 0});
+const VertexInputStructure<Pos3h> pos3h(0,
+    {0, 0, VK_FORMAT_R16G16B16_SFLOAT, 0});
+const VertexInputStructure<Pos3f> pos3f(0,
     {0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0});
-const VertexInputStructure<core::float4> pos4f(0,
+const VertexInputStructure<Pos3d> pos3d(0,
+    {0, 0, VK_FORMAT_R64G64B64_SFLOAT, 0});
+const VertexInputStructure<Pos4h> pos4h(0,
+    {0, 0, VK_FORMAT_R16G16B16A16_SFLOAT, 0});
+const VertexInputStructure<Pos4f> pos4f(0,
     {0, 0, VK_FORMAT_R32G32B32A32_SFLOAT, 0});
+const VertexInputStructure<Pos4d> pos4d(0,
+    {0, 0, VK_FORMAT_R64G64B64A64_SFLOAT, 0});
 
-const VertexInputStructure<Pos2fTex2f> pos2fTex2f(0, {
-    {0, &Pos2fTex2f::position},
-    {1, &Pos2fTex2f::attrib}});
-const VertexInputStructure<Pos2fColor3f> pos2fColor3f(0, {
-    {0, &Pos2fColor3f::position},
-    {1, &Pos2fColor3f::attrib}});
-const VertexInputStructure<Pos2fColor4f> pos2fColor4f(0, {
-    {0, &Pos2fColor4f::position},
-    {1, &Pos2fColor4f::attrib}});
-const VertexInputStructure<Pos2fColor4b> pos2fColor4b(0, {
-    {0, &Pos2fColor4b::position},
-    {1, &Pos2fColor4b::attrib, normalized}});
+/* Vertex position and color. */
 
-const VertexInputStructure<Pos3fTex2f> pos3fTex2f(0, {
-    {0, &Pos3fTex2f::position},
-    {1, &Pos3fTex2f::attrib}});
-const VertexInputStructure<Pos3fColor3f> pos3fColor3f(0, {
-    {0, &Pos3fColor3f::position},
-    {1, &Pos3fColor3f::attrib}});
-const VertexInputStructure<Pos3fColor4f> pos3fColor4f(0, {
-    {0, &Pos3fColor4f::position},
-    {1, &Pos3fColor4f::attrib}});
-const VertexInputStructure<Pos3fColor4b> pos3fColor4b(0, {
-    {0, &Pos3fColor4b::position},
-    {1, &Pos3fColor4b::attrib, normalized}});
-const VertexInputStructure<Pos3fNormal3f> pos3fNormal3f(0, {
-    {0, &Pos3fNormal3f::position},
-    {1, &Pos3fNormal3f::attrib}});
+#define MAGMA_COLOR_VERTEX(Vertex, name)\
+const VertexInputStructure<Vertex> name(0,\
+    {\
+        {0, &Vertex::pos},\
+        {1, &Vertex::color},\
+    });
 
-const VertexInputStructure<Pos3fNormal3fTex2f> pos3fNormal3fTex2(0, {
-    {0, &Pos3fNormal3fTex2f::position},
-    {1, &Pos3fNormal3fTex2f::normal},
-    {2, &Pos3fNormal3fTex2f::attrib}});
-const VertexInputStructure<Pos3fNormal3fColor3f> pos3fNormal3fColor3f(0, {
-    {0, &Pos3fNormal3fColor3f::position},
-    {1, &Pos3fNormal3fColor3f::normal},
-    {2, &Pos3fNormal3fColor3f::attrib}});
-const VertexInputStructure<Pos3fNormal3fColor4f> pos3fNormal3fColor4f(0, {
-    {0, &Pos3fNormal3fColor4f::position},
-    {1, &Pos3fNormal3fColor4f::normal},
-    {2, &Pos3fNormal3fColor4f::attrib}});
-const VertexInputStructure<Pos3fNormal3fColor4b> pos3fNormal3fColor4b(0, {
-    {0, &Pos3fNormal3fColor4b::position},
-    {1, &Pos3fNormal3fColor4b::normal},
-    {2, &Pos3fNormal3fColor4b::attrib, normalized}});
+MAGMA_COLOR_VERTEX(Pos2hColor4ub, pos2hColor4ub)
+MAGMA_COLOR_VERTEX(Pos2fColor4ub, pos2fColor4ub)
+MAGMA_COLOR_VERTEX(Pos2dColor4ub, pos2dColor4ub)
+MAGMA_COLOR_VERTEX(Pos3hColor4ub, pos3hColor4ub)
+MAGMA_COLOR_VERTEX(Pos3fColor4ub, pos3fColor4ub)
+MAGMA_COLOR_VERTEX(Pos3dColor4ub, pos3dColor4ub)
+MAGMA_COLOR_VERTEX(Pos4hColor4ub, pos4hColor4ub)
+MAGMA_COLOR_VERTEX(Pos4fColor4ub, pos4fColor4ub)
+MAGMA_COLOR_VERTEX(Pos4dColor4ub, pos4dColor4ub)
+
+/* Vertex position and texture coordinates. */
+
+#define MAGMA_TEX_VERTEX(Vertex, name)\
+const VertexInputStructure<Vertex> name(0,\
+    {\
+        {0, &Vertex::pos},\
+        {1, &Vertex::uv},\
+    });
+
+MAGMA_TEX_VERTEX(Pos2hTex2h, pos2hTex2h)
+MAGMA_TEX_VERTEX(Pos2fTex2h, pos2fTex2h)
+MAGMA_TEX_VERTEX(Pos2fTex2f, pos2fTex2f)
+MAGMA_TEX_VERTEX(Pos2dTex2f, pos2dTex2f)
+MAGMA_TEX_VERTEX(Pos3hTex2h, pos3hTex2h)
+MAGMA_TEX_VERTEX(Pos3fTex2h, pos3fTex2h)
+MAGMA_TEX_VERTEX(Pos3fTex2f, pos3fTex2f)
+MAGMA_TEX_VERTEX(Pos3dTex2f, pos3dTex2f)
+MAGMA_TEX_VERTEX(Pos4hTex2h, pos4hTex2h)
+MAGMA_TEX_VERTEX(Pos4fTex2h, pos4fTex2h)
+MAGMA_TEX_VERTEX(Pos4fTex2f, pos4fTex2f)
+MAGMA_TEX_VERTEX(Pos4dTex2f, pos4dTex2f)
+
+/* Vertex position and normal. */
+
+#define MAGMA_LIT_VERTEX(Vertex, name)\
+const VertexInputStructure<Vertex> name(0,\
+    {\
+        {0, &Vertex::pos},\
+        {1, &Vertex::normal},\
+    });
+
+MAGMA_LIT_VERTEX(Pos3hNormal3h, pos3hNormal3h)
+MAGMA_LIT_VERTEX(Pos3hNormal4ub, pos3hNormal4ub)
+MAGMA_LIT_VERTEX(Pos3fNormal3h, pos3fNormal3h)
+MAGMA_LIT_VERTEX(Pos3fNormal3f, pos3fNormal3f)
+MAGMA_LIT_VERTEX(Pos3fNormal4ub, pos3fNormal4ub)
+MAGMA_LIT_VERTEX(Pos3dNormal3h, pos3dNormal3h)
+MAGMA_LIT_VERTEX(Pos3dNormal3f, pos3dNormal3f)
+MAGMA_LIT_VERTEX(Pos3dNormal4ub, pos3dNormal4ub)
+MAGMA_LIT_VERTEX(Pos4hNormal3h, pos4hNormal3h)
+MAGMA_LIT_VERTEX(Pos4hNormal4ub, pos4hNormal4ub)
+MAGMA_LIT_VERTEX(Pos4fNormal3h, pos4fNormal3h)
+MAGMA_LIT_VERTEX(Pos4fNormal3f, pos4fNormal3f)
+MAGMA_LIT_VERTEX(Pos4fNormal4ub, pos4fNormal4ub)
+MAGMA_LIT_VERTEX(Pos4dNormal3h, pos4dNormal3h)
+MAGMA_LIT_VERTEX(Pos4dNormal3f, pos4dNormal3f)
+MAGMA_LIT_VERTEX(Pos4dNormal4ub, pos4dNormal4ub)
+
+/* Vertex position, TBN matrix and texture coordinates. */
+
+#define MAGMA_BUMP_VERTEX(Vertex, name)\
+const VertexInputStructure<Vertex> name(0,\
+    {\
+        {0, &Vertex::pos},\
+        {1, &Vertex::normal},\
+        {2, &Vertex::tangent},\
+        {3, &Vertex::bitangent},\
+        {4, &Vertex::uv},\
+    });
+
+MAGMA_BUMP_VERTEX(Pos3hTBN4ubTex2h, pos3hTBN4ubTex2h)
+MAGMA_BUMP_VERTEX(Pos3fTBN4ubTex2h, pos3fTBN4ubTex2h)
+MAGMA_BUMP_VERTEX(Pos3fTBN4ubTex2f, pos3fTBN4ubTex2f)
+MAGMA_BUMP_VERTEX(Pos3dTBN4ubTex2h, pos3dTBN4ubTex2h)
+MAGMA_BUMP_VERTEX(Pos3dTBN4ubTex2f, pos3dTBN4ubTex2f)
+MAGMA_BUMP_VERTEX(Pos4hTBN4ubTex2h, pos4hTBN4ubTex2h)
+MAGMA_BUMP_VERTEX(Pos4fTBN4ubTex2h, pos4fTBN4ubTex2h)
+MAGMA_BUMP_VERTEX(Pos4fTBN4ubTex2f, pos4fTBN4ubTex2f)
+MAGMA_BUMP_VERTEX(Pos4dTBN4ubTex2h, pos4dTBN4ubTex2h)
+MAGMA_BUMP_VERTEX(Pos4dTBN4ubTex2f, pos4dTBN4ubTex2f)
 } // namespace renderstate
 } // namespace magma

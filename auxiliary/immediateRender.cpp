@@ -188,7 +188,7 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTop
         {0, &Vertex::position},
         {1, &Vertex::normalPSize},
         {2, &Vertex::color},
-        {3, &Vertex::texcoord}});
+        {3, &Vertex::texCoord}});
     constexpr const InputAssemblyState *inputAssemblyStates[] = {
         &renderstate::pointList,
         &renderstate::lineList,

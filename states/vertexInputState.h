@@ -47,18 +47,14 @@ namespace magma
 
     struct VertexInputAttribute : VkVertexInputAttributeDescription
     {
-        template<bool normalized>
-        struct Normalized {}; // Deduce constructor's template <bool normalized> parameter
-
         VertexInputAttribute() = default;
         constexpr VertexInputAttribute(uint32_t location,
             uint32_t binding,
             VkFormat format,
             uint32_t offset) noexcept;
-        template<typename Vertex, typename Type, bool normalized = false>
+        template<class Vertex, class Type>
         VertexInputAttribute(uint32_t location,
-            Type Vertex::*attrib,
-            Normalized<normalized> normalize = Normalized<false>()) noexcept;
+            Type Vertex::*attrib) noexcept;
         constexpr hash_t hash() const noexcept;
     };
 
@@ -78,7 +74,7 @@ namespace magma
             const std::initializer_list<VertexInputAttribute>& attributes) noexcept;
         explicit VertexInputState(const std::initializer_list<VertexInputBindingDivisor>& bindings,
             const std::initializer_list<VertexInputAttribute>& attributes) noexcept;
-    #endif
+    #endif // VK_EXT_vertex_attribute_divisor
         VertexInputState(const VertexInputState&) noexcept;
         VertexInputState& operator=(const VertexInputState&) noexcept;
         virtual ~VertexInputState();

@@ -1,20 +1,20 @@
 namespace magma
 {
-template<typename Vertex, typename Type, bool normalized /* false */>
-inline VertexInputAttribute::VertexInputAttribute(uint32_t location, Type Vertex::*attrib,
-    Normalized<normalized> /* deduce template <normalized> parameter */) noexcept
+template<class Vertex, class Type>
+inline VertexInputAttribute::VertexInputAttribute(uint32_t location_, Type Vertex::*attrib) noexcept
 {
-    this->location = location;
+    location = location_;
     binding = 0;
-    format = specialization::VertexAttribute<Type, normalized>().getFormat(); // constexpr value
+    format = specialization::VertexAttribute<Type>::format(); // constexpr value
     const ptrdiff_t diff = reinterpret_cast<ptrdiff_t>(&(((Vertex *)0)->*attrib));
     offset = static_cast<uint32_t>(diff);
 }
 
-template<typename Vertex>
+template<class Vertex>
 inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, const VertexInputAttribute& attribute,
     VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */)
 {
+    static_assert(sizeof(Vertex) % sizeof(uint16_t) == 0, "vertex structure should have at least 2-byte alignment");
     VkVertexInputBindingDescription *vertexBindingDescription = new VkVertexInputBindingDescription[1];
     vertexBindingDescription->binding = binding;
     vertexBindingDescription->stride = sizeof(Vertex);
@@ -30,10 +30,11 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, cons
     pVertexAttributeDescriptions = vertexAttributeDescription;
 }
 
-template<typename Vertex>
+template<class Vertex>
 inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, const std::initializer_list<VertexInputAttribute>& attributes,
     VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */)
 {
+    static_assert(sizeof(Vertex) % sizeof(uint16_t) == 0, "vertex structure should have at least 2-byte alignment");
     VkVertexInputBindingDescription *vertexBindingDescription = new VkVertexInputBindingDescription[1];
     vertexBindingDescription->binding = binding;
     vertexBindingDescription->stride = sizeof(Vertex);
@@ -55,11 +56,12 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, cons
     pVertexAttributeDescriptions = vertexAttributeDescriptions;
 }
 
-template<typename Vertex>
+template<class Vertex>
 template<uint32_t vertexAttributeCount>
 inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, const VertexInputAttribute(&attributes)[vertexAttributeCount],
     VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */)
 {
+    static_assert(sizeof(Vertex) % sizeof(uint16_t) == 0, "vertex structure should have at least 2-byte alignment");
     VkVertexInputBindingDescription *vertexBindingDescription = new VkVertexInputBindingDescription[1];
     vertexBindingDescription->binding = binding;
     vertexBindingDescription->stride = sizeof(Vertex);
@@ -81,7 +83,7 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, cons
     pVertexAttributeDescriptions = vertexAttributeDescriptions;
 }
 
-template<typename Vertex>
+template<class Vertex>
 inline VertexInputStructure<Vertex>::VertexInputStructure(const VertexInputStructure& other) noexcept
 {
     sType = other.sType;
@@ -93,7 +95,7 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(const VertexInputStruc
     pVertexAttributeDescriptions = core::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
 }
 
-template<typename Vertex>
+template<class Vertex>
 inline VertexInputStructure<Vertex>& VertexInputStructure<Vertex>::operator=(const VertexInputStructure<Vertex>& other) noexcept
 {
     if (this != &other)
@@ -109,7 +111,7 @@ inline VertexInputStructure<Vertex>& VertexInputStructure<Vertex>::operator=(con
     return *this;
 }
 
-template<typename Vertex>
+template<class Vertex>
 inline uint32_t VertexInputStructure<Vertex>::stride(uint32_t binding) const noexcept
 {
     MAGMA_ASSERT(0 == binding);
@@ -120,8 +122,8 @@ inline uint32_t VertexInputStructure<Vertex>::stride(uint32_t binding) const noe
 
 namespace specialization
 {
-template<typename Type, bool normalized>
-constexpr VertexAttribute<Type, normalized>::VertexAttribute()
+template<class Type>
+constexpr VertexAttribute<Type>::VertexAttribute() noexcept
 {
 #ifdef _MSC_VER
     // TODO: By design this should be called in compile-time when there is no user-provided

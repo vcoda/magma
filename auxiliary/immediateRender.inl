@@ -4,10 +4,10 @@ namespace aux
 {
 struct ImmediateRender::Vertex
 {
-    core::float4 position;
-    core::float4 normalPSize;
-    core::float4 color;
-    core::float2 texcoord;
+    Float4 position;
+    Float4 normalPSize;
+    Float4 color;
+    Float2 texCoord;
 };
 
 struct ImmediateRender::Primitive
@@ -139,8 +139,8 @@ inline void ImmediateRender::color(const uint8_t c[4]) noexcept
 
 inline void ImmediateRender::texCoord(float u, float v) noexcept
 {
-    current->texcoord.v[0] = u;
-    current->texcoord.v[1] = v;
+    current->texCoord.v[0] = u;
+    current->texCoord.v[1] = v;
 }
 
 inline void ImmediateRender::texCoord(const float uv[2]) noexcept
