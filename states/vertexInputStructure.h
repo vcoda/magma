@@ -53,7 +53,7 @@ namespace magma
         template<VkFormat Format, bool Unsigned, bool Normalized>
         struct VertexAttributeTraits
         {
-            constexpr static VkFormat format() noexcept { return Format; }
+            constexpr static VkFormat format() noexcept;
             constexpr static bool unsigned_() noexcept { return Unsigned; }
             constexpr static bool normalized() noexcept { return Normalized; }
         };
@@ -61,7 +61,6 @@ namespace magma
         template<class Type>
         struct VertexAttribute : VertexAttributeTraits<VK_FORMAT_UNDEFINED, false, false>
         {
-            constexpr VertexAttribute() noexcept;
             constexpr static std::size_t size() noexcept { return sizeof(Type); }
         };
 

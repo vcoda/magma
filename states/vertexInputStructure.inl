@@ -6,6 +6,7 @@ inline VertexInputAttribute::VertexInputAttribute(uint32_t location_, Type Verte
     location = location_;
     binding = 0;
     format = specialization::VertexAttribute<Type>::format(); // constexpr value
+    MAGMA_ASSERT(format != VK_FORMAT_UNDEFINED);
     const ptrdiff_t diff = reinterpret_cast<ptrdiff_t>(&(((Vertex *)0)->*attrib));
     offset = static_cast<uint32_t>(diff);
 }
@@ -122,14 +123,11 @@ inline uint32_t VertexInputStructure<Vertex>::stride(uint32_t binding) const noe
 
 namespace specialization
 {
-template<class Type>
-constexpr VertexAttribute<Type>::VertexAttribute() noexcept
+template<VkFormat Format, bool Unsigned, bool Normalized>
+constexpr VkFormat VertexAttributeTraits<Format, Unsigned, Normalized>::format() noexcept
 {
-#ifdef _MSC_VER
-    // TODO: By design this should be called in compile-time when there is no user-provided
-    // specialization for concrete type, but this way it doesn't work on GCC.
-    static_assert(false, "vertex attribute type not specialized");
-#endif
+    static_assert(Format != VK_FORMAT_UNDEFINED, "vertex attribute type not specialized");
+    return Format;
 }
 } // namespace specialization
 } // namespace magma
