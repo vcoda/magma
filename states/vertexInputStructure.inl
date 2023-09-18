@@ -3,6 +3,7 @@ namespace magma
 template<class Vertex, class Type>
 inline VertexInputAttribute::VertexInputAttribute(uint32_t location_, Type Vertex::*attrib) noexcept
 {
+    static_assert(sizeof(Type) != sizeof(uint16_t) * 3, "6-byte attribute types not allowed");
     location = location_;
     binding = 0;
     format = specialization::VertexAttribute<Type>::format(); // constexpr value
