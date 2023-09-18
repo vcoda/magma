@@ -89,18 +89,24 @@ namespace magma
         typedef ColorVertex<Float4, UByteNorm4> Pos4fColor4ub;
         typedef ColorVertex<Double4, UByteNorm4> Pos4dColor4ub;
 
+        typedef TexVertex<Half2, UShortNorm2> Pos2hTex2us;
         typedef TexVertex<Half2, Half2> Pos2hTex2h;
+        typedef TexVertex<Half2, Float2> Pos2hTex2f;
+        typedef TexVertex<Float2, UShortNorm2> Pos2fTex2us;
         typedef TexVertex<Float2, Half2> Pos2fTex2h;
         typedef TexVertex<Float2, Float2> Pos2fTex2f;
+        typedef TexVertex<Double2, UShortNorm2> Pos2dTex2us;
+        typedef TexVertex<Double2, Half2> Pos2dTex2h;
         typedef TexVertex<Double2, Float2> Pos2dTex2f;
+        typedef TexVertex<Half3, UShortNorm2> Pos3hTex2us;
         typedef TexVertex<Half3, Half2> Pos3hTex2h;
+        typedef TexVertex<Half3, Float2> Pos3hTex2f;
+        typedef TexVertex<Float3, UShortNorm2> Pos3fTex2us;
         typedef TexVertex<Float3, Half2> Pos3fTex2h;
         typedef TexVertex<Float3, Float2> Pos3fTex2f;
+        typedef TexVertex<Double3, UShortNorm2> Pos3dTex2us;
+        typedef TexVertex<Double3, Half2> Pos3dTex2h;
         typedef TexVertex<Double3, Float2> Pos3dTex2f;
-        typedef TexVertex<Half4, Half2> Pos4hTex2h;
-        typedef TexVertex<Float4, Half2> Pos4fTex2h;
-        typedef TexVertex<Float4, Float2> Pos4fTex2f;
-        typedef TexVertex<Double4, Float2> Pos4dTex2f;
 
         typedef LitVertex<Half3, Half3> Pos3hNormal3h;
         typedef LitVertex<Half3, UByteNorm4> Pos3hNormal4ub;

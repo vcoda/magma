@@ -172,18 +172,24 @@ namespace magma
 
         /* Vertex position and texture coordinates. */
 
+        extern const VertexInputStructure<fvf::Pos2hTex2us> pos2hTex2us;
         extern const VertexInputStructure<fvf::Pos2hTex2h> pos2hTex2h;
+        extern const VertexInputStructure<fvf::Pos2hTex2f> pos2hTex2f;
+        extern const VertexInputStructure<fvf::Pos2fTex2us> pos2fTex2us;
         extern const VertexInputStructure<fvf::Pos2fTex2h> pos2fTex2h;
         extern const VertexInputStructure<fvf::Pos2fTex2f> pos2fTex2f;
+        extern const VertexInputStructure<fvf::Pos2dTex2us> pos2dTex2us;
+        extern const VertexInputStructure<fvf::Pos2dTex2h> pos2dTex2h;
         extern const VertexInputStructure<fvf::Pos2dTex2f> pos2dTex2f;
+        extern const VertexInputStructure<fvf::Pos3hTex2us> pos3hTex2us;
         extern const VertexInputStructure<fvf::Pos3hTex2h> pos3hTex2h;
+        extern const VertexInputStructure<fvf::Pos3hTex2f> pos3hTex2f;
+        extern const VertexInputStructure<fvf::Pos3fTex2us> pos3fTex2us;
         extern const VertexInputStructure<fvf::Pos3fTex2h> pos3fTex2h;
         extern const VertexInputStructure<fvf::Pos3fTex2f> pos3fTex2f;
+        extern const VertexInputStructure<fvf::Pos3dTex2us> pos3dTex2us;
+        extern const VertexInputStructure<fvf::Pos3dTex2h> pos3dTex2h;
         extern const VertexInputStructure<fvf::Pos3dTex2f> pos3dTex2f;
-        extern const VertexInputStructure<fvf::Pos4hTex2h> pos4hTex2h;
-        extern const VertexInputStructure<fvf::Pos4fTex2h> pos4fTex2h;
-        extern const VertexInputStructure<fvf::Pos4fTex2f> pos4fTex2f;
-        extern const VertexInputStructure<fvf::Pos4dTex2f> pos4dTex2f;
 
         /* Vertex position and normal. */
 

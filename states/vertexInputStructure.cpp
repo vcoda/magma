@@ -70,18 +70,24 @@ const VertexInputStructure<Vertex> name(0,\
         {1, &Vertex::uv},\
     });
 
+MAGMA_TEX_VERTEX(Pos2hTex2us, pos2hTex2us)
 MAGMA_TEX_VERTEX(Pos2hTex2h, pos2hTex2h)
+MAGMA_TEX_VERTEX(Pos2hTex2f, pos2hTex2f)
+MAGMA_TEX_VERTEX(Pos2fTex2us, pos2fTex2us)
 MAGMA_TEX_VERTEX(Pos2fTex2h, pos2fTex2h)
 MAGMA_TEX_VERTEX(Pos2fTex2f, pos2fTex2f)
+MAGMA_TEX_VERTEX(Pos2dTex2us, pos2dTex2us)
+MAGMA_TEX_VERTEX(Pos2dTex2h, pos2dTex2h)
 MAGMA_TEX_VERTEX(Pos2dTex2f, pos2dTex2f)
+MAGMA_TEX_VERTEX(Pos3hTex2us, pos3hTex2us)
 MAGMA_TEX_VERTEX(Pos3hTex2h, pos3hTex2h)
+MAGMA_TEX_VERTEX(Pos3hTex2f, pos3hTex2f)
+MAGMA_TEX_VERTEX(Pos3fTex2us, pos3fTex2us)
 MAGMA_TEX_VERTEX(Pos3fTex2h, pos3fTex2h)
 MAGMA_TEX_VERTEX(Pos3fTex2f, pos3fTex2f)
+MAGMA_TEX_VERTEX(Pos3dTex2us, pos3dTex2us)
+MAGMA_TEX_VERTEX(Pos3dTex2h, pos3dTex2h)
 MAGMA_TEX_VERTEX(Pos3dTex2f, pos3dTex2f)
-MAGMA_TEX_VERTEX(Pos4hTex2h, pos4hTex2h)
-MAGMA_TEX_VERTEX(Pos4fTex2h, pos4fTex2h)
-MAGMA_TEX_VERTEX(Pos4fTex2f, pos4fTex2f)
-MAGMA_TEX_VERTEX(Pos4dTex2f, pos4dTex2f)
 
 #define MAGMA_LIT_VERTEX(Vertex, name)\
 const VertexInputStructure<Vertex> name(0,\
