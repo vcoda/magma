@@ -22,7 +22,9 @@ namespace magma
 {
     namespace fvf
     {
-        /* Flexible vertex formats for basic vertex shading. */
+        /* Flexible vertex formats for basic vertex shading.
+           Note that vertex attributes should be 4-byte aligned,
+           so (u)short3 and half3 types are omitted. */
 
         template<class Pos>
         struct Vertex
@@ -65,7 +67,7 @@ namespace magma
         typedef Vertex<Half2> Pos2h;
         typedef Vertex<Float2> Pos2f;
         typedef Vertex<Double2> Pos2d;
-        typedef Vertex<Half3> Pos3h;
+        //typedef Vertex<Half3> Pos3h;
         typedef Vertex<Float3> Pos3f;
         typedef Vertex<Double3> Pos3d;
         typedef Vertex<Half4> Pos4h;
@@ -75,7 +77,7 @@ namespace magma
         typedef ColorVertex<Half2, UByteNorm4> Pos2hColor4ub;
         typedef ColorVertex<Float2, UByteNorm4> Pos2fColor4ub;
         typedef ColorVertex<Double2, UByteNorm4> Pos2dColor4ub;
-        typedef ColorVertex<Half3, UByteNorm4> Pos3hColor4ub;
+        typedef ColorVertex<Half4, UByteNorm4> Pos4hColor4ub;
         typedef ColorVertex<Float3, UByteNorm4> Pos3fColor4ub;
         typedef ColorVertex<Double3, UByteNorm4> Pos3dColor4ub;
 
@@ -88,9 +90,9 @@ namespace magma
         typedef TexVertex<Double2, UShortNorm2> Pos2dTex2us;
         typedef TexVertex<Double2, Half2> Pos2dTex2h;
         typedef TexVertex<Double2, Float2> Pos2dTex2f;
-        typedef TexVertex<Half3, UShortNorm2> Pos3hTex2us;
-        typedef TexVertex<Half3, Half2> Pos3hTex2h;
-        typedef TexVertex<Half3, Float2> Pos3hTex2f;
+        typedef TexVertex<Half4, UShortNorm2> Pos4hTex2us;
+        typedef TexVertex<Half4, Half2> Pos4hTex2h;
+        typedef TexVertex<Half4, Float2> Pos4hTex2f;
         typedef TexVertex<Float3, UShortNorm2> Pos3fTex2us;
         typedef TexVertex<Float3, Half2> Pos3fTex2h;
         typedef TexVertex<Float3, Float2> Pos3fTex2f;
@@ -98,58 +100,58 @@ namespace magma
         typedef TexVertex<Double3, Half2> Pos3dTex2h;
         typedef TexVertex<Double3, Float2> Pos3dTex2f;
 
-        typedef LitVertex<Half3, ByteNorm4> Pos3hNormal4b;
-        typedef LitVertex<Half3, UByteNorm4> Pos3hNormal4ub;
-        typedef LitVertex<Half3, ShortNorm3> Pos3hNormal3s;
-        typedef LitVertex<Half3, UShortNorm3> Pos3hNormal3us;
-        typedef LitVertex<Half3, Half3> Pos3hNormal3h;
-        typedef LitVertex<Half3, Float3> Pos3hNormal3f;
+        typedef LitVertex<Half4, ByteNorm4> Pos4hNormal4b;
+        typedef LitVertex<Half4, UByteNorm4> Pos4hNormal4ub;
+        typedef LitVertex<Half4, ShortNorm4> Pos4hNormal4s;
+        typedef LitVertex<Half4, UShortNorm4> Pos4hNormal4us;
+        typedef LitVertex<Half4, Half4> Pos4hNormal4h;
+        typedef LitVertex<Half4, Float3> Pos4hNormal3f;
         typedef LitVertex<Float3, ByteNorm4> Pos3fNormal4b;
         typedef LitVertex<Float3, UByteNorm4> Pos3fNormal4ub;
-        typedef LitVertex<Float3, ShortNorm3> Pos3fNormal3s;
-        typedef LitVertex<Float3, UShortNorm3> Pos3fNormal3us;
-        typedef LitVertex<Float3, Half3> Pos3fNormal3h;
+        typedef LitVertex<Float3, ShortNorm4> Pos3fNormal4s;
+        typedef LitVertex<Float3, UShortNorm4> Pos3fNormal4us;
+        typedef LitVertex<Float3, Half4> Pos3fNormal4h;
         typedef LitVertex<Float3, Float3> Pos3fNormal3f;
         typedef LitVertex<Double3, ByteNorm4> Pos3dNormal4b;
         typedef LitVertex<Double3, UByteNorm4> Pos3dNormal4ub;
-        typedef LitVertex<Double3, ShortNorm3> Pos3dNormal3s;
-        typedef LitVertex<Double3, UShortNorm3> Pos3dNormal3us;
-        typedef LitVertex<Double3, Half3> Pos3dNormal3h;
+        typedef LitVertex<Double3, ShortNorm4> Pos3dNormal4s;
+        typedef LitVertex<Double3, UShortNorm4> Pos3dNormal4us;
+        typedef LitVertex<Double3, Half4> Pos3dNormal4h;
         typedef LitVertex<Double3, Float3> Pos3dNormal3f;
 
-        typedef LitTexVertex<Half3, ByteNorm4, UShortNorm2> Pos3hNormal4bTex2us;
-        typedef LitTexVertex<Half3, ByteNorm4, Half2> Pos3hNormal4bTex2h;
-        typedef LitTexVertex<Half3, ByteNorm4, Float2> Pos3hNormal4bTex2f;
-        typedef LitTexVertex<Half3, UByteNorm4, UShortNorm2> Pos3hNormal4ubTex2us;
-        typedef LitTexVertex<Half3, UByteNorm4, Half2> Pos3hNormal4ubTex2h;
-        typedef LitTexVertex<Half3, UByteNorm4, Float2> Pos3hNormal4ubTex2f;
-        typedef LitTexVertex<Half3, ShortNorm3, UShortNorm2> Pos3hNormal3sTex2us;
-        typedef LitTexVertex<Half3, ShortNorm3, Half2> Pos3hNormal3sTex2h;
-        typedef LitTexVertex<Half3, ShortNorm3, Float2> Pos3hNormal3sTex2f;
-        typedef LitTexVertex<Half3, UShortNorm3, UShortNorm2> Pos3hNormal3usTex2us;
-        typedef LitTexVertex<Half3, UShortNorm3, Half2> Pos3hNormal3usTex2h;
-        typedef LitTexVertex<Half3, UShortNorm3, Float2> Pos3hNormal3usTex2f;
-        typedef LitTexVertex<Half3, Half3, UShortNorm2> Pos3hNormal3hTex2us;
-        typedef LitTexVertex<Half3, Half3, Half2> Pos3hNormal3hTex2h;
-        typedef LitTexVertex<Half3, Half3, Float2> Pos3hNormal3hTex2f;
-        typedef LitTexVertex<Half3, Float3, UShortNorm2> Pos3hNormal3fTex2us;
-        typedef LitTexVertex<Half3, Float3, Half2> Pos3hNormal3fTex2h;
-        typedef LitTexVertex<Half3, Float3, Float2> Pos3hNormal3fTex2f;
+        typedef LitTexVertex<Half4, ByteNorm4, UShortNorm2> Pos4hNormal4bTex2us;
+        typedef LitTexVertex<Half4, ByteNorm4, Half2> Pos4hNormal4bTex2h;
+        typedef LitTexVertex<Half4, ByteNorm4, Float2> Pos4hNormal4bTex2f;
+        typedef LitTexVertex<Half4, UByteNorm4, UShortNorm2> Pos4hNormal4ubTex2us;
+        typedef LitTexVertex<Half4, UByteNorm4, Half2> Pos4hNormal4ubTex2h;
+        typedef LitTexVertex<Half4, UByteNorm4, Float2> Pos4hNormal4ubTex2f;
+        typedef LitTexVertex<Half4, ShortNorm4, UShortNorm2> Pos4hNormal4sTex2us;
+        typedef LitTexVertex<Half4, ShortNorm4, Half2> Pos4hNormal4sTex2h;
+        typedef LitTexVertex<Half4, ShortNorm4, Float2> Pos4hNormal4sTex2f;
+        typedef LitTexVertex<Half4, UShortNorm4, UShortNorm2> Pos4hNormal4usTex2us;
+        typedef LitTexVertex<Half4, UShortNorm4, Half2> Pos4hNormal4usTex2h;
+        typedef LitTexVertex<Half4, UShortNorm4, Float2> Pos4hNormal4usTex2f;
+        typedef LitTexVertex<Half4, Half4, UShortNorm2> Pos4hNormal4hTex2us;
+        typedef LitTexVertex<Half4, Half4, Half2> Pos4hNormal4hTex2h;
+        typedef LitTexVertex<Half4, Half4, Float2> Pos4hNormal4hTex2f;
+        typedef LitTexVertex<Half4, Float3, UShortNorm2> Pos4hNormal3fTex2us;
+        typedef LitTexVertex<Half4, Float3, Half2> Pos4hNormal3fTex2h;
+        typedef LitTexVertex<Half4, Float3, Float2> Pos4hNormal3fTex2f;
         typedef LitTexVertex<Float3, ByteNorm4, UShortNorm2> Pos3fNormal4bTex2us;
         typedef LitTexVertex<Float3, ByteNorm4, Half2> Pos3fNormal4bTex2h;
         typedef LitTexVertex<Float3, ByteNorm4, Float2> Pos3fNormal4bTex2f;
         typedef LitTexVertex<Float3, UByteNorm4, UShortNorm2> Pos3fNormal4ubTex2us;
         typedef LitTexVertex<Float3, UByteNorm4, Half2> Pos3fNormal4ubTex2h;
         typedef LitTexVertex<Float3, UByteNorm4, Float2> Pos3fNormal4ubTex2f;
-        typedef LitTexVertex<Float3, ShortNorm3, UShortNorm2> Pos3fNormal3sTex2us;
-        typedef LitTexVertex<Float3, ShortNorm3, Half2> Pos3fNormal3sTex2h;
-        typedef LitTexVertex<Float3, ShortNorm3, Float2> Pos3fNormal3sTex2f;
-        typedef LitTexVertex<Float3, UShortNorm3, UShortNorm2> Pos3fNormal3usTex2us;
-        typedef LitTexVertex<Float3, UShortNorm3, Half2> Pos3fNormal3usTex2h;
-        typedef LitTexVertex<Float3, UShortNorm3, Float2> Pos3fNormal3usTex2f;
-        typedef LitTexVertex<Float3, Half3, UShortNorm2> Pos3fNormal3hTex2us;
-        typedef LitTexVertex<Float3, Half3, Half2> Pos3fNormal3hTex2h;
-        typedef LitTexVertex<Float3, Half3, Float2> Pos3fNormal3hTex2f;
+        typedef LitTexVertex<Float3, ShortNorm4, UShortNorm2> Pos3fNormal4sTex2us;
+        typedef LitTexVertex<Float3, ShortNorm4, Half2> Pos3fNormal4sTex2h;
+        typedef LitTexVertex<Float3, ShortNorm4, Float2> Pos3fNormal4sTex2f;
+        typedef LitTexVertex<Float3, UShortNorm4, UShortNorm2> Pos3fNormal4usTex2us;
+        typedef LitTexVertex<Float3, UShortNorm4, Half2> Pos3fNormal4usTex2h;
+        typedef LitTexVertex<Float3, UShortNorm4, Float2> Pos3fNormal4usTex2f;
+        typedef LitTexVertex<Float3, Half4, UShortNorm2> Pos3fNormal4hTex2us;
+        typedef LitTexVertex<Float3, Half4, Half2> Pos3fNormal4hTex2h;
+        typedef LitTexVertex<Float3, Half4, Float2> Pos3fNormal4hTex2f;
         typedef LitTexVertex<Float3, Float3, UShortNorm2> Pos3fNormal3fTex2us;
         typedef LitTexVertex<Float3, Float3, Half2> Pos3fNormal3fTex2h;
         typedef LitTexVertex<Float3, Float3, Float2> Pos3fNormal3fTex2f;
@@ -159,28 +161,42 @@ namespace magma
         typedef LitTexVertex<Double3, UByteNorm4, UShortNorm2> Pos3dNormal4ubTex2us;
         typedef LitTexVertex<Double3, UByteNorm4, Half2> Pos3dNormal4ubTex2h;
         typedef LitTexVertex<Double3, UByteNorm4, Float2> Pos3dNormal4ubTex2f;
-        typedef LitTexVertex<Double3, ShortNorm3, UShortNorm2> Pos3dNormal3sTex2us;
-        typedef LitTexVertex<Double3, ShortNorm3, Half2> Pos3dNormal3sTex2h;
-        typedef LitTexVertex<Double3, ShortNorm3, Float2> Pos3dNormal3sTex2f;
-        typedef LitTexVertex<Double3, UShortNorm3, UShortNorm2> Pos3dNormal3usTex2us;
-        typedef LitTexVertex<Double3, UShortNorm3, Half2> Pos3dNormal3usTex2h;
-        typedef LitTexVertex<Double3, UShortNorm3, Float2> Pos3dNormal3usTex2f;
-        typedef LitTexVertex<Double3, Half3, UShortNorm2> Pos3dNormal3hTex2us;
-        typedef LitTexVertex<Double3, Half3, Half2> Pos3dNormal3hTex2h;
-        typedef LitTexVertex<Double3, Half3, Float2> Pos3dNormal3hTex2f;
+        typedef LitTexVertex<Double3, ShortNorm4, UShortNorm2> Pos3dNormal4sTex2us;
+        typedef LitTexVertex<Double3, ShortNorm4, Half2> Pos3dNormal4sTex2h;
+        typedef LitTexVertex<Double3, ShortNorm4, Float2> Pos3dNormal4sTex2f;
+        typedef LitTexVertex<Double3, UShortNorm4, UShortNorm2> Pos3dNormal4usTex2us;
+        typedef LitTexVertex<Double3, UShortNorm4, Half2> Pos3dNormal4usTex2h;
+        typedef LitTexVertex<Double3, UShortNorm4, Float2> Pos3dNormal4usTex2f;
+        typedef LitTexVertex<Double3, Half4, UShortNorm2> Pos3dNormal4hTex2us;
+        typedef LitTexVertex<Double3, Half4, Half2> Pos3dNormal4hTex2h;
+        typedef LitTexVertex<Double3, Half4, Float2> Pos3dNormal4hTex2f;
         typedef LitTexVertex<Double3, Float3, UShortNorm2> Pos3dNormal3fTex2us;
         typedef LitTexVertex<Double3, Float3, Half2> Pos3dNormal3fTex2h;
         typedef LitTexVertex<Double3, Float3, Float2> Pos3dNormal3fTex2f;
 
-        typedef BumpVertex<Half3, UByteNorm4, Half2> Pos3hTBN4ubTex2h;
-        typedef BumpVertex<Float3, UByteNorm4, Half2> Pos3fTBN4ubTex2h;
-        typedef BumpVertex<Float3, UByteNorm4, Float2> Pos3fTBN4ubTex2f;
-        typedef BumpVertex<Double3, UByteNorm4, Half2> Pos3dTBN4ubTex2h;
-        typedef BumpVertex<Double3, UByteNorm4, Float2> Pos3dTBN4ubTex2f;
+        typedef BumpVertex<Half4, ByteNorm4, Half2> Pos4hTBN4bTex2h;
         typedef BumpVertex<Half4, UByteNorm4, Half2> Pos4hTBN4ubTex2h;
-        typedef BumpVertex<Float4, UByteNorm4, Half2> Pos4fTBN4ubTex2h;
-        typedef BumpVertex<Float4, UByteNorm4, Float2> Pos4fTBN4ubTex2f;
-        typedef BumpVertex<Double4, UByteNorm4, Half2> Pos4dTBN4ubTex2h;
-        typedef BumpVertex<Double4, UByteNorm4, Float2> Pos4dTBN4ubTex2f;
+        typedef BumpVertex<Half4, ShortNorm4, Half2> Pos4hTBN4sTex2h;
+        typedef BumpVertex<Half4, UShortNorm4, Half2> Pos4hTBN4usTex2h;
+        typedef BumpVertex<Half4, ByteNorm4, Float2> Pos4hTBN4bTex2f;
+        typedef BumpVertex<Half4, UByteNorm4, Float2> Pos4hTBN4ubTex2f;
+        typedef BumpVertex<Half4, ShortNorm4, Float2> Pos4hTBN4sTex2f;
+        typedef BumpVertex<Half4, UShortNorm4, Float2> Pos4hTBN4usTex2f;
+        typedef BumpVertex<Float3, ByteNorm4, Half2> Pos3fTBN4bTex2h;
+        typedef BumpVertex<Float3, UByteNorm4, Half2> Pos3fTBN4ubTex2h;
+        typedef BumpVertex<Float3, ShortNorm4, Half2> Pos3fTBN4sTex2h;
+        typedef BumpVertex<Float3, UShortNorm4, Half2> Pos3fTBN4usTex2h;
+        typedef BumpVertex<Float3, ByteNorm4, Float2> Pos3fTBN4bTex2f;
+        typedef BumpVertex<Float3, UByteNorm4, Float2> Pos3fTBN4ubTex2f;
+        typedef BumpVertex<Float3, ShortNorm4, Float2> Pos3fTBN4sTex2f;
+        typedef BumpVertex<Float3, UShortNorm4, Float2> Pos3fTBN4usTex2f;
+        typedef BumpVertex<Double3, ByteNorm4, Half2> Pos3dTBN4bTex2h;
+        typedef BumpVertex<Double3, UByteNorm4, Half2> Pos3dTBN4ubTex2h;
+        typedef BumpVertex<Double3, ShortNorm4, Half2> Pos3dTBN4sTex2h;
+        typedef BumpVertex<Double3, UShortNorm4, Half2> Pos3dTBN4usTex2h;
+        typedef BumpVertex<Double3, ByteNorm4, Float2> Pos3dTBN4bTex2f;
+        typedef BumpVertex<Double3, UByteNorm4, Float2> Pos3dTBN4ubTex2f;
+        typedef BumpVertex<Double3, ShortNorm4, Float2> Pos3dTBN4sTex2f;
+        typedef BumpVertex<Double3, UShortNorm4, Float2> Pos3dTBN4usTex2f;
     } // namespace fvf
 } // namespace magma
