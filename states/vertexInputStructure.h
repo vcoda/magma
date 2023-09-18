@@ -209,6 +209,63 @@ namespace magma
         extern const VertexInputStructure<fvf::Pos3dNormal3h> pos3dNormal3h;
         extern const VertexInputStructure<fvf::Pos3dNormal3f> pos3dNormal3f;
 
+        /* Vertex position, normal and texture coordinates. */
+
+        extern const VertexInputStructure<fvf::Pos3hNormal4bTex2us> pos3hNormal4bTex2us;
+        extern const VertexInputStructure<fvf::Pos3hNormal4bTex2h> pos3hNormal4bTex2h;
+        extern const VertexInputStructure<fvf::Pos3hNormal4bTex2f> pos3hNormal4bTex2f;
+        extern const VertexInputStructure<fvf::Pos3hNormal4ubTex2us> pos3hNormal4ubTex2us;
+        extern const VertexInputStructure<fvf::Pos3hNormal4ubTex2h> pos3hNormal4ubTex2h;
+        extern const VertexInputStructure<fvf::Pos3hNormal4ubTex2f> pos3hNormal4ubTex2f;
+        extern const VertexInputStructure<fvf::Pos3hNormal3sTex2us> pos3hNormal3sTex2us;
+        extern const VertexInputStructure<fvf::Pos3hNormal3sTex2h> pos3hNormal3sTex2h;
+        extern const VertexInputStructure<fvf::Pos3hNormal3sTex2f> pos3hNormal3sTex2f;
+        extern const VertexInputStructure<fvf::Pos3hNormal3usTex2us> pos3hNormal3usTex2us;
+        extern const VertexInputStructure<fvf::Pos3hNormal3usTex2h> pos3hNormal3usTex2h;
+        extern const VertexInputStructure<fvf::Pos3hNormal3usTex2f> pos3hNormal3usTex2f;
+        extern const VertexInputStructure<fvf::Pos3hNormal3hTex2us> pos3hNormal3hTex2us;
+        extern const VertexInputStructure<fvf::Pos3hNormal3hTex2h> pos3hNormal3hTex2h;
+        extern const VertexInputStructure<fvf::Pos3hNormal3hTex2f> pos3hNormal3hTex2f;
+        extern const VertexInputStructure<fvf::Pos3hNormal3fTex2us> pos3hNormal3fTex2us;
+        extern const VertexInputStructure<fvf::Pos3hNormal3fTex2h> pos3hNormal3fTex2h;
+        extern const VertexInputStructure<fvf::Pos3hNormal3fTex2f> pos3hNormal3fTex2f;
+        extern const VertexInputStructure<fvf::Pos3fNormal4bTex2us> pos3fNormal4bTex2us;
+        extern const VertexInputStructure<fvf::Pos3fNormal4bTex2h> pos3fNormal4bTex2h;
+        extern const VertexInputStructure<fvf::Pos3fNormal4bTex2f> pos3fNormal4bTex2f;
+        extern const VertexInputStructure<fvf::Pos3fNormal4ubTex2us> pos3fNormal4ubTex2us;
+        extern const VertexInputStructure<fvf::Pos3fNormal4ubTex2h> pos3fNormal4ubTex2h;
+        extern const VertexInputStructure<fvf::Pos3fNormal4ubTex2f> pos3fNormal4ubTex2f;
+        extern const VertexInputStructure<fvf::Pos3fNormal3sTex2us> pos3fNormal3sTex2us;
+        extern const VertexInputStructure<fvf::Pos3fNormal3sTex2h> pos3fNormal3sTex2h;
+        extern const VertexInputStructure<fvf::Pos3fNormal3sTex2f> pos3fNormal3sTex2f;
+        extern const VertexInputStructure<fvf::Pos3fNormal3usTex2us> pos3fNormal3usTex2us;
+        extern const VertexInputStructure<fvf::Pos3fNormal3usTex2h> pos3fNormal3usTex2h;
+        extern const VertexInputStructure<fvf::Pos3fNormal3usTex2f> pos3fNormal3usTex2f;
+        extern const VertexInputStructure<fvf::Pos3fNormal3hTex2us> pos3fNormal3hTex2us;
+        extern const VertexInputStructure<fvf::Pos3fNormal3hTex2h> pos3fNormal3hTex2h;
+        extern const VertexInputStructure<fvf::Pos3fNormal3hTex2f> pos3fNormal3hTex2f;
+        extern const VertexInputStructure<fvf::Pos3fNormal3fTex2us> pos3fNormal3fTex2us;
+        extern const VertexInputStructure<fvf::Pos3fNormal3fTex2h> pos3fNormal3fTex2h;
+        extern const VertexInputStructure<fvf::Pos3fNormal3fTex2f> pos3fNormal3fTex2f;
+        extern const VertexInputStructure<fvf::Pos3dNormal4bTex2us> pos3dNormal4bTex2us;
+        extern const VertexInputStructure<fvf::Pos3dNormal4bTex2h> pos3dNormal4bTex2h;
+        extern const VertexInputStructure<fvf::Pos3dNormal4bTex2f> pos3dNormal4bTex2f;
+        extern const VertexInputStructure<fvf::Pos3dNormal4ubTex2us> pos3dNormal4ubTex2us;
+        extern const VertexInputStructure<fvf::Pos3dNormal4ubTex2h> pos3dNormal4ubTex2h;
+        extern const VertexInputStructure<fvf::Pos3dNormal4ubTex2f> pos3dNormal4ubTex2f;
+        extern const VertexInputStructure<fvf::Pos3dNormal3sTex2us> pos3dNormal3sTex2us;
+        extern const VertexInputStructure<fvf::Pos3dNormal3sTex2h> pos3dNormal3sTex2h;
+        extern const VertexInputStructure<fvf::Pos3dNormal3sTex2f> pos3dNormal3sTex2f;
+        extern const VertexInputStructure<fvf::Pos3dNormal3usTex2us> pos3dNormal3usTex2us;
+        extern const VertexInputStructure<fvf::Pos3dNormal3usTex2h> pos3dNormal3usTex2h;
+        extern const VertexInputStructure<fvf::Pos3dNormal3usTex2f> pos3dNormal3usTex2f;
+        extern const VertexInputStructure<fvf::Pos3dNormal3hTex2us> pos3dNormal3hTex2us;
+        extern const VertexInputStructure<fvf::Pos3dNormal3hTex2h> pos3dNormal3hTex2h;
+        extern const VertexInputStructure<fvf::Pos3dNormal3hTex2f> pos3dNormal3hTex2f;
+        extern const VertexInputStructure<fvf::Pos3dNormal3fTex2us> pos3dNormal3fTex2us;
+        extern const VertexInputStructure<fvf::Pos3dNormal3fTex2h> pos3dNormal3fTex2h;
+        extern const VertexInputStructure<fvf::Pos3dNormal3fTex2f> pos3dNormal3fTex2f;
+
         /* Vertex position, TBN matrix and texture coordinates. */
 
         extern const VertexInputStructure<fvf::Pos3hTBN4ubTex2h> pos3hTBN4ubTex2h;
