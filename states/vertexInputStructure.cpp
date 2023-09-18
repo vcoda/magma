@@ -34,7 +34,7 @@ const VertexInputStructure<Pos2f> pos2f(0,
 const VertexInputStructure<Pos2d> pos2d(0,
     {0, 0, VK_FORMAT_R64G64_SFLOAT, 0});
 // 6-byte format usually not supported
-//const VertexInputStructure<Pos3h> pos4h(0,
+//const VertexInputStructure<Pos3h> pos3h(0,
 //    {0, 0, VK_FORMAT_R16G16B16_SFLOAT, 0});
 const VertexInputStructure<Pos3f> pos3f(0,
     {0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0});

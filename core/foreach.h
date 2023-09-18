@@ -19,40 +19,36 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    namespace core
+namespace core
+{
+template<class Foo, class Bar>
+inline void forEach(Foo& a, Bar& b,
+    std::function<void(typename Foo::iterator&,
+                       typename Bar::iterator&)> each)
+{
+    typename Foo::iterator i;
+    typename Bar::iterator j;
+    for (i = a.begin(), j = b.begin();
+        (i != a.end()) && (j != b.end());
+        ++i, ++j)
     {
-        /* Iterates two containers simultaneously. */
+        each(i, j);
+    }
+}
 
-        template<class Foo, class Bar>
-        inline void forEach(Foo& a, Bar& b,
-            std::function<void(typename Foo::iterator&,
-                               typename Bar::iterator&)> eachFn)
-        {
-            typename Foo::iterator i;
-            typename Bar::iterator j;
-            for (i = a.begin(), j = b.begin();
-                (i != a.end()) && (j != b.end());
-                ++i, ++j)
-            {
-                eachFn(i, j);
-            }
-        }
-
-        /* Iterates two immutable containers simultaneously. */
-
-        template<class Foo, class Bar>
-        inline void forConstEach(const Foo& a, const Bar& b,
-            std::function<void(typename Foo::const_iterator&,
-                               typename Bar::const_iterator&)> eachFn)
-        {
-            typename Foo::const_iterator i;
-            typename Bar::const_iterator j;
-            for (i = a.cbegin(), j = b.cbegin();
-                (i != a.cend()) && (j != b.cend());
-                ++i, ++j)
-            {
-                eachFn(i, j);
-            }
-        }
-    } // namespace core
+template<class Foo, class Bar>
+inline void forConstEach(const Foo& a, const Bar& b,
+    std::function<void(typename Foo::const_iterator&,
+                       typename Bar::const_iterator&)> each)
+{
+    typename Foo::const_iterator i;
+    typename Bar::const_iterator j;
+    for (i = a.cbegin(), j = b.cbegin();
+        (i != a.cend()) && (j != b.cend());
+        ++i, ++j)
+    {
+        each(i, j);
+    }
+}
+} // namespace core
 } // namespace magma

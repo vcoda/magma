@@ -268,6 +268,7 @@ namespace magma
         extern const VertexInputStructure<fvf::Pos3dNormal3fTex2f> pos3dNormal3fTex2f;
 
         /* Vertex position, TBN matrix and texture coordinates. */
+
         extern const VertexInputStructure<fvf::Pos4hTBN4bTex2h> pos4hTBN4bTex2h;
         extern const VertexInputStructure<fvf::Pos4hTBN4ubTex2h> pos4hTBN4ubTex2h;
         extern const VertexInputStructure<fvf::Pos4hTBN4sTex2h> pos4hTBN4sTex2h;

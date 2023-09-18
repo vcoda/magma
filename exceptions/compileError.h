@@ -24,7 +24,7 @@ namespace magma
 {
     namespace exception
     {
-        /* aux::ShaderCompiler exception. */
+        /* Exception thrown by aux::ShaderCompiler. */
 
         class CompileError : public Exception
         {

@@ -91,6 +91,7 @@ namespace magma
         void end();
         bool reset(bool releaseResources) noexcept;
         void bindPipeline(const std::shared_ptr<Pipeline>& pipeline) noexcept;
+
         void setViewport(float x, float y,
             float width,
             float height,
