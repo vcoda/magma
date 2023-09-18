@@ -15,7 +15,7 @@ template<class Vertex>
 inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, const VertexInputAttribute& attribute,
     VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */)
 {
-    static_assert(sizeof(Vertex) % sizeof(uint32_t) == 0, "vertex structure should have at least four byte alignment");
+    static_assert(sizeof(Vertex) % sizeof(uint32_t) == 0, "vertex structure size should be a multiple of 4 bytes");
     VkVertexInputBindingDescription *vertexBindingDescription = new VkVertexInputBindingDescription[1];
     vertexBindingDescription->binding = binding;
     vertexBindingDescription->stride = sizeof(Vertex);
@@ -35,7 +35,7 @@ template<class Vertex>
 inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, const std::initializer_list<VertexInputAttribute>& attributes,
     VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */)
 {
-    static_assert(sizeof(Vertex) % sizeof(uint32_t) == 0, "vertex structure should have at least four byte alignment");
+    static_assert(sizeof(Vertex) % sizeof(uint32_t) == 0, "vertex structure size should be a multiple of 4 bytes");
     VkVertexInputBindingDescription *vertexBindingDescription = new VkVertexInputBindingDescription[1];
     vertexBindingDescription->binding = binding;
     vertexBindingDescription->stride = sizeof(Vertex);
@@ -62,7 +62,7 @@ template<uint32_t vertexAttributeCount>
 inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, const VertexInputAttribute(&attributes)[vertexAttributeCount],
     VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */)
 {
-    static_assert(sizeof(Vertex) % sizeof(uint32_t) == 0, "vertex structure should have at least four byte alignment");
+    static_assert(sizeof(Vertex) % sizeof(uint32_t) == 0, "vertex structure size should be a multiple of 4 bytes");
     VkVertexInputBindingDescription *vertexBindingDescription = new VkVertexInputBindingDescription[1];
     vertexBindingDescription->binding = binding;
     vertexBindingDescription->stride = sizeof(Vertex);
