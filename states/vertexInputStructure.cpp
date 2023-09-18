@@ -59,9 +59,6 @@ MAGMA_COLOR_VERTEX(Pos2dColor4ub, pos2dColor4ub)
 MAGMA_COLOR_VERTEX(Pos3hColor4ub, pos3hColor4ub)
 MAGMA_COLOR_VERTEX(Pos3fColor4ub, pos3fColor4ub)
 MAGMA_COLOR_VERTEX(Pos3dColor4ub, pos3dColor4ub)
-MAGMA_COLOR_VERTEX(Pos4hColor4ub, pos4hColor4ub)
-MAGMA_COLOR_VERTEX(Pos4fColor4ub, pos4fColor4ub)
-MAGMA_COLOR_VERTEX(Pos4dColor4ub, pos4dColor4ub)
 
 #define MAGMA_TEX_VERTEX(Vertex, name)\
 const VertexInputStructure<Vertex> name(0,\

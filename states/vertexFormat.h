@@ -85,9 +85,6 @@ namespace magma
         typedef ColorVertex<Half3, UByteNorm4> Pos3hColor4ub;
         typedef ColorVertex<Float3, UByteNorm4> Pos3fColor4ub;
         typedef ColorVertex<Double3, UByteNorm4> Pos3dColor4ub;
-        typedef ColorVertex<Half4, UByteNorm4> Pos4hColor4ub;
-        typedef ColorVertex<Float4, UByteNorm4> Pos4fColor4ub;
-        typedef ColorVertex<Double4, UByteNorm4> Pos4dColor4ub;
 
         typedef TexVertex<Half2, UShortNorm2> Pos2hTex2us;
         typedef TexVertex<Half2, Half2> Pos2hTex2h;
