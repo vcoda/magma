@@ -193,22 +193,24 @@ namespace magma
 
         /* Vertex position and normal. */
 
-        extern const VertexInputStructure<fvf::Pos3hNormal3h> pos3hNormal3h;
+        extern const VertexInputStructure<fvf::Pos3hNormal4b> pos3hNormal4b;
         extern const VertexInputStructure<fvf::Pos3hNormal4ub> pos3hNormal4ub;
+        extern const VertexInputStructure<fvf::Pos3hNormal3s> pos3hNormal3s;
+        extern const VertexInputStructure<fvf::Pos3hNormal3us> pos3hNormal3us;
+        extern const VertexInputStructure<fvf::Pos3hNormal3h> pos3hNormal3h;
+        extern const VertexInputStructure<fvf::Pos3hNormal3f> pos3hNormal3f;
+        extern const VertexInputStructure<fvf::Pos3fNormal4b> pos3fNormal4b;
+        extern const VertexInputStructure<fvf::Pos3fNormal4ub> pos3fNormal4ub;
+        extern const VertexInputStructure<fvf::Pos3fNormal3s> pos3fNormal3s;
+        extern const VertexInputStructure<fvf::Pos3fNormal3us> pos3fNormal3us;
         extern const VertexInputStructure<fvf::Pos3fNormal3h> pos3fNormal3h;
         extern const VertexInputStructure<fvf::Pos3fNormal3f> pos3fNormal3f;
-        extern const VertexInputStructure<fvf::Pos3fNormal4ub> pos3fNormal4ub;
+        extern const VertexInputStructure<fvf::Pos3dNormal4b> pos3dNormal4b;
+        extern const VertexInputStructure<fvf::Pos3dNormal4ub> pos3dNormal4ub;
+        extern const VertexInputStructure<fvf::Pos3dNormal3s> pos3dNormal3s;
+        extern const VertexInputStructure<fvf::Pos3dNormal3us> pos3dNormal3us;
         extern const VertexInputStructure<fvf::Pos3dNormal3h> pos3dNormal3h;
         extern const VertexInputStructure<fvf::Pos3dNormal3f> pos3dNormal3f;
-        extern const VertexInputStructure<fvf::Pos3dNormal4ub> pos3dNormal4ub;
-        extern const VertexInputStructure<fvf::Pos4hNormal3h> pos4hNormal3h;
-        extern const VertexInputStructure<fvf::Pos4hNormal4ub> pos4hNormal4ub;
-        extern const VertexInputStructure<fvf::Pos4fNormal3h> pos4fNormal3h;
-        extern const VertexInputStructure<fvf::Pos4fNormal3f> pos4fNormal3f;
-        extern const VertexInputStructure<fvf::Pos4fNormal4ub> pos4fNormal4ub;
-        extern const VertexInputStructure<fvf::Pos4dNormal3h> pos4dNormal3h;
-        extern const VertexInputStructure<fvf::Pos4dNormal3f> pos4dNormal3f;
-        extern const VertexInputStructure<fvf::Pos4dNormal4ub> pos4dNormal4ub;
 
         /* Vertex position, TBN matrix and texture coordinates. */
 

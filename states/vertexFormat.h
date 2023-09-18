@@ -108,22 +108,24 @@ namespace magma
         typedef TexVertex<Double3, Half2> Pos3dTex2h;
         typedef TexVertex<Double3, Float2> Pos3dTex2f;
 
-        typedef LitVertex<Half3, Half3> Pos3hNormal3h;
+        typedef LitVertex<Half3, ByteNorm4> Pos3hNormal4b;
         typedef LitVertex<Half3, UByteNorm4> Pos3hNormal4ub;
+        typedef LitVertex<Half3, ShortNorm3> Pos3hNormal3s;
+        typedef LitVertex<Half3, UShortNorm3> Pos3hNormal3us;
+        typedef LitVertex<Half3, Half3> Pos3hNormal3h;
+        typedef LitVertex<Half3, Float3> Pos3hNormal3f;
+        typedef LitVertex<Float3, ByteNorm4> Pos3fNormal4b;
+        typedef LitVertex<Float3, UByteNorm4> Pos3fNormal4ub;
+        typedef LitVertex<Float3, ShortNorm3> Pos3fNormal3s;
+        typedef LitVertex<Float3, UShortNorm3> Pos3fNormal3us;
         typedef LitVertex<Float3, Half3> Pos3fNormal3h;
         typedef LitVertex<Float3, Float3> Pos3fNormal3f;
-        typedef LitVertex<Float3, UByteNorm4> Pos3fNormal4ub;
+        typedef LitVertex<Double3, ByteNorm4> Pos3dNormal4b;
+        typedef LitVertex<Double3, UByteNorm4> Pos3dNormal4ub;
+        typedef LitVertex<Double3, ShortNorm3> Pos3dNormal3s;
+        typedef LitVertex<Double3, UShortNorm3> Pos3dNormal3us;
         typedef LitVertex<Double3, Half3> Pos3dNormal3h;
         typedef LitVertex<Double3, Float3> Pos3dNormal3f;
-        typedef LitVertex<Double3, UByteNorm4> Pos3dNormal4ub;
-        typedef LitVertex<Half4, Half3> Pos4hNormal3h;
-        typedef LitVertex<Half4, UByteNorm4> Pos4hNormal4ub;
-        typedef LitVertex<Float4, Half3> Pos4fNormal3h;
-        typedef LitVertex<Float4, Float3> Pos4fNormal3f;
-        typedef LitVertex<Float4, UByteNorm4> Pos4fNormal4ub;
-        typedef LitVertex<Double4, Half3> Pos4dNormal3h;
-        typedef LitVertex<Double4, Float3> Pos4dNormal3f;
-        typedef LitVertex<Double4, UByteNorm4> Pos4dNormal4ub;
 
         typedef BumpVertex<Half3, UByteNorm4, Half2> Pos3hTBN4ubTex2h;
         typedef BumpVertex<Float3, UByteNorm4, Half2> Pos3fTBN4ubTex2h;

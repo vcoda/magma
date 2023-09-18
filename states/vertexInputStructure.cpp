@@ -96,22 +96,24 @@ const VertexInputStructure<Vertex> name(0,\
         {1, &Vertex::normal},\
     });
 
-MAGMA_LIT_VERTEX(Pos3hNormal3h, pos3hNormal3h)
+MAGMA_LIT_VERTEX(Pos3hNormal4b, pos3hNormal4b)
 MAGMA_LIT_VERTEX(Pos3hNormal4ub, pos3hNormal4ub)
+MAGMA_LIT_VERTEX(Pos3hNormal3s, pos3hNormal3s)
+MAGMA_LIT_VERTEX(Pos3hNormal3us, pos3hNormal3us)
+MAGMA_LIT_VERTEX(Pos3hNormal3h, pos3hNormal3h)
+MAGMA_LIT_VERTEX(Pos3hNormal3f, pos3hNormal3f)
+MAGMA_LIT_VERTEX(Pos3fNormal4b, pos3fNormal4b)
+MAGMA_LIT_VERTEX(Pos3fNormal4ub, pos3fNormal4ub)
+MAGMA_LIT_VERTEX(Pos3fNormal3s, pos3fNormal3s)
+MAGMA_LIT_VERTEX(Pos3fNormal3us, pos3fNormal3us)
 MAGMA_LIT_VERTEX(Pos3fNormal3h, pos3fNormal3h)
 MAGMA_LIT_VERTEX(Pos3fNormal3f, pos3fNormal3f)
-MAGMA_LIT_VERTEX(Pos3fNormal4ub, pos3fNormal4ub)
+MAGMA_LIT_VERTEX(Pos3dNormal4b, pos3dNormal4b)
+MAGMA_LIT_VERTEX(Pos3dNormal4ub, pos3dNormal4ub)
+MAGMA_LIT_VERTEX(Pos3dNormal3s, pos3dNormal3s)
+MAGMA_LIT_VERTEX(Pos3dNormal3us, pos3dNormal3us)
 MAGMA_LIT_VERTEX(Pos3dNormal3h, pos3dNormal3h)
 MAGMA_LIT_VERTEX(Pos3dNormal3f, pos3dNormal3f)
-MAGMA_LIT_VERTEX(Pos3dNormal4ub, pos3dNormal4ub)
-MAGMA_LIT_VERTEX(Pos4hNormal3h, pos4hNormal3h)
-MAGMA_LIT_VERTEX(Pos4hNormal4ub, pos4hNormal4ub)
-MAGMA_LIT_VERTEX(Pos4fNormal3h, pos4fNormal3h)
-MAGMA_LIT_VERTEX(Pos4fNormal3f, pos4fNormal3f)
-MAGMA_LIT_VERTEX(Pos4fNormal4ub, pos4fNormal4ub)
-MAGMA_LIT_VERTEX(Pos4dNormal3h, pos4dNormal3h)
-MAGMA_LIT_VERTEX(Pos4dNormal3f, pos4dNormal3f)
-MAGMA_LIT_VERTEX(Pos4dNormal4ub, pos4dNormal4ub)
 
 #define MAGMA_BUMP_VERTEX(Vertex, name)\
 const VertexInputStructure<Vertex> name(0,\
