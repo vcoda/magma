@@ -31,39 +31,32 @@ namespace magma
         };
 
         template<class Pos, class Color>
-        struct ColorVertex
+        struct ColorVertex : Vertex<Pos>
         {
-            Pos pos;
             Color color;
         };
 
         template<class Pos, class TexCoord>
-        struct TexVertex
+        struct TexVertex : Vertex<Pos>
         {
-            Pos pos;
             TexCoord uv;
         };
 
         template<class Pos, class Normal>
-        struct LitVertex
+        struct LitVertex : Vertex<Pos>
         {
-            Pos pos;
             Normal normal;
         };
 
         template<class Pos, class Normal, class TexCoord>
-        struct TexLitVertex
+        struct LitTexVertex : LitVertex<Pos, Normal>
         {
-            Pos pos;
-            Normal normal;
             TexCoord uv;
         };
 
         template<class Pos, class Vector, class TexCoord>
-        struct BumpVertex
+        struct BumpVertex : LitVertex<Pos, Vector>
         {
-            Pos pos;
-            Vector normal;
             Vector tangent;
             Vector bitangent;
             TexCoord uv;
