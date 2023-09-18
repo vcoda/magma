@@ -50,7 +50,7 @@ const VertexInputStructure<Pos4d> pos4d(0,
 const VertexInputStructure<Vertex> name(0,\
     {\
         {0, &Vertex::pos},\
-        {1, &Vertex::color},\
+        {1, &Vertex::color}\
     });
 
 MAGMA_COLOR_VERTEX(Pos2hColor4ub, pos2hColor4ub)
@@ -64,7 +64,7 @@ MAGMA_COLOR_VERTEX(Pos3dColor4ub, pos3dColor4ub)
 const VertexInputStructure<Vertex> name(0,\
     {\
         {0, &Vertex::pos},\
-        {1, &Vertex::uv},\
+        {1, &Vertex::uv}\
     });
 
 MAGMA_TEX_VERTEX(Pos2hTex2us, pos2hTex2us)
@@ -90,7 +90,7 @@ MAGMA_TEX_VERTEX(Pos3dTex2f, pos3dTex2f)
 const VertexInputStructure<Vertex> name(0,\
     {\
         {0, &Vertex::pos},\
-        {1, &Vertex::normal},\
+        {1, &Vertex::normal}\
     });
 
 MAGMA_LIT_VERTEX(Pos3hNormal4b, pos3hNormal4b)
@@ -182,7 +182,7 @@ const VertexInputStructure<Vertex> name(0,\
         {1, &Vertex::normal},\
         {2, &Vertex::tangent},\
         {3, &Vertex::bitangent},\
-        {4, &Vertex::uv},\
+        {4, &Vertex::uv}\
     });
 
 MAGMA_BUMP_VERTEX(Pos3hTBN4ubTex2h, pos3hTBN4ubTex2h)
