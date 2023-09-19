@@ -1,17 +1,5 @@
 namespace magma
 {
-template<class Vertex, class Type>
-inline VertexInputAttribute::VertexInputAttribute(uint32_t location_, Type Vertex::*attrib) noexcept
-{
-    static_assert(sizeof(Type) != sizeof(uint16_t) * 3, "6-byte attribute types not allowed");
-    location = location_;
-    binding = 0;
-    format = specialization::VertexAttribute<Type>::format(); // constexpr value
-    MAGMA_ASSERT(format != VK_FORMAT_UNDEFINED);
-    const ptrdiff_t diff = reinterpret_cast<ptrdiff_t>(&(((Vertex *)0)->*attrib));
-    offset = static_cast<uint32_t>(diff);
-}
-
 template<class Vertex>
 inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, const VertexInputAttribute& attribute,
     VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */)
