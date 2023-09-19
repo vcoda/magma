@@ -26,81 +26,93 @@ namespace magma
         uint16_t value;
     };
 
-    /* Scalar or vector GPU type. <Unsigned> and <Normalized>
-       parameters are used to distinguish Vulkan formats with
-       UNORM, SNORM, UINT and SINT modificators. */
+    /* https://registry.khronos.org/vulkan/specs/1.1/html/vkspec.html#_identification_of_formats
+       Table 34. Interpretation of Numeric Format */
 
-    template<class PodType, size_t Components, bool Unsigned, bool Normalized = false>
+    enum class Numeric
+    {
+        UNorm, SNorm, UScaled, SScaled, UInt, SInt, UFloat, SFloat
+    };
+
+    /* Scalar or vector GPU type. <normalized> and <scaled>
+       parameters are used to distinguish numeric formats
+       such as UNORM, SNORM, USCALED, SSCALED, UINT and SINT. */
+
+    template<class PodType, int components,
+        bool normalized = false,
+        bool scaled = false>
     struct AttributeType
     {
-        PodType v[Components];
-        constexpr static bool unsigned_() noexcept { return Unsigned; }
-        constexpr static bool normalized() noexcept { return Normalized; }
+        PodType v[components];
+        constexpr static std::size_t size() noexcept { return sizeof(PodType); }
+        constexpr static Numeric numeric() noexcept;
     };
 
     /* Scalar vertex input types. */
 
-    typedef AttributeType<uint8_t, 1, true, true> UByteNorm;
-    typedef AttributeType<int8_t, 1, false, true> ByteNorm;
-    typedef AttributeType<uint8_t, 1, true> UByte;
-    typedef AttributeType<int8_t, 1, false> Byte;
-    typedef AttributeType<uint16_t, 1, true, true> UShortNorm;
-    typedef AttributeType<int16_t, 1, false, true> ShortNorm;
-    typedef AttributeType<uint16_t, 1, true> UShort;
-    typedef AttributeType<int16_t, 1, false> Short;
-    typedef AttributeType<half_t, 1, false> Half;
-    typedef AttributeType<uint32_t, 1, true> UInt;
-    typedef AttributeType<int32_t, 1, false> Int;
-    typedef AttributeType<float, 1, false> Float;
-    typedef AttributeType<uint64_t, 1, true> LargeUInt;
-    typedef AttributeType<int64_t, 1, false> LargeInt;
-    typedef AttributeType<double, 1, false> Double;
+    typedef AttributeType<uint8_t, 1, true> UByteNorm;
+    typedef AttributeType<int8_t, 1, true> ByteNorm;
+    typedef AttributeType<uint8_t, 1> UByte;
+    typedef AttributeType<int8_t, 1> Byte;
+    typedef AttributeType<uint16_t, 1, true> UShortNorm;
+    typedef AttributeType<int16_t, 1, true> ShortNorm;
+    typedef AttributeType<uint16_t, 1> UShort;
+    typedef AttributeType<int16_t, 1> Short;
+    typedef AttributeType<half_t, 1> Half;
+    typedef AttributeType<uint32_t, 1> UInt;
+    typedef AttributeType<int32_t, 1> Int;
+    typedef AttributeType<float, 1> Float;
+    typedef AttributeType<uint64_t, 1> LargeUInt;
+    typedef AttributeType<int64_t, 1> LargeInt;
+    typedef AttributeType<double, 1> Double;
 
     /* Vectorized vertex input types. */
 
-    typedef AttributeType<uint8_t, 2, true, true> UByteNorm2;
-    typedef AttributeType<int8_t, 2, false, true> ByteNorm2;
-    typedef AttributeType<uint8_t, 2, true> UByte2;
-    typedef AttributeType<int8_t, 2, false> Byte2;
-    typedef AttributeType<uint8_t, 4, true, true> UByteNorm4;
-    typedef AttributeType<int8_t, 4, false, true> ByteNorm4;
-    typedef AttributeType<uint8_t, 4, true> UByte4;
-    typedef AttributeType<int8_t, 4, false> Byte4;
+    typedef AttributeType<uint8_t, 2, true> UByteNorm2;
+    typedef AttributeType<int8_t, 2, true> ByteNorm2;
+    typedef AttributeType<uint8_t, 2> UByte2;
+    typedef AttributeType<int8_t, 2> Byte2;
+    typedef AttributeType<uint8_t, 4, true> UByteNorm4;
+    typedef AttributeType<int8_t, 4, true> ByteNorm4;
+    typedef AttributeType<uint8_t, 4> UByte4;
+    typedef AttributeType<int8_t, 4> Byte4;
 
-    typedef AttributeType<uint16_t, 2, true, true> UShortNorm2;
-    typedef AttributeType<int16_t, 2, false, true> ShortNorm2;
-    typedef AttributeType<uint16_t, 2, true> UShort2;
-    typedef AttributeType<int16_t, 2, false> Short2;
-    typedef AttributeType<uint16_t, 3, true, true> UShortNorm3;
-    typedef AttributeType<int16_t, 3, false, true> ShortNorm3;
-    typedef AttributeType<uint16_t, 3, true> UShort3;
-    typedef AttributeType<int16_t, 3, false> Short3;
-    typedef AttributeType<uint16_t, 4, true, true> UShortNorm4;
-    typedef AttributeType<int16_t, 4, false, true> ShortNorm4;
-    typedef AttributeType<uint16_t, 4, true> UShort4;
-    typedef AttributeType<int16_t, 4, false> Short4;
+    typedef AttributeType<uint16_t, 2, true> UShortNorm2;
+    typedef AttributeType<int16_t, 2, true> ShortNorm2;
+    typedef AttributeType<uint16_t, 2> UShort2;
+    typedef AttributeType<int16_t, 2> Short2;
+    typedef AttributeType<uint16_t, 3, true> UShortNorm3;
+    typedef AttributeType<int16_t, 3, true> ShortNorm3;
+    typedef AttributeType<uint16_t, 3> UShort3;
+    typedef AttributeType<int16_t, 3> Short3;
+    typedef AttributeType<uint16_t, 4, true> UShortNorm4;
+    typedef AttributeType<int16_t, 4, true> ShortNorm4;
+    typedef AttributeType<uint16_t, 4> UShort4;
+    typedef AttributeType<int16_t, 4> Short4;
 
-    typedef AttributeType<uint32_t, 2, true> UInt2;
-    typedef AttributeType<int32_t, 2, false> Int2;
-    typedef AttributeType<uint32_t, 3, true> UInt3;
-    typedef AttributeType<int32_t, 3, false> Int3;
-    typedef AttributeType<uint32_t, 4, true> UInt4;
-    typedef AttributeType<int32_t, 4, false> Int4;
+    typedef AttributeType<uint32_t, 2> UInt2;
+    typedef AttributeType<int32_t, 2> Int2;
+    typedef AttributeType<uint32_t, 3> UInt3;
+    typedef AttributeType<int32_t, 3> Int3;
+    typedef AttributeType<uint32_t, 4> UInt4;
+    typedef AttributeType<int32_t, 4> Int4;
 
-    typedef AttributeType<uint64_t, 2, true> LargeUInt2;
-    typedef AttributeType<int64_t, 2, false> LargeInt2;
-    typedef AttributeType<uint64_t, 3, true> LargeUInt3;
-    typedef AttributeType<int64_t, 3, false> LargeInt3;
-    typedef AttributeType<uint64_t, 4, true> LargeUInt4;
-    typedef AttributeType<int64_t, 4, false> LargeInt4;
+    typedef AttributeType<uint64_t, 2> LargeUInt2;
+    typedef AttributeType<int64_t, 2> LargeInt2;
+    typedef AttributeType<uint64_t, 3> LargeUInt3;
+    typedef AttributeType<int64_t, 3> LargeInt3;
+    typedef AttributeType<uint64_t, 4> LargeUInt4;
+    typedef AttributeType<int64_t, 4> LargeInt4;
 
-    typedef AttributeType<half_t, 2, false> Half2;
-    typedef AttributeType<half_t, 3, false> Half3;
-    typedef AttributeType<half_t, 4, false> Half4;
-    typedef AttributeType<float, 2, false> Float2;
-    typedef AttributeType<float, 3, false> Float3;
-    typedef AttributeType<float, 4, false> Float4;
-    typedef AttributeType<double, 2, false> Double2;
-    typedef AttributeType<double, 3, false> Double3;
-    typedef AttributeType<double, 4, false> Double4;
+    typedef AttributeType<half_t, 2> Half2;
+    typedef AttributeType<half_t, 3> Half3;
+    typedef AttributeType<half_t, 4> Half4;
+    typedef AttributeType<float, 2> Float2;
+    typedef AttributeType<float, 3> Float3;
+    typedef AttributeType<float, 4> Float4;
+    typedef AttributeType<double, 2> Double2;
+    typedef AttributeType<double, 3> Double3;
+    typedef AttributeType<double, 4> Double4;
 } // namespace magma
+
+#include "vertexAttributeType.inl"

@@ -112,8 +112,8 @@ inline uint32_t VertexInputStructure<Vertex>::stride(uint32_t binding) const noe
 
 namespace specialization
 {
-template<VkFormat Format, bool Unsigned, bool Normalized>
-constexpr VkFormat VertexAttributeTraits<Format, Unsigned, Normalized>::format() noexcept
+template<VkFormat Format>
+constexpr VkFormat VertexAttributeFormat<Format>::format() noexcept
 {
     static_assert(Format != VK_FORMAT_UNDEFINED, "vertex attribute type not specialized");
     return Format;

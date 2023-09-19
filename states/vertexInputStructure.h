@@ -46,26 +46,24 @@ namespace magma
 
     namespace specialization
     {
-        /* User have to specialize this template for concrete type.
-           <Unsigned> and <Normalized> parameters are used to distinguish
-           Vulkan formats with UNORM, SNORM, UINT and SINT modificators. */
+        /* User have to specialize this template with
+           concrete type for corresponding Vulkan format. */
 
-        template<VkFormat Format, bool Unsigned, bool Normalized>
-        struct VertexAttributeTraits
+        template<VkFormat Format>
+        struct VertexAttributeFormat
         {
             constexpr static VkFormat format() noexcept;
-            constexpr static bool unsigned_() noexcept { return Unsigned; }
-            constexpr static bool normalized() noexcept { return Normalized; }
         };
 
         template<class Type>
-        struct VertexAttribute : VertexAttributeTraits<VK_FORMAT_UNDEFINED, false, false>
+        struct VertexAttribute : VertexAttributeFormat<VK_FORMAT_UNDEFINED>
         {
             constexpr static std::size_t size() noexcept { return sizeof(Type); }
         };
 
-        #define MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Type, format) template<> struct VertexAttribute<Type> :\
-            VertexAttributeTraits<format, Type::unsigned_(), Type::normalized()> {}
+        #define MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Type, Format)\
+            template<> struct magma::specialization::VertexAttribute<Type> :\
+                magma::specialization::VertexAttributeFormat<Format> {}
 
         /* Built-in specializations for scalar vertex input types. */
 

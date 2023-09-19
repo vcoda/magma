@@ -688,6 +688,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\states\samplerState.inl" />
     <None Include="..\..\states\streamRasterizationState.inl" />
     <None Include="..\..\states\tesselationState.inl" />
+    <None Include="..\..\states\vertexAttributeType.inl" />
     <None Include="..\..\states\vertexInputState.inl" />
     <None Include="..\..\states\vertexInputStructure.inl" />
     <None Include="..\..\states\samplerYcbcrConversionState.inl" />

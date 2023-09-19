@@ -1447,6 +1447,9 @@
     <None Include="..\..\misc\extension.inl">
       <Filter>Header Files\misc</Filter>
     </None>
+    <None Include="..\..\states\vertexAttributeType.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">
