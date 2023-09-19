@@ -20,11 +20,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Flexible vertex formats for basic vertex shading.
+       Note that vertex attributes should be 4-byte aligned,
+       so (u)short3 and half3 types are omitted. */
+
     namespace fvf
     {
-        /* Flexible vertex formats for basic vertex shading.
-           Note that vertex attributes should be 4-byte aligned,
-           so (u)short3 and half3 types are omitted. */
+        /* Vertex as single 2D, 3D or 4D position. */
 
         template<class Pos>
         struct Vertex
@@ -32,11 +34,16 @@ namespace magma
             Pos pos;
         };
 
+        /* Vertex with position and color (r,g,b,a) values to
+           draw triangles with per-vertex color interpolation. */
+
         template<class Pos, class Color>
         struct ColorVertex : Vertex<Pos>
         {
             Color color;
         };
+
+        /* Vertex with position and texture (u,v) coordinates. */
 
         template<class Pos, class TexCoord>
         struct TexVertex : Vertex<Pos>
@@ -44,17 +51,28 @@ namespace magma
             TexCoord uv;
         };
 
+        /* Vertex with position and normal (x,y,z) vector
+           to implement simple diffuse and specular lighting. */
+
         template<class Pos, class Normal>
         struct LitVertex : Vertex<Pos>
         {
             Normal normal;
         };
 
+        /* Vertex with position, normal and texture coordinates
+           to implement simple diffuse and specular lighting
+           multiplied with diffuse texture. */
+
         template<class Pos, class Normal, class TexCoord>
         struct LitTexVertex : LitVertex<Pos, Normal>
         {
             TexCoord uv;
         };
+
+        /* Vertex with position, normal, tangent, bitangent
+           vectors and texture coordinates to implement per-
+           pixel bump mapping. */
 
         template<class Pos, class Vector, class TexCoord>
         struct BumpVertex : LitVertex<Pos, Vector>

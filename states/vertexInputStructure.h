@@ -157,7 +157,7 @@ namespace magma
         extern const VertexInputStructure<fvf::Pos4f> pos4f;
         extern const VertexInputStructure<fvf::Pos4d> pos4d;
 
-        /* Vertex position and color. */
+        /* Vertex position and 32-bit (r,g,b,a) color. */
 
         extern const VertexInputStructure<fvf::Pos2hColor4ub> pos2hColor4ub;
         extern const VertexInputStructure<fvf::Pos2fColor4ub> pos2fColor4ub;
@@ -166,7 +166,7 @@ namespace magma
         extern const VertexInputStructure<fvf::Pos3fColor4ub> pos3fColor4ub;
         extern const VertexInputStructure<fvf::Pos3dColor4ub> pos3dColor4ub;
 
-        /* Vertex position and texture coordinates. */
+        /* Vertex position and texture (u,v) coordinates. */
 
         extern const VertexInputStructure<fvf::Pos2hTex2us> pos2hTex2us;
         extern const VertexInputStructure<fvf::Pos2hTex2h> pos2hTex2h;
