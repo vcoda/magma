@@ -44,7 +44,7 @@ namespace magma
     struct AttributeType
     {
         PodType v[components];
-        constexpr static std::size_t size() noexcept { return sizeof(PodType); }
+        constexpr static std::size_t size() noexcept { return sizeof(PodType) * components; }
         constexpr static Numeric numeric() noexcept;
     };
 
