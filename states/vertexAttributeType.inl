@@ -10,14 +10,14 @@ constexpr Numeric AttributeType<PodType, components, normalized, scaled>::numeri
             if (scaled)
                 return Numeric::UScaled;
             else
-                return Normalized ? Numeric::UNorm : Numeric::UInt;
+                return normalized ? Numeric::UNorm : Numeric::UInt;
         }
         else
         {
             if (scaled)
                 return Numeric::SScaled;
             else
-                return Normalized ? Numeric::SNorm : Numeric::SInt;
+                return normalized ? Numeric::SNorm : Numeric::SInt;
         }
     }
     return Numeric::SFloat;

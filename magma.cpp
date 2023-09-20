@@ -88,11 +88,29 @@ namespace magma
     };
     constexpr pushconstant::VertexFragmentConstantRange<PushConstants> pushConstant;
     constexpr hash_t pushConstantHash = pushConstant.hash();
-    // Verify mipmap filter
+
+    // Mipmap filters
     static_assert(sampler::magMinMipNearestRepeat.getMipFilter() == MipFilter::Nearest, "expected nearest filter");
     static_assert(sampler::magMinLinearMipNearestRepeat.getMipFilter() == MipFilter::Bilinear, "expected bilinear filter");
     static_assert(sampler::magMinMipLinearRepeat.getMipFilter() == MipFilter::Trilinear, "expected trilinear filter");
     static_assert(sampler::magMinLinearMipAnisotropicRepeat.getMipFilter() == MipFilter::Anisotropic, "expected anisotropic filter");
     static_assert(sampler::magLinearMinNearestMipLinearRepeat.getMipFilter() == MipFilter::Partial, "expected mixed filter");
+
+    // Numeric formats
+    static_assert(UByteNorm::numeric() == Numeric::UNorm, "expected UNORM format");
+    static_assert(ByteNorm::numeric() == Numeric::SNorm, "expected SNORM format");
+    static_assert(UByte::numeric() == Numeric::UInt, "expected UINT format");
+    static_assert(Byte::numeric() == Numeric::SInt, "expected SINT format");
+    static_assert(UShortNorm::numeric() == Numeric::UNorm, "expected UNORM format");
+    static_assert(ShortNorm::numeric() == Numeric::SNorm, "expected SNORM format");
+    static_assert(UShort::numeric() == Numeric::UInt, "expected UINT format");
+    static_assert(Short::numeric() == Numeric::SInt, "expected SINT format");
+    static_assert(Half::numeric() == Numeric::SFloat, "expected SFLOAT format");
+    static_assert(UInt::numeric() == Numeric::UInt, "expected UINT format");
+    static_assert(Int::numeric() == Numeric::SInt, "expected SINT format");
+    static_assert(Float::numeric() == Numeric::SFloat, "expected SFLOAT format");
+    static_assert(LargeUInt::numeric() == Numeric::UInt, "expected UINT format");
+    static_assert(LargeInt::numeric() == Numeric::SInt, "expected SINT format");
+    static_assert(Double::numeric() == Numeric::SFloat, "expected SFLOAT format");
 #endif // MAGMA_VERIFY_CONSTEXPR
 } // namespace magma
