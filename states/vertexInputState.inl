@@ -41,18 +41,6 @@ constexpr VertexInputAttribute::VertexInputAttribute(const uint32_t location, co
     }
 {}
 
-template<class Vertex, class Type>
-constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location, Type Vertex::*attrib) noexcept:
-    VkVertexInputAttributeDescription{
-        location,
-        0, // binding
-        specialization::VertexAttribute<Type>::format(),
-        static_cast<uint32_t>(reinterpret_cast<ptrdiff_t>(&(((Vertex *)0)->*attrib)))
-    }
-{
-    static_assert(sizeof(Type) != sizeof(uint16_t) * 3, "6-byte attribute types not allowed");
-}
-
 constexpr hash_t VertexInputAttribute::hash() const noexcept
 {
     return core::hashArgs(

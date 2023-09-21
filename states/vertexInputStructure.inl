@@ -119,4 +119,16 @@ constexpr VkFormat VertexAttributeFormat<Format>::format() noexcept
     return Format;
 }
 } // namespace specialization
+
+template<class Vertex, class Type>
+constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location, Type Vertex::*attrib) noexcept:
+    VkVertexInputAttributeDescription{
+        location,
+        0, // binding
+        specialization::VertexAttribute<Type>::format(),
+        static_cast<uint32_t>(reinterpret_cast<ptrdiff_t>(&(((Vertex *)0)->*attrib)))
+    }
+{
+    static_assert(sizeof(Type) != sizeof(uint16_t) * 3, "6-byte attribute types not allowed");
+}
 } // namespace magma
