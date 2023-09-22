@@ -46,14 +46,8 @@ namespace magma
 
     namespace specialization
     {
-        /* User have to specialize this template with
-           concrete type for corresponding Vulkan format. */
-
-        template<VkFormat Format>
-        struct VertexAttributeFormat
-        {
-            constexpr static VkFormat format() noexcept;
-        };
+        /* User have to specialize this template for concrete
+           type and corresponding Vulkan format. */
 
         template<class Type>
         struct VertexAttribute : VertexAttributeFormat<VK_FORMAT_UNDEFINED>
@@ -63,7 +57,7 @@ namespace magma
 
         #define MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Type, Format)\
             template<> struct magma::specialization::VertexAttribute<Type> :\
-                magma::specialization::VertexAttributeFormat<Format> {}
+                magma::VertexAttributeFormat<Format> {}
 
         /* Built-in specializations for scalar vertex input types. */
 

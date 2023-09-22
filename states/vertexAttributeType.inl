@@ -22,4 +22,11 @@ constexpr Numeric VertexAttributeType<PodType, components, normalized, scaled>::
     }
     return Numeric::SFloat;
 }
+
+template<VkFormat Format>
+constexpr VkFormat VertexAttributeFormat<Format>::format() noexcept
+{
+    static_assert(Format != VK_FORMAT_UNDEFINED, "vertex attribute type not specialized");
+    return Format;
+}
 } // namespace magma

@@ -110,16 +110,6 @@ inline uint32_t VertexInputStructure<Vertex>::stride(uint32_t binding) const noe
     return static_cast<uint32_t>(sizeof(Vertex));
 }
 
-namespace specialization
-{
-template<VkFormat Format>
-constexpr VkFormat VertexAttributeFormat<Format>::format() noexcept
-{
-    static_assert(Format != VK_FORMAT_UNDEFINED, "vertex attribute type not specialized");
-    return Format;
-}
-} // namespace specialization
-
 template<class Vertex, class Type>
 constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location, Type Vertex::*attrib) noexcept:
     VkVertexInputAttributeDescription{

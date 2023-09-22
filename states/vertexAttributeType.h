@@ -48,6 +48,15 @@ namespace magma
         constexpr static Numeric numeric() noexcept;
     };
 
+    /* Each vertex attribute type should be associated
+       with corresponding Vulkan format. */
+
+    template<VkFormat Format>
+    struct VertexAttributeFormat
+    {
+        constexpr static VkFormat format() noexcept;
+    };
+
     /* Scalar vertex input types. */
 
     typedef VertexAttributeType<uint8_t, 1, true> UByteNorm;
