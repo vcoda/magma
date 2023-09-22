@@ -41,7 +41,7 @@ namespace magma
     template<class PodType, int components,
         bool normalized = false,
         bool scaled = false>
-    struct AttributeType
+    struct VertexAttributeType
     {
         PodType v[components];
         constexpr static std::size_t size() noexcept { return sizeof(PodType) * components; }
@@ -50,69 +50,69 @@ namespace magma
 
     /* Scalar vertex input types. */
 
-    typedef AttributeType<uint8_t, 1, true> UByteNorm;
-    typedef AttributeType<int8_t, 1, true> ByteNorm;
-    typedef AttributeType<uint8_t, 1> UByte;
-    typedef AttributeType<int8_t, 1> Byte;
-    typedef AttributeType<uint16_t, 1, true> UShortNorm;
-    typedef AttributeType<int16_t, 1, true> ShortNorm;
-    typedef AttributeType<uint16_t, 1> UShort;
-    typedef AttributeType<int16_t, 1> Short;
-    typedef AttributeType<half_t, 1> Half;
-    typedef AttributeType<uint32_t, 1> UInt;
-    typedef AttributeType<int32_t, 1> Int;
-    typedef AttributeType<float, 1> Float;
-    typedef AttributeType<uint64_t, 1> LargeUInt;
-    typedef AttributeType<int64_t, 1> LargeInt;
-    typedef AttributeType<double, 1> Double;
+    typedef VertexAttributeType<uint8_t, 1, true> UByteNorm;
+    typedef VertexAttributeType<int8_t, 1, true> ByteNorm;
+    typedef VertexAttributeType<uint8_t, 1> UByte;
+    typedef VertexAttributeType<int8_t, 1> Byte;
+    typedef VertexAttributeType<uint16_t, 1, true> UShortNorm;
+    typedef VertexAttributeType<int16_t, 1, true> ShortNorm;
+    typedef VertexAttributeType<uint16_t, 1> UShort;
+    typedef VertexAttributeType<int16_t, 1> Short;
+    typedef VertexAttributeType<half_t, 1> Half;
+    typedef VertexAttributeType<uint32_t, 1> UInt;
+    typedef VertexAttributeType<int32_t, 1> Int;
+    typedef VertexAttributeType<float, 1> Float;
+    typedef VertexAttributeType<uint64_t, 1> LargeUInt;
+    typedef VertexAttributeType<int64_t, 1> LargeInt;
+    typedef VertexAttributeType<double, 1> Double;
 
     /* Vectorized vertex input types. */
 
-    typedef AttributeType<uint8_t, 2, true> UByteNorm2;
-    typedef AttributeType<int8_t, 2, true> ByteNorm2;
-    typedef AttributeType<uint8_t, 2> UByte2;
-    typedef AttributeType<int8_t, 2> Byte2;
-    typedef AttributeType<uint8_t, 4, true> UByteNorm4;
-    typedef AttributeType<int8_t, 4, true> ByteNorm4;
-    typedef AttributeType<uint8_t, 4> UByte4;
-    typedef AttributeType<int8_t, 4> Byte4;
+    typedef VertexAttributeType<uint8_t, 2, true> UByteNorm2;
+    typedef VertexAttributeType<int8_t, 2, true> ByteNorm2;
+    typedef VertexAttributeType<uint8_t, 2> UByte2;
+    typedef VertexAttributeType<int8_t, 2> Byte2;
+    typedef VertexAttributeType<uint8_t, 4, true> UByteNorm4;
+    typedef VertexAttributeType<int8_t, 4, true> ByteNorm4;
+    typedef VertexAttributeType<uint8_t, 4> UByte4;
+    typedef VertexAttributeType<int8_t, 4> Byte4;
 
-    typedef AttributeType<uint16_t, 2, true> UShortNorm2;
-    typedef AttributeType<int16_t, 2, true> ShortNorm2;
-    typedef AttributeType<uint16_t, 2> UShort2;
-    typedef AttributeType<int16_t, 2> Short2;
-    typedef AttributeType<uint16_t, 3, true> UShortNorm3;
-    typedef AttributeType<int16_t, 3, true> ShortNorm3;
-    typedef AttributeType<uint16_t, 3> UShort3;
-    typedef AttributeType<int16_t, 3> Short3;
-    typedef AttributeType<uint16_t, 4, true> UShortNorm4;
-    typedef AttributeType<int16_t, 4, true> ShortNorm4;
-    typedef AttributeType<uint16_t, 4> UShort4;
-    typedef AttributeType<int16_t, 4> Short4;
+    typedef VertexAttributeType<uint16_t, 2, true> UShortNorm2;
+    typedef VertexAttributeType<int16_t, 2, true> ShortNorm2;
+    typedef VertexAttributeType<uint16_t, 2> UShort2;
+    typedef VertexAttributeType<int16_t, 2> Short2;
+    typedef VertexAttributeType<uint16_t, 3, true> UShortNorm3;
+    typedef VertexAttributeType<int16_t, 3, true> ShortNorm3;
+    typedef VertexAttributeType<uint16_t, 3> UShort3;
+    typedef VertexAttributeType<int16_t, 3> Short3;
+    typedef VertexAttributeType<uint16_t, 4, true> UShortNorm4;
+    typedef VertexAttributeType<int16_t, 4, true> ShortNorm4;
+    typedef VertexAttributeType<uint16_t, 4> UShort4;
+    typedef VertexAttributeType<int16_t, 4> Short4;
 
-    typedef AttributeType<uint32_t, 2> UInt2;
-    typedef AttributeType<int32_t, 2> Int2;
-    typedef AttributeType<uint32_t, 3> UInt3;
-    typedef AttributeType<int32_t, 3> Int3;
-    typedef AttributeType<uint32_t, 4> UInt4;
-    typedef AttributeType<int32_t, 4> Int4;
+    typedef VertexAttributeType<uint32_t, 2> UInt2;
+    typedef VertexAttributeType<int32_t, 2> Int2;
+    typedef VertexAttributeType<uint32_t, 3> UInt3;
+    typedef VertexAttributeType<int32_t, 3> Int3;
+    typedef VertexAttributeType<uint32_t, 4> UInt4;
+    typedef VertexAttributeType<int32_t, 4> Int4;
 
-    typedef AttributeType<uint64_t, 2> LargeUInt2;
-    typedef AttributeType<int64_t, 2> LargeInt2;
-    typedef AttributeType<uint64_t, 3> LargeUInt3;
-    typedef AttributeType<int64_t, 3> LargeInt3;
-    typedef AttributeType<uint64_t, 4> LargeUInt4;
-    typedef AttributeType<int64_t, 4> LargeInt4;
+    typedef VertexAttributeType<uint64_t, 2> LargeUInt2;
+    typedef VertexAttributeType<int64_t, 2> LargeInt2;
+    typedef VertexAttributeType<uint64_t, 3> LargeUInt3;
+    typedef VertexAttributeType<int64_t, 3> LargeInt3;
+    typedef VertexAttributeType<uint64_t, 4> LargeUInt4;
+    typedef VertexAttributeType<int64_t, 4> LargeInt4;
 
-    typedef AttributeType<half_t, 2> Half2;
-    typedef AttributeType<half_t, 3> Half3;
-    typedef AttributeType<half_t, 4> Half4;
-    typedef AttributeType<float, 2> Float2;
-    typedef AttributeType<float, 3> Float3;
-    typedef AttributeType<float, 4> Float4;
-    typedef AttributeType<double, 2> Double2;
-    typedef AttributeType<double, 3> Double3;
-    typedef AttributeType<double, 4> Double4;
+    typedef VertexAttributeType<half_t, 2> Half2;
+    typedef VertexAttributeType<half_t, 3> Half3;
+    typedef VertexAttributeType<half_t, 4> Half4;
+    typedef VertexAttributeType<float, 2> Float2;
+    typedef VertexAttributeType<float, 3> Float3;
+    typedef VertexAttributeType<float, 4> Float4;
+    typedef VertexAttributeType<double, 2> Double2;
+    typedef VertexAttributeType<double, 3> Double3;
+    typedef VertexAttributeType<double, 4> Double4;
 } // namespace magma
 
 #include "vertexAttributeType.inl"

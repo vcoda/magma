@@ -1,7 +1,7 @@
 namespace magma
 {
 template<class PodType, int components, bool normalized, bool scaled>
-constexpr Numeric AttributeType<PodType, components, normalized, scaled>::numeric() noexcept
+constexpr Numeric VertexAttributeType<PodType, components, normalized, scaled>::numeric() noexcept
 {
     if (std::is_integral<PodType>::value)
     {
