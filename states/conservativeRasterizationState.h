@@ -21,10 +21,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #ifdef VK_EXT_conservative_rasterization
 namespace magma
 {
-    /* When overestimation is enabled, if any part of the primitive, including its edges,
-       covers any part of the rectangular pixel area, then a fragment is generated with all
-       coverage samples turned on. When underestimation is enabled, fragments are only generated
-       if the rectangular pixel area is fully covered by the generating primitive. */
+    /* When overestimation is enabled, if any part of the primitive,
+       including its edges, covers any part of the rectangular pixel
+       area, then a fragment is generated with all coverage samples
+       turned on. When underestimation is enabled, fragments are only
+       generated if the rectangular pixel area is fully covered by
+       the generating primitive. */
 
     struct ConservativeRasterizationState : RasterizationState
     {

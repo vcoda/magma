@@ -20,10 +20,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Blending combines the incoming source fragment's R, G, B, and A values
-       with the destination R, G, B, and A values of each sample stored in the framebuffer
-       at the fragment's location. Blending is performed for each pixel sample,
-       rather than just once for each fragment. */
+    /* Blending combines the incoming source fragment's
+       R, G, B, and A values with the destination R, G, B,
+       and A values of each sample stored in the framebuffer
+       at the fragment's location. Blending is performed for
+       each pixel sample, rather than just once for each fragment. */
 
     struct ColorBlendState : VkPipelineColorBlendStateCreateInfo
     {
@@ -37,8 +38,9 @@ namespace magma
         constexpr bool operator==(const ColorBlendState&) const noexcept;
     };
 
-    /* Multiple attachment color blend state takes care about array of blend attachment states and
-       thereof is copyable, but not constexpr-constructible. */
+    /* Multiple attachment color blend state takes care
+       about array of blend attachment states and thereof
+       is copyable, but not constexpr-constructible. */
 
     struct MultiColorBlendState final : ColorBlendState
     {

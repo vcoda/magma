@@ -19,6 +19,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Structure specifying vertex input binding description. */
+
     struct VertexInputBinding : VkVertexInputBindingDescription
     {
         constexpr VertexInputBinding(uint32_t binding,
@@ -28,10 +30,11 @@ namespace magma
     };
 
     /* Allows to specify individual divisor value for binding.
-       Divisor is the number of successive instances that will use the same
-       value of the vertex attribute when instanced rendering is enabled.
-       For example, if the divisor is N, the same vertex attribute will be applied
-       to N successive instances before moving on to the next vertex attribute. */
+       Divisor is the number of successive instances that will
+       use the same value of the vertex attribute when instanced
+       rendering is enabled. For example, if the divisor is N,
+       the same vertex attribute will be applied to N successive
+       instances before moving on to the next vertex attribute. */
 
     struct VertexInputBindingDivisor : VertexInputBinding
     {
@@ -58,8 +61,8 @@ namespace magma
         constexpr hash_t hash() const noexcept;
     };
 
-    /* Applications specify vertex input attribute and vertex input binding descriptions
-       as part of graphics pipeline creation. */
+    /* Applications specify vertex input attribute and vertex
+       input binding descriptions as part of graphics pipeline. */
 
     class VertexInputState : public VkPipelineVertexInputStateCreateInfo
     {

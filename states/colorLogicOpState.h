@@ -20,9 +20,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* If logicOpEnable is VK_TRUE, then a logical operation selected by logicOp is applied
-       between each color attachment and the fragment's corresponding output value,
-       and blending of all attachments is treated as if it were disabled. */
+    /* If logicOpEnable is VK_TRUE, then a logical operation
+       selected by logicOp is applied between each color
+       attachment and the fragment's corresponding output
+       value, and blending of all attachments is treated
+       as if it were disabled. */
 
     struct ColorLogicOpState : ColorBlendState
     {

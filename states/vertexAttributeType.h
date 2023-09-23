@@ -36,8 +36,8 @@ namespace magma
     };
 
     /* Scalar or vector GPU type. <normalized> and <scaled>
-       parameters are used to distinguish numeric formats
-       such as UNORM, SNORM, USCALED, SSCALED, UINT and SINT. */
+       parameters are used to distinguish numeric formats such as
+       UNORM/SNORM, USCALED/SSCALED, UINT/SINT and SFLOAT. */
 
     template<class PodType, int components,
         bool normalized = false,

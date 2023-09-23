@@ -20,8 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     /* Multisampling is a mechanism to antialias all Vulkan primitives:
-       points, lines, and polygons. The technique is to sample all primitives
-       multiple times at each pixel. */
+       points, lines, and polygons. The technique is to sample all
+       primitives multiple times at each pixel. */
 
     struct MultisampleState : VkPipelineMultisampleStateCreateInfo
     {
@@ -32,10 +32,11 @@ namespace magma
         constexpr bool operator==(const MultisampleState&) const noexcept;
     };
 
-    /* Sample shading can be used to specify a minimum number of unique samples
-       to process for each fragment. When the sample shading fraction is 1.0,
-       a separate set of associated data are evaluated for each sample,
-       and each set of values is evaluated at the sample location. */
+    /* Sample shading can be used to specify a minimum number of
+       unique samples to process for each fragment. When the sample
+       shading fraction is 1.0, a separate set of associated data
+       are evaluated for each sample, and each set of values is
+       evaluated at the sample location. */
 
     struct SampleShadingState : MultisampleState
     {
@@ -45,8 +46,8 @@ namespace magma
             float minSampleShading = 1.f) noexcept;
     };
 
-    /* Sample mask contains a bitmask of static coverage information that is ANDed
-       with the coverage information generated during rasterization. */
+    /* Sample mask contains a bitmask of static coverage information
+       that is ANDed with the coverage information generated during rasterization. */
 
     struct MultisampleCoverageState final : MultisampleState
     {

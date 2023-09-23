@@ -54,8 +54,9 @@ namespace magma
         constexpr bool operator==(const SamplerState&) const noexcept;
     };
 
-    /* Anisotropic sampler state takes into account long and narrow (i.e. anisotropic)
-       projection of the pixel filter footprint into texture space. */
+    /* Anisotropic sampler state takes into account long and narrow
+       (i.e. anisotropic) projection of the pixel filter footprint
+       into texture space. */
 
     struct AnisotropicSamplerState : SamplerState
     {

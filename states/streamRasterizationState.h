@@ -21,9 +21,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #ifdef VK_EXT_transform_feedback
 namespace magma
 {
-    /* The vertex stream used for rasterization is specified by this state.
-       If the implementation is capable, a vertex stream other than zero can be rasterized.
-       If this structure is not present, rasterizationStream is assumed to be zero. */
+    /* The vertex stream used for rasterization is specified
+       by this state. If the implementation is capable, a vertex
+       stream other than zero can be rasterized. If this structure
+       is not present, rasterizationStream is assumed to be zero. */
 
     struct StreamRasterizationState : RasterizationState
     {

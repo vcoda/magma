@@ -19,8 +19,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Each tessellation control shader invocation operates on an input patch.
-       The input patch is sized according to tesselation state. */
+    /* Each tessellation control shader invocation operates
+       on an input patch. The input patch is sized according
+       to tesselation state. */
 
     struct TesselationState : VkPipelineTessellationStateCreateInfo
     {

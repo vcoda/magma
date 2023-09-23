@@ -20,9 +20,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* This extension adds a number of "advanced" blending operations that can be
-       used to perform new color blending operations, many of which are more
-       complex than the standard blend modes provided by unextended Vulkan. */
+    /* This extension adds a number of "advanced" blending
+       operations that can be used to perform new color
+       blending operations, many of which are more complex than
+       the standard blend modes provided by unextended Vulkan. */
 
     struct AdvancedColorBlendAttachmentState : VkPipelineColorBlendAttachmentState
     {

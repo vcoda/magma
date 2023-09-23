@@ -21,7 +21,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #ifdef VK_EXT_line_rasterization
 namespace magma
 {
-    /* Exposes some line rasterization features that are commonly used in CAD applications. */
+    /* Exposes some line rasterization features that are
+       commonly used in CAD applications. */
 
     struct LineRasterizationState : RasterizationState
     {

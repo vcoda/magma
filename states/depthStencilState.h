@@ -41,11 +41,13 @@ namespace magma
         constexpr StencilOpState stencilAlwaysDontWrite(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0x0, 0x0, 0);
     }
 
-    /* The stencil test conditionally disables coverage of a sample
-       based on the outcome of a comparison between the stencil value
-       in the depth/stencil attachment at fragment location and a reference value.
-       The stencil test also updates the value in the stencil attachment,
-       depending on the test state, the stencil value and the stencil write masks. */
+    /* The stencil test conditionally disables coverage of a
+       sample based on the outcome of a comparison between the
+       stencil value in the depth/stencil attachment at fragment
+       location and a reference value. The stencil test also
+       updates the value in the stencil attachment, depending
+       on the test state, the stencil value and the stencil
+       write masks. */
 
     struct DepthStencilState : VkPipelineDepthStencilStateCreateInfo
     {
@@ -62,9 +64,10 @@ namespace magma
         constexpr bool operator==(const DepthStencilState&) const noexcept;
     };
 
-    /* The depth bounds test conditionally disables coverage of a sample
-       based on the outcome of a comparison between the value Z in the depth attachment
-       at location (xf,yf) (for the appropriate sample) and a range of values. */
+    /* The depth bounds test conditionally disables coverage
+       of a sample based on the outcome of a comparison between
+       the value Z in the depth attachment at location (xf,yf)
+       (for the appropriate sample) and a range of values. */
 
     struct DepthBoundsState : DepthStencilState
     {

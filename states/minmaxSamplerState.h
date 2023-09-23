@@ -21,8 +21,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #ifdef VK_EXT_sampler_filter_minmax
 namespace magma
 {
-    /* Minmax sampler allows to produce a filtered texel value by computing
-       a component-wise minimum or maximum of the texels that would normally be averaged. */
+    /* Minmax sampler allows to produce a filtered texel value
+       by computing a component-wise minimum or maximum of the
+       texels that would normally be averaged. */
 
     struct MinMaxSamplerState : SamplerState
     {

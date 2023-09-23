@@ -20,7 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Depth sampler state with comparison function for Percentage Closer Filtering etc. */
+    /* Depth sampler state with comparison function
+       for Percentage Closer Filtering etc. */
 
     struct DepthComparisonSamplerState : SamplerState
     {

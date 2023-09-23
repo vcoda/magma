@@ -21,9 +21,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #ifdef VK_AMD_rasterization_order
 namespace magma
 {
-    /* This extension enables applications to opt into a relaxed, implementation
-       defined primitive rasterization order that may allow better parallel processing
-       of primitives and thus enabling higher primitive throughput. */
+    /* This extension enables applications to opt into a relaxed,
+       implementation defined primitive rasterization order that
+       may allow better parallel processing of primitives and thus
+       enabling higher primitive throughput. */
 
     struct RasterizationOrderState : RasterizationState
     {

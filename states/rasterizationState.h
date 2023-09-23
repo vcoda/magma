@@ -38,9 +38,11 @@ namespace magma
     };
 
     /* Controls whether to bias fragment depth values:
-       depthBiasConstantFactor is a scalar factor controlling the constant depth value added to each fragment.
-       depthBiasClamp is the maximum (or minimum) depth bias of a fragment.
-       depthBiasSlopeFactor is a scalar factor applied to a fragment's slope in depth bias calculations. */
+        * depthBiasConstantFactor is a scalar factor controlling
+          the constant depth value added to each fragment.
+        * depthBiasClamp is the maximum (or minimum) depth bias of a fragment.
+        * depthBiasSlopeFactor is a scalar factor applied to a
+          fragment's slope in depth bias calculations. */
 
     struct DepthBiasRasterizationState : RasterizationState
     {
@@ -50,9 +52,12 @@ namespace magma
             float depthBiasSlopeFactor) noexcept;
     };
 
-    /* In order to use this state, wideLines member of the VkPhysicalDeviceFeatures structure should be set to VK_TRUE.
-       When this feature is supported, the range and granularity of supported line widths are indicated by the
-       lineWidthRange and lineWidthGranularity members of the VkPhysicalDeviceLimits structure, respectively. */
+    /* In order to use this state, wideLines member of the
+       VkPhysicalDeviceFeatures structure should be set to VK_TRUE.
+       When this feature is supported, the range and granularity of
+       supported line widths are indicated by the lineWidthRange and
+       lineWidthGranularity members of the VkPhysicalDeviceLimits
+       structure, respectively. */
 
     struct WideLineRasterizationState : RasterizationState
     {
@@ -60,8 +65,9 @@ namespace magma
             float lineWidth) noexcept;
     };
 
-    /* Allows to construct rasterization state with enabled rasterizer discard flag from any existing state.
-       Primitives are discarded immediately before the rasterization stage. */
+    /* Allows to construct rasterization state with enabled rasterizer
+       discard flag from any existing state. Primitives are discarded
+       immediately before the rasterization stage. */
 
     struct DiscardRasterizationState : RasterizationState
     {
