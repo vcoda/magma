@@ -47,7 +47,7 @@ inline SubpassDescription::SubpassDescription(VkPipelineBindPoint pipelineBindPo
 SubpassDescription::SubpassDescription(VkImageLayout colorLayout) noexcept:
     SubpassDescription(VK_PIPELINE_BIND_POINT_GRAPHICS)
 {
-    VkAttachmentReference *colorReference = new(std::nothrow) VkAttachmentReference[1];
+    VkAttachmentReference *colorReference = MAGMA_NEW VkAttachmentReference[1];
     if (colorReference)
     {
         colorReference->attachment = 0;
@@ -66,7 +66,7 @@ SubpassDescription::SubpassDescription(VkImageLayout colorLayout, VkImageLayout 
 {
     if (colorLayout != VK_IMAGE_LAYOUT_UNDEFINED)
     {
-        VkAttachmentReference *colorReference = new(std::nothrow) VkAttachmentReference[1];
+        VkAttachmentReference *colorReference = MAGMA_NEW VkAttachmentReference[1];
         if (colorReference)
         {
             colorReference->attachment = 0;
@@ -76,7 +76,7 @@ SubpassDescription::SubpassDescription(VkImageLayout colorLayout, VkImageLayout 
         pColorAttachments = colorReference;
     }
     pResolveAttachments = nullptr;
-    VkAttachmentReference *depthStencilReference = new(std::nothrow) VkAttachmentReference;
+    VkAttachmentReference *depthStencilReference = MAGMA_NEW VkAttachmentReference;
     if (depthStencilReference)
     {
         depthStencilReference->attachment = 1;
@@ -92,7 +92,7 @@ SubpassDescription::SubpassDescription(const std::vector<VkImageLayout>& colorLa
 {
     if (!colorLayouts.empty())
     {
-        VkAttachmentReference *colorReferences = new(std::nothrow) VkAttachmentReference[colorLayouts.size()];
+        VkAttachmentReference *colorReferences = MAGMA_NEW VkAttachmentReference[colorLayouts.size()];
         if (colorReferences)
         {
             for (auto layout : colorLayouts)
@@ -113,7 +113,7 @@ SubpassDescription::SubpassDescription(const std::vector<VkImageLayout>& colorLa
 SubpassDescription::SubpassDescription(const std::vector<VkImageLayout>& colorLayouts, const VkImageLayout& depthStencilLayout) noexcept:
     SubpassDescription(colorLayouts)
 {
-    VkAttachmentReference *depthStencilReference = new(std::nothrow) VkAttachmentReference;
+    VkAttachmentReference *depthStencilReference = MAGMA_NEW VkAttachmentReference;
     if (depthStencilReference)
     {
         depthStencilReference->attachment = colorAttachmentCount;

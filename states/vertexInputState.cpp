@@ -89,9 +89,12 @@ VertexInputState::VertexInputState(const VertexInputBindingDivisor& binding,
     vertexInputDivisorInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
     vertexInputDivisorInfo.pNext = nullptr;
     vertexInputDivisorInfo.vertexBindingDivisorCount = 1;
-    VkVertexInputBindingDivisorDescriptionEXT *vertexBindingDivisor = new(std::nothrow) VkVertexInputBindingDivisorDescriptionEXT[1];
-    vertexBindingDivisor->binding = binding.binding;
-    vertexBindingDivisor->divisor = binding.divisor;
+    VkVertexInputBindingDivisorDescriptionEXT *vertexBindingDivisor = MAGMA_NEW VkVertexInputBindingDivisorDescriptionEXT[1];
+    if (vertexBindingDivisor)
+    {
+        vertexBindingDivisor->binding = binding.binding;
+        vertexBindingDivisor->divisor = binding.divisor;
+    }
     vertexInputDivisorInfo.pVertexBindingDivisors = vertexBindingDivisor;
 }
 
@@ -102,12 +105,15 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
     pNext = &vertexInputDivisorInfo;
     flags = 0;
     vertexBindingDescriptionCount = 0;
-    VkVertexInputBindingDescription *vertexBindingDescriptions = new(std::nothrow) VkVertexInputBindingDescription[bindings.size()];
-    for (const auto& binding : bindings)
+    VkVertexInputBindingDescription *vertexBindingDescriptions = MAGMA_NEW VkVertexInputBindingDescription[bindings.size()];
+    if (vertexBindingDescriptions)
     {
-        vertexBindingDescriptions[vertexBindingDescriptionCount].binding = binding.binding;
-        vertexBindingDescriptions[vertexBindingDescriptionCount].stride = binding.stride;
-        vertexBindingDescriptions[vertexBindingDescriptionCount++].inputRate = binding.inputRate;
+        for (auto const& binding: bindings)
+        {
+            vertexBindingDescriptions[vertexBindingDescriptionCount].binding = binding.binding;
+            vertexBindingDescriptions[vertexBindingDescriptionCount].stride = binding.stride;
+            vertexBindingDescriptions[vertexBindingDescriptionCount++].inputRate = binding.inputRate;
+        }
     }
     pVertexBindingDescriptions = vertexBindingDescriptions;
     vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
@@ -115,11 +121,14 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
     vertexInputDivisorInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
     vertexInputDivisorInfo.pNext = nullptr;
     vertexInputDivisorInfo.vertexBindingDivisorCount = 0;
-    VkVertexInputBindingDivisorDescriptionEXT *vertexBindingDivisors = new(std::nothrow) VkVertexInputBindingDivisorDescriptionEXT[vertexBindingDescriptionCount];
-    for (const auto& binding : bindings)
+    VkVertexInputBindingDivisorDescriptionEXT *vertexBindingDivisors = MAGMA_NEW VkVertexInputBindingDivisorDescriptionEXT[vertexBindingDescriptionCount];
+    if (vertexBindingDivisors)
     {
-        vertexBindingDivisors[vertexInputDivisorInfo.vertexBindingDivisorCount].binding = binding.binding;
-        vertexBindingDivisors[vertexInputDivisorInfo.vertexBindingDivisorCount++].divisor = binding.divisor;
+        for (auto const& binding: bindings)
+        {
+            vertexBindingDivisors[vertexInputDivisorInfo.vertexBindingDivisorCount].binding = binding.binding;
+            vertexBindingDivisors[vertexInputDivisorInfo.vertexBindingDivisorCount++].divisor = binding.divisor;
+        }
     }
     vertexInputDivisorInfo.pVertexBindingDivisors = vertexBindingDivisors;
 }
