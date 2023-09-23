@@ -41,7 +41,7 @@ inline void copy(Type *dst, const Type *src) noexcept
     MAGMA_ASSERT(src);
     MAGMA_ASSERT(dst);
     MAGMA_ASSERT(dst != src);
-    if (dst != src)
+    if (dst && dst != src)
         memcpy(dst, src, sizeof(Type));
 }
 
@@ -135,6 +135,15 @@ inline void *copyBinaryData(const void *src, std::size_t size) noexcept
     void *dst = MAGMA_NEW char[size];
     if (dst)
         memcpy(dst, src, size);
+    return dst;
+}
+
+template<class Type>
+inline void *copyBinaryData(const Type& src) noexcept
+{
+    void *dst = MAGMA_NEW char[sizeof(Type)];
+    if (dst)
+        memcpy(dst, &src, sizeof(Type));
     return dst;
 }
 

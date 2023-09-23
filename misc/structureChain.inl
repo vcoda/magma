@@ -1,22 +1,20 @@
 namespace magma
 {
 template<class StructureType>
-inline StructureChain::Node::Node(const StructureType& node):
+inline StructureChain::Node::Node(const StructureType& node) noexcept:
     size(sizeof(StructureType))
 {
     static_assert(sizeof(StructureType) > sizeof(VkBaseInStructure),
         "chain structure size is too little");
     static_assert(std::is_trivially_copyable<StructureType>::value,
         "chain structure required to be trivially copyable");
-    data = new uint8_t[size];
-    memcpy(data, &node, size);
+    data = core::copyBinaryData(node);
 }
 
-inline StructureChain::Node::Node(const Node& node):
+inline StructureChain::Node::Node(const Node& node) noexcept:
     size(node.size)
 {
-    data = new uint8_t[size];
-    memcpy(data, node.data, size);
+    data = core::copyBinaryData(node);
 }
 
 inline StructureChain::Node::Node(Node&& node) noexcept:
@@ -29,7 +27,7 @@ inline StructureChain::Node::Node(Node&& node) noexcept:
 
 inline StructureChain::Node::~Node()
 {
-    delete[] data;
+    delete[] reinterpret_cast<char *>(data);
 }
 
 inline VkBaseOutStructure *StructureChain::Node::getNode() noexcept

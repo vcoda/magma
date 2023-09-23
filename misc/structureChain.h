@@ -51,8 +51,8 @@ namespace magma
     {
     public:
         template<class StructureType>
-        Node(const StructureType& node);
-        Node(const Node& node);
+        Node(const StructureType& node) noexcept;
+        Node(const Node& node) noexcept;
         Node(Node&& node) noexcept;
         ~Node();
         VkBaseOutStructure *getNode() noexcept;
@@ -61,7 +61,7 @@ namespace magma
 
     private:
         size_t size;
-        uint8_t *data;
+        void *data;
     };
 } // namespace magma
 
