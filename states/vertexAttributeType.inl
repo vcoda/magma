@@ -26,8 +26,8 @@ constexpr Numeric VertexAttributeType<PodType, components, normalized, scaled>::
 template<VkFormat Format>
 constexpr VkFormat VertexAttributeFormat<Format>::format() noexcept
 {
-    static_assert(Format != VK_FORMAT_UNDEFINED, "vertex attribute type not specialized");
     constexpr magma::Format attribFormat(Format);
+    static_assert(attribFormat.valid(), "vertex attribute type not specialized");
     static_assert(
         !attribFormat.depth() &&
         !attribFormat.stencil() &&
