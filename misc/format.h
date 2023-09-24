@@ -30,6 +30,14 @@ namespace magma
         constexpr Format(VkFormat format) noexcept;
         constexpr operator VkFormat() const noexcept;
         constexpr bool valid() const noexcept;
+        constexpr bool unorm() const noexcept;
+        constexpr bool snorm() const noexcept;
+        constexpr bool uscaled() const noexcept;
+        constexpr bool sscaled() const noexcept;
+        constexpr bool uint() const noexcept;
+        constexpr bool sint() const noexcept;
+        constexpr bool ufloat() const noexcept;
+        constexpr bool sfloat() const noexcept;
         constexpr bool depth() const noexcept;
         constexpr bool stencil() const noexcept;
         constexpr bool depthStencil() const noexcept;
@@ -42,10 +50,6 @@ namespace magma
         constexpr bool pvrtc() const noexcept;
         constexpr bool srgb() const noexcept;
         constexpr bool ycbcr() const noexcept;
-        constexpr bool floatingPoint() const noexcept;
-        constexpr bool unsignedFloat() const noexcept;
-        constexpr bool signedNorm() const noexcept;
-        bool unsignedNorm() const noexcept;
         bool blockCompressed() const noexcept;
         uint8_t componentCount() const noexcept;
         uint8_t planeCount() const noexcept;
