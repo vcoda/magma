@@ -736,4 +736,30 @@ constexpr bool Format::packed() const noexcept
         return false;
     }
 }
+
+constexpr std::size_t Format::depthStencilSize() const noexcept
+{
+    switch (format)
+    {
+    case VK_FORMAT_S8_UINT:
+        return sizeof(uint8_t);
+    case VK_FORMAT_D16_UNORM:
+        return sizeof(uint16_t);
+    case VK_FORMAT_D16_UNORM_S8_UINT:
+        return sizeof(uint16_t) + sizeof(uint8_t);
+    case VK_FORMAT_X8_D24_UNORM_PACK32:
+    case VK_FORMAT_D24_UNORM_S8_UINT:
+        return sizeof(uint32_t);
+    case VK_FORMAT_D32_SFLOAT:
+        return sizeof(float);
+    case VK_FORMAT_D32_SFLOAT_S8_UINT:
+        // Specifies a two-component format that has 32 signed
+        // float bits in the depth component and 8 unsigned integer
+        // bits in the stencil component. There are optionally
+        // 24 bits that are unused.
+        return sizeof(float) + sizeof(uint32_t);
+    default:
+        return 0;
+    }
+}
 } // namespace magma

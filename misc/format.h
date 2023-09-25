@@ -51,6 +51,7 @@ namespace magma
         constexpr bool pvrtc() const noexcept;
         constexpr bool ycbcr() const noexcept;
         constexpr bool packed() const noexcept;
+        constexpr std::size_t depthStencilSize() const noexcept;
         bool blockCompressed() const noexcept;
         uint8_t componentCount() const noexcept;
         uint8_t planeCount() const noexcept;
