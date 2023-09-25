@@ -176,7 +176,7 @@ uint8_t Format::planeCount() const noexcept
 std::size_t Format::size() const noexcept
 {
     if (bc())
-        return blockCompressedSize();
+        return bcSize();
     if (etc2())
         return etc2Size();
     if (eac())
@@ -372,7 +372,7 @@ std::size_t Format::uncompressedSize() const noexcept
     }
 }
 
-std::size_t Format::blockCompressedSize() const noexcept
+std::size_t Format::bcSize() const noexcept
 {
     switch (format)
     {

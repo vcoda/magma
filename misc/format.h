@@ -56,7 +56,7 @@ namespace magma
         uint8_t planeCount() const noexcept;
         std::size_t size() const noexcept;
         std::size_t uncompressedSize() const noexcept;
-        std::size_t blockCompressedSize() const noexcept;
+        std::size_t bcSize() const noexcept;
         std::size_t etc2Size() const noexcept;
         std::size_t eacSize() const noexcept;
         std::size_t videoCompressedSize() const noexcept;
