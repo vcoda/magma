@@ -50,6 +50,7 @@ namespace magma
         constexpr bool pvrtc() const noexcept;
         constexpr bool srgb() const noexcept;
         constexpr bool ycbcr() const noexcept;
+        constexpr bool packed() const noexcept;
         bool blockCompressed() const noexcept;
         uint8_t componentCount() const noexcept;
         uint8_t planeCount() const noexcept;
