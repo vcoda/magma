@@ -181,11 +181,10 @@ std::size_t Format::size() const noexcept
         return etc2Size();
     if (eac())
         return eacSize();
+    if (astc() || astcHdr())
+        return astcSize();
     if (pvrtc())
-    {   // Specifies a four-component, PVRTC compressed format where each
-        // 64-bit compressed texel block encodes an 8(4)x4 rectangle.
-        return 64/8;
-    }
+        return pvrtcSize();
     if (ycbcr())
         return videoCompressedSize();
     return uncompressedSize();
@@ -473,6 +472,86 @@ std::size_t Format::eacSize() const noexcept
         // ETC2 compressed format where each 128-bit compressed
         // texel block encodes a 4x4 rectangle.
         return 128/8;
+    default:
+        return 0;
+    }
+}
+
+std::size_t Format::astcSize() const noexcept
+{
+    switch (format)
+    {
+    // 43.1. Format Definition
+    // ASTC compressed format where each 128-bit compressed
+    // texel block encodes a NxN rectangle.
+    case VK_FORMAT_ASTC_4x4_UNORM_BLOCK:
+    case VK_FORMAT_ASTC_4x4_SRGB_BLOCK:
+    case VK_FORMAT_ASTC_5x4_UNORM_BLOCK:
+    case VK_FORMAT_ASTC_5x4_SRGB_BLOCK:
+    case VK_FORMAT_ASTC_5x5_UNORM_BLOCK:
+    case VK_FORMAT_ASTC_5x5_SRGB_BLOCK:
+    case VK_FORMAT_ASTC_6x5_UNORM_BLOCK:
+    case VK_FORMAT_ASTC_6x5_SRGB_BLOCK:
+    case VK_FORMAT_ASTC_6x6_UNORM_BLOCK:
+    case VK_FORMAT_ASTC_6x6_SRGB_BLOCK:
+    case VK_FORMAT_ASTC_8x5_UNORM_BLOCK:
+    case VK_FORMAT_ASTC_8x5_SRGB_BLOCK:
+    case VK_FORMAT_ASTC_8x6_UNORM_BLOCK:
+    case VK_FORMAT_ASTC_8x6_SRGB_BLOCK:
+    case VK_FORMAT_ASTC_8x8_UNORM_BLOCK:
+    case VK_FORMAT_ASTC_8x8_SRGB_BLOCK:
+    case VK_FORMAT_ASTC_10x5_UNORM_BLOCK:
+    case VK_FORMAT_ASTC_10x5_SRGB_BLOCK:
+    case VK_FORMAT_ASTC_10x6_UNORM_BLOCK:
+    case VK_FORMAT_ASTC_10x6_SRGB_BLOCK:
+    case VK_FORMAT_ASTC_10x8_UNORM_BLOCK:
+    case VK_FORMAT_ASTC_10x8_SRGB_BLOCK:
+    case VK_FORMAT_ASTC_10x10_UNORM_BLOCK:
+    case VK_FORMAT_ASTC_10x10_SRGB_BLOCK:
+    case VK_FORMAT_ASTC_12x10_UNORM_BLOCK:
+    case VK_FORMAT_ASTC_12x10_SRGB_BLOCK:
+    case VK_FORMAT_ASTC_12x12_UNORM_BLOCK:
+    case VK_FORMAT_ASTC_12x12_SRGB_BLOCK:
+#ifdef VK_EXT_texture_compression_astc_hdr
+    case VK_FORMAT_ASTC_4x4_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_5x4_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_5x5_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_6x5_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_6x6_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_8x5_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_8x6_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_8x8_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_10x5_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_10x6_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_10x8_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_10x10_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_12x10_SFLOAT_BLOCK_EXT:
+    case VK_FORMAT_ASTC_12x12_SFLOAT_BLOCK_EXT:
+#endif // VK_EXT_texture_compression_astc_hdr
+        return 128/8;
+    default:
+        return 0;
+    };
+}
+
+std::size_t Format::pvrtcSize() const noexcept
+{
+    switch (format)
+    {
+    // Specifies a four-component, PVRTC compressed format
+    // where each 64-bit compressed texel block encodes an
+    // 8(4)x4 rectangle.
+#ifdef VK_IMG_format_pvrtc
+    case VK_FORMAT_PVRTC1_2BPP_UNORM_BLOCK_IMG:
+    case VK_FORMAT_PVRTC1_4BPP_UNORM_BLOCK_IMG:
+    case VK_FORMAT_PVRTC2_2BPP_UNORM_BLOCK_IMG:
+    case VK_FORMAT_PVRTC2_4BPP_UNORM_BLOCK_IMG:
+    case VK_FORMAT_PVRTC1_2BPP_SRGB_BLOCK_IMG:
+    case VK_FORMAT_PVRTC1_4BPP_SRGB_BLOCK_IMG:
+    case VK_FORMAT_PVRTC2_2BPP_SRGB_BLOCK_IMG:
+    case VK_FORMAT_PVRTC2_4BPP_SRGB_BLOCK_IMG:
+        return 64/8;
+#endif // VK_IMG_format_pvrtc
     default:
         return 0;
     }
