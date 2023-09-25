@@ -177,6 +177,10 @@ std::size_t Format::size() const noexcept
 {
     if (bc())
         return blockCompressedSize();
+    if (etc2())
+        return etc2Size();
+    if (eac())
+        return eacSize();
     if (pvrtc())
     {   // Specifies a four-component, PVRTC compressed format where each
         // 64-bit compressed texel block encodes an 8(4)x4 rectangle.
@@ -426,6 +430,48 @@ std::size_t Format::blockCompressedSize() const noexcept
     case VK_FORMAT_BC7_SRGB_BLOCK:
         // BC7 uses a fixed block size of 16 bytes (128 bits)
         // and a fixed tile size of 4x4 texels.
+        return 128/8;
+    default:
+        return 0;
+    }
+}
+
+std::size_t Format::etc2Size() const noexcept
+{
+    switch (format)
+    {
+    // 43.1. Format Definition
+    case VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK:
+    case VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK:
+    case VK_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK:
+    case VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK:
+        // ETC2 compressed format where each 64-bit compressed
+        // texel block encodes a 4x4 rectangle.
+        return 64/8;
+    case VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK:
+    case VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK:
+        // ETC2 compressed format where each 128-bit compressed
+        // texel block encodes a 4x4 rectangle.
+        return 128/8;
+    default:
+        return 0;
+    }
+}
+
+std::size_t Format::eacSize() const noexcept
+{
+    switch (format)
+    {
+    // 43.1. Format Definition
+    case VK_FORMAT_EAC_R11_UNORM_BLOCK:
+    case VK_FORMAT_EAC_R11_SNORM_BLOCK:
+        // ETC2 compressed format where each 64-bit compressed
+        // texel block encodes a 4x4 rectangle.
+        return 64/8;
+    case VK_FORMAT_EAC_R11G11_UNORM_BLOCK:
+    case VK_FORMAT_EAC_R11G11_SNORM_BLOCK:
+        // ETC2 compressed format where each 128-bit compressed
+        // texel block encodes a 4x4 rectangle.
         return 128/8;
     default:
         return 0;
