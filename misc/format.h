@@ -42,13 +42,13 @@ namespace magma
         constexpr bool stencil() const noexcept;
         constexpr bool depthStencil() const noexcept;
         constexpr bool alpha() const noexcept;
+        constexpr bool srgb() const noexcept;
         constexpr bool bc() const noexcept;
         constexpr bool etc2() const noexcept;
         constexpr bool eac() const noexcept;
         constexpr bool astc() const noexcept;
         constexpr bool astcHdr() const noexcept;
         constexpr bool pvrtc() const noexcept;
-        constexpr bool srgb() const noexcept;
         constexpr bool ycbcr() const noexcept;
         constexpr bool packed() const noexcept;
         bool blockCompressed() const noexcept;
