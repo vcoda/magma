@@ -419,6 +419,10 @@ constexpr bool Format::alpha() const noexcept
     case VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK:
     case VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK:
     case VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK:
+#ifdef VK_KHR_sampler_ycbcr_conversion
+    case VK_FORMAT_R10X6G10X6B10X6A10X6_UNORM_4PACK16_KHR:
+    case VK_FORMAT_R12X4G12X4B12X4A12X4_UNORM_4PACK16_KHR:
+#endif // VK_KHR_sampler_ycbcr_conversion
 #ifdef VK_EXT_4444_formats
     case VK_FORMAT_A4R4G4B4_UNORM_PACK16_EXT:
     case VK_FORMAT_A4B4G4R4_UNORM_PACK16_EXT:
