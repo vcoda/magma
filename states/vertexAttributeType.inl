@@ -36,7 +36,7 @@ constexpr VkFormat VertexAttributeFormat<Format>::format() noexcept
         !attribFormat.bc() &&
         !attribFormat.etc2() &&
         !attribFormat.eac() &&
-        !attribFormat.astc() &&
+        !attribFormat.astcLdr() &&
         !attribFormat.astcHdr() &&
         !attribFormat.pvrtc(), "block compressed formats not allowed");
     static_assert(!attribFormat.srgb(), "sRGB formats not allowed");

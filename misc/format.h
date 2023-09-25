@@ -46,7 +46,7 @@ namespace magma
         constexpr bool bc() const noexcept;
         constexpr bool etc2() const noexcept;
         constexpr bool eac() const noexcept;
-        constexpr bool astc() const noexcept;
+        constexpr bool astcLdr() const noexcept;
         constexpr bool astcHdr() const noexcept;
         constexpr bool pvrtc() const noexcept;
         constexpr bool ycbcr() const noexcept;

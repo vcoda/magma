@@ -534,7 +534,7 @@ constexpr bool Format::eac() const noexcept
     }
 }
 
-constexpr bool Format::astc() const noexcept
+constexpr bool Format::astcLdr() const noexcept
 {
     switch (format)
     {

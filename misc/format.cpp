@@ -23,7 +23,7 @@ namespace magma
 {
 bool Format::blockCompressed() const noexcept
 {
-    return bc() || etc2() || eac() || astc() || astcHdr() || pvrtc();
+    return bc() || etc2() || eac() || astcLdr() || astcHdr() || pvrtc();
 }
 
 uint8_t Format::componentCount() const noexcept
@@ -181,7 +181,7 @@ std::size_t Format::size() const noexcept
         return etc2Size();
     if (eac())
         return eacSize();
-    if (astc() || astcHdr())
+    if (astcLdr() || astcHdr())
         return astcSize();
     if (pvrtc())
         return pvrtcSize();
