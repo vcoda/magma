@@ -33,14 +33,14 @@ DeviceFaultInfo::DeviceFaultInfo() noexcept:
     }
 {}
 
-DeviceFaultInfo::DeviceFaultInfo(const VkDeviceFaultCountsEXT& faultCounts):
+DeviceFaultInfo::DeviceFaultInfo(const VkDeviceFaultCountsEXT& faultCounts) noexcept:
     VkDeviceFaultInfoEXT{
         VK_STRUCTURE_TYPE_DEVICE_FAULT_INFO_EXT,
         nullptr,
         "",
-        new VkDeviceFaultAddressInfoEXT[faultCounts.addressInfoCount],
-        new VkDeviceFaultVendorInfoEXT[faultCounts.vendorInfoCount],
-        new uint8_t[static_cast<std::size_t>(faultCounts.vendorBinarySize)]
+        MAGMA_NEW VkDeviceFaultAddressInfoEXT[faultCounts.addressInfoCount],
+        MAGMA_NEW VkDeviceFaultVendorInfoEXT[faultCounts.vendorInfoCount],
+        MAGMA_NEW uint8_t[static_cast<std::size_t>(faultCounts.vendorBinarySize)]
     },
     addressInfoCount(faultCounts.addressInfoCount),
     vendorInfoCount(faultCounts.vendorInfoCount),
