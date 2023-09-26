@@ -23,12 +23,15 @@ namespace magma
 {
 std::size_t Format::size() const noexcept
 {
+    std::size_t size = 0;
     if (depth() || stencil() || depthStencil())
-        return depthStencilSize();
-    if (bc() || etc2() || eac() || astcLdr() || astcHdr() || pvrtc())
-        return blockSize();
-    // TODO: Add video format size
-    return texelSize();
+        size = depthStencilSize();
+    else if (bc() || etc2() || eac() || astcLdr() || astcHdr() || pvrtc())
+        size = blockSize();
+    else // TODO: Add video format size
+        size = texelSize();
+    MAGMA_ASSERT(size);
+    return size;
 }
 
 uint8_t Format::componentCount() const noexcept
@@ -625,7 +628,6 @@ std::size_t Format::texelSize() const noexcept
     case VK_FORMAT_R64G64B64A64_SFLOAT:
         return sizeof(double) * 4;
     default:
-        MAGMA_ASSERT(false);
         return 0;
     }
 }
@@ -642,7 +644,6 @@ std::size_t Format::blockSize() const noexcept
         return astcSize();
     else if (pvrtc())
         return pvrtcSize();
-    MAGMA_ASSERT(false);
     return 0;
 }
 } // namespace magma
