@@ -57,17 +57,18 @@ namespace magma
         constexpr std::size_t eacSize() const noexcept;
         constexpr std::size_t astcSize() const noexcept;
         constexpr std::size_t pvrtcSize() const noexcept;
-        bool blockCompressed() const noexcept;
+        std::size_t size() const noexcept;
         uint8_t componentCount() const noexcept;
         uint8_t planeCount() const noexcept;
-        std::size_t size() const noexcept;
-        std::size_t uncompressedSize() const noexcept;
-        std::size_t videoCompressedSize() const noexcept;
+        bool blockCompressed() const noexcept;
         std::pair<uint32_t, uint32_t> blockFootprint() const noexcept;
         VkFormat unormToSrgb() const noexcept;
         VkFormat srgbToUnorm() const noexcept;
 
     private:
+        std::size_t texelSize() const noexcept;
+        std::size_t blockSize() const noexcept;
+
         const VkFormat format;
     };
 } // namespace magma
