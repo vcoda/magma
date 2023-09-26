@@ -372,11 +372,15 @@ DeviceFaultInfo Device::getFaultInfo() const
     deviceFaultCounts.vendorBinarySize = 0ull;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDeviceFaultInfoEXT, VK_EXT_DEVICE_FAULT_EXTENSION_NAME);
     VkResult result = vkGetDeviceFaultInfoEXT(handle, &deviceFaultCounts, nullptr);
-    MAGMA_HANDLE_RESULT(result, "failed to get device fault counts");
-    DeviceFaultInfo deviceFaultInfo(deviceFaultCounts);
-    result = vkGetDeviceFaultInfoEXT(handle, &deviceFaultCounts, &deviceFaultInfo);
+    if (MAGMA_SUCCEEDED(result))
+    {
+        DeviceFaultInfo deviceFaultInfo(deviceFaultCounts);
+        result = vkGetDeviceFaultInfoEXT(handle, &deviceFaultCounts, &deviceFaultInfo);
+        if (MAGMA_SUCCEEDED(result))
+            return deviceFaultInfo;
+    }
     MAGMA_HANDLE_RESULT(result, "failed to get device fault info");
-    return deviceFaultInfo;
+    return DeviceFaultInfo();
 }
 #endif // VK_EXT_device_fault
 
