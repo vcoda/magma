@@ -396,6 +396,16 @@ std::pair<uint32_t, uint32_t> Format::blockFootprint() const noexcept
     case VK_FORMAT_BC6H_SFLOAT_BLOCK:
     case VK_FORMAT_BC7_UNORM_BLOCK:
     case VK_FORMAT_BC7_SRGB_BLOCK:
+    case VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK:
+    case VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK:
+    case VK_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK:
+    case VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK:
+    case VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK:
+    case VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK:
+    case VK_FORMAT_EAC_R11_UNORM_BLOCK:
+    case VK_FORMAT_EAC_R11_SNORM_BLOCK:
+    case VK_FORMAT_EAC_R11G11_UNORM_BLOCK:
+    case VK_FORMAT_EAC_R11G11_SNORM_BLOCK:
         return std::make_pair(4, 4);
     case VK_FORMAT_ASTC_4x4_UNORM_BLOCK:
     case VK_FORMAT_ASTC_4x4_SRGB_BLOCK:
@@ -439,6 +449,36 @@ std::pair<uint32_t, uint32_t> Format::blockFootprint() const noexcept
     case VK_FORMAT_ASTC_12x12_UNORM_BLOCK:
     case VK_FORMAT_ASTC_12x12_SRGB_BLOCK:
         return std::make_pair(12, 12);
+#ifdef VK_EXT_texture_compression_astc_hdr
+    case VK_FORMAT_ASTC_4x4_SFLOAT_BLOCK_EXT:
+        return std::make_pair(4, 4);
+    case VK_FORMAT_ASTC_5x4_SFLOAT_BLOCK_EXT:
+        return std::make_pair(5, 4);
+    case VK_FORMAT_ASTC_5x5_SFLOAT_BLOCK_EXT:
+        return std::make_pair(5, 5);
+    case VK_FORMAT_ASTC_6x5_SFLOAT_BLOCK_EXT:
+        return std::make_pair(6, 5);
+    case VK_FORMAT_ASTC_6x6_SFLOAT_BLOCK_EXT:
+        return std::make_pair(6, 6);
+    case VK_FORMAT_ASTC_8x5_SFLOAT_BLOCK_EXT:
+        return std::make_pair(8, 5);
+    case VK_FORMAT_ASTC_8x6_SFLOAT_BLOCK_EXT:
+        return std::make_pair(8, 6);
+    case VK_FORMAT_ASTC_8x8_SFLOAT_BLOCK_EXT:
+        return std::make_pair(8, 8);
+    case VK_FORMAT_ASTC_10x5_SFLOAT_BLOCK_EXT:
+        return std::make_pair(10, 5);
+    case VK_FORMAT_ASTC_10x6_SFLOAT_BLOCK_EXT:
+        return std::make_pair(10, 6);
+    case VK_FORMAT_ASTC_10x8_SFLOAT_BLOCK_EXT:
+        return std::make_pair(10, 8);
+    case VK_FORMAT_ASTC_10x10_SFLOAT_BLOCK_EXT:
+        return std::make_pair(10, 10);
+    case VK_FORMAT_ASTC_12x10_SFLOAT_BLOCK_EXT:
+        return std::make_pair(12, 10);
+    case VK_FORMAT_ASTC_12x12_SFLOAT_BLOCK_EXT:
+        return std::make_pair(12, 12);
+#endif // VK_EXT_texture_compression_astc_hdr
 #ifdef VK_IMG_format_pvrtc
     case VK_FORMAT_PVRTC1_2BPP_UNORM_BLOCK_IMG:
     case VK_FORMAT_PVRTC2_2BPP_UNORM_BLOCK_IMG:
