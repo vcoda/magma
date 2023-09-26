@@ -143,6 +143,13 @@ uint8_t Format::planeCount() const noexcept
 {
     switch (format)
     {
+#ifdef VK_EXT_ycbcr_2plane_444_formats
+    case VK_FORMAT_G8_B8R8_2PLANE_444_UNORM_EXT:
+    case VK_FORMAT_G10X6_B10X6R10X6_2PLANE_444_UNORM_3PACK16_EXT:
+    case VK_FORMAT_G12X4_B12X4R12X4_2PLANE_444_UNORM_3PACK16_EXT:
+    case VK_FORMAT_G16_B16R16_2PLANE_444_UNORM_EXT:
+        return 2;
+#endif // VK_EXT_ycbcr_2plane_444_formats
 #ifdef VK_KHR_sampler_ycbcr_conversion
     case VK_FORMAT_G8_B8R8_2PLANE_420_UNORM_KHR:
     case VK_FORMAT_G8_B8R8_2PLANE_422_UNORM_KHR:
@@ -167,14 +174,8 @@ uint8_t Format::planeCount() const noexcept
     case VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM_KHR:
         return 3;
 #endif // VK_KHR_sampler_ycbcr_conversion
-#ifdef VK_EXT_ycbcr_2plane_444_formats
-    case VK_FORMAT_G8_B8R8_2PLANE_444_UNORM_EXT:
-    case VK_FORMAT_G10X6_B10X6R10X6_2PLANE_444_UNORM_3PACK16_EXT:
-    case VK_FORMAT_G12X4_B12X4R12X4_2PLANE_444_UNORM_3PACK16_EXT:
-    case VK_FORMAT_G16_B16R16_2PLANE_444_UNORM_EXT:
-        return 2;
-#endif // VK_EXT_ycbcr_2plane_444_formats
     default:
+        MAGMA_ASSERT(ycbcr());
         return 0;
     }
 }
