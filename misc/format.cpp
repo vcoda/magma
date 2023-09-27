@@ -480,7 +480,11 @@ std::size_t Format::texelSize() const noexcept
     case VK_FORMAT_R5G5B5A1_UNORM_PACK16:
     case VK_FORMAT_B5G5R5A1_UNORM_PACK16:
     case VK_FORMAT_A1R5G5B5_UNORM_PACK16:
+#ifdef VK_KHR_maintenance5
+    case VK_FORMAT_A1B5G5R5_UNORM_PACK16_KHR:
+#endif // VK_KHR_maintenance5
         return sizeof(uint16_t);
+    case VK_FORMAT_R4G4_UNORM_PACK8:
     case VK_FORMAT_R8_UNORM:
     case VK_FORMAT_R8_SNORM:
     case VK_FORMAT_R8_USCALED:
@@ -488,6 +492,9 @@ std::size_t Format::texelSize() const noexcept
     case VK_FORMAT_R8_UINT:
     case VK_FORMAT_R8_SINT:
     case VK_FORMAT_R8_SRGB:
+#ifdef VK_KHR_maintenance5
+    case VK_FORMAT_A8_UNORM_KHR:
+#endif // VK_KHR_maintenance5
         return sizeof(uint8_t);
     case VK_FORMAT_R8G8_UNORM:
     case VK_FORMAT_R8G8_SNORM:
@@ -496,7 +503,7 @@ std::size_t Format::texelSize() const noexcept
     case VK_FORMAT_R8G8_UINT:
     case VK_FORMAT_R8G8_SINT:
     case VK_FORMAT_R8G8_SRGB:
-        return sizeof(uint8_t) * 2;
+        return 2 * sizeof(uint8_t);
     case VK_FORMAT_R8G8B8_UNORM:
     case VK_FORMAT_R8G8B8_SNORM:
     case VK_FORMAT_R8G8B8_USCALED:
@@ -511,7 +518,7 @@ std::size_t Format::texelSize() const noexcept
     case VK_FORMAT_B8G8R8_UINT:
     case VK_FORMAT_B8G8R8_SINT:
     case VK_FORMAT_B8G8R8_SRGB:
-        return sizeof(uint8_t) * 3;
+        return 3 * sizeof(uint8_t);
     case VK_FORMAT_R8G8B8A8_UNORM:
     case VK_FORMAT_R8G8B8A8_SNORM:
     case VK_FORMAT_R8G8B8A8_USCALED:
@@ -526,7 +533,6 @@ std::size_t Format::texelSize() const noexcept
     case VK_FORMAT_B8G8R8A8_UINT:
     case VK_FORMAT_B8G8R8A8_SINT:
     case VK_FORMAT_B8G8R8A8_SRGB:
-        return sizeof(uint8_t) * 4;
     case VK_FORMAT_A8B8G8R8_UNORM_PACK32:
     case VK_FORMAT_A8B8G8R8_SNORM_PACK32:
     case VK_FORMAT_A8B8G8R8_USCALED_PACK32:
@@ -534,6 +540,7 @@ std::size_t Format::texelSize() const noexcept
     case VK_FORMAT_A8B8G8R8_UINT_PACK32:
     case VK_FORMAT_A8B8G8R8_SINT_PACK32:
     case VK_FORMAT_A8B8G8R8_SRGB_PACK32:
+        return 4 * sizeof(uint8_t);
     case VK_FORMAT_A2R10G10B10_UNORM_PACK32:
     case VK_FORMAT_A2R10G10B10_SNORM_PACK32:
     case VK_FORMAT_A2R10G10B10_USCALED_PACK32:
@@ -554,7 +561,7 @@ std::size_t Format::texelSize() const noexcept
     case VK_FORMAT_R16_UINT:
     case VK_FORMAT_R16_SINT:
     case VK_FORMAT_R16_SFLOAT:
-        return sizeof(int16_t);
+        return sizeof(uint16_t);
     case VK_FORMAT_R16G16_UNORM:
     case VK_FORMAT_R16G16_SNORM:
     case VK_FORMAT_R16G16_USCALED:
@@ -562,7 +569,7 @@ std::size_t Format::texelSize() const noexcept
     case VK_FORMAT_R16G16_UINT:
     case VK_FORMAT_R16G16_SINT:
     case VK_FORMAT_R16G16_SFLOAT:
-        return sizeof(int16_t) * 2;
+        return 2 * sizeof(uint16_t);
     case VK_FORMAT_R16G16B16_UNORM:
     case VK_FORMAT_R16G16B16_SNORM:
     case VK_FORMAT_R16G16B16_USCALED:
@@ -570,7 +577,7 @@ std::size_t Format::texelSize() const noexcept
     case VK_FORMAT_R16G16B16_UINT:
     case VK_FORMAT_R16G16B16_SINT:
     case VK_FORMAT_R16G16B16_SFLOAT:
-        return sizeof(int16_t) * 3;
+        return 3 * sizeof(uint16_t);
     case VK_FORMAT_R16G16B16A16_UNORM:
     case VK_FORMAT_R16G16B16A16_SNORM:
     case VK_FORMAT_R16G16B16A16_USCALED:
@@ -578,7 +585,8 @@ std::size_t Format::texelSize() const noexcept
     case VK_FORMAT_R16G16B16A16_UINT:
     case VK_FORMAT_R16G16B16A16_SINT:
     case VK_FORMAT_R16G16B16A16_SFLOAT:
-        return sizeof(int16_t) * 4;
+        return 4 * sizeof(uint16_t);
+    // Map to 32-bit machine type
     case VK_FORMAT_R32_UINT:
         return sizeof(uint32_t);
     case VK_FORMAT_R32_SINT:
@@ -586,23 +594,24 @@ std::size_t Format::texelSize() const noexcept
     case VK_FORMAT_R32_SFLOAT:
         return sizeof(float);
     case VK_FORMAT_R32G32_UINT:
-        return sizeof(uint32_t) * 2;
+        return 2 * sizeof(uint32_t);
     case VK_FORMAT_R32G32_SINT:
-        return sizeof(int32_t) * 2;
+        return 2 * sizeof(int32_t);
     case VK_FORMAT_R32G32_SFLOAT:
-        return sizeof(float) * 2;
+        return 2 * sizeof(float);
     case VK_FORMAT_R32G32B32_UINT:
-        return sizeof(uint32_t) * 3;
+        return 3 * sizeof(uint32_t);
     case VK_FORMAT_R32G32B32_SINT:
-        return sizeof(int32_t) * 3;
+        return 3 * sizeof(int32_t);
     case VK_FORMAT_R32G32B32_SFLOAT:
-        return sizeof(float) * 3;
+        return 3 * sizeof(float);
     case VK_FORMAT_R32G32B32A32_UINT:
-        return sizeof(uint32_t) * 4;
+        return 4 * sizeof(uint32_t);
     case VK_FORMAT_R32G32B32A32_SINT:
-        return sizeof(int32_t) * 4;
+        return 4 * sizeof(int32_t);
     case VK_FORMAT_R32G32B32A32_SFLOAT:
-        return sizeof(float) * 4;
+        return 4 * sizeof(float);
+    // Map to 64-bit machine type
     case VK_FORMAT_R64_UINT:
         return sizeof(uint64_t);
     case VK_FORMAT_R64_SINT:
@@ -610,23 +619,30 @@ std::size_t Format::texelSize() const noexcept
     case VK_FORMAT_R64_SFLOAT:
         return sizeof(double);
     case VK_FORMAT_R64G64_UINT:
-        return sizeof(uint64_t) * 2;
+        return 2 * sizeof(uint64_t);
     case VK_FORMAT_R64G64_SINT:
-        return sizeof(int64_t) * 2;
+        return 2 * sizeof(int64_t);
     case VK_FORMAT_R64G64_SFLOAT:
-        return sizeof(double) * 2;
+        return 2 * sizeof(double);
     case VK_FORMAT_R64G64B64_UINT:
-        return sizeof(uint64_t) * 3;
+        return 3 * sizeof(uint64_t);
     case VK_FORMAT_R64G64B64_SINT:
-        return sizeof(int64_t) * 3;
+        return 3 * sizeof(int64_t);
     case VK_FORMAT_R64G64B64_SFLOAT:
-        return sizeof(double) * 3;
+        return 3 * sizeof(double);
     case VK_FORMAT_R64G64B64A64_UINT:
-        return sizeof(uint64_t) * 4;
+        return 4 * sizeof(uint64_t);
     case VK_FORMAT_R64G64B64A64_SINT:
-        return sizeof(int64_t) * 4;
+        return 4 * sizeof(int64_t);
     case VK_FORMAT_R64G64B64A64_SFLOAT:
-        return sizeof(double) * 4;
+        return 4 * sizeof(double);
+    case VK_FORMAT_B10G11R11_UFLOAT_PACK32:
+    case VK_FORMAT_E5B9G9R9_UFLOAT_PACK32:
+        return sizeof(float);
+#ifdef VK_NV_optical_flow
+    case VK_FORMAT_R16G16_S10_5_NV:
+        return 2 * sizeof(uint16_t);
+#endif // VK_NV_optical_flow
     default:
         return 0;
     }
