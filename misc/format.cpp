@@ -338,7 +338,7 @@ std::pair<uint32_t, uint32_t> Format::blockFootprint() const noexcept
         return std::make_pair(4, 4);
 #endif // VK_IMG_format_pvrtc
     default:
-        MAGMA_ASSERT(false);
+        MAGMA_ASSERT(blockCompressed());
         return std::make_pair(1, 1);
     };
 }
