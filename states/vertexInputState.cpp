@@ -22,25 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-VertexInputState::VertexInputState() noexcept:
-    VkPipelineVertexInputStateCreateInfo{
-        VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
-        nullptr,
-        0, // flags
-        0, // vertexBindingDescriptionCount
-        nullptr, // pVertexBindingDescriptions
-        0, // vertexAttributeDescriptionCount
-        nullptr // pVertexAttributeDescriptions
-    }
-{
-#ifdef VK_EXT_vertex_attribute_divisor
-    vertexInputDivisorInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
-    vertexInputDivisorInfo.pNext = nullptr;
-    vertexInputDivisorInfo.vertexBindingDivisorCount = 0;
-    vertexInputDivisorInfo.pVertexBindingDivisors = nullptr;
-#endif // VK_EXT_vertex_attribute_divisor
-}
-
 VertexInputState::VertexInputState(const VertexInputBinding& binding,
     const std::initializer_list<VertexInputAttribute>& attributes) noexcept
 {
