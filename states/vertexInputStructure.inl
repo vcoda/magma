@@ -2,74 +2,61 @@ namespace magma
 {
 template<class Vertex>
 inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, const VertexInputAttribute& attribute,
-    VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */)
+    VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */) noexcept
 {
     static_assert(sizeof(Vertex) % sizeof(uint32_t) == 0, "vertex structure size should be a multiple of 4 bytes");
-    VkVertexInputBindingDescription *vertexBindingDescription = new VkVertexInputBindingDescription[1];
+    VkVertexInputBindingDescription *vertexBindingDescription = MAGMA_NEW VkVertexInputBindingDescription[1];
+    MAGMA_ASSERT(vertexBindingDescription);
     vertexBindingDescription->binding = binding;
     vertexBindingDescription->stride = sizeof(Vertex);
     vertexBindingDescription->inputRate = inputRate;
-    VkVertexInputAttributeDescription *vertexAttributeDescription = core::copyArray(&attribute, 1);
-    vertexAttributeDescription->binding = binding;
-    sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    pNext = nullptr;
-    flags = 0;
     vertexBindingDescriptionCount = 1;
     pVertexBindingDescriptions = vertexBindingDescription;
+    VkVertexInputAttributeDescription *vertexAttributeDescription = core::copyArray(&attribute, 1);
+    MAGMA_ASSERT(vertexAttributeDescription);
+    vertexAttributeDescription->binding = binding;
     vertexAttributeDescriptionCount = 1;
     pVertexAttributeDescriptions = vertexAttributeDescription;
 }
 
 template<class Vertex>
 inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, const std::initializer_list<VertexInputAttribute>& attributes,
-    VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */)
+    VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */) noexcept
 {
     static_assert(sizeof(Vertex) % sizeof(uint32_t) == 0, "vertex structure size should be a multiple of 4 bytes");
-    VkVertexInputBindingDescription *vertexBindingDescription = new VkVertexInputBindingDescription[1];
+    VkVertexInputBindingDescription *vertexBindingDescription = MAGMA_NEW VkVertexInputBindingDescription[1];
+    MAGMA_ASSERT(vertexBindingDescription);
     vertexBindingDescription->binding = binding;
     vertexBindingDescription->stride = sizeof(Vertex);
     vertexBindingDescription->inputRate = inputRate;
-    VkVertexInputAttributeDescription *vertexAttributeDescriptions = core::copyInitializerList(attributes);
-    if (!vertexAttributeDescriptions)
-        vertexAttributeDescriptionCount = 0;
-    else
-    {
-        vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
-        for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
-            vertexAttributeDescriptions[i].binding = binding;
-    }
-    sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    pNext = nullptr;
-    flags = 0;
     vertexBindingDescriptionCount = 1;
     pVertexBindingDescriptions = vertexBindingDescription;
+    VkVertexInputAttributeDescription *vertexAttributeDescriptions = core::copyInitializerList(attributes);
+    MAGMA_ASSERT(vertexAttributeDescriptions);
+    vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
+    for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
+        vertexAttributeDescriptions[i].binding = binding;
     pVertexAttributeDescriptions = vertexAttributeDescriptions;
 }
 
 template<class Vertex>
 template<uint32_t vertexAttributeCount>
 inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, const VertexInputAttribute(&attributes)[vertexAttributeCount],
-    VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */)
+    VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */) noexcept
 {
     static_assert(sizeof(Vertex) % sizeof(uint32_t) == 0, "vertex structure size should be a multiple of 4 bytes");
-    VkVertexInputBindingDescription *vertexBindingDescription = new VkVertexInputBindingDescription[1];
+    VkVertexInputBindingDescription *vertexBindingDescription = MAGMA_NEW VkVertexInputBindingDescription[1];
+    MAGMA_ASSERT(vertexBindingDescription);
     vertexBindingDescription->binding = binding;
     vertexBindingDescription->stride = sizeof(Vertex);
     vertexBindingDescription->inputRate = inputRate;
-    VkVertexInputAttributeDescription *vertexAttributeDescriptions = core::copyArray(attributes, vertexAttributeCount);
-    if (!vertexAttributeDescriptions)
-        vertexAttributeDescriptionCount = 0;
-    else
-    {
-        vertexAttributeDescriptionCount = vertexAttributeCount;
-        for (uint32_t i = 0; i <  vertexAttributeDescriptionCount; ++i)
-            vertexAttributeDescriptions[i].binding = binding;
-    }
-    sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    pNext = nullptr;
-    flags = 0;
     vertexBindingDescriptionCount = 1;
     pVertexBindingDescriptions = vertexBindingDescription;
+    VkVertexInputAttributeDescription *vertexAttributeDescriptions = core::copyArray(attributes, vertexAttributeCount);
+    MAGMA_ASSERT(vertexAttributeDescriptions);
+    vertexAttributeDescriptionCount = vertexAttributeCount;
+    for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
+        vertexAttributeDescriptions[i].binding = binding;
     pVertexAttributeDescriptions = vertexAttributeDescriptions;
 }
 

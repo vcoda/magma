@@ -31,14 +31,14 @@ namespace magma
         VertexInputStructure() = default;
         explicit VertexInputStructure(uint32_t binding,
             const VertexInputAttribute& attribute,
-            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX);
+            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
         explicit VertexInputStructure(uint32_t binding,
             const std::initializer_list<VertexInputAttribute>& attributes,
-            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX);
+            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
         template<uint32_t vertexAttributeCount>
         explicit VertexInputStructure(uint32_t binding,
             const VertexInputAttribute(&attributes)[vertexAttributeCount],
-            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX);
+            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
         VertexInputStructure(const VertexInputStructure& other) noexcept;
         VertexInputStructure& operator=(const VertexInputStructure& other) noexcept;
         virtual uint32_t stride(uint32_t binding) const noexcept override;

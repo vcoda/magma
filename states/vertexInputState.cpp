@@ -22,15 +22,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-VertexInputState::VertexInputState() noexcept
+VertexInputState::VertexInputState() noexcept:
+    VkPipelineVertexInputStateCreateInfo{
+        VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
+        nullptr,
+        0, // flags
+        0, // vertexBindingDescriptionCount
+        nullptr, // pVertexBindingDescriptions
+        0, // vertexAttributeDescriptionCount
+        nullptr // pVertexAttributeDescriptions
+    }
 {
-    sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    pNext = nullptr;
-    flags = 0;
-    vertexBindingDescriptionCount = 0;
-    pVertexBindingDescriptions = nullptr;
-    vertexAttributeDescriptionCount = 0;
-    pVertexAttributeDescriptions = nullptr;
 #ifdef VK_EXT_vertex_attribute_divisor
     vertexInputDivisorInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
     vertexInputDivisorInfo.pNext = nullptr;
