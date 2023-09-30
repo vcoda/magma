@@ -66,8 +66,9 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(const VertexInputStruc
     sType = other.sType;
     pNext = other.pNext;
     flags = other.flags;
+    vertexBindingDescription = other.vertexBindingDescription;
     vertexBindingDescriptionCount = other.vertexBindingDescriptionCount;
-    pVertexBindingDescriptions = core::copyArray(other.pVertexBindingDescriptions, 1);
+    pVertexBindingDescriptions = &vertexBindingDescription;
     vertexAttributeDescriptionCount = other.vertexAttributeDescriptionCount;
     pVertexAttributeDescriptions = core::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
 }
@@ -78,9 +79,9 @@ inline VertexInputStructure<Vertex>& VertexInputStructure<Vertex>::operator=(con
     if (this != &other)
     {
         flags = other.flags;
+        vertexBindingDescription = other.vertexBindingDescription;
         vertexBindingDescriptionCount = other.vertexBindingDescriptionCount;
-        delete[] pVertexBindingDescriptions;
-        pVertexBindingDescriptions = core::copyArray(other.pVertexBindingDescriptions, 1);
+        pVertexBindingDescriptions = &vertexBindingDescription;
         vertexAttributeDescriptionCount = other.vertexAttributeDescriptionCount;
         delete[] pVertexAttributeDescriptions;
         pVertexAttributeDescriptions = core::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
