@@ -56,7 +56,7 @@ namespace magma
             VkFormat format,
             uint32_t offset) noexcept;
         template<class Vertex, class Type>
-        constexpr VertexInputAttribute(uint32_t location,
+        inline VertexInputAttribute(uint32_t location,
             Type Vertex::*attrib) noexcept;
         constexpr hash_t hash() const noexcept;
     };

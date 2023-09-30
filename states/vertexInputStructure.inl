@@ -98,7 +98,7 @@ inline uint32_t VertexInputStructure<Vertex>::stride(uint32_t binding) const noe
 }
 
 template<class Vertex, class Type>
-constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location, Type Vertex::*attrib) noexcept:
+inline VertexInputAttribute::VertexInputAttribute(uint32_t location, Type Vertex::*attrib) noexcept:
     VkVertexInputAttributeDescription{
         location,
         0, // binding
