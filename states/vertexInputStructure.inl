@@ -1,17 +1,21 @@
 namespace magma
 {
 template<class Vertex>
+inline VertexInputStructure<Vertex>::~VertexInputStructure()
+{
+    pVertexBindingDescriptions = nullptr; // delete[] pVertexBindingDescriptions in VertexInputState will be no-op
+}
+
+template<class Vertex>
 inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, const VertexInputAttribute& attribute,
     VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */) noexcept
 {
     static_assert(sizeof(Vertex) % sizeof(uint32_t) == 0, "vertex structure size should be a multiple of 4 bytes");
-    VkVertexInputBindingDescription *vertexBindingDescription = MAGMA_NEW VkVertexInputBindingDescription[1];
-    MAGMA_ASSERT(vertexBindingDescription);
-    vertexBindingDescription->binding = binding;
-    vertexBindingDescription->stride = sizeof(Vertex);
-    vertexBindingDescription->inputRate = inputRate;
+    vertexBindingDescription.binding = binding;
+    vertexBindingDescription.stride = sizeof(Vertex);
+    vertexBindingDescription.inputRate = inputRate;
     vertexBindingDescriptionCount = 1;
-    pVertexBindingDescriptions = vertexBindingDescription;
+    pVertexBindingDescriptions = &vertexBindingDescription;
     VkVertexInputAttributeDescription *vertexAttributeDescription = core::copyArray(&attribute, 1);
     MAGMA_ASSERT(vertexAttributeDescription);
     vertexAttributeDescription->binding = binding;
@@ -24,13 +28,11 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, cons
     VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */) noexcept
 {
     static_assert(sizeof(Vertex) % sizeof(uint32_t) == 0, "vertex structure size should be a multiple of 4 bytes");
-    VkVertexInputBindingDescription *vertexBindingDescription = MAGMA_NEW VkVertexInputBindingDescription[1];
-    MAGMA_ASSERT(vertexBindingDescription);
-    vertexBindingDescription->binding = binding;
-    vertexBindingDescription->stride = sizeof(Vertex);
-    vertexBindingDescription->inputRate = inputRate;
+    vertexBindingDescription.binding = binding;
+    vertexBindingDescription.stride = sizeof(Vertex);
+    vertexBindingDescription.inputRate = inputRate;
     vertexBindingDescriptionCount = 1;
-    pVertexBindingDescriptions = vertexBindingDescription;
+    pVertexBindingDescriptions = &vertexBindingDescription;
     VkVertexInputAttributeDescription *vertexAttributeDescriptions = core::copyInitializerList(attributes);
     MAGMA_ASSERT(vertexAttributeDescriptions);
     vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
@@ -45,13 +47,11 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, cons
     VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */) noexcept
 {
     static_assert(sizeof(Vertex) % sizeof(uint32_t) == 0, "vertex structure size should be a multiple of 4 bytes");
-    VkVertexInputBindingDescription *vertexBindingDescription = MAGMA_NEW VkVertexInputBindingDescription[1];
-    MAGMA_ASSERT(vertexBindingDescription);
-    vertexBindingDescription->binding = binding;
-    vertexBindingDescription->stride = sizeof(Vertex);
-    vertexBindingDescription->inputRate = inputRate;
+    vertexBindingDescription.binding = binding;
+    vertexBindingDescription.stride = sizeof(Vertex);
+    vertexBindingDescription.inputRate = inputRate;
     vertexBindingDescriptionCount = 1;
-    pVertexBindingDescriptions = vertexBindingDescription;
+    pVertexBindingDescriptions = &vertexBindingDescription;
     VkVertexInputAttributeDescription *vertexAttributeDescriptions = core::copyArray(attributes, vertexAttributeCount);
     MAGMA_ASSERT(vertexAttributeDescriptions);
     vertexAttributeDescriptionCount = vertexAttributeCount;
