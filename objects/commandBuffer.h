@@ -305,22 +305,29 @@ namespace magma
             const std::shared_ptr<Image>& dstImage,
             const VkImageResolve& region) const noexcept;
 
-        void setEvent(const std::shared_ptr<Event>& event,
-            VkPipelineStageFlags stageMask) noexcept;
-        void resetEvent(const std::shared_ptr<Event>& event,
-            VkPipelineStageFlags stageMask) noexcept;
+        void setEvent(std::shared_ptr<Event>& event,
+            VkPipelineStageFlags stageMask) const noexcept;
+        void resetEvent(std::shared_ptr<Event>& event,
+            VkPipelineStageFlags stageMask) const noexcept;
+        void waitEvent(const std::shared_ptr<Event>& event,
+            VkPipelineStageFlags srcStageMask,
+            VkPipelineStageFlags dstStageMask) const noexcept;
         void waitEvent(const std::shared_ptr<Event>& event,
             VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
-            const std::vector<MemoryBarrier>& memoryBarriers = {},
-            const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers = {},
-            const std::vector<ImageMemoryBarrier>& imageMemoryBarriers = {}) noexcept;
+            const MemoryBarrier& barrier) const noexcept;
+        void waitEvent(const std::shared_ptr<Event>& event,
+            VkPipelineStageFlags srcStageMask,
+            VkPipelineStageFlags dstStageMask,
+            const MemoryBarrier& memoryBarrier,
+            const BufferMemoryBarrier& bufferMemoryBarrier,
+            const ImageMemoryBarrier& imageMemoryBarrier) const noexcept;
         void waitEvents(const std::vector<std::shared_ptr<Event>>& events,
             VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
             const std::vector<MemoryBarrier>& memoryBarriers = {},
             const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers = {},
-            const std::vector<ImageMemoryBarrier>& imageMemoryBarriers = {}) noexcept;
+            const std::vector<ImageMemoryBarrier>& imageMemoryBarriers = {}) const noexcept;
 
         void pipelineBarrier(VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,

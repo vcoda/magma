@@ -307,30 +307,12 @@ void CommandBuffer::fillBuffer(const std::shared_ptr<Buffer>& buffer, uint32_t v
 // inline void CommandBuffer::resolveImage
 // inline void CommandBuffer::setEvent
 // inline void CommandBuffer::resetEvent
-
-void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
-    const std::vector<MemoryBarrier>& memoryBarriers /* {} */,
-    const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers /* {} */,
-    const std::vector<ImageMemoryBarrier>& imageMemoryBarriers /* {} */) noexcept
-{
-    MAGMA_ASSERT(srcStageMask);
-    MAGMA_ASSERT(dstStageMask);
-    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedImageMemoryBarriers, imageMemoryBarriers.size());
-    for (const auto& barrier : imageMemoryBarriers)
-        dereferencedImageMemoryBarriers.put(barrier);
-    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask,
-        MAGMA_COUNT(memoryBarriers),
-        memoryBarriers.data(),
-        MAGMA_COUNT(bufferMemoryBarriers),
-        bufferMemoryBarriers.data(),
-        MAGMA_COUNT(imageMemoryBarriers),
-        dereferencedImageMemoryBarriers);
-}
+// inline void CommandBuffer::waitEvent
 
 void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
     const std::vector<MemoryBarrier>& memoryBarriers /* {} */,
     const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers /* {} */,
-    const std::vector<ImageMemoryBarrier>& imageMemoryBarriers /* {} */) noexcept
+    const std::vector<ImageMemoryBarrier>& imageMemoryBarriers /* {} */) const noexcept
 {
     MAGMA_ASSERT(srcStageMask);
     MAGMA_ASSERT(dstStageMask);
