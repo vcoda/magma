@@ -96,7 +96,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
         break;
     case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
         if (0 == srcAccessMask)
-            srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT | VK_ACCESS_HOST_WRITE_BIT;
+            srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;// | VK_ACCESS_HOST_WRITE_BIT;
         dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
         break;
     case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
