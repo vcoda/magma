@@ -52,12 +52,13 @@ CommandPool::~CommandPool()
     vkDestroyCommandPool(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-bool CommandPool::reset(bool releaseResources) noexcept
+bool CommandPool::reset(bool releaseResources /* false */) noexcept
 {
     VkCommandPoolResetFlags flags = 0;
     if (releaseResources)
         flags |= VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT;
     const VkResult result = vkResetCommandPool(MAGMA_HANDLE(device), handle, flags);
+    MAGMA_ASSERT(VK_SUCCESS == result);
     return (VK_SUCCESS == result);
 }
 

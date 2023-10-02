@@ -44,7 +44,7 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
         ~CommandPool();
         uint32_t getQueueFamilyIndex() const noexcept { return queueFamilyIndex; }
-        bool reset(bool releaseResources) noexcept;
+        bool reset(bool releaseResources = false) noexcept;
         std::vector<std::shared_ptr<CommandBuffer>> allocateCommandBuffers(uint32_t commandBufferCount,
             bool primaryLevel,
             const StructureChain& extendedInfo = StructureChain());
