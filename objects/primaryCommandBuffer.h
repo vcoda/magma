@@ -20,11 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    namespace memory
-    {
-        class LinearPlacementPool;
-    }
-
     /* Primary command buffer, which can execute secondary
        command buffers, and which is submitted to the queue. */
 
@@ -36,9 +31,7 @@ namespace magma
         void executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept;
 
     private:
-        PrimaryCommandBuffer(VkCommandBuffer handle,
-            std::shared_ptr<CommandPool> cmdPool);
+        PrimaryCommandBuffer(VkCommandBuffer handle, std::shared_ptr<CommandPool> cmdPool);
         friend CommandPool;
-        friend memory::LinearPlacementPool;
     };
 } // namespace magma

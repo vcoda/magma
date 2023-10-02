@@ -77,9 +77,6 @@ namespace magma
 
     class CommandBuffer : public Dispatchable<VkCommandBuffer>
     {
-        friend CommandPool;
-        friend Queue;
-
     public:
         enum class State : uint32_t;
         ~CommandBuffer();
@@ -580,11 +577,13 @@ namespace magma
 
     protected:
         CommandBuffer(VkCommandBufferLevel level,
-            std::shared_ptr<CommandPool> cmdPool);
-        CommandBuffer(VkCommandBufferLevel level,
             VkCommandBuffer handle,
             std::shared_ptr<CommandPool> cmdPool);
+        CommandBuffer(VkCommandBufferLevel level,
+            std::shared_ptr<CommandPool> cmdPool);
         void onSubmit() noexcept;
+        friend CommandPool;
+        friend Queue;
 
         std::shared_ptr<CommandPool> cmdPool;
         std::shared_ptr<Fence> fence;

@@ -22,11 +22,6 @@ namespace magma
 {
     class CommandBuffer;
 
-    namespace memory
-    {
-        class LinearPlacementPool;
-    }
-
     /* Command pools are opaque objects that command buffer memory
        is allocated from, and which allow the implementation
        to amortize the cost of resource creation across multiple
@@ -46,7 +41,6 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             bool transient = false,
             bool resetCommandBuffer = true,
-            uint32_t maxCommandBufferCount = 64,
             const StructureChain& extendedInfo = StructureChain());
         ~CommandPool();
         uint32_t getQueueFamilyIndex() const noexcept { return queueFamilyIndex; }
@@ -61,6 +55,5 @@ namespace magma
 
     private:
         const uint32_t queueFamilyIndex;
-        std::unique_ptr<memory::LinearPlacementPool> pool;
     };
 } // namespace magma

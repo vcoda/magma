@@ -20,11 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    namespace memory
-    {
-        class LinearPlacementPool;
-    }
-
     /* Secondary command buffer can be recorded to a primary
        command buffer via vkCmdExecuteCommands (and not directly
        submitted to the queue). There is no inheritance of state
@@ -38,10 +33,8 @@ namespace magma
             CommandBuffer(VK_COMMAND_BUFFER_LEVEL_SECONDARY, std::move(cmdPool)) {}
 
     private:
-        explicit SecondaryCommandBuffer(VkCommandBuffer handle,
-            std::shared_ptr<CommandPool> cmdPool):
+        SecondaryCommandBuffer(VkCommandBuffer handle, std::shared_ptr<CommandPool> cmdPool):
             CommandBuffer(VK_COMMAND_BUFFER_LEVEL_SECONDARY, handle, std::move(cmdPool)) {}
         friend CommandPool;
-        friend memory::LinearPlacementPool;
     };
 } // namespace magma

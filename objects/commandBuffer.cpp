@@ -31,6 +31,23 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle, std::shared_ptr<CommandPool> cmdPool_):
+    Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, handle, cmdPool_->getDevice(), nullptr),
+    cmdPool(std::move(cmdPool_)),
+    fence(std::make_shared<Fence>(device)),
+    level(level),
+    usageFlags(0),
+    state(State::Initial),
+    occlusionQueryEnable(VK_FALSE),
+    conditionalRenderingEnable(VK_FALSE),
+    negativeViewportHeightEnabled(device->getDeviceFeatures()->negativeViewportHeightEnabled()),
+    withinRenderPass(VK_FALSE),
+    withinConditionalRendering(VK_FALSE),
+    withinTransformFeedback(VK_FALSE),
+    queryFlags(0),
+    pipelineStatistics(0)
+{}
+
 CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<CommandPool> cmdPool_):
     Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, cmdPool_->getDevice(), nullptr),
     cmdPool(std::move(cmdPool_)),
@@ -57,23 +74,6 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     MAGMA_HANDLE_RESULT(result, VK_COMMAND_BUFFER_LEVEL_PRIMARY == level ?
         "failed to allocate primary command buffer" : "failed to allocate secondary command buffer");
 }
-
-CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle, std::shared_ptr<CommandPool> cmdPool_):
-    Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, handle, cmdPool_->getDevice(), nullptr),
-    cmdPool(std::move(cmdPool_)),
-    fence(std::make_shared<Fence>(device)),
-    level(level),
-    usageFlags(0),
-    state(State::Initial),
-    occlusionQueryEnable(VK_FALSE),
-    conditionalRenderingEnable(VK_FALSE),
-    negativeViewportHeightEnabled(device->getDeviceFeatures()->negativeViewportHeightEnabled()),
-    withinRenderPass(VK_FALSE),
-    withinConditionalRendering(VK_FALSE),
-    withinTransformFeedback(VK_FALSE),
-    queryFlags(0),
-    pipelineStatistics(0)
-{}
 
 CommandBuffer::~CommandBuffer()
 {   // Release if not freed through command pool
