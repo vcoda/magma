@@ -150,7 +150,25 @@ void CommandBuffer::end()
     }
 }
 
-// inline void CommandBuffer::reset
+bool CommandBuffer::reset(bool releaseResources /* false */) noexcept
+{   // The command buffer can be in any state other than pending
+    MAGMA_ASSERT(state != State::Pending);
+    VkCommandBufferResetFlags flags = 0;
+    if (releaseResources)
+        flags |= VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT;
+    const VkResult result = vkResetCommandBuffer(handle, flags);
+    MAGMA_ASSERT(VK_SUCCESS == result);
+    if (VK_SUCCESS == result)
+    {
+        state = State::Initial;
+        withinRenderPass = VK_FALSE;
+        withinConditionalRendering = VK_FALSE;
+        withinTransformFeedback = VK_FALSE;
+        return true;
+    }
+    return false;
+}
+
 // inline void CommandBuffer::bindPipeline
 
 void CommandBuffer::setViewport(float x, float y, float width, float height,
