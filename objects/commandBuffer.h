@@ -89,7 +89,7 @@ namespace magma
             const std::shared_ptr<Framebuffer>& framebuffer,
             VkCommandBufferUsageFlags flags = 0) noexcept;
         void end();
-        bool reset(bool releaseResources) noexcept;
+        bool reset(bool releaseResources = false) noexcept;
         void bindPipeline(const std::shared_ptr<Pipeline>& pipeline) noexcept;
 
         void setViewport(float x, float y,
