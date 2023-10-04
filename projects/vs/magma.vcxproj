@@ -402,6 +402,8 @@
     <ClCompile Include="..\..\barriers\bufferMemoryBarrier.cpp" />
     <ClCompile Include="..\..\barriers\imageMemoryBarrier.cpp" />
     <ClCompile Include="..\..\descriptors\accelerationStructureDescriptor.cpp" />
+    <ClCompile Include="..\..\descriptors\bufferDescriptor.cpp" />
+    <ClCompile Include="..\..\descriptors\imageDescriptor.cpp" />
     <ClCompile Include="..\..\exceptions\errorResult.cpp" />
     <ClCompile Include="..\..\helpers\executeDeferredOperation.cpp" />
     <ClCompile Include="..\..\magma.cpp" />
@@ -411,7 +413,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\descriptors\binding.cpp" />
     <ClCompile Include="..\..\exceptions\exception.cpp" />
     <ClCompile Include="..\..\extensions\instanceExtensions.cpp" />
     <ClCompile Include="..\..\extensions\instanceLayers.cpp" />
@@ -629,6 +630,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\descriptors\array\bufferDescriptor.inl" />
     <None Include="..\..\descriptors\array\descriptor.inl" />
     <None Include="..\..\descriptors\array\imageDescriptor.inl" />
+    <None Include="..\..\descriptors\binding.inl" />
     <None Include="..\..\descriptors\bufferDescriptor.inl" />
     <None Include="..\..\descriptors\bufferDescriptorArray.inl" />
     <None Include="..\..\descriptors\descriptorSetTable.inl" />

@@ -88,7 +88,8 @@ auxiliary\textShader.cpp ^
 barriers\bufferMemoryBarrier.cpp ^
 barriers\imageMemoryBarrier.cpp ^
 descriptors\accelerationStructureDescriptor.cpp ^
-descriptors\binding.cpp ^
+descriptors\bufferDescriptor.cpp ^
+descriptors\imageDescriptor.cpp ^
 exceptions\errorResult.cpp ^
 exceptions\exception.cpp ^
 extensions\extensions.cpp ^
@@ -254,7 +255,8 @@ bufferMemoryBarrier.obj ^
 imageMemoryBarrier.obj ^
 pch.obj ^
 accelerationStructureDescriptor.obj ^
-binding.obj ^
+bufferDescriptor.obj ^
+imageDescriptor.obj ^
 errorResult.obj ^
 exception.obj ^
 extensions.obj ^

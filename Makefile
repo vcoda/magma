@@ -48,7 +48,8 @@ SRC_OBJS= \
 	barriers/imageMemoryBarrier.o \
 	\
 	descriptors/accelerationStructureDescriptor.o \
-	descriptors/binding.o \
+	descriptors/bufferDescriptor.o \
+	descriptors/imageDescriptor.o \
 	\
 	exceptions/errorResult.o \
 	exceptions/exception.o \

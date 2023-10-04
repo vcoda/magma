@@ -17,50 +17,10 @@ inline bool ImageDescriptor::associatedWithResource() const noexcept
     case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
         return (descriptor.imageView != VK_NULL_HANDLE);
     case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
-        return (descriptor.imageView != VK_NULL_HANDLE) && ((descriptor.sampler != VK_NULL_HANDLE) || (binding.pImmutableSamplers != nullptr));
+        return (descriptor.imageView != VK_NULL_HANDLE) &&
+            ((descriptor.sampler != VK_NULL_HANDLE) || (binding.pImmutableSamplers != nullptr));
     default:
         return false;
-    }
-}
-
-inline void ImageDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
-{
-    MAGMA_ASSERT(associatedWithResource());
-    writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeDescriptorSet.pNext = nullptr;
-    writeDescriptorSet.dstSet = dstSet;
-    writeDescriptorSet.dstBinding = binding.binding;
-    writeDescriptorSet.dstArrayElement = 0;
-    writeDescriptorSet.descriptorCount = binding.descriptorCount;
-    writeDescriptorSet.descriptorType = binding.descriptorType;
-    writeDescriptorSet.pImageInfo = &descriptor;
-    writeDescriptorSet.pBufferInfo = nullptr;
-    writeDescriptorSet.pTexelBufferView = nullptr;
-    updated = false;
-}
-
-inline void ImageDescriptor::updateImageView(std::shared_ptr<const ImageView> imageView, std::shared_ptr<const magma::Sampler> sampler,
-    VkImageUsageFlags requiredUsage) noexcept
-{
-    MAGMA_UNUSED(requiredUsage);
-    MAGMA_ASSERT(imageView);
-    const std::shared_ptr<Image>& image = imageView->getImage();
-    MAGMA_ASSERT(image->getUsage() & requiredUsage);
-    if ((descriptor.imageView != *imageView) ||
-        (sampler && descriptor.sampler != *sampler))
-    {
-        setImageType(image->getType());
-        descriptor = imageView->getDescriptor(sampler); // May be null
-        if (VK_IMAGE_LAYOUT_UNDEFINED == descriptor.imageLayout)
-        {   // Assume that later image layout will be changed,
-            // e.g. when a render pass instance ends.
-            const Format format(image->getFormat());
-            if (format.depth() || format.stencil() || format.depthStencil())
-                descriptor.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
-            else
-                descriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-        }
-        updated = true;
     }
 }
 

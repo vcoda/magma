@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptor.h"
 #include "../objects/sampler.h"
 #include "../objects/imageView.h"
-#include "../misc/format.h"
 
 namespace magma
 {
@@ -34,11 +33,12 @@ namespace magma
         {
         public:
             bool associatedWithResource() const noexcept override;
-
-        protected:
-            ImageDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
+
+        protected:
+            ImageDescriptor(VkDescriptorType descriptorType,
+                uint32_t binding) noexcept;
             void updateImageView(std::shared_ptr<const ImageView> imageView,
                 std::shared_ptr<const magma::Sampler> sampler,
                 VkImageUsageFlags requiredUsage) noexcept;

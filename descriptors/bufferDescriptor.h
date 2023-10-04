@@ -30,11 +30,12 @@ namespace magma
         {
         public:
             bool associatedWithResource() const noexcept override;
-
-        protected:
-            BufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
+
+        protected:
+            BufferDescriptor(VkDescriptorType descriptorType,
+                uint32_t binding) noexcept;
             void updateBuffer(std::shared_ptr<const Buffer> buffer,
                 VkBufferUsageFlags requiredUsage) noexcept;
         };
@@ -47,7 +48,8 @@ namespace magma
             bool associatedWithResource() const noexcept override;
 
         protected:
-            TexelBufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept;
+            TexelBufferDescriptor(VkDescriptorType descriptorType,
+                uint32_t binding) noexcept;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
             void updateBufferView(std::shared_ptr<const BufferView> bufferView,

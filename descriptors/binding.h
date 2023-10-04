@@ -51,3 +51,5 @@ namespace magma
         };
     } // namespace descriptor
 } // namespace magma
+
+#include "binding.inl"
