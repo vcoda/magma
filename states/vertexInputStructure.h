@@ -136,7 +136,6 @@ namespace magma
    through dynamic initializer before entering main(),
    thus requiring additional storage and boot time. */
 
-#ifndef MAGMA_NO_VERTEX_INPUTS
 namespace magma
 {
     /* Pre-defined vertex input structures. */
@@ -149,6 +148,7 @@ namespace magma
 
         /* Vertex position only. */
 
+    #ifndef MAGMA_NO_VERTEX_INPUTS
         extern const VertexInputStructure<vtx::Pos2h> pos2h;
         extern const VertexInputStructure<vtx::Pos2f> pos2f;
         extern const VertexInputStructure<vtx::Pos2d> pos2d;
@@ -327,8 +327,8 @@ namespace magma
         extern const VertexInputStructure<vtx::Pos3dTbn3fTex2us> pos3dTbn3fTex2us;
         extern const VertexInputStructure<vtx::Pos3dTbn3fTex2h> pos3dTbn3fTex2h;
         extern const VertexInputStructure<vtx::Pos3dTbn3fTex2f> pos3dTbn3fTex2f;
+    #endif // !MAGMA_NO_VERTEX_INPUTS
     } // namespace renderstate
 } // namespace magma
-#endif // !MAGMA_NO_VERTEX_INPUTS
 
 #include "vertexInputStructure.inl"

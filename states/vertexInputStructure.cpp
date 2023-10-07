@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#ifndef MAGMA_NO_VERTEX_INPUTS
 #include "vertexInputStructure.h"
 
 namespace magma
@@ -28,6 +27,7 @@ namespace renderstate
 {
 const VertexInputStructure<int> nullVertexInput;
 
+#ifndef MAGMA_NO_VERTEX_INPUTS
 const VertexInputStructure<Pos2h> pos2h(0,
     {0, 0, VK_FORMAT_R16G16_SFLOAT, 0});
 const VertexInputStructure<Pos2f> pos2f(0,
@@ -245,6 +245,6 @@ MAGMA_BUMP_VERTEX(Pos3dTbn4hTex2f, pos3dTbn4hTex2f)
 MAGMA_BUMP_VERTEX(Pos3dTbn3fTex2us, pos3dTbn3fTex2us)
 MAGMA_BUMP_VERTEX(Pos3dTbn3fTex2h, pos3dTbn3fTex2h)
 MAGMA_BUMP_VERTEX(Pos3dTbn3fTex2f, pos3dTbn3fTex2f)
+#endif // !MAGMA_NO_VERTEX_INPUTS
 } // namespace renderstate
 } // namespace magma
-#endif // !MAGMA_NO_VERTEX_INPUTS
