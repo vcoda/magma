@@ -20,11 +20,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Flexible vertex formats for basic vertex shading.
+    /* Generic vertex formats for basic vertex shading.
        Note that vertex attributes should be 4-byte aligned,
        so (u)short3 and half3 types are omitted. */
 
-    namespace fvf
+    namespace vtx
     {
         /* Vertex as single 2D, 3D or 4D position. */
 
@@ -246,5 +246,5 @@ namespace magma
         typedef BumpVertex<Double3, Float3, UShortNorm2> Pos3dTbn3fTex2us;
         typedef BumpVertex<Double3, Float3, Half2> Pos3dTbn3fTex2h;
         typedef BumpVertex<Double3, Float3, Float2> Pos3dTbn3fTex2f;
-    } // namespace fvf
+    } // namespace vtx
 } // namespace magma

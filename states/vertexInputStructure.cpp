@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-using namespace fvf;
+using namespace vtx;
 
 namespace renderstate
 {
