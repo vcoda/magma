@@ -170,7 +170,7 @@ DrawMeshTasksIndirectBuffer::DrawMeshTasksIndirectBuffer(std::shared_ptr<Device>
     bool persistentlyMapped /* false */,
     const Descriptor& optional /* default */,
     const Sharing& sharing /* Sharing() */):
-    IndirectBuffer(device, maxDrawMeshTasksCount, extensionDependentStride(device),
+    IndirectBuffer(device, maxDrawMeshTasksCount, indirectCommandStride(device),
         persistentlyMapped, optional, sharing, std::move(allocator)),
     mappedData(persistentlyMapped ? memory->map() : nullptr),
 #ifdef VK_EXT_mesh_shader
@@ -215,7 +215,7 @@ uint32_t DrawMeshTasksIndirectBuffer::writeDrawMeshTaskCommand(uint32_t groupCou
     return ++drawCount;
 }
 
-std::size_t DrawMeshTasksIndirectBuffer::extensionDependentStride(std::shared_ptr<Device> device) noexcept
+std::size_t DrawMeshTasksIndirectBuffer::indirectCommandStride(std::shared_ptr<Device> device) noexcept
 {
 #ifdef VK_EXT_mesh_shader
     if (device->extensionEnabled(VK_EXT_MESH_SHADER_EXTENSION_NAME))

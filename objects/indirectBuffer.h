@@ -131,7 +131,7 @@ namespace magma
             uint32_t groupCountZ = 1);
 
     private:
-        static std::size_t extensionDependentStride(std::shared_ptr<Device> device) noexcept;
+        static std::size_t indirectCommandStride(std::shared_ptr<Device> device) noexcept;
 
         void *const mappedData;
         const bool extMeshShader;
