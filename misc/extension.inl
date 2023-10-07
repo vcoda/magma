@@ -15,7 +15,7 @@ inline void Extension<Fn>::requireProcAddress(const char *extensionName, bool de
     #else
         std::cout << "unsupported " << (device ? "device" : "instance") << " extension: "
             << extensionName << std::endl;
-        MAGMA_ASSERT(procAddress);
+        MAGMA_ASSERT(procAddr);
         abort();
     #endif // !MAGMA_NO_EXCEPTIONS
     }
