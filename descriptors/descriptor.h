@@ -28,7 +28,7 @@ namespace magma
            descriptor structure of type <Type> to store properties of
            underlying objects like buffers, images. samplers etc. */
 
-        template<class Type>
+        template<class DescriptorInfo>
         class Descriptor : public Binding
         {
         protected:
@@ -36,12 +36,12 @@ namespace magma
                 uint32_t binding) noexcept
             : Binding(descriptorType, 1, binding) {}
 
-            Type descriptor = {};
+            DescriptorInfo descriptor = {};
         };
 
         /* Base template class of descriptor array. */
 
-        template<class Type, uint32_t Size>
+        template<class DescriptorInfo, uint32_t Size>
         class DescriptorArray : public Binding
         {
         public:
@@ -52,7 +52,7 @@ namespace magma
                 uint32_t binding) noexcept
             : Binding(descriptorType, Size, binding) {}
 
-            std::array<Type, Size> descriptors = {};
+            std::array<DescriptorInfo, Size> descriptors = {};
         };
     } // namespace descriptor
 } // namespace magma
