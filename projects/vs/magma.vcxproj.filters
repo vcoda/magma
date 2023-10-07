@@ -1193,9 +1193,6 @@
     <ClCompile Include="..\..\allocator\vmaImplementation.cpp">
       <Filter>Source Files\allocator</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\descriptors\binding.cpp">
-      <Filter>Source Files\descriptors</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\renderpass\subpass.cpp">
       <Filter>Source Files\renderpass</Filter>
     </ClCompile>
