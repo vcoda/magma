@@ -29,7 +29,7 @@ namespace magma
     {
     public:
         operator Fn() const noexcept { return procAddr; }
-        operator bool() { return procAddr != nullptr; }
+        operator bool() const noexcept { return procAddr != nullptr; }
 
     protected:
         Extension(PFN_vkVoidFunction procAddr) noexcept;
