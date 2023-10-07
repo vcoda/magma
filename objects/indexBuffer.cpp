@@ -45,10 +45,11 @@ std::size_t BaseIndexBuffer::getIndexSize() const noexcept
 #ifdef VK_EXT_index_type_uint8
     case VK_INDEX_TYPE_UINT8_EXT:
         return sizeof(uint8_t);
-    }
 #endif
-    MAGMA_ASSERT(false);
-    return 0;
+    default:
+        MAGMA_ASSERT(false);
+        return 0;
+    }
 }
 
 uint32_t BaseIndexBuffer::getIndexCount() const noexcept
