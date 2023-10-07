@@ -131,6 +131,12 @@ namespace magma
     } // namespace specialization
 } // namespace magma
 
+/* Keep in mind that vertex input structures are not
+   a constexpr objects, so they are initialized by CRT
+   through dynamic initializer before entering main(),
+   thus requiring additional storage and boot time. */
+
+#ifndef MAGMA_NO_VERTEX_INPUTS
 namespace magma
 {
     /* Pre-defined vertex input structures. */
@@ -323,5 +329,6 @@ namespace magma
         extern const VertexInputStructure<vtx::Pos3dTbn3fTex2f> pos3dTbn3fTex2f;
     } // namespace renderstate
 } // namespace magma
+#endif // !MAGMA_NO_VERTEX_INPUTS
 
 #include "vertexInputStructure.inl"
