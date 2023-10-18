@@ -40,7 +40,7 @@ namespace magma
             const Sharing& sharing = Sharing()):
             Buffer(std::move(device), sizeof(Type) * arraySize,
                 0, // flags
-                VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, // Make it compatible with vkCmdUpdateBuffer
                 (barStagedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0) | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                 optional, sharing, std::move(allocator)),
             arraySize(arraySize)
