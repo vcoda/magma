@@ -51,7 +51,7 @@ namespace magma
             uint32_t maxInlineUniformBlockBindings = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~DescriptorPool();
-        void reset();
+        void reset(VkDescriptorPoolResetFlags flags = 0);
         bool canFreeDescriptorSet() const noexcept { return freeDescriptorSet; }
 
     private:

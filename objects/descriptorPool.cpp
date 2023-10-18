@@ -86,9 +86,9 @@ DescriptorPool::~DescriptorPool()
     vkDestroyDescriptorPool(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-void DescriptorPool::reset()
-{
-    const VkResult result = vkResetDescriptorPool(MAGMA_HANDLE(device), handle, 0);
+void DescriptorPool::reset(VkDescriptorPoolResetFlags flags /* 0 */)
+{   // Set the pointer back to the start of pool memory
+    const VkResult result = vkResetDescriptorPool(MAGMA_HANDLE(device), handle, flags);
     MAGMA_HANDLE_RESULT(result, "failed to reset descriptor pool");
 }
 } // namespace magma
