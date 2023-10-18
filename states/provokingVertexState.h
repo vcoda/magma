@@ -40,10 +40,10 @@ namespace magma
 namespace magma
 {
 #define MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(polygonMode, ProvokingMode, provokingVertexMode)\
-    constexpr ProvokingVertexRasterizationState polygonMode##CullNoneCCw##ProvokingMode(polygonMode##CullNoneCCw, provokingVertexMode);\
-    constexpr ProvokingVertexRasterizationState polygonMode##CullFrontCCw##ProvokingMode(polygonMode##CullFrontCCw, provokingVertexMode);\
-    constexpr ProvokingVertexRasterizationState polygonMode##CullBackCCw##ProvokingMode(polygonMode##CullBackCCw, provokingVertexMode);\
-    constexpr ProvokingVertexRasterizationState polygonMode##CullFrontAndBackCCw##ProvokingMode(polygonMode##CullFrontAndBackCCw, provokingVertexMode);\
+    constexpr ProvokingVertexRasterizationState polygonMode##CullNoneCcw##ProvokingMode(polygonMode##CullNoneCcw, provokingVertexMode);\
+    constexpr ProvokingVertexRasterizationState polygonMode##CullFrontCcw##ProvokingMode(polygonMode##CullFrontCcw, provokingVertexMode);\
+    constexpr ProvokingVertexRasterizationState polygonMode##CullBackCcw##ProvokingMode(polygonMode##CullBackCcw, provokingVertexMode);\
+    constexpr ProvokingVertexRasterizationState polygonMode##CullFrontAndBackCcw##ProvokingMode(polygonMode##CullFrontAndBackCcw, provokingVertexMode);\
     constexpr ProvokingVertexRasterizationState polygonMode##CullNoneCw##ProvokingMode(polygonMode##CullNoneCw, provokingVertexMode);\
     constexpr ProvokingVertexRasterizationState polygonMode##CullFrontCw##ProvokingMode(polygonMode##CullFrontCw, provokingVertexMode);\
     constexpr ProvokingVertexRasterizationState polygonMode##CullBackCw##ProvokingMode(polygonMode##CullBackCw, provokingVertexMode);\

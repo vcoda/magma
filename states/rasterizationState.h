@@ -80,10 +80,10 @@ namespace magma
 namespace magma
 {
 #define MAGMA_RASTERIZATION_STATE_PERMUTATIONS(name, polygonMode)\
-    constexpr RasterizationState name##CullNoneCCw(polygonMode, VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
-    constexpr RasterizationState name##CullFrontCCw(polygonMode, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
-    constexpr RasterizationState name##CullBackCCw(polygonMode, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
-    constexpr RasterizationState name##CullFrontAndBackCCw(polygonMode, VK_CULL_MODE_FRONT_AND_BACK, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
+    constexpr RasterizationState name##CullNoneCcw(polygonMode, VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
+    constexpr RasterizationState name##CullFrontCcw(polygonMode, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
+    constexpr RasterizationState name##CullBackCcw(polygonMode, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
+    constexpr RasterizationState name##CullFrontAndBackCcw(polygonMode, VK_CULL_MODE_FRONT_AND_BACK, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
     constexpr RasterizationState name##CullNoneCw(polygonMode, VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);\
     constexpr RasterizationState name##CullFrontCw(polygonMode, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_CLOCKWISE);\
     constexpr RasterizationState name##CullBackCw(polygonMode, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_CLOCKWISE);\

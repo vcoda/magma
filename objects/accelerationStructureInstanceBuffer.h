@@ -61,7 +61,7 @@ namespace magma
         void setCullTriangles(bool enable) noexcept { setFlag(VK_GEOMETRY_INSTANCE_TRIANGLE_CULL_DISABLE_BIT_NV, !enable); }
         bool cullEnabled() const noexcept { return !(flags & VK_GEOMETRY_INSTANCE_TRIANGLE_CULL_DISABLE_BIT_NV); }
         void setFrontTriangle(bool ccw) noexcept { setFlag(VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_NV, ccw); }
-        bool frontTriangleCCw() const noexcept { return flags & VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_NV; }
+        bool frontTriangleCcw() const noexcept { return flags & VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_NV; }
         void setForceOpaque(bool opaque) noexcept { setFlag(VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV, opaque); }
         void setForceNoOpaque(bool noOpaque) noexcept { setFlag(VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV, noOpaque); }
         bool opaque() const noexcept { return flags & VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV; }

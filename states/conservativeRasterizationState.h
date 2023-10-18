@@ -45,10 +45,10 @@ namespace magma
 namespace magma
 {
 #define MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(polygonMode, ConservativeMode, conservativeRasterizationMode)\
-    constexpr ConservativeRasterizationState polygonMode##CullNoneCCw##ConservativeMode(polygonMode##CullNoneCCw, conservativeRasterizationMode);\
-    constexpr ConservativeRasterizationState polygonMode##CullFrontCCw##ConservativeMode(polygonMode##CullFrontCCw, conservativeRasterizationMode);\
-    constexpr ConservativeRasterizationState polygonMode##CullBackCCw##ConservativeMode(polygonMode##CullBackCCw, conservativeRasterizationMode);\
-    constexpr ConservativeRasterizationState polygonMode##CullFrontAndBackCCw##ConservativeMode(polygonMode##CullFrontAndBackCCw, conservativeRasterizationMode);\
+    constexpr ConservativeRasterizationState polygonMode##CullNoneCcw##ConservativeMode(polygonMode##CullNoneCcw, conservativeRasterizationMode);\
+    constexpr ConservativeRasterizationState polygonMode##CullFrontCcw##ConservativeMode(polygonMode##CullFrontCcw, conservativeRasterizationMode);\
+    constexpr ConservativeRasterizationState polygonMode##CullBackCcw##ConservativeMode(polygonMode##CullBackCcw, conservativeRasterizationMode);\
+    constexpr ConservativeRasterizationState polygonMode##CullFrontAndBackCcw##ConservativeMode(polygonMode##CullFrontAndBackCcw, conservativeRasterizationMode);\
     constexpr ConservativeRasterizationState polygonMode##CullNoneCw##ConservativeMode(polygonMode##CullNoneCw, conservativeRasterizationMode);\
     constexpr ConservativeRasterizationState polygonMode##CullFrontCw##ConservativeMode(polygonMode##CullFrontCw, conservativeRasterizationMode);\
     constexpr ConservativeRasterizationState polygonMode##CullBackCw##ConservativeMode(polygonMode##CullBackCw, conservativeRasterizationMode);\

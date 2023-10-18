@@ -113,7 +113,7 @@ constexpr
         shaderStages,
         renderstate::nullVertexInput,
         renderstate::triangleList,
-        renderstate::fillCullNoneCCw,
+        renderstate::fillCullNoneCcw,
         renderstate::dontMultisample,
         renderstate::depthAlwaysDontWrite,
         renderstate::blendNormalRgb,

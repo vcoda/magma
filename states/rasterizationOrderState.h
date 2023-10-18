@@ -42,10 +42,10 @@ namespace magma
 namespace magma
 {
 #define MAGMA_RASTERIZATION_ORDER_STATE_PERMUTATIONS(polygonMode, Order, rasterizationOrder)\
-    constexpr RasterizationOrderState polygonMode##CullNoneCCw##Order(polygonMode##CullNoneCCw, rasterizationOrder);\
-    constexpr RasterizationOrderState polygonMode##CullFrontCCw##Order(polygonMode##CullFrontCCw, rasterizationOrder);\
-    constexpr RasterizationOrderState polygonMode##CullBackCCw##Order(polygonMode##CullBackCCw, rasterizationOrder);\
-    constexpr RasterizationOrderState polygonMode##CullFrontAndBackCCw##Order(polygonMode##CullFrontAndBackCCw, rasterizationOrder);\
+    constexpr RasterizationOrderState polygonMode##CullNoneCcw##Order(polygonMode##CullNoneCcw, rasterizationOrder);\
+    constexpr RasterizationOrderState polygonMode##CullFrontCcw##Order(polygonMode##CullFrontCcw, rasterizationOrder);\
+    constexpr RasterizationOrderState polygonMode##CullBackCcw##Order(polygonMode##CullBackCcw, rasterizationOrder);\
+    constexpr RasterizationOrderState polygonMode##CullFrontAndBackCcw##Order(polygonMode##CullFrontAndBackCcw, rasterizationOrder);\
     constexpr RasterizationOrderState polygonMode##CullNoneCw##Order(polygonMode##CullNoneCw, rasterizationOrder);\
     constexpr RasterizationOrderState polygonMode##CullFrontCw##Order(polygonMode##CullFrontCw, rasterizationOrder);\
     constexpr RasterizationOrderState polygonMode##CullBackCw##Order(polygonMode##CullBackCw, rasterizationOrder);\

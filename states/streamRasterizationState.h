@@ -43,10 +43,10 @@ namespace magma
 namespace magma
 {
 #define MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(polygonMode, Stream, rasterizationStream)\
-    constexpr StreamRasterizationState polygonMode##CullNoneCCw##Stream(polygonMode##CullNoneCCw, rasterizationStream);\
-    constexpr StreamRasterizationState polygonMode##CullFrontCCw##Stream(polygonMode##CullFrontCCw, rasterizationStream);\
-    constexpr StreamRasterizationState polygonMode##CullBackCCw##Stream(polygonMode##CullBackCCw, rasterizationStream);\
-    constexpr StreamRasterizationState polygonMode##CullFrontAndBackCCw##Stream(polygonMode##CullFrontAndBackCCw, rasterizationStream);\
+    constexpr StreamRasterizationState polygonMode##CullNoneCcw##Stream(polygonMode##CullNoneCcw, rasterizationStream);\
+    constexpr StreamRasterizationState polygonMode##CullFrontCcw##Stream(polygonMode##CullFrontCcw, rasterizationStream);\
+    constexpr StreamRasterizationState polygonMode##CullBackCcw##Stream(polygonMode##CullBackCcw, rasterizationStream);\
+    constexpr StreamRasterizationState polygonMode##CullFrontAndBackCcw##Stream(polygonMode##CullFrontAndBackCcw, rasterizationStream);\
     constexpr StreamRasterizationState polygonMode##CullNoneCw##Stream(polygonMode##CullNoneCw, rasterizationStream);\
     constexpr StreamRasterizationState polygonMode##CullFrontCw##Stream(polygonMode##CullFrontCw, rasterizationStream);\
     constexpr StreamRasterizationState polygonMode##CullBackCw##Stream(polygonMode##CullBackCw, rasterizationStream);\
