@@ -60,7 +60,7 @@ namespace magma
             uint64_t signalValue,
             const StructureChain& extendedInfo /* default */);
     #endif // VK_KHR_timeline_semaphore
-#ifdef VK_KHR_device_group
+    #ifdef VK_KHR_device_group
         void submitDeviceGroup(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
             const std::vector<uint32_t>& cmdBufferDeviceMasks = {},
             const std::vector<VkPipelineStageFlags>& waitStageMasks = {},
@@ -69,20 +69,20 @@ namespace magma
             const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores = {},
             const std::vector<uint32_t>& signalSemaphoreDeviceIndices = {},
             std::shared_ptr<const Fence> fence = nullptr);
-#endif // VK_KHR_device_group
+    #endif // VK_KHR_device_group
         bool waitIdle() noexcept;
         void present(std::shared_ptr<const Swapchain> swapchain,
             uint32_t imageIndex,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
             const StructureChain& extendedInfo = StructureChain());
-#ifdef VK_KHR_display_swapchain
+    #ifdef VK_KHR_display_swapchain
         void presentDisplay(std::shared_ptr<const Swapchain> swapchain,
             uint32_t imageIndex,
             const VkRect2D& srcRect,
             const VkRect2D& dstRect,
             bool persistent,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr);
-#endif // VK_KHR_display_swapchain
+    #endif // VK_KHR_display_swapchain
 
     private:
         Queue(VkQueue handle, std::shared_ptr<Device> device,

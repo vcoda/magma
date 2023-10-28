@@ -45,10 +45,10 @@ namespace magma
             VkPresentModeKHR presentMode,
             VkSwapchainCreateFlagsKHR flags,
             VkFullScreenExclusiveEXT fullScreenExclusive,
-        #ifdef VK_KHR_win32_surface
             // Allows to specify full-screen exclusive mode for physical display
             // that is represented by a monitor handle of type HMONITOR. See:
             // https://docs.microsoft.com/en-us/windows/win32/gdi/hmonitor-and-the-device-context
+        #ifdef VK_KHR_win32_surface
             HMONITOR hMonitor = NULL,
         #endif
             std::shared_ptr<IAllocator> allocator = nullptr,

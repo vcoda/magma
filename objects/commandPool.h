@@ -49,9 +49,9 @@ namespace magma
             bool primaryLevel,
             const StructureChain& extendedInfo = StructureChain());
         void freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept;
-#ifdef VK_KHR_maintenance1
+    #ifdef VK_KHR_maintenance1
         void trim(VkCommandPoolTrimFlagsKHR flags = 0);
-#endif
+    #endif
 
     private:
         const uint32_t queueFamilyIndex;

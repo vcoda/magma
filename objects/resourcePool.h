@@ -70,34 +70,34 @@ namespace magma
         core::ThreadSafeUnorderedSet<NonDispatchable<VkDescriptorSet>> descriptorSets;
         core::ThreadSafeUnorderedSet<NonDispatchable<VkFramebuffer>> framebuffers;
         core::ThreadSafeUnorderedSet<NonDispatchable<VkCommandPool>> commandPools;
-#ifdef VK_KHR_deferred_host_operations
+    #ifdef VK_KHR_deferred_host_operations
         core::ThreadSafeUnorderedSet<NonDispatchable<VkDeferredOperationKHR>> deferredOperations;
-#endif
-#ifdef VK_KHR_sampler_ycbcr_conversion
+    #endif
+    #ifdef VK_KHR_sampler_ycbcr_conversion
         core::ThreadSafeUnorderedSet<NonDispatchable<VkSamplerYcbcrConversionKHR>> ycbcrSamplers;
-#endif
-#ifdef VK_KHR_surface
+    #endif
+    #ifdef VK_KHR_surface
         core::ThreadSafeUnorderedSet<NonDispatchable<VkSurfaceKHR>> surfaces;
-#endif
-#ifdef VK_KHR_swapchain
+    #endif
+    #ifdef VK_KHR_swapchain
         core::ThreadSafeUnorderedSet<NonDispatchable<VkSwapchainKHR>> swapchains;
-#endif
-#ifdef VK_KHR_display
+    #endif
+    #ifdef VK_KHR_display
         core::ThreadSafeUnorderedSet<NonDispatchable<VkDisplayKHR>> displays;
         core::ThreadSafeUnorderedSet<NonDispatchable<VkDisplayModeKHR>> displayModes;
-#endif
-#ifdef VK_EXT_debug_report
+    #endif
+    #ifdef VK_EXT_debug_report
         core::ThreadSafeUnorderedSet<NonDispatchable<VkDebugReportCallbackEXT>> debugReportCallbacks;
-#endif
-#ifdef VK_EXT_debug_utils
+    #endif
+    #ifdef VK_EXT_debug_utils
         core::ThreadSafeUnorderedSet<NonDispatchable<VkDebugUtilsMessengerEXT>> debugUtilsMessengers;
-#endif
-#ifdef VK_EXT_private_data
+    #endif
+    #ifdef VK_EXT_private_data
         core::ThreadSafeUnorderedSet<NonDispatchable<VkPrivateDataSlotEXT>> privateDataSlots;
-#endif
-#ifdef VK_NV_ray_tracing
+    #endif
+    #ifdef VK_NV_ray_tracing
         core::ThreadSafeUnorderedSet<NonDispatchable<VkAccelerationStructureNV>> accelerationStructures;
-#endif
+    #endif
         mutable std::mutex mtx;
         template<class Type>
         friend class NonDispatchable;

@@ -136,9 +136,9 @@ void CommandBuffer::end()
     MAGMA_ASSERT(State::Recording == state);
     if (State::Recording == state)
     {
-#ifdef MAGMA_DEBUG_LABEL
+    #ifdef MAGMA_DEBUG_LABEL
         endDebugLabel();
-#endif // MAGMA_DEBUG_LABEL
+    #endif // MAGMA_DEBUG_LABEL
         /* Performance - critical commands generally do not have return codes.
            If a run time error occurs in such commands, the implementation will defer
            reporting the error until a specified point. For commands that record

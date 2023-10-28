@@ -85,9 +85,9 @@ namespace magma
 
     namespace blendstate
     {
-#ifdef VK_EXT_blend_operation_advanced
         namespace advanced
         {
+        #ifdef VK_EXT_blend_operation_advanced
             MAGMA_ADVANCED_COLOR_BLEND_ATTACHMENT_STATE_PERMUTATIONS(blendZero, VK_BLEND_OP_ZERO_EXT)
             MAGMA_ADVANCED_COLOR_BLEND_ATTACHMENT_STATE_PERMUTATIONS(blendSrc, VK_BLEND_OP_SRC_EXT)
             MAGMA_ADVANCED_COLOR_BLEND_ATTACHMENT_STATE_PERMUTATIONS(blendDst, VK_BLEND_OP_DST_EXT)
@@ -135,7 +135,7 @@ namespace magma
             constexpr AdvancedColorBlendAttachmentState blendRed(VK_BLEND_OP_RED_EXT); // (R,G,B,A) = (Rs', Gd, Bd, Ad)
             constexpr AdvancedColorBlendAttachmentState blendGreen(VK_BLEND_OP_GREEN_EXT); // (R,G,B,A) = (Rd, Gs', Bd, Ad)
             constexpr AdvancedColorBlendAttachmentState blendBlue(VK_BLEND_OP_BLUE_EXT); // (R,G,B,A) = (Rd, Gd, Bs', Ad)
+        #endif // VK_EXT_blend_operation_advanced
         } // namespace advanced
-#endif // VK_EXT_blend_operation_advanced
     } // namespace blendstate
 } // namespace magma

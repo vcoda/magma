@@ -86,8 +86,6 @@ namespace magma
     constexpr SamplerState magCubicMinLinearMipNearest##Suffix(VK_FILTER_CUBIC_EXT, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_NEAREST, addressMode);\
     constexpr SamplerState magCubicMinMipLinear##Suffix(VK_FILTER_CUBIC_EXT, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode);\
     constexpr SamplerState magMinCubicMipLinear##Suffix(VK_FILTER_CUBIC_EXT, VK_FILTER_CUBIC_EXT, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode);
-#else
-#define MAGMA_CUBIC_SAMPLER_STATE_PERMUTATIONS(Suffix, addressMode)
 #endif // VK_EXT_filter_cubic
 
     namespace sampler
@@ -96,16 +94,18 @@ namespace magma
         MAGMA_SAMPLER_STATE_PERMUTATIONS(MirroredRepeat, VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT)
         MAGMA_SAMPLER_STATE_PERMUTATIONS(ClampToEdge, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE)
         MAGMA_SAMPLER_STATE_PERMUTATIONS(ClampToBorder, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER)
-#   ifdef VK_KHR_sampler_mirror_clamp_to_edge
+    #ifdef VK_KHR_sampler_mirror_clamp_to_edge
         MAGMA_SAMPLER_STATE_PERMUTATIONS(MirrorClampToEdge, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE_KHR)
-#   endif
+    #endif
 
+    #ifdef VK_EXT_filter_cubic
         MAGMA_CUBIC_SAMPLER_STATE_PERMUTATIONS(Repeat, VK_SAMPLER_ADDRESS_MODE_REPEAT)
         MAGMA_CUBIC_SAMPLER_STATE_PERMUTATIONS(MirroredRepeat, VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT)
         MAGMA_CUBIC_SAMPLER_STATE_PERMUTATIONS(ClampToEdge, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE)
         MAGMA_CUBIC_SAMPLER_STATE_PERMUTATIONS(ClampToBorder, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER)
-#   ifdef VK_KHR_sampler_mirror_clamp_to_edge
+    #ifdef VK_KHR_sampler_mirror_clamp_to_edge
         MAGMA_CUBIC_SAMPLER_STATE_PERMUTATIONS(MirrorClampToEdge, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE_KHR)
-#   endif
+    #endif
+    #endif // VK_EXT_filter_cubic
     } // namespace sampler
 } // namespace magma

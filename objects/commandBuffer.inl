@@ -597,9 +597,9 @@ inline void CommandBuffer::endRenderPass() noexcept
     MAGMA_ASSERT(withinRenderPass);
     if (withinRenderPass)
     {
-#ifdef MAGMA_DEBUG_LABEL
+    #ifdef MAGMA_DEBUG_LABEL
         endDebugLabel();
-#endif // MAGMA_DEBUG_LABEL
+    #endif // MAGMA_DEBUG_LABEL
         vkCmdEndRenderPass(handle);
         withinRenderPass = VK_FALSE;
     }

@@ -65,9 +65,9 @@ namespace magma
         const char *stringize(VkQueueFlagBits) noexcept;
         const char *stringize(VkMemoryPropertyFlagBits) noexcept;
         const char *stringize(VkMemoryHeapFlagBits) noexcept;
-#ifdef VK_VERSION_1_1
+    #ifdef VK_VERSION_1_1
         const char *stringize(VkDeviceQueueCreateFlagBits) noexcept;
-#endif
+    #endif
         const char *stringize(VkPipelineStageFlagBits) noexcept;
         const char *stringize(VkImageAspectFlagBits) noexcept;
         const char *stringize(VkSparseImageFormatFlagBits) noexcept;
@@ -81,9 +81,9 @@ namespace magma
         const char *stringize(VkShaderStageFlagBits) noexcept;
         const char *stringize(VkCullModeFlagBits) noexcept;
         const char *stringize(VkColorComponentFlagBits) noexcept;
-#ifdef VK_KHR_push_descriptor
+    #ifdef VK_KHR_push_descriptor
         const char *stringize(VkDescriptorSetLayoutCreateFlagBits) noexcept;
-#endif
+    #endif
         const char *stringize(VkDescriptorPoolCreateFlagBits) noexcept;
         const char *stringize(VkAttachmentDescriptionFlagBits) noexcept;
         const char *stringize(VkAccessFlagBits) noexcept;
@@ -100,10 +100,10 @@ namespace magma
     #ifdef VK_EXT_fullscreen_exclusive
         const char *stringize(VkFullScreenExclusiveEXT) noexcept;
     #endif
-#ifdef VK_KHR_driver_properties
+    #ifdef VK_KHR_driver_properties
         const char *stringize(VkDriverIdKHR) noexcept;
-#endif
-#ifdef VK_NV_ray_tracing
+    #endif
+    #ifdef VK_NV_ray_tracing
         const char *stringize(VkRayTracingShaderGroupTypeNV) noexcept;
         const char *stringize(VkGeometryTypeNV) noexcept;
         const char *stringize(VkAccelerationStructureTypeNV) noexcept;
@@ -112,7 +112,7 @@ namespace magma
         const char *stringize(VkGeometryFlagBitsNV) noexcept;
         const char *stringize(VkGeometryInstanceFlagBitsNV) noexcept;
         const char *stringize(VkBuildAccelerationStructureFlagBitsNV) noexcept;
-#endif // VK_NV_ray_tracing
+    #endif // VK_NV_ray_tracing
 
         const char *stringize(SpvReflectResult) noexcept;
         const char *stringize(SpvReflectTypeFlagBits) noexcept;

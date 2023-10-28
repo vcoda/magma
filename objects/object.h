@@ -70,10 +70,11 @@ namespace magma
     /* Template object that provides getObjectType() getter. */
 
     template<class Type>
-    class TObject : public Object
+    class TObject :
     #ifdef MAGMA_X64
-        ,public ObjectType<Type> // Use custom template specialization
+        public ObjectType<Type>, // Use custom template specialization
     #endif
+        public Object
     {
     public:
         typedef Type NativeHandle;
@@ -91,10 +92,10 @@ namespace magma
         operator NativeHandle() const noexcept { return handle; }
 
     protected:
-    #if !defined(MAGMA_X64)
         // Additional storage is required under x86 target
         // as Vulkan non-dispatchable handles are defined as uint64_t
         // and thus cannot be used in custom template specialization.
+    #if !defined(MAGMA_X64)
         const VkObjectType objectType;
     #endif
         NativeHandle handle;

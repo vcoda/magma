@@ -46,7 +46,7 @@ inline void ImmediateRender::setRasterizationState(const RasterizationState& sta
         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT);
     if (lineRasterizationInfo)
         stippledLineState = lineRasterizationInfo->stippledLineEnable;
-#endif
+#endif // VK_EXT_line_rasterization
 }
 
 inline void ImmediateRender::setMultisampleState(const MultisampleState& state) noexcept

@@ -73,7 +73,7 @@ namespace magma
         MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Stream1, 1)
         MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Stream2, 2)
         MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Stream3, 3)
-    #endif
+    #endif // VK_NV_fill_rectangle
     } // namespace renderstate
 } // namespace magma
 #endif // VK_EXT_transform_feedback

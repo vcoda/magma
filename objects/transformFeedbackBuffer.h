@@ -20,13 +20,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-#ifdef VK_EXT_transform_feedback
     /* Transform feedback buffer to capture the primitives
        emitted by the graphics pipeline from SPIR-V outputs
        decorated for transform feedback. The captured data
        can be drawn again where the vertex count is derived
        from the byte counter without CPU intervention. */
 
+#ifdef VK_EXT_transform_feedback
     class TransformFeedbackBuffer : public Buffer
     {
     public:

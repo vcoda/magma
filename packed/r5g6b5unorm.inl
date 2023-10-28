@@ -26,7 +26,7 @@ inline R5g6b5Unorm::R5g6b5Unorm(float r, float g, float b) noexcept
     v = (((uint16_t)r & 0x1F) << 11) |
         (((uint16_t)g & 0x3F) << 5) |
         ((uint16_t)b & 0x1F);
-#endif // MAGMA_SSE
+#endif // MAGMA_NEON
 }
 
 inline R5g6b5Unorm::R5g6b5Unorm(uint8_t r, uint8_t g, uint8_t b) noexcept:

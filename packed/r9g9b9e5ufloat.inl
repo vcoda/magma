@@ -68,7 +68,7 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     gm = (uint32_t)std::roundf(g * scale);
     bm = (uint32_t)std::roundf(b * scale);
     e = (uint32_t)exp;
-#endif // MAGMA_SSE
+#endif // MAGMA_NEON
 }
 
 inline void R9g9b9e5Ufloat::unpack(float v[3]) const noexcept

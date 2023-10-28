@@ -111,7 +111,7 @@ namespace magma
     #ifdef VK_EXT_line_rasterization
         void setLineStipple(uint32_t stippleFactor,
             uint16_t stipplePattern) noexcept;
-    #endif
+    #endif // VK_EXT_line_rasterization
         void setDepthBias(float depthBiasConstantFactor,
             float depthBiasClamp,
             float depthBiasSlopeFactor) noexcept;
@@ -159,7 +159,7 @@ namespace magma
         void bindVertexBuffers(uint32_t firstBinding,
             const std::vector<std::shared_ptr<Buffer>>& vertexBuffers,
             std::vector<VkDeviceSize> offsets = {}) noexcept;
-#ifdef VK_EXT_transform_feedback
+    #ifdef VK_EXT_transform_feedback
         void bindTransformFeedbackBuffer(uint32_t firstBinding,
             const std::shared_ptr<TransformFeedbackBuffer>& transformFeedbackBuffer,
             VkDeviceSize offset = 0,
@@ -168,7 +168,7 @@ namespace magma
             const std::initializer_list<std::shared_ptr<TransformFeedbackBuffer>>& transformFeedbackBuffers,
             std::vector<VkDeviceSize> offsets = {},
             const std::initializer_list<VkDeviceSize>& sizes = {});
-#endif // VK_EXT_transform_feedback
+    #endif // VK_EXT_transform_feedback
 
         void draw(uint32_t vertexCount,
             uint32_t firstVertex = 0) const noexcept;
@@ -349,14 +349,14 @@ namespace magma
             uint32_t queryIndex) noexcept;
         void endQuery(const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex) noexcept;
-#ifdef VK_EXT_transform_feedback
+    #ifdef VK_EXT_transform_feedback
         void beginQueryIndexed(const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex,
             uint32_t vertexStream) noexcept;
         void endQueryIndexed(const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex,
             uint32_t vertexStream) noexcept;
-#endif // VK_EXT_transform_feedback
+    #endif // VK_EXT_transform_feedback
         void resetQueryPool(const std::shared_ptr<QueryPool>& queryPool,
             uint32_t firstQuery,
             uint32_t queryCount) noexcept;
@@ -403,18 +403,18 @@ namespace magma
             const std::vector<ClearValue>& clearValues = {},
             const VkRect2D& renderArea = {0, 0, 0, 0},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
-#ifdef VK_KHR_imageless_framebuffer
+    #ifdef VK_KHR_imageless_framebuffer
         void beginRenderPass(const std::shared_ptr<RenderPass>& renderPass,
             const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
             const std::vector<std::shared_ptr<ImageView>>& attachments,
             const std::vector<ClearValue>& clearValues = {},
             const VkRect2D& renderArea = {0, 0, 0, 0},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
-#endif // VK_KHR_imageless_framebuffer
+    #endif // VK_KHR_imageless_framebuffer
         void nextSubpass(VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void endRenderPass() noexcept;
 
-#ifdef VK_KHR_device_group
+    #ifdef VK_KHR_device_group
         void setDeviceMask(uint32_t deviceMask) noexcept;
         void dispatchBase(uint32_t baseGroupX,
             uint32_t baseGroupY,
@@ -430,7 +430,7 @@ namespace magma
             const std::vector<VkRect2D>& deviceRenderAreas = {},
             const std::vector<ClearValue>& clearValues = {},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
-#   ifdef VK_KHR_imageless_framebuffer
+    #ifdef VK_KHR_imageless_framebuffer
         void beginDeviceGroupRenderPass(uint32_t deviceMask,
             const std::shared_ptr<RenderPass>& renderPass,
             const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
@@ -438,17 +438,17 @@ namespace magma
             const std::vector<VkRect2D>& deviceRenderAreas = {},
             const std::vector<ClearValue>& clearValues = {},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
-#   endif // VK_KHR_imageless_framebuffer
-#endif // VK_KHR_device_group
+    #endif // VK_KHR_imageless_framebuffer
+    #endif // VK_KHR_device_group
 
-#ifdef VK_EXT_conditional_rendering
+    #ifdef VK_EXT_conditional_rendering
         void beginConditionalRendering(const std::shared_ptr<Buffer>& buffer,
             VkDeviceSize offset = 0,
             bool inverted = false) noexcept;
         void endConditionalRendering() noexcept;
-#endif // VK_EXT_conditional_rendering
+    #endif // VK_EXT_conditional_rendering
 
-#ifdef VK_EXT_transform_feedback
+    #ifdef VK_EXT_transform_feedback
         void beginTransformFeedback() noexcept;
         void endTransformFeedback() noexcept;
         void beginTransformFeedback(uint32_t firstCounterBuffer,
@@ -457,9 +457,9 @@ namespace magma
         void endTransformFeedback(uint32_t firstCounterBuffer,
             const std::initializer_list<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers,
             const std::initializer_list<VkDeviceSize>& counterBufferOffsets = {}) noexcept;
-#endif // VK_EXT_transform_feedback
+    #endif // VK_EXT_transform_feedback
 
-#ifdef VK_NV_ray_tracing
+    #ifdef VK_NV_ray_tracing
         void buildAccelerationStructure(const std::shared_ptr<Buffer>& instanceData,
             VkDeviceSize instanceOffset,
             bool update,
@@ -487,24 +487,24 @@ namespace magma
             uint32_t width,
             uint32_t height,
             uint32_t depth) noexcept;
-#endif // VK_NV_ray_tracing
+    #endif // VK_NV_ray_tracing
 
-#ifdef VK_EXT_debug_marker
+    #ifdef VK_EXT_debug_marker
         void beginDebugMarker(const char *name,
             uint32_t color) noexcept;
         void endDebugMarker() noexcept;
         void insertDebugMarker(const char *name,
             uint32_t color) noexcept;
-#endif // VK_EXT_debug_marker
+    #endif // VK_EXT_debug_marker
 
-#ifdef VK_EXT_debug_utils
+    #ifdef VK_EXT_debug_utils
         void beginDebugLabel(const char *name,
             uint32_t color) noexcept;
         void endDebugLabel() noexcept;
         void insertDebugLabel(
             const char *name,
             uint32_t color) noexcept;
-#endif // VK_EXT_debug_utils
+    #endif // VK_EXT_debug_utils
 
         const std::shared_ptr<CommandPool>& getCommandPool() const noexcept { return cmdPool; }
         const std::shared_ptr<Fence>& getFence() const noexcept { return fence; }
@@ -538,7 +538,7 @@ namespace magma
             uint32_t renderPassColor,
             const VkRect2D& renderArea = {0, 0, 0, 0},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
-#ifdef VK_KHR_imageless_framebuffer
+    #ifdef VK_KHR_imageless_framebuffer
         void beginRenderPass(const std::shared_ptr<RenderPass>& renderPass,
             const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
             const std::vector<std::shared_ptr<ImageView>>& attachments,
@@ -547,9 +547,9 @@ namespace magma
             uint32_t renderPassColor,
             const VkRect2D& renderArea = {0, 0, 0, 0},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
-#endif // VK_KHR_imageless_framebuffer
+    #endif // VK_KHR_imageless_framebuffer
 
-#ifdef VK_KHR_device_group
+    #ifdef VK_KHR_device_group
         bool beginDeviceGroup(uint32_t deviceMask,
             const char *blockName,
             uint32_t blockColor,
@@ -562,7 +562,7 @@ namespace magma
             const char *renderPassName,
             uint32_t renderPassColor,
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
-#   ifdef VK_KHR_imageless_framebuffer
+    #ifdef VK_KHR_imageless_framebuffer
         void beginDeviceGroupRenderPass(uint32_t deviceMask,
             const std::shared_ptr<RenderPass>& renderPass,
             const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
@@ -572,8 +572,8 @@ namespace magma
             const char *renderPassName,
             uint32_t renderPassColor,
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
-#   endif // VK_KHR_imageless_framebuffer
-#endif // VK_KHR_device_group
+    #endif // VK_KHR_imageless_framebuffer
+    #endif // VK_KHR_device_group
 
     protected:
         CommandBuffer(VkCommandBufferLevel level,

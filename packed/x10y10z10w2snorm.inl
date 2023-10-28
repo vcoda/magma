@@ -31,7 +31,7 @@ inline X10y10z10w2Snorm::X10y10z10w2Snorm(float x, float y, float z, uint32_t w 
         (((int32_t)z & 0x3FF) << 20) |
         (((int32_t)y & 0x3FF) << 10) |
         ((int32_t)x & 0x3FF);
-#endif // MAGMA_SSE
+#endif // MAGMA_NEON
 }
 } // namespace packed
 } // namespace magma

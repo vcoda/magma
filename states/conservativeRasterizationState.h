@@ -65,7 +65,7 @@ namespace magma
     #ifdef VK_NV_fill_rectangle
         MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Overestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT)
         MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Underestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT)
-    #endif
+    #endif // VK_NV_fill_rectangle
     } // namespace renderstate
 } // namespace magma
 #endif // VK_EXT_conservative_rasterization

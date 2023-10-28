@@ -29,7 +29,7 @@ inline B5g5r5a1Unorm::B5g5r5a1Unorm(float b, float g, float r, float a) noexcept
         (((uint16_t)g & 0x1F) << 6) |
         (((uint16_t)r & 0x1F) << 1) |
         ((uint16_t)a & 0x1);
-#endif
+#endif // MAGMA_NEON
 }
 
 inline B5g5r5a1Unorm::B5g5r5a1Unorm(uint8_t b, uint8_t g, uint8_t r, uint8_t a) noexcept:

@@ -30,7 +30,7 @@ inline R4g4b4a4Unorm::R4g4b4a4Unorm(float r, float g, float b, float a) noexcept
         (((uint16_t)g & 0xF) << 8) |
         (((uint16_t)b & 0xF) << 4) |
         ((uint16_t)a & 0xF);
-#endif // MAGMA_SSE
+#endif // MAGMA_NEON
 }
 
 inline R4g4b4a4Unorm::R4g4b4a4Unorm(uint8_t r, uint8_t g, uint8_t b, uint8_t a) noexcept:

@@ -50,9 +50,9 @@ namespace magma
 
     private:
         static std::shared_ptr<ICxxAllocator> allocator;
-#ifdef MAGMA_DEBUG
+    #ifdef MAGMA_DEBUG
         static std::atomic<int64_t> allocCount;
-#endif
+    #endif
     };
 } // namespace magma
 

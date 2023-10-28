@@ -82,18 +82,18 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain()) const;
     #endif // VK_EXT_descriptor_indexing
     #endif // VK_KHR_maintenance3
-#ifdef VK_KHR_device_group
+    #ifdef VK_KHR_device_group
         VkDeviceGroupPresentCapabilitiesKHR getDeviceGroupPresentCapabilitiesKHR() const;
         VkDeviceGroupPresentModeFlagsKHR getDeviceGroupSurfacePresentModes(std::shared_ptr<const Surface> surface) const;
-#   ifdef VK_EXT_full_screen_exclusive
+    #ifdef VK_EXT_full_screen_exclusive
         VkDeviceGroupPresentModeFlagsKHR getDeviceGroupSurfaceFullScreenExclusivePresentModes(std::shared_ptr<const Surface> surface,
             VkFullScreenExclusiveEXT fullScreenExclusive,
             void *hMonitor /* nullptr */) const;
-#   endif
+    #endif // VK_EXT_full_screen_exclusive
         VkPeerMemoryFeatureFlags getDeviceGroupPeerMemoryFeatures(uint32_t heapIndex,
             uint32_t localDeviceIndex,
             uint32_t remoteDeviceIndex) const;
-#endif // VK_KHR_device_group
+    #endif // VK_KHR_device_group
     #ifdef VK_EXT_calibrated_timestamps
         std::vector<uint64_t> getCalibratedTimestamps(const std::vector<VkTimeDomainEXT>& timeDomains,
             uint64_t *maxDeviation = nullptr) const;

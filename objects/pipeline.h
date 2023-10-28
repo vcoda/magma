@@ -68,7 +68,7 @@ namespace magma
         #ifdef VK_EXT_pipeline_creation_feedback
             VkPipelineCreationFeedbackEXT creationFeedback = {},
             const std::vector<VkPipelineCreationFeedbackEXT>& stageCreationFeedbacks = {},
-        #endif
+        #endif // VK_EXT_pipeline_creation_feedback
             hash_t hash = 0ull);
 
         const VkPipelineBindPoint bindPoint;

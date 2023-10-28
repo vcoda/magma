@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#ifdef VK_EXT_inline_uniform_block
 #include "descriptor.h"
 
 namespace magma
@@ -33,7 +34,6 @@ namespace magma
            constant data across multiple disjoint sets of drawing and
            dispatching commands. */
 
-    #ifdef VK_EXT_inline_uniform_block
         template<class UniformBlockType>
         class InlineUniformBlock : public Descriptor<VkWriteDescriptorSetInlineUniformBlockEXT>
         {
@@ -44,8 +44,8 @@ namespace magma
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
             InlineUniformBlock<UniformBlockType>& operator=(const UniformBlockType&) noexcept;
         };
-    #endif // VK_EXT_inline_uniform_block
     } // namespace descriptor
 } // namespace magma
 
 #include "inlineUniformBlock.inl"
+#endif // VK_EXT_inline_uniform_block
