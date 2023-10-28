@@ -57,13 +57,13 @@ constexpr hash_t hashArgs(const Type& arg, Args... args) noexcept
     return hashArg(hash(arg), args...);
 }
 
-template<typename T, std::size_t N>
+template<class T, std::size_t N>
 constexpr hash_t hashArray(const T (&arr)[N]) noexcept
 {
     return hashing::Fnv1a<T, N, N>().hash(arr);
 }
 
-template<typename T>
+template<class T>
 constexpr hash_t hashString(const T *str) noexcept
 {
     return hashing::string::Fnv1a<T, 0ull>().hash(str);

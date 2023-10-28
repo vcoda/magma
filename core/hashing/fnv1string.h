@@ -28,7 +28,7 @@ namespace magma
             {
                 /* FNV-1 hash algorithm for C string. */
 
-                template<typename T, std::size_t I>
+                template<class T, std::size_t I>
                 struct Fnv1
                 {
                     constexpr hash_t hash(const T *const str, const hash_t hash) noexcept
@@ -37,7 +37,7 @@ namespace magma
                     }
                 };
 
-                template<typename T>
+                template<class T>
                 struct Fnv1<T, 0>
                 {
                     constexpr hash_t hash(const T *const str, const std::size_t basis = fnv::basis) noexcept
@@ -46,7 +46,7 @@ namespace magma
                     }
                 };
 
-                template<typename T>
+                template<class T>
                 struct Fnv1<T, 1024>
                 {
                     constexpr hash_t hash(const T *const, const hash_t hash) noexcept
@@ -57,7 +57,7 @@ namespace magma
 
                 /* FNV-1a hash algorithm for C string. */
 
-                template<typename T, std::size_t I>
+                template<class T, std::size_t I>
                 struct Fnv1a
                 {
                     constexpr hash_t hash(const T *const str, const hash_t hash) noexcept
@@ -66,7 +66,7 @@ namespace magma
                     }
                 };
 
-                template<typename T>
+                template<class T>
                 struct Fnv1a<T, 0>
                 {
                     constexpr hash_t hash(const T *const str, const std::size_t basis = fnv::basis) noexcept
@@ -75,7 +75,7 @@ namespace magma
                     }
                 };
 
-                template<typename T>
+                template<class T>
                 struct Fnv1a<T, 1024>
                 {
                     constexpr hash_t hash(const T *const, const hash_t hash) noexcept

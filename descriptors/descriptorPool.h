@@ -97,7 +97,7 @@ namespace magma
         };
 
     #ifdef VK_EXT_inline_uniform_block
-        template<typename UniformBlockType>
+        template<class UniformBlockType>
         struct InlineUniformBlockPool : DescriptorPool
         {
             constexpr InlineUniformBlockPool() noexcept:

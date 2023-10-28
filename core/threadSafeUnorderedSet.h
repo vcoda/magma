@@ -23,7 +23,7 @@ namespace magma
     {
         /* Thread safe unordered set with some sugar. */
 
-        template<typename Type>
+        template<class Type>
         class ThreadSafeUnorderedSet : std::unordered_set<Type *>
         {
             typedef std::unordered_set<Type *> base;
@@ -50,7 +50,7 @@ namespace magma
                 return static_cast<uint32_t>(base::size());
             }
 
-            template<typename DerivedType>
+            template<class DerivedType>
             void forEach(const std::function<void(const DerivedType *obj)>& fn) const
             {
                 std::lock_guard<std::mutex> guard(mtx);

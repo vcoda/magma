@@ -106,7 +106,7 @@ namespace magma
         void setPrivateDataSlot(std::shared_ptr<PrivateDataSlot> privateDataSlot_) noexcept { privateDataSlot = privateDataSlot_; }
         std::shared_ptr<PrivateDataSlot> getPrivateDataSlot() const noexcept { return privateDataSlot.lock(); }
     #endif // VK_EXT_private_data
-        template<typename PhysicalDeviceFeatures>
+        template<class PhysicalDeviceFeatures>
         const PhysicalDeviceFeatures *getEnabledExtendedFeatures() const noexcept;
         bool extensionEnabled(const char *extensionName) const noexcept;
 

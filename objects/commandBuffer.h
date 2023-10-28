@@ -281,7 +281,7 @@ namespace magma
             VkDeviceSize dataSize,
             const void *data,
             VkDeviceSize offset = 0) const noexcept;
-        template<typename Type>
+        template<class Type>
         void updateBuffer(const std::shared_ptr<Buffer>& buffer,
             const std::vector<Type>& data,
             VkDeviceSize offset = 0) const noexcept;
@@ -363,36 +363,36 @@ namespace magma
         void writeTimestamp(VkPipelineStageFlagBits pipelineStage,
             const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex) noexcept;
-        template<typename Type>
+        template<class Type>
         void copyQueryResults(const std::shared_ptr<QueryPool>& queryPool,
             const std::shared_ptr<Buffer>& dstBuffer,
             bool wait,
             uint32_t firstQuery = 0,
             uint32_t queryCount = std::numeric_limits<uint32_t>::max(),
             VkDeviceSize dstOffset = 0) noexcept;
-        template<typename Type>
+        template<class Type>
         void copyQueryResultsWithAvailability(const std::shared_ptr<QueryPool>& queryPool,
             const std::shared_ptr<Buffer>& dstBuffer,
             uint32_t firstQuery = 0,
             uint32_t queryCount = std::numeric_limits<uint32_t>::max(),
             VkDeviceSize dstOffset = 0) noexcept;
 
-        template<typename Type>
+        template<class Type>
         void pushConstant(const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags,
             const Type& constant,
             uint32_t offset = 0) noexcept;
-        template<typename Type, uint32_t pushConstantCount>
+        template<class Type, uint32_t pushConstantCount>
         void pushConstants(const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags,
             const Type(&constants)[pushConstantCount],
             uint32_t offset = 0) noexcept;
-        template<typename Type>
+        template<class Type>
         void pushConstants(const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags,
             const std::vector<Type>& constants,
             uint32_t offset = 0) noexcept;
-        template<typename BlockType>
+        template<class BlockType>
         void pushConstantBlock(const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags,
             const BlockType& block,

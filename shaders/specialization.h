@@ -22,7 +22,7 @@ namespace magma
     struct SpecializationEntry : VkSpecializationMapEntry
     {
         SpecializationEntry() noexcept = default;
-        template<typename Block, typename Type>
+        template<class Block, class Type>
         SpecializationEntry(uint32_t index, Type Block::*member) noexcept;
     };
 

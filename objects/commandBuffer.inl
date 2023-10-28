@@ -373,7 +373,7 @@ inline void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, V
         (const uint32_t *)data); // Compatibility with old SDK
 }
 
-template<typename Type>
+template<class Type>
 inline void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, const std::vector<Type>& data,
     VkDeviceSize offset /* 0 */) const noexcept
 {
@@ -503,7 +503,7 @@ inline void CommandBuffer::writeTimestamp(VkPipelineStageFlagBits pipelineStage,
     vkCmdWriteTimestamp(handle, pipelineStage, *queryPool, queryIndex);
 }
 
-template<typename Type>
+template<class Type>
 void CommandBuffer::copyQueryResults(const std::shared_ptr<QueryPool>& /* queryPool */, const std::shared_ptr<Buffer>& /* dstBuffer */, bool /* wait */,
     uint32_t /* firstQuery */, uint32_t /* queryCount */, VkDeviceSize /* dstOffset */) noexcept
 {
@@ -531,7 +531,7 @@ inline void CommandBuffer::copyQueryResults<uint64_t>(const std::shared_ptr<Quer
     vkCmdCopyQueryPoolResults(handle, *queryPool, firstQuery, queryCount, *dstBuffer, dstOffset, sizeof(uint64_t), flags);
 }
 
-template<typename Type>
+template<class Type>
 inline void CommandBuffer::copyQueryResultsWithAvailability(const std::shared_ptr<QueryPool>& /* queryPool */, const std::shared_ptr<Buffer>& /* dstBuffer */,
     uint32_t /* firstQuery */, uint32_t /* queryCount */, VkDeviceSize /* dstOffset */) noexcept
 {
@@ -559,28 +559,28 @@ inline void CommandBuffer::copyQueryResultsWithAvailability<uint64_t>(const std:
     vkCmdCopyQueryPoolResults(handle, *queryPool, firstQuery, queryCount, *dstBuffer, dstOffset, sizeof(uint64_t) * 2, flags);
 }
 
-template<typename Type>
+template<class Type>
 inline void CommandBuffer::pushConstant(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const Type& constant,
     uint32_t offset /* 0 */) noexcept
 {
     vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type)), &constant);
 }
 
-template<typename Type, uint32_t pushConstantCount>
+template<class Type, uint32_t pushConstantCount>
 inline void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const Type(&constants)[pushConstantCount],
     uint32_t offset /* 0 */) noexcept
 {
     vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * pushConstantCount), constants);
 }
 
-template<typename Type>
+template<class Type>
 inline void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const std::vector<Type>& constants,
     uint32_t offset /* 0 */) noexcept
 {
     vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * constants.size()), constants.data());
 }
 
-template<typename BlockType>
+template<class BlockType>
 inline void CommandBuffer::pushConstantBlock(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const BlockType& block,
     uint32_t offset /* 0 */) noexcept
 {

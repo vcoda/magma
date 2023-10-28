@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    template<typename Type>
+    template<class Type>
     class NonDispatchable;
     class Device;
 
@@ -46,7 +46,7 @@ namespace magma
         VkDeviceSize countAllocatedAccelerationStructureMemory() const;
         bool hasAnyDeviceResource() const;
     #ifdef MAGMA_X64
-        template<typename Type>
+        template<class Type>
         core::ThreadSafeUnorderedSet<Type>& getPool();
     #endif
     private:
@@ -99,7 +99,7 @@ namespace magma
         core::ThreadSafeUnorderedSet<NonDispatchable<VkAccelerationStructureNV>> accelerationStructures;
 #endif
         mutable std::mutex mtx;
-        template<typename Type>
+        template<class Type>
         friend class NonDispatchable;
     };
 

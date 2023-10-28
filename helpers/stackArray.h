@@ -26,7 +26,7 @@ namespace magma
            multiple allocation in cycles/inlined functions, as
            allocated stack memory freed only when function returns. */
 
-        template<typename Type>
+        template<class Type>
         class StackArray final
         {
         public:

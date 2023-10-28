@@ -27,7 +27,7 @@ namespace magma
 {
 namespace helpers
 {
-template<typename Type>
+template<class Type>
 inline void mapRangeScoped(std::shared_ptr<Buffer> buffer,
     VkDeviceSize offset,
     VkDeviceSize size,
@@ -55,14 +55,14 @@ inline void mapRangeScoped(std::shared_ptr<Buffer> buffer,
     }
 }
 
-template<typename Type>
+template<class Type>
 inline void mapScoped(std::shared_ptr<Buffer> buffer,
     std::function<void(Type *data)> mapFn)
 {
     mapRangeScoped(std::move(buffer), 0, VK_WHOLE_SIZE, std::move(mapFn));
 }
 
-template<typename Type>
+template<class Type>
 inline void mapScoped(std::shared_ptr<UniformBuffer<Type>> uniformBuffer,
     std::function<void(typename UniformBuffer<Type>::UniformType *data)> mapFn)
 {
@@ -83,7 +83,7 @@ inline void mapScoped(std::shared_ptr<UniformBuffer<Type>> uniformBuffer,
     }
 }
 
-template<typename Type>
+template<class Type>
 inline void mapScoped(std::shared_ptr<UniformBuffer<Type>> uniformBuffer,
     std::function<void(UniformArray<Type>& array)> mapFn)
 {
@@ -105,7 +105,7 @@ inline void mapScoped(std::shared_ptr<UniformBuffer<Type>> uniformBuffer,
     }
 }
 
-template<typename Type>
+template<class Type>
 inline void mapScoped(std::shared_ptr<DynamicUniformBuffer<Type>> uniformBuffer,
     std::function<void(AlignedUniformArray<Type>& array)> mapFn)
 {
@@ -129,7 +129,7 @@ inline void mapScoped(std::shared_ptr<DynamicUniformBuffer<Type>> uniformBuffer,
     }
 }
 
-template<typename Type>
+template<class Type>
 inline void mapRangeScoped(std::shared_ptr<Image> image,
     VkDeviceSize offset,
     VkDeviceSize size,
@@ -157,7 +157,7 @@ inline void mapRangeScoped(std::shared_ptr<Image> image,
     }
 }
 
-template<typename Type>
+template<class Type>
 inline void mapScoped(std::shared_ptr<Image> image,
     std::function<void(Type *data)> mapFn)
 {

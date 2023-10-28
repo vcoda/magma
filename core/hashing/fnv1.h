@@ -43,7 +43,7 @@ namespace magma
 
             /* FNV-1 hash algorithm. */
 
-            template<typename T, std::size_t N, std::size_t I>
+            template<class T, std::size_t N, std::size_t I>
             struct Fnv1
             {
                 constexpr hash_t hash(const T (&a)[N]) noexcept
@@ -52,7 +52,7 @@ namespace magma
                 }
             };
 
-            template<typename T, std::size_t N>
+            template<class T, std::size_t N>
             struct Fnv1<T, N, 1>
             {
                 constexpr hash_t hash(const T (&a)[N]) noexcept
@@ -63,7 +63,7 @@ namespace magma
 
             /* The FNV-1a hash differs from the FNV-1 hash by only the order in which the multiply and xor is performed. */
 
-            template<typename T, std::size_t N, std::size_t I>
+            template<class T, std::size_t N, std::size_t I>
             struct Fnv1a
             {
                 constexpr hash_t hash(const T (&a)[N]) noexcept
@@ -72,7 +72,7 @@ namespace magma
                 }
             };
 
-            template<typename T, std::size_t N>
+            template<class T, std::size_t N>
             struct Fnv1a<T, N, 1>
             {
                 constexpr hash_t hash(const T (&a)[N]) noexcept

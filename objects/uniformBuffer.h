@@ -26,7 +26,7 @@ namespace magma
        shader stages. It is host visible so can be mapped
        by user to write uniform values. */
 
-    template<typename Type>
+    template<class Type>
     class UniformBuffer : public Buffer
     {
     public:
@@ -85,7 +85,7 @@ namespace magma
        by hardware requirements. To access elements of a buffer,
        iterator of AlignedUniformArray should be used. */
 
-    template<typename Type>
+    template<class Type>
     class DynamicUniformBuffer : public UniformBuffer<Type>
     {
     public:
@@ -145,6 +145,6 @@ namespace magma
         const VkDeviceSize alignment;
     };
 
-    template<typename Type> using UniformBufferPtr = std::shared_ptr<UniformBuffer<Type>>;
-    template<typename Type> using DynamicUniformBufferPtr = std::shared_ptr<DynamicUniformBuffer<Type>>;
+    template<class Type> using UniformBufferPtr = std::shared_ptr<UniformBuffer<Type>>;
+    template<class Type> using DynamicUniformBufferPtr = std::shared_ptr<DynamicUniformBuffer<Type>>;
 } // namespace magma
