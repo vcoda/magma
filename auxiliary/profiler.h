@@ -29,14 +29,13 @@ namespace magma
 
     namespace aux
     {
-        /* In-house GPU performance profiler.
-
+        /* Little GPU performance profiler.
            As GPU may perform out-of-order execution of commands,
            writing timestamps may introduce execution dependency
            on commands that were submitted inside profiling scope.
-           A preferred usage is to profile large render blocks to
-           avoid performance impact due to synchronizations inside
-           command list. */
+           A preferred usage is to profile large render blocks
+           to avoid performance impact due to synchronizations
+           inside command list. */
 
         class Profiler : public Base
         {

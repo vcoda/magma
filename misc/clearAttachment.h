@@ -20,11 +20,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Structure specifying a clear attachment. */
+
     struct ClearAttachment : VkClearAttachment
     {
         constexpr ClearAttachment() noexcept;
         constexpr ClearAttachment(VkImageAspectFlags aspectMask, uint32_t attachment) noexcept;
     };
+
+    /* Defines the attachment to clear and the clear value to use. */
 
     struct ColorClearAttachment : ClearAttachment
     {
