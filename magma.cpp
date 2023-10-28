@@ -39,7 +39,7 @@ namespace magma
     constexpr TesselationState eightControlPointsPatch(8);
     constexpr hash_t eightControlPointsPatchHash = eightControlPointsPatch.hash();
     // Rasterization state
-    constexpr hash_t fillCullBackCCwHash = renderstate::fillCullBackCCw.hash();
+    constexpr hash_t fillCullBackCcwHash = renderstate::fillCullBackCcw.hash();
     // Depth/stencil states
     constexpr hash_t depthLessOrEqualHash = renderstate::depthLessOrEqual.hash();
     constexpr hash_t stencilOneDepthPassHash = renderstate::stencilOneDepthPass.hash();
@@ -54,19 +54,19 @@ namespace magma
     constexpr hash_t multisampleFourHash = renderstate::multisampleFour.hash();
     // Extended states
 #ifdef VK_AMD_rasterization_order
-    constexpr hash_t fillCullNoneCCwStrictHash = renderstate::fillCullNoneCCwStrict.hash();
+    constexpr hash_t fillCullNoneCcwStrictHash = renderstate::fillCullNoneCcwStrict.hash();
 #endif
 #ifdef VK_EXT_conservative_rasterization
-    constexpr hash_t fillCullNoneCCwOverestimateHash = renderstate::fillCullNoneCCwOverestimate.hash();
+    constexpr hash_t fillCullNoneCcwOverestimateHash = renderstate::fillCullNoneCcwOverestimate.hash();
 #endif
 #ifdef VK_EXT_line_rasterization
     constexpr hash_t stippledLineBresenhamPatternAx2Hash = renderstate::stippledLineBresenhamPatternAx2.hash();
 #endif
 #ifdef VK_EXT_provoking_vertex
-    constexpr hash_t fillCullBackCCwProvokingFirstHash = renderstate::fillCullBackCCwProvokingFirst.hash();
+    constexpr hash_t fillCullBackCcwProvokingFirstHash = renderstate::fillCullBackCcwProvokingFirst.hash();
 #endif
 #ifdef VK_EXT_transform_feedback
-    constexpr hash_t fillCullNoneCCwStream1Hash = renderstate::fillCullNoneCCwStream1.hash();
+    constexpr hash_t fillCullNoneCcwStream1Hash = renderstate::fillCullNoneCcwStream1.hash();
 #endif
 #ifdef VK_EXT_blend_operation_advanced
     constexpr hash_t blendOverlayRgbaHash = blendstate::advanced::blendOverlayRgba.hash();
