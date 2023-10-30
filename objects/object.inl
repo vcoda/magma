@@ -41,8 +41,6 @@ inline TObject<Type>::TObject(VkObjectType objectType, std::shared_ptr<Device> d
     handle(VK_NULL_HANDLE)
 {
     MAGMA_UNUSED(objectType);
-    if (!device)
-        throw std::invalid_argument("invalid device argument");
 }
 
 template<class Type>
@@ -54,8 +52,6 @@ inline TObject<Type>::TObject(VkObjectType objectType, Type handle, std::shared_
     handle(handle)
 {
     MAGMA_UNUSED(objectType);
-    if (!device)
-        throw std::invalid_argument("invalid device argument");
 }
 
 template<class Type>
