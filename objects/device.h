@@ -131,7 +131,7 @@ namespace magma
         std::map<VkStructureType, const VkBaseInStructure *> extendedFeatures;
         std::unordered_map<uint64_t, uint64_t> privateData;
     #ifdef VK_EXT_private_data
-        std::weak_ptr<magma::PrivateDataSlot> privateDataSlot;
+        std::weak_ptr<PrivateDataSlot> privateDataSlot;
     #endif
         friend PhysicalDevice;
     };
