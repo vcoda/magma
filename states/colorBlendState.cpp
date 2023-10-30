@@ -23,21 +23,19 @@ namespace magma
 {
 MultiColorBlendState::MultiColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
     VkPipelineColorBlendStateCreateFlags flags /* 0 */,
-    const std::initializer_list<float>& blendConstants /* {1, 1, 1, 1} */) noexcept
+    const std::initializer_list<float>& blendConstants_ /* {1, 1, 1, 1} */) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     pNext = nullptr;
     flags = flags;
-    this->logicOpEnable = VK_FALSE;
-    this->logicOp = VK_LOGIC_OP_CLEAR;
+    logicOpEnable = VK_FALSE;
+    logicOp = VK_LOGIC_OP_CLEAR;
     attachmentCount = MAGMA_COUNT(attachments);
     pAttachments = core::copyArray<VkPipelineColorBlendAttachmentState>(attachments.data(), attachments.size());
-    MAGMA_ASSERT(blendConstants.size() >= 4);
-    const auto c = blendConstants.begin();
-    this->blendConstants[0] = c[0];
-    this->blendConstants[1] = c[1];
-    this->blendConstants[2] = c[2];
-    this->blendConstants[3] = c[3];
+    uint32_t i = 0;
+    MAGMA_ASSERT(blendConstants_.size() == 4);
+    for (float value: blendConstants_)
+        blendConstants[i++] = value;
 }
 
 MultiColorBlendState::MultiColorBlendState(const ColorBlendState& blendState) noexcept

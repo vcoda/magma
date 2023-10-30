@@ -31,7 +31,7 @@ DeviceFeatures::DeviceFeatures(std::shared_ptr<const Device> device) noexcept:
 DeviceFeatures::FormatFeaturesSupport DeviceFeatures::checkFormatFeaturesSupport(VkFormat format, const VkFormatFeatureFlags flags) const noexcept
 {
     FormatFeaturesSupport result = {};
-    if (std::shared_ptr<const Device> device = parent.lock())
+    if (auto device = parent.lock())
     {
         std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
         const VkFormatProperties properties = physicalDevice->getFormatProperties(format);
@@ -47,7 +47,7 @@ DeviceFeatures::FormatFeaturesSupport DeviceFeatures::checkFormatFeaturesSupport
 
 bool DeviceFeatures::checkImageUsageSupport(std::shared_ptr<const Surface> surface, VkImageUsageFlags flags)
 {
-    if (std::shared_ptr<const Device> device = parent.lock())
+    if (auto device = parent.lock())
     {
         std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
         const VkSurfaceCapabilitiesKHR surfaceCaps = physicalDevice->getSurfaceCapabilities(std::move(surface));
@@ -87,13 +87,14 @@ bool DeviceFeatures::maintenanceEnabled(uint8_t index) const noexcept
         'V','K','_','K','H','R','_','m','a','i','n','t','e','n','a','n','c','e',
         char('0' + index), '\0'
     };
-    std::shared_ptr<const Device> device = parent.lock();
-    return device->extensionEnabled(extensionName);
+    if (auto device = parent.lock())
+        return device->extensionEnabled(extensionName);
+    return false;
 }
 
 bool DeviceFeatures::negativeViewportHeightEnabled() const noexcept
 {
-    if (std::shared_ptr<const Device> device = parent.lock())
+    if (auto device = parent.lock())
     {
     #ifdef VK_KHR_maintenance1
         if (device->extensionEnabled(VK_KHR_MAINTENANCE1_EXTENSION_NAME))
@@ -111,7 +112,7 @@ bool DeviceFeatures::negativeViewportHeightEnabled() const noexcept
 bool DeviceFeatures::separateDepthStencilLayoutsEnabled() const noexcept
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts
-    if (std::shared_ptr<const Device> device = parent.lock())
+    if (auto device = parent.lock())
     {
         if (device->extensionEnabled(VK_KHR_SEPARATE_DEPTH_STENCIL_LAYOUTS_EXTENSION_NAME))
         {
@@ -128,7 +129,7 @@ bool DeviceFeatures::separateDepthStencilLayoutsEnabled() const noexcept
 bool DeviceFeatures::extendedLinesEnabled() const noexcept
 {
 #ifdef VK_EXT_line_rasterization
-    if (std::shared_ptr<const Device> device = parent.lock())
+    if (auto device = parent.lock())
     {
         if (device->extensionEnabled(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME))
         {
@@ -149,7 +150,7 @@ bool DeviceFeatures::extendedLinesEnabled() const noexcept
 bool DeviceFeatures::stippledLinesEnabled() const noexcept
 {
 #ifdef VK_EXT_line_rasterization
-    if (std::shared_ptr<const Device> device = parent.lock())
+    if (auto device = parent.lock())
     {
         if (device->extensionEnabled(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME))
         {
@@ -169,18 +170,18 @@ bool DeviceFeatures::stippledLinesEnabled() const noexcept
 
 bool DeviceFeatures::hasLocalHostVisibleMemory() const noexcept
 {
-    if (std::shared_ptr<const Device> device = parent.lock())
+    if (auto device = parent.lock())
     {
         std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
         const VkPhysicalDeviceMemoryProperties memoryProperties = physicalDevice->getMemoryProperties();
         for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
         {
             const VkMemoryType& memoryType = memoryProperties.memoryTypes[i];
-            const VkMemoryPropertyFlags deviceLocalHostVisibleFlags =
+            const VkMemoryPropertyFlags deviceLocalHostVisible =
                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
                 VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-            if ((memoryType.propertyFlags & deviceLocalHostVisibleFlags) == deviceLocalHostVisibleFlags)
+            if ((memoryType.propertyFlags & deviceLocalHostVisible) == deviceLocalHostVisible)
                 return true;
         }
     }

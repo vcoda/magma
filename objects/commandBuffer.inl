@@ -370,7 +370,7 @@ inline void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, V
        and then copy the data from the command buffer into dstBuffer
        when the command is executed on a device. */
     vkCmdUpdateBuffer(handle, *buffer, offset, dataSize,
-        (const uint32_t *)data); // Compatibility with old SDK
+        reinterpret_cast<const uint32_t *>(data)); // Compatibility with old SDK
 }
 
 template<class Type>
@@ -645,10 +645,10 @@ inline void CommandBuffer::endTransformFeedback() noexcept
 }
 #endif // VK_EXT_transform_feedback
 
-inline void CommandBuffer::enableOcclusionQuery(bool enable, VkQueryControlFlags queryFlags) noexcept
+inline void CommandBuffer::enableOcclusionQuery(bool enable, VkQueryControlFlags queryFlags_) noexcept
 {
     occlusionQueryEnable = MAGMA_BOOLEAN(enable);
-    this->queryFlags = queryFlags;
+    queryFlags = queryFlags_;
 }
 
 inline void CommandBuffer::enableConditionalRendering(bool enable) noexcept
@@ -656,14 +656,13 @@ inline void CommandBuffer::enableConditionalRendering(bool enable) noexcept
     conditionalRenderingEnable = MAGMA_BOOLEAN(enable);
 }
 
-inline void CommandBuffer::queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept
+inline void CommandBuffer::queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics_) noexcept
 {
-    this->pipelineStatistics = pipelineStatistics;
+    pipelineStatistics = pipelineStatistics_;
 }
 
 inline void CommandBuffer::onSubmit() noexcept
 {
-    const bool oneTimeSubmit = (VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT == usageFlags);
-    state = oneTimeSubmit ? State::Invalid : State::Pending;
+    state = (usageFlags & VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT) ? State::Invalid : State::Pending;
 }
 } // namespace magma
