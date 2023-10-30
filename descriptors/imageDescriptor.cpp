@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "imageDescriptor.h"
 #include "../objects/image.h"
-#include "../objects/sampler.h"
 #include "../misc/format.h"
 
 namespace magma
