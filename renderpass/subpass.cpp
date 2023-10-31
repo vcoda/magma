@@ -21,28 +21,35 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-SubpassDescription::SubpassDescription() noexcept
-{
-    flags = 0;
-    pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-    inputAttachmentCount = 0;
-    pInputAttachments = nullptr;
-    colorAttachmentCount = 0;
-    pColorAttachments = nullptr;
-    pResolveAttachments = nullptr;
-    pDepthStencilAttachment = nullptr;
-    preserveAttachmentCount = 0;
-    pPreserveAttachments = nullptr;
-}
+SubpassDescription::SubpassDescription() noexcept:
+    VkSubpassDescription{
+        0, // flags
+        VK_PIPELINE_BIND_POINT_GRAPHICS, // pipelineBindPoint
+        0, // inputAttachmentCount
+        nullptr, // pInputAttachments
+        0, // colorAttachmentCount
+        nullptr, // pColorAttachments
+        nullptr, // pResolveAttachments
+        nullptr, // pDepthStencilAttachment
+        0, // preserveAttachmentCount
+        nullptr // pPreserveAttachments
+    }
+{}
 
-inline SubpassDescription::SubpassDescription(VkPipelineBindPoint pipelineBindPoint) noexcept
-{
-    MAGMA_ASSERT(VK_PIPELINE_BIND_POINT_GRAPHICS == pipelineBindPoint);
-    flags = 0;
-    this->pipelineBindPoint = pipelineBindPoint;
-    inputAttachmentCount = 0;
-    pInputAttachments = nullptr;
-}
+SubpassDescription::SubpassDescription(VkPipelineBindPoint pipelineBindPoint) noexcept:
+    VkSubpassDescription{
+        0, // flags
+        pipelineBindPoint,
+        0, // inputAttachmentCount
+        nullptr, // pInputAttachments
+        0, // colorAttachmentCount
+        nullptr, // pColorAttachments
+        nullptr, // pResolveAttachments
+        nullptr, // pDepthStencilAttachment
+        0, // preserveAttachmentCount
+        nullptr // pPreserveAttachments
+    }
+{}
 
 SubpassDescription::SubpassDescription(VkImageLayout colorLayout) noexcept:
     SubpassDescription(VK_PIPELINE_BIND_POINT_GRAPHICS)
@@ -55,10 +62,6 @@ SubpassDescription::SubpassDescription(VkImageLayout colorLayout) noexcept:
         colorAttachmentCount = 1;
     }
     pColorAttachments = colorReference;
-    pResolveAttachments = nullptr;
-    pDepthStencilAttachment = nullptr;
-    preserveAttachmentCount = 0;
-    pPreserveAttachments = nullptr;
 }
 
 SubpassDescription::SubpassDescription(VkImageLayout colorLayout, VkImageLayout depthStencilLayout) noexcept:
@@ -75,7 +78,6 @@ SubpassDescription::SubpassDescription(VkImageLayout colorLayout, VkImageLayout 
         }
         pColorAttachments = colorReference;
     }
-    pResolveAttachments = nullptr;
     VkAttachmentReference *depthStencilReference = MAGMA_NEW VkAttachmentReference;
     if (depthStencilReference)
     {
@@ -83,8 +85,6 @@ SubpassDescription::SubpassDescription(VkImageLayout colorLayout, VkImageLayout 
         depthStencilReference->layout = depthStencilLayout;
     }
     pDepthStencilAttachment = depthStencilReference;
-    preserveAttachmentCount = 0;
-    pPreserveAttachments = nullptr;
 }
 
 SubpassDescription::SubpassDescription(const std::vector<VkImageLayout>& colorLayouts) noexcept:
@@ -95,7 +95,7 @@ SubpassDescription::SubpassDescription(const std::vector<VkImageLayout>& colorLa
         VkAttachmentReference *colorReferences = MAGMA_NEW VkAttachmentReference[colorLayouts.size()];
         if (colorReferences)
         {
-            for (auto layout : colorLayouts)
+            for (auto layout: colorLayouts)
             {
                 colorReferences[colorAttachmentCount].attachment = colorAttachmentCount;
                 colorReferences[colorAttachmentCount].layout = layout;
@@ -104,10 +104,6 @@ SubpassDescription::SubpassDescription(const std::vector<VkImageLayout>& colorLa
         }
         pColorAttachments = colorReferences;
     }
-    pResolveAttachments = nullptr;
-    pDepthStencilAttachment = nullptr;
-    preserveAttachmentCount = 0;
-    pPreserveAttachments = nullptr;
 }
 
 SubpassDescription::SubpassDescription(const std::vector<VkImageLayout>& colorLayouts, const VkImageLayout& depthStencilLayout) noexcept:
@@ -124,32 +120,48 @@ SubpassDescription::SubpassDescription(const std::vector<VkImageLayout>& colorLa
 
 SubpassDescription::SubpassDescription(const SubpassDescription& other) noexcept
 {
-    core::copy(this, &other);
-    if (other.pColorAttachments)
-        pColorAttachments = core::copyArray(other.pColorAttachments, colorAttachmentCount);
-    if (other.pDepthStencilAttachment)
-        pDepthStencilAttachment = core::copy(other.pDepthStencilAttachment);
+    flags = other.flags;
+    pipelineBindPoint = other.pipelineBindPoint;
+    inputAttachmentCount = other.inputAttachmentCount;
+    pInputAttachments = core::copyArray(other.pInputAttachments, other.inputAttachmentCount);
+    colorAttachmentCount = other.colorAttachmentCount;
+    pColorAttachments = core::copyArray(other.pColorAttachments, other.colorAttachmentCount);
+    pResolveAttachments = core::copyArray(other.pResolveAttachments, other.colorAttachmentCount);
+    pDepthStencilAttachment = core::copy(other.pDepthStencilAttachment);
+    preserveAttachmentCount = other.preserveAttachmentCount;
+    pPreserveAttachments = core::copyArray(other.pPreserveAttachments, other.preserveAttachmentCount);
 }
 
 SubpassDescription& SubpassDescription::operator=(const SubpassDescription& other) noexcept
 {
     if (this != &other)
     {
+        flags = other.flags;
+        pipelineBindPoint = other.pipelineBindPoint;
+        inputAttachmentCount = other.inputAttachmentCount;
+        delete[] pInputAttachments;
+        pInputAttachments = core::copyArray(other.pInputAttachments, other.inputAttachmentCount);
+        colorAttachmentCount = other.colorAttachmentCount;
         delete[] pColorAttachments;
+        pColorAttachments = core::copyArray(other.pColorAttachments, other.colorAttachmentCount);
+        delete[] pResolveAttachments;
+        pResolveAttachments = core::copyArray(other.pResolveAttachments, other.colorAttachmentCount);
         delete pDepthStencilAttachment;
-        core::copy(this, &other);
-        if (other.pColorAttachments)
-            pColorAttachments = core::copyArray(other.pColorAttachments, colorAttachmentCount);
-        if (other.pDepthStencilAttachment)
-            pDepthStencilAttachment = core::copy(other.pDepthStencilAttachment);
+        pDepthStencilAttachment = core::copy(other.pDepthStencilAttachment);
+        preserveAttachmentCount = other.preserveAttachmentCount;
+        delete[] pPreserveAttachments;
+        pPreserveAttachments = core::copyArray(other.pPreserveAttachments, other.preserveAttachmentCount);
     }
     return *this;
 }
 
 SubpassDescription::~SubpassDescription()
 {
+    delete[] pInputAttachments;
     delete[] pColorAttachments;
+    delete[] pResolveAttachments;
     delete pDepthStencilAttachment;
+    delete[] pPreserveAttachments;
 }
 
 hash_t SubpassDescription::getHash() const noexcept
@@ -174,7 +186,8 @@ hash_t SubpassDescription::getHash() const noexcept
             hash = core::hashCombine(hash, core::hashArgs(
                 pColorAttachments[i].attachment,
                 pColorAttachments[i].layout));
-        } else if (pResolveAttachments)
+        }
+        else if (pResolveAttachments)
         {
             hash = core::hashCombine(hash, core::hashArgs(
                 pResolveAttachments[i].attachment,
