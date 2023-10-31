@@ -111,7 +111,7 @@ namespace magma
             RasterizationState rasterizationState;
             MultisampleState multisampleState;
             DepthStencilState depthStencilState;
-            MultiColorBlendState colorBlendState;
+            ColorMultiBlendState colorBlendState;
             VkBool32 stippledLineState;
             float lineWidth = 1.f;
             uint32_t lineStippleFactor = 1;

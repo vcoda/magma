@@ -26,10 +26,30 @@ constexpr ColorBlendState::ColorBlendState(const ColorBlendAttachmentState& atta
         logicOp,
         1, // attachmentCount
         &attachment,
-        {blendConstants.begin()[0],
-         blendConstants.begin()[1],
-         blendConstants.begin()[2],
-         blendConstants.begin()[3]}
+        {
+            blendConstants.begin()[0],
+            blendConstants.begin()[1],
+            blendConstants.begin()[2],
+            blendConstants.begin()[3]
+        }
+    }
+{}
+
+constexpr ColorBlendState::ColorBlendState(const ColorBlendState& other) noexcept:
+    VkPipelineColorBlendStateCreateInfo{
+        VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
+        other.pNext,
+        other.flags,
+        other.logicOpEnable,
+        other.logicOp,
+        other.attachmentCount,
+        other.pAttachments,
+        {
+            other.blendConstants[0],
+            other.blendConstants[1],
+            other.blendConstants[2],
+            other.blendConstants[3],
+        }
     }
 {}
 

@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-MultiColorBlendState::MultiColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
+ColorMultiBlendState::ColorMultiBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
     VkPipelineColorBlendStateCreateFlags flags /* 0 */,
     const std::initializer_list<float>& blendConstants_ /* {1, 1, 1, 1} */) noexcept
 {
@@ -34,41 +34,16 @@ MultiColorBlendState::MultiColorBlendState(const std::vector<ColorBlendAttachmen
         blendConstants[i++] = value;
 }
 
-MultiColorBlendState::MultiColorBlendState(const ColorBlendState& other) noexcept
+ColorMultiBlendState::ColorMultiBlendState(const ColorBlendState& other) noexcept:
+    ColorBlendState(other)
 {
-    sType = other.sType;
-    pNext = other.pNext;
-    flags = other.flags;
-    logicOpEnable = other.logicOpEnable;
-    logicOp = other.logicOp;
-    attachmentCount = other.attachmentCount;
     pAttachments = core::copyArray(other.pAttachments, other.attachmentCount);
-    blendConstants[0] = other.blendConstants[0];
-    blendConstants[1] = other.blendConstants[1];
-    blendConstants[2] = other.blendConstants[2];
-    blendConstants[3] = other.blendConstants[3];
 }
 
-MultiColorBlendState::MultiColorBlendState(const MultiColorBlendState& other) noexcept
-{
-    sType = other.sType;
-    pNext = other.pNext;
-    flags = other.flags;
-    logicOpEnable = other.logicOpEnable;
-    logicOp = other.logicOp;
-    attachmentCount = other.attachmentCount;
-    pAttachments = core::copyArray(other.pAttachments, other.attachmentCount);
-    blendConstants[0] = other.blendConstants[0];
-    blendConstants[1] = other.blendConstants[1];
-    blendConstants[2] = other.blendConstants[2];
-    blendConstants[3] = other.blendConstants[3];
-}
-
-MultiColorBlendState& MultiColorBlendState::operator=(const MultiColorBlendState& other) noexcept
+ColorMultiBlendState& ColorMultiBlendState::operator=(const ColorMultiBlendState& other) noexcept
 {
     if (this != &other)
     {
-        sType = other.sType;
         pNext = other.pNext;
         flags = other.flags;
         logicOpEnable = other.logicOpEnable;
@@ -84,12 +59,12 @@ MultiColorBlendState& MultiColorBlendState::operator=(const MultiColorBlendState
     return *this;
 }
 
-MultiColorBlendState::~MultiColorBlendState()
+ColorMultiBlendState::~ColorMultiBlendState()
 {
     delete[] pAttachments;
 }
 
-hash_t MultiColorBlendState::hash() const noexcept
+hash_t ColorMultiBlendState::hash() const noexcept
 {
     hash_t hash = core::hashArgs(
         sType,
@@ -116,7 +91,7 @@ hash_t MultiColorBlendState::hash() const noexcept
         blendConstants[3]));
 }
 
-bool MultiColorBlendState::operator==(const MultiColorBlendState& other) const noexcept
+bool ColorMultiBlendState::operator==(const ColorMultiBlendState& other) const noexcept
 {
     return (flags == other.flags) &&
         (logicOpEnable == other.logicOpEnable) &&

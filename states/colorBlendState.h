@@ -34,6 +34,7 @@ namespace magma
             VkLogicOp logicOp = VK_LOGIC_OP_CLEAR,
             VkPipelineColorBlendStateCreateFlags flags = 0,
             const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f}) noexcept;
+        constexpr ColorBlendState(const ColorBlendState&) noexcept;
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const ColorBlendState&) const noexcept;
     };
@@ -42,17 +43,16 @@ namespace magma
        about array of blend attachment states and thereof
        is copyable, but not constexpr-constructible. */
 
-    struct MultiColorBlendState final : ColorBlendState
+    struct ColorMultiBlendState final : ColorBlendState
     {
-        explicit MultiColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
+        explicit ColorMultiBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
             VkPipelineColorBlendStateCreateFlags flags = 0,
             const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f}) noexcept;
-        MultiColorBlendState(const ColorBlendState&) noexcept;
-        MultiColorBlendState(const MultiColorBlendState&) noexcept;
-        MultiColorBlendState& operator=(const MultiColorBlendState&) noexcept;
-        ~MultiColorBlendState();
+        ColorMultiBlendState(const ColorBlendState&) noexcept;
+        ColorMultiBlendState& operator=(const ColorMultiBlendState&) noexcept;
+        ~ColorMultiBlendState();
         hash_t hash() const noexcept;
-        bool operator==(const MultiColorBlendState&) const noexcept;
+        bool operator==(const ColorMultiBlendState&) const noexcept;
     };
 } // namespace magma
 
