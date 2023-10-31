@@ -24,30 +24,39 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 DeviceQueueDescriptor::DeviceQueueDescriptor(std::shared_ptr<const PhysicalDevice> device,
-    VkQueueFlagBits queueType, const std::vector<float>& queuePriorities /* 1 */)
-{
-    MAGMA_ASSERT_FOR_EACH(queuePriorities, priority, (priority >= 0.f) && (priority <= 1.f));
-    sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-    pNext = nullptr;
-    flags = 0;
-    queueFamilyIndex = chooseFamilyIndex(queueType, device->getQueueFamilyProperties());
-    queueCount = MAGMA_COUNT(queuePriorities);
-    pQueuePriorities = core::copyVector(queuePriorities);
-}
+    VkQueueFlagBits queueType, const std::vector<float>& queuePriorities /* 1 */):
+    VkDeviceQueueCreateInfo{
+        VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
+        nullptr, // pNext,
+        0, // flags
+        chooseFamilyIndex(queueType, device->getQueueFamilyProperties()),
+        MAGMA_COUNT(queuePriorities),
+        core::copyVector(queuePriorities)
+    }
+{}
 
-DeviceQueueDescriptor::DeviceQueueDescriptor(const DeviceQueueDescriptor& other)
-{
-    core::copy(this, &other);
-    pQueuePriorities = core::copyArray(other.pQueuePriorities, queueCount);
-}
+DeviceQueueDescriptor::DeviceQueueDescriptor(const DeviceQueueDescriptor& other):
+    VkDeviceQueueCreateInfo{
+        other.sType,
+        other.pNext,
+        other.flags,
+        other.queueFamilyIndex,
+        other.queueCount,
+        core::copyArray(other.pQueuePriorities, other.queueCount)
+    }
+{}
 
 DeviceQueueDescriptor& DeviceQueueDescriptor::operator=(const DeviceQueueDescriptor& other)
 {
     if (this != &other)
     {
+        sType = other.sType;
+        pNext = other.pNext;
+        flags = other.flags;
+        queueFamilyIndex = other.queueFamilyIndex;
+        queueCount = other.queueCount;
         delete[] pQueuePriorities;
-        core::copy(this, &other);
-        pQueuePriorities = core::copyArray(other.pQueuePriorities, queueCount);
+        pQueuePriorities = core::copyArray(other.pQueuePriorities, other.queueCount);
     }
     return *this;
 }
