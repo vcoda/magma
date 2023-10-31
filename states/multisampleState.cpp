@@ -24,34 +24,40 @@ namespace magma
 MultisampleCoverageState::MultisampleCoverageState(const MultisampleState& state,
     uint64_t coverageMask,
     bool alphaToCoverage /* false */,
-    bool alphaToOne /* false */):
+    bool alphaToOne /* false */) noexcept:
     MultisampleState(state.rasterizationSamples)
 {   // The array is sized to a length of [rasterizationSamples/32] words
-    VkSampleMask *sampleMask = new VkSampleMask[rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1];
-    sampleMask[0] = coverageMask & 0xFFFFFFFFULL;
-    if (rasterizationSamples > VK_SAMPLE_COUNT_32_BIT)
-        sampleMask[1] = (coverageMask >> VK_SAMPLE_COUNT_32_BIT) & 0xFFFFFFFFULL;
-    pSampleMask = sampleMask;
+    VkSampleMask *sampleMask = MAGMA_NEW VkSampleMask[rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1];
+    if (sampleMask)
+    {
+        sampleMask[0] = coverageMask & 0xFFFFFFFFULL;
+        if (rasterizationSamples > VK_SAMPLE_COUNT_32_BIT)
+            sampleMask[1] = (coverageMask >> VK_SAMPLE_COUNT_32_BIT) & 0xFFFFFFFFULL;
+        pSampleMask = sampleMask;
+    }
     alphaToCoverageEnable = MAGMA_BOOLEAN(alphaToCoverage);
     alphaToOneEnable = MAGMA_BOOLEAN(alphaToOne);
 }
 
 MultisampleCoverageState::MultisampleCoverageState(const MultisampleCoverageState& other) noexcept:
-    MultisampleState(other.rasterizationSamples)
+    MultisampleState(other)
 {
-    pSampleMask = core::copyArray(other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1);
-    alphaToCoverageEnable = other.alphaToCoverageEnable;
-    alphaToOneEnable = other.alphaToOneEnable;
+    pSampleMask = core::copyArray(other.pSampleMask, other.rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1);
 }
 
 MultisampleCoverageState& MultisampleCoverageState::operator=(const MultisampleCoverageState& other) noexcept
 {
     if (this != &other)
     {
+        pNext = other.pNext;
+        flags = other.flags;
+        rasterizationSamples = other.rasterizationSamples;
+        sampleShadingEnable = other.sampleShadingEnable;
+        minSampleShading = other.minSampleShading;
         delete[] pSampleMask;
-        core::copy(this, &other);
-        if (other.pSampleMask)
-            pSampleMask = core::copyArray(other.pSampleMask, rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1);
+        pSampleMask = core::copyArray(other.pSampleMask, other.rasterizationSamples > VK_SAMPLE_COUNT_32_BIT ? 2 : 1);
+        alphaToCoverageEnable = other.alphaToCoverageEnable;
+        alphaToOneEnable = other.alphaToOneEnable;
     }
     return *this;
 }

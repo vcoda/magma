@@ -54,7 +54,7 @@ namespace magma
         explicit MultisampleCoverageState(const MultisampleState& state,
             uint64_t coverageMask,
             bool alphaToCoverage = false,
-            bool alphaToOne = false);
+            bool alphaToOne = false) noexcept;
         MultisampleCoverageState(const MultisampleCoverageState&) noexcept;
         MultisampleCoverageState& operator=(const MultisampleCoverageState&) noexcept;
         ~MultisampleCoverageState();
