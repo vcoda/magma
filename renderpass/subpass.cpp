@@ -208,7 +208,7 @@ hash_t SubpassDescription::getHash() const noexcept
     return hash;
 }
 
-namespace subpasses
+namespace subpass
 {
 const SubpassDescription colorAttachment(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
 const SubpassDescription colorDepthStencilAttachment(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
@@ -233,5 +233,5 @@ const SubpassDescription stencilAttachment(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_L
 const SubpassDescription depthReadOnly(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL_KHR);
 const SubpassDescription stencilReadOnly(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL_KHR);
 #endif // VK_KHR_separate_depth_stencil_layouts
-} // namespace subpasses
+} // namespace subpass
 } // namespace magma
