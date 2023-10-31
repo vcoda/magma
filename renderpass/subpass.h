@@ -29,7 +29,7 @@ namespace magma
        written by the subpass but whose contents must be preserved
        throughout the subpass. */
 
-    struct SubpassDescription : VkSubpassDescription
+    struct SubpassDescription final : VkSubpassDescription
     {
         SubpassDescription() noexcept;
         explicit SubpassDescription(VkImageLayout colorLayout) noexcept;
