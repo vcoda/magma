@@ -25,11 +25,7 @@ MultiColorBlendState::MultiColorBlendState(const std::vector<ColorBlendAttachmen
     VkPipelineColorBlendStateCreateFlags flags /* 0 */,
     const std::initializer_list<float>& blendConstants_ /* {1, 1, 1, 1} */) noexcept
 {
-    sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-    pNext = nullptr;
     flags = flags;
-    logicOpEnable = VK_FALSE;
-    logicOp = VK_LOGIC_OP_CLEAR;
     attachmentCount = MAGMA_COUNT(attachments);
     pAttachments = core::copyArray<VkPipelineColorBlendAttachmentState>(attachments.data(), attachments.size());
     uint32_t i = 0;
@@ -38,34 +34,52 @@ MultiColorBlendState::MultiColorBlendState(const std::vector<ColorBlendAttachmen
         blendConstants[i++] = value;
 }
 
-MultiColorBlendState::MultiColorBlendState(const ColorBlendState& blendState) noexcept
+MultiColorBlendState::MultiColorBlendState(const ColorBlendState& other) noexcept
 {
-    sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-    pNext = nullptr;
-    flags = blendState.flags;
-    logicOpEnable = blendState.logicOpEnable;
-    logicOp = blendState.logicOp;
-    attachmentCount = blendState.attachmentCount;
-    pAttachments = core::copyArray(blendState.pAttachments, blendState.attachmentCount);
-    blendConstants[0] = blendState.blendConstants[0];
-    blendConstants[1] = blendState.blendConstants[1];
-    blendConstants[2] = blendState.blendConstants[2];
-    blendConstants[3] = blendState.blendConstants[3];
+    sType = other.sType;
+    pNext = other.pNext;
+    flags = other.flags;
+    logicOpEnable = other.logicOpEnable;
+    logicOp = other.logicOp;
+    attachmentCount = other.attachmentCount;
+    pAttachments = core::copyArray(other.pAttachments, other.attachmentCount);
+    blendConstants[0] = other.blendConstants[0];
+    blendConstants[1] = other.blendConstants[1];
+    blendConstants[2] = other.blendConstants[2];
+    blendConstants[3] = other.blendConstants[3];
 }
 
 MultiColorBlendState::MultiColorBlendState(const MultiColorBlendState& other) noexcept
 {
-    core::copy(this, &other);
-    pAttachments = core::copyArray(other.pAttachments, attachmentCount);
+    sType = other.sType;
+    pNext = other.pNext;
+    flags = other.flags;
+    logicOpEnable = other.logicOpEnable;
+    logicOp = other.logicOp;
+    attachmentCount = other.attachmentCount;
+    pAttachments = core::copyArray(other.pAttachments, other.attachmentCount);
+    blendConstants[0] = other.blendConstants[0];
+    blendConstants[1] = other.blendConstants[1];
+    blendConstants[2] = other.blendConstants[2];
+    blendConstants[3] = other.blendConstants[3];
 }
 
 MultiColorBlendState& MultiColorBlendState::operator=(const MultiColorBlendState& other) noexcept
 {
     if (this != &other)
     {
+        sType = other.sType;
+        pNext = other.pNext;
+        flags = other.flags;
+        logicOpEnable = other.logicOpEnable;
+        logicOp = other.logicOp;
+        attachmentCount = other.attachmentCount;
         delete[] pAttachments;
-        core::copy(this, &other);
-        pAttachments = core::copyArray(other.pAttachments, attachmentCount);
+        pAttachments = core::copyArray(other.pAttachments, other.attachmentCount);
+        blendConstants[0] = other.blendConstants[0];
+        blendConstants[1] = other.blendConstants[1];
+        blendConstants[2] = other.blendConstants[2];
+        blendConstants[3] = other.blendConstants[3];
     }
     return *this;
 }
