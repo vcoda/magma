@@ -32,11 +32,11 @@ namespace magma
     struct SubpassDescription : VkSubpassDescription
     {
         SubpassDescription() noexcept;
-        SubpassDescription(VkImageLayout colorLayout) noexcept;
-        SubpassDescription(VkImageLayout colorLayout,
+        explicit SubpassDescription(VkImageLayout colorLayout) noexcept;
+        explicit SubpassDescription(VkImageLayout colorLayout,
             VkImageLayout depthStencilLayout) noexcept;
-        SubpassDescription(const std::vector<VkImageLayout>& colorLayouts) noexcept;
-        SubpassDescription(const std::vector<VkImageLayout>& colorLayouts,
+        explicit SubpassDescription(const std::vector<VkImageLayout>& colorLayouts) noexcept;
+        explicit SubpassDescription(const std::vector<VkImageLayout>& colorLayouts,
             const VkImageLayout& depthStencilLayout) noexcept;
         SubpassDescription(const SubpassDescription&) noexcept;
         SubpassDescription& operator=(const SubpassDescription&) noexcept;
