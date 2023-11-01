@@ -44,9 +44,7 @@ namespace magma
                 const char *name;
                 uint32_t frameIndex;
                 uint32_t beginQuery;
-                Section(const char *name,
-                    uint32_t frameIndex,
-                    uint32_t beginQuery);
+                Section(const char *, uint32_t, uint32_t) noexcept;
             };
 
         public:
@@ -102,7 +100,7 @@ namespace magma
             const char *name;
             uint32_t frameIndex;
             double time; // In nanoseconds
-            Sample(const char *, uint32_t, double);
+            Sample(const char *, uint32_t, double) noexcept;
         };
 
         /* Performance profiler for graphics queue. */
