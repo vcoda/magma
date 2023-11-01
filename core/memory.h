@@ -26,12 +26,13 @@ namespace core
 template<class Type>
 inline Type *copy(const Type *src) noexcept
 {
-    MAGMA_ASSERT(src);
-    if (!src)
-        return nullptr;
-    Type *dst = MAGMA_NEW Type();
-    if (dst)
-        memcpy(dst, src, sizeof(Type));
+    Type *dst = nullptr;
+    if (src)
+    {
+        dst = MAGMA_NEW Type();
+        if (dst)
+            memcpy(dst, src, sizeof(Type));
+    }
     return dst;
 }
 
@@ -48,66 +49,75 @@ inline void copy(Type *dst, const Type *src) noexcept
 template<class Type>
 inline Type *copyArray(const Type *src, std::size_t size) noexcept
 {
-    MAGMA_ASSERT(src);
-    MAGMA_ASSERT(size);
-    if (!src || (0 == size))
-        return nullptr;
-    Type *dst = MAGMA_NEW Type[size];
-    if (dst)
-        memcpy(dst, src, sizeof(Type) * size);
+    Type *dst = nullptr;
+    if (src && size)
+    {
+        dst = MAGMA_NEW Type[size];
+        if (dst)
+            memcpy(dst, src, sizeof(Type) * size);
+    }
     return dst;
 }
 
 template<class Type>
 inline Type *copyVector(const std::vector<Type>& src) noexcept
 {
-    MAGMA_ASSERT(!src.empty());
-    if (src.empty())
-        return nullptr;
-    const std::size_t size = src.size();
-    Type *dst = MAGMA_NEW Type[size];
-    if (dst)
-        memcpy(dst, src.data(), sizeof(Type) * size);
+    Type *dst = nullptr;
+    if (std::size_t size = src.size())
+    {
+        dst = MAGMA_NEW Type[size];
+        if (dst)
+            memcpy(dst, src.data(), sizeof(Type) * size);
+    }
     return dst;
 }
 
-template<class Dst, class Src>
-inline Dst *copyVector(const std::vector<Src>& src) noexcept
+template<class DstType, class SrcType>
+inline DstType *copyVector(const std::vector<SrcType>& src) noexcept
 {
-    static_assert(sizeof(Dst) == sizeof(Src), "type size mismatch");
-    if (src.empty())
-        return nullptr;
-    const std::size_t size = src.size();
-    Dst *dst = MAGMA_NEW Dst[size];
-    if (dst)
-        memcpy(dst, src.data(), sizeof(Src) * size);
+    static_assert(sizeof(DstType) == sizeof(SrcType), "type size mismatch");
+    DstType *dst = nullptr;
+    if (std::size_t size = src.size())
+    {
+        dst = MAGMA_NEW DstType[size];
+        if (dst)
+            memcpy(dst, src.data(), sizeof(SrcType) * size);
+    }
     return dst;
 }
 
 template<class Type>
 inline Type *copyInitializerList(const std::initializer_list<Type>& src) noexcept
 {
-    const std::size_t size = src.size();
-    MAGMA_ASSERT(size);
-    if (0 == size)
-        return nullptr;
-    Type *dst = MAGMA_NEW Type[size];
-    if (dst)
-        memcpy(dst, src.begin(), sizeof(Type) * size);
+    Type *dst = nullptr;
+    if (std::size_t size = src.size())
+    {
+        dst = MAGMA_NEW Type[size];
+        if (dst)
+        {
+            Type *elem = dst;
+            for (const Type& value: src)
+                *elem++ = value;
+        }
+    }
     return dst;
 }
 
-template<class Dst, class Src>
-inline Dst *copyInitializerList(const std::initializer_list<Src>& src) noexcept
+template<class DstType, class SrcType>
+inline DstType *copyInitializerList(const std::initializer_list<SrcType>& src) noexcept
 {
-    static_assert(sizeof(Dst) == sizeof(Src), "type size mismatch");
-    const std::size_t size = src.size();
-    MAGMA_ASSERT(size);
-    if (0 == size)
-        return nullptr;
-    Dst *dst = MAGMA_NEW Dst[size];
-    if (dst)
-        memcpy(dst, src.begin(), sizeof(Src) * size);
+    static_assert(sizeof(DstType) == sizeof(SrcType), "type size mismatch");
+    DstType *dst = nullptr;
+    if (std::size_t size = src.size())
+    {
+        dst = MAGMA_NEW DstType[size];
+        if (dst)
+        {
+            DstType *elem = dst;
+            for (const SrcType& value: src)
+                memcpy(elem++, &value, sizeof(SrcType));
+        }
+    }
     return dst;
 }
 
@@ -132,9 +142,13 @@ inline char *copyString(const char *src) noexcept
 
 inline void *copyBinaryData(const void *src, std::size_t size) noexcept
 {
-    void *dst = MAGMA_NEW char[size];
-    if (dst)
-        memcpy(dst, src, size);
+    void *dst = nullptr;
+    if (src && size)
+    {
+        dst = MAGMA_NEW char[size];
+        if (dst)
+            memcpy(dst, src, size);
+    }
     return dst;
 }
 
