@@ -50,20 +50,8 @@ namespace magma
             };
 
         public:
-            enum Queue
-            {
-                Graphics, Compute
-            };
-
-            struct Sample
-            {
-                const char *name;
-                uint32_t frameIndex;
-                double time; // In nanoseconds
-                Sample(const char *name,
-                    uint32_t frameIndex,
-                    double time);
-            };
+            enum Queue;
+            struct Sample;
 
             static void set(Profiler *profiler) noexcept;
             static Profiler *get(Queue queue) noexcept { return profilers[queue]; }
@@ -102,6 +90,19 @@ namespace magma
             bool useLabels = false;
             bool resetQueries = false;
             bool insideFrame = false;
+        };
+
+        enum Profiler::Queue
+        {
+            Graphics, Compute
+        };
+
+        struct Profiler::Sample
+        {
+            const char *name;
+            uint32_t frameIndex;
+            double time; // In nanoseconds
+            Sample(const char *, uint32_t, double);
         };
 
         /* Performance profiler for graphics queue. */
