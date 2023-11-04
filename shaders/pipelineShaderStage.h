@@ -37,6 +37,7 @@ namespace magma
             std::shared_ptr<Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept;
         PipelineShaderStage(const PipelineShaderStage&) noexcept;
+        PipelineShaderStage(PipelineShaderStage&&) noexcept;
         PipelineShaderStage& operator=(const PipelineShaderStage&) noexcept;
         virtual ~PipelineShaderStage();
         const std::shared_ptr<ShaderModule>& getShaderModule() const noexcept { return shaderModule; }

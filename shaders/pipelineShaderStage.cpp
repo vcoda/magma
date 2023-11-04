@@ -25,29 +25,52 @@ namespace magma
 PipelineShaderStage::PipelineShaderStage(const VkShaderStageFlagBits stage, std::shared_ptr<ShaderModule> shaderModule, const char *const entrypoint,
     std::shared_ptr<Specialization> specialization /* nullptr */,
     VkPipelineShaderStageCreateFlags flags /* 0 */) noexcept:
+    VkPipelineShaderStageCreateInfo{
+        VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+        nullptr,
+        flags,
+        stage,
+        *shaderModule,
+        core::copyString(entrypoint),
+        specialization.get()
+    },
     shaderModule(std::move(shaderModule)),
     specialization(std::move(specialization))
-{
-    sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    pNext = nullptr;
-    this->flags = flags;
-    this->stage = stage;
-    module = MAGMA_HANDLE(shaderModule);
-    pName = core::copyString(entrypoint);
-    pSpecializationInfo = this->specialization.get();
-}
+{}
 
 PipelineShaderStage::PipelineShaderStage(const PipelineShaderStage& other) noexcept:
+    VkPipelineShaderStageCreateInfo{
+        VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+        other.pNext,
+        other.flags,
+        other.stage,
+        other.module,
+        core::copyString(other.pName),
+        other.pSpecializationInfo,
+    },
     shaderModule(other.shaderModule),
     specialization(other.specialization)
+{}
+
+PipelineShaderStage::PipelineShaderStage(PipelineShaderStage&& other) noexcept:
+    VkPipelineShaderStageCreateInfo{
+        VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+        other.pNext,
+        other.flags,
+        other.stage,
+        other.module,
+        other.pName,
+        other.pSpecializationInfo,
+    },
+    shaderModule(std::move(other.shaderModule)),
+    specialization(std::move(other.specialization))
 {
-    sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    pNext = other.pNext;
-    flags = other.flags;
-    stage = other.stage;
-    module = other.module;
-    pName = core::copyString(other.pName);
-    pSpecializationInfo = specialization.get();
+    other.pNext = nullptr;
+    other.flags = 0;
+    other.stage = (VkShaderStageFlagBits)0;
+    other.module = VK_NULL_HANDLE;
+    other.pName = nullptr;
+    other.pSpecializationInfo = nullptr;
 }
 
 PipelineShaderStage& PipelineShaderStage::operator=(const PipelineShaderStage& other) noexcept
