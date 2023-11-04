@@ -125,7 +125,7 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
 
 VertexInputState::VertexInputState(const VertexInputState& other) noexcept
 {
-    sType = other.sType;
+    sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = nullptr;
     flags = other.flags;
     vertexBindingDescriptionCount = other.vertexBindingDescriptionCount;

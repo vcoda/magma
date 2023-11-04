@@ -66,7 +66,7 @@ AdvancedColorBlendState::AdvancedColorBlendState(const std::vector<AdvancedColor
 
 AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendState& other)
 {
-    sType = other.sType;
+    sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     pNext = core::copy((VkPipelineColorBlendAdvancedStateCreateInfoEXT *)other.pNext);
     flags = other.flags;
     logicOpEnable = other.logicOpEnable;

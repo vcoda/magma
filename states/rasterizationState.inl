@@ -22,7 +22,7 @@ constexpr RasterizationState::RasterizationState(const VkPolygonMode polygonMode
 
 constexpr RasterizationState::RasterizationState(const RasterizationState& other) noexcept:
     VkPipelineRasterizationStateCreateInfo{
-        other.sType,
+        VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO,
         other.pNext,
         other.flags,
         other.depthClampEnable,

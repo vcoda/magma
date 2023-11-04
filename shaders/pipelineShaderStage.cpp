@@ -41,7 +41,7 @@ PipelineShaderStage::PipelineShaderStage(const PipelineShaderStage& other) noexc
     shaderModule(other.shaderModule),
     specialization(other.specialization)
 {
-    sType = other.sType;
+    sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
     pNext = other.pNext;
     flags = other.flags;
     stage = other.stage;

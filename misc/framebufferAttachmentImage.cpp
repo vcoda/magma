@@ -57,7 +57,7 @@ FramebufferAttachmentImage::FramebufferAttachmentImage(std::shared_ptr<const Ima
 
 FramebufferAttachmentImage::FramebufferAttachmentImage(const FramebufferAttachmentImage& other) noexcept
 {
-    sType = other.sType;
+    sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
     pNext = other.pNext;
     flags = other.flags;
     usage = other.usage;

@@ -42,7 +42,7 @@ constexpr MultisampleState::MultisampleState(const uint32_t sampleCount) noexcep
 
 constexpr MultisampleState::MultisampleState(const MultisampleState& other) noexcept:
     VkPipelineMultisampleStateCreateInfo{
-        other.sType,
+        VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
         other.pNext,
         other.flags,
         other.rasterizationSamples,

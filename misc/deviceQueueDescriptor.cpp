@@ -37,7 +37,7 @@ DeviceQueueDescriptor::DeviceQueueDescriptor(std::shared_ptr<const PhysicalDevic
 
 DeviceQueueDescriptor::DeviceQueueDescriptor(const DeviceQueueDescriptor& other):
     VkDeviceQueueCreateInfo{
-        other.sType,
+        VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
         other.pNext,
         other.flags,
         other.queueFamilyIndex,
@@ -50,7 +50,6 @@ DeviceQueueDescriptor& DeviceQueueDescriptor::operator=(const DeviceQueueDescrip
 {
     if (this != &other)
     {
-        sType = other.sType;
         pNext = other.pNext;
         flags = other.flags;
         queueFamilyIndex = other.queueFamilyIndex;

@@ -26,7 +26,7 @@ constexpr SamplerState::SamplerState(const VkFilter magFilter, const VkFilter mi
 
 constexpr SamplerState::SamplerState(const SamplerState& other) noexcept:
     VkSamplerCreateInfo{
-        other.sType,
+        VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
         other.pNext,
         other.flags,
         other.magFilter,

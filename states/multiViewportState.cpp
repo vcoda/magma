@@ -56,8 +56,8 @@ MultiViewportState::MultiViewportState(const MultiViewportState& other):
     viewports(other.viewports),
     scissors(other.scissors)
 {
-    sType = other.sType;
-    pNext = nullptr;
+    sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+    pNext = nullptr; // TODO
     flags = other.flags;
     viewportCount = other.viewportCount;
     pViewports = viewports.data();

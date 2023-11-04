@@ -131,7 +131,7 @@ ViewportState::ViewportState(const ViewportState& other) noexcept:
    ,depthClipControlInfo(other.depthClipControlInfo)
 #endif
 {
-    sType = other.sType;
+    sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
     if (!other.pNext)
         pNext = nullptr;
 #ifdef VK_EXT_depth_clip_control
