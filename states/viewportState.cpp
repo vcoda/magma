@@ -45,12 +45,12 @@ ViewportState::ViewportState(bool negativeOneToOne) noexcept:
     pScissors = &scissor;
     if (negativeOneToOne)
     {
-#ifdef VK_EXT_depth_clip_control
+    #ifdef VK_EXT_depth_clip_control
         pNext = &depthClipControlInfo;
         depthClipControlInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_DEPTH_CLIP_CONTROL_CREATE_INFO_EXT;
         depthClipControlInfo.pNext = nullptr;
         depthClipControlInfo.negativeOneToOne = VK_TRUE;
-#endif // VK_EXT_depth_clip_control
+    #endif // VK_EXT_depth_clip_control
     }
 }
 
@@ -153,17 +153,17 @@ ViewportState& ViewportState::operator=(const ViewportState& other) noexcept
     {
         viewport = other.viewport;
         scissor = other.scissor;
-#ifdef VK_EXT_depth_clip_control
+    #ifdef VK_EXT_depth_clip_control
         depthClipControlInfo = other.depthClipControlInfo;
-#endif
+    #endif
         if (!other.pNext)
             pNext = nullptr;
-#ifdef VK_EXT_depth_clip_control
+    #ifdef VK_EXT_depth_clip_control
         else if (depthClipControlInfo.negativeOneToOne)
             pNext = &depthClipControlInfo;
         else
             pNext = nullptr;
-#endif // VK_EXT_depth_clip_control
+    #endif // VK_EXT_depth_clip_control
         flags = other.flags;
         viewportCount = other.viewportCount;
         scissorCount = other.scissorCount;
@@ -188,10 +188,10 @@ hash_t ViewportState::hash() const noexcept
         scissor.offset.y,
         scissor.extent.width,
         scissor.extent.height,
-#ifdef VK_EXT_depth_clip_control
+    #ifdef VK_EXT_depth_clip_control
         depthClipControlInfo.sType,
         depthClipControlInfo.negativeOneToOne,
-#endif // VK_EXT_depth_clip_control
+    #endif // VK_EXT_depth_clip_control
         0);
 }
 
