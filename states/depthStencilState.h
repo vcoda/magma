@@ -30,8 +30,7 @@ namespace magma
             const uint32_t compareMask = 0x0,
             const uint32_t writeMask = 0x0,
             const uint32_t reference = 0) noexcept:
-            VkStencilOpState{failOp, passOp, depthFailOp, compareOp, compareMask, writeMask, reference}
-        {}
+            VkStencilOpState{failOp, passOp, depthFailOp, compareOp, compareMask, writeMask, reference} {}
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const StencilOpState&) const noexcept;
     };

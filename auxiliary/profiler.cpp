@@ -32,6 +32,8 @@ namespace magma
 {
 namespace aux
 {
+Profiler *Profiler::profilers[2];
+
 Profiler::Profiler(VkQueueFlags queueType, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator):
     queueType(queueType)
 {
@@ -243,7 +245,5 @@ uint32_t Profiler::getResetQueryCount() const noexcept
     // Reset all queries before first use
     return queryPool->getQueryCount();
 }
-
-Profiler *Profiler::profilers[2];
 } // namespace aux
 } // namespace magma

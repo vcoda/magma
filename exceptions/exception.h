@@ -62,4 +62,3 @@ namespace magma
 } // namespace magma
 
 #define MAGMA_ERROR(message) magma::exception::handleException(message, MAGMA_SOURCE_LOCATION)
-

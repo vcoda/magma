@@ -186,4 +186,3 @@ namespace magma
 } // namespace magma
 
 #define MAGMA_HANDLE_RESULT(result, message) magma::exception::handleResult(result, message, MAGMA_SOURCE_LOCATION)
-

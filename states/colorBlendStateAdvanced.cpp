@@ -129,8 +129,7 @@ hash_t AdvancedColorBlendState::hash() const noexcept
 
 bool AdvancedColorBlendState::operator==(const AdvancedColorBlendState& other) const noexcept
 {
-    return (sType == other.sType) &&
-        (core::compare<VkPipelineColorBlendAdvancedStateCreateInfoEXT>(pNext, other.pNext)) &&
+    return (core::compare<VkPipelineColorBlendAdvancedStateCreateInfoEXT>(pNext, other.pNext)) &&
         (flags == other.flags) &&
         (logicOpEnable == other.logicOpEnable) &&
         (logicOp == other.logicOp) &&

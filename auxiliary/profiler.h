@@ -39,14 +39,6 @@ namespace magma
 
         class Profiler : public Base
         {
-            struct Section
-            {
-                const char *name;
-                uint32_t frameIndex;
-                uint32_t beginQuery;
-                Section(const char *, uint32_t, uint32_t) noexcept;
-            };
-
         public:
             enum Queue;
             struct Sample;
@@ -67,12 +59,20 @@ namespace magma
                 bool hostRead = true) const noexcept;
 
         protected:
-            explicit Profiler(VkQueueFlags queueType,
+            Profiler(VkQueueFlags queueType,
                 std::shared_ptr<Device> device,
                 std::shared_ptr<IAllocator> allocator);
             uint32_t getResetQueryCount() const noexcept;
 
         private:
+            struct Section
+            {
+                const char *name;
+                uint32_t frameIndex;
+                uint32_t beginQuery;
+                Section(const char *, uint32_t, uint32_t) noexcept;
+            };
+
             static Profiler *profilers[2];
             const VkQueueFlags queueType;
             float timestampPeriod = 0.f;
