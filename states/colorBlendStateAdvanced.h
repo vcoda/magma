@@ -44,17 +44,17 @@ namespace magma
         explicit AdvancedColorBlendState(const AdvancedColorBlendAttachmentState& attachment,
             bool srcPremultiplied,
             bool dstPremultiplied,
-            VkBlendOverlapEXT blendOverlap);
+            VkBlendOverlapEXT blendOverlap) noexcept;
         explicit AdvancedColorBlendState(const std::initializer_list<AdvancedColorBlendAttachmentState>& attachments,
             bool srcPremultiplied,
             bool dstPremultiplied,
-            VkBlendOverlapEXT blendOverlap);
+            VkBlendOverlapEXT blendOverlap) noexcept;
         explicit AdvancedColorBlendState(const std::vector<AdvancedColorBlendAttachmentState>& attachments,
             bool srcPremultiplied,
             bool dstPremultiplied,
-            VkBlendOverlapEXT blendOverlap);
-        AdvancedColorBlendState(const AdvancedColorBlendState&);
-        AdvancedColorBlendState& operator=(const AdvancedColorBlendState&);
+            VkBlendOverlapEXT blendOverlap) noexcept;
+        AdvancedColorBlendState(const AdvancedColorBlendState&) noexcept;
+        AdvancedColorBlendState& operator=(const AdvancedColorBlendState&) noexcept;
         ~AdvancedColorBlendState();
         hash_t hash() const noexcept;
         bool operator==(const AdvancedColorBlendState&) const noexcept;

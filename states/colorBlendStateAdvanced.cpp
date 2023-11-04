@@ -23,48 +23,57 @@ namespace magma
 {
 #ifdef VK_EXT_blend_operation_advanced
 AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendAttachmentState& attachment,
-    bool srcPremultiplied, bool dstPremultiplied, VkBlendOverlapEXT blendOverlap)
+    bool srcPremultiplied, bool dstPremultiplied, VkBlendOverlapEXT blendOverlap) noexcept
 {
-    VkPipelineColorBlendAdvancedStateCreateInfoEXT *colorBlendAdvanced = new VkPipelineColorBlendAdvancedStateCreateInfoEXT;
-    colorBlendAdvanced->sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT;
-    colorBlendAdvanced->pNext = nullptr;
-    colorBlendAdvanced->srcPremultiplied = MAGMA_BOOLEAN(srcPremultiplied);
-    colorBlendAdvanced->dstPremultiplied = MAGMA_BOOLEAN(dstPremultiplied);
-    colorBlendAdvanced->blendOverlap = blendOverlap;
-    pNext = colorBlendAdvanced;
+    VkPipelineColorBlendAdvancedStateCreateInfoEXT *colorBlendAdvanced = MAGMA_NEW VkPipelineColorBlendAdvancedStateCreateInfoEXT;
+    if (colorBlendAdvanced)
+    {
+        colorBlendAdvanced->sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT;
+        colorBlendAdvanced->pNext = nullptr;
+        colorBlendAdvanced->srcPremultiplied = MAGMA_BOOLEAN(srcPremultiplied);
+        colorBlendAdvanced->dstPremultiplied = MAGMA_BOOLEAN(dstPremultiplied);
+        colorBlendAdvanced->blendOverlap = blendOverlap;
+        pNext = colorBlendAdvanced;
+    }
     attachmentCount = 1;
     pAttachments = core::copyArray<VkPipelineColorBlendAttachmentState>(&attachment, 1);
 }
 
 AdvancedColorBlendState::AdvancedColorBlendState(const std::initializer_list<AdvancedColorBlendAttachmentState>& attachments,
-    bool srcPremultiplied, bool dstPremultiplied, VkBlendOverlapEXT blendOverlap)
+    bool srcPremultiplied, bool dstPremultiplied, VkBlendOverlapEXT blendOverlap) noexcept
 {
-    VkPipelineColorBlendAdvancedStateCreateInfoEXT *colorBlendAdvanced = new VkPipelineColorBlendAdvancedStateCreateInfoEXT;
-    colorBlendAdvanced->sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT;
-    colorBlendAdvanced->pNext = nullptr;
-    colorBlendAdvanced->srcPremultiplied = MAGMA_BOOLEAN(srcPremultiplied);
-    colorBlendAdvanced->dstPremultiplied = MAGMA_BOOLEAN(dstPremultiplied);
-    colorBlendAdvanced->blendOverlap = blendOverlap;
-    pNext = colorBlendAdvanced;
+    VkPipelineColorBlendAdvancedStateCreateInfoEXT *colorBlendAdvanced = MAGMA_NEW VkPipelineColorBlendAdvancedStateCreateInfoEXT;
+    if (colorBlendAdvanced)
+    {
+        colorBlendAdvanced->sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT;
+        colorBlendAdvanced->pNext = nullptr;
+        colorBlendAdvanced->srcPremultiplied = MAGMA_BOOLEAN(srcPremultiplied);
+        colorBlendAdvanced->dstPremultiplied = MAGMA_BOOLEAN(dstPremultiplied);
+        colorBlendAdvanced->blendOverlap = blendOverlap;
+        pNext = colorBlendAdvanced;
+    }
     attachmentCount = MAGMA_COUNT(attachments);
     pAttachments = core::copyInitializerList<VkPipelineColorBlendAttachmentState>(attachments);
 }
 
 AdvancedColorBlendState::AdvancedColorBlendState(const std::vector<AdvancedColorBlendAttachmentState>& attachments,
-    bool srcPremultiplied, bool dstPremultiplied, VkBlendOverlapEXT blendOverlap)
+    bool srcPremultiplied, bool dstPremultiplied, VkBlendOverlapEXT blendOverlap) noexcept
 {
-    VkPipelineColorBlendAdvancedStateCreateInfoEXT *colorBlendAdvanced = new VkPipelineColorBlendAdvancedStateCreateInfoEXT;
-    colorBlendAdvanced->sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT;
-    colorBlendAdvanced->pNext = nullptr;
-    colorBlendAdvanced->srcPremultiplied = MAGMA_BOOLEAN(srcPremultiplied);
-    colorBlendAdvanced->dstPremultiplied = MAGMA_BOOLEAN(dstPremultiplied);
-    colorBlendAdvanced->blendOverlap = blendOverlap;
-    pNext = colorBlendAdvanced;
+    VkPipelineColorBlendAdvancedStateCreateInfoEXT *colorBlendAdvanced = MAGMA_NEW VkPipelineColorBlendAdvancedStateCreateInfoEXT;
+    if (colorBlendAdvanced)
+    {
+        colorBlendAdvanced->sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT;
+        colorBlendAdvanced->pNext = nullptr;
+        colorBlendAdvanced->srcPremultiplied = MAGMA_BOOLEAN(srcPremultiplied);
+        colorBlendAdvanced->dstPremultiplied = MAGMA_BOOLEAN(dstPremultiplied);
+        colorBlendAdvanced->blendOverlap = blendOverlap;
+        pNext = colorBlendAdvanced;
+    }
     attachmentCount = MAGMA_COUNT(attachments);
     pAttachments = core::copyVector<VkPipelineColorBlendAttachmentState>(attachments);
 }
 
-AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendState& other)
+AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendState& other) noexcept
 {
     sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     pNext = core::copy((VkPipelineColorBlendAdvancedStateCreateInfoEXT *)other.pNext);
@@ -79,15 +88,22 @@ AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendState& 
     blendConstants[3] = other.blendConstants[3];
 }
 
-AdvancedColorBlendState& AdvancedColorBlendState::operator=(const AdvancedColorBlendState& other)
+AdvancedColorBlendState& AdvancedColorBlendState::operator=(const AdvancedColorBlendState& other)  noexcept
 {
     if (this != &other)
     {
         delete reinterpret_cast<const VkPipelineColorBlendAdvancedStateCreateInfoEXT *>(pNext);
+        pNext = core::copy(reinterpret_cast<const VkPipelineColorBlendAdvancedStateCreateInfoEXT *>(other.pNext));
+        flags = other.flags;
+        logicOpEnable = other.logicOpEnable;
+        logicOp = other.logicOp;
+        attachmentCount = other.attachmentCount;
         delete[] pAttachments;
-        core::copy(this, &other);
-        pNext = core::copy((VkPipelineColorBlendAdvancedStateCreateInfoEXT *)other.pNext);
-        pAttachments = core::copyArray(other.pAttachments, attachmentCount);
+        pAttachments = core::copyArray(other.pAttachments, other.attachmentCount);
+        blendConstants[0] = other.blendConstants[0];
+        blendConstants[1] = other.blendConstants[1];
+        blendConstants[2] = other.blendConstants[2];
+        blendConstants[3] = other.blendConstants[3];
     }
     return *this;
 }
