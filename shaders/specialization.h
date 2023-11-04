@@ -42,6 +42,7 @@ namespace magma
         explicit Specialization(const Block& data,
             const std::initializer_list<SpecializationEntry>& mapEntries) noexcept;
         Specialization(const Specialization&) noexcept;
+        Specialization(Specialization&&) noexcept;
         Specialization& operator=(const Specialization&) noexcept;
         ~Specialization();
         hash_t getHash() const noexcept;

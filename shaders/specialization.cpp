@@ -21,12 +21,27 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Specialization::Specialization(const Specialization& other) noexcept
+Specialization::Specialization(const Specialization& other) noexcept:
+    VkSpecializationInfo{
+        other.mapEntryCount,
+        core::copyArray(other.pMapEntries, mapEntryCount),
+        other.dataSize,
+        core::copyBinaryData(other.pData, dataSize)
+    }
+{}
+
+Specialization::Specialization(Specialization&& other) noexcept:
+    VkSpecializationInfo{
+        other.mapEntryCount,
+        other.pMapEntries,
+        other.dataSize,
+        other.pData
+    }
 {
-    mapEntryCount = other.mapEntryCount;
-    pMapEntries = core::copyArray(other.pMapEntries, mapEntryCount);
-    dataSize = other.dataSize;
-    pData = core::copyBinaryData(other.pData, dataSize);
+    other.mapEntryCount = 0;
+    pMapEntries = nullptr;
+    dataSize = 0;
+    pData = nullptr;
 }
 
 Specialization& Specialization::operator=(const Specialization& other) noexcept
@@ -35,10 +50,10 @@ Specialization& Specialization::operator=(const Specialization& other) noexcept
     {
         mapEntryCount = other.mapEntryCount;
         delete[] pMapEntries;
-        pMapEntries = core::copyArray(other.pMapEntries, mapEntryCount);
+        pMapEntries = core::copyArray(other.pMapEntries, other.mapEntryCount);
         dataSize = other.dataSize;
         delete[] reinterpret_cast<const char *>(pData);
-        pData = core::copyBinaryData(other.pData, dataSize);
+        pData = core::copyBinaryData(other.pData, other.dataSize);
     }
     return *this;
 }
