@@ -1,30 +1,33 @@
 namespace magma
 {
 template<class Block, class Type>
-inline SpecializationEntry::SpecializationEntry(uint32_t index, Type Block::*member) noexcept
+inline SpecializationEntry::SpecializationEntry(uint32_t constantID, Type Block::*member) noexcept:
+    VkSpecializationMapEntry{
+        constantID,
+        static_cast<uint32_t>(reinterpret_cast<ptrdiff_t>(&(((Block*)0)->*member))), // offset
+        sizeof(Type) // size
+    }
+{}
+
+template<class Block>
+inline Specialization::Specialization(const Block& data, const SpecializationEntry& entry) noexcept:
+    VkSpecializationInfo{
+        1, // mapEntryCount
+        MAGMA_NEW SpecializationEntry[1], // pMapEntries
+        sizeof(Block), // dataSize
+        core::copyBinaryData(data) // pData
+    }
 {
-    constantID = index;
-    const ptrdiff_t diff = reinterpret_cast<ptrdiff_t>(&(((Block*)0)->*member));
-    offset = static_cast<uint32_t>(diff);
-    size = sizeof(Type);
+    core::copy((VkSpecializationMapEntry *)pMapEntries, (VkSpecializationMapEntry *)&entry),
 }
 
 template<class Block>
-inline Specialization::Specialization(const Block& data, const SpecializationEntry& entry) noexcept
-{
-    mapEntryCount = 1;
-    pMapEntries = MAGMA_NEW SpecializationEntry[1];
-    core::copy((VkSpecializationMapEntry *)pMapEntries, (VkSpecializationMapEntry *)&entry);
-    dataSize = sizeof(Block);
-    pData = core::copyBinaryData(data);
-}
-
-template<class Block>
-inline Specialization::Specialization(const Block& data, const std::initializer_list<SpecializationEntry>& mapEntries) noexcept
-{
-    mapEntryCount = MAGMA_COUNT(mapEntries);
-    pMapEntries = core::copyInitializerList(mapEntries);
-    dataSize = sizeof(Block);
-    pData = core::copyBinaryData(data);
-}
+inline Specialization::Specialization(const Block& data, const std::initializer_list<SpecializationEntry>& mapEntries) noexcept:
+    VkSpecializationInfo{
+        MAGMA_COUNT(mapEntries), // mapEntryCount
+        core::copyInitializerList(mapEntries), // pMapEntries
+        sizeof(Block),  // dataSize
+        core::copyBinaryData(data) // pData
+    }
+{}
 } // namespace magma

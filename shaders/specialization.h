@@ -23,7 +23,7 @@ namespace magma
     {
         SpecializationEntry() noexcept = default;
         template<class Block, class Type>
-        SpecializationEntry(uint32_t index, Type Block::*member) noexcept;
+        SpecializationEntry(uint32_t constantID, Type Block::*member) noexcept;
     };
 
     /* Specialization constants are a mechanism whereby constants
