@@ -192,6 +192,7 @@ objects\transformFeedbackBuffer.cpp ^
 objects\uniformTexelBuffer.cpp ^
 objects\validationCache.cpp ^
 objects\vertexBuffer.cpp ^
+platform\androidHardwareBuffer.cpp ^
 renderpass\subpass.cpp ^
 shaders\pipelineShaderStage.cpp ^
 shaders\rayTracingShaderGroup.cpp ^
@@ -359,6 +360,7 @@ transformFeedbackBuffer.obj ^
 uniformTexelBuffer.obj ^
 validationCache.obj ^
 vertexBuffer.obj ^
+androidHardwareBuffer.obj ^
 subpass.obj ^
 pipelineShaderStage.obj ^
 rayTracingShaderGroup.obj ^

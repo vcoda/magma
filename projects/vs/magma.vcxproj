@@ -337,6 +337,7 @@
     <ClInclude Include="..\..\packed\color.h" />
     <ClInclude Include="..\..\packed\ieee754.h" />
     <ClInclude Include="..\..\packed\vector.h" />
+    <ClInclude Include="..\..\platform\androidHardwareBuffer.h" />
     <ClInclude Include="..\..\renderpass\attachment.h" />
     <ClInclude Include="..\..\renderpass\loadStoreOp.h" />
     <ClInclude Include="..\..\renderpass\subpass.h" />
@@ -513,6 +514,7 @@
     <ClCompile Include="..\..\objects\uniformTexelBuffer.cpp" />
     <ClCompile Include="..\..\objects\validationCache.cpp" />
     <ClCompile Include="..\..\objects\vertexBuffer.cpp" />
+    <ClCompile Include="..\..\platform\androidHardwareBuffer.cpp" />
     <ClCompile Include="..\..\renderpass\subpass.cpp" />
     <ClCompile Include="..\..\shaders\pipelineShaderStage.cpp" />
     <ClCompile Include="..\..\shaders\rayTracingShaderGroup.cpp" />

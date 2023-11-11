@@ -158,6 +158,8 @@ SRC_OBJS= \
 	objects/validationCache.o \
 	objects/vertexBuffer.o \
 	\
+	platform/androidHardwareBuffer.o \
+	\
 	renderpass/subpass.o \
 	\
 	shaders/pipelineShaderStage.o \

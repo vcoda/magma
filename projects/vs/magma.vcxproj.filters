@@ -103,6 +103,12 @@
     <Filter Include="Source Files\renderpass">
       <UniqueIdentifier>{03eea6f5-e16d-427a-ac84-2b5bd732cc35}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\platform">
+      <UniqueIdentifier>{cd0b8547-2ee2-48f4-85b6-96c35024b377}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\platform">
+      <UniqueIdentifier>{3f3d2ca0-c10b-4e7b-a7b0-bb41047fe765}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\allocator\allocator.h">
@@ -789,6 +795,9 @@
     <ClInclude Include="..\..\states\vertexAttributeType.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\platform\androidHardwareBuffer.h">
+      <Filter>Header Files\platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1234,6 +1243,9 @@
     </ClCompile>
     <ClCompile Include="..\..\descriptors\bufferDescriptor.cpp">
       <Filter>Source Files\descriptors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\platform\androidHardwareBuffer.cpp">
+      <Filter>Source Files\platform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
