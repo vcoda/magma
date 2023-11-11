@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "deviceMemory.h"
 #include "device.h"
 #include "physicalDevice.h"
+#include "../platform/androidHardwareBuffer.h"
 #include "../allocator/allocator.h"
 #include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
@@ -46,6 +47,30 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     ++allocationCount;
 }
 
+#ifdef VK_ANDROID_external_memory_android_hardware_buffer
+DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
+    std::shared_ptr<AndroidHardwareBuffer> hardwareBuffer,
+    VkMemoryPropertyFlags flags,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const StructureChain& extendedInfo /* default */):
+    BaseDeviceMemory(std::move(device), hardwareBuffer->getMemoryRequirements(), flags, std::move(allocator), extendedInfo)
+{
+    VkMemoryAllocateInfo memoryAllocateInfo;
+    VkImportAndroidHardwareBufferInfoANDROID importAndroidHardwareBufferInfo;
+    memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    memoryAllocateInfo.pNext = &importAndroidHardwareBufferInfo;
+    memoryAllocateInfo.allocationSize = memoryRequirements.size;
+    memoryAllocateInfo.memoryTypeIndex = findTypeIndex(flags);
+    importAndroidHardwareBufferInfo.sType = VK_STRUCTURE_TYPE_IMPORT_ANDROID_HARDWARE_BUFFER_INFO_ANDROID;
+    importAndroidHardwareBufferInfo.pNext = extendedInfo.chainNodes();
+    importAndroidHardwareBufferInfo.buffer = hardwareBuffer->getBuffer();
+    const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &memoryAllocateInfo,
+        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_HANDLE_RESULT(result, "failed to import memory from android hardware buffer");
+    ++allocationCount;
+}
+#endif // VK_ANDROID_external_memory_android_hardware_buffer
+
 DeviceMemory::~DeviceMemory()
 {
     MAGMA_ASSERT(!mapped());
@@ -64,6 +89,24 @@ void DeviceMemory::setPriority(float priority) noexcept
         vkSetDeviceMemoryPriorityEXT(MAGMA_HANDLE(device), handle, clampPriority(priority));
 #endif // VK_EXT_pageable_device_local_memory
 }
+
+#ifdef VK_ANDROID_external_memory_android_hardware_buffer
+AHardwareBuffer* DeviceMemory::getHardwareBuffer() const
+{
+    VkMemoryGetAndroidHardwareBufferInfoANDROID androidHardwareBufferInfo;
+    androidHardwareBufferInfo.sType = VK_STRUCTURE_TYPE_MEMORY_GET_ANDROID_HARDWARE_BUFFER_INFO_ANDROID;
+    androidHardwareBufferInfo.pNext = nullptr;
+    androidHardwareBufferInfo.memory = handle;
+    AHardwareBuffer *buffer = nullptr;
+    // A new reference acquired in addition to the reference held by the VkDeviceMemory
+    MAGMA_REQUIRED_EXTENSION(vkGetMemoryAndroidHardwareBufferANDROID,
+        VK_ANDROID_EXTERNAL_MEMORY_ANDROID_HARDWARE_BUFFER_EXTENSION_NAME);
+    const VkResult result = vkGetMemoryAndroidHardwareBufferANDROID(MAGMA_HANDLE(device),
+        &androidHardwareBufferInfo, &buffer);
+    MAGMA_HANDLE_RESULT(result, "failed to get android hardware buffer for a memory object");
+    return buffer;
+}
+#endif // VK_ANDROID_external_memory_android_hardware_buffer
 
 void DeviceMemory::realloc(NonDispatchableHandle /* unused */,
     const VkMemoryRequirements& memoryRequirements_,

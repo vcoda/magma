@@ -20,6 +20,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef VK_ANDROID_external_memory_android_hardware_buffer
+    class AndroidHardwareBuffer;
+#endif
+
     /* The maximum number of valid memory allocations that can
        exist simultaneously within a VkDevice may be restricted
        by implementation- or platform-dependent limits.
@@ -35,11 +39,21 @@ namespace magma
             VkMemoryPropertyFlags flags,
             std::shared_ptr<IAllocator> allocator = nullptr,
             const StructureChain& extendedInfo = StructureChain());
+    #ifdef VK_ANDROID_external_memory_android_hardware_buffer
+        explicit DeviceMemory(std::shared_ptr<Device> device,
+            std::shared_ptr<AndroidHardwareBuffer> hardwareBuffer,
+            VkMemoryPropertyFlags flags,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            const StructureChain& extendedInfo = StructureChain());
+    #endif // VK_ANDROID_external_memory_android_hardware_buffer
         ~DeviceMemory();
         static uint32_t getAllocationCount() noexcept { return allocationCount; }
         VkDeviceSize getSuballocationOffset() const noexcept override { return 0ull; }
         float getPriority() const noexcept override { return priority; }
         void setPriority(float priority) noexcept override;
+    #ifdef VK_ANDROID_external_memory_android_hardware_buffer
+        AHardwareBuffer* getHardwareBuffer() const;
+    #endif
         bool managed() const noexcept override { return false; }
         void realloc(NonDispatchableHandle object,
             const VkMemoryRequirements& memoryRequirements,
