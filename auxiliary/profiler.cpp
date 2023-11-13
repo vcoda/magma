@@ -132,6 +132,8 @@ void Profiler::beginSection(const char *name, uint32_t color, std::shared_ptr<Co
     MAGMA_ASSERT(strlen(name) > 0);
     if (resetQueries)
     {   // VK_EXT_host_query_reset not supported, use vkCmdResetQueryPool()
+        // vkCmdResetQueryPool command must only be called outside of a render pass instance!
+        MAGMA_ASSERT(!cmdBuffer->insideRenderPass());
         cmdBuffer->resetQueryPool(queryPool, 0, getResetQueryCount());
         queryCount = 0;
         resetQueries = false;
@@ -227,7 +229,7 @@ void Profiler::copyTimestamps(std::shared_ptr<CommandBuffer> cmdBuffer, std::sha
 {
     constexpr bool wait = true;
     const uint32_t count = std::min(queryCount, queryPool->getQueryCount());
-    // vkCmdCopyQueryPoolResults must only be called outside of a render pass instance!
+    // vkCmdCopyQueryPoolResults command must only be called outside of a render pass instance!
     MAGMA_ASSERT(!cmdBuffer->insideRenderPass());
     cmdBuffer->copyQueryResults<uint64_t>(queryPool, buffer, wait, 0, count, bufferOffset);
     if (hostRead)
