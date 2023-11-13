@@ -48,13 +48,16 @@ namespace magma
     } // namespace aux
 } // namespace magma
 
-#ifdef MAGMA_DEBUG
-    #define MAGMA_SCOPED_PROFILE(name, cmdBuffer, line) magma::aux::ScopedProfile _magma_profile_line##line(name, cmdBuffer);
-    #define MAGMA_PROFILE_INDIRECT(name, cmdBuffer, line) MAGMA_SCOPED_PROFILE(name, cmdBuffer, line)
+#define MAGMA_SCOPED_PROFILE(name, cmdBuffer, line) magma::aux::ScopedProfile _magma_profile_line##line(name, cmdBuffer);
 
-    #define MAGMA_PROFILE(cmdBuffer) MAGMA_PROFILE_INDIRECT(__FUNCTION__, cmdBuffer, __LINE__)
-    #define MAGMA_PROFILE_NAME(label, cmdBuffer) MAGMA_PROFILE_INDIRECT(label, cmdBuffer, __LINE__)
+#ifdef MAGMA_DEBUG
+    #define MAGMA_PROFILE_INDIRECT(name, cmdBuffer, line) MAGMA_SCOPED_PROFILE(name, cmdBuffer, line)
+    #define MAGMA_PROFILE(label, cmdBuffer) MAGMA_PROFILE_INDIRECT(label, cmdBuffer, __LINE__)
+    #define MAGMA_PROFILE_BEGIN(label, cmdBuffer) {\
+        MAGMA_PROFILE(label, cmdBuffer)
+    #define MAGMA_PROFILE_END }
 #else
-    #define MAGMA_PROFILE(cmdBuffer)
-    #define MAGMA_PROFILE_NAME(label, cmdBuffer)
-#endif
+    #define MAGMA_PROFILE(label, cmdBuffer)
+    #define MAGMA_PROFILE_BEGIN(label, cmdBuffer) {
+    #define MAGMA_PROFILE_END }
+#endif // MAGMA_DEBUG
