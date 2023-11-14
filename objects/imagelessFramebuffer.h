@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    struct FramebufferAttachmentImage;
+    class FramebufferAttachmentImage;
 
     /* Allows framebuffer to be created without the need for
        creating images first, allowing more flexibility in how

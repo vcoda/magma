@@ -23,11 +23,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_imageless_framebuffer
-static_assert(sizeof(FramebufferAttachmentImage) == sizeof(VkFramebufferAttachmentImageInfoKHR),
-    "framebuffer attachment image size mismatch");
-
 FramebufferAttachmentImage::FramebufferAttachmentImage(VkImageUsageFlags usage,
-    uint32_t width, uint32_t height, uint32_t layerCount, const std::vector<VkFormat>& viewFormats,
+    uint32_t width, uint32_t height, uint32_t layerCount,
+    const std::vector<VkFormat>& viewFormats,
     VkImageCreateFlags flags /* 0 */) noexcept:
     VkFramebufferAttachmentImageInfoKHR{
         VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR,
@@ -42,31 +40,55 @@ FramebufferAttachmentImage::FramebufferAttachmentImage(VkImageUsageFlags usage,
     }
 {}
 
-FramebufferAttachmentImage::FramebufferAttachmentImage(std::shared_ptr<const Image> image) noexcept
-{
-    sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
-    pNext = nullptr;
-    flags = image->getFlags();
-    usage = image->getUsage();
-    width = image->getWidth();
-    height = image->getHeight();
-    layerCount = image->getArrayLayers();
-    viewFormatCount = MAGMA_COUNT(image->getViewFormats());
-    pViewFormats = core::copyVector(image->getViewFormats());
-}
+FramebufferAttachmentImage::FramebufferAttachmentImage(std::shared_ptr<const Image> image) noexcept:
+    VkFramebufferAttachmentImageInfoKHR{
+        VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR,
+        nullptr, // pNext
+        image->getFlags(),
+        image->getUsage(),
+        image->getWidth(),
+        image->getHeight(),
+        image->getArrayLayers(),
+        MAGMA_COUNT(image->getViewFormats()),
+        core::copyVector(image->getViewFormats())
+    }
+{}
 
-FramebufferAttachmentImage::FramebufferAttachmentImage(const FramebufferAttachmentImage& other) noexcept
+FramebufferAttachmentImage::FramebufferAttachmentImage(const FramebufferAttachmentImage& other) noexcept:
+    VkFramebufferAttachmentImageInfoKHR{
+        VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR,
+        other.pNext,
+        other.flags,
+        other.usage,
+        other.width,
+        other.height,
+        other.layerCount,
+        other.viewFormatCount,
+        core::copyArray(other.pViewFormats, other.viewFormatCount)
+    }
+{}
+
+FramebufferAttachmentImage::FramebufferAttachmentImage(FramebufferAttachmentImage&& other) noexcept:
+    VkFramebufferAttachmentImageInfoKHR{
+        VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR,
+        other.pNext,
+        other.flags,
+        other.usage,
+        other.width,
+        other.height,
+        other.layerCount,
+        other.viewFormatCount,
+        other.pViewFormats
+    }
 {
-    sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
-    pNext = other.pNext;
-    flags = other.flags;
-    usage = other.usage;
-    width = other.width;
-    height = other.height;
-    layerCount = other.layerCount;
-    viewFormatCount = other.viewFormatCount;
-    delete[] pViewFormats;
-    pViewFormats = core::copyArray(other.pViewFormats, other.viewFormatCount);
+    other.pNext = nullptr;
+    other.flags = 0;
+    other.usage = 0;
+    other.width = 0;
+    other.height = 0;
+    other.layerCount = 0;
+    other.viewFormatCount = 0;
+    other.pViewFormats = nullptr;
 }
 
 FramebufferAttachmentImage& FramebufferAttachmentImage::operator=(const FramebufferAttachmentImage& other) noexcept

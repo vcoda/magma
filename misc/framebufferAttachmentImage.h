@@ -22,8 +22,9 @@ namespace magma
     class Image;
 
 #ifdef VK_KHR_imageless_framebuffer
-    struct FramebufferAttachmentImage final : VkFramebufferAttachmentImageInfoKHR
+    class FramebufferAttachmentImage : public VkFramebufferAttachmentImageInfoKHR
     {
+    public:
         FramebufferAttachmentImage() noexcept: VkFramebufferAttachmentImageInfoKHR{} {}
         explicit FramebufferAttachmentImage(VkImageUsageFlags usage,
             uint32_t width,
@@ -33,7 +34,7 @@ namespace magma
             VkImageCreateFlags flags = 0) noexcept;
         explicit FramebufferAttachmentImage(std::shared_ptr<const Image> image) noexcept;
         FramebufferAttachmentImage(const FramebufferAttachmentImage&) noexcept;
-        FramebufferAttachmentImage(FramebufferAttachmentImage&&) noexcept = default;
+        FramebufferAttachmentImage(FramebufferAttachmentImage&&) noexcept;
         ~FramebufferAttachmentImage() { delete[] pViewFormats; }
         FramebufferAttachmentImage& operator=(const FramebufferAttachmentImage&) noexcept;
         VkExtent2D getExtent() const noexcept { return {width, height}; }
