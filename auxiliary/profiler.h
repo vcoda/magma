@@ -46,7 +46,7 @@ namespace magma
             static void set(Profiler *profiler) noexcept;
             static Profiler *get(Queue queue) noexcept { return profilers[queue]; }
             VkQueueFlags getQueueType() const noexcept { return queueType; }
-            bool setLabelUsage(bool enable) noexcept { useLabels = enable; }
+            void setLabelUsage(bool enable) noexcept;
             bool getLabelUsage() const noexcept { return useLabels; }
             uint32_t getQueryCount() const noexcept { return queryCount; }
             bool beginFrame(std::shared_ptr<CommandBuffer> cmdBuffer,

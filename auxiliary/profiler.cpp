@@ -74,7 +74,9 @@ Profiler::Profiler(VkQueueFlags queueType, std::shared_ptr<Device> device, std::
 #endif // VK_EXT_debug_utils
 #ifdef VK_EXT_debug_marker
     if (!debugUtils)
+    {   // This extension has been deprecated, but still may be used with older drivers
         debugMarker = device->extensionEnabled(VK_EXT_DEBUG_MARKER_EXTENSION_NAME);
+    }
 #endif // VK_EXT_debug_marker
 }
 
@@ -84,6 +86,15 @@ void Profiler::set(Profiler *profiler) noexcept
         profilers[Graphics] = profiler;
     else // VK_QUEUE_COMPUTE_BIT
         profilers[Compute] = profiler;
+}
+
+void Profiler::setLabelUsage(bool enable) noexcept
+{
+    useLabels = enable;
+    if (useLabels)
+    {   // Check that either debug extension is enabled
+        MAGMA_ASSERT(debugUtils || debugMarker);
+    }
 }
 
 bool Profiler::beginFrame(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t frameIndex_)
