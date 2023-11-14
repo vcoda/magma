@@ -32,7 +32,7 @@ namespace magma
                 profiler(Profiler::get(Profiler::Graphics))
             {
                 if (profiler)
-                    profiler->beginSection(name, color, cmdBuffer);
+                    profiler->beginSection(cmdBuffer, name, color);
             }
 
             ~ScopedProfile()

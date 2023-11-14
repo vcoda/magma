@@ -86,7 +86,7 @@ void Profiler::set(Profiler *profiler) noexcept
         profilers[Compute] = profiler;
 }
 
-bool Profiler::beginFrame(uint32_t frameIndex_)
+bool Profiler::beginFrame(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t frameIndex_)
 {
     MAGMA_ASSERT(!insideFrame);
     MAGMA_ASSERT(stack.empty());
@@ -101,7 +101,12 @@ bool Profiler::beginFrame(uint32_t frameIndex_)
             queryCount = 0;
         }
         if (!hostQueryReset)
-            resetQueries = true;
+        {   // VK_EXT_host_query_reset not supported, use vkCmdResetQueryPool()
+            // vkCmdResetQueryPool command must only be called outside of a render pass instance!
+            MAGMA_ASSERT(!cmdBuffer->insideRenderPass());
+            cmdBuffer->resetQueryPool(queryPool, 0, getResetQueryCount());
+            queryCount = 0;
+        }
         else
         {   // Reset from host
         #ifdef VK_EXT_host_query_reset
@@ -126,18 +131,10 @@ bool Profiler::endFrame()
     return true;
 }
 
-void Profiler::beginSection(const char *name, uint32_t color, std::shared_ptr<CommandBuffer> cmdBuffer)
+void Profiler::beginSection(std::shared_ptr<CommandBuffer> cmdBuffer, const char *name, uint32_t color)
 {
     MAGMA_ASSERT(insideFrame);
     MAGMA_ASSERT(strlen(name) > 0);
-    if (resetQueries)
-    {   // VK_EXT_host_query_reset not supported, use vkCmdResetQueryPool()
-        // vkCmdResetQueryPool command must only be called outside of a render pass instance!
-        MAGMA_ASSERT(!cmdBuffer->insideRenderPass());
-        cmdBuffer->resetQueryPool(queryPool, 0, getResetQueryCount());
-        queryCount = 0;
-        resetQueries = false;
-    }
     if (useLabels)
     {
     #ifdef VK_EXT_debug_utils

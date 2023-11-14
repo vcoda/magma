@@ -49,9 +49,11 @@ namespace magma
             bool setLabelUsage(bool enable) noexcept { useLabels = enable; }
             bool getLabelUsage() const noexcept { return useLabels; }
             uint32_t getQueryCount() const noexcept { return queryCount; }
-            bool beginFrame(uint32_t frameIndex);
+            bool beginFrame(std::shared_ptr<CommandBuffer> cmdBuffer,
+                uint32_t frameIndex);
             bool endFrame();
-            void beginSection(const char *name, uint32_t color, std::shared_ptr<CommandBuffer> cmdBuffer);
+            void beginSection(std::shared_ptr<CommandBuffer> cmdBuffer,
+                const char *name, uint32_t color);
             void endSection(std::shared_ptr<CommandBuffer> cmdBuffer);
             std::vector<Sample> collectSamples(bool wait) const;
             void copyTimestamps(std::shared_ptr<CommandBuffer> cmdBuffer,
@@ -86,7 +88,6 @@ namespace magma
             bool debugUtils = false;
             bool debugMarker = false;
             bool useLabels = false;
-            bool resetQueries = false;
             bool insideFrame = false;
         };
 
