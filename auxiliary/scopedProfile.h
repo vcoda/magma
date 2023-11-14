@@ -52,12 +52,12 @@ namespace magma
 
 #ifdef MAGMA_DEBUG
     #define MAGMA_PROFILE_INDIRECT(name, cmdBuffer, line) MAGMA_SCOPED_PROFILE(name, cmdBuffer, line)
-    #define MAGMA_PROFILE(label, cmdBuffer) MAGMA_PROFILE_INDIRECT(label, cmdBuffer, __LINE__)
-    #define MAGMA_PROFILE_BEGIN(label, cmdBuffer) {\
-        MAGMA_PROFILE(label, cmdBuffer)
+    #define MAGMA_PROFILE(name, cmdBuffer) MAGMA_PROFILE_INDIRECT(name, cmdBuffer, __LINE__)
+    #define MAGMA_PROFILE_BEGIN(name, cmdBuffer) {\
+        MAGMA_PROFILE(name, cmdBuffer)
     #define MAGMA_PROFILE_END }
 #else
-    #define MAGMA_PROFILE(label, cmdBuffer)
-    #define MAGMA_PROFILE_BEGIN(label, cmdBuffer) {
+    #define MAGMA_PROFILE(name, cmdBuffer)
+    #define MAGMA_PROFILE_BEGIN(name, cmdBuffer) {
     #define MAGMA_PROFILE_END }
 #endif // MAGMA_DEBUG
