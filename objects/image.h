@@ -153,7 +153,7 @@ namespace magma
         // VK_KHR_device_group
         uint32_t deviceMask = 0;
         // VK_EXT_memory_priority
-        float memoryPriority = MAGMA_DEFAULT_MEMORY_PRIORITY;
+        float memoryPriority = MAGMA_MEMORY_PRIORITY_DEFAULT;
     };
 
     struct Image::CopyLayout

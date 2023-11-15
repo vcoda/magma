@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "baseDeviceMemory.h"
 #include "device.h"
 #include "physicalDevice.h"
+#include "iresource.h"
 #include "../exceptions/exception.h"
 
 namespace magma
@@ -31,7 +32,7 @@ BaseDeviceMemory::BaseDeviceMemory(std::shared_ptr<Device> device,
     memoryRequirements(memoryRequirements),
     flags(flags),
     deviceMask(0),
-    priority(MAGMA_DEFAULT_MEMORY_PRIORITY),
+    priority(MAGMA_MEMORY_PRIORITY_DEFAULT),
     binding(VK_NULL_HANDLE),
     mapPointer(nullptr)
 {

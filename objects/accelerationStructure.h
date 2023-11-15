@@ -80,7 +80,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBuildAccelerationStructureFlagsNV flags = 0,
             VkDeviceSize compactedSize = 0,
-            float memoryPriority = MAGMA_DEFAULT_MEMORY_PRIORITY):
+            float memoryPriority = MAGMA_MEMORY_PRIORITY_DEFAULT):
             AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NV,
                 instanceCount, std::list<Geometry>{}, flags, compactedSize, memoryPriority, std::move(allocator))
         {}
@@ -96,7 +96,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             VkBuildAccelerationStructureFlagsNV flags = 0,
             VkDeviceSize compactedSize = 0,
-            float memoryPriority = MAGMA_DEFAULT_MEMORY_PRIORITY):
+            float memoryPriority = MAGMA_MEMORY_PRIORITY_DEFAULT):
             AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NV,
                 0, geometries, flags, compactedSize, memoryPriority, std::move(allocator))
         {}

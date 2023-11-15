@@ -97,7 +97,7 @@ DeviceMemoryBlock DeviceMemoryAllocator::allocate(VkObjectType objectType, NonDi
     allocInfo.memoryTypeBits = 0;
     allocInfo.pool = VK_NULL_HANDLE;
     allocInfo.pUserData = nullptr;
-    allocInfo.priority = MAGMA_DEFAULT_MEMORY_PRIORITY;
+    allocInfo.priority = MAGMA_MEMORY_PRIORITY_DEFAULT;
 #ifdef VK_EXT_memory_priority
     if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
     {
@@ -130,7 +130,7 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
     allocInfos.reserve(memoryFlags.size());
     std::vector<float> defaultPriorities;
     if (priorities.empty())
-        defaultPriorities.resize(memoryFlags.size(), MAGMA_DEFAULT_MEMORY_PRIORITY);
+        defaultPriorities.resize(memoryFlags.size(), MAGMA_MEMORY_PRIORITY_DEFAULT);
     core::forConstEach(memoryFlags, priorities.empty() ? defaultPriorities : priorities,
         [&allocInfos](auto& flags, auto& priority)
         {
@@ -150,7 +150,7 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
             allocInfo.memoryTypeBits = 0;
             allocInfo.pool = VK_NULL_HANDLE;
             allocInfo.pUserData = nullptr;
-            MAGMA_ASSERT((*priority >= 0.f) && (*priority <= 1.f));
+            MAGMA_ASSERT((*priority >= MAGMA_MEMORY_PRIORITY_LOWEST) && (*priority <= MAGMA_MEMORY_PRIORITY_HIGHEST));
             allocInfo.priority = *priority;
             allocInfos.push_back(allocInfo);
         });

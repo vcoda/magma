@@ -50,9 +50,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_ALIGNMENT 16
 
-// https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VkMemoryPriorityAllocateInfoEXT.html
-#define MAGMA_DEFAULT_MEMORY_PRIORITY 0.5f
-
 #define MAGMA_MAX_STRING 4096
 
 #define MAGMA_BAD_CODE 0xBAADC0DE

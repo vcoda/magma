@@ -93,6 +93,6 @@ namespace magma
         bool deviceAddress = false;
         bool deviceAddressCaptureReplay = false;
         // VK_EXT_memory_priority
-        float memoryPriority = MAGMA_DEFAULT_MEMORY_PRIORITY;
+        float memoryPriority = MAGMA_MEMORY_PRIORITY_DEFAULT;
     };
 } // namespace magma
