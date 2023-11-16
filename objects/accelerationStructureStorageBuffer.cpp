@@ -22,6 +22,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_acceleration_structure
+AccelerationStructureBuildInputBuffer::AccelerationStructureBuildInputBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Descriptor& optional /* default */,
+    const Sharing& sharing /* default */):
+    Buffer(std::move(device), size,
+        0, // flags
+        VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        optional, sharing, std::move(allocator))
+{}
+
 AccelerationStructureStorageBuffer::AccelerationStructureStorageBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Descriptor& optional /* default */,

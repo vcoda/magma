@@ -20,9 +20,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Buffer on which the acceleration structure will be stored. */
+    /* Buffer for use as a read-only input to an acceleration structure build.. */
 
 #ifdef VK_KHR_acceleration_structure
+    class AccelerationStructureBuildInputBuffer : public Buffer
+    {
+    public:
+        explicit AccelerationStructureBuildInputBuffer(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Descriptor& optional = Descriptor(),
+            const Sharing& sharing = Sharing());
+    };
+
+    /* Buffer is suitable for storage space for acceleration structure. */
+
     class AccelerationStructureStorageBuffer : public Buffer
     {
     public:
