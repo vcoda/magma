@@ -27,7 +27,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Buffer;
-    class AccelerationStructureStorageBuffer;
 #ifdef VK_KHR_deferred_host_operations
     class DeferredOperation;
 #endif
@@ -117,7 +116,7 @@ namespace magma
         VkDeviceSize accelerationStructureSize;
         VkDeviceSize buildScratchSize;
         VkDeviceSize updateScratchSize;
-        std::unique_ptr<AccelerationStructureStorageBuffer> buffer;
+        std::unique_ptr<Buffer> buffer;
     };
 
     /* The defined header structure for the serialized data consists of:
