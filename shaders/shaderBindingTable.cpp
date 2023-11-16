@@ -33,7 +33,7 @@ ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const voi
     Buffer(device,
         device->getPhysicalDevice()->getRayTracingPipelineProperties().shaderGroupHandleSize * handleCount,
         0, // flags
-        VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT,
+        VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR,
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
         optional, sharing, std::move(allocator)),
     handleCount(handleCount)
