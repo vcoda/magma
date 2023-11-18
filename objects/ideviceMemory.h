@@ -75,12 +75,12 @@ namespace magma
 
     struct IDeviceMemory::Flags
     {
-        uint32_t deviceLocal: 1;
-        uint32_t hostVisible: 1;
-        uint32_t hostCached: 1;
-        uint32_t lazilyAllocated: 1;
-        uint32_t deviceHostCoherent: 1;
-        uint32_t deviceUncached: 1;
-        uint32_t staged: 1;
+        VkBool32 deviceLocal: 1;
+        VkBool32 hostVisible: 1;
+        VkBool32 hostCached: 1;
+        VkBool32 lazilyAllocated: 1;
+        VkBool32 deviceHostCoherent: 1;
+        VkBool32 deviceUncached: 1;
+        VkBool32 staged: 1;
     };
 } // namespace magma

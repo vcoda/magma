@@ -54,8 +54,8 @@ BaseDeviceMemory::BaseDeviceMemory(std::shared_ptr<Device> device,
     flags.deviceHostCoherent = (memoryFlags & deviceHostCoherentFlags) == deviceHostCoherentFlags;
     flags.deviceUncached = (memoryFlags & VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD);
 #else
-    flags.deviceHostCoherent = 0;
-    flags.deviceUncached = 0;
+    flags.deviceHostCoherent = VK_FALSE;
+    flags.deviceUncached = VK_FALSE;
 #endif // VK_AMD_device_coherent_memory
     // On discrete NVIDIA and AMD GPUs there are around 256 MiB of
     // DEVICE_LOCAL + HOST_VISIBLE memory pool. This 256MiB limit
