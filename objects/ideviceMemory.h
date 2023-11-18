@@ -35,7 +35,7 @@ namespace magma
         virtual VkDeviceSize getSize() const noexcept = 0;
         virtual VkDeviceSize getAlignment() const noexcept = 0;
         virtual uint32_t getMemoryTypeBits() const noexcept = 0;
-        virtual const Flags& getFlags() const noexcept = 0;
+        virtual Flags getFlags() const noexcept = 0;
         virtual uint32_t getDeviceMask() const noexcept = 0;
         virtual float getPriority() const noexcept = 0;
         virtual void setPriority(float priority) noexcept = 0;

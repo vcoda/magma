@@ -31,7 +31,7 @@ namespace magma
         VkDeviceSize getSize() const noexcept override { return memoryRequirements.size; }
         VkDeviceSize getAlignment() const noexcept override { return memoryRequirements.alignment; }
         uint32_t getMemoryTypeBits() const noexcept override { return memoryRequirements.memoryTypeBits; }
-        const Flags& getFlags() const noexcept override { return flags; }
+        Flags getFlags() const noexcept override { return flags; }
         uint32_t getDeviceMask() const noexcept { return deviceMask; }
         void *getMapPointer() const noexcept { return mapPointer; }
         bool binded() const noexcept override;
@@ -40,7 +40,7 @@ namespace magma
     protected:
         BaseDeviceMemory(std::shared_ptr<Device> device,
             const VkMemoryRequirements& memoryRequirements,
-            VkMemoryPropertyFlags flags,
+            VkMemoryPropertyFlags memoryFlags,
             std::shared_ptr<IAllocator> allocator,
             const StructureChain& extendedInfo);
         uint32_t findTypeIndex(VkMemoryPropertyFlags flags) const;
