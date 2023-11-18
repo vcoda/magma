@@ -16,6 +16,8 @@ inline bool BaseDeviceMemory::mapped() const noexcept
 
 inline float BaseDeviceMemory::clampPriority(float value) noexcept
 {
-    return (priority = std::max(0.f, std::min(value, 1.f)));
+    priority = std::max(MAGMA_MEMORY_PRIORITY_LOWEST, value);
+    priority = std::min(MAGMA_MEMORY_PRIORITY_HIGHEST, priority);
+    return priority;
 }
 } // namespace magma

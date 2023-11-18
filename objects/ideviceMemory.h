@@ -18,6 +18,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "../misc/structureChain.h"
 
+// The granularity of the priorities is implementation-dependent.
+#define MAGMA_MEMORY_PRIORITY_LOWEST 0.f
+#define MAGMA_MEMORY_PRIORITY_LOW 0.25f
+#define MAGMA_MEMORY_PRIORITY_DEFAULT 0.5f
+#define MAGMA_MEMORY_PRIORITY_HIGH 0.75f
+#define MAGMA_MEMORY_PRIORITY_HIGHEST 1.f
+
 namespace magma
 {
     /* Device memory is memory that is visible to the device -
