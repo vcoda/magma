@@ -26,16 +26,44 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 BaseDeviceMemory::BaseDeviceMemory(std::shared_ptr<Device> device,
-    const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
+    const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags memoryFlags,
     std::shared_ptr<IAllocator> allocator, const StructureChain& extendedInfo):
     NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), std::move(allocator)),
     memoryRequirements(memoryRequirements),
-    flags(flags),
+    memoryFlags(memoryFlags),
     deviceMask(0),
     priority(MAGMA_MEMORY_PRIORITY_DEFAULT),
     binding(VK_NULL_HANDLE),
     mapPointer(nullptr)
 {
+    constexpr VkMemoryPropertyFlags hostVisibleFlags =
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+    flags.deviceLocal = (memoryFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+    flags.hostVisible = (memoryFlags & hostVisibleFlags) == hostVisibleFlags;
+    flags.hostCached = flags.hostVisible && (memoryFlags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
+    flags.lazilyAllocated = (memoryFlags & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT);
+#ifdef VK_AMD_device_coherent_memory
+    // For any memory allocated with both the HOST_COHERENT and
+    // the DEVICE_COHERENT flags, host or device accesses also
+    // perform automatic memory domain transfer operations,
+    // such that writes are always automatically available and
+    // visible to both host and device memory domains.
+    constexpr VkMemoryPropertyFlags deviceHostCoherentFlags =
+        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
+        VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD;
+    flags.deviceHostCoherent = (memoryFlags & deviceHostCoherentFlags) == deviceHostCoherentFlags;
+    flags.deviceUncached = (memoryFlags & VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD);
+#else
+    flags.deviceHostCoherent = 0;
+    flags.deviceUncached = 0;
+#endif // VK_AMD_device_coherent_memory
+    // On discrete NVIDIA and AMD GPUs there are around 256 MiB of
+    // DEVICE_LOCAL + HOST_VISIBLE memory pool. This 256MiB limit
+    // correlates with the 256MiB PCIE-specified BAR-size limit
+    // that defines the size of the 256MiB aperture/window of VRAM
+    // that the host can access.
+    flags.staged = flags.deviceLocal && flags.hostVisible;
     if (!extendedInfo.empty())
     {
     #ifdef VK_KHR_device_group

@@ -57,7 +57,7 @@ void ManagedDeviceMemory::realloc(NonDispatchableHandle object,
     handle = VK_NULL_HANDLE;
     subOffset = 0ull;
     memoryRequirements = memoryRequirements_;
-    allocation = deviceAllocator->allocate(objectType, object, memoryRequirements, flags, extendedInfo);
+    allocation = deviceAllocator->allocate(objectType, object, memoryRequirements, memoryFlags, extendedInfo);
     onDefragment();
 }
 
@@ -113,11 +113,10 @@ void ManagedDeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObject
 void *ManagedDeviceMemory::map(
     VkDeviceSize offset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */,
-    VkMemoryMapFlags flags /* 0 */) noexcept
+    VkMemoryMapFlags /* 0 */) noexcept
 {
-    MAGMA_ASSERT(hostVisible());
+    MAGMA_ASSERT(flags.hostVisible);
     MAGMA_UNUSED(size);
-    MAGMA_UNUSED(flags);
     if (!mapPointer)
     {
         const VkResult result = deviceAllocator->map(allocation, offset, &mapPointer);
@@ -133,7 +132,7 @@ void *ManagedDeviceMemory::map(
 
 void ManagedDeviceMemory::unmap() noexcept
 {
-    MAGMA_ASSERT(hostVisible());
+    MAGMA_ASSERT(flags.hostVisible);
     if (mapPointer)
     {
         deviceAllocator->unmap(allocation);

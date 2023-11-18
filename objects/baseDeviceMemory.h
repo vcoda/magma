@@ -31,15 +31,9 @@ namespace magma
         VkDeviceSize getSize() const noexcept override { return memoryRequirements.size; }
         VkDeviceSize getAlignment() const noexcept override { return memoryRequirements.alignment; }
         uint32_t getMemoryTypeBits() const noexcept override { return memoryRequirements.memoryTypeBits; }
+        const Flags& getFlags() const noexcept override { return flags; }
         uint32_t getDeviceMask() const noexcept { return deviceMask; }
         void *getMapPointer() const noexcept { return mapPointer; }
-        bool local() const noexcept override;
-        bool staged() const noexcept override;
-        bool hostVisible() const noexcept override;
-        bool hostCached() const noexcept override;
-    #ifdef VK_AMD_device_coherent_memory
-        bool deviceHostCoherent() const noexcept override;
-    #endif
         bool binded() const noexcept override;
         bool mapped() const noexcept override;
 
@@ -53,7 +47,8 @@ namespace magma
         float clampPriority(float value) noexcept;
 
         VkMemoryRequirements memoryRequirements;
-        const VkMemoryPropertyFlags flags;
+        const VkMemoryPropertyFlags memoryFlags;
+        Flags flags;
         uint32_t deviceMask;
         float priority;
         NonDispatchableHandle binding;

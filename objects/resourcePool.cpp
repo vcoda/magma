@@ -125,7 +125,7 @@ VkDeviceSize ResourcePool::countAllocatedDeviceLocalMemory() const
     deviceMemories.forEach<DeviceMemory>(
         [&deviceLocalAllocatedSize](const DeviceMemory *memory)
         {
-            if (memory->local())
+            if (memory->getFlags().deviceLocal)
                 deviceLocalAllocatedSize += memory->getSize();
         });
     return deviceLocalAllocatedSize;
@@ -138,7 +138,7 @@ VkDeviceSize ResourcePool::countAllocatedHostVisibleMemory() const
     deviceMemories.forEach<DeviceMemory>(
         [&hostVisibleAllocatedSize](const DeviceMemory *memory)
         {
-            if (memory->hostVisible())
+            if (memory->getFlags().hostVisible)
                 hostVisibleAllocatedSize += memory->getSize();
         });
     return hostVisibleAllocatedSize;

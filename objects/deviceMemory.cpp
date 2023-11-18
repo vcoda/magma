@@ -126,7 +126,7 @@ void DeviceMemory::realloc(NonDispatchableHandle /* unused */,
     memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     memoryAllocateInfo.pNext = extendedInfo.chainNodes();
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
-    memoryAllocateInfo.memoryTypeIndex = findTypeIndex(flags);
+    memoryAllocateInfo.memoryTypeIndex = findTypeIndex(memoryFlags);
     const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &memoryAllocateInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to reallocate device memory");
@@ -238,12 +238,12 @@ void DeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObjectType ob
 void *DeviceMemory::map(
     VkDeviceSize offset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */,
-    VkMemoryMapFlags flags /* 0 */) noexcept
+    VkMemoryMapFlags mapFlags /* 0 */) noexcept
 {
-    MAGMA_ASSERT(hostVisible());
+    MAGMA_ASSERT(flags.hostVisible);
     if (!mapPointer)
     {
-        const VkResult result = vkMapMemory(MAGMA_HANDLE(device), handle, offset, size, flags, &mapPointer);
+        const VkResult result = vkMapMemory(MAGMA_HANDLE(device), handle, offset, size, mapFlags, &mapPointer);
         if (result != VK_SUCCESS)
         {   // VK_ERROR_OUT_OF_HOST_MEMORY
             // VK_ERROR_OUT_OF_DEVICE_MEMORY
@@ -256,7 +256,7 @@ void *DeviceMemory::map(
 
 void DeviceMemory::unmap() noexcept
 {
-    MAGMA_ASSERT(hostVisible());
+    MAGMA_ASSERT(flags.hostVisible);
     if (mapPointer)
     {
         vkUnmapMemory(MAGMA_HANDLE(device), handle);

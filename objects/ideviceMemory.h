@@ -27,22 +27,19 @@ namespace magma
     class IDeviceMemory : public IDestructible
     {
     public:
+        struct Flags;
+
+    public:
         virtual VkDeviceMemory getNativeHandle() const noexcept = 0;
         virtual VkDeviceSize getSuballocationOffset() const noexcept = 0;
         virtual VkDeviceSize getSize() const noexcept = 0;
         virtual VkDeviceSize getAlignment() const noexcept = 0;
         virtual uint32_t getMemoryTypeBits() const noexcept = 0;
+        virtual const Flags& getFlags() const noexcept = 0;
         virtual uint32_t getDeviceMask() const noexcept = 0;
         virtual float getPriority() const noexcept = 0;
         virtual void setPriority(float priority) noexcept = 0;
         virtual bool managed() const noexcept = 0;
-        virtual bool local() const noexcept = 0;
-        virtual bool staged() const noexcept = 0;
-        virtual bool hostVisible() const noexcept = 0;
-        virtual bool hostCached() const noexcept = 0;
-    #ifdef VK_AMD_device_coherent_memory
-        virtual bool deviceHostCoherent() const noexcept = 0;
-    #endif
         virtual bool binded() const noexcept = 0;
         virtual bool mapped() const noexcept = 0;
         virtual void realloc(NonDispatchableHandle object,
@@ -67,5 +64,16 @@ namespace magma
         virtual bool invalidateMappedRange(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept = 0;
         virtual void onDefragment() noexcept = 0;
+    };
+
+    struct IDeviceMemory::Flags
+    {
+        uint32_t deviceLocal: 1;
+        uint32_t hostVisible: 1;
+        uint32_t hostCached: 1;
+        uint32_t lazilyAllocated: 1;
+        uint32_t deviceHostCoherent: 1;
+        uint32_t deviceUncached: 1;
+        uint32_t staged: 1;
     };
 } // namespace magma
