@@ -33,15 +33,21 @@ namespace magma
 AndroidHardwareBuffer::AndroidHardwareBuffer(std::shared_ptr<Device> device, AHardwareBuffer* buffer):
     buffer(buffer)
 {
-    VkAndroidHardwareBufferPropertiesANDROID androidHardwareBufferProperties = {};
-    androidHardwareBufferProperties.sType = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_PROPERTIES_ANDROID;
+    properties.sType = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_PROPERTIES_ANDROID;
+    properties.pNext = &formatProperties;
+    formatProperties.sType = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_FORMAT_PROPERTIES_ANDROID;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetAndroidHardwareBufferPropertiesANDROID, VK_ANDROID_EXTERNAL_MEMORY_ANDROID_HARDWARE_BUFFER_EXTENSION_NAME);
-    const VkResult result = vkGetAndroidHardwareBufferPropertiesANDROID(MAGMA_HANDLE(device), buffer, &androidHardwareBufferProperties);
+    const VkResult result = vkGetAndroidHardwareBufferPropertiesANDROID(MAGMA_HANDLE(device), buffer, &properties);
     MAGMA_HANDLE_RESULT(result, "failed to get properties of android hardware buffer");
+}
+
+VkMemoryRequirements AndroidHardwareBuffer::getMemoryRequirements() const noexcept
+{
     VkMemoryRequirements memoryRequirements;
-    memoryRequirements.size = androidHardwareBufferProperties.allocationSize;
+    memoryRequirements.size = properties.allocationSize;
     memoryRequirements.alignment = 0; // TODO: What is a proper alignment?
-    memoryRequirements.memoryTypeBits = androidHardwareBufferProperties.memoryTypeBits;
+    memoryRequirements.memoryTypeBits = properties.memoryTypeBits;
+    return memoryRequirements;
 }
 #endif // VK_ANDROID_external_memory_android_hardware_buffer
 } // namespace magma

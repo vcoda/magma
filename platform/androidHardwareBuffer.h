@@ -33,11 +33,15 @@ namespace magma
         explicit AndroidHardwareBuffer(std::shared_ptr<Device> device,
             AHardwareBuffer* buffer);
         AHardwareBuffer* getBuffer() const noexcept { return buffer; }
-        const VkMemoryRequirements& getMemoryRequirements() const noexcept { return memoryRequirements; }
+        VkFormat getFormat() const noexcept { return formatProperties.format; }
+        const VkAndroidHardwareBufferPropertiesANDROID& getProperties() const noexcept { return properties; }
+        const VkAndroidHardwareBufferFormatPropertiesANDROID& getFormatProperties() const noexcept { return formatProperties; }
+        VkMemoryRequirements getMemoryRequirements() const noexcept;
 
     private:
         AHardwareBuffer* buffer;
-        VkMemoryRequirements memoryRequirements;
+        VkAndroidHardwareBufferPropertiesANDROID properties;
+        VkAndroidHardwareBufferFormatPropertiesANDROID formatProperties;
     };
 #endif // VK_ANDROID_external_memory_android_hardware_buffer
 } // namespace magma
