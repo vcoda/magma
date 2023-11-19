@@ -22,7 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif
 #include "androidHardwareBuffer.h"
 #include "../objects/device.h"
-#include "../objects/physicalDevice.h"
 #include "../exceptions/errorResult.h"
 
 #undef MAGMA_HANDLE
