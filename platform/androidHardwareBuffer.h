@@ -41,6 +41,9 @@ namespace magma
 
     private:
         AHardwareBuffer* buffer;
+    #ifdef VK_USE_PLATFORM_ANDROID_KHR
+        AHardwareBuffer_Desc bufferDesc;
+    #endif
         VkAndroidHardwareBufferPropertiesANDROID properties;
         VkAndroidHardwareBufferFormatPropertiesANDROID formatProperties;
     };

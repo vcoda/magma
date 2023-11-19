@@ -36,6 +36,9 @@ namespace magma
 AndroidHardwareBuffer::AndroidHardwareBuffer(std::shared_ptr<Device> device, AHardwareBuffer* buffer):
     buffer(buffer)
 {
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
+    AHardwareBuffer_describe(buffer, &bufferDesc);
+#endif
     properties.sType = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_PROPERTIES_ANDROID;
     properties.pNext = &formatProperties;
     formatProperties.sType = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_FORMAT_PROPERTIES_ANDROID;
@@ -48,8 +51,6 @@ VkImageUsageFlags AndroidHardwareBuffer::getImageUsage() const noexcept
 {
     VkImageUsageFlags usage = 0;
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
-    AHardwareBuffer_Desc bufferDesc;
-    AHardwareBuffer_describe(buffer, &bufferDesc);
     if (bufferDesc.usage & AHARDWAREBUFFER_USAGE_GPU_SAMPLED_IMAGE)
         usage |= VK_IMAGE_USAGE_SAMPLED_BIT;
     if (bufferDesc.usage & AHARDWAREBUFFER_USAGE_GPU_COLOR_OUTPUT)
