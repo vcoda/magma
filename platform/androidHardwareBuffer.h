@@ -21,10 +21,10 @@ namespace magma
 {
     class Device;
 
-    /* Enables an application to import Android AHardwareBuffer
-       objects created outside of the Vulkan device into
-       Vulkan memory objects, where they can be bound to
-       images and buffers. */
+    /* Enables an application to import Android
+       AHardwareBuffer objects created outside of
+       the Vulkan device into Vulkan memory objects,
+       where they can be bound to images and buffers. */
 
 #ifdef VK_ANDROID_external_memory_android_hardware_buffer
     class AndroidHardwareBuffer : NonCopyable
