@@ -17,6 +17,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
+#include <android/hardware_buffer.h>
+#endif
 #include "androidHardwareBuffer.h"
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
@@ -39,6 +42,20 @@ AndroidHardwareBuffer::AndroidHardwareBuffer(std::shared_ptr<Device> device, AHa
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetAndroidHardwareBufferPropertiesANDROID, VK_ANDROID_EXTERNAL_MEMORY_ANDROID_HARDWARE_BUFFER_EXTENSION_NAME);
     const VkResult result = vkGetAndroidHardwareBufferPropertiesANDROID(MAGMA_HANDLE(device), buffer, &properties);
     MAGMA_HANDLE_RESULT(result, "failed to get properties of android hardware buffer");
+}
+
+VkImageUsageFlags AndroidHardwareBuffer::getImageUsage() const noexcept
+{
+    VkImageUsageFlags usage = 0;
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
+    AHardwareBuffer_Desc bufferDesc;
+    AHardwareBuffer_describe(buffer, &bufferDesc);
+    if (bufferDesc.usage & AHARDWAREBUFFER_USAGE_GPU_SAMPLED_IMAGE)
+        usage |= VK_IMAGE_USAGE_SAMPLED_BIT;
+    if (bufferDesc.usage & AHARDWAREBUFFER_USAGE_GPU_COLOR_OUTPUT)
+        usage |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+#endif // VK_USE_PLATFORM_ANDROID_KHR
+    return usage;
 }
 
 VkMemoryRequirements AndroidHardwareBuffer::getMemoryRequirements() const noexcept

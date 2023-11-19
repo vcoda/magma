@@ -36,6 +36,7 @@ namespace magma
         VkFormat getFormat() const noexcept { return formatProperties.format; }
         const VkAndroidHardwareBufferPropertiesANDROID& getProperties() const noexcept { return properties; }
         const VkAndroidHardwareBufferFormatPropertiesANDROID& getFormatProperties() const noexcept { return formatProperties; }
+        VkImageUsageFlags getImageUsage() const noexcept;
         VkMemoryRequirements getMemoryRequirements() const noexcept;
 
     private:
