@@ -47,6 +47,17 @@ AndroidHardwareBuffer::AndroidHardwareBuffer(std::shared_ptr<Device> device, AHa
     MAGMA_HANDLE_RESULT(result, "failed to get properties of android hardware buffer");
 }
 
+VkExtent2D AndroidHardwareBuffer::getExtent() const noexcept
+{
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
+    VkExtent2D extent;
+    extent.width = bufferDesc.width;
+    extent.height = bufferDesc.height;
+    return extent;
+#endif // VK_USE_PLATFORM_ANDROID_KHR
+    return VkExtent2D{0, 0};
+}
+
 VkImageUsageFlags AndroidHardwareBuffer::getImageUsage() const noexcept
 {
     VkImageUsageFlags usage = 0;
