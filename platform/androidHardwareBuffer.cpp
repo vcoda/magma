@@ -57,6 +57,14 @@ VkExtent2D AndroidHardwareBuffer::getExtent() const noexcept
     return VkExtent2D{0, 0};
 }
 
+uint32_t AndroidHardwareBuffer::getLayers() const noexcept
+{
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
+    return bufferDesc.layers;
+#endif // VK_USE_PLATFORM_ANDROID_KHR
+    return 1;
+}
+
 VkImageUsageFlags AndroidHardwareBuffer::getImageUsage() const noexcept
 {
     VkImageUsageFlags usage = 0;

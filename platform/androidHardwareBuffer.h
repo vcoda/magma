@@ -37,6 +37,7 @@ namespace magma
         const VkAndroidHardwareBufferPropertiesANDROID& getProperties() const noexcept { return properties; }
         const VkAndroidHardwareBufferFormatPropertiesANDROID& getFormatProperties() const noexcept { return formatProperties; }
         VkExtent2D getExtent() const noexcept;
+        uint32_t getLayers() const noexcept;
         VkImageUsageFlags getImageUsage() const noexcept;
         bool protectedContent() const noexcept;
         VkMemoryRequirements getMemoryRequirements() const noexcept;
