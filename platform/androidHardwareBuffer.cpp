@@ -70,6 +70,15 @@ VkImageUsageFlags AndroidHardwareBuffer::getImageUsage() const noexcept
     return usage;
 }
 
+bool AndroidHardwareBuffer::protectedContent() const noexcept
+{
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
+    return (bufferDesc.usage & AHARDWAREBUFFER_USAGE_PROTECTED_CONTENT);
+#else
+    return false;
+#endif // VK_USE_PLATFORM_ANDROID_KHR
+}
+
 VkMemoryRequirements AndroidHardwareBuffer::getMemoryRequirements() const noexcept
 {
     VkMemoryRequirements memoryRequirements;
