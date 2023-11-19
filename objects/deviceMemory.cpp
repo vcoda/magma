@@ -91,20 +91,22 @@ void DeviceMemory::setPriority(float priority) noexcept
 }
 
 #ifdef VK_ANDROID_external_memory_android_hardware_buffer
-AHardwareBuffer* DeviceMemory::getHardwareBuffer() const
+AHardwareBuffer* DeviceMemory::getHardwareBuffer() const noexcept
 {
     VkMemoryGetAndroidHardwareBufferInfoANDROID androidHardwareBufferInfo;
     androidHardwareBufferInfo.sType = VK_STRUCTURE_TYPE_MEMORY_GET_ANDROID_HARDWARE_BUFFER_INFO_ANDROID;
     androidHardwareBufferInfo.pNext = nullptr;
     androidHardwareBufferInfo.memory = handle;
-    AHardwareBuffer *buffer = nullptr;
-    // A new reference acquired in addition to the reference held by the VkDeviceMemory
-    MAGMA_REQUIRED_EXTENSION(vkGetMemoryAndroidHardwareBufferANDROID,
-        VK_ANDROID_EXTERNAL_MEMORY_ANDROID_HARDWARE_BUFFER_EXTENSION_NAME);
-    const VkResult result = vkGetMemoryAndroidHardwareBufferANDROID(MAGMA_HANDLE(device),
-        &androidHardwareBufferInfo, &buffer);
-    MAGMA_HANDLE_RESULT(result, "failed to get android hardware buffer for a memory object");
-    return buffer;
+    MAGMA_DEVICE_EXTENSION(vkGetMemoryAndroidHardwareBufferANDROID);
+    if (vkGetMemoryAndroidHardwareBufferANDROID)
+    {   // A new reference acquired in addition to the reference held by the VkDeviceMemory
+        AHardwareBuffer *buffer = nullptr;
+        const VkResult result = vkGetMemoryAndroidHardwareBufferANDROID(MAGMA_HANDLE(device),
+            &androidHardwareBufferInfo, &buffer);
+        if (MAGMA_SUCCEEDED(result))
+            return buffer;
+    }
+    return nullptr;
 }
 #endif // VK_ANDROID_external_memory_android_hardware_buffer
 

@@ -52,7 +52,7 @@ namespace magma
         float getPriority() const noexcept override { return priority; }
         void setPriority(float priority) noexcept override;
     #ifdef VK_ANDROID_external_memory_android_hardware_buffer
-        AHardwareBuffer* getHardwareBuffer() const;
+        AHardwareBuffer* getHardwareBuffer() const noexcept;
     #endif
         bool managed() const noexcept override { return false; }
         void realloc(NonDispatchableHandle object,
