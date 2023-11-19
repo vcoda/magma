@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{8D9D4A3E-439A-4210-8879-259B20D992CA}</ProjectGuid>
     <RootNamespace>magma</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -270,6 +270,7 @@
     <ClInclude Include="..\..\objects\displayMode.h" />
     <ClInclude Include="..\..\objects\dstTransferBuffer.h" />
     <ClInclude Include="..\..\objects\event.h" />
+    <ClInclude Include="..\..\objects\externalImage.h" />
     <ClInclude Include="..\..\objects\fence.h" />
     <ClInclude Include="..\..\objects\fragmentDensityMapView.h" />
     <ClInclude Include="..\..\objects\fragmentShadingRateAttachment.h" />
@@ -457,6 +458,7 @@
     <ClCompile Include="..\..\objects\displayMode.cpp" />
     <ClCompile Include="..\..\objects\dstTransferBuffer.cpp" />
     <ClCompile Include="..\..\objects\event.cpp" />
+    <ClCompile Include="..\..\objects\externalImage.cpp" />
     <ClCompile Include="..\..\objects\fence.cpp" />
     <ClCompile Include="..\..\objects\fragmentDensityMapView.cpp" />
     <ClCompile Include="..\..\objects\fragmentShadingRateAttachment.cpp" />

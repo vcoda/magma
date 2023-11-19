@@ -100,6 +100,7 @@ SRC_OBJS= \
 	objects/displayMode.o \
 	objects/dstTransferBuffer.o \
 	objects/event.o \
+	objects/externalImage.o \
 	objects/fence.o \
 	objects/fragmentDensityMap.o \
 	objects/fragmentDensityMapView.o \

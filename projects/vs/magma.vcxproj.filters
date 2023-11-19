@@ -798,6 +798,9 @@
     <ClInclude Include="..\..\platform\androidHardwareBuffer.h">
       <Filter>Header Files\platform</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\objects\externalImage.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
@@ -1246,6 +1249,9 @@
     </ClCompile>
     <ClCompile Include="..\..\platform\androidHardwareBuffer.cpp">
       <Filter>Source Files\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\objects\externalImage.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

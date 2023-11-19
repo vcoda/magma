@@ -44,6 +44,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "objects/displayMode.h"
 #include "objects/dstTransferBuffer.h"
 #include "objects/event.h"
+#include "objects/externalImage.h"
 #include "objects/fence.h"
 #include "objects/fragmentDensityMap.h"
 #include "objects/fragmentShadingRateAttachment.h"
