@@ -394,6 +394,31 @@ std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint3
 }
 #endif // VK_KHR_display
 
+#if defined(VK_ANDROID_external_memory_android_hardware_buffer) && defined(VK_KHR_get_physical_device_properties2)
+uint64_t PhysicalDevice::getAndroidHardwareBufferUsage(VkFormat format, VkImageUsageFlags usage,
+    VkImageCreateFlags flags /* 0 */) const
+{
+    VkPhysicalDeviceImageFormatInfo2KHR imageFormatInfo;
+    VkImageFormatProperties2KHR imageFormatProperties;
+    VkAndroidHardwareBufferUsageANDROID hardwareBufferUsage;
+    imageFormatInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2_KHR;
+    imageFormatInfo.pNext = nullptr;
+    imageFormatInfo.format = format;
+    imageFormatInfo.type = VK_IMAGE_TYPE_2D;
+    imageFormatInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+    imageFormatInfo.usage = usage;
+    imageFormatInfo.flags = flags;
+    imageFormatProperties.sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2_KHR;
+    imageFormatProperties.pNext = &hardwareBufferUsage;
+    hardwareBufferUsage.sType = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_USAGE_ANDROID;
+    hardwareBufferUsage.pNext = nullptr;
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceImageFormatProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
+    const VkResult result = vkGetPhysicalDeviceImageFormatProperties2KHR(handle, &imageFormatInfo, &imageFormatProperties);
+    MAGMA_HANDLE_RESULT(result, "failed to get android hardware buffer usage");
+    return hardwareBufferUsage.androidHardwareBufferUsage;
+}
+#endif // VK_ANDROID_external_memory_android_hardware_buffer && VK_KHR_get_physical_device_properties2
+
 std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
 {
     const std::vector<float> defaultQueuePriorities = {1.0f};
