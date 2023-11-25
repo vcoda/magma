@@ -18,7 +18,7 @@ inline Specialization::Specialization(const Block& data, const SpecializationEnt
         core::copyBinaryData(data) // pData
     }
 {
-    core::copy((VkSpecializationMapEntry *)pMapEntries, (VkSpecializationMapEntry *)&entry),
+    core::copy((VkSpecializationMapEntry *)pMapEntries, (VkSpecializationMapEntry *)&entry);
 }
 
 template<class Block>

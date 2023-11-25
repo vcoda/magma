@@ -63,7 +63,7 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, cons
 template<class Vertex>
 inline VertexInputStructure<Vertex>::VertexInputStructure(const VertexInputStructure& other) noexcept
 {
-    sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,;
+    sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     pNext = other.pNext;
     flags = other.flags;
     vertexBindingDescription = other.vertexBindingDescription;
