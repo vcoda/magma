@@ -40,7 +40,7 @@ namespace magma
         class Profiler : public Base
         {
         public:
-            enum Queue;
+            enum Queue : uint8_t;
             struct Sample;
 
             static void set(Profiler *profiler) noexcept;
@@ -91,7 +91,7 @@ namespace magma
             bool insideFrame = false;
         };
 
-        enum Profiler::Queue
+        enum Profiler::Queue : uint8_t
         {
             Graphics, Compute
         };
