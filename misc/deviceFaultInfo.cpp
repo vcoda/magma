@@ -54,7 +54,7 @@ DeviceFaultInfo::DeviceFaultInfo(const DeviceFaultInfo& other) noexcept:
         "",
         core::copyArray(other.pAddressInfos, other.addressInfoCount),
         core::copyArray(other.pVendorInfos, other.vendorInfoCount),
-        core::copyBinaryData(other.pVendorBinaryData, other.vendorBinarySize)
+        core::copyBinaryData(other.pVendorBinaryData, static_cast<std::size_t>(other.vendorBinarySize))
     },
     addressInfoCount(other.addressInfoCount),
     vendorInfoCount(other.vendorInfoCount),
@@ -97,7 +97,7 @@ DeviceFaultInfo& DeviceFaultInfo::operator=(const DeviceFaultInfo& other) noexce
         delete[] pVendorInfos;
         pVendorInfos = core::copyArray(other.pVendorInfos, other.vendorInfoCount);
         delete[] pVendorBinaryData;
-        pVendorBinaryData = core::copyBinaryData(other.pVendorBinaryData, other.vendorBinarySize);
+        pVendorBinaryData = core::copyBinaryData(other.pVendorBinaryData, static_cast<std::size_t>(other.vendorBinarySize));
         addressInfoCount = other.addressInfoCount;
         vendorInfoCount = other.vendorInfoCount;
         vendorBinarySize = other.vendorBinarySize;
