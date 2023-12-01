@@ -33,7 +33,7 @@ inline TObject<Type>::TObject(VkObjectType objectType, std::shared_ptr<IAllocato
 }
 
 template<class Type>
-inline TObject<Type>::TObject(VkObjectType objectType, std::shared_ptr<Device> device_, std::shared_ptr<IAllocator> hostAllocator):
+inline TObject<Type>::TObject(VkObjectType objectType, std::shared_ptr<Device> device_, std::shared_ptr<IAllocator> hostAllocator) noexcept:
     Object(std::move(device_), std::move(hostAllocator)),
 #if !defined(MAGMA_X64)
     objectType(objectType),
@@ -44,7 +44,7 @@ inline TObject<Type>::TObject(VkObjectType objectType, std::shared_ptr<Device> d
 }
 
 template<class Type>
-inline TObject<Type>::TObject(VkObjectType objectType, Type handle, std::shared_ptr<Device> device_, std::shared_ptr<IAllocator> hostAllocator):
+inline TObject<Type>::TObject(VkObjectType objectType, Type handle, std::shared_ptr<Device> device_, std::shared_ptr<IAllocator> hostAllocator) noexcept:
     Object(std::move(device_), std::move(hostAllocator)),
 #if !defined(MAGMA_X64)
     objectType(objectType),

@@ -82,11 +82,11 @@ namespace magma
             std::shared_ptr<IAllocator> hostAllocator) noexcept;
         explicit TObject(VkObjectType objectType,
             std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> hostAllocator);
+            std::shared_ptr<IAllocator> hostAllocator) noexcept;
         explicit TObject(VkObjectType objectType,
             Type handle,
             std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> hostAllocator);
+            std::shared_ptr<IAllocator> hostAllocator) noexcept;
         VkObjectType getObjectType() const noexcept override;
         const NativeHandle *getHandleAddress() const noexcept { return &handle; }
         operator NativeHandle() const noexcept { return handle; }

@@ -45,12 +45,11 @@ namespace magma
     protected:
         explicit NonDispatchable(VkObjectType objectType,
             std::shared_ptr<IAllocator> hostAllocator) noexcept:
-            TObject<Type>(objectType, std::move(hostAllocator))
-        {}
+            TObject<Type>(objectType, std::move(hostAllocator)) {}
 
         explicit NonDispatchable(VkObjectType objectType,
             std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> hostAllocator):
+            std::shared_ptr<IAllocator> hostAllocator) noexcept:
             TObject<Type>(objectType, std::move(device), std::move(hostAllocator))
         {
         #ifdef MAGMA_X64

@@ -36,12 +36,12 @@ namespace magma
             TObject<Type>(objectType, std::move(hostAllocator)) {}
         explicit Dispatchable(VkObjectType objectType,
             std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> hostAllocator):
+            std::shared_ptr<IAllocator> hostAllocator) noexcept:
             TObject<Type>(objectType, std::move(device), std::move(hostAllocator)) {}
         explicit Dispatchable(VkObjectType objectType,
             Type handle,
             std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> hostAllocator):
+            std::shared_ptr<IAllocator> hostAllocator) noexcept:
             TObject<Type>(objectType, handle, std::move(device), std::move(hostAllocator)) {}
         uint64_t getHandle() const noexcept override
             { return reinterpret_cast<uint64_t>(TObject<Type>::handle); }
