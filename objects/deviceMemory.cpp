@@ -158,7 +158,7 @@ void DeviceMemory::bind(NonDispatchableHandle object, VkObjectType objectType,
             bindAccelerationStructureMemoryInfo.memoryOffset = offset;
             bindAccelerationStructureMemoryInfo.deviceIndexCount = 0;
             bindAccelerationStructureMemoryInfo.pDeviceIndices = nullptr;
-            MAGMA_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV);
+            MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
             result = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &bindAccelerationStructureMemoryInfo);
         }
         break;
