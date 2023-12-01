@@ -24,14 +24,14 @@ namespace magma
     template<class Type>
     struct ObjectType
     {
-        static constexpr VkObjectType getObjectType() { return VK_OBJECT_TYPE_UNKNOWN; }
+        static constexpr VkObjectType getObjectType() noexcept { return VK_OBJECT_TYPE_UNKNOWN; }
     };
 
-#define MAGMA_SPECIALIZE_OBJECT_TYPE(Type, objectType)\
+    #define MAGMA_SPECIALIZE_OBJECT_TYPE(Type, objectType)\
     template<>\
     struct ObjectType<Type>\
     {\
-        static constexpr VkObjectType getObjectType() { return objectType; }\
+        static constexpr VkObjectType getObjectType() noexcept { return objectType; }\
     };
 
     /* Template specializations for Vulkan object types. */
