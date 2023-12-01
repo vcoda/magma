@@ -39,6 +39,7 @@ namespace magma
         VkExtent2D getExtent() const noexcept;
         uint32_t getLayers() const noexcept;
         VkImageUsageFlags getImageUsage() const noexcept;
+        bool cubeMap() const noexcept;
         bool protectedContent() const noexcept;
         VkMemoryRequirements getMemoryRequirements() const noexcept;
 

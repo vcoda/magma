@@ -78,6 +78,15 @@ VkImageUsageFlags AndroidHardwareBuffer::getImageUsage() const noexcept
     return usage;
 }
 
+bool AndroidHardwareBuffer::cubeMap() const noexcept
+{
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
+    return (bufferDesc.usage & AHARDWAREBUFFER_USAGE_GPU_CUBE_MAP);
+#else
+    return false;
+#endif // VK_USE_PLATFORM_ANDROID_KHR
+}
+
 bool AndroidHardwareBuffer::protectedContent() const noexcept
 {
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
