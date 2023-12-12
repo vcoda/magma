@@ -310,23 +310,22 @@ void Buffer::onDefragment()
     bindMemory(std::move(memory), offset);
 }
 
-void Buffer::copyHost(const void *srcBuffer,
+void Buffer::copyHost(const void *srcBuffer, VkDeviceSize srcBufferSize,
     VkDeviceSize srcOffset /* 0 */,
     VkDeviceSize dstOffset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */,
     CopyMemoryFunction copyFn /* nullptr */) noexcept
 {
-    void *dstBuffer = memory->map(dstOffset, size);
+    if (VK_WHOLE_SIZE == size)
+        MAGMA_ASSERT(0 == dstOffset);
+    const VkDeviceSize wholeSize = std::min(getSize(), srcBufferSize); 
+    void *dstBuffer = memory->map(dstOffset, (VK_WHOLE_SIZE == size) ? VK_WHOLE_SIZE : std::min(size, wholeSize));
     if (dstBuffer)
     {
         if (!copyFn)
             copyFn = core::copyMemory;
-        if (VK_WHOLE_SIZE == size)
-        {
-            MAGMA_ASSERT(0 == dstOffset);
-            size = getSize();
-        }
-        copyFn(dstBuffer, (uint8_t *)srcBuffer + srcOffset, static_cast<std::size_t>(size));
+        const VkDeviceSize copySize = (VK_WHOLE_SIZE == size) ? wholeSize : std::min(size, wholeSize);
+        copyFn(dstBuffer, (uint8_t *)srcBuffer + srcOffset, static_cast<std::size_t>(copySize));
         memory->unmap();
     }
 }
@@ -336,10 +335,13 @@ void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_
     VkDeviceSize dstOffset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */)
 {
+    if (VK_WHOLE_SIZE == size)
+        MAGMA_ASSERT(0 == dstOffset);
+    const VkDeviceSize wholeSize = std::min(getSize(), srcBuffer->getSize()); 
     VkBufferCopy region;
     region.srcOffset = srcOffset;
     region.dstOffset = dstOffset;
-    region.size = (VK_WHOLE_SIZE == size) ? std::min(getSize(), srcBuffer->getSize()) : size;
+    region.size = (VK_WHOLE_SIZE == size) ? wholeSize : std::min(size, wholeSize);
     // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
     std::shared_ptr<Buffer> self = std::shared_ptr<Buffer>(this, [](Buffer *) {});
     cmdBuffer->copyBuffer(srcBuffer, self, region);

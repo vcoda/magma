@@ -59,6 +59,7 @@ namespace magma
     #endif // VK_KHR_device_group
         void onDefragment() override;
         void copyHost(const void *srcBuffer,
+            VkDeviceSize srcBufferSize,
             VkDeviceSize srcOffset = 0,
             VkDeviceSize dstOffset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE,
