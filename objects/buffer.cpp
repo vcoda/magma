@@ -152,14 +152,14 @@ VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
 #ifdef VK_KHR_get_memory_requirements2
 VkMemoryRequirements Buffer::getMemoryRequirements2(void *memoryRequirements) const
 {
-    VkBufferMemoryRequirementsInfo2KHR bufferMemoryRequirementsInfo2;
-    bufferMemoryRequirementsInfo2.sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_REQUIREMENTS_INFO_2_KHR;
-    bufferMemoryRequirementsInfo2.pNext = nullptr;
-    bufferMemoryRequirementsInfo2.buffer = handle;
     VkMemoryRequirements2KHR memoryRequirements2;
+    VkBufferMemoryRequirementsInfo2KHR bufferMemoryRequirementsInfo2;
     memoryRequirements2.sType = VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2_KHR;
     memoryRequirements2.pNext = memoryRequirements;
     memoryRequirements2.memoryRequirements = {};
+    bufferMemoryRequirementsInfo2.sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_REQUIREMENTS_INFO_2_KHR;
+    bufferMemoryRequirementsInfo2.pNext = nullptr;
+    bufferMemoryRequirementsInfo2.buffer = handle;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetBufferMemoryRequirements2KHR, VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME);
     vkGetBufferMemoryRequirements2KHR(MAGMA_HANDLE(device), &bufferMemoryRequirementsInfo2, &memoryRequirements2);
     return memoryRequirements2.memoryRequirements;
@@ -319,12 +319,14 @@ void Buffer::copyHost(const void *srcBuffer, VkDeviceSize srcBufferSize,
     if (VK_WHOLE_SIZE == size)
         MAGMA_ASSERT(0 == dstOffset);
     const VkDeviceSize wholeSize = std::min(getSize(), srcBufferSize); 
-    void *dstBuffer = memory->map(dstOffset, (VK_WHOLE_SIZE == size) ? VK_WHOLE_SIZE : std::min(size, wholeSize));
+    if (VK_WHOLE_SIZE != size)
+        size = std::min(size, wholeSize);
+    void *dstBuffer = memory->map(dstOffset, size);
     if (dstBuffer)
     {
         if (!copyFn)
             copyFn = core::copyMemory;
-        const VkDeviceSize copySize = (VK_WHOLE_SIZE == size) ? wholeSize : std::min(size, wholeSize);
+        const VkDeviceSize copySize = (VK_WHOLE_SIZE == size) ? wholeSize : size;
         copyFn(dstBuffer, (uint8_t *)srcBuffer + srcOffset, static_cast<std::size_t>(copySize));
         memory->unmap();
     }
@@ -338,10 +340,12 @@ void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_
     if (VK_WHOLE_SIZE == size)
         MAGMA_ASSERT(0 == dstOffset);
     const VkDeviceSize wholeSize = std::min(getSize(), srcBuffer->getSize()); 
+    if (VK_WHOLE_SIZE != size)
+        size = std::min(size, wholeSize);
     VkBufferCopy region;
     region.srcOffset = srcOffset;
     region.dstOffset = dstOffset;
-    region.size = (VK_WHOLE_SIZE == size) ? wholeSize : std::min(size, wholeSize);
+    region.size = (VK_WHOLE_SIZE == size) ? wholeSize : size;
     // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
     std::shared_ptr<Buffer> self = std::shared_ptr<Buffer>(this, [](Buffer *) {});
     cmdBuffer->copyBuffer(srcBuffer, self, region);
