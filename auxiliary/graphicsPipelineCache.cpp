@@ -79,15 +79,25 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
         renderPass,
         subpass,
         extendedInfo);
+    // Compute hash of shader stages
+    hash_t shaderHash = 0ull;
+    for (auto const& stage: shaderStages)
+        shaderHash = core::hashCombine(shaderHash, stage.getHash());
     // Lookup for existing pipeline
     auto it = pipelines.find(hashes.first);
     if (it != pipelines.end())
         return it->second;
-    // Try to lookup base pipeline by render state hash to speed up pipeline construction
     std::shared_ptr<GraphicsPipeline> basePipeline;
-    it = basePipelines.find(hashes.second);
-    if (it != basePipelines.end())
+    // Try to lookup base pipeline by hash of render states
+    it = basePipelinesByRenderStates.find(hashes.second);
+    if (it != basePipelinesByRenderStates.end())
         basePipeline = it->second;
+    else
+    {   // Try to lookup base pipeline by hash of shader stages
+        it = basePipelinesByShaderStages.find(shaderHash);
+        if (it != basePipelinesByShaderStages.end())
+            basePipeline = it->second;
+    }
     if (basePipeline)
     {   // A pipeline derivative is a child pipeline created from a parent pipeline,
         // where the child and parent are expected to have much commonality.
@@ -118,7 +128,8 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
     MAGMA_ASSERT(hashes.first == pipeline->getHash());
     MAGMA_ASSERT(hashes.second == pipeline->getRenderStateHash());
     pipelines.emplace(pipeline->getHash(), pipeline);
-    basePipelines.emplace(pipeline->getRenderStateHash(), pipeline);
+    basePipelinesByRenderStates.emplace(pipeline->getRenderStateHash(), pipeline);
+    basePipelinesByShaderStages.emplace(shaderHash, pipeline);
     return pipeline;
 }
 } // namespace aux

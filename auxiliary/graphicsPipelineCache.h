@@ -40,6 +40,8 @@ namespace magma
 
     namespace aux
     {
+        typedef std::unordered_map<hash_t, std::shared_ptr<GraphicsPipeline>> PsoCache;
+
         /* Auxiliary cache used to speed up graphics pipeline
            construction in run-time. Utilizes VkPipelineCache
            object along with lookup of base pipeline and lookup
@@ -75,8 +77,9 @@ namespace magma
             std::shared_ptr<Device> device;
             std::shared_ptr<PipelineCache> pipelineCache;
             std::shared_ptr<IAllocator> allocator;
-            std::unordered_map<hash_t, std::shared_ptr<GraphicsPipeline>> pipelines;
-            std::unordered_map<hash_t, std::shared_ptr<GraphicsPipeline>> basePipelines;
+            PsoCache pipelines;
+            PsoCache basePipelinesByRenderStates;
+            PsoCache basePipelinesByShaderStages;
         };
     } // namespace aux
 } // namespace magma
