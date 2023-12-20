@@ -56,7 +56,8 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass,
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
-    VkPipelineCreateFlags flags /* 0 */)
+    VkPipelineCreateFlags flags /* 0 */,
+    const StructureChain& extendedInfo /* default */)
 {
     stages.push_back(shaderStages);
     vertexInputStates.push_back(vertexInputState);
@@ -80,7 +81,7 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     dynamicStateInfos.push_back(dynamicStateInfo);
     VkGraphicsPipelineCreateInfo pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    pipelineInfo.pNext = nullptr;
+    pipelineInfo.pNext = extendedInfo.chainNodes();
     pipelineInfo.flags = flags;
     if (basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
@@ -96,7 +97,7 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     pipelineInfo.pColorBlendState = &colorBlendStates.back();
     pipelineInfo.pDynamicState = &dynamicStateInfos.back();
     pipelineInfo.layout = MAGMA_OPTIONAL_HANDLE(layouts.back());
-    pipelineInfo.renderPass = *renderPasses.back();
+    pipelineInfo.renderPass = MAGMA_OPTIONAL_HANDLE(renderPasses.back());
     pipelineInfo.subpass = subpass;
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipelines.back());
     pipelineInfo.basePipelineIndex = -1;
@@ -107,7 +108,7 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
         stageCreationFeedbacks.emplace_back(pipelineInfo.stageCount);
         VkPipelineCreationFeedbackCreateInfoEXT creationFeedbackInfo;
         creationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
-        creationFeedbackInfo.pNext = nullptr;
+        creationFeedbackInfo.pNext = pipelineInfo.pNext;
         creationFeedbackInfo.pPipelineCreationFeedback = &creationFeedbacks.back();
         creationFeedbackInfo.pipelineStageCreationFeedbackCount = pipelineInfo.stageCount;
         creationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks.back().data();
@@ -116,33 +117,24 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     }
 #endif // VK_EXT_pipeline_creation_feedback
     pipelineInfos.push_back(pipelineInfo);
-    hash_t hash = core::hashArgs(
-        pipelineInfo.sType,
-        pipelineInfo.flags,
-        pipelineInfo.stageCount);
-    for (const auto& stage : shaderStages)
-        hash = core::hashCombine(hash, stage.getHash());
-    hash_t stateHash = core::combineHashList({
-        vertexInputState.hash(),
-        inputAssemblyState.hash(),
-        tesselationState.hash(),
-        viewportState.hash(),
-        rasterizationState.chained()
-            ? rasterizationState.chainedHash()
-            : rasterizationState.hash(),
-        multisampleState.hash(),
-        depthStencilState.hash(),
-        colorBlendState.hash()});
-    for (auto state: dynamicStates_)
-        hash = core::hashCombine(stateHash, core::hash(state));
-    hash = core::hashCombine(hash, stateHash);
-    hash = core::hashCombine(hash, layout->getHash());
-    if (renderPass)
-    {
-        hash = core::hashCombine(hash, renderPass->getHash());
-        hash = core::hashCombine(hash, core::hash(subpass));
-    }
-    hashes.push_back(hash);
+    std::pair<hash_t, hash_t> hash = psoHash(
+        flags,
+        shaderStages,
+        vertexInputState,
+        inputAssemblyState,
+        tesselationState,
+        viewportState,
+        rasterizationState,
+        multisampleState,
+        depthStencilState,
+        colorBlendState,
+        dynamicStates_,
+        std::move(layout),
+        std::move(renderPass),
+        subpass,
+        extendedInfo);
+    hashes.push_back(hash.first);
+    rsHashes.push_back(hash.second);
     return MAGMA_COUNT(pipelineInfos) - 1;
 }
 
@@ -179,6 +171,7 @@ void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<Device> device,
         auto stageFeedbacks = stageCreationFeedbacks.cbegin();
     #endif // VK_EXT_pipeline_creation_feedback
         auto hash = hashes.cbegin();
+        auto rsHash = rsHashes.cbegin();
         while (handle != handles.cend())
         {
             pipelines.emplace_back(new GraphicsPipeline(
@@ -188,7 +181,7 @@ void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<Device> device,
                 creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,
                 stageCreationFeedbacks.empty() ? std::vector<VkPipelineCreationFeedbackEXT>{} : *stageFeedbacks++,
             #endif // VK_EXT_pipeline_creation_feedback
-                *hash++));
+                *hash++, *rsHash++));
         }
     }
     postBuild();

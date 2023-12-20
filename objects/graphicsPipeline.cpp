@@ -74,7 +74,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
     const std::vector<VkDynamicState>& dynamicStates,
-    std::shared_ptr<PipelineLayout> layout,
+    std::shared_ptr<PipelineLayout> pipelineLayout,
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
@@ -82,7 +82,8 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     std::shared_ptr<GraphicsPipeline> basePipeline_ /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device_), std::move(layout), std::move(basePipeline_), std::move(allocator), MAGMA_COUNT(shaderStages))
+    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device_), pipelineLayout, std::move(basePipeline_), std::move(allocator), MAGMA_COUNT(shaderStages)),
+    rsHash(0ull)
 {
     MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
     for (auto& stage : shaderStages)
@@ -131,32 +132,24 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     const VkResult result = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),
         1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create graphics pipeline");
-    hash = core::hashArgs(
-        pipelineInfo.sType,
-        pipelineInfo.flags,
-        pipelineInfo.stageCount);
-    for (const auto& stage : shaderStages)
-        hash = core::hashCombine(hash, stage.getHash());
-    hash_t stateHash = core::combineHashList({
-        vertexInputState.hash(),
-        inputAssemblyState.hash(),
-        tesselationState.hash(),
-        viewportState.hash(),
-        rasterizationState.chained()
-            ? rasterizationState.chainedHash()
-            : rasterizationState.hash(),
-        multisampleState.hash(),
-        depthStencilState.hash(),
-        colorBlendState.hash()});
-    for (auto state : dynamicStates)
-        hash = core::hashCombine(stateHash, core::hash(state));
-    hash = core::hashCombine(hash, stateHash);
-    hash = core::hashCombine(hash, this->layout->getHash());
-    if (renderPass)
-    {
-        hash = core::hashCombine(hash, renderPass->getHash());
-        hash = core::hashCombine(hash, core::hash(subpass));
-    }
+    std::pair<hash_t, hash_t> hashes = psoHash(
+        flags,
+        shaderStages,
+        vertexInputState,
+        inputAssemblyState,
+        tesselationState,
+        viewportState,
+        rasterizationState,
+        multisampleState,
+        depthStencilState,
+        colorBlendState,
+        dynamicStates,
+        std::move(pipelineLayout),
+        std::move(renderPass),
+        subpass,
+        extendedInfo);
+    hash = hashes.first;
+    rsHash = hashes.second;
 }
 
 GraphicsPipeline::GraphicsPipeline(VkPipeline handle_,
@@ -169,14 +162,65 @@ GraphicsPipeline::GraphicsPipeline(VkPipeline handle_,
     VkPipelineCreationFeedbackEXT creationFeedback,
     const std::vector<VkPipelineCreationFeedbackEXT>& stageCreationFeedbacks,
 #endif // VK_EXT_pipeline_creation_feedback
-    hash_t hash):
+    hash_t hash,
+    hash_t rsHash):
     Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator),
         stageCount,
     #ifdef VK_EXT_pipeline_creation_feedback
         creationFeedback, stageCreationFeedbacks,
     #endif
-        hash)
+        hash),
+    rsHash(rsHash)
 {
     handle = handle_;
+}
+
+std::pair<hash_t, hash_t> psoHash(VkPipelineCreateFlags flags,
+    const std::vector<PipelineShaderStage>& shaderStages,
+    const VertexInputState& vertexInputState,
+    const InputAssemblyState& inputAssemblyState,
+    const TesselationState& tesselationState,
+    const ViewportState& viewportState,
+    const RasterizationState& rasterizationState,
+    const MultisampleState& multisampleState,
+    const DepthStencilState& depthStencilState,
+    const ColorBlendState& colorBlendState,
+    const std::vector<VkDynamicState>& dynamicStates,
+    std::shared_ptr<PipelineLayout> layout,
+    std::shared_ptr<RenderPass> renderPass,
+    uint32_t subpass,
+    const StructureChain& extendedInfo /* default */) noexcept
+{   // Erase flags that do not affect pipeline states
+    // TODO: maybe clear some extension flags too?
+    flags = flags & ~(VK_PIPELINE_CREATE_DISABLE_OPTIMIZATION_BIT |
+                      VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT |
+                      VK_PIPELINE_CREATE_DERIVATIVE_BIT);
+    hash_t hash = core::hash(flags);
+    for (auto const& stage: shaderStages)
+        hash = core::hashCombine(hash, stage.getHash());
+    hash_t rsHash = core::combineHashList(
+        {   // Compute hash of render states
+            vertexInputState.hash(),
+            inputAssemblyState.hash(),
+            tesselationState.hash(),
+            viewportState.hash(),
+            rasterizationState.chainedHash(),
+            multisampleState.hash(),
+            depthStencilState.hash(),
+            colorBlendState.hash()
+        });
+    for (auto state: dynamicStates)
+        rsHash = core::hashCombine(rsHash, core::hash(state));
+    hash = core::hashCombine(hash, rsHash);
+    if (layout)
+        hash = core::hashCombine(hash, layout->getHash());
+    if (renderPass)
+    {
+        hash = core::hashCombine(hash, renderPass->getHash());
+        hash = core::hashCombine(hash, core::hash(subpass));
+    }
+    if (!extendedInfo.empty()) // TODO: not all extended info may affect pipeline state
+        hash = core::hashCombine(hash, extendedInfo.getHash());
+    return {hash, rsHash};
 }
 } // namespace magma

@@ -57,7 +57,8 @@ namespace magma
             std::shared_ptr<RenderPass> renderPass,
             uint32_t subpass,
             std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
-            VkPipelineCreateFlags flags = 0);
+            VkPipelineCreateFlags flags = 0,
+            const StructureChain& extendedInfo = StructureChain());
         void buildPipelines(std::shared_ptr<Device> device,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr) override;
@@ -75,5 +76,6 @@ namespace magma
         std::list<VkPipelineDynamicStateCreateInfo> dynamicStateInfos;
         std::list<std::shared_ptr<RenderPass>> renderPasses;
         std::vector<VkGraphicsPipelineCreateInfo> pipelineInfos;
+        std::list<hash_t> rsHashes;
     };
 } // namespace magma

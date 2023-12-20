@@ -79,6 +79,7 @@ namespace magma
             std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
+        hash_t getRenderStateHash() const noexcept { return rsHash; }
 
     private:
         GraphicsPipeline(VkPipeline handle,
@@ -91,7 +92,31 @@ namespace magma
             VkPipelineCreationFeedbackEXT creationFeedback,
             const std::vector<VkPipelineCreationFeedbackEXT>& stageCreationFeedbacks,
         #endif // VK_EXT_pipeline_creation_feedback
-            hash_t hash);
+            hash_t hash,
+            hash_t rsHash);
         friend class GraphicsPipelineBatch;
+
+        hash_t rsHash;
     };
+
+    /* Calculates hash of render states and full hash of graphics 
+       pipeline state object. This function is shared between
+       classes to make sure that hash computation is consitent
+       across different parts of the library. */
+
+    std::pair<hash_t, hash_t> psoHash(VkPipelineCreateFlags flags,
+        const std::vector<PipelineShaderStage>& shaderStages,
+        const VertexInputState& vertexInputState,
+        const InputAssemblyState& inputAssemblyState,
+        const TesselationState& tesselationState,
+        const ViewportState& viewportState,
+        const RasterizationState& rasterizationState,
+        const MultisampleState& multisampleState,
+        const DepthStencilState& depthStencilState,
+        const ColorBlendState& colorBlendState,
+        const std::vector<VkDynamicState>& dynamicStates,
+        std::shared_ptr<PipelineLayout> layout,
+        std::shared_ptr<RenderPass> renderPass,
+        uint32_t subpass,
+        const StructureChain& extendedInfo = StructureChain()) noexcept;
 } // namespace magma
