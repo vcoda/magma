@@ -52,6 +52,8 @@ namespace magma
         public:
             explicit GraphicsPipelineCache(std::shared_ptr<Device> device,
                 std::shared_ptr<PipelineCache> pipelineCache,
+                bool useDerivativePipelines,
+                bool disablePipelineOptimization,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
             const std::shared_ptr<PipelineCache>& getPipelineCache() const noexcept { return pipelineCache; }
@@ -77,6 +79,7 @@ namespace magma
             std::shared_ptr<Device> device;
             std::shared_ptr<PipelineCache> pipelineCache;
             std::shared_ptr<IAllocator> allocator;
+            VkPipelineCreateFlags psoFlags;
             PsoCache pipelines;
             PsoCache basePipelinesByRenderStates;
             PsoCache basePipelinesByShaderStages;

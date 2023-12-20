@@ -37,13 +37,26 @@ namespace aux
 {
 GraphicsPipelineCache::GraphicsPipelineCache(std::shared_ptr<Device> device_,
     std::shared_ptr<PipelineCache> pipelineCache_,
+    bool useDerivativePipelines,
+    bool disablePipelineOptimization,
     std::shared_ptr<IAllocator> allocator_ /* nullptr */):
     device(std::move(device_)),
     pipelineCache(std::move(pipelineCache_)),
-    allocator(std::move(allocator_))
+    allocator(std::move(allocator_)),
+    psoFlags(0)
 {
     if (!pipelineCache)
         pipelineCache = std::make_shared<PipelineCache>(device, allocator);
+    if (useDerivativePipelines)
+    {   // Specify that the pipeline to be created is allowed to be 
+        // the parent of a pipeline that will be created.
+        psoFlags |= VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
+    }
+    if (disablePipelineOptimization)
+    {   // Pipeline will not be optimized. Using this flag may reduce 
+        // the time taken to create the pipeline.
+        psoFlags |= VK_PIPELINE_CREATE_DISABLE_OPTIMIZATION_BIT;
+    }
 }
 
 std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
@@ -79,37 +92,36 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
         renderPass,
         subpass,
         extendedInfo);
-    // Compute hash of shader stages
-    hash_t shaderHash = 0ull;
-    for (auto const& stage: shaderStages)
-        shaderHash = core::hashCombine(shaderHash, stage.getHash());
     // Lookup for existing pipeline
     auto it = pipelines.find(hashes.first);
     if (it != pipelines.end())
         return it->second;
     std::shared_ptr<GraphicsPipeline> basePipeline;
-    // Try to lookup base pipeline by hash of render states
-    it = basePipelinesByRenderStates.find(hashes.second);
-    if (it != basePipelinesByRenderStates.end())
-        basePipeline = it->second;
-    else
-    {   // Try to lookup base pipeline by hash of shader stages
-        it = basePipelinesByShaderStages.find(shaderHash);
-        if (it != basePipelinesByShaderStages.end())
+    hash_t shaderHash = 0ull;
+    if (psoFlags & VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT)
+    {   // Compute hash of shader stages
+        for (auto const& stage: shaderStages)
+            shaderHash = core::hashCombine(shaderHash, stage.getHash());
+        // Try to lookup base pipeline by hash of render states
+        it = basePipelinesByRenderStates.find(hashes.second);
+        if (it != basePipelinesByRenderStates.end())
             basePipeline = it->second;
+        else
+        {   // Try to lookup base pipeline by hash of shader stages
+            it = basePipelinesByShaderStages.find(shaderHash);
+            if (it != basePipelinesByShaderStages.end())
+                basePipeline = it->second;
+        }
+        if (basePipeline)
+        {   // A pipeline derivative is a child pipeline created from 
+            // a parent pipeline, where the child and parent are expected 
+            // to have much commonality. The goal of derivative pipelines 
+            // is that they be cheaper to create using the parent as a 
+            // starting point, and that it be more efficient (on either host 
+            // or device) to switch/bind between children of the same parent.
+            flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
+        }
     }
-    if (basePipeline)
-    {   // A pipeline derivative is a child pipeline created from 
-        // a parent pipeline, where the child and parent are expected 
-        // to have much commonality. The goal of derivative pipelines 
-        // is that they be cheaper to create using the parent as a 
-        // starting point, and that it be more efficient (on either host 
-        // or device) to switch/bind between children of the same parent.
-        flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
-    }
-    // Specify that the pipeline to be created is allowed to be 
-    // the parent of a pipeline that will be created
-    flags |= VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
     // Create new pipeline using cache (and base pipeline if exists)
     std::shared_ptr<GraphicsPipeline> pipeline = std::make_shared<GraphicsPipeline>(device,
         shaderStages, 
@@ -128,12 +140,15 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
         allocator, 
         pipelineCache, 
         std::move(basePipeline), 
-        flags);
-    MAGMA_ASSERT(hashes.first == pipeline->getHash());
-    MAGMA_ASSERT(hashes.second == pipeline->getRenderStateHash());
+        flags | psoFlags);
+    MAGMA_ASSERT(pipeline->getHash() == hashes.first);
+    MAGMA_ASSERT(pipeline->getRenderStateHash() == hashes.second);
     pipelines.emplace(pipeline->getHash(), pipeline);
-    basePipelinesByRenderStates.emplace(pipeline->getRenderStateHash(), pipeline);
-    basePipelinesByShaderStages.emplace(shaderHash, pipeline);
+    if (psoFlags & VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT)
+    {
+        basePipelinesByRenderStates.emplace(pipeline->getRenderStateHash(), pipeline);
+        basePipelinesByShaderStages.emplace(shaderHash, pipeline);
+    }
     return pipeline;
 }
 } // namespace aux

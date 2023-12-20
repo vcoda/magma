@@ -46,7 +46,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
     device(renderPass->getDevice()),
     renderPass(std::move(renderPass)),
     layout(std::move(layout)),
-    pipelineCache(std::make_shared<GraphicsPipelineCache>(device, std::move(pipelineCache), MAGMA_HOST_ALLOCATOR(allocator))),
+    pipelineCache(std::make_shared<GraphicsPipelineCache>(device, std::move(pipelineCache), true, false, MAGMA_HOST_ALLOCATOR(allocator))),
     rasterizationState(renderstate::fillCullBackCcw),
     multisampleState(renderstate::dontMultisample),
     depthStencilState(renderstate::depthAlwaysDontWrite),
