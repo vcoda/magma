@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "base.h"
 #include "../shaders/pipelineShaderStage.h"
+#include "../misc/structureChain.h"
 
 namespace magma
 {
@@ -40,9 +41,9 @@ namespace magma
     namespace aux
     {
         /* Auxiliary cache used to speed up graphics pipeline
-           construction in run-time. Utilizes pipeline cache along
-           with lookup of base pipeline and lookup of existing
-           pipeline by computing its hash. */
+           construction in run-time. Utilizes VkPipelineCache
+           object along with lookup of base pipeline and lookup
+           of existing pipeline by computing its hash. */
 
         class GraphicsPipelineCache : public Base
         {
@@ -64,20 +65,11 @@ namespace magma
                 const DepthStencilState& depthStencilState,
                 const ColorBlendState& colorBlendState,
                 const std::vector<VkDynamicState>& dynamicStates,
-                std::shared_ptr<PipelineLayout> pipelineLayout,
+                std::shared_ptr<PipelineLayout> layout,
                 std::shared_ptr<RenderPass> renderPass,
                 uint32_t subpass = 0,
-                VkPipelineCreateFlags flags = 0);
-            std::shared_ptr<GraphicsPipeline> lookupBasePipeline(
-                const VertexInputState& vertexInputState,
-                const InputAssemblyState& inputAssemblyState,
-                const TesselationState& tesselationState,
-                const ViewportState& viewportState,
-                const RasterizationState& rasterizationState,
-                const MultisampleState& multisampleState,
-                const DepthStencilState& depthStencilState,
-                const ColorBlendState& colorBlendState,
-                const std::vector<VkDynamicState>& dynamicStates = {}) const noexcept;
+                VkPipelineCreateFlags flags = 0,
+                const StructureChain& extendedInfo = StructureChain());
 
         private:
             std::shared_ptr<Device> device;

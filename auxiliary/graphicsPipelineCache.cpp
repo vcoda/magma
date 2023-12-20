@@ -57,98 +57,69 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
     const std::vector<VkDynamicState>& dynamicStates,
-    std::shared_ptr<PipelineLayout> pipelineLayout,
+    std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass /* 0 */,
-    VkPipelineCreateFlags flags /* 0 */)
+    VkPipelineCreateFlags flags /* 0 */,
+    const StructureChain& extendedInfo /* default */)
 {   // Compute hash of graphics pipeline object
-    VkGraphicsPipelineCreateInfo info;
-    info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    info.pNext = nullptr;
-    // Specify that the pipeline to be created is allowed to be the parent of a pipeline that will be created
-    info.flags = flags | VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
-    info.stageCount = MAGMA_COUNT(shaderStages);
-    hash_t hash = core::hashArgs(
-        info.sType,
-        info.flags,
-        info.stageCount);
-    for (const auto& stage : shaderStages)
-        hash = core::hashCombine(hash, stage.getHash());
-    hash_t baseHash = core::combineHashList({
-        vertexInputState.hash(),
-        inputAssemblyState.hash(),
-        tesselationState.hash(),
-        viewportState.hash(),
-        rasterizationState.hash(),
-        multisampleState.hash(),
-        depthStencilState.hash(),
-        colorBlendState.hash()});
-    for (auto state : dynamicStates)
-        hash = core::hashCombine(baseHash, core::hash(state));
-    hash = core::hashCombine(hash, baseHash);
-    if (!pipelineLayout)
-        pipelineLayout = std::make_shared<PipelineLayout>(device);
-    hash = core::hashCombine(hash, pipelineLayout->getHash());
-    if (renderPass)
-    {
-        hash = core::hashCombine(hash, renderPass->getHash());
-        hash = core::hashCombine(hash, core::hash(subpass));
-    }
+    std::pair<hash_t, hash_t> hashes = psoHash(
+        flags,
+        shaderStages,
+        vertexInputState,
+        inputAssemblyState,
+        tesselationState,
+        viewportState,
+        rasterizationState,
+        multisampleState,
+        depthStencilState,
+        colorBlendState,
+        dynamicStates,
+        std::move(layout),
+        std::move(renderPass),
+        subpass,
+        extendedInfo);
     // Lookup for existing pipeline
-    auto it = pipelines.find(hash);
+    auto it = pipelines.find(hashes.first);
     if (it != pipelines.end())
         return it->second;
-    // Try to lookup base pipeline to speed up pipeline construction
-    std::shared_ptr<GraphicsPipeline> basePipeline = lookupBasePipeline(
-        vertexInputState, inputAssemblyState, tesselationState, viewportState,
-        rasterizationState, multisampleState, depthStencilState, colorBlendState,
-        dynamicStates);
+    // Try to lookup base pipeline by render state hash to speed up pipeline construction
+    std::shared_ptr<GraphicsPipeline> basePipeline;
+    it = basePipelines.find(hashes.second);
+    if (it != basePipelines.end())
+        basePipeline = it->second;
     if (basePipeline)
     {   // A pipeline derivative is a child pipeline created from a parent pipeline,
         // where the child and parent are expected to have much commonality.
-        info.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
+        flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     }
-    // Create new pipeline using cache and base pipeline to speed up construction time
+    // Specify that the pipeline to be created is allowed to be 
+    // the parent of a pipeline that will be created
+    flags |= VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
+    // Create new pipeline using cache (and base pipeline if exists)
     std::shared_ptr<GraphicsPipeline> pipeline = std::make_shared<GraphicsPipeline>(device,
-        shaderStages, vertexInputState, inputAssemblyState, tesselationState, viewportState,
-        rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
-        std::move(pipelineLayout), std::move(renderPass), subpass,
-        allocator, pipelineCache, std::move(basePipeline), info.flags);
-    MAGMA_ASSERT(pipeline->getHash() == hash); // Check hash computation
-    pipelines.emplace(hash, pipeline);
-    basePipelines.emplace(baseHash, pipeline);
+        shaderStages, 
+        vertexInputState, 
+        inputAssemblyState, 
+        tesselationState, 
+        viewportState,
+        rasterizationState, 
+        multisampleState, 
+        depthStencilState, 
+        colorBlendState, 
+        dynamicStates,
+        std::move(layout), 
+        std::move(renderPass), 
+        subpass,
+        allocator, 
+        pipelineCache, 
+        std::move(basePipeline), 
+        flags);
+    MAGMA_ASSERT(hashes.first == pipeline->getHash());
+    MAGMA_ASSERT(hashes.second == pipeline->getRenderStateHash());
+    pipelines.emplace(pipeline->getHash(), pipeline);
+    basePipelines.emplace(pipeline->getRenderStateHash(), pipeline);
     return pipeline;
-}
-
-std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupBasePipeline(
-    const VertexInputState& vertexInputState,
-    const InputAssemblyState& inputAssemblyState,
-    const TesselationState& tesselationState,
-    const ViewportState& viewportState,
-    const RasterizationState& rasterizationState,
-    const MultisampleState& multisampleState,
-    const DepthStencilState& depthStencilState,
-    const ColorBlendState& colorBlendState,
-    const std::vector<VkDynamicState>& dynamicStates /* {} */) const noexcept
-{
-    if (!basePipelines.empty())
-    {   // Compute hash of render and dynamic states
-        hash_t hash = core::combineHashList({
-            vertexInputState.hash(),
-            inputAssemblyState.hash(),
-            tesselationState.hash(),
-            viewportState.hash(),
-            rasterizationState.hash(),
-            multisampleState.hash(),
-            depthStencilState.hash(),
-            colorBlendState.hash()});
-        for (auto state : dynamicStates)
-            hash = core::hashCombine(hash, core::hash(state));
-        auto it = basePipelines.find(hash);
-        if (it != basePipelines.end())
-            return it->second;
-    }
-    return nullptr;
 }
 } // namespace aux
 } // namespace magma
