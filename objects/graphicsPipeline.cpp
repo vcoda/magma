@@ -106,7 +106,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     pipelineInfo.pDepthStencilState = &depthStencilState;
     pipelineInfo.pColorBlendState = &colorBlendState;
     pipelineInfo.pDynamicState = dynamicStates.empty() ? nullptr : &pipelineDynamicStateInfo;
-    pipelineInfo.layout = MAGMA_HANDLE(layout);
+    pipelineInfo.layout = *layout;
     pipelineInfo.renderPass = *renderPass;
     pipelineInfo.subpass = subpass;
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipeline);
