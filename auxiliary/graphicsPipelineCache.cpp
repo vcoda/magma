@@ -48,12 +48,12 @@ GraphicsPipelineCache::GraphicsPipelineCache(std::shared_ptr<Device> device_,
     if (!pipelineCache)
         pipelineCache = std::make_shared<PipelineCache>(device, allocator);
     if (useDerivativePipelines)
-    {   // Specify that the pipeline to be created is allowed to be 
+    {   // Specify that the pipeline to be created is allowed to be
         // the parent of a pipeline that will be created.
         psoFlags |= VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
     }
     if (disablePipelineOptimization)
-    {   // Pipeline will not be optimized. Using this flag may reduce 
+    {   // Pipeline will not be optimized. Using this flag may reduce
         // the time taken to create the pipeline.
         psoFlags |= VK_PIPELINE_CREATE_DISABLE_OPTIMIZATION_BIT;
     }
@@ -113,33 +113,33 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
                 basePipeline = it->second;
         }
         if (basePipeline)
-        {   // A pipeline derivative is a child pipeline created from 
-            // a parent pipeline, where the child and parent are expected 
-            // to have much commonality. The goal of derivative pipelines 
-            // is that they be cheaper to create using the parent as a 
-            // starting point, and that it be more efficient (on either host 
+        {   // A pipeline derivative is a child pipeline created from
+            // a parent pipeline, where the child and parent are expected
+            // to have much commonality. The goal of derivative pipelines
+            // is that they be cheaper to create using the parent as a
+            // starting point, and that it be more efficient (on either host
             // or device) to switch/bind between children of the same parent.
             flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
         }
     }
     // Create new pipeline using cache (and base pipeline if exists)
     std::shared_ptr<GraphicsPipeline> pipeline = std::make_shared<GraphicsPipeline>(device,
-        shaderStages, 
-        vertexInputState, 
-        inputAssemblyState, 
-        tesselationState, 
+        shaderStages,
+        vertexInputState,
+        inputAssemblyState,
+        tesselationState,
         viewportState,
-        rasterizationState, 
-        multisampleState, 
-        depthStencilState, 
-        colorBlendState, 
+        rasterizationState,
+        multisampleState,
+        depthStencilState,
+        colorBlendState,
         dynamicStates,
-        std::move(layout), 
-        std::move(renderPass), 
+        std::move(layout),
+        std::move(renderPass),
         subpass,
-        allocator, 
-        pipelineCache, 
-        std::move(basePipeline), 
+        allocator,
+        pipelineCache,
+        std::move(basePipeline),
         flags | psoFlags);
     MAGMA_ASSERT(pipeline->getHash() == hashes.first);
     MAGMA_ASSERT(pipeline->getRenderStateHash() == hashes.second);
