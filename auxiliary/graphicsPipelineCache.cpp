@@ -99,8 +99,12 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
             basePipeline = it->second;
     }
     if (basePipeline)
-    {   // A pipeline derivative is a child pipeline created from a parent pipeline,
-        // where the child and parent are expected to have much commonality.
+    {   // A pipeline derivative is a child pipeline created from 
+        // a parent pipeline, where the child and parent are expected 
+        // to have much commonality. The goal of derivative pipelines 
+        // is that they be cheaper to create using the parent as a 
+        // starting point, and that it be more efficient (on either host 
+        // or device) to switch/bind between children of the same parent.
         flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     }
     // Specify that the pipeline to be created is allowed to be 
