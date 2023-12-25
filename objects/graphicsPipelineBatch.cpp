@@ -185,6 +185,7 @@ void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<Device> device,
         }
     }
     postBuild();
+    rsHashes.clear();
     MAGMA_HANDLE_RESULT(result, "failed to create multiple graphics pipelines");
 }
 } // namespace magma
