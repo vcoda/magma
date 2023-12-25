@@ -76,6 +76,6 @@ namespace magma
         std::list<VkPipelineDynamicStateCreateInfo> dynamicStateInfos;
         std::list<std::shared_ptr<RenderPass>> renderPasses;
         std::vector<VkGraphicsPipelineCreateInfo> pipelineInfos;
-        std::list<hash_t> rsHashes;
+        std::vector<hash_t> rsHashes;
     };
 } // namespace magma

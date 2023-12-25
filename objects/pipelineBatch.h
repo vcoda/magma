@@ -61,7 +61,7 @@ namespace magma
         std::list<std::vector<VkPipelineCreationFeedbackEXT>> stageCreationFeedbacks;
         std::list<VkPipelineCreationFeedbackCreateInfoEXT> creationFeedbackInfos;
     #endif // VK_EXT_pipeline_creation_feedback
-        std::list<hash_t> hashes;
+        std::vector<hash_t> hashes;
 
     private:
         void collectShaderStageInfos() const;
