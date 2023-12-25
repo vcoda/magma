@@ -1,1 +1,1 @@
-ldFeatSpec ../../objects/device.inl
+ldFeatSpec ../../src/objects/device.inl

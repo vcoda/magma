@@ -145,422 +145,435 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\allocator\alignedAllocator.h" />
-    <ClInclude Include="..\..\allocator\allocator.h" />
-    <ClInclude Include="..\..\allocator\debugAlignedAllocator.h" />
-    <ClInclude Include="..\..\allocator\deviceMemoryAllocator.h" />
-    <ClInclude Include="..\..\allocator\linearPlacementPool.h" />
-    <ClInclude Include="..\..\allocator\cxxAllocator.h" />
-    <ClInclude Include="..\..\auxiliary\accumulationBuffer.h" />
-    <ClInclude Include="..\..\auxiliary\blitRectangle.h" />
-    <ClInclude Include="..\..\auxiliary\colorFramebuffer.h" />
-    <ClInclude Include="..\..\auxiliary\baseFramebuffer.h" />
-    <ClInclude Include="..\..\auxiliary\colorMultisampleFramebuffer.h" />
-    <ClInclude Include="..\..\auxiliary\fillRectangleVertexShader.h" />
-    <ClInclude Include="..\..\auxiliary\graphicsPipelineCache.h" />
-    <ClInclude Include="..\..\auxiliary\imageDescriptorSet.h" />
-    <ClInclude Include="..\..\auxiliary\immediateRender.h" />
-    <ClInclude Include="..\..\auxiliary\generateMipmap.h" />
-    <ClInclude Include="..\..\auxiliary\multiAttachmentFramebuffer.h" />
-    <ClInclude Include="..\..\auxiliary\frameGrabber.h" />
-    <ClInclude Include="..\..\auxiliary\base.h" />
-    <ClInclude Include="..\..\auxiliary\profiler.h" />
-    <ClInclude Include="..\..\auxiliary\scopedProfile.h" />
-    <ClInclude Include="..\..\auxiliary\shaderCompiler.h" />
-    <ClInclude Include="..\..\auxiliary\depthFramebuffer.h" />
-    <ClInclude Include="..\..\auxiliary\sprite.h" />
-    <ClInclude Include="..\..\auxiliary\swapchainFramebuffer.h" />
-    <ClInclude Include="..\..\auxiliary\textShader.h" />
-    <ClInclude Include="..\..\auxiliary\typedefs.h" />
-    <ClInclude Include="..\..\barriers\bufferMemoryBarrier.h" />
-    <ClInclude Include="..\..\barriers\memoryBarrier.h" />
-    <ClInclude Include="..\..\barriers\imageMemoryBarrier.h" />
-    <ClInclude Include="..\..\barriers\subpassDependency.h" />
-    <ClInclude Include="..\..\barriers\subpassDependency2.h" />
-    <ClInclude Include="..\..\core\foreach.h" />
-    <ClInclude Include="..\..\core\hash.h" />
     <ClInclude Include="..\..\core\hashing\combine.h" />
     <ClInclude Include="..\..\core\hashing\fnv1.h" />
     <ClInclude Include="..\..\core\hashing\fnv1string.h" />
     <ClInclude Include="..\..\core\hashing\constexpr.h" />
-    <ClInclude Include="..\..\core\linearAllocator.h" />
-    <ClInclude Include="..\..\core\macros.h" />
-    <ClInclude Include="..\..\core\memory.h" />
-    <ClInclude Include="..\..\core\copyMemory.h" />
-    <ClInclude Include="..\..\core\core.h" />
-    <ClInclude Include="..\..\core\pch.h" />
-    <ClInclude Include="..\..\core\threadSafeUnorderedSet.h" />
-    <ClInclude Include="..\..\core\refCountChecker.h" />
-    <ClInclude Include="..\..\core\zeroMemory.h" />
-    <ClInclude Include="..\..\descriptors\accelerationStructure.h" />
-    <ClInclude Include="..\..\descriptors\array\descriptor.h" />
-    <ClInclude Include="..\..\descriptors\array\imageDescriptor.h" />
-    <ClInclude Include="..\..\descriptors\bufferDescriptor.h" />
-    <ClInclude Include="..\..\descriptors\bufferDescriptorArray.h" />
-    <ClInclude Include="..\..\descriptors\descriptorPool.h" />
-    <ClInclude Include="..\..\descriptors\descriptor.h" />
-    <ClInclude Include="..\..\descriptors\descriptorSetTable.h" />
-    <ClInclude Include="..\..\descriptors\imageDescriptor.h" />
-    <ClInclude Include="..\..\descriptors\imageDescriptorArray.h" />
-    <ClInclude Include="..\..\descriptors\inlineUniformBlock.h" />
-    <ClInclude Include="..\..\descriptors\binding.h" />
-    <ClInclude Include="..\..\exceptions\compileError.h" />
-    <ClInclude Include="..\..\exceptions\errorResult.h" />
-    <ClInclude Include="..\..\exceptions\exception.h" />
-    <ClInclude Include="..\..\exceptions\notImplemented.h" />
-    <ClInclude Include="..\..\exceptions\reflectionErrorResult.h" />
-    <ClInclude Include="..\..\exceptions\sourcelocation.h" />
-    <ClInclude Include="..\..\exceptions\unsupportedExtension.h" />
-    <ClInclude Include="..\..\extensions\instanceLayers.h" />
-    <ClInclude Include="..\..\extensions\layers.h" />
-    <ClInclude Include="..\..\extensions\physicalDeviceExtensions.h" />
-    <ClInclude Include="..\..\extensions\extensions.h" />
-    <ClInclude Include="..\..\extensions\instanceExtensions.h" />
-    <ClInclude Include="..\..\helpers\alignedUniformArray.h" />
-    <ClInclude Include="..\..\helpers\castToDebugReport.h" />
-    <ClInclude Include="..\..\helpers\executeDeferredOperation.h" />
-    <ClInclude Include="..\..\helpers\spirvReflectionTypeCast.h" />
-    <ClInclude Include="..\..\helpers\executeCommandBuffer.h" />
-    <ClInclude Include="..\..\helpers\mapScoped.h" />
-    <ClInclude Include="..\..\helpers\stackArray.h" />
-    <ClInclude Include="..\..\helpers\stringize.h" />
-    <ClInclude Include="..\..\helpers\uniformArray.h" />
     <ClInclude Include="..\..\magma.h" />
-    <ClInclude Include="..\..\misc\application.h" />
-    <ClInclude Include="..\..\misc\borderColor.h" />
-    <ClInclude Include="..\..\misc\deviceFaultInfo.h" />
-    <ClInclude Include="..\..\misc\deviceFeatures.h" />
-    <ClInclude Include="..\..\misc\extension.h" />
-    <ClInclude Include="..\..\misc\framebufferAttachmentImage.h" />
-    <ClInclude Include="..\..\misc\sharing.h" />
-    <ClInclude Include="..\..\misc\structureChain.h" />
-    <ClInclude Include="..\..\misc\clearAttachment.h" />
-    <ClInclude Include="..\..\misc\clearValue.h" />
-    <ClInclude Include="..\..\misc\compatibility.h" />
-    <ClInclude Include="..\..\misc\deviceQueueDescriptor.h" />
-    <ClInclude Include="..\..\misc\format.h" />
-    <ClInclude Include="..\..\misc\geometry.h" />
-    <ClInclude Include="..\..\misc\imageSubresourceRange.h" />
-    <ClInclude Include="..\..\misc\pipelineExecutable.h" />
-    <ClInclude Include="..\..\misc\pushConstantRange.h" />
-    <ClInclude Include="..\..\misc\scissor.h" />
-    <ClInclude Include="..\..\misc\scopedDebugMarker.h" />
-    <ClInclude Include="..\..\misc\viewport.h" />
-    <ClInclude Include="..\..\objects\accelerationStructure.h" />
-    <ClInclude Include="..\..\objects\accelerationStructureStorageBuffer.h" />
-    <ClInclude Include="..\..\objects\accelerationStructureInstanceBuffer.h" />
-    <ClInclude Include="..\..\objects\buffer.h" />
-    <ClInclude Include="..\..\objects\bufferView.h" />
-    <ClInclude Include="..\..\objects\commandBuffer.h" />
-    <ClInclude Include="..\..\objects\commandPool.h" />
-    <ClInclude Include="..\..\objects\computePipeline.h" />
-    <ClInclude Include="..\..\objects\computePipelineBatch.h" />
-    <ClInclude Include="..\..\objects\conditionalRenderingBuffer.h" />
-    <ClInclude Include="..\..\objects\debugReportCallback.h" />
-    <ClInclude Include="..\..\objects\debugUtilsMessenger.h" />
-    <ClInclude Include="..\..\objects\deferredOperation.h" />
-    <ClInclude Include="..\..\objects\descriptorPool.h" />
-    <ClInclude Include="..\..\objects\descriptorSet.h" />
-    <ClInclude Include="..\..\objects\descriptorSetLayout.h" />
-    <ClInclude Include="..\..\objects\device.h" />
-    <ClInclude Include="..\..\objects\deviceMemory.h" />
-    <ClInclude Include="..\..\objects\baseDeviceMemory.h" />
-    <ClInclude Include="..\..\objects\dispatchable.h" />
-    <ClInclude Include="..\..\objects\display.h" />
-    <ClInclude Include="..\..\objects\displayMode.h" />
-    <ClInclude Include="..\..\objects\dstTransferBuffer.h" />
-    <ClInclude Include="..\..\objects\event.h" />
-    <ClInclude Include="..\..\objects\externalImage.h" />
-    <ClInclude Include="..\..\objects\fence.h" />
-    <ClInclude Include="..\..\objects\fragmentDensityMapView.h" />
-    <ClInclude Include="..\..\objects\fragmentShadingRateAttachment.h" />
-    <ClInclude Include="..\..\objects\framebuffer.h" />
-    <ClInclude Include="..\..\objects\graphicsPipeline.h" />
-    <ClInclude Include="..\..\objects\graphicsPipelineBatch.h" />
-    <ClInclude Include="..\..\objects\ideviceMemory.h" />
-    <ClInclude Include="..\..\objects\image.h" />
-    <ClInclude Include="..\..\objects\image1D.h" />
-    <ClInclude Include="..\..\objects\image1DArray.h" />
-    <ClInclude Include="..\..\objects\image2D.h" />
-    <ClInclude Include="..\..\objects\image2DArray.h" />
-    <ClInclude Include="..\..\objects\imageAttachment.h" />
-    <ClInclude Include="..\..\objects\image3D.h" />
-    <ClInclude Include="..\..\objects\imageCube.h" />
-    <ClInclude Include="..\..\objects\fragmentDensityMap.h" />
-    <ClInclude Include="..\..\objects\imagelessFramebuffer.h" />
-    <ClInclude Include="..\..\objects\imageView.h" />
-    <ClInclude Include="..\..\objects\indexBuffer.h" />
-    <ClInclude Include="..\..\objects\indirectBuffer.h" />
-    <ClInclude Include="..\..\objects\instance.h" />
-    <ClInclude Include="..\..\objects\iresource.h" />
-    <ClInclude Include="..\..\objects\managedDeviceMemory.h" />
-    <ClInclude Include="..\..\objects\mutableImage.h" />
-    <ClInclude Include="..\..\objects\mutableImageView.h" />
-    <ClInclude Include="..\..\objects\nondispatchable.h" />
-    <ClInclude Include="..\..\objects\object.h" />
-    <ClInclude Include="..\..\objects\objectType.h" />
-    <ClInclude Include="..\..\objects\physicalDevice.h" />
-    <ClInclude Include="..\..\objects\physicalDeviceGroup.h" />
-    <ClInclude Include="..\..\objects\pipeline.h" />
-    <ClInclude Include="..\..\objects\pipelineBatch.h" />
-    <ClInclude Include="..\..\objects\pipelineCache.h" />
-    <ClInclude Include="..\..\objects\pipelineLayout.h" />
-    <ClInclude Include="..\..\objects\primaryCommandBuffer.h" />
-    <ClInclude Include="..\..\objects\privateDataSlot.h" />
-    <ClInclude Include="..\..\objects\queryPool.h" />
-    <ClInclude Include="..\..\objects\queue.h" />
-    <ClInclude Include="..\..\objects\rayTracingBuffer.h" />
-    <ClInclude Include="..\..\objects\rayTracingPipeline.h" />
-    <ClInclude Include="..\..\objects\rayTracingPipelineBatch.h" />
-    <ClInclude Include="..\..\objects\renderPass.h" />
-    <ClInclude Include="..\..\objects\renderPassMultiview.h" />
-    <ClInclude Include="..\..\objects\resource.h" />
-    <ClInclude Include="..\..\objects\resourcePool.h" />
-    <ClInclude Include="..\..\objects\sampler.h" />
-    <ClInclude Include="..\..\objects\samplerYcbcrConversion.h" />
-    <ClInclude Include="..\..\objects\secondaryCommandBuffer.h" />
-    <ClInclude Include="..\..\objects\semaphore.h" />
-    <ClInclude Include="..\..\objects\shaderModule.h" />
-    <ClInclude Include="..\..\objects\srcTransferBuffer.h" />
-    <ClInclude Include="..\..\objects\storageBuffer.h" />
-    <ClInclude Include="..\..\objects\storageTexelBuffer.h" />
-    <ClInclude Include="..\..\objects\surface.h" />
-    <ClInclude Include="..\..\objects\swapchain.h" />
-    <ClInclude Include="..\..\objects\fullScreenExclusiveSwapchain.h" />
-    <ClInclude Include="..\..\objects\swapchainImage.h" />
-    <ClInclude Include="..\..\objects\timelineSemaphore.h" />
-    <ClInclude Include="..\..\objects\transformFeedbackBuffer.h" />
-    <ClInclude Include="..\..\objects\typedefs.h" />
-    <ClInclude Include="..\..\objects\uniformBuffer.h" />
-    <ClInclude Include="..\..\objects\uniformTexelBuffer.h" />
-    <ClInclude Include="..\..\objects\validationCache.h" />
-    <ClInclude Include="..\..\objects\vertexBuffer.h" />
-    <ClInclude Include="..\..\packed\color.h" />
-    <ClInclude Include="..\..\packed\ieee754.h" />
-    <ClInclude Include="..\..\packed\vector.h" />
-    <ClInclude Include="..\..\platform\androidHardwareBuffer.h" />
-    <ClInclude Include="..\..\renderpass\attachment.h" />
-    <ClInclude Include="..\..\renderpass\loadStoreOp.h" />
-    <ClInclude Include="..\..\renderpass\subpass.h" />
-    <ClInclude Include="..\..\shaders\pipelineShaderStage.h" />
-    <ClInclude Include="..\..\shaders\rayTracingShaderGroup.h" />
-    <ClInclude Include="..\..\shaders\shaderBindingTable.h" />
-    <ClInclude Include="..\..\shaders\shaderReflection.h" />
-    <ClInclude Include="..\..\shaders\shaderReflectionFactory.h" />
-    <ClInclude Include="..\..\shaders\specialization.h" />
-    <ClInclude Include="..\..\shaders\shaderStages.h" />
-    <ClInclude Include="..\..\states\colorBlendAttachmentState.h" />
-    <ClInclude Include="..\..\states\colorBlendState.h" />
-    <ClInclude Include="..\..\states\colorBlendStateAdvanced.h" />
-    <ClInclude Include="..\..\states\colorLogicOpState.h" />
-    <ClInclude Include="..\..\states\conservativeRasterizationState.h" />
-    <ClInclude Include="..\..\states\depthComparisonSamplerState.h" />
-    <ClInclude Include="..\..\states\depthStencilState.h" />
-    <ClInclude Include="..\..\states\inputAssemblyState.h" />
-    <ClInclude Include="..\..\states\lineRasterizationState.h" />
-    <ClInclude Include="..\..\states\minmaxSamplerState.h" />
-    <ClInclude Include="..\..\states\multisampleCoverageReductionState.h" />
-    <ClInclude Include="..\..\states\multisampleState.h" />
-    <ClInclude Include="..\..\states\provokingVertexState.h" />
-    <ClInclude Include="..\..\states\rasterizationOrderState.h" />
-    <ClInclude Include="..\..\states\rasterizationState.h" />
-    <ClInclude Include="..\..\states\samplerState.h" />
-    <ClInclude Include="..\..\states\streamRasterizationState.h" />
-    <ClInclude Include="..\..\states\tesselationState.h" />
-    <ClInclude Include="..\..\states\vertexAttributeType.h" />
-    <ClInclude Include="..\..\states\vertexInputState.h" />
-    <ClInclude Include="..\..\states\vertexInputStructure.h" />
-    <ClInclude Include="..\..\states\vertexFormat.h" />
-    <ClInclude Include="..\..\states\multiViewportState.h" />
-    <ClInclude Include="..\..\states\viewportState.h" />
-    <ClInclude Include="..\..\states\colorMask.h" />
-    <ClInclude Include="..\..\states\samplerYcbcrConversionState.h" />
+    <ClInclude Include="..\..\src\allocator\alignedAllocator.h" />
+    <ClInclude Include="..\..\src\allocator\allocator.h" />
+    <ClInclude Include="..\..\src\allocator\cxxAllocator.h" />
+    <ClInclude Include="..\..\src\allocator\debugAlignedAllocator.h" />
+    <ClInclude Include="..\..\src\allocator\deviceMemoryAllocator.h" />
+    <ClInclude Include="..\..\src\allocator\linearPlacementPool.h" />
+    <ClInclude Include="..\..\src\auxiliary\accumulationBuffer.h" />
+    <ClInclude Include="..\..\src\auxiliary\base.h" />
+    <ClInclude Include="..\..\src\auxiliary\baseFramebuffer.h" />
+    <ClInclude Include="..\..\src\auxiliary\blitRectangle.h" />
+    <ClInclude Include="..\..\src\auxiliary\colorFramebuffer.h" />
+    <ClInclude Include="..\..\src\auxiliary\colorMultisampleFramebuffer.h" />
+    <ClInclude Include="..\..\src\auxiliary\depthFramebuffer.h" />
+    <ClInclude Include="..\..\src\auxiliary\fillRectangleVertexShader.h" />
+    <ClInclude Include="..\..\src\auxiliary\frameGrabber.h" />
+    <ClInclude Include="..\..\src\auxiliary\generateMipmap.h" />
+    <ClInclude Include="..\..\src\auxiliary\graphicsPipelineCache.h" />
+    <ClInclude Include="..\..\src\auxiliary\imageDescriptorSet.h" />
+    <ClInclude Include="..\..\src\auxiliary\immediateRender.h" />
+    <ClInclude Include="..\..\src\auxiliary\multiAttachmentFramebuffer.h" />
+    <ClInclude Include="..\..\src\auxiliary\profiler.h" />
+    <ClInclude Include="..\..\src\auxiliary\scopedProfile.h" />
+    <ClInclude Include="..\..\src\auxiliary\shaderCompiler.h" />
+    <ClInclude Include="..\..\src\auxiliary\sprite.h" />
+    <ClInclude Include="..\..\src\auxiliary\swapchainFramebuffer.h" />
+    <ClInclude Include="..\..\src\auxiliary\textShader.h" />
+    <ClInclude Include="..\..\src\auxiliary\typedefs.h" />
+    <ClInclude Include="..\..\src\barriers\bufferMemoryBarrier.h" />
+    <ClInclude Include="..\..\src\barriers\imageMemoryBarrier.h" />
+    <ClInclude Include="..\..\src\barriers\memoryBarrier.h" />
+    <ClInclude Include="..\..\src\barriers\subpassDependency.h" />
+    <ClInclude Include="..\..\src\barriers\subpassDependency2.h" />
+    <ClInclude Include="..\..\src\core\copyMemory.h" />
+    <ClInclude Include="..\..\src\core\core.h" />
+    <ClInclude Include="..\..\src\core\foreach.h" />
+    <ClInclude Include="..\..\src\core\hash.h" />
+    <ClInclude Include="..\..\src\core\linearAllocator.h" />
+    <ClInclude Include="..\..\src\core\macros.h" />
+    <ClInclude Include="..\..\src\core\memory.h" />
+    <ClInclude Include="..\..\src\core\pch.h" />
+    <ClInclude Include="..\..\src\core\refCountChecker.h" />
+    <ClInclude Include="..\..\src\core\threadSafeUnorderedSet.h" />
+    <ClInclude Include="..\..\src\core\zeroMemory.h" />
+    <ClInclude Include="..\..\src\descriptors\accelerationStructure.h" />
+    <ClInclude Include="..\..\src\descriptors\array\bufferDescriptor.h" />
+    <ClInclude Include="..\..\src\descriptors\array\descriptor.h" />
+    <ClInclude Include="..\..\src\descriptors\array\imageDescriptor.h" />
+    <ClInclude Include="..\..\src\descriptors\binding.h" />
+    <ClInclude Include="..\..\src\descriptors\bufferDescriptor.h" />
+    <ClInclude Include="..\..\src\descriptors\bufferDescriptorArray.h" />
+    <ClInclude Include="..\..\src\descriptors\descriptor.h" />
+    <ClInclude Include="..\..\src\descriptors\descriptorPool.h" />
+    <ClInclude Include="..\..\src\descriptors\descriptorSetTable.h" />
+    <ClInclude Include="..\..\src\descriptors\imageDescriptor.h" />
+    <ClInclude Include="..\..\src\descriptors\imageDescriptorArray.h" />
+    <ClInclude Include="..\..\src\descriptors\inlineUniformBlock.h" />
+    <ClInclude Include="..\..\src\exceptions\compileError.h" />
+    <ClInclude Include="..\..\src\exceptions\errorResult.h" />
+    <ClInclude Include="..\..\src\exceptions\exception.h" />
+    <ClInclude Include="..\..\src\exceptions\notImplemented.h" />
+    <ClInclude Include="..\..\src\exceptions\reflectionErrorResult.h" />
+    <ClInclude Include="..\..\src\exceptions\sourcelocation.h" />
+    <ClInclude Include="..\..\src\exceptions\unsupportedExtension.h" />
+    <ClInclude Include="..\..\src\extensions\extensions.h" />
+    <ClInclude Include="..\..\src\extensions\instanceExtensions.h" />
+    <ClInclude Include="..\..\src\extensions\instanceLayers.h" />
+    <ClInclude Include="..\..\src\extensions\layers.h" />
+    <ClInclude Include="..\..\src\extensions\physicalDeviceExtensions.h" />
+    <ClInclude Include="..\..\src\helpers\alignedUniformArray.h" />
+    <ClInclude Include="..\..\src\helpers\castToDebugReport.h" />
+    <ClInclude Include="..\..\src\helpers\executeCommandBuffer.h" />
+    <ClInclude Include="..\..\src\helpers\executeDeferredOperation.h" />
+    <ClInclude Include="..\..\src\helpers\mapScoped.h" />
+    <ClInclude Include="..\..\src\helpers\spirvReflectionTypeCast.h" />
+    <ClInclude Include="..\..\src\helpers\stackArray.h" />
+    <ClInclude Include="..\..\src\helpers\stringize.h" />
+    <ClInclude Include="..\..\src\helpers\uniformArray.h" />
+    <ClInclude Include="..\..\src\misc\application.h" />
+    <ClInclude Include="..\..\src\misc\borderColor.h" />
+    <ClInclude Include="..\..\src\misc\clearAttachment.h" />
+    <ClInclude Include="..\..\src\misc\clearValue.h" />
+    <ClInclude Include="..\..\src\misc\compatibility.h" />
+    <ClInclude Include="..\..\src\misc\deviceFaultInfo.h" />
+    <ClInclude Include="..\..\src\misc\deviceFeatures.h" />
+    <ClInclude Include="..\..\src\misc\deviceQueueDescriptor.h" />
+    <ClInclude Include="..\..\src\misc\extension.h" />
+    <ClInclude Include="..\..\src\misc\format.h" />
+    <ClInclude Include="..\..\src\misc\framebufferAttachmentImage.h" />
+    <ClInclude Include="..\..\src\misc\geometry.h" />
+    <ClInclude Include="..\..\src\misc\imageSubresourceRange.h" />
+    <ClInclude Include="..\..\src\misc\pipelineExecutable.h" />
+    <ClInclude Include="..\..\src\misc\pushConstantRange.h" />
+    <ClInclude Include="..\..\src\misc\scissor.h" />
+    <ClInclude Include="..\..\src\misc\scopedDebugMarker.h" />
+    <ClInclude Include="..\..\src\misc\sharing.h" />
+    <ClInclude Include="..\..\src\misc\structureChain.h" />
+    <ClInclude Include="..\..\src\misc\viewport.h" />
+    <ClInclude Include="..\..\src\objects\accelerationStructure.h" />
+    <ClInclude Include="..\..\src\objects\accelerationStructureInstanceBuffer.h" />
+    <ClInclude Include="..\..\src\objects\accelerationStructureStorageBuffer.h" />
+    <ClInclude Include="..\..\src\objects\baseDeviceMemory.h" />
+    <ClInclude Include="..\..\src\objects\buffer.h" />
+    <ClInclude Include="..\..\src\objects\bufferView.h" />
+    <ClInclude Include="..\..\src\objects\commandBuffer.h" />
+    <ClInclude Include="..\..\src\objects\commandPool.h" />
+    <ClInclude Include="..\..\src\objects\computePipeline.h" />
+    <ClInclude Include="..\..\src\objects\computePipelineBatch.h" />
+    <ClInclude Include="..\..\src\objects\conditionalRenderingBuffer.h" />
+    <ClInclude Include="..\..\src\objects\debugReportCallback.h" />
+    <ClInclude Include="..\..\src\objects\debugUtilsMessenger.h" />
+    <ClInclude Include="..\..\src\objects\deferredOperation.h" />
+    <ClInclude Include="..\..\src\objects\descriptorPool.h" />
+    <ClInclude Include="..\..\src\objects\descriptorSet.h" />
+    <ClInclude Include="..\..\src\objects\descriptorSetLayout.h" />
+    <ClInclude Include="..\..\src\objects\device.h" />
+    <ClInclude Include="..\..\src\objects\deviceMemory.h" />
+    <ClInclude Include="..\..\src\objects\dispatchable.h" />
+    <ClInclude Include="..\..\src\objects\display.h" />
+    <ClInclude Include="..\..\src\objects\displayMode.h" />
+    <ClInclude Include="..\..\src\objects\dstTransferBuffer.h" />
+    <ClInclude Include="..\..\src\objects\event.h" />
+    <ClInclude Include="..\..\src\objects\externalImage.h" />
+    <ClInclude Include="..\..\src\objects\fence.h" />
+    <ClInclude Include="..\..\src\objects\fragmentDensityMap.h" />
+    <ClInclude Include="..\..\src\objects\fragmentDensityMapView.h" />
+    <ClInclude Include="..\..\src\objects\fragmentShadingRateAttachment.h" />
+    <ClInclude Include="..\..\src\objects\framebuffer.h" />
+    <ClInclude Include="..\..\src\objects\fullScreenExclusiveSwapchain.h" />
+    <ClInclude Include="..\..\src\objects\graphicsPipeline.h" />
+    <ClInclude Include="..\..\src\objects\graphicsPipelineBatch.h" />
+    <ClInclude Include="..\..\src\objects\ideviceMemory.h" />
+    <ClInclude Include="..\..\src\objects\image.h" />
+    <ClInclude Include="..\..\src\objects\image1D.h" />
+    <ClInclude Include="..\..\src\objects\image1DArray.h" />
+    <ClInclude Include="..\..\src\objects\image2D.h" />
+    <ClInclude Include="..\..\src\objects\image2DArray.h" />
+    <ClInclude Include="..\..\src\objects\image3D.h" />
+    <ClInclude Include="..\..\src\objects\imageAttachment.h" />
+    <ClInclude Include="..\..\src\objects\imageCube.h" />
+    <ClInclude Include="..\..\src\objects\imagelessFramebuffer.h" />
+    <ClInclude Include="..\..\src\objects\imageView.h" />
+    <ClInclude Include="..\..\src\objects\indexBuffer.h" />
+    <ClInclude Include="..\..\src\objects\indirectBuffer.h" />
+    <ClInclude Include="..\..\src\objects\instance.h" />
+    <ClInclude Include="..\..\src\objects\iresource.h" />
+    <ClInclude Include="..\..\src\objects\managedDeviceMemory.h" />
+    <ClInclude Include="..\..\src\objects\mutableImage.h" />
+    <ClInclude Include="..\..\src\objects\mutableImageView.h" />
+    <ClInclude Include="..\..\src\objects\nondispatchable.h" />
+    <ClInclude Include="..\..\src\objects\object.h" />
+    <ClInclude Include="..\..\src\objects\objectType.h" />
+    <ClInclude Include="..\..\src\objects\physicalDevice.h" />
+    <ClInclude Include="..\..\src\objects\physicalDeviceGroup.h" />
+    <ClInclude Include="..\..\src\objects\pipeline.h" />
+    <ClInclude Include="..\..\src\objects\pipelineBatch.h" />
+    <ClInclude Include="..\..\src\objects\pipelineCache.h" />
+    <ClInclude Include="..\..\src\objects\pipelineLayout.h" />
+    <ClInclude Include="..\..\src\objects\primaryCommandBuffer.h" />
+    <ClInclude Include="..\..\src\objects\privateDataSlot.h" />
+    <ClInclude Include="..\..\src\objects\queryPool.h" />
+    <ClInclude Include="..\..\src\objects\queue.h" />
+    <ClInclude Include="..\..\src\objects\rayTracingBuffer.h" />
+    <ClInclude Include="..\..\src\objects\rayTracingPipeline.h" />
+    <ClInclude Include="..\..\src\objects\rayTracingPipelineBatch.h" />
+    <ClInclude Include="..\..\src\objects\renderPass.h" />
+    <ClInclude Include="..\..\src\objects\renderPassMultiview.h" />
+    <ClInclude Include="..\..\src\objects\resource.h" />
+    <ClInclude Include="..\..\src\objects\resourcePool.h" />
+    <ClInclude Include="..\..\src\objects\sampler.h" />
+    <ClInclude Include="..\..\src\objects\samplerYcbcrConversion.h" />
+    <ClInclude Include="..\..\src\objects\secondaryCommandBuffer.h" />
+    <ClInclude Include="..\..\src\objects\semaphore.h" />
+    <ClInclude Include="..\..\src\objects\shaderModule.h" />
+    <ClInclude Include="..\..\src\objects\srcTransferBuffer.h" />
+    <ClInclude Include="..\..\src\objects\storageBuffer.h" />
+    <ClInclude Include="..\..\src\objects\storageTexelBuffer.h" />
+    <ClInclude Include="..\..\src\objects\surface.h" />
+    <ClInclude Include="..\..\src\objects\swapchain.h" />
+    <ClInclude Include="..\..\src\objects\swapchainImage.h" />
+    <ClInclude Include="..\..\src\objects\timelineSemaphore.h" />
+    <ClInclude Include="..\..\src\objects\transformFeedbackBuffer.h" />
+    <ClInclude Include="..\..\src\objects\typedefs.h" />
+    <ClInclude Include="..\..\src\objects\uniformBuffer.h" />
+    <ClInclude Include="..\..\src\objects\uniformTexelBuffer.h" />
+    <ClInclude Include="..\..\src\objects\validationCache.h" />
+    <ClInclude Include="..\..\src\objects\vertexBuffer.h" />
+    <ClInclude Include="..\..\src\packed\color.h" />
+    <ClInclude Include="..\..\src\packed\expPow2.h" />
+    <ClInclude Include="..\..\src\packed\ieee754.h" />
+    <ClInclude Include="..\..\src\packed\rcpExpPow2.h" />
+    <ClInclude Include="..\..\src\packed\vector.h" />
+    <ClInclude Include="..\..\src\platform\androidHardwareBuffer.h" />
+    <ClInclude Include="..\..\src\renderpass\attachment.h" />
+    <ClInclude Include="..\..\src\renderpass\loadStoreOp.h" />
+    <ClInclude Include="..\..\src\renderpass\subpass.h" />
+    <ClInclude Include="..\..\src\shaders\pipelineShaderStage.h" />
+    <ClInclude Include="..\..\src\shaders\rayTracingShaderGroup.h" />
+    <ClInclude Include="..\..\src\shaders\shaderBindingTable.h" />
+    <ClInclude Include="..\..\src\shaders\shaderReflection.h" />
+    <ClInclude Include="..\..\src\shaders\shaderReflectionFactory.h" />
+    <ClInclude Include="..\..\src\shaders\shaderStages.h" />
+    <ClInclude Include="..\..\src\shaders\specialization.h" />
+    <ClInclude Include="..\..\src\states\colorBlendAttachmentState.h" />
+    <ClInclude Include="..\..\src\states\colorBlendState.h" />
+    <ClInclude Include="..\..\src\states\colorBlendStateAdvanced.h" />
+    <ClInclude Include="..\..\src\states\colorLogicOpState.h" />
+    <ClInclude Include="..\..\src\states\colorMask.h" />
+    <ClInclude Include="..\..\src\states\conservativeRasterizationState.h" />
+    <ClInclude Include="..\..\src\states\depthComparisonSamplerState.h" />
+    <ClInclude Include="..\..\src\states\depthStencilState.h" />
+    <ClInclude Include="..\..\src\states\inputAssemblyState.h" />
+    <ClInclude Include="..\..\src\states\lineRasterizationState.h" />
+    <ClInclude Include="..\..\src\states\minmaxSamplerState.h" />
+    <ClInclude Include="..\..\src\states\multisampleCoverageReductionState.h" />
+    <ClInclude Include="..\..\src\states\multisampleState.h" />
+    <ClInclude Include="..\..\src\states\multiViewportState.h" />
+    <ClInclude Include="..\..\src\states\provokingVertexState.h" />
+    <ClInclude Include="..\..\src\states\rasterizationOrderState.h" />
+    <ClInclude Include="..\..\src\states\rasterizationState.h" />
+    <ClInclude Include="..\..\src\states\samplerState.h" />
+    <ClInclude Include="..\..\src\states\samplerYcbcrConversionState.h" />
+    <ClInclude Include="..\..\src\states\streamRasterizationState.h" />
+    <ClInclude Include="..\..\src\states\tesselationState.h" />
+    <ClInclude Include="..\..\src\states\vertexAttributeType.h" />
+    <ClInclude Include="..\..\src\states\vertexFormat.h" />
+    <ClInclude Include="..\..\src\states\vertexInputState.h" />
+    <ClInclude Include="..\..\src\states\vertexInputStructure.h" />
+    <ClInclude Include="..\..\src\states\viewportState.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\allocator\alignedAllocator.cpp" />
-    <ClCompile Include="..\..\allocator\allocationCallbacks.cpp" />
-    <ClCompile Include="..\..\allocator\debugAlignedAllocator.cpp" />
-    <ClCompile Include="..\..\allocator\deviceMemoryAllocator.cpp" />
-    <ClCompile Include="..\..\allocator\cxxAllocator.cpp" />
-    <ClCompile Include="..\..\allocator\vmaImplementation.cpp" />
-    <ClCompile Include="..\..\auxiliary\accumulationBuffer.cpp" />
-    <ClCompile Include="..\..\auxiliary\baseFramebuffer.cpp" />
-    <ClCompile Include="..\..\auxiliary\blitRectangle.cpp" />
-    <ClCompile Include="..\..\auxiliary\colorFramebuffer.cpp" />
-    <ClCompile Include="..\..\auxiliary\colorMultisampleFramebuffer.cpp" />
-    <ClCompile Include="..\..\auxiliary\fillRectangleVertexShader.cpp" />
-    <ClCompile Include="..\..\auxiliary\graphicsPipelineCache.cpp" />
-    <ClCompile Include="..\..\auxiliary\imageDescriptorSet.cpp" />
-    <ClCompile Include="..\..\auxiliary\immediateRender.cpp" />
-    <ClCompile Include="..\..\auxiliary\generateMipmap.cpp" />
-    <ClCompile Include="..\..\auxiliary\frameGrabber.cpp" />
-    <ClCompile Include="..\..\auxiliary\multiAttachmentFramebuffer.cpp" />
-    <ClCompile Include="..\..\auxiliary\profiler.cpp" />
-    <ClCompile Include="..\..\auxiliary\shaderCompiler.cpp" />
-    <ClCompile Include="..\..\auxiliary\depthFramebuffer.cpp" />
-    <ClCompile Include="..\..\auxiliary\sprite.cpp" />
-    <ClCompile Include="..\..\auxiliary\swapchainFramebuffer.cpp" />
-    <ClCompile Include="..\..\auxiliary\textShader.cpp" />
-    <ClCompile Include="..\..\barriers\bufferMemoryBarrier.cpp" />
-    <ClCompile Include="..\..\barriers\imageMemoryBarrier.cpp" />
-    <ClCompile Include="..\..\descriptors\accelerationStructureDescriptor.cpp" />
-    <ClCompile Include="..\..\descriptors\bufferDescriptor.cpp" />
-    <ClCompile Include="..\..\descriptors\imageDescriptor.cpp" />
-    <ClCompile Include="..\..\exceptions\errorResult.cpp" />
-    <ClCompile Include="..\..\helpers\executeDeferredOperation.cpp" />
-    <ClCompile Include="..\..\magma.cpp" />
-    <ClCompile Include="..\..\core\pch.cpp">
+    <ClCompile Include="..\..\src\allocator\alignedAllocator.cpp" />
+    <ClCompile Include="..\..\src\allocator\allocationCallbacks.cpp" />
+    <ClCompile Include="..\..\src\allocator\cxxAllocator.cpp" />
+    <ClCompile Include="..\..\src\allocator\debugAlignedAllocator.cpp" />
+    <ClCompile Include="..\..\src\allocator\deviceMemoryAllocator.cpp" />
+    <ClCompile Include="..\..\src\allocator\vmaImplementation.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\accumulationBuffer.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\baseFramebuffer.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\blitRectangle.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\colorFramebuffer.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\colorMultisampleFramebuffer.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\depthFramebuffer.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\fillRectangleVertexShader.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\frameGrabber.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\generateMipmap.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\graphicsPipelineCache.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\imageDescriptorSet.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\immediateRender.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\multiAttachmentFramebuffer.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\profiler.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\shaderCompiler.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\sprite.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\swapchainFramebuffer.cpp" />
+    <ClCompile Include="..\..\src\auxiliary\textShader.cpp" />
+    <ClCompile Include="..\..\src\barriers\bufferMemoryBarrier.cpp" />
+    <ClCompile Include="..\..\src\barriers\imageMemoryBarrier.cpp" />
+    <ClCompile Include="..\..\src\core\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="..\..\exceptions\exception.cpp" />
-    <ClCompile Include="..\..\extensions\instanceExtensions.cpp" />
-    <ClCompile Include="..\..\extensions\instanceLayers.cpp" />
-    <ClCompile Include="..\..\extensions\layers.cpp" />
-    <ClCompile Include="..\..\extensions\physicalDeviceExtensions.cpp" />
-    <ClCompile Include="..\..\extensions\extensions.cpp" />
-    <ClCompile Include="..\..\helpers\executeCommandBuffer.cpp" />
-    <ClCompile Include="..\..\helpers\stringize.cpp" />
-    <ClCompile Include="..\..\misc\application.cpp" />
-    <ClCompile Include="..\..\misc\deviceFaultInfo.cpp" />
-    <ClCompile Include="..\..\misc\deviceFeatures.cpp" />
-    <ClCompile Include="..\..\misc\framebufferAttachmentImage.cpp" />
-    <ClCompile Include="..\..\misc\sharing.cpp" />
-    <ClCompile Include="..\..\misc\structureChain.cpp" />
-    <ClCompile Include="..\..\misc\deviceQueueDescriptor.cpp" />
-    <ClCompile Include="..\..\misc\format.cpp" />
-    <ClCompile Include="..\..\misc\geometry.cpp" />
-    <ClCompile Include="..\..\misc\pipelineExecutable.cpp" />
-    <ClCompile Include="..\..\misc\scopedDebugMarker.cpp" />
-    <ClCompile Include="..\..\objects\accelerationStructure.cpp" />
-    <ClCompile Include="..\..\objects\accelerationStructureStorageBuffer.cpp" />
-    <ClCompile Include="..\..\objects\accelerationStructureInstanceBuffer.cpp" />
-    <ClCompile Include="..\..\objects\buffer.cpp" />
-    <ClCompile Include="..\..\objects\bufferView.cpp" />
-    <ClCompile Include="..\..\objects\commandBuffer.cpp" />
-    <ClCompile Include="..\..\objects\commandBufferDebug.cpp" />
-    <ClCompile Include="..\..\objects\commandPool.cpp" />
-    <ClCompile Include="..\..\objects\computePipeline.cpp" />
-    <ClCompile Include="..\..\objects\computePipelineBatch.cpp" />
-    <ClCompile Include="..\..\objects\conditionalRenderingBuffer.cpp" />
-    <ClCompile Include="..\..\objects\debugReportCallback.cpp" />
-    <ClCompile Include="..\..\objects\debugUtilsMessenger.cpp" />
-    <ClCompile Include="..\..\objects\deferredOperation.cpp" />
-    <ClCompile Include="..\..\objects\descriptorPool.cpp" />
-    <ClCompile Include="..\..\objects\descriptorSet.cpp" />
-    <ClCompile Include="..\..\objects\descriptorSetLayout.cpp" />
-    <ClCompile Include="..\..\objects\device.cpp" />
-    <ClCompile Include="..\..\objects\deviceMemory.cpp" />
-    <ClCompile Include="..\..\objects\baseDeviceMemory.cpp" />
-    <ClCompile Include="..\..\objects\display.cpp" />
-    <ClCompile Include="..\..\objects\displayMode.cpp" />
-    <ClCompile Include="..\..\objects\dstTransferBuffer.cpp" />
-    <ClCompile Include="..\..\objects\event.cpp" />
-    <ClCompile Include="..\..\objects\externalImage.cpp" />
-    <ClCompile Include="..\..\objects\fence.cpp" />
-    <ClCompile Include="..\..\objects\fragmentDensityMapView.cpp" />
-    <ClCompile Include="..\..\objects\fragmentShadingRateAttachment.cpp" />
-    <ClCompile Include="..\..\objects\framebuffer.cpp" />
-    <ClCompile Include="..\..\objects\graphicsPipeline.cpp" />
-    <ClCompile Include="..\..\objects\graphicsPipelineBatch.cpp" />
-    <ClCompile Include="..\..\objects\image.cpp" />
-    <ClCompile Include="..\..\objects\image1D.cpp" />
-    <ClCompile Include="..\..\objects\image1DArray.cpp" />
-    <ClCompile Include="..\..\objects\image2D.cpp" />
-    <ClCompile Include="..\..\objects\image2DArray.cpp" />
-    <ClCompile Include="..\..\objects\imageAttachment.cpp" />
-    <ClCompile Include="..\..\objects\image3D.cpp" />
-    <ClCompile Include="..\..\objects\imageCube.cpp" />
-    <ClCompile Include="..\..\objects\fragmentDensityMap.cpp" />
-    <ClCompile Include="..\..\objects\imagelessFramebuffer.cpp" />
-    <ClCompile Include="..\..\objects\imageView.cpp" />
-    <ClCompile Include="..\..\objects\indexBuffer.cpp" />
-    <ClCompile Include="..\..\objects\indirectBuffer.cpp" />
-    <ClCompile Include="..\..\objects\instance.cpp" />
-    <ClCompile Include="..\..\objects\managedDeviceMemory.cpp" />
-    <ClCompile Include="..\..\objects\mutableImage.cpp" />
-    <ClCompile Include="..\..\objects\mutableImageView.cpp" />
-    <ClCompile Include="..\..\objects\object.cpp" />
-    <ClCompile Include="..\..\objects\physicalDevice.cpp" />
-    <ClCompile Include="..\..\objects\physicalDeviceGroup.cpp" />
-    <ClCompile Include="..\..\objects\physicalDeviceFeatures.cpp" />
-    <ClCompile Include="..\..\objects\pipeline.cpp" />
-    <ClCompile Include="..\..\objects\pipelineCache.cpp" />
-    <ClCompile Include="..\..\objects\pipelineLayout.cpp" />
-    <ClCompile Include="..\..\objects\primaryCommandBuffer.cpp" />
-    <ClCompile Include="..\..\objects\privateDataSlot.cpp" />
-    <ClCompile Include="..\..\objects\queryPool.cpp" />
-    <ClCompile Include="..\..\objects\queue.cpp" />
-    <ClCompile Include="..\..\objects\rayTracingBuffer.cpp" />
-    <ClCompile Include="..\..\objects\rayTracingPipeline.cpp" />
-    <ClCompile Include="..\..\objects\rayTracingPipelineBatch.cpp" />
-    <ClCompile Include="..\..\objects\renderPass.cpp" />
-    <ClCompile Include="..\..\objects\renderPassMultiview.cpp" />
-    <ClCompile Include="..\..\objects\resource.cpp" />
-    <ClCompile Include="..\..\objects\resourcePool.cpp" />
-    <ClCompile Include="..\..\objects\sampler.cpp" />
-    <ClCompile Include="..\..\objects\samplerYcbcrConversion.cpp" />
-    <ClCompile Include="..\..\objects\semaphore.cpp" />
-    <ClCompile Include="..\..\objects\shaderModule.cpp" />
-    <ClCompile Include="..\..\objects\srcTransferBuffer.cpp" />
-    <ClCompile Include="..\..\objects\storageBuffer.cpp" />
-    <ClCompile Include="..\..\objects\storageTexelBuffer.cpp" />
-    <ClCompile Include="..\..\objects\surface.cpp" />
-    <ClCompile Include="..\..\objects\swapchain.cpp" />
-    <ClCompile Include="..\..\objects\fullScreenExclusiveSwapchain.cpp" />
-    <ClCompile Include="..\..\objects\swapchainImage.cpp" />
-    <ClCompile Include="..\..\objects\timelineSemaphore.cpp" />
-    <ClCompile Include="..\..\objects\transformFeedbackBuffer.cpp" />
-    <ClCompile Include="..\..\objects\uniformTexelBuffer.cpp" />
-    <ClCompile Include="..\..\objects\validationCache.cpp" />
-    <ClCompile Include="..\..\objects\vertexBuffer.cpp" />
-    <ClCompile Include="..\..\platform\androidHardwareBuffer.cpp" />
-    <ClCompile Include="..\..\renderpass\subpass.cpp" />
-    <ClCompile Include="..\..\shaders\pipelineShaderStage.cpp" />
-    <ClCompile Include="..\..\shaders\rayTracingShaderGroup.cpp" />
-    <ClCompile Include="..\..\shaders\shaderBindingTable.cpp" />
-    <ClCompile Include="..\..\shaders\shaderReflection.cpp" />
-    <ClCompile Include="..\..\shaders\specialization.cpp" />
-    <ClCompile Include="..\..\states\colorBlendState.cpp" />
-    <ClCompile Include="..\..\states\colorBlendStateAdvanced.cpp" />
-    <ClCompile Include="..\..\states\multisampleState.cpp" />
-    <ClCompile Include="..\..\states\rasterizationState.cpp" />
-    <ClCompile Include="..\..\states\vertexInputState.cpp" />
-    <ClCompile Include="..\..\states\vertexInputStructure.cpp" />
-    <ClCompile Include="..\..\states\multiViewportState.cpp" />
-    <ClCompile Include="..\..\states\viewportState.cpp" />
-    <ClCompile Include="..\..\third-party\SPIRV-Reflect\spirv_reflect.c">
+    <ClCompile Include="..\..\src\descriptors\accelerationStructureDescriptor.cpp" />
+    <ClCompile Include="..\..\src\descriptors\bufferDescriptor.cpp" />
+    <ClCompile Include="..\..\src\descriptors\imageDescriptor.cpp" />
+    <ClCompile Include="..\..\src\exceptions\errorResult.cpp" />
+    <ClCompile Include="..\..\src\exceptions\exception.cpp" />
+    <ClCompile Include="..\..\src\extensions\extensions.cpp" />
+    <ClCompile Include="..\..\src\extensions\instanceExtensions.cpp" />
+    <ClCompile Include="..\..\src\extensions\instanceLayers.cpp" />
+    <ClCompile Include="..\..\src\extensions\layers.cpp" />
+    <ClCompile Include="..\..\src\extensions\physicalDeviceExtensions.cpp" />
+    <ClCompile Include="..\..\src\helpers\executeCommandBuffer.cpp" />
+    <ClCompile Include="..\..\src\helpers\executeDeferredOperation.cpp" />
+    <ClCompile Include="..\..\src\helpers\stringize.cpp" />
+    <ClCompile Include="..\..\src\magma.cpp" />
+    <ClCompile Include="..\..\src\misc\application.cpp" />
+    <ClCompile Include="..\..\src\misc\deviceFaultInfo.cpp" />
+    <ClCompile Include="..\..\src\misc\deviceFeatures.cpp" />
+    <ClCompile Include="..\..\src\misc\deviceQueueDescriptor.cpp" />
+    <ClCompile Include="..\..\src\misc\format.cpp" />
+    <ClCompile Include="..\..\src\misc\framebufferAttachmentImage.cpp" />
+    <ClCompile Include="..\..\src\misc\geometry.cpp" />
+    <ClCompile Include="..\..\src\misc\pipelineExecutable.cpp" />
+    <ClCompile Include="..\..\src\misc\scopedDebugMarker.cpp" />
+    <ClCompile Include="..\..\src\misc\sharing.cpp" />
+    <ClCompile Include="..\..\src\misc\structureChain.cpp" />
+    <ClCompile Include="..\..\src\objects\accelerationStructure.cpp" />
+    <ClCompile Include="..\..\src\objects\accelerationStructureInstanceBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\accelerationStructureStorageBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\baseDeviceMemory.cpp" />
+    <ClCompile Include="..\..\src\objects\buffer.cpp" />
+    <ClCompile Include="..\..\src\objects\bufferView.cpp" />
+    <ClCompile Include="..\..\src\objects\commandBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\commandBufferDebug.cpp" />
+    <ClCompile Include="..\..\src\objects\commandPool.cpp" />
+    <ClCompile Include="..\..\src\objects\computePipeline.cpp" />
+    <ClCompile Include="..\..\src\objects\computePipelineBatch.cpp" />
+    <ClCompile Include="..\..\src\objects\conditionalRenderingBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\debugReportCallback.cpp" />
+    <ClCompile Include="..\..\src\objects\debugUtilsMessenger.cpp" />
+    <ClCompile Include="..\..\src\objects\deferredOperation.cpp" />
+    <ClCompile Include="..\..\src\objects\descriptorPool.cpp" />
+    <ClCompile Include="..\..\src\objects\descriptorSet.cpp" />
+    <ClCompile Include="..\..\src\objects\descriptorSetLayout.cpp" />
+    <ClCompile Include="..\..\src\objects\device.cpp" />
+    <ClCompile Include="..\..\src\objects\deviceMemory.cpp" />
+    <ClCompile Include="..\..\src\objects\display.cpp" />
+    <ClCompile Include="..\..\src\objects\displayMode.cpp" />
+    <ClCompile Include="..\..\src\objects\dstTransferBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\event.cpp" />
+    <ClCompile Include="..\..\src\objects\externalImage.cpp" />
+    <ClCompile Include="..\..\src\objects\fence.cpp" />
+    <ClCompile Include="..\..\src\objects\fragmentDensityMap.cpp" />
+    <ClCompile Include="..\..\src\objects\fragmentDensityMapView.cpp" />
+    <ClCompile Include="..\..\src\objects\fragmentShadingRateAttachment.cpp" />
+    <ClCompile Include="..\..\src\objects\framebuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\fullScreenExclusiveSwapchain.cpp" />
+    <ClCompile Include="..\..\src\objects\graphicsPipeline.cpp" />
+    <ClCompile Include="..\..\src\objects\graphicsPipelineBatch.cpp" />
+    <ClCompile Include="..\..\src\objects\image.cpp" />
+    <ClCompile Include="..\..\src\objects\image1D.cpp" />
+    <ClCompile Include="..\..\src\objects\image1DArray.cpp" />
+    <ClCompile Include="..\..\src\objects\image2D.cpp" />
+    <ClCompile Include="..\..\src\objects\image2DArray.cpp" />
+    <ClCompile Include="..\..\src\objects\image3D.cpp" />
+    <ClCompile Include="..\..\src\objects\imageAttachment.cpp" />
+    <ClCompile Include="..\..\src\objects\imageCube.cpp" />
+    <ClCompile Include="..\..\src\objects\imagelessFramebuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\imageView.cpp" />
+    <ClCompile Include="..\..\src\objects\indexBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\indirectBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\instance.cpp" />
+    <ClCompile Include="..\..\src\objects\managedDeviceMemory.cpp" />
+    <ClCompile Include="..\..\src\objects\mutableImage.cpp" />
+    <ClCompile Include="..\..\src\objects\mutableImageView.cpp" />
+    <ClCompile Include="..\..\src\objects\object.cpp" />
+    <ClCompile Include="..\..\src\objects\physicalDevice.cpp" />
+    <ClCompile Include="..\..\src\objects\physicalDeviceFeatures.cpp" />
+    <ClCompile Include="..\..\src\objects\physicalDeviceGroup.cpp" />
+    <ClCompile Include="..\..\src\objects\pipeline.cpp" />
+    <ClCompile Include="..\..\src\objects\pipelineCache.cpp" />
+    <ClCompile Include="..\..\src\objects\pipelineLayout.cpp" />
+    <ClCompile Include="..\..\src\objects\primaryCommandBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\privateDataSlot.cpp" />
+    <ClCompile Include="..\..\src\objects\queryPool.cpp" />
+    <ClCompile Include="..\..\src\objects\queue.cpp" />
+    <ClCompile Include="..\..\src\objects\rayTracingBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\rayTracingPipeline.cpp" />
+    <ClCompile Include="..\..\src\objects\rayTracingPipelineBatch.cpp" />
+    <ClCompile Include="..\..\src\objects\renderPass.cpp" />
+    <ClCompile Include="..\..\src\objects\renderPassMultiview.cpp" />
+    <ClCompile Include="..\..\src\objects\resource.cpp" />
+    <ClCompile Include="..\..\src\objects\resourcePool.cpp" />
+    <ClCompile Include="..\..\src\objects\sampler.cpp" />
+    <ClCompile Include="..\..\src\objects\samplerYcbcrConversion.cpp" />
+    <ClCompile Include="..\..\src\objects\semaphore.cpp" />
+    <ClCompile Include="..\..\src\objects\shaderModule.cpp" />
+    <ClCompile Include="..\..\src\objects\srcTransferBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\storageBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\storageTexelBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\surface.cpp" />
+    <ClCompile Include="..\..\src\objects\swapchain.cpp" />
+    <ClCompile Include="..\..\src\objects\swapchainImage.cpp" />
+    <ClCompile Include="..\..\src\objects\timelineSemaphore.cpp" />
+    <ClCompile Include="..\..\src\objects\transformFeedbackBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\uniformTexelBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\validationCache.cpp" />
+    <ClCompile Include="..\..\src\objects\vertexBuffer.cpp" />
+    <ClCompile Include="..\..\src\platform\androidHardwareBuffer.cpp" />
+    <ClCompile Include="..\..\src\renderpass\subpass.cpp" />
+    <ClCompile Include="..\..\src\shaders\pipelineShaderStage.cpp" />
+    <ClCompile Include="..\..\src\shaders\rayTracingShaderGroup.cpp" />
+    <ClCompile Include="..\..\src\shaders\shaderBindingTable.cpp" />
+    <ClCompile Include="..\..\src\shaders\shaderReflection.cpp" />
+    <ClCompile Include="..\..\src\shaders\specialization.cpp" />
+    <ClCompile Include="..\..\src\states\colorBlendState.cpp" />
+    <ClCompile Include="..\..\src\states\colorBlendStateAdvanced.cpp" />
+    <ClCompile Include="..\..\src\states\multisampleState.cpp" />
+    <ClCompile Include="..\..\src\states\multiViewportState.cpp" />
+    <ClCompile Include="..\..\src\states\rasterizationState.cpp" />
+    <ClCompile Include="..\..\src\states\vertexInputState.cpp" />
+    <ClCompile Include="..\..\src\states\vertexInputStructure.cpp" />
+    <ClCompile Include="..\..\src\states\viewportState.cpp" />
+    <ClCompile Include="..\..\src\third-party\SPIRV-Reflect\spirv_reflect.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeaderFile>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\allocator\cxxAllocator.inl" />
-    <None Include="..\..\auxiliary\immediateRender.inl" />
-    <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">
+    <None Include="..\..\src\allocator\cxxAllocator.inl" />
+    <None Include="..\..\src\auxiliary\immediateRender.inl" />
+    <None Include="..\..\src\auxiliary\profiler.inl" />
+    <None Include="..\..\src\auxiliary\shaderCompiler.inl" />
+    <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsBlit %(FullPath) -o ../../auxiliary/spirv/output/blitf</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsBlit %(FullPath) -o ../../auxiliary/spirv/output/blitf</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsBlit %(FullPath) -o ../../auxiliary/spirv/output/blitf</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsBlit %(FullPath) -o ../../auxiliary/spirv/output/blitf</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling fragment shader</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling fragment shader</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compiling fragment shader</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling fragment shader</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../auxiliary/spirv/output/blitf</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsBlit %(FullPath) -o ../../auxiliary/spirv/output/blitf</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling fragment shader</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../auxiliary/spirv/output/blitf</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsBlit %(FullPath) -o ../../auxiliary/spirv/output/blitf</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compiling fragment shader</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../auxiliary/spirv/output/blitf</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsBlit %(FullPath) -o ../../auxiliary/spirv/output/blitf</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling fragment shader</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/output/blitf</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\..\auxiliary\spirv\blit.vert">
+    <CustomBuild Include="..\..\src\auxiliary\spirv\blit.vert">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn vsBlit %(FullPath) -o ../../auxiliary/spirv/output/blitv
 $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../../auxiliary/spirv/output/blitv_nv</Command>
@@ -579,125 +592,124 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling vertex shader</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/output/blitv;../../auxiliary/spirv/output/blitv_nv</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\..\auxiliary\spirv\imm.frag">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsImm %(FullPath) -o ../../auxiliary/spirv/output/immf</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsImm %(FullPath) -o ../../auxiliary/spirv/output/immf</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsImm %(FullPath) -o ../../auxiliary/spirv/output/immf</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsImm %(FullPath) -o ../../auxiliary/spirv/output/immf</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling fragment shader</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling fragment shader</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compiling fragment shader</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling fragment shader</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../auxiliary/spirv/output/immf</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../auxiliary/spirv/output/immf</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../auxiliary/spirv/output/immf</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/output/immf</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="..\..\auxiliary\spirv\imm.vert">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn vsImm %(FullPath) -o ../../auxiliary/spirv/output/immv</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling vertex shader</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn vsImm %(FullPath) -o ../../auxiliary/spirv/output/immv</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling vertex shader</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn vsImm %(FullPath) -o ../../auxiliary/spirv/output/immv</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compiling vertex shader</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn vsImm %(FullPath) -o ../../auxiliary/spirv/output/immv</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling vertex shader</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../auxiliary/spirv/output/immv</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../auxiliary/spirv/output/immv</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../auxiliary/spirv/output/immv</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/output/immv</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="..\..\auxiliary\spirv\font.frag">
+    <CustomBuild Include="..\..\src\auxiliary\spirv\font.frag">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsFont %(FullPath) -o ../../auxiliary/spirv/output/fontf</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsFont %(FullPath) -o ../../auxiliary/spirv/output/fontf</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsFont %(FullPath) -o ../../auxiliary/spirv/output/fontf</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsFont %(FullPath) -o ../../auxiliary/spirv/output/fontf</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling fragment shader</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../auxiliary/spirv/output/fontf</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsFont %(FullPath) -o ../../auxiliary/spirv/output/fontf</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling fragment shader</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../auxiliary/spirv/output/fontf</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsFont %(FullPath) -o ../../auxiliary/spirv/output/fontf</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compiling fragment shader</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../auxiliary/spirv/output/fontf</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsFont %(FullPath) -o ../../auxiliary/spirv/output/fontf</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling fragment shader</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/output/fontf</Outputs>
     </CustomBuild>
-    <None Include="..\..\auxiliary\profiler.inl" />
-    <None Include="..\..\auxiliary\shaderCompiler.inl" />
-    <None Include="..\..\barriers\bufferMemoryBarrier.inl" />
-    <None Include="..\..\barriers\memoryBarrier.inl" />
-    <None Include="..\..\barriers\subpassDependency.inl" />
-    <None Include="..\..\barriers\subpassDependency2.inl" />
-    <None Include="..\..\descriptors\array\bufferDescriptor.h" />
-    <None Include="..\..\descriptors\array\bufferDescriptor.inl" />
-    <None Include="..\..\descriptors\array\descriptor.inl" />
-    <None Include="..\..\descriptors\array\imageDescriptor.inl" />
-    <None Include="..\..\descriptors\binding.inl" />
-    <None Include="..\..\descriptors\bufferDescriptor.inl" />
-    <None Include="..\..\descriptors\bufferDescriptorArray.inl" />
-    <None Include="..\..\descriptors\descriptorSetTable.inl" />
-    <None Include="..\..\descriptors\imageDescriptor.inl" />
-    <None Include="..\..\descriptors\imageDescriptorArray.inl" />
-    <None Include="..\..\descriptors\inlineUniformBlock.inl" />
-    <None Include="..\..\helpers\alignedUniformArray.inl" />
-    <None Include="..\..\helpers\uniformArray.inl" />
-    <None Include="..\..\misc\borderColor.inl" />
-    <None Include="..\..\misc\clearAttachment.inl" />
-    <None Include="..\..\misc\clearValue.inl" />
-    <None Include="..\..\misc\extension.inl" />
-    <None Include="..\..\misc\format.inl" />
-    <None Include="..\..\misc\imageSubresourceRange.inl" />
-    <None Include="..\..\misc\pushConstantRange.inl" />
-    <None Include="..\..\misc\scissor.inl" />
-    <None Include="..\..\misc\structureChain.inl" />
-    <None Include="..\..\misc\structureChainNode.inl" />
-    <None Include="..\..\misc\viewport.inl" />
-    <None Include="..\..\objects\commandBuffer.inl" />
-    <None Include="..\..\objects\device.inl" />
-    <None Include="..\..\objects\baseDeviceMemory.inl" />
-    <None Include="..\..\objects\indirectBuffer.inl" />
-    <None Include="..\..\objects\object.inl" />
-    <None Include="..\..\objects\pipeline.inl" />
-    <None Include="..\..\objects\pipelineBatch.inl" />
-    <None Include="..\..\objects\pipelineLayout.inl" />
-    <None Include="..\..\objects\queryPool.inl" />
-    <None Include="..\..\objects\resourcePool.inl" />
-    <None Include="..\..\objects\shaderModule.inl" />
-    <None Include="..\..\packed\b5g5r5a1unorm.inl" />
-    <None Include="..\..\packed\r5g5b5a1unorm.inl" />
-    <None Include="..\..\packed\b4g4r4a4unorm.inl" />
-    <None Include="..\..\packed\b5g6r5unorm.inl" />
-    <None Include="..\..\packed\r4g4b4a4unorm.inl" />
-    <None Include="..\..\packed\r9g9b9e5ufloat.inl" />
-    <None Include="..\..\packed\x10y10z10w2snorm.inl" />
-    <None Include="..\..\packed\x10y10z10w2unorm.inl" />
-    <None Include="..\..\packed\x11y11z10ufloat.inl" />
-    <None Include="..\..\packed\r5g6b5unorm.inl" />
-    <None Include="..\..\renderpass\attachment.inl" />
-    <None Include="..\..\shaders\specialization.inl" />
-    <None Include="..\..\states\colorBlendAttachmentState.inl" />
-    <None Include="..\..\states\colorBlendState.inl" />
-    <None Include="..\..\states\colorBlendStateAdvanced.inl" />
-    <None Include="..\..\states\conservativeRasterizationState.inl" />
-    <None Include="..\..\states\depthComparisonSamplerState.inl" />
-    <None Include="..\..\states\depthStencilState.inl" />
-    <None Include="..\..\states\inputAssemblyState.inl" />
-    <None Include="..\..\states\lineRasterizationState.inl" />
-    <None Include="..\..\states\minmaxSamplerState.inl" />
-    <None Include="..\..\states\multisampleCoverageReductionState.inl" />
-    <None Include="..\..\states\multisampleState.inl" />
-    <None Include="..\..\states\provokingVertexState.inl" />
-    <None Include="..\..\states\rasterizationOrderState.inl" />
-    <None Include="..\..\states\rasterizationState.inl" />
-    <None Include="..\..\states\samplerState.inl" />
-    <None Include="..\..\states\streamRasterizationState.inl" />
-    <None Include="..\..\states\tesselationState.inl" />
-    <None Include="..\..\states\vertexAttributeType.inl" />
-    <None Include="..\..\states\vertexInputState.inl" />
-    <None Include="..\..\states\vertexInputStructure.inl" />
-    <None Include="..\..\states\samplerYcbcrConversionState.inl" />
+    <CustomBuild Include="..\..\src\auxiliary\spirv\imm.frag">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsImm %(FullPath) -o ../../auxiliary/spirv/output/immf</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling fragment shader</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../auxiliary/spirv/output/immf</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsImm %(FullPath) -o ../../auxiliary/spirv/output/immf</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling fragment shader</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../auxiliary/spirv/output/immf</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsImm %(FullPath) -o ../../auxiliary/spirv/output/immf</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compiling fragment shader</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../auxiliary/spirv/output/immf</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn fsImm %(FullPath) -o ../../auxiliary/spirv/output/immf</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling fragment shader</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/output/immf</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\src\auxiliary\spirv\imm.vert">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn vsImm %(FullPath) -o ../../auxiliary/spirv/output/immv</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling vertex shader</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../auxiliary/spirv/output/immv</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn vsImm %(FullPath) -o ../../auxiliary/spirv/output/immv</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling vertex shader</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../auxiliary/spirv/output/immv</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn vsImm %(FullPath) -o ../../auxiliary/spirv/output/immv</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compiling vertex shader</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../auxiliary/spirv/output/immv</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VK_SDK_PATH)\Bin\glslangValidator.exe -V --vn vsImm %(FullPath) -o ../../auxiliary/spirv/output/immv</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling vertex shader</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../auxiliary/spirv/output/immv</Outputs>
+    </CustomBuild>
+    <None Include="..\..\src\barriers\bufferMemoryBarrier.inl" />
+    <None Include="..\..\src\barriers\memoryBarrier.inl" />
+    <None Include="..\..\src\barriers\subpassDependency.inl" />
+    <None Include="..\..\src\barriers\subpassDependency2.inl" />
+    <None Include="..\..\src\core\copyThread.inl" />
+    <None Include="..\..\src\core\zeroThread.inl" />
+    <None Include="..\..\src\descriptors\array\bufferDescriptor.inl" />
+    <None Include="..\..\src\descriptors\array\descriptor.inl" />
+    <None Include="..\..\src\descriptors\array\imageDescriptor.inl" />
+    <None Include="..\..\src\descriptors\binding.inl" />
+    <None Include="..\..\src\descriptors\bufferDescriptor.inl" />
+    <None Include="..\..\src\descriptors\bufferDescriptorArray.inl" />
+    <None Include="..\..\src\descriptors\descriptorSetTable.inl" />
+    <None Include="..\..\src\descriptors\imageDescriptor.inl" />
+    <None Include="..\..\src\descriptors\imageDescriptorArray.inl" />
+    <None Include="..\..\src\descriptors\inlineUniformBlock.inl" />
+    <None Include="..\..\src\helpers\alignedUniformArray.inl" />
+    <None Include="..\..\src\helpers\uniformArray.inl" />
+    <None Include="..\..\src\misc\borderColor.inl" />
+    <None Include="..\..\src\misc\clearAttachment.inl" />
+    <None Include="..\..\src\misc\clearValue.inl" />
+    <None Include="..\..\src\misc\extension.inl" />
+    <None Include="..\..\src\misc\format.inl" />
+    <None Include="..\..\src\misc\imageSubresourceRange.inl" />
+    <None Include="..\..\src\misc\pushConstantRange.inl" />
+    <None Include="..\..\src\misc\scissor.inl" />
+    <None Include="..\..\src\misc\structureChain.inl" />
+    <None Include="..\..\src\misc\structureChainNode.inl" />
+    <None Include="..\..\src\misc\viewport.inl" />
+    <None Include="..\..\src\objects\baseDeviceMemory.inl" />
+    <None Include="..\..\src\objects\commandBuffer.inl" />
+    <None Include="..\..\src\objects\device.inl" />
+    <None Include="..\..\src\objects\indirectBuffer.inl" />
+    <None Include="..\..\src\objects\object.inl" />
+    <None Include="..\..\src\objects\pipeline.inl" />
+    <None Include="..\..\src\objects\pipelineBatch.inl" />
+    <None Include="..\..\src\objects\pipelineLayout.inl" />
+    <None Include="..\..\src\objects\queryPool.inl" />
+    <None Include="..\..\src\objects\resourcePool.inl" />
+    <None Include="..\..\src\objects\shaderModule.inl" />
+    <None Include="..\..\src\packed\b4g4r4a4unorm.inl" />
+    <None Include="..\..\src\packed\b5g5r5a1unorm.inl" />
+    <None Include="..\..\src\packed\b5g6r5unorm.inl" />
+    <None Include="..\..\src\packed\r4g4b4a4unorm.inl" />
+    <None Include="..\..\src\packed\r5g5b5a1unorm.inl" />
+    <None Include="..\..\src\packed\r5g6b5unorm.inl" />
+    <None Include="..\..\src\packed\r9g9b9e5ufloat.inl" />
+    <None Include="..\..\src\packed\x10y10z10w2snorm.inl" />
+    <None Include="..\..\src\packed\x10y10z10w2unorm.inl" />
+    <None Include="..\..\src\packed\x11y11z10ufloat.inl" />
+    <None Include="..\..\src\renderpass\attachment.inl" />
+    <None Include="..\..\src\shaders\specialization.inl" />
+    <None Include="..\..\src\states\colorBlendAttachmentState.inl" />
+    <None Include="..\..\src\states\colorBlendState.inl" />
+    <None Include="..\..\src\states\colorBlendStateAdvanced.inl" />
+    <None Include="..\..\src\states\conservativeRasterizationState.inl" />
+    <None Include="..\..\src\states\depthComparisonSamplerState.inl" />
+    <None Include="..\..\src\states\depthStencilState.inl" />
+    <None Include="..\..\src\states\inputAssemblyState.inl" />
+    <None Include="..\..\src\states\lineRasterizationState.inl" />
+    <None Include="..\..\src\states\minmaxSamplerState.inl" />
+    <None Include="..\..\src\states\multisampleCoverageReductionState.inl" />
+    <None Include="..\..\src\states\multisampleState.inl" />
+    <None Include="..\..\src\states\provokingVertexState.inl" />
+    <None Include="..\..\src\states\rasterizationOrderState.inl" />
+    <None Include="..\..\src\states\rasterizationState.inl" />
+    <None Include="..\..\src\states\samplerState.inl" />
+    <None Include="..\..\src\states\samplerYcbcrConversionState.inl" />
+    <None Include="..\..\src\states\streamRasterizationState.inl" />
+    <None Include="..\..\src\states\tesselationState.inl" />
+    <None Include="..\..\src\states\vertexAttributeType.inl" />
+    <None Include="..\..\src\states\vertexInputState.inl" />
+    <None Include="..\..\src\states\vertexInputStructure.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -111,494 +111,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\allocator\allocator.h">
-      <Filter>Header Files\allocator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\allocator\cxxAllocator.h">
-      <Filter>Header Files\allocator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\blitRectangle.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\immediateRender.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\shaderCompiler.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\barriers\bufferMemoryBarrier.h">
-      <Filter>Header Files\barriers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\barriers\imageMemoryBarrier.h">
-      <Filter>Header Files\barriers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\helpers\alignedUniformArray.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\helpers\mapScoped.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\helpers\stackArray.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\helpers\stringize.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\helpers\uniformArray.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\clearAttachment.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\clearValue.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\format.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\geometry.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\imageSubresourceRange.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\scissor.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\scopedDebugMarker.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\viewport.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\accelerationStructure.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\buffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\bufferView.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\commandBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\commandPool.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\conditionalRenderingBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\debugReportCallback.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\debugUtilsMessenger.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\descriptorPool.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\descriptorSet.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\descriptorSetLayout.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\device.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\deviceMemory.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\display.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\displayMode.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\dstTransferBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\event.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\fence.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\framebuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\image.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\image1D.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\image1DArray.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\image2D.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\image2DArray.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\image3D.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\imageCube.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\imageView.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\indexBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\indirectBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\instance.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\object.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\physicalDevice.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\pipeline.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\pipelineCache.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\pipelineLayout.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\queryPool.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\queue.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\renderPass.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\sampler.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\semaphore.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\shaderModule.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\srcTransferBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\storageBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\storageTexelBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\surface.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\swapchain.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\uniformBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\uniformTexelBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\vertexBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\colorBlendState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\depthStencilState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\inputAssemblyState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\multisampleState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\rasterizationState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\samplerState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\tesselationState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\vertexInputState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\viewportState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\magma.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\helpers\executeCommandBuffer.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\colorBlendStateAdvanced.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\dispatchable.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\nondispatchable.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shaders\specialization.h">
-      <Filter>Header Files\shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shaders\pipelineShaderStage.h">
-      <Filter>Header Files\shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shaders\shaderStages.h">
-      <Filter>Header Files\shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shaders\rayTracingShaderGroup.h">
-      <Filter>Header Files\shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\graphicsPipeline.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\computePipeline.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\rayTracingPipeline.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\helpers\castToDebugReport.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\validationCache.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\rayTracingBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\extensions\instanceExtensions.h">
-      <Filter>Header Files\extensions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\extensions\physicalDeviceExtensions.h">
-      <Filter>Header Files\extensions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\extensions\extensions.h">
-      <Filter>Header Files\extensions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\extensions\instanceLayers.h">
-      <Filter>Header Files\extensions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\vertexInputStructure.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\extensions\layers.h">
-      <Filter>Header Files\extensions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\deviceQueueDescriptor.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\resource.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\graphicsPipelineCache.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\frameGrabber.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\barriers\memoryBarrier.h">
-      <Filter>Header Files\barriers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\typedefs.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\typedefs.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\textShader.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\copyMemory.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\zeroMemory.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\refCountChecker.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\pch.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\core.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\allocator\linearPlacementPool.h">
-      <Filter>Header Files\allocator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\objectType.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\resourcePool.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\core\hashing\fnv1.h">
       <Filter>Header Files\core\hashing</Filter>
     </ClInclude>
     <ClInclude Include="..\..\core\hashing\fnv1string.h">
       <Filter>Header Files\core\hashing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shaders\shaderReflection.h">
-      <Filter>Header Files\shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\exceptions\exception.h">
-      <Filter>Header Files\exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\exceptions\sourcelocation.h">
-      <Filter>Header Files\exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\exceptions\unsupportedExtension.h">
-      <Filter>Header Files\exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\exceptions\notImplemented.h">
-      <Filter>Header Files\exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\exceptions\errorResult.h">
-      <Filter>Header Files\exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\exceptions\reflectionErrorResult.h">
-      <Filter>Header Files\exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\exceptions\compileError.h">
-      <Filter>Header Files\exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\borderColor.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\colorFramebuffer.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\baseFramebuffer.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\depthFramebuffer.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\colorMultisampleFramebuffer.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\swapchainFramebuffer.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\multiAttachmentFramebuffer.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shaders\shaderBindingTable.h">
-      <Filter>Header Files\shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\accelerationStructureInstanceBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\allocator\deviceMemoryAllocator.h">
-      <Filter>Header Files\allocator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\allocator\alignedAllocator.h">
-      <Filter>Header Files\allocator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\physicalDeviceGroup.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\accumulationBuffer.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\fillRectangleVertexShader.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\imageDescriptorSet.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\linearAllocator.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\helpers\spirvReflectionTypeCast.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shaders\shaderReflectionFactory.h">
-      <Filter>Header Files\shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\renderPassMultiview.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\imagelessFramebuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\compatibility.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\transformFeedbackBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\packed\vector.h">
-      <Filter>Header Files\packed</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\packed\color.h">
-      <Filter>Header Files\packed</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\packed\ieee754.h">
-      <Filter>Header Files\packed</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\rasterizationOrderState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\conservativeRasterizationState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\streamRasterizationState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\multiViewportState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\sprite.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\generateMipmap.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\primaryCommandBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\secondaryCommandBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\auxiliary\base.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\threadSafeUnorderedSet.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\minmaxSamplerState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\depthComparisonSamplerState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\samplerYcbcrConversion.h">
-      <Filter>Header Files\objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\core\hashing\combine.h">
       <Filter>Header Files\core\hashing</Filter>
@@ -606,899 +123,1394 @@
     <ClInclude Include="..\..\core\hashing\constexpr.h">
       <Filter>Header Files\core\hashing</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\misc\pushConstantRange.h">
-      <Filter>Header Files\misc</Filter>
+    <ClInclude Include="..\..\magma.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\states\colorMask.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\colorBlendAttachmentState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\colorLogicOpState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\deferredOperation.h">
+    <ClInclude Include="..\..\src\objects\accelerationStructure.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\helpers\executeDeferredOperation.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\samplerYcbcrConversionState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\pipelineExecutable.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\provokingVertexState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\states\lineRasterizationState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\fragmentDensityMap.h">
+    <ClInclude Include="..\..\src\objects\accelerationStructureInstanceBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\fragmentShadingRateAttachment.h">
+    <ClInclude Include="..\..\src\objects\accelerationStructureStorageBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\barriers\subpassDependency2.h">
-      <Filter>Header Files\barriers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\barriers\subpassDependency.h">
-      <Filter>Header Files\barriers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\structureChain.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\fullScreenExclusiveSwapchain.h">
+    <ClInclude Include="..\..\src\objects\baseDeviceMemory.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\states\multisampleCoverageReductionState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\swapchainImage.h">
+    <ClInclude Include="..\..\src\objects\buffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\misc\sharing.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\framebufferAttachmentImage.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\fragmentDensityMapView.h">
+    <ClInclude Include="..\..\src\objects\bufferView.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\auxiliary\profiler.h">
+    <ClInclude Include="..\..\src\objects\commandBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\commandPool.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\computePipeline.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\computePipelineBatch.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\conditionalRenderingBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\debugReportCallback.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\debugUtilsMessenger.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\deferredOperation.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\descriptorPool.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\descriptorSet.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\descriptorSetLayout.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\device.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\deviceMemory.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\dispatchable.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\display.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\displayMode.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\dstTransferBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\event.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\externalImage.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\fence.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\fragmentDensityMap.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\fragmentDensityMapView.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\fragmentShadingRateAttachment.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\framebuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\fullScreenExclusiveSwapchain.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\graphicsPipeline.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\graphicsPipelineBatch.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\ideviceMemory.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\image.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\image1D.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\image1DArray.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\image2D.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\image2DArray.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\image3D.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\imageAttachment.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\imageCube.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\imagelessFramebuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\imageView.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\indexBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\indirectBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\instance.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\iresource.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\managedDeviceMemory.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\mutableImage.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\mutableImageView.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\nondispatchable.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\object.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\objectType.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\physicalDevice.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\physicalDeviceGroup.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\pipeline.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\pipelineBatch.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\pipelineCache.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\pipelineLayout.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\primaryCommandBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\privateDataSlot.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\queryPool.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\queue.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\rayTracingBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\rayTracingPipeline.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\rayTracingPipelineBatch.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\renderPass.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\renderPassMultiview.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\resource.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\resourcePool.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\sampler.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\samplerYcbcrConversion.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\secondaryCommandBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\semaphore.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\shaderModule.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\srcTransferBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\storageBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\storageTexelBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\surface.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\swapchain.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\swapchainImage.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\timelineSemaphore.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\transformFeedbackBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\typedefs.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\uniformBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\uniformTexelBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\validationCache.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\vertexBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\auxiliary\accumulationBuffer.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\auxiliary\scopedProfile.h">
+    <ClInclude Include="..\..\src\auxiliary\base.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\timelineSemaphore.h">
-      <Filter>Header Files\objects</Filter>
+    <ClInclude Include="..\..\src\auxiliary\baseFramebuffer.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\misc\deviceFaultInfo.h">
-      <Filter>Header Files\misc</Filter>
+    <ClInclude Include="..\..\src\auxiliary\blitRectangle.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\mutableImageView.h">
-      <Filter>Header Files\objects</Filter>
+    <ClInclude Include="..\..\src\auxiliary\colorFramebuffer.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\mutableImage.h">
-      <Filter>Header Files\objects</Filter>
+    <ClInclude Include="..\..\src\auxiliary\colorMultisampleFramebuffer.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\imageAttachment.h">
-      <Filter>Header Files\objects</Filter>
+    <ClInclude Include="..\..\src\auxiliary\depthFramebuffer.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\descriptorPool.h">
-      <Filter>Header Files\descriptors</Filter>
+    <ClInclude Include="..\..\src\auxiliary\fillRectangleVertexShader.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\descriptor.h">
-      <Filter>Header Files\descriptors</Filter>
+    <ClInclude Include="..\..\src\auxiliary\frameGrabber.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\descriptorSetTable.h">
-      <Filter>Header Files\descriptors</Filter>
+    <ClInclude Include="..\..\src\auxiliary\generateMipmap.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\misc\deviceFeatures.h">
-      <Filter>Header Files\misc</Filter>
+    <ClInclude Include="..\..\src\auxiliary\graphicsPipelineCache.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\imageDescriptor.h">
-      <Filter>Header Files\descriptors</Filter>
+    <ClInclude Include="..\..\src\auxiliary\imageDescriptorSet.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\bufferDescriptor.h">
-      <Filter>Header Files\descriptors</Filter>
+    <ClInclude Include="..\..\src\auxiliary\immediateRender.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\inlineUniformBlock.h">
-      <Filter>Header Files\descriptors</Filter>
+    <ClInclude Include="..\..\src\auxiliary\multiAttachmentFramebuffer.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\accelerationStructure.h">
-      <Filter>Header Files\descriptors</Filter>
+    <ClInclude Include="..\..\src\auxiliary\profiler.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\imageDescriptorArray.h">
-      <Filter>Header Files\descriptors</Filter>
+    <ClInclude Include="..\..\src\auxiliary\scopedProfile.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\bufferDescriptorArray.h">
-      <Filter>Header Files\descriptors</Filter>
+    <ClInclude Include="..\..\src\auxiliary\shaderCompiler.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\array\descriptor.h">
-      <Filter>Header Files\descriptors\array</Filter>
+    <ClInclude Include="..\..\src\auxiliary\sprite.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\array\imageDescriptor.h">
-      <Filter>Header Files\descriptors\array</Filter>
+    <ClInclude Include="..\..\src\auxiliary\swapchainFramebuffer.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\descriptors\binding.h">
-      <Filter>Header Files\descriptors</Filter>
+    <ClInclude Include="..\..\src\auxiliary\textShader.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\renderpass\attachment.h">
-      <Filter>Header Files\renderpass</Filter>
+    <ClInclude Include="..\..\src\auxiliary\typedefs.h">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\renderpass\loadStoreOp.h">
-      <Filter>Header Files\renderpass</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\renderpass\subpass.h">
-      <Filter>Header Files\renderpass</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\application.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\managedDeviceMemory.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\objects\ideviceMemory.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\allocator\debugAlignedAllocator.h">
+    <ClInclude Include="..\..\src\allocator\alignedAllocator.h">
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\baseDeviceMemory.h">
-      <Filter>Header Files\objects</Filter>
+    <ClInclude Include="..\..\src\allocator\allocator.h">
+      <Filter>Header Files\allocator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\accelerationStructureStorageBuffer.h">
-      <Filter>Header Files\objects</Filter>
+    <ClInclude Include="..\..\src\allocator\cxxAllocator.h">
+      <Filter>Header Files\allocator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\privateDataSlot.h">
-      <Filter>Header Files\objects</Filter>
+    <ClInclude Include="..\..\src\allocator\debugAlignedAllocator.h">
+      <Filter>Header Files\allocator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\pipelineBatch.h">
-      <Filter>Header Files\objects</Filter>
+    <ClInclude Include="..\..\src\allocator\deviceMemoryAllocator.h">
+      <Filter>Header Files\allocator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\graphicsPipelineBatch.h">
-      <Filter>Header Files\objects</Filter>
+    <ClInclude Include="..\..\src\allocator\linearPlacementPool.h">
+      <Filter>Header Files\allocator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\computePipelineBatch.h">
-      <Filter>Header Files\objects</Filter>
+    <ClInclude Include="..\..\src\barriers\bufferMemoryBarrier.h">
+      <Filter>Header Files\barriers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\rayTracingPipelineBatch.h">
-      <Filter>Header Files\objects</Filter>
+    <ClInclude Include="..\..\src\barriers\imageMemoryBarrier.h">
+      <Filter>Header Files\barriers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\misc\extension.h">
+    <ClInclude Include="..\..\src\barriers\memoryBarrier.h">
+      <Filter>Header Files\barriers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\barriers\subpassDependency.h">
+      <Filter>Header Files\barriers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\barriers\subpassDependency2.h">
+      <Filter>Header Files\barriers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\copyMemory.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\core.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\foreach.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\hash.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\linearAllocator.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\macros.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\memory.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\pch.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\refCountChecker.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\threadSafeUnorderedSet.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zeroMemory.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\accelerationStructure.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\binding.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\bufferDescriptor.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\bufferDescriptorArray.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\descriptor.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\descriptorPool.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\descriptorSetTable.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\imageDescriptor.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\imageDescriptorArray.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\inlineUniformBlock.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\array\bufferDescriptor.h">
+      <Filter>Header Files\descriptors\array</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\array\descriptor.h">
+      <Filter>Header Files\descriptors\array</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\array\imageDescriptor.h">
+      <Filter>Header Files\descriptors\array</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\exceptions\compileError.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\exceptions\errorResult.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\exceptions\exception.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\exceptions\notImplemented.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\exceptions\reflectionErrorResult.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\exceptions\sourcelocation.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\exceptions\unsupportedExtension.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\extensions\extensions.h">
+      <Filter>Header Files\extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\extensions\instanceExtensions.h">
+      <Filter>Header Files\extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\extensions\instanceLayers.h">
+      <Filter>Header Files\extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\extensions\layers.h">
+      <Filter>Header Files\extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\extensions\physicalDeviceExtensions.h">
+      <Filter>Header Files\extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\helpers\alignedUniformArray.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\helpers\castToDebugReport.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\helpers\executeCommandBuffer.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\helpers\executeDeferredOperation.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\helpers\mapScoped.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\helpers\spirvReflectionTypeCast.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\helpers\stackArray.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\helpers\stringize.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\helpers\uniformArray.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\misc\application.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\iresource.h">
-      <Filter>Header Files\objects</Filter>
+    <ClInclude Include="..\..\src\misc\borderColor.h">
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\core\macros.h">
-      <Filter>Header Files\core</Filter>
+    <ClInclude Include="..\..\src\misc\clearAttachment.h">
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\core\foreach.h">
-      <Filter>Header Files\core</Filter>
+    <ClInclude Include="..\..\src\misc\clearValue.h">
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\core\memory.h">
-      <Filter>Header Files\core</Filter>
+    <ClInclude Include="..\..\src\misc\compatibility.h">
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\core\hash.h">
-      <Filter>Header Files\core</Filter>
+    <ClInclude Include="..\..\src\misc\deviceFaultInfo.h">
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\states\vertexFormat.h">
-      <Filter>Header Files\states</Filter>
+    <ClInclude Include="..\..\src\misc\deviceFeatures.h">
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\states\vertexAttributeType.h">
-      <Filter>Header Files\states</Filter>
+    <ClInclude Include="..\..\src\misc\deviceQueueDescriptor.h">
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\platform\androidHardwareBuffer.h">
+    <ClInclude Include="..\..\src\misc\extension.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\misc\format.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\misc\framebufferAttachmentImage.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\misc\geometry.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\misc\imageSubresourceRange.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\misc\pipelineExecutable.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\misc\pushConstantRange.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\misc\scissor.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\misc\scopedDebugMarker.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\misc\sharing.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\misc\structureChain.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\misc\viewport.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\packed\color.h">
+      <Filter>Header Files\packed</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\packed\expPow2.h">
+      <Filter>Header Files\packed</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\packed\ieee754.h">
+      <Filter>Header Files\packed</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\packed\rcpExpPow2.h">
+      <Filter>Header Files\packed</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\packed\vector.h">
+      <Filter>Header Files\packed</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\platform\androidHardwareBuffer.h">
       <Filter>Header Files\platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\objects\externalImage.h">
-      <Filter>Header Files\objects</Filter>
+    <ClInclude Include="..\..\src\renderpass\attachment.h">
+      <Filter>Header Files\renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\renderpass\loadStoreOp.h">
+      <Filter>Header Files\renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\renderpass\subpass.h">
+      <Filter>Header Files\renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shaders\pipelineShaderStage.h">
+      <Filter>Header Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shaders\rayTracingShaderGroup.h">
+      <Filter>Header Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shaders\shaderBindingTable.h">
+      <Filter>Header Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shaders\shaderReflection.h">
+      <Filter>Header Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shaders\shaderReflectionFactory.h">
+      <Filter>Header Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shaders\shaderStages.h">
+      <Filter>Header Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shaders\specialization.h">
+      <Filter>Header Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\colorBlendAttachmentState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\colorBlendState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\colorBlendStateAdvanced.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\colorLogicOpState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\colorMask.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\conservativeRasterizationState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\depthComparisonSamplerState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\depthStencilState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\inputAssemblyState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\lineRasterizationState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\minmaxSamplerState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\multisampleCoverageReductionState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\multisampleState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\multiViewportState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\provokingVertexState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\rasterizationOrderState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\rasterizationState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\samplerState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\samplerYcbcrConversionState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\streamRasterizationState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\tesselationState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\vertexAttributeType.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\vertexFormat.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\vertexInputState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\vertexInputStructure.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\viewportState.h">
+      <Filter>Header Files\states</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\allocator\allocationCallbacks.cpp">
-      <Filter>Source Files\allocator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\blitRectangle.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\immediateRender.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\shaderCompiler.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\barriers\bufferMemoryBarrier.cpp">
-      <Filter>Source Files\barriers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\barriers\imageMemoryBarrier.cpp">
-      <Filter>Source Files\barriers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\helpers\stringize.cpp">
-      <Filter>Source Files\helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\misc\format.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\misc\geometry.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\misc\scopedDebugMarker.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\states\colorBlendState.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\states\multisampleState.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\states\vertexInputState.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\states\viewportState.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\accelerationStructure.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\buffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\bufferView.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\commandBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\commandBufferDebug.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\commandPool.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\conditionalRenderingBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\debugReportCallback.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\debugUtilsMessenger.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\descriptorPool.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\descriptorSet.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\descriptorSetLayout.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\device.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\deviceMemory.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\display.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\displayMode.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\dstTransferBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\event.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\fence.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\framebuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\image.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\image1D.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\image1DArray.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\image2D.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\image2DArray.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\image3D.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\imageCube.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\imageView.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\indexBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\indirectBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\instance.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\physicalDevice.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\pipeline.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\pipelineCache.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\pipelineLayout.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\queryPool.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\queue.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\renderPass.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\sampler.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\semaphore.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\shaderModule.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\srcTransferBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\storageBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\storageTexelBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\surface.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\swapchain.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\uniformTexelBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\vertexBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\helpers\executeCommandBuffer.cpp">
-      <Filter>Source Files\helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\states\colorBlendStateAdvanced.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\shaders\pipelineShaderStage.cpp">
-      <Filter>Source Files\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\shaders\rayTracingShaderGroup.cpp">
-      <Filter>Source Files\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\shaders\specialization.cpp">
-      <Filter>Source Files\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\graphicsPipeline.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\computePipeline.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\rayTracingPipeline.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\validationCache.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\rayTracingBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\extensions\physicalDeviceExtensions.cpp">
-      <Filter>Source Files\extensions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\extensions\instanceExtensions.cpp">
-      <Filter>Source Files\extensions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\extensions\extensions.cpp">
-      <Filter>Source Files\extensions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\extensions\instanceLayers.cpp">
-      <Filter>Source Files\extensions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\states\vertexInputStructure.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\extensions\layers.cpp">
-      <Filter>Source Files\extensions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\misc\deviceQueueDescriptor.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\resource.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\graphicsPipelineCache.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\frameGrabber.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\textShader.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\core\pch.cpp">
-      <Filter>Source Files\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\allocator\cxxAllocator.cpp">
-      <Filter>Source Files\allocator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\resourcePool.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\shaders\shaderReflection.cpp">
-      <Filter>Source Files\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third-party\SPIRV-Reflect\spirv_reflect.c">
-      <Filter>Source Files\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\exceptions\exception.cpp">
-      <Filter>Source Files\exceptions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\colorFramebuffer.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\depthFramebuffer.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\colorMultisampleFramebuffer.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\swapchainFramebuffer.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\baseFramebuffer.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\multiAttachmentFramebuffer.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\shaders\shaderBindingTable.cpp">
-      <Filter>Source Files\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\accelerationStructureInstanceBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\allocator\deviceMemoryAllocator.cpp">
-      <Filter>Source Files\allocator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\allocator\alignedAllocator.cpp">
-      <Filter>Source Files\allocator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\physicalDeviceGroup.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\accumulationBuffer.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\fillRectangleVertexShader.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\imageDescriptorSet.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\renderPassMultiview.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\imagelessFramebuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\object.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\transformFeedbackBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\states\multiViewportState.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\sprite.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\auxiliary\generateMipmap.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\primaryCommandBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\samplerYcbcrConversion.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\magma.cpp">
+    <ClCompile Include="..\..\src\magma.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\objects\deferredOperation.cpp">
+    <ClCompile Include="..\..\src\objects\accelerationStructure.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\helpers\executeDeferredOperation.cpp">
-      <Filter>Source Files\helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\misc\pipelineExecutable.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\states\rasterizationState.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\fragmentDensityMap.cpp">
+    <ClCompile Include="..\..\src\objects\accelerationStructureInstanceBuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\objects\fragmentShadingRateAttachment.cpp">
+    <ClCompile Include="..\..\src\objects\accelerationStructureStorageBuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\misc\structureChain.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\fullScreenExclusiveSwapchain.cpp">
+    <ClCompile Include="..\..\src\objects\baseDeviceMemory.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\objects\swapchainImage.cpp">
+    <ClCompile Include="..\..\src\objects\buffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\misc\sharing.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\misc\framebufferAttachmentImage.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\fragmentDensityMapView.cpp">
+    <ClCompile Include="..\..\src\objects\bufferView.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\auxiliary\profiler.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\timelineSemaphore.cpp">
+    <ClCompile Include="..\..\src\objects\commandBuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\misc\deviceFaultInfo.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\mutableImageView.cpp">
+    <ClCompile Include="..\..\src\objects\commandBufferDebug.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\objects\mutableImage.cpp">
+    <ClCompile Include="..\..\src\objects\commandPool.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\objects\imageAttachment.cpp">
+    <ClCompile Include="..\..\src\objects\computePipeline.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\descriptors\accelerationStructureDescriptor.cpp">
+    <ClCompile Include="..\..\src\objects\computePipelineBatch.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\conditionalRenderingBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\debugReportCallback.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\debugUtilsMessenger.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\deferredOperation.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\descriptorPool.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\descriptorSet.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\descriptorSetLayout.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\device.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\deviceMemory.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\display.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\displayMode.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\dstTransferBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\event.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\externalImage.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\fence.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\fragmentDensityMap.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\fragmentDensityMapView.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\fragmentShadingRateAttachment.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\framebuffer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\fullScreenExclusiveSwapchain.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\graphicsPipeline.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\graphicsPipelineBatch.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\image.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\image1D.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\image1DArray.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\image2D.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\image2DArray.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\image3D.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\imageAttachment.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\imageCube.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\imagelessFramebuffer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\imageView.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\indexBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\indirectBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\instance.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\managedDeviceMemory.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\mutableImage.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\mutableImageView.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\object.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\physicalDevice.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\physicalDeviceFeatures.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\physicalDeviceGroup.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\pipeline.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\pipelineCache.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\pipelineLayout.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\primaryCommandBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\privateDataSlot.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\queryPool.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\queue.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\rayTracingBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\rayTracingPipeline.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\rayTracingPipelineBatch.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\renderPass.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\renderPassMultiview.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\resource.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\resourcePool.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\sampler.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\samplerYcbcrConversion.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\semaphore.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\shaderModule.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\srcTransferBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\storageBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\storageTexelBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\surface.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\swapchain.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\swapchainImage.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\timelineSemaphore.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\transformFeedbackBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\uniformTexelBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\validationCache.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\vertexBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\allocator\alignedAllocator.cpp">
+      <Filter>Source Files\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\allocator\allocationCallbacks.cpp">
+      <Filter>Source Files\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\allocator\cxxAllocator.cpp">
+      <Filter>Source Files\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\allocator\debugAlignedAllocator.cpp">
+      <Filter>Source Files\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\allocator\deviceMemoryAllocator.cpp">
+      <Filter>Source Files\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\allocator\vmaImplementation.cpp">
+      <Filter>Source Files\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\barriers\bufferMemoryBarrier.cpp">
+      <Filter>Source Files\barriers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\barriers\imageMemoryBarrier.cpp">
+      <Filter>Source Files\barriers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\pch.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\descriptors\accelerationStructureDescriptor.cpp">
       <Filter>Source Files\descriptors</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\misc\deviceFeatures.cpp">
-      <Filter>Source Files\misc</Filter>
+    <ClCompile Include="..\..\src\descriptors\bufferDescriptor.cpp">
+      <Filter>Source Files\descriptors</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\allocator\vmaImplementation.cpp">
-      <Filter>Source Files\allocator</Filter>
+    <ClCompile Include="..\..\src\descriptors\imageDescriptor.cpp">
+      <Filter>Source Files\descriptors</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\renderpass\subpass.cpp">
-      <Filter>Source Files\renderpass</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\misc\application.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\allocator\debugAlignedAllocator.cpp">
-      <Filter>Source Files\allocator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\managedDeviceMemory.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\baseDeviceMemory.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\accelerationStructureStorageBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\privateDataSlot.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\physicalDeviceFeatures.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\graphicsPipelineBatch.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\computePipelineBatch.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\objects\rayTracingPipelineBatch.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\exceptions\errorResult.cpp">
+    <ClCompile Include="..\..\src\exceptions\errorResult.cpp">
       <Filter>Source Files\exceptions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\descriptors\imageDescriptor.cpp">
-      <Filter>Source Files\descriptors</Filter>
+    <ClCompile Include="..\..\src\exceptions\exception.cpp">
+      <Filter>Source Files\exceptions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\descriptors\bufferDescriptor.cpp">
-      <Filter>Source Files\descriptors</Filter>
+    <ClCompile Include="..\..\src\extensions\extensions.cpp">
+      <Filter>Source Files\extensions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\platform\androidHardwareBuffer.cpp">
+    <ClCompile Include="..\..\src\extensions\instanceExtensions.cpp">
+      <Filter>Source Files\extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\extensions\instanceLayers.cpp">
+      <Filter>Source Files\extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\extensions\layers.cpp">
+      <Filter>Source Files\extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\extensions\physicalDeviceExtensions.cpp">
+      <Filter>Source Files\extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\helpers\executeCommandBuffer.cpp">
+      <Filter>Source Files\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\helpers\executeDeferredOperation.cpp">
+      <Filter>Source Files\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\helpers\stringize.cpp">
+      <Filter>Source Files\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\misc\application.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\misc\deviceFaultInfo.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\misc\deviceFeatures.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\misc\deviceQueueDescriptor.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\misc\format.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\misc\framebufferAttachmentImage.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\misc\geometry.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\misc\pipelineExecutable.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\misc\scopedDebugMarker.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\misc\sharing.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\misc\structureChain.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\platform\androidHardwareBuffer.cpp">
       <Filter>Source Files\platform</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\objects\externalImage.cpp">
-      <Filter>Source Files\objects</Filter>
+    <ClCompile Include="..\..\src\renderpass\subpass.cpp">
+      <Filter>Source Files\renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shaders\pipelineShaderStage.cpp">
+      <Filter>Source Files\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shaders\rayTracingShaderGroup.cpp">
+      <Filter>Source Files\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shaders\shaderBindingTable.cpp">
+      <Filter>Source Files\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shaders\shaderReflection.cpp">
+      <Filter>Source Files\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shaders\specialization.cpp">
+      <Filter>Source Files\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\third-party\SPIRV-Reflect\spirv_reflect.c">
+      <Filter>Source Files\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\states\colorBlendState.cpp">
+      <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\states\colorBlendStateAdvanced.cpp">
+      <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\states\multisampleState.cpp">
+      <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\states\multiViewportState.cpp">
+      <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\states\rasterizationState.cpp">
+      <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\states\vertexInputState.cpp">
+      <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\states\vertexInputStructure.cpp">
+      <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\states\viewportState.cpp">
+      <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\accumulationBuffer.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\baseFramebuffer.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\blitRectangle.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\colorFramebuffer.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\colorMultisampleFramebuffer.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\depthFramebuffer.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\fillRectangleVertexShader.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\frameGrabber.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\generateMipmap.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\graphicsPipelineCache.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\imageDescriptorSet.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\immediateRender.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\multiAttachmentFramebuffer.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\profiler.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\shaderCompiler.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\sprite.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\swapchainFramebuffer.cpp">
+      <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\textShader.cpp">
+      <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\auxiliary\immediateRender.inl">
-      <Filter>Header Files\auxiliary</Filter>
-    </None>
-    <None Include="..\..\misc\clearAttachment.inl">
-      <Filter>Header Files\misc</Filter>
-    </None>
-    <None Include="..\..\misc\clearValue.inl">
-      <Filter>Header Files\misc</Filter>
-    </None>
-    <None Include="..\..\misc\imageSubresourceRange.inl">
-      <Filter>Header Files\misc</Filter>
-    </None>
-    <None Include="..\..\misc\scissor.inl">
-      <Filter>Header Files\misc</Filter>
-    </None>
-    <None Include="..\..\misc\viewport.inl">
-      <Filter>Header Files\misc</Filter>
-    </None>
-    <None Include="..\..\objects\commandBuffer.inl">
+    <None Include="..\..\src\objects\baseDeviceMemory.inl">
       <Filter>Header Files\objects</Filter>
     </None>
-    <None Include="..\..\states\rasterizationState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\states\samplerState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\states\depthStencilState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\states\inputAssemblyState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\states\multisampleState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\states\tesselationState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\states\colorBlendState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\misc\format.inl">
-      <Filter>Header Files\misc</Filter>
-    </None>
-    <None Include="..\..\states\colorBlendStateAdvanced.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\objects\object.inl">
+    <None Include="..\..\src\objects\commandBuffer.inl">
       <Filter>Header Files\objects</Filter>
     </None>
-    <None Include="..\..\states\vertexInputStructure.inl">
-      <Filter>Header Files\states</Filter>
+    <None Include="..\..\src\objects\device.inl">
+      <Filter>Header Files\objects</Filter>
     </None>
-    <None Include="..\..\states\vertexInputState.inl">
-      <Filter>Header Files\states</Filter>
+    <None Include="..\..\src\objects\indirectBuffer.inl">
+      <Filter>Header Files\objects</Filter>
     </None>
-    <None Include="..\..\auxiliary\shaderCompiler.inl">
+    <None Include="..\..\src\objects\object.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\src\objects\pipeline.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\src\objects\pipelineBatch.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\src\objects\pipelineLayout.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\src\objects\queryPool.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\src\objects\resourcePool.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\src\objects\shaderModule.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\src\auxiliary\immediateRender.inl">
       <Filter>Header Files\auxiliary</Filter>
     </None>
-    <None Include="..\..\allocator\cxxAllocator.inl">
+    <None Include="..\..\src\auxiliary\profiler.inl">
+      <Filter>Header Files\auxiliary</Filter>
+    </None>
+    <None Include="..\..\src\auxiliary\shaderCompiler.inl">
+      <Filter>Header Files\auxiliary</Filter>
+    </None>
+    <None Include="..\..\src\allocator\cxxAllocator.inl">
       <Filter>Header Files\allocator</Filter>
     </None>
-    <None Include="..\..\objects\resourcePool.inl">
-      <Filter>Header Files\objects</Filter>
-    </None>
-    <None Include="..\..\objects\shaderModule.inl">
-      <Filter>Header Files\objects</Filter>
-    </None>
-    <None Include="..\..\barriers\bufferMemoryBarrier.inl">
+    <None Include="..\..\src\barriers\bufferMemoryBarrier.inl">
       <Filter>Header Files\barriers</Filter>
     </None>
-    <None Include="..\..\shaders\specialization.inl">
-      <Filter>Header Files\shaders</Filter>
-    </None>
-    <None Include="..\..\objects\pipeline.inl">
-      <Filter>Header Files\objects</Filter>
-    </None>
-    <None Include="..\..\packed\x10y10z10w2snorm.inl">
-      <Filter>Header Files\packed</Filter>
-    </None>
-    <None Include="..\..\packed\x10y10z10w2unorm.inl">
-      <Filter>Header Files\packed</Filter>
-    </None>
-    <None Include="..\..\packed\x11y11z10ufloat.inl">
-      <Filter>Header Files\packed</Filter>
-    </None>
-    <None Include="..\..\packed\r5g6b5unorm.inl">
-      <Filter>Header Files\packed</Filter>
-    </None>
-    <None Include="..\..\packed\b5g6r5unorm.inl">
-      <Filter>Header Files\packed</Filter>
-    </None>
-    <None Include="..\..\packed\r4g4b4a4unorm.inl">
-      <Filter>Header Files\packed</Filter>
-    </None>
-    <None Include="..\..\packed\b4g4r4a4unorm.inl">
-      <Filter>Header Files\packed</Filter>
-    </None>
-    <None Include="..\..\packed\r5g5b5a1unorm.inl">
-      <Filter>Header Files\packed</Filter>
-    </None>
-    <None Include="..\..\packed\b5g5r5a1unorm.inl">
-      <Filter>Header Files\packed</Filter>
-    </None>
-    <None Include="..\..\packed\r9g9b9e5ufloat.inl">
-      <Filter>Header Files\packed</Filter>
-    </None>
-    <None Include="..\..\states\depthComparisonSamplerState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\states\minmaxSamplerState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\misc\pushConstantRange.inl">
-      <Filter>Header Files\misc</Filter>
-    </None>
-    <None Include="..\..\misc\borderColor.inl">
-      <Filter>Header Files\misc</Filter>
-    </None>
-    <None Include="..\..\states\colorBlendAttachmentState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\states\samplerYcbcrConversionState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\states\provokingVertexState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\states\lineRasterizationState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\objects\device.inl">
-      <Filter>Header Files\objects</Filter>
-    </None>
-    <None Include="..\..\barriers\subpassDependency2.inl">
+    <None Include="..\..\src\barriers\memoryBarrier.inl">
       <Filter>Header Files\barriers</Filter>
     </None>
-    <None Include="..\..\barriers\subpassDependency.inl">
+    <None Include="..\..\src\barriers\subpassDependency.inl">
       <Filter>Header Files\barriers</Filter>
     </None>
-    <None Include="..\..\misc\structureChain.inl">
-      <Filter>Header Files\misc</Filter>
+    <None Include="..\..\src\barriers\subpassDependency2.inl">
+      <Filter>Header Files\barriers</Filter>
     </None>
-    <None Include="..\..\states\multisampleCoverageReductionState.inl">
-      <Filter>Header Files\states</Filter>
+    <None Include="..\..\src\core\copyThread.inl">
+      <Filter>Header Files\core</Filter>
     </None>
-    <None Include="..\..\objects\queryPool.inl">
-      <Filter>Header Files\objects</Filter>
+    <None Include="..\..\src\core\zeroThread.inl">
+      <Filter>Header Files\core</Filter>
     </None>
-    <None Include="..\..\objects\indirectBuffer.inl">
-      <Filter>Header Files\objects</Filter>
+    <None Include="..\..\src\descriptors\binding.inl">
+      <Filter>Header Files\descriptors</Filter>
     </None>
-    <None Include="..\..\objects\pipelineLayout.inl">
-      <Filter>Header Files\objects</Filter>
+    <None Include="..\..\src\descriptors\bufferDescriptor.inl">
+      <Filter>Header Files\descriptors</Filter>
     </None>
-    <None Include="..\..\helpers\uniformArray.inl">
+    <None Include="..\..\src\descriptors\bufferDescriptorArray.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\src\descriptors\descriptorSetTable.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\src\descriptors\imageDescriptor.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\src\descriptors\imageDescriptorArray.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\src\descriptors\inlineUniformBlock.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\src\descriptors\array\bufferDescriptor.inl">
+      <Filter>Header Files\descriptors\array</Filter>
+    </None>
+    <None Include="..\..\src\descriptors\array\descriptor.inl">
+      <Filter>Header Files\descriptors\array</Filter>
+    </None>
+    <None Include="..\..\src\descriptors\array\imageDescriptor.inl">
+      <Filter>Header Files\descriptors\array</Filter>
+    </None>
+    <None Include="..\..\src\helpers\alignedUniformArray.inl">
       <Filter>Header Files\helpers</Filter>
     </None>
-    <None Include="..\..\helpers\alignedUniformArray.inl">
+    <None Include="..\..\src\helpers\uniformArray.inl">
       <Filter>Header Files\helpers</Filter>
     </None>
-    <None Include="..\..\descriptors\inlineUniformBlock.inl">
-      <Filter>Header Files\descriptors</Filter>
+    <None Include="..\..\src\misc\borderColor.inl">
+      <Filter>Header Files\misc</Filter>
     </None>
-    <None Include="..\..\descriptors\imageDescriptor.inl">
-      <Filter>Header Files\descriptors</Filter>
+    <None Include="..\..\src\misc\clearAttachment.inl">
+      <Filter>Header Files\misc</Filter>
     </None>
-    <None Include="..\..\descriptors\bufferDescriptor.inl">
-      <Filter>Header Files\descriptors</Filter>
+    <None Include="..\..\src\misc\clearValue.inl">
+      <Filter>Header Files\misc</Filter>
     </None>
-    <None Include="..\..\descriptors\imageDescriptorArray.inl">
-      <Filter>Header Files\descriptors</Filter>
+    <None Include="..\..\src\misc\extension.inl">
+      <Filter>Header Files\misc</Filter>
     </None>
-    <None Include="..\..\descriptors\bufferDescriptorArray.inl">
-      <Filter>Header Files\descriptors</Filter>
+    <None Include="..\..\src\misc\format.inl">
+      <Filter>Header Files\misc</Filter>
     </None>
-    <None Include="..\..\descriptors\descriptorSetTable.inl">
-      <Filter>Header Files\descriptors</Filter>
+    <None Include="..\..\src\misc\imageSubresourceRange.inl">
+      <Filter>Header Files\misc</Filter>
     </None>
-    <None Include="..\..\descriptors\array\bufferDescriptor.h">
-      <Filter>Header Files\descriptors\array</Filter>
+    <None Include="..\..\src\misc\pushConstantRange.inl">
+      <Filter>Header Files\misc</Filter>
     </None>
-    <None Include="..\..\descriptors\array\bufferDescriptor.inl">
-      <Filter>Header Files\descriptors\array</Filter>
+    <None Include="..\..\src\misc\scissor.inl">
+      <Filter>Header Files\misc</Filter>
     </None>
-    <None Include="..\..\descriptors\array\imageDescriptor.inl">
-      <Filter>Header Files\descriptors\array</Filter>
+    <None Include="..\..\src\misc\structureChain.inl">
+      <Filter>Header Files\misc</Filter>
     </None>
-    <None Include="..\..\descriptors\array\descriptor.inl">
-      <Filter>Header Files\descriptors\array</Filter>
+    <None Include="..\..\src\misc\structureChainNode.inl">
+      <Filter>Header Files\misc</Filter>
     </None>
-    <None Include="..\..\renderpass\attachment.inl">
+    <None Include="..\..\src\misc\viewport.inl">
+      <Filter>Header Files\misc</Filter>
+    </None>
+    <None Include="..\..\src\packed\b4g4r4a4unorm.inl">
+      <Filter>Header Files\packed</Filter>
+    </None>
+    <None Include="..\..\src\packed\b5g5r5a1unorm.inl">
+      <Filter>Header Files\packed</Filter>
+    </None>
+    <None Include="..\..\src\packed\b5g6r5unorm.inl">
+      <Filter>Header Files\packed</Filter>
+    </None>
+    <None Include="..\..\src\packed\r4g4b4a4unorm.inl">
+      <Filter>Header Files\packed</Filter>
+    </None>
+    <None Include="..\..\src\packed\r5g5b5a1unorm.inl">
+      <Filter>Header Files\packed</Filter>
+    </None>
+    <None Include="..\..\src\packed\r5g6b5unorm.inl">
+      <Filter>Header Files\packed</Filter>
+    </None>
+    <None Include="..\..\src\packed\r9g9b9e5ufloat.inl">
+      <Filter>Header Files\packed</Filter>
+    </None>
+    <None Include="..\..\src\packed\x10y10z10w2snorm.inl">
+      <Filter>Header Files\packed</Filter>
+    </None>
+    <None Include="..\..\src\packed\x10y10z10w2unorm.inl">
+      <Filter>Header Files\packed</Filter>
+    </None>
+    <None Include="..\..\src\packed\x11y11z10ufloat.inl">
+      <Filter>Header Files\packed</Filter>
+    </None>
+    <None Include="..\..\src\renderpass\attachment.inl">
       <Filter>Header Files\renderpass</Filter>
     </None>
-    <None Include="..\..\misc\structureChainNode.inl">
-      <Filter>Header Files\misc</Filter>
+    <None Include="..\..\src\shaders\specialization.inl">
+      <Filter>Header Files\shaders</Filter>
     </None>
-    <None Include="..\..\auxiliary\profiler.inl">
-      <Filter>Header Files\auxiliary</Filter>
-    </None>
-    <None Include="..\..\objects\baseDeviceMemory.inl">
-      <Filter>Header Files\objects</Filter>
-    </None>
-    <None Include="..\..\objects\pipelineBatch.inl">
-      <Filter>Header Files\objects</Filter>
-    </None>
-    <None Include="..\..\barriers\memoryBarrier.inl">
-      <Filter>Header Files\barriers</Filter>
-    </None>
-    <None Include="..\..\misc\extension.inl">
-      <Filter>Header Files\misc</Filter>
-    </None>
-    <None Include="..\..\states\vertexAttributeType.inl">
+    <None Include="..\..\src\states\colorBlendAttachmentState.inl">
       <Filter>Header Files\states</Filter>
     </None>
-    <None Include="..\..\descriptors\binding.inl">
-      <Filter>Header Files\descriptors</Filter>
+    <None Include="..\..\src\states\colorBlendState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\colorBlendStateAdvanced.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\conservativeRasterizationState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\depthComparisonSamplerState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\depthStencilState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\inputAssemblyState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\lineRasterizationState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\minmaxSamplerState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\multisampleCoverageReductionState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\multisampleState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\provokingVertexState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\rasterizationOrderState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\rasterizationState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\samplerState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\samplerYcbcrConversionState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\streamRasterizationState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\tesselationState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\vertexAttributeType.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\vertexInputState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\states\vertexInputStructure.inl">
+      <Filter>Header Files\states</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\auxiliary\spirv\blit.frag">
+    <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">
       <Filter>Source Files\auxiliary\spirv</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\auxiliary\spirv\blit.vert">
+    <CustomBuild Include="..\..\src\auxiliary\spirv\blit.vert">
       <Filter>Source Files\auxiliary\spirv</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\auxiliary\spirv\imm.frag">
+    <CustomBuild Include="..\..\src\auxiliary\spirv\font.frag">
       <Filter>Source Files\auxiliary\spirv</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\auxiliary\spirv\imm.vert">
+    <CustomBuild Include="..\..\src\auxiliary\spirv\imm.frag">
       <Filter>Source Files\auxiliary\spirv</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\auxiliary\spirv\font.frag">
+    <CustomBuild Include="..\..\src\auxiliary\spirv\imm.vert">
       <Filter>Source Files\auxiliary\spirv</Filter>
     </CustomBuild>
-    <None Include="..\..\states\rasterizationOrderState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\states\conservativeRasterizationState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
-    <None Include="..\..\states\streamRasterizationState.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
   </ItemGroup>
 </Project>

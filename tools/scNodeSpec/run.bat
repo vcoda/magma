@@ -1,1 +1,1 @@
-scNodeSpec ../../misc/structureChainNode.inl
+scNodeSpec ../../src/misc/structureChainNode.inl

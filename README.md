@@ -1,7 +1,7 @@
 # Abstraction layer over Khronos Vulkan API
 
 <p align="center">
-    <img src="resources/vulkan.gif" width="94px" height="107px">
+    <img src="docs/images/vulkan.gif" width="94px" height="107px">
 </p>
 
 ## Problem

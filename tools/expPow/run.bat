@@ -1,1 +1,1 @@
-expPow "../../packed/expPow2.h" ../../packed/rcpExpPow2.h
+expPow "../../src/packed/expPow2.h" ../../src/packed/rcpExpPow2.h
