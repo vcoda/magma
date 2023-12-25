@@ -67,7 +67,7 @@ namespace magma
             VK_PIPELINE_CACHE_HEADER_VERSION_ONE;
         uint32_t vendorID = 0;
         uint32_t deviceID = 0;
-        uint8_t cacheUUID[VK_UUID_SIZE] = {};
+        uint8_t pipelineCacheUUID[VK_UUID_SIZE] = {};
     };
 
     static_assert(sizeof(PipelineCache::Header) == 32, "intended size of the pipeline cache header structure is 32 bytes");

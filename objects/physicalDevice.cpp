@@ -456,7 +456,7 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
     header.version = VK_PIPELINE_CACHE_HEADER_VERSION_ONE;
     header.vendorID = properties.vendorID;
     header.deviceID = properties.deviceID;
-    memcpy(header.cacheUUID, properties.pipelineCacheUUID, VK_UUID_SIZE);
+    memcpy(header.pipelineCacheUUID, properties.pipelineCacheUUID, VK_UUID_SIZE);
     const PipelineCache::Header *cacheHeader = reinterpret_cast<const PipelineCache::Header *>(cacheData);
     return core::compare(cacheHeader, &header);
 }
