@@ -54,6 +54,7 @@ namespace magma
                 cacheData.data(), std::move(allocator), extendedInfo) {}
         ~PipelineCache();
         std::vector<uint8_t> getData() const;
+        void mergeCache(std::shared_ptr<const PipelineCache> srcCache);
         void mergeCaches(const std::vector<std::shared_ptr<const PipelineCache>>& caches);
     };
 

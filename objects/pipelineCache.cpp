@@ -66,6 +66,12 @@ std::vector<uint8_t> PipelineCache::getData() const
     return cacheData;
 }
 
+void PipelineCache::mergeCache(std::shared_ptr<const PipelineCache> srcCache)
+{
+    const VkResult result = vkMergePipelineCaches(MAGMA_HANDLE(device), handle, 1, srcCache->getHandleAddress());
+    MAGMA_HANDLE_RESULT(result, "failed to merge pipeline cache");
+}
+
 void PipelineCache::mergeCaches(const std::vector<std::shared_ptr<const PipelineCache>>& caches)
 {
     MAGMA_STACK_ARRAY(VkPipelineCache, dereferencedCaches, caches.size());
