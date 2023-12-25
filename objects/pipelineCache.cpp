@@ -28,19 +28,20 @@ namespace magma
 PipelineCache::PipelineCache(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const StructureChain& extendedInfo /* default */):
-    PipelineCache(std::move(device), 0, nullptr, std::move(allocator), extendedInfo)
+    PipelineCache(std::move(device), 0, nullptr, std::move(allocator), 0, extendedInfo)
 {}
 
 PipelineCache::PipelineCache(std::shared_ptr<Device> device,
     std::size_t dataSize, const void *initialData,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkPipelineCacheCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_CACHE, std::move(device), std::move(allocator))
 {
     VkPipelineCacheCreateInfo pipelineCacheInfo;
     pipelineCacheInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
     pipelineCacheInfo.pNext = extendedInfo.chainNodes();
-    pipelineCacheInfo.flags = 0;
+    pipelineCacheInfo.flags = flags;
     pipelineCacheInfo.initialDataSize = dataSize;
     pipelineCacheInfo.pInitialData = initialData;
     const VkResult result = vkCreatePipelineCache(MAGMA_HANDLE(device), &pipelineCacheInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
