@@ -447,18 +447,16 @@ bool PhysicalDevice::extensionSupported(const char *extensionName) const noexcep
 bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept
 {
     MAGMA_ASSERT(cacheData);
-    if (!cacheData)
-        return false;
     VkPhysicalDeviceProperties properties;
     vkGetPhysicalDeviceProperties(handle, &properties);
-    PipelineCache::Header header;
-    header.size = sizeof(PipelineCache::Header);
-    header.version = VK_PIPELINE_CACHE_HEADER_VERSION_ONE;
-    header.vendorID = properties.vendorID;
-    header.deviceID = properties.deviceID;
-    memcpy(header.pipelineCacheUUID, properties.pipelineCacheUUID, VK_UUID_SIZE);
-    const PipelineCache::Header *cacheHeader = reinterpret_cast<const PipelineCache::Header *>(cacheData);
-    return core::compare(cacheHeader, &header);
+    VkPipelineCacheHeaderVersionOne requiredHeader;
+    requiredHeader.headerSize = sizeof(VkPipelineCacheHeaderVersionOne);
+    requiredHeader.headerVersion = VK_PIPELINE_CACHE_HEADER_VERSION_ONE;
+    requiredHeader.vendorID = properties.vendorID;
+    requiredHeader.deviceID = properties.deviceID;
+    memcpy(requiredHeader.pipelineCacheUUID, properties.pipelineCacheUUID, VK_UUID_SIZE);
+    const VkPipelineCacheHeaderVersionOne *cacheHeader = reinterpret_cast<const VkPipelineCacheHeaderVersionOne *>(cacheData);
+    return core::compare(cacheHeader, &requiredHeader);
 }
 
 void PhysicalDevice::getFeatures2(void *physicalDeviceFeatures) const
