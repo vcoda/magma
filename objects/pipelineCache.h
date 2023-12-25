@@ -60,6 +60,11 @@ namespace magma
         void mergeCaches(const std::vector<std::shared_ptr<const PipelineCache>>& srcCaches);
     };
 
+    /* To enable applications to detect when previously retrieved
+       data  is incompatible with the device, the pipeline cache 
+       data must begin with a valid pipeline cache header. Version 1 
+       of the pipeline cache header is defined as: */
+       
     struct PipelineCache::Header
     {
         uint32_t size = 0;
