@@ -32,18 +32,18 @@ PipelineCache::PipelineCache(std::shared_ptr<Device> device,
 {}
 
 PipelineCache::PipelineCache(std::shared_ptr<Device> device,
-    std::size_t dataSize, const void *cacheData,
+    std::size_t dataSize, const void *initialData,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_CACHE, std::move(device), std::move(allocator))
 {
-    VkPipelineCacheCreateInfo cacheInfo;
-    cacheInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
-    cacheInfo.pNext = extendedInfo.chainNodes();
-    cacheInfo.flags = 0;
-    cacheInfo.initialDataSize = dataSize;
-    cacheInfo.pInitialData = cacheData;
-    const VkResult result = vkCreatePipelineCache(MAGMA_HANDLE(device), &cacheInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    VkPipelineCacheCreateInfo pipelineCacheInfo;
+    pipelineCacheInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+    pipelineCacheInfo.pNext = extendedInfo.chainNodes();
+    pipelineCacheInfo.flags = 0;
+    pipelineCacheInfo.initialDataSize = dataSize;
+    pipelineCacheInfo.pInitialData = initialData;
+    const VkResult result = vkCreatePipelineCache(MAGMA_HANDLE(device), &pipelineCacheInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create pipeline cache");
 }
 
@@ -72,12 +72,12 @@ void PipelineCache::mergeCache(std::shared_ptr<const PipelineCache> srcCache)
     MAGMA_HANDLE_RESULT(result, "failed to merge pipeline cache");
 }
 
-void PipelineCache::mergeCaches(const std::vector<std::shared_ptr<const PipelineCache>>& caches)
+void PipelineCache::mergeCaches(const std::vector<std::shared_ptr<const PipelineCache>>& srcCaches)
 {
-    MAGMA_STACK_ARRAY(VkPipelineCache, dereferencedCaches, caches.size());
-    for (const auto& cache : caches)
-        dereferencedCaches.put(*cache);
-    const VkResult result = vkMergePipelineCaches(MAGMA_HANDLE(device), handle, MAGMA_COUNT(dereferencedCaches), dereferencedCaches);
+    MAGMA_STACK_ARRAY(VkPipelineCache, dereferencedSrcCaches, srcCaches.size());
+    for (auto const& cache: srcCaches)
+        dereferencedSrcCaches.put(*cache);
+    const VkResult result = vkMergePipelineCaches(MAGMA_HANDLE(device), handle, dereferencedSrcCaches.size(), dereferencedSrcCaches);
     MAGMA_HANDLE_RESULT(result, "failed to merge pipeline caches");
 }
 } // namespace magma

@@ -42,7 +42,7 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
         explicit PipelineCache(std::shared_ptr<Device> device,
             std::size_t dataSize,
-            const void *cacheData,
+            const void *initialData,
             std::shared_ptr<IAllocator> allocator = nullptr,
             const StructureChain& extendedInfo = StructureChain());
         template<class Type>
@@ -55,7 +55,7 @@ namespace magma
         ~PipelineCache();
         std::vector<uint8_t> getData() const;
         void mergeCache(std::shared_ptr<const PipelineCache> srcCache);
-        void mergeCaches(const std::vector<std::shared_ptr<const PipelineCache>>& caches);
+        void mergeCaches(const std::vector<std::shared_ptr<const PipelineCache>>& srcCaches);
     };
 
     struct PipelineCache::Header
