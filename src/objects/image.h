@@ -53,6 +53,7 @@ namespace magma
         uint32_t getArrayLayers() const noexcept { return arrayLayers; }
         uint32_t getSamples() const noexcept { return samples; }
         VkImageUsageFlags getUsage() const noexcept { return usage; }
+        VkExtent3D getExtent() const noexcept { return extent; }
         VkExtent3D calculateMipExtent(uint32_t level) const noexcept;
         const std::vector<VkFormat>& getViewFormats() const noexcept { return viewFormats; }
         VkSubresourceLayout getSubresourceLayout(uint32_t mipLevel,
