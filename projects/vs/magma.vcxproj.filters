@@ -810,6 +810,9 @@
     <ClInclude Include="..\..\src\states\viewportState.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\misc\imageResolve.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1494,6 +1497,9 @@
     </None>
     <None Include="..\..\src\states\vertexInputStructure.inl">
       <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\misc\imageResolve.inl">
+      <Filter>Header Files\misc</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

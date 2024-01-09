@@ -34,6 +34,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/extension.h"
 #include "../misc/clearValue.h"
 #include "../misc/clearAttachment.h"
+#include "../misc/imageResolve.h"
 #include "../misc/viewport.h"
 #include "../misc/scissor.h"
 #include "../helpers/stackArray.h"
@@ -298,7 +299,9 @@ namespace magma
             const VkImageSubresourceRange& range) const noexcept;
         void clearAttachments(const std::initializer_list<ClearAttachment>& attachments,
             const VkClearRect& clearRect) const noexcept;
-        void resolveImage(const std::shared_ptr<Image>& srcImage,
+        void resolveImage(const std::shared_ptr<const Image>& srcImage,
+            const std::shared_ptr<Image>& dstImage) const noexcept;
+        void resolveImage(const std::shared_ptr<const Image>& srcImage,
             const std::shared_ptr<Image>& dstImage,
             const VkImageResolve& region) const noexcept;
 

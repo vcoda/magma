@@ -167,6 +167,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/misc/format.h"
 #include "src/misc/framebufferAttachmentImage.h"
 #include "src/misc/geometry.h"
+#include "src/misc/imageResolve.h"
 #include "src/misc/imageSubresourceRange.h"
 #include "src/misc/pipelineExecutable.h"
 #include "src/misc/pushConstantRange.h"

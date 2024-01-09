@@ -398,7 +398,13 @@ inline void CommandBuffer::clearAttachments(const std::initializer_list<ClearAtt
     vkCmdClearAttachments(handle, MAGMA_COUNT(attachments), attachments.begin(), 1, &clearRect);
 }
 
-inline void CommandBuffer::resolveImage(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Image>& dstImage, const VkImageResolve& region) const noexcept
+inline void CommandBuffer::resolveImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage) const noexcept
+{
+    const ImageResolve region(srcImage, dstImage);
+    resolveImage(srcImage, dstImage, region);
+}
+
+inline void CommandBuffer::resolveImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage, const VkImageResolve& region) const noexcept
 {
     vkCmdResolveImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &region);
 }
