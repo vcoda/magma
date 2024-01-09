@@ -440,7 +440,7 @@ void Image::copyMip(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t mipLevel,
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
 }
 
-VkDeviceSize Image::setupMipMaps(std::vector<Mip>& dstMips, const std::vector<MipData>& srcMips) const
+VkDeviceSize Image::setupMipmap(std::vector<Mip>& dstMips, const std::vector<MipData>& srcMips) const
 {
     VkDeviceSize bufferOffset = 0;
     Mip mip;
@@ -459,7 +459,7 @@ VkDeviceSize Image::setupMipMaps(std::vector<Mip>& dstMips, const std::vector<Mi
     return bufferOffset;
 }
 
-void Image::copyMipMaps(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     const std::vector<Mip>& mipMaps, const CopyLayout& bufferLayout)
 {
     std::vector<VkBufferImageCopy> regions;

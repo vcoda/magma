@@ -53,7 +53,7 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
         std::move(allocator), optional, sharing)
 {
     MAGMA_ASSERT(MAGMA_COUNT(mipMaps) % arrayLayers == 0);
-    copyMipMaps(cmdBuffer, srcBuffer, mipMaps, bufferLayout);
+    copyMipmap(cmdBuffer, srcBuffer, mipMaps, bufferLayout);
 }
 
 Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t arrayLayers,
@@ -69,7 +69,7 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
     MAGMA_ASSERT(MAGMA_COUNT(mipMaps) % arrayLayers == 0);
     // Setup memory layout of mip maps in the buffer
     std::vector<Mip> mipChain;
-    const VkDeviceSize bufferSize = setupMipMaps(mipChain, mipMaps);
+    const VkDeviceSize bufferSize = setupMipmap(mipChain, mipMaps);
     std::shared_ptr<SrcTransferBuffer> srcBuffer = std::make_shared<SrcTransferBuffer>(device, bufferSize, nullptr,
         std::move(allocator), Buffer::Descriptor(), sharing);
     helpers::mapScoped<uint8_t>(srcBuffer,
@@ -85,7 +85,7 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
         });
     // Copy buffer to image
     cmdBuffer->begin();
-    copyMipMaps(cmdBuffer, srcBuffer, mipChain, CopyLayout{0, 0, 0});
+    copyMipmap(cmdBuffer, srcBuffer, mipChain, CopyLayout{0, 0, 0});
     cmdBuffer->end();
     commitAndWait(std::move(cmdBuffer));
 }

@@ -49,7 +49,7 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format,
     Image1D(cmdBuffer->getDevice(), format, mipMaps.front().extent.width, MAGMA_COUNT(mipMaps),
         std::move(allocator), optional, sharing)
 {
-    copyMipMaps(cmdBuffer, srcBuffer, mipMaps, bufferLayout);
+    copyMipmap(cmdBuffer, srcBuffer, mipMaps, bufferLayout);
 }
 
 Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const std::vector<MipData>& mipMaps,
@@ -62,7 +62,7 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
 {
     // Setup memory layout of mip maps in the buffer
     std::vector<Mip> mipChain;
-    const VkDeviceSize bufferSize = setupMipMaps(mipChain, mipMaps);
+    const VkDeviceSize bufferSize = setupMipmap(mipChain, mipMaps);
     std::shared_ptr<SrcTransferBuffer> srcBuffer = std::make_shared<SrcTransferBuffer>(device, bufferSize, nullptr,
         std::move(allocator), Buffer::Descriptor(), sharing);
     helpers::mapScoped<uint8_t>(srcBuffer,
@@ -78,7 +78,7 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
         });
     // Copy buffer to image
     cmdBuffer->begin();
-    copyMipMaps(cmdBuffer, srcBuffer, mipChain, CopyLayout{0, 0, 0});
+    copyMipmap(cmdBuffer, srcBuffer, mipChain, CopyLayout{0, 0, 0});
     cmdBuffer->end();
     commitAndWait(std::move(cmdBuffer));
 }

@@ -50,7 +50,7 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format,
 {
     MAGMA_ASSERT(mipMaps.size() % 6 == 0);
     MAGMA_ASSERT(mipMaps.front().extent.width == mipMaps.front().extent.height);
-    copyMipMaps(std::move(cmdBuffer), std::move(srcBuffer), mipMaps, bufferLayout);
+    copyMipmap(std::move(cmdBuffer), std::move(srcBuffer), mipMaps, bufferLayout);
 }
 
 ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const std::vector<MipData>& mipMaps,
@@ -65,7 +65,7 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, 
     MAGMA_ASSERT(mipMaps.front().extent.width == mipMaps.front().extent.height);
     // Setup memory layout of mip maps in the buffer
     std::vector<Mip> mipChain;
-    const VkDeviceSize bufferSize = setupMipMaps(mipChain, mipMaps);
+    const VkDeviceSize bufferSize = setupMipmap(mipChain, mipMaps);
     std::shared_ptr<SrcTransferBuffer> srcBuffer = std::make_shared<SrcTransferBuffer>(device, bufferSize, nullptr,
         std::move(allocator), Buffer::Descriptor(), sharing);
     helpers::mapScoped<uint8_t>(srcBuffer,
@@ -81,7 +81,7 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, 
         });
     // Copy buffer to image
     cmdBuffer->begin();
-    copyMipMaps(cmdBuffer, srcBuffer, mipChain, CopyLayout{0, 0, 0});
+    copyMipmap(cmdBuffer, srcBuffer, mipChain, CopyLayout{0, 0, 0});
     cmdBuffer->end();
     commitAndWait(std::move(cmdBuffer));
 }
