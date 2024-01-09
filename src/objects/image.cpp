@@ -369,16 +369,35 @@ void Image::onDefragment()
 
 VkImageLayout Image::layoutTransition(VkImageLayout newLayout, std::shared_ptr<CommandBuffer> cmdBuffer)
 {
-    VkImageSubresourceRange subresourceRange;
-    subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-    subresourceRange.baseMipLevel = 0;
-    subresourceRange.levelCount = mipLevels;
-    subresourceRange.baseArrayLayer = 0;
-    subresourceRange.layerCount = arrayLayers;
     const VkImageLayout oldLayout = layout;
     layout = VK_IMAGE_LAYOUT_UNDEFINED; // Hack to assing 0 to srcAccessMask inside ImageMemoryBarrier
+    constexpr uint32_t baseMipLevel = 0;
+    const VkImageSubresourceRange subresourceRange = getSubresourceRange(baseMipLevel);
     const ImageMemoryBarrier memoryBarrier(shared_from_this(), newLayout, subresourceRange);
-    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, memoryBarrier);
+    constexpr VkPipelineStageFlags srcStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
+    VkPipelineStageFlags dstStageMask = 0;
+    switch (newLayout)
+    {
+    case VK_IMAGE_LAYOUT_GENERAL:
+        dstStageMask = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
+        dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL:
+        dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+    case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
+        dstStageMask |= (VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT);
+        break;
+    case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
+        dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
+    case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
+        dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
+        break;
+    }
+    cmdBuffer->pipelineBarrier(srcStageMask, dstStageMask, memoryBarrier);
     return oldLayout;
 }
 
