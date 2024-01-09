@@ -239,6 +239,25 @@ VkImageSubresourceLayers Image::getSubresourceLayers(uint32_t mipLevel, uint32_t
     return subresourceLayers;
 }
 
+VkImageSubresourceRange Image::getSubresourceRange(uint32_t baseMipLevel, uint32_t arrayLayer /* 0 */) const noexcept
+{
+    VkImageSubresourceRange subresourceRange;
+    const Format imageFormat(format);
+    if (imageFormat.depth())
+        subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+    else if (imageFormat.stencil())
+        subresourceRange.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
+    else if (imageFormat.depthStencil())
+        subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+    else
+        subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    subresourceRange.baseMipLevel = baseMipLevel;
+    subresourceRange.levelCount = mipLevels;
+    subresourceRange.baseArrayLayer = arrayLayers > 1 ? arrayLayer : 0;
+    subresourceRange.layerCount = arrayLayers;
+    return subresourceRange;
+}
+
 VkMemoryRequirements Image::getMemoryRequirements() const noexcept
 {
     VkMemoryRequirements memoryRequirements = {};
