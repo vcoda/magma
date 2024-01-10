@@ -412,6 +412,16 @@ VkImageLayout Image::layoutTransition(VkImageLayout newLayout, std::shared_ptr<C
         srcStageMask = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
         break;
 #endif // VK_KHR_swapchain
+#ifdef VK_EXT_fragment_density_map
+    case VK_IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT:
+        srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+        break;
+#endif // VK_EXT_fragment_density_map
+#ifdef VK_KHR_fragment_shading_rate
+    case VK_IMAGE_LAYOUT_FRAGMENT_SHADING_RATE_ATTACHMENT_OPTIMAL_KHR:
+        srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+        break;
+#endif // VK_KHR_fragment_shading_rate
     default:
         MAGMA_THROW_NOT_IMPLEMENTED;
     }
@@ -454,6 +464,18 @@ VkImageLayout Image::layoutTransition(VkImageLayout newLayout, std::shared_ptr<C
         dstStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
         break;
 #endif // VK_KHR_swapchain
+#ifdef VK_EXT_fragment_density_map
+    case VK_IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT:
+        MAGMA_ASSERT(usage & VK_IMAGE_USAGE_FRAGMENT_DENSITY_MAP_BIT_EXT);
+        dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+        break;
+#endif // VK_EXT_fragment_density_map
+#ifdef VK_KHR_fragment_shading_rate
+    case VK_IMAGE_LAYOUT_FRAGMENT_SHADING_RATE_ATTACHMENT_OPTIMAL_KHR:
+        MAGMA_ASSERT(usage & VK_IMAGE_USAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR);
+        dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+        break;
+#endif // VK_KHR_fragment_shading_rate
     default:
         MAGMA_THROW_NOT_IMPLEMENTED;
     }
