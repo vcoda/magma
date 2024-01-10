@@ -374,7 +374,7 @@ VkImageLayout Image::layoutTransition(VkImageLayout newLayout, std::shared_ptr<C
     const VkImageSubresourceRange subresourceRange = getSubresourceRange(baseMipLevel);
     const ImageMemoryBarrier memoryBarrier(shared_from_this(), newLayout, subresourceRange);
     const VkImageLayout oldLayout = layout;
-    VkPipelineStageFlags srcStageMask;
+    VkPipelineStageFlags srcStageMask = 0;
     switch (oldLayout)
     {
     case VK_IMAGE_LAYOUT_UNDEFINED:
@@ -425,7 +425,7 @@ VkImageLayout Image::layoutTransition(VkImageLayout newLayout, std::shared_ptr<C
     default:
         MAGMA_THROW_NOT_IMPLEMENTED;
     }
-    VkPipelineStageFlags dstStageMask;
+    VkPipelineStageFlags dstStageMask = 0;
     switch (newLayout)
     {
     case VK_IMAGE_LAYOUT_GENERAL:
