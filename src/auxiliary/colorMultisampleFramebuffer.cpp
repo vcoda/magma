@@ -56,17 +56,18 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
     Image::Descriptor imageFormatList;
     imageFormatList.viewFormats.push_back(colorFormat);
     // Create multisample color attachment
+    constexpr bool explicitResolve = false;
     msaaColor = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, sampleCount, msaaColorSampled, // TODO: recheck it
-        allocator, imageFormatList);
+        allocator, explicitResolve, imageFormatList);
     // Create color resolve attachment
     constexpr bool colorSampled = true;
     resolve = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, colorSampled,
-        allocator, imageFormatList);
+        allocator, explicitResolve, imageFormatList);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create multisample depth attachment
         imageFormatList.viewFormats.back() = depthStencilFormat;
         msaaDepthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, sampleCount,
-            msaaDepthSampled || msaaStencilSampled, allocator, imageFormatList);
+            msaaDepthSampled || msaaStencilSampled, allocator, explicitResolve, imageFormatList);
     }
     // Create color and resolve views
     msaaColorView = std::make_shared<ImageView>(msaaColor, swizzle);

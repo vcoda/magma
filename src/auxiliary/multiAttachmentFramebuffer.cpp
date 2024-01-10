@@ -48,7 +48,7 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
         imageFormatList.viewFormats.back() = colorFormat;
         constexpr bool colorSampled = true;
         attachments.emplace_back(std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, colorSampled,
-            allocator, imageFormatList));
+            allocator, false, imageFormatList));
         // Create color view
         constexpr VkComponentMapping dontSwizzle = {
             VK_COMPONENT_SWIZZLE_IDENTITY,
@@ -62,7 +62,7 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     {   // Create depth/stencil attachment
         imageFormatList.viewFormats.back() = depthStencilFormat;
         attachments.emplace_back(std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, 1, depthSampled,
-            allocator, imageFormatList));
+            allocator, false, imageFormatList));
         // Create depth/stencil view
         attachmentViews.push_back(std::make_shared<ImageView>(attachments.back()));
     }

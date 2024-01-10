@@ -39,7 +39,7 @@ DepthFramebuffer::DepthFramebuffer(std::shared_ptr<Device> device, const VkForma
     // Create depth attachment
     constexpr bool sampled = true;
     depth = std::make_shared<DepthStencilAttachment>(device, depthFormat, extent, 1, 1, sampled,
-        allocator, imageFormatList);
+        allocator, false, imageFormatList);
     // Create depth view
     depthView = std::make_shared<ImageView>(depth);
     // We should be able to read depth in the shader when a render pass instance ends

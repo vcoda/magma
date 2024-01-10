@@ -33,6 +33,7 @@ namespace magma
             uint32_t samples,
             bool sampled,
             std::shared_ptr<Allocator> allocator = nullptr,
+            bool explicitResolve = false,
             const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
     };
@@ -50,6 +51,7 @@ namespace magma
             uint32_t samples,
             bool sampled,
             std::shared_ptr<Allocator> allocator = nullptr,
+            bool explicitResolve = false,
             const Descriptor& optional = Descriptor(),
             const Sharing& sharing = Sharing());
     };
