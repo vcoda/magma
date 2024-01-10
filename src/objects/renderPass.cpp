@@ -45,8 +45,8 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
     RenderPass(std::move(device), std::move(allocator), attachments)
 {
     uint32_t multisampleAttachmentCount = 0;
-    uint32_t resolveAttachmentCount = 0;
-    for (const auto& attachmentDesc : attachments)
+    uint32_t colorAttachmentCount = 0;
+    for (auto const& attachmentDesc: attachments)
     {
         const Format format(attachmentDesc.format);
         if (!format.depth() && !format.stencil() && !format.depthStencil())
@@ -54,11 +54,11 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
             if (attachmentDesc.samples > 1)
                 ++multisampleAttachmentCount;
             else
-                ++resolveAttachmentCount;
+                ++colorAttachmentCount;
         }
     }
-    const uint32_t colorAttachmentCount = multisampleAttachmentCount ? multisampleAttachmentCount : resolveAttachmentCount;
-    resolveAttachmentCount = std::max(0U, multisampleAttachmentCount);
+    const uint32_t resolveAttachmentCount = multisampleAttachmentCount ? colorAttachmentCount : 0;
+    colorAttachmentCount = std::max(multisampleAttachmentCount, colorAttachmentCount); // Any non-depth attachment
     MAGMA_STACK_ARRAY(VkAttachmentReference, colorAttachments, colorAttachmentCount);
     MAGMA_STACK_ARRAY(VkAttachmentReference, resolveAttachments, resolveAttachmentCount);
     VkAttachmentReference depthStencilAttachment = {0, VK_IMAGE_LAYOUT_UNDEFINED};
