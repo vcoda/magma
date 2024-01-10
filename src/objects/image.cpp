@@ -30,6 +30,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/format.h"
 #include "../misc/structureChain.h"
 #include "../exceptions/errorResult.h"
+#include "../exceptions/notImplemented.h"
 
 // Vulkan validation layers may complain about image regions for block-compressed formats. See:
 // https://vulkan.lunarg.com/doc/view/1.3.224.1/windows/1.3-extensions/vkspec.html#VUID-vkCmdCopyBufferToImage-pRegions-06218
@@ -369,13 +370,52 @@ void Image::onDefragment()
 
 VkImageLayout Image::layoutTransition(VkImageLayout newLayout, std::shared_ptr<CommandBuffer> cmdBuffer)
 {
-    const VkImageLayout oldLayout = layout;
-    layout = VK_IMAGE_LAYOUT_UNDEFINED; // Hack to assing 0 to srcAccessMask inside ImageMemoryBarrier
     constexpr uint32_t baseMipLevel = 0;
     const VkImageSubresourceRange subresourceRange = getSubresourceRange(baseMipLevel);
     const ImageMemoryBarrier memoryBarrier(shared_from_this(), newLayout, subresourceRange);
-    constexpr VkPipelineStageFlags srcStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
-    VkPipelineStageFlags dstStageMask = 0;
+    const VkImageLayout oldLayout = layout;
+    VkPipelineStageFlags srcStageMask;
+    switch (oldLayout)
+    {
+    case VK_IMAGE_LAYOUT_UNDEFINED:
+        srcStageMask = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_GENERAL:
+        srcStageMask = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
+        srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL:
+        srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+    case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
+        srcStageMask |= (VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT);
+        break;
+    case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
+        srcStageMask =
+            VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
+            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
+    case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
+        srcStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_PREINITIALIZED:
+        srcStageMask = VK_PIPELINE_STAGE_HOST_BIT;
+        break;
+#ifdef VK_KHR_swapchain
+    case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR:
+    #ifdef VK_KHR_shared_presentable_image
+    case VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR:
+    #endif
+        srcStageMask = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+        break;
+#endif // VK_KHR_swapchain
+    default:
+        MAGMA_THROW_NOT_IMPLEMENTED;
+    }
+    VkPipelineStageFlags dstStageMask;
     switch (newLayout)
     {
     case VK_IMAGE_LAYOUT_GENERAL:
@@ -390,12 +430,32 @@ VkImageLayout Image::layoutTransition(VkImageLayout newLayout, std::shared_ptr<C
         dstStageMask |= (VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT);
         break;
     case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
-        dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+        dstStageMask =
+            VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
+            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
         break;
     case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
     case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
         dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
         break;
+#ifdef VK_KHR_swapchain
+    case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR:
+    #ifdef VK_KHR_shared_presentable_image
+    case VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR:
+    #endif
+        // When transitioning the image to VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR
+        // or VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, there is no need to delay
+        // subsequent processing, or perform any visibility operations
+        // (as vkQueuePresentKHR performs automatic visibility operations).
+        // To achieve this, the dstAccessMask member of the VkImageMemoryBarrier
+        // should be set to 0, and the dstStageMask parameter should be set to
+        // VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT.
+        dstStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+        break;
+#endif // VK_KHR_swapchain
+    default:
+        MAGMA_THROW_NOT_IMPLEMENTED;
     }
     cmdBuffer->pipelineBarrier(srcStageMask, dstStageMask, memoryBarrier);
     return oldLayout;
