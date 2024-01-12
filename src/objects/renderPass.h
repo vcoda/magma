@@ -66,8 +66,10 @@ namespace magma
 
     protected:
         VkImageLayout optimalDepthStencilLayout(const Format& format) const;
-        SubpassDependency subpassBeginDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept;
-        SubpassDependency subpassEndDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept;
+        SubpassDependency subpassBeginDependency(bool colorAttachment,
+            bool depthStencilAttachment) const noexcept;
+        SubpassDependency subpassEndDependency(bool colorAttachment,
+            bool depthStencilAttachment) const noexcept;
 
     private:
         void begin(std::shared_ptr<Framebuffer> framebuffer) const noexcept;
