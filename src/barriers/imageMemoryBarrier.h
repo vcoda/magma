@@ -36,7 +36,7 @@ namespace magma
             VkImageLayout newLayout);
         ImageMemoryBarrier(std::shared_ptr<Image> image,
             VkImageLayout newLayout,
-            VkImageSubresourceRange subresourceRange);
+            const VkImageSubresourceRange& subresourceRange);
 
     private:
         std::shared_ptr<Image> resource; // Store resource as its layout may be changed

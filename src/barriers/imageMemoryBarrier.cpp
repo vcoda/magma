@@ -28,8 +28,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
     ImageMemoryBarrier(std::move(image), newLayout, ImageSubresourceRange(image))
 {}
 
-ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayout newLayout,
-    VkImageSubresourceRange subresourceRange):
+ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayout newLayout, const VkImageSubresourceRange& subresourceRange):
     resource(std::move(image))
 {
     sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
