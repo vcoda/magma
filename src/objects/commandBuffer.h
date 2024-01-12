@@ -606,6 +606,7 @@ namespace magma
         {
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<Framebuffer> framebuffer;
+            std::vector<std::shared_ptr<ImageView>> attachments;
         } bindings;
     };
 

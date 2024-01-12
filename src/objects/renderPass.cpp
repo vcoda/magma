@@ -18,7 +18,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "renderPass.h"
-#include "framebuffer.h"
 #include "image.h"
 #include "imageView.h"
 #include "device.h"
@@ -256,9 +255,9 @@ SubpassDependency RenderPass::subpassEndDependency(bool colorAttachment, bool de
     return subpassDependency;
 }
 
-void RenderPass::begin(std::shared_ptr<Framebuffer> framebuffer) const noexcept
+void RenderPass::begin(const FramebufferAttachments& attachments) const noexcept
 {
-    core::forConstEach(framebuffer->getAttachments(), attachments,
+    core::forConstEach(attachments, this->attachments,
         [](auto& attachment, auto& attachmentDesc)
         {   // initialLayout is the layout the attachment image subresource
             // will be in when a render pass instance begins
@@ -267,9 +266,9 @@ void RenderPass::begin(std::shared_ptr<Framebuffer> framebuffer) const noexcept
         });
 }
 
-void RenderPass::end(std::shared_ptr<Framebuffer> framebuffer) const noexcept
+void RenderPass::end(const FramebufferAttachments& attachments) const noexcept
 {
-    core::forConstEach(framebuffer->getAttachments(), attachments,
+    core::forConstEach(attachments, this->attachments,
         [](auto& attachment, auto& attachmentDesc)
         {   // finalLayout is the layout the attachment image subresource
             // will be transitioned to when a render pass instance ends.

@@ -399,7 +399,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     renderPassBeginInfo.clearValueCount = MAGMA_COUNT(clearValues);
     renderPassBeginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
     vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
-    renderPass->begin(framebuffer);
+    renderPass->begin(framebuffer->getAttachments());
     withinRenderPass = VK_TRUE;
     bindings.renderPass = renderPass;
     bindings.framebuffer = framebuffer;
@@ -434,10 +434,11 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     renderPassBeginAttachmentInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
     renderPassBeginAttachmentInfo.pAttachments = dereferencedAttachments;
     vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
-    renderPass->begin(framebuffer);
+    renderPass->begin(attachments);
     withinRenderPass = VK_TRUE;
     bindings.renderPass = renderPass;
     bindings.framebuffer = framebuffer;
+    bindings.attachments = attachments;
 }
 #endif // VK_KHR_imageless_framebuffer
 
@@ -452,8 +453,13 @@ void CommandBuffer::endRenderPass() noexcept
         endDebugLabel();
     #endif // MAGMA_DEBUG_LABEL
         vkCmdEndRenderPass(handle);
-        bindings.renderPass->end(std::move(bindings.framebuffer));
+        if (bindings.attachments.empty())
+            bindings.renderPass->end(bindings.framebuffer->getAttachments());
+        else // Imageless framebuffer
+            bindings.renderPass->end(bindings.attachments);
         bindings.renderPass.reset();
+        bindings.framebuffer.reset();
+        bindings.attachments.clear();
         withinRenderPass = VK_FALSE;
     }
 }
@@ -505,7 +511,10 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     renderPassBeginDeviceGroupInfo.deviceRenderAreaCount = MAGMA_COUNT(deviceRenderAreas);
     renderPassBeginDeviceGroupInfo.pDeviceRenderAreas = deviceRenderAreas.data();
     vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
+    renderPass->begin(framebuffer->getAttachments());
     withinRenderPass = VK_TRUE;
+    bindings.renderPass = renderPass;
+    bindings.framebuffer = framebuffer;
 }
 
 #ifdef VK_KHR_imageless_framebuffer
@@ -544,7 +553,11 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     renderPassBeginAttachmentInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
     renderPassBeginAttachmentInfo.pAttachments = dereferencedAttachments;
     vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
+    renderPass->begin(attachments);
     withinRenderPass = VK_TRUE;
+    bindings.renderPass = renderPass;
+    bindings.framebuffer = framebuffer;
+    bindings.attachments = attachments;
 }
 #endif // VK_KHR_imageless_framebuffer
 #endif // VK_KHR_device_group

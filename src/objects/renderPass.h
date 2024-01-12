@@ -24,7 +24,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Format;
-    class Framebuffer;
+    class ImageView;
+    typedef std::vector<std::shared_ptr<ImageView>> FramebufferAttachments;
 
     /* A render pass represents a collection of attachments,
        subpasses, and dependencies between the subpasses,
@@ -72,8 +73,8 @@ namespace magma
             bool depthStencilAttachment) const noexcept;
 
     private:
-        void begin(std::shared_ptr<Framebuffer> framebuffer) const noexcept;
-        void end(std::shared_ptr<Framebuffer> framebuffer) const noexcept;
+        void begin(const FramebufferAttachments& attachments) const noexcept;
+        void end(const FramebufferAttachments& attachments) const noexcept;
 
     protected:
         std::vector<AttachmentDescription> attachments;
