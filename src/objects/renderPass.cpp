@@ -18,6 +18,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "renderPass.h"
+#include "framebuffer.h"
+#include "image.h"
+#include "imageView.h"
 #include "device.h"
 #include "physicalDevice.h"
 #include "../allocator/allocator.h"
@@ -25,6 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/deviceFeatures.h"
 #include "../misc/format.h"
 #include "../exceptions/errorResult.h"
+#include "../core/foreach.h"
 
 namespace magma
 {
@@ -250,5 +254,27 @@ SubpassDependency RenderPass::subpassEndDependency(bool colorAttachment, bool de
     }
     subpassDependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
     return subpassDependency;
+}
+
+void RenderPass::begin(std::shared_ptr<Framebuffer> framebuffer) const noexcept
+{
+    core::forConstEach(framebuffer->getAttachments(), attachments,
+        [](auto& attachment, auto& attachmentDesc)
+        {   // initialLayout is the layout the attachment image subresource
+            // will be in when a render pass instance begins
+            const std::shared_ptr<Image>& image = (*attachment)->getImage();
+            image->setLayout(attachmentDesc->initialLayout);
+        });
+}
+
+void RenderPass::end(std::shared_ptr<Framebuffer> framebuffer) const noexcept
+{
+    core::forConstEach(framebuffer->getAttachments(), attachments,
+        [](auto& attachment, auto& attachmentDesc)
+        {   // finalLayout is the layout the attachment image subresource
+            // will be transitioned to when a render pass instance ends.
+            const std::shared_ptr<Image>& image = (*attachment)->getImage();
+            image->setLayout(attachmentDesc->finalLayout);
+        });
 }
 } // namespace magma

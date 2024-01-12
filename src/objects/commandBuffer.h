@@ -601,6 +601,12 @@ namespace magma
         VkBool32 withinTransformFeedback : 1;
         VkQueryControlFlags queryFlags;
         VkQueryPipelineStatisticFlags pipelineStatistics;
+
+        struct ResourceBindings
+        {
+            std::shared_ptr<RenderPass> renderPass;
+            std::shared_ptr<Framebuffer> framebuffer;
+        } bindings;
     };
 
     /* See 6.1. Command Buffer Lifecycle

@@ -598,19 +598,6 @@ inline void CommandBuffer::nextSubpass(VkSubpassContents contents /* VK_SUBPASS_
     vkCmdNextSubpass(handle, contents);
 }
 
-inline void CommandBuffer::endRenderPass() noexcept
-{
-    MAGMA_ASSERT(withinRenderPass);
-    if (withinRenderPass)
-    {
-    #ifdef MAGMA_DEBUG_LABEL
-        endDebugLabel();
-    #endif // MAGMA_DEBUG_LABEL
-        vkCmdEndRenderPass(handle);
-        withinRenderPass = VK_FALSE;
-    }
-}
-
 #ifdef VK_KHR_device_group
 inline void CommandBuffer::setDeviceMask(uint32_t deviceMask) noexcept
 {

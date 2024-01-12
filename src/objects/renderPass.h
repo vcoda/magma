@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Format;
+    class Framebuffer;
 
     /* A render pass represents a collection of attachments,
        subpasses, and dependencies between the subpasses,
@@ -63,11 +64,18 @@ namespace magma
             std::shared_ptr<IAllocator> allocator,
             const std::vector<AttachmentDescription>& attachments);
 
+    protected:
         VkImageLayout optimalDepthStencilLayout(const Format& format) const;
         SubpassDependency subpassBeginDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept;
         SubpassDependency subpassEndDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept;
 
+    private:
+        void begin(std::shared_ptr<Framebuffer> framebuffer) const noexcept;
+        void end(std::shared_ptr<Framebuffer> framebuffer) const noexcept;
+
+    protected:
         std::vector<AttachmentDescription> attachments;
         hash_t hash;
+        friend class CommandBuffer;
     };
 } // namespace magma

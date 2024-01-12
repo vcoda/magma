@@ -399,7 +399,10 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     renderPassBeginInfo.clearValueCount = MAGMA_COUNT(clearValues);
     renderPassBeginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
     vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
+    renderPass->begin(framebuffer);
     withinRenderPass = VK_TRUE;
+    bindings.renderPass = renderPass;
+    bindings.framebuffer = framebuffer;
 }
 
 #ifdef VK_KHR_imageless_framebuffer
@@ -431,12 +434,29 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     renderPassBeginAttachmentInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
     renderPassBeginAttachmentInfo.pAttachments = dereferencedAttachments;
     vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
+    renderPass->begin(framebuffer);
     withinRenderPass = VK_TRUE;
+    bindings.renderPass = renderPass;
+    bindings.framebuffer = framebuffer;
 }
 #endif // VK_KHR_imageless_framebuffer
 
 // inline CommandBuffer::nextSubpass
-// inline CommandBuffer::endRenderPass
+
+void CommandBuffer::endRenderPass() noexcept
+{
+    MAGMA_ASSERT(withinRenderPass);
+    if (withinRenderPass)
+    {
+    #ifdef MAGMA_DEBUG_LABEL
+        endDebugLabel();
+    #endif // MAGMA_DEBUG_LABEL
+        vkCmdEndRenderPass(handle);
+        bindings.renderPass->end(std::move(bindings.framebuffer));
+        bindings.renderPass.reset();
+        withinRenderPass = VK_FALSE;
+    }
+}
 
 #ifdef VK_KHR_device_group
 // inline CommandBuffer::setDeviceMask
