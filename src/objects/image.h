@@ -61,7 +61,7 @@ namespace magma
         VkImageSubresourceLayers getSubresourceLayers(uint32_t mipLevel,
             uint32_t arrayLayer = 0) const noexcept;
         VkImageSubresourceRange getSubresourceRange(uint32_t baseMipLevel,
-            uint32_t arrayLayer = 0) const noexcept;
+            uint32_t baseArrayLayer = 0) const noexcept;
         VkMemoryRequirements getMemoryRequirements() const noexcept;
         std::vector<VkSparseImageMemoryRequirements> getSparseMemoryRequirements() const;
     #ifdef VK_KHR_get_memory_requirements2

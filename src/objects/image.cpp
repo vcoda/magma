@@ -240,7 +240,7 @@ VkImageSubresourceLayers Image::getSubresourceLayers(uint32_t mipLevel, uint32_t
     return subresourceLayers;
 }
 
-VkImageSubresourceRange Image::getSubresourceRange(uint32_t baseMipLevel, uint32_t arrayLayer /* 0 */) const noexcept
+VkImageSubresourceRange Image::getSubresourceRange(uint32_t baseMipLevel, uint32_t baseArrayLayer /* 0 */) const noexcept
 {
     VkImageSubresourceRange subresourceRange;
     const Format imageFormat(format);
@@ -253,9 +253,9 @@ VkImageSubresourceRange Image::getSubresourceRange(uint32_t baseMipLevel, uint32
     else
         subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
     subresourceRange.baseMipLevel = baseMipLevel;
-    subresourceRange.levelCount = mipLevels;
-    subresourceRange.baseArrayLayer = arrayLayers > 1 ? arrayLayer : 0;
-    subresourceRange.layerCount = arrayLayers;
+    subresourceRange.levelCount = mipLevels - baseMipLevel;
+    subresourceRange.baseArrayLayer = arrayLayers > 1 ? baseArrayLayer : 0;
+    subresourceRange.layerCount = arrayLayers - baseArrayLayer;
     return subresourceRange;
 }
 
