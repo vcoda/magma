@@ -79,7 +79,8 @@ namespace magma
     #endif // VK_KHR_device_group
         void onDefragment() override;
         VkImageLayout layoutTransition(VkImageLayout newLayout,
-            std::shared_ptr<CommandBuffer> cmdBuffer);
+            std::shared_ptr<CommandBuffer> cmdBuffer,
+            VkPipelineStageFlags shaderStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
         void copyMip(std::shared_ptr<CommandBuffer> cmdBuffer,
             uint32_t mipLevel,
             uint32_t arrayLayer,

@@ -368,7 +368,8 @@ void Image::onDefragment()
     bindMemory(std::move(memory), offset);
 }
 
-VkImageLayout Image::layoutTransition(VkImageLayout newLayout, std::shared_ptr<CommandBuffer> cmdBuffer)
+VkImageLayout Image::layoutTransition(VkImageLayout newLayout, std::shared_ptr<CommandBuffer> cmdBuffer,
+    VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */)
 {
     constexpr uint32_t baseMipLevel = 0;
     const VkImageSubresourceRange subresourceRange = getSubresourceRange(baseMipLevel);
@@ -392,10 +393,7 @@ VkImageLayout Image::layoutTransition(VkImageLayout newLayout, std::shared_ptr<C
         srcStageMask |= (VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT);
         break;
     case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
-        srcStageMask =
-            VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
-            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+        srcStageMask = shaderStageMask;
         break;
     case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
     case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
@@ -443,10 +441,7 @@ VkImageLayout Image::layoutTransition(VkImageLayout newLayout, std::shared_ptr<C
         break;
     case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
         MAGMA_ASSERT(usage & (VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT));
-        dstStageMask =
-            VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
-            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+        dstStageMask = shaderStageMask;
         break;
     case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
         MAGMA_ASSERT(usage & VK_IMAGE_USAGE_TRANSFER_SRC_BIT);
