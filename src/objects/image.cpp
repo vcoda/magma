@@ -371,8 +371,14 @@ void Image::onDefragment()
 VkImageLayout Image::layoutTransition(VkImageLayout newLayout, std::shared_ptr<CommandBuffer> cmdBuffer,
     VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */)
 {
-    constexpr uint32_t baseMipLevel = 0;
-    const VkImageSubresourceRange subresourceRange = getSubresourceRange(baseMipLevel);
+    return layoutTransitionMipLayer(newLayout, 0, 0, std::move(cmdBuffer), shaderStageMask);
+}
+
+VkImageLayout Image::layoutTransitionMipLayer(VkImageLayout newLayout, uint32_t baseMipLevel, uint32_t baseArrayLayer,
+    std::shared_ptr<CommandBuffer> cmdBuffer,
+    VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */)
+{
+    const VkImageSubresourceRange subresourceRange = getSubresourceRange(baseMipLevel, baseArrayLayer);
     const ImageMemoryBarrier memoryBarrier(shared_from_this(), newLayout, subresourceRange);
     const VkImageLayout oldLayout = layout;
     VkPipelineStageFlags srcStageMask = 0;

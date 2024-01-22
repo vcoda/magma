@@ -81,6 +81,11 @@ namespace magma
         VkImageLayout layoutTransition(VkImageLayout newLayout,
             std::shared_ptr<CommandBuffer> cmdBuffer,
             VkPipelineStageFlags shaderStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+        VkImageLayout layoutTransitionMipLayer(VkImageLayout newLayout,
+            uint32_t baseMipLevel,
+            uint32_t baseArrayLayer,
+            std::shared_ptr<CommandBuffer> cmdBuffer,
+            VkPipelineStageFlags shaderStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
         void copyMip(std::shared_ptr<CommandBuffer> cmdBuffer,
             uint32_t mipLevel,
             uint32_t arrayLayer,
