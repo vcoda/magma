@@ -41,7 +41,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
         *image,
         subresourceRange
     },
-    resource(std::move(image))
+    image(std::move(image))
 {
     switch (oldLayout)
     {

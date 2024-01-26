@@ -366,8 +366,9 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
         MAGMA_COUNT(memoryBarriers), memoryBarriers.data(),
         MAGMA_COUNT(bufferMemoryBarriers), bufferMemoryBarriers.data(),
         MAGMA_COUNT(imageMemoryBarriers), dereferencedImageMemoryBarriers);
+    // TODO: Queue barriers and update image layout on submit?
     for (const auto& barrier : imageMemoryBarriers)
-        barrier.resource->setLayout(barrier.newLayout);
+        barrier.image->setLayout(barrier.newLayout);
 }
 
 // inline void CommandBuffer::beginQuery

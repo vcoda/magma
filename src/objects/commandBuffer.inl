@@ -470,7 +470,8 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
         0, nullptr,
         0, nullptr,
         1, &barrier);
-    barrier.resource->setLayout(barrier.newLayout);
+    // TODO: Queue barriers and update image layout on submit?
+    barrier.image->setLayout(barrier.newLayout);
 }
 
 inline void CommandBuffer::beginQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex) noexcept
