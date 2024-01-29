@@ -32,8 +32,8 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
     VkImageMemoryBarrier{
         VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
         nullptr, // pNext
-        0, // srcAccessMask
-        0, // dstAccessMask
+        VK_ACCESS_NONE_KHR, // srcAccessMask
+        VK_ACCESS_NONE_KHR, // dstAccessMask
         image->getLayout(),
         newLayout,
         VK_QUEUE_FAMILY_IGNORED,
@@ -62,7 +62,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
         srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
         break;
     case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
-        srcAccessMask = 0;
+        srcAccessMask = VK_ACCESS_NONE_KHR;
         break;
     case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
         srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
@@ -133,7 +133,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
         // To achieve this, the dstAccessMask member of the VkImageMemoryBarrier
         // should be set to 0, and the dstStageMask parameter should be set to
         // VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT.
-        dstAccessMask = 0;
+        dstAccessMask = VK_ACCESS_NONE_KHR;
         break;
 #endif // VK_KHR_swapchain
 #ifdef VK_NV_shading_rate_image

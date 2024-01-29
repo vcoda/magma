@@ -77,6 +77,10 @@ constexpr VkDebugReportObjectTypeEXT VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_MODE_KH
 #endif // VK_EXT_debug_report && VK_KHR_display
 #endif
 
+#if !defined(VK_KHR_synchronization2)
+constexpr VkAccessFlagBits VK_ACCESS_NONE_KHR = VkAccessFlagBits(0);
+#endif
+
 typedef struct VkNode {
     VkStructureType sType;
     void*           pNext;
