@@ -108,7 +108,10 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
         // combined image/sampler, or input attachment.
         dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
     case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
-        dstAccessMask |= VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
+        if (image->getUsage() & VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT)
+            dstAccessMask |= VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
+        else
+            dstAccessMask |= VK_ACCESS_SHADER_READ_BIT;
         break;
     case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
         dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
