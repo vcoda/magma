@@ -86,6 +86,13 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
     switch (newLayout)
     {
     case VK_IMAGE_LAYOUT_UNDEFINED:
+        // Image layout transitions with VK_IMAGE_LAYOUT_UNDEFINED
+        // allow the implementation to discard the image subresource
+        // range, which can provide performance or power benefits.
+        // Tile-based architectures may be able to avoid flushing
+        // tile data to memory, and immediate style renderers may be
+        // able to achieve fast metadata clears to reinitialize
+        // frame buffer compression state, or similar.
         break;
     case VK_IMAGE_LAYOUT_GENERAL:
         dstAccessMask = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
