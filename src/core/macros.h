@@ -26,6 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_COUNT(container) static_cast<uint32_t>((container).size())
 
 #define MAGMA_ASSERT(expression) assert(expression)
+#define MAGMA_FAILURE(message) MAGMA_ASSERT(!message)
 
 #ifdef MAGMA_DEBUG
     #define MAGMA_ASSERT_FOR_EACH(arr, it, expr) for (auto const& it: arr) MAGMA_ASSERT(expr)
