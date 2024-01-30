@@ -149,11 +149,13 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
 #endif // VK_KHR_swapchain
 #ifdef VK_EXT_fragment_density_map
     case VK_IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT:
+        MAGMA_ASSERT(image->getUsage() & VK_IMAGE_USAGE_FRAGMENT_DENSITY_MAP_BIT_EXT);
         dstAccessMask = VK_ACCESS_FRAGMENT_DENSITY_MAP_READ_BIT_EXT;
         break;
 #endif // VK_EXT_fragment_density_map
 #ifdef VK_NV_shading_rate_image
     case VK_IMAGE_LAYOUT_SHADING_RATE_OPTIMAL_NV:
+        MAGMA_ASSERT(image->getUsage() & VK_IMAGE_USAGE_SHADING_RATE_IMAGE_BIT_NV);
         dstAccessMask = VK_ACCESS_SHADING_RATE_IMAGE_READ_BIT_NV;
         break;
 #endif // VK_NV_shading_rate_image
