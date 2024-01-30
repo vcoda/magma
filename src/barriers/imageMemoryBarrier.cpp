@@ -120,6 +120,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
         dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
         break;
     case VK_IMAGE_LAYOUT_PREINITIALIZED:
+        MAGMA_ERROR("image memory cannot be transitioned into VK_IMAGE_LAYOUT_PREINITIALIZED layout");
         break;
 #ifdef VK_KHR_swapchain
     case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR:
