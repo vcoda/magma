@@ -40,7 +40,7 @@ PhysicalDevice::PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDev
 }
 
 std::shared_ptr<Device> PhysicalDevice::createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
-    const std::vector<const char *>& enabledLayers, const std::vector<const char *>& enabledExtensions,
+    const NullTerminatedStringArray& enabledLayers, const NullTerminatedStringArray& enabledExtensions,
     const VkPhysicalDeviceFeatures& enabledFeatures,
     const StructureChain& enabledExtendedFeatures /* default */,
     const StructureChain& extendedInfo /* default */) const
@@ -425,8 +425,8 @@ std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
     const std::vector<DeviceQueueDescriptor> queueDescriptors = {
         DeviceQueueDescriptor(shared_from_this(), VK_QUEUE_GRAPHICS_BIT, defaultQueuePriorities)
     };
-    const std::vector<const char*> noLayers;
-    const std::vector<const char*> swapchainExtension = {
+    const NullTerminatedStringArray noLayers;
+    const NullTerminatedStringArray swapchainExtension = {
         VK_KHR_SWAPCHAIN_EXTENSION_NAME
     };
     const VkPhysicalDeviceFeatures noDeviceFeatures = {};

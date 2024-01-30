@@ -33,8 +33,8 @@ namespace magma
         public std::enable_shared_from_this<Instance>
     {
     public:
-        explicit Instance(const std::vector<const char *>& enabledLayers,
-            const std::vector<const char *>& enabledExtensions,
+        explicit Instance(const NullTerminatedStringArray& enabledLayers,
+            const NullTerminatedStringArray& enabledExtensions,
             std::shared_ptr<IAllocator> allocator = nullptr,
             const Application *applicationInfo = nullptr,
         #ifdef VK_EXT_debug_utils

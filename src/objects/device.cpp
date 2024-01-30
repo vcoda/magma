@@ -42,8 +42,8 @@ namespace magma
 {
 Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     const std::vector<DeviceQueueDescriptor>& queueDescriptors,
-    const std::vector<const char *>& enabledLayers_,
-    const std::vector<const char *>& enabledExtensions_,
+    const NullTerminatedStringArray& enabledLayers_,
+    const NullTerminatedStringArray& enabledExtensions_,
     const VkPhysicalDeviceFeatures& enabledFeatures_,
     const StructureChain& enabledExtendedFeatures_,
     const StructureChain& extendedInfo,

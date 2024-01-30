@@ -40,7 +40,7 @@ static magma::core::RefCountChecker _refCountChecker;
 
 namespace magma
 {
-Instance::Instance(const std::vector<const char *>& enabledLayers, const std::vector<const char *>& enabledExtensions,
+Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTerminatedStringArray& enabledExtensions,
     std::shared_ptr<IAllocator> allocator /* nullptr */, const Application *applicationInfo /* nullptr */,
 #ifdef VK_EXT_debug_utils
     PFN_vkDebugUtilsMessengerCallbackEXT debugUtilsCallback /* nullptr */,

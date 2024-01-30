@@ -72,6 +72,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+typedef std::vector<const char *> NullTerminatedStringArray;
+
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
 typedef void *NonDispatchableHandle;
 #else
