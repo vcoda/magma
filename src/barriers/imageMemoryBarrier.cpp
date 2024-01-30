@@ -132,6 +132,17 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
     case VK_IMAGE_LAYOUT_PREINITIALIZED:
         MAGMA_ERROR("image memory cannot be transitioned into VK_IMAGE_LAYOUT_PREINITIALIZED layout");
         break;
+#ifdef VK_KHR_maintenance2
+    case VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL_KHR:
+    case VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL_KHR:
+        // Two image layouts for depth stencil images to allow either the depth
+        // or stencil aspect to be read-only while the other aspect is writable.
+        MAGMA_ASSERT(image->getUsage() & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
+        dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT |
+                        VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
+                        VK_ACCESS_SHADER_READ_BIT;
+        break;
+#endif // VK_KHR_maintenance2
 #ifdef VK_KHR_swapchain
     case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR:
     #ifdef VK_KHR_shared_presentable_image
