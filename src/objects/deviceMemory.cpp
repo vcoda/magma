@@ -24,7 +24,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
-#include "../exceptions/notImplemented.h"
 
 namespace magma
 {
@@ -164,7 +163,7 @@ void DeviceMemory::bind(NonDispatchableHandle object, VkObjectType objectType,
         break;
 #endif // VK_NV_ray_tracing
     default:
-        MAGMA_THROW_NOT_IMPLEMENTED;
+        MAGMA_FAILURE("unknown type of binded object");
     };
     MAGMA_HANDLE_RESULT(result, "failed to bind device memory");
     if (VK_SUCCESS == result)
@@ -229,7 +228,7 @@ void DeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObjectType ob
 #endif // VK_NV_ray_tracing
     else
     {
-        MAGMA_THROW_NOT_IMPLEMENTED;
+        MAGMA_FAILURE("unknown type of binded object");
     }
     MAGMA_HANDLE_RESULT(result, "failed to bind device memory within device group");
     if (VK_SUCCESS == result)

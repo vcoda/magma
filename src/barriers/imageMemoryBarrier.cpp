@@ -20,15 +20,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "imageMemoryBarrier.h"
 #include "../objects/image.h"
 #include "../misc/imageSubresourceRange.h"
-#include "../exceptions/notImplemented.h"
 
 namespace magma
 {
-ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayout newLayout):
+ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayout newLayout) noexcept:
     ImageMemoryBarrier(std::move(image), newLayout, ImageSubresourceRange(image))
 {}
 
-ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayout newLayout, const VkImageSubresourceRange& subresourceRange):
+ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayout newLayout, const VkImageSubresourceRange& subresourceRange) noexcept:
     VkImageMemoryBarrier{
         VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
         nullptr, // pNext
@@ -88,12 +87,12 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
         break;
 #endif // VK_KHR_swapchain
     default:
-        MAGMA_THROW_NOT_IMPLEMENTED;
+        MAGMA_FAILURE("unknown old image layout");
     }
     switch (newLayout)
     {
     case VK_IMAGE_LAYOUT_UNDEFINED:
-        MAGMA_ERROR("image memory cannot be transitioned into VK_IMAGE_LAYOUT_UNDEFINED layout");
+        MAGMA_FAILURE("image memory cannot be transitioned into VK_IMAGE_LAYOUT_UNDEFINED layout");
         break;
     case VK_IMAGE_LAYOUT_GENERAL:
         dstAccessMask = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
@@ -128,7 +127,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
         dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
         break;
     case VK_IMAGE_LAYOUT_PREINITIALIZED:
-        MAGMA_ERROR("image memory cannot be transitioned into VK_IMAGE_LAYOUT_PREINITIALIZED layout");
+        MAGMA_FAILURE("image memory cannot be transitioned into VK_IMAGE_LAYOUT_PREINITIALIZED layout");
         break;
 #ifdef VK_KHR_maintenance2
     case VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL_KHR:
@@ -170,7 +169,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
         break;
 #endif // VK_NV_shading_rate_image
     default:
-        MAGMA_THROW_NOT_IMPLEMENTED;
+        MAGMA_FAILURE("unknown new image layout");
     }
 }
 } // namespace magma

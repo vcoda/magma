@@ -30,7 +30,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/format.h"
 #include "../misc/structureChain.h"
 #include "../exceptions/errorResult.h"
-#include "../exceptions/notImplemented.h"
 
 // Vulkan validation layers may complain about image regions for block-compressed formats. See:
 // https://vulkan.lunarg.com/doc/view/1.3.224.1/windows/1.3-extensions/vkspec.html#VUID-vkCmdCopyBufferToImage-pRegions-06218
@@ -369,14 +368,14 @@ void Image::onDefragment()
 }
 
 VkImageLayout Image::layoutTransition(VkImageLayout newLayout, std::shared_ptr<CommandBuffer> cmdBuffer,
-    VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */)
+    VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */) noexcept
 {
     return layoutTransitionMipLayer(newLayout, 0, 0, std::move(cmdBuffer), shaderStageMask);
 }
 
 VkImageLayout Image::layoutTransitionMipLayer(VkImageLayout newLayout, uint32_t baseMipLevel, uint32_t baseArrayLayer,
     std::shared_ptr<CommandBuffer> cmdBuffer,
-    VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */)
+    VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */) noexcept
 {
     const VkImageSubresourceRange subresourceRange = getSubresourceRange(baseMipLevel, baseArrayLayer);
     const ImageMemoryBarrier memoryBarrier(shared_from_this(), newLayout, subresourceRange);
@@ -427,7 +426,7 @@ VkImageLayout Image::layoutTransitionMipLayer(VkImageLayout newLayout, uint32_t 
         break;
 #endif // VK_KHR_fragment_shading_rate
     default:
-        MAGMA_THROW_NOT_IMPLEMENTED;
+        MAGMA_FAILURE("unknown old image layout");
     }
     VkPipelineStageFlags dstStageMask = 0;
     switch (newLayout)
@@ -485,7 +484,7 @@ VkImageLayout Image::layoutTransitionMipLayer(VkImageLayout newLayout, uint32_t 
         break;
 #endif // VK_KHR_fragment_shading_rate
     default:
-        MAGMA_THROW_NOT_IMPLEMENTED;
+        MAGMA_FAILURE("unknown new image layout");
     }
     cmdBuffer->pipelineBarrier(srcStageMask, dstStageMask, memoryBarrier);
     return oldLayout;
