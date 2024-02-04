@@ -45,6 +45,29 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     const NullTerminatedStringArray& enabledLayers_,
     const NullTerminatedStringArray& enabledExtensions_,
     const VkPhysicalDeviceFeatures& enabledFeatures_,
+    VkDevice device):
+    Dispatchable<VkDevice>(VK_OBJECT_TYPE_DEVICE, nullptr),
+    physicalDevice(std::move(physicalDevice_)),
+    resourcePool(std::make_shared<ResourcePool>()),
+    enabledFeatures(enabledFeatures_),
+    externalHandle(true)
+{
+    handle = device;
+    queues.reserve(queueDescriptors.size());
+    for (const auto& desc : queueDescriptors)
+        queues.emplace_back(desc, std::weak_ptr<Queue>());
+    // Store enabled layers and extensions
+    for (const auto& layer: enabledLayers_)
+        enabledLayers.emplace(layer);
+    for (const auto& extension: enabledExtensions_)
+        enabledExtensions.emplace(extension);
+}
+
+Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
+    const std::vector<DeviceQueueDescriptor>& queueDescriptors,
+    const NullTerminatedStringArray& enabledLayers_,
+    const NullTerminatedStringArray& enabledExtensions_,
+    const VkPhysicalDeviceFeatures& enabledFeatures_,
     const StructureChain& enabledExtendedFeatures_,
     const StructureChain& extendedInfo,
     std::shared_ptr<IAllocator> allocator):
@@ -52,7 +75,8 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     physicalDevice(std::move(physicalDevice_)),
     resourcePool(std::make_shared<ResourcePool>()),
     enabledFeatures(enabledFeatures_),
-    enabledExtendedFeatures(enabledExtendedFeatures_)
+    enabledExtendedFeatures(enabledExtendedFeatures_),
+    externalHandle(false)
 {
     VkDeviceCreateInfo deviceInfo;
     deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -107,7 +131,8 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
 Device::~Device()
 {
     MAGMA_ASSERT(resourcePool->hasAnyDeviceResource() == false);
-    vkDestroyDevice(handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    if (!externalHandle)
+        vkDestroyDevice(handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 const std::shared_ptr<DeviceFeatures>& Device::getDeviceFeatures() const noexcept

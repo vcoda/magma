@@ -39,6 +39,12 @@ namespace magma
             const VkPhysicalDeviceFeatures& enabledFeatures,
             const StructureChain& enabledExtendedFeatures = StructureChain(),
             const StructureChain& extendedInfo = StructureChain()) const;
+        std::shared_ptr<Device> getDeviceFromExternalHandle(
+            VkDevice device,
+            const std::vector<DeviceQueueDescriptor>& queueDescriptors,
+            const NullTerminatedStringArray& enabledLayers,
+            const NullTerminatedStringArray& enabledExtensions,
+            const VkPhysicalDeviceFeatures& enabledFeatures);
         const std::shared_ptr<Instance>& getInstance() const noexcept { return instance; }
         VkPhysicalDeviceFeatures getFeatures() const noexcept;
         VkFormatProperties getFormatProperties(VkFormat format) const noexcept;

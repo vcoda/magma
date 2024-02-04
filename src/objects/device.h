@@ -116,11 +116,18 @@ namespace magma
             const NullTerminatedStringArray& enabledLayers,
             const NullTerminatedStringArray& enabledExtensions,
             const VkPhysicalDeviceFeatures& enabledFeatures,
+            VkDevice device);
+        Device(std::shared_ptr<PhysicalDevice> physicalDevice,
+            const std::vector<DeviceQueueDescriptor>& queueDescriptors,
+            const NullTerminatedStringArray& enabledLayers,
+            const NullTerminatedStringArray& enabledExtensions,
+            const VkPhysicalDeviceFeatures& enabledFeatures,
             const StructureChain& enabledExtendedFeatures,
             const StructureChain& extendedInfo,
             std::shared_ptr<IAllocator> allocator);
 
         std::shared_ptr<PhysicalDevice> physicalDevice;
+        const bool externalHandle;
         mutable std::shared_ptr<DeviceFeatures> features;
         mutable std::vector<std::pair<DeviceQueueDescriptor, std::weak_ptr<Queue>>> queues;
         std::shared_ptr<ResourcePool> resourcePool;

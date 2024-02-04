@@ -33,6 +33,7 @@ namespace magma
         public std::enable_shared_from_this<Instance>
     {
     public:
+        explicit Instance(VkInstance instance);
         explicit Instance(const NullTerminatedStringArray& enabledLayers,
             const NullTerminatedStringArray& enabledExtensions,
             std::shared_ptr<IAllocator> allocator = nullptr,
@@ -50,6 +51,7 @@ namespace magma
         const std::set<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
         uint32_t enumeratePhysicalDevices() const;
         std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId) const;
+        std::shared_ptr<PhysicalDevice> getPhysicalDeviceFromExternalHandle(VkPhysicalDevice device) const;
     #ifdef VK_KHR_device_group
         std::vector<VkPhysicalDeviceGroupPropertiesKHR> enumeratePhysicalDeviceGroups() const;
         std::shared_ptr<PhysicalDeviceGroup> getPhysicalDeviceGroup(uint32_t groupId) const;
@@ -62,6 +64,7 @@ namespace magma
 
     private:
         const uint32_t apiVersion;
+        const bool externalHandle;
         std::set<std::string> extensions;
         std::set<std::string> enabledLayers;
         std::set<std::string> enabledExtensions;

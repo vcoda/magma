@@ -40,6 +40,17 @@ static magma::core::RefCountChecker _refCountChecker;
 
 namespace magma
 {
+Instance::Instance(VkInstance instance):
+    Dispatchable<VkInstance>(VK_OBJECT_TYPE_INSTANCE, nullptr),
+    apiVersion(VK_API_VERSION_1_0),
+    externalHandle(true)
+{
+    handle = instance;
+#ifdef MAGMA_DEBUG
+    _refCountChecker.addRef();
+#endif
+}
+
 Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTerminatedStringArray& enabledExtensions,
     std::shared_ptr<IAllocator> allocator /* nullptr */, const Application *applicationInfo /* nullptr */,
 #ifdef VK_EXT_debug_utils
@@ -50,7 +61,8 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTer
 #endif
     void *userData /* nullptr */):
     Dispatchable<VkInstance>(VK_OBJECT_TYPE_INSTANCE, std::move(allocator)),
-    apiVersion(applicationInfo ? applicationInfo->apiVersion : VK_API_VERSION_1_0)
+    apiVersion(applicationInfo ? applicationInfo->apiVersion : VK_API_VERSION_1_0),
+    externalHandle(false)
 {
     VkInstanceCreateInfo instanceInfo;
     instanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -130,7 +142,8 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTer
 
 Instance::~Instance()
 {
-    vkDestroyInstance(handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    if (!externalHandle)
+        vkDestroyInstance(handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 #ifdef MAGMA_DEBUG
     _refCountChecker.release();
 #endif
@@ -157,6 +170,12 @@ std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId) c
     result = vkEnumeratePhysicalDevices(handle, &physicalDeviceCount, physicalDevices);
     MAGMA_HANDLE_RESULT(result, "failed to enumerate physical devices");
     VkPhysicalDevice physicalDevice = physicalDevices[deviceId];
+    std::shared_ptr<Instance> instance = std::const_pointer_cast<Instance>(shared_from_this());
+    return std::shared_ptr<PhysicalDevice>(new PhysicalDevice(instance, physicalDevice, hostAllocator));
+}
+
+std::shared_ptr<PhysicalDevice> Instance::getPhysicalDeviceFromExternalHandle(VkPhysicalDevice physicalDevice) const
+{
     std::shared_ptr<Instance> instance = std::const_pointer_cast<Instance>(shared_from_this());
     return std::shared_ptr<PhysicalDevice>(new PhysicalDevice(instance, physicalDevice, hostAllocator));
 }
