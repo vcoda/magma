@@ -32,9 +32,9 @@ namespace magma
     class ImageMemoryBarrier : public VkImageMemoryBarrier
     {
     public:
-        explicit ImageMemoryBarrier(std::shared_ptr<Image> image,
+        ImageMemoryBarrier(std::shared_ptr<Image> image,
             VkImageLayout newLayout) noexcept;
-        explicit ImageMemoryBarrier(std::shared_ptr<Image> image,
+        ImageMemoryBarrier(std::shared_ptr<Image> image,
             VkImageLayout newLayout,
             const VkImageSubresourceRange& subresourceRange) noexcept;
 

@@ -34,12 +34,12 @@ namespace magma
             VkAccessFlags dstAccessMask,
             VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
-        explicit BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
+        BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
             VkAccessFlags srcAccessMask,
             VkAccessFlags dstAccessMask,
             VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
-        explicit BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
+        BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
             const BufferMemoryBarrier& barrier) noexcept;
     };
 } // namespace magma
