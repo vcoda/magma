@@ -27,20 +27,20 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayo
     ImageMemoryBarrier(std::move(image), newLayout, ImageSubresourceRange(image))
 {}
 
-ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayout newLayout, const VkImageSubresourceRange& subresourceRange) noexcept:
+ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image_, VkImageLayout newLayout, const VkImageSubresourceRange& subresourceRange) noexcept:
     VkImageMemoryBarrier{
         VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
         nullptr, // pNext
         VK_ACCESS_NONE_KHR, // srcAccessMask
         VK_ACCESS_NONE_KHR, // dstAccessMask
-        image->getLayout(),
+        image_->getLayout(),
         newLayout,
         VK_QUEUE_FAMILY_IGNORED,
         VK_QUEUE_FAMILY_IGNORED,
-        *image,
+        *image_,
         subresourceRange
     },
-    image(std::move(image))
+    image(std::move(image_))
 {
     switch (oldLayout)
     {
