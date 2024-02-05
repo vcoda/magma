@@ -478,21 +478,21 @@ inline void CommandBuffer::batchPipelineBarrier(VkPipelineStageFlags srcStageMas
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     auto& batch = findBarrierBatch(srcStageMask, dstStageMask, dependencyFlags);
-    batch.memoryBarriers.push_back(barrier);
+    MAGMA_TRY_CATCH(batch.memoryBarriers.push_back(barrier))
 }
 
 inline void CommandBuffer::batchPipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const BufferMemoryBarrier& barrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     auto& batch = findBarrierBatch(srcStageMask, dstStageMask, dependencyFlags);
-    batch.bufferMemoryBarriers.push_back(barrier);
+    MAGMA_TRY_CATCH(batch.bufferMemoryBarriers.push_back(barrier))
 }
 
 inline void CommandBuffer::batchPipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     auto& batch = findBarrierBatch(srcStageMask, dstStageMask, dependencyFlags);
-    batch.imageMemoryBarriers.push_back(barrier);
+    MAGMA_TRY_CATCH(batch.imageMemoryBarriers.push_back(barrier))
 }
 
 inline void CommandBuffer::beginQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex) noexcept

@@ -613,7 +613,7 @@ namespace magma
 
         PipelineBarrierBatch& findBarrierBatch(VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
-            VkDependencyFlags dependencyFlags);
+            VkDependencyFlags dependencyFlags) noexcept;
 
         std::shared_ptr<CommandPool> cmdPool;
         std::shared_ptr<Fence> fence;
