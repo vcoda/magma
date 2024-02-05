@@ -136,6 +136,20 @@ void CommandBuffer::end()
     MAGMA_ASSERT(State::Recording == state);
     if (State::Recording == state)
     {
+        if (!pipelineBarriers.empty())
+        {   // Flush deferred memory barriers
+            for (auto const& it: pipelineBarriers)
+            {
+                const PipelineBarrierBatch& batch = it.second;
+                pipelineBarrier(batch.srcStageMask,
+                    batch.dstStageMask,
+                    batch.memoryBarriers,
+                    batch.bufferMemoryBarriers,
+                    batch.imageMemoryBarriers,
+                    batch.dependencyFlags);
+            }
+            pipelineBarriers.clear();
+        }
     #ifdef MAGMA_DEBUG_LABEL
         endDebugLabel();
     #endif // MAGMA_DEBUG_LABEL
@@ -693,4 +707,16 @@ void CommandBuffer::traceRays(const std::shared_ptr<Buffer>& raygenShaderBinding
     }
 }
 #endif // VK_NV_ray_tracing
+
+CommandBuffer::PipelineBarrierBatch& CommandBuffer::findBarrierBatch(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, VkDependencyFlags dependencyFlags)
+{
+    const hash_t hash = core::hashArgs(srcStageMask, dstStageMask, dependencyFlags);
+    auto it = pipelineBarriers.find(hash);
+    if (it == pipelineBarriers.end())
+    {
+        PipelineBarrierBatch batch{srcStageMask, dstStageMask, dependencyFlags};
+        it = pipelineBarriers.emplace(hash, batch).first;
+    }
+    return it->second;
+}
 } // namespace magma

@@ -347,6 +347,18 @@ namespace magma
             const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers = {},
             const std::vector<ImageMemoryBarrier>& imageMemoryBarriers = {},
             VkDependencyFlags dependencyFlags = 0) noexcept;
+        void batchPipelineBarrier(VkPipelineStageFlags srcStageMask,
+            VkPipelineStageFlags dstStageMask,
+            const MemoryBarrier& barrier,
+            VkDependencyFlags dependencyFlags = 0) noexcept;
+        void batchPipelineBarrier(VkPipelineStageFlags srcStageMask,
+            VkPipelineStageFlags dstStageMask,
+            const BufferMemoryBarrier& barrier,
+            VkDependencyFlags dependencyFlags = 0) noexcept;
+        void batchPipelineBarrier(VkPipelineStageFlags srcStageMask,
+            VkPipelineStageFlags dstStageMask,
+            const ImageMemoryBarrier& imageMemoryBarrier,
+            VkDependencyFlags dependencyFlags = 0) noexcept;
 
         void beginQuery(const std::shared_ptr<QueryPool>& queryPool,
             uint32_t queryIndex) noexcept;
@@ -588,6 +600,21 @@ namespace magma
         friend CommandPool;
         friend Queue;
 
+    private:
+        struct PipelineBarrierBatch
+        {
+            VkPipelineStageFlags srcStageMask;
+            VkPipelineStageFlags dstStageMask;
+            VkDependencyFlags dependencyFlags;
+            std::vector<MemoryBarrier> memoryBarriers;
+            std::vector<BufferMemoryBarrier> bufferMemoryBarriers;
+            std::vector<ImageMemoryBarrier> imageMemoryBarriers;
+        };
+
+        PipelineBarrierBatch& findBarrierBatch(VkPipelineStageFlags srcStageMask,
+            VkPipelineStageFlags dstStageMask,
+            VkDependencyFlags dependencyFlags);
+
         std::shared_ptr<CommandPool> cmdPool;
         std::shared_ptr<Fence> fence;
         const VkCommandBufferLevel level;
@@ -608,6 +635,7 @@ namespace magma
             std::shared_ptr<Framebuffer> framebuffer;
             std::vector<std::shared_ptr<ImageView>> attachments;
         } bindings;
+        std::unordered_map<hash_t, PipelineBarrierBatch> pipelineBarriers;
     };
 
     /* See 6.1. Command Buffer Lifecycle

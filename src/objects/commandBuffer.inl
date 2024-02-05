@@ -474,6 +474,27 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
     barrier.image->setLayout(barrier.newLayout);
 }
 
+inline void CommandBuffer::batchPipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
+{
+    auto& batch = findBarrierBatch(srcStageMask, dstStageMask, dependencyFlags);
+    batch.memoryBarriers.push_back(barrier);
+}
+
+inline void CommandBuffer::batchPipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const BufferMemoryBarrier& barrier,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
+{
+    auto& batch = findBarrierBatch(srcStageMask, dstStageMask, dependencyFlags);
+    batch.bufferMemoryBarriers.push_back(barrier);
+}
+
+inline void CommandBuffer::batchPipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
+{
+    auto& batch = findBarrierBatch(srcStageMask, dstStageMask, dependencyFlags);
+    batch.imageMemoryBarriers.push_back(barrier);
+}
+
 inline void CommandBuffer::beginQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t queryIndex) noexcept
 {
     vkCmdBeginQuery(handle, *queryPool, queryIndex, queryPool->getControlFlags());
