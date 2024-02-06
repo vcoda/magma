@@ -421,56 +421,37 @@ inline void CommandBuffer::resetEvent(std::shared_ptr<Event>& event, VkPipelineS
 
 inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask) const noexcept
 {
-    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask,
-        0, nullptr,
-        0, nullptr,
-        0, nullptr);
+    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask, 0, nullptr, 0, nullptr, 0, nullptr);
 }
 
 inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
     const MemoryBarrier& barrier) const noexcept
 {
-    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask,
-        1, &barrier,
-        0, nullptr,
-        0, nullptr);
+    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask, 1, &barrier, 0, nullptr, 0, nullptr);
 }
 
 inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
     const MemoryBarrier& memoryBarrier, const BufferMemoryBarrier& bufferMemoryBarrier, const ImageMemoryBarrier& imageMemoryBarrier) const noexcept
 {
-    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask,
-        1, &memoryBarrier,
-        0, &bufferMemoryBarrier,
-        0, &imageMemoryBarrier);
+    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask, 1, &memoryBarrier, 0, &bufferMemoryBarrier, 0, &imageMemoryBarrier);
 }
 
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
-        1, &barrier,
-        0, nullptr,
-        0, nullptr);
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 1, &barrier, 0, nullptr, 0, nullptr);
 }
 
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const BufferMemoryBarrier& barrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
-        0, nullptr,
-        1, &barrier,
-        0, nullptr);
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 0, nullptr, 1, &barrier, 0, nullptr);
 }
 
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
-        0, nullptr,
-        0, nullptr,
-        1, &barrier);
-    // TODO: Queue barriers and update image layout on submit?
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 0, nullptr, 0, nullptr, 1, &barrier);
     barrier.image->setLayout(barrier.newLayout);
 }
 
