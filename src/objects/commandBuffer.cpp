@@ -134,6 +134,9 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
 void CommandBuffer::end()
 {
     MAGMA_ASSERT(State::Recording == state);
+    MAGMA_ASSERT(!withinRenderPass);
+    MAGMA_ASSERT(!withinConditionalRendering);
+    MAGMA_ASSERT(!withinTransformFeedback);
     if (State::Recording == state)
     {
         if (!pipelineBarriers.empty())
