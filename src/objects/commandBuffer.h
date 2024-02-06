@@ -611,7 +611,7 @@ namespace magma
             std::vector<ImageMemoryBarrier> imageMemoryBarriers;
         };
 
-        PipelineBarrierBatch& findBarrierBatch(VkPipelineStageFlags srcStageMask,
+        PipelineBarrierBatch *findBarrierBatch(VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
             VkDependencyFlags dependencyFlags) noexcept;
 

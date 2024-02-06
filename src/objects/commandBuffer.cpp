@@ -708,15 +708,16 @@ void CommandBuffer::traceRays(const std::shared_ptr<Buffer>& raygenShaderBinding
 }
 #endif // VK_NV_ray_tracing
 
-CommandBuffer::PipelineBarrierBatch& CommandBuffer::findBarrierBatch(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, VkDependencyFlags dependencyFlags) noexcept
+CommandBuffer::PipelineBarrierBatch *CommandBuffer::findBarrierBatch(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, VkDependencyFlags dependencyFlags) noexcept
 {
     const hash_t hash = core::hashArgs(srcStageMask, dstStageMask, dependencyFlags);
     auto it = pipelineBarriers.find(hash);
-    if (it == pipelineBarriers.end())
-    {
-        PipelineBarrierBatch batch{srcStageMask, dstStageMask, dependencyFlags};
-        MAGMA_TRY_CATCH(it = pipelineBarriers.emplace(hash, batch).first);
-    }
-    return it->second;
+    if (it != pipelineBarriers.end())
+        return &it->second;
+    PipelineBarrierBatch batch{srcStageMask, dstStageMask, dependencyFlags};
+    MAGMA_TRY_CATCH(it = pipelineBarriers.emplace(hash, batch).first);
+    if (it != pipelineBarriers.end())
+        return &it->second;
+    return nullptr;
 }
 } // namespace magma
