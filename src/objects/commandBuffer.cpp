@@ -181,6 +181,10 @@ bool CommandBuffer::reset(bool releaseResources /* false */) noexcept
         withinRenderPass = VK_FALSE;
         withinConditionalRendering = VK_FALSE;
         withinTransformFeedback = VK_FALSE;
+        bindings.renderPass.reset();
+        bindings.framebuffer.reset();
+        bindings.attachments.clear();
+        pipelineBarriers.clear();
         return true;
     }
     return false;
