@@ -17,7 +17,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
-#define MAGMA_NEW new(std::nothrow)
+#ifdef MAGMA_NO_EXCEPTIONS
+    #define MAGMA_NEW new(std::nothrow)
+#else
+    #define MAGMA_NEW new
+#endif
 
 #define MAGMA_UNUSED(variable) variable
 

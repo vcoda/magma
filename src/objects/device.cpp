@@ -113,7 +113,7 @@ Device::~Device()
 const std::shared_ptr<DeviceFeatures>& Device::getDeviceFeatures() const noexcept
 {
     if (!features)
-        features = std::shared_ptr<DeviceFeatures>(new DeviceFeatures(shared_from_this()));
+        features = std::shared_ptr<DeviceFeatures>(MAGMA_NEW DeviceFeatures(shared_from_this()));
     return features;
 }
 
@@ -131,7 +131,7 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
             vkGetDeviceQueue(handle, queueDesc.queueFamilyIndex, queueIndex, &queueHandle);
             if (VK_NULL_HANDLE == queueHandle)
                 MAGMA_ERROR("failed to get device queue");
-            auto queue = std::shared_ptr<Queue>(new Queue(queueHandle,
+            auto queue = std::shared_ptr<Queue>(MAGMA_NEW Queue(queueHandle,
                 std::const_pointer_cast<Device>(shared_from_this()),
                 flags, queueDesc.queueFamilyIndex, queueIndex));
             // Cache using weak_ptr to break circular references

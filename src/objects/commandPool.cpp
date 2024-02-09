@@ -79,9 +79,9 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     {
         CommandBuffer *cmdBuffer;
         if (primaryLevel)
-            cmdBuffer = new PrimaryCommandBuffer(handle, shared_from_this());
+            cmdBuffer = MAGMA_NEW PrimaryCommandBuffer(handle, shared_from_this());
         else
-            cmdBuffer = new SecondaryCommandBuffer(handle, shared_from_this());
+            cmdBuffer = MAGMA_NEW SecondaryCommandBuffer(handle, shared_from_this());
         cmdBuffers.emplace_back(cmdBuffer);
     }
     return cmdBuffers;

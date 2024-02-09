@@ -79,7 +79,7 @@ std::vector<std::shared_ptr<PipelineExecutable>> Pipeline::getExecutables() cons
     std::vector<std::shared_ptr<PipelineExecutable>> executables;
     uint32_t index = 0;
     for (const auto& properties : executableProperties)
-        executables.emplace_back(new PipelineExecutable(shared_from_this(), properties, index++));
+        executables.emplace_back(MAGMA_NEW PipelineExecutable(shared_from_this(), properties, index++));
     return executables;
 }
 #endif // VK_KHR_pipeline_executable_properties

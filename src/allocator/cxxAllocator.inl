@@ -39,4 +39,15 @@ inline void CxxAllocator::operator delete(void *ptr)
     else
         free(ptr);
 }
+
+inline void CxxAllocator::operator delete(void *ptr, const std::nothrow_t&)
+{
+#ifdef MAGMA_DEBUG
+    if (ptr) --allocCount;
+#endif
+    if (allocator)
+        allocator->free(ptr);
+    else
+        free(ptr);
+}
 } // namespace magma

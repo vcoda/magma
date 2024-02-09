@@ -43,6 +43,7 @@ namespace magma
         void *operator new(std::size_t size, const std::nothrow_t&) noexcept;
         void* operator new(std::size_t, void* where) noexcept;
         void operator delete(void *ptr);
+        void operator delete(void *ptr, const std::nothrow_t&);
         void operator delete(void *, void *) {}
 
         static void overrideDefaultAllocator(std::shared_ptr<ICxxAllocator> allocator);

@@ -158,7 +158,7 @@ std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId) c
     MAGMA_HANDLE_RESULT(result, "failed to enumerate physical devices");
     VkPhysicalDevice physicalDevice = physicalDevices[deviceId];
     std::shared_ptr<Instance> instance = std::const_pointer_cast<Instance>(shared_from_this());
-    return std::shared_ptr<PhysicalDevice>(new PhysicalDevice(instance, physicalDevice, hostAllocator));
+    return std::shared_ptr<PhysicalDevice>(MAGMA_NEW PhysicalDevice(instance, physicalDevice, hostAllocator));
 }
 
 #ifdef VK_KHR_device_group
@@ -189,9 +189,9 @@ std::shared_ptr<PhysicalDeviceGroup> Instance::getPhysicalDeviceGroup(uint32_t g
     for (uint32_t deviceId = 0; deviceId < deviceGroupProperties.physicalDeviceCount; ++deviceId)
     {
         VkPhysicalDevice physicalDevice = deviceGroupProperties.physicalDevices[deviceId];
-        physicalDevices.emplace_back(new PhysicalDevice(instance, physicalDevice, hostAllocator));
+        physicalDevices.emplace_back(MAGMA_NEW PhysicalDevice(instance, physicalDevice, hostAllocator));
     }
-    return std::shared_ptr<PhysicalDeviceGroup>(new PhysicalDeviceGroup(physicalDevices, groupId));
+    return std::shared_ptr<PhysicalDeviceGroup>(MAGMA_NEW PhysicalDeviceGroup(physicalDevices, groupId));
 }
 #endif // VK_KHR_device_group
 

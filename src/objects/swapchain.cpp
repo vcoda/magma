@@ -200,7 +200,7 @@ const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages() const
             uint32_t imageIndex = 0;
             for (VkImage handle: swapchainImages)
             {   // Image has been created by swapchain internally, so we just assign image handle
-                auto image = std::shared_ptr<SwapchainImage>(new SwapchainImage(device, handle, surfaceFormat.format, extent, imageIndex));
+                auto image = std::shared_ptr<SwapchainImage>(MAGMA_NEW SwapchainImage(device, handle, surfaceFormat.format, extent, imageIndex));
                 bindedImages.push_back(std::move(image));
                 ++imageIndex;
             }

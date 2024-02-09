@@ -96,7 +96,7 @@ void ComputePipelineBatch::buildPipelines(std::shared_ptr<Device> device,
         auto hash = hashes.cbegin();
         while (handle != handles.cend())
         {
-            pipelines.emplace_back(new ComputePipeline(
+            pipelines.emplace_back(MAGMA_NEW ComputePipeline(
                 *handle++, device, *layout++, *basePipeline++, allocator,
             #ifdef VK_EXT_pipeline_creation_feedback
                 creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,

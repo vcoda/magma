@@ -49,7 +49,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device_, Vk
         accelerationStructureInfo.info.pGeometries = nullptr;
     else
     {
-        VkGeometryNV *pGeometries = new VkGeometryNV[accelerationStructureInfo.info.geometryCount];
+        VkGeometryNV *pGeometries = MAGMA_NEW VkGeometryNV[accelerationStructureInfo.info.geometryCount];
         accelerationStructureInfo.info.pGeometries = pGeometries;
         for (const auto& geometry : geometries)
             *pGeometries++ = geometry;

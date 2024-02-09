@@ -174,7 +174,7 @@ void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<Device> device,
         auto rsHash = rsHashes.cbegin();
         while (handle != handles.cend())
         {
-            pipelines.emplace_back(new GraphicsPipeline(
+            pipelines.emplace_back(MAGMA_NEW GraphicsPipeline(
                 *handle++, device, *layout++, *basePipeline++, allocator,
                 MAGMA_COUNT(*shaderStages++),
             #ifdef VK_EXT_pipeline_creation_feedback
