@@ -538,7 +538,7 @@ void Image::copyMip(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t mipLevel,
         dstLayout,
         subresourceRange);
     // Insert memory dependency between transfer and fragment shader stages
-    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
+    cmdBuffer->batchPipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
 }
 
 VkDeviceSize Image::setupMipmap(std::vector<Mip>& dstMips, const std::vector<MipData>& srcMips) const
@@ -561,7 +561,8 @@ VkDeviceSize Image::setupMipmap(std::vector<Mip>& dstMips, const std::vector<Mip
 }
 
 void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
-    const std::vector<Mip>& mipMaps, const CopyLayout& bufferLayout)
+    const std::vector<Mip>& mipMaps, const CopyLayout& bufferLayout,
+    VkPipelineStageFlags dstStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */)
 {
     std::vector<VkBufferImageCopy> regions;
     regions.reserve(mipMaps.size());
@@ -603,7 +604,7 @@ void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
         subresourceRange);
     // Insert memory dependency between transfer and fragment shader stages
-    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, shaderRead);
+    cmdBuffer->batchPipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
 }
 
 VkExtent3D Image::virtualMipExtent(uint32_t level) const noexcept

@@ -119,7 +119,8 @@ namespace magma
         void copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             const std::vector<Mip>& mipMaps,
-            const CopyLayout& bufferLayout);
+            const CopyLayout& bufferLayout,
+            VkPipelineStageFlags shaderStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
         VkExtent3D virtualMipExtent(uint32_t mipLevel) const noexcept;
         static VkSampleCountFlagBits getSampleCountBit(uint32_t samples) noexcept;
         static VkFormat checkFormatFeature(std::shared_ptr<Device> device,
