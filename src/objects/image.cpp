@@ -377,8 +377,6 @@ VkImageLayout Image::layoutTransitionMipLayer(VkImageLayout newLayout, uint32_t 
     std::shared_ptr<CommandBuffer> cmdBuffer,
     VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */) noexcept
 {
-    const VkImageSubresourceRange subresourceRange = getSubresourceRange(baseMipLevel, baseArrayLayer);
-    const ImageMemoryBarrier memoryBarrier(shared_from_this(), newLayout, subresourceRange);
     const VkImageLayout oldLayout = layout;
     VkPipelineStageFlags srcStageMask = 0;
     switch (oldLayout)
@@ -498,6 +496,8 @@ VkImageLayout Image::layoutTransitionMipLayer(VkImageLayout newLayout, uint32_t 
     default:
         MAGMA_FAILURE("unknown new image layout");
     }
+    const VkImageSubresourceRange subresourceRange = getSubresourceRange(baseMipLevel, baseArrayLayer);
+    const ImageMemoryBarrier memoryBarrier(shared_from_this(), newLayout, subresourceRange);
     cmdBuffer->pipelineBarrier(srcStageMask, dstStageMask, memoryBarrier);
     return oldLayout;
 }
